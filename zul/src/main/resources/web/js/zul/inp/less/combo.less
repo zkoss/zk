@@ -1,0 +1,350 @@
+@import "~./zul/less/_header.less";
+
+@components: z-combobox, z-bandbox, z-datebox, z-timebox, z-spinner, z-doublespinner;
+each(@components, {
+	.@{value} {
+		display: inline-block;
+		height: @comboInputHeight;
+		font-size: @inputTextSize;
+		line-height: normal; //reset for inside other component
+		white-space: nowrap;
+		position: relative;
+
+		&-input {
+			.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
+			width: 100%;
+			height: @comboInputHeight;
+			border: 1px solid @inputBorderColor;
+			.borderRadius(@baseBorderRadius);
+			margin: 0;
+			padding: @inputPadding;
+			padding-right: @comboInputPaddingRight;
+			line-height: @baseLineHeight;
+			background: @inputBackgroundColor;
+
+			// Placeholder ZK-3876: combobox does not provide proper placeholder style
+			&::-webkit-input-placeholder {
+				color: @inputPlaceholderColor;
+			}
+
+			&:-moz-placeholder {
+				/* FF 4-18 */
+				color: @inputPlaceholderColor;
+				opacity: 1;
+			}
+
+			&::-moz-placeholder {
+				/* FF 19+ */
+				color: @inputPlaceholderColor;
+				opacity: 1;
+			}
+
+			&:-ms-input-placeholder {
+				/* IE 10+ */
+				color: @inputPlaceholderColor;
+			}
+		}
+
+		&-input&-hover, &-input&-hover + &-button {
+			border-color: @inputHoverBorderColor;
+		}
+
+		&-input:focus {
+			border-color: @inputFocusBorderColor;
+		}
+
+		&-input:focus + &-button {
+			border-left: 1px solid @inputFocusBorderColor;
+		}
+
+		&-input-full {
+			padding-right: @inputPaddingRight;
+		}
+
+		&-button {
+			.iconFontStyle(@comboButtonIconSize, @comboButtonIconColor);
+			display: inline-block;
+			position: absolute;
+			top: 0;
+			right: 0;
+			min-width: @comboButtonMinWidth;
+			height: @comboInputHeight;
+			border: 1px solid @inputBorderColor;
+			.rightBorderRadius(@baseBorderRadius);
+			padding: @comboButtonPadding;
+			line-height: @baseLineHeight;
+			background: @inputBackgroundColor;
+			text-align: center;
+			vertical-align: middle;
+			overflow: hidden;
+			cursor: pointer;
+
+			&:hover {
+				border-color: @comboButtonHoverBorderColor;
+				background: @comboButtonHoverBackgroundColor;
+			}
+
+			&:active {
+				color: @comboButtonActiveIconColor;
+				border-color: @comboButtonActiveBorderColor;
+				background-color: @comboButtonActiveBackgroundColor;
+			}
+		}
+
+		&-disabled {
+			.opacity(@disabledOpacity);
+
+			& > input {
+				color: @inputDisableColor !important;
+				background: @inputDisableBackgroundColor !important;
+				cursor: default !important;
+			}
+
+			& > a, & > span {
+				color: @inputDisableColor !important;
+				background: @inputDisableBackgroundColor !important;
+				cursor: default !important;
+			}
+		}
+		&-disabled &-button:hover {
+			border-color: @inputBorderColor;
+		}
+
+		&-button&-disabled { // buttonVisible="false"
+			display: none;
+		}
+
+		&-invalid {
+			border-color: @invalidBorderColor !important;
+		}
+		&-invalid + &-button {
+			border-left: 1px solid @invalidBorderColor !important;
+		}
+
+		&-readonly {
+			& > input {
+				color: @inputReadonlyColor;
+				background: @inputReadonlyBackgroundColor;
+			}
+		}
+		&-readonly &-button {
+			color: @inputReadonlyColor;
+			background-color: @inputBackgroundColor;
+		}
+
+		// Inplace editing
+		&-inplace &-input {
+			border: 0;
+			padding: 3px;
+			background: none;
+		}
+		&-inplace &-button {
+			visibility: hidden; // Bug ZK-2216: Performance issue of Listbox and Combobox with inplace="true"
+		}
+	}
+});
+
+.z-combobox-readonly,
+.z-bandbox-readonly,
+.z-datebox-readonly {
+	& > input {
+		cursor: pointer;
+	}
+}
+
+.z-datebox-button,
+.z-bandbox-button,
+.z-combobox-button {
+	font-size: @comboButtonIconSizeLarge;
+	min-height: @baseButtonHeight;
+}
+
+.z-datebox-button,
+.z-bandbox-button {
+	text-align: center;
+}
+
+.z-combobox-open .z-combobox-button,
+.z-bandbox-open .z-bandbox-button,
+.z-datebox-open .z-datebox-button {
+	border-color: @inputFocusBorderColor;
+}
+
+.z-timebox-disabled a,
+.z-spinner-disabled a,
+.z-doublespinner-disabled a {
+	color: @disabledColor;
+	&:hover {
+		background: 0;
+	}
+}
+
+// separator
+.z-timebox-disabled span,
+.z-spinner-disabled span,
+.z-doublespinner-disabled span {
+	& > i {
+		display: none;
+	}
+}
+
+.z-timebox-button,
+.z-spinner-button,
+.z-doublespinner-button {
+	width: @spinnerButtonWidth;
+	padding: 0;
+
+	&:hover,
+	&:active {
+		background: @inputBackgroundColor;
+	}
+	// separator
+	& > i {
+		z-index: 2; // greater than arrow icon
+	}
+	& > a {
+		display: block;
+		color: @textColorDefault;
+		height: @spinnerButtonIconHeight;
+		padding: @spinnerButtonPadding;
+		overflow: hidden;
+		text-decoration: none;
+
+		> i {
+			.transform(@spinnerButtonIconTransform)
+		}
+
+		&:hover {
+			background: @comboButtonHoverBackgroundColor;
+		}
+	}
+	&:hover > i {
+		.size(100%, 1px);
+		border-top: 1px solid @comboButtonHoverBorderColor;
+		position: absolute;
+		top: @spinnerButtonIconPositionTop;
+		left: 0;
+	}
+}
+// button active
+.btnActive(@parent) {
+	@selector: ~'@{parent}';
+	@{selector} {
+		&-active&-icon,
+		&-active&-icon:hover {
+			color: @comboButtonActiveIconColor;
+			border-color: @comboButtonActiveBorderColor;
+			background: @comboButtonActiveBackgroundColor;
+		}
+	}
+}
+.btnActive('.z-timebox');
+.btnActive('.z-spinner');
+.btnActive('.z-doublespinner');
+
+// combobox emptySearchMessage
+.z-combobox-empty-search-message {
+	display: block;
+	padding: 4px 8px;
+	position: relative;
+	min-height: @comboPopupItemSize + 2px + 4px * 2;
+	.borderRadius(@baseBorderRadius);
+	color: @disabledColor;
+}
+.z-combobox-empty-search-message-hidden {
+	display: none;
+}
+
+// Comboitem
+.z-comboitem,
+.z-comboitem-button {
+	font-size: @comboPopupItemSize;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.z-comboitem {
+	display: block;
+	padding: @comboitemPadding;
+	position: relative;
+	min-height: @comboitemEmptyHeight; //ZK-2783: give default height to empty item
+	.borderRadius(@baseBorderRadius);
+}
+.z-comboitem-inner,
+.z-comboitem-content {//description
+	.iconFontStyle(@comboitemInnerFontSize, @comboPopupDescColor);
+}
+.z-comboitem,
+.z-comboitem a,
+.z-comboitem a:visited {
+	font-size: @comboPopupItemSize;
+	font-weight: normal;
+	color: @comboPopupItemColor;
+	text-decoration: none;
+}
+.z-comboitem:hover {
+	background-color: @comboPopupItemHoverBackgroundColor;
+}
+.z-comboitem-selected {
+	color: @comboPopupItemSelectedColor;
+}
+.z-comboitem-text {
+	line-height: @comboPopupItemSize + 2;
+}
+.z-comboitem-image {
+	margin-top: -4px;
+	margin-right: 4px;
+	float: left;
+
+	&:empty {
+		margin-right: 0;
+	}
+}
+.z-comboitem-icon {
+	.iconFontStyle(@comboPopupIconSize, @comboPopupIconColor);
+	padding-right: 4px;
+}
+.z-combobox-popup,
+.z-bandbox-popup,
+.z-datebox-popup,
+.z-timebox-popup {
+	font-family: @baseContentFontFamily;
+	font-weight: normal;
+	font-size: @fontSizeMedium;
+	color: @textColorDefault;
+	display: block;
+	border: 1px solid @comboPopupBorderColor;
+	.borderRadius(@baseBorderRadius);
+	padding: @comboitemPadding;
+	background: @popupBackgroundColor;
+	position: absolute;
+	overflow: hidden;
+}
+
+.z-combobox-popup {
+	overflow: auto;
+	min-height: 10px;
+}
+
+.z-bandbox-popup {
+	overflow: auto;
+	padding: 8px;
+	min-height: 10px;
+}
+
+.z-combobox-content {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	background: transparent none repeat 0 0;
+	position: relative;
+	list-style: none outside none;
+	min-width: 100%;
+	display: inline-block;
+}
+
+//Shadow
+.z-combobox-shadow,
+.z-bandbox-shadow,
+.z-datebox-shadow {
+	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
+}

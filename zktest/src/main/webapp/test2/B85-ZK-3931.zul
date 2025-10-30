@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3931.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 25 10:25:03 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click the button
+        2. the second label 'testLabel' shouldn't be empty and also shows the user-agent correctly
+
+    </label>
+    <button onClick='testLabel.setValue(Executions.getCurrent().getUserAgent());' label="print useragent during AU"/>
+    <separator/>
+    <label id="testLabel"/>
+</zk>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4930.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 10 15:33:14 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Enable WebSocket in zk.xml.
+        &lt;listener>
+        &lt;listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class>
+        &lt;/listener>
+        2. Click "test event" button.
+        3. The server shouldn't have an exception "java.lang.IllegalStateException: The response object has been recycled and is no longer associated with this facade".
+    </label>
+    <button onClick="Clients.log(event.toString())" label="test event"/>
+</zk>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3243.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 22 12:36:54 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">1. click the combobox button
+	2. the width of the popup should not exceed browser width
+
+	</label>
+	<combobox>
+		<comboitem label="long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long"/>
+	</combobox>
+</zk>

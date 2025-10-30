@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4447.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb 17 15:39:38 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Should see HTTP Error 500: org.zkoss.zk.ui.UiException: Adding causes a smaller list?
+        2. Should only see an item "test"
+    </label>
+    <div apply="org.zkoss.zktest.test2.B90_ZK_4447Composer">
+        <grid id="grid" height="200px">
+            <custom-attributes org.zkoss.zul.grid.autoSort="true"/>
+        </grid>
+        <listbox id="listbox" height="200px">
+            <custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+        </listbox>
+    </div>
+</zk>

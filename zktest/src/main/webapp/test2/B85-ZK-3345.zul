@@ -1,0 +1,22 @@
+<zk>
+	<zscript><![CDATA[
+	List cellData = Collections.nCopies(50, "cell");
+	ListModelList model = new ListModelList(Collections.nCopies(500, cellData));
+	]]></zscript>
+	<div height="100%">
+		Scroll it, and it won't lag.
+		<listbox model="${model}" vflex="1" mold="paging" autopaging="true">
+			<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+			<frozen columns="4"/>
+			<listhead>
+				<listheader forEach="${cellData}" label="col-${forEachStatus.index}" width="90px"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<custom-attributes rowStatus="${forEachStatus}"/>
+					<listcell forEach="${each}" label="row-${rowStatus.index}-cell-${forEachStatus.index}"/>
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</zk>

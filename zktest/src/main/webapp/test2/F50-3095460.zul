@@ -1,0 +1,148 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<!--
+F50-3095460.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Oct 26, 2010 2:58:17 PM , Created by Sam
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<window title="Listbox" border="normal">
+	span column when sizedByContent = "true", compare column width with next listbox
+		<listbox sizedByContent="true" span="true">
+			<listhead>
+				<listheader label="long long long long long long long header" />
+				<listheader label="header" />
+				<listheader label="long long long header" />
+				<listheader label="header" />
+			</listhead>
+			<listitem >
+				<listcell label="content" />
+				<listcell label="long content.........................." />
+				<listcell label="content" />
+				<listcell label="content" />
+			</listitem>
+		</listbox>
+		Default listbox without span column width
+		<listbox sizedByContent="true" >
+			<listhead>
+				<listheader label="long long long long long long long header" />
+				<listheader label="header" />
+				<listheader label="long long long header" />
+				<listheader label="header" />
+			</listhead>
+			<listitem >
+				<listcell label="content" />
+				<listcell label="long content.........................." />
+				<listcell label="content" />
+				<listcell label="content" />
+			</listitem>
+		</listbox>
+		hflex="min", span="true": hflex take hight priority than span.
+		<listbox sizedByContent="true" span="true" hflex="min">
+			<listhead>
+				<listheader label="long long long long long long long header" />
+				<listheader label="header" />
+				<listheader label="long long long header" />
+				<listheader label="header" />
+			</listhead>
+			<listitem >
+				<listcell label="content" />
+				<listcell label="long content.........................." />
+				<listcell label="content" />
+				<listcell label="content" />
+			</listitem>
+		</listbox>
+		hflex="max", span="true": hflex take hight priority than span.
+		<listbox sizedByContent="true" span="true" hflex="max">
+			<listhead>
+				<listheader label="long long long long long long long header" />
+				<listheader label="header" />
+				<listheader label="long long long header" />
+				<listheader label="header" />
+			</listhead>
+			<listitem >
+				<listcell label="content" />
+				<listcell label="long content.........................." />
+				<listcell label="content" />
+				<listcell label="content" />
+			</listitem>
+		</listbox>
+</window>
+<window title="grid" border="normal">
+	span column when sizedByContent = "true", compare column width with next listbox
+	<grid sizedByContent="true" span="true">
+		<columns>
+			<column label="long long ong long long long long header" />
+			<column label="header" />
+			<column label="header" />
+			<column label="long long ong long header" />
+		</columns>
+		<rows>
+			<row>
+				<label value="content" />
+				<label value="long content.........................." />
+				<label value="content" />
+				<label value="content" />
+			</row>
+		</rows>
+	</grid>
+	Default grid when sizedByContent="true"
+	<grid sizedByContent="true" >
+		<columns>
+			<column label="long long ong long long long long header" />
+			<column label="header" />
+			<column label="header" />
+			<column label="long long ong long header" />
+		</columns>
+		<rows>
+			<row>
+				<label value="content" />
+				<label value="long content.........................." />
+				<label value="content" />
+				<label value="content" />
+			</row>
+		</rows>
+	</grid>
+	hflex="min", span="true": hflex take hight priority than span.
+	<grid sizedByContent="true" span="true" hflex="min">
+		<columns>
+			<column label="long long ong long long long long header" />
+			<column label="header" />
+			<column label="header" />
+			<column label="long long ong long header" />
+		</columns>
+		<rows>
+			<row>
+				<label value="content" />
+				<label value="long content.........................." />
+				<label value="content" />
+				<label value="content" />
+			</row>
+		</rows>
+	</grid>
+	hflex="max", span="true": hflex take hight priority than span.
+	<grid sizedByContent="true" span="true" hflex="max">
+		<columns>
+			<column label="long long ong long long long long header" />
+			<column label="header" />
+			<column label="header" />
+			<column label="long long ong long header" />
+		</columns>
+		<rows>
+			<row>
+				<label value="content" />
+				<label value="long content.........................." />
+				<label value="content" />
+				<label value="content" />
+			</row>
+		</rows>
+	</grid>
+</window>
+</zk>

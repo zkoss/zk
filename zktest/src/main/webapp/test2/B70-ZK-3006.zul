@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-3006.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri, Dec 11, 2015  3:48:28 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript><![CDATA[
+	List list = new ArrayList();
+	for (int i = 0; i < 100; i++) {
+		list.add("item" + i);
+	}
+	ListModelList model = new ListModelList(list);
+]]></zscript>
+<label multiline="true">
+	1. trigger the drop down menu of the chosenbox
+	2. press down and select any item with ":" colon key (press "shift + ;")
+	3. an item should be selected, instead of actually inputting : into the chosenbox
+</label>
+<chosenbox separator=":" model="${model}" width="200px"/>
+</zk>

@@ -1,0 +1,23 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<zk xmlns:sh="shadow">
+	<window id="host" title="@load(model.currentStep.title)" border="normal"
+			form="@id(formVar) @load(formData) 
+			                @save(formData, after={model.nextCommand, model.submitCommand}) 
+			                @validator('formBeanValidator', prefix='p_', groups=model.currentStep.validationGroups)"> 
+		<div width="@load(c:cat(model.progress, '%'))" style="background-color: green; height: 10px;"/>
+		<sh:apply template="@load(model.currentStep.template)"/>
+
+			<sh:if test="@load(not model.firstStep)">
+				<button label="@load(model.backLabel)" onClick="@command(model.backCommand)"/>
+			</sh:if>
+			<sh:if test="@load(not model.lastStep)">
+				<button label="@load(model.nextLabel)" onClick="@command(model.nextCommand)"/>
+			</sh:if>
+			<sh:if test="@load(model.lastStep)">
+				<button label="@load(model.submitLabel)" onClick="@command(model.submitCommand)"/>
+			</sh:if>
+	</window>
+	
+	<debugger rootId="host"/>
+</zk>

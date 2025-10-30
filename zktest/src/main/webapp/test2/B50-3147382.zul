@@ -1,0 +1,24 @@
+<zk>
+	<zscript>
+		Clients.confirmClose("Confirm Close");
+	</zscript>
+	<html><![CDATA[
+		<ol>
+			<li><b>This test case requires to change zk.xml and restart server.</b></li>
+			<li>Add the following to zk.xml:</li>
+		</ol>
+<pre>
+&lt;session-config>
+	&lt;device-type>ajax&lt;/device-type>
+	&lt;session-timeout>5&lt;/session-timeout>
+	&lt;automatic-timeout />
+	&lt;timeout-message>Timeout Message&lt;/timeout-message>
+&lt;/session-config>
+</pre>
+		<ol>
+			<li>Wait for 5-10 seconds to timeout.</li>
+			<li>You should see a Messagebox saying "Timeout".</li>
+			<li>Click on Reload button. If you see another javascript confirm dialog saying "Confirm Close", it is a bug.</li>
+		</ol>
+	]]></html>
+</zk>

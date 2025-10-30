@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Doublebox]" width="480px">
+        <doublebox hflex="1" value="1.1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Doublebox, rounded]" width="480px">
+        <doublebox hflex="1" mold="rounded" value="1.1"/>
+    </window>
+</hbox>
+</zk>

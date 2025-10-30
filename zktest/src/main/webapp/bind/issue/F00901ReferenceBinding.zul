@@ -1,0 +1,40 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00901ReferenceBinding')">
+	<label multiline="true">
+	1.Change each textbox value, the corresponding textbox should change you edit any one
+	2.Click replace1 , All the name become Alex, Number:888, Street:888 st
+	3.Click replace2 , All the Number:999, Street:999 st
+	</label>
+	<vlayout id="vlayout">
+		<hbox>
+			Name:<textbox id="tb11" value="@bind(vm.user.name)"/>
+			Number:<textbox id="tb12" value="@bind(vm.user.profile.number)"/>
+			Street:<textbox id="tb13" value="@bind(vm.user.profile.address.street)"/>
+		</hbox>
+		================
+		<hbox id="box2" u="@ref(vm.user)">
+			Name:<textbox id="tb21" value="@bind(u.name)"/>
+			Number:<textbox id="tb22" value="@bind(u.profile.number)"/>
+			Street:<textbox id="tb23" value="@bind(u.profile.address.street)"/>
+		</hbox>
+		================
+		<vbox id="box3" p="@ref(vm.user.profile)">
+			<hbox>
+				Number:<textbox id="tb32" value="@bind(p.number)"/>
+				Street:<textbox id="tb33" value="@bind(p.address.street)"/>
+			</hbox>
+			================
+			<hbox addr="@ref(p.address)">
+				Street:<textbox id="tb43" value="@bind(addr.street)"/>
+			</hbox>
+		</vbox>
+		<hlayout>
+			<button id="replace1" label="replace1" onClick="@command('replace1')"/>
+			<button id="replace2" label="replace2" onClick="@command('replace2')"/>
+		</hlayout>
+	</vlayout>
+	
+	<button label="dump" onClick="binder.tracker.dump()"/>
+	<button label="detach1" onClick="box3.detach()"/>
+	<button label="detach2" onClick="vlayout.detach()"/>
+</window>

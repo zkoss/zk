@@ -1,0 +1,27 @@
+<zk>
+<html><![CDATA[
+<ol>
+<li>Press the "add Group+Groupfoot" button</li>
+<li>If you see a Group and a Groupfoot item shown in the listbox, then it is OK; otherwise, it is a bug</li>
+</ol>
+]]>
+</html>
+<listbox id="lbx" mold="paging">
+	<listhead>
+		<listheader label="header"></listheader>
+	</listhead>
+</listbox>
+<zscript>
+	lbx.getPaginal().setAutohide(false);
+</zscript>
+<button label="add Group+Groupfoot">
+	<attribute name="onClick">
+	<![CDATA[
+	Listgroup lg = new Listgroup("Group");
+	lbx.insertBefore(lg, lbx.getPaginal());
+	Listgroupfoot lgf = new Listgroupfoot("Groupfoot");
+	lbx.insertBefore(lgf, lbx.getPaginal());
+	]]>
+	</attribute>
+</button>
+</zk>

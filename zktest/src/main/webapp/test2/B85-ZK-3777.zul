@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3777.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 30 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<script>
+	zk.afterLoad("zul.inp", function() {
+		zul.inp.MySlider = zk.$extends(zul.inp.Slider, {
+			_startDrag: function(dg) {
+				var widget = dg.control;
+				widget.$supers("_startDrag", arguments);
+				zk.log(jq(".z-slider-popup").text());
+			}
+		});
+	});
+	</script>
+	<div height="300px">
+		<slider vflex="1" maxpos="4" orient="vertical" slidingtext="Test {0}" w:use="zul.inp.MySlider"/>
+	</div>
+	<label multiline="true">
+		1. drag the slider
+		2. should see 'Test 0...4' instead of '0...4'
+	</label>
+</zk>

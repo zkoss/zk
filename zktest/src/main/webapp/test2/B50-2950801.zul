@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2950801.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb 22 12:53:29 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Check it will not happen js error
+	<borderlayout>
+		<east>
+			<hbox hflex="1" vflex="1" style="padding-top:20px"/>
+		</east>
+		<center>
+			<label value="center" />
+		</center>
+	</borderlayout>
+</zk>
+

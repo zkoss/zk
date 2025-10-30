@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2957.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 17 14:15:31 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute" xmlns:x="xhtml">
+	<label multiline="true">
+		should see "data-handler works" in zk.log
+
+	</label>
+	<x:input id="xinput" ca:data-zk-2957=""></x:input>
+</zk>

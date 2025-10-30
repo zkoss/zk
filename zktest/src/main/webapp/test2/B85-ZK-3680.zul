@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3680.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 10 12:27:10 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <zscript>
+        boolean _lastStatus = false;
+        public void openStatus(boolean status) {
+            if (status != _lastStatus) {
+                _lastStatus = status;
+                Clients.log(status ? "opened" : "closed");
+            }
+        }
+    </zscript>
+    <timer delay="100" repeats="true" onTimer='openStatus(bb.isOpen())' />
+    <label multiline="true">
+        1. Scroll the panel down until the bandbox is visible.
+        2. Click the button of bandbox to open the popup. (Expected log showed opened)
+        3. Scroll the panel away from bandbox.
+        4. The popup is closed automatically. (Expected log showed closed)
+    </label>
+    <div>
+        <tabbox width="400px" height="600px">
+            <tabs>
+                <tab label="Tab 1" />
+            </tabs>
+            <tabpanels>
+                <tabpanel style="overflow:auto"
+                          ca:data-scrollable="true">
+                    This is panel 1
+                    <div height="800px"></div>
+                    <bandbox id="bb" onOpen='Clients.log("Did a thing")'>
+                        <bandpopup>bandpopup</bandpopup>
+                    </bandbox>
+                    <div height="800px"></div>
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+    </div>
+</zk>

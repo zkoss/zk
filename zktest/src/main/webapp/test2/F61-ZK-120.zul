@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F61-ZK-120.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jun 08, 2012  6:31:26 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+1. Please test if the column's menu function works well.(like Grouping, Sorting, Hiding)
+	<listbox>
+		<listhead menupopup="auto">
+			<listheader label="Author" sort="client" />
+			<listheader label="Title" sort="auto" />
+			<listheader label="Publisher" sort="auto" />
+			<listheader label="Hardcover" sort="auto" />
+		</listhead>
+		<listitem>
+			<listcell label="Philip Hensher" />
+			<listcell label="The Northern Clemency" />
+			<listcell label="Knopf (October 30, 2008)" />
+			<listcell label="608 pages" />
+		</listitem>
+		<listitem>
+			<listcell label="Philip Hensher" />
+			<listcell label="The Fit" />
+			<listcell label="HarperPerennial (April 4, 2005)" />
+			<listcell label="240 pages" />
+		</listitem>
+		<listitem>
+			<listcell label="Philip Hensher" />
+			<listcell label="Kitchen Venom" />
+			<listcell label="Flamingo (May 19, 2003)" />
+			<listcell label="336 pages" />
+		</listitem>
+		<listitem>
+			<listcell label="Michael Greenberg" />
+			<listcell label="Hurry Down Sunshine" />
+			<listcell label="Other Press (September 9, 2008)" />
+			<listcell label="240 pages" />
+		</listitem>
+		<listitem>
+			<listcell label="Michael Greenberg" />
+			<listcell label="Painless Vocabulary (Painless)" />
+			<listcell label="Barron's Educational Series (September 1, 2001)" />
+			<listcell label="292 pages" />
+		</listitem>
+		<listitem>
+			<listcell label="Rick Perlstein" />
+			<listcell
+				label="Nixonland: The Rise of a President and the Fracturing of America" />
+			<listcell
+				label="Scribner; 1st Scribner Hardcover Ed edition (May 13, 2008)" />
+			<listcell label="896 pages" />
+		</listitem>
+		<listitem>
+			<listcell label="Rick Perlstein" />
+			<listcell label="Nixonland" />
+			<listcell label="Simon &amp; Schuster (May 13, 2008)" />
+			<listcell label="100 pages" />
+		</listitem>
+	</listbox>
+</zk>

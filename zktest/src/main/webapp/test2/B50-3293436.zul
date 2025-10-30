@@ -1,0 +1,15 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Go to next page of the Grid. If the alternating color on Grid is lost, it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		rows = new String[50];
+	]]></zscript>
+	<grid mold="paging" pageSize="10">
+		<rows>
+			<row forEach="${rows}">${forEachStatus.index}</row>
+		</rows>
+	</grid>
+</zk>

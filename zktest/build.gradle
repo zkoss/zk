@@ -1,0 +1,371 @@
+plugins {
+	id 'war'
+	id "org.gretty" version "3.1.1"
+	id 'com.github.psxpaul.execfork' version '0.2.2'
+	id 'jacoco'
+}
+
+jacoco {
+	toolVersion = "0.8.11"
+}
+
+war {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// TODO: don't use gretty since gretty not supporting jetty 10.0.5 and gretty 4.0.0 only support jetty11+
+
+java.sourceCompatibility = JavaVersion.VERSION_11
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+	options.warnings = false
+}
+
+repositories {
+	mavenLocal() {
+		content {
+			excludeGroupByRegex "io\\.netty\\.*"
+		}
+	}
+
+	maven {
+		url = uri('https://mavensync.zkoss.org/maven2')
+	}
+
+	maven {
+		url = uri('https://mavensync.zkoss.org/eval')
+	}
+
+	maven {
+		url = uri('https://repo.maven.apache.org/maven2/')
+	}
+
+	maven {
+		url = uri('https://maven.seasar.org/maven2')
+	}
+
+	maven {
+		url = uri('https://maven.nuxeo.org/nexus/content/groups/public/')
+	}
+
+	maven {
+		url = uri('https://maven.java.net/content/groups/public/')
+	}
+
+	maven {
+		url = uri('https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/')
+	}
+}
+
+// work for Servlet 3.0
+configurations.all {
+	exclude group: 'org.zkoss.zk', module: 'zkwebfragment'
+}
+// fix CDI(Weld) to scan from META-INF/beans.xml into build/classes/java/main/META-INF
+task copyResources(type: Copy) {
+	from "${projectDir}/src/main/resources/META-INF"
+	into layout.buildDirectory.dir('classes/java/main/META-INF')
+}
+
+processResources.dependsOn copyResources
+
+dependencies {
+	implementation "org.zkoss.theme:breeze:10.0.1.1-Eval"
+	implementation "org.zkoss.theme:silvertail:10.0.1.1-Eval"
+	implementation "org.zkoss.theme:sapphire:10.0.1.1-Eval"
+	implementation "org.zkoss.theme:atlantic:10.0.1.1-Eval"
+	implementation 'commons-logging:commons-logging:1.1.1'
+	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M4'
+	implementation 'commons-io:commons-io:2.17.0'
+	implementation "org.zkoss.zk:zk:${version}"
+	implementation "org.zkoss.zk:zkplus:${version}"
+	implementation "org.zkoss.zk:zkbind:${version}"
+	implementation "org.zkoss.zk:zul:${version}"
+	implementation "org.zkoss.zk:zhtml:${version}"
+	implementation "org.zkoss.common:zcommon:${version}"
+	implementation "org.zkoss.common:zweb:${version}"
+	implementation "org.zkoss.common:zweb-dsp:${version}"
+	implementation "org.zkoss.common:zel:${version}"
+	implementation "org.zkoss.zk:zkex:${version}"
+	implementation "org.zkoss.zk:zkmax:${version}"
+	implementation "org.zkoss.zk:zuti:${version}"
+	if (project.ext['zktestWithoutA11y'] == 'false') {
+		implementation "org.zkoss.zk:za11y:${version}"
+	} else {
+		testCompileOnly "org.zkoss.zk:za11y:${version}"
+	}
+	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
+	implementation 'commons-lang:commons-lang:2.6'
+	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+	implementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
+	implementation 'net.sf.jasperreports:jasperreports:6.20.5'
+	implementation 'org.jfree:jfreechart:1.0.19'
+	implementation 'com.jhlabs:filters:2.0.235-1'
+	implementation 'org.zkoss.zkforge:ckez:4.21.0.0'
+	implementation 'org.zkoss.zkforge:timelinez:2.3.1_50'
+	implementation 'org.zkoss.zkforge:timeplotz:1.1_50'
+	implementation 'org.zkoss.zkforge:gmapsz:3.1.0'
+	implementation 'org.hibernate:hibernate-validator:6.0.23.Final'
+	implementation 'javax.validation:validation-api:1.1.0.Final'
+
+	// fix for DestroyTest.java that org.eclipse.jetty:apache-jsp:10.0.5 depends on slf4j-api 2.0.0-alpha1
+	implementation 'org.slf4j:slf4j-jdk14:2.0.7'
+	implementation 'javax.inject:javax.inject:1'
+	implementation 'javax.enterprise:cdi-api:2.0.SP1'
+	implementation 'org.javassist:javassist:3.29.2-GA'
+	implementation 'org.easymock:easymock:3.4'
+	implementation 'de.odysseus.juel:juel-spi:2.2.7'
+	implementation 'de.odysseus.juel:juel-impl:2.2.7'
+
+	// ZK-5458
+	implementation 'org.jboss.weld.servlet:weld-servlet-core:3.1.9.Final'
+
+	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
+	runtimeOnly 'org.apache.groovy:groovy:5.0.0-alpha-1'
+	runtimeOnly 'org.mozilla:rhino:1.7.14'
+//	testImplementation 'org.jruby:jruby-core:1.7.27'
+	runtimeOnly 'org.python:jython:2.2.1'
+	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.1.0-FL-2024082716'
+	testImplementation 'net.jcip:jcip-annotations:1.0'
+	testImplementation 'com.deque.html.axe-core:selenium:4.7.0'
+	testImplementation 'org.springframework.session:spring-session-core:2.1.6.RELEASE'
+	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+	testImplementation "org.mockito:mockito-inline:4.7.0"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+	testImplementation 'org.eclipse.jetty.websocket:websocket-javax-server:10.0.11'
+	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
+	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
+	testImplementation 'xml-apis:xml-apis:1.4.01'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.4.32.0.0'
+
+	// For B96_ZK_4194Test to use a specific Chrome driver version (this will change to match latest chrome)
+	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v130:4.26.0'
+	testImplementation "org.seleniumhq.selenium:selenium-java:4.26.0"
+	testImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
+
+	providedCompile 'javax.el:javax.el-api:2.2.5'
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+	providedCompile 'javax.websocket:javax.websocket-api:1.1'
+	// workaround for running Mockito under Java 11
+	providedCompile "net.bytebuddy:byte-buddy:1.8.22"
+	providedCompile "net.bytebuddy:byte-buddy-agent:1.8.22"
+}
+
+sourceSets {
+	main {
+		resources {
+			// some test will try to get content from resources
+			srcDirs += "src/main/webapp"
+		}
+	}
+}
+
+task testGroupForkJVMTestOnly(type: Test) {
+
+	forkEvery = 1 // a new test process is started for every test class
+	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
+	if (project.hasProperty('maxParallelForks'))
+		maxParallelForks = project.maxParallelForks as int
+
+
+	exclude 'org/zkoss/zktest/zats/wcag/**'
+
+	if (project.ext['zktestWithoutA11y'] != 'false') {
+		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/testGroupForkJVMTestOnly")
+		useJUnitPlatform {
+			includeTags 'ForkJVMTestOnly'
+			excludeTags 'WcagTestOnly'
+		}
+	} else {
+		useJUnitPlatform {
+			includeTags 'ForkJVMTestOnly'
+		}
+	}
+	systemProperty "zkWebdriverContextPath", "/zktest"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zktest.zats"
+
+	// a way to pass -Dtags=...
+	options {
+		systemProperties(System.getProperties())
+	}
+
+	// for Jenkins' info
+	testLogging {
+		events("standardOut", "started", "passed", "skipped", "failed")
+	}
+}
+
+task npmInstallLighthouse(type: Exec) {
+	outputs.dir("${project.buildDir}/lighthouse/")
+	commandLine 'npm', 'install', '-g', 'lighthouse@12.2.0'
+}
+task testWCAGOnly(type: Test) {
+	dependsOn npmInstallLighthouse
+	forkEvery = 1 // a new test process is started for every test class
+	maxParallelForks = 1 // default 1 process, because it will hang in Jenkins
+	if (project.hasProperty('maxParallelForks'))
+		maxParallelForks = project.maxParallelForks as int
+
+	include 'org/zkoss/zktest/zats/wcag/**'
+
+	systemProperty "zkWebdriverContextPath", "/zktest"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zktest.zats"
+
+	// a way to pass -Dtags=...
+	options {
+		systemProperties(System.getProperties())
+	}
+
+	useJUnitPlatform();
+
+	// for Jenkins' info
+	testLogging {
+		events("standardOut", "started", "passed", "skipped", "failed")
+	}
+}
+test {
+	forkEvery = 1
+	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
+	if (project.hasProperty('maxParallelForks'))
+		maxParallelForks = project.maxParallelForks as int
+
+	exclude 'org/zkoss/zktest/zats/wcag/**'
+
+	if (project.ext['zktestWithoutA11y'] != 'false') {
+		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/test")
+		useJUnitPlatform {
+			excludeTags 'WcagTestOnly', 'ForkJVMTestOnly'
+		}
+	} else {
+		useJUnitPlatform {
+			excludeTags 'ForkJVMTestOnly'
+		}
+	}
+	systemProperty "zkWebdriverContextPath", "/zktest"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zktest.zats"
+
+	// a way to pass -Dtags=...
+	options {
+		systemProperties(System.getProperties())
+	}
+
+	// for Jenkins' info
+	testLogging {
+		events("standardOut", "started", "passed", "skipped", "failed")
+	}
+
+	maxHeapSize = "1024m"
+	jvmArgs '-XX:MaxMetaspaceSize=1024m'
+
+	// jacoco coverage report
+	if (project.ext['zktestWithJacoco'] == 'true')
+		finalizedBy jacocoTestReport
+}
+
+task clearNoA11Y(type: Delete) {
+	delete "$buildDir/test-results/no-A11Y/"
+}
+
+task renameNoA11yTestResult (type: Copy) {
+//	mustRunAfter test
+//	mustRunAfter 'testGroupForkJVMTestOnly'
+//	setOnlyIf { project.ext['zktestWithoutA11y'] != 'false' }
+	destinationDir = file("$buildDir/test-results/no-A11Y0")
+	from ("$buildDir/test-results/no-A11Y")
+	includeEmptyDirs false
+	include '**/*Test.xml'
+	filter {
+		String line -> line.replaceAll("testsuite name=\"(.[^\"]*)\"",
+				"testsuite name=\"\$1(NO_A11Y)\"")
+	}
+	rename '(.*).xml', '$1NO_A11Y.xml'
+
+	finalizedBy clearNoA11Y
+}
+
+description = 'ZK Test'
+
+
+gretty {
+	if (project.hasProperty('httpPort')) {
+		httpPort = Integer.parseInt(project.httpPort)
+	}
+	systemProperty 'java.util.logging.config.file', './src/main/webapp/WEB-INF/logging.properties'
+}
+
+// Start browsersync in the background.
+// Failed attempt:
+//   Use `ant.exec` instead of `exec`: https://stackoverflow.com/a/43501772
+//   However, the synatx for `arg` in the link above is wrong: https://discuss.gradle.org/t/running-ant-exec-with-env-attribute/11001
+//   Unfortunately, the spawned process will not be killed.
+//   ```
+//   ant.exec(executable: 'npm', spawn: true) {
+// 	   arg(value: 'run')
+// 	   arg(value: 'dev')
+// 	   arg(value: '--')
+// 	   arg(value: '--port')
+// 	   arg(value: gretty.httpPort)
+// 	   arg(value: '--startPath')
+// 	   arg(value: '/zephyr-test')
+//   }
+// Beware that specifying `waitForPort` below could cause the spawned process to not be killed.
+// In that case, check for `ps aux | grep gulp` and `localhost:300{n}` where n is odd.
+task browsersync(type: com.github.psxpaul.task.ExecFork) {
+    executable = 'npm'
+    args = ['run', 'dev', '--', '--port', "${gretty.httpPort}", '--startPath', '/zktest']
+}
+
+// WARNING: Do NOT move this task before the "dependencies" declaration; otherwise,
+// `configurations.implementation.dependencies` will not work.
+task devMode {
+	if (project.gradle.startParameter.taskNames.stream().filter {
+			it.endsWith('Dev')
+		}.findFirst().isPresent()) {
+		dependsOn browsersync
+		gretty {
+			httpPort = gretty.httpPort
+			beforeClassPath = []
+			def allowedWorkspace = []
+			configurations.implementation.dependencies.each {
+				allowedWorkspace << it.group + ":" + it.name
+			}
+			def subprojectsWithJS = []
+			addClassPath(gradle, beforeClassPath, [], allowedWorkspace, subprojectsWithJS)
+
+			println "Watching the following subprojects with browsersync:"
+			println subprojectsWithJS
+			browsersync.args << '--subprojectPaths' << subprojectsWithJS.join(',')
+		}
+	}
+}
+
+task appRunDev {
+	dependsOn devMode
+}
+task appRunDebugDev {
+	dependsOn devMode
+}
+
+def addClassPath(gradle, beforeClassPath, visitedBuilds, allowedWorkspace, subprojectsWithJS) {
+	gradle.includedBuilds.each {
+		if (visitedBuilds.contains(it.name)) return
+		visitedBuilds << it.name
+		def rootGradle = it.properties['target'].properties['buildController'].gradle
+		it.properties['target'].properties['availableModules'].each {
+
+			def prj = rootGradle.rootProject.findProject(it.right.identityPath.toString())
+			if (!prj) {
+				prj = rootGradle.rootProject.findProject(it.right.projectPath.toString())
+			}
+			if (prj && allowedWorkspace.contains(prj.group + ":" + prj.name)) {
+				beforeClassPath << prj.sourceSets.main.output.resourcesDir
+				println "add to classPath: " + prj.sourceSets.main.output.resourcesDir
+				subprojectsWithJS << prj.projectDir
+			}
+		}
+		addClassPath(rootGradle, beforeClassPath, visitedBuilds, allowedWorkspace, subprojectsWithJS);
+	}
+}
+
+appRunDev.dependsOn 'appRun'
+appRunDebugDev.dependsOn 'appRunDebug'

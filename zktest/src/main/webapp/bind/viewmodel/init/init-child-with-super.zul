@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+init-child-with-super.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 03 10:54:40 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.init.ChildInitSuperVM')">
+        <label multiline="true">
+            1. Click the button.
+            2. Should see
+            InitVM.init was called
+            ChildInitSuperVM.childInit was called
+        </label>
+        <button label="see result" onClick="@command('printMessage')"/>
+    </div>
+</zk>

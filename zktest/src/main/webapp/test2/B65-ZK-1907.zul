@@ -1,0 +1,7 @@
+<window>
+	<vlayout>
+	type 81374562389765913874569283746592837465918645923749238475923745927349572934857 into intbox, 
+	the content long number should not overlap the error message container. 
+	<intbox/>
+	</vlayout>
+</window>

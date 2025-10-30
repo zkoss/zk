@@ -1,0 +1,12 @@
+<zk>
+	<panel sizable="true" width="500px" height="500px"
+		movable="true" border="rounded+" floatable="true">
+		<panelchildren>
+			<html><![CDATA[
+				<ol>
+					<li>You should be able to reduce the height of the Panel. If not, it is a bug.</li>
+				</ol>
+			]]></html>
+		</panelchildren>
+	</panel>
+</zk>

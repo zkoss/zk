@@ -1,0 +1,4 @@
+<vlayout>
+ <html>You shall see a hyper link below having a label (Link) and an image</html>
+ <a label="Link"><image src="/img/inet.png"/></a>
+</vlayout>

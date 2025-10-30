@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-337.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Aug 24, 2011 11:08:28 AM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>1. Move the cursor to the disabled button.</div>
+	<div>2. The mouse cursor shall not be a pointer.</div>
+	<button label="disabled" disabled="true"/>
+	<button label="click" />
+</zk>

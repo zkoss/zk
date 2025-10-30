@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2952.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Nov 25, 2015 11:26:28 AM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		the issue was, when clicking on the border of the X and the X itself on the errorbox, there were two different closing animation
+		Now no matter where you click, the errorbox will disappear without animation.
+		1. trigger an error box
+		2. click on the border of the X, the errorbox disappears.
+		3. trigger an error box again
+		4. click the X itself, the errorbox disappears.
+	</label>
+	<textbox constraint="no empty" />
+</zk>

@@ -1,0 +1,10 @@
+<zk>
+	<if test="${forEachStatus.index eq 2}">
+		<if test="true">
+			<div style="color:blue">Only ${item} Template</div>
+		</if>
+	</if>
+	<if test="${forEachStatus.index ne 2}">
+		<div style="color:red">${item} Template</div>
+	</if>
+</zk>

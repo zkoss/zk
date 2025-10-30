@@ -1,0 +1,24 @@
+<zk>
+<zscript>
+
+public class MyComposer extends org.zkoss.zk.ui.select.SelectorComposer {
+
+	public String getName(){
+		return "testing";
+	}
+}
+</zscript>
+<window id="win" title="custom" border="normal" apply="MyComposer">
+	<custom-attributes composerName="mc"/>
+	<vlayout>
+	<label>value: '${win$composer.name}', value should be 'testing'</label>
+	<label>value: '${mc.name}', value should be 'testing'</label>
+	</vlayout>
+</window>
+<window id="win2" title="custom" border="normal" apply="MyComposer">
+	<vlayout>
+	<label>value: '${win2$composer.name}', value should be 'testing'</label>
+	<label>value: '${mc.name}', value should be ''</label>
+	</vlayout>
+</window>
+</zk>

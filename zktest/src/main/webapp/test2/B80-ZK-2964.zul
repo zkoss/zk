@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2964.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec  1 11:30:05 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. change browser language to Dutch
+		2. click on the dateboxs' buttons
+		3. the first three calendars' time should have hour, minute and second.
+		4. the last calendar's time should appear without second.
+
+	</label>
+	<window border="normal" title="hello">
+		<datebox width="350px" format="long+full"/>
+		<datebox width="350px" format="long+long"/>
+		<datebox width="350px" format="long+medium"/>
+		<datebox width="350px" format="long+short"/>
+
+	</window>
+</zk>

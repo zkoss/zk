@@ -1,0 +1,44 @@
+<window id="win" title="new page title" border="normal"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01189FormNotifyChange')">
+	<label multiline="true">
+	1.change tb1 to A, only tb2 and tb4 value is changed to A, click save 1, bea1.prop is changed to A
+	2.change tb2 to B, only tb1 and tb4 value is changed to B, click save 1, bea1.prop is changed to B
+	3.change tb3 to C, only tb4 value is changed to C, click save 1, bea1.prop is changed to B
+	4.change tb4 to D, nothing changed, click save 1, bean1.prop is changed to D
+	
+	repeat 1-4, value from E-H
+	</label>
+
+	<hlayout form="@id('fx') @load(vm) @save(vm, before='save1')">
+		tb1 <textbox id="tb1"  value="@bind(fx.bean1['prop'])" />
+		tb2 <textbox id="tb2" value="@bind(fx.bean1['prop'])" />
+		tb3 <textbox id="tb3" value="@bind(fx.bean1[vm.propName])" />
+		tb4 <textbox id="tb4" value="@bind(fx.bean1.prop)" />
+	</hlayout>
+	<hlayout>
+		bean1.prop : <label id="lb1" value="@bind(vm.bean1.prop)"/>
+	</hlayout>
+	<button id="save1" label="save1" onClick="@command('save1')" />
+	
+	<label multiline="true">
+	1.change tb5 to A, only tb6 is changed to A,
+	2.change tb6 to B, only tb5 is changed to B,
+	3.change tb7 to C, only tb8 is changed to C,
+	4.change tb8 to D, only tb7 is changed to D,
+	click save 2, bean2.prop is changed to B, bean3.prop is changed to D
+	
+	</label>
+	<hlayout form="@id('fx') @load(vm) @save(vm, before='save2')">
+		tb5 <textbox id="tb5"  value="@bind(fx.bean2[vm.propName])" />
+		tb6 <textbox id="tb6"  value="@bind(fx.bean2[vm.propName])" />
+		tb7 <textbox id="tb7"  value="@bind(fx.bean3[vm.propName])" />
+		tb8 <textbox id="tb8"  value="@bind(fx.bean3[vm.propName])" />
+	</hlayout>
+	<hlayout>
+		bean2.prop : <label id="lb2"  value="@bind(vm.bean2.prop)"/>
+		bean3.prop : <label id="lb3"  value="@bind(vm.bean3.prop)"/>
+	</hlayout>
+	<button id="save2" label="save2" onClick="@command('save2')" />
+	
+	<button label="dump" onClick="binder.tracker.dump()" />
+</window>

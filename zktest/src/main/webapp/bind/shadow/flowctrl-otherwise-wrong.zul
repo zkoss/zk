@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+flowctrl-otherwise-wrong.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 07 09:55:07 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        Unsupported parent error.
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.shadow.NavbarVM')">
+        <navbar id="navbar" orient="horizontal" collapsed="false">
+            <forEach items="@load(vm.menuItems)" var="menu">
+                <if test="@load(empty menu.subMenus)">
+                    <navitem label="@load(menu.label)" iconSclass="@load(menu.iconSclass)"/>
+                </if>
+                <otherwise> <!-- Wrong usage. Only can be used in choose -->
+                    <nav label="@load(menu.label)" iconSclass="@load(menu.iconSclass)"/>
+                </otherwise>
+            </forEach>
+        </navbar>
+    </div>
+</zk>

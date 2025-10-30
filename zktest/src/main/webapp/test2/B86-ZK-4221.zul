@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4221.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Apr 30 12:33:26 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		public class ViewModel {
+			public Object value = 123.456;
+			public String type = "FLOAT";
+			public Object getValue() { return value; }
+			public String getType() { return type; }
+		}
+
+		public void toggleInput(boolean checked) {
+			if(checked) {
+				vm.type = "STRING";
+				vm.value = "Test";
+			} else {
+				vm.type = "FLOAT";
+				vm.value = Double.valueOf(123.456);
+			}
+			BindUtils.postNotifyChange(null, null, vm, "type");
+			BindUtils.postNotifyChange(null, null, vm, "value");
+		}
+	]]></zscript>
+	<div viewModel="@id('vm') @init('ViewModel')">
+		<label>Click check box, no exception occurs</label>
+		<checkbox onCheck="toggleInput(event.checked);"/>
+		<separator/>
+
+		<apply template="@load(vm.type)">
+			<template name="FLOAT">
+				${vm.type}
+				<doublebox value="@load(vm.value)" readonly="true"/>
+			</template>
+
+			<template name="STRING">
+				${vm.type}
+				<textbox value="@load(vm.value)" readonly="true"/>
+			</template>
+		</apply>
+	</div>
+</zk>

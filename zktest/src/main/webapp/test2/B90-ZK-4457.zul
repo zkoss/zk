@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4457.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Mar 03 10:05:48 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label>
+		the coachmark width should fit the text inside by default.
+	</label>
+	<a id="menu" iconSclass="z-icon-navicon" />
+	<coachmark id="coachmark" target="menu" position="after_center">short</coachmark>
+</zk>

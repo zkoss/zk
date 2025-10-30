@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4677.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Oct 29 15:10:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.mid {
+			margin-top: 100px;
+		}
+	</style>
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.util.*;
+		import org.zkoss.zkmax.ui.util.*;
+		import org.zkoss.zul.*;
+		ListModel posm = new SimpleListModel(new String[] {
+			"before_start", "before_center", "before_end",
+			"after_start", "after_center", "after_end",
+			"start_before","start_center", "start_after",
+			"end_before", "end_center","end_after"
+		});
+	]]></zscript>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		Test Coachmark in all themes.
+		Check whether coachmark(position and arrow) displayed well.
+		The target shall be highlighted when the coachmark is open.
+		Follow the guide inside the coachmark for testing.
+	</label>
+	<window sclass="mid" apply="org.zkoss.zktest.test2.F90_ZK_4382Composer" width="2400px">
+		<button label="startTest" onClick="coachmark.open();"/>
+		<button id="button3" label="target3"/>
+		<hlayout>
+			<div hflex="2"></div>
+			<button id="button4" label="target4" onClick='Clients.log("task4")'/>
+			<div hflex="2" style="padding: 800px 0; border: 1px solid #339999" xmlns:n="native">
+				<n:table>
+					<n:tr>
+						<n:td rowspan="2">
+							<button id="showButton" label="Show">
+								<attribute name="onClick"><![CDATA[
+								ListModel model = posm;
+								int i = Math.max(0, posbox.selectedIndex);
+								String plb = (String) model.getElementAt(i);
+								String pval = plb.charAt(0) == '(' ? null : plb;
+								coachmark5.setPosition(pval);
+								coachmark5.setTarget(self);
+								coachmark5.open();
+						]]></attribute>
+							</button>
+						</n:td>
+						<n:td>
+							<label>Position Test: try these options.</label>
+						</n:td>
+					</n:tr>
+					<n:tr>
+						<n:td>
+							<selectbox id="posbox" model="${posm}" />
+						</n:td>
+					</n:tr>
+				</n:table>
+			</div>
+			<button id="button5" label="target5" onClick='Clients.log("task5")'/>
+			<div hflex="1"></div>
+		</hlayout>
+		<hlayout spacing="40px">
+			<button id="button2" label="target2"/>
+			<button id="button1" label="target1"/>
+		</hlayout>
+		<coachmark id="coachmark" target="button1" position="before_start" next="coachmark2" onTargetClick='Clients.log("onTargetClick!")'>
+			<label multiline="true">
+				load the page shall open this coachmark.(you shall check the description on top)
+				coackmark1:
+				You should see 'target1' button scrolled into view.
+			</label>
+			<button label="next()" onClick="coachmark.next();"/>
+			<button label="next(coachmark2)" onClick="coachmark.next(coachmark2);"/>
+		</coachmark>
+		<coachmark id="coachmark2" target="button3" position="before_center" visible="false" next="coachmark3">
+			<vlayout>
+				<label multiline="true">
+					coackmark2:
+					try "setTarget" buttons below for testing setTarget, the previous target highlight shall restore.
+					The new target will be highlight after coachmark open next time.
+					click the target to next coachmark(3).
+				</label>
+				<hlayout spacing="40px">
+					<button label="setTarget2" onClick="coachmark2.setTarget(button2)"/>
+					<button label="setTarget3" onClick="coachmark2.setTarget(button3)"/>
+					<button label="setTargetNull" onClick="coachmark2.setTarget(null)"/>
+					<button label="reopen" onClick="coachmark2.close();coachmark2.open()"/>
+				</hlayout>
+			</vlayout>
+		</coachmark>
+		<coachmark id="coachmark3" target="button4" position="start_center" visible="false" next="coachmark4">
+			<label multiline="true">
+				coachmark3:
+				check target and coachmark is scrollIntoview and displayed well.
+				test the "position" button.
+			</label>
+			<button id="buttonP" label="position"/>
+		</coachmark>
+		<coachmark id="coachmark4" target="button5" position="end_center" visible="false" next="coachmark">
+			<label multiline="true">
+				coachmark4:
+				check target and coachmark is scrollIntoview and displayed well.
+				click the X icon on top right. the coachmark shall close without opening next coachmark.
+			</label>
+		</coachmark>
+		<coachmark id="coachmark5" visible="false">
+			<label multiline="true">
+				Check coackmark position and arrow displayed well.
+			</label>
+		</coachmark>
+	</window>
+</zk>

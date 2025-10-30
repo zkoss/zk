@@ -1,0 +1,11 @@
+<zk>
+	<div>
+		You should not see java error.
+		<window id="win" title="Window">
+			<label id="lb" value="Label" />
+		</window>
+	</div>
+	<zscript>
+		org.zkoss.zk.ui.util.ConventionWires.wireFellows(win, new Object());
+	</zscript>
+</zk>

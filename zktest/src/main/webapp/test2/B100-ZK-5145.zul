@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5145.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 22 09:14:41 CST 2022, Created by katherine
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click button to update empty message.
+		2. you should see empty message is 'none'.
+	</label>   <chosenbox id="cb" emptyMessage="empty..."/>
+	<button label="update emptyMessage" onClick='cb.setEmptyMessage("none");'/>
+	<zscript>
+		String[] items = {
+			"item 1", "item 2"
+		};
+		ListModel dictModel = new SimpleListModel(items);
+		cb.setModel(dictModel);
+	</zscript>
+</zk>

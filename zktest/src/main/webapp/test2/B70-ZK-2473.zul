@@ -1,0 +1,7 @@
+<zk>
+	<label multiline="true">
+		According to zhtml's lang.xml, it can recognize zhtml, htm, html, and xhtml file type.
+		So the include component should be instant mode for this case.
+	</label>
+	<include src="/test2/B70-ZK-2473_include.xhtml" />
+</zk>

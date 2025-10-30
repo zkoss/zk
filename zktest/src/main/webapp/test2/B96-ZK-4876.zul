@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4876.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Jun 02 11:43:59 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Columnlayout shall not prevent line breaks in content.
+		Labels located in a descendant component of the Columnlayout shall not receive "white-space: no-wrap;".
+	</label>
+	<columnlayout>
+		<columnchildren id="cc" width="33%" style="padding: 5px">
+			<listbox hflex="1">
+				<listitem>
+					<listcell>
+						<label id="l1"
+								value="foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar" />
+						<separator spacing="1px" />
+						<label id="l2"
+								value="foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar"
+								style="font-size:smaller;" />
+						<separator spacing="1px" />
+						<label id="l3"
+								value="foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar foo bar"
+								style="font-size:smaller;font-style:italic;" />
+					</listcell>
+				</listitem>
+			</listbox>
+		</columnchildren>
+	</columnlayout>
+</zk>

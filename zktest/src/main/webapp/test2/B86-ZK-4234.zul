@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4234.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Apr 29 16:53:06 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.mycustom {
+			outline: 2px solid red;
+		}
+	</style>
+	<label multiline="true">
+		1. You should see the custom style (the red outline) on the combobox/bandbox and its popup
+		2. click on the "remove sclass" button, you should see the custom style disappear on the combobox/bandbox and its popup
+		3. click on the "add sclass" button, you should see the custom style appear on the combobox/bandbox and its popup
+	</label>
+	<combobox id="cb" sclass="mycustom">
+		<comboitem label="aaaa"/>
+		<comboitem label="bbbb"/>
+		<comboitem label="cccc"/>
+	</combobox>
+	<button onClick="cb.setSclass(null);bb.setSclass(null);" label="remove sclass"/>
+	<button onClick='cb.setSclass("mycustom");bb.setSclass("mycustom");' label="add sclass"/>
+	<separator/>
+	<bandbox id="bb" sclass="mycustom">
+		<bandpopup>111</bandpopup>
+	</bandbox>
+</zk>

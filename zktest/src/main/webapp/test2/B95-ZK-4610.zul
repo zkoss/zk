@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4610.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 12 16:22:11 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Press "Refresh" button twice.
+        2. Should have no any exception.
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4610VM')">
+        <button label="Refresh" onClick="@command('refresh')"/>
+        <listbox model="@init(vm.items)">
+            <auxhead>
+                <auxheader>
+                    <div sclass="z-icon-bars" popup="exportmenuMenupopup, after_start, type=toggle"/>
+                    <menupopup id="exportmenuMenupopup">
+                        <menuitem label="Print" iconSclass="z-icon-print"/>
+                        <menu label="Export" iconSclass="z-icon-share-square-o">
+                            <menupopup>
+                                <menuitem label="PDF"/>
+                                <menuitem label="CSV"/>
+                            </menupopup>
+                        </menu>
+                    </menupopup>
+                </auxheader>
+            </auxhead>
+            <listhead>
+                <listheader label="Header"/>
+            </listhead>
+            <template name="model">
+                <listitem label="${each}"/>
+            </template>
+        </listbox>
+    </div>
+</zk>

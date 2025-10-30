@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2785.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 18 16:56:25 CST 2015, Created by JamesChu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout>
+	    <label multiline="true">
+		1. Drop a folder under 'drop a folder here:'. (chrome)
+		2. You should see nothing and no exceptions.
+		</label>
+        <span>
+        	File:<label id="file"/>
+        </span>
+        <image id="img" />
+        drop a folder here:
+        <dropupload maxsize="-1" content="content" detection="browser">
+        	<attribute name="onUpload"><![CDATA[
+        	    org.zkoss.util.media.Media m = event.media;
+        	    if (m != null) {
+					img.setContent(event.media);
+					file.setValue(event.media.format);
+        	    }
+    		]]></attribute>
+        </dropupload>
+    </vlayout>
+</zk>

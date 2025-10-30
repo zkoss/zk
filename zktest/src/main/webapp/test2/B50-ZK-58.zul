@@ -1,0 +1,4 @@
+<zk>
+	<div>Click the Button and you should not see Java Exception. Otherwise it is a bug.</div>
+	<button label="Go" onClick='desktop.bookmark = "a?b"' />
+</zk>

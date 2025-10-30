@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2809.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 22 14:36:31 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<?import java.wrong.import.BigDecimal ?>
+<window>
+	You should not see any error with "importHandler.classNotFound"
+</window>

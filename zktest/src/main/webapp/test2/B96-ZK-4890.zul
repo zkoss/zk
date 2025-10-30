@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4890.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 19 14:42:56 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Wait for the Listbox and Grid to finish loading.
+        2. The "foo500" should be seen.
+    </label>
+    <window apply="org.zkoss.zktest.test2.B96_ZK_4890Composer" hflex="1" vflex="1">
+        <hlayout vflex="1" hflex="1">
+            <listbox id="lb" vflex="1" hflex="1">
+                <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+            </listbox>
+            <grid id="gr" vflex="1" hflex="1">
+                <custom-attributes org.zkoss.zul.grid.rod="true"/>
+            </grid>
+        </hlayout>
+    </window>
+</zk>

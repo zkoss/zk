@@ -1,0 +1,111 @@
+<!--
+desktop.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 21 18:59:49     2006, Created by Ian tsai
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<zscript><![CDATA[  
+//@DECLARATION
+int count = 0;
+Tab tab = null;
+Tabpanel tPanel = null;
+
+void addTabAndPanel(){
+	count++;
+	tab = new Tab("add "+count);
+    tPanel = new Tabpanel();
+    new Label("add::"+count).setParent(tPanel);
+    
+    tbox.getTabs().getChildren().add(tab);
+    tbox.getTabpanels().getChildren().add(tPanel);
+}
+]]></zscript>
+<html><![CDATA[
+<h3>test Tabbox Image in vertical panel </h3>
+<p>This also test the add/ remove Tab/Tabpanel functions.</p>
+]]></html>
+
+<button label="Add and SelectTab">
+	<attribute name="onClick"><![CDATA[
+		addTabAndPanel();
+        tbox.setSelectedTab(tab);
+	]]></attribute>
+</button>
+<button label="remove Last and Select Last Tab">
+	<attribute name="onClick"><![CDATA[
+		tbox.getTabs().getChildren().remove(
+			tbox.getTabs().getChildren().size()-1);
+		
+        tbox.setSelectedIndex(tbox.getTabs().getChildren().size()-1);
+	]]></attribute>
+</button>
+<button label="remove last Tabpanel from Tabpanels">
+	<attribute name="onClick"><![CDATA[
+		tbox.getTabpanels().getChildren().remove(
+			tbox.getTabpanels().getChildren().size()-1);
+		
+        tbox.setSelectedIndex(tbox.getTabs().getChildren().size()-1);
+	]]></attribute>
+</button>
+<button label="insert Tab before 3rd">
+	<attribute name="onClick"><![CDATA[
+		count++;
+		tab = new Tab("add "+count);
+		tbox.getTabs().insertBefore(tab,
+				(Component)tbox.getTabs().getChildren().get(3));
+	]]></attribute>
+</button>
+<button label="insert Tabpanel before invalidate">
+	<attribute name="onClick"><![CDATA[
+		tPanel = new Tabpanel();
+   		new Label("add:NEW:"+count).setParent(tPanel);
+		tbox.getTabpanels().insertBefore(tPanel,
+				(Component)tbox.getTabpanels().getChildren().get(3));
+		tbox.invalidate();
+	]]></attribute>
+</button>
+	<tabbox id="tbox" width="600px" height="500px" orient="vertical">
+		<tabs width="150px">
+			<tab label="Tab 1 greeeeeeeeeeeeeeeeeeeeeeeeee;ioh" image="../img/home.gif"/>
+			<tab label="Tab 2 greeeeeeeeeeeeeeeeeeeeeeeeee;ioh"/>
+			<tab label="Tab 3 greeeeeeeeeeeeeeeeeeeeeeeeee;ioh"/>
+			<tab label="Tab 4 greeeeeeeeeeeeeeeeeeeeeeeeee;ioh"/>
+			<tab label="Tab 5 greeeeeeeeeeeeeeeeeeeeeeeeee;ioh"/>
+			<tab label="Tab 6 greeeeeeeeeeeeeeeeeeeeeeeeee;ioh"/>
+			<tab label="Tab 7 greeeeeeeeeeeeeeeeeeeeeeeeee;ioh"/>
+			<tab label="Tab 8 greeeeeeeeeeeeeeeeeeeeeeeeee;ioh"/>
+			
+		</tabs>
+		<tabpanels>
+			
+			
+			<tabpanel><!--CONTAIN-->Tab1<button label="tab1"/></tabpanel>
+			<tabpanel><!--CONTAIN-->Tab2<button label="tab2"/></tabpanel>
+			<tabpanel><!--CONTAIN-->Tab3<button label="tab3"/></tabpanel>
+			<tabpanel><!--CONTAIN-->Tab4<button label="tab4"/></tabpanel>
+			<tabpanel><!--CONTAIN-->Tab5<button label="tab5"/></tabpanel>
+			<tabpanel><!--CONTAIN-->Tab6<button label="tab6"/></tabpanel>
+			<tabpanel><!--CONTAIN-->Tab7<button label="tab7"/></tabpanel>
+			<tabpanel><!--CONTAIN-->
+				<window title="test inner window" border="normal" width="100%" height="100%">
+					Tab8<button label="tab8"/>	
+					Tab8<button label="tab8"/>
+					Tab8<button label="tab8"/>
+					Tab8<button label="tab8"/>
+				</window>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

@@ -1,0 +1,8 @@
+<zk>
+	Please select 'a' or 'b', you should see the result as you selected.
+	<listbox mold="select" onSelect="self.selectedItem.invalidate();">
+		<listitem label="a" />
+		<listitem label="b" />
+		<listitem label="c" selected="true" />
+	</listbox>
+</zk>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Label"?>
+<?root-attributes lang="en"?>
+<!--
+label.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 28 15:23:05 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Label</n:h1>
+	</n:header>
+	<n:main>
+		<label>test label</label>
+		<label multiline="true">
+			1. test label
+			2. test label
+		</label>
+		<label maxlength="5">test label</label>
+		<label value="test label"/>
+	</n:main>
+</zk>

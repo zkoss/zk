@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4486.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 18 16:25:13 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "toggle header 1 visible".
+        2. The visibility of header 1 should be toggled.
+    </label>
+    <listbox>
+<!--        <custom-attributes org.zkoss.zul.css.flex="false"/>-->
+        <listhead>
+            <listheader label="1" id="lh1"/>
+            <listheader label="2" hflex="1"/>
+        </listhead>
+        <listitem>
+            <listcell label="1"/>
+            <listcell label="2"/>
+        </listitem>
+        <listfoot>
+            <listfooter label="1"/>
+            <listfooter label="2"/>
+        </listfoot>
+    </listbox>
+    <button label="toggle header 1 visible" onClick="lh1.visible=!lh1.visible"/>
+</zk>

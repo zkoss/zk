@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3905.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue May 29 18:18:42 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.  Click checkbox in header
+		2.  All checkboxes should be checked
+		3.  Click clear selection button
+		4.  All checkboxes should be unchecked
+		5.  Click checkbox in header
+		6.  Uncheck a listitem
+		7.  The checkbox in header should be unchecked
+		8.  Check the same listitem
+		9.  The checkbox in header should be checked
+		10. Click checkbox in header
+		11. All checkboxes should be unchecked
+	</label>
+	<listbox id="lb" multiple="true" checkmark="true">
+		<listhead>
+			<listheader label="All"/>
+		</listhead>
+		<listitem label="One"/>
+		<listitem label="Two"/>
+	</listbox>
+	<button label="clear selection" onClick="lb.clearSelection()"/>
+</zk>

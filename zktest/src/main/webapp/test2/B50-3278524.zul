@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tabbox>
+	<tabs>
+	<tab label="Hi"/>
+	</tabs>
+	<tabpanels>
+	<tabpanel>
+	You shall see a log (at the right bottom) showing "false"
+<include src="B50-3278524-inc.html"/>
+	</tabpanel>
+	</tabpanels>
+</tabbox>

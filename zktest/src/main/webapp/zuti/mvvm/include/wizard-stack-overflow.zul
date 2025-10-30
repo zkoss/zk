@@ -1,0 +1,30 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<zk xmlns:sh="shadow">
+	<window id="host" title="@load(model.currentStep.title)" border="normal"
+			viewModel="@id('wizardVM') @init(model)"
+			validationMessages="@id('vmsgs')"
+			onOK="@command('next')">
+
+		<sh:apply template="@load(empty contentTemplate ? 'defaultWizardContent' : contentTemplate)"/>
+
+		<template name="defaultWizardContent">
+			<sh:apply template="wizardProgress"/>
+			<sh:apply template="@load(wizardVM.currentStepTemplate)"/> 
+			<sh:if test="@load(wizardVM.backVisible)">
+				<button label="@load(wizardVM.backLabel)"
+					onClick="@command('back')" />
+			</sh:if>
+			<sh:if test="@load(wizardVM.nextVisible)">
+				<button label="@load(wizardVM.nextLabel)"
+					onClick="@command('next')" />
+			</sh:if>
+		</template>
+		
+		<template name="wizardProgress">
+			<div width="@load(c:cat(wizardVM.progress, '%'))" style="background-color: #DEF; height: 20px; overflow: visible; white-space: nowrap; text-align: center;">
+				<label value="@load(wizardVM.progress)"/> %
+			</div>
+		</template>
+	</window>
+</zk>

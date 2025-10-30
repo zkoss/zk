@@ -1,0 +1,31 @@
+<!--
+	B50-ZK-1031.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Apr 13 10:26:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		The header and body of the listbox should align.
+	</div>
+	<div height="500px" width="500px">
+		<listbox vflex="1" span="1">
+			<listhead sizable="true">
+				<listheader label="Col1" width="100px" />
+				<listheader label="Col2" width="100px" />
+				<listheader label="Col3" width="100px" />
+			</listhead>
+			<listitem>
+				<listcell>A</listcell>
+				<listcell>B</listcell>
+				<listcell>C</listcell>
+			</listitem>
+		</listbox>
+	</div>
+</zk>

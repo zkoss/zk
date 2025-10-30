@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3918.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jun 12 16:48:17 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click colorbox to open color palette
+		2. Type "@GHIJKL" in hex input, the value should keep empty
+		3. Type "#123ABC" in hex input, the value should be #123ABC
+		4. Press CTRL + A to select hex input value
+		5. Press CTRL + X to cut it, the value should be empty
+		6. Press CTRL + V to paste it back, the value should be #123ABC
+		7. Click color picker button
+		8. Redo step 2 to 6
+	</label>
+	<colorbox/>
+</zk>

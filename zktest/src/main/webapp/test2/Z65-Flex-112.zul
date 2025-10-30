@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Timebox, rounded]" width="480px">
+        <timebox mold="rounded" vflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Timebox]" width="480px">
+        <timebox vflex="1"/>
+    </window>
+</hbox>
+</zk>

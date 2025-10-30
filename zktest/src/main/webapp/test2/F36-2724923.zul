@@ -1,0 +1,33 @@
+<window title="test of scroll">
+	<div height="100px" style="overflow:auto">
+		<vbox>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label id="t1" value="Cell target"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+			<label value="Cell"/>
+		</vbox>
+	</div>
+	<button label="scroll" onClick="Clients.scrollIntoView(t1)"/>
+	and you will see "Cell target" scrolled into view above
+	<div height="100px" style="overflow:auto">
+		<div height="150px" style="overflow:auto">
+			<div height="200px">
+			inner
+			</div>
+			<label id="t2" value="Div target"/>
+		</div>
+	</div>
+	<button label="scroll" onClick="Clients.scrollIntoView(t2)"/>
+	and you will see "Div target" scrolled into view above
+</window>

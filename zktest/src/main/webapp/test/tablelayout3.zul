@@ -1,0 +1,61 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<!-- testing wait for the spinner to be finished 
+tablelayout column number: <spinner value="3" onChanging="tablelayout.setColumns(event.value)"/>
+<separator/>
+table1> rowspan: <spinner value="1" onChanging="table1.setRowspan(event.value)"/> colspan: <spinner value="1" onChanging="table1.setColspan(event.value)"/>
+<separator/>
+table2> rowspan: <spinner value="2" onChanging="table2.setRowspan(event.value)"/> colspan: <spinner value="1" onChanging="table2.setColspan(event.value)"/>
+<separator/>
+table3> rowspan: <spinner value="1" onChanging="table3.setRowspan(event.value)"/> colspan: <spinner value="1" onChanging="table3.setColspan(event.value)"/>
+<separator/>
+table4> rowspan: <spinner value="1" onChanging="table4.setRowspan(event.value)"/> colspan: <spinner value="2" onChanging="table4.setColspan(event.value)"/>
+<separator/>
+-->
+<tablelayout id="tablelayout" columns="3">
+	<tablechildren id="table1" rowspan="2">
+		<panel title="table1" border="normal" collapsible="true">
+			<panelchildren><image src="../img/castle.png"/></panelchildren>	
+		</panel>
+	</tablechildren>
+	<tablechildren id="table2">
+		<panel height="247px" title="table2" border="normal">
+		 	<panelchildren>
+		 		<html>
+			 		&lt;h4&gt;Direct RIA&lt;/h4&gt;
+			 		&lt;ul&gt;
+			 			&lt;li&gt;No JavaScript&lt;/li&gt;
+			 			&lt;li&gt;No Exposure of Biz Logic&lt;/li&gt;
+			 			&lt;li&gt;No Sync Hassle&lt;/li&gt;
+			 			&lt;li&gt;No Data Inconsistency&lt;/li&gt;
+			 			&lt;li&gt;No Security Hazard&lt;/li&gt;
+			 		&lt;/ul&gt;
+				</html>
+		 	</panelchildren>
+		 </panel>
+	</tablechildren>
+	<tablechildren id="table3">
+		<panel height="247px" title="table2" border="normal"
+		 	collapsible="true">
+		 	<panelchildren>
+		 		<html>
+			 		&lt;h4&gt;Direct RIA&lt;/h4&gt;
+			 		&lt;ul&gt;
+			 			&lt;li&gt;Boosting Productivity&lt;/li&gt;
+			 			&lt;li&gt;Minimal Maintenance&lt;/li&gt;
+			 			&lt;li&gt;Engaging User Experience&lt;/li&gt;
+			 			&lt;li&gt;Fast Prototyping&lt;/li&gt;
+			 			&lt;li&gt;Real-time Push&lt;/li&gt;
+			 		&lt;/ul&gt;
+				</html>
+		 	</panelchildren>
+		 </panel>
+	</tablechildren>
+	<tablechildren  id="table4" colspan="2">
+		<panel title="table4" border="normal" collapsible="true">
+		 	<panelchildren>ZK: No1. Ajax + Mobile<image src="../img/earth.png"/></panelchildren>	
+		 </panel>
+	</tablechildren>
+</tablelayout>
+			
+</zk>

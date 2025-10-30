@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3167027.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 28 19:58:07 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "add node" button.</li>
+			<li>A "new item" shall appear.</li>
+		</ol>
+	]]></html>
+	<button label="add node">
+		<attribute name="onClick"><![CDATA[
+			Treerow tr = new Treerow();
+			item.appendChild(tr);
+			tr.appendChild(new Treecell("new Item"));
+		]]></attribute>
+	</button>
+	<tree>
+		<treechildren>
+			<treeitem id="item"/>
+		</treechildren>
+	</tree>
+</zk>

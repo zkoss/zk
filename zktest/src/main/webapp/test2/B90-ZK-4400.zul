@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4400.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 23 16:04:14 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Grant a camera access.
+        2. Try a QR code. The component shouldn't trigger any onDetect events.
+        3. Click "toggle on" button.
+        4. Try a QR code. The component should trigger some onDetect events.
+    </label>
+    <barcodescanner id="bcs" type="qr" enable="false"
+                    onDetect='Clients.log(event.getType() + " " + event.getResult())'/>
+    <hlayout>
+        <button onClick='bcs.setEnable(true);Clients.log(bcs.getEnable()?"enabled":"not enabled")' label="toggle on"/>
+        <button onClick='bcs.setEnable(false);Clients.log(bcs.getEnable()?"enabled":"not enabled")' label="toggle off"/>
+    </hlayout>
+</zk>

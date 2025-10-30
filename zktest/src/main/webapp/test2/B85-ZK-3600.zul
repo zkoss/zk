@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3600.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 3 17:49:05 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		for (int i = 0; i < 100; i++) {
+			model.add(i);
+		}
+	]]></zscript>
+	<label multiline="true">
+		1. The size of each scrollbar handles should be the same.
+		2. The size of scrollbar handle is not affected regardless of visibility of the first column/header.
+	</label>
+	<button onClick="colA.visible = !colA.visible;
+					hdrA.visible = !hdrA.visible;"
+			label="First column/header visibility change"/>
+	<hlayout>
+		<grid model="${model}" height="400px" hflex="1">
+			<custom-attributes org.zkoss.zul.grid.rod="false"/>
+			<columns>
+				<column label="A" visible="false" id="colA"/>
+				<column label="B"/>
+			</columns>
+			<template name="model">
+				<row>
+					<label value="${forEachStatus.index}"/>
+					<label value="${forEachStatus.index}"/>
+				</row>
+			</template>
+		</grid>
+		<grid model="${model}" height="400px" hflex="1">
+			<custom-attributes org.zkoss.zul.grid.rod="false"/>
+			<columns>
+				<column label="A"/>
+				<column label="B"/>
+			</columns>
+			<template name="model">
+				<row>
+					<label value="${forEachStatus.index}"/>
+					<label value="${forEachStatus.index}"/>
+				</row>
+			</template>
+		</grid>
+	</hlayout>
+	<hlayout>
+		<listbox model="${model}" height="400px" hflex="1">
+			<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+			<listhead>
+				<listheader label="A" visible="false" id="hdrA"/>
+				<listheader label="B"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<label value="${forEachStatus.index}"/>
+					</listcell>
+					<listcell>
+						<label value="${forEachStatus.index}"/>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<listbox model="${model}" height="400px" hflex="1">
+			<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+			<listhead>
+				<listheader label="A"/>
+				<listheader label="B"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<label value="${forEachStatus.index}"/>
+					</listcell>
+					<listcell>
+						<label value="${forEachStatus.index}"/>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</hlayout>
+</zk>

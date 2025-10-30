@@ -1,0 +1,46 @@
+<!--
+Z30-grid-0024.zul
+
+{{IS_NOTE
+	Purpose:
+		test grid span.
+	Description:
+		
+	History:
+		Create by Dennis
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+Grid without Column, you can see the layout of grid shows properly.
+
+<grid>
+	<rows>
+		<row spans="2,3">
+			<label value="(2,3)"/>
+			<label value="Item B.5"/><label value="Item B.6"/>
+		</row>
+		<row spans="3">
+			<label value="(3)"/><label value="Item C.4"/>
+			<label value="Item C.5"/><label value="Item C.6"/>
+		</row>
+		<row spans=",,1,2">
+			<label value="(,,1,2)"/><label value="Item D.2"/>
+			<label value="Item D.3"/><label value="Item D.4"/>
+			<label value="Item D.5"/>
+		</row>
+	</rows>
+	<foot>
+		<footer width="30%">Left : width 30%</footer>
+		<footer>Center</footer>
+		<footer width="100px" label="Right : width 100px" />
+		<footer>Column 4</footer>
+		<footer>Column 5</footer>
+		<footer>Column 6</footer>
+	</foot>
+</grid>
+</window>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3110.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 28, 2016  6:08:27 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:sh="shadow">
+	<style>
+	.tag1 {
+		background-color: #FFAD46;
+		border-radius: 7px;
+		padding: 10px;
+	}
+	.tag2 {
+		border: 2px solid #FFAD46;
+		border-radius: 7px;
+		padding: 5px;
+	}
+	</style>
+	<div apply="org.zkoss.zktest.test2.B80_ZK_3110Composer">
+	
+		<div id="tagList">
+			<template name="tag1">
+				<span sclass="tag1">
+					<sh:apply template="tagLabel" text="${each}"/>
+				</span>
+			</template>
+			<template name="tag2">
+				<span sclass="tag2">
+					<sh:apply template="tagLabel" text="${each}"/>
+				</span>
+			</template>
+
+<!-- 			the tagLabel template is only visible when inside the component which is the host of the collection template -->
+<!-- 			<template name="tagLabel">${text}</template> -->
+
+		</div>
+		<template name="tagLabel">${text}</template>
+
+
+	</div>
+	<label multiline="true">
+		1.load the page
+		2.it should not appear any exception
+	</label>
+
+</zk>

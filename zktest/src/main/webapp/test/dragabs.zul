@@ -1,0 +1,39 @@
+<!-- Bug 1514789 -->
+<zk>
+<zscript>
+index = 0;
+exchange() {
+	exchange(self, event.getDragged());
+}
+exchange(a, b) {
+	String left = a.getLeft();
+	String top = a.getTop();
+	a.setLeft(b.getLeft());
+	a.setTop(b.getTop());
+	b.setLeft(left);
+	b.setTop(top);
+}
+</zscript>
+<div id="div1" style="position:absolute;" top="0px" left="0px"
+draggable="true" droppable="true" onDrop="exchange()">
+div 1
+</div>
+<div id="div2" style="position:absolute;" top="0px" left="90px"
+draggable="true" droppable="true" onDrop="exchange()">
+div 2
+</div>
+<div id="div3" style="position:absolute;" top="90px" left="0px"
+draggable="true" droppable="true" onDrop="exchange()">
+div 3
+</div>
+<div id="div4" style="position:absolute;" top="90px" left="90px"
+draggable="true" droppable="true" onDrop="exchange()">
+div 4
+</div>
+<div height="30px">
+</div>
+try to drag "div x" and drop it to any other
+<separator/>
+<button label="swap 1, 4" onClick="exchange(div1, div4)"/>
+</zk>
+

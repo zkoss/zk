@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4694-inc.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 07 15:12:05 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window onClientInfo="Clients.log(event.getName() + event.getData())"/>
+</zk>

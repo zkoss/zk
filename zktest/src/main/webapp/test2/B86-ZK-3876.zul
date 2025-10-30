@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3876.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Nov 13 11:35:21 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		All these input placeholder style(color) should be same.
+	</label>
+	<div>
+		<textbox placeholder="textbox"></textbox>
+		<decimalbox placeholder="decimalbox"></decimalbox>
+		<intbox placeholder="intbox"></intbox>
+		<longbox placeholder="longbox"></longbox>
+		<doublebox placeholder="doublebox"></doublebox>
+	</div>
+	<separator></separator>
+	<div>
+		<combobox placeholder="combobox"></combobox>
+		<bandbox placeholder="bandbox"></bandbox>
+		<datebox placeholder="datebox"></datebox>
+		<timebox placeholder="timebox"></timebox>
+		<spinner placeholder="spinner"></spinner>
+		<doublespinner placeholder="doublespinner"></doublespinner>
+		<timepicker placeholder="timepicker"></timepicker>
+	</div>
+</zk>

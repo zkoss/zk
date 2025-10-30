@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3208-tree.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, May 17, 2016  4:46:48 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3208VM')">
+		<label multiline="true">
+			1. should see both trees have page size of 5, instead of the default 20
+			2. switch to page 2 on both grids, should see page size is still 5
+			3. switch back to page 1 on both grids, should see page size is still 5
+		</label>
+		<zscript><![CDATA[
+			public void log() {
+				Clients.log("tree1 pgsz: " + tree1.getPageSize());
+				Clients.log("tree2 pgsz:" + tree2.getPageSize());
+				Clients.log("model pgsz: " + ((org.zkoss.zul.ext.Pageable) tree1.getModel()).getPageSize());
+				Clients.log("paging pgsz: " + myPaging.getPageSize());
+			}
+		]]></zscript>
+		<tree id="tree1" model="@init(vm.tmodel)" mold="paging" paginal="@init(myPaging)" onPaging="log()">
+			<custom-attributes org.zkoss.zul.tree.rod="true"/>
+			<treecols>
+				<treecol>rod=true</treecol>
+			</treecols>
+		</tree>
+		<tree id="tree2" model="@init(vm.tmodel)" mold="paging" paginal="@init(myPaging)" onCreate="log()">
+			<custom-attributes org.zkoss.zul.tree.rod="false"/>
+			<treecols>
+				<treecol>rod=false</treecol>
+			</treecols>
+		</tree>
+		<paging id="myPaging" pageSize="@init(vm.myPageSize)"/>
+	</div>
+</zk>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3000.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 3 10:48:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        import org.zkoss.zul.ListModel;
+        import org.zkoss.zul.ListModelList;
+        import org.zkoss.zul.ListModels;
+
+        public class ChosenboxViewModel {
+
+        private ListModelList contactsModel=new ListModelList(Locale.getAvailableLocales());
+
+        public ListModel getContactsSubModel() {
+        ListModelList subModel =new ListModelList(Locale.getAvailableLocales());
+            subModel.addToSelection(subModel.get(1));
+            return ListModels.toListSubModel(subModel);
+        }
+        public ListModel getContactsModel() {
+            contactsModel.addToSelection(contactsModel.get(1));
+            return contactsModel;
+        }
+
+        }
+    </zscript>
+    <vlayout hflex="1" apply="org.zkoss.bind.BindComposer"
+             viewModel="@id('vm') @init('ChosenboxViewModel')">
+        <label multiline="true">
+            1. You should see one selected option in chosenbox.
+            2. Focus chosenbox and enter 'a', you should see few options appear.
+            3. Select one option, you should see the dropdown list closed and a new selected option appear in chosenbox.
+        </label>
+        <separator />
+        <vlayout sclass="mail" hflex="1">
+            <chosenbox sclass="mailinput" hflex="1" model="@load(vm.contactsSubModel)" />
+        </vlayout>
+    </vlayout>
+</zk>

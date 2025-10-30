@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-397.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 23 18:08:52 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+You shouldn't see the icon of the checkbox or radio is cut on Opera
+<listbox multiple="true" checkmark="true">
+<listitem label="item1" disabled="true"/>
+</listbox>
+<listbox checkmark="true">
+<listitem label="item1" disabled="true"/>
+</listbox>
+<tree multiple="true" checkmark="true">
+<treechildren>
+<treeitem label="item1" disabled="true"/>
+</treechildren>
+</tree>
+<tree checkmark="true">
+<treechildren>
+<treeitem label="item1" disabled="true"/>
+</treechildren>
+</tree>
+</zk>

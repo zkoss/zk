@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4055.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 13 10:51:34 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <label multiline="true">
+        1. You should see 1, 2, 4 are visible. 3 and 5 are hidden.
+        2. Each visible line should have a red "ZK label".
+    </label>
+    <div>
+        <n:div>
+            <zk if="${true}">
+                <n:div id="div1">
+                    1 Visible (ZK label should be here) ==>
+                    <label value="ZK label" style="color:red"/>
+                </n:div>
+            </zk>
+            <n:div id="div2" if="true">
+                2 Visible
+                <label value="ZK label" style="color:red"/>
+            </n:div>
+            <n:div id="div3" if="false">
+                3 Hidden
+                <label value="ZK label" style="color:red"/>
+            </n:div>
+            <zk if="${true}">
+                <n:div id="div4">
+                    4 Visible (ZK label should be here) ==>
+                    <label value="ZK label" style="color:red"/>
+                </n:div>
+            </zk>
+            <zk if="${false}">
+                <n:div id="div5">5 Hidden
+                    <label value="ZK label" style="color:red"/>
+                </n:div>
+            </zk>
+        </n:div>
+    </div>
+</zk>

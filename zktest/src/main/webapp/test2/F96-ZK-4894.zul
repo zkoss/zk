@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4894.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 20 12:42:10 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <label multiline="true">
+        1. Focus in the textbox and blur, and you should see an errorbox.
+        2. Open the combobox.
+        3. Use the mouse wheel to scroll.
+        4. The errorbox and popup should follow the textbox and combobox.
+    </label>
+    <div id="content" height="600px" width="800px" style="overflow: auto" ca:data-scrollable="true">
+        <div height="300px"/>
+        <vlayout>
+            <combobox>
+                <comboitem label="item 1"/>
+                <comboitem label="item 2"/>
+                <comboitem label="item 3"/>
+                <comboitem label="item 4"/>
+                <comboitem label="item 5"/>
+            </combobox>
+            <textbox constraint="no empty"/>
+        </vlayout>
+        <div height="1000px"/>
+    </div>
+</zk>

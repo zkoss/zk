@@ -1,0 +1,75 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "es5",
+    "lib": [
+      "esnext",
+      "dom",
+      "ScriptHost"
+    ],
+    "module": "commonjs",
+    "allowJs": true,
+    "noEmit": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUmdGlobalAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noEmitHelpers": true,
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "typeRoots": [
+      "node_modules",
+      "node_modules/@types",
+      "../zkcml/node_modules"
+    ],
+    "types": [
+      "zk",
+      "zul",
+      "zhtml",
+      "zkbind",
+      "stateless",
+      "zkmax",
+      "zkex",
+      "client-bind",
+      "webpack-env"
+    ],
+    "paths": {
+      "@zk/*": [
+        "./zk/src/main/resources/web/js/zk/*"
+      ],
+      "@zul/*": [
+        "./zul/src/main/resources/web/js/zul/*"
+      ],
+      "@zhtml/*": [
+        "./zhtml/src/main/resources/web/js/zhtml/*"
+      ],
+      "@stateless/*": [
+        "./stateless/src/main/resources/web/js/stateless/*"
+      ],
+      "@zkex/*": [
+        "../zkcml/zkex/src/main/resources/web/js/zkex/*"
+      ],
+      "@zkmax/*": [
+        "../zkcml/zkmax/src/main/resources/web/js/zkmax/*"
+      ],
+      "@client-bind/*": [
+        "../zkcml/client-bind/src/main/resources/web/js/clientbind/*"
+      ]
+    }
+  },
+  "include": [
+    "zk/src/main/resources/web/js",
+    "zul/src/main/resources/web/js",
+    "zkbind/src/main/resources/web/js",
+    "zhtml/src/main/resources/web/js"
+  ],
+  "exclude": [
+    "node_modules",
+    "zktest",
+    "**/build/*",
+    "**/codegen/*"
+  ]
+}

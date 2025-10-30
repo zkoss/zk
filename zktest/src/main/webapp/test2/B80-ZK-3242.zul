@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3242.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jun 24, 2016  5:13:11 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1.click button "check"
+        2.zk log should appear "false"
+    </label>
+    <tabbox xmlns:w="client">
+<!--     render tab2 from start, to avoid having to select tab2 before checking visible. -->
+    <custom-attributes org.zkoss.zul.client.rod="false"/>
+        <tabs>
+            <tab label="Tab 1" />
+            <tab label="Tab 2" />
+        </tabs>
+        <tabpanels>
+            <tabpanel><button w:onClick="zk.log(zk('$tx1').$().isRealVisible())" label="check"/></tabpanel>
+            <tabpanel><textbox id="tx1" /></tabpanel>
+        </tabpanels>
+    </tabbox>
+</zk>

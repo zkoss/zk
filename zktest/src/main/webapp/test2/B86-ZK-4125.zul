@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4125.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 9 17:52:15 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout hflex="1" vflex="1">
+		<label>Click bar in the slider, it should slide by steps</label>
+		<slider vflex="1" maxpos="4" orient="vertical" slidingtext="Test"/>
+	</vlayout>
+</zk>

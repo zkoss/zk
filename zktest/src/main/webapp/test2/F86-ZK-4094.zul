@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
+<!--
+F86-ZK-4094.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Oct 25 10:15:10 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click requestCamera, should see the stop icon on the upper right corner
+		2. Click Start, should see the recording icon on the upper right corner
+		3. Click Pause, should see the pause icon on the upper right corner
+		4. Click Resume, should see the recording icon on the upper right corner
+		5. Click Stop, should see the stop icon on the upper right corner
+	</label>
+	<vlayout>
+		<camera id="camera" width="600px"/>
+		<hlayout>
+			<button onClick="camera.requestCamera()" label="requestCamera"/>
+			<button onClick="camera.start()" label="Start"/>
+			<button onClick="camera.stop()" label="Stop"/>
+			<button onClick="camera.pause()" label="Pause"/>
+			<button onClick="camera.resume()" label="Resume"/>
+		</hlayout>
+		<combobox>
+			<comboitem label="iceblue"/>
+			<comboitem label="breeze"/>
+			<comboitem label="sapphire"/>
+			<comboitem label="silvertail"/>
+			<comboitem label="atlantic"/>
+			<attribute name="onChange">
+				Library.setProperty("org.zkoss.theme.preferred", event.value);
+				Executions.sendRedirect("");
+			</attribute>
+		</combobox>
+	</vlayout>
+</zk>

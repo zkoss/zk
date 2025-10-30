@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4765.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jan 13, 2021 02:48:18 PM, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	Click the middle of splitter, than drag. It should work fine.
+	<separator />
+	<hbox height="100px" width="100%">
+		<div>
+			left side <textbox/>
+		</div>
+		<splitter/>
+		<div>
+			right side <textbox/>
+		</div>
+	</hbox>
+	<separator />
+	Click the middle of splitter of splitlayout, than drag. It should work fine.
+	<splitlayout height="200px" orient="horizontal" widths="200,200">
+		<div></div>
+		<div></div>
+	</splitlayout>
+</zk>

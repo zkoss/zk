@@ -1,0 +1,26 @@
+<?page title="title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<zscript><![CDATA[
+		import java.util.ArrayList;
+		import org.zkoss.zul.DefaultTreeModel;
+		import org.zkoss.zul.DefaultTreeNode;
+		
+		ArrayList children = new ArrayList();
+		children.add(new DefaultTreeNode("Child1"));
+		children.add(new DefaultTreeNode("Child2"));
+		DefaultTreeNode root = new DefaultTreeNode("Root", children);
+		DefaultTreeModel model = new DefaultTreeModel(root);
+		void remove() {
+			root.remove(1);
+		}
+	]]></zscript>
+	<window title="title" border="normal">
+		Click "Remove Child2" button directly without open the Bandbox, should not see JS error message.<separator />
+		<bandbox id="bd" mold="rounded">
+			<bandpopup>
+				<tree id="tree" width="300px" model="${model}"/>
+			</bandpopup>
+		</bandbox>
+		<button id="removeChild2" label="Remove Child2" onClick="remove()"/>
+	</window>
+</zk>

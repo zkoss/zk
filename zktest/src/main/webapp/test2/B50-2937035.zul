@@ -1,0 +1,27 @@
+<zk>
+	<tabbox height="100%">
+		<tabs>
+			<tab label="tab" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<borderlayout height="100%">
+					<north title="Inbox" size="50%"
+						splittable="true" collapsible="true">
+						<div vflex="1">
+							IE 6 only: Borderlayout inside tabpanel has
+							no height
+							<separator />
+							The tabbox below should has two part,
+							separate equally
+						</div>
+					</north>
+					<center autoscroll="true"
+						border="normal">
+						<div vflex="1"></div>
+					</center>
+				</borderlayout>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

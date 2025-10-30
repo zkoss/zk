@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3333.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Sep 20 11:42:32 CST 2016, Created by jameschu
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <window apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.BB0_ZK_3333VM')">
+        <vlayout form="@id('myProxy') @load(vm) @save(vm, before='validate') @validator(vm.myValidator)">
+            <label>Type "ss" in tbeditor and click validate button, you should see "...PROXY MSG : original messagess" in red block, and "original messagess" in blue block.</label>
+            <tbeditor id="tb" value="@bind(myProxy.message)" />
+            <button id="validate" label="Validate" onClick="@command('validate')"/>
+            <label id="mid" value="@load(vm.midMsg)" style="border:1px solid red"/>
+            <label id="final" value="@load(vm.finalMsg)" style="border:1px solid blue"/>
+        </vlayout>
+    </window>
+</zk>

@@ -1,0 +1,6 @@
+<zk>
+	<hbox>
+		<calendar id="cal" />
+		<label>Should not be able to select year less than 1900 or greater than 2099</label>
+	</hbox>
+</zk>

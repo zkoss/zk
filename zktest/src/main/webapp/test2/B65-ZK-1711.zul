@@ -1,0 +1,16 @@
+<zk>
+	<label multiline="true">
+	1. Click "invalidate" button.
+	2. If drop-down list of "Chosenbox" and "Selectbox" is empty, it is a bug. 
+	</label>
+	<window id="win" width="100%">
+		<zscript>
+			ListModelList model = new ListModelList();
+			model.add("test1");
+			model.add("test2");
+		</zscript>
+		Chosen Box: <chosenbox id="chosenbox" width="100px" model="${model}" />
+		Select Box: <selectbox model="${model}" />
+		<button label="invalidate" onClick="win.invalidate()" />
+	</window>
+</zk>

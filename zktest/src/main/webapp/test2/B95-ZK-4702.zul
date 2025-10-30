@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4702.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Oct 27 18:10:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	You should see rows works well (there should be empty rows to fulfill rows = 5)
+	<tree id="tree" width="400px" rows="5" multiple="true">
+		<treecols>
+			<treecol label="Subject"/>
+			<treecol label="From"/>
+			<treecol label="Received"/>
+		</treecols>
+		<auxhead>
+			<auxheader/>
+			<auxheader label="Details" colspan="2"/>
+		</auxhead>
+		<auxhead>
+			<auxheader label="Some" colspan="2"/>
+			<auxheader/>
+		</auxhead>
+		<treechildren>
+			<treeitem id="ti0" selected="true">
+				<treerow>
+					<treecell label="Intel Snares XML"/>
+					<treecell label="David Needle"/>
+					<treecell label="7-12-2005"/>
+				</treerow>
+				<treechildren>
+					<treeitem id="ti01">
+						<treerow>
+							<treecell label="Intel Snares XML"/>
+							<treecell label="Ria Coen"/>
+							<treecell label="7-12-2005"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Unknown chaos"/>
+		</treechildren>
+	</tree>
+	<div id="d" height="700px">
+		500px
+	</div>
+	<custom-attributes org.zkoss.zul.css.flex="false"/>
+	<div vflex="1">
+		vflex = 1
+	</div>
+</zk>

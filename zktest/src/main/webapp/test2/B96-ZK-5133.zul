@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5133.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 14 15:52:31 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<div>
+	<label>
+		Click the button and see the selected index: initial >> 1, detached >> -1, reattached >> 1
+	</label>
+	<separator bar="true"/>
+	<vlayout>
+		<div>
+			Selected index - initial:
+			<label id="l1"/>
+		</div>
+		<div>
+			Selected index - detached:
+			<label id="l2"/>
+		</div>
+		<div>
+			Selected index - reattached:
+			<label id="l3"/>
+		</div>
+	</vlayout>
+	<radiogroup id="radiogroup">
+		<radio label="First" value="first"/>
+		<radio label="Second" value="second" selected="true"/>
+	</radiogroup>
+	<button id="button" label="detach and see">
+		<attribute name="onClick">
+			final Radiogroup radiogroup = button.getFellow("radiogroup");
+			final int initial = radiogroup.getSelectedIndex();
+			radiogroup.detach();
+			final int detached = radiogroup.getSelectedIndex();
+			button.getParent().appendChild(radiogroup);
+			final int reattached = radiogroup.getSelectedIndex();
+			l1.setValue("" + initial);
+			l2.setValue("" + detached);
+			l3.setValue("" + reattached);
+		</attribute>
+	</button>
+</div>

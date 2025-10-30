@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2823.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 21 12:32:00 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:sh="shadow" xmlns:x="xhtml">
+	<style>
+		.item {
+			display: inline-block;
+			width: 30px;
+			border-radius: 3px;
+			background-color: PeachPuff;
+			text-align: center;
+			margin: 1px;
+		}
+	</style>
+	
+	<zscript>
+		ListModelList items = new ListModelList();
+		items.add(0);
+		items.add(1);
+		items.add(2);
+		items.add(3);
+		items.add(4);
+		items.add(5);
+	</zscript>
+	
+	<vlayout>
+		<hlayout>
+			<sh:forEach items="${items}">
+				<label sclass="item" value="${each}"/>
+			</sh:forEach>
+		</hlayout>
+		<label id="testLabel" value="${items}"/>
+		
+		<button label="clear" onClick="
+			items.clear(); 
+			testLabel.setValue(items.toString())"/>
+	</vlayout>
+</zk>

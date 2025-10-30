@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4416.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 19 18:41:56 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Load absolute path" button.
+        2. The PDFViewer should load a PDF properly.
+        3. Click "Load ~. path" button.
+        4. The URL in error message should not include "~./" (it should be encoded)
+    </label>
+    <pdfviewer id="pdf" height="300px"/>
+    <button label="Load absolute path" onClick='pdf.setSrc("/test2/B1896797.pdf");'/>
+    <button label="Load ~. path" onClick='pdf.setSrc("~./non-exists.pdf");'/>
+</zk>

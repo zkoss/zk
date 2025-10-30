@@ -1,0 +1,46 @@
+<zk xmlns:w="client">
+	<div>
+		Select mutiple Item using shift key should return correct count in listbox (ROD enabled)
+	</div>
+	<window border="normal" title="hello">
+		<custom-attributes org.zkoss.zul.listbox.rod="true" />
+
+		<button
+			onClick="label.value=String.valueOf(listbox.getSelectedCount())"
+			  label="getSelectedCount" />
+		<label id="label" />
+
+		<listbox id="listbox" multiple="true" rows="10" width="200px" >
+			<listitem label="1" />
+			<listitem label="2" />
+			<listitem label="3" />
+			<listitem label="4" />
+			<listitem label="1" />
+			<listitem label="2" />
+			<listitem label="3" />
+			<listitem label="4" />
+			<listitem label="3" />
+			<listitem label="4" />
+			<listitem label="4" />
+		</listbox>
+		
+		
+		<button
+			onClick="label2.value=String.valueOf(listbox2.getSelectedCount())"
+			 label="getSelectedCount" />
+		<label id="label2" />
+		<listbox id="listbox2" multiple="true" rows="10" width="200px" checkmark="true" >
+			<listitem label="1" />
+			<listitem label="2" />
+			<listitem label="3" />
+			<listitem label="4" />
+			<listitem label="1" />
+			<listitem label="2" />
+			<listitem label="3" />
+			<listitem label="4" />
+			<listitem label="3" />
+			<listitem label="4" />
+			<listitem label="4" />
+		</listbox>
+	</window>
+</zk>

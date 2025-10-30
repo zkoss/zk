@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
+<!--
+B86-ZK-4114.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Nov 02 18:21:02 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in all themes
+		2. The font-family of Item1 and Item2 should be the same
+	</label>
+	<organigram width="600px">
+		<orgchildren>
+			<orgitem label="Item1">
+				<orgchildren>
+					<orgitem>
+						<orgnode>
+							<label value="Item2"/>
+						</orgnode>
+					</orgitem>
+				</orgchildren>
+			</orgitem>
+		</orgchildren>
+	</organigram>
+	<combobox>
+		<comboitem label="iceblue"/>
+		<comboitem label="breeze"/>
+		<comboitem label="sapphire"/>
+		<comboitem label="silvertail"/>
+		<comboitem label="atlantic"/>
+		<attribute name="onChange">
+			Library.setProperty("org.zkoss.theme.preferred", event.value);
+			Executions.sendRedirect("");
+		</attribute>
+	</combobox>
+</zk>

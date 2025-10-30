@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Barcodescanner"?>
+<?root-attributes lang="en"?>
+<!--
+barcodescanner.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 4 16:10:23 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Barcodescanner</n:h1>
+	</n:header>
+	<n:main>
+		<barcodescanner type="qr,code128" continuous="true" interval="500" height="100px"
+			onDetect='Clients.log(event.getType() + " " + event.getResult())' ca:aria-label="A Barcode Scanner, used to scan barcode" />
+	</n:main>
+</zk>

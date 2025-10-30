@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xel-method prefix="y" name="isDateFirstDayOfAMonth" class="org.zkoss.zktest.test2.ZK_3076" signature="boolean myMethod(Date)"?>
+<!--
+B80_ZK-3076.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jun 16, 2016 10:54:40 AM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>You should see exception "Class not found: Date" </label>
+</zk>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3912.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 14 12:23:41 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Hover mouse on "TAB" text.
+        2. The tooltip text is "HELLO", not "TAB".
+    </label>
+    <tabbox>
+        <tabs>
+            <tab tooltiptext="HELLO" label="TAB"/>
+            <tab label="TAB2"/>
+        </tabs>
+        <tabpanels>
+            <tabpanel/>
+            <tabpanel/>
+        </tabpanels>
+    </tabbox>
+</zk>

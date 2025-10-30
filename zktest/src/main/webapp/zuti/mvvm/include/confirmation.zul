@@ -1,0 +1,15 @@
+<zk>
+	<vlayout>
+		<div>
+			Shipping: 
+			<textbox value="@bind(orderForm.shippingAddress)"/>
+			<label sclass="invalid" value="@load(vmsgs['p_shippingAddress'])"/>
+		</div>
+		<div>
+			Payment: 
+			<textbox value="@bind(orderForm.paymentDetails)"/>
+			<label sclass="invalid" value="@load(vmsgs['p_paymentDetails'])"/>
+		</div>
+		Please confirm the above! 
+	</vlayout>
+</zk>

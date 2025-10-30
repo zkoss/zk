@@ -1,0 +1,31 @@
+<!--
+B50-3330762.zul
+
+{{IS_NOTE
+ Purpose:
+  
+ Description:
+  
+ History:
+  Mon Jul 4 10:21:01 TST 2011, Created by peterkuo
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<separator/>
+		1. Input "1" in spinner and click button "test"
+	<separator/>
+		2. If an exception is thrown, it is a bug.
+	<separator/>
+		3. Click the up arrow, the doublespinner value should change to 1.1
+	<separator/>
+		4. Click button "test", if there is an exception, it is a bug.
+	<separator/>
+	<doublespinner id="ds" step="0.1" />
+	<button id="btn" label="test" onClick='lb.value = "" + ds.value' />
+	Doublespinner Value: <label id="lb" />
+</zk>

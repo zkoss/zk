@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4804.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 16 12:43:38 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" title="hello" apply="org.zkoss.zktest.test2.B96_ZK_4804Composer">
+        <vlayout>
+            <label multiline="true">
+            This fiddle simulates a real world scenario where we have a large tree and then the user can start an async operation that creates a new model and assign it to the tree (no its not built around echoEvent in real life).
+            When starting the refresh we clear the current model of the tree, and somehow this seems to cause the scroll position to be left lingering at the client side.
+            1. Scroll to the middle of the tree around item 8000 or so
+            2. Click the button
+            3. The new model is loaded, but the scroll position is left at the middle of the tree and nothing but blank is shown
+            4. Scroll down in the tree somewhat and the client realizes that it needs to render some items and they appear on screen
+            </label>
+            <button id="btn" label="Change tree model" />
+        </vlayout>
+
+        <vlayout width="200px" height="300px" >
+            <tree id="theTree" width="100%" vflex="1"/>
+        </vlayout>
+    </window>
+</zk>

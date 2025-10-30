@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3805.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 18 10:39:55 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script>
+        zk.afterLoad(function() {
+            var url = window.location.href.replace('B85-ZK-3805.zul', 'B85-ZK-3805-1.zul');
+            <!--window.location.replace(url);-->
+            zAu.cmd0.redirect(url); /*also happens using zAu.cmd0.redirect*/
+        });
+    </script>
+</zk>

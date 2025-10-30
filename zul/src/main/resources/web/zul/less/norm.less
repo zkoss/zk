@@ -1,0 +1,722 @@
+@import "~./zul/less/_header.less";
+@import "~./zul/less/_reset.less";
+@import "~./zul/less/font/_variables.less";
+
+e('<c:if test="${empty c:property(@{browserDefault})}">');
+html, body {
+	height: 100%;
+}
+e('</c:if>');
+
+// affect ZK component only
+[class^="z-"],
+[class*=" z-"],
+[class^="z-"]:after,
+[class*=" z-"]:after,
+[class^="z-"]:before,
+[class*=" z-"]:before,
+.z-borderbox {
+	.applyCSS3('box-sizing', 'border-box');
+}
+
+// Reset
+@{browserDefaultPrefix}input[type=number]::-webkit-inner-spin-button,
+@{browserDefaultPrefix}input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+@{browserDefaultPrefix}input,
+@{browserDefaultPrefix}input:focus,
+@{browserDefaultPrefix}textarea,
+@{browserDefaultPrefix}textarea:focus {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	 outline: none;
+	 -webkit-user-select: text;
+}
+
+@{browserDefaultPrefix}*:focus {
+  outline: none;
+}
+
+@{browserDefaultPrefix}fieldset {
+	border: 1px solid #c0c0c0;
+	border-radius: 0;
+	margin: 0 2px;
+	padding: 0px;
+}
+
+@{browserDefaultPrefix}legend {
+	border: 0;
+	padding: 0;
+}
+
+.gecko {
+	button::-moz-focus-inner {
+		border: 0;
+	}
+}
+e('<c:if test="${empty c:property(@{browserDefault})}">');
+body {
+	margin: 0;
+	padding: 0 5px;
+}
+e('</c:if>');
+
+//mobile
+.mobile * {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+//ZK JavaScript debug box
+.z-error {
+	display: none;
+	width: 450px;
+	color: @errorboxColor;
+	border: 1px solid @errorboxBorderColor;
+	.borderRadius(@baseBorderRadius);
+	padding: @errorPadding;
+	background: @errorboxBackgroundColor;
+	position: absolute;
+	top: 0;
+	left: 40%;
+	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
+	z-index: 9999999;
+
+	.messagecontent {
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal);
+		padding: @errorMessageContentPadding;
+	}
+	.messages {
+		word-wrap: break-word;
+		overflow: auto;
+		.message {
+			margin-top: 8px;
+		}
+	}
+	.newmessage {
+		background: @errorboxBackgroundColor;
+		display: none;
+	}
+	.button {
+		font-size: @errorButtonFontSize;
+		.size(@errorButtonSize, @errorButtonSize);
+		margin-left: @errorButtonMarginLeft;
+		cursor: pointer;
+		float: right;
+
+		> .z-icon-times {
+			font-size: @errorCloseButtonFontSize;
+		}
+	}
+	#zk_err-p {
+		height: 24px;
+		cursor: move;
+	}
+	.errornumbers {
+		.fontStyle(@baseTitleFontFamily, @errorNumberFontSize, 700);
+		float: left;
+	}
+}
+
+//zk.log box
+div.z-log {
+	width: 50%;
+	text-align: right;
+	position: absolute;
+	right: 10px;
+	bottom: 5px;
+	z-index: 99000;
+
+	textarea {
+		width: 100%;
+		border-color: rgba(82,168,236,0.8);
+		outline: 0;
+		.boxShadow('inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6)');
+	}
+	button {
+		font-size: @fontSizeXSmall;
+	}
+}
+
+//General
+.noscript { //the content of noscript
+	.size(100%, 100%);
+	background: #E0E1E3;
+	.opacity(0.6);
+	text-align: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	zoom: 1;
+	z-index: 32000;
+
+	p {
+		font-weight: bold;
+		color: black;
+		border: 1px solid black;
+		margin: 10% 15%;
+		padding: 10px 0;
+		background: white;
+		.opacity(1.0);
+	}
+}
+
+//radio, radiogroup
+@{browserDefaultPrefix}input[type="radio"] {
+	margin: @checkboxMargin;
+	background: @inputBackgroundColor;
+	border: 1px solid @inputBorderColor;
+	.borderRadius(50%);
+	.size(@checkboxSize, @checkboxSize);
+	&:hover {
+		border-color: @checkboxHoverBorderColor;
+	}
+
+	&:focus-visible {
+		box-shadow: 0 0 0 2px @focusBorderColor;
+		transition: unset;
+	}
+
+	&:before {
+		content: '';
+		.displaySize(block, 12px, 12px);
+		.borderRadius(50%);
+		position: relative;
+		top: 50%;
+		left: 50%;
+		.transform('translate(-50%, -50%)');
+	}
+
+	&:checked {
+		border-color: @checkedColor;
+		&:before {
+			background-color: @checkedColor;
+		}
+	}
+
+	&[disabled] {
+		cursor: default;
+		background-color: @inputDisableBackgroundColor;
+		&:checked {
+			border-color: @inputDisableColor;
+			&:before {
+				background-color: @inputDisableColor;
+			}
+			&:hover {
+				border-color: @inputDisableColor;
+			}
+		}
+		&:hover {
+			border-color: @inputBorderColor;
+		}
+	}
+
+	&::-ms-check {
+		border: 0;
+	}
+
+	&:checked::-ms-check {
+		border-color: @checkedBorderColor;
+		color: @checkedColor;
+	}
+
+	&[disabled]:checked::-ms-check {
+		border-color: @inputDisableColor;
+		color: @inputDisableColor;
+		border-radius: 50%;
+	}
+}
+
+//checkbox
+@{browserDefaultPrefix}input[type="checkbox"] {
+	.baseIconFont();
+	font-size: @fontSizeLarge;
+	margin: @checkboxMargin;
+	background: @inputBackgroundColor;
+	border: 1px solid @inputBorderColor;
+	.borderRadius(@inputBorderRadius);
+	.size(@checkboxSize, @checkboxSize);
+	&:hover {
+		border-color: @checkboxHoverBorderColor;
+	}
+
+	&:checked {
+		background-color: @checkedColor;
+		color: @checkedBackgroundColor;
+		&:before {
+			content: "\f00c";
+		}
+	}
+
+	&:indeterminate {
+		background-color: @checkedColor;
+		color: @checkedBackgroundColor;
+		&:before {
+			content: "\f068";
+		}
+	}
+
+	&[disabled] {
+		cursor: default;
+		color: @inputDisableColor;
+		background-color: @inputDisableBackgroundColor;
+		&:hover {
+			border-color: @inputBorderColor;
+		}
+	}
+
+	&::-ms-check {
+		border: 0;
+		.borderRadius(@inputBorderRadius);
+	}
+
+	&:checked::-ms-check {
+		border: 0;
+		background-clip: content-box;
+		background-color: @checkedColor;
+		color: @checkedBackgroundColor;
+	}
+
+	&[disabled]:checked::-ms-check {
+		background-color: @inputDisableBackgroundColor;
+		color: @inputDisableColor;
+	}
+}
+
+//label
+.z-label {
+	line-height: normal;
+}
+.z-label,
+.z-radio-content,
+.z-checkbox-content,
+.z-loading {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+}
+
+.z-temp,
+.z-modal-mask {
+	.size(100%, 100%);
+	background: @maskBackgroundColor;
+	.opacity(0.6);
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+#zk_proc > .z-modal-mask {
+	.opacity(1); // ZK-5017.zul, before zk processing ready, we should hide the screen to avoid flickering.
+}
+.mobile {
+	.z-temp,
+	.z-modal-mask {
+		min-height: 100vh; // ZK-4483
+	}
+}
+
+.z-initing {
+	.size(60px, 60px);
+	background: transparent no-repeat center;
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+	z-index: 32000;
+}
+
+.z-loading,
+.z-apply-loading {
+	background: @loadingBackgroundColor;
+	.borderRadius(@baseBorderRadius);
+	position: absolute;
+	cursor: wait;
+	white-space: nowrap;
+}
+.z-loading {
+	top: 0;
+	left: 0;
+	z-index: 31000;
+}
+.z-apply-loading {
+	z-index: 89500;
+}
+.z-loading-indicator,
+.z-apply-loading-indicator {
+	color: @loadingTextColor;
+	background: @loadingBackgroundColor;
+	white-space: nowrap;
+}
+.z-loading-indicator {
+	padding: @loadingIndicatorPadding;
+	text-align: center;
+}
+.z-apply-loading-indicator {
+	font-family: @baseTitleFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+	padding: @applyLoadingIndicatorPadding;
+	position: relative;
+	overflow: hidden;
+}
+.z-apply-loading-icon,
+.z-renderdefer {
+	.size(@applyLoadingIconSize, @applyLoadingIconSize);
+	background: transparent no-repeat center;
+	.encodeThemeURL(background-image, @loadingAnimationDefer);
+	background-size: contain;
+}
+.z-loading-icon {
+	.size(@loadingIconSize, @loadingIconSize);
+	background: transparent no-repeat center;
+	.encodeThemeURL(background-image, @loadingAnimationLoad);
+	background-size: contain;
+	display: block;
+	vertical-align: top;
+	position: relative;
+	left: 50%;
+	margin-left: -(@loadingIconSize / 2);
+	margin-bottom: @loadingIconMarginBottom;
+}
+.z-apply-loading-icon {
+	display: inline-block;
+	vertical-align: top;
+	position: absolute;
+	left: @applyLoadingIconPositionLeft;
+	top: 50%;
+	margin-top: -(@applyLoadingIconSize / 2);
+}
+.z-apply-mask {
+	.size(100%, 100%);
+	background: @maskBackgroundColor;
+	.opacity(0.6);
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 89000;
+}
+.z-inline-block { //used with label/checkbox and others to ensure the dimension
+	display: inline-block;
+	vertical-align: top; //vertical-align: make it looks same in diff browsers
+}
+.z-word-wrap {
+	word-wrap: break-word;
+}
+.z-word-nowrap {
+	white-space: nowrap;
+}
+.z-overflow-hidden {
+	overflow: hidden;
+}
+.z-dd-stackup {
+	.size(100%, 100%);
+	.encodeURL(background-image, 'data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAUUAAEALAAAAAABAAEAAAICTAEAOw==');
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 16800;
+}
+
+.z-temp * { //temporary
+	font-size: 5px;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.z-temp {
+	.z-loading {
+		background: @loadingBackgroundColor;
+		top: 49%;
+		left: 46%;
+	}
+	.z-loading-indicator {
+		font-size: @fontSizeMedium;
+		color: @textColorLight;
+	}
+}
+
+//Fix float issue for CSS
+.z-clear {
+	font-size: 0;
+	.size(0, 0);
+	line-height: 0;
+	overflow: hidden;
+	clear: both;
+}
+
+//Drag-Drop
+.z-dragged {
+	color: @dragColor;
+	background: none no-repeat scroll 0 0 @dragBackgroundColor;
+}
+.z-drag {
+	&-over {
+		background: @dragHoverBackgroundColor !important;
+	}
+	&-ghost {
+		list-style: none;
+	}
+}
+// ZK-3195: only apply to the first layer of children
+.gecko {
+	.z-draggable-over {
+		> * {
+			-moz-user-select: none;
+		}
+	}
+}
+.z-drop {
+	&-allow {
+		background: @dragBackgroundColor;
+		.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
+		.borderRadius(@baseBorderRadius);
+		overflow: hidden;
+		.z-drop-content {
+			background: @dragAllowBackgroundColor;
+		}
+		.z-drop-icon {
+			color: @dragAllowIconColor;
+		}
+	}
+	&-disallow {
+		background: @dragBackgroundColor;
+		.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
+		.borderRadius(@baseBorderRadius);
+		overflow: hidden;
+		.z-drop-content {
+			background: @dragDisAllowBackgroundColor;
+		}
+		.z-drop-icon {
+			color: @dragDisAllowIconColor;
+		}
+		.z-drop-text {
+			color: @disabledColor;
+		}
+	}
+	&-content {
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @dragColor);
+		padding: @dropContentPadding;
+		line-height: @dropContentLineHeight;
+		position: relative;
+	}
+	&-icon {
+		font-size: @dropIconSize;
+		.size(@dropIconSize, @dropIconSize);
+		line-height: @dropIconSize;
+		background: transparent;
+		text-align: center;
+		vertical-align: @dropIconVerticalAlign;
+	}
+	&-text {
+		padding-left: 8px;
+	}
+}
+
+// Focus Anchor
+.z-focus-a {
+	font-size: 0 !important;
+	.size(1px, 1px) !important;
+	border: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	line-height: 0 !important;
+	background: transparent !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	-moz-outline: 0 none;
+	outline: 0 none;
+	-moz-user-select: text;
+	-khtml-user-select: text;
+	overflow: hidden;
+
+	&:focus {
+		-moz-outline: 0 none;
+		outline: 0 none;
+	}
+}
+
+//upload button
+span.z-upload {
+	font-size: 0;
+	.displaySize(inline-block, 0, 0);
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+span.z-upload input {
+	font-size: 45pt;
+	margin: 0;
+	padding: 0;
+	.opacity(0);
+	position: absolute;
+	cursor: pointer;
+	z-index: -1;
+}
+
+.z-upload-icon {
+	.encodeThemeURL(background-image, '~./zul/img/misc/prgmeter.png');
+	overflow: hidden;
+}
+
+//fileupload dialog
+.z-fileupload-add,
+.z-fileupload-remove {
+	color: #1096BC;
+	.size(16px, 17px);
+	cursor: pointer;
+}
+.z-fileupload-progress {
+	width: 300px;
+}
+.z-fileupload-manager {
+	width: 350px;
+}
+
+//scrollbar
+.z-scrollbar {
+	display: none;
+	position: absolute;
+	line-height: 1;
+
+	&-wrapper {
+		position: absolute;
+	}
+
+	&-indicator {
+		border: 1px solid @scrollbarBorderColor;
+		.borderRadius(@scrollbarBarSize / 2);
+		background-color: @scrollbarBarBackgroundColor;
+		position: absolute;
+		cursor: pointer;
+		z-index: 100;
+		&:hover {
+			background-color: @scrollbarBarHoverBackground;
+		}
+	}
+
+	&-rail {
+		position: absolute;
+		.size(100%, 100%);
+		background: @scrollbarBackgroundColor;
+		.borderRadius(@scrollbarRailSize / 2);
+	}
+
+	&-icon {
+		display: @scrollbarIconDisplay;
+		color: @iconColor;
+		.size(@baseIconWidth, @baseIconHeight);
+		position: absolute;
+	}
+
+	.embedBase() {
+		.borderRadius(@scrollbarEmbeddedSize / 2);
+		background-color: @scrollbarEmbeddedColor;
+		position: absolute;
+		.size(@scrollbarEmbeddedSize, @scrollbarEmbeddedSize);
+	}
+
+	.buttonBase() {
+		.iconFontStyle(@fontSizeXLarge, @scrollbarButtonColor);
+		.size(@baseIconWidth, @baseIconHeight);
+		background: @scrollbarButtonBackground;
+		position: absolute;
+		cursor: pointer;
+		&:hover {
+			color: @scrollbarButtonHoverColor;
+			background: @scrollbarButtonHoverBackground;
+		}
+	}
+
+	//vertical
+	&-vertical {
+		.size(@scrollbarSize, 100%);
+		top: 0;
+		right: 0;
+		margin-right: 4px;
+
+		.z-scrollbar {
+			&-wrapper {
+				width: 100%;
+				top: @baseIconHeight;
+				left: 0;
+			}
+			&-rail {
+				width: @scrollbarRailSize;
+				left: 3px;
+			}
+			&-indicator {
+				width: @scrollbarBarSize;
+				left: 1px;
+			}
+			&-icon {
+				margin-top: -8px;
+				left: -1px;
+				top: 50%;
+				.transform('scale(0.5, 0.7)');
+			}
+		}
+		&-embed {
+			.embedBase();
+			height: 100%;
+			top: 0;
+			right: 0;
+		}
+	}
+	&-up,
+	&-down {
+		.buttonBase();
+		margin-left: -4px;
+	}
+	&-down {
+		bottom: 0;
+	}
+
+	//horizontal
+	&-horizontal {
+		.size(100%, @scrollbarSize);
+		left: 0;
+		bottom: 0;
+		margin-bottom: 4px;
+
+		.z-scrollbar {
+			&-wrapper {
+				height: 100%;
+				bottom: 0;
+				left: @baseIconWidth;
+			}
+			&-rail {
+				height: @scrollbarRailSize;
+				top: 3px;
+			}
+			&-indicator {
+				height: @scrollbarBarSize;
+				top: 1px;
+			}
+			&-icon {
+				margin-left: -8px;
+				left: 50%;
+				top: -1px;
+				.transform('rotate(90deg) scale(0.5, 0.7)');
+			}
+		}
+		&-embed {
+			.embedBase();
+			width: 100%;
+			bottom: 0;
+			left: 0;
+		}
+	}
+	&-left,
+	&-right {
+		.buttonBase();
+		margin-top: -4px;
+	}
+	&-right {
+		right: 0;
+	}
+}
+
+.z-macro {
+	display: inline-block;
+	min-width: 1px;
+}

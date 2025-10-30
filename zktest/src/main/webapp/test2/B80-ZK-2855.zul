@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2855.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Sep 1, 2015  2:28:00 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window id="window">
+		<label multiline="true">
+			case 1: two &lt;apply&gt; using the same &lt;template&gt; in the SAME &lt;div&gt;
+			case 2: two &lt;apply&gt; using the same &lt;template&gt; in DIFFERENT &lt;div&gt;
+			case 3: two &lt;apply&gt;, the second &lt;apply&gt; does not have a &lt;template&gt;, both in the SAME &lt;div&gt;
+			expected result
+			case 1: you should see "include 1" and "include 2"
+			case 2: you should see "include 1" and "include 2"
+			case 3: you should see two "include 1"
+		</label>
+		<label value="---- case 1: in the same div" />
+		<div id="host1">
+			<apply template="container">
+				<template name="content">
+					<label value="include 1"/>
+				</template>
+			</apply>
+			<apply template="container">
+				<template name="content">
+					<label value="include 2"/>
+				</template>
+			</apply>
+		</div>
+
+		<label value="---- case 2: in separated divs" />
+		<div id="host2">
+			<apply template="container">
+				<template name="content">
+					<label value="include 1"/>
+				</template>
+			</apply>
+		</div>
+		<div id="host3">
+			<apply template="container">
+				<template name="content">
+					<label value="include 2"/>
+				</template>
+			</apply>
+		</div>
+
+		<label value="---- case 3: in the same div, one without template" />
+		<div id="host4">
+			<apply template="container">
+				<template name="content">
+					<label value="include 1"/>
+				</template>
+			</apply>
+			<apply template="container">
+			</apply>
+		</div>
+
+		<template name="container">
+			<div>
+				<apply template="content"/>
+			</div>
+		</template>
+	</window>
+</zk>

@@ -1,0 +1,27 @@
+<?component name="wizard" templateURI="include/wizard-ordering-problem.zul"?>
+<zk xmlns:sh="shadow">
+	
+	<style>
+		.invalid {
+			color: red;
+		}
+	</style>
+	
+	<div width="500px"
+			viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.OrderViewModel')">
+			
+		<wizard model="@ref(vm.wizardModel)" contentTemplate="wizardValidatingForm">
+			
+			<template name="wizardValidatingForm">
+				<div form="@id('orderForm') @load(vm.order) @save(vm.order, after='next') @validator('formBeanValidator', prefix='p_', groups=vm.wizardModel.currentStep.validationGroups)">
+					<sh:apply template="defaultWizardContent"/>
+				</div>
+			</template>
+		
+			<template name="shipping" src="include/shipping.zul" />
+			<template name="payment" src="include/payment.zul"/>
+			<template name="confirmation" src="include/confirmation.zul"/>
+			<template name="feedback" src="include/feedback.zul"/>
+		</wizard>
+	</div>
+</zk>

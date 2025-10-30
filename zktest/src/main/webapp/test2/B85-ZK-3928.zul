@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3928.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 10 09:55:18 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div width="100%">
+        <zscript><![CDATA[
+            List items = Collections.nCopies(4, "");
+        ]]></zscript>
+        <label multiline="true">
+            1. Open "item-0".
+            2. Select "item-0-0-1".
+            3. The scroll position shouldn't be changed.
+        </label>
+        <button onClick="i_0.setOpen(true)" label="Open item-0" />
+        <button onClick="i_0_0_1.setSelected(true)" label="Select item-0-0-1" />
+        <tree id="tr" height="300px" sizedByContent="true"
+              onSelect="
+                tr.clearSelection();
+                tr.addItemToSelection(event.getSelectedItems().iterator().next());">
+            <treecols>
+                <treecol label="Path" />
+            </treecols>
+            <treechildren>
+                <forEach items="${items}" varStatus="level1">
+                    <treeitem open="false" label="item-${level1.index}" id="i_${level1.index}">
+                        <treechildren>
+                            <forEach items="${items}" varStatus="level2">
+                                <treeitem open="true" label="item-${level1.index}-${level2.index}" id="i_${level1.index}_${level2.index}">
+                                    <treechildren>
+                                        <forEach items="${items}" varStatus="level3">
+                                            <treeitem open="true" label="item-${level1.index}-${level2.index}-${level3.index}" id="i_${level1.index}_${level2.index}_${level3.index}"/>
+                                        </forEach>
+                                    </treechildren>
+                                </treeitem>
+                            </forEach>
+                        </treechildren>
+                    </treeitem>
+                </forEach>
+            </treechildren>
+        </tree>
+    </div>
+</zk>

@@ -1,0 +1,66 @@
+<zk>
+<zscript>
+public class MyLabel extends Label {
+	public void onCreate() {
+		setValue(getParent().toString());
+	}
+}
+</zscript>
+<style>
+#zk_log {
+	height: 500px !important;
+}
+</style>
+	<div id="bind" apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ManipulateInsertionVM')">
+		<div id="host" apply="org.zkoss.zktest.zats.zuti.composer.ShadowComposer">
+			<if test="@load(vm.rootVisible)">
+				<if test="@load(vm.visible)">
+					<div style="background:yellow"><label use="MyLabel"/></div>
+				</if>
+				<if test="@load(vm.visible)">
+					<div style="background:yellow"><label use="MyLabel"/></div>
+				</if>
+				<div style="background:yellow;"><label use="MyLabel"/></div>
+				<if test="@load(vm.visible)">
+					<if test="@load(vm.visible)">
+						<div style="background:yellow"><label use="MyLabel"/></div>
+					</if>
+					<div style="background:yellow"><label use="MyLabel"/></div>
+				</if>
+				<if test="@load(vm.visible)">
+					<div style="background:yellow"><label use="MyLabel"/></div>
+				</if>
+				<div style="background:yellow"><label use="MyLabel"/></div>
+				<if test="@load(vm.visible)">
+					<if test="@load(vm.visible)">
+						<div style="background:yellow"><label use="MyLabel"/></div>
+					</if>
+					<div style="background:yellow"><label use="MyLabel"/></div>
+				</if>
+				<if test="@load(vm.visible)">
+					<div style="background:yellow"><label use="MyLabel"/></div>
+				</if>
+				<div style="background:yellow"><label use="MyLabel"/></div>
+				<if test="@load(vm.visible)">
+					<if test="@load(vm.visible)">
+						<div style="background:yellow"><label use="MyLabel"/></div>
+					</if>
+					<div style="background:yellow"><label use="MyLabel"/></div>
+				</if>
+			</if>
+		</div>
+		<button id="changeVisible" label="Change if visible" onClick='@command("changeVisible")'/>
+	</div>
+	<button label="Print Shadow Root Info" id="btn" />
+	<button label="Revmoe Index 5" onClick='host.getChildren().get(5).detach()'/>
+	<button label="Remove ShadowRoot's firstChild" id="removeFirst"/>
+	<button label="Remove ShadowRoot's lastChild" id="removeLast"/>
+	<separator/>
+	
+	<button label="Add a component before ShadowRoot's firstChild" id="addBeforeFirst"/>
+	<button label="Add a component after ShadowRoot's firstChild" id="addAfterFirst"/>
+	<button label="Add a component before ShadowRoot's lastChild" id="addBeforeLast"/>
+	<button label="Add a component after ShadowRoot's LastChild" id="addAfterLast"/>
+	<debugger rootId="host"/>
+</zk>

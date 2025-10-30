@@ -1,0 +1,15 @@
+<zk>
+<html><![CDATA[
+<ul>
+	<li>Click the Test button to open a message box.</li>
+	<li>Then, you shall see the first button is labelled as "Yes, it is correct", and the second button is "No"</li>
+</ul>
+]]></html>
+
+<button label="Test"
+onClick='Messagebox.show("Yes and No", "Test",
+	new Messagebox.Button[] {Messagebox.Button.YES, Messagebox.Button.NO},
+	new String[] {"Yes, it is correct"},
+	Messagebox.INFORMATION, null, null)'/>
+
+</zk>

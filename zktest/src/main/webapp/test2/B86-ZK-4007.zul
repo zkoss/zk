@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4007.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Aug 23 09:51:30 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label id="label" style="float:right;" multiline="true">
+        position="nocenter" is ignored after moving modal window
+        1) move zk window to new position
+        2) resize browser window
+        -> the position of zk window shouldn't move to center
+    </label>
+    <window id="window" border="normal" width="200px" height="200px" title="Complex Window"
+            position="nocenter" mode="modal" sizable="true" >
+        <button label="change window size" onClick='window.setWidth("300px")'/>
+    </window>
+</zk>

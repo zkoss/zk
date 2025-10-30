@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4170.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Dec 14 12:54:53 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. The width of knobs should be 200px
+		2. Click setHeight("300px")
+		3. The height of knobs should be 300px
+	</label>
+	<button label="setHeight300px">
+		<attribute name="onClick"><![CDATA[
+			knob0.setHeight("300px");
+			knob1.setHeight("300px");
+			knob2.setHeight("300px");
+			knob3.setHeight("300px");
+		]]></attribute>
+	</button>
+	<hlayout>
+		<slider id="knob0" mold="knob" angleArc="90"/>
+		<slider id="knob1" mold="knob" angleArc="180"/>
+		<slider id="knob2" mold="knob" angleArc="270"/>
+		<slider id="knob3" mold="knob"/>
+	</hlayout>
+</zk>

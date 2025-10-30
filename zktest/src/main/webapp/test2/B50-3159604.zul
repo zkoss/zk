@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3159604.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 17 10:51:11 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<groupbox closable="false" mold="3d">
+		<caption width="100%">
+				<button id="btn" label="locateButtonText"/>
+		</caption>
+		<label xmlns:w="client" w:onBind="this.setValue('It shall be 12px: '+jq('@button .z-button-cm').css('font-size'));"/>
+	</groupbox>
+</zk>

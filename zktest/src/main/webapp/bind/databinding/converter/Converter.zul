@@ -1,0 +1,49 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] (Test "Custom Converter") type valid date should work, but type invaliad date will get an exception
+		[Step 2] (Test "Application Level Converter") Apply the following setting in zk.xml
+			<library-property>
+				<name>org.zkoss.bind.appConverters</name>
+				<value>foo=org.zkoss.zktest.bind.databinding.converter.FooConverter,bar=org.zkoss.zktest.bind.databinding.converter.BarConverter</value>
+			</library-property>
+		[Step 3] (Test "Application Level Converter")
+			Change the textbox, the Foo/Bar would be added in value
+		[Step 4] (Test "Built-in Converter")
+			Change the textbox, the value should be changed will the corresponding format
+	]]></label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.converter.ConverterVM')">
+		Custom Converter: (format : yyyy/MM/dd)
+		<div>
+			<label id="msg1" value="@load(vm.creationDate) @converter(vm.myConverter, format='yyyy/MM/dd')"/>
+			(vm property) <textbox id="tb1_1" value="@bind(vm.creationDate) @converter(vm.myConverter, format='yyyy/MM/dd')"/>
+			(class name) <textbox id="tb1_2" value="@bind(vm.creationDate) @converter('org.zkoss.zktest.bind.databinding.converter.MyDateFormatConverter', format='yyyy/MM/dd')"/>
+		</div>
+		Application Level Converter
+		<div>
+			Origin:
+			<label id="msg2_1" value="@load(vm.message)"/>
+			<separator />
+			Foo:
+			<label id="msg2_2" value="@load(vm.message) @converter('foo')"/>
+			<textbox id="tb2_1" value="@bind(vm.message) @converter('foo')"/>
+			<separator />
+			Bar:
+			<label id="msg2_3" value="@load(vm.message) @converter('bar')"/>
+			<textbox id="tb2_2" value="@bind(vm.message) @converter('bar')"/>
+		</div>
+		Built-in Converter
+		<div>
+			(format: ###,##0.00, Origin: <label value="@load(vm.price)"/> )
+			<label id="msg3_1" value="@load(vm.price) @converter('formatedNumber', format='###,##0.00')"/>
+			<textbox id="tb3_1" value="@bind(vm.price) @converter('formatedNumber', format='###,##0.00')"/>
+			<separator />
+			(format: yyyy/MM/dd, Origin: <label value="@load(vm.creationDate)"/> )
+			<label id="msg3_2" value="@load(vm.creationDate) @converter('formatedDate', format='yyyy/MM/dd')"/>
+			<textbox id="tb3_2" value="@bind(vm.creationDate) @converter('formatedDate', format='yyyy/MM/dd')"/>
+			<separator />
+			(format: hhmmss, Origin: <label value="@load(vm.time)"/> )
+			<label id="msg3_3" value="@load(vm.time) @converter('formattedTime', format='hhmmss')"/>
+			<textbox id="tb3_3" value="@bind(vm.time) @converter('formattedTime', format='hhmmss')"/>
+		</div>
+	</vlayout>
+</zk>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4787.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 17 11:12:29 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open the combobox.
+        2. The popup will be filled with items.
+        3. It shouldn't grow too high to make the whole page scrollable. Instead the height should be constrained.
+    </label>
+    <div apply="org.zkoss.zktest.test2.B96_ZK_4787Composer">
+        <vlayout>
+            <hlayout>
+                Normal:
+                <combobox id="cb"/>
+            </hlayout>
+            <hlayout>
+                Server push:
+                <combobox id="cbSP"/>
+            </hlayout>
+        </vlayout>
+    </div>
+</zk>

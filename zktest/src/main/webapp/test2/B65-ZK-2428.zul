@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2428.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Sep 03, 2014 12:09:53 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	You should not see any Java Exception
+<div apply="org.zkoss.bind.BindComposer" viewModel="@id('outerVm')@init('org.zkoss.zktest.test2.B65_ZK_2428OuterVM')">
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('innerVm')@init(outerVm.innerVm)">
+		<button label="myCommand" onClick="@command('myCommand')"/>
+	</div>
+</div>
+</zk>

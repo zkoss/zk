@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4130.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Dec 10 12:38:24 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Do the following steps and scroll browser vertically each time, the popup should remain appear
+		2. Left click menu
+		3. Left click open menupopup
+		4. Right click open menupopup
+		5. Left click open popup
+		6. Right click open popup
+		7. Left click showNotification
+	</label>
+	<button label="close popup"/>
+	<div height="1000px">
+		<separator height="200px"/>
+		<menubar>
+			<menu label="menu">
+				<menupopup id="menupopup">
+					<menuitem label="menuitem 1"/>
+					<menuitem label="menuitem 2"/>
+					<menuitem label="menuitem 3"/>
+				</menupopup>
+			</menu>
+		</menubar>
+		<button popup="menupopup" context="menupopup" label="open menupopup"/>
+		<button popup="popup" context="popup" label="open popup"/>
+		<popup id="popup">
+			<label value="Popup"/>
+		</popup>
+		<button id="ref" onClick='Clients.showNotification("!!!", ref)'
+				label="showNotification"/>
+		<separator/>
+	</div>
+</zk>

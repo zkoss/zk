@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+WiringSequence-2.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 06 14:36:29 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		load the page, you should see only "The variable resolver annotated registered with the VariableResolver annotation." in zk log.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.WiringSequenceVM')">
+		<vlayout>
+			var:
+			<label id="l1" value="@load(vm.page)" />
+		</vlayout>
+	</div>
+</zk>

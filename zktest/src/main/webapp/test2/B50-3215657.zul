@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3215657.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 11 11:04:18 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button label="Upload" upload="true">
+		<attribute name="onUpload">{
+			org.zkoss.util.media.Media media = event.getMedia();
+			if (media instanceof org.zkoss.image.Image) {
+				org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+				image.setContent(media);
+				image.setParent(pics);
+			} else {
+				Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+				break; //not to show too many errors
+			}
+		}</attribute>
+	</button>
+	<vbox id="pics" />
+	Please click the bottom of the "upload" button to show the file chooser, if you cannot see the file chooser in Opera, that is a bug.
+</zk>
+			

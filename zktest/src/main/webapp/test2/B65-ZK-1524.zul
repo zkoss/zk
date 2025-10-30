@@ -1,0 +1,34 @@
+<zk>
+	<label multiline="true">
+	Issue : use caption in window will cause hflex="min" doesn't work.
+	1. Width of "Title" window and "Caption" window should be the same.
+	2. Check groupbox and panel also.
+	</label>
+	<window title="Title" border="normal" hflex="min">
+		<div width="200px" height="50px"/>
+	</window>
+	<window border="normal" hflex="min">
+		<caption label="Caption"/>
+		<div width="200px" height="50px"/>
+	</window>
+	<separator />
+	<groupbox title="Title" hflex="min" mold="3d">
+		<div width="200px" height="50px"/>
+	</groupbox>
+	<groupbox hflex="min" mold="3d">
+		<caption label="Caption"/>
+		<div width="200px" height="50px"/>
+	</groupbox>
+	<separator />
+	<panel title="Title" border="normal" hflex="min">
+		<panelchildren>
+			<div width="200px" height="50px"/>
+		</panelchildren>
+	</panel>
+	<panel border="normal" hflex="min">
+		<caption label="Caption"/>
+		<panelchildren>
+			<div width="200px" height="50px"/>
+		</panelchildren>
+	</panel>
+</zk>

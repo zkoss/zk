@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4800.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 12 15:01:15 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    While this page is loading, no exception is popped.
+    <tree id="tree"/>
+    <listbox id="lb"/>
+    <grid id="gr"/>
+    <zscript><![CDATA[
+        tree.setModel(new DefaultTreeModel(new DefaultTreeNode("root")));
+        tree.setModel(null);
+
+        lb.setModel(new ListModelList());
+        lb.setModel(null);
+
+        gr.setModel(new ListModelList());
+        gr.setModel(null);
+    ]]></zscript>
+</zk>

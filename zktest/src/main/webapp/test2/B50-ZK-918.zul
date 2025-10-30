@@ -1,0 +1,12 @@
+<zk>
+	<style>
+		.mycombo .z-comboitem{
+			background:red;
+		}
+	</style>
+	<combobox id="box" width="150px" mold="rounded" sclass="mycombo" >
+	    <comboitem id="scf" label="Server+client Fusion" />
+	    <comboitem id="pd" label="Pattern Driven" />
+	    <comboitem id="ei" label="Enterprise Integration" />
+	</combobox>
+</zk>

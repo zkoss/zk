@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2959.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 16 14:54:47 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the button
+		2. should see "done" in zklog
+
+	</label>
+	<vlayout apply="org.zkoss.zktest.test2.F80_ZK_2959">
+		<button id="btn" label="log"/>
+		<image id="img1" src="~./zul/img/popup/notif-close.gif"/>
+		<image src="~./zul/less/font/fontawesome-webfont.svg"/>
+	</vlayout>
+</zk>

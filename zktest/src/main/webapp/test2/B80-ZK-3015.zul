@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-30155.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 16 17:48:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        1.Click button, and you should see "Value1" in Combobox input.
+    </label>
+    <zscript><![CDATA[
+		ListModelList myModel = new ListModelList();
+		myModel.add("Value1");
+		myModel.add("Value2");
+		myModel.add("Value3");
+		]]>
+    </zscript>
+    <combobox id="cmb" model="${myModel}"/>
+    <button label="set selection on 1st item" onClick='cmb.model.clearSelection();cmb.model.addToSelection(cmb.model.get(0))'/>
+</zk>

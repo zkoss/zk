@@ -1,0 +1,71 @@
+<zk>
+	<style>
+		.yellow {border:1px solid #f1da36}
+		.red {color: red}
+		.green {color: green}
+		.blue {background: blue; color: white;}
+	</style>
+	<window id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ApplyVM')">
+		<div>
+			**Start**
+			<apply template="@load(vm.template)">
+				<template>Default</template>
+				<template name="readonly">
+					<div class="yellow">
+						<apply>
+							<label class="green">1</label>
+						</apply>
+					</div>
+					<apply>
+						<label class="red">1</label>
+					</apply>
+				</template>
+				<template name="edit">
+					<div class="green">
+						<apply>
+							<label class="green">1</label>
+						</apply>
+					</div>
+					<apply>
+						<label class="yellow">1</label>
+					</apply>
+				</template>
+			</apply>
+			**Middle**
+			<apply template="@load(vm.template)">
+				<template>Default</template>
+				<template name="readonly">
+					<div class="yellow">
+						<apply>
+							<label class="green">1</label>
+						</apply>
+					</div>
+				</template>
+				<template name="edit">
+					<div class="green">
+						<apply>
+							<label class="green">1</label>
+						</apply>
+					</div>
+				</template>
+			</apply>
+			**End**
+		</div>
+		<div>
+			**Start**
+			<apply templateURI="@load(vm.simpleNestedTemplateURI)"
+				simpleTemplateURI="@ref(vm.simpleTemplateURI)"
+				person="@ref(vm.person)" />
+			**Middle**
+			<apply templateURI="@load(vm.simpleNestedTemplateURI)"
+			simpleTemplateURI="@ref(vm.simpleTemplateURI)"
+			person="@ref(vm.person)" />
+			<apply templateURI="@load(vm.simpleNestedTemplateURI)"
+			simpleTemplateURI="@ref(vm.simpleTemplateURI)"
+				person="@ref(vm.person)" />
+		</div>
+		<button label="Change Template" onClick='@command("changeNestedTemplate")'/>
+	</window>
+	<debugger rootId="host" />
+</zk>

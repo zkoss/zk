@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3250.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jul  4, 2016 11:33:24, Created by Chris
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		for (int i = 0; i < 300; i++) {
+			model.add("test " + i);
+		}
+		public void add(){
+			model.add("test " + System.currentTimeMillis());
+		}
+
+	]]></zscript>
+	<script>
+		zk.afterLoad('zul.sel', function () {
+			var _xListbox = {};
+			zk.override(zul.sel.Listbox.prototype, _xListbox, {
+				setItemsInvalid_: function () {
+					_xListbox.setItemsInvalid_.apply(this,arguments);
+					zk.log('after setItemsInvalid_');
+				}
+			});
+		});
+	</script>
+	<div>
+		<label multiline="true">
+			1. open your browser dev tool
+			2. click add button
+			3. should see a zkau request/response, inspect the response
+			4. should NOT see "itemsInvalid_" command with ~ 50 items in the au response
+		</label>
+		<button id="add" onClick="add()">add</button>
+		<listbox model="${model}" height="300px">
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+			<listhead >
+				<listheader label="ROD enabled" />
+			</listhead>
+		</listbox>
+	</div>
+</zk>

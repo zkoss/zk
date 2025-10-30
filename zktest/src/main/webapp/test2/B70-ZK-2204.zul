@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2204.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 10, 2014 12:32:57 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please open the select drop down, and mouse out on each option, the browser should not auto-select that option. (Firefox only)
+    <grid>
+        <rows>
+            <row>
+                <cell width="50%">
+                    <listbox mold="select">
+                        <listitem label="1" value="1"/>
+                        <listitem label="2" value="2"/>
+                        <listitem label="3" value="3"/>
+                        <listitem label="4" value="4"/>
+                        <listitem label="5" value="5"/>
+                        <listitem label="6" value="6"/>
+                        <listitem label="7" value="7"/>
+                        <listitem label="8" value="8"/>
+                        <listitem label="9" value="9"/>
+                        <listitem label="10" value="10"/>
+                    </listbox>
+                </cell>
+            </row>
+        </rows>
+    </grid>
+</zk>

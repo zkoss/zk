@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4915.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jun 18 09:52:53 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label>
+		Test all themes, the badgeText should be vertical aligned in nav.
+	</label>
+	<navbar orient="vertical" width="300px">
+		<nav label="Get Started" iconSclass="z-icon-th-list" badgeText="3">
+			<navitem label="Step One" />
+			<navitem label="Step Two" />
+			<navitem label="Step Three" />
+		</nav>
+	</navbar>
+	<navbar>
+		<nav label="Get Started" iconSclass="z-icon-th-list" badgeText="3">
+			<navitem label="Step One" />
+			<navitem label="Step Two" />
+			<navitem label="Step Three" />
+		</nav>
+	</navbar>
+	<navbar orient="vertical" width="300px" collapsed="true">
+		<nav label="Get Started" iconSclass="z-icon-th-list" badgeText="3">
+			<navitem label="Step One" />
+			<navitem label="Step Two" />
+			<navitem label="Step Three" />
+		</nav>
+	</navbar>
+	<navbar collapsed="true">
+		<nav label="Get Started" iconSclass="z-icon-th-list" badgeText="3">
+			<navitem label="Step One" />
+			<navitem label="Step Two" />
+			<navitem label="Step Three" />
+		</nav>
+	</navbar>
+</zk>

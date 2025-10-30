@@ -1,0 +1,53 @@
+<!--
+	B50-ZK-806.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Feb 3 12:18:31 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		Sapphire only. 
+	</div>
+	<div>
+		Open the Detail. You should see content in the inner Grid. 
+		If it looks empty (font color white) then it is a bug.
+	</div>
+	<button label="change to default">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "default"); // default
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to breeze">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to sapphire">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<grid>
+		<rows>
+			<row>
+				<detail>
+					<grid>
+						<rows>
+							<row>Detail Content</row>
+						</rows>
+					</grid>
+				</detail>
+				<label value="Outer Grid Content" />
+			</row>
+		</rows>
+	</grid>
+</zk>

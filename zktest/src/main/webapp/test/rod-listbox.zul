@@ -1,0 +1,105 @@
+<zk>
+    <tabbox>
+     <tabs>
+      <tab label="a" />
+      <tab label="listbox" />
+      <tab label="grid" />
+      <tab label="tree" />
+     </tabs>
+     <tabpanels>
+      <tabpanel>aaa</tabpanel>
+      <tabpanel>
+       <listbox id="lb" width="300px"/>
+      </tabpanel>
+      <tabpanel>
+       <grid id="gr" width="300px"/>
+      </tabpanel>
+      <tabpanel>
+       <tree id="tree" width="300px"/>
+      </tabpanel>
+     </tabpanels>
+    </tabbox>
+
+	Handle listbox:  
+    <button label="header">
+     <attribute name="onClick"><![CDATA[
+   Listhead listhead = new Listhead();
+   listhead.appendChild(new Listheader("header"));
+   listhead.setParent(lb);
+  ]]></attribute>
+ </button>
+ <button label="item">
+     <attribute name="onClick"><![CDATA[
+   lb.appendChild(new Listitem("item"));
+  ]]></attribute>
+ </button>
+  <button label="all">
+     <attribute name="onClick"><![CDATA[
+   Listhead listhead = new Listhead();
+   listhead.appendChild(new Listheader("header"));
+   listhead.setParent(lb);
+   
+   for(int i = 0; i < 20;i++)
+    lb.appendChild(new Listitem("item " + i));
+   
+  ]]></attribute>
+ </button>
+
+   <separator/>
+   Handle grid:
+    <button label="header">
+     <attribute name="onClick"><![CDATA[
+	Columns cols = new Columns();
+	cols.appendChild(new Column("header"));
+	cols.setParent(gr);
+  ]]></attribute>
+ </button>
+ <button label="item">
+     <attribute name="onClick"><![CDATA[
+     Rows rows = gr.getRows();
+     if (rows == null)
+     	(rows = new Rows()).setParent(gr);
+     Row row = new Row();
+     row.appendChild(new Label("item"));
+     rows.appendChild(row);
+  ]]></attribute>
+ </button>
+  <button label="all">
+     <attribute name="onClick"><![CDATA[
+	Columns cols = new Columns();
+	cols.appendChild(new Column("header"));
+	cols.setParent(gr);
+   
+	Rows rows = gr.getRows();
+	if (rows == null)
+		(rows = new Rows()).setParent(gr);
+
+	for(int i = 0; i < 20;i++) {
+		Row row = new Row();
+		row.appendChild(new Label("item " + i));
+		rows.appendChild(row);
+	}
+  ]]></attribute>
+ </button>
+
+   <separator/>
+   Handle Tree:
+  <button label="all">
+     <attribute name="onClick"><![CDATA[
+	Treecols tcs = new Treecols();
+	tcs.appendChild(new Treecol("header"));
+	tcs.setParent(tree);
+
+	Treechildren tc = new Treechildren();
+	Treeitem ti = new Treeitem("item 1");
+	tc.appendChild(ti);
+	tree.appendChild(tc);
+	tc = new Treechildren();
+	ti.appendChild(tc);
+	ti.setOpen(false);
+	tc.appendChild(new Treeitem("item 1.1"));
+	tc.appendChild(new Treeitem("item 1.2"));
+	
+  ]]></attribute>
+ </button>
+</zk>

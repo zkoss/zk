@@ -1,0 +1,12 @@
+name: WIP
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited, labeled, auto_merge_enabled]
+    
+jobs:
+  wip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: wip/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

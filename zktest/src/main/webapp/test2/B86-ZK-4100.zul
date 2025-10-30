@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4100.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 19 18:20:35 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        Input "31.11.2018" on all dateboxes.
+    </label>
+    <vlayout>
+        <div>
+            <datebox lenient="true" strictDate="true" format="dd.MM.yyyy"/>
+            lenient="true" strictDate="true" (error)
+        </div>
+        <div>
+            <datebox lenient="false" strictDate="true" format="dd.MM.yyyy"/>
+            lenient="false" strictDate="true" (error)
+        </div>
+        <div>
+            <datebox lenient="true" strictDate="false" format="dd.MM.yyyy"/>
+            lenient="true" strictDate="false" (no error)
+        </div>
+        <div>
+            <datebox lenient="false" strictDate="false" format="dd.MM.yyyy"/>
+            lenient="false" strictDate="false" (error)
+        </div>
+    </vlayout>
+
+</zk>

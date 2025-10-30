@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4715-2.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Nov 20 15:25:45 AM CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>embeded page - 2</label>
+	<button label="test AU" onClick='Clients.log("Test")'/>
+	<chosenbox/>
+</zk>

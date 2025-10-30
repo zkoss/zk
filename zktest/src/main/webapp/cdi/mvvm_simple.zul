@@ -1,0 +1,28 @@
+<?variable-resolver class="org.zkoss.zkplus.cdi.DelegatingVariableResolver" ?>
+<zk>
+<!-- 
+<window apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('org.zkoss.zktest.test2.cdi.TestCdiVM')">
+
+	<textbox value="@bind(vm.name)"/>
+	
+	<label value="@load(vm.message)"/>
+	
+	<button onClick="@command('sayHello')" label="say hi!"/>
+	
+	<button label="kill session">
+		<attribute name="onClick"><![CDATA[
+			Sessions.getCurrent().invalidate();
+		]]></attribute>
+	</button>
+	
+</window>
+ -->
+
+<label value="${empty hello ? hello.sayHello('Ian') : hello.sayHello('dennis')}"/>
+
+<zscript><![CDATA[
+	System.out.println("befor after Compose of mvvm_simple.zul");
+]]></zscript>
+
+</zk>

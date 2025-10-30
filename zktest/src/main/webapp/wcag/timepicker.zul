@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Timepicker"?>
+<?root-attributes lang="en"?>
+<!--
+timepicker.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 15 12:44:00 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <style><![CDATA[
+    :focus {
+        outline: 1px dotted red !important;
+    }
+    ]]></style>
+    <n:header>
+        <n:h1>Timepicker</n:h1>
+    </n:header>
+    <n:main>
+        <timepicker ca:aria-label="choose lunch time"/>
+    </n:main>
+</zk>

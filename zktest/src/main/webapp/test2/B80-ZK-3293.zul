@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3293.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug  9 16:46:51 CST 2016, Created by wenninghsu
+ClipMenu.app
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">1. drag the splitter from left to right
+		 2. the tabbox should be resized and become smaller
+
+	</label>
+	<hbox width="100%" height="150px">
+		<div height="100px">left <textbox/></div>
+		<splitter collapse="after"/>
+		<tabbox width="100%">
+			<tabs>
+				<tab>AAA</tab>
+				<tab>BBB</tab>
+				<tab>CCC</tab>
+				<tab>DDD</tab>
+				<tab>EEE</tab>
+			</tabs>
+			<tabpanels>
+				<tabpanel>AAA</tabpanel>
+				<tabpanel>BBB</tabpanel>
+				<tabpanel>CCC</tabpanel>
+				<tabpanel>DDD</tabpanel>
+				<tabpanel>EEE</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</hbox>
+</zk>

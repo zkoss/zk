@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2793.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 18 10:45:26 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<label multiline="true">
+	1. Please open this page in Android's Chrome browser.
+	2. Open the datebox's popup, and change the year field to 2020.
+	3. Close it and reopen the datebox's popup, and scroll down a little bit.
+	4. The year field shouldn't jump to 19xx year.
+	</label>
+	<datebox/>
+</window>

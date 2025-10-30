@@ -1,0 +1,9 @@
+**/debug/*
+**/build/*
+**/codegen/*
+**/.git/*
+**/ext/*
+@types
+*.config.js
+.eslintrc.js
+/jsdoc

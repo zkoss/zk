@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5047.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/16, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        List locales = new ArrayList();
+        for(Locale loc : Locale.getAvailableLocales()) {
+            locales.add(loc.getDisplayName().toLowerCase());
+        }
+        SimpleListModel model = new SimpleListModel(locales);
+    ]]></zscript>
+    <combobox model="${model}" autodrop="true"
+              onSelect='
+                Clients.log("SelectedItem   : " + event.getSelectedItems().iterator().next().getValue());
+                Clients.log("SelectedObject : " + event.getSelectedObjects().iterator().next());
+              '>
+    </combobox>
+</zk>

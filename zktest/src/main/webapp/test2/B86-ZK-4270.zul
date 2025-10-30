@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4270.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 16 10:05:39 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]></script>
+	<zscript>
+		Toolbar toolbar = new Toolbar();
+		toolbar.appendChild(new Textbox());
+	</zscript>
+	<label multiline="true">
+		The toolbar inside a Tabbox is only allowed with horizontal orient:
+		1. click the "setOrient=left" button, then click "addToolbar" button
+		2. you should see a message "Toolbar is allowed only when the tabbox is horizontal."
+		3. close the message by clicking the x icon on the top right
+		4. click the "setOrient=top" button, then click "addToolbar" button
+		5. you should see the toolbar(with a textbox) on the top right
+		6. click the "setOrient=left" button
+		7. you should see a message "Unsupported vertical orient when there is a toolbar"
+		8. you should not see any javascript error
+	</label>
+	<button label="setOrient=left" onClick='tb.setOrient("left")'></button>
+	<button label="setOrient=top" onClick='tb.setOrient("top")'></button>
+	<button label="addToolbar" onClick='tb.appendChild(toolbar)'></button>
+	<button label="removeToolbar" onClick='tb.removeChild(toolbar)'></button>
+	<tabbox id="tb" orient="top">
+		<tabs>
+			<tab label="Tab1" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				1
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

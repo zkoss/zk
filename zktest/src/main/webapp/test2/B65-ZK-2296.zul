@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2296.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 14, 2014 10:46:19 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="Auto Generated index.zul"?>
+<window title="Hello World!!" border="normal" vflex="1" hflex="1">
+<label multiline="true">
+1.select an item in combobox
+2.click to expand the dropdown
+3. the scrollbar should not move to right.
+</label>
+	<label value="You are using: ${desktop.webApp.version}" />
+	<combobox id="cmbUser2" width="150px" readonly="true"
+		style="background:#FFFFFF">
+		<comboitem label="111111111" />
+		<comboitem label="abcdefghijklmnopqrstuvwxyz1234567890wxyz123456789" />
+		<comboitem label="12" />
+		<comboitem label="34" />
+		<comboitem label="23" />
+		<comboitem label="34" />
+		<comboitem label="111111111" />
+		<comboitem label="f'd" />
+		<comboitem label="12" />
+		<comboitem label="34" />
+		<comboitem label="23" />
+		<comboitem label="34" />
+		<comboitem label="111111111" />
+		<comboitem label="f'd" />
+		<comboitem label="12" />
+		<comboitem label="34" />
+		<comboitem label="23" />
+		<comboitem label="34" />
+		<comboitem label="111111111" />
+		<comboitem label="f'd" />
+		<comboitem label="12" />
+		<comboitem label="34" />
+		<comboitem label="23" />
+		<comboitem label="34" />
+		<comboitem label="111111111" />
+		<comboitem label="f'd" />
+		<comboitem label="12" />
+		<comboitem label="34" />
+		<comboitem label="23" />
+		<comboitem label="34" />
+		<comboitem label="111111111" />
+		<comboitem label="f'd" />
+		<comboitem label="12" />
+		<comboitem label="34" />
+		<comboitem label="23" />
+		<comboitem label="34" />
+		<comboitem label="111111111" />
+		<comboitem label="f'd" />
+		<comboitem label="12" />
+		<comboitem label="34" />
+		<comboitem label="23" />
+		<comboitem label="34" />
+		<comboitem label="111111111" />
+		<comboitem label="f'd" />
+		<comboitem label="12" />
+		<comboitem label="34" />
+		<comboitem label="23" />
+		<comboitem label="34" />
+	</combobox>
+
+</window>

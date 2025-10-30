@@ -1,0 +1,14 @@
+<window id="subWin" mode="modal" width="500px" height="500px"
+	closable="true" title="Wizard" border="normal">
+	<groupbox>
+		<caption>Wizard</caption>
+		<vlayout>
+			<a></a>
+			<textbox value="Enter value"></textbox>
+			<combobox>
+				<comboitem label="United Nations (UN)" />
+				<comboitem label="North America (NA)" />
+			</combobox>
+		</vlayout>
+	</groupbox>
+</window>

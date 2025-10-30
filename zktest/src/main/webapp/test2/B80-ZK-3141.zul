@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3141.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Aug 9 15:12:42 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div width="100%">
+        <label multiline="true"><![CDATA[
+            1. Focus the textbox and focus out. You should see the error box appear.
+            2. Resize the browser, then the error box should move to the correct position.
+            3. Click the button "change position", then the error box should move to the correct position.
+            4. Click the button "change mode - popup", then the error box should move to the correct position.
+            5. Drag the popup window, then the error box should move to the correct position.
+        ]]>
+        </label>
+		<window id="win" border="normal" title="window" mode="overlapped" position="center">
+            <textbox id="tb" constraint="no empty"/>
+		</window>
+        <button label="change mode - popup" onClick='win.mode="popup"' />
+        <button label="change mode - overlapped" onClick='win.mode="overlapped"' />
+        <button label="change position">
+            <attribute name="onClick"><![CDATA[
+                String position = "center".equals(win.getPosition()) ? "left,center" : "center";
+                win.setPosition(position);
+            ]]></attribute>
+        </button>
+	</div>
+</zk>

@@ -1,0 +1,31 @@
+<vlayout>
+	<html>
+	<p>Testing instructions:</p>
+	<ol>
+		<li>Expand the tree nodes until the scrollbar appears.</li>
+		<li>Scroll down</li>
+		<li>Switch to Tab 2</li>
+		<li>Switch back to Tab 1</li>
+	</ol>
+	<p>The scrollbar should be at the previous position. Otherwise, it is a bug</p>
+	</html>
+
+	<tabbox	width="400px" height="400px">
+		<tabs>
+			<tab label="Tab 1" closable="true" />
+			<tab label="Tab 2" closable="true" />
+		</tabs>
+		<tabpanels>
+			<tabpanel style="position: relative; overflow: auto;">
+				<zscript>
+				import org.zkoss.zktest.test2.BigList;
+			    import org.zkoss.zktest.test2.tree.BinaryTreeModel;
+			    import java.util.ArrayList;
+				BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new BigList(1000)));
+				</zscript>
+				<tree id="tree"	model="${btm}" />
+			</tabpanel>
+			<tabpanel>Close this panel</tabpanel>
+		</tabpanels>
+	</tabbox>
+</vlayout>

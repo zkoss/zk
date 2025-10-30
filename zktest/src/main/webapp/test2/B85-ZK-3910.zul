@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3910.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri May 18 3:03 PM:45 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <label multiline="treu">
+        1. click the close button on the window.
+        2. it should not have any error message on the console.log;
+    </label>
+    <window mode="modal" title="test" closable="true">
+        <ckeditor></ckeditor>
+    </window>
+</zk>

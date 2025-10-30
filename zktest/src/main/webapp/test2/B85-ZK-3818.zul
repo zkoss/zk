@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3818.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 19 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		In each section:
+		1. click button "add before first item" once, should see a radiobutton
+		2. select the radiobutton
+		3. click button "add before first item" twice
+		4. click button "delete first item" twice
+
+		client log should look like following:
+		selected index: -1
+		selected index: 0
+		selected index: 1
+		selected index: 2
+		selected index: 1
+		selected index: 0
+	</label>
+	<zscript>
+		import org.zkoss.zk.ui.Component;
+		import org.zkoss.zk.ui.sys.ComponentCtrl;
+		import org.zkoss.zk.ui.util.Clients;
+		import java.io.ByteArrayInputStream;
+		import java.io.ByteArrayOutputStream;
+		import java.io.ObjectInputStream;
+		import java.io.ObjectOutputStream;
+
+		byte[] _bytes;
+
+		public void doSerialize(Component win1) {
+			try {
+				doSerialize0(win1);
+				doDeserialize0(win1);
+			} catch(Exception x) {
+				x.printStackTrace();
+				Clients.log("error :" + x.getClass() + "," + x.getMessage());
+			}
+		}
+
+		public void doSerialize0(Component win1) throws Exception {
+			Page pg = win1.getPage();
+			((ComponentCtrl) win1).sessionWillPassivate(pg); //simulate
+			ByteArrayOutputStream oaos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(oaos);
+			oos.writeObject(win1);
+			oos.close();
+			oaos.close();
+			_bytes = oaos.toByteArray();
+		}
+
+		public void doDeserialize0(Component win1) throws Exception {
+			ByteArrayInputStream oaos = new ByteArrayInputStream(_bytes);
+			ObjectInputStream oos = new ObjectInputStream(oaos);
+
+			Component newwin = (Component) oos.readObject();
+			Page pg = win1.getPage();
+			Component parent = win1.getParent();
+			Component ref = win1.getNextSibling();
+			win1.detach();
+			oos.close();
+			oaos.close();
+			parent.insertBefore(newwin, ref);
+			//for load component back.
+			((ComponentCtrl) newwin).sessionDidActivate(newwin.getPage()); //simulate
+			Clients.log("done deserialize: " + _bytes.length);
+		}
+	</zscript>
+	<hlayout>
+		<div style="border: black 1px solid">
+			<window id="win1">
+				<div apply="org.zkoss.zktest.test2.B85_ZK_3818composer_1" height="300px" width="200px">
+					<vlayout>
+						<button id="btnAdd1" label="add before first item"/>
+						<button id="btnDelete1" label="delete first item"/>
+						<button id="btnSerialize1" label="serialize/deserialize" onClick="doSerialize(win1)"/>
+						<radiogroup id="rg1">
+						</radiogroup>
+					</vlayout>
+				</div>
+			</window>
+		</div>
+		<div style="border: black 1px solid">
+			<window id="win2">
+				<div apply="org.zkoss.zktest.test2.B85_ZK_3818composer_2" height="300px" width="200px">
+					<vlayout>
+						<button id="btnAdd2" label="add before first item"/>
+						<button id="btnDelete2" label="delete first item"/>
+						<button id="btnSerialize2" label="serialize/deserialize" onClick="doSerialize(win2)"/>
+						<radiogroup id="rg2">
+						</radiogroup>
+					</vlayout>
+				</div>
+			</window>
+		</div>
+		<div style="border: black 1px solid">
+			<window id="win3">
+				<div apply="org.zkoss.zktest.test2.B85_ZK_3818composer_3" height="300px" width="200px">
+					<vlayout>
+						<button id="btnAdd3" label="add before first item"/>
+						<button id="btnDelete3" label="delete first item"/>
+						<button id="btnSerialize3" label="serialize/deserialize" onClick="doSerialize(win3)"/>
+						<radiogroup id="rg3">
+							<div id="rgdiv3"></div>
+						</radiogroup>
+					</vlayout>
+				</div>
+			</window>
+		</div>
+		<div style="border: black 1px solid">
+			<window id="win4">
+				<div apply="org.zkoss.zktest.test2.B85_ZK_3818composer_4" height="300px" width="200px">
+					<vlayout>
+						<button id="btnAdd4" label="add before first item"/>
+						<button id="btnDelete4" label="delete first item"/>
+						<button id="btnSerialize4" label="serialize/deserialize" onClick="doSerialize(win4)"/>
+						<radiogroup id="rg4">
+							<div id="rgdiv4"></div>
+						</radiogroup>
+					</vlayout>
+				</div>
+			</window>
+		</div>
+	</hlayout>
+</zk>

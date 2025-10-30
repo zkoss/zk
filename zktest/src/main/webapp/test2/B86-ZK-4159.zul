@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4159.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 12 16:36:30 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Click "trigger au".
+        2. Shouldn't have second "render" in zklog.
+    </label>
+    <listbox mold="select" w:onBind="zk.log('render')">
+        <listitem label="aaa" selected="true"/>
+        <listitem label="bbb" />
+    </listbox>
+    <button onClick="" label="trigger au"/>
+</zk>

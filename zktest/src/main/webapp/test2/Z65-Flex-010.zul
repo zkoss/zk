@@ -1,0 +1,55 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Panel, Vlayout]" width="480px">
+        <vlayout height="200px" hflex="min">
+            <panel hflex="1" vflex="1">
+                <panelchildren>
+                    <div height="100%" style="background:yellow" width="100%">
+                        <label value="1"/>
+                    </div>
+                </panelchildren>
+            </panel>
+            <panel vflex="1" width="75px">
+                <panelchildren>
+                    <div height="100%" style="background:cyan" width="100%">
+                        <label value="1"/>
+                    </div>
+                </panelchildren>
+            </panel>
+            <panel vflex="1" width="120px">
+                <panelchildren>
+                    <div height="100%" style="background:red" width="100%">
+                        <label value="1"/>
+                    </div>
+                </panelchildren>
+            </panel>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Panel, Vbox]" width="480px">
+        <vbox height="200px" hflex="min">
+            <panel hflex="1" vflex="1">
+                <panelchildren>
+                    <div height="100%" style="background:yellow" width="100%">
+                        <label value="1"/>
+                    </div>
+                </panelchildren>
+            </panel>
+            <panel vflex="1" width="75px">
+                <panelchildren>
+                    <div height="100%" style="background:cyan" width="100%">
+                        <label value="1"/>
+                    </div>
+                </panelchildren>
+            </panel>
+            <panel vflex="1" width="120px">
+                <panelchildren>
+                    <div height="100%" style="background:red" width="100%">
+                        <label value="1"/>
+                    </div>
+                </panelchildren>
+            </panel>
+        </vbox>
+    </window>
+</hbox>
+</zk>

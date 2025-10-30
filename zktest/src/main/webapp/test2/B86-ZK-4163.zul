@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4163.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Dec 26 12:47:08 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Upload a file
+		2. The dialog shows upload progress and the file remains visible after uploaded
+	</label>
+	<window apply="org.zkoss.zktest.test2.B86_ZK_4163Composer">
+		<button id="button" label="trigger upload dialog"/>
+	</window>
+</zk>

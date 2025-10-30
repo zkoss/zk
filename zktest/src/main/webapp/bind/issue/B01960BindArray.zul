@@ -1,0 +1,29 @@
+<zk>
+	<window border="none" vflex="1" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01960BindArray')">
+
+		<grid hflex="1">
+			<columns>
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<textbox id="tb1" value="@bind(vm.testArray['0'])" />
+					<label id="lb1" value="@bind(vm.testArray['0'])" />
+				</row>
+				<row>
+					<textbox id="tb2" value="@bind(vm.testArray[1])" />
+					<label id="lb2" value="@bind(vm.testArray[1])" />
+				</row>
+				<row>
+					<textbox id="tb3" value="@bind(vm.testArray[2])" />
+					<label id="lb3" value="@bind(vm.testArray[2])" />
+				</row>
+				<row>
+					<textbox id="tb4" value="@bind(vm.testArray[3])" />
+					<label id="lb4" value="@bind(vm.testArray[3])" />
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>

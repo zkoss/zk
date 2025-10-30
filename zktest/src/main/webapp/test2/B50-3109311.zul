@@ -1,0 +1,13 @@
+<?page title="Bug ID: 3109311" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window>
+		Resize column, then move your mouse. If the resized column is resized again, it is a bug.
+		<listbox sizedByContent="true">
+			<listhead sizable="true">
+				<listheader label="clm1" />
+				<listheader label="clm2" />
+				<listheader label="clm3" />
+			</listhead>
+		</listbox>
+	</window>
+</zk>

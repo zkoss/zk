@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4914.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jun 29 14:23:33 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true"><![CDATA[
+		1. Add Library Property
+			<library-property>
+				<name>org.zkoss.ui.script.ScriptErrorListener.class</name>
+				<value>F96_ZK_4914_ScriptErrorListener</value>
+			</library-property>
+		2. Click 'Click and error' button and see "Clients.evalJavaScript Error!" in zk log
+		3. Click 'Click and no error' button twice and click 'Click and error', and you should only see "Clients.evalJavaScript Error!" once in zk log
+		4. Click 'Click and client error' button, and you should not see "Clients.evalJavaScript Error!" in zk log
+	]]></label>
+	<div>
+		<button id="btnError" onClick='Clients.evalJavaScript("console.log(this);causeError();")'>Click and error </button>
+		<button id="btnNormal" onClick='Clients.evalJavaScript("console.log(\"doSth\");")'>Click and no error </button>
+		<button id="btnCallJsScript" w:onClick='zAu.cmd0.script("aaa");'>Click and client error </button>
+	</div>
+</zk>

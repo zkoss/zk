@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2901.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 27 12:52:20 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+  <window border="normal" title="hello" apply="org.zkoss.zktest.test2.B80_ZK_2901Composer">
+  	<label multiline="true">
+        1. Click the button "Remove a bunch of tree items".
+        2. You should see the top one item is "1490" and display in 3 seconds (IE only), if it displays in 10 seconds or more, that's a bug.
+    </label>
+  	<!--<div>This demonstrates a performance problem in IE with the fireEvent method in TreeModel to remove many tree items.-->
+        <!--Tested with IE11.        -->
+        <!--Chrome has no problems at all.-->
+    <!--Invalidating the tree after changing the model and firing the events fixes the performance problem, but should that really be necessary?-->
+          <!--And if so, how come it works just fine without it in Chrome?-->
+    <!--</div>-->
+    
+        <button id="btnRemove" label="Remove a bunch of tree items" />
+
+        <tree id="tree" height="200px" width="200px"/>
+  </window>
+</zk>

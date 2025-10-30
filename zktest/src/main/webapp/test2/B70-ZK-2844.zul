@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2844.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 19 11:26:29 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. Please click the "redirect stops client engine" button.
+	2. Click the "test AU" button, and then you should be able to see "au working" message at zk log area.
+	</label>
+	<button label="redirect stops client engine" onClick='Executions.getCurrent().sendRedirect("whatever", "_blank");'/>
+	<button label="test AU" onClick='Clients.log("au working")'/>
+</zk>

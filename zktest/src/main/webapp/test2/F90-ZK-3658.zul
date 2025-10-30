@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-3658.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 20 10:46:06 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <zscript><![CDATA[
+	ListModelList model = new ListModelList();
+	for (int i = 1; i <= 3; i++) {
+		model.add("item" + i);
+	}
+
+	ListModelList add5 = new ListModelList();
+	for(int i = 1; i <= 5; i++) {
+		add5.add("new " + i);
+	}
+]]></zscript>
+    <label multiline="true">
+        1. Type some text in the textbox.
+        2. Click the button "trigger INVALIDATE_THRESHOLD".
+        3. After finished, the previous input content exists and shouldn't be empty.
+    </label>
+    <div>
+        <custom-attributes org.zkoss.zul.listbox.rod="false"/>
+        <listbox model="${model}">
+            <custom-attributes org.zkoss.zul.invalidateThreshold="3"/>
+            <listhead>
+                <listheader>
+                    <n:input type="text"/>
+                    <button label="trigger INVALIDATE_THRESHOLD" onClick="model.addAll(add5)" />
+                </listheader>
+            </listhead>
+        </listbox>
+    </div>
+</zk>

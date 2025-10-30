@@ -1,0 +1,10 @@
+<zk>
+	<image src="B100-ZK-5639/steps/rent-car.png" tooltiptext="dummy content"/>
+	<hlayout style="position: relative; margin-top: 12px;" spacing="8px">
+		<div hflex="1" sclass="highlight">
+			<span sclass="z-icon-car"/>
+			<label zclass=" " value="I changed my mind - remove car."/>
+		</div>
+		<button zclass="stepbar-button" width="245px" sclass="outline" onClick="@command('removeCar')" label="Remove Car"/>
+	</hlayout>
+</zk>

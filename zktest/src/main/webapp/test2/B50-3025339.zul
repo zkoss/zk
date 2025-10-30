@@ -1,0 +1,17 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Check mouse over/out/up/down events function correctly (especially UI) on Timebox/Spinner, in either default or rounded mold.</li>
+</ol>
+]]>
+</html>
+<window title="Timebox, Spinner" border="normal">
+	<vbox>
+		<timebox />
+		<spinner />
+		<timebox mold="rounded" />
+		<spinner mold="rounded" />
+	</vbox>
+</window>
+</zk>

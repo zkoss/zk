@@ -1,0 +1,19 @@
+<zk>
+	<zscript>
+		int each = 1;
+	</zscript>
+	<div style="border:1px solid red;" id="host">
+		<choose>
+			<when test="false">
+				<div style="color:blue">${each} Template</div>
+			</when>
+			<when test="true">
+				<div style="color:green">${each} Template</div>
+			</when>
+			<otherwise>
+				<div style="color:red">${each} Template</div>
+			</otherwise>
+		</choose>
+	</div>
+	<debugger rootId="host" />
+</zk>

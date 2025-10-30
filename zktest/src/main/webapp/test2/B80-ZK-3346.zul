@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3346.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 15 16:54:00 CST 2016, Created by Jack Wei
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Test Case:
+        1. Click the Button 'Popup' or 'Menupopup', and a popup will display; Or click the combobox, and a drop down will display.
+        2. Click on the label 'click a label' and the popup or drop down will close.
+        3. Click on the button 'click a button' and the popup or drop down will close.
+        4. Click on the textbox 'click a textbox' and the popup or drop down will close.
+        5. Click on the gray color div, and the popup or drop down will close.
+        6. Click on the background or anywhere, and the popup or drop down will close.
+        
+        Wrong Case: (Especially in older Firefox with version before 3.8)
+        1. Click on the gray div, and the popup or drop down will NOT close.
+        2. Click on the background or anywhere, and the popup or drop down will NOT close.
+        
+    </label>
+	<popup id="pop">
+		Now try closing the pop up by clicking somewhere else below.
+	</popup>
+	<menupopup id="menupop">
+		<menuitem label="Now try closing the pop up by clicking somewhere else below."/>
+	</menupopup>
+	<vbox>
+		<hbox>
+			<button style="width: 100px; height: 40px;"
+				label="Popup" popup="pop"/>
+			<button style="width: 100px; height: 40px;"
+				label="Menupopup" popup="menupop"/>
+			<combobox style="width: 100px;">
+				<comboitem label="dropdown"/>
+				<comboitem label="should"/>
+				<comboitem label="close"/>
+				<comboitem label="properly"/>
+			</combobox>
+		</hbox>
+		<space />
+		<label style="background: lightgray; width: 200px;">
+			click a label
+		</label>
+		<button label="click a button" style="width: 200px;"/>
+		<textbox cols="30" placeholder="click a textbox" style="width: 200px;"/>
+		<hbox>
+			click a div:
+			<div style="width: 200px; height: 20px; background: lightgray;" />
+		</hbox>
+		click the background
+	</vbox>
+</zk>

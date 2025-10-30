@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2369.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jul 25, 2014  10:49:12 PM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<borderlayout>
+		<north height="200px" splittable="true">
+			<div>
+				<button label="(1.) remove first content element" onClick="content.removeChild(content.getFirstChild());"/>
+				<button label="(2.) remove content container" onClick="content.setParent(null);"/>
+
+				<button label="(3.) re-add" onClick="content2.setParent(mycenter);"/>
+				<button label="(4.) remove first content element" onClick="content2.removeChild(content2.getFirstChild());"/>
+				<button label="(5.) remove content container" onClick="content2.setParent(null);"/>
+			</div>
+		</north>
+		<west width="200px" splittable="true">
+			press the buttons in sequence. if it has javascript error in console, it's a bug.
+		</west>
+		<center autoscroll="true" id="mycenter">
+			<vlayout id="content" >
+				<div height="150px">1</div>
+				<div height="150px">2</div>
+				<div height="150px">3</div>
+				<div height="150px">4</div>
+				<div height="150px">5</div>
+			</vlayout>
+		</center>
+	</borderlayout>
+	<div visible="false">
+			<vlayout id="content2" >
+				<div height="150px">1</div>
+				<div height="150px">2</div>
+				<div height="150px">3</div>
+				<div height="150px">4</div>
+				<div height="150px">5</div>
+			</vlayout>
+	</div>
+</zk>

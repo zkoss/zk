@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3109926.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 25 14:08:01 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>There should not be javascript error at page loading in IE8. If you see the screen hangs on loading, it is a bug.</li>
+		</ol>
+	]]></html>
+	<hbox width="200px" height="200px">
+		<splitter open="false" collapse="before" />
+		Content
+	</hbox>
+	<vbox width="200px" height="200px">
+		<splitter open="false" collapse="before" />
+		Content
+	</vbox>
+</zk>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4103.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Oct 26 12:22:50 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in Chrome
+		2. Click first button to upload a video, the video should be played properly
+		2. Click second button to upload an audio, the audio should be played properly
+	</label>
+	<vlayout apply="org.zkoss.zktest.test2.B86_ZK_4103Composer">
+		<fileupload id="videoUpload" label="Upload video here" upload="maxsize=-1"/>
+		<video id="video" width="600px" controls="true" autoplay="true"/>
+		<fileupload id="audioUpload" label="Upload audio here" upload="maxsize=-1"/>
+		<audio id="audio" width="600px" controls="true" autoplay="true"/>
+	</vlayout>
+</zk>

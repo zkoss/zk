@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5224.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Apr 14 11:23:51 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<style>
+		.z-groupbox {
+		margin: 10px;
+		}
+		.z-hlayout {
+			background: lightblue;
+		}
+	</style>
+	<hlayout vflex="1">
+		<groupbox id="g1" hflex="1" vflex="1">
+			Click buttons and see the width of groupbox and hlayout inner width should not be the same. (which means margin is ignored -> bug!!)
+			<button w:onClick="zk.log('groupbox width: ' + jq('$g1').width() + ', hlayout inner width: ' + jq('$g1').parent().width())" label="click" />
+		</groupbox>
+		<groupbox id="g2" hflex="1" vflex="1">
+			<button w:onClick="zk.log('groupbox width: ' + jq('$g2').width() + ', hlayout inner width: ' + jq('$g2').parent().width())" label="click" />
+		</groupbox>
+	</hlayout>
+</zk>

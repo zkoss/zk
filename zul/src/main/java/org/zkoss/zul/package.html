@@ -1,0 +1,248 @@
+<html>
+<head>
+<title>ZUL Component Set in HTML</title>
+</head>
+<body>
+<p>ZUL component set that are used for HTML-based clients.</p>
+
+<h1>Table of Contents</h1>
+<ul>
+	<li><a href="#Components">Components of XUL in HTML</a>
+	<ul>
+		<li><a href="#window">window</a></li>
+	</ul></li>
+	<li><a href="#Implicits">Implicit Objects</a>
+	<ul>
+		<li><a href="#browseComps">How to browse components</a></li>
+	</ul></li>
+	<li><a href="#Events">Events</li>
+</ul>
+
+<h1><a name="Components"></a>Components of XUL in HTML</h1>
+<h2>Introduction</h2>
+	The implementation of XUL components for ZK.
+
+<h2>Directive Elements</h2>
+
+<h3>page</h3>
+
+<pre><code>&lt;?page [id="..."] [title="..."] [language="xul/html"]?&gt;</code></pre>
+
+<ul>
+	<li>The language must be <code>xul/html</code>.</li>
+	<li>The title is used as the HTML page title. Used only if it is rendered
+	as a standalone page (rather than included).</li>
+	<li>The id, if specified, must be unique in the same request.
+	Note: a request might contain multiple pages (such as a portal page).</li>
+	<li>It must be at the same level as the root element.</li>
+</ul>
+
+<h2>Special Elements</h2>
+
+<h3>zk</h3>
+
+<p>Due to XML's syntax limitation, we can only specify one document root.
+	Thus, if you have multiple root components, you must use &lt;zk&gt;
+	as the document root to group these root components.
+	In other words, &lt;zk&gt; is not a component and it, if used,
+must be the document root.</p>
+
+<h3>zscript</h3>
+
+<pre><code>&lt;zscript&gt;...&lt;/zscript&gt;</code></pre>
+
+<pre><code>&lt;zscript src="<i>/WEB-INF/xx/yy.bs</i>"&gt;</code></pre>
+
+<ul>
+	<li>Specifies a script that shall be interpret when executing
+	this page.</li>
+	<li>If you want to pre-compile Java codes, you could do
+		<pre><code>&lt;zscript&gt;
+import com.MyCompany.MyPackage.MyClass;
+MyClass.doThis();
+MyClass.doThat();
+.&lt;/zscript&gt;</code></pre></li>
+	<li>Predefined variables:
+	<dl>
+	<dt>self</dt>
+		<dd>The component itself</dd>
+	<dt>self.parent</dt>
+		<dd>The parent component, if any</dd>
+	<dt>page</dt>
+		<dd>The page (org.zkoss.zk.ui.Page)</dd>
+	<dt>session</dt>
+		<dd>The session (org.zkoss.zk.ui.Session)</dd>
+	<dt>this</dt>
+		<dd>The BeanShell namespace to interpret the script defined in this
+		component. Advanced users only.</dd>
+	<dt>super</dt>
+		<dd>The BeanShell namespace to interpret the script defined in
+		the parent component, if any.  Advanced users only.</dd>
+	</dl>
+</li>
+	<li>If you specify the id attribute for a component, a variable
+	the same as the specified ID is created automatically.</li>
+	<li>If you want to resolve the EL's variables, such as a parameter,
+		use page.resolveVariable().
+		Example: page.getELVariable('param').get('some')</li>
+</ul>
+
+<h2>Simple Elements</h2>
+
+<h3>Common Attributes</h3>
+
+<pre><code>&lt;xxx [id="..."] [class="..."] [style="...] [use="..."]/&gt;</code></pre>
+
+<ul>
+	<li>If id is not specified, it is generated automatically.
+	If specified, it must be unique in the whole page.</li>
+	<li>The class attribute defines the CSS class that this component
+	shall refer.</li>
+	<li>The use attribute defines the Java class to use instead of
+	the Java class defined in zk-xul-*.xml</li>
+</ul>
+
+<h3>textbox</h3>
+
+<pre><code>&lt;textbox [id="..."] [class="..."] [style="...] [use="..."]
+[onChange="<i>script</i>"] [onChanging="<i>script</i>"] [value="value"] [type="|password"]
+[maxlength="<b>0</b>|<i>num</i>"] [rows="<b>3</b>|<i>num</i>"] [cols="<b>0</b>|<i>num</i>"]
+[disabled="<b>false</b>|true"] [readonly="<b>false</b>|true"] [multiline="<b>false</b>|true"] /&gt;</code></pre>
+
+<ul>
+	<li>The onChange attribute is called after the value is really set.
+	<ul><li>Note: the script of the onChange attribute is called
+		only if user input a different value.
+		On the other hand, the setValue method is called either by a program
+	or by user's input (if by a program, the value might not be changed).</li>
+	</ul>
+	</li>
+	<li>The onChanging attribute is called when a user is chaning its content.
+	onChanging won't cause the content being set. It is simply used to notify
+	server for implementing auto-completion and other features.</li>
+</ul>
+
+<h3><a name="window"></a>window</h3>
+
+<pre><code>&lt;window [id="..."] [class="..."] [style="...] [use="..."] [title="..."] [border="<b>normal</b>|none"]/&gt;</code></pre>
+
+<ul>
+	<li>The title attribute defines the window title.</li>
+</ul>
+
+<hr>
+<h1><a name="Implicits"></a>Implicit Objects</h1>
+<p>Depending on invoking from a script or from an EL expression, different
+implicit objects might be used.
+<table border="1">
+<tr>
+	<th>Name</th><th>Description</th><th>From Script</th><th>From EL</th>
+</tr>
+<tr>
+	<td>self</td>
+	<td>The current component that script/EL is interpreted upon.<br>
+	It is the same as this in Java.</td>
+	<td>Yes</td><td>Yes</td>
+</tr>
+<tr>
+	<td>spaceOwner</td>
+	<td>The owner of the ID space that the current component belongs to
+		(See <a href="#IdSpace">What is an ID space</a>").
+		It is null, if the current component doesn't belong to any space.<br>
+		It is the same as self.getSpaceOwner() in script, self.root in EL and
+		this.getSpaceOwner() in Java.</td>
+	<td>Yes</td><td>Yes</td>
+</tr>
+<tr>
+	<td>desktopScope</td>
+	<td>The attributes defined in the current desktop.<br>
+	It is the same as this.getPage().getAttributes(name,DESKTOP_SCOPE) in Java.</td>
+	<td>Yes</td><td>Yes</td>
+</tr>
+<tr>
+	<td>pageScope</td>
+	<td>The attributes defined in the current page.<br>
+	It is the same as this.getPage().getAttributes() in Java.</td>
+	<td>Yes</td><td>Yes</td>
+</tr>
+<tr>
+	<td>spaceScope</td>
+	<td>The attributes defined in the ID space that the current component belongs to
+		(See <a href="#IdSpace">What is an ID space</a>").
+	It is the same as this.getAttributes() with SPACE_SCOPE in Java.</td>
+	<td>Yes</td><td>Yes</td>
+</tr>
+<tr>
+	<td>componentScope</td>
+	<td>The attributes defined in the current component.
+	It is the same as this.getAttributes() with COMPONENT_SCOPE in Java.</td>
+	<td>Yes</td><td>Yes</td>
+</tr>
+<tr>
+	<td>arg</td>
+	<td>A map of parameters that are passed to Execution.createComponents(...).<br>
+	It is the same as desktop.getExecution().getArg() in Java.</td>
+	<td>Yes</td><td>Yes</td>
+</tr>
+</table>
+
+<h2><a name="browseComps"></a>How to browse components</h2>
+<h3><a name="browseCompsInJava"></a>In Java</h3>
+
+<p><a name="IdSpace"></a>Each window forms an independent ID space.
+To get a component from an ID space, use Component.getFellow against
+any component in the same ID space. If a window, say C, is a child of
+another window, say P, then C belongs the ID space of P, but descendants
+of C don't. Rather, descendants of C belong to the ID space of C.
+Notice: C belongs to the ID spaces of both C and P.</p>
+
+<p>A page is also an independent ID space, Page.getFellow is used to
+	retrieve a fellow in it.</p>
+
+<ul>
+<li>To get the current page, use Component.getPage().</li>
+<li>To get another page (in the same desktop), use Component.getPage(String).</li>
+
+<li>To get a component of a page, use Page.getFellow(String) -- assuming
+	the component is not a descendant of any window..</li>
+
+<li>To get a child component of <a href="#window">window</a>, use
+	Window.getFellow(String).</li>
+
+<li>To get a fellow component, use Componnet.getFellow(String).
+	All components belongs (aka., child or descendant of) to the same window
+	are called fellows. If a window, say X, belongs to another window, say Y,
+	then X, like other type of components, is a fellow of Y. However,
+	children and descendants of X are NOT fellow of Y because they belong
+	to X's space. Only X belongs to both X's and Y's spaces.</li>
+</ul>
+
+<h3><a name="browseCompsInScript"></a>In Script and EL</h3>
+<p>Components that are specified with the id attribute (i.e., you have assign an ID)
+can be accessed directly by the value of the id attribute.
+<p>For example,
+<pre><code>&lt;label id="label" value="Not good enough?"/&gt;
+&lt;button label="Change label" onClick="label.value = label.value + 'A'"/&gt;</code></pre>
+
+The scope of visibility, same as <a href="#browseCompsInJava">in Java</a>, is controlled by the ID space.
+In other words, each <a href="#window">window</a> has an independent ID space.
+When you specified an ID, only the current ID space is searched.
+
+<h1><a name="Events"></a>Events</h1>
+
+<h2>onOK and onCancel</h2>
+
+<p>When window intercepts whether ENTER or ESC is pressed,
+the onOK or onCancel event is sent, resprectively.
+</p>
+
+<h2>onCtrlKey</h2>
+
+<p>Window intercepts whether control or function keys is pressed
+if you specify what to intercept by use of the ctrlKeys attribute.
+For example, If ctrlKeys="GW2" is specified, it means Ctrl+G,
+Ctrl+W and F2 are all intercepted.
+Once user press one of them, the onCtrlKey event is sent.</p>
+
+</body>
+</html>

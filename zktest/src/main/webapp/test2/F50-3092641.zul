@@ -1,0 +1,75 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<!--
+F50-3092641.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Oct 22, 2010 2:58:17 PM , Created by Sam
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		<attribute name="value">
+			Right click on Listbox/Tree shall popup menupopup, and DO NOT change selection status
+		</attribute>
+	</label>
+	<label multiline="true" >
+		<attribute name="value">
+			<![CDATA[
+			**NOTE**
+			If right click cause select/deselect item, please check zk.xml first
+
+			Do check zk.xml has these Library property (the property can not change dynamic)
+			<library-property>
+				<name>org.zkoss.zul.listbox.rightSelect</name>
+				<value>false</value>
+			</library-property>
+			<library-property>
+				<name>org.zkoss.zul.tree.rightSelect</name>
+				<value>false</value>
+			</library-property>
+
+			]]>
+		</attribute>
+	</label>
+	<menupopup id="pp">
+		<menuitem label="item 1" />
+		<menuitem label="item 2" />
+	</menupopup>
+	1. Check Listbox Right Click
+	<custom-attributes org.zkoss.zul.listbox.rightSelect="false"/>
+	<listbox id="lb" checkmark="true" multiple="true">
+		<listhead>
+			<listheader label="header" sort="auto" />
+		</listhead>
+		<listitem context="pp">
+			<listcell label="cell 1" />
+		</listitem>
+	</listbox>
+	2. Check Tree Right Click
+	<custom-attributes org.zkoss.zul.tree.rightSelect="false"/>
+	<tree checkmark="true" multiple="true">
+		<treecols>
+			<treecol label="header" />
+		</treecols>
+		<treechildren>
+			<treeitem context="pp">
+				<treerow>
+					<treecell label="cell 1" />
+				</treerow>
+				<treechildren>
+					<treeitem context="pp">
+						<treerow>
+							<treecell label="cell 2"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

@@ -1,0 +1,18 @@
+<zk:zk xmlns="native" xmlns:x="xhtml" xmlns:sh="shadow" xmlns:zk="zk">
+<x:html lang="en">
+	<x:head/>
+	<x:body>
+		<x:div id="content" viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ZhtmlVM')">
+			<x:button onClick="@command('changeTemplate')">
+				change template
+			</x:button>
+			<div id="n1">1231
+			</div>
+			<div id="n2">1232
+			</div>
+			1233
+			<sh:apply templateURI="@load(vm.templateURI)"/>
+		</x:div>
+	</x:body>
+</x:html>
+</zk:zk>

@@ -1,0 +1,3 @@
+<window apply="org.zkoss.zktest.test2.B70_ZK_1829" width="300px" border="normal">
+	Should not show any error message.
+</window>

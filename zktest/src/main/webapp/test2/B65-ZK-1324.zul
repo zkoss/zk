@@ -1,0 +1,23 @@
+<zk>
+	<html>
+		Testing instructions:
+		<ol>
+			<li>Click on the bandbox button to open the popup</li>
+			<li>Click on one of the buttons to give it focus</li>
+			<li>Click outside the popup to close the bandbox</li>
+			<li>Click on the bandbox button to open the popup again.</li>
+		</ol>
+		
+		Expected result:
+		<ol>
+			<li>Bandbox input field should have focus</li>
+			<li>Buttons inside the bandbox popup should not be rendered as focused.</li>
+		</ol> 
+	</html>
+    <bandbox>
+        <bandpopup width="200px" height="100px">
+            <button id="btn1" label="Button 1" mold="trendy"></button>
+            <button id="btn2" label="Button 2" mold="trendy"></button>
+        </bandpopup>
+    </bandbox>
+</zk>

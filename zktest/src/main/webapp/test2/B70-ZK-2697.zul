@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2697.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 10 15:45:25 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Ipad/IPhone issue only. 
+	
+	${session.nativeSession.id}
+	<a onClick='
+			Executions.sendRedirect("");
+			'>inst 1</a>
+	<a onClick='
+			Executions.sendRedirect("");
+			'>inst 2</a>
+	<div>
+		main page
+	</div>
+	<a onClick='execution.sendRedirect("B70-ZK-2697_1.zul")'>go to other page (ipad should trigger rmdesktop in this clicked)</a>
+</zk>

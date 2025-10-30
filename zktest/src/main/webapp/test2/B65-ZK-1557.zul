@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1557.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 05, 2013 11:49:25 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please click the "Caption" once, and then it should show the content of the groupbox
+	<groupbox mold="3d" width="100%" open="false">
+		<caption label="Caption" />
+		<div>
+			<label value="Label 1"/>
+			<textbox cols="30" maxlength="50" focus="true"/>
+		</div>
+		<div visible="false">
+			<label value="Label 2"/>
+			<combobox readonly="true"/>
+		</div>
+	</groupbox>
+</zk>

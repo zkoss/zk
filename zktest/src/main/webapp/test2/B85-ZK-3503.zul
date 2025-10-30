@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3503.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Mar 29 15:06:42 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Use Firefox
+        1. Double right click "Click Me"
+        2. The text shouldn't change
+    </label>
+    <separator/>
+    <div w:onDoubleClick="this.$n().innerText = this.$n().innerText + '!';">Click Me</div>
+</zk>

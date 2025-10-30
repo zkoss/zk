@@ -1,0 +1,11 @@
+<zk>
+	<label multiline="true">
+	1. Click the toolbarbutton, choose and upload a file (don't care file size or content).
+	2. After finish upload, will show "Toolbarbutton finish". 
+	3. Click the toolbarbutton again, it must still can upload.
+	</label>
+	<window border="normal" title="hello">		
+		<toolbarbutton label="toolbarbutton"
+			autodisable="self" upload="true" onUpload='alert("Toolbarbutton finish")' />
+	</window>
+</zk>

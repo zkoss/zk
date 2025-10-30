@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+gmap.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
+	<custom-attributes org.zkoss.zul.image.preload="true"/>
+	<html><![CDATA[
+	<style type="text/css"> 
+	.z-gmaps img {
+		max-width: none;
+	}
+	</style>
+	<h4>Demo of Google Maps</h4>
+	<p><a href="http://maps.google.com">Google Maps</a> is a popular maps service developed by Google. <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>
+	<p style="display:none;" id="infos">In this demo, user can enter the new center(latitude and longitude) of the maps and the maps would 
+	move to show the new location. User can also drag the maps around to a new location and see the 
+	current center of the maps.</p>
+	]]></html>
+	<separator />
+	<tabbox width="100%" tabscroll="false" vflex="1">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view" contentStyle="overflow:auto" vflex="1">
+				</window>
+			</tabpanel>
+			
+			<tabpanel>
+				<panel vflex="1">
+					<panelchildren>
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
+<window title="Google Maps" xmlns:w="client">
+	<attribute w:name="doClick_">
+		function (evt) {
+			if (!evt.domTarget)
+				evt.domTarget = this.$n(); // gmaps/gmarker do not has dom element in evt
+		}
+	</attribute>
+	<vbox>
+	<gmaps id="mymap" width="500px" height="300px" showSmallCtrl="true">
+		<attribute name="onMapMove">
+			mylat.setValue(self.getLat());
+			mylng.setValue(self.getLng());
+		</attribute>
+		<attribute name="onMapZoom">
+			myzoom.setValue(self.getZoom());
+		</attribute>
+		<attribute name="onMapClick">
+			if (event.getReference() instanceof org.zkoss.gmaps.Gmarker) {
+				event.getReference().setOpen(true);
+			}
+		</attribute>
+
+		<ginfo id="myinfo" open="true">
+			<attribute name="content">
+				Hello, &lt;a href="http://www.zkoss.org"&gt;ZK&lt;/a&gt;.
+			</attribute>
+		</ginfo>
+		
+		<gmarker id="mymark" lat="37.4410" lng="-122.1490" draggingEnabled="true">
+			<attribute name="content">
+				Hello, &lt;a href="http://www.zkoss.org"&gt;ZK&lt;/a&gt; on top of Gmarker.
+			</attribute>
+				<attribute w:name="_initListeners">
+				function() {
+					// google map will ignore marker click in map click event if marker is draggable
+					// listen to marker's event directly
+					var gmarker = this.mapitem_,
+						gmarkerwgt = this;
+					this.$_initListeners();
+					google.maps.event.addListener(gmarker, "click", function(event) {event.target = gmarkerwgt; event.opts = {}; gmarkerwgt.parent.doClick_(event);});
+				}
+			</attribute>
+		</gmarker>
+	</gmaps>
+	<grid><rows>
+		<row>Latitude: <doublebox id="mylat" value="&#36;{mymap.lat}" onChange="mymap.panTo(self.doubleValue(), mymap.getLng())"/></row>
+		<row>Longitude: <doublebox id="mylng" value="&#36;{mymap.lng}" onChange="mymap.panTo(mymap.getLat(), self.doubleValue())"/></row>
+		<row>Zoom Level: <intbox id="myzoom" value="&#36;{mymap.zoom}" onChange="mymap.setZoom(self.getValue())"/></row>
+		<row>Open Info: <button label="Change" onClick="myinfo.isOpen() ? mymark.setOpen(true) : myinfo.setOpen(true)"/></row>
+	</rows></grid>
+	</vbox>
+</window>
+]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

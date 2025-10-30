@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4621.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jul 9 16:05:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label>
+		Click button, and you should see 'off' in zk log. (valid dom autocomplete value)
+	</label>
+	<searchbox />
+	<button label="click" w:onClick="zk.log(jq('.z-searchbox-search').attr('autocomplete'));" />
+</zk>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F35-1444991.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 16 18:15:02 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<button label="restore window" visible="false" id="btn" onClick="win.minimized = !win.minimized; self.visible = win.minimized;"/>
+	<window id="win" border="normal" title="Maximize and Minimize Demo" height="400px" width="350px" sizable="true" maximizable="true"
+	minimizable="true" closable="true" mode="overlapped">
+	 <attribute name="onMaximize">
+	 if (self.maximized)
+	 	alert("The window is maximized!");
+	 </attribute>
+	 <attribute name="onMinimize">
+	 if (self.minimized) {
+	 	alert("The window is minimized!");
+	 	btn.visible = self.minimized;
+	 }
+	 </attribute>
+	 Please test both maximize and minimize buttons, and then they work well.
+	</window>
+</zk>

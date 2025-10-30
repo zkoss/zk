@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4883.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 26 11:16:06 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+    <label multiline="true">
+        1. Click "Submit".
+        2. You should see an alert("onsubmit triggered") and the page redirects to another zul.
+    </label>
+    <div>
+        <h:form id="myForm" action="B96-ZK-4883-redirect.zul" onsubmit="alert('onsubmit triggered')">
+            <h:input type="hidden" name="xmlContent" value="blahblah"/>
+            <h:input type="hidden" name="encoding" value="utf-8"/>
+        </h:form>
+        <button label="Submit" onClick="Clients.submitForm(myForm)"/>
+    </div>
+</zk>

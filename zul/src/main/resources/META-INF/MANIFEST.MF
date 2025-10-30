@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Specification-Title: ZK XUL Components
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zul
+Implementation-URL: http://www.zkoss.org/prj/zul
+Implementation-Vendor: Potix Corporation

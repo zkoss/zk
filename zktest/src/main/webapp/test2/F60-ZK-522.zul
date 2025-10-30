@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-522.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov  02 10:30:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>This page should displaied without any problem.</div>
+	<tablelayout columns="3">
+		<custom-attributes org.zkoss.zul.image.preload="true"/>
+	    <tablechildren rowspan="2">
+	        <window width="300px" height="500px" title="test window" border="normal" />
+	    </tablechildren>
+	    <tablechildren>
+	        <listbox height="250px" width="250px">
+	        	<listhead>
+	        		<listheader label="test listbox" />
+	        	</listhead>
+	        	<listitem>
+	       			<listcell> test listbox</listcell>
+	       		</listitem>
+	        </listbox>
+	    </tablechildren>
+	    <tablechildren>
+			<groupbox mold="3d" height="250px" width="250px" open="true">
+				<caption image="/test2/img/inet.png" label="Testing Group Box" />
+				<div style="background:#B8D335" vflex="1"> or vflex="1"</div>
+			</groupbox>
+	    </tablechildren>
+	    <tablechildren colspan="2">
+	        <window height="245px" title="test window" border="normal" />
+	    </tablechildren>
+	</tablelayout>
+</zk>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2390.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Aug 06, 2014 12:19:26 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="B70-ZK-2390_1.zul"?>
+<zk>
+	<window self="@define(detail)" border="normal" hflex="1" title="You should see the width of the window is extended to right edge, not the same as red color div" sizable="true">
+		<div width="300px" height="300px" style="border: 1px solid red;"></div>
+	</window>
+</zk>

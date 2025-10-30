@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.zkmax.ui.util.Toast?>
+<!--
+B90-ZK-4466.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 27 17:45:33 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <borderlayout height="100px" width="100%">
+        <center>
+            <button label="toast" onClick="Toast.show(event.getName());"/>
+        </center>
+    </borderlayout>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <label multiline="true">
+        1. Click "toast" button.
+        2. The toast should be topmost.
+    </label>
+</zk>

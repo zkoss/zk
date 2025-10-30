@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F86-ZK-3992.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 13 17:01:57 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click the button 'select', should see 'testing' in zklog
+        2. click the button 'select testi', should see 'testi' in zklog
+
+    </label>
+    <textbox id="input" value="testing"/>
+    <button label="select">
+        <attribute name="onClick"><![CDATA[
+            input.select();
+            Clients.evalJavaScript("zk.log(window.getSelection().toString())");
+        ]]></attribute>
+    </button>
+    <button label="select testi">
+        <attribute name="onClick"><![CDATA[
+            input.setSelectionRange(0, 5);
+            Clients.evalJavaScript("zk.log(window.getSelection().toString())");
+        ]]></attribute>
+    </button>
+</zk>

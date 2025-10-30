@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3584.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 07 09:56:00 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <zscript>
+        import javax.servlet.http.*;
+        import org.zkoss.web.servlet.http.*;
+
+        HttpServletRequest req = (HttpServletRequest) Executions.getCurrent().getNativeRequest();
+        String completeContext = Https.getCompleteContext(req);
+        String completeServerName = Https.getCompleteServerName(req);
+    </zscript>
+    <div>
+        completeContext = <label value="${completeContext}"/><n:br />
+        completeServerName = <label value="${completeServerName}"/>
+    </div>
+</zk>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2542.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  8 09:59:14 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:x="xhtml">
+    Check the size of _dependents variable in TrackerNodeImplEx class with "vm" property should less than 5.
+    It means if the loading time is greater than 3 seconds, it may be a bug.
+    <div id="bind" apply="org.zkoss.bind.BindComposer"
+         viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2542VM')">
+        <x:table id="host" border="1" children="@load(vm.children)">
+            <template name="children" var="r">
+                <x:tr children="@load(vm.children)">
+                    <template name="children" var="gb">
+                        <x:td>
+                            <label
+                                    style='@load(vm.children) @converter(vm.concatConverter,x=r,y=gb,z=gb, format="background:rgb(%s,%s,%s)")' />
+                        </x:td>
+                    </template>
+                </x:tr>
+            </template>
+        </x:table>
+    </div>
+</zk>

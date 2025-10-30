@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4379.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Sep 11 14:43:44 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		import org.zkoss.zkmax.ui.util.*;
+		<!--org.zkoss.lang.Library.setProperty("org.zkoss.zkmax.ui.util.Loadingbar.animationSpeed", "0");-->
+	</zscript>
+	<window id="win" height="2000px" apply="org.zkoss.zktest.test2.F90_ZK_4379Composer">
+		<apply templateURI="/test2/include/themes.zul" />
+		<label multiline="true">
+			1. Try these button to control the Loadingbar in all themes(start one first).
+			2. The Loadingbar will be detached if it's finished or set value to 100.
+			3. Try start multiple Loadingbars and control them.
+			4. The bar should be fixed on the top or bottom when scrolling the page.
+		</label>
+		<label>control bar: </label>
+		<button label="createCtrl()" onClick='LoadingbarControl lc = Loadingbar.createLoadingbar()' />
+		<button label="startAtTop" onClick='lc.start(20, "top");' />
+		<button label="startAtBottom" onClick='lc.start(10, "bottom");' />
+		<button label="setValue">
+			<attribute name="onClick"><![CDATA[
+			int value = index.getValue();
+			lc.update(value);
+		]]></attribute>
+		</button>
+		<intbox id="index"/>
+		<label>%</label>
+		<button label="indeterminate" onClick='lc.update(true);' />
+		<button label="stop indeterminate" onClick='lc.update(false);' />
+		<button label="finish" onClick='lc.finish();' />
+		
+		<separator/>
+		
+		<label>control target bar by uuid: </label>
+		<button id="createCtrl" label="createCtrl(myId)" />
+		<button id="start" label="startAtTop" />
+		<button id="setValue" label="bar setValue" />
+		<intbox id="index2"/>
+		<label>%</label>
+		<button id="indeterminate" label="bar indeterminate" />
+		<button id="stopIndeterminate" label="bar stop indeterminate" />
+		<button id="finish" label="bar finish" />
+	</window>
+</zk>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3961.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jul 12 15:51:26 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<div vflex="1">
+		<label multiline="true">
+			1. Clock on the stock, the stroke colored length should change to the position as we clicked, and the input value be calculated and update as percentage * 100.
+			2. Mouse down and move the mouse on the first knob, the stroke colored length should be moved to where the cursor is, and the input value should also be updated as percentage * 100.
+			3. Repeat step2 with the wheel.
+			4. Click button 'set H 300px', should not see ant changes.
+			5. Click button 'setW 300', should see the first knob changed to both width and height 300px.
+			6. Click button 'set Angle 181' , should see the first knob change from a whole circle to a 181 degree knob. And the Colored stoke length should be at about the percentage of input value / 100.
+			7. Click button 'set SE 40', should see the stroke of the first knob changed from 10 to 40px.
+			8. Click button 'Input size * 1.5', should see the input of the first knob become 1.5 times larger.
+
+		</label>
+		<style>
+			.knob2 .z-slider-knob-area {
+				stroke: black;
+			}
+			.knob2 .z-slider-input {
+				color: black;
+			}
+			.knob2 .z-slider-input:hover {
+				border-color: #aaa;
+			}
+		</style>
+		<hlayout>
+			<div height="400px" hflex="1">
+				<slider id="knob1" hflex="1" vflex="1" sclass="knob1" mold="knob" minpos="0.0" maxpos="100.0" curpos="80.0" step="0.5" angleArc="360" strokeWidth="10"/>
+			</div>
+			<div height="400px" hflex="1">
+				<slider id="knob2" hflex="1" vflex="1" sclass="knob2" mold="knob" minpos="0.0" maxpos="100.0" curpos="65.0" step="1" angleArc="270" strokeWidth="10"/>
+			</div>
+		</hlayout>
+		<button label="set H 300px" onClick='knob1.setVflex(null);knob1.setHeight("300px")'/>
+		<button label="set H 100px" onClick='knob1.setVflex(null);knob1.setHeight("100px")'/>
+		<button label="set H 50%" onClick='knob1.setVflex(null);knob1.setHeight("50%")'/>
+		<button label="set H 100%" onClick='knob1.setVflex(null);knob1.setHeight("100%")'/>
+		<button label="set H null" onClick='knob1.setVflex(null);knob1.setHeight(null)'/>
+		<separator/>
+		<button label="set W 300" onClick='knob1.setHflex(null);knob1.setWidth("300px")'/>
+		<button label="set W 100" onClick='knob1.setHflex(null);knob1.setWidth("100px")'/>
+		<button label="set W 50%" onClick='knob1.setHflex(null);knob1.setWidth("50%")'/>
+		<button label="set W 100%" onClick='knob1.setHflex(null);knob1.setWidth("100%")'/>
+		<separator/>
+		<button label="set Angle 360" onClick="knob1.setAngleArc(360)"/>
+		<button label="set Angle 270" onClick="knob1.setAngleArc(270)"/>
+		<button label="set Angle 181" onClick="knob1.setAngleArc(181)"/>
+		<button label="set Angle 140" onClick="knob1.setAngleArc(130)"/>
+		<separator/>
+		<button label="set SW 10" onClick="knob1.setStrokeWidth(10)"/>
+		<button label="set SW 20" onClick="knob1.setStrokeWidth(20)"/>
+		<button label="set SW 40" onClick="knob1.setStrokeWidth(40)"/>
+		<separator/>
+		<button label="Input size * 0.7" onClick="knob1.setScaleInput(0.7)"/>
+		<button label="Input size * 1.0" onClick="knob1.setScaleInput(1.0)"/>
+		<button label="Input size * 1.5" onClick="knob1.setScaleInput(1.5)"/>
+	</div>
+</zk>

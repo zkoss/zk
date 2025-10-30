@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5392.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 28 11:51:21 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<?import java.text.*?>
+<zk>
+	<label multiline="true">
+		Open the first datebox, and see only 20230110 ~ 20230130 available (but no 20230115, 20230116, 20230117)
+		Open the third datebox, and see only 20230110 ~ 20231314 and 20230122 ~ 20230130 available (but no 20230125)
+	</label>
+
+	<zscript>
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = df.parse("2023-01-10");
+	</zscript>
+	<separator />
+	<datebox id="db1" value="${date}" constraint="between 20230110 and 20230130, not 20230115,not 20230116,not 20230117" />
+	<datebox value="${date}" constraint="not 20230115,not 20230121,not 20230118" />
+	<datebox id="db3" value="${date}" constraint="between 20230110 and 20230130, not between 20230115 and 20230121, not 20230125" />
+</zk>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3844.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 18 12:57:28 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <script><![CDATA[
+    function dynamicTemp() {
+        var index = (Date.now() / 1000 | 0) % 5;
+        zk.$('$btnT').setIconSclass("z-icon-thermometer-" + index);
+    }
+
+    function dynamicBattery() {
+        var index = (Date.now() / 1000 | 0) % 5;
+        zk.$('$btnB').setIconSclass("z-icon-battery-" + index);
+    }
+    ]]></script>
+    <label multiline="true">
+        Font Awesome 4.7:
+        1. You should see a "Temperature" button with a dynamic thermometer icon (in 4.7).
+        2. You should see a "Font Awesome" button with a logo icon (in 4.6).
+        3. You should see a "Open Bluetooth" button with a bluetooth icon (in 4.5).
+        4. You should see a "Charging" button with a dynamic battery icon (in 4.4).
+        5. You would not see step 6 unless you use a screen reader. (accessibility in 4.6)
+    </label>
+    <label multiline="true" sclass="sr-only">6. The following are 4 buttons with a decorative icon.
+    </label>
+    <button id="btnT" iconSclass="z-icon-thermometer" label="Temperature" />
+    <button iconSclass="z-icon-font-awesome" label="Font Awesome" />
+    <button iconSclass="z-icon-bluetooth" label="Open Bluetooth" />
+    <button id="btnB" iconSclass="z-icon-battery" label="Charging" />
+    <timer w:onTimer="dynamicTemp(); dynamicBattery();" repeats="true" delay="1000" />
+</zk>

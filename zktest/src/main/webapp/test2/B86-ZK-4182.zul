@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4182.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 09 16:12:45 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <label multiline="true">
+        1. Click "Save 1".
+        2. The last errorbox should be invisible.
+        3. Click "Save 2".
+        4. The last errorbox should be invisible.
+    </label>
+    <zscript><![CDATA[
+    void onSave(Groupbox groupbox, Component c1, Component c2, Component c3, Component c4) {
+        groupbox.setOpen(true);
+        WrongValueException[] wvea = new WrongValueException[] {
+            new WrongValueException(c1, "Field 1 is mandatory"),
+            new WrongValueException(c2, "Field 2 is mandatory"),
+            new WrongValueException(c3, "Field 3 is mandatory"),
+            new WrongValueException(c4, "Field 4 is mandatory")
+        };
+        throw new WrongValuesException(wvea);
+    }
+    ]]>
+    </zscript>
+    <window width="100%" height="100%">
+        <div>
+            <button label="Save 1" onClick="onSave(gb, field1, field2, field3, field4)"/>
+            <button label="Save 2" onClick="onSave(gb_, field1_, field2_, field3_, field4_)"/>
+            <div width="100%">
+                <groupbox id="gb" contentStyle="overflow:auto" ca:data-scrollable="true" mold="3d" open="true">
+                    <caption label="Customer Details" width="100%" />
+                    <div width="100%" height="120px">
+                        <grid style="border:0px;">
+                            <columns>
+                                <column width="200px" />
+                                <column width="500px" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <label value="Field 1" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field1" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 2" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field2" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 3" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field3" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 4" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field4" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                            </rows>
+                        </grid>
+                    </div>
+                </groupbox>
+                <groupbox id="gb_" contentStyle="overflow:auto" ca:data-scrollable="true" mold="3d" open="false">
+                    <caption label="Customer Details" width="100%" />
+                    <div width="100%" height="120px">
+                        <grid style="border:0px;">
+                            <columns>
+                                <column width="200px" />
+                                <column width="500px" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <label value="Field 1" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field1_" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 2" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field2_" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 3" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field3_" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 4" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field4_" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                            </rows>
+                        </grid>
+                    </div>
+                </groupbox>
+            </div>
+        </div>
+    </window>
+</zk>

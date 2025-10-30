@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2697_1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 10 15:46:10 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		other page
+	</div>
+	<a onClick='execution.sendRedirect("B70-ZK-2697.zul")'>go to main page</a>
+</zk>

@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Spinner]" width="480px">
+        <spinner hflex="1" value="2"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Spinner, rounded]" width="480px">
+        <spinner hflex="1" mold="rounded" value="2"/>
+    </window>
+</hbox>
+</zk>

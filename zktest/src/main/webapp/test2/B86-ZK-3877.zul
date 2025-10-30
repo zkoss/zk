@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3877.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Aug 24 14:55:22 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label style="float:right;" multiline="true">
+        Modal window shadow gets removed after clicking to border:
+        1) clicking on the border of zk window
+        -> css class "z-window-shadow" of the window shouldn't be removed
+    </label>
+    <window title="Modal Window" width="200px" height="200px"
+            border="none" sizable="true" mode="overlapped">
+        <label value="content in modal window" ></label>
+    </window>
+</zk>

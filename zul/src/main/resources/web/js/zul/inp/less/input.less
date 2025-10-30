@@ -1,0 +1,164 @@
+@import "~./zul/less/_header.less";
+
+.z-textbox,
+.z-decimalbox,
+.z-intbox,
+.z-longbox,
+.z-doublebox {
+	.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
+	height: @inputHeight;
+	border: 1px solid @inputBorderColor;
+	.borderRadius(@baseBorderRadius);
+	padding: @inputPadding;
+	line-height: @inputLineHeight;
+	background: @inputBackgroundColor;
+
+	// Placeholder
+	&::-webkit-input-placeholder {
+		color: @inputPlaceholderColor;
+	}
+	&::-moz-placeholder {
+		/* FF 19+ */
+		color: @inputPlaceholderColor;
+		opacity: 1;
+	}
+	&:-moz-placeholder {
+		/* FF 4-18 */
+		color: @inputPlaceholderColor;
+		opacity: 1;
+	}
+	&:-ms-input-placeholder {
+		/* IE 10+ */
+		color: @inputPlaceholderColor;
+	}
+	
+	&:hover {
+		border-color: @inputHoverBorderColor;
+	}
+	&:focus {
+		border-color: @inputFocusBorderColor;
+	}
+	&[readonly] {
+		color: @inputReadonlyColor;
+		background: @inputReadonlyBackgroundColor;
+		&:hover {
+			border-color: @inputBorderColor;
+		}
+		&:focus {
+			border-color: @inputBorderColor;
+		}
+	}
+	&-invalid {
+		border-color: @invalidBorderColor;
+	}
+	&[disabled] {
+		color: @inputDisableColor !important;
+		background: @inputDisableBackgroundColor !important;
+		cursor: default !important;
+		&:hover {
+			border-color: @inputBorderColor;
+		}
+		&:focus {
+			border-color: @inputBorderColor;
+		}
+	}
+
+	// Inplace editing
+	&-inplace {
+		border-color: transparent;
+		background: none;
+		resize: none;
+		&:hover {
+			border-color: transparent;
+		}
+	}
+}
+// multi-line
+textarea.z-textbox {
+	height: auto;
+}
+
+// error box
+.z-errorbox {
+	color: @errorboxColor;
+	width: 260px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	
+	& > .z-errorbox-icon {
+		.iconFontStyle(@fontSizeLarge, @errorboxColor);
+		position: absolute;
+		top: @errorboxInsideIconPositionTop;
+		left: 7px;
+		z-index: 2;
+	}
+}
+.z-errorbox-left + .z-errorbox-icon {
+	left: 15px;
+}
+.z-errorbox-up + .z-errorbox-icon {
+	top: @errorboxUpIconPositionTop;
+}
+.z-errorbox-content {
+	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @errorboxColor);
+	width: 100%;
+	border: 1px solid @errorboxBorderColor;
+	.borderRadius(@baseBorderRadius);
+	padding: @errorboxContentPadding;
+	background: @errorboxBackgroundColor;
+	vertical-align: middle;
+	position: relative;
+	overflow: hidden;
+	cursor: move;
+}
+
+.z-errorbox-pointer {
+	.displaySize(none, 0, 0);
+	border: 6px solid transparent;
+	position: absolute;
+	z-index: 100;
+}
+// errorbox arrows: base style
+.z-errorbox-left,
+.z-errorbox-right,
+.z-errorbox-up,
+.z-errorbox-down {
+	border: 6px solid transparent;
+}
+.z-errorbox-left {
+	border-right-color: @errorboxBackgroundColor;
+}
+.z-errorbox-right {
+	border-left-color: @errorboxBackgroundColor;
+}
+.z-errorbox-up {
+	border-bottom-color: @errorboxBackgroundColor;
+}
+.z-errorbox-down {
+	border-top-color: @errorboxBackgroundColor;
+}
+.z-errorbox-close {
+	font-size: @fontSizeLarge;
+	.size(@fontSizeLarge, @fontSizeLarge);
+	padding: 0 1px;
+	position: absolute;
+	top: 10px;
+	right: 8px;
+	cursor: pointer;
+	.opacity(0.6);
+	&:hover {
+		.opacity(1);
+	}
+}
+/* stylelint-disable-next-line no-descending-specificity */
+.z-errorbox-icon {
+	position: absolute;
+	top: @errorboxIconPositionTop;
+}
+.z-errorbox-right ~ .z-errorbox-close {
+	right: 16px;
+}
+.z-errorbox-up ~ .z-errorbox-close {
+	top: 17px;
+}

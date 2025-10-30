@@ -1,0 +1,147 @@
+@import "~./zul/less/_header.less";
+
+.z-slider {
+	background-image: none;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	&-center {
+		background-color: @sliderBackgroundColor;
+		cursor: pointer;
+	}
+
+	&-button {
+		.size(@baseIconWidth, @baseIconHeight);
+		.borderRadius(@baseBorderRadius);
+		.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
+		background-color: @buttonBackgroundColor;
+		position: relative;
+		cursor: pointer;
+
+		&:hover {
+			background: @buttonHoverBackgroundColor;
+		}
+		&:active {
+			background-color: @buttonActiveBackgroundColor;
+		}
+	}
+
+	&-area {
+		position: absolute;
+		background-color: @sliderAreaBackgroundColor;
+	}
+
+	&-knob-area {
+		stroke: @sliderAreaBackgroundColor;
+	}
+
+	&-knob-inner {
+		stroke: @sliderBackgroundColor;
+	}
+
+	&-knob-svg {
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+	}
+
+	&-input {
+		border: 1px solid @inputBorderColor;
+		.borderRadius(@baseBorderRadius);
+		background: @inputBackgroundColor;
+		-webkit-appearance: textfield;
+		-moz-appearance: textfield;
+		text-align: center;
+		position: absolute;
+		line-height: 1.5;
+		padding: 1px;
+		.fontStyle(@baseContentFontFamily, @inputTextSize, bold, @sliderInputColor);
+
+		&:hover {
+			border-color: @inputHoverBorderColor;
+		}
+
+		&:focus {
+			border-color: @inputFocusBorderColor;
+			-webkit-appearance: textfield;
+			-moz-appearance: textfield;
+		}
+	}
+
+	&-horizontal {
+		height: @baseBarHeight;
+		width: 200px;
+
+		.z-slider-center {
+			.size(100%, @sliderAreaSize);
+			margin-top: -3px;
+			position: relative;
+			top: 50%;
+		}
+
+		.z-slider-area {
+			height: @sliderAreaSize;
+		}
+
+		.z-slider-button {
+			top: -5px;
+			left: 0;
+		}
+	}
+
+	&-vertical {
+		font-size: 0;
+		width: @baseBarWidth;
+		margin-right: 0;
+		line-height: 0;
+		height: 200px;
+
+		.z-slider-area {
+			width: @sliderAreaSize;
+		}
+
+		.z-slider-button {
+			left: -5px;
+		}
+
+		.z-slider-center {
+			.size(@sliderAreaSize, 100%);
+			margin: auto;
+		}
+	}
+
+	&-popup {
+		font-family: @baseContentFontFamily;
+		font-size: @sliderPopupFontSize;
+		font-weight: normal;
+		padding: 4px;
+		color: @tooltipColor;
+		background-color: @tooltipBackgroundColor;
+		position: absolute;
+		z-index: 60000;
+		.borderRadius(@baseBorderRadius);
+		.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
+	}
+
+	&-sphere {
+		.z-slider-vertical .z-slider-button {
+			bottom: 0;
+		}
+	}
+
+	&-sphere,
+	&-scale {
+		.z-slider-button {
+			.borderRadius(50%);
+		}
+	}
+
+	&-scale&-horizontal {
+		.encodeThemeURL(background-image, @sliderTicks);
+		background-position: 0 22px;
+		background-repeat: repeat-x;
+	}
+}
+

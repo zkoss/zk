@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B95-ZK-4584.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug 31, 2020 02:11:11 PM, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Tablet only, the position of the button should be correct (rightmost)</label>
+	<spinner/>
+	<doublespinner />
+</zk>

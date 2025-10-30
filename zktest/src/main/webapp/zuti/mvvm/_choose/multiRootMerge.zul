@@ -1,0 +1,34 @@
+<zk>
+	<div id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ForEachVM')">
+		**Start**
+		<forEach begin="@load(vm.begin)" end="@load(vm.end)">
+			<choose>
+				<when test="@load(each lt 3)">
+					<div style="color:blue">${each} Template</div>
+				</when>
+				<when test="@load(each lt 6)">
+					<div style="color:yellow">${each} Template</div>
+				</when>
+				<otherwise>
+					<div style="color:red">${each} Template</div>
+				</otherwise>
+			</choose>
+			**Middle**
+			<choose>
+				<when test="${each lt 3}">
+					<div style="color:blue">${each} Template</div>
+				</when>
+				<when test="${each lt 6}">
+					<div style="color:yellow">${each} Template</div>
+				</when>
+				<otherwise>
+					<div style="color:red">${each} Template</div>
+					<button label="@load(each)" onClick="@command('updateStep', step=each)"/>
+				</otherwise>
+			</choose>
+		</forEach>
+		**End**
+	</div>
+	<debugger rootId="host"/>
+</zk>

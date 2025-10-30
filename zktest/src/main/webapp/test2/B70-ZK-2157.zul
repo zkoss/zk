@@ -1,0 +1,21 @@
+<zk>
+	<div>should see 'Header 1' and 'Header 2' in mesh components</div>
+	<listbox sizedByContent="true">
+		<listhead>
+			<listheader label="Header 1" />
+			<listheader label="Header 2" />
+		</listhead>
+	</listbox>
+	<grid sizedByContent="true">
+		<columns>
+			<column label="Header 1" />
+			<column label="Header 2" />
+		</columns>
+	</grid>
+	<tree sizedByContent="true">
+		<treecols>
+			<treecol label="Header 1" />
+			<treecol label="Header 2" />
+		</treecols>
+	</tree>
+</zk>

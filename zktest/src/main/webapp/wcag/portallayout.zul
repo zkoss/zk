@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Portallayout"?>
+<?root-attributes lang="en"?>
+<!--
+portallayout.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jun 19 17:47:05 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Portallayout</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-panel:focus {
+				border: 1px red solid;
+			}
+		</style>
+		<label multiline="true">
+			Keyboard Instructions
+			
+			Use the Tab to focus to the panel you want to move.
+			open the menu with the Spacebar.
+			Use the Up and Down cursor keys to select a target portalchildren in the menu.
+			Press Escape or Tab will close menu and focus back to the panel.
+			Press Enter to move the panel to the portalchildren.
+		</label>
+		<button label="setTitle(Portalchildren1)" onClick='pc1.setTitle("Portalchildren1")'></button>
+		<button label="clearTitle" onClick='pc1.setTitle("")'></button>
+		<button label="toggleCounterVisible" onClick='pc1.setCounterVisible(!pc1.isCounterVisible())'></button>
+		<button label="toggleVisible" onClick='pc3.setVisible(!pc3.isVisible())'></button>
+		<portallayout id="pl" ca:aria-label="Portallayout">
+			<portalchildren id="pc1" title="Portalchildren1">
+				<panel title="Panel1" border="normal">
+					<panelchildren><textbox ca:aria-label="textbox"></textbox></panelchildren>
+				</panel>
+			</portalchildren>
+			<portalchildren id="pc2" title="Portalchildren2" ca:aria-label="Portalchildren2">
+				<panel border="normal" width="200px" height="200px">
+					<panelchildren>2</panelchildren>
+				</panel>
+			</portalchildren>
+			<portalchildren id="pc3" title="Portalchildren3" visible="false">
+				<panel title="Panel3" border="normal" width="200px" height="200px">
+					<panelchildren>3</panelchildren>
+				</panel>
+				<panel open="false" border="normal" width="200px" height="200px">
+					<panelchildren>4</panelchildren>
+				</panel>
+			</portalchildren>
+			<portalchildren id="pc4" title="Portalchildren4" >
+				<panel title="Panel5" border="normal" width="200px" height="200px">
+					<panelchildren>5</panelchildren>
+				</panel>
+			</portalchildren>
+		</portallayout>
+	</n:main>
+</zk>

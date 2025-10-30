@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3843-mylistbox.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jun 06 12:28:57 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<zscript><![CDATA[
+		import java.util.*;
+		ListModelList model = new ListModelList();
+		model.add("test");
+	]]></zscript>
+	<listbox id="listbox1" model="${model}" rows="1">
+		<template name="model">
+			<listitem label="${each}" ></listitem>
+		</template>
+	</listbox>
+	<listbox id="listbox2">
+		<listitem label="111"/>
+	</listbox>
+</zk>

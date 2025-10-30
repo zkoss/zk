@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. The background image of the Signature widget (on the left) should be displayed without error.
+		2. The background image of the Signature widget (on the left )should be identical to the image displayed by the Image widget (on the right).
+	</label>
+	<hlayout spacing="20px">
+	<signature id="sig" width="300px" height="400px" backgroundImage="/img/sun.jpg" backgroundIncluded="true"/>
+	<image id="image2" src="/img/sun.jpg"/>
+	</hlayout>
+</zk>

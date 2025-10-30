@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3616.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 28 14:14:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        Scroll to about 500st item and select one, then click the button several times. It should work fine.
+    </label>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		for(int i = 0; i < 1000; i++) {
+			model.add("item-" + i);
+		}
+	]]></zscript>
+	<listbox model="${model}" onSelect="" height="400px">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<template name="model">
+			<listitem>
+				<listcell>${each}</listcell>
+				<listcell>asd</listcell>
+				<listcell>fds</listcell>
+				<listcell>fgh</listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<button label="remove first item" onClick="model.remove(0)"/>
+</zk>

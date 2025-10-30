@@ -1,0 +1,15 @@
+<zk>
+	<div>
+		input '123' into textbox and press 'enter' then should be able
+		to edit textbox value
+	</div>
+	<window apply="org.zkoss.zktest.test2.B70_ZK_2020_Composer">
+		<grid id="myGrid" hflex="">
+			<columns id="record">
+				<column>
+					<textbox id="myFilter" />
+				</column>
+			</columns>
+		</grid>
+	</window>
+</zk>

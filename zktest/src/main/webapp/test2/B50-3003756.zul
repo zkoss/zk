@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3003756.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 19 11:45:17 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please setting browser language with German(de), and reload the page again.
+<separator/>
+2. You should see the "35,00" in the textbox, and please click upon the button, you should see the "100,00" in the textbox.
+<separator/>
+3. Please setting browser language with English(en), and reload the page again.
+<separator/>
+4. You should see the "35.00" in the textbox, and please click upon the button, you should see the "100.00" in the textbox.
+<separator/>
+<doublebox format="#,##0.00" value="35.0" id="doublebox"/>
+<button label="Change value" onClick="doublebox.setValue(100.0);"/> 
+</zk>
+

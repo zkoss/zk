@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4397.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 16 18:30:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div hflex="1" vflex="1" id="container" apply="org.zkoss.zktest.test2.B90_ZK_4397Composer">
+        <button id="btn" label="click twice, should see the count of goldenpanels change (4 -> 5)"/>
+        <goldenlayout id="gl" vflex="1" hflex="1">
+            <attribute name="areas">
+                A A B
+                A A B
+                C C D
+            </attribute>
+            <goldenpanel area="A" title="Panel A">
+                <window vflex="1" title="Window inside GoldenPanel A" border="normal"/>
+            </goldenpanel>
+            <goldenpanel area="B" title="Panel B">
+                <button label="Button inside GoldenPanel B"/>
+            </goldenpanel>
+            <goldenpanel area="C" title="Panel C">
+                <vlayout>
+                    SplitLayout inside GoldenPanel C
+                    <splitlayout hflex="1" height="500px">
+                        <tbeditor vflex="1"/>
+                        <window border="normal" title="Window" vflex="1"/>
+                    </splitlayout>
+                </vlayout>
+            </goldenpanel>
+            <goldenpanel area="D" title="Panel D">
+                <vlayout>
+                    Rating inside GoldenPanel D
+                    <rating max="10" rating="8"/>
+                </vlayout>
+            </goldenpanel>
+        </goldenlayout>
+    </div>
+</zk>

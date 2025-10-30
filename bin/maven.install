@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+#{{IS_NOTE
+#	Purpose:
+#		To build java projects
+#	Description:
+#		'build help' for more descriptions
+#	History:
+#		March 29 15:11 2001, Created by tomyeh
+#		August 21 13:59 2002, Rewritten by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2002 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#	This program is distributed under GPL Version 3.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#}}IS_RIGHT
+#
+maindir="$(pwd)"
+version=$1
+if [ "$2" == "" ] ; then
+      version=$version.FL.$(date +%Y%m%d)
+fi
+
+if [ "$ZK" = "" ] ; then
+	ZK=$maindir
+fi
+if [ "$ZKCML" = "" ] ; then
+	if [ -d "zkex" ] ; then
+		ZKCML="."
+	elif [ -d "../zkcml/zkex" ] ; then
+		ZKCML="../zkcml"
+	else
+		echo "ZKCML path is not found!!"
+	fi
+fi
+
+function upVer {
+	(
+	cd $1
+	cp pom.xml pom.xml.bak
+	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" pom.xml
+
+	mvn clean install -N
+	mv -f pom.xml.bak pom.xml
+	#Remove local files and folders
+	rm -f debug/*.jar
+	)
+}
+
+cd $maindir
+upVer zk-parent
+upVer zel
+upVer zcommon
+upVer zweb
+upVer zweb-dsp
+upVer zkwebfragment
+upVer zk
+upVer zul
+upVer zhtml
+upVer zkbind
+upVer zkplus
+cd $ZKCML
+upVer zkcml-parent
+upVer zkex
+upVer zml
+upVer zkmax
+upVer zuti
+upVer za11y
+cd $maindir

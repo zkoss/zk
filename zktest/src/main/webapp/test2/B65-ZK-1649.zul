@@ -1,0 +1,33 @@
+<zk>
+	<label multiline="true">
+	Chrome/Safari/IE only
+	Scroll the horizontal scroll bar, should not see content blinking.
+	</label>
+	<separator />
+	<listbox width="300px">
+		<listhead>
+			<listheader width="120px" />
+			<listheader width="120px" />
+			<listheader width="120px" />
+			<listheader width="120px" />
+		</listhead>
+		<listitem>
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+		</listitem>
+		<listitem>
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+		</listitem>
+		<listitem>
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+			<listcell label="Item 1" />
+		</listitem>
+	</listbox>
+</zk>

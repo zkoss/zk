@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4875.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 21 18:50:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		Play to end and see zk log contains "3"
+	</label>
+	<video id="vi" src="F86-ZK-3845.webm" controls="true" width="640px" height="480px" onStateChange='Clients.log(event.getState().toString())' />
+	<button id="btn" label="Click to play" onClick="vi.play()" />
+</zk>

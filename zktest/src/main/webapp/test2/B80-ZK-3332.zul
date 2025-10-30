@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3332.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Sep 19, 2016  4:58:56 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1.resize first column size
+        2.click toggle button, Col3 should disappear and Col4 should appear
+        3.click invalidate button, all columns should keep the same width
+    </label>
+    <grid id="grid" >
+        <columns id="cols" sizable="true">
+            <column hflex="2" label="Col1" />
+            <column hflex="3" label="Col2" />
+            <column id="c3" hflex="4" label="Col3" />
+            <column id="c4" hflex="4" label="Col4" visible="false"/>
+        </columns>
+        <rows>
+            <row>
+                <label value="c1"/>
+                <label value="c2"/>
+                <label value="c3"/>
+                <label value="c4"/>
+            </row>
+            <row>
+                <label value="c1"/>
+                <label value="c2"/>
+                <label value="c3"/>
+                <label value="c4"/>
+            </row>
+            <row>
+                <label value="c1"/>
+                <label value="c2"/>
+                <label value="c3"/>
+                <label value="c4"/>
+            </row>
+        </rows>
+    </grid>
+    <button label="toggle" onClick="c3.setVisible(!c3.isVisible());c4.setVisible(!c4.isVisible());"/>
+    <button label="invalidate" onClick="grid.invalidate()"/>
+</zk>

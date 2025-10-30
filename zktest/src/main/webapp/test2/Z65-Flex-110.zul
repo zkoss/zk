@@ -1,0 +1,37 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Textbox, Vlayout]" width="480px">
+        <vlayout height="200px" hflex="min">
+            <textbox hflex="1" value="1" vflex="1"/>
+            <textbox value="1" vflex="1" width="75px"/>
+            <textbox value="1" vflex="1" width="120px"/>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Textbox, Vbox]" width="480px">
+        <vbox height="200px" hflex="min">
+            <textbox hflex="1" value="1" vflex="1"/>
+            <textbox value="1" vflex="1" width="75px"/>
+            <textbox value="1" vflex="1" width="120px"/>
+        </vbox>
+    </window>
+</hbox>
+<hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Textbox, Vlayout, rounded]" width="480px">
+        <vlayout height="200px" hflex="min">
+            <textbox hflex="1" mold="rounded" value="1" vflex="1"/>
+            <textbox mold="rounded" value="1" vflex="1" width="75px"/>
+            <textbox mold="rounded" value="1" vflex="1" width="120px"/>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Textbox, Vbox, rounded]" width="480px">
+        <vbox height="200px" hflex="min">
+            <textbox hflex="1" mold="rounded" value="1" vflex="1"/>
+            <textbox mold="rounded" value="1" vflex="1" width="75px"/>
+            <textbox mold="rounded" value="1" vflex="1" width="120px"/>
+        </vbox>
+    </window>
+</hbox>
+</zk>

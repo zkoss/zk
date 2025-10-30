@@ -1,0 +1,8 @@
+<zk>
+	<window border="normal" height="360px" width="480px">
+		<hlayout hflex="1" vflex="1">
+			<cardlayout hflex="1" />
+			<cardlayout hflex="2" />
+		</hlayout>
+	</window>
+</zk>

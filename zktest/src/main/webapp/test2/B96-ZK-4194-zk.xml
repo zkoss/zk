@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<library-property>
+		<name>org.zkoss.zk.ui.Desktop.maxScheduleInfoSize</name>
+		<value>15</value>
+	</library-property>
+	<library-property>
+		<name>org.zkoss.zk.ui.Desktop.scheduleInfoTimeout</name>
+		<value>1</value>
+	</library-property>
+</zk>

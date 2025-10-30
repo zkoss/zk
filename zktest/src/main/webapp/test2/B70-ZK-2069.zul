@@ -1,0 +1,259 @@
+<?page title="Validation Scroll" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:ca="client/attribute">
+	<label multiline="true">
+		1.Click the text box, then tab away to lose focus and produce the validation error message. 
+		2.Scroll down, if text box leaved display area,then errorbox should be closed. 
+		3.repeat above action step to test each container.
+	</label>
+	<hlayout>
+		<vlayout hflex="1">
+			<label value="window" />
+			<window height="100px" contentStyle="overflow:auto" ca:data-scrollable="true">
+				<div height="200px">
+					<textbox constraint="no empty" />
+				</div>
+			</window>
+			<label value="groupbox" />
+			<groupbox contentStyle="overflow:auto" ca:data-scrollable="true" id="gb3"
+				height="100px">
+				<caption label="Groupbox"></caption>
+				<hlayout height="200px">
+					<textbox constraint="no empty" />
+				</hlayout>
+			</groupbox>
+			<label value="tabbox" />
+			<tabbox>
+				<tabs>
+					<tab label="Tab 1" />
+				</tabs>
+				<tabpanels>
+					<tabpanel style="overflow:auto"
+						ca:data-scrollable="true" height="100px">
+						<hlayout height="200px">
+							<textbox constraint="no empty" />
+						</hlayout>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+			<label value="panel" />
+			<panel height="100px">
+				<panelchildren style="overflow:auto"
+					ca:data-scrollable="true">
+					<div height="200px">
+						<textbox constraint="no empty" />
+					</div>
+				</panelchildren>
+			</panel>
+			<label value="borderlayout" />
+			<borderlayout height="100px">
+				<center autoscroll="true">
+					<div height="200px">
+						<textbox constraint="no empty" />
+					</div>
+				</center>
+			</borderlayout>
+		</vlayout>
+		<vlayout hflex="1">
+			<label value="listbox with nativebar" />
+			<listbox height="100px" ca:data-scrollable="true">
+				<custom-attributes org.zkoss.zul.nativebar="true" />
+				<listitem forEach="1,2,3,4,5,6">
+					<listcell>
+						<textbox constraint="no empty" />
+					</listcell>
+				</listitem>
+			</listbox>
+			<label value="grid with nativebar" />
+			<grid height="100px" ca:data-scrollable="true">
+				<custom-attributes org.zkoss.zul.nativebar="true" />
+				<rows>
+					<row forEach="1,2,3,4,5,6">
+						<textbox constraint="no empty" />
+					</row>
+				</rows>
+			</grid>
+			<label value="tree with nativebar" />
+			<tree height="100px" ca:data-scrollable="true">
+				<custom-attributes org.zkoss.zul.nativebar="true" />
+				<treechildren>
+					<treeitem forEach="1,2,3,4,5,6">
+						<treerow>
+							<treecell>
+								<textbox constraint="no empty" />
+							</treecell>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</tree>
+			<label value="listbox" />
+			<listbox height="100px" ca:data-scrollable="true">
+				<listitem forEach="1,2,3,4,5,6">
+					<listcell>
+						<textbox constraint="no empty" />
+					</listcell>
+				</listitem>
+			</listbox>
+			<label value="grid" />
+			<grid height="100px" ca:data-scrollable="true">
+				<rows>
+					<row forEach="1,2,3,4,5,6">
+						<textbox constraint="no empty" />
+					</row>
+				</rows>
+			</grid>
+			<label value="tree" />
+			<tree height="100px" ca:data-scrollable="true">
+				<treechildren>
+					<treeitem forEach="1,2,3,4,5,6">
+						<treerow>
+							<treecell>
+								<textbox constraint="no empty" />
+							</treecell>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</tree>
+		</vlayout>
+		<vlayout hflex="1">
+			<label value="window > window" />
+			<window border="normal" height="100px" contentStyle="overflow:auto"
+				ca:data-scrollable="true">
+				<window contentStyle="overflow:auto" height="200px" ca:data-scrollable="true">
+					<div height="300px">
+						<textbox constraint="no empty" />
+					</div>
+				</window>
+			</window>
+			<label value="window > groupbox" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<groupbox contentStyle="overflow:auto" ca:data-scrollable="true" id="gb3"
+					height="200px">
+					<caption label="Groupbox"></caption>
+					<hlayout height="300px">
+						<textbox constraint="no empty" />
+					</hlayout>
+				</groupbox>
+			</window>
+			<label value="window > tabbox" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<tabbox>
+					<tabs>
+						<tab label="Tab 1" />
+					</tabs>
+					<tabpanels>
+						<tabpanel style="overflow:auto"
+							ca:data-scrollable="true" height="200px">
+							<hlayout height="300px">
+								<textbox constraint="no empty" />
+							</hlayout>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</window>
+			<label value="window > panel" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<panel height="200px">
+					<panelchildren style="overflow:auto"
+						ca:data-scrollable="true">
+						<div height="300px">
+							<textbox constraint="no empty" />
+						</div>
+					</panelchildren>
+				</panel>
+			</window>
+			<label value="window > borderlayout" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<borderlayout height="200px">
+					<center autoscroll="true">
+						<div height="300px">
+							<textbox constraint="no empty" />
+						</div>
+					</center>
+				</borderlayout>
+			</window>
+		</vlayout>
+		<vlayout hflex="1">
+			<label value="window > listbox with nativebar" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<listbox height="150px" ca:data-scrollable="true">
+					<custom-attributes org.zkoss.zul.nativebar="true" />
+					<listitem forEach="1,2,3,4,5,6">
+						<listcell>
+							<textbox constraint="no empty" />
+						</listcell>
+					</listitem>
+				</listbox>
+			</window>
+			<label value="window > grid with nativebar" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<grid height="150px" ca:data-scrollable="true">
+					<custom-attributes org.zkoss.zul.nativebar="true" />
+					<rows>
+						<row forEach="1,2,3,4,5,6">
+							<textbox constraint="no empty" />
+						</row>
+					</rows>
+				</grid>
+			</window>
+			<label value="window > tree with nativebar" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<tree height="150px" ca:data-scrollable="true">
+					<custom-attributes org.zkoss.zul.nativebar="true" />
+					<treechildren>
+						<treeitem forEach="1,2,3,4,5,6">
+							<treerow>
+								<treecell>
+									<textbox constraint="no empty" />
+								</treecell>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</tree>
+			</window>
+			<label value="window > listbox" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<listbox height="150px" ca:data-scrollable="true">
+					<listitem forEach="1,2,3,4,5,6">
+						<listcell>
+							<textbox constraint="no empty" />
+						</listcell>
+					</listitem>
+				</listbox>
+			</window>
+			<label value="window > grid" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<grid height="150px" ca:data-scrollable="true">
+					<rows>
+						<row forEach="1,2,3,4,5,6">
+							<textbox constraint="no empty" />
+						</row>
+					</rows>
+				</grid>
+			</window>
+			<label value="window > tree" />
+			<window contentStyle="overflow:auto" border="normal" height="100px"
+				ca:data-scrollable="true">
+				<tree height="150px" ca:data-scrollable="true">
+					<treechildren>
+						<treeitem forEach="1,2,3,4,5,6">
+							<treerow>
+								<treecell>
+									<textbox constraint="no empty" />
+								</treecell>
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</tree>
+			</window>
+		</vlayout>
+	</hlayout>
+</zk>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2496.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Aug 30, 2016 11:18:11 AM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.resize the panel inside the BorderLayout
+		2.the panel's position should move as expect
+	</label>
+	<borderlayout width="500px" height="400px">
+		<north border="none" height="23px" style="background:lightgreen">
+			23 px
+		</north>
+		<west border="none" width="9px" style="background:lightgreen">
+			9px + 5px padding
+		</west>
+		<center>
+			<panel id="panel"
+				title="resize me" border="normal"
+				width="200px" height="100px" floatable="true" sizable="true"
+				movable="true" top="10px" left="10px"
+				onSize='self.getPanelchildren().appendChild(new Label(self.getLeft() + self.getTop() + "; "));'>
+				<panelchildren />
+			</panel>
+		</center>
+		</borderlayout>
+</zk>

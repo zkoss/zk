@@ -1,0 +1,34 @@
+<!--
+	B50-ZK-473.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Oct 4 14:42:16 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>1. The Tabbox's height should occupy the entire Window height.</div>
+	<div>2. The Groupbox's height should also occupy the entire Tabpanel height.</div>
+	<window width="300px" height="300px" sizable="true" border="normal">
+		<tabbox orient="vertical" vflex="1">
+			<tabs>
+				<tab label="One" />
+				<tab label="Two" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<groupbox hflex="1" vflex="1">
+						<label value="One" />
+					</groupbox>
+				</tabpanel>
+				<tabpanel>
+					<label value="Two" />
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

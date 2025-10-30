@@ -1,0 +1,56 @@
+<!--
+Z30-listbox-0008.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 27 21:18:02     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+The complex listbox should show properly.
+<listbox>
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="%"/>
+	</listhead>
+	<listitem value="A">
+		<listcell><textbox value="A. Graduate"/></listcell>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="B">
+		<listcell><checkbox label="B. College"/></listcell>
+		<listcell><button label="23%"/></listcell>
+	</listitem>
+	<listitem value="C">
+		<listcell label="C. High School"/>
+		<listcell><textbox cols="8" value="40%"/></listcell>
+	</listitem>
+</listbox>
+<listbox>
+	<listhead>
+		<listheader/>
+		<listheader align="right"/>
+	</listhead>
+	<listitem value="X">
+		<listcell label="X. Graduate"/>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="Y">
+		<listcell label="Y. College"/>
+		<listcell label="23%"/>
+	</listitem>
+	<listitem value="Z">
+		<listcell label="Z. High School"/>
+		<listcell label="40%"/>
+	</listitem>
+</listbox>
+</zk>

@@ -1,0 +1,19 @@
+<?page contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<window border="normal" width="500px" height="200px">
+		<vbox>
+			click slider's rightmost position, its value should not be greater then 70
+			<separator spacing="4px" />
+			<hbox>
+				<label id="lb" value="40" />/ 70
+			</hbox>
+			<separator spacing="4px" />
+			<slider orient="horizontal" maxpos="70" curpos="40">
+				<attribute w:name="onScroll"><![CDATA[
+					var pos = this.getCurpos();
+					this.$f("lb").setValue(pos);
+				]]></attribute>
+			</slider>
+		</vbox>
+	</window>
+</zk>

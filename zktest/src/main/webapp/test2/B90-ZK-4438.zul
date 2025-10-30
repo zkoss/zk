@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4438.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Mar 09 14:54:52 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Click the button below without rendering tabTwo
+		you should not see an JavaScript error
+	</label>
+	<tabbox id="tabbox" width="400px">
+		<tabs id="tabs">
+			<tab id="tabOne" label="tabOne"/>
+			<tab id="tabTwo" label="tabTwo"/>
+		</tabs>
+		<tabpanels id="tabpanels">
+			<tabpanel id="panelOne">
+				panel one
+			</tabpanel>
+			<tabpanel id="panelTwo">
+				<toolbar id="toolbar">
+					<label value="Label to remove by button"></label>
+				</toolbar>
+				panel two
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<button label="remove Label from second tab Toolbar" onClick="toolbar.removeChild(toolbar.getFirstChild())"></button>
+</zk>

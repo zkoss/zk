@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Selectbox"?>
+<?root-attributes lang="en"?>
+<!--
+selectbox.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jun 04 16:55:30 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Selectbox</n:h1>
+	</n:header>
+	<n:main>
+		<zscript><![CDATA[
+        String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
+        ListModelList model = new ListModelList(userName);
+    ]]></zscript>
+		<window title="chrome bug: the select outside container can't use keyboard navigation in chrome">
+			<selectbox model="${model}" ca:aria-label="select name">
+				<template name="model">
+					Name is ${each}
+				</template>
+			</selectbox>
+		</window>
+		<selectbox model="${model}" ca:aria-label="select name outside">
+			<template name="model">
+				Name is ${each}
+			</template>
+		</selectbox>
+	</n:main>
+</zk>

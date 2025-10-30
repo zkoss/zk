@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Borderlayout"?>
+<?root-attributes lang="en"?>
+<!--
+borderlayout.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jun 11 15:20:09 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<n:header>
+		<n:h1>Borderlayout</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-borderlayout :focus {
+				border: 1px solid red;
+			}
+		</style>
+		<label>
+			Test focus and key control on the collapsible header or splittable splitter.
+		</label>
+		<borderlayout height="450px">
+			<north title="North" maxsize="300" size="50%" splittable="true" collapsible="true">
+				<borderlayout>
+					<west title="West" size="25%" maxsize="250" splittable="true" collapsible="true">
+						<div style="background:#B8D335" hflex="1" vflex="1">
+							<label value="25%"
+								   style="color:white;font-size:50px" />
+						</div>
+					</west>
+					<center border="none">
+						<div style="background:#E6D92C" vflex="1">
+							<label value="25%"
+								   style="color:white;font-size:50px" />
+						</div>
+					</center>
+					<east size="50%" border="none" splittable="true" collapsible="true" title="East">
+						<label value="Here is a non-border"
+							   style="color:gray;font-size:30px" />
+					</east>
+				</borderlayout>
+			</north>
+			<center border="0">
+				<borderlayout>
+					<west maxsize="600" size="30%" border="0" splittable="false">
+						<div style="background:#E6D92C" vflex="1">
+							<label value="30%"
+								   style="color:white;font-size:50px" />
+						</div>
+					</west>
+					<center>
+						<label value="Here is a border"
+							   style="color:gray;font-size:30px" />
+					</center>
+					<east size="30%" collapsible="true" open="false">
+						<div style="background:#B8D335"  vflex="1">
+							<label value="30%"
+								   style="color:white;font-size:50px" />
+						</div>
+					</east>
+				</borderlayout>
+			</center>
+			<south splittable="true">
+				south
+			</south>
+		</borderlayout>
+		<borderlayout height="400px" width="500px">
+			<west width="200px" splittable="true" collapsible="true"></west>
+			<center></center>
+		</borderlayout>
+		<borderlayout height="400px" width="500px">
+			<south height="200px" splittable="true" collapsible="true"></south>
+			<center></center>
+		</borderlayout>
+		<borderlayout height="400px" width="500px">
+			<west width="200px" splittable="true" collapsible="true"></west>
+			<center></center>
+			<east width="200px" splittable="true" collapsible="true"></east>
+		</borderlayout>
+		<borderlayout height="400px" width="500px">
+			<west width="200px" splittable="true" collapsible="true">
+				<caption>ZK-4950<button label="b1"/></caption>
+			</west>
+			<center/>
+		</borderlayout>
+	</n:main>
+</zk>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4910.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 27 15:58:01 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (Mobile or hybrid desktop only)
+        1. Scroll down the tree until it loads new contents.
+        2. It shouldn't be scroll back.
+    </label>
+    <tree id="theTree" width="200px" height="300px" />
+    <zscript><![CDATA[
+        public List createManyNodes(int num) {
+            List nodes = new ArrayList();
+            for(int i = 0; i < num; i++) {
+                nodes.add(new DefaultTreeNode("node-" + i));
+            }
+            return nodes;
+        }
+        theTree.setModel(new DefaultTreeModel(new DefaultTreeNode("root", createManyNodes(500))));
+    ]]></zscript>
+</zk>

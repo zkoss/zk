@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4162.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 28 17:07:22 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        List items = new ArrayList();
+        for (int i = 0; i < 10; i++) {
+            items.add("data " + i);
+        }
+        model = new ListModelList(items);
+        model.setMultiple(true);
+
+        public void print() {
+            Iterator it = model.getSelection().iterator();
+            StringBuilder sb = new StringBuilder();
+            while (it.hasNext()) {
+                sb.append(it.next()).append(' ');
+            }
+            Clients.log(sb.toString());
+        }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Select all the rows with the header checkbox
+        2. Both order should be the same in zklog.
+    </label>
+    <hlayout>
+        <listbox hflex="1" model="${model}" mold="paging" pageSize="5"
+                 onSelect="print()" checkmark="true">
+            <listhead>
+                <listheader label="listbox header"/>
+            </listhead>
+            <template name="model">
+                <listitem label="${each}"/>
+            </template>
+        </listbox>
+        <listbox hflex="1" model="${model}" rows="5"
+                 onSelect="print()" checkmark="true">
+            <listhead>
+                <listheader label="listbox header"/>
+            </listhead>
+            <template name="model">
+                <listitem label="${each}"/>
+            </template>
+        </listbox>
+    </hlayout>
+</zk>

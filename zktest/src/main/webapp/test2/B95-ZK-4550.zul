@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4550.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 18 16:48:48 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		Test with all Themes:
+		1. click the buttons bellow to set the orient of outer tabbox.
+		2. The Tab 2(second tab) inside nested tabbox should be visible in all orient of the outer tabbox.
+	</label>
+	<div>
+		<button label="setOrientTop" onClick='outerTabbox.setOrient("top");' />
+		<button label="setOrientBottom" onClick='outerTabbox.setOrient("bottom");' />
+		<button label="setOrientLeft" onClick='outerTabbox.setOrient("left");' />
+		<button label="setOrientRight" onClick='outerTabbox.setOrient("right");' />
+		<button label="Accordion mold" onClick='outerTabbox.setMold("accordion");' />
+		<button label="Default mold" onClick='outerTabbox.setMold("default");' />
+	</div>
+	<tabbox id="outerTabbox" hflex="1" vflex="1">
+		<tabs>
+			<tab label="Tab 1" closable="true"/>
+			<tab label="Tab 2"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<tabbox orient="bottom" hflex="1" vflex="1">
+					<tabs>
+						<tab label="Tab 1" closable="true"/>
+						<tab id="target" label="Tab 2"/>
+					</tabs>
+					<toolbar id="tbar">
+						<toolbarbutton label="label" image="/img/defender.gif" />
+						<toolbarbutton label="label" image="/img/defender.gif" />
+					</toolbar>
+					<tabpanels>
+						<tabpanel>Panel 1</tabpanel>
+						<tabpanel>Panel 2</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</tabpanel>
+			<tabpanel>
+				Panel
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

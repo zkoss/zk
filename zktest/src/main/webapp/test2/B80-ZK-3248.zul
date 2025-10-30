@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3248.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 28, 2016 14:28:12, Created by Chris
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<borderlayout height="100%" width="100%">
+		<north>
+			<div>
+				<label multiline="true">
+					1. click the caption of groupbox
+					2. the groupbox is too tall, so scrollbar appears
+					3. groupbox should resize (shrink in width) to fit the new width, not overlapped by the scrollbar
+					4. close the groupbox
+					5. click the expand button of panel 1
+					6. the panel is too tall, so scrollbar appears
+					7. panel should resize (shrink in width) to fit the new width, not overlapped by the scrollbar
+				</label>
+			</div>
+		</north>
+		<center autoscroll="true">
+			<div>
+				<div width="100%">
+					<div hflex="1">
+						<groupbox open="false">
+							<caption>groupbox 1</caption>
+							<div height="3000px">
+								<label>some text here</label>
+							</div>
+						</groupbox>
+					</div>
+				</div>
+				<portallayout maximizedMode="whole">
+					<portalchildren hflex="1">
+						<panel closable="true" collapsible="true"
+							open="false" border="normal" title="Panel1">
+							<panelchildren>
+								<div height="3000px">
+									<label value="This is panel 1"/>
+								</div>
+							</panelchildren>
+						</panel>
+						<panel closable="true" collapsible="true" open="false" border="normal" title="Panel2">
+							<panelchildren>
+								<label value="This is panel 2"/>
+							</panelchildren>
+						</panel>
+					</portalchildren>
+				</portallayout>
+			</div>
+		</center>
+	</borderlayout>
+</zk>

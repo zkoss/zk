@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3357573.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 11 12:18:48 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="After resize browser width, the grid should resize as well" border="normal" width="100%" height="400px">
+<groupbox hflex="1">
+<grid >
+<columns>
+<column>test1</column>
+<column>test2</column>
+<column>test3</column>
+<column>test4</column>
+<column>test5</column>
+<column>test6</column>
+<column>test7</column>
+<column>test8</column>
+<column>test9</column>
+<column>test10</column>
+</columns>
+</grid>
+</groupbox>
+</window> 

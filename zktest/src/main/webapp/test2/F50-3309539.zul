@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3309539.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 31 14:51:59 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<?component name="timebox" extends="timebox" width="140px"?>
+<?component name="datebox" extends="datebox"  width="100px"?>
+<zk>
+	1. Please check each input value and the datebox's calendar is the same as the language to the Locale
+	<separator/>
+	2. Please click the button "Change all locales to Taiwan", and then you should see
+	all of the input values will be the same as the language in TW (Taiwan).
+<grid width="750px">
+		<columns>
+			<column hflex="min" label="Locale" />
+			<column hflex="min" label="Datebox(medium)" />
+			<column hflex="min" label="Datebox(long)" />
+			<column hflex="min" label="Timebox(medium)" />
+			<column hflex="min" label="Datebox(long)" />
+		</columns>
+		<rows id="rows">
+			<row>
+				TW (Taiwan):
+				<datebox format="medium" locale="zh_TW" onCreate="self.value = new Date()"/>
+				<datebox format="long" locale="zh_TW" onCreate="self.value = new Date()"/>
+				<timebox format="medium" locale="zh_TW"  onCreate="self.value = new Date()"/>
+				<timebox format="long" locale="zh_TW"  onCreate="self.value = new Date()"/>
+			</row>
+			<row>
+				FR (French):
+				<datebox format="medium" locale="fr_FR"  onCreate="self.value = new Date()"/>
+				<datebox format="long" locale="fr_FR"  onCreate="self.value = new Date()"/>
+				<timebox format="medium" locale="fr_FR"  onCreate="self.value = new Date()"/>
+				<timebox format="long" locale="fr_FR"  onCreate="self.value = new Date()"/>
+			</row>
+			<row>
+				IT (Italian):
+				<datebox format="medium" locale="it"  onCreate="self.value = new Date()"/>
+				<datebox format="long" locale="it"  onCreate="self.value = new Date()"/>
+				<timebox format="medium" locale="it_IT"  onCreate="self.value = new Date()"/>
+				<timebox format="long" locale="it_IT"  onCreate="self.value = new Date()"/>
+			</row>
+			<row>
+				TH (Thai):
+				<datebox format="medium" locale="th_TH"  onCreate="self.value = new Date()"/>
+				<datebox format="long" locale="th_TH"  onCreate="self.value = new Date()"/>
+				<timebox format="medium" locale="th"  onCreate="self.value = new Date()"/>
+				<timebox format="long" locale="th"  onCreate="self.value = new Date()"/>
+			</row>
+		</rows>
+	</grid><button label="Change all locales to Taiwan">
+		<attribute name="onClick"><![CDATA[
+			for(Iterator it = rows.getChildren().iterator(); it.hasNext();) {
+				for(Iterator itt = it.next().getChildren().iterator(); itt.hasNext();) {
+						Component c = itt.next();
+						if (c instanceof Datebox || c instanceof Timebox)
+							c.setLocale("zh_TW");
+				}
+			}
+			]]></attribute>
+	</button>
+</zk>

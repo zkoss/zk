@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4394.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 18 09:42:00 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <label multiline="true">
+        1. Hover the column separators used to resize the columns.
+        2. Check the cursor icon. It should be resizing style.
+    </label>
+    <grid width="400px">
+        <columns sizable="true">
+            <column label="col-1" sort="auto" />
+            <column label="col-2" />
+            <column label="col-3" sort="auto" />
+        </columns>
+    </grid>
+    <listbox width="400px">
+        <listhead sizable="true">
+            <listheader label="col-1" sort="auto" />
+            <listheader label="col-2" />
+            <listheader label="col-3" sort="auto" />
+        </listhead>
+    </listbox>
+    <tree width="400px">
+        <treecols sizable="true">
+            <treecol label="col-1" sort="auto" />
+            <treecol label="col-2" />
+            <treecol label="col-3" sort="auto" />
+        </treecols>
+    </tree>
+</zk>

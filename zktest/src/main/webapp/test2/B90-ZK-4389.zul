@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4389.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 06 17:42:44 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open the first groupbox.
+        2. Click Button1 inside the groupbox.
+        3. Button1 should be invisible, and Button2 should be visible.
+        4. Verify the second groupbox, it should be the same result.
+    </label>
+    <groupbox open="false" mold="3d" width="100%">
+        <caption label="groupBox with rod" />
+        <button id="bt1" label="Button1" onClick="bt1.setVisible(false);bt2.setVisible(true)"/>
+        <button id="bt2" label="Button2" visible="false" onClick="bt1.setVisible(true);bt2.setVisible(false)"/>
+    </groupbox>
+    <groupbox open="false" mold="3d" width="100%">
+        <custom-attributes org.zkoss.zul.client.rod="false"/>
+        <caption label="groupBox without rod" />
+        <button id="bt3" label="Button1" onClick="bt3.setVisible(false);bt4.setVisible(true)"/>
+        <button id="bt4" label="Button2" visible="false" onClick="bt3.setVisible(true);bt4.setVisible(false)"/>
+    </groupbox>
+
+    <zscript><![CDATA[
+    class TestComposer extends org.zkoss.zk.ui.util.GenericForwardComposer {
+        public void doAfterCompose(Component comp) throws Exception {
+            super.doAfterCompose(comp);
+            Clients.showBusy(comp, "showbusy");
+        }
+    }
+    TestComposer comp = new TestComposer();
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Open the groupbox
+        2. Click the button to show the div
+        3. You should see total two busy windows and two textboxes without any JavaScript exception.
+    </label>
+    <groupbox id="gb1" title="open" open="false" mold="3d">
+        <window apply="${comp}" title="window">yoyoyo</window>
+        <textbox/>
+
+        <button id="btn1" onClick="div1.visible=!div1.visible"/>
+        <div id="div1" visible="false">
+            <window apply="${comp}" title="window">yoyoyo</window>
+            <textbox/>
+        </div>
+    </groupbox>
+
+    <label multiline="true">
+        1. Click the button to show the div
+        2. Open the groupbox
+        3. You should see total two busy windows and two textboxes without any JavaScript exception.
+    </label>
+    <button id="btn2" onClick="div2.visible=!div2.visible"/>
+    <div id="div2" visible="false">
+        <window apply="${comp}" title="window">yoyoyo</window>
+        <textbox/>
+        <groupbox id="gb2" title="open" open="false" mold="3d">
+            <window apply="${comp}" title="window">yoyoyo</window>
+            <textbox/>
+        </groupbox>
+    </div>
+</zk>

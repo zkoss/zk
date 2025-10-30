@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5461.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 10 16:27:35 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. open chrome devtools, go to network tab
+		2. click the button to send a zkau request
+		3. check for custom 'myKey' request header
+	</label>
+	<script><![CDATA[
+	zk.afterLoad(function () {
+		const {getExtraHeaders} = zk.augment(zAu, {
+			getExtraHeaders() {
+				const extraHeaders = getExtraHeaders();
+				extraHeaders['myKey'] = 'myValue';
+				return extraHeaders;
+			}
+		});
+	});
+	]]></script>
+	<button label="button" onClick=''/>
+</zk>

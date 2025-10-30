@@ -1,0 +1,32 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.CollectionTemplateDependenceVM')">
+	<label multiline="true">
+	1.the item named from A - E, only item which name is 'A' or the index is 2 is applied to 'model1' , others are 'model2'
+	2.after click change1, the 1st item('A') becomes to 'X' and 'model2', the 2nd item('B') becomes to 'A' and model1
+	3.then after click change2, the 1st item('X') becomes to 'A' and 'model1', the 2nd item('A') becomes to 'X' and model2    
+	</label>
+	<grid id="outergrid" width="700px" model="@bind(vm.items) @template(each.name eq 'A' or forEachStatus.index eq 2?'model1':'model2')">
+		<columns>
+			<column label="item name"/>
+			<column label="template name"/>
+		</columns>
+		
+		<template name="model1" var="item" >
+			<row>
+				<label value="@bind(item.name)"/>
+				<label value="Model1"/>				
+			</row>
+		</template>
+		<template name="model2" var="item" >
+			<row>
+				<label value="@bind(item.name)"/>
+				<label value="Model2"/>
+			</row>
+		</template>
+	</grid>
+
+	<hbox>
+		<button label="change 1" onClick="@command('change1')" />
+		<button label="change 2" onClick="@command('change2')" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

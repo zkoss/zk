@@ -1,0 +1,31 @@
+<zk>
+   <html><![CDATA[
+	<ul>
+	<li>click "set selected"</li>
+	<li>select "B" tab</li>
+	<li>"BB" tab shall be selected</li>
+	</ul>
+	]]></html>
+	<button label="set selected" onClick="tabB.selected = true;" />
+	<tabbox>
+		<tabs>
+			<tab label="A" />
+			<tab label="B" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>A</tabpanel>
+			<tabpanel>
+				<tabbox>
+					<tabs>
+						<tab label="BA" />
+						<tab label="BB" id="tabB"/>
+					</tabs>
+					<tabpanels>
+						<tabpanel>BA</tabpanel>
+						<tabpanel>BB</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

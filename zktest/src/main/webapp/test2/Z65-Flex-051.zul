@@ -1,0 +1,37 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Bandbox]" width="480px">
+        <bandbox hflex="1">
+            <bandpopup>
+                <vbox>
+                    <listbox width="200px">
+                        <listhead>
+                            <listheader label="Name"/>
+                        </listhead>
+                        <listitem>
+                            <listcell label="John"/>
+                        </listitem>
+                    </listbox>
+                </vbox>
+            </bandpopup>
+        </bandbox>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Bandbox, rounded]" width="480px">
+        <bandbox hflex="1" mold="rounded">
+            <bandpopup>
+                <vbox>
+                    <listbox width="200px">
+                        <listhead>
+                            <listheader label="Name"/>
+                        </listhead>
+                        <listitem>
+                            <listcell label="John"/>
+                        </listitem>
+                    </listbox>
+                </vbox>
+            </bandpopup>
+        </bandbox>
+    </window>
+</hbox>
+</zk>

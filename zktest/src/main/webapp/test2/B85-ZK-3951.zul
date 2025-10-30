@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3951.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jun 12 14:34:00 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<zscript><![CDATA[
+	ListModelList model = new ListModelList();
+	for (int i=0 ; i < 500 ; i++){
+	    model.add("item " + i);
+	}
+	public void show(){
+		int n = grid.getRows().getChildren().size();
+		Clients.showNotification(n+"");
+	}
+	]]></zscript>
+	<label multiline="true">
+		1. Click the button "number of rows";
+		2. You should see 50 in a popop
+	</label>
+	<custom-attributes org.zkoss.zul.grid.rod="true"/>
+    <button id="btn" label="number of rows" onClick="show()" />
+	<grid id="grid" model="${model}"  visibleRows="10">
+	</grid>
+</zk>

@@ -1,0 +1,11 @@
+<zk>
+You should see a textbox inside a square box. If not, it is a bug.
+<grid hflex="min">
+  <columns>
+	<column hflex="min"/>
+  </columns>
+  <rows>
+     <row><textbox /></row>
+  </rows>
+</grid>
+</zk>

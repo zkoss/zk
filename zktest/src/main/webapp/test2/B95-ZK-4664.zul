@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4118.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Oct 8 10:22:33 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>The paging should would fine, and no duplicate paging DOM id</label>
+	<listbox id="lb" width="250px" mold="paging" pageSize="3" pagingPosition="both" onPaging='currentPage.setValue("" + event.getActivePage())'>
+		<listitem label="123"></listitem>
+		<listitem label="223"></listitem>
+		<listitem label="323"></listitem>
+		<listitem label="423"></listitem>
+	</listbox>
+	Current Page: <label id="currentPage" value="${lb.getActivePage()}"/>
+	<button label="Change Paging Mold">
+		<attribute name="onClick">
+			lb.pagingChild.mold = "os".equals(lb.pagingChild.mold) ? "default" : "os";
+		</attribute>
+	</button>
+</zk>

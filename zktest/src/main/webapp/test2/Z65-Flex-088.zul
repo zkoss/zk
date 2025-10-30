@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Doublebox, rounded]" width="480px">
+        <doublebox mold="rounded" value="1.1" vflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Doublebox]" width="480px">
+        <doublebox value="1.1" vflex="1"/>
+    </window>
+</hbox>
+</zk>

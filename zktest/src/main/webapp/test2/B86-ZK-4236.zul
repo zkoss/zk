@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4236.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 30 14:36:56 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="mydiv">
+		<zscript><![CDATA[
+		import org.zkoss.zk.ui.util.*;
+		import org.zkoss.xel.VariableResolver;
+		import org.zkoss.zuti.zul.*;
+
+		//a simple template rendering a <label> element
+		public class MyTemplate implements Template {
+			public Component[] create(Component parent, Component insertBefore, VariableResolver resolver, Composer composer) {
+				String each = resolver.resolveVariable("each");
+				Label label = new Label(each);
+				parent.insertBefore(label, insertBefore);
+				return new Component[] {label};
+			}
+			public Map getParameters() { return null; }
+		}
+
+		mydiv.setTemplate("LABEL",  new MyTemplate());
+
+		public class MyTemplateResolver implements CollectionTemplateResolver {
+			public Template resolve(Object each) {
+				return Templates.lookup(mydiv, "LABEL");
+			}
+		}
+
+		ListModelList listModelList = new ListModelList(new String[] {"FIRST_LABEL", "SECOND_LABEL", "LAST_LABEL"});
+
+		CollectionTemplate collectionTemplate = new CollectionTemplate(true);
+		collectionTemplate.setTemplateResolver(new MyTemplateResolver());
+		collectionTemplate.setModel(listModelList);
+		collectionTemplate.apply(mydiv);
+		]]></zscript>
+	</div>
+	<label multiline="true">
+		1. The bug is VariableResolvers added by ForEachRenderer leak into the execution scope allowing to resolve the expression \${each}.
+		2. Below you should see "each => ". If you see "each => LAST_LABEL", the bug still exists.
+	</label>
+	<separator/>
+	each => <label id="lblEach" value="${each}"/> <!-- should be null -->
+</zk>
+

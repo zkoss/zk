@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4228.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Apr 29 15:45:12 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.test with iceblue_c (compact) theme
+		2.the spinner/timebox/doublespinner button icon should not be misaligned
+	</label>
+	<spinner/>
+	<timebox/>
+	<doublespinner/>
+	<datebox/>
+	<bandbox/>
+	<combobox/>
+	<combobutton label="combobutton"/>
+</zk>

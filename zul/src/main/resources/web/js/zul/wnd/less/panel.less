@@ -1,0 +1,134 @@
+@import "~./zul/less/_header.less";
+
+.defaultOverflowZoom() {
+	overflow: hidden;
+	zoom: 1;
+}
+
+.z-panel {
+	.defaultOverflowZoom();
+	padding: 0;
+	border: 1px solid @containerBorderColor;
+	background: @containerBackground;
+	.borderRadius(@containerBorderRadius);
+	
+	&-shadow {
+		.boxShadow('0 3px 6px rgba(0, 0, 0, 0.24)');
+	}
+	
+	&-collapsed {
+		height: auto !important;
+	}
+	
+	&-head {
+		overflow: hidden;
+	}
+	
+	&-header {
+		.fontStyle(@baseTitleFontFamily, @containerHeaderTextSize, normal, @containerHeaderColor);
+		border: 0;
+		padding: @panelHeaderPadding;
+		line-height: 24px;
+		.defaultOverflowZoom();
+		
+		&-move {
+			cursor: move;
+		}
+	}
+
+	&-body {
+		margin: 0;
+		padding: 0;
+		background: @baseBackgroundColor;
+		color: @containerBodyColor;
+		.defaultOverflowZoom();
+	}
+
+	&-drag-button {
+		display: none;
+
+		+ .z-panel-body {
+			height: 100%;
+		}
+	}
+
+	&-icons {
+		display: inline-block;
+		float: right;
+	}
+
+	&-icon {
+		background: transparent;
+		color: extract(@containerButtonColors, 1);
+		margin: auto 1px;
+		padding: @containerButtonPadding;
+		text-align: center;
+		overflow: hidden;
+		cursor: pointer;
+		font-size: @containerButtonSize;
+		.displaySize(inline-block, @baseButtonWidth + 4, @baseButtonHeight);
+		line-height: @baseButtonHeight;
+		border: none;
+
+		&:hover {
+			color: extract(@containerButtonColors, 2);
+		}
+	}
+
+	&-close {
+		font-size: @fontSizeXLarge;
+	}
+	
+	&-resize-faker {
+		border: 1px dashed #1854C2;
+		background: #D7E6F7;
+		.opacity(0.5);
+		position: absolute;
+		left: 0;
+		top: 0;
+		overflow: hidden;
+		z-index: 60000;
+	}
+	
+	&-move-ghost {
+		.borderRadius(@containerBorderRadius);
+		margin: 0;
+		padding: 0;
+		background: #D7E6F7;
+		.opacity(0.6);
+		position: absolute;
+		overflow: hidden;
+		cursor: move;
+		
+		.z-panel-body {
+			padding: 0;
+		}
+		
+		dl {
+			font-size: 0;
+			display: block;
+			border: 1px solid @containerBorderColor;
+			border-top: 0;
+			margin: 0;
+			padding: 0;
+			line-height: 0;
+			overflow: hidden;
+		}
+	}
+	
+	&-noborder {
+		border: 0;
+		.borderRadius(0);
+	}
+
+ 	&-move-block {
+	 	border: 2px dashed #B2CAD6;
+	}
+	
+}
+
+.z-panelchildren {
+	position: relative;
+	padding: @containerPadding;
+	.defaultOverflowZoom();
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4192.zul
+
+		Purpose:
+                
+		Description:
+                
+		History:
+				Tue Jan 15 12:19:00 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click start, wait 5 seconds
+		2. Click pause, wait 5 seconds
+		3. Click resume, wait until you see "onLengthLimitExceed" on zk log
+		4. The content of recorded video should be correct, and the length should be 10 seconds
+	</label>
+	<camera id="camera" lengthLimit="10" width="300px" maxsize="-1"
+			onLengthLimitExceed='Clients.log("onLengthLimitExceed")'
+			onVideoUpload="video.setContent(event.media)"/>
+	<video id="video" width="300px" controls="true"/>
+	<hlayout>
+		<button label="start" onClick="camera.start()"/>
+		<button label="pause" onClick="camera.pause()"/>
+		<button label="resume" onClick="camera.resume()"/>
+		<button label="stop" onClick="camera.stop()"/>
+	</hlayout>
+</zk>

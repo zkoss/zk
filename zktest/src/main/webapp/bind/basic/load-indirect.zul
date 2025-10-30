@@ -1,0 +1,33 @@
+<window apply="org.zkoss.zktest.bind.basic.LoadIndirectComposer">
+	<custom-attributes composerName="vm"/>
+<grid width="500px" >
+	<columns>
+		<column label="First Name"></column>
+		<column label="Last Name"></column>
+		<column label="Full Name"></column>
+		<column label="Current Field"></column>
+	</columns>
+	<rows>
+		<row id="row1">
+			<textbox id="l1" value="@bind(vm.p1.firstName)"/>
+			<label id="l2" value="@bind(vm.p1.lastName)"/>
+			<label id="l3" value="@bind(vm.p1.fullName)"/>
+			<label id="l4" value="@bind(vm.p1[vm.currField])"/>
+		</row>
+	</rows>
+</grid>
+<hbox>
+<button id="btn1" label="to firstName" onClick="@command('toFirstName')"/>
+<button id="btn2" label="to lastName" onClick="@command('toLastName')"/>
+<button id="btn3" label="to fullName" onClick="@command('toFullName')"/>
+
+<listbox selectedItem="@bind(vm.currField)" id="select" mold="select">
+<listitem label="firstName" value="firstName" />
+<listitem label="lastName" value="lastName" />
+<listitem label="fullName" value="fullName" />
+</listbox>
+
+</hbox>
+
+<button label="Dump" onClick="binder.getTracker().dump()"/>
+</window>

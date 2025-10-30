@@ -1,0 +1,73 @@
+<window title="Everything below shall be min" border="normal" width="600px">
+	<borderlayout id="b1" vflex="min" hflex="1">
+		<east id="e1" vflex="1" hflex="min">
+			<div vflex="1" hflex="min">
+				<borderlayout id="b2" vflex="1" hflex="min">
+					<east id="e2" vflex="1" hflex="min">
+						<groupbox vflex="1" hflex="min">
+							<caption label="EAST" vflex="min" hflex="min" />
+							<grid vflex="min" hflex="min">
+								<rows>
+									<row forEach="1,2,3"><cell>itemA</cell></row>
+								</rows>
+							</grid>
+						</groupbox>
+					</east>
+					<west id="w1" vflex="1" hflex="min">
+						<groupbox vflex="1" hflex="min">
+							<caption label="WEST" vflex="min" hflex="min" />
+							<grid vflex="min" hflex="min">
+								<rows>
+									<row forEach="1,2,3,4,5,6,7"><cell>itemA</cell></row>
+								</rows>
+							</grid>
+						</groupbox>
+					</west>
+				</borderlayout>
+			</div>
+		</east>
+		<west id="w2" vflex="min" hflex="min">
+			<groupbox vflex="min" hflex="min">
+				<caption label="WEST" vflex="min" hflex="min" />
+				<grid vflex="min" hflex="min">
+					<rows>
+						<row forEach="1,2,3,4,5,6,7,8,9,10,11"><cell>itemA</cell></row>
+					</rows>
+				</grid>
+			</groupbox>
+		</west>
+		<center id="c1" vflex="1" hflex="min">
+			<groupbox vflex="1" hflex="min">
+				<caption label="CENTER" vflex="min" hflex="min" />
+				<grid vflex="min" hflex="min">
+					<rows>
+						<row><cell>itemA and more stuff here</cell></row>
+						<row forEach="1,2,3,4,5,6,7"><cell>itemA</cell></row>
+					</rows>
+				</grid>
+			</groupbox>
+		</center>
+		<north id="n1" vflex="min" hflex="1">
+			<groupbox vflex="min" hflex="1">
+				<caption label="NORTH" vflex="min" hflex="1" />
+				<grid vflex="min" hflex="min">
+					<rows>
+						<row><cell>itemA and more stuff here</cell></row>
+						<row forEach="1,2,3,4,5,6,7"><cell>itemA</cell></row>
+					</rows>
+				</grid>
+			</groupbox>
+		</north>
+		<south id="s1" vflex="min" hflex="1">
+			<groupbox vflex="min" hflex="1">
+				<caption label="SOUTH" vflex="min" hflex="min" />
+				<grid vflex="min" hflex="min">
+					<rows>
+						<row><cell>itemA and more stuff here</cell></row>
+						<row forEach="1,2,3,4,5,6,7"><cell>itemA</cell></row>
+					</rows>
+				</grid>
+			</groupbox>
+		</south>
+	</borderlayout>
+</window>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3864.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 31 10:52:49 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		<![CDATA[
+			/*highlighting styles*/
+			.z-cell:nth-child(2),
+			.z-listcell:nth-child(2),
+			.z-treecell:nth-child(2) {
+				border: 3px solid red;
+			}
+			.z-listcell:nth-child(2)>.z-listcell-content,
+			.z-treecell:nth-child(2)>.z-treecell-content {
+				border: 3px solid green;
+			}
+			.z-cell:nth-child(2) .z-div,
+			.z-listcell:nth-child(2) .z-div,
+			.z-treecell:nth-child(2) .z-div {
+				height: 10px;
+				width: 100%;
+			}
+
+			/*position styles: causing the issue*/
+			.relDiv {
+				position: relative;
+				border: 3px solid blue;
+			}
+			.absDiv {
+				position: absolute;
+				z-index: 1;
+				border: 3px solid pink;
+			}
+		]]>
+	</style>
+	
+	<label multiline="true" pre="true">
+		1. Scroll the horizontal bars of tree, grid and listbox
+		2. The frozen columns should stay above the scrollable cells
+		(the bug is parts of the content overlap the frozen column)
+	</label>
+	
+	<tree width="300px">
+		<treecols>
+			<treecol label="1" width="100px"/>
+			<treecol label="2" width="1000px"/>
+		</treecols>
+		<frozen columns="1"/>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="overflow"/>
+					<treecell>
+						<div sclass="relDiv">
+							<div sclass="absDiv"/>
+						</div>
+					</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+	
+	<grid width="300px">
+		<columns>
+			<column label="1" width="100px"/>
+			<column label="2" width="1000px"/>
+		</columns>
+		<frozen columns="1"/>
+		<rows>
+			<row>
+				<cell>
+					<label value="overflow"/>
+				</cell>
+				<cell>
+					<div sclass="relDiv">
+						<div sclass="absDiv"/>
+					</div>
+				</cell>
+			</row>
+		</rows>
+	</grid>
+	
+	<listbox width="300px">
+		<listhead>
+			<listheader label="1" width="100px"/>
+			<listheader label="2" width="1000px"/>
+		</listhead>
+		<frozen columns="1"/>
+		<listitem>
+			<listcell label="overflow"/>
+			<listcell>
+				<div sclass="relDiv">
+					<div sclass="absDiv"/>
+				</div>
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>

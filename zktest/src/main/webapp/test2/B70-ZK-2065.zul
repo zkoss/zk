@@ -1,0 +1,13 @@
+<?page title="Macro Demo" ?>
+<?component name="test-ma"   macroURI="B70-ZK-2065-1.zul" ?>
+<window border="normal" width="400px">
+	<label multiline="true">
+		1. The below should show 11111111 in the same line.
+		2. The page should not be cached.
+	</label>
+		3. Paste the HTML code to <a href="http://validator.w3.org/">validator</a> should not show any error.
+	<separator/>
+	<test-ma/>
+	<test-ma/>
+</window>
+

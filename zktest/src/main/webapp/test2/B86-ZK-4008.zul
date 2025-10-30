@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4008.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 25 10:44:40 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void append() {
+        Column column = new Column("Col");
+        column.setHflex("min");
+        inboxGrid.getColumns().appendChild(column);
+
+        for (Row row : inboxGrid.getRows().getChildren()) {
+            row.appendChild(new Label("looooooongText"));
+        }
+    }
+    ]]>
+    </zscript>
+    <div>
+        <label multiline="true">
+            1. Click "append" button to add a new column dynamically.
+            2. Click "invalidate" button.
+            3. The width of new column shouldn't be changed.
+        </label>
+        <grid id="inboxGrid" width="800px" span="true">
+            <columns>
+                <column hflex="min" label="Column1" />
+                <column hflex="min" label="Column2" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="1"/>
+                    <label value="TonyQ"/>
+                </row>
+                <row>
+                    <label value="2"/>
+                    <label value="Ryan"/>
+                </row>
+                <row>
+                    <label value="3"/>
+                    <label value="Simon"/>
+                </row>
+                <row>
+                    <label value="4"/>
+                    <label value="Jimmy"/>
+                </row>
+            </rows>
+        </grid>
+
+        <button id="append" label="append" onClick="append()"/>
+        <button id="invalidate" label="invalidate" onClick="inboxGrid.invalidate()"/>
+    </div>
+</zk>

@@ -1,0 +1,16 @@
+rootProject.name = 'zkroot'
+
+include(':zkplus')
+include(':zweb-dsp')
+include(':zk')
+include(':zhtml')
+include(':zweb')
+include(':zel')
+include(':zkbind')
+//include(':zktest')
+include(':zcommon')
+include(':zkwebfragment')
+include(':zul')
+
+includeBuild '../zkcml'
+includeBuild "$rootDir/zksandbox"

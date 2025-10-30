@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4191.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jan 14 14:15:14 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click requestCamera
+		2. DO NOT allow the request
+		3. You should see the error name and error message on zk log
+	</label>
+	<window apply="org.zkoss.zktest.test2.F86_ZK_4191Composer">
+		<camera id="camera" width="300px"/>
+		<button id="button" label="requestCamera"/>
+	</window>
+</zk>

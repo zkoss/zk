@@ -1,0 +1,69 @@
+<zk xmlns:a="client/attribute">
+	<vlayout height="100%" width="100%">
+	1. Swipe left/right inside tab-panel, it should change to previous/next tab-panel.<separator />
+	2. Click "vertical/horizontal" button to change orientation of tabbox.<separator />
+	3. Swipe up/down, it should change to previous/next tab-panel.<separator />
+	<button label="vertical" onClick='tbox1.orient="vertical";' /><button label="horizontal" onClick='tbox1.orient="horizontal";' />
+	<hlayout hflex="1" vflex="1">
+		<tabbox id="tbox1" hflex="1" vflex="1" orient="vertical" a:data-swipeable="true">
+			<tabs>
+				<tab label="tab 1" />
+				<tab label="tab 2" />
+				<tab label="tab 3" />
+				<tab label="tab 4" />
+				<tab label="tab 5" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					This is tab panel 1
+				</tabpanel>
+				<tabpanel>
+					This is tab panel 2
+				</tabpanel>
+				<tabpanel>
+					This is tab panel 3
+				</tabpanel>
+				<tabpanel>
+					This is tab panel 4
+				</tabpanel>
+				<tabpanel>
+					This is tab panel 5
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<tabbox id="tbox2" hflex="1" vflex="1" mold="accordion" a:data-swipeable="true">
+			<tabs>
+				<tab label="tab 1" />
+				<tab label="tab 2" />
+				<tab label="tab 3" />
+				<tab label="tab 4" />
+				<tab label="tab 5" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					This is tab panel 1
+					<div width="900px" vflex="min">
+						<zscript>Object[] o = new Object[40]</zscript>
+						<zk forEach="${o}">
+						test ${forEachStatus.index}<separator/>
+						</zk>
+					</div>
+				</tabpanel>
+				<tabpanel>
+					This is tab panel 2
+					<div width="900px" height="700px">test</div>
+				</tabpanel>
+				<tabpanel>
+					This is tab panel 3
+				</tabpanel>
+				<tabpanel>
+					This is tab panel 4
+				</tabpanel>
+				<tabpanel>
+					This is tab panel 5
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</hlayout>
+	</vlayout>
+</zk>

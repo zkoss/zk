@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3311.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thr, Sep 08, 2016 12:36:45 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		String[] data = new String[100];
+		for (int i = 0; i < 100; i++) data[i] = (i*i*i).toString();
+		ListModelList myModel = new ListModelList(data);
+		DefaultTreeNode[] nodes = new DefaultTreeNode[data.length];
+		for (int i = 0; i < data.length; i++) nodes[i] = new DefaultTreeNode(data[i]);
+		TreeModel treeModel = new DefaultTreeModel( new DefaultTreeNode(null, nodes));
+	]]></zscript>
+	<label multiline="true">
+	1.load the zul on iPhone or iPad
+	2.Listbox, Grid, Tree and BorderLayout should using native ScrollBar by default
+	3.scroll each components, scrolling animation should displayed in smooth slide
+	</label>
+	<listbox height="250px" width="200px" model="${myModel}"/>
+	<grid height="250px" width="200px" model="${myModel}"/>
+	<tree height="250px" width="200px" model="${treeModel}"/>
+	<borderlayout height="250px" width="200px">
+		<center autoscroll="true">
+			<div>
+				<div height="100px" style="background:red"></div>
+				<div height="100px" style="background:orange"></div>
+				<div height="100px" style="background:yellow"></div>
+				<div height="100px" style="background:green"></div>
+				<div height="100px" style="background:blue"></div>
+				<div height="100px" style="background:pink"></div>
+				<div height="100px" style="background:silver"></div>
+				<div height="100px" style="background:brown"></div>
+				<div height="100px" style="background:aqua"></div>
+				<div height="100px" style="background:lightgray"></div>
+				<div height="100px" style="background:black"></div>
+				<div height="100px" style="background:cyan"></div>
+				<div height="100px" style="background:gray"></div>
+			</div>
+		</center>
+	</borderlayout>
+</zk>

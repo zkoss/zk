@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5153.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/4, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click the button "update title"
+		2. The height of the blue border "Div" should not be shrunken
+	</label>
+	<window id="win" title="Window with flex content" border="normal"
+	        width="800px" height="500px"
+	        contentStyle="background-color: lightgreen"
+	>
+		<!-- workaround style preserving vertical flex-->
+		<!--             contentStyle="background-color: lightgreen; display: flex; flex-direction: column;" -->
+		<vlayout hflex="1" vflex="1" style="background-color: hotpink">
+			<div vflex="1" style="border: 1px solid blue">
+				Some vflex content here
+			</div>
+			<div>
+				<button label="update title" onClick='win.setTitle("updated title")'/>
+			</div>
+		</vlayout>
+	</window>
+</zk>

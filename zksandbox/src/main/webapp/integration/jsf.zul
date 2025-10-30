@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+jsf.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" xmlns:h="xhtml"
+	xmlns:zk="zk">
+	<vbox>
+		<html><![CDATA[
+				<h4>JSF</h4>
+				<p>ZK JSF Components is a collection of JSF Components built on top of highly interactive ZK Ajax components.</p>
+				<p>It provides a straightforward way of enriching legacy Web applications, and Java EE applications that comply with JSF technologies. 
+				ZK JSF Components follows standard JSF specifications and can be integrated seamlessly with other JSF components and solutions.</p>
+			]]></html>		
+		<separator bar="true" />
+		<html><![CDATA[
+			<h5>ZK JSF Components 2.0</h5>
+			<h5>Live Demo:</h5>
+			<object id="obj1" width="700" height="700" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" 
+			classid="clsid:D27CDB6E-AE6D-11CF-96B8-444553540000">
+			<param value="http://books.zkoss.org/images/3/34/Jsf2.swf" name="movie"/>
+			<param value="High" name="quality"/>
+			<embed align="middle" width="700" height="300" name="obj1" type="application/x-shockwave-flash" 
+				pluginspage="http://www.macromedia.com/go/getflashplayer" src="http://books.zkoss.org/images/3/34/Jsf2.swf"/>
+			</object>
+			<h5>Content:</h5>
+			<ul>
+				<li>ZK JSF Component 1.1</li>
+				<li>Unified Expression Language</li>
+				<li>Download</li>
+			<ul>
+		]]></html>
+	</vbox>
+	For more information, see our
+	<toolbarbutton id="target" label="Documentation" target="zksandbox"
+		href="http://www.zkoss.org/product/zkjsf" />
+</window>

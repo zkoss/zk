@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-419.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 16 10:49:11 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="new page title" border="normal">
+	1. Please click the "add" button 3~5 times to see if the "new" tab is added one by one, the bug is fixed.
+	<separator/>
+	2. Click the "invalidate" button, the result is the same as before.
+	
+		<tabbox mold="accordion" id="tabBoxAdd">
+			<tabs id="tabsAdd"></tabs>
+			<tabpanels id="tabpanelsAdd"></tabpanels>
+		</tabbox>
+		<button label="add" onClick='add()'></button>
+		<zscript>
+	void add() {
+		Tab tab = new Tab("new");
+		tabsAdd.appendChild(tab);
+		Tabpanel tabpanel = new Tabpanel();
+		tabpanelsAdd.appendChild(tabpanel);
+	}
+</zscript>
+<button label="invalidate" onClick="tabBoxAdd.invalidate()"/>
+	</window>
+</zk>

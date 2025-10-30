@@ -1,0 +1,16 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.LoadSavePromptCommandValidation')">
+	
+<vbox>
+	the value should only save to value 2 when it is ZZ. if you type XX, or YY, it should not save to 
+	<hbox>l1[<label id="l11" value="@load(vm.value1)"/>]=A</hbox>
+	<hbox>l2[<label id="l12" value="@load(vm.value2)"/>]=B</hbox>
+	<hbox>l2[<label id="l13" value="@load(vm.value3)"/>]=B</hbox>
+	<label id="msg1" value="@load(vm.msg1)"  />
+	<label id="msg2" value="@load(vm.msg2)"  />
+	<hbox>
+		<textbox id="t11" value="@save(vm.value1, v1=true) @save(vm.value2,v2=true,after='cmd1') @validator(vm.validator1)" onChange="@command('cmd1')"/>
+		<textbox id="t12" value="@save(vm.value3,after='cmd1')"/>
+	</hbox>
+</vbox>
+<button label="Dump" onClick="mybinder.getTracker().dump()"/>
+</window>

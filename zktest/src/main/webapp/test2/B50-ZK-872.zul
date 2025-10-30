@@ -1,0 +1,29 @@
+<zk>
+	<zscript>
+		class MyModel extends SimpleGroupsModel {
+			public MyModel(Object[][] data) {
+				super(data);
+			}
+	
+			public void update(int group) {
+				fireEvent(org.zkoss.zul.event.GroupsDataEvent.CONTENTS_CHANGED, group, 0, 0);
+			}		
+		}
+
+		Object[][] data = new Object[2][2];
+		data[0][0] = "test0";
+		data[0][1] = "test01";
+		data[1][0] = "test1";
+		data[1][1] = "test11";
+		MyModel model = new MyModel(data);
+		
+		public void update(){
+			model.update(0);model.update(1);
+		}
+	</zscript>
+	<div width="100%">
+	<custom-attributes org.zkoss.zul.grid.rod="true" />
+		<grid id="grid" model="${model}" />
+		<button id="button" label="Run" onClick="update();" />
+	</div>
+</zk>

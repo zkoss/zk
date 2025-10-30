@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4834.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 12 15:57:36 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <script><![CDATA[
+        function testScroll(nSteps, startPos, stepSize, stepDelay, latency) {
+            var tree = zk.$('@tree');
+            tree.simulatedLatency = latency;
+            var treeBody = tree.ebody;
+            for (var step = 0; step < nSteps; step++) {
+                let pos = startPos + step * stepSize;
+                let timeout = step * stepDelay;
+                setTimeout(function () {
+                    console.log(pos, timeout);
+                    treeBody.scrollTop = pos;
+                }, timeout);
+            }
+        }
+    ]]></script>
+
+    <label multiline="true">
+        [The test needs to be examined in several times to reproduce]
+        1. Click either "bug: remains blank" or "bug: jumps to bottom" button.
+        2. After updating the scroll positions, the tree should render the items visible for this position.
+        3. Fail:
+        - If you see a blank result
+        - If you see the scrollbar is scrolled to the bottom
+    </label>
+    <button label="bug: remains blank" w:onClick="testScroll(3, 160000, 40000, 450, 500);"/>
+    <button label="bug: jumps to bottom" w:onClick="testScroll(7, 160000, 10000, 350, 1000);"/>
+
+    <tree id="tree" height="600px"
+          w:onBind="jq(this.ebody).on('scroll', () => console.log('current scrollTop', this.ebody.scrollTop))"
+          w:onScrollPos="this.fire('onDelay', this.simulatedLatency || 0, {toServer: true, duplicateIgnore: {onDelay: true}})"
+          onDelay="Thread.sleep(event.getData());"
+    />
+    <zscript><![CDATA[
+        public List createManyNodes(int num) {
+            List nodes = new ArrayList();
+            for(int i = 0; i < num; i++) {
+                nodes.add(new DefaultTreeNode("node-" + i));
+            }
+            return nodes;
+        }
+        tree.setModel(new DefaultTreeModel(new DefaultTreeNode("root", createManyNodes(8000))));
+    ]]></zscript>
+</zk>

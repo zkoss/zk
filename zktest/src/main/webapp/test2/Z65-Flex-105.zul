@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Longbox]" width="480px">
+        <longbox hflex="1" value="1111111111111"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Longbox, rounded]" width="480px">
+        <longbox hflex="1" mold="rounded" value="1111111111111"/>
+    </window>
+</hbox>
+</zk>

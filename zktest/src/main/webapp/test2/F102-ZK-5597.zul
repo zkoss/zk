@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5597.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 22 17:23:55 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zkmax.zul.Stepbar;
+		public void toggleOrient(Stepbar stepbar) {
+			if ("vertical".equals(stepbar.getOrient())) {
+				stepbar.setOrient("horizontal");
+			} else {
+				stepbar.setOrient("vertical");
+			}
+		}
+	]]></zscript>
+	<label>This feature is about vertical stepbar. It should be displayed properly.</label>
+	<button id="btn1" label="change stepbar 1 orient" onClick='toggleOrient(sbar1)'/>
+	<button label="stepbar 1 next" onClick='sbar1.next()'/>
+	<button label="stepbar 1 back" onClick='sbar1.back()'/>
+	<button id="btn2" label="change stepbar 2 orient" onClick='toggleOrient(sbar2)'/>
+	<button label="stepbar 2 next" onClick='sbar2.next()'/>
+	<button label="stepbar 2 back" onClick='sbar2.back()'/>
+	<button id="btn3" label="change stepbar 3 orient" onClick='toggleOrient(sbar3)'/>
+	<button id="btn4" label="change stepbar 4 orient" onClick='toggleOrient(sbar4)'/>
+	<stepbar id="sbar1">
+		<step title="First Step" iconSclass="z-icon-home"/>
+		<step title="Second Step" complete="true"/>
+		<step title="Third Step" error="true"/>
+	</stepbar>
+	<stepbar id="sbar2" wrappedLabels="true" activeIndex="5">
+		<step title="Step 1"/>
+		<step title="Step 2"/>
+		<step title="Step 3 long"/>
+		<step title="Step 4 longer"/>
+		<step title="Step 5 loooooooooongest"/>
+		<step title="Step 6"/>
+	</stepbar>
+	<stepbar id="sbar3" orient="vertical">
+		<step title="First Step" iconSclass="z-icon-home"/>
+		<step title="Second Step" complete="true"/>
+		<step title="Third Step" error="true"/>
+	</stepbar>
+	<stepbar id="sbar4" wrappedLabels="true" activeIndex="5" orient="vertical">
+		<step title="Step 1"/>
+		<step title="Step 2"/>
+		<step title="Step 3 long"/>
+		<step title="Step 4 longer"/>
+		<step title="Step 5 loooooooooongest"/>
+		<step title="Step 6"/>
+	</stepbar>
+	<hlayout>
+		<stepbar orient="vertical" linear="false">
+			<step title="First Step" iconSclass="z-icon-home"/>
+			<step title="Second Step" complete="true"/>
+			<step title="Third Step" error="true"/>
+		</stepbar>
+		<stepbar wrappedLabels="true" activeIndex="5" orient="vertical" linear="false">
+			<step title="Step 1"/>
+			<step title="Step 2"/>
+			<step title="Step 3 long"/>
+			<step title="Step 4 longer"/>
+			<step title="Step 5 loooooooooongest"/>
+			<step title="Step 6"/>
+		</stepbar>
+	</hlayout>
+</zk>

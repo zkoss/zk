@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4446.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Feb 04 16:27:56 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		test: 1 > 2 > 3a > reset model > 1 > 2 > 3b
+		1. create a new item 'AAA'
+		2. remove the item 'AAA'
+		3a. add the item 'AAA' again, the item should appear in the choices
+		3b. create the item 'AAA' again, re-creating the same item should not be possible
+	</label>
+	<zscript>
+		ListModelList model = new ListModelList();
+	</zscript>
+	<chosenbox width="300px" creatable="true"
+			   model="${model}"
+			   onSearch='model.add(event.value); model.addToSelection(event.value); Clients.log(model)'
+			   onSelect='Clients.log(model)'
+	/>
+	<button label="reset model" onClick="model.clear();" />
+</zk>

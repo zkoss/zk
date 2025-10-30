@@ -1,0 +1,34 @@
+<?page title="Grid onScroll" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Grid onScroll" border="normal">
+		<zscript>Object[] o = new Object[50];</zscript>
+		<label>
+			scroll down "Grid1", then "Grid2" scroll position should synchronized.
+		</label>
+		<hlayout>
+			<grid id="grid1" width="100px" height="150px">
+				<columns>
+					<column label="Grid1" />
+				</columns>
+				<rows>
+					<row forEach="${o}">
+						<label value="item ${forEachStatus.index}"/>
+					</row>
+				</rows>
+			</grid>
+			<grid id="grid2" width="100px" height="150px">
+				<columns>
+					<column label="Grid2" />
+				</columns>
+				<rows>
+					<row forEach="${o}">
+						<label value="item ${forEachStatus.index}"/>
+					</row>
+				</rows>
+			</grid>
+		</hlayout>
+		<zscript><![CDATA[
+			grid1.setWidgetListener("onScroll", "this.$f('grid2').ebody.scrollTop = this.ebody.scrollTop;");
+		]]></zscript>
+	</window>
+</zk>

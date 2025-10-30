@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B86-ZK-4051.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 14 09:52:41 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click button 'breeze' to set theme to breeze.
+        2. Click Add Tab to add tabs until the tabs become scrollable.
+        3. Tabs should not line break and become scrollable instead.
+        4. Click 'iceblue' to set theme back.
+
+    </label>
+    <button id="iceblue" label="iceblue">
+        <attribute name="onClick">
+            org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "iceblue"); // iceblue
+            Executions.sendRedirect(null);
+        </attribute>
+    </button>
+    <button id="breeze" label="breeze">
+        <attribute name="onClick">
+            org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "breeze"); // breeze
+            Executions.sendRedirect(null);
+        </attribute>
+    </button>
+    <separator/>
+    <tabbox width="500px">
+        <tabs id="tabs"/>
+        <tabpanels height="100px"/>
+    </tabbox>
+    <button id="addTab" label="Add Tab">
+        <attribute name="onClick"><![CDATA[
+            Tab tb = new Tab();
+            tb.setLabel("Tab panel test test test test");
+            tb.setClosable(true);
+            tb.setSelected(true);
+            tabs.appendChild(tb);
+        ]]></attribute>
+    </button>
+</zk>

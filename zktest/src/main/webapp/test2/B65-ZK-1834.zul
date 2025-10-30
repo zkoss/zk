@@ -1,0 +1,38 @@
+<zk>
+	<label multiline="true">
+	Test the two Listbox together.
+	1. Click "add data" button.
+	2. Scroll down to last item, and select it.
+	3. Click "clear data" button, if you still can see the scroll-bar, it is a bug.
+	</label>
+	<window border="normal" title="hello">
+		<zscript><![CDATA[
+		ListModelList model = new ListModelList();;
+		void add() {
+			for(int i = 0; i < 20; ++i) {
+				theListbox.appendChild(new Listitem("" + i));
+				model.add("" + i);
+			}
+		}
+		void clear() {
+			theListbox.getItems().clear();
+			model.clear();
+		}
+		]]></zscript>
+		<hlayout>
+			<listbox id="theListbox" width="200px" height="200px">
+				<listhead>
+					<listheader label="Using ListItem" />
+				</listhead>
+			</listbox>
+			<listbox id="mylist" width="200px" height="200px" model="${model}">
+				<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+				<listhead>
+					<listheader label="Using Model" />
+				</listhead>
+			</listbox>
+		</hlayout>
+		<button label="add data" onClick="add()" />
+		<button label="clear data" onClick="clear()" />
+	</window>
+</zk>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-2984235.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 12 17:47:40 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+    Hover to the textbox and combobox for a while, you should see an empty popup.
+    </label>
+    <separator/>
+    <textbox id="tb" tooltip="popup" />
+    <combobox id="cb" tooltip="popup"/>
+    <popup id="popup"/>
+</zk>

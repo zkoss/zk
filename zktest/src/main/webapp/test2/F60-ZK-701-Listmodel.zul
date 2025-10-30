@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- F60-ZK-701-Listmodel.zul Purpose: Description: History: Wed Dec 21 16:49:18 
+	TST 2011, Created by jumperchen Copyright (C) 2011 Potix Corporation. All 
+	Rights Reserved. -->
+<zk>
+	<vbox id="vb">
+		1. Please select one item on the list.
+		<separator />
+		2. Press the "Clone" button (it should not show any exception)
+		<separator />
+		3. Please select another item on the top list and then click the top head to sort it.
+		<separator />
+		4. The sorting and the selection cannot apply to the bottom list. (That is the feature)
+		<button label="Clone">
+			<attribute name="onClick">{
+				Object l = grid.clone();
+				l.setId("dst" + ++cnt);
+				vb.insertBefore(l, self);
+				}</attribute>
+		</button>
+		<zscript><![CDATA[
+import org.zkoss.zk.ui.util.ComponentCloneListener;
+  int cnt = 0;
+String[] data = new String[10];
+for (int i = 0; i < data.length; i++)
+	data[i] = "option " + i;
+
+public class CloneableModel extends ListModelList implements ComponentCloneListener, Cloneable {
+	public CloneableModel(String[] d) {
+		super(d);
+	}
+	public Object willClone(Component comp) {
+		return clone();
+	}
+}
+CloneableModel model = new CloneableModel(data);
+    ]]></zscript>
+		<listbox id="grid" model="${model}" onSelect="">
+			<listhead>
+				<listheader label="column" sort="auto" />
+			</listhead>
+		</listbox>
+	</vbox>
+</zk>

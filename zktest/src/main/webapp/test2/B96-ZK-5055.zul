@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5055.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/8, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <script><![CDATA[
+        function test() {
+            var failure = false,
+                result;
+            if (!((result = jq('.z-west').css('transform')) && result == 'none')) {
+                failure = true;
+            }
+            if (!((result = jq('.z-east').css('transform')) && result == 'none')) {
+                failure = true;
+            }
+            jq('$result').html(failure ? 'Failure' : 'OK');
+        }
+    ]]></script>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <label multiline="true">
+        1. change the current theme to Atlantic
+        2. click "test" button
+        3. the resolt value will be "OK"
+        4. change the current theme to Default (finish the test)
+    </label>
+    <button label="test" w:onClick="test()"/>
+    Result: <label id="result"/>
+    <!-- added overflow style to make the effect more obvious -->
+    <borderlayout width="400px" height="200px" style="overflow: visible;">
+        <west title="Test" width="100px" collapsible="true" closable="true">
+            West Content
+        </west>
+        <center/>
+        <east title="Test" width="100px" collapsible="true" closable="true">
+            East Content
+        </east>
+    </borderlayout>
+</zk>

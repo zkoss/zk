@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2944-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jan  6, 2016  5:01:12 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+	
+	import org.zkoss.zul.ListModelList;
+	
+	public class F80_ZK_2944VM {
+		
+		private ListModelList model = new ListModelList();
+		private String child = "vlayout";
+		private boolean test = true;
+		
+		public boolean getTest() {
+			return test;
+		}
+		
+		public ListModelList getFilteredView() {
+			model.clear();
+			model.add(Integer.valueOf(1));
+			model.add(Integer.valueOf(2));
+			return model;
+		}
+	
+		public ListModelList getModel() {
+			return model;
+		}
+		
+		public String getChild() {
+			return child;
+		}
+	}
+	</zscript>
+	<label multiline="true">
+		test shadow selector with the following conditions
+		1. nested templates
+		2. shadow elements inside templates preserved by using @load
+	</label>
+	<div id="parent" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('F80_ZK_2944VM')">
+		<vlayout children="@init(vm)">
+			<template name="children" var="mainBean">
+				<label value="@load(mainBean.child)" style="color: red;"/>
+				<vlayout children="@init(mainBean.filteredView)" style="margin-left: 15px;">
+					<template name="children" var="childBean">
+						<if test="true" whatever="@load(vm.test)">
+							<label value="@load(mainBean.child)" style="color: green;"/>
+						</if>
+					</template>
+				</vlayout>
+			</template>
+		</vlayout> 
+	</div>
+</zk>

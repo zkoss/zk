@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+notifychange-onsetter.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 05 11:05:48 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. You should see "I will call you John Smith . John Smith ."
+        2. Modify both First Name and Last Name.
+        3. You should see "I will call you (new first name) (new lastname) . John (new lastname) ."
+           Example: I will call you Tom Riddle . John Riddle .
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.notification.NotifyChangeOnSetterVM')">
+        <vlayout>
+            <hlayout>
+                First Name <textbox id="fn" value="@bind(vm.firstname)" />
+            </hlayout>
+            <hlayout>
+                Last Name <textbox id="ln" value="@bind(vm.lastname)" />
+            </hlayout>
+            <hlayout>
+                I will call you <label id="fullname" value="@load(vm.fullname)"/>.
+                <label id="firstname" value="@load(vm.firstname)"/> <label id="lastname" value="@load(vm.lastname)"/>.
+            </hlayout>
+        </vlayout>
+    </div>
+</zk>

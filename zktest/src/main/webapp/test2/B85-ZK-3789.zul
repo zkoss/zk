@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3789.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 7 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<script>
+		zk.afterLoad('ckez', function() {
+			ckez.MyCKeditor = zk.$extends(ckez.CKeditor, {
+				onRestore: function() {
+					this.$supers('onRestore', arguments);
+					zk.log('fail');
+				}
+			});
+		});
+	</script>
+	<bandbox>
+		<bandpopup>
+			test
+		</bandpopup>
+	</bandbox>
+	<ckeditor w:use="ckez.MyCKeditor"/>
+	<label multiline="true">
+		1. click button of the bandbox
+		2. the bandpopup pops up without ckeditor flickering and without seeing 'fail' in ZK client log
+	</label>
+</zk>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4067.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Dec 27 14:54:05 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in Grid, Listbox and Tree
+		2. Click update model
+		3. Click header to sort data, you should see the sort icon on header
+		4. Click update model
+		5. The sort icon on header should be cleared
+	</label>
+
+	<grid id="grid" width="300px">
+		<!--<custom-attributes org.zkoss.zul.grid.autoSort="true"/>-->
+		<columns>
+			<column sort="auto" label="Grid"/>
+		</columns>
+	</grid>
+	<button label="update model"
+			onClick='grid.setModel(new ListModelList(Arrays.asList(new String[]{"1","2","3"})))'/>
+
+	<listbox id="listbox" width="300px">
+		<!--<custom-attributes org.zkoss.zul.listbox.autoSort="true"/>-->
+		<listhead>
+			<listheader sort="auto" label="Listbox"/>
+		</listhead>
+	</listbox>
+	<button label="update model"
+			onClick='listbox.setModel(new ListModelList(Arrays.asList(new String[]{"1","2","3"})))'/>
+
+	<tree id="tree" width="300px">
+		<!--<custom-attributes org.zkoss.zul.tree.autoSort="true"/>-->
+		<treecols>
+			<treecol sort="auto" label="Tree"/>
+		</treecols>
+	</tree>
+	<button label="update model">
+		<attribute name="onClick"><![CDATA[
+			TreeModel model = new DefaultTreeModel(
+				new DefaultTreeNode(null,
+					new DefaultTreeNode[] {
+						new DefaultTreeNode("1"),
+						new DefaultTreeNode("2"),
+						new DefaultTreeNode("3")
+					}
+				));
+			tree.setModel(model);
+		]]></attribute>
+	</button>
+</zk>

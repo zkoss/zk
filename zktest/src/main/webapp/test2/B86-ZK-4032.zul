@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4032.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Aug 20 17:24:05 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<zscript><![CDATA[
+   		List model = new ArrayList();
+   		model.add("a");
+   		model.add("b");
+   		model.add("c");
+   		model.add("d");
+	]]></zscript>
+	<label multiline="true">
+		1. It should not have any error message.
+	</label>
+	<div apply="org.zkoss.bind.BindComposer">
+        <custom-attributes org.zkoss.zul.listbox.rod="false"/>
+		<listbox height="200px" model="@load(model)">
+
+			<template name="model" var="item">
+				<listitem visible="false">
+					<listcell label="@load(item)" />
+				</listitem>
+			</template>
+
+			<listfoot>
+				<listfooter label="Hello" />
+			</listfoot>
+
+		</listbox>
+	</div>
+</zk>

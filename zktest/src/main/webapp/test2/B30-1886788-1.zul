@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1886788-1.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb 13 12:35:34 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>Grid rows should follow columns's widths when it has the auxhead component, if you can find the alignment of the content is not matched from its column, that is a bug.</n:p>
+	<listbox>
+		<auxhead>
+			<auxheader label="Selecteds Items (Listbox)" colspan="9"
+				align="center" />
+		</auxhead>
+		<listhead>
+			<listheader id="header0" label="70px" width="70px" />
+			<listheader id="header1" label="75px" width="75px" />
+			<listheader id="header2" label="75px" width="75px" />
+			<listheader id="header3" label="150px" width="150px" />
+			<listheader id="header4" label="107px" width="107px" />
+			<listheader id="header5" label="120px" width="120px" />
+			<listheader id="header6" label="115px" width="115px" />
+			<listheader id="header7" label="50px" width="50px" />
+			<listheader id="header8" label="80px" width="90px" />
+		</listhead>
+		<listitem>
+			<listcell id="cell0" label="1" />
+			<listcell id="cell1" label="2" />
+			<listcell id="cell2" label="3" />
+			<listcell id="cell3" label="4" />
+			<listcell id="cell4" label="5" />
+			<listcell id="cell5" label="6" />
+			<listcell id="cell6" label="7" />
+			<listcell id="cell7" label="8" />
+			<listcell id="cell8" label="9" />
+		</listitem>
+	</listbox>
+</zk>

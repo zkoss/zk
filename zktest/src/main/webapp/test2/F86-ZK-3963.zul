@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3963.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jul 23 10:01:35 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		public void log(Object message) {
+			Clients.log(message.toString());
+		}
+	</zscript>
+	<label multiline="true" pre="true">
+		Test Organigram:
+		1. Click setSelectedItem(item3)
+		2. Click getSelectedItem(), should see "item3"
+		3. Click setSelectedItem(null)
+		4. Click getSelectedItem(), should see "null"
+		5. Click item1, should see "onSelect: item1"
+		6. Click getSelectedItem(), should see "item1"
+		7. Click getItemCount(), should see "9"
+		8. Click getVisibleItemCount(), should see "9"
+		9. Close item3 by clicking minus icon
+		10. Click getItemCount(), should see "9"
+		11. Click getVisibleItemCount(), should see "4"
+		12. Click clear()
+		13. Click getItemCount(), should see "0"
+		
+		Test Orgitem (item3):
+		1. Click setDisabled then click item3
+		2. Click isSelected, should see "false"
+		3. Click setDisabled again
+		4. Click setSelectable then click item3
+		5. Click isSelected, should see "false"
+		6. Click setSelectable again
+		7. Click appendChild, should see newItem append to item3
+		8. Click removeChild, should see newItem removed
+		9. Click isOpen, should see "true"
+		10. Click setOpen, should see item3 closed
+		11. Click isOpen, should see "false"
+		12. Click getVisibleItemCount(), should see "4"
+		13. Click isSelected, should see "false"
+		14. Click setSelected, item3 should be selected
+		15. Click isSelected, should see "true"
+		16. Click getSelectedItem(), should see "item3"
+		17. Click getLevel, should see "1"
+		18. Click getParentItem, should see "item1"
+		19. Click isContainer, should see "true"
+		20. Click isEmpty, should see "false"
+		
+		Test by model:
+		1. Click remove3, item3 should be removed
+		2. Click getItemCount(), should see "3"
+		3. Click add3, item3 should be added
+		4. Click getItemCount(), should see "4"
+		5. Click select3, item3 should be selected
+		6. Click isSelected, should see "true"
+		7. Click getSelectedItem(), should see "item3"
+		8. Click clearSelection, nothing should be selected
+		9. Click isSelected, should see "false"
+		10. Click getSelectedItem(), should see "null"
+		11. Click open3, should see item3 opened
+		12. Click isOpen, should see "true"
+		13. Click getItemCount(), should see "7"
+	</label>
+	<window viewModel="@init('org.zkoss.zktest.test2.F86_ZK_3963VM') @id('vm')">
+		<vlayout>
+			<organigram id="organigram" model="@load(vm.model)"
+						onSelect='log("onSelect: " + self.getSelectedItem().getLabel())'>
+				<template name="model">
+					<orgitem id="@load(each.data)" label="@load(each.data)"/>
+				</template>
+			</organigram>
+			<label value="Test Organigram:"/>
+			<hlayout>
+				<button label="setSelectedItem(item3)" onClick="organigram.setSelectedItem(item3)"/>
+				<button label="setSelectedItem(null)" onClick="organigram.setSelectedItem(null)"/>
+				<button label="getSelectedItem()">
+					<attribute name="onClick">
+						Orgitem item = organigram.getSelectedItem();
+						if (item != null)
+							log(item.getLabel());
+						else
+							log("null");
+					</attribute>
+				</button>
+			</hlayout>
+			<hlayout>
+				<button label="getItemCount()" onClick="log(organigram.getItemCount())"/>
+				<button label="getVisibleItemCount()" onClick="log(organigram.getVisibleItemCount())"/>
+				<button label="clear()" onClick="organigram.clear()"/>
+			</hlayout>
+			<label value="Test Orgitem (item3):"/>
+			<hlayout>
+				<button label="setDisabled" onClick="item3.setDisabled(!item3.isDisabled())"/>
+				<button label="setSelectable" onClick="item3.setSelectable(!item3.isSelectable())"/>
+				<zscript>
+					Orgitem newItem = new Orgitem("newItem");
+				</zscript>
+				<button label="appendChild" onClick='item3.getOrgchildren().appendChild(newItem)'/>
+				<button label="removeChild" onClick='item3.getOrgchildren().removeChild(newItem)'/>
+			</hlayout>
+			<hlayout>
+				<button label="setOpen" onClick="item3.setOpen(!item3.isOpen())"/>
+				<button label="isOpen" onClick="log(item3.isOpen())"/>
+				<button label="setSelected" onClick="item3.setSelected(!item3.isSelected())"/>
+				<button label="isSelected" onClick="log(item3.isSelected())"/>
+			</hlayout>
+			<hlayout>
+				<button label="getLevel" onClick="log(item3.getLevel())"/>
+				<button label="getParentItem" onClick="log(item3.getParentItem().getLabel())"/>
+				<button label="isContainer" onClick="log(item3.isContainer())"/>
+				<button label="isEmpty" onClick="log(item3.isEmpty())"/>
+			</hlayout>
+			<label value="Test by model"/>
+			<hlayout>
+				<button label="remove3" onClick="@command('remove3')"/>
+				<button label="add3" onClick="@command('add3')"/>
+				<button label="select3" onClick="@command('select3')"/>
+				<button label="clearSelection" onClick="@command('clearSelection')"/>
+				<button label="open3" onClick="@command('open3')"/>
+			</hlayout>
+			<separator height="50px"/>
+			<button label="Organigram without model"
+					onClick="organigram1.setVisible(!organigram1.isVisible())"/>
+			<organigram id="organigram1" visible="false">
+				<orgchildren>
+					<orgitem label="item1">
+						<orgchildren>
+							<orgitem label="item2" disabled="true"/>
+							<orgitem label="item3">
+								<orgchildren>
+									<orgitem label="item5" selectable="false"/>
+									<orgitem label="item6"/>
+									<orgitem label="item7" selected="true">
+										<orgchildren>
+											<orgitem label="item10"/>
+											<orgitem label="item11"/>
+										</orgchildren>
+									</orgitem>
+								</orgchildren>
+							</orgitem>
+							<orgitem label="item4" open="false">
+								<orgchildren>
+									<orgitem label="item8"/>
+									<orgitem label="item9" open="false">
+										<orgchildren>
+											<orgitem label="item12"/>
+										</orgchildren>
+									</orgitem>
+								</orgchildren>
+							</orgitem>
+						</orgchildren>
+					</orgitem>
+				</orgchildren>
+			</organigram>
+			<button label="Organigram with itemRenderer"
+					onClick="itemRenderer.setVisible(!itemRenderer.isVisible())"/>
+			<organigram id="itemRenderer" model="@load(vm.newModel)" visible="false"
+						itemRenderer="@load(vm.itemRenderer)"/>
+		</vlayout>
+	</window>
+</zk>

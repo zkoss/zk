@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2516.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Feb 26, 2015  9:30:27 AM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please click two buttons "invalidate" and "replace", you should not see any flickers (red color) in the center area.
+	<style>
+		.z-borderlayout {
+			background-color: red !important;
+		} 
+		.z-center {
+			background-color: green !important;
+		} 
+		.z-center-body {
+			background-color: blue !important;
+		} 
+	</style>
+	<zscript>
+		public void invalidate() {myCenter.invalidate();}
+	</zscript>
+	<borderlayout id="container">
+		<west width="200px" collapsible="true" splittable="true">
+			<vlayout>
+				<button label="invalidate" onClick="invalidate();"/>
+				<button label="replace" onClick="Component c = myCenter; myCenter.detach(); container.appendChild(c);"/>
+			</vlayout>
+		</west>
+		<center id="myCenter">
+			<div style="background-color: yellow;" height="200px" width="200px">
+				CENTER
+			</div>
+		</center>
+	</borderlayout>
+</zk>

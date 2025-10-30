@@ -1,0 +1,36 @@
+<zk>
+	<label multiline="true">
+		1. click the magnifier button
+		2. click a row of the drop down listbox
+		3. press ENTER
+		4. you should see the textbox is filled with the name you choose
+		5. click the magnifier button
+		6. click a row of the drop down listbox
+		7. press ESC
+		8. you should see an empty textbox
+	</label>
+	<separator />
+	<bandbox id="bd">
+	    <bandpopup>
+		    <listbox id="lb" width="200px" onOK="bd.value=lb.selectedItem.label; bd.close();" 
+		    	onCancel='bd.value="";lb.setSelectedItem(null); bd.close();'>
+		        <listhead>
+		            <listheader label="Name" />
+		            <listheader label="Description" />
+		        </listhead>
+		        <listitem>
+		            <listcell label="John" />
+		            <listcell label="CEO" />
+		        </listitem>
+		        <listitem>
+		            <listcell label="Joe" />
+		            <listcell label="Engineer" />
+		        </listitem>
+		        <listitem>
+		            <listcell label="Mary" />
+		            <listcell label="Supervisor" />
+		        </listitem>
+		    </listbox>
+	    </bandpopup>
+	</bandbox>
+</zk>

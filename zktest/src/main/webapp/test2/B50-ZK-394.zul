@@ -1,0 +1,65 @@
+<!--
+	B55-ZK-394.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Sep 20 16:52:29 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		In each Grid, the 2 columns should have equal widths, and there should be no empty space or cut content.
+	</div>
+	<grid width="300px">
+		<columns>
+			<column hflex="1">A</column>
+			<column hflex="1">B</column>
+		</columns>
+		<rows>
+			<row>
+				<label value="C" />
+				<label value="D" />
+			</row>
+		</rows>
+	</grid>
+	<grid width="300px">
+		<columns>
+			<column hflex="1" label="A" />
+			<column hflex="1" label="B" />
+		</columns>
+		<rows>
+			<row>
+				<label value="C" />
+				<label value="D" />
+			</row>
+		</rows>
+	</grid>
+	<grid hflex="min">
+		<columns>
+			<column>A</column>
+			<column>B</column>
+		</columns>
+		<rows>
+			<row>
+				<label value="C" />
+				<label value="D" />
+			</row>
+		</rows>
+	</grid>
+	<grid hflex="min">
+		<columns>
+			<column label="A" />
+			<column label="B" />
+		</columns>
+		<rows>
+			<row>
+				<label value="C" />
+				<label value="D" />
+			</row>
+		</rows>
+	</grid>
+</zk>

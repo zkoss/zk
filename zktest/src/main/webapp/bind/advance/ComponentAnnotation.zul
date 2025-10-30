@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ComponentAnnotation.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri May 07 15:23:33 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the red  label to open the textbox, then type "red" then blur, you shall see all other colored label still be "init".
+		2. click the blue colored label to open the textbox, then type "blue" then blur, you shall see all other colored label changed to "blue".
+		3. click the green colored label to open the textbox, then type "green" then blur, you shall see all other colored label changed to "green".
+		4. click the purple colored label to open the textbox, then type "purple" then blur, you shall see all other colored label changed to "purple".
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.ComponentAnnotationVM')">
+		<vlayout>
+			vm:
+			<label id="l1" value="@load(vm.message)" style="color:orange;"/>
+			without ComponentAnnotation:
+			<editableLabel id="custom0" value="@bind(vm.message)" style="color:red;"/>
+			ComponentAnnotation on class:
+			<editableLabel1 id="custom1" value="@bind(vm.message)" style="color:blue;"/>
+			ComponentAnnotation on getter:
+			<editableLabel2 id="custom2" value="@bind(vm.message)" style="color:green;"/>
+			ComponentAnnotation on setter:
+			<editableLabel3 id="custom3" value="@bind(vm.message)" style="color:purple;"/>
+		</vlayout>
+	</div>
+</zk>

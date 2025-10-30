@@ -1,0 +1,35 @@
+<zk>
+	<style>
+	.yellow {border:1px solid #f1da36}
+	.red {color: red}
+	.green {color: green}
+	.blue {background: blue; color: white;}
+	</style>
+	<window id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ApplyVM')">
+		<div>
+			**Start**
+			<apply template="@load(vm.template)">
+				<template>Default</template>
+				<template name="readonly"><label class="yellow">1</label></template>
+				<template name="edit"><label class="green">2</label></template>
+			</apply>
+			**Middle**
+			<apply template="@load(vm.template)">
+				<template>Default</template>
+				<template name="readonly"><label class="yellow">1</label></template>
+				<template name="edit"><label class="green">2</label></template>
+			</apply>
+			**End**
+		</div>
+		<div>
+			**Start**
+			<apply templateURI="@load(vm.simpleTemplateURI)" person="@ref(vm.person)"/>
+			**Middle**	
+			<apply templateURI="@load(vm.simpleTemplateURI)" person="@ref(vm.person)"/>
+			**End**	
+		</div>
+		<button label="Change Template" onClick='@command("changeTemplate")'/>
+	</window>
+	<debugger rootId="host" />
+</zk>

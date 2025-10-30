@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-817.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb  6 12:21:09 TST 2012, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. Please resize the B window's width by dragging the right side to cover over the green area of A window.
+	<separator/>
+	2. The B window should be resized well on the green area of A window.
+	
+	<window title="A" border="normal" width="800px" height="600px"
+		sizable="true" mode="overlapped" top="100px" left="100px">
+		<hlayout>
+			<div width="400px" height="600px" style="backGround:red"></div>
+			<div width="400px" height="600px"
+				style="backGround:green">
+				<iframe width="100%" height="100%" />
+			</div>
+		</hlayout>
+	</window>
+	<window title="B" border="normal" width="500px" height="300px"
+		sizable="true" mode="overlapped" top="350px" left="150px">
+		<hlayout>
+			<div width="250px" height="300px" style="backGround:red"></div>
+			<div width="250px" height="300px"
+				style="backGround:green">
+				<iframe width="100%" height="100%" />
+			</div>
+		</hlayout>
+	</window>
+</zk>
+
+

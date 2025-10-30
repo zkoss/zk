@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: A"?>
+<?root-attributes lang="en"?>
+<!--
+a.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 28 16:56:33 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>A</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-a:focus {
+				border: 1px solid red;
+			}
+		</style>
+		<a id="ok" label="OK" autodisable="ok,cancel" />
+		<a id="cancel" label="Cancel" autodisable="ok,cancel" />
+		<a label="disabled" disabled="true" />
+		<a href="http://www.zkoss.org" ca:aria-label="Home" iconSclass="z-icon-home"/>
+		<a href="http://www.zkoss.org" label="Visit ZK!" image="/img/ZK-Logo.gif" />
+		<a href="http://www.zkoss.org" label="Visit ZK!">
+			<image ca:alt="ZK official website" src="/img/ZK-Logo.gif" width="30px"></image>
+		</a>
+	</n:main>
+</zk>

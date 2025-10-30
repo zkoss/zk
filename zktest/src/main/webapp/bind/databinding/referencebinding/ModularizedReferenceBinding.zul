@@ -1,0 +1,12 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] Change Number by intbox, the labels should be changed
+		[Step 2] Change the First Name/Last Name by textbox, the labels should be changed
+		[Step 3] Click "Append number to firstName" multiple times, the First Name should be changed.
+		[Step 4] Click "Update to another person", the First Name/Last Name should be changed.
+		[Step 5] Click "Append number to firstName" multiple times, the First Name should be changed.
+	]]></label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.referencebinding.BasicReferenceBindingVM')">
+		<include n="@ref(vm.num)" p="@ref(vm.person)" src="ModularizedReferenceBinding-1.zul"/>
+	</vlayout>
+</zk>

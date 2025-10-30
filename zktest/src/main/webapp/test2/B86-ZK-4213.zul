@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4213.zul
+
+		Purpose:
+                
+		Description:
+                
+		History:
+				Tue Feb 19 10:00:05 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Collections.nCopies(1000, "dummy"));
+	]]></zscript>
+	<div hflex="1" vflex="1">
+		<label multiline="true">
+			1. The sum of all columns width should be the same as grid width
+			2. Resize the window
+			3. The sum of all columns width should be the same as grid width
+			4. Scroll down to trigger ROD
+			5. The sum of all columns width should be the same as grid width
+		</label>
+		<grid model="${model}" vflex="1" span="true">
+			<custom-attributes org.zkoss.zul.grid.rod="true"/>
+			<columns>
+				<column label="col-1" hflex="min"/>
+				<column label="col-2" hflex="min"/>
+				<column label="col-3" hflex="min"/>
+			</columns>
+			<template name="model">
+				<row>
+					<cell>${each}</cell>
+					<cell>${each}-${each}</cell>
+					<cell>${each}-${each}-${each}</cell>
+				</row>
+			</template>
+		</grid>
+	</div>
+</zk>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4452.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 3 14:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout>
+        <button onClick='bb.setErrorMessage("error");cb.setErrorMessage("error");db.setErrorMessage("error");' label="show error, the border should display fine in different themes" />
+        <bandbox id="bb"/>
+        <combobox id="cb"/>
+        <datebox id="db"/>
+    </vlayout>
+    <apply templateURI="/test2/include/themes.zul"/>
+</zk>

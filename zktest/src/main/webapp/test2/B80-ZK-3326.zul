@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3326.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Sep 14, 2016  3:48:56 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.click bandbox to open the popup
+		2.click a listitem in listbox
+		3.click white space of bandbox popup
+		4.it should not fire onChanging event and no "bandbox changing" log
+	</label>
+		<bandbox value="aaa" id="withListbox" onFocus='Clients.log("bandbox focused")' onChanging='Clients.log("bandbox changing")'>
+			<bandpopup width="200px">
+				<listbox height="100px" width="150px" onFocus='Clients.log("listbox focused")' onBlur='Clients.log("listbox blured")'>
+					<listitem label="1" />
+					<listitem label="2" />
+					<listitem label="3" />
+					<listitem label="4" />
+					<listitem label="5" />
+					<listitem label="6" />
+				</listbox>
+			</bandpopup>
+
+		</bandbox>
+</zk>

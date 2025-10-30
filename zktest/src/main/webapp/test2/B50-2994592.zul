@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2994592.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 30 18:08:09 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="Fly Region" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Fly Region" border="normal">
+		<borderlayout height="500px">
+			<center>
+				<div>
+					<button label="Go" onClick="east.open = !east.open" />
+					The region appears at the wrong side and suddenly flies to the correct side when:
+					<separator/>
+					1. The region is not open when page loads;
+					<separator/>
+					2. It is set to open the first time.
+					<separator/>
+					* This happens in both Firefox and IE.
+	* This applies to both East and South component (West and North work normally)
+				</div>
+			</center>
+			<east id="east" size="200px" collapsible="true" open="false">
+				<label value="east" />
+			</east>
+		</borderlayout>
+	</window>
+</zk>
+

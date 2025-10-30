@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3926.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jun 13 14:15:53 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true" pre="true"><![CDATA[
+		1. Click open arrow on north
+		2. You should see the north open with animation
+		3. Uncomment the following setting in zk.xml
+			<library-property>
+				<name>org.zkoss.zul.borderlayout.animation.disabled</name>
+				<value>true</value>
+			</library-property>
+		4. Restart server and refresh page
+		5. Click open arrow on north
+		6. You should see the north open without animation
+		7. Change <name>org.zkoss.zul.borderlayout.animation.disabled</name>
+			to <name>org.zkoss.zul.borderlayout.animation.disabed</name>
+		8. Restart server and refresh page
+		9. You should see "The library-property setting: org.zkoss.zul.borderlayout.animation.disabed was changed to org.zkoss.zul.borderlayout.animation.disabled, please use the new one instead." on console
+		10. Click open arrow on north
+		11. You should see the north open without animation
+	]]></label>
+	<borderlayout width="300px" height="300px">
+		<north title="NORTH" collapsible="true" open="false">
+			<label value="NORTH"/>
+		</north>
+		<center/>
+	</borderlayout>
+</zk>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3643.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 3 15:34:49 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the button "add listheader + invalidate listhead" at least twice
+		2. resize a column
+		3. JS error "Uncaught TypeError: Cannot read property 'style' of undefined" is logged if this problem still exists
+	</label>
+	<button label="add listheader + invalidate listhead"
+		onClick='listhead.appendChild(new Listheader("new Listheader"));
+				listhead.invalidate();'/>
+	<button label="add listheader (no invalidate)" 
+		onClick='listhead.appendChild(new Listheader("new Listheader"));'/>
+	<listbox>
+		<listhead id="listhead" sizable="true">
+			<listheader label="hdr 1"/>
+			<listheader label="hdr 2"/>
+		</listhead>
+	</listbox>
+</zk>

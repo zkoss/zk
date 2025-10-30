@@ -1,0 +1,20 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+}
+
+dependencies {
+	api project(':zcommon')
+	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
+	compileOnly "javax.portlet:portlet-api:${portletVersion}"
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.web"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+group = 'org.zkoss.common'
+description = 'The ZKoss Web Library'

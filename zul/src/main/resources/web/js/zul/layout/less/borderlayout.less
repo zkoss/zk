@@ -1,0 +1,267 @@
+@import "~./zul/less/_header.less";
+
+@media print {
+	.safari {//Bug 2949287
+		.z-borderlayout {
+			position: static;
+		}
+	}
+}
+
+@media screen {
+	.z-borderlayout {
+		position: relative;
+	}
+}
+
+.z-borderlayout {
+	.size(100%, 100%);
+	border: 0;
+	background: @baseBackgroundColor;
+	overflow: hidden;
+
+	&-icon {
+		.iconFontStyle(@borderlayoutIconFontSize, @iconColor);
+		.displaySize(block, @borderlayoutIconSize, @borderlayoutIconSize);
+		line-height: @baseButtonHeight;
+		text-align: center;
+		position: absolute;
+		top: @borderlayoutIconPositionTop;
+		right: @borderlayoutIconPositionRight;
+		overflow: hidden;
+		cursor: pointer;
+		
+		&:hover {
+			.opacity(1);
+		}
+	}
+}
+
+.z-west,
+.z-west-collapsed,
+.z-west-splitter {
+	z-index: 12;
+}
+.z-east,
+.z-east-collapsed,
+.z-east-splitter {
+	z-index: 10;
+}
+.z-north,
+.z-north-collapsed,
+.z-north-splitter  {
+	z-index: 16;
+}
+.z-south,
+.z-south-collapsed,
+.z-south-splitter {
+	z-index: 14;
+}
+
+.z-north,
+.z-south,
+.z-west,
+.z-center,
+.z-east {
+	border: 1px solid @baseBorderColor;
+	background: @baseBackgroundColor;
+	position: absolute;
+	overflow: hidden;
+
+	&-noborder {
+		border: 0;
+	}
+	&-header {
+		.fontStyle(@baseTitleFontFamily, @borderlayoutHeaderFontSize, normal, @borderlayoutHeaderColor);
+		height: @borderlayoutHeaderHeight;
+		background: @borderlayoutHeaderBackgroundColor;
+		border-bottom: 1px solid @baseBorderColor;
+		padding: @borderlayoutHeaderPadding;
+		overflow: hidden;
+		cursor: default;
+		white-space: nowrap;
+	}
+
+	&-body {
+		line-height: @baseLineHeight;
+		padding: @borderlayoutBodyPadding;
+		color: @baseTextColor;
+	}
+
+	&-collapsed {
+		.size(@borderlayoutCollapsedSize, @borderlayoutCollapsedSize);
+		border: 1px solid @baseBorderColor;
+		padding: @borderlayoutCollapsedPadding;
+		background: @colorBackground1;
+		position: absolute;
+		overflow: hidden;
+	 	cursor: pointer; // ios issue
+		 .z-borderlayout-icon {
+			color: extract(@borderlayoutCollapsedIconColors, 1);
+		}
+		&:hover {
+			background: @hoverBackgroundColor;
+			.z-borderlayout-icon {
+				color: extract(@borderlayoutCollapsedIconColors, 2);
+			}
+		}
+	}
+
+	&-slide > &-collapsed {
+		background: @baseBackgroundColor;
+		&:hover {
+			background: @hoverBackgroundColor;
+		}
+	}
+
+	&-slide &-header {
+		border-bottom-width: 0;
+	}
+
+	&-caption {
+		// ZK-969: should show correct in borderlayout
+		height: @baseButtonHeight;
+
+		.z-caption-content {
+			padding: 0;
+			line-height: normal;
+
+			.z-label {
+				line-height: normal;
+			}
+		}
+	}
+}
+.z-north,
+.z-south,
+.z-center {
+	width: 100%; // Fixed for B30-1902533.zul
+}
+.z-west,
+.z-east {
+	height: 100%; // Fixed for B30-1902533.zul
+	&-title {
+		.transform('rotate(90deg)');
+		.applyCSS3('transform-origin', 'left bottom');
+	}
+}
+
+.z-center {
+	z-index: 8;
+}
+
+.z-north-splitter,
+.z-south-splitter {
+	border-left: 1px solid @splitterBorderColor;
+	border-right: 1px solid @splitterBorderColor;
+	cursor: ns-resize;
+}
+
+.z-west-splitter-button,
+.z-east-splitter-button {
+	.size(@splitterSize, 30px);
+	border-width: 1px 0;
+}
+.z-north-splitter-button,
+.z-south-splitter-button {
+	.size(30px, @splitterSize);
+	border-width: 0 1px;
+}
+
+.z-east,
+.z-west,
+.z-north,
+.z-south {
+	&-splitter {
+		.size(@splitterSize, @splitterSize);
+		background-color: @splitterBackgroundColor;
+		position: absolute;
+		overflow: hidden;
+		cursor: ew-resize;
+
+		// splitter-button
+		&-button {
+			color: extract(@splitterButtonTextColors, 1);
+			display: inline-block;
+			vertical-align: top;// vertical-align: make it looks same in diff browsers
+			position: relative;
+			cursor: pointer;
+		}
+
+		&:hover {
+			background-color: @splitterHoverBackgroundColor;
+			.z-east-splitter-button,
+			.z-west-splitter-button,
+			.z-north-splitter-button,
+			.z-south-splitter-button {
+				color: extract(@splitterButtonTextColors, 2);
+			}
+		}
+	}
+
+	&-icon {
+		font-size: @splitterButtonTextSize;
+		line-height: @baseLineHeight;
+		position: absolute;
+	}
+
+	&-title {
+		.fontStyle(@baseTitleFontFamily, @borderlayoutHeaderFontSize, normal, @borderlayoutHeaderColor);
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		line-height: @baseButtonHeight;
+	}
+}
+
+.z-north-splitter-button-disabled .z-icon-caret-up,
+.z-south-splitter-button-disabled .z-icon-caret-down,
+.z-west-splitter-button-disabled .z-icon-caret-left,
+.z-east-splitter-button-disabled .z-icon-caret-right {
+	display: none;
+}
+.z-north-splitter-button-disabled,
+.z-south-splitter-button-disabled {
+	cursor: ns-resize;
+}
+.z-west-splitter-button-disabled,
+.z-east-splitter-button-disabled {
+	cursor: ew-resize;
+}
+.z-west-icon,
+.z-east-icon {
+	top: 8px;
+	left: -3px;
+}
+
+.z-west-icon.z-icon-ellipsis-v,
+.z-east-icon.z-icon-ellipsis-v {
+	font-size: @fontSizeXSmall;
+	top: -21px;
+	left: 3px;
+	cursor: ew-resize;
+	visibility: hidden;
+}
+
+.z-north-icon,
+.z-south-icon {
+	left: 9px;
+	top: -4px;
+}
+.z-west-icon.z-icon-ellipsis-v ~ .z-west-icon.z-icon-ellipsis-v,
+.z-east-icon.z-icon-ellipsis-v ~ .z-east-icon.z-icon-ellipsis-v {
+	top: 39px;
+}
+
+.z-north-icon.z-icon-ellipsis-h,
+.z-south-icon.z-icon-ellipsis-h {
+	top: -2px;
+	left: -20px;
+	cursor: ns-resize;
+	visibility: hidden;
+}
+
+.z-north-icon.z-icon-ellipsis-h ~ .z-north-icon.z-icon-ellipsis-h,
+.z-south-icon.z-icon-ellipsis-h ~ .z-south-icon.z-icon-ellipsis-h {
+	left: 40px;
+}

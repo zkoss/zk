@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4810-2.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jul 15 16:01:59 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		import java.util.*;
+		
+		ListModelList list = new ListModelList();
+		list.addAll( Arrays.asList(new String[] { "radio1", "radio2", "radio3" }));
+		
+		ListModelList list2 = new ListModelList();
+		list2.addAll( Arrays.asList(new String[] { "new radio1", "new radio2", "new radio3" }));
+	]]></zscript>
+	<vlayout>
+		<label value="radiogroup1" />
+		<label multiline="true">
+			1. you shall see the radios in radiogroup1 are not disabled.
+			2. select the "radio2", and click the "toggle radiogroup1 disabled" button.
+			3. you shall see the radios in radiogroup1 are all disabled.
+			4. click the add button, the added "new1" radio shall be disabled.
+			5. click the remove button, the added "new1" radio shall be removed and others still disabled.
+			6. click "set another model" button, the radios shall still be disabled.
+			7. click the "toggle radiogroup1 disabled" button, the radios shall not be disabled.
+		</label>
+		<hlayout id="hl1">
+			<radiogroup model="${list}" id="rg1" />
+			<button label="set another model" onClick="rg1.setModel(list2)" />
+			<button label="add" onClick='rg1.getModel().add("new1")' />
+			<button label="remove" onClick='rg1.getModel().remove(rg1.getModel().size()-1)' />
+			<button label="toggle radiogroup1 disabled" onClick="rg1.setDisabled(!rg1.isDisabled())" />
+		</hlayout>
+		<label value="radiogroup2" />
+		<label multiline="true">
+			1. you shall see the radios in radiogroup2 are disabled.
+			2. click the "toggle radiogroup2 disabled" button, the radios shall not be disabled.
+			3. select the "Hi radio2", and click the "toggle radiogroup2 disabled" button.
+			4. you shall see the radios in radiogroup2 are all disabled.
+			5. click the add button, the added "Hi new1" radio shall be disabled.
+			6. click the remove button, the added "Hi new1" radio shall be removed and others still disabled.
+			7. click "set another model" button, the radios shall still be disabled.
+			8. click the "toggle radiogroup2 disabled" button, the radios shall not be disabled.
+		</label>
+		<hlayout id="hl2">
+			<radiogroup model="${list}" id="rg2" disabled="true">
+				<template name="model">
+					<radio value="${each}" label="Hi ${each}"></radio>
+				</template>
+			</radiogroup>
+			<button label="set another model" onClick="rg2.setModel(list2)" />
+			<button label="add" onClick='rg2.getModel().add("new1")' />
+			<button label="remove" onClick='rg2.getModel().remove(rg2.getModel().size()-1)' />
+			<button label="toggle radiogroup2 disabled" onClick="rg2.setDisabled(!rg2.isDisabled())" />
+		</hlayout>
+		<label value="Test Renderer" />
+		<label multiline="true">
+			1. you shall see the radios in radiogroup3 are not disabled.
+			2. select the "renderer[radio2]", and click the "toggle radiogroup3 disabled" button.
+			3. you shall see the radios in radiogroup3 are all disabled.
+			4. click the add button, the added "renderer[new1]" radio shall be disabled.
+			5. click the remove button, the added "renderer[new1]" radio shall be removed and others still disabled.
+			6. click "set another model" button, the radios shall still be disabled.
+			7. click the "toggle radiogroup3 disabled" button, the radios shall not be disabled.
+		</label>
+		<hlayout id="hl3">
+			<radiogroup model="${list}" id="rg3" radioRenderer="org.zkoss.zktest.test2.F96_ZK_4810RadioRenderer" />
+			<button label="set another model" onClick="rg3.setModel(list2)" />
+			<button label="add" onClick='rg3.getModel().add("new1")' />
+			<button label="remove" onClick='rg3.getModel().remove(rg3.getModel().size()-1)' />
+			<button label="toggle radiogroup3 disabled" onClick="rg3.setDisabled(!rg3.isDisabled())" />
+		</hlayout>
+	</vlayout>
+</zk>

@@ -1,0 +1,69 @@
+<zk>
+<window id="main" title="main" width="100%" height="800px" >
+<window id="win1" title="Welcome" mode="overlapped" width="400px" border="3d" context="menuService">
+  <window id="Contenu">
+    Window on the upper left, context menu shows nearly correctly
+  </window>
+  <menupopup id="menuService">
+    <menuitem label="mymenu"/>
+    <menu label="Modify background color">                
+      <menupopup>
+        <menuitem label="blue"/>
+        <menuitem label="red"/>
+        <menuitem label="green"/>
+      </menupopup>
+    </menu>
+  </menupopup>
+  <combobox>
+    <comboitem label="combo1"/>
+    <comboitem label="combo2"/>
+    <comboitem label="combo3"/>
+  </combobox>
+  <datebox/>
+</window>
+
+<window id="win2" title="Welcome" mode="overlapped" left="30%" top="40%" width="400px" border="3d" context="menuService">
+  <window id="Contenu">
+    Window on the middle, context menu shows far away from the mouse pointer
+  </window>
+  <menupopup id="menuService">
+    <menuitem label="mymenu"/>
+    <menu label="Modify background color">                
+      <menupopup>
+        <menuitem label="blue"/>
+        <menuitem label="red"/>
+        <menuitem label="green"/>
+      </menupopup>
+    </menu>
+  </menupopup>
+  <combobox>
+    <comboitem label="combo1"/>
+    <comboitem label="combo2"/>
+    <comboitem label="combo3"/>
+  </combobox>
+  <datebox/>
+</window>
+
+<window id="win3" title="Welcome" mode="overlapped" left="60%" top="80%" width="400px" border="3d" context="menuService">
+  <window id="Contenu">
+    Window on the right lower, context menu is invisible on the hidden right part of the screen
+  </window>
+  <menupopup id="menuService">
+    <menuitem label="mymenu"/>
+    <menu label="Modify background color">                
+      <menupopup>
+        <menuitem label="blue"/>
+        <menuitem label="red"/>
+        <menuitem label="green"/>
+      </menupopup>
+    </menu>
+  </menupopup>
+  <combobox>
+    <comboitem label="combo1"/>
+    <comboitem label="combo2"/>
+    <comboitem label="combo3"/>
+  </combobox>
+</window>
+</window>
+
+</zk>

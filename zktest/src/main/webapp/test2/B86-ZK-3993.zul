@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3993.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Aug 01 17:24:23 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. open this page by mobile phone and desktop, the behavior of the three listbox should be the same(with out ctrl-key)
+	</label>
+	<listbox id="lb" width="150px" multiple="true" checkmark="true">
+		<custom-attributes org.zkoss.zul.listbox.checkmarkDeselectOthers="true"/>
+		<listitem forEach="1,2,3" label="item ${each}"/>
+	</listbox>
+	<listbox id="lb1" width="150px" multiple="true" checkmark="true">
+		<listitem forEach="1,2,3" label="item ${each}"/>
+	</listbox>
+	<listbox id="lb2" width="150px" multiple="true" checkmark="false">
+		<listitem forEach="1,2,3" label="item ${each}"/>
+	</listbox>
+</zk>

@@ -1,0 +1,11 @@
+
+<zk>
+	<zscript>
+		import java.util.*;
+		Date d =new Date();
+	</zscript>
+	<datebox id="untilDatebox" format="medium+medium" constraint="no past" cols="26" value="${d}"/>
+	<zscript>
+		untilDatebox.setLocale("de_CH"); 
+	</zscript>
+</zk>

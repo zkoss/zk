@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5430.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Apr 18 16:52:31 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>click button and see the snapshot with correct ratio</label>
+	<vbox>
+		<camera id="camera" onSnapshotUpload='image.setContent(event.getMedia())' height="300px" width="800px" />
+		<button label="take snapshot" onClick="camera.requestCamera(); camera.snapshot()" />
+		<image id="image" />
+	</vbox>
+</zk>

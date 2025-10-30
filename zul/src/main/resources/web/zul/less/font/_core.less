@@ -1,0 +1,37 @@
+// base icon class definition
+// -------------------------
+
+.@{fa-css-prefix} {
+  font-family: ~"var(--@{fa-css-prefix}-style-family, '@{fa-style-family}')";
+  font-weight: ~'var(--@{fa-css-prefix}-style, @{fa-style})';
+}
+
+[class*="@{fa-css-prefix}"],
+.fas,
+.@{fa-css-prefix}-solid,
+.fass,
+.@{fa-css-prefix}-sharp,
+.far,
+.@{fa-css-prefix}-regular,
+.fab,
+.@{fa-css-prefix}-brands {
+  // NOTICE that this part is to avoid the side effects of B85-ZK-3800,
+  // so keep the settings from FontAwesome 4.7.0 instead of 6.4.2.
+  // Be careful when modifying, the margins of the icon may change.
+  display: inline-block;
+  font: normal normal normal @fa-font-size-base/@fa-line-height-base FontAwesome; // shortening font declaration
+  font-size: inherit; // can't have font-size inherit on line above, so need to override
+  text-rendering: auto; // optimizelegibility throws things off #1094
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fas,
+.@{fa-css-prefix}-classic,
+.@{fa-css-prefix}-solid,
+.far,
+.@{fa-css-prefix}-regular,
+.fab,
+.@{fa-css-prefix}-brands {
+  font-family: FontAwesome;
+}

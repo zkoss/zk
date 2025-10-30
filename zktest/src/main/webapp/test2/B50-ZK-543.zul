@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-543.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov  01 12:20:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<div>There should no extra space below the last row of the listbox.</div>
+
+	<listbox  width="400px" sizedByContent="true"
+		rows="3">
+		<listhead >
+			<listheader label="Test" />
+		</listhead>
+		<listitem>
+			<listcell>
+				<label value="1" />
+			</listcell>
+			<listcell>
+				<label value="DEQU8978163" />
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<label value="11-Oct-25 1929" />
+			</listcell>
+			<listcell>
+				<label value="DEQU8978163" />
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell>
+				<label value="11-Oct-25 1929" />
+			</listcell>
+			<listcell>
+				<label value="TBBS15243100" />
+			</listcell>
+			<listcell>
+				<label value="APLxzxzxzxzxz" />
+			</listcell>
+			<listcell>
+				<label value="V152sfsfs" />
+			</listcell>
+			<listcell>
+				<label value="V152" />
+			</listcell>
+			<listcell>
+				<label value="Export" />
+			</listcell>
+		</listitem>
+	</listbox>
+</zk>

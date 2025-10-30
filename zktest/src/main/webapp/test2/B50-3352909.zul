@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3352909.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 13 15:22:36 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Plese scroll to item99(or more than it), it shouldn't jump to item 41.
+<zscript>
+Object[] o = new Object[200];
+</zscript>
+<listbox width="100px" height="100px">
+<listitem forEach="${o}" label="item ${forEachStatus.index}" />
+</listbox>
+<grid width="100px" height="100px">
+<rows>
+<row forEach="${o}">
+<label value="item ${forEachStatus.index}"/>
+</row>
+</rows>
+</grid>
+</zk>

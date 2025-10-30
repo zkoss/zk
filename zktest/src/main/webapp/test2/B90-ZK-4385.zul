@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4385.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 10 18:42:00 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <zscript><![CDATA[
+    session.setMaxInactiveInterval(1);
+    ]]></zscript>
+    <label multiline="true">
+        1. Wait 1 second for the session timeout.
+        2. Click the textbox.
+        3. Click "Cancel" when the error dialog appears.
+        4. The error dialog shouldn't appear again.
+    </label>
+    <textbox w:onClick="zAu.send(new zk.Event(this, 'onMyEvent', null, {toServer:true}))"
+             w:onBlur="zAu.send(new zk.Event(this, 'onMyEvent', null, {toServer:true}))"/>
+</zk>

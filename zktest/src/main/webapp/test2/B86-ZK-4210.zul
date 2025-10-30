@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4210.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 06 10:58:32 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Scroll right to see 5th column.
+        2. Shrink the width the 5th column by dragging its right border.
+        3. The ghost line shouldn't pass over its left border.
+    </label>
+    <div width="200%" height="1px" />
+    <vlayout>
+        Grid
+        <grid width="800px" height="150px">
+            <columns sizable="true">
+                <column label="1" width="300px"/>
+                <column label="2" width="300px"/>
+                <column label="3" width="300px"/>
+                <column label="4" width="300px"/>
+                <column label="5" width="300px"/>
+                <column label="6" width="300px"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="Item 1.1" />
+                    <label value="Item 1.2" />
+                    <label value="Item 1.3" />
+                    <label value="Item 1.4" />
+                    <label value="Item 1.5" />
+                    <label value="Item 1.6" />
+                </row>
+            </rows>
+        </grid>
+        Listbox
+        <listbox width="800px" height="150px">
+            <listhead sizable="true">
+                <listheader label="1" width="300px"/>
+                <listheader label="2" width="300px"/>
+                <listheader label="3" width="300px"/>
+                <listheader label="4" width="300px"/>
+                <listheader label="5" width="300px"/>
+                <listheader label="6" width="300px"/>
+            </listhead>
+            <listitem>
+                <listcell label="Item 1.1" />
+                <listcell label="Item 1.2" />
+                <listcell label="Item 1.3" />
+                <listcell label="Item 1.4" />
+                <listcell label="Item 1.5" />
+                <listcell label="Item 1.6" />
+            </listitem>
+        </listbox>
+        Tree
+        <tree width="800px" height="150px">
+            <treecols sizable="true">
+                <treecol label="1" width="300px"/>
+                <treecol label="2" width="300px"/>
+                <treecol label="3" width="300px"/>
+                <treecol label="4" width="300px"/>
+                <treecol label="5" width="300px"/>
+                <treecol label="6" width="300px"/>
+            </treecols>
+            <treechildren>
+                <treeitem>
+                    <treerow>
+                        <treecell label="Item 1.1" />
+                        <treecell label="Item 1.2" />
+                        <treecell label="Item 1.3" />
+                        <treecell label="Item 1.4" />
+                        <treecell label="Item 1.5" />
+                        <treecell label="Item 1.6" />
+                    </treerow>
+                </treeitem>
+            </treechildren>
+        </tree>
+    </vlayout>
+</zk>

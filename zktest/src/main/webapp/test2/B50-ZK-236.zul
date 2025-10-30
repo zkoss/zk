@@ -1,0 +1,31 @@
+<!--
+B50-ZK-236.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 26 12:04:42 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<borderlayout>
+		<north title="North" vflex="min">
+			<div style="border: 1px solid green">
+				North
+			</div>
+		</north>
+		<south title="South" vflex="min">
+			<div style="border: 1px solid green">
+				South
+			</div>
+		</south>
+		<center>
+			<div>
+				You should be able to see the entire green borders of North and South contents.
+			</div>
+		</center>
+	</borderlayout>
+</zk>

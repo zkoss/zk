@@ -1,0 +1,19 @@
+<zk>
+<html><![CDATA[
+<ul><li>You shall see "onCreated received" inside the following window.</li></ul>
+]]></html>
+
+<zscript><![CDATA[
+public class Tooltip extends org.zkoss.zk.ui.util.GenericForwardComposer {
+	Label tip;
+	public void onCreate$tip(Event event) {
+		tip.setValue("onCreated received");
+	}
+}
+]]></zscript>
+
+<window border="normal" apply="Tooltip">
+	<label id="tip"/>
+</window>
+
+</zk>

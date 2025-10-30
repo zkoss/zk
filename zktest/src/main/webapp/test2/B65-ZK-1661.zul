@@ -1,0 +1,18 @@
+<zk>
+<zscript><![CDATA[
+import java.util.*;
+import org.zkoss.zul.*;
+List listShop = new ArrayList();
+for (int i = 0; i < 100; i++)
+	listShop.add("SHOP - " + i);
+
+ListModelList model = new ListModelList(listShop);
+]]></zscript>
+	<window title="Chosen Box" border="normal">
+		<label multiline="true">
+			1. Type 'S' in the input text.
+			2. Drop-down list should scroll by using keyboard.
+		</label>
+		<chosenbox id="cb" model="${model}" width="400px" noResultsText="No such item - {0}" />
+	</window>
+</zk>

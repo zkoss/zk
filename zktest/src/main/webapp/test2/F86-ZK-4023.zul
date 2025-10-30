@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4023.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Aug 10 11:32:18 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. key Jan 0, 2018 in the first datebox, it should turn into Dec 31, 2017.
+		2. key Feb 31, 2018 in the first datebox, it should turn into Mar 3, 2018.
+		3. key Dec 20, 2018 in the first datebox, it should remain Dec 20, 2018.
+		4. key Jan 0, 2018 in the second datebox, it should be an error message.
+		5. key Feb 31, 2018 in the second datebox, it should be an error message.
+		6. key Dec 20, 2018 in the second datebox, it should remain Dec 20, 2018.
+	</label>
+	<datebox format="MMM d, yyyy" id="d1" lenient="true" strictDate="false"/>
+	<datebox format="MMM d, yyyy" id="d2" lenient="true" strictDate="true"/>
+</zk>

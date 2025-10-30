@@ -1,0 +1,40 @@
+@import "~./zul/less/_header.less";
+
+.z-button {
+	.fontStyle(@baseTitleFontFamily, @inputTextSize, normal, @buttonColor);
+	min-height: @baseButtonHeight;
+	border: @buttonBorderWidth solid @buttonBorderColor;
+	.borderRadius(@inputBorderRadius);
+	padding: @buttonPadding;
+	line-height: normal;
+	background-color: @buttonBackgroundColor;
+	.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
+	cursor: pointer;
+	white-space: nowrap;
+
+	&-image {
+		vertical-align: text-bottom;
+	}
+
+	&:hover {
+		color: @buttonHoverColor;
+		border-color: @buttonHoverBorderColor;
+		background-color: @buttonHoverBackgroundColor;
+	}
+	&:focus {
+		color: @buttonFocusColor;
+		border-color: @buttonFocusBorderColor;
+		background-color: @buttonFocusBackgroundColor;
+	}
+	&:active {
+		color: @buttonActiveColor;
+		border-color: @buttonActiveBorderColor;
+		background-color: @buttonActiveBackgroundColor;
+	}
+	&[disabled] {
+		color: @buttonDisableColor;
+		border-color: @buttonDisableBorderColor;
+		background-color: @buttonDisableBackgroundColor;
+		cursor: default;
+	}
+}

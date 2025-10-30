@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+treeOnDemand.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec  7 14:01:44     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<tree width="400px">
+	<treecols>
+		<treecol label="Subject"/>
+		<treecol label="From"/>
+	</treecols>
+	<treechildren>
+		<treeitem open="false" onOpen="if (event.open) load()">
+			<treerow>
+				<treecell label="Intel Snares XML"/>
+				<treecell label="David Needle"/>
+			</treerow>
+			<treechildren/>
+		</treeitem>
+	</treechildren>
+	<zscript>
+void load() {
+	Treechildren tc = self.getTreechildren();
+	if (tc.getChildren().isEmpty()) {
+		Treeitem ti = new Treeitem();
+		ti.setLabel("New added");
+		ti.setParent(tc);
+	}
+}
+	</zscript>
+</tree>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<window title="frame1" border="normal">
+	<iframe src="F50-3026623-2.zul" height="200px"/>
+	<iframe src="F50-3026623-2.zul" height="200px"/>
+</window>

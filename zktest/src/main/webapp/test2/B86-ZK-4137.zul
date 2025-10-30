@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4137.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Dec 7 16:34:41 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click "confirm close"
+		2. click "trigger redirect"
+		3. click cancel (stay on page don't reload)
+		4. click button "Test Server ...", then zk log should occur
+	</label>
+	<button label="confirm close" onClick='Clients.confirmClose("Please stay here")'/>
+	<button label="trigger redirect" onClick='execution.sendRedirect("");'/>
+	<button label="Test Server is still responding to AJAX" onClick="Clients.log(event.toString())"/>
+</zk>

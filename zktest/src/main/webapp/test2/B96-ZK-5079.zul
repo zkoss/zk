@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5079.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 20 14:22:36 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<nodom viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_5079VM')">
+		<forEach items="@init(vm.model)">
+			<apply template="noChildTemplate"/>
+		</forEach>
+		<button id="btn" label="del" onClick="@command('del')"/>
+	</nodom>
+	<template name="noChildTemplate"></template>
+</zk>

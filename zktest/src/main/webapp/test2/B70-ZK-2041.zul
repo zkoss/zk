@@ -1,0 +1,35 @@
+<window id="win">
+	<div height="300px">
+		<vlayout vflex="1" spacing="5px">
+			<hlayout vflex="1" spacing="5px" valign="top">
+				<div vflex="1" hflex="1">
+					<vlayout vflex="1" spacing="5px">
+						<label value="Grid 1: " />
+						<grid vflex="1" oddRowSclass="z-grid-odd" />
+					</vlayout>
+				</div>
+				<div vflex="1" hflex="1">
+					<vlayout vflex="1" spacing="5px">
+						<label value="Grid 2: " />
+						<grid vflex="1" />
+					</vlayout>
+				</div>
+			</hlayout>
+			<hlayout vflex="1" spacing="5px" valign="top">
+				<div vflex="1" hflex="1">
+					<vlayout vflex="1" spacing="5px">
+						<label value="Grid 3: " />
+						<grid vflex="1" />
+					</vlayout>
+				</div>
+				<div vflex="1" hflex="1">
+					<vlayout vflex="1" spacing="5px">
+						<label value="Grid 4: " />
+						<grid vflex="1" />
+					</vlayout>
+				</div>
+			</hlayout>
+		</vlayout>
+	</div>
+	<button label="Test" onClick="win.doModal()" />
+</window>

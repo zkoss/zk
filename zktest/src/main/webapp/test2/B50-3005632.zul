@@ -1,0 +1,20 @@
+<window>
+<html>
+<![CDATA[
+<ol>
+<li>You shall see listbox with item0~item9</li>
+<li>Press "Replace with empty model" button, you shall see the listbox contents are clear to empty(white background).</li>
+<li>If not, it is a bug.</li>
+</ol>
+]]>
+</html>
+<zscript><![CDATA[
+List lst = new ArrayList(120);
+ListModel model = new ListModelList(lst, true);
+for(int j = 0; j < 120; ++j) {
+lst.add("item"+ j);
+}
+]]></zscript>
+<listbox id="lb" model="${model}" rows="10"/>
+<button label="Replace with empty model" onClick='lb.setModel(new ListModelList(new ArrayList()))'/>
+</window>

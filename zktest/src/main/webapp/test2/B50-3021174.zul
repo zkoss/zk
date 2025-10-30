@@ -1,0 +1,15 @@
+<zk>
+   <html><![CDATA[
+	<ul>
+	<li>Click "show popup window" shall not cause js error</li>
+	</ul>
+	]]></html>
+	<button label="click" >
+		<attribute name="onClick"><![CDATA[
+			createEvent.setLeft("100px");
+			createEvent.visible = true;
+		]]></attribute>
+	</button>
+	<window width="400px" title="Create Event" border="normal"
+			id="createEvent" mode="popup" visible="false"  closable="true"/>
+</zk>

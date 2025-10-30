@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4742-login.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Dec 29 11:40:38 CST 2020, Created by katherinelin
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>
+		login page
+	</label>
+</zk>

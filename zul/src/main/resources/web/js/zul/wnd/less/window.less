@@ -1,0 +1,186 @@
+@import "~./zul/less/_header.less";
+
+.defaultOverflowZoom() {
+	overflow: hidden;
+	zoom: 1;
+}
+
+.z-window {
+	// ZK-2115: the style should apply [overflow: hidden]
+	.defaultOverflowZoom();
+	border: 1px solid @containerBorderColor;
+	.borderRadius(@containerBorderRadius);
+	padding: @containerPadding;
+	background-color: @containerBackground;
+
+	&-shadow {
+		.boxShadow('0 3px 6px rgba(0, 0, 0, 0.24)');
+	}
+
+	&-header {
+		.fontStyle(@baseTitleFontFamily, @containerHeaderTextSize, normal, @containerHeaderColor);
+		line-height: @baseButtonWidth;
+		padding: @windowHeaderPadding;
+		.defaultOverflowZoom();
+		cursor: default;
+
+		&-move {
+			cursor: move;
+		}
+	}
+
+	&-content {
+		padding: @containerPadding;
+		background: @baseBackgroundColor;
+		color: @containerBodyColor;
+		.defaultOverflowZoom();
+	}
+
+	&-icons {
+		display: inline-block;
+		float: right;
+	}
+
+	&-icon {
+		font-size: @containerButtonSize;
+		color: extract(@containerButtonColors, 1);
+		.displaySize(inline-block, @baseButtonWidth + 4, @baseButtonHeight);
+		margin: auto 1px;
+		padding: @containerButtonPadding;
+		line-height: @baseButtonHeight;
+		text-align: center;
+		overflow: hidden;
+		cursor: pointer;
+		border: none;
+		background: transparent;
+
+		&:hover {
+			color: extract(@containerButtonColors, 2);
+		}
+	}
+
+
+	&-resize-faker {
+		border: 1px dashed #1854C2;
+		background: #D7E6F7;
+		.opacity(0.5);
+		position: absolute;
+		left: 0;
+		top: 0;
+		overflow: hidden;
+		z-index: 60000;
+	}
+
+	&-move-ghost {
+		border: 1px solid @containerBorderColor;
+		.borderRadius(@containerBorderRadius);
+		padding: 0;
+		background: @colorPrimaryLighter;
+		.opacity(0.65);
+		position: absolute;
+		overflow: hidden;
+		cursor: move !important;
+
+		.z-window-header-move {
+			padding: @windowGhostHeaderPadding;
+		}
+
+		dl {
+			font-size: 0;
+			display: block;
+			border-top: 1px solid @containerBorderColor;
+			margin: 0;
+			padding: 0;
+			line-height: 0;
+			overflow: hidden;
+		}
+	}
+
+	&-embedded {
+		.z-window-shadow {
+			.boxShadow('none');
+		}
+	}
+
+	&-noborder {
+		border: 0;
+		.borderRadius(0);
+
+		> .z-window-content {
+			border: 0;
+			.borderRadius(0);
+		}
+	}
+}
+
+.z-messagebox {
+	display: inline-block;
+	white-space: normal;
+	width: @messageboxWindowWidth - @messageboxIconMarginLeft - @messageboxIconSize - @messageboxPaddingHorizontal;
+
+	&-window {
+		padding: @messageboxWindowPadding;
+		width: @messageboxWindowWidth;
+	}
+
+	&-window .z-window-header {
+		padding: @messageboxHeaderPadding;
+	}
+
+	&-window .z-window-content {
+		padding: @messageboxWindowContentPadding;
+	}
+
+	&-buttons {
+		text-align: right;
+		margin-right: 16px;
+		left: 0;
+		position: sticky;
+		& > * {
+			margin-left: @messageboxButtonsMarginLeft;
+		}
+	}
+
+	&-button {
+		width: 100%;
+		min-width: 48px;
+	}
+
+	&-icon {
+		font-size: 30px;
+		.displaySize(inline-block, @messageboxIconSize, @messageboxIconSize);
+		border: 0;
+		background-repeat: no-repeat;
+		text-align: center;
+		vertical-align: top;
+		cursor: pointer;
+		margin-left: @messageboxIconMarginLeft;
+	}
+
+	&-question {
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/question-btn.png');
+	}
+
+	&-viewport {
+		overflow: auto;
+		white-space: nowrap;
+		margin-bottom: @messageboxViewportMarginBottom;
+	}
+
+	&-exclamation {
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/warning-btn.png');
+	}
+
+	&-information {
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/info-btn.png');
+	}
+
+	&-error {
+		.encodeThemeURL(background-image, '~./zul/img/msgbox/stop-btn.png');
+	}
+
+	.z-label {
+		display: inline-block;
+		padding: @messageboxPadding;
+	}
+}

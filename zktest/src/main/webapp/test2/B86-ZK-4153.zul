@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4153.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 21 11:33:52 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <hlayout>
+        <custom-attributes pageSelf="${desktop.getRequestPath()}"/>
+        <a href="${pageSelf}?zktheme=breeze" label="Breeze"/>
+        <a href="${pageSelf}?zktheme=sapphire" label="Sapphire"/>
+        <a href="${pageSelf}?zktheme=silvertail" label="Silvertail"/>
+        <a href="${pageSelf}?zktheme=atlantic" label="Atlantic"/>
+        <a href="${pageSelf}?zktheme=default" label="Default"/>
+    </hlayout>
+    <label multiline="true">
+        (Only on IE11)
+        1. Use F12 > UI Responsiveness to do profiling.
+        2. Hover on the input fields back and forth.
+        3. Check the CPU utilization and Layout times, shouldn't like the result below.
+    </label>
+    <html><img src="data:image/png;base64,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"/></html>
+    <hlayout>
+        <forEach begin="1" end="5">
+            <vlayout xmlns:n="native">
+                <forEach begin="1" end="100">
+                    <n:input type="text"/>
+                </forEach>
+            </vlayout>
+        </forEach>
+    </hlayout>
+    <separator/>
+    <hlayout>
+        <combobox/>
+        <bandbox/>
+        <datebox/>
+        <timebox/>
+        <spinner/>
+        <doublespinner/>
+        <timepicker/>
+    </hlayout>
+    <hlayout>
+        <combobox constraint="no empty"/>
+        <bandbox disabled="true"/>
+        <datebox inplace="true"/>
+        <timebox readonly="true"/>
+        <spinner buttonVisible="false"/>
+        <timepicker disabled="true"/>
+    </hlayout>
+</zk>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4675.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Sep 22 18:00:55 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		choose a dark or mix-n-match theme from themepack
+		e.g. amber / zen
+		click these buttons
+		the text should be readable in the notification (text should have enough contrast with background)
+	</label>
+	<button label="show notification info" onClick='Clients.showNotification("some text")' />
+	<button label="show notification error" onClick='Clients.showNotification("some text", "error", null, null, -1)' />
+	<button label="show notification warning" onClick='Clients.showNotification("some text", "warning", null, null, -1)' />
+</zk>

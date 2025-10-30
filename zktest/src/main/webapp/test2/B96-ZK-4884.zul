@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4884.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 18 09:39:27 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <style><![CDATA[
+    .z-menu-hover > .z-menu-content {
+        color: black;
+        background-color: yellow;
+    }
+    ]]></style>
+    <label multiline="true">
+        1. Click menu1 -> menuitem1.
+        2. Click menu2 (don't hover to menu1) -> menuitem2.
+        3. You shouldn't see both menu1 and menu2 are yellow.
+    </label>
+    <menubar>
+        <menu label="menu1" id="menu1">
+            <menupopup>
+                <menuitem label="menuitem1" id="menuitem1"/>
+                <menuitem label="label"/>
+                <menuitem label="label"/>
+                <menu label="label">
+                    <menupopup>
+                        <menuitem label="label"/>
+                        <menuitem label="label"/>
+                        <menuitem label="label"/>
+                        <menuitem label="label"/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+        <menu label="menu2" id="menu2">
+            <menupopup>
+                <menuitem label="menuitem2" id="menuitem2"/>
+                <menuitem label="label"/>
+                <menuitem label="label"/>
+                <menu label="label">
+                    <menupopup>
+                        <menuitem label="label"/>
+                        <menuitem label="label"/>
+                        <menuitem label="label"/>
+                        <menuitem label="label"/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+    </menubar>
+</zk>

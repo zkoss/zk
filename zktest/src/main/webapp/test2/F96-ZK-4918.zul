@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4918.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 07 12:01:07 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Add these lines in zk.xml:
+        &lt;library-property>
+            &lt;name>org.zkoss.zkmax.touch.disabled&lt;/name>
+            &lt;value>true&lt;/value>
+        &lt;/library-property>
+        2. Use a hybrid desktop notebook to browse this page.
+        3. "Touch Enabled?" should be false.
+        4. Try using the touch panel to drag the window. It should have no effect.
+    </label>
+    Touch Enabled? <label id="touchEnabled"/>
+    <window mode="overlapped" width="300px" height="300px" title="Drag me!">
+        By using the touch device.
+    </window>
+    <script><![CDATA[
+    zk.afterMount(function () {
+        zk.$('$touchEnabled').setValue('' + zk.touchEnabled);
+    });
+    ]]></script>
+</zk>

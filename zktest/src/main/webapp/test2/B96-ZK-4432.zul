@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4432.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun 16 18:09:58 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+    <label multiline="true">
+        1. Click the button.
+        2. No error of 500: Form too large or 400: Unable to parse form content (It depends on server implementations)
+    </label>
+    <button label="Trigger AU requests">
+        <attribute w:name="onClick"><![CDATA[
+        for (var i = 0; i < 5000; i++) {
+            this.fire('myClick', {'': new Date()}, {toServer: true});
+        }
+        ]]></attribute>
+    </button>
+</zk>

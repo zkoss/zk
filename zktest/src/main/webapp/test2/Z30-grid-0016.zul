@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Z30-grid-0016.zul
+
+{{IS_NOTE
+	Purpose:
+		paging test of grid, no live data.
+	Description:
+		
+	History:
+		Create by Dennis
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+<vbox>
+	Empty grid:
+	<grid id="gd" mold="paging"/>
+             <hbox>
+	<button label="1. Click me to add rows only once" onClick="new Rows().setParent(gd)"/>
+	<button label="2. Click me to add row" onClick="addgd(1)"/>
+<zscript><![CDATA[
+	void addgd(int cnt) {
+		for (int j = 0; ++j <= cnt;) {
+			Row r = new Row();
+			String prefix = "Item " + (gd.getRows().getChildren().size() + 1);
+			new Label(prefix + "-L").setParent(r);
+			new Label(prefix + "-C").setParent(r);
+			new Label(prefix + "-R").setParent(r);
+			r.setParent(gd.getRows());
+		}
+	}
+	]]>
+</zscript>
+             </hbox>
+</vbox>
+</window>

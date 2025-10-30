@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F60-ZK-701-Grid.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 21 16:49:18 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vbox id="vb">
+	1. Please close the node of "Seafood".
+	<separator/>
+	2. Press the "Clone" button (it should not show any exception)
+	<separator/>
+	3. Please open the node of "Seafood" from the top grid, it should work as expected 
+	<button label="Clone">
+		<attribute name="onClick">{
+	Object l = grid.clone();
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+		}</attribute>
+	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(grid);
+	byte[] bs = boa.toByteArray();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject(); 
+	l.setId("dst" + ++cnt);
+	vb.insertBefore(l, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}</attribute>
+	</button>
+    <zscript><![CDATA[
+  int cnt = 0;
+Object[][] foods = new Object[][] {
+    new Object[] { "Vegetables", "Asparagus", "Vitamin K", 115, 43},
+    new Object[] { "Vegetables", "Beets", "Folate", 33, 74},
+    new Object[] { "Vegetables", "Bell peppers", "Vitamin C", 291, 24},
+    new Object[] { "Vegetables", "Cauliflower", "Vitamin C", 92, 28},
+    new Object[] { "Vegetables", "Eggplant", "Dietary Fiber", 10, 27},
+    new Object[] { "Vegetables", "Onions", "Chromium", 21, 60},
+    new Object[] { "Vegetables", "Potatoes", "Vitamin C", 26, 132},
+    new Object[] { "Vegetables", "Spinach", "Vitamin K", 1110, 41},
+    new Object[] { "Vegetables", "Tomatoes", "Vitamin C", 57, 37},
+    new Object[] { "Seafood", "Salmon", "Tryptophan", 103, 261},
+    new Object[] { "Seafood", "Shrimp", "Tryptophan", 103, 112},
+    new Object[] { "Seafood", "Scallops", "Tryptophan", 81, 151},
+    new Object[] { "Seafood", "Cod", "Tryptophan", 90, 119}
+};
+
+
+RowRenderer renderer = new org.zkoss.zktest.test2.group.FoodGroupRenderer();
+GroupsModel model = new GroupsModelArray(foods, new ArrayComparator(0, true));
+    ]]></zscript>
+    <grid id="grid" model="${model}" rowRenderer="${renderer}">
+        <columns menupopup="auto">
+            <column label="Category" sort="auto(0)"/>
+            <column label="Name" sort="auto(1)"/>
+            <column label="Top Nutrients" sort="auto(2)"/>
+            <column label="% of Daily" sort="auto(3)"/>
+            <column label="Calories" sort="auto(4)"/>
+        </columns>
+    </grid>
+	</vbox>
+</zk>

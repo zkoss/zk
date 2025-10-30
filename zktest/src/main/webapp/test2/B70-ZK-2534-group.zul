@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2534.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 30 16:54:47 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript><![CDATA[
+
+]]>
+</zscript>
+	<label multiline="true">
+		1. Please test each of the following listbox with select all functionality.
+		2. Test steps:
+			2.1. Check the select all checkmark on the header and navigate to each page that the selectAll checkmark on the header should be checked as well.(paging or list mold)
+			2.2. Uncheck anyone of the checked item, and navigate to each page that the selectAll checkmark on the header should not be checked as well. (paging or list mold)
+		3. Test select range for list mold only.
+			3.1. Please uncheck the select all checkmark on the header of the two list mold cases.
+			3.2. Please select the first item and scroll to the end of the list and then press the SHIFT key and select the last item.
+			3.3. The select all checkmark should be checked and please scroll up to the first item, the new rendered item should be checked as well.
+	</label>
+	<vlayout>
+		Listbox with ROD
+		<listbox viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2534Group')"
+                 model="@load(vm.groupsModel) @template(vm.getTemplate(each))" rows="5" checkmark="true" mold="paging" pageSize="5">
+			<custom-attributes org.zkoss.zul.listbox.rod="true" />
+            <listhead sizable="true">
+                <listheader label="Category" />
+                <listheader label="Name" />
+            </listhead>
+            <template name="row">
+                <listitem>
+                    <listcell>
+                        <label value="@load(each.category)"/>
+                    </listcell>
+                    <listcell>
+                        <label value="@load(each.name)"/>
+                    </listcell>
+                </listitem>
+            </template>
+            <template name="head">
+                <listgroup label="@load(each[0].category)"/>
+            </template>
+            <template name="foot">
+                <listgroupfoot sclass="foodFooter" >
+                    <listcell span="2" label="@load(each)"/>
+                </listgroupfoot>
+            </template>
+        </listbox>
+        Listbox with ROD
+        <listbox viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2534Group')" rows="5" checkmark="true"
+                 model="@load(vm.groupsModel) @template(vm.getTemplate(each))">
+            <custom-attributes org.zkoss.zul.listbox.rod="true" />
+            <listhead sizable="true">
+                <listheader label="Category" />
+                <listheader label="Name" />
+            </listhead>
+            <template name="row">
+                <listitem>
+                    <listcell>
+                        <label value="@load(each.category)"/>
+                    </listcell>
+                    <listcell>
+                        <label value="@load(each.name)"/>
+                    </listcell>
+                </listitem>
+            </template>
+            <template name="head">
+                <listgroup label="@load(each[0].category)"/>
+            </template>
+            <template name="foot">
+                <listgroupfoot sclass="foodFooter" >
+                    <listcell span="2" label="@load(each)"/>
+                </listgroupfoot>
+            </template>
+        </listbox>
+        Listbox with ROD with Group Seletable
+        <listbox viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2534Group')"
+                 model="@load(vm.groupsModel) @template(vm.getTemplate(each))" rows="5" checkmark="true" mold="paging" pageSize="5">
+            <custom-attributes org.zkoss.zul.listbox.rod="true" org.zkoss.zul.listbox.groupSelect="true"/>
+            <listhead sizable="true">
+                <listheader label="Category" />
+                <listheader label="Name" />
+            </listhead>
+            <template name="row">
+                <listitem>
+                    <listcell>
+                        <label value="@load(each.category)"/>
+                    </listcell>
+                    <listcell>
+                        <label value="@load(each.name)"/>
+                    </listcell>
+                </listitem>
+            </template>
+            <template name="head">
+                <listgroup label="@load(each[0].category)"/>
+            </template>
+            <template name="foot">
+                <listgroupfoot sclass="foodFooter" >
+                    <listcell span="2" label="@load(each)"/>
+                </listgroupfoot>
+            </template>
+        </listbox>
+        Listbox with ROD with Group Seletable
+        <listbox viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2534Group')" rows="5" checkmark="true"
+                 model="@load(vm.groupsModel) @template(vm.getTemplate(each))">
+            <custom-attributes org.zkoss.zul.listbox.rod="true" org.zkoss.zul.listbox.groupSelect="true"/>
+            <listhead sizable="true">
+                <listheader label="Category" />
+                <listheader label="Name" />
+            </listhead>
+            <template name="row">
+                <listitem>
+                    <listcell>
+                        <label value="@load(each.category)"/>
+                    </listcell>
+                    <listcell>
+                        <label value="@load(each.name)"/>
+                    </listcell>
+                </listitem>
+            </template>
+            <template name="head">
+                <listgroup label="@load(each[0].category)"/>
+            </template>
+            <template name="foot">
+                <listgroupfoot sclass="foodFooter" >
+                    <listcell span="2" label="@load(each)"/>
+                </listgroupfoot>
+            </template>
+        </listbox>
+	</vlayout>
+</zk>

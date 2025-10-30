@@ -1,0 +1,4 @@
+<zk>
+	Open the calendar, click next month arrow button, should see input value keep blank.
+	<datebox width="150px" constraint="no future" />
+</zk>

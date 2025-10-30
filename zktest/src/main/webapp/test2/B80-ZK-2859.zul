@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2859.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 27 16:04:55 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		shouldn't have any exception when you close the tree or after being brought back in the view from another page.
+	</label>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2859VM')">
+		<vlayout>
+			<tree model="@load(vm.pagTreeModel)" mold="paging" pageSize="2">
+				<template name="model" var="node">
+					<treeitem id="${node.data.id}" label="${node.data.label}"/>
+				</template>
+			</tree>
+		</vlayout>
+	</window>
+</zk>

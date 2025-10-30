@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4695.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 12 11:16:22 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Click the button.
+        2. You shouldn't see any JS error in browser dev console.
+    </label>
+    <tabbox id="tb">
+        <tabs>
+            <tab id="tab1" label="foo"/>
+            <tab label="foo2" selected="true"/>
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                bar
+            </tabpanel>
+            <tabpanel>
+                bar2
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+    <button label="Click me">
+        <attribute w:name="onClick"><![CDATA[
+        var tb = zk.$('$tb'),
+            tab1 = zk.$('$tab1');
+        tab1.detach();
+        tb.setSelectedTab(tab1);
+        ]]></attribute>
+    </button>
+</zk>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+WireFromVariableResolver.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed May 05 18:00:46 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		load the page, you should see var: Resolver1 and var2: Resolver2
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.WireFromVariableResolverVM')">
+		<vlayout>
+			var:
+			<label id="l1" value="@load(vm.var)" />
+			var2:
+			<label id="l2" value="@load(vm.var2)" />
+		</vlayout>
+	</div>
+</zk>

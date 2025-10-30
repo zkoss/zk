@@ -1,0 +1,42 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00682')">
+		this page should show up without any problem
+		<hbox>
+			<label id="l1" value="@bind(vm.stringValue)"/>
+			<label id="l2" value="@bind(vm.dateValue)"/>
+			<label id="l3" value="@bind(vm.decimalValue)"/>
+			<label id="l4" value="@bind(vm.doubleValue)"/>
+			<label id="l5" value="@bind(vm.intValue)"/>
+			<label id="l6" value="@bind(vm.longValue)"/>
+		</hbox>		
+		<hbox>
+		<vbox>
+			<hbox>textbox <textbox id="inp11" width="100px" constraint="no empty" value="@bind(vm.stringValue)"/> = empty</hbox>
+			<hbox>bandbox <bandbox id="inp12" width="100px" constraint="no empty" value="@bind(vm.stringValue)"/> = empty</hbox>
+			<hbox>combobx <combobox id="inp13" width="100px" constraint="no empty" value="@bind(vm.stringValue)"/> = empty</hbox>
+			<hbox>datebox <datebox id="inp14" width="100px" constraint="no empty" format="yyyyMMdd" value="@bind(vm.dateValue)" /> = empty</hbox>
+			<hbox>timebox <timebox id="inp15" width="100px" constraint="no empty" value="@bind(vm.dateValue)" /> = empty</hbox>
+			<hbox>decimalbox <decimalbox id="inp16" width="100px" constraint="no negative" value="@bind(vm.decimalValue)"/> = -1</hbox>
+			<hbox>doublebox <doublebox id="inp17" width="100px" constraint="no negative" value="@bind(vm.doubleValue)"/> = -2</hbox>
+			<hbox>doublespinner <doublespinner id="inp18" width="100px" constraint="no negative" value="@bind(vm.doubleValue)"/> = -2</hbox>
+			<hbox>intbox <intbox id="inp19" width="100px" constraint="no negative" value="@bind(vm.intValue)"/> = -3</hbox>
+			<hbox>spinner <spinner id="inp1a" width="100px" constraint="no negative" value="@bind(vm.intValue)"/> = -3</hbox>
+			<hbox>longbox <longbox id="inp1b" width="100px" constraint="no negative" value="@bind(vm.longValue)"/> = -4</hbox>
+		</vbox>
+		<vbox>
+			<hbox><textbox id="inp21" width="100px" constraint="no empty" value="@init(vm.stringValue)"/> = empty</hbox>
+			<hbox><bandbox id="inp22" width="100px" constraint="no empty" value="@init(vm.stringValue)"/> = empty</hbox>
+			<hbox><combobox id="inp23" width="100px" constraint="no empty" value="@init(vm.stringValue)"/> = empty</hbox>
+			<hbox><datebox id="inp24" width="100px" constraint="no empty" format="yyyyMMdd" value="@init(vm.dateValue)" /> = empty</hbox>
+			<hbox><timebox id="inp25" width="100px" constraint="no empty" value="@init(vm.dateValue)" /> = empty</hbox>
+			<hbox><decimalbox id="inp26" width="100px" constraint="no negative" value="@init(vm.decimalValue)"/> = -1</hbox>
+			<hbox><doublebox id="inp27" width="100px" constraint="no negative" value="@init(vm.doubleValue)"/> = -2</hbox>
+			<hbox><doublespinner id="inp28" width="100px" constraint="no negative" value="@init(vm.doubleValue)"/> = -2</hbox>
+			<hbox><intbox id="inp29" width="100px" constraint="no negative" value="@init(vm.intValue)"/> = -3</hbox>
+			<hbox><spinner id="inp2a" width="100px" constraint="no negative" value="@init(vm.intValue)"/> = -3</hbox>
+			<hbox><longbox id="inp2b" width="100px" constraint="no negative" value="@init(vm.longValue)"/> = -4</hbox>
+		</vbox>
+		</hbox>
+	</window>
+</zk>

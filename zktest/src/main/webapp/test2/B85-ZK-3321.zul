@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3321.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon May 21 2:27 PM:15 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<zscript>
+		<![CDATA[
+            public void syncErrorboxtx2() {
+                Clients.syncErrorbox(inp2);
+            }
+        ]]>
+	</zscript>
+	<vlayout>
+		<label multiline="true">
+			1. click button from 1~4, set the error message status
+			2. click button from 5~7, then clickbutton "set tx2 visible"
+			3. click button "datebox setErrorMessage", then clickbutton "set db1 visible"
+			4. you should see three errorbox besides the three appearing element.
+		</label>
+		Click the buttons, and you should not see any errorbox.
+		<textbox visible="false" id="inp1"/>
+		<textbox visible="false" id="inp2" constraint="/.[a-z]+/"/>
+		<datebox visible="false" id="inp3"/>
+		<combobox visible="false" id="inp4"/>
+		<doublebox visible="false" id="inp5"/>
+		<doublespinner visible="false" id="inp6"/>
+		<intbox visible="false" id="inp7"/>
+		<longbox visible="false" id="inp8"/>
+		<spinner visible="false" id="inp9"/>
+		<hlayout width="80%">
+			<div>
+				<button onClick='inp1.setErrorMessage("textbox on non visible")' label="1. textbox setErrorMessage"/>
+				<button onClick='inp2.setValue("123")' label="2. textbox setValue"/>
+				<button onClick='inp3.setErrorMessage("datebox on non visible")' label="3. datebox setErrorMessage"/>
+				<button onClick='inp4.setErrorMessage("combobox on non visible")' label="4. combobox setValue"/>
+				<button onClick='inp5.setErrorMessage("doublebox on non visible")' label="5. doublebox setErrorMessage"/>
+				<button onClick='inp6.setErrorMessage("doublespinner on non visible")' label="6. doublespinner setErrorMessage"/>
+				<button onClick='inp7.setErrorMessage("intbox on non visible")' label="7. intbox setErrorMessage"/>
+				<button onClick='inp8.setErrorMessage("longbox on non visible")' label="8. longbox setValue"/>
+				<button onClick='inp9.setErrorMessage("spinner on non visible")' label="9. spinner setErrorMessage"/>
+			</div>
+		</hlayout>
+		<hlayout width="80%">
+			<div>
+				<button onClick='inp9.setVisible(true)' label="10. set textbox visible"/>
+				<button onClick='inp8.setVisible(true)' label="11. set datebox visible"/>
+				<button onClick='inp7.setVisible(true)' label="12. set bandbox visible"/>
+				<button onClick='inp6.setVisible(true)' label="13. set bandpopup visible"/>
+				<button onClick='inp5.setVisible(true)' label="14. set combobox visible"/>
+				<button onClick='inp4.setVisible(true)' label="15. set doublebox visible"/>
+				<button onClick='inp3.setVisible(true)' label="16. set longbox visible"/>
+				<button onClick='inp2.setVisible(true)' label="17. set slider visible"/>
+				<button onClick='inp1.setVisible(true)' label="18. set spinner visible"/>
+			</div>
+		</hlayout>
+		<button onClick='syncEboxtx2()' label="19. sync ebox one"/>
+		<button onClick='Clients.syncErrorbox()' label="20. sync ebox all"/>
+	</vlayout>
+</zk>

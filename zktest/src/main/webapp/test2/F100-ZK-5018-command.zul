@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F100-ZK-5018-command.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Dec 05 14:43:51 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Simplified Syntax</label>
+	<separator />
+	<div viewModel="@('org.zkoss.zktest.test2.F100_ZK_5018SyntaxVM')" style="overflow:auto" width="500px"
+		 height="500px">
+		<div>
+			<label id="l1" value="@(vm.label)"/>
+			<separator />
+			<button onClick="@('doClick', 123, 'asssas,sa2', 1)" label="Click"/>
+			<button onClick="@command('doTest', 'aa', 12, 2)" label="Click"/>
+			<button onClick="@('log', txt='123', msg='logMessage')" label="log"/>
+		</div>
+		<separator/>
+		<label id="l2" value="@(vm.text)"/>
+		<separator/>
+		<textbox id="tb" value="@(vm.text)"/>
+		<separator/>
+		<div id="list">
+			<forEach items="@(vm.list)">
+				<div>
+					<label value="@(each)"/>
+				</div>
+			</forEach>
+		</div>
+	</div>
+</zk>

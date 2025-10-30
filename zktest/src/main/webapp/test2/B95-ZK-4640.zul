@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4640.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 14 15:51:00 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Click the "Replace drawer contents" button once.
+        2. Click the "Check the children count" to see the count.
+        3. Click the "Replace drawer contents" button multiple times (e.g. 10 times).
+        4. Click the "Check the children count". The count shouldn't be increased.
+    </label>
+    <button label="Replace drawer contents">
+        <attribute name="onClick"><![CDATA[
+        drawer.getChildren().clear();
+        Div div = new Div();
+        div.appendChild(new Drawer());
+        div.appendChild(new Drawer());
+        drawer.appendChild(div);
+        ]]>
+        </attribute>
+    </button>
+    <button label="Check the children count" w:onClick="zk.log(zk.$('$drawer').$n('cave').children.length)" />
+    <drawer id="drawer" />
+</zk>

@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Longbox, rounded]" width="480px">
+        <longbox mold="rounded" value="1111111111111" vflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Longbox]" width="480px">
+        <longbox value="1111111111111" vflex="1"/>
+    </window>
+</hbox>
+</zk>

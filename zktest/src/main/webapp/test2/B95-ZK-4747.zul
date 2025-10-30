@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4747.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 31 11:06:37 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Focus the first textbox.
+        2. Press Tab key 2 times.
+        3. The second textbox should gain a focus.
+    </label>
+    <textbox value="Focus me first"/>
+    <button upload="true" label="upload" tooltiptext="an upload button"/>
+    <textbox value="After 2 tabs, I should get the focus"/>
+</zk>

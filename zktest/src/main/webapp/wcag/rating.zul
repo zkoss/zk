@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Rating"?>
+<?root-attributes lang="en"?>
+<?link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"?>
+<!--
+rating.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Jun 03 16:54:15 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Rating</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-rating:focus {
+				border: 1px solid red;
+			}
+		</style>
+		<label multiline="true">
+			1.make sure the aria-valuemax/aria-valuenow/aria-orientation/aria-disabled/aria-readonly ... is correct and updated.
+			2.try to control the ratings by keyboard:
+				Tab: select/focus the rating.
+				Right Arrow: Increase the value of the rating by one step.
+				Up Arrow: Increase the value of the rating by one step.
+				Left Arrow: Decrease the value of the rating by one step.
+				Down Arrow: Decrease the value of the rating by one step.
+				Home: Set the rating to the first allowed value in its range.
+				End: Set the rating to the last allowed value in its range.
+		</label>
+		<rating id="rating" ca:aria-label="rating1" iconSclass="z-icon-bolt" rating="3" max="7" onChange="Clients.log(self.getRating())"/>
+		<button label="setMax10" onClick="rating.setMax(10)"/>
+		<separator/>
+		<rating id="or" ca:aria-label="orient rating" orient="vertical" rating="3" max="7"/>
+		<button label="Horizontal" onClick='or.setOrient("horizontal")'/>
+		<button label="Vertical" onClick='or.setOrient("vertical")'/>
+		<separator/>
+		<rating id="dr" ca:aria-label="disabled rating" disabled="true" rating="3" max="7"/>
+		<button label="Disabled" onClick="dr.setDisabled(!dr.isDisabled())"/>
+		<separator/>
+		<rating id="rr" ca:aria-label="readonly rating" readonly="true" rating="3" max="7"/>
+		<button label="Readonly" onClick="rr.setReadonly(!rr.isReadonly())"/>
+		<separator/>
+		glyphicons <rating ca:aria-label="glyphicons rating" iconSclass="glyphicon glyphicon-star" rating="3"/>
+	</n:main>
+</zk>

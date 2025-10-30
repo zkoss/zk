@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Linelayout"?>
+<?root-attributes lang="en"?>
+<!--
+linelayout.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jun 23 14:40:46 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Linelayout</n:h1>
+	</n:header>
+	<n:main>
+		<style>
+			.z-linelayout:focus-within {
+				border: 1px red solid;
+			}
+			.z-lineitem > *:focus {
+				border: 1px red solid;
+			}
+		</style>
+		<button label="first component"/>
+		<linelayout id="target" ca:aria-label="Linelayout" height="800px">
+			<lineitem ca:aria-label="lineitem-1" pointStyle="background-color:#fc885f;">
+				<button visible="false" label="item-1 content"></button>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem0" pointStyle="background-color:#fc885f;">
+				<button visible="false" label="item0 content"></button>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem1" pointIconSclass="z-icon-times">
+				item1
+			</lineitem>
+			<lineitem ca:aria-label="lineitem2" pointStyle="background-color:#fc885f;">
+				<button visible="false" label="item2 content"></button>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem3" opposite="true" vflex="3">
+				<window title="item3" width="300px" vflex="1" border="normal">
+					<button label="button"></button>
+					<textbox ca:aria-label="textbox" value="item3"></textbox>
+				</window>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem4" pointStyle="background-color:#fc885f;" pointImageSrc="/test2/img/sun.jpg">
+				<button label="button"></button>
+				<textbox ca:aria-label="textbox" value="item4"></textbox>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem5" opposite="true">
+				<button label="button"></button>
+				<textbox ca:aria-label="textbox" value="item5"></textbox>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem6" opposite="true">
+				item6
+			</lineitem>
+		</linelayout>
+		<button label="middle component"/>
+		<linelayout ca:aria-label="Linelayout" height="800px">
+			<lineitem ca:aria-label="lineitem1" pointIconSclass="z-icon-times">
+				item1
+			</lineitem>
+			<lineitem ca:aria-label="lineitem2" pointStyle="background-color:#fc885f;">
+				<button visible="false" label="item2 content"></button>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem3" opposite="true" vflex="3">
+				<window title="item3" width="300px" vflex="1" border="normal" visible="false">
+					<button label="button"></button>
+					<textbox ca:aria-label="textbox" value="item3"></textbox>
+				</window>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem4" pointStyle="background-color:#fc885f;" pointImageSrc="/test2/img/sun.jpg">
+				<button label="button"></button>
+				<textbox ca:aria-label="textbox" value="item4"></textbox>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem5" opposite="true">
+				<button label="button"></button>
+				<textbox ca:aria-label="textbox" value="item5"></textbox>
+			</lineitem>
+			<lineitem ca:aria-label="lineitem6">
+				item6
+			</lineitem>
+		</linelayout>
+		<button label="last component"/>
+	</n:main>
+</zk>

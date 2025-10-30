@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2742.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 3 10:09:00 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.ListModel;
+		import org.zkoss.zul.ListModelList;
+		import java.util.Arrays;
+		import java.util.TimeZone;
+		ListModel timeZones = new ListModelList(Arrays.asList(TimeZone.getAvailableIDs()));
+	]]></zscript>
+	<window border="normal" mode="modal" height="20%" title="Window with dimensions setted in %" contentStyle="overflow-y:scroll;"
+			closable="true">
+		<vlayout>
+			<space />
+			<space />
+			<space />
+            <space />
+            <label value="(IE) Click combobox button, you should see the dropdown list appear at correct position"/>
+			<combobox model="${timeZones}" />
+		</vlayout>
+	</window>
+</zk>

@@ -1,0 +1,6 @@
+<?component name="foo" templateURI="../include/apply.zul"?> 
+<zk>
+	1. First
+	<foo/>
+	3. Last
+</zk>

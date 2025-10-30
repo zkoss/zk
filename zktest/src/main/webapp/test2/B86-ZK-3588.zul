@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3588.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Aug 23 15:08:58 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click add
+		2. The width of frozen should be the same as first column (both in Listbox and Grid)
+		3. Scroll to the right most
+		4. Click add
+		5. You should see new content are displayed properly (header contains 5 and cell contains 5)
+	</label>
+	<window apply="org.zkoss.zktest.test2.B86_ZK_3588Composer">
+		<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+		<listbox width="600px">
+			<listhead id="listhead">
+				<listheader label="1"/>
+				<listheader label="2"/>
+				<listheader label="3"/>
+			</listhead>
+			<frozen columns="1"/>
+			<listitem id="listitem">
+				<listcell label="1"/>
+				<listcell label="2"/>
+				<listcell label="3"/>
+			</listitem>
+		</listbox>
+		<grid width="600px">
+			<columns id="columns">
+				<column label="1"/>
+				<column label="2"/>
+				<column label="3"/>
+			</columns>
+			<frozen columns="1"/>
+			<rows>
+				<row id="row">
+					<label value="1"/>
+					<label value="2"/>
+					<label value="3"/>
+				</row>
+			</rows>
+		</grid>
+		<button id="add" label="add"/>
+	</window>
+</zk>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4645.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Oct 28 11:10:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+        StepModel model = new DefaultStepModel();
+        model.add("AAA");
+        model.add("BBB");
+        model.add("CCC");
+        model.setActiveStep("BBB");
+    ]]></zscript>
+	<button id="render" label="Click to Render Stepbar and no error"/>
+	<button id="show" label="Show First Step Complete" onClick='Clients.log(st.getChildren().get(0).isComplete() + "")'/>
+	<div fulfill="render.onClick">
+		<stepbar id="st" model="${model}"/>
+	</div>
+</zk>

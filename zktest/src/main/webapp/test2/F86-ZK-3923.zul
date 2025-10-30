@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3923.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Apr 26 12:11 PM:17 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <window viewModel="@id('vm')@init('org.zkoss.zktest.test2.F86_ZK_3923VM')">
+        <label multiline="true">
+            1. use mobile, open "http://localhost:8080/zktest/img/qrcode.png",
+               let the camera scan the qr code,
+               you should see "qr http://www.zkoss.org" at client log.
+            2. use mobile, open "http://localhost:8080/zktest/img/code128.png",
+               let the camera scan the barcode code,
+               you should see "code128 http://www.zkoss.org" at client log.
+
+        </label>
+        <div height="800px">
+            <barcodescanner type="@load(vm.type)" height="@load(vm.height)" width="600px" continuous="@load(vm.continuous)"
+                        interval="@load(vm.interval)" enable="@load(vm.enable)"
+                        onDetect='Clients.log(event.getType() + " " + event.getResult())'/>
+        </div>
+
+        <hlayout>
+            type:
+            <label value="@load(vm.type)"/>
+            continue scan:
+            <label value="@load(vm.continuous)"/>
+            interval:
+            <label value="@load(vm.interval)"/>
+            enable:
+            <label value="@load(vm.enable)"/>
+        </hlayout>
+        <hlayout>
+            <button label="change type" onClick="@command('changeType')"/>
+            <button label="change cont" onClick="@command('changeContinuous')"/>
+            <button label="change interval" onClick="@command('changeInterval')"/>
+            <button label="change enable" onClick="@command('changeEnable')"/>
+            <button label="change high" onClick="@command('changeHeight')"/>
+        </hlayout>
+    </window>
+
+</zk>

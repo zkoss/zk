@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel='stylesheet' href="~./css/common.css"?>
+<!--
+B96-ZK-4986.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 21 10:22:32 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+		1. load this page to see the request path of "common.css" and "*.wpd" (open developer tool, make sure don't "disable cache")
+		2. specify library-property (different value)
+		<library-property>
+			<name>org.zkoss.zk.ui.versionInfo.enabled</name>
+			<value>2021</value>
+    	</library-property>
+    	3. restart server and see the paths above changed
+	]]></label>
+	<datebox />
+</zk>

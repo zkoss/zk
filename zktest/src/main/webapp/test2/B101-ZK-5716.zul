@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5716.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/10, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Running this case must enable CSP filter into web.xml - https://github.com/zkoss/zk/blob/master/zktest/src/main/webapp/test2/B101-ZK-5716-web.xml
+		2. Click to close both zk error and zk log.
+		3. NO JS error should be shown on console.
+	</label>
+	<script>zk.log("close me without any JS error on console")</script>
+	<script>zk.error("close me without any JS error on console")</script>
+</zk>

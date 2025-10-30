@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1885.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug 12, 2013 12:05:07 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="Test Scrolling" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. please scroll to the end of the list.
+		2. please resize the browser window.
+		3. the scrollbar should not be reset when you resized.
+	</label>
+<window title="Test Scrolling with Tooltip" border="none" width="300px" height="200px">
+
+	<popup id="help" onOpen=''>
+	    <html id="html">TestTooltip</html>
+	</popup>
+		
+	<div style="overflow:auto;" vflex="1">
+			<vlayout>
+				Begin
+				<label value="1 hover me" tooltip="help" />
+				<label value="2 hover me" tooltip="help" />
+				<label value="3 hover me" tooltip="help" />
+				<label value="4 hover me" tooltip="help" />
+				<label value="5 hover me" tooltip="help" />
+				<label value="6 hover me" tooltip="help" />
+				<label value="7 hover me" tooltip="help" />
+				<label value="8 hover me" tooltip="help" />
+				<label value="9 hover me" tooltip="help" />
+				<label value="10 hover me" tooltip="help" />
+				<label value="11 hover me" tooltip="help" />
+				<label value="12 hover me" tooltip="help" />
+				<label value="13 hover me" tooltip="help" />
+				<label value="14 hover me" tooltip="help" />
+				<label value="15 hover me" tooltip="help" />
+				<label value="16 hover me" tooltip="help" />
+				<label value="17 hover me" tooltip="help" />
+				<label value="18 hover me" tooltip="help" />
+				<label value="19 hover me" tooltip="help" />
+				<label value="20 hover me" tooltip="help" />
+				End
+			</vlayout>
+	</div>
+</window>
+</zk>

@@ -1,0 +1,36 @@
+<zk>
+	1. Left listbox can scroll only on "ZK Spring" item. <separator />
+	2. Drag-and-Drop other items inside both listbox, both listbox should not be able to scroll.
+	<hlayout>
+		<listbox id="left" height="250px" width="200px" onDrop="move(event.dragged)" droppable="true" oddRowSclass="non-odd">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)" label="ZK Forge" />
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)" label="ZK Mobile" />
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)" label="ZK GWT" />
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)" label="ZK JSF" />
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)" label="ZK JSP" />
+			<listitem label="ZK Spring" />
+		</listbox>
+		<separator orient="vertical" spacing="8px" />
+		<listbox id="right" height="250px" width="200px" onDrop="move(event.dragged)" droppable="true" oddRowSclass="non-odd">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)" label="ZK" />
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+				<listcell>
+					<hlayout>
+					 	<label value="ZK Studio" />
+					 	<label value="ZK Studio" />
+					 	<label value="ZK Studio" />
+					</hlayout>
+				</listcell>
+			</listitem>
+		</listbox>
+	</hlayout>
+	<zscript><![CDATA[
+		void move(Component dragged) {
+			if (self instanceof Listitem) {
+				self.parent.insertBefore(dragged, self);
+			} else {
+				self.appendChild(dragged);
+			}
+		}
+	]]></zscript>
+</zk>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3691.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Apr 03 10:20:20 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Use the select all checkmark
+		2. Only listitems should be selected
+	</label>
+	<listbox checkmark="true" multiple="true">
+		<attribute name="onSelect"><![CDATA[
+   		for (Iterator iterator = self.getSelectedItems().iterator(); iterator.hasNext();)
+   			Clients.log(iterator.next().getClass().getName());
+    ]]></attribute>
+		<listhead sizable="true">
+			<listheader label="Brand"/>
+			<listheader label="Processor Type" width="150px"/>
+			<listheader label="Memory (RAM)" width="120px"/>
+			<listheader label="Price" width="100px"/>
+			<listheader label="Hard Drive Capacity" width="150px"/>
+		</listhead>
+		<listgroup label="Dell"/>
+		<listitem>
+			<listcell style="padding-left:15px" label="Dell E4500 2.2GHz"/>
+			<listcell label="Intel Core 2 Duo"/>
+			<listcell label="2GB RAM"/>
+			<listcell label="$261.00" style="color:green"/>
+			<listcell label="500GB"/>
+		</listitem>
+		<listitem>
+			<listcell style="padding-left:15px" label="XP-Pro Slim Dell-Inspiron-530-s"/>
+			<listcell label="Intel Core 2 Duo"/>
+			<listcell label="2GB RAM"/>
+			<listcell label="$498.93" style="color:green"/>
+			<listcell label="500GB"/>
+		</listitem>
+		<listitem>
+			<listcell style="padding-left:15px" label="Dell P4 3.2 GHz"/>
+			<listcell label="Intel Pentium 4"/>
+			<listcell label="4GB RAM"/>
+			<listcell label="$377.99" style="color:green"/>
+			<listcell label="500GB"/>
+		</listitem>
+		<listgroup label="Compaq"/>
+		<listitem>
+			<listcell style="padding-left:15px" label="Compaq SR5113WM"/>
+			<listcell label="Intel Core Duo"/>
+			<listcell label="1GB RAM"/>
+			<listcell label="$279.00" style="color:green"/>
+			<listcell label="160GB"/>
+		</listitem>
+		<listitem>
+			<listcell style="padding-left:15px" label="Compaq HP XW4200"/>
+			<listcell label="Intel Pentium 4"/>
+			<listcell label="4GB RAM"/>
+			<listcell label="$980" style="color:green"/>
+			<listcell label="500GB"/>
+		</listitem>
+		<listgroupfoot>
+			<listcell span="5" label="This a summary about Compaq Desktop PCs"/>
+		</listgroupfoot>
+	</listbox>
+</zk>

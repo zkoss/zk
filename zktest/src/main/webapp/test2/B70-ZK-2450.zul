@@ -1,0 +1,37 @@
+<zk>
+
+	<zscript>
+	<![CDATA[
+	ListModelList bigList = new ListModelList();
+	for (int i = 0; i < 5000; i++) {
+		bigList.add("item-" + i);
+	}
+]]>
+</zscript>
+	<custom-attributes org.zkoss.zul.listbox.rod="true" />
+	<label style="color: red">ATTENTION: This case has to be tested under CE version</label>
+	<label multiline="true">
+		1. run selectedIndex.zul with ZK 7.0.3 CE
+		2. select an item in the listbox
+		3. press page down
+		4. press page up
+	</label>
+	<listbox id="listbox2" model="${bigList}" width="400px" mold="paging" onSelect="printIndex(listbox2)">
+		<listhead>
+			<listheader label="2) EE ROD On" />
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell label="${each}"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+
+	<label id="indexLabel"/>
+	<zscript><![CDATA[
+	public void printIndex(Listbox listbox) {
+		indexLabel.setValue("Selected index "+listbox.getSelectedIndex()+"");
+	}
+]]></zscript>
+
+</zk>

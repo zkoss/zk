@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4581.zul
+        Purpose:
+
+        Description:
+
+        History:
+               Thu May 14 14:33:20 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		<button label="click me, and you should see 'gogo' in zk log." onClick='Clients.log("gogo")' />
+	</div>
+</zk>

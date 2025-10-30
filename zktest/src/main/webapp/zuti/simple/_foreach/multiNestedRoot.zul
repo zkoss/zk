@@ -1,0 +1,34 @@
+<zk>
+	<zscript>
+	int begin = 0;
+	int end = 3;
+	items = Arrays.asList(new String[] { "one", "two", "three" });
+	</zscript>
+	<div style="border:1px solid red;" id="host">
+		**Start**
+		<forEach items="${items}">
+			<div style="color:blue">
+			**Nested Start**
+			<forEach begin="${begin}" end="1" var="nestedEach">
+				<div style="color:blue">
+					${each} - ${nestedEach} Template
+				</div>
+			</forEach>
+			**Nested Middle**
+			<forEach begin="2" end="${end}" var="nestedEach2">
+				<div style="color:blue">
+					${each} - ${nestedEach2} Template
+				</div>
+			</forEach>
+			**Nested End**
+			</div>
+		</forEach>
+		**Middle**
+		<forEach begin="${begin}" end="${end}" step="2">
+			<div style="color:blue">${each} Template</div>
+		</forEach>
+		**End**
+	</div>
+
+	<debugger rootId="host" />
+</zk>

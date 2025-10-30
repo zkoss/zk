@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-998.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Mar 30, 2012  6:39:26 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please upload a MP3 file, and it won't show any "Unable to read" message.
+<button label="Upload MP3" upload="true">
+<attribute name="onUpload"><![CDATA[
+org.zkoss.util.media.Media media = event.getMedia();
+Messagebox.show(media.getContentType());
+]]></attribute>
+</button>
+</zk>

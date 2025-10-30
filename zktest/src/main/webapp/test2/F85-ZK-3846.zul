@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3846.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jun 07 12:47:08 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Type 2019/01/01 in first datebox and blur
+		2. The date of error message should be 2018/01/01 ~ 2018/12/31
+		3. Type 01.01.2019 in second datebox and blur
+		4. The date of error message should be 01.01.2018 ~ 31.12.2018
+		5. Type 20190101 in third datebox and blur
+		6. The date of error message should be 20180101 ~ 20181231
+		7. Click button and redo step 1 to 6, the separators between two dates should be ... e.g. 2018/01/01 ... 2018/12/31
+	</label>
+	<datebox format="yyyy/MM/dd" constraint="between 20180101 and 20181231"/>
+	<separator/>
+	<datebox format="dd.MM.yyyy" constraint="between 20180101 and 20181231"/>
+	<separator/>
+	<datebox format="yyyyMMdd" constraint="between 20180101 and 20181231"/>
+	<separator/>
+	<button label="Clients.reloadMessages(Locale.GERMAN)" onClick='Clients.reloadMessages(Locale.GERMAN)'/>
+</zk>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3309174.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		May 30, 2011 5:13:02 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click "remove 20" button.</li>
+			<li>The first of item shall be "item 20"</li>
+		</ol>
+	]]></html>
+	<window>
+		<custom-attributes org.zkoss.zul.grid.rod="false" />
+		<zscript><![CDATA[
+			import java.util.*;
+			import org.zkoss.zul.*;
+			import org.zkoss.zk.ui.event.*;
+			import org.zkoss.zk.ui.event.EventListener;
+			List list = new ArrayList();
+			for (int i = 0; i < 200; i++)
+				list.add("item " + i);
+			ListModelList model = new ListModelList(list);
+		]]></zscript>
+		<button label="remove 20">
+			<attribute name="onClick"><![CDATA[
+				for (int i = 0; i < 20; i++)
+					model.remove(0);
+			]]></attribute>
+		</button>
+		<grid model="${model}" width="100px" height="250px" />
+	</window>
+</zk>

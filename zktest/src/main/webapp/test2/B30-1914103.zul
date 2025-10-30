@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1914103.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 17 17:55:21 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:h="http://www.w3.org/1999/xhtml"
+xmlns:n="http://www.zkoss.org/2005/zk/native">
+<h:p>In IE, a grid in borderlayout,and there are some component in grid header.
+If you drag the size of borderlayout, or the column size of grid in center
+panel, the column will resize to a wrong width .</h:p>
+<borderlayout>
+<west size="33%" splittable="true">
+<listbox width="400px" sizedByContent="true">
+<auxhead>
+<auxheader colspan="2">
+<label id="span">ss</label>
+<textbox onChange='span.value = self.value' />
+ssss
+</auxheader>
+</auxhead>
+<listhead sizable="true">
+<listheader sort="auto">
+<toolbarbutton label="toobarbutton" onClick='alert(self.label)'/>
+<menubar>
+<menu label="File">
+<menupopup>
+<menuitem label="New"
+onClick="alert(self.label)" />
+<menuitem label="Open"
+onClick="alert(self.label)" />
+<menuitem label="Save"
+onClick="alert(self.label)" />
+<menuseparator />
+<menuitem label="Exit"
+onClick="alert(self.label)" />
+</menupopup>
+</menu>
+<menu label="Help">
+<menupopup>
+<menuitem label="Index"
+onClick="alert(self.label)" />
+<menu label="About">
+<menupopup>
+<menuitem label="About ZK"
+onClick="alert(self.label)" />
+<menuitem label="About Potix"
+onClick="alert(self.label)" />
+</menupopup>
+</menu>
+</menupopup>
+</menu>
+</menubar>
+<button label="lable" onClick='alert("button")' />
+<datebox />
+
+</listheader>
+<listheader>
+<listbox rows="1" mold="select">
+<listitem label="option1" />
+<listitem label="option2" />
+<listitem label="option3" />
+</listbox>
+<datebox />
+</listheader>
+</listhead>
+<listitem>
+<listcell label="Mary" />
+<listcell label="FEMALE" />
+</listitem>
+<listitem>
+<listcell label="John" />
+<listcell label="MALE" />
+</listitem>
+<listitem>
+<listcell label="Jane" />
+<listcell label="FEMALE" />
+</listitem>
+<listitem>
+<listcell label="Henry" />
+<listcell label="MALE" />
+</listitem>
+</listbox>
+</west>
+<center>
+<grid sizedByContent="true">
+<columns sizable="true">
+<column width="250px" label="Type">
+<menubar>
+<menu label="File">
+<menupopup>
+<menuitem label="New"
+onClick="alert(self.label)" />
+<menuitem label="Open"
+onClick="alert(self.label)" />
+<menuitem label="Save"
+onClick="alert(self.label)" />
+<menuseparator />
+<menuitem label="Exit"
+onClick="alert(self.label)" />
+</menupopup>
+</menu>
+<menu label="Help">
+<menupopup>
+<menuitem label="Index"
+onClick="alert(self.label)" />
+<menu label="About">
+<menupopup>
+<menuitem label="About ZK"
+onClick="alert(self.label)" />
+<menuitem label="About Potix"
+onClick="alert(self.label)" />
+</menupopup>
+</menu>
+</menupopup>
+</menu>
+</menubar>
+<button label="lable" onClick='alert("button")' />
+<datebox />
+</column>
+<column label="Content">
+<listbox rows="1" mold="select">
+<listitem label="option1" />
+<listitem label="option2" />
+<listitem label="option3" />
+</listbox>
+</column>
+</columns>
+<rows>
+<row>
+<label value="File:" />
+<textbox width="99%" />
+</row>
+<row>
+<label value="Type:" />
+<hbox>
+<listbox rows="1" mold="select">
+<listitem label="Java Files,(*.java)" />
+<listitem label="All Files,(*.*)" />
+</listbox>
+<button label="Browse..." />
+</hbox>
+</row>
+<row>
+<label value="Options:" />
+<textbox rows="3" width="99%" />
+</row>
+</rows>
+</grid>
+
+</center>
+<east size="30%" splittable="true">
+<tree id="tree" width="90%" rows="5" sizedByContent="true">
+<treecols sizable="true">
+<treecol label="Name">
+<menubar>
+<menu label="File">
+<menupopup>
+<menuitem label="New"
+onClick="alert(self.label)" />
+<menuitem label="Open"
+onClick="alert(self.label)" />
+<menuitem label="Save"
+onClick="alert(self.label)" />
+<menuseparator />
+<menuitem label="Exit"
+onClick="alert(self.label)" />
+</menupopup>
+</menu>
+<menu label="Help">
+<menupopup>
+<menuitem label="Index"
+onClick="alert(self.label)" />
+<menu label="About">
+<menupopup>
+<menuitem label="About ZK"
+onClick="alert(self.label)" />
+<menuitem label="About Potix"
+onClick="alert(self.label)" />
+</menupopup>
+</menu>
+</menupopup>
+</menu>
+</menubar>
+<button label="lable" onClick='alert("button")' />
+<datebox />
+</treecol>
+<treecol width="100px" label="Description" />
+</treecols>
+<treechildren>
+<treeitem>
+<treerow>
+<treecell label="Item 1" />
+<treecell label="Item 1 description" />
+</treerow>
+</treeitem>
+<treeitem>
+<treerow>
+<treecell label="Item 2" />
+<treecell label="Item 2 description" />
+</treerow>
+<treechildren>
+<treeitem>
+<treerow>
+<treecell label="Item 2.1" />
+</treerow>
+<treechildren>
+<treeitem>
+<treerow>
+<treecell label="Item 2.1.1" />
+</treerow>
+</treeitem>
+<treeitem>
+<treerow>
+<treecell label="Item 2.1.2" />
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+<treeitem>
+<treerow>
+<treecell label="Item 2.2" />
+<treecell
+label="Item 2.2 is something who cares" />
+</treerow>
+</treeitem>
+</treechildren>
+</treeitem>
+<treeitem label="Item 3" />
+</treechildren>
+</tree>
+</east>
+</borderlayout>
+</zk>

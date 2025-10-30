@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3700.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jul 7 12:36:49 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script id="script1" src="./js/zk-3701-1.js" />
+    <script id="script2" src="./js/zk-3701-d1.js" defer="true" />
+    <label multiline="true">
+        1. You should see "zk-3701-1"\n"zk-3701-d1" in zk log.
+        2. Click button "set script1", and you should see "zk-3701-2" in zk log.
+        3. Click button "set script2", and you should see "zk-3701-d2" in zk log.
+    </label>
+	<button label="set script1" onClick="set1()"/>
+    <button label="set script2" onClick="set2()"/>
+	<zscript><![CDATA[
+        public void set1(){
+            script1.setSrc("./js/zk-3701-2.js");
+        }
+        public void set2(){
+            script2.setSrc("./js/zk-3701-d2.js");
+        }
+	]]></zscript>
+</zk>

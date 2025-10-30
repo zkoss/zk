@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4723.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Nov 17 16:59:55 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4723_1VM')">
+	</div>
+	<window border="normal" title="hello" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4723VM')">
+		<grid model="@init(vm.keys)">
+			<columns>
+				<column>
+					<label value="key" />
+				</column>
+				<column>
+					<label value="value" />
+				</column>
+				<column>
+					<label value="Click the two buttons, you should not see [Method 'loadValue' called with: null]" />
+				</column>
+			</columns>
+			<template name="model">
+				<row>
+					<cell>
+						<label value="@init(each)" />
+					</cell>
+					<cell>
+						<label value="@init(vm.loadValue(each))" />
+					</cell>
+					<cell>
+						<button label="Click me!"
+							onClick="@global-command('loadValue', parameter=vm.loadValue(each))" />
+					</cell>
+				</row>
+			</template>
+		</grid>
+		<grid model="@init(vm.debug)">
+			<columns>
+				<column>
+					<label value="debug" />
+				</column>
+			</columns>
+			<template name="model">
+				<row>
+					<cell>
+						<label value="@init(each)" />
+					</cell>
+				</row>
+			</template>
+		</grid>
+	</window>
+</zk>

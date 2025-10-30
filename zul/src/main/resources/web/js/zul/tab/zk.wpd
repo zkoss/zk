@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		Widget Package Descriptor
+	Description:
+		
+	History:
+		Fri Jan 23 10:51:58     2008, Created by Flyworld
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.tab" language="xul/html" depends="zul.wgt">
+	<script src="index.js" sourceMap="true"/>
+	<widget name="Tabbox" moldOnly="true"/>
+	<widget name="Tabs" moldOnly="true"/>
+	<widget name="Tab" moldOnly="true"/>
+	<widget name="Tabpanels" moldOnly="true"/>
+	<widget name="Tabpanel" moldOnly="true"/>
+</package>

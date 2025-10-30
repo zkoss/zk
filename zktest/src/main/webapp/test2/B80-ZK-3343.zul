@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3343.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Dec 24 22:14:37 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click the button, should open a popup which contains a chosenbox
+        2. focus inside the chosen box to open the chosen-popup
+        3. click anywhere else to close the popup
+        4. click the button again
+        5. should see chosenbox remain inside the popup
+
+    </label>
+    <button label="Open Popup" popup="pop"/>
+    <popup id="pop">
+        <chosenbox width="200px" />
+    </popup>
+</zk>

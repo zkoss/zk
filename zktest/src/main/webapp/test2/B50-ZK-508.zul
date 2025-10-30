@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-508.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 18 16:33:10 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+You should see the two cells "_____" are aligned the same height.
+	<tree>
+		<treecols sizable="true">
+			<treecol label="A" width="80px"/>
+			<treecol label="B"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="_____"/>
+					<treecell label="_____"/>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
+
+

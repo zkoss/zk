@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3035897.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 28 19:54:57 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+<html><![CDATA[<ol>
+<li>type or paste '100%', it shall become to '1'</li>
+</ol>
+	]]></html>
+<longbox/>
+</window>

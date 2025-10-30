@@ -1,0 +1,21 @@
+<div id="container">
+<label><![CDATA[
+You shall see two inputs below and the value are both <foo>1</foo>
+]]></label>
+
+<zscript><![CDATA[
+import org.zkoss.zhtml.*;
+
+Form form = new Form();
+form.setDynamicProperty("action", "https://www.sandbox.paypal.com/cgi-bin/webscr");
+form.setDynamicProperty("method", "post");
+form.setDynamicProperty("target", "_self");
+form.setParent(container);
+
+org.zkoss.zhtml.Input input = new Input();
+input.setParent(form);
+input.setDynamicProperty("name", "custom1");
+input.setValue("<foo>1</foo>");
+]]></zscript>
+<n:input name="some" value="&lt;foo>1&lt;/foo>" xmlns:n="native"/>
+</div>

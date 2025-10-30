@@ -1,0 +1,35 @@
+<zk>
+	<label>Click each button and see corresponding zk log</label>
+	<div id="d1" viewModel="@('org.zkoss.zktest.bind.databinding.commandbinding.CommandVM')">
+		<toolbar>
+			<button label="New" onClick="@command('newOrder')"/>
+			<button label="Save" onClick="@command('save')"/>
+			<button label="Default" onClick="@command('aaa')"/>
+			<button label="Do Nothing" onClick="@command(empty vm.selection ? 'cmd' : '')" />
+			<button label="Do Nothing" onClick="@command(empty vm.selection ? 'cmd' : null)" />
+		</toolbar>
+		<menubar>
+			<menuitem label="New" onClick="@command('newOrder')"/>
+			<menuitem label="Save" onClick="@command('save')"/>
+			<menuitem label="Default" onClick="@command('aaa')"/>
+			<menuitem label="Do Nothing" onClick="@command(empty vm.selection ? 'cmd' : '')" />
+			<menuitem label="Do Nothing" onClick="@command(empty vm.selection ? 'cmd' : null)" />
+		</menubar>
+	</div>
+	<div id="d2" viewModel="@('org.zkoss.zktest.bind.databinding.commandbinding.CommandVM')">
+		<toolbar>
+			<button label="New" onClick="@('newOrder')"/>
+			<button label="Save" onClick="@('save')"/>
+			<button label="Default" onClick="@('aaa')"/>
+			<button label="Do Nothing" onClick="@(empty vm.selection ? 'cmd' : '')" />
+			<button label="Do Nothing" onClick="@(empty vm.selection ? 'cmd' : null)" />
+		</toolbar>
+		<menubar>
+			<menuitem label="New" onClick="@('newOrder')"/>
+			<menuitem label="Save" onClick="@('save')"/>
+			<menuitem label="Default" onClick="@('aaa')"/>
+			<menuitem label="Do Nothing" onClick="@(empty vm.selection ? 'cmd' : '')" />
+			<menuitem label="Do Nothing" onClick="@(empty vm.selection ? 'cmd' : null)" />
+		</menubar>
+	</div>
+</zk>

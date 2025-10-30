@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3689.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 04 15:56:37 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        String enabled = org.zkoss.lang.Library.getProperty("org.zkoss.zk.ui.versionInfo.enabled", "true");
+        String build = WebApps.getCurrent().getBuild();
+    </zscript>
+    <label multiline="true">
+        *org.zkoss.zk.ui.versionInfo.enabled = ${enabled}
+        1. zk.version should be empty.
+        2. zk.build should be obfuscated.
+    </label>
+    <vlayout>
+        <cell>zk.version = <textbox id="zkver"/> (empty)</cell>
+        <cell>zk.build = <textbox id="zkbuild"/> (obfuscated result. shouldn't be <label id="build" value="${build}"/>)</cell>
+    </vlayout>
+
+    <label multiline="true">
+        This is filled with hex code that need to be used as cache.
+    </label>
+    ckez version = <textbox id="ckezver"/>
+    <script><![CDATA[
+    zk.afterMount(function() {
+        zk.$('$zkver').setValue(zk.version);
+        zk.$('$zkbuild').setValue(zk.build);
+        zk.$('$ckezver').setValue(zk.getVersion('ckez'));
+    });
+    ]]>
+    </script>
+</zk>

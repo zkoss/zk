@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3572.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 09 11:27:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<zscript><![CDATA[
+		// build large model
+		ListModelList myModel = new ListModelList(Locale.getAvailableLocales());
+		myModel.addAll(myModel);
+		myModel.addAll(myModel);
+	]]></zscript>
+	<borderlayout height="600px">
+        <west sclass="navbar-system-scrollbar">
+			<window title="listbox demo" border="normal" width="250px">
+			    <listbox model="${myModel}" height="500px" id="box" preloadSize="20">
+			    	<template name="model">
+			    		<listitem label='${c:cat3(forEachStatus.index , " " , each)}'>
+			    		</listitem>
+			    	</template>
+			    </listbox>
+			    <zscript><![CDATA[
+					//Using Live data (CE render on demand)
+			    	box.setAttribute("org.zkoss.zul.listbox.rod",false);
+					//set the initial number of rows to be rendered
+			    	box.setAttribute("org.zkoss.zul.listbox.initRodSize",60);
+					//set the number of row to be rendered in each loading cycle
+			    	box.setAttribute("org.zkoss.zul.listbox.preloadSize",70);
+			    ]]></zscript>
+			</window>
+        </west>
+        <center>
+            <label multiline="true">
+            1. Open browser console, and switch to network tab
+            2. Scroll the sidebar of listbox over item 50
+            3. Check how many additional items listbox loaded (the information would be in the brower console / network / zkau request)
+            Expect: 70 items (based on library property "org.zkoss.zul.listbox.preloadSize")
+            Error: 20 items
+            </label>
+        </center>
+    </borderlayout>
+</zk>

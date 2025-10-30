@@ -1,0 +1,7 @@
+#!/bin/bash
+nodeChecker=`node -v`
+if [ -z "$nodeChecker" ] ; then
+	echo please install node.js
+	exit 1
+fi
+npm install

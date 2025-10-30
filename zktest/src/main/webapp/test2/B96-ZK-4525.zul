@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4525.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 06 15:27:48 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Right click on textbox to open context menu.
+        2. Move cursor left a bit and wait for a tooltip appear.
+        3. The context menu shouldn't be closed when a tooltip showed.
+    </label>
+    <textbox rows="3" width="250px" context="editPopup,type=toggle" tooltip="tooltip" />
+    <popup id="editPopup" width="300px" height="100px">
+        Context Menu
+    </popup>
+    <popup id="tooltip" width="100px">
+        Tooltip Menu
+    </popup>
+</zk>

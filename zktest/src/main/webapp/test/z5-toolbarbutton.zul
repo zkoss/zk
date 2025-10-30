@@ -1,0 +1,42 @@
+<zk>
+	<vbox>
+		<label value="==Dynamic==" />
+		<hbox>
+			<button label="Enable" onClick="tb.disabled=false" />
+			<button label="Disable" onClick="tb.disabled=true" />
+			<button label="Reverse Dir" onClick='tb.dir="reverse"' />
+			<button label="Normal  Dir" onClick='tb.dir="normal"' />
+			<button label="Horizontal" onClick='tb.orient="horizontal"' />
+			<button label="Vertical" onClick='tb.orient="vertical"' />
+			<button label="href" onClick='tb.href="http://www.google.com"' />
+			<button label="tabindex" onClick='tb.tabindex=3' />
+			<button label="target" onClick='tb.target="demo"' />
+		</hbox>
+		<toolbarbutton id="tb" image="/c/img/head.jpg"
+			label="Dynamic" href="http://www.zkoss.org" target="go" tabindex="10" />
+	</vbox>
+	<vbox>
+		<label value="==Static==" />
+		Default :
+		<toolbarbutton label="test" href="http://www.zkoss.org" />
+		Disable :
+		<toolbarbutton label="test" href="http://www.zkoss.org"
+			disabled="true" />
+		Target :
+		<toolbarbutton label="test" href="http://www.zkoss.org"
+			target="go" />
+		With Image :
+		<toolbarbutton image="/c/img/head.jpg" label="test"
+			href="http://www.zkoss.org" target="go" />
+		Reverse :
+		<toolbarbutton image="/c/img/head.jpg" dir="reverse"
+			label="test" href="http://www.zkoss.org" target="go" />
+		Vertical :
+		<toolbarbutton image="/c/img/head.jpg" orient="vertical"
+			label="test" href="http://www.zkoss.org" target="go" />
+		R + V :
+		<toolbarbutton image="/c/img/head.jpg" dir="reverse"
+			orient="vertical" label="test" href="http://www.zkoss.org"
+			target="go" />
+	</vbox>
+</zk>

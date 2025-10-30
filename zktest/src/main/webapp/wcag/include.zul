@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Include"?>
+<?root-attributes lang="en"?>
+<!--
+include.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 22 12:49:48 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Include</n:h1>
+    </n:header>
+    <include src="include_inner.zul" enclosingTag="main"/>
+</zk>

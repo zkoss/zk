@@ -1,0 +1,17 @@
+<vbox>
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.SelectorParamVM')">
+		
+		<hbox><label id="l11" /></hbox>
+		<hbox><label id="l12" /></hbox>
+		<hbox><label id="l13" /></hbox>
+		<hbox><label id="l14" /></hbox>
+
+		<button id="cmd1" label="cmd1" onClick="@command('cmd1')" />
+		
+		<button id="cmd2" label="cmd2" onClick="@command('cmd2')" />
+
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</vbox>
+
+</vbox>

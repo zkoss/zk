@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4467.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 06 16:56:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label value="open the groupbox, you should see that the vflex of the div with red border works fine" />
+    <separator />
+    <groupbox height="500px" width="500px" title="Closed Groupbox" open="false">
+        <div vflex="1" style="border: 1px solid red">
+            surrounding div uses vflex="1"
+        </div>
+    </groupbox>
+    <apply templateURI="/test2/include/themes.zul"/>
+</zk>

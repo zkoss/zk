@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4054.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 10 18:16:54 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click button "bandbox open", "combobox open" and "combobutton open".
+        2. They all show "false" in zk log.
+        3. Click button "Toggle visible".
+        4. Repeat step 1. They all show "true" in zk log.
+        5. Click button "Toggle visible".
+        6. Repeat step 1. They all show "false" in zk log.
+    </label>
+
+    <hlayout>
+        <button label="bandbox open" onClick='comp1.setOpen(true); Clients.log(comp1.isOpen()+"")'/>
+        <button label="combobox open" onClick='comp2.setOpen(true); Clients.log(comp2.isOpen()+"")'/>
+        <button label="combobutton open" onClick='comp3.setOpen(true); Clients.log(comp3.isOpen()+"")'/>
+        <button label="Toggle visible" onClick="comp1.visible = comp2.visible = comp3.visible = !comp1.visible"/>
+    </hlayout>
+
+    <bandbox id="comp1" visible="false">
+        <bandpopup>
+            pp
+        </bandpopup>
+    </bandbox>
+
+    <combobox id="comp2" visible="false">
+        <comboitem>pp</comboitem>
+    </combobox>
+
+    <combobutton id="comp3" label="button" visible="false">
+        <popup>
+            pp
+        </popup>
+    </combobutton>
+</zk>

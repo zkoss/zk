@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4212-1.zul
+
+		Purpose:
+                
+		Description:
+                
+		History:
+				Thu Feb 14 11:13:02 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in all theme
+		2. Should see last column freezed
+		3. Click setRightColumns(2)
+		4. Should see last two columns freezed
+		5. Click addColumn, last two columns should be freezed
+		6. Click addRow and scroll to the bottom, last two columns should be freezed
+		7. Click increaseLastColumnWidth, the frozen width should increase too
+	</label>
+	<hlayout>
+		<a href="?zktheme=default" label="Default"/>
+		<a href="?zktheme=breeze" label="Breeze"/>
+		<a href="?zktheme=sapphire" label="Sapphire"/>
+		<a href="?zktheme=silvertail" label="Silvertail"/>
+		<a href="?zktheme=atlantic" label="Atlantic"/>
+	</hlayout>
+	<div apply="org.zkoss.zktest.test2.F86_ZK_4212Composer">
+		<button id="columns2" label="columns2"/>
+		<button id="rightColumns2" label="rightColumns2"/>
+		<button id="addColumn" label="addColumn"/>
+		<button id="addRow" label="addRow"/>
+		<button id="increaseLastColumnWidth" label="increaseLastColumnWidth"/>
+		<grid id="grid" width="600px" height="200px">
+			<frozen columns="1" rightColumns="1"/>
+			<columns>
+				<forEach begin="1" end="10" var="i">
+					<column label="Column ${i}" width="100px"/>
+				</forEach>
+			</columns>
+			<rows>
+				<forEach begin="1" end="10" var="i">
+					<row>
+						<forEach begin="1" end="10" var="j">
+							<label value="Cell ${i}-${j}"/>
+						</forEach>
+					</row>
+				</forEach>
+			</rows>
+			<foot>
+				<forEach begin="1" end="10" var="i">
+					<footer label="Footer ${i}"/>
+				</forEach>
+			</foot>
+		</grid>
+		<listbox id="listbox" width="600px" height="200px">
+			<frozen columns="1" rightColumns="1"/>
+			<listhead>
+				<forEach begin="1" end="10" var="i">
+					<listheader label="Column ${i}" width="100px"/>
+				</forEach>
+			</listhead>
+			<forEach begin="1" end="10" var="i">
+				<listitem>
+					<forEach begin="1" end="10" var="j">
+						<listcell label="Cell ${i}-${j}"/>
+					</forEach>
+				</listitem>
+			</forEach>
+			<listfoot>
+				<forEach begin="1" end="10" var="i">
+					<listfooter label="Footer ${i}"/>
+				</forEach>
+			</listfoot>
+		</listbox>
+		<tree id="tree" width="600px" height="200px">
+			<frozen columns="1" rightColumns="1"/>
+			<treecols>
+				<forEach begin="1" end="10" var="i">
+					<treecol label="Column ${i}" width="100px"/>
+				</forEach>
+			</treecols>
+			<treechildren>
+				<forEach begin="1" end="10" var="i">
+					<treeitem>
+						<treerow>
+							<forEach begin="1" end="10" var="j">
+								<treecell label="Cell ${i}-${j}"/>
+							</forEach>
+						</treerow>
+					</treeitem>
+				</forEach>
+			</treechildren>
+			<treefoot>
+				<forEach begin="1" end="10" var="i">
+					<treefooter label="Footer ${i}"/>
+				</forEach>
+			</treefoot>
+		</tree>
+	</div>
+</zk>

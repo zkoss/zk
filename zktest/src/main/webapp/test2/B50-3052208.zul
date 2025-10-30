@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3052208.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 25 11:30:01 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ul>
+			<li>Mouseover on those two menu quickly</li>
+			<li>The menupopup shall show correctly</li>
+		</ul>
+	]]></html>
+	<menubar id="menubar" width="300px" autodrop="true">
+		<menu label="Project">
+			<menupopup>
+				<menuitem label="New" />
+				<menuitem label="Open" />
+				<menuitem label="Save" />
+			</menupopup>
+		</menu>
+		<menu label="Help">
+			<menupopup>
+				<menuitem label="Index" />
+				<menu label="About" />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

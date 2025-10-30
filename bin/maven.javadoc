@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+#{{IS_NOTE
+#	Purpose:
+#		To build javadoc per jar file for maven repository
+#	Description:
+#	History:
+#		August 22 11:13 2011, Created by simon
+#}}IS_NOTE
+#
+#Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+maindir="$(pwd)"
+version=$1
+if [ "$2" == "" ] ; then
+      version=$version.FL.$(date +%Y%m%d)
+fi
+
+if [ "$ZK" = "" ] ; then
+	ZK=$maindir
+fi
+if [ "$ZKCML" = "" ] ; then
+	if [ -d "zkex" ] ; then
+		ZKCML="."
+	elif [ -d "../zkcml/zkex" ] ; then
+		ZKCML="../zkcml"
+	else
+		echo "ZKCML path is not found!!"
+	fi
+fi
+
+function jvdoc {
+	cp $1/pom.xml $1/pom.xml.bak
+	sed -i "1,/version>.*<\/version/s/version>.*<\/version/version>$version<\/version/" $1/pom.xml
+	
+	cd $1
+	echo Generating javadoc for $1
+	mvn --quiet javadoc:jar -Ddoclint=none
+
+	mv -f pom.xml.bak pom.xml
+	
+	rm -rf debug/apidocs
+	rm -rf debug/javadoc-bundle-options
+	cp debug/$1-$version-javadoc.jar /tmp/maven/_javadoc/$1-$version-javadoc.jar
+	chmod 644 /tmp/maven/_javadoc/$1-$version-javadoc.jar
+	cd ..
+}
+
+mkdir -p /tmp/maven/_javadoc
+
+cd $maindir
+jvdoc zel
+jvdoc zcommon
+jvdoc zweb
+jvdoc zk
+jvdoc zul
+jvdoc zhtml
+jvdoc zkbind
+jvdoc zkplus
+cd $ZKCML
+jvdoc zml
+jvdoc zkex
+jvdoc zkmax
+jvdoc zuti
+cd $maindir

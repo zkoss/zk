@@ -1,0 +1,21 @@
+<zk>
+<zscript>
+public class MyLabel extends Label {
+	public void onCreate() {
+		setValue(getParent().toString());
+	}
+}
+</zscript>
+	<div id="bind" apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ManipulateInsertionVM')">
+		<div id="host">
+			<if test="true">
+				<if test="@load(vm.visible)">
+					<div style="background:yellow"><label use="MyLabel"/></div>
+				</if>
+				<div style="background:green"><label use="MyLabel"/></div>
+			</if>
+		</div>
+	</div>
+	<debugger rootId="host"/>
+</zk>

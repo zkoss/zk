@@ -1,0 +1,31 @@
+<zk>
+	<div>
+	Ste 1: Click "update"<separator/>
+	Step 2: Select first item in the lsitbox "test1"<separator/>
+	Step 3: Click "test"<separator/>
+	Message box should show "test1"
+	</div>
+	<window border="normal" title="hello" width="400px" height="400px">
+		<label value="test" />
+		<listbox id="listbox" mold="select" rows="1" onSelect=""></listbox>
+		<button id="btn2" label="update" onClick="update();" />
+		<button id="btn" label="test" onClick='Messagebox.show(listbox.getSelectedItem().getValue().toString());' />
+		<zscript><![CDATA[
+	listbox.getItems().clear();
+	Listitem li = new Listitem("test3", "test3");
+	li.setSelected(true);
+	li.setParent(listbox);
+	public void update() {
+		listbox.getItems().clear();
+		Listitem li = new Listitem("test1", "test1");
+		li.setParent(listbox);
+		li = new Listitem("test2", "test2");
+		li.setParent(listbox);
+		li = new Listitem("test3", "test3");
+		li.setSelected(true);
+		li.setParent(listbox);
+	}
+]]>
+		</zscript>
+	</window>
+</zk>

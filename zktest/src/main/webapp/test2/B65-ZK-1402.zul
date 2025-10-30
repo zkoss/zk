@@ -1,0 +1,11 @@
+<zk>
+	<window title="Simple Title" border="normal" width="300px" height="300px">
+		<borderlayout>
+			<center title="Center">Center Content</center>
+			<north size="20%" title="North">North Content</north>
+			<south size="20%" title="South">South Content</south>
+			<east size="20%" title="East">East Content</east>
+			<west size="20%" title="West">West Content</west>
+		</borderlayout>
+	</window>
+</zk>

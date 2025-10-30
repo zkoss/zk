@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3953.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jun 19 17:58:00 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Run this page on wildfly 13 with JDK 10
+		2. No exception is thrown
+		3. The label should be 3.0
+	</label>
+	<div apply="org.zkoss.bind.BindComposer">
+		<label value="@load(Math.sqrt(9))"/>
+	</div>
+</zk>

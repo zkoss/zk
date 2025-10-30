@@ -1,0 +1,48 @@
+<!--
+B95-ZK-4744-1.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon Dec 14 14:50:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window id="modalDialog" title="Coffee Order" border="none"
+			width="460px" position="center,center" closable="true"
+			mode="highlighted" >
+
+		<vlayout>
+			<grid>
+				<columns>
+					<column hflex="1" label="Name" />
+					<column hflex="2" label="Coffee Type"
+							align="center" />
+					<column hflex="1" label="Quantity" align="center" />
+				</columns>
+				<rows>
+					<row>
+						<label value="Evan"/>
+						<label value="Java" />
+						<label value="2" />
+					</row>
+					<row>
+						<label value="Billy" />
+						<label value="Latte" />
+						<label value="3" />
+					</row>
+					<row>
+						<label value="Roger" />
+						<label value="Americano" />
+						<label value="6" />
+					</row>
+				</rows>
+			</grid>
+			<button id="closeBtn" hflex="1" label="close" />
+		</vlayout>
+	</window>
+</zk>

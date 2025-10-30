@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4832.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 8 10:50:21 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4832VM')">
+		<apply template="test" uid="@init('uid1')"/>
+		<apply template="test" uid="@init('uid2')"/>
+		<apply template="test" uid="@init('uid3')"/>
+		<template name="test">
+			<div>
+				${uid}:
+				<label id="${uid}" value="@load(vm.dataMap[uid].value)"/>
+			</div>
+		</template>
+		<separator/>
+		<!--		Outside Uid1: <label value="@load(vm.dataMap['uid1'].value)"/>-->
+		<!--		Outside Uid2: <label value="@load(vm.dataMap['uid2'].value)"/>-->
+		<label>
+			Click the following buttons, the value of the corresponding label should be changed.
+		</label>
+		<button id="updBtn1" label="update: uid1" onClick="@command('updateValue', uid='uid1')"/>
+		<button id="updBtn2" label="update: uid2" onClick="@command('updateValue', uid='uid2')"/>
+		<button id="updBtn3" label="update: uid3" onClick="@command('updateValue', uid='uid3')"/>
+	</div>
+</zk>

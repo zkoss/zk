@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3184.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Apr 20, 2016  3:49:32 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Click "scroll target" button, the label "--- Target ---" should show in the viewport.
+    </label>
+    <div height="300px" width="200px" style="overflow:auto">
+        <vlayout>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <label>test</label>
+            <grid sclass="noborder">
+                <columns>
+                    <column/>
+                </columns>
+                <rows>
+                    <row>
+                        <label value="--- Target ---" id="target" />
+                    </row>
+                    <row>
+                        <label value="test" />
+                    </row>
+                    <row>
+                        <label value="test" />
+                    </row>
+                    <row>
+                        <label value="test" />
+                    </row>
+                    <row>
+                        <label value="test" />
+                    </row>
+                </rows>
+            </grid>
+        </vlayout>
+    </div>
+    <button onClick="Clients.scrollIntoView(target)" label="scroll target"/>
+</zk>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3695.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 02 17:24:55 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <style>
+    .z-tabbox-accordion .z-tabpanel > div.z-tabpanel-content {
+        padding: 20px;
+        border: 7px dotted blue;
+    }
+    </style>
+    <label>The slide animation should not be jumpy.</label>
+    <hlayout>
+        <tabbox width="500px" height="300px" mold="accordion">
+            <tabs>
+                <tab label="Tab 1" />
+                <tab label="Tab 2" />
+                <tab label="Tab 3" />
+                <tab label="Tab 4" />
+                <tab label="Tab 5" />
+            </tabs>
+            <tabpanels>
+                <tabpanel>Panel 1</tabpanel>
+                <tabpanel>Panel 2</tabpanel>
+                <tabpanel>Panel 3</tabpanel>
+                <tabpanel>Panel 4</tabpanel>
+                <tabpanel>Panel 5</tabpanel>
+            </tabpanels>
+        </tabbox>
+        <borderlayout width="500px" height="300px">
+            <north splittable="true" collapsible="true" height="100px">
+                <label value="111" />
+            </north>
+            <west splittable="true" collapsible="true" width="100px">
+                <label value="222" />
+            </west>
+            <east splittable="true" collapsible="true" width="100px">
+                <label value="333" />
+            </east>
+            <south splittable="true" collapsible="true" height="100px">
+                <label value="444" />
+            </south>
+            <center>
+                <label value="555" />
+            </center>
+        </borderlayout>
+    </hlayout>
+
+    <zscript>
+    ListModel model = new org.zkoss.zktest.test2.grid.FakeListModel(30);
+    </zscript>
+    <vlayout>
+        <combobox model="${model}" />
+        <chosenbox model="${model}" />
+    </vlayout>
+</zk>

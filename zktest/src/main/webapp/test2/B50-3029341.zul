@@ -1,0 +1,21 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+	<li>Click "a link"</li>
+	<li>Check the row of the listbox will not be selected</li>
+</ol>
+]]>
+</html>
+	<listbox width="300px">
+		<listitem>
+			<listcell>
+				<a label="a link" />
+			</listcell>
+			<listcell>
+				<button label="button" />
+			</listcell>
+		</listitem>
+		<listitem label="second item" />
+	</listbox>
+</zk>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2746.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, May 11, 2015 11:30:29 AM, Created by Jameschu
+
+Copyright (C)Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window border="normal" title="hello">
+		<label multiline="true">
+			1. click two buttons separately
+			2. both errorbox will show up
+		</label>
+		<button label="Wrong value" onClick='throw new WrongValueException(textbox1, "error message");'/>
+		<textbox id="textbox1" multiline="true"/>
+		   <hlayout>
+		    <button label="Wrong value" onClick='throw new WrongValueException(textbox2, "error message");'/>
+		    <textbox id="textbox2" multiline="true"/>
+		</hlayout>
+	</window>
+</zk>

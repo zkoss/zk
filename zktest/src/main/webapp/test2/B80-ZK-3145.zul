@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3145.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 8 16:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout xmlns:w="client">
+        <label multiline="true">
+            1.Click the first button, and the chosenbox should be focused.
+            2.Click the second button, and the combobox should be focused.
+            3.Click the third button, and the chosenbox should be focused.
+        </label>
+        <div>
+            <label value="combobox:" />
+            <combobox id="combo" />
+        </div>
+        <div>
+            <label value="chosenbox:" />
+            <chosenbox id="chosen" />
+        </div>
+        <button label="chosenbox focus(java)" onClick="chosen.focus()" />
+        <button label="combobox focus(java)" onClick="combo.focus()" />
+        <button label="chosenbox focus(js)" w:onClick="this.$f('chosen').focus()" />
+    </vlayout>
+</zk>

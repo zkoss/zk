@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4665.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Oct 15 14:25:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		function callJqueryWidth() {
+			jq('$cMid').width();
+		}
+	]]></script>
+	<label value="Click button, the following blocks should be one-line (test in ff and edge_legacy)" />
+	<button xmlns:w="client" w:onClick="callJqueryWidth()" label="click"/>
+	<separator />
+	<columnlayout id="cLay">
+		<columnchildren id="cMid" width="30%" height="700px" style="padding: 5px;border: solid 1px greed;">
+		</columnchildren>
+		<columnchildren id="cRig" width="70%" height="700px" style="padding: 10px; border: solid 1px red;">
+		</columnchildren>
+	</columnlayout>
+</zk>

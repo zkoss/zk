@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2944-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jan  6, 2016  5:01:50 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+	public class F80_ZK_2944VM {
+		
+		private boolean test = true;
+		
+		public boolean getTest() {
+			return test;
+		}
+	}
+	</zscript>
+	<label multiline="true">
+		test shadow selector with the following conditions
+	</label>
+	<div id="parent" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('F80_ZK_2944VM')">
+		<div id="host">
+			<if test="true" id="if1">
+				<if test="true" id="if2" whatever="@load('vm.test')">
+					<label id="lb1" value="I am here 1"/>
+					<if test="true" id="if3" whatever="@load('vm.test')">
+						<label id="lb2" value="I am here 2"/>
+						<label id="lb3" value="I am here 3"/>
+					</if>
+				</if>
+				<if test="true" id="if4">
+					<label id="lb4" value="I am here 4"/>
+				</if>
+				<if test="true" id="if5" whatever="@load('vm.test')">
+					<label id="lb5" value="I am here 5"/>
+				</if>
+			</if>
+			<if test="true" id="if6" whatever="@load('vm.test')">
+				<if test="true" id="if7">
+					<if test="true" id="if8" whatever="@load('vm.test')">
+						<if test="true" id="if9">
+							<label id="lb6" value="I am here 6"/>
+						</if>
+					</if>
+				</if>
+			</if>
+		</div>
+	</div>
+</zk>

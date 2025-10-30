@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4128.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 11 16:09:28 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Check if a custom converter is used".
+        2. It should print true in zklog.
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4128VM')">
+        <zk4128listbox id="mylb" width="400px" model="@bind(vm.itemList)">
+            <listhead>
+                <listheader label="index"/>
+                <listheader label="name"/>
+            </listhead>
+            <template name="model" var="item" status="s">
+                <listitem>
+                    <listcell label="@init(s.index)"/>
+                    <listcell label="@init(item)"/>
+                </listitem>
+            </template>
+        </zk4128listbox>
+        <button label="Check if a custom converter is used" onClick='Clients.log("" + mylb.hasAttribute("B86_ZK_4128Converter"))'/>
+    </div>
+</zk>

@@ -1,0 +1,18 @@
+<zk>
+	<zscript><![CDATA[
+	import java.util.*;
+	import org.zkoss.zul.*;
+	List listShop = new ArrayList();
+	for (int i = 0; i < 100; i++)
+		listShop.add("SHOP - " + i);
+	ListModelList model = new ListModelList(listShop);
+	ListSubModel submodel = (ListSubModel) ListModels.toListSubModel(model);
+	]]></zscript>
+	<window title="Chosen Box" border="normal">
+		<label multiline="true">
+		1. Type "S" in the input, and select one item.
+		2. If you see the component disappeared, it is a bug.
+		</label>
+		<chosenbox id="cb" model="${submodel}" width="400px" noResultsText="No such item - {0}" />
+	</window>
+</zk>

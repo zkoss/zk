@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1951.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Oct 02, 2013 11:30:35 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+
+	<label multiline="true">
+	1. Click the button of "Show first dialog to start dialog with iframe"
+	2. Click the button of "Show Dialog 1 with IFrame"
+	3. Select pdf File to upload
+	4. Click the button of "Click for close iframe dialog"
+	5. You shouldn't see a blank page in IE10 only
+	</label>
+    <window id="win1" height="400px" width="600px">
+        <button label="Show first dialog to start dialog with iframe" onClick="AnotherDialog.doModal(); AnotherDialog.setVisible(true);"/>
+    </window>
+
+    <window id="AnotherDialog" height="400px" width="600px" visible="false">
+        <button label="Show Dialog 1 with IFrame" onClick="mainDlg.doModal(); mainDlg.setVisible(true);" />
+        <button label="Close me " onClick="AnotherDialog.detach();" />
+    </window>
+
+    <window width="700px" height="550px" style="border: 1px solid gray" title="pdf test for IE 10" id="mainDlg" visible="false" parent="${AnotherDialog}">
+        <window id="win2" title="load a pdf into frame, then close me!" width="650px" height="480px">
+            <vbox hflex="1" vflex="1">
+                <iframe id="iframe" src="http://www.zkoss.org" hflex="1" vflex="10" style="border: 1px solid gray" />
+
+                <button upload="true" label="Select pdf File" vflex="1"> 
+                    <attribute name="onUpload"><![CDATA[ 
+						Object media = event.getMedia(); 
+						if (media != null) iframe.setContent(media); 
+					]]></attribute>
+                </button>
+            </vbox>
+        </window>
+
+        <button label="Click for close iframe dialog" onClick='mainDlg.detach();'/>
+    </window>
+</zk>

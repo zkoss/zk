@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    B80-ZK-3187.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jun 8 09:44:23 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. click each "set src incX" button, and you should see "mydiv attached" in zk log.
+        2. click each "clear src incX" button, and you should see "mydiv detached" in zk log.
+    </label>
+	<div>
+		inc1: mode=AUTO
+		<button id="setInc1" label="set src inc1" onClick='inc1.setSrc("B80-ZK-3187-1.zul");' />
+		<button id="clearInc1" label="clear src inc1" onClick='inc1.setSrc(null);' />
+	</div>
+	<include id="inc1" src="" mode="auto" width="200px" height="100px" style="border:1px solid green"/>
+	<div>
+		inc2: mode=DEFER
+		<button id="setInc2" label="set src inc2" onClick='inc2.setSrc("B80-ZK-3187-1.zul");' />
+		<button id="clearInc2" label="clear src inc2 [unexpected]" onClick='inc2.setSrc(null);' />
+	</div>
+	<include id="inc2" src="" mode="defer" width="200px" height="100px" style="border:1px solid green"/>
+	<div>
+		inc3: mode=INSTANT
+		<button id="setInc3" label="set src inc3(instant)" onClick='inc3.setSrc("B80-ZK-3187-1.zul");' />
+		<button id="clearInc3" label="clear src inc3 [unexpected]" onClick='inc3.setSrc(null);' />
+	</div>
+	<include id="inc3" src="" mode="instant" width="200px" height="100px" style="border:1px solid green"/>
+
+</zk>

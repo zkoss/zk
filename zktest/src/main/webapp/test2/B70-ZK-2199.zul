@@ -1,0 +1,44 @@
+<zk>
+	<label multiline="true">
+		1. Resize column 2.
+		2. All columns should not disappear. 
+	</label>
+    <window title="Listbox" border="normal">
+        <listbox>
+            <listhead sizable="true">
+                <listheader label="Column 1" width="20%" />
+                <listheader label="Column 2" width="20%" />
+                <listheader label="Column 3" width="20%" />
+                <listheader label="Column 4" width="20%" />
+                <listheader label="Column 5" width="20%" />
+            </listhead>
+            <listitem height="28px">
+                <listcell label="Item 1" />
+                <listcell label="Item 2" />
+                <listcell label="Item 3" />
+                <listcell label="Item 4" />
+                <listcell label="Item 5" />
+            </listitem>
+        </listbox>
+    </window>
+    <window title="Grid" border="normal">
+        <grid>
+            <columns sizable="true">
+                <column label="Column 1" width="20%"/>
+                <column label="Column 2" width="20%"/>
+                <column label="Column 3" width="20%"/>
+                <column label="Column 4" width="20%"/>
+                <column label="Column 5" width="20%"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="Item 1" />
+                    <label value="Item 2" />
+                    <label value="Item 3" />
+                    <label value="Item 4" />
+                    <label value="Item 5" />
+                </row>
+            </rows>
+        </grid>
+    </window>
+</zk>

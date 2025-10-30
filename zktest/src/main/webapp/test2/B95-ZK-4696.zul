@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4696.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 15 18:18:57 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void include(String src) {
+        Include include = new Include(src);
+        include.setMode("defer");
+        g1.appendChild(include);
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Click the "Create an include1" button.
+        2. You should see "Received from inc1" in zk log.
+        3. Click the "Create an include2" button.
+        4. You shouldn't see "Received from inc2" in zk log since the clientinfo didn't change.
+        5. Resize the browser window.
+        6. You should see both "Received from inc1" and "Received from inc2" in zklog.
+    </label>
+    <button label="Create an include1" onClick='include("./B95-ZK-4696-inc1.zul")' />
+    <button label="Create an include2" onClick='include("./B95-ZK-4696-inc2.zul")' />
+    <window title="foo" id="g1">
+        Hello
+    </window>
+</zk>

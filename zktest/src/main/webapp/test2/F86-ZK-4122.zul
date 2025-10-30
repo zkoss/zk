@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4122.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Nov 08 14:42:40 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Open developer tool and observe DOM
+		2. The orgchildren of orgitem(Item1) should not contain any child
+		3. Click appendOrgitem then click toggleItem1
+		4. The orgchildren of orgitem(Item1) should contain 3 children
+		5. The orgchildren of orgitem(Item2) should not contain any child
+		6. Click plus icon to open orgitem(Item2)
+		7. The orgchildren of orgitem(Item2) should contain 2 children
+		8. Click minus icon to close orgitem(Item2)
+		9. The orgchildren of orgitem(Item2) should contain 2 children, and orgchildren should be invisible
+		10. Click appendOrgchildren
+		11. The orgchildren of orgitem(Item5) should not contain any child
+		12. Click toggleItem5
+		13. The orgchildren of orgitem(Item5) should contain 2 orgchildren
+	</label>
+	<vlayout apply="org.zkoss.zktest.test2.F86_ZK_4122Composer">
+		<organigram width="800px">
+			<custom-attributes org.zkoss.zul.client.rod="true"/>
+			<orgchildren>
+				<orgitem id="item1" label="Item1" open="false">
+					<orgchildren>
+						<orgitem label="Item2" open="false">
+							<orgchildren>
+								<orgitem>
+									<orgnode label="Item3">
+										<textbox/>
+									</orgnode>
+								</orgitem>
+								<orgitem label="Item4"/>
+							</orgchildren>
+						</orgitem>
+						<orgitem id="item5" label="Item5" open="false"/>
+					</orgchildren>
+				</orgitem>
+			</orgchildren>
+		</organigram>
+		<hlayout>
+			<button id="toggleItem1" label="toggleItem1"/>
+			<button id="appendOrgitem" label="appendOrgitem"/>
+			<button id="removeOrgitem" label="removeOrgitem"/>
+		</hlayout>
+		<hlayout>
+			<button id="toggleItem5" label="toggleItem5"/>
+			<button id="appendOrgchildren" label="appendOrgchildren"/>
+			<button id="removeOrgchildren" label="removeOrgchildren"/>
+		</hlayout>
+	</vlayout>
+</zk>

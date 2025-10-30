@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Cardlayout"?>
+<?root-attributes lang="en"?>
+<!--
+cardlayout.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jun 19 15:03:55 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Cardlayout</n:h1>
+	</n:header>
+	<n:main>
+		<div ca:role="region" ca:aria-roledescription="carousel" ca:aria-label="traffic light" tabindex="0">
+			<div>
+				<button ca:aria-label="Previous Slide" onClick="card.previous()">previous</button>
+				<button ca:aria-label="Next Slide" onClick="card.next()">next</button>
+			</div>
+			<cardlayout id="card" width="300px" height="200px" style="border:1px solid red" selectedIndex="1" tabindex="0">
+				<div ca:aria-label="red" vflex="1" hflex="1" style="background-color:red;padding:20px">red</div>
+				<div ca:aria-label="yellow" vflex="1" hflex="1" style="background-color:yellow;padding:20px">yellow</div>
+				<div ca:aria-label="green" vflex="1" hflex="1" style="background-color:green;padding:20px">green</div>
+			</cardlayout>
+		</div>
+	</n:main>
+</zk>

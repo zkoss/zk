@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2228.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Mar 25, 2014  7:29:01 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true">
+1. scroll down and scroll right
+2. resize any column header
+If the bug happened -> the scroll position is reset to leftmost and topmost. (IE9 only)
+Otherwise, that's correct to keep the same scroll position.
+</label>
+<div hflex="1" vflex="1"
+    apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('org.zkoss.zktest.test2.B70_ZK_2228_Composer')">
+    <listbox
+        model="@init(vm.rows)"
+        mold="paging" pageSize="25"
+        sizedByContent="true"
+        span="true" hflex="1" vflex="1">
+        <custom-attributes org.zkoss.zul.listbox.autohidePaging="false" />
+        <custom-attributes org.zkoss.zul.nativebar="true" />
+
+        <listhead 
+            children="@load(vm.headers)"
+            sizable="true">
+            <template name="children" var="columnHeader">
+                <listheader hflex="min">
+                    <label value="@load(columnHeader)"
+                           style="white-space: nowrap;" />
+                </listheader>
+            </template>
+        </listhead>
+
+        <template name="model" var="row">
+            <listitem children="@load(row.columns)">
+                <template name="children">
+                    <listcell label="@load(each)" />
+                </template>
+            </listitem>
+        </template>             
+    </listbox>
+
+    <grid 
+        model="@init(vm.rows)"
+        mold="paging" pageSize="25"
+        sizedByContent="true"
+        span="true" hflex="1" vflex="1">
+        <custom-attributes org.zkoss.zul.nativebar="true" />
+        <columns 
+            children="@load(vm.headers)" 
+            sizable="true">
+            <template name="children" var="columnHeader">
+                <column hflex="min">
+                    <label value="@load(columnHeader)" 
+                        style="white-space: nowrap;" />
+                </column> 
+            </template>
+        </columns>
+        <rows>
+            <template name="model" var="row">
+                <row children="@load(row.columns)">
+                    <template name="children">
+                        <cell><label value="@load(each)"/></cell>
+                    </template>
+                </row>
+            </template>
+        </rows>
+    </grid>
+</div>
+</zk>

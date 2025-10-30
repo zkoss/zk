@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3013.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Dec 30 10:00:28 CST 2015, Created by Jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window apply="org.zkoss.zktest.test2.B80_ZK_3013Composer">
+        <custom-attributes composerName="mc"/>
+        <label multiline="true">
+            Select the second item of the two comboboxes, and there is no error log occurred.
+        </label>
+        <grid id="gridTemplate" model="${mc.gridModel}">
+            <template name="model">
+                <row>
+                    <label value="${each} ${mc.comboModel.getSelection()}"/>
+                    <combobox model="${mc.comboModel}"
+                              onChange='if (self.getDesktop() == null) Clients.log("error");
+                                        mc.gridModel.set(0, "dummyTemplate");'
+                              onSelect='if (self.getDesktop() == null) Clients.log("error");' >
+                    </combobox>
+                </row>
+            </template>
+        </grid>
+        <grid id="gridRenderer" model="${mc.gridModel2}" rowRenderer="${mc.rowRenderer}" />
+    </window>
+</zk>

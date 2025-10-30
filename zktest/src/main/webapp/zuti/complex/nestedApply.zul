@@ -1,0 +1,23 @@
+<zk>
+    <zscript><![CDATA[
+        List list = new ArrayList();
+        for (int i = 0; i < 100; i++) {
+            list.add("item" + i);
+        }
+        ListModelList model = new ListModelList(list);
+    ]]></zscript>
+
+ <div id="host" apply="org.zkoss.bind.BindComposer">
+  <template name="row">
+   <row>
+    <label value="${each}"/>
+   </row>
+  </template>
+
+  <grid model="@init(model)" onCreate="self.renderAll();">
+   <template name="model">
+    <apply template="row"/>
+   </template>
+  </grid>
+ </div>
+</zk>

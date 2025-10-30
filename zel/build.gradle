@@ -1,0 +1,25 @@
+plugins {
+	id 'java-library'
+	id 'com.github.gmazzo.buildconfig'
+}
+
+java {
+	// Declaring feature variants for optionalImplementation, to generate dependency optional in pom
+	registerFeature('optional') {
+		usingSourceSet(sourceSets.main)
+	}
+}
+
+dependencies {
+	api "org.javassist:javassist:${javassistVersion}"
+	optionalImplementation "org.slf4j:slf4j-api:${slf4jVersion}"
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.${project.name}"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+group = 'org.zkoss.common'
+description = 'The ZK EL Library'

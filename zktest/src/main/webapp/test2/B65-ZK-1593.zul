@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1593.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 05, 2013 12:33:31 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true">
+1. Click to Show button.
+2. Close modal dialog with close button in title bar.
+3. Click to Show button again.
+4. If no error console is shown, the bug has fixed.
+</label>
+  <window>
+          <button label="Show">
+          <attribute name="onClick"><![CDATA[
+          
+      Window window = (Window)Executions.createComponentsDirectly("<zk><window>Lorem ipsum dolor sit amet, consectetur adipiscing elit.    <grid>	<columns>          <column hflex=\"min\">A</column>          <column hflex=\"min\">B</column>          <column >C</column>        </columns>      <rows>      	<row>          <label>1</label>          <label>2</label>          <label>3</label>              </row>        <row>          <label>a</label>          <label>b</label>          <div>c</div>        </row>            </rows>        </grid>  </window></zk>", null, null, null);
+      window.setBorder(true);
+      window.setClosable(true);
+      window.setTitle(" ");
+      window.doModal();
+          ]]></attribute>
+          </button>
+        
+          
+  </window>
+</zk>

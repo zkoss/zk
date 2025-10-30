@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+multiple-init.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 03 16:01:06 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.init.MultipleInitVM')">
+        <label multiline="true">
+            You should see:
+            org.zkoss.zk.ui.UiException: more than one [@Init] in the class
+        </label>
+        <button label="see result" onClick="@command('printMessage')"/>
+    </div>
+</zk>

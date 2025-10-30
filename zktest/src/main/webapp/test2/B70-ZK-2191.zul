@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2191.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Mar 31, 2014  4:49:50 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+Please click the details' arrow, and then you should not see any JS error.
+    <grid width="400px">
+        <columns>
+            <column vflex="1"/>
+        </columns>
+        <rows>
+            <row>
+                <detail>
+            <attribute w:name="getIconOpenClass_">
+            	function () { return 'z-icon-caret-down';  }
+            </attribute>
+            <attribute w:name="getIconCloseClass_">
+            	function () {return 'z-icon-caret-right';  }
+            </attribute>
+                    <label value="Show" />
+                </detail>
+            </row>
+        </rows>
+    </grid>
+</zk>

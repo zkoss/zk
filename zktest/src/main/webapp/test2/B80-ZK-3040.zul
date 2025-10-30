@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3040.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Dec 18, 2015  6:33:10 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		should see a icon that looks like &lt;/&gt; right below this text in IE8
+		the icon should continue to exist when mouse hovers on it
+	</label>
+	<div style="background:red;" sclass="z-icon-code"></div>
+</zk>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4245.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Mon May 20 15:17:18 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/B70-ZK-2804.zul" />
+</zk>

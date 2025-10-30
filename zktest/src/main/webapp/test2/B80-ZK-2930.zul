@@ -1,0 +1,30 @@
+<!--
+B80-ZK-2930.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Nov 10 15:03:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Press the button, and you should not see any exception.
+    </label>
+	<button id="btn" onClick="add()" label="add chosenbox"/>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("item" + i);
+		}
+		ListModelList model = new ListModelList(list);
+        public void add() {
+            Chosenbox box = new Chosenbox();
+            box.setModel(model);
+        }
+]]></zscript>
+</zk>

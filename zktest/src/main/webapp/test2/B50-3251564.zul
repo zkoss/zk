@@ -1,0 +1,20 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on the Textbox on the right side and click somewhere else to show the Errorbox.</li>
+			<li>The Errorbox should appear within the browser screen (so you shoule be able to see it).</li>
+			<li>The Errorbox should NOT cover the Textbox.</li>
+		</ol>
+	]]></html>
+	<style>
+		body {
+			overflow: hidden;
+		}
+	</style>
+	<window border="normal">
+		<hlayout>
+			<div hflex="1" />
+			<textbox constraint="no empty" />
+		</hlayout>
+	</window>
+</zk>

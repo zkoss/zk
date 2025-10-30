@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+foreach-numbers.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 06 15:40:02 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        You can see 5 columns and 10 rows.
+    </label>
+    <hlayout id="multiplicationTable">
+        <forEach begin="1" end="10" step="2" var="x">
+            <vlayout>
+                <forEach begin="1" end="10" var="y">
+                    <label value="${x} x ${y} = ${x * y}"/>
+                </forEach>
+            </vlayout>
+        </forEach>
+    </hlayout>
+</zk>

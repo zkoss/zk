@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4160.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 14 17:57:34 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4160VM')" style="height:100%; width: 100%">
+        <div style="height:100%; width: 100%">
+            <label multiline="true">
+                1. Switch to tab "Tree" and click "Add" 3 times.
+                2. Switch to tab "Button" and click "Add" 3 times.
+                3. Switch back to tab "Tree".
+                4. The tree shouldn't shrink to fewer than 7 treerows.
+            </label>
+            <tabbox>
+                <tabs>
+                    <tab label="Buttons"/>
+                    <tab label="Tree"/>
+                </tabs>
+                <tabpanels>
+                    <tabpanel>
+                        <button label="Add" onClick="@command('add')"/>
+                    </tabpanel>
+                    <tabpanel>
+                        <button label="Add" onClick="@command('add')"/>
+                        Tree in another tab (doesn't update properly) :
+                        <tree>
+                            <custom-attributes org.zkoss.zul.client.rod="true"/>
+                            <treechildren>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="Root"/>
+                                    </treerow>
+                                    <treechildren>
+                                        <forEach items="@load(vm.items)" var="item">
+                                            <treeitem>
+                                                <treerow>
+                                                    <treecell label="@load(item)"/>
+                                                </treerow>
+                                            </treeitem>
+                                        </forEach>
+                                    </treechildren>
+                                </treeitem>
+                            </treechildren>
+                        </tree>
+                        <div style="padding-top: 20px;">
+                            Div and labels (updates properly) :
+                            <div id="treeitems">
+                                <forEach items="@load(vm.items)" var="item">
+                                    <label value="@load(item)"/>
+                                </forEach>
+                            </div>
+                        </div>
+                    </tabpanel>
+                </tabpanels>
+            </tabbox>
+        </div>
+    </window>
+</zk>

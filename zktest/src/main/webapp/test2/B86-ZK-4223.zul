@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4223.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 7 10:21:26 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Collections.nCopies(29, "dummy"));
+	]]></zscript>
+	<label>
+		You should not see black background (the width of grid should be the same as the width of the grid's parent)
+	</label>
+	<div width="100%" height="200px" style="background:black">
+		<grid model="${model}" vflex="1" hflex="1">
+			<columns>
+				<column label="col-1" />
+				<column label="col-2" />
+			</columns>
+			<template name="model">
+				<row>
+					<cell>${each}</cell>
+					<cell>${each}</cell>
+				</row>
+			</template>
+		</grid>
+	</div>
+</zk>

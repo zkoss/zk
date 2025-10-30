@@ -1,0 +1,20 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Type "aa" in the datebox, then press "tab" key</li>
+			<li>You can see "error1" in the below of datebox.</li>
+			<li>Delete "aa" in the datebox, then press "tab" key</li>
+			<li>You can see "error2" in the below of datebox.</li>
+			<li>Choose a date from the calendar.</li>
+			<li>You should NOT see "error3" text.</li>
+		</ol>
+	]]></html>
+	<zscript>
+		int i = 1;
+	</zscript>
+	<datebox format="dd-MMM-yyyy"
+		onError='msg.value = "error" + (i++);' />
+	<div>
+		<label id="msg" />
+	</div>
+</zk>

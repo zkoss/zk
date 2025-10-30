@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2944.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Nov  9, 2015  3:58:53 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+	public class F80_ZK_2944VM {
+		
+		private boolean test = true;
+		
+		public boolean getTest() {
+			return test;
+		}
+	}
+	</zscript>
+	<label multiline="true">
+		test shadow selector with the following conditions
+		1. three shadow hosts
+		2. one host (#div2) with two shadow roots
+		3. shadow element with shadow element as parent
+		4. shadow element with shadow element as sibling
+		5. all shadow elements are preserved (will not detach itself) by using @load
+	</label>
+	<div id="parent" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('F80_ZK_2944VM')">
+		<div id="div1" sclass="warning">
+		    <apply id="sh1" whatever="@load('vm.test')">
+		          <if test="true" id="if1" whatever="@load('vm.test')">
+		                <label id="label1" value="I am here 1"/>
+		          </if>
+		    </apply>
+		    <div id="inner1">
+		    	<label id="label2" value="I am here 2"/>
+		    </div>
+		</div>
+		<div id="div2">
+		    <apply id="sh2" whatever="@load('vm.test')">
+		          <if test="true" id="if2" whatever="@load('vm.test')">
+		                <label id="label3" value="I am here 3"/>
+		          </if>
+		          <if test="true" id="if3" whatever="@load('vm.test')">
+		                <label id="label4" value="I am here 4"/>
+		          </if>
+		    </apply>
+		    <apply id="sh3" whatever="@load('vm.test')">
+		          <if test="true" id="if4" whatever="@load('vm.test')">
+		                <label id="label5" value="I am here 5"/>
+		          </if>
+		    </apply>
+		    <div id="inner2">
+		    	<label id="label6" value="I am here 6"/>
+		    </div>
+		</div>
+		<div id="div3" sclass="warning">
+		    <apply id="sh4" whatever="@load('vm.test')">
+		          <if test="true" id="if5" whatever="@load('vm.test')">
+		                <label id="label7" value="I am here 7"/>
+		          </if>
+		    </apply>
+		    <div id="inner3">
+		    	<label id="label8" value="I am here 8"/>
+		    </div>
+		</div>
+	</div>
+</zk>

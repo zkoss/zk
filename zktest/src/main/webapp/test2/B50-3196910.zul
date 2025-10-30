@@ -1,0 +1,26 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>In the first row (which is a Group) of the Grid, you should see a triangle icon and a Button under the first column. Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<grid width="300px">
+		<columns>
+			<column label="1" />
+			<column label="2" />
+			<column label="3" />
+		</columns>
+		<rows>
+			<group>
+				<cell>
+					<button label="Button" />
+				</cell>
+			</group>
+			<row>
+				<label>1</label>
+				<label>2</label>
+				<label>3</label>
+			</row>
+		</rows>
+	</grid>
+</zk>

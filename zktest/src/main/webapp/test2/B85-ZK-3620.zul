@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3620.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 26 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Drag your file here:
+	<label id="label" style="color: red"></label>
+	<div height="120px" width="120px" style="border: 1px solid black">
+		<dropupload content="HERE!" onUpload="label.setValue(event.getMedia().toString())"></dropupload>
+	</div>
+	<label multiline="true">
+		1. Drag a file into the cell
+		2. Expect: display some text; Error: display 'null'
+	</label>
+</zk>

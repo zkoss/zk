@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4686.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Nov 24 10:25:45 AM CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	Click sequence to Error: "form 1" -> "form 2" -> "form 1"
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4686_1VM')">
+		<button id="displayBtn1" label="form 1" onClick="@command('displayForm1')"/>
+		<button id="displayBtn2" label="form 2" onClick="@command('displayForm2')"/>
+		<label id="template" value="@load(vm.formModel.template)"/>
+		<separator/>
+		<apply template="@load(vm.formModel.template)">
+			<template name="form1">
+				<label value="@load(vm.formModel.template)"/>
+				<button onClick="@command('resetForm')"/>
+				<div form="@id('myform') @load(vm.formModel) @save(vm.formModel, before='save') ">
+					<vlayout>
+						Common:
+						<textbox value="@bind(myform.formContent.commonProp)"/>
+						Prop 1:
+						<textbox value="@bind(myform.template)"/>
+					</vlayout>
+				</div>
+			</template>
+			<template name="form2">
+				<label value="@load(vm.formModel.template)"/>
+			</template>
+			<template name="default">
+				<label value="empty template"/>
+				<label value="${vm.formModel}"/>
+				<label value="${vm.formModel.template}"/>
+			</template>
+		</apply>
+	</div>
+</zk>

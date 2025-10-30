@@ -1,0 +1,15 @@
+<zk>
+	<html>
+		Testing Instructions:
+		<ul>
+			<li>Click on button 'b2'</li>
+		</ul>
+		
+		Expected Results:
+		<ul>
+			<li>Button 'b1' should now be focused.</li>
+		</ul>
+	</html>
+	<button id='b1' label="b1" disabled="true" />
+	<button id='b2' label="b2" onClick='b1.setDisabled(false); b1.focus();' />
+</zk>

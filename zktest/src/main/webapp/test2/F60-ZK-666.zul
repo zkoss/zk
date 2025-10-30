@@ -1,0 +1,31 @@
+<div>
+	<html><![CDATA[
+	<ul>
+	<li>The first two lines shall be the same: value is "abc", and annotation
+	is "@annot()".</li>
+	<li>The last two lines shall be the same: value is "@annot()", and
+	has no annotation.</li>
+	</ul>
+	]]></html>
+
+	<zscript><![CDATA[
+	void show(Component c) {
+		c.parent.insertBefore(
+			new Label(": " + c.getAnnotations("value", "annot")), c.nextSibling);
+	}
+	]]></zscript>
+
+	<textbox value="abc" a:value="@annot()" xmlns:a="annotation"/>
+	<separator onCreate="show(self.previousSibling)"/>
+	<textbox value="@annot()">
+		<attribute name="value">abc</attribute>
+	</textbox>
+	<separator onCreate="show(self.previousSibling)"/>
+
+	<textbox z:value="@annot()" xmlns:z="zul"/>
+	<separator onCreate="show(self.previousSibling)"/>
+	<textbox>
+		<attribute name="value">@annot()</attribute>
+	</textbox>
+	<separator onCreate="show(self.previousSibling)"/>
+</div>

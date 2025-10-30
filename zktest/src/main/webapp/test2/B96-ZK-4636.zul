@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4636.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Mar 15 14:38:34 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. open devtool and watch the console.
+		2. drag the slider button to the right (out of right edge of slider).
+		3. the _curpos(represent the current value) should not exceed the maxpos.
+		4. should not show zk log.
+	</label>
+	<script>
+		zk.afterLoad('zul.inp',function(){
+			var _xSlider = {};
+			zk.override(zul.inp.Slider.prototype, _xSlider, {
+				_fixPos: function () {
+					_xSlider._fixPos.apply(this, arguments);
+					console.log(this._curpos);
+					if (this._curpos > this._maxpos) {
+						zk.log("_curpos should not exceed the maxpos");
+					}
+				}
+			});
+		});
+	</script>
+	<slider/>
+</zk>

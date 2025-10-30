@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Toast"?>
+<?root-attributes lang="en"?>
+<?import org.zkoss.zkmax.ui.util.Toast?>
+<!--
+toast.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 20 16:33:01 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Toast</n:h1>
+    </n:header>
+    <n:main>
+         <button label="info" onClick='Toast.show("The operation is successful.", "info", "top_right", -1, true)' />
+         <button label="warning" onClick='Toast.show("The system is busy. A slow response is expected.", "warning", "top_right", -1, true)' />
+         <button label="error" onClick='Toast.show("HTTP/1.1 404 Not Found. Please try again later.", "error", "top_right", -1, true)' />
+    </n:main>
+</zk>

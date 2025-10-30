@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2934.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 28 12:17:12 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. You should see the button "button in grid" got the focus state.
+	<button />
+	<window mode="modal">
+
+		<grid>
+			<columns>
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<button label="button in grid" />
+				</row>
+			</rows>
+		</grid>
+		<button label="out of grid" />
+	</window>
+</zk>

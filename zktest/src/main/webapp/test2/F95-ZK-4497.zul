@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4497.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 07 10:31:48 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Mouse
+        1. You can see an "X" icon to clear the selection.
+        2. Press the "X" icon.
+        3. The selection should be empty.
+        Keyboard
+        1. Focus to the searchbox.
+        2. Press Backspace or Delete key without opening the popup.
+        3. The selection should be empty.
+    </label>
+    <zscript><![CDATA[
+    ListModel model = new ListModelList(Locale.getAvailableLocales());
+    model.setMultiple(true);
+    model.addToSelection(Locale.ENGLISH);
+    model.addToSelection(Locale.FRANCE);
+    model.addToSelection(Locale.GERMAN);
+    model.addToSelection(Locale.TRADITIONAL_CHINESE);
+    ]]>
+    </zscript>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <searchbox model="${model}" width="300px" placeholder="Choose..." />
+    <button label="Is selection empty?" onClick="Clients.log(model.isSelectionEmpty())"/>
+    <button label="Make some selection" onClick="model.addToSelection(Locale.ENGLISH)"/>
+    <button label="Make no selection" onClick="model.clearSelection()"/>
+</zk>

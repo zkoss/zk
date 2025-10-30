@@ -1,0 +1,56 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?xel-method prefix="x" name="max" class="java.lang.Math" signature="int max(int,int)"?>
+<zk>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.el.MethodsVM')">
+		[Step 1] Should see "my-test-valuepostfix"
+		<label id="result1" value="@load(vm.concat(vm.value, 'postfix'))"/>
+		[Step 2] Should see "A-my-test-value"
+		<label id="result2" value="@load(c:cat('A-', vm.value))"/>
+		<div>
+			[Step 3] change the value to a 1-digit value, the label should be changed ($0x per person)
+			<intbox id="ib3" value="@bind(vm.price1)"/>
+			<label id="result3" value="@load(c:cat3('$',c:formatNumber(vm.price1, '00'), ' per person'))"/>
+		</div>
+		[Step 4] Should see "array v1"
+		<label id="result4" value="@init(vm.array[0])"/>
+		<div>
+			[Step 5] change the value in intbox, the label should show the max value
+			<label id="result5" value="@load(x:max(vm.price1, vm.price2))"/>
+			<intbox id="ib5_1" value="@bind(vm.price1)"/>
+			<intbox id="ib5_2" value="@bind(vm.price2)"/>
+		</div>
+		[Step 6] change the value to 123 then any other string, the label should be changed properly. (>>null to >>123)
+		<div>
+			<textbox id="tb6" value="@bind(vm.picture)"/>
+			label (test ne):
+			<label id="result6_1" value="@load(vm.picture ne null ? '>>'.concat(vm.picture) : '>>null')"/>
+			, label (test eq):
+			<label id="result6_2" value="@load(vm.picture eq '123' ? 'picture is 123' : 'not 123')"/>
+			, label (test not(), and):
+			<label id="result6_3"
+				   value="@load(not(vm.picture eq null) and vm.picture eq '123' ? 'picture is 123' : 'not 123')"/>
+		</div>
+		[Step 7] change the value to 16 then 19, the following descriptions should be changed properly.
+		<textbox id="tb7" value="@bind(vm.age)"/>
+		<div>
+			<label><![CDATA[
+			The age < 18:
+		]]></label>
+			<label id="result7_1" value="@bind(vm.age lt 18 ? 'true' : 'false')"/>
+		</div>
+		<div>
+			<label><![CDATA[
+			The age <= 18:
+		]]></label>
+			<label id="result7_2" value="@bind(vm.age le 18 ? 'true' : 'false')"/>
+		</div>
+		<div>
+			The age > 18:
+			<label id="result7_3" value="@bind(vm.age gt 18 ? 'true' : 'false')"/>
+		</div>
+		<div>
+			The age >= 18:
+			<label id="result7_4" value="@bind(vm.age ge 18 ? 'true' : 'false')"/>
+		</div>
+	</vlayout>
+</zk>

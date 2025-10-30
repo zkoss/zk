@@ -1,0 +1,133 @@
+<zk xmlns:n="native" xmlns:x="xhtml">
+	<style>
+		.z-listcell-content ul { padding: 10px 20px; margin: 0px; }
+		.icon-red {
+			color: red;
+		}
+		.icon-green {
+			color: green;
+		}
+		.edit-title {
+			position: absolute;
+			left: 0;
+			top: 12px;
+			font-size: 16px !important;
+			font-weight: bold;
+		}
+		button[disabled] .z-icon-undo {
+			color: grey;
+		}
+	</style>
+	<window border="normal" title="Books Management"
+		viewModel="@id('vm')@init('org.zkoss.blog.example.formbinding.BooksViewModel')"
+		validationMessages="@id('vmsgs')">
+		<hlayout>
+			<listbox id="list" model="@load(vm.books)"
+				selectedItem="@bind(vm.currentBook)" hflex="2">
+				<listhead>
+					<listheader label="Name" />
+					<listheader label="Author" />
+					<listheader label="Categories" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell label="@load(each.name)" />
+						<listcell label="@load(each.author)" />
+						<listcell>
+							<x:ul children="@load(each.categories)">
+								<template name="children">
+									<n:li>
+										<label value="@load(each.name)" />
+									</n:li>
+								</template>
+							</x:ul>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<vlayout form="@id('fx') @load(vm.currentBook) @save(vm.currentBook, before='save')" hflex="3">
+				<toolbar align="end" mold="panel">
+					<label sclass="edit-title" value="Book's Details"/>
+					<button iconSclass="z-icon-edit" tooltiptext="edit"
+						visible="@load(not vm.editable)"
+						onClick='@command("editable", editable=true)' />
+					<button iconSclass="z-icon-undo"
+						disabled="@load(not fxStatus.dirty)"
+						tooltiptext="cancel" visible="@load(vm.editable)"
+						onClick="@command('cancel', form=fx)" />
+					<button iconSclass="z-icon-save"
+						tooltiptext="submit" visible="@load(vm.editable)"
+						onClick="@command('save')" />
+				</toolbar>
+				<grid 
+					hflex="1">
+					<columns>
+						<column width="120px" />
+						<column />
+					</columns>
+					<rows children="@load(1) @template(vm.editable ? 'edit' : 'read')">
+						<template name="read">
+						<row>
+							Name:
+							<label value="@load(vm.currentBook.name)" />
+						</row>
+						<row>
+							Author:
+							<label value="@load(vm.currentBook.author)" />
+						</row>
+						<row>
+							Categories:
+							<x:ul
+								children="@load(vm.currentBook.categories)">
+								<template name="children">
+									<n:li>
+										<label value="@load(each.name)" />
+									</n:li>
+								</template>
+							</x:ul>
+						</row>
+						</template>
+						<template name="edit">
+						<row>
+							Name:
+							<textbox value="@bind(fx.name)" width="200px"/>
+						</row>
+						<row>
+							Author:
+							<textbox value="@bind(fx.author)" />
+						</row>
+						<row>
+							Categories:
+							<cell>
+								<listbox model="@load(fx.categories)">
+									<template name="model">
+										<listitem>
+											<listcell>
+												<hlayout>
+													<textbox
+														value="@bind(each.name)" />
+													<a
+														iconSclass="z-icon-minus-circle icon-red"
+														onClick="@command('removeCategory', form=fx, category=each)" />
+												</hlayout>
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+								<hlayout>
+									Add Category
+									<textbox  width="150px"
+										value="@load(fx.resetEmptyStringValue, after={'addCategory', 'cancel'})" />
+									<a
+										iconSclass="z-icon-plus-circle icon-green"
+										onClick="@command('addCategory', form=fx, cateName=self.previousSibling.value)" />
+								</hlayout>
+							</cell>
+						</row>
+						</template>
+					</rows>
+				</grid>
+			</vlayout>
+		</hlayout>
+	</window>
+</zk>

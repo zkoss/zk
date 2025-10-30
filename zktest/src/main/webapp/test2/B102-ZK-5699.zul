@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5699.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed May 21 21:40:00 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    This is a Windows only issue, you need to run the server with Windows environment<separator/>
+    1. Use Windows environment to open the attached project `zk10localeresource` at <a href="https://tracker.zkoss.org/browse/ZK-5699">jira</a><separator/>
+    2. run <label style="background:yellow">mvn jetty:run</label><separator/>
+    3. open <a href="http://localhost:8080/zk10localeresources/">localhost</a><separator/>
+    4. you shouldn't see Java UiException shows on page<separator/>
+</zk>

@@ -1,0 +1,27 @@
+<!-- 
+	20120405 1115 TonyQ
+ -->
+ <zk>
+ 		<grid id = "testGrid" width="50%"  rowRenderer="org.zkoss.zktest.test2.B50_ZK_1022_GridRenderer" emptyMessage="Nothing." hflex = "true" >
+			<frozen style="background: #DFDED8" columns="2" />
+			<columns sizable="true" >
+				<column label="Test3" width="100px"  sort="auto(test3)" />
+				<column label="Test4" width="100px"  sort="auto(test4)" />
+				<column label="Test5" width="100px"  sort="auto(test5)" />
+				<column label="Test6" width="100px"  sort="auto(test6)" />
+				<column label="Test7" width="100px"  sort="auto(test7)" />
+			</columns>
+		</grid>
+		<zscript>
+			ListModelList list = new ListModelList();
+			list.add("test");
+			list.add("test2");
+			list.add("test3");
+			list.add("test4");
+			list.add("test5");
+			testGrid.setModel(list);
+		</zscript>
+		
+		<button onClick="testGrid.setModel(list);" label="setModel" />
+		
+</zk>

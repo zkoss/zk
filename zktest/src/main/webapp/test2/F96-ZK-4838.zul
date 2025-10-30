@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4838.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 15 10:00:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>try using mouse and keyboard to focus/blur the searchbox and cascader, it should work fine.</label>
+	<separator />
+	<button label="for focus" />
+	<zscript>
+		ListModel model = new ListModelArray(new String[] {
+		"North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
+		});
+	</zscript>
+	<searchbox model="${model}" placeholder="An unknown place" autoclose="true" onFocus='Clients.log("searchbox focus")' onBlur='Clients.log("searchbox blur")'>
+		<template name="model">
+			<html><![CDATA[
+				<i class="z-icon-globe"></i> ${each}
+			]]></html>
+		</template>
+	</searchbox>
+	<button label="for focus" />
+	<zscript><![CDATA[
+		DefaultTreeModel tm = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+			Arrays.asList (new DefaultTreeNode[] {
+			new DefaultTreeNode("David", Arrays.asList(new TreeNode[]{new DefaultTreeNode("David-1"),
+			new DefaultTreeNode("David-2")})),
+			new DefaultTreeNode("Thomas",new ArrayList()),
+			new DefaultTreeNode("Steven",new ArrayList())})));
+	]]></zscript>
+	<cascader width="300px" model="${tm}" placeholder="test text" onFocus='Clients.log("cascader focus")' onBlur='Clients.log("cascader blur")' />
+	<button label="for focus" />
+</zk>

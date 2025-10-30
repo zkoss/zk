@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3077.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jan 13 12:36:03 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        public class MoveSelectionVM {
+
+        Set selection1;
+        List list1;
+
+        public MoveSelectionVM(){
+        list1 = new ArrayList();
+        selection1 = new HashSet();
+
+        for (int i=0;i<10;i++){
+        list1.add("Item "+i);
+        }
+        }
+
+        public Set getSelection1() {
+        return selection1;
+        }
+
+        public void setSelection1(Set selection1) {
+        this.selection1 = selection1;
+        }
+
+        public List getList1() {
+        return list1;
+        }
+
+        }
+    ]]></zscript>
+    <window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('MoveSelectionVM')">
+        <label>
+            1.Click the check box (instead of a listitem itself) of an item to select item 0 ~ item 3.
+            2.Click the check box (instead of a listitem itself) of an item to deselect item 0 ~ item 3.
+            3.You should see only Item 3 focused.
+        </label>
+        <listbox model="@bind(vm.list1)" selectedItems="@bind(vm.selection1)" multiple="true" width="300px" height="300px" checkmark="true" >
+            <template name="model">
+                <listitem draggable="@load(true)" label="@load(each)"/>
+            </template>
+        </listbox>
+    </window>
+</zk>

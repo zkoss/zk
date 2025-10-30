@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4474.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 02 12:26:36 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:v-on="http://www.zkoss.org/2020/zk/client/attribute-prefix"
+	xmlns:v-bind="client/attribute-prefix">
+	<div id="binder" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F90_ZK_4474VM')">
+		<label>Click each button, the number should be increased.</label>
+		<separator />
+		<label>ZK Component:</label>
+		<div zclass="vue" v-bind:tooltip="message">
+			<label id="msg">{{ message }}</label>
+			<button sclass="btn" v-on:click="reverseMessage">Reverse Message</button>
+		</div>
+		<label>ZK Native Component:</label>
+		<n:div id="vue-n" v-bind:title="message">
+			<n:p id="msg-n">{{ message }}</n:p>
+			<n:button id="btn-n" v-on:click="reverseMessage">Reverse Message</n:button>
+		</n:div>
+		<label>ZK HTML Component:</label>
+		<html><![CDATA[
+			<div id="vue-h" v-bind:title="message">
+				<p id="msg-h">{{ message }}</p>
+				<button id="btn-h" v-on:click="reverseMessage">Reverse Message</button>
+			</div>
+		]]></html>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		zk.afterMount(function() {
+			var binder = zkbind.$('$binder'),
+				vueOpt = {
+					data: {
+						message: 'Hello'
+					},
+					beforeMount: function() {
+						this.initCallback();
+					},
+					methods: {
+						initCallback: function() {
+							var self = this,
+								updateMsg = function (data) {
+									self.message = data;
+								};
+							binder.after('toClient', updateMsg);
+						},
+						reverseMessage: function() {
+							binder.command('toServer');
+						}
+					}
+				};
+			vueOpt['el'] = '.vue';
+			new Vue(vueOpt);
+			vueOpt['el'] = '#vue-n';
+			new Vue(vueOpt);
+			vueOpt['el'] = '#vue-h';
+			new Vue(vueOpt);
+		});
+	</script>
+</zk>

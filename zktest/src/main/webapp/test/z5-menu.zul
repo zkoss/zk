@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+z5-menu.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 21 11:47:57     2009, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Menu" border="normal">
+	<menubar id="menubar" autodrop="true">
+		<menu label="File" image="/img/m1.gif" >
+			<menupopup>
+				<menuitem image="/img/m1.gif" label="New" onClick="alert(self.label)"/>
+				<menuitem image="/img/m2.gif" label="Open" onClick="alert(self.label)"/>
+				<menuitem image="/img/m3.gif" label="Save" onClick="alert(self.label)"/>
+				<menuseparator/>
+				<menuitem label="Exit" onClick="alert(self.label)"/>
+			</menupopup>
+		</menu>
+		<menu label="Help">
+			<menupopup>
+				<menuitem label="Index" onClick="alert(self.label)"/>
+				<menuseparator/>
+				<menu label="About">
+					<menupopup>
+						<menuitem checked="true" label="None AutoCheck" onClick="alert(self.label)"/>
+						<menuitem checked="true" autocheck="true" label="AutoCheck" onClick="alert(self.label)"/>
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+		<menu image="/img/m2.gif">
+			<menupopup>
+				<menuitem label="Index" onClick="alert(self.label)"/>
+			</menupopup>
+		</menu>
+		<menuitem label="Index" onClick="alert(self.label)"/>
+	</menubar>
+	<button label="Change Orient">
+		<attribute name="onClick">
+		if ("vertical".equals(menubar.getOrient()))
+			menubar.setOrient("horizontal");
+		else menubar.setOrient("vertical");
+		</attribute>
+	</button>
+</window>

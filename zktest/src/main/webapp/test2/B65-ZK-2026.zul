@@ -1,0 +1,7 @@
+<window border="normal" width="500px">
+	<label multiline="true">
+		1. Pick a date with year other than the current year
+		2. After close the calendar control, the year should not changes to the current year.
+	</label>
+	<datebox format="MM.yyyy"/>
+</window>

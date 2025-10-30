@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3298164-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  2 14:56:31 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+ 	You should see the red area only affects the four labels "Listbox".
+ 	<separator/>
+ 	And the bottom border of the bottom listbox shouldn't be covered or cut. 
+	<div id="firstDiv" width="250px" height="250px" style="overflow:hidden">
+		<hbox hflex="1" vflex="1" pack="stretch" style="background:red;">
+			<div vflex="1">
+				<div vflex="min">Listbox</div>
+				<div vflex="min">Listbox</div>
+				<div vflex="min">Listbox</div>
+				<div vflex="min">Listbox</div>
+				<div vflex="min">
+					<menubar vflex="min">
+						<menuitem label="Menuitem 1" />
+					</menubar>
+				</div>
+				<div vflex="1">
+					<listbox vflex="1">
+						<listhead>
+							<listheader label="Col0" />
+						</listhead>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+						<listitem>
+							<listcell label="x" />
+						</listitem>
+					</listbox>
+				</div>
+			</div>
+		</hbox>
+	</div>
+</zk>

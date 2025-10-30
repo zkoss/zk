@@ -1,0 +1,10 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>For each of the Doublespinners, press the Up button 10 times, then Down button 10 times.</li>
+			<li>If, at any step, you see a marginal error like ...0000001 or ...9999999, it is a bug.</li>
+		</ol>
+	]]></html>
+	<doublespinner step="0.01" value="1.0" />
+	<doublespinner step="0.01" value="1.0005" />
+</zk>

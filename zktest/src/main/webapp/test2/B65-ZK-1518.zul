@@ -1,0 +1,9 @@
+<zk>
+	Should not see any error message showed.
+	<decimalbox id="dbx" />
+	<zscript><![CDATA[
+		dbx.setLocale(java.util.Locale.GERMAN);
+		dbx.setFormat("#,##0.0###");
+		dbx.setValue(new java.math.BigDecimal(123456.1234));
+	]]></zscript>
+</zk>

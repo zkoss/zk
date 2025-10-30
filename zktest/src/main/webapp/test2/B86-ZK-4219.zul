@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4219.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri May 03 09:44:14 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. test this case with safari (recommend classic themes to see more clearly)
+		2. double click the separator between column 2 and 3 to auto size column 2
+		3. header and cell widths should remain synchronized
+	</label>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Collections.nCopies(200, "dummy"));
+	]]></zscript>
+	<hlayout>
+		<a href="?zktheme=breeze" label="Breeze" />
+		<a href="?zktheme=sapphire" label="Sapphire" />
+		<a href="?zktheme=silvertail" label="Silvertail" />
+		<a href="?zktheme=atlantic" label="Atlantic" />
+		<a href="?zktheme=default" label="Default" />
+	</hlayout>
+	<grid id="grid" model="${model}" width="1200px" height="800px">
+		<columns sizable="true">
+			<column label="1" width="300px"/>
+			<column label="2" width="300px"/>
+			<column label="3" width="300px"/>
+		</columns>
+		<template name="model">
+			<row>
+				<label value="looooooooooooong Content"/>
+				<label value="looooooooooooong Content"/>
+				<label value="looooooooooooong Content"/>
+			</row>
+		</template>
+	</grid>
+	<button label="check synchronized" xmlns:w ="client" w:onClick="check()"></button>
+	<script><![CDATA[
+		function check() {
+			var headBounding = $('.z-column')[1].getBoundingClientRect(),
+				bodyBounding = $('.z-row-inner')[1].getBoundingClientRect();
+			zk.log(headBounding.right == bodyBounding.right);
+		}
+	]]></script>
+</zk>

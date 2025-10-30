@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4530.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 25 16:58:50 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Add these setting in zk.xml to enable WebSocket
+        &lt;listener>
+          &lt;listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class>
+        &lt;/listener>
+        &lt;library-property>
+          &lt;name>org.zkoss.zkmax.au.websocket.WebSocketEndPoint.pingIntervalSecond&lt;/name>
+          &lt;value>20&lt;/value>
+        &lt;/library-property>
+        2. Open the browser devtool to inspect the WebSocket "ping - pong" packets, currently only observable in Firefox and Safari.
+    </label>
+</zk>

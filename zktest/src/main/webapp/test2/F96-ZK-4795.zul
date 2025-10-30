@@ -1,0 +1,60 @@
+<!--
+F96-ZK-4795.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Mar 16 10:50:45 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<zscript><![CDATA[
+	List list = new ArrayList();
+	for (int i = 0; i < 100; i++)
+		list.add("item_" + i);
+	ListModelList model = new ListModelList(list);
+	DefaultTreeNode root = new DefaultTreeNode("ROOT", new ArrayList());
+        DefaultTreeModel treeModel = new DefaultTreeModel(root);
+        for (int i = 0; i < 100; i++) {
+            root.add(new DefaultTreeNode("item_" + i));
+        }
+	]]></zscript>
+	Scroll down, and you should see each header will be sticky on the top of view
+	<div height="400px" />
+	Grid:
+	<grid model="${model}" sclass="z-sticky-header">
+		<columns>
+			<column label="Item - grid"/>
+		</columns>
+		<template name="model">
+			<row>
+				${each}
+			</row>
+		</template>
+	</grid>
+	<separator />
+	Listbox:
+	<listbox model="${model}" sclass="z-sticky-header">
+		<listhead>
+			<listheader label="Item - Listbox" />
+		</listhead>
+		<template name="model">
+			<listitem label="${each}" />
+		</template>
+	</listbox>
+	<separator />
+	Tree:
+	<tree model="${treeModel}" sclass="z-sticky-header">
+		<treecols>
+			<treecol label="Item - Tree" />
+		</treecols>
+		<template name="model">
+			<treeitem label="${each}" />
+		</template>
+	</tree>
+</zk>

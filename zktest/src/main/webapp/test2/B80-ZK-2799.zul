@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2799.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul  6 14:20:14 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:sh="shadow" xmlns:x="xhtml">
+	<label multiline="true">
+	1. Please click the following two buttons.
+	2. You should see the order of the labels of [0~5] are the same as the output of "Model: ..." 
+	</label>
+	<style>
+		.item {
+			display: inline-block;
+			width: 30px;
+			border-radius: 3px;
+			background-color: PeachPuff;
+			text-align: center;
+			margin: 1px;
+		}
+	</style>
+	
+	<zscript>
+		ListModelList items = new ListModelList();
+		items.add(0);
+		items.add(1);
+		items.add(2);
+		items.add(3);
+		items.add(4);
+		items.add(5);
+	</zscript>
+	
+	<vlayout>
+		<hlayout id="result">
+			<sh:forEach items="${items}">
+				<label sclass="item" value="${each}"/>
+			</sh:forEach>
+		</hlayout>
+		<hlayout>
+			Model: <label id="testLabel" value="${items}"/>
+		</hlayout>
+		
+		<button label="insert 2 items (2, 3) (-> wrong position)" onClick="
+			items.add(2, 102); 
+			items.add(3, 103); 
+			testLabel.setValue(items.toString())"/>
+
+		<button label="insert 2 items (2, 2) (-> reverse order)" onClick="
+			items.add(2, 1021); 
+			items.add(2, 1022); 
+			testLabel.setValue(items.toString())"/>
+	</vlayout>
+</zk>

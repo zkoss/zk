@@ -1,0 +1,8 @@
+<?page title="Button fileupload CSS" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<style src="/test2/css/B65-ZK-2111-Style.css" />
+	<label value="Click upload button, then the file selector should work fine."/>
+	<window width="200px" title="Button fileupload CSS" border="normal">
+		<button upload="true, native" label="upload"/>
+	</window>
+</zk>

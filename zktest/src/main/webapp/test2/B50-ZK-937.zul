@@ -1,0 +1,63 @@
+<zk xmlns:h="xhtml">
+	<h:pre>
+		1. drag selected tab and drop on other tabs 
+		2. select tab should go to the left side of drop tab. 
+		3. the tabpanel should change
+		4. the selected tab should still be selected after dropped
+	</h:pre>
+	<zscript>
+	public void droppedOnTabs(Event event) {
+		DropEvent dropEvent = (DropEvent) event;
+		Tab tab = (Tab) dropEvent.getDragged();
+		Tabs tabs = tab.getParent();
+		tabs.removeChild(tab);
+		tabs.appendChild(tab);
+		tab.setSelected(true);
+		// alert("dropped on tabs");
+	}
+	public void droppedOnTab(Event event) {
+		DropEvent dropEvent = (DropEvent) event;
+		Tab tab = (Tab) dropEvent.getDragged();
+		Tab destination = (Tab) event.getTarget();
+		Tabs tabs = tab.getParent();
+		tabs.removeChild(tab);
+		tabs.insertBefore(tab, destination);
+		
+		tab.setSelected(true);
+		
+		// alert("dropped on tab");
+	}
+</zscript>
+	<style>
+		li.z-drag-over{
+			border-left:2px solid red;
+		}
+		/* dropEffect_ */
+	</style>
+	<tabbox id="tb">
+		<tabs droppable="true" onDrop="droppedOnTabs(event)">
+			<tab label="first" draggable="true" closable="true" droppable="true"
+				onDrop="droppedOnTab(event)" />
+			<tab label="second" draggable="true" droppable="true"
+				onDrop="droppedOnTab(event)" />
+			<tab label="third" draggable="true" droppable="true"
+				onDrop="droppedOnTab(event)" />
+			<tab label="fourth" draggable="true" droppable="true"
+				onDrop="droppedOnTab(event)" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				1
+			</tabpanel>
+			<tabpanel>
+				2
+			</tabpanel>
+			<tabpanel>
+				3
+			</tabpanel>
+			<tabpanel>
+				4
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

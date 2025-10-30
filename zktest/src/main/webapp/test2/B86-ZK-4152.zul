@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4152.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Dec 13 12:47:11 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in Firefox
+		2. Drag the label from red area and drop on the blue area
+		3. You should see "dropped: Drag me" on zk log
+	</label>
+
+	<div style="overflow: auto; background-color:LightSalmon;" height="100px">
+		<label draggable="true" value="Drag me" style="border: 1px solid black; font-size: 20px;"/>
+	</div>
+
+	<div style="background-color:PowderBlue;" droppable="true" height="100px"
+		 onDrop='Clients.log("dropped: " + event.dragged.value);'>
+		<label value="Drop here" style="font-size: 20px;"/>
+	</div>
+</zk>

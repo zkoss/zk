@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B100-ZK-5529.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Dec 14 10:45:35 CST 2023, Created by rebeccalai
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click item node-2-2
+		2. press the right arrow key
+		3. wait for sub-items to render
+		4. press the down arrow key
+		5. item node-0-1 should be selected
+	</label>
+	<div height="600px" width="600px" apply="org.zkoss.zktest.test2.B100_ZK_5529Composer">
+		<tree id="myTree" hflex="1" vflex="1">
+			<template name="model">
+				<treeitem context="menupopup">
+					<treerow>
+						<treecell label="${each.data}"/>
+					</treerow>
+				</treeitem>
+			</template>
+		</tree>
+	</div>
+</zk>

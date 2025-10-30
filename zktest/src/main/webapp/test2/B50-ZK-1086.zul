@@ -1,0 +1,21 @@
+<!--  2012/4/25 TonyQ  -->
+<zk xmlns:h="xhtml">
+
+	<h:pre>
+		1.Click the datebox button to show calendar
+		
+		2.Select  2012/4/22		
+		
+		3.It should show up "22 aprile 2012 (domenica)" in the text of datebox.
+		
+		  If you see "22 aprile 2012 (undefined)", that's a bug.
+	</h:pre>
+<datebox id="viewShiftTableDateBox"
+	sclass="centerTextAlign"
+	format="dd MMMM yyyy (EEEE)"
+	width="200px"
+	locale="it"
+	mold="rounded"
+	hflex="1"
+/>
+</zk>

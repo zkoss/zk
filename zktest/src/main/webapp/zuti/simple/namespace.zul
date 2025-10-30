@@ -1,0 +1,15 @@
+<zk>
+	<zscript>
+	isVisible = true;
+	</zscript>
+	<div style="border:1px solid red;" xmlns:sh="shadow">
+		<sh:if test="${isVisible}">
+			<div style="background:yellow">try custom namespace(name)</div>
+		</sh:if>
+	</div>
+	<div style="border:1px solid red;" xmlns:sh="http://www.zkoss.org/2015/zk/shadow">
+		<sh:if test="${isVisible}">
+			<div style="background:yellow">try custom namespace(namespace)</div>
+		</sh:if>
+	</div>
+</zk>

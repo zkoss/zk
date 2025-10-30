@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F31-1981878.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun  2 17:42:13 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	When you click the "fruits" label, the content of groupbox should be collapsed/expanded.
+<groupbox id="gb" width="300px">
+	<caption image="/test2/img/inet.png" label="fruits"/>
+	<radiogroup>
+		<radio label="Apple"/>
+		<radio label="Orange"/>
+		<radio label="Grape"/>
+	</radiogroup>
+</groupbox>
+</zk>

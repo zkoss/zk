@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1861.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jul 26, 2013  3:00:19 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please resize the browser window, and it should not show any JS error.
+	<window title="CHT1" border="normal" hflex="1" vflex="1">
+		<hlayout hflex="1" vflex="1">
+			<listbox  vflex="1" width="300px">
+				
+			</listbox>
+			<div hflex="1" vflex="1" visible="false">
+				<vlayout hflex="1" vflex="1">
+					<label value="KK" />
+					<listbox  rows="3" width="300px" >
+						<template name="model">
+							<listitem />
+						</template>
+					</listbox>
+					
+				</vlayout>
+			</div>
+		</hlayout>
+	</window>
+</zk>

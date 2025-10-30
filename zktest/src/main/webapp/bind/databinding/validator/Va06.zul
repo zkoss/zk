@@ -1,0 +1,17 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="new page title" border="normal"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.validator.Va06')">
+		<label multiline="true">
+		v6.command, before, converter input with argument
+		1. input -1, not save
+		2. input 22, adult is checked
+		3. input 1, adult no checked
+		</label>
+		<intbox id="ageBox"
+			value="@init(vm.negativeOne) @save(vm.adult, before='checkAdult') @converter(vm.adultConverter) @validator(vm.booleanValidator)" />
+		<button id="checkButton" label="checkAdult" onClick="@command('checkAdult')" />
+		<checkbox id="adultBox" checked="@load(vm.adult)" label="Is Adult"/>			
+		
+	</window>
+</zk>

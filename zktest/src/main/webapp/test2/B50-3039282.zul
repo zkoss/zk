@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3039282.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 17:34:56 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. After this page loaded, you shouldn't see any error dialog.
+<separator/>
+2. Click the button "Resync Model", you shouldn't see any different.
+<zscript>
+ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel(1);
+</zscript>
+<button label="Resync Model" onClick="strset.invalidate()" />
+<grid onCreate="self.model = strset">
+<columns sizable="true">
+<column label="Type" />
+</columns>
+</grid>
+</zk>
+

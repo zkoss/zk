@@ -1,0 +1,35 @@
+<zk>
+  <html><![CDATA[
+  <ol>
+    <li>Try to drag the following box's scrollbar and it shall be able to scroll the content</li>
+    <li>Try to drag the following box's content, and the whole box shall be able to be dragged around</li>
+  </ol>
+   ]]></html>
+  <div style="border:1px solid #c0c0c0;height:100px;width:100px;overflow:auto" draggable="true">
+    <separator/>	
+    <separator/>	
+    <label value="Sample Application form"/>
+    <separator bar="true"/>
+    <separator/>	
+    <separator/>
+    <hbox>
+ 	<label value="First Name :"/>
+   	<textbox/>
+    </hbox>
+    <separator/>
+    <hbox>
+      <label value="Last Name :"/>
+      <textbox/>
+    </hbox>
+    <separator/>
+    <hbox>
+     	<label value="Phone :"/>
+    	<textbox/>
+    </hbox>
+    <separator/>
+    <hbox>
+        <label value="Email :"/>
+    	<textbox/>
+    </hbox>
+  </div>
+</zk>

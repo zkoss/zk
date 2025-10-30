@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3214.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 28, 2016 12:14:54 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.open this page in two browsers
+		2.click item in listbox
+		3.click "Invalidate Session" button
+		4.if the session you selected is self's session, the log should be "null"
+		5.otherwise the log should be current Execution
+	</label>
+	<div apply="org.zkoss.zktest.test2.B80_ZK_3214">
+		<label id="lbl"/>
+		<listbox id="lb"/>
+		<button id="btn" label="Invalidate Session"/>
+	</div>
+</zk>

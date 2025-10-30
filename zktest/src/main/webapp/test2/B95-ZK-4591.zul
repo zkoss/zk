@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4591.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 13 09:45:59 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Reload area" to load the content.
+        2. Scroll tabs by clicking ">" until the selected tab is out of view.
+        3. Click "Reload area" to reload the content.
+        4. Check the browser console. Shouldn't have any JS error (Cannot set property 'scrollLeft' of null).
+    </label>
+    <div apply="org.zkoss.zktest.test2.B95_ZK_4591Composer" width="100%" height="100%">
+        <button id="btn" label="Reload area" />
+        <div id="thearea" width="100%" height="100%"/>
+    </div>
+</zk>

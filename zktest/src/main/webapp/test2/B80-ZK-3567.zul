@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3567.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jan 17 17:14:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+
+    <listbox>
+        <listhead>
+            <listheader label="drag the row and you should not see zk log"/>
+        </listhead>
+        <listitem height="28px" label="&lt;img src=x onerror=zk.log('xss')&gt;" draggable="true"/>
+    </listbox>
+    <label>Select the listitem, and you should not see any zk log!</label>
+    <listbox name='"&gt;&lt;img src=x onerror=zk.log("xss")&gt;'>
+        <listitem label="Select Me" value="\&quot;/&gt;&lt;script&gt;zk.log('xss')&lt;/script&gt;"/>
+    </listbox>
+    <label>Mouse hover and see the tooltip. You should not see any zk log!</label>
+    <button autodisable="self" upload="true,multiple=false,native" tooltiptext='"&gt; &lt;img src=x onerror=zk.log("xss")/&gt;'
+            onUpload="" label="button with tooltiptext"/>
+</zk>

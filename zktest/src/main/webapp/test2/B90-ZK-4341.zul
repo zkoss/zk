@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4341.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 29 18:37:03 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the datebox and type "2019 01 01".
+        2. After you pressed space key, it shouldn't select the highlighted date.
+        3. Use arrow keys to select any date.
+        4. Press space key. This time the highlighted date will be selected.
+    </label>
+    <datebox open="true" format="yyyy MM dd"/>
+</zk>

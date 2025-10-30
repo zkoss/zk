@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-827.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Feb  4 17:48:33 TST 2012, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window>
+		<label multiline="true">
+		1.click sim1,sim2,sim3 to select these 3 item.
+		2.click single, you should see only one item is selected (which one is selected depends on hash code)
+		3.click another other item, the selection should change to clicked item.
+		
+		</label>
+		<zscript><![CDATA[
+		org.zkoss.zul.ListModelList lml1 = new org.zkoss.zul.ListModelList();
+		for(int i=0;i<10;i++){
+			lml1.add(""+i);
+		}
+		
+		void simbind(){
+			if(true) return;
+			//to sim zkbind sequence, you can ignore this method, just check sim1 ..etc
+			Object[] arr = lml1.getSelection().toArray();
+			lml1.clearSelection();
+			
+			for(Object obj:arr){
+				lml1.addToSelection(obj);
+			}
+		}
+		
+		void sim1(){
+			lml1.addToSelection("1");
+			lml1.clearSelection();
+			lml1.addToSelection("1");
+		}
+		void sim2(){
+			lml1.addToSelection("2");
+			lml1.clearSelection();
+			lml1.addToSelection("1");
+			lml1.addToSelection("2");
+		}
+		void sim3(){
+			lml1.addToSelection("3");
+			lml1.clearSelection();
+			lml1.addToSelection("1");
+			lml1.addToSelection("2");
+			lml1.addToSelection("3");
+		}
+		void single(){
+			listbox.setMultiple(false);
+		}
+		void showSelection(){
+			msg.setValue(""+listbox.getModel().getSelection());
+		}
+		
+		]]></zscript>
+		<listbox id="listbox" model="${lml1}" checkmark="true" multiple="true" onSelect="//simbind()">
+		
+		</listbox>
+		<button label="sim1" onClick='sim1()'/>
+		<button label="sim2" onClick='sim2()'/>
+		<button label="sim3" onClick='sim3()'/>
+		<button label="single" onClick='single()'/>
+		<button label="show selection" onClick='showSelection()'/>
+		<label id="msg" />
+	</window>
+</zk>

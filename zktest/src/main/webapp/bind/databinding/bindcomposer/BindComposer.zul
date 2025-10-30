@@ -1,0 +1,21 @@
+<zk>
+	<window id="win1" apply="org.zkoss.bind.BindComposer">
+		[Step 1] Should see "4.0"
+		<separator/>
+		<label id="result1" value="@load((Math.sqrt(16)))"/>
+		<separator/>
+		[Step 2] Click and see zk log
+		<separator/>
+		<button id="btn2" label="trigger global command" onClick="@global-command('doGlobalCommand')"/>
+		<separator/>
+		[Step 3] Should see "org.zkoss.zkmax.bind.impl.AnnotateBinderEx@..."
+		<separator/>
+		<label id="result3" value='${win1.getAttribute("binder")}'/>
+	</window>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.bindcomposer.BindComposerModel')">
+		[Step 4] Should see "123"
+		<label id="result4" value="@load(vm.msg)"/>
+		[Step 5] Should see "00"
+		<label id="result5" value="@load(vm.var)"/>
+	</vlayout>
+</zk>

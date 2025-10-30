@@ -1,0 +1,17 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00638')">
+	
+<vbox> 
+	-------------MVVM---------------------
+	<hbox>l11[<label id="l11" value="@load(vm.value1)"/>]=A</hbox>
+	<hbox>l12[<label id="l12" value="@load(vm.value2)"/>]=B</hbox>
+	<hbox>l12[<label id="l13" value="@load(vm.value3)"/>]=Y2</hbox>
+	
+	<textbox id="t11" value="@save(vm.value1)"/>
+	<textbox id="t12" value="@save(vm.value2)"/>
+	-------------MVP---------------------
+	<label id="l31"/>
+	<textbox id="t31"/>
+	<button label="click me" id="btn1" />
+</vbox>
+<button label="Dump" onClick="binder.getTracker().dump()"/>
+</window>

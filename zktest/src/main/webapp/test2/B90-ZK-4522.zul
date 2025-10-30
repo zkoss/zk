@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4522.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb 24 17:44:40 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Enable WebSocket in zk.xml.
+        &lt;listener>
+          &lt;listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class>
+        &lt;/listener>
+        2. Click "test event" button.
+        3. The server shouldn't have an exception "java.lang.IllegalStateException: ZK Session cannot be null!".
+    </label>
+    <button onClick="Clients.log(event.toString())" label="test event"/>
+</zk>

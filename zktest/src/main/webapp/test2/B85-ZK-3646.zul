@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3646.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 31 10:33:21 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Open by the chrome browser
+		2. Click the url below.
+		3. The new email window should open in the default mail client
+	</label>
+	<a label="test" href="mailto:someone@example.com"/>
+</zk>

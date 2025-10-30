@@ -1,0 +1,61 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.Panel')">
+		Try expanding/maximizing the Panel. The labels should be updated.
+		<panel id="panel" open="@bind(vm.open)" title="open test"
+			collapsible="true" border="normal" maximizable="true"
+			maximized="@bind(vm.maximized)" width="200px">
+			<panelchildren>
+				<vlayout>
+					<label id="panelLabel">testing content</label>
+					<label>testing content</label>
+					<label>testing content</label>
+				</vlayout>
+
+			</panelchildren>
+
+		</panel>
+		<hlayout>
+		open:	<label id="open" value="@load(vm.open)" />
+		</hlayout>
+		<hlayout>
+		maximized:	<label id="maximized" value="@load(vm.maximized)" />
+		</hlayout>
+		<space height="200px"/>
+		<label multiline="true">
+			1. The bottom panel is covered by the top panel.
+			2. Click "zIndex++" button of the bottom panel.
+			3. Now the top panel is covered by the bottom panel.
+		</label>
+		<hlayout>
+			panel 1 zindex:
+			<label id="panel1Zindex" value="@load(vm.index1)" />
+		</hlayout>
+		<hlayout>
+			panel 2 zindex:
+			<label id="panel2Zindex" value="@load(vm.index2)" />
+		</hlayout>
+		<panel id="panel01" title="bottom panel" border="normal" style="position:absolute;left:150px" collapsible="true"
+			   width="200px" movable="true" floatable="true" zindex="@bind(vm.index1)">
+			<panelchildren>
+				<vlayout>
+					<button id="bottomZIndexAdd" onClick="@command('index1Add')" label="zIndex++"/>
+					<label>bottom</label>
+					<label>bottom</label>
+				</vlayout>
+			</panelchildren>
+		</panel>
+		<panel id="panel02" title="top panel" border="normal" style="position:absolute;left:340px" collapsible="true"
+			   width="200px" movable="true" floatable="true"
+			   zindex="@bind(vm.index2)" >
+			<panelchildren>
+				<vlayout>
+					<button id="topZIndexAdd" onClick="@command('index2Add')" label="zIndex++"/>
+					<label>top</label>
+					<label>top</label>
+				</vlayout>
+			</panelchildren>
+		</panel>
+	</div>
+</zk>

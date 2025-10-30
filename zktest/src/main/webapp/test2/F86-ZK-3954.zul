@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F86-ZK-3954.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri, Jun 8, 2018 02:00:00 PM, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout hflex="1">
+        <label multiline="true">
+            1. should not see 'x' closable icon on the 'Project' and 'Main' stack.
+            2. should see 'x' closable icon on the 'Files' tab.
+            3. should be layout as two rows, should have 3 columns in the first row and only one column in the second row.
+            4. click the 'Files' tab, should see log: Files is activated added
+            5. drag the 'Files' tab and move to 'Side' panel, should not be able to drop on the 'north east south west' but able to stack on the tabs.
+            6. should see log: Files dropped Files is activated added
+            7. try to drag the 'Main' panel, should not be able to drag.
+            8. drag the splitters, panels should resized as dragged.
+
+            9. click button 1, should see a panel named 'Main2' added to the north of 'Main'.
+            10. click button 2, should see 'Main3' added to the east of 'Main2'.
+            11. click button 3, should see 'Side2' and 'Side1' added to the west-south and east-south of 'Side'
+            12. click button 4, 3 times, should see 'Todo' toddled stacking with 'Console'.
+            13. click button 5, 'Side2' should be closed properly.
+            14. click button 6, 'Main2' should be moved to east of 'Todo'.
+            15. click button 7, 'Main2' should be moved to west of the whole GoldenLayout.
+            16. click the Maximize icon of the 'Main' stack, should see log: Main maximized added
+            17. click the Minimize icon of the 'Main' stack, should see log: Main minimized added
+            18. close the 'Console' panel, should see log: Console closed added
+
+        </label>
+        <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3954VM')" hflex="1" height="600px">
+            <vlayout vflex="1" hflex="1">
+                <separator/>
+                <hlayout>
+                    <button id="btn1" label="1" tooltiptext="add panel 'Main2' to the north of panel 'Main' by area name">
+                        <attribute name="onClick">
+                            import org.zkoss.zul.impl.Utils;
+
+                            GoldenPanel gp = new GoldenPanel("Main2");
+                            gp.setTitle("Main2");
+                            gp.setId("main2");
+                            gl.addPanel(gp, main.getArea(), "north");
+                        </attribute>
+                    </button>
+                    <button id="btn2" label="2" tooltiptext="add panel 'Main3' to the east of 'Main2' by component id">
+                        <attribute name="onClick">
+                            import org.zkoss.zul.impl.Utils;
+
+                            GoldenPanel gp = new GoldenPanel("Main3");
+                            gp.setTitle("Main3");
+                            gp.setId("main3");
+                            gl.addPanel(gp, main2, "east");
+                        </attribute>
+                    </button>
+                    <button id="btn3" label="3" tooltiptext="add panel 'Side1' to the south of 'Side' by component id, and 'Side2' to west of 'Side1' by area of 'Side1' which have a duplicate area 'A' so that area will be changed in client side, but 'Side2' should still be able to add to the specified location">
+                        <attribute name="onClick">
+                            import org.zkoss.zul.impl.Utils;
+
+                            GoldenPanel gp = new GoldenPanel("Side1");
+                            gp.setTitle("Side1");
+                            gp.setId("side1");
+                            gp.setArea("A");
+                            gl.addPanel(gp, side, "south");
+
+                            GoldenPanel gp = new GoldenPanel("Side2");
+                            gp.setTitle("Side2");
+                            gp.setId("side2");
+                            gl.addPanel(gp, "A", "west");
+                        </attribute>
+                    </button>
+                    <button id="btn4" label="4" tooltiptext="Toggle Todo view">
+                        <attribute name="onClick">
+                            import org.zkoss.zul.impl.Utils;
+                            if (Utils.getComponentById(gl, "todo") != null) {
+                                todo.detach();
+                            } else {
+                                GoldenPanel gp = new GoldenPanel("Todo");
+                                gp.setTitle("Todo");
+                                gp.setId("todo");
+                                gl.addPanel(gp, console.getArea(), "stack");
+                            }
+                        </attribute>
+                    </button>
+                    <button id="btn5" label="5" tooltiptext="close Side2 by detach()">
+                        <attribute name="onClick">
+                            side2.detach();
+                        </attribute>
+                    </button>
+                    <button id="btn6" label="6" tooltiptext="moves 'Main2' to the east of 'Todo'">
+                        <attribute name="onClick">
+                            gl.movePanel(main2, console, "east");
+                        </attribute>
+                    </button>
+                    <button id="btn7" label="7" tooltiptext="move 'Main2' to the west of the whole GoldenLayout">
+                        <attribute name="onClick">
+                            gl.movePanelToRoot(main2, "west");
+                        </attribute>
+                    </button>
+                </hlayout>
+                <separator/>
+                <hlayout>
+                    log: <label id="lb" value=""/>
+                </hlayout>
+                <separator/>
+                <goldenlayout id="gl" hflex="1" vflex="1" orient="vertical" areas="@init(vm.areas)">
+                    <goldenpanel id="project" area="A" title="Project" closable="false" >
+                        <tree id="tree1" rows="4" mold="paging" pageSize="4">
+                            <treecols sizable="true">
+                                <treecol label="Name" />
+                                <treecol label="Description" />
+                            </treecols>
+                            <treechildren>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="Item 1" />
+                                        <treecell label="Item 1 description" />
+                                    </treerow>
+                                </treeitem>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="Item 2" />
+                                        <treecell label="Item 2 description" />
+                                    </treerow>
+                                    <treechildren>
+                                        <treeitem>
+                                            <treerow>
+                                                <treecell label="Item 2.1" />
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem>
+                                            <treerow>
+                                                <treecell label="Item 2.2" />
+                                                <treecell
+                                                        label="Item 2.2 is something who cares" />
+                                            </treerow>
+                                        </treeitem>
+                                    </treechildren>
+                                </treeitem>
+                                <treeitem label="Item 3" />
+                            </treechildren>
+                            <treefoot>
+                                <treefooter label="Count" />
+                                <treefooter label="Summary" />
+                            </treefoot>
+                        </tree>
+                    </goldenpanel>
+                    <goldenpanel id="files" area="A" title="Files" onPanelDrop='lb.setValue(lb.getValue() + " Files dropped")' onActive='lb.setValue(lb.getValue() + " Files is activated")'>
+                    </goldenpanel>
+                    <goldenpanel id="main" area="B" hflex="2" title="Main" closable="false" draggable="false" onMaximize='lb.setValue(lb.getValue() + " Main maximized")' onMinimize='lb.setValue(lb.getValue() + " Main minimized")'>
+                        <textbox hflex="1" vflex="1" multiline="true"/>
+                    </goldenpanel>
+                    <goldenpanel id="side" area="C" title="Side" droppable="false">
+                        <div hflex="1" vflex="1">
+                        </div>
+                    </goldenpanel>
+                    <goldenpanel id="console" area="D" title="Console" onClose='lb.setValue(lb.getValue() + " Console closed")'>
+                    </goldenpanel>
+                </goldenlayout>
+            </vlayout>
+        </div>
+    </vlayout>
+</zk>

@@ -1,0 +1,11 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Remove the '@' sign in the textbox and click outside the textbox, then the Errorbox will appear.</li>
+			<li>Do NOT close the Errorbox, add '@' sign back to the textbox again.</li>
+			<li>Close the Errorbox. If the border of textbox remains red, it is a bug.</li>
+		</ol>
+	]]></html>
+	<textbox id="tb" width="150px" value="info@zkoss.org"
+		constraint="/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*([,;]\s*\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)*/: Please enter real e-mail address" />
+</zk>

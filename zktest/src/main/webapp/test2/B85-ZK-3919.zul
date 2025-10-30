@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3919.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 23 12:54:44 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. click the left button, and then the right button
+        2. should see "response is: myValue" in zklog
+        3. repeat step1,2 10 times, should not see "response is: null" in zklog
+
+    </label>
+    <zscript>
+        import org.zkoss.zk.au.http.AuExtension;
+        import org.zkoss.zk.au.http.DHtmlUpdateServlet;
+        import javax.servlet.http.HttpServletRequest;
+        import javax.servlet.http.HttpServletResponse;
+
+        AuExtension auExt = new AuExtension() {
+        public void init(DHtmlUpdateServlet servlet) {
+        }
+        public void destroy() {
+        }
+        public void service(HttpServletRequest req, HttpServletResponse res, String pi) {
+            res.getWriter().write("response is: " + req.getParameter("myParam"));
+            res.getWriter().flush();
+        }
+        };
+        DHtmlUpdateServlet.getUpdateServlet(application).addAuExtension("/auext", auExt);
+    </zscript>
+    <button label="cause problem" onClick='Executions.getCurrent().getParameter("")'/>
+    <button label="trigger au extension with url parameters">
+        <attribute w:name="onClick"><![CDATA[
+			jq.get(zk.updateURI + '/auext', {myParam: "myValue"}, function(res, status) {
+			    zk.log(res);
+			});
+		]]></attribute>
+    </button>
+</zk>

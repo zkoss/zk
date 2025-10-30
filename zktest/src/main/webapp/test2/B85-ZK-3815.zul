@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.lang.Math ?>
+<!--
+B85-ZK-3815.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Mar 26 14:05:17 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript language="JavaScript"><![CDATA[
+        //if zscript contains any code including a comment, this page produces a MethodNotFoundException
+        //if you comment out (or remove) the whole zscript, then no exception is thrown.
+        //(8.5.0)
+    ]]></zscript>
+    <zscript language="Java">
+        public class MyMath {
+            public static double sqrt (double i) {
+                return Math.sqrt(i);
+            }
+        }
+    </zscript>
+    <label multiline="true">
+        1. No exception is thrown
+        2. The value of labels are correct
+    </label>
+    <div apply="org.zkoss.bind.BindComposer">
+        <label id="lb1" value="@init(Math.sqrt(16))"/>
+        <label id="lb2" value="@init(MyMath.sqrt(16))"/>
+    </div>
+</zk>

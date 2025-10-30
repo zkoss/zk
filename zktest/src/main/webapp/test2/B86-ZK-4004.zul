@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4004.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 13 16:12:07 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div>
+        <label multiline="true">
+            1. Click "invisible". The remaining columns should take the full space.
+            2. Click "rerender". The width of columns shouldn't change.
+            3. Click "remove". The width of columns shouldn't change.
+        </label>
+        <grid id="inboxGrid" width="600px" height="250px" span="true">
+            <columns>
+                <column id="tgCol" hflex="min" label="1" />
+                <column hflex="min" label="2" />
+                <column hflex="min" label="3" />
+                <column hflex="min" label="4" />
+            </columns>
+            <rows>
+                <row>
+                    <label id="tgCell" value="looooooooooooooooooong label"/>
+                    <label value="mediummmmmmmm label"/>
+                    <label value="short label"/>
+                    <label value="short label"/>
+                </row>
+            </rows>
+        </grid>
+        <button id="invisible" onClick="tgCol.visible = !tgCol.visible"
+                label="invisible" />
+        <button id="rerender" onClick="inboxGrid.invalidate();" label="rerender" />
+        <button id="remove" onClick="tgCol.detach();tgCell.detach();" label="remove" />
+    </div>
+</zk>

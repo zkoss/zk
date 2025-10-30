@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1888.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Aug 15, 2013  9:31:54 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[ 
+
+		ArrayList data = new ArrayList();
+		for (int i = 1; i <= 42; i++) {
+			data.add("Data " + i);
+		}
+
+		ListModel dataModel = new SimpleListModel(data);
+	 ]]></zscript>
+	<grid id="grid" mold="paging" onCreate="self.getPaginal().setAutohide(false)"
+		pageSize="10" model="${dataModel}" activePage="4">
+		 <custom-attributes org.zkoss.zul.grid.rod="false"/>
+		<columns>
+			<column value="Data"/>
+		</columns>
+	</grid>
+
+	<button id="button" label="Clear">
+		<attribute name="onClick"><![CDATA[ 
+
+			ArrayList data = new ArrayList();
+
+			ListModel dataModel = new SimpleListModel(data);
+			grid.setModel(dataModel);
+			System.out.println("size: " + grid.getPaginal().getTotalSize());
+		 ]]></attribute>
+	</button>
+</zk>

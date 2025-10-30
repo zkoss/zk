@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.zktest.test2.B96_ZK_5032_StaticClass ?>
+
+<!--
+B96-ZK-5032.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/16, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout>
+        <hlayout>
+            <label>used directly: </label>
+            <label value="${B96_ZK_5032_StaticClass.STATIC_STRING}"/>
+        </hlayout>
+        <hlayout>
+            <label>used from shadow element property: </label>
+            <apply template="item" myLabel="${B96_ZK_5032_StaticClass.STATIC_STRING}" />
+            <template name="item">
+                <label sclass="action" value="${myLabel}"/>
+            </template>
+        </hlayout>
+        <hlayout>
+            <custom-attributes myStringAsAttribute="${B96_ZK_5032_StaticClass.STATIC_STRING}"/>
+            <label>using from custom attribute: </label>
+            <apply template="item" myLabel="${myStringAsAttribute}" />
+            <template name="item">
+                <label sclass="action" value="${myLabel}"/>
+            </template>
+        </hlayout>
+    </vlayout>
+</zk>

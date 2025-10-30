@@ -1,0 +1,13 @@
+<zk>
+	<window title="Iframe" border="normal" width="300px">
+		<zscript>
+		EventQueue que = EventQueues.lookup("iframe", "group", true);
+		que.subscribe(new EventListener() {
+			public void onEvent(Event evt) {
+				lbl.setValue((String)evt.getData());
+			}
+		});
+		</zscript>
+		<textbox id="lbl" value="This is Iframe" />
+	</window>
+</zk>

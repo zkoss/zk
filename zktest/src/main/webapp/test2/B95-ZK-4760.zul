@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4760.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jan 26 12:33:18 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label multiline="true">
+		Click all buttons, all messages should not be hidden in the message box.
+	</label>
+	<button id="btn1" label="messagebox 1" onClick='throw new Exception("cannot find any method that is annotated for
+	 the command showHello with @Command in j21eol4p$v0.HelloViewModel@fff330ce at
+	[file:/tmp/resource463596934025823ffdsfafdasf0562tmp/21eol4p/0/index.zul, line:4]");'/>
+	<button id="btn2" label="messagebox 2" onClick='throw new Exception("error");'/>
+	<button label="Question" width="100px">
+		<attribute name="onClick"><![CDATA[
+			Messagebox.show("Question is pressed. Are you sure?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);
+		]]></attribute>
+	</button>
+	<button label="Warning" width="100px">
+		<attribute name="onClick"><![CDATA[
+			Messagebox.show("[file:/tmp/resource463596934025823ffdsfafdasf0562tmp/21eol4p/0/index.zul, line:4]", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
+		]]></attribute>
+	</button>
+	<button label="Information" width="100px">
+		<attribute name="onClick"><![CDATA[
+			Map params = new HashMap();
+			params.put("width", "600px");
+			Messagebox.show("Information is pressed.",null, null, null, Messagebox.INFORMATION, null,null, params);
+		]]></attribute>
+	</button>
+	<button label="Information" width="100px">
+		<attribute name="onClick"><![CDATA[
+			Map params = new HashMap();
+			params.put("width", "100px");
+			Messagebox.show("[file:/tmp/resource4635962tmp/21eol4p/0/index.zul, line:4]",null, null, null, Messagebox.INFORMATION, null,null, params);
+		]]></attribute>
+	</button>
+</zk>

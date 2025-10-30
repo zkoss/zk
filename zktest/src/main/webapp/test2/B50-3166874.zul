@@ -1,0 +1,16 @@
+<zk>
+	<window width="500px" mode="modal">
+		<caption label="Caption Title">
+			<toolbarbutton label="Go" onClick="lb.value = txt.value" />
+		</caption>
+		<html><![CDATA[
+			<ol>
+				<li>Change the value of textbox to "bbb", but DO NOT click outside the textbox.</li>
+				<li>Click on the "Go" toolbarbutton in the caption. You shall see the label show "bbb", otherwise it's a bug.</li>
+				<li>Make sure the modal Window is draggable, otherwise it's a bug.</li>
+			</ol>
+		]]></html>
+		<textbox id="txt" value="aaa" />
+		<label value="Label: " /><label id="lb" />
+	</window>
+</zk>

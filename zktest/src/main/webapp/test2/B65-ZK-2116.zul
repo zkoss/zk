@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2116.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Mar 28, 2014 12:12:36 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+If you can see this page without any JS error, that's correct.
+<button>
+	<attribute name="label">
+		<![CDATA[ </script><script src=//a/e> ]]>
+	</attribute>
+</button>
+<listbox>
+<listitem>
+<attribute name="label"><![CDATA[
+</script ><script src=//a/e>
+]]></attribute>
+</listitem>
+</listbox>
+</zk>

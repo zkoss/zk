@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-1519.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Feb 20, 2013 12:22:21 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<style>
+		.profile { width:60px; height:60px; } .p-data { padding-top:5px;
+		}
+	</style>
+	<image src="img/B60-ZK-1519_1.png"/>
+	
+	<label multiline="true">
+	1. Please refer to the image above to test it in IE 10 only.
+	2. The cursor to the red color area, the popup should not be disappeared.
+	</label>
+	<listbox width="500px">
+		<listhead>
+			<listheader label="Operation" width="200px" />
+			<listheader label="Contants" sort="auto" />
+		</listhead>
+		<listitem tooltip="msg">
+			<listcell label=" Mouse hover - tooltip " />
+			<listcell>
+				<hlayout>
+					<image src="/img/msn1.gif" class="profile" />
+					<image src="/img/Centigrade-Widget-Icons/CasualUserMale-16x16.png" class="p-data" />
+					<vlayout class="p-data">
+						<label value="Male" />
+						<label value="Male@hotmail.com" />
+					</vlayout>
+				</hlayout>
+			</listcell>
+		</listitem>
+		<listitem popup="msg">
+			<listcell label="Click - popup" />
+			<listcell>
+				<hlayout>
+					<image src="/img/msn1.gif" class="profile" />
+					<image src="/img/Centigrade-Widget-Icons/CasualUserFemale-16x16.png" class="p-data" />
+					<vlayout class="p-data">
+						<label value="Female" />
+						<label value="Female@hotmail.com" />
+					</vlayout>
+				</hlayout>
+			</listcell>
+		</listitem>
+	</listbox>
+	<popup id="msg" width="300px">
+		<vlayout>
+			This user is online now !
+			<toolbarbutton label="Mail him/her"/>
+<tree id="tree" width="200px" rows="8">
+	<treecols sizable="true">
+		<treecol width="250px" label="Name" />
+		<treecol label="Description" />
+	</treecols>
+	<treechildren>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 1" />
+				<treecell label="Item 1 description" />
+			</treerow>
+		</treeitem>
+		<treeitem>
+			<treerow>
+				<treecell label="Item 2" />
+				<treecell label="Item 2 description" />
+			</treerow>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.1" />
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.1" />
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.1.2" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 2.2" />
+					</treerow>
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2.2.1" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</treeitem>
+			</treechildren>
+		</treeitem>
+		<treeitem label="Item 3" />
+	</treechildren>
+</tree>
+
+		</vlayout>
+	</popup>
+</zk>
+			

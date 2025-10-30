@@ -1,0 +1,8 @@
+<zk>
+	<label multiline="true">
+	Chrome/Safari Only
+	1. Open datebox's popup.
+	2. Click arrow button of the timebox directly (do not focus on input node), should see the value in datebox changed.
+	</label>
+	<datebox id="db" cols="20" format="yyyy/MM/dd HH:mm" onCreate="self.value = new Date()" />
+</zk>

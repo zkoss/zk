@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-343.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Aug 23, 2011 7:22:34 PM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>1. Scroll to "header 4"</div>
+	<div>2. Click next page.</div>
+	<div>3. The column shall stay on "header4".</div>
+	<listbox mold="paging" pageSize="2">
+
+		<listhead>
+			<listheader label="header 1" />
+			<listheader label="header 2" />
+			<listheader label="header 3" />
+			<listheader label="header 4" />
+		</listhead>
+		<frozen columns="2" />
+		<listitem>
+			<listcell label="cell 1" />
+			<listcell label="cell 2" />
+			<listcell label="cell 3" />
+			<listcell label="cell 4" />
+		</listitem>
+		<listitem>
+			<listcell label="cell 1" />
+			<listcell label="cell 2" />
+			<listcell label="cell 3" />
+			<listcell label="cell 4" />
+		</listitem>
+		<listitem>
+			<listcell label="cell 1" />
+			<listcell label="cell 2" />
+			<listcell label="cell 3" />
+			<listcell label="cell 4" />
+		</listitem>
+		<listitem>
+			<listcell label="cell 1" />
+			<listcell label="cell 2" />
+			<listcell label="cell 3" />
+			<listcell label="cell 4" />
+		</listitem>
+	</listbox>
+</zk>

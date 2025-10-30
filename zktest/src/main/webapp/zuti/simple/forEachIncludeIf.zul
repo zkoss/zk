@@ -1,0 +1,11 @@
+<zk>
+	<vlayout>
+	begin=0, end=3, if each is 2, color is blue, otherwise, color is red.
+	<div id="host" style="border:1px solid red;">
+		<forEach begin="0" end="3" var="item">
+			<template src="include/forEachIncludeIf.zul"></template>
+		</forEach>
+	</div>
+	</vlayout>
+	<debugger rootId="host"/>
+</zk>

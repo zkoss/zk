@@ -1,0 +1,19 @@
+<?component name="wizard" templateURI="include/wizard.zul"?>
+<zk xmlns:sh="shadow">
+	
+	<style>
+		.invalid {
+			color: red;
+		}
+	</style>
+	
+	<div 
+			viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.WizardViewModel')"
+			validationMessages="@id('vmsgs')" >
+		<wizard model="@ref(vm.wizardModel)" formData="@ref(vm.order)" formVar="orderForm">
+			<template name="shipping" src="include/shipping.zul" />
+			<template name="payment" src="include/payment.zul"/>
+			<template name="confirmation" src="include/confirmation.zul"/>
+		</wizard>
+	</div>
+</zk>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3527.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 13 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import java.time.LocalDateTime;
+		import java.time.ZoneId;
+		import java.time.ZonedDateTime;
+
+		ZoneId lisbonZone = ZoneId.of("Europe/Lisbon");
+		ZoneId berlinZone = ZoneId.of("Europe/Berlin");
+
+		public Date getCalendar(int year, int month, int day, ZoneId zone) {
+			LocalDateTime ldt = LocalDateTime.of(year, month, day, 0, 0, 0);
+			ZonedDateTime zdt = ZonedDateTime.of(ldt, zone);
+			return Date.from(zdt.toInstant());
+		}
+
+		Date d1 = getCalendar(1976, 3, 1, lisbonZone);
+		Date d2 = getCalendar(1979, 7, 1, berlinZone);
+		Date d3 = getCalendar(1912, 1, 2, lisbonZone);
+		Date d4 = getCalendar(1947, 8, 10, berlinZone);
+	]]></zscript>
+
+	(1) Lisbon:
+	<datebox id="db1" format="yyyy-MM-dd HH:mm" timeZone="Europe/Lisbon" width="200px"
+			 showTodayLink="true"/>
+	<separator/>
+	(2) Berlin:
+	<datebox id="db2" format="yyyy-MM-dd HH:mm" timeZone="Europe/Berlin" width="200px"
+			 showTodayLink="true"/>
+	<separator/>
+	(3) Lisbon:
+	<datebox id="db3" format="yyyy-MM-dd HH:mm" timeZone="Europe/Lisbon" width="200px"
+			 showTodayLink="true"/>
+	<separator/>
+	(4) Berlin:
+	<datebox id="db4" format="yyyy-MM-dd HH:mm" timeZone="Europe/Berlin" width="200px"
+			 showTodayLink="true"/>
+	<separator/>
+
+	<zscript><![CDATA[
+		db1.setValue(d1);
+		db2.setValue(d2);
+		db3.setValue(d3);
+		db4.setValue(d4);
+	]]></zscript>
+	<label multiline="true">
+		Check the string in datebox, hours and minutes should be 00:00.
+
+		Info:
+		Clock Changes in Lisbon, Portugal (Lisboa) in 1912
+		1 Jan 1912 - Time Zone Change (LMT → WET)
+		When local standard time was about to reach
+		Monday, 1 January 1912, 00:00:00 clocks were turned forward 0:36:45 hours to
+		Monday, 1 January 1912, 00:36:45 local standard time instead.
+
+		Update since tzdata 2018d (tested in java 10.0.2 / 1.8.0_181):
+		According to a Portuguese decree,
+		Lisbon was at -0:36:44.68, but switched to GMT on 1912-01-01 at 00:00
+	</label>
+</zk>

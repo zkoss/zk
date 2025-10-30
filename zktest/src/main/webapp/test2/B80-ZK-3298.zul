@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3298.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 21 10:11:40 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout>
+		<label multiline="true">
+			(only in chrome)
+			resize the width of the browser
+			the right-aligned &lt;div&gt; should remain on the right,
+			while the left label should consume the remaining space (defined by hflex="1")
+		</label>
+		<hbox hflex="1" spacing="0" style="border:1px solid green">
+			<label hflex="1" value="Left aligned label" style="background:yellow"/>
+			<div style="background:pink">
+				right aligned stuff
+			</div>
+		</hbox>
+	</vlayout>
+</zk>

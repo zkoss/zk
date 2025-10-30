@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1819264.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun  9 17:34:04 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<borderlayout height="300px">
+	<center autoscroll="true">
+		<div height="500px">
+			Please focus in the textbox, then focus out, and then when
+			you scroll up/down the scroll bar, the error box should be
+			moved according to the textbox.
+			<separator />
+			<textbox value="show Error" constraint="/.+@.+\.[a-z]+/" />
+		</div>
+	</center>
+</borderlayout>

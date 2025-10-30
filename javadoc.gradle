@@ -1,0 +1,131 @@
+// Script for build javadoc and jsdoc
+
+def currentYear = new Date().format("yyyy")
+// general javadoc options
+def javadocOptions = {
+	options.author true
+	options.use true
+	options.version true
+	options.showFromProtected()
+	options.addStringOption("charset", "UTF-8")
+	options.addBooleanOption("notimestamp", false)
+	options.addBooleanOption("-allow-script-in-comments", true)
+	options.addBooleanOption('Xdoclint:none', true)
+	options.addBooleanOption("breakiterator", true)
+	options.addStringOption("-source ${version}")
+}
+def footerMessage = '<p class="legalCopy"><small>Copyright &copy; 2005-' + "${currentYear}" + ' Potix Corporation. All Rights Reserved.\n' +
+		'<script type="text/javascript">if (location.href.indexOf(\'zkoss.org\') >= 0) {var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));}</script><script type="text/javascript">if (location.href.indexOf(\'zkoss.org\') >= 0) {var pageTracker = _gat._getTracker("UA-121377-3");pageTracker._setDomainName("zkoss.org");pageTracker._initData();pageTracker._trackPageview();}</script>\n' +
+		'\t </small></p>\n'
+
+def addJavadocFooter(dir, footerMessage) {
+	fileTree(dir: dir).matching {
+		include "**/*.html"
+	}.each { htmlFile ->
+		ant.replaceregexp(
+				file: htmlFile,
+				match: '<!-- ======== END OF BOTTOM NAVBAR ======= -->\n',
+				replace: '<!-- ======== END OF BOTTOM NAVBAR ======= -->\n' + footerMessage
+		)
+	}
+}
+
+// generate javadoc
+task alljavadoc(type: Javadoc) {
+	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+		dependsOn gradle.includedBuild('zkcml').task(':stateless:compileJava')
+	}
+	title = "$project.description ${version} API"
+	options.setWindowTitle("$project.description ${version} API")
+	configure javadocOptions
+	source zkprojects.values().collect { dir ->
+		"$dir/src/main/java"
+	}
+	// add immutables code-gen for generating Javadoc
+	source files("../zkcml/stateless/build/generated/sources")
+
+	// Can't get package.html into javadoc with gradle
+	exclude '**/package.html',
+			'**/ELParser.html',
+			'**/*.properties',
+			'**/*.jjt',
+			'**/**.template' //stateless action type template
+	destinationDir = file("$buildDir/docs/javadoc/zk")
+
+	subprojects.forEach(prj -> {
+		classpath += prj.sourceSets.main.compileClasspath
+	})
+	gradle.includedBuilds.each {
+//		println ">>>>>>>>$it.name"
+		if (it.name != 'zkthemes' && it.name != 'zksandbox') {
+			def rootGradle = it.properties['target'].properties['buildController'].gradle
+			it.properties['target'].properties['availableModules'].each {
+				def prj = rootGradle.rootProject.findProject(it.right.identityPath.toString())
+				if (!prj) {
+					prj = rootGradle.rootProject.findProject(it.right.projectPath.toString())
+				}
+//				println ">>> name: " + prj.name
+				if (prj) {
+					classpath += prj.configurations.compileClasspath
+				}
+			}
+		}
+	}
+	doLast {
+		addJavadocFooter("$buildDir/docs/javadoc/zk", footerMessage)
+
+		// copy xml and html to the destination since they might be referenced by package.html
+		subprojects {
+			copy {
+				from "$rootDir/$project.name/src/main/java"
+				include "org/zkoss/**/*.xml"
+				include "org/zkoss/**/*.html"
+				exclude "**/package.html"
+				into file("$buildDir/docs/javadoc/zk")
+				setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+			}
+		}
+	}
+}
+
+// generate jsdoc
+task alljsdoc(type: NpmTask) {
+	dependsOn alljavadoc
+	args = ['run', 'build:doc']
+}
+
+subprojects {
+	// build javadoc each subproject for bundle
+	task buildJavadoc(type: Javadoc) {
+		// dependsOn all subprojects jar for javadoc classpath
+		dependsOn rootProject.subprojects.collect { ":$it.name:jar" }
+		if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+			dependsOn gradle.includedBuild('zkcml').task(':jar')
+		}
+		title = "$project.description ${version} API"
+		options.setWindowTitle("$project.description ${version} API")
+		configure javadocOptions
+		options.links 'https://docs.oracle.com/javase/8/docs/api/'
+		source sourceSets.main.allJava
+
+		// Can't get package.html into javadoc with gradle
+		exclude '**/package.html',
+				'**/ELParser.html',
+				'**/*.properties',
+				'**/*.jjt',
+				'**/**.template' //stateless action type template
+		destinationDir = file("$buildDir/docs/javadoc")
+
+		// add jars in dist into classpath
+		classpath += configurations.compileClasspath
+		// add jars in other projects(zk & cml) into classpath
+		classpath += files(zkprojects.collect {prj, dir ->
+			"$dir/build/libs/$prj-${version}.jar"
+		})
+
+		doLast {
+			def shortFooterMessage = '<p class="legalCopy"><small>Copyright &#169; ' + "${currentYear}." + ' All rights reserved.</small></p>\n'
+			addJavadocFooter("$buildDir/docs/javadoc", shortFooterMessage)
+		}
+	}
+}

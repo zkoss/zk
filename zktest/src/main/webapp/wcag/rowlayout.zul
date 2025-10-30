@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Rowlayout"?>
+<?root-attributes lang="en"?>
+<!--
+rowlayout.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jun 18 17:32:13 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Rowlayout</n:h1>
+	</n:header>
+	<n:main>
+		<rowlayout ncols="12">
+			<forEach begin="1" end="3">
+				<rowchildren colspan="4" style="background-color: skyblue">
+					1/3
+				</rowchildren>
+			</forEach>
+		</rowlayout>
+		<rowlayout ncols="12">
+			<rowchildren colspan="4" style="background-color: skyblue" offset="2">
+				offset 2 columns
+			</rowchildren>
+		</rowlayout>
+		<rowlayout ncols="12" spacing="1000%">
+			<forEach begin="1" end="3">
+				<rowchildren colspan="4" style="background-color: skyblue">
+					spacing = 100%
+				</rowchildren>
+			</forEach>
+		</rowlayout>
+	</n:main>
+</zk>

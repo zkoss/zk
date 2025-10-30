@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4304.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 28 09:47:26 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Combobox and Bandbox could change the button icon:
+		1. load the page, the button icons of combobox(z-icon-caret-down) and bandbox(z-icon-search) should be default.
+		2. try the buttons to change the icons, both combobox and bandbox button icons should change to what you set.
+	</label>
+	<button label="calendar" onClick='bd.setIconSclass("z-icon-calendar");cb.setIconSclass("z-icon-calendar");'/>
+	<button label="search" onClick='bd.setIconSclass("z-icon-search");cb.setIconSclass("z-icon-search");'/>
+	<button label="caret-down" onClick='bd.setIconSclass("z-icon-caret-down");cb.setIconSclass("z-icon-caret-down");'/>
+	<separator/>
+	<combobox id="cb" />
+	<bandbox id="bd" />
+</zk>

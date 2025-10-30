@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3809.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 16 16:19:32 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script><![CDATA[
+    zk.afterLoad(function () {
+        zk.override(zAu.cmd0, "download", function (url) {
+            zk.log(url);
+            zAu.cmd0.$download.apply(this, arguments);
+        });
+    });
+    ]]>
+    </script>
+    <label multiline="true">
+        1. Click the "Download" button.
+        2. The save dialog indicates the file name is not just "test" but "test#!?$(&lt;_&gt;/\&quot;&apos;)*+,:;=@[].txt" (some illegal characters might be replaced with _).
+    </label>
+    <button label="Download" onClick='Filedownload.save("test content", "text/plain", "test#!?$(&lt;_&gt;/\&quot;&apos;)*+,:;=@[].txt")' />
+</zk>

@@ -1,0 +1,35 @@
+<!--
+B50-ZK-181.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 25 09:38:12 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		The spacing of Hlayout and Vlayout should be 5px.
+	</div>
+	<style>
+		.z-hlayout-inner {
+			padding-right: 5px;
+		}
+		.z-vlayout-inner {
+			padding-bottom: 5px;
+		}
+	</style>
+	Hlayout:
+	<hlayout spacing="auto">
+		<div width="50px" style="border: 1px solid green">Div 1</div>
+		<div width="50px" style="border: 1px solid green">Div 2</div>
+	</hlayout>
+	Vlayout:
+	<vlayout spacing="auto">
+		<div width="50px" style="border: 1px solid green">Div 1</div>
+		<div width="50px" style="border: 1px solid green">Div 2</div>
+	</vlayout>
+</zk>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B95-ZK-4566.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 2 15:29:38 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Should see view display correct ("false" in zk log)
+	</label>
+	<tablelayout id="tl" columns="3" vflex="true" hflex="true">
+		<tablechildren width="150px">
+			<hlayout style="background-color:#f1f2f9">
+				<button label="button1"></button>
+			</hlayout>
+		</tablechildren>
+		<tablechildren width="10%">
+			<panel title="Table 1" border="normal" vflex="true" hflex="true">
+				<panelchildren>
+					<hlayout vflex="true" hflex="true" style="background-color:#c0c0c0">
+						<button label="button1"></button>
+					</hlayout>
+				</panelchildren>
+			</panel>
+		</tablechildren>
+		<tablechildren width="10%">
+			<hlayout vflex="true" hflex="true" style="background-color:#00d29e">
+				<button label="button1"></button>
+			</hlayout>
+		</tablechildren>
+	</tablelayout>
+	<script>
+		zk.afterMount(function() {
+			zk.log(zk.$('$tl')._cssflex);
+		});
+	</script>
+</zk>

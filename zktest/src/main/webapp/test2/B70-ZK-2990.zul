@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2990.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 26 10:37:35 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<!-- to reproduce in all browsers, defaults to IE only -->
+<?script content="zk.useStackup=true"?>
+<zk>
+	<label multiline="true">
+		1. click the button "Show notification" -> notification error is shown -> ok
+		2. close the window (not the notification)
+		3. close the notification, if the notification is closed, it's correct.
+	</label>
+	<window title="modal window" closable="true" mode="modal" width="400px">
+		<button label="Show notification!" onClick='Clients.showNotification("TEST", "error", null, "middle_center", 50000000, true);'/>
+	</window>
+</zk>

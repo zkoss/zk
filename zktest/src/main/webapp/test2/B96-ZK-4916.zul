@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4916.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jun 10 10:10:39 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client" >
+	<apply templateURI="/test2/include/themes.zul" />
+	<label multiline="true">
+		1. click the "value to foo" button, you shall see the "foo" text in the tbeditor.
+		2. click the "value to bar" button, you shall see the "bar" text in the tbeditor.
+	</label>
+	<tbeditor id="editor" />
+	<button label="value to foo" onClick='editor.setValue("foo");'/>
+	<button label="value to bar" onClick='editor.setValue("bar");'/>
+	<button label="rerender editor widget" w:onClick='zk.$("$editor").rerender();'/>
+</zk>

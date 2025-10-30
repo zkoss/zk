@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4686.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Nov 24 10:25:45 AM CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	Click sequence to Error: "test remove" -> "display view1" -> "display default" -> "display view1", the view will be changed in each step
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4686VM')" vflex="1">
+		<label id="target1" value="@load(vm.data)"/>
+		<button id="rmBtn1" label="test remove1" onClick="target1.detach()" />
+		<button id="chgToViewBtn" label="display view1" onClick="@command('displayView1')" />
+		<button id="chgToDefaultBtn" label="display default" onClick="@command('displayDefault')" />
+		<separator />
+		Target:
+		<label id="target2" value="@load(vm.data.template)"/>
+		<button id="rmBtn2" label="test remove2" onClick="target2.detach()" />
+		<separator />
+		Other bean:
+		<label id="rm3" value="@load(vm.data1)"/>
+		<button label="test remove3" onClick="rm3.detach()" />
+		<button id="showCacheSizeBtn" label="Show tracker node cache" onClick="@command('showNodeCache')" />
+		Cache size:
+		<label id="nodeCacheSize" value="@load(vm.nodeCacheSize)"/>
+	</div>
+</zk>

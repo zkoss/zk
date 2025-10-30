@@ -1,0 +1,55 @@
+plugins {
+	id 'java-library'
+	id 'checkstyle'
+	id 'com.github.gmazzo.buildconfig'
+}
+
+java {
+	// Declaring feature variants for optionalImplementation, to generate dependency optional in pom
+	registerFeature('optional') {
+		usingSourceSet(sourceSets.main)
+	}
+}
+
+repositories {
+	mavenCentral() // workaround for sometimes zkplus:compileJava FAILED
+
+	maven {
+		name = 'maven seasar org'
+		url = uri('https://maven.seasar.org/maven2')
+	}
+
+	maven {
+		name = 'jboss-repo'
+		url = uri('https://repository.jboss.org/nexus/content/groups/public-jboss/')
+	}
+
+	maven {
+		name = 'nuxeo'
+		url = uri('https://maven.nuxeo.org/nexus/content/groups/public/')
+	}
+}
+
+dependencies {
+	api project(':zul')
+	optionalImplementation 'javax.enterprise:cdi-api:2.0.SP1'
+	optionalImplementation "org.springframework:spring-beans:${springVersion}"
+	optionalImplementation "org.springframework:spring-context:${springVersion}"
+	optionalImplementation "org.springframework:spring-web:${springVersion}"
+	optionalImplementation('org.seasar.container:s2-framework:2.4.43') {
+		exclude group: '*', module: '*'
+	}
+	optionalImplementation 'javax.persistence:persistence-api:1.0'
+	optionalImplementation 'javax.transaction:jta:1.1'
+	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
+	compileOnly "javax.el:javax.el-api:${elVersion}"
+	compileOnly "javax.portlet:portlet-api:${portletVersion}"
+}
+
+buildConfig {
+	className = 'Version'
+	packageName = "org.zkoss.${project.name}"
+	buildConfigField("String", "UID", provider { "\"${project.version}\"" })
+}
+
+description = 'ZK Plus Utilities'

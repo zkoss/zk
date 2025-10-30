@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3182.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Apr 21, 2016  3:38:13 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+
+    <window id="mainWindow" height="100%" contentStyle="overflow:auto">
+        <zscript>
+            Map m = new HashMap();
+            Map m2 = new HashMap();
+            m2.put("name", "test");
+            m.put("fieldname", m2);
+            mainWindow.setAttribute("formx",m);
+            mainWindow.setAttribute("form","");
+        </zscript>
+        <label multiline="true">
+            1.load this page
+            2.first label should be "LabelsName"
+            3.second label should be "test"
+            4.third label should be "LabelsName"
+            5.should not any exception appear
+        </label>
+        <n:br/>
+        <label value="${labels.myscreen.form.field.name}"/>
+        <n:br/>
+        <label value="${labels.myscreen.form.field.name1}"/>
+        <n:br/>
+        <label value="${labels.myscreen.form.field.name2}"/>
+    </window>
+</zk>

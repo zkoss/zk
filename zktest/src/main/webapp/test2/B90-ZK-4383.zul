@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4383.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 03 10:29:21 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Start typing characters slowly to trigger the combo-popup and drill down possible choices.
+        e.g.: a, f, t, [backspace], [backspace], f, t, [backspace], [backspace], ... repeat
+        2. The typed characters shouldn't be removed or reverted from the input element.
+    </label>
+    <combobox id="combo" autocomplete="false" autodrop="true"/>
+    <zscript><![CDATA[
+    String[] _dict = {
+        "accuracy", "acuity", "adage", "afar", "after", "apple",
+        "bible", "bird", "bingle", "blog",
+        "cabane", "cape", "cease", "cedar",
+        "dacron", "defacto", "definable", "deluxe",
+        "each", "eager", "effect", "efficacy",
+    };
+    ListModel dictModel= new SimpleListModel(_dict);
+    combo.setModel(dictModel);
+    ]]>
+    </zscript>
+</zk>

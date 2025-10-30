@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F61-ZK-1175.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Jun 08, 2012  2:48:07 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk><n:h3 xmlns:n="native">ZK EE version only</n:h3>
+	1. Please check if the second Calendar can show the number of the week
+	of year at left side of the panel. (The first Calendar shouldn't show the number)
+	<separator />
+	2. Click upon the number of the week of the year, you should see a
+	dialog with the number you clicked.
+	<separator />
+	3. Click "enabel/disable" button to see if the weekOfYear column can be
+	visible or invisible
+	<separator />
+	4. Go to or go back the month to see whether the number of the week of the year
+	calculates correctly
+	<separator />
+	<separator />
+	<hlayout>
+		<vlayout>
+			Without WeekOfYear
+			<calendar />
+		</vlayout>
+		<vlayout>
+			With WeekOfYear
+			<calendar id="cal" weekOfYear="true" onWeekClick='alert(event.data)' />
+		</vlayout>
+	</hlayout>
+	<button label="enable/disable" onClick='cal.weekOfYear = !cal.weekOfYear; val0.value = cal.weekOfYear ? ":Enable":":Disable"' /><label id="val0" value=":Enable"/>
+	<separator />
+	5. Please check if the second Datebox can show the number of the week
+	of year at left side of the panel when you click the calendar icon. (The first Datebox shouldn't show the number)
+	<separator />
+	6. Click "enabel/disable" button to see if the weekOfYear column can be
+	visible or invisible
+	<separator />
+	7. Go to or go back the month to see whether the number of the week of the year
+	calculates correctly
+	<separator />
+	<hlayout>
+		<vlayout>
+			Without WeekOfYear
+			<datebox />
+		</vlayout>
+		<vlayout>
+			With WeekOfYear
+			<datebox id="db" weekOfYear="true" />
+		</vlayout>
+	</hlayout>
+	<button label="enable/disable" onClick='db.weekOfYear = !db.weekOfYear; val1.value = db.weekOfYear ? ":Enable":":Disable"' /><label id="val1" value=":Enable"/> 
+</zk>

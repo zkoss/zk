@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3879.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jul 30 12:50:29 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<zscript>
+		List items = new org.zkoss.zktest.test2.BigList(100); //a big list of Integer
+	</zscript>
+	<label multiline="treu">
+		1. The height of listbox should be 320px (tolerance 2px).
+		2. listbox should not have a scroll bar.
+		3. The paging should have not only one page.(the paginal should work)
+	</label>
+	<div>
+		Listbox
+		<listbox id="listbox" width="300px" height="320px" mold="paging" autopaging="true" onCreate="self.setPaginal(pagingId)">
+			<listhead>
+				<listheader label="column1" />
+				<listheader label="column2" />
+				<listheader label="column3" />
+				<listheader label="column4" />
+			</listhead>
+			<listitem forEach="&#36;{items}">
+				<listcell label="&#36;{each}-1" />
+				<listcell label="&#36;{each}-2" />
+				<listcell label="&#36;{each}-3" />
+				<listcell label="&#36;{each}-4" />
+			</listitem>
+		</listbox>
+		<paging id="pagingId"/>
+	</div>
+</zk>

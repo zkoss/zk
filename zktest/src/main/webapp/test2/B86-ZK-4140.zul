@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4140.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Nov 19 15:47:22 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		import org.zkoss.zktest.test2.select.models.*;
+		ListModelList model = ListModelLists.getModel(ListModelLists.MULTIPLE_AND_CLONEABLE);
+	</zscript>
+	<label multiline="true">
+		1. Test in all themes
+		2. The height of chosenbox should be the same as textbox and datebox
+	</label>
+	<chosenbox width="200px" emptyMessage="Choose a Value" model="${model}"/>
+	<textbox value="textbox"/>
+	<datebox/>
+	<hlayout>
+		<a href="?zktheme=breeze" label="Breeze"/>
+		<a href="?zktheme=sapphire" label="Sapphire"/>
+		<a href="?zktheme=silvertail" label="Silvertail"/>
+		<a href="?zktheme=atlantic" label="Atlantic"/>
+		<a href="?zktheme=default" label="Default"/>
+	</hlayout>
+</zk>

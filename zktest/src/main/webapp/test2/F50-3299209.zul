@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3299209.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		May 9, 2011 11:15:46 AM, Created by jimmyshiau
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+		<li>Click menuitem, it will disable, after processing, it will re-enable</li>
+		<li>After click OK, you shall see both buttons disabled for 3 seconds,
+		and then the OK button is enabled</li>
+		<li>After click Cancel, you shall see both buttons disabled for 3 seconds,
+		and then the Cancel button is enabled</li>
+		</ol>
+	]]></html>
+	<window title="test of autodisable" width="400px">
+	<menubar>
+		<menuitem label="menuitem" autodisable="self" onClick='org.zkoss.lang.Threads.sleep(3000);'/>
+		<menuitem id="ok" label="OK" autodisable="self,+cancel"
+			onClick='org.zkoss.lang.Threads.sleep(3000); new Label("(ok)").setParent(self.parent.parent)'/>
+		<menuitem id="cancel" label="Cancel" autodisable="+ok,cancel"
+			onClick='org.zkoss.lang.Threads.sleep(3000); new Label("(cancel)").setParent(self.parent.parent)'/>
+		<menuitem label="enable all" onClick="ok.disabled = cancel.disabled = false"/>
+		<menuitem label="disable all" onClick="ok.disabled = cancel.disabled = true"/>
+	</menubar>
+	</window>
+</zk>

@@ -1,0 +1,115 @@
+/* AbstractValidator.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2011/12/26 Created by Dennis Chen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+*/
+package org.zkoss.bind.validator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.zkoss.bind.ValidationContext;
+import org.zkoss.bind.Validator;
+import org.zkoss.bind.sys.BinderCtrl;
+import org.zkoss.bind.sys.Binding;
+import org.zkoss.bind.sys.FormBinding;
+import org.zkoss.bind.sys.PropertyBinding;
+import org.zkoss.bind.sys.ValidationMessages;
+
+/**
+ * A abstract validator the handling validation message
+ * 
+ * @author dennis
+ * @see ValidationMessages
+ * @since 6.0.0
+ */
+public abstract class AbstractValidator implements Validator {
+
+	private static final Logger log = LoggerFactory.getLogger(AbstractValidator.class);
+
+	/**
+	 * add a message to validation context, when you call this method, it also set context invalid.
+	 * @param ctx the validation context
+	 * @param message the message of validation
+	 */
+	protected void addInvalidMessage(ValidationContext ctx, String message) {
+		addInvalidMessages(ctx, null, new String[] { message });
+	}
+
+	/**
+	 * add a message to validation context, when you call this method, it also sets context invalid.
+	 * @param ctx the validation context
+	 * @param key the custom key of message
+	 * @param message the message of validation
+	 */
+	protected void addInvalidMessage(ValidationContext ctx, String key, String message) {
+		addInvalidMessages(ctx, key, new String[] { message });
+	}
+
+	/**
+	 * add a message to validation context, when you call this method, it also sets context invalid.
+	 * @param ctx the validation context
+	 * @param key the custom key of message
+	 * @param message the message of validation
+	 * @param value the value of the rejected field
+	 * @since 8.0.1
+	 */
+	protected void addInvalidMessage(ValidationContext ctx, String key, String message, Object value) {
+		addInvalidMessages(ctx, key, new String[] { message }, value);
+	}
+
+	/**
+	 * add multiple messages to validation context, when you call this method, it also sets the context invalid.
+	 * @param ctx the validation context
+	 * @param messages messages of validation
+	 */
+	protected void addInvalidMessages(ValidationContext ctx, String[] messages) {
+		addInvalidMessages(ctx, null, messages);
+	}
+
+	/**
+	 * add multiple messages to validation context, when you call this method, it also sets the context invalid.
+	 * @param ctx the validation context
+	 * @param key the custom key of message
+	 * @param messages messages of validation
+	 */
+	protected void addInvalidMessages(ValidationContext ctx, String key, String[] messages) {
+		addInvalidMessages(ctx, key, messages, null);
+	}
+
+	/**
+	 * add multiple messages to validation context, when you call this method, it also sets the context invalid.
+	 * @param ctx the validation context
+	 * @param key the custom key of message
+	 * @param messages messages of validation
+	 * @param value the value of the rejected field
+	 * @since 8.0.1
+	 */
+	protected void addInvalidMessages(ValidationContext ctx, String key, String[] messages, Object value) {
+		ctx.setInvalid();
+		ValidationMessages vmsgs = ((BinderCtrl) ctx.getBindContext().getBinder()).getValidationMessages();
+		if (vmsgs != null) {
+			Binding binding = ctx.getBindContext().getBinding();
+			String attr = null;
+			if (binding instanceof PropertyBinding) {
+				attr = ((PropertyBinding) binding).getFieldName();
+			} else if (binding instanceof FormBinding) {
+				attr = ((FormBinding) binding).getFormId();
+			} else {
+				//ignore children binding;
+			}
+			if (attr != null) {
+				vmsgs.addMessages(ctx.getBindContext().getComponent(), attr, key, messages, value);
+			}
+		} else {
+			log.warn("ValidationMessages not found on binder " + ctx.getBindContext().getBinder() + ", please init it");
+		}
+	}
+
+}

@@ -1,0 +1,28 @@
+<!--
+B80-ZK-2663.zhtml
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Mar 19, 2015  2:50:00 PM, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk:zk  xmlns="native" xmlns:x="xhtml" xmlns:zul="zul" xmlns:sh="shadow" xmlns:zk="zk">
+	<x:html sclass="no-js" lang="en">
+		<x:head>
+		</x:head>
+		<x:body>
+			<div>
+			<zul:popup id="pop">
+			You should be able to see this after click button.
+			</zul:popup>
+			<zul:button id="btn" label="please click me" popup="pop"/>
+			</div>
+			Click button, and you should be able to see the popup;
+		</x:body>
+	</x:html>
+</zk:zk>

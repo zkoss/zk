@@ -1,0 +1,51 @@
+<div>
+<label multiline="true">This case is not automatically testable.
+0.first all, you have to configure a cluster env, or simply use Tomcat (ease to test passive and active by shutdown and restart it)
+0.the demo application has to enable org.zkoss.zk.ui.http.SerializableUiFactory
+1.Select first item in listbox. the value should changed in Name filed to "A"
+2.edit the name field to "AX"
+3.shutdown tomcat.
+4.restart tomcat.
+5.click local save
+6.verify that
+  * message become 'local save'
+  * label of selected become 'AX'
+  * Children binding become 'AX B C D'
+  * item 1 in listbox become AX
+7, repeat 1,2,5,6 by select other item and filed other value
+  
+</label>
+	<window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00690ClusterEnv')"
+	validationMessages="@id('vmsgs')">
+		<vlayout>
+		<hlayout>message:<label id="msg" value="@bind(vm.message)"/></hlayout>
+		<hlayout>selected:<label id="selected" value="@bind(vm.selected.name)"/></hlayout>
+		</vlayout>
+		Children binding:
+		<hbox id="children" children="@load(vm.items)">
+			<template name="children">
+				<label value="@load(each.name)"/>
+			</template>
+		</hbox>
+		Model binding:
+		<listbox id="listbox" width="700px" model="@bind(vm.items)" rows="5" selectedItem="@bind(vm.selected)">
+			<listhead>
+				<listheader label="index"/>
+				<listheader label="name"/>
+			</listhead>
+			
+			<template name="model" var="item" status="s">
+				<listitem>
+					<listcell label="@bind(s.index)"/>
+					<listcell label="@bind(item.name)"/>
+				</listitem>
+			</template>
+		</listbox>
+		Form binding:
+		<vbox form="@id('fx') @load(vm.selected) @save(vm.selected,after='save') @validator(vm.dummyValidator)">
+			Name : <textbox id="tb1" value="@bind(fx.name) @converter(vm.dummyConverter)" errorMessage="@load(vmsgs[self.parent])"/>
+		</vbox>
+		<button id="localsave" label="localsave" onClick="@command('save',msg='local save')"/>
+		<button id="globalsave" label="globalsave" onClick="@global-command('save',msg='global save')"/>
+	</window>
+</div>

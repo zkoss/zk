@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+flowctrl-nested.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 07 11:01:21 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Fizz Buzz https://leetcode.com/problems/fizz-buzz/
+        * FizzBuzz if i is divisible by 3 and 5.
+        * Fizz if i is divisible by 3.
+        * Buzz if i is divisible by 5.
+        * i if none of the above conditions are true.
+
+        Click both buttons to see the result.
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.shadow.FizzBuzzVM')">
+        <button id="btnS" label="Small (1-20)" onClick="@command('useSmall')"/>
+        <button id="btnL" label="Large (50-100)" onClick="@command('useLarge')"/>
+        <vlayout>
+            <forEach items="@load(vm.numbers)">
+                <hlayout>
+                    <choose>
+                        <when test="@init(each mod 3 eq 0)">
+                            Fizz
+                            <if test="@init(each mod 5 eq 0)">
+                                Buzz
+                            </if>
+                        </when>
+                        <when test="@init(each mod 5 eq 0)">
+                            <if test="@init(each mod 3 eq 0)">
+                                Fizz
+                            </if>
+                            Buzz
+                        </when>
+                        <otherwise>
+                            <label value="@init(each)"/>
+                        </otherwise>
+                    </choose>
+                </hlayout>
+            </forEach>
+        </vlayout>
+    </div>
+</zk>

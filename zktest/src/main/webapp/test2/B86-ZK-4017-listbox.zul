@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4017-listbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 06 11:12:43 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "doFilter by clear/add".
+        2. Click "doClear by clear/add".
+        3. The content shouldn't be empty.
+    </label>
+    <window apply="org.zkoss.zktest.test2.B86_ZK_4017ListboxComposer" vflex="1">
+        <listbox id="listbox" itemRenderer="org.zkoss.zktest.test2.B86_ZK_4017ListitemRenderer" vflex="1">
+            <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+            <custom-attributes org.zkoss.zul.listbox.preloadSize="100" />
+            <custom-attributes org.zkoss.zul.listbox.initRodSize="50" />
+            <custom-attributes org.zkoss.zul.listbox.autoSort="true"/>
+            <listhead>
+                <listheader label="A" sort="auto(v1)" sortDirection="ascending"/>
+                <listheader label="B"/>
+                <listheader label="C" sort="auto(v3)" sortDirection="ascending"/>
+            </listhead>
+        </listbox>
+        <vlayout>
+            <hlayout>
+                <button id="filterByClear" label="doFilter by clear/add"/>
+                <button id="clearByClear" label="doClear by clear/add"/>
+                <button id="filterEverything" label="filter everything by clear/add"/>
+            </hlayout>
+        </vlayout>
+    </window>
+</zk>
+

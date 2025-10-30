@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4939.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jul 12 16:57:58 CST 2021, Created by katherine
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. all icons have the same size(blue pattern) by default.
+	</label>
+	<style>
+		.z-a{
+			font-size: 40px
+		}
+	</style>
+	<a iconSclass="z-icon-check-circle"/>
+	<a iconSclass="z-icon-times-circle"/>
+	<separator/>
+	<a iconSclass="z-icon-times-circle"/>
+	<a iconSclass="z-icon-check-circle-o"/>
+	<a iconSclass="z-icon-check-square"/>
+	<a iconSclass="z-icon-check-square-o"/>
+	<a iconSclass="z-icon-times-circle-o"/>
+	<a iconSclass="z-icon-close"/>
+	<separator/>
+	<a iconSclass="z-icon-search"/>
+	<a iconSclass="z-icon-envelope-o"/>
+	<a iconSclass="z-icon-user"/>
+	<a iconSclass="z-icon-th-list"/>
+	<a iconSclass="z-icon-check"/>
+	<a iconSclass="z-icon-power-off"/>
+	<a iconSclass="z-icon-cog"/>
+	<a iconSclass="z-icon-clock-o"/>
+	<a iconSclass="z-icon-inbox"/>
+	<a iconSclass="z-icon-refresh"/>
+	<a iconSclass="z-icon-flag"/>
+	<a iconSclass="z-icon-pencil-square-o"/>
+	<a iconSclass="z-icon-step-backward"/>
+	<a iconSclass="z-icon-fast-backward"/>
+	<a iconSclass="z-icon-backward"/>
+	<a iconSclass="z-icon-play"/>
+	<a iconSclass="z-icon-pause"/>
+	<a iconSclass="z-icon-stop"/>
+	<a iconSclass="z-icon-forward"/>
+	<a iconSclass="z-icon-fast-forward"/>
+	<a iconSclass="z-icon-step-forward"/>
+	<a iconSclass="z-icon-plus-circle"/>
+	<a iconSclass="z-icon-minus-circle"/>
+	<a iconSclass="z-icon-times-circle"/>
+	<a iconSclass="z-icon-question-circle"/>
+	<a iconSclass="z-icon-info-circle"/>
+	<a iconSclass="z-icon-ban"/>
+	<a iconSclass="z-icon-arrow-left"/>
+	<a iconSclass="z-icon-arrow-right"/>
+	<a iconSclass="z-icon-arrow-up"/>
+	<a iconSclass="z-icon-arrow-down"/>
+	<a iconSclass="z-icon-expand"/>
+	<a iconSclass="z-icon-compress"/>
+	<a iconSclass="z-icon-plus"/>
+	<a iconSclass="z-icon-minus"/>
+	<a iconSclass="z-icon-asterisk"/>
+	<a iconSclass="z-icon-exclamation-circle"/>
+	<a iconSclass="z-icon-exclamation-triangle"/>
+	<a iconSclass="z-icon-calendar"/>
+	<a iconSclass="z-icon-key"/>
+	<a iconSclass="z-icon-floppy-o"/>
+	<a iconSclass="z-icon-caret-down"/>
+	<a iconSclass="z-icon-caret-up"/>
+	<a iconSclass="z-icon-caret-left"/>
+	<a iconSclass="z-icon-caret-right"/>
+	<a iconSclass="z-icon-envelope"/>
+	<a iconSclass="z-icon-angle-double-left"/>
+	<a iconSclass="z-icon-angle-double-right"/>
+	<a iconSclass="z-icon-angle-double-up"/>
+	<a iconSclass="z-icon-angle-double-down"/>
+	<a iconSclass="z-icon-angle-left"/>
+	<a iconSclass="z-icon-angle-right"/>
+	<a iconSclass="z-icon-angle-up"/>
+	<a iconSclass="z-icon-angle-down"/>
+	<a iconSclass="z-icon-circle-o"/>
+	<a iconSclass="z-icon-circle"/>
+	<a iconSclass="z-icon-reply"/>
+	<a iconSclass="z-icon-keyboard-o"/>
+	<a iconSclass="z-icon-flag-o"/>
+	<a iconSclass="z-icon-reply-all"/>
+	<a iconSclass="z-icon-calendar-o"/>
+	<a iconSclass="z-icon-ellipsis-h"/>
+	<a iconSclass="z-icon-ellipsis-v"/>
+	<a iconSclass="z-icon-sort-alpha-asc"/>
+	<a iconSclass="z-icon-sort-alpha-desc"/>
+	<a iconSclass="z-icon-user-o"/>
+	<a iconSclass="z-icon-window-minimize"/>
+</zk>

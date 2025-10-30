@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3214754.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 17 16:01:22 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please test the following cases:
+	<separator/>
+	1. type "test" into the textbox and focus out, it should alert an error.
+	<separator/>
+
+	2. clear the error popup and type "123" into the textbox and focus out, it shouldn't alert an error.
+	<separator/>
+	3. clear the error popup and type "12A3" into the textbox and focus out, they should alert an error.
+	<separator/>
+	<textbox constraint="/\d+/"/>
+	<separator/>
+	4. Please test the step 1~3 with the following textbox as well.
+	<separator/>
+	<textbox constraint="/\d*/"/>
+</zk>
+

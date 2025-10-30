@@ -1,0 +1,21 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') 
+	@init('org.zkoss.zktest.bind.issue.B00892ChildBindingUnderListbox')">
+	<html><![CDATA[<pre>
+	1. You shall see 0 -- A, 1 -- B, 2 -- C, 3 ---D in Listbox.
+	2. If not (e.g. all item in name column is empty), it is bug.
+	</pre>]]></html>
+	<listbox id="outerbox" width="700px" model="@bind(vm.items)" rows="5">
+		<listhead>
+			<listheader label="index"/>
+			<listheader label="name"/>
+		</listhead>
+		<template name="model" var="item" status="s">
+			<listitem children="@bind(vm.dummyList(1)) @template('read')">
+				<template name="read">
+					<listcell label="@bind(s.index)"/>
+					<listcell label="@bind(item.name)"/>
+				</template>
+			</listitem>
+		</template>
+	</listbox>
+</window> 

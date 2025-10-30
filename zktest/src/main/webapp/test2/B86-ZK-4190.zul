@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4190.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Thu Jan 17 10:49:15 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script><![CDATA[
+        window.onerror = function (message, source, lineno, colno, error) {
+            zk.log(message);
+        };
+    ]]></script>
+    <zscript><![CDATA[
+    Constraint constraintByString = new SimpleConstraint("no empty");
+    Constraint constraintByFlag = new SimpleConstraint(SimpleConstraint.NO_EMPTY);
+    ]]></zscript>
+    <label multiline="true">
+        1. On "working constraint" datebox, focus and blur.
+        2. The error message popped and no zk log.
+        3. On "failing constraint" datebox, focus and blur.
+        4. The error message popped too and no zk log.
+    </label>
+
+    working constraint <datebox constraint="${constraintByString}" />
+    <separator/>
+    failing constraint <datebox constraint="${constraintByFlag}" /> (leaving empty produces JS error)
+</zk>

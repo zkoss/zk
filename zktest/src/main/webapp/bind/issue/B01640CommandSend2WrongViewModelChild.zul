@@ -1,0 +1,17 @@
+<zk >
+	<window border="normal" apply="org.zkoss.bind.BindComposer"
+		id="childWin" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01640CommandSend2WrongViewModelChild')">
+		<label id="lab" value="@bind(vm.value)"/>
+		<button label="out grid" id="outerBtn" onClick="@command('outerGridCommand')" />
+		<!-- execution when rod enabled, has rows and mold='paging' -->
+		<custom-attributes org.zkoss.zul.grid.rod="true"/>
+		<grid model="@bind(vm.items)" width="500px" mold="paging" id="innerGrid">
+			<rows id="innerRows"/>
+			<template name="model" var="msg1">
+				<row id="innerRow">
+					<button label="in grid" id="innerBtn" onClick="@command('innerGridCommand',str=msg1)" />
+				</row>
+			</template>
+		</grid>
+	</window>
+</zk>

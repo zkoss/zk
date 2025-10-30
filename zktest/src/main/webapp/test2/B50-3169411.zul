@@ -1,0 +1,21 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Change each Spinner's value to 8. You should see the error message same as the ones specified on the left. Otherwise it's a bug. </li>
+		</ol>
+	]]></html>
+	<vlayout>
+		<hlayout>
+			<div width="200px">
+				<label>Should see: "Between 2 to 6"</label>
+			</div>
+			<spinner value="4" constraint="min 2 max 6: Between 2 to 6" />
+		</hlayout>
+		<hlayout>
+			<div width="200px">
+				<label>Should see: "Out of range: 2 - 6"</label>
+			</div>
+			<spinner value="4" constraint="min 2 max 6" />
+		</hlayout>
+	</vlayout>
+</zk>

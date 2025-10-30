@@ -1,0 +1,92 @@
+<zk>
+<vlayout>
+    <tabbox orient="vertical">
+        <tabs>
+            <tab label="Tab 3" />
+            <tab label="Tab 4" />
+        </tabs>
+        <tabpanels>
+			<tabpanel>
+			<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>            
+            </tabpanel>        
+            <tabpanel>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            	<div>test</div>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+   <tabbox height="100%" orient="vertical">
+    <tabs width="60px">
+     <tab label="Tab1" closable="true" />
+     <tab label="Tab2" closable="true" />
+     <tab label="Tab3" closable="true" />
+     <tab label="Tab4" closable="true" />
+     <tab label="Tab5" closable="true" />
+     <tab label="Tab6" />
+     <tab label="Tab7" />
+     <tab label="Tab8" />
+     <tab label="Tab9" />
+     <tab label="Tab10" />
+    </tabs>
+    <tabpanels>
+     <tabpanel>
+      <vbox>
+       <label>Tabpanel Content 1</label>
+      </vbox>
+     </tabpanel>
+     <tabpanel>Tabpanel Content 2</tabpanel>
+     <tabpanel>Tabpanel Content 3</tabpanel>
+     <tabpanel>Tabpanel Content 4</tabpanel>
+     <tabpanel>Tabpanel Content 5</tabpanel>
+    </tabpanels>
+   </tabbox>    
+</vlayout>    
+    
+</zk>

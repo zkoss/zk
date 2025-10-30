@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2997040.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May  6 18:26:26 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+You can only upload 2 files at the same time.
+	<button label="Upload">
+	<attribute name="onClick">{
+		org.zkoss.util.media.Media[] media = Fileupload.get(2);
+		if (media != null) {
+			for (int i = 0; i &lt; media.length; i++) {
+				if (media[i] instanceof org.zkoss.image.Image) {
+					org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+					image.setContent(media[i]);
+					image.setParent(pics);
+				} else {
+					Messagebox.show("Not an image: "+media[i], "Error", Messagebox.OK, Messagebox.ERROR);
+					break; //not to show too many errors
+				}
+			}
+		}
+	}</attribute>
+	</button>
+	<vbox id="pics" />
+</zk>
+			

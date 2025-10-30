@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2944364.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 2 14:29:22 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+<ol>
+<li>The editor will be hidden at first, click visible button, it will show the editor</li>
+</ol>
+]]>
+</html>
+<button label="visible" onClick="ed.visible = !ed.visible"/>
+	<ckeditor id="ed" visible="false" />
+</zk>

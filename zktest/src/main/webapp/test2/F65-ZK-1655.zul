@@ -1,0 +1,21 @@
+<zk>
+	<label multiline="true">
+	1. Mouseover on blue area, should see tooltip showed on 40px right of mouse pointer
+	2. Click on pink area, should see tooltip showed on 20px down of mouse pointer
+	3. RightClick on yellow area, should see tooltip showed on 50px left of mouse pointer
+	</label>
+	<popup id="pop">
+		<label value="tooltip" />
+	</popup>
+	<hlayout>
+		<div style="width:200px; height:200px; background:cyan;" tooltip="pop, x=(zk.currentPointer[0] + 40), y=(zk.currentPointer[1])">
+			Tooltip
+		</div>
+		<div style="width:200px; height:200px; background:pink;" popup="pop, x=(zk.currentPointer[0]), y=(zk.currentPointer[1] + 20)">
+			Popup
+		</div>
+		<div style="width:200px; height:200px; background:yellow;" context="pop, x=(zk.currentPointer[0] - 50), y=(zk.currentPointer[1])">
+			Context
+		</div>
+	</hlayout>
+</zk>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4851.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Apr 07 10:25:57 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		test each datebox:
+		1. click the datebox button to open calendar and select 2021 Apr 7:
+			1-1: datebox with single y format should display 07 Apr 2021.
+			1-2: datebox with yy format should display 07 Apr 21. (only yy should truncated to 2 digits)
+			1-3: datebox with yyy format should display 07 Apr 2021.
+			1-4: datebox with yyyy format should display 07 Apr 2021.
+			1-5: datebox with yyyyy format should display 07 Apr 02021.
+
+		2. click the datebox button to open calendar again, all datebox calendar should show the correct date which is 2021 Apr 7.
+	</label>
+	y:
+	<datebox format="dd MMM y"/>
+	<separator/>
+	yy:
+	<datebox format="dd MMM yy"/>
+	<separator/>
+	yyy:
+	<datebox format="dd MMM yyy"/>
+	<separator/>
+	yyyy:
+	<datebox format="dd MMM yyyy"/>
+	<separator/>
+	yyyyy:
+	<datebox format="dd MMM yyyyy"/>
+</zk>

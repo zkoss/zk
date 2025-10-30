@@ -1,0 +1,47 @@
+<zk xmlns:w="client">
+	<zscript>
+		int i = 2;
+	</zscript>
+	<tree id="tree" sizedByContent="true">
+		<treecols>
+			<treecol></treecol>
+			<treecol></treecol>
+		</treecols>
+		<treechildren id="tc1">
+			<treeitem>
+				<treerow>
+					<treecell>Item 1</treecell>
+					<treecell>Item 1-B</treecell>
+				</treerow>
+				<treechildren id="tc2">
+					<treeitem>
+						<treerow>
+							<treecell>Item 1-1, Longer Content</treecell>
+							<treecell>Item 1-1-B</treecell>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	<button label="Add">
+		<attribute name="onClick">
+			Treeitem item = new Treeitem();
+			item.label = "Longer Item " + i;
+			item.parent = tc1;
+			item = new Treeitem();
+			item.label = "Item 1-" + i++;
+			item.parent = tc2;
+		</attribute>
+	</button>
+	<button label="Remove">
+		<attribute name="onClick">
+			tc1.lastChild.detach();
+			tc2.lastChild.detach();
+		</attribute>
+	</button>
+	<button label="Invalidate" onClick='tree.invalidate()' />
+	<button label="Rerender" w:onClick='this.$f("tree").rerender()' />
+	<button label="Sync Size" w:onClick='this.$f("tree").syncSize()' />
+</zk>
+

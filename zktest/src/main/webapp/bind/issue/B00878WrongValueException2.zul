@@ -1,0 +1,39 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00878WrongValueException2')">
+		<hbox>
+		<zscript>
+		org.zkoss.zktest.bind.issue.B00878WrongValueException2.TimeConstraint c = new org.zkoss.zktest.bind.issue.B00878WrongValueException2.TimeConstraint();
+		</zscript>
+		<vbox>
+			<hbox>bandbox <bandbox id="inp1" width="100px" constraint="no empty" value="@bind(vm.bandboxVal)"/>(no empty)</hbox>
+			<hbox>combobox <combobox id="inp2" width="100px" constraint="no empty" value="@bind(vm.comboboxVal)"/>(no empty)</hbox>
+			<hbox>datebox <datebox id="inp3" width="100px" constraint="after 20120101" value="@bind(vm.dateboxVal)" format="yyyyMMdd"/>(after 20120101)</hbox>
+			<hbox>decimalbox <decimalbox id="inp4" width="100px" constraint="no negative" value="@bind(vm.decimalboxVal)"/>(no negative)</hbox>
+			<hbox>doublebox <doublebox id="inp5" width="100px" constraint="no negative" value="@bind(vm.doubleboxVal)"/>(no negative)</hbox>
+			<hbox>doublespinner <doublespinner id="inp6" width="100px" constraint="no negative" value="@bind(vm.doublespinnerVal)"/>(no negative)</hbox>
+			<hbox>intbox <intbox id="inp7" width="100px" constraint="no negative" value="@bind(vm.intboxVal)"/>(no negative)</hbox>
+			<hbox>longbox <longbox id="inp8" width="100px" constraint="no negative" value="@bind(vm.longboxVal)"/>(no negative)</hbox>
+			<hbox>spinner <spinner id="inp9" width="100px" constraint="no negative" value="@bind(vm.spinnerVal)"/>(no negative)</hbox>
+			<hbox>textbox <textbox id="inp10" width="100px" constraint="no empty" value="@bind(vm.textboxVal)"/>(no empty)</hbox>
+			<hbox>timebox <timebox id="inp11" width="100px" constraint="${c}" value="@bind(vm.timeboxVal)" format="HH:mm"/>()</hbox>
+		</vbox>
+				
+		<vbox>
+			<hbox><label id="l1" value="@bind(vm.bandboxVal)"/></hbox>
+			<hbox><label id="l2" value="@bind(vm.comboboxVal)"/></hbox>
+			<hbox><label id="l3" value="@bind(vm.dateboxVal) @converter('formatedDate',format='yyyyMMdd')"/></hbox>
+			<hbox><label id="l4" value="@bind(vm.decimalboxVal)"/></hbox>
+			<hbox><label id="l5" value="@bind(vm.doubleboxVal)"/></hbox>
+			<hbox><label id="l6" value="@bind(vm.doublespinnerVal)"/></hbox>
+			<hbox><label id="l7" value="@bind(vm.intboxVal)"/></hbox>
+			<hbox><label id="l8" value="@bind(vm.longboxVal)"/></hbox>
+			<hbox><label id="l9" value="@bind(vm.spinnerVal)"/></hbox>
+			<hbox><label id="l10" value="@bind(vm.textboxVal)"/></hbox>
+			<hbox><label id="l11" value="@bind(vm.timeboxVal) @converter('formatedDate',format='HH:mm')" /></hbox>
+		</vbox>		
+
+		</hbox>
+		<button label="focus"></button>
+	</window>
+</zk>

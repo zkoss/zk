@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-483.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct  6 14:11:04 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	You should see the following three cases that "Groupbox Content" must be aligned at the same line,
+	not two lines (IE9+ only)
+	<separator />
+	<div hflex="min">Groupbox Content</div>
+	<separator />
+	<hlayout hflex="min">Groupbox Content</hlayout>
+	<separator />
+	<borderlayout hflex="min" vflex="min">
+		<center hflex="min">Groupbox Content</center>
+	</borderlayout>
+</zk>

@@ -1,0 +1,41 @@
+<zk>
+<radiogroup id="rg" onCheck='inf.appendChild(new Label(self.selectedItem.label))'>
+	<hlayout>
+		<radio label="radio 1"/>
+		<radio label="radio 2"/>
+		<radio label="radio 3"/>
+	</hlayout>
+</radiogroup>
+	<grid width="300px">
+		<rows>
+			<row>
+				<radio label="radio 4" radiogroup="rg"/>
+				<radio label="radio 5" radiogroup="rg"/>
+			</row>
+		</rows>
+	</grid>
+	<button label="change group name" onClick='rg.setName("what")'/>
+	<button label="check client" xmlns:w="client">
+		<attribute w:name="onClick"><![CDATA[
+	var rg = this.$f("rg"),
+		items = rg.getItems();
+	zk.log("total", items.length, "last", rg.getItemAtIndex(items.length-1), "selected", rg.getSelectedIndex());
+	for (var len = items.length, j = 0; j < len; ++j)
+		zk.log(items[j], items[j].isSelected());
+		]]></attribute>
+	</button>
+	<button label="check server">
+		<attribute name="onClick"><![CDATA[
+	List items = rg.getItems();
+	inf.appendChild(new Label("total:"+items.size()+", selected:"+rg.getSelectedIndex()));
+	for (Iterator it = items.iterator(); it.hasNext();) {
+		Radio radio = it.next();
+		inf.appendChild(new Label(radio+":"+radio.isSelected()));
+	}
+		]]></attribute>
+	</button>
+	<button label="add extra to group" onClick='extra.setRadiogroup(rg)'/>
+	<button label="remove extra to group" onClick='extra.setRadiogroup(null)'/>
+	<radio id="extra" label="extra"/>
+	<vlayout id="inf"/>
+</zk>

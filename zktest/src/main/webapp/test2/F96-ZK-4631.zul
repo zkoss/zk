@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4631.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Feb 23 11:57:59 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. The icon of Tabbox1 toolbar overflowPopupIcon should be set by attribute: z-icon-home.
+		2. The icon of Tabbox2 toolbar overflowPopupIcon should be default: z-icon-ellipsis-h.
+		3. Click setOverflowPopupIconSclass button.
+		4. The icon of Tabbox1 toolbar overflowPopupIcon should change to z-icon-search.
+	</label>
+	<window title="Toolbar window" width="300px" border="normal" sizable="true">
+		<button label="setOverflowPopupIconSclass" onClick='tb.setOverflowPopupIconSclass("z-icon-search")'/>
+		<tabbox height="100%">
+			<tabs>
+				<tab label="Tabbox 1" closable="true" />
+			</tabs>
+			<toolbar id="tb" width="20%" sclass="custom-icon" overflowPopup="true" align="end" overflowPopupIconSclass="z-icon-home">
+				<toolbarbutton iconSclass="z-icon-plus-square" />
+				<toolbarbutton iconSclass="z-icon-pencil" />
+				<toolbarbutton iconSclass="z-icon-copy" />
+				<toolbarbutton iconSclass="z-icon-trash" />
+				<separator orient="vertical" bar="true" />
+				<toolbarbutton iconSclass="z-icon-refresh" />
+				<toolbarbutton iconSclass="z-icon-download" />
+			</toolbar>
+		</tabbox>
+		<tabbox height="100%">
+			<tabs>
+				<tab label="Tabbox 2" closable="true" />
+			</tabs>
+			<toolbar id="tb2" width="20%" sclass="custom-icon" overflowPopup="true" align="end">
+				<toolbarbutton iconSclass="z-icon-plus-square" />
+				<toolbarbutton iconSclass="z-icon-pencil" />
+				<toolbarbutton iconSclass="z-icon-copy" />
+				<toolbarbutton iconSclass="z-icon-trash" />
+				<separator orient="vertical" bar="true" />
+				<toolbarbutton iconSclass="z-icon-refresh" />
+				<toolbarbutton iconSclass="z-icon-download" />
+			</toolbar>
+		</tabbox>
+	</window>
+</zk>

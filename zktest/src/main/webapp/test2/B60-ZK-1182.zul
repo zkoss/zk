@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-1182.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jun 28, 2012  3:20:02 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please type some words in the textbox and blur it, you should see a dialog with "org.zkoss.zk.ui.event.StubEvent:onStub"
+<textbox stubonly="true" onChange='alert(event.getClass().getName()+":"+event.getName())'/>
+</zk> 

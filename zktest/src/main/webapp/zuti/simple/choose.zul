@@ -1,0 +1,19 @@
+<zk>
+	<div style="border:1px solid red;" id="host">
+		begin=0, end=3
+		<forEach begin="0" end="3">
+			<choose>
+				<when test="${each == 0}">
+					<div style="color:blue">${each} Template</div>
+				</when>
+				<when test="${each == 1}">
+					<div style="color:yellow">${each} Template</div>
+				</when>
+				<otherwise>
+					<div style="color:red">${each} Template</div>
+				</otherwise>
+			</choose>
+		</forEach>
+	</div>
+	<debugger rootId="host"/>
+</zk>

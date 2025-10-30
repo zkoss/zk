@@ -1,0 +1,124 @@
+@import "~./zul/less/_header.less";
+
+.z-groupbox {
+	padding-top: 16px;
+
+	> .z-groupbox-header {
+		background: @baseBackgroundColor;
+		.fontStyle(@baseTitleFontFamily, @groupboxHeaderFontSize, normal, @groupboxHeaderColor);
+		.size(100%, @baseIconHeight);
+		border: 1px solid @baseBorderColor;
+		border-bottom: 0;
+		padding-left: 12px;
+		line-height: normal;
+		zoom: 1;
+
+		.z-groupbox-title {
+			height: auto;
+			min-height: 24px;
+			white-space: nowrap;
+		}
+
+		.z-groupbox-title-content {
+			display: inline-block;
+			line-height: @baseButtonHeight;
+			padding: 0 4px;
+		}
+
+		.z-caption, .z-groupbox-title {
+			display: inline;
+			width: auto;
+			padding: 0 4px;
+			line-height: @baseButtonHeight;
+			background: @baseBackgroundColor;
+			position: relative;
+			cursor: pointer;
+
+			&-readonly {
+				cursor: default;
+			}
+		}
+
+		.z-caption-content, .z-label {
+			float: none;
+		}
+	}
+	
+	> .z-groupbox-readonly .z-groupbox-title {
+		cursor: default;
+	}
+	
+	&-content {
+		.fontStyle(@baseTitleFontFamily, @fontSizeMedium, normal, @baseTextColor);
+		background: @baseBackgroundColor;
+		display: block;
+		height: inherit; // Firefox bug: content cant be collapsed when scrolling
+		border: 1px solid @baseBorderColor;
+		border-top: 0;
+		padding: @groupboxContentPadding;
+		overflow: hidden;
+		zoom: 1;
+	}
+
+	&-notitle {
+		padding: 0;
+
+		.z-groupbox-content {
+			border-top: 1px solid @baseBorderColor;
+			padding: @groupboxNotitleContentPadding;
+		}
+	}
+
+	&-collapsed .z-groupbox-header {
+		border-left: 1px solid transparent;
+		border-right: 1px solid transparent;
+	}
+
+	&-3d {
+		padding: 0;
+
+		> .z-groupbox-header {
+			height: auto;
+			min-height: @baseBarHeight;
+			border-bottom: 1px solid @baseBorderColor;
+			padding: 0;
+
+			.z-caption, .z-groupbox-title {
+				display: inline-block;
+				width: 100%;
+				margin: 0;
+				padding: @groupbox3DHeaderPadding;
+				line-height: @baseButtonHeight;
+				background: none;
+				top: 0;
+			}
+
+			.z-caption:has(> span:focus-visible) .z-caption-content {
+				box-shadow: @groupboxFocusBoxShadow;
+				transition: unset;
+				border-radius: @groupboxFocusBorderRadius;
+			}
+
+			.z-caption-content, .z-groupbox-title-content {
+				line-height: @baseIconHeight;
+				font-size: @groupboxHeaderFontSize;
+				color: @groupboxHeaderColor;
+				padding: 0;
+				> .z-caption-image {
+					margin-left: 0;
+					margin-right: 4px;
+				}
+			}
+		}
+
+		> .z-groupbox-content {
+			padding: @groupbox3DContentPadding;
+		}
+	}
+
+	&:not(.z-groupbox-3d) > .z-groupbox-header .z-caption:has(> span:focus-visible) {
+		box-shadow: @groupboxFocusBoxShadow;
+		transition: unset;
+		border-radius: @groupboxFocusBorderRadius;
+	}
+}

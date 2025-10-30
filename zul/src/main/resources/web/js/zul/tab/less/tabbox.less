@@ -1,0 +1,420 @@
+@import "~./zul/less/_header.less";
+
+// ZK-2100: use strict selector to prevent nest problem
+.verticalStyle() {
+	> .z-tabs {
+		float: left;
+		
+		.z-tabs-content {
+			display: block;
+		}
+		.z-tabs-space {
+			width: 0;
+			position: relative;
+			float: left;
+		}
+
+		.z-tab {
+			float: none;
+			border-bottom: 0;
+			padding: @tabboxTabVerticalPadding;
+
+			&.z-tab-disabled .z-tab-text {
+				color: @disabledColor;
+				.opacity(@disabledOpacity);
+				cursor: default;
+			}
+		}
+	}
+
+	&.z-tabbox-scroll {
+		> .z-tabbox-icon {
+			padding: @tabboxIconVerticalPadding;
+		}
+
+		> .z-tabs {
+			margin: @tabboxIconSize 0;
+		}
+	}
+
+	> .z-tabpanels {
+		height: 100%;
+		.z-tabpanel {
+			border-top: 0;
+		}
+	}
+}
+
+.z-tabbox {
+	position: relative;
+	overflow: hidden;
+	background: @tabboxBackgroundColor;
+	border: 1px solid @baseBorderColor;
+	.borderRadius(@baseBorderRadius);
+
+	// horizontal (default)
+	&-icon {
+		.iconFontStyle(@fontSizeXLarge, @tabboxScrollIconColor);
+		display: none;
+		padding: @tabboxIconPadding;
+		line-height: @fontSizeXLarge;
+		text-align: center;
+		position: absolute;
+		top: 0;
+		cursor: pointer;
+		z-index: 25;
+		background: @tabboxTabsBackgroundColor;
+		.userSelectNone();
+		
+		> i {
+			.opacity(0.7);
+		}
+		&:hover {
+			color: @tabboxScrollIconHoverColor;
+			> i {
+				.opacity(1);
+			}
+		}
+	}
+	&-left-scroll,
+	&-right-scroll {
+		width: @tabboxIconSize;
+		min-height: @tabboxTabMinHeight;
+	}
+	&-right-scroll {
+		right: 0;
+	}
+	&-up-scroll,
+	&-down-scroll {
+		height: @tabboxIconSize;
+	}
+	&-down-scroll {
+		top: auto;
+		bottom: 0;
+	}
+	&-top {
+		> .z-tabs {
+			.z-tabs-content {
+				white-space: nowrap;
+			}
+			.z-tab {
+				display: inline-block;
+				float: none;
+				vertical-align: bottom;
+			}
+		}
+	}
+	// bottom
+	&-bottom {
+		> .z-tabpanels > .z-tabpanel {
+			border-top: 0;
+			border-bottom: 1px solid @tabboxTabSeparatorColor;
+		}
+
+		> .z-tabbox-icon {
+			top: auto;
+			bottom: 0;
+		}
+		> .z-tabs {
+			.z-tabs-content {
+				white-space: nowrap;
+			}
+
+			.z-tab {
+				border-top: 2px solid transparent;
+				border-bottom: 0;
+				bottom: 0;
+				display: inline-block;
+				float: none;
+				vertical-align: bottom;
+
+				&.z-tab-selected {
+					border-top: 2px solid @tabboxSelectedBorderColor;
+					border-bottom: 0;
+					.bottomBorderRadius(@tabboxSelectedRadius);
+				}
+			}
+		}
+
+		> .z-toolbar.z-toolbar-tabs {
+			top: auto;
+			bottom: 0;
+		}
+	}
+	// left
+	&-left {
+		.verticalStyle();
+
+		> .z-tabs {
+			.z-tab {
+				border-right: 2px solid transparent;
+				&.z-tab-selected {
+					border-right: 2px solid @tabboxSelectedBorderColor;
+					.leftBorderRadius(@tabboxSelectedRadius);
+				}
+			}
+
+			.z-tab-button {
+				top: 0;
+				left: 0;
+				& + .z-tab-text {
+					margin-left: @tabboxTabButtonTextSpacing;
+					margin-right: 0;
+				}
+			}
+		}
+		> .z-tabpanels > .z-tabpanel {
+			border-left: 1px solid @tabboxTabSeparatorColor;
+		}
+	}
+
+	// right
+	&-right {
+		> .z-tabbox-icon {
+			right: 0;
+		}
+		.verticalStyle();
+
+		> .z-tabs {
+			float: right;
+
+			.z-tabs-space {
+				float: right;
+			}
+
+			.z-tab {
+				border-left: 2px solid transparent;
+				&.z-tab-selected {
+					border-left: 2px solid @tabboxSelectedBorderColor;
+					.rightBorderRadius(@tabboxSelectedRadius);
+				}
+			}
+		}
+		> .z-tabpanels > .z-tabpanel {
+			border-right: 1px solid @tabboxTabSeparatorColor;
+		}
+	}
+
+	// accordion
+	&-accordion {
+		> .z-tabpanels {
+			border: 0;
+
+			> .z-tabpanel {
+				border-top: 1px solid @tabboxTabSeparatorColor;
+				padding: 0;
+				&:first-child {
+					border-top: 0;
+				}
+			}
+		}
+		.z-tabpanel > .z-tabpanel-content {
+			padding: @containerPadding;
+			zoom: 1;
+		}
+		.z-tabpanel > .z-tab {
+			text-align: left;
+			float: none;
+			zoom: 1;
+
+			&-selected {
+				cursor: default;
+			}
+			.z-tab-button {
+				right: @tabboxTabAccordionButtonRight;
+				& + .z-tab-text {
+					margin-right: @tabboxTabButtonTextSpacing;
+				}
+			}
+		}
+	}
+
+	// .z-tabbox-scroll
+	&-scroll {
+		> .z-tabs {
+			border: 0;
+			margin: 0 @tabboxIconSize;
+			zoom: 1;
+		}
+		> .z-tabbox-icon {
+			display: block;
+		}
+	}
+}
+
+.z-tabs {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	line-height: @baseButtonHeight;
+	overflow: hidden;
+	position: relative;
+	background: @tabboxTabsBackgroundColor;
+	min-height: @tabboxTabMinHeight;
+
+	&-content {
+		display: flex;
+		min-height: @tabboxTabMinHeight;
+		border-collapse: separate;
+		border-spacing: 0;
+		margin: 0;
+		padding-left: 0;
+		padding-top: 0;
+		list-style: none outside none;
+		zoom: 1;
+		clear: both;
+
+		.z-tab {
+			flex: none; // ZK-4284: safari 9 flex items shrink bug
+		}
+	}
+}
+
+.z-tab {
+	font-family: @baseTitleFontFamily;
+	font-size: @tabboxTabFontSize;
+	display: block;
+	border-bottom: 2px solid transparent;
+	margin: 0;
+	line-height: @baseButtonHeight + 6;
+	background: @tabboxTabBackgroundColor;
+	text-align: center;
+	position: relative;
+	cursor: pointer;
+	float: left;
+	padding: @tabboxTabPadding;
+
+	&-content {
+		display: block;
+	}
+
+	&:hover {
+		background: @tabboxTabHoverBackgroundColor;
+	}
+
+	&-icon {
+		display: block;
+		.transform('translateY(-50%)');
+		line-height: normal;
+		position: absolute;
+		top: 50%;
+		left: 5px;
+		cursor: pointer;
+	}
+
+	&-text {
+		font-style: normal;
+		color: @tabboxTabColor;
+		display: block;
+		line-height: @baseButtonHeight;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+
+		&:hover {
+			color: @tabboxTabHoverColor;
+		}
+	}
+
+	&-image {
+		vertical-align: middle;
+		width: 20px;
+		height: 20px;
+		margin-right: 4px;
+	}
+
+	&-button {
+		.iconFontStyle(@tabboxTabButtonFontSize, @tabboxTabButtonColor);
+		.displaySize(block, @baseButtonHeight, 100%);
+		line-height: normal;
+		text-align: center;
+		position: absolute;
+		right: 0;
+		top: 0;
+		z-index: 15;
+		zoom: 1;
+		.userSelectNone();
+		
+		&:hover {
+			color: @tabboxTabButtonHoverColor;
+		}
+		& + .z-tab-text {
+			margin-right: 8px;
+		}
+	}
+	.z-caption {
+		margin: auto;
+	}
+	&-selected {
+		.topBorderRadius(@tabboxSelectedRadius);
+		border-bottom: 2px solid @tabboxSelectedBorderColor;
+		background: @tabboxSelectedBackgroundColor;
+
+		&:hover {
+			background: @tabboxSelectedHoverBackgroundColor;
+		}
+		.z-tab-button {
+			color: @tabboxSelectedColor;
+			&:hover {
+				color: @tabboxSelectedHoverColor;
+			}
+		}
+		.z-tab-text {
+			color: @tabboxSelectedColor;
+			&:hover {
+				color: @tabboxSelectedHoverColor;
+			}
+		}
+	}
+	&-disabled {
+		background: @disabledBackgroundColor;
+		color: @disabledColor;
+		.opacity(@disabledOpacity);
+		cursor: default;
+
+		&:hover {
+			background: @disabledBackgroundColor;
+		}
+
+		.z-tab-icon {
+			cursor: default;
+		}
+
+		.z-tab-button {
+			&, &:hover {
+				color: @disabledColor;
+			}
+		}
+		.z-tab-text {
+			color: @disabledColor;
+			white-space: nowrap;
+		}
+	}
+}
+
+.z-tabpanels {
+	zoom: 1;
+	overflow: hidden;
+	position: relative;
+}
+
+.z-tabpanel {
+	border-top: 1px solid @tabboxTabSeparatorColor;
+	padding: @containerPadding;
+	zoom: 1;
+	color: @baseTextColor;
+}
+
+// Icon replacement
+.z-tabbox-left-scroll > i:before {
+	content: '\f104';
+}
+.z-tabbox-right-scroll > i:before {
+	content: '\f105';
+}
+.z-tabbox-up-scroll > i:before {
+	content: '\f106';
+}
+.z-tabbox-down-scroll > i:before {
+	content: '\f107';
+}

@@ -1,0 +1,13 @@
+<zk xmlns:n="native">
+
+	<n:pre>
+		If the panel is not looking weird , it's correct.
+	</n:pre>
+	<portallayout>
+		<portalchildren>
+			<panel title="Panel" border="rounded+">
+				<panelchildren>Panel Content</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>

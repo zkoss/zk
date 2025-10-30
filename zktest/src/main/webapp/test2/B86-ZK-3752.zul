@@ -1,0 +1,24 @@
+<zk>
+	<zscript>
+		public void sessionLog() {
+			Session session = Sessions.getCurrent();
+			String sourcemap = session.getAttributes().toString();
+			if (sourcemap.contains("zk$sourcemap")) {
+				Clients.log("with SourceMap");
+			} else {
+				Clients.log("no SourceMap");
+			}
+		}
+	</zscript>
+	<button label="test" onClick="sessionLog()"/>
+	<button id="findMap" xmlns:w="client" label="findMap" w:onClick="window.location.href = '/zktest/zkau/web/js/zkbind.map';"/>
+	<label multiline="true"><![CDATA[
+		1. enable sourcemap
+			<client-config>
+				<debug-js>true</debug-js>
+				<enable-source-map>true</enable-source-map>
+			</client-config>
+		2. open browser dev tool, you would see source map
+		3. reload page, you would see source map works as usual.
+	]]></label>
+</zk>

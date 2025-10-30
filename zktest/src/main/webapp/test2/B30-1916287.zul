@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1916287.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 17 16:54:18 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>It's true, if you can see the bottom border of row.</n:p>
+	<grid height="100px">
+		<columns sizable="true">
+			<column label="Left" align="left" />
+			<column label="Center" align="center" />
+			<column label="Right" align="right" />
+			<column label="Column 4" />
+			<column label="Column 5" />
+			<column label="Column 6" />
+		</columns>
+		<rows>
+			<row spans="2,1,1,1,1">
+				<label value="Item 1" />
+				<label value="Item 3" />
+				<label value="Item 4" />
+				<label value="Item 5" />
+				<label value="Item 6" />
+			</row>
+		</rows>
+	</grid>
+</zk>

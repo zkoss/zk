@@ -1,0 +1,22 @@
+<!--
+B95-ZK-4676.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Oct 20 14:25:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<div height="500px" width="500px">
+	<panel title="Panel" border="normal" vflex="1">
+		<panelchildren>
+			<div vflex="1" style="border: 1px solid red">
+				run on mobile browser or mobile emulation mode, and the div should cover the whole panel content
+			</div>
+		</panelchildren>
+	</panel>
+</div>

@@ -1,0 +1,39 @@
+<zk>
+    <tabbox>
+     <tabs>
+      <tab label="a" />
+      <tab label="b" />
+     </tabs>
+     <tabpanels>
+      <tabpanel>Click "header" and then "item" buttons. Then, click the "b" tab to see
+      the listbox has a header and an item.</tabpanel>
+      <tabpanel>
+       <listbox id="lb" width="300px"></listbox>
+      </tabpanel>
+     </tabpanels>
+    </tabbox>
+    
+    <button label="header">
+     <attribute name="onClick"><![CDATA[
+   Listhead listhead = new Listhead();
+   listhead.appendChild(new Listheader("header"));
+   listhead.setParent(lb);
+  ]]></attribute>
+ </button>
+ <button label="item">
+     <attribute name="onClick"><![CDATA[
+   lb.appendChild(new Listitem("item"));
+  ]]></attribute>
+ </button>
+  <button label="all">
+     <attribute name="onClick"><![CDATA[
+   Listhead listhead = new Listhead();
+   listhead.appendChild(new Listheader("header"));
+   listhead.setParent(lb);
+   
+   for(int i = 0; i < 20;i++)
+    lb.appendChild(new Listitem("item"));
+   
+  ]]></attribute>
+ </button>
+</zk>

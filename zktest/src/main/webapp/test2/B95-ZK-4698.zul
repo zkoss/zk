@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4698.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 14 18:18:00 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void create() {
+        Map args = new HashMap();
+        args.put("myParam", "my parameter value");
+        Executions.createComponents("B95-ZK-4698-2.zul", null, args);
+    }
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. Click the button.
+        2. You should see "myParam = my parameter value" in zk log.
+    </label>
+    <button onClick="create()" label="create"/>
+</zk>

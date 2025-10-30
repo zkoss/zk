@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	B50-3346492.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Thu Jul 7 11:37:11 2011, Created by peterkuo
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<fileupload label="Upload">
+		<attribute name="onUpload">
+			org.zkoss.util.media.Media media = event.getMedia();
+			alert("complete");
+		</attribute>
+	</fileupload>
+</zk>

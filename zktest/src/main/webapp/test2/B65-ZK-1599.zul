@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1599.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Feb 18, 2013  4:38:40 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.click to open the combox drop down.
+		2.by clicking refresh fast, you will see following exception in console, if this bug is not fixed.
+Failed to load media, /view/z_fp70/sZdVlc/0qa1/1/c/a.png
+>>org.zkoss.zk.ui.ComponentNotFoundException: Component not found: sZdVlc
+>>	at org.zkoss.zk.ui.impl.DesktopImpl.getComponentByUuid(DesktopImpl.java:512)
+>>	at org.zkoss.zk.au.http.AuDynaMediar.service(AuDynaMediar.java:115)
+>>	at org.zkoss.zk.au.http.DHtmlUpdateServlet.doGet(DHtmlUpdateServlet.java:450)
+>>	at javax.servlet.http.HttpServlet.service(HttpServlet.java:707)
+>>	at javax.servlet.http.HttpServlet.service(HttpServlet.java:820)
+>>	at org.mortbay.jetty.servlet.ServletHolder.handle(ServletHolder.java:511)
+>>	at org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:401)
+		
+	</label>
+	<window id="ErrorConversor" title="" border="normal">
+		<combobox id="combo" model="@load(vm.beans)">
+			<template name="model">
+				<comboitem
+					label="${each.label}" imageContent="${each.image}"/>
+			</template>
+		</combobox>
+		<button label="_Refresh" onClick="reload()"></button>
+		<zscript><![CDATA[
+	import java.awt.*;
+	import java.awt.image.*;
+	import java.awt.geom.*;
+
+	void reload() {
+		ListModelList model = new ListModelList();
+		for(int i=0;i<100;i++){
+			model.add(new Bean("item "+i));
+		}
+		combo.setModel(model);
+	}
+	
+	java.awt.image.BufferedImage image = new java.awt.image.BufferedImage(24, 24, BufferedImage.TYPE_INT_RGB);
+    Graphics2D g2d = image.createGraphics();
+    g2d.setStroke(new BasicStroke(4));
+    Rectangle2D retangle = new Rectangle2D.Double(2, 2, 21, 21);
+    g2d.setColor(Color.RED);
+    g2d.draw(retangle);
+	
+	
+	public class Bean{
+		String label;
+		public Bean(String label){
+			this.label=label;
+		}
+		public String getLabel(){
+			return label;
+		}
+		public java.awt.image.RenderedImage getImage(){
+			return image;
+		}
+	}
+	
+	reload();
+		]]></zscript>
+	</window>
+</zk>

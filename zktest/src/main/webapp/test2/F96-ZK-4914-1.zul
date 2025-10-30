@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4914-1.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jun 29 14:23:33 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label><![CDATA[
+		1. Set library property:
+			<library-property>
+				<name>org.zkoss.ui.script.ScriptErrorListener.class</name>
+				<value></value>
+			</library-property>
+		2. Click button and you should not see "Clients.evalJavaScript Error!" in logger
+	]]></label>
+	<div>
+		<button onClick='Clients.evalJavaScript("console.log(this);causeError();")'/>
+	</div>
+</zk>

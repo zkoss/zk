@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<window title="main" border="normal" onOK="publish()">
+	<zscript>
+	EventQueue que = EventQueues.lookup("groupTest", "group", true);
+	que.subscribe(new EventListener() {
+		public void onEvent(Event evt) {
+			o.setValue(o.getValue() + evt.getData() + "\n");
+		}
+	});
+	void publish() {
+		String text = i.getValue();
+		if (text.length() > 0) {
+			i.setValue("");
+			que.publish(new Event("onGroupTest", null, text));
+		}
+	}
+	</zscript>
+	Please type some words into the short textbox, and then you should see every high textbox will append the same words.
+	<textbox id="i" onChange="publish()"/>		
+	<textbox id="o" rows="6"/>
+	<separator/>
+	<iframe src="F50-3026623-1.zul" height="500px" width="30%"/>
+	<iframe src="F50-3026623-2.zul" height="500px" width="30%"/>
+	<iframe src="F50-3026623-1.zul" height="500px" width="30%"/>
+</window>

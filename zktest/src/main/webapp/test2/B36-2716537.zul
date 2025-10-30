@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2716537.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 20 18:35:41     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please wait for 30 secounds, and the browser should not crash.
+<zscript><![CDATA[ 
+public class MyChart extends Chart {
+public void onCreate() {
+refresh();
+}
+
+public void refresh() {
+long start = System.currentTimeMillis();
+Random r = new Random();
+XYModel model = new SimpleXYModel();
+for (int line=0; line<16; line++) {
+for (int value=0; value<200; value++) {
+model.addValue("Line " + line, new Double(start + value * 1000), new Double(r.nextDouble()));
+}
+}
+setModel(model);
+long end = System.currentTimeMillis();
+System.out.println("Time used: " + (end - start));
+}
+}
+
+]]></zscript>
+<chart id="myChart" type="time_series" period="millisecond"
+dateFormat="HH:mm:ss" width="780px"
+use="MyChart">
+</chart>
+
+<timer running="true" repeats="true" onTimer="myChart.refresh()"
+delay="10000"/>
+</zk>

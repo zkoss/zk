@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5022.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/11, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        ListModelList model = new ListModelList();
+        model.setMultiple(true);
+        model.add("a");
+        model.add("b");
+        model.add("c");
+        model.add("d");
+        model.add("e");
+        model.add("f");
+        model.add("g");
+        model.add("h");
+    </zscript>
+    <button id="btn" onClick="model.remove(model.get(model.getSize()-1))"></button>
+    <listbox id="main" height="500px"
+             onSelect="res.setModel(new ListModelList(model.getSelection()))"
+             model="${model}"/>
+    <listbox id="res"/>
+</zk>

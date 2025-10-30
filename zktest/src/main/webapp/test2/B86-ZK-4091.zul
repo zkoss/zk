@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4091.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 18 18:20:54 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Try collapsing these groupboxes.
+        2. Should have no error popup or error message in zk log.
+    </label>
+
+    <script><![CDATA[
+    window.onerror = function (message, source, lineno, colno, error) {
+        zk.log(message);
+    };
+    ]]>
+    </script>
+
+    <groupbox onOpen="self.invalidate();"
+              title="Groupbox 1">
+        <button label="test button" />
+    </groupbox>
+
+    <groupbox onOpen="self.invalidate();">
+        <caption>Groupbox 2</caption>
+        <button label="test button" />
+    </groupbox>
+</zk>

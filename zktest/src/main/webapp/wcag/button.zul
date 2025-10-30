@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Button"?>
+<?root-attributes lang="en"?>
+<!--
+button.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 18 11:56:01 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Button</n:h1>
+    </n:header>
+    <n:main>
+        <button label="Home"/>
+        <button iconSclass="z-icon-home" label="Home"/>
+        <button image="/img/live.gif" label="Live Messenger"/>
+        <button iconSclass="z-icon-home" image="/img/live.gif" label="Live Messenger Home"/>
+        <button iconSclass="z-icon-home" ca:aria-label="Home"/>
+        <button image="/img/live.gif" ca:aria-label="Live Messenger"/>
+        <button iconSclass="z-icon-home" image="/img/live.gif" ca:aria-label="Live Messenger Home"/>
+    </n:main>
+</zk>

@@ -1,0 +1,22 @@
+<zk>
+
+	<window apply="org.zkoss.bind.BindComposer" title="aa"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01059DifferentType')">
+		<label multiline="true">
+			1.change the value of textbox, the label should change too
+		</label>
+		<hlayout>Value1,
+			<intbox id="ib1" value="@bind(vm.value1)" />
+			<label id="lb1" value="@load(vm.value1)" />
+		</hlayout>
+		<hlayout>Value2,
+			<intbox id="ib2" value="@bind(vm.value2)" />
+			<label id="lb2" value="@load(vm.value2)" />
+		</hlayout>
+		<hlayout>Value3,
+			<intbox id="ib3" value="@bind(vm.value3)" />
+			<label id="lb3" value="@load(vm.value3)" />
+		</hlayout>
+	</window>
+
+</zk>

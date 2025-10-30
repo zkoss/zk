@@ -1,0 +1,25 @@
+<zk>
+	<h:pre xmlns:h="xhtml">
+	    1.Click combobox , wait for 2 second and it drop down.
+	    2.type "test" and wait , it should show up the five options
+	    3.check if you find any scroll for the five option
+	    
+		Could reprodcue in IE6, crhome.
+
+		Error demo 
+		http://screencast.com/t/Rqi1B3qPtA6
+	</h:pre>
+	<combobox id="test" autodrop="true" >
+	
+		<attribute name="onChanging"><![CDATA[
+			ArrayList list = new ArrayList();
+			list.add("testestestestestestestsetestest");
+			list.add("testestestestestestestsetestest");
+			list.add("testestestestestestestsetestest");
+			list.add("testestestestestestestsetestest");
+			list.add("testestestestestestestsetestest");
+			test.setModel(new ListModelList(list));
+]]></attribute>
+	</combobox>
+	
+</zk>

@@ -1,0 +1,15 @@
+<!--
+	Z60-Tree-DefaultTreeModel-Single.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Jan 6 12:15:14 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<include id="inc" src="Z60-Tree-DefaultTreeModel-template.zul" multiple="false" />
+</zk>

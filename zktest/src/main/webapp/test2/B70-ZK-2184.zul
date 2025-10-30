@@ -1,0 +1,9 @@
+<window title="Click Navitem Label" border="normal" width="400px" height="300px">
+<navbar id="nb" collapsed="false">
+	<navitem label="Click me!" onClick='msg.appendChild(new Label("[click]"));' iconSclass="z-icon-flag"/>
+</navbar>
+Click on the "Click me!" in tablet, it would show [click].
+<separator />
+<div id="msg">
+</div>
+</window>

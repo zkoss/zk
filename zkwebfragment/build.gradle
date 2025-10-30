@@ -1,0 +1,5 @@
+plugins {
+	id 'java-library'
+}
+
+description = 'ZK Web Fragment'

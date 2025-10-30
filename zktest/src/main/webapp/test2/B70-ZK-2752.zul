@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2752.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun 30 16:37:14 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. you should see there is only one row
+	2. the first column shows full text of "Test hflex min" instead of few characters
+	</label>
+	<grid>
+		<columns>
+			<column hflex="min" />
+			<column hflex="1" />
+		</columns>
+		<rows>
+			<row visible="false">
+				<label>Test.....</label>
+				<textbox />
+			</row>
+			<row>
+				<label>Test hflex min</label>
+				<textbox />
+			</row>
+		</rows>
+	</grid>
+</zk>

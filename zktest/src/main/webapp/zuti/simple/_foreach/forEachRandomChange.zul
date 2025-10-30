@@ -1,0 +1,87 @@
+<zk xmlns:sh="shadow" xmlns:x="xhtml">
+	<style>
+		.item {
+			display: inline-block;
+			width: 30px;
+			border-radius: 3px;
+			background-color: PeachPuff;
+			text-align: center;
+			margin: 1px;
+		}
+	</style>
+	
+	<zscript><![CDATA[
+		ListModelList items = new ListModelList();
+		items.add(0);
+		items.add(1);
+		items.add(2);
+		items.add(3);
+		items.add(4);
+		items.add(5);
+		items.add(6);
+		items.add(7);
+		items.add(8);
+		items.add(9);
+		
+		long seed = Double.valueOf(Math.random() * Long.MAX_VALUE).longValue(); 
+
+		Random random = new Random(seed);
+		
+		int counter = 100;
+
+		public randomChange() {
+			if(items.isEmpty()) {
+				items.add(counter++); //append to end
+				return;	
+			}
+			switch(random.nextInt(3)) {
+			case 0:
+				if(random.nextInt(items.size() + 1) == 0) {
+					items.add(counter++); //append to end
+				} else {
+					items.add(randomPosition(), counter++);
+				}
+				break;
+			case 1: 
+				items.remove(randomPosition());
+				break;
+			case 2: 
+				items.set(randomPosition(), counter++);
+				break;
+			}
+		}
+		
+		public int randomPosition() {
+			return random.nextInt(items.size());
+		}
+	]]></zscript>
+	
+	<vlayout>
+		<hlayout>
+			Seed: <label id="seed" value="${seed}"/>
+		</hlayout>
+		<hlayout id="result">
+			<custom-attributes debugListModel="${items}"/>
+			<sh:forEach items="${items}">
+				<label sclass="item" value="${each}"/>
+			</sh:forEach>
+		</hlayout>
+		<hlayout>
+			Model: <label id="testLabel" value="${items}"/>
+		</hlayout>
+		<hlayout>
+			Number of Changes: <label id="numLabel"/>
+		</hlayout>
+		
+		<button label="random operations">
+			<attribute name="onClick"><![CDATA[
+			    int numberOfChanges = random.nextInt(20);
+				for(int i = 0; i < numberOfChanges; i++) {
+					randomChange();
+				}
+				testLabel.setValue(items.toString());
+				numLabel.setValue("" + numberOfChanges);
+			]]></attribute>
+		</button>
+	</vlayout>
+</zk>

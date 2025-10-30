@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+modal.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		It is OK to set the modal mode directly since 2.3.1
+	History:
+		Tue Apr 10 11:19:27     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Modal" width="200px" mode="modal" closable="true">
+	This is a modal window.
+</window>

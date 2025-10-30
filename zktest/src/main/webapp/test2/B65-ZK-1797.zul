@@ -1,0 +1,19 @@
+<zk>
+	<div id="mainDiv">
+		<listbox>
+			<attribute name="onSelect"><![CDATA[
+			 	mainDiv.getChildren().clear();
+			 	mainDiv.getTemplate("tmp").create(mainDiv, null, null, null);
+				mainDiv.invalidate();
+			]]></attribute>
+			<listitem label="click me should not see any JS error"/>
+		</listbox>
+		<template name="tmp">
+			<window >
+				<popup>
+					<button label="PopUpbutton"></button>
+				</popup>
+			</window>
+		</template>
+	</div>
+</zk>

@@ -1,0 +1,5 @@
+<package name="wgt4714" language="xul/html" depends="zul">
+    <script><![CDATA[
+        console.log("loaded package", "wgt4714");
+    ]]></script>
+</package>

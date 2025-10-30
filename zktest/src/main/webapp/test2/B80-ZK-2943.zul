@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2943.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov  5 10:01:49 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	if run this page to get NPE, that's a bug.
+	<template name="mytemplate" src="test.zul"/>
+</zk>

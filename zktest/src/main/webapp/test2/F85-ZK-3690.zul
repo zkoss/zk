@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3690.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 07 12:42:45 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        All MeshWidgets (Listbox/Grid/Tree) support rows property. (Control how many rows are visible)
+    </label>
+
+    <hlayout>
+        <listbox rows="3" hflex="1" id="l1">
+            <listitem label="1" />
+            <listitem label="2" />
+            <listitem label="3" />
+            <listitem label="4" />
+            <listitem label="5" />
+        </listbox>
+
+        <grid visibleRows="3" hflex="1" id="g1">
+            <rows>
+                <row>
+                    <label value="1"/>
+                </row>
+                <row>
+                    <label value="2"/>
+                </row>
+                <row>
+                    <label value="3"/>
+                </row>
+                <row>
+                    <label value="4"/>
+                </row>
+                <row>
+                    <label value="5"/>
+                </row>
+            </rows>
+        </grid>
+
+        <tree rows="3" mold="paging" hflex="1" id="t1">
+            <treecols>
+                <treecol label="Name"/>
+                <treecol label="Description"/>
+            </treecols>
+            <treechildren>
+                <treeitem>
+                    <treerow>
+                        <treecell label="Item 1"/>
+                        <treecell label="Item 1 description"/>
+                    </treerow>
+                </treeitem>
+                <treeitem>
+                    <treerow>
+                        <treecell label="Item 2"/>
+                        <treecell label="Item 2 description"/>
+                    </treerow>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="Item 2.1"/>
+                            </treerow>
+                            <treechildren>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="Item 2.1.1"/>
+                                    </treerow>
+                                </treeitem>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="Item 2.1.2"/>
+                                    </treerow>
+                                </treeitem>
+                            </treechildren>
+                        </treeitem>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="Item 2.2"/>
+                                <treecell label="Item 2.2 is something who cares"/>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                </treeitem>
+                <treeitem label="Item 3"/>
+            </treechildren>
+        </tree>
+    </hlayout>
+    <button onClick="l1.setRows(4)">l1.setRows(4)</button>
+    <button onClick="l1.setRows(0)">l1.setRows(0)</button>
+    <button onClick="g1.setVisibleRows(4)">g1.setVisibleRows(4)</button>
+    <button onClick="g1.setVisibleRows(0)">g1.setVisibleRows(0)</button>
+    <button onClick="t1.setRows(4)">t1.setRows(4)</button>
+    <button onClick="t1.setRows(0)">t1.setRows(0)</button>
+</zk>

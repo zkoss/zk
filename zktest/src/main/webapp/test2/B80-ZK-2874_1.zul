@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2874_1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 15 17:04:45 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<?init class="org.zkoss.zktest.test2.B80_ZK_2874RedirectInit" ?>
+	<label>page 1</label>
+</zk>

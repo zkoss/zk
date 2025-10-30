@@ -1,0 +1,24 @@
+<zk>
+	<borderlayout>
+		<north collapsible="true" splittable="true" title="North">
+			<label value="North Area" />
+		</north>
+		<east collapsible="true" splittable="true" title="East">
+			<label value="East Area" />
+		</east>
+		<center>
+			<label multiline="true">
+			1. Collapsed North.
+			2. Click on collapsed bar and see "North Area" content.
+			3. Resize browser, the "North Area" content should resize too.
+			4. Repeat East, West and South.
+			</label>
+		</center>
+		<south collapsible="true" splittable="true" title="South">
+			<label value="South Area" />
+		</south>
+		<west collapsible="true" splittable="true" title="West">
+			<label value="West Area" />
+		</west>
+	</borderlayout>
+</zk>

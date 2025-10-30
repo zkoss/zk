@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3317170.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Jun 17, 2011 12:20:58 PM, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>the div element of calendar should inside the datebox root i element</li>
+		</ol>
+	]]></html>
+		<datebox>
+			<custom-attributes org.zkoss.zul.client.rod="true" />
+		</datebox>
+</zk>

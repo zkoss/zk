@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Audio"?>
+<?root-attributes lang="en"?>
+<!--
+audio.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 25 12:23:39 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Audio</n:h1>
+    </n:header>
+    <n:main>
+        <audio src="/media/guitar.wav" controls="true" ca:aria-label="Funky Hip Hop Sample Pack (5 seconds)"/>
+        <html>
+            <div xmlns:cc="http://creativecommons.org/ns#" about="urn:sha1:LJTEPSYNUVZNTPWFJO2OSXZ7SOGM54JB">
+                The playing audio is from
+                <a rel="cc:attributionURL" property="cc:attributionName" href="http://ccmixter.org/files/samplepacks/6892"> ccMixStar Sample Packs</a> /
+                <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>
+            </div>
+        </html>
+    </n:main>
+</zk>

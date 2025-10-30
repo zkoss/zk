@@ -1,0 +1,5 @@
+<zk>
+	<window border="normal">
+		Included Window ${data}
+	</window>
+</zk>

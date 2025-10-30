@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4464.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Thu Mar 12 09:54:11 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true"><![CDATA[
+    1. Wait Comet retry
+    2. PE comet shouldn't retry forever since we configured retry for 3 times.
+    3. Before finishing test, click "Restore comet setting" to restore comet preferences.
+    ]]>
+    </label>
+    <zscript><![CDATA[
+    String oldDelay = desktop.webApp.configuration.getPreference("CometServerPush.retry.delay", "350");
+    String oldCount = desktop.webApp.configuration.getPreference("CometServerPush.retry.count", "4");
+    String oldTimeout = desktop.webApp.configuration.getPreference("CometServerPush.ajax.timeout", "-1");
+
+    desktop.webApp.configuration.setPreference("CometServerPush.retry.delay", "500");
+    desktop.webApp.configuration.setPreference("CometServerPush.retry.count", "3");
+    desktop.webApp.configuration.setPreference("CometServerPush.ajax.timeout", "1000");
+    desktop.enableServerPush(new org.zkoss.zkex.ui.comet.CometServerPush());
+    ]]>
+    </zscript>
+    <script><![CDATA[
+    zk.afterLoad('zkex.cmsp', function () {
+        var _zkexSp = {};
+        zk.override(zkex.cmsp.SPush.prototype, _zkexSp, {
+            _retry: function () {
+                zk.log('retry');
+                _zkexSp._retry.apply(this, arguments);
+            },
+            stop: function () {
+                zk.log('stopped');
+                _zkexSp.stop.apply(this, arguments);
+            }
+        });
+    });
+    ]]></script>
+    <button label="Restore comet setting">
+        <attribute name="onClick"><![CDATA[
+        desktop.webApp.configuration.setPreference("CometServerPush.retry.delay", oldDelay);
+        desktop.webApp.configuration.setPreference("CometServerPush.retry.count", oldCount);
+        desktop.webApp.configuration.setPreference("CometServerPush.ajax.timeout", oldTimeout);
+        ]]>
+        </attribute>
+    </button>
+</zk>

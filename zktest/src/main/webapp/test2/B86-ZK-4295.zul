@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4295.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 21 14:36:05 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		public class TestVM {
+			List list = Arrays.asList(new String[] {"Group", "Item 1", "Item 2", "Item 3", "Item 4"});
+			String selected = "Item 1";
+			public List getList() { return list; }
+			public String getSelected() { return selected; }
+			public void setSelected(String selected) { this.selected = selected; }
+		}
+		TestVM viewModel = new TestVM();
+	]]></zscript>
+	<label multiline="true">
+		1. select "Item 2" in the listbox(select mold)
+		2. you should see the selected item changed to Item 2, and the label changed to "Selected Item: Item 2"
+	</label>
+	<button label="getSelectedIndex" onClick="Clients.log(lb.getSelectedIndex())"/>
+	<separator/>
+	<div viewModel="@id('vm') @init(viewModel)">
+		<listbox id="lb" mold="select" rows="1" model="@init(vm.list)" selectedItem="@bind(vm.selected)">
+			<template name="model" >
+				<listgroup if="${each eq 'Group'}" label="${each}" />
+				<listitem unless="${each eq 'Group'}" label="${each}"/>
+			</template>
+		</listbox>
+		Selected Item:
+		<label sclass="target" value="@load(vm.selected)" />
+	</div>
+</zk>

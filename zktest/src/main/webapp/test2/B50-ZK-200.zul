@@ -1,0 +1,4 @@
+<window title="window with border" border="normal">
+You shall see the window having a border.
+<include src="B50-ZK-200-inc.zul" mode="defer"/> <!-- remove mode to see difference -->
+</window>

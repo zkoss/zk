@@ -1,0 +1,26 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client" xmlns:ca="client/attribute">
+    <window title="" border="normal"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3611VM')"
+            validationMessages="@id('vmsgs')">
+        <apply couple="@init(vm.couple)">
+            <div>
+                <apply template="personInfo"
+                       person="@ref(couple.person1)"
+                       details="@ref(couple.person1.personalDetails)"
+                />
+                <apply template="personInfo"
+                       person="@ref(couple.person2)"
+                       details="@ref(couple.person2.personalDetails)"
+                />
+            </div>
+        </apply>
+        <template name="personInfo">
+            <div>
+                <label value="@init(person.name)"/>:<!-- moving this label below the intbox fixes the problem -->
+                <label value="@load(details.age)"/>
+                <button label="+1" onClick="@command('incrementAge', person=person)"/>
+            </div>
+        </template>
+    </window>
+</zk>

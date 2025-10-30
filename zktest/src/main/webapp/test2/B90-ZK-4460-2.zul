@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4460.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Feb 24 17:44:40 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (Server push disabled)
+        1. Enable WebSocket and desktop recycling in zk.xml
+        &lt;listener>
+          &lt;listener-class>org.zkoss.zkmax.ui.util.DesktopRecycle&lt;/listener-class>
+        &lt;/listener>
+        &lt;listener>
+          &lt;listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit&lt;/listener-class>
+        &lt;/listener>
+        2. Refresh the page few times until you see the same desktop id appears.
+        3. Click "test event" button.
+        4. Shouldn't see "[Au] success. SID = " in zklog. If you saw it, this bug still exists.
+    </label>
+    <label value="${desktop.id}"/>
+    <button onClick="Clients.log(event.toString())" label="test event"/>
+    <script><![CDATA[
+    zk.afterLoad(function() {
+        var _zAu = {};
+        zk.override(zAu, _zAu, {
+            _respSuccess: function (req, reqInf, sid) {
+                zk.log('[Au] success. SID = ' + sid);
+                return _zAu._respSuccess.apply(this, arguments);
+            },
+        });
+    });
+    ]]>
+    </script>
+</zk>

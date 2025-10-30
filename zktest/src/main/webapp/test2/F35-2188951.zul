@@ -1,0 +1,8 @@
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/test2/F35-2188951_template.zul"?>
+<zk>
+<label value="North" self="@{define(north)}"/>
+<label value="West" self="@{define(west)}"/>
+<label value="East" self="@{define(east)}"/>
+<label value="South" self="@{define(south)}"/>
+<label value="Center" self="@{define(center)}"/>
+</zk>

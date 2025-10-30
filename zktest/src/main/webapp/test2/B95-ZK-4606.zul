@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4606.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Aug 18 15:16:53 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		List products = new ArrayList();
+		for (int i = 1; i <= 3; i++) {
+			products.add("Product #" + i);
+		}
+	]]></zscript>
+	<label multiline="true">
+		1. click the select-all checkbox (on listheader), all items should be selected.
+		2. deselect 1 item, the select-all checkbox should be unchecked.
+		3. click select-all checkbox again, all items should be selected.
+	</label>
+	<listbox id="listbox" width="100%" nonselectableTags="" checkmark="true" multiple="true">
+		<listhead>
+			<listheader label="Product" />
+		</listhead>
+		<zk forEach="${products}">
+			<listitem>
+				<listcell label="${each}"></listcell>
+			</listitem>
+		</zk>
+	</listbox>
+</zk>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4386.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 1 12:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <div apply="org.zkoss.zktest.test2.F90_ZK_4386Composer">
+        <anchornav>
+            <vlayout width="500px">
+                <a ca:data-anchornav-target="@window">1. Click it, should scroll to testing ZK</a>
+                <button ca:data-anchornav-target="$win2">2. Click it, should scroll to testing ZSS</button>
+                <button ca:data-anchornav-target="$win3">3. Click it, should scroll to testiong ZKCharts</button>
+                    Try following buttons, should work fine.
+                <button label="invalidate win 1" onClick="win1.invalidate()"></button>
+                <button label="add new one (first)" onClick="$composer.addWindow(true, win1)"></button>
+                <button label="add new one (last)" onClick="$composer.addWindow(false, win1)"></button>
+                <button label="detach new one" onClick="$composer.detachNewWindow()"></button>
+                <button label="append anchor" onClick="$composer.addAnchor(h)"></button>
+            </vlayout>
+        </anchornav>
+        <separator/>
+        <div height="500px"></div>
+        <window id="win1" title="1. ZK" height="600px" width="700px" border="normal" style="margin:0 auto">
+            testing ZK
+            <button label="invalidate win 1" onClick="win1.invalidate()"></button>
+            <button label="detach win 1" onClick="win1.detach()"></button>
+        </window>
+        <div height="500px"></div>
+        <window id="win2" title="2. ZSS" height="600px" width="700px" border="normal" style="margin:0 auto">
+            testing ZSS
+            <div height="600px"></div>
+            <label>123</label>
+        </window>
+        <div height="500px"></div>
+        <window id="win3" title="3. ZKCharts" height="600px" width="700px" border="normal" style="margin:0 auto">
+            testing ZKCharts
+            <div height="600px"></div>
+            <label>123</label>
+        </window>
+        <div height="500px"></div>
+    </div>
+</zk>

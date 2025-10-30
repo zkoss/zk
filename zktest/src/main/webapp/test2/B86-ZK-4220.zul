@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4220.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Apr 29 17:24:05 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    public void onUpload(UploadEvent e){
+        result.setValue(e.getMedia().getContentType() + ", size: " + e.getMedia().getByteData().length);
+    }
+    ]]></zscript>
+    <label multiline="true">
+        1. Click "Upload" button to upload a ".txt" file.
+        2. The label below the button should have some info, instead of an "Use getStringData() instead" exception.
+    </label>
+    <div>
+        <toolbar>
+            <toolbarbutton label="Upload" upload="true, native" onUpload="onUpload(event)"/>
+        </toolbar>
+        <label id="result"/>
+    </div>
+</zk>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3847.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 15 17:44:07 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Only in Tomcat
+        1. should see two "Inc 1" on the web page
+        2. click both buttons
+        3. those two "Inc 1" should change to "Inc 2"
+
+    </label>
+    <include id="incDefer" mode="defer" src="B85-ZK-3893-1.zul"/>
+    <button label="update include src (defer) => NPE" onClick='incDefer.setSrc("B85-ZK-3893-2.zul")'/>
+    <include id="incInstant" src="B85-ZK-3893-1.zul"/>
+    <button label="update include src (instant)" onClick='incInstant.setSrc("B85-ZK-3893-2.zul")'/>
+</zk>

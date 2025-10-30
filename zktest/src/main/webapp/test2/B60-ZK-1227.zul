@@ -1,0 +1,4 @@
+<zk>
+	Should not see any error message.<separator/>
+	<decimalbox value="1111.112" locale="pt" format="#.##0,0##" />
+</zk>

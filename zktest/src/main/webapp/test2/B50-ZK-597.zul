@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-597.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 22 11:39:32 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<tabbox width="100%" tabscroll="false">
+	<tabs>
+		<tab label="Tab1" />
+		<tab id="srcView" label="Tab2" />
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+		Please click "Tab2" to test it
+		</tabpanel>
+		<tabpanel>
+			<window id="view" fulfill="srcView.onSelect">
+				<hlayout id="hl" width="100%" height="500px">
+					<vlayout hflex="1" vflex="1" id="vl">
+						Please click the dottree radiobox, then the tree should display well.
+						<separator/>
+						Note: it cannot be empty size on Safari or Chrome, and not aligned to center on IE or Firefox
+						<radiogroup
+							onCheck='tree.setZclass("z-"+self.selectedItem.value)'>
+							<vlayout>
+								<radio label="Default" value="tree"
+									selected="true" />
+								<radio label="Dot Tree" value="dottree" />
+								<radio label="XP Explorer"
+									value="filetree" />
+								<radio label="Vista Explorer"
+									value="vfiletree" />
+							</vlayout>
+						</radiogroup>
+					</vlayout>
+					<tree id="tree" hflex="2" vflex="1">
+						<treecols sizable="true">
+							<treecol label="Name" />
+							<treecol label="Description" />
+						</treecols>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 1" />
+									<treecell
+										label="Item 1 description" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2" />
+									<treecell
+										label="Item 2 description" />
+								</treerow>
+								<treechildren>
+									<treeitem>
+										<treerow>
+											<treecell label="Item 2.1" />
+										</treerow>
+										<treechildren>
+											<treeitem>
+												<treerow>
+													<treecell
+														label="Item 2.1.1" />
+												</treerow>
+											</treeitem>
+											<treeitem>
+												<treerow>
+													<treecell
+														label="Item 2.1.2" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</treeitem>
+									<treeitem>
+										<treerow>
+											<treecell label="Item 2.2" />
+										</treerow>
+										<treechildren>
+											<treeitem>
+												<treerow>
+													<treecell
+														label="Item 2.2.1" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</treeitem>
+								</treechildren>
+							</treeitem>
+							<treeitem label="Item 3" />
+						</treechildren>
+					</tree>
+				</hlayout>
+			</window>
+		</tabpanel>
+	</tabpanels>
+</tabbox>

@@ -1,0 +1,48 @@
+<zk>
+	<style>
+	.yellow {border:1px solid f1da36}
+	.red {color: red}
+	.blue {background: blue; color: white;}
+	</style>
+	<window id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.NestedApplyVM')">
+		<apply template="@load(vm.templates[0])">
+			<template>Default</template>
+			<template name="first"><label class="yellow">1</label></template>
+			<template name="second"><label class="yellow">2</label></template>
+		</apply>
+		<apply template="@load(vm.templates[0])">
+			<template>Default</template>
+			<template name="first">
+				<separator bar="true" orient="vertical"/>
+				<apply template="@load(vm.templates[1])">
+					<template>Default</template>
+					<template name="first"><label class="red">First</label></template>
+					<template name="second"><label class="red">Second</label></template>
+				</apply>
+			</template>
+			<template name="second">Second</template>
+		</apply>
+		<apply template="@load(vm.templates[0])">
+			<template>Default</template>
+			<template name="first">
+				<apply template="second">
+					<template>Default</template>
+					<template name="first"><label class="red">First</label></template>
+					<template name="second">
+						<separator bar="true" orient="vertical"/>
+						<apply template="@load(vm.templates[2])">
+							<template>Default</template>
+							<template name="first"><label class="blue">Nested First</label></template>
+							<template name="second"><label class="blue">Nested Second</label></template>
+							<template name="third"><label class="blue">Nested Third</label></template>
+						</apply>
+					<separator bar="true" orient="vertical"/>
+					</template>
+				</apply>
+			</template>
+			<template name="second">Second</template>
+		</apply>
+	</window>
+	<debugger rootId="host" />
+</zk>

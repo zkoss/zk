@@ -1,0 +1,28 @@
+<zk>
+<zscript><![CDATA[
+long begin = 0;
+class MyComposer extends org.zkoss.zk.ui.util.GenericForwardComposer {
+	public void onClick$btn() {
+		timer.stop();
+		timer.start();
+		begin = System.currentTimeMillis();
+		inf.appendChild(new Label("timer started"));
+	}
+	public void onTimer$timer() {
+		inf.appendChild(new Label("timer fired: " + (System.currentTimeMillis() - begin) /1000));
+	}
+}
+]]></zscript>
+<div apply="MyComposer">
+<html><![CDATA[
+	<ol>
+	<li>Click the Fire button</li>
+	<li>Then, "timer started" apears, and after 5 seconds, "timer fired: 5" appears</li>
+	</ol>
+]]></html>
+
+<timer id="timer" running="false" repeats="false" delay="5000" />
+<button id="btn" label="Fire"/>
+<vlayout id="inf"/>
+</div>
+</zk>

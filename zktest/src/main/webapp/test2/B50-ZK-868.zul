@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-868.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb  29 17:20:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>1. You should see a 'test' button, a 'Upload' button and a label 'result: '</div>
+	<div>2. Click 'test' button, the label should become '0px'</div>
+	<button id="btn" label="test" mold="trendy">
+		<attribute name="onClick">
+			Clients.evalJavaScript("jq('$lb')[0].innerHTML = jq('$fileupload').find('.z-button-tl').css('font-size');");
+		</attribute>
+	</button>
+	<fileupload id="fileupload" mold="trendy" label="Upload" />
+	<label id="lb" value="result: " />
+</zk>

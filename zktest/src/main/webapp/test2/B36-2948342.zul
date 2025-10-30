@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2948342.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 11 18:00:03 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Check all of treeitem will be selected when open all of treenode
+	<zscript><![CDATA[
+	public class AllSelectedTreeItemRenderer implements TreeitemRenderer {
+		public void render(Treeitem ti, Object obj, int index) throws Exception {
+			ti.setSelected(true);
+
+			DefaultTreeNode t = (DefaultTreeNode) obj;
+			Treecell tc = new Treecell(t.getData().toString());
+			Treerow tr =  new Treerow();
+			tr.setParent(ti);
+
+			tc.setParent(tr);
+
+		}
+	}
+	List aChildren = new ArrayList();
+	List empty = new ArrayList();
+	List a2Children = new ArrayList();
+	DefaultTreeNode a20 = new DefaultTreeNode("A2-0", empty);
+	DefaultTreeNode a21 = new DefaultTreeNode("A2-1", empty);
+	DefaultTreeNode a22 = new DefaultTreeNode("A2-2", empty);
+	a2Children.add(a20);
+	a2Children.add(a21);
+	a2Children.add(a22);
+	DefaultTreeNode a0 = new DefaultTreeNode("A0", empty);
+	DefaultTreeNode a1 = new DefaultTreeNode("A1", empty);
+	DefaultTreeNode a2 = new DefaultTreeNode("A2", a2Children);
+	aChildren.add(a0);
+	aChildren.add(a1);
+	aChildren.add(a2);
+	List children = new ArrayList();
+	DefaultTreeNode a = new DefaultTreeNode("A", aChildren);
+	children.add(a);
+	List bbChildren = new ArrayList();
+	DefaultTreeNode b00 = new DefaultTreeNode("B0-0", empty);
+	bbChildren.add(b00);
+	List bChildren = new ArrayList();
+	DefaultTreeNode b0 = new DefaultTreeNode("B0", bbChildren);
+	DefaultTreeNode b1 = new DefaultTreeNode("B1", empty);
+	DefaultTreeNode b2 = new DefaultTreeNode("B2", empty);
+	bChildren.add(b0);
+	bChildren.add(b1);
+	bChildren.add(b2);
+	DefaultTreeNode b = new DefaultTreeNode("B", bChildren);
+	children.add(b);
+	List rList = new ArrayList();
+	rList.add(a);
+	rList.add(b);
+	DefaultTreeNode r = new DefaultTreeNode("Root", rList);
+	List rootList = new ArrayList();
+	rootList.add(r);
+	DefaultTreeNode root = new DefaultTreeNode("Root", rootList);
+	DefaultTreeModel stm = new DefaultTreeModel(root);
+	AllSelectedTreeItemRenderer tir = new AllSelectedTreeItemRenderer();
+]]></zscript>
+	<window title="Dynamically Change by Model">
+
+
+		<label value="You are using: ${desktop.webApp.version}" />
+		<tree model="${stm}" itemRenderer="${tir}" id="tree"
+			checkmark="true" multiple="true" />
+
+	</window>
+</zk>
+

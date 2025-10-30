@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3519.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Nov 30 10:11:40 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click all the disabled components, and there is no zk log appear
+        2. Right Click all the disabled components, and there is no zk log appear
+    </label>
+    textbox
+    <hlayout>
+        <textbox onRightClick='Clients.log("onRightClick")' onClick='Clients.log("onClick")' disabled="true" />
+        <textbox onRightClick='Clients.log("onRightClick")' onClick='Clients.log("onClick")'/>
+    </hlayout>
+    decimalbox
+    <hlayout>
+        <decimalbox onRightClick='Clients.log("onRightClick")' onClick='Clients.log("onClick")' disabled="true" />
+        <decimalbox onRightClick='Clients.log("onRightClick")' onClick='Clients.log("onClick")' />
+    </hlayout>
+    checkbox
+    <hlayout>
+        <checkbox onRightClick='Clients.log("onRightClick")' onClick='Clients.log("onClick")' disabled="true" />
+        <checkbox onRightClick='Clients.log("onRightClick")' onClick='Clients.log("onClick")' />
+    </hlayout>
+    button
+    <hlayout>
+        <button onRightClick='Clients.log("onRightClick")' onClick='Clients.log("onClick")' disabled="true" />
+        <button onRightClick='Clients.log("onRightClick")' onClick='Clients.log("onClick")' />
+    </hlayout>
+</zk>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4637.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 07 16:38:22 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the Searchbox.
+        2. It shouldn't have an active effect. And it should be dimmed.
+    </label>
+    <searchbox disabled="true"/>
+</zk>

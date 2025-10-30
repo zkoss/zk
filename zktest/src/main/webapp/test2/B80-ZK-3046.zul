@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3046.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 24 11:59:45 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	   List locales = Arrays.asList(Locale.getAvailableLocales());
+	]]></zscript>
+
+    <label multiline="true">
+        1. Click each button, you should see the zk.log with the button's label.
+    </label>
+
+	<div apply="org.zkoss.bind.BindComposer">
+	
+		<groupbox closable="false">
+			<caption label="children binding - static if-attribute" style="color: red"/>
+			<div children="@init(locales)">
+				<template name="children" var="locale">
+					<button if="${locale.language eq 'zh'}" label="${locale}" onClick="Clients.log(locale.getValue(null).toString())"/>
+				</template>
+			</div>
+		</groupbox>
+		<groupbox closable="false">
+			<caption label="children binding - static if-attribute [WORKAROUND]"/>
+			<div children="@init(locales)">
+				<template name="children" var="locale">
+					<span> <!-- workaround span -->
+						<button if="${locale.language eq 'zh'}" label="${locale}" onClick="Clients.log(locale.getValue(null).toString())"/>
+					</span> <!-- workaround span -->
+				</template>
+			</div>
+		</groupbox>
+		
+		<groupbox closable="false">
+			<caption label="children binding - if shadow element (static EL)" style="color: red"/>
+			<div children="@init(locales)">
+				<template name="children" var="locale">
+					<if test="${locale.language eq 'zh'}">
+						<button label="${locale}" onClick="Clients.log(locale.getValue(null).toString())"/>
+					</if>
+				</template>
+			</div>
+		</groupbox>
+		<groupbox closable="false">
+			<caption label="children binding - if shadow element (WORKAROUND)"/>
+			<div children="@init(locales)">
+				<template name="children" var="locale">
+					<span> <!-- workaround span -->
+						<if test="${locale.language eq 'zh'}">
+							<button label="${locale}" onClick="Clients.log(locale.getValue(null).toString())"/>
+						</if>
+					</span> <!-- workaround span -->
+				</template>
+			</div>
+		</groupbox>
+		
+		<groupbox closable="false">
+			<caption label="children binding - if shadow element (init binding) [EMPTY]" style="color: red"/>
+			<div children="@init(locales)">
+				<template name="children" var="locale">
+					<if test="@init(locale.language eq 'zh')">
+						<button label="@init(locale)" onClick="Clients.log(locale.getValue(null).toString())"/>
+					</if>
+				</template>
+			</div>
+		</groupbox>
+		<groupbox closable="false">
+			<caption label="children binding - if shadow element (init binding) (WORKAROUND)"/>
+			<div children="@init(locales)">
+				<template name="children" var="locale">
+					<span> <!-- workaround span -->
+						<if test="@init(locale.language eq 'zh')">
+							<button label="@init(locale)" onClick="Clients.log(locale.getValue(null).toString())"/>
+						</if>
+					</span> <!-- workaround span -->
+				</template>
+			</div>
+		</groupbox>
+		
+		<groupbox closable="false">
+			<caption label="shadow foreach, other limitations occur"/>
+			<div>
+				<forEach items="@init(locales)" var="locale">
+<!-- 					<span> --><!-- workaround span to preserve the 'locale' variable -->
+					<if test="@init(locale.language eq 'zh')">
+						<button label="@init(locale)" onClick="Clients.log(locale.toString())"/><!-- locale undefined -->
+					</if>
+<!-- 					</span> -->
+				</forEach>
+			</div>
+		</groupbox>
+	</div>
+</zk>

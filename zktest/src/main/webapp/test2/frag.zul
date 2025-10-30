@@ -1,0 +1,5 @@
+<window>
+This is included by other zul
+<textbox value="included" onChange="alert(self.value)"/>
+<datebox/>
+</window>

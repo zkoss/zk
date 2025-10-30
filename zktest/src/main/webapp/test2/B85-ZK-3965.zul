@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3965.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 15 12:51:44 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Test model
+        1. After page loaded, the s1 should be selected.
+        2. Click "Click Me To add s3 to model", s3 should be attached to page and no exception.
+        Test external
+        1. After page loaded, the e6 should be selected.
+        2. Click "Click Me To add an external radio", a new radio button should be attached to page and selected.
+    </label>
+    <window border="normal" title="hello" apply="org.zkoss.zktest.test2.B85_ZK_3965Composer">
+        <vbox>
+            <radiogroup id="radiogroup"/>
+            <button id="btn" label="Click Me To select s1" />
+            <button id="btn2" label="Click Me To add s3 to model" />
+        </vbox>
+
+        <panel id="testExternals" title="Externals">
+            <panelchildren>
+                <radiogroup id="rg">
+                    <radio label="e1" checked="true" />
+                    <radio label="e2" checked="true" />
+                    <radio label="e3" checked="true" />
+                </radiogroup>
+                <radio radiogroup="rg" label="e4" checked="true" />
+                <radio radiogroup="rg" label="e5" checked="true" />
+                <radio radiogroup="rg" label="e6" checked="true" />
+                <button id="btn3" label="Click Me To add an external radio"/>
+            </panelchildren>
+        </panel>
+    </window>
+</zk>
+

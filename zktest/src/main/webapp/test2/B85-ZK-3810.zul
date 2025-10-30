@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3810.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 17 14:34:37 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<?import org.zkoss.util.Locales?>
+<zk>
+	<label multiline="true">
+		WebSocket should be enabled
+
+		1. change the browser language to "chinese traditional"
+		2. reload this page, should see "initial: zh_TW" before the button
+		3. click the button, should see "dynamic: zh_TW" appear after the button
+
+	</label>
+	<label onCreate='self.setValue("initial: " + Locales.getCurrent().toString());'/>
+	<button label="display locale dynamically" onClick='new Label("dynamic: " + Locales.getCurrent().toString()).setPage(page);'/>
+</zk>

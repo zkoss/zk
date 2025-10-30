@@ -1,0 +1,32 @@
+<zk>
+	<html><![CDATA[
+		Test 1:
+		<ol>
+			<li>Open "Row A 0" node.</li>
+			<li>Click "c1" column of "SubRow A 0 X" node. Browser should not freeze.</li>
+		</ol>
+		Test 2:
+		<ol>
+			<li>Refresh Browser</li>
+			<li>Open "Row A 0" node and close.</li>
+			<li>Click "c1" column of "Row A 0" node.</li>
+			<li>Open "Row A 0" node again, should see its children nodes place on correct position.</li>
+			<li>Repeat step 2-4 for "Row A 1" node.</li>
+		</ol>
+	]]></html>
+	<tabbox vflex="1" id="myTab" apply="org.zkoss.zktest.test2.B65_ZK_1726_Composer">
+		<tabs>
+			<tab label="A" id="tab_a"/>
+		</tabs>
+		<tabpanels vflex="1">
+			<tabpanel id="tabp_a" >
+				<tree id="myTreeA"  vflex="1" hflex="1" >
+					<treecols sizable="true">
+				        <treecol label="c0" id="c0" hflex="1" />
+				        <treecol label="c1" id="c1" hflex="1" />
+					</treecols>
+				</tree>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

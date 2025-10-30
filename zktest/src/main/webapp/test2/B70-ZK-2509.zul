@@ -1,0 +1,21 @@
+<zk>
+    <label multiline="true">
+    1. scroll to right most.
+    2. scroll back to left.
+    3. you should not see the column with tiny width 
+    </label>
+    <zscript><![CDATA[
+    Object[] columns = new Object[50];
+    ]]></zscript>
+    <grid width="500px">
+        <frozen columns="1" />
+        <columns>
+            <column label="2200" align="center" hflex="min" forEach="${columns}" />
+        </columns>
+        <rows>
+            <row forEach="1,2,3,4,5,6">
+                <label value="5" forEach="${columns}" />
+            </row>
+        </rows>
+    </grid>
+</zk>

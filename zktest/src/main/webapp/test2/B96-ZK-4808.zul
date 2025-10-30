@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4808.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Mar 10 11:59:05 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click top menu icon area to open nested menu.
+		2. zk log should not show.
+		3. click both nested menu's menuitem and icon area, should trigger onClick event, and show the zk log.
+	</label>
+	<apply templateURI="/test2/include/themes.zul" />
+	<menubar>
+		<menu id="topMenu" label="Top Menu"
+			  onClick='Clients.log(event.toString());'>
+			<menupopup>
+				<menu id="nestedMenu" label="Nested Menu"
+					  onClick='Clients.log(event.toString());'>
+					<menupopup>
+						<menuitem id="menuItem" label="test" onClick='Clients.log(event.toString());'/>
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

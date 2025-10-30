@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4144.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 21 16:13:27 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <label multiline="true">
+        1. Click "Save"
+        2. The Groupbox will be opened with many error popups
+        3. Scroll Groupbox. These popups should follow the scroll.
+    </label>
+    <window width="100%" height="100%" apply="org.zkoss.zktest.test2.B86_ZK_4144Composer">
+        <div>
+            <button id="save" label="Save" />
+            <div width="100%">
+                <groupbox id="gb" contentStyle="overflow:auto" ca:data-scrollable="true" mold="3d" open="false">
+                    <caption label="Customer Details" width="100%" />
+                    <div width="100%" height="120px">
+                        <grid style="border:0px;">
+                            <columns>
+                                <column width="200px" />
+                                <column width="500px" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <label value="Field 1" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field1" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 2" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field2" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 3" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field3" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                                <row>
+                                    <label value="Field 4" />
+                                    <hbox>
+                                        <space spacing="2px" />
+                                        <textbox id="field4" maxlength="15" width="200px" />
+                                    </hbox>
+                                </row>
+                            </rows>
+                        </grid>
+                    </div>
+                </groupbox>
+            </div>
+        </div>
+    </window>
+</zk>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F31-1895872.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 28 14:36:14 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	Keyboard support for menues to navigate (only new Trendy mold)
+	<vbox>
+		<window title="Menu Demo (Trendy)" border="normal">
+			<menubar id="menubar">
+				<menu label="Help">
+					<menupopup>
+						<menuitem label="New"
+							onClick="alert(self.label)" />
+						<menuitem disabled="true" image="/test2/img/folder.gif"
+							label="Disabled item" onClick="alert(self.label)" />
+						<menuitem label="Save"
+							onClick="alert(self.label)" />
+						<menuseparator />
+						<menuitem label="Exit" checked="true"
+							onClick="alert(self.label)" />
+					</menupopup>
+				</menu>
+				<menuitem disabled="true" image="/test2/img/folder.gif"
+					label="Disabled item" onClick="alert(self.label)" />
+				<menu label="Help" image="/test2/img/folder.gif">
+					<menupopup>
+						<menuitem label="Index"
+							onClick="alert(self.label)" />
+						<menu label="About">
+							<menupopup>
+								<menuitem image="/test2/img/folder.gif"
+									label="About ZK" onClick="alert(self.label)" />
+								<menuitem label="About Potix"
+									onClick="alert(self.label)" />
+							</menupopup>
+						</menu>
+					</menupopup>
+				</menu>
+				<menu image="/test2/img/folder.gif">
+					<menupopup>
+						<menuitem label="Index"
+							onClick="alert(self.label)" />
+						<menu label="About">
+							<menupopup>
+								<menuitem label="About ZK"
+									onClick="alert(self.label)" />
+								<menuitem label="About Potix"
+									onClick="alert(self.label)" />
+							</menupopup>
+						</menu>
+					</menupopup>
+				</menu>
+
+				<menu>
+					<menupopup>
+						<menuitem label="Index"
+							onClick="alert(self.label)" />
+						<menu label="About">
+							<menupopup>
+								<menuitem label="About ZK"
+									onClick="alert(self.label)" />
+								<menuitem label="About Potix"
+									onClick="alert(self.label)" />
+							</menupopup>
+						</menu>
+					</menupopup>
+				</menu>
+			</menubar>
+		</window>
+		<separator bar="true" />
+		<window title="Menu Demo - Vertical (Trendy)" border="normal">
+			<menubar id="menubar" orient="vertical">
+				<menu label="Help">
+					<menupopup>
+						<menuitem label="New"
+							onClick="alert(self.label)" checkmark="true" autocheck="true" />
+						<menuitem disabled="true" image="/test2/img/folder.gif"
+							label="Disabled item" onClick="alert(self.label)" />
+						<menuitem label="Save"
+							onClick="alert(self.label)" />
+						<menuseparator />
+						<menuitem checked="true" label="Exit"
+							onClick="alert(self.label)" />
+					</menupopup>
+				</menu>
+				<menuitem disabled="true" image="/test2/img/folder.gif"
+					label="Disabled item" onClick="alert(self.label)" />
+				<menu label="Help" image="/test2/img/folder.gif">
+					<menupopup>
+						<menuitem label="Index"
+							onClick="alert(self.label)" />
+						<menu label="About">
+							<menupopup>
+								<menuitem image="/test2/img/folder.gif"
+									label="About ZK" onClick="alert(self.label)" />
+								<menuitem label="About Potix"
+									onClick="alert(self.label)" />
+							</menupopup>
+						</menu>
+					</menupopup>
+				</menu>
+				<menu image="/test2/img/folder.gif">
+					<menupopup>
+						<menuitem label="Index"
+							onClick="alert(self.label)" />
+						<menu label="About">
+							<menupopup>
+								<menuitem label="About ZK"
+									onClick="alert(self.label)" />
+								<menuitem label="About Potix"
+									onClick="alert(self.label)" />
+							</menupopup>
+						</menu>
+					</menupopup>
+				</menu>
+
+				<menu>
+					<menupopup>
+						<menuitem label="Index"
+							onClick="alert(self.label)" />
+						<menu label="About">
+							<menupopup>
+								<menuitem label="About ZK"
+									onClick="alert(self.label)" />
+								<menuitem label="About Potix"
+									onClick="alert(self.label)" />
+							</menupopup>
+						</menu>
+					</menupopup>
+				</menu>
+			</menubar>
+		</window>
+	</vbox>
+</zk>

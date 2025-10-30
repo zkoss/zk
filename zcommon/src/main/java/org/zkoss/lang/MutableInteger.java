@@ -1,0 +1,66 @@
+/* MutableInteger.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Feb 16 13:39:47     2007, Created by tomyeh
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under LGPL Version 2.1 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+*/
+package org.zkoss.lang;
+
+/**
+ * Represents an integer that can be modified.
+ *
+ * <p>It is useful if you want to pass an integer to a method
+ * and like to keep the result of how the method modifies the value.
+ *
+ * @author tomyeh
+ */
+public class MutableInteger implements Comparable<MutableInteger> {
+	/** The value of the mutable integer. */
+	public int value;
+
+	public MutableInteger(int value) {
+		this.value = value;
+	}
+
+	/** Returns the value of this {@link MutableInteger} as an int.
+	 */
+	public int intValue() {
+		return this.value;
+	}
+	/** Sets the value of this {@link MutableInteger}.
+	 */
+	public void setValue(int value) {
+		this.value = value;
+	}
+	/** Compares two {@link MutableInteger} objects numerically.
+	 *
+	 * @return the value 0 if the argument is numerically equal to this;
+	 * a value less than 0 if the argument is numerically greater than this;
+	 * and a value greater than 0 if the argument is numerically less than this.
+	 */
+	public int compareTo(MutableInteger o) {
+		return Integer.compare(this.value, o.value);
+	}
+	//Object//
+	public String toString() {
+		return "" + this.value;
+	}
+	public int hashCode() {
+		return this.value;
+	}
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		return (o instanceof MutableInteger)
+			&& ((MutableInteger)o).value == this.value;
+	}
+}

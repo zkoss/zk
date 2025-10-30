@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4644.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Oct 28 11:10:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="container" apply="org.zkoss.zktest.test2.B95_ZK_4644Composer">
+		<button id="btn" label="Click to Add Stepbar and no error"/>
+	</div>
+</zk>

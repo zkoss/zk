@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2321.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jun 11, 2014  4:42:40 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+If you cannot see any Java Exception, the bug has fixed.
+ <label>&#x23877;</label>
+ <label value="" onCreate='self.setValue("\uD84E\uDC77")'/>
+<label value="" onCreate='self.setValue(new String(Character.toChars(0x23877)))'/>
+</zk>

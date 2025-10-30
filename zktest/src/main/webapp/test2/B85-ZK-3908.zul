@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3908.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jun 28 15:57:50 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click add button twice
+		2. The children should be rendered vertically
+		3. Click horizontal button
+		4. The children should be rendered horizontally
+		5. Click vertical button
+		6. The children should be rendered vertically
+	</label>
+	<button label="add" onClick="add()"/>
+	<button label="horizontal" onClick='bar.setOrient("horizontal")'/>
+	<button label="vertical" onClick='bar.setOrient("vertical")'/>
+	<toolbar id="bar" orient="vertical">
+		<toolbarbutton label="xxx"/>
+		<toolbarbutton label="xxx"/>
+	</toolbar>
+	<zscript><![CDATA[
+		public void add(){
+			Toolbarbutton b = new Toolbarbutton("xxx");
+			bar.appendChild(b);
+		}
+	]]></zscript>
+</zk>

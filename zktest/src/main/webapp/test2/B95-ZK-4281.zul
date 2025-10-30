@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4281.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 16 12:45:59 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	import java.io.*;
+
+	int cmpCnt = 0;
+
+	List children = new ArrayList();
+	children.add(new DefaultTreeNode("1", null));
+	children.add(new DefaultTreeNode("2", null));
+	children.add(new DefaultTreeNode("3", null));
+	children.add(new DefaultTreeNode("4", null));
+	children.add(new DefaultTreeNode("5", null));
+	DefaultTreeModel model = new DefaultTreeModel(new DefaultTreeNode("ROOT", children));
+
+	Object serializationClone(Object obj) throws Exception {
+		ByteArrayOutputStream boa = new ByteArrayOutputStream();
+		new ObjectOutputStream(boa).writeObject(obj);
+		byte[] bs = boa.toByteArray();
+		return new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	}
+	]]>
+	</zscript>
+	<label multiline="true">
+		1. Click "Click me shouldn't have any error.".
+		2. Shouldn't have any error and see another tree appended on the page.
+		3. Click "page 2" button below the new appended tree.
+		4. The tree should switch to page 2.
+	</label>
+	<vlayout id="clones">
+		<tree id="testTree" model="${model}" mold="paging" rows="2" pageSize="2"/>
+		<button label="page 2" onClick="testTree.model.setActivePage(1)"/>
+	</vlayout>
+	<button id="add" label="Click me shouldn't have any error.">
+		<attribute name="onClick"><![CDATA[
+		Tree tree = (Tree) serializationClone(testTree);
+		tree.id = "treeCBS" + cmpCnt++;
+		tree.parent = clones;
+
+		Button btn = new Button("page 2");
+		btn.addEventListener("onClick", new EventListener() {
+			public void onEvent(Event e) {
+				tree.model.setActivePage(1);
+			}
+		});
+		btn.parent = clones;
+		]]>
+		</attribute>
+	</button>
+</zk>

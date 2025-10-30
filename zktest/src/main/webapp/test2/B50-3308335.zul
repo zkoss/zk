@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3308335.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 30 15:38:17 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please click the button of "Change RoundingMode", and then click the button of "The alert...." to see the result.
+<separator/>
+<spinner RoundingMode="CEILING" id="spinner"/>
+<separator/>
+<button label="Change RoundingMode" onClick='spinner.setRoundingMode("FLOOR")'/>
+<separator/>
+<button label="The alert should be 3, if 2 that is a bug." xmlns:w="client" w:onClick='alert(this.$f("spinner")._rounding);'/>
+</zk>

@@ -1,0 +1,48 @@
+<zk>
+<zscript>
+public class MyLabel extends Label {
+	public void onCreate() {
+		setValue(getParent().toString());
+	}
+}
+</zscript>
+	<div id="bind" apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ManipulateInsertionVM')">
+		<div id="host" apply="org.zkoss.zktest.zats.zuti.composer.ShadowComposer">
+			**Start**
+			<if test="@load(vm.rootVisible)">
+			1. First
+				<div>
+					**Nested Start**
+					<if test="@load(vm.visible)">
+						<div style="background:yellow"><label use="MyLabel"/></div>
+					</if>
+					<div style="background:green"><label use="MyLabel"/></div>
+					<if test="@load(vm.visible)">
+						<div style="background:yellow"><label use="MyLabel"/></div>
+					</if>
+					**Nested End**
+				</div>
+			3. Last
+			</if>
+			**Middle**
+			<if test="@load(vm.rootVisible)">
+			1. First
+				<div>
+					**Nested Start**
+					<if test="@load(vm.visible)">
+						<div style="background:yellow"><label use="MyLabel"/></div>
+					</if>
+					<div style="background:green"><label use="MyLabel"/></div>
+					<if test="@load(not vm.visible)">
+						<div style="background:green"><label use="MyLabel"/></div>
+					</if>
+					**Nested End**
+				</div>
+			3. Last
+			</if>
+		</div>
+		<button id="changeVisible" label="Change if visible" onClick='@command("changeVisible")'/>
+	</div>
+	<debugger rootId="host"/>
+</zk>

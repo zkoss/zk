@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4309.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Mar 06 12:46:50 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. test in chrome.
+		2. The listbox with many rows/columns is only added to highlight the performance drain, which gets worse in more complex UIs.
+		3. open the devtools and record the performance.
+		4. click the 4 buttons at bottom.
+		5. you should not see forced reflow cause by fireSized.
+	</label>
+	<div>
+		<div height="500px">
+			<listbox id="lb" model="${model}" vflex="1">
+				<listhead>
+					<forEach begin="0" end="50">
+						<listheader label="col-${each}" width="100px"/>
+					</forEach>
+				</listhead>
+				<template name="model">
+					<listitem>
+						<forEach begin="0" end="50">
+							<listcell label="${each}"/>
+						</forEach>
+					</listitem>
+				</template>
+			</listbox>
+			<zscript><![CDATA[
+                lb.setModel(new ListModelList(Locale.getAvailableLocales()));
+                lb.renderAll();
+            ]]></zscript>
+		</div>
+		<vlayout>
+			<button label="add 50 components to a visible container">
+				<attribute name="onClick">
+					<![CDATA[
+                    for(int i = 0; i < 50; i++) {
+                        new Label(" " + i).setParent(visibleContainer);
+                    }
+                ]]>
+				</attribute>
+			</button>
+			<button label="add 50 components at page level">
+				<attribute name="onClick">
+					<![CDATA[
+                    for(int i = 0; i < 50; i++) {
+                        new Label(" " + i).setPage(page);
+                    }
+                ]]>
+				</attribute>
+			</button>
+			<button label="add 50 components to a hidden container (WORKAROUND 1)">
+				<attribute name="onClick">
+					<![CDATA[
+                    for(int i = 0; i < 50; i++) {
+                        new Label(" " + i).setParent(hiddenContainer);
+                    }
+                    hiddenContainer.setVisible(true);
+                ]]>
+				</attribute>
+			</button>
+			<button label="add 50 components as a batchContainer (WORKAROUND 2)">
+				<attribute name="onClick">
+					<![CDATA[
+                    Div batchContainer = new Div();
+                    batchContainer.setPage(page);
+                    for(int i = 0; i < 50; i++) {
+                        new Label(" " + i).setParent(batchContainer);
+                    }
+                ]]>
+				</attribute>
+			</button>
+		</vlayout>
+	</div>
+	<div id="visibleContainer"/>
+	<div id="hiddenContainer" visible="false"/>
+</zk>

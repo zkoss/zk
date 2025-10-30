@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-983.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar  28 13:05:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>Click the 'detach' button, you should not see any error.</div>
+	<combobutton id="cb" label="Combobutton" />
+	<button label="detach" onClick='cb.detach()' />
+</zk>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3131.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Feb 15, 2016  3:27:14 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<?link href='//fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' ?>
+<zk>
+    <label value="some text here" style="font-family: 'Open Sans'"/>
+</zk>

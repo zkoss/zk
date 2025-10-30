@@ -1,0 +1,14 @@
+<window>
+	<html><![CDATA[
+	<ol>
+	<li>Right click on "right click me!"</li>
+	<li>You should see "Hello! I am a popup" popup</li>
+	<li>If you saw a "Loading..." mask on top of the popup and does not go away. It is a bug</li>
+	<li>done</li>
+	</ol>
+	]]></html>
+	<popup id="mypop" onOpen=''>
+		Hello! I am a popup.
+	</popup>
+	<label value="right click me!" id="mylabel" context="mypop" style="background-color:yellow"/>
+</window>

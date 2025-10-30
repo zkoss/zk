@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2767.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jun  3 14:17:53 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. Please drag an image to drop into the dropupload component to upload it.
+	2. Select the text "Upload your hot shot:" and drag it into the dropupload again. (if you cannot drag the text into dropupload component, it's okay too.)
+	3. You should not see any "null" message.	 
+	</label>
+    <vlayout>
+        <image id="img" />
+        Upload your hot shot:
+        <dropupload maxsize="-1" content="content" detection="browser">
+        	<attribute name="onUpload">
+        	if (event.media == null)
+        	 	alert(event.media);
+        	 else 
+        	 	img.setContent(event.media); 
+        	</attribute>
+        </dropupload>
+    </vlayout>
+</zk>

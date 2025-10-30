@@ -1,0 +1,11 @@
+<zk><window border="normal" height="360px"
+    title="Fit-the-Rest Flexibility: [Panel]" width="480px">
+    <panel vflex="1">
+        <panelchildren>
+            <div height="100%" style="background:yellow" width="100%">
+                <label value="1"/>
+            </div>
+        </panelchildren>
+    </panel>
+</window>
+</zk>

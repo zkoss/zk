@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3903.zul.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Mar 28 12:13 PM:25 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <label multiline="true">
+        1. click buttun group1~group3
+        2. Every icon should be replaced and the title should not be duplicate.
+    </label>
+
+    <groupbox>
+        <caption id="cap1" iconSclass="z-icon-plus" label="Testlabel1"/>
+        <button id="btn1" label="group1" onClick='cap1.setIconSclass("z-icon-globe");'/>
+    </groupbox>
+    <window>
+        <caption id="cap2" iconSclass="z-icon-plus" label="Testlabel2"/>
+        <button id="btn2" label="group3" onClick='cap2.setIconSclass("z-icon-globe");cap2.setLabel("asdf");'/>
+    </window>
+    <window>
+        <caption id="cap3" iconSclass="z-icon-plus" label="Testlabel3">
+            Some content in caption
+            <button label="some widget in caption"/>
+        </caption>
+        <button id="btn3" label="group2" onClick='cap3.setIconSclass("z-icon-globe");'/>
+    </window>
+</zk>

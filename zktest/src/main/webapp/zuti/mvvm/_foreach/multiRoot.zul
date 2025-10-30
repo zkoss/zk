@@ -1,0 +1,23 @@
+<zk xmlns:x="xhtml">
+	<div id="bind" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ForEachVM')">
+		<div id="host">
+			**Start**
+			<forEach begin="@load(vm.begin)" end="@load(vm.end)" step="@load(vm.step)"
+				var="x">
+				<label value="${x}"/>
+			</forEach>
+			**Middle**
+			<forEach begin="@load(vm.begin)" end="@load(vm.end)" step="@load(vm.step + 3)"
+				var="@load(vm.var)">
+				<label value="${each} + ${item}"/>
+			</forEach>
+			**End**
+		</div>
+		<button label="update range 1~5" onClick='@command("updateRange",begin=1,end=5)'/>
+		<button label="update range 5~9" onClick='@command("updateRange",begin=5,end=9)'/>
+		<button label="update step 3" onClick='@command("updateStep",step=3)'/>
+		<button label="update var" onClick='@command("updateVar",var="item")'/>
+	</div>
+	<debugger rootId="host" />
+</zk>

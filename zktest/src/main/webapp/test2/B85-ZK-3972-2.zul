@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3972-2.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jun 25 15:18:13 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <zscript><![CDATA[
+		List testPatterns = Arrays.asList(new String[] {
+			"E MMM dd yyyy",
+			"E, yyyy-MM-dd",
+		});
+	]]></zscript>
+	<label multiline="true">
+		(Connect the /zktest/test2/B85-ZK-3972.zul. before connect it)
+		3. No throwException should happen.
+	</label>
+	<separator/>
+	<zk forEach="${testPatterns}">
+		<div>
+			#${forEachStatus.index + 1} date format: ${each}
+		</div>
+		<separator/>
+	</zk>
+</zk>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4803.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Mar 08 12:15:08 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Click both buttons.
+        2. The difference shouldn't be a lot. (ex: 2x slower)
+    </label>
+    <tree id="tree" height="300px"/>
+    <button label="A) replace Model">
+        <attribute name="onClick"><![CDATA[
+        tree.setModel(new DefaultTreeModel(new DefaultTreeNode("root", createManyNodes(2000, true))));
+        ]]></attribute>
+        <attribute w:name="onClick"><![CDATA[
+        performance.mark('methodA');
+        ]]></attribute>
+    </button>
+    <button label="B) replace Model + invalidate">
+        <attribute name="onClick"><![CDATA[
+        tree.setModel(new DefaultTreeModel(new DefaultTreeNode("root", createManyNodes(2000, false))));
+        tree.invalidate();
+        ]]></attribute>
+        <attribute w:name="onClick"><![CDATA[
+        performance.mark('methodB');
+        ]]></attribute>
+    </button>
+    <zscript><![CDATA[
+    public List createManyNodes(int num, boolean reverseOrder) {
+        List nodes = new ArrayList();
+        for(int i = 0; i < num; i++) {
+            nodes.add(new DefaultTreeNode("node-" + (reverseOrder ? num - i - 1 : i)));
+        }
+        return nodes;
+    }
+    tree.setModel(new DefaultTreeModel(new DefaultTreeNode("root", createManyNodes(2000, false))));
+    ]]></zscript>
+    <script><![CDATA[
+    var pmeter = {
+        onResponse: function () {
+            performance.mark('done');
+            var hasA = performance.getEntriesByName('methodA').length > 0,
+                hasB = performance.getEntriesByName('methodB').length > 0;
+            if (hasA) {
+                performance.measure('result', 'methodA', 'done');
+                zk.log('methodA: ' + this.getDuration());
+            }
+            if (hasB) {
+                performance.measure('result', 'methodB', 'done');
+                zk.log('methodB: ' + this.getDuration());
+            }
+            performance.clearMarks();
+        },
+        getDuration: function () {
+            try {
+                var result = performance.getEntriesByName('result');
+                return result.length > 0 ? result[0].duration : 0;
+            } finally {
+                performance.clearMeasures();
+            }
+        }
+    };
+    zWatch.listen({
+        onResponse: pmeter
+    });
+    ]]></script>
+</zk>

@@ -1,0 +1,26 @@
+<!--
+	B50-ZK-244.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+	Mon Aug 1 14:45:12 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window border="normal" width="200px" mode="overlapped"
+		maximizable="true">
+		<caption id="caption" label="test" />
+		<div>
+			Click on the Change Button and then maximize the Window. If you can not maximize it, it is a bug.
+		</div>
+		<button label="Change">
+			<attribute name="onClick">
+				caption.setLabel("123");
+			</attribute>
+		</button>
+	</window>
+</zk>

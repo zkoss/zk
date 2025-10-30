@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4743.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Dec 10 17:11:14 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+	ListModelList model = new ListModelList(java.util.Arrays.asList(new String[]{"AAAAAAAAAAAAAAAAAAAAA","BBBBBBBBBBBBBBBBBB","CCCCCCCCCCCCCCC"}));
+	void doTheThing(){
+		lb.invalidate();
+		lb.setModel(model);
+	}
+]]></zscript>
+	<label multiline="true">
+		Scroll right until items 10, 11, 12 are in view, then click in the header's textboxes a few times
+		scrollbar position and view position should stay in sync.
+	</label>
+	<listbox id="lb" model="${model}" sizedByContent="true" width="800px" mold="paging" height="600px" pageSize="20" >
+		<custom-attributes org.zkoss.zul.frozen.smooth="true"/>
+		<frozen columns="1"/>
+		<auxhead>
+			<auxheader label="filter1 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter2 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter3 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter4 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter5 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter6 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter7 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter8 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter9 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter10 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter11 "><textbox onClick="doTheThing()"/></auxheader>
+			<auxheader label="filter12 "><textbox onClick="doTheThing()"/></auxheader>
+		</auxhead>
+		<listhead>
+			<listheader label="column 1" />
+			<listheader label="column 2" />
+			<listheader label="column 3" />
+			<listheader label="column 4" />
+			<listheader label="column 5" />
+			<listheader label="column 6" />
+			<listheader label="column 7" />
+			<listheader label="column 8" />
+			<listheader label="column 9" />
+			<listheader label="column 10"/>
+			<listheader label="column 11"/>
+			<listheader label="column 12"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+				<listcell><label value="${each}"/></listcell>
+			</listitem>
+		</template>
+	</listbox>
+</zk>

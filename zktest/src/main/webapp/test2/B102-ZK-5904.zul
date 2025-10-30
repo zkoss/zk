@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5904.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 30 14:34:22 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<label>No exception, click button to see zk log "doCommand -> 123" and "doCommand -> 123, 456"</label>
+	<window title="outer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B102_ZK_5904VM')">
+		<button onClick="@command(c:cat3('doTest','_1','_2'),a=123)" label="click 1"/>
+		<button onClick="@command(c:cat3('doTest','_3','_4'),a=123,b=456)" label="click 2"/>
+	</window>
+</zk>

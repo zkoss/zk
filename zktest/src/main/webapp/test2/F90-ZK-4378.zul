@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4378.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Jul 18 12:08:53 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		Test for Checkbox new mold: Tristate
+		1. Try click and press space key on the tristate Checkbox, the state should change,
+			and the order should be indeterminate > checked > unchecked > indeterminate.
+		2. Make sure the state didn't change when you click on a disabled tristate checkbox.
+	</label>
+	<checkbox id="tri" mold="tristate"></checkbox>
+	<button label="default mold" onClick='tri.setMold("default")'></button>
+	<button label="tristate mold" onClick='tri.setMold("tristate")'></button>
+	<button label="switch mold" onClick='tri.setMold("switch")'></button>
+	<button label="toggle mold" onClick='tri.setMold("toggle")'></button>
+	<separator/>
+	<button label="setDisabled(true)" onClick='tri.setDisabled(true)'></button>
+	<button label="setDisabled(false)" onClick='tri.setDisabled(false)'></button>
+	<button label="toogleIndeterminate(true)" onClick='tri.setIndeterminate(!tri.isIndeterminate())'></button>
+	<button label="isChecked" onClick='Clients.log("checked: " + tri.isChecked())'></button>
+	<button label="stateCheck" onClick='Clients.log(tri.getState())'></button>
+</zk>

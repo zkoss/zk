@@ -1,0 +1,9 @@
+<zk><window border="normal" height="360px"
+    title="Fit-the-Rest Flexibility: [Div]" width="480px">
+    <div style="background:yellow" vflex="1">
+        <div height="100%" style="background:yellow" width="100%">
+            <label value="1"/>
+        </div>
+    </div>
+</window>
+</zk>

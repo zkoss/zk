@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-2984382.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 12 18:46:44 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click the button of combobox to open popup.
+        2. The left of popup should be aligned with combobox.
+    </label>
+    <grid>
+        <rows>
+            <row>
+                <label value="name" />
+                <combobox id="cb"/>
+            </row>
+        </rows>
+    </grid>
+</zk>

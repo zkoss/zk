@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4081.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+            Mon Oct 15 12:54:45 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		You should see "false false false true".
+	</label>
+	<zscript>
+		ListModelList model = new ListModelList();
+		model.add("aaa");
+		model.add("bbb");
+		model.add("ccc");
+		model.add("ddd");
+	</zscript>
+	<div style="background:pink;">
+		<forEach items="${model}" varStatus="status">
+			<label>${status.last}</label>
+		</forEach>
+	</div>
+</zk>

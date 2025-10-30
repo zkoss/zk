@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3529.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri May 25 14:15:37 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<borderlayout width="300px" height="300px">
+		<north title="north title title title title title title title" collapsible="true" open="false"/>
+		<east title="east title title title title title title title" collapsible="true" open="false"/>
+		<west title="west title title title title title title title" collapsible="true" open="false"/>
+		<south title="south title title title title title title title" collapsible="true" open="false"/>
+		<center>CENTER</center>
+	</borderlayout>
+</zk>

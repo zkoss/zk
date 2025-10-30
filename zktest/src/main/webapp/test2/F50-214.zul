@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-214.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul  14 11:33:16 TST 2011, Created by peterkuo
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<html><![CDATA[
+1. Press the "submit" button. You should see the message as follows.<br/>
+[&lt;Textbox CA>, &lt;Textbox TX>, &lt;Textbox WA>] - [CA, TX, WA]
+]]></html> 
+<window style="margin: 0 auto" title="bindingValidation Test" apply="org.zkoss.zkplus.databind.AnnotateDataBindingComposer"> 
+ 
+<zscript><![CDATA[ 
+public class User{  
+	public String state;  
+ 
+	public String getState() { 
+		return(state); 
+	} 
+ 
+	public void setState(String st) { 
+		state = st; 
+	} 
+}  
+ 
+List list = new LinkedList(); 
+u = new User(); 
+u.state="CA";  
+list.add(u);  
+u = new User(); 
+u.state="TX";  
+list.add(u);  
+u = new User(); 
+u.state="WA";  
+list.add(u);  
+ 
+u = new User(); 
+u.state="ENTRY";  
+ 
+public void validationForGrid(Event ev) {  
+	System.out.println("validationForGrid called:"+ ev.getValue());  
+}  
+ 
+public void validationForEntry(Event ev) {  
+	System.out.println("validationForEntry called");  
+}  
+ 
+]]></zscript>  
+<grid id="griid" width="415px" model="@{list}"> 
+	<columns>  
+		<column label="State" align="center" width="60px"/>  
+	</columns>  
+	<rows> 
+		<row self="@{each=item}" align="center">
+			<textbox id="@{item.state}" value="@{item.state, save-when='submit.onClick'}" onBindingSave="validationForGrid(event)"/>
+		</row> 
+	</rows> 
+</grid> 
+<textbox value="@{u.state}" onBindingSave="validationForEntry(event)"/>  
+ 
+<button id="submit" label="submit"> 
+<attribute name="onBindingValidate"> 
+	alert(event.references + " - " +event.values); 
+</attribute> 
+<attribute name="onClick"> 
+	System.out.println("onClick() called"); 
+</attribute> 
+</button> 
+ 
+</window> 
+
+<separator/>
+2.You shall see "Hello! ZK." --> Hello! ZK.
+<separator/>
+<window id="xwin" title="My First Window" border="normal" width="200px" 
+	apply="org.zkoss.zktest.test2.MyComposer,org.zkoss.zkplus.databind.AnnotateDataBindingComposer">
+You shall see "Hello! ZK." --> <label value="@{xwin$MyComposer.hello}"/>
+</window>
+
+</zk>

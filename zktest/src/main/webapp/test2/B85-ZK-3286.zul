@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3286.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+            Thu Aug 31 10:25:05 AM CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+-->
+<window>
+	<label multiline="true">
+		1.in safari, open calendar popup by click datebox icon
+		2.click on the text representing a day (not the white space around it), it should be works correctly
+	</label>
+	<datebox/>
+</window>

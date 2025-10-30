@@ -1,0 +1,48 @@
+<!--
+	B50-ZK-1118.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Mon May 14 12:12:26 TST 2012, Created by vincent
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		You should not see vertical scroll bar in the Listbox.
+	</div>
+	<window width="100%">
+		<listbox id="lbPatientList" rows="5" width="100%"
+			sizedByContent="true">
+			<listhead sizable="true">
+				<listheader label="some" />
+				<listheader label="some" />
+				<listheader label="some" />
+				<listheader label="some" />
+				<listheader label="some" />
+				<listheader label="some" />
+				<listheader label="some" />
+				<listheader label="some" />
+				<listheader label="some" />
+				<listheader label="some" />
+			</listhead>
+			<zk forEach="1,2,3,4,5">
+				<listitem>
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+					<listcell label="somesomesomesomesomesome${each}" />
+				</listitem>
+			</zk>
+		</listbox>
+	</window>
+</zk>

@@ -1,0 +1,103 @@
+<zk xmlns:n="native">
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		import org.zkoss.zkmax.zul.Chosenbox;
+		import java.util.*;
+		
+		ListModel model = new ListModelList(new String[] {
+			"Apple", "Banana", "Super Apple", "Super Banana"
+		});
+		model.multiple = true;
+		model.addToSelection("Apple");
+		model.addToSelection("Banana");
+	]]></zscript>
+	<n:table>
+		<n:tr>
+			<n:th>
+				
+			</n:th>
+			<n:th>
+				<label>Doublebox</label>
+			</n:th>
+			<n:th>
+				<label>Datebox</label>
+			</n:th>
+			<n:th>
+				<label>Datebox</label>
+			</n:th>
+			<n:th if="${arg.imold != 'rounded'}">
+				<label>Chosenbox</label>
+			</n:th>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				<label>Base</label>
+			</n:td>
+			<n:td>
+				<doublebox mold="${arg.imold}" />
+			</n:td>
+			<n:td>
+				<datebox mold="${arg.imold}" buttonVisible="false" />
+			</n:td>
+			<n:td>
+				<datebox mold="${arg.imold}" />
+			</n:td>
+			<n:td if="${arg.imold != 'rounded'}">
+				<chosenbox model="${model}" width="200px" creatable="true"
+					onSelect="" />
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				<label>Disabled</label>
+			</n:td>
+			<n:td>
+				<doublebox mold="${arg.imold}" disabled="true" />
+			</n:td>
+			<n:td>
+				<datebox mold="${arg.imold}" disabled="true" buttonVisible="false" />
+			</n:td>
+			<n:td>
+				<datebox mold="${arg.imold}" disabled="true" />
+			</n:td>
+			<n:td if="${arg.imold != 'rounded'}">
+				<chosenbox model="${model}" width="200px" creatable="true"
+					onSelect="" disabled="true" />
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				<label>Read Only</label>
+			</n:td>
+			<n:td>
+				<doublebox mold="${arg.imold}" readonly="true" />
+			</n:td>
+			<n:td>
+				<datebox mold="${arg.imold}" readonly="true" buttonVisible="false" />
+			</n:td>
+			<n:td>
+				<datebox mold="${arg.imold}" readonly="true" />
+			</n:td>
+			<n:td if="${arg.imold != 'rounded'}" style="text-align: center">
+				<label>N/A</label>
+			</n:td>
+		</n:tr>
+		<n:tr>
+			<n:td>
+				<label>Inplace</label>
+			</n:td>
+			<n:td>
+				<doublebox mold="${arg.imold}" inplace="true" />
+			</n:td>
+			<n:td>
+				<datebox mold="${arg.imold}" inplace="true" buttonVisible="false" />
+			</n:td>
+			<n:td>
+				<datebox mold="${arg.imold}" inplace="true" />
+			</n:td>
+			<n:td if="${arg.imold != 'rounded'}" style="text-align: center">
+				<label>N/A</label>
+			</n:td>
+		</n:tr>
+	</n:table>
+</zk>

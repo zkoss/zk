@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-2010314.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Jul  5 12:03:28     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Event Priority"
+onA='l.value += "A"' onB='l.value += "B"' onC='l.value += "C"'
+onD='l.value += "D"' onE='l.value += "E"'>
+	You shall see the follow text below: CADEAB
+	<zscript>
+	Events.postEvent("onA", self, null);
+	Events.postEvent("onB", self, null);
+	Events.postEvent(2, "onC", self, null);
+	Events.postEvent(1, "onD", self, null);
+	Events.postEvent(1, "onE", self, null);
+	Events.postEvent(2, "onA", self, null);
+	</zscript>
+	<separator bar="true"/>
+	<label id="l"/>
+</window>

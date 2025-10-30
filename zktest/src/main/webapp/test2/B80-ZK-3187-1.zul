@@ -1,0 +1,19 @@
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.Page;	                  
+		public class MyDiv extends Div {
+			public void onPageAttached(Page newPage, Page oldPage) {
+				System.out.println("mydiv attached" + this);
+				Clients.log("mydiv attached" + this);
+			}
+			public void onPageDetached(Page page) {
+				System.out.println("mydiv detached" + this);
+				Clients.log("mydiv detached" + this);
+			}
+		}
+	]]></zscript>
+	
+	<div use="MyDiv" style="border: 1px solid red">
+		INCLUDE  ${self.parent}
+	</div>
+</zk>

@@ -1,0 +1,55 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] Click "Post GlobalCommand (outer)", you should see "GlobalCommand called > arg1: 1, arg2: outer" in zk log
+		[Step 2] Click "Post GlobalCommand (outer, myQueue)", you should not see any new log in zk log
+		[Step 3] Click "Post GlobalCommand (inner)", you should see two lines "GlobalCommand called > arg1: 3, arg2: inner" in zk log
+		[Step 4] Click "Post GlobalCommand (inner, myQueue)", you should see two lines "GlobalCommand called > arg1: 4, arg2: innerMyQueue" in zk log
+		[Step 5] Do above steps in each binder.
+	]]></label>
+	<separator />
+	>>> Outer Binder 1 (default):
+	<div viewModel="@id('outer_vm') @init('org.zkoss.zktest.bind.databinding.binder.OuterBinderGlobalCommandModel')">
+		<separator />
+		<button id="outerBtn1" label="Post GlobalCommand (outer)" onClick="@command('postGlobalCmdOuter') "/>
+		<button id="outerBtn2" label="Post GlobalCommand (outer, myQueue)" onClick="@command('postGlobalCmdOuterMyQueue') "/>
+		<button id="outerBtn3" label="Post GlobalCommand (inner)" onClick="@command('postGlobalCmdInner') "/>
+		<button id="outerBtn4" label="Post GlobalCommand (inner, myQueue)" onClick="@command('postGlobalCmdInnerMyQueue') "/>
+		<separator />
+		>>> Inner Binder 1 (myQueue):
+		<separator />
+		<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.binder.BinderGlobalCommandModel')"
+				binder="@init(queueName='myQueue')">
+			<button id="innerBtn1_1" label="Post GlobalCommand (outer)" onClick="@command('postGlobalCmdOuter') "/>
+			<button id="innerBtn1_2" label="Post GlobalCommand (outer, myQueue)" onClick="@command('postGlobalCmdOuterMyQueue') "/>
+			<button id="innerBtn1_3" label="Post GlobalCommand (inner)" onClick="@command('postGlobalCmdInner') "/>
+			<button id="innerBtn1_4" label="Post GlobalCommand (inner, myQueue)" onClick="@command('postGlobalCmdInnerMyQueue') "/>
+		</vlayout>
+		>>> Inner Binder 2 (myQueue, MyBinder):
+		<separator />
+		<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.binder.BinderGlobalCommandModel')"
+				binder="@id('myBinder') @init(value='org.zkoss.zktest.bind.databinding.binder.MyBinder', queueName='myQueue')">
+			<button id="innerBtn2_1" label="Post GlobalCommand (outer)" onClick="@command('postGlobalCmdOuter') "/>
+			<button id="innerBtn2_2" label="Post GlobalCommand (outer, myQueue)" onClick="@command('postGlobalCmdOuterMyQueue') "/>
+			<button id="innerBtn2_3" label="Post GlobalCommand (inner)" onClick="@command('postGlobalCmdInner') "/>
+			<button id="innerBtn2_4" label="Post GlobalCommand (inner, myQueue)" onClick="@command('postGlobalCmdInnerMyQueue') "/>
+		</vlayout>
+		>>> Inner Binder 3 (default, MyBinder):
+		<separator />
+		<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.binder.BinderGlobalCommandModel')"
+				 binder="@id('myBinder') @init(value=vm.binder)">
+			<button id="innerBtn3_1" label="Post GlobalCommand (outer)" onClick="@command('postGlobalCmdOuter') "/>
+			<button id="innerBtn3_2" label="Post GlobalCommand (outer, myQueue)" onClick="@command('postGlobalCmdOuterMyQueue') "/>
+			<button id="innerBtn3_3" label="Post GlobalCommand (inner)" onClick="@command('postGlobalCmdInner') "/>
+			<button id="innerBtn3_4" label="Post GlobalCommand (inner, myQueue)" onClick="@command('postGlobalCmdInnerMyQueue') "/>
+		</vlayout>
+		>>> Inner Binder 4 (default, MyBinder, scope=session):
+		<separator />
+		<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.binder.BinderGlobalCommandModel')"
+				 binder="@id('myBinder') @init(value=vm.binder, queueScope='session')">
+			<button id="innerBtn4_1" label="Post GlobalCommand (outer)" onClick="@command('postGlobalCmdOuter') "/>
+			<button id="innerBtn4_2" label="Post GlobalCommand (outer, myQueue)" onClick="@command('postGlobalCmdOuterMyQueue') "/>
+			<button id="innerBtn4_3" label="Post GlobalCommand (inner)" onClick="@command('postGlobalCmdInner') "/>
+			<button id="innerBtn4_4" label="Post GlobalCommand (inner, myQueue)" onClick="@command('postGlobalCmdInnerMyQueue') "/>
+		</vlayout>
+	</div>
+</zk>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3336745.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 12:50:31 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on Button 1 then Button 2 quickly. (Button 2 will be removed.) If you see javascript error, it is a bug.</li>
+		</ol>
+	]]></html>
+	<button id="btn1" label="Button 1" onClick='btn2.detach();' />
+	<button id="btn2" label="Button 2" onClick='alert("Button 2");' />
+</zk>

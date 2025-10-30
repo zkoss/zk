@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2337.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 27, 2014  18:12:12 PM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	If you don't see the odd row having the odd color style in any of following widgets, that's a bug.
+	<hlayout>
+		
+		<grid width="200px" height="200px">
+			<columns>
+				<column label="row"/>
+			</columns>
+			<rows>
+				<row><cell>CELL 1</cell></row>
+				<row><cell>CELL 2</cell></row>
+				<row><cell>CELL 3</cell></row>
+				<row><cell>CELL 4</cell></row>
+				<row><cell>CELL 5</cell></row>
+				<row><cell>CELL 6</cell></row>
+			</rows>
+		</grid>
+		<grid width="200px" height="200px">
+			<columns>
+				<column label="row"/>
+			</columns>
+			<rows>
+				<row renderdefer="100"><cell>CELL 1</cell></row>
+				<row renderdefer="200"><cell>CELL 2</cell></row>
+				<row renderdefer="300"><cell>CELL 3</cell></row>
+				<row renderdefer="400"><cell>CELL 4</cell></row>
+				<row renderdefer="500"><cell>CELL 5</cell></row>
+				<row renderdefer="600"><cell>CELL 6</cell></row>
+			</rows>
+		</grid>
+	    <zscript><![CDATA[
+	        String[] data = new String[300];
+	        for(int j=0; j < data.length; ++j) {
+	            data[j] = "option "+j;
+	        }
+	        ListModel strset = new SimpleListModel(data);
+	        ]]></zscript>
+	    <grid height="200px" width="200px" model="${strset}">
+	        <columns>
+	            <column label="options"/>
+	        </columns>
+	    </grid>
+		<grid height="200px" width="200px" model="${strset}">
+	    	<custom-attributes org.zkoss.zul.grid.rod="false"/>
+	        <columns>
+	            <column label="options"/>
+	        </columns>
+	        <rows renderdefer="1000">
+	        	<template name="model">
+		        	<row>${each}</row>
+	        	</template>
+	        </rows>
+	    </grid>
+	</hlayout>
+	
+	<hlayout>
+		<listbox width="200px" height="250px">
+	        <listhead sizable="true">
+	            <listheader label="name" sort="auto" />
+	            <listheader label="gender" sort="auto" />
+	        </listhead>
+	        <listitem>
+	            <listcell label="Mary" />
+	            <listcell label="FEMALE" />
+	        </listitem>
+	        <listitem>
+	            <listcell label="John" />
+	            <listcell label="MALE" />
+	        </listitem>
+	        <listitem>
+	            <listcell label="Jane" />
+	            <listcell label="FEMALE" />
+	        </listitem>
+	        <listitem>
+	            <listcell label="Henry" />
+	            <listcell label="MALE" />
+	        </listitem>
+	        <listitem>
+	            <listcell label="Henry" />
+	            <listcell label="MALE" />
+	        </listitem>
+	        <listitem>
+	            <listcell label="Henry" />
+	            <listcell label="MALE" />
+	        </listitem>
+	        <listitem>
+	            <listcell label="Henry" />
+	            <listcell label="MALE" />
+	        </listitem>
+		</listbox>
+		<listbox width="200px" height="250px">
+	        <listhead sizable="true">
+	            <listheader label="name" sort="auto" />
+	            <listheader label="gender" sort="auto" />
+	        </listhead>
+	        <listitem renderdefer="100">
+	            <listcell label="Mary" />
+	            <listcell label="FEMALE" />
+	        </listitem>
+	        <listitem renderdefer="200">
+	            <listcell label="John" />
+	            <listcell label="MALE" />
+	        </listitem>
+	        <listitem renderdefer="300">
+	            <listcell label="Jane" />
+	            <listcell label="FEMALE" />
+	        </listitem>
+	        <listitem renderdefer="400">
+	            <listcell label="Henry" />
+	            <listcell label="MALE" />
+	        </listitem>
+	        <listitem renderdefer="500">
+	            <listcell label="Henry" />
+	            <listcell label="MALE" />
+	        </listitem>
+	        <listitem renderdefer="600">
+	            <listcell label="Henry" />
+	            <listcell label="MALE" />
+	        </listitem>
+	        <listitem renderdefer="700">
+	            <listcell label="Henry" />
+	            <listcell label="MALE" />
+	        </listitem>
+		</listbox>
+		
+		<zscript><![CDATA[
+			String[] data = new String[300];
+			for (int j = 0; j < data.length; ++j) {
+				data[j] = "option " + j;
+			}
+			ListModel strset = new SimpleListModel(data);
+		]]></zscript>
+		<listbox width="200px" height="250px" model="${strset}">
+			<listhead>
+				<listheader label="Load on demend" />
+			</listhead>
+		</listbox>
+		<listbox width="200px" height="250px" model="${strset}">
+			<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+			<listhead>
+				<listheader label="Load on demend" />
+			</listhead>
+			<template name="model">
+				<listitem renderdefer="1000">
+					<listcell>${each}</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</hlayout>
+</zk>

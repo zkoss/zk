@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Chosenbox, rounded]" width="480px">
+        <chosenbox vflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Chosenbox]" width="480px">
+        <chosenbox vflex="1"/>
+    </window>
+</hbox>
+</zk>

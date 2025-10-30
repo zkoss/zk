@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3310055.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 12:50:31 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on the button. The times displayed in timebox and label should match for BOTH EST5EDT and EST.</li>
+		</ol>
+	]]></html>
+	<vlayout>
+		<hlayout>
+			EST:
+			<timebox id="timeEST"/>
+			<label id="labelEST"/>
+		</hlayout>
+		<hlayout>
+			EST5EDT:
+			<timebox id="timeEDT"/>
+			<label id="labelEDT"/>
+		</hlayout>
+		<button label="now" onClick="now();"/>
+		<zscript><![CDATA[
+			void now() {
+				TimeZone est = TimeZone.getTimeZone("EST");
+				TimeZone edt = TimeZone.getTimeZone("EST5EDT");
+				
+				Date d = new Date();
+				
+				timeEST.setTimeZone(est);
+				timeEST.setValue(d);
+				
+				timeEDT.setTimeZone(edt);
+				timeEDT.setValue(d);
+				
+				java.text.SimpleDateFormat estFormat = new java.text.SimpleDateFormat();
+				estFormat.setTimeZone(est);
+				labelEST.setValue(estFormat.format(d));
+				
+				java.text.SimpleDateFormat edtFormat = new java.text.SimpleDateFormat();
+				edtFormat.setTimeZone(edt);
+				labelEDT.setValue(edtFormat.format(d));
+			}
+		]]></zscript>
+	</vlayout>
+</zk>

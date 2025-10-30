@@ -1,0 +1,43 @@
+<zk>
+	<window id="win1" title="popup" border="normal" position="center,center" width="600px" height="600px">
+		<zscript>
+	<![CDATA[
+	void setData() {
+		List items = new org.zkoss.zktest.test2.B60_ZK_1512_BigList(10); //a big list of Integer
+		ListModelList lml = new ListModelList(items);
+		lml.setMultiple(true);
+		lb1.setModel(lml);
+	}
+	void clearData() {
+		List items = new org.zkoss.zktest.test2.B60_ZK_1512_BigList(0); //a big list of Integer
+		ListModelList lml = new ListModelList(items);
+		lml.setMultiple(true);
+		lb1.setModel(lml);
+	}
+	ListitemRenderer r = new ListitemRenderer() {
+		public void render(Listitem li, Integer b, int i) {
+			new Listcell("").setParent(li);
+			new Listcell(b + "-1").setParent(li);
+			new Listcell(b + "-2").setParent(li);
+			new Listcell(b + "-3").setParent(li);
+			new Listcell(b + "-4").setParent(li);
+		}
+	};
+]]>
+  </zscript>
+		<button id="btn5" label="Set Data" onClick="setData()" />
+		<button id="btn6" label="Clear Data" onClick="clearData()" />
+		<listbox id="lb1" multiple="true" checkmark="true"
+			height="500px" width="500px" itemRenderer="${r}">
+			<custom-attributes org.zkoss.zul.listbox.rod="false">
+			</custom-attributes>
+			<listhead>
+				<listheader width="30px" />
+				<listheader label="1" />
+				<listheader label="2" />
+				<listheader label="3" />
+				<listheader label="4" />
+			</listhead>
+		</listbox>
+	</window>
+</zk>

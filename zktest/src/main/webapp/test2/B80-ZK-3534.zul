@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3534.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Dec 15 16:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        1. IE 11 only.
+        2. Click on the combobox input element to give it focus.
+        3. Hover the 'test' button, and you would see the popup.
+        4. Move mouse out of the button to close the popup, and you should not see crash.
+    </label>
+    <div>
+        <combobox id="cb" width="210px" text="Please Select" />
+    </div>
+    <div>
+        <button label="test" tooltip="Div2" />
+        <popup width="500px" id="Div2">
+            <label value="test" />
+        </popup>
+    </div>
+</zk>

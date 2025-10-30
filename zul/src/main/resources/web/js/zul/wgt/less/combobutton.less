@@ -1,0 +1,110 @@
+@import "~./zul/less/_header.less";
+
+.z-combobutton {
+	display: inline-block;
+	vertical-align: middle;
+	min-height: @baseButtonHeight;
+	cursor: pointer;
+	.borderRadius(@inputBorderRadius);
+	.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
+	overflow: hidden;
+
+	&-content {
+		.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @buttonColor);
+		display: block;
+		min-height: @baseButtonHeight;
+		border: @buttonBorderWidth solid @buttonBorderColor;
+		padding: @combobuttonPadding;
+		line-height: normal;
+		background-color: @buttonBackgroundColor;
+		vertical-align: middle;
+		position: relative;
+		white-space: nowrap;
+	}
+	&-button {
+		font-weight: normal;
+		.displaySize(block, @combobuttonButtonWidth, 100%);
+		border-left: 1px solid @buttonSeparatorBorderColor;
+		line-height: normal;
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+	&-icon {
+		font-size: @fontSizeLarge;
+
+		&.z-icon-caret-down {
+			display: block;
+			margin-top: -8px;
+			position: absolute;
+			top: 50%;
+			left: @combobuttonButtonIconLeft;
+		}
+	}
+	&-image {
+		vertical-align: text-bottom;
+	}
+	//toolbar mold
+	&-toolbar {
+		.boxShadow('none');
+
+		.z-combobutton-content {
+			font-size: @combobuttonToolbarFontSize;
+			padding: @combobuttonToolbarPadding;
+			color: @toolbarButtonColor;
+			background-color: @toolbarButtonBackgroundColor;
+			.z-combobutton-button {
+				border-color: transparent;
+			}
+		}
+		&:hover, &:focus, &:active {
+			.z-combobutton-button {
+				border-color: @buttonSeparatorBorderColor;
+			}
+		}
+		&[disabled] {
+			.z-combobutton-button {
+				border-color: @buttonDisableSeparatorBorderColor;
+			}
+		}
+		&.z-combobutton-open {
+			.z-combobutton-content {
+				color: @buttonColor;
+				background-color: @buttonBackgroundColor;
+			}
+		}
+	}
+	&:hover {
+		.z-combobutton-content {
+			color: @buttonHoverColor;
+			border-color: @buttonHoverBorderColor;
+			background-color: @buttonHoverBackgroundColor;
+		}
+	}
+	&:focus {
+		.z-combobutton-content {
+			color: @buttonFocusColor;
+			border-color: @buttonFocusBorderColor;
+			background-color: @buttonFocusBackgroundColor;
+		}
+	}
+	&:active {
+		.z-combobutton-content {
+			color: @buttonActiveColor;
+			border-color: @buttonActiveBorderColor;
+			background-color: @buttonActiveBackgroundColor;
+		}
+	}
+	&[disabled] {
+		cursor: default;
+		.z-combobutton-content {
+			color: @buttonDisableColor;
+			border-color: @buttonDisableBorderColor;
+			background-color: @buttonDisableBackgroundColor;
+			cursor: default;
+		}
+		.z-combobutton-button {
+			border-color: @buttonDisableSeparatorBorderColor;
+		}
+	}
+}

@@ -1,0 +1,36 @@
+<zk>
+	<window apply="org.zkoss.zktest.test2.F65_ZK_2012_Composer">
+		<div>1. should see 'zk.ff: false' in zk.log</div>
+		<div width="400px">
+			2. click button, then should show
+			<div>'false' in 'isBrowser(ff)' textbox,</div>
+		</div>
+		<script>
+			<![CDATA[			
+			zk.afterLoad('zul.wgt', function() { 
+				zk.log('zk.ff: ' + zk.ff);
+			});
+			]]>
+		</script>
+		<div>
+			<button id="button" label="isBrowser, getBrowser"></button>
+			<vlayout>
+				<label value="isBrowser(ff)" />
+				<textbox id="ff" />
+				<label value="getBrowser" />
+				<textbox id="get" />
+			</vlayout>
+		</div>
+		<div>
+			3. check EL, should show {version=11.0, name=ie}, 11.0
+		</div>
+		<div>
+			<vlayout>
+				<label value="${zk.browser}" />
+				<label value="${zk.ie}" />
+				<label value="${zk.ff}" />
+				<label value="${zk.gecko}" />
+			</vlayout>
+		</div>
+	</window>
+</zk>

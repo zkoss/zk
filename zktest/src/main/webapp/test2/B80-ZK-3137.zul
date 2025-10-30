@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3137.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Mar 10 16:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1.Click the menu button, and you should see all the icons aligned vertically.
+    </label>
+	<menubar>
+		<menu iconSclass="z-icon-bars">
+			<menupopup>
+				<menuitem iconSclass="z-icon-dashboard" label="Dashboards"/>
+				<menu iconSclass="z-icon-edit" label="Admin">
+					<menupopup>
+						<menuitem label="Analysis Hierarchies Administration" />
+						<menuitem label="Fab Layout Administration" />
+						<menuitem label="PULSE Administration Client" />
+		                <menu label="PULSE Documentation">
+		                    <menupopup>
+								<menuitem label="PULSE Administrator's Guide" />
+								<menuitem label="PULSE Integrator's Guide" />
+								<menuitem label="PULSE Release Notes" />
+								<menuitem label="PULSE User's Guide" />
+		                    </menupopup>
+		                </menu>
+					</menupopup>			
+				</menu>
+				<menuitem iconSclass="z-icon-sitemap" label="Sitemap"/>
+				<menuitem iconSclass="z-icon-question" label="Help"/>
+				<menuitem iconSclass="z-icon-info" label="About..."/>
+				<menuitem label="no icon"/>
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

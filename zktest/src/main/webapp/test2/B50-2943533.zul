@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2943533.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb  2 16:20:26 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="" border="normal" width="400">
+    <grid>
+        <columns id="cols" sizable="true" menupopup="auto" >
+            <column label="A" />
+            <column label="B" />
+            <column label="C" />
+            <column label="D" />
+        </columns>
+        <rows>
+            <row>
+                <cell>
+                    <label value="a" />
+                </cell>
+                <cell>
+                    <label value="b" />
+                </cell>
+                <cell>
+                    <label value="c" />
+                </cell>
+                <cell>
+                    <label value="d" />
+                </cell>
+            </row>
+        </rows>
+    </grid>
+    <button id="btn" label="Click me should alert a message."></button>
+    <zscript>
+        import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+
+btn.addEventListener(Events.ON_CLICK, new EventListener() {
+public void onEvent(Event arg0) throws Exception {
+Messagebox.show("If you can see the message, the bug is fixed.");
+}
+});
+    </zscript>
+</window>
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3176297.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 10 19:14:51 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please click upon the datebox's icon and then mouse-over to move upon the dates, you shouldn't see the background of the row keeps changing its style on IE6/7/8.
+
+<grid>
+	<columns>
+		<column label="Type" width="150px" />
+		<column label="Content" />
+	</columns>
+	<rows>
+		<row>
+			<label value="UserName" width="150px" />
+			<datebox/>
+		</row>
+		<row>
+			<label value="UserName" width="150px" />
+			<datebox/>
+		</row>
+		<row>
+			<label value="UserName" width="150px" />
+			<datebox/>
+		</row>
+		<row>
+			<label value="UserName" width="150px" />
+			<datebox/>
+		</row>
+	</rows>
+</grid>
+</zk>

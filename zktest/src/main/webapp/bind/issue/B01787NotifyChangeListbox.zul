@@ -1,0 +1,38 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01787NotifyChangeCase')">
+		<label multiline="true"><![CDATA[
+		[Analysis]
+		1.click update path, label of comp1 : ['Item A:1','Item B:1'], box1 :['Item A:2','Item B:2']
+			[[path -> node change, teamplate doesn't chagne -> just reload node A and B (both load 2nd time)]]
+		2.reload, click updateA, label of comp1 : ['Item A.*:x:0','Item B:1'], box1 :['Item A.*:0','Item B:1']
+			[[node A -> tempatel changes -> reload teamplate (A template change, B load 2nd time)]]
+		3.reload, click updateAName, label of comp1 : ['Item A.name:0','Item B:1'], box1 :['Item A.name:0','Item B:1']
+			[[node A.name -> tempatel not notified -> just reload node a]]
+		4.reload, click updateB, label of comp1 : ['Item A:1','Item B.*:x:0'], box1 :['Item A:1','Item B.*:0']
+		5.reload, click updateBName, label of comp1 : ['Item A:1','Item B.name:0'], box1 :['Item A:1','Item B.name:0']
+				
+		========================
+		]]></label>
+		<listbox id="listbox" model="@load(vm.collection) @template(each.type)">
+			<template name="type1" var="cnode">
+				<listitem label="@load(vm.get1(cnode.name))"/>
+			</template>
+			<template name="type2" var="cnode">
+				<listitem label="@load(vm.get1x(cnode.name))"/>
+			</template>
+		</listbox>
+		<hbox id="box1" children="@load(vm.path)">
+			<template name="children" var="pnode">
+				<label value="@load(vm.get2(pnode.name))"/>
+			</template>
+		</hbox>
+		<button label="clear" onClick="@command('clear')"/>
+		<button id="updatePath" label="update path" onClick="@command('updatePath')"/>
+		<button id="updateA" label="update nodeA.*" onClick="@command('notifyChangeA')"/>
+		<button id="updateAName" label="update nodeA.name" onClick="@command('notifyChangeAName')"/>
+		<button id="updateB" label="update nodeB.*" onClick="@command('notifyChangeB')"/>
+		<button id="updateBName" label="update nodeB.name" onClick="@command('notifyChangeBName')"/>
+		<button label="dump" onClick="binder.getTracker().dump()"/>
+	</window>
+</zk>

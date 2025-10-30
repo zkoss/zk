@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4865.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 20 15:15:10 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.z-label:focus { background-color: salmon; }
+	</style>
+	<label multiline="true">
+		1. Click the "component focus with autodisable" button, you shall see the label is focused(background-color: salmon).
+		2. Click the "widget focus with autodisable" button, you shall see the label is focused(background-color: salmon).
+	</label>
+	<button label="component focus with autodisable" autodisable="self">
+		<attribute name="onClick"><![CDATA[
+			self.setLabel("updated label" + new Date());
+			title.focus();
+		]]></attribute>
+	</button>
+	<button label="widget focus with autodisable" autodisable="self">
+		<attribute name="onClick"><![CDATA[
+			self.setLabel("updated label" + new Date());
+			Clients.evalJavaScript("zk.$('$title').focus()");
+		]]></attribute>
+	</button>
+	<button label="no autodisable">
+		<attribute name="onClick"><![CDATA[
+			self.setLabel("updated label" + new Date());
+			title.focus();
+		]]></attribute>
+	</button>
+	<button label="no label change" autodisable="self">
+		<attribute name="onClick"><![CDATA[
+			title.focus();
+		]]></attribute>
+	</button>
+	<div>
+		<label id="title" tabindex="0" value="should be focussed after button click"/>
+	</div>
+</zk>

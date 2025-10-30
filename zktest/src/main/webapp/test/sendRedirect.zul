@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+sendRedirect.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Mar 11 17:03:37     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Test of sendRedirect
+	<button label="Go Yahoo!" onClick='execution.sendRedirect("http://yahoo.com")'/>
+</zk>

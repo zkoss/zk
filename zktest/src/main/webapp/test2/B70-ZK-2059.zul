@@ -1,0 +1,14 @@
+<window border="normal" width="500px">
+	<label multiline="true">
+		1. Click the Upload button, it will show file explorer.
+		2. Click the checkbox then click the button, the file explorer won't show up.
+		3. Click the checkbox again then click the button, the file explorer will show up.
+	</label>
+	<checkbox>
+	  <attribute name="onCheck">
+	  	upload.setDisabled(self.isChecked());
+	  </attribute>
+	</checkbox>
+	<space/>
+	<button id="upload" label="Upload" upload="true,maxsize=-1,native"/>
+</window>

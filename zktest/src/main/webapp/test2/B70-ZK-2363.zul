@@ -1,0 +1,14 @@
+<zk>
+	<div>
+		Maximize the window and restore it, you should be able to resize the window without any error
+	</div>
+	<window title="Test Max" border="normal" position="center" sizable="true" maximizable="true" minimizable="true" closable="true" width="488px">
+	  <menubar>
+	    <menu label="File" >
+	      <menupopup>
+	        <menu label="Test"></menu>
+	      </menupopup> 
+	    </menu>
+	  </menubar>
+	</window>
+</zk>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3800.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 22 10:14:19 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        The buttons should have the same height.
+    </label>
+    <div id="test-area">
+        <button label="submit"/>
+        <button label="submit" iconSclass="z-icon-search"/>
+        <button label="submit" image="/img/search.png"/>
+        <combobutton label="submit"/>
+        <combobutton label="submit" iconSclass="z-icon-search"/>
+        <combobutton label="submit" image="/img/search.png"/>
+        <textbox/>
+    </div>
+
+    <button id="btnCheck" xmlns:w="client" label="Check">
+        <attribute w:name="onClick"><![CDATA[
+        var heights = [];
+        jq('$test-area @button, $test-area @combobutton').each(function () {
+            var h = this.getBoundingClientRect().height.toFixed(1); // 0.1 precision
+            heights.push(h);
+            zk.log(h);
+        });
+        // IE9 getBoundingClientRect() is rounding int
+        var funSame = zk.ie9 ? function (val, i, arr) { return Math.abs(val - arr[0]) <= 1; } : function (val, i, arr) { return val == arr[0]; };
+        var result = heights.every(funSame);
+        zk.Widget.$('$result').setValue(result);
+        zk.log(result);
+        ]]></attribute>
+    </button>
+    <label id="result" />
+    <label>
+        (Notice: IE9 getBoundingClientRect() returns a rounding int, so you might see different values. A value +- 1 is acceptable)
+    </label>
+</zk>

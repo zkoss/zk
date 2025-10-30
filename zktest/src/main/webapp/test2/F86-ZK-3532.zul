@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-3532.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Oct 22 15:57:46 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		.classA {
+			color: red;
+		}
+		
+		.classB {
+			border: 3px solid blue;
+		}
+		
+		.classC {
+			background: green;
+		}
+	</style>
+	<label multiline="true">
+		1.Click the "addClassA" button, you should see the content of div1 is red.
+		2.Click the "removeClassB" button, nothing should happened.
+		3.Click the "addClassB" button, you should see div1 with a blue border.
+		4.Click the "removeClassA" button, you should see the content of div1 is black and the blue border still there.
+		5.Click the "removeClassB" button, you should see div1 without border.
+		6.Click the "addClassBCA" button, you should see "sclass:classB classC classA" in div1.
+		7.Click the "removeSClass()" button, you should see "sclass:" in div1.
+		8.Click the "addClassBCA" button, you should see "sclass:classB classC classA" in div1.
+		9.Click the "removeClassAB" button, you should see "sclass:classC" in div1.
+		10.Click the "removeSClass()" button, then click the "addAAAAA A" button, you should see "sclass:AAAAA A" in div1.
+		11.Click the "removeA" button, you should see "sclass:AAAAA" in div1.
+	</label>
+	<div id="d1">
+		div1
+		<separator />
+		sclass:<label id="lb" />
+	</div>
+	<zscript>
+		public void addS(String s) {
+		d1.addSclass(s);
+		lb.setValue(d1.getSclass());
+		}
+		
+		public void removeS(String s) {
+		d1.removeSclass(s);
+		lb.setValue(d1.getSclass());
+		}
+		
+		public void removeS() {
+		d1.removeSclass();
+		lb.setValue(d1.getSclass());
+		}
+	</zscript>
+	<button id="btn1" label="addClassA" onClick='addS("classA")' />
+	<button id="btn2" label="addClassB" onClick='addS("classB")' />
+	<button id="btn3" label="removeClassA" onClick='removeS("classA")' />
+	<button id="btn4" label="removeClassB" onClick='removeS("classB")' />
+	<button id="btn5" label="removeSclass()" onClick='removeS()' />
+	<button id="btn6" label="addClassBCA" onClick='addS("classB classC classA")' />
+	<button id="btn7" label="removeClassAB" onClick='removeS("classA classB")' />
+	<separator />
+	<button id="btn8" label="addAAAAA A" onClick='addS("AAAAA A")' />
+	<button id="btn9" label="removeA" onClick='removeS("A")' />
+</zk>

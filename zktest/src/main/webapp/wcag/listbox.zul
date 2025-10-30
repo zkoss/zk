@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Listbox"?>
+<?root-attributes lang="en"?>
+<!--
+listbox.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 28 16:00:23 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: solid;
+			outline-color: red;
+			outline-offset: -1px;
+		}
+		.z-paging :focus {
+			outline: 1px dotted red !important;
+		}
+    ]]></style>
+	<zscript>
+		List items = new org.zkoss.zktest.test2.BigList(100);
+		ListModel model = new org.zkoss.zktest.test2.grid.FakeListModel(200);
+	</zscript>
+	<n:header>
+		<n:h1>Listbox</n:h1>
+	</n:header>
+	<n:main>
+		<button label="test focus" />
+		<listbox mold="select" ca:aria-label="select box">
+			<listitem forEach="${items}">
+				<listcell label="${each}-1" />
+			</listitem>
+		</listbox>
+		<listbox model="${model}" width="250px" height="300px" ca:aria-label="a listbox">
+		</listbox>
+		<hlayout>
+			<listbox width="350px" ca:aria-label="a listbox">
+				<listhead>
+					<listheader label="name" sort="auto" />
+					<listheader label="gender" />
+					<listheader label="phone" />
+				</listhead>
+				<listitem>
+					<listcell label="Mary1" />
+					<listcell label="FEMALE" />
+					<listcell label="000000000" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary2" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary3" />
+					<listcell label="FEMALE" />
+					<listcell label="000000000" />
+				</listitem>
+				<listgroup ca:aria-label="Some group">
+					<listcell label="Assignee" />
+				</listgroup>
+				<listitem>
+					<listcell label="Mary4" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listgroupfoot>
+					<listcell label="Foot1" />
+					<listcell label="Foot2" />
+				</listgroupfoot>
+				<listitem>
+					<listcell label="Mary5" />
+					<listcell label="FEMALE" />
+					<listcell label="000000000" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary6" />
+					<listcell label="FEMALE" />
+					<listcell label="000000000" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary7" />
+					<listcell label="FEMALE" />
+					<listcell label="000000000" />
+				</listitem>
+				<listfoot>
+					<listfooter label="footer 1"/>
+					<listfooter label="footer 2"/>
+					<listfooter label="footer 3"/>
+				</listfoot>
+			</listbox>
+
+			<listbox width="250px" multiple="true" checkmark="true" ca:aria-label="a listbox">
+				<listitem>
+					<listcell label="Mary0" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listhead>
+					<listheader label="name" sort="auto" />
+					<listheader label="gender" />
+				</listhead>
+				<listgroup ca:aria-label="Some group">
+					<listcell label="Assignee" />
+				</listgroup>
+				<listitem>
+					<listcell label="Mary1" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listgroupfoot>
+					<listcell label="Foot1" />
+					<listcell label="Foot2" />
+				</listgroupfoot>
+				<listitem>
+					<listcell label="Mary2" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary3" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary4" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary5" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary6" />
+					<listcell label="FEMALE" />
+				</listitem>
+				<listitem>
+					<listcell label="Mary7" />
+					<listcell label="FEMALE" />
+				</listitem>
+			</listbox>
+		</hlayout>
+<!--		ZK-5440 ZK-5464 ZK-5478 disable paging in a container-->
+<!--		<listbox model="${model}" width="250px" height="300px" ca:aria-label="a listbox" mold="paging" pageSize="5"/>-->
+<!--		<paging id="pg" mold="os" pageSize="10" detailed="true" ca:aria-label="Test Paging 2"/>-->
+<!--		<listbox model="${model}" width="250px" height="300px" ca:aria-label="a listbox" mold="paging" paginal="${pg}"/>-->
+	</n:main>
+</zk>

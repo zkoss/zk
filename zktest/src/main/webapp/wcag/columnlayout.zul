@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Columnlayout"?>
+<?root-attributes lang="en"?>
+<!--
+columnlayout.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 27 12:40:18 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Columnlayout</n:h1>
+    </n:header>
+    <n:main>
+        <columnlayout>
+            <columnchildren width="40%">
+                <div width="100%" style="border: 1px solid red">
+                    Left
+                </div>
+            </columnchildren>
+            <columnchildren width="20%">
+                <div width="100%" style="border: 1px solid green">
+                    Center
+                </div>
+            </columnchildren>
+            <columnchildren width="300px">
+                <div width="100%" style="border: 1px solid blue">
+                    Right
+                </div>
+            </columnchildren>
+        </columnlayout>
+    </n:main>
+</zk>

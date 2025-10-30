@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5033.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/9/30, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button id="btn"/>
+	<script>
+		zk.afterMount(function () {
+			var b = zk.$('$btn');
+			b.detach();
+			b.fire('onCustomEvent', null, {toServer: true});
+		});
+	</script>
+</zk>

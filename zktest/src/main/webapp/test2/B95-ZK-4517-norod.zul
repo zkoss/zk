@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4517-norod.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 03 10:04:38 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList();
+        int size = model.size();
+        public void addModelItem() {
+            size++;
+            model.add("item-" + size);
+            lh.setLabel("" + size);
+            lf.setLabel("" + size);
+            lb.setValue("" + size);
+        }
+    ]]></zscript>
+    <label multiline="true">
+        1. Click "Add Entry".
+        2. You should see the text of list header change from 0 to 1.
+    </label>
+    <div>
+        <button label="Add Entry" onClick="addModelItem()"/>
+        <label id="lb" value="${size}"/>
+        <listbox model="${model}" width="200px">
+            <custom-attributes org.zkoss.zul.listbox.rod="false"/>
+            <listhead>
+                <listheader id="lh" label="${size}"/>
+            </listhead>
+            <listfoot>
+                <listfooter id="lf" label="${size}"/>
+            </listfoot>
+        </listbox>
+    </div>
+</zk>

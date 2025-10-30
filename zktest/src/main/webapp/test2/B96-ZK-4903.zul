@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4903.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 21 14:50:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="GoldenPanel A and C height ratio should be 3 : 1" width="100%" height="100%" border="normal"
+			sizable="true">
+		<goldenlayout vflex="1" hflex="1">
+			<attribute name="areas">
+				A A B
+				A A B
+				A A B
+				C C D
+			</attribute>
+			<goldenpanel id="gpA" area="A" title="Panel A">
+				<window vflex="1" title="Window inside GoldenPanel A" border="normal"/>
+			</goldenpanel>
+			<goldenpanel area="B" title="Panel B">
+				<button label="Button inside GoldenPanel B"/>
+			</goldenpanel>
+			<goldenpanel id="gpC" area="C" title="Panel C">
+				<vlayout>
+					SplitLayout inside GoldenPanel C
+					<splitlayout hflex="1" height="500px">
+						<tbeditor vflex="1"/>
+						<window border="normal" title="Window" vflex="1"/>
+					</splitlayout>
+				</vlayout>
+			</goldenpanel>
+			<goldenpanel area="D" title="Panel D">
+				<vlayout>
+					Rating inside GoldenPanel D
+					<rating max="10" rating="8"/>
+				</vlayout>
+			</goldenpanel>
+		</goldenlayout>
+	</window>
+</zk>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4649-init.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 31 12:27:35 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        An UiException should be thrown since "srclang" is not given.
+    </label>
+    <video src="F86-ZK-3845.mp4" controls="true" width="640px" height="480px">
+        <track kind="captions" src="F95-ZK-4649.vtt" default="true" label="Transcript (English)"/>
+        <track kind="subtitles" src="F95-ZK-4649-ch.vtt" label="逐字稿 (中文)"/>
+    </video>
+</zk>

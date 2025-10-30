@@ -1,0 +1,39 @@
+<!--
+B95-ZK-4759.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Jan 5 10:50:21 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout vflex="1" hflex="1">
+		<div id="block1" vflex="1" style="border: red 1px solid">
+			Resize browser, and you should not see 'beforeSize called' in zk log
+		</div>
+		<div id="block2" vflex="min" style="border: blue 1px solid">
+			2
+		</div>
+		<listbox id="block3" vflex="1">
+			<listhead>
+				<listheader id="lh1" hflex="1">Header1</listheader>
+				<listheader id="lh2" hflex="1">Header2</listheader>
+				<listheader id="lh3" hflex="min">Header3</listheader>
+			</listhead>
+			<listitem><listcell>1-1</listcell><listcell>2-1</listcell><listcell>3-1</listcell></listitem>
+			<listitem><listcell>1-2</listcell><listcell>2-2</listcell><listcell>3-2</listcell></listitem>
+		</listbox>
+	</vlayout>
+	<script>
+		var beforeSize = zFlex.beforeSize;
+		zFlex.beforeSize = function () {
+			zk.log('beforeSize called');
+			beforeSize.apply(this, arguments);
+		}
+	</script>
+</zk>

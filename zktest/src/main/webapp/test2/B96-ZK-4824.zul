@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4824.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Mar 26 10:33:46 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute" xmlns:w="client">
+	<script>
+		function test() {
+			var externalId = document.querySelector('.z-radiogroup').getAttribute('aria-owns');
+			zk.log(externalId === document.querySelector('.external>input').id ? 'pass' : 'fail');
+		}
+	</script>
+	<label>
+		test with WCAG(zA11y): click the button, you should see "pass".
+	</label>
+	<radiogroup id="rg" orient="vertical" ca:aria-label="Some question?">
+		<radio label="yes"/>
+		<radio label="no"/>
+	</radiogroup>
+	<radio sclass="external" radiogroup="rg" label="out"/>
+	<separator/>
+	<button label="check aria-owns" w:onClick="test()"/>
+</zk>

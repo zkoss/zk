@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4026.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Aug 13 13:01:35 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<zscript><![CDATA[
+		public class Pojo {
+			private boolean shown;
+			public boolean isShown() { return shown; }
+			public void setShown(boolean shown) { this.shown = shown; }
+		}
+		Pojo pojo = new Pojo();
+		pojo.setShown(true);
+	]]>
+	</zscript>
+
+	<div viewModel="@id('vm') @init(pojo)">
+		<label multiline="true">
+			1. click the notifyChange pojo.shown button.
+			2. the value of testLbl label should be the same.
+		</label>
+		<button label="toggle shown" onClick='pojo.setShown(!pojo.isShown());'/>
+		<button id="notifyBtn" label="notifyChange pojo.shown" onClick='BindUtils.postNotifyChange(null, null, pojo, "shown");'/>
+		<separator/>
+		before
+		<if test="@load(vm.shown)">
+			<div>
+				<label id="testLbl" value="${self.parent.toString()}"/>
+			</div>
+		</if>
+		after
+	</div>
+</zk>

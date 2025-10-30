@@ -1,0 +1,25 @@
+<zk>
+	<label multiline="true">
+		1. Hover on the Car menu at browser right edge 
+		2. Hover on New menu to open second level
+		menupopup 
+		3. the second level menupopup should open. 
+	</label>
+	<zscript>
+	Object[] o = new Object[30];
+</zscript>
+	<menubar autodrop="true">
+		<menu label="Car" forEach="${o}">
+			<menupopup>
+				<menu label="New">
+					<menupopup>
+						<menuitem label="Small Car" />
+						<menuitem label="Mediem Car" />
+						<menuitem label="Large Car" />
+					</menupopup>
+				</menu>
+				<menuitem label="Search" />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

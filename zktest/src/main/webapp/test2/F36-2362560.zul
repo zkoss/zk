@@ -1,0 +1,17 @@
+<window title="Test of use">
+	You shall see two textbox. The first textbox's value is abc,
+	and the second xyz
+	<separator/>
+	<zscript>
+	Textbox tb = new Textbox();
+	tb.setValue("abc");
+	String tbcls = "MyTextbox";
+	public class MyTextbox extends org.zkoss.zul.Textbox {
+		public MyTextbox() {
+			setValue("xyz");
+		}
+	}
+	</zscript>
+	<textbox use="${tb}"/>
+	<textbox use="${tbcls}"/>
+</window>

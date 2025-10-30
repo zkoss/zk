@@ -1,0 +1,45 @@
+<!--
+	B50-ZK-300.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Aug 11 14:31:27 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>This test case requires the following snippet in land-addon.xml: </div>
+	<div style="white-space: pre"><![CDATA[
+		<component>
+			<component-name>paging</component-name>
+			<extends>paging</extends>
+			<property>
+				<property-name>mold</property-name>
+				<property-value>os</property-value>
+			</property>
+		</component>
+	]]></div>
+	<div>All the internal Paging below should be in OS mold.</div>
+	<grid mold="paging" pageSize="4">
+		<rows>
+			<row forEach="0,1,2,3,4,5,6,7,8,9">Item ${each}</row>
+		</rows>
+	</grid>
+	<listbox mold="paging" pageSize="4">
+		<listitem forEach="0,1,2,3,4,5,6,7,8,9">
+			<listcell>Item ${each}</listcell>
+		</listitem>
+	</listbox>
+	<tree mold="paging" pageSize="4">
+		<treechildren>
+			<treeitem forEach="0,1,2,3,4,5,6,7,8,9">
+				<treerow>
+					<treecell>Item ${each}</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

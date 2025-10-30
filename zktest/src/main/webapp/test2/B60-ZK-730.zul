@@ -1,0 +1,17 @@
+<zk:zk xmlns:zul="zul" xmlns:zk="zk">
+	You shall see two buttons below that look the same.
+	<separator bar="true"/>
+
+	<button label="01234" >
+		<attribute name="width">
+			<![CDATA[ 200px ]]>
+		</attribute>
+	</button>
+
+	<zul:button label="01234">
+		<zk:attribute name="width">
+			<![CDATA[ 200px ]]>
+		</zk:attribute>
+	</zul:button>
+</zk:zk>
+

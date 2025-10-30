@@ -1,0 +1,24 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<vbox apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.collection.C1')">
+		<label multiline="true">
+		c1.
+		1. select combobox
+		2. content of listbox shall change. 
+		</label>
+		<combobox id="singleBox" visible="@load(vm.single)" model="@bind(vm.listNameList)" selectedItem="@bind(vm.selectedOne)">
+			<template name="model" var="n">
+			<comboitem label="@bind(n)" value="@bind(n)"></comboitem>
+			</template>
+		</combobox>
+		<label value="List Content:"/>
+		<listbox id="contentListbox" model="@bind(vm.selectedList)">
+			<template name="model" var="f">
+				<listitem>
+					<listcell label="@bind(f)"></listcell>
+				</listitem>
+			</template>
+
+		</listbox>
+	</vbox>
+</zk>

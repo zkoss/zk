@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3152.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Apr 29, 2016  3:15:35 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		Random r = new Random(System.currentTimeMillis());
+		for (int i = 0; i < 300; i++) {
+			model.add("item " + i);
+		}
+		public void add() {
+			model.add(java.util.Calendar.getInstance().getTime().toString());
+		}
+		public void change() {
+			model.set(3, model.get(3) + ":" + r.nextInt(10));
+		}
+	]]></zscript>
+	<label multiline="true">
+		original issue: in ROD mode, when items in listbox are edited, the rows will flicker.
+		the append button will append one new item at the end of the model
+		the change button will change the content of the 4th item (item 3)
+		1. scroll to the top of each grid and listbox, click "append" button multiple times, all should not flicker
+		2. scroll to the bottom of each grid and listbox and click "append" button multiple times, all should not flicker
+		(scroll bar will not aotumatically scroll the new items into view)
+		3. scroll to the top and click "change" button multiple times, "no ROD" should flicker, but "ROD" should not flicker
+	</label>
+	<button label="append" onClick="add()"/>
+	<button label="change" onClick="change()"/>
+	<hlayout>
+		<grid model="${model}" height="200px" width="250px">
+			<custom-attributes org.zkoss.zul.grid.rod="false"/>
+			<columns>
+				<column label="Grid, mold=normal, no ROD" />
+			</columns>
+		</grid>
+		<grid model="${model}" height="200px" width="250px">
+			<custom-attributes org.zkoss.zul.grid.rod="true"/>
+			<columns>
+				<column label="Grid, mold=normal, ROD" />
+			</columns>
+		</grid>
+	</hlayout>
+	<hlayout>
+		<listbox model="${model}" height="200px" width="250px">
+			<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+			<listhead >
+				<listheader label="Listbox, mold=normal, no ROD"/>
+			</listhead>
+		</listbox>
+		<listbox id="list" model="${model}" height="200px" width="250px">
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+			<listhead >
+				<listheader label="Listbox, mold=normal, ROD"/>
+			</listhead>
+		</listbox>
+	</hlayout>
+</zk>

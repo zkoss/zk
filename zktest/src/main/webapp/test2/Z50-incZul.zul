@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z50-incZul.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 21 13:11:39 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Test of include a zul (defer)" border="true">
+	<include src="frag.zul" mode="defer"/>
+</window>

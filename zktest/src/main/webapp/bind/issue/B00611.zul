@@ -1,0 +1,20 @@
+<window xmlns:n="http://www.zkoss.org/2005/zk/native" 
+	title="outter" border="normal" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00611')">
+	This is really easy to know it is error or not , you have to check the console after print Dump.
+	In Dump, there should only 1 binding of treecell , not 2
+	<tree model="@bind(vm.model)" width="500px">
+		<treecols>
+			<treecol label="name"/>
+		</treecols>
+		<template name="model" var="item" status="s">
+			<treeitem>
+				<treerow>
+					<treecell label="@bind(item.data)"/>
+				</treerow>
+			</treeitem>
+		</template>
+	</tree>
+	<hbox>
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>		
+</window>

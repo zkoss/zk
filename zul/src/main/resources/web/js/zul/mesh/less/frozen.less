@@ -1,0 +1,40 @@
+@import "~./zul/less/_header.less";
+
+.z-frozen {
+	.encodeThemeURL(background-image, '~./zul/img/common/bar-bg.png');
+	overflow: hidden;
+
+	&-body {
+		overflow: hidden;
+		float: left;
+	}
+
+	&-inner {
+		overflow-x: scroll;
+		overflow-y: hidden;
+
+		div {
+			height: 100%;
+		}
+	}
+	&-right {
+		overflow: hidden;
+		float: right;
+	}
+	//for new frozen
+	&-col {
+		border-left: none !important;
+		border-right: 1px solid @meshTitleBorderColor;
+	}
+	&-right-col {
+		position: sticky !important;
+
+		&:first-child {
+			left: 0;
+		}
+	}
+	&-sticky {
+		position: sticky;
+		z-index: 1;
+	}
+}

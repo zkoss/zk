@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+tabsz.zul
+
+{{IS_NOTE
+	Purpose:
+		Test tabs with different dimensions
+	Description:
+		
+	History:
+		Wed May 23 18:33:33     2007, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<tabbox width="400px">
+	<tabs>
+		<tab label="Tab 1" height="100px"/>
+		<tab label="Tab 2"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel><tabbox width="400px" mold="accordion">
+	<tabs>
+		<tab height="100px" label="Tab 1"/>
+		<tab label="Tab 2"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+<tabbox orient="vertical">
+<tabs>
+<tab label="A" width="120px"/>
+<tab label="B"/>
+<tab label="C"/>
+<tab label="D"/>
+<tab label="E"/>
+</tabs>
+<tabpanels width="300px">
+<tabpanel>This is panel A</tabpanel>
+<tabpanel>This is panel B</tabpanel>
+<tabpanel>This is panel C</tabpanel>
+<tabpanel>This is panel D</tabpanel>
+<tabpanel>This is panel E</tabpanel>
+</tabpanels>
+</tabbox>
+		</tabpanel>
+		<tabpanel>
+This is panel 2
+The second panel
+		</tabpanel>
+	</tabpanels>
+</tabbox>
+	</tabpanel>
+		<tabpanel>This is panel 2
+The second panel</tabpanel>
+	</tabpanels>
+</tabbox>

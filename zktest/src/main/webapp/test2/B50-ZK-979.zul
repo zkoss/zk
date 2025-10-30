@@ -1,0 +1,52 @@
+<zk>
+	<zscript><![CDATA[
+		class Person {
+			public String firstName;
+			public String lastName;
+			public String fullName;
+			public Person(String fn, String ln) {
+				firstName = fn;
+				lastName = ln;
+				fullName = fn + " " + ln;
+			}
+		}
+		class Renderer implements ListitemRenderer {
+			public void render(Listitem item, Object data) throws Exception {
+				Person p = (Person) data;
+				new Listcell(p.firstName).setParent(item);
+				new Listcell(p.lastName).setParent(item);
+				new Listcell(p.fullName).setParent(item);
+			}
+		}
+		
+		ArrayList pList = new ArrayList();
+		pList.add(new Person("A","A"));
+		pList.add(new Person("B","B"));
+		pList.add(new Person("C","C"));
+		ListModelList lml = new ListModelList(pList);
+		Renderer render = new Renderer();
+	]]></zscript>
+	<listbox model="${lml}" itemRenderer="${render}" height="425px">
+		<listhead sizable="true">
+			<listheader width="150px" label="First Name" />
+			<listheader width="150px" label="Last Name" />
+			<listheader width="300px" label="Full Name" />
+		</listhead>
+	</listbox>
+<script><![CDATA[
+	zk.afterLoad(function () {
+		if (zk.gecko < 10)
+			return;
+		zk.override(zul.mesh.MeshWidget.prototype, '_adjFlexWd', function () {
+			var ebody = this.ebody, h;
+			if (ebody)
+				h = ebody.style.height;
+			if (h)
+				ebody.style.height = '';
+			this.$_adjFlexWd.apply(this, arguments);
+			if (h)
+				ebody.style.height = h;
+		});
+	});
+]]></script>	
+</zk>

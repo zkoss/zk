@@ -1,0 +1,29 @@
+<zk>
+	<zscript><![CDATA[
+		import java.io.InputStream;
+		import java.io.ByteArrayInputStream;
+		import java.nio.charset.Charset;
+		import org.zkoss.util.media.AMedia;
+		
+		String dynamicContent = "downloadContent";
+	]]></zscript>
+	<label multiline="true">
+	1. Allow pop-up in browser setting.
+	2. Click "download" button.
+	Should see new tab page opened.
+	</label>
+	<textbox value="${dynamicContent}">
+		<attribute name="onChange">
+			dynamicContent = self.getValue();
+		</attribute>
+	</textbox>
+	<button label="download">
+		<attribute name="onClick"><![CDATA[
+			InputStream is = new ByteArrayInputStream(dynamicContent.getBytes(Charset.forName("utf-8")));
+			AMedia media = new AMedia("file", "txt", "text/plain", is);
+			media.setContentDisposition(false);
+			String url = Executions.getCurrent().getDesktop().getDownloadMediaURI(media, "report");
+			Clients.evalJavaScript("window.open('"+url+"')");
+		]]></attribute>
+	</button>
+</zk>

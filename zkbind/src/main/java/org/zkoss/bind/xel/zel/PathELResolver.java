@@ -1,0 +1,122 @@
+/* PathResolver.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sep 8, 2011 9:05:13 AM, Created by henrichen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+*/
+
+package org.zkoss.bind.xel.zel;
+
+import java.beans.FeatureDescriptor;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+import org.zkoss.bind.impl.Path;
+import org.zkoss.lang.Objects;
+import org.zkoss.zel.ELContext;
+import org.zkoss.zel.ELException;
+import org.zkoss.zel.ELResolver;
+import org.zkoss.zel.PropertyNotFoundException;
+import org.zkoss.zel.PropertyNotWritableException;
+import org.zkoss.zel.impl.parser.AstIdentifier;
+import org.zkoss.zel.impl.parser.Node;
+
+/**
+ * Handle dot series path when evaluating expression.
+ * @author henrichen
+ * @since 6.0.0
+ */
+public class PathELResolver extends ELResolver {
+	private LinkedList<Integer> _numOfKids = new LinkedList<Integer>();
+	private LinkedList<Path> _paths = new LinkedList<Path>();
+
+	private String toNodeString(ELContext ctx) {
+		final Node node0 = (Node) ctx.getContext(Node.class);
+		return BindELContext.toNodeString(node0, new StringBuilder());
+	}
+
+	public Object getValue(ELContext ctx, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
+		if (ctx == null) {
+			throw new NullPointerException();
+		}
+		Integer numOfKids;
+		Path path;
+		if (base == null) { //init
+			numOfKids = (Integer) ctx.getContext(AstIdentifier.class); //Number of siblings of AstIdentifier
+			path = new Path();
+		} else {
+			numOfKids = !_numOfKids.isEmpty() ? _numOfKids.removeFirst() : null;
+			path = !_paths.isEmpty() ? _paths.removeFirst() : new Path();
+		}
+
+		//ZK-2808: numOfKids may be null when calling static method or class constructor
+		if (numOfKids != null) {
+			//maintain the number of kids
+			int nums = numOfKids.intValue() - 1;
+			numOfKids = new Integer(nums);
+			ctx.putContext(Integer.class, numOfKids);
+
+			//maintain the form path field
+			path.add(toNodeString(ctx), Objects.toString(property));
+			ctx.putContext(Path.class, path);
+
+			if (nums > 0) { //still more property
+				_numOfKids.addFirst(numOfKids);
+				_paths.addFirst(path);
+			}
+		}
+		return null;
+	}
+
+	public Class<?> getType(ELContext ctx, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
+		if (ctx == null) {
+			throw new NullPointerException();
+		}
+
+		// for null object with form binding
+		if (!_numOfKids.isEmpty()) {
+			Integer numOfKids = _numOfKids.removeFirst();
+			Path path = _paths.removeFirst();
+
+			//maintain the number of kids
+			int nums = numOfKids.intValue() - 1;
+			numOfKids = new Integer(nums);
+			ctx.putContext(Integer.class, numOfKids);
+
+			//maintain the form path field
+			path.add(toNodeString(ctx), Objects.toString(property));
+			ctx.putContext(Path.class, path);
+		}
+		return null;
+
+	}
+
+	public void setValue(ELContext ctx, Object base, Object property, Object value)
+			throws NullPointerException, PropertyNotFoundException, PropertyNotWritableException, ELException {
+		if (ctx == null) {
+			throw new NullPointerException();
+		}
+
+		//#getType() will maintain number of kids and path field, just let go
+	}
+
+	public boolean isReadOnly(ELContext context, Object base, Object property)
+			throws NullPointerException, PropertyNotFoundException, ELException {
+		return true;
+	}
+
+	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
+		return null;
+	}
+
+	public Class<?> getCommonPropertyType(ELContext context, Object base) {
+		return null;
+	}
+}

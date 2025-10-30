@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="F96-ZK-4950"?>
+<?root-attributes lang="en"?>
+<!--
+F96-ZK-4950.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 13 10:27:19 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style>
+    :focus {
+        border: 1px solid red;
+    }
+    </style>
+    <n:header>
+        <n:h1>Test caption</n:h1>
+    </n:header>
+    <n:main>
+        <label multiline="true">
+            1. Install aXe DevTools browser plugin (>= 4.2.0).
+            2. Scan this page.
+            3. Should no "Nested interactive controls are not announced by screen readers." issue.
+        </label>
+
+        <groupbox title="title">
+            <caption id="cap1">caption<button label="b1" onClick="cap1.detach()"/></caption>
+            button in caption.
+        </groupbox>
+
+        <borderlayout height="500px" width="100%">
+            <west collapsible="true" splittable="true" width="300px">
+                <caption>caption<button label="b1"/></caption>
+            </west>
+            <east collapsible="true" width="300px" title="title">
+                <caption>caption<button label="b1"/></caption>
+            </east>
+        </borderlayout>
+    </n:main>
+</zk>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<library-property>
+		<name>org.zkoss.bind.defaultComposer.class</name>
+		<value>org.zkoss.zktest.test2.F100_ZK_BindComposer</value>
+	</library-property>
+</zk>

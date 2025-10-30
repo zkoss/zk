@@ -1,0 +1,41 @@
+<vlayout id="vb">
+<html><![CDATA[
+<ol>
+	<li>Click the "Clone by Serialization" button and then another window is created and append.</li>
+	<li>Click any of the OK button in the new window, a message saying "dst1: onOK" will be shown.</li>
+	<li>Click the "Clone" button, and repeat 1 and 2 (the message shall become "dst2: onOK").</li>
+</ol>
+]]></html>
+<window id="w" title="Test of Forward Conditions" border="normal"
+onOK='alert(self.id+": onOK")' onCancel='alert(self.id+": onCancel")'>
+	<window title="Inner" border="normal">
+		<button label="OK" forward="...onOK"/>
+		<button label="Cancel" forward="...onCancel"/>
+	</window>
+	<button label="OK" forward="onOK"/>
+	<button label="Cancel" forward="onCancel"/>
+</window>
+	${w.uuid}
+	<zscript>
+	int cnt = 0;
+	</zscript>
+	<button label="Clone by Serialization">
+		<attribute name="onClick"><![CDATA[{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(w);
+	byte[] bs = boa.toByteArray();
+	Object n = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	n.setId("dst" + ++cnt);
+	vb.insertBefore(n, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}]]></attribute>
+	</button>
+	<button label="Clone">
+		<attribute name="onClick"><![CDATA[{
+	Object n = w.clone();
+	n.setId("dst" + ++cnt);
+	vb.insertBefore(n, self);
+		}]]></attribute>
+	</button>
+</vlayout>

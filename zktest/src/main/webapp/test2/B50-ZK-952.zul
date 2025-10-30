@@ -1,0 +1,35 @@
+<zk>
+	<window>
+		<h:pre xmlns:h="xhtml" >
+			Drag panel2 to panel1 , position should show 0,1. 
+		</h:pre>
+		<zscript><![CDATA[
+			Panel panel1;
+			Panel panel2;
+			void init() {
+				panel1 = createPanel("panel1", "Panel 1");
+				panel2 = createPanel("panel2", "Panel 2");
+				myptl.setPanel(panel1, 0, 0);
+				myptl.setPanel(panel2, 0, 1);
+			}
+			Panel createPanel( String id, String title ) {
+				Panel panel = (Panel) Executions.createComponents("B50-ZK-952-1.zul",null, null);
+				panel.setId(id);
+				panel.setTitle(title);
+				return panel;
+			}
+		]]></zscript>
+		Position of Panel 1: <label id="lbl" />
+		<portallayout id="myptl" maximizedMode="whole" width="100%">
+			<attribute name="onCreate"><![CDATA[
+				init();
+			]]></attribute>
+			<attribute name="onPortalMove"><![CDATA[
+				int[] position = self.getPosition(panel1);
+				lbl.setValue(position[0] + "," + position[1]);
+			]]></attribute>
+			<portalchildren id="portalchild1" width="50%">
+			</portalchildren>
+		</portallayout>
+	</window>	
+</zk>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2030986.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 29 12:57:38 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	1. Please click the first item.
+	<separator/>
+	2. Then click the last item with the SHIFT key.
+	<separator/>
+	3. You should see that all the disabled item should not be selected.  
+	<groupbox width="400px" mold="3d">
+		<caption label="Treeitem Disabled" />
+		<tree id="tree" width="90%" multiple="true" checkmark="true">
+			<treecols sizable="true">
+				<treecol label="Name" />
+				<treecol label="Description" />
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 1" />
+						<treecell label="Click over here" />
+					</treerow>
+				</treeitem>
+				<treeitem id="tr" disabled="true">
+					<treerow>
+						<treecell label="Item 2" />
+						<treecell label="Item 2 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Item 3 description" />
+					</treerow>
+				</treeitem>
+				<treeitem>
+					<treerow>
+						<treecell label="Item 3" />
+						<treecell label="Click over here" />
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</groupbox>
+</zk>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4377.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Oct 14 12:41:42 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		Try these buttons for testing Linelayout and Lineitem.
+		Test the component in all themes, it should be displayed well(the black border is for testing easily).
+	</label>
+	<label>Linelayout:</label>
+	<zscript>
+		import org.zkoss.zkmax.zul.Lineitem;
+		
+		Lineitem lt = new Lineitem();
+		Label lb = new Label("add lineitem");
+		lb.setParent(lt);
+		
+		Label lb2 = new Label("add content");
+	</zscript>
+	<style>
+		.z-lineitem {
+			border: 1px solid black;
+		}
+	</style>
+	<button label="setOrient(vertical)" onClick='target.setOrient("vertical")'></button>
+	<button label="setOrient(horizontal)" onClick='target.setOrient("horizontal")'></button>
+	<button label="setLineStyle" onClick='target.setLineStyle("background:rgba(0,0,0,.3);")'></button>
+	<button label="clearLineStyle" onClick='target.setLineStyle("")'></button>
+	<button label="setFirstScale(2)" onClick='target.setFirstScale(2)'></button>
+	<button label="setFirstScale(1)" onClick='target.setFirstScale(1)'></button>
+	<button label="setLastScale(3)" onClick='target.setLastScale(3)'></button>
+	<button label="setLastScale(1)" onClick='target.setLastScale(1)'></button>
+	<button label="addLineitem" onClick='lt.setParent(target);'></button>
+	<button label="removeLineitem" onClick='lt.setParent(null);'></button>
+	<button label="setWidth(100%)" onClick='target.setWidth("100%")'></button>
+	<button label="setWidth(2000px)" onClick='target.setWidth("2000px")'></button>
+	<button label="setHeight(100%)" onClick='target.setHeight("100%")'></button>
+	<button label="setHeight(2000px)" onClick='target.setHeight("2000px")'></button>
+	<separator/>
+	<label>Lineitem3:</label>
+	<button label="setPointVisible(false)" onClick="item3.setPointVisible(false)"></button>
+	<button label="setPointVisible(true)" onClick="item3.setPointVisible(true)"></button>
+	<button label="setPointImageSrc" onClick='item3.setPointImageSrc("/test2/img/sun.jpg")'></button>
+	<button label="clearPointImageSrc" onClick='item3.setPointImageSrc("")'></button>
+	<button label="setPointImageContent" onClick=''>
+		<attribute name="onClick">
+			import org.zkoss.image.AImage;
+			AImage img = new AImage("t", desktop.webApp.getResourceAsStream("/test2/img/inet.png"));
+			item3.setPointImageContent(img)
+		</attribute>
+	</button>
+	<button label="setPointIconSclass" onClick='item3.setPointIconSclass("z-icon-home z-icon-1x z-icon-rotate-90")'></button>
+	<button label="setPointIconSclass2" onClick='item3.setPointIconSclass("z-icon-plus-circle")'></button>
+	<button label="clearPointIconSclass" onClick='item3.setPointIconSclass("")'></button>
+	<button label="toggleOpposite" onClick='item3.setOpposite(!item3.isOpposite())'></button>
+	<button label="setPointStyle" onClick='item3.setPointStyle("background-color:#fc885f;border-radius:0;")'></button>
+	<button label="clearPointStyle" onClick='item3.setPointStyle("")'></button>
+	<button label="setFrontSpace(10em)" onClick='item3.setFrontSpace("10em")'></button>
+	<button label="setFrontSpace(null)" onClick='item3.setFrontSpace(null)'></button>
+	<button label="setBackSpace(100px)" onClick='item3.setBackSpace("100px")'></button>
+	<button label="setBackSpace('')" onClick='item3.setBackSpace("")'></button>
+	<button label="addChild" onClick='item3.appendChild(lb2)'></button>
+	<button label="removeChild" onClick='item3.removeChild(lb2)'></button>
+	<button label="invalidate" onClick='item3.invalidate()'></button>
+	<button label="setVflex(3)" onClick='item3.setVflex("3")'></button>
+	<button label="setVflex(min)" onClick='item3.setVflex("min")'></button>
+	<button label="setVflex()" onClick='item3.setVflex("")'></button>
+	<button label="setHflex(3)" onClick='item3.setHflex("3")'></button>
+	<button label="setHflex(min)" onClick='item3.setHflex("min")'></button>
+	<button label="setHflex()" onClick='item3.setHflex("")'></button>
+	<button label="setHeight(300px)" onClick='item3.setHeight("300px")'></button>
+	<button label="setHeight(60%)" onClick='item3.setHeight("60%")'></button>
+	<button label="setHeight(null)" onClick='item3.setHeight(null)'></button>
+	<button label="setWidth(300px)" onClick='item3.setWidth("300px")'></button>
+	<button label="setWidth(60%)" onClick='item3.setWidth("60%")'></button>
+	<button label='setWidth("")' onClick='item3.setWidth("")'></button>
+	<linelayout id="target">
+		<lineitem pointIconSclass="z-icon-times">
+			<panel title="item1" border="normal">
+				<panelchildren>item1</panelchildren>
+			</panel>
+		</lineitem>
+		<lineitem id="item2" pointStyle="background-color:#fc885f;">
+			<window title="item2" border="normal">
+				<button label="first content 2"></button>
+			</window>
+		</lineitem>
+		<lineitem id="item3" opposite="true">
+			<window title="item3" width="300px" height="200px" border="normal">first content 3</window>
+		</lineitem>
+		<lineitem pointStyle="background-color:#fc885f;" pointImageSrc="/test2/img/sun.jpg">
+			<button label="button"></button>
+			<textbox value="2019"></textbox>
+		</lineitem>
+	</linelayout>
+</zk>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3624.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed May 30 16:06:07 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.  Click button setConstraint("min -1")
+		2.  Click spinner up button, the value should be 1
+		3.  Empty spinner text
+		4.  Click button setConstraint("min 2")
+		5.  Click spinner up button, the value should be 2
+		6.  Empty spinner text
+		7.  Click button setConstraint("max 1")
+		8.  Click spinner down button, the value should be -1
+		9.  Empty spinner text
+		10. Click button setConstraint("max -2")
+		11. Click spinner down button, the value should be -2
+		12. Empty spinner text
+		13. Repeat step 1 to 11, but use keyboard to adjust value instead click up and down buttons
+	</label>
+	<spinner id="sp"/>
+	<separator/>
+	<button label='setConstraint("min -1")' onClick='sp.setConstraint("min -1")'/>
+	<button label='setConstraint("min 2")' onClick='sp.setConstraint("min 2")'/>
+	<button label='setConstraint("max 1")' onClick='sp.setConstraint("max 1")'/>
+	<button label='setConstraint("max -2")' onClick='sp.setConstraint("max -2")'/>
+</zk>

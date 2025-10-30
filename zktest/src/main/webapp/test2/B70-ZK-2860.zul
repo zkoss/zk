@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2860.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 22 17:49:27 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. you should see a grid with three rows
+        2. click on the first button, text2 should disappear and the rows should maintain stripe.
+        3. click on the second button, text2 should appear and the rows should maintain stripe.
+        4. click on the third button, shouldn't have any exception.
+    </label>
+    <window xmlns:w="http://www.zkoss.org/2005/zk/client">
+        <grid id="gridb">
+            <rows id="rowsb">
+                <row>text1</row>
+                <row id="row2b">text2</row>
+                <row>text3</row>
+            </rows>
+        </grid>
+        <button label="setVisible on text2 - fire set visible=false" onClick="row2b.setVisible(false)"/>
+        <button label="setVisible on text2 - fire set visible=true" onClick="row2b.setVisible(true)"/>
+        <button label="recycle the grid rows - fire invalidate" onClick="rowsb.invalidate()"/>
+    </window>
+</zk>

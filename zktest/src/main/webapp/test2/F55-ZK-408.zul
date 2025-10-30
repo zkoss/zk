@@ -1,0 +1,17 @@
+<zk>
+	The content of the following block shall be the same.
+	<html><![CDATA[
+	<ol style="border: 1px solid blue">
+		<li>Apple</li>
+		<li>Orange</li>
+	</ol>
+	]]></html>
+	<zscript>
+	String[] fruits = new String[] {"Apple", "Orange"};
+	</zscript>
+	<html>
+	<ol style="border: 1px solid blue">
+		<li forEach="${fruits}">${each}</li>
+	</ol>
+	</html>
+</zk>

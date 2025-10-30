@@ -1,0 +1,49 @@
+<!-- 
+	2012/4/23  10:40 TonyQ
+-->
+<zk xmlns:w="client" xmlns:h="xhtml">
+	<h:pre>
+		1.Click the click button
+		  it should show up "items after clear child,2"
+		   
+		2.clic the "1" radio , it's firing onClick event.
+		   it should show up "onCheck, 1"
+		   
+		3.Click the click button again
+		  it should show up "items after clear child,2" (If that's "items after clear child,4", it's bug.)
+			
+		4.clic the "2" radio , it should be firing onClick event also. //If it's not firing the event ,that's bug.
+		  it should show up "onCheck, 2, 2"
+		
+		5.click the click2 button
+		  it should show up "items after invalidate , 2, 2"  
+		
+	</h:pre>
+	<radiogroup id="group1">
+		<attribute name="onCheck"><![CDATA[
+	Clients.evalJavaScript("zk.log('onCheck','"+group1.getSelectedItem().getLabel()+"')");
+]]></attribute>
+	</radiogroup>
+	<div id="div" />
+		<button label="click">
+			<attribute name="onClick"><![CDATA[
+		div.getChildren().clear();
+		Radio r = new Radio("1");
+		r.setRadiogroup(group1);
+		div.appendChild(r);
+		r = new Radio("2");
+		r.setRadiogroup(group1);
+		div.appendChild(r);
+		Clients.evalJavaScript("zk.log('items after clear child',zk.Widget.$(jq('@radiogroup')).getItems().length,"+group1.getItems().size()+")");
+		//group1.invalidate();
+	]]></attribute>
+	</button>
+	<button label="click2">
+			<attribute name="onClick"><![CDATA[
+		div.getChildren().get(0).invalidate();
+		Clients.evalJavaScript("zk.log('items after invalidate ',zk.Widget.$(jq('@radiogroup')).getItems().length,"+group1.getItems().size()+")");
+		//group1.invalidate();
+	]]></attribute>
+	</button>
+	
+</zk>

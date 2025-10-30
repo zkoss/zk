@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F80-ZK-3185.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 21 10:14:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div>
+        <window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_3185VM')">
+            <div form="@id('myProxy') @load(vm.myObj) @save(vm.myObj, before='validate') @load(vm.myObj, after='cancel') @validator(vm.myValidator)">
+                <vlayout>
+                    <label multiline="true">
+                        1. Type "s" in a textbox, and click "Validate" button. You should see false in zk log. Then click "Cancel" button
+                        2. Do the above thing in every textbox.
+                        3. Click "Add a Sub Bean" button, and then test the new textbox.
+                        4. Click "serialize/deserialize" button, and test.
+                    </label>
+                    <separator />
+                    <separator />
+                    <separator />
+                    <hlayout>
+                        <label value="Date" style="color: blue"/>
+                        <datebox  value="@bind(myProxy.date)"/>
+                    </hlayout>
+                    <hlayout>
+                        <label value="map value - 1:" style="color: blue"/>
+                        <datebox value="@bind(myProxy.remark['r1'])"/>
+                    </hlayout>
+                    <hlayout>
+                        <label value="map value - 2:" style="color: blue"/>
+                        <datebox value="@bind(myProxy.remark['r2'])"/>
+                    </hlayout>
+                    <hlayout sub="@ref(myProxy.mainSubBean)">
+                        <label value="Main Sub Bean date (@Reference)" style="color: blue"/>
+                        <datebox value="@bind(sub.date)"/>
+                    </hlayout>
+                    <separator />
+                    <label value="forEach binding" style="color: blue"/>
+                    <forEach items="@load(myProxy.subBeanList)" var="sub_in_foreach">
+                        <hlayout>
+                            <label value="Sub Bean date"/>
+                            <datebox value="@bind(sub_in_foreach.date)"/>
+                        </hlayout>
+                    </forEach>
+                    <button id="validate" label="Validate" onClick="@command('validate')"/>
+                    <button id="addSub" label="Add a Sub Bean" onClick="@command('addSubBean', form=myProxy)"/>
+                    <button id="cancel" label="Cancel" onClick="@command('cancel')"/>
+                    <button id="serialize" label="serialize/deserialize" onClick='win.getAttribute("vm").doSerialize(win)' />
+                </vlayout>
+            </div>
+        </window>
+    </div>
+</zk>

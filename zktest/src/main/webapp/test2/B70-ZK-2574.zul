@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2574.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 24, 2015  5:06:58 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please click the following two buttons, you should see "started" and then "finished". (Servlet 3.0 only)
+	<div apply="org.zkoss.zktest.test2.B70_ZK_2574">
+	<button id="btn" label="start (Generic Approach)"/>
+	<button id="btn2" label="start (Simpler Approach)"/>
+	<label id="status"/>
+	</div>
+</zk>

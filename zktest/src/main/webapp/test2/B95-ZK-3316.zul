@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-3316.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Dec 16 16:00:40 CST 2020, Created by katherinelin
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+
+	<zscript><![CDATA[
+		ListModelList model1 = new ListModelList();
+		ListModelList model2 = new ListModelList();
+		ListModelList model3 = new ListModelList();
+		for (int i=1 ; i<=200 ; i++){
+			model1.add("item "+i);
+		}
+		for (int i=1 ; i<=2 ; i++){
+			model2.add("item "+i);
+		}
+		for (int i=1 ; i<=2 ; i++){
+			model3.add("item "+i);
+		}
+	]]></zscript>
+	<label multiline="true">
+		1. grid1 and grid2 no horizontal scrollbar.
+		2. grid3 no vertical scrollbar.
+	</label>
+	<grid id="grid1" model="${model1}" hflex="min" height="200px">
+		<columns>
+			<column>name</column>
+		</columns>
+	</grid>
+	<grid id="grid2" model="${model2}" hflex="min" height="200px">
+		<columns>
+			<column>name</column>
+		</columns>
+	</grid>
+	<grid id="grid3" model="${model3}" vflex="min" width="70px">
+		<columns>
+			<column hflex="min">name</column>
+		</columns>
+	</grid>
+
+</zk>

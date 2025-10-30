@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2397.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Aug 13, 2014  6:51:43 PM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Add timeout-message in zk.xml
+		<![CDATA[
+			<session-config>
+			    <device-type>ajax</device-type>
+			    <timeout-message>Session timeout. Please reload.</timeout-message>
+			</session-config>
+		]]>
+		2. Wait until session timeout. (try restart server after we loaded a page, then do your operations)
+		3. Focus on textbox, it is bug if the error dialog show two lines of timeout message.
+		4. Also check after we click the reload button, it shouldn't show reload dialog again while browser is reloading.
+	</label>
+    <textbox id="txt" value="test" onFocus='System.out.println("hi focus")' onBlur='System.out.println("hi blur")' />
+</zk>

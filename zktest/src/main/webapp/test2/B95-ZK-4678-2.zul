@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4678-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 27 10:46:37 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Drag each component and errorbox.
+        2. The page shouldn't be scrolled, either.
+    </label>
+    <div width="200vw" height="1px"/>
+    <vlayout>
+        <slider curpos="50" />
+        <rangeslider startValue="20" endValue="80" />
+        <multislider>
+            <sliderbuttons startValue="20" endValue="80" />
+            <sliderbuttons startValue="40" endValue="60" />
+        </multislider>
+        <colorbox />
+        <hbox width="100vw" height="30px">
+            <div/>
+            <splitter/>
+            <div/>
+        </hbox>
+        <splitlayout orient="horizontal" width="100%" height="30px">
+            <div />
+            <div />
+        </splitlayout>
+        <borderlayout width="100%" height="30px">
+            <west splittable="true"/>
+            <center/>
+        </borderlayout>
+        <portallayout width="100%">
+            <portalchildren title="Todo">
+                <panel title="Drag me"/>
+            </portalchildren>
+            <portalchildren title="Done"/>
+        </portallayout>
+        <listbox>
+            <listitem label="item 1" draggable="true"/>
+            <listitem label="item 2" draggable="true"/>
+        </listbox>
+        <textbox constraint="no empty" onCreate="self.getValue()"/>
+    </vlayout>
+</zk>

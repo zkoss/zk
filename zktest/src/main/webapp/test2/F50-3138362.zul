@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-3138362.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 20 14:22:32 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    1. Test each button's function works well.
+    <separator/>
+	<doublespinner id="a1" mold="rounded" buttonVisible="false" constraint="no zero"/>
+	<doublespinner id="a2"  buttonVisible="false" constraint="no zero"/>
+	<separator/>
+	<button label="button show">
+	<attribute name="onClick"><![CDATA[
+	a1.setButtonVisible(!a1.isButtonVisible());
+	a2.setButtonVisible(!a2.isButtonVisible());
+	]]></attribute>
+	</button>
+	<button label="read only">
+	<attribute name="onClick"><![CDATA[
+	a1.setReadonly(!a1.isReadonly());
+	a2.setReadonly(!a2.isReadonly());
+	]]></attribute>
+	</button>
+	<button label="Disable">
+	<attribute name="onClick"><![CDATA[
+	a1.setDisabled(!a1.isDisabled());
+	a2.setDisabled(!a2.isDisabled());
+	]]></attribute>
+	</button>
+	<button label="Inplace">
+	<attribute name="onClick"><![CDATA[
+	a1.setInplace(!a1.isInplace());
+	a2.setInplace(!a2.isInplace());
+	]]></attribute>
+	</button>
+	<separator/>
+	2. Test increasing/decreasing(each step is 0.5) the number of the double spinner. (min: -2.5, max: 2.5) 
+	<doublespinner step="0.5" value="1" constraint="min -2.5 max 2.5"/>
+	
+</zk>

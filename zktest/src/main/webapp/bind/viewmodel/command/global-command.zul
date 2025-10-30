@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+global-command.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 04 16:23:32 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Do clean".
+        2. You can see (order is not important)
+        GlobalCommandVM clean!
+        command1
+        3. Click "Do unknown".
+        4. You can see (order is not important)
+        [GlobalCommandVM] GlobalCommand [unknown] unknown!
+        [LocalCommandVM] GlobalCommand [unknown] unknown!
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.command.GlobalCommandVM')">
+        <div viewModel="@('org.zkoss.zktest.bind.viewmodel.command.LocalCommandVM')">
+            <button id="btnClean" label="Do clean" onClick="@global-command('clean')"/>
+            <button id="btnUnknown" label="Do unknown" onClick="@global-command('unknown')"/>
+        </div>
+    </div>
+</zk>

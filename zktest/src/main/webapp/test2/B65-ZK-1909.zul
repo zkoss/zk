@@ -1,0 +1,5 @@
+<zk>
+	enter number 111 to the doublebox and blur, it should not show any error message.
+	<separator></separator>
+	<doublebox maxlength="3" onChange=""/>
+</zk>

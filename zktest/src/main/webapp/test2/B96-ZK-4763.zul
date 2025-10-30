@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4763.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Mar 18 14:48:38 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.Select the r_1 radio and click show selected index
+		2.Click "show selected index", you should see the rg_t1 index is 1 and rg_t2 index is -1.
+		3.Click "move" and click "show selected index", you should see the rg_t1 index is -1 and rg_t2 index is 1.
+		4.Select the r_2 radio then Select r_1 radio, you should not see r_1 and r_2 are both selected.
+	</label>
+	<radiogroup id="rg_t1">
+		<radio label="r_0"></radio>
+		<radio id="r_1" label="r_1"></radio>
+	</radiogroup>
+	<separator bar="true" />
+	<radiogroup id="rg_t2">
+		<radio id="r_2" label="r_2"></radio>
+	</radiogroup>
+	<button id="move" label="move" onClick='r_1.setParent(rg_t2);'></button>
+	<button label="show selected index"
+			onClick='Clients.log("rg_t1 selelcted index: " + rg_t1.selectedIndex);
+					Clients.log("rg_t2 selelcted index: " + rg_t2.selectedIndex)'></button>
+</zk>

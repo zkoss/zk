@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3989.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri Nov 30 15:35:46 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true" pre="true"><![CDATA[
+		1. Test in Firefox
+		2. Click two textbox in sequence: first > second > first > second > ...
+			(keep the mouse button down until receiving server response)
+		3. Value should be all selected when click textbox every time
+	]]>
+	</label>
+	<div>
+		<textbox value="firstvalue">
+			<attribute name="onFocus"><![CDATA[
+				self.select();
+			 ]]></attribute>
+		</textbox>
+		<textbox value="secondvalue">
+			<attribute name="onFocus"><![CDATA[
+				self.select();
+			 ]]></attribute>
+		</textbox>
+	</div>
+</zk>

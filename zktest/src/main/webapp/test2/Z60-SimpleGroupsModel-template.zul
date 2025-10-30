@@ -1,0 +1,120 @@
+<!--
+	Z60-SimpleGroupsModel-template.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Jan 6 12:15:14 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		import org.zkoss.zktest.util.*;
+		int rsize = 10;
+		int csize = Integer.parseInt(arg.get("csize"));
+		String[][] strs = new String[rsize][csize];
+		String[] heads = new String[rsize];
+		for (int i = 0; i < rsize; i++) {
+			heads[i] = "Group " + i;
+			for (int j = 0; j < csize; j++)
+				strs[i][j] = "Item " + i + "-" + j;
+		}
+		SimpleGroupsModel model1 = new SimpleGroupsModel(strs, heads);
+		SimpleGroupsModel model2 = new SimpleGroupsModel(strs, heads);
+		int cmpCnt = 0;
+	]]></zscript>
+	<div>
+		<div>Spec: SimpleGroupsModel does not support selection. All selection informatio are on components.</div>
+		<div>Spec: SimpleGroupsModel is immutable. (we cannot add or remove items.)</div>
+		<div>Open, close groups on Grid/Listbox of Model 1. They should share the same state.</div>
+		<div>Select items on Listbox of Model 2. Clone by POJO and Serialization. 
+			The selection state, open/close and page number should be brought to cloned components,
+			but they should not sync afterward.</div>
+		<div>Selection on any Listbox should not affect other Listboxes.</div>
+		<div>Extra Test 1 (ROD only): Scroll Grid of Model 1 to Group 2, close Group 2. 
+			You should see Group 2 is closed in all Grid/Listbox of Model 1.</div>
+		<div>Extra Test 2 (ROD only): Go to page 34 of the paging Listbox of Model 1 to see Group 2, close Group 2. 
+			You should see Group 2 is closed in all Grid/Listbox of Model 1.</div>
+	</div>
+	<separator />
+	<button label="Clone">
+		<attribute name="onClick"><![CDATA[
+			Grid g = grid.clone();
+			g.id = "gridC" + cmpCnt;
+			g.parent = clones;
+			Listbox lb = listbox1.clone();
+			lb.id = "listbox1C" + cmpCnt;
+			lb.parent = clones;
+			Listbox lb = listbox2.clone();
+			lb.id = "listbox2C" + cmpCnt++;
+			lb.parent = clones;
+		]]></attribute>
+	</button>
+	<button label="Clone by Serialization">
+		<attribute name="onClick"><![CDATA[
+			Grid g = Serializations.clone(grid);
+			g.id = "gridCBS" + cmpCnt;
+			g.parent = clones;
+			Listbox lb = Serializations.clone(listbox1);
+			lb.id = "listbox1CBS" + cmpCnt;
+			lb.parent = clones;
+			Listbox lb = Serializations.clone(listbox2);
+			lb.id = "listbox2CBS" + cmpCnt++;
+			lb.parent = clones;
+		]]></attribute>
+	</button>
+	<button label="Clear Clones">
+		<attribute name="onClick"><![CDATA[
+			clones.children.clear();
+			clones.appendChild(new Label("Cloned Mesh of Model 2"));
+		]]></attribute>
+	</button>
+	<separator />
+	<hlayout>
+		<vlayout hflex="1">
+			Model 1
+			<grid model="${model1}" height="200px">
+				<columns>
+					<column label="Grid Col" sort="auto" />
+				</columns>
+			</grid>
+			<listbox model="${model1}" checkmark="true" height="200px">
+				<listhead>
+					<listheader label="Listbox Col" sort="auto" />
+				</listhead>
+			</listbox>
+			<listbox model="${model1}" checkmark="true" mold="paging" pageSize="6">
+				<listhead>
+					<listheader label="Listbox Col" sort="auto" />
+				</listhead>
+			</listbox>
+		</vlayout>
+		<vlayout hflex="1">
+			Model 2
+			<grid id="grid" model="${model2}" width="300px" height="200px">
+				<columns>
+					<column label="Grid Col" sort="auto" />
+				</columns>
+			</grid>
+			<listbox id="listbox1" model="${model2}" checkmark="true" 
+				width="300px" height="200px">
+				<listhead>
+					<listheader label="Listbox Col" sort="auto" />
+				</listhead>
+			</listbox>
+			<listbox id="listbox2" model="${model2}" checkmark="true" 
+				width="300px" height="200px" mold="paging" pageSize="10">
+				<listhead>
+					<listheader label="Listbox Col" sort="auto" />
+				</listhead>
+			</listbox>
+		</vlayout>
+		<vlayout id="clones" hflex="1">
+			Cloned Mesh of Model 2
+		</vlayout>
+	</hlayout>
+</zk>

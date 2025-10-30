@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3582.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 25 15:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<vlayout>
+		<textbox tabindex="1"></textbox>
+		<radiogroup>
+			<radio label="yes" selected="true" tabindex="2"/>
+			<radio label="no" />
+		</radiogroup>
+		<combobox tabindex="3"></combobox>
+		<datebox tabindex="4"></datebox>
+		<bandbox tabindex="5"></bandbox>
+		<timepicker tabindex="6"></timepicker>
+		<timebox tabindex="7"></timebox>
+		<textbox tabindex="8"></textbox>
+	</vlayout>
+	<zscript><![CDATA[
+       import org.zkoss.zk.au.out.AuInvoke;
+       ]]></zscript>
+	<script><![CDATA[
+             function getTabindexCnt() {
+             	var tabindexCnt = jq("[tabindex]").length;
+             	zk.log("tabindex count: " + tabindexCnt);
+             	zk.log(tabindexCnt == 8 ? "Correct" : "Incorrect");
+             }
+       ]]></script>
+	<button label="button" onClick='Clients.response(new AuInvoke("getTabindexCnt", null))'/>
+	<label multiline="true">
+		1. click 'button', and it will print the count of elements with tabindex attr.
+			if the result is 8, then correct.
+	</label>
+</zk>

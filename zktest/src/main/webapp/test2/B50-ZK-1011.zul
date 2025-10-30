@@ -1,0 +1,19 @@
+<!-- 20120405 1844 -->
+
+<zk>
+	<listbox width="100px">
+		<listitem label="item 1" draggable="true" droppable="true"
+			onDrop="doDrop(event,self);" />
+		<listitem label="item 2" draggable="true" droppable="true"
+			onDrop="doDrop(event,self);" />
+		<listitem label="item 3" draggable="true" droppable="true"
+			onDrop="doDrop(event,self);" />
+
+	</listbox>
+	<zscript><![CDATA[
+		void doDrop(DropEvent event, Component droped) {
+			Component dragged = event.getDragged();
+			droped.getParent().insertBefore(dragged, droped);
+		}
+	]]></zscript>
+</zk>

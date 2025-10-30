@@ -1,0 +1,20 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Chrome/Safari only.</li>
+			<li>Scroll to the bottom.</li>
+		</ol>
+	]]></html>
+	<div height="2800px">EMPTY SPACE</div>
+	<html><![CDATA[
+		<ol>
+			<li>Go to next page of the Listbox.</li>
+			<li>If browser scroll moves and Listbox is not fully visible, it is a bug.</li>
+		</ol>
+	]]></html>
+	<listbox mold="paging" pageSize="10" id="listbox" />
+	<zscript><![CDATA[
+		for (int i = 0; i <= 50; i++)
+			listbox.appendChild(new org.zkoss.zul.Listitem("test"));
+	]]></zscript>
+</zk>

@@ -1,0 +1,40 @@
+<zk>
+	Drag the right edge of Header A in each of Grid/Listbox/Tree to adjust its size. If the rigth edge of Header B is moved, it is a bug.
+	<grid>
+		<columns sizable="true">
+			<column hflex="min">A (min)</column>
+			<column style="background-color:#00FF00">B</column>
+		</columns>
+		<rows>
+			<row>
+				<label>Row</label>
+				<label>Row</label>
+			</row>
+		</rows>
+	</grid>
+	<listbox>
+		<listhead sizable="true">
+			<listheader hflex="min">A (min)</listheader>
+			<listheader style="background-color:#00FF00">B</listheader>
+		</listhead>
+		<listitem>
+			<listcell>Listitem</listcell>
+			<listcell>Listitem</listcell>
+		</listitem>
+	</listbox>
+	<tree>
+		<treecols sizable="true">
+			<treecol hflex="min">A (min)</treecol>
+			<treecol style="background-color:#00FF00">B</treecol>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>Treeitem</treecell>
+					<treecell>Treeitem</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4411.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 21 11:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/include/themes.zul"/>
+
+    <label>the following 2 button should fullfil the width in 2 same widths</label>
+    <hlayout>
+        <button id="b1" label="button" hflex="1"/>
+        <combobutton id="c1" label="button" hflex="1"/>
+    </hlayout>
+    <label>the following 2 button should fullfil the height in 2 same heights</label>
+    <div height="300px">
+        <vlayout vflex="1">
+            <button id="b2" label="button" vflex="1"/>
+            <combobutton id="c2" label="button" vflex="1"/>
+        </vlayout>
+    </div>
+</zk>

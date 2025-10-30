@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3278.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 31 12:12:39 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Upload two files at once
+		2. You should see log "onMaxFileCountExceed: 2 files, upload failure."
+		3. Click button setMaxFileCount(2)
+		4. Upload two files at once
+		5. You should see log "onUpload: 2 files, upload success."
+		6. Upload three files at once
+		7. You should see log "onMaxFileCountExceed: 3 files, upload failure."
+	</label>
+	<dropupload id="dropupload" width="300px" height="300px" detection="none" maxFileCount="1">
+		<attribute name="onUpload">
+			Clients.log("onUpload: " + event.medias.length + " files, upload success.");
+		</attribute>
+		<attribute name="onMaxFileCountExceed">
+			Clients.log("onMaxFileCountExceed: " + event.data + " files, upload failure.");
+		</attribute>
+	</dropupload>
+	<button label="setMaxFileCount(2)" onClick="dropupload.setMaxFileCount(2)"/>
+	<button label="getMaxFileCount()" onClick='Clients.log("maxFileCount: " + dropupload.getMaxFileCount())'/>
+</zk>

@@ -1,0 +1,81 @@
+<zk>
+	<zscript><![CDATA[
+		java.util.Date date = new java.util.Date();
+		String[] languages = { "Ada", "Basic", "C", "C++", "CSS", "Cobol", "Forth",
+				"Fortran", "Go", "Groovy", "Haskell", "HTML", "Java", "JavaScript",
+				"Lisp", "Python", "Ruby", "Scala", "Scheme" };
+	]]></zscript>
+	<vlayout>
+		<hlayout>
+			1. Focus on date should show small calendar button 
+			<datebox value="${date}" mold="default" inplace="true" />
+		</hlayout>
+		<hlayout>
+			2. type any integet <intbox onChange='lbl1.setValue("onChange fired")' />, you should see red message. 
+			<label id="lbl1" style="color:red" />
+		</hlayout>
+		<hlayout>
+			3. type any text <textbox onChange='lbl2.setValue("onChange fired")' />, you should see red message. 
+			<label id="lbl2" style="color:red" />
+		</hlayout>
+		<hlayout>
+			4. type any number <decimalbox onChange='lbl3.setValue("onChange fired")' />, you should see red message. 
+			<label id="lbl3" style="color:red" />
+		</hlayout>
+		<hlayout>
+			5. Select any item should show alert message:
+			<listbox id="box" mold="select" onSelect='alert("item selected")'>
+				<listitem>
+					<listcell label="Philip Hensher" />
+				</listitem>
+				<listitem>
+					<listcell label="The Fit" />
+				</listitem>
+				<listitem>
+					<listcell label="HarperPerennial (April 4, 2005)" />
+				</listitem>
+				<listitem>
+					<listcell label="240 pages" />
+				</listitem>
+			</listbox>
+		</hlayout>
+		<hlayout>
+			6. Click on scrollbar, it should work correctly
+			<tabbox width="200px" height="300px">
+			    <tabs>
+			        <tab label="Tab 1" />
+			        <tab label="Tab 2" />
+			        <tab label="Tab 3" />
+			        <tab label="Tab 4" />
+			        <tab label="Tab 5" />
+			        <tab label="Tab 6" />
+			        <tab label="Tab 7" />
+			        <tab label="Tab 8" />
+			    </tabs>
+			    <tabpanels>
+			        <tabpanel style="color:#336699;">Panel 1</tabpanel>
+			        <tabpanel style="color:#333399;">Panel 2</tabpanel>
+			        <tabpanel style="color:#663366;">Panel 3</tabpanel>
+			        <tabpanel style="color:#CC0033;">Panel 4</tabpanel>
+			        <tabpanel style="color:#CC3300;">Panel 5</tabpanel>
+			        <tabpanel style="color:#FF9900;">Panel 6</tabpanel>
+			        <tabpanel style="color:#ABEA14;">Panel 7</tabpanel>
+			        <tabpanel style="color:#008DB7;">Panel 8</tabpanel>
+			    </tabpanels>
+			</tabbox>
+		</hlayout>
+		<hlayout>
+			7. Click on search icon button, it should open a listbox
+			<bandbox id="bd" mold="rounded" autodrop="true">
+				<bandpopup>
+					<listbox height="250px" width="300px" mold="paging" autopaging="true" onSelect="bd.value=self.selectedItem.label; bd.close();">
+						<listhead>
+							<listheader label="Programming Languages" />
+						</listhead>
+						<listitem label="${each}" forEach="${languages}" />
+					</listbox>
+				</bandpopup>
+			</bandbox>
+		</hlayout>
+	</vlayout>
+</zk>

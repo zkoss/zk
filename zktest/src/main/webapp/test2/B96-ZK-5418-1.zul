@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5418.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Apr 07 12:13:31 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="root1" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B96_ZK_5418VM')" value2="@ref(vm.value)">
+		<label multiline="true">
+			case 1: variable in zscript
+			(should run B96-ZK-5418.zul first)
+			1. enter "b" in the textbox
+			2. the label should be changed.
+		</label>
+		<textbox value="@bind(value2)"/>
+		<label id="r1" value="@load(value2)"/>
+	</div>
+	<div id="root2" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B96_ZK_5418VM')" value3="@ref(vm.value)">
+		<label multiline="true">
+			case 2: no ref binding
+			(should run B96-ZK-5418.zul first)
+			1. enter "b" in the textbox
+			2. the label should be changed.
+		</label>
+		<textbox value="@bind(value3)"/>
+		<label id="r2" value="@load(value3)"/>
+	</div>
+</zk>

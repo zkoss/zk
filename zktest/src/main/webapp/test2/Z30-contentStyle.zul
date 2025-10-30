@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Z30-contentStyle.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 25 15:30:41     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:p>Test each content style shows properly, you can also click the title of groupbox or the tab of tabbox to test.</n:p>
+<window title="3d type groupbox demo" border="normal">
+	Which kind of fruit do you want?
+	<groupbox mold="3d" width="300px" height="200px" contentStyle="background:yellow">
+		<caption image="/test2/img/inet.png" label="fruits"/>
+		<radiogroup onCheck="fruit.value = self.selectedItem.label">
+			<radio label="Apple"/>
+			<radio label="Orange"/>
+			<radio label="Grape"/>
+		</radiogroup>
+	</groupbox>
+	<hbox>You have selected :<label id="fruit"/></hbox>
+
+	<window title="My First Window" border="normal" width="200px" height="200px"
+	contentStyle="background:yellow">
+	Hello, World!
+	</window>
+	Not in the window
+
+	<tabbox width="400px" height="100px">
+		<tabs>
+			<tab label="Tab 1"/>
+			<tab label="Tab 2"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel style="background:yellow">This is panel 1</tabpanel>
+			<tabpanel style="background:blue;overflow:auto">This is panel 2
+			<div height="200px">---</div>The second panel
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<tabbox width="400px" orient="vertical">
+		<tabs width="60px">
+			<tab label="Tab 1"/>
+			<tab label="Tab 2" selected="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel height="100px" style="background:yellow">This is panel 1</tabpanel>
+			<tabpanel  height="100px" style="background:blue;overflow:auto">This is panel 2
+			<div height="200px">---</div>The second panel
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<tabbox width="400px" mold="accordion">
+		<tabs>
+			<tab label="Tab 1"/>
+			<tab label="Tab 2" selected="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel height="100px" style="background:yellow">This is panel 1</tabpanel>
+			<tabpanel height="100px" style="background:blue;overflow:auto">This is panel 2
+			<div height="200px">---</div>The second panel
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>
+</zk>

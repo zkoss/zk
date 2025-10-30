@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ctxmnu.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun  2 16:19:24     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Context Menu and Right Click" border="normal" width="360px"
+onDoubleClick="alert(&quot;double&quot;)" onRightClick="alert(self.title)">
+	<label value="Right Click with Context" context="editPopup"/>
+
+	<separator bar="true"/>
+
+	<label value="Right Click Me!" onClick="alert(&quot;Left&quot;)" onRightClick="alert(self.value)"/>
+	<image src="/test2/img/sun.jpg" onClick="alert(&quot;Left&quot;)" onRightClick="alert(&quot;Sun!&quot;)"/>
+	<div onRightClick="alert(&quot;div&quot;)">
+	Another div
+	</div>
+	<button label="Hi" onClick="alert(&quot;Left&quot;)" onRightClick="alert(self.label)"/>
+	<toolbarbutton label="Go!" onClick="alert(&quot;Left&quot;)" onRightClick="alert(self.label)"/>
+
+	<menupopup id="editPopup">
+        <menuitem label="Undo"/>
+        <menuitem label="Redo"/>
+        <menu label="Sort">
+			<menupopup>
+		        <menuitem label="Sort by Name" autocheck="true"/>
+		        <menuitem label="Sort by Date" autocheck="true"/>
+			</menupopup>
+        </menu>
+	</menupopup>
+</window>

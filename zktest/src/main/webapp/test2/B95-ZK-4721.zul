@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4721.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 15 14:41:52 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+    org.zkoss.lang.Library.setProperty("org.zkoss.zkmax.tablet.ui.disabled", "true");
+    </zscript>
+    <label multiline="true">
+        1. Open this page with a real Android device Chrome. (not mobile emulation)
+        2. Input a valid time by using a virtual keyboard.
+           (Don't use backspace/delete, just move positions and press numbers)
+        3. Tap out of the timebox.
+        4. The input value shouldn't be cleaned.
+        5. Remember to click "reset tablet UI disabled (after test)".
+    </label>
+    <timebox id="time" cols="18" buttonVisible="false" locale="en_US" onChange="System.out.println(event.getValue().toString())"/>
+    <button label="get timebox value" onClick="Clients.showNotification(Objects.toString(time.getValue()))" />
+    <button label="reset tablet UI disabled (after test)" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.zkmax.tablet.ui.disabled", "")'/>
+</zk>

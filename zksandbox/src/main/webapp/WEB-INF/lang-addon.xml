@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- lang-addon.xml
+	Purpose:
+		
+	Description:
+		This file is useless for zksandbox but demostrates how to
+		add new components and override definitions of existent components.
+	History:
+		Fri Mar  3 12:54:00     2006, Created by tomyeh
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+-->
+
+<language-addon>
+	<!-- The name of this addon. It must be unique -->
+	<addon-name>zksandbox</addon-name>
+
+	<!-- Which language this addon will be added to -->
+	<language-name>xul/html</language-name>
+
+	<!-- you can specify addition JavaScript files
+	<javascript src="/js/my.js" charset="UTF-8"/>
+	-->
+
+	<!-- an example
+	<component>
+		<component-name>window</component-name>
+		<extends>window</extends>
+		<property>
+			<property-name>border</property-name>
+			<property-value>normal</property-value>
+		</property>
+	</component>
+ 	-->
+ 	
+	<!-- a macro component
+	<component>
+		<component-name>whatever</component-name>
+		<macro-uri>/WEB-INF/zul/whatever.zul</macro-uri>
+		<component-class>foo.Whatever</component-class>
+	</component>
+	-->
+</language-addon>

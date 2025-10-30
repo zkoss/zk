@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Camera"?>
+<?root-attributes lang="en"?>
+<!--
+camera.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 4 17:41:29 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Camera</n:h1>
+	</n:header>
+	<n:main>
+		<camera id="camera" width="300px" height="123px" onVideoUpload="video.content = event.media" previewRecord="true"/>
+		<button label="Start" onClick="camera.start()"/>
+		<button label="Stop" onClick="camera.stop()"/>
+		<video id="video" width="300px" controls="true"/>
+	</n:main>
+</zk>

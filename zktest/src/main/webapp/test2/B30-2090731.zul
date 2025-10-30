@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2090731.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep  3 17:00:40     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	Click the change button, and the image of the button shall change.
+	Then, click the reset button, and the image shall change back.
+	<separator/>
+	<button id="b" label="Left" image="/test2/img/m1.gif" width="125px"/>
+	<separator/>
+	<zscript>
+	import org.zkoss.image.*;
+	</zscript>
+	<button label="change"
+		onClick='b.setImageContent(new AImage("t", desktop.webApp.getResourceAsStream("/test2/img/folder.gif")))'/>
+	<button label="reset" 
+		onClick='b.setImage("/test2/img/m1.gif"); '/>
+</zk>

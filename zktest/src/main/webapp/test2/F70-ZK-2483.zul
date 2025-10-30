@@ -1,0 +1,15 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm')@init('org.zkoss.zktest.test2.F70_ZK_2483_VM')"
+		validationMessages="@id('vmsgs')">
+		<label multiline="true">
+			Should display value and key in each entry of the map correctly
+		</label>
+		<vlayout id="init" children="@init(vm.entries)">
+	        <template name="children" var="node">
+	            <label value="@load(node.key)" style="padding-left:10px"/>
+	            <label value="@load(node.value)" style="padding-left:10px"/>
+	        </template>
+	    </vlayout> 
+	</window>
+</zk>

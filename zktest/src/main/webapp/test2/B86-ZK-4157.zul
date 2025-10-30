@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4157.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Dec 19 10:55:44 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+	<style>
+		img {
+			width: 100px;
+		}
+	</style>
+	<hlayout>
+		<a href="?zktheme=breeze" label="Breeze" />
+		<a href="?zktheme=sapphire" label="Sapphire" />
+		<a href="?zktheme=silvertail" label="Silvertail" />
+		<a href="?zktheme=atlantic" label="Atlantic" />
+		<a href="?zktheme=default" label="Default" />
+	</hlayout>
+	<label multiline="true">
+		1.test this case with all themes on ios mobile device.
+		2.try "Please edit me" part, it should be editable after you touch on it.
+		3.try both "native div" and "zk div", they should be editable or draggable as the description.
+		4.all the text in this case should be selectable.
+	</label>
+	<window border="normal" title="hello">
+		<div id="editor">
+			<label xmlns:ca="client/attribute" ca:contenteditable="true">Please edit me (on mobile device)</label>
+		</div>
+	</window>
+	<hlayout>
+		<vlayout hflex="1" style="border:1px solid black;">
+			<label>native div</label>
+			<n:div contenteditable="true">
+				<image src="/test2/img/sun.jpg" />
+				editable
+			</n:div>
+			<n:div>
+				<image src="/test2/img/sun.jpg" />
+				not editable
+			</n:div>
+		</vlayout>
+		<vlayout hflex="1" style="border:1px solid black;">
+			<label>zk div</label>
+			<div xmlns:ca="client/attribute" ca:contenteditable="true">
+				<image src="/test2/img/sun.jpg" />
+				editable only
+			</div>
+			<div draggable="true">
+				<image src="/test2/img/sun.jpg" />
+				draggable only
+			</div>
+			<div xmlns:ca="client/attribute" ca:contenteditable="true" draggable="true">
+				<image src="/test2/img/sun.jpg" />
+				editable and draggable
+			</div>
+			<div>
+				<image src="/test2/img/sun.jpg" />
+				not editable and not draggable
+			</div>
+		</vlayout>
+	</hlayout>
+</zk>

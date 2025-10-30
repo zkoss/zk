@@ -1,0 +1,33 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Window, Hlayout]" width="480px">
+        <hlayout height="200px" width="200px">
+            <window border="none" hflex="1" vflex="1">
+                <div height="100%" style="background:cyan" width="100%">
+                    <label value="1"/>
+                </div>
+            </window>
+            <window border="none" hflex="2" vflex="1">
+                <div height="100%" style="background:yellow" width="100%">
+                    <label value="1"/>
+                </div>
+            </window>
+        </hlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="Proportional Flexibility: [Window, Hbox]" width="480px">
+        <hbox height="200px" width="200px">
+            <window border="none" hflex="1" vflex="1">
+                <div height="100%" style="background:cyan" width="100%">
+                    <label value="1"/>
+                </div>
+            </window>
+            <window border="none" hflex="2" vflex="1">
+                <div height="100%" style="background:yellow" width="100%">
+                    <label value="1"/>
+                </div>
+            </window>
+        </hbox>
+    </window>
+</hbox>
+</zk>

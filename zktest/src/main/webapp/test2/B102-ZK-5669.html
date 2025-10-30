@@ -1,0 +1,41 @@
+<!--
+B102-ZK-5669.html
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Apr 22 10:44:29 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>B102-ZK-5669</title>
+	</head>
+	<body>
+		<div>
+			1. enable embedded with<br>
+				&lt;library-property&gt;<br>
+					&lt;name&gt;org.zkoss.web.servlet.http.embedded.enabled&lt;/name&gt;<br>
+					&lt;value&gt;true&lt;/value&gt;<br>
+				&lt;/library-property&gt;<br>
+			2. enable tablet ui
+				&lt;library-property>
+					&lt;name>org.zkoss.zkmax.tablet.ui.disabled&lt;/name>
+					&lt;value>false&lt;/value>
+				&lt;/library-property>
+			3. run two other zktest instances on port 8081<br>
+			4. click the load zkapp1 button<br>
+			5. you shall see the tablet css disabled in html head
+		</div>
+		<script src="/zktest/zkEmbedded"></script>
+		<button onclick="zEmbedded.load('zkapp1', 'http://localhost:8081/zktest/test2/B102-ZK-5669.zul')">load zkapp1</button>
+		<button onclick="zEmbedded.destroy('zkapp1', false)">destroy zkapp1</button>
+		<div id="zkapp1"></div>
+	</body>
+</html>

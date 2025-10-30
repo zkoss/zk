@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B86-ZK-4127.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 12 11:27:05 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="native">
+    <label multiline="true">
+        1. Open dev tool of browser, record by profiler
+        2. Click the button
+        3. Should not see resizing operations taking increasingly longer (e.g. forEach 50 items as about 4500ms)
+
+    </label>
+    <button label="click me" id="button"/>
+    <borderlayout fulfill="button.onClick" height="500px">
+        <center>
+            <listbox width="100%" vflex="1"><!-- remove vflex, no problem -->
+                <listhead>
+                    <listheader width="100px" label="A" />
+                    <listheader width="100px" label="B"/>
+                </listhead>
+                <forEach begin="0" end="50">
+                    <listitem>
+                        <listcell>
+                            <label visible="false"/><!-- make button visible - no problem -->
+                        </listcell>
+                        <listcell>
+                            <div hflex="1">BBB</div><!-- don't use hflex - no problem -->
+                        </listcell>
+                    </listitem>
+                </forEach>
+            </listbox>
+        </center>
+    </borderlayout>
+</zk>

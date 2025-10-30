@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B100-ZK-5722.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2024/5/31, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<zscript>
+			<![CDATA[
+	     String someUserProvidedString = "title \"onclick=\"alert('XSS')\" data-closingTagForDomSanity=\"nope";
+	    ]]>
+		</zscript>
+
+		<a tooltiptext="${someUserProvidedString}" label="Click here for XSS"/>
+		<button sclass="${someUserProvidedString}" label="Click here for XSS"/>
+		<window title="click here for xss" sclass="${someUserProvidedString}"></window>
+	</div>
+</zk>

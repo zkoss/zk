@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2868.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 10 12:31:41 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+  ListModelList mymodel = new ListModelList();
+  mymodel.add("telefon");
+  mymodel.add("address");
+  mymodel.add("email");
+ ]]></zscript>
+    <style>
+        .z-row-content {
+        border: 1px solid red;
+        }
+    </style>
+    You should only see the following two grid with two column children.
+    <div id="main" apply="org.zkoss.bind.BindComposer">
+        <grid model="@init(mymodel)">
+            <columns>
+                <column label="COL1"/>
+                <column label="COL2"/>
+            </columns>
+            <template name="model">
+                <row>
+                    <!--                  <apply template="filterAttributes" label="@init(each)" /> -->
+                    <apply template="filterAttributes" label2="@init(each)" />
+                </row>
+            </template>
+        </grid>
+
+        <grid model="@init(mymodel)">
+            <columns>
+                <column label="COL1"/>
+                <column label="COL2"/>
+            </columns>
+            <template name="model">
+                <row>
+                    <apply template="filterAttributes" label2="${each}" />
+                </row>
+            </template>
+        </grid>
+
+        <!-- template used to show filter attributes -->
+        <template name="filterAttributes">
+            <label value="@init(label2)"/>
+            <textbox/>
+        </template>
+    </div>
+</zk>

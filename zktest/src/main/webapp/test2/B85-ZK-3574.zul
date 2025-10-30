@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3574.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 27 12:49:32 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add("aaa");
+		model.add("bbb");
+		model.add("ccc");
+	]]></zscript>
+	<label multiline="true">
+		Run the attached example in a tomcat with session serialization enabled (default)
+		1. select one or more items
+		2. shutdown tomcat
+		3. restart tomcat
+		4. select/click another item in the chosenbox
+		5. selection/click should continue working after session de/serialization
+	</label>
+	<chosenbox model="${model}"
+			   onSelect='Clients.log("Selection:" + model.getSelection())'
+			   onItemClick='Clients.log("Click:" + event.data)'/>
+</zk>

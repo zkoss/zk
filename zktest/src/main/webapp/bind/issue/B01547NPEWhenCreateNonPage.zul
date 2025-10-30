@@ -1,0 +1,20 @@
+<zk>
+	<div id="cnt"></div>
+	<button id="btn1" label="append page">
+		<attribute name="onClick"><![CDATA[
+			Div div = new Div();
+			Executions.createComponents("B01547NPEWhenCreateNonPageX.zul", div, null);
+			cnt.appendChild(div);
+		]]></attribute>
+	</button>
+	<button id="btn2" label="append page2">
+		<attribute name="onClick"><![CDATA[
+			Div div = new Div();
+			cnt.appendChild(div);
+			Executions.createComponents("B01547NPEWhenCreateNonPageX.zul", div, null);
+			
+			
+		]]></attribute>
+	</button>
+	
+</zk>

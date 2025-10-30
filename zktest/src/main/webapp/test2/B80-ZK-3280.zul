@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3280.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug  1 17:35:53 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">1. click the button
+        2. the selected tab should be Tab 2
+
+    </label>
+    <tabbox id="tb" width="250px">
+        <tabs>
+            <tab id="tab1" label="Tab 1" />
+            <tab id="tab2" label="Tab 2" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>This is panel 1</tabpanel>
+            <tabpanel>This is panel 2 The second panel</tabpanel>
+        </tabpanels>
+    </tabbox>
+    <button onClick='tab1.setImage("dummy");tb.setSelectedTab(tab2)'/>
+</zk>

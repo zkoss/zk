@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2951.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 11 10:12:46 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		public class F80_ZK_2951VM {
+
+		}
+		F80_ZK_2951VM vm = new F80_ZK_2951VM()
+	</zscript>
+<window viewModel="@id('vm') @init(vm)">
+	<button label="1. click me and then you shouldn't see an exception" onClick='@command("/test")'/>
+	<button label="2. click me and then you shouldn't see an exception" onClick='@command(":test")'/>
+	<separator/>
+
+	<button label="3. click me and then you should see an exception" onClick='@command("test")'/>
+</window>
+</zk>

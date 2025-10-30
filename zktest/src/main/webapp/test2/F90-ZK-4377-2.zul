@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4377-2.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Oct 28 14:43:04 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Try these buttons for model and template test:
+	</label>
+	<div apply="org.zkoss.zktest.test2.F90_ZK_4377_2Composer" width="100%" height="100%">
+		<button label="add item" id="addItem" />
+		<button label="remove item" id="removeItem" />
+		<button label="change item" id="changeItem" />
+		<button label="setModelABC" id="setModelABC" />
+		<button label="setModelNull" id="setModelNull" />
+		<linelayout id="lineLayout" orient="horizontal">
+			<template name="model">
+				<lineitem>
+					<label value="label: ${each}"></label>
+					<button label="button: ${each}"></button>
+				</lineitem>
+			</template>
+		</linelayout>
+	</div>
+</zk>

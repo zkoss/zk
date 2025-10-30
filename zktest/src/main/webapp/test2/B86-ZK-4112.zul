@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4112.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Nov 06 12:42:28 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in IE9
+		2. Scroll to the second half (use the scrollbar)
+		3. You should see items (empty is bug)
+	</label>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(Collections.nCopies(250000, "item"));
+	]]></zscript>
+	<hlayout>
+		<listbox width="200px" height="540px" model="${model}">
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+			<listhead>
+				<listheader label="Load On Demand (Listbox)" sort="auto"/>
+			</listhead>
+		</listbox>
+		<grid width="200px" height="540px" model="${model}">
+			<custom-attributes org.zkoss.zul.grid.rod="true"/>
+			<columns>
+				<column label="Load On Demand (Grid)" sort="auto"/>
+			</columns>
+		</grid>
+	</hlayout>
+</zk>

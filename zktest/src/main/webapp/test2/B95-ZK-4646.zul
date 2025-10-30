@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4646.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 27 17:16:08 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open the first treeitem "David".
+        2. Should see one child "another" only and no exception.
+    </label>
+    <window apply="org.zkoss.zktest.test2.B95_ZK_4646Composer">
+        <tree id="tree" width="300px">
+            <treecols>
+                <treecol label="My List" />
+            </treecols>
+        </tree>
+    </window>
+</zk>

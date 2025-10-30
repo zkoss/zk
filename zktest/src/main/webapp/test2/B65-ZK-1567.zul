@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1567.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Feb 05, 2013  3:20:29 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+1. Please click "More" menu.
+<separator/>
+2. The menupopup should align with the left of "More" menu
+<hlayout>
+<label value="Actions:"/>
+<menubar zclass="none">
+<menu label="More">
+<menupopup>
+<menuitem label="Action 1"/>
+<menuitem label="Action 2"/>
+</menupopup>
+</menu>
+</menubar>
+</hlayout>
+</zk>

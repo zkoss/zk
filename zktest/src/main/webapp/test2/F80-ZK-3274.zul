@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3274.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, Sep  9, 2016  3:06:02 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        application.getConfiguration().setPreference("CometServerPush.retry.delay", "1000");
+        application.getConfiguration().setPreference("CometServerPush.retry.count", "-1");
+        application.getConfiguration().setPreference("CometServerPush.ajax.timeout", "1000");
+
+        desktop.enableServerPush(true);
+	]]></zscript>
+    <label multiline="true">
+        1. load this page
+        2. Open development tool, and switch to Network tab
+        3. comet server push request should retry forever
+    </label>
+</zk>

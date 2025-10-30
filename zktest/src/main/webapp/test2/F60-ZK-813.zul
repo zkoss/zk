@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-813-ListModel.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Feb 03 10:36:15 TST 2012, Created by henrichen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+String[] data = new String[10];
+for (int i = 0; i < data.length; i++)
+	data[i] = "option " + i;
+
+
+ListModelList model = new ListModelList(data);
+    ]]></zscript>
+    Please check the item index matches to its model index (e.g 5 -- 5 -- option 5, the three numbers shall be the same.)
+    <separator></separator>
+    <combobox model="${model}">
+    	<template name="model">
+    		<comboitem label="${forEachStatus.index} -- ${self.index} -- ${each}">
+    		</comboitem>
+    	</template>
+    </combobox>
+    <separator></separator>
+    <listbox model="${model}">
+    	<listhead>
+    		<listheader label="forEachStatus.index" />
+    		<listheader label="item.getIndex()" />
+    		<listheader label="each"/>
+    	</listhead>
+    	<template name="model">
+    		<listitem>
+    			<listcell label="${forEachStatus.index}"/>
+    			<listcell label="${self.parent.index}"/>
+    			<listcell label="${each}"/>
+    		</listitem>
+    	</template>
+    </listbox>
+    <separator></separator>
+    <grid model="${model}">
+    	<columns>
+    		<column label="forEachStatus.index" />
+    		<column label="row.getIndex()" />
+    		<column label="each"/>
+    	</columns>
+    	<template name="model">
+    		<row>
+	   			<label value="${forEachStatus.index}"/>
+	   			<label value="${self.parent.index}"/>
+	   			<label value="${each}"/>
+    		</row>
+    	</template>
+    </grid>
+</zk>

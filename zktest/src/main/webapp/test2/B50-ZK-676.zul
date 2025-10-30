@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-676.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec  20 09:20:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>1. You should see three lines of green text below without any alert box.</div>
+	<div>2. Mouseover each line, you should see the tooltiptext popup.</div>
+	<div>3. The content of the tooltiptext is 'abc"&gt;&lt;script&gt;&lt;/script&gt;&lt;!--'.</div>
+	<include src="B50-ZK-676_1.zul" />
+</zk>

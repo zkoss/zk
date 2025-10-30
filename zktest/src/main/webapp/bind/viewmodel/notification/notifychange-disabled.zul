@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+notifychange-disabled.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 05 16:10:38 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Change the text in all textboxes and blur to trigger an onChange event.
+        2. The result:
+        * Default: the label beside the textbox is updated
+        * @NotifyChangeDisabled: won't update
+        * @NotifyChangeDisabled + @NotifyChange: error
+        * @NotifyChangeDisabled + @SmartNotifyChange: error
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.notification.NotifyChangeDisabledVM')">
+        <hlayout>
+            Default
+            <textbox id="inp0" value="@bind(vm.val0)"/>
+            <label id="val0" value="@load(vm.val0)"/>
+        </hlayout>
+        <hlayout>
+            @NotifyChangeDisabled
+            <textbox id="inp1" value="@bind(vm.val1)"/>
+            <label id="val1" value="@load(vm.val1)"/>
+        </hlayout>
+        <hlayout>
+            @NotifyChangeDisabled + @NotifyChange
+            <textbox id="inp2" value="@bind(vm.val2)"/>
+            <label id="val2" value="@load(vm.val2)"/>
+        </hlayout>
+        <hlayout>
+            @NotifyChangeDisabled + @SmartNotifyChange
+            <textbox id="inp3" value="@bind(vm.val3)"/>
+            <label id="val3" value="@load(vm.val3)"/>
+        </hlayout>
+    </div>
+</zk>

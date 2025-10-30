@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-528.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 26 15:47:46 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please test the following steps for two components(Grid and Listbox)
+<separator/>
+1. You should see "Column1" at header area and "Empty Message" aligned to center
+<separator/>
+2. Please click "add row", you should see "test" aligned left instead of "Empty Message" aligned center
+<separator/>
+3. Please click "clean rows", you should see the result as step 1.
+<separator/>
+4. Please click "add column" twice, you should see "Empty Message" still align to center
+<separator/>
+5. Please click "clean columns", you should see "Empty Message" only without "Column1"
+<div>
+	Grid
+	<grid emptyMessage="Empty Message">
+		<columns id="cols">
+			<column label="Column1" />
+			<column label="if you can see this, that is a bug" visible="false"/>
+		</columns>
+		<rows id="rows" />
+	</grid>
+	<button label="add row">
+		<attribute name="onClick">
+			rows.appendChild(new Row());
+			rows.lastChild.appendChild(new Label("test"));
+		</attribute>
+	</button>
+	<button label="clean rows" onClick="rows.getChildren().clear()" />
+	<button label="add column">
+		<attribute name="onClick">
+			cols.appendChild(new Column("test"));
+		</attribute>
+	</button>
+	<button label="clean columns" onClick="cols.getChildren().clear()" />
+</div>
+<div>	
+	Listbox
+	<listbox id="list" emptyMessage="Empty Message">
+		<listhead id="lh">
+			<listheader label="Column1" />
+			<listheader label="if you can see this, that is a bug" visible="false"/>
+		</listhead>
+	</listbox>
+	<button label="add row">
+		<attribute name="onClick">
+			list.appendChild(new Listitem("test"));
+		</attribute>
+	</button>
+	<button label="clean rows" onClick="list.getItems().clear()" />
+	<button label="add column">
+		<attribute name="onClick">
+			lh.appendChild(new Listheader("test"));
+		</attribute>
+	</button>
+	<button label="clean columns" onClick="lh.getChildren().clear()" />
+</div>
+</zk>

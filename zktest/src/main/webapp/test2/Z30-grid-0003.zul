@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+{{IS_NOTE
+	Purpose:
+		Test Grid with live data and renderer and sort
+	Description:
+		
+	History:
+	Create by Dennis	
+}}IS_NOTE
+
+Copyright (C) 2007 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:h="http://www.w3.org/1999/xhtml">
+<h:h3> Test Grid with paging</h:h3>
+<h:p>
+See if the sorted result printed in console is same as the data collection displayed in Browser.
+</h:p>
+<vbox>
+<toolbarbutton label="B30-1823959.zul" href="B30-1823959.zul"/>
+<toolbarbutton label="B30-1824604.zul" href="B30-1824604.zul"/>
+</vbox>
+	<separator/>
+	<zscript>
+		import org.zkoss.zktest.util.*;
+		import java.util.*;
+		import org.zkoss.zul.*;
+		
+		ListModel strset = new org.zkoss.zktest.test2.grid.FakeListModel();
+		Comparator asc = new RowLabelComparator(true),
+		dsc = new RowLabelComparator(false);
+	</zscript>
+	<vbox>
+		<button id="btn1" label="Invalidate Model" onClick="strset.invalidate()"/>
+		<button id="btn2" label="Invalidate Grid" onClick="g.invalidate()"/>
+		<grid id="g" mold="paging" model="${strset}" width="400px" pageSize="13" activePage="10">
+			<columns sizable="true">
+				<column label="Type" sortAscending="${asc}" sortDescending="${dsc}"
+				 sortDirection="ascending"/>
+			</columns>
+		</grid>
+	</vbox>
+</zk>

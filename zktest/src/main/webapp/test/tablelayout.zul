@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+columnlayout.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 18 12:36:44 TST 2008, Created by robbiecheng
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?component name="panel" extends="panel" width="200px" height="200px" ?>
+
+<zk>
+<tablelayout id="tbl" columns="4">
+		<tablechildren id="tc1" rowspan="3">
+			<panel title="table1" border="normal"
+			 	maximizable="true" collapsible="true" >
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren  colspan="3">
+			<panel title="table2" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>
+			 </panel>
+		</tablechildren>
+		<tablechildren >
+			<panel title="table3" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table4" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table5" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table6" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table7" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+		<tablechildren>
+			<panel title="table8" border="normal"
+			 	maximizable="true" collapsible="true">
+			 	<panelchildren>Panel</panelchildren>	
+			 </panel>
+		</tablechildren>
+</tablelayout>
+<hbox><intbox id="ib1"/><button label="set Column of Table" onClick='tl.columns = ib1.value'/></hbox>
+<hbox><intbox id="ib2"/><button label="set Colspan of table1" onClick='tc1.colspan = ib2.value'/></hbox>
+<hbox><intbox id="ib3"/><button label="set Rowspan of table1" onClick='tc1.rowspan = ib3.value'/></hbox>
+<button label="add child">
+	<attribute name="onClick">
+		import org.zkoss.zkmax.zul.*;
+		import org.zkoss.zkex.zul.*;
+		
+		Tablechildren tc1 = new Tablechildren();
+		Panel pl1 = new Panel();
+		pl1.setParent(tc1);
+		pl1.setTitle("table0");
+		pl1.setBorder("normal");
+		pl1.setMaximizable(true);
+		pl1.setCollapsible(true);
+		Panelchildren pc1 = new Panelchildren();
+		Label lb1 = new Label("Panel");
+		lb1.setParent(pc1);
+		pc1.setParent(pl1);
+		tc1.setParent(tbl);
+	</attribute>
+</button>
+<button label="remove tc1">
+	<attribute name="onClick">
+		tbl.removeChild(tc1);
+	</attribute>
+</button>
+</zk>

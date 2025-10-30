@@ -1,0 +1,29 @@
+<!--
+	B50-ZK-382.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Sep 1 18:54:27 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<window>
+	Show and hide the button. You should see two alert dialogs each time.
+	<button id="btn" label="button" />
+	<button label="show/hide"
+		onClick="btn.setVisible(!btn.isVisible());" />
+	<script defer="true">
+		var btn = zk.Widget.$("$btn");
+		zWatch.listen({ 
+			onHide: [ btn, function () { alert("[zWatch]onHide " + this.id); } ] ,
+			onShow: [ btn, function () { alert("[zWatch]onShow " + this.id); } ] 
+		}); 
+		btn.listen({
+			onHide: function () { alert("[Widget]onHide " + this.id) } ,
+			onShow: function () { alert("[Widget]onShow " + this.id) }
+		});
+	</script>
+</window>

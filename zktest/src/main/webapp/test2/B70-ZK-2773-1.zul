@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2773-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jun  9 17:28:08 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window border="normal" title="hello">
+	<label multiline="true">
+	1. Please scroll the datebox in the center of the screen (IPad only)
+	2. Click the datebox's icon to show the timepicker, the timepicker should stay at the bottom of the screen (not as center as the datebox)
+	3. Click the combobox's icon to show the list of comboitems, the popup picker should stay at the bottom of the screen (not as center as the datebox)
+	4. Click the timebox's icon, its popup picker should stay at the bottom of the screen (not as center as the datebox)
+	</label>
+	<vlayout>
+		<div height="800px">Welcome to ZK</div>
+		<datebox format="dd/MM/yyyy" />
+		<timebox/>
+		<combobox>
+			<comboitem label="Comboitem 1" />
+			<comboitem label="Comboitem 2" />
+			<comboitem label="Comboitem 3" />
+		</combobox>
+		<div height="1200px">Welcome to ZK</div>
+	</vlayout>
+</window>

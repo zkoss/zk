@@ -1,0 +1,19 @@
+<zk>
+Clicks the collapse button to open/close the following two boxes.
+Their behavior shall be the same: the total height won't be changed.
+
+<vbox height="200px" style="border:3px black solid">
+Column 1-1: The left-top box. To know whether a splitter is
+collapsed, you can listen to the onOpen event.
+<splitter collapse="after" open="false"></splitter>
+Column 1-2: You can enforce to open or collapse programming by
+calling setOpen method.
+</vbox>
+<vbox height="200px" style="border:3px black solid">
+Column 1-1: The left-top box. To know whether a splitter is
+collapsed, you can listen to the onOpen event.
+<splitter collapse="after" open="true"></splitter>
+Column 1-2: You can enforce to open or collapse programming by
+calling setOpen method.
+</vbox>
+</zk>

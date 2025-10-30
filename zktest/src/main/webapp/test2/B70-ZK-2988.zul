@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2988.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 25 11:02:14 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. this page should load without any errors in console.
+
+	</label>
+	<grid>
+		<columns>
+			<column label="Col 1" hflex="min" />
+			<column label="Col 2" hflex="1" />
+			<column label="Col 3" hflex="1" />
+			<column label="Col 4" hflex="1" />
+		</columns>
+		<rows>
+			<row>
+				<label value="1" />
+				<label value="2" />
+				<label value="3" />
+				<label value="4" />
+			</row>
+		</rows>
+		<foot>
+			<footer label="1" span="2"/>
+			<footer label="3" />
+			<footer label="4" />
+		</foot>
+	</grid>
+</zk>

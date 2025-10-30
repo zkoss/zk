@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3149.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Apr 20 14:05:32 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B80_ZK_3149VM')"
+            form="@id('fx') @load(vm.obj) @load(vm.obj, after='cancel') @save(vm.obj, before='save')">
+        <div>
+            1.You should see 'Peter' and 'handled' in these two textboxes
+            2.Type something and press 'cancel' and it would restore to original value.
+        </div>>
+        <div>
+            Name: <textbox value="@bind(fx.name)"/>
+        </div>
+        <div>
+            Info: <textbox value="@bind(fx.info)"/>
+        </div>
+        <button label="save" onClick="@command('save')"/>
+        <button label="cancel" onClick="@command('cancel')"/>
+	</window>
+</zk>

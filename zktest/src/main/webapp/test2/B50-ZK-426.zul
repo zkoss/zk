@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+xmlns:h="http://www.w3.org/1999/xhtml"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<html><![CDATA[
+<ul>
+<li>Press TAB and type 123 in the seond intbox, and you shall see 123 being entered.</li>
+<li>This bug found in IE and it does not allow entering anything.</li>
+</ul>
+]]></html>
+<grid>
+<columns>
+<column width="150px" />
+<column />
+</columns>
+<rows>
+
+<row visible="true">
+<label value="intbox 1" />
+<intbox id="intbox1" maxlength="1" focus="true">
+<attribute name="onBlur">
+changeProperty(intbox2);
+</attribute>
+<!--
+<attribute w:name="onBlur" xmlns:w="client">
+this.$f().intbox2.setReadonly(false);
+</attribute>
+-->
+</intbox>
+</row>
+<row visible="true">
+<label value="Intbox 2" />
+<intbox id="intbox2" maxlength="5"
+readonly="true">
+</intbox>
+</row>
+
+</rows>
+</grid>
+
+<zscript>
+void changeProperty(Intbox intbox2) { intbox2.setReadonly(false); intbox2.setText("0"); }
+</zscript>
+
+</zk>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3140.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Mar 15 16:12:46 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        (Firefox only) The text in the textbox should be able to select.
+    </label>
+    <grid>
+        <columns sizable="true">
+            <column label="label" width="50px"/>
+            <column label="textbox"/>
+        </columns>
+        <rows>
+            <row draggable="true">
+                <label value="test"/>
+                <textbox value="test text" width="99%"/>
+            </row>
+        </rows>
+    </grid>
+</zk>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="UpdDemo" title="Upload Audio"?>
+<!--
+audio.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep  8 17:24:47     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window border="normal">
+	Post your audio.
+	<separator/>
+
+	<audio id="audio" height="20"/>
+	<separator/>
+	<button label="audio 321" onClick='audio.src = "am_md321.mid"'/>
+	<button label="audio 322" onClick='audio.src = "am_md322.mid"'/>
+	<separator/>
+	<button label="Play" onClick="audio.play()"/>
+	<button label="Stop" onClick="audio.stop()"/>
+</window>

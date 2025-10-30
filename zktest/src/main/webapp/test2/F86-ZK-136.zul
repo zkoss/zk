@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
+<!--
+F86-ZK-136.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Aug 24 09:56:53 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click isIndeterminate, should see "true"
+		2. Click isChecked, should see "true"
+		3. Click toggleIndeterminate
+		4. Click isIndeterminate, should see "false"
+		5. Click isChecked, should see "true"
+		6. Click toggleIndeterminate
+		7. Click isIndeterminate, should see "true"
+		8. Click isChecked, should see "true"
+		9. Click checkbox
+		10. Click isIndeterminate, should see "false"
+		11. Click isChecked, should see "false"
+		12. Click toggleIndeterminate
+		13. Click isIndeterminate, should see "true"
+		14. Click isChecked, should see "false"
+		15. Click checkbox
+		16. Click isIndeterminate, should see "false"
+		17. Click isChecked, should see "true"
+	</label>
+	<vlayout>
+		<checkbox id="checkbox" label="Checkbox" indeterminate="true" checked="true"/>
+		<hlayout>
+			<button label="toggleIndeterminate"
+					onClick="checkbox.setIndeterminate(!checkbox.isIndeterminate())"/>
+			<button label="isIndeterminate"
+					onClick='Clients.log(checkbox.isIndeterminate().toString())'/>
+			<button label="isChecked"
+					onClick="Clients.log(checkbox.isChecked().toString())"/>
+		</hlayout>
+		<combobox>
+			<comboitem label="iceblue"/>
+			<comboitem label="breeze"/>
+			<comboitem label="sapphire"/>
+			<comboitem label="silvertail"/>
+			<comboitem label="atlantic"/>
+			<attribute name="onChange">
+				Library.setProperty("org.zkoss.theme.preferred", event.value);
+				Executions.sendRedirect("");
+			</attribute>
+		</combobox>
+	</vlayout>
+</zk>

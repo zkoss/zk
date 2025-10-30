@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-3289.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Oct 23 15:54:15 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open the first datebox.
+        2. You can only select to "Year".
+        3. Open the second datebox.
+        4. You can only select to "Month".
+        5. Open the last datebox.
+        6. You can select to "Day".
+    </label>
+    <zscript><![CDATA[
+    import java.time.*;
+
+    void showResult() {
+        Year y = Year.from(dbY.getValueInLocalDate());
+        YearMonth ym = YearMonth.from(dbYM.getValueInLocalDate());
+        LocalDate ymd = dbYMD.getValueInLocalDate();
+        Clients.log(y + " - " + ym + " - " + ymd);
+    }
+
+    LocalDate d = LocalDate.of(2020, 10, 23);
+    ]]></zscript>
+    <vlayout>
+        <div>
+            Year
+            <datebox id="dbY" selectLevel="year" format="yyyy" valueInLocalDate="${d}"/>
+        </div>
+        <div>
+            YearMonth
+            <datebox id="dbYM" selectLevel="month" format="MMM, yyyy" valueInLocalDate="${d}"/>
+        </div>
+        <div>
+            LocalDate
+            <datebox id="dbYMD" selectLevel="day" format="dd MMM, yyyy" valueInLocalDate="${d}"/>
+        </div>
+        <div>
+            <button label="Show result" onClick="showResult()"/>
+        </div>
+    </vlayout>
+</zk>

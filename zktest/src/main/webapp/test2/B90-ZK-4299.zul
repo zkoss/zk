@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4299.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 05 09:40:48 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open with Firefox in Android.
+        2. The Listitems can be dragged and dropped to another Listbox.
+    </label>
+    <hlayout>
+        <listbox id="left" height="350px" width="200px"
+                 onDrop="move(event.dragged)" droppable="true">
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell label="ZK Forge" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell label="ZK Mobile" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell label="ZK GWT" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell label="ZK JSF" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell label="ZK JSP" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell label="ZK Spring" />
+            </listitem>
+        </listbox>
+        <separator orient="vertical" spacing="8px" />
+        <listbox id="right" height="350px" width="200px"
+                 onDrop="move(event.dragged)" droppable="true">
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell label="ZK" />
+            </listitem>
+            <listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
+                <listcell label="ZK Studio" />
+            </listitem>
+        </listbox>
+    </hlayout>
+    <zscript><![CDATA[
+        void move(Component dragged) {
+            if (self instanceof Listitem) {
+                self.parent.insertBefore(dragged, self);
+            } else {
+                self.appendChild(dragged);
+            }
+        }
+    ]]></zscript>
+</zk>

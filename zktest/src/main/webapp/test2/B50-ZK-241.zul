@@ -1,0 +1,44 @@
+<!--
+B50-ZK-241.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 29 12:23:45 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>These are Grids in Grids. All Grids should be sized by content.</div>
+	<grid id="grid1" hflex="min">
+		<rows>
+			<row>
+				<grid id="grid2" hflex="min">
+					<columns>
+						<column label="Col 2" />
+						<column label="Col 3" />
+					</columns>
+				</grid>
+			</row>
+		</rows>
+	</grid>
+	<grid hflex="min">
+		<columns>
+			<column />
+			<column />
+		</columns>
+		<rows>
+			<row>
+				<label>State</label>
+				<grid hflex="min">
+					<columns>
+						<column hflex="min" label="Code" />
+						<column hflex="min" label="Name" />
+					</columns>
+				</grid>
+			</row>
+		</rows>
+	</grid>
+</zk>

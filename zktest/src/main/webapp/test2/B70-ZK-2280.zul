@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2280.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 07, 2014  5:06:20 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<paging id="pag" width="500px" pageSize="10" totalSize="12" sclass="floatright" pageIncrement="1" detailed="true" onPaging=""/>
+	Please click the following buttons, and the detail text of the paging bar at the right side will be updated.
+	<button onClick="pag.setTotalSize(pag.getTotalSize() + 1);" label="+"/>
+	<button onClick="pag.setTotalSize(pag.getTotalSize() - 1);" label="-"/>
+</zk>

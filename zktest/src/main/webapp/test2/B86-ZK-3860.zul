@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B86-ZK-3860.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 14 14:55:25 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.ListSubModel;
+        import org.zkoss.zul.ListModels;
+        Collection getContacts() {
+            List l = new ArrayList();
+            l.add("Adam adam@company.org");
+            l.add("Bdam adam@company.org");
+            l.add("Cdam adam@company.org");
+            l.add("Ddam adam@company.org");
+            return l;
+        }
+        ListModelList model1 = new ListModelList(getContacts());
+
+        void newContact(String contact) {
+            model1.add(contact);
+            model1.addToSelection(contact);
+        }
+    ]]></zscript>
+    <label multiline="true">
+        1. Type `ada` in the combobox
+        2. Select `Adam adam@company.org` by down key and enter (bug is not reproducible with mouse click)
+        3. `Adam adam@company.org` should be selected instead of `ada`
+
+    </label>
+    <div>
+        <vlayout>
+            <label value="model - creatable"/>
+            <chosenbox model="${model1}" creatable="true" width="500px" createMessage="Create new '{0}'" onSearch="newContact(event.value)" />
+        </vlayout>
+    </div>
+</zk>

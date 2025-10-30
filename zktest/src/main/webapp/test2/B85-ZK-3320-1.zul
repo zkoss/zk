@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3320-1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 14 12:18:38 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<div apply="org.zkoss.bind.BindComposer">
+    <zscript>
+        String myValue="Hello world";
+    </zscript>
+    <div myParam="@ref(myValue)" width="200px" height="200px" style="background:orange">
+        <div myParam="@ref(myParam)">
+            <label value="@load(myParam)" style="color:green"/>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+/* AuEchoGlobal.java
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul  8 19:16:35 TST 2010, Created by tomyeh
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+*/
+package org.zkoss.zk.au.out;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.Desktop;
+
+/**
+ * A response to ask client to send the specified event for all qualified desktops.
+ *
+ * <p>Notice that, unlike other requests, {@link AuEchoGlobal} will check all browser windows
+ * belonging to the same top browser window -- not just the current browser window.
+ *
+ * @author tomyeh
+ * @since 5.0.4
+ */
+public class AuEchoGlobal extends AuResponse {
+	/**
+	 * @param evtnm the event name to echo back
+	 * @param data the data to sent with the event when echoed back
+	 * @param dt the desktop to receive the event.
+	 */
+	public AuEchoGlobal(String evtnm, String data, Desktop dt) {
+		super("echoGx", new String[] { evtnm, data, dt.getId() });
+	}
+
+	/**
+	 * @param evtnm the event name to echo back
+	 * @param data the data to sent with the event when echoed back
+	 * @param dts a collection of desktops ({@link Desktop}) to receive the event.
+	 */
+	public AuEchoGlobal(String evtnm, String data, Collection<Desktop> dts) {
+		super("echoGx", toArray(evtnm, data, dts));
+	}
+
+	private static String[] toArray(String evtnm, String data, Collection<Desktop> dts) {
+		final List<String> l = new LinkedList<String>();
+		l.add(evtnm);
+		l.add(data);
+		for (Desktop desktop : dts)
+			l.add(desktop.getId());
+		return l.toArray(new String[l.size()]);
+	}
+}

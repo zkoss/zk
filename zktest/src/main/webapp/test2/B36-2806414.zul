@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2806414.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 15 12:44:01     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please type some words into the textbox and press "Enter", you should not see any Javascript error on the browser's status bar.
+<window  onOK='self.detach()'>
+<textbox onChanging=""/>
+</window>
+</zk>

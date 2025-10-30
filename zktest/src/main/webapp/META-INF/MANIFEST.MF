@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Specification-Title: ZK DEMO
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zktest
+Implementation-URL: http://www.zkoss.org/prj/zktest
+Implementation-Vendor: Potix Corporation

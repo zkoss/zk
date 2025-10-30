@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4391.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 09 11:25:15 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click button "toggle vertical".
+        2. The inputgroup should be vertical or horizontal.
+    </label>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <vlayout>
+        <inputgroup>
+            @<textbox />
+        </inputgroup>
+
+        <inputgroup>
+            <textbox placeholder="Recipient's username"/>@example.com
+        </inputgroup>
+
+        <inputgroup>
+            $<textbox/>.00
+        </inputgroup>
+
+        <inputgroup>
+            With textarea
+            <textbox multiline="true" rows="5" cols="30"/>
+        </inputgroup>
+
+        <!-- Multiple inputs -->
+        <inputgroup>
+            First and last name<textbox/><textbox/>
+        </inputgroup>
+
+        <!-- Multiple addons -->
+        <inputgroup>
+            <label value="$"/>
+            <label value="0.00"/>
+            <textbox placeholder="Recipient's username"/>
+        </inputgroup>
+
+        <!-- Checkboxes and radios -->
+        <inputgroup>
+            <checkbox/>
+            <textbox/>
+        </inputgroup>
+
+        <inputgroup>
+            <radio/>
+            <textbox/>
+        </inputgroup>
+
+        <!-- Button addons -->
+        <inputgroup>
+            <textbox placeholder="Recipient's username"/>
+            <button label="Button"/>
+            <button label="Button"/>
+        </inputgroup>
+
+        <!-- Buttons with Dropdowns -->
+        <inputgroup>
+            <textbox placeholder="Recipient's username"/>
+            <combobutton label="Dropdown">
+                <menupopup>
+                    <menuitem label="Action"/>
+                    <menuitem label="Another action"/>
+                    <menuitem label="Something else here"/>
+                    <menuseparator/>
+                    <menuitem label="Separated link"/>
+                </menupopup>
+            </combobutton>
+        </inputgroup>
+
+        <!-- Button group -->
+        <inputgroup>
+            <toolbarbutton label="Left"/>
+            <toolbarbutton label="Middle"/>
+            <toolbarbutton label="Right"/>
+        </inputgroup>
+
+        <inputgroup>
+            <button label="1"/>
+            <button label="2"/>
+            <combobutton label="Dropdown">
+                <menupopup>
+                    <menuitem label="Dropdown link"/>
+                    <menuitem label="Dropdown link"/>
+                </menupopup>
+            </combobutton>
+        </inputgroup>
+
+        <!-- vertical -->
+        <inputgroup orient="vertical">
+            First and last name<textbox/><textbox/>
+        </inputgroup>
+
+        <inputgroup orient="vertical">
+            <button label="Button"/>
+            <button label="Button"/>
+            <button label="Button"/>
+            <button label="toggle vertical" onClick='self.parent.orient = self.parent.vertical ? "horizontal" : "vertical"'/>
+        </inputgroup>
+    </vlayout>
+</zk>

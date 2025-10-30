@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-803.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Feb  04 10:00:38 TST 2012, Created by benbai
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		var oldGhost = zk.DnD.ghost;
+		zk.DnD.ghost = function(drag, ofs, msg) {
+			var g = oldGhost(drag, ofs, msg);
+			zk.log(">>>" + jq('.z-drop-content').length);
+			zk.log(jq('#zk_ddghost').html());
+			return g;
+		}
+	]]></script>
+	<div>1. Select first item and second item.</div>
+	<div>2. Drag first item, you should see two selected items dragged.</div>
+	<div>3. Drag third item, you should see only third item dragged</div>
+	<listbox width="200px" multiple="true" checkmark="true">
+		<listhead>
+			<listheader label="name" sort="auto"/>
+			<listheader label="gender" sort="auto"/>
+		</listhead>
+		<listitem draggable="true">
+			<listcell label="Mary"/>
+			<listcell label="FEMALE"/>
+		</listitem>
+		<listitem draggable="true">
+			<listcell label="John"/>
+			<listcell label="MALE"/>
+		</listitem>
+		<listitem draggable="true">
+			<listcell label="Jane"/>
+			<listcell label="FEMALE"/>
+		</listitem>
+		<listitem draggable="true">
+			<listcell label="Henry"/>
+			<listcell label="MALE"/>
+		</listitem>
+	</listbox>
+</zk>

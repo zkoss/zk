@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4036.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Aug 28 10:03:38 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. value should be value in execution
+		2. valueAuto should be value in execution;
+	</label>
+	<zscript><![CDATA[
+		WebApps.getCurrent().setAttribute("config", "my sys config");
+		Sessions.getCurrent().setAttribute("user", "Hawk");
+		Executions.getCurrent().setAttribute("exec", "value in execution");
+	]]></zscript>
+	<div viewModel="@id('vm')@init('org.zkoss.zktest.test2.F86_ZK_4036VM')">
+		sysConfig: <label value="@load(vm.sysConfig)"/><separator/>
+		username: <label value="@load(vm.name)"/><separator/>
+		value: <label id="exec1" value="@load(vm.value)"/><separator/>
+		valueAuto: <label id="execAuto" value="@load(vm.valueAuto)"/>
+	</div>
+	EL resolved: ${exec}
+</zk>

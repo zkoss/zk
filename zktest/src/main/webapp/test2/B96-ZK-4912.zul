@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4912.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 03 10:43:56 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    List items = new ArrayList();
+    for (int i = 0; i < 10; i++) {
+        items.add("data " + i);
+    }
+    ListModelList model = new ListModelList(items);
+    ]]></zscript>
+    <label multiline="true">
+        (Affected on Firefox and IE)
+        1. Open the select.
+        2. Click any item.
+        3. No zk log ([MouseEvent onClick &lt;Listitem xxx&gt;]) appeared.
+    </label>
+    <listbox model="${model}" mold="select">
+        <template name="model">
+            <listitem onClick="Clients.log(event.toString())">
+                <listcell label="${each}"/>
+            </listitem>
+        </template>
+    </listbox>
+</zk>

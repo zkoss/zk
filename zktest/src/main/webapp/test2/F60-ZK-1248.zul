@@ -1,0 +1,37 @@
+<zk>
+	<div width="100%">
+		<window border="normal" mode="modal" context="mpp" title="menupopup" width="500px">
+			<label multiline="true">
+			1. Move the modal window to the right side of browser.
+			2. Right click on the right edge of window to open the menupopup.
+			3. Hover on "About" menu.
+			4. Should see sub-menu showed on the left of parent menu instead of overlapped.
+			</label>
+		</window>
+		<menupopup id="mpp">
+			<menu label="About">
+				<menupopup>
+					<menu label="About">
+						<menupopup>
+							<menu label="About">
+								<menupopup>
+									<menuitem label="About ZK" onClick="alert(self.label)" />
+									<menuitem label="About Potix" onClick="alert(self.label)" />
+								</menupopup>
+							</menu>
+							<menuitem label="About ZK" onClick="alert(self.label)" />
+							<menuitem label="About Potix" onClick="alert(self.label)" />
+						</menupopup>
+					</menu>
+					<menuitem label="About ZK" onClick="alert(self.label)" />
+					<menuitem label="About Potix" onClick="alert(self.label)" />
+				</menupopup>
+			</menu>
+            <menuitem image="/img/castle.png" label="New" onClick="alert(self.label)" />
+            <menuitem label="Open" onClick="alert(self.label)" />
+            <menuitem label="Save" onClick="alert(self.label)" />
+            <menuseparator />
+            <menuitem label="Exit" onClick="alert(self.label)" />
+        </menupopup>
+	</div>
+</zk>

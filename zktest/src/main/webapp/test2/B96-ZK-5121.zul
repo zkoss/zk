@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5121.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 28 16:37:12 CST 2022, Created by jameschu
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		void doTheThing(){
+			java.util.concurrent.CountDownLatch cdl = new java.util.concurrent.CountDownLatch(1);
+			cdl.await(3, java.util.concurrent.TimeUnit.SECONDS);
+			tg.invalidate();
+		}
+	</zscript>
+	<label>Click button and click the searchbox/cascader dropdown button immediately, you should see the popup closed later.</label>
+	<div id="tg">
+		<searchbox/>
+		<cascader/>
+		<button onClick="doTheThing()"/>
+	</div>
+</zk>

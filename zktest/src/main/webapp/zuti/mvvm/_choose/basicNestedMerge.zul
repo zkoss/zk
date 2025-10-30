@@ -1,0 +1,73 @@
+<zk>
+	<div id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ForEachVM')">
+		<forEach begin="@load(vm.begin)" end="@load(vm.end)">
+			<choose>
+				<when test="${each lt 4}">
+					<div>
+						<choose>
+							<when test="${each eq 1}">
+								<div style="color:blue">
+									${each} Template
+								</div>
+							</when>
+							<when test="${each eq 2}">
+								<div style="color:yellow">
+									${each} Template
+								</div>
+							</when>
+							<otherwise>
+								<div style="color:red">
+									${each} Template
+								</div>
+							</otherwise>
+						</choose>
+					</div>
+				</when>
+				<when test="@load(each lt 7)">
+					<div>
+						<choose>
+							<when test="${each eq 4}">
+								<div style="color:blue">
+									${each} Template
+								</div>
+							</when>
+							<when test="${each eq 5}">
+								<div style="color:yellow">
+									${each} Template
+								</div>
+							</when>
+							<otherwise>
+								<div style="color:red">
+									${each} Template
+								</div>
+							</otherwise>
+						</choose>
+					</div>
+				</when>
+				<otherwise>
+					<div>
+						<choose>
+							<when test="${each eq 7}">
+								<div style="color:blue">
+									${each} Template
+								</div>
+							</when>
+							<when test="${each eq 8}">
+								<div style="color:yellow">
+									${each} Template
+								</div>
+							</when>
+							<otherwise>
+								<div style="color:red">
+									${each} Template
+								</div>
+							</otherwise>
+						</choose>
+					</div>
+				</otherwise>
+			</choose>
+		</forEach>
+	</div>
+	<debugger rootId="host" />
+</zk>

@@ -1,0 +1,11 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>IE only.</li>
+			<li>You shall see the correct IE version in the lower left corner.</li>
+		</ol>
+	]]></html>
+	<script>
+		zk.log('IE Version', zk.ie);
+	</script>
+</zk>

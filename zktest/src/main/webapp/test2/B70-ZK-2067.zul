@@ -1,0 +1,17 @@
+<window id="wd" border="normal" width="400px" title="Popup in Overlapping and Modaling Window">
+	<tree onClick="wd.doOverlapped();wd.doModal();">
+			<treecols>
+				<treecol/>
+			</treecols>
+			<treechildren>
+				<treeitem>
+					<treerow>
+						<treecell label="Click me should not show any error." popup="pp"/>
+					</treerow>
+				</treeitem>
+			</treechildren>
+	</tree>
+	<popup id="pp">
+		<label value="Popup"/>
+	</popup>
+</window>

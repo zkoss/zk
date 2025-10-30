@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4149.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Nov 29 17:07:23 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click setCurpos(50), knob should update to the right position
+		2. Click setMinpos(30), knob should update to the right position
+		3. Click setMaxpos(70), knob should update to the right position
+	</label>
+	<slider width="300px" id="knob" mold="knob"
+			onScroll='Clients.log("scroll")' onScrolling='Clients.log("scrolling")'/>
+	<slider width="300px" id="slider"/>
+	<button label="setCurpos(50)">
+		<attribute name="onClick">
+			knob.setCurpos(50);
+			slider.setCurpos(50);
+		</attribute>
+	</button>
+	<button label="setMinpos(30)">
+		<attribute name="onClick">
+			knob.setMinpos(30);
+			slider.setMinpos(30);
+		</attribute>
+	</button>
+	<button label="setMaxpos(70)">
+		<attribute name="onClick">
+			knob.setMaxpos(70);
+			slider.setMaxpos(70);
+		</attribute>
+	</button>
+</zk>

@@ -1,0 +1,61 @@
+<zk xmlns:w="client">
+<div>
+<zscript>
+org.zkoss.zul.ListModelList list = new org.zkoss.zul.ListModelList();
+list.add("A");
+list.add("B");
+list.add("C");
+</zscript>
+		<label multiline="true">
+		[onSelect not fired if there is a listheader]
+		1.Both listbox should select to B.
+		2.select C on listbox 1, it should pop up a message 'onSelect .....' (will not if bug is not fixed)
+		3.select C on listbox 2,  it should pop up a message 'onSelect .....'
+		</label>
+		<zscript>
+			void printLog(Component myself){
+				Clients.evalJavaScript("zk.log('server','onSelect :"+ myself.id + ":" + myself.getSelectedItem().getLabel() + "');  ");
+			}
+		</zscript>
+	<window apply="org.zkoss.bind.BindComposer"
+		title="a title" width="400px">
+
+		<listbox mold="select"  width="100%" model="${list}"  id="first" 
+			w:onSelect='zk.log("client","onSelect :"+this.id+":"+this.$n().value)'
+			onSelect='printLog(self)' 
+			onCreate='list.addToSelection("B")'>
+			<listhead>
+				<listheader></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="${each}"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<listbox mold="select"  width="100%" model="${list}" id="second"
+			w:onSelect='zk.log("client","onSelect :"+this.id+":"+this.$n().value)'
+			onSelect='printLog(self)' 
+			onCreate='list.addToSelection("B")'>
+			<template name="model">
+				<listitem>
+					<listcell label="${each}"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<listbox width="100%" model="${list}"  id="third" 
+			w:onSelect='zk.log("client","onSelect :"+this.id+":"+jq(".z-listitem-seld",this.$n()).text())'
+			onSelect='printLog(self)' 
+			onCreate='list.addToSelection("B")'>
+			<listhead>
+				<listheader></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="${each}"></listcell>
+				</listitem>
+			</template>
+		</listbox>		
+	</window>
+	</div>
+</zk>

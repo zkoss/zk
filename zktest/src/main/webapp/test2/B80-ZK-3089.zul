@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3089.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jan 8 10:36:03 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" title="ZK-3089">
+        <label multiline="true">
+            1. Click 'Upload' (on the text) to open the fileupload dialogue, and click 'cancel'.
+            2. It should not open twice.
+            3. Click 'Upload' (on the corner of upload button) to open the fileupload dialogue, and click 'cancel'.
+            4. It should not open twice.
+        </label>
+        <menubar>
+            <menuitem label="Upload" upload="true,native"/>
+        </menubar>
+    </window>
+</zk>

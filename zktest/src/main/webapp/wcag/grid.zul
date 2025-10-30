@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Grid"?>
+<?root-attributes lang="en"?>
+<!--
+grid.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jun 30 15:25:09 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Grid</n:h1>
+	</n:header>
+	<n:main>
+		<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: solid;
+			outline-color: red;
+			outline-offset: -1px;
+		}
+    ]]></style>
+		<button label="Simple Grid" />
+		<grid>
+			<auxhead>
+				<auxheader label="apple" colspan="1"/>
+				<auxheader label="banana" colspan="1"/>
+				<auxheader label="lemon" colspan="2"/>
+			</auxhead>
+			<columns>
+				<column hflex="5">Language</column>
+				<column hflex="6">Contributor</column>
+				<column hflex="3" sort="auto">Charset</column>
+				<column hflex="4">Comment</column>
+			</columns>
+			<rows>
+				<row>
+					<label value="Arabic (ar)" visible="false" />
+					<label value="Ayman Elgharabawy" />
+					<label value="iso-8859-6" />
+					<textbox ca:aria-label="textbox"/>
+				</row>
+				<row>
+					<label value="Hungarian (hu)" />
+					<label value="Andreas Klein" />
+					<label value="iso-8859-2" />
+					<textbox ca:aria-label="textbox"/>
+				</row>
+				<row>
+					<cell>Italian (it)</cell>
+					<cell>Matteo Barbieri</cell>
+					<label value="iso-8859-1"/>
+					<cell><textbox ca:aria-label="textbox"/></cell>
+				</row>
+			</rows>
+			<foot>
+				<footer label="footer 1"/>
+				<footer label="footer 2"/>
+				<footer label="footer 3"/>
+				<footer label="footer 4"/>
+			</foot>
+		</grid>
+		<label value="Detail" />
+		<grid  width="600px">
+			<columns>
+				<column width="40px" />
+				<column>Product Name</column>
+				<column>Price</column>
+				<column>Item location</column>
+			</columns>
+			<rows>
+				<row id="row" draggable="my message">
+					<detail id="detail" open="true">
+						<window>
+							<label value="hello!"/>
+						</window>
+					</detail>
+					<label value="label 1" />
+					<label style="color:green;float:right;" value="label 2" />
+					<label value="label 3" />
+				</row>
+				<row id="row2" draggable="my message">
+					<detail id="detail2">
+						<window>
+							<label value="hello!"/>
+						</window>
+					</detail>
+					<label value="label 1" />
+					<label style="color:green;float:right;" value="label 2" />
+					<label value="label 3" />
+				</row>
+			</rows>
+		</grid>
+		
+		<label value="Group/Groupfoot" />
+		<grid>
+			<columns sizable="true">
+				<column label="Brand" sort="auto" />
+				<column label="Processor Type" width="250px" sort="auto" />
+				<column label="Memory (RAM)" width="220px" sort="auto" />
+				<column label="Price"  width="200px" sort="auto" />
+				<column label="Hard Drive Capacity" width="250px" sort="auto" />
+			</columns>
+			<rows>
+				<group open="false">
+					<label value="Dell"/>
+					<label value="group1"/>
+					<cell>cell</cell>
+					<label value="group1"/>
+					<label value="group1"/>
+				</group>
+				<row>
+					<label value="Dell E4500 2.2GHz" style="padding-left:15px"/>
+					<label value="Intel Core 2 Duo" />
+					<label value="4GB RAM" />
+					<label value="$261.00" style="color:green" />
+					<label value="500GB" />
+				</row>
+				<row>
+					<label value="XP-Pro Slim Dell-Inspiron-530-s" style="padding-left:15px" />
+					<label value="Intel Core 2 Duo" />
+					<label value="4GB RAM" />
+					<label value="$498.93" style="color:green" />
+					<label value="500GB" />
+				</row>
+				<row>
+					<label value="Dell P4 3.2 GHz" style="padding-left:15px" />
+					<label value="Intel Pentium 4" />
+					<label value="8GB RAM" />
+					<label value="$377.99" style="color:green" />
+					<label value="500GB" />
+				</row>
+				<group label="Compaq" />
+				<row>
+					<label value="Compaq SR5113WM" style="padding-left:15px" />
+					<label value="Intel Core Duo" />
+					<label value="2GB RAM" />
+					<label value="$279.00" style="color:green" />
+					<label value="160GB" />
+				</row>
+				<row>
+					<label value="Compaq HP XW4200" style="padding-left:15px" />
+					<label value="Intel Pentium 4" />
+					<label value="8GB RAM" />
+					<label value="$980.00" style="color:green" />
+					<label value="500GB" />
+				</row>
+				<groupfoot>
+					<cell colspan="5">
+						<label value="This a summary about Compaq Desktop PCs" />
+					</cell>
+				</groupfoot>
+			</rows>
+		</grid>
+		
+		<label value="test key event (combo with radio)" />
+		<radiogroup id="popular"/>
+		<radiogroup id="fun"/>
+		<grid>
+			<columns>
+				<column label="Question"/>
+				<column label="Option 1"/>
+				<column label="Option 2"/>
+				<column label="Option 3"/>
+				<column label="Comment"/>
+			</columns>
+			<rows>
+				<row>
+					Most popular
+					<radio label="Java" radiogroup="popular"/>
+					<radio label="Groovy" radiogroup="popular"/>
+					<radio label="C#" radiogroup="popular"/>
+					<textbox ca:aria-label="Most popular textbox"/>
+				</row>
+				<row>
+					Most fun
+					<radio label="Open Source" radiogroup="fun"/>
+					<radio label="Social Networking" radiogroup="fun"/>
+					<radio label="Searching" radiogroup="fun"/>
+					<textbox ca:aria-label="Most fun textbox"/>
+				</row>
+			</rows>
+		</grid>
+		<label multiline="true">
+			try using alt + arrowDown to open the menupopup in column
+		</label>
+		<grid id="grid" width="300px">
+			<columns menupopup="auto">
+				<column width="150px" label="col 1"/>
+				<column label="col 2" width="150px" sort="auto"/>
+				<column label="col 3" align="center" width="150px"/>
+				<column label="col 4" align="right" width="150px"/>
+			</columns>
+			<frozen columns="1"/>
+			<rows>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/></row>
+			</rows>
+		</grid>
+		<label multiline="true">
+			should not announce any gridcell in hidden column or hidden row, and should not able to focus on the hidden gridcell by arrow keys.
+		</label>
+		<grid width="300px">
+			<columns menupopup="auto">
+				<column width="150px" label="col 1" visible="false"/>
+				<column label="col 2" width="150px" sort="auto"/>
+				<column label="col 3" align="center" width="150px" visible="false"/>
+				<column label="col 4" align="right" width="150px"/>
+				<column label="col 5" align="right" width="150px" visible="false"/>
+			</columns>
+			<rows>
+				<row visible="false"><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/></row>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/></row>
+				<row><label value="1"/><label value="2"/><label value="3"/><label value="4"/><label value="5"/></row>
+				<row><cell>1</cell><cell>2</cell><cell>3</cell><cell>4</cell><cell>5</cell></row>
+			</rows>
+		</grid>
+		<label>hide the first column should not happen infinite loop</label>
+		<grid height="300px">
+			<columns columnsgroup="false" menupopup="auto">
+				<column label="col 1 (hide me)"/>
+				<column label="col 2"/>
+				<column label="col 3"/>
+			</columns>
+			<rows>
+				<group label="group 1"/>
+				<row><label value="cell 1"/><label value="cell 2"/><label value="cell 3"/></row>
+				<row><label value="cell 1"/><label value="cell 2"/><label value="cell 3"/></row>
+			</rows>
+		</grid>
+	</n:main>
+</zk>

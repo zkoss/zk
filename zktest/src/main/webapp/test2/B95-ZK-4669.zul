@@ -1,0 +1,27 @@
+<!--
+B95-ZK-4669.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu Oct 22 11:50:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Resize browser, and the size of div should be resized correctly.</label>
+	<div height="80%" width="100%">
+		<hbox hflex="1" vflex="1">
+			<cell>
+				<div hflex="1" vflex="1" style="border: 1px solid red" />
+			</cell>
+			<splitter/>
+			<cell>
+				<div hflex="1" vflex="1" style="border: 1px solid red" />
+			</cell>
+		</hbox>
+	</div>
+</zk>

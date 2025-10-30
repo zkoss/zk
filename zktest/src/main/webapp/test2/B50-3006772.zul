@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3003756.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue May 25 11:45:17 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Select "1.1.1", click icon of treeitem "1" twice to close and open.
+		Then select "1.1.2".
+		It should work fine (only "1.1.2" selected).
+	</label>
+	<tree id="tree" multiple="true">
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="1"/>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="1.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem id="ti1">
+								<treerow id="tr1">
+									<treecell label="1.1.1" id="tc1"/>
+								</treerow>
+							</treeitem>
+							<treeitem id="ti2">
+								<treerow id="tr2">
+									<treecell label="1.1.2" id="tc2"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="1.1.3"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

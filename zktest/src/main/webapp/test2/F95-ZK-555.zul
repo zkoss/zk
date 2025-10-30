@@ -1,0 +1,22 @@
+<!--
+F95-ZK-555.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri Nov 6 09:50:21 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window onCtrlKey='Clients.log("Key " + event.getKeyCode() + " is pressed");' ctrlKeys="#tab">
+		<label multiline="true">
+			1. focus on the textbox
+			2. press "Tab" button, after click button, the zk log will show key code
+		</label>
+		<separator/>
+		<textbox />
+	</window>
+</zk>

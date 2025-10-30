@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
+<!--
+F86-ZK-3959.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Jul 25 15:44:07 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Use the signature pad to write name on it.
+		2. Click the "setLabels" button, you should see labels appear.
+		3. Click the "Undo" button, the last step should be undone.
+		4. Click the "Save" button, the signature should be saved to the server.
+		5. Click the "Clear" button, the signature should be cleared.
+		6. Click the "toggleToolbar" button, toolbar should be invisible.
+		7. Use first colorbox and write something, the pen color should change.
+		8. Use second colorbox, the background color should change.
+		9. Use intbox and write something, the pen size should change.
+		10. Click the "set H 100" and "set W 400" button, the height and width should change.
+		11. Click detach, the signature should be removed without error.
+	</label>
+	<signature id="s" width="600px" height="200px"
+			   onSave="image.setContent(event.media)" onClear='Clients.log("onClear")'/>
+	<separator/>
+	<label value="change pen color: "/>
+	<colorbox id="c1" onChange='s.setPenColor(c1.getValue())'/>
+	<label value="change background color: "/>
+	<colorbox id="c2" onChange='s.setBackgroundColor(c2.getValue())'/>
+	<label value="change pen size: "/>
+	<intbox id="intbox" onChange="s.setPenSize(Integer.valueOf(intbox.getValue()))"/>
+	<separator/>
+	<hlayout>
+		<button label="set H 100" onClick='s.setHeight("100px")'/>
+		<button label="set W 400" onClick='s.setWidth("400px")'/>
+		<button label="undo" onClick='s.undo()'/>
+		<button label="save" onClick='s.save()'/>
+		<button label="clear" onClick='s.clear()'/>
+		<combobox>
+			<comboitem label="iceblue"/>
+			<comboitem label="breeze"/>
+			<comboitem label="sapphire"/>
+			<comboitem label="silvertail"/>
+			<comboitem label="atlantic"/>
+			<attribute name="onChange">
+				Library.setProperty("org.zkoss.theme.preferred", event.value);
+				Executions.sendRedirect("");
+			</attribute>
+		</combobox>
+	</hlayout>
+	<separator/>
+	<hlayout>
+		<button label="toggleToolbar" onClick='s.setToolbarVisible(!s.isToolbarVisible())'/>
+		<button label="changeSaveType" onClick='s.setSaveType("image/jpeg")'/>
+		<button label="setLabels">
+			<attribute name="onClick">
+				s.setUndoLabel("Undo");
+				s.setSaveLabel("Save");
+				s.setClearLabel("Clear");
+			</attribute>
+		</button>
+		<button label="detach" onClick="s.detach()"/>
+	</hlayout>
+	<separator/>
+	<image id="image" width="600px" height="200px"/>
+</zk>

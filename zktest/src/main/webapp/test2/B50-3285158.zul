@@ -1,0 +1,16 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Hover around the border between Columns. A E-W-arrow style cursor should appear in a 10-pixel wide region.</li>
+			<li>If the region is too narrow (1-pixel wide), then it is a bug. </li>
+		</ol>
+	]]></html>
+	<grid height="100px">
+		<columns sizable="true" menupopup="auto">
+			<column width="60px">Head 1</column>
+			<column width="60px">Head 2</column>
+			<column width="60px">Head 3</column>
+			<column width="60px">Head 4</column>
+		</columns>
+	</grid>
+</zk>

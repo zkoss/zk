@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3641.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Mar 29 14:21:47 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Open datebox and iframe should disappear.
+        2. Open chosenbox and iframe should disappear.
+        3. Open colorbox and iframe should disappear.
+    </label>
+    <div>
+        <datebox/>
+        <chosenbox/>
+        <colorbox/>
+    </div>
+    <iframe width="500px" height="300px" style="border: 1px solid red" src="B85-ZK-3641.pdf"
+            autohide="true"/>
+</zk>

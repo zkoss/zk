@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2598.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Mar 11, 2015  5:11:47 PM, Created by Han
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<div id="${'someDynamicId'}" onForwarded="alert(event)">
+			<custom-attributes outerDiv="${self}"/>
+			<button label="always OK" forward="onClick=${outerDiv.id}.onForwarded"/>
+			<button label="always OK" forward="onClick=${outerDiv}.onForwarded"/>
+			<button label="bad" forward="onClick=outerDiv.onForwarded"/>
+		</div>
+	</div>
+</zk>

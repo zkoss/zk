@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="zk.tabletUIEnabled = true;"?>
+
+<!--
+B96-ZK-5044.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/8, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. the combobox's button should look well in tableUIEnable mode. (if the button is missing or its width is less than 100px, it must be a bug)
+    </label>
+    <hbox pack="center" align="top" width="100%" height="400px">
+        <div apply="org.zkoss.bind.BindComposer" height="278px" width="443px"
+             viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_5044VM')">
+            <separator spacing="40px" />
+            <hbox>
+                <vlayout>
+                    <separator/>
+                    <label value="Color" />
+                    <combobox id="cmbColor" hflex="min"
+                              model="@load(vm.names)" selectedItem="@bind(vm.iname)">
+                    </combobox>
+                </vlayout>
+
+            </hbox>
+        </div>
+    </hbox>
+</zk>

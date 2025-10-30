@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3631.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Apr 27 14:22:32 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <navbar onSelect="Clients.log(event.toString())">
+        <navitem id="ni1" label="item1"/>
+        <navitem id="ni2" label="item2"/>
+    </navbar>
+    <button label="select item1" onClick="ni1.setSelected(true)"/>
+    <button label="select item2" onClick="ni2.setSelected(true)"/>
+    <label multiline="true">
+        1. Click either of the buttons to change the current selected navitem at server side
+        2. Observe network activity. No additional onSelect event to server.
+    </label>
+</zk>

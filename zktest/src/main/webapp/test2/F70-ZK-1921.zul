@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F70-ZK-1921.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Sep 17, 2013  4:16:56 PM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+In the HTML5's browsers (Like Firefox,Chrome,Safari, and Opera), you can only choose image files to upload.
+	<vbox id="pics" />
+    
+	<button label="Upload" upload="true,accept=image/*">
+		<attribute name="onUpload">{
+			org.zkoss.util.media.Media[] medias = event.getMedias();
+			alert(medias.length);
+			for (media : medias) {
+			if (media instanceof org.zkoss.image.Image) {
+				org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+				image.setContent(media);
+				image.setParent(pics);
+			} else {
+				Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+				break; //not to show too many errors
+			}
+			}
+		}</attribute>
+	</button>
+</zk>

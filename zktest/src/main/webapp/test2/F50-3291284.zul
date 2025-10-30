@@ -1,0 +1,17 @@
+<zk>
+	<h:pre xmlns:h="xhtml"><![CDATA[
+		It is needed to set a zk.xml config for
+		<library-property>
+			<name>org.zkoss.zk.WPD.cache</name>
+			<value>false</value>
+		</library-property>	
+
+		Then you update the code in widget , 
+		it should update without restart the server.
+	]]></h:pre>
+	<window title="Hello World!!" border="normal" width="200px">
+
+		<label value="Hello" />
+
+	</window>
+</zk>

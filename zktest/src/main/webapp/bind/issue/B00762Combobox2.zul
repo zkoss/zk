@@ -1,0 +1,29 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00762Combobox2')">
+	<vlayout>
+	<label id="msg" value="@bind(vm.message1)"/>
+	</vlayout>
+	<combobox id="outerbox" width="300px" model="@bind(vm.items)">
+		<template name="model" var="item">
+			<comboitem label="@bind(item.name)"/>
+		</template>
+	</combobox>
+	<zscript>
+		void show(){
+			org.zkoss.zul.ListModelList model = outerbox.getModel();
+			java.util.Set sels = model.getSelection();
+			int index = (sels==null||sels.size()==0)?-1:model.indexOf(sels.iterator().next());
+			min.setValue(""+index);
+		}
+	</zscript>
+	<hbox>
+		<label id="min"/>
+	</hbox>
+	<hbox>
+		<button id="clean" label="clean" onClick="@command('clean')" />
+		<button id="select" label="select 1" onClick="@command('select')" />
+		<button id="reload" label="reload" onClick="@command('reload')" />
+		<button id="showselect" label="show selection" onClick="show()" />
+		
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>
+</window>

@@ -1,0 +1,28 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Maximize Panel 2 by clicking on the maximize button.</li>
+			<li>Normalize Panel 2 by clicking on the button again.</li>
+			<li>Maximize Panel 2 again. If you can see "Center Content" or "North Content", it is a bug.</li>
+		</ol>
+	]]></html>
+	<portallayout maximizedMode="whole">
+		<portalchildren width="30%">
+			<panel height="300px" title="Panel 1" border="normal">
+				<panelchildren>
+					<borderlayout width="100px" height="100px">
+						<north size="20%" style="background: #CCCC99">North Content</north>
+						<center style="background: #99CCCC">Center Content</center>
+					</borderlayout>
+				</panelchildren>
+			</panel>
+		</portalchildren>
+		<portalchildren width="30%">
+			<panel height="300px" title="Panel 2" border="normal" maximizable="true">
+				<panelchildren>
+					Panelchildren 2
+				</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>

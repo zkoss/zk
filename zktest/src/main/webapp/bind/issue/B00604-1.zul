@@ -1,0 +1,13 @@
+<listbox width="500px" model="@bind(vm.options)" rows="3" sclass="outside">
+	<custom-attributes mark="options"/>
+	<listhead>
+		<listheader label="name"/>
+		<listheader label="value" width="200px"/>
+	</listhead>
+	<template name="model" var="opt">
+		<listitem>
+			<listcell label="@bind(opt.name)"/>
+			<listcell label="@bind(opt.value)"/>
+		</listitem>
+	</template>
+</listbox>

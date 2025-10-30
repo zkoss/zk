@@ -1,0 +1,21 @@
+
+<zk>
+<label multiline="true">
+1.label1 and 2 are blue
+2.click red, only label1 changes to 'red'
+3.click yellow, both label1 and 2 change to 'yellow' 
+</label>
+
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00847FormInit')" width="400px">
+	
+	<hbox>label1 :<label id="l1" value="@bind(vm.attr.color)"/></hbox>
+	<div form="@id('fx') @init(vm.attr) @load(vm.attr,after='yellow')">
+		<hbox>label2 :<label id="l2" value="@load(fx.color)"/></hbox>
+	</div>
+	
+	<button id="cmd1" label="red" onClick="@command('red')"/>
+	<button id="cmd2" label="yellow" onClick="@command('yellow')"/>
+
+	</vbox>
+</zk>

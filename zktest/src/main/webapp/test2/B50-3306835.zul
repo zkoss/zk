@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3306835.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul  8 18:12:08 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript>
+public void move(Component dragged, Component self) {
+if (dragged instanceof Listitem)
+self.parent.insertBefore(dragged, self);
+else
+alert("Sorry, no food here");
+}
+</zscript>
+<window title="You should be able to drag and drop the image in listbox" width="400px" border="normal">
+<listbox id="src" multiple="true" width="300px">
+<listhead>
+<listheader label="Country/Area"/>
+<listheader align="right" label="Visits"/>
+<listheader align="right" label="%"/>
+</listhead>
+<listitem draggable="true" droppable="true" onDrop="move(event.dragged, self)">
+<listcell label="United States"/>
+<listcell label="5,093"/>
+<listcell label="19.39%"/>
+</listitem>
+<listitem draggable="true" droppable="true" onDrop="move(event.dragged, self)">
+<listcell label="China"/>
+<listcell label="4,274"/>
+<listcell label="16.27%"/>
+</listitem>
+<listitem draggable="true" droppable="true" onDrop="move(event.dragged, self)">
+<listcell label="France"/>
+<listcell label="1,892"/>
+<listcell label="7.20%"/>
+</listitem>
+</listbox>
+<image src="/img/search.png" width="100px" style="border:1px solid red;" height="80px" draggable="true" mold="alphafix"/>
+</window>
+</zk> 

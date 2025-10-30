@@ -1,0 +1,12 @@
+<window title="IE9 only">
+	<vlayout>
+		<label>When click the button and move mouse at the tooltip "test" of the combobox, the label "popup" should popup (IE9).
+		</label>
+		<combobox id="cb">
+			<comboitem tooltip="popup" label="test" id="cbi"/>
+		</combobox>
+		<popup id="popup">
+			<label value="popup"/>
+		</popup>
+	</vlayout>
+</window>

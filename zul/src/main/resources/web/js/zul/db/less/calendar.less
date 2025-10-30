@@ -1,0 +1,226 @@
+@import "~./zul/less/_header.less";
+
+.z-calendar {
+	.fontStyle(@baseContentFontFamily, @calendarFontSize, normal);
+	background-color: @calendarBackgroundColor;
+	min-width: 230px;
+	padding: @calendarPadding;
+
+	a {
+		text-decoration: none;
+	}
+	th {
+		.size(32px, 36px);
+		min-width: 32px;
+		.borderRadius(@baseBorderRadius);
+		.fontStyle(@baseTitleFontFamily, @calendarFontSizeSmall, 700, @calendarWeekTitleColor);
+		text-align: center;
+		padding: 8px 0;
+	}
+
+	table {
+		width: 100%;
+	}
+
+	&-title {
+		font-family: @baseTitleFontFamily;
+		font-size: @calendarTitleFontSize;
+		color: @calendarTitleColor;
+		width: 100%;
+		line-height: @baseLineHeight;
+		text-align: center;
+
+		&:hover {
+			color: @calendarTitleHoverColor;
+		}
+	}
+
+	&-header {
+		position: relative;
+		text-align: center;
+
+		& > a {
+			display: inline-block;
+		}
+
+		&:first-child { // calendar title
+			line-height: @calendarTitleLineHeight;
+		}
+	}
+
+	&-body {
+		height: 100%;
+	}
+	&-cell {
+		font-size: @calendarFontSizeSmall;
+		color: @calendarCellColor;
+		min-width: @calendarCellWidth;
+		height: @calendarCellHeight;
+		line-height: normal;
+		text-align: center;
+		cursor: pointer;
+		.borderRadius(@baseBorderRadius);
+
+		&:hover {
+			color: @calendarCellColor;
+			background: @calendarCellHoverBackgroundColor;
+		}
+	}
+	&-decade,
+	&-month,
+	&-year {
+		padding-top: 8px;
+
+		.z-calendar-cell {
+			min-width: 56px;
+			height: 40px;
+			padding: 0 8px;
+		}
+	}
+	&-decade {
+		.z-calendar-cell {
+			text-align: left;
+		}
+	}
+	&-wk& {
+		.z-calendar-decade, .z-calendar-month, .z-calendar-year {
+			.z-calendar-cell {
+				.size(64px, 44px);
+			}
+		}
+	}
+	&-weekend {
+		color: @weekendColor;
+		background: @weekendBackgroundColor;
+	}
+	&-weekday {
+		color: @weekdayColor;
+		background: @weekdayBackgroundColor;
+	}
+	&-outrange {
+		color: @disabledColor;
+		text-shadow: none;
+	}
+	&-weekofyear {
+		font-style: italic !important;
+		color: @weekofyearColor !important;
+		background: @weekofyearBackgroundColor;
+		cursor: default;
+		
+		&:hover {
+			color: @weekofyearColor;
+			background: @weekofyearBackgroundColor;
+		}
+	}
+
+	// for transition's animation use only
+	&-anima {
+		overflow: hidden;
+		position: relative;
+	}
+	&-anima-inner {
+		height: 100%;
+		width: 200%;
+		position: absolute;
+
+		table {
+			width: 50%;
+			float: left;
+		}
+	}
+	&-selected {
+		.borderRadius(@baseBorderRadius);
+		color: @calendarSelectedColor;
+		background: @calendarSelectedBackgroundColor;
+		&:hover {
+			color: @calendarSelectedHoverColor;
+			background: @calendarSelectedHoverBackgroundColor;
+		}
+	}
+	&-outside {
+		color: @disabledColor;
+		text-shadow: none;
+	}
+	&-icon {
+		.iconFontStyle(@calendarIconFontSize, @iconColor);
+		.size(@baseButtonWidth, @baseButtonHeight);
+		padding: 0 4px;
+		position: absolute;
+
+		&:hover {
+			color: @iconHoverColor;
+		}
+	}
+	&-right {
+		right: @calendarLeftRightPosition;
+	}
+	&-left {
+		left: @calendarLeftRightPosition;
+	}
+
+	&-left[disabled],
+	&-right[disabled],
+	&-disabled {
+		color: @disabledColor !important;
+		text-shadow: none !important;
+		cursor: default !important;
+
+		&:hover {
+			background: @calendarBackgroundColor;
+		}
+	}
+
+	&-today {
+		border: 1px solid @baseBorderColor;
+		.borderRadius(@baseBorderRadius);
+		background-color: @calendarBackgroundColor;
+		margin-top: @calendarTodayMarginTop;
+
+		.z-calendar-title {
+			display: block;
+			padding: @calendarTodayTitlePadding;
+			color: @calendarTodayColor;
+		}
+
+		&:hover {
+			border-color: @hoverBorderColor;
+			background-color: @calendarCellHoverBackgroundColor;
+		}
+		&:active {
+			border-color: @activeBorderColor;
+			background-color: @calendarSelectedBackgroundColor;
+			.z-calendar-title {
+				color: @calendarSelectedColor;
+			}
+		}
+
+		.z-calendar-decade + &,
+		.z-calendar-month + &,
+		.z-calendar-year + & {
+			display: none;
+		}
+	}
+}
+
+// Calendar and Datebox
+.z-datebox-timezone {
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	font-weight: normal;
+}
+
+.z-datebox-popup {
+	position: absolute;
+
+	.z-calendar {
+		background: transparent;
+		border: 0;
+		& + .z-timebox {
+			margin: 5px;
+		}
+		& ~ .z-datebox-timezone {
+			margin: 0 5px 5px;
+		}
+	}
+
+}

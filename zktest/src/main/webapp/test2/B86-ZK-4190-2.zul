@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4190-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 17 11:37:38 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    Constraint constraint1 = new SimpleConstraint(SimpleConstraint.NO_EMPTY);
+    Constraint constraint2 = new SimpleDateConstraint(SimpleConstraint.NO_EMPTY);
+    ]]></zscript>
+    <label multiline="true">
+        1. Click "set SimpleConstraint" button.
+        2. Click "trigger NPE" button. You shouldn't see any exception on server or page.
+        3. Click "set SimpleDateConstraint" button.
+        4. Click "trigger NPE" button. You shouldn't see any exception on server or page.
+    </label>
+    <datebox id="db1" constraint="${constraint1}" timeZone="America/New_York" />
+    <button id="cst1" label="set SimpleConstraint" onClick='db1.setConstraint(constraint1);'/>
+    <button id="cst2" label="set SimpleDateConstraint" onClick='db1.setConstraint(constraint2);'/>
+    <button id="trigger" label="trigger NPE" onClick='db1.setValue(new Date());'/>
+</zk>

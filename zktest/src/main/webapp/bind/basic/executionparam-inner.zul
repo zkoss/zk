@@ -1,0 +1,13 @@
+<vbox>
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ExecutionParamVM')">
+		
+		<hbox><label id="l11" value="@load(vm.param1)"/> = foo|abc</hbox>
+		<hbox><label id="l12" value="@load(vm.arg1)" /> = bar|goo</hbox>
+
+		<button id="cmd1" label="cmd1" onClick="@command('cmd1')" />
+
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</vbox>
+
+</vbox>

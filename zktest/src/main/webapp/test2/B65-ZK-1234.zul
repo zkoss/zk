@@ -1,0 +1,78 @@
+<zk>
+	<html>
+		Testing instructions:
+		<ul>
+			<li>None. Visual verification only</li>
+		</ul>
+		
+		Expected results:
+		<ul>
+			<li>Outer grid: all rows should have alternating background color.</li>
+			<li>Inner grid: all rows should have alternating background color.</li>
+		</ul>
+	</html>
+	<hlayout>
+		<zscript>import org.zkoss.zul.theme.*;</zscript>
+		<button label="sapphire" onClick='Themes.setTheme(Executions.getCurrent(), self.label); Executions.sendRedirect(null);'/>
+		<button label="silvertail" onClick='Themes.setTheme(Executions.getCurrent(), self.label); Executions.sendRedirect(null);'/>
+	</hlayout>
+	<grid>
+	    <rows>
+	        <row>
+	            <panel>
+	                <panelchildren>
+	                    <grid>
+	                        <rows>
+	                            <row>Row1</row>
+	                            <row>Row2</row>
+	                            <row>Row3</row>
+	                            <row>Row4</row>
+	                        </rows>
+	                    </grid>
+	                </panelchildren>
+	            </panel>
+	        </row>
+	        <row>
+	            <panel>
+	                <panelchildren>
+	                    <grid>
+	                        <rows>
+	                            <row>Row1</row>
+	                            <row>
+						            <panel>
+						                <panelchildren>
+						                    <grid>
+						                        <rows>
+						                            <row>Row1</row>
+						                            <row>Row2</row>
+						                            <row>Row3</row>
+						                            <row>Row4</row>
+						                        </rows>
+						                    </grid>
+						                </panelchildren>
+						            </panel>
+						        </row>
+	                            <row>Row3</row>
+	                            <row>Row4</row>
+	                        </rows>
+	                    </grid>
+	                </panelchildren>
+	            </panel>
+	        </row>
+	        <row>
+	            <panel>
+	                <panelchildren>
+	                    <grid>
+	                        <rows>
+	                            <row>Row1</row>
+	                            <row>Row2</row>
+	                            <row>Row3</row>
+	                            <row>Row4</row>
+	                        </rows>
+	                    </grid>
+	                </panelchildren>
+	            </panel>
+	        </row>
+	    </rows>
+	</grid>
+</zk>

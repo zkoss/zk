@@ -1,0 +1,9 @@
+<?meta name="viewport" content="width=800"?>
+<zk>
+	<n:h3 xmlns:n="native">iPad/Android Only</n:h3>
+	<vlayout>
+		You should be able to close errorbox just click one time.
+		<separator/>
+		<intbox value="0" id="ibox" constraint="no zero"/>
+	</vlayout>
+</zk>

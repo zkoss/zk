@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4771.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Mar 05 11:55:38 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script>
+		function test() {
+			var headLinks = document.querySelectorAll('head > link');
+			for (var link of headLinks) {
+				zk.log(link.href);
+			}
+		}
+	</script>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		1. Prepare the settings:
+		1-1. please uncomment the theme-uri-handler-class org.zkoss.zktest.test2.F96_ZK_4771ThemeURIHandler setting in the zk.xml(zktest).
+		1-2. please turn off the library-property org.zkoss.zkmax.tablet.ui.disabled
+
+		2. Load this page and start testing:
+		2-1: change the current theme to Default(iceblue), you should see the button is red(the CSS file is loaded properly).
+		2-2: click the test button, you should see zklog contains "zk.wcs", "tablet.css.dsp" and "F96-ZK-4771-Style.css".
+		2-3: change the current theme to Atlantic, you should see the button is green(the CSS file is loaded properly).
+		2-4: click the test button, you should see zklog contains "zk.wcs", "F96-ZK-4771-Style2.css" and "tablet.css.dsp".
+
+		3. Remember to reset the settings in step 1 after testing.
+	</label>
+	<button label="test" w:onClick="test()"/>
+</zk>

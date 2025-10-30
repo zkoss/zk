@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3058.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 28 17:08:29 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+		Filedownload.save("some content", "text/plain", "測試 test.txt");
+	]]></zscript>
+    Download starting automatically...
+    <label multiline="true">
+        1. Clean the cookie of this domain.
+        2. Refresh this page to trigger a download.
+        3. The downloaded filename should be "測試 test.txt" (not contains jsessionid).
+    </label>
+</zk>

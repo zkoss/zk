@@ -1,0 +1,16 @@
+<div style="background: #aaa;border:1px solid blue">
+	this is included <datebox/>
+	<zscript>
+	ListModel infos = new ListModelArray(
+		new String[][] {
+			{"Apple", "10kg"},
+			{"Orange", "20kg"},
+			{"Mango", "12kg"}
+		});
+	</zscript>			
+	<listbox model="${infos}" width="200px">
+		<template name="model">
+			<listitem label="${each[0]}: ${each[1]}"/>
+		</template>
+	</listbox>
+</div>

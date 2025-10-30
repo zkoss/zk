@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3309.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 27 16:15:14 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Enter text in the combobox
+        2. Without loosing focus from the input field, click the combobox button
+        3. The input text is not overridden by previous text
+    </label>
+
+    <combobox onChange='Clients.log(event.getValue())'>
+        <attribute name="onOpen"><![CDATA[
+            if (!event.isOpen()) return;
+
+            Combobox cb = (Combobox) event.getTarget();
+            cb.getItems().clear();
+            cb.appendChild(new Comboitem("Loaded on demand."));
+        ]]>
+        </attribute>
+    </combobox>
+</zk>

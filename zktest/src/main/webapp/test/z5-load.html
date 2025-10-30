@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>Load ZK dynamically</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
+<body>
+	This example loads a ZUL file from a plain HTML file (with jQuery)
+	<div id="myDiv">
+	</div>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#myDiv").load("z5-load-1.zul?zk.redrawCtrl=page");
+});
+</script>
+</body>
+</html>

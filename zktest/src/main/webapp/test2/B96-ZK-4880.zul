@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4880.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jul 15 10:46:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div id="test">
+		<button label="change to Green, it should less than 1 second">
+			<attribute name="onClick">
+				for (Component child : test.getChildren()) {
+				child.setStyle("color: green;");
+				}
+			</attribute>
+		</button>
+		<forEach begin="0" end="10000">
+			<span style="color:red;">TEST</span>
+		</forEach>
+	</div>
+</zk>

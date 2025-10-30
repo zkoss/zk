@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4222.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Aug 27 12:23:12 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		span.z-upload input {
+			opacity: 1;
+			background-color: black;
+		}
+	</style>
+	<label multiline="true">
+		load this zul, you should not see the black background-color (from input tag inside the z-upload) protruding the left edge of the button.
+		(you should see the "you should see this" label on the left of the button)
+	</label>
+	<separator/>
+	<label>you should see this</label>
+	<button width="200px" upload="true" label="upload"></button>
+</zk>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1905999.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar  3 10:02:12     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+<n:h2>[ 1905999 ] Messagebox: a way to listen what button is clicked</n:h2>
+	<n:ol>
+		<n:li>Press the Ask button, it will show a messagebox</n:li>
+		<n:li>press one of the buttons in message box, and you will see the button you pressed is shown at the end.</n:li>
+	</n:ol>
+<window>
+	<vbox id="vb">
+		<button label="Ask">
+			<attribute name="onClick">
+Messagebox.show("Are you ready?", "Ready",
+Messagebox.YES|Messagebox.NO|Messagebox.ABORT|Messagebox.RETRY|Messagebox.IGNORE,
+Messagebox.QUESTION,
+	new EventListener() {
+		public void onEvent(Event evt) {
+		new Label("Button clicked: "+evt.getName()+", "+evt.getData()).setParent(vb);
+		}
+	});
+			</attribute>
+		</button>
+	</vbox>
+</window>
+</zk>

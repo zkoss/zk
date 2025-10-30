@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4121.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 21 09:54:34 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "Start scan"
+        2. Permit to use your webcam
+        4. Scan some EAN-13 product barcode. The result will be updated on barcode components.
+    </label>
+    <zscript><![CDATA[
+    void onDetect(org.zkoss.zkmax.zul.event.DetectEvent e) {
+        resultEan.setValue(e.getResult());
+    }
+    ]]>
+    </zscript>
+    <vlayout>
+        <barcode id="resultEan" type="ean13" value="0000000000000" displayValue="true" height="100px" width="300px"/>
+
+        <button label="Start scan" onClick='scanner.doModal(); scanner.getFellow("bs").setEnable(true)'/>
+        <window id="scanner" minimizable="true" visible="false" title="Scanner"
+                onMinimize='scanner.getFellow("bs").setEnable(!event.minimized)'>
+            <barcodescanner id="bs" type="ean" continuous="true" interval="100"
+                            width="640px" height="480px"
+                            consistencyBufferSize="1"
+                            consistencyThreshold="1"
+                            errorAcceptance="0.5"
+                            onDetect='onDetect(event)' />
+            <hlayout>
+                Error Acceptance:
+                <slider curpos="0.5" maxpos="1" minpos="0" step="0.1" mode="decimal"
+                        onScroll='bs.setErrorAcceptance(self.getCurposInDouble())' />
+            </hlayout>
+        </window>
+
+        <button label="Reset" onClick='resultEan.setValue("0000000000000");' />
+    </vlayout>
+</zk>

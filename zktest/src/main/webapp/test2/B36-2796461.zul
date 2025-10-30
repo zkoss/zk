@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2796461.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  4 10:01:01     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<style>
+.z-calendar {
+	width: 360px;
+}
+.z-calendar-cell {
+   font-size: 20px;
+}
+</style>
+Please press the icon on the right of the box, and then the popup should not appear with a scroll bar.
+<datebox/>
+</zk>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4689.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Oct 05 16:02:24 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		click the button, you should not see any js error.
+	</label>
+	<portallayout id="pl">
+		<portalchildren/>
+	</portallayout>
+	<button onClick="pl.detach()" label="click to detach portallayout"/>
+</zk>

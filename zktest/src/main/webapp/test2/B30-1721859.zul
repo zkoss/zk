@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml">
+Won't show in IE due to table structure
+<style>
+.blue { background-color: blue; }
+.green { background-color: green; }
+</style>
+
+Each 25%
+<hbox pack="stretch" width="100%" >
+ <vbox pack="stretch" sclass="blue" width="50%"> Left </vbox>
+ <vbox pack="stretch" sclass="green" width="50%"> Right </vbox>
+</hbox>
+Each 50%
+<hbox pack="stretch" width="100%" >
+ <vbox pack="stretch" sclass="blue" width="100%"> Left </vbox>
+ <vbox pack="stretch" sclass="green" width="100%"> Right </vbox>
+</hbox>
+</window>

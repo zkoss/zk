@@ -1,0 +1,14 @@
+<zk>
+	<label multiline="true">
+	1.click Remove and Append
+	2.click Button, the button 
+	</label>
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B02022ComponentRemoval')">
+		<button id="arbtn" label="Remove &amp; Append" onClick="@command('doRemoveAppend')" />
+		<div id="container">
+			<button id="btn" label="Count" onClick="@command('doNotify')" />
+			
+		</div>
+		Counting:<label id="lab" value="@load(vm.count)" />
+	</div>
+</zk>

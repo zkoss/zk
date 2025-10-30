@@ -1,0 +1,22 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on the Radio. The messagebox should NOT be shown. Otherwise it is a bug.</li>
+			<li>Click on the Button. A messagebox should popup. Otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<zscript><![CDATA[
+		import org.zkoss.zk.au.*;
+		AuService as = new AuService() {
+			public boolean service(AuRequest request, boolean everError) {
+				if("onCheck".equals(request.getCommand()))
+					Messagebox.show("AuService: onCheck");
+				return false;
+			}
+		};
+	]]></zscript>
+	<radiogroup>
+		<radio label="A" checked="false" auService="${as}" />
+	</radiogroup>
+	<button label="Save" onClick="" />
+</zk>

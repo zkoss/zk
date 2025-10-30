@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5167.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/4, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click the button "click me!".
+		2. The mask of the "show busying" message should be the top of other dom elements.
+	</label>
+	<button onClick='Clients.showBusy("Message")' label="click me!"/>
+	<borderlayout width="800px" >
+
+		<north border="none" style="background:#438eb9"
+		       height="80px" hflex="1">
+			<hlayout>
+				<textbox></textbox>
+				<button></button>
+			</hlayout>
+		</north>
+		<center>
+			<hlayout>
+				<textbox></textbox>
+				<button></button>
+			</hlayout>
+		</center>
+		<east width="320px">
+			<hlayout>
+				<textbox></textbox>
+				<button></button>
+			</hlayout>
+		</east>
+	</borderlayout>
+</zk>

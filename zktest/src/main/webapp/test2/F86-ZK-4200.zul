@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4200.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan 29 10:32:37 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        It is slow in EL ImportHandler because of repeatable ClassNotFoundExceptions.
+    </label>
+
+    <custom-attributes myvar="123"/>
+    <div forEach="1,2,3">
+        ${myvar}
+    </div>
+</zk>

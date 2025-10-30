@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3233-1.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon, Jun 27, 2016 11:46:23, Created by Jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm')@init('org.zkoss.zktest.test2.B80_ZK_3233VM')" validationMessages="@id('vmsgs')">
+		<vlayout >
+			<hlayout>
+				FieldWithFrontValidation
+				<datebox />
+			</hlayout>
+			<hlayout>
+				FieldWithBackValidation
+				<textbox value="@bind(vm.name) @validator(vm.validator)" errorMessage="@load(vmsgs['name'])"  />
+			</hlayout>
+			<button label="Validate" onClick="@command('validate')"/>
+		</vlayout>
+	</window>
+</zk>

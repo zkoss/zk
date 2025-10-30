@@ -1,0 +1,15 @@
+<!--
+B85-ZK-3659.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 5 12:24:13 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <include src="./B50-ZK-255.zul" />
+</zk>

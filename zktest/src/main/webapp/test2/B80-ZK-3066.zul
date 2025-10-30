@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3066.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jan 8 12:36:03 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+        public class VM {
+            public org.zkoss.zhtml.Div getDp() {
+                org.zkoss.zhtml.Div d = new org.zkoss.zhtml.Div();
+                d.setDynamicProperty("abc", "ccc");
+                return d;
+            }
+        }
+    </zscript>
+	<window title="You see 'ccc' inside." width="640px" border="normal" viewModel="@id('vm') @init('VM')">
+        <label id="dp" value="@load(vm.dp.abc)"/>
+	</window>
+</zk>

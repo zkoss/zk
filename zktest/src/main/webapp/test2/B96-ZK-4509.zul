@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?component name="testcombobox" class="org.zkoss.zktest.test2.B96_ZK_4509Combobox"?>
+<!--
+B96-ZK-4509.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu Oct 28 11:00:42 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<label multiline="true">
+		1. Using the mouse drop down the category list and select "Category 2". The list below should now have 20 rows.
+		2. Using the mouse drop down the category list and select "Category 3". The list below should be empty.
+		3. Repeat step 2. you should not see any error message.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4509VM')" apply="org.zkoss.bind.BindComposer">
+		<vlayout>
+			<hlayout>
+				<label value="Category 1 list size"/>
+				<intbox value="@bind(vm.category1ListSize)"/>
+				<label value="Category 2 list size"/>
+				<intbox value="@bind(vm.category2ListSize)"/>
+				<button label="Regenerate lists" onClick="@command('regenerateCategoryLists')"/>
+			</hlayout>
+			<hlayout>
+				<label value="Category" />
+				<testcombobox value="@bind(vm.category)"
+							  onChange="@command('categoryChanged')"
+				/>
+			</hlayout>
+		</vlayout>
+		<listbox model="@bind(vm.categoryList)">
+			<listhead>
+				<listheader label="Category details" hflex="true"/>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@load(each)"/>
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</zk>

@@ -1,0 +1,49 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00995ValidationMessages')" validationMessages = "@id('vmsgs')">
+	<vbox>
+		<hbox>Value1:<label id="l1" value="@bind(vm.value1)"></label></hbox>
+		<hlayout>Value1:<textbox id="t1" value="@bind(vm.value1) @validator(vm.validator1)"/></hlayout>
+	</vbox>	
+	<vbox>
+		<hlayout>vmsgs[t1]:<label id="msg11" value="@bind(vmsgs[t1])"/></hlayout>
+		<hlayout>vmsgs[t1]['value']:<label id="msg12" value="@bind(vmsgs[t1]['value'])"/></hlayout>
+		<hlayout>vmsgs['key1']:<label id="msg13" value="@bind(vmsgs['key1'])"/></hlayout>
+		============================================================
+		<hlayout>Wrong1:<label id="msg21" value="@bind(vmsgs[t1]['x-value'])"/></hlayout> 
+		<hlayout>Wrong2:<label id="msg22" value="@bind(vmsgs['x-key1'])"/></hlayout>
+		============================================================
+		<hlayout>Empty1:<label id="msg31" value="@bind(empty vmsgs.texts)"/></hlayout>
+		<hlayout>Empty2:<label id="msg32" value="@bind(empty vmsgs)"/></hlayout>
+		<hlayout>Empty3:<label id="msg33" value="@bind(not empty vmsgs.texts)"/></hlayout>
+		<hlayout>Empty4:<label id="msg34" value="@bind(not empty vmsgs)"/></hlayout>
+		============================================================
+		<hlayout>vmsgs.texts[1]:<label id="msg41" value="@bind(vmsgs.texts[1])"/></hlayout>
+		<hlayout>vmsgs.texts[t1][1]:<label id="msg42" value="@bind(vmsgs.texts[t1][1])"/></hlayout>
+		<hlayout>vmsgs.texts[t1]['value'][1]:<label id="msg43" value="@bind(vmsgs.texts[t1]['value'][1])"/></hlayout>
+		<hlayout>vmsgs.texts['key1'][1]:<label id="msg44" value="@bind(vmsgs.texts['key1'][1])"/></hlayout>
+		============================================================
+		vmsgs.texts[t1]
+		<grid id="msggrid1" model="@bind(vmsgs.texts[t1])" visible="@bind(not empty vmsgs.texts[t1])">
+			<template name="model" var="msg">
+				<row>
+					<label value="@bind(msg)" />
+				</row>
+			</template>
+		</grid>
+		vmsgs.texts[t1]['value']
+		<grid id="msggrid2" model="@bind(vmsgs.texts[t1]['value'])" visible="@bind(not empty vmsgs.texts[t1]['value'])">
+			<template name="model" var="msg">
+				<row>
+					<label value="@bind(msg)" />
+				</row>
+			</template>
+		</grid>
+		vmsgs.texts['key1']
+		<grid id="msggrid3" model="@bind(vmsgs.texts['key1'])" visible="@bind(not empty vmsgs.texts['key1'])">
+			<template name="model" var="msg">
+				<row>
+					<label value="@bind(msg)" />
+				</row>
+			</template>
+		</grid>
+	</vbox>	
+</window>

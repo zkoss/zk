@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5766.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/8/15, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<zscript>
+			<![CDATA[
+      String anotherTooltip = "TEST <a test>...</a> should display in tooltip";
+      String anotherTooltip2 = "TEST <a href>...</a> should display in tooltip";
+	    ]]>
+		</zscript>
+
+		<a tooltiptext="${anotherTooltip}" label="Click here for XSS"/>
+		<button sclass="${anotherTooltip2}" label="Click here for XSS"/>
+
+		<div tooltiptext="${anotherTooltip}">looks ok but</div>
+		<div tooltiptext="${anotherTooltip2}">this causes a problem</div>
+		<window title="click here for xss" sclass="${anotherTooltip2}"></window>
+	</div>
+</zk>

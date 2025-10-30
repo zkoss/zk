@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4381.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 11 12:56:15 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Enable SerializableUiFactory in zk.xml
+        &lt;system-config>
+        &lt;ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory&lt;/ui-factory-class>
+        &lt;/system-config>
+        2. Resize the browser width &lt;=1024px
+        3. It should print 768px and/or 1024px in the zk log, else the case is failed.
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B90_ZK_4381VM')" />
+</zk>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/theme" prefix="t" ?>
+<!--
+style.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" height="100%">
+	<html><![CDATA[
+	<h4>Custom Style</h4>
+	<p>CSS(Cascading Style Sheet), class attribute, and style attribute are supported.<br />
+	Developers use style components as follows to specify which style sheet
+	to be loaded.  Like HTML, it affects all
+	components in the same desktop.<br />
+	For more information, see our <a href="http://books.zkoss.org/wiki/ZK_Style_Guide">ZK Style Guide</a>
+	</p>
+	]]></html>
+	<separator />
+	<tabbox width="100%" tabscroll="false" vflex="1">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+			
+			<tabpanel>
+				<panel vflex="1">
+					<panelchildren>
+						<textbox id="codeView" class="code" multiline="true" width="95%" vflex="1">
+<attribute name="value"><![CDATA[
+<zk>
+<style>
+.myBlack { 
+	${t:gradient('ver', '#FFFFFF 0%; #666666 100%')};
+}
+.myBlack:focus {
+	${t:gradient('ver', '#FFFFFF 0%; #666666 100%')};
+}
+.myBlack:hover { 
+	${t:gradient('ver', '#FFFFFF 0%; #A6A6A6 100%')};	
+}
+.myBlack:active {	
+	${t:gradient('ver', '#FFFFFF 0%; #000000 100%')};
+}
+
+.myBlue { 
+	${t:gradient('ver', '#FFFFFF 0%; #6666FF 100%')};
+}
+.myBlue:focus {
+	${t:gradient('ver', '#FFFFFF 0%; #6666FF 100%')};
+}
+.myBlue:hover { 
+	${t:gradient('ver', '#FFFFFF 0%; #A6A6FF 100%')};
+}
+.myBlue:active { 
+	${t:gradient('ver', '#FFFFFF 0%; #0000FF 100%')};	
+}
+
+.myRed { 
+	${t:gradient('ver', '#FFFFFF 0%; #FF6666 100%')};
+}
+.myRed:focus {
+	${t:gradient('ver', '#FFFFFF 0%; #FF6666 100%')};
+}
+.myRed:hover { 
+	${t:gradient('ver', '#FFFFFF 0%; #FFA6A6 100%')};
+}
+.myRed:active { 
+	${t:gradient('ver', '#FFFFFF 0%; #FF0000 100%')};
+}
+
+.myBlack:hover, .myBlue:hover, .myRed:hover {
+	border-color: #CFCFCF;
+}
+.myBlack:focus, .myBlue:focus, .myRed:focus {
+	border-color: #CFCFCF;
+	${t:boxShadow('inset 0 0 2px #A6A6A6')};
+}
+
+
+</style>
+<hbox>
+	<groupbox mold="3d" width="150px" if="${zk.mobile == null}">
+		<caption label="Use Style Tag" />
+		<div class="btndiv">
+			<button id="btn" label="My Button" height="38px" sclass="myBlack" width="106px" />
+		</div>
+	</groupbox>
+	
+	<groupbox mold="3d" width="150px">
+		<caption label="Use style attribute" />
+		<hbox>
+			<radiogroup
+				onCheck='msg.style = "color:white;background:" + self.selectedItem.label;
+				btn.sclass = "my" + self.SelectedItem.label;'>
+				<vbox>
+					<radio label="Black" checked="true" />
+					<radio label="Blue" />
+					<radio label="Red" />
+				</vbox>
+			</radiogroup>
+			<label id="msg" value="Hello, ZK"
+				style="color:white;background:black" />
+		</hbox>
+	</groupbox>
+</hbox>
+</zk>
+]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="tryBtn" label="Try me!" autodisable="self"/>
+						<button id="reloadBtn" label="Reload" autodisable="self"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

@@ -1,0 +1,10 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Inplace editor doesn't remove the border when focus out</li>
+		</ol>
+	]]></html>
+
+	<textbox id="test1" inplace="true" onFocus="tb.focus();" value="text1"/>
+	<textbox id="tb" inplace="true" value="text2"/>
+</zk>

@@ -1,0 +1,28 @@
+<zk> 
+	<window title="(150, NaN)" mode="overlapped" width="100px" height="100px"  
+	 id="winX_" left="150px"            visible="false" />
+	<window title="(NaN, 150)" mode="overlapped" width="100px" height="100px"  
+	 id="win_Y"             top="150px" visible="false" />
+	<window title="(150, 150)" mode="overlapped" width="100px" height="100px"  
+	 id="winXY" left="150px" top="150px" visible="false" />
+	<separator height="400px" />
+	<button label="show" >
+		<attribute name="onClick">
+			winX_.visible=true;
+			win_Y.visible=true;
+			winXY.visible=true;
+		</attribute>
+	</button>
+	<button label="hide">
+		<attribute name="onClick">
+			winX_.visible=false;
+			win_Y.visible=false;
+			winXY.visible=false;
+		</attribute>		
+	</button>
+	<separator />
+	<label multiline="true">
+	1. Initially, there is no window on the screen.
+	2. Click "show", there will appear 3 windows on position (150, 0), (0, 150), (150, 150) 
+	</label>
+</zk>

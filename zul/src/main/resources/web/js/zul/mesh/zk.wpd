@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May  4 16:50:13     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.mesh" language="xul/html" depends="zul,zul.menu">
+	<script src="index.js" sourceMap="true"/>
+	<widget name="Paging" moldOnly="true"/>	
+	<widget name="Auxhead" moldOnly="true"/>
+	<widget name="Auxheader" moldOnly="true"/>
+	<widget name="Frozen" moldOnly="true"/>
+</package>

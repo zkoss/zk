@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-547.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov  21 14:00:38 TST 2011, Created by benbai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div height="25px">Test both tree and listbox below.</div>
+	<div height="25px">Click Item 1.</div>
+	<div height="25px">You should see the two labels below the tree ( or listbox ) contains Item 1.</div>
+	<div height="25px">Hold 'ctrl' then click Item 2.</div>
+	<div height="25px">You should see the two labels below the tree ( or listbox ) contains Item 1 and Item 2.</div>
+	<div height="25px">Hold 'ctrl' then click Item 3.</div>
+	<div height="25px">You should see the two labels below the tree ( or listbox ) contains Item 1, Item 2 and Item 3.</div>
+	<div height="25px">Hold 'ctrl' then click Item 2 again.</div>
+	<div height="25px">You should see the two labels below the tree ( or listbox ) contains Item 1 and Item 3.</div>
+	<div height="25px">Ignore the order if they are different between the two labels below the tree ( or listbox ).</div>
+	<tree id="tree" width="400px" rows="8" multiple="true">
+		<attribute name="onSelect">
+			String s = "";
+			for (Object o : event.getSelectedItems()) {
+				s = s + ((Treeitem)o).getLabel() + ", ";
+			}
+			_selection.setValue( "Selected items: " +  s);
+			s = "";
+			for (Object o : self.getSelectedItems()) {
+				s = s + ((Treeitem)o).getLabel() + ", ";
+			}
+			_selection2.setValue( "Selected items: " + s );
+		</attribute>
+		<treecols sizable="true">
+			<treecol label="Name" />
+			<treecol label="Description" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+				<treecell label="Item 1" />
+				<treecell label="Item 1 description" />
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2" />
+					<treecell label="Item 2 description" />
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+						<treecell label="Item 2.1" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+								<treecell label="Item 2.1.1" />
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+								<treecell label="Item 2.1.2" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+						<treecell label="Item 2.2" />
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+								<treecell label="Item 2.2.1" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3" />
+		</treechildren>
+	</tree>
+	<label id="_selection" value="Selected items:" /><div />
+	<label id="_selection2" value="Selected items:" />
+	<listbox multiple="true">
+		<attribute name="onSelect">
+			String s = "";
+			for (Object o : event.getSelectedItems()) {
+				s = s + ((Listitem)o).getLabel() + ", ";
+			}
+			_selection3.setValue( "Selected items: " +  s);
+			s = "";
+			for (Object o : self.getSelectedItems()) {
+				s = s + ((Listitem)o).getLabel() + ", ";
+			}
+			_selection4.setValue( "Selected items: " + s );
+		</attribute>
+		<listitem label="Item 1" />
+		<listitem label="Item 2" />
+		<listitem label="Item 3" />
+		<listitem label="Item 4" />
+	</listbox>
+	<label id="_selection3" value="Selected items:" /><div />
+	<label id="_selection4" value="Selected items:" />
+</zk>

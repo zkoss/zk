@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-3206.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May  5 15:53:10 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        only in osx
+        1. press the command key and left click on btn1, should not release command key before clicking
+        2. should see "264" in zklog
+
+    </label>
+    <div apply="org.zkoss.zktest.test2.F80_ZK_3206">
+        <button id="btn1" label="btn1"/>
+    </div>
+</zk>

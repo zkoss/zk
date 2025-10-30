@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5793.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/9/26, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. upload any big file > 1 MB with an upload button or dropupload
+		2. the progress bar shall show the progress
+	</label>
+	<button label="Upload" upload="true" onUpload=""/>
+	<dropupload/>
+</zk>

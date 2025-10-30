@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3175.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr  8 09:31:24 CST 2016, Created by jumperchen
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<tree onSelect="Clients.log(event.getName())" multiple="false" width="200px" checkmark="true">
+		<treechildren>
+			<treeitem value="draggable" draggable="true" label="draggable"/>
+			<treeitem value="non-draggable" draggable="false" label="non-draggable"/>
+		</treechildren>
+	</tree>
+	<textbox onChange="Clients.log(event.getName())" onBlur="Clients.log(event.getName())" placeholder="edit me"/>
+	<button label="focus me" onBlur="Clients.log(event.getName());"/>
+    <label multiline="true">
+	1. A side-effect of ZK-3143, please open the developer tool first. (IE 11 and Edge only)
+    2. Please type some text into the textbox, and drag the first treeitem and drop it away.
+    3. select some text in the textbox, the console of the developer tool should not have any JS error.
+    </label>
+</zk>

@@ -1,0 +1,11 @@
+<div id="host">
+	<apply>
+		<template>
+			1. First
+			<div>
+				2. <apply>Hello</apply>
+			</div>
+			3. Last
+		</template>
+	</apply>
+</div>

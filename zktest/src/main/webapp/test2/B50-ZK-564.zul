@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-564.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 21 11:12:20 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<vbox id="vb" apply="org.zkoss.zktest.test2.B50_ZK_564_Composer">
+	<div>1. click the "Add" to add the tree nodes. </div>
+	<div>2. click the "Clone by Serialization" to copy another Tree.</div>
+	<div>3. You should see a copied tree is the same as the origin one and no error dialog appears.</div>
+	<div>
+		<button label="Add" id="add"/>
+	</div>
+	<tree id="tree" onTreeDataEvent='alert(event)' />
+	
+	<button label="Clone by Serialization">
+		<attribute name="onClick">{
+	import java.io.*;
+	ByteArrayOutputStream boa = new ByteArrayOutputStream();
+	new ObjectOutputStream(boa).writeObject(tree);
+	byte[] bs = boa.toByteArray();
+	Object l = new ObjectInputStream(new ByteArrayInputStream(bs)).readObject();
+	l.setId("tree" + vb.getChildren().size());
+	vb.insertBefore(l, self);
+	vb.insertBefore(new Label(bs.length+" bytes copied"), self);
+		}</attribute>
+	</button>
+	</vbox>
+</zk>

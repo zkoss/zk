@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3097199.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 28 18:25:35 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<combobox constraint="strict:Please select">
+		<comboitem label="Simple and Rich"
+			description="The simplest way to make Web applications rich" />
+		<comboitem label="Cool!" description="The coolest technology" />
+		<comboitem label="Ajax and RIA"
+			description="Rich Internet Application by Ajax" />
+	</combobox>
+</zk>

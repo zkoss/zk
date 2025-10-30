@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2957773.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 25 17:17:21 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<calendar />
+	<zscript><![CDATA[
+	Sessions.getCurrent().setAttribute("px_preferred_locale", new Locale("th","TH"));
+    void init(Datebox d) {
+java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+ d.setValue(sdf.parse("24/02/2010"));
+   }
+	]]></zscript>
+	<datebox format="dd/MM/yyyy" onCreate='init(self);'/>
+Please click the icon to see the calendar is at Wednesday in Thai language(if not, please reload again)
+<separator/>
+<button label="Click me after you test done" onClick='Sessions.getCurrent().removeAttribute("px_preferred_locale")' />
+</zk>

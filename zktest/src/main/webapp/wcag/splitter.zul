@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Splitter"?>
+<?root-attributes lang="en"?>
+<!--
+splitter.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 25 11:25:01 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		.z-splitter:focus {
+			outline: solid;
+		}
+    ]]></style>
+	<n:header>
+		<n:h1>Splitter</n:h1>
+	</n:header>
+	<n:main>
+		<hbox width="600px" height="500px">
+			<div>
+				Hello Left
+				<button label="Left"/>
+			</div>
+			<splitter collapse="before"/>
+			<div>
+				<button label="Right"/>
+				Hello Right
+			</div>
+		</hbox>
+		<vbox width="600px" height="500px">
+			<div>
+				Hello Top
+				<button label="Top"/>
+			</div>
+			<splitter collapse="before"/>
+			<div>
+				Hello Bottom
+				<button label="Bottom"/>
+			</div>
+		</vbox>
+	</n:main>
+</zk>

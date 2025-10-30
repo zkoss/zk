@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2857.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep  2 16:10:53 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	You should see "Europe/Berlin" below
+    <include src="B70-ZK-2857_1.zul?timezone=Europe/Berlin" />
+</zk>

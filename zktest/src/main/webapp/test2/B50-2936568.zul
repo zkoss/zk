@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2936568.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jan 22 10:34:32 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please focus in the timebox, and focus out the timebox, the value should be reset with blank.
+<separator/>
+2. Please focus in the timebox, and click the UP/Down arrow, and then focus out the timebox, the value should be changed(without blank).
+<separator/>
+<timebox/>
+</zk>

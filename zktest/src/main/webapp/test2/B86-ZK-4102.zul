@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B86-ZK-4102.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 25 10:47:14 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout hflex="1" vflex="1">
+        <label multiline="true">1. Should see the 1st slider with height 200px, width as default slider theme style width (in iceblue it's 32px)
+            2. Should see the 2nd slider with width 200px, height as default slider theme style height (in iceblue it's 32px)
+            3. Click the 1st button, the 1st slider should be resized to size of vflex="1" and fill the rest of the height of the browser
+            4. Click the 2nd button, the 2nd slider should be resized to fill the rest of the width of the browser
+            5. Click the 3rd button, the 1st slider should be resized to width 300px
+            6. Click the 4th button, the 2nd slider should be changed to vertical, and has the width as hflex="1", height as 200px
+            7. Click the 5th button, the 1st slider should be changed to horizontal and has the width as 300px, height as vflex="1"
+
+        </label>
+        <hlayout vflex="1" hflex="1">
+            <slider id="s1" maxpos="4" orient="vertical" slidingtext="Test"/>
+            <slider id="s2" maxpos="4" slidingtext="Test"/>
+        </hlayout>
+        <hlayout>
+            <button label="s1 vflex 1" onClick='s1.setHeight(null);s1.setVflex("1")'/>
+            <button label="s2 hflex 1" onClick='s2.setWidth(null);s2.setHflex("1")'/>
+            <button label="s1 width 300px" onClick='s1.setHflex(null);s1.setWidth("300px")'/>
+            <button label="s2 vertical" onClick='s2.setOrient("vertical")'/>
+            <button label="s1 horizontal" onClick='s1.setOrient("horizontal")'/>
+        </hlayout>
+    </vlayout>
+</zk>

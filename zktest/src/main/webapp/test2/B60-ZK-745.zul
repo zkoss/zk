@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-745.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/27, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+If you see nothing below this message, the bug has fixed.
+<div id="container">
+	<zscript><![CDATA[
+org.zkoss.zhtml.Form form = new org.zkoss.zhtml.Form();
+form.setDynamicProperty("action", "https://www.sandbox.paypal.com/cgi-bin/webscr");
+form.setDynamicProperty("method", "post");
+form.setDynamicProperty("target", "_self");
+form.setParent(container);
+
+org.zkoss.zhtml.Input input = new org.zkoss.zhtml.Input();
+input.setParent(form);
+input.setDynamicProperty("type", "hidden");
+input.setDynamicProperty("name", "custom1");
+input.setValue("<foo>1</foo><bar>2</bar>");
+
+input = new org.zkoss.zhtml.Input();
+input.setParent(form);
+input.setDynamicProperty("type", "hidden");
+input.setDynamicProperty("name", "custom2");
+input.setValue("1,2");
+]]></zscript>
+</div>
+</zk>

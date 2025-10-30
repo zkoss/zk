@@ -1,0 +1,10 @@
+<zk>
+	<div>should show correct</div>
+	<groupbox>
+		<caption>
+			<div>
+				<label value="ICD Version"></label>
+			</div>
+		</caption>
+	</groupbox>
+</zk>

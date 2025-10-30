@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4479.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Mar 10 14:54:14 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		tpye a long string("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa") into the chosenboxs,
+		the input width should grow until it approach the chosenbox width.
+	</label>
+	<chosenbox width="50%"/>
+	<separator/>
+	<chosenbox width="200px"/>
+</zk>

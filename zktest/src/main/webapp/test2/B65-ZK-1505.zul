@@ -1,0 +1,8 @@
+<zk>
+	<label multiline="true">
+	Click "Access page" button, should see Progressing bar showed.
+	</label>
+	<div>
+		<button id="btn" label="Access page" onClick="Thread.sleep(10000L);"/>
+	</div>
+</zk>

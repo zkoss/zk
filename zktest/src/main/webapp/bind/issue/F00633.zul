@@ -1,0 +1,23 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00633')">
+	
+<vbox onCreate="@command('create',label=l12)">
+	<label id="l11" value="@load(vm.value1)"/>
+	<label id="l12" />
+	<hbox id="h11">
+		<button id="btn1" label="cmd1" onClick="@command('cmd1')"/>
+		<button id="btn2" label="cmd2" onClick="@command('cmd2')"/>
+		<button id="btn3" label="cmd3" onClick="@command('cmd3')"/>
+		<button id="btn4" label="cmd4" onClick="@command('cmd4')"/>
+		<button id="btn5" label="cmd5" onClick="@command('cmd5',arg1=99,arg2=true,arg3='XYZ')"/>
+		<button id="btn6" label="cmd6" onClick="@command('cmd6')"/>
+		<button id="btn7" label="cmd7" onClick="@command('cmd7',arg3='XYZ')"/>
+		<button id="btn8" label="cmd8" onClick="@command('cmd8',arg1=22)"/>
+		<button id="btn9" label="cmd9" onClick="@command('cmd9',arg2=false,arg3='EFG')"/>
+		
+		<button id="btn10" label="cmdA1" onClick="@command('cmdA',label=l12,unknow=self)"/>
+		<button id="btn11" label="cmdA2" onClick="@command('cmdA',label=l12,unknow=desktop)"/>
+		<button id="btn12" label="cmdA3" onClick="@command('cmdA',label=l12,unknow=self.parent)"/>
+	</hbox>
+</vbox>
+<button label="Dump" onClick="binder.getTracker().dump()"/>
+</window>

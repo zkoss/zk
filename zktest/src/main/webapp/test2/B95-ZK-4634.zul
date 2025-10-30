@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4634.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Aug 19 14:22:06 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<label multiline="true">
+		Test with all themes (include iceblue compact)
+		To make the width of icons always be fixed, add z-icon-fw
+		The toolbar overflowpopup button ("..." button) should not overlapping with other button in these situations below,
+		otherwise its a bug.
+		1. after load this page.
+		2. after click "align start" "align end" "align center" buttons.
+		3. after resize the browser.
+		4. after resize the window
+	</label>
+	<window title="Toolbar window" width="500px" border="normal" sizable="true">
+		<button label="align start" onClick='tb.setAlign("start");tb2.setAlign("start");' />
+		<button label="align end" onClick='tb.setAlign("end");tb2.setAlign("end");' />
+		<button label="align center" onClick='tb.setAlign("center");tb2.setAlign("center");' />
+		<tabbox height="100%" style="min-width: 200px;">
+			<tabs>
+				<tab label="Tab 1" closable="true" />
+				<tab label="Tab 2" closable="true" />
+				<tab label="Tab 3" closable="true" />
+				<tab label="Tab 4" closable="true" />
+				<tab label="Tab 5" closable="true" />
+			</tabs>
+			<toolbar id="tb" width="25%" overflowPopup="true" align="end" >
+				<toolbarbutton iconSclass="z-icon-fw z-icon-plus-square" />
+				<toolbarbutton iconSclass="z-icon-fw z-icon-pencil" />
+				<toolbarbutton iconSclass="z-icon-fw z-icon-copy" />
+				<toolbarbutton iconSclass="z-icon-fw z-icon-trash" />
+				<separator orient="vertical" bar="true" />
+				<toolbarbutton iconSclass="z-icon-fw z-icon-refresh" />
+				<toolbarbutton iconSclass="z-icon-fw z-icon-download" />
+			</toolbar>
+		</tabbox>
+	</window>
+	<label>
+		toolbar:
+	</label>
+	<toolbar id="tb2" width="120px" overflowPopup="true" align="end" >
+		<toolbarbutton iconSclass="z-icon-fw z-icon-plus-square" />
+		<toolbarbutton iconSclass="z-icon-fw z-icon-pencil" />
+		<toolbarbutton iconSclass="z-icon-fw z-icon-copy" />
+		<toolbarbutton iconSclass="z-icon-fw z-icon-trash" />
+		<separator orient="vertical" bar="true" />
+		<toolbarbutton iconSclass="z-icon-fw z-icon-refresh" />
+		<toolbarbutton iconSclass="z-icon-fw z-icon-download" />
+	</toolbar>
+</zk>

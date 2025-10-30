@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3316543.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jul 12 12:50:31 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	You should see both 'mdminfile' and 'wtbinfile' below. Otherwise it is a bug.
+	<separator bar="true" />
+	<div>
+		${labels.mdm}
+	</div>
+	<div>
+		${labels.wtb}
+	</div>
+</zk>

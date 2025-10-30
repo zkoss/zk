@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+notifychange-self.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 05 12:26:01 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Modify start date and end date.
+        2. The duration will be updated.
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.notification.NotifyChangeSelfVM')">
+        <hlayout>
+            Start Date: <datebox id="date1" format="yyyy/MM/dd" valueInLocalDate="@bind(vm.range.start)"/>
+        </hlayout>
+        <hlayout>
+            End Date: <datebox id="date2" format="yyyy/MM/dd" valueInLocalDate="@bind(vm.range.end)"/>
+        </hlayout>
+        Duration (in days): <label id="dur" value="@load(vm.range)" />
+    </div>
+</zk>

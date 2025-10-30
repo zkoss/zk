@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-5429.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Apr 24 12:00:11 CST 2023, Created by jameschu
+
+Copyright (C) 2023 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window border="normal" title="hello" sizable="true">
+		<tabbox tabscroll="true">
+			<toolbar>
+				<div>Hello World, this is a text on toolbar</div>
+			</toolbar>
+			<tabs>
+				<tab label="Tab 1"/>
+				<tab label="Tab 2"/>
+				<tab label="Tab 3"/>
+				<tab label="Tab 4"/>
+				<tab label="Tab 5"/>
+				<tab label="Tab 6"/>
+				<tab label="Tab 7"/>
+				<tab label="Tab 8"/>
+				<tab label="Tab 9"/>
+				<tab label="Tab 10"/>
+				<tab label="Tab 11"/>
+				<tab label="Tab 12"/>
+				<tab label="Tab 13"/>
+				<tab label="Tab 14"/>
+				<tab label="Tab 15"/>
+				<tab label="Tab 16"/>
+			</tabs>
+		</tabbox>
+	</window>
+</zk>

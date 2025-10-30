@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1926759.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 27 11:06:51     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<hbox spacing="0" width="100%" height="300px">
+	<vbox spacing="0" width="100%" height="100%" heights="200px">
+	Column 1-1: both splitters shall not be visible.
+	Then click the checkbox to see if the visibility of splitter is
+	changed accordingly.
+	<splitter id="s1" collapse="after" visible="false"/>
+	<div>
+	Column 1-2:
+	<checkbox label="splitter visible" onCheck="s1.visible = !s1.visible"
+		checked="${s1.visible}"/>
+	</div>
+	</vbox>
+	<splitter id="s2" collapse="before" visible="false"/>
+	<div>
+	Column 2:
+	<checkbox label="splitter visible" onCheck="s2.visible = !s2.visible"
+		checked="${s2.visible}"/>
+	</div>
+</hbox>

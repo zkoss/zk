@@ -1,0 +1,17 @@
+<zk>
+	<zscript><![CDATA[
+	ListModelList m1 = new ListModelList();
+	m1.add("1");
+	m1.add("");
+	m1.add("2");
+	ListModelList m2 = new ListModelList();
+	m2.add("");
+	m2.add("1");
+]]></zscript>
+	<div>1. Focus on first Combobox.</div>
+	<div>2. Press "down" key, "2" item should be selectable.</div>
+	<div>3. Focus on second Combobox.</div>
+	<div>4. Press "down" key, "1" item should be selectable.</div>
+	<combobox autodrop="true" model="${m1}" />
+	<combobox autodrop="true" model="${m2}" />
+</zk>

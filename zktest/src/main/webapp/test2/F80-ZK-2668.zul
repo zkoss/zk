@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F80-ZK-2668.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Mar 23, 2015  12:00:20 PM, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<?script src="../js/jquery.timepicker.min.js"?>
+<?link rel="stylesheet" type="text/css" href="../css/jquery.timepicker.css"?>
+<zk>
+	<label multiline="true">
+		1.click timepicker and select time
+		2.you will see timebox and datebox change and the year/month/date won't change
+	</label>
+	<window id="w" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F80_ZK_2668VM')">
+		Timebox: <timebox id="tb" cols="14" format="a hh:mm:ss" value="@bind(vm.time)"/>
+		<separator/>
+		Datebox: <datebox id="db" cols="25" format="yyyy/MM/dd a hh:mm:ss" value="@bind(vm.time)"/>
+		<separator/>
+		timepicker : <textbox id="tpicker" value="@bind(vm.time) @converter('formattedTime', format='hh:mm a')"/>
+		<script><![CDATA[
+			zk.afterMount(function() {
+            	jq('$tpicker').timepicker({ 'timeFormat': 'h:i A' });
+			});
+		]]></script>
+	</window>
+</zk>

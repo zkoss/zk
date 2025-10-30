@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2854.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  1 14:59:03 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	You should see "value" below.
+    <include src="B70-ZK-2854_1.zul?param=value" mode="auto" />
+</zk>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4232.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Apr 29 11:33:46 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test this case with all classic themes(breeze, sapphire, silvertail)
+		2. you should see the border of tabbox tabs display correctly and completely
+	</label>
+	<button label="change to default">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "default");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to breeze">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "breeze");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to sapphire">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "sapphire");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	<button label="change to silvertail">
+		<attribute name="onClick">
+			org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "silvertail");
+			Executions.sendRedirect(null);
+		</attribute>
+	</button>
+	
+	<tabbox height="200px">
+		<tabs>
+			<tab label="aaa longer"/>
+			<tab label="bbb longer longer"/>
+			<tab label="ccc longer longer longer"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>a</tabpanel>
+			<tabpanel>b</tabpanel>
+			<tabpanel>c</tabpanel>
+		</tabpanels>
+	</tabbox>
+	
+	<tabbox height="200px" orient="bottom">
+		<tabs>
+			<tab label="aaa longer"/>
+			<tab label="bbb longer longer"/>
+			<tab label="ccc longer longer longer"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>a</tabpanel>
+			<tabpanel>b</tabpanel>
+			<tabpanel>c</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

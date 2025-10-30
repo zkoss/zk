@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2919.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 10 10:03:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" title="hello" sclass="project-dialog"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2919VM')">
+        <label multiline="true">
+            1.click "save" button, and you should see an error "Not valid".
+            2.click combobutton and select the first option.
+            3.click "save" button, and you should not see any error.
+            4.click "show current value" button, and you should see "value 1"
+        </label>
+        <combobox id="combobox" selectedItem="@bind(vm.item)" children="@load(vm.values)">
+            <template name="children">
+                <comboitem value="@load(each)" label="@load(each)" onChange="@command('fake')" />
+            </template>
+        </combobox>
+
+        <separator />
+
+        <button onClick="@command('save')" label="save" />
+        <button onClick="@command('showValue')" label="show current value" />
+    </window>
+</zk>

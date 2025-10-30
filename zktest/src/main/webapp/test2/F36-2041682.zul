@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2041682.zul
+
+{{IS_NOTE
+Purpose:
+
+Description:
+
+History:
+Thu Oct 16 16:00:38 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Menu" border="normal">
+	menubar separator - hor
+    <menubar id="menubar">
+        <menu label="File" image="/test2/img/m1.gif">
+            <menupopup>
+                <menuitem image="/test2/img/m1.gif" label="New" onClick="alert(self.label)"/>
+                <menuitem image="/test2/img/m2.gif" label="Open" onClick="alert(self.label)"/>
+                <menuitem image="/test2/img/m3.gif" label="Save" onClick="alert(self.label)"/>
+				<menuseparator />                
+                <menuitem label="Exit" onClick="alert(self.label)"/>
+            </menupopup>
+        </menu>
+		<menuseparator/>
+        <menu label="Help">
+            <menupopup>
+                <menuitem label="Index" onClick="alert(self.label)"/>
+                <menu label="About">
+                    <menupopup>
+                        <menuitem label="About ZK" onClick="alert(self.label)"/>
+                        <menuitem label="About Potix" onClick="alert(self.label)"/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+        <menu image="/test2/img/m2.gif">
+            <menupopup>
+                <menuitem label="Index" onClick="alert(self.label)"/>
+            </menupopup>
+        </menu>
+    </menubar>
+	menubar separator - ver
+	<menubar orient="vertical">
+        <menu label="File" image="/test2/img/m1.gif">
+            <menupopup>
+                <menuitem image="/test2/img/m1.gif" label="New" onClick="alert(self.label)"/>
+                <menuitem image="/test2/img/m2.gif" label="Open" onClick="alert(self.label)"/>
+                <menuitem image="/test2/img/m3.gif" label="Save" onClick="alert(self.label)"/>
+				<menuseparator />                
+                <menuitem label="Exit" onClick="alert(self.label)"/>
+            </menupopup>
+        </menu>
+		<menuseparator/>
+        <menu label="Help">
+            <menupopup>
+                <menuitem label="Index" onClick="alert(self.label)"/>
+                <menu label="About">
+                    <menupopup>
+                        <menuitem label="About ZK" onClick="alert(self.label)"/>
+                        <menuitem label="About Potix" onClick="alert(self.label)"/>
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+        <menu image="/test2/img/m2.gif">
+            <menupopup>
+                <menuitem label="Index" onClick="alert(self.label)"/>
+            </menupopup>
+        </menu>
+    </menubar>
+</window>
+

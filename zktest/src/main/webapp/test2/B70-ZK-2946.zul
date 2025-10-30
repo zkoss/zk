@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2946.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov  6 14:39:45 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		the treecells' align should be applied as same as the treecol elements.
+		
+	</label>
+	<tree width="400px">
+		<treecols>
+			<treecol label="left"/>
+			<treecol align="center" label="center"/>
+			<treecol align="right" label="right"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>
+						<label value="left"/>
+					</treecell>
+					<treecell>
+						<label value="center"/>
+					</treecell>
+					<treecell>
+						<label value="right"/>
+					</treecell>
+				</treerow>
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell>
+								<label value="left"/>
+							</treecell>
+							<treecell>
+								<label value="center"/>
+							</treecell>
+							<treecell>
+								<label value="right"/>
+							</treecell>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

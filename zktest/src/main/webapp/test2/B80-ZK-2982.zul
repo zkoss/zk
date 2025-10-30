@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2982.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 23 14:27:17 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    Please click the buttons "click me first" and then "click me", you should not see any exception.
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2982VM')" someVariable="@ref('peter')">
+		<apply param1="@load(someVariable)">
+			<label value="@init(param1)"/>
+		</apply>
+        <button onClick="@command('serialize')" label="click me first"/>
+		<button onClick="@command('doEcho', msg=someVariable)" label="click me"/>
+	</div>
+</zk>

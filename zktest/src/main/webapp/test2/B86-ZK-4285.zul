@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4285.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 14 09:43:20 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        All Listboxes shouldn't have a vertical scrollbar.
+    </label>
+    <listbox vflex="min" width="600px">
+        <auxhead>
+            <auxheader colspan="2" label="vflex='min'" />
+        </auxhead>
+        <listhead>
+            <listheader label="name" sort="auto" width="350px" />
+            <listheader label="gender" sort="auto" width="350px" />
+        </listhead>
+        <listitem>
+            <listcell label="Mary" />
+            <listcell label="FEMALE" />
+        </listitem>
+        <listitem>
+            <listcell label="John" />
+            <listcell label="MALE" />
+        </listitem>
+        <listitem>
+            <listcell label="Jane" />
+            <listcell label="FEMALE" />
+        </listitem>
+        <listitem>
+            <listcell label="Henry" />
+            <listcell label="MALE" />
+        </listitem>
+        <listfoot>
+            <listfooter label="name" />
+            <listfooter label="gender" />
+        </listfoot>
+    </listbox>
+    <separator />
+    <listbox vflex="min" width="600px">
+        <auxhead>
+            <auxheader colspan="2" label="vflex='min' with frozen" />
+        </auxhead>
+        <listhead>
+            <listheader label="name" sort="auto" width="350px" />
+            <listheader label="gender" sort="auto" width="350px" />
+        </listhead>
+        <listitem>
+            <listcell label="Mary" />
+            <listcell label="FEMALE" />
+        </listitem>
+        <listitem>
+            <listcell label="John" />
+            <listcell label="MALE" />
+        </listitem>
+        <listitem>
+            <listcell label="Jane" />
+            <listcell label="FEMALE" />
+        </listitem>
+        <listitem>
+            <listcell label="Henry" />
+            <listcell label="MALE" />
+        </listitem>
+        <listfoot>
+            <listfooter label="name" />
+            <listfooter label="gender" />
+        </listfoot>
+        <frozen columns="1"/>
+    </listbox>
+    <separator />
+    <listbox width="600px">
+        <auxhead>
+            <auxheader colspan="2" label="Control group" />
+        </auxhead>
+        <listhead>
+            <listheader label="name" sort="auto" width="350px" />
+            <listheader label="gender" sort="auto" width="350px" />
+        </listhead>
+        <listitem>
+            <listcell label="Mary" />
+            <listcell label="FEMALE" />
+        </listitem>
+        <listitem>
+            <listcell label="John" />
+            <listcell label="MALE" />
+        </listitem>
+        <listitem>
+            <listcell label="Jane" />
+            <listcell label="FEMALE" />
+        </listitem>
+        <listitem>
+            <listcell label="Henry" />
+            <listcell label="MALE" />
+        </listitem>
+        <listfoot>
+            <listfooter label="name" />
+            <listfooter label="gender" />
+        </listfoot>
+    </listbox>
+</zk>

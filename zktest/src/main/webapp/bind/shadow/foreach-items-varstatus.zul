@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+foreach-items-varstatus.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 06 16:07:02 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Check the grid data:
+        * Current is an object.
+        * Index is 0, 1, 2, 3, 4, 5.
+        * Count is index + 1.
+        * First: only the first row is true, others false.
+        * Last: only the last row is true, others false.
+        * All begin / end / step should be 0 / 5 / 1.
+    </label>
+    <grid viewModel="@('org.zkoss.zktest.bind.shadow.NavbarVM')">
+        <columns>
+            <column label="current" hflex="min"/>
+            <column label="index"/>
+            <column label="count"/>
+            <column label="first"/>
+            <column label="last"/>
+            <column label="begin"/>
+            <column label="end"/>
+            <column label="step"/>
+        </columns>
+        <rows>
+            <forEach items="@init(vm.menuItems)" varStatus="status">
+                <row>
+                    <label value="${status.current}"/>
+                    <label value="${status.index}"/>
+                    <label value="${status.count}"/>
+                    <label value="${status.first}"/>
+                    <label value="${status.last}"/>
+                    <label value="${status.begin}"/>
+                    <label value="${status.end}"/>
+                    <label value="${status.step}"/>
+                </row>
+            </forEach>
+        </rows>
+    </grid>
+</zk>

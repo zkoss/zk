@@ -1,0 +1,5 @@
+<zk>
+	<div class="green">
+		<label value="@load(person.name)" />
+	</div>
+</zk>

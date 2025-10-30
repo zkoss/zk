@@ -1,0 +1,10 @@
+<zk>
+	<vlayout>
+		<div>Shipping: <label value="@load(orderForm.shippingAddress)"/></div>
+		Payment:
+		<div>
+			<textbox value="@bind(orderForm.paymentDetails)"/>
+			<label sclass="invalid" value="@load(vmsgs['p_paymentDetails'])"/>
+		</div>
+	</vlayout>
+</zk>

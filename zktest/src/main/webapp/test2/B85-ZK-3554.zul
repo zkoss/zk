@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3554.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 16 11:52:15 CST 2017, Created by bobpeng
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		int id = 1;
+	]]></zscript>
+	<div>
+		<button id="btn_context" label="Context (right click)" context="${id}"/>
+		<button id="btn_popupId" label="Popup (left click)" popup="${id}"/>
+		<button id="btn_tooltipId" label="Tooltip (hover)" tooltip="${id}"/>
+		<menupopup id="${id}">
+			<menu label="menu"/>
+		</menupopup>
+	</div>
+	<label multiline="true">
+		Right click button labeled 'Context'
+		Left click button labeled 'Popup'
+		Hover over button labeled 'Tooltip'
+
+		Expect: a menupopup shows up
+	</label>
+</zk>

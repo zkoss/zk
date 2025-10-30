@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4592.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Oct 13 10:56:33 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Please click "detach coachmark" button, the mask should not remain after detach.
+		2. After step 1, click the "click test" button, you should see "onClick" in ZK log.
+	</label>
+	<button id="btn" label="detach coachmark"/>
+	<coachmark id="c3" target="btn" position="end_center" onTargetClick="self.detach()">
+		Please click "detach coachmark" button, the mask should not remain after detach.
+		<button label="invalidate coachmark" onClick="c3.invalidate();"/>
+	</coachmark>
+	<separator/>
+	<button id="btn2" label="click test" onClick='Clients.log("onClick")'/>
+</zk>

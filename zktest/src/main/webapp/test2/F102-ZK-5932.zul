@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F102-ZK-5932.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Apr 28 11:20:44 CST 2025, Created by jamson
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. press TAB to focus on Listbox, and press ARROW_DOWN, and press ARROW_UP to focus on listheader's checkbox
+        2. you should see listheader's checkbox has the border highlight
+    </label>
+    <listbox multiple="true" checkmark="true">
+        <listhead>
+            <listheader sort="auto">1</listheader>
+            <listheader sort="auto">2</listheader>
+        </listhead>
+        <listitem>
+            <listcell>1</listcell>
+            <listcell>1</listcell>
+        </listitem>
+        <listitem>
+            <listcell>2</listcell>
+            <listcell>2</listcell>
+        </listitem>
+    </listbox>
+</zk>

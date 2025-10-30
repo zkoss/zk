@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3089492.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 18 11:20:02 TST 2010, Created by jimmy
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html>
+		<![CDATA[
+			<ol>
+			<li>The bug has been fixed if you don't see any error</li>
+			</ol>
+		]]>
+	</html>
+	<tabbox>
+		<attribute name="onCreate"><![CDATA[
+			Tabs tabs = new Tabs();
+			tabs.setWidth("100px");
+			tabs.setParent(self);
+		]]></attribute>
+	</tabbox>
+</zk>
+

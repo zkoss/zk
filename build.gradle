@@ -1,0 +1,423 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+	id 'java'
+	id 'maven-publish'
+	id 'checkstyle'
+	id "com.github.node-gradle.node" version "7.0.1"
+	id 'com.github.gmazzo.buildconfig' version '3.0.3'
+	id "org.sonarqube" version "4.4.1.3373"
+	id "org.owasp.dependencycheck" version "11.1.0"
+}
+
+allprojects {
+	apply plugin: 'com.github.node-gradle.node'
+}
+
+dependencyCheck {
+	nvd {
+		apiKey=System.getenv("NVD_API_KEY") ?: ""
+		delay=30000
+	}
+	formats = ['ALL']
+    analyzers {
+        nodeAudit {
+            skipDevDependencies = true
+        }
+        nodePackage {
+			skipDevDependencies = true
+		}
+    }
+}
+
+def zkcmlDir = "$rootDir/../zkcml"
+def resources = 'src/main/resources'
+def codegen = 'codegen/resources'
+ext {
+	zkprojects = [
+			'zk'           : "$rootDir/zk",
+			'zkplus'       : "$rootDir/zkplus",
+			'zweb-dsp'     : "$rootDir/zweb-dsp",
+			'zhtml'        : "$rootDir/zhtml",
+			'zweb'         : "$rootDir/zweb",
+			'zel'          : "$rootDir/zel",
+			'zkbind'       : "$rootDir/zkbind",
+			'zcommon'      : "$rootDir/zcommon",
+			'zkwebfragment': "$rootDir/zkwebfragment",
+			'zul'          : "$rootDir/zul",
+			'za11y'        : "$zkcmlDir/za11y",
+			'zkex'         : "$zkcmlDir/zkex",
+			'zkmax'        : "$zkcmlDir/zkmax",
+			'zml'          : "$zkcmlDir/zml",
+			'zuti'         : "$zkcmlDir/zuti",
+			'stateless'       : "$zkcmlDir/stateless",
+			'stateless-immutable': "$zkcmlDir/stateless-immutable",
+			'client-bind' : "$zkcmlDir/client-bind"
+	]
+	zkcmlprojects = [
+			'za11y': "$zkcmlDir/za11y",
+			'zkex' : "$zkcmlDir/zkex",
+			'zkmax': "$zkcmlDir/zkmax",
+			'zml'  : "$zkcmlDir/zml",
+			'zuti' : "$zkcmlDir/zuti",
+			'stateless' : "$zkcmlDir/stateless",
+			'stateless-immutable': "$zkcmlDir/stateless-immutable",
+			'client-bind' : "$zkcmlDir/client-bind"
+	]
+}
+
+apply {
+	from 'release.gradle'
+	from 'javadoc.gradle'
+}
+
+// add repositories here for checkstyle plugin
+repositories {
+	mavenCentral()
+}
+
+task buildESLintPlugin(type: NpmTask) {
+	dependsOn npm_install
+	args = ['run', 'build', '-w', "eslint-plugin-zk"]
+}
+
+if (project.ext['gradleFrontendSkip'] == 'false') {
+	clean {
+		dependsOn buildESLintPlugin
+	}
+	classes.dependsOn buildESLintPlugin
+}
+
+subprojects {
+	// Repositories for all subprojects (from 9.6.0 zk-parent)
+	repositories {
+		mavenCentral()
+
+		maven {
+			name = 'ZK Repository'
+			url = uri('https://mavensync.zkoss.org/maven2')
+		}
+	}
+
+	sonarqube {
+		properties {
+			if (new File("$projectDir/$resources/web").exists()) {
+				property 'sonar.sources', "$projectDir/src/main/java, $projectDir/$resources/web"
+				property 'sonar.sources.exclusions', '**/package.html'
+			} else if (new File("$projectDir/src/main/java").exists()) {
+				property 'sonar.sources', "$projectDir/src/main/java"
+				property 'sonar.sources.exclusions', '**/package.html'
+			}
+		}
+	}
+
+	// Prepare the result of TypeScript before gradle assemble
+	task compileTypeScript() {
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
+		if (new File("$projectDir/$resources/web/js").exists()) {
+			inputs.dir("$projectDir/$resources/web/js")
+			outputs.dir("$projectDir/$codegen/web/js")
+
+			doLast {
+				exec {
+					if (project.hasProperty("devMode")) {
+						commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js", "--devMode=true"
+					} else {
+						commandLine "$rootDir/node_modules/.bin/gulp", 'build:single', "--src=$projectDir/$resources/web/js", "--dest=$projectDir/$codegen/web/js"
+					}
+				}
+			}
+		}
+	}
+
+	task compileCSS() {
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
+
+		if (new File("$projectDir/$resources/web/$project.name/css").exists()) {
+			inputs.dir("$projectDir/$resources/web/$project.name/css")
+			outputs.dir("$projectDir/$codegen/web/$project.name/css")
+
+			doLast {
+				exec {
+					commandLine "$rootDir/node_modules/.bin/gulp", 'build:minify-css', "--src=$projectDir/$resources/web/$project.name/css", "--dest=$projectDir/$codegen/web/$project.name/css"
+				}
+			}
+		}
+	}
+
+	java.sourceCompatibility = JavaVersion.VERSION_11
+	tasks.withType(JavaCompile) {
+		options.encoding = 'UTF-8'
+		options.warnings = false
+	}
+
+	checkstyle {
+		toolVersion '10.18.1'
+	}
+
+	// eslint
+	task jscheck(type: NpmTask) {
+		dependsOn rootProject.tasks.named('npm_install')
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
+		workingDir = rootDir
+		def eslintDir = project.file(".eslintrc.js").exists() ? projectDir : rootDir;
+		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--config=$eslintDir/.eslintrc.js", "--ignore-path=$rootDir/.eslintignore"]
+	}
+
+	// NOTE: Do not depend on this task for normal build.
+	// This task is to make applying eslint auto-fixes easier, and is meant to be
+	// called manually: `./gradlew jsfix`.
+	task jsfix(type: NpmTask) {
+		workingDir = rootDir
+		def eslintDir = project.file(".eslintrc.js").exists() ? projectDir : rootDir;
+		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--config=$eslintDir/.eslintrc.js", "--ignore-path=$rootDir/.eslintignore", "--fix"]
+	}
+
+	check {
+		dependsOn(jscheck)
+	}
+
+	// Compile LESS
+	task compileLess() {
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
+		if (new File("$projectDir/$resources/web/$project.name/").exists()) {
+			inputs.dir("$projectDir/$resources/web/$project.name/")
+			outputs.dir("$projectDir/$codegen/web/$project.name/")
+			doLast {
+				exec {
+					commandLine "$rootDir/node_modules/.bin/zklessc", '-s', "$projectDir/$resources/web/", '-o', "$projectDir/$codegen/web/", '-i', "$rootDir/zul/$resources/web/", '-i', "$zkcmlDir/zkmax/$resources/web/", '-c'
+				}
+			}
+		}
+	}
+
+	task codegenMessages() {
+		if (new File("$projectDir/$resources/metainfo/mesg").exists()) {
+			doFirst {
+				exec {
+					commandLine 'bash', "$rootDir/bin/genprop", '-x', "$projectDir/$resources/metainfo/mesg/", "$projectDir/src/main/java"
+				}
+			}
+		}
+	}
+	compileJava {
+		dependsOn(codegenMessages)
+	}
+
+	// Configure additional resource for generated resources
+	processResources() {
+		dependsOn(compileJava)
+		dependsOn(compileTypeScript)
+		dependsOn(compileLess)
+		dependsOn(compileCSS)
+
+		from("$projectDir/$codegen") {
+			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+		}
+
+		// replace @version@ token in xml files
+		from('src/main/resources') {
+			include "**/config.xml", "**/lang.xml", "**/lang-addon.xml"
+			filter(ReplaceTokens, tokens: [version: "$version".toString()])
+			// Gstring to String
+			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+		}
+	}
+
+	jar {
+		manifest {
+			attributes(
+					"Specification-Version": project.properties['version'],
+					"Implementation-Version": project.properties['version']
+			)
+			// Merge specify MANIFEST.MF file.
+			from "$projectDir/$resources/META-INF/MANIFEST.MF"
+		}
+	}
+
+	// build sources jar each subproject for bundle
+	task sourcesJar(type: Jar) {
+		dependsOn(generateBuildConfig)
+		archiveClassifier = 'sources'
+
+		// add generated java in to source
+		from "$buildDir/generated/source/buildConfig/main/main"
+
+		from 'src/main/java'
+		exclude "**/package.html"
+		setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+	}
+
+	// build javadoc jar each subproject for bundle
+	task javadocJar(type: Jar) {
+		dependsOn 'buildJavadoc'
+		setOnlyIf { project.name != 'zkwebfragment' && project.name != 'zweb-dsp' }
+		archiveClassifier = 'javadoc'
+		from "$javadoc.destinationDir"
+	}
+
+	// TODO: add the manifest file into sources.jar for ZK-4132 (build special osgi sources.jar)
+	task buildOSGi() {
+		dependsOn 'jar'
+		dependsOn 'sourcesJar'
+		doFirst {
+			// generate the bnd config files for osgi
+			def bndContent = "Bundle-Version:${version}\nImport-Package: *;resolution:=optional\nExport-Package: *;version=${version}\nBundle-Name:${project.name}\nBundle-SymbolicName:${project.name}"
+			if ("${project.name}" == 'zweb') {
+				bndContent = "Bundle-Version:${version}\nImport-Package: javax.servlet.annotation;resolution:=optional,*;resolution:=optional\nExport-Package: *;version=${version}\nBundle-Name:${project.name}\nBundle-SymbolicName:${project.name}"
+			} else if ("${project.name}" == 'zkbind') {
+				bndContent = "Bundle-Version:${version}\nImport-Package:javassist.util.proxy;resolution:=optional,*;resolution:=optional\nExport-Package: *;version=${version}\nBundle-Name:${project.name}\nBundle-SymbolicName:${project.name}"
+			} else if ("${project.name}" == 'zkex') {
+				bndContent = "Bundle-Version:${version}\nImport-Package:org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional\nExport-Package: !org.zkoss.zk.ui.sys,*;version=${version}\nBundle-Name:${project.name}\nBundle-SymbolicName:${project.name}"
+			} else if ("${project.name}" == 'zweb-dsp') {
+				def fragmentHostVersion = "${version}"
+				// Fragment-Host not support version with suffix e.g. x.x.x-FL
+				fragmentHostVersion = fragmentHostVersion.split(/[\.-][a-zA-Z]/)[0]
+				bndContent += "\nFragment-Host:zweb;bundle-version=$fragmentHostVersion"
+			}
+			new File("$buildDir/libs", "${project.name}.bnd").text = bndContent
+		}
+		doLast {
+			// build osgi jar
+			javaexec {
+				main = "-jar";
+				args = [
+						"$rootDir/dist/lib/ext/bnd.jar",
+						"wrap",
+						"--properties",
+						"$buildDir/libs/${project.name}.bnd",
+						"--output",
+						"$buildDir/libs/${project.name}.osgi.jar",
+						"$buildDir/libs/${project.name}-${version}.jar"
+				]
+			}
+			copy {
+				from "$buildDir/libs/${project.name}.osgi.jar"
+				into "$rootDir/build/dist/lib/osgi"
+			}
+			// build osgi source jar
+			javaexec {
+				main = "-jar";
+				args = [
+						"$rootDir/dist/lib/ext/bnd.jar",
+						"wrap",
+						"--properties",
+						"$buildDir/libs/${project.name}.bnd",
+						"--output",
+						"$buildDir/libs/${project.name}-sources.osgi.jar",
+						"$buildDir/libs/${project.name}-${version}-sources.jar"
+				]
+			}
+			copy {
+				from "$buildDir/libs/${project.name}-sources.osgi.jar"
+				into "$rootDir/build/dist/lib/osgi-src"
+				rename "${project.name}-sources.osgi.jar", "${project.name}-sources.jar"
+			}
+		}
+	}
+
+	// Delete codegen folder before clean
+	clean.doFirst {
+		delete "$projectDir/codegen/"
+	}
+
+	compileJava.mustRunAfter(rootProject.tasks.named('npm_install'))
+	compileTypeScript.mustRunAfter(rootProject.tasks.named('npm_install'))
+	compileLess.mustRunAfter(rootProject.tasks.named('npm_install'))
+	compileCSS.mustRunAfter(rootProject.tasks.named('npm_install'))
+}
+
+task tscheck(type: NpmTask, dependsOn: 'npm_install') {
+	setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
+	args =['run', 'type-check']
+}
+if (!project.hasProperty("cleanZKOnly") && gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+	def zkcmlBuildTask = gradle.includedBuild('zkcml').task(':build')
+	tscheck.dependsOn(gradle.includedBuild('zkcml').task(':tscheck'))
+	tscheck.dependsOn(zkcmlBuildTask)
+	tscheck.mustRunAfter(zkcmlBuildTask)
+} else {
+	check.dependsOn(tscheck)
+}
+
+// Version Check
+def fileCheck(file, regex) {
+	println "version check: ${file.path}"
+	int matchFound = 0
+	file.eachLine { line ->
+		if (line ==~ regex)
+			matchFound++
+	}
+	if (matchFound == 0)
+		throw new ResourceException("version check faild with: ${file.path}")
+}
+
+// check version: gradle versionCheck -Pcheck.version={VERSION}
+task versionCheck() {
+	if (project.hasProperty("check.version")) {
+		fileTree("../").matching {
+			include "**/gradle.properties"
+		}.each {
+			fileCheck(it, /version=${project.getProperty("check.version")}/)
+		}
+	}
+}
+
+task cleanJsdoc(type: Delete) {
+	dependsOn(clean)
+	delete "$projectDir/jsdoc/codegen/"
+}
+
+clean {
+	// also clean cml
+	if (!project.hasProperty("cleanZKOnly") && gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+		dependsOn(gradle.includedBuild('zkcml').task(':clean'))
+		zkcmlprojects.each { prjName, dir ->
+			dependsOn(gradle.includedBuild('zkcml').task(":$prjName:clean"))
+		}
+		// also clean sandbox
+		dependsOn(gradle.includedBuild('zksandbox').task(':clean'))
+	}
+}
+
+build {
+	// also build cml
+	if (!project.hasProperty("buildZKOnly") && gradle.includedBuilds.find { it.name == 'zkcml' } != null) {
+		def zkcmlBuild = gradle.includedBuild('zkcml').task(':build')
+		dependsOn(zkcmlBuild)
+		zkcmlprojects.each { prjName, dir ->
+			dependsOn(gradle.includedBuild('zkcml').task(":$prjName:build"))
+		}
+	}
+}
+// change all the version in gradle.properties under zk
+// e.g. ./gradlew upVer -PchangeVersionTo=10.0.1-SNAPSHOT
+task upVer() {
+	doLast {
+		if (project.hasProperty("changeVersionTo")) {
+			fileTree("$rootDir/").matching {
+				include "**/gradle.properties"
+			}.each { file ->
+				println "upVer: ${file.path} from ${project.version} to ${project.changeVersionTo}"
+				ant.replaceregexp(
+						file: file,
+						match: "version=$project.version",
+						replace: "version=$project.changeVersionTo",
+				)
+			}
+			// Update version in pom.xml files in zk-bom and zk-parent
+			['zk-bom', 'zk-parent'].each { dir ->
+				fileTree("$rootDir/$dir").matching {
+					include "pom.xml"
+				}.each { file ->
+					println "upVer: ${file.path} from ${project.version} to ${project.changeVersionTo}"
+					ant.replaceregexp(
+							file: file,
+							match: "<version>${project.version}</version>",
+							replace: "<version>${project.changeVersionTo}</version>",
+					)
+				}
+			}
+		}
+	}
+}

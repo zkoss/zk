@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3817.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 11 11:52:15 CST 2018, Created by bobpeng
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button label="download" onClick='Filedownload.save("text file content", "text/plain", "test.txt");'/>
+	<label multiline="true">
+		1. open this page on Android device
+		2. hit 'download' button, should download the file successfully
+	</label>
+</zk>

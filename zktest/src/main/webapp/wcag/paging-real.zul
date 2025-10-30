@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Paging"?>
+<?root-attributes lang="en"?>
+<!--
+paging-real.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 23 16:55:59 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <style>
+        :focus {
+        outline: 1px dotted red !important;
+        }
+    </style>
+    <zscript>
+        ListModel model = new ListModelList(Locale.getAvailableLocales());
+    </zscript>
+
+    <n:header>
+        <n:h1>Paging</n:h1>
+    </n:header>
+    <n:main>
+        <grid model="${model}" mold="paging" pageSize="10" pagingPosition="both" ca:aria-label="Supported languages"/>
+    </n:main>
+</zk>

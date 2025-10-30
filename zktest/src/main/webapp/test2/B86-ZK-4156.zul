@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4156.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Dec 21 16:34:41 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 0; i < 200; i++) {
+			list.add(i);
+		}
+		ListModelList model = new ListModelList(list);
+	]]></zscript>
+	<script><![CDATA[
+    zk.afterLoad(function () {
+        zk.override(zAu.cmd1, "addChd", function (wgt) {
+            zAu.cmd1.$addChd.apply(this, arguments);
+            zk.log("addChd");
+        });
+    });
+    ]]>
+	</script>
+	<label>scroll down to see listbox rod loaded, and you should not see "addChd" in zk log</label>
+	<listbox model="${model}" height="700px">
+		<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+		<listhead>
+			<listheader width="150px" label="col-1"/>
+			<listheader width="150px" label="col-2"/>
+			<listheader width="150px" label="col-3"/>
+			<listheader width="150px" label="col-4"/>
+			<listheader width="150px" label="col-5"/>
+		</listhead>
+		<template name="model">
+			<listitem>
+				<listcell><combobox width="80px"/></listcell>
+				<listcell><textbox width="80px" value="${each}"/></listcell>
+				<listcell><textbox width="80px"/></listcell>
+				<listcell><textbox width="80px"/></listcell>
+				<listcell><textbox width="80px"/></listcell>
+			</listitem>
+		</template>
+	</listbox>
+</zk>

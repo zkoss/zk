@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2350.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jul 09, 2014  3:09:33 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please click the download button, you should see the downloaded file with the file name "測 試" (IE and Firefox)
+	<zscript><![CDATA[
+	import org.zkoss.zul.Filedownload;
+	import java.io.InputStream;
+	import java.io.ByteArrayInputStream;
+	import org.zkoss.util.media.AMedia;
+	import java.net.URLEncoder;
+	import org.zkoss.lang.Strings;
+	
+	void download() throws Exception {
+		InputStream is = new ByteArrayInputStream("test".getBytes("utf-8"));
+		AMedia media = new AMedia("測 試", "txt", "text/plain", is);
+		Filedownload.save(media);
+	}
+	]]></zscript>
+	<button label="download" onClick="download()">
+	</button>
+</zk>

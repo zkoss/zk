@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3322795.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 24 16:47:34 TST 2011, Created by peterkuo
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	1. click on the right side up/down button several times
+	<separator/>
+	2. the value change is 1 each time, the value inside should be ... 9.7, 8.7, 7.7, 6.7,... 
+	<separator/>
+	
+	<doublespinner value="8.7" width="200px"></doublespinner>
+</zk>

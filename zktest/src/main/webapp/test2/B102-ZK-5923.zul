@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5923.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 15 11:25:24 CST 2025, Created by jameschu
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window viewModel="@id('vm') @init('org.zkoss.zktest.test2.B102_ZK_5923VM')">
+		<label>
+			1. change active page via the arrow in grid/listbox/tree
+			2. all active page should sync.
+		</label>
+		<intbox id="intbox" value="@bind(vm.pageIndex)"/>
+		<grid model="@bind(vm.data)" mold="paging" pageSize="@bind(vm.pageSize)" activePage="@bind(vm.pageIndex)">
+			<columns>
+				<column label="col"/>
+			</columns>
+			<rows>
+				<row forEach="${data}">Item</row>
+			</rows>
+		</grid>
+		<listbox model="@bind(vm.data)" mold="paging" pageSize="@bind(vm.pageSize)" activePage="@bind(vm.pageIndex)">
+			<listhead>
+				<listheader label="col"/>
+			</listhead>
+			<listitem forEach="${data}" label="Item"/>
+		</listbox>
+		<separator/>
+		<tree model="@init(vm.treeModel)" mold="paging" pageSize="@bind(vm.pageSize)" activePage="@bind(vm.pageIndex)">
+			<treecols>
+				<treecol>rod=true</treecol>
+			</treecols>
+		</tree>
+		Paging Component Only:
+		<paging pageSize="@load(vm.pageSize)" id="pg" totalSize="@load(vm.totalSize)" activePage="@bind(vm.pageIndex)"/>
+		<label id="lb" value="@bind(vm.pageIndex)"/>
+	</window>
+</zk>

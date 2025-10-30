@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4588.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Oct 06 16:16:00 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		public class Dictionary {
+			static String[] dictionary = { "abacus", "abase", "abate", "abbess", "abbey" };
+			public static String[] getDirectory() {
+				return dictionary;
+			}
+		}
+	]]></zscript>
+	<label multiline="true"><![CDATA[
+	Please type the following words slowly, "a" and "b" and <- (backspace) and then "a" in IE9/IE10,
+	it should be "aba" then autocompleted to "abacus", and the "cus" should be selected in the combo input.
+	If you go back to the previous(history) page after pressing backspace, it is a bug.
+	]]></label>
+	<combobox id="combo" autodrop="true" buttonVisible="false"/>
+	<zscript><![CDATA[
+		ListModel dictModel= new SimpleListModel(Dictionary.getDirectory());
+		combo.setModel(dictModel);
+	]]></zscript>
+</zk>

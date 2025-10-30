@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3763.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Oct 02 12:27:32 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Try these steps for all 4 windows:
+		1. scroll window into the viewport
+		2. click the "Popup" button
+		3. a popup message should shown, otherwise it's a bug
+	</label>
+	<window id="win" border="normal" title="Window" height="300px" width="300px">
+		Window Content
+		<button id="btn1" onClick="popup(win)" label="Popup" />
+	</window>
+
+	<hlayout style="overflow-x: auto">
+		<div style="width: 2000px" />
+		<window id="win2" border="normal" title="Window" height="300px" width="300px">
+			Window Content
+			<button id="btn2" onClick="popup(win2)" label="Popup" />
+		</window>
+	</hlayout>
+
+	<window id="win3" border="normal" title="Window" height="300px" width="300px" style="margin-left: 2000px">
+		Window Content
+		<button id="btn3" onClick="popup(win3)" label="Popup" />
+	</window>
+
+	<window id="win4" border="normal" title="Window" height="300px" width="300px">
+		Window Content
+		<button id="btn4" onClick="popup(win4)" label="Popup" />
+	</window>
+
+	<zscript><![CDATA[
+	import org.zkoss.zk.ui.util.Clients;
+	import org.zkoss.zk.ui.Component;
+
+	void popup(Component ref) {
+		String msg = "Use the force, Harry.";
+		String type = Clients.NOTIFICATION_TYPE_ERROR;
+		String pval = "bottom_center";
+		int dur = -1;
+		boolean closable = true;
+		Clients.showNotification(msg, type, ref, pval, dur, closable);
+	}
+	]]>
+	</zscript>
+</zk>

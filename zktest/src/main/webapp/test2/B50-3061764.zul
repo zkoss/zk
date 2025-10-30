@@ -1,0 +1,22 @@
+<zk>
+<html>
+<![CDATA[
+<ol>
+<li>Opera only.</li>
+<li>Sizing the list header to right and make it wider</li>
+<li>The list header shall be resized to the position you make. If not, it is a bug.</li>
+<li>Done.</li>
+]]>
+</html>
+<listbox>
+	<listhead sizable="true">
+		<listheader label="column1" width="40px"/>
+	</listhead>
+	<listitem>
+		<listcell label="row1" />
+	</listitem>
+	<listitem>
+		<listcell label="row2" />
+	</listitem>
+</listbox>
+</zk>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3985.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Nov 13 09:35:04 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script>
+		function sizeLog(component) {
+			zk.log(component + ' height : ' + jq('.z-' + component).height())
+		}
+	</script>
+	<label multiline="true">
+		1.Test with ie9.
+		2.Click the listbox/grid/tree. You should NOT see the listbox/grid/tree height changing.
+	</label>
+	<hlayout>
+		<listbox hflex="1">
+			<listhead>
+				<listheader label="Column 1" width="250px" />
+				<listheader label="Column 2" width="250px" />
+				<listheader label="Column 3" hflex="2" />
+				<listheader label="Column 4" hflex="1" />
+			</listhead>
+			<listitem forEach="1,2,3" w:onClick="sizeLog('listbox');" >
+				<listcell forEach="1,2,3,4">Listcell</listcell>
+			</listitem>
+		</listbox>
+		<grid hflex="1">
+			<columns>
+				<column label="Column 1" width="250px" />
+				<column label="Column 2" width="250px" />
+				<column label="Column 3" hflex="2" />
+				<column label="Column 4" hflex="1" />
+			</columns>
+			<rows>
+				<row forEach="1,2,3" w:onClick="sizeLog('grid');" >
+					<cell forEach="1,2,3,4">Cell</cell>
+				</row>
+			</rows>
+		</grid>
+		<tree hflex="1">
+			<treecols>
+				<treecol label="Column 1" width="250px" />
+				<treecol label="Column 2" width="250px" />
+				<treecol label="Column 3" hflex="2" />
+				<treecol label="Column 4" hflex="1" />
+			</treecols>
+			<treechildren>
+				<treeitem forEach="1,2,3" w:onClick="sizeLog('tree');" >
+					<treerow>
+						<treecell forEach="1,2,3,4">Treecell</treecell>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+	</hlayout>
+</zk>

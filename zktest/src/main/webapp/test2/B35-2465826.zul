@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2465826.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan  6 12:02:47     2009, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. Please click on one listitem, and press Enter on the keyboard.
+<separator/>
+2. After the dialog showed, please press Enter on the keyboard again.
+<separator/>
+3. Then, the focus should be on the listitem, you can try to press Up and Down key to test whether the selected item is work well or not.
+<zscript>
+Listitem listitem = new Listitem();
+<![CDATA[  
+	String[] data = new String[30];
+	int j=0;
+	for(int j=0; j < data.length; ++j){
+		data[j] = "option000000 "+j;
+		j++;
+	}
+	ListModel strset = new SimpleListModel(data);
+]]>
+</zscript>
+<window id="win" width="400px" border="normal">
+        <attribute name="onOK">
+        import org.zkoss.zk.ui.event.EventListener;
+
+	Messagebox.show("123", "Prompt", Messagebox.OK, Messagebox.QUESTION, new EventListener() {
+		public void onEvent(Event evt) {
+		listitem.setFocus(true);	
+	}});
+	
+	</attribute>
+	<listbox id="list" width="200px" rows="10" model="${strset}" >
+		<attribute name="onSelect">
+			listitem = list.getSelectedItem();
+		</attribute>
+		<listhead>
+			<listheader id="lhd" label="Load on Demend" sort="auto"/>
+		</listhead>
+	</listbox>
+</window>
+</zk>

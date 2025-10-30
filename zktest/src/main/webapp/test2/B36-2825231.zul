@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2825231.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 12 18:12:27     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+You should see the words "Outside" and "Inside" into the tabpanel's content.
+<tabbox orient="vertical" height="24.5em">
+	<tabs width="10em">
+		<tab label="Test"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>
+			Outside
+			<vbox width="90%">
+				Inside
+			</vbox>
+		</tabpanel>
+	</tabpanels>
+</tabbox>
+</zk>

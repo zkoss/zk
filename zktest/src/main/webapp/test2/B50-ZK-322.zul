@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-322.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Aug 29 11:34:44 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Hello World!!" border="normal" width="100%">
+	Please scroll to the end of the grid, and the width of "col1" shouldn't be increased and no Javascript error.
+	<div>
+		<grid id="grid" width="300px">
+			<frozen columns="1" />
+			<columns sizable="true" width="100px">
+				<column label="col1"/>
+				<column label="col2"/>
+				<column label="col3"/>
+				<column label="col4"/>
+				<column label="col5"/>
+			</columns>
+			<rows>
+				<row>
+					<label value="cell1" />
+					<label value="cell2" />
+					<label value="cell3" />
+					<label value="cell4" />
+					<label value="cell5" />
+				</row>
+			</rows>
+			<foot>
+				<footer label="foot1" />
+				<footer label="foot2" />
+				<footer label="foot3" />
+				<footer label="foot4" />
+				<footer label="foot5" />
+			</foot>
+		</grid>
+		</div>
+</window>

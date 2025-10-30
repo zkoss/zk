@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="ZK Tabboxes"?>
+
+<!--
+tabbox.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May  3 12:30:30     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+	<tabbox id="tb" width="400px">
+		<tabs>
+			<tab id="tab0" label="Tab 1"/>
+			<tab label="Tab 2"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel id="panel0">This is panel 1
+<tabbox orient="vertical">
+	<tabs>
+		<tab label="Tab 1-1"/>
+		<tab label="Tab 1-2"/>
+	</tabs>
+	<tabpanels>
+		<tabpanel>This is panel 1-1</tabpanel>
+		<tabpanel>This is panel 1-2</tabpanel>
+	</tabpanels>
+</tabbox>
+			</tabpanel>
+			<tabpanel>This is panel 2
+The second panel</tabpanel>
+		</tabpanels>
+	</tabbox>
+
+	<button label="Add tab" onClick="addTab(tb)"/>
+	<button label="Insert" onClick="insTab(tab0, panel0)"/>
+	<button label="Not ${tb.orient}" onClick="toggleOrient(tb)"/>
+	<button label="Not ${tb.mold}" onClick="toggleMold(tb)"/>
+	<zscript>
+	void toggleOrient(Tabbox tb) {
+		tb.orient = tb.orient == "horizontal" ? "vertical": "horizontal";
+	}
+	void toggleMold(Tabbox tb) {
+		tb.mold = tb.mold == "default" ? "accordion": "default";
+	}
+	void addTab(Tabbox tb) {
+		tb.getTabs().appendChild(new Tab("New"));
+		tb.getTabpanels().appendChild(new Tabpanel());
+	}
+	void insTab(Tab tab, Tabpanel panel) {
+		tab.getParent().insertBefore(new Tab("New"), tab);
+		panel.getParent().insertBefore(new Tabpanel(), panel);
+	}
+	</zscript>
+</window>

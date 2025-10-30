@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3499.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 14 13:42:14 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:h="client">
+    <label multiline="true">
+        1. click 'Menu First Row 1', should see a 'true' appear under the menubar.
+        2. click it again to close it.
+        3. click 'Menu Second Row 1', should see another 'true' appear under the menubar.
+        4. click it again to close it.
+
+    </label>
+    <script><![CDATA[
+        function click1() {
+            var menu = zk.Widget.$(jq('@menu:eq(0)')),
+                mpp = menu.menupopup;
+            if (mpp && mpp._visible) {
+                var n = menu.$n(),
+                    menuBtm = jq(n).offset().top + n.offsetHeight;
+                    popupTop = jq(mpp).offset().top;
+                zk.Widget.$(jq('.z-label')[1]).setValue(Math.abs(menuBtm - popupTop) < 1);
+            }
+        }
+        function click2() {
+            var menu = zk.Widget.$(jq('@menu:eq(3)')),
+                mpp = menu.menupopup;
+            if (mpp && mpp._visible) {
+                var n = menu.$n(),
+                    menuBtm = jq(n).offset().top + n.offsetHeight;
+                    popupTop = jq(mpp).offset().top;
+                zk.Widget.$(jq('.z-label')[2]).setValue(Math.abs(menuBtm - popupTop) < 1);
+            }
+        }
+    ]]></script>
+    <div width="500px">
+        <menubar orient="horizontal">
+            <menu label="Menu First Row 1">
+                <menupopup h:onOpen="click1();">
+                    <menuitem label="Item 1" />
+                    <menuitem label="Item 2" />
+                </menupopup>
+            </menu>
+            <menu label="Menu First Row 2">
+                <menupopup>
+                    <menuitem label="Item 1" />
+                    <menuitem label="Item 2" />
+                </menupopup>
+            </menu>
+            <menu label="Menu First Row 3">
+                <menupopup>
+                    <menuitem label="Item 1" />
+                    <menuitem label="Item 2" />
+                </menupopup>
+            </menu>
+            <menu label="Menu Second Row 1">
+                <menupopup h:onOpen="click2();">
+                    <menuitem label="Item 1" />
+                    <menuitem label="Item 2" />
+                    <menu label="About">
+                        <menupopup>
+                            <menuitem label="About ZK"/>
+                            <menuitem label="About Potix"/>
+                        </menupopup>
+                    </menu>
+                </menupopup>
+            </menu>
+            <menu label="Menu Second Row 2">
+                <menupopup>
+                    <menuitem label="Item 1" />
+                    <menuitem label="Item 2" />
+                </menupopup>
+            </menu>
+            <menu label="Menu Second Row 3">
+                <menupopup>
+                    <menuitem label="Item 1" />
+                    <menuitem label="Item 2" />
+                </menupopup>
+            </menu>
+        </menubar>
+    </div>
+    <label/>
+    <label/>
+</zk>

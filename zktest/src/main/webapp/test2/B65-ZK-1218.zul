@@ -1,0 +1,8 @@
+<zk>
+	<label multiline="true">
+	1. Type 1.224323423452352345345345634534634634 in the doublebox and doublespinner
+	2. Should see "Illegal value" message instead of "You must specify a number, rather than 'input'" 
+	</label>
+	<doublebox width="300px" /><separator />
+	<doublespinner width="300px" />
+</zk>

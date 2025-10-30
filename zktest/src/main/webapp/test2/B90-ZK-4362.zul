@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4362.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Mar 10 11:51:40 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "print" button.
+        2. Use print preview to check if grid was cut.
+    </label>
+    <button label="print" onClick="Clients.print();"/>
+    <div width="100%">
+<!--        <custom-attributes org.zkoss.zul.css.flex="false"/>-->
+<!--        <custom-attributes org.zkoss.zul.nativebar="false"/>-->
+        <grid hflex="1" visibleRows="5">
+            <auxhead>
+                <auxheader colspan="2" label="111"/>
+                <auxheader colspan="4"/>
+            </auxhead>
+            <columns sizable="true">
+                <column label="1"/>
+                <column/>
+                <column label="3"/>
+                <column width="180px"/>
+                <column/>
+                <column label="see me"/>
+            </columns>
+            <rows>
+                <forEach begin="1" end="10">
+                    <row>
+                        <label value="Bank Account"/>
+                        <cell>
+                            <textbox value="024" cols="3"/>
+                            <textbox value="110" cols="3"/>
+                            <textbox value="00000" cols="5"/>
+                            <textbox value="0" cols="1"/>
+                        </cell>
+                        <label value="Deposit No."/>
+                        <textbox value="00100401" cols="8"/>
+                        <label value="Summary"/>
+                        <cell>
+                            <textbox value="2" cols="1"/>
+                            <textbox value="RH" cols="2"/>
+                        </cell>
+                    </row>
+                </forEach>
+            </rows>
+            <foot>
+                <footer label="1"/>
+                <footer/>
+                <footer label="3"/>
+                <footer/>
+                <footer/>
+                <footer label="see me"/>
+            </foot>
+        </grid>
+    </div>
+</zk>

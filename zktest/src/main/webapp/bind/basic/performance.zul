@@ -1,0 +1,18 @@
+<zk>
+	<label multiline="true">
+		1. Rapidly click the "switch" buttons.
+		2. It should be fast.
+	</label>
+	<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.PerformanceVM')">
+		<button id="btnSwitch" label="switch" onClick="@command('switchCase')"/>
+		<hbox>
+			<label value="@load(vm.count)"/>
+			<label value="@load(vm.src1)"/>
+			<label value="@load(vm.src2)"/>
+		</hbox>
+		<include src="@load(vm.src1)"/>
+		<include src="@load(vm.src2)"/>
+		
+	</window>
+
+</zk>

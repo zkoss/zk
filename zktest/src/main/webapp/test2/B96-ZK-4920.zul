@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4920.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jun 18 11:43:20 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul" />
+	<label>
+		If you see any Combobox/Button was cut in the autopaging mesh, it's a bug.
+	</label>
+	<div>
+		<listbox id="list" height="200px" autopaging="true" mold="paging" hflex="1">
+			<listhead>
+				<listheader label="bla" sort="auto" />
+				<listheader label="bla2" sort="auto" />
+			</listhead>
+			<listitem forEach="1,2,3,4">
+				<listcell>
+					<label value="Item ${each}"/>
+				</listcell>
+				<listcell>
+					<combobox/>
+					<button label="button"/>
+				</listcell>
+			</listitem>
+		</listbox>
+		<tree mold="paging" height="200px" pagingPosition="bottom" autopaging="true" hflex="1">
+			<treecols>
+				<treecol label="treecol" />
+			</treecols>
+			<treechildren>
+				<treeitem forEach="1,2,3,4">
+					<treerow>
+						<treecell label="Item ${each}" >
+							<combobox/>
+							<button label="button"/>
+						</treecell>
+					</treerow>
+				</treeitem>
+			</treechildren>
+		</tree>
+		<grid mold="paging" height="200px" pagingPosition="bottom" autopaging="true" hflex="1">
+			<columns>
+				<column label="Grid" />
+			</columns>
+			<rows>
+				<row forEach="1,2,3,4">
+					<label value="Item ${each}" />
+					<combobox/>
+					<button label="button"/>
+				</row>
+			</rows>
+		</grid>
+	</div>
+</zk>

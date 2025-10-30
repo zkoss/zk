@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4308.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 29 14:59:07 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+    <label multiline="true">
+        1. Try clicking "&lt;", "&gt;" or title to change calendar view.
+        2. There is no animation.
+    </label>
+    <div ca:data-animationspeed="0">
+        <calendar />
+        <datebox />
+    </div>
+</zk>

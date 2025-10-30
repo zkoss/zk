@@ -1,0 +1,16 @@
+<zk xmlns:x="xhtml">
+	<div id="bind" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ForEachVM')">
+		<div id="host">
+			<template name="apply">
+				Test <label value="@load(item)"/>
+			</template>
+			<forEach items="@load(vm.dataList)">
+				<apply template="@load(vm.template)" item="@ref(each)"/>
+			</forEach>
+		</div>
+		<button label="update range to small" onClick='@command("updateDataList",data="small")'/>
+		<button label="update range to large" onClick='@command("updateDataList",data="large")'/>
+	</div>
+	<debugger rootId="host" />
+</zk>

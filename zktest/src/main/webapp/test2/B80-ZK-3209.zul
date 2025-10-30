@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3209.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 12 16:23:11 CST 2016, Created by wenning
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    this page should load without any error
+    <script src="https://code.jquery.com/jquery-1.12.3.js"/>
+    <tbeditor id="tb" value="this is a demo for &lt;b&gt;trumbowy&lt;/b&gt; editor!!" width="500px"/>
+</zk>

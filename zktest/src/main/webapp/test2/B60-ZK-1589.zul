@@ -1,0 +1,21 @@
+<zk xmlns:n="native" xmlns:w="client">
+	<window id="win" title="new page title" border="normal" width="100%" height="100%">
+		<label multiline="true">
+		1. Click "invalidate" button.
+		2. If you did not see "unbind_ window" message, it is a bug.
+		</label>
+		<button id="btn" label="invalidate" onClick="cave.invalidate();"></button>
+		<div id="cave">
+			<n:div>
+				<window title="window" border="normal">
+					<attribute w:name="unbind_">
+						function () {
+							zk.log('unbind_ window');
+							this.$unbind_();
+						}
+					</attribute>
+				</window>
+			</n:div>
+		</div>
+	</window>
+</zk>

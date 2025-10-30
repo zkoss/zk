@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4713.zul
+		Purpose:
+
+		Description:
+
+		History:
+
+				Tue Dec 08 16:15:28 CST 2020, Created by katherinelin
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+
+<zk>
+	<style>
+		.z-listbox-autopaging  .z-listcell-content{ height: 20px; padding:12px;}
+	</style>
+	<label multiline="true">
+			1. the last 2 items shouldn't showing and disappearing repeatedly.
+	</label>
+	<div vflex="1">
+		<listbox mold="paging" pagingPosition="bottom"
+			autopaging="true" height="880px" onPageSize='Clients.log("onPageSize")' >
+			<custom-attributes
+				org.zkoss.zul.listbox.autohidePaging="false"/>
+			<listhead>
+				<listheader label="Header" />
+			</listhead>
+			<listitem>
+				<listcell label="Item 1" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 2" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 3" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 4" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 5" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 6" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 7" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 8" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 9" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 10" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 11" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 12" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 13" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 14" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 15" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 16" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 17" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 18" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 19" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 20" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 21" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 22" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 23" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 24" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 25" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 26" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 27" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 28" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 29" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 30" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 31" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 32" />
+			</listitem>
+			<listitem>
+				<listcell label="Item 33" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

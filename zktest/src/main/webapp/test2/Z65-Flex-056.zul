@@ -1,0 +1,37 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Calendar, Vlayout]" width="480px">
+        <vlayout height="200px" hflex="min">
+            <calendar hflex="1" vflex="1"/>
+            <calendar vflex="1" width="75px"/>
+            <calendar vflex="1" width="120px"/>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Calendar, Vbox]" width="480px">
+        <vbox height="200px" hflex="min">
+            <calendar hflex="1" vflex="1"/>
+            <calendar vflex="1" width="75px"/>
+            <calendar vflex="1" width="120px"/>
+        </vbox>
+    </window>
+</hbox>
+<hbox>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Calendar, Vlayout, rounded]" width="480px">
+        <vlayout height="200px" hflex="min">
+            <calendar hflex="1" vflex="1"/>
+            <calendar vflex="1" width="75px"/>
+            <calendar vflex="1" width="120px"/>
+        </vlayout>
+    </window>
+    <window border="normal" height="360px"
+        title="minimum Flex: [Calendar, Vbox, rounded]" width="480px">
+        <vbox height="200px" hflex="min">
+            <calendar hflex="1" vflex="1"/>
+            <calendar vflex="1" width="75px"/>
+            <calendar vflex="1" width="120px"/>
+        </vbox>
+    </window>
+</hbox>
+</zk>

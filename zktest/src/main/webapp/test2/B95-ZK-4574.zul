@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4574.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 13 10:22:33 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div id="div1" vflex="1" hflex="1" style="background: blue">blue</div>
+	<div id="div2" vflex="1" hflex="1" style="background: red">red</div>
+	<div>
+		<button label="1. Click it, you should see the blue div change to minimum height (vflex to min)">
+			<attribute name="onClick"><![CDATA[
+			div1.setVflex("min");
+		]]></attribute>
+		</button>
+		<button label="2. Click it, you should see the blue div change to double height of red div (vflex to 2)">
+			<attribute name="onClick"><![CDATA[
+			div1.setVflex("2");
+		]]></attribute>
+		</button>
+		<button label="3. Click it, you should see the blue div change to same height of red div (vflex to 1)">
+			<attribute name="onClick"><![CDATA[
+			div1.setVflex("1");
+		]]></attribute>
+		</button>
+		<button label="4. Click it, you should see the blue div change to small height (vflex to empty)">
+			<attribute name="onClick"><![CDATA[
+			div1.setVflex("");
+		]]></attribute>
+		</button>
+	</div>
+</zk>

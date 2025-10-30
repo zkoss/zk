@@ -1,0 +1,7 @@
+<window>
+IE, 
+<separator/>
+You should see a black bar, or it is a bug.
+<separator/>
+<space bar="true" spacing="1px"/>
+</window>

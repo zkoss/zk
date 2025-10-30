@@ -1,0 +1,48 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.childrenbinding.ChildrenSimpleVM')">
+	<label multiline="true">
+		1. Load the page:
+		you should see Item A, Item B, Item C in "Simple - Init", "Simple - load" and "Simple - dependency", "Simple - load after cmd" should be empty.
+		2. click "reload 1" button:
+		you should see Item D is added into "Simple - load" and "Simple - dependency", "Simple - Init" and "Simple - load after cmd" shall not change.
+		3. click "reload 2" button:
+		you should see Item A, B, C, D, E (5 items) are added into "Simple - load after cmd".
+		4. click "reload 3" button:
+		you should see the first item changed to "Item X" and the second item become "Item A" in all parts.
+		5. the Item A in "Simple - dependency" shall always display with blue border, others with red border, otherwise it's a bug.
+	</label>
+	Simple - Init
+	<vlayout id="init" children="@init(vm.nodes)">
+		<template name="children" var="node">
+			<label value="@bind(node.name)" style="padding-left:10px"/>
+		</template>
+	</vlayout> 
+	Simple - load
+	<vlayout id="load" children="@load(vm.nodes2)"> <!-- node2 for testing zk-1191 -->
+		<template name="children" var="node">
+			<label value="@bind(node.name)" style="padding-left:10px"/>
+		</template>
+	</vlayout>
+	Simple - load after cmd
+	<vlayout id="aftercmd" children="@load(vm.nodes, after='cmd2')">
+		<template name="children" var="node">
+			<label value="@bind(node.name)" style="padding-left:10px"/>
+		</template>
+	</vlayout>
+	
+	Simple - dependency
+	<vlayout id="dependency" children="@load(vm.nodes) @template(each.name eq 'Item A'?'c1':'c2')">
+		<template name="c1" var="node">
+			<label value="@bind(node.name)" sclass="c1" style="padding-left:10px;border:2px solid blue;"/>
+		</template>
+		<template name="c2" var="node">
+			<label value="@bind(node.name)" sclass="c2" style="padding-left:10px;border:2px solid red;"/>
+		</template>
+	</vlayout>
+	
+	<button label="reload 1" id="cmd1" onClick="@command('cmd1')"/>
+	<button label="reload 2" id="cmd2" onClick="@command('cmd2')"/>
+	<button label="reload 3" id="cmd3" onClick="@command('cmd3')"/>
+	
+	<button label="clear " id="clear" onClick="@command('clear')"/> 
+	
+</window>

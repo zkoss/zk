@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3263.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Mar 30 10:14:22 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        Scroll fast in listbox and grid, it should not scroll to the bottom automatically.
+    </label>
+    <zscript><![CDATA[
+		ListModelList model = new ListModelList(Collections.nCopies(2000, "test"));
+		ListModelList model2 = new ListModelList(Collections.nCopies(2000, "test"));
+	]]></zscript>
+    <listbox model="${model}" height="200px" width="400px">
+        <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+        <template name="model">
+            <listitem label="${each}${forEachStatus.index}"/>
+        </template>
+    </listbox>
+
+    <grid model="${model2}" height="200px" width="400px">
+        <custom-attributes org.zkoss.zul.grid.rod="true"/>
+        <template name="model">
+            <row>${each}${forEachStatus.index}</row>
+        </template>
+    </grid>
+</zk>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4124.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Nov 13 16:38:44 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in Firefox, open the console
+		2. Click Start to record, wait 3 seconds
+		3. Click Stop, you should see the video you just recorded
+		4. Console should not contain any error or warning
+	</label>
+	<vlayout>
+		<camera id="camera" width="300px" onVideoUpload="video.content = event.media"/>
+		<button label="Start" onClick="camera.start()"/>
+		<button label="Stop" onClick="camera.stop()"/>
+		<video id="video" width="300px" controls="true"/>
+	</vlayout>
+</zk>

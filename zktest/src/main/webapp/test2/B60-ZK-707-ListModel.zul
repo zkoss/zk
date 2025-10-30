@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B60-ZK-707-ListModel.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 29 18:11:54 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+String[] data = new String[10];
+for (int i = 0; i < data.length; i++)
+	data[i] = "option " + i;
+
+
+ListModelList model = new ListModelList(data);
+    ]]></zscript>
+    1. Please test to select the listitem, the both listbox should be the same result. (test both checked/unchecked multiple)
+    <checkbox label="Multiple Selections">
+    	<attribute name="onCheck">
+    	model.setMultiple(event.checked);
+    	
+    	// reset model
+    	grid.setModel(null);
+    	grid2.setModel(null);
+    	grid.setModel(model);
+    	grid2.setModel(model);
+    	</attribute>
+    </checkbox>
+    <separator/>
+    2. Please click upon the head "Column" to sort it, the selection status and sorting
+    function also affect the both listbox.
+    <listbox id="grid" model="${model}" onSelect="">
+    	<listhead><listheader label="column" sort="auto"/></listhead>
+    </listbox>
+    
+    <listbox id="grid2" model="${model}" onSelect="">
+    	<listhead><listheader label="column" sort="auto"/></listhead>
+    </listbox>
+</zk>

@@ -1,0 +1,25 @@
+
+<zk>
+<label multiline="true">
+1.type abcd and tab, you will see a validation message
+2.click the save, the validation message is still here
+3.click the reload, the value of textbox should become abc and the validation message should disappear
+</label>
+
+	<vbox apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B00722')" width="400px"
+		validationMessages="@id('vmsgs')">
+	<label>
+
+	</label>
+	<label id="l11" value="@bind(vm.value1)"/>
+	<vbox form="@id('fx') @load(vm) @save(vm,before='save')">
+		<textbox id="t21" value="@bind(fx.value1) @validator(vm.validator)" />	
+		<label id="m21" value="@load(vmsgs[t21])"/>
+	</vbox>
+	
+	<button id="cmd1" label="save" onClick="@command('save')"/>
+	<button id="cmd2" label="reload" onClick="@command('reload')"/>
+
+	</vbox>
+</zk>

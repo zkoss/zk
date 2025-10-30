@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3514.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 13 14:54:00 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+        1. open "Network" to check the au response.
+        2. Click the first button "Clear Dropdown/Model (set null)", and you should not see any 'rm' in au response.
+        3. Click the second & third button, and you should not see any 'rm' in the last au response.
+        4. Do it in the other three groups.
+    ]]></label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3514VM')">
+        <hlayout>
+            <div>
+                <label>Listbox(select mold) - ArrayList</label>
+                <button label="Clear Dropdown (set null)" onClick="@command('clearListNull$Listbox')" />
+                <button label="change Model list" onClick="@command('changeModel1$Listbox')" />
+                <button label="Clear Dropdown (clear)" onClick="@command('clearList$Listbox')" />
+                <separator />
+                <listbox mold="select" model="@load(vm.list1)">
+                <template name="model">
+                <listitem value="@load(each)" label="@load(each.placementRefNoWithProductName)" />
+                </template>
+                </listbox>
+                <separator />
+                <label>Listbox(select mold) - ListModelList</label>
+                <button label="Clear Dropdown (set null)"  onClick="@command('clearModelListNull$Listbox')" />
+                <button label="change Model list" onClick="@command('changeModel2$Listbox')" />
+                <button label="Clear Dropdown (clear)"  onClick="@command('clearModelList$Listbox')" />
+                <separator />
+                <listbox mold="select" model="@load(vm.modelList1)">
+                    <template name="model">
+                        <listitem value="@load(each)" label="@load(each.placementRefNoWithProductName)" />
+                    </template>
+                </listbox>
+            </div>
+            <div>
+                <label>Grid - ArrayList</label>
+                <button label="Clear Model (set null)" onClick="@command('clearListNull$Grid')" />
+                <button label="change Model list" onClick="@command('changeModel1$Grid')" />
+                <button label="Clear Dropdown (clear)" onClick="@command('clearList$Grid')" />
+                <grid model="@load(vm.list2)" width="500px">
+                    <rows/>
+                    <template name="model">
+                        <row>
+                            <label value="@load(each.placementRefNoWithProductName)" />
+                        </row>
+                    </template>
+                </grid>
+            </div>
+            <div>
+                <label>Grid - ListModelList</label>
+                <button label="Clear Model (set null)"  onClick="@command('clearModelListNull$Grid')" />
+                <button label="change Model list" onClick="@command('changeModel2$Grid')" />
+                <button label="Clear Dropdown (clear)"  onClick="@command('clearModelList$Grid')" />
+                <grid model="@load(vm.modelList2)" width="500px">
+                    <rows/>
+                    <template name="model">
+                        <row>
+                            <label value="@load(each.placementRefNoWithProductName)" />
+                        </row>
+                    </template>
+                </grid>
+            </div>
+        </hlayout>
+    </div>
+</zk>

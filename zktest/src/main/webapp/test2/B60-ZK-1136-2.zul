@@ -1,0 +1,14 @@
+<zk>	
+	<window id="win_inc_defer" title="include mode defer" border="normal" width="100%">
+		<separator spacing="10px"/>
+		<button label="Close me">
+			<attribute name="onClick">
+				<![CDATA[
+				    Window win_main = (Window ) self.getAttribute("arg_win_main");
+					Events.postEvent(new Event(Events.ON_CLOSE, win_main, null));
+				]]>
+			</attribute>
+			<custom-attributes arg_win_main="${requestScope.arg_win_main}"/>
+		</button>
+	</window>
+</zk>

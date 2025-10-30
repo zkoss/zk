@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4623.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Aug 26 15:53:35 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Test with iceblue compact:
+        when button is disabled,
+        the combobox/bandbox/datebox/timebox/spinner/doublespinner input right-padding should be same as textbox input.
+        You should not see a large white space at the right of input when typing a long text.
+    </label>
+    <vlayout>
+        textbox:
+        <textbox/>
+        combobox:
+        <combobox buttonVisible="false"/>
+        <combobox />
+        bandbox:
+        <bandbox buttonVisible="false"/>
+        <bandbox />
+        datebox:
+        <datebox buttonVisible="false"/>
+        <datebox />
+        timebox:
+        <timebox buttonVisible="false"/>
+        <timebox />
+        spinner:
+        <spinner buttonVisible="false"/>
+        <spinner />
+        doublespinner:
+        <doublespinner buttonVisible="false"/>
+        <doublespinner />
+    </vlayout>
+</zk>

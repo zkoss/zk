@@ -1,0 +1,21 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="new page title" border="normal"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.validator.Va03')">
+
+		va3
+		<label multiline="true"> 
+		command argument, before, converter, validator argument, 
+		1. input 1, not save 
+		2. enter 28, click, show 18, Adult 
+		</label>
+		
+		age can NOT less 10 :<intbox id="ageBox"
+			value="@init(vm.age) @save(vm.age, before='minus') @validator(vm.lowerBoundValidator, min=10)"/>
+		<button id="minusButton" label="Minus 10" onClick="@command('minus' , decrement=10)" />
+		<label id="adultLabel" value="@bind(vm.age) @converter(vm.maturityIndicator)"/>			
+		<separator />
+		10 years ago : <label id="ageLabel" value="@load(vm.age, after='minus')" />
+		
+	</window>
+</zk>

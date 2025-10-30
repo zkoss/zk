@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4575.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Nov 10 11:22:52 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Test with all themes and tablet: all the vertical border should be align(even 1px)
+		Try browser zoom in/out, the vertical border should stay align
+		"border-color: black;" is for easily testing only.
+	</label>
+	<style>
+		* {
+			border-color: black !important;
+		}
+	</style>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<grid visibleRows="2">
+		<auxhead>
+			<auxheader label="apple" colspan="1"/>
+			<auxheader label="banana" colspan="1"/>
+			<auxheader label="lemon" colspan="2"/>
+		</auxhead>
+		<columns menupopup="auto">
+			<column hflex="5">Language</column>
+			<column hflex="6">Contributor</column>
+			<column hflex="3" sort="auto">Charset</column>
+			<column hflex="4">Comment</column>
+		</columns>
+		<rows>
+			<row>
+				<label value="Arabic (ar)" visible="false" />
+				<label value="Ayman Elgharabawy" />
+				<label value="iso-8859-6" />
+				<textbox/>
+			</row>
+			<row>
+				<label value="Hungarian (hu)" />
+				<label value="Andreas Klein" />
+				<label value="iso-8859-2" />
+				<textbox/>
+			</row>
+			<row>
+				<cell>Italian (it)</cell>
+				<cell>Matteo Barbieri</cell>
+				<label value="iso-8859-1"/>
+				<cell><textbox /></cell>
+			</row>
+		</rows>
+		<foot>
+			<footer label="footer 1"/>
+			<footer label="footer 2"/>
+			<footer label="footer 3"/>
+			<footer label="footer 4"/>
+		</foot>
+	</grid>
+	<separator/>
+	<listbox rows="2">
+		<auxhead>
+			<auxheader label="column 1" colspan="1"/>
+			<auxheader label="column 2" colspan="1"/>
+			<auxheader label="column 3,4" colspan="2"/>
+			<auxheader label="column 5,6,7" colspan="3"/>
+		</auxhead>
+		<listhead menupopup="auto">
+			<listheader label="column ${each}" forEach="1,2,3,4,5,6,7"/>
+		</listhead>
+		<listitem>
+			<listcell label="listcell ${each}" forEach="1,2,3,4,5,6,7"/>
+		</listitem>
+		<listitem>
+			<listcell label="listcell ${each}" forEach="1,2,3,4,5,6,7"/>
+		</listitem>
+		<listitem>
+			<listcell label="listcell ${each}" forEach="1,2,3,4,5,6,7"/>
+		</listitem>
+		<listfoot>
+			<listfooter label="footer ${each}" forEach="1,2,3,4,5,6,7"/>
+		</listfoot>
+	</listbox>
+	<separator/>
+	<tree rows="2">
+		<auxhead>
+			<auxheader id="Phi"  label="Phi" colspan="2"/>
+			<auxheader id="Pi" label="Pi" colspan="2" />
+			<auxheader id="Kroc" label="Kroc" colspan="3"/>
+		</auxhead>
+		<treecols>
+			<treecol width="100px" id="tcola" label="A" />
+			<treecol label="B" />
+			<treecol label="C" />
+			<treecol label="D" />
+			<treecol label="E" />
+			<treecol label="F" />
+			<treecol id="tcolg" label="G" />
+		</treecols>
+		<treechildren>
+			<treeitem id="ti0" selected="true">
+				<treerow>
+					<treecell label="A" />
+					<treecell label="B" />
+					<treecell label="C" />
+					<treecell label="D" />
+					<treecell label="E" />
+					<treecell label="F" />
+					<treecell label="G" />
+				</treerow>
+				<treechildren>
+					<treeitem selected="true">
+						<treerow>
+							<treecell label="A-1" />
+							<treecell label="B" />
+							<treecell label="C" />
+							<treecell label="D" />
+							<treecell label="E" />
+							<treecell label="F" />
+							<treecell label="G" />
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="A-2" />
+							<treecell label="B" />
+							<treecell label="C" />
+							<treecell label="D" />
+							<treecell label="E" />
+							<treecell label="F" />
+							<treecell label="G" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+		<treefoot>
+			<forEach begin="1" end="7" var="i">
+				<treefooter label="Footer ${i}"/>
+			</forEach>
+		</treefoot>
+	</tree>
+</zk>

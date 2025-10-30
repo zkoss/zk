@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<!-- Used to test the performance meter -->
+	<listener>
+		<listener-class>org.zkoss.zktest.test.PerformanceMeter</listener-class>
+	</listener>
+</zk>

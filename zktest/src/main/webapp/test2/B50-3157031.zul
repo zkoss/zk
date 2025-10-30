@@ -1,0 +1,23 @@
+<zk>
+<div>
+1. You shall see 2 blocks with outline borders
+<separator/>
+2. If you cannot see any side of the borders, it is a bug
+</div>
+<vlayout width="100%">
+	<hlayout hflex="1" vflex="min">
+		<div hflex="1" vflex="min" style="overflow:hidden">
+			<vlayout vflex="min" hflex="1">
+				Report Filter:
+				<listbox hflex="true" height="100px" />
+			</vlayout>
+		</div>
+		<div hflex="1" vflex="min" style="overflow:hidden">
+			<vlayout vflex="min" hflex="1">
+				Column Labels:
+				<listbox hflex="true" height="100px" />
+			</vlayout>
+		</div>
+	</hlayout>
+</vlayout>
+</zk>

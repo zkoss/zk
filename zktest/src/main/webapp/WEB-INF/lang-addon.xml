@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- lang-addon.xml
+	Purpose:
+		
+	Description:
+		This file is useless for zktest but demostrates how to
+		add new components and override definitions of existent components.
+	History:
+		Fri Mar  3 12:54:00     2006, Created by tomyeh
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+-->
+
+<language-addon>
+	<!-- The name of this addon. It must be unique -->
+	<addon-name>zktest</addon-name>
+	<depends>zkmax</depends>
+
+	<!-- Which language this addon will be added to -->
+	<language-name>xul/html</language-name>
+
+	<!-- you can specify addition JavaScript files
+	<javascript src="/js/my.js" charset="UTF-8"/>
+	-->
+	<javascript src="/test2/js/zk-3913-PDF417lib.js"/>
+	<javascript src="/test2/js/zk-3913-l.js"/>
+
+	<!-- an example
+	<component>
+		<component-name>window</component-name>
+		<extends>window</extends>
+		<property>
+			<property-name>border</property-name>
+			<property-value>normal</property-value>
+		</property>
+	</component>
+ 	-->
+    <component>
+        <component-name>mycomp1</component-name>
+        <component-class>org.zkoss.zuti.zul.Apply</component-class>
+        <property>
+            <property-name>templateURI</property-name>
+            <property-value>/test2/F80-ZK-3039-template.zul</property-value>
+        </property>
+        <shadow-element/>
+    </component>
+
+    <component>
+        <component-name>mycomp2</component-name>
+        <extends>mycomp1</extends>
+        <property>
+            <property-name>title</property-name>
+            <property-value>amazing</property-value>
+        </property>
+    </component>
+
+    <component>
+        <component-name>mycomp3</component-name>
+        <extends>apply</extends>
+        <property>
+            <property-name>templateURI</property-name>
+            <property-value>/test2/F80-ZK-3039-template.zul</property-value>
+        </property>
+    </component>
+
+    <component>
+        <component-name>mycomp4</component-name>
+        <template-uri>/test2/F80-ZK-3039-template.zul</template-uri>
+    </component>
+
+    <component>
+        <component-name>mycomp5</component-name>
+        <template-uri>/test2/F80-ZK-3039-template.zul</template-uri>
+        <property>
+            <property-name>title</property-name>
+            <property-value>amazing</property-value>
+        </property>
+    </component>
+
+	<component>
+		<component-name>debugger</component-name>
+		<macro-uri>/WEB-INF/tool/debugger.zul</macro-uri>
+		<inline>true</inline>
+	</component>
+
+	<component>
+		<component-name>teststeps</component-name>
+		<extends>label</extends>
+		<component-class>org.zkoss.zktest.comp.Teststeps</component-class>
+	</component>
+	<component>
+		<component-name>B85_ZK_3988MyComp</component-name>
+		<macro-uri>/test2/B85-ZK-3988MyComp.zul</macro-uri>
+		<component-class>org.zkoss.zktest.test2.B85_ZK_3988MyComp</component-class>
+	</component>
+
+	<!-- ZK-4128 -->
+	<component>
+		<component-name>zk4128listbox</component-name>
+		<extends>listbox</extends>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>model</property-name>
+			<attribute>
+				<attribute-name>CONVERTER</attribute-name>
+				<attribute-value>org.zkoss.zktest.test2.B86_ZK_4128Converter</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+
+	<!-- ZK-4500 -->
+	<javascript>
+		if (window.ZK4500) {
+			zk.afterLoad('zkmax.nav', function() {
+				zk.log('4500');
+			});
+			zk.load('zkmax.nav');
+		}
+	</javascript>
+	<!-- ZK-4714 -->
+	<component>
+		<component-name>test01</component-name>
+		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
+		<widget-class>wgt4714.test01.Test01</widget-class>
+	</component>
+	<component>
+		<component-name>test02</component-name>
+		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
+		<widget-class>wgt4714.test02.Test02</widget-class>
+	</component>
+	<component>
+		<component-name>test03</component-name>
+		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
+		<widget-class>wgt4714.test03.Test03</widget-class>
+	</component>
+	<component>
+		<component-name>test04</component-name>
+		<component-class>org.zkoss.zktest.test2.B95_ZK_4714Comp</component-class>
+		<widget-class>wgt4714.test04.Test04</widget-class>
+	</component>
+	<!-- ZK-4852 -->
+	<component>
+		<component-name>test4852</component-name>
+		<component-class>org.zkoss.zktest.test2.B96_ZK_4852Comp</component-class>
+		<widget-class>wgt4852.TestWidget</widget-class>
+	</component>
+	<component>
+		<component-name>editableLabel</component-name>
+		<component-class>org.zkoss.zktest.bind.advance.EditableLabel</component-class>
+	</component>
+	<component>
+		<component-name>editableLabel1</component-name>
+		<component-class>org.zkoss.zktest.bind.advance.EditableLabel1</component-class>
+	</component>
+	<component>
+		<component-name>editableLabel2</component-name>
+		<component-class>org.zkoss.zktest.bind.advance.EditableLabel2</component-class>
+	</component>
+	<component>
+		<component-name>editableLabel3</component-name>
+		<component-class>org.zkoss.zktest.bind.advance.EditableLabel3</component-class>
+	</component>
+</language-addon>

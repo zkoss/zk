@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import org.zkoss.lang.Library?>
+<!--
+B86-ZK-4048.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Nov 12 14:26:31 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		import org.zkoss.zktest.test2.select.models.*;
+		ListModelList model = ListModelLists.getModel(ListModelLists.MULTIPLE_AND_CLONEABLE);
+	</zscript>
+	<label multiline="true">
+		1. Test in all themes
+		2. The chosenbox should have consistent vertical align with other input components
+		3. Click verify, should see three identical numbers on zk log
+	</label>
+	<div>
+		<textbox value="textbox"/>
+		<chosenbox width="400px" emptyMessage="Choose a Value" model="${model}"/>
+		<datebox/>
+	</div>
+	<separator/>
+	<button xmlns:w="client" label="verify">
+		<attribute w:name="onClick"><![CDATA[
+			zk.log(jq('@textbox')[0].getBoundingClientRect().bottom)
+			zk.log(jq('@chosenbox')[0].getBoundingClientRect().bottom)
+			zk.log(jq('@datebox')[0].getBoundingClientRect().bottom)
+		]]></attribute>
+	</button>
+	<combobox value="Change themes here">
+		<comboitem label="iceblue"/>
+		<comboitem label="breeze"/>
+		<comboitem label="sapphire"/>
+		<comboitem label="silvertail"/>
+		<comboitem label="atlantic"/>
+		<attribute name="onChange">
+			Library.setProperty("org.zkoss.theme.preferred", event.value);
+			Executions.sendRedirect("");
+		</attribute>
+	</combobox>
+</zk>

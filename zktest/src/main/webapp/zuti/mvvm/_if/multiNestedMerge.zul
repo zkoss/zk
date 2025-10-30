@@ -1,0 +1,53 @@
+<zk>
+	<zscript>
+	public class MyLabel extends Label {
+		public void onCreate() {
+			setValue(getParent().toString());
+		}
+	}
+</zscript>
+	<div id="bind" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ManipulateInsertionVM')">
+		<div id="host">
+			**Start**
+			<if test="true">
+				<if test="@load(vm.visible)">
+					<div style="background:yellow">
+						<if test="true">
+							<if test="@load(vm.visible)">
+								<div style="background:yellow">
+									<label use="MyLabel" />
+								</div>
+							</if>
+							<div style="background:green">
+								<label use="MyLabel" />
+							</div>
+						</if>
+					</div>
+				</if>
+				<div style="background:green">
+					<label use="MyLabel" />
+				</div>
+			</if>
+			**Middle**
+			<if test="@load(vm.visible)">
+				<div style="background:yellow">
+					<if test="true">
+						<if test="@load(vm.visible)">
+							<div style="background:yellow">
+								<label use="MyLabel" />
+							</div>
+						</if>
+						<div style="background:green">
+							<label use="MyLabel" />
+						</div>
+					</if>
+				</div>
+			</if>
+			**End**
+			<if test="false"><div>you should not see this</div></if>
+		</div>
+		<button id="changeVisible" label="Change if visible" onClick='@command("changeVisible")'/>
+	</div>
+	<debugger rootId="host" />
+</zk>

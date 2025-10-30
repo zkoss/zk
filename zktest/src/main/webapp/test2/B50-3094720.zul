@@ -1,0 +1,36 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Spacing should be seen only between labels (not at the end of last end, see the colors).</li>
+			<li>Click on Add, Remove, and Set Spacing for Vlayout and Hlayout, the property above should persist.</li>
+		</ol>
+	]]></html>
+	<style>
+		.z-vlayout-inner, .z-hlayout-inner {
+			background: #669999;
+		}
+		.z-vlayout-inner *, .z-hlayout-inner * {
+			background: #996666;
+		}
+	</style>
+	<html><![CDATA[<h3>Vlayout: </h3>]]></html>
+	<button label="Add" onClick='vl.appendChild(new Label("Label"));' />
+	<button label="Remove" onClick='vl.removeChild(vl.lastChild);' />
+	<button label="Set Spacing" onClick='vl.spacing = tbv.value' />
+	<textbox id="tbv" value="20px" />
+	<vlayout id="vl" spacing="10px">
+		<label>Label</label>
+		<label>Label</label>
+		<label>Label</label>
+	</vlayout>
+	<html><![CDATA[<h3>Hlayout: </h3>]]></html>
+	<button label="Add" onClick='hl.appendChild(new Label("Label"));' />
+	<button label="Remove" onClick='hl.removeChild(hl.lastChild);' />
+	<button label="Set Spacing" onClick='hl.spacing = tbh.value' />
+	<textbox id="tbh" value="20px" />
+	<hlayout id="hl" spacing="10px">
+		<label>Label</label>
+		<label>Label</label>
+		<label>Label</label>
+	</hlayout>
+</zk>

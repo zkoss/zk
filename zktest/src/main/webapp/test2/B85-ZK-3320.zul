@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3320.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 14 12:18:38 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <vlayout vflex="1">
+        <label multiline="true">
+            should see "Property "myParam" is not allowed to be same as the reference expression in reference binding" instead of "StackOverflowError"
+        </label>
+        <iframe src="B85-ZK-3320-1.zul" hflex="1" vflex="1"/>
+    </vlayout>
+</zk>

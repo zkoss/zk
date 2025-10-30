@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4515.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 28 12:32:40 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "+" button to add a new entry.
+        2. Type something on the new entry.
+        3. Click "Save" button.
+        4. Now "Save" button should be disabled since the FormProxy shouldn't be dirty.
+    </label>
+    <vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.B95_ZK_4515VM')"
+             form="@id('fx') @load(vm.person) @save(vm.person, before='save')">
+        <listbox model="@load(fx.familyNames)" height="400px" hflex="min">
+            <listhead>
+                <listheader width="400px">
+                    <label value="Family Name" />
+                </listheader>
+                <listheader width="85px">
+                    <toolbarbutton iconSclass="z-icon-plus"
+                                   onClick="@command('doAddFamilyName',form=fx)" />
+                </listheader>
+            </listhead>
+            <template name="model">
+                <listitem>
+                    <listcell>
+                        <textbox value="@bind(each.value)" />
+                    </listcell>
+                    <listcell>
+                        <toolbarbutton iconSclass="z-icon-minus"
+                                       onClick="@command('doDeleteFamilyName',form=fx,item=each)" />
+                    </listcell>
+                </listitem>
+            </template>
+        </listbox>
+        <hlayout>
+            <button label="Reset" onClick="@command('reset')"
+                    disabled="@load(not fxStatus.dirty)" />
+            <button label="Save" onClick="@command('save')"
+                    disabled="@load(not fxStatus.dirty)" />
+        </hlayout>
+    </vlayout>
+</zk>

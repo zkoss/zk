@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2757.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  4 10:09:00 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. type 123 to first textbox
+	2. type 321 to second textbox
+	3. drag 123 to second textbox
+	4. two textboxes might fire onChange depending on the behavior of different browsers
+	ex. ff -> onChange on second textbox, ie, chrome -> onChange on first
+	</label>
+	<vlayout>
+		<hlayout>
+			<textbox onChange="label1.setValue(self.getValue())"/>
+			<label id="label1"/>
+		</hlayout>
+		<hlayout>
+			<textbox onChange="label2.setValue(self.getValue())"/>
+			<label id="label2"/>
+		</hlayout>
+	</vlayout>
+	
+</zk>

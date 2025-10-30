@@ -1,0 +1,163 @@
+<zk>
+	<div>
+		<window id="w" title="ZK ForEach" border="normal" viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ForEachListModelVM')">
+			<hlayout id="list">
+				<div hflex="1">
+					<label value="** ListBox ListModelList Start (@init) **" />
+					<listbox id="lli" model="@init(vm.model_l)">
+						<template name="model">
+							<listitem>
+								<listcell label="@init(each.name)"/>
+            					<listcell label="@init(each.address)"/>
+							</listitem>
+						</template>
+					</listbox>
+					<label value="** ListBox ListModelList End (@init) **" />
+				</div>
+				<div hflex="1">
+					<vlayout id="fli">
+						<label value="** ForEach ListModelList Start (@init) **" />
+						<forEach items="@init(vm.model_l)">
+							<hlayout>
+								<label value="@init(each.name)"/>
+								<label value=" - "/>
+								<label value="@init(each.address)"/>
+							</hlayout>
+						</forEach>
+						<label value="** ForEach ListModelList End (@init) **" />
+					</vlayout>
+				</div>
+				<div hflex="1">
+					<label value="** ListBox ListModelList Start (@load) **" />
+					<listbox id="lll" model="@load(vm.model_l)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.name)"/>
+            					<listcell label="@load(each.address)"/>
+							</listitem>
+						</template>
+					</listbox>
+					<label value="** ListBox ListModelList End (@load) **" />
+				</div>
+				<div hflex="1">
+					<vlayout id="fll">
+						<label value="** ForEach ListModelList Start (@load) **" />
+						<forEach items="@load(vm.model_l)">
+							<hlayout>
+								<label value="@load(each.name)"/>
+								<label value=" - "/>
+								<label value="@load(each.address)"/>
+							</hlayout>
+						</forEach>
+						<label value="** ForEach ListModelList End (@load) **" />
+					</vlayout>
+				</div>
+			</hlayout>
+			<hlayout id="array">
+			<div hflex="1">
+					<label value="** ListBox ListModelArray 1D Start (@load) **" />
+					<listbox id="la1d" model="@load(vm.model_a1D)">
+						<template name="model">
+							<listitem label="@load(each)" />
+						</template>
+					</listbox>
+					<label value="** ListBox ListModelArray 1D End (@load) **" />
+				</div>
+				<div hflex="1">
+					<vlayout id="fa1d">
+						<label value="** ForEach ListModelArray 1D Start (@load) **" />
+						<forEach items="@load(vm.model_a1D)">
+							<label value="@load(each)"/>
+						</forEach>
+						<label value="** ForEach ListModelArray 1D End (@load) **" />
+					</vlayout>
+				</div>
+				<div hflex="1">
+					<label value="** ListBox ListModelArray 2D Start (@load) **" />
+					<listbox id="la2d" model="@load(vm.model_a2D)">
+						<template name="model">
+							<listitem>	
+								<listcell label="@load(each[0])"/>
+            					<listcell label="@load(each[1])"/>
+            				</listitem>
+						</template>
+					</listbox>
+					<label value="** ListBox ListModelArray 2D End (@load) **" />
+				</div>
+				<div hflex="1">
+					<vlayout id="fa2d">
+						<label value="** ForEach ListModelArray 2D Start (@load) **" />
+						<forEach items="@load(vm.model_a2D)">
+							<hlayout>
+								<label value="@load(each[0])"/>
+								<label value=" - "/>
+								<label value="@load(each[1])"/>
+							</hlayout>
+						</forEach>
+						<label value="** ForEach ListModelArray 2D End (@load) **" />
+					</vlayout>
+				</div>
+			</hlayout>
+			<hlayout id="map_set">
+				<div hflex="1">
+					<label value="** ListBox ListModelMap Start (@load) **" />
+					<listbox id="lm" model="@load(vm.model_m)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.key)"/>
+            					<listcell label="@load(each.value.address)"/>
+							</listitem>
+						</template>
+					</listbox>
+					<label value="** ListBox ListModelMap End (@load) **" />
+				</div>
+				<div hflex="1">
+					<vlayout id="fm">
+						<label value="** ForEach ListModelMap Start (@load) **" />
+						<forEach items="@load(vm.model_m)">
+							<hlayout>
+								<label value="@load(each.key)"/>
+								<label value=" - "/>
+								<label value="@load(each.value.address)"/>
+							</hlayout>
+						</forEach>
+						<label value="** ForEach ListModelMap End (@load) **" />
+					</vlayout>
+				</div>
+				<div hflex="1">
+					<label value="** ListBox ListModelSet Start (@load) **" />
+					<listbox id="ls" model="@load(vm.model_s)">
+						<template name="model">
+							<listitem>
+								<listcell label="@load(each.name)"/>
+            					<listcell label="@load(each.address)"/>
+							</listitem>
+						</template>
+					</listbox>
+					<label value="** ListBox ListModelSet End (@load) **" />
+				</div>
+				<div hflex="1">
+					<vlayout id="fs">
+						<label value="** ForEach ListModelSet Start (@load) **" />
+						<forEach items="@load(vm.model_s)">
+							<hlayout>
+								<label value="@load(each.name)"/>
+								<label value=" - "/>
+								<label value="@load(each.address)"/>
+							</hlayout>
+						</forEach>
+						<label value="** ForEach ListModelSet End (@load) **" />
+					</vlayout>
+				</div>
+			</hlayout>
+			<button id="change_model" label="change_model(all)" onClick="@command('change_model')" />
+			<button id="add" label="add(List, Map, Set)" onClick="@command('add')" />
+			<button id="update" label="update(List, Map, Array)" onClick="@command('update')" />
+			<button id="remove" label="remove(List, Map, Set)" onClick="@command('remove')" />
+			<!-- <debugger rootId="fli" /> -->
+		</window>
+	</div>
+	<div id="ctrl">
+		<button id="serialization" label="serialize/deserialize" onClick='w.getAttribute("vm").doSerialize(w, msg)' />message:<label id="msg"/>
+	</div>
+</zk>

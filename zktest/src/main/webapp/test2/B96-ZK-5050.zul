@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5050.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/16, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <button label="invalidate treechildren" onClick="tc.invalidate();"/>
+    <tree>
+        <treechildren id="tc">
+            <treeitem label="item1"/>
+            <treeitem label="item2"/>
+            <treeitem label="item3"/>
+            <treeitem label="item4"/>
+            <treeitem label="item5"/>
+        </treechildren>
+    </tree>
+</zk>

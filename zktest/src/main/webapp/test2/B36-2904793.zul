@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2904793.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 27 11:48:44     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<vbox>
+<label value="1. It is correct when you see 'onChange has been triggered!' 
+after input any words into following textbox." />
+<label value="2. It is correct when you see 'onOK has been triggered!' after press Enter key." />
+<textbox id="myTextbox" onOK="okEvtLabel.setVisible(true);" onChanging="changeEvtLabel.setVisible(true);"/>
+<label id="changeEvtLabel" value="onChange has been triggered!" visible="false" />
+<label id="okEvtLabel" value="onOk has been triggered!" visible="false" />
+</vbox>

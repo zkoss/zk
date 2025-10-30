@@ -1,0 +1,23 @@
+<grid>
+	<rows>
+		<row>
+			<cell>User Name:@</cell>
+			<cell><textbox value="@bind(person.name)"/></cell>
+		</row>
+		<row>
+			<cell>Address:@</cell>
+			<cell><textbox value="@bind(person.address)"/></cell>
+		</row>
+		
+		<row>
+			<cell>Apply's values:$</cell>
+			<cell>[${arg.name}][${arg.address}]</cell>
+		</row>
+		<row>
+			<cell colspan="2" align="center">
+				<button label="Save Profile"
+					onClick="@command('updateProfile')" />
+			</cell>
+		</row>
+	</rows>
+</grid>

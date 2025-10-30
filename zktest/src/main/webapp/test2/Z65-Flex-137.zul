@@ -1,0 +1,5 @@
+<zk>
+	<vlayout hflex="1" vflex="1">
+		<slider />
+	</vlayout>
+</zk>

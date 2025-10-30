@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4133.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Nov 15 10:46:09 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click menuitem to upload an image
+		2. You should see the image you just uploaded
+	</label>
+	<menubar width="100px">
+		<menuitem upload="true,maxsize=-1" label="Upload" onUpload='image.content = event.media'/>
+	</menubar>
+	<image id="image"/>
+</zk>

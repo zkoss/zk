@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4354.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Aug 19 16:25:00 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. No js error
+		2. You should see two blue blocks have same style, and two red blocks have same style
+	</label>
+	<vlayout>
+		<hlayout style="border:5px solid blue" hflex="1">
+			<div style="min-width: 190px" hflex="min">
+				hlayout -> normal
+			</div>
+			<div id="hd" hflex="1" style="border: 1px solid">
+				content
+			</div>
+		</hlayout>
+		<hlayout style="border:5px solid blue" hflex="1">
+			<nodom>
+				<div style="min-width: 190px" hflex="min">
+					hlayout -> nodom
+				</div>
+			</nodom>
+			<div id="hdn" hflex="1" style="border: 1px solid">
+				content
+			</div>
+		</hlayout>
+	</vlayout>
+	<hlayout>
+		<vlayout style="border:5px solid red" height="300px" hflex="1">
+			<div style="min-height: 190px" vflex="min">
+				vlayout -> normal
+			</div>
+			<div id="vd" vflex="1" style="border: 1px solid">
+				content
+			</div>
+		</vlayout>
+		<vlayout style="border:5px solid red"  height="300px" hflex="1">
+			<nodom>
+				<div style="min-height: 190px" vflex="min">
+					vlayout -> nodom
+				</div>
+			</nodom>
+			<div id="vdn" vflex="1" style="border: 1px solid">
+				content
+			</div>
+		</vlayout>
+	</hlayout>
+	<hbox>
+		<nodom>
+			<div style="min-width: 190px" hflex="min">
+				hbox -> nodom
+			</div>
+		</nodom>
+		<div hflex="1" style="border: 1px solid">
+			content
+		</div>
+	</hbox>
+	<vbox>
+		<nodom>
+			<div style="min-height: 190px" vflex="min">
+				vbox -> nodom
+			</div>
+		</nodom>
+		<div vflex="1" style="border: 1px solid">
+			content
+		</div>
+	</vbox>
+</zk>

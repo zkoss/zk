@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3824.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jun 04 12:55:57 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true" pre="true"><![CDATA[
+		1. Add the following setting in zk.xml
+		<library-property>
+			<name>org.zkoss.zk.au.AuWriters.ContentType</name>
+			<value>json/application;charset=UTF-8</value>
+		</library-property>
+		2. Click button
+		3. Open browser develop tool and check network
+		4. The Content-Type of response should be json/application;charset=UTF-8
+	]]></label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3824VM')">
+		<label value="@load(vm.value)"/>
+		<button label="randomValue" onClick="@command('randomValue')"/>
+	</vlayout>
+</zk>

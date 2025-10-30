@@ -1,0 +1,38 @@
+@import "~./zul/less/_header.less";
+
+.z-hlayout, .z-vlayout {
+	overflow: hidden;
+}
+.z-hlayout {
+	white-space: nowrap;
+	//css flex
+	&.z-valign-bottom.z-flex {
+		align-items: flex-end;
+	}
+
+	&.z-valign-top.z-flex {
+		align-items: flex-start;
+	}
+
+	&.z-valign-middle.z-flex {
+		align-items: center;
+	}
+}
+.z-hlayout-inner {
+	display: inline-block;
+	position: relative;
+	vertical-align: top;
+	white-space: normal;
+	.z-valign-bottom > & {
+		vertical-align: bottom;
+	}
+	.z-valign-top > & {
+		vertical-align: top;
+	}
+	.z-valign-middle > & {
+		vertical-align: middle;
+	}
+}
+.z-vlayout-inner {
+	position: relative;
+}

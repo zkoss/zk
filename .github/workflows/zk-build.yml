@@ -1,0 +1,44 @@
+name: zk-build
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Java 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: 11
+      - name: Use Node.js 16 LTS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Checkout ZK EE
+        uses: actions/checkout@v3
+        with:
+          repository: zkoss/zkcml
+          ref: master
+          ssh-key: '${{ secrets.SSH_KEY }}'
+          path: zkcml-${{ github.run_id }}-${{ github.run_number }}
+      - run: |
+          mv zkcml-${{ github.run_id }}-${{ github.run_number }} ../zkcml
+          cd ../zkcml
+          if [ -e yarn.lock ]; then
+            yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+            npm ci
+          else
+            npm i
+          fi
+      - name: Build Latest ZK
+        run: |
+          sed -i 's/includeBuild/\/\/includeBuild/' settings.gradle
+          ./gradlew clean build
+

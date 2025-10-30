@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2948875.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Feb 10 12:35:03 TST 2010, Created by jimmyshiau
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Check alert will not call again after typing a new value and press enter then focus out the input
+	<zscript><![CDATA[	
+		String[] data = new String[30];
+		for(int j=0; j < data.length; ++j) {
+			data[j] = "option "+j;
+		}
+		ListModel strset = new SimpleListModel(data);
+		]]></zscript>
+	<listbox width="500px"  mold="paging" pageSize="3" model="${strset}" onPaging='alert("It will appear after focus out the input");'>	
+	</listbox>
+</zk>
+

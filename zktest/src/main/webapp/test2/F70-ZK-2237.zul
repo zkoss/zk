@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F70-ZK-2237.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, May 14, 2014  4:56:04 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<vlayout>
+		1. The simplest use is to specify it with self as follows. Then, the anchor is disabled when it is clicked.
+		<a label="OK" autodisable="self" />
+		<div>
+			2. The following disables both anchors, when one of them is clicked.
+			<a id="ok" label="OK 2" autodisable="ok,cancel" />
+			<a id="cancel" label="Cancel" autodisable="ok,cancel" />
+		</div>
+		3. Change the disable status.
+		<button label="Change OK 2 to disabled" onClick='ok.setDisabled(true)'/>
+		<button label="Change OK 2 to enabled" onClick='ok.setDisabled(false)'/>
+	</vlayout>
+</window>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4775.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Jan 20 11:14:28 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. open the network tab in the browser's dev tools
+		2. click the buttons -> observe the requests succeed
+		3. stop the server, disconnect the network
+			(or simulate in browser's dev tools network -> throttling -> offline)
+		4. click either button
+		4-A. some event
+		4-B. send dummy
+		5. restart the sever, reconnect network or disable offline
+		6-A. click retry in dialog
+		7. click any button
+
+		After reconnecting/restarting the UI should continue to work
+	</label>
+	<button label="some event"
+			onClick="Clients.log(event.toString())"/>
+	<button label="send dummy"
+			w:onClick="zAu.send(new zk.Event(this.desktop, 'dummy', null, {ignorable: true, rtags: {isDummy: true}}));"/>
+</zk>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2208873.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct 30 12:10:28     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+You shall see a listbox with one, two, tree, four
+<separator/>
+<zscript language="Python">
+from java.lang import String
+
+inputArray = ["one", "two", "three", "four"]
+print "input String Array =", inputArray
+</zscript>
+<listbox width="100px">
+<listitem label="${each}" forEach="${inputArray}"/>
+</listbox>
+</zk> 

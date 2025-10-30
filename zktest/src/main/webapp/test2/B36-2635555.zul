@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2635555.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  4 12:23:18     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+IE only
+<vbox>
+<label value="1.Click the Upload button"/>
+<label value="2.Click the Cancel button"/>
+<label value="3.Focus into the input box, you should see a cursor is inside the input box"/>
+</vbox>
+<button label="Upload">
+<attribute name="onClick">{
+Object media = Fileupload.get(-1);
+if (media instanceof org.zkoss.util.media.Media[]) {
+org.zkoss.util.media.Media[] medias = (org.zkoss.util.media.Media
+[])media;
+for (int i = 0; i &lt; medias.length; i++) {
+Image image = new Image();
+image.setContent(medias[i]);
+image.setParent(pics);
+}
+} else if (media != null)
+Messagebox.show("Not an image: "+media, "Error", Messagebox.OK,
+Messagebox.ERROR);
+}</attribute>
+</button>
+<textbox onFocus='self.style="background:red;"'
+onBlur='self.style="background:white"' />
+</zk>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B50-3162238.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 20 11:04:50 TST 2010, Created by simonpai
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on Show Null, the included content should disappear, 
+			otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<include id="inc" src="B50-3162238-inc.zul" />
+	<button label="Show Null" onClick='inc.src = null' />
+</zk>

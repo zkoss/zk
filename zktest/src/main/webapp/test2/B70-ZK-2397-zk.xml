@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <session-config>
+        <device-type>ajax</device-type>
+        <timeout-message>Session timeout. Please reload.</timeout-message>
+        <session-timeout>1</session-timeout>
+    </session-config>
+</zk>

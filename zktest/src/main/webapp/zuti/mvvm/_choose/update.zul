@@ -1,0 +1,20 @@
+<zk>
+	<div id="host" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.ForEachVM')">
+		<forEach begin="@load(vm.begin)" end="@load(vm.end)">
+			<choose>
+				<when test="@load(each lt 3)">
+					<div style="color:blue">${each} Template</div>
+				</when>
+				<when test="@load(each lt 6)">
+					<div style="color:yellow">${each} Template</div>
+				</when>
+				<otherwise>
+					<div style="color:red">${each} Template</div>
+				</otherwise>
+			</choose>
+		</forEach>
+		<button label="update range 5~9" onClick='@command("updateRange",begin=5,end=9)'/>
+	</div>
+	<debugger rootId="host"/>
+</zk>

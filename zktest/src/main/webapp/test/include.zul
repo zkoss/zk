@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Include another page"?>
+<!--
+includer.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 29 13:54:09     2005, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+This includes another page.
+	<window id="embed" title="Includee" border="true">
+	<include id="inc" src="include2.zul" mode="defer"/>
+	</window>
+	<button label="Change to slider.zul">
+		<attribute name="onClick">
+		embed.getFellow("inc").setSrc("slider.zul");
+		</attribute>
+	</button>
+	<button label="Change to upload.zul">
+		<attribute name="onClick">
+		Include inc = embed.getFellow("inc");
+		inc.setSrc("upload.zul?pageId=UpdDemo&amp;style=border:1px%20solid%20red");
+		</attribute>
+	</button>
+	<button label="Change to grid.zul">
+		<attribute name="onClick">
+		embed.getFellow("inc").setSrc("grid.zul");
+		</attribute>
+	</button>
+	<button label="Change to include2.zul">
+		<attribute name="onClick">
+		embed.getFellow("inc").setSrc("include2.zul");
+		</attribute>
+	</button>
+	<button label="Add comp to includee">
+	<attribute name="onClick">
+	new Label("A new label").setPage(page.desktop.getPage("UpdDemo"));
+	</attribute>
+	</button>
+	<button label="Remove Includee" onClick="embed.detach()"/>
+
+	<window title="The second includee" border="true">
+	<include id="inc2" src="menu.zul" mode="defer"/>
+	</window>
+And, it includes '~./html/alert.dsp'
+	<include src="~./html/alert.dsp" mode="auto"/>
+And, it includes '~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message'
+Note: title and message has no effect since fileuploaddlg uses arg
+while parameters in the query string are part of param.
+	<include src="~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message" mode="defer"/>
+instant mode:
+	<include src="~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message" mode="instant"/>
+</window>

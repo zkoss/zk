@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3152754.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 19 17:13:20 TST 2011, Created by simon
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Click on Show + Invalidate, if Div Content is not shown it is a bug.</li>
+			<li>Click on Hide + Invalidate and then Show + Invalidate, if Div Content is not shown it is a bug.</li>
+		</ol>
+	]]></html>
+	<div id="inc" visible="false">
+		<window border="normal">
+			<label value="Div Content" />
+		</window>
+	</div>
+	<div>
+		<button label="Show + Invalidate" onClick='inc.visible = true; inc.invalidate();' />
+		<button label="Hide + Invalidate" onClick='inc.visible = false; inc.invalidate();' />
+	</div>
+</zk>

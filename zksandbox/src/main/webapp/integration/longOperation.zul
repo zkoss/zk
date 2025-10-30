@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+longOperation.zul
+
+{{IS_NOTE
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zksandbox.DemoWindowComposer" xmlns:h="xhtml" xmlns:zk="zk">
+	<vbox>
+		<html><![CDATA[
+				<h4>Performance Optimization</h4>
+				<h5>Prompt the User before Doing a Long Operation with Echo Event</h5>
+				<p>Handling the long operation is always a challenge to Web
+				application developers, since it will block the users from accessing
+				until the long operation is done. As described in the Developer's Guide,
+				there are four options to prevent the blocking: server push,
+				suspend/resume, timer, and piggyback. They all require you to create a
+				working thread to handle the long operation.</p>
+				<p>However, if it is OK for your application to block the user, ZK
+				3.0.2 introduces a neat way to provide a more descriptive message and to
+				prevent the user from clicking a button and doing other activities. It
+				is the echo event and the showBusy method.</p>
+				<p>The concept is simple: use the showBusy method of the
+				org.zkoss.zk.ui.util.Clients class to show a descriptive message, and
+				then use the echoEvent method to ask the client to fire back an event
+				after it shows the message.</p>
+				<p>Of course, you can do whatever you want, not limited to the
+				showBusy method. For example, you might want to open a window with the
+				highlited mode.</p>
+			]]></html>
+		<separator bar="true" />
+		<html><![CDATA[
+			<h5>Live Demo</h5>
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+			codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0"
+			width="350" height="310" ID="Captivate1">
+			<param name="movie" value="http://books.zkoss.org/images/3/30/Echoevent.swf">
+			<param name="quality" value="high">
+			<param name="loop" value="0">
+			<embed align="center" src="http://books.zkoss.org/images/3/30/Echoevent.swf" width="350" height="310"
+				loop="0" quality="high"
+				pluginspage="http://www.macromedia.com/go/getflashplayer"
+				type="application/x-shockwave-flash" menu="false"></embed> 
+		</object>
+		]]></html>
+	</vbox>
+	For more information, see our
+	<toolbarbutton id="target" label="Documentation" target="zksandbox"
+		href="http://books.zkoss.org/wiki/ZK_Developer%27s_Reference/Event_Handling/Event_Firing" />
+</window>

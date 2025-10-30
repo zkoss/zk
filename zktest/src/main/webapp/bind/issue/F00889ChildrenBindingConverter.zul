@@ -1,0 +1,76 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.F00889ChildrenBindingConverter')">
+	<label multiline="true">
+	1.the both the init side and load side display without error.
+	2.first Item is A, other collections are A B C
+	</label>
+	<hbox>
+		<vlayout>
+			<label value="init"/>
+			1.Item
+			<hlayout id="item1" children="@init(vm.item1)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+			2.Set
+			<hlayout id="set1" children="@init(vm.itemSet1)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+			3.List
+			<hlayout id="list1" children="@init(vm.itemList1)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+			4.Array
+			<hlayout id="array1" children="@init(vm.itemArray1)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+			5.Enum
+			<hlayout id="enum1" children="@init(vm.itemEnum1)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+		</vlayout>
+		<vlayout>
+			<label value="load"/>
+			1.Item
+			<hlayout id="item2" children="@load(vm.item2)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+			2.Set
+			<hlayout id="set2" children="@load(vm.itemSet2)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+			3.List
+			<hlayout id="list2" children="@load(vm.itemList2)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+			4.Array
+			<hlayout id="array2" children="@load(vm.itemArray2)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+			5.Enum
+			<hlayout id="enum2" children="@load(vm.itemEnum2)">
+				<template name="children">
+					<label value="@load(each)"/>
+				</template>
+			</hlayout>
+		</vlayout>
+	</hbox>
+	
+</window>

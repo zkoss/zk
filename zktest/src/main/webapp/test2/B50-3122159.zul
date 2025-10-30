@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3122159.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 30 09:03:56 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please click upon the date icon to choose a date and it should immediately alert a dialog to display a date that you selected.
+<datebox onChange="alert(self.value)"/>
+</zk>

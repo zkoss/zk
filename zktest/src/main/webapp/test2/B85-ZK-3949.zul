@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3949.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jun 14 12:50:25 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true">
+		1. click the "Hide image" button.
+		2. The caption image should disappear.
+	</label>
+
+	<window title="new page title" border="normal"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3949VM')">
+		<groupbox closable="true" mold="3d">
+			<caption image="@load(vm.image)" label="" />
+			<button id="showbtn" label="Show image" onClick="@command('showImage')" />
+			<button id="hidebtn" label="Hide image" onClick="@command('hideImage')" />
+		</groupbox>
+	</window>
+</zk>

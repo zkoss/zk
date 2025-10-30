@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3303872.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul  8 17:34:07 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<groupbox mold="3d" width="400px"
+height="300px" contentStyle="overflow:auto;position:relative">
+<caption label="tabbox bug" />
+<tabbox orient="vertical" height="400px">
+<tabs>
+<tab label="A" />
+</tabs>
+<tabpanels>
+<tabpanel>This is panel A</tabpanel>
+</tabpanels>
+</tabbox>
+</groupbox>
+</zk> 

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4411.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 21 11:26:36 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <apply templateURI="/test2/include/themes.zul"/>
+    <style>
+        .blue {
+        background-color: lightblue;
+        }
+    </style>
+    <label>The valign should work fine</label>
+    <hlayout sclass="blue">
+        <hlayout hflex="1">
+            <button label="test button" height="50px"/>
+        </hlayout>
+        <div hflex="1">
+            valign top
+        </div>
+    </hlayout>
+    <separator />
+    <hlayout hflex="1">
+        <hlayout valign="middle" sclass="blue" hflex="1">
+            <hlayout hflex="1">
+                <button label="test button" height="50px"/>
+            </hlayout>
+            <div id="m1" hflex="1">
+                valign middle
+            </div>
+        </hlayout>
+        <hlayout valign="middle" sclass="blue" hflex="1">
+            <custom-attributes org.zkoss.zul.css.flex="false"/>
+            <hlayout hflex="1">
+                <button label="test button" height="50px"/>
+            </hlayout>
+            <div id="m2" hflex="1">
+                valign middle (using old flex)
+            </div>
+        </hlayout>
+    </hlayout>
+    <separator />
+    <hlayout hflex="1">
+        <hlayout valign="bottom" sclass="blue" hflex="1">
+            <hlayout hflex="1">
+                <button label="test button" height="50px"/>
+            </hlayout>
+            <div id="b1" hflex="1">
+                valign bottom
+            </div>
+        </hlayout>
+        <hlayout valign="bottom" sclass="blue" hflex="1">
+            <custom-attributes org.zkoss.zul.css.flex="false"/>
+            <hlayout hflex="1">
+                <button label="test button" height="50px"/>
+            </hlayout>
+            <div id="b2" hflex="1">
+                valign bottom (using old flex)
+            </div>
+        </hlayout>
+    </hlayout>
+</zk>

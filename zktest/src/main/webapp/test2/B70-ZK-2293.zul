@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2293.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, May 13, 2014 12:26:22 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<vlayout>
+Please open the bandpopup twice, the width of the popup should be the same.
+<bandbox hflex="1">
+    <bandpopup>
+        <hlayout>
+            <label value="Name" hflex="1" />
+            <space />
+            <label value="Surname" hflex="1" />
+        </hlayout>
+        <hlayout>
+            <textbox value="Peter" hflex="1" />
+            <space />
+            <textbox value="Parker" hflex="1" />
+        </hlayout>
+    </bandpopup>
+</bandbox>
+</vlayout>
+</zk>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-2756.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Sep 03 13:01:21 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F86_ZK_2756VM')">
+        <label multiline="true">
+            1. No "UnsupportedOperationException: Unsupported Listgroup in Select mold!"
+            2. Click the select box, the items should be grouped.
+            3. Choose "2015-Q4".
+            4. Click button "mold=default". You can see the grouped Listbox and "2015-Q4" is selected.
+            5. Fold "Fiscal Year" group and click button "mold=select"
+            6. You can see the items under "Fiscal Year" are now hidden.
+        </label>
+        <button onClick='lb.mold = "select"' label="mold=select"/>
+        <button onClick='lb.mold = "default"' label="mold=default"/>
+        <listbox id="lb" model="@load(vm.model)" selectedItem="@bind(vm.selected)" mold="select">
+            <template name="model">
+                <listitem label="@load(each)" />
+            </template>
+            <template name="model:group">
+                <listgroup label="@load(each)" />
+            </template>
+        </listbox>
+    </div>
+</zk>

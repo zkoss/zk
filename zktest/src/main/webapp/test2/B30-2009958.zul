@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2009958.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jul 24 16:51:31 TST 2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Focus on the option box (if the option box is not focused already).</li>
+			<li>Press 'M' key. The option box should show "Madruga".</li>
+			<li>Press Enter key. A Messagebox of "Madruga" should show up. If the message is not "Madruga"  or otherwise, it is a bug.</li>
+		</ol>
+	]]></html>
+	<window title="onOK listbox select" border="normal" width="400px">
+	<zscript><![CDATA[
+		String[] str = new String[]{"Dennis", "Jumper", "Madruga", "Tom"};
+		ListModel ml = new SimpleListModel(str);
+	]]></zscript>
+	<listbox id="lb" mold="select" model="${ml}" focus="true"
+		onOK="alert(lb.getSelectedItem().getLabel())"/>
+	</window>
+</zk>

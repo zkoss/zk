@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3704.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jun 04 15:34:38 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Type 123456.789 in the first decimalbox and blur
+		2. The value should be 1,23,456.789
+		3. Type 123456.789 in the second decimalbox and blur
+		4. The value should be 123 456,789
+		5. Click button setFormat("locale:de")
+		6. The value in the first decimalbox should be 123.456,789
+	</label>
+	<decimalbox id="db1" width="200px" format="locale:en-IN"/>
+	<decimalbox width="200px" format="locale:fr"/>
+	<button label='setFormat("locale:de")' onClick='db1.setFormat("locale:de")'/>
+</zk>

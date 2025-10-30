@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4301.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 20 10:37:11 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Enable TouchEvent emulation (Chrome device emulation -> add Desktop (touch))
+        2. Reload this page.
+        3. Click the button.
+        4. Drag the header of the messagebox.
+        5. It should be able to drag.
+    </label>
+    <button label="Show a messagebox">
+        <attribute name="onClick"><![CDATA[
+        Messagebox.show("Drag the header to test if it acts normally on a touch screen");
+        ]]></attribute>
+    </button>
+</zk>

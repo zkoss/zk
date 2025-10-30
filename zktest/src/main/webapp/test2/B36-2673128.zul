@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2673128.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 19 17:34:24 TST 2009, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window>
+  <datebox id="db" width="150px" format="dd/MMM .yyyy" />
+  <datebox id="db2" width="150px" format="dd MMMM yyyy"/>
+  <vbox>
+  1) Change Locale to fr 
+  2) Select December
+  3) Should not show error
+</vbox>
+</window>

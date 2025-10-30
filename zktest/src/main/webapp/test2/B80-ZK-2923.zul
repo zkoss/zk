@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2923.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 19 12:50:01 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client" xmlns:ca="client/attribute">
+    <label multiline="true">
+        1. Please type some words into the two textbox, and then click the "clear and notify account" button.
+        2. You should see that the first textbox should keep the words that you typed. and the second textbox should be cleaned up.
+    </label>
+	<window title="" border="normal" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_2923ViewModel')"
+		validationMessages="@id('vmsgs')">
+
+		Special Account <textbox width="150px" value="@load(vm.specialAccount.code) @save(vm.specialAccount.code, before='other')" /> type a value, not saved yet
+		<space orient="horizontal"/>
+		Account <textbox width="150px" value="@load(vm.account.code) @save(vm.account.code, before='other')" />
+		<space orient="horizontal"/>
+		<button onClick="@command('selectAccountType')" label="clear and notify account"/>
+		pressing this button will also trigger an unexpected @load on the specialAccount textbox
+	</window>
+</zk>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3907.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 17 10:13 AM:32 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <button label="click it" onClick=""/>
+</zk>

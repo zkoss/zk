@@ -1,0 +1,13 @@
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.util.GenericForwardComposer;
+		public class Composer extends GenericForwardComposer {
+			public void doAfterCompose(Component comp) throws Exception {
+				new Separator().setPage(comp.parent.page);
+				new Label("Created!\n").setPage(comp.parent.page);
+				super.doAfterCompose(comp);
+			}
+		}
+	]]></zscript>
+	<window apply="Composer"/>
+</zk>

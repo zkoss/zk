@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-724.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 29 18:01:56 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+String[] data = new String[10];
+for (int i = 0; i < data.length; i++)
+	data[i] = "option " + i;
+
+
+ListModelList model = new ListModelList(data);
+    ]]></zscript>
+    Please click the button and you shouldn't see any exception (ROD mode)
+    <button label="clean model">
+    	<attribute name="onClick">
+    	
+    	// reset model
+    	listbox.setModel(null);
+    	</attribute>
+    </button>
+    <listbox id="listbox" model="${model}" onSelect="">
+    	<listhead><listheader label="column" sort="auto"/></listhead>
+    </listbox>
+    
+</zk>

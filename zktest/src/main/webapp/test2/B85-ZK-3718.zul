@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3718.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Dec 18 16:41:53 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div style="width: 400px; border: 1px solid Black;">
+        <vlayout style="background-color: red;" height="500px" width="300px" spacing="0">
+            <forEach begin="1" end="10">
+                <div style="background-color: PaleGreen;">above</div>
+            </forEach>
+            <div style="background-color: BurlyWood;" vflex="1">vflex</div>
+            <forEach begin="1" end="10">
+                <div style="background-color: LightBlue;">below</div>
+            </forEach>
+        </vlayout>
+    </div>
+    (Sub-pixel rendering) IE9/10/11/Edge/Firefox have an empty margin (red) at the bottom, depending on the number of divs around the vflex element
+</zk>

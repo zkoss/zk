@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="zk.useStackup=true;"?>
+<!--
+B86-ZK-3869.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Aug 09 11:11:14 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		iframe {
+			opacity: 1!important;
+			outline: 2px solid red;
+		}
+	</style>
+	<label multiline="true">
+		1. Click Popup
+		2. The stackup iframe should be the same position as popup (means the outline should fit popup)
+	</label>
+	<div>
+		<div height="200px"/>
+		<button popup="pop,position=after_end" label="Popup"/>
+		<popup id="pop" width="200px" height="150px">Dummy Content</popup>
+	</div>
+</zk>

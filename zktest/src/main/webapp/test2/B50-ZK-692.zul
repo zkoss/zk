@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-692.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Dec 20 10:34:15 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+<zscript>
+if (null == Sessions.getCurrent().getAttribute("MyDesktopCleanup"))
+	Sessions.getCurrent().setAttribute("MyDesktopCleanup", new Integer(1));
+</zscript>
+Please press F5 5 times to reload this page, then you should see the Counts is greater than 1. (not for Opera)
+<separator/>
+Counts: <label value="${sessionScope.MyDesktopCleanup}"/> 
+</window>

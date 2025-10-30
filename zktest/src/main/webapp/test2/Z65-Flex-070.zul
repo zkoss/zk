@@ -1,0 +1,17 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Combobox, rounded]" width="480px">
+        <combobox mold="rounded" vflex="1">
+            <comboitem label="apple"/>
+            <comboitem label="banana"/>
+        </combobox>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Combobox]" width="480px">
+        <combobox vflex="1">
+            <comboitem label="apple"/>
+            <comboitem label="banana"/>
+        </combobox>
+    </window>
+</hbox>
+</zk>

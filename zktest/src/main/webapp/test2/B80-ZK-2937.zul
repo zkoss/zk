@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2937.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov  9 10:01:37 CST 2015, Created by wenning
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. select the first item, "ar_AE".
+		2. delete the last 2 character, so it's "ar_".
+		3. the input text keeps unchanged after deleting the last 2 chars, if not, it's a bug.
+
+	</label>
+	<combobox id="combo" autodrop="true" buttonVisible="false" autocomplete="false"/>
+
+	<zscript><![CDATA[
+			import org.zkoss.zul.ext.*;
+			/*Dictionary.getDictionary() returns a String[] containing the dictionary words*/
+			ListModel dictModel= new SimpleListModel(Locale.getAvailableLocales());
+			combo.setModel(dictModel);
+	]]></zscript>
+</zk>

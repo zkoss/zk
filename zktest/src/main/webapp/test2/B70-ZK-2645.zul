@@ -1,0 +1,29 @@
+<zk>
+    <zscript><![CDATA[
+    ListModelList model = new ListModelList();
+    for (int j = 1; j < 201; ++j) {
+        model.add("" + j);
+    }
+    void reset() {
+        model.clear();
+        for (int j = 1; j < 201; ++j) {
+            model.add("" + j);
+        }
+    }
+    ]]></zscript>
+    <label multiline="true">
+    1. Scroll the listbox to most bottom.
+    2. Click "Reset" button.
+    The listbox scroll position go back to top most but the data didn't show.
+    This issue only happened when ROD enabled.
+    </label>
+    <window>
+        <button label="Reset" onClick="reset()" />
+        <listbox width="100%" height="400px" model="${model}">
+            <custom-attributes org.zkoss.zul.listbox.rod="true" />
+            <listhead>
+                <listheader label="A" />
+            </listhead>
+        </listbox>
+    </window>
+</zk>

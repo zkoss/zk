@@ -1,0 +1,11 @@
+<window id="win_LoginDialog" width="350px" border="normal"
+xmlns:h="http://www.w3.org/1999/xhtml">
+	<h:form method="POST">
+	<textbox value="init" onChange='new Label("a:"+self.value).setParent(inf)'/>
+	<textbox constraint="no empty" onChange='new Label("b:"+self.value).setParent(inf)'/>
+	<separator/>
+	<h:input type="submit" value="Login"/>
+	<h:input type="reset" value="Reset"/>
+	</h:form>
+	<vbox id="inf"/>
+</window>

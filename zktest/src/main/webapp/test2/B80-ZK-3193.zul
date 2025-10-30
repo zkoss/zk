@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3193.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Apr 27, 2016  6:44:05 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zk.au.*;
+		import org.zkoss.zk.ui.util.Clients;
+		AuService as = new AuService() {
+			public boolean service(AuRequest request, boolean everError) {
+				if("onChanging".equals(request.getCommand()))
+					Clients.log("onChanging");
+				return false;
+			}
+		};
+	]]></zscript>
+	<label multiline="true">
+		firefox triggers onChanging after using the listbox scrollbar inside the popup, and then click outside the popup
+		1. open the bandbox
+		2. use the scrollbar of the listbox (not mousewheel, click/drag it)
+		3. click outside the popup to close it
+		4. should not send onChanging to server
+	</label>
+	<div>
+		<bandbox onChanging="" auService="${as}">
+			<bandpopup width="200px">
+				<listbox height="100px" width="150px">
+					<listitem label="1" />
+					<listitem label="2" />
+					<listitem label="3" />
+					<listitem label="4" />
+					<listitem label="5" />
+					<listitem label="6" />
+				</listbox>
+			</bandpopup>
+		</bandbox>
+		contains listbox - triggers onChanging after using the listbox scrollbar inside the popup, and then click outside the popup (no selection, no key press required)
+	</div>
+</zk>

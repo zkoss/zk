@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B95-ZK-4633.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jul 30, 2020 02:48:18 PM, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>These two slider should be disabled</label>
+	<rangeslider disabled="true" startValue="10" endValue="90" />
+	<multislider disabled="true">
+		<sliderbuttons startValue="10" endValue="90" />
+	</multislider>
+</zk>

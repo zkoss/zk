@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+comps.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Oct  9 17:52:48     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="win" title="Show ZUL Components" border="normal"
+	width="200px" height="400px" contentStyle="overflow:auto;">
+	<button label="Show ME">
+		<attribute name="onClick">
+		import org.zkoss.zk.ui.metainfo.*;
+		import java.util.*;
+		
+		new Separator().setParent(win);
+		LanguageDefinition ld = this.page.getLanguageDefinition();
+		ComponentDefinitionMap map = ld.getComponentDefinitionMap();
+		ArrayList al = new ArrayList();
+		al.addAll(map.getNames());
+		Collections.sort(al);
+		for(Iterator it = al.iterator(); it.hasNext();) {
+			new Label(it.next()).setParent(win);
+			new Separator().setParent(win);
+		}
+		new Label("Total Size: " + map.getNames().size()).setPage(win.getPage());
+		self.detach();
+		</attribute>
+	</button>
+</window>
+
+

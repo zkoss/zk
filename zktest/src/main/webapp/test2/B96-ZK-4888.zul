@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4888.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 11 16:03:59 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. resize the first header column
+		2. click the "Refresh" button
+		listheaders and listcells shall not shrink to minimal width and width shall sync.
+	</label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.B96_ZK_4888VM')" vflex="1">
+		<button label="Refresh" onClick="@command('refreshData')"/>
+		<listbox id="box" sizedByContent="true" span="true"
+				 model="@load(vm.listModel)" vflex="1" selectedItem="@bind(vm.selectedItem)" autopaging="true" mold="paging">
+			<listhead sizable="true" children="@load(vm.allColumns)"
+					  onColSize="Clients.resize(self.getChildren().get(self.getChildren().size()-1))"
+			>
+				<template name="children" var="columnInfo">
+					<listheader label="@load(columnInfo.label)"
+								draggable="true" droppable="true"
+								sort="@load('auto('.concat(columnInfo.value).concat(')'))"
+								onDrop="@command('dropColumn', event=event)" />
+				</template>
+			</listhead>
+			<template name="model" var="item">
+				<listitem children="@init(vm.allColumns) @template(each.templateName)">
+					<template name="default" var="columnInfo">
+						<listcell label="@load(item[columnInfo.value])" />
+					</template>
+				</listitem>
+			</template>
+		</listbox>
+	</vlayout>
+	<!--    <script src="zk-4888.js"/>-->
+</zk>

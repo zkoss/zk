@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4556.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon Apr 27 12:46:50 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+        public void addModal() {
+            Window win=new Window();
+            win.setPage(Executions.getCurrent().getDesktop().getFirstPage());
+            win.setWidth("400px");
+            win.setHeight("400px");
+            win.setTitle("ZK EE 9.0.1 Test");
+            win.setSizable(true);
+
+            Label label=new Label();
+            label.setParent(win);
+            label.setValue("test label 1 ZK EE 9.0.1");
+            Borderlayout borderlayout= new Borderlayout();
+            borderlayout.setParent(win);
+            Center center=new Center();
+            center.setParent(borderlayout);
+            Label label2=new Label();
+            label2.setParent(center);
+            label2.setValue("test label 2 ZK EE 9.0.1");
+            win.doModal();
+            win.setVisible(true);
+            win.setClosable(true);
+        }
+    ]]></zscript>
+	<custom-attributes org.zkoss.zul.css.flex="false"/>
+	<div>
+		<button label="Click me, and see the window content with proper height" onClick="addModal()"/>
+	</div>
+	<separator/>
+	<div>
+		<button label="Click me, and see the grid with proper column width (sizeByContent)">
+			<attribute name="onClick"><![CDATA[
+					self.getTemplate("grid").create(self.getParent(), null, null, null);
+				]]></attribute>
+			<template name="grid">
+				<grid sizedByContent="true">
+					<columns>
+						<column label="col1"/>
+						<column label="column2"/>
+					</columns>
+					<rows>
+						<row>
+							<cell>content 1</cell>
+							<cell>content 2 longer</cell>
+						</row>
+					</rows>
+				</grid>
+			</template>
+		</button>
+	</div>
+</zk>

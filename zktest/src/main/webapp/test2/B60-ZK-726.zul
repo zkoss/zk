@@ -1,0 +1,28 @@
+<!--
+	B50-ZK-726.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Thu Apr 19 10:26:15 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<div>
+		You should see the busy loading sign on the dummy div.
+	</div>
+	<borderlayout vflex="1">
+		<center autoscroll="true">
+			<div id="loading_div" width="100px" height="100px" style="position: absolute; z-index: 1; border: 1px solid black">
+				Dummy Div
+			</div>
+		</center>
+	</borderlayout>
+	<script defer="true">
+		var div = zk.Widget.$('$loading_div');
+		zAu.cmd0.showBusy(div.uuid, 'loading');
+	</script>
+</zk>

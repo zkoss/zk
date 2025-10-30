@@ -1,0 +1,20 @@
+<zk>
+<tabbox orient="vertical">
+<tabs>
+<tab label="tab" />
+</tabs>
+<tabpanels>
+<tabpanel>
+<combobox/>
+<html><![CDATA[
+<ol>
+ <li>Click the dropdown button, and the popup shall be aligned correctly under
+ the input</li>
+</ol>
+]]></html>
+</tabpanel>
+</tabpanels>
+</tabbox>
+<button label="change orient"
+onClick='self.previousSibling.orient = "vertical".equals(self.previousSibling.orient) ? "horizontal": "vertical"'/>
+</zk>

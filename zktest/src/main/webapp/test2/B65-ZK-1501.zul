@@ -1,0 +1,27 @@
+<zk>
+	<label multiline="true">
+	iPad/Android Only
+	1. Scroll the grid horizontally.
+	2. The footer should scroll too.
+	</label>
+	<grid>
+		<zscript>Object[] o = new Object[20];</zscript>
+		<columns>
+			<column forEach="${o}" width="100px">Column</column>
+		</columns>
+		<rows>
+			<row>
+				<label forEach="${o}">Label</label>
+			</row>
+			<row>
+				<label forEach="${o}">Label</label>
+			</row>
+			<row>
+				<label forEach="${o}">Label</label>
+			</row>
+		</rows>
+		<foot>
+			<footer forEach="${o}">Footer</footer>
+		</foot>
+	</grid>
+</zk>

@@ -1,0 +1,22 @@
+<grid>
+	<rows>
+		<row>
+			<cell>User Name:@</cell>
+			<cell><label value="@load(person.name)"/></cell>
+		</row>
+		<row>
+			<cell>Address:@</cell>
+			<cell><label value="@load(person.address)"/></cell>
+		</row>
+		<row>
+			<cell>Apply's values:$</cell>
+			<cell>[${arg.name}][${arg.address}]</cell>
+		</row>
+		<row>
+			<cell colspan="2" align="center">
+				<button label="Edit Profile"
+					onClick="@command('editProfile', profile=person)" />
+			</cell>
+		</row>
+	</rows>
+</grid>

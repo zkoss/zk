@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3660.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jun 15 10:34:49 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Double click the border between column "aaa" and "bbbb bbbb" to do the auto fitting.
+        2. Click the first cell, and do the auto fitting again. You should see it works.
+        3. try it in grid, listbox and tree.
+    </label>
+    <separator />
+    Grid:
+    <separator />
+    <grid>
+        <columns sizable="true">
+            <column label="aaa"/>
+            <column label="bbbb bbbb"/>
+            <column label="ccccccc ccc"/>
+            <column label="dddd"/>
+        </columns>
+        <rows>
+            <row>
+                <label value="CLICK here to shorten label" onClick='self.setValue("SHORT")' />
+                <label value="value B" />
+                <label value="value C" />
+                <label value="value D" />
+            </row>
+            <row>
+                <label value="value A" />
+                <label value="value B" />
+                <label value="value C" />
+                <label value="value D" />
+            </row>
+        </rows>
+    </grid>
+    <separator />
+    Listbox:
+    <separator />
+	<listbox>
+		<listhead sizable="true">
+			<listheader label="aaa"/>
+			<listheader label="bbbb bbbb"/>
+			<listheader label="ccccccc ccc"/>
+			<listheader label="dddd"/>
+		</listhead>
+		<listitem>
+			<listcell label="CLICK here to shorten label" onClick='self.setLabel("SHORT")'/>
+			<listcell label="value B"/>
+			<listcell label="value C"/>
+			<listcell label="value D"/>
+		</listitem>
+		<listitem>
+			<listcell label="value A"/>
+			<listcell label="value B"/>
+			<listcell label="value C"/>
+			<listcell label="value D"/>
+		</listitem>
+	</listbox>
+    <separator />
+    Listbox:
+    <separator />
+    <tree>
+        <treecols sizable="true">
+            <treecol label="aaa"/>
+            <treecol label="bbbb bbbb"/>
+            <treecol label="ccccccc ccc"/>
+            <treecol label="dddd"/>
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell label="2. CLICK here to shorten label" onClick='self.setLabel("SHORT")'/>
+                    <treecell label="value B"/>
+                    <treecell label="value C"/>
+                    <treecell label="value D"/>
+                </treerow>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="value A"/>
+                            <treecell label="value B"/>
+                            <treecell label="value C"/>
+                            <treecell label="value D"/>
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>

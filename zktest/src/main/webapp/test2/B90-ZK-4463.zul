@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4463.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 19 17:46:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label value="Click '40' twice, only one button will move."/>
+    <multislider id="ms1">
+        <sliderbuttons startValue="10" endValue="70" onRangeValueChange='Clients.log("Changed")'/>
+        <sliderbuttons startValue="20" endValue="50" onRangeValueChange='Clients.log("Changed")'/>
+    </multislider>
+</zk>

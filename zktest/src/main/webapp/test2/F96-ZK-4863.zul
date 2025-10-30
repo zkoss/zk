@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4863.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jul 02 12:11:11 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		custom Regex flag test, click the "server test" button after each step, you shall not see any error message.
+		1. click these textboxs and focus out, it should be rejected by the constraint.
+		2. paste "aaa" in to the textboxs, it should not be rejected by the constraint.
+		3. paste "a" in to the textboxs, it should be rejected by the constraint.
+		4. paste "AAA" in to the textboxs, it should not be rejected by the constraint.
+	</label>
+	custom Regex flag(giu) test:
+	<vlayout>
+		<button label="server test" onClick=""/>
+		<textbox constraint="/[A-Z]{3}/iu"/>
+		<textbox constraint="/[A-Z]{3}/giu"/>
+		<textbox constraint="/[A-Z]{3}/giu : custom message"/>
+		<textbox constraint="/[A-Z]{3}/giu, no empty"/>
+		<textbox constraint="/[A-Z]{3}/giu, no empty: empty message"/>
+		<textbox constraint="/[A-Z]{3}/giu: custom message, no empty: empty message"/>
+		<textbox constraint="no empty, /[A-Z]{3}/giu"/>
+		<textbox constraint="no empty: empty message, /[A-Z]{3}/giu: custom message"/>
+	</vlayout>
+	<separator bar="true"/>
+	default(g) test: paste "aaa" in to the textboxs, it should be rejected by the constraint.
+	<textbox constraint="/[A-Z]{3}/"/>
+	<separator bar="true"/>
+	invalid flag(abc) test: click the button and you shall see an error "Invalid flags supplied to RegExp constructor 'abcg'"
+	<button label="test invalid flags" onClick='inv.setConstraint("/[A-Z]{3}/abc");'/>
+	<textbox id="inv"/>
+	<separator bar="true"/>
+	unsupported flag(y) test: click the button and you shall see an error "unsupported regex flags in: /[A-Z]{3}/y"
+	<button label="test unsupported flags" onClick='unsup.setConstraint("/[A-Z]{3}/y");'/>
+	<textbox id="unsup"/>
+</zk>

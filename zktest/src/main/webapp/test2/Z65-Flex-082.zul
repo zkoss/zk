@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Decimalbox, rounded]" width="480px">
+        <decimalbox mold="rounded" value="1111111111111" vflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Decimalbox]" width="480px">
+        <decimalbox value="1111111111111" vflex="1"/>
+    </window>
+</hbox>
+</zk>

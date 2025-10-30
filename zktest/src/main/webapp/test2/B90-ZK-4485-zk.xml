@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<client-config>
+		<debug-js>false</debug-js>
+		<enable-source-map>true</enable-source-map>
+	</client-config>
+</zk>

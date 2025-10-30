@@ -1,0 +1,10 @@
+<!-- 
+	20120322 17:24	TonyQ
+ -->
+ <zk>
+	<panel height="300px" border="normal" style="padding-bottom: 10px; padding-right: 10px;">
+		<panelchildren>
+			<label />
+		</panelchildren>
+	</panel>
+</zk>

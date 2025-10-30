@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3208-grid.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, May 17, 2016  4:46:42 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3208VM')">
+		<label multiline="true">
+			1. should see both grids have page size of 5, instead of the default 20
+			2. switch to page 2 on both grids, should see page size is still 5
+			3. switch back to page 1 on both grids, should see page size is still 5
+		</label>
+		<zscript><![CDATA[
+			public void log() {
+				Clients.log("grid1 pgsz: " + grid1.getPageSize());
+				Clients.log("grid2 pgsz:" + grid2.getPageSize());
+				Clients.log("model pgsz: " + ((org.zkoss.zul.ext.Pageable) grid1.getModel()).getPageSize());
+				Clients.log("paging pgsz: " + myPaging.getPageSize());
+			}
+		]]></zscript>
+		<grid id="grid1" model="@init(vm.myModel)" mold="paging" paginal="@init(myPaging)" onPaging="log()">
+			<custom-attributes org.zkoss.zul.grid.rod="true"/>
+			<columns>
+				<column>rod=true</column>
+			</columns>
+		</grid>
+		<grid id="grid2" model="@init(vm.myModel)" mold="paging" paginal="@init(myPaging)" onCreate="log()">
+			<custom-attributes org.zkoss.zul.grid.rod="false"/>
+			<columns>
+				<column>rod=false</column>
+			</columns>
+		</grid>
+		<paging id="myPaging" pageSize="@init(vm.myPageSize)"/>
+	</div>
+</zk>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2950364.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Feb 12 14:40:01 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<menubar orient="vertical" id="menubarServices">
+<menu label="Click ME">
+<menupopup id="menupopupNavigationProxy">
+<menuitem label="-> Click Me" onClick='alert("Close Me, and then repeat
+again, the menupopup in IE7 should display well.")' />
+<menuitem label="test2" />
+<menuitem label="test3" />
+<menuitem label="test4" />
+</menupopup>
+</menu>
+<menuitem
+label="test"
+id="menuAuthentication" style="border-bottom:1px dotted #009EE0;" />
+<menuitem
+label="test"
+id="menuProfileTree" style="border-bottom:1px dotted #009EE0;" />
+<menuitem
+label="test"
+id="menuProfileAssignment" style="border-bottom:1px dotted #009EE0;" />
+<menuitem label="test"
+id="menuAdmin" style="border-bottom:1px dotted #009EE0;" />
+</menubar>

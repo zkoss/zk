@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3208-list.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, May 17, 2016  4:46:33 PM, Created by Christopher
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B80_ZK_3208VM')">
+		<label multiline="true">
+			1. should see both listboxes have page size of 5, instead of the default 20
+			2. switch to page 2 on both listboxes, should see page size is still 5
+			3. switch back to page 1 on both listboxes, should see page size is still 5
+		</label>
+		<zscript><![CDATA[
+			public void log() {
+				Clients.log("lb1 pgsz: " + lb1.getPageSize());
+				Clients.log("lb2 pgsz:" + lb2.getPageSize());
+				Clients.log("model pgsz: " + ((org.zkoss.zul.ext.Pageable) lb1.getModel()).getPageSize());
+				Clients.log("paging pgsz: " + myPaging.getPageSize());
+			}
+		]]></zscript>
+		<listbox id="lb1" model="@init(vm.myModel)" mold="paging" paginal="@init(myPaging)" onPaging="log()">
+			<custom-attributes org.zkoss.zul.listbox.rod="true"/>
+			<listhead>
+				<listheader>rod=true</listheader>
+			</listhead>
+		</listbox>
+		<listbox id="lb2" model="@init(vm.myModel)" mold="paging" paginal="@init(myPaging)" onCreate="log()">
+			<custom-attributes org.zkoss.zul.listbox.rod="false"/>
+			<listhead>
+				<listheader>rod=false</listheader>
+			</listhead>
+		</listbox>
+		<paging id="myPaging" pageSize="@init(vm.myPageSize)"/>
+	</div>
+</zk>

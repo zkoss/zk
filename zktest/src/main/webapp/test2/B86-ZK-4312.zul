@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4312.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Aug 14 17:06:51 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1.load this zul page (with wpdcache enabled)
+		2.after the request take a heap dump and check the cached wpd instances
+		especially the cached AbstractExtendletMethodInfo objects
+		3.make sure No user specific information cached in a shared resource cache
+		4.click the test button, observe the testParam(should be "My Test Value") on the alert message
+		5.reload the page, and do 4. again, you should not see testParam become null
+	</label>
+	<button label="test" w:onClick="zk.load('ZK-4312')" />
+</zk>

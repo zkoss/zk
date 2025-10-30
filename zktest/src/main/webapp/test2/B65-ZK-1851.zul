@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<vlayout>
+		<span>the Spinner translated a value to NAN, this should not happen after fix</span>
+		<span>1. input a value</span>
+		<span>2. blur the widget (-> it will format to e.g. $1)</span>
+		<span>3. increase the value again using the spinner button</span>
+		<hlayout>
+			Spinner <spinner format="$#,##0.##"/>
+		</hlayout>
+		<hlayout>
+			DoubleSpinner <doublespinner step="0.5" format="$#,##0.##"/>
+		</hlayout>
+	</vlayout>
+</zk>

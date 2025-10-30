@@ -1,0 +1,78 @@
+/**
+ * 
+ */
+package org.zkoss.zk.ui.select.impl;
+
+import java.util.ArrayList;
+
+import org.zkoss.lang.Strings;
+
+/**
+ * The model representing a selector.
+ * @since 6.0.0
+ * @author simonpai
+ */
+public class Selector extends ArrayList<SimpleSelectorSequence> {
+
+	private static final long serialVersionUID = -9125226126564264333L;
+
+	private final int _selectorIndex;
+
+	public Selector(int selectorIndex) {
+		_selectorIndex = selectorIndex;
+	}
+
+	/**
+	 * Add combinator to the last simple selector sequence
+	 */
+	public void attachCombinator(Combinator combinator) {
+		if (isEmpty())
+			throw new ParseException("Cannot have combinator " + "prior to the first sequence of simple selectors.");
+		get(size() - 1).setCombinator(combinator);
+	}
+
+	/**
+	 * Return the index of this selector in a multiple selector sequence.
+	 */
+	public int getSelectorIndex() {
+		return _selectorIndex;
+	}
+
+	/**
+	 * Return the i-th combinator
+	 */
+	public Combinator getCombinator(int index) {
+		return get(index).getCombinator();
+	}
+
+	/*package*/ boolean requiresIdSpace(int index) {
+		return !Strings.isEmpty(get(index).getId());
+	}
+
+	public enum Combinator {
+		DESCENDANT(" "), CHILD(" > "), ADJACENT_SIBLING(" + "), GENERAL_SIBLING(" ~ ");
+
+		private final String _str;
+
+		Combinator(String str) {
+			_str = str;
+		}
+
+		public String toString() {
+			return _str;
+		}
+	}
+
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		int size = size();
+		for (int i = 0; i < size; i++) {
+			SimpleSelectorSequence seq = get(i);
+			sb.append(seq);
+			if (i < size - 1)
+				sb.append(seq.getCombinator());
+		}
+		return sb.toString();
+	}
+
+}

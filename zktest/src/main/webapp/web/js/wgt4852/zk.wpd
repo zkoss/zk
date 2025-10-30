@@ -1,0 +1,6 @@
+<package name="wgt4852" language="xul/html" depends="zul">
+	<widget name="TestWidget"/>
+	<script><![CDATA[
+		console.log("loaded package", "wgt4852");
+	]]></script>
+</package>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Caption"?>
+<?root-attributes lang="en"?>
+<!--
+caption.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri May 22 15:12:07 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Caption</n:h1>
+    </n:header>
+    <n:main>
+        <window closable="true" minimizable="true" maximizable="true">
+            <caption image="/img/live.gif">Window: buttons Caption</caption>
+            Hello world
+        </window>
+
+        <panel closable="true" minimizable="true" maximizable="true">
+            <caption iconSclass="z-icon-home">Panel: buttons Caption</caption>
+            <panelchildren>
+                Hello world
+            </panelchildren>
+        </panel>
+
+        <groupbox>
+            <caption iconSclass="z-icon-home">Groupbox: caption</caption>
+            Hello world
+        </groupbox>
+
+        <groupbox mold="3d">
+            <caption image="/img/live.gif">Groupbox: caption</caption>
+            Hello world
+        </groupbox>
+
+        <tabbox>
+            <tabs>
+                <tab>
+                    <caption iconSclass="z-icon-home">Tab Caption</caption>
+                </tab>
+            </tabs>
+            <tabpanels>
+                <tabpanel>
+                    Hello world
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+    </n:main>
+</zk>

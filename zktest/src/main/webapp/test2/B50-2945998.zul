@@ -1,0 +1,12 @@
+<zk>
+<zscript>
+Label x = new Label();
+</zscript>
+<window id="mywin" border="normal">
+<custom-attributes a="${x}"/>
+A window
+</window>
+Click 
+<button label="test" onClick="new Div().appendChild(mywin)"/>
+and you shall see the above window disappears
+</zk>

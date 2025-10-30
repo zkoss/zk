@@ -1,0 +1,4 @@
+<zk>
+	<div>should not see NullPointerException</div>
+	<biglistbox height="300px" width="400px"></biglistbox>
+</zk>

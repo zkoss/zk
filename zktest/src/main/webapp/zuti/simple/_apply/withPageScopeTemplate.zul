@@ -1,0 +1,13 @@
+<?template name="tmp1" src="../include/apply.zul" ?>
+<?template name="tmp2" src="../include/nestedApply.zul" ?>
+<zk>
+	<div id="a1">
+		<apply template="tmp1" />
+	</div>
+	<div id="a2">
+		<apply template="tmp2" />
+	</div>
+	<div id="a3">
+		<apply template="tmp2" />
+	</div>
+</zk>

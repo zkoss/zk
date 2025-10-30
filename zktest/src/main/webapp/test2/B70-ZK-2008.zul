@@ -1,0 +1,26 @@
+<zk>
+	<div>
+		drag and drop from rows1 to rows2, then should not see js error
+		in jsconsole
+	</div>
+	<window title="Drag between Grids">
+		<hlayout>
+			<grid hflex="1">
+				<columns>
+					<column>Grid 1</column>
+				</columns>
+				<rows>
+					<row draggable="true">drag this</row>
+				</rows>
+			</grid>
+			<grid droppable="true" hflex="1">
+				<columns>
+					<column>Grid 2</column>
+				</columns>
+				<rows>
+					<row>drop here</row>
+				</rows>
+			</grid>
+		</hlayout>
+	</window>
+</zk>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4742.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Dec 29 10:45:08 CST 2020, Created by katherinelin
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>
+		Click the button, should be redirect to login page.
+	</label>
+	<separator />
+	<button onClick="execution.getNativeResponse().sendError(403); execution.setVoided(true);"/>
+</zk>

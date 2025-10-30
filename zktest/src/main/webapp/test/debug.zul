@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script src="~./js/zk.debug.wpd"?>
+
+<!--
+debug.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 30 17:49:00 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<div xmlns:w="client">
+	<button label="dump dom" w:onClick="zDebug.dumpDomTree(this.parent)"/>
+	<button label="dump wgt" w:onClick="zDebug.dumpWidgetTree(this.parent)"/>
+</div>

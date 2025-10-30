@@ -1,0 +1,28 @@
+<window apply="org.zkoss.zktest.bind.issue.F0002" xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<custom-attributes composerName="vm"/>
+	<div>
+	1.Change row'1 value will only change value of label in row2 <n:br/>
+	2.Change row'2 value will not change value of label in row2, but it changed after click cmd1,
+	After click cmd1, row1's value also change<n:br/>
+	3.Change row'2 value will not change value of label in row3,  but it changed after click cmd2
+	</div>
+	<hbox>Row 1
+		<textbox id="tb1" value="@bind(vm.value1)"/>
+		<label id="l1" value="@bind(vm.value1)" />
+	</hbox>
+	<hbox>Row 2
+		<textbox id="tb2" value="@init(vm.value1) @save(vm.value1, before='cmd1')"/>
+		<label id="l2" value="@init(vm.value1) @load(vm.value1, after='cmd1')" />
+	</hbox>
+	<hbox form="@id('fx') @init(vm.form1) @load(vm) @save(vm, after='cmd2')">
+		Row 3
+		<textbox id="tb3" value="@bind(fx.value2)"/>
+		<label id="l31" value="@bind(vm.value2)" />
+		<label id="l32" value="@bind(vm.formValue2)" />
+	</hbox>
+	<hbox>
+		<button id="btn1" label="cmd1" onClick="@command('cmd1')" />
+		<button id="btn2" label="cmd2" onClick="@command('cmd2')" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

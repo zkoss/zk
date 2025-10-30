@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3538.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 22 10:22:37 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Type 'ch' in the textbox
+		2. Focus should remain on textbox
+		3. Open the second treerow
+		4. Tree should get focus
+	</label>
+	
+	<separator/>
+	
+	<textbox onChanging="onSearching(event.getValue())"/>
+	
+	<separator/>
+	
+	<tree id="tree" width="450px" onFocus='Clients.log("tree is on focus")'>
+		<treecols>
+			<treecol label="Name" width="130px"/>
+			<treecol label="Hobbies" width="250px"/>
+			<treecol label="Age"/>
+		</treecols>
+		
+		<treechildren>
+			<treeitem label="The Flintstones" open="false">
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Fred"/>
+							<treecell label="Eating, Hanging with Barney"/>
+							<treecell label="35"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Wilma"/>
+							<treecell label="Cleaning, Cooking, Chatting with Betty"/>
+							<treecell label="34"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Pebbles"/>
+							<treecell label="Toddler Stuff"/>
+							<treecell label="3"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="The Simpons" open="false">
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Homer"/>
+							<treecell label="TV, Donuts and Beer"/>
+							<treecell label="35"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Marge"/>
+							<treecell label="Gambling"/>
+							<treecell label="34"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Bart"/>
+							<treecell label="Causing Trouble"/>
+							<treecell label="10"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Lisa"/>
+							<treecell label="Saxophone"/>
+							<treecell label="9"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Maggie"/>
+							<treecell label="Pacifier"/>
+							<treecell label="1"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="The Griffins" open="false">
+				<treechildren>
+					<treeitem>
+						<treerow>
+							<treecell label="Peter"/>
+							<treecell label="Fighting Chicken"/>
+							<treecell label="38"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Lois"/>
+							<treecell label="Doing Things"/>
+							<treecell label="36"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Chris"/>
+							<treecell label="Video Games"/>
+							<treecell label="15"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Meg"/>
+							<treecell label="Being Miserable"/>
+							<treecell label="14"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Stewie"/>
+							<treecell label="Taking over the World"/>
+							<treecell label="2"/>
+						</treerow>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Brian"/>
+							<treecell label="Driving Prius"/>
+							<treecell label="5"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+	
+	<zscript><![CDATA[
+		public void onSearching(String text) {
+			for (Treeitem item : tree.getItems()) {
+				item.setOpen(false);
+			}
+			if (!(text == null || text.isEmpty())) {
+				for (Treeitem item : tree.getItems()) {
+					if (item.getParentItem() != null) {
+						for (Component row : item.getChildren()) {
+							if (row instanceof Treerow) {
+								for (Component cell : row.getChildren()) {
+									if (((Treecell) cell).getLabel().toLowerCase().contains(text.toLowerCase())) {
+										item.getParentItem().setOpen(true);
+										cell.setStyle("font-weight: bold;");
+									} else {
+										cell.setStyle("");
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	]]></zscript>
+</zk>

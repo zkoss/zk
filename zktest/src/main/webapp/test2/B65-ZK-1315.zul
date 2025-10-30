@@ -1,0 +1,55 @@
+<zk>
+	<div>
+	1. Hide 'Title' column by menupopup.<separator />
+	2. Click 'Publisher' column to sort.<separator />
+	3. Show 'Title' column by menupopup. 'Title' column should show correctly.<separator />
+	</div>
+	<grid sizedByContent="true">
+		<auxhead>
+			<auxheader colspan="4" label="Grid" />
+		</auxhead>
+		<columns menupopup="auto">
+			<column label="Author" sort="auto" />
+			<column label="Title" sort="auto" />
+			<column label="Publisher" sort="auto" />
+			<column label="Hardcover" sort="auto" />
+		</columns>
+		<rows>
+			<row>
+				<label value="Philip Hensher" />
+				<label value="The Northern Clemency" />
+				<label value="Knopf (October 30, 2008)" />
+				<label value="608 pages" />
+			</row>
+			<row>
+				<label value="Philip Hensher" />
+				<label value="The Fit" />
+				<label value="HarperPerennial (April 4, 2005)" />
+				<label value="240 pages" />
+			</row>
+		</rows>
+	</grid>
+	<listbox sizedByContent="true">
+		<auxhead>
+			<auxheader colspan="4" label="Listbox" />
+		</auxhead>
+		<listhead menupopup="auto">
+			<listheader label="Author" sort="auto" />
+			<listheader label="Title" sort="auto" />
+			<listheader label="Publisher" sort="auto" />
+			<listheader label="Hardcover" sort="auto" />
+		</listhead>
+		<listitem>
+			<listcell label="Philip Hensher" />
+			<listcell label="The Northern Clemency" />
+			<listcell label="Knopf (October 30, 2008)" />
+			<listcell label="608 pages" />
+		</listitem>
+		<listitem>
+			<listcell label="Philip Hensher" />
+			<listcell label="The Fit" />
+			<listcell label="HarperPerennial (April 4, 2005)" />
+			<listcell label="240 pages" />
+		</listitem>
+	</listbox>
+</zk>

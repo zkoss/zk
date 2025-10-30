@@ -1,0 +1,28 @@
+<window>
+<html><![CDATA[
+<ul>
+	<li>Click the "create 1" button, and then you shall see a Hi! label and a Hi! textbox.</li>
+</ul>
+]]></html>
+
+<idspace>
+<button label="create 1">
+<attribute name="onClick">
+Div div = new Div();
+execution.createComponents("B50-3049192-sub.zul", div, null);
+self.parent.appendChild(div);
+</attribute>
+</button>
+</idspace>
+
+<idspace>
+<button label="create 2">
+<attribute name="onClick"><![CDATA[
+final Component[] cs = execution.createComponents("B50-3049192-sub.zul", null);
+for (int j = 0; j < cs.length; ++j)
+	self.parent.appendChild(cs[j]);
+]]></attribute>
+</button>
+</idspace>
+
+</window>

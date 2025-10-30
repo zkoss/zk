@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2759.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Jun 2, 2015  15:40:29 AM, Created by Jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<?page title="Grid Flex Example" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<label multiline="true">
+   		1.Resize the width of browser until you can see the last button in the last column goes to second line.
+   		2.Refresh
+   		3.You won't see the grid header and content misaligned.   		
+    </label>
+	<div style="padding: 50px 100px">
+		<window border="normal" >
+			<zscript>Object[] obj = new Object[20];</zscript>
+			<caption label="Grid Example" />
+			<grid vflex="1" span="true">
+				<columns>
+					<column hflex="min">
+						<checkbox />
+					</column>
+					<column label="Originator AccInfo" hflex="min" align="left" sort="auto" />
+					<column label="A-B" hflex="min" align="center" sort="auto" />
+					<column label="Type" hflex="min" sort="auto" />
+					<column label="ExampleText AB" hflex="min" align="right" sort="auto" />
+					<column label="Receiving Party" hflex="min" sort="auto" />
+					<column label="Counts" hflex="min" align="right" sort="auto" />
+					<column label="Counts/Again" hflex="min" align="right" sort="auto" />
+					<column label="Some Date" hflex="min" sort="auto" />
+					<column label="Editorname" hflex="min" sort="auto" />
+					<column label="State" hflex="min" sort="auto" />
+					<column label="Date of change" hflex="min" sort="auto" />
+					<column label="Actions" hflex="min" />
+				</columns>
+				<rows>
+					<row forEach="${obj}">
+						<checkbox />
+						<label value="1234567890123456789012345678"/>
+						<label value="A"/>
+						<label value="One"/>
+						<label value="SomeUnbreakableContent"/>
+						<label value="ABC1234567890DEF 1234567890GHI5678" />
+						<label value="1" />
+						<label value="1,311,680.14"/>
+						<label value="02/27/2015"/>
+						<label value="TheQuick BrownFox"/>
+						<label value="Created"/>
+						<label value="02/27/2015 07:15"/>
+						<div>
+							<button iconSclass="z-icon-search" />
+							<button iconSclass="z-icon-pencil" />
+							<button iconSclass="z-icon-trash-o" />
+						</div>
+					</row>
+				</rows>
+			</grid>
+		</window>
+	</div>
+</zk>

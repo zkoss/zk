@@ -1,0 +1,8 @@
+{
+  "name": "zk",
+  "version": "0.1.0",
+  "description": "Core ZK frontend functionality",
+  "types": "./src/main/resources/web/js/zk/global.d.ts",
+  "author": "Potix",
+  "license": "LGPL-2.0-or-later"
+}

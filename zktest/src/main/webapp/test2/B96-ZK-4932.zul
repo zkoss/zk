@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4932.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jun 18 10:38:36 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Focus the Datebox.
+        2. Blur the Datebox.
+        3. The zk log "onChange triggered" shouldn't appear.
+    </label>
+    <datebox id="dbConstraint" format="MM/dd/yyyy"
+             constraint="between 21000101 and 19000101"
+             onCreate="self.setValue(new Date());"
+             onChange=""
+             w:onChange="zk.log('onChange triggered')"/>
+    <button label="Click me to blur" />
+</zk>

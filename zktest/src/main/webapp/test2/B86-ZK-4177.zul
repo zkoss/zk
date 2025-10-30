@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4177.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Jan 03 10:58:12 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Use mouse wheel to test following steps in all browsers
+		2. Scroll outside the knob area, value should not change, page should be scrolled
+		3. Mouse over knob area and scroll, value should change, page should not be scrolled
+		4. Mouse over input area and scroll, value should not change, page should not be scrolled
+		5. Scroll outside the knob area, value should not change, page should be scrolled
+	</label>
+	<slider mold="knob"
+			minpos="0.0" maxpos="100.0"
+			curpos="80" step="1" width="300px" angleArc="360"
+			style="border: 1px solid black;" strokeWidth="120"/>
+	<div height="1200px"/>
+</zk>

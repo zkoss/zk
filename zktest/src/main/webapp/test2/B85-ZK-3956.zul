@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3956.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jun 19 10:33:18 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1. Click the popup button.
+		2. The second jq(".z-vlayout-inner") div should still be invisible.
+	</label>
+	<vlayout>
+		<div style="background-color: DarkSalmon;" height="50px"/>
+		<popup id="pop">Popup Content</popup>
+		<div style="background-color: DarkOliveGreen;" height="50px">
+			<button label="popup" popup="pop"/>
+			<button label="tooltip" tooltip="pop"/>
+			<button label="context" context="pop"/>
+		</div>
+	</vlayout>
+</zk>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-3012.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Dec 8 17:09:00 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <custom-attributes org.zkoss.zul.grid.rod="false" scope="page"/>
+    <label multiline="true">
+        1.You should see three items in both grid and listbox without any exceptions.
+    </label>
+    <vlayout>
+        <label> grid - no rod</label>
+        <grid id="gd"/>
+        <label> listbox - no rod</label>
+        <listbox id="lb"/>
+        <zscript><![CDATA[
+            ListModelList model = new ListModelList();
+            model.add("aaa");
+            model.add("bbb");
+            model.add("ccc");
+            model.add("ddd");
+            gd.setModel(model);
+            lb.setModel(model);
+            model.remove("ddd");
+        ]]></zscript>
+    </vlayout>
+</zk>

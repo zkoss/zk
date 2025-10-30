@@ -1,0 +1,12 @@
+<zk>
+	Open the Treeitem. The dotted line should rendered correctly (NOT T shape).
+	<tree zclass="z-dottree">
+		<treechildren>
+			<treeitem label="Item" open="false">
+				<treechildren>
+					<treeitem label="Child Item" />
+				</treechildren>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

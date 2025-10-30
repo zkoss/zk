@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B86-ZK-4134.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+
+		Wed Nov 14 14:48:13 CST 2018, Created by wenninghsu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModel model = new ListModelList();
+        model.add("adam");
+        model.add("bbb");
+        model.add("item0");
+        model.add("item1");
+        model.add("item2");
+        model.add("item3");
+        model.add("item4");
+        model.add("item5");
+        model.multiple = true;
+        model.addToSelection("item1");
+        model.addToSelection("item3");
+
+        long id = 2;
+
+        void update(Timer comp) {
+            model.removeRange((int) id, (int) id + 2);
+            if (model.size() == 2) {
+                comp.stop();
+            }
+            return;
+        }
+
+    ]]></zscript>
+    <label multiline="true">
+        1. Should see no selection after 6 secs.
+
+    </label>
+    <div apply="org.zkoss.bind.BindComposer">
+        <vlayout>
+            <chosenbox model="@bind(model)" width="80%" creatable="true"/>
+            <timer id="timer" repeats="true" delay="3000" onTimer="update(self)"/>
+        </vlayout>
+    </div>
+</zk>
+

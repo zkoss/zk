@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3315-comet.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Jul 14 11:30:17 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <script><![CDATA[
+    zk.afterLoad('zkex.cmsp', function () {
+        var _zkexSp = {};
+        zk.override(zkex.cmsp.SPush.prototype, _zkexSp, {
+            _onRespReady: function () {
+                zk.log('[SP] injected.');
+                _zkexSp._onRespReady.apply(this, arguments);
+            },
+            _respSuccess: function (req, cerr) {
+                zk.log('[SP] success');
+                _zkexSp._respSuccess.apply(this, arguments);
+            },
+            _respFailure: function (rqst, v) {
+                zk.log('[SP] failed');
+                _zkexSp._respFailure.apply(this, arguments);
+            }
+        });
+    });
+    ]]>
+
+    </script>
+    <label multiline="true">
+        ZKComet override
+        1. Follow the tips below
+        2. Some hook text appeared in zk log
+    </label>
+    <include src="Z50-eventque.zul"/>
+</zk>

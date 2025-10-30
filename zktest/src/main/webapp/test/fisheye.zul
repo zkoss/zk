@@ -1,0 +1,90 @@
+<?page title="test fisheye" contentType="text/html;charset=UTF-8"?>
+<!--
+z5-fisheye.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu May 15 10:33:20     2009, Created by kindalu
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<window id="win" title="win title" width="100%" border="normal">
+<button label="attachEdge = bottom">
+	<attribute name="onClick">
+		fsb.setAttachEdge("bottom");
+	</attribute>
+</button>
+<button label="setItemHeight 60px">
+	<attribute name="onClick">
+		fsb.setItemHeight(60);
+	</attribute>
+</button>
+<button label="setItemWidth 60px">
+	<attribute name="onClick">
+		fsb.setItemWidth(60);
+	</attribute>
+</button>
+<button label="setItemMaxHeight 300">
+	<attribute name="onClick">
+		fsb.setItemMaxHeight(300);
+	</attribute>
+</button>
+<button label="setItemMaxWidth 300">
+	<attribute name="onClick">
+		fsb.setItemMaxWidth(300);
+	</attribute>
+</button>
+<separator/>
+<button label="attachEdge = top">
+	<attribute name="onClick">
+		fsb.setAttachEdge("top");
+	</attribute>
+</button>
+<button label="setItemHeight 40px">
+	<attribute name="onClick">
+		fsb.setItemHeight(40);
+	</attribute>
+</button>
+<button label="setItemWidth 40px">
+	<attribute name="onClick">
+		fsb.setItemWidth(40);
+	</attribute>
+</button>
+<button label="setItemMaxHeight 100">
+	<attribute name="onClick">
+		fsb.setItemMaxHeight(100);
+	</attribute>
+</button>
+<button label="setItemMaxWidth 100">
+	<attribute name="onClick">
+		fsb.setItemMaxWidth(100);
+	</attribute>
+</button>
+	<div height="450px">
+		<checkbox label="AttachEdgo bottom"
+			onCheck='fsb.attachEdge=self.checked?"bottom":"top"' />
+		<checkbox label="Vertical orient"
+			onCheck='fsb.orient=self.checked?"vertical":"horizontal"' />
+		<separator bar="true" />
+		<fisheyebar id="fsb" style="position:absolute;margin:80px 150px;"
+			attachEdge="top" itemWidth="80" itemHeight="80" itemMaxHeight="160" itemMaxWidth="160">
+			<fisheye image="../img/Centigrade-Widget-Icons/FolderABlue-128x128.png" label="Folder"
+				onClick="alert(self.label)" />
+			<fisheye image="../img/Centigrade-Widget-Icons/ReadingGlass-128x128.png" label="Reading Glasses"
+				onClick="alert(self.label)" />
+		 	<fisheye image="../img/Centigrade-Widget-Icons/Briefcase-128x128.png" label="Project"
+				onClick="alert(self.label)" />
+			<fisheye image="../img/Centigrade-Widget-Icons/MailboxFlag-128x128.png"
+				label="Email" onClick="alert(self.label)" />
+			<fisheye image="../img/Centigrade-Widget-Icons/Globe-128x128.png"
+				label="Globe" onClick="alert(self.label)" />
+			<fisheye image="../img/Centigrade-Widget-Icons/Spyglass-128x128.png" label="Spyglass"
+				onClick="alert(self.label)" />
+		</fisheyebar>
+	</div>
+</window>
+

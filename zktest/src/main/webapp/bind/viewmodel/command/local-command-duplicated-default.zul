@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+local-command-duplicated.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 04 15:41:26 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click command 1.
+        2. The error popup occurs indicating there are more than one DefaultCommand.
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.command.LocalCommandDuplicatedDefaultVM')">
+        <button label="command 1" onClick="@command('command1')"/>
+    </div>
+</zk>

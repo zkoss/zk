@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3576.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jan 19 10:00:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+	ListModelList model = new ListModelList();
+	ListModelList model2 = new ListModelList();
+	model2.add("test");
+	List list = new ArrayList();
+]]></zscript>
+    <window title='You should only see a "test" label.' apply="org.zkoss.bind.BindComposer">
+        <forEach items="@load(model)">
+            <label value="@load(each)" />
+        </forEach>
+        <forEach items="@load(model2)">
+            <label value="@load(each)" />
+        </forEach>
+        <forEach items="@load(list)">
+            <label value="@load(each)" />
+        </forEach>
+    </window>
+</zk>

@@ -1,0 +1,16 @@
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "https://www.eclipse.org/jetty/configure_10_0.dtd">
+<Configure id="webAppCtxUnique" class="org.eclipse.jetty.webapp.WebAppContext">
+	<New  class="org.eclipse.jetty.plus.jndi.Resource">
+		<Arg>
+			<Ref id="webAppCtxUnique2" />
+		</Arg>
+		<Arg>BeanManager</Arg>
+		<Arg>
+			<New class="javax.naming.Reference">
+				<Arg>javax.enterprise.inject.spi.BeanManager</Arg>
+				<Arg>org.jboss.weld.resources.ManagerObjectFactory</Arg>
+				<Arg />
+			</New>
+		</Arg>
+	</New>
+</Configure>

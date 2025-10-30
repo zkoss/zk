@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+destroy-child-with-super.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 10 17:49:22 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.init.ChildInitSuperVM')">
+        <label multiline="true">
+            1. Reload the browser.
+            2. Should see the following text in the server console.
+            ChildInitSuperVM.childDestroy was called
+            InitVM.cleanup was called
+        </label>
+    </div>
+</zk>

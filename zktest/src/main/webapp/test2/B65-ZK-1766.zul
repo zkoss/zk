@@ -1,0 +1,45 @@
+<zk>
+	<label multiline="true">
+	Click buttons on the following steps, should see the tree node update correctly.
+	1. Click "update first 2 Lvl 1" button.
+	2. Click "update all" button.
+	3. Click "Case 2" button
+	4. Click "update first 2 Lvl 1" button.
+	5. Click "update all" button.
+	6. Click "fillRandom" button
+	7. Click "update first 2 Lvl 1" button.
+	8. Click "update all" button.
+	</label>
+	<style>
+		.green_class {
+			background: #80FF80;
+		}
+		.red_class {
+			background: #FF8080;
+		}
+		.white_class {
+			background: #FFFFFF;
+		}
+	</style>
+	<div apply="org.zkoss.zktest.test2.B65_ZK_1766_Composer">
+		<tree id="myTree" width="500px" height="400px">
+			<treecols sizable="true">
+				<treecol label="c0" id="c0A" width="175px" />
+				<treecol label="c1" id="c1A" width="100px" />
+				<treecol label="c2" id="c2A" width="100px" />
+			</treecols>
+			<treechildren></treechildren>
+		</tree>
+	</div>
+	<hlayout>
+		<button id="fill1" label="Case 1" />
+		<button id="fill2" label="Case 2" />
+		<button id="fillRandom" label="fillRandom" />
+	</hlayout>
+	<hlayout>
+		<button id="update2" label="update first 2 Lvl 1" />
+		<button id="updateAll" label="update all" />
+		<button id="invalidate" label="invalidate" />
+		<button id="removeLast" label="Remove Last" />
+	</hlayout>
+</zk>

@@ -1,0 +1,12 @@
+<zk>
+	when click menu, menuitem and menu agian, then the menuitem should not be on focus in ie 10.
+	<menubar>
+		<menu label="File">
+			<menupopup>
+				<menuitem label="1" />
+				<menuitem label="1" />
+				<menuitem label="1" />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4455.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Dec 17 12:34:41 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<cascader id="cas"
+			  width="300px"
+			  onOpen="Clients.log(event.toString() + model.getSelection())"
+			  onSelect="Clients.log(event.toString() + model.getSelection())"
+			  placeholder="choose"
+	/>
+	<button onClick="model.addToSelection(n21)" label="select in model"/>
+	<zscript><![CDATA[
+        DefaultTreeNode n21 = new DefaultTreeNode("Node-2.1");
+        DefaultTreeNode root = new DefaultTreeNode("root", Arrays.asList(new DefaultTreeNode[] {
+            new DefaultTreeNode("Node-1 loooooooooong"),
+            new DefaultTreeNode("Node-2 also loooooong", Arrays.asList(new DefaultTreeNode[] {
+                n21,
+                new DefaultTreeNode("Node-2.2", Arrays.asList(new DefaultTreeNode[] {
+                    new DefaultTreeNode("Node-2.2.1"),
+                    new DefaultTreeNode("Node-2.2.2"),
+                    new DefaultTreeNode("Node-2.2.3"),
+                    new DefaultTreeNode("Node-2.2.4"),
+                    new DefaultTreeNode("Node-2.2.5")
+                })),
+                new DefaultTreeNode("Node-2.3")
+            })),
+            new DefaultTreeNode("Node-3"),
+            new DefaultTreeNode("Node-4")
+        }));
+        DefaultTreeModel model = new DefaultTreeModel(root);
+        cas.setModel(model);
+    ]]></zscript>
+</zk>

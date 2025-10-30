@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3927.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Jun 11 17:25:00 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Headers and cells should be aligned correctly
+	</label>
+	<style>
+		.z-listitem .z-listcell {
+			border-right: 1px solid black;
+		}
+	</style>
+	<zscript><![CDATA[
+		List items = Collections.nCopies(7, "dummy");
+	]]></zscript>
+	<hlayout>
+		<listbox height="400px" width="300px">
+			<listhead>
+				<listheader label="col-1"/>
+				<listheader label="col-2" hflex="min"/>
+				<listheader label="col-3" hflex="min"/>
+			</listhead>
+			<listitem forEach="${items}">
+				<listcell label="${forEachStatus.index}-1"/>
+				<listcell label="${forEachStatus.index}-2"/>
+				<listcell label="${forEachStatus.index}-3 some text"/>
+			</listitem>
+		</listbox>
+		<listbox height="600px" width="500px">
+			<listhead>
+				<listheader label="col-1"/>
+				<listheader label="col-2" hflex="min"/>
+				<listheader label="col-3" hflex="min"/>
+				<listheader label="col-4" hflex="min"/>
+				<listheader label="col-5" hflex="min"/>
+			</listhead>
+			<listitem forEach="${items}">
+				<listcell label="${forEachStatus.index}-1"/>
+				<listcell label="${forEachStatus.index}-2"/>
+				<listcell label="${forEachStatus.index}-3"/>
+				<listcell label="${forEachStatus.index}-4"/>
+				<listcell label="${forEachStatus.index}-5 some additional testtext"/>
+			</listitem>
+		</listbox>
+	</hlayout>
+</zk>

@@ -1,0 +1,32 @@
+@import "~./zul/less/_header.less";
+
+.z-auxhead {
+	th:first-child {
+		border-left: none;
+		// B50-3306729: the first header should have border-left when the first column is covered with other header
+		&.z-auxhead-border {
+			border-left: 1px solid @meshTitleBorderColor;
+		}
+	}
+	&-bar {
+		border-left: 1px solid @meshTitleBorderColor;
+		border-bottom: 1px solid @meshTitleBorderColor;
+	}
+}
+
+.z-auxheader {
+	border-left: 1px solid @meshTitleBorderColor;
+	border-bottom: 1px solid @meshTitleBorderColor;
+	padding: 0;
+	background-color: @meshTitleBackgroundColor;
+	position: relative;
+	overflow: hidden;
+	white-space: nowrap;
+	&-content {
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @meshTitleColor);
+		padding: @auxheadContentPadding;
+		line-height: @baseButtonHeight;
+		overflow: hidden;
+	}
+}
+

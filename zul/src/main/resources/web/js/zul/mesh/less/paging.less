@@ -1,0 +1,137 @@
+@import "~./zul/less/_header.less";
+
+.z-paging {
+	height: @pagingHeight;
+	padding: 4px 16px 3px;
+	background: @pagingBackgroundColor;
+	position: relative;
+
+	ul {
+		display: inline-block;
+		margin: 0;
+		padding: 0;
+		
+		> li {
+			display: inline;
+			margin-left: 2px;
+			&:first-child {
+				margin-left: 0;
+			}
+		}
+	}
+	&-button {
+		.fontStyle(@baseContentFontFamily, @pagingButtonFontSize, normal, @pagingColor);
+		display: inline-block;
+		min-width: @pagingButtonMinWidth;
+		height: @pagingButtonHeight;
+		border: none;
+		.borderRadius(@borderRadiusSmall);
+		padding: @pagingButtonPadding;
+		margin: @pagingButtonMargin;
+		line-height: normal;
+		background-color: transparent;
+		text-align: center;
+		vertical-align: top;
+		cursor: pointer;
+		text-decoration: none;
+		white-space: nowrap;
+		
+		&:focus-visible {
+			box-shadow: @pagingButtonFocusBoxShadow;
+			transition: unset;
+			border-radius: @pagingButtonFocusBorderRadius;
+		}
+		&:hover {
+			background-color: @pagingItemHoverBackgroundColor;
+		}
+		&:active {
+			color: @pagingItemActiveColor;
+			background-color: @pagingItemActiveBackgroundColor;
+		}
+		&[disabled] {
+			color: @disabledColor;
+			.opacity(@disabledOpacity);
+			cursor: default;
+			&:hover {
+				background-color: transparent;
+			}
+		}
+	}
+	.z-paging-icon {
+		font-size: @pagingIconSize;
+		line-height: @pagingIconLineHeight;
+	}
+	&-noborder {
+		border-color: transparent;
+		&:hover, &:active {
+			border-color: transparent;
+		}
+	}
+	&-selected {
+		color: @pagingItemSelectedColor;
+		background: @pagingItemSelectedBackgroundColor;
+	}
+	&-input {
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @pagingColor);
+		.size(42px, @pagingInputHeight);
+		border: 1px solid @pagingBorderColor;
+		.borderRadius(@baseBorderRadius);
+		background: @inputBackgroundColor;
+		margin-left: 6px;
+		padding: @inputPadding;
+		line-height: @baseLineHeight;
+		vertical-align: baseline;
+		&:hover {
+			border-color: @inputHoverBorderColor;
+		}
+		&:focus {
+			border-color: @inputFocusBorderColor;
+		}
+		&[disabled] {
+			color: @disabledColor;
+			.opacity(@disabledOpacity);
+			cursor: default;
+			&:hover, &:focus {
+				border-color: @pagingBorderColor;
+			}
+		}
+	}
+	&-text {
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @pagingColor);
+		margin-right: 6px;
+		&-disabled {
+			color: @disabledColor;
+		}
+	}
+	&-info {
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @textColorLighter);
+		padding: 10px 0;
+		position: absolute;
+		top: 4px;
+		right: 16px;
+	}
+}
+
+.z-paging-os {
+	border-bottom: none;
+	padding-bottom: 4px;
+
+	ul {
+		> li {
+			margin-left: 4px;
+		}
+		> li.z-paging-navigate + li,
+		> li + li.z-paging-navigate {
+			margin-left: 8px;
+		}
+		// for special case
+		> li.z-paging-navigate + li.z-paging-navigate {
+			margin-left: 4px;
+		}
+	}
+
+	.z-paging-button {
+		font-size: @fontSizeMedium;
+		padding: @pagingOsButtonPadding;
+	}
+}

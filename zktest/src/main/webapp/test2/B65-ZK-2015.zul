@@ -1,0 +1,30 @@
+<window title="IE10 Only" xmlns:n="native" border="normal">
+	Click show and hide, BB and CC will show and hide normally.
+	<button label="show">
+		<attribute name="onClick"><![CDATA[
+			cell1.setVisible(true);
+			cell2.setVisible(true);
+		]]></attribute>
+	</button>
+	<button label="hide">
+		<attribute name="onClick"><![CDATA[
+			cell1.setVisible(false);
+			cell2.setVisible(false);
+		]]></attribute>
+	</button>
+
+	<grid width="300px" id="grid">
+		<columns>
+			<column label="col" />
+			<column label="col" />
+			<column label="col" />
+		</columns>
+		<rows>
+			<row>
+				<cell>AA</cell>
+				<cell id="cell1">BB</cell>
+				<cell id="cell2">CC</cell>
+			</row>
+		</rows>
+	</grid>
+</window>

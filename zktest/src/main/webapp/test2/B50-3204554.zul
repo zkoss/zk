@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3204554.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 26 09:33:11 TST 2011, Created by jimmy
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Change your browser language to Italian.</li>
+			<li>Click up arrow to incress value.</li>
+			<li>It shell be works fine when from 1.5 increase to 2.</li>
+		</ol>
+	]]></html>
+	<doublespinner step="0.5"/>
+</zk>

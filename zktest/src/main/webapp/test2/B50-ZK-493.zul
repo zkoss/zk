@@ -1,0 +1,42 @@
+<!--
+	B50-ZK-493.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Oct 11 15:08:49 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<script>
+		zk.afterLoad(function () {
+			var aa = zk.$extends(zk.Object, {
+				f: function () {
+					return 'aa';
+				},
+				g: function () {
+					return 'cc';
+				}
+			});
+			var bb = zk.$extends(aa, {});
+			zk.override(aa.prototype, 'f', function () {
+				return this.$f.apply(this, arguments) + 'bb';
+			});
+			var _aa = {};
+			zk.override(aa.prototype, _aa, {
+				g: function () {
+					return _aa.g.apply(this, arguments) + 'dd';
+				}
+			});
+			var a = new aa(), b = new bb();
+			zk.log(a.f(), a.g());
+			zk.log(b.f(), b.g());
+		});
+	</script>
+	<div>
+		You shall see 'aabb', 'ccdd' exactly twice in zk log, with no javascript error.
+	</div>
+</zk>

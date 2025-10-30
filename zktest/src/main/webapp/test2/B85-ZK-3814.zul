@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3814.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun 07 12:05:09 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    import org.zkoss.zktest.test2.*;
+    B85_ZK_3814Interface e = new B85_ZK_3814Employee();
+    e.setFirstName("Hawk");
+    e.setLastName("Chen");
+    ]]></zscript>
+    <div apply="org.zkoss.bind.BindComposer">
+        You should see the full name, not exception:
+        <label id="fullname" value="@init(e.name)"/>
+    </div>
+</zk>

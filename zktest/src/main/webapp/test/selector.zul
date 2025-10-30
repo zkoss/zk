@@ -1,0 +1,63 @@
+<?page title="ZK Selector Demo within jQuery"?>
+<?component name="window" extends="window" shadow="false"?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<label value="ZK Selector Demo within jQuery" style="font-weight:bold" />
+	<separator />
+	<textbox id="tb" width="500px"
+		value='jq("@window").hide("width").show("width");' />
+		<separator />
+	<button label="run with textbox"
+		onClick="Clients.evalJavaScript(tb.value)" />
+	<separator />
+	<radiogroup onCheck='tb.value = self.selectedItem.value'>
+		<radio label='All: jq("@window").hide("width").show("width");'
+			checked="true" value='jq("@window").hide("width").show("width");' />
+		<separator />
+		<radio label='Fadeout: jq("@window:gt(3)").fadeOut("slow");'
+			value='jq("@window:gt(3)").fadeOut("slow");' />
+		<separator />
+		<radio label='Fadein: jq("@window:gt(3)").fadeIn("slow");'
+			value='jq("@window:gt(3)").fadeIn("slow");' />
+		<separator />
+		<radio
+			label='SlideUp: jq("@window[title="test case 3"]").slideUp("slow");'
+			value='jq("@window[title=\"test case 3\"]").slideUp("slow");' />
+		<separator />
+		<radio
+			label='SlideDown: jq("@window[title="test case 3"]").slideDown("slow");'
+			value='jq("@window[title=\"test case 3\"]").slideDown("slow");' />
+	</radiogroup>
+	<window title="test case 0" position="top,center" border="normal"
+		hflex="min" mode="overlapped">
+		<label value="a simple label" />
+	</window>
+	<window title="test case 1" position="top,right" border="normal"
+		hflex="min" mode="overlapped">
+		<label value="a simple label" />
+	</window>
+	<window title="test case 2" position="center,left" border="normal"
+		hflex="min" mode="overlapped">
+		<label value="a simple label" />
+	</window>
+	<window title="test case 3" position="center" border="normal"
+		hflex="min" mode="overlapped">
+		<label value="a simple label" />
+	</window>
+	<window title="test case 4" position="center,right" border="normal"
+		hflex="min" mode="overlapped">
+		<label value="a simple label" />
+	</window>
+	<window title="test case 5" position="bottom,left" border="normal"
+		hflex="min" mode="overlapped">
+		<label value="a simple label" />
+	</window>
+	<window title="test case 6" position="bottom,center" border="normal"
+		hflex="min" mode="overlapped">
+		<label value="a simple label" />
+	</window>
+	<window title="test case 7" position="bottom,right" border="normal"
+		hflex="min" mode="overlapped">
+		<label value="a simple label" />
+	</window>
+</zk>
+

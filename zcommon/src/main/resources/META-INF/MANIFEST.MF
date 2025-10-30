@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Specification-Title: Potix Common Library
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss
+Implementation-URL: http://www.zkoss.org/prj/zcommon
+Implementation-Vendor: Potix Corporation

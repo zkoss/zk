@@ -1,0 +1,46 @@
+<zk>
+	<label multiline="true">
+	1. Set focus on the first combobox's text input box
+	2. Press "down arrow" key to change its selection
+	3. Press "tab" to set focus on the second combobox, model should be set
+	</label>
+    <zscript><![CDATA[
+    ListModelList items = new ListModelList();
+    items.add("d1");
+    items.add("d2");
+    items.add("d3");
+    
+    ListModelList otherItems = null;
+    
+    ListModelList sub1 = new ListModelList();
+    sub1.add("d1s1");
+    sub1.add("d1s2");
+    sub1.add("d1s3");
+    
+    ListModelList sub2 = new ListModelList();
+    sub2.add("d2s1");
+    sub2.add("d2s2");
+    sub2.add("d2s3");
+
+    ListModelList sub3 = new ListModelList();
+    sub3.add("d3s1");
+    sub3.add("d3s2");
+    sub3.add("d3s3");
+
+    void doSelect(String value) {
+        System.out.println("doSelect: " + value);
+        if ("d1".equals(value))
+            secondCombo.setModel(sub1);
+        else if ("d2".equals(value))
+            secondCombo.setModel(sub2);
+        else
+            secondCombo.setModel(sub3);
+    }
+    ]]></zscript>
+    <combobox id="firstCombo"
+        model="${items}"
+        onSelect="doSelect(self.value)"
+        constraint="no empty"/>
+    <combobox id="secondCombo"
+        constraint="no empty"/>
+</zk>

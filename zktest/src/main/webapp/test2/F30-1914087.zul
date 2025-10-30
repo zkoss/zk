@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1914087.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 14 14:43:09     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns:n="http://www.zkoss.org/2005/zk/native">
+	<n:p>It is correct, if you can see the pdf file.</n:p>
+	<window id="w2" title="Test PDF" shadow="false" closable="true" mode="overlapped" width="800px">
+		Created by AMedia(File)
+		<iframe id="if_test" width="80%" height="500px">
+			<zscript>
+				import javax.servlet.ServletContext;
+				import org.zkoss.web.fn.*;
+				ServletContext context = ServletFns.getCurrentServletContext();
+				org.zkoss.util.media.AMedia media =
+					new org.zkoss.util.media.AMedia("B1896797.pdf",null,null,
+						new java.io.File(context.getRealPath("/test2") + "/B1896797.pdf"),
+						true);
+				if_test.setContent(media);
+			</zscript>
+		</iframe>
+	</window>
+</zk>

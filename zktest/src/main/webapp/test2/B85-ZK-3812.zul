@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3812.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 17 11:42:38 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3812VM')">
+		<button id="btn" label="click to delete current displayed item and show next" onClick="@command('cmd1')"/>
+		<vlayout>
+			<label value="case1: using @load and @template with [index]: binding stop firing after first event"/>
+			<hlayout id="h1" children="@load(vm.myContainer[0].beanList[0]) @template(vm.myContainer[0].beanList[0] eq 'test'?'redbox':'greenbox')">
+				<template name="redbox" var="node">
+					<vlayout style="padding-left:10px; border:2px solid green;" >
+						<label value="@load(node)" />
+					</vlayout>
+				</template>
+				<template name="greenbox" var="node">
+					<vlayout style="padding-left:10px; border:2px solid red;" >
+						<label value="@load(node)" />
+					</vlayout>
+				</template>
+			</hlayout>
+			<separator/>
+			<label value="case2: using @load [index]: if alone, doesn't break (comment above block to test). If following case1: both this and case 1 breaks after 2 calls"/>
+			<hlayout id="h2" children="@load(vm.myContainer[0].beanList[0])">
+			</hlayout>
+
+			<separator/>
+			<label value="case3: using @load and template with .get(index): breaks after the first call" />
+			<hlayout id="h3" children="@load(vm.myContainer.get(0).beanList.get(0)) @template(vm.myContainer.get(0).beanList.get(0) eq 'test'?'redbox':'greenbox')">
+				<template name="redbox" var="node">
+					<vlayout style="padding-left:10px; border:2px solid green;" >
+						<label value="@load(node)" />
+					</vlayout>
+				</template>
+				<template name="greenbox" var="node">
+					<vlayout style="padding-left:10px; border:2px solid red;" >
+						<label value="@load(node)" />
+					</vlayout>
+				</template>
+			</hlayout>
+			<separator/>
+			<label value="case4: using @load [index]: if alone, doesn't break (comment above block to test). If following case3: If following case1: both this and case 3 breaks after 2 calls"/>
+			<hlayout id="h4" children="@load(vm.myContainer.get(0).beanList.get(0))">
+			</hlayout>
+		</vlayout>
+	</div>
+</zk>

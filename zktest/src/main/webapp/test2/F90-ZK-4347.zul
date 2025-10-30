@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4347.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 08 10:34:57 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    import java.time.*;
+    LocalTime min = LocalTime.of(4, 0);
+    LocalTime max = LocalTime.of(23, 1);
+    ]]>
+    </zscript>
+    <label multiline="true">
+        1. The value in Dateboxes should be "2020-01-01-01:00:00".
+        Except last two are "2020-01-01-00:00:00" (only date) and "yyyy-mm-dd-01:00:00" (only time)
+        2. The value in Timeboxes and Timepickers should be "01:00:00".
+        3. The chosen date in Calendars should be "2020-01-01".
+        4. The last Timepicker has a range (04:00:00 ~ 23:00:00).
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F90_ZK_4347VM')">
+        <hlayout>
+            <vlayout>
+                <label stubonly="true" value="Datebox" />
+                <datebox format="yyyy-MM-dd-HH:mm:ss" timeZone="Europe/Berlin" value="@bind(vm.date)"/>
+                <datebox format="yyyy-MM-dd-HH:mm:ss" timeZone="Europe/Berlin" valueInZonedDateTime="@bind(vm.zonedDateTime)" />
+                <datebox format="yyyy-MM-dd-HH:mm:ss" timeZone="Europe/Berlin" valueInLocalDateTime="@bind(vm.localDateTime)" />
+                <datebox format="yyyy-MM-dd-HH:mm:ss" timeZone="Europe/Berlin" valueInLocalDate="@bind(vm.localDate)" />
+                <datebox format="yyyy-MM-dd-HH:mm:ss" timeZone="Europe/Berlin" valueInLocalTime="@bind(vm.localTime)" />
+            </vlayout>
+            <vlayout>
+                <label stubonly="true" value="Timebox" />
+                <timebox format="HH:mm:ss" timeZone="Europe/Berlin" value="@bind(vm.date)" />
+                <timebox format="HH:mm:ss" timeZone="Europe/Berlin" valueInZonedDateTime="@bind(vm.zonedDateTime)" />
+                <timebox format="HH:mm:ss" timeZone="Europe/Berlin" valueInLocalDateTime="@bind(vm.localDateTime)" />
+<!--                <timebox format="HH:mm:ss" timeZone="Europe/Berlin" valueInLocalDate="@bind(vm.localDate)" />-->
+                <timebox format="HH:mm:ss" timeZone="Europe/Berlin" valueInLocalTime="@bind(vm.localTime)" />
+            </vlayout>
+            <vlayout>
+                <label stubonly="true" value="Calendar" />
+                <calendar value="@bind(vm.date)" />
+                <calendar valueInZonedDateTime="@bind(vm.zonedDateTime)" />
+                <calendar valueInLocalDateTime="@bind(vm.localDateTime)" />
+                <calendar valueInLocalDate="@bind(vm.localDate)" />
+<!--                <calendar valueInLocalTime="@bind(vm.localTime)" />-->
+            </vlayout>
+            <vlayout>
+                <label stubonly="true" value="Timepicker" />
+                <timepicker format="HH:mm:ss" timeZone="Europe/Berlin" value="@bind(vm.date)" />
+                <timepicker format="HH:mm:ss" timeZone="Europe/Berlin" valueInZonedDateTime="@bind(vm.zonedDateTime)" />
+                <timepicker format="HH:mm:ss" timeZone="Europe/Berlin" valueInLocalDateTime="@bind(vm.localDateTime)" />
+<!--                <timepicker format="HH:mm:ss" timeZone="Europe/Berlin" valueInLocalDate="@bind(vm.localDate)" />-->
+                <timepicker format="HH:mm:ss" timeZone="Europe/Berlin" valueInLocalTime="@bind(vm.localTime)" minInLocalTime="${min}" maxInLocalTime="${max}" />
+            </vlayout>
+        </hlayout>
+        <button label="show" onClick="@command('showNow')"/>
+    </div>
+</zk>

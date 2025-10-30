@@ -1,0 +1,24 @@
+<!--
+F80-ZK-2748.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri, May 08, 2015 02:30:24 PM, Created by jameschu
+Copyright (C)  Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label>
+		1. the two label "aaa" and "bbb" should be continuous
+	</label>
+	<zscript>
+		import org.zkoss.lang.Library;
+		Library.setProperty("preserve-all-blank", "false");
+	</zscript>
+	<div>
+		<label>aaa</label>
+		<label>bbb</label>
+	</div>
+</zk>

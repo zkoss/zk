@@ -1,0 +1,45 @@
+<zk>
+	<label multiline="true">
+		iScroll Library should be loaded for listbox and grid
+	</label>
+    <zscript><![CDATA[
+    	Object[] obj = new Object[150]
+    ]]></zscript>
+    <label value="Listbox: " />
+    <listbox height="300px" mold="paging" pageSize="20" width="100%">
+<!--     	<custom-attributes org.zkoss.zul.nativebar="true" /> -->
+        <listhead>
+            <listheader width="150px">
+                <label value="Tanggal" zclass="font-judul" />
+            </listheader>
+            <listheader width="100px">
+                <label value="Uraian" zclass="font-judul" />
+            </listheader>
+            <listheader width="120px" align="right">
+                <label value="Debit" zclass="font-judul" />
+            </listheader>
+            <listheader width="120px" align="right">
+                <label value="Kredit" zclass="font-judul" />
+            </listheader>
+            <listheader width="120px" align="right">
+                <label value="Saldo Akhir" zclass="font-judul" />
+            </listheader>
+        </listhead>
+        <listitem forEach="${obj}">
+            <listcell label="Tanggal" />
+            <listcell label="Uraian" />
+            <listcell label="Debit" />
+            <listcell label="Kredit" />
+            <listcell label="Saldo Akhir" />
+        </listitem>
+    </listbox>
+    
+    <label value="Grid: " />
+    <grid height="300px" mold="paging" pageSize="20" width="100%" >
+	    <rows>
+	        <row forEach="${obj}">
+	            <label>Tanggal Uraian Debit Kredit Saldo Akhir</label>
+	        </row>
+	    </rows>
+	</grid>
+</zk>

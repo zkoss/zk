@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2950.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 11 09:45:54 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+	<apply dynamicValue="true">
+		<button onClick='alert(self.parent.getShadowRoots().isEmpty())' label="please click me to see a 'false' message"/>
+	</apply>
+</window>

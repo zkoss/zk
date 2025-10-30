@@ -1,0 +1,23 @@
+<zk>
+	<zscript>
+	import org.zkoss.zktest.test2.ZK83Utils;
+	</zscript>
+	<vlayout>
+		<hlayout>
+		<button label="Say Yes" onClick='Messagebox.show("Say Yes", "Yes", Messagebox.YES, Messagebox.INFORMATION)'/>
+		shows a message box with a button called Yes
+		</hlayout>
+		<hlayout>
+		<button label="Hi, OK" onClick="ZK83Utils.test0(self)"/>
+		shows a message box with a button called OK
+		</hlayout>
+		<hlayout>
+		<button label="Hi, Cancel and OK" onClick="ZK83Utils.test1(self)"/>
+		shows a message box with two buttons: Cancel and OK
+		</hlayout>
+		<hlayout>
+		<button label="Hi, Cancel, OK and No" onClick="ZK83Utils.test2(self)"/>
+		shows a message box with two buttons: Cancel, OK and No. And, the focus is OK.
+		</hlayout>
+	</vlayout>
+</zk>

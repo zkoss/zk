@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4496.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 05 16:36:05 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <script><![CDATA[
+    function checkTemplate() {
+        var myTmp = document.getElementById('myTmp');
+        if (!myTmp)
+            zk.log('Template not found!');
+        else {
+            zk.log('Template found: ' + myTmp.content);
+        }
+    }
+    ]]></script>
+    <label multiline="true">
+        1. Click the "Check template" button.
+        2. It should print "Template found: XXXX" in zk log. If "Template not found!" was printed, the test is failed.
+    </label>
+    <div>
+        <n:template id="myTmp">Welcome to ZK Fiddle , run it right now!</n:template>
+        <n:button onclick="checkTemplate()">Check template</n:button>
+    </div>
+</zk>

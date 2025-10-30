@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4203.zul
+		Purpose:
+
+		Description:
+
+		History:
+			Tue Aug 13 09:55:10 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Click button, you should not see a number more than 10</label>
+	<custom-attributes org.zkoss.zul.tree.initRodSize="10"/>
+	<button id="btn" label="show count" />
+	<label id="label" />
+	<separator />
+	<tree id="tree" apply="org.zkoss.zktest.test2.F86_ZK_4203Composer" height="400px"></tree>
+</zk>

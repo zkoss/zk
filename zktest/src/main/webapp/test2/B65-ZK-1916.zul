@@ -1,0 +1,8 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<window title="IE10 Only" border="normal">
+	<vlayout>
+	Change the language to Chinese (Simplified) [zh-Hans] or [zh-Hans-CN], should see zh_CN
+	<separator/>
+	<label id="msg" value="${c:getCurrentLocale()}"/>
+	</vlayout>
+</window>

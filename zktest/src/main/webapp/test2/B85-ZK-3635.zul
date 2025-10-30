@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3635.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri Mar 30 16:15:38 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		input:focus, input[type="checkbox"]:focus {
+			background: #ffffcf none;
+			outline: dotted thin;
+		}
+	</style>
+	<label multiline="true">
+		1. Open bandbox
+		2. Focus in first textbox
+		3. Press Tab twice
+		4. Bandbox should not close and the second textbox should receive focus.
+	</label>
+	<separator/>
+	<bandbox>
+		<bandpopup>
+			<textbox/>
+			<checkbox/>
+			<textbox/>
+		</bandpopup>
+	</bandbox>
+</zk>

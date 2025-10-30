@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+MultipleContextScopeRetrievalParam.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue May 04 15:39:11 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Load the page, you should see the Host info in request header bellow and a "test" button aside.
+		2. click the "test" button, you should see the Host info become the jsessionid.
+		3. click the "test2" button, you should see the jsessionid become the Host info.
+		4. click the "test3" button, you should see the Host info become the jsessionid.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.MultipleContextScopeRetrievalParamVM')">
+		<label id="msg" value="@load(vm.message)"/>
+		<button label="test" onClick="@command('cmd')"/>
+		<button label="test2" onClick="@command('cmd2')"/>
+		<button label="test3" onClick="@command('cmd3')"/>
+	</div>
+</zk>

@@ -1,0 +1,16 @@
+<zk>
+	Click <button label="show/hide">
+		<attribute name="onClick"><![CDATA[
+			lb.setVisible(!lb.isVisible());
+			lb.invalidate();
+		]]></attribute>
+	</button> button, should see a listbox show/hide accordingly.
+	<hlayout>
+		<listbox id="lb" visible="false">
+			<listhead>
+				<listheader label="column" />
+			</listhead>
+			<listitem forEach="1,2,3" label="item ${each}" />
+		</listbox>
+	</hlayout>
+</zk>

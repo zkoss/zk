@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2927-2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 24 17:51:23 CST 2015, Created by jumperchen
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+	public class VMTest {
+		private ListModelList model = new ListModelList();
+		public String c1 = "another";
+		public ListModelList getFilteredView() {
+			model.add("a");
+			model.remove(0);
+			return model;
+		}
+		public String getC1(){
+			return c1;
+		}
+	}
+]]></zscript>
+    <window viewModel="@id('vm') @init('VMTest')">
+        <div children="@load(vm.c1) @template(each)">
+            <template name="another"></template>
+            <template name="vlayout">
+                <vlayout children="@load(vm.getFilteredView())">
+                    <template name="children">
+                        <label value="@load(each)" />
+                    </template>
+                </vlayout>
+            </template>
+        </div>
+        <button label="Chick Me twice without any exception" onClick='vm.c1="vlayout";BindUtils.postNotifyChange(null,null,vm,"filteredView");BindUtils.postNotifyChange(null,null,vm,"c1");' />
+    </window>
+</zk>

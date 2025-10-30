@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3885.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Mar 19 2:41 PM:47 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+    <label multiline="true">
+        1. Click the button, you will see the binded info in the label at bottom once.
+
+    </label>
+    <button id="btn" label="render border layout dynamically">
+        <attribute name="onClick">
+            myContainer.getChildren().clear();
+            Borderlayout borderLayout = new Borderlayout();
+            borderLayout.setWidgetListener("onBind", "console.log('bind', this);jq('$outLabel').append('bind ');");
+            borderLayout.setWidgetListener("onUnbind", "console.log('unbind', this);jq('$outLabel').append('unbind ');");
+            myContainer.appendChild(borderLayout);
+        </attribute>
+    </button>
+
+    <borderlayout width="400px" height="300px">
+        <north>
+            <div style="background:#008db7;color:white;">N</div>
+        </north>
+        <south>
+            <div style="background:#112f37;color:white;">S</div>
+        </south>
+        <center id="myContainer"/>
+        <east width="50px">
+            <div vflex="1" style="background:#f2f2f2;">E</div>
+        </east>
+        <west width="50px">
+            <div vflex="1" style="background:#f2f2f2;">W</div>
+        </west>
+    </borderlayout>
+
+    <label id="outLabel"/>
+</zk>

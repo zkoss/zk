@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5777.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/10/29, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+Object v1 = Executions.getCurrent().getParameter("param1");
+Object v2 = Executions.getCurrent().getParameter("param2");
+
+public void redirect() {
+    Executions.getCurrent().sendRedirect("B101-ZK-5777.zul?param1=value1&param2=value2");
+    // Executions.getCurrent().sendRedirect("B101-ZK-5777.zul?param1=value1&param2=value2", "_self"); workaround
+}
+    ]]></zscript>
+	<label value="param1: ${v1}" />
+	<label value="param2: ${v2}" />
+	<button label="redirect with parameters"  onClick="redirect()"/>
+</zk>

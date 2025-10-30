@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3583.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Jul 14 09:56:00 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <style>
+        .vertical div{
+        display: inline-block;
+        }
+    </style>
+    <label>
+        Hover on the "disabled button tooltip", you should see a popup. Then hover on the disabled button, the popup should not close.
+    </label>
+    <div sclass="vertical">
+        <div id="button" tooltip="ppd" style="border:solid 2px">disabled button tooltip</div>
+        <div style="border:solid 2px" tooltip="pp">normal tooltip</div>
+    </div>
+    <popup id="pp">
+        <button>normal</button>
+    </popup>
+    <popup id="ppd">
+        <div style="padding:20px">
+            <button disabled="true">disabled</button>
+        </div>
+    </popup>
+</zk>

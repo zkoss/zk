@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3329.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 16 12:52:55 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <borderlayout height="300px">
+        <center />
+        <west id="west" title="Slidable / Non-closable" collapsible="true" splittable="true"
+              open="false" closable="false" size="50%"
+              onSlide='Clients.log("West onSlide " + event.slide)'
+              onOpen='Clients.log("West onOpen " + event.open)'/>
+        <east id="east" title="Non-slidable / Closable" collapsible="true"
+              open="false" slidable="false" size="50%"
+              onSlide='Clients.log("East onSlide "  + event.slide)'
+              onOpen='Clients.log("East onOpen " + event.open)'/>
+    </borderlayout>
+    <button onClick='west.slide = !west.slide' label="west toggle slide"/>
+    <button onClick='west.open = !west.open' label="west toggle open"/>
+    <checkbox label="west collapsible" onCheck="west.collapsible = event.checked" checked="${west.collapsible}" />
+    <checkbox label="west closable" onCheck="west.closable = event.checked" checked="${west.closable}" />
+    <separator />
+    <button onClick='east.slide = !east.slide' label="east toggle slide"/>
+    <button onClick='east.open = !east.open' label="east toggle open"/>
+    <checkbox label="east collapsible" onCheck="east.collapsible = event.checked" checked="${east.collapsible}" />
+    <checkbox label="east slidable" onCheck="east.slidable = event.checked" checked="${east.slidable}" />
+    <label multiline="true">
+        Collapsible layout regions provide a new property closable (default: true) and slidable (default: true).
+
+        Test closable (West):
+        1. Click the west region, it slides.
+        2. Click "west toggle open" to see if it can be opened by program.
+        3. Click the west region, it would not be closed (there is no button).
+        4. Click "west toggle open" again to see if it can be closed by program.
+        5. Check "west closable" to switch the closable behavior.
+        6. Click the west region button ("»"), it now opens.
+        7. Check "west closable" to switch the closable behavior, and both the buttons on splitter and bar are hidden.
+        8. Click the splitter center area, nothing happened.
+
+        Test slidable (East):
+        1. Click the east region (Not "«"), it opens (not slides). And click » to close it.
+        2. Click "east toggle slide" twice to see if it can be slided by program.
+        3. Check "east slidable" to switch the slidable behavior.
+        4. Click the east region (Not "«"), it now slides.
+    </label>
+</zk>

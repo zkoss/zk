@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4029.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Jan 19 12:34:41 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Click "check nodes" then "replace items, and click "check nodes" again. You should be see the number is the same.</label>
+	<div id="d" viewModel="@id('vm') @init('org.zkoss.zktest.test2.B86_ZK_4029VM')">
+		<listbox model="@load(vm.model)">
+			<template name="model">
+				<listitem>
+					<listcell>
+						<label value="@load(each.label)"/>
+					</listcell>
+					<listcell>
+						<label value="@load(vm.getTitleForItem(each))"/>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<button id="btn1" onClick="@command('checkNode',comp=d)" label="check nodes"/>
+		<button id="btn2" onClick="@command('replaceItems')" label="replace items"/>
+	</div>
+</zk>

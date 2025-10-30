@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F86-ZK-4059.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Nov 13 16:49:34 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Add option to keep menupopup=auto open after setting column visibility
+		1. click on down arrow in listheader(or gridcolumn) to show the menupopup
+		2. hide a column, the menupopup should keep visible if menupopup="auto-keep"
+	</label>
+	<label>Listhead menupopup="auto-keep"</label>
+	<listbox width="1000px">
+		<listhead menupopup="auto-keep" >
+			<listheader id="lh1" label="Author" sort="auto"/>
+			<listheader label="Title" sort="auto"/>
+			<listheader label="Publisher" sort="auto"/>
+			<listheader label="Hardcover" sort="auto"/>
+		</listhead>
+	</listbox>
+	<label>Listhead menupopup="auto"</label>
+	<listbox width="1000px">
+		<listhead menupopup="auto">
+			<listheader label="Author" sort="auto"/>
+			<listheader label="Title" sort="auto"/>
+			<listheader id="lh2" label="Publisher" sort="auto"/>
+			<listheader label="Hardcover" sort="auto"/>
+		</listhead>
+	</listbox>
+	<label>Columns menupopup="auto-keep"</label>
+	<grid width="1000px">
+		<columns menupopup="auto-keep">
+			<column id="col1" label="Author" sort="auto" />
+			<column label="Title" sort="auto" />
+			<column label="Publisher" sort="auto" />
+			<column label="Hardcover" sort="auto" />
+		</columns>
+	</grid>
+	<label>Columns menupopup="auto"</label>
+	<grid width="1000px">
+		<columns menupopup="auto">
+			<column label="Author" sort="auto" />
+			<column label="Title" sort="auto" />
+			<column label="Publisher" sort="auto" />
+			<column id="col2" label="Hardcover" sort="auto" />
+		</columns>
+	</grid>
+</zk>

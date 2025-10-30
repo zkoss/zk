@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4086.zul
+
+        Purpose:
+                
+        Description:
+
+        History:
+                Fri Nov 16 15:26:25 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>
+		1. There should not have padding between knob and its nearest border.
+	</label>
+	<hlayout>
+		<slider mold="knob"
+				minpos="0.0" maxpos="100.0"
+				curpos="80" step="1" width="200px" angleArc="360"
+				style="border: 1px solid black;" strokeWidth="95"/>
+		<vlayout>
+			<slider mold="knob"
+					minpos="0.0" maxpos="100.0"
+					curpos="80" step="1" width="200px" height="100px" angleArc="180"
+					style="border: 1px solid black;" strokeWidth="30"/>
+			<slider mold="knob"
+					minpos="0.0" maxpos="100.0"
+					curpos="80" step="1" width="200px" height="100px" angleArc="360"
+					style="border: 1px solid black;" strokeWidth="30"/>
+		</vlayout>
+		<hlayout>
+			<slider mold="knob"
+					minpos="0.0" maxpos="100.0"
+					curpos="80" step="1" width="100px" height="200px" angleArc="180"
+					style="border: 1px solid black;" strokeWidth="30"/>
+			<slider mold="knob"
+					minpos="0.0" maxpos="100.0"
+					curpos="80" step="1" width="100px" height="200px" angleArc="360"
+					style="border: 1px solid black;" strokeWidth="30"/>
+		</hlayout>
+	</hlayout>
+</zk>

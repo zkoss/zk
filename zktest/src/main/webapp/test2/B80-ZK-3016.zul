@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3016.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Dec 30, 2015  3:27:46 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<tabbox width="450px">
+		<tabs>
+             <tab id="tab1" label="Similar requests"/>
+             <tab id="tab2" label="Contact Requests"/>
+             <tab id="tab3" label="E-mail"/>
+             <tab id="tab4" label="History"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>dummy content</tabpanel>
+			<tabpanel>dummy content</tabpanel>
+			<tabpanel>dummy content</tabpanel>
+			<tabpanel>dummy content</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<vlayout>
+		changing the tab labels will resize the tabs, and requires scrollable tabs (REFRESH before clicking another button)
+		<button id="btn1" label="expand tab1 label -> OK" onClick='tab1.setLabel(tab1.getLabel() + " (XXXXXXXXXXXXXXXX)");'/>
+		<button id="btn2" label="expand tab2 label -> LINE BREAK" onClick='tab2.setLabel(tab2.getLabel() + " (XXXXXXXXXXXXXXXX)");'/>
+		<button id="btn3" label="expand tab4 label -> LINE BREAK" onClick='tab4.setLabel(tab4.getLabel() + " (XXXXXXXXXXXXXXXX)");'/>
+	</vlayout>
+</zk>

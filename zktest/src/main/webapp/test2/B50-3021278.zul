@@ -1,0 +1,24 @@
+<zk>
+   <html><![CDATA[
+	<ul>
+	<li>Hide the second column by click the menu in the column</li>
+	<li>if the background color of the second row is write, that is bug</li>
+	</ul>
+	]]></html>
+	<grid width="300px">
+		<columns menupopup="auto">
+			<column label="Author"/>
+			<column label="Title"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Northern Clemency"/>
+			</row>
+			<row>
+				<label value="Philip Hensher"/>
+				<label value="The Fit"/>
+			</row>
+		</rows>
+	</grid>
+</zk>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4923.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jun 17 12:44:23 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+        1. open another container <A> and move B96-ZK-4923test.html there. (change script src for ZK App URL)
+        2. Set library properties
+        <library-property>
+            <name>org.zkoss.web.servlet.http.embedded.enabled</name>
+            <value>true</value>
+        </library-property>
+        3. add cors filter in web.xml.
+        4. Open "http://localhost:9000" to test. (container <A>)
+    ]]></label>
+	<div>
+		You should be able to download file.
+		<separator/>
+		<button label="Download sun.jpg">
+			<attribute name="onClick">
+				Filedownload.save("/img/sun.jpg", null);
+			</attribute>
+		</button>
+	</div>
+</zk>

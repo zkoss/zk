@@ -1,0 +1,66 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<html><![CDATA[
+  <ol>
+  <li>You shall see two comboboxes.</li> 
+  <li>The first combobox contains the week type: "Regular Week" and "Working Week".</li>
+  <li>The second combobox contains the days indicated by the selection of the first combobox.</li>
+  <li>If "Regular Week" is selected in the first combobox, the second combobox should contain "Sunday" through "Saturday".</li>
+  <li>If "Working Week" is selected in the first combobox, the second combobox should contain "Monday" through "Friday".</li>
+  <li>No exceptions should occur when changing the selection in any order.</li>
+  </p>
+]]>
+</html>
+
+  <borderlayout
+    width="100%"
+    height="100%"
+    apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('dw') 
+    @init('org.zkoss.zktest.test2.B60_ZK_1202_DaysAndWeeks')">
+    
+    <center>
+      <grid
+        model="@load(dw.dayWeekModels)"
+        width="550px"
+        emptyMessage="No Index Fields to show">
+        <columns>
+          <column label="Week Type" />
+          <column label="Days" />
+        </columns>
+        <rows>
+          <template
+            name="model"
+            var="dayWeekModel">
+            <row>
+              <combobox
+                autocomplete="true"
+                readonly="true"
+                autodrop="true"
+                selectedItem="@bind(dayWeekModel.selectedWeekType)"
+                model="@bind(dayWeekModel.weekTypes)">
+                <template
+                  name="model"
+                  var="weekType">
+                  <comboitem label="@load(weekType)" />
+                </template>
+              </combobox>
+              <combobox
+                autocomplete="true"
+                readonly="true"
+                model="@bind(dayWeekModel.days)"
+                selectedItem="@load(dayWeekModel.selectedDay)">
+                <template
+                  name="model"
+                  var="day">
+                  <comboitem label="@load(day)" />
+                </template>
+              </combobox>
+            </row>
+          </template>
+        </rows>
+      </grid>
+    </center>
+  </borderlayout>
+</zk>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F90-ZK-4421.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 02 12:26:43 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click each "Toast/Notification" button.
+        2. The toast (top) is slimmer than the notification (center).
+    </label>
+    <zscript><![CDATA[
+    void showToastNotification(String msg) {
+        org.zkoss.zkmax.ui.util.Toast.show(msg, null, null, -1, true);
+        org.zkoss.zk.ui.util.Notification.show(msg, true);
+    }
+    ]]>
+    </zscript>
+    <button label="Toast/Notification 1">
+        <attribute name="onClick"><![CDATA[
+        showToastNotification("I don't always drink beer.");
+        ]]></attribute>
+    </button>
+    <button label="Toast/Notification 2">
+        <attribute name="onClick"><![CDATA[
+        showToastNotification("I don't always drink beer, but when I do, I code a lot.");
+        ]]></attribute>
+    </button>
+    <button label="Toast/Notification 3">
+        <attribute name="onClick"><![CDATA[
+        showToastNotification("I don't always drink beer, but when I do, I code a lot.I don't always drink beer, but when I do, I code a lot.I don't always drink beer, but when I do, I code a lot.");
+        ]]></attribute>
+    </button>
+    <apply templateURI="/test2/include/themes.zul"/>
+</zk>

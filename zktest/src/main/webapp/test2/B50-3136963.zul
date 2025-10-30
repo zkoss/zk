@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3136963.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tuesday Dec  14 16:12:38 TST 2010, Created by jumperchen
+
+Copyright (C) 2010 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please press the click button and the invalidate button, and each time it should only appear one message below.
+	<include id="include" />
+	<button label="click" onClick='include.src="B50-3136963_2.zul"' autodisable="+self"/>
+	<button label="invalidate" onClick='include.invalidate()'/>
+</zk>
+

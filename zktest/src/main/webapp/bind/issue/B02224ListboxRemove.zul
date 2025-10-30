@@ -1,0 +1,54 @@
+<zk>
+	<window border="normal" title="big list" vflex="1" hflex="1"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B02224ListboxRemove')">
+		<label multiline="true">
+		1.click widen model number, and click narrow model to remove items.
+		2.it shouldn't take too long (server time) when switch back to narrow model (it took 60+s to remove 400. after fix reduced to 3+s)
+		</label>
+	    <custom-attributes org.zkoss.zul.nativebar="true"/>
+
+		<vlayout hflex="1" vflex="1">
+			<hlayout>
+				<button onClick="binder.tracker.dumpLess()" label="dump"/>
+				<button onClick="@command('narrowModel')" label="narrow model"/>
+				<button onClick="@command('widenModel', cols=50)" label="widen model 50"/>
+				<button onClick="@command('widenModel', cols=100)" label="widen model 100"/>
+				<button onClick="@command('widenModel', cols=200)" label="widen model 200"/>
+				<button onClick="@command('widenModel', cols=400)" label="widen model 400"/>
+			</hlayout>
+			<listbox model="@load(vm.rows)" hflex="1" vflex="1" mold="paging" pageSize="20">
+			
+	<!-- 			<frozen columns="1"/> -->
+			
+				<listhead children="@load(vm.columns) @template(each.type)">
+					<template name="text">
+						<listheader label="@init(each.label)" width="100px"/>
+					</template>
+					<template name="number">
+						<listheader label="@init(each.label)" width="50px"/>
+					</template>
+				</listhead>
+			
+				<template name="model">
+					<listitem children="@load(each.cells) @template(each.column.type)" use="org.zkoss.zktest.bind.issue.B02224DebugListitem">
+						<template name="text">
+							<listcell>
+								<label value="@load(each.value)" onClick=""/>
+								<textbox value="@bind(each.value)" width="90px" onChange=""/>
+							</listcell>
+						</template>
+						<template name="number">
+							<listcell>
+								<label value="@load(each.value)" onClick=""/>
+								<intbox value="@bind(each.value)" width="40px" onChange=""/>
+							</listcell>
+						</template>
+					</listitem>
+				</template>	
+			
+			</listbox>
+		</vlayout>
+	
+	</window>
+</zk>

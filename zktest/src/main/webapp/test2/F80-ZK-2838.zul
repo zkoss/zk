@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2838.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 12 12:09:06 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:x="xhtml">
+	<label multiline="true">
+		1. please check Composer for more information about testing
+	</label>
+	<div apply="org.zkoss.zktest.test2.F80_ZK_2838Composer">
+		<div style="border: solid purple">
+			<div id="host1" style="background: green"></div>
+			<x:div id="host2" style="background: grey"></x:div>
+			<div>
+				@host zul, autodrop false
+				<button id="btn1">gen shadow template</button>
+			</div>
+			<div>
+				@host xhtml, autodrop false
+				<button id="btn2">gen shadow template</button>
+			</div>
+			<div>
+				@host zul, autodrop false, change template
+				<button id="btn3">change template</button>
+			</div>
+		</div>
+		<div style="border: solid black">
+			<div id="host3" style="background: green"></div>
+			<x:div id="host4" style="background: grey"></x:div>
+			<div>
+				@host zul, autodrop true
+				<button id="btn4">gen shadow template</button>
+			</div>
+			<div>
+				@host xhtml, autodrop true
+				<button id="btn5">gen shadow template</button>
+			</div>
+			<div>
+				@host zul, autodrop true, change template
+				<button id="btn6">change template</button>
+			</div>
+			<div>
+				@apply null
+				<button id="btn7">apply null</button>
+			</div>
+			<div>
+				@insert children (before, middle, after)
+				<button id="btn8">insert children</button>
+			</div>
+		</div>
+		<template name="one">
+			<label value="zul label in one"/>
+			<x:label>xhtml label in one</x:label>
+			<n:span>native span in one</n:span>
+		</template>
+		<template name="two">
+			<label value="zul label in two"/>
+			<x:label>xhtml label in two</x:label>
+			<n:span>native span in two</n:span>
+		</template>
+		<template name="three">
+			<label value="zul label in three"/>
+			<x:label>xhtml label in three</x:label>
+			<n:span>native span in three</n:span>
+		</template>
+		<button id="btn9">apply large number</button>
+	</div>
+</zk>

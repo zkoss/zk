@@ -1,0 +1,16 @@
+<data>
+	<event start="Aug 1 2012 00:00:00 GMT" end="Aug 1 2012 00:00:00 GMT"
+		title="Friend's wedding">
+		I'm not sure precisely when my friend's wedding is.
+  </event>
+	<event start="Aug 15 2012 11:00:00 GMT" end="Sep 1 2012 09:00:00 GMT"
+		isDuration="true" title="Writing Style Guide" image="http://simile.mit.edu/images/csail-logo.gif">
+		A few days to write some documentation for
+		<a href="http://books.zkoss.org/wiki/ZK_Style_Guide">Timeline</a>
+		.
+	</event>
+	<event start="Aug 23 2012 06:12:33 GMT" title="Trip to New York"
+		link="http://www.priceline.com/">
+		Happy New Year !
+	</event>
+</data>

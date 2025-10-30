@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3897.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 08 12:07:50 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript>
+    TimeZone tzUtc = TimeZone.getTimeZone("UTC");
+    Date now = new Date();
+
+    Date getNearMinTime(TimeZone tz) {
+        java.util.Calendar cal = java.util.Calendar.getInstance(tz);
+        cal.set(1900, 0, 2, 23, 59, 59); // Test if 1899/12/31 23:59:59 can be selected
+        return cal.getTime();
+    }
+
+    Date getNearMaxTime(TimeZone tz) {
+        java.util.Calendar cal = java.util.Calendar.getInstance(tz);
+        cal.set(2099, 11, 30, 0, 0, 0); // Test if 2100/01/01 00:00:00 can be selected
+        return cal.getTime();
+    }
+    </zscript>
+    <label>
+        By default, you can't select less than 1900/01/01 00:00:00 and more than 2099/12/31 23:59:59 using keyboard left/right key (ZK-1804).
+    </label>
+    <vlayout>
+        <datebox id="db1" timeZone="${tzUtc}" width="300px"
+                 format="yyyy/MM/dd HH:mm:ss" onCreate="self.value = now" />
+        <hlayout>
+            <button onClick='db1.timeZone = TimeZone.getTimeZone("UTC")' label="Set TimeZone UTC (page default)" />
+            <button onClick='db1.timeZone = TimeZone.getTimeZone("Europe/Berlin")' label="Set TimeZone Europe/Berlin" />
+            <button onClick='db1.timeZone = TimeZone.getTimeZone("America/New_York")' label="Set TimeZone America/New_York" />
+        </hlayout>
+        <hlayout>
+            <button onClick='db1.value = getNearMinTime(db1.timeZone)' label="Set Near Min" />
+            <button onClick='db1.value = getNearMaxTime(db1.timeZone)' label="Set Near Max" />
+        </hlayout>
+    </vlayout>
+</zk>

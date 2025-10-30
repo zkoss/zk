@@ -1,0 +1,15 @@
+<zk xmlns:h="native">
+	<label multiline="true" style="font-size: 14px">
+	1. If not see Modal Window, it is a bug.
+	2. Click 'popup' button, should see Popup.
+	</label>
+	<window vflex="1" hflex="1" border="none" position="center" mode="modal">
+		<div style="background-color:gold;" width="437px" height="341px">
+			Modal Window
+			<button id="btn" label="popup" onClick='pp.open(self, "after_end");' />
+			<popup vflex="1" hflex="1" id="pp">
+				<div style="background-color: pink;" width="200px" height="100px">Popup</div>
+			</popup>
+		</div>
+	</window>
+</zk>

@@ -1,0 +1,21 @@
+<zk>
+	<window border="normal" title="hello"
+		apply="org.zkoss.zktest.test2.B65_ZK_2133_Composer">
+
+		<label multiline="true">
+			1. Select d0, d1 and d2 in left listbox 2. Click "Left ->
+			Right" button 3. Unselect d1 in left listbox 4. Click "Left
+			-> Right" button Excepted: only d0 and d2 are selected in
+			right listbox Actual: d0, d1 and d2 are selected in right
+			listbox
+		</label>
+
+		<button id="btn" label="Left -> Right" />
+		<hbox>
+			<listbox height="200px" width="200px" mold="select"
+				multiple="true" id="lb1" />
+			<listbox height="200px" width="200px" mold="select"
+				multiple="true" id="lb2" />
+		</hbox>
+	</window>
+</zk>

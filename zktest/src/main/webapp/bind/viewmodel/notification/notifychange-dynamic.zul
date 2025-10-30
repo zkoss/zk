@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+notifychange-dynamic.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed May 05 14:54:28 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click "add with notify" button multiple times.
+        2. The value increased by 5 regularly.
+        3. Click "add without notify" button multiple times.
+        4. The value won't be changed.
+        5. Click "add with notify" button again.
+        6. The value updated with a larger value (depends on how many times you click in step 3)
+    </label>
+    <div viewModel="@('org.zkoss.zktest.bind.viewmodel.notification.NotifyChangeDynamicVM')">
+        <label id="current" value="@load(vm.number)"/>
+        <button id="add" label="add with notify" onClick="@command('add')"/>
+        <button id="addNoNotify" label="add without notify" onClick="@command('add', notify=false)"/>
+    </div>
+</zk>

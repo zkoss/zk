@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2887.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Oct 21, 2015  3:46:20 PM, Created by Christopher
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true">
+tablet.css was not rendered correctly due to an error in _zkmixins.less
+the background gradient was missing, causing tablet devices to have no background in datebox.
+Click the select date icon on the datebox,
+if the date selector looks "normal", then the bug is fixed.
+</label>
+<datebox />
+</zk>

@@ -1,0 +1,38 @@
+<!--
+B70-ZK-2941.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Nov 11 14:03:53 CST 2015, Created by jameschu
+
+Copyright (C) 2015 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window border="normal" title="hello" apply="org.zkoss.bind.BindComposer">
+        <label multiline="true">
+            1. Navigate between page components using TAB key, focus on Combobutton component.
+            2. Press "enter", and you should see popup with message "click event - combobutton"
+            3. Click button to return main page.
+            4. Press "space", and you should see popup with message "click event - combobutton"
+            5. Click button to return main page.
+            6. Press "arrow down", and you should see a dropdown list, and press "esc", and you should see the dropdown list close.
+        </label>
+        <hbox hflex="1">
+            <button id="btn" onClick='alert("click event - btn")' label="Button" focus="true" tabindex="1"/>
+            <combobutton onClick='alert("click event - combobutton")' label="ComboButton" tabindex="2">
+                <menupopup>
+                    <menuitem label="Item 1" />
+                    <menuitem label="Item 2" />
+                </menupopup>
+            </combobutton>
+        </hbox>
+        <combobox>
+            <comboitem />
+            <comboitem />
+        </combobox>
+    </window>
+</zk>

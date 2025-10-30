@@ -1,0 +1,26 @@
+<!--
+	B60-ZK-987.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Tue Mar 27 18:11:17 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		The two Groupboxes should look identical (the one on the right should have no top border on cave DIV).
+	</div>
+	<hlayout>
+		<groupbox mold="3d" height="200px" width="200px">
+			<caption label="Groupbox" />
+			Groupbox
+		</groupbox>
+		<groupbox mold="3d" title="Groupbox" height="200px" width="200px">
+			Groupbox
+		</groupbox>
+	</hlayout>
+</zk>

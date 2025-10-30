@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3737.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 15 19:03:11 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		All borders of headers of Tree, Grid, and Listbox, should be consistent with columns.
+
+	</label>
+	<zscript><![CDATA[
+		List rows = Collections.nCopies(10, "dummy");
+	]]></zscript>
+	<listbox height="200px" width="200px">
+		<listhead>
+			<listheader>header1</listheader>
+			<listheader>header2</listheader>
+		</listhead>
+		<forEach items="${rows}">
+			<listitem>
+				<listcell label="col1"/>
+				<listcell label="col2"/>
+			</listitem>
+		</forEach>
+	</listbox>
+
+	<separator/>
+
+	<grid width="200px" height="200px">
+		<columns>
+			<column>column1</column>
+			<column>column2</column>
+		</columns>
+		<rows>
+			<forEach items="${rows}">
+				<row>
+					<label value="col1"/>
+					<label value="col2"/>
+				</row>
+			</forEach>
+		</rows>
+	</grid>
+
+	<separator/>
+
+	<tree width="200px" height="200px">
+		<treecols>
+			<treecol>treecol1</treecol>
+			<treecol>treecol2</treecol>
+		</treecols>
+		<treechildren>
+			<forEach items="${rows}">
+				<treeitem>
+					<treerow>
+						<treecell label="col1"/>
+						<treecell label="col2"/>
+					</treerow>
+				</treeitem>
+			</forEach>
+		</treechildren>
+	</tree>
+</zk>

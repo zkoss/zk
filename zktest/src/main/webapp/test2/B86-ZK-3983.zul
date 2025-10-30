@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3983.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Aug 7 12:44:40 CST 2018, Created by jameschu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Drag splitter, the two panel size should be display as expect.
+	<vbox spacing="0" width="100%" vflex="1" heights="50%,50%">
+		<panel title="Dashboard 2.1" border="normal" vflex="1" hflex="true">
+			<panelchildren>
+				<div>Dashboard components</div>
+			</panelchildren>
+		</panel>
+		<splitter/>
+		<panel title="Dashboard 2.2" border="normal" vflex="1" hflex="true">
+			<panelchildren>
+				<div>Dashboard components</div>
+			</panelchildren>
+		</panel>
+	</vbox>
+</zk>

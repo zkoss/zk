@@ -1,0 +1,101 @@
+<zk>
+	<label multiline="true"><![CDATA[
+		[Step 1] #1 grid should be same as #2 grid
+		[Step 2] the ids in #3 grid should be "*****"
+		[Step 3] Click 'toggle template type', the ids in #3 grid should not be "*****"
+		[Step 4] Click 'update first order quantity to 1', the 'Need to Check' col should be "v" in the first row in #4 grid
+		[Step 5] Click 'update first order quantity to 10', the 'Need to Check' col should be "" in the first row in #4 grid
+	]]></label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.bind.databinding.propertybinding.TemplatePropertyBindingVM')">
+		#1 grid
+		<grid id="g1" model="@load(vm.orders)">
+			<columns>
+				<column label="Index"/>
+				<column label="Id"/>
+				<column label="Quantity"/>
+				<column label="Price"/>
+			</columns>
+			<template name="model" var="item">
+				<row>
+					<label value="@load(itemStatus.index)"/>
+					<label value="@load(item.id)"/>
+					<label value="@load(item.quantity)"/>
+					<label value="@load(item.price)"/>
+				</row>
+			</template>
+		</grid>
+		#2 grid
+		<grid id="g2" model="@bind(vm.orders) @template('myTemplate')">
+			<columns>
+				<column label="Index"/>
+				<column label="Id"/>
+				<column label="Quantity"/>
+				<column label="Price"/>
+			</columns>
+			<template name="myTemplate" var="item">
+				<row>
+					<label value="@load(itemStatus.index)"/>
+					<label value="@load(item.id)"/>
+					<label value="@load(item.quantity)"/>
+					<label value="@load(item.price)"/>
+				</row>
+			</template>
+		</grid>
+		#3 grid
+		<grid id="g3" model="@bind(vm.orders) @template(vm.type eq 'customer' ? 'template1' : 'template2')">
+			<columns>
+				<column label="Index"/>
+				<column label="Id"/>
+				<column label="Quantity"/>
+				<column label="Price"/>
+			</columns>
+			<template name="template1" var="item">
+				<row>
+					<label value="@load(itemStatus.index)"/>
+					<label value="*****"/>
+					<label value="@load(item.quantity)"/>
+					<label value="@load(item.price)"/>
+				</row>
+			</template>
+			<template name="template2" var="item">
+				<row>
+					<label value="@load(itemStatus.index)"/>
+					<label value="@load(item.id)"/>
+					<label value="@load(item.quantity)"/>
+					<label value="@load(item.price)"/>
+				</row>
+			</template>
+		</grid>
+		<button id="btn1" label="toggle template type" onClick="@command('toggleType')"/>
+		#4 grid
+		<grid id="g4" model="@bind(vm.orders) @template(each.quantity ge 10 ? 'templateA' : 'templateB')">
+			<columns>
+				<column label="Index"/>
+				<column label="Id"/>
+				<column label="Quantity"/>
+				<column label="Price"/>
+				<column label="Need to Check"/>
+			</columns>
+			<template name="templateA" var="item">
+				<row>
+					<label value="@load(itemStatus.index)"/>
+					<label value="@load(item.id)"/>
+					<label value="@load(item.quantity)"/>
+					<label value="@load(item.price)"/>
+					<label value=""/>
+				</row>
+			</template>
+			<template name="templateB" var="item">
+				<row>
+					<label value="@load(itemStatus.index)"/>
+					<label value="@load(item.id)"/>
+					<label value="@load(item.quantity)"/>
+					<label value="@load(item.price)"/>
+					<label value="v"/>
+				</row>
+			</template>
+		</grid>
+		<button id="btn2_1" label="update first order quantity to 1" onClick="@command('updateFirstOrderQuantity', num=1)"/>
+		<button id="btn2_2" label="update first order quantity to 10" onClick="@command('updateFirstOrderQuantity', num=10)"/>
+	</vlayout>
+</zk>

@@ -1,0 +1,11 @@
+<?meta name="viewport" content="width=600"?>
+<zk>
+	<div>
+		Click on calendar button should not see native keyboard.
+	</div>
+	<vlayout spacing="30px">
+		<datebox onChange='lbl.setValue("" + self.getValue())'/>
+		<calendar onChange='lbl.setValue("" + self.getValue())'/>
+		<label id="lbl" />
+	</vlayout>
+</zk>

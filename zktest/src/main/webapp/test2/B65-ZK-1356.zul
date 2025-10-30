@@ -1,0 +1,11 @@
+<vlayout>
+	<label multiline="true">
+	iPad/Android Only
+	1. click spinner's button to increase value.
+	2. click doublespinner's button to increase value.
+	3. click on "get spinner value" button, you should see a alert which shows the last the value of spinner and doublespinner.
+	</label>
+	<spinner id="s"/>
+	<doublespinner id="d"/>
+	<button label="get spinner value" onClick='alert("Spinner value : "+ s.getValue() + "\nDoublespinner value: " + d.getValue())'/>
+</vlayout>

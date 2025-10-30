@@ -1,0 +1,8 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="win1" title="new page title" border="normal">
+		Right click on the button, should only see "Right clicked" message showed.<separator />
+		<button image="/img/inet.png" onClick='lbl.value="Left Clicked"' onRightClick='lbl.value="Right Clicked"'></button>
+		<label id="lbl" style="color: red" />
+	</window>
+</zk>

@@ -1,0 +1,31 @@
+.z-treecell-content > span {
+    position: relative;
+}
+
+.z-treerow, .z-treecell, .z-treecell-content {
+    overflow: visible !important;
+}
+
+/* vertical lines */
+span.z-tree-spacer::before {
+    left: 50%;
+    bottom: 50%;
+    width: 100%;
+    height: 280%;
+    content: "";
+    position: absolute;
+    display: inline-block;
+    border-left: 1px solid black;
+}
+
+/* horizontal lines */
+span:nth-last-of-type(3).z-tree-spacer::before,
+span:nth-last-of-type(3).z-tree-spacer + span.z-tree-spacer::before {
+    border-bottom: 1px solid black;
+}
+
+/* omitted vertical lines */
+span.z-tree-line-omit::before,
+span:nth-last-of-type(2).z-tree-spacer::before {
+    border-left: none;
+}

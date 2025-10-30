@@ -1,0 +1,34 @@
+<zk>
+	<vlayout>
+	upload a huge file, and cancel the upload using the browser cancel-button (or the button below, will call window.stop())
+	<button label="Upload" upload="true">
+		<attribute name="onUpload">
+				org.zkoss.util.media.Media media = event.getMedia();
+				if (media instanceof org.zkoss.image.Image) {
+					org.zkoss.image.Image img = (org.zkoss.image.Image) media;
+					if (img.getWidth() > img.getHeight()){
+						if (img.getHeight() > 300) {
+							pics.setHeight("300px");
+							pics.setWidth(img.getWidth() * 300 / img.getHeight() + "px");
+						}
+					}
+					if (img.getHeight() > img.getWidth()){
+						if (img.getWidth() > 400) {
+							pics.setWidth("400px");
+							pics.setHeight(img.getHeight() * 400 / img.getWidth() + "px");
+						}
+					}
+					pics.setContent(img);
+				} else {
+					Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+					break; //not to show too many errors
+				}
+			</attribute>	
+	
+	</button>
+	
+	<image id="pics" height="100px"/>
+	<h:button xmlns:h="native" onclick="window.stop();">window.stop()</h:button>
+	</vlayout>
+	
+</zk>

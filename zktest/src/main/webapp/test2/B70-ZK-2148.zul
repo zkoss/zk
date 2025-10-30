@@ -1,0 +1,24 @@
+<zk>
+	<label multiline="true">
+		1. Select "option 1" in the selectbox. 
+		2. Click "clear" button.
+		3. Open and close the selectbox should not see NullPotinerException showed.
+	</label>
+	<div>
+		<selectbox id="selbox"
+			onSelect='System.out.println(self.getSelectedIndex())' />
+		<button id="btn" label="clear" onClick="clear()" />
+		<zscript><![CDATA[
+	ListModelList lml = new ListModelList();
+	lml.add("option 1");
+	lml.add("option 2");
+	lml.add("option 3");
+	lml.add("option 4");
+	lml.add("option 5");
+	selbox.setModel(lml);
+	void clear() {
+		selbox.setModel(null);
+	}
+]]></zscript>
+	</div>
+</zk>

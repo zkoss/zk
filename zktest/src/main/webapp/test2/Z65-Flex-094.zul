@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Intbox, rounded]" width="480px">
+        <intbox mold="rounded" value="1" vflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Fit-the-Rest Flexibility: [Intbox]" width="480px">
+        <intbox value="1" vflex="1"/>
+    </window>
+</hbox>
+</zk>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3735.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Aug 22 10:40:43 CST 2018, Created by leon
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        Check the listbox visibleItemCount correct or not after setModel.
+        press set1,set2,set3 button sequently.(set model for listbox)
+        visibleItemCount should be 1, 1, 8.
+    </label>
+    <window border="normal" title="ZK3735Test"
+            apply="org.zkoss.zktest.test2.B86_ZK_3735Composer">
+        <button id="set1" label="setM1"/>
+        <button id="set2" label="setM2"/>
+        <button id="set3" label="setM3"/>
+        <listbox id="listbox">
+            <template name="model">
+                <listitem>
+                    <listcell>
+                        <label value="${each}"/>
+                    </listcell>
+                </listitem>
+            </template>
+        </listbox>
+    </window>
+</zk>

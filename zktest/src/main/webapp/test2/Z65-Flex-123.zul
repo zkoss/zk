@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Doublespinner]" width="480px">
+        <doublespinner hflex="1" value="0.5"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Doublespinner, rounded]" width="480px">
+        <doublespinner hflex="1" mold="rounded" value="0.5"/>
+    </window>
+</hbox>
+</zk>

@@ -1,0 +1,8 @@
+<zk>
+	<html><![CDATA[
+		<ol>
+			<li>Type "1-2" in longbox and click on somewhere else. You should see an errorbox. If not, it is a bug.</li>
+		</ol>
+	]]></html>
+	<longbox />
+</zk>

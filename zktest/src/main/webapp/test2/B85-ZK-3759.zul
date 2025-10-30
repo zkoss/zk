@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3759.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 26 14:39:43 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		iPad/Android only
+		1. Click on menu1, you shouldn't see a alert.
+		2. Click on arrow icon of menu1, you shouldn't see menupopup showed.
+	</label>
+	<menubar>
+		<menu label="Menu1" onClick='alert("alert")' disabled="true">
+			<menupopup>
+				<menu label="New">
+					<menupopup>
+						<menuitem label="Small Car" />
+						<menuitem label="Mediem Car" />
+						<menuitem label="Large Car" />
+					</menupopup>
+				</menu>
+				<menuitem label="Search" />
+			</menupopup>
+		</menu>
+		<menu label="Menu2">
+			<menupopup>
+				<menu label="New">
+					<menupopup>
+						<menuitem label="Small Car" />
+						<menuitem label="Mediem Car" />
+						<menuitem label="Large Car" />
+					</menupopup>
+				</menu>
+				<menuitem label="Search" />
+			</menupopup>
+		</menu>
+	</menubar>
+</zk>

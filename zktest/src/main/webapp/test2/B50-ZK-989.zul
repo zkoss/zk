@@ -1,0 +1,25 @@
+<!--
+	B50-ZK-989.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Wed Mar 28 11:54:17 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>1. Select item 3.</div>
+	<div>2. Click 'Disabled' Button.</div>
+	<div>3. Select item 4, and click 'Get Selected' Button. You should see "4" next to the button.</div>
+	<div>4. Select item 3, and click 'Get Selected' Button. You should see "3".</div>
+	<listbox id="listbox" mold="select">
+		<listitem id="item${each}" value="${each}" label="${each}" forEach="1,2,3,4" />
+	</listbox>
+	<button label="Disable" onClick="item2.visible=false;" />
+	<button label="Get Selected" 
+		onClick="selectedValue.value=listbox.getSelectedItem().getValue();" />
+	<label value="" id="selectedValue" />
+</zk>

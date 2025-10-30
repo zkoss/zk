@@ -1,0 +1,36 @@
+<zk>
+	<div>The last column should occupy the rest of width</div>
+	<listbox sizedByContent="true" style="border: 0;" hflex="min">
+		<listhead sizable="true">
+			<listheader label="150px" width="150px" />
+			<listheader label="75px" width="75px" />
+			<listheader label="75px" width="75px" />
+			<listheader label="N/A" />
+		</listhead>
+		<listitem>
+			<listcell label="6/28/10 4:19:18 PM"></listcell>
+			<listcell label="Info"></listcell>
+			<listcell label="Server"></listcell>
+			<listcell label="Merging recovery point 52 created 20 6/27/10 10 :11 PM">
+			</listcell>
+		</listitem>
+		<listitem>
+			<listcell label="6/28/10 4:19:18 PM"></listcell>
+			<listcell label="Info"></listcell>
+			<listcell label="Server"></listcell>
+			<listcell label="Merging recovery point 52"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="6/28/10 4:19:18 PM"></listcell>
+			<listcell label="Info"></listcell>
+			<listcell label="Server"></listcell>
+			<listcell label="Merging recovery"></listcell>
+		</listitem>
+		<listitem>
+			<listcell label="6/28/10 4:19:18 PM"></listcell>
+			<listcell label="Info"></listcell>
+			<listcell label="Server"></listcell>
+			<listcell label="Merging recovery------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*" />
+		</listitem>
+	</listbox>
+</zk>

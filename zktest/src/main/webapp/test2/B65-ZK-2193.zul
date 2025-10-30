@@ -1,0 +1,27 @@
+<zk>
+	<zscript><![CDATA[
+	Object[] column = new Object[20];
+	List list = new ArrayList();
+	for (int i = 0; i < 100; i++) {
+		list.add("item" + i);
+	}
+	ListModelList lml = new ListModelList(list);
+	lml.setMultiple(true);
+]]></zscript>
+
+	<div>1. Select first row in listbox.</div>
+	<div>2. Press "down" key.</div>
+	<div>3. Horizontal scroll should not scroll.</div>
+	
+	<listbox model="${lml}" checkmark="true" width="600px" height="200px">
+		<listhead>
+			<listheader forEach="${column}"
+				label="${forEachStatus.index}" width="100px" />
+		</listhead>
+		<template name="model" var="each">
+			<listitem>
+				<listcell forEach="${column}" label="${each}"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+</zk>

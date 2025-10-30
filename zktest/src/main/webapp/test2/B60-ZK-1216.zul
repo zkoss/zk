@@ -1,0 +1,18 @@
+<?page title="B60-ZK-1216" contentType="text/html;charset=UTF-8"?>
+<zk>
+  <window title="B60-ZK-1216" border="normal" mode="overlapped" position="center">
+    <html>
+    Please expand the combo-button below and click on one of the buttons in the popup window.<br/>
+    The label for the combo-button should change to match that for the button clicked.<br/>
+    </html>
+    <combobutton id="comboBtn" label="open me">
+      <popup>
+        <vlayout>
+          <button id="btn1" label="click me" onClick="comboBtn.label = self.label"></button>
+          <button id="btn2" label="or me" onClick="comboBtn.label = self.label"></button>
+          <button id="btn3" label="me too!" onClick="comboBtn.label = self.label"></button>
+        </vlayout>
+      </popup>
+    </combobutton>
+  </window>
+</zk>

@@ -1,0 +1,35 @@
+#!/bin/bash
+# preverify
+#
+#{{IS_NOTE
+#	Purpose:
+#		Execute Sun Wireless Toolkit's preverify
+#	Description:
+#		
+#	History:
+#		Tue Nov 28 11:58:49     2006, Created by tomyeh
+#}}IS_NOTE
+#
+#Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+if [ $# != 2 ] ; then
+	echo "Usage:"
+	echo "  preverify src-dir dst-dir"
+	echo
+	echo "Execute Sun Wireless Toolkit's preverify to verify the class files."
+	exit 1
+fi
+if [ "$MIDP_HOME" = "" ] ; then
+	if [ ! -d /usr/WTK ] ; then
+		echo '$MIDP_HOME must be defined, or WTK must be found at /usr/WTK'
+		exit 1
+	fi
+	MIDP_HOME=/usr/WTK
+fi
+
+cp=$MIDP_HOME/lib/midpapi20.jar\;$MIDP_HOME/lib/cldcapi11.jar
+
+$MIDP_HOME/bin/preverify -target CLDC1.0 -cldc -classpath $cp -d $2 $1

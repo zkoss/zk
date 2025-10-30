@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F96-ZK-4524.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Feb 17 15:31:13 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click processMask button, all textbox could not keydown.
+		2. click browser show busy button, all textbox could not keydown.
+	</label>
+	<button label="processMask" id="btn1" onClick="Thread.sleep(1000);" />
+	<button label="browser show busy" id="btn4">
+		<attribute name="onClick">
+			Clients.showBusy("processing");
+			timer.start();
+		</attribute>
+	</button>
+	<textbox />
+	<timer id="timer" delay="2000" running="false" onTimer='Clients.clearBusy();self.stop();'/>
+</zk>

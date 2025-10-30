@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4208.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 09 09:47:52 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]>
+	</script>
+	<label multiline="true">
+		1.click the "show notification" button, you should not see any javascript error.
+		2.test the notification:
+			2-1. notification shows as expect
+			2-2. notification can close itself automatically
+			2-3. notification can be closed by clicking x icon on the top-right
+	</label>
+	<hlayout id="hlt">
+		<button id="btn" label="show notification"
+				onClick='Clients.showNotification("Not disappearing box", Clients.NOTIFICATION_TYPE_WARNING, hlt, "bottom_center", 3000, true);'/>
+	</hlayout>
+</zk>

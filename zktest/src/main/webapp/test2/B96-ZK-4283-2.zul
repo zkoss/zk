@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4283.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Wed Jul 07 15:26:00 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    Object[][][] foods = new Object[][][] {
+        new Object[][] {
+            new Object[] { "Vegetables", "Asparagus", "Vitamin K", 115, 43},
+            new Object[] { "Vegetables", "Beets", "Folate", 33, 74},
+            new Object[] { "Vegetables", "Tomatoes", "Vitamin C", 57, 37}
+        },
+        new Object[][] {
+            new Object[] { "Seafood", "Salmon", "Tryptophan", 103, 261},
+            new Object[] { "Seafood", "Cod", "Tryptophan", 90, 119}
+        }
+    };
+
+    GroupsModel model = new SimpleGroupsModel(foods, new String[]{ "Vegetables", "Seafood" });
+    ]]></zscript>
+    <label multiline="true">
+        1. Click the column "Name" to sort
+        2. Both "Name" columns on the listboxes should have a sort ascending/descending indication icon
+    </label>
+    <hlayout>
+        <listbox hflex="1" model="${model}">
+            <listhead>
+                <listheader label="Category" sort="auto(0)"/>
+                <listheader label="Name" sort="auto(1)"/>
+                <listheader label="Calories" sort="auto(2)"/>
+            </listhead>
+            <template name="model:group">
+                <listgroup open="${groupingInfo.open}" label="${each}"/>
+            </template>
+            <template name="model">
+                <listitem>
+                    <listcell label="${each[0]}"/>
+                    <listcell label="${each[1]}"/>
+                    <listcell label="${each[2]}"/>
+                </listitem>
+            </template>
+        </listbox>
+        <grid hflex="1" model="${model}">
+            <columns>
+                <column label="Category" sort="auto(0)"/>
+                <column label="Name" sort="auto(1)"/>
+                <column label="Calories" sort="auto(2)"/>
+            </columns>
+            <template name="model:group">
+                <group open="${groupingInfo.open}" label="${each}"/>
+            </template>
+            <template name="model">
+                <row>
+                    <label value="${each[0]}"/>
+                    <label value="${each[1]}"/>
+                    <label value="${each[2]}"/>
+                </row>
+            </template>
+        </grid>
+    </hlayout>
+</zk>

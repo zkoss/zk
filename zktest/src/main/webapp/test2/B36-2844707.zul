@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2844707.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 13 17:26:57     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please select a date, and then select another month, and then it should be changed correctly.
+<datebox format="d-MMM-yyyy"/>
+</zk>

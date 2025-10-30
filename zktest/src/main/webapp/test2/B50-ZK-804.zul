@@ -1,0 +1,31 @@
+<!--
+	B60-ZK-804.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Wed Tue 1 12:48:48 TST 2012, Created by simon
+	
+	Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		1. Click on the button. You should NOT see javascript Exception. 
+	</div>
+	<button label="Go">
+		<attribute name="onClick"><![CDATA[
+			Tabpanels tps = new Tabpanels();
+			tps.parent = tabbox;
+			Tabpanel tp = new Tabpanel();
+			tp.parent = tps;
+			tp.appendChild(new Label("Tabpanel Content"));
+		]]></attribute>
+	</button>
+	<tabbox id="tabbox">
+		<tabs>
+			<tab label="Tab" />
+		</tabs>
+	</tabbox>
+</zk>

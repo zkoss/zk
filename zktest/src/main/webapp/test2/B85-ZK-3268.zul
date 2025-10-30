@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3268.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu May 24 15:37:21 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">
+		1.click "Upload Image" button, give a 1MB ~ 8MB file, the upload progress bar should be seen.
+	</label>
+	<button label="Upload Image" upload="true,maxsize=10000">
+		<attribute name="onUpload"><![CDATA[
+            org.zkoss.util.media.Media media = event.getMedia();
+			Messagebox.show(media.getName() + " is uploaded");
+        ]]></attribute>
+	</button>
+</zk>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2925964.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Jan  5 10:22:14 TST 2010, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<separator/>
+<label value="Right-click me first." context="popup"/>
+<separator/>
+<label value="And then, right-click me." context="popup"/>
+<separator/>
+You should see the shadow displays correctly.
+<menupopup id="popup" onOpen="doOpen(event, self)">
+</menupopup>
+<zscript>
+boolean flag = true;
+void doOpen(OpenEvent evt, Menupopup pp) {
+if (!evt.isOpen()) return;
+pp.getChildren().clear();
+new Menuitem("item1").setParent(pp);
+new Menuitem("item2").setParent(pp);
+if (flag) {
+new Menuitem("item3").setParent(pp);
+new Menuitem("item4").setParent(pp);
+}
+flag = !flag;
+}
+</zscript>
+</zk>

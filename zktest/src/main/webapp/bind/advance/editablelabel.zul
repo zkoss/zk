@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+editablelabel.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri May 07 15:02:46 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label id="label" />
+	<textbox id="textbox" visible="false"/>
+</zk>

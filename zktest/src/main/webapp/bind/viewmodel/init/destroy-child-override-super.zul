@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+destroy-child-override-super.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 10 17:04:45 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.init.ChildInitOverrideVM')">
+        <label multiline="true">
+            1. Reload the browser.
+            2. Should see "ChildInitOverrideVM.cleanup was called twice" in the server console.
+        </label>
+    </div>
+</zk>

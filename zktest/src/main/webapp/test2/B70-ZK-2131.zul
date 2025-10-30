@@ -1,0 +1,15 @@
+<zk>
+	<div>should not see js error in jsconsole</div>
+	<custom-attributes org.zkoss.zul.nativebar="true" />
+	<tree>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell>
+						<label value="value" />
+					</treecell>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

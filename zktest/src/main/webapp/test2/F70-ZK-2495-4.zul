@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<window>
+	<label multiline="true">
+		1. user script error, error code = 4
+	</label>
+	<script><![CDATA[
+		zk.afterMount(function () {
+			for (var i = 0; i < 3; i++))
+				zk.log('hi' + i);
+		});
+	]]></script>
+</window>

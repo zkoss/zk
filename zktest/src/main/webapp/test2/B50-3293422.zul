@@ -1,0 +1,9 @@
+<zk>
+	<window border="normal" height="500px" width="500px" sizable="true" mode="overlapped">
+		<html><![CDATA[
+			<ol>
+				<li>You should be able to reduce the height and width of the Window. If not, it is a bug.</li>
+			</ol>
+		]]></html>
+	</window>
+</zk>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4809.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Mar 18 12:46:37 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        Only found on Tomcat.
+        1. Add a breakpoint (suspend on Thread) at org.zkoss.zkex.ui.comet.CometServerPush#activate (_active = info;)
+        2. Click "start long-op"
+        3. Click "stop long-op" (reaches the breakpoint)
+        4. Click "simulate comet re-connect"
+        5. Continue the code from the breakpoint
+        6. No exception popup.
+    </label>
+    <div id="main" apply="org.zkoss.zktest.test2.B96_ZK_4809Composer">
+        <button id="start" label="start long-op"/>
+        <button id="stop" label="stop long-op"/>
+        <button label="simulate comet re-connect" w:onClick="zkmax.cmsp.stop();zkmax.cmsp.start();"/>
+    </div>
+</zk>

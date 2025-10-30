@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B101-ZK-5766-1.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		2024/10/9, Created by jumperchen
+
+Copyright (C) 2024 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		<zscript><![CDATA[
+		    String myBadgeTextWithoutADoubleQuote =
+		        "'name - ;background: red url(https://www.zkoss.org/resource/img/logo/ZK-logo.svg);'";
+		    String myBadgeTextContainingADoubleQuote =
+		        "'name \" ;background: red url(https://www.zkoss.org/resource/img/logo/ZK-logo.svg);'";
+		]]></zscript>
+
+		<span>works as intended</span>
+		<div sclass="withBadge" style="--badgeText: ${myBadgeTextWithoutADoubleQuote} ;">this is a button-tag</div>
+		<separator orient="horizontal"></separator>
+		<span>transforms double quote into single quote, allows for the style property to be escaped</span>
+		<div sclass="withBadge" style="--badgeText: ${myBadgeTextContainingADoubleQuote} ;">this is a button-tag</div>
+		<separator orient="horizontal"></separator>
+		<span>fixed with tooltiptext, which doesnt change the doublequote into a singlequote</span>
+		<div sclass="withBadge" tooltiptext="${myBadgeTextWithoutADoubleQuote} ;">this is a button-tag</div>
+		<div sclass="withBadge" tooltiptext="${myBadgeTextContainingADoubleQuote} ;">this is a button-tag</div>
+
+	</div>
+</zk>

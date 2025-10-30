@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2718.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Apr 22, 2015  5:52:28 PM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window>
+<label>should throw exception loading this page</label>
+<div hflex="1" width="100px"></div>
+<!-- <div width="200px" hflex="1" ></div> -->
+<!-- <div vflex="1" height="100px"></div> -->
+<!-- <div height="200px" vflex="1" ></div> -->
+</window>

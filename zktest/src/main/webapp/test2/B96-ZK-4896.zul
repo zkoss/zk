@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4896.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 11 17:51:29 CST 2021, Created by rudyhuang
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        org.zkoss.zk.ui.UiException: Unsupported parent for when: &lt;ForEach@0 ...&gt;
+    </label>
+    <forEach begin="1" end="100">
+        <when test="${each gt 50}">
+            ${each}
+        </when>
+    </forEach>
+</zk>

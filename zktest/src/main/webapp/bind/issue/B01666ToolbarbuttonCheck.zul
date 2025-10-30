@@ -1,0 +1,18 @@
+<window apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('org.zkoss.zktest.bind.issue.B01666ToolbarbuttonCheck')">
+	<label multiline="true">
+	1.click 'toggle me' the label and message should change false and checked false
+	2.click again, the label and message should change to true and checked true
+	</label>
+	<vbox>
+		<hbox>
+			<label id="checkedLab" value="@bind(vm.checked)" />
+			/
+			<label id="messageLab" value="@bind(vm.message)" />
+		</hbox>
+		<toolbar>
+			<toolbarbutton id="btn1" label="toggle me" checked="@bind(vm.checked)"
+				mode="toggle" onCheck="@command('check')" />
+		</toolbar>
+	</vbox>
+</window>

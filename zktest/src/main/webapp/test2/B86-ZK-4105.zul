@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4105.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 14 11:51:26 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList();
+        model.add("ABC");
+        model.add("DEF");
+    ]]></zscript>
+    <label multiline="true">
+        1. Type "-abc" in combobox and press Tab or click out to trigger blur.
+        2. It should print out "(empty)" in zk log.
+        3. Delete the first "-" character and press Tab or click out to trigger blur.
+        4. It should NOT print out "(empty)" in zk log.
+    </label>
+    <combobox model="${model}" autocomplete="true" autodrop="true"
+              onChange='Clients.log(self.selectedItem == null ? "(empty)" : self.selectedItem.toString())'>
+        <template name="model">
+            <comboitem label="${each}" />
+        </template>
+    </combobox>
+</zk>

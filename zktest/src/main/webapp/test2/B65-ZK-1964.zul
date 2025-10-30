@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1964.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue, Oct 08, 2013 10:35:30 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. Tablet device only
+	2. Please open the datebox's chooser.
+	3. You should be able to scroll and select the time area.
+	</label>
+	<datebox id="db" width="200px" format="yyyy/MM/dd a hh:mm:ss"
+		displayedTimeZones="GMT+8,GMT-8" />
+	<zscript>
+		db.value = new java.util.Date();
+	</zscript>
+</zk>

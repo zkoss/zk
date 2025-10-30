@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    B80-ZK-2601.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jun 7 10:22:54 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>
+        1. Click 'down' to change the value to '00', and blur. There is no error box occur.
+    </label>
+    <spinner value="1" format="#00"></spinner>
+</zk>

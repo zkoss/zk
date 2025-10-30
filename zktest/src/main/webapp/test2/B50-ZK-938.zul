@@ -1,0 +1,28 @@
+
+<!-- 
+	20120320 10:31 TonyQ
+ -->
+<zk>
+  	<vlayout>
+          <div>
+	1. Test NullStream , try to upload a ".exe" file (content type as binary),  
+	   the bytes shouldn't be zero.
+          </div>
+	<fileupload label="Upload" >
+		<attribute name="onUpload">
+			alert("bytes:"+ event.getMedia().getByteData().length);
+		</attribute>
+	</fileupload>
+
+	<div>
+          	2. Test NullReader , try to upload a ".txt" file and you should see the file content is alerted.
+        </div>
+	<fileupload label="Upload" >
+		<attribute name="onUpload">
+			alert(event.getMedia().getStringData());
+		</attribute>
+	</fileupload>
+          
+	  </vlayout>
+	
+</zk>

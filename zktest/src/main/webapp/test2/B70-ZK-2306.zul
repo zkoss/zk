@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2306.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, May 22, 2014  4:09:59 PM, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div height="1200px">scroll down to click the datebox and use keyboard to navigate the calendar with UP and DOWN, the browser's scrollbar won't be moved.</div>
+	<datebox/>
+</zk>

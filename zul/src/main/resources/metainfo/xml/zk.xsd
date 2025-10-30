@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zk/config"
+	targetNamespace="http://www.zkoss.org/2005/zk/config" elementFormDefault="qualified" version="8.6.1.201812251209">
+	<xs:element name="zk">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="client-config"/>
+				<xs:element ref="desktop-config"/>
+				<xs:element ref="device-config"/>
+				<xs:element ref="error-page"/>
+				<xs:element ref="language-config"/>
+				<xs:element ref="library-property"/>
+				<xs:element ref="listener"/>
+				<xs:element ref="preference"/>
+				<xs:element ref="richlet"/>
+				<xs:element ref="richlet-mapping"/>
+				<xs:element ref="xel-config"/>
+				<xs:element ref="session-config"/>
+				<xs:element ref="system-config"/>
+				<xs:element ref="system-property"/>
+				<xs:element ref="zscript-config"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="client-config">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="debug-js"/>
+				<xs:element ref="error-reload"/>
+				<xs:element ref="keep-across-visits"/>
+				<xs:element ref="package"/>
+				<xs:element ref="processing-prompt-delay"/>
+				<xs:element ref="tooltip-delay"/>
+				<xs:element ref="auto-resend-timeout"/>
+				<xs:element ref="init-crash-script"/>
+				<xs:element ref="init-crash-timeout"/>
+				<xs:element ref="enable-history-state"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="debug-js" type="xs:boolean"/>
+
+	<xs:element name="error-reload">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="connection-type" minOccurs="0"/>
+				<xs:element ref="device-type" minOccurs="0"/>
+				<xs:element ref="error-code"/>
+				<xs:element ref="reload-uri"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="connection-type" type="xs:string"/>
+
+	<xs:element name="device-type" type="xs:string"/>
+
+	<xs:element name="error-code" type="xs:integer"/>
+
+	<xs:element name="reload-uri" type="xs:string"/>
+
+	<xs:element name="keep-across-visits" type="xs:boolean"/>
+
+	<xs:element name="package">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="package-name"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="package-name" type="xs:string"/>
+
+	<xs:element name="processing-prompt-delay" type="xs:integer"/>
+
+	<xs:element name="tooltip-delay" type="xs:integer"/>
+
+	<xs:element name="auto-resend-timeout" type="xs:integer"/>
+
+	<xs:element name="init-crash-script" type="xs:string"/>
+
+	<xs:element name="init-crash-timeout" type="xs:integer"/>
+
+	<xs:element name="enable-history-state" type="xs:boolean"/>
+
+	<xs:element name="desktop-config">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="desktop-timeout"/>
+				<xs:element ref="disable-theme-uri"/>
+				<xs:element ref="extendlet-check-period"/>
+				<xs:element ref="file-check-period"/>
+				<xs:element ref="repeat-uuid"/>
+				<xs:element ref="theme-uri"/>
+				<xs:element ref="theme-provider-class"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="desktop-timeout" type="xs:integer"/>
+
+	<xs:element name="disable-theme-uri" type="xs:string"/>
+
+	<xs:element name="extendlet-check-period" type="xs:integer"/>
+
+	<xs:element name="file-check-period" type="xs:integer"/>
+
+	<xs:element name="repeat-uuid" type="xs:boolean"/>
+
+	<xs:element name="theme-uri" type="xs:string"/>
+
+	<xs:element name="theme-provider-class" type="xs:string"/>
+
+	<xs:element name="device-config">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="device-class"/>
+				<xs:element ref="device-type"/>
+				<xs:element ref="embed"/>
+				<xs:element ref="server-push-class"/>
+				<xs:element ref="unavailable-message"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="device-class" type="xs:string"/>
+
+	<xs:element name="embed" type="xs:string"/>
+
+	<xs:element name="server-push-class" type="xs:string"/>
+
+	<xs:element name="unavailable-message" type="xs:string"/>
+
+	<xs:element name="error-page">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="device-type"/>
+				<xs:element ref="exception-type"/>
+				<xs:element ref="location"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="exception-type" type="xs:string"/>
+
+	<xs:element name="location" type="xs:string"/>
+
+	<xs:element name="language-config">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="addon-uri"/>
+				<xs:element ref="language-uri"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="addon-uri" type="xs:string"/>
+
+	<xs:element name="language-uri" type="xs:string"/>
+
+	<xs:element name="library-property">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="name"/>
+				<xs:element ref="value"/>
+				<xs:element ref="appendable"/>
+				<xs:element ref="list"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="name" type="xs:string"/>
+
+	<xs:element name="value" type="xs:string"/>
+
+	<xs:element name="appendable" type="xs:boolean"/>
+
+	<xs:element name="list">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="value"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="listener">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="listener-class"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="listener-class" type="xs:string"/>
+
+	<xs:element name="preference">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="name"/>
+				<xs:element ref="value"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="richlet">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="richlet-name"/>
+				<xs:element ref="richlet-class"/>
+				<xs:element ref="init-param"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="richlet-name" type="xs:string"/>
+
+	<xs:element name="richlet-class" type="xs:string"/>
+
+	<xs:element name="init-param">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="param-name"/>
+				<xs:element ref="param-value"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="param-name" type="xs:string"/>
+
+	<xs:element name="param-value" type="xs:string"/>
+
+	<xs:element name="richlet-mapping">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="richlet-name"/>
+				<xs:element ref="url-pattern"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="url-pattern" type="xs:string"/>
+
+	<xs:element name="xel-config">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="evaluator-class"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="evaluator-class" type="xs:string"/>
+
+	<xs:element name="session-config">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="automatic-timeout" minOccurs="0"/>
+				<xs:element ref="device-type" minOccurs="0"/>
+				<xs:element ref="max-desktops-per-session" minOccurs="0"/>
+				<xs:element ref="max-pushes-per-session" minOccurs="0"/>
+				<xs:element ref="max-requests-per-session" minOccurs="0"/>
+				<xs:element ref="session-timeout" minOccurs="0"/>
+				<xs:element ref="timeout-message" minOccurs="0"/>
+				<xs:element ref="timeout-uri" minOccurs="0"/>
+				<xs:element ref="timer-keep-alive" minOccurs="0"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="automatic-timeout" type="xs:boolean"/>
+
+	<xs:element name="max-desktops-per-session" type="xs:integer"/>
+
+	<xs:element name="max-pushes-per-session" type="xs:integer"/>
+
+	<xs:element name="max-requests-per-session" type="xs:integer"/>
+
+	<xs:element name="session-timeout" type="xs:integer"/>
+
+	<xs:element name="timeout-message" type="xs:string"/>
+
+	<xs:element name="timeout-uri" type="xs:string"/>
+
+	<xs:element name="timer-keep-alive" type="xs:boolean"/>
+
+	<xs:element name="system-config">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="au-decoder-class"/>
+				<xs:element ref="au-writer-class"/>
+				<xs:element ref="cache-provider-class"/>
+				<xs:element ref="config-parser-class"/>
+				<xs:element ref="crawlable"/>
+				<xs:element ref="disable-event-thread"/>
+				<xs:element ref="disable-zscript"/>
+				<xs:element ref="engine-class"/>
+				<xs:element ref="event-time-warning"/>
+				<xs:element ref="failover-manager-class"/>
+				<xs:element ref="file-item-factory-class"/>
+				<xs:element ref="file-repository"/>
+				<xs:element ref="file-size-threshold"/>
+				<xs:element ref="id-generator-class"/>
+				<xs:element ref="label-location"/>
+				<xs:element ref="max-spare-threads"/>
+				<xs:element ref="max-suspended-threads"/>
+				<xs:element ref="max-upload-size"/>
+				<xs:element ref="max-process-time"/>
+				<xs:element ref="response-charset"/>
+				<xs:element ref="session-cache-class"/>
+				<xs:element ref="upload-charset"/>
+				<xs:element ref="upload-charset-finder-class"/>
+				<xs:element ref="ui-factory-class"/>
+				<xs:element ref="web-app-class"/>
+				<xs:element ref="web-app-factory-class"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="au-decoder-class" type="xs:string"/>
+
+	<xs:element name="au-writer-class" type="xs:string"/>
+
+	<xs:element name="cache-provider-class" type="xs:string"/>
+
+	<xs:element name="config-parser-class" type="xs:string"/>
+
+	<xs:element name="crawlable" type="xs:boolean"/>
+
+	<xs:element name="disable-event-thread" type="xs:boolean"/>
+
+	<xs:element name="disable-zscript" type="xs:boolean"/>
+
+	<xs:element name="engine-class" type="xs:string"/>
+
+	<xs:element name="event-time-warning" type="xs:integer"/>
+
+	<xs:element name="failover-manager-class" type="xs:string"/>
+
+	<xs:element name="file-item-factory-class" type="xs:string"/>
+
+	<xs:element name="file-repository" type="xs:string"/>
+
+	<xs:element name="file-size-threshold" type="xs:integer"/>
+
+	<xs:element name="id-generator-class" type="xs:string"/>
+
+	<xs:element name="label-location" type="xs:string"/>
+
+	<xs:element name="max-spare-threads" type="xs:integer"/>
+
+	<xs:element name="max-suspended-threads" type="xs:integer"/>
+
+	<xs:element name="max-upload-size" type="xs:integer"/>
+
+	<xs:element name="max-process-time" type="xs:integer"/>
+
+	<xs:element name="response-charset" type="xs:string"/>
+
+	<xs:element name="session-cache-class" type="xs:string"/>
+
+	<xs:element name="upload-charset" type="xs:string"/>
+
+	<xs:element name="upload-charset-finder-class" type="xs:string"/>
+
+	<xs:element name="ui-factory-class" type="xs:string"/>
+
+	<xs:element name="web-app-class" type="xs:string"/>
+
+	<xs:element name="web-app-factory-class" type="xs:string"/>
+
+	<xs:element name="system-property">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="name"/>
+				<xs:element ref="value"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="zscript-config">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="language-name"/>
+				<xs:element ref="interpreter-class"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="language-name" type="xs:string"/>
+
+	<xs:element name="interpreter-class" type="xs:string"/>
+</xs:schema>

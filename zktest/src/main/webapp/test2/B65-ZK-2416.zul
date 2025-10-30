@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2416.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Aug 25, 2014  15:15:00 PM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<div>
+		the following four listbox shouldn't be mis-aligned(head, body, foot).
+	</div>
+	<listbox height="150px" width="900px">
+		<listhead >
+			<listheader label="1" hflex="1"/>
+			<listheader label="2" />
+			<listheader label="3" hflex="min"/>
+		</listhead>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listfoot>
+            <listfooter><label value="f1"/></listfooter>
+            <listfooter><label value="f2"/></listfooter>
+            <listfooter><label value="f3"/></listfooter>
+        </listfoot>
+	</listbox>
+	<listbox height="150px" width="900px">
+		<listhead >
+			<listheader label="1" hflex="1"/>
+			<listheader label="2" width="200px"/>
+			<listheader label="3" hflex="min"/>
+		</listhead>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listitem>
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+			<listcell label="Cell" />
+		</listitem>
+		<listfoot >
+            <listfooter><label value="f1"/></listfooter>
+            <listfooter><label value="f2"/></listfooter>
+            <listfooter><label value="f3"/></listfooter>
+        </listfoot>
+	</listbox>
+</zk>

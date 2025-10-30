@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4580.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed Oct 7 18:12:13 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script />
+	<div hflex="1" vflex="1">
+		<window title="should see inner label" hflex="1" vflex="1">
+			<label value="Should see this."/>
+		</window>
+	</div>
+</zk>

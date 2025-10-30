@@ -1,0 +1,4 @@
+<zk>
+The combobox's width should be 80px.
+	<combobox id="cb" width="80px" />
+</zk>

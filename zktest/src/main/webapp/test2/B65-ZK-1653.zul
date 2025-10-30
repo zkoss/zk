@@ -1,0 +1,11 @@
+<zk xmlns:w='client'>
+	Click the button, should not see any error message in developer tools(firebug).
+	<menubar>
+		<menuitem id="menuitem" label="Menuitem" />
+	</menubar>
+	<button label="Set Menuitem disabled">
+		<attribute w:name="onClick"><![CDATA[
+			zk.Widget.$('#${menuitem.uuid}').setDisabled(true);
+		]]></attribute>
+	</button>
+</zk>

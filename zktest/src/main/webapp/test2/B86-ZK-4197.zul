@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4197.zul
+
+		Purpose:
+                
+		Description:
+                
+		History:
+				Mon Jan 21 11:14:34 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:c="client" xmlns:ca="client/attribute">
+	<label multiline="true">
+		1. Open groupbox
+		2. See "animationspeed: 0" on zk log
+	</label>
+	<groupbox title="Groupbox" ca:data-animationspeed="0" open="false"
+			  c:onOpen="zk.log('animationspeed: ' + zk(this).getAnimationSpeed())"/>
+</zk>

@@ -1,0 +1,749 @@
+/* HeaderWidget.ts
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Dec 29 17:33:15     2008, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+This program is distributed under LGPL Version 2.1 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+*/
+export type SortDirection = 'ascending' | 'descending' | 'natural';
+/**
+ * A skeletal implementation for a header.
+ */
+@zk.WrapClass('zul.mesh.HeaderWidget')
+export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellElement> {
+	// NOTE: parent can be null, as `getMeshWidget` asserts
+	override parent?: zul.mesh.HeadWidget;
+	override nextSibling?: zul.mesh.HeaderWidget;
+	override previousSibling?: zul.mesh.HeaderWidget;
+	/** @internal */
+	declare _colspan?: number;
+	/** @internal */
+	declare _rowspan?: number;
+
+	/** @internal */
+	_sumWidth = true; // FIXME: never used
+	/** @internal */
+	_align?: string;
+	/** @internal */
+	_valign?: string;
+	/** @internal */
+	_hflexWidth?: number;
+	/** @internal */
+	_nhflexbak?: boolean;
+	/** @internal */
+	_origWd?: string;
+	/** @internal */
+	_dragsz?: zk.Draggable;
+
+	/** @internal */
+	_checked?: boolean; // zul.sel.SelectWidget.prototype._isAllSelected
+	/** @internal */
+	_sortDirection!: SortDirection;
+	abstract getSortDirection(): SortDirection;
+	abstract setSortDirection(sortDirection: SortDirection, opts?: Record<string, boolean>): this;
+
+	/**
+	 * @returns the horizontal alignment of this column.
+	 * @defaultValue `null` (system default: left unless CSS specified).
+	 */
+	getAlign(): string | undefined {
+		return this._align;
+	}
+
+	/**
+	 * Sets the horizontal alignment of this column.
+	 */
+	setAlign(align: string, opts?: Record<string, boolean>): this {
+		const o = this._align;
+		this._align = align;
+
+		if (o !== align || opts?.force) {
+			this.adjustDOMAlign_('align', align);
+		}
+
+		return this;
+	}
+
+	/**
+	 * @returns the vertical alignment of this grid.
+	 * @defaultValue `null` (system default: top).
+	 */
+	getValign(): string | undefined {
+		return this._valign;
+	}
+
+	/**
+	 * Sets the vertical alignment of this grid.
+	 */
+	setValign(valign: string, opts?: Record<string, boolean>): this {
+		const o = this._valign;
+		this._valign = valign;
+
+		if (o !== valign || opts?.force) {
+			this.adjustDOMAlign_('valign', valign);
+		}
+
+		return this;
+	}
+
+	override getHeight(): string | undefined {
+		return this._height;
+	}
+
+	override setHeight(height: string, opts?: Record<string, boolean>): this {
+		const o = this._height;
+		this._height = height;
+
+		if (o !== height || opts?.force) {
+			this.updateMesh_();
+		}
+
+		return this;
+	}
+
+	override getWidth(): string | undefined {
+		// NOTE: Returning 0 is currently the intended behavior. A return value of 0 from getWidth is acceptable
+		// in two current use cases.
+		// 1. `'width:' + wd + ';'` where `wd` is assigned the return value of `getWidth` (could be indirectly
+		//     achieved with nested function calls, e.g., `wd = f()` where `f(){return getWidth();}`).
+		// 2. Asserting truthiness of the return value of `getWidth`.
+		// FIXME: `0 as never` is a hack.
+		// TODO:
+		// 1. Find a way to embed return type 0 cleanly. One could try `getWidth(): string | null | undefined | 0`,
+		//     but it requires a lot of code change from other places. However, it might turn out that incorporating
+		//     the "0 literal type" into the return type union is the most robust solution, albeit cumbersome.
+		// 2. Return something else instead of 0. Returning null seems feasible, but `'width:' + wd + ';'` will break.
+		return this.isVisible() ? this._width : 0 as never;
+	}
+
+	override setWidth(width?: string): this {
+		this._width = width;
+		this.updateMesh_();
+		return this;
+	}
+
+	// Bug ZK-2401
+	/** @internal */
+	override doFocus_(evt: zk.Event): void {
+		super.doFocus_(evt);
+
+		//sync frozen
+		var box: zul.mesh.MeshWidget | undefined,
+			node: HTMLTableCellElement | undefined;
+		if ((box = this.getMeshWidget()) && box.efrozen
+			&& zk.Widget.$(box.efrozen.firstChild)
+			&& (node = this.$n())) {
+			box._moveToHidingFocusCell(node.cellIndex);
+		}
+	}
+
+	/**
+	 * Updates the whole mesh widget.
+	 * @internal
+	 */
+	updateMesh_(nm?: string, val?: unknown): void { //TODO: don't rerender
+		if (this.desktop) {
+			var mesh = this.getMeshWidget();
+			if (mesh) {
+				var minWds: zul.mesh.MeshWidth | undefined;
+				if (nm == 'visible' && val && this._width == '-1') //sizable + visible false -> true
+					minWds = mesh._calcMinWds();
+				// B70-ZK-2036: Clear min width cache before rerender.
+				mesh._minWd = undefined;
+				mesh.rerender();
+				if (minWds) {
+					var parent = this.parent!;
+					for (var w = parent.firstChild, i = 0; w; w = w.nextSibling, i++) {
+						if (w == this) {
+							this._width = jq.px0(minWds.wds[i]);
+							break;
+						}
+					}
+					zUtl.fireSized(mesh, -1);
+				}
+			}
+		}
+	}
+
+	/** @internal */
+	adjustDOMAlign_(direction: 'align' | 'valign', value: string): void {
+		var n = this.$n();
+		if (n) {
+			if (direction == 'align') {
+				n.style.textAlign = value;
+			} else if (direction == 'valign') {
+				n.style.verticalAlign = value;
+			}
+		}
+	}
+
+	/** @internal */
+	override setFlexSize_(flexSize: zk.FlexSize, isFlexMin?: boolean): void {
+		if (this._cssflex && this.parent!.getFlexContainer_() != null && !isFlexMin)
+			return;
+		if ((flexSize.width !== undefined && flexSize.width != 'auto' && flexSize.width != '') || flexSize.width as unknown == 0) { //JavaScript deems 0 == ''
+			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
+			//for faker column, so don't use revisedWidth().
+			//updated: need to concern inner padding due to wgt.getContentEdgeWidth_()
+			//spec in flex.js
+			var rvw = this._hflex == 'min' && this.firstChild && this.isRealVisible() ? // B50-ZK-394
+				zk(this.$n('cave')).revisedWidth(flexSize.width as number) : flexSize.width as number;
+			this._hflexWidth = rvw;
+		} else
+			super.setFlexSize_(flexSize, isFlexMin);
+	}
+
+	/** @internal */
+	override getContentEdgeHeight_(): number {
+		return zk(this).sumStyles('tb', jq.margins);
+	}
+
+	/** @internal */
+	override getContentEdgeWidth_(): number {
+		return zk(this).sumStyles('lr', jq.margins);
+	}
+
+	/** @internal */
+	override domStyle_(no?: zk.DomStyleOptions): string {
+		var style = '';
+		if (this._hflexWidth) { //handle hflex
+			style = `width: ${this._hflexWidth}px;`;
+
+			if (no) no.width = true;
+			else no = { width: true };
+		}
+		if (this._align)
+			style += 'text-align:' + this._align + ';';
+		if (this._valign)
+			style += 'vertical-align:' + this._valign + ';';
+
+		return style + super.domStyle_(no);
+	}
+
+	/**
+	 * @returns the mesh widget that this belongs to.
+	 */
+	getMeshWidget(): zul.mesh.MeshWidget | undefined {
+		return this.parent ? this.parent.parent : undefined;
+	}
+
+	/**
+	 * @returns whether the widget is sortable or not.
+	 * @defaultValue `false`.
+	 * @internal
+	 */
+	isSortable_(): boolean {
+		return false;
+	}
+
+	override setVisible(visible: boolean): this {
+		if (this.isVisible() != visible) {
+			super.setVisible(visible);
+			this.updateMesh_('visible', visible);
+			//ZK-3332 update server side component width
+			var mesh = this.getMeshWidget();
+			if (mesh?.desktop && !this._hflexWidth && this.getWidth())
+				this.parent!.fire('onColSize', {
+					index: zk(this.$n()).cellIndex(),
+					column: this,
+					width: this.isVisible() ? this._width : '-1'
+				}, undefined, 0);
+		}
+		return this;
+	}
+
+	override getTextNode(): HTMLElement | undefined {
+		return jq(this.$n_()).find('>div:first')[0];
+	}
+
+	/** @internal */
+	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
+		super.bind_(desktop, skipper, after);
+		if (this.parent!.isSizable())
+			this._initsz();
+		var mesh = this.getMeshWidget(),
+			width0 = zul.mesh.MeshWidget.WIDTH0;
+		if (mesh) {
+			var $n = jq(this.$n()),
+				$faker = jq(this.$n('hdfaker')), // `this.$n('hdfaker')` can be null. Musn't use `this.$n_('hdfaker')`.
+				w = this.getWidth();
+			if (mesh._cssflex && mesh.isChildrenFlex && mesh.isChildrenFlex()) { //skip not MeshWidget
+				if (!this.isVisible()) {
+					$n.css('display', 'none');
+				} else {
+					$n.css('display', '');
+				}
+			} else {
+				if (!this.isVisible()) {
+					$faker.css('display', '');
+					$faker.css('visibility', 'collapse');
+					$faker.css('width', width0);
+					if (mesh._cssflex && this._nhflex! > 0) {
+						$n.css('display', 'none');
+					} else {
+						$n.css('display', '');
+					}
+				} else {
+					$faker.css('visibility', '');
+					// B70-ZK-2036: Check if header has hflex width first.
+					if (!this._hflexWidth && w) {
+						$faker.css('width', w);
+					}
+				}
+			}
+		}
+		this.fixFaker_();
+	}
+
+	/** @internal */
+	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
+		if (this._dragsz) {
+			this._dragsz.destroy();
+			this._dragsz = undefined;
+		}
+		super.unbind_(skipper, after, keepRod);
+	}
+
+	/** @internal */
+	_initsz(): void {
+		var n = this.$n();
+		if (n && !this._dragsz) {
+			this._dragsz = new zk.Draggable(this, undefined, {
+				revert: true,
+				constraint: 'horizontal',
+				ghosting: HeaderWidget._ghostsizing,
+				endghosting: HeaderWidget._endghostsizing,
+				snap: HeaderWidget._snapsizing,
+				ignoredrag: HeaderWidget._ignoresizing,
+				zIndex: '99999', // Bug: B50-3285153
+				endeffect: HeaderWidget._aftersizing
+			});
+		}
+	}
+
+	/**
+	 * Fixes the faker (an visible row for adjusting column), if any.
+	 * @internal
+	 */
+	fixFaker_(): void {
+		let n = this.$n();
+		if (!(this.parent instanceof zul.mesh.Auxhead) && n) {
+			let index = zk(n).cellIndex(),
+				owner = this.getMeshWidget()!;
+			for (var faker: HTMLElement | undefined, fs = HeaderWidget._faker, i = fs.length; i--;) {
+				type MethodName = `e${typeof fs[number]}`;
+				faker = owner[('e' + fs[i]) as MethodName]; // internal element
+				if (faker && !this.$n(fs[i])) {
+					faker[faker.childNodes.length > index ? 'insertBefore' : 'appendChild'](this._createFaker(n, fs[i]), faker.childNodes[index]);
+					this._subnodes[fs[i]] = undefined; // clear inner cache
+				}
+			}
+		}
+	}
+
+	/** @internal */
+	_createFaker(n: HTMLElement, postfix: string): HTMLTableColElement {
+		var _getWidth = zul.mesh.MeshWidget._getWidth,
+			wd = _getWidth(this, this._hflexWidth ? `${this._hflexWidth}px` : this.getWidth()),
+			t = document.createElement('col'),
+			frozen = this.getMeshWidget()!.frozen;
+		wd = wd ? 'width: ' + wd + ';' : '';
+		if (!wd && frozen && !frozen._smooth)
+			wd = this._calcFakerWidth(postfix);
+		t.id = n.id + '-' + postfix;
+		t.style.cssText = wd;
+		return t;
+	}
+
+	/** @internal */
+	_calcFakerWidth(postfix: string): string {
+		var parent = this.parent!,
+			child = parent.firstChild,
+			totalWidth = 0,
+			fakerCount = 1;
+
+		while (child) {
+			if (!child.getWidth() && !child.getHflex() && child != this) {
+				var fakerWidth = child.$n_(postfix).style.width;
+				if (fakerWidth == '')
+					break;
+				if (fakerWidth == zul.mesh.MeshWidget.WIDTH0)
+					totalWidth += parseFloat(child._origWd!);
+				else
+					totalWidth += parseFloat(fakerWidth);
+				fakerCount++;
+			}
+			child = child.nextSibling;
+		}
+		if (totalWidth == 0)
+			return '';
+		else {
+			var eachWidth = jq.px0(totalWidth / fakerCount);
+			this._syncFakerWidth(eachWidth, postfix);
+			return 'width: ' + eachWidth;
+		}
+	}
+
+	/** @internal */
+	_syncFakerWidth(width: string, postfix: string): void {
+		var parent = this.parent!,
+			child = parent.firstChild;
+
+		while (child) {
+			if (!child.getWidth() && !child.getHflex() && child != this) {
+				var faker = child.$n_(postfix);
+				if (faker.style.width == zul.mesh.MeshWidget.WIDTH0) {
+					if (postfix == 'hdfaker')
+						child._origWd = width;
+				} else
+					faker.style.width = width;
+			}
+			child = child.nextSibling;
+		}
+	}
+
+	/** @internal */
+	override doClick_(evt: zk.Event, popupOnly?: boolean): void {
+		var tg = evt.domTarget,
+			wgt = zk.Widget.$(tg)!,
+			n = this.$n(),
+			ofs = this._dragsz ? zk(n).revisedOffset() : false;
+
+		if (!zk.dragging && (wgt == this || (wgt instanceof zul.wgt.Label))
+			&& this.isSortable_() && !jq.nodeName(tg, 'input')
+			&& (!this._dragsz || !this._insizer(evt.pageX - ofs[0]))
+		) {
+			this.fire('onSort', 'ascending' != this.getSortDirection()); // B50-ZK-266
+			evt.stop();
+		} else {
+			if (jq.nodeName(tg, 'input'))
+				evt.stop({ propagation: true });
+			super.doClick_(evt, popupOnly);
+		}
+	}
+
+	/** @internal */
+	override doDoubleClick_(evt: zk.Event): void {
+		if (this._dragsz) {
+			var n = this.$n(),
+				$n = zk(n),
+				ofs = $n.revisedOffset();
+			if (this._insizer(evt.pageX - ofs[0])) {
+				var mesh = this.getMeshWidget()!,
+					cIndex = $n.cellIndex();
+				mesh.clearCachedSize_();
+				mesh._calcMinWds();
+				var sz = mesh._minWd!.wds[cIndex];
+				// NOTE: `{control: this, _zszofs: sz}` has intended behavior but is a poor hack.
+				// TODO: Should refactor `{control: this, _zszofs: sz}` to match `zk.Draggable`.
+				HeaderWidget._aftersizing({ control: this, _zszofs: sz } as unknown as zk.Draggable, evt);
+			} else
+				super.doDoubleClick_(evt);
+		} else
+			super.doDoubleClick_(evt);
+	}
+
+	/** @internal */
+	override doMouseMove_(evt: zk.Event): void {
+		if (zk.dragging || !this.parent!.isSizable())
+			return;
+		var n = this.$n_(),
+			ofs = zk(n).revisedOffset(); // Bug #1812154
+		if (this._insizer(evt.pageX - ofs[0])) {
+			jq(n).addClass(this.$s('sizing'));
+		} else {
+			jq(n).removeClass(this.$s('sizing'));
+		}
+	}
+
+	/** @internal */
+	override doMouseOut_(evt: zk.Event): void {
+		if (this.parent!.isSizable()) {
+			var n = this.$n_();
+			jq(n).removeClass(this.$s('sizing'));
+		}
+		super.doMouseOut_(evt);
+	}
+
+	/** @internal */
+	override ignoreDrag_(pt: zk.Offset): boolean {
+		if (this.parent!.isSizable()) {
+			var n = this.$n(),
+				ofs = zk(n).revisedOffset();
+			return this._insizer(pt[0] - ofs[0]);
+		}
+		return false;
+	}
+
+	//@Override to avoid add child offset
+	/** @internal */
+	override ignoreChildNodeOffset_(attr: string): boolean {
+		return true;
+	}
+
+	/** @internal */
+	override listenOnFitSize_(): void { return; } // skip flex
+	/** @internal */
+	override unlistenOnFitSize_(): void { return; }
+
+	//@Override to find the minimum width of listheader
+	/** @internal */
+	override beforeMinFlex_(o: zk.FlexOrient): number | undefined {
+		if (o == 'w') {
+			var wgt = this.getMeshWidget();
+			if (wgt) {
+				wgt._calcMinWds();
+				if (wgt._minWd) {
+					var n = this.$n(), zkn = zk(n),
+						cidx = zkn.cellIndex();
+					return zkn.revisedWidth(wgt._minWd.wds[cidx]);
+				}
+			}
+		}
+		return undefined;
+	}
+
+	/** @internal */
+	override clearCachedSize_(): void {
+		super.clearCachedSize_();
+		this.getMeshWidget()?._clearCachedSize();
+	}
+
+	//@Override to get width/height of MeshWidget
+	/** @internal */
+	override getParentSize_(): { height: number; width: number } {
+		//to be overridden
+		var mw = this.getMeshWidget()!,
+			p = mw.$n(),
+			zkp = p ? zk(p) : undefined;
+		if (zkp) {
+			return {
+				height: zkp.contentHeight(),
+				width: zkp.contentWidth()
+			};
+		}
+		// NOTE: originally `{}`
+		return { height: 0, width: 0 };
+	}
+
+	/** @internal */
+	override isWatchable_(name: string, p: zk.Widget, cache?: Record<string, unknown>): boolean {
+		//Bug 3164504: Hflex will not recalculate when the colum without label
+		//Cause: DIV (parent of HeadWidget) is invisible if all columns have no label
+		var wp: zul.mesh.HeadWidget | zul.mesh.MeshWidget | undefined;
+		return !!(this._visible && (wp = this.parent) && wp._visible //check this and HeadWidget
+			&& (wp = wp.parent) && wp.isWatchable_(name, p, cache)); //then MeshWidget.isWatchable_
+	}
+
+	/** @internal */
+	_insizer(x: number): boolean {
+		return x >= this.$n_().offsetWidth - 8;
+	}
+
+	/** @internal */
+	override deferRedrawHTML_(out: string[]): void {
+		out.push('<th', this.domAttrs_({ domClass: true }), ' class="z-renderdefer"></th>');
+	}
+
+	/** @internal */
+	override afterClearFlex_(): void {
+		this.parent!.afterClearFlex_();
+	}
+
+	/** @internal */
+	getContentWidth_(): number {
+		var $cv = zk(this.$n('cave')),
+			isTextOnly = !this.nChildren && !this._iconSclass,
+			contentWidth = isTextOnly ? $cv.textWidth() : $cv.textSize()[0];
+		return Math.ceil(contentWidth + $cv.padBorderWidth() + zk(this.$n()).padBorderWidth());
+	}
+
+	/** @internal */
+	static readonly _faker = ['hdfaker', 'bdfaker', 'ftfaker'] as const;
+
+	//drag
+	/** @internal */
+	static _ghostsizing(dg: zk.Draggable, ofs: zk.Offset, evt: zk.Event): HTMLElement | undefined {
+		var wgt = dg.control as HeaderWidget,
+			el = wgt.getMeshWidget()!.eheadtbl!,
+			of = zk(el).revisedOffset(),
+			n = wgt.$n();
+
+		ofs[1] = of[1];
+		ofs[0] += zk(n).offsetWidth();
+		jq(document.body).append(/*safe*/
+			'<div id="zk_hdghost" style="position:absolute;top:'
+			+ jq.px(ofs[1]) + ';left:' + jq.px(ofs[0]) + ';width:3px;height:' + jq.px(zk(el.parentNode!.parentNode).offsetHeight())
+			+ ';background:darkgray"></div>');
+		return jq('#zk_hdghost')[0];
+	}
+
+	/** @internal */
+	static _endghostsizing(dg: zk.Draggable, origin: HTMLElement): void {
+		dg._zszofs = zk(dg.node).revisedOffset()[0] - zk(origin).revisedOffset()[0];
+	}
+
+	/** @internal */
+	static _snapsizing(dg: zk.Draggable, pointer: zk.Offset): zk.Offset {
+		var n = (dg.control as zk.Widget).$n(),
+			$n = zk(n),
+			ofs = $n.viewportOffset(),
+			sofs = $n.scrollOffset(),
+			min = ofs[0] + sofs[0] + dg._zmin!;
+		pointer[0] += $n.offsetWidth();
+		if (pointer[0] < min)
+			pointer[0] = min;
+		return pointer;
+	}
+
+	/** @internal */
+	static _ignoresizing(dg: zk.Draggable, pointer: zk.Offset, evt: zk.Event): boolean {
+		var wgt = dg.control as HeaderWidget,
+			n = wgt.$n(), $n = zk(n),
+			ofs = $n.revisedOffset(); // Bug #1812154
+
+		if (wgt._insizer(pointer[0] - ofs[0])) {
+			dg._zmin = 10 + $n.padBorderWidth();
+			return false;
+		}
+		return true;
+	}
+
+	/** @internal */
+	static _aftersizing(dg: zk.Draggable, evt: zk.Event): void {
+		var wgt = dg.control as HeaderWidget,
+			mesh = wgt.getMeshWidget()!,
+			wd = jq.px(dg._zszofs!),
+			hdfaker = mesh.ehdfaker!,
+			bdfaker = mesh.ebdfaker!,
+			ftfaker = mesh.eftfaker,
+			cidx = zk(wgt.$n()).cellIndex(),
+			hdcols = hdfaker.childNodes as NodeListOf<HTMLElement>,
+			bdcols = bdfaker.childNodes as NodeListOf<HTMLElement>,
+			ftcols = ftfaker ? ftfaker.childNodes as NodeListOf<HTMLElement> : undefined,
+			wds: string[] = [],
+			shallResyncColumns: number[] = [], // if cssflex, the fixed size should resync its body col size.
+			cssflex: boolean = mesh._cssflex && mesh.isChildrenFlex();
+
+
+		//1. store resized width
+		// B70-ZK-2199: convert percent width to fixed width
+		for (var w = mesh.head!.firstChild, i = 0; w; w = w.nextSibling, i++) {
+			var stylew = hdcols[i].style.width,
+				origWd = w._origWd, // ZK-1022: get original width if it is shrinked by Frozen.js#_doScrollNow
+				isFixedWidth = stylew && !stylew.includes('%');
+
+			if (origWd) {
+				if (isFixedWidth && zk.parseFloat(stylew) > 1) {
+					origWd = stylew; // use the latest one;
+				}
+				w._width = wds[i] = origWd;
+			} else {
+				wds[i] = isFixedWidth ? stylew : jq.px0(w.$n_().offsetWidth);
+				if (w.isVisible()) w._width = wds[i];
+				else if (!w._width && !w._hflex) //invisible and no width
+					w._width = '-1';
+			}
+			if (!isFixedWidth) {
+				hdcols[i].style.width = bdcols[i].style.width = wds[i];
+				if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
+					ftcols[i].style.width = wds[i];
+			}
+
+			// reset hflex, Bug ZK-2772 - Misaligned Grid columns
+			var wdInt = zk.parseInt(wds[i]);
+			if (cssflex) {
+				zFlex.clearCSSFlex(w, 'h', true);
+				// reset display:none and flex for ZK-5030
+				const wns = w.$n_().style;
+
+				if (wns.flex) {
+					shallResyncColumns.push(i);
+					wns.flex = '';
+				}
+				wns.display = '';
+			} else if (w._hflexWidth) {
+				w.setHflex_();
+				w._hflexWidth = undefined;
+			}
+			if (mesh._minWd) {
+				mesh._minWd.wds[i] = wdInt;
+			}
+		}
+
+		if (cssflex) {
+			// re-enable head's colgruop and head-bar
+			mesh.head!.$n_('hdfaker').style.display = mesh.head!.$n_('bar').style.display = '';
+		}
+
+
+		//2. set resized width to colgroup col
+		if (!wgt._origWd) // NOTE: originally, `if(!wgt.origWd)` which was wrong.
+			wgt._width = wds[cidx] = wd;
+		hdcols[cidx].style.width = bdcols[cidx].style.width = wd;
+		if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
+			ftcols[cidx].style.width = wd;
+
+		// resync
+		while (shallResyncColumns.length) {
+			const ci = shallResyncColumns.shift()!;
+			hdcols[ci].style.width = bdcols[ci].style.width = wds[ci];
+		}
+
+		//3. clear width=100% setting, otherwise it will try to expand to whole width
+		mesh.eheadtbl!.width = '';
+		mesh.ebodytbl!.width = '';
+		if (mesh.efoottbl)
+			mesh.efoottbl.width = '';
+
+		delete mesh._span; //no span!
+		delete mesh._sizedByContent; //no sizedByContent!
+		for (var w = mesh.head!.firstChild; w; w = w.nextSibling)
+			w.setHflex_(); //has side effect of setting w.$n().style.width of w._width
+
+		wgt.parent!.fire('onColSize', zk.copy({
+			index: cidx,
+			column: wgt,
+			width: wd,
+			widths: wds
+		}, evt.data), undefined, 0);
+
+		// bug #2799258 in IE, we have to force to recalculate the size.
+		mesh.$n_()._lastsz = undefined;
+
+		// for the test case of B70-ZK-2290.zul, we need to put the width back.
+		if (!zk.webkit) {
+			mesh.eheadtbl!.width = '100%';
+			mesh.ebodytbl!.width = '100%';
+			if (mesh.efoottbl)
+				mesh.efoottbl.width = '100%';
+		}
+		// bug #2799258
+		zUtl.fireSized(mesh, -1); //no beforeSize
+	}
+
+	static redraw(this: HeaderWidget, out: string[]): void {
+		const uuidHTML = this.uuid,
+			/*safe*/ label = this.domContent_();
+		out.push('<th', this.domAttrs_({ width: true }), ' role="columnheader"><div id="',
+			uuidHTML, '-cave" class="', this.$s('content'), '"',
+			this.domTextStyleAttr_()!, '><div class="', this.$s('sorticon'),
+			'"><i id="', uuidHTML, '-sort-icon" aria-hidden="true"></i></div>',
+			((!this.firstChild && label == '') ? '&nbsp;' : /*safe*/ label)); //ZK-805 MenuPopup without columns issue
+
+		if (this.parent!._menupopup && this.parent!._menupopup != 'none')
+			out.push('<div id="', uuidHTML, '-btn" class="',
+				this.$s('button'), '" tabindex="-1" aria-hidden="true"><i class="z-icon-caret-down"></i></div>');
+
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+		out.push('</div></th>');
+	}
+}

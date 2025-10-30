@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3181.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon May 28 15:35:24 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+    void reattach() {
+        Component obj = d;
+        obj.detach();
+        obj.setPage(page);
+    }
+    ]]></zscript>
+    <div id="d" apply="org.zkoss.zktest.test2.F85_ZK_3181Composer">
+        <label multiline="true">
+            1. Click "Reattach" multiple times.
+            2. No new "Received onClientInfo event" in zk log since the client info didn't change.
+        </label>
+        <button onClick="reattach()" label="Reattach" />
+    </div>
+</zk>

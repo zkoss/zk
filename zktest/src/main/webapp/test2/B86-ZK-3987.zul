@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3987.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 03 10:36:18 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        The two "a very very very very looooong text" should be the same color.
+    </label>
+    <grid>
+        <rows>
+            <row>
+                <label value="BBB BBB"/>
+                <label value="a very very very very looooong text"/>
+            </row>
+            <row>
+                <label value="BBB BBB BBB"/>
+                <cell>
+                    <label value="a very very very very looooong text"/>
+                </cell>
+            </row>
+        </rows>
+    </grid>
+</zk>

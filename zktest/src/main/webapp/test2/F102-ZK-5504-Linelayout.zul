@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F102-ZK-5504-Linelayout.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2025/4/17, Created by jumperchen
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		for (int i = 0; i < 3; i++) {
+		model.add("aaa" + i);
+		}
+	]]></zscript>
+	<style>
+		@keyframes flash {
+		0%, 50%, 100% {
+		background-color: white;
+		}
+		25%, 75% {
+		background-color: red;
+		}
+		}
+		.flash-initially {
+		animation-duration: 0.5s;
+		animation-name: flash;
+		}
+	</style>
+	<div id="main">
+		<label multiline="true">
+			1. Click "insert before" button, the new label should be added at first row.
+			2. The second row should be "1 - aaa0" label.
+			3. When you click "insert before", "add", "insert middle", and "remove" button,
+			there should not have any CSS flickering animation.
+		</label>
+		<button label="invalidate" onClick='main.invalidate()'/>
+		<button label="add"
+		        onClick='model.add("ddd " + System.currentTimeMillis());'/>
+		<button label="insert before"
+		        onClick='model.add(0, "ddd " + System.currentTimeMillis());'/>
+		<button label="insert middle"
+		        onClick='model.add(((int) model.size() / 2), "ddd " + System.currentTimeMillis());'/>
+		<button label="remove" onClick='model.remove(0);'/>
+		<hlayout>
+			<vlayout hflex="1">
+				Linelayout with model
+				<linelayout model="${model}" height="600px">
+					<custom-attributes org.zkoss.zul.model.selectiveComponentUpdate.enable="true"/>
+					<template name="model">
+						<lineitem>
+							<label value="${forEachStatus.index} - ${each}"
+							       sclass="flash-initially"/>
+						</lineitem>
+					</template>
+				</linelayout>
+			</vlayout>
+		</hlayout>
+	</div>
+</zk>

@@ -1,0 +1,62 @@
+<zk>
+	<div height="100%">
+		<div height="90%">
+			when click the button of bandbox, the popup should be above bandbox.
+		</div>
+		<div height="10%">
+			<bandbox id="bd" mold="rounded" xmlns:w="client">
+				<bandpopup>
+					<vbox>
+						<hbox>
+							Search
+							<textbox />
+						</hbox>
+						<listbox width="200px"
+							onSelect="bd.value=self.selectedItem.label; bd.close();">
+							<listhead>
+								<listheader label="Name" />
+								<listheader label="Description" />
+							</listhead>
+							<listitem>
+								<listcell label="John" />
+								<listcell label="CEO" />
+							</listitem>
+							<listitem>
+								<listcell label="Joe" />
+								<listcell label="Engineer" />
+							</listitem>
+							<listitem>
+								<listcell label="Mary" />
+								<listcell label="Supervisor" />
+							</listitem>
+							<listitem>
+								<listcell label="John" />
+								<listcell label="CEO" />
+							</listitem>
+							<listitem>
+								<listcell label="Joe" />
+								<listcell label="Engineer" />
+							</listitem>
+							<listitem>
+								<listcell label="Mary" />
+								<listcell label="Supervisor" />
+							</listitem>
+							<listitem>
+								<listcell label="John" />
+								<listcell label="CEO" />
+							</listitem>
+							<listitem>
+								<listcell label="Joe" />
+								<listcell label="Engineer" />
+							</listitem>
+							<listitem>
+								<listcell label="Mary" />
+								<listcell label="Supervisor" />
+							</listitem>
+						</listbox>
+					</vbox>
+				</bandpopup>
+			</bandbox>
+		</div>
+	</div>
+</zk>

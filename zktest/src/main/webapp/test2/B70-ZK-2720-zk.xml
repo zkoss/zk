@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <session-config>
+        <device-type>ajax</device-type>
+        <session-timeout>10</session-timeout>
+        <timer-keep-alive>false</timer-keep-alive>
+        <automatic-timeout>true</automatic-timeout>
+        <timeout-uri>/timeout.zul</timeout-uri>
+    </session-config>
+</zk>

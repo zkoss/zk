@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3564.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Fri May 11 17:24:22 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true" pre="true">
+	1. Scroll the bar.
+	2. (Current position - minimum position) % step should be 0.
+		For example: minimum position is 0, step is 3, when moving the scroll bar,
+		the current position should be 3, 6 ,9 and so on until the maximum position.
+	</label>
+	<slider width="190px" minpos="0" maxpos="20" step="3"
+			onScroll='lbl.setValue(self.getCurpos().toString())'/>
+	<label id="lbl"/>
+</zk>

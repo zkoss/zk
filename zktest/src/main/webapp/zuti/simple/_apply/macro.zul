@@ -1,0 +1,4 @@
+<?component name="foo" templateURI="../include/apply.zul"?> 
+<div>
+	<foo/>
+</div>

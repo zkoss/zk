@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4868.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Jul 12 14:47:42 CST 2021, Created by katherine
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. click clear color button to setBackgroundColor(null).
+		2. background color should be white.
+		3. click get color button, you should see "255,255,255,255" in zk log.
+	</label>
+	<script><![CDATA[
+		function getColor() {
+			var ctx = zk.$('$signature').$n('canvas-bg').getContext('2d');
+			zk.log(ctx.getImageData(1, 1, 1, 1).data);
+		}
+	]]></script>
+	<button label="clear color" onClick='signature.setBackgroundColor(null)'/>
+	<button label="get color" w:onClick="getColor()"/>
+	<signature id="signature" width="800px" height="400px" backgroundColor="lightblue"/>
+	<style>
+		body {
+			background-color: #F0F0F0;
+		}
+	</style>
+</zk>

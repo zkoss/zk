@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3619.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Thu May 24 10:26:31 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click "NO PAST" button.
+		2. Should not be able to select past.
+		3. Click "NO FUTURE" button.
+		4. Should not be able to select future.
+	</label>
+	<calendar id="calendar" width="600px"/>
+	<button label="NO PAST" onClick='calendar.setConstraint("no past")'/>
+	<button label="NO FUTURE" onClick='calendar.setConstraint("no future")'/>
+</zk>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<!--
+F86-ZK-4046.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep 18 12:34:02 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Click button "Disable" to disable "org.zkoss.util.label.cache"
+        2. Open zk-label.properties, modify the resource "ZK4046.test" value and save (No server restart needed)
+        3. Refresh the page
+        4. The changes are applied
+    </label>
+    <zscript><![CDATA[
+    String msg = org.zkoss.util.resource.Labels.getLabel("ZK4046.test");
+    String setting = org.zkoss.lang.Library.getProperty("org.zkoss.util.label.cache", "true");
+
+    void setCache(boolean setting) {
+        org.zkoss.lang.Library.setProperty("org.zkoss.util.label.cache", Boolean.toString(setting));
+        refresh();
+    }
+
+    void refresh() {
+        Executions.sendRedirect(null);
+    }
+    ]]>
+    </zscript>
+    <button label="Disable" onClick="setCache(false)"/>
+    <button label="Enable" onClick="setCache(true)"/>
+    <button label="Refresh" onClick="refresh()"/>
+    <label value="org.zkoss.util.label.cache = ${setting}"/>
+    <vlayout>
+        <label id="lbl1" value="${labels.ZK4046.test}" />
+        <label id="lbl2" value="${c:l('ZK4046.test')}" />
+        <label id="lbl3" value="${msg}" />
+    </vlayout>
+</zk>

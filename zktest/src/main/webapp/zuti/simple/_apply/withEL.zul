@@ -1,0 +1,11 @@
+<zk>
+	<zscript>
+	String templateName = "default";
+	</zscript>
+	<div>
+		<apply template="${templateName}">
+			<template>test</template>
+			<template name="default">test with the default name</template>
+		</apply>
+	</div>
+</zk>

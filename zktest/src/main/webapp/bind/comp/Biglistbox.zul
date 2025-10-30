@@ -1,0 +1,27 @@
+<zk>
+<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.zktest.bind.comp.BiglistboxVM')">
+	<label multiline="true">
+		1.after loaded, the first item should selected.
+		2.change the selection on biglistbox and listbox also, they should synchronize each other
+	</label>
+	<div width="600px" height="300px">
+		<biglistbox id="biglist" hflex="1" vflex="1" colWidth="130px" model="@bind(vm.model)" selectedObject="@bind(vm.selected)" selectedIndex="@bind(vm.selectedIndex)">
+		<template name="rows">
+        	<html><![CDATA[
+     		${each.name}-${each.fields[matrixInfo[0]].value}
+        	]]></html>
+    		</template>
+		</biglistbox>
+	</div>
+	<hbox width="300px">
+		Object <listbox id="listbox1" mold="select" model="@bind(vm.model)" selectedItem="@bind(vm.selected)" />
+		Index <listbox id="listbox2" mold="select" model="@bind(vm.model)" selectedIndex="@bind(vm.selectedIndex)" />
+	</hbox>
+	<hbox width="300px">
+		Object <label id="lb1" value="@bind(vm.selected)"/>
+		Index <label id="lb2" value="@bind(vm.selectedIndex)"/>
+	</hbox>
+	<button id="clear" label="clear" onClick="@command('clear')"/>
+</window>
+</zk>

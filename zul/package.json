@@ -1,0 +1,8 @@
+{
+  "name": "zul",
+  "version": "0.1.0",
+  "description": "Core ZK components",
+  "types": "./src/main/resources/web/js/zul/global.d.ts",
+  "author": "Potix",
+  "license": "LGPL-2.0-or-later"
+}

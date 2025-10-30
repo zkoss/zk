@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4483.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Mar 16 11:30:42 CST 2020, Created by rudyhuang
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window mode="modal" title="modal window" border="normal">
+        <apply templateURI="/test2/include/themes.zul"/>
+        <label multiline="true">
+            1. Scroll down to check modal mask.
+            2. Should cover the whole scrollable area.
+            3. The middle busy mask should cover the "I'm busy" window.
+        </label>
+    </window>
+    <div height="100vh"/>
+    <window title="I'm busy" border="normal" onCreate='Clients.showBusy(self, "busy")'/>
+    <div height="100vh"/>
+</zk>

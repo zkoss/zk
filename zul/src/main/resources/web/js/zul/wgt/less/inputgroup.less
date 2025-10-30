@@ -1,0 +1,50 @@
+@import "~./zul/less/_header.less";
+
+.z-inputgroup {
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+
+	&-text {
+		display: -ms-flexbox;
+		display: flex;
+		background: @inputgroupTextBackgroundColor;
+		border: 1px solid @inputBorderColor;
+		padding: 0 12px;
+		min-height: @inputHeight; // same as .z-textbox
+		-ms-flex-align: center;
+		align-items: center;
+	}
+
+	// Workaround for .z-toolbarbutton (The load order of toolbar.less is after inputgroup.less)
+	> :nth-child(n) { // "> :nth-child(n)" has a higher specificity than "> *"
+		border-radius: 0;
+	}
+
+	&-vertical {
+		-ms-flex-direction: column;
+		flex-direction: column;
+
+		> :first-child {
+			border-top-left-radius: @inputBorderRadius;
+			border-top-right-radius: @inputBorderRadius;
+		}
+		> :last-child {
+			border-bottom-left-radius: @inputBorderRadius;
+			border-bottom-right-radius: @inputBorderRadius;
+		}
+	}
+
+	&:not(&-vertical) {
+		> :nth-child(n) { // for a higher specificity see above
+			height: auto;
+		}
+		> :first-child {
+			border-top-left-radius: @inputBorderRadius;
+			border-bottom-left-radius: @inputBorderRadius;
+		}
+		> :last-child {
+			border-top-right-radius: @inputBorderRadius;
+			border-bottom-right-radius: @inputBorderRadius;
+		}
+	}
+}

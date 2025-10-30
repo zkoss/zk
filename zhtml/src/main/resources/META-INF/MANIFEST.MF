@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Specification-Title: ZK XHTML Components
+Specification-Vendor: Potix Corporation
+Implementation-Title: org.zkoss.zhtml
+Implementation-URL: http://www.zkoss.org/prj/zhtml
+Implementation-Vendor: Potix Corporation

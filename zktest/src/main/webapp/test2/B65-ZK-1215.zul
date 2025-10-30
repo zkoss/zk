@@ -1,0 +1,10 @@
+<zk>
+	<label multiline="true">
+	1. Click a date (suppose 10/20), and keep cursor on it.
+	2. Use arrow keys to change the selected date, the selected css of "10/20" must be removed.
+	
+	Note: This test case is focus on "Use mouse and keyboard to control Calendar at the same time."
+		  Other Calendar's behavior (like change style when mouseOver, mouseOut) must be the same as original.
+	</label>
+    <calendar id="cal" onChange="in.value = cal.value" />
+</zk>

@@ -1,0 +1,20 @@
+<window apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.basic.ComboboxModelSelectionVM')">
+	<vbox>
+	<label id="msg" value="@bind(vm.message1)"/>
+	<combobox id="cb1" model="@bind(vm.items)" width="100px">
+		<template name="model" var="item" >
+			<comboitem label="@bind(item.name)"/>	
+		</template>
+	</combobox>
+	<combobox id="cb2" model="@bind(vm.items)" width="100px" selectedItem="@bind(vm.selected)">
+		<template name="model" var="item" >
+			<comboitem label="@bind(item.name)"/>	
+		</template>
+	</combobox>
+	</vbox>	
+	<hbox>
+		<button id="btn1" label="reload" onClick="@command('reload')" />
+		<button id="btn2" label="select" onClick="@command('select')" />
+		<button label="Dump" onClick="binder.getTracker().dump()" />
+	</hbox>	
+</window>

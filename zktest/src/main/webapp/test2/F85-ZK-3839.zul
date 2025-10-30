@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3839.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jan 15 10:12:23 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        (ZumlExtendlet only (loaded zul from the classpath, like zk-spring-boot))
+        New setting in zk.xml: org.zkoss.zk.ZUML.cache.
+        You can edit zul files loaded by ZumlExtendlet (/zkau/web/) and reload to see the result without restarting the web server.
+    </label>
+</zk>

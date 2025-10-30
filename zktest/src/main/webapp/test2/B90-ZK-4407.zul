@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4407.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon Nov 11 11:18:11 CST 2019, Created by leon
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:w="client">
+	<script>
+		function logScrollRestoration () {
+			if ('scrollRestoration' in history)
+				zk.log('history.scrollRestoration: ' + history.scrollRestoration);
+		}
+	</script>
+	<label multiline="true">
+		1.Test the case in Chrome and Safari.
+		2.Scroll to the top of the screen and press F5 to refresh page,
+		the target button and the coachmark shall scroll into view.
+		3.Click the button, you should see 'history.scrollRestoration: auto' in zk log.
+	</label>
+	<coachmark id="coachmark" target="btn" position="before_start">
+		<label multiline="true">
+			1.Test the case in Chrome and Safari.
+			2.Scroll to the top of the screen and press F5 to refresh page,
+			the target button and the coachmark shall scroll into view.
+			3.Click the button, you should see 'history.scrollRestoration: auto' in zk log.
+		</label>
+	</coachmark>
+	<div height="2000px"></div>
+	<button id="btn" label="target" w:onClick="logScrollRestoration()"></button>
+</zk>

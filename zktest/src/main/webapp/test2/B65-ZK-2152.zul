@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-2152.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, June 23, 2014  14:16:12 PM, Created by jerrychen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+		String string = "10/10/2014 05:00:00";
+		Date date = null;
+		try{
+			date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH).parse(string);
+		} catch(Exception ex){}
+	</zscript>
+	<div>
+		1. click datebox and input specified time into timebox.
+		<separator/>
+		2. if there's not the result as expected, it's a bug.
+		<separator/>
+	</div>
+	<div>
+		21:00:00 => 10/10/2014 21:00:00
+		<separator/>
+		<datebox cols="30" format="MM/dd/yyyy HH:mm:ss"
+			onCreate="self.value = date" width="230px" />
+	</div>
+	<div>
+		11:00:00 => 10/10/2014 11:00:00 AM
+		<separator/>
+		<datebox cols="30" format="MM/dd/yyyy hh:mm:ss a"
+			onCreate="self.value = date" width="230px" />
+	</div>
+	<div>
+		11:00:00 => 10/10/2014 11:00:00 AM
+		<separator/>
+		<datebox cols="30" format="MM/dd/yyyy KK:mm:ss a"
+			onCreate="self.value = date" width="230px" />
+	</div>
+	<div>
+		21:00:00 => 10/10/2014 21:00:00
+		<separator/>
+		<datebox cols="30" format="MM/dd/yyyy kk:mm:ss"
+			onCreate="self.value = date" width="230px" />
+	</div>
+</zk>

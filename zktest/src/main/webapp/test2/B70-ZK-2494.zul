@@ -1,0 +1,37 @@
+<zk> 
+	<label multiline="true">
+		<![CDATA[
+ 			2494 test: please add
+ 			<language-mapping>
+ 				<language-name>xml</language-name>
+ 				<extension>svg</extension>
+ 			</language-mapping>
+ 			to zk.xml and 
+ 			<servlet-mapping>
+ 				<servlet-name>zkLoader</servlet-name>
+ 				<url-pattern>*.svg</url-pattern>
+ 			</servlet-mapping>
+ 			to web.xml and
+ 			<dependency>
+ 				<groupId>org.zkoss.zk</groupId>
+ 				<artifactId>zml</artifactId>
+ 				<version>${project.version}</version>
+ 			</dependency>
+ 			to pom.xml
+			
+			
+ 			1. You should see the svg img displyed correctly
+ 			2. You should see the customized xmlns got added on the native dom elements correctly
+			3. client onClick in native component should call the given js code correctly
+    		 ]]>
+	</label>
+	<n:div xmlns:abc="http://myabcnamespace.org" xmlns:n="native">
+		<n:object data="img/B70-ZK-2494.svg" type="image/svg+xml" id="testsvg"></n:object>
+		<n:div xmlns:ccc="http://mycccnamespace.org" abc:name="no chinese" />
+		<n:div xmlns:zk="zk" zk:onClick="alert(2)">
+			<n:div onClick="alert(1)">This is a Native Component (1)</n:div>
+			<n:div xmlns:w="client" w:onClick="alert(2)">This is a Native Component (2)</n:div>
+		</n:div>
+	</n:div>
+	<div xmlns:zk="zk" xmlns:c="client" c:onClick="console.log('js called')" zk:onClick="alert(1)">This is a ZUL Component</div>
+</zk>

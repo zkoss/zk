@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4143.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Thu Dec 27 09:42:42 CST 2018, Created by charlesqiu
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Test in all browsers except Firefox and IE
+		2. Click toggle all
+		3. The content of head, body and foot should be invisible
+	</label>
+	<grid>
+		<columns>
+			<column id="col1" width="200px" label="col-1"/>
+			<column id="col2" width="200px" label="col-2"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="row 1-1"/>
+				<label value="row 1-2"/>
+			</row>
+			<row>
+				<label value="row 2-1"/>
+				<label value="row 2-2"/>
+			</row>
+			<row>
+				<label value="row 3-1"/>
+				<label value="row 3-2"/>
+			</row>
+		</rows>
+		<foot>
+			<footer label="footer-1"/>
+			<footer label="footer-2"/>
+		</foot>
+	</grid>
+	<toolbarbutton mode="toggle" checked="true" onClick="col1.setVisible(!col1.visible)" label="toggle col-1"/>
+	<toolbarbutton mode="toggle" checked="true" onClick="col2.setVisible(!col2.visible)" label="toggle col-2"/>
+	<toolbarbutton mode="toggle" checked="true" label="toggle all">
+		<attribute name="onClick">
+			col1.setVisible(!col1.visible);
+			col2.setVisible(!col2.visible);
+		</attribute>
+	</toolbarbutton>
+</zk>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1217.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Nov 14, 2012 12:38:14 PM, Created by jumperchen
+
+Copyright (C) 2012 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<label multiline="true"><![CDATA[
+1. Please click upon "Contacts" to close the groupbox, and then open/close panel or borderlayout's north.
+2. Please click upon "Contacts" to open the groupbox, and then its content shouldn't be hidden.
+]]></label>
+	<panel title="panel" border="normal" width="100px"
+		collapsible="true">
+		<panelchildren>
+			<groupbox mold="3d" height="100%">
+				<caption label="Contacts" />
+				<div>a</div>
+				<div>a</div>
+			</groupbox>
+		</panelchildren>
+	</panel>
+	
+	<borderlayout  width="100px">
+		<west title="north" collapsible="true">
+			<div>
+				<groupbox mold="3d" height="100%">
+					<caption label="Contacts" />
+					<div>a</div>
+					<div>a</div>
+				</groupbox>
+			</div>
+		</west>
+	</borderlayout>
+</zk>

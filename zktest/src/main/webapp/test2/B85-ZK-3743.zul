@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3743.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 11 11:52:15 CST 2018, Created by bobpeng
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Run this page on Tomcat
+		2. Click 'trigger onIncrement' button multiple times, should see no exception.
+	</label>
+	<vlayout viewModel="@id('vm') @init('org.zkoss.zktest.test2.B85_ZK_3743VM')">
+		<button onClick="@command('triggerOnIncrement')" label="trigger onIncrement"/>
+		Desktop list
+		<listbox model="@init(vm.desktopList)">
+			<template name="model">
+				<listitem>
+					<listcell>
+						<label value="@init(each)"/>
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</vlayout>
+</zk>

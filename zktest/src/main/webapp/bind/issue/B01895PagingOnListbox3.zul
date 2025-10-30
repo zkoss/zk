@@ -1,0 +1,22 @@
+<window border="none" width="100%" height="100%" id="test">
+    <zscript><![CDATA[
+    void setModel(){
+    	ListModelList model = new ListModelList();
+    	for(int i=0;i<100;i++){
+    		model.add("A"+i);
+		}
+    	listbox.setModel(model);
+    }
+    ]]></zscript>
+    <listbox id="listbox" vflex="true" mold="paging"
+    	autopaging="true" onCreate="setModel()">
+    	<listhead>
+    		<listheader sort="auto">Title</listheader>
+    	</listhead>
+    	<template name="model">
+    		<listitem>
+    			<listcell label="${each}" />
+    		</listitem>
+    	</template>
+    </listbox>
+</window>

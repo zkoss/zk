@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F30-1948462.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 22 14:55:41     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Test of DeferredValue with dynamic image" border="normal">
+	<vbox>
+	Press the following button to see if the image is changed.
+	If changed, it is correct.
+	<button label="c" >
+		<attribute name="onClick">
+	image.setContent(new org.zkoss.image.AImage("t", desktop.webApp.getResourceAsStream("/test2/img/inet.png")));
+		</attribute>
+	</button>
+		<image id="image" src="/test2/img/sun.jpg"/>
+	</vbox>
+</window>

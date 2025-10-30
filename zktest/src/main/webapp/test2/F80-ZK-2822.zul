@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F80-ZK-2822.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 14 12:11:09 CST 2015, Created by jumperchen
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<window id="win" apply="org.zkoss.zktest.test2.F80_ZK_2822Composer">
+    After click the "Click Me", you should see "Foo Bar" message in zk log
+		<button label="Click Me" xmlns:w="client" w:onClick="zkservice.$('$win').command('clientCommand', [{foo: 'Foo'}, {bar: 'Bar'}]);"/>
+</window>

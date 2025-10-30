@@ -1,0 +1,47 @@
+<zk>
+
+	<zscript><![CDATA[
+		ListModelList mymodel = new ListModelList();
+		mymodel.add("aaa"); 
+		mymodel.add("bbb"); 
+		mymodel.add("ccc"); 
+		
+		class Pojo {
+		   private String selected = "aaa";
+		   public void setSelected(String sel) {selected = sel;}
+		   public String getSelected() {return selected;} 
+		}
+
+		Pojo pojo = new Pojo();
+		pojo.setSelected("bbb");
+	]]>
+	</zscript>	
+
+	<div apply="org.zkoss.bind.BindComposer" >
+		<apply myselected="@ref(pojo.selected)">
+			<listbox model="@init(mymodel)" selectedItem="@bind(myselected)">
+				<template name="model">
+					<listitem>
+						<apply> <!-- without the apply-tag there is no problem -->
+							<listcell label="@init(each)"/>
+						</apply>
+					</listitem>
+				</template>
+			</listbox>
+		</apply>
+		<button label="causes NPEs">
+			<attribute name="onClick"><![CDATA[
+				mymodel.clear(); 
+				mymodel.add("ccc"); 
+				mymodel.add("ddd"); 
+				mymodel.add("eee"); 
+				mymodel.add("fff");
+				if(!mymodel.contains(pojo.selected)) {
+					pojo.setSelected(null);
+				}
+				BindUtils.postNotifyChange(null, null, pojo, "selected");
+			]]></attribute>
+		</button>
+		Selected: <label value="@load(pojo.selected)"/> 
+	</div>
+</zk>

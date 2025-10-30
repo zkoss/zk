@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3526.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 17 18:54:00 CST 2016, Created by Jack Wei
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	Case 1:
+	1. Click the "add element" button, and a second item will show in the grid and the listbox.
+    2. Click the "add element" button more times, and more items will be added.
+    
+    Case 2:
+    1. Click the "clear model" button, and the data inside the grid and the listbox will be cleared.
+    2. Click the "add element" button, and a new item will be added in the grid and the listbox, with no JS error.
+    
+    Wrong Case:
+    (1) After adding the second item, clicking "add element" button dose not react anymore.
+    (2) After clearing the model, adding element will cause JS error.
+    
+    </label>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add(UUID.randomUUID().toString());
+	]]></zscript>
+	<div>
+		<custom-attributes 
+				org.zkoss.zul.grid.rod="true" org.zkoss.zul.grid.autoSort="true"
+				org.zkoss.zul.listbox.rod="true" org.zkoss.zul.listbox.autoSort="true"/>
+		<hlayout>
+			<vlayout>
+				Grid:
+				<grid height="300px" width="300px" model="${model}">
+					<columns>
+						<column sort="auto" sortDirection="natural" label="Grid Column"/>
+					</columns>
+					<template name="model">
+						<row>${each}</row>
+					</template>
+				</grid>
+			</vlayout>
+			<vlayout>
+				Listbox:
+				<listbox height="300px" width="300px" model="${model}">
+					<listhead>
+						<listheader sort="auto" label="Listbox Item"/>
+					</listhead>
+					<template name="model">
+						<listitem label="${each}"/>
+					</template>
+				</listbox>
+			</vlayout>
+		</hlayout>
+	</div>
+	<button label="add element" onClick="model.add(UUID.randomUUID().toString());"/>
+	<button label="clear model" onClick="model.clear();"/>
+</zk>

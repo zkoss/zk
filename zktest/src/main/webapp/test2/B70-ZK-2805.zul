@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2805.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul  1 10:55:57 CST 2015, Created by chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<zscript><![CDATA[
+	Collection getContacts() {
+		List l = new ArrayList();
+		l.add("Adam adam@company.org");
+		l.add("Bdam adam@company.org");
+		l.add("Cdam adam@company.org");
+		l.add("Ddam adam@company.org");
+		return l;
+	}
+	ListModelList contactsModel = new ListModelList(getContacts());
+
+	void newContact(String contact) {
+		contactsModel.add(contact);
+	}
+]]></zscript>
+<label multiline="true">
+1. type bbb to create new item
+2. there is no js errorbox
+</label>
+<div>
+	<chosenbox model="${contactsModel}" creatable="true" width="200px" createMessage="Create new  '{0}'" 
+	onSearch="newContact(event.value)" />
+</div>
+</zk>

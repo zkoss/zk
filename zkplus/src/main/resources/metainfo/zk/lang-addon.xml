@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- lang-addon.xml
+	Purpose:
+		A extension for integration of spring, hibernate, acegi and so on.
+	Description:
+		
+	Note:
+	 1. Properties defined here are assigned to all instances of the
+		specified definition, no matter it is created by ZUML or by program.
+	History:
+		Wed Dec 06 11:48:24     2006, Created by Henri Chen
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+-->
+<language-addon>
+	<!-- The name of this addon. It must be unique -->
+	<addon-name>zkplus</addon-name>
+	<!-- Specifies what other addon this depends -->
+	<depends>zkbind,zkex,zkmax</depends>
+	<!-- Which language this addon will be added to -->
+	<language-name>xul/html</language-name>
+	<version>
+		<version-class>org.zkoss.zkplus.Version</version-class>
+		<version-uid>@version@</version-uid>
+		<zk-version>@version@</zk-version><!-- or later -->
+	</version>
+</language-addon>

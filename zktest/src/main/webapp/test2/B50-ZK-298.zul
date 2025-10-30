@@ -1,0 +1,43 @@
+<!--
+	B50-ZK-298.zul
+	
+	Purpose:
+	
+	Description:
+	
+	History:
+		Fri Aug 12 15:43:11 TST 2011, Created by simon
+	
+	Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>1. Switch to each Tab. The Tabbox height shall change depending on Tabpanel content height.</div>
+	<div>2. Click "set height" and repeat the same. The Tabbox height shall NOT change.</div>
+	<div>3. Click "clear height" and repeat the same. The height shall change again.</div>
+	<button label="set height" onClick='box.height = "300px"' />
+	<button label="clear height" onClick='box.height = ""' />
+	<tabbox id="box" orient="vertical">
+		<tabs width="40px">
+			<tab label="first" />
+			<tab label="second" />
+			<tab label="third" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<div height="20px" style="border: 1px red dotted;" forEach="1,2">
+					input
+				</div>
+			</tabpanel>
+			<tabpanel id="pnl">
+				<div height="300px" style="border: 1px red dotted;" forEach="1,2,3,4">
+					input
+				</div>
+			</tabpanel>
+			<tabpanel>
+				<div height="300px" style="border: 1px red dotted;">
+					input
+				</div>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>

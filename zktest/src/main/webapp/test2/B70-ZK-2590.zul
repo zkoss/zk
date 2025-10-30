@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2590.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed, Jan 28, 2015  8:49:32 AM, Created by Chunfu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+	1. focus on combobox
+	2. press 1 from numpad
+	3. "1A" should be selected
+	</label>
+	<combobox width="150px" readonly="true" >
+		<comboitem label="A1" value="A1" />
+		<comboitem label="B1" value="B1" />
+		<comboitem label="C1" value="C1" />
+		<comboitem label="0A" value="0A" />
+		<comboitem label="1A" value="1A" />
+		<comboitem label="2A" value="2A" />
+	</combobox>
+</zk>

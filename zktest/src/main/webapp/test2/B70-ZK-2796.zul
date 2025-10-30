@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B70-ZK-2796.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jul 6 15:43:02 CST 2015, Created by jameschu
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. open browser devtool / Network and refresh
+		2. you should see only 1 zkau request
+	</label>
+    <zscript><![CDATA[
+    ListModelList model = new ListModelList();
+    void create(Component comp) {
+        Events.echoEvent("onLoad", comp, null);
+    }
+    void load(Component comp) {
+        org.zkoss.lang.Threads.sleep(1000);
+        for (int i = 0; i < 1000; i++) {
+            model.add("item " + i);
+        }
+    }
+    ]]></zscript>
+    <tabbox>
+        <tabs>
+            <tab id="tab1" label="1" />
+            <tab id="tab2" label="2" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                Details 1
+                <separator />
+                Details 1
+                <separator />
+                Details 1
+                <separator />
+                Details 1
+                <separator />
+                Details 1
+                <separator />
+            </tabpanel>
+            <tabpanel onCreate="create(self)" onLoad="load(self)">
+            	<custom-attributes org.zkoss.zul.grid.rod="false"/>
+                <grid id="details2" vflex="1" model="${model}"/>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+</zk>

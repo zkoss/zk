@@ -1,0 +1,330 @@
+@import "~./zul/less/_header.less";
+
+.contentStyle(@color, @bgcolor) {
+	color: @color;
+	background-color: @bgcolor;
+}
+.disabledStyle(@bgColor) {
+	border: 1px solid transparent;
+	cursor: default;
+	color: @disabledColor;
+	background: @bgColor;
+	text-decoration: none;
+	&:active, &:hover {
+		color: @disabledColor;
+		background: 0;
+	}
+}
+.restUl() {
+	background: transparent none repeat 0 0;
+	border: 0;
+	.borderRadius(@baseBorderRadius);
+	padding: 0;
+	margin: 0;
+	position: relative;
+	list-style: none outside none;
+}
+
+// define common font property
+.z-menubar {
+	display: block;
+	border-top: 1px solid @baseBorderColor;
+	border-bottom: 1px solid @baseBorderColor;
+	padding: @menubarPadding;
+	position: relative;
+	background: @menuBackground;
+
+	ul {
+		overflow: hidden;
+		.restUl();
+	}
+	li {
+		display: block;
+		padding: 0;
+		position: relative;
+	}
+
+	&-horizontal {
+		li {
+			margin: @menubarHorizontalMargin;
+			float: left;
+		}
+		.z-menuseparator {
+			display: block;
+			width: 1px;
+			border-left: 1px solid @menuSeparatorBorderColor;
+			line-height: @menubarHorizontalSeparatorLineHeight;
+			margin: @menubarHorizontalSeparatorMargin;
+		}
+	}
+	&-vertical {
+		padding: 4px 2px;
+		ul {
+			display: inline-table;
+		}
+		li {
+			margin: 2px;
+		}
+		.z-menu-clickable .z-menu-text {
+			margin-right: 20px;
+		}
+
+		.z-menuseparator {
+			height: 0;
+			min-height: 0;
+			border-top: 1px solid @menuSeparatorBorderColor;
+			line-height: 0;
+		}
+	}
+}
+
+.z-menu,
+.z-menuitem {
+	.restUl(); //avoid using none default zclass
+	&-text {
+		font-family: @baseTitleFontFamily;
+		font-size: @menuTextFontSize;
+		font-weight: normal;
+		display: inline-block;
+		vertical-align: middle;
+		
+		// align for img + text
+		img ~ & {
+			vertical-align: middle;
+		}
+		&:empty {
+			display: none;
+		}
+	}
+	&-image {
+		max-width: @menuImageSize;
+		line-height: normal;
+		margin-right: 4px;
+	}
+	&-content {
+		color: @menuItemColor;
+		background: @menuItemBackground;
+		display: block;
+		border: 1px solid transparent;
+		.borderRadius(@baseBorderRadius);
+		padding: @menuContentPadding;
+		line-height: @menuContentLineHeight;
+		position: relative;
+		cursor: pointer;
+		text-decoration: none;
+		white-space: nowrap;
+		min-height: @menuContentMinHeight;
+		z-index: 20; // the 20 is greater than menupopup-separator's z-index
+		&:hover {
+			.contentStyle(@menuItemHoverColor, @menuItemHoverBackground);
+		}
+		&:focus {
+			.contentStyle(@menuItemHoverColor, @menuItemHoverBackground);
+		}
+		&:active {
+			.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
+		}
+		&[disabled] {
+			.disabledStyle(@menuItemBackground);
+		}
+	}
+
+	// icon sclass
+	&-content i {
+		margin-right: @menuIconMarginRight;
+		vertical-align: middle;
+	}
+}
+.z-menu {
+	&-separator {
+		display: none;
+	}
+	&-clickable {
+		.z-menu-separator {
+			.size(1px, 100%);
+			display: block;
+			background: transparent;
+			position: absolute;
+			top: 0;
+			right: 30px;
+		}
+		&.z-menu:active,
+		&.z-menu-selected {
+			outline: 2px solid @focusBorderColor;
+			.z-menu-separator {
+				background: @menuSeparatorBackgroundColor;
+			}
+		}
+		.z-menu-text {
+			margin-right: 8px;
+		}
+	}
+	&-content {
+		padding-right: @menuContentPaddingRight;
+	}
+
+	&-icon {
+		font-size: @menuIconSize;
+		position: absolute;
+		right: 0;
+		top: @menuIconPositionTop;
+	}
+	&-selected > &-content {
+		.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
+	}
+}
+.z-menuitem {
+	&-selected > &-content {
+		.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
+	}
+}
+
+// menupopup
+.z-menupopup-shadow,
+.z-menu-palette-popup,
+.z-menu-picker-popup,
+.z-menu-content-popup {
+	.boxShadow('0 3px 6px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.24)');
+}
+
+.z-menu-content-popup {
+	.displaySize(none, auto, auto);
+	position: absolute;
+	overflow: auto;
+	z-index: @basePopupZIndex;
+}
+.z-menupopup {
+	border: 1px solid @baseBorderColor;
+	.borderRadius(4px);
+	padding: 4px;
+	background: @menuPopupBackground;
+	left: 0;
+	top: 0;
+	white-space: nowrap;
+	z-index: @basePopupZIndex;
+	max-height: 100%;
+	overflow-y: auto;
+
+	ul {
+		.restUl();
+	}
+	&-separator {
+		display: none;
+	}
+	.z-menu-content,
+	.z-menuitem-content {
+		color: @menuPopupItemColor;
+		background: @menuPopupItemBackground;
+		&:active {
+			.contentStyle(@menuPopupItemActiveColor, @menuPopupItemActiveBackground);
+		}
+		&[disabled] {
+			.disabledStyle(@menuPopupItemBackground);
+		}
+	}
+	.z-menu-image,
+	.z-menuitem-image {
+		min-width:  @menuImageSize;
+		min-height:  @menuImageSize;
+		line-height: normal;
+		background-repeat: no-repeat;
+		margin-right: 8px;
+	}
+	.z-menuitem-icon {
+		.iconFontStyle(@menuPopupItemIconSize, @menuCheckedColor);
+		display: none;
+		position: absolute;
+		top: @menuPopupItemIconPositionTop;
+		left: @menuPopupItemIconPositionLeft;
+	}
+	.z-menuseparator {
+		font-size: 1px;
+		display: block;
+		width: auto;
+		min-height: 2px;
+		border-bottom: 1px solid @menuPopupSeparatorBorder;
+		padding: 0;
+		line-height: 1px;
+		margin: 4px 0;
+		position: relative;
+	}
+	[class^="z-icon"] {
+		text-align: center;
+		display: inline-block;
+		min-width: @menuImageSize; // for text alignment
+		margin-right: 8px;
+		line-height: normal;
+	}
+	.z-menu-hover > .z-menu-content,
+	.z-menu-focus > .z-menu-content,
+	.z-menuitem-hover > .z-menuitem-content,
+	.z-menuitem-focus > .z-menuitem-content {
+		.contentStyle(@menuPopupItemHoverColor, @menuPopupItemHoverBackground);
+	}
+}
+//define checked menuitem effect in menupopup
+.z-menuitem-checkable .z-menuitem-image {
+	border: 1px solid @checkedBorderColor;
+	.borderRadius(@baseBorderRadius);
+	background: @checkedBackgroundColor;
+}
+.z-menuitem-checked.z-menuitem-checkable {
+	.z-menuitem-image {
+		background: @menuCheckedBackgroundColor;
+	}
+	.z-menuitem-icon {
+		display: block;
+	}
+}
+
+//define menubar hor scroll
+.z-menubar {
+	&-scroll {
+		overflow: hidden;
+	}
+	&-body {
+		width: 100%;
+		margin: 0 @baseBarWidth;
+		position: relative;
+		overflow: hidden;
+	}
+	&-content {
+		width: 5000px;
+	}
+	&-icon {
+		.iconFontStyle(@fontSizeXLarge, extract(@menuScrollableIconColors, 1));
+		margin-top: -@fontSizeXLarge/2;
+		margin-left: -@fontSizeXLarge/2 + 2;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
+	&-left,
+	&-right {
+		&:hover {
+			> .z-menubar-icon {
+				color: extract(@menuScrollableIconColors, 2);
+			}
+		}
+	}
+	&-left {
+		left: 0;
+	}
+	&-scrollable {
+		.size(@baseBarWidth, 100%);
+		line-height: normal;
+		position: absolute;
+		top: 0;
+		right: 0;
+		cursor: pointer;
+		z-index: 25;
+	}
+}
+
+// Icon replacement
+.z-menubar-left > i:before {
+	content: '\f104';
+}
+.z-menubar-right > i:before {
+	content: '\f105';
+}

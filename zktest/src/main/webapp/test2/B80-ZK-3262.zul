@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3262.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 16 11:50:01 CST 2016, Created by wenninghsu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk>
+	<label multiline="true">1. click the datebox button to open the popup calendar
+		2. click on any date on the calendar
+		3. should not popup errorbox
+
+	</label>
+	<zscript>
+		import org.zkoss.util.resource.Labels;
+		import org.zkoss.zk.ui.Component;
+		import org.zkoss.zk.ui.WrongValueException;
+		import org.zkoss.zul.Constraint;
+		public class DateboxMandatoryValidator implements Constraint {
+
+			public void validate(Component comp, Object value) throws WrongValueException {
+				if (value == null) {
+					throw new WrongValueException(comp, "Error message");
+				}
+			}
+		}
+		public DateboxMandatoryValidator validator = new DateboxMandatoryValidator();
+	</zscript>
+	<datebox constraint="${validator}"/>
+</zk>

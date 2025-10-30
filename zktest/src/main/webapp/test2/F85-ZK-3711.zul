@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F85-ZK-3711.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 26 12:52:42 CST 2017, Created by rudyhuang
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <zscript><![CDATA[
+        void goPage(String title, String url, int page) {
+            tb.selectedIndex = page - 1;
+            desktop.pushHistoryState(Collections.singletonMap("page", page), title, url);
+        }
+        void replacePage(String title, String url, int page) {
+            tb.selectedIndex = page - 1;
+            desktop.replaceHistoryState(Collections.singletonMap("page", page), title, url);
+        }
+        void handleHistoryPopState(HistoryPopStateEvent e) {
+            Clients.log("[By onHistoryPopState]");
+            Clients.log("State: " + e.state);
+            Clients.log("Url: " + e.url);
+        }
+
+        // Method 1: Page EventListener
+        page.addEventListener("onHistoryPopState", new EventListener() {
+            public void onEvent(HistoryPopStateEvent e) throws Exception {
+                Clients.log("[By page.addEventListener]");
+                Clients.log("State: " + e.state);
+                Clients.log("Url: " + e.url);
+            }
+        });
+    ]]></zscript>
+
+    <div onHistoryPopState='handleHistoryPopState(event)'> <!-- Method 2: need to register on the root component -->
+        <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F85_ZK_3711VM')"> <!-- Method 3: VM @HistoryPopState -->
+            <label multiline="true">
+                1. There are 3 different ways to handle HistoryPopStateEvent.
+                2. The history.pushState adds new entry, and history.replaceState replaces the current one.
+                3. Press back or forward will pop state, making tab selected index changed.
+            </label>
+            <hlayout>
+                history.pushState
+                <button onClick='@command("goPage", title="Page 1", url="?page/1", page=1)'>Page 1</button>
+                <button onClick='goPage("Page 2", "?page=2", 2)'>Page 2</button>
+                <button onClick='goPage("Page 3", "#p3", 3)'>Page 3</button>
+                <button onClick='goPage("Page 4", "", 4)'>Page 4</button>
+                <button onClick='goPage("Page 5", null, 5)'>Page 5</button>
+            </hlayout>
+            <hlayout>
+                history.replaceState
+                <button onClick='@command("replacePage", title="Page 1", url="?page/1", page=1)'>Page 1</button>
+                <button onClick='replacePage("Page 2", "?page=2", 2)'>Page 2</button>
+                <button onClick='replacePage("Page 3", "#p3", 3)'>Page 3</button>
+                <button onClick='replacePage("Page 4", "", 4)'>Page 4</button>
+                <button onClick='replacePage("Page 5", null, 5)'>Page 5</button>
+            </hlayout>
+            <tabbox id="tb" selectedIndex="@load(vm.tabIndex)"
+                    onSelect='@command("pushHistoryState", title="", url="", page=self.selectedIndex)'>
+                <tabs>
+                    <tab>Page 1</tab>
+                    <tab>Page 2</tab>
+                    <tab>Page 3</tab>
+                    <tab>Page 4</tab>
+                    <tab>Page 5</tab>
+                </tabs>
+                <tabpanels>
+                    <tabpanel>Content 1</tabpanel>
+                    <tabpanel>Content 2</tabpanel>
+                    <tabpanel>Content 3</tabpanel>
+                    <tabpanel>Content 4</tabpanel>
+                    <tabpanel>Content 5</tabpanel>
+                </tabpanels>
+            </tabbox>
+        </div>
+    </div>
+</zk>

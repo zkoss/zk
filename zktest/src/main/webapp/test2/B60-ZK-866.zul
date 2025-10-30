@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B60-ZK-866.zul
+
+    Purpose:
+
+    Description:
+
+    History:
+        Fri Oct 25 16:11:38 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window>
+        <zscript><![CDATA[
+        org.zkoss.zul.ListModelList lml1 = new org.zkoss.zul.ListModelList();
+        for(int i=0;i<10;i++){
+            lml1.add(""+i);
+        }
+        void sim3(){
+            lml1.addToSelection("3");
+            lml1.clearSelection();
+            lml1.addToSelection("1");
+            lml1.addToSelection("2");
+            lml1.addToSelection("3");
+        }
+        void single(){
+            listbox.setMultiple(false);
+        }
+        void showSelection(){
+            msg.setValue(""+listbox.getModel().getSelection());
+        }
+        ]]></zscript>
+        <label multiline="true">
+            1. Click "sim3" button to select items.
+            2. Click "single" to change to single selection mode.
+            3. Click "show selection".
+            4. You should see "1" is selected and the label shows "[1]"
+        </label>
+        <listbox id="listbox" model="${lml1}" checkmark="true" multiple="true"/>
+        <button label="sim3" onClick='sim3()'/>
+        <button label="single" onClick='single()'/>
+        <button label="show selection" onClick='showSelection()'/>
+        <label id="msg" />
+    </window>
+</zk>

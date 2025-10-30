@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B95-ZK-4322.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Mon 13 16:14:19 CST 2021, Created by katherinelin
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModel model1 = new org.zkoss.zktest.test2.grid.FakeListModel(200);
+		ListModel model2 = new org.zkoss.zktest.test2.grid.FakeListModel(200);
+		String[] array = new String[50];
+		for (int i =0; i < array.length; i++)
+			array[i] = "data " + i;
+	]]></zscript>
+	<label multiline="true">
+		1. Please click the first button "Test Listitem.setSelected", and then all the listboxes should scroll to the last one.
+		2. Please click the second button "Test Listbox.setSelectedIndex()", and then all the listboxes should scroll to the first one.
+		3. Please click the third button "Test Listbox.setSelectedItem()", and then all the listboxes should scroll to the last one.
+	</label>
+	<hlayout>
+		<listbox id="list1" width="200px" rows="10" model="&#36;{model1}">
+			<custom-attributes org.zkoss.zul.listbox.rod="true" org.zkoss.zul.nativebar="true"/>
+			<listhead>
+				<listheader label="Model ROD True" sort="auto"/>
+			</listhead>
+		</listbox>
+		<listbox id="list2" width="200px" rows="10" model="&#36;{model2}">
+			<custom-attributes org.zkoss.zul.listbox.rod="true" org.zkoss.zul.nativebar="false"/>
+			<listhead>
+				<listheader label="Model ROD True" sort="auto"/>
+			</listhead>
+		</listbox>
+	</hlayout>
+	<button label="Test Listitem.setSelected()">
+		<attribute name="onClick">
+			model1.addToSelection(model1.getElementAt(model1.getSize()-1));
+			model2.addToSelection(model2.getElementAt(model2.getSize()-1));
+		</attribute>
+	</button>
+	<button label="Test Listbox.setSelectedIndex()">
+		<attribute name="onClick">
+			model1.addToSelection(model1.getElementAt(0));
+			model2.addToSelection(model2.getElementAt(0));
+		</attribute>
+	</button>
+	<button label="Test Listbox.setSelectedItem()">
+		<attribute name="onClick">
+			model1.addToSelection(model1.getElementAt(model1.getSize()-1));
+			model2.addToSelection(model2.getElementAt(model2.getSize()-1));
+		</attribute>
+	</button>
+</zk>

@@ -1,0 +1,11 @@
+<zk><hbox>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Colorbox]" width="480px">
+        <colorbox hflex="1"/>
+    </window>
+    <window border="normal" height="360px"
+        title="Input HFlex Case: [Colorbox, rounded]" width="480px">
+        <colorbox hflex="1"/>
+    </window>
+</hbox>
+</zk>

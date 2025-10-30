@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3244.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Jun 27, 2016 12:12:59 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.on IE
+		2.click the button to open popup
+		3.click first input
+		4.click any others make input lost his focus
+		5.second input should append text "blur - "
+	</label>
+	<div xmlns:w="client">
+		<script>
+			function handleBlur(){
+				var text = zk('$target').$().getValue() + 'blur - ';
+				zk('$target').$().setValue(text);
+			}
+		</script>
+			<textbox id="tx1" w:onBlur="handleBlur()"/>
+			<menupopup id="mp">
+				<menuitem label="test popup" />	
+			</menupopup>
+			<button onClick="mp.open(self)"/>
+		</div>
+	<textbox width="600px" id="target"/>
+</zk>

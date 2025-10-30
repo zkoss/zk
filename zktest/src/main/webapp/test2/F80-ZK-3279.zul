@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    F80-ZK-3279.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Jul 19 15:21:48 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1.click 1st button, you should see "id1" disappear (invisible).
+        2.click 2nd button, you should see "id1" appear (visible).
+        3.click 3rd button, you should see "id1" disappear (deleted, includes the first z-nodom comment scope).
+        4.click 4th button, you should see "id2" nothing change.
+        5.click 5th button, you should see "id2" move to 3rd Block.
+        6.click 6th button, you should see "new1" inserted before the z-nodom start comment (id2).
+        7.click 7th button, you should see "new2" append after the z-nodom end comment (id2).
+        8.click 8th button, you should see "new3" append after the z-nodom start comment (id2).
+        9.click 9th button, you should see "new4" inserted before the z-nodom end comment (id2).
+    </label>
+    <separator />
+    <separator />
+    <separator />
+    <div id="p1">
+        <label>1st Block</label>
+        <nodom id="id1">
+            <label id="l1">
+                id1
+            </label>
+        </nodom>
+    </div>
+
+    <div id="p2">
+        <label>2nd Block</label>
+        <nodom id="id2">
+            <label id="l2">
+                id2
+            </label>
+        </nodom>
+    </div>
+    <separator />
+    <div id="p3">
+        <label>3rd Block</label>
+    </div>
+    <div>
+        <button label="setVisible false id1" onClick="id1.setVisible(false)" />
+        <button label="setVisible true id1" onClick="id1.setVisible(true)" />
+        <button label="detach id1" onClick="id1.detach()" />
+        <button label="invalidate id2" onClick="id2.invalidate()" />
+        <button label="detach+attach id2" onClick="Component comp = id2; id2.detach(); comp.setParent(p3)" />
+        <button label="insert before id2" onClick="p3.insertBefore(new1, id2)" />
+        <button label="append id2" onClick="p3.appendChild(new2);" />
+        <button label="inner insert before child" onClick="id2.insertBefore(new3, id2.getFirstChild())" />
+        <button label="inner append" onClick="id2.appendChild(new4)" />
+    </div>
+    <div id="new1">new1</div>
+    <div id="new2">new2</div>
+    <div id="new3">new3</div>
+    <div id="new4">new4</div>
+</zk>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Separator"?>
+<?root-attributes lang="en"?>
+<!--
+separator.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Wed May 27 12:25:23 CST 2020, Created by leon
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Separator and Space</n:h1>
+	</n:header>
+	<n:main>
+		Separator:
+		<separator orient="vertical" bar="true"/>
+		<separator bar="true"/>
+		<separator orient="vertical"/>
+		<separator/>
+		
+		Space:
+		<space bar="true"/>
+		<space orient="horizontal" bar="true"/>
+		<space/>
+		<space orient="horizontal"/>
+	</n:main>
+</zk>

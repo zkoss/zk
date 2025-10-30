@@ -1,0 +1,137 @@
+#!/bin/bash
+# release
+#
+#{{IS_NOTE
+#	Purpose:
+#		
+#	Description:
+#		
+#	History:
+#		Tue Mar 3 11:11:09     2011, Created by Jimmy
+#}}IS_NOTE
+#
+#Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+#
+#{{IS_RIGHT
+#}}IS_RIGHT
+#
+maindir="$(pwd)"
+maindir="${maindir%/cmldoc}"
+cd $maindir
+echo "Working directory $maindir"
+stamp=$(date +%Y%m%d)
+oldVersion=$1
+newVersion=$2
+isFL=$3
+
+if [ "$ZK" = "" ] ; then
+	ZK=$maindir
+fi
+if [ "$ZKCML" = "" ] ; then
+	if [ -d "zkex" ] ; then
+		ZKCML="."
+	elif [ -d "../zkcml/zkex" ] ; then
+		ZKCML="../zkcml"
+	else
+		echo "ZKCML path is not found!!"
+	fi
+fi
+
+if [ "$oldVersion" == "" ] || [ "$newVersion" == "" ] ; then
+	echo "Usage: upVer [ oldVersion ] [ newVersion ] [options]"
+	echo "Available options: FL."
+	exit 1
+fi
+
+function upVer {
+	if [ "$isFL" == "FL" ] ; then
+		sed -i "/version>/,/<\//s/>$oldVersion.*<\//>$newVersion-SNAPSHOT<\//" $1/pom.xml
+		echo "$1 pom.xml"
+		grep -n --color=auto $newVersion"-SNAPSHOT" $1/pom.xml
+	else
+		sed -i "/version>/,/<\//s/>$oldVersion.*<\//>$newVersion<\//" $1/pom.xml
+		echo "$1 pom.xml"
+		grep -n --color=auto $newVersion $1/pom.xml
+	fi
+
+	if [[ -f "$1/version" ]]; then
+		sed -i "s/$oldVersion.*/$newVersion/g" $1/version
+		echo "$1 version"
+		grep -n --color=auto $newVersion $1/version
+	fi
+
+	if [[ -d "$1/src" ]]; then
+		echo "$1 MANIFEST.MF"
+		find $1/src -name MANIFEST.MF -exec sed -i "s/$oldVersion.*/$newVersion/g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+		echo "$1 config.xml"
+		find $1/src -name config.xml -exec sed -i "
+		/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+		echo "$1 lang.xml"
+		find $1/src -name lang.xml -exec sed -i "
+		/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+		echo "$1 lang-addon.xml"
+		find $1/src -name lang-addon.xml -exec sed -i "
+		/<version/,/\/version>/s/>$oldVersion.*<\//>$newVersion<\//g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+
+		echo "$1 Version.java"
+		find $1/src -name Version.java -exec sed -i "
+		s/UID = \"$oldVersion.*\";/UID = \"$newVersion\";/g
+		" {} \; -exec grep -n --color=auto $newVersion {} \;
+	fi
+}
+
+if [ "$3" == "FL" ] ; then
+	sed -i "s/$oldVersion.*/$newVersion-FL/g" $maindir/build.setting
+	echo "build.setting"
+	grep -n --color=auto $newVersion"-FL" $maindir/build.setting
+	
+	echo "zk Version.java"
+	find $maindir/zk/src -name Version.java -exec sed -i "
+	s/RELEASE = \"$oldVersion.*\";/RELEASE = \"$newVersion-FL\";/g
+	" {} \; -exec grep -n --color=auto $newVersion"-FL" {} \;
+else
+	sed -i "s/$oldVersion.*/$newVersion/g" $maindir/build.setting
+	echo "build.setting"
+	grep -n --color=auto $newVersion $maindir/build.setting
+	
+	echo "zk Version.java"
+	find $maindir/zk/src -name Version.java -exec sed -i "
+	s/RELEASE = \"$oldVersion.*\";/RELEASE = \"$newVersion\";/g
+	" {} \; -exec grep -n --color=auto $newVersion {} \;
+fi
+sed -i "s/$oldVersion.*/$newVersion/g" $maindir/deploy/version
+sed -i "s/$oldVersion.*/$newVersion/g" $maindir/jsdoc/version
+sed -i "s/$oldVersion.*/$newVersion/g" $maindir/zksandboxs/version
+sed -i "s/$oldVersion.*/$newVersion/g" $maindir/zksandboxs/src/archive/META-INF/MANIFEST.MF
+cd $maindir
+upVer zk-parent
+upVer zel
+upVer zcommon
+upVer zhtml
+upVer zkwebfragment
+upVer zk
+upVer zksandbox
+upVer zktest
+upVer zkplus
+upVer zkbind
+upVer zul
+upVer zweb
+upVer zweb-dsp
+upVer zk-bom
+cd $ZKCML
+upVer zkcml-parent
+upVer zkex
+upVer zkmax
+upVer zml
+upVer zkrt
+upVer zuti
+upVer zkthemebuilder
+upVer za11y
+cd $maindir

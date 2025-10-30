@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4837.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+
+		Wed Jun 09 17:30:22 CST 2021, Created by jameschu
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList dataModel1 = new ListModelList();
+		ListModelList dataModel2 = new ListModelList();
+		ListModelList dataModel3 = new ListModelList();
+		public void appendData(ListModelList model) {
+			model.add("new item - 1");
+			model.add("new item - 2");
+		}
+		public void insertDataAfterFirst(ListModelList model) {
+			if (model.size == 0)
+				Clients.log("Unable to insert data, the size must not be 0");
+			else
+				model.add(1, "new item");
+		}
+		public void appendDataWhenOpen(OpenEvent e, ListModelList model) {
+			if (e.isOpen())
+				appendData(model);
+		}
+		public void insertDataAfterFirstWhenOpen(OpenEvent e, ListModelList model) {
+			if (e.isOpen())
+				insertDataAfterFirst(model);
+		}
+	]]></zscript>
+	<vlayout>
+		<div>
+			<searchbox id="sbox1" model="${dataModel1}"/>
+			[Searchbox] Test button handle model (press buttons and see correct result)
+			<button label="Append 2 item" onClick='appendData(dataModel1)'/>
+			<button label="Append 2 item" onClick='appendData(dataModel1)'/>
+			<button label="Insert 1 item" onClick='insertDataAfterFirst(dataModel1)'/>
+		</div>
+		<div>
+			<searchbox id="sbox2" model="${dataModel2}">
+				<attribute name="onOpen"><![CDATA[
+					if (self.model.size() < 4)
+						appendDataWhenOpen(event, dataModel2);
+					else
+						insertDataAfterFirstWhenOpen(event, dataModel2);
+				]]></attribute>
+			</searchbox>
+			[Searchbox] Test onOpen (open 3 times, and see the same result above)
+		</div>
+		<div>
+			<searchbox id="sbox3" model="${dataModel3}">
+				<attribute name="onSearching"><![CDATA[
+					if (self.model.size() < 4)
+						appendData(dataModel3);
+					else
+						insertDataAfterFirst(dataModel3);
+				]]></attribute>
+			</searchbox>
+			[Searchbox] Test onSearching (Type "a" -> 2 item, press "backspace" -> 4 items, type "b" -> 2 items, press "backspace" -> 6 items)
+		</div>
+	</vlayout>
+</zk>

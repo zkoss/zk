@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-3679.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 12 14:55:59 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. Before you start, take a look at the expected result.
+           - If you see a "Custom Error Handler", it means the test is successful.
+           - If you see the default error handling page, the test is failed.
+        2. Click button "Start test". It will be redirected.
+    </label>
+    <button href="B86-ZK-3679-2.zul" label="Start test"/>
+</zk>

@@ -1,0 +1,15 @@
+<zk>
+	<window border="normal" title="hello" xmlns:w="client">
+		<vlayout>
+			<imagemap id="imageMap"
+				src="http://zkfiddle.org/img/top_zk_logo.png"
+				onClick='alert("Clicked!")'>
+				<area id="area" coords="0,0,0,0" />
+			</imagemap>
+			click 'set corrds' button, then should not see js error in
+			js console.
+			<button label="Set coords to 0,0,65,50"
+				w:onClick='zk.Widget.$("$area").setCoords("0,0,30,25");' />
+		</vlayout>
+	</window>
+</zk>

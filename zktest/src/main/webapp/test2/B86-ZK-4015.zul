@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4015.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug 07 10:11:44 CST 2018, Created by rudyhuang
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window title="new page title" border="normal" width="800px">
+        <label multiline="true">
+            1. Click "open".
+            2. Scroll to the page bottom.
+            3. Open the bandbox popup.
+            4. Click anywhere but the bandbox itself. (Try window inner / outer)
+            5. The popup should be closed.
+        </label>
+        <button label="open">
+            <attribute name="onClick"><![CDATA[
+            Window win = new Window();
+            win.setParent(self.getParent());
+            Executions.createComponents("B86-ZK-4015modal.zul", win, null);
+            win.onModal();
+            ]]></attribute>
+        </button>
+    </window>
+</zk>

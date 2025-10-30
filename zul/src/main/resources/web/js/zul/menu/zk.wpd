@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 15 09:03:43     2009, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.menu" language="xul/html" depends="zul.wgt">
+	<script src="index.js" sourceMap="true"/>
+	<widget name="Menubar" moldOnly="true"/>
+	<widget name="Menu" moldOnly="true"/>
+	<widget name="Menuitem" moldOnly="true"/>
+	<widget name="Menuseparator" moldOnly="true"/>
+	<widget name="Menupopup" moldOnly="true"/>
+</package>

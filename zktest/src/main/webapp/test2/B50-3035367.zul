@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-3035367.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 28 18:22:20 TST 2010, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="Test Case: Updating list model of not yet rendered listbox" border="normal" width="500px"
+			height="400px">
+		<tabbox height="100%">
+			<tabs>
+				<tab label="Visible (selected) Tab" selected="true"></tab>
+				<tab label="Not visible (selected) by default" selected="false"></tab>
+				<tab id="t3" label="Not visible (selected) by default" selected="false"></tab>
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<button label="update list model of listbox on second tab panel"
+							onClick='listbox1.setModel(new ListModelList(Collections.singletonList("element")));'/>
+					<button label="update list model of grid on third tab panel"
+							onClick='grid1.setModel(new ListModelList(Collections.singletonList("element")));'/>
+				</tabpanel>
+				<tabpanel>
+					<listbox id="listbox1"
+							 vflex="true"> <!-- if height="100%" or vflex="true": script error if button is pressed -->
+						<listhead>
+							<listheader label="Listbox"/>
+						</listhead>
+					</listbox>
+				</tabpanel>
+				<tabpanel>
+					<grid id="grid1"
+						  vflex="true"> <!-- if height="100%" or vflex="true": script error if button is pressed -->
+						<columns>
+							<column label="Grid"/>
+						</columns>
+						<rows/>
+					</grid>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

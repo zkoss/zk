@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+leak.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 23 12:39:08     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<div id="d">
+div
+</div>
+<window id="w" title="Hello" border="normal">
+window
+</window>
+<button label="invalid window" onClick="w.invalidate()" mold="os"/>
+<button label="invalid div" onClick="d.invalidate()" mold="os"/>
+<button label="invalid self" onClick="self.invalidate()" mold="os"/>
+<separator/>
+<button label="alert" onClick='alert("Hi")' mold="os"/>
+<separator/>
+<button label="overlap" onClick="w.doOverlapped()" mold="os"/>
+<button label="embed" onClick="w.doEmbedded()" mold="os"/>
+<separator/>
+<zscript>
+Object d2;
+void add(what) {
+	d.appendChild(d2 = what);
+}
+void del() {
+	if (d2 != null) {d2.detach(); d2 = null;}
+}
+Window addwnd() {
+	Window w = new Window();
+	w.setBorder("normal");
+	w.setTitle("new");
+	w.setClosable(true);
+	w.setMinimizable(true);
+	w.setMaximizable(true);
+	w.setWidth("200px");
+	w.appendChild(new Button("what's up"));
+	add(w);
+	return w;
+}
+</zscript>
+<button label="new div" onClick="add(new Div())" mold="os"/>
+<button label="del" onClick="del()" mold="os"/>
+<button label="new div" onClick="add(new Div())"/>
+<button label="del" onClick="del()"/>
+<separator/>
+<button label="new btn" onClick='add(new Button("new"))' mold="os"/>
+<button label="del" onClick="del()" mold="os"/>
+<separator/>
+<button label="new embedded wnd" onClick="addwnd()" mold="os"/>
+<button label="del" onClick="del()" mold="os"/>
+<separator/>
+<button label="new overlapped wnd" onClick="addwnd().doOverlapped()" mold="os"/>
+<button label="del" onClick="del()" mold="os"/>
+<separator/>
+<button label="new modal wnd" onClick="addwnd().doModal()" mold="os"/>
+<button label="del" onClick="del()" mold="os"/>
+</zk>

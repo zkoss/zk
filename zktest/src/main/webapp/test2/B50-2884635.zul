@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-2884635.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct 27 17:00:40     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. (IE only) Click the icon, and focus into the time from the popup (for example, focus before "AM/PM")
+<separator/>
+2. Keep pressing the button from the timebox's icon (Up/Down), the selection should be the part of the focused you expected.
+<separator/>
+<datebox format="yyyy/MM/dd hh:mm:ss a" cols="20"/>
+</zk>

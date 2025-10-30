@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4908.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jul 16 11:47:41 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<style>
+		/* debugging style */
+		*:focus {
+			box-shadow: inset 0 0 6px 1px red;
+		}
+	</style>
+	<label>
+		1. click nav1 then click navitem2, the nav1 shall close.
+		2 .click nav1 then click navitem2 again, the nav1 shall close.
+	</label>
+	<navbar>
+		<nav id="nav1" label="nav1">
+			<navitem label="navitem1-1"/>
+			<nav label="nav1-2"/>
+			<navitem label="navitem1-3"/>
+		</nav>
+		<navitem id="navitem2" label="navitem2"/>
+		<nav label="nav3"></nav>
+		<navitem label="navitem4"/>
+		<nav label="nav5"></nav>
+	</navbar>
+</zk>

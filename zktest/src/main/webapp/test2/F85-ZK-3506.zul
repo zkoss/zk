@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F85-ZK-3506.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Aug  8 16:58:25 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <window apply="org.zkoss.zktest.test2.F85_ZK_3506Composer" id="w" title="MAC Command key support" border="normal" ctrlKeys="%j^%y^@%t^$%o@$%k^@$%p">
+        <label multiline="true">New feature: supporting command key of mac with constant %
+
+            ctrlKeys="%j^%y^@%t^$%o@$%k^@$%p"
+
+            Works only in MAC
+            Focus in the textbox
+            Press the following combination of keyboard shortcut, should see corresponding message in zk-log:
+            1. Command J
+            2. Ctrl Command Y
+            3. Ctrl Alt Command T
+            4. Ctrl Shift Command O
+            5. Alt Shift Command K
+            6. Ctrl Alt Shift Command P
+
+        </label>
+        <textbox />
+    </window>
+</zk>

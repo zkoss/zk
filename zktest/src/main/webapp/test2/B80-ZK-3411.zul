@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3411.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 29 09:50:00 CST 2016, Created by Jack Wei
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+
+	<zscript><![CDATA[
+		ArrayList cols = new ArrayList();
+		for (int i = 0; i < 10; i++) {
+			cols.add("Column " + i);
+		}
+		ArrayList rows = new ArrayList();
+		for (int i = 0; i < 40; i++) {
+			rows.add("Row " + i);
+		}
+    ]]>
+	</zscript>
+	<window hflex="1" vflex="1">
+		<grid hflex="1" vflex="1" span="true" style="background:#ddd">
+			<columns>
+				<column forEach="${cols}" hflex="min"><label value="${each}" /></column>
+			</columns>
+			<rows>
+				<!--<row forEach="${rows}"><label forEach="${cols}" value="Content content" /></row>-->
+				<row forEach="${rows}">
+					<label value="there" />
+					<label value="should not" />
+					<label value="have extra space" />
+					<label value="at bottom and right" />
+					<label value="between the grid" />
+					<label value="and the browser" />
+					<label value="since" />
+					<label value="hflex is 1" />
+					<label value="and" />
+					<label value="vflex is 1" />
+				</row>
+			</rows>
+		</grid>
+	</window>
+</zk>

@@ -1,0 +1,16 @@
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		String[] strs = new String[200];
+		for (int i = 0; i < 200; i++)
+			strs[i] = "Item " + (i + 1);
+		ListModelList model = new ListModelList(strs);
+	]]></zscript>
+	<div>1. Click on Item 1, you should see a messagebox</div>
+	<div>2. Scroll down in the Grid and click on Item 200, you should see a messagebox</div>
+	<div>3. Click on each of the Buttons, and you should see a messagebox for each click.</div>
+	<window title="Window" border="normal" apply="org.zkoss.zktest.test2.select.Z60EventWiringController">
+		<grid model="${model}" height="400px" />
+		<button id="btn" label="Go" />
+	</window>
+</zk>

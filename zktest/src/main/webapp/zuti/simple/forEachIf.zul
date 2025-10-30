@@ -1,0 +1,17 @@
+<zk>
+	<vlayout>
+		begin=0, end=3, if each is 2, color is blue, otherwise, color is
+		red.
+		<div id="host" style="border:1px solid red;">
+			<forEach begin="0" end="3" var="item">
+				<if test="${forEachStatus.index eq 2}">
+					<div style="color:blue">Only ${item} Template</div>
+				</if>
+				<if test="${forEachStatus.index ne 2}">
+					<div style="color:red">${item} Template</div>
+				</if>
+			</forEach>
+		</div>
+	</vlayout>
+	<debugger rootId="host" />
+</zk>

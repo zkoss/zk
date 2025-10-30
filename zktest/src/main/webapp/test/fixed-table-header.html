@@ -1,0 +1,186 @@
+<html lang="en">
+<HEAD>
+<TITLE>JavaScript - Fixed table header</TITLE>
+<STYLE>
+div#fixedtable {
+	padding: 0px;
+}
+
+div#fixedtable table{
+	background: #ffffff;
+}
+
+div#fixedtable td {
+	background: #000000;
+	color: #ffffff;
+}
+
+</STYLE>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+var stuff = new Array('name','tel','function');
+
+function scale()
+{
+	var extra = 0; // default NN6 & IE5Mac, not perfect IE4Mac, Too Bad
+	if (document.all && navigator.userAgent.indexOf('Win') != -1)
+		extra = 2; //default IEWin
+	// extra += 2 per point of cellpadding; not necessary NN6.01
+	if (!document.all || navigator.userAgent.indexOf('Mac') == -1)
+		extra +=4;
+	var a = document.getElementById('fixedtable');
+	var b = document.getElementById('normaltable');
+	for (i=0;i<stuff.length;i++)
+	{
+		y = document.getElementById(stuff[i]+'body');
+		z = document.getElementById(stuff[i]+'head');
+		x = y.offsetWidth - extra;
+		z.style.width = x;
+	}
+}
+
+// -->
+</SCRIPT>
+</HEAD>
+
+<BODY>
+
+<DIV>
+<DIV ID="fixedtable">
+<TABLE border=1 cellpadding=2 cellspacing=0 width="100%">
+	<TR>
+		<TD ID="namehead">Name</TD>
+		<TD ID="telhead">Telephone</TD>
+		<TD ID="functionhead">Function</TD>
+	</TR>
+</TABLE>
+</DIV>
+
+<DIV ID="normaltable">
+<TABLE border=1 cellpadding=2 cellspacing=0>
+	<TR>
+		<TD ID="namebody">The Bo$$</TD>
+		<TD ID="telbody">(to be reached through his secretary)</TD>
+		<TD ID="functionbody">Our gracious leader, informed, well-spoken, judicious, He Who Guides,
+		Strong Arm of the Business, Offender of the Faithful, Protractor of the Useless,
+		mystical, mythical, arcane, may his working days be long and his wealth increase</TD>
+	</TR>
+	<TR>
+		<TD>Dr. Markbrand</TD>
+		<TD>++46.32.191883</TD>
+		<TD>Customer Care Server</TD>
+	</TR>
+	<TR>
+		<TD>'Manuel'</TD>
+		<TD>++.89.23844.37222</TD>
+		<TD>Cousin of Pedro</TD>
+	</TR>
+	<TR>
+		<TD>'Pedro'</TD>
+		<TD>++.89.23844.37221</TD>
+		<TD>Cousin of Manuel</TD>
+	</TR>
+	<TR>
+		<TD>Helly Marshdown</TD>
+		<TD>525.9910</TD>
+		<TD>Incompatibility Manager</TD>
+	</TR>
+	<TR>
+		<TD>The Archimandrite</TD>
+		<TD>914-20339</TD>
+		<TD>Religious leader, competitor of The Primate</TD>
+	</TR>
+	<TR>
+		<TD>The Primate</TD>
+		<TD>915-20339</TD>
+		<TD>Religious leader, competitor of The Archimandrite</TD>
+	</TR>
+	<TR>
+		<TD>Lord Faintheart</TD>
+		<TD>1904</TD>
+		<TD>Chairman of the Vague Board</TD>
+	</TR>
+	<TR>
+		<TD>Maxwell</TD>
+		<TD>8838 (home) or 7402 (mistress)</TD>
+		<TD>Co-worker</TD>
+	</TR>
+	<TR>
+		<TD>John Street</TD>
+		<TD>8302</TD>
+		<TD>Snooker referee</TD>
+	</TR>
+	<TR>
+		<TD>Dr. Gr&auml;vestein</TD>
+		<TD>0</TD>
+		<TD>Fruitologist</TD>
+	</TR>
+	<TR>
+		<TD>Ms. T.</TD>
+		<TD>secret</TD>
+		<TD>Senior Capital Venturer</TD>
+	</TR>
+	<TR>
+		<TD>Augustus</TD>
+		<TD>2714</TD>
+		<TD>Dead Roman Emperor</TD>
+	</TR>
+	<TR>
+		<TD>Claude</TD>
+		<TD>4154</TD>
+		<TD>Claims to be a dead Roman Emperor.</TD>
+	</TR>
+	<TR>
+		<TD>Mohammed al-Jawri</TD>
+		<TD>to be ascertained</TD>
+		<TD>Currently asleep, function to be determined onWakeup</TD>
+	</TR>
+	<TR>
+		<TD>flock of geese</TD>
+		<TD>Can be reached through The Capitol, Rome</TD>
+		<TD>Security</TD>
+	</TR>
+	<TR>
+		<TD>Kiwulu Asampa</TD>
+		<TD>Doesn't have one<BR>(religous reasons)</TD>
+		<TD>He's the guy sitting on the ground in the
+		disused office on the fifth floor</TD>
+	</TR>
+	<TR>
+		<TD>Albert Einstein</TD>
+		<TD>194024205</TD>
+		<TD>Inventor of relations</TD>
+	</TR>
+	<TR>
+		<TD>Ernst Schr&ouml;dinger</TD>
+		<TD>234239420</TD>
+		<TD>Inventor of cat abuse</TD>
+	</TR>
+	<TR>
+		<TD>Niels Bohr</TD>
+		<TD>3948234</TD>
+		<TD>Inventor of the dice</TD>
+	</TR>
+	<TR>
+		<TD>Sir Isaac Newton</TD>
+		<TD>q14892048</TD>
+		<TD>Inventor of the apple</TD>
+	</TR>
+	<TR>
+		<TD>Steve Jobs</TD>
+		<TD>03948-3</TD>
+		<TD>Inventor of the Apple</TD>
+	</TR>
+	<TR>
+		<TD>Mongo</TD>
+		<TD>none</TD>
+		<TD>Pawn in game of life</TD>
+	</TR>
+</TABLE>
+</DIV>
+</DIV>
+<SCRIPT LANGUAGE="JavaScript">
+scale();
+</SCRIPT>
+</BODY>
+</HTML>

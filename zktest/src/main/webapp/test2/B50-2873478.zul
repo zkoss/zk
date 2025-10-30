@@ -1,0 +1,26 @@
+<?page title="" contentType="text/html;charset=UTF-8" zscript-language="javascript" ?>
+<window title="ZK5 RC Test - 01" border="normal" width="80%">
+<html><![CDATA[
+<ol>
+	<li>If you can see this page and the under Grid, it is OK</li>
+	<li>Done</li>
+</ol>
+]]></html>
+  <grid>
+      <columns sizable="true">
+        <column label="Fields" align="right" width="80px" />
+        <column label="" />
+      </columns>
+ 
+      <rows>
+        <row>
+          <label value="NO1:" />
+          <textbox id="no1" constraint="no empty"/>
+        </row>
+        <row visible="false">
+          <label value="NO2:" />
+          <textbox id="no2" constraint="no empty"/>
+        </row>
+      </rows>
+  </grid>
+</window>

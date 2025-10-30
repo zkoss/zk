@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-2789.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Aug 14 12:39:15 CST 2015, Created by Christopher
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList();
+		model.add(null);
+		model.add(Locale.GERMANY);
+		model.add(Locale.US);
+		model.add(Locale.CHINA);
+	]]></zscript>
+	<label multiline="true">
+		model containing null values will cause unexpected behavior in the combobox drop down menu,
+		the root cause of this issue is that zk assumes set attribute value = null is the same as removing the attribute,
+		simply allowing null attribute values solves this issue.
+	</label>
+	<div apply="org.zkoss.bind.BindComposer" children="@init('One Child')">
+		<template name="children">
+			<div>
+				<label value="${each}"/>
+				<combobox id="cb1" onChange='lb.setValue(model.getSelection().toString())' model="@init(model)" readonly="true">
+					<template name="model" var="each">
+						<comboitem label="${each eq null ? 'None' : each}"/> 
+					</template>
+				</combobox>
+			</div>
+		</template>
+	</div>
+	
+	<label id="lb"/>
+</zk>

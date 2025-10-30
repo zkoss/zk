@@ -1,0 +1,23 @@
+<window title="Test" mode="modal" border="normal" width="80%">
+	<html><![CDATA[
+	<ol>
+	<li>Check the first listbox. No item shall be selected (i.e., it shall be empty).</li>
+	<li>Click embed and check the first listbox. No item shall be selected.</li>
+	<li>Click modal and check again.</li>
+	<li>Click the drop down of the bandbox. It will slide down and the listbox shown shall has no item being selected.</li>
+	</ol>
+	]]></html>
+
+	<listbox rows="1" mold="select" w:onSelect="zk.log(this)" xmlns:w="client">
+	<listitem label="Test"/>
+	</listbox>
+	<button label="embed" onClick="self.parent.doEmbedded()"/>
+	<button label="modal" onClick="self.parent.doModal()"/>
+	<bandbox>
+		<bandpopup>
+		<listbox rows="1" mold="select" w:onSelect="zk.log(this)" xmlns:w="client">
+		<listitem label="Test"/>
+		</listbox>
+		</bandpopup>
+	</bandbox>
+</window>

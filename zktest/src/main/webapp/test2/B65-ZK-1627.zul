@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B65-ZK-1627.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon, Feb 18, 2013 11:14:11 AM, Created by jumperchen
+
+Copyright (C) 2013 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+1. You should not see any exception after the page loaded.
+<separator/>
+2. Please focus in/out the datebox, you should see an error arrow points to the mid-bottom of the datebox. 
+<datebox constraint="no empty, after_end"/>
+</zk>

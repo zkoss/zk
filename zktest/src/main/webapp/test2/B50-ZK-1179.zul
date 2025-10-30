@@ -1,0 +1,6 @@
+<zk xmlns:n="native">
+	<n:h3>Liferay Portlet only</n:h3>
+	<window title="${labels.username}" width="400px">
+		Change your browser's preferred language to Chinese(zh-TW) and reload, you should see the window title changed.
+	</window>
+</zk>

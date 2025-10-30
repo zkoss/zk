@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3265.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 17 14:13:50 CST 2016, Created by jameschu
+
+Copyright (C) 2016 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label value="Click the button, and no exception occur" />
+    <zscript><![CDATA[
+		ListModelList myModel = new ListModelList(Locale.getAvailableLocales());
+	]]></zscript>
+    <grid model="${myModel}" id="grid" height="200px">
+        <custom-attributes org.zkoss.zul.grid.autoSort="true" />
+        <custom-attributes org.zkoss.zul.grid.rod="true" />
+        <columns>
+            <column width="60px">test</column>
+        </columns>
+    </grid>
+    <listbox model="${myModel}" id="listbox" height="200px">
+        <custom-attributes org.zkoss.zul.listbox.autoSort="true" />
+        <custom-attributes org.zkoss.zul.listbox.rod="true" />
+    </listbox>
+    <button id="btn" label="click here to reproduce">
+        <attribute name="onClick"><![CDATA[
+			myModel.clear();
+			myModel.add("test2");
+	  		myModel.add("test1");
+	  		myModel.remove(myModel.get(0));
+	  ]]></attribute>
+    </button>
+</zk>

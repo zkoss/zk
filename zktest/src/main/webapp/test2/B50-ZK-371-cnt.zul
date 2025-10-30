@@ -1,0 +1,54 @@
+				<tree id="tree" rows="8" hflex="min">
+					<!--  
+					<treecols sizable="true">
+						<treecol label="Name" />
+						<treecol label="Description" />
+					</treecols>
+					-->
+					<treechildren>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 1" />
+								<treecell label="Item 1 description" />
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="Item 2" />
+								<treecell label="Item 2 description" />
+							</treerow>
+							<treechildren>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.1" />
+									</treerow>
+									<treechildren>
+										<treeitem>
+											<treerow>
+												<treecell label="Item 2.1.1" />
+											</treerow>
+										</treeitem>
+										<treeitem>
+											<treerow>
+												<treecell label="Item 2.1.2" />
+											</treerow>
+										</treeitem>
+									</treechildren>
+								</treeitem>
+								<treeitem>
+									<treerow>
+										<treecell label="Item 2.2" />
+									</treerow>
+									<treechildren>
+										<treeitem>
+											<treerow>
+												<treecell label="Item 2.2.1" />
+											</treerow>
+										</treeitem>
+									</treechildren>
+								</treeitem>
+							</treechildren>
+						</treeitem>
+						<treeitem label="Item 3" />
+					</treechildren>
+				</tree>

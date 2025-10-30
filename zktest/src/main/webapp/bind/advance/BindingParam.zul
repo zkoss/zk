@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BindingParam.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Mon May 03 14:26:05 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window viewModel="@id('vm') @init('org.zkoss.zktest.bind.advance.BindingParamVM')">
+		<label id="msg" value="@bind(vm.message1)"/>
+		<grid id="outergrid" width="900px" model="@bind(vm.items)">
+			<columns>
+				<column label="index"/>
+				<column label="name"/>
+				<column label="action" width="500px"/>
+			</columns>
+
+			<template name="model" var="item">
+				<row>
+					<label value="@bind(itemStatus.index)"/>
+					<label value="@bind(item.name)"/>
+					<hbox>
+						<button label="Index" onClick="@command('showIndex', index=itemStatus.index)"/>
+						<button label="Index omit" onClick="@('showIndex', itemStatus.index)"/>
+						<button label="Update" onClick="@command('update', item=item, addName=item.name)"/>
+						<button label="Update omit" onClick="@('update', item, item.name)"/>
+					</hbox>
+				</row>
+			</template>
+		</grid>
+		<label multiline="true">
+			test @BindingParam with normal and simplified syntax:
+			1.click the Index button on the 3rd row, you should see the message "item index 2".
+			2.click the Index omit button on the 4th row, you should see the message "item index 3".
+			3.click the Update button on the 1st row, you should see the message "updated item name to: AA".
+			4.click the Update omit button on the 2nd row, you should see the message "updated item name to: BB".
+		</label>
+	</window>
+</zk>

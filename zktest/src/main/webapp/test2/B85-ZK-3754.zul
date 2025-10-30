@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3754.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Oct 18 10:24:21 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. click the button to add a navitem to the first nav
+		2. the width of "Nav 1" should not extend
+
+	</label>
+	<button label="Add Navitem">
+		<attribute name="onClick">
+			Navitem n1 = new Navitem();
+			n1.setLabel("new item 1");
+			nb.getSelectedItem().getParent().appendChild(n1);
+		</attribute>
+	</button>
+	<navbar id="nb" orient="horizontal">
+		<nav iconSclass="z-icon-home" label="Nav 1">
+			<navitem label="Navitem 1.1" selected="true"/>
+			<navitem label="Navitem 1.2"/>
+		</nav>
+		<nav iconSclass="z-icon-home" label="Nav 2">
+			<navitem label="Navitem 2.1"/>
+			<navitem label="Navitem 2.2"/>
+		</nav>
+	</navbar>
+</zk>

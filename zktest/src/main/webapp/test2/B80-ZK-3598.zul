@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B80-ZK-3598.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Feb 9 15:20:32 CST 2017, Created by jameschu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label>Select the first 2 items and drag, you should see "Test1 Test2" is two lines.</label>
+    <listbox multiple="true" checkmark="true">
+        <listitem draggable="true" droppable="true" label="Test1"/>
+        <listitem draggable="true" droppable="true" label="Test2"/>
+        <listitem draggable="true" droppable="true" label="Test3"/>
+    </listbox>
+</zk>

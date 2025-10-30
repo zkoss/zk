@@ -1,0 +1,24 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="new page title" border="normal"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.bind.viewmodel.validator.Va04')">
+		
+		va4
+		<label multiline="true">
+		argument command, after,converter,argument validator 
+		1. input 1,click , save and show 1 and 11 
+		2. enter 22, click button, become "adult"
+		4. enter 33, click button, not change 
+		</label>
+		
+		Age can not over 30:<intbox id="ageBox"
+			value="@init(vm.positiveOne) @save(vm.age, before='add') @validator(vm.upperBoundValidator, max=30)"/>
+		<button id="addButton" label="Add 10" onClick="@command('add', increment=10)" />
+		<label id="adultLabel" value="@bind(vm.age) @converter(vm.maturityIndicator)"/>			
+		<separator />
+		original age:<label id="originalAge" value="@load(vm.age, before='add')" />
+		<separator />
+		10 years after: <label id="afterAge" value="@load(vm.age, after='add')" />
+
+	</window>
+</zk>

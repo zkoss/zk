@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B85-ZK-3685.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jul 12 16:06:53 CST 2017, Created by wenninghsu
+
+Copyright (C) 2017 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. load with chrome mobile device devtool to simulate "iPad Pro"
+        2. scroll down to the most bottom
+        3. click combobox, datebox, timebox, timepicker to open its popup
+        4. popup should show up at the buttom of the visible range
+
+    </label>
+    <combobox sclass="field">
+        <comboitem label="cb 1" />
+        <comboitem label="cb 2" />
+        <comboitem label="cb 3" />
+    </combobox>
+    <div style="border:solid 5px green;overflow:auto;padding:20px;" vflex="1">
+        <div style="border:solid 5px blue;overflow:auto;padding:20px;" height="1700px">
+            <grid style="border:solid 5px red;">
+                <rows>
+                    <row height="2300px"></row>
+                    <row>
+                        <combobox id="titleCombobox1" sclass="field">
+                            <comboitem label="Combobox1" />
+                            <comboitem label="Combobox2" />
+                            <comboitem label="Combobox3" />
+                            <comboitem label="Combobox4" />
+                            <comboitem label="Combobox5" />
+                            <comboitem label="Combobox6" />
+                            <comboitem label="Combobox7" />
+                            <comboitem label="Combobox8" />
+                            <comboitem label="Combobox9" />
+                            <comboitem label="Combobox10" />
+                            <comboitem label="Combobox11" />
+                            <comboitem label="Combobox12" />
+                            <comboitem label="Combobox13" />
+                            <comboitem label="Combobox14" />
+                            <comboitem label="Combobox15" />
+                            <comboitem label="Combobox16" />
+                            <comboitem label="Combobox17" />
+                            <comboitem label="Combobox18" />
+                            <comboitem label="Combobox19" />
+                            <comboitem label="Combobox20" />
+                        </combobox>
+                        <datebox/>
+                        <timebox/>
+                        <timepicker/>
+                    </row>
+                </rows>
+            </grid>
+        </div>
+    </div>
+    <combobox sclass="field">
+        <comboitem label="cb 1" />
+        <comboitem label="cb 2" />
+        <comboitem label="cb 3" />
+    </combobox>
+</zk>

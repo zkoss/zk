@@ -1,0 +1,137 @@
+<borderlayout>
+	<west maxsize="600" size="40%" border="0" splittable="true"
+		collapsible="true">
+		<window id="win" border="normal" width="350px" sizable="true">
+			<caption image="/test2/img/inet.png" label="Hi there!" />
+			<div style="border:1px solid black;">
+				<window top="50px" left="250px" id="inner" title="Inner"
+					border="normal" width="300px" sizable="true">
+					<menubar id="menubar" autodrop="true">
+						<menu label="File">
+							<menupopup>
+								<menuitem label="New"
+									onClick="alert(self.label)" />
+								<menuitem label="Open"
+									onClick="alert(self.label)" />
+								<menuitem label="Save"
+									onClick="alert(self.label)" />
+								<menuseparator />
+								<menuitem label="Exit"
+									onClick="alert(self.label)" />
+							</menupopup>
+						</menu>
+						<menu label="Option">
+							<menupopup>
+								<menuitem label="Simple"
+									autocheck="true" />
+								<menuitem label="Rich" autocheck="true" />
+							</menupopup>
+						</menu>
+						<menu label="Help">
+							<menupopup>
+								<menuitem label="Index"
+									onClick="alert(self.label)" />
+								<menu label="About">
+									<menupopup>
+										<menuitem label="About ZK"
+											onClick="alert(self.label)" />
+										<menuitem label="About Potix"
+											onClick="alert(self.label)" />
+									</menupopup>
+								</menu>
+							</menupopup>
+						</menu>
+					</menubar>
+
+					<separator bar="true" />
+					<combobox>
+						<comboitem label="Simple and Rich"
+							description="The simplest way to make Web applications rich" />
+						<comboitem label="Cool!"
+							description="The coolest technology" />
+						<comboitem label="Ajax and RIA"
+							description="Rich Internet Application by Ajax" />
+					</combobox>
+
+					<window top="80px" left="300px" id="in2" title="Inner2"
+						border="normal" width="250px" sizable="true">
+						<window top="100px" left="350px" id="in3" title="Inner3"
+							border="normal" width="200px" sizable="true">
+							<button label="Modal" onClick="in3.doModal();" />
+							<button label="Overlap"
+								onClick="in3.doOverlapped();" />
+							<button label="Popup" onClick="in3.doPopup();" />
+							<button label="Embed" onClick="in3.doEmbedded();" />
+						</window>
+
+						<separator bar="true" />
+						<button label="Modal" onClick="in2.doModal();" />
+						<button label="Overlap"
+							onClick="in2.doOverlapped();" />
+						<button label="Popup" onClick="in2.doPopup();" />
+						<button label="Embed" onClick="in2.doEmbedded();" />
+					</window>
+
+					<separator bar="true" />
+					<button label="Modal" onClick="inner.doModal();" />
+					<button label="Overlap"
+						onClick="inner.doOverlapped();" />
+					<button label="Popup" onClick="inner.doPopup();" />
+					<button label="Embed" onClick="inner.doEmbedded();" />
+					<button label="showPosition"
+						onClick='alert(inner.left + "," + inner.top)' />
+				</window>
+			</div>
+			<button id="btn" label="left,center"
+				onClick="win.position = &quot;left,center&quot;;" />
+			<button label="right,bottom"
+				onClick="win.position = &quot;right,bottom&quot;;" />
+			<button label="center"
+				onClick="win.position = &quot;center&quot;;" />
+
+			<button label="Modal" onClick="win.doModal();" />
+			<button label="Overlap" onClick="win.doOverlapped();" />
+			<button label="Popup" onClick="win.doPopup();" />
+			<button label="Embed" onClick="win.doEmbedded();" />
+
+			<separator bar="true" />
+			<button label="addBefore">
+				<attribute name="onClick">
+					Label l = new Label("addBefore");
+					inner.parent.insertBefore(l, inner);
+				</attribute>
+			</button>
+
+			<button label="addAfter">
+				<attribute name="onClick">
+					new Label("addAfter").setParent(inner.parent);
+				</attribute>
+			</button>
+			<button label="deleteInnerAndaddBefore">
+				<attribute name="onClick">
+					Label l = new Label("deleteInnerAndaddBefore");
+					inner.parent.insertBefore(l, inner); inner.detach();
+				</attribute>
+			</button>
+		</window>
+	</west>
+	<center border="0">
+		<vbox id="vb">
+	<zscript>
+Window inner = win.getFellow("inner");
+Window in2 = inner.getFellow("in2");
+Window in3 = in2.getFellow("in3");
+	</zscript>
+			<hbox>
+	<button label="toggle outer" onClick="win.visible = !win.visible"/>
+	<button label="toggle inner" onClick="inner.visible = !inner.visible"/>
+	<button label="toggle inner2" onClick="in2.visible = !in2.visible"/>
+	<button label="toggle inner3" onClick="in3.visible = !in3.visible"/>
+			</hbox>
+			<hbox>
+	<button label="move inner to top" onClick="inner.setParent(vb);"/>
+			</hbox>
+		</vbox>
+	</center>
+</borderlayout>
+

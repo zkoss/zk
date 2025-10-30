@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B90-ZK-4427.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 27 15:53:06 CST 2019, Created by jameschu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label>Click button, and you should see value 10~100,70~100</label>
+	<multislider>
+		<sliderbuttons id="s1" startValue="10" endValue="30"/>
+		<sliderbuttons id="s2" startValue="70" endValue="100"/>
+	</multislider>
+	<button onClick='Clients.log(s1.startValue + "~" + s1.endValue + "," + s2.startValue + "~" + s2.endValue)' label="show values"/>
+</zk>

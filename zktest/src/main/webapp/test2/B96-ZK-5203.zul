@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5203.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2022/10/6, Created by jumperchen
+
+Copyright (C) 2022 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click the button "create()"
+		2. The height of the window content (black border) cannot be a single line (i.e. 0 height)
+	</label>
+	<div sclass="invisibleWidget">
+		<div id="parent">
+		</div>
+	</div>
+	z-window-content has no height specified
+	<button label="create" onClick="create()"/>
+	<zscript><![CDATA[
+public void create(){
+    Window win = new Window();
+    win.setTitle("my title");
+    win.setBorder("normal");
+    win.setWidth("50%");
+    win.setClosable(true);
+    win.setHeight("50%");
+    Div box = new Div();
+    box.setSclass("content-box");
+    win.appendChild(box);
+    win.doHighlighted();
+    parent.appendChild(win);
+    //workaround 1
+    //win.setWidgetListener("onBind", "zWatch.fireDown('onSize', this)"); //fire onSize for ZK-5203
+}
+        ]]></zscript>
+	<style>
+		.invisibleWidget{
+			display: none;
+		}
+		.content-box{
+			border: 2px solid;
+			height: 100%;
+			overflow: auto;
+		}
+		/* workaround 2
+		.z-window-content{
+			height: 100%;
+		}
+		*/
+	</style>
+</zk>

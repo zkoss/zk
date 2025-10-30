@@ -1,0 +1,338 @@
+@import "~./zul/less/_header.less";
+
+//reset table
+.resetTable() {
+	table {
+		border-spacing: 0;
+		th, td {
+			background-clip: padding-box;
+			padding: 0;
+		}
+		th {
+			text-align: inherit;
+		}
+	}
+}
+
+//tree
+.z-tree {
+	background: @maskBackgroundColor;
+	border: 1px solid @baseBorderColor;
+	overflow: hidden;
+	zoom: 1;
+	&:focus-visible {
+		box-shadow: @meshFocusBoxShadow;
+		transition: unset;
+	}
+	//tree header div
+	&-header {
+		width: 100%;
+		position: relative;
+		overflow: hidden;
+		.resetTable();
+	}
+	//tree body div
+	&-body {
+		position: relative;
+		overflow: hidden;
+		.resetTable();
+		//ZK-3263, ZK-4733: scroll issue (chrome scroll anchor bug)
+		overflow-anchor: none;
+	}
+	&-body &-emptybody td {
+		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @disabledColor);
+		text-align: left;
+		height: 1px;
+		padding: 12px 16px;
+	}
+	//tree footer div
+	&-footer {
+		overflow: hidden;
+		white-space: nowrap;
+		.resetTable();
+
+		.z-treefooter {
+			overflow: hidden;
+			background: @meshFootBackgroundColor;
+			border-top: 1px solid @baseBorderColor;
+		}
+
+		.z-treefoot-bar {
+			background: @meshFootBackgroundColor;
+		}
+	}
+	// ZK-3138: ROD loading indicator
+	&-loading {
+		background: transparent no-repeat center;
+		.encodeThemeURL(background-image, @loadingAnimationLoad);
+	}
+	//tree open icon and indent space
+	&-icon,
+	&-line {
+		.displaySize(inline-block, @baseIconWidth, @baseIconHeight);
+		line-height: @baseIconHeight;
+		vertical-align: middle;
+	}
+	&-icon {
+		.iconFontStyle(@fontSizeLarge, @textColorDefault);
+		text-align: center;
+		cursor: pointer;
+	}
+}
+//content
+.z-treecol-content,
+.z-treecell-content,
+.z-treefooter-content {
+	.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @baseTextColor);
+	padding: @meshBodyPadding;
+	line-height: @meshContentLineHeight;
+	overflow: hidden;
+}
+.z-treecol-content {
+	color: @meshTitleColor;
+	position: relative;
+}
+.z-treecell-content {
+	line-height: @treecellContentLineHeight;
+}
+.z-treefooter-content {
+	color: @textColorLight;
+}
+.z-treecell-text {
+	vertical-align: middle;
+	margin-left: 8px;
+}
+//treecols
+.z-treecols {
+	th:first-child {
+		border-left: none;
+		// B50-3306729: the first header should have border-left when the first column is covered with other header
+		&.z-treecols-border {
+			border-left: 1px solid @meshTitleBorderColor;
+		}
+	}
+	&-bar {
+		background: @meshTitleBackgroundColor;
+		border-left: 1px solid @meshTitleBorderColor;
+		border-bottom: 1px solid @meshTitleBorderColor;
+	}
+}
+.z-treecol {
+	background: @meshTitleBackgroundColor;
+	border-left: 1px solid @meshTitleBorderColor;
+	border-bottom: 1px solid @meshTitleBorderColor;
+	padding: 0;
+	position: relative;
+	overflow: hidden;
+	white-space: nowrap;
+	&:focus-visible {
+		box-shadow: @meshTitleFocusBoxShadow;
+		transition: unset;
+	}
+	&-sort {
+		cursor: pointer;
+
+		.z-treecol-sorticon {
+			color: @meshTitleColor;
+			position: absolute;
+			top: -7px;
+			left: 50%;
+			.transform('translateX(-50%)');
+
+			:active {
+				background: rgba(0, 0, 0, 0);
+			}
+		}
+	}
+	&-sizing,
+	&-sizing .z-treecol-content {
+		cursor: col-resize;
+	}
+	&-checkable {
+		.displaySize(inline-block, @checkboxSize, @checkboxSize);
+		.iconFontStyle(@checkedIconSize, @checkedColor);
+		border: 1px solid @checkedBorderColor;
+		background: @checkedBackgroundColor;
+		vertical-align: text-top;
+		margin-right: 8px;
+		.borderRadius(@baseBorderRadius);
+
+		&:focus-visible {
+			box-shadow: @meshTitleFocusBoxShadow;
+			transition: unset;
+		}
+		.z-treecol-icon {
+			display: none;
+			cursor: default;
+		}
+		&.z-treecol-checked .z-treecol-icon {
+			display: block;
+		}
+	}
+	//partial
+	&-partial {
+		> .z-treecol-icon {
+			color: @checkedColor;
+			display: block;
+
+			&.z-icon-minus {} //for checkbox partial selected state, use font-awesome
+		}
+	}
+}
+//paging
+.z-tree-paging {
+	&-top {
+		border-bottom: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+	&-bottom {
+		border-top: 1px solid @pagingBorderColor;
+		overflow: hidden;
+		width: 100%;
+	}
+}
+.z-tree-autopaging .z-treecell-content {
+	height: @meshAutoPagingRowHeight;
+	padding: @meshAutoPagingRowPadding;
+	line-height: @meshAutoPagingRowLineHeight;
+	overflow: hidden;
+}
+// ZK-2151: use strict selector to prevent nest problem
+//tree row and cell
+.z-treerow {
+	//tree cell
+	.z-treecell {
+		border-top: 1px solid @meshContentBorderColor;
+		overflow: hidden;
+		cursor: pointer;
+		background: @meshBackgroundColor;
+		position: relative;
+		z-index: 0;
+	}
+
+	&-focus {
+		> .z-treecell {
+			.treeitemFocusBorder(@left: 0, @right: 0) {
+				box-shadow: inset 0 2px 0 0 @meshCellFocusBoxShadowColor,
+							inset 0 -2px 0 0 @meshCellFocusBoxShadowColor,
+							inset @left 0 0 0 @meshCellFocusBoxShadowColor,
+							inset -@right 0 0 0 @meshCellFocusBoxShadowColor;
+			}
+			.treeitemFocusBorder();
+			&:first-child {
+				.treeitemFocusBorder(@left: 2px);
+			}
+			&:last-child {
+				.treeitemFocusBorder(@right: 2px);
+			}
+			> .z-treecell-content {
+				color: @hoverColor;
+			}
+		}
+	}
+
+	&:hover {
+		> .z-treecell {
+			background: @hoverBackgroundColor;
+			> .z-treecell-content {
+				color: @hoverColor;
+			}
+		}
+	}
+	//check mark
+	&-checkable {
+		.displaySize(inline-block, @checkboxSize, @checkboxSize);
+    	.iconFontStyle(@checkedIconSize, @checkedColor);
+    	border: 1px solid @checkedBorderColor;
+    	background: @checkedBackgroundColor;
+    	vertical-align: text-top;
+    	margin-right: 8px;
+    	.borderRadius(@baseBorderRadius);
+
+		&.z-treerow-radio {
+			.borderRadius(50%);
+		}
+		.z-treerow-icon {
+			display: none;
+			cursor: default;
+		}
+	}
+	//selected tree cell
+	&.z-treerow-selected {
+		> .z-treecell {
+			background: @selectedBackgroundColor;
+
+			> .z-treecell-content {
+				color: @selectedColor;
+			}
+		}
+		
+		&:hover {
+			> .z-treecell {
+				background: @selectedHoverBackgroundColor;
+				> .z-treecell-content {
+					color: @selectedHoverColor;
+				}
+			}
+		}
+	}
+	&.z-treerow-selected.z-treerow-focus {
+		> .z-treecell {
+			background: @selectedFocusBackgroundColor;
+
+			> .z-treecell-content {
+				color: @selectedFocusColor;
+			}
+		}
+		&:hover {
+			> .z-treecell {
+				background: @selectedHoverBackgroundColor;
+				> .z-treecell-content {
+					color: @selectedHoverColor;
+				}
+			}
+		}
+	}
+	//selected check mark
+	&-selected {
+		> .z-treecell > .z-treecell-content 
+			> .z-treerow-checkable .z-treerow-icon {
+			color: @checkedColor;
+			display: block;
+			
+			&.z-icon-check {} //for checkbox, use font-awesome
+			&.z-icon-radio { //for radio
+				.size(10px, 10px);
+				.borderRadius(50%);
+				background: @checkedColor;
+				position: relative;
+				top: 50%;
+				left: 50%;
+				.transform('translate(-50%, -50%)');
+			}
+		}
+	}
+	//disabled
+	&.z-treerow-disabled {
+		* {
+			color: @disabledColor !important;
+			cursor: default !important;
+		}
+	}
+	//partial
+	&-partial {
+		> .z-treecell > .z-treecell-content
+		> .z-treerow-checkable .z-treerow-icon {
+			color: @checkedColor;
+			display: block;
+
+			&.z-icon-minus {} //for checkbox partial selected state, use font-awesome
+		}
+	}
+}
+// hidden col
+.z-treecell-hidden-col {
+	white-space: nowrap;
+	overflow: hidden;
+}

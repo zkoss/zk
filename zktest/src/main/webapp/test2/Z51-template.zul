@@ -1,0 +1,47 @@
+<zk>
+<vlayout>
+	<template name="t1">
+		This is date: <datebox/>
+		This is native:
+			<n:ol xmlns:n="native">
+				<n:li>first item</n:li>
+				<n:li>second item</n:li>
+			</n:ol>
+
+		This is listbox
+		<zscript>
+		ListModel infos = new ListModelArray(
+			new String[][] {
+				{"Apple", "10kg"},
+				{"Orange", "20kg"},
+				{"Mango", "12kg"}
+			});
+		</zscript>
+		<listbox model="${infos}">
+			<listhead>
+				<listheader label="Name"/>
+			</listhead>
+		</listbox>
+	</template>
+
+	<button label="create after from template"
+		onClick='self.parent.getTemplate("t1").create(self.parent, null, null)'/>
+	<button label="create before from template"
+		onClick='self.parent.getTemplate("t1").create(self.parent, self, null)'/>
+	<button label="create 1 into blue div">
+		<attribute name="onClick"><![CDATA[
+			Component[] cs = self.parent.getTemplate("t1").create(null, null, null);
+			for (int j = 0; j < cs.length; ++j)
+				div.appendChild(cs[j]);
+		]]></attribute>
+	</button>
+	<button label="create 2 into blue div">
+		<attribute name="onClick"><![CDATA[
+		Div p = new Div();
+		Component[] cs = self.parent.getTemplate("t1").create(p, null, null);
+		div.appendChild(p);
+		]]></attribute>
+	</button>
+</vlayout>
+<div style="border:1px solid blue" id="div"/>
+</zk>

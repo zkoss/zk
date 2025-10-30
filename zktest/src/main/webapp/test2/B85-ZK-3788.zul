@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B85-ZK-3788.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Wed Jan 24 6:45 PM:59 CST 2018, Created by klyve
+
+Copyright (C) 2018 Potix Corporation. All Rights Reserved.
+
+-->
+
+<zk xmlns:n="native">
+
+    <apply template="frozen-grid" id="outDiv" title="out of div:"/>
+
+    <template name="frozen-grid">
+        <n:h3>${title}</n:h3>
+        <grid width="500px">
+            <frozen columns="2"/>
+            <columns>
+                <column width="50px">ID</column>
+                <column width="100px">Priority</column>
+                <column width="100px">Status</column>
+                <column width="250px">Summary</column>
+                <column width="350px">Detail</column>
+                <column width="150px">Group</column>
+                <column width="100px">Assign</column>
+            </columns>
+            <rows>
+                <row>
+                    <cell>0001</cell>
+                    <cell>1</cell>
+                    <cell>closed</cell>
+                    <cell>Fix login issue</cell>
+                    <cell>Login does not work at all</cell>
+                    <cell>Account</cell>
+                    <cell>Bob</cell>
+                </row>
+            </rows>
+        </grid>
+    </template>
+
+    <label multiline="true">
+        1. The normal one is apply in div can show the scroll bar in grid.
+        2. The abnormal one(but fixed) is out of the div is without scroll bar.
+        3. You should see the grid with the scroll bar.
+    </label>
+</zk>

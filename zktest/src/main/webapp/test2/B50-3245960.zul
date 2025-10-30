@@ -1,0 +1,8 @@
+<zk xmlns:h="xhtml">
+	<html><![CDATA[
+		<ol>
+			<li>You should see only "text" in the textarea, otherwise it is a bug.</li>
+		</ol>
+	]]></html>
+	<h:textarea>text</h:textarea>
+</zk>

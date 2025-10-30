@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B80-ZK-3204.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu, Jun  2, 2016  5:45:37 PM, Created by Sefi
+
+Copyright (C)  Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1.Scroll down to the bottom of the page
+		2.click arrow button on the right of comboBox, you should see popup was shown above of comboBox
+		3.type 'a' in the comboBox, the popup should filter items that start with 'a', and popup's bottom attach the comboBox's top
+		4.delete all text in comboBox, popup should not cover comboBox
+	</label>
+	<div>
+	    <separator spacing="1500px" />
+	    <vlayout>
+	        <separator/>
+	        <combobox onChanging='
+	        	boolean blank = event.getValue() == null || event.getValue().equals("");
+	        	Comboitem item = self.getItemAtIndex(2);
+	        	item.setVisible(blank);
+	        	'>
+	        	<comboitem label="aaaa"/>
+	        	<comboitem label="abbb"/>
+	        	<comboitem label="bccc"/>
+	        	<comboitem label="addd"/>
+	        	<comboitem label="aeee"/>
+	        </combobox>
+	    </vlayout>
+	</div>
+</zk>

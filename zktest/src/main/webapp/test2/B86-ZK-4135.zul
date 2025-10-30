@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4135.zul
+
+        Purpose:
+                
+        Description:
+                
+        History:
+                Tue Jan 08 14:43:30 CST 2019, Created by charlesqiu
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.log(message);
+		};
+	]]></script>
+	<label multiline="true">
+		1. Click detach frozen
+		2. Frozen should be detached without error
+	</label>
+	<listbox id="listbox">
+		<frozen columns="1" id="frozen"/>
+		<auxhead>
+			<auxheader rowspan="2" label="A"/>
+			<auxheader label="B"/>
+		</auxhead>
+		<auxhead>
+			<auxheader label="C"/>
+		</auxhead>
+		<listhead>
+			<listheader label="col 1"/>
+			<listheader label="col 2"/>
+		</listhead>
+	</listbox>
+	<button label="detach listbox" onClick="listbox.detach();"/>
+	<button label="detach frozen" onClick="frozen.detach();"/>
+</zk>

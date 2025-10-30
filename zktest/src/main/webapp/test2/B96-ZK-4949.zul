@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4949.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Tue Jul 13 17:58:50 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<script><![CDATA[
+		window.onerror = function (message, source, lineno, colno, error) {
+			zk.error(message);
+		};
+
+		zk.afterLoad("zk", function () {
+			var _xzjq = {};
+			zk.override(zjq.prototype, _xzjq, {
+				undoVParent: function() {
+					this.jq[0] = null; // emulate missing element
+					return _xzjq.undoVParent.apply(this, arguments);
+				}
+			 });
+		});
+	]]></script>
+	<label>
+		click the red label to open popup, then click the detach popup button, you shall not see any error.
+	</label>
+	<separator/>
+	<label id="lb" value="Click Me! (popup)" popup="pp" style="color:red;"/>
+	<popup id="pp" width="300px">
+		<button id="btn" label="detach popup" onClick="pp.detach()"/>
+		Popup
+	</popup>
+</zk>

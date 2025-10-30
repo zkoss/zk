@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B86-ZK-4269.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Apr 30 10:28:39 CST 2019, Created by rudyhuang
+
+Copyright (C) 2019 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <label multiline="true">
+        1. When entering this page, the cropper should select a 250x250 rectangle by default.
+        2. If this bug exists, you can see a toolbar but no any rectangle.
+    </label>
+    <cropper w="250" h="250" x="0" y="0" src="/test2/img/sun.jpg" />
+</zk>

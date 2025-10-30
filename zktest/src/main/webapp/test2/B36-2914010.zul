@@ -1,0 +1,6 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+Scroll to the bottom, click the button "show messsagebox", the messagebox should display in the center of the window.
+<div height='1500px'/>
+<button label='show messsagebox' onClick='alert("Test")'/>
+</zk>

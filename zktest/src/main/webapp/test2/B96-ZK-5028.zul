@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B96-ZK-5028.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		2021/11/12, Created by jumperchen
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+    <button label="replace treecols"
+            onClick='
+            Treecols tco = tr.getTreecols();
+            tco.detach();
+            tr.appendChild(tco);
+    '/>
+    <button label="replace listhead"
+            onClick='
+           Listhead lco = list.getListhead();
+            lco.detach();
+            list.appendChild(lco);
+    '/>
+    <button label="replace columns"
+            onClick='
+           Columns gco = grid.getColumns();
+            gco.detach();
+            grid.appendChild(gco);
+    '/>
+    <tree id="tr" hflex="min">
+        <treecols>
+            <treecol label="col-1"/>
+            <treecol label="col-2"/>
+        </treecols>
+    </tree>
+    <listbox id="list" hflex="min">
+        <listhead>
+            <listheader label="col-1"/>
+            <listheader label="col-2"/>
+        </listhead>
+    </listbox>
+    <grid id="grid" hflex="min">
+        <columns>
+            <column label="col-1"/>
+            <column label="col-2"/>
+        </columns>
+    </grid>
+</zk>

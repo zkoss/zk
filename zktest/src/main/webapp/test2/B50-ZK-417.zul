@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B50-ZK-417.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Sep 15 15:46:36 TST 2011, Created by jumperchen
+
+Copyright (C) 2011 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please keep the scrollbar to scroll to the end of the list and then scroll to the top of the list.(in Chrome, if you don't release the scrollbar, it should keep the scrollbar being moved, otherwise, it is a bug)
+<zscript>
+Object[] o2 = new Object[300];
+</zscript>
+<grid id="grid2" width="100px" height="300px">
+<custom-attributes org.zkoss.zul.grid.rod="true" />
+<rows>
+<row forEach="${o2}">item</row>
+</rows>
+</grid>
+</zk>

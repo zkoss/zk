@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-4937.zul
+
+		Purpose:
+		
+		Description:
+		
+		History:
+				Fri Jun 25 12:14:56 CST 2021, Created by leon
+
+Copyright (C) 2021 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		check developer tool > network tab
+		check the response header "content-type" of all request to *.eot and *.woff
+		you shall see the contentType:
+		1. *.woff => font/woff
+		2. *.eot => application/vnd.ms-fontobject
+	</label>
+	<button iconSclass="z-icon-home"/>
+</zk>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F95-ZK-4622.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+			Thu Jul 09 17:18:57 CST 2020, Created by jameschu
+
+Copyright (C) 2020 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<apply templateURI="/test2/include/themes.zul"/>
+	<!--		<custom-attributes org.zkoss.zul.frozen.smooth="false"/>-->
+	<label> No '.z-{mesh}-header-broder' div appear.</label>
+	<listbox id="box" width="300px">
+		<listhead sizable="true">
+			<listheader label="name" sort="auto" width="100px" />
+			<listheader label="gender" sort="auto" width="200px" />
+			<listheader label="gender" sort="auto" width="200px" />
+		</listhead>
+		<frozen columns="1" />
+		<listitem>
+			<listcell label="Mary" />
+			<listcell label="FEMALE" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="John" />
+			<listcell label="MALE" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Jane" />
+			<listcell label="FEMALE" />
+			<listcell label="FEMALE" />
+		</listitem>
+		<listitem>
+			<listcell label="Henry" />
+			<listcell label="MALE" />
+			<listcell label="FEMALE" />
+		</listitem>
+	</listbox>
+	<zscript>
+		List rowData = Collections.nCopies(46, "row");
+		List data = Collections.nCopies(20, "column");
+	</zscript>
+	<grid height="500px">
+		<frozen columns="1"/>
+		<columns >
+			<column label="first" width="400px"/>
+			<column forEach="${data}" label="${each} ${forEachStatus.index + 1}" width="200px"/>
+		</columns>
+		<rows>
+			<row forEach="${rowData}" >
+				<label value="${each} ${forEachStatus.index + 1}"></label>
+				<cell forEach="${data}" width="200px">
+					<label value="${each} ${forEachStatus.index + 1}"/>
+				</cell>
+			</row>
+		</rows>
+	</grid>
+	<tree width="500px">
+		<frozen columns="1" start="2" />
+		<treecols>
+			<treecol label="hierarchy below" width="300px" />
+			<treecol id="col2013_10" label="Oct 2013" width="100px" />
+			<treecol id="col2013_11" label="Nov 2013" width="100px" />
+			<treecol id="col2013_12" label="Dec 2013" width="100px" />
+			<treecol label="Quarter" width="60px" />
+			<treecol id="col2014_01" label="Jan 2014" width="100px" />
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="1.2.2 AAAAA_bbbbb_details 2" />
+					<treecell label="80" />
+					<treecell label="90" />
+					<treecell label="100" />
+					<treecell label="270" />
+					<treecell label="120" />
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+</zk>

@@ -1,0 +1,16 @@
+<zk>
+	<label multiline="true">
+	1. Move Window C to center.
+	2. Overlap Window B on Window C partially.
+	Expected: Window B should be the topmost window.
+	</label>
+	<window sizable="true" mode="overlapped" border="normal" title="Window A" closable="true">
+		<label value="Hello World"/>
+	</window>
+	<window sizable="true" mode="overlapped" border="normal" title="Window B" closable="true">
+		<label value="Hello World"/>
+	</window>
+	<window sizable="true" mode="overlapped" border="normal" title="Window C" closable="true">
+		<label value="Hello World"/>
+	</window>
+</zk>
