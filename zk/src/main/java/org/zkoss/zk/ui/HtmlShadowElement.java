@@ -1209,6 +1209,23 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 		}
 	}
 
+	private void adjustBoundaries(Component child) {
+		if (_firstInsertion != null && _firstInsertion.getParent() == null) {
+			_firstInsertion = child;
+			if (_lastInsertion == null || _lastInsertion.getParent() == null) {
+				_lastInsertion = child;
+			}
+			return;
+		}
+
+		if (_lastInsertion != null && _lastInsertion.getParent() == null) {
+			_lastInsertion = child;
+			if (_firstInsertion == null || _firstInsertion.getParent() == null) {
+				_firstInsertion = child;
+			}
+		}
+	}
+
 	/**
 	 * A help class for an insertion direction.
 	 * @author jumperchen
@@ -1355,6 +1372,7 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 					asShadow(getParent()).stretchRange(_firstInsertion, _lastInsertion);
 				}
 
+				adjustBoundaries(child);
 				// a callback
 				onHostChildAdded(child);
 				return; // finish
