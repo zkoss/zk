@@ -1147,9 +1147,8 @@ public class Combobox extends Textbox {
 		super.onChildRemoved(child);
 		_syncItemIndicesLater = true;
 		if (child == _selItem) {
-			// Bug B60-ZK-1202.zul
-			_selItem = null;
-			schedSyncValueToSelection();
+			// Bug B60-ZK-1202.zul and B103-ZK-5207.zul
+			setSelectedItem(null);
 		}
 		smartUpdate("repos", true);
 	}
