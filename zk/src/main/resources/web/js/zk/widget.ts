@@ -4576,8 +4576,9 @@ new zul.wnd.Window({
 				lsns = this._lsns[evtnm],
 				len = lsns ? lsns.length : 0;
 			if (len) {
-				for (var j = 0; j < len;) {
-					var inf = lsns[j++], o = inf[0] as zk.Widget;
+				var lsnsCopy = lsns.slice();
+				for (var j = 0; j < len; j++) {
+					var inf = lsnsCopy[j], o = inf[0] as zk.Widget;
 					(inf[1] as CallableFunction || o[evtnm]).bind(o)(evt);
 					if (evt.stopped) return evt; //no more processing
 				}
