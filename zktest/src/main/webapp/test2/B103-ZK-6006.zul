@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-6006.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Oct 30 17:39:00 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. change the value in the left timepicker
+        2. press the "Show value" button
+        3. the correct time should be displayed instead of the default time
+    </label>
+    <nodom viewModel="@id('mainVm') @init('org.zkoss.zktest.test2.B103_ZK_6006_VM')">
+        <groupbox>
+            <caption label="Change values then click button to show bound values from viewmodel"/>
+            Time: <timepicker interval="300" valueInLocalTime="@bind(mainVm.timeValue)"/>
+            <!--Date: <timepicker interval="300" valueInLocalDate="@bind(mainVm.dateValue)"/>-->
+            DateTime: <timepicker interval="300" valueInLocalDateTime="@bind(mainVm.dateTimeValue)" readonly="false"/>
+            <button label="Show value" onClick="@command('showValue')"/>
+        </groupbox>
+    </nodom>
+</zk>
