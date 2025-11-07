@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5254.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 06 22:29:58 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <window border="normal" title="hello" apply="org.zkoss.zktest.test2.B103_ZK_5254Composer">
+        <label multiline="true">
+            1. scroll down the tree and select an item
+            2. click on the "Clear tree selection" button
+            3. the scroll position of the tree should remain unchanged
+        </label>
+        <vlayout>
+            <separator/>
+            <button id="btn" label="Clear tree selection" />
+            <button id="btn2" label="Clear listbox selection" />
+            <div/>
+        </vlayout>
+        <tree id="theTree" width="200px" height="300px" />
+        <listbox id="lb" width="200px" height="300px" />
+    </window>
+</zk>
