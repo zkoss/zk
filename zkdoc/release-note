@@ -7,6 +7,7 @@ ZK 10.3.0
   ZK-5973: Apache Commons FileUpload DoS Vulnerability
   ZK-5972: Suppress false-positive scanner alerts in PE/EE
   ZK-5982: HeaderWidget _getWidth undefined properties
+  ZK-5818: drag and drop a panel causes a NullPointerException
 
 * Upgrade Notes
 
