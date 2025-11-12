@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5417.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Nov 12 16:42:21 CST 2025, Created by peaker
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Scroll to the bottom of the page.
+        2. Open the cascader, expand node 2, then expand node 2.2.
+        3. The popup window should reposition itself, since its height is too large and should not stretch the original page height.
+    </label>
+    <div id="mainDiv">
+        <div style="height:100vh; background-color: #dfe4ea;"></div>
+        <cascader id="cascader" width="360px"/>
+        <separator/>
+        <button id="selectNodeInModel" label="Select 'Node 2.3' in Model"/>
+        <div style="height:200px; background-color: #dfe4ea;"></div>
+
+        <zscript><![CDATA[
+            import org.zkoss.zul.*;
+            import org.zkoss.zk.ui.event.*;
+            import org.zkoss.zk.ui.util.Clients;
+            import java.util.*;
+            import java.util.stream.Collectors;
+
+            class MyNodeData {
+                String label;
+                MyNodeData(String label) {
+                    this.label = label;
+                }
+                String getLabel() {
+                    return label;
+                }
+                public String toString() {
+                    return "MyNodeData{label='" + label + "'}";
+                }
+            }
+
+            DefaultTreeNode createLeafNode(String label) {
+                return new DefaultTreeNode(new MyNodeData(label));
+            }
+
+            DefaultTreeNode createParentNode(String label, List children) {
+                return new DefaultTreeNode(new MyNodeData(label), children);
+            }
+
+            List node2_2_children = new ArrayList();
+            node2_2_children.add(createLeafNode("Node-2.2.1"));
+            node2_2_children.add(createLeafNode("Node-2.2.2"));
+            node2_2_children.add(createLeafNode("Node-2.2.3"));
+            node2_2_children.add(createLeafNode("Node-2.2.4"));
+            node2_2_children.add(createLeafNode("Node-2.2.5"));
+            node2_2_children.add(createLeafNode("Node-2.2.6"));
+            node2_2_children.add(createLeafNode("Node-2.2.7"));
+            node2_2_children.add(createLeafNode("Node-2.2.8"));
+            node2_2_children.add(createLeafNode("Node-2.2.9"));
+            node2_2_children.add(createLeafNode("Node-2.2.10"));
+
+            List node2_3_2_children = new ArrayList();
+                node2_3_2_children.add(createLeafNode("Node-2.3.2.1"));
+                node2_3_2_children.add(createLeafNode("Node-2.3.2.2"));
+            List node2_3_children = new ArrayList();
+                node2_3_children.add(createLeafNode("Node-2.3.1"));
+                node2_3_children.add(createParentNode("Node-2.3.2", node2_3_2_children));
+                node2_3_children.add(createLeafNode("Node-2.3.3"));
+            List node2_children = new ArrayList();
+                node2_children.add(createLeafNode("Node-2.1"));
+                node2_children.add(createParentNode("Node-2.2", node2_2_children));
+                node2_children.add(createParentNode("Node-2.3", node2_3_children));
+                node2_children.add(createLeafNode("Node-2.4"));
+            List rootChildren = new ArrayList();
+                rootChildren.add(createLeafNode("Node-1"));
+                rootChildren.add(createParentNode("Node-2", node2_children));
+                rootChildren.add(createLeafNode("Node-3"));
+                rootChildren.add(createLeafNode("Node-4"));
+            DefaultTreeNode root = createParentNode("root", rootChildren);
+            model = new DefaultTreeModel(root);
+
+            cascader.setPlaceholder("select your node");
+            cascader.setModel(model);
+            itemRenderer = new org.zkoss.zul.ItemRenderer() {
+                public String render(org.zkoss.zk.ui.Component comp, Object data, int index) {
+                    TreeNode node = (TreeNode) data;
+                    MyNodeData nodeData = (MyNodeData) node.getData();
+                    return nodeData.getLabel();
+                }
+            };
+            cascader.setItemRenderer(itemRenderer);
+
+            itemConverter = new org.zkoss.util.Converter() {
+                public Object coerceToUi(Object nodePath, org.zkoss.zk.ui.Component comp) {
+                    if (nodePath == null) return "";
+                    Collection nodes = (Collection) nodePath;
+                    StringBuilder sb = new StringBuilder();
+                    Iterator it = nodes.iterator();
+                    while (it.hasNext()) {
+                        TreeNode node = (TreeNode) it.next();
+                        MyNodeData nodeData = (MyNodeData) node.getData();
+                        sb.append(nodeData.getLabel());
+                        if (it.hasNext()) {
+                            sb.append(" > ");
+                        }
+                    }
+                    return sb.toString();
+                }
+                public Object coerceToBean(Object obj, org.zkoss.zk.ui.Component comp) {
+                    return obj;
+                }
+            };
+
+            cascader.setItemConverter(itemConverter);
+                selectNodeInModel.addEventListener("onClick", new org.zkoss.zk.ui.event.EventListener() {
+                    public void onEvent(org.zkoss.zk.ui.event.Event event) {
+                        model.addSelectionPath(new int[] { 1, 2 });
+                    }
+            });
+
+            cascader.addEventListener("onSelect", new org.zkoss.zk.ui.event.EventListener() {
+                public void onEvent(org.zkoss.zk.ui.event.Event event) {
+                    org.zkoss.zk.ui.event.SelectEvent selectEvent = (org.zkoss.zk.ui.event.SelectEvent) event;
+                    String msg = "selected item: " + selectEvent.getSelectedObjects() + "<br/><br/>" +
+                            "selected path: " + cascader.getSelectedItems();
+                    Clients.showNotification(msg, "info", null, "middle_center", 3000);
+                }
+            });
+        ]]></zscript>
+    </div>
+</zk>
