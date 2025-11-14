@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B102-ZK-5955.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Oct 26 12:31:53 CST 2025, Created by peaker
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Click the button. The inner detail should be opened without error, and child nodes should exist properly.
+        2. If you see no error, the test is passed.
+    </label>
+    <button id="btn" label="open detail and render inner grid"
+            onClick='outerDetail.setOpen(true);
+                     Events.postEvent("onLoadDetailContent", outerDetail, null);
+                    '/>
+    <grid>
+        <columns>
+            <column label="" width="50px"/>
+            <column label="col1"/>
+            <column label="col2"/>
+        </columns>
+        <rows>
+            <row>
+                <detail id="outerDetail"
+                        fulfill="self.onLoadDetailContent"
+                        forward="onOpen=self.onLoadDetailContent">
+                    <grid>
+                        <columns>
+                            <column label="" width="50px"/>
+                            <column label="col1"/>
+                            <column label="col2"/>
+                        </columns>
+                        <rows>
+                            <row>
+                                <detail open="true">
+                                    any content
+                                </detail>
+                                <cell>regular cell</cell>
+                                <cell>regular cell</cell>
+                            </row>
+                        </rows>
+                    </grid>
+                </detail>
+                <cell>regular cell</cell>
+                <cell>regular cell</cell>
+            </row>
+        </rows>
+    </grid>
+</zk>
