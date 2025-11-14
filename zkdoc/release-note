@@ -10,6 +10,7 @@ ZK 10.3.0
   ZK-5981: ZK-5370 causes JS error if component has client data-handler onBind listener
   ZK-5864: cannot load zk.debug
   ZK-5859: detach a button causes a javascript error
+  ZK-5800: css flex listen then unlisten immediately causes listeners to not be removed
 
 * Upgrade Notes
 
