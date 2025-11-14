@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5800.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Oct 29 17:22:46 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+    <label multiline="true">
+        1. Set breakpoints in window.doFlex() after zk.widget_._listenFlex(wgt); and after zk.widget_._unlistenFlex(wgt);.
+        2. Click the "Do Flex" button at the top of the window.
+        3. In the debugger Scopes panel, check zWatch._watches.onSize to verify that listeners are properly registered after _listenFlex.
+        4. Resume execution and confirm that after _unlistenFlex, the listeners are successfully removed and no duplicates or memory leaks remain.
+    </label>
+    <script><![CDATA[
+        function doFlex(wgt){
+            delete wgt._cssFlexApplied;
+            zk.widget_._listenFlex(wgt);
+            zk.widget_._unlistenFlex(wgt);
+            zWatch.fire("onSize", wgt);
+        }
+	]]>
+    </script>
+    <div hflex="1" vflex="1" id="tg" w:onBind="doFlex(this);">
+        <button label="Do Flex" w:onClick="doFlex(zk.$('$tg'))"/>
+        <div hflex="1" vflex="1">foo</div>
+        <div hflex="1" vflex="1">foo</div>
+        <div hflex="1" vflex="1">foo</div>
+        <div hflex="1" vflex="1">foo</div>
+        <div hflex="1" vflex="1">foo</div>
+        <div hflex="1" vflex="1">foo</div>
+        <div hflex="1" vflex="1">foo</div>
+        <div hflex="1" vflex="1">foo</div>
+    </div>
+</zk>

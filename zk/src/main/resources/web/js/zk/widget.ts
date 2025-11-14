@@ -364,23 +364,24 @@ function _listenFlex(wgt: zk.Widget & {_flexListened?: boolean}): void {
 		wgt._flexListened = true;
 	}
 }
+
 function _unlistenFlex(wgt: zk.Widget): void {
 	if (wgt._flexListened) {
-		var cssFlexApplied = wgt._cssFlexApplied;
-		if (cssFlexApplied) {
-			//remove css flex flag
+		var parent = wgt.parent,
+			cssFlexEnabled = wgt._cssflex && parent && (parent instanceof zk.Page || parent.getFlexContainer_() != null);
+		if (cssFlexEnabled)
+			zWatch.unlisten({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
+		wgt.unlistenOnFitSize_();
+		if (cssFlexEnabled) {
 			zWatch.unlisten({onSize: [wgt, zFlex.applyCSSFlex]});
 			delete wgt._cssFlexApplied;
 		} else {
-			zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
 			zWatch.unlisten({
 				_beforeSizeForRead: [wgt, zFlex.beforeSizeForRead],
 				beforeSize: [wgt, zFlex.beforeSize]
 			});
+			zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
 		}
-		wgt.unlistenOnFitSize_();
-		if (cssFlexApplied)
-			zWatch.unlisten({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
 		delete wgt._flexListened;
 	}
 }
@@ -4576,8 +4577,9 @@ new zul.wnd.Window({
 				lsns = this._lsns[evtnm],
 				len = lsns ? lsns.length : 0;
 			if (len) {
-				for (var j = 0; j < len;) {
-					var inf = lsns[j++], o = inf[0] as zk.Widget;
+				var lsnsCopy = lsns.slice();
+				for (var j = 0; j < len; j++) {
+					var inf = lsnsCopy[j], o = inf[0] as zk.Widget;
 					(inf[1] as CallableFunction || o[evtnm]).bind(o)(evt);
 					if (evt.stopped) return evt; //no more processing
 				}
