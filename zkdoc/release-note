@@ -12,6 +12,7 @@ ZK 10.3.0
   ZK-5859: detach a button causes a javascript error
   ZK-5800: css flex listen then unlisten immediately causes listeners to not be removed
   ZK-5731: Nested detail receives onStripe when no fake node exists in ZK 10
+  ZK-6025: The tooltip text of Slider does not update after clicking
 
 * Upgrade Notes
 
