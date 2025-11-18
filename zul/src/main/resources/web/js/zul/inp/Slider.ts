@@ -394,6 +394,12 @@ export class Slider extends zul.Widget {
 		$btn.animate(nextPos, speed, function () {
 			pos = moveToCursor ? wgt._realpos() : wgt._curpos;
 			pos = wgt._constraintPos(pos);
+
+			var btn = wgt.$n_('btn');
+			btn.title = wgt.isDecimal()
+				? pos.toFixed(Slider._digitsAfterDecimal(Slider._getStep(wgt)))
+				: pos.toString();
+
 			wgt.fire('onScroll', wgt.isDecimal() ? {decimal: pos} : pos);
 		});
 		jq(this.$n_('area')).animate(isVertical ? {height: nextPos.top} : {width: nextPos.left}, speed);
