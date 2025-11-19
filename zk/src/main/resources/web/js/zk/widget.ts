@@ -368,11 +368,14 @@ function _listenFlex(wgt: zk.Widget & {_flexListened?: boolean}): void {
 function _unlistenFlex(wgt: zk.Widget): void {
 	if (wgt._flexListened) {
 		var parent = wgt.parent,
-			cssFlexEnabled = wgt._cssflex && parent && (parent instanceof zk.Page || parent.getFlexContainer_() != null);
-		if (cssFlexEnabled)
+			cssFlexMode = wgt._cssFlexApplied ||
+				(wgt._cssflex && parent && (parent instanceof zk.Page || parent.getFlexContainer_() != null));
+
+		if (cssFlexMode)
 			zWatch.unlisten({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
 		wgt.unlistenOnFitSize_();
-		if (cssFlexEnabled) {
+
+		if (cssFlexMode) {
 			zWatch.unlisten({onSize: [wgt, zFlex.applyCSSFlex]});
 			delete wgt._cssFlexApplied;
 		} else {
