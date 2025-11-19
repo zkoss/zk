@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5909.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Nov 17 22:59:46 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div>
+        <zscript>
+            void setSelection(){
+            Set sel =  new HashSet(lb.getSelectedItems());
+                sel.add(lb.getItemAtIndex(0));
+                lb.setSelectedItems(sel);
+            }
+        </zscript>
+        <label multiline="true">
+            1. navigate to page 2
+            2. select row "5"
+            3. click the "set selection" button
+            4. row "5" should remain selected
+        </label>
+        <listbox id="lb" multiple="true" checkmark="true" mold="paging" pageSize="5">
+            <listitem label="0"/>
+            <listitem label="1"/>
+            <listitem label="2"/>
+            <listitem label="3"/>
+            <listitem label="4"/>
+            <listitem label="5"/>
+            <listitem label="6"/>
+        </listbox>
+        <button label="set selection" onClick='setSelection()'/>
+    </div>
+</zk>
