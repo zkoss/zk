@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5090.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Oct 31 16:35:05 CST 2025, Created by peaker
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. The size of the blue border is less than the size of the red border.
+    </label>
+    <window border="none" width="300px" height="300px" style="border: 1px solid red">
+        <div hflex="1" vflex="1" style="border: 1px solid blue">The blue div should cover the red border.</div>
+    </window>
+</zk>
