@@ -364,23 +364,27 @@ function _listenFlex(wgt: zk.Widget & {_flexListened?: boolean}): void {
 		wgt._flexListened = true;
 	}
 }
+
 function _unlistenFlex(wgt: zk.Widget): void {
 	if (wgt._flexListened) {
-		var cssFlexApplied = wgt._cssFlexApplied;
-		if (cssFlexApplied) {
-			//remove css flex flag
+		var parent = wgt.parent,
+			cssFlexMode = wgt._cssFlexApplied ||
+				(wgt._cssflex && parent && (parent instanceof zk.Page || parent.getFlexContainer_() != null));
+
+		if (cssFlexMode)
+			zWatch.unlisten({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
+		wgt.unlistenOnFitSize_();
+
+		if (cssFlexMode) {
 			zWatch.unlisten({onSize: [wgt, zFlex.applyCSSFlex]});
 			delete wgt._cssFlexApplied;
 		} else {
-			zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
 			zWatch.unlisten({
 				_beforeSizeForRead: [wgt, zFlex.beforeSizeForRead],
 				beforeSize: [wgt, zFlex.beforeSize]
 			});
+			zWatch.unlisten({onSize: [wgt, zFlex.onSize]});
 		}
-		wgt.unlistenOnFitSize_();
-		if (cssFlexApplied)
-			zWatch.unlisten({beforeSize: [wgt, zFlex.beforeSizeClearCachedSize]});
 		delete wgt._flexListened;
 	}
 }
