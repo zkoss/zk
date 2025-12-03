@@ -13,6 +13,7 @@ ZK 10.3.0
   ZK-5800: css flex listen then unlisten immediately causes listeners to not be removed
   ZK-5731: Nested detail receives onStripe when no fake node exists in ZK 10
   ZK-5909: paging grid loose selection when on non-active page
+  ZK-5988: a popup doesn't open at the pointer inside a listitem with a double click listener
 
 * Upgrade Notes
 

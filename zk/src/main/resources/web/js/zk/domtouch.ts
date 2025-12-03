@@ -207,11 +207,6 @@ zk.override(zk.Widget.prototype, _xWidget, {
 				this._startTap!(this);
 			}
 		}
-		// ZK-2179: should skip row widget
-		var p = (zk.Widget.$(evt.target) as zk.Widget).parent;
-		if (p && (!zk.isLoaded('zul.grid') || !(p instanceof zul.grid.Row))
-			&& (!zk.isLoaded('zul.sel') || (!(p instanceof zul.sel.Listitem) && !(p instanceof zul.sel.Treerow))))
-		tevt.stopPropagation();
 	},
 	/** @internal */
 	_dblTapEnd(evt: JQuery.TouchEndEvent) {
