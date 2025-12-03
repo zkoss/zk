@@ -471,7 +471,7 @@ declare global {
 	export import zjq = anima_global.zjq;
 
 	declare function $eval<T>(x: unknown): T | undefined;
-	declare var zDebug: zk.Object;
+	declare var zDebug: typeof import('./debug/debugger').Debugger;
 	export import zWs = websocket_global.zWs;
 
 	declare var msgzk: Record<
@@ -508,6 +508,7 @@ export * from '.';
 export * from './zswipe'; // Only required in `zk/index.ts` if `zk.touchEnabled` is true.
 export * as canvas from './canvas';
 export * as cpsp from './cpsp';
+export * as debug from './debug';
 export * as fmt from './fmt';
 export * as gapi from './gapi';
 export * as wgt from './wgt';
