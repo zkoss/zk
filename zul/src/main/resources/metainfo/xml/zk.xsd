@@ -292,6 +292,12 @@
 				<xs:element ref="cache-provider-class"/>
 				<xs:element ref="config-parser-class"/>
 				<xs:element ref="crawlable"/>
+				<xs:element ref="csp-enabled"/>
+				<xs:element ref="csp-strict-dynamic-enabled"/>
+				<xs:element ref="csp-policy"/>
+				<xs:element ref="csp-report-only"/>
+				<xs:element ref="csp-report-uri"/>
+				<xs:element ref="csp-header-generator-class"/>
 				<xs:element ref="disable-event-thread"/>
 				<xs:element ref="disable-zscript"/>
 				<xs:element ref="engine-class"/>
@@ -326,6 +332,18 @@
 	<xs:element name="config-parser-class" type="xs:string"/>
 
 	<xs:element name="crawlable" type="xs:boolean"/>
+
+	<xs:element name="csp-enabled" type="xs:boolean"/>
+
+	<xs:element name="csp-strict-dynamic-enabled" type="xs:boolean"/>
+
+	<xs:element name="csp-policy" type="xs:string"/>
+
+	<xs:element name="csp-header-generator-class" type="xs:string"/>
+
+	<xs:element name="csp-report-only" type="xs:boolean"/>
+
+	<xs:element name="csp-report-uri" type="xs:string"/>
 
 	<xs:element name="disable-event-thread" type="xs:boolean"/>
 
