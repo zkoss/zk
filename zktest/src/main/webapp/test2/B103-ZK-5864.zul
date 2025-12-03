@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5864.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Oct 31 16:35:40 CST 2025, Created by peaker
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. in browser Console, run the command zk.load('zk.debug')
+        2. then run zDebug.dumpWidgetTree4Zul(zk.Desktop._dt)
+        3. you'll see a floating panel displaying the widget tree at the bottom right corner
+    </label>
+</zk>

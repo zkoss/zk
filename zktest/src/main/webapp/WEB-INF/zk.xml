@@ -2,9 +2,9 @@
 
 <!-- zk.xml
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Mar 26 16:29:07     2006, Created by tomyeh
 
@@ -36,12 +36,21 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>ZK Test</value>
 	</preference>
 
-	<!-- for B80-ZK-2957 -->
 	<client-config>
+		<!-- for B80-ZK-2957 -->
 		<data-handler>
 			<name>zk-2957</name> <!-- data-datepicker -->
 			<script src="/test2/js/zk-2957.js" /> <!-- jQuery UI Library -->
 			<script src="/test2/js/data-zk-2957.js" />  <!-- Data Handler Script -->
+		</data-handler>
+		<!-- for B103-ZK-5981 -->
+		<data-handler>
+			<name>foo</name>
+			<script>
+				function (wgt, dataValue) {
+					console.log(dataValue);
+				}
+			</script>
 		</data-handler>
 	</client-config>
 
@@ -64,15 +73,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>false</value>
 	</library-property>
 	-->
-	
+
 	<!-- Turn on if you want to cache by etag for dynamic resource.
 	<library-property>
 		<name>org.zkoss.web.classWebResource.cache.etag</name>
 		<value>true</value>
 	</library-property>
 	-->
-	
-	<!-- F65-ZK 1465 
+
+	<!-- F65-ZK 1465
 		Turn off smart connection for the comet server push.
 		By default is enable and only HTML5 browser support
 	<library-property>
@@ -80,8 +89,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	-->
-	
-	<!-- F70-ZK 2079 
+
+	<!-- F70-ZK 2079
 		Turn on autohide in mesh component -->
 	<library-property>
 		<name>org.zkoss.zul.grid.autohidePaging</name>
@@ -95,7 +104,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zul.listbox.autohidePaging</name>
 		<value>true</value>
 	</library-property>
-	
+
 	<!--  Bug ZK-692 -->
 	<listener>
 		<listener-class>org.zkoss.zktest.test.MyDesktopCleanup</listener-class>
@@ -135,7 +144,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zul.Button.mold</name>
 		<value>trendy</value>
 	</library-property>
-	
+
 	<!--  Turn on following if you want to disable the animation effects of
 		Borderlayout for all. Since 5.0.8  -->
 	<!--<library-property>-->
@@ -155,7 +164,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
-	
+
 	<language-config>
 		<addon-uri>/WEB-INF/ZK-1345.xml</addon-uri>
 	</language-config>
@@ -185,7 +194,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	-->
-	
+
 	<!-- [ZK EE]
 		Turn on if you want to enable the render-on-demand feature for grid.
 		It improves the performance for huge grid.
@@ -244,7 +253,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.zkmax.ui.util.DesktopRecycle</listener-class>
 	</listener>
-	--> 
+	-->
 
 	<!-- [ZK EE]
 		Turn on if you want to make your Web application crawlable (indexed)
@@ -287,7 +296,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		-->
 	</session-config>
 	<session-config>
-		<!-- 
+		<!--
 		 Uncomment it and set it to android, if you want to configure for
 		 an Android device.
 		 If omitted, ajax is assumed.
@@ -319,7 +328,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<disable-event-thread>false</disable-event-thread>
 	</system-config>
 	-->
-	
+
 	<!-- Turn on the following if you want to use ZK with a clustering server
 		or cloud environment (such as Google App Engine)
 	<system-config>
@@ -442,7 +451,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value></value>
 	</preference>
 	-->
-	
+
 	<!-- Configure the default font size in ZUL CSS file (~./zul/css/zk.wcs)
 		Default: 12px.
 	<library-property>
@@ -513,7 +522,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>mouse</value>
 	</library-property>
 	-->
-	
+
 	<!-- Uncomment if you want to load a conifugration file for logging ZK core
 	ZK will try to locate the file from the class path, and the current directory
 	("user.dir").
@@ -540,7 +549,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 
 	<!-- Uncommet to control where the label propeties file is located.
-		If you have multiple properties files, specify them one-by-one. 
+		If you have multiple properties files, specify them one-by-one.
 		Default: /WEB-INF/zk-label.properties
 	<system-config>
 		<label-location>/WEB-INF/label/foo.properties</label-location>
@@ -551,8 +560,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<label-location>/WEB-INF/zk-label.properties</label-location>
 		<label-location>/WEB-INF/prop/B50-3316543-mdm.properties</label-location>
     	<label-location>/WEB-INF/prop/B50-3316543-wtb.properties</label-location>
-	</system-config>	
-	
+	</system-config>
+
 	<!-- for ZKBIND ZK-921	A way to register system level converter and validator  -->
 	<library-property>
 		<name>org.zkoss.bind.appConverters</name>
@@ -566,7 +575,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>xValidator=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$XValidator,
 		yValidator=org.zkoss.zktest.bind.issue.F00921SystemConverterValidator$YValidator</value>
 	</library-property>
-	
+
 	<!-- Uncommet to control the encoding of the labe properties files
 		Default: UTF-8
 	<library-property>
@@ -608,14 +617,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<listener-class>org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener</listener-class>
 	</listener>
 	-->
-	
+
 	<!-- Configure the Hibernate configuration file name if not "hibernate.cfg.xml"
 	<preference>
 		<name>HibernateUtil.config</name>
 		<value></value>
 	</preference>
 	-->
-	
+
 	<!-- Configure the Hibernate "Open Session In View" Session Lifecycle
 	<listener>
 		<description>Hibernate "Open Session In View" Session Lifecycle</description>
@@ -631,7 +640,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</listener-class>
 	</listener>
 	 -->
-	 	
+
 	<!-- Turn on if you want to debug by copying JavaScript files directly
 		to classpath
 	<desktop-config>
@@ -644,26 +653,26 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<evaluator-class>org.zkoss.zkmax.xel.el21.ApacheELFactory</evaluator-class>
 	</xel-config>
 	-->
-	
+
 	<!-- Turn on if you want to enable zkbind debug info
 	<library-property>
 		<name>org.zkoss.bind.DebuggerFactory.enable</name>
 		<value>true</value>
 	</library-property>
 	 -->
-	
+
 	<!-- Turn on if you want to pre-load image by default
 	<library-property>
 		<name>org.zkoss.zul.image.preload</name>
 		<value>true</value>
 	</library-property>
 	 -->
-	
+
 	<!-- Turn on if you want to use browser native scrollbar by default
 	<library-property>
 		<name>org.zkoss.zul.nativebar</name>
 		<value>true</value>
-	</library-property> 
+	</library-property>
 	-->
 
 	<!-- for B65-ZK-2061: Hide the ZK version info  -->
@@ -671,24 +680,24 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zk.ui.versionInfo.enabled</name>
 		<value>false</value>
 	</library-property>
-	 
+
 	<!-- Turn on if you want to disable tablet UI by default -->
 	<library-property>
 		<name>org.zkoss.zkmax.tablet.ui.disabled</name>
 		<value>true</value>
 	</library-property>
-	
-	<!-- zkmax.jar will define this automatically 
+
+	<!-- zkmax.jar will define this automatically
 	<library-property>
 	   <name>org.zkoss.bind.AnnotateBinder.class</name>
 	   <value>org.zkoss.zkmax.bind.impl.AnnotateBinderEx</value>
 	</library-property>
 	 -->
-	 
+
 	 <client-config>
 		<init-crash-script><![CDATA[
 		    window.zkShowCrashMessage = function (code) {
-		    	var h2 = '<h2 style="background: rgb(1,133,174); text-align: center; ' 
+		    	var h2 = '<h2 style="background: rgb(1,133,174); text-align: center; '
 		    			+ 'color: white; width: 700px; margin: 0 auto;">';
 			    var msg = 'Ooooops!! ErrorCode: ' + code;
 			    h2 = h2 + msg + '</h2>';
@@ -698,7 +707,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		  ]]></init-crash-script>
 		<init-crash-timeout>5</init-crash-timeout>
 	</client-config>
-	
+
 	<library-property>
       <name>org.zkoss.zk.WPD.cache</name>
       <value>false</value>
