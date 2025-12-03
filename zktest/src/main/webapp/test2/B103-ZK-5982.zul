@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5982.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Oct 30 00:18:30 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. press the add button on the page
+        2. there should be no console errors
+    </label>
+    <listbox hflex="1">
+        <listhead id="head" sizable="true" hflex="1">
+            <listheader style="min-width: 200px" hflex="1" label="foo 1"></listheader>
+            <listheader width="35%" label="foo 1">
+                <textbox value="bar" hflex="1"/>
+            </listheader>
+        </listhead>
+        <listitem>
+            <listcell label="foo 1"/>
+            <listcell label="bar"/>
+        </listitem>
+    </listbox>
+    <button onClick='add()' label="add"/>
+    <zscript><![CDATA[
+        public void add(){
+            Listheader header = new Listheader("foo 2");
+            header.setVisible(false);
+            head.appendChild(header);
+        }
+    ]]></zscript>
+</zk>
