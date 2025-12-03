@@ -8,6 +8,7 @@ ZK 10.3.0
   ZK-5972: Suppress false-positive scanner alerts in PE/EE
   ZK-5090: Window's content should not contain padding when no border on it
   ZK-5982: HeaderWidget _getWidth undefined properties
+  ZK-6006: Timepicker does not bind value
   ZK-5227: Provide option for autodrop combowidget to open on up/down keypresses
   ZK-5981: ZK-5370 causes JS error if component has client data-handler onBind listener
   ZK-5864: cannot load zk.debug
