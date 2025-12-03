@@ -857,4 +857,38 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--	<listener>-->
 <!--		<listener-class>org.zkoss.zktest.test2.B101_ZK_5764ViewModelAnnotationHandler</listener-class>-->
 <!--	</listener>-->
+
+	<!-- for ZK-5265 -->
+<!--	<system-config>-->
+<!--		<csp-enabled>true</csp-enabled>-->
+<!--		<csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>-->
+<!--		<csp-policy>script-src 'self' 'nonce-{nonce}' 'strict-dynamic'</csp-policy>-->
+		<!-- for testing Csp Policy Multiple Directives -->
+<!--		<csp-policy>-->
+<!--			script-src 'self' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' 'nonce-{nonce}';-->
+<!--			style-src 'self' 'unsafe-inline';-->
+<!--			img-src 'self' data: https:;-->
+<!--			font-src 'self';-->
+<!--			connect-src 'self';-->
+<!--			frame-ancestors 'none'-->
+<!--		</csp-policy>-->
+<!--		<csp-header-generator-class>org.zkoss.zk.ui.http.CspProviderImpl</csp-header-generator-class>-->
+<!--		<csp-report-only>true</csp-report-only>-->
+<!--		<csp-report-uri>/csp-violations</csp-report-uri>-->
+<!--	</system-config>-->
+
+	<!-- for ZK-5265 Application Scope 10 -->
+<!--	<listener>-->
+<!--		<listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit</listener-class>-->
+<!--	</listener>-->
+
+	<!-- for ZK-5265 Application Scope 4 embed -->
+<!--	<device-config>-->
+<!--		<device-type>ajax</device-type>-->
+<!--		<embed>-->
+<!--			<![CDATA[-->
+<!--				<script type="text/javascript">console.log('4. Device-specific embed script loaded');</script>-->
+<!--            ]]>-->
+<!--		</embed>-->
+<!--	</device-config>-->
 </zk>
