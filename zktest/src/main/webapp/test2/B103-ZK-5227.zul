@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5227.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Nov 05 18:02:47 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. focus on the input field in the middle combobox
+        2. press the up or down arrow key
+        3. this action should open the combobox and display the dropdown automatically
+    </label>
+    <combobox autodrop="false" placeholder="no autodrop">
+        <comboitem label="foo" />
+        <comboitem label="bar" />
+        <comboitem label="baz" />
+    </combobox>
+    <combobox autodrop="true" placeholder="with autodrop">
+        <comboitem label="foo" />
+        <comboitem label="bar" />
+        <comboitem label="baz" />
+    </combobox>
+    <combobox w:onFocus="this.open()" xmlns:w="client" autodrop="true"
+              placeholder="with autodrop and open on focus">
+        <comboitem label="foo" />
+        <comboitem label="bar" />
+        <comboitem label="baz" />
+    </combobox>
+</zk>
