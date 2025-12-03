@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5859.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Oct 31 16:38:09 CST 2025, Created by peaker
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Click "trigger: open popup 2x".
+        2. Click "close popup".
+        3. Click "trigger: open popup 2x".
+        4. Click "close popup".
+        5. Click "detach trigger" button, an error occurs "Cannot read properties of undefined (reading '0') (TypeError)".
+    </label>
+    <zscript><![CDATA[
+        public void openPopup(Component target) {
+            Popup mypop = new Popup();
+            Button closeButton = new Button("Close Popup");
+            closeButton.addEventListener("onClick", new EventListener() {
+                public void onEvent(Event e) {
+                    mypop.close();
+                    mypop.detach();
+                }
+            });
+            mypop.setPage(page);
+            mypop.appendChild(closeButton);
+            mypop.open(target, "after_end");
+        }
+    ]]></zscript>
+    <button id="trigger" label="trigger: open popup 2x" onClick="openPopup(self)"/>
+    <button label="detach trigger" onClick="trigger.detach();"/>
+</zk>
