@@ -626,13 +626,22 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	}
 
 	dnPressed_(evt: zk.Event): void {
-		// empty on purpose
+		this._handleAutodrop(evt);
 	}
+
 	upPressed_(evt: zk.Event): void {
-		// empty on purpose
+		this._handleAutodrop(evt);
 	}
+
 	otherPressed_(evt: zk.Event): void {
 		// empty on purpose
+	}
+
+	/** @internal */
+	_handleAutodrop(evt: zk.Event): void {
+		if (!evt.altKey && this._autodrop && !this._open) {
+			this.open({sendOnOpen: true});
+		}
 	}
 
 	/**

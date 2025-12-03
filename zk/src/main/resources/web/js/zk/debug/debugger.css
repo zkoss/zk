@@ -1,0 +1,52 @@
+.z-debug {
+  width: 80%;
+  right: 10px;
+  bottom: 5px;
+  position: absolute;
+  z-index: 99000;
+  overflow: auto;
+  color: #7D9196;
+  background: white;
+  padding: 2px;
+  border: 1px solid gray;
+}
+
+.z-debug .z-debug-header {
+  overflow: hidden;
+  zoom: 1;
+  color: #403E39;
+  padding: 5px 3px 4px 5px;
+  border: 1px solid #999884;
+  line-height: 15px;
+  background: linear-gradient(to bottom, #f8f8f8 0%, #e9e9e9 40%, #d8d8d8 100%);
+  font-weight: bold;
+}
+
+.z-debug .z-debug-body {
+  border: 1px solid #999884;
+  border-top: 0;
+  overflow-y: auto;
+  max-height: 30vh;
+}
+
+.z-debug-close {
+  overflow: hidden;
+  width: 20px;
+  height: 15px;
+  float: right;
+  cursor: pointer;
+  margin-left: 2px;
+  color: #666;
+  font-size: 14px;
+  line-height: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.z-debug-close::before {
+  content: '[X]';
+}
+
+.z-debug-close-over {
+  color: #000;
+}

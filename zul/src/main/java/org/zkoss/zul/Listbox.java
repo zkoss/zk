@@ -137,13 +137,13 @@ import org.zkoss.zul.impl.XulElement;
  * <pre><code>
  * Set selection = ((Selectable)getModel()).getSelection();
  * </code></pre>
- * 
+ *
  * <p>[Since 6.0.0] If a model is set, whether the listbox allows
  * the multiple selection depends on {@link Selectable#setMultiple}.
  * In other words, the application shall not access listbox directly if
  * a model is assigned. Rather, the application shall access the model
  * directly.
- * 
+ *
  * <p>
  * There are two ways to handle long content: scrolling and paging. If
  * {@link #getMold} is "default", scrolling is used if {@link #setHeight} is
@@ -246,39 +246,39 @@ import org.zkoss.zul.impl.XulElement;
  * <dd>Specifies whether to enable ROD (render-on-demand).</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
- * <dt>org.zkoss.zul.listbox.autoSort</dt>.(since 5.0.7) 
+ * <dt>org.zkoss.zul.listbox.autoSort</dt>.(since 5.0.7)
  * <dd>Specifies whether to sort the model when the following cases:</br>
  * <ol>
  * <li>{@link #setModel} is called and {@link Listheader#setSortDirection} is set.</li>
  * <li>{@link Listheader#setSortDirection} is called.</li>
  * <li>Model receives {@link ListDataEvent} and {@link Listheader#setSortDirection} is set.</li>
  * </ol>
- * If you want to ignore sort when receiving {@link ListDataEvent}, 
+ * If you want to ignore sort when receiving {@link ListDataEvent},
  * you can specifies the value as "ignore.change".</br>
  * Notice that you could specify this attribute in any of its ancestor's attributes.
  * It will be inherited.</dd>
  * </dl>
  * <dt>org.zkoss.zul.listbox.groupSelect</dt>
- * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that 
- * you could specify this attribute in any of its ancestor's attributes. It will 
+ * <dd>Specifies whether Listgroups under this Listbox are selectable. Notice that
+ * you could specify this attribute in any of its ancestor's attributes. It will
  * be inherited. Default value is false.</dd>
- * 
- * <dt>org.zkoss.zul.listbox.preloadSize</dt>.(since 5.0.8) 
+ *
+ * <dt>org.zkoss.zul.listbox.preloadSize</dt>.(since 5.0.8)
  * <dd>Specifies the number of items to preload when receiving
  * the rendering request from the client.
  * <p>It is used only if live data ({@link #setModel(ListModel)} and
  * not paging ({@link #getPagingChild}).</dd>
- * 
- * <dt>org.zkoss.zul.listbox.initRodSize</dt>.(since 5.0.8) 
+ *
+ * <dt>org.zkoss.zul.listbox.initRodSize</dt>.(since 5.0.8)
  * <dd>Specifies the number of items rendered when the Listbox first render.
  * <p>
  * It is used only if live data ({@link #setModel(ListModel)} and not paging
  * ({@link #getPagingChild}).</dd>
- * 
+ *
  * <dt>org.zkoss.zul.listbox.selectOnHighlight.disabled</dt>.(since 7.0.4)
- * <dd>Sets whether to disable select functionality when highlighting text 
+ * <dd>Sets whether to disable select functionality when highlighting text
  * content with mouse dragging or not.</dd>
- * 
+ *
  * @author tomyeh
  * @see ListModel
  * @see ListitemRenderer
@@ -423,7 +423,7 @@ public class Listbox extends MeshElement {
 			}
 
 			/**
-			 * Override to remove unnecessary Listitem re-indexing (when ROD is on, clear() is called frequently). 
+			 * Override to remove unnecessary Listitem re-indexing (when ROD is on, clear() is called frequently).
 			 */
 			public void clear() {
 				final boolean oldFlag = setReplacingItem(true);
@@ -432,7 +432,7 @@ public class Listbox extends MeshElement {
 					if (getSelectedCount() > 0) {
 						clearSelection();
 
-						// Bug ZK-1842 Listbox scroll bug listheader sort 
+						// Bug ZK-1842 Listbox scroll bug listheader sort
 						_anchorLeft = _anchorTop = 0;
 					}
 					super.clear();
@@ -725,7 +725,7 @@ public class Listbox extends MeshElement {
 	/**
 	 * Sets the seltype.
 	 * Allowed values:single,multiple
-	 * 
+	 *
 	 */
 	public void setSeltype(String seltype) throws WrongValueException {
 		if ("single".equals(seltype))
@@ -1008,7 +1008,7 @@ public class Listbox extends MeshElement {
 			if (!_multiple) {
 				selectItem(item);
 			} else {
-				if (item.getIndex() < _jsel || _jsel < 0) {
+				if (isItemOnCurrentPage(item) && (item.getIndex() < _jsel || _jsel < 0)) {
 					_jsel = item.getIndex();
 					if (!_ignoreSelectedItem) {
 						// ZK-866
@@ -1033,6 +1033,20 @@ public class Listbox extends MeshElement {
 				smartUpdateSelection();
 			}
 		}
+	}
+
+	/**
+	 * Checks whether the given item is on the current page.
+	 */
+	private boolean isItemOnCurrentPage(Listitem item) {
+		if (!inPagingMold())
+			return true;
+		boolean isOnCurrentPage = false;
+		if (item != null && item.getParent() == this) {
+			final int page = item.getIndex() / getPageSize();
+			isOnCurrentPage = page == getActivePage();
+		}
+		return isOnCurrentPage;
 	}
 
 	/**
@@ -1574,7 +1588,7 @@ public class Listbox extends MeshElement {
 				it.next().setIndexDirectly(j);
 		}
 	}
-	
+
 	/* package */Listgroup getListgroupAt(int index) {
 		if (_groupsInfo.isEmpty())
 			return null;
@@ -1610,7 +1624,7 @@ public class Listbox extends MeshElement {
 	/* package */int[] getGroupsInfoAt(int index) {
 		return getGroupsInfoAt(index, false);
 	}
-	
+
 	/**
 	 * Returns an int array that it has two length, one is an index of
 	 * listgroup, and the other is the number of items of listgroup(inclusive).
@@ -2414,7 +2428,7 @@ public class Listbox extends MeshElement {
 			getDataLoader().updateModelInfo();
 		}
 	}
-	
+
 	/**
 	 * Sets the groups model associated with this list box. If a non-null model
 	 * is assigned, no matter whether it is the same as the previous, it will
@@ -2595,7 +2609,7 @@ public class Listbox extends MeshElement {
 		// 20080724, Henri Chen: optimize to avoid postOnInitRender twice
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
-			// Bug ZL-1696: manipulate list from api might happen before list 
+			// Bug ZL-1696: manipulate list from api might happen before list
 			// render, use sendEvent instead of postEvent to render list first
 			Events.postEvent("onInitRender", this, null);
 		}
@@ -2892,7 +2906,7 @@ public class Listbox extends MeshElement {
 	/** Sets the mold to render this component.
 	 *
 	 * @param mold the mold. If null or empty, "default" is assumed.
-	 * Allowed values: default, select, paging 
+	 * Allowed values: default, select, paging
 	 * @see org.zkoss.zk.ui.metainfo.ComponentDefinition
 	 */
 	public void setMold(String mold) {
@@ -3394,7 +3408,7 @@ public class Listbox extends MeshElement {
 			if (_model == null) {
 				renderer.render("_listbox$noSelectAll", true); // B50-ZK-873, separate the select all condition and isCropper
 			}
-			
+
 			//ZK-3103: only true when setSelectedIndex is called
 			if (_shallSyncSelInView) {
 				renderer.render("_listbox$shallSyncSelInView", true);
@@ -3436,7 +3450,7 @@ public class Listbox extends MeshElement {
 		return Utils.testAttribute(this, "org.zkoss.zul.listbox.selectOnHighlight.disabled", false, true);
 	}
 
-	/** 
+	/**
 	 * Returns the number of items to preload when receiving the rendering
 	 * request from the client.
 	 * <p>
@@ -3454,7 +3468,7 @@ public class Listbox extends MeshElement {
 		return sz;
 	}
 
-	/** 
+	/**
 	 * Returns the number of items rendered when the Listbox first render.
 	 *  <p>
 	 * Default: 50. (Since 6.0.1)
@@ -4033,7 +4047,7 @@ public class Listbox extends MeshElement {
 		}
 		super.setPageSize(pgsz);
 	}
-	
+
 	public void onAfterRender() {
 		if (inPagingMold() && _model instanceof Pageable) {
 			Pageable m = (Pageable) _model;
@@ -4050,7 +4064,7 @@ public class Listbox extends MeshElement {
 			}
 		}
 	}
-	
+
 	/**
 	 * Scroll to the specified item by the given index.
 	 * @param index the index of item

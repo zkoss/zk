@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5981.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sun Nov 02 23:23:07 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. press the data-handler button on the page
+        2. there should be no console errors
+    </label>
+    <div id="host" xmlns:ca="client/attribute">
+        <button label="data-handler" onClick='Div div = new Div();div.setClientAttribute("data-foo","bar");host.appendChild(div);' />
+        <button label="onbind listener" onClick='Div div = new Div();div.setWidgetListener("onBind","console.log(`did on bind`);");host.appendChild(div);' />
+    </div>
+</zk>
