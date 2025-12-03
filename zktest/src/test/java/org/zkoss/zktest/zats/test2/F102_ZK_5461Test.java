@@ -20,7 +20,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v130.network.Network;
+import org.openqa.selenium.devtools.v142.network.Network;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
@@ -31,7 +31,7 @@ public class F102_ZK_5461Test extends WebDriverTestCase {
 		Map<String, Object> headers = new HashMap<>();
 		DevTools devTools = ((ChromeDriver) driver).getDevTools();
 		devTools.createSession();
-		devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+		devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
 		devTools.addListener(Network.requestWillBeSent(), request -> headers.putAll(request.getRequest().getHeaders()));
 		click(jq("@button"));
 		waitResponse();

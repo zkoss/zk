@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5988.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Nov 19 14:21:59 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<?meta name="viewport" content="width=device-width, initial-scale=1"?>
+<zk>
+    <label multiline="true">
+        1. view the page with a mobile browser (dev tool > device toolbar > ipad pro)
+        2. click "show popup"
+        3. the popup should open at the mouse pointer's position
+    </label>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList();
+        model.add("item 1");
+        model.add("item 2");
+    ]]></zscript>
+    <popup id="pp"  >
+        <apply template="content"/>
+    </popup>
+    <listbox model="${model}" >
+        <listhead>
+            <listheader label="Display Name"/>
+            <listheader label="Popup"/>
+        </listhead>
+        <template name="model">
+            <listitem onDoubleClick="">
+                <listcell label="${each}"/>
+                <listcell>
+                    <idspace>
+                        <a label="show popup" popup="pp"/>
+                        <popup id="pp" >
+                            <label value="${each}"/>
+                        </popup>
+                    </idspace>
+                </listcell>
+            </listitem>
+        </template>
+    </listbox>
+    ZK-2179, related bug, verify together
+    <label multiline="true">
+        1. scroll the listbox in the mobile browser
+        2. the listbox should be scrollable
+    </label>
+    <zscript><![CDATA[
+		List list = new ArrayList();
+		for (int i = 0; i < 100; i++) {
+			list.add("Item " + i);
+		}
+		ListModelList lml = new ListModelList(list);
+	]]></zscript>
+    <listbox model="${lml}" height="200px">
+        <listhead>
+            <listheader label="From" hflex="min"/>
+        </listhead>
+        <template name="model" var="each">
+            <listitem label="${each}" context="popup" />
+        </template>
+    </listbox>
+    <popup id="popup">Context</popup>
+</zk>
