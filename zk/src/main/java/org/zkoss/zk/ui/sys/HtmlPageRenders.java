@@ -200,13 +200,15 @@ public class HtmlPageRenders {
 	public static final String outResponseJavaScripts(Execution exec, boolean directJS) {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl) exec;
 		final Collection<AuResponse> responses = execCtrl.getResponses();
+		final Desktop desktop = exec.getDesktop();
+		Configuration config = desktop.getWebApp().getConfiguration();
 		if (responses == null || responses.isEmpty())
 			return "";
 		execCtrl.setResponses(null);
 
 		final StringBuffer sb = new StringBuffer(256);
 		if (!directJS)
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkac(");
+			sb.append(outCsp("<script class=\"z-runonce\" type=\"text/javascript\">\nzkac(", config));
 
 		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = it.next();
@@ -315,7 +317,7 @@ public class HtmlPageRenders {
 				groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkopt({");
+			sb.append(outCsp("<script class=\"z-runonce\" type=\"text/javascript\">\nzkopt({", desktop.getWebApp().getConfiguration()));
 
 			if (keepDesktop)
 				sb.append("kd:1,");
@@ -563,6 +565,7 @@ public class HtmlPageRenders {
 		final PageCtrl pageCtrl = (PageCtrl) page;
 		final Component owner = pageCtrl.getOwner();
 		boolean contained = owner == null && exec.isIncluded();
+		Configuration config = desktop.getWebApp().getConfiguration();
 		//a standalone page (i.e., no owner), and being included by
 		//non-ZK page (e.g., JSP).
 		//
@@ -707,7 +710,7 @@ public class HtmlPageRenders {
 			Files.write(out, ((StringWriter) rc.perm).getBuffer()); //perm
 
 			// B65-ZK-1836
-			Files.write(out, new StringBuffer(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/"))); //js
+			Files.write(out, new StringBuffer(outCsp(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/"), config))); //js
 		} else if (owner != null) { //restore
 			setRenderContext(exec, old);
 		}
@@ -768,6 +771,19 @@ public class HtmlPageRenders {
 		}
 		outSEOContent(page, out);
 		out.write("</div>");
+	}
+
+	private static String outCsp(String output, Configuration config) {
+		boolean cspEnabled = config.isCspEnabled(),
+				cspStrictDynamicEnabled = config.isCspStrictDynamicEnabled();
+
+		if (cspEnabled && cspStrictDynamicEnabled && output != null) {
+			String nonce = config.getCspProvider().getCspNonce();
+			return output
+					.replaceAll("<script(?!\\s+nonce=)", "<script nonce=\"" + Encode.forHtmlAttribute(nonce) + "\"")
+					.replaceAll("<style(?!\\s+nonce=)", "<style nonce=\"" + Encode.forHtmlAttribute(nonce) + "\"");
+		}
+		return output;
 	}
 
 	/** Generates the SEO content for the given page.

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<zk>
+    <!-- for F103-ZK-5265 using Websocket Server push -->
+    <listener>
+        <listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit</listener-class>
+    </listener>
+    <!-- for F103-ZK-5265 lang-addon.xml -->
+    <language-addon>
+        <javascript>
+            console.log('3. ZK-5265 lang-addon loaded');
+        </javascript>
+    </language-addon>
+    <!-- for F103-ZK-5265 <embed> in zk.xml -->
+    <device-config>
+        <device-type>ajax</device-type>
+        <embed>
+            <![CDATA[
+				<script type="text/javascript">
+					console.log('4. Device-specific embed script loaded');
+				</script>
+            ]]>
+        </embed>
+    </device-config>
+    <system-config>
+        <csp-enabled>true</csp-enabled>
+        <csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>
+        <csp-policy>script-src 'self' 'nonce-{nonce}' 'strict-dynamic';</csp-policy>
+        <csp-report-only>true</csp-report-only>
+        <csp-report-uri>/csp-violations</csp-report-uri>
+    </system-config>
+</zk>

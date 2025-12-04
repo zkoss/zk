@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadSuspend;
+import org.zkoss.zk.ui.http.CspProviderImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
@@ -170,6 +171,19 @@ public class Configuration {
 	private boolean _debugJS;
 	/** Whether the ZK application is crawlable. */
 	private boolean _crawlable;
+	/** Whether the ZK application is enable CSP. */
+	private boolean _cspEnabled;
+	/** Whether to enable the nonce-based strict CSP mode. */
+	private boolean _cspStrictDynamicEnabled;
+	/** The developer-defined policy used to override the default CSP rules. */
+	private String _cspPolicy;
+	/** Whether to enforce the CSP in report-only mode. */
+	private boolean _cspReportOnly;
+	/** The URI destination for CSP violation reports. */
+	private String _cspReportURI;
+	/** The instance of the CSP provider class responsible for generating the CSP header and managing nonce. */
+	private CspProvider _cspProvider = new CspProviderImpl();
+
 	/** Whether to use the same UUID sequence. */
 	private boolean _repeatUuid;
 	// ZK-1671: ThemeProvider defined in metainfo/zk/zk.xml from jar file doesn't work
@@ -1816,6 +1830,121 @@ public class Configuration {
 			return;
 		}
 		_crawlable = crawlable;
+	}
+
+	/**
+	 * Whether the ZK application enables Content Security Policy (CSP).
+	 * Required for other CSP settings; applies a default policy when enabled.
+	 * <p>Default: false.
+	 * @since 10.3.0
+	 */
+	public boolean isCspEnabled() {
+		return _cspEnabled;
+	}
+
+	/**
+	 * Sets whether CSP is enabled for this ZK application.
+	 * @since 10.3.0
+	 */
+	public void setCspEnabled(boolean cspEnabled) {
+		_cspEnabled = cspEnabled;
+	}
+
+	/**
+	 * Whether the ZK application enables CSP strict-dynamic.
+	 * <p>Default: false.
+	 * @since 10.3.0
+	 */
+	public boolean isCspStrictDynamicEnabled() {
+		return _cspStrictDynamicEnabled;
+	}
+
+	/**
+	 * Sets whether CSP strict-dynamic is enabled for this ZK application.
+	 * @since 10.3.0
+	 */
+	public void setCspStrictDynamicEnabled(boolean cspStrictDynamicEnabled) {
+		_cspStrictDynamicEnabled = cspStrictDynamicEnabled;
+	}
+
+	/**
+	 * Returns the customized Content Security Policy (CSP).
+	 *
+	 * @return the current Csp Header Content
+	 * @since 10.3.0
+	 */
+	public String getCspPolicy() {
+		return _cspPolicy;
+	}
+
+	/**
+	 * Sets the customized Content Security Policy (CSP).
+	 *
+	 * @param policy the current Csp Header Content to set
+	 * @since 10.3.0
+	 */
+	public void setCspPolicy(String policy) {
+		_cspPolicy = policy;
+	}
+
+	/**
+	 * Whether the ZK application enables CSP report-only mode.
+	 *
+	 * <p>Default: false.
+	 * @since 10.3.0
+	 */
+	public boolean isCspReportOnly() {
+		return _cspReportOnly;
+	}
+
+	/**
+	 * Sets whether CSP report-only mode is enabled for this ZK application.
+	 *
+	 * @param cspReportOnly true to enable report-only mode, false otherwise
+	 * @since 10.3.0
+	 */
+	public void setCspReportOnly(boolean cspReportOnly) {
+		_cspReportOnly = cspReportOnly;
+	}
+
+	/**
+	 * Returns the CSP report URI.
+	 *
+	 * @return the current CSP report URI
+	 * @since 10.3.0
+	 */
+	public String getCspReportURI() {
+		return _cspReportURI;
+	}
+
+	/**
+	 * Sets the CSP report URI.
+	 *
+	 * @param cspReportURI the URI to use for CSP reports
+	 * @since 10.3.0
+	 */
+	public void setCspReportURI(String cspReportURI) {
+		_cspReportURI = cspReportURI.trim();
+	}
+
+	/**
+	 * Returns the CSP provider, used for cases with a custom CSP header generator.
+	 *
+	 * @return the current CSP provider
+	 * @since 10.3.0
+	 */
+	public CspProvider getCspProvider() {
+		return _cspProvider;
+	}
+
+	/**
+	 * Sets the CSP provider.
+	 *
+	 * @param cspProvider the CSP provider to set
+	 * @since 10.3.0
+	 */
+	public void setCspProvider(CspProvider cspProvider) {
+		_cspProvider = cspProvider;
 	}
 
 	/** Returns the timeout URI for this device.
