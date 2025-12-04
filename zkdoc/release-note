@@ -1,5 +1,6 @@
 ZK 10.3.0
 * Features
+  ZK-5991: update tbeditor to the latest Trumbowyg js widget
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
