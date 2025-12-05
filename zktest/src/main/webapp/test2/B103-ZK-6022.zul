@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-6022.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Dec 05 10:29:07 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		0. Add `MZa11y.1037=Ascending up (custom)` to WEB-INF/zk-label_zh_TW.properties
+		1. Click the "Change locale to TW" button
+		2. The tooltip of the listbox sort icon should be "Ascending up (custom)"
+	</label>
+	<window border="normal" title="hello" apply="org.zkoss.zktest.test2.B103_ZK_6022Composer">
+		<listbox>
+			<listhead>
+				<listheader label="Name" sort="auto"/>
+			</listhead>
+		</listbox>
+		<button id="btn" label="Change locale to TW"/>
+	</window>
+</zk>
