@@ -1056,6 +1056,10 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 				_nextInsertion = child;
 			}
 		}
+		if (child == _firstInsertion || child == _lastInsertion
+				|| insertBefore == null || insertBefore == _firstInsertion) {
+			adjustBoundaries(child, insertBefore);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1206,6 +1210,34 @@ public abstract class HtmlShadowElement extends AbstractComponent implements Sha
 			}
 		default:
 			return false;
+		}
+	}
+
+    private void adjustBoundaries(Component child, Component insertBefore) {
+		if (_firstInsertion == null && _lastInsertion == null || child == null || child.getParent() == null)
+			return;
+
+		if (_firstInsertion == null) _firstInsertion = child;
+		if (_lastInsertion == null) _lastInsertion = child;
+
+		Component firstNext = _firstInsertion.getNextSibling();
+		Component lastPrev = _lastInsertion.getPreviousSibling();
+
+		if (firstNext == null) firstNext = _lastInsertion;
+		if (lastPrev == null) lastPrev = _firstInsertion;
+
+		if (insertBefore == _firstInsertion) {
+			if (child == _lastInsertion)
+				_lastInsertion = lastPrev;
+			_firstInsertion = child;
+		} else if (insertBefore == null) {
+			_lastInsertion = child;
+			if (child == _firstInsertion)
+				_firstInsertion = firstNext;
+		} else if (child == _firstInsertion) {
+			_firstInsertion = firstNext;
+		} else if (child == _lastInsertion) {
+			_lastInsertion = lastPrev;
 		}
 	}
 

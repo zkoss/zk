@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5818/B103-ZK-5818.zul
+        Purpose:
+        Description:
+        History:
+                Mon Nov 3 12:30:53 CST 2025, Created by peaker
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Drag panel 3 on top of panel 1.
+        2. Drag panel 2 on top of panel 1.
+        3. Before ZK-5818 fix, occurs Java NullPointerException.
+    </label>
+    <zscript><![CDATA[
+        String[] grades = new String[] {"1", "2", "3"};
+    ]]></zscript>
+    <portallayout orient="vertical" apply="org.zkoss.bind.BindComposer">
+        <portalchildren title="Todo" counterVisible="true" hflex="1">
+            <forEach items="@init(grades)">
+                <panel title="${each}">
+                    <panelchildren>
+                        ${each}
+                    </panelchildren>
+                </panel>
+            </forEach>
+        </portalchildren>
+    </portallayout>
+</zk>
