@@ -20,6 +20,7 @@ ZK 10.3.0
   ZK-6025: The tooltip text of Slider does not update after clicking
   ZK-5909: paging grid loose selection when on non-active page
   ZK-5988: a popup doesn't open at the pointer inside a listitem with a double click listener
+  ZK-5916: Radiogroup model/template pattern only accepts templates that create only one radio
 
 * Upgrade Notes
 

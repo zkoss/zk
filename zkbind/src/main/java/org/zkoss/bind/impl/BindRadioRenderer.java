@@ -89,7 +89,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not " + items.length);
 
-			final Radio nr = (Radio) items[0];
+			final Radio nr = findRadioComponent(items[0]);
 			nr.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 
 			// ZK-2552
@@ -126,4 +126,10 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			item.detach();
 		}
 	}
+
+	private Radio findRadioComponent(Component component) {
+		if (component instanceof Radio)
+			return (Radio) component;
+        return findRadioComponent((Component) component.getFirstChild());
+    }
 }
