@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5903.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 03 18:26:17 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    Frozen Column Hides Table Content When Tabbing from End of One Row to Beginning of the Next
+    <label multiline="true">
+        1. focus on an input field
+        2. while pressing the Tab key or Shift+Tab, the focused input field should not be truncated or hidden behind the frozen columns
+    </label>
+    <listbox width="800px" sizedByContent="true">
+        <listhead>
+            <listheader label="Header 1" />
+            <listheader label="Header 2" />
+            <listheader label="Header 3" />
+            <listheader label="Header 4" />
+            <listheader label="Header 5" />
+            <listheader label="Header 6" />
+            <listheader label="Header 7" />
+            <listheader label="Header 8" />
+            <listheader label="Header 9" />
+        </listhead>
+        <frozen columns="2" start="5"/>
+        <listitem>
+            <listcell label="1">
+                Hello Test Content
+            </listcell>
+            <listcell>
+                Gimme Some Test Content
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45"/>
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+        </listitem>
+        <listitem>
+            <listcell label="2">
+                Some More Test Content
+            </listcell>
+            <listcell>
+                Gotta Love That Test Content
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45"/>
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+            <listcell>
+                <decimalbox value="155.45" />
+            </listcell>
+        </listitem>
+    </listbox>
+</zk>

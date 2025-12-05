@@ -930,17 +930,45 @@ export abstract class MeshWidget extends zul.Widget {
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : undefined,
 			frozen = this.frozen;
-		if (td && frozen && (ignoreWidth || zk.parseInt(td.style.width) == 0)
-			&& (index = index - frozen.getColumns()!) >= 0) {
-			const bar = this._scrollbar;
-			if (this._nativebar) {
-				frozen.setStart(index);
-			} else if (bar) {
-				frozen._doScrollNow(index);
-				bar.setBarPosition(index);
+		if (td && frozen) {
+			const frozenCols = frozen.getColumns()!,
+				scrollableIndex = index - frozenCols;
+
+			if (scrollableIndex >= 0 && (ignoreWidth || this._isCellOutOfView(td, index))) {
+				const bar = this._scrollbar;
+				if (this._nativebar) {
+					frozen.setStart(scrollableIndex, { force: true });
+				} else if (bar) {
+					frozen._doScrollNow(scrollableIndex);
+					bar.setBarPosition(scrollableIndex);
+				}
+
+				_shallFocusBack = !notFocusBack;
 			}
-			_shallFocusBack = !notFocusBack;
 		}
+	}
+
+	/** @internal */
+	_isCellOutOfView(td: HTMLTableCellElement, index: number): boolean {
+		let isOutOfView = false;
+		const ehead = this.ehead,
+			frozenCols = this.frozen!.getColumns(),
+			columnNodes = this.ehdfaker!.childNodes as NodeListOf<HTMLElement>;
+
+		if (ehead && frozenCols) {
+			let leftFrozenWidth = 0;
+			for (let i = 0; i < frozenCols; i++) {
+				leftFrozenWidth += columnNodes[i].offsetWidth;
+			}
+
+			const tdLeft = td.offsetLeft,
+				tdRight = tdLeft + td.offsetWidth,
+				viewportLeft = this._currentLeft + leftFrozenWidth,
+				viewportRight = this._currentLeft + ehead.offsetWidth;
+
+			isOutOfView = (tdLeft < viewportLeft) || (tdRight > viewportRight);
+		}
+		return isOutOfView;
 	}
 
 	/** @internal */
