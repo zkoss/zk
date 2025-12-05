@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5785.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Dec 04 21:52:03 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Click the link.
+        2. It will open your default email client.
+    </label>
+    <a id="AMailContacto" target="_blank" href="mailto:info@zkoss.org"
+       label="info@zkoss.org" iconSclass="z-icon-envelope z-icon-lg z-icon-0,1x">
+        ZK-5785 link
+    </a>
+</zk>
