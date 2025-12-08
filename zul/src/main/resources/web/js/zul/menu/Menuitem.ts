@@ -510,7 +510,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 			var key = evt.key;
 			if (key == ' ' || key == 'Enter') {
 				evt.stop();
-				this.doClick_(new zk.Event(this, 'onClick', {}));
+				this.doClick_(new zk.Event(this, 'onClick', {}, {}, evt.domEvent)); // ZK-5895: domEvent is required
 			}
 		}
 		super.doKeyDown_(evt);
