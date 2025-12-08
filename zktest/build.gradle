@@ -321,7 +321,7 @@ task devMode {
 	if (project.gradle.startParameter.taskNames.stream().filter {
 			it.endsWith('Dev')
 		}.findFirst().isPresent()) {
-		dependsOn browsersync
+//		dependsOn browsersync
 		gretty {
 			httpPort = gretty.httpPort
 			beforeClassPath = []
