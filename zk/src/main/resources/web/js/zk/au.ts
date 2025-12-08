@@ -494,8 +494,9 @@ export namespace au_global {
 		 */
 		export function showError(msgCode: string, msg2?: string, cmd?: string, ex?: Error): void {
 			var msg = msgzk[msgCode] as string;
-			zk.error((msg ? msg : msgCode) + '\n' + (msg2 ? msg2 + ': ' : '') + (cmd || '')
-				+ (ex ? '\n' + _exmsg(ex) : ''));
+			const errMsg = (msg ? msg : msgCode) + '\n' + (msg2 ? msg2 + ': ' : '') + (cmd || '')
+				+ (ex ? '\n' + _exmsg(ex) : '');
+			ex ? zk.error(ex, false, errMsg) : zk.error(errMsg);
 		}
 		/**
 		 * @returns the URI for the specified error.
