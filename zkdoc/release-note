@@ -46,6 +46,7 @@ ZK 10.3.0
   ZK-5662: Tab with Caption component causes JS error
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
+  ZK-5896: resizing column loses flex proportions on column width with hflex
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
