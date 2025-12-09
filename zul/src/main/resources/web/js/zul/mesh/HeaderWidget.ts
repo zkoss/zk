@@ -660,13 +660,15 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 			// reset hflex, Bug ZK-2772 - Misaligned Grid columns
 			var wdInt = zk.parseInt(wds[i]);
 			if (cssflex) {
-				zFlex.clearCSSFlex(w, 'h', true);
+				// for B103-ZK-5896
+				// zFlex.clearCSSFlex(w, 'h', true);
 				// reset display:none and flex for ZK-5030
 				const wns = w.$n_().style;
 
 				if (wns.flex) {
 					shallResyncColumns.push(i);
-					wns.flex = '';
+					// for B103-ZK-5896
+					// wns.flex = '';
 				}
 				wns.display = '';
 			} else if (w._hflexWidth) {
