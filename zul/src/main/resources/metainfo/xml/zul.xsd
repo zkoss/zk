@@ -4057,7 +4057,6 @@
 		<xs:attribute name="template" type="xs:string" use="optional" />
 		<xs:attribute name="templateURI" type="xs:string" use="optional" />
 		<xs:attribute name="dynamicValue" type="booleanType" use="optional" />
-		<xs:attribute name="templateName" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- shadow element: forEach -->
 	<xs:element name="forEach" type="forEachType" />

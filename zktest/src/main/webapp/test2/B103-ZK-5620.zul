@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5620.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Dec 06 22:05:11 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Type apply tags, templateName can't show in the suggestion dropdown.
+    </label>
+    <apply templateName="" />
+</zk>
