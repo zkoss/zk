@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * The page render for ZUL pages.
@@ -62,6 +63,9 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 */
 	protected void renderDesktop(Execution exec, Page page, Writer out) throws IOException {
 		HtmlPageRenders.setContentType(exec, page);
+
+		Configuration config = page.getDesktop().getWebApp().getConfiguration();
+		config.getCspProvider().setCspHeader(exec, config);
 
 		final PageCtrl pageCtrl = (PageCtrl) page;
 		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
@@ -108,12 +112,14 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	}
 
 	private static void outHeaders(Execution exec, Page page, Writer out) throws IOException {
-		out.write(HtmlPageRenders.outHeaders(exec, page, true));
+		Configuration config = page.getDesktop().getWebApp().getConfiguration();
+
+		out.write(outCsp(HtmlPageRenders.outHeaders(exec, page, true), config));
 		//F70-ZK-2495: place init-crash-script before zk.wpd
-		out.write(HtmlPageRenders.outInitCrashScript(exec, null));
-		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
-		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
-		out.write(HtmlPageRenders.outHeaders(exec, page, false));
+		out.write(outCsp(HtmlPageRenders.outInitCrashScript(exec, null), config));
+		out.write(outCsp(HtmlPageRenders.outLangJavaScripts(exec, null, null), config));
+		out.write(outCsp(HtmlPageRenders.outLangStyleSheets(exec, null, null), config));
+		out.write(outCsp(HtmlPageRenders.outHeaders(exec, page, false), config));
 	}
 
 	private static void write(Writer out, String s) throws IOException {
@@ -126,6 +132,19 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			out.write(s);
 			out.write('\n');
 		}
+	}
+
+	private static String outCsp(String output, Configuration config) {
+		boolean cspEnabled = config.isCspEnabled(),
+				cspStrictDynamicEnabled = config.isCspStrictDynamicEnabled();
+
+		if (cspEnabled && cspStrictDynamicEnabled && output != null) {
+			String nonce = config.getCspProvider().getCspNonce();
+			return output
+				.replaceAll("<script(?!\\s+nonce=)", "<script nonce=\"" + Encode.forHtmlAttribute(nonce) + "\"")
+				.replaceAll("<style(?!\\s+nonce=)", "<style nonce=\"" + Encode.forHtmlAttribute(nonce) + "\"");
+		}
+		return output;
 	}
 
 	/** Renders the page if {@link Page#isComplete} is false.
