@@ -3822,7 +3822,7 @@ public class Listbox extends MeshElement {
 				if (selectAll)
 					ctrl.setSelectAll(true);
 			}
-			if (sitems == null || sitems.isEmpty() || _model == null)
+			if (data.get("range") == null && (sitems == null || sitems.isEmpty() || _model == null))
 				selectedObjects = null;
 			SelectEvent evt = new SelectEvent(Events.ON_SELECT, this, curSeldItems, prevSeldItems, unselectedItems,
 					selectedObjects, prevSeldObjects, unselectedObjects,
