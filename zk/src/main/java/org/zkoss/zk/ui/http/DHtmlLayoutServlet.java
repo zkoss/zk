@@ -21,8 +21,6 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -83,40 +81,12 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	private boolean _compress = true;
 
 	//Servlet//
-	@SuppressWarnings("deprecation")
 	public void init() throws ServletException {
 		final ServletConfig config = getServletConfig();
+		@Deprecated
 		String param = config.getInitParameter("log-level");
-		if (param != null && param.length() > 0) {
-			param = param.toUpperCase();
-			Level level = null;
-			switch (param) {
-			case "DEBUG":
-			case "FINE":
-				level = Level.FINER;
-				break;
-			case "ERROR":
-			case "SEVERE":
-				level = Level.SEVERE;
-				break;
-			case "FINER":
-				level = Level.FINER;
-				break;
-			case "INFO":
-				level = Level.INFO;
-				break;
-			case "WARNING":
-				level = Level.WARNING;
-				break;
-			case "OFF":
-				level = Level.OFF;
-				break;
-			}
-
-			if (level != null)
-				Logger.getLogger("org.zkoss").setLevel(level);
-			else
-				log.error("Unknown log-level: " + param);
+		if (param != null && !param.isEmpty()) {
+			log.warn("The 'log-level' init parameter is deprecated. Please configure logging levels using your SLF4J implementation's configuration file (e.g., logback.xml).");
 		}
 
 		param = config.getInitParameter("compress");
