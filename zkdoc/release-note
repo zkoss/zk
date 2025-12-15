@@ -1,18 +1,31 @@
 ZK 10.3.0
 * Features
   ZK-5991: update tbeditor to the latest Trumbowyg js widget
+  ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
   ZK-5968: cannot invoke "String.equals(Object)" because "org.zkoss.zk.ui.http.Wpds._currentClientTZDBVersion" is null
   ZK-5973: Apache Commons FileUpload DoS Vulnerability
   ZK-5972: Suppress false-positive scanner alerts in PE/EE
+  ZK-5090: Window's content should not contain padding when no border on it
   ZK-5982: HeaderWidget _getWidth undefined properties
+  ZK-5254: removing selection on Tree causes scroll to top
+  ZK-6006: Timepicker does not bind value
+  ZK-5227: Provide option for autodrop combowidget to open on up/down keypresses
   ZK-5981: ZK-5370 causes JS error if component has client data-handler onBind listener
   ZK-5864: cannot load zk.debug
   ZK-5859: detach a button causes a javascript error
+  ZK-5417: Cascader popup scrolls screen instead of repositioning when growing
   ZK-5800: css flex listen then unlisten immediately causes listeners to not be removed
   ZK-5731: Nested detail receives onStripe when no fake node exists in ZK 10
+  ZK-6025: The tooltip text of Slider does not update after clicking
+  ZK-5909: paging grid loose selection when on non-active page
+  ZK-5988: a popup doesn't open at the pointer inside a listitem with a double click listener
+  ZK-6008: audtodisable is not listed in the suggestion dropdown
+  ZK-5818: drag and drop a panel causes a NullPointerException
+  ZK-5617: an invisible toolbarbutton is not hidden when it's inside an overflow popup
+  ZK-5931: DhtmlLayoutServlet uses java.util.logging.*
 
 * Upgrade Notes
 

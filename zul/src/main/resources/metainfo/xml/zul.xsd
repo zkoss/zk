@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.0.0.202404301520">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.3.0.202512031741">
 	<!--
 	SIMPLETYPE
 	-->
@@ -3268,18 +3268,12 @@
 	<!-- toolbarbutton -->
 	<xs:element name="toolbarbutton" type="toolbarbuttonType" />
 	<xs:complexType name="toolbarbuttonType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="labelImageElementAttrGroup" />
-		<xs:attribute name="orient" type="orientAttrType" use="optional" />
-		<xs:attribute name="dir" type="dirAttrType" use="optional" />
-		<xs:attribute name="href" type="xs:string" use="optional" />
-		<xs:attribute name="target" type="xs:string" use="optional" />
-		<xs:attribute name="disabled" type="booleanType" use="optional" />
-		<xs:attribute name="mode" type="xs:string" use="optional" />
-		<xs:attribute name="checked" type="booleanType" use="optional" />
-		<xs:attribute name="upload" type="xs:string" use="optional" />
-		<xs:attributeGroup ref="rootAttrGroup" />
-		<xs:attribute name="onUpload" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="buttonType">
+				<xs:attribute name="mode" type="xs:string" use="optional" />
+				<xs:attribute name="checked" type="booleanType" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<!-- nodom -->
 	<xs:element name="nodom" type="nodomType" />

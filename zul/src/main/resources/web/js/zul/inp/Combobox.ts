@@ -374,11 +374,13 @@ export class Combobox extends zul.inp.ComboWidget {
 
 	/** @internal */
 	override dnPressed_(evt: zk.Event): void {
+		super.dnPressed_(evt);
 		this._updnSel(evt);
 	}
 
 	/** @internal */
 	override upPressed_(evt: zk.Event): void {
+		super.upPressed_(evt);
 		this._updnSel(evt, true);
 	}
 
