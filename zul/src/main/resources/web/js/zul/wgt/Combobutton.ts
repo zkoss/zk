@@ -190,8 +190,7 @@ export class Combobutton extends zul.wgt.Button {
 	 */
 	setOpen(open: boolean, opts?: zul.wgt.PopupOptions): this {
 		if (!this._disabled && !zk.animating())
-			// have to provide empty opts or menupopup will set sendOnOpen to true
-			this[open ? 'open' : 'close'](opts || {});
+			this[open ? 'open' : 'close'](opts || { sendOnOpen: true }); // ZK-5835: need to update its child popup's visible state by triggering the onOpen event
 		return this;
 	}
 

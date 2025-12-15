@@ -3268,12 +3268,12 @@
 	<!-- toolbarbutton -->
 	<xs:element name="toolbarbutton" type="toolbarbuttonType" />
 	<xs:complexType name="toolbarbuttonType">
-        <xs:complexContent>
-            <xs:extension base="buttonType">
+		<xs:complexContent>
+			<xs:extension base="buttonType">
 				<xs:attribute name="mode" type="xs:string" use="optional" />
 				<xs:attribute name="checked" type="booleanType" use="optional" />
-            </xs:extension>
-        </xs:complexContent>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<!-- nodom -->
 	<xs:element name="nodom" type="nodomType" />
