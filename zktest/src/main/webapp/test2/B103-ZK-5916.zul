@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5916.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Dec 04 17:32:49 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. There should be no exception when loading this radiogroup using a template renderer with an hlayout.
+        2. Test various template-rendering approaches using a radiogroup.
+    </label>
+
+    <caption label="Simple case">
+        <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B103_ZK_5916VM')">
+            <radiogroup model="@load(vm.model)">
+                <template name="model">
+                    <hlayout>
+                        <radio label="@load(each)" />
+                    </hlayout>
+                </template>
+            </radiogroup>
+        </div>
+    </caption>
+
+    <caption label="Radiogroup using a template renderer with a div">
+        <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B103_ZK_5916VM')">
+            <radiogroup model="@load(vm.model)">
+                <template name="model">
+                    <div>
+                        <radio label="@load(each)" />
+                    </div>
+                </template>
+            </radiogroup>
+        </div>
+    </caption>
+
+    <caption label="Radiogroup using a template renderer without additional wrapping tags">
+        <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B103_ZK_5916VM')">
+            <radiogroup model="@load(vm.model)">
+                <template name="model">
+                    <radio label="@load(each)" />
+                </template>
+            </radiogroup>
+        </div>
+    </caption>
+
+    <caption label="Radiogroup using a template renderer with both hlayout and div tags">
+        <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B103_ZK_5916VM')">
+            <radiogroup model="@load(vm.model)">
+                <template name="model">
+                    <div>
+                        <hlayout>
+                                <radio label="@load(each)" />
+                        </hlayout>
+                    </div>
+                </template>
+            </radiogroup>
+        </div>
+    </caption>
+</zk>
