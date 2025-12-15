@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Component;
  * which will increase its size according to its content. If so, please use Vlayout
  * component instead.
  * @author tomyeh
+ * @deprecated As of release 10.3.0, using {@link Vlayout} instead.
  */
 public class Vbox extends Box {
 	public Vbox() {
