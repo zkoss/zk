@@ -1,5 +1,6 @@
 ZK 10.3.0
 * Features
+  ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
@@ -20,8 +21,10 @@ ZK 10.3.0
   ZK-6025: The tooltip text of Slider does not update after clicking
   ZK-5909: paging grid loose selection when on non-active page
   ZK-5988: a popup doesn't open at the pointer inside a listitem with a double click listener
+  ZK-6008: audtodisable is not listed in the suggestion dropdown
   ZK-5818: drag and drop a panel causes a NullPointerException
   ZK-5617: an invisible toolbarbutton is not hidden when it's inside an overflow popup
+  ZK-5931: DhtmlLayoutServlet uses java.util.logging.*
 
 * Upgrade Notes
 
