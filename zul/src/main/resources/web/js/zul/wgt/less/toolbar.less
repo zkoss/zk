@@ -70,7 +70,7 @@
 		overflow: auto;
 		max-height: 350px;
 
-		> * {
+		> *:not([disabled]) { // ZK-5617: invisible is not hidden when it's inside an overflow popup
 			display: table !important;
 			margin: 4px 0 4px 8px;
 		}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5895.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sun Dec 07 19:44:54 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. use the arrow keys to navigate to a menuitem with upload="true"
+        2. press the enter key or space key
+        3. there should be no console errors
+    </label>
+    <menubar>
+        <menuitem label="Click me with space / enter" upload="true" onClick='alert("upload button clicked");' />
+        <menuitem label="Click me too with space / enter" onClick='alert("other button clicked");' />
+        <menu label="Open with keyboard">
+            <menupopup>
+                <menuitem label="Click me with keyboard" upload="true" onClick='alert("upload button clicked");' />
+                <menuitem label="Click me too with keyboard" onClick='alert("other button clicked");' />
+            </menupopup>
+        </menu>
+    </menubar>
+</zk>

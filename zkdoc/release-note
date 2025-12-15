@@ -1,5 +1,8 @@
 ZK 10.3.0
 * Features
+  ZK-5858: zk.showError() can show error stack trace in the browser console
+  ZK-5991: update tbeditor to the latest Trumbowyg js widget
+  ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
@@ -17,10 +20,22 @@ ZK 10.3.0
   ZK-5417: Cascader popup scrolls screen instead of repositioning when growing
   ZK-5800: css flex listen then unlisten immediately causes listeners to not be removed
   ZK-5731: Nested detail receives onStripe when no fake node exists in ZK 10
+  ZK-5678: moving focus among treecells of a frozen tree but the scroll bar doesn't sync to the corresponding position
   ZK-6025: The tooltip text of Slider does not update after clicking
   ZK-5909: paging grid loose selection when on non-active page
   ZK-5988: a popup doesn't open at the pointer inside a listitem with a double click listener
   ZK-5838: timepicker has a different button width from other similar components
+  ZK-5837: icons in some disabled Input components do not reflect disabled state color
+  ZK-5985: pressing a menuitem with upload=true doesn't fire onClick event
+  ZK-5903: focus on an input component in a listbox with frozen column, it doesn't scroll the input component into the current view
+  ZK-6022: Unable to reload locale message of Za11y
+  ZK-5916: Radiogroup model/template pattern only accepts templates that create only one radio
+  ZK-5785: mailto link doesn't work
+  ZK-6019: different inline script between nav and navitem
+  ZK-6008: audtodisable is not listed in the suggestion dropdown
+  ZK-5818: drag and drop a panel causes a NullPointerException
+  ZK-5617: an invisible toolbarbutton is not hidden when it's inside an overflow popup
+  ZK-5931: DhtmlLayoutServlet uses java.util.logging.*
 
 * Upgrade Notes
 

@@ -15,4 +15,6 @@
     <suppress checks=".*" files="zkex[\\/]srcpv[\\/]org[\\/]zkoss[\\/].*"/>
     <!-- zktest and zephyr-test -->
     <suppress checks=".*" files="zktest/.*|zephyr-test/.*"/>
+    <!-- for stateless module to ignore build files -->
+    <suppress checks=".*" files="build[\\/].*"/>
 </suppressions>
