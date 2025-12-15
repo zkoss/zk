@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5837.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Dec 06 17:40:33 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="display: grid; grid-template-columns: repeat(3, min-content); gap: 8px;">
+        datebox
+        <datebox disabled="false" width="200px"/>
+        <datebox disabled="true" width="200px"/>
+
+        bandbox
+        <bandbox disabled="false" width="200px"/>
+        <bandbox disabled="true" width="200px"/>
+
+        cascader
+        <cascader disabled="false" width="200px"/>
+        <cascader disabled="true" width="200px"/>
+
+        timebox
+        <timebox disabled="false" width="200px"/>
+        <timebox disabled="true" width="200px"/>
+
+        spinner
+        <spinner disabled="false" width="200px"/>
+        <spinner disabled="true" width="200px"/>
+
+        doublespinner
+        <doublespinner disabled="false" width="200px"/>
+        <doublespinner disabled="true" width="200px"/>
+    </div>
+</zk>

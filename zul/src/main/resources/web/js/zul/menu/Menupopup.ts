@@ -413,7 +413,7 @@ export class Menupopup extends zul.wgt.Popup {
 			// 3. fire onClick event if target is Menu and clickable
 			if (w && w instanceof zul.menu.Menuitem) {
 				//{} for emulate as onClick, escape the checking data == null at serverside
-				w.doClick_(new zk.Event(w, 'onClick', {}));
+				w.doClick_(new zk.Event(w, 'onClick', {}, {}, evt.domEvent)); // ZK-5895: domEvent is required
 				zWatch.fire('onFloatUp', w); //notify all
 				this.close({sendOnOpen: true});
 			} else if (w && w instanceof zul.menu.Menu) {
@@ -431,6 +431,25 @@ export class Menupopup extends zul.wgt.Popup {
 						}
 					}
 				}
+			}
+			break;
+		case 32: //SPACE
+			var isMenuitem = w instanceof zul.menu.Menuitem;
+			if (w && (isMenuitem || w instanceof zul.menu.Menu)) {
+				const oldKeepOpen = this._keepOpen,
+					isMenuitemCheckbox = w instanceof zul.menu.Menuitem ? w.isAutocheck() : false;
+
+				if (isMenuitemCheckbox) this._keepOpen = true;
+
+				w.doClick_(new zk.Event(w, 'onClick', {}, {}, evt.domEvent)); // ZK-5895: domEvent is required
+
+				if (isMenuitemCheckbox) {
+					this._keepOpen = oldKeepOpen;
+				} else if (isMenuitem) {
+					zWatch.fire('onFloatUp', w);
+					this.close({sendOnOpen: true});
+				}
+				evt.stop();
 			}
 			break;
 		case 27: //ESC

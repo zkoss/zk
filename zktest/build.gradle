@@ -291,6 +291,7 @@ gretty {
 		httpPort = Integer.parseInt(project.httpPort)
 	}
 	systemProperty 'java.util.logging.config.file', './src/main/webapp/WEB-INF/logging.properties'
+	reloadOnClassChange    = false // disable reloading when classes changes
 }
 
 // Start browsersync in the background.
@@ -321,7 +322,7 @@ task devMode {
 	if (project.gradle.startParameter.taskNames.stream().filter {
 			it.endsWith('Dev')
 		}.findFirst().isPresent()) {
-		dependsOn browsersync
+//		dependsOn browsersync
 		gretty {
 			httpPort = gretty.httpPort
 			beforeClassPath = []
