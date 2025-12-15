@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Component;
  * which will increase its size according to its content. If so, please use Hlayout
  * component instead. 
  * @author tomyeh
+ * @deprecated As of release 10.3.0, using {@link Hlayout} instead.
  */
 public class Hbox extends Box {
 	public Hbox() {

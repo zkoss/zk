@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5678.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 20 12:44:41 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <label multiline="true">
+        1. focus on the textbox in column 1
+        2. press tab repeatedly to move focus to the textbox in column 6
+        3. the scrollbar should not stay in the same position
+    </label>
+    <tree width="1000px">
+        <frozen id="frozen" columns="2"></frozen>
+        <treecols>
+            <treecol label="column 1" width="200px"/>
+            <treecol label="column 2" width="200px"/>
+            <treecol label="column 3" width="200px"/>
+            <treecol label="column 4" width="200px"/>
+            <treecol label="column 5" width="200px" />
+            <treecol label="column 6" width="200px"/>
+            <treecol label="column 7" width="200px"/>
+            <treecol label="column 8" width="200px"/>
+            <treecol label="column 9" width="200px"/>
+            <treecol label="column 10" width="200px"/>
+            <treecol label="column 11" width="200px"/>
+            <treecol label="column 12" width="200px"/>
+            <treecol label="column 13" width="200px" />
+            <treecol label="column 14" width="200px"/>
+            <treecol label="column 15" width="200px"/>
+            <treecol label="column 16" width="200px"/>
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                    <treecell><textbox hflex="true"></textbox></treecell>
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
+</zk>

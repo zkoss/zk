@@ -89,7 +89,7 @@ public class BindRadioRenderer extends AbstractRenderer implements RadioRenderer
 			if (items.length != 1)
 				throw new UiException("The model template must have exactly one item, not " + items.length);
 
-			final Radio nr = (Radio) items[0];
+			final Radio nr = (Radio) items[0].query("radio"); // ZK-5916 Radiogroup as an Ancestor of Radio
 			nr.setAttribute(BinderCtrl.VAR, varnm); // for the converter to get the value
 
 			// ZK-2552

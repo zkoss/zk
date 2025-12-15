@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5991.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Nov 29 23:33:29 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. update tbeditor to the latest(v2.31) Trumbowyg js, and verify it works fine.
+    </label>
+    <tbeditor/>
+</zk>
