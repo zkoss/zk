@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5617.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Dec 11 09:14:51 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <window width="200px" sizable="true" border="normal">
+        <toolbar width="100%" overflowPopup="true">
+            <toolbarbutton label="111"/>
+            <toolbarbutton label="222"/>
+            <toolbarbutton label="333" />
+            <toolbarbutton label="444" visible="false" disabled="true"/>
+        </toolbar>
+    </window>
+</zk>
