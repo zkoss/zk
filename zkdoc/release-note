@@ -24,6 +24,7 @@ ZK 10.3.0
   ZK-6025: The tooltip text of Slider does not update after clicking
   ZK-5909: paging grid loose selection when on non-active page
   ZK-5988: a popup doesn't open at the pointer inside a listitem with a double click listener
+  ZK-5838: timepicker has a different button width from other similar components
   ZK-5837: icons in some disabled Input components do not reflect disabled state color
   ZK-5985: pressing a menuitem with upload=true doesn't fire onClick event
   ZK-5903: focus on an input component in a listbox with frozen column, it doesn't scroll the input component into the current view
