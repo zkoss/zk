@@ -190,7 +190,7 @@ export class Menupopup extends zul.wgt.Popup {
 
 	override close(opts?: zul.wgt.PopupOptions): void {
 		if (this.isOpen())
-			zul.menu._nOpen--;
+			zul.menu._nOpen = (zul.menu._nOpen || 0) - 1;
 
 		super.close(opts);
 		jq(this.$n_()).hide(); // force to hide the element
@@ -205,7 +205,7 @@ export class Menupopup extends zul.wgt.Popup {
 
 	override open(ref?: zul.wgt.Ref, offset?: zk.Offset, position?: string, opts?: zul.wgt.PopupOptions): void {
 		if (!this.isOpen())
-			zul.menu._nOpen++;
+			zul.menu._nOpen = (zul.menu._nOpen || 0) + 1;
 		var menu: zul.menu.Menu | undefined;
 		if (menu = _getMenu(this)) {
 			if (!offset) {
