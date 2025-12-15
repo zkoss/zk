@@ -1,5 +1,6 @@
 ZK 10.3.0
 * Features
+  ZK-5991: update tbeditor to the latest Trumbowyg js widget
   ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
 
 * Bugs
