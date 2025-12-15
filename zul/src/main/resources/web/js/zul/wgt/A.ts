@@ -274,7 +274,7 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 				setTimeout(() => { jq(ifrm).remove(); }, 100);
 			else
 				jq(ifrm).remove();
-			evt.stop();
+			evt.stop({propagation: true}); // ZK-5785: mailto link doesn't work
 		}
 		if (this._disabled)
 			evt.stop(); // Prevent browser default
