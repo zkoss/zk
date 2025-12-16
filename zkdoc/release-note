@@ -3,6 +3,7 @@ ZK 10.3.0
   ZK-5858: zk.showError() can show error stack trace in the browser console
   ZK-5991: update tbeditor to the latest Trumbowyg js widget
   ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
+  ZK-2910: add osgi JAR to maven repository
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
@@ -42,6 +43,7 @@ ZK 10.3.0
   ZK-5931: DhtmlLayoutServlet uses java.util.logging.*
 
 * Upgrade Notes
+  + add OSGi header into all ZK jars without additional OSGi bundles.
 
    --------
 ZK 10.2.0
