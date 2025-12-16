@@ -454,7 +454,7 @@ public class JsContentRenderer implements ContentRenderer {
 				final String v = value.trim();
 				char cc;
 				if (!v.isEmpty() && ((cc = v.charAt(v.length() - 1)) == ';' || cc == ','
-						|| (!v.contains("function") && v.indexOf(';') >= 0)))
+						|| (!v.contains("function") && validateValueExpression(v))))
 					throw new UiException("Illegal client override: " + v
 							+ (name.startsWith("on")
 									? "\nTo listen an event, remember to captalize the third letter, such as onClick"
@@ -463,6 +463,24 @@ public class JsContentRenderer implements ContentRenderer {
 			_buf.append(name).append(":\n").append(Strings.isEmpty(value) ? "''" : value).append("\n,");
 		}
 		_buf.setCharAt(_buf.length() - 1, '}');
+	}
+
+	private boolean validateValueExpression(String v) {
+		boolean inSingleQuote = false,
+				inDoubleQuote = false;
+
+		for (int i = 0; i < v.length(); i++) {
+			char c = v.charAt(i);
+
+			if (c == '\'' && !inDoubleQuote) {
+				inSingleQuote = !inSingleQuote;
+			} else if (c == '"' && !inSingleQuote) {
+				inDoubleQuote = !inDoubleQuote;
+			} else if (c == ';' && !inSingleQuote && !inDoubleQuote) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void renderWidgetAttributes(Map<String, String> attrs) {

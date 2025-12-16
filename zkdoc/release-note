@@ -21,6 +21,7 @@ ZK 10.3.0
   ZK-5909: paging grid loose selection when on non-active page
   ZK-5988: a popup doesn't open at the pointer inside a listitem with a double click listener
   ZK-5818: drag and drop a panel causes a NullPointerException
+  ZK-5821: a semicolon in java String causes an UiException
 
 * Upgrade Notes
 
