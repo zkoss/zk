@@ -41,6 +41,7 @@ ZK 10.3.0
   ZK-5690: menu._nOpen initializes to void (undefined) instead of zero, prevent closing
   ZK-5617: an invisible toolbarbutton is not hidden when it's inside an overflow popup
   ZK-5931: DhtmlLayoutServlet uses java.util.logging.*
+  ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
