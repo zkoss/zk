@@ -1,5 +1,228 @@
 // Script for release
 
+// Validate OSGi headers in all JARs before release
+task validateOSGiHeaders {
+	description = 'Validates that all JAR files contain correct OSGi manifest headers (run after building JARs)'
+	group = 'verification'
+
+	// This task should run after JARs are built
+	mustRunAfter 'build'
+	subprojects.each { subproject ->
+		mustRunAfter "${subproject.path}:jar"
+		mustRunAfter "${subproject.path}:sourcesJar"
+	}
+
+	doLast {
+		def errors = []
+		def warnings = []
+		def successCount = 0
+		def totalJars = 0
+
+		println "=" * 80
+		println "Validating OSGi Headers in All JAR Files"
+		println "=" * 80
+
+		// Check if we should fail on missing JARs (default: warn only)
+		def failOnMissing = project.hasProperty('validateOSGi.failOnMissing') ?
+			project.property('validateOSGi.failOnMissing').toBoolean() : false
+
+		// Helper function to validate a single JAR
+		def validateJar = { File jarFile, String projectName, boolean isEval ->
+			def jarType = isEval ? "eval" : "standard"
+
+			if (!jarFile.exists()) {
+				if (failOnMissing) {
+					errors << "❌ JAR not found: ${jarFile.path}"
+				} else {
+					// Skip missing JARs with debug message
+					// println "⏭️  Skipping: ${jarFile.name} (not found)"
+				}
+				return
+			}
+
+			totalJars++
+
+			try {
+				// Extract MANIFEST.MF
+				def manifest = new java.util.jar.JarFile(jarFile).manifest
+				def attrs = manifest?.mainAttributes
+
+				if (!attrs) {
+					errors << "❌ [$projectName] ($jarType) No manifest found in ${jarFile.name}"
+					return
+				}
+
+				// Required OSGi headers
+				def bundleName = attrs.getValue("Bundle-Name")
+				def bundleSymbolicName = attrs.getValue("Bundle-SymbolicName")
+				def bundleVersion = attrs.getValue("Bundle-Version")
+				def bundleManifestVersion = attrs.getValue("Bundle-ManifestVersion")
+				def exportPackage = attrs.getValue("Export-Package")
+				def importPackage = attrs.getValue("Import-Package")
+
+				def projectErrors = []
+
+				// Validate required headers exist
+				if (!bundleManifestVersion) {
+					projectErrors << "Missing Bundle-ManifestVersion"
+				} else if (bundleManifestVersion != "2") {
+					projectErrors << "Bundle-ManifestVersion should be '2', got '${bundleManifestVersion}'"
+				}
+
+				if (!bundleName) {
+					projectErrors << "Missing Bundle-Name"
+				}
+
+				if (!bundleSymbolicName) {
+					projectErrors << "Missing Bundle-SymbolicName"
+				} else if (bundleSymbolicName != projectName) {
+					warnings << "⚠️  [$projectName] ($jarType) Bundle-SymbolicName is '${bundleSymbolicName}', expected '${projectName}'"
+				}
+
+				if (!bundleVersion) {
+					projectErrors << "Missing Bundle-Version"
+				}
+
+				if (!exportPackage) {
+					projectErrors << "Missing Export-Package"
+				}
+
+				if (!importPackage) {
+					projectErrors << "Missing Import-Package"
+				}
+
+				// Special validations for specific projects
+				if (projectName == 'zweb' && importPackage) {
+					if (!importPackage.contains('javax.servlet.annotation')) {
+						warnings << "⚠️  [$projectName] ($jarType) Should import javax.servlet.annotation"
+					}
+				}
+
+				if (projectName == 'zkbind' && importPackage) {
+					if (!importPackage.contains('javassist.util.proxy')) {
+						warnings << "⚠️  [$projectName] ($jarType) Should import javassist.util.proxy"
+					}
+				}
+
+				if (projectName == 'zkex') {
+					if (importPackage && !importPackage.contains('org.zkoss.zk.ui.sys')) {
+						warnings << "⚠️  [$projectName] ($jarType) Should import org.zkoss.zk.ui.sys"
+					}
+					if (exportPackage && !exportPackage.contains('!org.zkoss.zk.ui.sys')) {
+						warnings << "⚠️  [$projectName] ($jarType) Should not export org.zkoss.zk.ui.sys"
+					}
+				}
+
+				if (projectName == 'zweb-dsp') {
+					def fragmentHost = attrs.getValue("Fragment-Host")
+					if (!fragmentHost) {
+						projectErrors << "Missing Fragment-Host header"
+					} else if (!fragmentHost.contains('zweb')) {
+						projectErrors << "Fragment-Host should reference 'zweb', got '${fragmentHost}'"
+					}
+				}
+
+				if (projectErrors.isEmpty()) {
+					successCount++
+					println "✅ [$projectName] ($jarType) ${jarFile.name}"
+				} else {
+					errors << "❌ [$projectName] ($jarType) ${jarFile.name}: ${projectErrors.join(', ')}"
+				}
+
+			} catch (Exception e) {
+				errors << "❌ [$projectName] ($jarType) Failed to validate ${jarFile.name}: ${e.message}"
+			}
+		}
+
+		// Validate ZK subprojects (standard JARs)
+		println "\nValidating ZK subprojects..."
+		println "-" * 80
+		zkprojects.each { prjName, dir ->
+			if (prjName != 'za11y' && prjName != 'zkex' && prjName != 'zkmax' &&
+			    prjName != 'zml' && prjName != 'zuti' && prjName != 'stateless' &&
+			    prjName != 'stateless-immutable' && prjName != 'client-bind') {
+				def jarFile = new File("${dir}/build/libs/${prjName}-${project.version}.jar")
+				validateJar(jarFile, prjName, false)
+			}
+		}
+
+		// Validate ZKCML subprojects (standard JARs)
+		if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+			println "\nValidating ZKCML subprojects (standard)..."
+			println "-" * 80
+			zkcmlprojects.each { prjName, dir ->
+				def jarFile = new File("${dir}/build/libs/${prjName}-${project.version}.jar")
+				validateJar(jarFile, prjName, false)
+			}
+
+			// Validate ZKCML eval JARs
+			println "\nValidating ZKCML subprojects (eval)..."
+			println "-" * 80
+			zkcmlprojects.each { prjName, dir ->
+				if (prjName != 'stateless-mock' && prjName != 'stateless-processor') {
+					def evalJarFile = new File("${dir}/build/libs/eval/${prjName}-${project.version}.jar")
+					validateJar(evalJarFile, prjName, true)
+				}
+			}
+		}
+
+		// Validate sources JARs
+		println "\nValidating sources JARs..."
+		println "-" * 80
+		zkprojects.each { prjName, dir ->
+			if (prjName != 'za11y' && prjName != 'zkex' && prjName != 'zkmax' &&
+			    prjName != 'zml' && prjName != 'zuti' && prjName != 'stateless' &&
+			    prjName != 'stateless-immutable' && prjName != 'client-bind') {
+				def sourcesJarFile = new File("${dir}/build/libs/${prjName}-${project.version}-sources.jar")
+				if (sourcesJarFile.exists()) {
+					validateJar(sourcesJarFile, prjName, false)
+				}
+			}
+		}
+
+		if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
+			zkcmlprojects.each { prjName, dir ->
+				if (prjName != 'stateless-mock' && prjName != 'stateless-processor') {
+					def sourcesJarFile = new File("${dir}/build/libs/${prjName}-${project.version}-sources.jar")
+					if (sourcesJarFile.exists()) {
+						validateJar(sourcesJarFile, prjName, false)
+					}
+				}
+			}
+		}
+
+		// Print summary
+		println "\n" + "=" * 80
+		println "Validation Summary"
+		println "=" * 80
+		println "Total JARs validated: ${totalJars}"
+		println "✅ Success: ${successCount}"
+		println "❌ Errors: ${errors.size()}"
+		println "⚠️  Warnings: ${warnings.size()}"
+
+		// Print warnings
+		if (!warnings.isEmpty()) {
+			println "\n" + "=" * 80
+			println "Warnings:"
+			println "=" * 80
+			warnings.each { println it }
+		}
+
+		// Print errors
+		if (!errors.isEmpty()) {
+			println "\n" + "=" * 80
+			println "Errors:"
+			println "=" * 80
+			errors.each { println it }
+			println "=" * 80
+			throw new GradleException("OSGi headers validation failed! Found ${errors.size()} error(s).")
+		}
+
+		println "\n🎉 All OSGi headers are valid!"
+		println "=" * 80
+	}
+}
+
 subprojects {
 	afterEvaluate {
 		// generate Publishing tasks each project, you can check these tasks with 'gradle task' command
@@ -358,87 +581,9 @@ task prepareCmlBin() {
 	}
 }
 
-task prepareBinOSGi() {
-	subprojects.each {
-		dependsOn ":$it.name:buildOSGi"
-	}
-	if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
-		zkcmlprojects.each { prjName, dir ->
-			dependsOn gradle.includedBuild('zkcml').task(":$prjName:buildOSGi")
-		}
-	}
-	doLast {
-		// osgi jars
-		copy {
-			into "$buildDir/tmp/eebin-osgi/dist/lib"
-			from "$buildDir/dist/lib/osgi"
-		}
-		// osgi sources jars
-		copy {
-			into "$buildDir/tmp/eebin-osgi/dist/src"
-			from "$buildDir/dist/lib/osgi-src"
-		}
-		// doc
-		copy {
-			into "$buildDir/tmp/eebin-osgi/doc"
-			from("$rootDir/zkdoc") {
-				include "**/release-note"
-			}
-			from("$rootDir/../zkcml/cmldoc/CML_LICENSE") {
-				rename "CML_LICENSE", "LICENSE"
-			}
-		}
 
-		// prepare ce
-		copy {
-			into "$buildDir/tmp/cebin-osgi"
-			from("$buildDir/tmp/eebin-osgi") {
-				// cml
-				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-				// doc
-				exclude "**/doc"
-			}
-		}
-		copy {
-			into "$buildDir/tmp/cebin-osgi/doc"
-			from "$rootDir/zkdoc"
-		}
-	}
-}
 
-task prepareCmlBinOSGi() {
-	dependsOn processBins
-	processBins.dependsOn prepareBinOSGi
-	doLast {
-		// prepare ee
-		copy {
-			into "$buildDir/tmp/eebin-osgi/dist/lib"
-			from("$buildDir/dist/lib/osgi") {
-				include "zk.osgi.jar"
-			}
-		}
-		// prepare ee eval
-		// copy from eebin exclude cml jar & sources jar
-		copy {
-			into "$buildDir/tmp/eebin-osgi-eval"
-			from("$buildDir/tmp/eebin-osgi") {
-				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-				exclude "**/LICENSE"
-			}
-		}
-		copy {
-			into "$buildDir/tmp/eebin-osgi-eval/doc"
-			from "$rootDir/../zkcml/cmldoc/LICENSE"
-		}
-		// copy eval jar
-		zkcmlprojects.each { prjName, dir ->
-			copy {
-				into "$buildDir/tmp/eebin-osgi-eval/dist/lib"
-				from "$dir/build/libs/eval/${prjName}.osgi.jar"
-			}
-		}
-	}
-}
+
 
 task prepareSrc() {
 	dependsOn(prepareBin)
@@ -506,22 +651,7 @@ task zkeeBinZip(type: Zip) {
 	into "zkee-bin-${project.version}"
 }
 
-task zkeeBinOSGiTar(type: Tar) {
-	dependsOn(prepareCmlBinOSGi)
-	archiveFileName = "zkee-bin-osgi-${project.version}.tar.gz"
-	destinationDirectory = file("$buildDir/bin/proprietary")
-	compression = Compression.GZIP
-	from "$buildDir/tmp/eebin-osgi"
-	into "zkee-bin-osgi-${project.version}"
-}
 
-task zkeeBinOSGiZip(type: Zip) {
-	dependsOn(prepareCmlBinOSGi)
-	archiveFileName = "zkee-bin-osgi-${project.version}.zip"
-	destinationDirectory = file("$buildDir/bin/proprietary")
-	from "$buildDir/tmp/eebin-osgi"
-	into "zkee-bin-osgi-${project.version}"
-}
 
 task zkeeSrcZip(type: Zip) {
 	dependsOn(prepareSrc)
@@ -552,24 +682,7 @@ task zkpeBinZip(type: Zip) {
 	exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
 }
 
-task zkpeBinOSGiTar(type: Tar) {
-	dependsOn(prepareCmlBinOSGi)
-	archiveFileName = "zkpe-bin-osgi-${project.version}.tar.gz"
-	destinationDirectory = file("$buildDir/bin/proprietary")
-	compression = Compression.GZIP
-	from "$buildDir/tmp/eebin-osgi"
-	into "zkpe-bin-osgi-${project.version}"
-	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-}
 
-task zkpeBinOSGiZip(type: Zip) {
-	dependsOn(prepareCmlBinOSGi)
-	archiveFileName = "zkpe-bin-osgi-${project.version}.zip"
-	destinationDirectory = file("$buildDir/bin/proprietary")
-	from "$buildDir/tmp/eebin-osgi"
-	into "zkpe-bin-osgi-${project.version}"
-	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-}
 
 task zkpeSrcZip(type: Zip) {
 	dependsOn(prepareSrc)
@@ -599,22 +712,7 @@ task zkBinTar(type: Tar) {
 	into "zk-bin-${project.version}"
 }
 
-task zkBinOSGiTar(type: Tar) {
-	dependsOn(prepareBinOSGi)
-	archiveFileName = "zk-bin-osgi-${project.version}.tar.gz"
-	destinationDirectory = file("$buildDir/bin")
-	compression = Compression.GZIP
-	from "$buildDir/tmp/cebin-osgi"
-	into "zk-bin-osgi-${project.version}"
-}
 
-task zkBinOSGiZip(type: Zip) {
-	dependsOn(prepareBinOSGi)
-	archiveFileName = "zk-bin-osgi-${project.version}.zip"
-	destinationDirectory = file("$buildDir/bin")
-	from "$buildDir/tmp/cebin-osgi"
-	into "zk-bin-osgi-${project.version}"
-}
 
 task zkSrcZip(type: Zip) {
 	dependsOn(prepareSrc)
@@ -643,23 +741,7 @@ task zkeeBinEvalZip(type: Zip) {
 	into "zkee-bin-eval-${project.version}"
 }
 
-task zkeeBinOSGiEvalZip(type: Zip) {
-	dependsOn(prepareCmlBinOSGi)
-	archiveFileName = "zkee-bin-osgi-eval-${project.version}.zip"
-	destinationDirectory = file("$buildDir/bin")
-	from "$buildDir/tmp/eebin-osgi-eval"
-	into "zkee-bin-osgi-eval-${project.version}"
-}
 
-task zkpeBinOSGiEvalZip(type: Zip) {
-	dependsOn(prepareCmlBinOSGi)
-	archiveFileName = "zkpe-bin-osgi-eval-${project.version}.zip"
-	destinationDirectory = file("$buildDir/bin")
-	from("$buildDir/tmp/eebin-osgi-eval") {
-		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-	}
-	into "zkpe-bin-osgi-eval-${project.version}"
-}
 
 task zksandboxZip(type: Zip) {
 	dependsOn(prepareCmlBin)
@@ -689,8 +771,6 @@ task zkBins() {
 	// ce
 	dependsOn(zkBinZip)
 	dependsOn(zkBinTar)
-	dependsOn(zkBinOSGiTar)
-	dependsOn(zkBinOSGiZip)
 	dependsOn(zkSrcZip)
 
 	// javadoc & jsdoc
@@ -702,20 +782,14 @@ task cmlBins() {
 	// ee
 	dependsOn(zkeeBinZip)
 	dependsOn(zkeeBinTar)
-	dependsOn(zkeeBinOSGiTar)
-	dependsOn(zkeeBinOSGiZip)
 	dependsOn(zkeeSrcZip)
 	// pe
 	dependsOn(zkpeBinZip)
 	dependsOn(zkpeBinTar)
-	dependsOn(zkpeBinOSGiTar)
-	dependsOn(zkpeBinOSGiZip)
 	dependsOn(zkpeSrcZip)
 	// eval
 	dependsOn(zkeeBinEvalZip)
 	dependsOn(zkpeBinEvalZip)
-	dependsOn(zkeeBinOSGiEvalZip)
-	dependsOn(zkpeBinOSGiEvalZip)
 }
 
 // maven part
@@ -910,6 +984,9 @@ task packageBomMavenProjects() {
 }
 
 task binsAndBundles {
+	// Validate OSGi headers before packaging
+	dependsOn(validateOSGiHeaders)
+
 	// zksandbox
 	dependsOn(zksandboxZip)
 	dependsOn(packageBomMavenProjects)
@@ -918,6 +995,10 @@ task binsAndBundles {
 	processJar.dependsOn(processBins)
 	processBins.dependsOn(zkBinsAndBundles)
 	packageBomMavenProjects.dependsOn(cmlBinsAndBundles)
+
+	// Ensure validation runs after all JARs are built
+	validateOSGiHeaders.mustRunAfter(zkBinsAndBundles)
+	validateOSGiHeaders.mustRunAfter(cmlBinsAndBundles)
 }
 
 task release() {
