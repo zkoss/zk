@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5875Override.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 17 10:41:40 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <script><![CDATA[
+        zk.afterLoad('zkmax.inp', function() {
+            zk.override(zkmax.inp.Chosenbox.prototype, {}, {
+                _filterOptionLogic: function(optionText, searchText) {
+                    return optionText.startsWith(searchText);
+                }
+            });
+        });
+    ]]></script>
+    <window apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.F103_ZK_5875VM')">
+        <chosenbox model="@bind(vm.items)"
+                   selectedObjects="@bind(vm.selectedItems)"
+                   width="300px">
+        </chosenbox>
+    </window>
+</zk>
