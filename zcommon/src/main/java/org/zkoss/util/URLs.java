@@ -36,27 +36,33 @@ public class URLs {
 	public static URL sanitizeURL(URL url) throws MalformedURLException, URISyntaxException {
 		if (url == null) return null;
 
-		final String urlString = url.getPath();
-		// avoid java.net.MalformedURLException: no !/ in spec
-		if (urlString.contains("!/")) {
-			String[] parts = urlString.split("!/");
-			if (parts.length == 2) {
-				String jarFilePath = parts[0];
-				String internalPath = parts[1];
+		// Handle JAR URLs specially - they have protocol "jar" and contain "!/" separator
+		if ("jar".equals(url.getProtocol())) {
+			// For JAR URLs, getFile() returns the full jar path with "!/" separator
+			// e.g., "file:/path/to/lib.jar!/META-INF/resources/js/file.js"
+			String jarSpec = url.getFile();
+			if (jarSpec != null && jarSpec.contains("!/")) {
+				int separatorIndex = jarSpec.indexOf("!/");
+				String jarFilePath = jarSpec.substring(0, separatorIndex);
+				String internalPath = jarSpec.substring(separatorIndex + 2);
 
-				// Ensure the jarFilePath is properly formed
+				if (jarFilePath.isEmpty() || internalPath.isEmpty()) {
+					throw new MalformedURLException("Invalid JAR URL format: empty jar path or internal path");
+				}
+
+				// Sanitize the jar file URL (e.g., "file:/path/to/lib.jar")
 				URL jarURL = new URL(jarFilePath);
 				URI jarURI = new URIBuilder().setScheme(jarURL.getProtocol())
 						.setHost(jarURL.getHost()).setPort(jarURL.getPort())
 						.setPath(jarURL.getPath()).build();
 
-				// Combine the jar URI with the internal path
-				return new URL("jar:" + jarURI + "!/" + internalPath);
+				// Reconstruct the JAR URL with sanitized jar path
+				return new URL("jar:" + jarURI.toString() + "!/" + internalPath);
 			} else {
-				throw new MalformedURLException("Invalid JAR URL format");
+				throw new MalformedURLException("Invalid JAR URL format: missing !/ separator");
 			}
 		} else {
-			// prevent SSRF warning
+			// For regular URLs, prevent SSRF warning by reconstructing via URI
 			return new URIBuilder().setScheme(url.getProtocol())
 					.setHost(url.getHost()).setPort(url.getPort())
 					.setPath(url.getPath())
