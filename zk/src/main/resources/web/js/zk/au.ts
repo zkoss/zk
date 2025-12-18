@@ -1737,8 +1737,8 @@ export namespace au_global {
 					}
 
 					// Clean up event handlers
-					ifr.onload = undefined;
-					ifr.onerror = undefined;
+					ifr.onload = undefined as never;
+					ifr.onerror = undefined as never;
 
 					// Process next download after delay
 					setTimeout(() => _processNextDownload(), downloadDelay);
