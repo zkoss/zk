@@ -12,7 +12,6 @@ Copyright (C) 2024 Potix Corporation. All Rights Reserved.
 package org.zkoss.util;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -51,13 +50,14 @@ public class URLs {
 				}
 
 				// Sanitize the jar file URL (e.g., "file:/path/to/lib.jar")
+				// Validate by parsing through URL and URI, but preserve original format
 				URL jarURL = new URL(jarFilePath);
-				URI jarURI = new URIBuilder().setScheme(jarURL.getProtocol())
-						.setHost(jarURL.getHost()).setPort(jarURL.getPort())
-						.setPath(jarURL.getPath()).build();
 
-				// Reconstruct the JAR URL with sanitized jar path
-				return new URL("jar:" + jarURI.toString() + "!/" + internalPath);
+				// Validate the URL can be converted to URI (SSRF check)
+				jarURL.toURI();
+
+				// Reconstruct the JAR URL preserving the original jar path format
+				return new URL("jar:" + jarFilePath + "!/" + internalPath);
 			} else {
 				throw new MalformedURLException("Invalid JAR URL format: missing !/ separator");
 			}
