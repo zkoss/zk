@@ -43,6 +43,7 @@ public class B50_2917947Test extends WebDriverTestCase {
 		actions.moveToElement(driver.findElement(col))
 				.moveByOffset(colWidth / 2 - DRAG_THRESHOLD, 0)
 				.clickAndHold()
+				.pause(500)
 				.moveByOffset(-50, 0)
 				.release()
 				.perform();
