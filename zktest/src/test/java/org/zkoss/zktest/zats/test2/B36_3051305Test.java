@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.endsWith;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -29,8 +30,13 @@ public class B36_3051305Test extends WebDriverTestCase {
 		connect();
 
 		Actions actions = new Actions(driver);
-		actions.dragAndDropBy(driver.findElement(jq("@listitem:contains(ZK JSP)")), 0, 50)
+		WebElement listitem = driver.findElement(jq("@listitem:contains(ZK JSP)"));
+		actions.clickAndHold(listitem)
+				.pause(200)
+				.moveByOffset(0, 50)
+				.release()
 				.perform();
+
 		waitResponse();
 		Assertions.assertEquals(5, jq("@listitem").length());
 		assertThat(jq("@listitem:last").text(), endsWith("ZK Spring"));
