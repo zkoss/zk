@@ -25,7 +25,9 @@ public class B86_ZK_4151Test extends WebDriverTestCase {
 		Actions act = new Actions(driver);
 		WebElement row = toElement(jq("$row"));
 		
-		act.moveToElement(row, 10, 10).clickAndHold().moveByOffset(20, 20).build().perform();
+		act.moveToElement(row, 10, 10).clickAndHold().pause(500)
+				.moveByOffset(20, 20)
+				.build().perform();
 		String dragmsg1 = jq(".z-drop-content").text();
 		act.release().build().perform();
 		
