@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.event.EventThreadSuspend;
+import org.zkoss.zk.ui.http.CspProviderImpl;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.ui.impl.MultiComposer;
 import org.zkoss.zk.ui.impl.RichletConfigImpl;
@@ -170,6 +171,19 @@ public class Configuration {
 	private boolean _debugJS;
 	/** Whether the ZK application is crawlable. */
 	private boolean _crawlable;
+	/** Whether the ZK application enables CSP. */
+	private boolean _cspEnabled;
+	/** Whether to enable the nonce-based strict CSP mode. */
+	private boolean _cspStrictDynamicEnabled;
+	/** The developer-defined policy used to override the default CSP rules. */
+	private String _cspPolicy;
+	/** Whether to enforce the CSP in report-only mode. */
+	private boolean _cspReportOnly;
+	/** The URI destination for CSP violation reports. */
+	private String _cspReportURI;
+	/** The instance of the CSP provider class responsible for generating the CSP header and managing nonce. */
+	private CspProvider _cspProvider = new CspProviderImpl();
+
 	/** Whether to use the same UUID sequence. */
 	private boolean _repeatUuid;
 	// ZK-1671: ThemeProvider defined in metainfo/zk/zk.xml from jar file doesn't work
@@ -1816,6 +1830,117 @@ public class Configuration {
 			return;
 		}
 		_crawlable = crawlable;
+	}
+
+	/**
+	 * Returns whether this Web application enables Content Security Policy (CSP).
+	 * It is required for other CSP settings and applies a default policy when enabled.
+	 * <p>Default: false.
+	 * @since 10.3.0
+	 */
+	public boolean isCspEnabled() {
+		return _cspEnabled;
+	}
+
+	/**
+	 * Sets whether CSP is enabled.
+	 * @since 10.3.0
+	 */
+	public void setCspEnabled(boolean cspEnabled) {
+		_cspEnabled = cspEnabled;
+	}
+
+	/**
+	 * Returns whether this Web application enables nonce-based strict CSP mode.
+	 * <p>Default: false.
+	 * @since 10.3.0
+	 */
+	public boolean isCspStrictDynamicEnabled() {
+		return _cspStrictDynamicEnabled;
+	}
+
+	/**
+	 * Sets whether nonce-based strict CSP mode is enabled.
+	 * @since 10.3.0
+	 */
+	public void setCspStrictDynamicEnabled(boolean cspStrictDynamicEnabled) {
+		_cspStrictDynamicEnabled = cspStrictDynamicEnabled;
+	}
+
+	/**
+	 * Returns the developer-defined policy used to override the default CSP rules,
+	 * or null if not specified.
+	 *
+	 * @return the current Csp Header Content
+	 * @since 10.3.0
+	 */
+	public String getCspPolicy() {
+		return _cspPolicy;
+	}
+
+	/**
+	 * Sets the developer-defined policy used to override the default CSP rules.
+	 *
+	 * @param policy the CSP policy to use, or null to use the default
+	 * @since 10.3.0
+	 */
+	public void setCspPolicy(String policy) {
+		_cspPolicy = policy;
+	}
+
+	/**
+	 * Returns whether CSP is enforced in report-only mode.
+	 * <p>Default: false.
+	 * @since 10.3.0
+	 */
+	public boolean isCspReportOnly() {
+		return _cspReportOnly;
+	}
+
+	/**
+	 * Sets whether to enforce CSP in report-only mode.
+	 * @since 10.3.0
+	 */
+	public void setCspReportOnly(boolean cspReportOnly) {
+		_cspReportOnly = cspReportOnly;
+	}
+
+	/**
+	 * Returns the URI destination for CSP violation reports,
+	 * or null if not specified.
+	 * <p>Default: null.
+	 * @since 10.3.0
+	 */
+	public String getCspReportURI() {
+		return _cspReportURI;
+	}
+
+	/**
+	 * Sets the URI destination for CSP violation reports.
+	 * @param cspReportURI the URI to send CSP reports to, or null to disable reporting
+	 * @since 10.3.0
+	 */
+	public void setCspReportURI(String cspReportURI) {
+		_cspReportURI = cspReportURI;
+	}
+
+	/**
+	 * Returns the CSP provider responsible for generating the CSP header and managing nonce,
+	 * or null if not available.
+	 * <p>Default: an instance of {@link CspProviderImpl}.
+	 * @since 10.3.0
+	 */
+	public CspProvider getCspProvider() {
+		return _cspProvider;
+	}
+
+	/**
+	 * Sets the CSP provider.
+	 * @param cspProvider the CSP provider to use, or null to use the default
+	 * @since 10.3.0
+	 */
+	public void setCspProvider(CspProvider cspProvider) {
+		_cspProvider = cspProvider;
 	}
 
 	/** Returns the timeout URI for this device.

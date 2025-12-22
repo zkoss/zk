@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5821.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Dec 15 13:59:34 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+    <zscript>
+        <![CDATA[
+            String validJsonString = "'normal string containing a semicolon ; nothing special here'";
+        ]]>
+    </zscript>
+    <label w:mydata="${validJsonString}" w:onBind="this.setValue(this.mydata)"/>
+</zk>

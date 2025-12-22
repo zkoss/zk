@@ -1,8 +1,11 @@
 ZK 10.3.0
 * Features
+  ZK-5265: Add a CSP provider class, which allows the users to define CSPs and provide a nonce used for strict-dynamic support
   ZK-5858: zk.showError() can show error stack trace in the browser console
   ZK-5991: update tbeditor to the latest Trumbowyg js widget
   ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
+  ZK-2910: add osgi JAR to maven repository
+  ZK-5908: provide a multi-download API
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
@@ -36,13 +39,19 @@ ZK 10.3.0
   ZK-6019: different inline script between nav and navitem
   ZK-6008: audtodisable is not listed in the suggestion dropdown
   ZK-5818: drag and drop a panel causes a NullPointerException
+  ZK-5684: model.set(...) with ROD causes grid to redraw all content instead of just the target row
+  ZK-5821: a semicolon in java String causes an UiException
   ZK-5683: ROD listbox with shift-select only sends range, causes selectedObjects to be empty
   ZK-5690: menu._nOpen initializes to void (undefined) instead of zero, prevent closing
   ZK-5617: an invisible toolbarbutton is not hidden when it's inside an overflow popup
   ZK-5931: DhtmlLayoutServlet uses java.util.logging.*
   ZK-5841: fail to render a script tag's id attribute when it's in an included html
+  ZK-5662: Tab with Caption component causes JS error
+  ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
+  ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
 
 * Upgrade Notes
+  + add OSGi header into all ZK jars without additional OSGi bundles.
 
    --------
 ZK 10.2.0
