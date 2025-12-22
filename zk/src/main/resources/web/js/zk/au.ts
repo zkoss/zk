@@ -1677,24 +1677,111 @@ export namespace au_global {
 						visibilityState: visibilityState
 					}, { implicit: true, ignorable: true }));
 			}
+			// Download queue support for multiple file downloads
+			let downloadQueue: string[] = [],
+				isDownloading = false,
+				downloadDelay = 500; // ms delay between downloads
+
 			/**
 			 * Asks the client to download the resource at the specified URL.
+			 * Multiple download requests are queued and processed sequentially to avoid
+			 * browser navigation cancellation issues.
 			 * @param url - the URL to download from
 			 */
 			export function download(url: string): void {
-				if (url) {
-					var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement;
+				if (!url) return;
 
-					if (!ifr) {
-						ifr = document.createElement('iframe');
-						ifr.id = ifr.name = 'zk_download';
-						ifr.style.display = 'none';
-						ifr.style.width = ifr.style.height = ifr.style.border = ifr.frameBorder = '0';
-						document.body.appendChild(ifr);
+				downloadQueue.push(url);
+
+				if (!isDownloading) {
+					_processNextDownload();
+				}
+			}
+
+			/**
+			 * Process next download in the queue (internal helper function)
+			 * @internal
+			 */
+			const _processNextDownload = (): void => {
+				if (downloadQueue.length === 0) {
+					isDownloading = false;
+					return;
+				}
+
+				isDownloading = true;
+				const url = downloadQueue.shift()!;
+
+				var ifr: HTMLIFrameElement = jq('#zk_download')[0] as HTMLIFrameElement;
+
+				if (!ifr) {
+					ifr = document.createElement('iframe');
+					ifr.id = ifr.name = 'zk_download';
+					ifr.style.display = 'none';
+					ifr.style.width = ifr.style.height = ifr.style.border = ifr.frameBorder = '0';
+					document.body.appendChild(ifr);
+				}
+
+				// Track if download has completed to prevent double-triggering
+				let completed = false,
+					timeoutId: number | undefined;
+
+				// Set up completion handler
+				const onComplete = (): void => {
+					if (completed) return; // Already processed
+					completed = true;
+
+					// Clear the timeout if it exists
+					if (timeoutId !== undefined) {
+						clearTimeout(timeoutId);
+						timeoutId = undefined;
 					}
 
-					ifr.src = url; //It is OK to reuse the same iframe
+					// Clean up event handlers
+					ifr.onload = undefined as never;
+					ifr.onerror = undefined as never;
+
+					// Process next download after delay
+					setTimeout(() => _processNextDownload(), downloadDelay);
+				};
+
+				// Use load event to detect completion
+				ifr.onload = onComplete;
+				ifr.onerror = onComplete;
+
+				// Set timeout as fallback (some downloads may not trigger load event)
+				timeoutId = setTimeout(onComplete, downloadDelay * 2) as unknown as number;
+
+				ifr.src = url;
+			};
+
+			/**
+			 * Sets the delay (in milliseconds) between sequential downloads.
+			 * Default is 500ms.
+			 * @param delay - delay in milliseconds
+			 * @since 10.3.0
+			 */
+			export function setDownloadDelay(delay: number): void {
+				if (delay >= 0) {
+					downloadDelay = delay;
 				}
+			}
+
+			/**
+			 * Gets the current download delay.
+			 * @returns the delay in milliseconds
+			 * @since 10.3.0
+			 */
+			export function getDownloadDelay(): number {
+				return downloadDelay;
+			}
+
+			/**
+			 * Clears the download queue.
+			 * @since 10.3.0
+			 */
+			export function clearDownloadQueue(): void {
+				downloadQueue = [];
+				isDownloading = false;
 			}
 			/**
 			 * Prints the content of the browser window.

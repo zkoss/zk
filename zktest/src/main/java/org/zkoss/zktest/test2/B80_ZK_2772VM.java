@@ -25,7 +25,7 @@ public class B80_ZK_2772VM
 	public void init()
 	{
 		this.customers = new ListModelList<Customer>();
-		for(int i = 0; i < 20; i++)
+		for(int i = 0; i < 15; i++)
 			this.customers.add(new Customer("Name " + i, "Name " + i, "Name " + i, "Name " + i, "Name " + i, "Name " + i, "Long long long long long long long long long long long long long name " + i, "Name " + i, "Name " + i, "Name " + i));
 	}
 
