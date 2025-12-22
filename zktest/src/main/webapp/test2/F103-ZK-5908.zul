@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5908.zul
+
+	Purpose:
+		Demonstrate multiple file download feature
+	Description:
+		Test page for Filedownload.saveMultiple() and saveAsZip() APIs
+	History:
+		Dec 17, 2025, Created by jumperchen
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<window title="Multiple File Download Test" border="normal" width="800px"
+		apply="org.zkoss.zktest.test2.F103_ZK_5908_MultipleFileDownloadComposer">
+		<vlayout spacing="10px">
+			<label value="Test Multiple File Download Functionality"
+				style="font-size: 16px; font-weight: bold;"/>
+
+			<separator/>
+
+			<groupbox>
+				<caption label="Test 1: Simple Multiple Download (varargs)"/>
+				<vlayout>
+					<label value="Download 3 files with original filenames (PDF, TXT, CSV)"/>
+					<button id="btnDownloadMultipleSimple"
+						label="Download 3 Files (Simple)" width="250px"/>
+					<label value="Expected: 3 separate downloads with original names"
+						style="color: gray; font-size: 11px;"/>
+				</vlayout>
+			</groupbox>
+
+			<groupbox>
+				<caption label="Test 2: Custom Filenames (Map)"/>
+				<vlayout>
+					<label value="Download files with custom filenames using Map"/>
+					<button id="btnDownloadMultipleMap"
+						label="Download with Custom Names" width="250px"/>
+					<label value="Expected: Files renamed as Annual-Report-2024.pdf, Sales-Chart-Q4.txt, etc."
+						style="color: gray; font-size: 11px;"/>
+				</vlayout>
+			</groupbox>
+
+			<groupbox>
+				<caption label="Test 3: Using DownloadItem"/>
+				<vlayout>
+					<label value="Download using DownloadItem class (mixed original/custom names)"/>
+					<button id="btnDownloadMultipleItems"
+						label="Download with DownloadItem" width="250px"/>
+					<label value="Expected: Mix of custom and original filenames"
+						style="color: gray; font-size: 11px;"/>
+				</vlayout>
+			</groupbox>
+
+			<separator/>
+
+			<groupbox>
+				<caption label="Test 4: Download as ZIP (simple)"/>
+				<vlayout>
+					<label value="Download multiple files as a single ZIP archive"/>
+					<button id="btnDownloadAsZip"
+						label="Download as ZIP" width="250px"/>
+					<label value="Expected: Single ZIP file containing all files"
+						style="color: gray; font-size: 11px;"/>
+				</vlayout>
+			</groupbox>
+
+			<groupbox>
+				<caption label="Test 5: Download as ZIP with Custom Names"/>
+				<vlayout>
+					<label value="Download as ZIP with files renamed inside the archive"/>
+					<button id="btnDownloadAsZipMap"
+						label="Download ZIP with Custom Names" width="250px"/>
+					<label value="Expected: ZIP with files having custom names inside"
+						style="color: gray; font-size: 11px;"/>
+				</vlayout>
+			</groupbox>
+
+			<separator/>
+
+			<groupbox>
+				<caption label="Test 6: Stress Test - Many Files"/>
+				<vlayout>
+					<label value="Download 10 files separately (tests queue mechanism)"/>
+					<button id="btnDownloadMany"
+						label="Download 10 Files Separately" width="250px"/>
+					<label value="Expected: 10 sequential downloads (queue working)"
+						style="color: gray; font-size: 11px;"/>
+				</vlayout>
+			</groupbox>
+
+			<groupbox>
+				<caption label="Test 7: Many Files as ZIP (Recommended)"/>
+				<vlayout>
+					<label value="Download 10 files as a single ZIP (better UX for many files)"/>
+					<button id="btnDownloadManyAsZip"
+						label="Download 10 Files as ZIP" width="250px"/>
+					<label value="Expected: Single ZIP containing 10 files"
+						style="color: gray; font-size: 11px;"/>
+				</vlayout>
+			</groupbox>
+
+			<separator bar="true"/>
+
+			<hlayout>
+				<label value="Note:" style="font-weight: bold;"/>
+				<label value="Files are downloaded with 500ms delay between each to avoid browser cancellation.
+					For 10+ files, ZIP download is recommended for better user experience."/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>
+

@@ -7,7 +7,7 @@ plugins {
 	id "com.github.node-gradle.node" version "7.0.1"
 	id 'com.github.gmazzo.buildconfig' version '3.0.3'
 	id "org.sonarqube" version "4.4.1.3373"
-	id "org.owasp.dependencycheck" version "11.1.0"
+	id "org.owasp.dependencycheck" version "12.1.9"
 }
 
 allprojects {
@@ -226,10 +226,32 @@ subprojects {
 
 	jar {
 		manifest {
-			attributes(
-					"Specification-Version": project.properties['version'],
-					"Implementation-Version": project.properties['version']
-			)
+			def osgiHeaders = [
+				"Specification-Version": project.properties['version'],
+				"Implementation-Version": project.properties['version'],
+				// OSGi Headers
+				"Bundle-ManifestVersion": "2",
+				"Bundle-Name": project.name,
+				"Bundle-SymbolicName": project.name,
+				"Bundle-Version": version,
+				"Export-Package": "*;version=\"${version}\"",
+				"Import-Package": "*;resolution:=optional"
+			]
+
+			// Special handling for different projects
+			if ("${project.name}" == 'zweb') {
+				osgiHeaders."Import-Package" = "javax.servlet.annotation;resolution:=optional,*;resolution:=optional"
+			} else if ("${project.name}" == 'zkbind') {
+				osgiHeaders."Import-Package" = "javassist.util.proxy;resolution:=optional,*;resolution:=optional"
+			} else if ("${project.name}" == 'zkex') {
+				osgiHeaders."Import-Package" = "org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional"
+				osgiHeaders."Export-Package" = "!org.zkoss.zk.ui.sys,*;version=\"${version}\""
+			} else if ("${project.name}" == 'zweb-dsp') {
+				def fragmentHostVersion = "${version}".split(/[\.-][a-zA-Z]/)[0]
+				osgiHeaders."Fragment-Host" = "zweb;bundle-version=\"${fragmentHostVersion}\""
+			}
+
+			attributes(osgiHeaders)
 			// Merge specify MANIFEST.MF file.
 			from "$projectDir/$resources/META-INF/MANIFEST.MF"
 		}
@@ -246,6 +268,33 @@ subprojects {
 		from 'src/main/java'
 		exclude "**/package.html"
 		setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
+
+		manifest {
+			def osgiHeaders = [
+				// OSGi Headers
+				"Bundle-ManifestVersion": "2",
+				"Bundle-Name": project.name,
+				"Bundle-SymbolicName": project.name,
+				"Bundle-Version": version,
+				"Export-Package": "*;version=\"${version}\"",
+				"Import-Package": "*;resolution:=optional"
+			]
+
+			// Special handling for different projects
+			if ("${project.name}" == 'zweb') {
+				osgiHeaders."Import-Package" = "javax.servlet.annotation;resolution:=optional,*;resolution:=optional"
+			} else if ("${project.name}" == 'zkbind') {
+				osgiHeaders."Import-Package" = "javassist.util.proxy;resolution:=optional,*;resolution:=optional"
+			} else if ("${project.name}" == 'zkex') {
+				osgiHeaders."Import-Package" = "org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional"
+				osgiHeaders."Export-Package" = "!org.zkoss.zk.ui.sys,*;version=\"${version}\""
+			} else if ("${project.name}" == 'zweb-dsp') {
+				def fragmentHostVersion = "${version}".split(/[\.-][a-zA-Z]/)[0]
+				osgiHeaders."Fragment-Host" = "zweb;bundle-version=\"${fragmentHostVersion}\""
+			}
+
+			attributes(osgiHeaders)
+		}
 	}
 
 	// build javadoc jar each subproject for bundle
@@ -256,65 +305,7 @@ subprojects {
 		from "$javadoc.destinationDir"
 	}
 
-	// TODO: add the manifest file into sources.jar for ZK-4132 (build special osgi sources.jar)
-	task buildOSGi() {
-		dependsOn 'jar'
-		dependsOn 'sourcesJar'
-		doFirst {
-			// generate the bnd config files for osgi
-			def bndContent = "Bundle-Version:${version}\nImport-Package: *;resolution:=optional\nExport-Package: *;version=${version}\nBundle-Name:${project.name}\nBundle-SymbolicName:${project.name}"
-			if ("${project.name}" == 'zweb') {
-				bndContent = "Bundle-Version:${version}\nImport-Package: javax.servlet.annotation;resolution:=optional,*;resolution:=optional\nExport-Package: *;version=${version}\nBundle-Name:${project.name}\nBundle-SymbolicName:${project.name}"
-			} else if ("${project.name}" == 'zkbind') {
-				bndContent = "Bundle-Version:${version}\nImport-Package:javassist.util.proxy;resolution:=optional,*;resolution:=optional\nExport-Package: *;version=${version}\nBundle-Name:${project.name}\nBundle-SymbolicName:${project.name}"
-			} else if ("${project.name}" == 'zkex') {
-				bndContent = "Bundle-Version:${version}\nImport-Package:org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional\nExport-Package: !org.zkoss.zk.ui.sys,*;version=${version}\nBundle-Name:${project.name}\nBundle-SymbolicName:${project.name}"
-			} else if ("${project.name}" == 'zweb-dsp') {
-				def fragmentHostVersion = "${version}"
-				// Fragment-Host not support version with suffix e.g. x.x.x-FL
-				fragmentHostVersion = fragmentHostVersion.split(/[\.-][a-zA-Z]/)[0]
-				bndContent += "\nFragment-Host:zweb;bundle-version=$fragmentHostVersion"
-			}
-			new File("$buildDir/libs", "${project.name}.bnd").text = bndContent
-		}
-		doLast {
-			// build osgi jar
-			javaexec {
-				main = "-jar";
-				args = [
-						"$rootDir/dist/lib/ext/bnd.jar",
-						"wrap",
-						"--properties",
-						"$buildDir/libs/${project.name}.bnd",
-						"--output",
-						"$buildDir/libs/${project.name}.osgi.jar",
-						"$buildDir/libs/${project.name}-${version}.jar"
-				]
-			}
-			copy {
-				from "$buildDir/libs/${project.name}.osgi.jar"
-				into "$rootDir/build/dist/lib/osgi"
-			}
-			// build osgi source jar
-			javaexec {
-				main = "-jar";
-				args = [
-						"$rootDir/dist/lib/ext/bnd.jar",
-						"wrap",
-						"--properties",
-						"$buildDir/libs/${project.name}.bnd",
-						"--output",
-						"$buildDir/libs/${project.name}-sources.osgi.jar",
-						"$buildDir/libs/${project.name}-${version}-sources.jar"
-				]
-			}
-			copy {
-				from "$buildDir/libs/${project.name}-sources.osgi.jar"
-				into "$rootDir/build/dist/lib/osgi-src"
-				rename "${project.name}-sources.osgi.jar", "${project.name}-sources.jar"
-			}
-		}
-	}
+
 
 	// Delete codegen folder before clean
 	clean.doFirst {

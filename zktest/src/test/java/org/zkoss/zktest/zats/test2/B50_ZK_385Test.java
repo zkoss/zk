@@ -19,13 +19,19 @@ import org.openqa.selenium.interactions.Actions;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_385Test extends WebDriverTestCase {
+
 	@Test
 	public void test() {
 		Actions act = new Actions(connect());
 		int[] startD = {driver.manage().window().getSize().width ,driver.manage().window().getSize().height};
 		int startPosLeft = jq(".z-window").positionLeft();
 		
-		act.dragAndDropBy(toElement(jq(".z-window-header")), 200, 200).build().perform();
+		act.clickAndHold(toElement(jq(".z-window-header")))
+				.pause(500)
+				.moveByOffset(200, 200)
+				.release()
+				.build()
+				.perform();
 		Dimension d = new Dimension(1280, startD[1]);
 		driver.manage().window().setSize(d);
 		Assertions.assertEquals(startPosLeft + 200, jq(".z-window").positionLeft());

@@ -1261,13 +1261,14 @@ _zk._noESC = 0; //# of disableESC being called (also used by mount.js)
  * ```
  * @param err - the error or error message
  * @param silent - only show error box
+ * @param errMsg - the error message to show instead of err.message, ignored if err is a string
  * @see {@link errorPush}
  * @see {@link errorDismiss}
  * @see {@link log}
  * @see {@link stamp}
  */
-_zk.error = function (err: Error | string, silent?: boolean): void {
-	const msg = err instanceof Error ? err.message : err,
+_zk.error = function (err: Error | string, silent?: boolean, errMsg?: string): void {
+	const msg = err instanceof Error ? errMsg ?? err.message : err,
 		stack = err instanceof Error ? err.stack : undefined;
 	if (!silent) {
 		if (stack)

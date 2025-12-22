@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5690.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 10 22:06:45 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <menubar autodrop="true">
+        <menu label="hover me">
+            <menupopup>
+                <menuitem label="item 1"/>
+                <menuitem label="item 2"/>
+                <menuitem label="item 3"/>
+            </menupopup>
+        </menu>
+    </menubar>
+</zk>

@@ -38,6 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-splitter.
  * 
  * @author tomyeh
+ * @deprecated As of release 10.3.0, using {@code org.zkoss.zkmax.zul.Splitlayout} instead.
  */
 public class Splitter extends XulElement {
 	private String _collapse = "none";
