@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5265ReportUri.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Nov 20 12:37:41 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<?script content="
+    window.zkAppDirectiveScript = function() {
+        console.log('2. Script directive executed - Application Scope');
+    };
+    zkAppDirectiveScript();
+"?>
+<zk xmlns:n="native" xmlns:w="client">
+    <label multiline="true">
+        1. This feature ZK-5265 is for enabling CSP through zk.xml, and applying script and style files when a nonce is present.
+        2. You must first configure system-config in zk.xml (search for ZK-5265) and enable it:
+        <system-config>
+            <csp-enabled>true</csp-enabled>
+            <csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>
+            <csp-policy>script-src 'self' 'nonce-{nonce}' 'strict-dynamic';</csp-policy>
+            <csp-report-only>true</csp-report-only>
+            <csp-report-uri>/csp-violations</csp-report-uri>
+        </system-config>
+        3. For scripts that rely on the Application Scope, you need to add:
+        <device-config>
+            <device-type>ajax</device-type>
+            <embed>
+                <![CDATA[
+                    <script type="text/javascript">console.log('4. Device-specific embed script loaded');</script>
+                ]]>
+            </embed>
+        </device-config>
+        4. For scripts used by WebSocket Server Push, you need to add:
+        <listener>
+            <listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit</listener-class>
+        </listener>
+        5. Open the browser’s developer tools (F12) and check the Console tab to verify whether the script is executed correctly.
+        6. Inspect the Response Header of the currently viewed ZUL page to confirm whether the CSP header is correctly included.
+    </label>
+    <script>
+        window.zkScriptComponent = function() {
+        console.log('1. zk:script component executed - Application Scope');
+        };
+        zkScriptComponent();
+    </script>
+
+    <window id="w" title="F103-ZK-5265" border="normal" width="600px"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.F103_ZK_5265_VM')">
+        <div  apply="org.zkoss.zktest.test2.F103_ZK_5265_Composer">
+            <script defer="true">
+                console.log("7. Defining custom widget with $define");
+            </script>
+
+            <textbox id="eventListener" w:onChange="console.log('8. Event listener script');"
+                     placeholder="Type here to trigger event listener"/>
+
+            <vbox spacing="5px">
+                <checkbox id="statusCheckbox" label="6. Checkbox Status Change (manual)" />
+                <button id="serverPushBtn" label="10. WebSocket Server Push (manual)" />
+            </vbox>
+
+            <groupbox>
+                <caption label="9. Data Binding Scripts"/>
+                <vlayout>
+                    <label value="Scripts triggered by ZK MVVM data binding"/>
+                    <textbox id="bindingValue" value="@bind(vm.bindingValue)"
+                             onChange="@command('onBindingChange')"/>
+                    <label value="@load(vm.bindingValue)"
+                           style="font-weight: bold;"/>
+                </vlayout>
+            </groupbox>
+        </div>
+        <zscript><![CDATA[
+            org.zkoss.zk.ui.util.CspProvider provider = new org.zkoss.zk.ui.http.CspProviderImpl();
+            provider.getCspNonce();
+        ]]></zscript>
+
+        <label id="elNonce">${cspNonce}</label>
+        <separator/>
+        <label id="execNonce">${execution.getAttribute('cspNonce')}</label>
+    </window>
+</zk>

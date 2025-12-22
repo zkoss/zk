@@ -1,5 +1,6 @@
 ZK 10.3.0
 * Features
+  ZK-5265: Add a CSP provider class, which allows the users to define CSPs and provide a nonce used for strict-dynamic support
   ZK-5858: zk.showError() can show error stack trace in the browser console
   ZK-5991: update tbeditor to the latest Trumbowyg js widget
   ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
