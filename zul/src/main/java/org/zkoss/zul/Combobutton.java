@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed May 18 09:00:00     2011, Created by Benbai
 }}IS_NOTE
@@ -69,7 +69,7 @@ public class Combobutton extends Button {
 		return (Popup) getFirstChild();
 	}
 
-	/** Returns whether to automatically drop the popup if user hovers on this 
+	/** Returns whether to automatically drop the popup if user hovers on this
 	 * Combobutton.
 	 * <p>Default: false.
 	 */
@@ -77,7 +77,7 @@ public class Combobutton extends Button {
 		return _autodrop;
 	}
 
-	/** Sets whether to automatically drop the popup if user hovers on this 
+	/** Sets whether to automatically drop the popup if user hovers on this
 	 * Combobutton.
 	 */
 	public void setAutodrop(boolean autodrop) {
@@ -87,7 +87,7 @@ public class Combobutton extends Button {
 		}
 	}
 
-	/** Drops down or closes the child, 
+	/** Drops down or closes the child,
 	 * only works while visible.
 	 * @see #open
 	 * @see #close
@@ -163,7 +163,7 @@ public class Combobutton extends Button {
 	}
 
 	//Override//
-	/** 
+	/**
 	 * Combobutton does not support file upload
 	 */
 	public void setUpload(String upload) {

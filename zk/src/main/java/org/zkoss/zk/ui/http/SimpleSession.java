@@ -453,7 +453,9 @@ public class SimpleSession implements Session, SessionCtrl {
 		final Object old = SessionsCtrl.getRawCurrent(); //shall be null; just in case
 		SessionsCtrl.setCurrent(this);
 		try {
-			((WebAppCtrl) _wapp).sessionWillPassivate(this);
+			if (_wapp != null) {
+				((WebAppCtrl) _wapp).sessionWillPassivate(this);
+			}
 
 			for (Enumeration<String> en = getAttrNames(); en.hasMoreElements();) {
 				final String nm = en.nextElement();
@@ -482,7 +484,10 @@ public class SimpleSession implements Session, SessionCtrl {
 					new WebManagerActivationListener() {
 						public void didActivate(WebManager webman) {
 							_wapp = webman.getWebApp();
-							((WebAppCtrl) _wapp).sessionDidActivate(SimpleSession.this);
+							if (_wapp != null) {
+								((WebAppCtrl) _wapp).sessionDidActivate(
+										SimpleSession.this);
+							}
 						}
 					});
 
