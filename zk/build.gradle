@@ -26,8 +26,8 @@ dependencies {
 	optionalImplementation('org.jruby:jruby-core:1.7.27') {
 		exclude group: '*', module: '*'
 	}
-	optionalImplementation 'org.python:jython:2.2.1'
-	optionalImplementation 'org.mozilla:rhino:1.7.14'
+	optionalImplementation 'org.python:jython:2.7.2'
+	optionalImplementation 'org.mozilla:rhino:1.7.14.1'
 }
 
 buildConfig {
