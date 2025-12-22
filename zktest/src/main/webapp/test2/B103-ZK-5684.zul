@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5684.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Dec 11 10:12:14 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<?page title="Grid Details" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window border="none" height="100%" width="100%"
+            apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.B103_ZK_5684VM')">
+        <label multiline="true">
+            1. Click "Update Second Row" button to update the second row's UUID.
+            2. Verify only second row's UUID is changed.
+        </label>
+        <vlayout hflex="1" vflex="1">
+            <hlayout>
+                <button onClick="@command('update-row-2')">Update Second Row</button>
+
+                <a href=".entry50">Go to Entry #50</a>
+            </hlayout>
+
+            <grid model="@load(vm.gridRows)" hflex="1" vflex="1">
+                <custom-attributes org.zkoss.zul.grid.rod="true"/>
+                <columns>
+                    <column hflex="1">Rows</column>
+                </columns>
+
+                <template name="model" var="row">
+                    <row>
+                        <cell>
+                            <a sclass="@load(vm.concat('entry', row.number))">
+                                <label value="${self.uuid}"/>
+                            </a>
+                        </cell>
+                    </row>
+                </template>
+            </grid>
+        </vlayout>
+    </window>
+</zk>
