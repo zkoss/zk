@@ -95,7 +95,7 @@ dependencies {
 		testCompileOnly "org.zkoss.zk:za11y:${version}"
 	}
 	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
-	implementation 'commons-lang:commons-lang:2.6'
+	implementation 'org.apache.commons:commons-lang3:3.20.0'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
 	implementation 'com.google.javascript:closure-compiler-unshaded:v20251216'
 	implementation 'net.sf.jasperreports:jasperreports:6.20.5'
