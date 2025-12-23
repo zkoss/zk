@@ -46,6 +46,7 @@ ZK 10.3.0
   ZK-5662: Tab with Caption component causes JS error
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
+  ZK-5918: check a checkbox with switch mold with a space key scrolls down a page
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
