@@ -122,7 +122,7 @@ dependencies {
 
 	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
 	runtimeOnly 'org.apache.groovy:groovy:5.0.0-alpha-1'
-	runtimeOnly 'org.mozilla:rhino:1.7.14'
+	runtimeOnly 'org.mozilla:rhino:1.8.1'
 //	testImplementation 'org.jruby:jruby-core:1.7.27'
 	runtimeOnly 'org.python:jython:2.7.4'
 	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.1.0-FL-2024082716'
