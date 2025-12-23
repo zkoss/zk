@@ -52,6 +52,7 @@ ZK 10.3.0
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
+  + upgrade jython to 2.7.4 to fix vulnerabilities
 
    --------
 ZK 10.2.0
