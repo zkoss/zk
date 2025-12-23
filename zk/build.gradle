@@ -27,7 +27,7 @@ dependencies {
 		exclude group: '*', module: '*'
 	}
 	optionalImplementation 'org.python:jython:2.7.4'
-	optionalImplementation 'org.mozilla:rhino:1.7.14'
+	optionalImplementation 'org.mozilla:rhino:1.8.1'
 }
 
 buildConfig {
