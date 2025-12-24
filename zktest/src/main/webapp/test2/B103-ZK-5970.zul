@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5970.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 24 10:13:06 CST 2025, Created by josephlo
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <button label="collapse nav" onClick="collapse()"/>
+    <button label="open nav" onClick="expand()"/>
+    <button label="rerender" onClick="navbar.invalidate()"/>
+    <navbar id="navbar" orient="vertical" visible="true" autoclose="true">
+        <nav id="a1" iconSclass="" label="nav1" sclass="planActividades">
+            <navitem id="a1-1" iconSclass=""
+                     label="_Reuniones interdisciplinares individual" selected="true">
+            </navitem>
+            <navitem id="a1-2" iconSclass=""
+                     label="_Reuniones interdisciplinares colectivas">
+            </navitem>
+        </nav>
+        <nav id="a2"  label="nav2">
+            <navitem id="a2-1" label="iconExpand" iconSclass="z-icon-expand z-icon-lg"/>
+        </nav>
+        <nav id="a3" iconSclass="" label="nav3" sclass="planActividades">
+            <navitem id="a3-1" iconSclass="" label="_Individual por paciente"/>
+            <navitem id="a3-2" iconSclass="" label="_Seguimiento general"/>
+        </nav>
+    </navbar>
+    <zscript><![CDATA[
+        public void collapse() {
+            navbar.setCollapsed(true);
+        }
+
+        public void expand() {
+            navbar.setCollapsed(false);
+        }
+    ]]></zscript>
+</zk>
