@@ -29,11 +29,11 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
             <menuitem upload="true, native" label="upload"
                       onUpload='printDebugInfo(result2, event.media.name + ", binary=" + event.media.binary);'/>
         </menubar>
-        <cell>
+        <div>
             DropUpload
             <dropupload native="true" width="200px" height="100px" style="border: 1px solid red"
                         onUpload='printDebugInfo(result3, event.media.name + ", binary=" + event.media.binary);'/>
-        </cell>
+        </div>
     </hlayout>
     <hlayout>
         <label id="result1"/>
