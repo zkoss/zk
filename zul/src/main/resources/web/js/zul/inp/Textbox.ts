@@ -151,6 +151,7 @@ export class Textbox extends zul.inp.InputWidget<string> {
 	override doKeyDown_(evt: zk.Event): void {
 		if (evt.keyCode == 13 && this._submitByEnter && this._multiline && !evt.shiftKey) {
 			evt.stop();
+			this.updateChange_(); // ZK-5651: need onChange event
 			this.fire('onOK');
 		}
 		super.doKeyDown_(evt);
