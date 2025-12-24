@@ -60,7 +60,7 @@ public class Statistic implements Monitor {
 	/** Returns the average number of sessions being created in an hour.
 	 */
 	public double getAverageSessionCount() {
-		return _nsess / getEscapedHours();
+		return _nsess / Math.max(getEscapedHours(), 1.0); // ZK-5606: when it's less than an hour, treat it as 1 hour
 	}
 
 	/** Returns the total number of desktops that have been created
