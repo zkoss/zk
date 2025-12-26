@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5692.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 24 09:24:06 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        :root {
+            --baseFontSize: 20px;
+        }
+
+        .z-comboitem {
+            --fontSizeMedium: 32px;
+        }
+
+        .custom-timepicker {
+            --fontSizeMedium: 24px;
+        }
+
+        .custom-rangeslider {
+            --colorPrimary: #ff6b35;
+            --colorGreyLight: #ffe8e0;
+        }
+
+        .custom-color {
+            --colorPrimary: #00ff00;
+        }
+
+        .font-test {
+            margin: 5px 0;
+        }
+
+        .theme-container {
+            --colorPrimary: #9c27b0;
+            --textColorActive: #9c27b0;
+        }
+
+        .inner-theme {
+            --fontSizeMedium: 24px;
+            --colorGreyLight: #e1bee7;
+        }
+    </style>
+    <label multiline="true">
+        Verify that the changes applied to the components work via CSS variables
+    </label>
+    <div>
+        <vlayout>
+            <label value="Font Size Variables Test:" style="font-weight: bold;" />
+            <label value="XLarge (--fontSizeXLarge)" style="font-size: var(--fontSizeXLarge);" />
+            <label value="Large (--fontSizeLarge)" style="font-size: var(--fontSizeLarge);" />
+            <label value="Medium (--fontSizeMedium)" style="font-size: var(--fontSizeMedium);" />
+            <label value="Small (--fontSizeSmall)" style="font-size: var(--fontSizeSmall);" />
+            <label value="XSmall (--fontSizeXSmall)" style="font-size: var(--fontSizeXSmall);" />
+        </vlayout>
+        <vlayout>
+            <label value="Text Color Variables Test:" style="font-weight: bold;" />
+            <label value="Default (--textColorDefault)" style="color: var(--textColorDefault);" />
+            <label value="Light (--textColorLight)" style="color: var(--textColorLight);" />
+            <label value="Lighter (--textColorLighter)" style="color: var(--textColorLighter);" />
+            <label value="White (--textColorDefault3)" style="color: var(--textColorDefault3); background: black; padding: 5px;" />
+            <label value="Active (--textColorActive)" style="color: var(--textColorActive);" />
+        </vlayout>
+        <vlayout>
+            <label value="Color Variables Test:" style="font-weight: bold;" />
+            <div style="padding: 10px; background: var(--colorPrimary); color: white;">Primary</div>
+            <div style="padding: 10px; background: var(--colorPrimaryDark); color: white;">Primary Dark</div>
+            <div style="padding: 10px; background: var(--colorPrimaryLight);">Primary Light</div>
+            <div style="padding: 10px; background: var(--colorPrimaryLighter);">Primary Lighter</div>
+            <div style="padding: 10px; background: var(--colorAccent); color: white;">Accent</div>
+            <div style="padding: 10px; background: var(--colorAccent2); color: white;">Accent2</div>
+            <div style="padding: 10px; background: var(--colorAccent3); color: white;">Accent3</div>
+        </vlayout>
+        <vlayout>
+            <label value="Background Color Variables Test:" style="font-weight: bold;" />
+            <div style="padding: 20px; background: var(--colorBackground1); border: 1px solid var(--colorGreyLight);">
+                Background1 (Window/Panel Bg)
+            </div>
+            <div style="padding: 20px; background: var(--colorBackground3); border: 1px solid var(--colorGreyLight);">
+                Background3 (Container Bg)
+            </div>
+            <div style="padding: 10px; background: var(--colorGreyDark); color: white;">Grey Dark</div>
+            <div style="padding: 10px; background: var(--colorGreyLight);">Grey Light (Btn disabled)</div>
+            <div style="padding: 10px; background: var(--colorGreyLighter);">Grey Lighter (Field disabled)</div>
+        </vlayout>
+    </div>
+
+    <div>
+        <timepicker />
+        <vlayout>
+            <label value="Rangeslider:" />
+            <rangeslider/>
+            <rangeslider disabled="true" />
+        </vlayout>
+        <vlayout>
+            <label value="Multislider:" />
+            <multislider>
+                <sliderbuttons startValue="10" endValue="70"/>
+                <sliderbuttons startValue="20" endValue="50"/>
+                <sliderbuttons startValue="30" endValue="40"/>
+            </multislider>
+            <multislider disabled="true">
+                <sliderbuttons startValue="10" endValue="70"/>
+                <sliderbuttons startValue="20" endValue="50"/>
+                <sliderbuttons startValue="30" endValue="40"/>
+            </multislider>
+        </vlayout>
+        <vlayout>
+            <label value="Combobox:" />
+            <combobox>
+                <comboitem label="Option 1" />
+                <comboitem label="Option 2" />
+                <comboitem/>
+            </combobox>
+        </vlayout>
+        <vlayout>
+            <label value="Menu:" />
+            <menubar>
+                <menu label="File">
+                    <menupopup>
+                        <menuitem label="New" onClick="alert(self.label)"/>
+                        <menuitem label="Open" onClick="alert(self.label)"/>
+                        <menuitem label="Save" onClick="alert(self.label)"/>
+                        <menuseparator/>
+                        <menuitem label="Exit" onClick="alert(self.label)"/>
+                    </menupopup>
+                </menu>
+                <menuitem label="Home"/>
+            </menubar>
+        </vlayout>
+    </div>
+
+    <div sclass="custom-rangeslider">
+        <vlayout>
+            <label value="Custom Rangeslider (custom colors):" />
+            <rangeslider/>
+            <rangeslider disabled="true" />
+        </vlayout>
+    </div>
+
+    <div sclass="custom-color">
+        <button label="Custom colored button" />
+    </div>
+
+    <vlayout sclass="theme-container">
+        <label value="Nested Theme Test:" style="font-weight: bold;" />
+        <label value="Active text" style="color: var(--textColorActive);" />
+        <button label="Purple themed button" />
+
+        <vlayout sclass="inner-theme">
+            <label value="Inner theme with larger font" style="font-size: var(--fontSizeMedium);" />
+            <button label="Custom disabled" disabled="true" />
+        </vlayout>
+    </vlayout>
+</zk>
