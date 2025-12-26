@@ -36,16 +36,16 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  */
 public class AuRequest {
 	/** Indicates whether it can be ignored by the server when the server
-	 * receives the same requests consecutively.</dd>
+	 * is busy.</dd>
 	 */
 	public static final int BUSY_IGNORE = ComponentCtrl.CE_BUSY_IGNORE;
 	/**
-	 * Indicates Whether it can be ignored by the server when the server
-	 * receives the same requests that was not processed yet.</dd>
+	 * Indicates whether it can be ignored by the server when the server
+	 * receives the same requests consecutively.</dd>
 	 */
 	public static final int REPEAT_IGNORE = ComponentCtrl.CE_REPEAT_IGNORE;
 	/** Indicates whether it can be ignored by the server when the server
-	 * receives the same requests consecutively.</dd>
+	 * receives the same requests that was not processed yet.</dd>
 	 */
 	public static final int DUPLICATE_IGNORE = ComponentCtrl.CE_DUPLICATE_IGNORE;
 

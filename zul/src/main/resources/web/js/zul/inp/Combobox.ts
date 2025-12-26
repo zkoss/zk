@@ -600,7 +600,8 @@ export class Combobox extends zul.inp.ComboWidget {
 		}
 		var input = this.getInputNode()!;
 		this.domListen_(input, 'onCompositionstart', '_doCompositionstart')
-			.domListen_(input, 'onCompositionend', '_doCompositionend');
+			.domListen_(input, 'onCompositionend', '_doCompositionend')
+			.domListen_(input, 'onInput', '_doInput');
 	}
 
 	/** @internal */
@@ -608,7 +609,8 @@ export class Combobox extends zul.inp.ComboWidget {
 		this._hilite2();
 		this._sel = this._lastsel = undefined;
 		var input = this.getInputNode()!;
-		this.domUnlisten_(input, 'onCompositionend', '_doCompositionend')
+		this.domUnlisten_(input, 'onInput', '_doInput')
+			.domUnlisten_(input, 'onCompositionend', '_doCompositionend')
 			.domUnlisten_(input, 'onCompositionstart', '_doCompositionstart');
 		// Bug ZK-403
 		if (this.isListen('onOpen'))
@@ -625,6 +627,17 @@ export class Combobox extends zul.inp.ComboWidget {
 	_doCompositionend(): void {
 		this._autoCompleteSuppressed = false;
 		if (!this._disabled && !this._readonly)
+			this._typeahead(false);
+	}
+
+	/** @internal */
+	_doInput(evt: zk.Event): void {
+		// ZK-5588: combobox doesn't highlight the matched item when pasting value via a mouse
+		if (this._disabled || this._readonly)
+			return;
+
+		const nativeEvt = evt.domEvent ? (evt.domEvent.originalEvent as InputEvent) : undefined;
+		if (!nativeEvt || nativeEvt.inputType === 'insertFromPaste' || nativeEvt.inputType === 'insertFromDrop')
 			this._typeahead(false);
 	}
 

@@ -31,7 +31,8 @@ public class B80_ZK_3333Test extends WebDriverTestCase {
 		waitResponse();
 		click(jq(".z-button"));
 		waitResponse();
-		Assertions.assertTrue(jq("$mid").text().contains("PROXY MSG : original messagess"));
-		Assertions.assertEquals("original messagess", jq("$final").text());
+		// ZK-5991: update trumbowyg v2.31, after 2.12.0, the inserted text will be wrapped with <p> tag
+		Assertions.assertTrue(jq("$mid").text().contains("PROXY MSG : <p>original messagess</p>"));
+		Assertions.assertEquals("<p>original messagess</p>", jq("$final").text());
 	}
 }

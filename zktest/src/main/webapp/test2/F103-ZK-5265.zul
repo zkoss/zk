@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5265.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Dec 08 16:17:34 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. You must first configure system-config in zk.xml (search for ZK-5265) and enable it:
+        <system-config>
+            <csp-enabled>true</csp-enabled>
+            <csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>
+        </system-config>
+        2. You need to first initialize the CspProviderImpl class,
+        and then use EL or execution.getAttribute to get the nonce in a ZUL page.
+    </label>
+
+    <zscript><![CDATA[
+        org.zkoss.zk.ui.util.CspProvider provider = new org.zkoss.zk.ui.http.CspProviderImpl();
+        provider.getCspNonce();
+    ]]></zscript>
+
+    <label>${cspNonce}</label>
+    <label>${execution.getAttribute('cspNonce')}</label>
+</zk>
