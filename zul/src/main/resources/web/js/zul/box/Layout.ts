@@ -37,10 +37,14 @@ export class Layout extends zul.Widget {
 
 		if (o !== spacing || opts?.force) {
 			var n = this.$n(),
-				vert = this.isVertical_(),
 				spc = this._spacing;
-			if (n)
-				jq(n).children('div:not(:last-child)').css('padding-' + (vert ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
+			if (n) {
+				if (spc && spc != 'auto') {
+					n.style.setProperty('--layout-spacing', spc);
+				} else {
+					n.style.removeProperty('--layout-spacing');
+				}
+			}
 		}
 
 		return this;
@@ -65,10 +69,7 @@ export class Layout extends zul.Widget {
 		if (before)
 			jq(this._chdextr(before)).before(/*safe*/ this.encloseChildHTML_(child));
 		else {
-			var jqn = jq(this.$n()),
-			spc = this._spacing;
-			jqn.children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), (spc && spc != 'auto') ? spc : '');
-			jqn.append(/*safe*/ this.encloseChildHTML_(child));
+			jq(this.$n()).append(/*safe*/ this.encloseChildHTML_(child));
 		}
 		child.bind(desktop);
 	}
@@ -77,6 +78,10 @@ export class Layout extends zul.Widget {
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		zWatch.listen({onResponse: this});
+		const spc = this._spacing; // ZK-5625: easy to override layout
+		if (spc && spc != 'auto' && this.$n()) {
+			this.$n_().style.setProperty('--layout-spacing', spc);
+		}
 	}
 
 	/** @internal */
@@ -145,8 +150,6 @@ export class Layout extends zul.Widget {
 	override removeChildHTML_(child: zk.Widget, ignoreDom?: boolean): void {
 		super.removeChildHTML_(child, ignoreDom);
 		jq(child.uuid + '-chdex', zk).remove();
-		if (this._spacing != 'auto' && this.lastChild == child)
-			jq(this.$n()).children('div:last-child').css('padding-' + (this.isVertical_() ? 'bottom' : 'right'), '');
 	}
 
 	/**
@@ -157,18 +160,20 @@ export class Layout extends zul.Widget {
 	 * @internal
 	 */
 	encloseChildHTML_(child: zk.Widget, out?: string[]): string {
-		var oo = new zk.Buffer(),
-			vert = this.isVertical_(),
-			spc = this._spacing;
+		var oo = new zk.Buffer();
 
 		oo.push('<div id="' + /*safe*/ child.uuid + '-chdex" class="' + this.$s('inner') + '"');
-		if (spc && spc != 'auto') {
-			oo.push(' style="', !child.isVisible() ? 'display:none;' : ''); //Bug ZK-1650: set chdex display style according to child widget
-			var next = child.nextSibling; //Bug ZK-1526: popup should not consider spacing
-			if (next && !(next instanceof zul.wgt.Popup) && !(child instanceof zul.wgt.Popup))
-				oo.push('padding-', vert ? 'bottom:' : 'right:', spc);
-			oo.push('"');
-		}
+
+		var style = '';
+		if (!child.isVisible())
+			style += 'display:none;'; //Bug ZK-1650: set chdex display style according to child widget
+
+		if (child instanceof zul.wgt.Popup) //Bug ZK-1526: popup should not consider spacing
+			style += '--layout-spacing: 0px; padding: 0px;';
+
+		if (style)
+			oo.push(' style="', style, '"');
+
 		oo.push('>');
 		child.redraw(oo);
 		oo.push('</div>');

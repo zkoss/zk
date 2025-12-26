@@ -2,6 +2,7 @@
 
 .z-hlayout, .z-vlayout {
 	overflow: hidden;
+	--layout-spacing: 0px; // ZK-5625: easy to override layout
 }
 .z-hlayout {
 	white-space: nowrap;
@@ -23,6 +24,9 @@
 	position: relative;
 	vertical-align: top;
 	white-space: normal;
+	&:not(:last-child) {
+		padding-right: var(--layout-spacing); // ZK-5625: easy to override layout
+	}
 	.z-valign-bottom > & {
 		vertical-align: bottom;
 	}
@@ -35,4 +39,7 @@
 }
 .z-vlayout-inner {
 	position: relative;
+	&:not(:last-child) {
+		padding-bottom: var(--layout-spacing); // ZK-5625: easy to override layout
+	}
 }

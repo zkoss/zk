@@ -16,10 +16,10 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	</div>
 	<style>
 		.z-hlayout-inner {
-			padding-right: 5px;
+			padding-right: 5px !important;
 		}
 		.z-vlayout-inner {
-			padding-bottom: 5px;
+			padding-bottom: 5px !important;
 		}
 	</style>
 	Hlayout:

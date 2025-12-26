@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5625.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 24 15:52:36 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. change variable instead of inline style that will be easy to override.
+        2. for Testing Layout spacing can be applied correctly.
+    </label>
+
+    <label>1. vlayout default setting spacing is 5px</label>
+    <vlayout id="vlayout1">
+        <button/>
+        <button/>
+        <button/>
+    </vlayout>
+
+    <label>2. vlayout set spacing to 10px</label>
+    <vlayout id="vlayout2" spacing="10px">
+        <button/>
+        <button/>
+        <button/>
+    </vlayout>
+
+
+    <label>3. vlayout set spacing to auto</label>
+    <vlayout id="vlayout3" spacing="auto">
+        <button/>
+        <button/>
+        <button/>
+    </vlayout>
+
+    <label>4. hlayout default setting spacing is 5px</label>
+    <hlayout id="hlayout1">
+        <button/>
+        <button/>
+        <button/>
+    </hlayout>
+
+    <label>5. hlayout set spacing to 20px</label>
+    <hlayout id="hlayout2" spacing="20px">
+        <button/>
+        <button/>
+        <button/>
+    </hlayout>
+
+    <label>6. hlayout set spacing to auto</label>
+    <hlayout id="hlayout3" spacing="auto">
+        <button/>
+        <button/>
+        <button/>
+    </hlayout>
+</zk>
