@@ -49,6 +49,7 @@ ZK 10.3.0
   ZK-5662: Tab with Caption component causes JS error
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
+  ZK-5606: Statistic returns incorrect average number when escaped hour is less then 1 hour
   ZK-5588: combobox doesn't highlight the matched item when pasting value via a mouse
 
 * Upgrade Notes
