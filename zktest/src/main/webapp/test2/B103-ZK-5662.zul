@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5662.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Dec 16 13:08:36 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1, Please use "org.zkoss.zk:client-bind:${version}" in build.gradle if you haven't already.
+        2. client-bind should work correctly in Tabbox without causing ZK errors.
+    </label>
+    <tabbox width="400px">
+        <tabs>
+<!--            <tab label="Tab 1" image="/img/folder.gif" />-->
+<!--            <tab label="Tab 2" image="/img/folder.gif" closable="true" />-->
+            <!-- remove image load -->
+            <tab label="Tab 1" />
+            <tab label="Tab 2" closable="true" />
+            <tab>
+                <caption hflex="min" label="search">
+                    <textbox />
+                </caption>
+            </tab>
+        </tabs>
+        <tabpanels>
+            <tabpanel>This is panel 1</tabpanel>
+            <tabpanel>This is panel 2</tabpanel>
+            <tabpanel>This is panel 3</tabpanel>
+        </tabpanels>
+    </tabbox>
+</zk>
