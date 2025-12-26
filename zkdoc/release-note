@@ -49,6 +49,7 @@ ZK 10.3.0
   ZK-5662: Tab with Caption component causes JS error
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
+  ZK-5673: Listbox setRows removes shallSize, prevents flexing
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
