@@ -55,6 +55,19 @@ Copyright (C) 2015 Potix Corporation. All Rights Reserved.
             model3.addToSelection(tag);
 		}
     ]]></zscript>
+    <!--
+        ZK-5875: Change Default Filtering Logic of Chosenbox from 'Starts With' to 'Contains'
+        Note: override the _filterOptionLogic method to implement 'Starts With' behavior
+     -->
+    <script><![CDATA[
+        zk.afterLoad('zkmax.inp', function() {
+            zk.override(zkmax.inp.Chosenbox.prototype, {}, {
+                _filterOptionLogic: function(optionText, searchText) {
+                    return optionText.startsWith(searchText);
+                }
+            });
+        });
+    ]]></script>
     <label multiline="true">
         -- In the 1st Chosenbox --
         1. Focus in the chosenbox, you can see four options in the drop down list.
