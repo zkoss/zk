@@ -97,7 +97,7 @@ dependencies {
 	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
 	implementation 'org.apache.commons:commons-lang3:3.20.0'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
-	implementation 'com.google.javascript:closure-compiler-unshaded:v20251216'
+	implementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
 	implementation 'net.sf.jasperreports:jasperreports:6.20.5'
 	implementation 'org.jfree:jfreechart:1.0.19'
 	implementation 'com.jhlabs:filters:2.0.235-1'
@@ -141,7 +141,7 @@ dependencies {
 	// For B96_ZK_4194Test and F102_ZK_5461Test to use a specific Chrome driver version (this will change to match latest chrome)
 	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v142:4.38.0'
 	testImplementation "org.seleniumhq.selenium:selenium-java:4.38.0"
-	testImplementation 'com.google.javascript:closure-compiler-unshaded:v20251216'
+	testImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
 
 	providedCompile 'javax.el:javax.el-api:2.2.5'
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
