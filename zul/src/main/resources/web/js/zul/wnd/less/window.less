@@ -44,7 +44,7 @@
 	&-icon {
 		font-size: @containerButtonSize;
 		color: extract(@containerButtonColors, 1);
-		.displaySize(inline-block, @baseButtonWidth + 4, @baseButtonHeight);
+		.displaySize(inline-block, calc(@baseButtonWidth + 4px), @baseButtonHeight);
 		margin: auto 1px;
 		padding: @containerButtonPadding;
 		line-height: @baseButtonHeight;
@@ -124,7 +124,7 @@
 .z-messagebox {
 	display: inline-block;
 	white-space: normal;
-	width: @messageboxWindowWidth - @messageboxIconMarginLeft - @messageboxIconSize - @messageboxPaddingHorizontal;
+	width: calc(@messageboxWindowWidth - @messageboxIconMarginLeft - @messageboxIconSize - @messageboxPaddingHorizontal);
 
 	&-window {
 		padding: @messageboxWindowPadding;

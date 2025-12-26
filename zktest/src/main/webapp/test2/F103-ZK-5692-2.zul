@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5692-2.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Jan 02 10:41:39 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        .custom-rangeslider {
+            --zk-color-primary: #ff6b35;
+            --zk-color-grey-light: #ffe8e0;
+        }
+    </style>
+    <zscript><![CDATA[
+        import org.zkoss.zktest.test2.big.*;
+		import org.zkoss.util.*;
+
+        ListModel model = new ListModelArray(new String[] {
+          "North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
+        });
+
+        FakerMatrixModel bigData = new FakerMatrixModel(200, 200);
+
+        DefaultTreeModel treeModel = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+            Arrays.asList(new DefaultTreeNode[]{
+                new DefaultTreeNode("USA", Arrays.asList(new TreeNode[]{new DefaultTreeNode("New York"),new DefaultTreeNode("San Francisco")})),
+                new DefaultTreeNode("Japan", Arrays.asList(new TreeNode[]{new DefaultTreeNode("Hokkaido"),new DefaultTreeNode("Kyoto")}))
+            })
+        ));
+        treeModel.addToSelection(treeModel.getChild(new int[]{1, 1}));
+    ]]></zscript>
+
+    <label value="CSS Variables Test for Components -2 (Close the Coachmark First)" style="font-size: 24px; font-weight: bold; display: block;" />
+    <label multiline="true">
+        Verify the CSS variables defined in each component are applied correctly.
+    </label>
+
+    <vlayout spacing="16px">
+        <div>
+            <label value="Coachmark:" />
+            <coachmark target="infoButton" onTargetClick="self.close()">
+                <label>Wellcome! click here for more information!</label>
+                <button style="display: block;margin: 10px auto 0" label="got it!" onClick="self.parent.close()"/>
+            </coachmark>
+        </div>
+
+        <div>
+            <label value="Navbar / Nav:" />
+            <navbar width="520px">
+                <navitem label="Home" iconSclass="z-icon-home" selected="true" />
+                <navitem label="Files" iconSclass="z-icon-file" />
+                <navitem label="Settings" iconSclass="z-icon-cog" />
+            </navbar>
+        </div>
+
+        <div>
+            <label value="Chosenbox:" />
+            <chosenbox width="520px" model="${model}" />
+        </div>
+
+        <div>
+            <label value="Biglistbox:" />
+            <biglistbox height="300px" width="400px" model="${bigData}"/>
+        </div>
+
+        <div>
+            <label value="Rating:" />
+            <rating rating="3" />
+            <rating rating="4" disabled="true" />
+        </div>
+
+        <div>
+            <label value="Goldenlayout:" />
+            <goldenlayout width="520px" height="260px">
+                <attribute name="areas">
+                    A A B
+                    A A B
+                </attribute>
+                <goldenpanel area="A" title="Panel A">
+                    <window vflex="1" title="Window inside GoldenPanel A" border="normal"/>
+                </goldenpanel>
+                <goldenpanel area="B" title="Panel B">
+                    <button label="Button inside GoldenPanel B"/>
+                </goldenpanel>
+            </goldenlayout>
+        </div>
+
+        <div>
+            <label value="Organigram:" />
+            <organigram width="520px">
+                <orgchildren>
+                    <orgitem label="Item1">
+                        <orgchildren>
+                            <orgitem label="Item2" selected="true" open="false">
+                                <orgchildren>
+                                    <orgitem label="Item4"/>
+                                </orgchildren>
+                            </orgitem>
+                            <orgitem label="Item3"/>
+                        </orgchildren>
+                    </orgitem>
+                </orgchildren>
+            </organigram>
+        </div>
+
+        <div>
+            <label value="Signature:" />
+            <signature width="520px" height="200px" />
+        </div>
+
+        <div>
+            <label value="Drawer:" />
+            <button label="Open drawer" onClick="drawer.open()" />
+            <drawer id="drawer" width="360px" closable="true" title="Drawer title">
+                <vlayout spacing="8px" style="padding: 8px;">
+                    <label value="Drawer content" />
+                    <button label="Action" />
+                </vlayout>
+            </drawer>
+        </div>
+
+        <div>
+            <label value="Rangeslider:" />
+            <rangeslider/>
+            <rangeslider disabled="true" />
+        </div>
+
+        <div>
+            <label value="Multislider:" />
+            <multislider>
+                <sliderbuttons startValue="10" endValue="70"/>
+                <sliderbuttons startValue="20" endValue="50"/>
+                <sliderbuttons startValue="30" endValue="40"/>
+            </multislider>
+            <multislider disabled="true">
+                <sliderbuttons startValue="10" endValue="70"/>
+                <sliderbuttons startValue="20" endValue="50"/>
+                <sliderbuttons startValue="30" endValue="40"/>
+            </multislider>
+        </div>
+
+        <div sclass="custom-rangeslider">
+            <label value="Custom Rangeslider (custom colors):" />
+            <rangeslider/>
+            <rangeslider disabled="true" />
+        </div>
+
+        <div>
+            <label value="Inputgroup:" />
+            <inputgroup>
+                <label value="Prefix" />
+                <textbox width="240px" placeholder="Input..." />
+                <button label="Go" />
+            </inputgroup>
+        </div>
+
+        <div>
+            <label value="Pdfviewer:" />
+            <pdfviewer src="ZK 6 Essentials.pdf" width="800px" height="300px" />
+        </div>
+
+        <div>
+            <label value="Searchbox:" />
+            <searchbox model="${model}" placeholder="An unknown place" autoclose="true">
+                <template name="model">
+                    <html><![CDATA[
+                   <i class="z-icon-globe"></i> ${each}
+                   ]]></html>
+                </template>
+            </searchbox>
+        </div>
+
+        <div>
+            <label value="Stepbar:" />
+            <stepbar activeIndex="1" width="600px">
+                <step title="First Step" />
+                <step title="Second Step" />
+                <step title="Third Step"/>
+            </stepbar>
+        </div>
+
+        <div>
+            <label value="Portallayout:" />
+            <portallayout width="520px">
+                <portalchildren width="50%">
+                    <panel height="50%" title="Calendar" border="normal">
+                        <panelchildren>
+                            <calendar/>
+                        </panelchildren>
+                    </panel>
+                    <panel height="50%" title="Colorbox" border="normal">
+                        <panelchildren>
+                            <colorbox/>
+                        </panelchildren>
+                    </panel>
+                </portalchildren>
+                <portalchildren width="50%">
+                    <panel height="100%" title="Editor" border="normal">
+                        <panelchildren>
+                            <tbeditor/>
+                        </panelchildren>
+                    </panel>
+                </portalchildren>
+            </portallayout>
+        </div>
+
+        <div>
+            <label value="Linelayout:" />
+            <linelayout orient="horizontal" lineStyle="background:rgba(0,0,0,0.5)" >
+                <lineitem>
+                    <label>8 am</label>
+                    <button>good morning</button>
+                </lineitem>
+                <lineitem opposite="true" pointIconSclass="z-icon-plus-circle" pointStyle="background: #FF4051">
+                    <label>12 pm</label>
+                    <button>lunch time</button>
+                </lineitem>
+                <lineitem>
+                    <label>6 pm</label>
+                    <button>dinner time</button>
+                </lineitem>
+                <lineitem opposite="true">
+                    <label>10 pm</label>
+                    <button>good night</button>
+                </lineitem>
+            </linelayout>
+        </div>
+
+        <div>
+            <label value="Cascader:" />
+            <cascader id="cas" width="300px" model="${treeModel}"/>
+        </div>
+
+        <div>
+            <label value="Cropper:" />
+            <cropper w="250" h="250" x="0" y="0" src="/test2/img/sun.jpg" />
+        </div>
+    </vlayout>
+</zk>

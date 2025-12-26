@@ -11,26 +11,26 @@
 	border: 1px solid @containerBorderColor;
 	background: @containerBackground;
 	.borderRadius(@containerBorderRadius);
-	
+
 	&-shadow {
 		.boxShadow('0 3px 6px rgba(0, 0, 0, 0.24)');
 	}
-	
+
 	&-collapsed {
 		height: auto !important;
 	}
-	
+
 	&-head {
 		overflow: hidden;
 	}
-	
+
 	&-header {
 		.fontStyle(@baseTitleFontFamily, @containerHeaderTextSize, normal, @containerHeaderColor);
 		border: 0;
 		padding: @panelHeaderPadding;
 		line-height: 24px;
 		.defaultOverflowZoom();
-		
+
 		&-move {
 			cursor: move;
 		}
@@ -66,7 +66,7 @@
 		overflow: hidden;
 		cursor: pointer;
 		font-size: @containerButtonSize;
-		.displaySize(inline-block, @baseButtonWidth + 4, @baseButtonHeight);
+		.displaySize(inline-block, calc(@baseButtonWidth + 4px), @baseButtonHeight);
 		line-height: @baseButtonHeight;
 		border: none;
 
@@ -78,7 +78,7 @@
 	&-close {
 		font-size: @fontSizeXLarge;
 	}
-	
+
 	&-resize-faker {
 		border: 1px dashed #1854C2;
 		background: #D7E6F7;
@@ -89,7 +89,7 @@
 		overflow: hidden;
 		z-index: 60000;
 	}
-	
+
 	&-move-ghost {
 		.borderRadius(@containerBorderRadius);
 		margin: 0;
@@ -99,11 +99,11 @@
 		position: absolute;
 		overflow: hidden;
 		cursor: move;
-		
+
 		.z-panel-body {
 			padding: 0;
 		}
-		
+
 		dl {
 			font-size: 0;
 			display: block;
@@ -115,7 +115,7 @@
 			overflow: hidden;
 		}
 	}
-	
+
 	&-noborder {
 		border: 0;
 		.borderRadius(0);
@@ -124,7 +124,7 @@
  	&-move-block {
 	 	border: 2px dashed #B2CAD6;
 	}
-	
+
 }
 
 .z-panelchildren {

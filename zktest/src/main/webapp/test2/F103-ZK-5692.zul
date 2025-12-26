@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5692.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 24 09:24:06 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        .test-block {
+            border: 1px dashed #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .color-box {
+            width: 100px;
+            height: 50px;
+            display: inline-block;
+            text-align: center;
+            line-height: 50px;
+            color: white;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .z-comboitem {
+            --zk-combo-popup-item-size: 32px;
+        }
+    </style>
+
+    <label value="CSS Variables Test (:root)" style="font-size: 24px; font-weight: bold; display: block;" />
+    <label multiline="true">
+        Verify the CSS variables defined in :root are applied correctly to various components and styles below.
+    </label>
+
+    <groupbox title="1. Typography and Sizes" mold="3d">
+        <vlayout>
+            <label value="Base Font Size (should be 16px):" />
+            <label value="The quick brown fox jumps over the lazy dog."
+                   style="font-size: var(--zk-base-font-size); font-family: var(--zk-base-title-font-family); line-height: var(--zk-base-line-height);" />
+
+            <separator />
+
+            <label value="Font Sizes Scale:" />
+            <hlayout>
+                <label value="XS" style="font-size: var(--zk-font-size-x-small);" />
+                <label value="S" style="font-size: var(--zk-font-size-small);" />
+                <label value="M" style="font-size: var(--zk-font-size-medium);" />
+                <label value="L" style="font-size: var(--zk-font-size-large);" />
+                <label value="XL" style="font-size: var(--zk-font-size-x-large);" />
+            </hlayout>
+
+            <separator />
+
+            <label value="Border Radius Test:" />
+            <hlayout>
+                <div style="width: 50px; height: 50px; background: grey; border-radius: var(--zk-base-border-radius);">Base</div>
+                <div style="width: 50px; height: 50px; background: grey; border-radius: var(--zk-border-radius-large);">Large</div>
+                <div style="width: 50px; height: 50px; background: grey; border-radius: var(--zk-border-radius-small);">Small</div>
+            </hlayout>
+        </vlayout>
+    </groupbox>
+
+    <separator />
+
+    <groupbox title="2. Colors" mold="3d">
+        <vlayout>
+            <label value="Primary Colors:" />
+            <hlayout>
+                <div sclass="color-box" style="background: var(--zk-color-primary);">Primary</div>
+                <div sclass="color-box" style="background: var(--zk-color-primary-dark);">Dark</div>
+                <div sclass="color-box" style="background: var(--zk-color-primary-light); color: black;">Light</div>
+                <div sclass="color-box" style="background: var(--zk-color-primary-lighter); color: black;">Lighter</div>
+            </hlayout>
+
+            <label value="Accent Colors:" />
+            <hlayout>
+                <div sclass="color-box" style="background: var(--zk-color-accent);">Accent</div>
+                <div sclass="color-box" style="background: var(--zk-color-accent2);">Accent2</div>
+                <div sclass="color-box" style="background: var(--zk-color-accent3);">Accent3</div>
+            </hlayout>
+
+            <label value="Grey Scale:" />
+            <hlayout>
+                <div sclass="color-box" style="background: var(--zk-color-grey-dark);">Dark</div>
+                <div sclass="color-box" style="background: var(--zk-color-grey-light); color: black;">Light</div>
+                <div sclass="color-box" style="background: var(--zk-color-grey-lighter); color: black;">Lighter</div>
+            </hlayout>
+
+            <label value="Text Colors (on white bg):" />
+            <hlayout style="background: white; padding: 5px;">
+                <label value="Default" style="color: var(--zk-text-color-default);" />
+                <separator orient="vertical" />
+                <label value="Light" style="color: var(--zk-text-color-light);" />
+                <separator orient="vertical" />
+                <label value="Lighter" style="color: var(--zk-text-color-lighter);" />
+                <separator orient="vertical" />
+                <label value="Active" style="color: var(--zk-text-color-active);" />
+            </hlayout>
+        </vlayout>
+    </groupbox>
+
+    <separator />
+
+    <groupbox title="3. Component Variables (Real Components)" mold="3d">
+        <hlayout>
+            <vlayout class="test-block">
+                <label value="Input (Textbox):" />
+                <textbox value="Input Text" />
+            </vlayout>
+
+            <vlayout class="test-block">
+                <label value="Button:" />
+                <button label="Button Text" />
+            </vlayout>
+
+            <vlayout class="test-block">
+                <label value="Grid Header:" />
+                <grid width="150px">
+                    <columns>
+                        <column label="Grid Header" />
+                    </columns>
+                    <rows>
+                        <row><label value="Data" /></row>
+                    </rows>
+                </grid>
+            </vlayout>
+
+            <vlayout class="test-block">
+                <label value="Combobox:" />
+                <combobox>
+                    <comboitem label="Option 1" />
+                    <comboitem label="Option 2" />
+                    <comboitem/>
+                </combobox>
+            </vlayout>
+        </hlayout>
+    </groupbox>
+
+    <separator />
+
+    <groupbox title="4. Special Colors and Functions" mold="3d">
+        <label value="Notification Colors (Click to test):" />
+        <hlayout>
+            <button label="Info" onClick='Clients.showNotification("Info Message", "info", self, "after_end", 2000)' />
+            <button label="Warning" onClick='Clients.showNotification("Warning Message", "warning", self, "after_end", 2000)' />
+            <button label="Error" onClick='Clients.showNotification("Error Message", "error", self, "after_end", 2000)' />
+        </hlayout>
+    </groupbox>
+</zk>

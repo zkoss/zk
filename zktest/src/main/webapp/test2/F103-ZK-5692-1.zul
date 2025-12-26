@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5692-1.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Jan 02 09:46:05 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript>
+        import org.zkoss.zkmax.ui.util.*;
+    </zscript>
+
+    <label value="CSS Variables Test for Components -1" style="font-size: 24px; font-weight: bold; display: block;" />
+    <label multiline="true">
+        Verify the CSS variables defined in each component are applied correctly.
+    </label>
+
+    <vlayout spacing="16px">
+        <div>
+            <label value="Panel:" />
+            <panel title="Panel title (header padding test)" width="520px" border="normal">
+                <panelchildren>
+                    Panel content
+                </panelchildren>
+            </panel>
+        </div>
+
+        <div>
+            <label value="Window:" />
+            <window title="Window title (header padding test)" width="520px" border="normal" closable="true">
+                <label value="Window content" />
+            </window>
+        </div>
+
+        <div>
+            <label value="Borderlayout:" />
+            <borderlayout width="520px" height="240px">
+                <west maxsize="600" size="30%" border="0" splittable="true">
+                    <div style="background:#E6D92C" vflex="1">
+                        <label value="30%"
+                               style="color:white;font-size:50px" />
+                    </div>
+                </west>
+                <center>
+                    <label value="Here is a border"
+                           style="color:gray;font-size:30px" />
+                </center>
+                <east title="East" size="30%" collapsible="true">
+                    <div style="background:#B8D335"  vflex="1">
+                        <label value="30%"
+                               style="color:white;font-size:50px" />
+                    </div>
+                </east>
+            </borderlayout>
+        </div>
+
+        <div>
+            <label value="Caption on Groupbox:" />
+            <groupbox width="300px">
+                <caption label="fruits"/>
+                <radiogroup onCheck="fruit.value = self.selectedItem.label">
+                    <radio label="Apple"/>
+                    <radio label="Orange"/>
+                    <radio label="Banana"/>
+                </radiogroup>
+            </groupbox>
+        </div>
+
+        <div>
+            <label value="Groupbox:" />
+            <groupbox width="520px">
+                <caption label="Groupbox title" />
+                <label value="Content padding test" />
+            </groupbox>
+        </div>
+
+        <div>
+            <label value="Toolbar + Toolbarbutton:" />
+            <toolbar>
+                <toolbarbutton sclass="t-toolbarbutton" label="A" />
+                <toolbarbutton sclass="t-toolbarbutton" label="B" checked="true" />
+                <toolbarbutton sclass="t-toolbarbutton" label="C" />
+            </toolbar>
+        </div>
+
+        <div>
+            <label value="Combobutton:" />
+            <combobutton label="Combo">
+                <menupopup>
+                    <menuitem label="Option 1" />
+                    <menuitem label="Option 2" />
+                </menupopup>
+            </combobutton>
+        </div>
+
+        <div>
+            <label value="Timepicker:" />
+            <timepicker />
+        </div>
+
+        <div>
+            <label value="Colorbox:" />
+            <colorbox />
+        </div>
+
+        <div>
+            <label value="Calendar:" />
+            <calendar />
+        </div>
+
+        <div>
+            <label value="Paging:" />
+            <paging pageSize="10" totalSize="200" />
+        </div>
+
+        <div>
+            <label value="Slider:" />
+            <slider curpos="30" />
+        </div>
+
+        <div>
+            <label value="Progressmeter:" />
+            <progressmeter value="60" width="520px" />
+        </div>
+
+        <div>
+            <label value="Loadingbar:" />
+            <button label="createCtrl()" onClick='LoadingbarControl lc = Loadingbar.createLoadingbar()' />
+            <button label="startAtTop" onClick='lc.start(20, "top");' />
+        </div>
+
+        <div>
+            <label value="Tabbox:" />
+            <tabbox width="520px">
+                <tabs>
+                    <tab label="Tab 1" />
+                    <tab label="Tab 2" />
+                </tabs>
+                <tabpanels>
+                    <tabpanel>
+                        <label value="Tabpanel 1 content" />
+                    </tabpanel>
+                    <tabpanel>
+                        <label value="Tabpanel 2 content" />
+                    </tabpanel>
+                </tabpanels>
+            </tabbox>
+        </div>
+
+        <div>
+            <label value="Menu:" />
+            <menubar>
+                <menu label="File">
+                    <menupopup>
+                        <menuitem label="New" />
+                        <menuitem label="Open" />
+                        <menuitem label="Save" />
+                        <menuseparator />
+                        <menuitem label="Exit" />
+                    </menupopup>
+                </menu>
+                <menuitem label="Home" />
+            </menubar>
+        </div>
+    </vlayout>
+</zk>
