@@ -4,7 +4,7 @@
 @themePalette:                 "iceblue";
 // Typography
 // -------------------------------------
-@baseFontSize:                 16px;
+@baseFontSize:                 var(--baseFontSize, 16px);
 @baseTitleFontFamily:          "Helvetica Neue", Helvetica, Arial, sans-serif;
 @baseContentFontFamily:        @baseTitleFontFamily;
 @baseLineHeight:               16px;
@@ -25,12 +25,11 @@
 // -------------------------------------
 // Component sizing
 // -------------------------------------
-// Based on 14px font-size and 20px line-height
-@fontSizeXLarge:               ceil(@baseFontSize * 1.25);   // 20px
-@fontSizeLarge:                floor(@baseFontSize * 1.125); // 18px
-@fontSizeMedium:               ceil(@baseFontSize);          // 16px
-@fontSizeSmall:                floor(@baseFontSize * 0.875); // 14px
-@fontSizeXSmall:               ceil(@baseFontSize * 0.75);   // 12px
+@fontSizeXLarge:               var(--fontSizeXLarge, 20px);
+@fontSizeLarge:                var(--fontSizeLarge, 18px);
+@fontSizeMedium:               var(--fontSizeMedium, 16px);
+@fontSizeSmall:                var(--fontSizeSmall, 14px);
+@fontSizeXSmall:               var(--fontSizeXSmall, 12px);
 
 @baseBorderRadius:             4px;
 @borderRadiusLarge:            6px;
@@ -40,24 +39,24 @@
 // Component Basic Coloring
 // -------------------------------------
 // Font color
-@textColorDefault:             rgba(0, 0, 0, 0.9);
-@textColorLight:               rgba(0, 0, 0, 0.57);
-@textColorLighter:             rgba(0, 0, 0, 0.34);
-@textColorDefault3:            #FFFFFF;
-@textColorActive:              #0093F9;
+@textColorDefault:             var(--textColorDefault);
+@textColorLight:               var(--textColorLight);
+@textColorLighter:             var(--textColorLighter);
+@textColorDefault3:            var(--textColorDefault3);
+@textColorActive:              var(--textColorActive);
 
-@colorPrimary:                 #0093F9;
-@colorPrimaryDark:             #0064ED; //darken(@colorPrimary, 20%);
-@colorPrimaryLight:            lighten(@colorPrimary, 25%);
-@colorPrimaryLighter:          lighten(@colorPrimary, 45%); // List hover Bg
-@colorAccent:                  #FFA516;
-@colorAccent2:                 #FF4051;
-@colorAccent3:                 #261429; // Tooltip Bg
-@colorBackground1:             #F9FCFF; // Window Bg, Panel Bg
-@colorBackground3:             #FFFFFF; // Container Bg
-@colorGreyDark:                #A8A8A8;
-@colorGreyLight:               #D9D9D9; // Btn disabled Bg
-@colorGreyLighter:             #F2F2F2; // Field disabled Bg
+@colorPrimary:                 var(--colorPrimary);
+@colorPrimaryDark:             var(--colorPrimaryDark); //darken(@colorPrimary, 20%);
+@colorPrimaryLight:            var(--colorPrimaryLight);
+@colorPrimaryLighter:          var(--colorPrimaryLighter);
+@colorAccent:                  var(--colorAccent);
+@colorAccent2:                 var(--colorAccent2);
+@colorAccent3:                 var(--colorAccent3);
+@colorBackground1:             var(--colorBackground1);
+@colorBackground3:             var(--colorBackground3);
+@colorGreyDark:                var(--colorGreyDark);
+@colorGreyLight:               var(--colorGreyLight);
+@colorGreyLighter:             var(--colorGreyLighter);
 
 @baseTextColor:                @textColorDefault;
 
@@ -345,7 +344,7 @@
 @spinnerButtonIconPositionTop: 15px;
 @spinnerButtonPadding:         0 8px;
 @comboitemPadding:             4px 8px;
-@comboitemEmptyHeight:         @comboPopupItemSize + 2px + 4px * 2;
+@comboitemEmptyHeight:         calc(@comboPopupItemSize + 2px + (4px * 2));
 @comboitemInnerFontSize:       @comboPopupDescSize;
 
 // Timepicker
@@ -693,7 +692,7 @@
 @chosenboxItemMargin:          4px 0 0 4px;
 @chosenboxItemPadding:         4px 8px;
 @chosenboxItemContentPadding:  0;
-@chosenboxItemContentMarginRight: @chosenboxIconSize + 6;
+@chosenboxItemContentMarginRight: calc(@chosenboxIconSize + 6px);
 @chosenboxButtonPositionTop:   4px;
 @chosenboxButtonPositionRight: 8px;
 @chosenboxInputWidth:          30px;
@@ -786,7 +785,7 @@
 @signatureToolbarRight: 8px;
 @signatureToolbarBottom: 16px;
 @signatureToolbarButtonSpacing: 8px;
-@signatureToolbarButtonIconFontSize: 20px;
+@signatureToolbarButtonIconFontSize: @fontSizeXLarge;
 
 // drawer
 @drawerMaskBackgroundColor: #000;
@@ -808,12 +807,12 @@
 @rangesliderShadowColor: rgba(0, 0, 0, 0.3);
 @rangesliderButtonSize: 20px;
 @rangesliderButtonBorderWidth: 2px;
-@rangesliderButtonColor: @colorPrimary;
+@rangesliderButtonColor: var(--rangesliderButtonColor);
 @rangesliderButtonHoverColor: @colorPrimaryLight;
 @rangesliderButtonActiveColor: @colorPrimaryDark;
 @rangesliderButtonFocusBorderColor: @colorAccent;
 @rangesliderDisabledTrackColor: @colorGreyLighter;
-@rangesliderDisabledButtonColor: lighten(@rangesliderButtonColor, 30%);
+@rangesliderDisabledButtonColor: var(--rangesliderDisabledButtonColor);
 @rangesliderBorderRadius: @baseBorderRadius;
 @rangesliderTooltipBorderRadius: @baseBorderRadius;
 @rangesliderTooltipBackgroundColor: rgba(0, 0, 0, 0.8);
@@ -836,20 +835,20 @@
 @multisliderShadowColor: rgba(0, 0, 0, 0.2);
 @multisliderButtonSize: 20px;
 @multisliderButtonBorderWidth: 2px;
-@multisliderButtonColor: @colorPrimary;
+@multisliderButtonColor: var(--multisliderButtonColor);
 @multisliderButtonHoverColor: @colorPrimaryLight;
 @multisliderButtonActiveColor: @colorPrimaryDark;
 @multisliderButtonFocusBorderColor: @colorAccent;
-@multisliderButtonColor2: @colorPrimaryLight;
-@multisliderButtonHoverColor2: lighten(@multisliderButtonColor2, 15%);
-@multisliderButtonActiveColor2: darken(@multisliderButtonColor2, 20%);
+@multisliderButtonColor2: var(--multisliderButtonColor2);
+@multisliderButtonHoverColor2: var(--multisliderButtonHoverColor2);
+@multisliderButtonActiveColor2: var(--multisliderButtonActiveColor2);
 @multisliderBorderRadius: @baseBorderRadius;
 @multisliderTooltipBackgroundColor: rgba(0, 0, 0, 0.8);
 @multisliderDisabledTooltipBackgroundColor: rgba(0, 0, 0, 0.5);
 @multisliderInnerSize: 8px;
 @multisliderDisabledTrackColor: @colorGreyLighter;
-@multisliderDisabledButtonColor: lighten(@multisliderButtonColor, 30%);
-@multisliderDisabledButtonColor2: lighten(@multisliderButtonColor2, 20%);
+@multisliderDisabledButtonColor: var(--multisliderDisabledButtonColor);
+@multisliderDisabledButtonColor2: var(--multisliderDisabledButtonColor2);
 
 // inputgroup
 @inputgroupTextBackgroundColor: #E9ECEF;

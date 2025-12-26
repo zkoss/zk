@@ -87,7 +87,7 @@
 		font-weight: normal;
 		display: inline-block;
 		vertical-align: middle;
-		
+
 		// align for img + text
 		img ~ & {
 			vertical-align: middle;
@@ -293,8 +293,8 @@
 	}
 	&-icon {
 		.iconFontStyle(@fontSizeXLarge, extract(@menuScrollableIconColors, 1));
-		margin-top: -@fontSizeXLarge/2;
-		margin-left: -@fontSizeXLarge/2 + 2;
+		margin-top: calc(@fontSizeXLarge * -0.5);
+		margin-left: calc(@fontSizeXLarge * -0.5 + 2px);
 		position: absolute;
 		top: 50%;
 		left: 50%;

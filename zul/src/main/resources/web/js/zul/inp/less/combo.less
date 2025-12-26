@@ -246,7 +246,7 @@ each(@components, {
 	display: block;
 	padding: 4px 8px;
 	position: relative;
-	min-height: @comboPopupItemSize + 2px + 4px * 2;
+	min-height: calc(@comboPopupItemSize + 2px + 4px * 2);
 	.borderRadius(@baseBorderRadius);
 	color: @disabledColor;
 }
@@ -287,7 +287,7 @@ each(@components, {
 	color: @comboPopupItemSelectedColor;
 }
 .z-comboitem-text {
-	line-height: @comboPopupItemSize + 2;
+	line-height: calc(@comboPopupItemSize + 2px);
 }
 .z-comboitem-image {
 	margin-top: -4px;
