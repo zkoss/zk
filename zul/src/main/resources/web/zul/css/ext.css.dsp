@@ -25,32 +25,43 @@ ${z:setCSSCacheControl()}
 	scope="request" if="${empty fontFamilyT}"/><%-- title --%>
 <c:set var="fontFamilyC" value="arial, sans-serif"
 	scope="request" if="${empty fontFamilyC}"/><%-- content --%>
+
+:root {
+    --fontSizeM: ${fontSizeM};
+    --fontSizeMS: ${fontSizeMS};
+    --fontSizeS: ${fontSizeS};
+    --fontSizeXS: ${fontSizeXS};
+    --fontFamilyT: ${fontFamilyT};
+    --fontFamilyC: ${fontFamilyC};
+}
+
 p,span {
-	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+	font-family: var(--fontFamilyC);
+	font-size: var(--fontSizeM); font-weight: normal;
 }
 h1 {
-	font-family: ${fontFamilyT};
+	font-family: var(--fontFamilyT);
 	font-size: x-large; font-weight: bold; color: #250070;
 	letter-spacing: -1px; margin-top: 3pt;
 }
 h2 {
-	font-family: ${fontFamilyT};
+	font-family: var(--fontFamilyT);
 	font-size: large; font-weight: bold; color: #200066;
 }
 h3 {
-	font-family: ${fontFamilyT};
+	font-family: var(--fontFamilyT);
 	font-size: medium; font-weight: bold; color: #100050;
 }
 h4 {
-	font-family: ${fontFamilyT};
+	font-family: var(--fontFamilyT);
 	font-size: small; font-weight: bold; color: #346B93;
 }
 h5 {
-	font-family: ${fontFamilyT};
+	font-family: var(--fontFamilyT);
 	font-size: small; font-weight: bold; color: #4BA7D2;
 }
 h6 {
-	font-family: ${fontFamilyT};
+	font-family: var(--fontFamilyT);
 	font-size: small; font-weight: normal; color: #404040;
 }
 
@@ -65,9 +76,9 @@ dd {
 }
 
 li, dt, dd, pre, body {
-	font-family: ${fontFamilyC};
+	font-family: var(--fontFamilyC);
 	font-weight: normal;
-	font-size: ${fontSizeM};
+	font-size: var(--fontSizeM);
 }
 
 li	{
