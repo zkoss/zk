@@ -49,6 +49,7 @@ ZK 10.3.0
   ZK-5662: Tab with Caption component causes JS error
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
+  ZK-5896: resizing column loses flex proportions on column width with hflex
   ZK-5651: onOK with multiline, instant and submitByEnter doesn't update value before sending onOK
   ZK-5631: slider sets curpos in a wrong value with data binding
   ZK-5606: Statistic returns incorrect average number when escaped hour is less then 1 hour
