@@ -21,13 +21,13 @@ dependencies {
 	compileOnly "javax.portlet:portlet-api:${portletVersion}"
 	compileOnly 'javax.websocket:javax.websocket-api:1.1'
 
-	optionalImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
+	optionalImplementation 'com.google.javascript:closure-compiler-unshaded:v20251216'
 	optionalImplementation 'org.apache.groovy:groovy:5.0.0-alpha-1'
 	optionalImplementation('org.jruby:jruby-core:1.7.27') {
 		exclude group: '*', module: '*'
 	}
-	optionalImplementation 'org.python:jython:2.2.1'
-	optionalImplementation 'org.mozilla:rhino:1.7.14'
+	optionalImplementation 'org.python:jython:2.7.4'
+	optionalImplementation 'org.mozilla:rhino:1.8.1'
 }
 
 buildConfig {

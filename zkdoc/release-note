@@ -50,9 +50,12 @@ ZK 10.3.0
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
   ZK-5606: Statistic returns incorrect average number when escaped hour is less then 1 hour
+  ZK-5588: combobox doesn't highlight the matched item when pasting value via a mouse
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
+  + upgrade jython to 2.7.4, rhino to 1.8.1, closure-compiler-unshaded to v20251216,
+  and commons-lang to commons-lang3 3.20.0 to fix vulnerabilities
 
    --------
 ZK 10.2.0
