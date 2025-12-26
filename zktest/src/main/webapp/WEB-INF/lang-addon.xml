@@ -161,4 +161,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<component-name>editableLabel3</component-name>
 		<component-class>org.zkoss.zktest.bind.advance.EditableLabel3</component-class>
 	</component>
+	<!-- for F103-ZK-5265 lang-addon.xml -->
+<!--	<javascript>-->
+<!--		console.log('3. ZK-5265 lang-addon loaded');-->
+<!--	</javascript>-->
 </language-addon>

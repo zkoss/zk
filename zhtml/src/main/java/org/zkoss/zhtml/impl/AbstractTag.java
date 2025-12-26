@@ -535,6 +535,8 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 //		Do this at client side for ZK-5270
 //		if ((!hideUuidIfNoId && !shallHideId()) || getId().length() > 0)
 //			sb.append(" id=\"").append(getUuid()).append('"');
+		if (!getId().isEmpty()) // ZK-5841: self-defined id should be rendered
+			sb.append(" id=\"").append(getUuid()).append('"');
 
 		if (_props != null) {
 			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
