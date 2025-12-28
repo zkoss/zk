@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5538.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Dec 26 15:48:47 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div draggable="true" style="border: 1px solid black; padding: 20px;">
+        drag this and the radio shouldn't get unchecked
+        <radiogroup>
+            <radio label="yes" checked="true"/>
+            <radio label="no"/>
+        </radiogroup>
+    </div>
+</zk>
