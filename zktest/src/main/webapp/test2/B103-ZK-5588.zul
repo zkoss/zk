@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5588.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 24 16:06:32 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Copy the word "auto" to your clipboard.
+        2. Open the context menu and paste it (right-click inside the combobox and select "Paste").
+        3. The value "auto" should be highlighted.
+    </label>
+    <combobox autocomplete="true" autodrop="true" onFocus="self.open()">
+        <comboitem value="auto" label="${self.value}"/>
+        <comboitem value="authorize" label="${self.value}"/>
+        <comboitem value="beta" label="${self.value}"/>
+        <comboitem value="car" label="${self.value}"/>
+    </combobox>
+</zk>

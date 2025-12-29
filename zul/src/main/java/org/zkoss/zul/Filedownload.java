@@ -16,18 +16,26 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+import org.zkoss.io.Files;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.media.Media;
 import org.zkoss.zk.au.DeferredValue;
 import org.zkoss.zk.au.out.AuDownload;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 
 /**
@@ -155,6 +163,233 @@ public class Filedownload {
 		if (url == null)
 			throw new FileNotFoundException(path);
 		save(url, contentType);
+	}
+
+
+	/**
+	 * Downloads multiple media files using their original filenames.
+	 * The files will be downloaded sequentially to avoid browser cancellation issues.
+	 *
+	 * @param medias the media files to download
+	 * @since 10.3.0
+	 */
+	public static void saveMultiple(Media... medias) {
+		if (medias == null || medias.length == 0)
+			return;
+
+		for (Media media : medias) {
+			save(media, null);
+		}
+	}
+
+	/**
+	 * Downloads multiple media files with custom filenames.
+	 * The files will be downloaded sequentially to avoid browser cancellation issues.
+	 *
+	 * @param mediaMap a map of media to filename pairs. If filename is null, the original media name is used.
+	 * @since 10.3.0
+	 */
+	public static void saveMultiple(Map<Media, String> mediaMap) {
+		if (mediaMap == null || mediaMap.isEmpty())
+			return;
+
+		for (Map.Entry<Media, String> entry : mediaMap.entrySet()) {
+			save(entry.getKey(), entry.getValue());
+		}
+	}
+
+	/**
+	 * Downloads multiple files using DownloadItem objects.
+	 * The files will be downloaded sequentially to avoid browser cancellation issues.
+	 *
+	 * @param items the download items containing media and optional custom filenames
+	 * @since 10.3.0
+	 */
+	public static void saveMultiple(DownloadItem... items) {
+		if (items == null || items.length == 0)
+			return;
+
+		for (DownloadItem item : items) {
+			save(item.getMedia(), item.getFilename());
+		}
+	}
+
+	/**
+	 * Downloads multiple media files as a single ZIP archive.
+	 *
+	 * @param medias the media files to include in the ZIP
+	 * @param zipFilename the name of the ZIP file (e.g., "download.zip")
+	 * @since 10.3.0
+	 */
+	public static void saveAsZip(Media[] medias, String zipFilename) {
+		if (medias == null || medias.length == 0)
+			return;
+
+		Map<Media, String> mediaMap = new LinkedHashMap<>();
+		for (Media media : medias) {
+			mediaMap.put(media, null); // use original filename
+		}
+		saveAsZip(mediaMap, zipFilename);
+	}
+
+	/**
+	 * Downloads multiple media files with custom names as a single ZIP archive.
+	 *
+	 * @param mediaMap a map of media to filename pairs. If filename is null, the original media name is used.
+	 * @param zipFilename the name of the ZIP file (e.g., "download.zip")
+	 * @since 10.3.0
+	 */
+	public static void saveAsZip(Map<Media, String> mediaMap, String zipFilename) {
+		if (mediaMap == null || mediaMap.isEmpty())
+			return;
+
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ZipOutputStream zos = new ZipOutputStream(baos);
+
+			for (Map.Entry<Media, String> entry : mediaMap.entrySet()) {
+				Media media = entry.getKey();
+				String filename = entry.getValue();
+
+				if (filename == null || filename.isEmpty()) {
+					filename = media.getName();
+				}
+
+				// Ensure filename has extension
+				if (filename != null && filename.lastIndexOf('.') < 0) {
+					String format = media.getFormat();
+					if (format != null && !format.isEmpty()) {
+						filename = filename + "." + format;
+					}
+				}
+
+				// Add entry to ZIP
+				ZipEntry zipEntry = new ZipEntry(filename != null ? filename : "file");
+				zos.putNextEntry(zipEntry);
+
+				// Write media content
+				if (media.isBinary()) {
+					if (media.inMemory()) {
+						zos.write(media.getByteData());
+					} else {
+						try (InputStream is = media.getStreamData()) {
+							Files.copy(zos, is);
+						}
+					}
+				} else {
+					if (media.inMemory()) {
+						zos.write(media.getStringData().getBytes("UTF-8"));
+					} else {
+						try (Reader reader = media.getReaderData()) {
+							// Convert Reader content to bytes
+							char[] buffer = new char[8192];
+							int len;
+							while ((len = reader.read(buffer)) > 0) {
+								zos.write(new String(buffer, 0, len).getBytes("UTF-8"));
+							}
+						}
+					}
+				}
+
+				zos.closeEntry();
+			}
+
+			zos.close();
+
+			// Ensure ZIP filename
+			if (zipFilename == null || zipFilename.isEmpty()) {
+				zipFilename = "download.zip";
+			} else if (!zipFilename.toLowerCase().endsWith(".zip")) {
+				zipFilename = zipFilename + ".zip";
+			}
+
+			// Create ZIP media and download
+			byte[] zipData = baos.toByteArray();
+			AMedia zipMedia = new AMedia(zipFilename, "zip", "application/zip", zipData);
+			save(zipMedia, zipFilename);
+
+		} catch (IOException e) {
+			throw new UiException("Failed to create ZIP file: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Downloads multiple files using DownloadItem objects as a single ZIP archive.
+	 *
+	 * @param items the download items to include in the ZIP
+	 * @param zipFilename the name of the ZIP file (e.g., "download.zip")
+	 * @since 10.3.0
+	 */
+	public static void saveAsZip(DownloadItem[] items, String zipFilename) {
+		if (items == null || items.length == 0)
+			return;
+
+		Map<Media, String> mediaMap = new LinkedHashMap<>();
+		for (DownloadItem item : items) {
+			mediaMap.put(item.getMedia(), item.getFilename());
+		}
+		saveAsZip(mediaMap, zipFilename);
+	}
+
+	/**
+	 * Helper class for specifying media and optional custom filename for multiple file downloads.
+	 *
+	 * @since 10.3.0
+	 */
+	public static class DownloadItem {
+		private final Media media;
+		private final String filename;
+
+		/**
+		 * Creates a download item with custom filename.
+		 *
+		 * @param media the media to download
+		 * @param filename the custom filename (can be null to use media's original name)
+		 */
+		public DownloadItem(Media media, String filename) {
+			if (media == null)
+				throw new IllegalArgumentException("media cannot be null");
+			this.media = media;
+			this.filename = filename;
+		}
+
+		/**
+		 * Creates a download item using the media's original filename.
+		 *
+		 * @param media the media to download
+		 */
+		public DownloadItem(Media media) {
+			this(media, null);
+		}
+
+		/**
+		 * Static factory method to create a download item with custom filename.
+		 *
+		 * @param media the media to download
+		 * @param filename the custom filename
+		 * @return a new DownloadItem instance
+		 */
+		public static DownloadItem of(Media media, String filename) {
+			return new DownloadItem(media, filename);
+		}
+
+		/**
+		 * Static factory method to create a download item using media's original filename.
+		 *
+		 * @param media the media to download
+		 * @return a new DownloadItem instance
+		 */
+		public static DownloadItem of(Media media) {
+			return new DownloadItem(media);
+		}
+
+		public Media getMedia() {
+			return media;
+		}
+
+		public String getFilename() {
+			return filename;
+		}
 	}
 
 	private static class DownloadURL implements DeferredValue {

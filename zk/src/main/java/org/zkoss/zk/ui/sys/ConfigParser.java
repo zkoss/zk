@@ -62,6 +62,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.metainfo.DefinitionLoaders;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.util.CspProvider;
 import org.zkoss.zk.ui.util.DataHandlerInfo;
 import org.zkoss.zk.ui.util.ThemeProvider;
 import org.zkoss.zk.ui.util.ThemeURIHandler;
@@ -416,6 +417,12 @@ public class ConfigParser {
 				//	url-encoder-class
 				//	au-writer-class
 				//	au-decoder-class
+				//	csp-enabled
+				//	csp-strict-dynamic-enabled
+				//	csp-policy
+				//	csp-header-generator-class
+				//	csp-report-only
+				//	csp-report-uri
 				parseSystemConfig(config, el);
 			} else if ("xel-config".equals(elnm)) {
 				//xel-config
@@ -739,6 +746,30 @@ public class ConfigParser {
 		cls = parseClass(el, "au-writer-class", AuWriter.class);
 		if (cls != null)
 			AuWriters.setImplementationClass(cls);
+
+		s = el.getElementValue("csp-enabled", true);
+		if (s != null)
+			config.setCspEnabled(!"false".equals(s));
+
+		s = el.getElementValue("csp-strict-dynamic-enabled", true);
+		if (s != null)
+			config.setCspStrictDynamicEnabled(!"false".equals(s));
+
+		s = el.getElementValue("csp-policy", true);
+		if (s != null)
+			config.setCspPolicy(s);
+
+		s = el.getElementValue("csp-report-only", true);
+		if (s != null)
+			config.setCspReportOnly(!"false".equals(s));
+
+		s = el.getElementValue("csp-report-uri", true);
+		if (s != null)
+			config.setCspReportURI(s);
+
+		cls = parseClass(el, "csp-header-generator-class", CspProvider.class);
+		if (cls != null)
+			config.setCspProvider((CspProvider) cls.newInstance());
 	}
 
 	/** Parses client-config. */
