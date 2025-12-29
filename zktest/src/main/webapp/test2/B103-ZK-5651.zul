@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5651.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Dec 23 22:58:06 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Type characters in the textbox, then press Enter before onChange is triggered.
+        2. Expected result: self.value should be the textbox value at the moment the user presses Enter.
+    </label>
+    <textbox id="tb" multiline="true" submitByEnter="true" instant="true"
+             onOK='Clients.log("onOK: "+self.value)'
+             onChange='Clients.log("onChange: "+self.value)' value="abcd" />
+</zk>

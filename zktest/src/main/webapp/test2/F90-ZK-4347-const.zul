@@ -59,32 +59,32 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
     </vlayout>
     <vlayout>
         1950-01-01 ~ 1980-12-31 (Date)
-        <cell>
+        <div>
             <datebox id="d1" constraint="${sldcPeriod2}" />
             <button label="set today" onClick="d1.setValueInLocalDate(LocalDate.now())"/>
-        </cell>
-        <cell>
+        </div>
+        <div>
             <datebox id="d2" constraint="${sdcPeriod2}" />
             <button label="set today" onClick="d2.setValueInLocalDate(LocalDate.now())"/>
-        </cell>
+        </div>
     </vlayout>
     <vlayout>
         09:30 ~ 18:30
-        <cell>
+        <div>
             <timebox id="t1" format="HH:mm:ss" constraint="${sltc}" />
             <timebox format="HH:mm:ss" constraint="between 093000 and 183000" />
             <timepicker format="HH:mm:ss" constraint="between 093000 and 183000" />
             <button label="set 00:00" onClick="t1.setValueInLocalTime(LocalTime.of(0, 0, 0))"/>
             <button label="set 10:00" onClick="t1.setValueInLocalTime(LocalTime.of(10, 0, 0))"/>
             <button label="set 20:00" onClick="t1.setValueInLocalTime(LocalTime.of(20, 0, 0))"/>
-        </cell>
+        </div>
     </vlayout>
     <vlayout>
         before 18:30
-        <cell>
+        <div>
             <timebox format="HH:mm:ss" constraint="before 183000" />
             <timepicker format="HH:mm:ss" constraint="${sltcBefore}" />
             <timepicker format="HH:mm:ss" constraint="before 183000" />
-        </cell>
+        </div>
     </vlayout>
 </zk>

@@ -23,8 +23,8 @@ Copyright (C) 2017 Potix Corporation. All Rights Reserved.
         2. zk.build should be obfuscated.
     </label>
     <vlayout>
-        <cell>zk.version = <textbox id="zkver"/> (empty)</cell>
-        <cell>zk.build = <textbox id="zkbuild"/> (obfuscated result. shouldn't be <label id="build" value="${build}"/>)</cell>
+        <div>zk.version = <textbox id="zkver"/> (empty)</div>
+        <div>zk.build = <textbox id="zkbuild"/> (obfuscated result. shouldn't be <label id="build" value="${build}"/>)</div>
     </vlayout>
 
     <label multiline="true">

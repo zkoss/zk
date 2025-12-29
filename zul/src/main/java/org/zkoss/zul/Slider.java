@@ -41,6 +41,7 @@ public class Slider extends XulElement {
 	private double _angleArc = 360.0;
 	private double _strokeWidth = 10.0;
 	private double _scaleInput = 1.0;
+	private boolean _isInitialRender = false;
 
 	/** Represent integer slider.
 	 * @since 7.0.1
@@ -156,15 +157,21 @@ public class Slider extends XulElement {
 	 * @since 7.0.1
 	 */
 	public void setCurpos(double curpos) throws WrongValueException {
-		if (curpos < _minpos)
-			curpos = _minpos;
-		else if (curpos > _maxpos)
-			curpos = _maxpos;
+		if (_isInitialRender) // ZK-5631: should defer validate on initial render
+			validateCurpos();
 
 		if (Double.compare(_curpos, curpos) != 0) {
 			_curpos = curpos;
 			smartUpdate("curpos", _curpos);
 		}
+	}
+
+	private void validateCurpos() {
+		if (_curpos < _minpos)
+			_curpos = _minpos;
+		else if (_curpos > _maxpos)
+			_curpos = _maxpos;
+		_isInitialRender = true;
 	}
 
 	/** Returns the minimum position of the slider.
@@ -550,6 +557,7 @@ public class Slider extends XulElement {
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
+		validateCurpos();
 		if (!"horizontal".equals(_orient))
 			renderer.render("orient", _orient);
 		if (!"{0}".equals(_slidingtext))
