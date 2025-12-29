@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5918.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Dec 23 12:35:43 CST 2025, Created by peggypeng
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. focus on a checkbox whose mold is set to switch or toggle
+        2. pressing the Space key should not cause the page to scroll
+    </label>
+    <checkbox label="checkbox" />
+    <checkbox label="switch" mold="switch" focus="true"/>
+    <checkbox label="toggle" mold="toggle"/>
+    <div height="10000px"/>
+</zk>
