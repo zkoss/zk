@@ -31,19 +31,26 @@ function tabbox$mold$(out) {
 				tabpanels.redraw(out);
 			if (tabs)
 				tabs.redraw(out);
+			if (tabscroll) {
+				out.push(
+					'<div id="', uuid, '-left" class="', /*safe*/ icon, ' ', this.$s('left-scroll'), '">', domIconHTML('left'), '</div>',
+					'<div id="', uuid, '-right" class="', /*safe*/ icon, ' ', this.$s('right-scroll'), '">', domIconHTML('right'), '</div>');
+			}
+			if (tabscroll && toolbar)
+				toolbar.redraw(out);
 		} else {
 			if (tabs)
 				tabs.redraw(out);
+			if (tabscroll) {
+				out.push(
+					'<div id="', uuid, '-left" class="', /*safe*/ icon, ' ', this.$s('left-scroll'), '">', domIconHTML('left'), '</div>',
+					'<div id="', uuid, '-right" class="', /*safe*/ icon, ' ', this.$s('right-scroll'), '">', domIconHTML('right'), '</div>');
+			}
+			if (tabscroll && toolbar)
+				toolbar.redraw(out);
 			if (tabpanels)
 				tabpanels.redraw(out);
 		}
-		if (tabscroll) {
-			out.push(
-				'<div id="', uuid, '-left" class="', /*safe*/ icon, ' ', this.$s('left-scroll'), '">', domIconHTML('left'), '</div>',
-				'<div id="', uuid, '-right" class="', /*safe*/ icon, ' ', this.$s('right-scroll'), '">', domIconHTML('right'), '</div>');
-		}
-		if (tabscroll && toolbar)
-			toolbar.redraw(out);
 	} else { // accordion and vertical(-right)
 		if (tabs)
 			tabs.redraw(out);

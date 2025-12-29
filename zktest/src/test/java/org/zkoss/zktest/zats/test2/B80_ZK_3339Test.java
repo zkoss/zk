@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.containsString;
 
 import java.time.Duration;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;

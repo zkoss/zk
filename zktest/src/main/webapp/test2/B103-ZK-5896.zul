@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5896.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Dec 08 16:07:35 CST 2025, Created by rebeccalai
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. resize col 1
+		2. check that the widths of col 2 and 3 remain unchanged 
+	</label>
+	<grid width="100%" height="560px">
+		<columns sizable="true">
+			<column label="col 1" width="150px"/>
+			<column label="col 2" hflex="1"/>
+			<column label="col 3" hflex="2"/>
+			<column label="col 4" width="100px"/>
+			<column label="col 5" width="100px"/>
+		</columns>
+		<rows>
+			<forEach begin="0" end="10">
+				<row>
+					<label value="cell 1"/>
+					<label value="cell 2"/>
+					<label value="cell 3"/>
+					<label value="cell 4"/>
+					<label value="cell 5"/>
+				</row>
+			</forEach>
+		</rows>
+	</grid>
+</zk>

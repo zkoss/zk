@@ -512,6 +512,9 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		super.doKeyDown_(evt);
 		const spaceKeyCode = 32;
 		if (evt.domTarget == this.$n('mold') && evt.keyCode == spaceKeyCode) {
+			// B103-ZK-5918: should prevent default space key action: scroll down the page
+			evt.domEvent?.preventDefault();
+
 			if (this._isTristateMold()) {
 				this.nextState_();
 				this.fireOnCheck_(this.getState());

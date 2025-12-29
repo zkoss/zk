@@ -17,6 +17,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
 
@@ -35,7 +37,7 @@ public class Cell extends XulElement {
 	 * <p>Default: null (system default: left unless CSS specified).
 	 */
 	public String getAlign() {
-		return _auxinf != null ? _auxinf.align : null;
+		return _auxinf != null ? _auxinf._align : null;
 	}
 
 	/** Sets the horizontal alignment.
@@ -43,7 +45,7 @@ public class Cell extends XulElement {
 	 */
 	public void setAlign(String align) {
 		if (!Objects.equals(getAlign(), align)) {
-			initAuxInfoForCell().align = align;
+			initAuxInfoForCell()._align = align;
 			smartUpdate("align", getAlign());
 		}
 	}
@@ -52,7 +54,7 @@ public class Cell extends XulElement {
 	 * <p>Default: null (system default: top).
 	 */
 	public String getValign() {
-		return _auxinf != null ? _auxinf.valign : null;
+		return _auxinf != null ? _auxinf._valign : null;
 	}
 
 	/** Sets the vertical alignment of this grid.
@@ -60,7 +62,7 @@ public class Cell extends XulElement {
 	 */
 	public void setValign(String valign) {
 		if (!Objects.equals(getValign(), valign)) {
-			initAuxInfoForCell().valign = valign;
+			initAuxInfoForCell()._valign = valign;
 			smartUpdate("valign", getValign());
 		}
 	}
@@ -69,7 +71,7 @@ public class Cell extends XulElement {
 	 * Default: 1.
 	 */
 	public int getColspan() {
-		return _auxinf != null ? _auxinf.colspan : 1;
+		return _auxinf != null ? _auxinf._colspan : 1;
 	}
 
 	/** Sets the number of columns to span.
@@ -79,7 +81,7 @@ public class Cell extends XulElement {
 		if (colspan <= 0)
 			throw new WrongValueException("Positive only");
 		if (getColspan() != colspan) {
-			initAuxInfoForCell().colspan = colspan;
+			initAuxInfoForCell()._colspan = colspan;
 			smartUpdate("colspan", getColspan());
 		}
 	}
@@ -88,7 +90,7 @@ public class Cell extends XulElement {
 	 * Default: 1.
 	 */
 	public int getRowspan() {
-		return _auxinf != null ? _auxinf.rowspan : 1;
+		return _auxinf != null ? _auxinf._rowspan : 1;
 	}
 
 	/** Sets the number of rows to span.
@@ -98,7 +100,7 @@ public class Cell extends XulElement {
 		if (rowspan <= 0)
 			throw new WrongValueException("Positive only");
 		if (getRowspan() != rowspan) {
-			initAuxInfoForCell().rowspan = rowspan;
+			initAuxInfoForCell()._rowspan = rowspan;
 			smartUpdate("rowspan", getRowspan());
 		}
 	}
@@ -114,6 +116,13 @@ public class Cell extends XulElement {
 		if (_auxinf != null)
 			clone._auxinf = (AuxInfo) _auxinf.clone();
 		return clone;
+	}
+
+	public void beforeParentChanged(Component parent) {
+		if (parent != null)
+			if (!(parent instanceof Row) && !(parent instanceof Hbox) && !(parent instanceof Vbox))
+				throw new UiException("Unsupported parent for cell: " + parent);
+		super.beforeParentChanged(parent);
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
@@ -140,10 +149,10 @@ public class Cell extends XulElement {
 	}
 
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
-		private String align = null;
-		private String valign = null;
-		private int colspan = 1;
-		private int rowspan = 1;
+		private String _align = null;
+		private String _valign = null;
+		private int _colspan = 1;
+		private int _rowspan = 1;
 
 		public Object clone() {
 			try {

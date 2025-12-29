@@ -28,7 +28,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
         <!--<button label="Button Upload (max. 1000KB)" upload="true,maxsize=1000,multiple=true">-->
             <!--<attribute name="onUpload"><![CDATA[-->
                 <!--import org.zkoss.util.media.Media;-->
-                <!--import org.apache.commons.lang.StringUtils;-->
+                <!--import org.apache.commons.lang3.StringUtils;-->
                 <!--Media[] ma = event.medias;-->
                 <!--ArrayList data = new ArrayList();-->
                 <!--String[] datas;-->
@@ -47,7 +47,7 @@ Copyright (C) 2016 Potix Corporation. All Rights Reserved.
         <dropupload maxsize="1000" anchor="${self.parent}">
             <attribute name="onUpload"><![CDATA[
                 import org.zkoss.util.media.Media;
-                import org.apache.commons.lang.StringUtils;
+                import org.apache.commons.lang3.StringUtils;
                 Media[] ma = event.medias;
                 ArrayList data = new ArrayList();
                 String[] datas;
