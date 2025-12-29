@@ -231,6 +231,7 @@ Nov 12, 2024
   ZK-4961: Unable to scroll in grid and listbox when using non-native scrollbar on mobile
   ZK-5528: Tabbox rendering order is incorrect, causing tab order to be wrong
   ZK-5571: make an invisible cell visible causes a js error
+  ZK-5870: Error when using Uploader with websockets
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.

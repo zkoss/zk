@@ -181,7 +181,7 @@ public class AuMultipartUploader {
 	public static AbstractMap.SimpleImmutableEntry<String, String> splitQueryParameter(String it) {
 		final int idx = it.indexOf("=");
 		final String key = idx > 0 ? it.substring(0, idx) : it;
-		final String value = idx > 0 && it.length() > idx + 1 ? it.substring(idx + 1) : null;
+		final String value = idx > 0 && it.length() > idx + 1 ? it.substring(idx + 1) : "";
 		try {
 			return new AbstractMap.SimpleImmutableEntry<>(
 					URLDecoder.decode(key, "UTF-8"),
