@@ -8,6 +8,7 @@ ZK 10.3.0
   ZK-5908: provide a multi-download API
   ZK-6021: Allow user to see all messages in Za11y module
   ZK-5865: Chosenbox should support configurable initial rendering size when using ListSubModel
+  ZK-5866: Chosenbox can be customized filtering logic easier
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file

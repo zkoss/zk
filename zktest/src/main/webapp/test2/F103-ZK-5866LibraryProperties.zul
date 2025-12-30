@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5866LibraryProperties.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Dec 23 11:01:23 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import java.util.Comparator;
+
+        public static final Comparator STRING_COMPARATOR_CONTAINS = new Comparator() {
+            public int compare(Object key, Object value) {
+                String idx = Objects.toString(key);
+                return idx != null && value != null && idx.length() > 0 && Objects.toString(value).contains(idx) ? 0 : 1;
+            }
+        };
+
+        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+        ListSubModel subModelContains = ListModels.toListSubModel(model, STRING_COMPARATOR_CONTAINS, 15);
+    ]]></zscript>
+
+    <label multiline="true">
+        1. This is the new filter logic of Chosenbox.
+        2. It uses "contains" / "includes" logic by default, so the behavior is the same as the first Chosenbox above.
+        3. using Library Property "org.zkoss.zul.Chosenbox.filterLogic"
+    </label>
+
+    <chosenbox width="400px" model="${subModelContains}" />
+</zk>
