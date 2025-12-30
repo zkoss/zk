@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5865.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Dec 29 09:40:40 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+
+        List items = new ArrayList();
+        items.add("Apple");
+        items.add("Banana");
+        items.add("Cherry");
+        items.add("Date");
+        items.add("Grape");
+        ListModelList myModel1 = new ListModelList(items);
+    ]]></zscript>
+
+    <label multiline="true">
+        1. Chosenbox without server-side rendering → After searching, the correct number of items is displayed.
+    </label>
+    <chosenbox id="chosenbox1" width="400px" model="${myModel1}"/>
+</zk>
