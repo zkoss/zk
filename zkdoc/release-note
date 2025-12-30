@@ -6,6 +6,7 @@ ZK 10.3.0
   ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
   ZK-2910: add osgi JAR to maven repository
   ZK-5908: provide a multi-download API
+  ZK-5865: Chosenbox should support configurable initial rendering size when using ListSubModel
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
