@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5841.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 17 15:05:24 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:h="native">
+    <label>
+        1. The script should have an id attribute when the HTML/ZHTML file is loaded via include.
+    </label>
+    <zscript>
+        <![CDATA[
+            String myid= "myid";
+        ]]>
+    </zscript>
+    <div apply="org.zkoss.bind.BindComposer">
+        <include myid="@load(myid)" src="B103-ZK-5841.html" />
+    </div>
+</zk>

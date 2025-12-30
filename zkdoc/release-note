@@ -1,5 +1,6 @@
 ZK 10.3.0
 * Features
+  ZK-5265: Add a CSP provider class, which allows the users to define CSPs and provide a nonce used for strict-dynamic support
   ZK-5858: zk.showError() can show error stack trace in the browser console
   ZK-5991: update tbeditor to the latest Trumbowyg js widget
   ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
@@ -38,18 +39,29 @@ ZK 10.3.0
   ZK-6019: different inline script between nav and navitem
   ZK-6008: audtodisable is not listed in the suggestion dropdown
   ZK-5818: drag and drop a panel causes a NullPointerException
+  ZK-5684: model.set(...) with ROD causes grid to redraw all content instead of just the target row
   ZK-5821: a semicolon in java String causes an UiException
   ZK-5683: ROD listbox with shift-select only sends range, causes selectedObjects to be empty
   ZK-5690: menu._nOpen initializes to void (undefined) instead of zero, prevent closing
   ZK-5617: an invisible toolbarbutton is not hidden when it's inside an overflow popup
   ZK-5931: DhtmlLayoutServlet uses java.util.logging.*
+  ZK-5841: fail to render a script tag's id attribute when it's in an included html
   ZK-5662: Tab with Caption component causes JS error
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
   ZK-5538: dragging a radiogroup loses checked radio
+  ZK-5673: Listbox setRows removes shallSize, prevents flexing
+  ZK-5918: check a checkbox with switch mold with a space key scrolls down a page
+  ZK-5896: resizing column loses flex proportions on column width with hflex
+  ZK-5651: onOK with multiline, instant and submitByEnter doesn't update value before sending onOK
+  ZK-5631: slider sets curpos in a wrong value with data binding
+  ZK-5606: Statistic returns incorrect average number when escaped hour is less then 1 hour
+  ZK-5588: combobox doesn't highlight the matched item when pasting value via a mouse
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
+  + upgrade jython to 2.7.4 and rhino to 1.8.1 to fix vulnerabilities
+  + upgrade pdfjs to 4.4.168 to fix vulnerabilities
 
    --------
 ZK 10.2.0
@@ -216,6 +228,9 @@ Nov 12, 2024
   ZK-5833: ZK-423 regression on Android
   ZK-4960: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader in mobile
   ZK-4961: Unable to scroll in grid and listbox when using non-native scrollbar on mobile
+  ZK-5970: collapsing a navbar cause a javascript error: node is not found
+  ZK-5528: Tabbox rendering order is incorrect, causing tab order to be wrong
+  ZK-5571: make an invisible cell visible causes a js error
 
 * Upgrade Notes
   + Remove Htmls.encodeJavaScript(), Strings.encodeJavaScript(), Strings.escape() with Strings.ESCAPE_JAVASCRIPT, and replace them with OWASP Java Encoder APIs instead.

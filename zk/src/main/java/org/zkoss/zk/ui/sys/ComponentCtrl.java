@@ -257,8 +257,8 @@ public interface ComponentCtrl {
 	 */
 	public static final int CE_DUPLICATE_IGNORE = 0x2000;
 	/** Returned by {@link #getClientEvents} to indicate the event
-	 * an be ignored by the server when the server receives consecutive
-	 * AU requests. In other words, the server will remove the first request
+	 * can be ignored by the server when the server receives the same
+	 * AU requests consecutively. In other words, the server will remove the first request
 	 * if it receives an event listed in this map consecutively.
 	 */
 	public static final int CE_REPEAT_IGNORE = 0x4000;
