@@ -54,7 +54,7 @@ public class PackageData {
 																		new DirectoryTreeNode(new PackageDataUnit("commons-logging.jar", "Jasperreport related Component")),
 																		new DirectoryTreeNode(new PackageDataUnit("commons-digester.jar", "Jasperreport related Component")),
 																		new DirectoryTreeNode(new PackageDataUnit("bsh.jar", "Scripting in Java interpreter for zscript (BeanShell)")),
-																		new DirectoryTreeNode(new PackageDataUnit("js.jar", "Scripting in JavaScript (Rhino)")),
+																		new DirectoryTreeNode(new PackageDataUnit("rhino.jar", "Scripting in JavaScript (Rhino)")),
 																		new DirectoryTreeNode(new PackageDataUnit("groovy.jar", "Scripting in Groovy")),
 																		new DirectoryTreeNode(new PackageDataUnit("jruby.jar", "Scripting in Ruby (JRuby)")),
 																		new DirectoryTreeNode(new PackageDataUnit("jython.jar", "Scripting in Python (Jython)")),

@@ -6,6 +6,9 @@ ZK 10.3.0
   ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
   ZK-2910: add osgi JAR to maven repository
   ZK-5908: provide a multi-download API
+  ZK-6020: clear unsupported font-related library properties
+  ZK-6021: Allow user to see all messages in Za11y module
+  ZK-5865: Chosenbox should support configurable initial rendering size when using ListSubModel
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
@@ -49,6 +52,7 @@ ZK 10.3.0
   ZK-5662: Tab with Caption component causes JS error
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
+  ZK-5538: dragging a radiogroup loses checked radio
   ZK-5673: Listbox setRows removes shallSize, prevents flexing
   ZK-5918: check a checkbox with switch mold with a space key scrolls down a page
   ZK-5896: resizing column loses flex proportions on column width with hflex
@@ -56,6 +60,7 @@ ZK 10.3.0
   ZK-5631: slider sets curpos in a wrong value with data binding
   ZK-5606: Statistic returns incorrect average number when escaped hour is less then 1 hour
   ZK-5588: combobox doesn't highlight the matched item when pasting value via a mouse
+  ZK-5375: Borderlayout regions do not resize when borderlayout resizes
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
@@ -63,6 +68,8 @@ ZK 10.3.0
   and commons-lang to commons-lang3 3.20.0 to fix vulnerabilities
   + upgrade jython to 2.7.4, rhino to 1.8.1 to fix vulnerabilities
   + upgrade jython to 2.7.4 and rhino to 1.8.1 to fix vulnerabilities
+  + upgrade jython to 2.7.4, rhino to 1.8.1, and commons-lang to commons-lang3 3.20.0 to fix vulnerabilities
+  + upgrade pdfjs to 4.10.38 to fix vulnerabilities
 
    --------
 ZK 10.2.0
@@ -229,6 +236,7 @@ Nov 12, 2024
   ZK-5833: ZK-423 regression on Android
   ZK-4960: Listbox doesn't keep scrollbar position when applying hflex="min" on a listheader in mobile
   ZK-4961: Unable to scroll in grid and listbox when using non-native scrollbar on mobile
+  ZK-5970: collapsing a navbar cause a javascript error: node is not found
   ZK-5528: Tabbox rendering order is incorrect, causing tab order to be wrong
   ZK-5571: make an invisible cell visible causes a js error
   ZK-5870: Error when using Uploader with websockets
