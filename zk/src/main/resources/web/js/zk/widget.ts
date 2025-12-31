@@ -444,6 +444,16 @@ export var DnD = class { //for easy overriding
 		}
 
 		var dgelm = jq(drag.node).clone()[0];
+
+		// ZK-5538: rename radio button names to avoid unchecking the original ones
+		jq(dgelm).find('input[type="radio"]').each(function () {
+			const $this = jq(this),
+				oldName = $this.attr('name');
+			if (oldName) {
+				$this.attr('name', oldName + '_ghost');
+			}
+		});
+
 		dgelm.id = 'zk_ddghost';
 		zk.copy(dgelm.style, {
 			position: 'absolute', left: ofs[0] + 'px', top: ofs[1] + 'px'
