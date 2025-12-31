@@ -32,7 +32,8 @@ public class B80_ZK_3169Test extends WebDriverTestCase {
         JQuery listItem = jq(".z-listitem");
         assertEquals(1, listItem.length());
         assertEquals(text, listItem.eq(0).text());
-
+        // ZK-5865: need to blur the input since options are rendered only when the input is empty
+        click(jq("body"));
         click(jq("@button"));
         waitResponse();
 
