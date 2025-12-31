@@ -6,6 +6,9 @@ ZK 10.3.0
   ZK-6017: Mark Hbox Vbox as deprecated on Java class / doc
   ZK-2910: add osgi JAR to maven repository
   ZK-5908: provide a multi-download API
+  ZK-6020: clear unsupported font-related library properties
+  ZK-6021: Allow user to see all messages in Za11y module
+  ZK-5865: Chosenbox should support configurable initial rendering size when using ListSubModel
 
 * Bugs
   ZK-5969: Error extracting moment-timezone-with-data.src.js timezone database version from jar file
@@ -49,6 +52,7 @@ ZK 10.3.0
   ZK-5662: Tab with Caption component causes JS error
   ZK-5682: _wapp may be null in SimpleSession#sessionWillPassivate, may cause NPE
   ZK-5877: java.net.MalformedURLException: Invalid JAR URL format
+  ZK-5538: dragging a radiogroup loses checked radio
   ZK-5673: Listbox setRows removes shallSize, prevents flexing
   ZK-5918: check a checkbox with switch mold with a space key scrolls down a page
   ZK-5896: resizing column loses flex proportions on column width with hflex
@@ -61,6 +65,7 @@ ZK 10.3.0
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
   + upgrade jython to 2.7.4 and rhino to 1.8.1 to fix vulnerabilities
+  + upgrade pdfjs to 4.10.38 to fix vulnerabilities
 
    --------
 ZK 10.2.0
