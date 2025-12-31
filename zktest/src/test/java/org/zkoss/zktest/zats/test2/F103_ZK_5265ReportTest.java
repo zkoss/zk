@@ -23,8 +23,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v142.network.Network;
-import org.openqa.selenium.devtools.v142.network.model.Response;
+import org.openqa.selenium.devtools.v143.network.Network;
+import org.openqa.selenium.devtools.v143.network.model.Response;
 
 import org.zkoss.test.webdriver.ExternalZkXml;
 import org.zkoss.test.webdriver.ForkJVMTestOnly;
