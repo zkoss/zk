@@ -64,7 +64,7 @@ ZK 10.3.0
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
-  + upgrade jython to 2.7.4 and rhino to 1.8.1 to fix vulnerabilities
+  + upgrade jython to 2.7.4, rhino to 1.8.1, and commons-lang to commons-lang3 3.20.0 to fix vulnerabilities
   + upgrade pdfjs to 4.10.38 to fix vulnerabilities
 
    --------
