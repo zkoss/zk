@@ -2,9 +2,9 @@
 
 <!-- zk.xml
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Mar 26 16:29:07     2006, Created by tomyeh
 
@@ -35,7 +35,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>false</value>
 	</library-property>
 	-->
-	
+
 	<!-- Turn on if you want to always enable the process mask.
 	<library-property>
 		<name>org.zkoss.zk.ui.processMask.enabled</name>
@@ -49,7 +49,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	-->
-	
+
 	<!-- Uncomment if you want to control the number of hours that
 		the CSS files of class Web resources won't be changed.
 		By default, it is 8760 (the same as other class Web resouces).
@@ -76,8 +76,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>
 	-->
-	
-	<!-- F65-ZK 1465 
+
+	<!-- F65-ZK 1465
 		Turn off smart connection for the comet server push.
 		By default is enable and only HTML5 browser support
 	<library-property>
@@ -93,7 +93,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.zul.Button.mold</name>
 		<value>trendy</value>
 	</library-property>
-	
+
 	<!--  Turn on following if you want to disable the animation effects of
 		Borderlayout for all. Since 5.0.8
 	<library-property>
@@ -101,7 +101,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	-->
-	
+
 	<!--  Turn on following if you want to change the default format for
 	the NumberInputElement when the locale is specified.
 	Note that the format by default is (##,##0.##). Since 5.0.9
@@ -110,7 +110,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>##,##0.##</value>
 	</library-property>
 	-->
-	
+
 	<!-- Turn on the following if you want to use the defer mode as the default,
 		which is compatible to 3.x
 	<library-property>
@@ -168,7 +168,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>false</value>
 	</library-property>
 	-->
-	
+
 	<!-- [ZK EE]
 		Turn on if you want to enable the render-on-demand feature for grid.
 		It improves the performance for huge grid.
@@ -223,7 +223,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<listener>
 		<listener-class>org.zkoss.zkmax.ui.util.DesktopRecycle</listener-class>
 	</listener>
-	--> 
+	-->
 
 	<!-- [ZK EE]
 		Turn on if you want to make your Web application crawlable (indexed)
@@ -266,7 +266,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		-->
 	</session-config>
 	<session-config>
-		<!-- 
+		<!--
 		 Uncomment it and set it to android, if you want to configure for
 		 an Android device.
 		 If omitted, ajax is assumed.
@@ -299,7 +299,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<disable-event-thread>false</disable-event-thread>
 	</system-config>
 	-->
-	
+
 	<!-- Turn on the following if you want to use ZK with a clustering server
 		or cloud environment (such as Google App Engine)
 	<system-config>
@@ -395,7 +395,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<theme-provider-class>org.zkoss.zul.theme.StandardThemeProvider</theme-provider-class>
 	</desktop-config>
 	-->
-	
+
 	<!-- Uncomment the following if you want to redirect to particular
 		page when ZK Client receives an error code.
 	<client-config>
@@ -440,51 +440,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value></value>
 	</preference>
 	-->
-	
-	<!-- Configure the default font size in ZUL CSS file (~./zul/css/zk.wcs)
-		Default: 12px.
-	<library-property>
-		<name>org.zkoss.zul.theme.fontSizeM</name>
-		<value>12px</value>
-	</library-property>
-	-->
-	<!-- Configure the font size for menus in ZUL CSS file (~./zul/css/zk.wcs)
-		Default: 11px.
-	<library-property>
-		<name>org.zkoss.zul.theme.fontSizeMS</name>
-		<value>11px</value>
-	</library-property>
-	-->
-	<!-- Configure the font size for smaller fonts, such as toolbar,
-		 in ZUL CSS file (~./zul/css/zk.wcs)
-		Default: 11px.
-	<library-property>
-		<name>org.zkoss.zul.theme.fontSizeS</name>
-		<value>11px</value>
-	</library-property>
-	-->
-	<!-- Configure the font size for extremely small fonts,
-		 in ZUL CSS file (~./zul/css/zk.wcs)
-		Default: 10px.
-	<library-property>
-		<name>org.zkoss.zul.theme.fontSizeXS</name>
-		<value>10px</value>
-	</library-property>
-	-->
-	<!-- Configure the font family for titles in ZUL CSS file (~./zul/css/zk.wcs)
-		Default: arial, sans-serif.
-	<library-property>
-		<name>org.zkoss.zul.theme.fontFamilyT</name>
-		<value>arial, sans-serif</value>
-	</library-property>
-	-->
-	<!-- Configure the font family for content in ZUL CSS file (~./zul/css/zk.wcs)
-		Default: arial, sans-serif.
-	<library-property>
-		<name>org.zkoss.zul.theme.fontFamilyC</name>
-		<value>arial, sans-serif</value>
-	</library-property>
-	-->
 
 	<!-- Configure ZUL not to override the standard HTML tags, such as body's
 		margin and padding
@@ -505,7 +460,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>mouse</value>
 	</library-property>
 	-->
-	
+
 	<!-- Uncomment if you want to load a conifugration file for logging ZK core
 	ZK will try to locate the file from the class path, and the current directory
 	("user.dir").
@@ -532,7 +487,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 
 	<!-- Uncommet to control where the label propeties file is located.
-		If you have multiple properties files, specify them one-by-one. 
+		If you have multiple properties files, specify them one-by-one.
 		Default: /WEB-INF/zk-label.properties
 	<system-config>
 		<label-location>/WEB-INF/label/foo.properties</label-location>
@@ -553,7 +508,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>java:comp/env/BeanManager</value>
 	</library-property>
 	-->
-	
+
 	<!-- Uncommet to specify a directory, where ZK will load the so-called
 		Class-Web Resources (CWR), including JavaScript files, CSS files,
 		 and other resources (~./xxx), in addition to the class path.
@@ -580,7 +535,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<keep-across-visits>true</keep-across-visits>
 	</client-config>
 	-->
-	 	
+
 	<!-- ZK Demo properties loader -->
 	<listener>
 		<description>ZK Demo properties loader</description>
