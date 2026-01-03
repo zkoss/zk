@@ -19,7 +19,7 @@
 		font-size: 0;
 		display: inline-block;  // inline-block has filled bug in Firefox
 		vertical-align: top;  // prevent filled bug
-		height: @baseIconHeight - 2;
+		height: calc(@baseIconHeight - 2px);
 		line-height: 0;
 		background-color: @progressmeterBackgroundColor;
 	}
@@ -49,12 +49,12 @@
 	overflow: hidden;
 	position: relative;
 	pointer-events: none;
-	
+
 	&-colorbar {
 		background-color: @loadingbarColor;
 		height: 100%;
 	}
-	
+
 	&-image {
 		display: inline-block;
 		vertical-align: top;

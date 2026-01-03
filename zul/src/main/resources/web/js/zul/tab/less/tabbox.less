@@ -4,7 +4,7 @@
 .verticalStyle() {
 	> .z-tabs {
 		float: left;
-		
+
 		.z-tabs-content {
 			display: block;
 		}
@@ -65,7 +65,7 @@
 		z-index: 25;
 		background: @tabboxTabsBackgroundColor;
 		.userSelectNone();
-		
+
 		> i {
 			.opacity(0.7);
 		}
@@ -276,7 +276,7 @@
 	display: block;
 	border-bottom: 2px solid transparent;
 	margin: 0;
-	line-height: @baseButtonHeight + 6;
+	line-height: calc(@baseButtonHeight + 6px);
 	background: @tabboxTabBackgroundColor;
 	text-align: center;
 	position: relative;
@@ -334,7 +334,7 @@
 		z-index: 15;
 		zoom: 1;
 		.userSelectNone();
-		
+
 		&:hover {
 			color: @tabboxTabButtonHoverColor;
 		}
