@@ -88,6 +88,43 @@ public class ListModels {
 	/**
 	 * Returns a proxy instance of the given model that implements
 	 * {@link ListSubModel} and {@link ListModel} interface.
+	 * @param model a model
+	 * @param comparator used to compare the value typed by user and
+	 * the value from the model. The first argument is the value typed by user,
+	 * and the second argument is the value retrieved from the model.
+	 * It shall return 0 if they matched (i.e., shall be shown).
+	 * @param nRows the maximal allowed number of matched items.
+	 * @param initRenderCount the number of items to be rendered initially when
+	 * the input is empty (Support for Chosenbox).
+	 *
+	 * @since 10.3.0
+	 */
+	public static <T> ListModel<T> toListSubModel(ListModel<T> model, Comparator<T> comparator, int nRows, int initRenderCount) {
+		return new SubModel<T>(model, comparator, nRows, initRenderCount);
+	}
+
+	/**
+	 * Returns a proxy instance of the given model that implements
+	 * {@link ListSubModel} and {@link ListModel} interface.
+	 * <p>The default comparator depends on the type of the model, if the
+	 * model is an instance of {@link ListModelMap}, {@link #MAP_COMPARATOR} is used.
+	 * Otherwise, {@link #STRING_COMPARATOR} is used.
+	 * <p>If you want more control, use {@link #toListSubModel(ListModel, Comparator, int, int)}
+	 * instead.
+	 * @param model a {@link ListModel}
+	 * @param initRenderCount the number of items to be rendered initially when
+	 * the input is empty (Support for Chosenbox).
+	 * @see #toListSubModel(ListModel, Comparator, int, int)
+	 *
+	 * @since 10.3.0
+	 */
+	public static <T> ListModel<T> toListSubModel(ListModel<T> model, int initRenderCount) {
+		return new SubModel<T>(model, (model instanceof ListModelMap) ? MAP_COMPARATOR : STRING_COMPARATOR, 15, initRenderCount);
+	}
+
+	/**
+	 * Returns a proxy instance of the given model that implements
+	 * {@link ListSubModel} and {@link ListModel} interface.
 	 * <p>The default comparator depends on the type of the model, if the
 	 * model is an instance of {@link ListModelMap}, {@link #MAP_COMPARATOR} is used.
 	 * Otherwise, {@link #STRING_COMPARATOR} is used.
@@ -108,6 +145,7 @@ public class ListModels {
 		private final Comparator<E> _comparator;
 
 		private final int _nRows;
+		private final int _initRenderRows;
 
 		public void setSelectionControl(SelectionControl ctrl) {
 			if (_model instanceof Selectable)
@@ -121,9 +159,14 @@ public class ListModels {
 		}
 
 		private SubModel(ListModel<E> model, Comparator<E> comparator, int nRows) {
+			this(model, comparator, nRows, 0);
+		}
+
+		private SubModel(ListModel<E> model, Comparator<E> comparator, int nRows, int initRenderRows) {
 			_model = model;
 			_comparator = comparator;
 			_nRows = nRows;
+			_initRenderRows = initRenderRows;
 		}
 
 		/**
@@ -144,10 +187,12 @@ public class ListModels {
 		public ListModel<E> getSubModel(Object value, int nRows) {
 			final List<E> data = new LinkedList<E>();
 			final Set<E> selection = new LinkedHashSet<E>();
-			nRows = nRows < 0 ? _nRows : nRows;
+			boolean isValueEmpty = value == null || (value instanceof String && ((String) value).isEmpty());
+			nRows = (isValueEmpty && _initRenderRows > 0) ? _initRenderRows : nRows < 0 ? _nRows : nRows;
 			for (int i = 0, j = _model.getSize(); i < j; i++) {
 				E o = _model.getElementAt(i);
-				if (((Comparator) _comparator).compare(value, o) == 0) {
+				int match = isValueEmpty ? 0 : ((Comparator) _comparator).compare(value, o);
+				if (match == 0) {
 					data.add(o);
 					if (_model instanceof Selectable && ((Selectable<?>) _model).isSelected(o)) {
 						selection.add(o);

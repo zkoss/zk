@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5673.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Dec 24 10:23:42 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Click column 2 in the textbox and observe that its width is 100% of the column.
+        2. Click the "Add Item" button to add some rows.
+        3. The textbox width should remain 100% of the column.
+    </label>
+    <zscript>
+        ListModelList model = new ListModelList();
+        model.add("default");
+        model.add("default");
+        model.add("default");
+        model.add("default");
+        model.add("default");
+    </zscript>
+    <div height="600px" style="overflow-y:auto;">
+        <button id="addBtn" label="add item" onClick='model.addAll(model);lb.setRows(lb.getRows()+10); ' />
+        <listbox width="600px" model="${model}" rows="200" id="lb">
+            <custom-attributes org.zkoss.zul.invalidateThreshold="1" />
+            <auxhead>
+                <auxheader label="1"></auxheader>
+                <auxheader label="2"></auxheader>
+                <auxheader label="3"></auxheader>
+            </auxhead>
+            <listhead>
+                <listheader width="15%"></listheader>
+                <listheader width="70%"></listheader>
+                <listheader width="15%"></listheader>
+            </listhead>
+            <template name="model">
+                <listitem>
+                    <listcell label="1"></listcell>
+                    <listcell>
+                        <hlayout hflex="1">
+                            <listbox visible="false"></listbox>
+                            <hlayout hflex="1" height="100%">
+                                <textbox multiline="true"
+                                         inplace="true" hflex="1"
+                                         value="${each}"
+                                         height="60px">
+                                </textbox>
+                            </hlayout>
+                        </hlayout>
+                    </listcell>
+                    <listcell label="3"></listcell>
+                </listitem>
+            </template>
+        </listbox>
+    </div>
+</zk>

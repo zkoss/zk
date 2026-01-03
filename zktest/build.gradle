@@ -95,7 +95,7 @@ dependencies {
 		testCompileOnly "org.zkoss.zk:za11y:${version}"
 	}
 	implementation 'org.zkoss.zkforge.el:zcommons-el:1.1.0'
-	implementation 'commons-lang:commons-lang:2.6'
+	implementation 'org.apache.commons:commons-lang3:3.20.0'
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
 	implementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
 	implementation 'net.sf.jasperreports:jasperreports:6.20.5'
@@ -122,9 +122,9 @@ dependencies {
 
 	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
 	runtimeOnly 'org.apache.groovy:groovy:5.0.0-alpha-1'
-	runtimeOnly 'org.mozilla:rhino:1.7.14'
+	runtimeOnly 'org.mozilla:rhino:1.8.1'
 //	testImplementation 'org.jruby:jruby-core:1.7.27'
-	runtimeOnly 'org.python:jython:2.2.1'
+	runtimeOnly 'org.python:jython:2.7.4'
 	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.1.0-FL-2024082716'
 	testImplementation 'net.jcip:jcip-annotations:1.0'
 	testImplementation 'com.deque.html.axe-core:selenium:4.7.0'

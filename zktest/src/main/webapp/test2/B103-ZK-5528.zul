@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5528.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Dec 19 18:16:43 CST 2025, Created by josephlo
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        *:focus{
+        border: 1px red solid;
+        }
+    </style>
+
+    <label multiline="true">
+        1. For a Tabbox with orientation 'up', selecting a tab should focus first on the toolbar, and then on the Tabpanel content.
+    </label>
+    <textbox/>
+    <tabbox width="250px">
+        <tabs>
+            <tab label="Tab 1" closable="true"/>
+            <tab label="Tab 2" closable="true"/>
+            <tab label="Tab 3" closable="true"/>
+            <tab label="Tab 4" closable="true"/>
+            <tab label="Tab 5" closable="true"/>
+        </tabs>
+        <toolbar>
+            <toolbarbutton label="1"/>
+            <toolbarbutton label="2"/>
+            <toolbarbutton label="3"/>
+        </toolbar>
+        <tabpanels>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+    <textbox/>
+    <tabbox width="250px" orient="bottom">
+        <tabs>
+            <tab label="Tab 1" closable="true"/>
+            <tab label="Tab 2" closable="true"/>
+            <tab label="Tab 3" closable="true"/>
+            <tab label="Tab 4" closable="true"/>
+            <tab label="Tab 5" closable="true"/>
+        </tabs>
+        <toolbar>
+            <toolbarbutton label="1"/>
+            <toolbarbutton label="2"/>
+            <toolbarbutton label="3"/>
+        </toolbar>
+        <tabpanels>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+            <tabpanel>
+                <textbox/>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+    <textbox/>
+</zk>

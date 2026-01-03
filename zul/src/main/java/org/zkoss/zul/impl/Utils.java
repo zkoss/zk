@@ -414,4 +414,20 @@ public class Utils {
 			return defValue;
 		}
 	}
+
+	/** Returns the string if the given attribute is defined in a component or in library property.
+	 * @param name the name of the attribute
+	 * @param defValue the default value if neither component's attribute or library property is defined
+	 * for the given name
+	 * @param recurse whether to look up the ancestor's attribute
+	 * @since 10.3.0
+	 */
+	public static final String getStringAttribute(Component comp, String name, String defValue, boolean recurse) {
+		Object val = comp.getAttribute(name, recurse);
+		if (val == null)
+			val = Library.getProperty(name);
+		if (val == null)
+			return defValue;
+		return String.valueOf(val);
+	}
 }

@@ -989,7 +989,7 @@ export namespace au_global {
 					if (typeof content !== 'string') {
 						let reqContent = '';
 						for (const key in content) {
-							if (Object.hasOwn(content, key)) {
+							if (key && Object.hasOwn(content, key)) {
 								reqContent += (reqContent.length ? '&' : '') + key + '=' + encodeURIComponent(content[key] as string);
 							}
 						}

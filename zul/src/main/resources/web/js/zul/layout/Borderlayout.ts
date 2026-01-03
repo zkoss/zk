@@ -115,6 +115,18 @@ export class Borderlayout extends zul.Widget {
 		return this;
 	}
 
+	override setWidth(width?: string): this {
+		super.setWidth(width);
+		this.resize();
+		return this;
+	}
+
+	override setHeight(height?: string): this {
+		super.setHeight(height);
+		this.resize();
+		return this;
+	}
+
 	//-- super --//
 	/** @internal */
 	override onChildAdded_(child: zul.layout.LayoutRegion): void {

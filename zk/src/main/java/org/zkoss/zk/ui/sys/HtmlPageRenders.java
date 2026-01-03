@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -109,6 +110,10 @@ public class HtmlPageRenders {
 	* @since 6.5.5
 	*/
 	private static final String ZK_VERSION_INFO_ENABLED_KEY = "org.zkoss.zk.ui.versionInfo.enabled";
+
+	/** Support for Csp tag pattern */
+	private static final Pattern SCRIPT_TAG_PATTERN = Pattern.compile("<script(?!\\s+nonce=)");
+	private static final Pattern STYLE_TAG_PATTERN = Pattern.compile("<style(?!\\s+nonce=)");
 
 	private static volatile int msgCode = -1;
 
@@ -200,13 +205,15 @@ public class HtmlPageRenders {
 	public static final String outResponseJavaScripts(Execution exec, boolean directJS) {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl) exec;
 		final Collection<AuResponse> responses = execCtrl.getResponses();
+		final Desktop desktop = exec.getDesktop();
+		Configuration config = desktop.getWebApp().getConfiguration();
 		if (responses == null || responses.isEmpty())
 			return "";
 		execCtrl.setResponses(null);
 
 		final StringBuffer sb = new StringBuffer(256);
 		if (!directJS)
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkac(");
+			sb.append(outCspNonceAttr("<script class=\"z-runonce\" type=\"text/javascript\">\nzkac("));
 
 		for (Iterator<AuResponse> it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = it.next();
@@ -315,7 +322,7 @@ public class HtmlPageRenders {
 				groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
 		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkopt({");
+			sb.append(outCspNonceAttr("<script class=\"z-runonce\" type=\"text/javascript\">\nzkopt({"));
 
 			if (keepDesktop)
 				sb.append("kd:1,");
@@ -353,7 +360,7 @@ public class HtmlPageRenders {
 				sb.append(">").append(scriptInfo.getY());
 			sb.append("</script>\n");
 		}
-		return sb.toString();
+		return outCspNonceAttr(sb.toString());
 	}
 
 	private static Boolean getAutomaticTimeout(Desktop desktop) {
@@ -418,7 +425,7 @@ public class HtmlPageRenders {
 			}
 			sb.append("/>");
 		}
-		return sb.toString();
+		return outCspNonceAttr(sb.toString());
 	}
 
 	/** Returns a list of {@link StyleSheet} that shall be generated
@@ -707,7 +714,7 @@ public class HtmlPageRenders {
 			Files.write(out, ((StringWriter) rc.perm).getBuffer()); //perm
 
 			// B65-ZK-1836
-			Files.write(out, new StringBuffer(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/"))); //js
+			Files.write(out, new StringBuffer(outCspNonceAttr(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/")))); //js
 		} else if (owner != null) { //restore
 			setRenderContext(exec, old);
 		}
@@ -768,6 +775,22 @@ public class HtmlPageRenders {
 		}
 		outSEOContent(page, out);
 		out.write("</div>");
+	}
+
+	protected static String outCspNonceAttr(String output) {
+		Configuration config = WebApps.getCurrent().getConfiguration();
+		boolean cspEnabled = config.isCspEnabled(),
+				cspStrictDynamicEnabled = config.isCspStrictDynamicEnabled();
+
+		if (cspEnabled && cspStrictDynamicEnabled && output != null) {
+			String nonce = config.getCspProvider().getCspNonce();
+			String nonceAttr = " nonce=\"" + Encode.forHtmlAttribute(nonce) + "\"";
+
+			String result = SCRIPT_TAG_PATTERN.matcher(output).replaceAll("<script" + nonceAttr);
+			result = STYLE_TAG_PATTERN.matcher(result).replaceAll("<style" + nonceAttr);
+			return result;
+		}
+		return output;
 	}
 
 	/** Generates the SEO content for the given page.
@@ -1029,7 +1052,7 @@ public class HtmlPageRenders {
 			return null;
 
 		exec.setAttribute(attr, Boolean.TRUE); //generated only once
-		return before ? ((PageCtrl) page).getBeforeHeadTags() : ((PageCtrl) page).getAfterHeadTags();
+		return outCspNonceAttr(before ? ((PageCtrl) page).getBeforeHeadTags() : ((PageCtrl) page).getAfterHeadTags());
 	}
 
 	/** Generates and returns the ZK specific HTML tags including
@@ -1223,6 +1246,6 @@ public class HtmlPageRenders {
 		if (script != null || timeout >= 0) {
 			sb.append("</script>");
 		}
-		return sb.toString();
+		return outCspNonceAttr(sb.toString());
 	}
 }

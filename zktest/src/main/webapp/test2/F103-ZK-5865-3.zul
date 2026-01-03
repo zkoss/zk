@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5865-3.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Dec 29 09:40:40 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+        ListSubModel subModel3 = ListModels.toListSubModel(model, 10);
+    ]]></zscript>
+
+    <label multiline="true">
+        3. Chosenbox with server-side rendering and an initial render size limited to 10 →
+        Intentionally search for a result set smaller than the initial size.
+    </label>
+    <chosenbox id="chosenbox3" width="400px" model="${subModel3}"/>
+</zk>
