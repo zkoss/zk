@@ -138,7 +138,7 @@ public class Tabs extends XulElement {
 		final Tabbox tabbox = getTabbox();
 		if (tabbox != null) {
 			Tab tab = (Tab) child;
-			tab.removeEventListener(Events.ON_SELECT, tabbox._listener);
+			tab.removeEventListener(Events.ON_SELECT, tabbox.listener);
 			if (tabbox.getSelectedTab() == tab) {
 				tabbox.clearSelectedTab();
 			}
@@ -150,7 +150,7 @@ public class Tabs extends XulElement {
 
 		final Tabbox tabbox = getTabbox();
 		if (tabbox != null)
-			((Tab) child).addEventListener(Events.ON_SELECT, tabbox._listener);
+			((Tab) child).addEventListener(Events.ON_SELECT, tabbox.listener);
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {

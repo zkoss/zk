@@ -80,9 +80,9 @@ public class GridDataLoader implements DataLoader, Cropper {
 		return model != null ? model.getSize() : rows != null ? rows.getVisibleItemCount() : 0;
 	}
 
-	private int INVALIDATE_THRESHOLD = -1;
+	private int _invalidateThreshold = -1;
 
-	private Boolean SELECTIVE_COMPONENT_UPDATE = null; // since 10.2.0
+	private Boolean _selectiveComponentUpdate = null; // since 10.2.0
 
 	public void doGroupsDataChange(GroupsDataEvent event) {
 		if (event.getType() == GroupsDataEvent.GROUPS_OPENED) {
@@ -94,14 +94,14 @@ public class GridDataLoader implements DataLoader, Cropper {
 	}
 
 	public void doListDataChange(ListDataEvent event) {
-		if (INVALIDATE_THRESHOLD == -1) {
-			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10,
+		if (_invalidateThreshold == -1) {
+			_invalidateThreshold = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10,
 					true);
 		}
 
 		// ZK-5504
-		if (SELECTIVE_COMPONENT_UPDATE == null) {
-			SELECTIVE_COMPONENT_UPDATE = Utils.testAttribute(this.getOwner(),
+		if (_selectiveComponentUpdate == null) {
+			_selectiveComponentUpdate = Utils.testAttribute(this.getOwner(),
 					Attributes.SELECTIVE_COMPONENT_UPDATE, false,
 					true);
 		}
@@ -118,7 +118,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				return;
 				//throw new UiException("Adding causes a smaller list?");
 			}
-			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
+			if ((oldsz <= 0 || cnt > _invalidateThreshold) && !inPagingMold())
 				rows.invalidate();
 			//Invalidate rows to improve the performance since it is faster
 			//to remove a lot of individual rows. It is safer than invalidating
@@ -144,7 +144,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 
 
 			// Fix ZK-5468: the content of the subsequence item might be changed
-			if (!SELECTIVE_COMPONENT_UPDATE && !rows.isInvalidated()) {
+			if (!_selectiveComponentUpdate && !rows.isInvalidated()) {
 				syncModel(max, rows.getChildren().size() - (max - min));
 			}
 			break;
@@ -156,7 +156,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 				return;
 				//throw new UiException("Removal causes a larger list?");
 			}
-			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold())
+			if ((newsz <= 0 || cnt > _invalidateThreshold) && !inPagingMold())
 				rows.invalidate();
 			//Invalidate rows to improve the performance see above
 
@@ -176,7 +176,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 			}
 
 			// Fix ZK-5468: the content of the subsequence item might be changed
-			if (!SELECTIVE_COMPONENT_UPDATE && !rows.isInvalidated()) {
+			if (!_selectiveComponentUpdate && !rows.isInvalidated()) {
 				syncModel(max, rows.getChildren().size() - (max - min));
 			}
 			break;
@@ -418,7 +418,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 					//detach all from end to front since groupfoot
 					//must be detached before group
 					newcnt += cnt; //add affected later
-					if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD) && !inPaging)
+					if ((shallInvalidated || newcnt > _invalidateThreshold) && !inPaging)
 						rows.invalidate();
 					//Invalidate rows to improve the performance see above
 
@@ -448,7 +448,7 @@ public class GridDataLoader implements DataLoader, Cropper {
 						row = next;
 					}
 
-					if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
+					if ((shallInvalidated || addcnt > _invalidateThreshold || addcnt + newcnt > _invalidateThreshold)
 							&& !inPaging)
 						rows.invalidate();
 					//Invalidate rows to improve the performance see above

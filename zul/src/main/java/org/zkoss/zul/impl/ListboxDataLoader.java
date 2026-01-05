@@ -89,8 +89,8 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 		return model != null ? model.getSize() : _listbox.getVisibleItemCount();
 	}
 
-	private int INVALIDATE_THRESHOLD = -1;
-	private Boolean SELECTIVE_COMPONENT_UPDATE = null; // since 10.2.0
+	private int _invalidateThreshold = -1;
+	private Boolean _selectiveComponentUpdate = null; // since 10.2.0
 
 	/**
 	 * updates the status of the changed group.
@@ -107,14 +107,14 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 	}
 
 	public void doListDataChange(ListDataEvent event) {
-		if (INVALIDATE_THRESHOLD == -1) {
-			INVALIDATE_THRESHOLD = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10,
+		if (_invalidateThreshold == -1) {
+			_invalidateThreshold = Utils.getIntAttribute(this.getOwner(), "org.zkoss.zul.invalidateThreshold", 10,
 					true);
 		}
 
 		// ZK-5504
-		if (SELECTIVE_COMPONENT_UPDATE == null) {
-			SELECTIVE_COMPONENT_UPDATE = Utils.testAttribute(this.getOwner(),
+		if (_selectiveComponentUpdate == null) {
+			_selectiveComponentUpdate = Utils.testAttribute(this.getOwner(),
 					Attributes.SELECTIVE_COMPONENT_UPDATE, false,
 					true);
 		}
@@ -131,7 +131,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			if (cnt == 0) //no change, nothing to do here
 				return;
 			boolean isInvalidated = false;
-			if ((oldsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold()) {
+			if ((oldsz <= 0 || cnt > _invalidateThreshold) && !inPagingMold()) {
 				invalidateListitems();
 				isInvalidated = true;
 			}
@@ -152,7 +152,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			}
 
 			// Fix ZK-5468: the content of the subsequence item might be changed
-			if (!SELECTIVE_COMPONENT_UPDATE && !isInvalidated && !_listbox.isInvalidated()) {
+			if (!_selectiveComponentUpdate && !isInvalidated && !_listbox.isInvalidated()) {
 				syncModel(max, _listbox.getItemCount() - (max - min));
 			}
 			break;
@@ -171,7 +171,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				max = oldsz - 1;
 
 			boolean isInvalidated0 = false;
-			if ((newsz <= 0 || cnt > INVALIDATE_THRESHOLD) && !inPagingMold()) {
+			if ((newsz <= 0 || cnt > _invalidateThreshold) && !inPagingMold()) {
 				_listbox.shallUpdateScrollPos(true);
 				invalidateListitems();
 				isInvalidated0 = true;
@@ -186,7 +186,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 			}
 
 			// Fix ZK-5468: the content of the subsequence item might be changed
-			if (!SELECTIVE_COMPONENT_UPDATE && !isInvalidated0 && !_listbox.isInvalidated()) {
+			if (!_selectiveComponentUpdate && !isInvalidated0 && !_listbox.isInvalidated()) {
 				syncModel(max, _listbox.getItemCount() - (max - min));
 			}
 			break;
@@ -440,7 +440,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 				//detach all from end to front since groupfoot
 				//must be detached before group
 				newcnt += cnt; //add affected later
-				if ((shallInvalidated || newcnt > INVALIDATE_THRESHOLD) && !inPaging)
+				if ((shallInvalidated || newcnt > _invalidateThreshold) && !inPaging)
 					invalidateListitems();
 
 				Component comp = _listbox.getItemAtIndex(max);
@@ -479,7 +479,7 @@ public class ListboxDataLoader implements DataLoader, Cropper { //no need to ser
 					item = next; //B2100338.,next item could be Paging, don't use Listitem directly
 				}
 
-				if ((shallInvalidated || addcnt > INVALIDATE_THRESHOLD || addcnt + newcnt > INVALIDATE_THRESHOLD)
+				if ((shallInvalidated || addcnt > _invalidateThreshold || addcnt + newcnt > _invalidateThreshold)
 						&& !inPagingMold())
 					invalidateListitems();
 			}

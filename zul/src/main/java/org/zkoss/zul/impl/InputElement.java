@@ -165,7 +165,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * with other kind of clients.
 	 */
 	public String getName() {
-		return _auxinf != null ? _auxinf.name : null;
+		return _auxinf != null ? _auxinf._name : null;
 	}
 
 	/** Sets the name of this component.
@@ -181,8 +181,8 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	public void setName(String name) {
 		if (name != null && name.length() == 0)
 			name = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.name : null, name)) {
-			initAuxInfoForInputElement().name = name;
+		if (!Objects.equals(_auxinf != null ? _auxinf._name : null, name)) {
+			initAuxInfoForInputElement()._name = name;
 			smartUpdate("name", getName());
 		}
 	}
@@ -201,7 +201,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * {@link org.zkoss.zul.Intbox#getValue}.
 	 */
 	public String getErrorMessage() {
-		return _auxinf != null ? _auxinf.errmsg : null;
+		return _auxinf != null ? _auxinf._errmsg : null;
 	}
 
 	/** Associates an error message to this input.
@@ -214,7 +214,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 */
 	public void setErrorMessage(String errmsg) {
 		if (errmsg != null && errmsg.length() > 0) {
-			initAuxInfoForInputElement().errmsg = errmsg;
+			initAuxInfoForInputElement()._errmsg = errmsg;
 			response(new AuWrongValue(this, errmsg));
 		} else {
 			clearErrorMessage();
@@ -250,8 +250,8 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @since 3.0.1
 	 */
 	public void clearErrorMessage(boolean revalidateRequired) {
-		if (_auxinf != null && _auxinf.errmsg != null) {
-			_auxinf.errmsg = null;
+		if (_auxinf != null && _auxinf._errmsg != null) {
+			_auxinf._errmsg = null;
 			Clients.clearWrongValue(this);
 		}
 		_valided = !revalidateRequired;
@@ -300,18 +300,18 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @param value the value; If null, it is considered as empty.
 	 */
 	public void setText(String value) throws WrongValueException {
-		if (_auxinf != null && _auxinf.maxlength > 0 && value != null && value.length() > _auxinf.maxlength)
-			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength));
+		if (_auxinf != null && _auxinf._maxlength > 0 && value != null && value.length() > _auxinf._maxlength)
+			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf._maxlength));
 
 		final Object val = coerceFromString(value);
 
 		// cannot use java.util.Objects.equals() because it will cause BigDecimal with String comparison to be wrong. See B95_ZK_4658Test.
 		final boolean same = Objects.equals(_value, val);
 		boolean errFound = false;
-		if (!same || !_valided || (_auxinf != null && _auxinf.errmsg != null)) { //note: the first time (!_valided) must always validate
+		if (!same || !_valided || (_auxinf != null && _auxinf._errmsg != null)) { //note: the first time (!_valided) must always validate
 			validate(val); //Bug 2946917: don't validate if not changed
 
-			errFound = _auxinf != null && _auxinf.errmsg != null;
+			errFound = _auxinf != null && _auxinf._errmsg != null;
 			clearErrorMessage(); //no error at all
 		}
 
@@ -359,7 +359,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 			Scopes.beforeInterpret(this);
 			try {
 				constr.validate(this, value);
-				if (!_auxinf.checkOnly && (constr instanceof CustomConstraint)) {
+				if (!_auxinf._checkOnly && (constr instanceof CustomConstraint)) {
 					try {
 						((CustomConstraint) constr).showCustomError(this, null);
 						//not call thru showCustomError(Wrong...) for better performance
@@ -385,10 +385,10 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @return the exception (ex)
 	 */
 	protected WrongValueException showCustomError(WrongValueException ex) {
-		if (_auxinf != null && _auxinf.constr instanceof CustomConstraint) {
+		if (_auxinf != null && _auxinf._constr instanceof CustomConstraint) {
 			Scopes.beforeInterpret(this);
 			try {
-				((CustomConstraint) _auxinf.constr).showCustomError(this, ex);
+				((CustomConstraint) _auxinf._constr).showCustomError(this, ex);
 			} catch (Throwable t) {
 				log.error("", t); //and ignore it
 			} finally {
@@ -402,15 +402,15 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * <p>Default: 0 (non-positive means unlimited).
 	 */
 	public int getMaxlength() {
-		return _auxinf != null ? _auxinf.maxlength : 0;
+		return _auxinf != null ? _auxinf._maxlength : 0;
 	}
 
 	/** Sets the maxlength.
 	 * <p> The length includes the format, if specified.
 	 */
 	public void setMaxlength(int maxlength) {
-		if ((_auxinf != null ? _auxinf.maxlength : 0) != maxlength) {
-			initAuxInfoForInputElement().maxlength = maxlength;
+		if ((_auxinf != null ? _auxinf._maxlength : 0) != maxlength) {
+			initAuxInfoForInputElement()._maxlength = maxlength;
 			smartUpdate("maxlength", getMaxlength());
 		}
 	}
@@ -449,7 +449,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @since 8.0.0
 	 */
 	public boolean isInstant() {
-		return _auxinf != null && _auxinf.instant;
+		return _auxinf != null && _auxinf._instant;
 	}
 
 	/** Sets the instant attribute. When the attribute is true, onChange event 
@@ -458,7 +458,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 */
 	public void setInstant(boolean instant) {
 		if (getInstant() != instant) {
-			initAuxInfoForInputElement().instant = instant;
+			initAuxInfoForInputElement()._instant = instant;
 			smartUpdate("instant", getInstant());
 		}
 	}
@@ -489,15 +489,15 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	}
 
 	public void setConstraint(Constraint constr) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.constr : null, constr)) {
-			initAuxInfoForInputElement().constr = constr;
+		if (!Objects.equals(_auxinf != null ? _auxinf._constr : null, constr)) {
+			initAuxInfoForInputElement()._constr = constr;
 			_valided = false;
 
-			if (_auxinf.constr instanceof CustomConstraint) { //client ignored if custom
+			if (_auxinf._constr instanceof CustomConstraint) { //client ignored if custom
 				smartUpdate("constraint", "[c"); //implies validated at server
 				return;
-			} else if (_auxinf.constr instanceof ClientConstraint) {
-				final ClientConstraint cc = (ClientConstraint) _auxinf.constr;
+			} else if (_auxinf._constr instanceof ClientConstraint) {
+				final ClientConstraint cc = (ClientConstraint) _auxinf._constr;
 				final JavaScriptValue cpkgs = getClientPackages(cc);
 				if (cpkgs != null)
 					smartUpdate("_0", cpkgs); //name doesn't matter
@@ -511,7 +511,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 					return;
 				}
 			}
-			smartUpdate("constraint", _auxinf.constr != null ? "[s" : null);
+			smartUpdate("constraint", _auxinf._constr != null ? "[s" : null);
 		}
 	}
 
@@ -533,7 +533,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	}
 
 	public Constraint getConstraint() {
-		return _auxinf != null ? _auxinf.constr : null;
+		return _auxinf != null ? _auxinf._constr : null;
 	}
 
 	/**
@@ -615,7 +615,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @see #getRawValue
 	 */
 	public void setRawValue(Object value) {
-		if ((_auxinf != null && _auxinf.errmsg != null) || !Objects.equals(_value, value)) {
+		if ((_auxinf != null && _auxinf._errmsg != null) || !Objects.equals(_value, value)) {
 			clearErrorMessage(true);
 			_value = value;
 			smartUpdate("_value", marshall(_value));
@@ -641,17 +641,17 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * throws WrongValueException.
 	 */
 	public boolean isValid() {
-		if (_auxinf != null && _auxinf.errmsg != null)
+		if (_auxinf != null && _auxinf._errmsg != null)
 			return false;
 
-		if (!_valided && _auxinf != null && _auxinf.constr != null) {
-			_auxinf.checkOnly = true;
+		if (!_valided && _auxinf != null && _auxinf._constr != null) {
+			_auxinf._checkOnly = true;
 			try {
 				validate(_value);
 			} catch (Throwable ex) {
 				return false;
 			} finally {
-				_auxinf.checkOnly = false;
+				_auxinf._checkOnly = false;
 			}
 		}
 		return true;
@@ -728,13 +728,13 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * {@link #getText} and {@link #getTargetValue}.
 	 */
 	protected void checkUserError() throws WrongValueException {
-		if (_auxinf != null && _auxinf.errmsg != null)
-			throw new WrongValueException(this, _auxinf.errmsg);
+		if (_auxinf != null && _auxinf._errmsg != null)
+			throw new WrongValueException(this, _auxinf._errmsg);
 		//Note: we still throw exception to abort the exec flow
 		//It's client's job NOT to show the error box!
 		//(client checks z.srvald to decide whether to open error box)
 
-		if (!_valided && _auxinf != null && _auxinf.constr != null)
+		if (!_valided && _auxinf != null && _auxinf._constr != null)
 			setText(coerceToString(_value));
 	}
 
@@ -744,7 +744,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @since 8.0.1
 	 */
 	public String getErrorboxSclass() {
-		return _auxinf != null ? _auxinf.errorboxSclass : null;
+		return _auxinf != null ? _auxinf._errorboxSclass : null;
 	}
 
 	/**
@@ -755,8 +755,8 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	public void setErrorboxSclass(String sclass) {
 		if (sclass != null && sclass.length() == 0)
 			sclass = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.errorboxSclass : null, sclass)) {
-			initAuxInfoForInputElement().errorboxSclass = sclass;
+		if (!Objects.equals(_auxinf != null ? _auxinf._errorboxSclass : null, sclass)) {
+			initAuxInfoForInputElement()._errorboxSclass = sclass;
 			smartUpdate("errorboxSclass", getErrorboxSclass());
 		}
 	}
@@ -767,7 +767,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	 * @since 8.0.1
 	 */
 	public String getErrorboxIconSclass() {
-		return _auxinf != null ? _auxinf.errorboxIconSclass : null;
+		return _auxinf != null ? _auxinf._errorboxIconSclass : null;
 	}
 
 	/**
@@ -778,8 +778,8 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	public void setErrorboxIconSclass(String iconSclass) {
 		if (iconSclass != null && iconSclass.length() == 0)
 			iconSclass = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.errorboxSclass : null, iconSclass)) {
-			initAuxInfoForInputElement().errorboxIconSclass = iconSclass;
+		if (!Objects.equals(_auxinf != null ? _auxinf._errorboxSclass : null, iconSclass)) {
+			initAuxInfoForInputElement()._errorboxIconSclass = iconSclass;
 			smartUpdate("errorboxIconSclass", getErrorboxIconSclass());
 		}
 	}
@@ -833,7 +833,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 
 	//-- ComponentCtrl --//
 	public WrongValueException onWrongValue(WrongValueException ex) {
-		initAuxInfoForInputElement().errmsg = Exceptions.getMessage(ex);
+		initAuxInfoForInputElement()._errmsg = Exceptions.getMessage(ex);
 		return showCustomError(ex);
 	}
 
@@ -860,15 +860,15 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	}
 
 	private void setValueByClient(Object value, String valstr) {
-		if (_auxinf != null && _auxinf.maxlength > 0 && valstr != null && valstr.length() > _auxinf.maxlength)
-			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf.maxlength));
+		if (_auxinf != null && _auxinf._maxlength > 0 && valstr != null && valstr.length() > _auxinf._maxlength)
+			throw new WrongValueException(this, MZul.STRING_TOO_LONG, new Integer(_auxinf._maxlength));
 
 		final boolean same = Objects.equals(_value, value);
 		boolean errFound = false;
-		if (!same || !_valided || (_auxinf != null && _auxinf.errmsg != null)) { //note: the first time (!_valided) must always validate
+		if (!same || !_valided || (_auxinf != null && _auxinf._errmsg != null)) { //note: the first time (!_valided) must always validate
 			validate(value); //Bug 2946917: don't validate if not changed
 
-			errFound = _auxinf != null && _auxinf.errmsg != null;
+			errFound = _auxinf != null && _auxinf._errmsg != null;
 			clearErrorMessage(); //no error at all
 		}
 
@@ -917,7 +917,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 						AuRequests.getBoolean(data, "bySelectBack"), AuRequests.getInt(data, "start", 0));
 				Events.postEvent(evt);
 			} catch (WrongValueException ex) {
-				initAuxInfoForInputElement().errmsg = ex.getMessage();
+				initAuxInfoForInputElement()._errmsg = ex.getMessage();
 				throw ex; //No need to go through onWrongValue since UiEngine will do it
 			}
 		} else if (cmd.equals(Events.ON_CHANGING)) {
@@ -930,7 +930,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		} else if (cmd.equals(Events.ON_ERROR)) {
 			ErrorEvent evt = ErrorEvent.getErrorEvent(request, _value);
 			final String msg = evt.getMessage();
-			initAuxInfoForInputElement().errmsg = msg != null && msg.length() > 0 ? msg : null;
+			initAuxInfoForInputElement()._errmsg = msg != null && msg.length() > 0 ? msg : null;
 			Events.postEvent(evt);
 		} else if (cmd.equals(Events.ON_SELECTION)) {
 			Events.postEvent(SelectionEvent.getSelectionEvent(request));
@@ -963,7 +963,7 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 			renderer.render("instant", true);
 
 		boolean constrDone = false;
-		final Constraint constr = _auxinf != null ? _auxinf.constr : null;
+		final Constraint constr = _auxinf != null ? _auxinf._constr : null;
 		if (constr instanceof CustomConstraint) { //client ignored if custom
 			renderer.render("constraint", "[c"); //implies validated at server
 			constrDone = true;
@@ -1128,17 +1128,17 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		/** The error message. Not null if users entered a wrong data (and
 		 * not correct it yet).
 		 */
-		private String errmsg;
+		private String _errmsg;
 		/** The name. */
-		private String name;
-		private int maxlength;
+		private String _name;
+		private int _maxlength;
 		/** Whether to send onChange as soon as possible */
-		private boolean instant;
-		private Constraint constr;
+		private boolean _instant;
+		private Constraint _constr;
 		/** Whether the validation is caused by {@link #isValid}. */
-		private transient boolean checkOnly;
-		private String errorboxSclass;
-		private String errorboxIconSclass;
+		private transient boolean _checkOnly;
+		private String _errorboxSclass;
+		private String _errorboxIconSclass;
 
 		public Object clone() {
 			try {

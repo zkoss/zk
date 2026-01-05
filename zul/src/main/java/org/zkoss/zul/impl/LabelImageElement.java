@@ -91,8 +91,8 @@ public abstract class LabelImageElement extends LabelElement {
 	public void setIconSclass(String iconSclass) {
 		if (iconSclass != null && iconSclass.isEmpty())
 			iconSclass = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.iconSclass : null, iconSclass)) {
-			initAuxInfo().iconSclass = iconSclass;
+		if (!Objects.equals(_auxinf != null ? _auxinf._iconSclass : null, iconSclass)) {
+			initAuxInfo()._iconSclass = iconSclass;
 			smartUpdate("iconSclass", iconSclass);
 		}
 	}
@@ -103,8 +103,8 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 10.0.0
 	 */
 	public void setIconSclasses(String[] iconSclasses) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.iconSclasses : null, iconSclasses)) {
-			initAuxInfo().iconSclasses = iconSclasses;
+		if (!Objects.equals(_auxinf != null ? _auxinf._iconSclasses : null, iconSclasses)) {
+			initAuxInfo()._iconSclasses = iconSclasses;
 			smartUpdate("iconSclasses", iconSclasses);
 		}
 	}
@@ -114,7 +114,7 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 7.0.0
 	 */
 	public String getIconSclass() {
-		return _auxinf != null && _auxinf.iconSclass instanceof String ? _auxinf.iconSclass : null;
+		return _auxinf != null && _auxinf._iconSclass instanceof String ? _auxinf._iconSclass : null;
 	}
 
 	/**
@@ -122,7 +122,7 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 10.0.0
 	 */
 	public String[] getIconSclasses() {
-		return _auxinf != null && _auxinf.iconSclasses instanceof String[] ? _auxinf.iconSclasses : null;
+		return _auxinf != null && _auxinf._iconSclasses instanceof String[] ? _auxinf._iconSclasses : null;
 	}
 
 	/**
@@ -133,8 +133,8 @@ public abstract class LabelImageElement extends LabelElement {
 	public void setIconTooltip(String iconTooltip) {
 		if (iconTooltip != null && iconTooltip.isEmpty())
 			iconTooltip = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.iconTooltips : null, iconTooltip)) {
-			initAuxInfo().iconTooltip = iconTooltip;
+		if (!Objects.equals(_auxinf != null ? _auxinf._iconTooltips : null, iconTooltip)) {
+			initAuxInfo()._iconTooltip = iconTooltip;
 			smartUpdate("iconTooltip", iconTooltip);
 		}
 	}
@@ -145,8 +145,8 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 10.0.0
 	 */
 	public void setIconTooltips(String[] iconTooltips) {
-		if (!Objects.equals(_auxinf != null ? _auxinf.iconTooltips : null, iconTooltips)) {
-			initAuxInfo().iconTooltips = iconTooltips;
+		if (!Objects.equals(_auxinf != null ? _auxinf._iconTooltips : null, iconTooltips)) {
+			initAuxInfo()._iconTooltips = iconTooltips;
 			smartUpdate("iconTooltips", iconTooltips);
 		}
 	}
@@ -156,7 +156,7 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 10.0.0
 	 */
 	public String getIconTooltip() {
-		return _auxinf != null && _auxinf.iconTooltip instanceof String ? _auxinf.iconTooltip : null;
+		return _auxinf != null && _auxinf._iconTooltip instanceof String ? _auxinf._iconTooltip : null;
 	}
 
 	/**
@@ -164,14 +164,14 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 10.0.0
 	 */
 	public String[] getIconTooltips() {
-		return _auxinf != null && _auxinf.iconTooltips instanceof String[] ? _auxinf.iconTooltips : null;
+		return _auxinf != null && _auxinf._iconTooltips instanceof String[] ? _auxinf._iconTooltips : null;
 	}
 
 	/** Returns the image URI.
 	 * <p>Default: null.
 	 */
 	public String getImage() {
-		return _auxinf != null && _auxinf.image instanceof String ? (String) _auxinf.image : null;
+		return _auxinf != null && _auxinf._image instanceof String ? (String) _auxinf._image : null;
 	}
 
 	/** Sets the image URI.
@@ -185,8 +185,8 @@ public abstract class LabelImageElement extends LabelElement {
 	public void setImage(String src) {
 		if (src != null && src.length() == 0)
 			src = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.image : null, src)) {
-			initAuxInfo().image = src;
+		if (!Objects.equals(_auxinf != null ? _auxinf._image : null, src)) {
+			initAuxInfo()._image = src;
 			smartUpdate("image", new EncodedImageURL());
 		}
 	}
@@ -201,10 +201,10 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @see #setImage
 	 */
 	public void setImageContent(Image image) {
-		if ((_auxinf != null ? _auxinf.image : null) != image) {
-			initAuxInfo().image = image;
+		if ((_auxinf != null ? _auxinf._image : null) != image) {
+			initAuxInfo()._image = image;
 			if (image != null)
-				_auxinf.imgver++; //enforce browser to reload image
+				_auxinf._imgver++; //enforce browser to reload image
 			smartUpdate("image", new EncodedImageURL());
 		}
 	}
@@ -235,7 +235,7 @@ public abstract class LabelImageElement extends LabelElement {
 	 * Actually, it returns null if {@link #setImage} was called.
 	 */
 	public Image getImageContent() {
-		return _auxinf != null && _auxinf.image instanceof Image ? (Image) _auxinf.image : null;
+		return _auxinf != null && _auxinf._image instanceof Image ? (Image) _auxinf._image : null;
 	}
 
 	/** Returns the URI of the hover image.
@@ -244,7 +244,7 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 3.5.0
 	 */
 	public String getHoverImage() {
-		return _auxinf != null && _auxinf.hoverimg instanceof String ? (String) _auxinf.hoverimg : null;
+		return _auxinf != null && _auxinf._hoverimg instanceof String ? (String) _auxinf._hoverimg : null;
 	}
 
 	/** Sets the image URI.
@@ -257,8 +257,8 @@ public abstract class LabelImageElement extends LabelElement {
 	public void setHoverImage(String src) {
 		if (src != null && src.length() == 0)
 			src = null;
-		if (!Objects.equals(_auxinf != null ? _auxinf.hoverimg : null, src)) {
-			initAuxInfo().hoverimg = src;
+		if (!Objects.equals(_auxinf != null ? _auxinf._hoverimg : null, src)) {
+			initAuxInfo()._hoverimg = src;
 			smartUpdate("hoverImage", new EncodedHoverURL());
 		}
 	}
@@ -272,7 +272,7 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 5.0.8
 	 */
 	public Image getHoverImageContent() {
-		return _auxinf != null && _auxinf.hoverimg instanceof Image ? (Image) _auxinf.hoverimg : null;
+		return _auxinf != null && _auxinf._hoverimg instanceof Image ? (Image) _auxinf._hoverimg : null;
 	}
 
 	/** Sets the content of the hover image directly.
@@ -286,10 +286,10 @@ public abstract class LabelImageElement extends LabelElement {
 	 * @since 3.5.0
 	 */
 	public void setHoverImageContent(Image image) {
-		if ((_auxinf != null ? _auxinf.hoverimg : null) != image) {
-			initAuxInfo().hoverimg = image;
+		if ((_auxinf != null ? _auxinf._hoverimg : null) != image) {
+			initAuxInfo()._hoverimg = image;
 			if (image != null)
-				_auxinf.hoverimgver++; //enforce browser to reload image
+				_auxinf._hoverimgver++; //enforce browser to reload image
 			smartUpdate("hoverImage", new EncodedHoverURL());
 		}
 	}
@@ -318,7 +318,7 @@ public abstract class LabelImageElement extends LabelElement {
 	 * {@link #setImageContent(org.zkoss.image.Image)} is called with non-null.
 	 */
 	public boolean isImageAssigned() {
-		return _auxinf != null && _auxinf.image != null;
+		return _auxinf != null && _auxinf._image != null;
 	}
 
 	/** Returns the encoded URL for the image ({@link #getImage}
@@ -327,29 +327,29 @@ public abstract class LabelImageElement extends LabelElement {
 	 * <p>Note: this method can be invoked only if execution is not null.
 	 */
 	private String getEncodedImageURL() {
-		if (_auxinf != null && _auxinf.image instanceof Image) {
-			final Image image = (Image) _auxinf.image;
+		if (_auxinf != null && _auxinf._image instanceof Image) {
+			final Image image = (Image) _auxinf._image;
 			return Utils.getDynamicMediaURI(this, //already encoded
-					_auxinf.imgver, "c/" + image.getName(), image.getFormat());
+					_auxinf._imgver, "c/" + image.getName(), image.getFormat());
 		}
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null && _auxinf != null && _auxinf.image != null
-				? dt.getExecution().encodeURL((String) _auxinf.image) : null;
+		return dt != null && _auxinf != null && _auxinf._image != null
+				? dt.getExecution().encodeURL((String) _auxinf._image) : null;
 	}
 
 	/** Returns the encoded URL for the hover image or null if not
 	 * available.
 	 */
 	private String getEncodedHoverURL() {
-		if (_auxinf != null && _auxinf.hoverimg instanceof Image) {
-			final Image image = (Image) _auxinf.hoverimg;
-			return Utils.getDynamicMediaURI(this, _auxinf.hoverimgver, "h/" + image.getName(), image.getFormat());
+		if (_auxinf != null && _auxinf._hoverimg instanceof Image) {
+			final Image image = (Image) _auxinf._hoverimg;
+			return Utils.getDynamicMediaURI(this, _auxinf._hoverimgver, "h/" + image.getName(), image.getFormat());
 		}
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null && _auxinf != null && _auxinf.hoverimg != null
-				? dt.getExecution().encodeURL((String) _auxinf.hoverimg) : null;
+		return dt != null && _auxinf != null && _auxinf._hoverimg != null
+				? dt.getExecution().encodeURL((String) _auxinf._hoverimg) : null;
 	}
 
 	//super//
@@ -518,21 +518,21 @@ public abstract class LabelImageElement extends LabelElement {
 	 */
 	private static class AuxInfo implements java.io.Serializable, Cloneable {
 		/** The image; either String or Image. */
-		private Object image;
+		private Object _image;
 		/** The hover image; either String or Image. */
-		private Object hoverimg;
-		/** Count the version of {@link #image}. */
-		private byte imgver;
-		/** Count the version of {@link #hoverimg}. */
-		private byte hoverimgver;
+		private Object _hoverimg;
+		/** Count the version of {@link #_image}. */
+		private byte _imgver;
+		/** Count the version of {@link #_hoverimg}. */
+		private byte _hoverimgver;
 
-		private String iconSclass;
+		private String _iconSclass;
 
-		private String[] iconSclasses;
+		private String[] _iconSclasses;
 
-		private String iconTooltip;
+		private String _iconTooltip;
 
-		private String[] iconTooltips;
+		private String[] _iconTooltips;
 
 		public Object clone() {
 			try {

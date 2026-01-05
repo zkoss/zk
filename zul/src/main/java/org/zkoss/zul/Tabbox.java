@@ -100,7 +100,7 @@ public class Tabbox extends XulElement {
 	private boolean _tabscroll = true;
 	private boolean _maximalHeight = false;
 	/** The event listener used to listen onSelect for each tab. */
-	/* package */transient EventListener<Event> _listener;
+	/* package */transient EventListener<Event> listener;
 
 	private transient ListModel<?> _model;
 	private transient ListDataListener _dataListener;
@@ -112,7 +112,7 @@ public class Tabbox extends XulElement {
 	}
 
 	private void init() {
-		_listener = new Listener();
+		listener = new Listener();
 	}
 
 	/** Returns the implementation tabbox engine.
@@ -685,7 +685,7 @@ public class Tabbox extends XulElement {
 		if (_tabs != null) {
 			for (Iterator<Component> it = _tabs.getChildren().iterator(); it.hasNext();) {
 				final Tab tab = (Tab) it.next();
-				tab.removeEventListener(Events.ON_SELECT, _listener);
+				tab.removeEventListener(Events.ON_SELECT, listener);
 			}
 		}
 	}
@@ -695,7 +695,7 @@ public class Tabbox extends XulElement {
 		if (_tabs != null) {
 			for (Iterator<Component> it = _tabs.getChildren().iterator(); it.hasNext();) {
 				final Tab tab = (Tab) it.next();
-				tab.addEventListener(Events.ON_SELECT, _listener);
+				tab.addEventListener(Events.ON_SELECT, listener);
 			}
 		}
 	}

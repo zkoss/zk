@@ -524,9 +524,9 @@ public abstract class XulElement extends HtmlBasedComponent {
 		private Popup popup;
 		private String popupString;
 		private String position;
-		private String[] coordinates;
-		private Integer delay;
-		private String type;
+		private String[] _coordinates;
+		private Integer _delay;
+		private String _type;
 
 		public DeferedUuid(String popupString) {
 			super();
@@ -543,15 +543,15 @@ public abstract class XulElement extends HtmlBasedComponent {
 		}
 
 		public void setCoordinates(String x, String y) {
-			this.coordinates = new String[]{x, y};
+			this._coordinates = new String[]{x, y};
 		}
 
 		public void setDelay(Integer delay) {
-			this.delay = delay;
+			this._delay = delay;
 		}
 
 		public void setType(String type) {
-			this.type = type;
+			this._type = type;
 		}
 
 		public Object getValue() {
@@ -561,17 +561,17 @@ public abstract class XulElement extends HtmlBasedComponent {
 				String uuidString = "uuid(" + popup.getUuid() + ")";
 				if (position != null) {
 					uuidString += ", " + position;
-				} else if (coordinates != null) {
-					if (coordinates[0] != null)
-						uuidString += ", x=" + coordinates[0];
-					if (coordinates[1] != null)
-						uuidString += ", y=" + coordinates[1];
+				} else if (_coordinates != null) {
+					if (_coordinates[0] != null)
+						uuidString += ", x=" + _coordinates[0];
+					if (_coordinates[1] != null)
+						uuidString += ", y=" + _coordinates[1];
 				}
-				if (delay != null) {
-					uuidString += ", delay=" + delay;
+				if (_delay != null) {
+					uuidString += ", delay=" + _delay;
 				}
-				if (type != null) {
-					uuidString += ", type=" + type;
+				if (_type != null) {
+					uuidString += ", type=" + _type;
 				}
 				return uuidString;
 			} else {

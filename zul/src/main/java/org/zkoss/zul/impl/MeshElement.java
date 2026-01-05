@@ -167,25 +167,25 @@ public abstract class MeshElement extends XulElement implements Paginated {
 	}
 
 	protected static class InternalPaging extends Paging {
-		private boolean autohideModify = false;
+		private boolean _autohideModify = false;
 
 		public InternalPaging() {
 		}
 
 		public boolean isAutohide() {
-			if (!autohideModify)
+			if (!_autohideModify)
 				return ((MeshElement) getParent()).isAutohidePaging();
 			else
 				return super.isAutohide();
 		}
 
 		public void setAutohide(boolean autohide) {
-			autohideModify = true;
+			_autohideModify = true;
 			super.setAutohide(autohide);
 		}
 
 		public boolean isAutohideModify() {
-			return autohideModify;
+			return _autohideModify;
 		}
 
 	}
