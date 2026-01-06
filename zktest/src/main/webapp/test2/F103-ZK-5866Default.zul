@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5866Default.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Dec 30 13:51:04 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+        ListSubModel subModelDefault = ListModels.toListSubModel(model);
+    ]]></zscript>
+
+    <label multiline="true">
+        1. This is the default filter logic of Chosenbox.
+        2. It uses "startsWith" logic by default, so the behavior is the same as the first Chosenbox above.
+    </label>
+
+    <label>startsWith</label>
+    <chosenbox width="400px" model="${subModelDefault}">
+        <custom-attributes org.zkoss.zul.chosenbox.filterLogic="startsWith"/>
+    </chosenbox>
+</zk>

@@ -430,6 +430,14 @@ export abstract class SelectWidget extends zul.mesh.MeshWidget {
 		return this;
 	}
 
+	override setRows(rows: number): this {
+		// ZK-5673: Listbox setRows removes shallSize, prevents flexing
+		const shallSize = this._shallSize,
+			result = super.setRows(rows);
+		this._shallSize = shallSize;
+		return result;
+	}
+
 	/** @internal */
 	_getEbodyWd(): number {
 		var anchor = this.$n_('a');

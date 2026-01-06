@@ -74,7 +74,8 @@ public class F80_ZK_3041Test extends WebDriverTestCase {
 		JQuery cb = jq("@chosenbox:eq(2)");
 		click(cb);
 		waitResponse(true);
-		Assertions.assertEquals(0, jq(".z-chosenbox-option:visible").length());
+		// after ZK-5865: Chosenbox Initial Item Rendering with ListSubModel
+		Assertions.assertEquals(9, jq(".z-chosenbox-option:visible").length());
 
 		getActions().sendKeys("t").perform();
 		waitResponse();
@@ -101,7 +102,8 @@ public class F80_ZK_3041Test extends WebDriverTestCase {
 		JQuery cb = jq("@chosenbox:eq(3)");
 		click(cb);
 		waitResponse(true);
-		Assertions.assertEquals(0, jq(".z-chosenbox-option:visible").length());
+		// after ZK-5865: Chosenbox Initial Item Rendering with ListSubModel
+		Assertions.assertEquals(9, jq(".z-chosenbox-option:visible").length());
 
 		getActions().sendKeys("t").perform();
 		waitResponse();

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F103-ZK-5865-2.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Dec 29 09:40:40 CST 2025, Created by peakerlee
+
+Copyright (C) 2025 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+        ListSubModel subModel2 = ListModels.toListSubModel(model);
+    ]]></zscript>
+
+    <label multiline="true">
+        2. Chosenbox with normal server-side rendering → After searching, the correct number of items is displayed.
+    </label>
+    <chosenbox id="chosenbox2" width="400px" model="${subModel2}"/>
+</zk>
