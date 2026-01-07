@@ -83,12 +83,50 @@ task validateOSGiHeaders {
 					projectErrors << "Missing Bundle-Version"
 				}
 
-				if (!exportPackage) {
-					projectErrors << "Missing Export-Package"
+				// zkwebfragment is a web fragment with no Java code, so it doesn't need Export/Import-Package
+				if (projectName != 'zkwebfragment') {
+					if (!exportPackage) {
+						projectErrors << "Missing Export-Package"
+					}
+
+					if (!importPackage) {
+						projectErrors << "Missing Import-Package"
+					}
 				}
 
-				if (!importPackage) {
-					projectErrors << "Missing Import-Package"
+				// Validate standard manifest headers (to prevent future issues like the one we just fixed)
+				def specTitle = attrs.getValue("Specification-Title")
+				def specVendor = attrs.getValue("Specification-Vendor")
+				def specVersion = attrs.getValue("Specification-Version")
+				def implTitle = attrs.getValue("Implementation-Title")
+				def implVendor = attrs.getValue("Implementation-Vendor")
+				def implVersion = attrs.getValue("Implementation-Version")
+
+				if (!specTitle) {
+					projectErrors << "Missing Specification-Title"
+				}
+				if (!specVendor) {
+					projectErrors << "Missing Specification-Vendor"
+				}
+				if (!specVersion) {
+					projectErrors << "Missing Specification-Version"
+				}
+				if (!implTitle) {
+					projectErrors << "Missing Implementation-Title"
+				}
+				if (!implVendor) {
+					projectErrors << "Missing Implementation-Vendor"
+				}
+				if (!implVersion) {
+					projectErrors << "Missing Implementation-Version"
+				}
+
+				// Validate Export-Package is not using wildcard (should list specific packages)
+				if (exportPackage) {
+					// Check if Export-Package starts with just "*" (wildcard without specific packages)
+					if (exportPackage.trim().startsWith("*;") || exportPackage.trim() == "*") {
+						warnings << "⚠️  [$projectName] ($jarType) Export-Package uses wildcard '*' instead of listing specific packages"
+					}
 				}
 
 				// Special validations for specific projects
@@ -108,8 +146,24 @@ task validateOSGiHeaders {
 					if (importPackage && !importPackage.contains('org.zkoss.zk.ui.sys')) {
 						warnings << "⚠️  [$projectName] ($jarType) Should import org.zkoss.zk.ui.sys"
 					}
-					if (exportPackage && !exportPackage.contains('!org.zkoss.zk.ui.sys')) {
-						warnings << "⚠️  [$projectName] ($jarType) Should not export org.zkoss.zk.ui.sys"
+					// Check that org.zkoss.zk.ui.sys is NOT in the Export-Package list
+					// (it may appear in uses:= clauses, but should not be exported as a main package)
+					if (exportPackage) {
+						// Remove all content inside quotes to avoid splitting on commas within "uses" or "version" attributes
+						// This simplifies parsing: org.pkg1;attr="a,b",org.pkg2 -> org.pkg1;attr=,org.pkg2
+						def simpleExport = exportPackage.replaceAll(/"[^"]*"/, "")
+
+						// Extract package names
+						def exportedPackages = simpleExport.split(',').collect {
+							def pkgPart = it.trim()
+							// Get the part before the first semicolon (the package name)
+							def semiIndex = pkgPart.indexOf(';')
+							semiIndex > 0 ? pkgPart.substring(0, semiIndex).trim() : pkgPart.trim()
+						}
+
+						if (exportedPackages.contains('org.zkoss.zk.ui.sys')) {
+							warnings << "⚠️  [$projectName] ($jarType) Should not export org.zkoss.zk.ui.sys"
+						}
 					}
 				}
 
