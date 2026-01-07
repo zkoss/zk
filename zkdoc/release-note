@@ -64,6 +64,9 @@ ZK 10.3.0
   ZK-5606: Statistic returns incorrect average number when escaped hour is less then 1 hour
   ZK-5588: combobox doesn't highlight the matched item when pasting value via a mouse
   ZK-5375: Borderlayout regions do not resize when borderlayout resizes
+  ZK-5897: No error message when unable to open Camera
+  ZK-5660: Destroying and reloading an embedded desktop doesn't reset responseId, cause 3.6s delay on first zkau request
+  ZK-5718: deprecated feature used in client-bind reported by Chrome
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
