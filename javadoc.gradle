@@ -2,17 +2,17 @@
 
 def currentYear = new Date().format("yyyy")
 // general javadoc options
-def javadocOptions = {
-	options.author true
-	options.use true
-	options.version true
-	options.showFromProtected()
-	options.addStringOption("charset", "UTF-8")
-	options.addBooleanOption("notimestamp", false)
-	options.addBooleanOption("-allow-script-in-comments", true)
-	options.addBooleanOption('Xdoclint:none', true)
-	options.addBooleanOption("breakiterator", true)
-	options.addStringOption("-source ${version}")
+def applyJavadocOptions(Task task) {
+	task.options.author true
+	task.options.use true
+	task.options.version true
+	task.options.showFromProtected()
+	task.options.addStringOption("charset", "UTF-8")
+	task.options.addBooleanOption("notimestamp", false)
+	task.options.addBooleanOption("-allow-script-in-comments", true)
+	task.options.addBooleanOption('Xdoclint:none', true)
+	task.options.addBooleanOption("breakiterator", true)
+	task.options.addStringOption("-source ${version}")
 }
 def footerMessage = '<p class="legalCopy"><small>Copyright &copy; 2005-' + "${currentYear}" + ' Potix Corporation. All Rights Reserved.\n' +
 		'<script type="text/javascript">if (location.href.indexOf(\'zkoss.org\') >= 0) {var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));}</script><script type="text/javascript">if (location.href.indexOf(\'zkoss.org\') >= 0) {var pageTracker = _gat._getTracker("UA-121377-3");pageTracker._setDomainName("zkoss.org");pageTracker._initData();pageTracker._trackPageview();}</script>\n' +
@@ -37,7 +37,7 @@ task alljavadoc(type: Javadoc) {
 	}
 	title = "$project.description ${version} API"
 	options.setWindowTitle("$project.description ${version} API")
-	configure javadocOptions
+	applyJavadocOptions(it)
 	source zkprojects.values().collect { dir ->
 		"$dir/src/main/java"
 	}
@@ -52,9 +52,9 @@ task alljavadoc(type: Javadoc) {
 			'**/**.template' //stateless action type template
 	destinationDir = file("$buildDir/docs/javadoc/zk")
 
-	subprojects.forEach(prj -> {
+	subprojects.each { prj ->
 		classpath += prj.sourceSets.main.compileClasspath
-	})
+	}
 	gradle.includedBuilds.each {
 //		println ">>>>>>>>$it.name"
 		if (it.name != 'zkthemes' && it.name != 'zksandbox') {
@@ -104,7 +104,7 @@ subprojects {
 		}
 		title = "$project.description ${version} API"
 		options.setWindowTitle("$project.description ${version} API")
-		configure javadocOptions
+		applyJavadocOptions(it)
 		options.links 'https://docs.oracle.com/javase/8/docs/api/'
 		source sourceSets.main.allJava
 

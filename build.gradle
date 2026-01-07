@@ -328,7 +328,9 @@ subprojects {
 				"Bundle-Name": project.name,
 				"Bundle-SymbolicName": project.name,
 				"Bundle-Version": version,
-				"Import-Package": "*;resolution:=optional"
+				"Import-Package": "*;resolution:=optional",
+				"Specification-Version": version,
+				"Implementation-Version": version
 			]
 
 			// Generate Export-Package by scanning source files
@@ -374,9 +376,6 @@ subprojects {
 				def sortedPackages = exportPackages.sort()
 				def exportPackageValue = sortedPackages.collect { "${it};version=\"${version}\"" }.join(',')
 				osgiHeaders."Export-Package" = exportPackageValue
-			} else {
-				// Fallback if no packages found
-				osgiHeaders."Export-Package" = "*;version=\"${version}\""
 			}
 
 			// Special handling for different projects
