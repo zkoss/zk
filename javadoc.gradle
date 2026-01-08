@@ -22,11 +22,13 @@ def addJavadocFooter(dir, footerMessage) {
 	fileTree(dir: dir).matching {
 		include "**/*.html"
 	}.each { htmlFile ->
-		ant.replaceregexp(
-				file: htmlFile,
-				match: '<!-- ======== END OF BOTTOM NAVBAR ======= -->\n',
-				replace: '<!-- ======== END OF BOTTOM NAVBAR ======= -->\n' + footerMessage
-		)
+		synchronized(ant) {
+			ant.replaceregexp(
+					file: htmlFile,
+					match: '<!-- ======== END OF BOTTOM NAVBAR ======= -->\n',
+					replace: '<!-- ======== END OF BOTTOM NAVBAR ======= -->\n' + footerMessage
+			)
+		}
 	}
 }
 
