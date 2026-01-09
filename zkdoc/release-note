@@ -63,6 +63,7 @@ ZK 10.3.0
   ZK-5606: Statistic returns incorrect average number when escaped hour is less then 1 hour
   ZK-5588: combobox doesn't highlight the matched item when pasting value via a mouse
   ZK-5375: Borderlayout regions do not resize when borderlayout resizes
+  ZK-5831: grid produces a different column width from zk 9 with org.zkoss.zul.css.flex=false
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
