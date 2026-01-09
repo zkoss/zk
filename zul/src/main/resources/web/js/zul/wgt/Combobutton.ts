@@ -183,8 +183,8 @@ export class Combobutton extends zul.wgt.Button {
 
 	/**
 	 * Drops down or closes the child popup ({@link zul.wgt.Popup})
-	 * ({@link zul.menu.Menupopup}, and fire onOpen if it is called with an Event.
-	 * 	if opts.sendOnOpen exists, it will fire onOpen event.
+	 * ({@link zul.menu.Menupopup}).
+	 * 	It will fire the onOpen event if no opts are provided.
 	 * @see {@link open}
 	 * @see {@link close}
 	 */
