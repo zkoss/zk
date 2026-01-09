@@ -493,10 +493,8 @@
 
 .z-scrollbar {
     --zk-scrollbar-size: 10px;
-    --zk-scrollbar-embedded-size: 10px;
     --zk-scrollbar-bar-size: 10px;
     --zk-scrollbar-rail-size: 6px;
-    --zk-scrollbar-embedded-color: var(--zk-color-grey-light);
     --zk-scrollbar-border-color: transparent;
     --zk-scrollbar-background-color: var(--zk-color-grey-light);
     --zk-scrollbar-bar-background-color: var(--zk-color-primary);
@@ -506,6 +504,11 @@
     --zk-scrollbar-button-hover-background: transparent;
     --zk-scrollbar-button-color: var(--zk-color-primary);
     --zk-scrollbar-button-hover-color: var(--zk-color-primary-dark);
+}
+
+.z-scrollbar-horizontal-embed, .z-scrollbar-vertical-embed {
+    --zk-scrollbar-embedded-size: 10px;
+    --zk-scrollbar-embedded-color: var(--zk-color-grey-light);
 }
 
 .z-calendar {

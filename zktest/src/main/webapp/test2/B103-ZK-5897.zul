@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5897.zul
+
+	Purpose:
+		Test camera error logging when devices are unavailable
+
+	Description:
+		Verifies that onCameraUnavailable event is fired and logged on server
+		when getUserMedia fails due to disabled devices or permissions policy
+
+	History:
+		Sun Jan 05 16:23:00 CST 2026, Created by jumperchen
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. This test verifies camera error logging when devices are unavailable
+		2. In headless browser, getUserMedia will fail with NotAllowedError
+		3. Check that onCameraUnavailable event is fired
+		4. Check server log for "Camera unavailable" error message
+	</label>
+	<separator/>
+	<camera id="camera"/>
+	<button id="btn" label="Request Camera" onClick="camera.requestCamera()"/>
+	<separator/>
+	<label id="status" value="Status: Ready"/>
+	<label id="errorName" value="Error Name: (none)"/>
+	<label id="errorMessage" value="Error Message: (none)"/>
+
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.event.Event;
+		import org.zkoss.zk.ui.event.DOMExceptionEvent;
+
+		camera.addEventListener("onCameraUnavailable", new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(Event event) throws Exception {
+				DOMExceptionEvent domEvent = (DOMExceptionEvent) event;
+				status.setValue("Status: onCameraUnavailable fired!");
+				errorName.setValue("Error Name: " + domEvent.getErrorName());
+				errorMessage.setValue("Error Message: " + domEvent.getErrorMessage());
+			}
+		});
+	]]></zscript>
+</zk>
