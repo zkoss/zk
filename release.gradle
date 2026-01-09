@@ -17,6 +17,16 @@ task validateOSGiHeaders {
 		def warnings = []
 		def successCount = 0
 		def totalJars = 0
+		def reportFile = file("${project.buildDir}/osgi-validation-report.txt")
+
+		// Ensure build dir exists
+		if (!reportFile.parentFile.exists()) {
+			reportFile.parentFile.mkdirs()
+		}
+
+		reportFile.write("OSGi Validation Report\n")
+		reportFile.append("Generated at: ${new Date()}\n")
+		reportFile.append("=" * 80 + "\n\n")
 
 		println "=" * 80
 		println "Validating OSGi Headers in All JAR Files"
@@ -32,10 +42,9 @@ task validateOSGiHeaders {
 
 			if (!jarFile.exists()) {
 				if (failOnMissing) {
-					errors << "❌ JAR not found: ${jarFile.path}"
-				} else {
-					// Skip missing JARs with debug message
-					// println "⏭️  Skipping: ${jarFile.name} (not found)"
+					def msg = "❌ JAR not found: ${jarFile.path}"
+					errors << msg
+					reportFile.append("${msg}\n")
 				}
 				return
 			}
@@ -48,7 +57,9 @@ task validateOSGiHeaders {
 				def attrs = manifest?.mainAttributes
 
 				if (!attrs) {
-					errors << "❌ [$projectName] ($jarType) No manifest found in ${jarFile.name}"
+					def msg = "❌ [$projectName] ($jarType) No manifest found in ${jarFile.name}"
+					errors << msg
+					reportFile.append("${msg}\n")
 					return
 				}
 
@@ -94,7 +105,7 @@ task validateOSGiHeaders {
 					}
 				}
 
-				// Validate standard manifest headers (to prevent future issues like the one we just fixed)
+				// Validate standard manifest headers
 				def specTitle = attrs.getValue("Specification-Title")
 				def specVendor = attrs.getValue("Specification-Vendor")
 				def specVersion = attrs.getValue("Specification-Version")
@@ -102,30 +113,22 @@ task validateOSGiHeaders {
 				def implVendor = attrs.getValue("Implementation-Vendor")
 				def implVersion = attrs.getValue("Implementation-Version")
 
-				if (!specTitle) {
-					projectErrors << "Missing Specification-Title"
-				}
-				if (!specVendor) {
-					projectErrors << "Missing Specification-Vendor"
-				}
-				if (!specVersion) {
-					projectErrors << "Missing Specification-Version"
-				}
-				if (!implTitle) {
-					projectErrors << "Missing Implementation-Title"
-				}
-				if (!implVendor) {
-					projectErrors << "Missing Implementation-Vendor"
-				}
-				if (!implVersion) {
-					projectErrors << "Missing Implementation-Version"
-				}
+				if (!specTitle) projectErrors << "Missing Specification-Title"
+				if (!specVendor) projectErrors << "Missing Specification-Vendor"
+				if (!specVersion) projectErrors << "Missing Specification-Version"
+				if (!implTitle) projectErrors << "Missing Implementation-Title"
+				if (!implVendor) projectErrors << "Missing Implementation-Vendor"
+				if (!implVersion) projectErrors << "Missing Implementation-Version"
 
-				// Validate Export-Package is not using wildcard (should list specific packages)
+				// Validate Export-Package content
 				if (exportPackage) {
 					// Check if Export-Package starts with just "*" (wildcard without specific packages)
 					if (exportPackage.trim().startsWith("*;") || exportPackage.trim() == "*") {
 						warnings << "⚠️  [$projectName] ($jarType) Export-Package uses wildcard '*' instead of listing specific packages"
+					}
+					// Check for invalid character '!' which usually indicates failed exclusion logic
+					if (exportPackage.contains('!')) {
+						projectErrors << "Export-Package contains invalid character '!', possibly failed Bnd exclusion directive"
 					}
 				}
 
@@ -147,22 +150,18 @@ task validateOSGiHeaders {
 						warnings << "⚠️  [$projectName] ($jarType) Should import org.zkoss.zk.ui.sys"
 					}
 					// Check that org.zkoss.zk.ui.sys is NOT in the Export-Package list
-					// (it may appear in uses:= clauses, but should not be exported as a main package)
 					if (exportPackage) {
-						// Remove all content inside quotes to avoid splitting on commas within "uses" or "version" attributes
-						// This simplifies parsing: org.pkg1;attr="a,b",org.pkg2 -> org.pkg1;attr=,org.pkg2
 						def simpleExport = exportPackage.replaceAll(/"[^"]*"/, "")
-
-						// Extract package names
-						def exportedPackages = simpleExport.split(',').collect {
-							def pkgPart = it.trim()
-							// Get the part before the first semicolon (the package name)
-							def semiIndex = pkgPart.indexOf(';')
-							semiIndex > 0 ? pkgPart.substring(0, semiIndex).trim() : pkgPart.trim()
-						}
-
-						if (exportedPackages.contains('org.zkoss.zk.ui.sys')) {
-							warnings << "⚠️  [$projectName] ($jarType) Should not export org.zkoss.zk.ui.sys"
+						if (simpleExport.contains('org.zkoss.zk.ui.sys')) {
+                             // Double check if it's really the package or just a substring (e.g. org.zkoss.zk.ui.sys.something)
+                             // Since we simplified, a simple contains might be risky, but usually package names are distinct enough
+                             // Let's rely on the previous logic if it was robust, or just warn.
+                             // Actually, the regex replacement removes version attributes.
+                             // Splitting by comma is safer.
+                             def exportedPackages = simpleExport.split(',').collect { it.split(';')[0].trim() }
+                             if (exportedPackages.contains('org.zkoss.zk.ui.sys')) {
+ 							    warnings << "⚠️  [$projectName] ($jarType) Should not export org.zkoss.zk.ui.sys"
+                             }
 						}
 					}
 				}
@@ -179,17 +178,23 @@ task validateOSGiHeaders {
 				if (projectErrors.isEmpty()) {
 					successCount++
 					println "✅ [$projectName] ($jarType) ${jarFile.name}"
+					reportFile.append("✅ [$projectName] ($jarType) OK\n")
 				} else {
-					errors << "❌ [$projectName] ($jarType) ${jarFile.name}: ${projectErrors.join(', ')}"
+					def errorMsg = "❌ [$projectName] ($jarType) ${jarFile.name}: ${projectErrors.join(', ')}"
+					errors << errorMsg
+					reportFile.append("${errorMsg}\n")
 				}
 
 			} catch (Exception e) {
-				errors << "❌ [$projectName] ($jarType) Failed to validate ${jarFile.name}: ${e.message}"
+				def msg = "❌ [$projectName] ($jarType) Failed to validate ${jarFile.name}: ${e.message}"
+				errors << msg
+				reportFile.append("${msg}\n")
 			}
 		}
 
 		// Validate ZK subprojects (standard JARs)
 		println "\nValidating ZK subprojects..."
+		reportFile.append("\nValidating ZK subprojects...\n")
 		println "-" * 80
 		zkprojects.each { prjName, dir ->
 			if (prjName != 'za11y' && prjName != 'zkex' && prjName != 'zkmax' &&
@@ -200,17 +205,18 @@ task validateOSGiHeaders {
 			}
 		}
 
-		// Validate ZKCML subprojects (standard JARs)
+		// Validate ZKCML subprojects
 		if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
 			println "\nValidating ZKCML subprojects (standard)..."
+			reportFile.append("\nValidating ZKCML subprojects (standard)...\n")
 			println "-" * 80
 			zkcmlprojects.each { prjName, dir ->
 				def jarFile = new File("${dir}/build/libs/${prjName}-${project.version}.jar")
 				validateJar(jarFile, prjName, false)
 			}
 
-			// Validate ZKCML eval JARs
 			println "\nValidating ZKCML subprojects (eval)..."
+			reportFile.append("\nValidating ZKCML subprojects (eval)...\n")
 			println "-" * 80
 			zkcmlprojects.each { prjName, dir ->
 				if (prjName != 'stateless-mock' && prjName != 'stateless-processor') {
@@ -222,6 +228,7 @@ task validateOSGiHeaders {
 
 		// Validate sources JARs
 		println "\nValidating sources JARs..."
+		reportFile.append("\nValidating sources JARs...\n")
 		println "-" * 80
 		zkprojects.each { prjName, dir ->
 			if (prjName != 'za11y' && prjName != 'zkex' && prjName != 'zkmax' &&
@@ -246,34 +253,55 @@ task validateOSGiHeaders {
 		}
 
 		// Print summary
-		println "\n" + "=" * 80
-		println "Validation Summary"
-		println "=" * 80
-		println "Total JARs validated: ${totalJars}"
-		println "✅ Success: ${successCount}"
-		println "❌ Errors: ${errors.size()}"
-		println "⚠️  Warnings: ${warnings.size()}"
+		def summary = """
+${"=" * 80}
+Validation Summary
+${"=" * 80}
+Total JARs validated: ${totalJars}
+✅ Success: ${successCount}
+❌ Errors: ${errors.size()}
+⚠️  Warnings: ${warnings.size()}
+"""
+		println summary
+		reportFile.append(summary)
 
 		// Print warnings
 		if (!warnings.isEmpty()) {
-			println "\n" + "=" * 80
-			println "Warnings:"
-			println "=" * 80
-			warnings.each { println it }
+			def warnHeader = """
+${"=" * 80}
+Warnings:
+${"=" * 80}
+"""
+			println warnHeader
+			reportFile.append(warnHeader)
+			warnings.each {
+				println it
+				reportFile.append("${it}\n")
+			}
 		}
 
 		// Print errors
 		if (!errors.isEmpty()) {
-			println "\n" + "=" * 80
-			println "Errors:"
+			def errHeader = """
+${"=" * 80}
+Errors:
+${"=" * 80}
+"""
+			println errHeader
+			reportFile.append(errHeader)
+			errors.each {
+				println it
+				reportFile.append("${it}\n")
+			}
 			println "=" * 80
-			errors.each { println it }
-			println "=" * 80
-			throw new GradleException("OSGi headers validation failed! Found ${errors.size()} error(s).")
+			reportFile.append("=" * 80 + "\n")
+			throw new GradleException("OSGi headers validation failed! Found ${errors.size()} error(s). See ${reportFile.path} for details.")
 		}
 
 		println "\n🎉 All OSGi headers are valid!"
 		println "=" * 80
+		println "Report saved to: ${reportFile.path}"
+		reportFile.append("\n🎉 All OSGi headers are valid!\n")
 	}
 }
 
