@@ -6220,6 +6220,8 @@ export class Desktop extends Widget {
 			zAu._rmDesktop(desktop);
 			delete zk.Desktop.all[desktop.id!];
 			--zk.Desktop._ndt;
+			// ZK-5660: Reset responseId to prevent delayed response processing
+			zAu._resetResponseId();
 		}
 	}
 }

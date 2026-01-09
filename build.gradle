@@ -8,6 +8,7 @@ plugins {
 	id 'com.github.gmazzo.buildconfig' version '3.0.3'
 	id "org.sonarqube" version "4.4.1.3373"
 	id "org.owasp.dependencycheck" version "12.1.9"
+	id 'biz.aQute.bnd.builder' version '6.4.0'
 }
 
 allprojects {
@@ -89,6 +90,9 @@ if (project.ext['gradleFrontendSkip'] == 'false') {
 }
 
 subprojects {
+	// Apply bnd plugin for OSGi manifest generation
+	apply plugin: 'biz.aQute.bnd.builder'
+
 	// Repositories for all subprojects (from 9.6.0 zk-parent)
 	repositories {
 		mavenCentral()
@@ -225,35 +229,83 @@ subprojects {
 	}
 
 	jar {
-		manifest {
-			def osgiHeaders = [
-				"Specification-Version": project.properties['version'],
-				"Implementation-Version": project.properties['version'],
-				// OSGi Headers
-				"Bundle-ManifestVersion": "2",
-				"Bundle-Name": project.name,
-				"Bundle-SymbolicName": project.name,
-				"Bundle-Version": version,
-				"Export-Package": "*;version=\"${version}\"",
-				"Import-Package": "*;resolution:=optional"
-			]
+		bundle {
+			// Read standard headers from MANIFEST.MF
+			def manifestFile = file("$projectDir/$resources/META-INF/MANIFEST.MF")
+			def bndInstructions = """
+				# OSGi Bundle headers
+				Bundle-ManifestVersion: 2
+				Bundle-Name: ${project.name}
+				Bundle-SymbolicName: ${project.name}
+				Bundle-Version: ${version}
+
+				# Use -exportcontents instead of Export-Package
+				# This exports packages WITHOUT embedding dependency classes
+				-exportcontents: *;version=${version}
+
+			# Only include classes from this project's output
+			-sources: false
+
+			# Import all packages as optional
+			Import-Package: *;resolution:=optional
+
+				# Don't include dependency classes
+				-noclassforname: true
+
+				# Don't add extra bnd headers
+				-noextraheaders: true
+
+				# Don't fail on missing packages
+				-failok: true
+			"""
 
 			// Special handling for different projects
 			if ("${project.name}" == 'zweb') {
-				osgiHeaders."Import-Package" = "javax.servlet.annotation;resolution:=optional,*;resolution:=optional"
+				bndInstructions += """
+					Import-Package: javax.servlet.annotation;resolution:=optional,*;resolution:=optional
+				"""
 			} else if ("${project.name}" == 'zkbind') {
-				osgiHeaders."Import-Package" = "javassist.util.proxy;resolution:=optional,*;resolution:=optional"
+				bndInstructions += """
+					Import-Package: javassist.util.proxy;resolution:=optional,*;resolution:=optional
+				"""
 			} else if ("${project.name}" == 'zkex') {
-				osgiHeaders."Import-Package" = "org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional"
-				osgiHeaders."Export-Package" = "!org.zkoss.zk.ui.sys,*;version=\"${version}\""
+				bndInstructions += """
+					Import-Package: org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional
+					-exportcontents: !org.zkoss.zk.ui.sys,*;version=${version}
+				"""
 			} else if ("${project.name}" == 'zweb-dsp') {
-				def fragmentHostVersion = "${version}".split(/[\.-][a-zA-Z]/)[0]
-				osgiHeaders."Fragment-Host" = "zweb;bundle-version=\"${fragmentHostVersion}\""
+				def fragmentHostVersion = "${version}".split(/[\\.-][a-zA-Z]/)[0]
+				bndInstructions += """
+					Fragment-Host: zweb;bundle-version=${fragmentHostVersion}
+				"""
 			}
 
-			attributes(osgiHeaders)
-			// Merge specify MANIFEST.MF file.
-			from "$projectDir/$resources/META-INF/MANIFEST.MF"
+			// Read standard headers from MANIFEST.MF and add to bnd instructions
+			if (manifestFile.exists()) {
+				manifestFile.withInputStream { is ->
+					def existingManifest = new java.util.jar.Manifest(is)
+					existingManifest.mainAttributes.each { key, value ->
+						def keyStr = key.toString()
+						// Add non-OSGi headers to bnd instructions
+						if (!keyStr.startsWith('Bundle-') &&
+						    !keyStr.startsWith('Export-') &&
+						    !keyStr.startsWith('Import-') &&
+						    keyStr != 'Manifest-Version') {
+							bndInstructions += """
+								${keyStr}: ${value}
+							"""
+						}
+					}
+				}
+			}
+
+			// Add version headers
+			bndInstructions += """
+				Specification-Version: ${version}
+				Implementation-Version: ${version}
+			"""
+
+			bnd bndInstructions
 		}
 	}
 
@@ -276,9 +328,55 @@ subprojects {
 				"Bundle-Name": project.name,
 				"Bundle-SymbolicName": project.name,
 				"Bundle-Version": version,
-				"Export-Package": "*;version=\"${version}\"",
-				"Import-Package": "*;resolution:=optional"
+				"Import-Package": "*;resolution:=optional",
+				"Specification-Version": version,
+				"Implementation-Version": version
 			]
+
+			// Generate Export-Package by scanning source files
+			def exportPackages = [] as Set
+
+			// Scan Java source files
+			def srcDir = file("$projectDir/src/main/java")
+			if (srcDir.exists()) {
+				fileTree(srcDir).matching {
+					include '**/*.java'
+				}.each { javaFile ->
+					def relativePath = srcDir.toPath().relativize(javaFile.toPath()).toString()
+					def packagePath = relativePath.substring(0, relativePath.lastIndexOf('/'))
+					def packageName = packagePath.replace('/', '.')
+					if (packageName && !packageName.isEmpty()) {
+						exportPackages.add(packageName)
+					}
+				}
+			}
+
+			// Scan resources for additional packages
+			def resourcesDir = file("$projectDir/$resources")
+			if (resourcesDir.exists()) {
+				fileTree(resourcesDir).matching {
+					include '**/*'
+					exclude '**/*.MF', '**/*.SF', '**/*.DSA', '**/*.RSA'
+				}.each { resourceFile ->
+					if (resourceFile.isFile()) {
+						def relativePath = resourcesDir.toPath().relativize(resourceFile.toPath()).toString()
+						if (relativePath.contains('/')) {
+							def packagePath = relativePath.substring(0, relativePath.lastIndexOf('/'))
+							def packageName = packagePath.replace('/', '.')
+							if (packageName && !packageName.isEmpty() && !packageName.startsWith('META-INF')) {
+								exportPackages.add(packageName)
+							}
+						}
+					}
+				}
+			}
+
+			// Build Export-Package string
+			if (!exportPackages.isEmpty()) {
+				def sortedPackages = exportPackages.sort()
+				def exportPackageValue = sortedPackages.collect { "${it};version=\"${version}\"" }.join(',')
+				osgiHeaders."Export-Package" = exportPackageValue
+			}
 
 			// Special handling for different projects
 			if ("${project.name}" == 'zweb') {
@@ -287,10 +385,28 @@ subprojects {
 				osgiHeaders."Import-Package" = "javassist.util.proxy;resolution:=optional,*;resolution:=optional"
 			} else if ("${project.name}" == 'zkex') {
 				osgiHeaders."Import-Package" = "org.zkoss.zk.ui.sys;resolution:=optional,*;resolution:=optional"
-				osgiHeaders."Export-Package" = "!org.zkoss.zk.ui.sys,*;version=\"${version}\""
+				// For zkex, exclude org.zkoss.zk.ui.sys from exports
+				if (osgiHeaders."Export-Package") {
+					osgiHeaders."Export-Package" = "!org.zkoss.zk.ui.sys," + osgiHeaders."Export-Package"
+				}
 			} else if ("${project.name}" == 'zweb-dsp') {
-				def fragmentHostVersion = "${version}".split(/[\.-][a-zA-Z]/)[0]
+				def fragmentHostVersion = "${version}".split(/[\\.-][a-zA-Z]/)[0]
 				osgiHeaders."Fragment-Host" = "zweb;bundle-version=\"${fragmentHostVersion}\""
+			}
+
+			// Read and merge existing MANIFEST.MF attributes (if exists)
+			def manifestFile = file("$projectDir/$resources/META-INF/MANIFEST.MF")
+			if (manifestFile.exists()) {
+				manifestFile.withInputStream { is ->
+					def existingManifest = new java.util.jar.Manifest(is)
+					existingManifest.mainAttributes.each { key, value ->
+						def keyStr = key.toString()
+						// Only add if not already defined in osgiHeaders
+						if (!osgiHeaders.containsKey(keyStr) && keyStr != 'Manifest-Version') {
+							osgiHeaders[keyStr] = value.toString()
+						}
+					}
+				}
 			}
 
 			attributes(osgiHeaders)

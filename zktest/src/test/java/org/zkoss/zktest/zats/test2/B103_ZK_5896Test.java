@@ -1,9 +1,9 @@
 /* B103_ZK_5896Test.java
 
         Purpose:
-                
+
         Description:
-                
+
         History:
                 Tue Dec 09 15:59:43 CST 2025, Created by rebeccalai
 
@@ -55,7 +55,7 @@ public class B103_ZK_5896Test extends WebDriverTestCase {
 
 	private void resizeColumn(JQuery col) {
 		int colWidth = col.width();
-		getActions().moveToElement(toElement(col), colWidth / 2 - DRAG_THRESHOLD, 1).clickAndHold().moveByOffset(-50, 1).release().perform();
+		getActions().moveToElement(toElement(col), colWidth / 2 - DRAG_THRESHOLD, 1).clickAndHold().pause(100).moveByOffset(-50, 1).release().perform();
 		int colWidthAfter = col.width();
 		assertThat("resize failed", colWidthAfter, lessThan(colWidth));
 	}
