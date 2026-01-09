@@ -13,7 +13,5 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <button onClick="cell.visible=true" />
-    <hlayout>
-        <cell id="cell" visible="false">in cell</cell>
-    </hlayout>
+    <cell id="cell" visible="false">in cell</cell>
 </zk>
