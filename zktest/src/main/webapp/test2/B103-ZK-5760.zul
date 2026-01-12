@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5760.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Jan 09 17:11:39 CST 2026, Created by josephlo
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div>
+        <grid id="myGrid">
+            <auxhead>
+                <auxheader label="H1'07" colspan="6" />
+                <auxheader label="H2'07" colspan="6" />
+            </auxhead>
+            <auxhead>
+                <auxheader label="Q1" colspan="3" />
+                <auxheader label="Q2" colspan="3" />
+                <auxheader label="Q3" colspan="3" />
+                <auxheader label="Q4" colspan="3" />
+            </auxhead>
+            <columns onColSize="Clients.log(event.getWidth());" id="cols" sizable="true">
+                <column label="Jan" />
+                <column label="Feb" />
+                <column label="Mar" />
+                <column label="Apr" />
+                <column label="May" />
+                <column label="Jun" />
+                <column label="Jul" />
+                <column label="Aug" />
+                <column label="Sep" />
+                <column label="Oct" />
+                <column label="Nov" />
+                <column label="Dec" hflex="min"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="1,000" />
+                    <label value="1,100" />
+                    <label value="1,200" />
+                    <label value="1,300" />
+                    <label value="1,400" />
+                    <label value="1,500" />
+                    <label value="1,600" />
+                    <label value="1,700" />
+                    <label value="1,800" />
+                    <label value="1,900" />
+                    <label value="2,000" />
+                    <label value="2,100" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>
