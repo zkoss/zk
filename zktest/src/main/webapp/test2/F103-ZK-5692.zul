@@ -35,9 +35,9 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
         }
     </style>
 
-    <label value="CSS Variables Test (:root)" style="font-size: 24px; font-weight: bold; display: block;" />
+    <label value="CSS Variables Test" style="font-size: 24px; font-weight: bold; display: block;" />
     <label multiline="true">
-        Verify the CSS variables defined in :root are applied correctly to various components and styles below.
+        Verify the CSS variables are applied correctly to various components and styles below.
     </label>
 
     <groupbox title="1. Typography and Sizes" mold="3d">

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-6038.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Jan 12 18:00:11 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        The background color of coachmark mask shouldn't be rgba(0, 0, 0, 0) (transparent)
+    </label>
+    <button id="infoButton" label="Information"/>
+    <coachmark target="infoButton" onTargetClick="self.close()">
+        <label>Welcome! click here for more information!</label>
+        <button style="display: block;margin: 10px auto 0" label="got it!" onClick="self.parent.close()"/>
+    </coachmark>
+</zk>

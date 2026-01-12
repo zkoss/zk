@@ -33,7 +33,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 
     <label value="CSS Variables Test for Components -1" style="font-size: 24px; font-weight: bold; display: block;" />
     <label multiline="true">
-        Verify the CSS variables defined in each component are applied correctly.
+        Verify the CSS variables for each component are applied correctly.
     </label>
 
     <vlayout spacing="16px">
