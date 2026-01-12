@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5571-1.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jan 08 14:16:57 CST 2026, Created by josephlo
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <button onClick="cell.visible=true" />
+    <hlayout>
+        <cell id="cell" visible="false">in cell</cell>
+    </hlayout>
+</zk>

@@ -12,6 +12,21 @@ F103-ZK-5692-1.zul
 Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 -->
 <zk>
+    <style>
+        .z-listbox {
+            width: 1000px;
+        }
+        .z-listcell {
+            width: 200px !important;
+        }
+        .z-listheader {
+            width: 200px !important;
+        }
+        .z-listbox-body {
+            height: 300px;
+            overflow: scroll;
+        }
+    </style>
     <zscript>
         import org.zkoss.zkmax.ui.util.*;
     </zscript>
@@ -107,6 +122,63 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
         <div>
             <label value="Colorbox:" />
             <colorbox />
+        </div>
+
+        <div>
+            <label value="Listbox with horizontal z-scrollbar:" />
+            <listbox>
+                <custom-attributes org.zkoss.zul.nativebar="false"/>
+                <listhead>
+                    <listheader label="Col A" />
+                    <listheader label="Col B" />
+                    <listheader label="Col C" />
+                    <listheader label="Col D" />
+                    <listheader label="Col E" />
+                    <listheader label="Col F" />
+                    <listheader label="Col G" />
+                    <listheader label="Col H" />
+                </listhead>
+
+                <listitem>
+                    <listcell label="Alice" />
+                    <listcell label="YES" />
+                    <listcell label="10" />
+                    <listcell label="Row1-A" />
+                    <listcell label="Bob" />
+                    <listcell label="NO" />
+                    <listcell label="20" />
+                    <listcell label="Row1-B" />
+                </listitem>
+
+                <listitem>
+                    <listcell label="Carol" />
+                    <listcell label="ON" />
+                    <listcell label="30" />
+                    <listcell label="Row2-A" />
+                    <listcell label="Dave" />
+                    <listcell label="OFF" />
+                    <listcell label="40" />
+                    <listcell label="Row2-B" />
+                </listitem>
+            </listbox>
+
+            <label value="Listbox with vertical z-scrollbar:" />
+            <listbox width="300px">
+                <custom-attributes org.zkoss.zul.nativebar="false"/>
+                <listhead>
+                    <listheader label="Col A List" sort="auto"/>
+                </listhead>
+                <listitem label="Item-1" />
+                <listitem label="Item-2" />
+                <listitem label="Item-3" />
+                <listitem label="Item-4" />
+                <listitem label="Item-5" />
+                <listitem label="Item-6" />
+                <listitem label="Item-7" />
+                <listitem label="Item-8" />
+                <listitem label="Item-9" />
+                <listitem label="Item-10" />
+            </listbox>
         </div>
 
         <div>
