@@ -687,8 +687,9 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 
 
 		//2. set resized width to colgroup col
+		wds[cidx] = wd;
 		if (!wgt._origWd) // NOTE: originally, `if(!wgt.origWd)` which was wrong.
-			wgt._width = wds[cidx] = wd;
+			wgt._width = wd;
 		hdcols[cidx].style.width = bdcols[cidx].style.width = wd;
 		if (ftcols) //ZK-2769: Listfooter is not aligned with listhead on changing width
 			ftcols[cidx].style.width = wd;
