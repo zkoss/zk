@@ -341,8 +341,16 @@ export class Tabs extends zul.Widget {
 	_fixWidth(toSel: boolean): void {
 		var tabs = this.$n_(),
 			tabbox = this.getTabbox()!,
-			tbx = tabbox.$n_(),
-			btnsize = tabbox._scrolling ? this._getArrowSize() : 0;
+			tbx = tabbox.$n_();
+		if (tabbox.isTabscroll() && tabbox._scrolling && !tabbox.inAccordionMold()) {
+			if (tabs) {
+				if (tabs.style.width || tabs.style.height) {
+					tabs.style.width = tabs.style.height = '';
+					this._scrollcheck('init');
+				}
+			}
+		}
+		var btnsize = tabbox._scrolling ? this._getArrowSize() : 0;
 		this._fixHgh(toSel); //ZK-2810: don't set height to tabbox when deselect
 		if (tabbox.isVertical()) {
 			//LI in IE doesn't have width...
