@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5831.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 06 17:39:54 CST 2026, Created by josephlo
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid emptyMessage="no data" width="1200px">
+        <custom-attributes org.zkoss.zul.css.flex="false"/>
+        <columns sizable="true">
+            <column label="primary" hflex="1"/>
+            <column label="222" hflex="min"/>
+            <column label="333"/>
+            <column label="444"/>
+            <column label="555"/>
+        </columns>
+
+    </grid>
+</zk>
