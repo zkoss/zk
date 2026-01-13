@@ -18,6 +18,7 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.impl.XulElement;
@@ -135,6 +136,12 @@ public class Cell extends XulElement {
 
 		renderer.render("align", getAlign());
 		renderer.render("valign", getValign());
+	}
+
+	public void onPageAttached(Page newPage, Page oldPage) {
+		super.onPageAttached(newPage, oldPage);
+		if (getParent() == null)
+			throw new UiException("Cell must be a child of Row, Hbox or Vbox: " + this);
 	}
 
 	private AuxInfo initAuxInfoForCell() {

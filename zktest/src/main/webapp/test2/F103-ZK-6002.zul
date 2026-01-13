@@ -1,0 +1,76 @@
+<zk>
+	<label multiline="true">
+		ZK-6002: Modern XMLHttpRequest Event Handling for Comet Server Push
+
+		Acceptance Criteria:
+		1. Modern Event Handlers - Uses onload, onerror, ontimeout, onabort instead of onreadystatechange
+		2. Extensibility - Can override _createXHR or event handlers via zk.override()
+		3. Event Classification - Dedicated handlers for different event types
+		4. Backward Compatibility - Opt-in via "org.zkoss.zkex.ui.comet.modernEvent" property to "true" for this test
+
+		Manual Test:
+		1. Click "Start" to start server push
+		2. Open browser console - should see "Custom _createXHR called!" (demonstrates extensibility)
+		3. Verify counter increments (server push working)
+		4. In console, check: zk.Desktop.$()._cmsp._modernEvent === true
+	</label>
+	<separator/>
+	<button label="Start" onClick="start()"/>
+	<button label="Stop" onClick="stop()"/>
+	<separator/>
+	<label id="cnt">0</label>
+	<zscript><![CDATA[
+		import org.zkoss.zk.ui.Desktop;
+		import org.zkoss.zk.ui.Executions;
+		import org.zkoss.zk.ui.util.Clients;
+		import org.zkoss.lang.Library;
+
+		int count = 0;
+		boolean run = false;
+		Desktop desktop = Executions.getCurrent().getDesktop();
+
+		void start() {
+			if (run) return;
+			run = true;
+			desktop.enableServerPush(true);
+			new Thread(new Runnable() {
+				public void run() {
+					while (run) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						Executions.activate(desktop);
+						try {
+							count++;
+							cnt.setValue(String.valueOf(count));
+						} finally {
+							Executions.deactivate(desktop);
+						}
+					}
+				}
+			}).start();
+		}
+
+		void stop() {
+			run = false;
+			desktop.enableServerPush(false);
+		}
+	]]></zscript>
+
+	<script><![CDATA[
+		// Override _createXHR to demonstrate extensibility
+		zk.afterLoad('zkex.cmsp', function() {
+			var _xjax = {};
+			zk.override(zkex.cmsp.SPush.prototype, _xjax, {
+				_createXHR: function() {
+					console.log('Custom _createXHR called!');
+					// Mark that override was called
+					window._customXHRCalled = true;
+					return _xjax._createXHR.apply(this, arguments);
+				}
+			});
+		});
+	]]></script>
+</zk>

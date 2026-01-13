@@ -1,0 +1,93 @@
+<!--
+B103-ZK-5660-test.html
+
+	Purpose:
+		Test embedded desktop destruction and timer response delay
+	Description:
+		Tests that after destroying an embedded desktop, timer responses
+		are not delayed by 3600ms due to responseId not being reset.
+	History:
+		Sun Jan 05 17:35:00 CST 2026, Created by jumperchen
+
+	Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ZK-5660 Embedded Desktop Timer Test</title>
+</head>
+
+<body>
+	<h2>ZK-5660: Timer Response Delay After Desktop Destruction</h2>
+	<div id="instructions">
+		<h3>Test Instructions:</h3>
+		<ol>
+			<li>Enable embedded ZK in zk.xml (org.zkoss.web.servlet.http.embedded.enabled=true)</li>
+			<li>Click "Load Embedded ZK" to load the embedded desktop</li>
+			<li>Click "Start Timer" in the embedded ZK</li>
+			<li>Observe timer fires every 500ms</li>
+			<li>Do 10 times to see if timer responses are NOT delayed more then 1 second
+				<ol>
+					<li>Click "Destroy Embedded ZK"</li>
+					<li>Click "Load Embedded ZK"</li>
+					<li>Verify timer responses are NOT delayed more then 1 second</li>
+				</ol>
+			</li>
+		</ol>
+	</div>
+	<br />
+	<div id="zkContainer"></div>
+	<br />
+	<div id="status"></div>
+	<button id="loadBtn">Load Embedded ZK</button>
+	<button id="destroyBtn">Destroy Embedded ZK</button>
+	<button id="checkResponseIdBtn">Check ResponseId (should be undefined after destroy)</button>
+
+	<script src="/zktest/zkEmbedded"></script>
+	<script>
+		var loadBtn = document.getElementById('loadBtn');
+		var destroyBtn = document.getElementById('destroyBtn');
+		var checkResponseIdBtn = document.getElementById('checkResponseIdBtn');
+		var statusDiv = document.getElementById('status');
+
+		loadBtn.addEventListener('click', embedZK, false);
+		function embedZK() {
+			statusDiv.innerHTML = 'Loading embedded ZK...';
+			var p = zEmbedded.load('zkContainer', '/zktest/test2/B103-ZK-5660-1.zul')
+				.then(function (result) {
+					var dt = result.widget.desktop;
+					dt.listen({
+						onBeforeDestroy: function () {
+							statusDiv.innerHTML = 'Desktop destroying...';
+						}
+					});
+					window['tempZKDtid'] = dt.id;
+					statusDiv.innerHTML = 'Embedded ZK loaded. Desktop ID: ' + dt.id;
+				})
+				.catch(function (error) {
+					statusDiv.innerHTML = 'Error loading embedded ZK: ' + error;
+				});
+		}
+
+		destroyBtn.addEventListener('click', destroyEmbeddedZK, false);
+		function destroyEmbeddedZK() {
+			zEmbedded.destroy('zkContainer');
+			statusDiv.innerHTML = 'Embedded ZK destroyed!';
+		}
+
+		checkResponseIdBtn.addEventListener('click', checkResponseId, false);
+		function checkResponseId() {
+			// Access the internal responseId variable (for debugging)
+			// After fix, this should be undefined after desktop destruction
+			var desktopCount = zk.Desktop._ndt;
+			var desktopInAll = zk.Desktop.all[window['tempZKDtid']];
+			alert('Desktop count: ' + desktopCount +
+				'\nDesktop in all: ' + desktopInAll +
+				'\n(Both should be 0/undefined after destroy)');
+		}
+	</script>
+</body>
+
+</html>

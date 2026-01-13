@@ -30,11 +30,9 @@ import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.lang.Library;
-import org.zkoss.web.fn.ThemeFns;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.HttpBufferedResponse;
 import org.zkoss.web.servlet.http.Https;
-import org.zkoss.web.theme.StandardTheme;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletLoader;
@@ -104,17 +102,10 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 					return;
 			}
 
-			String themeName = ThemeFns.getCurrentTheme();
-			boolean isDefaultTheme = StandardTheme.DEFAULT_NAME.equals(themeName);
 			for (int j = 0; j < wi.items.length; ++j) {
 				final Object o = wi.items[j];
 				if (o instanceof String) {
 					String uri = (String) o;
-
-					// ZK CSS variables are only supported in the default theme
-					if (!isDefaultTheme && "~./zul/css/zkcssvariables.css.dsp".equals(uri))
-						continue;
-
 					if (tp != null) {
 						uri = tp.beforeWidgetCSS(exec, uri);
 						if (uri == null)

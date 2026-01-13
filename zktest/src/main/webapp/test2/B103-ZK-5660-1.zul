@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-5660-1.zul
+
+	Purpose:
+		Test that timer responses are not delayed after desktop destruction
+	Description:
+		After fixing ZK-5083, embedded desktop destruction correctly decrements
+		the desktop count, but responseId was not reset, causing 3600ms delay
+		in processing subsequent timer responses.
+	History:
+		Sun Jan 05 17:35:00 CST 2026, Created by jumperchen
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+		1. Click "Start Timer" button
+		2. Observe that the timer fires every 500ms and updates the label
+		3. The response should be processed immediately without 3600ms delay
+	]]></label>
+	<div>
+		<label id="timerLabel" value="Timer not started"/>
+		<separator/>
+		<button id="startBtn" label="Start Timer">
+			<attribute name="onClick"><![CDATA[
+				import org.zkoss.zk.ui.event.*;
+				timer.start();
+				timerLabel.setValue("Timer started at: " + new java.util.Date());
+			]]></attribute>
+		</button>
+		<button id="stopBtn" label="Stop Timer">
+			<attribute name="onClick"><![CDATA[
+				timer.stop();
+				timerLabel.setValue("Timer stopped");
+			]]></attribute>
+		</button>
+		<timer id="timer" delay="500" repeats="true">
+			<attribute name="onTimer"><![CDATA[
+				long currentTime = System.currentTimeMillis();
+				timerLabel.setValue("Timer fired at: " + currentTime);
+				timerLabel.setAttribute("lastFireTime", currentTime);
+			]]></attribute>
+		</timer>
+	</div>
+</zk>

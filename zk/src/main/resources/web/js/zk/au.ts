@@ -786,7 +786,7 @@ export namespace au_global {
 		 * pageTracker._setDomainName("zkoss.org");
 		 * pageTracker._initData();
 		 * pageTracker._trackPageview();
-	 	 *
+		 *
 		 * var auBfSend = zAu.beforeSend;
 		 * zAu.beforeSend = function (uri, req, dt) {
 		 *   try {
@@ -1048,6 +1048,15 @@ export namespace au_global {
 		 */
 		export function getAuRequests(dt: zk.Desktop): zk.Event[] {
 			return dt._aureqs;
+		}
+		/**
+		 * Resets the response ID to undefined.
+		 * This is called when a desktop is destroyed to prevent response processing delays.
+		 * @internal
+		 * @since 10.3.0
+		 */
+		export function _resetResponseId(): void {
+			responseId = undefined!;
 		}
 		/**
 		 * A map of Ajax default setting used to send the AU requests.
