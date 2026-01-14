@@ -124,7 +124,7 @@ dependencies {
 	runtimeOnly 'org.apache.groovy:groovy:5.0.0-alpha-1'
 	runtimeOnly 'org.mozilla:rhino:1.8.1'
 //	testImplementation 'org.jruby:jruby-core:1.7.27'
-	runtimeOnly 'org.python:jython:2.7.4'
+	runtimeOnly 'org.python:jython-slim:2.7.4'
 	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.1.0-FL-2024082716'
 	testImplementation 'net.jcip:jcip-annotations:1.0'
 	testImplementation 'com.deque.html.axe-core:selenium:4.7.0'
