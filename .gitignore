@@ -13,6 +13,7 @@ Thumbs.db
 zkex
 zkmax
 zml
+zktest/.jython_cache
 dist/lib/z*.jar
 dist/lib/z*.war
 dist/lib/osgi
