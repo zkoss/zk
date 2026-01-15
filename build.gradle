@@ -29,6 +29,7 @@ dependencyCheck {
 			skipDevDependencies = true
 		}
     }
+	skipConfigurations = ['checkstyle']
 }
 
 def zkcmlDir = "$rootDir/../zkcml"

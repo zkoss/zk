@@ -14,8 +14,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 <zk>
     <style>
         .custom-rangeslider {
-            --zk-color-primary: #ff6b35;
-            --zk-color-grey-light: #ffe8e0;
+            --zk-rangeslider-button-color: #ff6b35;
+            --zk-rangeslider-track-color: #ffe8e0;
         }
     </style>
     <zscript><![CDATA[
@@ -23,7 +23,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		import org.zkoss.util.*;
 
         ListModel model = new ListModelArray(new String[] {
-          "North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
+            "North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
         });
 
         FakerMatrixModel bigData = new FakerMatrixModel(200, 200);
@@ -39,7 +39,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 
     <label value="CSS Variables Test for Components -2 (Close the Coachmark First)" style="font-size: 24px; font-weight: bold; display: block;" />
     <label multiline="true">
-        Verify the CSS variables defined in each component are applied correctly.
+        Verify the CSS variables for each component are applied correctly.
     </label>
 
     <vlayout spacing="16px">
@@ -149,7 +149,6 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
         <div sclass="custom-rangeslider">
             <label value="Custom Rangeslider (custom colors):" />
             <rangeslider/>
-            <rangeslider disabled="true" />
         </div>
 
         <div>
