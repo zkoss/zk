@@ -204,6 +204,12 @@ each(@components, {
 	}
 	& > a {
 		display: block;
+		color: @textColorDefault;
+		.z-timebox-disabled &,
+		.z-spinner-disabled &,
+		.z-doublespinner-disabled & {
+			color: @disabledColor; // ZK-5837: follow disabled color
+		}
 		height: @spinnerButtonIconHeight;
 		padding: @spinnerButtonPadding;
 		overflow: hidden;
