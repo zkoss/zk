@@ -41,10 +41,17 @@ public class F103_ZK_5866LibaryPropertiesTest extends WebDriverTestCase {
         type(inp, "");
         waitResponse();
 
-        sendKeys(inp, "DZ");
+        sendKeys(inp, "ka");
         waitResponse();
         options = jq(".z-chosenbox-option");
-        Assertions.assertEquals(3, getVisibleCount(options));
+        Assertions.assertEquals(6, getVisibleCount(options));
+        type(inp, "");
+        waitResponse();
+
+        sendKeys(inp, "_");
+        waitResponse();
+        options = jq(".z-chosenbox-option");
+        Assertions.assertEquals(15, getVisibleCount(options));
         type(inp, "");
         waitResponse();
 
