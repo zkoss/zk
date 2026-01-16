@@ -13,25 +13,16 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 -->
 <zk>
     <zscript><![CDATA[
-        import java.util.Comparator;
-
-        public static final Comparator STRING_COMPARATOR_CONTAINS = new Comparator() {
-            public int compare(Object key, Object value) {
-                String idx = Objects.toString(key);
-                return idx != null && value != null && idx.length() > 0 && Objects.toString(value).contains(idx) ? 0 : 1;
-            }
-        };
-
         ListModelList model = new ListModelList(Locale.getAvailableLocales());
-        ListSubModel subModelContains = ListModels.toListSubModel(model, STRING_COMPARATOR_CONTAINS, 15);
+        ListSubModel subModel = ListModels.toListSubModel(model, ListModels.STRING_CONTAINS_COMPARATOR, 15);
     ]]></zscript>
 
     <label multiline="true">
-        1. This is the new filter logic of Chosenbox.
-        2. It uses "contains" / "includes" logic by default, so the behavior is the same as the first Chosenbox above.
+        1. This is the extra filter logic of Chosenbox.
+        2. It uses “contains” as the filtering logic. When you use ListSubModel, you need to configure a comparator via toListSubModel.
     </label>
 
-    <chosenbox width="400px" model="${subModelContains}">
+    <chosenbox width="400px" model="${subModel}">
         <custom-attributes org.zkoss.zul.chosenbox.filterLogic="contains"/>
     </chosenbox>
 </zk>
