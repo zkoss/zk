@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-6046.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Jan 14 14:02:56 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Press and hold the up/down button continuously.
+        2. Verify that the pressed button displays the active color.
+        3. Verify that the other, unpressed button displays the default color.
+    </label>
+    <spinner />
+</zk>
