@@ -35,12 +35,12 @@ public class BiglistboxTest extends WebDriverTestCase {
 		Assertions.assertEquals("1", lbxObject.toElement().get("selectedIndex"));
 		Assertions.assertEquals("1", lbxIndex.toElement().get("selectedIndex"));
 
-		new Select(toElement(lbxObject)).selectByIndex(2);
+		new Select(toElement(lbxObject)).selectByVisibleText("Row 2");
 		waitResponse();
 		Assertions.assertEquals("2", jq(".z-biglistbox-selected").eval("index()"));
 		Assertions.assertEquals("2", lbxIndex.toElement().get("selectedIndex"));
 
-		new Select(toElement(lbxIndex)).selectByIndex(3);
+		new Select(toElement(lbxIndex)).selectByVisibleText("Row 3");
 		waitResponse();
 		Assertions.assertEquals("3", jq(".z-biglistbox-selected").eval("index()"));
 		Assertions.assertEquals("3", lbxObject.toElement().get("selectedIndex"));

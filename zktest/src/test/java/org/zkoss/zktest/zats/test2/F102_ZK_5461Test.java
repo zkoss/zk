@@ -20,7 +20,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v142.network.Network;
+import org.openqa.selenium.devtools.v143.network.Network;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 

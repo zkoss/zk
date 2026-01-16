@@ -18,6 +18,7 @@ import java.time.Duration;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -33,7 +34,7 @@ public class B90_ZK_4340Test extends WebDriverTestCase {
 		connect();
 
 		final JQuery textbox = jq("@textbox");
-		new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.presenceOfElementLocated(textbox));
+		new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions.presenceOfElementLocated(By.className("z-textbox")));
 		Assertions.assertTrue(textbox.exists());
 
 		click(textbox);
