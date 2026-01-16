@@ -292,21 +292,26 @@ export class Notification extends zul.wgt.Popup {
 			n: HTMLElement | undefined,
 			isInView = true;
 
-		if (ref) {
-			n = ref.$n('real') || ref.$n();
-			isInView = zk(n).isRealScrollIntoView();
-		}
-
 		// TODO: allow user to specify arrow direction?
-
-		//ZK-2687, don't show notification if wgt is not in view
-		if (!isInView)
-			return;
 
 		if (!pos && !off)
 			pos = ref ? 'end_center' : 'middle_center';
 
 		jq(document.body).append(ntf);
+		var ntfNode = ntf.$n();
+		if (ref && ntfNode) {
+			n = ref.$n('real') || ref.$n();
+			jq(ntfNode).css({ visibility: 'hidden', display: 'block' });
+			var rect = ntfNode.getBoundingClientRect();
+			jq(ntfNode).css({ visibility: '', display: '' });
+			isInView = zk(n).hasEnoughVisibleArea(rect.width, rect.height);
+			//ZK-2687, don't show notification if wgt is not in view
+			if (!isInView) {
+				ntf.detach();
+				return;
+			}
+		}
+
 		ntf._nftPos = pos;
 		ntf.open(ref!, off, pos);
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-6047.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jan 15 17:52:11 CST 2026, Created by josephlo
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <window id="win" height="50%" title="a window that is partially visible" border="normal"/>
+    <button label="show"  onClick='Clients.showNotification("msg", "info", win, "middle_center", 2000);'/>
+    <div height="100%"></div>
+</zk>

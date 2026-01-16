@@ -505,6 +505,47 @@ export class JQZK {
 	}
 
 	/**
+	 * Checks whether the element has enough visible area within the viewport
+	 * @returns if false, it means the element is not shown.
+	 * @since 10.4.0
+	 */
+	hasEnoughVisibleArea(minW: number, minH: number): boolean {
+		var node = this.jq[0];
+        if (!node || !this.isRealVisible()) return false;
+
+        var vOffset = this.viewportOffset(),
+            x = vOffset[0], y = vOffset[1],
+            w = node.offsetWidth, h = node.offsetHeight,
+            viewW = jq.innerWidth(), viewH = jq.innerHeight(),
+			visibleX1 = Math.max(x, 0),
+            visibleY1 = Math.max(y, 0),
+            visibleX2 = Math.min(x + w, viewW),
+            visibleY2 = Math.min(y + h, viewH),
+			oels = _overflowElement(this, true);
+        for (var i = 0; i < oels.length; i++) {
+            var oel = oels[i],
+                cont = node == oel[0] ? oel[0].parentElement : oel[0];
+
+            if (!cont) continue;
+
+            var cOffset = zk(cont).viewportOffset(),
+                cx = cOffset[0], cy = cOffset[1],
+                cw = cont.offsetWidth, ch = cont.offsetHeight;
+
+            visibleX1 = Math.max(visibleX1, cx);
+            visibleY1 = Math.max(visibleY1, cy);
+            visibleX2 = Math.min(visibleX2, cx + cw);
+            visibleY2 = Math.min(visibleY2, cy + ch);
+			if (visibleX2 <= visibleX1 || visibleY2 <= visibleY1) return false;
+        }
+
+        var finalVisibleW = (visibleX2 > visibleX1) ? (visibleX2 - visibleX1) : 0,
+			finalVisibleH = (visibleY2 > visibleY1) ? (visibleY2 - visibleY1) : 0;
+
+        return finalVisibleW >= minW && finalVisibleH >= minH;
+	}
+
+	/**
 	 * @returns whether the first matched DOM element has the vertical scrollbar
 	 * @since 5.0.8
 	 */
