@@ -69,11 +69,17 @@ ZK 10.3.0
   ZK-5660: Destroying and reloading an embedded desktop doesn't reset responseId, cause 3.6s delay on first zkau request
   ZK-5718: deprecated feature used in client-bind reported by Chrome
   ZK-6050: timezone conversion fix from ZK-5946 missing in stateless
+  ZK-6048: update 3rd party dependencies to mitigate vulnerability
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
   + upgrade jython to 2.7.4, rhino to 1.8.1, and commons-lang to commons-lang3 3.20.0 to fix vulnerabilities
   + upgrade pdfjs to 4.10.38 to fix vulnerabilities
+  + the following optional dependencies have known vulnerabilities, users are recommended to review them if used:
+    - closure-compiler-unshaded (in zk) and spring-beans, spring-context, spring-web (in zkplus) cannot be upgraded
+    within ZK 10.3.0 due to Java 11 support requirement, users may upgrade them in their applications if used.
+    - jasperreports (in zkex) may be affected by CVE-2025-10492 but is not yet fixed in its latest community edition,
+    please see https://community.jaspersoft.com/knowledgebase/faq/update-details-about-the-java-vulnerability-r4897/.
   + improve consistency across ZK components by aligning the behavior of Combobutton with Menu: send the onOpen event when calling setOpen(boolean) directly
 
    --------
