@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6039.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 20 12:07:09 CST 2026, Created by josephlo
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <hlayout>
+        <vlayout>
+            <div style="border: 2px solid blue; width: 400px; height: 300px;">
+                <window border="normal" maximizable="true" 
+                        maximized="true" mode="embedded">
+                    maximized
+                </window>
+            </div>
+        </vlayout>
+
+        <vlayout>
+            <div style="border: 2px solid blue; width: 400px; height: 300px;">
+                <window border="normal" maximizable="true" 
+                        maximized="false" mode="embedded" width="200px" height="100px">
+                    normal
+                </window>
+            </div>
+        </vlayout>
+    </hlayout>
+</zk>

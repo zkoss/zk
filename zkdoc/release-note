@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-6039: $n_ in window setMaximize causes page crashes
 
 * Upgrade Notes
 
