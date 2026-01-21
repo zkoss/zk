@@ -19,11 +19,15 @@
         <zkckeditor.version>4.21.0.0</zkckeditor.version>
         <zkgmaps.version>4.0.3</zkgmaps.version>
         <zkcharts.version>12.2.0.0</zkcharts.version>
+        <!-- not upgraded to 3.1.0 due to keikai-poi version conflict
+             pivottable 3.1.0 depends on keikai-poi 5.13.0
+             keikai-ex 6.2.0.1 depends on keikai-poi 6.2.0.1
+         -->
         <zkpivotable.version>3.0.0</zkpivotable.version>
         <zkpoi.version>3.9.17</zkpoi.version>
         <zss.version>3.9.6</zss.version>
         <keikai.oss.version>5.0.0.1</keikai.oss.version>
-        <keikai.ex.version>6.1.0.1</keikai.ex.version>
+        <keikai.ex.version>6.2.0.1</keikai.ex.version>
     </properties>
     <dependencyManagement>
         <dependencies>
