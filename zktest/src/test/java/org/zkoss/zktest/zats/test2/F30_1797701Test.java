@@ -22,7 +22,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class F30_1797701Test extends WebDriverTestCase {
 	@Test
 	public void test() {
-		Actions act = new Actions(connect());
+		connect();
+		Actions act = getActions();
 		waitResponse();
 		int sliderWidth = jq("@slider").width();
 		act.clickAndHold(toElement(jq(".z-slider-button"))).moveByOffset(sliderWidth, 0).perform();

@@ -21,11 +21,11 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class B86_ZK_4151Test extends WebDriverTestCase {
 	@Test
 	public void test() {
-		driver = connect();
-		Actions act = new Actions(driver);
+		connect();
+		Actions act = getActions();
 		WebElement row = toElement(jq("$row"));
 		
-		act.moveToElement(row, 10, 10).clickAndHold().pause(500)
+		act.moveToElement(row, 10, 10).clickAndHold()
 				.moveByOffset(20, 20)
 				.build().perform();
 		String dragmsg1 = jq(".z-drop-content").text();

@@ -29,10 +29,9 @@ public class B36_3051305Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		WebElement listitem = driver.findElement(jq("@listitem:contains(ZK JSP)"));
 		actions.clickAndHold(listitem)
-				.pause(200)
 				.moveByOffset(0, 50)
 				.release()
 				.perform();
