@@ -60,7 +60,7 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 
 		Assertions.assertEquals(false, jq("@grid:last @column:last").isVisible());
 
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		resizeColumn(actions, jq("@grid:last @column:eq(0)"), 100);
 		waitResponse();
 

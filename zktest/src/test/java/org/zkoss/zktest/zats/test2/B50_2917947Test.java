@@ -30,7 +30,7 @@ public class B50_2917947Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		JQuery columns = jq("@column");
 		resizeColumn(actions, columns.eq(3));
 		resizeColumn(actions, columns.eq(2));
@@ -43,7 +43,6 @@ public class B50_2917947Test extends WebDriverTestCase {
 		actions.moveToElement(driver.findElement(col))
 				.moveByOffset(colWidth / 2 - DRAG_THRESHOLD, 0)
 				.clickAndHold()
-				.pause(500)
 				.moveByOffset(-50, 0)
 				.release()
 				.perform();
