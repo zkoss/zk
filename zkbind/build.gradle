@@ -9,7 +9,7 @@ dependencies {
 	api project(':zhtml')
 	api "org.javassist:javassist:${javassistVersion}"
 	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
-	compileOnly 'javax.validation:validation-api:1.1.0.Final'
+	compileOnly 'javax.validation:validation-api:2.0.1.Final'
 }
 
 buildConfig {
