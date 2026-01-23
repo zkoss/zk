@@ -71,6 +71,7 @@ ZK 10.3.0
   ZK-5760: ZK10 onColSize sends incorrect data with hflex="min"
   ZK-6050: timezone conversion fix from ZK-5946 missing in stateless
   ZK-6048: update 3rd party dependencies to mitigate vulnerability
+  ZK-5919: the checkbox on a listheader is not operable through a keyboard
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
