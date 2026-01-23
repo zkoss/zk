@@ -56,6 +56,21 @@ public class ListModels {
 
 	/**
 	 * A comparator for {@link ListSubModel#getSubModel} to check if
+	 * a value retrieved from the model contains the user typed.
+	 * To compare, it will convert them to String instances, and
+	 * return 0 (i.e., matched), when the value contains
+	 * the user typed (case-insensitive), and both of them are not empty.
+	 * @since 10.3.0
+	 */
+	public static final Comparator STRING_CONTAINS_COMPARATOR = new Comparator() {
+		public int compare(Object key, Object value) {
+			String idx = Objects.toString(key);
+			return idx != null && value != null && idx.length() > 0 && Objects.toString(value).contains(idx) ? 0 : 1;
+		}
+	};
+
+	/**
+	 * A comparator for {@link ListSubModel#getSubModel} to check if
 	 * a value retrieved from the model matches the user typed.
 	 * It assumes the model is {@link Map}, and the value is
 	 * Map.Entry.
@@ -68,6 +83,24 @@ public class ListModels {
 			String idx = Objects.toString(key);
 			return idx != null && value != null && idx.length() > 0
 					&& Objects.toString(((Map.Entry) value).getValue()).startsWith(idx) ? 0 : 1;
+		}
+	};
+
+	/**
+	 * A comparator for {@link ListSubModel#getSubModel} to check if
+	 * a value retrieved from the model matches the user typed.
+	 * It assumes the model is {@link Map}, and the value is
+	 * Map.Entry.
+	 * To compare, it will convert them to String instances, and
+	 * return 0 when the value (Map.Entry's getValue())
+	 * contains the user typed, and both of them are not empty.
+	 * @since 10.3.0
+	 */
+	public static final Comparator MAP_CONTAINS_COMPARATOR = new Comparator() {
+		public int compare(Object key, Object value) {
+			String idx = Objects.toString(key);
+			return idx != null && value != null && idx.length() > 0
+					&& Objects.toString(((Map.Entry) value).getValue()).contains(idx) ? 0 : 1;
 		}
 	};
 

@@ -18,6 +18,13 @@ export interface FlexSize {
 	height?: string | number;
 }
 
+declare module '@zk/widget' {
+	interface Widget {
+		/** @internal */
+		_hflexWidth?: number;
+	}
+}
+
 const blockLevelComputedDisplays: Set<string> = new Set(['block', 'flex', 'grid', 'flow-root', 'table', 'table-row', 'list-item']);
 
 function _getTextSize(zkc: zk.JQZK, zkp: zk.JQZK, zkpOffset: zk.Offset): zk.Offset {
@@ -242,7 +249,7 @@ function _fixMinFlex(isVflex?): ((wgt: zk.Widget, wgtn: HTMLElement, o: FlexOrie
 
 			map[sizePos] = size + (wgt[contentPos] as ((n) => number))(size);
 			wgt.setFlexSize_(map, true);
-			const szInfo = {height: wn.offsetHeight, width: wn.offsetWidth};
+			const szInfo = {height: wn.offsetHeight, width: wgt._hflexWidth || wn.offsetWidth}; // Refer to the commit 3c9728e
 			if (szInfo[sizePos] >= 0)
 				wgt[flexsz] = szInfo[sizePos] as number + margin;
 

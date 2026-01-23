@@ -34,7 +34,7 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	/** @internal */
 	_valign?: string;
 	/** @internal */
-	_hflexWidth?: number;
+	override _hflexWidth?: number;
 	/** @internal */
 	_nhflexbak?: boolean;
 	/** @internal */

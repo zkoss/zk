@@ -95,7 +95,7 @@ public abstract class DateTimeFormatInputElement extends FormatInputElement {
 			Constraint cst = getConstraint();
 			if (cst instanceof AbstractSimpleDateTimeConstraint)
 				((AbstractSimpleDateTimeConstraint) cst).setTimeZone(_tzone);
-			smartUpdate("timeZone", getFormattedTimeZone());
+			smartUpdate("timeZone", getFormattedTimeZone(_tzone));
 			smartUpdate("_value", marshall(_value));
 		}
 	}
@@ -289,7 +289,7 @@ public abstract class DateTimeFormatInputElement extends FormatInputElement {
 	protected void renderProperties(ContentRenderer renderer) throws IOException {
 		super.renderProperties(renderer);
 		if (_tzone != null)
-			renderer.render("timeZone", getFormattedTimeZone());
+			renderer.render("timeZone", getFormattedTimeZone(_tzone));
 	}
 
 	private static Map<String, PropertyAccess> _properties = new HashMap<>(5);
@@ -404,6 +404,7 @@ public abstract class DateTimeFormatInputElement extends FormatInputElement {
 	private static final Pattern _gmtWholeHourNegative = Pattern.compile("^GMT-(0\\d|1[0-4]):00$", Pattern.CASE_INSENSITIVE);
 
 	/**
+	 * Internal use only.
 	 * Returns the formatted timezone ID,
 	 * convert the timezone IDs for moment.js recognized format.
 	 * <p>
@@ -437,9 +438,11 @@ public abstract class DateTimeFormatInputElement extends FormatInputElement {
 	 *         For other cases, the timezone ID is already recognized by moment.js.
 	 *     </li>
 	 * </ol>
+	 * @param tzone the timezone to be formatted
+	 * @hidden for Javadoc
 	 */
-	private String getFormattedTimeZone() {
-		String zoneID = _tzone.toZoneId().getId();
+	public static String getFormattedTimeZone(TimeZone tzone) {
+		String zoneID = tzone.toZoneId().getId();
 		if (_javaSystemVOldTimeZoneMappings.containsKey(zoneID)) {
 			zoneID = _javaSystemVOldTimeZoneMappings.get(zoneID);
 		} else if (_gmtWholeHourPositive.matcher(zoneID).matches()) {
