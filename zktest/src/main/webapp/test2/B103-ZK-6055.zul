@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B103-ZK-6055.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jan 22 16:54:33 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Add CSP whitelist for "javascript:void(0);".
+    </label>
+
+    <navbar orient="vertical" width="200px">
+        <nav label="Get Started" iconSclass="z-icon-th-list" badgeText="3">
+            <navitem label="Step One"/>
+            <navitem label="Step Two"/>
+            <navitem label="Step Three"/>
+        </nav>
+    </navbar>
+</zk>

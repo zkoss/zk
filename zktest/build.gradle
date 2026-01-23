@@ -106,7 +106,7 @@ dependencies {
 	implementation 'org.zkoss.zkforge:timeplotz:1.1_50'
 	implementation 'org.zkoss.zkforge:gmapsz:3.1.0'
 	implementation 'org.hibernate:hibernate-validator:6.0.23.Final'
-	implementation 'javax.validation:validation-api:1.1.0.Final'
+	implementation 'javax.validation:validation-api:2.0.1.Final'
 
 	// fix for DestroyTest.java that org.eclipse.jetty:apache-jsp:10.0.5 depends on slf4j-api 2.0.0-alpha1
 	implementation 'org.slf4j:slf4j-jdk14:2.0.7'
@@ -136,11 +136,11 @@ dependencies {
 	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
 	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
 	testImplementation 'xml-apis:xml-apis:1.4.01'
-	testImplementation 'org.zkoss.test:zk-webdriver:1.4.32.0.0'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.4.39.0.1'
 
 	// For B96_ZK_4194Test and F102_ZK_5461Test to use a specific Chrome driver version (this will change to match latest chrome)
-	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v142:4.38.0'
-	testImplementation "org.seleniumhq.selenium:selenium-java:4.38.0"
+	testImplementation 'org.seleniumhq.selenium:selenium-devtools-v143:4.39.0'
+	testImplementation "org.seleniumhq.selenium:selenium-java:4.39.0"
 	testImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
 
 	providedCompile 'javax.el:javax.el-api:2.2.5'

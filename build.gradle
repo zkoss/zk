@@ -264,6 +264,13 @@ subprojects {
 			if ("${project.name}" == 'zweb') {
 				bndInstructions += """
 					Import-Package: javax.servlet.annotation;resolution:=optional,*;resolution:=optional
+					# Exclude packages with invalid names (containing hyphens)
+					-exportcontents: !web.WEB-INF*,*;version=${version}
+				"""
+			} else if ("${project.name}" == 'zk') {
+				bndInstructions += """
+					# Exclude packages with invalid names (containing hyphens)
+					-exportcontents: !web.WEB-INF*,*;version=${version}
 				"""
 			} else if ("${project.name}" == 'zkbind') {
 				bndInstructions += """
@@ -364,7 +371,9 @@ subprojects {
 						if (relativePath.contains('/')) {
 							def packagePath = relativePath.substring(0, relativePath.lastIndexOf('/'))
 							def packageName = packagePath.replace('/', '.')
-							if (packageName && !packageName.isEmpty() && !packageName.startsWith('META-INF')) {
+							// Validate package name: must not contain hyphens or other invalid characters
+							if (packageName && !packageName.isEmpty() && !packageName.startsWith('META-INF') &&
+							    packageName.matches('[a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_]*)*')) {
 								exportPackages.add(packageName)
 							}
 						}

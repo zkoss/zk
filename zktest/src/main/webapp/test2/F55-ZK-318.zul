@@ -28,8 +28,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <li>Open the popup of test combobutton one, click listcell in the inner listbox, the popup should be closed and the test combobutton one should not be focused</li>
 <li>Click 'auto drop' check box, the drop down should open while mouseover and close while mouseout the right side drop icon of both combobutton.</li>
 <li>Click change image button, the image of two combobutton should be changed.
-<li>Clear message box one and message box two then click 'open combobutton one' button, both message box should keep blank.
-<li>Clear message box one and message box two then click 'open combobutton two' button, both message box should keep blank.
+<li>Click 'open combobutton one' button, message box should display 'combobutton one opened', message box two should display 'popup opened'.
+<li>Click 'open combobutton two' button, message box should display 'combobutton two opened', message box two should display 'menu popup opened'.
 <li>Open combobutton two, select a color from About -> Menu -> Color Picker, the background of test win should changed.</li>
 <li>Click change child button, all above should work fine.
 <li>Do above for each theme, everything should be ok.</li>
