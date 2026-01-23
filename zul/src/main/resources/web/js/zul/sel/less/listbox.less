@@ -219,6 +219,11 @@
 	//check mark
 	&-checkable {
 		.checkable();
+
+		&:focus-visible {
+			box-shadow: @meshTitleFocusBoxShadow;
+			transition: unset;
+		}
 		
 		&.z-listitem-radio {
 			.borderRadius(50%);
