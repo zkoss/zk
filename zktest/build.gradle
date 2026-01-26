@@ -106,7 +106,7 @@ dependencies {
 	implementation 'org.zkoss.zkforge:timeplotz:1.1_50'
 	implementation 'org.zkoss.zkforge:gmapsz:3.1.0'
 	implementation 'org.hibernate:hibernate-validator:6.0.23.Final'
-	implementation 'javax.validation:validation-api:1.1.0.Final'
+	implementation 'javax.validation:validation-api:2.0.1.Final'
 
 	// fix for DestroyTest.java that org.eclipse.jetty:apache-jsp:10.0.5 depends on slf4j-api 2.0.0-alpha1
 	implementation 'org.slf4j:slf4j-jdk14:2.0.7'

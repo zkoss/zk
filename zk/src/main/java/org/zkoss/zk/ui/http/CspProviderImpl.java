@@ -130,11 +130,20 @@ public class CspProviderImpl implements CspProvider {
     private StringBuilder generateHeader(Map<String, Set<String>> cspMap, boolean cspStrictDynamicEnabled) {
         StringBuilder cspHeader = new StringBuilder();
         for (Map.Entry<String, Set<String>> entry : cspMap.entrySet()) {
-            cspHeader.append(entry.getKey())
-                    .append(" ")
-                    .append(String.join(" ", entry.getValue()));
             if ("script-src".equals(entry.getKey()) && cspStrictDynamicEnabled) {
+                Set<String> scriptValues = new LinkedHashSet<>(entry.getValue());
+                // ZK-6055: in dynamic mode need add unsafe-hashes and whitelist for javascript:void(0);
+                cspHeader.append(entry.getKey())
+                        .append(" ")
+                        .append(String.join(" ", scriptValues))
+                        .append(" 'unsafe-hashes' ")
+                        .append("'sha256-lfXlPY3+MCPOPb4mrw1Y961+745U3WlDQVcOXdchSQc=' ")
+                        .append("'sha256-kbHtQyYDQKz4SWMQ8OHVol3EC0t3tHEJFPCSwNG9NxQ='");
                 addStrictDynamic(cspHeader);
+            } else {
+                cspHeader.append(entry.getKey())
+                        .append(" ")
+                        .append(String.join(" ", entry.getValue()));
             }
             cspHeader.append("; ");
         }

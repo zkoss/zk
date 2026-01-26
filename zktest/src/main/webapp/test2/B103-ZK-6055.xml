@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<zk>
+    <system-config>
+        <csp-enabled>true</csp-enabled>
+        <csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>
+    </system-config>
+</zk>
