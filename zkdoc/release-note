@@ -70,6 +70,7 @@ ZK 10.3.0
   ZK-5718: deprecated feature used in client-bind reported by Chrome
   ZK-6050: timezone conversion fix from ZK-5946 missing in stateless
   ZK-6048: update 3rd party dependencies to mitigate vulnerability
+  ZK-5751: Combobox without an explicit itemRender mistakenly uses parent's template
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.

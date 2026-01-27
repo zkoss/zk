@@ -37,6 +37,11 @@ import org.zkoss.zul.ListSubModel;
 public class BindComboitemRenderer extends AbstractRenderer implements ComboitemRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;
 
+	// ZK-5751
+	protected Template lookupTemplate(Component comp, String name) {
+		return comp.getTemplate(name);
+	}
+
 	public void render(final Comboitem item, final Object data, final int index) throws Exception {
 		final Combobox cb = (Combobox) item.getParent();
 		final ListModel<?> model = cb.getModel();
