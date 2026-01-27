@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5765: InaccessibleWidgetBlockService blocks listheaders from being made visible by autopaging
 
 * Upgrade Notes
 

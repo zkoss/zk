@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5765.zul
+
+    Purpose:
+        
+    Description:
+        
+    History:
+        Mon Jan 26 12:02:54 CST 2026, Created by josephlo
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		ListModelList model = new ListModelList(Locale.getAvailableLocales());
+	</zscript>
+	<div height="500px">
+		<listbox id="lb" vflex="1" model="${model}" mold="paging" autopaging="true">
+			<listhead menupopup="auto">
+				<listheader label="col1"></listheader>
+				<listheader label="col2"></listheader>
+				<listheader label="col3"></listheader>
+				<listheader label="col4"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="${each}" value="${each}"></listcell>
+					<listcell label="${each}" value="${each}"></listcell>
+					<listcell label="${each}" value="${each}"></listcell>
+					<listcell label="${each}" value="${each}"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</zk>
