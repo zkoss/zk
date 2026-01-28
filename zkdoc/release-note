@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5608: modal window should catch keyboard events registered on the window, even without focusable content in the window
 
 * Upgrade Notes
 

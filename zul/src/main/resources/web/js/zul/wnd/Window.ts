@@ -1324,6 +1324,14 @@ export class Window extends zul.ContainerWidget {
 		}
 		if (cap?.focus_(timeout)) {
 			return true;
+		} else if (_isModal(this._mode)) {
+			var n = this.$n();
+			if (n) {
+				if (!n.hasAttribute('tabindex'))
+					n.tabIndex = -1;
+				n.focus();
+				return true;
+			}
 		} else if (this._anchor) {
 			this._anchor.focus();
 			return true;
