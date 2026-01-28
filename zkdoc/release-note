@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5706: pdfviewer: scrolling cannot change pages when the browser zoom level is not 100%
 
 * Upgrade Notes
 
