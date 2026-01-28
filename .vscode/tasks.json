@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "zktest: appRunDebugDev",
+      "type": "shell",
+      "command": "./gradlew",
+      "group": "build",
+      "args": ["appRunDebugDev"],
+      "isBackground": true,
+      "options": {
+        "cwd": "${workspaceFolder}/zktest"
+      },
+      "problemMatcher": [
+        {
+          "owner": "java",
+          "pattern": {
+            "regexp": "^.*$"
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "Starting ZK",
+            "endsPattern": "started and listening on port"
+          }
+        }
+      ]
+    }]
+}

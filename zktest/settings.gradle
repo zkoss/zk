@@ -1,25 +1,65 @@
 rootProject.name = 'zktest'
 
-includeBuild('../../zk') {
-	dependencySubstitution {
-		substitute module('org.zkoss.zk:zk') using project(':zk')
-		substitute module('org.zkoss.zk:zkplus') using project(':zkplus')
-		substitute module('org.zkoss.zk:zkbind') using project(':zkbind')
-		substitute module('org.zkoss.zk:zul') using project(':zul')
-		substitute module('org.zkoss.zk:zhtml') using project(':zhtml')
-		substitute module('org.zkoss.zk:zkwebfragment') using project(':zkwebfragment')
-		substitute module('org.zkoss.common:zcommon') using project(':zcommon')
-		substitute module('org.zkoss.common:zel') using project(':zel')
-		substitute module('org.zkoss.common:zweb') using project(':zweb')
-		substitute module('org.zkoss.common:zweb-dsp') using project(':zweb-dsp')
-	}
+// Enable more logs when needed: ./gradlew -Dzktest.composite.debug=true
+def debugComposite = System.getProperty("zktest.composite.debug") == "true"
+
+// ---- Helper: Resolve Path Safely ----
+File resolveProjectDir(String relativePath) {
+    try {
+        def dir = rootDir.toPath()
+                .resolve(relativePath)
+                .normalize()
+                .toFile()
+                .canonicalFile
+
+        if (dir.exists() && dir.isDirectory()) {
+            logger.lifecycle("[zktest] Found composite build: ${dir}")
+            return dir
+        } else {
+            logger.lifecycle("[zktest] Composite build NOT found: ${dir} (skipping)")
+            return null
+        }
+    } catch (Exception e) {
+        logger.lifecycle("[zktest] Composite build resolve failed for '${relativePath}' (skipping)")
+        if (debugComposite) {
+            logger.lifecycle("[zktest] resolve error: ${e.class.name}: ${e.message}")
+        }
+        return null
+    }
 }
 
-includeBuild('../../zkcml') {
-	dependencySubstitution {
-		substitute module('org.zkoss.zk:zkex') using project(':zkex')
-		substitute module('org.zkoss.zk:zkmax') using project(':zkmax')
-		substitute module('org.zkoss.zk:zuti') using project(':zuti')
-		substitute module('org.zkoss.zk:za11y') using project(':za11y')
-	}
+// ---- 1. Resolve ----
+def zkDir    = resolveProjectDir("../../zk")
+def zkcmlDir = resolveProjectDir("../../zkcml")
+
+// ---- 2. Include ZK (core) ----
+if (zkDir != null) {
+    includeBuild(zkDir) {
+        dependencySubstitution {
+            substitute module('org.zkoss.zk:zk') using project(':zk')
+            substitute module('org.zkoss.zk:zkplus') using project(':zkplus')
+            substitute module('org.zkoss.zk:zkbind') using project(':zkbind')
+            substitute module('org.zkoss.zk:zul') using project(':zul')
+            substitute module('org.zkoss.zk:zhtml') using project(':zhtml')
+            substitute module('org.zkoss.zk:zkwebfragment') using project(':zkwebfragment')
+            substitute module('org.zkoss.common:zcommon') using project(':zcommon')
+            substitute module('org.zkoss.common:zel') using project(':zel')
+            substitute module('org.zkoss.common:zweb') using project(':zweb')
+            substitute module('org.zkoss.common:zweb-dsp') using project(':zweb-dsp')
+        }
+    }
+} else {
+    logger.lifecycle("[zktest] WARNING: '../../zk' NOT FOUND. Source debugging for zk projects will NOT work.")
+}
+
+// ---- 3. Include ZKCML (optional) ----
+if (zkcmlDir != null) {
+    includeBuild(zkcmlDir) {
+        dependencySubstitution {
+            substitute module('org.zkoss.zk:zkex') using project(':zkex')
+            substitute module('org.zkoss.zk:zkmax') using project(':zkmax')
+            substitute module('org.zkoss.zk:zuti') using project(':zuti')
+            substitute module('org.zkoss.zk:za11y') using project(':za11y')
+        }
+    }
 }
