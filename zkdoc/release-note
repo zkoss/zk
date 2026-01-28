@@ -80,6 +80,7 @@ Jan 27, 2026
   ZK-5760: ZK10 onColSize sends incorrect data with hflex="min"
   ZK-6050: timezone conversion fix from ZK-5946 missing in stateless
   ZK-6048: update 3rd party dependencies to mitigate vulnerability
+  ZK-5686: zk failed to parse an attribute with a namespace in an injected zul
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
