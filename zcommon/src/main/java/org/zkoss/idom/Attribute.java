@@ -138,8 +138,9 @@ public class Attribute extends AbstractItem implements Namespaceable, Attr {
 			final Namespace found =
 				((Element)owner).getNamespace(ns.getPrefix());
 			if (found == null)
-				throw new DOMException(DOMException.NAMESPACE_ERR,
-					"Attribute's namespace, "+ns+", not found in element");
+				// ZK-5686: During element cloning, the namespace might not be available yet
+				// in the cloned element. Return the original namespace instead of throwing.
+				return ns;
 			if (!ns.equals(found))
 				throw new DOMException(DOMException.NAMESPACE_ERR,
 					"Attribute's namespace, "+ns+", conflicts with element's, "+found);
