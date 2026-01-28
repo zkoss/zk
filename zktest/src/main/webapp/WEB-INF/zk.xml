@@ -846,4 +846,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <!--            ]]>-->
 <!--		</embed>-->
 <!--	</device-config>-->
+
+	<!-- ZK-5670 -->
+<!--	<library-property>-->
+<!--		<name>org.zkoss.zul.progressbox.position</name>-->
+<!--		<value>center, center</value>-->
+<!--	</library-property>-->
 </zk>
