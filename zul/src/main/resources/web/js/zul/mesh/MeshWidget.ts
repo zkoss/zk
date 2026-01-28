@@ -2266,7 +2266,8 @@ export abstract class MeshWidget extends zul.Widget {
 			this._setOrGetVisibleRows(nRows);
 		}
 
-		if (nRows) {
+		// ZK-5584: under CSS flex, a row taller than the vflex height rounds nRows to 0 but the body still needs that height
+		if (nRows || (hgh && firstVisiRow && this._cssflex && this.parent!.getFlexContainer_() != null)) {
 			if (!hgh) {
 				if (!nVisiRows) {
 					hgh = this._headHgh(20, true) * nRows;
