@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-6024: load theme-based font-awesome.css.dsp from a wrong path
 
 * Upgrade Notes
 
