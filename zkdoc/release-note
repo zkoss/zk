@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5689: ZK font-awesome leaks to default font-awesome shortcut fas, fass, far, fabb
 
 * Upgrade Notes
 
