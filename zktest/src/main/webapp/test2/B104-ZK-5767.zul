@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5767.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Jan 21 16:55:51 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. z-column header is set to transform to uppercase by CSS rule.
+        2. Add a column with hflex="min" to a grid.
+        3. Verify that after ZK-5767 fix, the column width is calculated correctly and text is fully visible.
+    </label>
+    <window border="normal" title="hello">
+        <style>
+            .z-column .z-column-content {text-transform: uppercase;}
+        </style>
+        <div>Column 4 should have all content visible, but width is calculated without CSS text-transform: uppercase in mind</div>
+
+        <grid>
+            <columns>
+                <column label="Column 1" hflex="1"/>
+                <column label="Column 2" hflex="1"/>
+                <column label="Column 3" hflex="1"/>
+                <column label="Column hflex min" hflex="min"/>
+                <column label="Column 5" hflex="1"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="Row 1 Col 1"/>
+                    <label value="Row 1 Col 2"/>
+                    <label value="Row 1 Col 3"/>
+                    <label value=""/>
+                    <label value="Row 1 Col 5"/>
+                </row>
+                <row>
+                    <label value="Row 2 Col 1"/>
+                    <label value="Row 2 Col 2"/>
+                    <label value="Row 2 Col 3"/>
+                    <label value=""/>
+                    <label value="Row 2 Col 5"/>
+                </row>
+            </rows>
+        </grid>
+    </window>
+</zk>
