@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5584: Mesh doesn't set height on body when using CSS flex
 
 * Upgrade Notes
 
