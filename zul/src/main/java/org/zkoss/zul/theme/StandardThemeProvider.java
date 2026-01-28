@@ -79,8 +79,7 @@ public class StandardThemeProvider implements ThemeProvider {
 	}
 
 	public String beforeWidgetCSS(Execution exec, String uri) {
-		if (uri.startsWith("~./zul/css/") || uri.startsWith("~./js/zul/")) {
-
+		if (uri.startsWith("~./zul/css/") || uri.startsWith("~./js/zul/") || uri.startsWith("~./zul/font/")) {
 			uri = ServletFns.resolveThemeURL(uri);
 		}
 
