@@ -2190,9 +2190,11 @@ export abstract class MeshWidget extends zul.Widget {
 		var rows: ArrayLike<HTMLTableRowElement> = this.ebodyrows ? this.ebodyrows.rows : [],
 			n = this.$n_(),
 			hgh: string | number = n.style.height,
-			isHgh = hgh && hgh != 'auto' && !hgh.includes('%');
-		if (isHgh) {
-			hgh = zk.parseInt(hgh) - zk(n).padBorderHeight();
+			isHgh = hgh && hgh != 'auto' && !hgh.includes('%'),
+			// ZK-5584: check for CSS flex mode when style height is not set
+			isCssFlex = this._cssflex && this.parent && this.parent.getFlexContainer_() != null;
+		if (isHgh || isCssFlex) {
+			hgh = (zk.parseInt(hgh) || n.getBoundingClientRect().height) - zk(n).padBorderHeight();
 			if (hgh) {
 				hgh -= this._headHgh(0);
 				if (hgh < 0) hgh = 0;
