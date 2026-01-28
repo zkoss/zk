@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5608.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Jan 21 10:37:06 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        *:focus-within{
+            border: 1px red solid;
+        }
+    </style>
+    <window border="none" mode="modal" apply="org.zkoss.zktest.test2.B104_ZK_5608Composer"
+            onOK="Clients.log(event);" onCancel="Clients.log(event);">
+        <div>Welcome to ZK Fiddle , run it right now!</div>
+    </window>
+</zk>
