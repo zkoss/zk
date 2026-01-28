@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
 
 * Upgrade Notes
 
