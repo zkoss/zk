@@ -11,16 +11,15 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
@@ -31,7 +30,7 @@ public class B103_ZK_5760Test extends WebDriverTestCase {
         JQuery column = jq("@column").first();
         WebElement columnEl = toElement(column);
         int width = column.outerWidth();
-        Actions actions = new Actions(driver);
+        Actions actions = getActions();
         int rightEdge = (width / 2) - 1;
 
         actions.moveToElement(columnEl, rightEdge, 0)
