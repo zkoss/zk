@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5584.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Feb 06 12:38:24 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. after fix, listbox has scrollbar
+    </label>
+    <div height="50px" >
+        <listbox vflex="1" width="200px">
+            <custom-attributes org.zkoss.zul.css.flex="true"/>
+            <listitem>
+                <listcell>
+                    <label multiline="true">
+                        <attribute name="value">line 1
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            line
+                            last line
+                        </attribute>
+                    </label>
+                </listcell>
+            </listitem>
+        </listbox>
+    </div>
+</zk>
