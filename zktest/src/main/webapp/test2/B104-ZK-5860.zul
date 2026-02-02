@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5860.zul
+
+    Purpose:
+        
+    Description:
+        
+    History:
+        Thu Jan 29 13:02:35 CST 2026, Created by josephlo
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div>
+        simplest
+        <datebox id="dbox" format='dd-MMM-yyyy HH:mm' width="230px" readonly="true"
+                 constraint="between 20241224 and 20241226"/>
+        <button label="Change Date" onClick='dbox.setConstraint("between 20241224 and 20241228")'/>
+    </div>
+    <div viewModel="@id('vm')@init('org.zkoss.zktest.test2.B104_ZK_5860VM')">
+        real use case
+        <datebox value="@bind(vm.selectedDate)" format='dd-MMM-yyyy HH:mm' width="230px" readonly="true"
+                 constraint="@load(vm.selectedDateConstraint)"/>
+        <button label="Change Date" onClick="@command('changeDate')"/>
+    </div>
+</zk>

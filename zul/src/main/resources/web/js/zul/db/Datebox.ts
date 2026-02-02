@@ -71,7 +71,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 		this._pop = new zul.db.CalendarPop();
 		this._tm = new zul.db.CalendarTime();
 		this.appendChild(this._pop);
-		this.appendChild(this._tm);
+		this._pop.appendChild(this._tm);
 	}
 
 	setPosition(position: string): this {
@@ -1104,6 +1104,14 @@ export class CalendarPop extends zul.db.Calendar {
 		this._shadow.sync();
 	}
 
+	override redraw(out: string[], skipper?: zk.Skipper): void {
+		super.redraw(out, skipper);
+
+		for (var w = this.firstChild; w; w = w.nextSibling) {
+			w.redraw(out);
+		}
+	}
+
 	override onChange(evt: zk.Event & { data: zul.db.CalendarOnChangeData }): void {
 		var date: DateImpl | undefined = this.getTime(),
 			db = this.parent,
@@ -1281,7 +1289,7 @@ export class CalendarPop extends zul.db.Calendar {
 
 @zk.WrapClass('zul.db.CalendarTime')
 export class CalendarTime extends zul.db.Timebox {
-	override parent!: Datebox;
+	override parent!: CalendarPop;
 
 	constructor() {
 		super();
@@ -1289,7 +1297,7 @@ export class CalendarTime extends zul.db.Timebox {
 	}
 
 	onChanging(evt: zk.Event & { data: zul.db.CalendarOnChangeData }): void {
-		var db = this.parent,
+		var db = this.parent.parent,
 			oldDate = db.getValue() || db._pop.getValue(),
 			// ZK-2382 we must do the conversion with date and time in the same time
 			// otherwise the result may be affcted by DST adjustment

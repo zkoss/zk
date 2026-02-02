@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5860: cannot change hour and minute in a datebox after changing its constraint
 
 * Upgrade Notes
 
