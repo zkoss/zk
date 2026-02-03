@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5928: Tabbox can't be resized after dragging the scroll bar
 
 * Upgrade Notes
 
