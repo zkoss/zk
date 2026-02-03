@@ -2,6 +2,11 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
+  ZK-5689: ZK font-awesome leaks to default font-awesome shortcut fas, fass, far, fabb
+  ZK-6024: load theme-based font-awesome.css.dsp from a wrong path
+  ZK-5706: pdfviewer: scrolling cannot change pages when the browser zoom level is not 100%
+  ZK-5767: Grid or Listbox column with hflex=min and CSS text-transform: uppercase - wrong width
   ZK-5523: chosenbox loses its selection in a model after invalidate()
   ZK-6057: themepack colors not applied
 
