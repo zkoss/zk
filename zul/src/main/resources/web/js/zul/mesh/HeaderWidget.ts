@@ -561,7 +561,9 @@ export abstract class HeaderWidget extends zul.LabelImageWidget<HTMLTableCellEle
 	getContentWidth_(): number {
 		var $cv = zk(this.$n('cave')),
 			isTextOnly = !this.nChildren && !this._iconSclass,
-			contentWidth = isTextOnly ? $cv.textWidth() : $cv.textSize()[0];
+			// ZK-5767: If text-transform or other CSS text rendering need to use textSize()
+			hasTextTransform = isTextOnly && $cv.jq.css('text-transform') != 'none',
+			contentWidth = isTextOnly && !hasTextTransform ? $cv.textWidth() : $cv.textSize()[0];
 		return Math.ceil(contentWidth + $cv.padBorderWidth() + zk(this.$n()).padBorderWidth());
 	}
 

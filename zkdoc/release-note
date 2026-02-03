@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-5767: Grid or Listbox column with hflex=min and CSS text-transform: uppercase - wrong width
   ZK-5523: chosenbox loses its selection in a model after invalidate()
 
 * Upgrade Notes
