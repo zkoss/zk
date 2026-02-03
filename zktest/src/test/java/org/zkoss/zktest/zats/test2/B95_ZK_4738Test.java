@@ -37,7 +37,8 @@ public class B95_ZK_4738Test extends WebDriverTestCase {
 
 	@Test
 	public void test() {
-		Actions act = new Actions(connect());
+		connect();
+		Actions act = getActions();
 		act.clickAndHold(toElement(jq(".box").eq(0))).moveToElement(toElement(jq(".box").eq(2))).release().perform();
 		waitResponse();
 		Assertions.assertTrue(jq("@toast").exists(),

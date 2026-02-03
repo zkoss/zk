@@ -1,4 +1,13 @@
+ZK 10.4.0
+* Features
+
+* Bugs
+
+* Upgrade Notes
+
+   --------
 ZK 10.3.0
+Jan 27, 2026
 * Features
   ZK-5265: Add a CSP provider class, which allows the users to define CSPs and provide a nonce used for strict-dynamic support
   ZK-5858: zk.showError() can show error stack trace in the browser console
@@ -68,6 +77,7 @@ ZK 10.3.0
   ZK-5897: No error message when unable to open Camera
   ZK-5660: Destroying and reloading an embedded desktop doesn't reset responseId, cause 3.6s delay on first zkau request
   ZK-5718: deprecated feature used in client-bind reported by Chrome
+  ZK-5760: ZK10 onColSize sends incorrect data with hflex="min"
   ZK-6050: timezone conversion fix from ZK-5946 missing in stateless
   ZK-6048: update 3rd party dependencies to mitigate vulnerability
 

@@ -44,7 +44,7 @@ public class B80_ZK_2772_2Test extends WebDriverTestCase {
 		//resize column 7
 		JQuery column7 = jq(".z-column").eq(6);
 		int colWidth = column7.outerWidth();
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		actions.moveToElement(driver.findElement(column7)).moveByOffset(colWidth / 2 - 2, 0).clickAndHold().moveByOffset(-50, 0).release().perform();
 		waitResponse();
 		int colWidthAfter = column7.outerWidth();
