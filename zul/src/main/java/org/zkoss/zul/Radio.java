@@ -296,6 +296,9 @@ public class Radio extends Checkbox {
 		if (!_explictGroup) {
 			_group = this.getRadiogroup();
 		}
+		if (_explictGroup && rg != null) {
+			rg.addExternal(this);
+		}
 		if (rg != null && rootParent instanceof ComponentCtrl) {
 			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_ADDED, new Callback<Component>() {
 				public void call(Component rootParent) {
