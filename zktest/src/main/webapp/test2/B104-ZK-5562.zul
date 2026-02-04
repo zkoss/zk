@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5562.zul
+
+    Purpose:
+        
+    Description:
+        
+    History:
+        Tue Feb 03 14:19:56 CST 2026, Created by josephlo
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<panel border="normal" title="ZK Report Viewer">
+        <panelchildren>
+            <menubar id="menubar" width="100%">
+                <menu label="File">
+                    <menupopup>
+                        <menu label="New" image="/widgets/menu/drop-down_menu/img/file_new.png">
+                            <menupopup>
+                                <menuitem label="Document"  image="/widgets/menu/drop-down_menu/img/file_new_writer.png" />
+                                <menuitem label="Spreadsheet"  image="/widgets/menu/drop-down_menu/img/file_new_spreadsheet.png" />
+                                <menuitem label="Presentation"  image="/widgets/menu/drop-down_menu/img/file_new_presentation.png" />
+                            </menupopup>
+                        </menu>
+                        <menuitem label="Open.."  image="/widgets/menu/drop-down_menu/img/file_open.png" />
+                        <menuseparator></menuseparator>
+                        <menuitem label="Save"  image="/widgets/menu/drop-down_menu/img/file_save.png" />
+                        <menuitem label="Save As..."  image="/widgets/menu/drop-down_menu/img/file_save-as.png" />
+                        <menuitem label="Save All"  image="/widgets/menu/drop-down_menu/img/file_save-all.png" />
+                        <menuitem label="Close"  image="/widgets/menu/drop-down_menu/img/file_close.png" />
+                        <menuitem label="Close All"  image="/widgets/menu/drop-down_menu/img/file_close-all.png" />
+                        <menuseparator></menuseparator>
+                        <menuitem label="Import"  image="/widgets/menu/drop-down_menu/img/file_import.png" />
+                        <menuitem label="Export" disabled="true" image="/widgets/menu/drop-down_menu/img/file_export.png" />
+                        <menuseparator></menuseparator>
+                        <menuitem label="Exit" disabled="true" image="/widgets/menu/drop-down_menu/img/file_exit.png" />
+                    </menupopup>
+                </menu>
+                <menu label="Edit">
+                    <menupopup>
+                        <menuitem label="Undo"  image="/widgets/menu/drop-down_menu/img/edit_undo.png" />
+                        <menuitem label="Redo" disabled="true" image="/widgets/menu/drop-down_menu/img/edit_redo.png" />
+                        <menuseparator></menuseparator>
+                        <menuitem label="Cut"  image="/widgets/menu/drop-down_menu/img/edit_cut.png" />
+                        <menuitem label="Copy"  image="/widgets/menu/drop-down_menu/img/edit_copy.png" />
+                        <menuitem label="Paste"  image="/widgets/menu/drop-down_menu/img/edit_paste.png" />
+                        <menuseparator></menuseparator>
+                        <menuitem label="Select All"  image="/widgets/menu/drop-down_menu/img/edit_select-all.png" />
+                    </menupopup>
+                </menu>
+                <menu label="Help">
+                    <menupopup>
+                        <menuitem label="Issue tracker" target="_zkdemo" href="http://tracker.zkoss.org" image="/widgets/menu/drop-down_menu/img/bug.png" />
+                        <menu label="About">
+                            <menupopup>
+                                <menuitem label="About Potix" target="_zkdemo" href="http://www.zkoss.org/support/about"  />
+                            </menupopup>
+                        </menu>
+                    </menupopup>
+                </menu>
+                <menuitem label="ZK Web Framework" target="_zkdemo" href="http://www.zkoss.org/download" image="/images/zk16x16.png"  />
+            </menubar>
+            <div height="300px" sclass="content">
+                <image src="/widgets/menu/drop-down_menu/img/report.png"></image>
+            </div>
+        </panelchildren>
+    </panel>
+ 
+</zk>

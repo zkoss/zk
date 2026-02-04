@@ -479,7 +479,7 @@ export class Menuitem extends zul.LabelImageWidget implements zul.LabelImageWidg
 						p._updateHoverImage(); // remove parent Menu hover image
 				}
 				// regain the focus on the root menu
-				if (!this.isRealVisible()) {
+				if (!this.isRealVisible() && evt.domEvent!.type !== 'click') {
 					var rootMenu = this._getRootMenu();
 					if (rootMenu) rootMenu.focus();
 					else if (ref) {
