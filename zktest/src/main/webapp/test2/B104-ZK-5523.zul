@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5523.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Jan 21 14:15:39 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. select an item in a chosenbox, then click invalidate button.
+        2. chosenbox should contain the previously selected item.
+    </label>
+    <zscript><![CDATA[
+        ListModelList model1 = new ListModelList(Locale.getAvailableLocales()).subList(1,7);
+        model1.setMultiple(true);
+    ]]>
+    </zscript>
+    <button label="invalidate" onClick="parent.invalidate()"/>
+    <button label="print" onClick="print(model1)"/>
+    <div id="parent">
+        <listbox model="${model1}">
+        </listbox>
+        <chosenbox width="400px" model="${model1}" inplace="false" onSelect="print(model1)"/>
+    </div>
+    <zscript><![CDATA[
+        public print(ListModelList model){
+            Clients.log(model.getSelection());
+        }
+    ]]></zscript>
+</zk>
