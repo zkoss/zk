@@ -467,24 +467,28 @@ export class JQZK {
 			p = p.parent;
 		}
 		// ZK-2069: should check native and fake scrollbar case
-		return inView && this.isScrollIntoView(true);
+		return inView && this.isScrollIntoView(true, opt); // ZK-6047
 	}
 	/**
 	 * Checks whether the element is shown in the current viewport.
+	 * @param partial - whether to check if the element is partially visible in the viewport.
 	 * @returns if false, it means the element is not shown.
 	 * @since 6.5.2
+	 * @since 10.4.0 Added the `partial` parameter.
 	 */
-	isScrollIntoView(recursive?: boolean): boolean {// ZK-2069: can check whether the element is shown in parents' viewport.
+	isScrollIntoView(recursive?: boolean, partial?: boolean): boolean {// ZK-2069: can check whether the element is shown in parents' viewport.
 		var vOffset = this.viewportOffset(),
 			x = vOffset[0],
 			y = vOffset[1],
 			w = this.jq[0].offsetWidth,
 			h = this.jq[0].offsetHeight,
 			x1 = x + w,
-			y1 = y + h;
+			y1 = y + h,
+			iw = jq.innerWidth(),
+			ih = jq.innerHeight();
 
 		// browser's viewport
-		if (x >= 0 && y >= 0 && x1 <= jq.innerWidth() && y1 <= jq.innerHeight()) {
+		if (partial ? (x < iw && x1 > 0 && y < ih && y1 > 0) : (x >= 0 && y >= 0 && x1 <= iw && y1 <= ih)) {
 			var oels = _overflowElement(this, recursive),
 				inView = true;
 			for (var i = 0; i < oels.length; i++) {
@@ -493,9 +497,14 @@ export class JQZK {
 					le = this.jq[0] == oel[0] ? oel[0].parentElement : oel[0],
 					te = this.jq[0] == oel[1] ? oel[1].parentElement : oel[1],
 					lex = le ? zk(le).viewportOffset()[0] : 0,
-					tey = te ? zk(te).viewportOffset()[1] : 0;
+					tey = te ? zk(te).viewportOffset()[1] : 0,
+					lew = le?.offsetWidth ?? 0,
+					teh = te?.offsetHeight ?? 0;
 				// scrollbar's viewport
-				inView = (x >= lex && x1 <= lex + (le?.offsetWidth ?? 0) && y >= tey && y1 <= tey + (te?.offsetHeight ?? 0));
+				if (partial)
+					inView = (x < lex + lew && x1 > lex && y < tey + teh && y1 > tey);
+				else
+					inView = (x >= lex && x1 <= lex + lew && y >= tey && y1 <= tey + teh);
 				if (!inView)
 					return inView;
 			}

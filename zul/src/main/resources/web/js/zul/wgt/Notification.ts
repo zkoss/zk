@@ -294,7 +294,7 @@ export class Notification extends zul.wgt.Popup {
 
 		if (ref) {
 			n = ref.$n('real') || ref.$n();
-			isInView = zk(n).isRealScrollIntoView();
+			isInView = zk(n).isRealScrollIntoView(true);
 		}
 
 		// TODO: allow user to specify arrow direction?
