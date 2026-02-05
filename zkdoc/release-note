@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
 
 * Bugs
+  ZK-6047: Notification doesn't show when its reference component is partially visible
 
 * Upgrade Notes
 
