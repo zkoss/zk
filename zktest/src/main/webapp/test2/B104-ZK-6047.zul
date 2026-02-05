@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6047.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Feb 5 17:56:35 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <window id="win" height="90%" title="a window that is partially visible" border="normal">
+        <label multiline="true">
+            1. Click "show" button, notification should appear.
+            2. Scroll down 20px (so button is still visible but partially out or window is scrolled).
+            3. Click "show" button again.
+            4. If notification does NOT appear, bug is reproduced.
+        </label>
+        <div height="80%"/>
+        <button label="show"  onClick='Clients.showNotification("msg", "info", win, "middle_center", 2000);'/>
+    </window>
+    <div height="80%"/>
+</zk>

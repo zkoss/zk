@@ -411,7 +411,7 @@ export class Scrollbar extends zk.Object {
 		zk(dom).scrollIntoView();
 	}
 
-	isScrollIntoView(dom: HTMLElement): boolean {
+	isScrollIntoView(dom: HTMLElement, partial?: boolean): boolean {
 		var cave = this.cave,
 			domTop = jq(dom).offset()!.top,
 			domBottom = domTop + dom.offsetHeight,
@@ -422,11 +422,16 @@ export class Scrollbar extends zk.Object {
 			viewLeft = jq(cave).offset()!.left,
 			viewRight = viewLeft + cave.offsetWidth;
 
-		if ((this.needV && domBottom <= viewBottom && domTop >= viewTop)
-			|| (this.needH && domRight <= viewRight && domLeft >= viewLeft))
-			return true;
-		else
-			return false;
+		if (partial) {
+			if ((this.needV && domTop < viewBottom && domBottom > viewTop)
+				|| (this.needH && domLeft < viewRight && domRight > viewLeft))
+				return true;
+		} else {
+			if ((this.needV && domBottom <= viewBottom && domTop >= viewTop)
+				|| (this.needH && domRight <= viewRight && domLeft >= viewLeft))
+				return true;
+		}
+		return false;
 	}
 
 	getCurrentPosition(): Position | undefined {
