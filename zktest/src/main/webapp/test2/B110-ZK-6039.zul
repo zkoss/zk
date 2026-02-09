@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6039.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Feb 09 15:51:21 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. There should be no JS error in the console (F12).
+        2. Each box is one (maximizable, maximized) combination. A box without a title/caption renders no
+           maximize button, so the "maximizable=true, maximized=true" boxes are the ZK-6039 regression.
+        3. Every "maximized=true" box should fill its 600x200 container; every "maximized=false" box should
+           keep its natural size.
+        4. Click Restore -- the two header-less maximized boxes should shrink back to their natural size.
+        5. "Illegal combination" below should read "rejected/rejected".
+    </label>
+
+    <separator/>
+    <label value="Window"/>
+    <div width="600px" height="200px" style="border: 1px dotted blue">
+        <window id="winNoneOff" border="none">
+            <label>no header, maximizable=false, maximized=false</label>
+        </window>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted blue">
+        <window id="winNoneMaxable" maximizable="true" border="none">
+            <label>no header, maximizable=true, maximized=false</label>
+        </window>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted blue">
+        <window id="winNoneMaximized" maximizable="true" maximized="true" border="none">
+            <label>no header, maximizable=true, maximized=true</label>
+        </window>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted blue">
+        <window id="winTitleMaxable" title="titled" maximizable="true" border="none">
+            <label>title, maximizable=true, maximized=false</label>
+        </window>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted blue">
+        <window id="winTitleMaximized" title="titled" maximizable="true" maximized="true" border="none">
+            <label>title, maximizable=true, maximized=true</label>
+        </window>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted blue">
+        <window id="winCaptionMaximized" maximizable="true" maximized="true" border="none">
+            <caption label="captioned"/>
+            <label>caption, maximizable=true, maximized=true</label>
+        </window>
+    </div>
+
+    <separator/>
+    <label value="Panel"/>
+    <div width="600px" height="200px" style="border: 1px dotted green">
+        <panel id="pnlNoneOff" border="none">
+            <panelchildren>
+                <label>no header, maximizable=false, maximized=false</label>
+            </panelchildren>
+        </panel>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted green">
+        <panel id="pnlNoneMaxable" maximizable="true" border="none">
+            <panelchildren>
+                <label>no header, maximizable=true, maximized=false</label>
+            </panelchildren>
+        </panel>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted green">
+        <panel id="pnlNoneMaximized" maximizable="true" maximized="true" border="none">
+            <panelchildren>
+                <label>no header, maximizable=true, maximized=true</label>
+            </panelchildren>
+        </panel>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted green">
+        <panel id="pnlTitleMaxable" title="titled" maximizable="true" border="none">
+            <panelchildren>
+                <label>title, maximizable=true, maximized=false</label>
+            </panelchildren>
+        </panel>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted green">
+        <panel id="pnlTitleMaximized" title="titled" maximizable="true" maximized="true" border="none">
+            <panelchildren>
+                <label>title, maximizable=true, maximized=true</label>
+            </panelchildren>
+        </panel>
+    </div>
+    <div width="600px" height="200px" style="border: 1px dotted green">
+        <panel id="pnlCaptionMaximized" maximizable="true" maximized="true" border="none">
+            <caption label="captioned"/>
+            <panelchildren>
+                <label>caption, maximizable=true, maximized=true</label>
+            </panelchildren>
+        </panel>
+    </div>
+
+    <separator/>
+    <button id="restoreWin" label="Restore window"
+            onClick='winNoneMaximized.setMaximized(false)'/>
+    <button id="restorePnl" label="Restore panel"
+            onClick='pnlNoneMaximized.setMaximized(false)'/>
+
+    <separator/>
+    <label value="Illegal combination (maximizable=false, maximized=true):"/>
+    <label id="illegalCombo"/>
+    <zscript><![CDATA[
+        String winResult = "no-exception";
+        try {
+            new org.zkoss.zul.Window().setMaximized(true);
+        } catch (org.zkoss.zk.ui.UiException ex) {
+            winResult = "rejected";
+        }
+        String pnlResult = "no-exception";
+        try {
+            new org.zkoss.zul.Panel().setMaximized(true);
+        } catch (org.zkoss.zk.ui.UiException ex) {
+            pnlResult = "rejected";
+        }
+        illegalCombo.setValue(winResult + "/" + pnlResult);
+    ]]></zscript>
+</zk>
