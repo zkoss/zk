@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6039.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Feb 09 15:51:21 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Load the page successfully, there should be no JS error in the console.
+    </label>
+	<div>
+		<window id="targetWindow" maximizable="true" maximized="true" border="none" mode="embedded">
+			<label>Window content - should load without JS error</label>
+		</window>
+	</div>
+	<div>
+		<panel id="targetPanel" maximizable="true" maximized="true" border="none">
+			<panelchildren>
+				<label>Panel content - should load without JS error</label>
+			</panelchildren>
+		</panel>
+	</div>
+	<label id="result">Page loaded successfully</label>
+</zk>

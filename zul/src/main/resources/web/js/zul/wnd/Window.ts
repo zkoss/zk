@@ -689,11 +689,13 @@ export class Window extends zul.ContainerWidget {
 				var l: string, t: string, w: string, h: string,
 					s = node.style,
 					up = this.getMaximizableIconClass_(),
-					down = this.getMaximizedIconClass_();
+					down = this.getMaximizedIconClass_(),
+					max = this.$n('max');
 				if (maximized) {
-					jq(this.$n_('max')).addClass(this.$s('maximized'))
-						.attr('title', msgzul.PANEL_RESTORE)
-						.children('.' + up).removeClass(up).addClass(down);
+					if (max)
+						jq(max).addClass(this.$s('maximized'))
+							.attr('title', msgzul.PANEL_RESTORE)
+							.children('.' + up).removeClass(up).addClass(down);
 
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent(),
@@ -719,11 +721,11 @@ export class Window extends zul.ContainerWidget {
 					w = s.width;
 					h = s.height;
 				} else {
-					var max = this.$n_('max'),
-						$max = jq(max);
-					$max.removeClass(this.$s('maximized'))
-						.attr('title', msgzul.PANEL_MAXIMIZE)
-						.children('.' + down).removeClass(down).addClass(up);
+					if (max) {
+						jq(max).removeClass(this.$s('maximized'))
+							.attr('title', msgzul.PANEL_MAXIMIZE)
+							.children('.' + down).removeClass(down).addClass(up);
+					}
 					if (this._lastSize) {
 						s.left = this._lastSize.l!;
 						s.top = this._lastSize.t!;
