@@ -59,6 +59,7 @@ ZK 11.0.0
   ZK-5686: zk failed to parse an attribute with a namespace in an injected zul
   ZK-5584: Mesh doesn't set height on body when using CSS flex
   ZK-5906: external link and zk event race condition for timeout redirect
+  ZK-5860: cannot change hour and minute in a datebox after changing its constraint
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
