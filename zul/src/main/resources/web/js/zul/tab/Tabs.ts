@@ -389,7 +389,7 @@ export class Tabs extends zul.Widget {
 
 	/** @internal */
 	_fixHgh(toSel: boolean): void {
-		if (this.getTabbox()!._scrolling) return;
+		// if (this.getTabbox()!._scrolling) return;
 		var tabbox = this.getTabbox()!;
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
