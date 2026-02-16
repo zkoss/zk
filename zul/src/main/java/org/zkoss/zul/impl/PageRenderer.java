@@ -22,6 +22,7 @@ import java.io.Writer;
 import org.owasp.encoder.Encode;
 
 import org.zkoss.lang.Library;
+import org.zkoss.util.Locales;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -72,7 +73,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		Double number = exec.getBrowser("mobile");
 
-		out.write("<html");
+		out.write("<html lang=\"" + Locales.getCurrent().toLanguageTag() + "\"");
 		if (number == null || number.intValue() == 0) {
 			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
