@@ -2190,9 +2190,12 @@ export abstract class MeshWidget extends zul.Widget {
 		var rows: ArrayLike<HTMLTableRowElement> = this.ebodyrows ? this.ebodyrows.rows : [],
 			n = this.$n_(),
 			hgh: string | number = n.style.height,
-			isHgh = hgh && hgh != 'auto' && !hgh.includes('%');
-		if (isHgh) {
-			hgh = zk.parseInt(hgh) - zk(n).padBorderHeight();
+			isHgh = hgh && hgh != 'auto' && !hgh.includes('%'),
+			// ZK-5584: when using vflex, style.height is not set
+			// but we need to calculate height from the computed size
+			isCssFlexVflex = !isHgh && this._cssflex && this.isVflex();
+		if (isHgh || isCssFlexVflex) {
+			hgh = (zk.parseInt(hgh) || n.offsetHeight) - zk(n).padBorderHeight();
 			if (hgh) {
 				hgh -= this._headHgh(0);
 				if (hgh < 0) hgh = 0;
