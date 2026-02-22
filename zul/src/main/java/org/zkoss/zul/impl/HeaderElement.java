@@ -17,8 +17,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.ext.Blockable;
 
 /**
  * A skeletal implementation for a header.
@@ -99,5 +101,20 @@ public abstract class HeaderElement extends LabelImageElement {
 		if (parent != null)
 			return ((HtmlBasedComponent) parent).evalCSSFlex();
 		return super.evalCSSFlex();
+	}
+
+	@Override
+	public Object getExtraCtrl() {
+		return new ExtraCtrl();
+	}
+
+	/**
+	 * A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl implements Blockable {
+		public boolean shallBlock(AuRequest request) {
+			return false; // ZK-5765: Allow visibility changes to pass through
+		}
 	}
 }
