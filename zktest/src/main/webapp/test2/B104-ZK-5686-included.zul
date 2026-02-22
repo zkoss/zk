@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5686-included.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Jan 26 10:51:45 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+    <div w:onClick="console.log('test')">
+        This div has a client namespace attribute
+    </div>
+</zk>
+

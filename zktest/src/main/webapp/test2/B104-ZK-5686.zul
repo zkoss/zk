@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5686.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Jan 26 10:51:45 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        This page includes B104-ZK-5686-included.zul which declares xmlns:w="client" namespace.
+        Before the fix, zklinter would throw DOMException when parsing this file structure.
+
+        1. run B104_ZK_5686Test approach that directly tests the Element.clone() method with namespaced attributes.
+        
+        To verify the fix:
+
+        2. Linter test (verify zklinter can parse without DOMException):
+           cd zkcml/zklinter
+           ./gradlew runLinter 2>&amp;1 | grep -E "B104-ZK-5686|SEVERE"
+           Expected: No SEVERE errors for B104-ZK-5686.zul
+    </label>
+    <div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B104_ZK_5686VM')">
+        <apply templateURI="B104-ZK-5686-included.zul"/>
+    </div>
+</zk>
