@@ -282,6 +282,8 @@ public class Radio extends Checkbox {
 		final Radiogroup rg = getRadiogroup();
 		if (rg != null) {
 			rg.removeExternal(this);
+			// ZK-5259: reset _attachExternal so that onPageAttached can re-add the radio
+			_attachExternal = false;
 			// B96-ZK-4784: should fix selectedIndex without adding callback to prevent memory leak
 			rg.fixOnRemove(Radio.this);
 		}
@@ -295,6 +297,11 @@ public class Radio extends Checkbox {
 		// ZK-3818: update selected index in the callback
 		if (!_explictGroup) {
 			_group = this.getRadiogroup();
+		}
+		// ZK-5259: re-add external radio to radiogroup after page attachment
+		if (_explictGroup && rg != null && !_attachExternal) {
+			rg.addExternal(this);
+			_attachExternal = true;
 		}
 		if (rg != null && rootParent instanceof ComponentCtrl) {
 			((ComponentCtrl) rootParent).addCallback(AFTER_CHILD_ADDED, new Callback<Component>() {
