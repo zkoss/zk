@@ -1,5 +1,6 @@
 ZK 10.4.0
 * Features
+  ZK-6059: html element does not have a lang attribute
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
