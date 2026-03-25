@@ -15,6 +15,7 @@ ZK 10.4.0
   ZK-5928: Tabbox can't be resized after dragging the scroll bar
   ZK-6047: Notification doesn't show when its reference component is partially visible
   ZK-5765: InaccessibleWidgetBlockService blocks listheaders from being made visible by autopaging
+  ZK-5259: Radiogroup external radio items lost after setPage
 
 * Upgrade Notes
 
