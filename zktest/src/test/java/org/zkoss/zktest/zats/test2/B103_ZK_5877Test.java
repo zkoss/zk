@@ -105,7 +105,8 @@ public class B103_ZK_5877Test {
 
 	@Test
 	public void testSanitizeInvalidJarURLMissingSeparator() {
-		// Test JAR URL without !/ separator - should throw exception
+		// A jar URL without "!/" is rejected by the JDK jar handler in the
+		// URL constructor itself, before sanitizeURL is reached.
 		assertThrows(MalformedURLException.class, () -> {
 			URL jarUrl = new URL("jar:file:/path/to/lib.jar");
 			URLs.sanitizeURL(jarUrl);
@@ -139,7 +140,8 @@ public class B103_ZK_5877Test {
 		URL sanitized = URLs.sanitizeURL(jarUrl);
 
 		assertNotNull(sanitized);
-		// Verify the URL is properly reconstructed through URIBuilder
+		// The jar URL is returned unchanged; verify the format (protocol and
+		// "!/" separator) is preserved exactly
 		assertEquals("jar", sanitized.getProtocol());
 		assertEquals("file:/legitimate/path/lib.jar!/internal/path/file.js", sanitized.getFile());
 	}

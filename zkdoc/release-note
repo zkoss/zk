@@ -22,8 +22,10 @@ ZK 10.4.0
   ZK-5259: Radiogroup external radio items lost after setPage
   ZK-6092: DOMPurify: Fix XSS vulnerabilities CVE-2026-0540 and CVE-2025-15599
   ZK-6079: zul.xsd : toolbar only allows one child component instead of multiple
+  ZK-6075: URL exception in IBM WebSphere / Open Liberty
 
 * Upgrade Notes
+  + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
 
    --------
 ZK 10.3.0

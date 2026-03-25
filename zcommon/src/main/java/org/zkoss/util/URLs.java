@@ -25,48 +25,31 @@ import org.apache.hc.core5.net.URIBuilder;
 public class URLs {
 
 	/**
-	 * Sanitizes a URL to prevent MalformedURLException and SSRF warning.
+	 * Sanitizes a URL for resource loading.
+	 *
+	 * <p>Only {@code http}/{@code https} URLs keep the legacy URIBuilder rebuild;
+	 * a URL of any other protocol is returned unchanged, so the declared
+	 * exceptions can only be thrown for {@code http}/{@code https} URLs.
 	 *
 	 * @param url The URL to be sanitized.
 	 * @return The sanitized URL.
-	 * @throws MalformedURLException If the URL is not in the correct format.
-	 * @throws URISyntaxException If the URL is not formatted strictly according to RFC2396 and cannot be converted to a URI.
+	 * @throws MalformedURLException If an http/https URL cannot be reconstructed.
+	 * @throws URISyntaxException If an http/https URL is not formatted strictly according to RFC2396 and cannot be converted to a URI.
 	 */
 	public static URL sanitizeURL(URL url) throws MalformedURLException, URISyntaxException {
 		if (url == null) return null;
 
-		// Handle JAR URLs specially - they have protocol "jar" and contain "!/" separator
-		if ("jar".equals(url.getProtocol())) {
-			// For JAR URLs, getFile() returns the full jar path with "!/" separator
-			// e.g., "file:/path/to/lib.jar!/META-INF/resources/js/file.js"
-			String jarSpec = url.getFile();
-			if (jarSpec != null && jarSpec.contains("!/")) {
-				int separatorIndex = jarSpec.indexOf("!/");
-				String jarFilePath = jarSpec.substring(0, separatorIndex);
-				String internalPath = jarSpec.substring(separatorIndex + 2);
-
-				if (jarFilePath.isEmpty() || internalPath.isEmpty()) {
-					throw new MalformedURLException("Invalid JAR URL format: empty jar path or internal path");
-				}
-
-				// Sanitize the jar file URL (e.g., "file:/path/to/lib.jar")
-				// Validate by parsing through URL and URI, but preserve original format
-				URL jarURL = new URL(jarFilePath);
-
-				// Validate the URL can be converted to URI (SSRF check)
-				jarURL.toURI();
-
-				// Reconstruct the JAR URL preserving the original jar path format
-				return new URL("jar:" + jarFilePath + "!/" + internalPath);
-			} else {
-				throw new MalformedURLException("Invalid JAR URL format: missing !/ separator");
-			}
-		} else {
-			// For regular URLs, prevent SSRF warning by reconstructing via URI
-			return new URIBuilder().setScheme(url.getProtocol())
+		String protocol = url.getProtocol();
+		// Preserve the existing http/https behavior. Any other protocol
+		// (file, jar, wsjar, vfs, ftp, ...) is returned untouched - its format is owned by its
+		// URLStreamHandler, and rebuilding may corrupt it (e.g. percent-encode
+		// the separators of a nested JAR URL, or drop the user-info).
+		if ("http".equals(protocol) || "https".equals(protocol)) {
+			return new URIBuilder().setScheme(protocol)
 					.setHost(url.getHost()).setPort(url.getPort())
 					.setPath(url.getPath())
 					.setCustomQuery(url.getQuery()).build().toURL();
 		}
+		return url;
 	}
 }
