@@ -9,6 +9,22 @@ ZK is an open-source Java web framework. The sibling directory `../zkcml/` conta
 - `zktest/` — Selenium integration tests
 - `eslint-plugin-zk/` — custom ESLint rules
 
+## Version
+
+**Always read the current version dynamically** from `gradle.properties` — never hardcode.
+- `zk/gradle.properties` (CE)
+- `zkcml/gradle.properties` (EE — at `../zkcml/`)
+
+The active development version ends in `-SNAPSHOT`. Both files must always stay in sync.
+
+Version code mapping (used in file naming): `10.0.0` → `100`, `10.4.0` → `104`, `11.0.0` → `110`.
+
+To update version:
+```bash
+./gradlew upVer -PchangeVersionTo=X.Y.Z
+./gradlew versionCheck -Pcheck.version=X.Y.Z
+```
+
 ## Tech Stack
 - **Frontend:** TypeScript 5.3.3 + JavaScript, Gulp 5 + Webpack 5
 - **Backend:** Java 11, Gradle
@@ -29,6 +45,7 @@ npm run lint -- .    # ESLint on .js and .ts files (path argument required)
 ./gradlew clean build         # full build
 ./gradlew checkstyleMain      # Java style check only
 ./gradlew :zk:build           # single module build
+./gradlew publishToMavenLocal # publish to local Maven so zktest picks up latest changes
 ```
 
 ## Code Style
@@ -45,7 +62,27 @@ npm run lint -- .    # ESLint on .js and .ts files (path argument required)
 
 ## Testing Requirements
 
+**Do NOT use the VS Code IDE's built-in test runner (▶ play button).** It bypasses Gradle's resource processing, leaving `@version@` placeholders unresolved, causing `Language not found: xul/html` errors. Always use the CLI commands below.
+
 **Every bug fix and new feature MUST include a test case.**
+
+### How to Run Tests
+
+```bash
+# Run a single test class (from project root)
+cd zktest && ./gradlew test --tests "org.zkoss.zktest.zats.test2.B104_ZK_6047Test" -PmaxParallelForks=1 --console=plain --no-daemon
+
+# If the test has @ForkJVMTestOnly or @Tag("ForkJVMTestOnly") annotation (requires Docker)
+cd zktest && ./gradlew testGroupForkJVMTestOnly --tests "org.zkoss.zktest.zats.test2.B101_ZK_5716Test" -PmaxParallelForks=1 --console=plain --no-daemon
+
+# Full test suite (excludes WCAG and ForkJVMTestOnly)
+cd zktest && ./gradlew test
+
+# WCAG / accessibility tests (requires Lighthouse)
+cd zktest && ./gradlew testWCAGOnly
+```
+
+**Important:** Check the test file for `@ForkJVMTestOnly` or `@Tag("ForkJVMTestOnly")` annotation to decide whether to use `test` or `testGroupForkJVMTestOnly`.
 
 ### Location & Naming Convention
 - Path: `zktest/src/test/java/org/zkoss/zktest/zats/test2/`
@@ -72,6 +109,8 @@ public class B100_ZK_5529Test extends WebDriverTestCase {
 ```
 
 - Extends `org.zkoss.test.webdriver.WebDriverTestCase`
+- For Selenium actions, use `Actions action = getActions();` instead of instantiating `new Actions(...)` directly
+- For drag interactions, do not use `dragAndDropBy`; write the sequence explicitly with `action.clickAndHold(...)` and the follow-up move/release calls
 - A corresponding ZUL page must be added under `zktest/src/main/webapp/test2/`
   - ZUL naming uses dashes: `B100-ZK-5529.zul` (Java test uses underscores)
 - After adding the ZUL page, register it in `zktest/src/main/webapp/test2/config.properties`:
