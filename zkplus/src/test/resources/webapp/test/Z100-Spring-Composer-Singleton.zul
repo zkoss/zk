@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<zk>
+    <div id="comp1" apply="${composerScopeSingleton}">
+        <label id="hash1"/>
+    </div>
+    <div id="comp2" apply="${composerScopeSingleton}">
+        <label id="hash2"/>
+    </div>
+</zk>
