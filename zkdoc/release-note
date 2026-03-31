@@ -1,5 +1,7 @@
 ZK 10.4.0
 * Features
+  ZK-6068: zk.xsd declares elements for CSP-related settings
+  ZK-6059: html element does not have a lang attribute
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -10,6 +12,9 @@ ZK 10.4.0
   ZK-5523: chosenbox loses its selection in a model after invalidate()
   ZK-6057: themepack colors not applied
   ZK-6078: Unable to load form proxy from null to object
+  ZK-5928: Tabbox can't be resized after dragging the scroll bar
+  ZK-6047: Notification doesn't show when its reference component is partially visible
+  ZK-5765: InaccessibleWidgetBlockService blocks listheaders from being made visible by autopaging
 
 * Upgrade Notes
 
@@ -88,6 +93,7 @@ Jan 27, 2026
   ZK-5760: ZK10 onColSize sends incorrect data with hflex="min"
   ZK-6050: timezone conversion fix from ZK-5946 missing in stateless
   ZK-6048: update 3rd party dependencies to mitigate vulnerability
+  ZK-5751: Combobox without an explicit itemRender mistakenly uses parent's template
 
 * Upgrade Notes
   + add OSGi header into all ZK jars without additional OSGi bundles.
