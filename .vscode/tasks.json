@@ -1,28 +1,140 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "zktest: appRunDebugDev",
-      "type": "shell",
-      "command": "./gradlew",
-      "group": "build",
-      "args": ["appRunDebugDev"],
-      "isBackground": true,
-      "options": {
-        "cwd": "${workspaceFolder}/zktest"
-      },
-      "problemMatcher": [
+    "version": "2.0.0",
+    "tasks": [
         {
-          "owner": "java",
-          "pattern": {
-            "regexp": "^.*$"
-          },
-          "background": {
-            "activeOnStart": true,
-            "beginsPattern": "Starting ZK",
-            "endsPattern": "started and listening on port"
-          }
+            "label": "ALL: publishToMavenLocal",
+            "detail": "Execute publishToMavenLocal in all modules",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "zk: publishToMavenLocal",
+                "zkcml: publishToMavenLocal"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "zktest: appRunDebugDev",
+            "detail": "Execute appRunDebugDev in zktest module",
+            "type": "shell",
+            "command": "./gradlew",
+            "group": "build",
+            "args": [
+                ":zktest:appRunDebugDev"
+            ],
+            "isBackground": true,
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                {
+                    "owner": "java",
+                    "pattern": {
+                        "regexp": "^.*$"
+                    },
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "Starting ZK",
+                        "endsPattern": "started and listening on port"
+                    }
+                }
+            ]
+        },
+        {
+            "label": "Run Current ZK Test File",
+            "detail": "Execute the currently opened test file (zktest)",
+            "type": "process",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/.vscode/scripts/run-current-test.sh",
+                "${workspaceFolder}",
+                "${relativeFile}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/zktest"
+            },
+            "problemMatcher": [
+                "$gradle"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "clear": true
+            }
+        },
+        {
+            "label": "Run Multiple ZK Test Files",
+            "detail": "Paste multiple tests (supports FQCN.method() format), run sequentially, stop on failure",
+            "type": "process",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/.vscode/scripts/run-tests.sh",
+                "${workspaceFolder}",
+                "${input:zkTestsList}"
+            ],
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gradle"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            }
+        },
+        {
+            "label": "zk: publishToMavenLocal",
+            "type": "shell",
+            "command": "./gradlew",
+            "group": "build",
+            "args": [
+                "publishToMavenLocal"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gradle"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "hide": true
+        },
+        {
+            "label": "zkcml: publishToMavenLocal",
+            "type": "shell",
+            "command": "./gradlew",
+            "group": "build",
+            "args": [
+                "publishToMavenLocal"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/../zkcml"
+            },
+            "problemMatcher": [
+                "$gradle"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "hide": true
         }
-      ]
-    }]
+    ],
+    "inputs": [
+        {
+            "id": "zkTestsList",
+            "type": "promptString",
+            "description": "Paste the test list (one per line, supports org.xxx.XxxTest.method() format, method names will be automatically removed)"
+        }
+    ]
 }
