@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5751.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 27 11:59:22 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk
+        xmlns="http://www.zkoss.org/2005/zul"
+        xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:js="http://www.zkoss.org/2005/zk/client"
+        xmlns:ca="http://www.zkoss.org/2005/zk/client/attribute"
+        xmlns:a="http://www.zkoss.org/2005/zk/annotation"
+        xmlns:n="http://www.zkoss.org/2005/zk/native">
+    <zscript>
+        <![CDATA[
+
+import org.zkoss.zul.ComboitemRenderer;
+
+class FooCtrl extends org.zkoss.bind.BindComposer {
+
+	private List itemNames = new ArrayList();
+
+	public List getItemNames() {
+		return itemNames;
+	}
+
+	public void setItemNames(List itemNames) {
+		this.itemNames = itemNames;
+	}
+
+	public List getDefaultNames() {
+		return Arrays.asList(new String[]{"A", "B"});
+	}
+}
+
+class StringRenderer implements ComboitemRenderer {
+	public void render( Comboitem item, Object data, int index) throws Exception {
+		item.setLabel( data != null ? data.toString() : "null" );
+		item.setValue( data );
+	}
+}
+
+class ItemName {
+
+	private String name = "";
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}
+
+fooCtrl = new FooCtrl();
+itemNames = fooCtrl.getItemNames();
+for (int a=0;a<200;a++) {
+	itemNames.add(new ItemName());
+}
+
+stringRenderer = new StringRenderer();
+
+]]>
+    </zscript>
+    <window id="wnd" apply="${fooCtrl}">
+        Default itemRenderer works outside of grid: <combobox model="@load(fooCtrl.defaultNames)"/>
+        <grid mold="paging" autopaging="true" height="300px" model="@bind(fooCtrl.itemNames)">
+            <template name="model" var="entry">
+                <row>
+                    <combobox model="@load(fooCtrl.defaultNames)" selectedItem="@bind(entry.name)" value="@bind(entry.name)"/>
+                </row>
+            </template>
+        </grid>
+    </window>
+</zk>
