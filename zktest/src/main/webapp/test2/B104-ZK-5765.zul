@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5765.zul
+
+    Purpose:
+        
+    Description:
+        
+    History:
+        Thu Feb 05 17:02:54 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		ListModelList model = new ListModelList(Locale.getAvailableLocales());
+	</zscript>
+	<label multiline="true">
+	    1. Use menupopup auto to hide col1
+		2. Use paging to navigate to page 2
+		3. Use menupopup auto to show col1
+		4. Use paging to navigate to page 3
+	</label>
+	<div height="500px">
+		<listbox id="lb" vflex="1" model="${model}" mold="paging" autopaging="true">
+			<listhead menupopup="auto">
+				<listheader label="col1"></listheader>
+				<listheader label="col2"></listheader>
+				<listheader label="col3"></listheader>
+				<listheader label="col4"></listheader>
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="${each}" value="${each}"></listcell>
+					<listcell label="${each}" value="${each}"></listcell>
+					<listcell label="${each}" value="${each}"></listcell>
+					<listcell label="${each}" value="${each}"></listcell>
+				</listitem>
+			</template>
+		</listbox>
+	</div>
+</zk>
