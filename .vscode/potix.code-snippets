@@ -1,0 +1,40 @@
+{
+	"Potix ZUL Header": {
+		"prefix": ["zul"],
+		"body": [
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+			"<!--",
+			"${TM_FILENAME}",
+			"",
+			"\t\tPurpose:",
+			"",
+			"\t\tDescription:",
+			"",
+			"\t\tHistory:",
+			"\t\t\t\t$CURRENT_DAY_NAME_SHORT $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND CST $CURRENT_YEAR, Created by ${WORKSPACE_FOLDER/^\\/Users\\/([^\\/]+)\\/.+$/$1/}",
+			"",
+			"Copyright (C) $CURRENT_YEAR Potix Corporation. All Rights Reserved.",
+			"-->",
+			"<zk></zk>"
+		],
+		"description": "Potix ZUL file header template"
+	},
+	"Potix Java Header": {
+		"prefix": ["java"],
+		"body": [
+			"/* ${TM_FILENAME}",
+			"",
+			"\t\tPurpose:",
+			"\t\t\t\t",
+			"\t\tDescription:",
+			"\t\t\t\t",
+			"\t\tHistory:",
+			"\t\t\t\t$CURRENT_DAY_NAME_SHORT $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND CST $CURRENT_YEAR, Created by ${WORKSPACE_FOLDER/^\\/Users\\/([^\\/]+)\\/.+$/$1/}",
+			"",
+			"Copyright (C) $CURRENT_YEAR Potix Corporation. All Rights Reserved.",
+			"*/",
+			"$0"
+		],
+		"description": "Potix Java file header template"
+	}
+}

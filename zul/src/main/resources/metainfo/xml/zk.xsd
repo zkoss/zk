@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zk/config"
-	targetNamespace="http://www.zkoss.org/2005/zk/config" elementFormDefault="qualified" version="8.6.1.201812251209">
+	targetNamespace="http://www.zkoss.org/2005/zk/config" elementFormDefault="qualified" version="10.4.0.202603251448">
 	<xs:element name="zk">
 		<xs:complexType>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">

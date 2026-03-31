@@ -114,8 +114,8 @@ public class BeanProxyHandler<T> implements MethodHandler, Serializable {
 						return method.invoke(_origin, args);
 					}
 				}
-				// check null value
-				return args.length == 1 && args[0] == null;
+				// ZK-6078: Use identity comparison to avoid proxy==null being true, ensuring tracker binding correctness
+				return self == args[0];
 			}
 			if (method.getDeclaringClass().isAssignableFrom(FormProxyObject.class)) {
 				if ("submitToOrigin".equals(mname)) {

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+    <div id="comp1" apply="org.zkoss.zkplus.spring.ComposerScopeTestComposer">
+        <label id="hash1"/>
+    </div>
+    <div id="comp2" apply="org.zkoss.zkplus.spring.ComposerScopeTestComposer">
+        <label id="hash2"/>
+    </div>
+</zk>

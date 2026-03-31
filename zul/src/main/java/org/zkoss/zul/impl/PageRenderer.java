@@ -18,10 +18,12 @@ package org.zkoss.zul.impl;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.regex.Pattern;
 
 import org.owasp.encoder.Encode;
 
 import org.zkoss.lang.Library;
+import org.zkoss.util.Locales;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -40,6 +42,8 @@ import org.zkoss.zk.ui.util.Configuration;
  * @since 5.0.0
  */
 public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
+	private static final Pattern LANG_ATTRIBUTE_PATTERN = Pattern.compile("(?i)(?:^|\\s)lang\\s*=");
+
 	public void render(Page page, Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
 		final String ctl = ExecutionsCtrl.getPageRedrawControl(exec);
@@ -68,20 +72,22 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		config.getCspProvider().setCspHeader(exec, config);
 
 		final PageCtrl pageCtrl = (PageCtrl) page;
+		final String rootAttrs = pageCtrl.getRootAttributes();
 		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
 		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
 		Double number = exec.getBrowser("mobile");
 
 		out.write("<html");
+		if (!containsLangAttribute(rootAttrs))
+			out.write(" lang=\"" + Locales.getCurrent().toLanguageTag() + "\"");
+		write(out, rootAttrs);
 		if (number == null || number.intValue() == 0) {
-			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n"
 					// B70-ZK-2065: Remove meta for validation.
 					//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
 					//	+ "<meta http-equiv=\"Expires\" content=\"-1\" />\n"
 					+ "<title>");
 		} else {
-			write(out, pageCtrl.getRootAttributes());
 			out.write(">\n<head>\n");
 			// B70-ZK-2065: Remove meta for validation.
 			//	+ "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n"
@@ -130,6 +136,10 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			out.write(s);
 			out.write('\n');
 		}
+	}
+
+	private static boolean containsLangAttribute(String rootAttrs) {
+		return rootAttrs != null && LANG_ATTRIBUTE_PATTERN.matcher(rootAttrs).find();
 	}
 
 	/** Renders the page if {@link Page#isComplete} is false.

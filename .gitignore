@@ -28,5 +28,6 @@ dist/lib/osgi
 node_modules/
 node/
 .gradle
-.vscode
+.vscode/settings.json
+zk.code-workspace
 *.tsbuildinfo

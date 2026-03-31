@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5670.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 20 14:07:33 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. When opened directly (not embedded), click the button.
+        2. Verify the "Processing..." message appears at the center of the page.
+        3. Visit B104-ZK-5670Embedded.zhtml to test in embedded mode.
+        4. Click the button and verify "Processing..." also appears at center.
+    </label>
+    <button id="btn" label="Long Operation" onClick="org.zkoss.lang.Threads.sleep(3000)"/>
+</zk>

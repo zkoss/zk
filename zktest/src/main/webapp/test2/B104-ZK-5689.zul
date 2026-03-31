@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5689.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Jan 20 12:32:58 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<?link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"?>
+<zk>
+    <div style="padding: 20px;">
+        <label multiline="true">
+            1. The first button (ZK Icon) should look like a home icon (FontAwesome 4.7).
+            2. The second button (External FA) should look like a home icon (FontAwesome 6.5.2).
+            3. Inspect the second button's icon &lt;i&gt; element.
+            4. The computed "font-family" should NOT be "FontAwesome" (which is ZK's internal one).
+            It should be "Font Awesome 6 Free" (or similar, from the CDN).
+            5. If the second button is broken or uses the wrong font, the ZK styles are leaking.
+        </label>
+        <separator />
+        <button id="btn-zk" iconSclass="z-icon-home" label="ZK Icon (z-icon-home)" />
+        <separator />
+        <button id="btn-fas" iconSclass="fas fa-home" label="External FA (fas fa-home)" />
+    </div>
+</zk>
