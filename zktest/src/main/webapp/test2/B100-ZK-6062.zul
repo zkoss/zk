@@ -1,0 +1,4 @@
+<zk>
+	<!-- ZK-6062: Missing comma in generated wpd for javascript-module in lang-addon.xml -->
+	<label value="ZK-6062 test: javascript-module in wpd should not cause JS error" />
+</zk>
