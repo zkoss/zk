@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?root-attributes lang="ja"?>
+<!--
+F104-ZK-6059-2.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Mar 24 18:33:12 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+	    1. This page specifies root-attributes lang="ja".
+        2. open the developer tools and inspect the &lt;html&gt; element, it should have lang="ja" instead of the preferred locale "fr-CA" set in F104-ZK-6059-1.zul.
+	</label>
+</zk>
