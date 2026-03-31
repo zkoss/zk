@@ -15,6 +15,11 @@ repositories {
 	mavenCentral() // workaround for sometimes zkplus:compileJava FAILED
 
 	maven {
+		name = 'zkoss'
+		url = uri('https://mavensync.zkoss.org/maven2')
+	}
+
+	maven {
 		name = 'maven seasar org'
 		url = uri('https://maven.seasar.org/maven2')
 	}
@@ -44,6 +49,21 @@ dependencies {
 	compileOnly "javax.servlet:javax.servlet-api:${servletVersion}"
 	compileOnly "javax.el:javax.el-api:${elVersion}"
 	compileOnly "javax.portlet:portlet-api:${portletVersion}"
+
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.11.3"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.11.3"
+	testImplementation "org.mockito:mockito-inline:4.7.0"
+	testImplementation "org.springframework:spring-web:${springVersion}"
+	testImplementation "org.springframework:spring-test:${springVersion}"
+	testImplementation "javax.servlet:javax.servlet-api:${servletVersion}"
+	testImplementation 'org.zkoss.test:zk-webdriver:1.4.39.0.2'
+	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.1.0-FL-2024082716'
+	testImplementation 'org.eclipse.jetty.websocket:websocket-javax-server:10.0.11'
+	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
+}
+
+test {
+	useJUnitPlatform()
 }
 
 buildConfig {

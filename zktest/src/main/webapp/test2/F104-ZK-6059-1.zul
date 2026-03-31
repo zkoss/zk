@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6059-1.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Mar 24 18:32:59 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click "Set Preferred Locale (fr-CA)" and check the html lang is "fr-CA".
+		2. Click "Set Preferred Locale + Open Root Lang Page" and check the html lang is "en".
+
+		Expected result:
+		- Preferred locale is used when root-attributes lang is not specified.
+		- root-attributes lang has higher priority when specified.
+	</label>
+	<button id="setFrLocale" label="Set Preferred Locale (fr-CA)">
+		<attribute name="onClick"><![CDATA[
+			java.util.Locale locale = org.zkoss.util.Locales.getLocale("fr_CA");
+			session.setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, locale);
+			execution.sendRedirect("F104-ZK-6059.zul");
+		]]></attribute>
+	</button>
+	<button id="setFrLocaleAndGotoRootLang" label="Set Preferred Locale + Open Root Lang Page">
+		<attribute name="onClick"><![CDATA[
+			java.util.Locale locale = org.zkoss.util.Locales.getLocale("fr_CA");
+			session.setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, locale);
+			execution.sendRedirect("F104-ZK-6059-2.zul");
+		]]></attribute>
+	</button>
+</zk>

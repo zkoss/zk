@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="win" xmlns="http://www.zkoss.org/2005/zul">
+    <zscript>
+        void doDetachReattach() {
+            org.zkoss.zk.ui.Component comp = win.getFellow("comp");
+            org.zkoss.zk.ui.Component host = comp.getParent();
+            comp.detach();
+            host.appendChild(comp);
+        }
+    </zscript>
+    <div id="host">
+        <div id="comp" apply="org.zkoss.zkplus.spring.ComposerScopeTestComposer">
+            <label id="hashLabel"/>
+        </div>
+    </div>
+    <button id="detachReattachBtn" label="DetachReattach" onClick="doDetachReattach()"/>
+</window>
