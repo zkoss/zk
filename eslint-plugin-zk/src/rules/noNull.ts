@@ -71,7 +71,7 @@ export const noNull = createRule({
 								}
 							}
 						}
-						parent = parent.parent;
+						parent = parent.parent!;
 					}
 					if (node.parent?.type === AST_NODE_TYPES.BinaryExpression) {
 						if (node.parent.operator === '!=' || node.parent.operator === '==') {

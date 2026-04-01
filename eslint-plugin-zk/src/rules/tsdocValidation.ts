@@ -82,7 +82,7 @@ export const tsdocValidation = createRule({
 			return {};
 		}
 		const tsdocParser = new TSDocParser(tsdocConfig);
-		const sourceCode = context.getSourceCode();
+		const sourceCode = context.sourceCode;
 
 		return {
 			Program() { // Surface all builtin TSDoc errors.

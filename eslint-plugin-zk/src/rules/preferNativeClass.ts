@@ -42,9 +42,7 @@ export const preferNativeClass = createRule({
 								'jscodeshift',
 								'-t',
 								path.resolve(__dirname, '..', 'transform.js'),
-								// We are using ESLint 8, so `getPhysicalFilename` exists.
-								// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-								context.getPhysicalFilename!(),
+								context.filename,
 							],
 							{
 								stdio: 'ignore'

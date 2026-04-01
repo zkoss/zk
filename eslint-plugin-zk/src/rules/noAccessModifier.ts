@@ -28,7 +28,7 @@ export const noAccessModifier = createRule({
 	},
 	defaultOptions: [],
 	create(context) {
-		const sourceCode = context.getSourceCode();
+		const sourceCode = context.sourceCode;
 		function checkAccessModifier(node: ClassMember): void {
 			// Knowing that `node.accessibility` is not enough; must check with
 			// `isValidAccessModifier`.

@@ -33,3 +33,10 @@ zk.code-workspace
 *.tsbuildinfo
 .env
 .vscode/.mcp.json
+
+.agents/
+.claude/
+.mcp.json
+.vscode/mcp.json
+docs/
+skills-lock.json

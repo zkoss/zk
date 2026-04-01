@@ -233,7 +233,7 @@ export const noMixedHtml = function (context: Rule.RuleContext) {
 				if (node.name === 'undefined' || node.name === 'null') return true;
 
 				// if the variable is initialized with a literal but not with Html, it is safe
-				const parent: TSESTree.VariableDeclarator | undefined = (context.getScope().variables.find(v => v.name === node.name)?.identifiers[0] as {
+				const parent: TSESTree.VariableDeclarator | undefined = (context.sourceCode.getScope(node as never).variables.find(v => v.name === node.name)?.identifiers[0] as {
 					parent?: TSESTree.VariableDeclarator
 				})?.parent;
 				if (parent && parent.init && (

@@ -76,8 +76,8 @@ _zk.copy = function<T, U> (dst: T, src: U, backup?: Record<string, unknown>): T 
 	return dst as T & U;
 };
 
-type Getter = Function; // eslint-disable-line @typescript-eslint/ban-types
-type Setter = Function; // eslint-disable-line @typescript-eslint/ban-types
+type Getter = Function; // eslint-disable-line @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-function-type
+type Setter = Function; // eslint-disable-line @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-function-type
 type GeneratedSetter = (this: zk.Widget, v: unknown, opts: Partial<{ force: boolean }>) => zk.Widget;
 
 var _oid = 0,
@@ -1960,7 +1960,7 @@ export abstract class ZKObject {
 		if (!supers) supers = this._$supers = {};
 
 		if (typeof nm != 'string') { //zk.Class assumed
-			let method: Function, // eslint-disable-line @typescript-eslint/ban-types
+			let method: Function, // eslint-disable-line @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-function-type
 				old = supers[args as string], //args is method's name
 				p: object; //args is method's name
 			if (!(p = nm.prototype._$super as never || Object.getPrototypeOf(nm.prototype)) || !(method = p[args as string] as never)) //nm is zk.Class
@@ -1976,7 +1976,7 @@ export abstract class ZKObject {
 
 		//locate method
 		var old = supers[nm],
-			m: undefined | Function, // eslint-disable-line @typescript-eslint/ban-types
+			m: undefined | Function, // eslint-disable-line @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-function-type
 			p: object & { _$super?: object },
 			oldmtd: CallableFunction;
 		if (old) {

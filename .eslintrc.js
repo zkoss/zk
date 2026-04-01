@@ -344,7 +344,7 @@ module.exports = {
         'no-undef': 'off',
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
-        '@typescript-eslint/ban-types': [
+        '@typescript-eslint/no-restricted-types': [
           'error',
           {
             'types': {
@@ -375,7 +375,7 @@ module.exports = {
           }
         ],
         '@typescript-eslint/explicit-module-boundary-types': 'error',
-        '@typescript-eslint/member-delimiter-style': 'error',
+        '@typescript-eslint/member-delimiter-style': 'off', // removed in v8, use @stylistic if needed
         '@typescript-eslint/naming-convention': [
           'error',
           {
@@ -389,10 +389,10 @@ module.exports = {
             }
           }
         ],
-        '@typescript-eslint/no-empty-interface': [
+        '@typescript-eslint/no-empty-object-type': [
           'error',
           {
-            'allowSingleExtends': true
+            'allowInterfaces': 'with-single-extends'
           }
         ],
         '@typescript-eslint/no-explicit-any': 'error',
@@ -413,12 +413,20 @@ module.exports = {
             'lib': 'never'
           }
         ],
-        '@typescript-eslint/type-annotation-spacing': 'error',
+        '@typescript-eslint/type-annotation-spacing': 'off', // removed in v8, use @stylistic if needed
         '@typescript-eslint/unbound-method': 'off',
         '@typescript-eslint/unified-signatures': 'off', // TSDoc overloaded functions
         '@typescript-eslint/no-redundant-type-constituents': 'warn',
         '@typescript-eslint/no-dynamic-delete': 'warn',
         '@typescript-eslint/no-extraneous-class': 'off',
+        // @typescript-eslint v8: new/changed rules — maintain backward compat
+        '@typescript-eslint/no-unsafe-call': 'warn', // v8 expanded to catch Function typed calls
+        '@typescript-eslint/only-throw-error': 'off', // new in v8, replaces no-throw-literal
+        '@typescript-eslint/no-unsafe-function-type': 'off', // new in v8, covered by no-restricted-types
+        '@typescript-eslint/no-base-to-string': 'warn', // v8 behavior expanded
+        '@typescript-eslint/no-unused-expressions': 'warn', // v8 TS version enabled by preset
+        '@typescript-eslint/no-duplicate-type-constituents': 'warn',
+        '@typescript-eslint/no-for-in-array': 'warn',
         'zk/noMixedHtml': [ 2, {
           'htmlFunctionRules': [
             'dom(?:(?!Evt|Target).)', 'getStyle', 'getSclass', 'getZclass', 'HTML_$',
