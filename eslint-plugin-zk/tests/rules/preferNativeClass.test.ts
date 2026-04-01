@@ -16,9 +16,6 @@ ruleTester.run('preferNativeClass', preferNativeClass, {
 			code: `
 zkmax.nav.Anchornav = zk.$extends(zul.Widget, {});
 `,
-			output: `
-zkmax.nav.Anchornav = zk.$extends(zul.Widget, {});
-`,
 			errors: [
 				replaceWithES6Class(2, 26),
 			],

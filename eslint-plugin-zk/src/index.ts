@@ -1,4 +1,16 @@
-import * as rules from './rules';
+import * as ruleExports from './rules';
+import { noMixedHtml, schema as noMixedHtmlSchema } from './rules/noMixedHtml';
+
+// Build rules map: wrap noMixedHtml (plain function) as a proper ESLint rule object
+const rules: Record<string, unknown> = { ...ruleExports };
+rules['noMixedHtml'] = {
+	meta: {
+		type: 'problem',
+		schema: noMixedHtmlSchema,
+	},
+	create: noMixedHtml,
+};
+delete rules['schema']; // Remove leaked schema from noMixedHtml re-exports
 
 export = {
 	rules,

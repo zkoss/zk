@@ -11,7 +11,8 @@
 
 Copyright (C) 2023 Potix Corporation. All Rights Reserved.
 */
-import {noMixedHtml} from '@rules';
+import plugin = require('../../src/index');
+const noMixedHtml = plugin.rules['noMixedHtml'] as import('eslint').Rule.RuleModule;
 import {typedRuleTester as ruleTester} from '../util';
 
 ruleTester.run('no-mixed-html', noMixedHtml, {
@@ -128,7 +129,6 @@ ruleTester.run('no-mixed-html', noMixedHtml, {
 		'html = "<div>" + /*safe*/ obj.value + "</div>"',
 		'text = /*safe*/ stuffAsHtml()',
 		'html = /*safe*/ getElement()',
-		'html = /*safe*/ getElement()',
 		'x = /*safe*/ "This is not <html>" + text',
 		'text = /*safe*/ stuffAsHtml() + text',
 		'text = /*safe*/ ( "<div>" + "</div>" )',
@@ -211,39 +211,39 @@ ruleTester.run('no-mixed-html', noMixedHtml, {
 		'(function() { return "<div>" })',
 		'(function() { return input })',
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: '(() => "<div>")',
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: '(() => html)',
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: 'text = (html) => input',
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: '(() => input)',
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: 'html = () => { return "<div>" }',
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: 'text = () => { return input }',
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: 'text = ( html ) => { return input }',
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: '(() => { return "<div>" })',
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: '(() => { return input })',
 		},
 
@@ -567,7 +567,7 @@ ruleTester.run('no-mixed-html', noMixedHtml, {
 			]
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: 'var bar = y => "<div>"',
 			options: [{htmlFunctionRules: ['AsHtml$']}],
 			errors: [
@@ -597,7 +597,7 @@ ruleTester.run('no-mixed-html', noMixedHtml, {
 			]
 		},
 		{
-			parserOptions: {ecmaVersion: 6},
+			languageOptions: {parserOptions: {ecmaVersion: 6}},
 			code: 'var barAsHtml = y => y',
 			options: [{htmlFunctionRules: ['AsHtml$']}],
 			errors: [

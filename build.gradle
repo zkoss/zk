@@ -165,8 +165,7 @@ subprojects {
 		dependsOn rootProject.tasks.named('npm_install')
 		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
 		workingDir = rootDir
-		def eslintDir = project.file(".eslintrc.js").exists() ? projectDir : rootDir;
-		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--config=$eslintDir/.eslintrc.js", "--ignore-path=$rootDir/.eslintignore"]
+		args =['run', 'lint', '--', "$projectDir/$resources/web/js"]
 	}
 
 	// NOTE: Do not depend on this task for normal build.
@@ -174,8 +173,7 @@ subprojects {
 	// called manually: `./gradlew jsfix`.
 	task jsfix(type: NpmTask) {
 		workingDir = rootDir
-		def eslintDir = project.file(".eslintrc.js").exists() ? projectDir : rootDir;
-		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--config=$eslintDir/.eslintrc.js", "--ignore-path=$rootDir/.eslintignore", "--fix"]
+		args =['run', 'lint', '--', "$projectDir/$resources/web/js", "--fix"]
 	}
 
 	check {

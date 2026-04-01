@@ -1827,7 +1827,7 @@ export class JQZK {
 	/** @internal */
 	declare static _sfKeys: Record<number, number>;
 	/** @internal */
-	declare static _evt: Record<'fix' | string, Function>; // eslint-disable-line @typescript-eslint/ban-types
+	declare static _evt: Record<'fix' | string, Function>; // eslint-disable-line @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-function-type
 }
 jq.fn.zon = jq.fn.on;
 jq.fn.zoff = jq.fn.off;
@@ -2802,7 +2802,7 @@ export const _JQEventStatic = {
 	}
 };
 Object.assign(jq.Event, _JQEventStatic);
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-function-type
 export var delayQue: Record<string, Function[]> = {};
 zk.delayQue = delayQue; //key is uuid, value is array of pending functions
 /**

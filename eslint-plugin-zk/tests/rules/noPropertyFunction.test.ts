@@ -46,17 +46,6 @@ class Test {
   })();
   prop2 = function() {};
 }`,
-			output: `
-var fun = zk.$void,
-  fun2 = () => null;
-class Test {
-  foo = zk.$void;
-  bar = zk.ie ? null : zk.$void;
-  prop = (function() {
-    return function() {};
-  })();
-  prop2 = function() {};
-}`,
 			errors: [
 				omitPropertyFunction(5, 9),
 				omitPropertyFunction(6, 24),

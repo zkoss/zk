@@ -89,7 +89,7 @@ export const javaStyleSetterSignature = createRule({
 					fix(fixer) {
 						// There must be a variable bearing the name of the first parameter.
 						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						const fixes = context
+						const fixes = context.sourceCode
 							.getDeclaredVariables(functionExpression)
 							.find(variable => variable.name === oldParamName)!
 							.references

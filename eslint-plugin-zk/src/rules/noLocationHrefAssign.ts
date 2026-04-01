@@ -65,7 +65,7 @@ export const noLocationHrefAssign = createRule({
 					return;
 				}
 
-				const sourceCode = context.getSourceCode();
+				const sourceCode = context.sourceCode;
 				if (node.right.type === 'CallExpression' && (node.right.callee.type === 'Identifier') &&
 					(node.right.callee.name === escapeFunc || sourceCode.getText(node.right.callee) === escapeFunc)) {
 					return;

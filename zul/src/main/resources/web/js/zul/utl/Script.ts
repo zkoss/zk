@@ -28,7 +28,7 @@ export class Script extends zk.Widget {
 	/** @internal */
 	_srcrun?: boolean;
 	/** @internal */
-		// eslint-disable-next-line @typescript-eslint/ban-types
+		// eslint-disable-next-line @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-function-type
 	_fn?: Function;
 	packages?: string;
 

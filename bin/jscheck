@@ -12,7 +12,7 @@ shift
 srcdir="$1"
 shift
 echo "check js code style : $maindir/$srcdir"
-OUT=$(npx eslint --ext .js,.ts "$maindir/$srcdir" "$@") || {
+OUT=$(npx eslint --no-error-on-unmatched-pattern "$maindir/$srcdir" "$@") || {
 	echo "$OUT"
 	#Coding Style Error found.
 	exit 1

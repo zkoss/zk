@@ -1,11 +1,11 @@
-import { ESLintUtils } from '@typescript-eslint/utils';
+import { RuleTester } from '@typescript-eslint/rule-tester';
+import * as tsParser from '@typescript-eslint/parser';
+import * as path from 'path';
 
-// import { parser, parserOptions } from '../.eslintrc.json' as const;
-// FIXME: Awaiting strongly-typed JSON module imports, which allows the line of code above:
-// See https://github.com/microsoft/TypeScript/issues/32063
-const parser = '@typescript-eslint/parser';
-const parserOptions = { project: './tsconfig.json' };
+const parserOptions = { project: './tsconfig.json', tsconfigRootDir: path.resolve(__dirname, '..') };
 
-export const typedRuleTester = new ESLintUtils.RuleTester({ parser, parserOptions });
-export const untypedRuleTester = new ESLintUtils.RuleTester({ parser });
-export import noFormat = ESLintUtils.noFormat;
+export const typedRuleTester = new RuleTester({ languageOptions: { parser: tsParser, parserOptions } });
+export const untypedRuleTester = new RuleTester({ languageOptions: { parser: tsParser } });
+export function noFormat(strings: TemplateStringsArray, ...keys: string[]): string {
+	return strings.reduce((result, str, i) => result + str + (keys[i] || ''), '');
+}
