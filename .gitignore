@@ -31,3 +31,5 @@ node/
 .vscode/settings.json
 zk.code-workspace
 *.tsbuildinfo
+.mcp.json
+.vscode/.mcp.json
