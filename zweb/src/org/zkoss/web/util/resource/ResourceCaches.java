@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.SystemException;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.http.Https;
 
 /**
  * Utilities to load (and parse) the Servlet resource.
@@ -116,6 +117,10 @@ public class ResourceCaches {
 					path = path0; //restore
 				}
 			}
+
+			path = Https.sanitizePath(path); // ZK-6083
+			if (path == null)
+				return null;
 
 			final String flnm = ctx.getRealPath(path);
 			if (flnm != null) {

@@ -1,7 +1,9 @@
 ZK 9.6.6.1
+Apr 08, 2026
 * Features
 
 * Bugs
+  ZK-6083: Fix path traversal vulnerabilities on WebSphere Liberty deployments
 
 * Upgrade Notes
 

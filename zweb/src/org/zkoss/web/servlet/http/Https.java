@@ -20,13 +20,18 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletContext;
@@ -639,5 +644,118 @@ public class Https extends Servlets {
 			j = k;
 		}
 		return null;
+	}
+
+	private static final String PATH_REGEX = "^(/[\\p{L}\\p{N}\\-:@&?=+,.!/~*'%$_;() ]*)?$";
+	private static final Pattern PATH_PATTERN = Pattern.compile(PATH_REGEX, Pattern.UNICODE_CHARACTER_CLASS);
+
+	/**
+	 * Returns the normalized path, or null if it is invalid.
+	 * It is invalid if it is null, or normalization resolves above the root.
+	 *
+	 * @since 9.6.6.1
+	 */
+	public static String normalizePath(String path) {
+		if (path == null) {
+			return null;
+		}
+		if ("/".equals(path)) {
+			return path;
+		}
+
+		List<String> parts = new ArrayList<>();
+		String[] segments = path.split("/");
+
+		for (String segment : segments) {
+			if (segment.equals("..")) {
+				if (!parts.isEmpty()) {
+					parts.remove(parts.size() - 1); // Go up one directory
+				} else {
+					// Path is trying to go above the root, which might be a security issue
+					return null;
+				}
+			} else if (!segment.equals(".") && !segment.isEmpty()) {
+				parts.add(segment); // Add non-empty, non-current directory segments
+			}
+		}
+
+		String result = String.join("/", parts);
+		if (path.startsWith("/")) {
+			result = "/" + result;
+		}
+		if (path.endsWith("/")) {
+			result = result + "/";
+		}
+		return result;
+	}
+
+	/**
+	 * Returns whether the specified path is valid.
+	 * It is valid if it is not null, starts with "/" and doesn't contain "..".
+	 *
+	 * @since 9.6.6.1
+	 */
+	public static boolean isValidPath(String path) {
+		if (path == null)
+			return false;
+		path = normalizePath(path);
+
+		if (path == null || !PATH_PATTERN.matcher(path).matches()) {
+			return false;
+		}
+		if (path.startsWith("/../") || path.equals("/..")) {
+			return false;
+		}
+		final int slash2Count = countToken("//", path);
+		return slash2Count <= 0;
+	}
+
+	/**
+	 * Returns the sanitized path, or null
+	 * if the path is invalid.
+	 *
+	 * @since 9.6.6.1
+	 * @see #isValidPath(String)
+	 */
+	public static String sanitizePath(String path) {
+		if (path == null)
+			return null;
+		String normalizedPath;
+		try {
+			if (path.startsWith("/")) {
+				normalizedPath = normalizePath(path);
+			} else {
+				final URI uri = new URI(path).normalize();
+				if (uri.getScheme() != null) {
+					final String sanitizedUriPath = normalizePath(uri.getPath());
+					if (!isValidPath(sanitizedUriPath))
+						return null;
+					return new URI(uri.getScheme(), uri.getAuthority(), sanitizedUriPath, uri.getQuery(), uri.getFragment())
+							.toString();
+				}
+				normalizedPath = normalizePath(uri.toString());
+			}
+		} catch (URISyntaxException e) {
+			return null;
+		}
+
+		if (!isValidPath(normalizedPath))
+			return null;
+
+		// Return the sanitized URL path
+		return normalizedPath;
+	}
+
+	private static int countToken(final String token, final String target) {
+		int tokenIndex = 0;
+		int count = 0;
+		while (tokenIndex != -1) {
+			tokenIndex = target.indexOf(token, tokenIndex);
+			if (tokenIndex > -1) {
+				tokenIndex++;
+				count++;
+			}
+		}
+		return count;
 	}
 }
