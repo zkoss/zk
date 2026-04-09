@@ -43,11 +43,23 @@ public class CookieThemeResolver implements ThemeResolver {
 		for (Cookie c : cookies) {
 			if (THEME_COOKIE_KEY.equals(c.getName())) {
 				String themeName = c.getValue();
-				if (themeName != null)
+				if (isValidName(themeName))
 					return themeName;
 			}
 		}
 		return "";
+	}
+
+	// ZK-6083: Validate theme name to prevent path traversal via cookie injection
+	private boolean isValidName(String themeName) {
+		if (themeName == null || themeName.trim().isEmpty()) return false;
+		for (int j = 0, len = themeName.length(); j < len; ++j) {
+			char cc = themeName.charAt(j);
+			// check if it is a valid character for a theme name
+			if (cc == '/' || cc == '\\' || cc == '.' || cc == ':' || cc == '?' || cc == '&' || cc == '=' || cc == '%' || cc == '#' || cc == ' ')
+				return false;
+		}
+		return true;
 	}
 
 	/**
