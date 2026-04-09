@@ -159,7 +159,8 @@ public class ClassWebResource {
 			if (url != null)
 				return url;
 		}
-		return Locators.getDefault().getResource(PATH_PREFIX + uri);
+		final String sanitizedWebPath = sanitizeWebPath(uri); // ZK-6083
+		return sanitizedWebPath != null ? Locators.getDefault().getResource(sanitizedWebPath) : null;
 	}
 
 	/** Returns the resource in a stream of the specified URI by searching
@@ -174,7 +175,8 @@ public class ClassWebResource {
 			if (is != null)
 				return is;
 		}
-		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
+		final String sanitizedWebPath = sanitizeWebPath(uri); // ZK-6083
+		return sanitizedWebPath != null ? Locators.getDefault().getResourceAsStream(sanitizedWebPath) : null;
 	}
 
 	private static String fixURI(String uri) {
@@ -185,6 +187,18 @@ public class ClassWebResource {
 		if (j >= 0)
 			uri = uri.substring(0, j);
 		return uri;
+	}
+
+	private static String sanitizeWebPath(String uri) {
+		if (uri == null)
+			return null;
+		final String webPath = PATH_PREFIX + (uri.startsWith("/") ? uri : "/" + uri);
+		final String sanitizedPath = Https.sanitizePath(webPath);
+		return isValidWebPath(sanitizedPath) ? sanitizedPath : null;
+	}
+
+	private static boolean isValidWebPath(String path) {
+		return path != null && (PATH_PREFIX.equals(path) || path.startsWith(PATH_PREFIX + "/"));
 	}
 
 	/** Sets the required headers (e.g., Cache-Control) to notify the
@@ -265,8 +279,14 @@ public class ClassWebResource {
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String pi = Https.getThisPathInfo(request);
 		//		if (log.isDebugEnabled()) log.debug("Path info: "+pi);
-		if (pi != null)
-			service(request, response, pi.substring(PATH_PREFIX.length()));
+		if (pi != null) {
+			final String sanitizedPath = Https.sanitizePath(pi); // ZK-6083
+			if (!isValidWebPath(sanitizedPath)) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND);
+				return;
+			}
+			service(request, response, sanitizedPath.substring(PATH_PREFIX.length()));
+		}
 	}
 
 	/** Process the request with the specified path.
