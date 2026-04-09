@@ -57,6 +57,7 @@ import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.http.Encodes;
+import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ServletContextLocator;
 
@@ -1050,7 +1051,10 @@ public class Servlets {
 	public static final URL getResource(ServletContext ctx, String uri) throws UnsupportedEncodingException {
 		try {
 			if (uri != null && uri.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://")) {
-				final File file = new File(new URI(uri));
+				final String sanitizedUri = Https.sanitizePath(uri); // ZK-6083
+				if (sanitizedUri == null)
+					return null;
+				final File file = new File(new URI(sanitizedUri));
 				return file.exists() ? file.toURI().toURL() : null;
 				//spec: return null if not found
 			}
@@ -1073,7 +1077,10 @@ public class Servlets {
 	public static final InputStream getResourceAsStream(ServletContext ctx, String uri) throws IOException {
 		try {
 			if (uri != null && uri.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://")) {
-				final File file = new File(new URI(uri));
+				final String sanitizedUri = Https.sanitizePath(uri); // ZK-6083
+				if (sanitizedUri == null)
+					return null;
+				final File file = new File(new URI(sanitizedUri));
 				return file.exists() ? new BufferedInputStream(new FileInputStream(file)) : null;
 				//spec: return null if not found
 			}
@@ -1123,12 +1130,12 @@ public class Servlets {
 				}
 			} else {
 				_svlctx = ctx;
-				_uri = uri;
+				_uri = Https.sanitizePath(uri); // ZK-6083
 			}
 		}
 
 		private RequestDispatcher getRequestDispatcher(Map params, int mode) {
-			if (_extctx == null && _svlctx == null) //not found
+			if ((_extctx == null && _svlctx == null) || _uri == null) //not found or invalid path
 				return null;
 
 			final String uri = generateURI(_uri, params, mode);
@@ -1136,12 +1143,14 @@ public class Servlets {
 		}
 
 		private URL getResource() throws MalformedURLException {
-			return _svlctx != null ? _svlctx.getResource(_uri) : _extctx != null ? _extctx.getResource(_uri) : null;
+			return _uri == null ? null
+					: _svlctx != null ? _svlctx.getResource(_uri) : _extctx != null ? _extctx.getResource(_uri) : null;
 		}
 
 		private InputStream getResourceAsStream() {
-			return _svlctx != null ? _svlctx.getResourceAsStream(_uri)
-					: _extctx != null ? _extctx.getResourceAsStream(_uri) : null;
+			return _uri == null ? null
+					: _svlctx != null ? _svlctx.getResourceAsStream(_uri)
+							: _extctx != null ? _extctx.getResourceAsStream(_uri) : null;
 		}
 	}
 

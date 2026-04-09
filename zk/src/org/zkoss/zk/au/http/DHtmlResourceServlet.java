@@ -114,7 +114,13 @@ public class DHtmlResourceServlet extends HttpServlet {
 									: I18Ns.setup(hsess, request, response, "UTF-8")
 					: Charsets.setup(null, request, response, "UTF-8");
 			try {
-				cwr.service(request, response, pi.substring(ClassWebResource.PATH_PREFIX.length()));
+				final String sanitizedPath = Https.sanitizePath(pi); // ZK-6083
+				if (sanitizedPath == null || !(ClassWebResource.PATH_PREFIX.equals(sanitizedPath)
+						|| sanitizedPath.startsWith(ClassWebResource.PATH_PREFIX + "/"))) {
+					response.sendError(HttpServletResponse.SC_NOT_FOUND);
+					return true;
+				}
+				cwr.service(request, response, sanitizedPath.substring(ClassWebResource.PATH_PREFIX.length()));
 			} finally {
 				if (hsess != null)
 					I18Ns.cleanup(request, old);
