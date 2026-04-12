@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5990.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Apr 01 10:00:13 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		SimpleNumberInputConstraint causes NPE when value is cleared.
+
+		Steps to reproduce:
+		1. Select any number input below (they all have constraint="min 0 max 10").
+		2. Delete the value (clear the input).
+		3. Click outside of the component (blur).
+
+		To verify the fix:
+		- Expected: No error should occur. The value is simply null (empty).
+	</label>
+	<intbox id="ib" value="1" constraint="min 0 max 10"/>
+	<doublebox id="db" value="1" constraint="min 0 max 10"/>
+	<longbox id="lb" value="1" constraint="min 0 max 10"/>
+	<decimalbox id="dcb" value="1" constraint="min 0 max 10"/>
+	<spinner id="sp" value="1" constraint="min 0 max 10"/>
+	<doublespinner id="dsp" value="1" constraint="min 0 max 10"/>
+</zk>
