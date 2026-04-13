@@ -42,6 +42,7 @@ ZK 11.0.0
   ZK-6060: duplicated attributes in zul.xsd
   ZK-6080: zul.xsd — rowsType Missing groupfoot as Valid Child Element
   ZK-6081: fileupload missing from anyGroup in zul.xsd
+  ZK-6072: drag a panel without title produces javascript errors
 
 * Upgrade Notes
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
