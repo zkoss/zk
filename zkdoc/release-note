@@ -70,6 +70,7 @@ ZK 11.0.0
   ZK-6073: instantSelect combobox sends incorrect onChanging when navigating through Up/down
   ZK-6189: zul.xsd: a does not accept child components, so <a><div/></a> fails validation
   ZK-5515: open portallayout navigation popup produces a javascript error
+  ZK-6076: Incorrect rendering of Groupboxes with vflex
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
