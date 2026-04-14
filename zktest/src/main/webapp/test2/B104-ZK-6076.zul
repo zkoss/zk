@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6076.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 14 15:21:51 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.B104_ZK_6076VM')"
+            height="600px">
+        <button id="btn" label="view" height="29px" onClick="@command('doCmd')" />
+        <groupbox id="gb1" title="@load(vm.no)"
+                    visible="@load(vm.visible)" vflex="1">
+            <vbox vflex="1">
+				<groupbox id="gbInner" open="false" title="init close">
+					<datebox value="@load(vm.date)" />
+				</groupbox>
+			</vbox>
+		</groupbox>
+		<groupbox id="gb2" title="second" vflex="1" closable="false">
+			<vlayout vflex="1">
+				<groupbox title="second inner" open="false">
+					<grid>
+						<columns>
+							<column hflex="1" />
+						</columns>
+						<rows>
+							<row>
+								<cell>
+									<label value="second inner label"/>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+			</vlayout>
+		</groupbox>
+		<!-- always-visible closable groupbox: its bound title changes via setTitle's
+		     in-place fast path on a bound widget (exercises the za11y header re-sync). -->
+		<groupbox id="gbA11y" title="@load(vm.no)" closable="true">
+			<label value="a11y"/>
+		</groupbox>
+		<!-- title with an XML special char: the mold must render it once-decoded
+		     (not double-encoded) so it matches the setTitle fast path. -->
+		<groupbox id="gbAmp" title="A &amp; B">
+			<label value="amp"/>
+		</groupbox>
+	</div>
+</zk>
