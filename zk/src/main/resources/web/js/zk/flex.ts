@@ -271,6 +271,52 @@ function _zero(): 0 {
 	return 0;
 }
 
+const _contentSizedFlexContainers = new WeakMap<zk.ZWatchController, WeakSet<HTMLElement>>();
+
+// ZK-6076: content-sized containers must keep flex items at their content size.
+function _fixContentSizedFlex(fContainer: HTMLElement, ctl?: zk.ZWatchController): void {
+	if (ctl) {
+		let containers = _contentSizedFlexContainers.get(ctl);
+		if (!containers) {
+			containers = new WeakSet<HTMLElement>();
+			_contentSizedFlexContainers.set(ctl, containers);
+		} else if (containers.has(fContainer))
+			return;
+		containers.add(fContainer);
+	}
+
+	const jqfc = jq(fContainer),
+		isRow = jqfc.hasClass('z-flex-row');
+	// a px-sized container is never content-sized; skip the measuring reflows
+	if ((isRow ? fContainer.style.width : fContainer.style.height).endsWith('px')) {
+		jqfc.removeClass('z-flex-content');
+		return;
+	}
+	const size = isRow ? 'offsetWidth' : 'offsetHeight',
+		scrollPositions: {node: HTMLElement; left: number; top: number}[] = [];
+	// ZK-6076: the temporary collapse must not clamp an ancestor's scroll position.
+	if (jqfc.hasClass('z-flex-content')) {
+		for (let node: HTMLElement | undefined = fContainer; node; node = node.parentElement ?? undefined) {
+			const left = node.scrollLeft,
+				top = node.scrollTop;
+			if (left || top)
+				scrollPositions.push({node, left, top});
+		}
+	}
+	jqfc.removeClass('z-flex-content');
+	if (Array.from(fContainer.children).some(fcc => jq(fcc).hasClass('z-flex-item')
+		&& (isRow ? fcc.scrollWidth > fcc.clientWidth : fcc.scrollHeight > fcc.clientHeight))) {
+		const flexSize = fContainer[size];
+		jqfc.addClass('z-flex-content');
+		if (fContainer[size] <= flexSize)
+			jqfc.removeClass('z-flex-content');
+	}
+	for (const {node, left, top} of scrollPositions) {
+		node.scrollLeft = left;
+		node.scrollTop = top;
+	}
+}
+
 export namespace flex_global {
 	export const zFlex = { //static methods
 		/**
@@ -538,7 +584,7 @@ export namespace flex_global {
 			//find the max size of all children
 			return (o == 'h' ? _fixMinVflex : o == 'w' ? _fixMinHflex : _zero)(wgt, wgtn, o, wgt.beforeMinFlex_(o));
 		},
-		applyCSSFlex(this: zk.Widget): void {
+		applyCSSFlex(this: zk.Widget, ctl?: zk.ZWatchController): void {
 			const wgt = this;
 			if (!wgt._nvflex && !wgt._nhflex)
 				return;
@@ -564,6 +610,8 @@ export namespace flex_global {
 				if (fcWgt && fcWgt._cssflexContainer && !fcJQ.hasClass('z-flex') /* fix for B95-ZK-4764.zul */) {
 					fcJQ.addClass('z-flex').addClass(zFlex.getFlexInfo(wgt).isFlexRow ? 'z-flex-row' : 'z-flex-column');
 				}
+				if (fContainer && fcJQ.hasClass('z-flex'))
+					_fixContentSizedFlex(fContainer, ctl);
 				return;
 			}
 			if (fContainer == null) { //using old flex
@@ -652,6 +700,9 @@ export namespace flex_global {
 					cwgts[i].setFlexSize_(szInfo);
 			}
 
+			if (!isAllMin)
+				_fixContentSizedFlex(fContainer, ctl);
+
 			pwgt.afterChildrenFlex_(wgt);
 		},
 		clearCSSFlex(wgt: zk.Widget, o: FlexOrient, clearAllSiblings?: boolean): void {
@@ -700,7 +751,7 @@ export namespace flex_global {
 			if (clearAllSiblings || noSibFlex) {
 				const fcWgt: zk.Widget & {_cssflexContainer?: boolean} | undefined = zk.$(fContainer);
 				if (fcWgt) delete fcWgt._cssflexContainer;
-				jq(fContainer).removeClass('z-flex').removeClass(isRow ? 'z-flex-row' : 'z-flex-column');
+				jq(fContainer).removeClass('z-flex').removeClass(isRow ? 'z-flex-row' : 'z-flex-column').removeClass('z-flex-content');
 			}
 
 			wgt.afterClearFlex_();
@@ -768,7 +819,7 @@ const _xWidget = zk.augment(zk.Widget.prototype, {
 			n = this.$n() as HTMLElement | undefined;
 		if (n) {
 			const jqn = jq(n),
-				flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item'];
+				flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item', 'z-flex-content'];
 			for (let i = 0, length = flexClasses.length; i < length; i++) {
 				const flexClass = flexClasses[i];
 				if (jqn.hasClass(flexClass)) {

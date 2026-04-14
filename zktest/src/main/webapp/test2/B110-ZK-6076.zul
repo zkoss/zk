@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6076.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 14 15:21:51 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<!-- no height: the vflex groupboxes share a content-sized container -->
+	<div apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.B110_ZK_6076VM')">
+		<button id="btn" label="view" height="29px" onClick="@command('doCmd')" />
+		<groupbox id="gb1" title="@load(vm.no)" visible="@load(vm.visible)" vflex="1">
+			<vbox vflex="1">
+				<groupbox id="gbInner" open="false" title="init close">
+					<datebox value="@load(vm.date)" />
+				</groupbox>
+			</vbox>
+		</groupbox>
+		<groupbox id="gb2" title="second" vflex="1" closable="false">
+			<vlayout vflex="1">
+				<groupbox title="second inner" open="false">
+					<grid>
+						<columns>
+							<column hflex="1" />
+						</columns>
+						<rows>
+							<row>
+								<cell>
+									<label value="second inner label"/>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+			</vlayout>
+		</groupbox>
+		<!-- bound title on a closable groupbox: za11y label -->
+		<groupbox id="gbA11y" title="@load(vm.no)" closable="true">
+			<label value="a11y"/>
+		</groupbox>
+	</div>
+	<!-- a fixed-height container still splits its height evenly, even when a child overflows -->
+	<div id="fixed" height="200px">
+		<div id="fixed1" vflex="1"><label value="fixed 1"/></div>
+		<div id="fixed2" vflex="1"><div height="150px"/></div>
+	</div>
+	<!-- a min-height-only container with spare space still splits it evenly -->
+	<div id="minh" style="min-height: 300px">
+		<div id="minh1" vflex="1"><div height="50px"/></div>
+		<div id="minh2" vflex="1"><div height="100px"/></div>
+	</div>
+	<!-- a title update rebuilds the window cave while preserving its flex children -->
+	<div>
+		<window id="win" title="w0" border="normal">
+			<div id="win1" vflex="1"><div height="80px"><label id="winLabel" value="window content"/></div></div>
+			<div id="win2" vflex="1"><div height="80px"/></div>
+		</window>
+		<button id="btnWin" label="update window title" onClick='win.setTitle("w1")'/>
+	</div>
+	<div id="natural">
+		<div id="natural1" vflex="1"><div height="80px"/></div>
+		<div id="natural2" vflex="1"><div height="80px"/></div>
+	</div>
+	<button id="btnSclass" label="update container class" onClick='natural.setSclass("updated")'/>
+	<!-- an explicit resize must fit newly shown content without rerendering the flex items. -->
+	<button id="show" label="show and resize"
+			onClick="late1c.setVisible(true); late2c.setVisible(true); Clients.resize(late)"/>
+	<button id="appendLate" label="append">
+		<attribute name="onClick"><![CDATA[
+			Div first = new Div();
+			first.setHeight("100px");
+			late1.appendChild(first);
+			Div second = new Div();
+			second.setHeight("100px");
+			late2.appendChild(second);
+		]]></attribute>
+	</button>
+	<div id="late" style="border: 2px dashed #888">
+		<div id="late1" vflex="1">
+			<div id="late1c" height="100px" visible="false" style="background: rgba(255, 0, 0, 0.5)"/>
+		</div>
+		<div id="late2" vflex="1">
+			<div id="late2c" height="100px" visible="false" style="background: rgba(0, 0, 255, 0.5)"/>
+		</div>
+	</div>
+	<div id="scrollHost" height="120px" style="overflow:auto">
+		<div id="scrollFlex">
+			<div vflex="1"><div height="400px"/></div>
+			<div vflex="1"><div height="400px"/></div>
+		</div>
+	</div>
+	<!-- markup-like title: must render literally, encoded exactly once -->
+	<groupbox id="gbAmp" title="A &amp; &lt;b&gt;B&lt;/b&gt;">
+		<label value="amp"/>
+	</groupbox>
+</zk>
