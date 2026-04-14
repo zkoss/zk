@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6076.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 14 15:21:51 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<!-- no height: the vflex groupboxes share a content-sized container -->
+	<div apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.B110_ZK_6076VM')">
+		<button id="btn" label="view" height="29px" onClick="@command('doCmd')" />
+		<groupbox id="gb1" title="@load(vm.no)" visible="@load(vm.visible)" vflex="1">
+			<vbox vflex="1">
+				<groupbox id="gbInner" open="false" title="init close">
+					<datebox value="@load(vm.date)" />
+				</groupbox>
+			</vbox>
+		</groupbox>
+		<groupbox id="gb2" title="second" vflex="1" closable="false">
+			<vlayout vflex="1">
+				<groupbox title="second inner" open="false">
+					<grid>
+						<columns>
+							<column hflex="1" />
+						</columns>
+						<rows>
+							<row>
+								<cell>
+									<label value="second inner label"/>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+			</vlayout>
+		</groupbox>
+		<!-- bound title on a closable groupbox: za11y label -->
+		<groupbox id="gbA11y" title="@load(vm.no)" closable="true">
+			<label value="a11y"/>
+		</groupbox>
+	</div>
+	<!-- a fixed-height container still splits its height evenly, even when a child overflows -->
+	<div id="fixed" height="200px">
+		<div id="fixed1" vflex="1"><label value="fixed 1"/></div>
+		<div id="fixed2" vflex="1"><div height="150px"/></div>
+	</div>
+	<!-- markup-like title: must render literally, encoded exactly once -->
+	<groupbox id="gbAmp" title="A &amp; &lt;b&gt;B&lt;/b&gt;">
+		<label value="amp"/>
+	</groupbox>
+</zk>

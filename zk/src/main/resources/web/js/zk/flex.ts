@@ -271,6 +271,19 @@ function _zero(): 0 {
 	return 0;
 }
 
+// ZK-6076: in a content-sized container flex-basis 0 has no free space to share and collapses the items, so keep them at their content size
+function _fixContentSizedFlex(fContainer: HTMLElement, fccs: HTMLElement[], isRow: boolean): void {
+	const jqfc = jq(fContainer).removeClass('z-flex-content'),
+		size = isRow ? 'offsetWidth' : 'offsetHeight';
+	// only an item squeezed below its content can tell a content-sized container from a fixed one
+	if (fccs.some(fcc => isRow ? fcc.scrollWidth > fcc.clientWidth : fcc.scrollHeight > fcc.clientHeight)) {
+		const flexSize = fContainer[size];
+		jqfc.addClass('z-flex-content');
+		if (fContainer[size] <= flexSize)
+			jqfc.removeClass('z-flex-content');
+	}
+}
+
 export namespace flex_global {
 	export const zFlex = { //static methods
 		/**
@@ -652,6 +665,9 @@ export namespace flex_global {
 					cwgts[i].setFlexSize_(szInfo);
 			}
 
+			if (!isAllMin)
+				_fixContentSizedFlex(fContainer, fccs.filter(fcc => jq(fcc).hasClass(flexItemClass)), isRow);
+
 			pwgt.afterChildrenFlex_(wgt);
 		},
 		clearCSSFlex(wgt: zk.Widget, o: FlexOrient, clearAllSiblings?: boolean): void {
@@ -700,7 +716,7 @@ export namespace flex_global {
 			if (clearAllSiblings || noSibFlex) {
 				const fcWgt: zk.Widget & {_cssflexContainer?: boolean} | undefined = zk.$(fContainer);
 				if (fcWgt) delete fcWgt._cssflexContainer;
-				jq(fContainer).removeClass('z-flex').removeClass(isRow ? 'z-flex-row' : 'z-flex-column');
+				jq(fContainer).removeClass('z-flex').removeClass(isRow ? 'z-flex-row' : 'z-flex-column').removeClass('z-flex-content');
 			}
 
 			wgt.afterClearFlex_();
@@ -768,7 +784,7 @@ const _xWidget = zk.augment(zk.Widget.prototype, {
 			n = this.$n() as HTMLElement | undefined;
 		if (n) {
 			const jqn = jq(n),
-				flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item'];
+				flexClasses = ['z-flex', 'z-flex-row', 'z-flex-column', 'z-flex-item', 'z-flex-content'];
 			for (let i = 0, length = flexClasses.length; i < length; i++) {
 				const flexClass = flexClasses[i];
 				if (jqn.hasClass(flexClass)) {
