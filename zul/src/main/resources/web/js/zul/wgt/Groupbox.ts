@@ -161,7 +161,17 @@ export class Groupbox extends zul.ContainerWidget {
 		this._title = title;
 
 		if (o !== title || opts?.force) {
-			this._updDomOuter();
+			// ZK-6076: if the title node already exists and the new title is non-empty,
+			// just update the text to avoid a full rerender that can disrupt
+			// sibling layout ordering when combined with visibility changes.
+			// When a rerender is unavoidable, defer it via rerenderLater_ so it
+			// batches with other setters in the same AU response.
+			const titleCnt = this.$n('title-cnt');
+			if (titleCnt && title) {
+				titleCnt.textContent = title;
+			} else {
+				this.rerenderLater_(zk.Skipper.nonCaptionSkipper);
+			}
 		}
 
 		return this;
