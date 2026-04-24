@@ -166,7 +166,7 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		var swipe = this._swipe;
 		if (swipe) {
 			this._swipe = undefined;
-			swipe.destroy(this.$n() as HTMLElement);
+			swipe.destroy(swipe.node!); // ZK-6090: _unbind0() already cleared this.$n()
 		}
 	},
 	/** @internal */
