@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B96-ZK-6072.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 23 15:38:26 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label id="info" value="DOMPurify version check"/>
+</zk>
