@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090={errors:[]};window.addEventListener('error',function(evt){window.zk6090.errors.push(''+(evt.message||evt.error));});"?>
+<!--
+B110-ZK-6090-TouchSwipe.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Aug 21 11:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps (mobile/touch emulation with the tablet UI on):
+		1. Every widget below listens to onSwipe, so the zkmax touch molds give each of
+		   them a zk.Swipe 300ms after mount.
+		2. Unbinding them must not throw "Node ... is not found" and must leave no
+		   swipe behind.
+	</label>
+	Tablet UI? <label id="tabletUI"/>
+
+	<calendar id="cal" onSwipe='self.setTooltiptext("swiped")'/>
+	<calendar id="early" onSwipe='self.setTooltiptext("swiped")'/>
+
+	<borderlayout id="bl" height="150px" width="400px">
+		<north id="rgn" size="60px" collapsible="true" onSwipe='self.setTooltiptext("swiped")'>
+			<label value="north"/>
+		</north>
+		<center>
+			<label value="center"/>
+		</center>
+	</borderlayout>
+
+	<tabbox id="tbx" width="400px" height="120px">
+		<tabs>
+			<tab label="one"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel id="tp" onSwipe='self.setTooltiptext("swiped")'>
+				<label value="panel"/>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+
+	<slider id="knob" mold="knob"/>
+
+	<script><![CDATA[
+	// unbind() drops the widget from zk.Widget.$, so hold on to it first, and report
+	// the throw instead of letting it escape into the caller
+	window.zk6090Unbind = function (name) {
+		var swipe = window.zk6090[name]._swipe;
+		if (swipe)
+			window.zk6090[name + 'Start'] = {node: swipe.node, fn: swipe.proxy(swipe._swipeStart)};
+		try {
+			window.zk6090[name].unbind();
+		} catch (e) {
+			window.zk6090.errors.push(name + ': ' + (e.message || e));
+		}
+	};
+	window.zk6090HasSwipe = function (name) {
+		return '' + !!window.zk6090[name]._swipe;
+	};
+	// whether the node still carries the swipe's start listener after unbind
+	window.zk6090StillListening = function (name) {
+		var start = window.zk6090[name + 'Start'],
+			hs = (jq._data(start.node, 'events') || {})['ontouchstart' in window ? 'touchstart' : 'mousedown'] || [];
+		return '' + hs.some(function (h) { return h.handler === start.fn; });
+	};
+	zk.afterMount(function () {
+		zk.$('$tabletUI').setValue('' + !!zk.tabletUIEnabled);
+		window.zk6090.cal = zk.Widget.$('$cal');
+		window.zk6090.early = zk.Widget.$('$early');
+		window.zk6090Unbind('early'); // well within the 300ms before its swipe is made
+		window.zk6090.rgn = zk.Widget.$('$rgn');
+		window.zk6090.tp = zk.Widget.$('$tp');
+		window.zk6090.knob = zk.Widget.$('$knob');
+	});
+	]]></script>
+</zk>
