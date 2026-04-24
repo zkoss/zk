@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6090.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed May 06 16:42:49 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps (using mobile/touch emulation):
+		1. Click the x on "test3".
+		2. The tab closes and no error bar (.z-error) appears.
+		3. "Touch Enabled?" should be true.
+	</label>
+	Touch Enabled? <label id="touchEnabled"/>
+	<tabbox id="tb" width="500px" height="250px">
+		<tabs>
+			<tab label="test1"/>
+			<tab label="test2" closable="true"/>
+			<tab label="test3" closable="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel><textbox value="plain"/></tabpanel>
+			<tabpanel><textbox value="plain"/></tabpanel>
+			<tabpanel>
+				<cardlayout id="card" width="400px" height="150px">
+					<textbox value="inside-cardlayout"/>
+				</cardlayout>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<script><![CDATA[
+	zk.afterMount(function () {
+		zk.$('$touchEnabled').setValue('' + zk.touchEnabled);
+	});
+	]]></script>
+</zk>
