@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090Spy=function(id){var m=zk.Widget.$(id);window['zk6090Hits_'+id]=0;m.onFloatUp=function(){window['zk6090Hits_'+id]++;};return String(!!m._contentHandler);};"?>
+<?script content="window.zk6090Hits=function(id){return String(window['zk6090Hits_'+id]);};"?>
+<?script content="window.zk6090FloatUp=function(){zWatch.fire('onFloatUp', zk.Widget.$('$outside'));};"?>
+<?script content="window.zk6090Unbind=function(id){window['zk6090W_'+id]=zk.Widget.$(id);window['zk6090W_'+id].unbind();};"?>
+<?script content="window.zk6090Bind=function(id){window['zk6090W_'+id].bind();};"?>
+<?script content="window.zk6090GainMenupopup=function(){var m=window.zk6090W_m2=zk.Widget.$('$m2');window.zk6090Pp2=m.$n('cnt-pp');m.menupopup=new zul.menu.Menupopup();m.unbind();return String(!!window.zk6090Pp2);};"?>
+<?script content="window.zk6090Pp2Listeners=function(){var e=jq._data(window.zk6090Pp2,'events')||{},c={mouseenter:0,mouseleave:0,keydown:0};for(var k in e){e[k].forEach(function(h){var t=h.origType||k;if(c[t]!==undefined)c[t]++;});}return [c.mouseenter,c.mouseleave,c.keydown].join(',');};"?>
+<!--
+B110-ZK-6090-ContentHandler.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 21 10:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		A menu that carries a content (here a colour picker) instead of a menupopup registers
+		itself for the onFloatUp and onHide watches and puts three listeners on its content popup
+		node. Removing the menu has to give all of that back.
+		1. Click "colour": the palette opens. Click somewhere else: it closes again.
+		2. Click "give the second menu a menupopup": the colour content of the second menu is
+		   replaced by an ordinary (empty) menupopup and nothing is left listening.
+	</label>
+
+	<label id="outside" value="a widget outside the menubar, used as the onFloatUp origin"/>
+
+	<menubar id="mb">
+		<menu id="m" label="colour" content="#color=#FF0000"/>
+		<menu id="m2" label="second colour" content="#color=#00FF00"/>
+	</menubar>
+
+	<button id="addPopup" label="give the second menu a menupopup"
+			onClick="m2.appendChild(new org.zkoss.zul.Menupopup())"/>
+</zk>

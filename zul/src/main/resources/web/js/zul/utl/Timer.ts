@@ -147,7 +147,8 @@ export class Timer extends zk.Widget {
 			delete this._tid;
 			clearTimeout(id);
 		}
-		zAu.unError(this._onErr.bind(this));
+		//must be the same identity _play() registered, or unError() matches nothing
+		zAu.unError(this.proxy(this._onErr));
 	}
 
 	/** @internal */

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6090-Coachmark.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 21 10:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		With the accessibility layer on, a coachmark listens for animationend on its own node so
+		it can move the focus onto the close button once it has slid in. Removing the coachmark
+		has to take exactly that listener off again.
+		1. Click "show": the coachmark appears and the focus lands on its close button.
+		2. Click the close button, then "show" again: the focus still lands on the close button,
+		   and no JS error appears in the console (F12).
+	</label>
+
+	<button id="target" label="Information"/>
+	<coachmark id="cm" target="target" visible="false">
+		<label value="Welcome! click here for more information!"/>
+	</coachmark>
+
+	<button id="show" label="show" onClick="cm.setVisible(!cm.isVisible())"/>
+</zk>

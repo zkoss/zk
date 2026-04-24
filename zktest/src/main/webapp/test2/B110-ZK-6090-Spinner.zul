@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090Errors=[];window.addEventListener('error',function(evt){if(!evt.message)return;window.zk6090Errors.push(evt.message);var b=document.getElementById('zk6090-errors');if(!b){b=document.createElement('pre');b.id='zk6090-errors';b.style.color='red';document.body.appendChild(b);}b.textContent='errors: '+window.zk6090Errors.length+' | '+window.zk6090Errors.join(' | ');});"?>
+<!--
+B110-ZK-6090-Spinner.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 20 16:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		A spinner watches the whole document for the mouse button going up, so it has to stop
+		watching when it is removed. Doublespinner and Timebox share the same arrows.
+		1. Press and hold an up arrow. onChanging closes that window right away.
+		2. Release the mouse button. There should be no JS error in the console (F12).
+	</label>
+
+	<window id="w" title="hold the up arrow" width="300px" border="normal">
+		<spinner id="sp" value="1" onChanging="w.detach()"/>
+	</window>
+
+	<label value="control (stays on the page):"/>
+	<spinner id="spCtrl" value="1"/>
+
+	<separator/>
+	<window id="w2" title="hold the up arrow" width="300px" border="normal">
+		<doublespinner id="dsp" value="1" onChanging="w2.detach()"/>
+	</window>
+
+	<label value="control (stays on the page):"/>
+	<doublespinner id="dspCtrl" value="1"/>
+
+	<separator/>
+	<window id="w3" title="hold the up arrow" width="300px" border="normal">
+		<timebox id="tb" onChanging="w3.detach()"/>
+	</window>
+
+	<label value="control (stays on the page):"/>
+	<timebox id="tbCtrl"/>
+</zk>

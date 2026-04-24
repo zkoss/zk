@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6090-Bandpopup.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 20 16:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		A bandpopup listens to focusin/focusout on its own node, and has to drop those listeners
+		when it is removed.
+		1. Open the bandbox, type in it, close it again: it behaves as usual.
+		2. Click "detach": the bandbox is gone and it leaves no listener behind.
+	</label>
+
+	<bandbox id="bb" value="x">
+		<bandpopup id="bp" width="200px">
+			<vlayout>
+				<label value="content"/>
+				<textbox id="inner"/>
+			</vlayout>
+		</bandpopup>
+	</bandbox>
+
+	<button id="detach" label="detach" onClick="bb.detach()"/>
+</zk>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090={errors:[]};window.addEventListener('error',function(evt){window.zk6090.errors.push(''+(evt.message||evt.error));});"?>
+<!--
+B110-ZK-6090-Teardown.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Aug 21 14:50:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Unbind the biglistbox: the wheel handlers its fake scrollbars put on the body node
+		   must come off, the body node itself stays.
+		2. Open the goldenlayout tab dropdown, then unbind the layout: the dropdown container
+		   must not be left behind in document.body.
+	</label>
+
+	<zscript><![CDATA[
+	class Zk6090MatrixModel extends AbstractListModel implements MatrixModel {
+		List rows = new ArrayList();
+		public void add(Object item) {
+			rows.add(item);
+		}
+		public Object getElementAt(int index) {
+			return rows.get(index);
+		}
+		public int getSize() {
+			return rows.size();
+		}
+		public int getColumnSize() {
+			return 4;
+		}
+		public int getHeadSize() {
+			return 1;
+		}
+		public Object getHeadAt(int rowIndex) {
+			return "Head" + rowIndex;
+		}
+		public Object getCellAt(Object rowData, int columnIndex) {
+			return rowData + "-" + columnIndex;
+		}
+		public Object getHeaderAt(Object headData, int columnIndex) {
+			return headData + ":" + columnIndex;
+		}
+	}
+	Zk6090MatrixModel model = new Zk6090MatrixModel();
+	for (int i = 0; i < 30; i++) {
+		model.add("row" + i);
+	}
+	]]></zscript>
+
+	<biglistbox id="blb" model="${model}" colWidth="120px" width="300px" height="150px">
+		<template name="rows">
+			<html><attribute name="content"><![CDATA[<span>${each}</span>]]></attribute></html>
+		</template>
+	</biglistbox>
+
+	<goldenlayout id="gl" width="260px" height="160px">
+		<goldenpanel title="Panel one"><label value="one"/></goldenpanel>
+		<goldenpanel title="Panel two"><label value="two"/></goldenpanel>
+		<goldenpanel title="Panel three"><label value="three"/></goldenpanel>
+		<goldenpanel title="Panel four"><label value="four"/></goldenpanel>
+		<goldenpanel title="Panel five"><label value="five"/></goldenpanel>
+	</goldenlayout>
+
+	<script><![CDATA[
+	window.zk6090Events = function (node) {
+		var e = jq._data(node, 'events') || {}, out = [];
+		for (var k in e) out.push(k + ':' + e[k].length);
+		return out.sort().join(',');
+	};
+	window.zk6090Wheel = function () {
+		var e = jq._data(window.zk6090.bodyNode, 'events') || {};
+		return '' + ((e.mousewheel || []).length + (e.wheel || []).length);
+	};
+	// the tab dropdown container is moved to document.body while it is open
+	window.zk6090DropdownOrphans = function () {
+		return '' + jq(document.body).children('.lm_tabdropdown_list').length;
+	};
+	window.zk6090Unbind = function (name) {
+		try {
+			window.zk6090[name].unbind();
+		} catch (e) {
+			window.zk6090.errors.push(name + ': ' + (e.message || e));
+		}
+	};
+	zk.afterMount(function () {
+		var blb = zk.Widget.$('$blb');
+		// unbind() drops the widgets from zk.Widget.$, so hold on to them first
+		window.zk6090.blb = blb;
+		window.zk6090.bodyNode = blb.$n('body');
+		window.zk6090.gl = zk.Widget.$('$gl');
+	});
+	]]></script>
+</zk>

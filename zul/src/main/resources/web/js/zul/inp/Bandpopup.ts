@@ -32,16 +32,17 @@ export class Bandpopup extends zul.Widget {
 	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
+		// proxy() caches the bound function, so unbind_ can take the very same one off again
 		jq(this.$n())
-			.on('focusin', this._focusin.bind(this))
-			.on('focusout', this._focusout.bind(this));
+			.on('focusin', this.proxy(this._focusin))
+			.on('focusout', this.proxy(this._focusout));
 	}
 
 	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		jq(this.$n())
-			.off('focusout', this._focusout.bind(this))
-			.off('focusin', this._focusin.bind(this));
+			.off('focusout', this.proxy(this._focusout))
+			.off('focusin', this.proxy(this._focusin));
 		super.unbind_(skipper, after, keepRod);
 	}
 
