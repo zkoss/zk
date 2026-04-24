@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090RG={};window.zk6090RG.count=function(t){var n=zk.Widget.$('$target').$n(),e=(n&&jq._data(n,'events'))||{};return String((e[t]||[]).length);};"?>
+<?script content="window.zk6090RG.bound=0;window.zk6090RG.rebound=false;zk.afterMount(function(){setTimeout(function(){window.zk6090RG.rebound=true;zk.Widget.$('$target').rerender();},50);});"?>
+<!--
+B110-ZK-6090-RebindGesture.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Sep 01 14:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps (touch-enabled desktop emulation):
+		1. Widget.bind_ schedules the swipe/double-tap/tap-hold binding 300ms later, and none of
+		   those three bind methods is idempotent.
+		2. The div below is rerendered 50ms after it is mounted, so the same widget instance is
+		   unbound and bound again while the first timer is still pending.
+		3. Only one set of gesture handlers may end up on the node. Two sets make a single tap
+		   report itself as a double click.
+	</label>
+	Touch Enabled? <label id="touchEnabled"/>
+	tapped onDoubleClick: <label id="dblLog"/>
+
+	<div id="target" width="200px" height="80px"
+			onDoubleClick='dblLog.setValue(dblLog.getValue() + "D")'
+			onSwipe='dblLog.setValue(dblLog.getValue() + "S")'>
+		<label value="rerendered 50ms after mount"/>
+	</div>
+
+	<zscript><![CDATA[
+		touchEnabled.setValue("");
+	]]></zscript>
+	<?script content="zk.afterMount(function(){zk.Widget.$('$touchEnabled').setValue(String(!!zk.touchEnabled));});"?>
+</zk>

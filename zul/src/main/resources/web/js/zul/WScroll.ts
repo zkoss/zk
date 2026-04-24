@@ -412,18 +412,18 @@ export class WScroll extends zk.Object {
 	_listenMouseEvent(): void {
 		if (this._isVer) {
 			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
-			jq(this.control).mousewheel(this._mousewheelY.bind(this));
+			jq(this.control).mousewheel(this.proxy(this._mousewheelY));
 		} else if (!zk.opera) { // ie and opera unsupported
 			// @ts-expect-error: zk.Event is not completely compatible with JQueryMousewheelEventObject
-			jq(this.control).mousewheel(this._mousewheelX.bind(this));
+			jq(this.control).mousewheel(this.proxy(this._mousewheelX));
 		}
 
 		var $drag = jq(this.edrag);
 		$drag.children('div')
-			.on('mouseover', this._mouseOver.bind(this))
-			.on('mouseout', this._mouseOut.bind(this))
-			.on('mouseup', this._mouseUp.bind(this))
-			.on('mousedown', this._mouseDown.bind(this));
+			.on('mouseover', this.proxy(this._mouseOver))
+			.on('mouseout', this.proxy(this._mouseOut))
+			.on('mouseup', this.proxy(this._mouseUp))
+			.on('mousedown', this.proxy(this._mouseDown));
 		$drag.on('click', zk.$void);
 	}
 
@@ -431,17 +431,17 @@ export class WScroll extends zk.Object {
 	_unlistenMouseEvent(): void {
 		if (this._isVer)
 			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
-			jq(this.control).unmousewheel(this._mousewheelY.bind(this));
+			jq(this.control).unmousewheel(this.proxy(this._mousewheelY));
 		else if (!zk.opera) // ie and opera unsupported
 			// @ts-expect-error: unmousewheel expects 0 arguments, but got 1
-			jq(this.control).unmousewheel(this._mousewheelX.bind(this));
+			jq(this.control).unmousewheel(this.proxy(this._mousewheelX));
 
 		var $drag = jq(this.edrag);
 		$drag.children('div')
-			.off('mouseover', this._mouseOver.bind(this))
-			.off('mouseout', this._mouseOut.bind(this))
-			.off('mouseup', this._mouseUp.bind(this))
-			.off('mousedown', this._mouseDown.bind(this));
+			.off('mouseover', this.proxy(this._mouseOver))
+			.off('mouseout', this.proxy(this._mouseOut))
+			.off('mouseup', this.proxy(this._mouseUp))
+			.off('mousedown', this.proxy(this._mouseDown));
 		$drag.off('click', zk.$void);
 	}
 

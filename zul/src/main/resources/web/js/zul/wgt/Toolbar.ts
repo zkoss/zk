@@ -171,6 +171,8 @@ export class Toolbar extends zul.Widget {
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
 		const popup = this.$n('pp');
 		if (popup) {
+			// _openPopup vparents -pp into document.body and only onFloatUp undoes it
+			this._closePopup();
 			this.domUnlisten_(this.$n_('overflowpopup-button'), 'onClick', '_openPopup');
 			zWatch.unlisten({ onFloatUp: this, onCommandReady: this, onSize: this });
 		}

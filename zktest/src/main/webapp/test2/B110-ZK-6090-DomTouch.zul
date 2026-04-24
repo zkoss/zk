@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090Errors=[];window.addEventListener('error',function(evt){if(!evt.message)return;window.zk6090Errors.push(evt.message);var b=document.getElementById('zk6090-errors');if(!b){b=document.createElement('pre');b.id='zk6090-errors';b.style.color='red';document.body.appendChild(b);}b.textContent='errors: '+window.zk6090Errors.length+' | '+window.zk6090Errors.join(' | ');});"?>
+<!--
+B110-ZK-6090-DomTouch.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 20 16:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		On a touch device a widget listening to onSwipe, onDoubleClick or onRightClick gets
+		touch listeners on its own node, and those have to go away with the widget.
+		1. Open this page on a touch device (or with touch emulation on).
+		2. Click "detach": the box is gone and it leaves no touch listener behind.
+	</label>
+
+	<div id="d" width="120px" height="80px" style="border:1px solid #888"
+		 onSwipe="self.setStyle('border:1px solid #888')"
+		 onDoubleClick="self.setStyle('border:1px solid #888')"
+		 onRightClick="self.setStyle('border:1px solid #888')">touch me</div>
+
+	<button id="detach" label="detach" onClick="d.detach()"/>
+</zk>

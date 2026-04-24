@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090={errors:[],rightClicks:0};window.addEventListener('error',function(evt){window.zk6090.errors.push(''+(evt.message||evt.error));});"?>
+<!--
+B110-ZK-6090-TouchUnbind.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Aug 21 10:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps (touch emulation on a desktop user agent):
+		1. Touch the first box and let the page unbind it before the finger lifts:
+		   the handlers the gesture added must go away with the swipe.
+		2. Take the tap listeners off the second box, then unbind it: its touch
+		   handlers must come off even though the listeners are gone.
+		3. Press and hold the second box and let the page unbind it: no onRightClick
+		   may arrive afterwards.
+		4. No JavaScript error should appear in the browser console.
+	</label>
+
+	<div id="swiper" width="120px" height="80px" style="border:1px solid #888"
+		 onSwipe='self.setTooltiptext("swiped")'>swipe me</div>
+
+	<!-- the tap listeners are registered on the client, so they can be taken off again
+	     at run time the way an application removes a listener it no longer wants -->
+	<div id="tapper" width="120px" height="80px" style="border:1px solid #888">hold me</div>
+
+	<script><![CDATA[
+	// the touch listeners a widget carries, so a leftover one can be counted
+	window.zk6090Snap = function (node) {
+		var e = jq._data(node, 'events') || {};
+		return [(e.touchstart || []).length, (e.touchend || []).length,
+			(e.touchmove || []).length].join(',');
+	};
+	// a real touch event, so the handlers under test run the way a finger runs them
+	window.zk6090Touch = function (node, type) {
+		var t = new Touch({identifier: 1, target: node, clientX: 10, clientY: 10});
+		try {
+			node.dispatchEvent(new TouchEvent(type, {touches: [t], changedTouches: [t], bubbles: true}));
+		} catch (e) {
+			window.zk6090.errors.push('' + (e.message || e));
+		}
+	};
+	window.zk6090Drop = function () {
+		var s = window.zk6090;
+		s.tapper.unlisten({onDoubleClick: s.lsnDbl, onRightClick: s.lsnRight});
+	};
+	zk.afterMount(function () {
+		var swiper = zk.Widget.$('$swiper'), tapper = zk.Widget.$('$tapper');
+		// the widgets are unbound below, which takes them out of zk.Widget.$
+		window.zk6090.swiper = swiper;
+		window.zk6090.swiperNode = swiper.$n();
+		window.zk6090.tapper = tapper;
+		window.zk6090.tapperNode = tapper.$n();
+		// the baselines are read before the 300ms lazy gesture init, so the counts
+		// below only ever measure what that init added
+		window.zk6090.swiperBase = window.zk6090Snap(window.zk6090.swiperNode);
+		window.zk6090.tapperBase = window.zk6090Snap(window.zk6090.tapperNode);
+		window.zk6090.startEvt = ('ontouchstart' in window) ? 'touchstart' : 'mousedown';
+
+		window.zk6090.lsnDbl = function () {};
+		window.zk6090.lsnRight = function () {};
+		tapper.listen({onDoubleClick: window.zk6090.lsnDbl, onRightClick: window.zk6090.lsnRight});
+
+		// counts the onRightClick a pending hold timer would still deliver after the unbind
+		var doRightClick = tapper.doRightClick_;
+		tapper.doRightClick_ = function () {
+			window.zk6090.rightClicks++;
+			return doRightClick.apply(this, arguments);
+		};
+	});
+	]]></script>
+</zk>

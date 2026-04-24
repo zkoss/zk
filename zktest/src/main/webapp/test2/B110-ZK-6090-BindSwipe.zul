@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6090-BindSwipe.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 20 10:12:31 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps (touch-enabled desktop emulation):
+		1. The page detaches one div 50ms after mount, i.e. inside the 300ms lazy
+		   gesture-init window opened by Widget.bind_.
+		2. No JavaScript error should appear in the browser console.
+		3. "Touch Enabled?" should be true and "Tablet UI?" should be false.
+	</label>
+	Touch Enabled? <label id="touchEnabled"/>
+	Tablet UI? <label id="tabletUI"/>
+	Max Touch Points? <label id="maxTouch"/>
+	<div id="target" width="200px" height="80px" onSwipe='self.setTooltiptext("swiped")'>
+		<label value="detached inside the lazy bindSwipe_ window"/>
+	</div>
+	<div id="keeper" width="200px" height="80px" onSwipe='self.setTooltiptext("swiped")'>
+		<label value="stays bound, must still get its zk.Swipe"/>
+	</div>
+	<slider id="knob" mold="knob" width="120px" height="120px"/>
+	<script><![CDATA[
+	// seq orders the observations against each other, so the test never has to
+	// infer "the detach happened first" from a sleep boundary
+	window.zk6090 = {seq: 0, errors: [], boundBeforeDetach: false, unboundAfterDetach: false,
+		detachSeq: 0, keeperSeq: 0, targetSeq: 0, targetDesktopAtCall: 'not-called'};
+	window.addEventListener('error', function (evt) {
+		window.zk6090.errors.push('' + (evt.message || evt.error));
+	});
+	zk.afterMount(function () {
+		zk.$('$touchEnabled').setValue('' + !!zk.touchEnabled);
+		zk.$('$tabletUI').setValue('' + !!zk.tabletUIEnabled);
+		zk.$('$maxTouch').setValue('' + navigator.maxTouchPoints);
+
+		var target = zk.Widget.$('$target'), keeper = zk.Widget.$('$keeper'),
+			targetBind = target.bindSwipe_, keeperBind = keeper.bindSwipe_;
+		// records every entry into the lazy gesture init, and what desktop looked like
+		target.bindSwipe_ = function () {
+			window.zk6090.targetSeq = ++window.zk6090.seq;
+			window.zk6090.targetDesktopAtCall = '' + !!this.desktop;
+			return targetBind.apply(this, arguments);
+		};
+		// the keeper is never detached, so its call proves the 300ms timers really fired
+		keeper.bindSwipe_ = function () {
+			window.zk6090.keeperSeq = ++window.zk6090.seq;
+			return keeperBind.apply(this, arguments);
+		};
+
+		setTimeout(function () {
+			window.zk6090.boundBeforeDetach = !!target.desktop;
+			window.zk6090.detachSeq = ++window.zk6090.seq;
+			target.detach();
+			window.zk6090.unboundAfterDetach = !target.desktop;
+		}, 50);
+	});
+	]]></script>
+</zk>

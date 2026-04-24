@@ -684,10 +684,8 @@ export class Slider extends zul.Widget {
 
 	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		if (this._mold == 'knob') {
-			super.unbind_(skipper, after, keepRod);
-			return;
-		}
+		// not gated on _mold: setMold() assigns _mold before it rerenders, so a
+		// switch to the knob mold would otherwise skip the whole teardown below
 		this.efield = undefined;
 		if (this._drag) {
 			this._drag.destroy();

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090FloatUp=function(){try{zWatch.fire('onFloatUp', zk.Widget.$('$outside'));return 'ok';}catch(e){return 'THROW:'+(e.message||e);}};"?>
+<?script content="window.zk6090UnbindPopup=function(id){var p=window.zk6090Popup=zk.Widget.$(id)._rangePopup;p.unbind();return String(!!p);};"?>
+<?script content="window.zk6090PopupOpen=function(id){return String(!!zk.Widget.$(id)._open);};"?>
+<!--
+B110-ZK-6090-Daterange.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 21 10:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		An open daterange popup listens for the onFloatUp watch so that clicking anywhere else
+		closes it. Only close() gives that listener back, so a popup that is taken apart while it
+		is still open has to do it itself.
+		1. Open the first box and click the label below it: the popup closes.
+		2. Open it again and click the second box: the first popup closes and the second opens.
+	</label>
+
+	<label id="outside" value="a widget outside both boxes, used as the onFloatUp origin"/>
+
+	<daterangebox id="dr" format="yyyy-MM-dd" width="360px"/>
+	<daterangebox id="drCtrl" format="yyyy-MM-dd" width="360px"/>
+</zk>

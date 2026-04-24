@@ -800,6 +800,8 @@ export class Widget<TElement extends HTMLElement = HTMLElement> extends zk.Objec
 	declare _norenderdefer;
 	/** @internal */
 	declare _rerendering;
+	/** Handle of the lazy touch-gesture binding timer scheduled by bind_. @internal */
+	declare _gestureTid?: number;
 	declare domExtraAttrs?: Record<string, string>;
 	/** @internal */
 	declare _flexListened;
@@ -3887,10 +3889,22 @@ new zul.wnd.Window({
 
 		if ((zk.mobile || zk.touchEnabled) && after) {
 			after.push(function () {
-				setTimeout(function () {// lazy init
-					self.bindSwipe_();
-					self.bindDoubleTap_();
-					self.bindTapHold_();
+				//one timer per widget: a rebind within the delay would otherwise stack
+				//another, and unbind_ has to be able to cancel it
+				if (self._gestureTid)
+					clearTimeout(self._gestureTid);
+				self._gestureTid = setTimeout(function () {// lazy init
+					self._gestureTid = undefined;
+					if (self.desktop) { //might be unbound
+						//none of the bind*_ is idempotent and a timer from an earlier binding of
+						//this same widget may still be pending, so release before taking a set
+						self.unbindSwipe_();
+						self.unbindDoubleTap_();
+						self.unbindTapHold_();
+						self.bindSwipe_();
+						self.bindDoubleTap_();
+						self.bindTapHold_();
+					}
 				}, 300);
 			});
 		}
@@ -3948,6 +3962,11 @@ new zul.wnd.Window({
 
 		this.unbindChildren_(skipper, after, keepRod);
 		this.cleanDrag_(); //ok to invoke even if not init
+		//the lazy binding timer bind_ scheduled must not outlive this binding
+		if (this._gestureTid) {
+			clearTimeout(this._gestureTid);
+			this._gestureTid = undefined;
+		}
 		this.unbindSwipe_();
 		this.unbindDoubleTap_();
 		this.unbindTapHold_();

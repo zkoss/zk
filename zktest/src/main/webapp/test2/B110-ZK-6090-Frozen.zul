@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090Errors=[];window.addEventListener('error',function(evt){if(!evt.message)return;window.zk6090Errors.push(evt.message);var b=document.getElementById('zk6090-errors');if(!b){b=document.createElement('pre');b.id='zk6090-errors';b.style.color='red';document.body.appendChild(b);}b.textContent='errors: '+window.zk6090Errors.length+' | '+window.zk6090Errors.join(' | ');});"?>
+<?script content="window.zk6090DropFrozen=function(){var f=zk.Widget.$('$fz');f.onSize();f.unbind();};"?>
+<!--
+B110-ZK-6090-Frozen.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 20 17:30:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<!-- the smooth mold is an EE replacement of onSize; this page is about the CE one -->
+	<custom-attributes org.zkoss.zul.frozen.smooth="false"/>
+	<label multiline="true">
+		A frozen column finishes its sizing in a timer, so a frozen that goes away before the timer
+		fires must take the timer with it.
+		1. Click "size and drop the frozen": the first grid sizes its frozen column and drops it
+		   while onSize is still running. There should be no JS error in the console (F12).
+		2. The control grid keeps its frozen: click "resize the control" and it still scrolls
+		   sideways with the arrows.
+	</label>
+
+	<label value="1. the frozen goes away between onSize and its timer"/>
+	<grid id="g" width="300px">
+		<columns>
+			<column label="a"/>
+			<column label="b"/>
+			<column label="c"/>
+			<column label="d"/>
+			<column label="e"/>
+			<column label="f"/>
+		</columns>
+		<frozen id="fz" columns="2"/>
+		<rows>
+			<row>
+				<label value="1"/><label value="2"/><label value="3"/>
+				<label value="4"/><label value="5"/><label value="6"/>
+			</row>
+		</rows>
+	</grid>
+	<button id="drop" label="size and drop the frozen"
+			onClick='Clients.evalJavaScript("zk6090DropFrozen();")'/>
+
+	<separator/>
+	<label value="2. control: the frozen stays"/>
+	<grid id="gCtrl" width="300px">
+		<columns>
+			<column label="a"/>
+			<column label="b"/>
+			<column label="c"/>
+			<column label="d"/>
+			<column label="e"/>
+			<column label="f"/>
+		</columns>
+		<frozen id="fzCtrl" columns="2"/>
+		<rows>
+			<row>
+				<label value="1"/><label value="2"/><label value="3"/>
+				<label value="4"/><label value="5"/><label value="6"/>
+			</row>
+		</rows>
+	</grid>
+	<button id="dropCtrl" label="resize the control" onClick="Clients.resize(gCtrl)"/>
+</zk>

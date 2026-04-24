@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090={errors:[]};window.addEventListener('error',function(evt){window.zk6090.errors.push(''+(evt.message||evt.error));});"?>
+<!--
+B110-ZK-6090-TabboxMold.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Sep 09 10:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps (mobile/touch emulation with the tablet UI on):
+		1. Push a new mold onto the first tabbox from the server.
+		2. The tablet augment only knows "default" and "accordion" and maps the pushed
+		   mold onto one of them, but it still has to redraw: only the accordion mold
+		   draws a -cave2 node inside a tabpanel, so a mold that is assigned without a
+		   redraw leaves the DOM contradicting the mold, and getCaveNode() then finds
+		   nothing.
+	</label>
+	Tablet UI? <label id="tabletUI"/>
+	Touch? <label id="touch"/>
+
+	<tabbox id="tbx" width="400px" height="160px">
+		<tabs>
+			<tab label="one"/>
+			<tab label="two"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel id="tp1">
+				<label value="panel one"/>
+			</tabpanel>
+			<tabpanel id="tp2">
+				<label value="panel two"/>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+
+	<!-- so the client also has the accordion mold loaded, for the mold pushes below -->
+	<tabbox id="accd" mold="accordion" width="400px" height="160px">
+		<tabs>
+			<tab label="already accordion"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<label value="panel"/>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+
+	<button id="toAccordion" label="server: setMold(accordion)" onClick='tbx.setMold("accordion")'/>
+	<button id="toDefault" label="server: setMold(default)" onClick='tbx.setMold("default")'/>
+	<button id="toAccordionLite" label="server: setMold(accordion-lite)" onClick='tbx.setMold("accordion-lite")'/>
+
+	<script><![CDATA[
+	// The accordion mold is the only one that wraps a tabpanel's cave in a -cave2, so it
+	// tells a redrawn tabbox from one whose DOM still belongs to the previous mold.
+	// Everything is looked up again on each call: rerender() throws the old nodes away.
+	window.zk6090Dom = function () {
+		var tbx = zk.Widget.$('$tbx'),
+			tp = zk.Widget.$('$tp1');
+		return [tbx.getMold(),
+			jq(tbx.$n()).hasClass(tbx.$s('accordion')) ? 'accordion' : 'plain',
+			tp.$n('cave2') ? 'cave2' : 'no-cave2',
+			tp.getCaveNode() ? 'cave' : 'no-cave'].join(',');
+	};
+	zk.afterMount(function () {
+		zk.$('$tabletUI').setValue('' + !!zk.tabletUIEnabled);
+		zk.$('$touch').setValue('' + !!zk.touchEnabled);
+	});
+	]]></script>
+</zk>

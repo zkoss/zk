@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090NavOpen=function(){var nav=zk.Widget.$('$nv');window.zk6090NavUuid=nav.uuid;nav._doMouseEnter();return String(!!nav._isPopup);};"?>
+<?script content="window.zk6090NavAtBody=function(){var n=document.getElementById(window.zk6090NavUuid+'-text');if(!n)return 'false';return String(n.parentNode===document.body);};"?>
+<?script content="window.zk6090NavLeaveAndDrop=function(){var nav=zk.Widget.$('$nv');nav._doMouseLeave();nav.parent.removeChild(nav);};"?>
+<?script content="window.zk6090NavStrays=function(){var u=window.zk6090NavUuid,r=[];['text','cave'].forEach(function(s){if(document.getElementById(u+'-'+s))r.push(s);});return r.join(',');};"?>
+<?script content="window.zk6090NavCtrlOpen=function(){var nav=zk.Widget.$('$nvCtrl');nav._doMouseEnter();return String(!!nav._isPopup);};"?>
+<?script content="window.zk6090NavCtrlLeave=function(){zk.Widget.$('$nvCtrl')._doMouseLeave();};"?>
+<?script content="window.zk6090NavCtrlPopup=function(){var nav=zk.Widget.$('$nvCtrl');return String(!!nav._isPopup)+','+String(nav.$n('text').parentNode===document.body);};"?>
+<!--
+B110-ZK-6090-Nav.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Aug 21 10:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		A collapsed navbar pops its nav out by moving the -text and -cave nodes to document.body,
+		and closes it again 100ms after the mouse leaves. A nav that goes away inside that 100ms
+		must still put both nodes back, or they are left in the page for good.
+		1. Hover "dropped": the sub menu pops out beside the navbar.
+		2. Click "leave and drop the nav" (it leaves the nav and removes it in the same task):
+		   the popup must disappear with it. Nothing may be left over at the bottom of the page.
+		3. Control: hover "control" and move away; the popup closes after 100ms as usual.
+	</label>
+
+	<navbar id="nb" orient="vertical" collapsed="true" hflex="min">
+		<nav id="nv" label="dropped" iconSclass="z-icon-cogs">
+			<navitem label="one"/>
+			<navitem label="two"/>
+		</nav>
+		<nav id="nvCtrl" label="control" iconSclass="z-icon-cogs">
+			<navitem label="three"/>
+		</nav>
+	</navbar>
+
+	<button id="pop" label="pop the nav out" onClick='Clients.evalJavaScript("zk6090NavOpen()")'/>
+	<button id="drop" label="leave and drop the nav" onClick='Clients.evalJavaScript("zk6090NavLeaveAndDrop()")'/>
+</zk>

@@ -652,6 +652,8 @@ export class ContentHandler extends zk.Object {
 	_shadow?: zk.eff.Shadow;
 	/** @internal */
 	_pp?: HTMLElement;
+	/** The node bind() listened to, or nothing if it made no registration. @internal */
+	_listenedNode?: HTMLElement;
 
 	constructor(wgt: zul.menu.Menu, content: string) {
 		super();
@@ -677,7 +679,8 @@ export class ContentHandler extends zk.Object {
 	bind(): void {
 		var wgt = this._wgt;
 		if (!wgt.menupopup) {
-			wgt.domListen_(wgt.$n_(), 'onClick', 'onShow');
+			this._listenedNode = wgt.$n_();
+			wgt.domListen_(this._listenedNode, 'onClick', 'onShow');
 			zWatch.listen({onFloatUp: wgt, onHide: wgt});
 		}
 
@@ -690,13 +693,21 @@ export class ContentHandler extends zk.Object {
 
 	unbind(): void {
 		var wgt = this._wgt;
-		if (!wgt.menupopup) {
-			if (this._shadow) {
-				this._shadow.destroy();
-				this._shadow = undefined;
-			}
-			wgt.domUnlisten_(wgt.$n_(), 'onClick', 'onShow');
+		// onShow vparented -cnt-pp into document.body; _pp is dropped below, so this is the
+		// last chance to bring it back - otherwise it is orphaned there, still visible
+		this.onHide();
+		// the shadow is made whatever the menu carries, so it has to go the same way
+		if (this._shadow) {
+			this._shadow.destroy();
+			this._shadow = undefined;
+		}
+		// release what bind() took: onChildAdded_ sets menupopup before it rerenders, so
+		// re-testing it here reads a state bind() never saw and skips the release for good
+		var listened = this._listenedNode;
+		if (listened) {
+			wgt.domUnlisten_(listened, 'onClick', 'onShow');
 			zWatch.unlisten({onFloatUp: wgt, onHide: wgt});
+			this._listenedNode = undefined;
 		}
 
 		jq(this._pp, zk)

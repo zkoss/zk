@@ -809,6 +809,11 @@ export class LayoutRegion extends zul.Widget {
 			}
 		}
 
+		// both flags, or the next binding is drawn collapsed while setSlide() still
+		// short-circuits on the old value and slides the region the wrong way
+		jq(document).off('click', this.proxy(this._docClick));
+		this._isSlide = this._slide = false;
+
 		this.destroyBar_();
 
 		if (this.$n('split')) {

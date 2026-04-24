@@ -77,6 +77,10 @@ export class Frozen extends zul.Widget {
 	/** @internal */
 	_delayedScroll?: number;
 	/** @internal */
+	_delayedSize?: number;
+	/** Handle of the sizing timer the smooth onSize schedules. @internal */
+	_delayedSmoothSize?: number;
+	/** @internal */
 	_lastScale?: number;
 	/** @internal */
 	_shallSync?: boolean;
@@ -340,6 +344,19 @@ export class Frozen extends zul.Widget {
 			jq(this.parent?.$n('body')).css('scrollbar-width', '');
 		this._clearColumnBorders();
 
+		// these sizing timers reach the DOM, so they must not outlive the binding.
+		// _delayedScroll is deliberately NOT cancelled here: it also carries the
+		// smartUpdate('start') of a scroll the user already made, which a rerender
+		// in the same tick would otherwise swallow. Its body checks desktop instead.
+		if (this._delayedSmoothSize) {
+			clearTimeout(this._delayedSmoothSize);
+			this._delayedSmoothSize = undefined;
+		}
+		if (this._delayedSize) {
+			clearTimeout(this._delayedSize);
+			this._delayedSize = undefined;
+		}
+
 		var p = this.parent!,
 			body = p.$n('body'),
 			foot = p.$n('foot'),
@@ -399,7 +416,14 @@ export class Frozen extends zul.Widget {
 				}
 			}
 		}
-		setTimeout(() => {
+		if (this._delayedSmoothSize)
+			clearTimeout(this._delayedSmoothSize);
+		this._delayedSmoothSize = setTimeout(() => {
+			this._delayedSmoothSize = undefined;
+			//unbind_ cancels this timer, but _unbindrod() drops a widget through
+			//_unbind0() alone and never runs unbind_, so it can still get here
+			if (!this.desktop)
+				return;
 			this._freezeRightColumns();
 			this._onSizeLater();
 		});
@@ -430,7 +454,14 @@ export class Frozen extends zul.Widget {
 		}
 
 		// Bug 3218078, to do the sizing after the 'setAttr' command
-		setTimeout(() => {
+		if (this._delayedSize)
+			clearTimeout(this._delayedSize);
+		this._delayedSize = setTimeout(() => {
+			this._delayedSize = undefined;
+			//unbind_ cancels this timer, but _unbindrod() drops a widget through
+			//_unbind0() alone and never runs unbind_, so it can still get here
+			if (!this.desktop)
+				return;
 			_onSizeLater(this);
 			this._syncFrozenNow();
 		});
@@ -518,11 +549,15 @@ export class Frozen extends zul.Widget {
 				clearTimeout(this._delayedScroll);
 			}
 			this._delayedScroll = setTimeout(() => {
+				this._delayedScroll = undefined;
+				//survives a rerender on purpose (unbind_ leaves it alone) so the
+				//scroll still reaches the server, but never touches a dead widget
+				if (!this.desktop)
+					return;
 				this._lastScale = num;
 				this._doScrollNow(num);
 				this.smartUpdate('start', num);
 				this._start = num;
-				this._delayedScroll = undefined;
 			}, 0);
 			return;
 		}

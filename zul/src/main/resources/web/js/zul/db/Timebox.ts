@@ -735,6 +735,9 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			this.timerId = undefined;
 		}
 		zWatch.unlisten({onSize: this});
+		// the listener lives on the body, it has to go even if the button never came up
+		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
+		this._currentbtn = undefined;
 		var btn = this.$n('btn');
 		if (btn) {
 			this.domUnlisten_(btn, 'onZMouseDown', '_btnDown')

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090Errors=[];window.addEventListener('error',function(evt){if(!evt.message)return;window.zk6090Errors.push(evt.message);var b=document.getElementById('zk6090-errors');if(!b){b=document.createElement('pre');b.id='zk6090-errors';b.style.color='red';document.body.appendChild(b);}b.textContent='errors: '+window.zk6090Errors.length+' | '+window.zk6090Errors.join(' | ');});window.zk6090SlideFlags=function(){var r=zk.Widget.$('$w');return r._isSlide+','+r._slide;};window.zk6090SlideShown=function(){var n=zk.Widget.$('$w').$n('real');if(!n)return false;return n.offsetWidth>0?n.offsetHeight>0:false;};window.zk6090Rerender=function(){zk.Widget.$('$w').rerender(-1);};"?>
+<!--
+B110-ZK-6090-SlideRebind.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Sep 03 16:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		A collapsed region that is slid down carries that state on the widget, not in the DOM, so a
+		rerender draws it collapsed again while the state still says it is slid down.
+		1. Click the "W" title of the collapsed region. It slides down.
+		2. Click "rerender this region" inside it. The region is drawn collapsed again.
+		3. Click the "W" title once. It must slide down again on that first click, and there should
+		   be no JS error in the console (F12).
+	</label>
+
+	<borderlayout id="bl" height="200px" width="420px">
+		<west id="w" title="W" collapsible="true" open="false" size="160px">
+			<vlayout>
+				<label value="slid down"/>
+				<!-- inside -real, so the click does not slide the region up first;
+					deferred a tick because the rerender replaces this button too -->
+				<button id="rerender" label="rerender this region"
+						w:onClick="setTimeout(zk6090Rerender, 0);"/>
+			</vlayout>
+		</west>
+		<center border="none">
+			<label value="center"/>
+		</center>
+	</borderlayout>
+</zk>
