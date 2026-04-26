@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6060.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sun Apr 26 08:36:26 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Fetch https://www.zkoss.org/2005/zul/zul.xsd
+        2. Run a script that flattens every &lt;xs:attributeGroup ref="..." /&gt;
+            and counts attribute names per attributeGroup / complexType
+            (see find-duplicates.js in ZK-6060).
+        3. Before the fix it reported duplicates such as:
+            inputElementAttrGroup        : onOK, onCancel
+            formatInputElementAttrGroup  : onOK, onCancel
+            numberInputElementAttrGroup  : onOK, onCancel
+            dateTimeInputElementAttrGroup: onOK, onCancel
+            plus duplicates inside colorboxType (width/height),
+            cropperType (onCancel), goldenpanelType (draggable/droppable),
+            listboxType / windowType (onOK/onCancel) and timeboxType /
+            timepickerType (constraint).
+    </label>
+</zk>
