@@ -4,6 +4,7 @@ Apr 08, 2026
 
 * Bugs
   ZK-6083: Fix path traversal vulnerabilities on WebSphere Liberty deployments
+  ZK-6092: DOMPurify: Fix XSS vulnerabilities CVE-2026-0540 and CVE-2025-15599
 
 * Upgrade Notes
 
