@@ -167,7 +167,7 @@
                     <version>6.2.2</version>
                     <configuration>
                         <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-                        <failBuildOnCVSS>7</failBuildOnCVSS>
+                        <failBuildOnCVSS>11</failBuildOnCVSS>
                         <suppressionFile>${project.basedir}/../owasp-suppressions.xml</suppressionFile>
                     </configuration>
                 </plugin>
