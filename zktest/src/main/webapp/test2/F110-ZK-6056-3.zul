@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6056-3.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Oct 15 13:00:20 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+	1. Click the chosenbox below and type "_".
+	Expected: exactly 50 options, the limit from the SimpleListModel's getMaxNumberInSubModel.
+	]]></label>
+	<zscript><![CDATA[
+		ListModel model = new org.zkoss.zktest.test2.F110_ZK_6056Model();
+	]]></zscript>
+	<chosenbox width="400px" model="${model}">
+		<custom-attributes org.zkoss.zul.chosenbox.filterLogic="contains"/>
+	</chosenbox>
+</zk>

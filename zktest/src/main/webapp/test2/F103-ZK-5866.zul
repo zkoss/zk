@@ -19,7 +19,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 
     <label multiline="true">
         1. This is the extra filter logic of Chosenbox.
-        2. It uses “contains” as the filtering logic. When you use ListSubModel, you need to configure a comparator via toListSubModel.
+        2. It uses “contains” as the filtering logic. With a ListSubModel, filterLogic alone decides the matching; the comparator passed to toListSubModel is no longer required.
     </label>
 
     <chosenbox width="400px" model="${subModel}">
