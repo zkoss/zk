@@ -172,6 +172,22 @@ public class ListModels {
 		return new SubModel<T>(model, (model instanceof ListModelMap) ? MAP_COMPARATOR : STRING_COMPARATOR, 15);
 	}
 
+	/**
+	 * Returns the maximal number of matched items the given model returns for a
+	 * search: the {@code nRows} of a sub model created by {@link #toListSubModel},
+	 * or {@link SimpleListModel#getMaxNumberInSubModel} of a {@link SimpleListModel}.
+	 * Returns -1 for any other model.
+	 * @param model the model to inspect
+	 * @since 11.0.0
+	 */
+	public static int getSubModelRows(ListModel<?> model) {
+		if (model instanceof SubModel)
+			return ((SubModel<?>) model)._nRows;
+		if (model instanceof SimpleListModel)
+			return ((SimpleListModel<?>) model).getMaxNumberInSubModel(-1);
+		return -1;
+	}
+
 	private static class SubModel<E> implements ListModel<E>, ListSubModel<E>, Selectable<E>, java.io.Serializable {
 		private final ListModel<E> _model;
 

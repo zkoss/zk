@@ -14,6 +14,7 @@ ZK 11.0.0
   ZK-6095: Support ctrlKeys in borderlayout
   ZK-6084: Accessibility Optimization: WCAG 2.1 AA Advanced Audit
   ZK-6089: Support ~./ prefix in <label-location> entries in zk.xml
+  ZK-6056: Configurable Filter Logic for Chosenbox with ListSubModel
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
