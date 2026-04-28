@@ -31,6 +31,7 @@ ZK 11.0.0
   ZK-5751: Combobox without an explicit itemRender mistakenly uses parent's template
   ZK-6136: Responsive Grid visible false column reappears
   ZK-6107: drag a panel in goldenlayout and it disappears
+  ZK-6071: Unexpected JS error when using datebox in nested groupbox
 
 * Upgrade Notes
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
