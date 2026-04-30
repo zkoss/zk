@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6089.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 30 17:26:03 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label id="msg" value="${labels.zk6089.message}"/>
+</zk>

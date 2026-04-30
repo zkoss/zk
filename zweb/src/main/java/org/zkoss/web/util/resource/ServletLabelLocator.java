@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.LabelLocator;
+import org.zkoss.util.resource.Locators;
 import org.zkoss.web.servlet.Servlets;
 
 /**
@@ -52,6 +53,11 @@ public class ServletLabelLocator implements LabelLocator {
 	/** Constructs a locator for the given path.
 	 * @param path the path of the properties file<br/>
 	 * Notice that <code>file://path</code> is supported (but not http://).
+	 * Since 10.4.0, <code>~./path</code> is also supported to load the
+	 * properties file from the class path under {@link ClassWebResource#PATH_PREFIX}
+	 * (i.e. <code>/web</code>). This is convenient for JAR-packaged
+	 * applications (e.g. ZK Spring Boot) where label files are bundled
+	 * inside the class path rather than under the servlet context.
 	 * @since 5.0.7
 	 */
 	public ServletLabelLocator(ServletContext ctx, String path) {
@@ -86,10 +92,18 @@ public class ServletLabelLocator implements LabelLocator {
 	}
 
 	private URL locate0(String path, Locale locale) throws IOException {
+		// ZK-6089: resolve the ~./ classpath prefix before locale concatenation
+		// so the locale suffix is inserted relative to the file extension on
+		// the remaining path, not relative to the dot in '~.'.
+		final boolean classpath = path.startsWith("~./");
+		if (classpath)
+			path = ClassWebResource.PATH_PREFIX + path.substring(2);
 		final int j = path.lastIndexOf('.');
 		final String prefix = j >= 0 ? path.substring(0, j) : path;
 		final String suffix = j >= 0 ? path.substring(j) : "";
 		path = locale == null ? prefix + suffix : prefix + '_' + locale + suffix;
+		if (classpath)
+			return Locators.getDefault().getResource(path);
 		return path.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://") ? Servlets.getResource(_ctx, path)
 				: _ctx.getResource(path);
 		//we don't accept http:// since we cannot detect if it exists
