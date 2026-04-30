@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6044.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 30 17:47:57 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+	import org.zkoss.zul.DefaultTreeModel;
+	import org.zkoss.zul.DefaultTreeNode;
+	import java.util.Arrays;
+	import java.util.ArrayList;
+	DefaultTreeModel treeModel = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+		Arrays.asList(new DefaultTreeNode[]{
+				new DefaultTreeNode("David", new ArrayList()),
+				new DefaultTreeNode("Thomas", new ArrayList()),
+				new DefaultTreeNode("Steven", new ArrayList())})));
+	]]></zscript>
+	<tree id="tree" width="300px" model="${treeModel}"
+		onAfterRender="self.setSelectedItem(self.getTreechildren().getLastChild())"/>
+</zk>
