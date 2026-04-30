@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6089.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 30 17:26:03 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label id="msg" value="${labels.zk6089.message}"/>
+	<button id="zhTW" label="zh_TW">
+		<attribute name="onClick"><![CDATA[
+			session.setAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE, org.zkoss.util.Locales.getLocale("zh_TW"));
+			execution.sendRedirect(null);
+		]]></attribute>
+	</button>
+</zk>
