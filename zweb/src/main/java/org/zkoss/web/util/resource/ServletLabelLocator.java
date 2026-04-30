@@ -44,6 +44,8 @@ public class ServletLabelLocator implements LabelLocator {
 	/** Constructs a locator where the properties file is decided
 	 * by the library property called org.zkoss.util.label.web.location.
 	 * If not defined, /WEB-INF/zk-label.properties is assumed
+	 * <p>The library property accepts the same syntax as the path passed to
+	 * {@link #ServletLabelLocator(ServletContext, String)}.
 	 */
 	public ServletLabelLocator(ServletContext ctx) {
 		this(ctx, null);
@@ -52,6 +54,15 @@ public class ServletLabelLocator implements LabelLocator {
 	/** Constructs a locator for the given path.
 	 * @param path the path of the properties file<br/>
 	 * Notice that <code>file://path</code> is supported (but not http://).
+	 * Since 11.0.0, <code>~./path</code> is also supported to load the
+	 * properties file from the class path under {@link ClassWebResource#PATH_PREFIX}
+	 * (i.e. <code>/web</code>). This is convenient for JAR-packaged
+	 * applications (e.g. ZK Spring Boot) where label files are bundled
+	 * inside the class path rather than under the servlet context.
+	 * <p>Caution: the class path's <code>/web</code> directory is served as
+	 * public static content (<code>&lt;ctx&gt;/zkau/web/...</code>), so a label
+	 * file put there can be downloaded by anyone. Keep confidential labels
+	 * under <code>/WEB-INF</code> instead.
 	 * @since 5.0.7
 	 */
 	public ServletLabelLocator(ServletContext ctx, String path) {
@@ -79,17 +90,35 @@ public class ServletLabelLocator implements LabelLocator {
 			if (fallback)
 				url = locate0("/WEB-INF/i3-label.properties", locale);
 			else if (locale == null)
-				log.error("File not found in " + _ctx.getServletContextName() + ": " + path);
+				log.error("File not found in " + (isClassPath(path) ? "the class path" : _ctx.getServletContextName())
+						+ ": " + path);
 		//error is shown only if locale, since zh_TW will load zh_TW and zh
 		//while users won't prepare zh
 		return url;
 	}
 
+	private static boolean isClassPath(String path) {
+		return path.startsWith("~./");
+	}
+
 	private URL locate0(String path, Locale locale) throws IOException {
+		// ZK-6089: strip the ~./ prefix before locale concatenation so the
+		// locale suffix is inserted relative to the file extension on the
+		// remaining path, not relative to the dot in '~.'.
+		final boolean classpath = isClassPath(path);
+		if (classpath)
+			path = path.substring(2);
 		final int j = path.lastIndexOf('.');
 		final String prefix = j >= 0 ? path.substring(0, j) : path;
 		final String suffix = j >= 0 ? path.substring(j) : "";
 		path = locale == null ? prefix + suffix : prefix + '_' + locale + suffix;
+		if (classpath) {
+			//resolve through ClassWebResource so a ~./ label file honours the
+			//extra locator (org.zkoss.web.util.resource.dir) and the
+			//path-traversal guard, like every other ~./ resource
+			final ExtendletContext extctx = Servlets.getExtendletContext(_ctx, ".");
+			return extctx != null ? extctx.getResource(path) : ClassWebResource.getClassResource(path);
+		}
 		return path.toLowerCase(java.util.Locale.ENGLISH).startsWith("file://") ? Servlets.getResource(_ctx, path)
 				: _ctx.getResource(path);
 		//we don't accept http:// since we cannot detect if it exists
