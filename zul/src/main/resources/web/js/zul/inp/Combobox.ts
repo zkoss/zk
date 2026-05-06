@@ -464,6 +464,11 @@ export class Combobox extends zul.inp.ComboWidget {
 		var inp = this.getInputNode()!,
 			val = inp.value = sel ? sel.getLabel() : '';
 		this.valueSel_ = val;
+		// ZK-6073: arrow-key nav with instantSelect=false skips the sendOnSelect
+		// branch in _hilite2, leaving valueEnter_ stale from prior typeahead.
+		// _onChanging's bySelectBack check then mistakes the change for a
+		// user edit and fires onChanging.
+		this.valueEnter_ = val;
 		this._hilite2(sel, opts);
 
 		// Fixed IE/Safari/Chrome
