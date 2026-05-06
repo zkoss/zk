@@ -643,6 +643,7 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 
 		if (_addNamespaces != null)
 			elem._addNamespaces = new LinkedHashMap<String, Namespace>(_addNamespaces);
+		copyInScopeAttributeNamespaces(elem);
 
 		if (_attrs != null) {
 			elem._attrs = elem.newAttrArray();
@@ -653,6 +654,24 @@ implements Attributable, Namespaceable, org.w3c.dom.Element {
 				elem._attrs.add((Attribute)attr.clone());
 		}
 		return elem;
+	}
+	/**
+	 * A detached clone has to carry the namespaces used by its attributes,
+	 * otherwise reattaching the cloned attributes fails namespace validation.
+	 */
+	private void copyInScopeAttributeNamespaces(Element elem) {
+		if (_attrs == null)
+			return;
+
+		for (Attribute attr: _attrs) {
+			final Namespace attrNs = attr.getNamespace();
+			if (attrNs == null || attrNs.getPrefix().length() == 0
+			|| elem.getNamespace(attrNs.getPrefix()) != null)
+				continue;
+
+			final Namespace inScope = getNamespace(attrNs.getPrefix());
+			elem.addDeclaredNamespace(inScope != null ? inScope: attrNs);
+		}
 	}
 
 	//-- Node --//

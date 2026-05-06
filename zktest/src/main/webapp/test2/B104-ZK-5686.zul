@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5686.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Sat Jan 26 10:51:45 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+How to reproduce ZK-5686 (before the fix)
+
+Setup:
+	An outer ZUL applies an inner ZUL via &lt;apply templateURI="..."/&gt;.
+	The inner ZUL declares a namespace on its root (xmlns:w="client") and
+	uses that prefix on a child attribute (w:onClick="...").
+
+Trigger path (zklinter):
+	zklinter's ZulParser resolves the &lt;apply&gt; by calling
+	cloneNode(true) on the included root, then appendChild to the outer
+	tree (zkcml/zklinter/.../ZulParser.java around line 190).
+	cloneNode -&gt; Element.clone() detaches the cloned subtree from its
+	parent (AbstractItem.clone sets _parent = null) and copies only the
+	element's own _addNamespaces. The cloned attributes still carry the
+	w prefix, but the cloned owner can no longer resolve it through the
+	parent chain.
+
+Failure:
+	Re-attaching cloned attributes via AttrArray.checkAdd ->
+	Attribute.setOwner -> reuseNamespace looks up the prefix on the new
+	owner, finds nothing, and throws DOMException NAMESPACE_ERR.
+
+Repro options:
+	1. Unit-level (fastest, no zkcml needed):
+	     cd zktest
+	     ./gradlew test \
+	         --tests "org.zkoss.zktest.zats.test2.B104_ZK_5686Test"
+	   Before the fix the test fails at clone with NAMESPACE_ERR;
+	   after the fix it passes.
+
+	2. Linter-level (mirrors the original report):
+	     ./gradlew publishToMavenLocal       # in zk/
+	     cd ../zkcml/zklinter
+	     ./gradlew runLinter
+	   Before the fix you see "Failed to include Zul file" / namespace
+	   errors on B104-ZK-5686.zul (because the linter clones the
+	   included tree). After the fix the linter parses cleanly.
+
+Note:
+	Loading this page in a browser does not by itself reproduce the
+	bug. The runtime ZUL parser (zk Parser, not idom cloneNode) does
+	not take the failing code path, so the page renders with or
+	without the fix. Use option 1 or 2 above to verify.
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B104_ZK_5686VM')">
+		<apply templateURI="B104-ZK-5686-included.zul"/>
+	</div>
+</zk>
