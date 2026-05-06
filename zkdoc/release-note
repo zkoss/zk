@@ -67,6 +67,7 @@ ZK 11.0.0
   ZK-6170: Clicking a partly visible input in a listbox with frozen columns scrolls the columns and loses the click
   ZK-6171: The horizontal scroll of a listbox with frozen columns lands in a different place after a re-render while an input in it has focus
   ZK-6169: Grid / Listbox emptybody is missing ARIA roles (rowgroup / row / gridcell) under role="grid"
+  ZK-6073: instantSelect combobox sends incorrect onChanging when navigating through Up/down
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on

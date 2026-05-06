@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6073.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed May 06 20:21:48 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Open the popup with the button, click the input and press Down once.
+		2. Within 0.3 seconds, press and hold Down for about 1 second; repeat a few times with Up and Down.
+		3. "non-selectBack onChanging" should stay 0.
+	</label>
+	<div apply="org.zkoss.zktest.test2.B110_ZK_6073Composer">
+		<combobox id="cb" instantSelect="false">
+			<comboitem label="ABC abc"/>
+			<comboitem label="ABC def"/>
+			<comboitem label="ABC ghi"/>
+			<comboitem label="ABC jkl"/>
+			<comboitem label="ABC mno"/>
+			<comboitem label="ABC pql"/>
+			<comboitem label="ABC rst"/>
+			<comboitem label="ABC uvw"/>
+			<comboitem label="ABC xyz"/>
+			<comboitem label="DEF abc"/>
+			<comboitem label="DEF def"/>
+		</combobox>
+		<separator/>
+		<hlayout>
+			total onChanging:
+			<label id="totalCount" value="0"/>
+		</hlayout>
+		<hlayout>
+			non-selectBack onChanging:
+			<label id="nonSelectBackCount" value="0"/>
+		</hlayout>
+	</div>
+</zk>
