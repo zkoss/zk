@@ -18,6 +18,7 @@ ZK 10.4.0
   ZK-5765: InaccessibleWidgetBlockService blocks listheaders from being made visible by autopaging
   ZK-5259: Radiogroup external radio items lost after setPage
   ZK-6092: DOMPurify: Fix XSS vulnerabilities CVE-2026-0540 and CVE-2025-15599
+  ZK-6079: zul.xsd : toolbar only allows one child component instead of multiple
 
 * Upgrade Notes
 

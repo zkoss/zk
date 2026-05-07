@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6079.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Mar 31 15:49:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Open this ZUL file in an IDE with XSD validation enabled.
+        2. Verify that no XSD validation errors are reported for the toolbar with multiple children.
+    </label>
+    <toolbar>
+        <toolbarbutton label="Button 1"/>
+        <toolbarbutton label="Button 2"/>
+        <toolbarbutton label="Button 3"/>
+    </toolbar>
+</zk>

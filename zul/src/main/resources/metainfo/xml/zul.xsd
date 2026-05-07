@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.3.0.202512151211">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202603251558">
 	<!--
 	SIMPLETYPE
 	-->
@@ -3254,10 +3254,7 @@
 	<!-- toolbar -->
 	<xs:element name="toolbar" type="toolbarType" />
 	<xs:complexType name="toolbarType">
-		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
-		</xs:sequence>
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="align" type="packAttrType" use="optional"/>
