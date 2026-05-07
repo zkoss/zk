@@ -13,18 +13,12 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v143.network.Network;
-import org.openqa.selenium.devtools.v143.network.model.Response;
 
 import org.zkoss.test.webdriver.ExternalZkXml;
 import org.zkoss.test.webdriver.ForkJVMTestOnly;
@@ -49,53 +43,20 @@ public class F103_ZK_5265PolicyDynamicTest extends WebDriverTestCase {
 	}
 
 	@Test
-	public void testHeader() {
-		connect();
-		DevTools devTools = ((ChromeDriver) driver).getDevTools();
-		devTools.createSession();
-
-		devTools.send(Network.enable(
-				Optional.empty(),
-				Optional.empty(),
-				Optional.empty(),
-				Optional.empty(),
-				Optional.empty()
-		));
-
-
-		AtomicReference<String> cspHeaderRef = new AtomicReference<>();
-		AtomicReference<String> cspReportOnlyRef = new AtomicReference<>();
-		CountDownLatch latch = new CountDownLatch(1);
-
-		devTools.addListener(Network.responseReceived(), response -> {
-			Response resp = response.getResponse();
-
-			if (resp.getUrl().contains(test_page)) {
-				Map<String, Object> headers = resp.getHeaders().toJson();
-				Object csp = headers.get("Content-Security-Policy");
-				Object cspReportOnly = headers.get("Content-Security-Policy-Report-Only");
-
-				cspHeaderRef.set(csp != null ? csp.toString() : null);
-				cspReportOnlyRef.set(cspReportOnly != null ? cspReportOnly.toString() : null);
-				latch.countDown();
-			}
-		});
-
-		driver.get(getAddress() + test_page);
-		waitResponse();
-
+	public void testHeader() throws IOException {
+		HttpURLConnection conn = (HttpURLConnection) new URL(getAddress() + test_page).openConnection();
+		conn.setRequestMethod("GET");
+		conn.connect();
 		try {
-			assertTrue(latch.await(10, TimeUnit.SECONDS));
-			assertNotNull(cspHeaderRef.get());
-			assertNull(cspReportOnlyRef.get());
-
-			String cspHeader = cspHeaderRef.get();
+			String cspHeader = conn.getHeaderField("Content-Security-Policy");
+			assertNotNull(cspHeader);
+			assertNull(conn.getHeaderField("Content-Security-Policy-Report-Only"));
 			assertTrue(cspHeader.contains("script-src"));
 			assertTrue(cspHeader.contains("'self'"));
 			assertTrue(cspHeader.contains("'unsafe-inline'"));
 			assertTrue(cspHeader.contains("'unsafe-eval'"));
-			driver.quit();
-		} catch (InterruptedException ignored) {
+		} finally {
+			conn.disconnect();
 		}
 	}
 
