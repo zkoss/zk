@@ -13,15 +13,13 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Optional;
+import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v143.network.Network;
-import org.openqa.selenium.devtools.v143.network.model.ConnectionType;
+import org.openqa.selenium.chromium.ChromiumNetworkConditions;
 
 import org.zkoss.test.webdriver.ChromiumHeadlessDriver;
 import org.zkoss.test.webdriver.ExternalZkXml;
@@ -39,6 +37,15 @@ public class B96_ZK_4194Test extends WebDriverTestCase {
 
 	protected boolean isUsingRemoteWebDriver(ChromeOptions driverOptions) {
 		return false;
+	}
+
+	private static ChromiumNetworkConditions offlineConditions() {
+		ChromiumNetworkConditions conditions = new ChromiumNetworkConditions();
+		conditions.setOffline(true);
+		conditions.setLatency(Duration.ofMillis(20));
+		conditions.setDownloadThroughput(20);
+		conditions.setUploadThroughput(40);
+		return conditions;
 	}
 
 	@Test
@@ -59,14 +66,8 @@ public class B96_ZK_4194Test extends WebDriverTestCase {
 		_local.set(window1);
 		assertEquals(1, jq("$eventLog @label").length());
 
-		try (DevTools devTools = window1.getDevTools()) {
-			devTools.createSession();
-			// network offline
-			devTools.send(
-					Network.enable(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
-			devTools.send(Network.emulateNetworkConditions(true, 20, 20, 40,
-					Optional.of(ConnectionType.WIFI), Optional.empty(), Optional.empty(), Optional.empty()));
-
+		window1.setNetworkConditions(offlineConditions());
+		try {
 			_local.set(window2);
 			for (int i = 0; i < 9; i++) {
 				click(jq("@button"));
@@ -77,7 +78,8 @@ public class B96_ZK_4194Test extends WebDriverTestCase {
 
 			_local.set(window1);
 			assertEquals(1, jq("$eventLog @label").length());
-
+		} finally {
+			window1.deleteNetworkConditions();
 		}
 
 		click(jq("@button"));
@@ -105,15 +107,8 @@ public class B96_ZK_4194Test extends WebDriverTestCase {
 		_local.set(window1);
 		assertEquals(1, jq("$eventLog @label").length());
 
-		try (DevTools devTools = window1.getDevTools()) {
-			devTools.createSession();
-			// network offline
-			devTools.send(Network.enable(Optional.empty(), Optional.empty(),
-					Optional.empty(), Optional.empty(), Optional.empty()));
-			devTools.send(Network.emulateNetworkConditions(true, 20, 20, 40,
-					Optional.of(ConnectionType.WIFI),Optional.empty(), Optional.empty(),
-					Optional.empty()));
-
+		window1.setNetworkConditions(offlineConditions());
+		try {
 			_local.set(window2);
 			for (int i = 0; i < 19; i++) {
 				click(jq("@button"));
@@ -124,7 +119,8 @@ public class B96_ZK_4194Test extends WebDriverTestCase {
 
 			_local.set(window1);
 			assertEquals(1, jq("$eventLog @label").length());
-
+		} finally {
+			window1.deleteNetworkConditions();
 		}
 
 		click(jq("@button"));
@@ -152,15 +148,8 @@ public class B96_ZK_4194Test extends WebDriverTestCase {
 		_local.set(window1);
 		assertEquals(1, jq("$eventLog @label").length());
 
-		try (DevTools devTools = window1.getDevTools()) {
-			devTools.createSession();
-			// network offline
-			devTools.send(Network.enable(Optional.empty(), Optional.empty(),
-					Optional.empty(), Optional.empty(), Optional.empty()));
-			devTools.send(Network.emulateNetworkConditions(true, 20, 20, 40,
-					Optional.of(ConnectionType.WIFI),Optional.empty(), Optional.empty(),
-					Optional.empty()));
-
+		window1.setNetworkConditions(offlineConditions());
+		try {
 			_local.set(window2);
 			for (int i = 0; i < 19; i++) {
 				click(jq("@button"));
@@ -171,7 +160,8 @@ public class B96_ZK_4194Test extends WebDriverTestCase {
 
 			_local.set(window1);
 			assertEquals(1, jq("$eventLog @label").length());
-
+		} finally {
+			window1.deleteNetworkConditions();
 		}
 
 		sleep(60_000); // wait for 1 minute to timeout
