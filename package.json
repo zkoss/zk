@@ -70,7 +70,7 @@
     "zkless-engine": "^1.1.13"
   },
   "dependencies": {
-    "dompurify": "^3.2.5",
+    "dompurify": "^3.4.1",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.48"
   },
