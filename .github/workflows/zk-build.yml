@@ -16,10 +16,10 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-      - name: Use Node.js 16 LTS
+      - name: Use Node.js 20 LTS
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
       - name: Checkout ZK EE
         uses: actions/checkout@v3
         with:
@@ -33,7 +33,7 @@ jobs:
           if [ -e yarn.lock ]; then
             yarn install --frozen-lockfile
           elif [ -e package-lock.json ]; then
-            npm ci
+            npm ci || npm install
           else
             npm i
           fi
