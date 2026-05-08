@@ -2948,6 +2948,7 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="row" />
 			<xs:element ref="group" />
+			<xs:element ref="groupfoot" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
