@@ -386,6 +386,11 @@
     color: inherit;
 }
 
+.z-combobox[readonly] .z-combobox-input,
+.z-combobox.z-combobox-readonly .z-combobox-input {
+    caret-color: transparent;
+}
+
 /* ─── Open state ──────────────────────────────────────────────────────────── */
 .z-combobox.z-combobox-open .z-combobox-input,
 .z-combobox.z-combobox-open .z-combobox-button {
