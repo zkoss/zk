@@ -27,6 +27,7 @@
  *   z-toolbar-vertical — vertical orientation
  *   z-toolbar-tabs     — inside a tabbox
  *   z-toolbar-overflowpopup / z-toolbar-overflowpopup-on / z-toolbar-overflowpopup-off
+ *   z-toolbar-icon-only — responsive="iconOnly" and narrower than the md breakpoint
  */
 
 /* ─── Base toolbar ───────────────────────────────────────────────────────── */
@@ -318,6 +319,25 @@
 
 .z-toolbar-popup-close {
     visibility: hidden;
+}
+
+/* ─── responsive="iconOnly" ──────────────────────────────────────────────── */
+/* Under it a toolbarbutton or button with an icon or image renders its label in -label. Icon-only hides it
+   the way .z-visually-hidden does, so it still names the button; children moved into the overflow popup keep it.
+   The panel mold puts each child in a table cell. */
+.z-toolbar-icon-only > .z-toolbar-content > .z-toolbarbutton > .z-toolbarbutton-content > .z-toolbarbutton-label,
+.z-toolbar-icon-only > .z-toolbar-content > .z-button > .z-button-label,
+.z-toolbar-icon-only > .z-toolbar-content > tbody > tr > td > .z-toolbarbutton > .z-toolbarbutton-content > .z-toolbarbutton-label,
+.z-toolbar-icon-only > .z-toolbar-content > tbody > tr > td > .z-button > .z-button-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* ─── ZK clear div (layout artifact) ────────────────────────────────────── */

@@ -393,8 +393,16 @@ export class Toolbarbutton extends zul.LabelImageWidget implements zul.LabelImag
 		if (!imgHTML) imgHTML = iconSclassHTML;
 		else imgHTML += (iconSclassHTML ? ' ' + iconSclassHTML : '');
 		// B50-ZK-640: toolbarbutton with no label will display larger width blur box
-		const spaceHTML = labelHTML ? 'vertical' == this.getOrient() ? '<br/>' : '&nbsp;' : '';
-		return this.getDir() == 'reverse' ? labelHTML + spaceHTML + imgHTML : imgHTML + spaceHTML + labelHTML;
+		let spaceHTML = labelHTML ? 'vertical' == this.getOrient() ? '<br/>' : '&nbsp;' : '';
+		const reverse = this.getDir() == 'reverse';
+		if (labelHTML && this.parent instanceof zul.wgt.Toolbar && this.parent.getResponsive() == 'iconOnly') {
+			if (spaceHTML == '&nbsp;') {
+				labelHTML = reverse ? labelHTML + spaceHTML : spaceHTML + labelHTML;
+				spaceHTML = '';
+			}
+			labelHTML = `<span class="${this.$s('label')}">${labelHTML}</span>`;
+		}
+		return reverse ? labelHTML + spaceHTML + imgHTML : imgHTML + spaceHTML + labelHTML;
 	}
 
 	/** @internal */

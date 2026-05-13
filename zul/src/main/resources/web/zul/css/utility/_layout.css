@@ -53,7 +53,8 @@
 
    Breakpoints follow the Bootstrap scale (see doc/spec/responsive-design.md §5):
      sm = 576px, md = 768px, lg = 992px, xl = 1200px.  (xs = 0 = the base.)
-   The same values are used by the Grid/Listbox `responsive` feature in zkmax;
+   The same values are used by the Grid/Listbox `responsive` feature in zkmax and
+   the Toolbar's responsive="iconOnly";
    scripts/build-css.js (--module zkmax) fails the build if they drift apart.
    Values are literal px — a media-query condition cannot read a CSS var().
    Value set is deliberately curated (none/block/flex/grid/inline-block):

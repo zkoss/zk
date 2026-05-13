@@ -177,9 +177,9 @@
 
 - `z-grid-fill` 與 `z-grid-cols-auto`（第 2、2.5 節）都**不用** breakpoint（intrinsic / 捲動容器處理 RWD）——
   能用 intrinsic 就優先用，這是本 theme 的取向。
-- 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組響應式 display utility。**breakpoint 尺度**採 Bootstrap：`sm` 576 / `md` 768 / `lg` 992 / `xl` 1200（`xs` 0 = base），與 EE 的 Grid／Listbox `responsive` 使用同一組值（`scripts/build-css.js` 建置 zkmax 時會檢查兩邊一致）。
+- 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組響應式 display utility。**breakpoint 尺度**採 Bootstrap：`sm` 576 / `md` 768 / `lg` 992 / `xl` 1200（`xs` 0 = base），與 EE 的 Grid／Listbox `responsive`、CE 的 Toolbar `responsive="iconOnly"`（低於 `md` 只顯示圖示）使用同一組值（`scripts/build-css.js` 建置 zkmax 時會檢查各處一致）。
   **不寫自訂寬度的 `@media` / `@container`**：寬度條件只能取上述尺度（`min-width` 為 576／768／992／1200，`max-width` 為其減 1），由 `scripts/check-breakpoints.js` 檢查（`scripts/build-css.js` 建置 zkmax 時執行）。
-  **EE 的兩個常數必須一致**：zkmax 的 Grid 與 Listbox `responsive` 功能中的 `_DEFAULT_BREAKPOINTS` 常數必須彼此相等，不一致時建置失敗；此檢查只在建置 zkmax 時執行（CE-only 建置沒有可比對的對象）。
+  **三個常數必須一致**：zkmax 的 Grid 與 Listbox `responsive` 功能、zul 的 Toolbar 中的 `_DEFAULT_BREAKPOINTS` 常數必須彼此相等，不一致時建置失敗；此檢查只在建置 zkmax 時執行（它要讀 zkmax 的原始碼，所以 CE-only 建置不檢查 Toolbar 的常數）。
   **`xxl` 不屬於此尺度**：JS 端正逐步移除（Jira ZK-6197；`grid-responsive.ts` 仍有 `xxl: 1400`），`scripts/check-breakpoints.js` 忽略它；它既不是必要值，也不被接受為 CSS 值。
   互動教學頁：`usecase/index.zul#utility/responsive`（原始檔 `zkthemelab/src/main/webapp/web/utility/responsive.zul`）。
 
