@@ -150,8 +150,7 @@ export class Combobutton extends zul.wgt.Button {
 		else
 			img += (iconSclass ? ' ' + iconSclass : '');
 		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
-		return this.getDir() == 'reverse' ?
-			label + space + img : img + space + label;
+		return zul.wgt.Toolbar._joinContent(this, img, label, space, this.getDir() == 'reverse');
 	}
 
 	/** @internal */

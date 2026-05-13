@@ -16,8 +16,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -34,11 +38,13 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Toolbar extends XulElement {
+	private static final Logger log = LoggerFactory.getLogger(Toolbar.class);
 	private static final String PRELOAD_IMAGE = "org.zkoss.zul.image.preload";
 	private String _orient = "horizontal";
 	private String _align = "start";
 	private boolean _overflowPopup;
 	private String _overflowPopupIconSclass = "z-icon-ellipsis-h";
+	private String _responsive;
 
 	public Toolbar() {
 	}
@@ -149,6 +155,9 @@ public class Toolbar extends XulElement {
 		render(renderer, "overflowPopup", _overflowPopup);
 		if (!"z-icon-ellipsis-h".equals(_overflowPopupIconSclass))
 			render(renderer, "overflowPopupIconSclass", getOverflowPopupIconSclass());
+		String effResp = getEffectiveResponsive();
+		if (effResp != null)
+			render(renderer, "responsive", effResp);
 	}
 
 	/**
@@ -173,5 +182,74 @@ public class Toolbar extends XulElement {
 			_overflowPopupIconSclass = overflowPopupIconSclass;
 			smartUpdate("overflowPopupIconSclass", _overflowPopupIconSclass);
 		}
+	}
+
+	/**
+	 * Returns the responsive policy.
+	 * <p>Default: null (unset — inherits from zk.xml
+	 * {@code org.zkoss.zul.toolbar.responsive}, then framework default of no responsive).
+	 *
+	 * @return the responsive policy, or null if not set.
+	 * @since 11.1.0
+	 */
+	public String getResponsive() {
+		return _responsive;
+	}
+
+	/**
+	 * Sets the responsive policy.
+	 * <p>Supported values: {@code "iconOnly"}, {@code "none"}, or null (unset).
+	 * <ul>
+	 *   <li>{@code "iconOnly"} — while the toolbar is narrower than the framework's
+	 *       {@code md} breakpoint (768px), the toolbarbuttons and buttons in it that
+	 *       have an icon or image show only it; their labels are visually hidden
+	 *       but still name the buttons for assistive technology.</li>
+	 *   <li>{@code "none"} — explicitly disables responsive, overriding any
+	 *       global setting.</li>
+	 *   <li>{@code null} — inherits from the global library property.</li>
+	 * </ul>
+	 * <p>The width compared with {@code md} is the toolbar's own. A toolbar sized by
+	 * its content, such as one in an {@code <hlayout>} or {@code <hbox>}, stays
+	 * icon-only once its labels are hidden; give it a {@code width} or {@code hflex}.
+	 *
+	 * @param responsive the responsive policy
+	 * @throws WrongValueException if {@code responsive} is neither
+	 *     {@code "iconOnly"}, {@code "none"}, nor {@code null}.
+	 * @since 11.1.0
+	 */
+	public void setResponsive(String responsive) throws WrongValueException {
+		if (responsive != null && responsive.isEmpty())
+			responsive = null;
+		if (!isValidResponsive(responsive))
+			throw new WrongValueException(
+					"responsive cannot be " + responsive
+					+ "; allowed: iconOnly, none");
+		if (!Objects.equals(_responsive, responsive)) {
+			_responsive = responsive;
+			// Send the effective value: clearing the own value falls back to the
+			// library property, not to "no responsive".
+			smartUpdate("responsive", getEffectiveResponsive());
+		}
+	}
+
+	private static boolean isValidResponsive(String v) {
+		return v == null || "iconOnly".equals(v) || "none".equals(v);
+	}
+
+	/**
+	 * Returns the effective responsive policy: this component's own value, then
+	 * {@code Utils.getStringAttribute} over the component-ancestor chain, page,
+	 * desktop and finally the {@code org.zkoss.zul.toolbar.responsive} library
+	 * property. An invalid fallback value is logged and clamped to null.
+	 */
+	/*package*/ String getEffectiveResponsive() {
+		if (_responsive != null)
+			return _responsive;
+		String v = Utils.getStringAttribute(this, "org.zkoss.zul.toolbar.responsive", null, true);
+		if (!isValidResponsive(v)) {
+			log.warn("Ignoring invalid org.zkoss.zul.toolbar.responsive value: {}; allowed: iconOnly, none", v);
+			return null;
+		}
+		return v;
 	}
 }
