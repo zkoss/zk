@@ -3,6 +3,7 @@ ZK 10.4.0
   ZK-6068: zk.xsd declares elements for CSP-related settings
   ZK-6059: html element does not have a lang attribute
   ZK-5409: responsive Grid
+  ZK-6097: Add Avatar, Avatargroup, Badge, Chip, Confirmpopup, Breadcrumb, Carousel to CE
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul

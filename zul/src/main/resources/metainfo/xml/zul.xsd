@@ -4172,4 +4172,212 @@
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded"/>
 		<xs:attributeGroup ref="labelImageElementAttrGroup"/>
 	</xs:complexType>
+	<!-- confirmpopup -->
+	<xs:element name="confirmpopup" type="confirmpopupType" />
+	<xs:complexType name="confirmpopupType">
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="header" type="xs:string" use="optional" />
+		<xs:attribute name="message" type="xs:string" use="optional" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
+		<xs:attribute name="severity" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="info"/>
+					<xs:enumeration value="success"/>
+					<xs:enumeration value="warning"/>
+					<xs:enumeration value="danger"/>
+					<xs:enumeration value="secondary"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="placement" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="top"/>
+					<xs:enumeration value="bottom"/>
+					<xs:enumeration value="left"/>
+					<xs:enumeration value="right"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="defaultFocus" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ok"/>
+					<xs:enumeration value="cancel"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="onOK" type="xs:string" use="optional" />
+		<xs:attribute name="onCancel" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- carousel -->
+	<xs:element name="carousel" type="carouselType" />
+	<xs:complexType name="carouselType">
+		<xs:sequence>
+			<xs:element ref="carouselitem" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="activeIndex" type="intType" use="optional" />
+		<xs:attribute name="autoplay" type="booleanType" use="optional" />
+		<xs:attribute name="interval" type="intType" use="optional" />
+		<xs:attribute name="showArrows" type="booleanType" use="optional" />
+		<xs:attribute name="showIndicators" type="booleanType" use="optional" />
+		<xs:attribute name="loop" type="booleanType" use="optional" />
+		<xs:attribute name="pause" type="booleanType" use="optional" />
+		<xs:attribute name="keyboard" type="booleanType" use="optional" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="effect" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="slide"/>
+					<xs:enumeration value="fade"/>
+					<xs:enumeration value="none"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="onSelect" type="xs:string" use="optional" />
+		<xs:attribute name="onChanging" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<xs:element name="carouselitem" type="carouselitemType" />
+	<xs:complexType name="carouselitemType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- chip -->
+	<xs:element name="chip" type="chipType" />
+	<xs:complexType name="chipType">
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="severity" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="info"/>
+					<xs:enumeration value="success"/>
+					<xs:enumeration value="warning"/>
+					<xs:enumeration value="danger"/>
+					<xs:enumeration value="secondary"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="size" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="small"/>
+					<xs:enumeration value="medium"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="rounded" type="booleanType" use="optional" />
+		<xs:attribute name="closable" type="booleanType" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="onClose" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- breadcrumb -->
+	<xs:element name="breadcrumb" type="breadcrumbType" />
+	<xs:complexType name="breadcrumbType">
+		<xs:sequence>
+			<xs:element ref="breadcrumbitem" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="separator" type="xs:string" use="optional" />
+		<xs:attribute name="maxItems" type="intType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<xs:element name="breadcrumbitem" type="breadcrumbitemType" />
+	<xs:complexType name="breadcrumbitemType">
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="href" type="xs:string" use="optional" />
+		<xs:attribute name="target" type="xs:string" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- badge -->
+	<xs:element name="badge" type="badgeType" />
+	<xs:complexType name="badgeType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="count" type="intType" use="optional" />
+		<xs:attribute name="max" type="intType" use="optional" />
+		<xs:attribute name="showZero" type="booleanType" use="optional" />
+		<xs:attribute name="dot" type="booleanType" use="optional" />
+		<xs:attribute name="severity" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="info"/>
+					<xs:enumeration value="success"/>
+					<xs:enumeration value="warning"/>
+					<xs:enumeration value="danger"/>
+					<xs:enumeration value="secondary"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="placement" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="top_right"/>
+					<xs:enumeration value="top_left"/>
+					<xs:enumeration value="bottom_right"/>
+					<xs:enumeration value="bottom_left"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- avatar -->
+	<xs:element name="avatar" type="avatarType" />
+	<xs:complexType name="avatarType">
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="shape" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="circle"/>
+					<xs:enumeration value="square"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="size" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="small"/>
+					<xs:enumeration value="medium"/>
+					<xs:enumeration value="large"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="gap" type="intType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- avatargroup -->
+	<xs:element name="avatargroup" type="avatargroupType" />
+	<xs:complexType name="avatargroupType">
+		<xs:sequence>
+			<xs:element ref="avatar" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="maxCount" type="intType" use="optional" />
+		<xs:attribute name="size" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="small"/>
+					<xs:enumeration value="medium"/>
+					<xs:enumeration value="large"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="shape" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="circle"/>
+					<xs:enumeration value="square"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
 </xs:schema>

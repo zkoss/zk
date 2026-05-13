@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Avatargroup.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed May 13 13:17:28 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<label multiline="true">
+		Avatargroup Demo — overlapping avatar stack.
+
+		Steps to verify:
+		1. Check that all three basic groups render with overlapping avatars.
+		2. Verify the maxCount group shows only the first 3 avatars and a "+2" overflow.
+		3. Confirm size/shape cascade: the small-circle group has small circular avatars,
+		   the large-square group has large square avatars.
+
+		Expected result:
+		- Avatars in each group overlap each other (negative margin stacking).
+		- The overflow indicator is a circle/round avatar labelled "+2".
+		- Cascaded size/shape matches the group setting even though individual avatars
+		  have no explicit size/shape set.
+	</label>
+
+	<separator />
+
+	<div style="padding:20px; display:flex; gap:32px; flex-wrap:wrap; align-items:center;">
+
+		<!-- Basic group — default size/shape -->
+		<div>
+			<label value="Basic group" style="display:block;margin-bottom:8px;"/>
+			<avatargroup id="agBasic">
+				<avatar label="A"/>
+				<avatar label="B"/>
+				<avatar label="C"/>
+				<avatar label="D"/>
+			</avatargroup>
+		</div>
+
+		<!-- maxCount = 3, shows +2 overflow -->
+		<div>
+			<label value="maxCount=3 (overflow)" style="display:block;margin-bottom:8px;"/>
+			<avatargroup id="agMax" maxCount="3">
+				<avatar label="A"/>
+				<avatar label="B"/>
+				<avatar label="C"/>
+				<avatar label="D"/>
+				<avatar id="agMaxE" label="E"/>
+			</avatargroup>
+			<button id="btn-setgap-hidden" label="setGap on hidden E"
+					onClick='agMaxE.setGap(8);'/>
+		</div>
+
+		<!-- P2-7: image-mode avatar HIDDEN behind "+1". A broken image fires
+		     onerror, which rerenders the avatar; the overflow marker must be
+		     re-applied so it stays hidden. -->
+		<div>
+			<avatargroup id="agImgGroup" maxCount="1">
+				<avatar label="V"/>
+				<avatar id="agImgHidden" image="/img/ZK-Logo.gif"/>
+			</avatargroup>
+		</div>
+
+		<!-- Size cascade: small, circle -->
+		<div>
+			<label value="size=small shape=circle" style="display:block;margin-bottom:8px;"/>
+			<avatargroup id="agSmallCircle" size="small" shape="circle">
+				<avatar label="X"/>
+				<avatar label="Y"/>
+				<avatar label="Z"/>
+			</avatargroup>
+		</div>
+
+		<!-- Size cascade: large, square -->
+		<div>
+			<label value="size=large shape=square" style="display:block;margin-bottom:8px;"/>
+			<avatargroup id="agLargeSquare" size="large" shape="square">
+				<avatar label="P"/>
+				<avatar label="Q"/>
+				<avatar label="R"/>
+			</avatargroup>
+		</div>
+
+	</div>
+</zk>

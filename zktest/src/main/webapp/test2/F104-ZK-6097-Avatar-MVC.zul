@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Avatar-MVC.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.zktest.test2.F104_ZK_6097_AvatarComposer">
+		<vlayout spacing="8px" style="padding:16px;">
+			<avatar id="avMvc" label="AB" shape="circle" size="medium"/>
+			<label id="mvcShape" value="circle"/>
+			<label id="mvcLabel" value="AB"/>
+
+			<hlayout spacing="8px">
+				<button id="btnSquare" label="Set square"/>
+				<button id="btnLarge" label="Set large"/>
+				<button id="btnChangeLabel" label="Change label"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

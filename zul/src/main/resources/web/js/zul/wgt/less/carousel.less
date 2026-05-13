@@ -1,0 +1,196 @@
+@import "~./zul/less/_header.less";
+
+.z-carousel {
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+
+	&-track {
+		display: flex;
+		transition: transform 0.4s ease;
+		height: 100%;
+		width: 100%;
+		/* Default for horizontal: let the browser keep vertical page scroll,
+		   but reserve the horizontal axis for our swipe handler so iOS / Android
+		   don't eat the gesture. The vertical-orientation rule below flips it. */
+		touch-action: pan-y;
+	}
+
+	&-vertical > &-track {
+		flex-direction: column;
+		touch-action: pan-x;
+	}
+
+	&-effect-fade {
+		> .z-carousel-track {
+			position: relative;
+			transition: none;
+			transform: none !important;
+			> .z-carouselitem {
+				position: absolute;
+				inset: 0;
+				opacity: 0;
+				transition: opacity 0.4s ease;
+			}
+			> .z-carouselitem-active {
+				opacity: 1;
+				z-index: 1;
+			}
+		}
+	}
+
+	&-effect-none > &-track {
+		transition: none;
+	}
+
+	&-arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, 0.4);
+		color: #fff;
+		border: 0;
+		font-family: @baseTitleFontFamily;
+		/* The ‹/› glyphs in the mold sit asymmetrically around the baseline,
+		   so flex centering of the line-box leaves them visually high inside
+		   the button. We zero out the glyph and draw a deterministic chevron
+		   via a rotated-border pseudo-element instead. */
+		font-size: 0;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 2;
+	}
+	&-arrow::before {
+		content: '';
+		display: block;
+		width: 8px;
+		height: 8px;
+		box-sizing: border-box;
+	}
+	&-arrow-prev::before {
+		border-left: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(45deg);
+		/* Optical centering: the rotated L-shape's bounding box leaves the
+		   visual ink slightly right of geometric center. */
+		margin-left: 2px;
+	}
+	&-arrow-next::before {
+		border-right: 2px solid currentColor;
+		border-top: 2px solid currentColor;
+		transform: rotate(45deg);
+		margin-right: 2px;
+	}
+	&-arrow:hover { background: rgba(0, 0, 0, 0.6); }
+	/* WCAG 2.1 SC 2.4.7 Focus Visible: keep a clearly visible indicator
+	   when the arrow receives keyboard focus. */
+	&-arrow:focus-visible {
+		outline: 2px solid @colorPrimary;
+		outline-offset: 2px;
+	}
+	&-arrow-prev { left: 10px; }
+	&-arrow-next { right: 10px; }
+
+	&-indicators {
+		position: absolute;
+		bottom: 10px;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		gap: 6px;
+		z-index: 2;
+	}
+	&-indicator {
+		/* WCAG 2.1 SC 2.5.8 Target Size (Minimum): the clickable button is a
+		   24x24 hit area (the size criterion), while the visible dot stays 8px
+		   and is drawn centered by ::before. Keeps the compact dot look without
+		   an undersized touch target. */
+		width: 24px;
+		height: 24px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	&-indicator::before {
+		content: "";
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		/* WCAG 2.1 SC 1.4.11 Non-Text Contrast: indicators must stand out
+		   from any slide background. Use opaque grey (≥3:1 against white)
+		   instead of translucent white which is invisible on light slides. */
+		background: rgba(0, 0, 0, 0.5);
+		border: 1px solid rgba(255, 255, 255, 0.8);
+	}
+	&-indicator-active::before { background: #fff; border-color: rgba(0, 0, 0, 0.5); }
+	&-indicator:focus-visible {
+		outline: 2px solid @colorPrimary;
+		outline-offset: 2px;
+	}
+
+	/* WCAG 2.1 SC 4.1.3 Status Messages: visually hide the live region
+	   but keep it announceable. Uses the standard sr-only pattern. */
+	&-status {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+}
+
+/* WCAG 2.1 SC 2.3.3 Animation from Interactions: respect the user's
+   reduced-motion preference. Slide/fade transitions and active-class
+   transitions are decorative — the active slide still becomes visible
+   without them. */
+@media (prefers-reduced-motion: reduce) {
+	.z-carousel {
+		&-track { transition: none; }
+		&-effect-fade > .z-carousel-track > .z-carouselitem { transition: none; }
+	}
+}
+
+/* Seamless-loop clones live inside the track alongside real items. They
+   intentionally drop the .z-carouselitem class so test selectors and the
+   active-class loop never see them, but they still need flex sizing to
+   keep the track's slot math (one viewport wide per slot) consistent. */
+.z-carousel-clone {
+	flex: 0 0 100%;
+	min-width: 100%;
+	height: 100%;
+	position: relative;
+	box-sizing: border-box;
+	pointer-events: none;
+}
+
+.z-carouselitem {
+	flex: 0 0 100%;
+	min-width: 100%;
+	height: 100%;
+	position: relative;
+	box-sizing: border-box;
+
+	&-label {
+		position: absolute;
+		bottom: 16px;
+		left: 16px;
+		background: rgba(0, 0, 0, 0.5);
+		color: #fff;
+		padding: 4px 10px;
+		border-radius: 4px;
+	}
+	> img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}

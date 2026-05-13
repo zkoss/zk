@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Breadcrumb"?>
+<?root-attributes lang="en"?>
+<!--
+breadcrumb.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 14 15:20:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Breadcrumb</n:h1>
+    </n:header>
+    <n:main>
+        <n:section>
+            <n:h2>Default separator</n:h2>
+            <breadcrumb>
+                <breadcrumbitem label="Home" href="/"/>
+                <breadcrumbitem label="Docs" href="/docs"/>
+                <breadcrumbitem label="WCAG"/>
+            </breadcrumb>
+        </n:section>
+        <n:section>
+            <n:h2>Custom string separator</n:h2>
+            <breadcrumb separator=">">
+                <breadcrumbitem label="Catalog" href="/c"/>
+                <breadcrumbitem label="Electronics" href="/c/e"/>
+                <breadcrumbitem label="Phones"/>
+            </breadcrumb>
+        </n:section>
+        <n:section>
+            <n:h2>Icon separator</n:h2>
+            <breadcrumb separator="icon:z-icon-chevron-right">
+                <breadcrumbitem label="Library" href="/l"/>
+                <breadcrumbitem label="Fiction" href="/l/f"/>
+                <breadcrumbitem label="Sci-Fi"/>
+            </breadcrumb>
+        </n:section>
+        <n:section>
+            <n:h2>Collapsed when maxItems exceeded</n:h2>
+            <breadcrumb maxItems="3">
+                <breadcrumbitem label="Root" href="/"/>
+                <breadcrumbitem label="A" href="/a"/>
+                <breadcrumbitem label="B" href="/a/b"/>
+                <breadcrumbitem label="C" href="/a/b/c"/>
+                <breadcrumbitem label="Leaf"/>
+            </breadcrumb>
+        </n:section>
+        <n:section>
+            <n:h2>Disabled item</n:h2>
+            <breadcrumb>
+                <breadcrumbitem label="Home" href="/"/>
+                <breadcrumbitem label="Private" disabled="true"/>
+                <breadcrumbitem label="Profile"/>
+            </breadcrumb>
+        </n:section>
+    </n:main>
+</zk>

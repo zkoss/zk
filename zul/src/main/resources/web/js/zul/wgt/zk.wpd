@@ -45,4 +45,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Notification" moldOnly="true"/>
 	<widget name="Rating" moldOnly="true"/>
 	<widget name="Inputgroup" moldOnly="true"/>
+	<widget name="Avatar" moldOnly="true"/>
+	<widget name="Avatargroup" moldOnly="true"/>
+	<widget name="Badge" moldOnly="true"/>
+	<widget name="Chip" moldOnly="true"/>
+	<widget name="Confirmpopup" moldOnly="true"/>
+	<widget name="Breadcrumb" moldOnly="true"/>
+	<widget name="Breadcrumbitem" moldOnly="true"/>
+	<widget name="Carousel" moldOnly="true"/>
+	<widget name="Carouselitem" moldOnly="true"/>
 </package>
