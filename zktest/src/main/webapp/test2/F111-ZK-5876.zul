@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F111-ZK-5876.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed May 13 17:12:43 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		The readonly combobox (second) is a simple dropdown list:
+		1. It looks like the editable combobox (first), not greyed out, and shows no text caret when focused.
+		2. Clicking anywhere on it opens the popup.
+		3. Typing does nothing; Left/Right select the previous/next item and a letter selects the first item starting with it.
+		4. Selecting an item closes the popup and shows the new value.
+		5. Click "IceBlue": step 1 holds there too.
+	</label>
+	<hlayout>
+		<a id="iceblue" href="?zktheme=iceblue" label="IceBlue"/>
+		<a id="default" href="?zktheme=default" label="Default"/>
+	</hlayout>
+	<zscript><![CDATA[
+		import org.zkoss.zul.ListModelList;
+		ListModelList model = new ListModelList(java.util.Arrays.asList(new String[] {"Apple", "Banana", "Cherry"}));
+		ListModelList model2 = new ListModelList(java.util.Arrays.asList(new String[] {"Apple", "Banana", "Cherry"}));
+	]]></zscript>
+
+	<combobox id="cbDefault" model="${model}"/>
+	<separator/>
+	<combobox id="cbReadonly" readonly="true" model="${model2}"/>
+</zk>
