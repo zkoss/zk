@@ -377,8 +377,7 @@ export class Button extends zul.LabelImageWidget<HTMLButtonElement> implements z
 		else
 			img = `<img class="${this.$s('image')}" src="${zUtl.encodeXMLAttribute(img)}" alt="" aria-hidden="true" />${iconSclass ? ' ' + iconSclass : ''}`;
 		var space = 'vertical' == this.getOrient() ? '<br/>' : ' ';
-		return this.getDir() == 'reverse' ?
-			label + space + img : img + space + label;
+		return zul.wgt.Toolbar._joinContent(this, img, label, space, this.getDir() == 'reverse');
 	}
 
 	onShow(): void {

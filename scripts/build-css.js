@@ -224,20 +224,22 @@ function assertNoUnlistedThemeCss() {
 
 /**
  * The framework breakpoint scale lives in two places that cannot read each other: the width
- * conditions of @media/@container in CSS, and the Grid/Listbox `responsive` constants in zkmax.
+ * conditions of @media/@container in CSS, and the Grid/Listbox `responsive` constants in zkmax and
+ * the zul Toolbar's.
  * Fail the build when they differ (doc/spec/responsive-design.md). Needs the zkmax
- * JS source, so it runs only for --module zkmax; a CE-only build has nothing to compare against.
+ * JS source, so it runs only for --module zkmax; a CE-only build does not check the zul Toolbar's.
  */
 function assertBreakpointsConsistent() {
     const zkmaxJs = path.join(ZKCML_ROOT, 'zkmax/src/main/resources/web/js/zkmax');
     const errors = checkBreakpoints({
-        jsFiles: ['grid-responsive.ts', 'listbox-responsive.ts'].map(f => path.join(zkmaxJs, f)),
+        jsFiles: ['grid-responsive.ts', 'listbox-responsive.ts'].map(f => path.join(zkmaxJs, f))
+            .concat(path.join(ZK_ROOT, 'zul/src/main/resources/web/js/zul/wgt/Toolbar.ts')),
         cssRoots: [MODULES.zul.webDir, MODULES.zkmax.webDir, MODULES.zkex.webDir].filter(d => fs.existsSync(d)),
     });
     if (errors.length) {
         throw new Error('Breakpoint consistency check failed:\n' + errors.map(e => '  - ' + e).join('\n') +
-            '\nThe CSS width conditions must match _DEFAULT_BREAKPOINTS in zkmax grid-responsive.ts and ' +
-            'listbox-responsive.ts.\nSee doc/spec/responsive-design.md.');
+            '\nThe CSS width conditions must match _DEFAULT_BREAKPOINTS in zkmax grid-responsive.ts, ' +
+            'listbox-responsive.ts and zul wgt/Toolbar.ts.\nSee doc/spec/responsive-design.md.');
     }
 }
 
