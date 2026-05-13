@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Avatar-MVVM.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6097_AvatarVM')">
+		<vlayout spacing="8px" style="padding:16px;">
+			<avatar id="avMvvm"
+					label="@load(vm.avatarLabel)"
+					image="@load(vm.avatarSrc)"
+					shape="@load(vm.shape)"
+					size="@load(vm.size)"/>
+
+			<label id="mvvmShape" value="@load(vm.shape)"/>
+			<label id="mvvmSize" value="@load(vm.size)"/>
+
+			<hlayout spacing="8px">
+				<button id="btnShowImage" label="Show image"
+						onClick="@command('showImage')"/>
+				<button id="btnShowLabel" label="Show label (JD)"
+						onClick="@command('showLabel')"/>
+				<button id="btnSetSquare" label="Set square"
+						onClick="@command('setSquare')"/>
+				<button id="btnSetLarge" label="Set large"
+						onClick="@command('setLarge')"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

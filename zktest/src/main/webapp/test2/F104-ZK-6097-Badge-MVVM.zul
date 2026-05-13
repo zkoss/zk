@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Badge-MVVM.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6097_BadgeVM')">
+		<vlayout spacing="8px" style="padding:16px;">
+			<!-- Badge wraps a button; count, severity and dot are MVVM-loaded -->
+			<badge id="bdgMvvm" count="@load(vm.count)" severity="@load(vm.severity)" dot="@load(vm.dot)">
+				<button label="Inbox"/>
+			</badge>
+
+			<label id="mvvmCount" value="@load(vm.count)"/>
+			<label id="mvvmSeverity" value="@load(vm.severity)"/>
+
+			<hlayout spacing="8px">
+				<button id="btnIncrement" label="Increment"
+						onClick="@command('increment')"/>
+				<button id="btnReset" label="Reset"
+						onClick="@command('reset')"/>
+				<button id="btnDanger" label="Danger severity"
+						onClick="@command('setDangerSeverity')"/>
+				<button id="btnToggleDot" label="Toggle dot"
+						onClick="@command('toggleDot')"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

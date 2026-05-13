@@ -1,0 +1,177 @@
+@import "~./zul/less/_header.less";
+
+@cp-arrow-size: 8px;
+@cp-bg: #fff;
+@cp-border: @baseBorderColor;
+@cp-padding-x: 16px;
+@cp-padding-y: 12px;
+
+.z-confirmpopup {
+	position: relative;
+	background: @cp-bg;
+	border: 1px solid @cp-border;
+	border-radius: @baseBorderRadius;
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+	min-width: 240px;
+	max-width: 360px;
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+	color: @textColorDefault;
+
+	&-header {
+		padding: @cp-padding-y @cp-padding-x;
+		border-bottom: 1px solid @cp-border;
+		font-weight: 600;
+		font-size: @fontSizeMedium;
+		color: @textColorDefault;
+	}
+	&-body {
+		display: flex;
+		gap: 10px;
+		align-items: flex-start;
+		padding: @cp-padding-y @cp-padding-x;
+	}
+	&-icon {
+		font-size: 18px;
+		line-height: 1.5;
+		flex: 0 0 auto;
+	}
+	&-message {
+		flex: 1;
+		line-height: 1.5;
+		color: @textColorDefault;
+	}
+	&-footer {
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+		padding: 8px @cp-padding-x;
+		border-top: 1px solid @cp-border;
+		background: rgba(0, 0, 0, 0.02);
+		border-radius: 0 0 @baseBorderRadius @baseBorderRadius;
+	}
+	&-cancel,
+	&-ok {
+		padding: 4px 12px;
+		font-family: inherit;
+		font-size: @fontSizeMedium;
+		line-height: 1.5;
+		border-radius: @baseBorderRadius;
+		border: 1px solid @baseBorderColor;
+		background: #fff;
+		color: @textColorDefault;
+		cursor: pointer;
+	}
+	&-ok {
+		background: @colorPrimary;
+		color: #fff;
+		border-color: @colorPrimary;
+	}
+	/* WCAG 2.1 SC 2.4.7 Focus Visible: surface a keyboard focus ring on
+	   both buttons so the user can see which one Enter / Space will trigger. */
+	&-cancel:focus-visible,
+	&-ok:focus-visible {
+		outline: 2px solid @colorPrimary;
+		outline-offset: 2px;
+	}
+
+	&-info > &-body > &-icon    { color: @severityInfoColor; }
+	&-success > &-body > &-icon { color: @severitySuccessColor; }
+	&-warning > &-body > &-icon { color: @severityWarningColor; }
+	&-danger > &-body > &-icon  { color: @severityDangerColor; }
+	&-secondary > &-body > &-icon { color: @severitySecondaryColor; }
+
+	/* Bootstrap-style triangular arrow drawn with two stacked CSS triangles —
+	   outer in border color, inner in background to hide the seam. */
+	&-arrow {
+		position: absolute;
+		width: @cp-arrow-size * 2;
+		height: @cp-arrow-size;
+		pointer-events: none;
+	}
+	&-arrow::before,
+	&-arrow::after {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		border-style: solid;
+	}
+
+	/* Gap between popup box and trigger = arrow height, so the arrow tip lands
+	   exactly at the trigger edge. ZK Popup positioning adds the popup's
+	   margin-top / margin-left to the reference dim before calculating the
+	   final coordinate (see Popup._posInfo). */
+	&-placement-top    { margin-top: -@cp-arrow-size; }
+	&-placement-bottom { margin-top: @cp-arrow-size; }
+	&-placement-left   { margin-left: -@cp-arrow-size; }
+	&-placement-right  { margin-left: @cp-arrow-size; }
+
+	&-placement-top > &-arrow {
+		bottom: -@cp-arrow-size;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	&-placement-top > &-arrow::before {
+		border-width: @cp-arrow-size @cp-arrow-size 0;
+		border-color: @cp-border transparent transparent;
+	}
+	&-placement-top > &-arrow::after {
+		top: -1px;
+		left: 0;
+		border-width: @cp-arrow-size @cp-arrow-size 0;
+		border-color: @cp-bg transparent transparent;
+	}
+
+	&-placement-bottom > &-arrow {
+		top: -@cp-arrow-size;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	&-placement-bottom > &-arrow::before {
+		border-width: 0 @cp-arrow-size @cp-arrow-size;
+		border-color: transparent transparent @cp-border;
+	}
+	&-placement-bottom > &-arrow::after {
+		top: 1px;
+		left: 0;
+		border-width: 0 @cp-arrow-size @cp-arrow-size;
+		border-color: transparent transparent @cp-bg;
+	}
+
+	&-placement-left > &-arrow {
+		right: -@cp-arrow-size;
+		top: 50%;
+		width: @cp-arrow-size;
+		height: @cp-arrow-size * 2;
+		transform: translateY(-50%);
+	}
+	&-placement-left > &-arrow::before {
+		border-width: @cp-arrow-size 0 @cp-arrow-size @cp-arrow-size;
+		border-color: transparent transparent transparent @cp-border;
+	}
+	&-placement-left > &-arrow::after {
+		left: -1px;
+		top: 0;
+		border-width: @cp-arrow-size 0 @cp-arrow-size @cp-arrow-size;
+		border-color: transparent transparent transparent @cp-bg;
+	}
+
+	&-placement-right > &-arrow {
+		left: -@cp-arrow-size;
+		top: 50%;
+		width: @cp-arrow-size;
+		height: @cp-arrow-size * 2;
+		transform: translateY(-50%);
+	}
+	&-placement-right > &-arrow::before {
+		border-width: @cp-arrow-size @cp-arrow-size @cp-arrow-size 0;
+		border-color: transparent @cp-border transparent transparent;
+	}
+	&-placement-right > &-arrow::after {
+		left: 1px;
+		top: 0;
+		border-width: @cp-arrow-size @cp-arrow-size @cp-arrow-size 0;
+		border-color: transparent @cp-bg transparent transparent;
+	}
+}

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Chip.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 11 15:05:48 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<vlayout spacing="10px" style="padding:16px;">
+		<!-- Severity variants -->
+		<hlayout spacing="10px">
+			<chip id="chip-default"   label="DEF"/>
+			<chip id="chip-info"      label="INFO"      severity="info"/>
+			<chip id="chip-success"   label="SUCCESS"   severity="success"/>
+			<chip id="chip-warning"   label="WARNING"   severity="warning"/>
+			<chip id="chip-danger"    label="DANGER"    severity="danger"/>
+			<chip id="chip-secondary" label="SEC"       severity="secondary"/>
+		</hlayout>
+
+		<!-- Modifiers -->
+		<hlayout spacing="10px">
+			<chip id="chip-rounded"   label="Rounded"   rounded="true"/>
+			<!-- Custom colors are driven by the CSS variables declared in
+				 chip.less; one-off overrides go through the standard `style`
+				 attribute instead of a dedicated `color` setter. -->
+			<chip id="chip-cssvar-hex"   label="Custom"
+				  style="--zk-chip-bg:#6366f1;--zk-chip-color:#fff;--zk-chip-border:#4f46e5;"/>
+			<chip id="chip-cssvar-named" label="Tomato"
+				  style="--zk-chip-bg:tomato;--zk-chip-color:#fff;--zk-chip-border:tomato;"/>
+			<chip id="chip-closable"  label="Closable"  closable="true"/>
+			<chip id="chip-small"     label="SM"        size="small"/>
+			<chip id="chip-medium"    label="MD"        size="medium"/>
+			<chip id="chip-disabled"  label="Disabled"  disabled="true" closable="true"/>
+		</hlayout>
+
+		<!-- onClose event target -->
+		<hlayout spacing="10px">
+			<label id="closeResult" value="no-close"/>
+			<chip id="chip-close-event" label="ClickX" closable="true"
+				onClose='closeResult.setValue("closed");'/>
+			<!-- Listener calls stopPropagation() — Chip.java contract: the
+				 chip stays visible because the default detach() handler is
+				 skipped, so the client must NOT have optimistically hidden it. -->
+			<chip id="chip-close-stopped" label="Keep" closable="true"
+				onClose='event.stopPropagation(); closeResult.setValue("stopped");'/>
+		</hlayout>
+
+		<!-- Dynamic update target + drivers -->
+		<hlayout spacing="10px">
+			<button id="btn-set-success"   label="Set success"
+					onClick='chipDyn.setSeverity("success");'/>
+			<button id="btn-set-rounded"   label="Set rounded"
+					onClick='chipDyn.setRounded(true);'/>
+			<button id="btn-set-closable"  label="Set closable"
+					onClick='chipDyn.setClosable(true);'/>
+			<!-- Custom colors flow through CSS variables — exercise the
+				 dynamic path via setStyle() rather than a dedicated setter. -->
+			<button id="btn-set-cssvar"    label="Set css-var color"
+					onClick='chipDyn.setStyle("--zk-chip-bg:#10b981;--zk-chip-color:#fff;--zk-chip-border:#059669;");'/>
+			<button id="btn-clear-cssvar"  label="Clear css-var color"
+					onClick='chipDyn.setStyle(null);'/>
+			<button id="btn-bad-severity"  label="Bad severity"
+					onClick='try { chipDyn.setSeverity("foo"); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-set-small"     label="Set small"
+					onClick='chipDyn.setSize("small");'/>
+			<button id="btn-bad-size"      label="Bad size"
+					onClick='try { chipDyn.setSize("xl"); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-set-disabled"  label="Set disabled"
+					onClick='chipDyn.setDisabled(true);'/>
+			<chip id="chipDyn" label="Dyn" severity="info"/>
+		</hlayout>
+
+		<label id="errMsg" value=""/>
+	</vlayout>
+</zk>

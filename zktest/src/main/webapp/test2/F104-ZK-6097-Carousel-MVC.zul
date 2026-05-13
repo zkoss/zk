@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Carousel-MVC.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<style>
+		.cs2 { display:flex; align-items:center; justify-content:center;
+			   width:100%; height:100%; box-sizing:border-box; font-size:32px; color:#fff; }
+	</style>
+	<window apply="org.zkoss.zktest.test2.F104_ZK_6097_CarouselComposer">
+		<vlayout spacing="8px" style="padding:16px;">
+			<carousel id="crMvc" width="320px" height="160px">
+				<carouselitem id="cmc0">
+					<div sclass="cs2" style="background:#1677ff;">S1</div>
+				</carouselitem>
+				<carouselitem id="cmc1">
+					<div sclass="cs2" style="background:#52c41a;">S2</div>
+				</carouselitem>
+				<carouselitem id="cmc2">
+					<div sclass="cs2" style="background:#faad14;">S3</div>
+				</carouselitem>
+			</carousel>
+
+			<label id="mvcSelResult" value="none"/>
+			<label id="mvcChangingResult" value="none"/>
+
+			<hlayout spacing="8px">
+				<button id="btnNextMvc" label="Next (server)"/>
+				<button id="btnPrevMvc" label="Prev (server)"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

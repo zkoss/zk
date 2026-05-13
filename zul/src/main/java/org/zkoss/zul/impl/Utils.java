@@ -43,6 +43,33 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  */
 public class Utils {
+	/** Validates an enumerated string value against a fixed set of accepted
+	 * tokens — the idiom shared by the enumerated setters of {@code zul}
+	 * components (shape, size, severity, placement, orient, effect, ...).
+	 *
+	 * @param value the incoming value.
+	 * @param defaultValue the value returned when {@code value} is {@code null};
+	 * pass the component's default to reset-on-null, or {@code null} to keep a
+	 * nullable "no override" value.
+	 * @param message the {@link WrongValueException} message prefix; the rejected
+	 * value is appended to it.
+	 * @param allowed the accepted (non-null) tokens.
+	 * @return {@code value} when it is accepted, or {@code defaultValue} when
+	 * {@code value} is {@code null}.
+	 * @throws WrongValueException if {@code value} is non-null and not one of
+	 * {@code allowed}.
+	 * @since 10.4.0
+	 */
+	public static String checkEnum(String value, String defaultValue, String message, String... allowed)
+	throws WrongValueException {
+		if (value == null)
+			return defaultValue;
+		for (String a : allowed)
+			if (a.equals(value))
+				return value;
+		throw new WrongValueException(message + value);
+	}
+
 	/** Parse a list of numbers.
 	 *
 	 * @param defaultValue the value if a number is omitted. For example, ",2"

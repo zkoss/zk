@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Avatar.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 11 15:06:24 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<vlayout spacing="10px" style="padding:16px;">
+		<!-- Render fallback chain: image > label > icon -->
+		<hlayout spacing="10px">
+			<avatar id="av-img"        image="/img/ZK-Logo.gif"/>
+			<avatar id="av-img-label"  image="/img/ZK-Logo.gif" label="AL"/>
+			<avatar id="av-label"      label="AL"/>
+			<avatar id="av-label-icon" label="LI" iconSclass="z-icon-user"/>
+			<avatar id="av-icon"       iconSclass="z-icon-user"/>
+		</hlayout>
+
+		<!-- Shape variants -->
+		<hlayout spacing="10px">
+			<avatar id="av-default"   label="DC"/>
+			<avatar id="av-circle"    label="CI" shape="circle"/>
+			<avatar id="av-square"    label="SQ" shape="square"/>
+		</hlayout>
+
+		<!-- Size variants -->
+		<hlayout spacing="10px">
+			<avatar id="av-small"     label="SM" size="small"/>
+			<avatar id="av-medium"    label="MD" size="medium"/>
+			<avatar id="av-large"     label="LG" size="large"/>
+		</hlayout>
+
+		<!-- Gap (Ant Design Avatar) -->
+		<hlayout spacing="10px">
+			<avatar id="av-gap-default" label="DG"/>
+			<avatar id="av-gap-0"       label="ZG" gap="0"/>
+			<avatar id="av-gap-8"       label="EG" gap="8"/>
+		</hlayout>
+
+		<!-- Dynamic update target + drivers -->
+		<hlayout spacing="10px">
+			<button id="btn-set-shape"         label="Set square"
+					onClick='avDyn.setShape("square");'/>
+			<button id="btn-reset-shape"       label="Set circle"
+					onClick='avDyn.setShape("circle");'/>
+			<button id="btn-set-size"          label="Set large"
+					onClick='avDyn.setSize("large");'/>
+			<button id="btn-reset-size"        label="Set small"
+					onClick='avDyn.setSize("small");'/>
+			<button id="btn-shape-invalid"     label="Bad shape"
+					onClick='try { avDyn.setShape("triangle"); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-size-invalid"      label="Bad size"
+					onClick='try { avDyn.setSize("xl"); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-set-gap"           label="Set gap 12"
+					onClick='avDyn.setGap(12);'/>
+			<button id="btn-bad-gap"           label="Bad gap"
+					onClick='try { avDyn.setGap(-1); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<avatar id="avDyn" label="X1" shape="circle" size="medium"/>
+		</hlayout>
+
+		<label id="errMsg" value=""/>
+	</vlayout>
+</zk>

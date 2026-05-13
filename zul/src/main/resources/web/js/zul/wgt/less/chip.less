@@ -1,0 +1,66 @@
+@import "~./zul/less/_header.less";
+
+/* 1px border, 4px corner radius, 12px font, 20px line-height giving 22px
+   total height. Each severity variant resolves three CSS custom properties
+   — --zk-chip-bg, --zk-chip-color, --zk-chip-border — which users can
+   override directly via `style="--zk-chip-bg: #6366f1;"` for one-off
+   custom colors without needing a dedicated `color` component attribute. */
+.z-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 0 7px;
+	border: 1px solid var(--zk-chip-border, @severityInfoBorder);
+	border-radius: 4px;
+	font-family: @baseTitleFontFamily;
+	font-size: 12px;
+	line-height: 20px;
+	background: var(--zk-chip-bg, @severityInfoBg);
+	color: var(--zk-chip-color, @severityInfoText);
+	box-sizing: border-box;
+
+	&-rounded { border-radius: 999px; }
+
+	&-small {
+		padding: 0 5px;
+		font-size: 11px;
+		line-height: 16px;
+	}
+
+	&-disabled {
+		opacity: 0.5;
+		pointer-events: none;
+		cursor: not-allowed;
+	}
+
+	&-info      { --zk-chip-bg: @severityInfoBg;      --zk-chip-border: @severityInfoBorder;      --zk-chip-color: @severityInfoText; }
+	&-success   { --zk-chip-bg: @severitySuccessBg;   --zk-chip-border: @severitySuccessBorder;   --zk-chip-color: @severitySuccessText; }
+	&-warning   { --zk-chip-bg: @severityWarningBg;   --zk-chip-border: @severityWarningBorder;   --zk-chip-color: @severityWarningText; }
+	&-danger    { --zk-chip-bg: @severityDangerBg;    --zk-chip-border: @severityDangerBorder;    --zk-chip-color: @severityDangerText; }
+	&-secondary { --zk-chip-bg: @severitySecondaryBg; --zk-chip-border: @severitySecondaryBorder; --zk-chip-color: @severitySecondaryText; }
+
+	&-close {
+		/* Native <button> brings its own background / border / padding —
+		   strip them so the close button visually matches the chip's
+		   compact layout (same as the prior <i role=button> shape). */
+		background: none;
+		border: 0;
+		padding: 0;
+		color: inherit;
+		cursor: pointer;
+		font-size: 10px;
+		line-height: 1;
+		opacity: 0.55;
+		margin-left: 3px;
+	}
+	&-close:hover { opacity: 1; }
+	&-close:focus-visible {
+		outline: 2px solid @colorGreyDark;
+		outline-offset: 1px;
+		opacity: 1;
+	}
+	&-close:disabled {
+		cursor: default;
+		opacity: 0.3;
+	}
+}

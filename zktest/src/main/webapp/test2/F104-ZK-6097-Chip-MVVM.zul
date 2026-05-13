@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Chip-MVVM.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6097_ChipVM')">
+		<vlayout spacing="8px" style="padding:16px;">
+			<!-- MVVM @load for label, severity; onClose fires @command -->
+			<chip id="chipMvvm" label="@load(vm.chipLabel)" severity="@load(vm.severity)"
+				 closable="true" onClose="@command('onChipClose')"/>
+			<label id="mvvmSeverity" value="@load(vm.severity)"/>
+			<label id="mvvmResult" value="@load(vm.result)"/>
+
+			<hlayout spacing="8px">
+				<button id="btnWarning" label="Set warning"
+						onClick="@command('changeSeverity', sev='warning')"/>
+				<button id="btnSuccess" label="Set success"
+						onClick="@command('changeSeverity', sev='success')"/>
+				<button id="btnChangeLabel" label="Change label"
+						onClick="@command('changeLabel')"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

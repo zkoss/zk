@@ -1,0 +1,76 @@
+@import "~./zul/less/_header.less";
+
+.z-breadcrumb {
+	display: inline-block;
+	font-family: @baseContentFontFamily;
+	font-size: @fontSizeMedium;
+
+	&-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	&-separator {
+		margin: 0 8px;
+		color: @colorGreyDark;
+		user-select: none;
+	}
+
+	/* Items/separators collapsed by `maxItems` are hidden by attribute (set in
+	   Breadcrumb.ts#_applyCollapse), never via inline style, so an author's
+	   inline `display` survives a collapse/expand cycle. !important so the hide
+	   still wins if the author did set an inline display. */
+	[data-zk-bc-hidden="true"] { display: none !important; }
+
+	/* Synthetic node injected by Breadcrumb.ts when `maxItems` collapses the
+	   middle. Mirrors `-separator` styling so the truncation reads naturally. */
+	&-ellipsis {
+		margin: 0 4px;
+		color: @colorGreyDark;
+		user-select: none;
+	}
+	&-ellipsis > button {
+		/* Strip native button chrome — the "…" reads as plain text to
+		   sighted users while aria-label exposes the show-more semantics
+		   to AT; native <button> still handles keyboard activation. */
+		background: none;
+		border: 0;
+		padding: 0;
+		color: inherit;
+		font: inherit;
+		cursor: pointer;
+	}
+	&-ellipsis > button:focus-visible {
+		outline: 2px solid @colorGreyDark;
+		outline-offset: 2px;
+	}
+}
+
+.z-breadcrumbitem {
+	display: inline-flex;
+	align-items: center;
+
+	& > a {
+		color: @colorPrimary;
+		text-decoration: none;
+	}
+	& > a:hover {
+		text-decoration: underline;
+	}
+	& > a:focus-visible {
+		outline: 2px solid @colorPrimary;
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+	& > span {
+		color: @textColorDefault;
+	}
+	&-disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+}

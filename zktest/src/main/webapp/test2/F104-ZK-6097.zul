@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri May 29 09:38:27 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml">
+	<vlayout spacing="8px" style="padding:24px;">
+		<label sclass="z-title" value="ZK-6097: new CE components — pages"/>
+
+		<grid hflex="min">
+			<columns>
+				<column label="Component"/>
+				<column label="Plain ZUL"/>
+				<column label="MVC"/>
+				<column label="MVVM"/>
+			</columns>
+			<rows>
+				<row>
+					<label value="Avatar"/>
+					<h:a href="F104-ZK-6097-Avatar.zul">F104-ZK-6097-Avatar.zul</h:a>
+					<h:a href="F104-ZK-6097-Avatar-MVC.zul">F104-ZK-6097-Avatar-MVC.zul</h:a>
+					<h:a href="F104-ZK-6097-Avatar-MVVM.zul">F104-ZK-6097-Avatar-MVVM.zul</h:a>
+				</row>
+				<row>
+					<label value="Avatargroup"/>
+					<h:a href="F104-ZK-6097-Avatargroup.zul">F104-ZK-6097-Avatargroup.zul</h:a>
+					<h:a href="F104-ZK-6097-Avatargroup-MVC.zul">F104-ZK-6097-Avatargroup-MVC.zul</h:a>
+					<h:a href="F104-ZK-6097-Avatargroup-MVVM.zul">F104-ZK-6097-Avatargroup-MVVM.zul</h:a>
+				</row>
+				<row>
+					<label value="Badge"/>
+					<h:a href="F104-ZK-6097-Badge.zul">F104-ZK-6097-Badge.zul</h:a>
+					<h:a href="F104-ZK-6097-Badge-MVC.zul">F104-ZK-6097-Badge-MVC.zul</h:a>
+					<h:a href="F104-ZK-6097-Badge-MVVM.zul">F104-ZK-6097-Badge-MVVM.zul</h:a>
+				</row>
+				<row>
+					<label value="Chip"/>
+					<h:a href="F104-ZK-6097-Chip.zul">F104-ZK-6097-Chip.zul</h:a>
+					<h:a href="F104-ZK-6097-Chip-MVC.zul">F104-ZK-6097-Chip-MVC.zul</h:a>
+					<h:a href="F104-ZK-6097-Chip-MVVM.zul">F104-ZK-6097-Chip-MVVM.zul</h:a>
+				</row>
+				<row>
+					<label value="Breadcrumb"/>
+					<h:a href="F104-ZK-6097-Breadcrumb.zul">F104-ZK-6097-Breadcrumb.zul</h:a>
+					<h:a href="F104-ZK-6097-Breadcrumb-MVC.zul">F104-ZK-6097-Breadcrumb-MVC.zul</h:a>
+					<h:a href="F104-ZK-6097-Breadcrumb-MVVM.zul">F104-ZK-6097-Breadcrumb-MVVM.zul</h:a>
+				</row>
+				<row>
+					<label value="Carousel"/>
+					<h:a href="F104-ZK-6097-Carousel.zul">F104-ZK-6097-Carousel.zul</h:a>
+					<h:a href="F104-ZK-6097-Carousel-MVC.zul">F104-ZK-6097-Carousel-MVC.zul</h:a>
+					<h:a href="F104-ZK-6097-Carousel-MVVM.zul">F104-ZK-6097-Carousel-MVVM.zul</h:a>
+				</row>
+				<row>
+					<label value="Confirmpopup"/>
+					<h:a href="F104-ZK-6097-Confirmpopup.zul">F104-ZK-6097-Confirmpopup.zul</h:a>
+					<h:a href="F104-ZK-6097-Confirmpopup-MVC.zul">F104-ZK-6097-Confirmpopup-MVC.zul</h:a>
+					<h:a href="F104-ZK-6097-Confirmpopup-MVVM.zul">F104-ZK-6097-Confirmpopup-MVVM.zul</h:a>
+				</row>
+			</rows>
+		</grid>
+
+		<separator/>
+		<h:a href="F104-ZK-6097-Style.zul">F104-ZK-6097-Style.zul — theme inheritance sanity</h:a>
+	</vlayout>
+</zk>

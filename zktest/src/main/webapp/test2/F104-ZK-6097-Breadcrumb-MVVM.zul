@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Breadcrumb-MVVM.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6097_BreadcrumbVM')">
+		<vlayout spacing="8px" style="padding:16px;">
+			<breadcrumb id="bcMvvm"
+					separator="@load(vm.separator)"
+					maxItems="@load(vm.maxItems)">
+				<breadcrumbitem label="Home" href="/"/>
+				<breadcrumbitem label="Products" href="/products"/>
+				<breadcrumbitem label="Category" href="/products/cat"/>
+				<breadcrumbitem label="Sub-Category" href="/products/cat/sub"/>
+				<breadcrumbitem label="Item"/>
+			</breadcrumb>
+
+			<label id="mvvmSeparator" value="@load(vm.separator)"/>
+			<label id="mvvmMaxItems" value="@load(vm.maxItems)"/>
+
+			<hlayout spacing="8px">
+				<button id="btnPipe" label="| separator"
+						onClick="@command('usePipeSeparator')"/>
+				<button id="btnSlash" label="/ separator"
+						onClick="@command('useDefaultSeparator')"/>
+				<button id="btnCollapse" label="Enable collapse (3)"
+						onClick="@command('enableCollapse')"/>
+				<button id="btnExpand" label="Disable collapse"
+						onClick="@command('disableCollapse')"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

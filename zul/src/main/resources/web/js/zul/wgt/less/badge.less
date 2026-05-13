@@ -1,0 +1,73 @@
+@import "~./zul/less/_header.less";
+
+/* Visual language follows Ant Design Badge (https://ant.design/components/badge):
+   solid colored pill (default red) with white text, ~20px tall, 12px font,
+   pill-rounded. Dot mode collapses to a 6px circle. Standalone mode flows
+   inline with no absolute positioning. */
+.z-badge {
+	position: relative;
+	display: inline-block;
+	line-height: 1;
+	vertical-align: middle;
+	font-family: @baseTitleFontFamily;
+
+	&-standalone {
+		display: inline-flex;
+		align-items: center;
+		& > .z-badge-indicator {
+			position: static;
+			transform: none;
+		}
+	}
+
+	&-indicator {
+		position: absolute;
+		min-width: 20px;
+		height: 20px;
+		padding: 0 6px;
+		border-radius: 10px;
+		background: @severityDangerColor;
+		color: #fff;
+		font-size: 12px;
+		line-height: 20px;
+		text-align: center;
+		white-space: nowrap;
+		box-sizing: border-box;
+		vertical-align: middle;
+		font-weight: normal;
+	}
+
+	&-top_right > .z-badge-indicator {
+		top: 0;
+		right: 0;
+		transform: translate(50%, -50%);
+	}
+	&-top_left > .z-badge-indicator {
+		top: 0;
+		left: 0;
+		transform: translate(-50%, -50%);
+	}
+	&-bottom_right > .z-badge-indicator {
+		bottom: 0;
+		right: 0;
+		transform: translate(50%, 50%);
+	}
+	&-bottom_left > .z-badge-indicator {
+		bottom: 0;
+		left: 0;
+		transform: translate(-50%, 50%);
+	}
+
+	&-dot > .z-badge-indicator {
+		min-width: 6px;
+		height: 6px;
+		padding: 0;
+		border-radius: 50%;
+	}
+
+	&-info > .z-badge-indicator      { background: @severityInfoColor; }
+	&-success > .z-badge-indicator   { background: @severitySuccessColor; }
+	&-warning > .z-badge-indicator   { background: @severityWarningColor; }
+	&-danger > .z-badge-indicator    { background: @severityDangerColor; }
+	&-secondary > .z-badge-indicator { background: @severitySecondaryColor; }
+}

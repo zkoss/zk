@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Carousel-MVVM.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<style>
+		.cs { display:flex; align-items:center; justify-content:center;
+			  width:100%; height:100%; box-sizing:border-box; font-size:32px; color:#fff; }
+	</style>
+	<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6097_CarouselVM')">
+		<vlayout spacing="8px" style="padding:16px;">
+			<carousel id="crMvvm" width="320px" height="160px"
+					activeIndex="@bind(vm.activeIndex)"
+					onSelect="@command('onSlideSelected', idx=event.data.index)"
+					onChanging="@command('onSlideChanging', from=event.previousValue, to=event.value)">
+				<carouselitem id="cmv0">
+					<div sclass="cs" style="background:#1677ff;">Slide 1</div>
+				</carouselitem>
+				<carouselitem id="cmv1">
+					<div sclass="cs" style="background:#52c41a;">Slide 2</div>
+				</carouselitem>
+				<carouselitem id="cmv2">
+					<div sclass="cs" style="background:#faad14;">Slide 3</div>
+				</carouselitem>
+			</carousel>
+
+			<label id="mvvmSelResult" value="@load(vm.selResult)"/>
+			<label id="mvvmChangingResult" value="@load(vm.changingResult)"/>
+
+			<hlayout spacing="8px">
+				<button id="btnGoToSecond" label="Go to Slide 2"
+						onClick="@command('goToSecond')"/>
+				<button id="btnGoToFirst" label="Go to Slide 1"
+						onClick="@command('goToFirst')"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

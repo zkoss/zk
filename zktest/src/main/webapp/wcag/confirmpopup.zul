@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Confirmpopup"?>
+<?root-attributes lang="en"?>
+<!--
+confirmpopup.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 14 15:20:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Confirmpopup</n:h1>
+    </n:header>
+    <n:main>
+        <n:section>
+            <n:h2>Default confirm popup</n:h2>
+            <button label="Delete item"
+                    onClick='cpDefault.open(self, "after_pointer")'/>
+            <confirmpopup id="cpDefault" message="Are you sure you want to delete this item?"/>
+        </n:section>
+        <n:section>
+            <n:h2>Severity variants</n:h2>
+            <button label="Warning popup"
+                    onClick='cpWarn.open(self, "after_pointer")'/>
+            <confirmpopup id="cpWarn" severity="warning"
+                          message="This action affects your subscription."/>
+
+            <button label="Danger popup"
+                    onClick='cpDanger.open(self, "after_pointer")'/>
+            <confirmpopup id="cpDanger" severity="danger"
+                          message="This action cannot be undone."/>
+        </n:section>
+        <n:section>
+            <n:h2>Custom labels</n:h2>
+            <button label="Sign out"
+                    onClick='cpCustom.open(self, "after_pointer")'/>
+            <confirmpopup id="cpCustom" message="Sign out of all devices?"/>
+        </n:section>
+    </n:main>
+</zk>

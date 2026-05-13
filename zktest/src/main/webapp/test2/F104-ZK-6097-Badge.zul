@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Badge.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 11 15:06:17 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<vlayout spacing="10px" style="padding:24px;">
+		<!-- Standalone — value / count / max / showZero / dot -->
+		<hlayout spacing="20px">
+			<badge id="b-value"       value="NEW" severity="success"/>
+			<badge id="b-count"       count="5"/>
+			<badge id="b-zero"        count="0"/>
+			<badge id="b-zero-show"   count="0" showZero="true"/>
+			<badge id="b-at-max"      count="99"/>
+			<badge id="b-over"        count="150"/>
+			<badge id="b-over-custom" count="1500" max="999"/>
+			<badge id="b-dot"         dot="true" severity="danger"/>
+		</hlayout>
+
+		<!-- Severity variants (standalone) -->
+		<hlayout spacing="20px">
+			<badge id="b-info"      value="I" severity="info"/>
+			<badge id="b-success"   value="S" severity="success"/>
+			<badge id="b-warning"   value="W" severity="warning"/>
+			<badge id="b-danger"    value="D" severity="danger"/>
+			<badge id="b-secondary" value="X" severity="secondary"/>
+		</hlayout>
+
+		<!-- Placement variants (wrap mode) -->
+		<hlayout spacing="40px" style="padding: 25px">
+			<badge id="b-tr" count="3" placement="top_right">
+				<button id="btn-tr" label="TR"/>
+			</badge>
+			<badge id="b-tl" count="9" placement="top_left">
+				<button id="btn-tl" label="TL"/>
+			</badge>
+			<badge id="b-br" count="6" placement="bottom_right">
+				<button id="btn-br" label="BR"/>
+			</badge>
+			<badge id="b-bl" count="2" placement="bottom_left">
+				<button id="btn-bl" label="BL"/>
+			</badge>
+		</hlayout>
+
+		<!-- Dynamic update target + drivers -->
+		<hlayout spacing="10px">
+			<button id="btn-inc"            label="+"
+					onClick='bDyn.setCount(bDyn.getCount() + 1);'/>
+			<button id="btn-set-zero"       label="0"
+					onClick='bDyn.setCount(0);'/>
+			<button id="btn-show-zero"      label="showZero"
+					onClick='bDyn.setShowZero(true);'/>
+			<button id="btn-set-danger"     label="Danger"
+					onClick='bDyn.setSeverity("danger");'/>
+			<button id="btn-set-bottom"     label="bottom_left"
+					onClick='bDyn.setPlacement("bottom_left");'/>
+			<button id="btn-bad-severity"   label="Bad severity"
+					onClick='try { bDyn.setSeverity("foo"); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-bad-placement"  label="Bad placement"
+					onClick='try { bDyn.setPlacement("middle"); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-bad-count"      label="Bad count"
+					onClick='try { bDyn.setCount(-1); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-bad-max"        label="Bad max"
+					onClick='try { bDyn.setMax(0); }
+                            catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<!-- Drives the getDisplayValue() public-API test: set count
+			     past max, then echo getDisplayValue() into the label. -->
+			<button id="btn-show-display"   label="Show display value"
+					onClick='bDyn.setCount(150);
+                             bDyn.setMax(99);
+                             dvResult.setValue(bDyn.getDisplayValue());'/>
+			<badge id="bDyn" count="1" severity="info"/>
+		</hlayout>
+
+		<label id="errMsg" value=""/>
+		<label id="dvResult" value=""/>
+	</vlayout>
+</zk>

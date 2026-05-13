@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Badge"?>
+<?root-attributes lang="en"?>
+<!--
+badge.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 14 15:20:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Badge</n:h1>
+    </n:header>
+    <n:main>
+        <n:section>
+            <n:h2>Count badge on icon</n:h2>
+            <badge count="5">
+                <button iconSclass="z-icon-envelope" ca:aria-label="Inbox"/>
+            </badge>
+            <badge count="120" max="99">
+                <button iconSclass="z-icon-bell" ca:aria-label="Notifications"/>
+            </badge>
+        </n:section>
+        <n:section>
+            <n:h2>Dot badge (no count)</n:h2>
+            <badge dot="true">
+                <button iconSclass="z-icon-user" ca:aria-label="Profile"/>
+            </badge>
+        </n:section>
+        <n:section>
+            <n:h2>Severity variants</n:h2>
+            <badge count="3" severity="info">
+                <button iconSclass="z-icon-info" ca:aria-label="Info messages"/>
+            </badge>
+            <badge count="7" severity="warning">
+                <button iconSclass="z-icon-exclamation" ca:aria-label="Warnings"/>
+            </badge>
+            <badge count="2" severity="danger">
+                <button iconSclass="z-icon-times" ca:aria-label="Errors"/>
+            </badge>
+        </n:section>
+    </n:main>
+</zk>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Confirmpopup.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 11 15:05:56 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<vlayout spacing="20px" style="padding:48px;">
+		<label id="cpResult" value="none"/>
+
+		<!-- Bootstrap-style placements: top / bottom / left / right -->
+		<hlayout spacing="40px">
+			<button id="btn-top"    label="Top"    onClick='cpTop.open(self);'/>
+			<confirmpopup id="cpTop"    placement="top"    message="Confirm delete? (top)"
+				onOK='cpResult.setValue("top-ok");'
+				onCancel='cpResult.setValue("top-cancel");'/>
+
+			<button id="btn-bottom" label="Bottom" onClick='cpBottom.open(self);'/>
+			<confirmpopup id="cpBottom" placement="bottom" message="Confirm delete? (bottom)"
+				onOK='cpResult.setValue("bottom-ok");'
+				onCancel='cpResult.setValue("bottom-cancel");'/>
+
+			<button id="btn-left"   label="Left"   onClick='cpLeft.open(self);'/>
+			<confirmpopup id="cpLeft"   placement="left"   message="Confirm delete? (left)"
+				onOK='cpResult.setValue("left-ok");'
+				onCancel='cpResult.setValue("left-cancel");'/>
+
+			<button id="btn-right"  label="Right"  onClick='cpRight.open(self);'/>
+			<confirmpopup id="cpRight"  placement="right"  message="Confirm delete? (right)"
+				onOK='cpResult.setValue("right-ok");'
+				onCancel='cpResult.setValue("right-cancel");'/>
+		</hlayout>
+
+		<!-- Severity variants -->
+		<hlayout spacing="20px">
+			<button id="btn-info"    label="Info"    onClick='cpInfo.open(self);'/>
+			<confirmpopup id="cpInfo"    severity="info"
+				iconSclass="z-icon-info-circle" message="Heads up!"/>
+
+			<button id="btn-success" label="Success" onClick='cpSuccess.open(self);'/>
+			<confirmpopup id="cpSuccess" severity="success"
+				iconSclass="z-icon-check-circle" message="Operation succeeded"/>
+
+			<button id="btn-warning" label="Warning" onClick='cpWarning.open(self);'/>
+			<confirmpopup id="cpWarning" severity="warning"
+				iconSclass="z-icon-exclamation-triangle" message="Are you sure?"/>
+
+			<button id="btn-danger"  label="Danger"  onClick='cpDanger.open(self);'/>
+			<confirmpopup id="cpDanger"  severity="danger"
+				iconSclass="z-icon-times-circle" message="Permanently delete?"/>
+
+			<button id="btn-secondary" label="Secondary" onClick='cpSecondary.open(self);'/>
+			<confirmpopup id="cpSecondary" severity="secondary"
+				message="Just FYI"/>
+		</hlayout>
+
+		<!-- defaultFocus: for destructive ops, focus Cancel so Enter doesn't commit -->
+		<hlayout spacing="20px">
+			<button id="btn-focus-ok"     label="Focus OK"
+					onClick='cpFocusOk.open(self);'/>
+			<confirmpopup id="cpFocusOk" defaultFocus="ok"
+					message="Default focus on OK (default behavior)"/>
+
+			<button id="btn-focus-cancel" label="Focus Cancel"
+					onClick='cpFocusCancel.open(self);'/>
+			<confirmpopup id="cpFocusCancel" defaultFocus="cancel" severity="danger"
+					message="Destructive — Cancel is focused; Enter is safe"/>
+
+			<button id="btn-bad-focus"    label="Bad defaultFocus"
+					onClick='try { cpFocusOk.setDefaultFocus("middle"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+		</hlayout>
+
+		<!-- Edge: no icon, no message -->
+		<hlayout spacing="20px">
+			<button id="btn-noicon" label="NoIcon" onClick='cpNoIcon.open(self);'/>
+			<confirmpopup id="cpNoIcon" iconSclass="" message="No icon variant"/>
+
+			<button id="btn-nomsg"  label="NoMsg"  onClick='cpNoMsg.open(self);'/>
+			<confirmpopup id="cpNoMsg" message=""/>
+		</hlayout>
+
+		<!-- Header (PrimeNG-style title row) -->
+		<hlayout spacing="20px">
+			<button id="btn-with-header" label="With header"
+					onClick='cpHeader.open(self);'/>
+			<confirmpopup id="cpHeader" header="Confirm action"
+				message="This will permanently remove the record."/>
+		</hlayout>
+
+		<!-- Default placement (== top) + dynamic update target -->
+		<button id="btn-open" label="Delete (default)" onClick='cp1.open(self);'/>
+		<confirmpopup id="cp1" message="Confirm delete?"
+			onOK='cpResult.setValue("ok");'
+			onCancel='cpResult.setValue("cancelled");'/>
+
+		<hlayout spacing="10px">
+			<button id="btn-set-msg"          label="Set msg"
+					onClick='cp1.setMessage("Updated message");'/>
+			<button id="btn-set-icon"         label="Set icon"
+					onClick='cp1.setIconSclass("z-icon-check-circle");'/>
+			<button id="btn-set-header"       label="Set header"
+					onClick='cp1.setHeader("Heads up");'/>
+			<button id="btn-bad-severity"     label="Bad severity"
+					onClick='try { cp1.setSeverity("foo"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-bad-placement"    label="Bad placement"
+					onClick='try { cp1.setPlacement("middle"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+		</hlayout>
+
+		<label id="errMsg" value=""/>
+	</vlayout>
+</zk>
