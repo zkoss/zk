@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "ALL: publishToMavenLocal",
+            "label": "ALL: clean publishToMavenLocal",
             "detail": "Execute publishToMavenLocal in all modules",
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -93,6 +93,7 @@
             "command": "./gradlew",
             "group": "build",
             "args": [
+                "clean",
                 "publishToMavenLocal"
             ],
             "options": {
@@ -114,6 +115,7 @@
             "command": "./gradlew",
             "group": "build",
             "args": [
+                "clean",
                 "publishToMavenLocal"
             ],
             "options": {
