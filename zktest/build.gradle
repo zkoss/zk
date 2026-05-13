@@ -136,9 +136,9 @@ dependencies {
 	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
 	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
 	testImplementation 'xml-apis:xml-apis:1.4.01'
-	testImplementation 'org.zkoss.test:zk-webdriver:1.4.39.0.2'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.4.43.0.0'
 
-	testImplementation "org.seleniumhq.selenium:selenium-java:4.39.0"
+	testImplementation "org.seleniumhq.selenium:selenium-java:4.43.0"
 	testImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
 
 	providedCompile 'javax.el:javax.el-api:2.2.5'
