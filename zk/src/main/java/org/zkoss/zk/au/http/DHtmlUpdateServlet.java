@@ -609,8 +609,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(compress);
 		out.open(request, response);
-		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
-			final String deviceType = getDeviceType(request);
+		final String deviceType = getDeviceType(request);
+		if (wapp.getConfiguration().isAutomaticTimeout(deviceType)
+				|| !getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			URIInfo ui = wapp != null ? wapp.getConfiguration().getTimeoutURI(deviceType) : null;
 			String uri = ui != null ? ui.uri : null;
 			out.write(new AuConfirmClose(null)); // Bug: B50-3147382
