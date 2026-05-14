@@ -609,10 +609,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(compress);
 		out.open(request, response);
-		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
-			final String deviceType = getDeviceType(request);
-			URIInfo ui = wapp != null ? wapp.getConfiguration().getTimeoutURI(deviceType) : null;
-			String uri = ui != null ? ui.uri : null;
+		final String deviceType = getDeviceType(request);
+		final Configuration conf = wapp != null ? wapp.getConfiguration() : null;
+		URIInfo ui = conf != null ? conf.getTimeoutURI(deviceType) : null;
+		String uri = ui != null ? ui.uri : null;
+		final boolean autoTimeout = conf != null && conf.isAutomaticTimeout(deviceType);
+		if (autoTimeout || uri != null || !getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			out.write(new AuConfirmClose(null)); // Bug: B50-3147382
 			final AuResponse resp;
 			if (uri != null) {
@@ -620,7 +622,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					uri = Encodes.encodeURL(getServletContext(), request, response, uri);
 				resp = new AuSendRedirect(uri, null);
 			} else {
-				String msg = wapp != null ? wapp.getConfiguration().getTimeoutMessage(deviceType) : null;
+				String msg = conf != null ? conf.getTimeoutMessage(deviceType) : null;
 				dtid = Encode.forHtml(dtid); // Fix ZK-1862 security issue
 				if (msg != null && msg.startsWith("label:")) {
 					final String key = msg.substring(6);
