@@ -55,6 +55,7 @@ ZK 11.0.0
   ZK-6044: Tree item toggle icons are overlapping text
   ZK-6051: badge text in nav is too low
   ZK-6101: Automatic timeout redirect is skipped when an ignorable AU request receives ZK-Error 410
+  ZK-6064: Signature buttons does not support accessibility
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
