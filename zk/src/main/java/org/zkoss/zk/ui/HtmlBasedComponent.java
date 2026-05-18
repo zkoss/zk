@@ -18,6 +18,7 @@ package org.zkoss.zk.ui;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.zk.au.AuRequest;
@@ -62,6 +63,8 @@ import org.zkoss.zk.ui.sys.StringPropertyAccess;
  * @since 6.5.0 supports onSwipe event for tablet.
  */
 public abstract class HtmlBasedComponent extends AbstractComponent {
+	private static final Set<String> SKELETON_MODES = Set.of("rect", "circle", "text");
+
 	/** The ZK CSS class. */
 	protected String _zclass;
 	/** The prolog content that shall be generated before real content. */
@@ -771,6 +774,38 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		}
 	}
 
+	/** Returns the skeleton placeholder mode, or null when skeleton mode is off.
+	 * <p>Default: null.
+	 * @since 10.4.0
+	 */
+	public String getSkeleton() {
+		return _auxinf != null ? _auxinf.skeleton : null;
+	}
+
+	/** Sets the skeleton placeholder mode. When non-null, the component is rendered
+	 * as a muted, animated placeholder block of the given shape until skeleton mode
+	 * is cleared.
+	 * <p>The animated placeholder is drawn by ZK PE (zkex); on CE the value is
+	 * stored and sent to the client, but no placeholder is rendered.
+	 * @param skeleton one of "rect", "circle", "text" (case-sensitive); null or an
+	 * empty string disables skeleton mode.
+	 * @since 10.4.0
+	 */
+	public void setSkeleton(String skeleton) throws WrongValueException {
+		if (skeleton != null && skeleton.length() == 0)
+			skeleton = null; //empty means off, consistent with the other string setters
+		if (skeleton != null) {
+			if (!SKELETON_MODES.contains(skeleton))
+				throw new WrongValueException(
+						"skeleton must be one of \"rect\", \"circle\", \"text\", or null (case-sensitive); got: \""
+								+ skeleton + "\"");
+		}
+		if (!Objects.equals((_auxinf != null ? _auxinf.skeleton : null), skeleton)) {
+			initAuxInfo0().skeleton = skeleton;
+			smartUpdate("skeleton", skeleton);
+		}
+	}
+
 	/**
 	 * Get whether css flex is enabled or not
 	 * @return css flex is enabled
@@ -814,6 +849,7 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 
 			render(renderer, "droppable", _auxinf.droppable);
 			render(renderer, "action", _auxinf.action);
+			render(renderer, "skeleton", _auxinf.skeleton);
 		}
 
 		render(renderer, "zclass", _zclass);
@@ -979,6 +1015,15 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 				return ((HtmlBasedComponent) cmp).getTabindexInteger();
 			}
 		});
+		_properties.put("skeleton", new StringPropertyAccess() {
+			public void setValue(Component cmp, String skeleton) {
+				((HtmlBasedComponent) cmp).setSkeleton(skeleton);
+			}
+
+			public String getValue(Component cmp) {
+				return ((HtmlBasedComponent) cmp).getSkeleton();
+			}
+		});
 	}
 
 	public PropertyAccess getPropertyAccess(String prop) {
@@ -1096,6 +1141,8 @@ public abstract class HtmlBasedComponent extends AbstractComponent {
 		private int zIndex = -1;
 		private int renderdefer = -1;
 		private Integer tabindex;
+		/** The skeleton placeholder mode (rect/circle/text), or null when off. */
+		private String skeleton;
 
 		public Object clone() {
 			try {

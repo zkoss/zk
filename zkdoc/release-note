@@ -5,6 +5,7 @@ ZK 10.4.0
   ZK-5409: responsive Grid
   ZK-6097: Add Avatar, Avatargroup, Badge, Chip, Confirmpopup, Breadcrumb, Carousel to CE
   ZK-4305: date range picker
+  ZK-6099: Add skeleton attribute on existing components to PE
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
