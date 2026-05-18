@@ -7,6 +7,7 @@ ZK 11.0.0
   ZK-6097: Add Avatar, Avatargroup, Badge, Chip, Confirmpopup, Breadcrumb, Carousel to CE
   ZK-4305: date range picker
   ZK-6065: Enable smooth scrolling for Frozen Grid on CE
+  ZK-6099: Add skeleton attribute on existing components to PE
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
