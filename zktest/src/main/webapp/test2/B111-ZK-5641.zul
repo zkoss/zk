@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-5641.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon May 18 23:49:03 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+1. The blue box (a dropdown inside the borderlayout center, z-index 90000) must be painted above the red box (a body-level layer, z-index 100).
+	</label>
+	<div style="position: relative">
+		<borderlayout height="200px">
+			<center>
+				<div id="dd" style="position: absolute; top: 20px; left: 20px; width: 100px; height: 100px; z-index: 90000; background: blue"/>
+			</center>
+		</borderlayout>
+		<div id="overlay" style="position: absolute; top: 0; left: 0; width: 200px; height: 200px; z-index: 100; background: red"/>
+	</div>
+</zk>

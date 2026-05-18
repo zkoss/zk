@@ -98,7 +98,7 @@
 /* ─── Center (main content) ───────────────────────────────────────────────── */
 .z-center {
     background-color: var(--zk-color-background);
-    z-index: 8;
+    z-index: auto; /* ZK-5641: a numeric z-index traps in-center dropdowns under body-level popups */
 }
 
 .z-center-noborder {
@@ -120,7 +120,7 @@
  * user sees the resize affordance across the full 8px hit area.
  *
  * z-index:20 keeps the strip's pill above neighbouring regions (north 16,
- * center 8). Without it the pill's overhang gets visually clipped.
+ * center auto). Without it the pill's overhang gets visually clipped.
  * ─────────────────────────────────────────────────────────────────────────── */
 .z-west-splitter,
 .z-east-splitter {

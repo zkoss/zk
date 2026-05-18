@@ -23,6 +23,7 @@ ZK 11.1.0
   ZK-6268: tree: client ROD keeps showing the rows of an earlier scroll position when an AU response is handled just before the scroll event
   ZK-6264: Timebox spin buttons insert digits at the wrong position after a partially typed value is blurred
   ZK-5655: ZK Color Picker doesn't get updated on some iOS devices
+  ZK-5641: a tooltip on the toolbar covers a dropdown menu
 
 * Upgrade Notes
   + jfreechart is now an optional dependency of zkex, so Maven and Gradle builds no longer pull it
