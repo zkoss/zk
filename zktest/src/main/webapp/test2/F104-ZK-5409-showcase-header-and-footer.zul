@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-header-and-footer.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:56 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+        import java.util.*;
+
+        Object[][] DATA = {
+            {"Vegetables", "Broccoli",   "Vitamin C, Fiber",     "34 kcal"},
+            {"Vegetables", "Spinach",    "Iron, Folate",         "23 kcal"},
+            {"Vegetables", "Carrot",     "Vitamin A",            "41 kcal"},
+            {"Seafood",    "Salmon",     "Omega-3, Protein",     "208 kcal"},
+            {"Seafood",    "Tuna",       "Protein, Niacin",      "184 kcal"},
+            {"Fruits",     "Apple",      "Fiber, Vitamin C",     "52 kcal"},
+            {"Fruits",     "Blueberry",  "Antioxidants",         "57 kcal"}
+        };
+        ListModelList foodModel = new ListModelList();
+        for (int i = 0; i < DATA.length; i++) foodModel.add(DATA[i]);
+
+        void applyCategory(String cat) {
+            foodModel.clear();
+            int count = 0;
+            for (int i = 0; i < DATA.length; i++) {
+                if ("All".equals(cat) || ((String) DATA[i][0]).equals(cat)) {
+                    foodModel.add(DATA[i]);
+                    count++;
+                }
+            }
+            totalFooter.setLabel("Total: " + count + " item(s)");
+        }
+    ]]></zscript>
+
+    <grid id="grid1" responsive="stacking"
+          width="100%" height="380px" model="${foodModel}">
+        <auxhead>
+            <auxheader label="Healthy Food List" colspan="4" />
+        </auxhead>
+        <auxhead>
+            <auxheader />
+            <auxheader colspan="3">
+                <radiogroup onCheck="applyCategory(event.getTarget().getLabel());">
+                    <radio label="All" checked="true" />
+                    <radio label="Vegetables" />
+                    <radio label="Seafood" />
+                    <radio label="Fruits" />
+                </radiogroup>
+            </auxheader>
+        </auxhead>
+        <columns>
+            <column label="Category"       width="120px" />
+            <column label="Name"           width="150px" />
+            <column label="Top Nutrients"  responsiveVisible="false" />
+            <column label="Calories"       width="110px" align="right" />
+        </columns>
+        <template name="model">
+            <row>
+                <label value="${each[0]}" />
+                <label value="${each[1]}" />
+                <label value="${each[2]}" />
+                <label value="${each[3]}" />
+            </row>
+        </template>
+        <foot>
+            <footer id="totalFooter" label="Total: 7 item(s)" />
+            <footer />
+            <footer />
+            <footer />
+        </foot>
+    </grid>
+</zk>

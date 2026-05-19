@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-hierarchy.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:52 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking" width="100%">
+        <columns>
+            <column label=""            width="40px" />
+            <column label="Stock Name"  sort="auto(label)" />
+            <column label="Avg. High"   align="right" sort="auto(label)" />
+            <column label="Avg. Low"    align="right" responsiveVisible="false" />
+            <column label="Avg. Volume" align="right" responsiveVisible="false" />
+        </columns>
+        <rows>
+            <row>
+                <detail open="false">
+                    <vbox>
+                        <label value="Q1 High: 28.50  Low: 26.80  Volume: 12,340,000" />
+                        <label value="Q2 High: 30.12  Low: 27.95  Volume: 15,820,000" />
+                        <label value="Q3 High: 32.40  Low: 29.10  Volume: 17,450,000" />
+                        <label value="Q4 High: 31.85  Low: 28.60  Volume: 14,960,000" />
+                    </vbox>
+                </detail>
+                <label value="Acme Inc."  /><label value="32.40" /><label value="26.80" /><label value="17,450,000" />
+            </row>
+            <row>
+                <detail open="false">
+                    <vbox>
+                        <label value="Q1 High: 105.20 Low: 98.75 Volume: 22,110,000" />
+                        <label value="Q2 High: 110.40 Low: 103.10 Volume: 24,500,000" />
+                    </vbox>
+                </detail>
+                <label value="Globex Corp." /><label value="110.40" /><label value="98.75" /><label value="24,500,000" />
+            </row>
+            <row>
+                <detail open="false">
+                    <vbox>
+                        <label value="Q1 High: 52.70  Low: 48.80  Volume: 9,210,000" />
+                        <label value="Q2 High: 55.10  Low: 50.20  Volume: 10,450,000" />
+                    </vbox>
+                </detail>
+                <label value="Initech Ltd." /><label value="55.10" /><label value="48.80" /><label value="10,450,000" />
+            </row>
+        </rows>
+    </grid>
+</zk>

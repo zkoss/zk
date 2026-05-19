@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-group-rowclick.zul
+
+	Purpose: guards the zkcml Group.ts row-click handler. In stacking mode
+	the whole group row should be a click target (not just the small icon).
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div style="padding: 10px;">
+		<label id="openStatus" value="open: initial" />
+		<grid id="grid1" responsive="stacking" responsiveColumns="sm-1 lg-none" width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Salary" />
+			</columns>
+			<rows>
+				<group id="groupA" label="Group A">
+					<attribute name="onOpen"><![CDATA[
+						org.zkoss.zk.ui.event.OpenEvent oe = (org.zkoss.zk.ui.event.OpenEvent) event;
+						openStatus.setValue("open: " + oe.isOpen());
+					]]></attribute>
+				</group>
+				<row>
+					<label value="John" />
+					<label value="5000" />
+				</row>
+				<row>
+					<label value="Jane" />
+					<label value="5500" />
+				</row>
+			</rows>
+		</grid>
+	</div>
+</zk>

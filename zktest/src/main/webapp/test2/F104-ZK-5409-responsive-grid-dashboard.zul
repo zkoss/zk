@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-dashboard.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:43 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        .tile-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px; }
+        .tile {
+            flex: 1 1 180px;
+            border: 1px solid #d9dde2;
+            border-radius: 8px;
+            padding: 12px 14px;
+            background: linear-gradient(180deg, #ffffff, #f5f8fc);
+        }
+        .tile .t-label { font-size: 12px; color: #6b7280; }
+        .tile .t-value { font-size: 22px; font-weight: 700; color: #1f2937; margin-top: 4px; }
+        .tile .t-delta-up   { color: #16a34a; font-size: 12px; }
+        .tile .t-delta-down { color: #dc2626; font-size: 12px; }
+        .section-gb { margin: 10px; }
+    </style>
+    <window title="Sales Dashboard — Q1 2026"
+            width="100%" border="normal"
+            contentStyle="overflow:auto;">
+
+        <!-- Stat tiles (flexbox, already responsive via flex-wrap).
+            Provided as context for the multi-Grid layout below. -->
+        <div sclass="tile-row">
+            <div sclass="tile">
+                <div sclass="t-label">Revenue</div>
+                <div sclass="t-value">$ 482,310</div>
+                <div sclass="t-delta-up">+12.4% MoM</div>
+            </div>
+            <div sclass="tile">
+                <div sclass="t-label">New Customers</div>
+                <div sclass="t-value">318</div>
+                <div sclass="t-delta-up">+5.1% MoM</div>
+            </div>
+            <div sclass="tile">
+                <div sclass="t-label">Churn</div>
+                <div sclass="t-value">2.3%</div>
+                <div sclass="t-delta-down">+0.4pp MoM</div>
+            </div>
+            <div sclass="tile">
+                <div sclass="t-label">Avg. Order</div>
+                <div sclass="t-value">$ 1,514</div>
+                <div sclass="t-delta-up">+1.8% MoM</div>
+            </div>
+        </div>
+
+        <!-- Left-right split: top regions and recent activity.
+            Each region hosts its own responsive Grid. Use a CSS flex div so
+            the two columns wrap naturally on narrow screens. -->
+        <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:stretch;">
+
+            <groupbox mold="3d" closable="false" sclass="section-gb"
+                    style="flex: 1 1 420px; margin:0;">
+                <caption label="Top Regions" />
+                <grid id="gridRegions" responsive="stacking" width="100%">
+                    <columns>
+                        <column label="Region" />
+                        <column label="Orders"  align="right" width="90px" />
+                        <column label="Revenue" align="right" width="120px" />
+                        <column label="Share"   align="right" width="90px"  responsiveVisible="false" />
+                        <column label="MoM %"   align="right" width="90px"  responsiveVisible="false" />
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="APAC" /><label value="412" /><label value="$ 168,200" />
+                            <label value="34.9%" /><label value="+8.3%" />
+                        </row>
+                        <row>
+                            <label value="EMEA" /><label value="305" /><label value="$ 141,050" />
+                            <label value="29.2%" /><label value="+3.1%" />
+                        </row>
+                        <row>
+                            <label value="NA" /><label value="289" /><label value="$ 128,410" />
+                            <label value="26.6%" /><label value="+16.2%" />
+                        </row>
+                        <row>
+                            <label value="LATAM" /><label value="80" /><label value="$ 44,650" />
+                            <label value="9.3%" /><label value="-1.4%" />
+                        </row>
+                    </rows>
+                    <foot>
+                        <footer label="Total" />
+                        <footer label="1,086" />
+                        <footer label="$ 482,310" />
+                        <footer label="100%" />
+                        <footer label="+12.4%" />
+                    </foot>
+                </grid>
+            </groupbox>
+
+            <groupbox mold="3d" closable="false" sclass="section-gb"
+                      style="flex: 1 1 280px; margin:0;">
+                <caption label="Recent Activity" />
+                <grid id="gridActivity" responsive="stacking" responsiveColumns="sm-1 lg-none" width="100%">
+                    <columns>
+                        <column label="When"   width="110px" />
+                        <column label="User" />
+                        <column label="Action" />
+                    </columns>
+                    <rows>
+                        <row><label value="10:32 AM" /><label value="alice" /><label value="approved PO-7781" /></row>
+                        <row><label value="10:25 AM" /><label value="bob" /><label value="updated pricing sheet" /></row>
+                        <row><label value="10:01 AM" /><label value="carol" /><label value="exported Q1 ledger" /></row>
+                        <row><label value="09:48 AM" /><label value="dan" /><label value="onboarded ACME Ltd." /></row>
+                    </rows>
+                </grid>
+            </groupbox>
+        </div>
+
+        <!-- Wide data Grid: fiscal report. Forces stacking at md because 9 columns
+             are too many for typical mobile widths. -->
+        <groupbox mold="3d" closable="false" sclass="section-gb">
+            <caption label="Top Accounts — Q1 2026" />
+            <grid id="gridAccounts" responsive="stacking"
+                  width="100%" sizedByContent="true">
+                <columns sizable="true">
+                    <column label="Account" />
+                    <column label="Tier"    width="80px"  responsiveVisible="false" />
+                    <column label="Orders"  width="80px"  align="right" />
+                    <column label="Rev."    width="120px" align="right" />
+                    <column label="Cost"    width="110px" align="right" responsiveVisible="false" />
+                    <column label="Margin"  width="100px" align="right" />
+                    <column label="AR Days" width="90px"  align="right" responsiveVisible="false" />
+                    <column label="CSAT"    width="80px"  align="right" responsiveVisible="false" />
+                    <column label="Owner"   width="110px"                responsiveVisible="false" />
+                </columns>
+                <rows>
+                    <row>
+                        <label value="ACME Ltd." /><label value="Gold" />
+                        <label value="48" /><label value="$ 82,110" /><label value="$ 41,200" />
+                        <label value="49.8%" /><label value="27" /><label value="4.6" />
+                        <label value="alice" />
+                    </row>
+                    <row>
+                        <label value="Globex" /><label value="Gold" />
+                        <label value="35" /><label value="$ 61,540" /><label value="$ 30,250" />
+                        <label value="50.9%" /><label value="30" /><label value="4.4" />
+                        <label value="bob" />
+                    </row>
+                    <row>
+                        <label value="Initech" /><label value="Silver" />
+                        <label value="22" /><label value="$ 32,150" /><label value="$ 18,900" />
+                        <label value="41.2%" /><label value="45" /><label value="3.9" />
+                        <label value="carol" />
+                    </row>
+                    <row>
+                        <label value="Umbrella" /><label value="Silver" />
+                        <label value="19" /><label value="$ 28,770" /><label value="$ 14,500" />
+                        <label value="49.6%" /><label value="21" /><label value="4.7" />
+                        <label value="dan" />
+                    </row>
+                </rows>
+            </grid>
+        </groupbox>
+    </window>
+</zk>

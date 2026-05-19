@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-sizing.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:57 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px; height: 800px;">
+        <!-- Fixed height -->
+        <grid id="gridFixedH" responsive="stacking" height="200px" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Email" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="jane@example.com" />
+                </row>
+                <row>
+                    <label value="Bob" />
+                    <label value="bob@example.com" />
+                </row>
+                <row>
+                    <label value="Alice" />
+                    <label value="alice@example.com" />
+                </row>
+                <row>
+                    <label value="Charlie" />
+                    <label value="charlie@example.com" />
+                </row>
+            </rows>
+        </grid>
+        <separator height="10px" />
+        <!-- vflex -->
+        <div height="300px">
+            <grid id="gridVflex" responsive="stacking" vflex="1" width="100%">
+                <columns>
+                    <column label="Name" />
+                    <column label="Email" />
+                </columns>
+                <rows>
+                    <row>
+                        <label value="John" />
+                        <label value="john@example.com" />
+                    </row>
+                    <row>
+                        <label value="Jane" />
+                        <label value="jane@example.com" />
+                    </row>
+                </rows>
+            </grid>
+        </div>
+        <separator height="10px" />
+        <!-- No height (auto) -->
+        <grid id="gridAuto" responsive="stacking" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Email" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                </row>
+            </rows>
+        </grid>
+        <separator height="10px" />
+        <!-- Fixed width -->
+        <grid id="gridFixedW" responsive="stacking" width="600px">
+            <columns>
+                <column label="Name" />
+                <column label="Email" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                </row>
+            </rows>
+        </grid>
+        <separator height="10px" />
+        <!-- hflex -->
+        <grid id="gridHflex" responsive="stacking" hflex="1">
+            <columns>
+                <column label="Name" />
+                <column label="Email" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

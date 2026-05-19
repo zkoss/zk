@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-grouping-model.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:25 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking" width="100%">
+        <columns menupopup="auto">
+            <column label="Name"          sort="auto" width="180px" />
+            <column label="Top Nutrients" hflex="1" responsiveVisible="false" />
+            <column label="Calories"      hflex="1" align="right" />
+        </columns>
+        <rows>
+            <group label="Vegetables" />
+            <row><label value="Broccoli"  /><label value="Vitamin C, Fiber" /><label value="34 kcal" /></row>
+            <row><label value="Spinach"   /><label value="Iron, Folate"     /><label value="23 kcal" /></row>
+            <row><label value="Carrot"    /><label value="Vitamin A"        /><label value="41 kcal" /></row>
+
+            <group label="Fruits" />
+            <row><label value="Apple"     /><label value="Fiber, Vitamin C" /><label value="52 kcal" /></row>
+            <row><label value="Blueberry" /><label value="Antioxidants"     /><label value="57 kcal" /></row>
+
+            <group label="Seafood" />
+            <row><label value="Salmon"    /><label value="Omega-3, Protein" /><label value="208 kcal"/></row>
+            <row><label value="Tuna"      /><label value="Protein, Niacin"  /><label value="184 kcal"/></row>
+            <row><label value="Cod"       /><label value="Protein, B12"     /><label value="82 kcal" /></row>
+        </rows>
+    </grid>
+</zk>

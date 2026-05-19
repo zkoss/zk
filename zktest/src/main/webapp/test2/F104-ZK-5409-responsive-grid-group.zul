@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-group.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:27:12 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <grid id="grid1" responsive="stacking" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Department" />
+                <column label="Salary" />
+            </columns>
+            <rows>
+                <group id="groupA" label="Group A" />
+                <row>
+                    <label value="John" />
+                    <label value="Engineering" />
+                    <label value="5000" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="Engineering" />
+                    <label value="5500" />
+                </row>
+                <groupfoot>
+                    <label value="" />
+                    <label value="" />
+                    <label value="Total: 10500" />
+                </groupfoot>
+                <group id="groupB" label="Group B" />
+                <row>
+                    <label value="Bob" />
+                    <label value="Sales" />
+                    <label value="4000" />
+                </row>
+                <row>
+                    <label value="Alice" />
+                    <label value="Sales" />
+                    <label value="4500" />
+                </row>
+                <groupfoot>
+                    <label value="" />
+                    <label value="" />
+                    <label value="Total: 8500" />
+                </groupfoot>
+            </rows>
+        </grid>
+        <separator height="20px" />
+        <!-- GroupsModel + multi-column -->
+        <grid id="grid2" responsive="stacking" responsiveColumns="sm-3 md-none" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Status" />
+            </columns>
+            <rows>
+                <group label="Active" />
+                <row>
+                    <label value="John" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="Bob" />
+                    <label value="Active" />
+                </row>
+                <group label="Inactive" />
+                <row>
+                    <label value="Alice" />
+                    <label value="Inactive" />
+                </row>
+                <row>
+                    <label value="Charlie" />
+                    <label value="Inactive" />
+                </row>
+                <row>
+                    <label value="Dave" />
+                    <label value="Inactive" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

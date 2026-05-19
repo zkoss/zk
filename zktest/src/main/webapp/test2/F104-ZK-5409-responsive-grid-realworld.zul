@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-realworld.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:27:08 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		import java.util.*;
+	]]></zscript>
+	<window title="SEGUIMIENTO DE PRODUCCIÓN — 028 MADRID"
+		width="100%" border="normal" vflex="1">
+		<div style="padding: 8px; background: #f5f5f5;">
+			<label value="PERIODO: 2026-04-15 | TIPO DE FACTURACIÓN: SALIDA 028 MADRID"
+				style="font-weight: 600;" />
+		</div>
+
+		<grid id="summaryGrid" responsive="stacking" responsiveColumns="sm-1 lg-none" width="100%" vflex="1"
+			sizedByContent="true">
+			<columns sizable="true">
+				<column label="Destino" align="left" />
+				<column label="Expds." align="right" width="80px" />
+				<column label="Bultos" align="right" width="80px" />
+				<column label="PvKg" align="right" width="90px"
+					responsiveVisible="false" />
+				<column label="Ingr.Cli." align="right" width="100px" />
+				<column label="Ingr.Plaz." align="right" width="100px"
+					responsiveVisible="false" />
+				<column label="Ingr.T" align="right" width="100px" />
+				<column label="Dis." align="right" width="90px"
+					responsiveVisible="false" />
+				<column label="Rec." align="right" width="80px"
+					responsiveVisible="false" />
+				<column label="Arrastre" align="right" width="100px"
+					responsiveVisible="false" />
+				<column label="Man." align="right" width="80px"
+					responsiveVisible="false" />
+				<column label="Costes" align="right" width="100px" />
+				<column label="Margen" align="right" width="100px" />
+				<column label="Ing./T" align="right" width="90px"
+					responsiveVisible="false" />
+			</columns>
+			<rows>
+				<row>
+					<label value="001 - VITORIA" />
+					<label value="15" />
+					<label value="26" />
+					<label value="1.465" />
+					<label value="203,29" />
+					<label value="21,63" />
+					<label value="224,92" />
+					<label value="78,89" />
+					<label value="0,00" />
+					<label value="-13,44" style="color:red;" />
+					<label value="0,00" />
+					<label value="65,45" />
+					<label value="159,47" />
+					<label value="153,53" />
+				</row>
+				<row>
+					<label value="002 - ALBACETE" />
+					<label value="11" />
+					<label value="20" />
+					<label value="2.074" />
+					<label value="227,03" />
+					<label value="0,00" />
+					<label value="227,03" />
+					<label value="101,51" />
+					<label value="0,00" />
+					<label value="-68,40" style="color:red;" />
+					<label value="0,00" />
+					<label value="33,11" />
+					<label value="193,92" />
+					<label value="109,46" />
+				</row>
+				<row>
+					<label value="003 - ALICANTE" />
+					<label value="34" />
+					<label value="51" />
+					<label value="5.059" />
+					<label value="695,68" />
+					<label value="12,30" />
+					<label value="707,98" />
+					<label value="251,92" />
+					<label value="0,00" />
+					<label value="102,22" />
+					<label value="0,00" />
+					<label value="354,14" />
+					<label value="353,84" />
+					<label value="139,94" />
+				</row>
+				<row>
+					<label value="004 - ALMERIA" />
+					<label value="20" />
+					<label value="39" />
+					<label value="7.781" />
+					<label value="880,80" />
+					<label value="0,00" />
+					<label value="880,80" />
+					<label value="292,51" />
+					<label value="0,00" />
+					<label value="-7,23" style="color:red;" />
+					<label value="0,00" />
+					<label value="285,28" />
+					<label value="595,52" />
+					<label value="113,20" />
+				</row>
+				<row>
+					<label value="005 - AVILA" />
+					<label value="3" />
+					<label value="6" />
+					<label value="2.677" />
+					<label value="171,00" />
+					<label value="0,00" />
+					<label value="171,00" />
+					<label value="111,65" />
+					<label value="0,00" />
+					<label value="47,70" />
+					<label value="0,00" />
+					<label value="159,35" />
+					<label value="11,65" />
+					<label value="63,88" />
+				</row>
+				<row>
+					<label value="006 - BADAJOZ" />
+					<label value="18" />
+					<label value="21" />
+					<label value="3.850" />
+					<label value="453,91" />
+					<label value="3,13" />
+					<label value="457,04" />
+					<label value="198,18" />
+					<label value="0,00" />
+					<label value="105,57" />
+					<label value="0,00" />
+					<label value="303,75" />
+					<label value="153,29" />
+					<label value="118,71" />
+				</row>
+				<row>
+					<label value="007 - MALLORCA" />
+					<label value="9" />
+					<label value="15" />
+					<label value="1.025" />
+					<label value="318,69" />
+					<label value="10,01" />
+					<label value="328,70" />
+					<label value="56,87" />
+					<label value="0,00" />
+					<label value="102,53" />
+					<label value="20,38" />
+					<label value="179,78" />
+					<label value="148,92" />
+					<label value="320,68" />
+				</row>
+				<row sclass="highlighted-row">
+					<label value="008 - BARCELONA" style="font-weight:600;" />
+					<label value="190" />
+					<label value="322" />
+					<label value="45.646" />
+					<label value="5.273,01" />
+					<label value="124,52" />
+					<label value="5.397,53" />
+					<label value="2.019,91" />
+					<label value="0,00" />
+					<label value="741,80" />
+					<label value="0,00" />
+					<label value="2.761,71" />
+					<label value="2.635,82" />
+					<label value="118,25" />
+				</row>
+			</rows>
+			<foot>
+				<footer label="Totales" />
+				<footer label="300" />
+				<footer label="500" />
+				<footer label="69.577" />
+				<footer label="8.223,41" />
+				<footer label="171,59" />
+				<footer label="8.395,00" />
+				<footer label="3.111,44" />
+				<footer label="0,00" />
+				<footer label="1.010,75" />
+				<footer label="20,38" />
+				<footer label="4.142,57" />
+				<footer label="4.252,43" />
+				<footer label="137,90" />
+			</foot>
+		</grid>
+	</window>
+</zk>

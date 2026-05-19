@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-model.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:27:20 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zul.*;
+		import java.util.*;
+
+		// Use ArrayList with add() to avoid Arrays.asList + array creation issues in zscript
+		ArrayList list = new ArrayList();
+		list.add(new String[]{"John", "john@example.com", "Engineering"});
+		list.add(new String[]{"Jane", "jane@example.com", "Design"});
+		list.add(new String[]{"Bob", "bob@example.com", "Sales"});
+		ListModelList model = new ListModelList(list);
+
+		ListModelList emptyModel = new ListModelList();
+
+		ArrayList dlist = new ArrayList();
+		dlist.add(new String[]{"Alice", "alice@example.com", "Marketing"});
+		dlist.add(new String[]{"Charlie", "charlie@example.com", "Support"});
+		ListModelList dynamicModel = new ListModelList(dlist);
+	]]></zscript>
+	<div style="padding: 10px;">
+		<!-- grid2: ListModel + template -->
+		<grid id="grid2" model="${model}" responsive="stacking" width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Email" />
+				<column label="Department" />
+			</columns>
+			<template name="model">
+				<row>
+					<label value="${each[0]}" />
+					<label value="${each[1]}" />
+					<label value="${each[2]}" />
+				</row>
+			</template>
+		</grid>
+		<separator height="20px" />
+		<!-- grid3: Same ListModel + template -->
+		<grid id="grid3" model="${model}" responsive="stacking" width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Email" />
+				<column label="Department" />
+			</columns>
+			<template name="model">
+				<row>
+					<label value="${each[0]}" />
+					<label value="${each[1]}" />
+					<label value="${each[2]}" />
+				</row>
+			</template>
+		</grid>
+		<separator height="20px" />
+		<!-- grid4: Empty model + emptyMessage -->
+		<grid id="grid4" model="${emptyModel}" responsive="stacking"
+			emptyMessage="No data available" width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Email" />
+			</columns>
+		</grid>
+		<separator height="20px" />
+		<!-- grid5: Dynamic model -->
+		<grid id="grid5" model="${dynamicModel}" responsive="stacking" width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Email" />
+				<column label="Department" />
+			</columns>
+			<template name="model">
+				<row>
+					<label value="${each[0]}" />
+					<label value="${each[1]}" />
+					<label value="${each[2]}" />
+				</row>
+			</template>
+		</grid>
+		<button id="btnAdd" label="Add Item">
+			<attribute name="onClick"><![CDATA[
+				dynamicModel.add(new String[]{"New", "new@example.com", "NewDept"});
+			]]></attribute>
+		</button>
+		<button id="btnRemove" label="Remove Item">
+			<attribute name="onClick"><![CDATA[
+				if (dynamicModel.getSize() > 0)
+					dynamicModel.remove(dynamicModel.getSize() - 1);
+			]]></attribute>
+		</button>
+	</div>
+</zk>

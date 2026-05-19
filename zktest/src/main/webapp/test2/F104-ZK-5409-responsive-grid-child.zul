@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-child.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:25 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div style="padding: 10px;">
+		<!-- Grid with Footer -->
+		<grid id="gridFooter" responsive="stacking" width="100%">
+			<columns>
+				<column label="Product" />
+				<column label="Quantity" />
+				<column label="Price" />
+			</columns>
+			<rows>
+				<row>
+					<label value="Widget A" />
+					<label value="10" />
+					<label value="100" />
+				</row>
+				<row>
+					<label value="Widget B" />
+					<label value="20" />
+					<label value="200" />
+				</row>
+			</rows>
+			<foot>
+				<footer label="Total" />
+				<footer label="30" />
+				<footer label="300" />
+			</foot>
+		</grid>
+		<separator height="20px" />
+		<!-- Grid with Row spans: spans="1,2" on a row with 2 cells means first cell spans 1 col, second spans 2 cols (total=3) -->
+		<grid id="gridSpans" responsive="stacking" width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Email" />
+				<column label="Department" />
+			</columns>
+			<rows>
+				<row>
+					<label value="John" />
+					<label value="john@example.com (Engineering)" />
+				</row>
+				<row>
+					<label value="Jane" />
+					<label value="jane@example.com" />
+					<label value="Design" />
+				</row>
+			</rows>
+		</grid>
+	</div>
+</zk>

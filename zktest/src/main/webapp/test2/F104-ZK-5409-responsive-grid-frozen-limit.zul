@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-frozen-limit.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:20 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div style="padding: 10px;">
+		<label style="font-weight:600; font-size: 14px;"
+			value="Frozen columns work in wide (table) mode only" />
+
+		<grid id="frozenGrid" responsive="stacking" width="100%" height="320px">
+			<frozen columns="1" />
+			<columns>
+				<column label="Region" width="120px" />
+				<column label="Code" width="100px" />
+				<column label="Q1" width="100px" align="right" />
+				<column label="Q2" width="100px" align="right" />
+				<column label="Q3" width="100px" align="right" />
+				<column label="Q4" width="100px" align="right" />
+			</columns>
+			<rows>
+				<row>
+					<label value="North" />
+					<label value="NTH-001" />
+					<label value="1200" />
+					<label value="1750" />
+					<label value="2010" />
+					<label value="1840" />
+				</row>
+				<row>
+					<label value="South" />
+					<label value="STH-002" />
+					<label value="950" />
+					<label value="1380" />
+					<label value="1620" />
+					<label value="1470" />
+				</row>
+				<row>
+					<label value="East" />
+					<label value="EST-003" />
+					<label value="820" />
+					<label value="1120" />
+					<label value="1330" />
+					<label value="1200" />
+				</row>
+				<row>
+					<label value="West" />
+					<label value="WST-004" />
+					<label value="1100" />
+					<label value="1510" />
+					<label value="1770" />
+					<label value="1610" />
+				</row>
+			</rows>
+		</grid>
+
+		<separator height="20px" />
+
+		<label style="font-weight:600; font-size: 14px;"
+			value="Comparison: same data without frozen" />
+
+		<grid id="noFrozenGrid" responsive="stacking" width="100%" height="320px">
+			<columns>
+				<column label="Region" width="120px" />
+				<column label="Code" width="100px" responsiveVisible="false" />
+				<column label="Q1" width="100px" align="right" />
+				<column label="Q2" width="100px" align="right" responsiveVisible="false" />
+				<column label="Q3" width="100px" align="right" responsiveVisible="false" />
+				<column label="Q4" width="100px" align="right" />
+			</columns>
+			<rows>
+				<row>
+					<label value="North" />
+					<label value="NTH-001" />
+					<label value="1200" />
+					<label value="1750" />
+					<label value="2010" />
+					<label value="1840" />
+				</row>
+				<row>
+					<label value="South" />
+					<label value="STH-002" />
+					<label value="950" />
+					<label value="1380" />
+					<label value="1620" />
+					<label value="1470" />
+				</row>
+				<row>
+					<label value="East" />
+					<label value="EST-003" />
+					<label value="820" />
+					<label value="1120" />
+					<label value="1330" />
+					<label value="1200" />
+				</row>
+				<row>
+					<label value="West" />
+					<label value="WST-004" />
+					<label value="1100" />
+					<label value="1510" />
+					<label value="1770" />
+					<label value="1610" />
+				</row>
+			</rows>
+		</grid>
+	</div>
+</zk>

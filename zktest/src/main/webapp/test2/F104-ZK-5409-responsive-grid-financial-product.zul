@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-financial-product.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:14 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        .toolbar-wrap {
+            background: #f6f7f9;
+            border: 1px solid #d9dde2;
+            border-bottom: none;
+            padding: 6px 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .toolbar-wrap .z-button {
+            font-size: 12px;
+        }
+        .tb-primary { background: #2a7ae4 !important; color: #fff !important; }
+        .tb-danger  { background: #d0021b !important; color: #fff !important; }
+        .tb-warn    { background: #e8833a !important; color: #fff !important; }
+        .product-grid .z-row-inner, .product-grid .z-cell { font-size: 12px; }
+        .status-chip {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 3px;
+            background: #eef6ff;
+            color: #2a7ae4;
+            font-size: 11px;
+        }
+    </style>
+    <window title="Product Management — Securitization Products"
+            width="100%" border="normal" vflex="1">
+        <!-- Toolbar -->
+        <div sclass="toolbar-wrap">
+            <button label="New Wizard"       sclass="tb-primary" iconSclass="z-icon-plus" />
+            <button label="Edit Wizard"      sclass="tb-primary" iconSclass="z-icon-pencil" />
+            <button label="View"             iconSclass="z-icon-search" />
+            <button label="Copy"             iconSclass="z-icon-copy" />
+            <button label="Delete"           sclass="tb-danger"  iconSclass="z-icon-trash" />
+            <button label="Issue Transfer"   iconSclass="z-icon-exchange" />
+            <button label="Product Pricing"  iconSclass="z-icon-calculator" />
+            <button label="Export Ledger"    iconSclass="z-icon-download" />
+            <button label="Refresh Key Dates" sclass="tb-danger" iconSclass="z-icon-refresh" />
+        </div>
+
+        <!-- Main data grid: 1 checkbox column + 12 data columns = 13 total.
+             Responsive strategy (container-based, default md=768 breakpoint):
+             - xl+/lg: show all columns
+             - md: hide low-priority columns (证券化类型, 创建人员, 创建时间, 经办机构)
+             - sm: collapse to stacking card mode via responsive="stacking"
+        -->
+        <grid id="productGrid" responsive="stacking"
+              width="100%" vflex="1" sclass="product-grid" sizedByContent="true">
+            <columns sizable="true">
+                <column label="" width="32px" align="center" responsiveVisible="false" />
+                <column label="Product Code"   width="140px" responsiveVisible="false" />
+                <column label="Product Name"   width="180px" />
+                <column label="Issuance (10k CNY)" width="130px" align="right" />
+                <column label="Initial Date"   width="110px" />
+                <column label="Asset Pool"     width="160px" responsiveVisible="false" />
+                <column label="Securitization Type" width="110px" responsiveVisible="false" />
+                <column label="Set Date"       width="110px" />
+                <column label="Expected Maturity" width="120px" />
+                <column label="Legal Maturity" width="120px" responsiveVisible="false" />
+                <column label="Organization"   width="120px" responsiveVisible="false" />
+                <column label="Creator"        width="90px"  responsiveVisible="false" />
+                <column label="Created At"     width="110px" responsiveVisible="false" />
+            </columns>
+            <rows>
+                <row>
+                    <checkbox checked="true" />
+                    <label value="GD01" />
+                    <label value="" />
+                    <label value="812,662.500" />
+                    <label value="2017-01-06" />
+                    <label value="GD01" />
+                    <label value="Corporate Loan" />
+                    <label value="2017-02-02" />
+                    <label value="2021-06-02" />
+                    <label value="2021-06-25" />
+                    <label value="Shenzhen HQ" />
+                    <label value="admin" />
+                    <label value="2018-08-28" />
+                </row>
+                <row>
+                    <checkbox />
+                    <label value="XMDM20181..." />
+                    <label value="DG-Refresh Balance-nxl" />
+                    <label value="34,000.000900" />
+                    <label value="2018-08-27" />
+                    <label value="DG-Refresh Balance..." />
+                    <label value="Corporate Loan" />
+                    <label value="2018-08-27" />
+                    <label value="2021-08-27" />
+                    <label value="2021-08-27" />
+                    <label value="Moneybank HQ" />
+                    <label value="nxl" />
+                    <label value="2018-08-30" />
+                </row>
+                <row>
+                    <checkbox />
+                    <label value="ABS2024-001" />
+                    <label value="Green Energy ABS Series A" />
+                    <label value="1,250,000.000" />
+                    <label value="2024-03-15" />
+                    <label value="Solar Receivables Pool" />
+                    <label value="Consumer Loan" />
+                    <label value="2024-04-01" />
+                    <label value="2028-03-31" />
+                    <label value="2029-03-31" />
+                    <label value="Beijing Branch" />
+                    <label value="liu.m" />
+                    <label value="2024-03-12" />
+                </row>
+                <row>
+                    <checkbox />
+                    <label value="CLO2024-017" />
+                    <label value="Corporate Loan CLO 17" />
+                    <label value="680,500.750" />
+                    <label value="2024-06-01" />
+                    <label value="SME Loan Pool #17" />
+                    <label value="Corporate Loan" />
+                    <label value="2024-06-15" />
+                    <label value="2027-06-01" />
+                    <label value="2028-06-01" />
+                    <label value="Shanghai Branch" />
+                    <label value="wang.h" />
+                    <label value="2024-05-28" />
+                </row>
+                <row>
+                    <checkbox />
+                    <label value="RMBS-2023-11" />
+                    <label value="Residential MBS 11" />
+                    <label value="2,450,120.000" />
+                    <label value="2023-11-10" />
+                    <label value="Mortgage Pool Tier-1" />
+                    <label value="Mortgage" />
+                    <label value="2023-12-01" />
+                    <label value="2038-11-30" />
+                    <label value="2040-11-30" />
+                    <label value="Shenzhen HQ" />
+                    <label value="chen.y" />
+                    <label value="2023-10-30" />
+                </row>
+                <row>
+                    <checkbox />
+                    <label value="AUTO-2024-05" />
+                    <label value="Auto Loan Trust 5" />
+                    <label value="560,000.000" />
+                    <label value="2024-02-20" />
+                    <label value="Auto Loan Pool" />
+                    <label value="Auto Loan" />
+                    <label value="2024-03-10" />
+                    <label value="2027-02-20" />
+                    <label value="2028-02-20" />
+                    <label value="Guangzhou Branch" />
+                    <label value="zhang.l" />
+                    <label value="2024-02-12" />
+                </row>
+            </rows>
+            <foot>
+                <footer label="Total (6)" />
+                <footer label="" />
+                <footer label="" />
+                <footer label="5,787,283.250" />
+                <footer label="" />
+                <footer label="" />
+                <footer label="" />
+                <footer label="" />
+                <footer label="" />
+                <footer label="" />
+                <footer label="" />
+                <footer label="" />
+                <footer label="" />
+            </foot>
+        </grid>
+    </window>
+</zk>

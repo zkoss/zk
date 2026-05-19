@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-colspan.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon May 18 17:53:22 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-5409 colspan edge case — a &lt;row&gt; uses &lt;cell colspan="2"&gt;
+		to span columns B+C of a 5-column grid. In stacking mode the spanning
+		cell must NOT be stamped with column B's data-label; the subsequent
+		cells must still align to columns D and E (not C and D).
+
+		Resize narrow to enter stacking; visual check:
+		- cellA shows label "A"
+		- spanned cell shows NO column label (it's not tied to one column)
+		- cellD shows label "D" (NOT "C")
+		- cellE shows label "E" (NOT "D")
+	</label>
+	<grid id="g1" responsive="stacking" width="100%">
+		<columns>
+			<column label="A"/>
+			<column label="B"/>
+			<column label="C"/>
+			<column label="D"/>
+			<column label="E"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="cellA"/>
+				<cell colspan="2"><label value="span-BC"/></cell>
+				<label value="cellD"/>
+				<label value="cellE"/>
+			</row>
+		</rows>
+	</grid>
+</zk>

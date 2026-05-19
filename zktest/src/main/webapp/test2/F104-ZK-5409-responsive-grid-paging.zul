@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-paging.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:27:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <label id="pagingStatus" value="page: 0" />
+        <grid id="grid1" responsive="stacking" mold="paging" pageSize="3" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Email" />
+                <column label="Department" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                    <label value="Engineering" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="jane@example.com" />
+                    <label value="Design" />
+                </row>
+                <row>
+                    <label value="Bob" />
+                    <label value="bob@example.com" />
+                    <label value="Sales" />
+                </row>
+                <row>
+                    <label value="Alice" />
+                    <label value="alice@example.com" />
+                    <label value="Marketing" />
+                </row>
+                <row>
+                    <label value="Charlie" />
+                    <label value="charlie@example.com" />
+                    <label value="Support" />
+                </row>
+                <row>
+                    <label value="Dave" />
+                    <label value="dave@example.com" />
+                    <label value="QA" />
+                </row>
+            </rows>
+            <attribute name="onPaging"><![CDATA[
+			pagingStatus.setValue("page: " + event.getActivePage());
+		]]></attribute>
+        </grid>
+        <separator height="20px" />
+        <!-- 3-column paging: 15 items per page = 3x5 card layout -->
+        <grid id="grid2" responsive="stacking" responsiveColumns="sm-3 md-none" mold="paging" pageSize="6"
+            width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Status" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="Item 1" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="Item 2" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="Item 3" />
+                    <label value="Inactive" />
+                </row>
+                <row>
+                    <label value="Item 4" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="Item 5" />
+                    <label value="Inactive" />
+                </row>
+                <row>
+                    <label value="Item 6" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="Item 7" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="Item 8" />
+                    <label value="Inactive" />
+                </row>
+                <row>
+                    <label value="Item 9" />
+                    <label value="Active" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

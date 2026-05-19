@@ -1519,6 +1519,7 @@
 		<xs:attribute name="onGroup" type="xs:string" use="optional" />
 		<xs:attribute name="onUngroup" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="responsiveVisible" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- columnchildren -->
 	<xs:element name="columnchildren" type="columnchildrenType" />
@@ -2023,6 +2024,22 @@
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
+		<xs:attribute name="responsive" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="" />
+					<xs:enumeration value="stacking" />
+					<xs:enumeration value="none" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="responsiveColumns" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="\s*((sm|md|lg|xl|xxl)-(\d+|none)\s*)*" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 
 	<!-- groupbox -->
