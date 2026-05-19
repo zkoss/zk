@@ -191,12 +191,27 @@ public class ClassWebResource {
 
 	/** Sets the required headers (e.g., Cache-Control) to notify the
 	 * the client is allowed to cache the content as long as possible.
+	 * @return true if 304 Not Modified was sent (ETag matched), so the caller should skip sending the body.
 	 */
-	private static void setClientCacheForever(HttpServletResponse response) {
+	private boolean setClientCacheForever(HttpServletRequest request, HttpServletResponse response) {
 		if (!"false".equals(Library.getProperty("org.zkoss.web.classWebResource.cache"))) {
 			response.setHeader("Cache-Control", "public, max-age=31536000"); //a year (unit: seconds)
 			response.setDateHeader("Expires", _expires);
+			// ZK-5776: honour ETag / If-None-Match when org.zkoss.web.classWebResource.cache.etag=true
+			if ("true".equals(Library.getProperty("org.zkoss.web.classWebResource.cache.etag"))) {
+				final String etag = getEncodeURLPrefix();
+				if (etag != null) {
+					final String inm = request.getHeader("If-None-Match");
+					if (inm != null && inm.equals(etag)) {
+						response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+						response.setHeader("ETag", etag);
+						return true;
+					}
+					response.setHeader("ETag", etag);
+				}
+			}
 		}
+		return false;
 	}
 
 	private static final long _expires;
@@ -619,8 +634,10 @@ public class ClassWebResource {
 			}
 
 			response.setContentType(ctype);
-			if (pi.indexOf('*') < 0) //not locale dependent
-				setClientCacheForever(response);
+			if (pi.indexOf('*') < 0) { //not locale dependent
+				if (setClientCacheForever(request, response))
+					return; //304 Not Modified; no body needed
+			}
 		}
 
 		InputStream is = null;

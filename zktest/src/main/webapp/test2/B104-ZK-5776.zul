@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5776.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed May 13 22:08:54 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Test for ZK-5776: ETag and If-None-Match headers not processed correctly.
+
+		Steps to reproduce (before fix):
+		1. Set org.zkoss.web.classWebResource.cache.etag=true in zk.xml.
+		2. Load the application in a browser.
+		3. Open developer tools, go to the Network tab.
+		4. Reload the page and observe request/response headers for a raw static resource
+		   served by ClassWebResource (e.g. /js/zk/ext/fetch.js). Note: .wpd/.wcs/.dsp are
+		   served by their Extendlets and were already revalidated via JspFns before this fix.
+		5. On the first load an ETag response header is present, but subsequent requests
+		   do NOT send If-None-Match, so the server never returns 304.
+
+		To verify the fix:
+		- Expected: after the first request, subsequent requests for the same static resource
+		  include If-None-Match matching the ETag value, and the server responds with 304 Not Modified.
+		- The automated test verifies the ETag response header is present when the property is enabled.
+	</label>
+
+	<button id="btn" label="Load static resource via AJAX" onClick="Clients.evalJavaScript(
+		&quot;fetch(zk.ajaxResourceURI('/js/zk/ext/fetch.js')).then(r => zk.afterMount(function(){jq('#result').text(r.headers.get('ETag') || 'no-etag')}))&quot;
+	)"/>
+	<label id="result" value="(click button to test)"/>
+</zk>
