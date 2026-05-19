@@ -56,6 +56,15 @@ public class ComponentDefinitionImpl implements ComponentDefinition, java.io.Ser
 	private transient LanguageDefinition _langdef;
 	private transient PageDefinition _pgdef;
 	private EvaluatorRef _evalr;
+	/** The base definition this one was cloned from via {@code extends}, or null.
+	 * Used by features that need to recognise alias relationships, e.g.
+	 * {@code stubonlyDescendants}. Since 10.4.0 (ZK-6096).
+	 * <p>Transient and not rebuilt on deserialization: after a passivated
+	 * page-scoped alias is reactivated the chain reads null, so alias matching
+	 * falls back to the literal definition name. This only forgoes the stub
+	 * optimization for the alias (it stays live) — never changes behavior.
+	 */
+	private transient ComponentDefinition _extends;
 	/** Either String or Class. */
 	private Object _implcls;
 	/** A map of (String mold, ExValue widgetClass). */
@@ -567,6 +576,11 @@ public class ComponentDefinitionImpl implements ComponentDefinition, java.io.Ser
 		ComponentDefinitionImpl cd = (ComponentDefinitionImpl) clone();
 		cd._name = name;
 		cd._langdef = langdef;
+		cd._extends = this; //record alias chain for ZK-6096 policy matching
 		return cd;
+	}
+
+	public ComponentDefinition getExtends() {
+		return _extends;
 	}
 }
