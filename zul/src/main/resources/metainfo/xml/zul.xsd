@@ -604,6 +604,16 @@
 		<xs:attribute name="onOK" type="xs:string" use="optional" />
 		<xs:attribute name="onCancel" type="xs:string" use="optional" />
 		<xs:attribute name="inputAttributes" type="xs:string" use="optional" />
+		<xs:attribute name="label" type="xs:string" use="optional" />
+		<xs:attribute name="labelPosition" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="left"/>
+					<xs:enumeration value="top"/>
+					<xs:enumeration value="floating"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:attributeGroup>
 	<xs:attributeGroup name="formatInputElementAttrGroup">
 		<xs:attributeGroup ref="inputElementAttrGroup" />
