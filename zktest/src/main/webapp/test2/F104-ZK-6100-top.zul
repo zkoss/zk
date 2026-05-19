@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6100-top.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 19 13:17:46 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6100 — labelPosition="top" matrix.
+
+		Steps to verify:
+		1. Every input renders the associated label stacked above the editor
+		   (column flex layout).
+		2. Label line takes its own row; input width inherits container.
+		3. Composite popup-trigger components keep their own border + button
+		   chrome unchanged in "top" mode.
+		4. Setting labelPosition via the buttons toggles between left / top /
+		   floating without losing value or focus.
+
+		Expected: all 13 inputs wrap in a span.z-input-label.z-input-label-top
+		except #t_unset.
+	</label>
+
+	<style>
+		.fixtures { padding: 12px; }
+		.fixtures &gt; vlayout &gt; * { margin-bottom: 12px; }
+		.group-title { font-weight: bold; margin-top: 12px; }
+	</style>
+
+	<vlayout id="root" sclass="fixtures" spacing="6px">
+
+		<!-- ============================================= -->
+		<!-- Section A: 13 InputElement variants (top position) -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="A. 13 InputElement variants (labelPosition=top)"/>
+		<textbox       id="t_textbox"       label="Name"     labelPosition="top"/>
+		<textbox       id="t_textarea"      label="Notes"    labelPosition="top" multiline="true" rows="3"/>
+		<textbox       id="t_searchbox"     label="Find"     labelPosition="top" type="search"/>
+		<intbox        id="t_intbox"        label="Age"      labelPosition="top"/>
+		<longbox       id="t_longbox"       label="Account"  labelPosition="top"/>
+		<doublebox     id="t_doublebox"     label="Latitude" labelPosition="top"/>
+		<decimalbox    id="t_decimalbox"    label="Amount"   labelPosition="top"/>
+		<spinner       id="t_spinner"       label="Count"    labelPosition="top"/>
+		<doublespinner id="t_doublespinner" label="Rate"     labelPosition="top"/>
+		<datebox       id="t_datebox"       label="Birthday" labelPosition="top"/>
+		<timebox       id="t_timebox"       label="Departure" labelPosition="top"/>
+		<combobox      id="t_combobox"      label="Country"  labelPosition="top">
+			<comboitem label="Taiwan"/>
+			<comboitem label="Japan"/>
+		</combobox>
+		<bandbox       id="t_bandbox"       label="Search"   labelPosition="top">
+			<bandpopup><label value="popup content"/></bandpopup>
+		</bandbox>
+
+		<!-- ============================================= -->
+		<!-- Section B: state variants -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="B. State variants (top position)"/>
+		<textbox id="t_prefilled" label="Prefilled" labelPosition="top" value="hello"/>
+		<textbox id="t_disabled"  label="Disabled"  labelPosition="top" disabled="true"/>
+		<textbox id="t_readonly"  label="Readonly"  labelPosition="top" readonly="true" value="locked"/>
+		<textbox id="t_invalid"   label="Required"  labelPosition="top" constraint="no empty: required"/>
+		<textbox id="t_hint"      label="Email"     labelPosition="top" placeholder="user@example.com"/>
+		<textbox id="t_inplace"   label="Inplace"   labelPosition="top" inplace="true" value="Untitled"/>
+
+		<!-- ============================================= -->
+		<!-- Section C: edge cases -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="C. Edge cases (XSS escape / long label / empty)"/>
+		<textbox id="t_xss"   label="&lt;script&gt;alert(1)&lt;/script&gt;" labelPosition="top"/>
+		<textbox id="t_long"  label="This is an exceptionally long label intended to test wrapping or ellipsis behavior in narrow inputs" labelPosition="top"/>
+		<textbox id="t_unset" label="" labelPosition="top"/>
+
+		<!-- ============================================= -->
+		<!-- Section D: dynamic API + i18n -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="D. Dynamic API + RTL"/>
+		<textbox id="t_dynamic" label="Initial" labelPosition="top"/>
+		<div style="direction: rtl;">
+			<textbox id="t_rtl" label="بريد إلكتروني" labelPosition="top"/>
+		</div>
+
+		<hlayout>
+			<button id="btn_setLabel" label="setLabel('Updated')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabel("Updated");
+				]]></attribute>
+			</button>
+			<button id="btn_unsetLabel" label="setLabel(null)">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabel(null);
+				]]></attribute>
+			</button>
+			<button id="btn_setPosLeft" label="setLabelPosition('left')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("left");
+				]]></attribute>
+			</button>
+			<button id="btn_setPosTop" label="setLabelPosition('top')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("top");
+				]]></attribute>
+			</button>
+			<button id="btn_setPosFloating" label="setLabelPosition('floating')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("floating");
+				]]></attribute>
+			</button>
+		</hlayout>
+	</vlayout>
+</zk>

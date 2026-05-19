@@ -80,6 +80,8 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 	private boolean _valided;
 	private boolean _inplace;
 	private String _placeholder;
+	private String _label;
+	private String _labelPosition = "left";
 	private Map<String, String> _inputAttributes;
 
 	/**
@@ -99,6 +101,58 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 		if (!Objects.equals(_placeholder, placeholder)) {
 			_placeholder = placeholder;
 			smartUpdate("placeholder", _placeholder);
+		}
+	}
+
+	/**
+	 * Returns the associated label text.
+	 * @since 10.4.0
+	 */
+	public String getLabel() {
+		return _label;
+	}
+
+	/**
+	 * Sets the associated label text. Empty string is treated as null.
+	 * @since 10.4.0
+	 */
+	public void setLabel(String label) {
+		if (label != null && label.length() == 0)
+			label = null;
+		if (!Objects.equals(_label, label)) {
+			_label = label;
+			smartUpdate("label", _label);
+		}
+	}
+
+	/**
+	 * Returns the label position.
+	 * @since 10.4.0
+	 */
+	public String getLabelPosition() {
+		return _labelPosition;
+	}
+
+	/**
+	 * Sets the label position: {@code "left"} (default), {@code "top"} or
+	 * {@code "floating"}. {@code left} renders the label inline before the
+	 * input; {@code top} stacks the label above the input; {@code floating}
+	 * starts the label in the placeholder slot and floats it to the top
+	 * border on focus / when the input has a value.
+	 * @throws WrongValueException if position is not one of the accepted values
+	 * @since 10.4.0
+	 */
+	public void setLabelPosition(String position) {
+		if (position == null
+				|| (!"left".equals(position)
+						&& !"top".equals(position)
+						&& !"floating".equals(position))) {
+			throw new WrongValueException(
+					"labelPosition must be one of left / top / floating, was: " + position);
+		}
+		if (!Objects.equals(_labelPosition, position)) {
+			_labelPosition = position;
+			smartUpdate("labelPosition", _labelPosition);
 		}
 	}
 
@@ -951,6 +1005,10 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 
 		if (_placeholder != null)
 			render(renderer, "placeholder", _placeholder);
+		if (_label != null)
+			render(renderer, "label", _label);
+		if (!"left".equals(_labelPosition))
+			render(renderer, "labelPosition", _labelPosition);
 		if (_inputAttributes != null)
 			render(renderer, "inputAttributes", _inputAttributes);
 
@@ -1039,6 +1097,26 @@ public abstract class InputElement extends XulElement implements Constrainted, R
 
 			public String getValue(Component cmp) {
 				return ((InputElement) cmp).getPlaceholder();
+			}
+		});
+
+		_properties.put("label", new StringPropertyAccess() {
+			public void setValue(Component cmp, String label) {
+				((InputElement) cmp).setLabel(label);
+			}
+
+			public String getValue(Component cmp) {
+				return ((InputElement) cmp).getLabel();
+			}
+		});
+
+		_properties.put("labelPosition", new StringPropertyAccess() {
+			public void setValue(Component cmp, String position) {
+				((InputElement) cmp).setLabelPosition(position);
+			}
+
+			public String getValue(Component cmp) {
+				return ((InputElement) cmp).getLabelPosition();
 			}
 		});
 

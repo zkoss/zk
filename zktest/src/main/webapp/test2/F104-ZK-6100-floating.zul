@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6100-floating.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 19 13:17:46 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6100 — labelPosition="floating" matrix.
+
+		Steps to verify:
+		1. Every input shows label in the placeholder slot when empty + blurred.
+		2. Focus → label shrinks 0.75x and floats to the top border.
+		3. Type → label stays floated; clear + blur → label returns to center.
+		4. Constraint failure paints border + label danger color.
+		5. Composite popup-trigger components (combobox / bandbox / datebox /
+		   timebox / spinner / doublespinner): outer chrome is neutralized;
+		   trigger column is reserved so label doesn't overlap buttons.
+		6. Placeholder hint is hidden when label is centered, revealed when shrunk.
+		7. inplace + floating: chrome hides until focus.
+		8. RTL container: label inset switches from left to right.
+
+		Expected: 13 wrapped inputs in span.z-input-label.z-input-label-floating.
+	</label>
+
+	<style>
+		.fixtures { padding: 12px; }
+		.fixtures &gt; vlayout &gt; * { margin-bottom: 16px; }
+		.group-title { font-weight: bold; margin-top: 12px; }
+	</style>
+
+	<vlayout id="root" sclass="fixtures" spacing="6px">
+
+		<!-- ============================================= -->
+		<!-- Section A: 13 InputElement variants (floating position) -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="A. 13 InputElement variants (labelPosition=floating)"/>
+		<textbox       id="t_textbox"       label="Name"     labelPosition="floating"/>
+		<textbox       id="t_textarea"      label="Notes"    labelPosition="floating" multiline="true" rows="3"/>
+		<textbox       id="t_searchbox"     label="Find"     labelPosition="floating" type="search"/>
+		<intbox        id="t_intbox"        label="Age"      labelPosition="floating"/>
+		<longbox       id="t_longbox"       label="Account"  labelPosition="floating"/>
+		<doublebox     id="t_doublebox"     label="Latitude" labelPosition="floating"/>
+		<decimalbox    id="t_decimalbox"    label="Amount"   labelPosition="floating"/>
+		<spinner       id="t_spinner"       label="Count"    labelPosition="floating"/>
+		<doublespinner id="t_doublespinner" label="Rate"     labelPosition="floating"/>
+		<datebox       id="t_datebox"       label="Birthday" labelPosition="floating"/>
+		<timebox       id="t_timebox"       label="Departure" labelPosition="floating"/>
+		<combobox      id="t_combobox"      label="Country"  labelPosition="floating">
+			<comboitem label="Taiwan"/>
+			<comboitem label="Japan"/>
+		</combobox>
+		<bandbox       id="t_bandbox"       label="Search"   labelPosition="floating">
+			<bandpopup><label value="popup content"/></bandpopup>
+		</bandbox>
+
+		<!-- ============================================= -->
+		<!-- Section B: state variants (floating) -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="B. State variants (floating position)"/>
+		<textbox id="t_prefilled" label="Prefilled" labelPosition="floating" value="hello"/>
+		<textbox id="t_disabled"  label="Disabled"  labelPosition="floating" disabled="true"/>
+		<textbox id="t_readonly"  label="Readonly"  labelPosition="floating" readonly="true" value="locked"/>
+		<textbox id="t_invalid"   label="Required"  labelPosition="floating" constraint="no empty: required"/>
+		<textbox id="t_hint"      label="Email"     labelPosition="floating" placeholder="user@example.com"/>
+		<textbox id="t_inplace"   label="Inplace"   labelPosition="floating" inplace="true" value="Untitled"/>
+
+		<!-- ============================================= -->
+		<!-- Section C: edge cases -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="C. Edge cases (XSS escape / long label / empty)"/>
+		<textbox id="t_xss"   label="&lt;script&gt;alert(1)&lt;/script&gt;" labelPosition="floating"/>
+		<textbox id="t_long"  label="This is an exceptionally long label intended to test ellipsis truncation behavior in narrow inputs" labelPosition="floating"/>
+		<textbox id="t_unset" label="" labelPosition="floating"/>
+
+		<!-- ============================================= -->
+		<!-- Section D: dynamic API + i18n -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="D. Dynamic API + RTL"/>
+		<textbox id="t_dynamic" label="Initial" labelPosition="floating"/>
+		<div style="direction: rtl;">
+			<textbox id="t_rtl" label="بريد إلكتروني" labelPosition="floating"/>
+		</div>
+
+		<hlayout>
+			<button id="btn_setLabel" label="setLabel('Updated')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabel("Updated");
+				]]></attribute>
+			</button>
+			<button id="btn_unsetLabel" label="setLabel(null)">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabel(null);
+				]]></attribute>
+			</button>
+			<button id="btn_setPosLeft" label="setLabelPosition('left')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("left");
+				]]></attribute>
+			</button>
+			<button id="btn_setPosTop" label="setLabelPosition('top')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("top");
+				]]></attribute>
+			</button>
+			<button id="btn_setPosFloating" label="setLabelPosition('floating')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("floating");
+				]]></attribute>
+			</button>
+		</hlayout>
+	</vlayout>
+</zk>
