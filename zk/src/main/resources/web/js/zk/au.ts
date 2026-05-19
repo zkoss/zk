@@ -878,7 +878,8 @@ export namespace au_global {
 		 * for other condition, this method returns false.
 		 */
 		export function sendNow(dt: zk.Desktop): boolean {
-			if (zAu.disabledRequest) {
+			// ZK-5906: a request deferred past unload would reach the removed desktop and redirect to timeout-uri
+			if (zAu.disabledRequest || (zk.unloading && zk.rmDesktoping)) {
 				if (zk.processing)
 					zk.endProcessing();
 				return false;

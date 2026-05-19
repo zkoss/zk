@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-5906.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue May 19 15:32:25 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<a id="lnk" label="link" onClick='Clients.log("lnk")'/>
+	<button id="btn" label="button" onClick='Clients.log("btn")'/>
+</zk>
