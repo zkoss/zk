@@ -1253,7 +1253,7 @@
 			<xs:element ref="west" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="east" minOccurs="0" maxOccurs="1" />
 		</xs:all>
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="animationDisabled" type="booleanType" use="optional" />
 	</xs:complexType>
