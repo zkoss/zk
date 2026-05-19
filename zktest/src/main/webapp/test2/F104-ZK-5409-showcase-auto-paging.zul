@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-auto-paging.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:45 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+        import java.util.*;
+
+        ListModelList purchases = new ListModelList();
+        String[] items = {"Widget", "Gadget", "Sprocket", "Cog", "Lever",
+                          "Spring", "Bolt", "Nut", "Washer", "Screw",
+                          "Pulley", "Belt", "Hose", "Gasket", "Valve",
+                          "Pump", "Motor", "Bearing", "Shaft", "Gear"};
+        for (int i = 0; i < items.length; i++) {
+            Map row = new HashMap();
+            row.put("id",   "SO-" + (20001 + i));
+            row.put("item", items[i]);
+            int day = (i % 20) + 1;
+            row.put("time", "2026-04-" + (day < 10 ? "0" + day : "" + day));
+            row.put("paid", Boolean.valueOf(i % 2 == 0));
+            purchases.add(row);
+        }
+    ]]></zscript>
+
+    <window width="100%" height="420px" border="normal">
+        <grid id="grid1" responsive="stacking"
+              mold="paging" pagingPosition="both" autopaging="true" vflex="true"
+              width="100%" model="${purchases}">
+            <columns>
+                <column label="Order #"        hflex="1" />
+                <column label="Item Purchased" hflex="2" />
+                <column label="Purchased Time" hflex="2" responsiveVisible="false" />
+                <column label="Paid"           hflex="1" align="center" />
+            </columns>
+            <template name="model">
+                <row>
+                    <label value="${each.id}" />
+                    <label value="${each.item}" />
+                    <label value="${each.time}" />
+                    <checkbox checked="${each.paid}" />
+                </row>
+            </template>
+        </grid>
+    </window>
+</zk>

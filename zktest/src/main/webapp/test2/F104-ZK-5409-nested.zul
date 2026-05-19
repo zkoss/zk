@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-nested.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue May 12 10:22:52 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-5409 nested isolation — outer grid contains an inner grid.
+		Narrow the window so both enter stacking mode and confirm that
+		_markStackingCells (which uses ":scope &gt; .z-grid-body" / footer
+		selectors) only stamps each grid's own column labels onto its own
+		&lt;td&gt; cells — no cross-stamping between outer and inner.
+
+		Expected at narrow width:
+		- Inner grid &lt;td&gt; has data-label="Inner-X" / "Inner-Y"
+		- Inner grid &lt;td&gt; data-label is NEVER "Outer-A" / "Outer-B"
+	</label>
+	<grid id="outer" responsive="stacking" width="100%">
+		<columns>
+			<column label="Outer-A"/>
+			<column label="Outer-B"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="outer-row1-a"/>
+				<grid id="inner" responsive="stacking" width="100%">
+					<columns>
+						<column label="Inner-X"/>
+						<column label="Inner-Y"/>
+					</columns>
+					<rows>
+						<row>
+							<label value="inner-x-val"/>
+							<label value="inner-y-val"/>
+						</row>
+					</rows>
+				</grid>
+			</row>
+		</rows>
+	</grid>
+</zk>

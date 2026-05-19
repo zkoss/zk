@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-columns.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:34 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <!-- Single column (default) -->
+        <grid id="grid1col" responsive="stacking" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Email" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="jane@example.com" />
+                </row>
+            </rows>
+        </grid>
+        <separator height="20px" />
+        <!-- 3-column layout -->
+        <grid id="grid3col" responsive="stacking" responsiveColumns="sm-3 md-none" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Department" />
+                <column label="Internal ID" responsiveVisible="false" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="Engineering" />
+                    <label value="ID-001" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="Design" />
+                    <label value="ID-002" />
+                </row>
+                <row>
+                    <label value="Bob" />
+                    <label value="Sales" />
+                    <label value="ID-003" />
+                </row>
+                <row>
+                    <label value="Alice" />
+                    <label value="Marketing" />
+                    <label value="ID-004" />
+                </row>
+                <row>
+                    <label value="Charlie" />
+                    <label value="Support" />
+                    <label value="ID-005" />
+                </row>
+                <row>
+                    <label value="Dave" />
+                    <label value="QA" />
+                    <label value="ID-006" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

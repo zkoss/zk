@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-dynamic.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:56 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+	import org.zkoss.zul.*;
+]]></zscript>
+    <div style="padding: 10px;">
+        <label id="modeStatus" value="mode: unknown" />
+        <label id="rowCount" value="rows: 3" />
+        <grid id="grid1" responsive="stacking" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Email" />
+                <column label="Department" />
+            </columns>
+            <rows id="rows1">
+                <row id="row1">
+                    <label value="John" />
+                    <label value="john@example.com" />
+                    <label value="Engineering" />
+                </row>
+                <row id="row2">
+                    <label value="Jane" />
+                    <label value="jane@example.com" />
+                    <label value="Design" />
+                </row>
+                <row id="row3">
+                    <label value="Bob" />
+                    <label value="bob@example.com" />
+                    <label value="Sales" />
+                </row>
+            </rows>
+            <attribute name="onResponsiveModeChange"><![CDATA[
+			modeStatus.setValue("mode: " + event.getData().get("mode"));
+		]]></attribute>
+        </grid>
+        <hlayout>
+            <button id="btnAdd" label="Add Row">
+                <attribute name="onClick"><![CDATA[
+				Row row = new Row();
+				row.appendChild(new Label("New"));
+				row.appendChild(new Label("new@example.com"));
+				row.appendChild(new Label("NewDept"));
+				rows1.appendChild(row);
+				rowCount.setValue("rows: " + rows1.getChildren().size());
+			]]></attribute>
+            </button>
+            <button id="btnRemove" label="Remove Row">
+                <attribute name="onClick"><![CDATA[
+				if (rows1.getChildren().size() > 0) {
+					rows1.removeChild(rows1.getLastChild());
+					rowCount.setValue("rows: " + rows1.getChildren().size());
+				}
+			]]></attribute>
+            </button>
+            <button id="btnToggle" label="Toggle Responsive">
+                <attribute name="onClick"><![CDATA[
+				if ("none".equals(grid1.getResponsive()))
+					grid1.setResponsive("stacking");
+				else
+					grid1.setResponsive("none");
+			]]></attribute>
+            </button>
+            <button id="btnInvalidate" label="Invalidate">
+                <attribute name="onClick"><![CDATA[
+				grid1.invalidate();
+			]]></attribute>
+            </button>
+        </hlayout>
+    </div>
+</zk>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-inline-row-editing.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:41 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+        import java.util.*;
+        Map editing = new HashMap();
+
+        void toggleEdit(String rowId) {
+            boolean isEditing = Boolean.TRUE.equals(editing.get(rowId));
+            editing.put(rowId, !isEditing);
+
+            Component row = grid1.getFellow(rowId);
+            String langVal = row.getAttribute("lang");
+            String nameVal = row.getAttribute("contributor");
+
+            row.getChildren().clear();
+            if (!isEditing) {
+                Textbox tLang = new Textbox(langVal);
+                Textbox tName = new Textbox(nameVal);
+                Button save = new Button("Save");
+                save.addEventListener("onClick", new org.zkoss.zk.ui.event.EventListener() {
+                    public void onEvent(org.zkoss.zk.ui.event.Event e) {
+                        row.setAttribute("lang", tLang.getValue());
+                        row.setAttribute("contributor", tName.getValue());
+                        toggleEdit(rowId);
+                    }
+                });
+                row.appendChild(tLang);
+                row.appendChild(tName);
+                row.appendChild(save);
+            } else {
+                row.appendChild(new Label((String) row.getAttribute("lang")));
+                row.appendChild(new Label((String) row.getAttribute("contributor")));
+                Button edit = new Button("Edit");
+                edit.addEventListener("onClick", new org.zkoss.zk.ui.event.EventListener() {
+                    public void onEvent(org.zkoss.zk.ui.event.Event e) {
+                        toggleEdit(rowId);
+                    }
+                });
+                row.appendChild(edit);
+            }
+        }
+    ]]></zscript>
+
+    <grid id="grid1" responsive="stacking" width="100%">
+        <columns>
+            <column label="Language"    hflex="3" />
+            <column label="Contributor" hflex="5" />
+            <column label="Action"      width="120px" />
+        </columns>
+        <rows>
+            <row id="r1">
+                <custom-attributes lang="Arabic" contributor="Ayman" />
+                <label value="Arabic" />
+                <label value="Ayman" />
+                <button label="Edit" onClick="toggleEdit('r1')" />
+            </row>
+            <row id="r2">
+                <custom-attributes lang="Chinese" contributor="Tom Yeh" />
+                <label value="Chinese" />
+                <label value="Tom Yeh" />
+                <button label="Edit" onClick="toggleEdit('r2')" />
+            </row>
+            <row id="r3">
+                <custom-attributes lang="French" contributor="Jean" />
+                <label value="French" />
+                <label value="Jean" />
+                <button label="Edit" onClick="toggleEdit('r3')" />
+            </row>
+        </rows>
+    </grid>
+</zk>

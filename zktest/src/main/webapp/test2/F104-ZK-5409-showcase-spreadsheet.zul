@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-spreadsheet.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:22 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking"
+        width="100%" height="360px" sclass="grid-spreadsheet" sizedByContent="true">
+        <frozen columns="3" style="background: #f5f4ee" />
+        <columns>
+            <column label="Product"     width="160px" />
+            <column label="Region"      width="120px" />
+            <column label="Owner"       width="120px" />
+            <column label="Q1"          width="110px" align="right" />
+            <column label="Q2"          width="110px" align="right" responsiveVisible="false" />
+            <column label="Q3"          width="110px" align="right" responsiveVisible="false" />
+            <column label="Q4"          width="110px" align="right" />
+            <column label="Notes"       width="240px" />
+        </columns>
+        <rows>
+            <row>
+                <label value="Widget Alpha" /><label value="APAC" /><label value="alice" />
+                <textbox inplace="true" width="100%" value="12,300" />
+                <textbox inplace="true" width="100%" value="14,200" />
+                <textbox inplace="true" width="100%" value="15,800" />
+                <textbox inplace="true" width="100%" value="16,100" />
+                <textbox inplace="true" width="100%" value="On track" />
+            </row>
+            <row>
+                <label value="Widget Beta"  /><label value="EMEA" /><label value="bob" />
+                <textbox inplace="true" width="100%" value="8,100" />
+                <textbox inplace="true" width="100%" value="9,400" />
+                <textbox inplace="true" width="100%" value="11,200" />
+                <textbox inplace="true" width="100%" value="12,500" />
+                <textbox inplace="true" width="100%" value="Ramping" />
+            </row>
+            <row>
+                <label value="Gadget X1"    /><label value="NA"   /><label value="carol" />
+                <textbox inplace="true" width="100%" value="22,400" />
+                <textbox inplace="true" width="100%" value="24,100" />
+                <textbox inplace="true" width="100%" value="25,500" />
+                <textbox inplace="true" width="100%" value="26,200" />
+                <textbox inplace="true" width="100%" value="Exceeds plan" />
+            </row>
+        </rows>
+    </grid>
+</zk>

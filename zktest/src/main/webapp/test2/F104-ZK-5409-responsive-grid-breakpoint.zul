@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-breakpoint.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:17 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <grid id="gridSm" responsive="stacking" responsiveColumns="sm-none" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Status" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="Active" />
+                </row>
+            </rows>
+        </grid>
+        <separator height="20px" />
+        <grid id="gridLg" responsive="stacking" responsiveColumns="sm-1 lg-none" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Status" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="Jane" />
+                    <label value="Inactive" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-search-form.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:53 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        .form-grid .z-row-inner, .form-grid .z-cell {
+            padding: 6px 8px;
+        }
+        .form-grid .z-label { font-size: 12px; color: #4b5563; }
+        .action-bar { padding: 8px; display: flex; gap: 6px; justify-content: flex-end; }
+    </style>
+    <window title="Customer Lookup" width="100%" border="normal" vflex="1">
+        <!-- Form-layout Grid: no <rows> chrome; uses responsive="stacking"
+             to collapse 4-column form to 1-column on narrow screens. -->
+        <grid id="searchForm" responsive="stacking"
+              width="100%" sclass="form-grid">
+            <columns>
+                <column label="" width="110px" align="right" />
+                <column label="" />
+                <column label="" width="110px" align="right" responsiveVisible="false" />
+                <column label="" responsiveVisible="false" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="Customer ID" />
+                    <textbox placeholder="e.g. C-10234" hflex="1" />
+                    <label value="Name" />
+                    <textbox placeholder="contains..." hflex="1" />
+                </row>
+                <row>
+                    <label value="Tier" />
+                    <combobox readonly="true" hflex="1">
+                        <comboitem label="(any)" />
+                        <comboitem label="Gold" />
+                        <comboitem label="Silver" />
+                        <comboitem label="Bronze" />
+                    </combobox>
+                    <label value="Status" />
+                    <combobox readonly="true" hflex="1">
+                        <comboitem label="(any)" />
+                        <comboitem label="Active" />
+                        <comboitem label="Suspended" />
+                        <comboitem label="Closed" />
+                    </combobox>
+                </row>
+                <row>
+                    <label value="Registered" />
+                    <hbox align="center" spacing="4px">
+                        <datebox placeholder="from" hflex="1" />
+                        <label value="~" />
+                        <datebox placeholder="to" hflex="1" />
+                    </hbox>
+                    <label value="Region" />
+                    <combobox readonly="true" hflex="1">
+                        <comboitem label="(any)" />
+                        <comboitem label="APAC" />
+                        <comboitem label="EMEA" />
+                        <comboitem label="NA" />
+                        <comboitem label="LATAM" />
+                    </combobox>
+                </row>
+            </rows>
+        </grid>
+
+        <div sclass="action-bar">
+            <button label="Reset" />
+            <button label="Search" sclass="z-button-primary" />
+        </div>
+
+        <!-- Result grid -->
+        <grid id="resultGrid" responsive="stacking"
+              width="100%" vflex="1" sizedByContent="true">
+            <columns sizable="true">
+                <column label="Cust ID"    width="100px" responsiveVisible="false" />
+                <column label="Name" />
+                <column label="Tier"       width="80px" />
+                <column label="Region"     width="90px"  responsiveVisible="false" />
+                <column label="Status"     width="90px" />
+                <column label="Registered" width="110px" responsiveVisible="false" />
+                <column label="Lifetime Revenue" width="140px" align="right" />
+                <column label="AR Days"    width="90px"  align="right" responsiveVisible="false" />
+                <column label="Owner"      width="110px" responsiveVisible="false" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="C-10234" /><label value="ACME Ltd." />
+                    <label value="Gold" /><label value="APAC" /><label value="Active" />
+                    <label value="2018-04-12" /><label value="$ 1,283,440" />
+                    <label value="27" /><label value="alice" />
+                </row>
+                <row>
+                    <label value="C-10512" /><label value="Globex" />
+                    <label value="Gold" /><label value="EMEA" /><label value="Active" />
+                    <label value="2020-09-03" /><label value="$ 842,100" />
+                    <label value="30" /><label value="bob" />
+                </row>
+                <row>
+                    <label value="C-11087" /><label value="Initech" />
+                    <label value="Silver" /><label value="NA" /><label value="Suspended" />
+                    <label value="2019-02-18" /><label value="$ 318,020" />
+                    <label value="45" /><label value="carol" />
+                </row>
+                <row>
+                    <label value="C-11290" /><label value="Umbrella Corp" />
+                    <label value="Silver" /><label value="EMEA" /><label value="Active" />
+                    <label value="2021-11-05" /><label value="$ 276,700" />
+                    <label value="21" /><label value="dan" />
+                </row>
+                <row>
+                    <label value="C-11855" /><label value="Hooli" />
+                    <label value="Bronze" /><label value="NA" /><label value="Active" />
+                    <label value="2023-01-20" /><label value="$ 98,400" />
+                    <label value="18" /><label value="eve" />
+                </row>
+            </rows>
+        </grid>
+    </window>
+</zk>

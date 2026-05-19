@@ -264,6 +264,13 @@ public class Grid extends MeshElement {
 	private String _emptyMessage;
 	private int _visibleRows; //since 8.5.0
 
+	/** Responsive policy: null (unset), "stacking", "none". @since 10.4.0 */
+	private String _responsive;
+	/** Responsive columns token string, e.g. "sm-1 md-2 lg-none". Null means unset
+	 * (client falls back to default "sm-1 md-none"). Server stores the raw string;
+	 * parsing and cascade resolution happen on the client. @since 10.4.0 */
+	private String _responsiveColumns;
+
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE);
 		addClientEvent(Grid.class, Events.ON_INNER_WIDTH, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
@@ -271,6 +278,7 @@ public class Grid extends MeshElement {
 		addClientEvent(Grid.class, Events.ON_TOP_PAD, CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, Events.ON_DATA_LOADING, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.0
 		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
+		addClientEvent(Grid.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 10.4.0
 	}
 
 	public Grid() {
@@ -1744,6 +1752,144 @@ public class Grid extends MeshElement {
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("paginal", _pgi);
 
+		// Responsive properties (ZK-5409) — send raw values; client parses cascade.
+		// EE-only behavior: zkmax's grid-responsive.ts augments zul.grid.Grid with
+		// the actual stacking logic. CE without zkmax just stores the values.
+		String effResp = getEffectiveResponsive();
+		if (effResp != null)
+			render(renderer, "responsive", effResp);
+		String effCols = getEffectiveResponsiveColumns();
+		if (effCols != null)
+			render(renderer, "responsiveColumns", effCols);
+	}
+
+	/**
+	 * Returns the responsive policy.
+	 * <p>Default: null (unset — inherits from zk.xml
+	 * {@code org.zkoss.zul.grid.responsive}, then framework default of no responsive).
+	 *
+	 * <p>Stacking behavior is provided by ZK EE (zkmax); CE stores the value only.
+	 *
+	 * @return the responsive policy, or null if not set.
+	 * @since 10.4.0
+	 */
+	public String getResponsive() {
+		return _responsive;
+	}
+
+	/**
+	 * Sets the responsive policy.
+	 * <p>Supported values: {@code "stacking"}, {@code "none"}, or null (unset).
+	 * <ul>
+	 *   <li>{@code "stacking"} — rows become vertical key-value blocks when
+	 *       the container width falls below the breakpoint (EE only).</li>
+	 *   <li>{@code "none"} — explicitly disables responsive, overriding any
+	 *       global setting.</li>
+	 *   <li>{@code null} — inherits from the global library property.</li>
+	 * </ul>
+	 *
+	 * @param responsive the responsive policy
+	 * @throws WrongValueException if {@code responsive} is neither
+	 *     {@code "stacking"}, {@code "none"}, nor {@code null}.
+	 * @since 10.4.0
+	 */
+	public void setResponsive(String responsive) throws WrongValueException {
+		if (responsive != null && responsive.isEmpty())
+			responsive = null;
+		if (!isValidResponsive(responsive))
+			throw new WrongValueException(
+					"responsive cannot be " + responsive
+					+ "; allowed: stacking, none");
+		if (!Objects.equals(_responsive, responsive)) {
+			_responsive = responsive;
+			smartUpdate("responsive", _responsive);
+		}
+	}
+
+	/** Accepts only null, "stacking", or "none". */
+	private static boolean isValidResponsive(String v) {
+		return v == null || "stacking".equals(v) || "none".equals(v);
+	}
+
+	/**
+	 * Returns the responsive columns token string.
+	 * <p>Default: null (unset — inherits from zk.xml
+	 * {@code org.zkoss.zul.grid.responsive.columns}, then framework default
+	 * {@code "sm-1 md-none"} resolved by the client).
+	 *
+	 * @return the responsive columns token string, or null if not set.
+	 * @since 10.4.0
+	 */
+	public String getResponsiveColumns() {
+		return _responsiveColumns;
+	}
+
+	/**
+	 * Sets the responsive columns token string for stacking mode.
+	 * <p>Bootstrap-style breakpoint tokens separated by whitespace, where
+	 * each token is {@code <breakpoint>-<value>} with breakpoint in
+	 * {sm, md, lg, xl, xxl} and value either a positive integer (cards per
+	 * row in stacking) or {@code none} (switch back to table mode at and
+	 * above this breakpoint).
+	 * <p>The string is stored verbatim — parsing, cascade resolution, and
+	 * matching against the current container width happen on the client side.
+	 * Invalid tokens are silently dropped by the client cascade resolver.
+	 *
+	 * @param columns the responsive columns token string
+	 * @since 10.4.0
+	 */
+	public void setResponsiveColumns(String columns) {
+		if (columns != null && columns.isEmpty())
+			columns = null;
+		if (!Objects.equals(_responsiveColumns, columns)) {
+			_responsiveColumns = columns;
+			smartUpdate("responsiveColumns", _responsiveColumns);
+		}
+	}
+
+	/**
+	 * Returns the effective responsive policy. Resolution order:
+	 * <ol>
+	 *   <li>This component's own {@code _responsive} field (set via
+	 *       {@link #setResponsive(String)}).</li>
+	 *   <li>{@code Utils.getStringAttribute(this, name, null, true)} which
+	 *       walks the component-ancestor chain (parent components, then
+	 *       page, then desktop) and finally falls back to
+	 *       {@link org.zkoss.lang.Library} (zk.xml's
+	 *       {@code org.zkoss.zul.grid.responsive} property).</li>
+	 *   <li>{@code null} if none of the above set a value.</li>
+	 * </ol>
+	 * <p>Values resolved from the fallback chain are validated; an invalid
+	 * value (anything other than {@code "stacking"}, {@code "none"}, or null)
+	 * is logged as a warning and clamped to null.
+	 * @since 10.4.0
+	 */
+	/*package*/ String getEffectiveResponsive() {
+		if (_responsive != null)
+			return _responsive;
+		String v = Utils.getStringAttribute(this, "org.zkoss.zul.grid.responsive", null, true);
+		if (!isValidResponsive(v)) {
+			// The setter rejects invalid values via WrongValueException, but the
+			// library-property / ancestor-attribute path bypasses the setter. A
+			// typo there would otherwise reach the client as an unrecognized
+			// mode and silently enable stacking with a bogus _responsiveMode.
+			// Clamp to null and warn so the misconfiguration is debuggable.
+			log.warn("Ignoring invalid org.zkoss.zul.grid.responsive value: {}; allowed: stacking, none", v);
+			return null;
+		}
+		return v;
+	}
+
+	/**
+	 * Returns the effective responsive columns token string, resolving the
+	 * same fallback chain. Null means the client supplies its own default
+	 * {@code "sm-1 md-none"}.
+	 * @since 10.4.0
+	 */
+	/*package*/ String getEffectiveResponsiveColumns() {
+		if (_responsiveColumns != null)
+			return _responsiveColumns;
+		return Utils.getStringAttribute(this, "org.zkoss.zul.grid.responsive.columns", null, true);
 	}
 
 	/*package*/ boolean isRod() {

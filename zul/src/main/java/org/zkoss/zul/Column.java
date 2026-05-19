@@ -66,6 +66,9 @@ public class Column extends HeaderElement {
 	private boolean _ignoreSort = false;
 	private boolean _isCustomAscComparator = false;
 	private boolean _isCustomDscComparator = false;
+	/** Responsive column visibility flag. Default true (visible in stacking).
+	 * @since 10.4.0 */
+	private boolean _responsiveVisible = true;
 
 	static {
 		addClientEvent(Column.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
@@ -597,7 +600,55 @@ public class Column extends HeaderElement {
 		if (!"natural".equals(_sortDir))
 			render(renderer, "sortDirection", _sortDir);
 
+		if (!_responsiveVisible)
+			// Direct renderer.render — the AbstractComponent.render(..., boolean)
+			// helper skips false values (treats false as default). We need the
+			// false to reach the client widget so the stacking-hide class is
+			// applied. ContentRenderer#render(String, boolean) renders regardless.
+			renderer.render("responsiveVisible", _responsiveVisible);
+
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
+	}
+
+	/**
+	 * Returns whether this column is visible when the grid is in
+	 * responsive (stacking) mode.
+	 * <p>Default: {@code true}.
+	 *
+	 * <p>Naming note: the grid-wide attribute is {@code responsiveColumns}
+	 * (a Bootstrap-style breakpoint token list); this column-level
+	 * attribute is {@code responsiveVisible} (a single boolean flag).
+	 * The two attributes have fundamentally different semantics — keeping
+	 * distinct names prevents grep / IDE auto-complete collision and
+	 * mirrors ZK's existing {@code setVisible(boolean)} vocabulary
+	 * (this is its stacking-mode-only counterpart).
+	 *
+	 * <p>Hiding behavior is provided by ZK EE (zkmax); CE stores the value only.
+	 *
+	 * @return {@code true} if visible in stacking mode (default), {@code false} to hide.
+	 * @since 10.4.0
+	 */
+	public boolean isResponsiveVisible() {
+		return _responsiveVisible;
+	}
+
+	/**
+	 * Sets whether this column is visible when the grid is in
+	 * responsive (stacking) mode.
+	 * <ul>
+	 *   <li>{@code true} (default) — column is visible in stacking mode.</li>
+	 *   <li>{@code false} — column is hidden in stacking mode; still visible
+	 *       in table mode.</li>
+	 * </ul>
+	 *
+	 * @param responsiveVisible visibility flag for stacking mode
+	 * @since 10.4.0
+	 */
+	public void setResponsiveVisible(boolean responsiveVisible) {
+		if (_responsiveVisible != responsiveVisible) {
+			_responsiveVisible = responsiveVisible;
+			smartUpdate("responsiveVisible", _responsiveVisible);
+		}
 	}
 
 	/** Returns the value.

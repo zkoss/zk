@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-dynamic-data.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:33 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+        ListModelList mails = new ListModelList();
+        Object[][] seed = {
+            {"Project kickoff",     "2026-04-20", "18 KB"},
+            {"Budget review Q2",    "2026-04-21", "42 KB"},
+            {"Design mockups v3",   "2026-04-22", "256 KB"},
+            {"Sprint retrospective","2026-04-23", "6 KB"},
+            {"Customer feedback",   "2026-04-23", "31 KB"}
+        };
+        for (int i = 0; i < seed.length; i++) {
+            mails.add(seed[i]);
+        }
+    ]]></zscript>
+
+    <grid id="grid1" responsive="stacking"
+          width="100%" height="350px" model="${mails}"
+          emptyMessage="Nothing in Inbox.">
+        <columns>
+            <column label="Icon"     width="50px"  responsiveVisible="false" />
+            <column label="Subject" />
+            <column label="Received" width="150px" />
+            <column label="Size"     width="80px"  responsiveVisible="false" />
+            <column label="Ctrl"     width="110px" />
+        </columns>
+        <template name="model">
+            <row>
+                <label value="Mail"       sclass="mail-icon" />
+                <label value="${each[0]}"  />
+                <label value="${each[1]}"  />
+                <label value="${each[2]}"  />
+                <button label="Delete">
+                    <attribute name="onClick"><![CDATA[
+                        mails.remove(self.getParent().getValue());
+                    ]]></attribute>
+                </button>
+            </row>
+        </template>
+    </grid>
+</zk>

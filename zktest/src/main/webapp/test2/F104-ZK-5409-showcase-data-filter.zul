@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-data-filter.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:41 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+        import java.util.*;
+
+        Object[][] DATA = {
+            {"Vegetables", "Broccoli",   "Vitamin C, Fiber",     "34 kcal"},
+            {"Vegetables", "Spinach",    "Iron, Folate",         "23 kcal"},
+            {"Vegetables", "Carrot",     "Vitamin A",            "41 kcal"},
+            {"Fruits",     "Apple",      "Fiber, Vitamin C",     "52 kcal"},
+            {"Fruits",     "Blueberry",  "Antioxidants",         "57 kcal"},
+            {"Seafood",    "Salmon",     "Omega-3, Protein",     "208 kcal"},
+            {"Seafood",    "Tuna",       "Protein, Niacin",      "184 kcal"},
+            {"Grains",     "Quinoa",     "Complete Protein",     "120 kcal"},
+            {"Grains",     "Oat",        "Beta-glucan, Fiber",   "68 kcal"}
+        };
+        ListModelList foodModel = new ListModelList();
+        for (int i = 0; i < DATA.length; i++) foodModel.add(DATA[i]);
+
+        void applyFilter() {
+            String catQ = (catBox.getValue() == null ? "" : catBox.getValue()).trim().toLowerCase();
+            String nameQ = (nameBox.getValue() == null ? "" : nameBox.getValue()).trim().toLowerCase();
+            foodModel.clear();
+            for (int i = 0; i < DATA.length; i++) {
+                String cat = (String) DATA[i][0];
+                String name = (String) DATA[i][1];
+                if ((catQ.length() == 0 || cat.toLowerCase().contains(catQ)) &&
+                    (nameQ.length() == 0 || name.toLowerCase().contains(nameQ)))
+                    foodModel.add(DATA[i]);
+            }
+        }
+    ]]></zscript>
+
+    <grid id="grid1" responsive="stacking"
+          width="100%" height="360px" model="${foodModel}">
+        <auxhead>
+            <auxheader>
+                <textbox id="catBox" instant="true" placeholder="Filter category..."
+                         hflex="1" onChange="applyFilter();" />
+            </auxheader>
+            <auxheader>
+                <textbox id="nameBox" instant="true" placeholder="Filter name..."
+                         hflex="1" onChange="applyFilter();" />
+            </auxheader>
+            <auxheader colspan="2" />
+        </auxhead>
+        <columns>
+            <column label="Category"       hflex="1" />
+            <column label="Name"           hflex="1" />
+            <column label="Top Nutrients"  hflex="2" responsiveVisible="false" />
+            <column label="Calories"       width="110px" align="right" />
+        </columns>
+        <template name="model">
+            <row>
+                <label value="${each[0]}" />
+                <label value="${each[1]}" />
+                <label value="${each[2]}" />
+                <label value="${each[3]}" />
+            </row>
+        </template>
+    </grid>
+</zk>
