@@ -10,6 +10,7 @@ ZK 11.0.0
   ZK-6099: Add skeleton attribute on existing components to PE
   ZK-6086: code editor
   ZK-5997: Support Content Security Policy Without 'unsafe-inline'
+  ZK-6095: Support ctrlKeys in borderlayout
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -44,6 +45,7 @@ ZK 11.0.0
 
 * Upgrade Notes
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
+  + Borderlayout is extended from XulElement since ZK 11.0.0, so it also accepts the context, popup and tooltip attributes.
   + Upgrade httpcore5 to 5.4.3 to fix vulnerabilities
   + Upgrade jackson-databind to 2.22.1 to fix vulnerabilities
   + Upgrade tomcat-jasper-el to 9.0.120 to fix vulnerabilities
