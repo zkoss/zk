@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5671.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu May 14 10:46:11 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<div>
+    <zscript>
+        import org.zkoss.util.media.AMedia;
+        public AMedia loadPdf() {
+            return new AMedia(application.getResource(execution.toAbsoluteURI("B1896797.pdf", true)), null, null);
+        }
+        AMedia document = loadPdf();
+    </zscript>
+    <label multiline="true">
+        On a HiDPI monitor (or with devicePixelRatio &gt; 1) the rendered PDF page
+        should stay sharp, not blurry. The canvas backing-store width/height should
+        be multiplied by window.devicePixelRatio, while the canvas CSS size should
+        match the viewport size.
+    </label>
+    <pdfviewer id="pdf" content="${document}"/>
+</div>
