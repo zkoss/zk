@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202603251558">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202606161129">
 	<!--
 	SIMPLETYPE
 	-->
@@ -543,6 +543,7 @@
 		<xs:attribute name="onCreate" type="xs:string" use="optional" />
 		<xs:attribute name="onFulfill" type="xs:string" use="optional" />
 		<xs:attribute name="stubonly" type="xs:string" use="optional" />
+		<xs:attribute name="stubonlyDescendants" type="xs:string" use="optional" />
 		<xs:attribute name="use" type="xs:string" use="optional" />
 		<xs:attribute name="viewModel" type="xs:string" use="optional" />
 		<xs:attribute name="validationMessages" type="xs:string" use="optional" />

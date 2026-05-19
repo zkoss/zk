@@ -48,6 +48,22 @@ public interface ComponentDefinition extends Cloneable {
 	 */
 	public String getName();
 
+	/** Returns the component definition this one was cloned from via the
+	 * {@code extends} mechanism (e.g. {@code <?component name="myDiv" extends="div"?>}),
+	 * or {@code null} if this definition was not produced by extending another.
+	 * <p>The returned reference can be chased upward to walk the full inheritance
+	 * chain — useful for tag-name based features such as
+	 * {@link org.zkoss.zk.ui.Component#setStubonlyDescendants stub-only policies}
+	 * that need to recognise an alias as a synonym for its base.
+	 * <p>The default implementation returns {@code null}; the standard
+	 * implementation ({@code ComponentDefinitionImpl}) records the reference
+	 * inside {@link #clone(LanguageDefinition, String)}.
+	 * @since 10.4.0
+	 */
+	default ComponentDefinition getExtends() {
+		return null;
+	}
+
 	/** Returns the property name to which the text enclosed within
 	 * the element (associated with this component definition) is assigned to.
 	 *
