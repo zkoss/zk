@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6096-macro.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Oct 20 12:39:40 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<button id="spaceButton" label="Check Macro IdSpace" stubonly="false"/>
+	<label id="spaceResult" sclass="idspace-result" stubonly="false"/>
+	<label id="spaceStatic" value="static in Macro"/>
+</zk>
