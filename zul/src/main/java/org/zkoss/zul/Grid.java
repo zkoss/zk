@@ -55,6 +55,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.ext.render.StubonlyControl;
 import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -1920,7 +1921,12 @@ public class Grid extends MeshElement {
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Padding {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Padding, StubonlyControl {
+		public boolean isStubonlyDescendantsAllowed() {
+			// ZK-6096: the default RowComparator reads the row's Label children, and sorting can be enabled later.
+			return getModel() != null;
+		}
+
 		//-- Padding --//
 		public int getHeight() {
 			return _topPad;

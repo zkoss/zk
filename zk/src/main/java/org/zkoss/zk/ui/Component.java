@@ -620,6 +620,53 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public void setStubonly(boolean stubonly);
 
+	/** Returns the component names declared on this component, or null if not specified.
+	 * <p>The default implementation returns null.
+	 * @since 11.0.0
+	 * @see #setStubonlyDescendants
+	 */
+	default String getStubonlyDescendants() {
+		return null;
+	}
+
+	/** Sets the names of the descendant components that are stub-only.
+	 * <p>A descendant becomes stub-only if this component or any other ancestor
+	 * lists its component name, or lists "*". The component name is the name of
+	 * its component definition, i.e., the ZUL element name (case-sensitive).
+	 * A component that specifies "true" or "false" by {@link #setStubonly(String)}
+	 * is not matched, and neither are its descendants by the names of its ancestors.
+	 * A component implementing {@link IdSpace}, with binding annotations, or registered
+	 * with a binder is not matched; its descendants can still be matched.
+	 * A component in the paging mold, using child cropping (such as render-on-demand),
+	 * or hosting shadow elements, such as forEach, and all its descendants are never
+	 * matched, even by the names they declare.
+	 * Components that require server-side child state, such as a Grid without a model,
+	 * also exclude their entire subtree from these rules. This preserves sorting that
+	 * is enabled after rendering.
+	 * Unlike {@link #setStubonly(String)}, a matched descendant does not make its
+	 * own children stub-only, and this component itself is not affected.
+	 * <p>Do not match the children that a live component manages, such as
+	 * listitem, row, treeitem, tab or comboitem. List listcell, cell or treecell
+	 * instead only if the server neither sorts nor reads them.
+	 * Likewise, do not match a component whose unmatched children rely on it as
+	 * their parent, such as tabbox, tabs, tabpanels, grid, rows, listbox, tree,
+	 * treechildren, combobox, radiogroup, hbox or vbox.
+	 * "*" matches these components too, so exclude them with stubonly="false"
+	 * or list the names explicitly instead.
+	 * Nor list a component the server still accesses after rendering, such as one
+	 * wired to a composer or looked up by getFellow, since a stub-only component
+	 * is replaced and the reference no longer reaches the client.
+	 * <p>Default: null.
+	 * <p>The default implementation throws {@link UnsupportedOperationException};
+	 * {@link AbstractComponent} implements it.
+	 * @param names the component names separated by comma or space,
+	 * such as "div, label", or "*" for all descendants. Null or empty clears it.
+	 * @since 11.0.0
+	 */
+	default void setStubonlyDescendants(String names) {
+		throw new UnsupportedOperationException();
+	}
+
 	/** Returns the parent component, or null if this is the root component.
 	 */
 	public Component getParent();
