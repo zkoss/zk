@@ -2,6 +2,7 @@ ZK 10.4.0
 * Features
   ZK-6068: zk.xsd declares elements for CSP-related settings
   ZK-6059: html element does not have a lang attribute
+  ZK-6095: Support ctrlKeys in borderlayout
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6095-mvvm.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 26 17:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6095_BorderlayoutVM')">
+		<label multiline="true">
+			ctrlKeys is bound via @load(vm.shortcutKeys) and onCtrlKey via @command.
+			Focus the textbox and press Ctrl+K — the VM should record the keyCode.
+		</label>
+		<borderlayout id="bl" height="200px"
+				ctrlKeys="@load(vm.shortcutKeys)"
+				onCtrlKey="@command('onShortcut', code=event.keyCode)">
+			<center>
+				<textbox id="tb" placeholder="focus me, then press Ctrl+K" width="320px"/>
+			</center>
+		</borderlayout>
+		boundCtrlKeys: <label id="boundCtrlKeys" value="@load(vm.shortcutKeys)"/>
+		<separator/>
+		result: <label id="result" value="@load(vm.result)"/>
+	</window>
+</zk>

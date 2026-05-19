@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6095.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed May 13 17:10:17 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click on a textbox inside any region to give it focus.
+		2. Press Ctrl+K — the result label should show "ctrlKey:75" (75 is the keyCode of K).
+		3. Press Ctrl+H — the result label should show "ctrlKey:72".
+		4. Press Ctrl+J — the result should stay unchanged (J is not in ctrlKeys).
+		5. Click "Test empty" — the empty-result label should show "true" (empty string → null).
+		The borderlayout itself is the ctrlKeys handler — no per-region ctrlKeys is declared,
+		yet pressing the shortcut inside any region routes onCtrlKey to the borderlayout.
+	</label>
+	<borderlayout id="bl" height="200px" ctrlKeys="^k^h"
+			onCtrlKey='result.setValue("ctrlKey:" + event.getKeyCode());'>
+		<north size="40px">
+			<textbox id="tbNorth" placeholder="north — focus me, then press Ctrl+K" width="320px"/>
+		</north>
+		<center>
+			<textbox id="tb" placeholder="center — focus me, then press Ctrl+K or Ctrl+H" width="320px"/>
+		</center>
+		<south size="40px">south</south>
+	</borderlayout>
+	result:
+	<label id="result" />
+	<separator/>
+	<button id="testEmpty" label="Test empty"
+			onClick='bl.setCtrlKeys(""); emptyResult.setValue(String.valueOf(bl.getCtrlKeys() == null));'/>
+	emptyResult:
+	<label id="emptyResult" />
+</zk>

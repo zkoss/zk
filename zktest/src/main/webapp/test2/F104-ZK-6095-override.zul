@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6095-override.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 26 17:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Both the borderlayout and its center region declare ctrlKeys="^k".
+		Focus the textbox inside center and press Ctrl+K — the closer-to-focus
+		(center) handler should fire and the borderlayout's should NOT.
+	</label>
+	<borderlayout id="bl" height="200px" ctrlKeys="^k"
+			onCtrlKey='result.setValue("bl");'>
+		<center ctrlKeys="^k" onCtrlKey='result.setValue("region");'>
+			<textbox id="tb" placeholder="focus me, then press Ctrl+K" width="320px"/>
+		</center>
+	</borderlayout>
+	result:
+	<label id="result" />
+</zk>

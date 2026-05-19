@@ -16,15 +16,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Library;
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.BooleanPropertyAccess;
+import org.zkoss.zk.ui.sys.PropertyAccess;
+import org.zkoss.zk.ui.sys.StringPropertyAccess;
 
 /**
  * A border layout is a layout container for arranging and resizing
@@ -116,6 +121,8 @@ public class Borderlayout extends HtmlBasedComponent {
 
 	private boolean _animationDisabled = isDefaultAnimationDisabled();
 
+	private String _ctrlKeys;
+
 	public Borderlayout() {
 	}
 
@@ -152,6 +159,37 @@ public class Borderlayout extends HtmlBasedComponent {
 		if (_animationDisabled != animationDisabled) {
 			_animationDisabled = animationDisabled;
 			smartUpdate("animationDisabled", animationDisabled);
+		}
+	}
+
+	/** Returns what keystrokes to intercept.
+	 * <p>Default: null.
+	 * @since 10.4.0
+	 * @see org.zkoss.zul.impl.XulElement#getCtrlKeys()
+	 */
+	public String getCtrlKeys() {
+		return _ctrlKeys;
+	}
+
+	/** Sets what keystrokes to intercept.
+	 *
+	 * <p>The string accepts the same syntax as
+	 * {@link org.zkoss.zul.impl.XulElement#setCtrlKeys(String)} (e.g. {@code ^k},
+	 * {@code @c}, {@code #f1}, {@code %a}). With this attribute set, the
+	 * {@code onCtrlKey} event fires on the borderlayout itself for matching key
+	 * presses anywhere inside its regions, so a composer applied on the
+	 * borderlayout can centralize shortcut handling without repeating the
+	 * declaration on each region.
+	 *
+	 * @since 10.4.0
+	 * @see org.zkoss.zul.impl.XulElement#setCtrlKeys(String)
+	 */
+	public void setCtrlKeys(String ctrlKeys) throws UiException {
+		if (ctrlKeys != null && ctrlKeys.length() == 0)
+			ctrlKeys = null;
+		if (!Objects.equals(_ctrlKeys, ctrlKeys)) {
+			_ctrlKeys = ctrlKeys;
+			smartUpdate("ctrlKeys", _ctrlKeys);
 		}
 	}
 
@@ -236,6 +274,38 @@ public class Borderlayout extends HtmlBasedComponent {
 		super.renderProperties(renderer);
 
 		render(renderer, "animationDisabled", _animationDisabled);
+		render(renderer, "ctrlKeys", _ctrlKeys);
+	}
+
+	//--ComponentCtrl--//
+	private static HashMap<String, PropertyAccess> _properties = new HashMap<String, PropertyAccess>(2);
+
+	static {
+		_properties.put("ctrlKeys", new StringPropertyAccess() {
+			public void setValue(Component cmp, String ctrlKeys) {
+				((Borderlayout) cmp).setCtrlKeys(ctrlKeys);
+			}
+
+			public String getValue(Component cmp) {
+				return ((Borderlayout) cmp).getCtrlKeys();
+			}
+		});
+		_properties.put("animationDisabled", new BooleanPropertyAccess() {
+			public void setValue(Component cmp, Boolean animationDisabled) {
+				((Borderlayout) cmp).setAnimationDisabled(animationDisabled);
+			}
+
+			public Boolean getValue(Component cmp) {
+				return ((Borderlayout) cmp).isAnimationDisabled();
+			}
+		});
+	}
+
+	public PropertyAccess getPropertyAccess(String prop) {
+		PropertyAccess pa = _properties.get(prop);
+		if (pa != null)
+			return pa;
+		return super.getPropertyAccess(prop);
 	}
 
 	public void onChildRemoved(Component child) {
