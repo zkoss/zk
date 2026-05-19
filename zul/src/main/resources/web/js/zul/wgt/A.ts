@@ -15,6 +15,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** The basic widgets, such as button and div.
  */
 //zk.$package('zul.wgt');
+
+// ZK-5906: backstop reset (ms) for the skipBfUnload flag. A real same-tab
+// navigation fires beforeunload/unload almost immediately after the click —
+// the browser does NOT wait for the onClick AU or the network — so the flag
+// is read while still set; this timer does not gate that protection. It only
+// matters when the navigation is cancelled (another handler preventDefaults,
+// or the user dismisses a beforeunload prompt): then it clears the otherwise
+// stale flag so a later genuine teardown is not suppressed. The bfcache
+// "Back" case is reset deterministically by the pageshow handler in mount.ts.
+const SKIP_BF_UNLOAD_RESET_MS = 1000;
+
 /**
  * The same as HTML A tag.
  * @defaultValue {@link getZclass}: z-a.
@@ -279,6 +290,14 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 		if (this._disabled)
 			evt.stop(); // Prevent browser default
 		else {
+			if (this._isNavigationHref(href) && !this._opensNewTab(evt)) {
+				// ZK-5906: a real same-tab navigation will unload this page;
+				// keep the desktop alive briefly so the click's onClick AU
+				// isn't answered with a timeout/410 and the user reaches the
+				// href instead of the timeout page.
+				zk.skipBfUnload = true;
+				setTimeout(() => { zk.skipBfUnload = false; }, SKIP_BF_UNLOAD_RESET_MS);
+			}
 			this.fireX(evt);
 			zul.wgt.ADBS.autodisable(this);
 
@@ -286,5 +305,25 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 				super.doClick_(evt, true);
 		}
 			// Unlike DOM, we don't propagate to parent (so do not call $supers)
+	}
+
+	/** @internal */
+	_isNavigationHref(href?: string): boolean {
+		if (!href) return false;
+		// A real navigation unloads the current tab; pseudo-protocols and
+		// same-page anchors (javascript:/mailto:/tel:/sms:/#) do not.
+		return !/^(?:javascript:|mailto:|tel:|sms:|#)/i.test(href);
+	}
+
+	/** @internal */
+	_opensNewTab(evt: zk.Event): boolean {
+		// target="_blank" / a named target navigates a new tab/window, so the
+		// current page keeps living and its desktop should work normally.
+		const t = this.getTarget();
+		if (t && t !== '_self' && t !== '_top' && t !== '_parent') return true;
+		// Modifier-clicks (Ctrl/Cmd/Shift/Alt) don't unload the current tab
+		// either. doClick_ only runs for a plain left-click (mount.ts dispatches
+		// onClick on evt.which == 1), so there is no middle-click case here.
+		return !!(evt.ctrlKey || evt.metaKey || evt.shiftKey || evt.altKey);
 	}
 }

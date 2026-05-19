@@ -931,7 +931,10 @@ jq(function () {
 			jq(window).on('pagehide', function () {
 				zk.unloading = true; //to disable error message
 
-				if (!zk.rmDesktoping) {
+				// ZK-5906: an external <a href> click may have asked us to
+				// skip the desktop teardown so its onClick AU isn't racing
+				// with rmDesktop.
+				if (!zk.rmDesktoping && !zk.skipBfUnload) {
 					rmDesktop();
 				}
 			});
@@ -945,9 +948,17 @@ jq(function () {
 	}).on('unload', function () {
 		zk.unloading = true; //to disable error message
 
-		if (!zk.rmDesktoping) {
+		// ZK-5906: see pagehide branch above.
+		if (!zk.rmDesktoping && !zk.skipBfUnload) {
 			rmDesktop();
 		}
+	}).on('pageshow', function () {
+		// ZK-5906: a page restored from the bfcache (e.g. the user hit Back
+		// after an external <a href> navigation) still carries the
+		// skipBfUnload flag that was set before leaving. Clear it on show so a
+		// later teardown of this restored desktop is not suppressed. On the
+		// initial show the flag is already falsy, so this is a no-op there.
+		zk.skipBfUnload = false;
 	});
 
 	function rmDesktop(): void {
@@ -989,8 +1000,14 @@ jq(function () {
 
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
 
-		// B65-ZK-2051: Remove desktop if not IE.
-		rmDesktop();
+		// ZK-5906: when an external <a href> click asked us to skip the
+		// desktop teardown, leave it alone so the click's onClick AU isn't
+		// answered with a timeout/410 and the user is correctly navigated
+		// to the external URL instead of the timeout page.
+		if (!zk.skipBfUnload) {
+			// B65-ZK-2051: Remove desktop if not IE.
+			rmDesktop();
+		}
 		//Return nothing
 	};
 

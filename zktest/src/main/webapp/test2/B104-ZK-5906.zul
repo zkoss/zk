@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5906.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue May 19 15:32:25 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<!-- The exact scenario from ZK-5906: a real external href together with
+	        a server-side onClick listener. -->
+	<a id="lnk" href="https://www.zkoss.org" onClick='Clients.log("foo")'>click me</a>
+	<!-- A new-tab link: clicking it must NOT suppress the desktop teardown,
+	        because the current page keeps living. -->
+	<a id="lnkBlank" href="https://www.zkoss.org" target="_blank" onClick='Clients.log("bar")'>open in new tab</a>
+</zk>
