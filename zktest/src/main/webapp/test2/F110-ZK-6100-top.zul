@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6100-top.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 19 13:17:46 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6100 — labelPosition="top" on every input component.
+		1. Each input shows its label above the field.
+		2. Trigger buttons stay aligned with the field, not the label.
+		3. Disabled / readonly / invalid fields keep their usual look.
+		4. The textbox without a label renders exactly as before.
+		5. The buttons change the Initial fields' label and position; setSclass keeps the Prefilled labels in place.
+	</label>
+	<vlayout>
+		<textbox id="t_textbox" label="Name" labelPosition="top"/>
+		<textbox id="t_textarea" label="Notes" labelPosition="top" multiline="true" rows="3"/>
+		<intbox id="t_intbox" label="Age" labelPosition="top"/>
+		<longbox id="t_longbox" label="Account" labelPosition="top"/>
+		<doublebox id="t_doublebox" label="Latitude" labelPosition="top"/>
+		<decimalbox id="t_decimalbox" label="Amount" labelPosition="top"/>
+		<combobox id="t_combobox" label="Country" labelPosition="top">
+			<comboitem label="Taiwan"/>
+			<comboitem label="Japan"/>
+		</combobox>
+		<bandbox id="t_bandbox" label="Search" labelPosition="top">
+			<bandpopup><label value="popup content"/></bandpopup>
+		</bandbox>
+		<datebox id="t_datebox" label="Birthday" labelPosition="top"/>
+		<timebox id="t_timebox" label="Departure" labelPosition="top"/>
+		<spinner id="t_spinner" label="Count" labelPosition="top"/>
+		<doublespinner id="t_doublespinner" label="Rate" labelPosition="top"/>
+		<timepicker id="t_timepicker" label="Meeting" labelPosition="top"/>
+		<combobox id="t_prefilled" label="Prefilled" labelPosition="top" value="hello"/>
+		<combobox id="t_disabled" label="Disabled" labelPosition="top" disabled="true"/>
+		<combobox id="t_readonly" label="Readonly" labelPosition="top" readonly="true" value="locked"/>
+		<combobox id="t_invalid" label="Required" labelPosition="top" constraint="no empty: required"/>
+		<textbox id="t_tprefilled" label="Prefilled" labelPosition="top" value="hello"/>
+		<textbox id="t_tdisabled" label="Disabled" labelPosition="top" disabled="true"/>
+		<textbox id="t_treadonly" label="Readonly" labelPosition="top" readonly="true" value="locked"/>
+		<textbox id="t_tinvalid" label="Required" labelPosition="top" constraint="no empty: required"/>
+		<textbox id="t_sclass" label="Styled" labelPosition="top" sclass="custom"/>
+		<combobox id="t_hint" label="Email" labelPosition="top" placeholder="user@example.com"/>
+		<combobox id="t_inplace" label="Inplace" labelPosition="top" inplace="true" value="Untitled"/>
+		<combobox id="t_xss" label="&lt;script&gt;alert(1)&lt;/script&gt;" labelPosition="top"/>
+		<combobox id="t_long" label="This is an exceptionally long label that cannot fit" labelPosition="top" width="200px"/>
+		<combobox id="t_unset" label="" labelPosition="top"/>
+		<textbox id="t_nolabel" labelPosition="top"/>
+		<combobox id="t_dynamic" label="Initial" labelPosition="top"/>
+		<textbox id="t_tdynamic" label="Initial" labelPosition="top"/>
+		<div xmlns:ca="client/attribute" ca:dir="rtl">
+			<combobox id="t_rtl" label="Email" labelPosition="top"/>
+			<textbox id="t_trtl" label="Email" labelPosition="top"/>
+		</div>
+		<hlayout>
+			<button id="btn_setLabel" label="setLabel" onClick='t_dynamic.setLabel("Updated"); t_tdynamic.setLabel("Updated")'/>
+			<button id="btn_unsetLabel" label="setLabel(null)" onClick="t_dynamic.setLabel(null); t_tdynamic.setLabel(null)"/>
+			<button id="btn_setPosLeft" label="left" onClick='t_dynamic.setLabelPosition("left"); t_tdynamic.setLabelPosition("left")'/>
+			<button id="btn_setPosTop" label="top" onClick='t_dynamic.setLabelPosition("top"); t_tdynamic.setLabelPosition("top")'/>
+			<button id="btn_setPosFloating" label="floating" onClick='t_dynamic.setLabelPosition("floating"); t_tdynamic.setLabelPosition("floating")'/>
+			<button id="btn_sclass" label="setSclass" onClick='t_prefilled.setSclass("changed"); t_tprefilled.setSclass("changed")'/>
+		</hlayout>
+	</vlayout>
+</zk>

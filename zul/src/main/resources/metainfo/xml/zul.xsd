@@ -762,6 +762,8 @@
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="inputAttributes" type="xs:string" use="optional" />
+		<xs:attribute name="label" type="xs:string" use="optional" />
+		<xs:attribute name="labelPosition" type="labelPositionAttrType" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="formatInputElementAttrGroup">
 		<xs:attributeGroup ref="inputElementAttrGroup" />
@@ -4038,6 +4040,20 @@
 					<xs:enumeration value="end_before" />
 					<xs:enumeration value="end_center" />
 					<xs:enumeration value="end_after" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="labelPositionAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="left" />
+					<xs:enumeration value="top" />
+					<xs:enumeration value="floating" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>

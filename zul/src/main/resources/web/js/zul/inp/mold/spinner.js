@@ -19,8 +19,9 @@ function spinner$mold$(out) {
 	out.push('<span', this.domAttrs_({
 			text: true,
 			tabindex: true
-		}), ' role="none">',
-		'<input id="', uuid, '-real"', 'class="', this.$s('input'));
+		}), ' role="none">');
+	this.redrawLabel_(out);
+	out.push('<input id="', uuid, '-real"', 'class="', this.$s('input'));
 
 	if (!isButtonVisible)
 		out.push(' ', this.$s('input-full'));

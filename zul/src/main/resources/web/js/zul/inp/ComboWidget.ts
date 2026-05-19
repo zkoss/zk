@@ -121,7 +121,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 
 				var ppofs = this._getPopupSize(pp, pp2);
 				this._fixsz(ppofs);
-				this._checkPopupSpaceAndPosition(pp, this.$n_());
+				this._checkPopupSpaceAndPosition(pp, this._fieldNode());
 				this._fixFfWhileBothScrollbar(pp, pp2);
 			}
 		}
@@ -209,7 +209,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 			if (pp) {
 				// ZK-5612: resize before repositioning the popup because its position depends on its size
 				this.fixPopupDimension_();
-				this._checkPopupSpaceAndPosition(pp, this.$n_());
+				this._checkPopupSpaceAndPosition(pp, this._fieldNode());
 			}
 		}
 	}
@@ -350,9 +350,10 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		pp.style.left = '';
 
 		var n = this.$n()!,
-			jqn = jq(n), jqpp = jq(pp);
+			jqn = jq(n), jqpp = jq(pp),
+			field = this._fieldNode();
 
-		this._checkPopupSpaceAndPosition(pp, n);
+		this._checkPopupSpaceAndPosition(pp, field);
 		this._shallSyncPopupPosition = false;
 
 		var pptop = jqpp.offset()!.top;
@@ -360,7 +361,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		pp.style.display = 'none';
 		pp.style.visibility = '';
 
-		if (jqn.offset()!.top > pptop)
+		if (jq(field).offset()!.top > pptop)
 			this.slideDown_(pp, 'b');
 		else
 			this.slideDown_(pp);
@@ -600,7 +601,7 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 				this._shadow.sync();
 		}
 
-		var cb = this.$n()!,
+		var cb = this._fieldNode(),
 			i: string | undefined;
 		if (i = this.getPopupWidth()) {
 			if (i.endsWith('%')) {
@@ -698,6 +699,11 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	_dnInputOpen(): void {
 		if (this._autodrop && !this._open)
 			this.open({sendOnOpen: true});
+	}
+
+	/** @internal */
+	override _rootWrapsInput(): boolean {
+		return true;
 	}
 
 	/** @internal */
@@ -851,8 +857,9 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		// element, not the inner input.
 		out.push('<span', this.domAttrs_({text: true, tabindex: true}),
 			' role="combobox" aria-expanded="false" aria-controls="', uuidHTML, '-pp"',
-			' aria-owns="', uuidHTML, '-pp" aria-haspopup="dialog"><input id="',
-			uuidHTML, '-real" class="', this.$s('input'));
+			' aria-owns="', uuidHTML, '-pp" aria-haspopup="dialog">');
+		this.redrawLabel_(out);
+		out.push('<input id="', uuidHTML, '-real" class="', this.$s('input'));
 
 		if (!isButtonVisible)
 			out.push(' ', this.$s('input-full'));

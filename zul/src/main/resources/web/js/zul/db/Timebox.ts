@@ -757,6 +757,11 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/** @internal */
+	override _rootWrapsInput(): boolean {
+		return true;
+	}
+
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var btn: HTMLElement | undefined;

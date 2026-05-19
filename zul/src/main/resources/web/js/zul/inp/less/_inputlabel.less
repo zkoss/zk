@@ -1,0 +1,140 @@
+/* _inputlabel.less
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon May 18 14:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+This program is distributed under LGPL Version 2.1 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+*/
+@inputLabelInsetX: 8px;
+@inputLabelComponents: z-combobox, z-bandbox, z-datebox, z-timebox, z-spinner, z-doublespinner;
+
+.z-input-label > .z-input-label-text {
+	.fontStyle(@baseContentFontFamily, @inputFontSize, normal, @inputColor);
+	line-height: normal;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.z-input-label-left {
+	display: inline-flex;
+	align-items: center;
+
+	& > .z-input-label-text {
+		flex: none;
+		margin-inline-end: 8px;
+	}
+	& > input,
+	& > textarea {
+		flex: 1 1 auto;
+		width: auto;
+		min-width: 0;
+	}
+	&.z-input-label-multiline {
+		align-items: flex-start;
+	}
+}
+
+.z-input-label-top {
+	display: inline-block;
+	height: auto;
+
+	& > .z-input-label-text {
+		display: block;
+		margin-bottom: 4px;
+	}
+	& > input,
+	& > textarea {
+		width: 100%;
+	}
+}
+each(@inputLabelComponents, {
+	.@{value}.z-input-label-top > .@{value}-button {
+		top: auto;
+		bottom: 0;
+	}
+});
+
+.z-input-label-floating {
+	display: inline-block;
+	position: relative;
+
+	& > input,
+	& > textarea {
+		width: 100%;
+		vertical-align: top;
+	}
+	& > .z-input-label-text {
+		position: absolute;
+		top: 50%;
+		left: @inputLabelInsetX;
+		z-index: 1;
+		max-width: calc(100% - 2 * @inputLabelInsetX);
+		padding: 0 4px;
+		color: @inputPlaceholderColor;
+		background: @inputBackgroundColor;
+		transform: translateY(-50%);
+		transform-origin: left center;
+		transition: top 200ms cubic-bezier(0.4, 0, 0.2, 1), transform 200ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms;
+		pointer-events: none;
+	}
+	& > .z-input-label-text:dir(rtl) {
+		left: auto;
+		right: @inputLabelInsetX;
+		transform-origin: right center;
+	}
+	&.z-input-label-multiline > .z-input-label-text {
+		top: 1em;
+	}
+	&.z-input-label-shrunk > .z-input-label-text {
+		top: 0;
+		transform: translateY(-50%) scale(0.75);
+	}
+	&:focus-within > .z-input-label-text {
+		color: @inputFocusBorderColor;
+	}
+	&.z-input-label-invalid > .z-input-label-text {
+		color: @invalidBorderColor;
+	}
+	&.z-input-label-readonly > .z-input-label-text {
+		color: @inputReadonlyColor;
+		background: @inputReadonlyBackgroundColor;
+	}
+	&.z-input-label-disabled > .z-input-label-text {
+		color: @inputDisabledColor;
+		background: @inputDisabledBackgroundColor;
+	}
+	& > input::placeholder,
+	& > textarea::placeholder {
+		color: transparent;
+	}
+	&.z-input-label-shrunk > input::placeholder,
+	&.z-input-label-shrunk > textarea::placeholder {
+		color: @inputPlaceholderColor;
+	}
+}
+each(@inputLabelComponents, {
+	.@{value}.z-input-label-floating > .z-input-label-text {
+		max-width: calc(100% - @inputLabelInsetX - @comboInputPaddingRight);
+	}
+});
+
+@media (prefers-reduced-motion: reduce) {
+	.z-input-label-floating > .z-input-label-text {
+		transition: none;
+	}
+}
+
+@media (forced-colors: active) {
+	.z-input-label-floating > .z-input-label-text {
+		color: CanvasText;
+		background: Canvas;
+	}
+}

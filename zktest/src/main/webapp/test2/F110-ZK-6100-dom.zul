@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6100-dom.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Oct 13 16:30:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+	<label multiline="true">
+		ZK-6100 — a labelled input behaves like any other component.
+		1. "hide" / "show": the Toggle fields and their labels disappear and reappear together.
+		2. The "insert" buttons: each INSERTED text appears next to its field, never between a label and its field.
+		3. "unlabel": INSERTED stays, only the Anchor labels go away.
+		4. "remove": the Removable fields and their labels are both gone.
+		5. Labelled and plain fields have the same width in the 400px boxes and in the grid.
+		6. Clicking the Click labels adds one to the counter, not two.
+		7. Pressing the up arrow of the empty Spin field moves its label onto the border.
+		8. The popups of Left combo / Top combo / Left date open right under their field, aligned with it.
+	</label>
+	<vlayout>
+		<combobox id="t_cleft" label="Left combo">
+			<comboitem label="Taiwan"/>
+			<comboitem label="Japan"/>
+		</combobox>
+		<combobox id="t_ctop" label="Top combo" labelPosition="top">
+			<comboitem label="Taiwan"/>
+			<comboitem label="Japan"/>
+		</combobox>
+		<datebox id="t_dleft" label="Left date"/>
+		<combobox id="t_hidden" label="Hidden" labelPosition="floating" visible="false"/>
+		<textbox id="t_thidden" label="Hidden" labelPosition="floating" visible="false"/>
+		<combobox id="t_toggle" label="Toggle" labelPosition="floating"/>
+		<textbox id="t_ttoggle" label="Toggle" labelPosition="floating"/>
+		<div id="box_insert"><combobox id="t_anchor" label="Anchor" labelPosition="left"/><textbox id="t_tanchor" label="Anchor" labelPosition="left"/></div>
+		<div id="box_nat"><combobox id="t_nat" label="Native" labelPosition="floating"/><n:br/></div>
+		<div id="box_tnat"><textbox id="t_tnat" label="Native" labelPosition="floating"/><n:br/></div>
+		<div id="box_tim"><timer id="tm" delay="999999" running="false"/><combobox id="t_tim" label="Timer" labelPosition="floating"/></div>
+		<div id="box_ttim"><timer id="ttm" delay="999999" running="false"/><textbox id="t_ttim" label="Timer" labelPosition="floating"/></div>
+		<inputgroup id="ig"><combobox id="t_ig" label="Group" labelPosition="floating"/><textbox id="t_tig" label="Group" labelPosition="floating"/></inputgroup>
+		<div id="box_remove"><combobox id="t_removable" label="Removable" labelPosition="floating"/><textbox id="t_tremovable" label="Removable" labelPosition="floating"/></div>
+		<div width="400px"><combobox id="t_w" label="Width" labelPosition="floating" width="100%"/></div>
+		<div width="400px"><combobox id="t_w0" width="100%"/></div>
+		<div width="400px"><textbox id="t_tw" label="Width" labelPosition="floating" width="100%"/></div>
+		<div width="400px"><textbox id="t_tw0" width="100%"/></div>
+		<div width="400px"><textbox id="t_twl" label="Width" width="100%"/></div>
+		<grid width="400px">
+			<rows>
+				<row><combobox id="t_row" label="Row" labelPosition="floating" hflex="1"/></row>
+				<row><combobox id="t_row0" hflex="1"/></row>
+				<row><textbox id="t_trow" label="Row" labelPosition="floating" hflex="1"/></row>
+				<row><textbox id="t_trow0" hflex="1"/></row>
+			</rows>
+		</grid>
+		<combobox id="t_dis" label="Disabled" labelPosition="floating" disabled="true"/>
+		<combobox id="t_dis0" disabled="true"/>
+		<textbox id="t_tdis" label="Disabled" labelPosition="floating" disabled="true"/>
+		<textbox id="t_tdis0" disabled="true"/>
+		<combobox id="t_fl"/>
+		<combobox id="t_fl2" label="Before" labelPosition="floating"/>
+		<textbox id="t_tfl"/>
+		<textbox id="t_tfl2" label="Before" labelPosition="floating"/>
+		<combobox id="t_click" label="Click" onClick='lb_click.setValue("" + (Integer.parseInt(lb_click.getValue()) + 1))'/>
+		<textbox id="t_tclick" label="Click" onClick='lb_tclick.setValue("" + (Integer.parseInt(lb_tclick.getValue()) + 1))'/>
+		<hlayout><label id="lb_click" value="0"/><label id="lb_tclick" value="0"/></hlayout>
+		<spinner id="t_spin" label="Spin" labelPosition="floating"/>
+		<hlayout>
+			<button id="btn_hide" label="hide" onClick="t_toggle.setVisible(false); t_ttoggle.setVisible(false)"/>
+			<button id="btn_show" label="show" onClick="t_toggle.setVisible(true); t_ttoggle.setVisible(true)"/>
+			<button id="btn_insert" label="insert">
+				<attribute name="onClick"><![CDATA[
+					org.zkoss.zul.Label l = new org.zkoss.zul.Label("INSERTED");
+					l.setSclass("ins");
+					box_insert.insertBefore(l, t_anchor);
+					org.zkoss.zul.Label tl = new org.zkoss.zul.Label("INSERTED");
+					tl.setSclass("tins");
+					box_insert.insertBefore(tl, t_tanchor);
+				]]></attribute>
+			</button>
+			<button id="btn_nat" label="insert after">
+				<attribute name="onClick"><![CDATA[
+					org.zkoss.zul.Label l = new org.zkoss.zul.Label("INSERTED");
+					l.setSclass("ins-nat");
+					box_nat.insertBefore(l, t_nat.getNextSibling());
+					org.zkoss.zul.Label tl = new org.zkoss.zul.Label("INSERTED");
+					tl.setSclass("tins-nat");
+					box_tnat.insertBefore(tl, t_tnat.getNextSibling());
+				]]></attribute>
+			</button>
+			<button id="btn_tim" label="insert before timer">
+				<attribute name="onClick"><![CDATA[
+					org.zkoss.zul.Label l = new org.zkoss.zul.Label("INSERTED");
+					l.setSclass("ins-tim");
+					box_tim.insertBefore(l, tm);
+					org.zkoss.zul.Label tl = new org.zkoss.zul.Label("INSERTED");
+					tl.setSclass("tins-tim");
+					box_ttim.insertBefore(tl, ttm);
+				]]></attribute>
+			</button>
+			<button id="btn_ig" label="insert into group">
+				<attribute name="onClick"><![CDATA[
+					org.zkoss.zul.Label l = new org.zkoss.zul.Label("INSERTED");
+					l.setSclass("ins-ig");
+					ig.insertBefore(l, t_ig);
+					org.zkoss.zul.Label tl = new org.zkoss.zul.Label("INSERTED");
+					tl.setSclass("tins-ig");
+					ig.insertBefore(tl, t_tig);
+				]]></attribute>
+			</button>
+			<button id="btn_unlabel" label="unlabel" onClick="t_anchor.setLabel(null); t_tanchor.setLabel(null)"/>
+			<button id="btn_remove" label="remove" onClick="t_removable.detach(); t_tremovable.detach()"/>
+		</hlayout>
+	</vlayout>
+</zk>

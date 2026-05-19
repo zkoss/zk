@@ -806,6 +806,11 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/** @internal */
+	override _rootWrapsInput(): boolean {
+		return true;
+	}
+
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		var btn = this.$n('btn');
@@ -938,7 +943,7 @@ export class Datebox extends zul.inp.FormatWidget<DateImpl> {
 	static _reposition(db: Datebox, silent?: boolean): void {
 		if (!db.$n()) return;
 		var pp = db.$n('pp'),
-			n = db.$n_(),
+			n = db._fieldNode(),
 			inp = db.getInputNode();
 
 		if (pp) {
@@ -1051,7 +1056,7 @@ export class CalendarPop extends zul.db.Calendar {
 		this._setView(db._selectLevel);
 		var /*safe*/ zcls = db.getZclass();
 
-		pp.className = dbn.className + ' ' + pp.className;
+		pp.className = dbn.className.replace(/\bz-input-label\S*/g, '') + ' ' + pp.className;
 		jq(pp).removeClass(zcls);
 
 		pp.style.width = 'auto'; //reset
@@ -1063,12 +1068,13 @@ export class CalendarPop extends zul.db.Calendar {
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		jq(pp).zk.makeVParent();
 
-		if (pp.offsetWidth < dbn.offsetWidth) {
-			pp.style.width = `${dbn.offsetWidth}px`;
+		var fieldWidth = db._fieldNode().offsetWidth;
+		if (pp.offsetWidth < fieldWidth) {
+			pp.style.width = `${fieldWidth}px`;
 		} else {
 			var wd = jq.innerWidth() - 20;
-			if (wd < dbn.offsetWidth)
-				wd = dbn.offsetWidth;
+			if (wd < fieldWidth)
+				wd = fieldWidth;
 			if (pp.offsetWidth > wd)
 				pp.style.width = wd as unknown as string;
 		}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6100.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 19 13:17:46 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6100 — labelPosition="left" on every input component.
+		1. Each input shows its label on its left; the label belongs to the component.
+		2. Trigger buttons stay at the right end of their field.
+		3. In the RTL row the labels are on the right.
+		4. The textbox without a label renders exactly as before.
+		5. The buttons change the Initial fields' label and position; setSclass keeps the Prefilled labels in place.
+	</label>
+	<vlayout>
+		<textbox id="t_textbox" label="Name" labelPosition="left"/>
+		<textbox id="t_textarea" label="Notes" labelPosition="left" multiline="true" rows="3"/>
+		<intbox id="t_intbox" label="Age" labelPosition="left"/>
+		<longbox id="t_longbox" label="Account" labelPosition="left"/>
+		<doublebox id="t_doublebox" label="Latitude" labelPosition="left"/>
+		<decimalbox id="t_decimalbox" label="Amount" labelPosition="left"/>
+		<combobox id="t_combobox" label="Country" labelPosition="left">
+			<comboitem label="Taiwan"/>
+			<comboitem label="Japan"/>
+		</combobox>
+		<bandbox id="t_bandbox" label="Search" labelPosition="left">
+			<bandpopup><label value="popup content"/></bandpopup>
+		</bandbox>
+		<datebox id="t_datebox" label="Birthday" labelPosition="left"/>
+		<timebox id="t_timebox" label="Departure" labelPosition="left"/>
+		<spinner id="t_spinner" label="Count" labelPosition="left"/>
+		<doublespinner id="t_doublespinner" label="Rate" labelPosition="left"/>
+		<timepicker id="t_timepicker" label="Meeting" labelPosition="left"/>
+		<combobox id="t_prefilled" label="Prefilled" labelPosition="left" value="hello"/>
+		<combobox id="t_disabled" label="Disabled" labelPosition="left" disabled="true"/>
+		<combobox id="t_readonly" label="Readonly" labelPosition="left" readonly="true" value="locked"/>
+		<combobox id="t_invalid" label="Required" labelPosition="left" constraint="no empty: required"/>
+		<textbox id="t_tprefilled" label="Prefilled" labelPosition="left" value="hello"/>
+		<textbox id="t_tdisabled" label="Disabled" labelPosition="left" disabled="true"/>
+		<textbox id="t_treadonly" label="Readonly" labelPosition="left" readonly="true" value="locked"/>
+		<textbox id="t_tinvalid" label="Required" labelPosition="left" constraint="no empty: required"/>
+		<textbox id="t_sclass" label="Styled" labelPosition="left" sclass="custom"/>
+		<combobox id="t_hint" label="Email" labelPosition="left" placeholder="user@example.com"/>
+		<combobox id="t_inplace" label="Inplace" labelPosition="left" inplace="true" value="Untitled"/>
+		<combobox id="t_xss" label="&lt;script&gt;alert(1)&lt;/script&gt;" labelPosition="left"/>
+		<combobox id="t_long" label="This is an exceptionally long label that cannot fit" labelPosition="left" width="200px"/>
+		<combobox id="t_unset" label="" labelPosition="left"/>
+		<textbox id="t_nolabel" labelPosition="left"/>
+		<combobox id="t_dynamic" label="Initial" labelPosition="left"/>
+		<textbox id="t_tdynamic" label="Initial" labelPosition="left"/>
+		<div xmlns:ca="client/attribute" ca:dir="rtl">
+			<combobox id="t_rtl" label="Email" labelPosition="left"/>
+			<textbox id="t_trtl" label="Email" labelPosition="left"/>
+		</div>
+		<hlayout>
+			<button id="btn_setLabel" label="setLabel" onClick='t_dynamic.setLabel("Updated"); t_tdynamic.setLabel("Updated")'/>
+			<button id="btn_unsetLabel" label="setLabel(null)" onClick="t_dynamic.setLabel(null); t_tdynamic.setLabel(null)"/>
+			<button id="btn_setPosLeft" label="left" onClick='t_dynamic.setLabelPosition("left"); t_tdynamic.setLabelPosition("left")'/>
+			<button id="btn_setPosTop" label="top" onClick='t_dynamic.setLabelPosition("top"); t_tdynamic.setLabelPosition("top")'/>
+			<button id="btn_setPosFloating" label="floating" onClick='t_dynamic.setLabelPosition("floating"); t_tdynamic.setLabelPosition("floating")'/>
+			<button id="btn_sclass" label="setSclass" onClick='t_prefilled.setSclass("changed"); t_tprefilled.setSclass("changed")'/>
+		</hlayout>
+	</vlayout>
+</zk>

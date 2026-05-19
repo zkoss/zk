@@ -13,5 +13,11 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function input$mold$(out) {
-	out.push('<input', this.domAttrs_(), '/>');
+	if (this._label) {
+		out.push('<span', this.domAttrs_({text: true, tabindex: true}), '>');
+		this.redrawLabel_(out);
+		out.push('<input id="', this.uuid, '-real" class="', /*safe*/ this._inputClass(), '"',
+			/*safe*/ this.textAttrs_(), '/></span>');
+	} else
+		out.push('<input', this.domAttrs_(), '/>');
 }

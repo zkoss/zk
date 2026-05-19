@@ -13,6 +13,17 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function textbox$mold$(out) {
+	if (this._label) {
+		out.push('<span', this.domAttrs_({text: true, tabindex: true}), '>');
+		this.redrawLabel_(out);
+		if (this.isMultiline())
+			out.push('<textarea id="', this.uuid, '-real" class="', /*safe*/ this._inputClass(), '"',
+				/*safe*/ this.textAttrs_(), '>\n', /*safe*/ this._areaText(), '</textarea></span>');
+		else
+			out.push('<input id="', this.uuid, '-real" class="', /*safe*/ this._inputClass(), '"',
+				/*safe*/ this.textAttrs_(), '/></span>');
+		return;
+	}
 	// ZK-679: Textbox multi-line start with new-line failed in onCreate event
 	// browser will ignore first newline
 	if (this.isMultiline())

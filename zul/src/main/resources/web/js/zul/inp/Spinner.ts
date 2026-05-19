@@ -318,6 +318,11 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	}
 
 	/** @internal */
+	override _rootWrapsInput(): boolean {
+		return true;
+	}
+
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {//after compose
 		super.bind_(desktop, skipper, after);
 

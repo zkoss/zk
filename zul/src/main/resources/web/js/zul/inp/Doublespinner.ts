@@ -403,6 +403,11 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	}
 
 	/** @internal */
+	override _rootWrapsInput(): boolean {
+		return true;
+	}
+
+	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 

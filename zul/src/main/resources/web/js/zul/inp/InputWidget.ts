@@ -67,7 +67,7 @@ export var RoundUtl = {
 				wgt._inplaceTimerId = undefined;
 			}
 			wgt._inplaceTimerId = setTimeout(function () {
-				if (wgt.desktop) jq(wgt.$n()).addClass(wgt.getInplaceCSS());
+				if (wgt.desktop) jq(wgt._stateNode()).addClass(wgt.getInplaceCSS());
 			}, wgt._inplaceTimeout);
 			wgt.onSize();
 			// should not clear node width if hflex is true
@@ -99,6 +99,10 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	_type = 'text';
 	/** @internal */
 	_placeholder?: string;
+	/** @internal */
+	_label?: string;
+	/** @internal */
+	_labelPosition = 'left';
 	/** @internal */
 	_inputAttributes?: Record<string, string>;
 	/** @internal */
@@ -211,7 +215,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			if (inp) { //check if bind
 				inp.disabled = disabled;
 				var fnm = disabled ? 'addClass' as const : 'removeClass' as const;
-				jq(this.$n())[fnm](this.$s('disabled'));
+				jq(this._stateNode())[fnm](this.$s('disabled'));
+				this._syncLabelState();
 			}
 		}
 
@@ -239,7 +244,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				var fnm = readonly ? 'addClass' as const : 'removeClass' as const;
 
 				inp.readOnly = readonly;
-				jq(this.$n())[fnm](this.$s('readonly')); //Merge breeze
+				jq(this._stateNode())[fnm](this.$s('readonly')); //Merge breeze
+				this._syncLabelState();
 			}
 		}
 
@@ -377,6 +383,111 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 
 		return this;
+	}
+
+	/**
+	 * @returns the associated label text.
+	 * @since 11.0.0
+	 */
+	getLabel(): string | undefined {
+		return this._label;
+	}
+
+	/**
+	 * Sets the associated label text. Empty string is treated as undefined.
+	 * @since 11.0.0
+	 */
+	setLabel(label: string, opts?: Record<string, boolean>): this {
+		const o = this._label;
+		this._label = label || undefined;
+		if ((o !== this._label || opts?.force) && this.desktop) {
+			const n = this.$n('label');
+			if (n && this._label)
+				n.textContent = this._label;
+			else
+				this.rerender();
+		}
+		return this;
+	}
+
+	/**
+	 * @returns the label position (left / top / floating).
+	 * @since 11.0.0
+	 */
+	getLabelPosition(): string {
+		return this._labelPosition;
+	}
+
+	/**
+	 * Sets the label position: "left" (default), "top" or "floating".
+	 * @since 11.0.0
+	 */
+	setLabelPosition(labelPosition: string, opts?: Record<string, boolean>): this {
+		const o = this._labelPosition;
+		this._labelPosition = labelPosition || 'left';
+		if ((o !== this._labelPosition || opts?.force) && this.desktop && this._label)
+			this.rerender();
+		return this;
+	}
+
+	/** @internal Whether the mold always renders a container root around the input. */
+	_rootWrapsInput(): boolean {
+		return false;
+	}
+
+	/** @internal */
+	redrawLabel_(out: string[]): void {
+		if (this._label)
+			out.push('<label id="', this.uuid, '-label" for="', this.uuid,
+				'-real" class="z-input-label-text">', zUtl.encodeXML(this._label), '</label>');
+	}
+
+	/** @internal The node carrying the zclass and its state classes. */
+	_stateNode(): HTMLElement | undefined {
+		return this._rootWrapsInput() ? this.$n() : this.getInputNode();
+	}
+
+	/** @internal The visible field: the input when a label shares the root. */
+	_fieldNode(): HTMLElement {
+		return this._label ? this.getInputNode()! : this.$n_();
+	}
+
+	/** @internal Class of the input node when a plain input is wrapped for its label. */
+	_inputClass(): string {
+		return zUtl.encodeXMLAttribute(this.getZclass() || '') + this._stateClass();
+	}
+
+	/** @internal */
+	_labelClass(): string {
+		return ' z-input-label z-input-label-' + zUtl.encodeXMLAttribute(this._labelPosition)
+			+ (this.isMultiline() ? ' z-input-label-multiline' : '');
+	}
+
+	/** @internal */
+	_stateClass(no?: zk.DomClassOptions): string {
+		var sc = '';
+		if ((!no || !no.zclass) && this._disabled)
+			sc += ' ' + this.$s('disabled');
+
+		if ((!no || !no.input) && this._inplace)
+			sc += ' ' + this.getInplaceCSS();
+
+		// Merge breeze
+		if ((!no || !no.zclass) && this._readonly)
+			sc += ' ' + this.$s('readonly');
+		return sc;
+	}
+
+	/** @internal Syncs floating-mode state classes (no-op for left / top). */
+	_syncLabelState(): void {
+		if (!this._label || this._labelPosition !== 'floating') return;
+		const n = this.$n(),
+			inp = this.getInputNode();
+		if (!n || !inp || n == inp) return;
+		jq(n).toggleClass('z-input-label-shrunk', !!inp.value || n.contains(document.activeElement))
+			.toggleClass('z-input-label-invalid', !!this._errmsg)
+			.toggleClass('z-input-label-disabled', !!this._disabled)
+			.toggleClass('z-input-label-readonly', !!this._readonly);
 	}
 
 	/**
@@ -577,6 +688,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			var inp = this.getInputNode();
 			if (inp) //check if bind
 				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value as ValueType);
+			this._syncLabelState();
 		}
 		return this;
 	}
@@ -673,6 +785,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	/** @internal */
 	_onChanging(timeout?: number): void {
 		InputWidget._onChanging.call(this, timeout);
+		this._syncLabelState();
 	}
 
 	/** @internal */
@@ -709,7 +822,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		this._lastChg = inp.value;
 		if (evt.domTarget.tagName) { //Bug 2111900
 			if (this._inplace) {
-				jq(this.$n()).removeClass(this.getInplaceCSS());
+				jq(this._stateNode()).removeClass(this.getInplaceCSS());
 				if (this._inplaceTimerId != null) {
 					clearTimeout(this._inplaceTimerId);
 					this._inplaceTimerId = undefined;
@@ -726,6 +839,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				});
 			}
 		}
+		this._syncLabelState();
 	}
 
 	/** @internal */
@@ -740,7 +854,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			if (!this._inplaceIgnore) {
 				var self = this;
 				self._inplaceTimerId = setTimeout(function () {
-					if (self.desktop) jq(self.$n()).addClass(self.getInplaceCSS());
+					if (self.desktop) jq(self._stateNode()).addClass(self.getInplaceCSS());
 				}, self._inplaceTimeout);
 			}
 		}
@@ -754,6 +868,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				window.scrollTo(windowX, windowY);
 		}
 		this._lastKeyDown = undefined;
+		this._syncLabelState();
 	}
 
 	/** @internal */
@@ -864,6 +979,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 		if (revalidate)
 			this._reVald = true; //revalidate required
+		this._syncLabelState();
 	}
 
 	/**
@@ -923,6 +1039,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 			if (!noOnError)
 				this.fire('onError', {value: val, message: msg});
+			this._syncLabelState();
 		}
 	}
 
@@ -1048,6 +1165,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	 */
 	updateChange_(): boolean {
 		if (zul.inp.validating) return false; //avoid deadloop (when both focus and blur fields invalid)
+		this._syncLabelState();
 
 		var inp = this.getInputNode()!,
 			value = inp.value;
@@ -1106,7 +1224,10 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		var inp = this.getInputNode()!;
 		if (inp.value != inp.defaultValue) { //test if it will be reset
 			var wgt = this;
-			setTimeout(function () {wgt.updateChange_();}, 0);
+			setTimeout(function () {
+				wgt.updateChange_();
+				wgt._syncLabelState();
+			}, 0);
 				//value not reset yet so wait a moment
 		}
 	}
@@ -1119,18 +1240,22 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
-		var /*safe*/ sc = super.domClass_(no);
-		if ((!no || !no.zclass) && this._disabled)
-			sc += ' ' + this.$s('disabled');
-
-		if ((!no || !no.input) && this._inplace)
-			sc += ' ' + this.getInplaceCSS();
-
-		// Merge breeze
-		if ((!no || !no.zclass) && this._readonly)
-			sc += ' ' + this.$s('readonly');
-
+		// ZK-6100: a plain input wrapped for its label keeps zclass and states on the input
+		if (this._label && !this._rootWrapsInput())
+			return super.domClass_({...no, zclass: true}) + this._labelClass();
+		var /*safe*/ sc = super.domClass_(no) + /*safe*/ this._stateClass(no);
+		if (this._label)
+			sc += this._labelClass();
 		return sc;
+	}
+
+	/** @internal */
+	override updateDomClass_(): void {
+		super.updateDomClass_();
+		const inp = this.getInputNode();
+		if (inp && inp != this.$n() && !this._rootWrapsInput())
+			/*safe*/ inp.className = this._inputClass();
+		this._syncLabelState();
 	}
 
 	/** @internal */
@@ -1153,6 +1278,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		if (n.form)
 			jq(n.form).on('reset', this.proxy(this._resetForm));
 		zWatch.listen({onShow: this});
+		this._syncLabelState();
 	}
 
 	/** @internal */
@@ -1189,6 +1315,9 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}, 10);
 		// ZK-4938: fire an onChanging event when users enter a predictive text
 		this._updateValue();
+		// ZK-6100: keep the floating label in sync when the value changes
+		// without a focus event (autofill, programmatic input, predictive text)
+		this._syncLabelState();
 	}
 
 	/** @internal */
