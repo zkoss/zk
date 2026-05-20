@@ -26,7 +26,7 @@ public class B36_3002536Test extends DockerWebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.addArguments("--lang=fr-FR")
+				.addArguments("--lang=fr-FR", "--accept-lang=fr-FR")
 				.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "fr-FR"));
 	}
 

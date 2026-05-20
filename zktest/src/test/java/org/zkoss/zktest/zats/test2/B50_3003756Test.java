@@ -29,7 +29,7 @@ public class B50_3003756Test extends DockerWebDriverTestCase {
 	protected ChromeOptions getWebDriverOptions() {
 		String lang = acceptLang.get();
 		return super.getWebDriverOptions()
-				.addArguments("--lang=" + lang)
+				.addArguments("--lang=" + lang, "--accept-lang=" + lang)
 				.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", lang));
 	}
 
