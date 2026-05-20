@@ -1195,6 +1195,7 @@
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="animationDisabled" type="booleanType" use="optional" />
+		<xs:attribute name="ctrlKeys" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- box -->
 	<xs:element name="box" type="boxType" />
