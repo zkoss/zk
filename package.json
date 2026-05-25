@@ -42,7 +42,7 @@
     "babel-loader": "^9.1.3",
     "cssnano": "^6.0.3",
     "eslint": "^9.26.0",
-    "eslint-plugin-tsdoc": "^0.2.17",
+    "eslint-plugin-tsdoc": "^0.5.2",
     "gulp": "^5.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",
@@ -64,13 +64,13 @@
     "typedoc": "^0.25.7",
     "typescript": "^5.3.3",
     "vinyl-map": "^1.0.2",
-    "webpack": "^5.90.0",
+    "webpack": "^5.106.2",
     "webpack-cli": "5.1.4",
     "webpack-stream": "^7.0.0",
     "zkless-engine": "^1.1.13"
   },
   "dependencies": {
-    "dompurify": "^3.4.1",
+    "dompurify": "^3.4.2",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.48"
   },
