@@ -58,7 +58,7 @@ public class TagRenderContext {
 			_jsout.insert(0,
 					"<script class=\"z-runonce\" type=\"text/javascript\">\nzkmb(true);try{");
 			_jsout.append("\n}finally{zkme();}</script>");
-			final String txt = _jsout.toString();
+			final String txt = HtmlPageRenders.outCspNonceAttr(_jsout.toString());
 			_jsout.setLength(0); // reset
 			return txt;
 		}

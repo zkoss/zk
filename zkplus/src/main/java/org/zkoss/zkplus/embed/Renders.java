@@ -196,28 +196,30 @@ public class Renders {
 			}
 
 			final Desktop desktop = _exec.getDesktop();
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">zkpb('");
-			out.write(page.getUuid());
-			out.write("','");
-			out.write(desktop.getId());
-			out.write("','");
-			out.write(Encode.forJavaScript(getContextURI()));
-			out.write("','");
-			out.write(Encode.forJavaScript(desktop.getUpdateURI(null)));
-			out.write("','");
-			out.write(Encode.forJavaScript(desktop.getResourceURI(null)));
-			out.write("','");
-			out.write(Encode.forJavaScript(desktop.getRequestPath()));
-			out.write('\'');
+			final StringBuilder sb = new StringBuilder();
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">zkpb('");
+			sb.append(page.getUuid());
+			sb.append("','");
+			sb.append(desktop.getId());
+			sb.append("','");
+			sb.append(Encode.forJavaScript(getContextURI()));
+			sb.append("','");
+			sb.append(Encode.forJavaScript(desktop.getUpdateURI(null)));
+			sb.append("','");
+			sb.append(Encode.forJavaScript(desktop.getResourceURI(null)));
+			sb.append("','");
+			sb.append(Encode.forJavaScript(desktop.getRequestPath()));
+			sb.append('\'');
 
 			String style = page.getStyle();
 			if (style != null && style.length() > 0) {
-				out.write(",{style:'");
-				out.write(style);
-				out.write("'}");
+				sb.append(",{style:'");
+				sb.append(style);
+				sb.append("'}");
 			}
 
-			out.write(");zkpe();</script>\n");
+			sb.append(");zkpe();</script>\n");
+			out.write(HtmlPageRenders.outCspNonceAttr(sb.toString()));
 
 			for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling()) {
 				HtmlPageRenders.outStandalone(_exec, root, out);

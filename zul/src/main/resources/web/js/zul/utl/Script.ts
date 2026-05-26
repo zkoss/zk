@@ -54,8 +54,7 @@ export class Script extends zk.Widget {
 
 		if (o !== content || opts?.force) {
 			if (content) {
-				// eslint-disable-next-line no-new-func
-				this._fn = typeof content == 'function' ? content : new Function(content);
+				this._fn = typeof content == 'function' ? content : zk.toFunction(content);
 				if (this.desktop) //check parent since no this.$n()
 					this._exec();
 			} else

@@ -755,6 +755,16 @@ public class ConfigParser {
 		if (s != null)
 			config.setCspStrictDynamicEnabled(!"false".equals(s));
 
+		// strict-dynamic mode generates and stamps a per-request nonce. Without the
+		// outer csp-enabled switch the rest of the framework never emits the nonce
+		// header / cspNonce hint, so inline scripts would be blocked by the browser
+		// and the failure is silent on the server. Surface the misconfig once at
+		// parse time rather than letting users hunt CSP violations in the console.
+		if (config.isCspStrictDynamicEnabled() && !config.isCspEnabled()) {
+			log.warn("csp-strict-dynamic-enabled requires csp-enabled to be true; "
+					+ "nonce will not be emitted. Set <csp-enabled>true</csp-enabled> in zk.xml.");
+		}
+
 		s = el.getElementValue("csp-policy", true);
 		if (s != null)
 			config.setCspPolicy(s);

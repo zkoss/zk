@@ -238,18 +238,15 @@ public class Script extends AbstractComponent {
 		if (_src != null) {
 			final HtmlPageRenders.RenderContext rc = _defer ? null : HtmlPageRenders.getRenderContext(null);
 			if (rc != null && rc.perm != null) {
-				final Writer cwout = rc.perm;
-				cwout.write("\n<script id=\"");
-				cwout.write(getUuid());
-				cwout.write("\" type=\"text/javascript\" src=\"");
-				cwout.write(getEncodedSrcURL());
-				cwout.write('"');
+				final StringBuilder sb = new StringBuilder();
+				sb.append("\n<script id=\"").append(getUuid())
+						.append("\" type=\"text/javascript\" src=\"")
+						.append(getEncodedSrcURL()).append('"');
 				if (_charset != null) {
-					cwout.write(" charset=\"");
-					cwout.write(_charset);
-					cwout.write('"');
+					sb.append(" charset=\"").append(_charset).append('"');
 				}
-				cwout.write(">\n</script>\n");
+				sb.append(">\n</script>\n");
+				rc.perm.write(HtmlPageRenders.outCspNonceAttr(sb.toString()));
 			} else
 				render(renderer, "src", getEncodedSrcURL());
 		}

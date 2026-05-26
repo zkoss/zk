@@ -321,7 +321,11 @@ public class HtmlPageRenders {
 				&& !"page".equals(ExecutionsCtrl.getPageRedrawControl(exec)),
 				groupingAllowed = isGroupingAllowed(desktop);
 		final String progressboxPos = org.zkoss.lang.Library.getProperty("org.zkoss.zul.progressbox.position", "");
-		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed) {
+		final Configuration config = wapp.getConfiguration();
+		final boolean cspEnabled = config.isCspEnabled();
+		final boolean cspStrictDynamic = cspEnabled && config.isCspStrictDynamicEnabled();
+		final String cspNonce = cspStrictDynamic ? config.getCspProvider().getCspNonce() : null;
+		if (tmout > 0 || keepDesktop || progressboxPos.length() > 0 || !groupingAllowed || cspNonce != null) {
 			sb.append(outCspNonceAttr("<script class=\"z-runonce\" type=\"text/javascript\">\nzkopt({"));
 
 			if (keepDesktop)
@@ -332,6 +336,8 @@ public class HtmlPageRenders {
 				sb.append("to:").append(tmout).append(',');
 			if (progressboxPos.length() > 0)
 				sb.append("ppos:'").append(progressboxPos).append('\'');
+			if (cspNonce != null)
+				sb.append("cn:'").append(Encode.forJavaScript(cspNonce)).append("',");
 
 			if (sb.charAt(sb.length() - 1) == ',')
 				sb.setLength(sb.length() - 1);
@@ -628,7 +634,7 @@ public class HtmlPageRenders {
 			out = new StringWriter();
 		} else if (divRequired) {
 			//generate JS second
-			out.write("\n<script class=\"z-runonce\" type=\"text/javascript\">\n");
+			out.write(outCspNonceAttr("\n<script class=\"z-runonce\" type=\"text/javascript\">\n"));
 		}
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
@@ -711,7 +717,7 @@ public class HtmlPageRenders {
 			if (divRequired)
 				outDivTemplateEnd(page, out);
 			//close tag after temp, but before perm (so perm won't be destroyed)
-			Files.write(out, ((StringWriter) rc.perm).getBuffer()); //perm
+			Files.write(out, new StringBuffer(outCspNonceAttr(((StringWriter) rc.perm).getBuffer().toString()))); //perm
 
 			// B65-ZK-1836
 			Files.write(out, new StringBuffer(outCspNonceAttr(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/")))); //js
@@ -754,13 +760,13 @@ public class HtmlPageRenders {
 			if (dt.getAttribute(ATTR_DESKTOP_CLIENTINFO) != null) {
 				dt.removeAttribute(ATTR_DESKTOP_CLIENTINFO);
 				if (!"CE".equals(WebApps.getEdition()))
-					out.write(
-							"<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>");
+					out.write(outCspNonceAttr(
+							"<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>"));
 			}
 			if (dt.getAttribute(ATTR_DESKTOP_VISIBILITYCHANGE) != null) {
 				dt.removeAttribute(ATTR_DESKTOP_VISIBILITYCHANGE);
-				out.write(
-						"<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>");
+				out.write(outCspNonceAttr(
+						"<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>"));
 			}
 			String resourceURL = (String) page.getAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE),
 					namespace = (String) page.getAttribute(ATTR_PORTLET2_NAMESPACE, Page.PAGE_SCOPE);
@@ -768,16 +774,16 @@ public class HtmlPageRenders {
 				page.removeAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE);
 				page.removeAttribute(ATTR_PORTLET2_NAMESPACE, Page.PAGE_SCOPE);
 				// B65-ZK-2210: store url and namespace per desktop.
-				out.write("<script type=\"text/javascript\">if(!zk.portlet2Data) zk.portlet2Data = {};\n"
+				out.write(outCspNonceAttr("<script type=\"text/javascript\">if(!zk.portlet2Data) zk.portlet2Data = {};\n"
 						+ "zk.portlet2Data['" + dt.getId() + "'] = {" + "resourceURL: '" + resourceURL + "', "
-						+ "namespace: '" + namespace + "'};</script>");
+						+ "namespace: '" + namespace + "'};</script>"));
 			}
 		}
 		outSEOContent(page, out);
 		out.write("</div>");
 	}
 
-	protected static String outCspNonceAttr(String output) {
+	public static String outCspNonceAttr(String output) {
 		Configuration config = WebApps.getCurrent().getConfiguration();
 		boolean cspEnabled = config.isCspEnabled(),
 				cspStrictDynamicEnabled = config.isCspStrictDynamicEnabled();
@@ -982,7 +988,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(comp.getPage(), out);
 			}
 
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">\n");
+			out.write(outCspNonceAttr("<script class=\"z-runonce\" type=\"text/javascript\">") + "\n");
 
 			// zkdh should run before zkmx()
 			WebApp webApp = WebApps.getCurrent();
@@ -1133,7 +1139,7 @@ public class HtmlPageRenders {
 			}
 		}
 
-		return sb.toString();
+		return outCspNonceAttr(sb.toString());
 	}
 
 	/** Returns if the ZK specific HTML tags are generated.

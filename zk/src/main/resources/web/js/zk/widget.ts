@@ -4906,8 +4906,7 @@ new zul.wnd.Window({
 		}
 		if (fn) {
 			inf[listener] = bklsns[listener]
-				// eslint-disable-next-line no-new-func
-				= typeof fn != 'function' ? new Function('var event=arguments[0];' + (fn as string)) : fn;
+				= typeof fn != 'function' ? zk.toFunction('var event=arguments[0];' + (fn as string)) : fn;
 			this.listen(inf);
 		}
 		return this;
@@ -4923,8 +4922,7 @@ new zul.wnd.Window({
 			inf = {};
 		if (fn) {
 			inf[listener0] = bklsns[listener0]
-				// eslint-disable-next-line no-new-func
-				= typeof fn != 'function' ? new Function('var event=arguments[0];' + (fn as string)) : fn;
+				= typeof fn != 'function' ? zk.toFunction('var event=arguments[0];' + (fn as string)) : fn;
 			this.listen(inf);
 		}
 		return this;
@@ -7091,7 +7089,8 @@ export namespace widget_global {
 				case 'ppos': zk.progPos = val as string; break;
 				case 'hs': zk.historystate.enabled = val as boolean; break;
 				case 'eup': zAu.setPushErrorURI(val as number); break;
-				case 'resURI': zk.resourceURI = val as string;
+				case 'resURI': zk.resourceURI = val as string; break;
+				case 'cn': zk.cspNonce = typeof val === 'string' ? val : undefined; break;
 			}
 		}
 	}

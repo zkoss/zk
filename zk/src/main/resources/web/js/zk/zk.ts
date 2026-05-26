@@ -469,6 +469,88 @@ _zk.busy = 0;
  */
 _zk.appName = 'ZK';
 
+/**
+ * The CSP nonce for this page, set by the server when CSP strict-dynamic is enabled.
+ * Used by {@link toFunction} to create CSP-safe dynamic functions, and by the
+ * jq.globalEval shim below so third-party callers that pre-date ZK 10.4 keep
+ * working without a code change.
+ * @since 10.4.0
+ */
+_zk.cspNonce = undefined as string | undefined;
+
+// Monkey-patch jq.globalEval so legacy one-argument callers (third-party widgets,
+// add-ons) automatically forward the page nonce. ZK's own three call sites in
+// au.ts / mount.ts already pass the nonce explicitly; this shim closes the gap
+// for everything else without breaking the (code, options, doc) signature.
+var _zkOrigGlobalEval = jq.globalEval;
+jq.globalEval = function (code: string, options?: { nonce?: string }, doc?: Document): void {
+	var opts = options;
+	if (!opts && _zk.cspNonce) opts = {nonce: _zk.cspNonce};
+	_zkOrigGlobalEval.call(jq, code, opts as never, doc as never);
+};
+
+var _fnCache = new Map<string, CallableFunction>(),
+	_FN_CACHE_MAX = 256;
+/**
+ * Creates a function from a code string in a CSP-safe manner.
+ * When {@link cspNonce} is set (CSP enabled), it uses a nonce-bearing
+ * `<script>` element instead of `new Function()`, avoiding the
+ * need for `'unsafe-eval'` in the Content Security Policy.
+ * Falls back to `new Function()` when CSP is not enabled.
+ *
+ * The result is cached by (argNames, body) so repeated EL expressions and
+ * listener strings avoid both the DOM mutation and the parser cost. The
+ * cache is bounded ({@link _FN_CACHE_MAX} entries) and cleared wholesale
+ * when full, which is sufficient for the typical "few hundred unique
+ * expressions per session" workload.
+ *
+ * @param body - the function body code string
+ * @param argNames - optional parameter names for the function
+ * @returns the created function
+ * @since 10.4.0
+ */
+_zk.toFunction = function (body: string, argNames?: string[]): CallableFunction {
+	var args = argNames ? argNames.join(',') : '',
+		cacheKey = args + '\0' + body,
+		cached = _fnCache.get(cacheKey);
+	if (cached) return cached;
+
+	var nonce = _zk.cspNonce,
+		fn: CallableFunction;
+	if (!nonce) {
+		// eslint-disable-next-line no-new-func
+		fn = argNames ? new Function(...argNames, body) : new Function(body);
+	} else {
+		// crypto.randomUUID is in modern browsers (Safari 15.4+); fall back to
+		// Math.random for older runtimes. The key only needs to be unguessable
+		// across concurrent toFunction calls, not cryptographically strong.
+		var rand = (typeof crypto !== 'undefined' && crypto.randomUUID)
+				? crypto.randomUUID().replace(/-/g, '')
+				: Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2),
+			key = 'zk_fn_' + rand,
+			script = document.createElement('script');
+		script.setAttribute('nonce', nonce);
+		script.textContent = 'window["' + key + '"]=function(' + args + '){'
+			+ body + '\n//# sourceURL=zk-fn-' + key + '.js\n}';
+		// document.head is null in the very early bootstrap window before <head>
+		// is parsed; documentElement is always available.
+		var parent = document.head || document.documentElement;
+		parent.appendChild(script);
+		parent.removeChild(script);
+		fn = window[key] as CallableFunction;
+		delete window[key];
+		// A <script> with a syntax error never assigns window[key] (the error is
+		// dispatched to window.onerror, not thrown to us). new Function() threw a
+		// SyntaxError synchronously; detect the parse failure and rethrow so callers
+		// that wrap toFunction in try/catch keep getting a catchable error under CSP.
+		if (typeof fn !== 'function')
+			throw new SyntaxError('zk.toFunction: failed to compile function body');
+	}
+	if (_fnCache.size >= _FN_CACHE_MAX) _fnCache.clear();
+	_fnCache.set(cacheKey, fn);
+	return fn;
+};
+
 declare namespace _zk {
 	/** The version of ZK, such as '5.0.0' */
 	export let version: string;

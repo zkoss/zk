@@ -30,7 +30,7 @@ ${z:outDeviceStyleSheets('ajax')}
 </head>
 <body>
 </body>
-<script type="text/javascript">
+<script type="text/javascript"${z:cspNonceAttr()}>
 <!--
 <%-- NOTE: we cannot execute zkau.sendUpdateResult in this frame with Firefox,
 	because this frame will be removed and it will cause the following error

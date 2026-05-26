@@ -142,4 +142,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	class Web resource for the current request.
 		</description>
 	</function>
+	<function>
+		<name>cspNonceAttr</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	java.lang.String cspNonceAttr()
+		</function-signature>
+		<description>
+	Returns the CSP nonce attribute for inline script/style tags
+	(e.g. nonce="..."), or an empty string if CSP is not enabled.
+		</description>
+	</function>
 </taglib>
