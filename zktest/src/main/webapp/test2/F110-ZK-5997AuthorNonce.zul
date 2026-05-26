@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page complete="true"?>
+<!--
+F110-ZK-5997AuthorNonce.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 27 10:20:11 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:u="http://www.zkoss.org/2005/zul"
+	xmlns:zk="http://www.zkoss.org/2005/zk">
+	<head>
+		<title>F110-ZK-5997 native page with an author-supplied nonce</title>
+		<zkhead/>
+		<!-- the page writes the nonce itself; ZK must not stamp a second one -->
+		<script type="text/javascript" nonce="${cspNonce}">
+			window.zkAuthorNonceNativeLoaded = true;
+		</script>
+	</head>
+	<body>
+		<u:label id="msg" value="native page with author nonce"/>
+	</body>
+</html>

@@ -42,8 +42,14 @@ public class B103_ZK_6055Test extends WebDriverTestCase {
             assertTrue(cspHeader.contains("script-src"));
             assertTrue(cspHeader.contains("'self'"));
             assertTrue(cspHeader.contains("'strict-dynamic'"));
-            assertTrue(cspHeader.contains("'unsafe-inline'"));
-            assertTrue(cspHeader.contains("'unsafe-eval'"));
+            // style-src keeps 'unsafe-inline' on purpose, so scope the check to script-src
+            String scriptSrc = null;
+            for (String directive : cspHeader.split(";"))
+                if (directive.trim().startsWith("script-src"))
+                    scriptSrc = directive.trim();
+            assertNotNull(scriptSrc, cspHeader);
+            assertFalse(scriptSrc.contains("'unsafe-inline'"), scriptSrc);
+            assertTrue(scriptSrc.contains("'unsafe-eval'"), scriptSrc);
             assertTrue(cspHeader.contains("'unsafe-hashes'"));
         } finally {
             conn.disconnect();

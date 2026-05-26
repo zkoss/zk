@@ -1,0 +1,25 @@
+<!--
+F110-ZK-5997AuthorNonce.zhtml
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Aug 27 10:20:11 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns:z="http://www.zkoss.org/2005/zul">
+<head>
+<title>F110-ZK-5997 zhtml page with an author-supplied nonce</title>
+<zkhead/>
+<!-- an author-supplied nonce must survive and appear exactly once -->
+<script type="text/javascript" nonce="${cspNonce}">
+window.zkAuthorNonceZhtmlLoaded = true;
+</script>
+</head>
+<body>
+<z:label id="msg" value="zhtml page with author nonce"/>
+</body>
+</html>

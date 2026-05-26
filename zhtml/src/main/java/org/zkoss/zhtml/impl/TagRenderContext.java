@@ -55,8 +55,10 @@ public class TagRenderContext {
 	 */
 	public String complete() {
 		if (_jsout.length() > 0) {
-			_jsout.insert(0,
-					"<script class=\"z-runonce\" type=\"text/javascript\">\nzkmb(true);try{");
+			// Stamp the wrapper tag only: the buffer also carries component data, and a
+			// literal "<script" in a property value would pick up the nonce by scanning.
+			_jsout.insert(0, HtmlPageRenders.outCspNonceAttr(
+					"<script class=\"z-runonce\" type=\"text/javascript\">") + "\nzkmb(true);try{");
 			_jsout.append("\n}finally{zkme();}</script>");
 			final String txt = _jsout.toString();
 			_jsout.setLength(0); // reset

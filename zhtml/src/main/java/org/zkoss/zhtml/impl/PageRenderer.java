@@ -62,6 +62,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		final Execution exec = Executions.getCurrent();
 		final String ctl = ExecutionsCtrl.getPageRedrawControl(exec);
 		boolean au = exec.isAsyncUpdate(null);
+		if (!au)
+			HtmlPageRenders.setCspHeader(exec, page); //before any output, and for every document we render
 		if (!au && (page.isComplete() || "complete".equals(ctl))) {
 			renderComplete(exec, page, out);
 			return;

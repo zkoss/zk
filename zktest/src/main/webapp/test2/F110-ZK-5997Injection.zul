@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-5997Injection.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Aug 25 12:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<!-- unencoded, this charset would close the open tag and start an executable <script> -->
+	<script id="injected" src="/test2/F110-ZK-5997-external.js"
+			charset='utf-8"&gt;&lt;/script&gt;&lt;script&gt;window.zkCspInjected = true;&lt;/script&gt;'/>
+	<!-- sane charset: proves a framework <script src> still carries the nonce and executes -->
+	<script id="benign" src="/test2/F110-ZK-5997-external.js" charset="utf-8"/>
+	<label id="ready" value="loaded"/>
+</zk>

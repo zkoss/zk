@@ -27,12 +27,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.owasp.encoder.Encode;
+import org.slf4j.LoggerFactory;
 
 import org.zkoss.html.HTMLs;
 import org.zkoss.html.JavaScript;
@@ -104,6 +106,8 @@ public class HtmlPageRenders {
 	/** Support Portlet 2.0 */
 	private static final String ATTR_PORTLET2_RESOURCEURL = "org.zkoss.portlet2.resourceURL";
 	private static final String ATTR_PORTLET2_NAMESPACE = "org.zkoss.portlet2.namespace";
+	/** Denotes whether a CspProvider failure has been logged for this request. */
+	private static final String ATTR_CSP_NONCE_ERROR_LOGGED = "org.zkoss.zk.ui.cspNonceError.logged";
 
 	/**
 	* Set this library property to false to hide the zk version info.
@@ -112,8 +116,9 @@ public class HtmlPageRenders {
 	private static final String ZK_VERSION_INFO_ENABLED_KEY = "org.zkoss.zk.ui.versionInfo.enabled";
 
 	/** Support for Csp tag pattern */
-	private static final Pattern SCRIPT_TAG_PATTERN = Pattern.compile("<script(?!\\s+nonce=)");
-	private static final Pattern STYLE_TAG_PATTERN = Pattern.compile("<style(?!\\s+nonce=)");
+	//(?i): a tag may be authored with any casing (e.g. n:SCRIPT); $0 preserves it
+	private static final Pattern SCRIPT_TAG_PATTERN = Pattern.compile("(?i)<script(?!\\s+nonce=)");
+	private static final Pattern STYLE_TAG_PATTERN = Pattern.compile("(?i)<style(?!\\s+nonce=)");
 
 	private static volatile int msgCode = -1;
 
@@ -136,6 +141,32 @@ public class HtmlPageRenders {
 		}
 
 		((ExecutionCtrl) exec).setContentType(contentType);
+	}
+
+	/** Sets the Content-Security-Policy response header for the given page, if CSP is
+	 * enabled (i.e., <code>&lt;csp-enabled&gt;</code> in <code>zk.xml</code>).
+	 * Nothing is done if the page does not belong to a desktop.
+	 *
+	 * <p>It must be invoked before any output is written, since a header can no longer be
+	 * set once the response has been committed. It shall be invoked only when rendering a
+	 * document -- not for an asynchronous update, whose response the browser does not
+	 * apply a policy to.
+	 *
+	 * <p>If a page renderer generates a complete document by itself, it must invoke this
+	 * method. The ZUL and ZHTML page renderers do it for the pages they render.
+	 *
+	 * <p>The header content is produced by the configured
+	 * {@link org.zkoss.zk.ui.util.CspProvider}; refer to
+	 * {@link Configuration#getCspProvider}.
+	 * @param exec the execution (never null)
+	 * @param page the page being rendered (never null)
+	 * @since 11.0.0
+	 */
+	public static final void setCspHeader(Execution exec, Page page) {
+		if (page.getDesktop() == null)
+			return; //no configuration to read
+		final Configuration config = page.getDesktop().getWebApp().getConfiguration();
+		config.getCspProvider().setCspHeader(exec, config);
 	}
 
 	/** Returns the doc type, or null if not available.
@@ -331,7 +362,7 @@ public class HtmlPageRenders {
 			if (tmout > 0)
 				sb.append("to:").append(tmout).append(',');
 			if (progressboxPos.length() > 0)
-				sb.append("ppos:'").append(progressboxPos).append('\'');
+				sb.append("ppos:'").append(progressboxPos).append("',");
 
 			if (sb.charAt(sb.length() - 1) == ',')
 				sb.setLength(sb.length() - 1);
@@ -628,7 +659,7 @@ public class HtmlPageRenders {
 			out = new StringWriter();
 		} else if (divRequired) {
 			//generate JS second
-			out.write("\n<script class=\"z-runonce\" type=\"text/javascript\">\n");
+			out.write(outCspNonceAttr("\n<script class=\"z-runonce\" type=\"text/javascript\">\n"));
 		}
 
 		exec.setAttribute(ATTR_DESKTOP_JS_GENED, Boolean.TRUE);
@@ -711,10 +742,12 @@ public class HtmlPageRenders {
 			if (divRequired)
 				outDivTemplateEnd(page, out);
 			//close tag after temp, but before perm (so perm won't be destroyed)
+			// Never scan rc.perm for "<script": it carries component data. Whoever writes a
+			// tag into it stamps its own open tag with getCspNonceAttr().
 			Files.write(out, ((StringWriter) rc.perm).getBuffer()); //perm
 
 			// B65-ZK-1836
-			Files.write(out, new StringBuffer(outCspNonceAttr(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/")))); //js
+			Files.write(out, new StringBuffer(sw.toString().replaceAll("</(?i)(?=script>)", "<\\\\/"))); //js
 		} else if (owner != null) { //restore
 			setRenderContext(exec, old);
 		}
@@ -754,13 +787,13 @@ public class HtmlPageRenders {
 			if (dt.getAttribute(ATTR_DESKTOP_CLIENTINFO) != null) {
 				dt.removeAttribute(ATTR_DESKTOP_CLIENTINFO);
 				if (!"CE".equals(WebApps.getEdition()))
-					out.write(
-							"<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>");
+					out.write(outCspNonceAttr(
+							"<script type=\"text/javascript\">if(zk.clientinfo === undefined)zk.clientinfo = true;</script>"));
 			}
 			if (dt.getAttribute(ATTR_DESKTOP_VISIBILITYCHANGE) != null) {
 				dt.removeAttribute(ATTR_DESKTOP_VISIBILITYCHANGE);
-				out.write(
-						"<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>");
+				out.write(outCspNonceAttr(
+						"<script type=\"text/javascript\">if(zk.visibilitychange === undefined)zk.visibilitychange = true;</script>"));
 			}
 			String resourceURL = (String) page.getAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE),
 					namespace = (String) page.getAttribute(ATTR_PORTLET2_NAMESPACE, Page.PAGE_SCOPE);
@@ -768,30 +801,121 @@ public class HtmlPageRenders {
 				page.removeAttribute(ATTR_PORTLET2_RESOURCEURL, Page.PAGE_SCOPE);
 				page.removeAttribute(ATTR_PORTLET2_NAMESPACE, Page.PAGE_SCOPE);
 				// B65-ZK-2210: store url and namespace per desktop.
-				out.write("<script type=\"text/javascript\">if(!zk.portlet2Data) zk.portlet2Data = {};\n"
-						+ "zk.portlet2Data['" + dt.getId() + "'] = {" + "resourceURL: '" + resourceURL + "', "
-						+ "namespace: '" + namespace + "'};</script>");
+				//the values are application data, so this tag is stamped and encoded as it is
+				//built -- scanning the finished buffer would splice the nonce into resourceURL
+				out.write("<script type=\"text/javascript\"" + getCspNonceAttr()
+						+ ">if(!zk.portlet2Data) zk.portlet2Data = {};\n"
+						+ "zk.portlet2Data['" + dt.getId() + "'] = {" + "resourceURL: '"
+						+ Encode.forJavaScript(resourceURL) + "', " + "namespace: '"
+						+ Encode.forJavaScript(String.valueOf(namespace)) + "'};</script>");
 			}
 		}
 		outSEOContent(page, out);
 		out.write("</div>");
 	}
 
-	protected static String outCspNonceAttr(String output) {
-		Configuration config = WebApps.getCurrent().getConfiguration();
-		boolean cspEnabled = config.isCspEnabled(),
-				cspStrictDynamicEnabled = config.isCspStrictDynamicEnabled();
+	/** Adds the CSP nonce attribute to every <code>&lt;script&gt;</code> and
+	 * <code>&lt;style&gt;</code> open tag found in the given output, and returns the
+	 * result. The output is returned as is if it is null, or if CSP with strict-dynamic
+	 * is not enabled. A tag whose first attribute is already <code>nonce</code> is
+	 * skipped, so an author-supplied nonce is never duplicated.
+	 *
+	 * <p>It works by scanning the given markup, so it may be used only on a buffer whose
+	 * every <code>&lt;script</code> and <code>&lt;style</code> occurrence is a real open
+	 * tag that shall carry the nonce; the body of a script or a style is fine. A buffer
+	 * that might embed the text inside an attribute value or a JavaScript string literal
+	 * -- such as a render context's <code>perm</code> buffer, which carries component
+	 * data -- is not: the live per-request nonce would be spliced into that value, both
+	 * corrupting it and disclosing the nonce. Build such an open tag with
+	 * {@link #getCspNonceAttr} instead.
+	 * @param output the markup to stamp; null is allowed
+	 * @return the markup with the nonce attribute added, or the given output unchanged
+	 * @see #getCspNonceAttr
+	 * @since 11.0.0
+	 */
+	public static String outCspNonceAttr(String output) {
+		if (output == null)
+			return output;
+		final String nonceAttr = getCspNonceAttr();
+		if (nonceAttr.length() == 0)
+			return output;
 
-		if (cspEnabled && cspStrictDynamicEnabled && output != null) {
-			String nonce = config.getCspProvider().getCspNonce();
-			String nonceAttr = " nonce=\"" + Encode.forHtmlAttribute(nonce) + "\"";
-
-			String result = SCRIPT_TAG_PATTERN.matcher(output).replaceAll("<script" + nonceAttr);
-			result = STYLE_TAG_PATTERN.matcher(result).replaceAll("<style" + nonceAttr);
-			return result;
-		}
-		return output;
+		//a provider's nonce may contain $ or \, which are regex-replacement metacharacters
+		final String replacement = Matcher.quoteReplacement(nonceAttr);
+		String result = SCRIPT_TAG_PATTERN.matcher(output).replaceAll("$0" + replacement);
+		return STYLE_TAG_PATTERN.matcher(result).replaceAll("$0" + replacement);
 	}
+
+	/** Mints the per-request CSP nonce eagerly, if CSP with strict-dynamic is enabled;
+	 * does nothing otherwise.
+	 *
+	 * <p>The nonce is otherwise created lazily by the first call to
+	 * {@link #getCspNonceAttr}, which happens while the response is being written -- that
+	 * is, after the page has been composed. Page code that runs earlier would then read
+	 * nothing: an EL expression such as <code>${cspNonce}</code>, a composer, a ViewModel
+	 * or zscript. Invoke this method before composition, so that every phase sees the
+	 * same value the Content-Security-Policy header will carry.
+	 *
+	 * <p>It is idempotent: the nonce is minted once per execution and reused afterwards.
+	 * @see #getCspNonceAttr
+	 * @since 11.0.0
+	 */
+	public static final void prepareCspNonce() {
+		getCspNonceAttr(); //reuses its enable guard and error handling
+	}
+
+	/** Returns the CSP nonce attribute of the current request, i.e.,
+	 * <code> nonce="xxx"</code> -- with a leading space, so it may be appended right after
+	 * a tag name. An empty string is returned if CSP with strict-dynamic is not enabled,
+	 * or if there is no active Web application.
+	 *
+	 * <p>Use it to build the open tag of a <code>&lt;script&gt;</code> or a
+	 * <code>&lt;style&gt;</code> that is written into a buffer also carrying component
+	 * data. Unlike {@link #outCspNonceAttr}, it never scans markup, so a
+	 * <code>&lt;script</code> occurring inside application data cannot pick the nonce up.
+	 *
+	 * <p>The value is supplied by the configured
+	 * {@link org.zkoss.zk.ui.util.CspProvider} and HTML-attribute encoded here. If the
+	 * provider fails, an empty string is returned and a warning is logged once per
+	 * response.
+	 * @return the nonce attribute, or an empty string (never null)
+	 * @see #outCspNonceAttr
+	 * @see #prepareCspNonce
+	 * @since 11.0.0
+	 */
+	public static String getCspNonceAttr() {
+		final WebApp wapp = WebApps.getCurrent();
+		if (wapp == null) //called outside an active webapp (e.g. tooling); treat as no CSP
+			return "";
+		final Configuration config = wapp.getConfiguration();
+		if (!(config.isCspEnabled() && config.isCspStrictDynamicEnabled())) {
+			//strict-dynamic without the outer switch emits neither header nor nonce, and fails
+			//silently; check the final config, since either flag may be set from a WebAppInit
+			if (config.isCspStrictDynamicEnabled() && !_cspMisconfigLogged) {
+				_cspMisconfigLogged = true;
+				LoggerFactory.getLogger(HtmlPageRenders.class)
+						.warn("csp-strict-dynamic-enabled requires csp-enabled to be true; nonce will not be emitted.");
+			}
+			return "";
+		}
+		try {
+			final String nonce = config.getCspProvider().getCspNonce();
+			return " nonce=\"" + Encode.forHtmlAttribute(nonce) + "\"";
+		} catch (Exception e) {
+			// A provider failure ships a nonce-only header with un-nonced scripts, i.e. a
+			// blank page: never swallow it. Once per response — every open tag comes here.
+			final Execution exec = Executions.getCurrent();
+			if (exec == null || exec.getAttribute(ATTR_CSP_NONCE_ERROR_LOGGED) == null) {
+				if (exec != null)
+					exec.setAttribute(ATTR_CSP_NONCE_ERROR_LOGGED, Boolean.TRUE);
+				LoggerFactory.getLogger(HtmlPageRenders.class)
+						.warn("HtmlPageRenders.getCspNonceAttr(): CspProvider failed; nonce attribute omitted", e);
+			}
+			return "";
+		}
+	}
+
+	private static volatile boolean _cspMisconfigLogged;
 
 	/** Generates the SEO content for the given page.
 	 * Nothing is generated if the SEO content has been generated or it shall not be generated.
@@ -982,7 +1106,7 @@ public class HtmlPageRenders {
 				outDivTemplateEnd(comp.getPage(), out);
 			}
 
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">\n");
+			out.write(outCspNonceAttr("<script class=\"z-runonce\" type=\"text/javascript\">") + "\n");
 
 			// zkdh should run before zkmx()
 			WebApp webApp = WebApps.getCurrent();
@@ -1106,7 +1230,8 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null && exec.getAttribute(ATTR_DESKTOP_JS_GENED) == null) {
-			sb.append("<script class=\"z-runonce\" type=\"text/javascript\">\nzkdt('").append(desktop.getId())
+			sb.append(outCspNonceAttr("<script class=\"z-runonce\" type=\"text/javascript\">"))
+					.append("\nzkdt('").append(desktop.getId())
 					.append("','").append(Encode.forJavaScript(getContextURI(exec))).append("','").append(Encode.forJavaScript(desktop.getUpdateURI(null)))
 					.append("','").append(Encode.forJavaScript(desktop.getResourceURI(null)))
 					.append("','").append(Encode.forJavaScript(desktop.getRequestPath())).append("');").append(outSpecialJS(desktop))
@@ -1119,7 +1244,10 @@ public class HtmlPageRenders {
 			final Collection responses = execCtrl.getResponses();
 			if (responses != null && !responses.isEmpty()) {
 				execCtrl.setResponses(null);
-				sb.append("\n<script>zk.afterMount(function(){\n");
+				// Stamp the open tag only: the loop below appends response data, which
+				// Encode.forJavaScript leaves "<" untouched in, so scanning the whole
+				// buffer would splice the live nonce into a value holding "<script".
+				sb.append('\n').append(outCspNonceAttr("<script>")).append("zk.afterMount(function(){\n");
 				for (Iterator it = responses.iterator(); it.hasNext();) {
 					final AuResponse response = (AuResponse) it.next();
 					sb.append("zAu.process('").append(response.getCommand()).append("'");

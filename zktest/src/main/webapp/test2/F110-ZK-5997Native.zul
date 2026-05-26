@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page complete="true"?>
+<!--
+F110-ZK-5997Native.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 26 11:28:26 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:u="http://www.zkoss.org/2005/zul"
+	xmlns:zk="http://www.zkoss.org/2005/zk">
+	<head>
+		<title>F110-ZK-5997 native complete page</title>
+		<zkhead/>
+		<script type="text/javascript">
+			window.zkNativeScriptLoaded = true;
+		</script>
+	</head>
+	<body>
+		<u:label id="msg" value="native complete page"/>
+	</body>
+</html>

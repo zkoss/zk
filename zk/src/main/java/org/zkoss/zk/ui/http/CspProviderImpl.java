@@ -28,6 +28,9 @@ import org.zkoss.zk.ui.util.CspProvider;
  * @author peakerlee
  */
 public class CspProviderImpl implements CspProvider {
+    /** The execution attribute holding the per-request nonce. Renaming it silently turns
+     * every <code>${cspNonce}</code> expression into an empty string.
+     */
     private static final String ATTR_ZK_CSP_NONCE = "cspNonce";
     private static final Set<String> CSP_DIRECTIVE = Set.of(
         "default-src",
@@ -76,6 +79,15 @@ public class CspProviderImpl implements CspProvider {
             "'strict-dynamic'"
     );
 
+    /** Tokens {@link #DEFAULT_POLICY} carries for the non-strict fallback that strict-dynamic
+     * drops — the nonce already authorises every script ZK emits; kept only if the application
+     * listed the token itself in {@code <csp-policy>}.
+     * <p>{@code 'unsafe-eval'} is deliberately absent: ZK and EE still need {@code eval()}.
+     */
+    private static final Set<String> UNSAFE_SCRIPT_TOKENS = Set.of(
+            "'unsafe-inline'"
+    );
+
     public void setCspHeader(Execution exec, Configuration config) {
         boolean cspEnable = config.isCspEnabled(),
                 cspStrictDynamicEnabled = config.isCspStrictDynamicEnabled();
@@ -108,30 +120,35 @@ public class CspProviderImpl implements CspProvider {
     }
 
     private String convertHeader(String policy, boolean cspStrictDynamicEnabled, String cspReportURI) {
-        Map<String, Set<String>> cspMap = mergePolicies(policy);
-        StringBuilder cspHeader = generateHeader(cspMap, cspStrictDynamicEnabled);
+        Map<String, Set<String>> customMap = policy == null || policy.isBlank() ? Map.of()
+                : parsePolicyToMap(policy);
+        Map<String, Set<String>> cspMap = mergePolicies(customMap);
+        // tokens the application spelled out itself are kept as-is
+        StringBuilder cspHeader = generateHeader(cspMap, cspStrictDynamicEnabled,
+                customMap.getOrDefault("script-src", Set.of()));
         if (cspReportURI != null && !cspReportURI.isEmpty())
             cspHeader.append("report-uri ").append(cspReportURI).append("; ");
         return cspHeader.toString().trim();
     }
 
-    private Map<String, Set<String>> mergePolicies(String customPolicy) {
+    private Map<String, Set<String>> mergePolicies(Map<String, Set<String>> customMap) {
         Map<String, Set<String>> cspMap = parsePolicyToMap(DEFAULT_POLICY);
-        if (customPolicy != null && !customPolicy.isBlank()) {
-            Map<String, Set<String>> customMap = parsePolicyToMap(customPolicy);
-            for (Map.Entry<String, Set<String>> entry : customMap.entrySet()) {
-                cspMap.computeIfAbsent(entry.getKey(), k -> new LinkedHashSet<>())
-                        .addAll(entry.getValue());
-            }
+        for (Map.Entry<String, Set<String>> entry : customMap.entrySet()) {
+            cspMap.computeIfAbsent(entry.getKey(), k -> new LinkedHashSet<>())
+                    .addAll(entry.getValue());
         }
         return cspMap;
     }
 
-    private StringBuilder generateHeader(Map<String, Set<String>> cspMap, boolean cspStrictDynamicEnabled) {
+    private StringBuilder generateHeader(Map<String, Set<String>> cspMap, boolean cspStrictDynamicEnabled,
+            Set<String> requestedScriptTokens) {
         StringBuilder cspHeader = new StringBuilder();
         for (Map.Entry<String, Set<String>> entry : cspMap.entrySet()) {
             if ("script-src".equals(entry.getKey()) && cspStrictDynamicEnabled) {
                 Set<String> scriptValues = new LinkedHashSet<>(entry.getValue());
+                for (String unsafe : UNSAFE_SCRIPT_TOKENS)
+                    if (!requestedScriptTokens.contains(unsafe))
+                        scriptValues.remove(unsafe);
                 // ZK-6055: in dynamic mode need add unsafe-hashes and whitelist for javascript:void(0);
                 cspHeader.append(entry.getKey())
                         .append(" ")

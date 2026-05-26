@@ -390,6 +390,10 @@ public class HtmlNativeComponent extends AbstractComponent implements DynamicTag
 
 			if (tag != null) {
 				final String tn = tag.toLowerCase(java.util.Locale.ENGLISH);
+				//stamp the open tag here, never by scanning: the buffer carries application data.
+				//Skipped when the page wrote its own — a parser drops the second nonce attribute
+				if (("script".equals(tn) || "style".equals(tn)) && !hasNonce(props))
+					sb.append(HtmlPageRenders.getCspNonceAttr());
 				if ("zkhead".equals(tn) || HTMLs.isOrphanTag(tn))
 					sb.append('/');
 				sb.append('>');
@@ -408,6 +412,15 @@ public class HtmlNativeComponent extends AbstractComponent implements DynamicTag
 
 		public void appendText(StringBuffer sb, String text) {
 			sb.append(text); //don't encode (bug 2689443)
+		}
+
+		/** Returns whether the page supplied a nonce attribute itself (case-insensitively). */
+		private static boolean hasNonce(Map<String, Object> props) {
+			if (props != null)
+				for (String name : props.keySet())
+					if ("nonce".equalsIgnoreCase(name))
+						return true;
+			return false;
 		}
 	}
 

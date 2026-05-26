@@ -478,7 +478,14 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 			rc = PageRenderer.getTagRenderContext(exec);
 		}
 
-		out.write(getPrologHalf(false));
+		String prologHalf = getPrologHalf(false);
+		if (("script".equalsIgnoreCase(_tagnm) || "style".equalsIgnoreCase(_tagnm)) && !hasNonce(_props)) {
+			//insert after the tag name, never by scanning: the attribute values that follow are
+			//application data. Skipped when the tag has one — a parser drops the second nonce
+			final int at = 1 + _tagnm.length();
+			prologHalf = prologHalf.substring(0, at) + HtmlPageRenders.getCspNonceAttr() + prologHalf.substring(at);
+		}
+		out.write(prologHalf);
 		rc.renderBegin(this, getClientEvents(), getSpecialRendererOutput(this), false);
 
 		redrawChildrenDirectly(rc, exec, out);
@@ -523,6 +530,15 @@ public class AbstractTag extends AbstractComponent implements DynamicPropertied,
 		super.renderProperties(renderer);
 		render(renderer, "prolog", getPrologHalf(false));
 		render(renderer, "epilog", getEpilogHalf());
+	}
+
+	/** Returns whether this tag carries a nonce attribute of its own (case-insensitively). */
+	private static boolean hasNonce(Map<String, Object> props) {
+		if (props != null)
+			for (String name : props.keySet())
+				if ("nonce".equalsIgnoreCase(name))
+					return true;
+		return false;
 	}
 
 	/**
