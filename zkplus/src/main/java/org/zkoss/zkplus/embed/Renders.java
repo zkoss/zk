@@ -157,6 +157,10 @@ public class Renders {
 	 * A special page renderer that renders a page without generating
 	 * the HTML tag of the page.
 	 * In other words, it generates all components directly.
+	 * <p>The Content-Security-Policy header belongs to the embedding page, so this renderer
+	 * does not generate one. It stamps the nonce ZK holds for the current request, which is
+	 * available as <code>${cspNonce}</code>, on the script tags it generates; a host that
+	 * wants those scripts authorised has to carry that nonce in its own policy.
 	 * @author tomyeh
 	 * @since 5.0.4
 	 */
@@ -196,28 +200,33 @@ public class Renders {
 			}
 
 			final Desktop desktop = _exec.getDesktop();
-			out.write("<script class=\"z-runonce\" type=\"text/javascript\">zkpb('");
-			out.write(page.getUuid());
-			out.write("','");
-			out.write(desktop.getId());
-			out.write("','");
-			out.write(Encode.forJavaScript(getContextURI()));
-			out.write("','");
-			out.write(Encode.forJavaScript(desktop.getUpdateURI(null)));
-			out.write("','");
-			out.write(Encode.forJavaScript(desktop.getResourceURI(null)));
-			out.write("','");
-			out.write(Encode.forJavaScript(desktop.getRequestPath()));
-			out.write('\'');
+			final StringBuilder sb = new StringBuilder();
+			//getCspNonceAttr, not outCspNonceAttr: sb also carries page data
+			sb.append("<script class=\"z-runonce\" type=\"text/javascript\"")
+					.append(HtmlPageRenders.getCspNonceAttr()).append(">")
+					.append("zkpb('");
+			sb.append(page.getUuid());
+			sb.append("','");
+			sb.append(desktop.getId());
+			sb.append("','");
+			sb.append(Encode.forJavaScript(getContextURI()));
+			sb.append("','");
+			sb.append(Encode.forJavaScript(desktop.getUpdateURI(null)));
+			sb.append("','");
+			sb.append(Encode.forJavaScript(desktop.getResourceURI(null)));
+			sb.append("','");
+			sb.append(Encode.forJavaScript(desktop.getRequestPath()));
+			sb.append('\'');
 
 			String style = page.getStyle();
 			if (style != null && style.length() > 0) {
-				out.write(",{style:'");
-				out.write(style);
-				out.write("'}");
+				sb.append(",{style:'");
+				sb.append(style);
+				sb.append("'}");
 			}
 
-			out.write(");zkpe();</script>\n");
+			sb.append(");zkpe();</script>\n");
+			out.write(sb.toString());
 
 			for (Component root = page.getFirstRoot(); root != null; root = root.getNextSibling()) {
 				HtmlPageRenders.outStandalone(_exec, root, out);

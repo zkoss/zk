@@ -1,0 +1,24 @@
+<!--
+F110-ZK-5997.zhtml
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 26 11:28:26 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns:z="http://www.zkoss.org/2005/zul">
+<head>
+<title>F110-ZK-5997 zhtml page</title>
+<zkhead/>
+<script type="text/javascript">
+window.zkZhtmlScriptLoaded = true;
+</script>
+</head>
+<body>
+<z:label id="msg" value="zhtml page"/>
+</body>
+</html>

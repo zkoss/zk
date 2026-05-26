@@ -18,6 +18,8 @@ package org.zkoss.zul;
 
 import java.io.Writer;
 
+import org.owasp.encoder.Encode;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Desktop;
@@ -239,14 +241,18 @@ public class Script extends AbstractComponent {
 			final HtmlPageRenders.RenderContext rc = _defer ? null : HtmlPageRenders.getRenderContext(null);
 			if (rc != null && rc.perm != null) {
 				final Writer cwout = rc.perm;
-				cwout.write("\n<script id=\"");
+				//stamp the open tag here: the buffer also carries src/charset, so scanning is unsafe
+				cwout.write("\n<script");
+				cwout.write(HtmlPageRenders.getCspNonceAttr());
+				cwout.write(" id=\"");
 				cwout.write(getUuid());
 				cwout.write("\" type=\"text/javascript\" src=\"");
-				cwout.write(getEncodedSrcURL());
+				//hand-built attribute: an unencoded quote would close the tag and open a new one
+				cwout.write(Encode.forHtmlAttribute(getEncodedSrcURL()));
 				cwout.write('"');
 				if (_charset != null) {
 					cwout.write(" charset=\"");
-					cwout.write(_charset);
+					cwout.write(Encode.forHtmlAttribute(_charset));
 					cwout.write('"');
 				}
 				cwout.write(">\n</script>\n");

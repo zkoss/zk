@@ -9,6 +9,7 @@ ZK 11.0.0
   ZK-6065: Enable smooth scrolling for Frozen Grid on CE
   ZK-6099: Add skeleton attribute on existing components to PE
   ZK-6086: code editor
+  ZK-5997: Support Content Security Policy Without 'unsafe-inline'
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -136,6 +137,17 @@ ZK 11.0.0
   + --zk-searchbox-popup-background-color now defaults to --zk-popup-background-color instead of the
     inverse text color, so a dark palette paints the Searchbox popup like every other popup instead
     of white.
+  + ZK-5997: with <csp-enabled> and <csp-strict-dynamic-enabled> both true, every inline
+    <script> ZK emits now carries the per-request nonce -- including .zhtml pages, pages
+    declared complete, and native (<n:script>) content, which previously received no
+    Content-Security-Policy header at all. The emitted script-src no longer carries
+    'unsafe-inline'; listing it in <csp-policy> keeps it in the header text, but a browser
+    ignores 'unsafe-inline' whenever the directive also carries a nonce-source, so it cannot
+    re-enable unnonced inline script. Setting <csp-strict-dynamic-enabled> without
+    <csp-enabled> logs a WARN the first time a nonce would have been emitted.
+    'unsafe-eval' is still required and still emitted; removing it is tracked separately.
+    style-src likewise still requires 'unsafe-inline': components emit inline style attributes,
+    which a nonce cannot authorise.
 
    --------
 ZK 10.3.0

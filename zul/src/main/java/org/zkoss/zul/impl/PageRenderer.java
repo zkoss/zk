@@ -33,7 +33,6 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.PageCtrl;
-import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * The page render for ZUL pages.
@@ -48,6 +47,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		final Execution exec = Executions.getCurrent();
 		final String ctl = ExecutionsCtrl.getPageRedrawControl(exec);
 		boolean au = exec.isAsyncUpdate(null);
+		if (!au)
+			HtmlPageRenders.setCspHeader(exec, page); //before any output, and for every document we render
 		if (!au && (page.isComplete() || "complete".equals(ctl))) {
 			renderComplete(exec, page, out);
 			return;
@@ -67,9 +68,6 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 */
 	protected void renderDesktop(Execution exec, Page page, Writer out) throws IOException {
 		HtmlPageRenders.setContentType(exec, page);
-
-		Configuration config = page.getDesktop().getWebApp().getConfiguration();
-		config.getCspProvider().setCspHeader(exec, config);
 
 		final PageCtrl pageCtrl = (PageCtrl) page;
 		final String rootAttrs = pageCtrl.getRootAttributes();

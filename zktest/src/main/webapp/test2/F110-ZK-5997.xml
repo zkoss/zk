@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<zk>
+    <!-- for F110-ZK-5997: CSP strict-dynamic with nonce on all scripts -->
+    <listener>
+        <listener-class>org.zkoss.zkmax.au.websocket.WebSocketWebAppInit</listener-class>
+    </listener>
+    <language-addon>
+        <javascript>
+            window.zkLangAddonLoaded = true;
+        </javascript>
+    </language-addon>
+    <device-config>
+        <device-type>ajax</device-type>
+        <embed>
+            <![CDATA[
+				<script type="text/javascript">
+					window.zkEmbedScriptLoaded = true;
+				</script>
+            ]]>
+        </embed>
+    </device-config>
+    <!-- ZK-5997: makes the zkopt block non-empty so its assembly is exercised. -->
+    <library-property>
+        <name>org.zkoss.zul.progressbox.position</name>
+        <value>center, center</value>
+    </library-property>
+    <system-config>
+        <csp-enabled>true</csp-enabled>
+        <csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>
+    </system-config>
+</zk>

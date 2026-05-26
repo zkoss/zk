@@ -451,6 +451,9 @@ public class UiEngineImpl implements UiEngine {
 						}
 					}
 
+					//the CSP nonce must exist before anything on the page can read it
+					org.zkoss.zk.ui.sys.HtmlPageRenders.prepareCspNonce();
+
 					final Component[] comps;
 					final String uri = pagedef.getForwardURI(page);
 					if (uri != null) {
