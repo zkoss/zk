@@ -2,6 +2,7 @@ ZK 11.1.0
 * Features
   ZK-6250: Cropper: support cropping at the image's original (natural) resolution
   ZK-4927: markdown editor component
+  ZK-6106: Add Inputmask to PE
 
 * Bugs
   ZK-5623: NPE occurred in Stateless Tree with TreeModel when multiple-select mode is enabled
