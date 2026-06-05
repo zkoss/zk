@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202603251558">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202606150957">
 	<!--
 	SIMPLETYPE
 	-->
@@ -769,6 +769,7 @@
 			<xs:element ref="slider" />
 			<xs:element ref="sliderbuttons" />
 			<xs:element ref="space" />
+			<xs:element ref="speeddial" />
 			<xs:element ref="spinner" />
 			<xs:element ref="splitlayout" />
 			<xs:element ref="step" />
@@ -884,6 +885,7 @@
 				<xs:element ref="slider" />
 				<xs:element ref="sliderbuttons" />
 				<xs:element ref="space" />
+				<xs:element ref="speeddial" />
 				<xs:element ref="spinner" />
 				<xs:element ref="splitlayout" />
 				<xs:element ref="step" />
@@ -4428,6 +4430,86 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- speeddial -->
+	<xs:simpleType name="speeddialDirectionAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="up" />
+					<xs:enumeration value="down" />
+					<xs:enumeration value="left" />
+					<xs:enumeration value="right" />
+					<xs:enumeration value="up_left" />
+					<xs:enumeration value="up_right" />
+					<xs:enumeration value="down_left" />
+					<xs:enumeration value="down_right" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="speeddialTypeAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear" />
+					<xs:enumeration value="quarter_circle" />
+					<xs:enumeration value="semi_circle" />
+					<xs:enumeration value="circle" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="speeddialTriggerAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="click" />
+					<xs:enumeration value="hover" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:element name="speeddial" type="speeddialType" />
+	<xs:complexType name="speeddialType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="speeddialitem" />
+		</xs:choice>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
+		<xs:attribute name="closeIconSclass" type="xs:string" use="optional" />
+		<xs:attribute name="direction" type="speeddialDirectionAttrType" use="optional" />
+		<xs:attribute name="type" type="speeddialTypeAttrType" use="optional" />
+		<xs:attribute name="modal" type="booleanType" use="optional" />
+		<xs:attribute name="closeOnOutsideClick" type="booleanType" use="optional" />
+		<xs:attribute name="trigger" type="speeddialTriggerAttrType" use="optional" />
+		<xs:attribute name="autoClose" type="booleanType" use="optional" />
+		<xs:attribute name="transitionDelay" type="intType" use="optional" />
+		<xs:attribute name="open" type="booleanType" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="autoFlip" type="booleanType" use="optional" />
+		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- speeddialitem -->
+	<xs:element name="speeddialitem" type="speeddialitemType" />
+	<xs:complexType name="speeddialitemType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="href" type="xs:string" use="optional" />
+		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 </xs:schema>

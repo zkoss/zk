@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Speeddial"?>
+<?root-attributes lang="en"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+speeddial.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Jun 05 14:38:58 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: 1px dotted red !important;
+		}
+	]]></style>
+	<n:header>
+		<n:h1>Speeddial</n:h1>
+	</n:header>
+	<n:main>
+		<div style="position: relative; height: 260px; width: 260px;">
+			<speeddial id="dial" type="circle" iconSclass="z-icon-plus"
+					ca:aria-label="Quick actions">
+				<speeddialitem label="New file" iconSclass="z-icon-file" />
+				<speeddialitem label="Open folder" iconSclass="z-icon-folder-open" />
+				<speeddialitem label="Save" iconSclass="z-icon-save" />
+				<speeddialitem label="Delete" iconSclass="z-icon-trash" disabled="true" />
+			</speeddial>
+		</div>
+	</n:main>
+</zk>

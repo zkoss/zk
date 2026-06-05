@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6098-Speeddial.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 15 09:43:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<style>
+		/*
+		 * Test-harness CSS, Vuetify-style organisation.
+		 *
+		 * Speeddial defaults to `position: fixed; bottom: 24px; right: 24px;`
+		 * because its real-world role is a single page-anchored FAB. A gallery
+		 * page with 20+ dials would stack them all at the viewport corner, so
+		 * we scope each dial to its `.dial-host` wrapper:
+		 *
+		 *   1. The wrapper gets `position: relative; transform: translateZ(0);`
+		 *      — `transform` creates a containing block that `position: fixed`
+		 *      children must honour, effectively demoting them to scoped.
+		 *   2. The dial's position is overridden to `absolute` and anchored to
+		 *      a wrapper corner (-tl / -tr / -bl / -br / -center).
+		 *
+		 * This is fixture-only — it does NOT alter widget defaults.
+		 */
+		.dial-host {
+			position: relative;
+			transform: translateZ(0);
+			border: 1px dashed #cbd5e0;
+			background: #f8fafc;
+			box-sizing: border-box;
+		}
+		.dial-host .z-speeddial {
+			position: absolute;
+			top: auto;
+			left: auto;
+			bottom: 8px;
+			right: 8px;
+		}
+		.dial-host-tl .z-speeddial { top: 8px; left: 8px; bottom: auto; right: auto; }
+		.dial-host-tr .z-speeddial { top: 8px; right: 8px; bottom: auto; left: auto; }
+		.dial-host-bl .z-speeddial { bottom: 8px; left: 8px; top: auto; right: auto; }
+		.dial-host-br .z-speeddial { bottom: 8px; right: 8px; top: auto; left: auto; }
+		.dial-host-center .z-speeddial {
+			top: 50%; left: 50%; bottom: auto; right: auto;
+			transform: translate(-50%, -50%);
+		}
+		.section-title {
+			font-weight: 600;
+			margin-top: 12px;
+		}
+		.section-sub {
+			color: #4a5568;
+			font-size: 13px;
+			margin-bottom: 8px;
+		}
+	</style>
+
+	<label multiline="true">
+		ZK-6098 — Speeddial (PE) — design inspired by Vuetify v-speed-dial.
+
+		Sections:
+		1. Usage      — single dial, click FAB to open.
+		2. Direction  — items radiate FROM the FAB CENTER along 8 directions
+		                (4 cardinal + 4 diagonals).
+		3. Type       — linear / circle / semi_circle / quarter_circle layouts.
+		4. Position   — 4 corners + centre anchor.
+		5. Transition — stagger (transitionDelay), closeIconSclass swap.
+		6. Mask       — backdrop overlay closes on click.
+		7. Server     — setOpen() round-trip + onOpen log accumulator.
+		8. Edge cases — empty / single / many children, hidden, xss-label,
+		                disabled item, autoClose=false, closeOnOutsideClick.
+
+		FAB centering — items orbit the FAB *centre*, not its top-left corner.
+		The blue FAB should sit exactly at the radial origin of the fan-out.
+	</label>
+
+	<separator />
+	<label value="1. Usage — basic FAB" sclass="section-title" />
+	<label value="A single dial, default direction=up + type=linear. Click the blue FAB to open." sclass="section-sub" />
+	<div sclass="dial-host dial-host-center" style="height: 260px; width: 200px;">
+		<speeddial id="usageDial" type="linear" direction="up" iconSclass="z-icon-plus">
+			<speeddialitem id="usageItem1" label="New" iconSclass="z-icon-file" />
+			<speeddialitem id="usageItem2" label="Open" iconSclass="z-icon-folder-open" />
+			<speeddialitem id="usageItem3" label="Save" iconSclass="z-icon-save" />
+		</speeddial>
+	</div>
+
+	<separator />
+	<label value="2. Direction — 4 cardinal" sclass="section-title" />
+	<label value="Items radiate FROM the FAB centre along the requested axis." sclass="section-sub" />
+	<hbox spacing="20px" align="start">
+		<vbox>
+			<label value="up" />
+			<div sclass="dial-host dial-host-bl" style="height: 220px; width: 100px;">
+				<speeddial id="linUp" type="linear" direction="up">
+					<speeddialitem id="linUpItem1" label="A" />
+					<speeddialitem id="linUpItem2" label="B" />
+					<speeddialitem id="linUpItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="right" />
+			<div sclass="dial-host dial-host-tl" style="height: 100px; width: 220px;">
+				<speeddial id="linRight" type="linear" direction="right">
+					<speeddialitem id="linRightItem1" label="A" />
+					<speeddialitem id="linRightItem2" label="B" />
+					<speeddialitem id="linRightItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="down" />
+			<div sclass="dial-host dial-host-tl" style="height: 220px; width: 100px;">
+				<speeddial id="linDown" type="linear" direction="down">
+					<speeddialitem id="linDownItem1" label="A" />
+					<speeddialitem id="linDownItem2" label="B" />
+					<speeddialitem id="linDownItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="left" />
+			<div sclass="dial-host dial-host-tr" style="height: 100px; width: 220px;">
+				<speeddial id="linLeft" type="linear" direction="left">
+					<speeddialitem id="linLeftItem1" label="A" />
+					<speeddialitem id="linLeftItem2" label="B" />
+					<speeddialitem id="linLeftItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+	</hbox>
+	<label value="2b. Direction — 4 diagonals" sclass="section-title" />
+	<hbox spacing="20px" align="start">
+		<vbox>
+			<label value="up_left" />
+			<div sclass="dial-host dial-host-br" style="height: 220px; width: 220px;">
+				<speeddial id="linUpLeft" type="linear" direction="up_left">
+					<speeddialitem id="linUpLeftItem1" label="A" />
+					<speeddialitem id="linUpLeftItem2" label="B" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="up_right" />
+			<div sclass="dial-host dial-host-bl" style="height: 220px; width: 220px;">
+				<speeddial id="linUpRight" type="linear" direction="up_right">
+					<speeddialitem id="linUpRightItem1" label="A" />
+					<speeddialitem id="linUpRightItem2" label="B" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="down_left" />
+			<div sclass="dial-host dial-host-tr" style="height: 220px; width: 220px;">
+				<speeddial id="linDownLeft" type="linear" direction="down_left">
+					<speeddialitem id="linDownLeftItem1" label="A" />
+					<speeddialitem id="linDownLeftItem2" label="B" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="down_right" />
+			<div sclass="dial-host dial-host-tl" style="height: 220px; width: 220px;">
+				<speeddial id="linDownRight" type="linear" direction="down_right">
+					<speeddialitem id="linDownRightItem1" label="A" />
+					<speeddialitem id="linDownRightItem2" label="B" />
+				</speeddial>
+			</div>
+		</vbox>
+	</hbox>
+
+	<separator />
+	<label value="3. Type — linear / circle / semi_circle / quarter_circle" sclass="section-title" />
+	<hbox spacing="20px" align="start">
+		<vbox>
+			<label value="circle (radial, full 360°)" />
+			<div sclass="dial-host dial-host-center" style="height: 220px; width: 220px;">
+				<speeddial id="typeCircle" type="circle">
+					<speeddialitem id="tcItem1" label="A" />
+					<speeddialitem id="tcItem2" label="B" />
+					<speeddialitem id="tcItem3" label="C" />
+					<speeddialitem id="tcItem4" label="D" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="semi_circle / down (180° arc)" />
+			<div sclass="dial-host dial-host-tl" style="height: 220px; width: 220px;">
+				<speeddial id="semiDown" type="semi_circle" direction="down">
+					<speeddialitem id="semiDownItem1" label="A" />
+					<speeddialitem id="semiDownItem2" label="B" />
+					<speeddialitem id="semiDownItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="semi_circle / up" />
+			<div sclass="dial-host dial-host-bl" style="height: 220px; width: 220px;">
+				<speeddial id="semiUp" type="semi_circle" direction="up">
+					<speeddialitem id="semiUpItem1" label="A" />
+					<speeddialitem id="semiUpItem2" label="B" />
+					<speeddialitem id="semiUpItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="semi_circle / right" />
+			<div sclass="dial-host dial-host-tl" style="height: 220px; width: 220px;">
+				<speeddial id="semiRight" type="semi_circle" direction="right">
+					<speeddialitem id="semiRightItem1" label="A" />
+					<speeddialitem id="semiRightItem2" label="B" />
+					<speeddialitem id="semiRightItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="semi_circle / left" />
+			<div sclass="dial-host dial-host-tr" style="height: 220px; width: 220px;">
+				<speeddial id="semiLeft" type="semi_circle" direction="left">
+					<speeddialitem id="semiLeftItem1" label="A" />
+					<speeddialitem id="semiLeftItem2" label="B" />
+					<speeddialitem id="semiLeftItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+	</hbox>
+	<label value="3b. quarter_circle — 4 diagonals (90° arc)" sclass="section-title" />
+	<hbox spacing="20px" align="start">
+		<vbox>
+			<label value="down_right" />
+			<div sclass="dial-host dial-host-tl" style="height: 220px; width: 220px;">
+				<speeddial id="quarterDownRight" type="quarter_circle" direction="down_right">
+					<speeddialitem id="qDownRightItem1" label="A" />
+					<speeddialitem id="qDownRightItem2" label="B" />
+					<speeddialitem id="qDownRightItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="down_left" />
+			<div sclass="dial-host dial-host-tr" style="height: 220px; width: 220px;">
+				<speeddial id="quarterDownLeft" type="quarter_circle" direction="down_left">
+					<speeddialitem id="qDownLeftItem1" label="A" />
+					<speeddialitem id="qDownLeftItem2" label="B" />
+					<speeddialitem id="qDownLeftItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="up_right" />
+			<div sclass="dial-host dial-host-bl" style="height: 220px; width: 220px;">
+				<speeddial id="quarterUpRight" type="quarter_circle" direction="up_right">
+					<speeddialitem id="qUpRightItem1" label="A" />
+					<speeddialitem id="qUpRightItem2" label="B" />
+					<speeddialitem id="qUpRightItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="up_left" />
+			<div sclass="dial-host dial-host-br" style="height: 220px; width: 220px;">
+				<speeddial id="quarterUpLeft" type="quarter_circle" direction="up_left">
+					<speeddialitem id="qUpLeftItem1" label="A" />
+					<speeddialitem id="qUpLeftItem2" label="B" />
+					<speeddialitem id="qUpLeftItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+	</hbox>
+
+	<separator />
+	<label value="4. Position — 4 corners + centre anchor" sclass="section-title" />
+	<label value="Each .dial-host* anchor pins the dial to a wrapper corner, then the dial fans toward its centre." sclass="section-sub" />
+	<hbox spacing="20px" align="start">
+		<div sclass="dial-host dial-host-tl" style="height: 220px; width: 220px;">
+			<speeddial id="anchorTL" type="linear" direction="down_right">
+				<speeddialitem id="anchorTLItem1" label="A" />
+				<speeddialitem id="anchorTLItem2" label="B" />
+			</speeddial>
+		</div>
+		<div sclass="dial-host dial-host-tr" style="height: 220px; width: 220px;">
+			<speeddial id="anchorTR" type="linear" direction="down_left">
+				<speeddialitem id="anchorTRItem1" label="A" />
+				<speeddialitem id="anchorTRItem2" label="B" />
+			</speeddial>
+		</div>
+		<div sclass="dial-host dial-host-bl" style="height: 220px; width: 220px;">
+			<speeddial id="anchorBL" type="linear" direction="up_right">
+				<speeddialitem id="anchorBLItem1" label="A" />
+				<speeddialitem id="anchorBLItem2" label="B" />
+			</speeddial>
+		</div>
+		<div sclass="dial-host dial-host-br" style="height: 220px; width: 220px;">
+			<speeddial id="anchorBR" type="linear" direction="up_left">
+				<speeddialitem id="anchorBRItem1" label="A" />
+				<speeddialitem id="anchorBRItem2" label="B" />
+			</speeddial>
+		</div>
+		<div sclass="dial-host dial-host-center" style="height: 220px; width: 220px;">
+			<speeddial id="anchorCenter" type="circle">
+				<speeddialitem id="anchorCenterItem1" label="A" />
+				<speeddialitem id="anchorCenterItem2" label="B" />
+				<speeddialitem id="anchorCenterItem3" label="C" />
+				<speeddialitem id="anchorCenterItem4" label="D" />
+			</speeddial>
+		</div>
+	</hbox>
+
+	<separator />
+	<label value="5. Transition — stagger, icon swap" sclass="section-title" />
+	<hbox spacing="20px" align="start">
+		<vbox>
+			<label value="transitionDelay=200 (stagger style applied to each li)" />
+			<div sclass="dial-host dial-host-bl" style="height: 200px; width: 200px;">
+				<speeddial id="delayDial" type="linear" direction="up" transitionDelay="200">
+					<speeddialitem id="delayItem1" label="A" />
+					<speeddialitem id="delayItem2" label="B" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="closeIconSclass — icon crossfade on open" />
+			<div sclass="dial-host dial-host-bl" style="height: 200px; width: 200px;">
+				<speeddial id="closeIconDial" type="linear" direction="up"
+						iconSclass="z-icon-plus" closeIconSclass="z-icon-times">
+					<speeddialitem id="closeIconItem1" label="One" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="disabled — click/keyboard/hover all ignored" />
+			<div sclass="dial-host dial-host-bl" style="height: 200px; width: 200px;">
+				<speeddial id="disabledDial" type="linear" direction="up" disabled="true">
+					<speeddialitem id="disabledDialItem1" label="A" />
+				</speeddial>
+			</div>
+			<button id="enableDialBtn" label="setDisabled(false)"
+					onClick='disabledDial.setDisabled(false)' />
+			<button id="forceOpenDisabledBtn" label="setOpen(true) on disabled"
+					onClick='disabledDial.setOpen(true)' />
+		</vbox>
+		<vbox>
+			<label value="autoFlip — direction=up near top viewport → flips down" />
+			<!-- This wrapper is fixed at the top of the viewport so direction=up
+			     items would render above the screen. autoFlip=true should flip
+			     to down. -->
+			<div sclass="dial-host" style="position: fixed; top: 4px; left: 50%;
+					transform: translateX(-50%); height: 80px; width: 80px; z-index: 200;">
+				<speeddial id="autoFlipDial" type="linear" direction="up" autoFlip="true">
+					<speeddialitem id="autoFlipItem1" label="A" />
+					<speeddialitem id="autoFlipItem2" label="B" />
+				</speeddial>
+			</div>
+			<!-- Control dial: same setup but autoFlip=false. Should remain up
+			     (and overflow the viewport). -->
+			<div sclass="dial-host" style="position: fixed; top: 4px; left: 75%;
+					transform: translateX(-50%); height: 80px; width: 80px; z-index: 200;">
+				<speeddial id="noFlipDial" type="linear" direction="up">
+					<speeddialitem id="noFlipItem1" label="A" />
+					<speeddialitem id="noFlipItem2" label="B" />
+				</speeddial>
+			</div>
+		</vbox>
+	</hbox>
+
+	<separator />
+	<label value="6. Mask — backdrop overlay (modal=true)" sclass="section-title" />
+	<label value="With modal=true the trigger=hover declaration is coerced to click. Clicking the modal overlay also closes the dial." sclass="section-sub" />
+	<div sclass="dial-host dial-host-bl" style="height: 220px; width: 220px;">
+		<speeddial id="quarterDial" type="quarter_circle" direction="up_right"
+				modal="true" trigger="hover">
+			<speeddialitem id="quarterItem1" label="Edit" />
+			<speeddialitem id="quarterItem2" label="Share" />
+			<speeddialitem id="quarterItem3" label="Archive" />
+		</speeddial>
+	</div>
+
+	<separator />
+	<label value="7. Server — setOpen() round-trip + onOpen log" sclass="section-title" />
+	<div sclass="dial-host dial-host-center" style="height: 220px; width: 220px;">
+		<speeddial id="circleDial" type="circle" iconSclass="z-icon-plus"
+				onOpen='openLog.setValue(openLog.getValue() + (event.isOpen() ? "open;" : "close;"))'>
+			<speeddialitem id="circleItem1" label="New" iconSclass="z-icon-file" />
+			<speeddialitem id="circleItem2" label="Open" iconSclass="z-icon-folder-open" />
+			<speeddialitem id="circleItem3" label="Save" iconSclass="z-icon-save" />
+			<speeddialitem id="circleItem4" label="Delete" iconSclass="z-icon-trash" disabled="true" />
+		</speeddial>
+	</div>
+	<hbox spacing="20px" align="center">
+		<button id="serverOpenBtn" label="server open" onClick='circleDial.setOpen(true)' />
+		<button id="serverCloseBtn" label="server close" onClick='circleDial.setOpen(false)' />
+		<button id="serverDisableBtn" label="server setDisabled(true)" onClick='circleDial.setDisabled(true)' />
+		<button id="serverEnableBtn" label="server setDisabled(false)" onClick='circleDial.setDisabled(false)' />
+		<label id="openLog" value="" />
+	</hbox>
+
+	<separator />
+	<label value="8. Edge cases" sclass="section-title" />
+	<hbox spacing="20px" align="start">
+		<vbox>
+			<label value="autoClose=false (stays open after item click)" />
+			<div sclass="dial-host dial-host-center" style="height: 200px; width: 200px;">
+				<speeddial id="autoCloseFalseDial" type="circle" autoClose="false">
+					<speeddialitem id="cosfItem1" label="Cut" />
+					<speeddialitem id="cosfItem2" label="Copy" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="autoClose=true (default — item click closes)" />
+			<div sclass="dial-host dial-host-center" style="height: 200px; width: 200px;">
+				<speeddial id="cosTrueDial" type="circle">
+					<speeddialitem id="cosTrueItem1" label="Cut" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="zclass override — z-mydial-test (no z-speeddial)" />
+			<div sclass="dial-host dial-host-tl" style="height: 200px; width: 200px;">
+				<speeddial id="zclassDial" type="linear" zclass="z-mydial-test">
+					<speeddialitem id="zclassItem" label="Item" />
+				</speeddial>
+			</div>
+		</vbox>
+	</hbox>
+	<hbox spacing="20px" align="start">
+		<vbox>
+			<label value="closeOnOutsideClick=true (default — outside click closes)" />
+			<div sclass="dial-host dial-host-bl" style="height: 200px; width: 200px;">
+				<speeddial id="hocoTrueDial" type="linear" direction="up">
+					<speeddialitem id="hocoTrueItem1" label="A" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="closeOnOutsideClick=false — outside click ignored" />
+			<div sclass="dial-host dial-host-bl" style="height: 200px; width: 200px;">
+				<speeddial id="hocoFalseDial" type="linear" direction="up"
+						closeOnOutsideClick="false">
+					<speeddialitem id="hocoFalseItem1" label="A" />
+				</speeddial>
+			</div>
+			<button id="outsideAnchor" label="outside" />
+		</vbox>
+	</hbox>
+	<hbox spacing="20px" align="start">
+		<vbox>
+			<label value="empty" />
+			<div sclass="dial-host dial-host-tl" style="height: 100px; width: 80px;">
+				<speeddial id="emptyDial" type="linear" />
+			</div>
+		</vbox>
+		<vbox>
+			<label value="single child" />
+			<div sclass="dial-host dial-host-tl" style="height: 100px; width: 80px;">
+				<speeddial id="singleDial" type="linear">
+					<speeddialitem id="onlyItem" label="Only" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="many (10) — linear up" />
+			<div sclass="dial-host dial-host-bl" style="height: 580px; width: 80px;">
+				<speeddial id="manyDial" type="linear">
+					<speeddialitem id="m1" label="1" />
+					<speeddialitem id="m2" label="2" />
+					<speeddialitem id="m3" label="3" />
+					<speeddialitem id="m4" label="4" />
+					<speeddialitem id="m5" label="5" />
+					<speeddialitem id="m6" label="6" />
+					<speeddialitem id="m7" label="7" />
+					<speeddialitem id="m8" label="8" />
+					<speeddialitem id="m9" label="9" />
+					<speeddialitem id="m10" label="10" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="visible=false (no layout)" />
+			<div sclass="dial-host dial-host-tl" style="height: 100px; width: 80px;">
+				<speeddial id="hiddenDial" type="linear" visible="false">
+					<speeddialitem id="hiddenItem" label="Hidden" />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="xss label (must escape)" />
+			<div sclass="dial-host dial-host-tl" style="height: 100px; width: 80px;">
+				<!-- A label with HTML payload; if not escaped the &lt;img onerror&gt;
+				     would set window._xssFired=true on render. -->
+				<speeddial id="xssDial" type="linear">
+					<speeddialitem id="xssItem"
+							label='&lt;img src=x onerror=window._xssFired=true&gt;' />
+				</speeddial>
+			</div>
+		</vbox>
+		<vbox>
+			<label value="href / target — item renders as &lt;a&gt;" />
+			<div sclass="dial-host dial-host-tl" style="height: 200px; width: 200px;">
+				<speeddial id="hrefDial" type="linear" direction="down">
+					<speeddialitem id="hrefItemAnchor" label="Docs"
+							href="https://www.zkoss.org/" target="_blank" />
+					<speeddialitem id="hrefItemTarget" label="Self"
+							href="#hrefDial-self" />
+					<speeddialitem id="hrefItemPlainButton" label="Plain" />
+					<speeddialitem id="hrefItemDisabled" label="Disabled"
+							href="https://www.zkoss.org/" disabled="true" />
+				</speeddial>
+			</div>
+			<button id="hrefDisableAnchorBtn" label="disable hrefItemAnchor"
+					onClick='hrefItemAnchor.setDisabled(true)' />
+		</vbox>
+		<vbox>
+			<label value="arrow nav must skip a disabled middle item" />
+			<div sclass="dial-host dial-host-tl" style="height: 200px; width: 200px;">
+				<speeddial id="arrowSkipDial" type="linear" direction="down">
+					<speeddialitem id="arrowSkipItem1" label="A" />
+					<speeddialitem id="arrowSkipItem2" label="B" disabled="true" />
+					<speeddialitem id="arrowSkipItem3" label="C" />
+				</speeddial>
+			</div>
+		</vbox>
+	</hbox>
+
+	<separator />
+	<label value="9. Runtime type/direction change — coercion must reach the client (ZK-6098 M1-R)" sclass="section-title" />
+	<label value="Changing type/direction at runtime must push the COERCED direction so the client never lays out an incompatible (type,direction) pair that a full render would never emit." sclass="section-sub" />
+	<div sclass="dial-host dial-host-center" style="height: 220px; width: 220px;">
+		<speeddial id="runtimeDial" type="linear" direction="up">
+			<speeddialitem id="rtItem1" label="A" />
+			<speeddialitem id="rtItem2" label="B" />
+		</speeddial>
+	</div>
+	<hbox spacing="20px" align="center">
+		<button id="rtSetQuarterBtn" label="setType(quarter_circle)"
+				onClick='runtimeDial.setType("quarter_circle")' />
+		<button id="rtSetDownBtn" label="setDirection(down)"
+				onClick='runtimeDial.setDirection("down")' />
+		<button id="rtSetLinearBtn" label="setType(linear)"
+				onClick='runtimeDial.setType("linear")' />
+	</hbox>
+
+	<separator />
+	<label value="10. A Speeddialitem onClick must fire exactly once per click (ZK-6098 H1)" sclass="section-title" />
+	<label value="The item's doClick_ must suppress the base re-fire; each click appends one 'x' to the label below, so a double-fire would show 'xx'." sclass="section-sub" />
+	<div sclass="dial-host dial-host-center" style="height: 220px; width: 220px;">
+		<speeddial id="clickCountDial" type="linear" direction="down" open="true" autoClose="false">
+			<speeddialitem id="clickCountItem" label="Click me"
+					onClick='clickCountLabel.setValue(clickCountLabel.getValue() + "x")' />
+		</speeddial>
+	</div>
+	<label id="clickCountLabel" value="" />
+
+	<separator />
+	<label value="11. Coverage-gap fixtures (image, relative href, hover, MVVM, runtime setters, toggle, multi-dial)" sclass="section-title" />
+
+	<!-- #1 image attribute renders an &lt;img&gt; -->
+	<div sclass="dial-host dial-host-center" style="height: 200px; width: 200px;">
+		<speeddial id="imgDial" type="linear" direction="up" open="true">
+			<speeddialitem id="imgItem" label="Pic" image="~./img/test.png" />
+		</speeddial>
+	</div>
+
+	<!-- #2 relative href must be run through execution encodeURL (~./ resolved) -->
+	<div sclass="dial-host dial-host-center" style="height: 200px; width: 200px;">
+		<speeddial id="relHrefDial" type="linear" direction="down" open="true">
+			<speeddialitem id="relHrefItem" label="Rel" href="~./img/test.png" />
+		</speeddial>
+	</div>
+
+	<!-- #3 genuine hover trigger (no modal, so NOT coerced to click) -->
+	<div sclass="dial-host dial-host-center" style="height: 240px; width: 240px;">
+		<speeddial id="hoverDial" type="linear" direction="up" trigger="hover">
+			<speeddialitem id="hoverItem1" label="A" />
+			<speeddialitem id="hoverItem2" label="B" />
+		</speeddial>
+	</div>
+	<button id="hoverAwayBtn" label="away" />
+
+	<!-- #5 MVVM: two-way open binding + onOpen command counter -->
+	<vbox apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.zats.zuti.vm.Speeddial6098VM')">
+		<label id="mvvmOpenLabel" value="@load(vm.open)" />
+		<label id="mvvmCmdLabel" value="@load(vm.toggledCount)" />
+		<div sclass="dial-host dial-host-center" style="height: 200px; width: 200px;">
+			<speeddial id="mvvmDial" open="@bind(vm.open)" onOpen="@command('toggled')">
+				<speeddialitem id="mvvmItem" label="X" />
+			</speeddial>
+		</div>
+	</vbox>
+
+	<!-- #8/#9 runtime setters + toggle (operate on runtimeDial from section 9) -->
+	<hbox>
+		<button id="rtSetModalBtn" label="setModal(true)" onClick='runtimeDial.setModal(true)' />
+		<button id="rtSetIconBtn" label="setIconSclass" onClick='runtimeDial.setIconSclass("z-icon-bars")' />
+		<button id="rtSetDelayBtn" label="setTransitionDelay(500)" onClick='runtimeDial.setTransitionDelay(500)' />
+		<button id="rtSetAutoFlipBtn" label="setAutoFlip(true)" onClick='runtimeDial.setAutoFlip(true)' />
+		<button id="rtSetTriggerBtn" label="setTrigger(hover)" onClick='runtimeDial.setTrigger("hover")' />
+	</hbox>
+
+	<!-- #9 toggle(): closeOnOutsideClick=false so the external button click does NOT
+	     trigger the outside-click close that would otherwise race with toggle() -->
+	<div sclass="dial-host dial-host-center" style="height: 200px; width: 200px;">
+		<speeddial id="toggleDial" type="linear" direction="up" closeOnOutsideClick="false">
+			<speeddialitem id="toggleItem" label="T" />
+		</speeddial>
+	</div>
+	<button id="toggleBtn" label="toggle()" onClick='toggleDial.toggle()' />
+
+	<!-- #10 two dials open at once (multi-dial coexistence) -->
+	<div sclass="dial-host dial-host-center" style="height: 200px; width: 200px;">
+		<speeddial id="multiA" type="linear" direction="up" open="true">
+			<speeddialitem id="multiAItem" label="A" />
+		</speeddial>
+	</div>
+	<div sclass="dial-host dial-host-center" style="height: 200px; width: 200px;">
+		<speeddial id="multiB" type="linear" direction="up" open="true">
+			<speeddialitem id="multiBItem" label="B" />
+		</speeddial>
+	</div>
+</zk>
