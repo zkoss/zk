@@ -10,6 +10,7 @@ ZK 11.0.0
   ZK-6099: Add skeleton attribute on existing components to PE
   ZK-6086: code editor
   ZK-5997: Support Content Security Policy Without 'unsafe-inline'
+  ZK-6098: Add Speeddial to PE
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
