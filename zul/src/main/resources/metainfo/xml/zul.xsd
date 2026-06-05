@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202603251558">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202606121727">
 	<!--
 	SIMPLETYPE
 	-->
@@ -737,6 +737,7 @@
 			<xs:element ref="imagemap" />
 			<xs:element ref="include" />
 			<xs:element ref="inputgroup" />
+			<xs:element ref="inputmask" />
 			<xs:element ref="intbox" />
 			<xs:element ref="label" />
 			<xs:element ref="linelayout" />
@@ -852,6 +853,7 @@
 				<xs:element ref="imagemap" />
 				<xs:element ref="include" />
 				<xs:element ref="inputgroup" />
+				<xs:element ref="inputmask" />
 				<xs:element ref="intbox" />
 				<xs:element ref="label" />
 				<xs:element ref="linelayout" />
@@ -4429,5 +4431,24 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attributeGroup ref="rootAttrGroup" />
+	</xs:complexType>
+	<!-- inputmask -->
+	<xs:element name="inputmask" type="inputmaskType" />
+	<xs:complexType name="inputmaskType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="inputElementAttrGroup" />
+		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="mask" type="xs:string" use="optional" />
+		<xs:attribute name="placeholderChar" type="xs:string" use="optional" />
+		<xs:attribute name="autoClear" type="booleanType" use="optional" />
+		<xs:attribute name="unmask" type="booleanType" use="optional" />
+		<xs:attribute name="announceProgress" type="booleanType" use="optional" />
+		<xs:attribute name="tabbable" type="booleanType" use="optional" />
+		<xs:attribute name="submitByEnter" type="booleanType" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attribute name="errorMessage" type="xs:string" use="optional" />
+		<xs:attribute name="errorboxSclass" type="xs:string" use="optional" />
+		<xs:attribute name="errorboxIconSclass" type="xs:string" use="optional" />
 	</xs:complexType>
 </xs:schema>
