@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6106.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri May 15 14:16:49 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6106 — Inputmask (PE)
+
+		Inputmask section:
+		1. phoneMask "9999-999-9999" — typing "0912345678" → "0912-345-678_".
+		2. lettersMask "aa-99" — letters then digits → "ab-12"; digit at first slot is rejected.
+		3. anyMask "***-***" + unmask=true + instant=true — instant onChange per slot.
+		4. literalMask "\\99" — renders literal '9' then a digit slot.
+		5. autoClearMask — partial fill + blur clears; onChange fires only
+		   when a previously committed value is actually cleared.
+		6. announceMask announceProgress=true — aria-live region present.
+		7. slotCharMask placeholderChar="X" — custom placeholder character.
+		8. readonlyMask / disabledMask — HTML attributes propagate.
+		9. valueMask + setValue("1234") — server-side setter round-trip.
+		10. anyCharsMask — `*` (any) token accepts alphanumeric only (rejects symbols).
+		    optMask "(999) 999-9999[ x999]" — optional [ ] section hidden until typed.
+		11. constraintMask constraint="no empty" — onError fires on blur of empty.
+		12. backspaceMask — Backspace clears the previous slot.
+		13. trailingLiteralMask "(999)" — complete fill commits the trailing literal.
+		14. instantDigitMask — instant + rejected char must not break the caret.
+		15. readonlyValueMask — readonly value survives Backspace/paste.
+		16. unmaskValueMask — unmask=true tolerates an already-formatted setValue.
+	</label>
+	<!-- Force load of zul.inp package: zkex.inp.Inputmask extends zul.inp.Textbox,
+	     but zkex.inp.wpd does declare zul.inp as a dependency now; keep the
+	     hidden textbox as a safety belt against future package-loading regressions. -->
+	<textbox visible="false" />
+
+	<separator />
+	<label value="Visual parity reference — the Inputmask below must look identical to this Intbox / Textbox." />
+	<hbox spacing="8px" align="center">
+		<label value="Textbox:" />
+		<textbox id="referenceTextbox" value="ref" />
+		<label value="Intbox:" />
+		<intbox id="referenceIntbox" value="123" />
+		<label value="Inputmask:" />
+		<inputmask id="referenceInputmask" mask="9999" />
+	</hbox>
+
+	<separator />
+	<grid hflex="min">
+		<columns>
+			<column label="Mask" width="260px" />
+			<column label="Inputmask" />
+			<column label="Log" width="260px" />
+		</columns>
+		<rows>
+			<row>
+				<label value="phone — 9999-999-9999" />
+				<inputmask id="phoneMask" mask="9999-999-9999" placeholder="phone" />
+				<label />
+			</row>
+			<row>
+				<label value="letters then digits — aa-99" />
+				<inputmask id="lettersMask" mask="aa-99" />
+				<label />
+			</row>
+			<row>
+				<label value="any + unmask + instant — ***-***" />
+				<inputmask id="anyMask" mask="***-***" unmask="true" instant="true"
+						onChange='instantLog.setValue(instantLog.getValue() + ":" + self.getValue())' />
+				<label id="instantLog" value="" />
+			</row>
+			<row>
+				<label value="literal '9' then digit — \\99" />
+				<inputmask id="literalMask" mask="\\99" />
+				<label />
+			</row>
+			<row>
+				<label value="autoClear=true (default) — partial fill + blur" />
+				<inputmask id="autoClearMask" mask="9999"
+						onChange='clearLog.setValue("change:" + (self.getValue() == null ? "null" : self.getValue()))' />
+				<label id="clearLog" value="" />
+			</row>
+			<row>
+				<label value="announceProgress=true" />
+				<inputmask id="announceMask" mask="9999" announceProgress="true" />
+				<label />
+			</row>
+			<row>
+				<label value='placeholderChar="X" (breadth: custom slot char)' />
+				<inputmask id="slotCharMask" mask="9999" placeholderChar="X" />
+				<label />
+			</row>
+			<row>
+				<label value="readonly=true" />
+				<inputmask id="readonlyMask" mask="9999" readonly="true" />
+				<label />
+			</row>
+			<row>
+				<label value="disabled=true" />
+				<inputmask id="disabledMask" mask="9999" disabled="true" />
+				<label />
+			</row>
+			<row>
+				<label value='setValue("1234") round-trip' />
+				<inputmask id="valueMask" mask="9999" />
+				<button id="valueSetBtn" label="setValue('1234')"
+						onClick='valueMask.setValue("1234")' />
+			</row>
+			<row>
+				<label value="* (any) accepts alphanumeric, rejects symbols" />
+				<inputmask id="anyCharsMask" mask="***" />
+				<label />
+			</row>
+			<row>
+				<label value="optional section — (999) 999-9999[ x999]" />
+				<inputmask id="optMask" mask="(999) 999-9999[ x999]"
+						onChange='optLog.setValue("change:" + self.getValue())' />
+				<label id="optLog" value="" />
+			</row>
+			<row>
+				<label value='constraint="no empty" — server error on blur empty' />
+				<inputmask id="constraintMask" mask="9999" constraint="no empty"
+						onError='constraintLog.setValue("error:" + event.getMessage())' />
+				<label id="constraintLog" value="" />
+			</row>
+			<row>
+				<label value="backspace clears slot" />
+				<inputmask id="backspaceMask" mask="9999" />
+				<label />
+			</row>
+			<row>
+				<label value="edge: empty mask (no constraint)" />
+				<inputmask id="emptyMask" mask="" />
+				<label />
+			</row>
+			<row>
+				<label value="edge: literal-only mask '---' (no slots)" />
+				<inputmask id="literalOnlyMask" mask="---" />
+				<label />
+			</row>
+			<row>
+				<label value="edge: long mask (30 digit slots)" />
+				<inputmask id="longMask" mask="999-999-999-999-999-999-999-999-99" />
+				<label />
+			</row>
+			<row>
+				<label value="isolation A — siblings must not cross-contaminate" />
+				<inputmask id="isolationA" mask="9999" />
+				<label />
+			</row>
+			<row>
+				<label value="isolation B" />
+				<inputmask id="isolationB" mask="aaaa" />
+				<label />
+			</row>
+			<row>
+				<label value="setValue edge cases — partial / invalid / over-length" />
+				<inputmask id="edgeValueMask" mask="9999" />
+				<hbox>
+					<button id="setPartialBtn" label='setValue("12")'
+							onClick='edgeValueMask.setValue("12")' />
+					<button id="setInvalidBtn" label='setValue("abcd")'
+							onClick='edgeValueMask.setValue("abcd")' />
+					<button id="setOverBtn" label='setValue("12345")'
+							onClick='edgeValueMask.setValue("12345")' />
+					<button id="setNullBtn" label='setValue(null)'
+							onClick='edgeValueMask.setValue(null)' />
+				</hbox>
+			</row>
+			<row>
+				<label value="paste pipeline (real ClipboardEvent)" />
+				<inputmask id="pasteMask" mask="9999-9999" />
+				<label />
+			</row>
+			<row>
+				<label value="RTL — direction:rtl style" />
+				<inputmask id="rtlMask" mask="9999" style="direction: rtl;" />
+				<label />
+			</row>
+			<row>
+				<label value="trailing literal — (999)" />
+				<inputmask id="trailingLiteralMask" mask="(999)"
+						onChange='trailingLog.setValue("change:" + self.getValue())' />
+				<label id="trailingLog" value="" />
+			</row>
+			<row>
+				<label value="instant + digit mask — rejected char keeps caret usable" />
+				<inputmask id="instantDigitMask" mask="9999" instant="true"
+						onChange='instantDigitLog.setValue(instantDigitLog.getValue() + ":" + self.getValue())' />
+				<label id="instantDigitLog" value="" />
+			</row>
+			<row>
+				<label value="readonly with committed value" />
+				<inputmask id="readonlyValueMask" mask="9999" readonly="true" value="1234"
+						onChange='readonlyLog.setValue("change:" + self.getValue())' />
+				<label id="readonlyLog" value="" />
+			</row>
+			<row>
+				<label value="unmask=true + already-formatted setValue" />
+				<inputmask id="unmaskValueMask" mask="9999-999-9999" unmask="true" />
+				<button id="unmaskSetMaskedBtn" label='setValue("0912-345-6789")'
+						onClick='unmaskValueMask.setValue("0912-345-6789")' />
+			</row>
+			<row>
+				<label value="runtime setMask remap — old value refits the new grid" />
+				<inputmask id="remaskMask" mask="99-99" />
+				<button id="remaskBtn" label='setMask("999-9")'
+						onClick='remaskMask.setMask("999-9")' />
+			</row>
+			<row>
+				<label value="maxlength + mask — maxlength is discarded (mask owns capacity)" />
+				<inputmask id="maxlenMask" maxlength="2" mask="9999"
+						onChange='maxlenLog.setValue("change:" + self.getValue())' />
+				<label id="maxlenLog" value="" />
+			</row>
+			<row>
+				<label value="runtime setPlaceholderChar — repaint existing placeholder glyphs" />
+				<inputmask id="phcRuntimeMask" mask="9999" autoClear="false" />
+				<button id="phcRuntimeBtn" label='setPlaceholderChar("#")'
+						onClick='phcRuntimeMask.setPlaceholderChar("#")' />
+			</row>
+			<row>
+				<label value="disabled=true — typing/paste blocked, no onChange (behavioral guard)" />
+				<inputmask id="disabledBehaviorMask" mask="9999" disabled="true"
+						onChange='disabledBehaviorLog.setValue("change:" + self.getValue())' />
+				<label id="disabledBehaviorLog" value="" />
+			</row>
+			<row>
+				<label value="runtime setInstant(true) — enables per-key onChange" />
+				<inputmask id="runtimeInstantMask" mask="9999" instant="false"
+						onChange='runtimeInstantLog.setValue(runtimeInstantLog.getValue() + ":change:" + self.getValue())' />
+				<hbox>
+					<button id="runtimeInstantBtn" label="setInstant(true)"
+							onClick='runtimeInstantMask.setInstant(true)' />
+					<label id="runtimeInstantLog" value="" />
+				</hbox>
+			</row>
+			<row>
+				<label value="runtime setAutoClear(true) — enables partial-blur clear" />
+				<inputmask id="runtimeAutoClearMask" mask="9999" autoClear="false"
+						onChange='runtimeAutoClearLog.setValue("change:" + self.getValue())' />
+				<hbox>
+					<button id="runtimeAutoClearBtn" label="setAutoClear(true)"
+							onClick='runtimeAutoClearMask.setAutoClear(true)' />
+					<label id="runtimeAutoClearLog" value="" />
+				</hbox>
+			</row>
+			<row>
+				<label value="runtime setUnmask(true) — strips literals from committed value" />
+				<inputmask id="runtimeUnmaskMask" mask="99-99" unmask="false"
+						onChange='runtimeUnmaskLog.setValue("change:" + self.getValue())' />
+				<hbox>
+					<button id="runtimeUnmaskBtn" label="setUnmask(true)"
+							onClick='runtimeUnmaskMask.setUnmask(true)' />
+					<label id="runtimeUnmaskLog" value="" />
+				</hbox>
+			</row>
+			<row>
+				<label value="runtime setMask(null) — reverts to plain textbox" />
+				<inputmask id="runtimeNullMaskMask" mask="9999" />
+				<button id="runtimeNullMaskBtn" label="setMask(null)"
+						onClick='runtimeNullMaskMask.setMask(null)' />
+			</row>
+			<row>
+				<label value='constraint="no empty" + autoClear=false — partial fill behavior' />
+				<inputmask id="constraintNoclearMask" mask="9999" constraint="no empty" autoClear="false"
+						onError='constraintNoclearLog.setValue("error:" + event.getMessage())' />
+				<label id="constraintNoclearLog" value="" />
+			</row>
+		</rows>
+	</grid>
+</zk>
