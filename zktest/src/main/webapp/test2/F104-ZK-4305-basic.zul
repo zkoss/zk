@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-4305-basic.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri May 08 15:08:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout spacing="10px" hflex="1">
+		<label value="ZK-4305 basic — Daterangebox renders two inputs and a calendar button"/>
+		<daterangebox id="dr" format="yyyy-MM-dd"/>
+		<hlayout>
+			<button label="Read range" onClick='Clients.evalJavaScript("var w = zk.Widget.$(\"$dr\");" +
+				"alert(JSON.stringify({begin: w._beginValue, end: w._endValue}));")'/>
+		</hlayout>
+	</vlayout>
+</zk>

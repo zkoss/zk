@@ -103,4 +103,11 @@ public interface MZul extends org.zkoss.mesg.MessageConst {
 	static final int CHOSENBOX_CREATE_MESSAGE = 0x3302 + MESSAGE_ID;
 	static final int ITEMWIDGET_SELECTED = 0x3401 + MESSAGE_ID;
 	static final int TREE_SELECT_ALL = 0x3501 + MESSAGE_ID;
+	static final int RANGE_CLEAR = 0x370b + MESSAGE_ID;
+	static final int RANGE_SEPARATOR = 0x3710 + MESSAGE_ID;
+	static final int RANGE_MIN_NIGHTS = 0x3711 + MESSAGE_ID;
+	static final int RANGE_MAX_NIGHTS = 0x3712 + MESSAGE_ID;
+	static final int RANGE_INVALID = 0x3713 + MESSAGE_ID;
+	// 0x3714 reserved (see 0x370d note)
+	static final int RANGE_BEGIN_AFTER_END = 0x3715 + MESSAGE_ID;
 }

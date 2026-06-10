@@ -713,6 +713,7 @@
 			<xs:element ref="combobox" />
 			<xs:element ref="combobutton" />
 			<xs:element ref="datebox" />
+			<xs:element ref="daterangebox" />
 			<xs:element ref="decimalbox" />
 			<xs:element ref="div" />
 			<xs:element ref="doublebox" />
@@ -827,6 +828,7 @@
 				<xs:element ref="combobox" />
 				<xs:element ref="combobutton" />
 				<xs:element ref="datebox" />
+				<xs:element ref="daterangebox" />
 				<xs:element ref="decimalbox" />
 				<xs:element ref="div" />
 				<xs:element ref="doublebox" />
@@ -1644,6 +1646,54 @@
 	<xs:element name="custom-attributes" type="custom-attributesType" />
 	<xs:complexType name="custom-attributesType">
 		<xs:anyAttribute processContents="lax" />
+	</xs:complexType>
+	<!-- daterangebox (ZK-4305) -->
+	<xs:element name="daterangebox" type="daterangeboxType" />
+	<xs:complexType name="daterangeboxType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<!-- `value` is typed as xs:string because it accepts only an EL
+		     reference (e.g. ${vm.range} or @bind(vm.range)) that resolves to
+		     a DateRange instance — literal text is not a valid input. Use
+		     beginValue / endValue (dateType) for literal date attributes. -->
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="beginValue" type="dateType" use="optional" />
+		<xs:attribute name="endValue" type="dateType" use="optional" />
+		<xs:attribute name="valueInLocalDate" type="xs:string" use="optional" />
+		<xs:attribute name="valueInLocalDateTime" type="xs:string" use="optional" />
+		<xs:attribute name="valueInZonedDateTime" type="xs:string" use="optional" />
+		<xs:attribute name="beginValueInLocalDate" type="xs:string" use="optional" />
+		<xs:attribute name="endValueInLocalDate" type="xs:string" use="optional" />
+		<xs:attribute name="beginValueInLocalDateTime" type="xs:string" use="optional" />
+		<xs:attribute name="endValueInLocalDateTime" type="xs:string" use="optional" />
+		<xs:attribute name="beginValueInZonedDateTime" type="xs:string" use="optional" />
+		<xs:attribute name="endValueInZonedDateTime" type="xs:string" use="optional" />
+		<xs:attribute name="format" type="xs:string" use="optional" />
+		<xs:attribute name="locale" type="xs:string" use="optional" />
+		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
+		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
+		<xs:attribute name="numberOfMonths" type="intType" use="optional" />
+		<xs:attribute name="allowEmpty" type="xs:string" use="optional" />
+		<xs:attribute name="showTime" type="booleanType" use="optional" />
+		<xs:attribute name="minNights" type="intType" use="optional" />
+		<xs:attribute name="maxNights" type="intType" use="optional" />
+		<xs:attribute name="position" type="PopupPositionAttrType" use="optional" />
+		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
+		<xs:attribute name="weekOfYear" type="booleanType" use="optional" />
+		<xs:attribute name="showTodayLink" type="booleanType" use="optional" />
+		<xs:attribute name="lenient" type="booleanType" use="optional" />
+		<xs:attribute name="strictDate" type="booleanType" use="optional" />
+		<xs:attribute name="separator" type="xs:string" use="optional" />
+		<xs:attribute name="placeholder" type="xs:string" use="optional" />
+		<xs:attribute name="beginPlaceholder" type="xs:string" use="optional" />
+		<xs:attribute name="endPlaceholder" type="xs:string" use="optional" />
+		<xs:attribute name="hoverPreview" type="booleanType" use="optional" />
+		<xs:attribute name="todayLinkLabel" type="xs:string" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="readonly" type="booleanType" use="optional" />
+		<xs:attribute name="open" type="booleanType" use="optional" />
+		<xs:attribute name="autocomplete" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- datebox -->
 	<xs:element name="datebox" type="dateboxType" />

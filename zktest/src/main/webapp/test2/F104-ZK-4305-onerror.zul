@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-4305-onerror.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Jun  3 14:43:46 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout spacing="10px" hflex="1">
+		<label value="ZK-4305 onError — unparseable input delivers a typed ErrorEvent"/>
+		<daterangebox id="dr" format="yyyy-MM-dd"
+			onError='cap.setValue("type=" + event.getClass().getSimpleName()
+				+ ";msg=" + event.getMessage() + ";val=" + event.getValue())'/>
+		<label id="cap"/>
+	</vlayout>
+</zk>
