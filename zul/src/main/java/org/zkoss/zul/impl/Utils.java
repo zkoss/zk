@@ -336,6 +336,16 @@ public class Utils {
 
 		addLocaleJS(sb, "TREE_SELECT_ALL", MZul.TREE_SELECT_ALL);
 
+		addLocaleJS(sb, "RANGE_CLEAR", MZul.RANGE_CLEAR);
+		// RANGE_SEPARATOR / RANGE_MIN_NIGHTS / RANGE_MAX_NIGHTS are server-side only
+		// (separator is a component property; min/max-nights are thrown server-side),
+		// so they are not shipped in the per-page client locale bundle.
+		addLocaleJS(sb, "RANGE_INVALID", MZul.RANGE_INVALID);
+		// CALENDAR_TODAY is NOT shipped globally: it already has a per-component
+		// home (Datebox/Calendar render it as the todayLinkLabel property), and
+		// Daterangebox now mirrors that via its own todayLinkLabel property —
+		// so a per-page global constant would be a redundant second owner.
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')
 			sb.setLength(j);

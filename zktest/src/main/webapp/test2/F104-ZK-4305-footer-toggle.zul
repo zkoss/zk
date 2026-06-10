@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-4305-footer-toggle.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu Jun  4 15:12:54 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-4305 Footer toggle — runtime allowEmpty / showTodayLink changes must
+		not leave a stale Clear / Today button behind.
+
+		Steps to verify:
+		1. Click the calendar button once (binds the popup).
+		2. Click "allowEmpty=none", then "=both", then "=none" — the Clear button
+		   must NOT linger after the final "=none".
+		3. Reload, open the popup, click "today on" then "today off" — the Today
+		   button must NOT linger after "today off".
+	</label>
+
+	<vlayout spacing="10px" hflex="1">
+		<daterangebox id="drToggle" format="yyyy-MM-dd" width="360px"/>
+		<hlayout>
+			<button id="btnEmptyNone" label="allowEmpty=none" onClick='drToggle.setAllowEmpty("none")'/>
+			<button id="btnEmptyBoth" label="allowEmpty=both" onClick='drToggle.setAllowEmpty("both")'/>
+			<button id="btnTodayOn" label="today on" onClick="drToggle.setShowTodayLink(true)"/>
+			<button id="btnTodayOff" label="today off" onClick="drToggle.setShowTodayLink(false)"/>
+		</hlayout>
+	</vlayout>
+</zk>

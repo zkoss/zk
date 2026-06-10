@@ -796,11 +796,19 @@ public class Datebox extends DateTimeFormatInputElement {
 		_symbols = symbols;
 	}
 
-	private static Object[] getRealSymbols(Locale locale, Datebox box) {
+	/**
+	 * Returns the localized client date symbols payload for a component locale.
+	 *
+	 * @param locale the component locale, or {@code null} for the page locale
+	 * @param comp the component requesting the symbols
+	 * @return the client payload, or {@code null} if no component locale is set
+	 * @since 10.4.0
+	 */
+	public static Object[] getRealSymbols(Locale locale, Component comp) {
 		if (locale != null) {
 			final String localeName = locale.toString();
-			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(box.getDesktop(),
-					box.getClass().getName() + localeName)) {
+			if (org.zkoss.zk.ui.impl.Utils.markClientInfoPerDesktop(comp.getDesktop(),
+					comp.getClass().getName() + localeName)) {
 				Map symbols = (Map) _symbols.get(locale);
 				if (symbols == null)
 					symbols = loadSymbols(locale);
