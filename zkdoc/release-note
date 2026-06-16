@@ -22,6 +22,7 @@ ZK 10.4.0
   ZK-5259: Radiogroup external radio items lost after setPage
   ZK-6092: DOMPurify: Fix XSS vulnerabilities CVE-2026-0540 and CVE-2025-15599
   ZK-6079: zul.xsd : toolbar only allows one child component instead of multiple
+  ZK-5906: external link and zk event race condition for timeout redirect
 
 * Upgrade Notes
 
