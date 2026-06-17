@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6042.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed May 06 15:56:05 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        the maximize and close icons are rendered completely
+    </label>
+	<panel id="pnl" height="20%" style="margin-bottom:10px"
+		title="Panel1" border="normal" maximizable="true" closable="true"
+		collapsible="true">
+		<caption iconSclass="z-icon-home"/>
+		<panelchildren>PanelContent</panelchildren>
+	</panel>
+</zk>
