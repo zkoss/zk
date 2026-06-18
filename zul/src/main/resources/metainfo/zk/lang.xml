@@ -440,6 +440,16 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>codeeditor</component-name>
+		<component-class>org.zkoss.zul.Codeeditor</component-class>
+		<widget-class>zul.code.Codeeditor</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/codeeditor.js</mold-uri>
+			<css-uri>css/codeeditor.css.dsp</css-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>column</component-name>
 		<component-class>org.zkoss.zul.Column</component-class>
 		<widget-class>zul.grid.Column</widget-class>

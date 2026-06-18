@@ -1,0 +1,41 @@
+@import "~./zul/less/_header.less";
+
+.z-codeeditor {
+	box-sizing: border-box;
+	overflow: hidden;
+	border: 1px solid @baseBorderColor;
+
+	&-cave,
+	.cm-editor {
+		height: 100%;
+	}
+	.cm-scroller {
+		overflow: auto;
+	}
+
+	&-dark {
+		.cm-editor {
+			background: var(--zk-codeeditor-background);
+			color: var(--zk-codeeditor-color);
+		}
+		.cm-gutters {
+			background: var(--zk-codeeditor-background);
+			color: var(--zk-codeeditor-gutter-color);
+			border: none;
+		}
+		.cm-activeLine {
+			background: var(--zk-codeeditor-active-line);
+		}
+		.cm-cursor,
+		.cm-dropCursor {
+			border-left-color: var(--zk-codeeditor-color);
+		}
+	}
+
+	&-disabled {
+		opacity: .5;
+		.cm-editor {
+			pointer-events: none;
+		}
+	}
+}
