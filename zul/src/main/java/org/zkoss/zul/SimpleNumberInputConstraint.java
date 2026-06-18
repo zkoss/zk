@@ -122,6 +122,8 @@ public abstract class SimpleNumberInputConstraint<T extends Number & Comparable<
 
     public void validate(Component comp, Object value) throws WrongValueException {
         super.validate(comp, value);
+        if (value == null) // ZK-5990: null is valid when NO_EMPTY is not set; super.validate already handles NO_EMPTY
+            return;
         T typedValue;
         try {
             typedValue = (T) value;
