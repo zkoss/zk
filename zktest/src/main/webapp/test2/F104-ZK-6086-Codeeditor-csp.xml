@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6086-Codeeditor-csp.xml
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jun 18 18:04:25 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<system-config>
+		<csp-enabled>true</csp-enabled>
+		<csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>
+		<csp-policy>script-src 'strict-dynamic' 'self' 'unsafe-inline' 'unsafe-eval';</csp-policy>
+	</system-config>
+</zk>

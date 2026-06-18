@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202603251558">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202606231041">
 	<!--
 	SIMPLETYPE
 	-->
@@ -47,6 +47,39 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="normal" />
 					<xs:enumeration value="none" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="codeeditorLanguageAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="plain" />
+					<xs:enumeration value="html" />
+					<xs:enumeration value="xml" />
+					<xs:enumeration value="java" />
+					<xs:enumeration value="javascript" />
+					<xs:enumeration value="css" />
+					<xs:enumeration value="json" />
+					<xs:enumeration value="sql" />
+					<xs:enumeration value="markdown" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="codeeditorThemeAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="light" />
+					<xs:enumeration value="dark" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
@@ -1492,6 +1525,24 @@
 		<xs:attribute name="position" type="coachmarkPositionAttrType" use="optional" />
 		<xs:attribute name="next" type="xs:string" use="optional" />
 		<xs:attribute name="onTargetClick" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+	</xs:complexType>
+	<!-- codeeditor -->
+	<xs:element name="codeeditor" type="codeeditorType" />
+	<xs:complexType name="codeeditorType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="language" type="codeeditorLanguageAttrType" use="optional" />
+		<xs:attribute name="readonly" type="booleanType" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="lineNumbers" type="booleanType" use="optional" />
+		<xs:attribute name="tabSize" type="intType" use="optional" />
+		<xs:attribute name="theme" type="codeeditorThemeAttrType" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attribute name="onChanging" type="xs:string" use="optional" />
+		<xs:attribute name="onFocus" type="xs:string" use="optional" />
+		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6086-Codeeditor.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jun 18 18:04:53 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6086 Code editor (CE basic) — full coverage harness.
+
+		Steps to verify:
+		1. Each language editor (java/xml/html/css/js/json/sql/markdown) shows highlighted token spans; plain shows none.
+		2. Read-only editor cannot be edited; editable one can. Toggling readonly/lineNumbers/theme/language live takes effect.
+		3. Typing fires onChanging; blurring commits onChange; the bound editor round-trips to the view model.
+		4. Rerender / detach-reattach keep exactly one editor and preserve value.
+	</label>
+
+	<!-- ===== per-language highlight (one editor per supported grammar) ===== -->
+	<codeeditor id="ceLangPlain" language="plain" height="60px" value="just plain text, no tokens"/>
+	<codeeditor id="ceLangJava" language="java" height="90px"
+				value="public class A {&#10;    int x = 1;&#10;}"/>
+	<codeeditor id="ceLangXml" language="xml" height="70px"
+				value="&lt;root attr=&quot;v&quot;&gt;&lt;child/&gt;&lt;/root&gt;"/>
+	<codeeditor id="ceLangHtml" language="html" height="70px"
+				value="&lt;div class=&quot;c&quot;&gt;hi&lt;/div&gt;"/>
+	<codeeditor id="ceLangCss" language="css" height="70px"
+				value=".a { color: red; font-size: 12px; }"/>
+	<codeeditor id="ceLangJavascript" language="javascript" height="70px"
+				value="const f = (n) =&gt; n + 42;"/>
+	<codeeditor id="ceLangJson" language="json" height="70px"
+				value="{ &quot;a&quot;: 1, &quot;b&quot;: true }"/>
+	<codeeditor id="ceLangSql" language="sql" height="70px"
+				value="SELECT id FROM t WHERE x = 1"/>
+	<codeeditor id="ceLangMarkdown" language="markdown" height="80px"
+				value="# Title&#10;**bold** and `code`"/>
+
+	<!-- ===== read-only vs editable ===== -->
+	<codeeditor id="ceRO" language="json" readonly="true" height="60px" value="{ &quot;ro&quot;: 1 }"/>
+	<codeeditor id="ceEditable" language="plain" height="60px" value="editable"/>
+
+	<!-- ===== disabled ===== -->
+	<codeeditor id="ceDisabled" language="json" disabled="true" height="60px" value="{ &quot;disabled&quot;: 1 }"/>
+	<button id="btnDisable" label="disable ceDyn" onClick="ceDyn.setDisabled(true)"/>
+
+	<!-- ===== onFocus / onBlur ===== -->
+	<codeeditor id="ceFocus" language="plain" height="60px" value="focus me"
+				onFocus='focusState.setValue("focused")'
+				onBlur='focusState.setValue("blurred")'/>
+	<label id="focusState" value=""/>
+
+	<!-- ===== line numbers on/off ===== -->
+	<codeeditor id="ceLn" language="plain" lineNumbers="true" height="60px" value="with gutter"/>
+	<codeeditor id="ceNoLn" language="plain" lineNumbers="false" height="60px" value="no gutter"/>
+
+	<!-- ===== tab display width (indent char is always a tab) ===== -->
+	<codeeditor id="ceTabSize2" language="plain" tabSize="2" height="60px" value="x"/>
+
+	<!-- ===== theme light / dark / unset(derived) ===== -->
+	<codeeditor id="ceLight" language="javascript" theme="light" height="60px" value="var a = 1;"/>
+	<codeeditor id="ceDark" language="javascript" theme="dark" height="60px" value="var a = 1;"/>
+	<codeeditor id="ceDerived" language="javascript" height="60px" value="var a = 1;"/>
+
+	<!-- ===== dynamic live reconfiguration ===== -->
+	<codeeditor id="ceDyn" language="plain" readonly="false" lineNumbers="true" theme="light"
+				height="70px" value="select 1"/>
+	<button id="btnLang" label="lang->sql" onClick="ceDyn.setLanguage(&quot;sql&quot;)"/>
+	<button id="btnNoLn" label="lineNumbers->false" onClick="ceDyn.setLineNumbers(false)"/>
+	<button id="btnRO" label="readonly->true" onClick="ceDyn.setReadonly(true)"/>
+	<button id="btnTheme" label="theme->dark" onClick="ceDyn.setTheme(&quot;dark&quot;)"/>
+	<button id="btnSetVal" label="setValue" onClick="ceDyn.setValue(&quot;changed by server&quot;)"/>
+
+	<!-- ===== typing / events ===== -->
+	<codeeditor id="ceType" language="plain" height="70px" value=""/>
+	<label id="lblChanging" value=""/>
+	<label id="lblChange" value=""/>
+	<zscript><![CDATA[
+		ceType.addEventListener("onChanging", new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(org.zkoss.zk.ui.event.Event ev) {
+				lblChanging.setValue("changing:" + ((org.zkoss.zk.ui.event.InputEvent) ev).getValue());
+			}
+		});
+		ceType.addEventListener("onChange", new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(org.zkoss.zk.ui.event.Event ev) {
+				lblChange.setValue("change:" + ((org.zkoss.zk.ui.event.InputEvent) ev).getValue());
+			}
+		});
+	]]></zscript>
+
+	<!-- ===== two-way binding ===== -->
+	<div apply="org.zkoss.bind.BindComposer"
+		 viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6086VM')">
+		<codeeditor id="ceBind" language="plain" height="60px" value="@bind(vm.code)"/>
+		<label id="bound" value="@load(vm.code)"/>
+	</div>
+
+	<!-- ===== width / height as inline style ===== -->
+	<codeeditor id="ceWH" language="plain" width="333px" height="111px" value="sized"/>
+
+	<!-- ===== large content + unicode ===== -->
+	<codeeditor id="ceUnicode" language="plain" height="60px" value="héllo 世界 🚀 ✓"/>
+
+	<!-- ===== rerender / detach-reattach ===== -->
+	<div id="host">
+		<codeeditor id="ceRe" language="java" height="60px" value="int n = 7;"/>
+	</div>
+	<button id="btnRerender" label="Rerender" onClick="host.invalidate()"/>
+	<button id="btnDetach" label="Detach/Reattach"
+			onClick="org.zkoss.zk.ui.Component c = ceRe; org.zkoss.zk.ui.Component p = host; c.detach(); p.appendChild(c);"/>
+</zk>
