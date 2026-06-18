@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6086-Codeeditor-csp.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jun 18 18:04:42 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6086 Code editor under nonce-based strict-dynamic CSP (paired with
+		F104-ZK-6086-Codeeditor-csp.xml). The CodeMirror editor injects its
+		highlight CSS from JavaScript at runtime; verify it still mounts,
+		highlights, and raises no CSP violation.
+	</label>
+	<codeeditor id="ceCsp" language="java" theme="dark" height="160px"
+				value="public class Hello {&#10;    public static void main(String[] a) {&#10;        System.out.println(&quot;hi&quot;);&#10;    }&#10;}"/>
+</zk>
