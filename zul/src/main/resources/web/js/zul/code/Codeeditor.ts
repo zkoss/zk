@@ -445,6 +445,23 @@ export class Codeeditor extends zul.Widget {
 		this.$n()?.classList.toggle(this.$s(name), on);
 	}
 
+	/**
+	 * @internal Emits the dark and disabled modifiers with the root class, so they
+	 * survive `setSclass`/`setZclass`, which rewrite `className` from `domClass_`;
+	 * `_toggleClass` alone only patches the live node.
+	 */
+	override domClass_(no?: zk.DomClassOptions): string {
+		let /*safe*/ cls = super.domClass_(no);
+		// the modifiers are derived from the zclass, so they go when the zclass does
+		if (!no?.zclass) {
+			if (this._isDark())
+				cls += ' ' + this.$s('dark');
+			if (this._disabled)
+				cls += ' ' + this.$s('disabled');
+		}
+		return cls;
+	}
+
 	/** @internal disabled: dim + drop out of the keyboard tab order (Tab skips); readonly stays focusable. */
 	_applyDisabledClass(): void {
 		this._toggleClass('disabled', this._disabled);

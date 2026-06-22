@@ -31,7 +31,7 @@ public class UseCaseVM {
                 "chosenbox", "searchbox", "cascader", "datebox", "daterangebox", "timebox", "timepicker", "spinner",
                 "doublespinner", "colorbox", "bandbox", "slider", "rangeslider", "multislider",
                 "rating", "inputgroup", "inputs", "inputs-basic", "a",
-                "calendar"}) {
+                "calendar", "mdeditor"}) {
             PAGE_TO_NAV.put(p, "Inputs");
         }
         for (String p : new String[]{"grid", "grid-header", "grid-grouping", "grid-livegrouping",
