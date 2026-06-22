@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5992-Lib.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 04 16:53:29 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout>
+		<label value="ZK-5992 — tbeditor library-property baseline"/>
+		<label multiline="true">
+What this page shows: a bare tbeditor with NO plugins= attribute, used to verify
+the application-wide library property and the pluginPath override.
+
+How to verify (browser developer tools → Network):
+1. With no library property set: the editor requests NO plugin assets.
+2. Set library-property org.zkoss.zkmax.zul.tbeditor.plugins = "table" (in zk.xml), reload:
+   this editor now loads trumbowyg.table.js app-wide, with no per-component change.
+3. Set library-property org.zkoss.zkmax.zul.tbeditor.pluginPath to a custom prefix, reload:
+   plugin assets are requested from that prefix instead of the bundled ~./js/.../ext/plugins/.
+		</label>
+		<tbeditor id="tb" width="500px"/>
+	</vlayout>
+</zk>

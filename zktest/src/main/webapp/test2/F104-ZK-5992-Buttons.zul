@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5992-Buttons.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon Jun 22 12:22:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import java.util.HashMap;
+		java.util.Map noAuto = new HashMap();
+		noAuto.put("autoPluginButtons", Boolean.FALSE);
+	]]></zscript>
+	<vlayout>
+		<label value="ZK-5992 — auto toolbar buttons + autoPluginButtons opt-out"/>
+		<label multiline="true">
+What this page shows: the auto-inserted toolbar button feature and its opt-out.
+Both editors enable the same plugin (table); only the button insertion differs.
+
+How to verify (compare the two toolbars):
+1. tbAuto (plugins="table"): the table toolbar button IS auto-inserted.
+2. tbNoAuto (plugins="table", config.autoPluginButtons=false): the plugin still LOADS
+   (trumbowyg.table.js is requested) but NO table button is inserted.
+3. Both: trumbowyg.table.js is requested only once (shared, de-duplicated).
+		</label>
+
+		<!-- default: the table plugin's toolbar button is auto-inserted -->
+		<tbeditor id="tbAuto" plugins="table" width="500px"/>
+
+		<!-- opt-out: the plugin still loads, but no button is auto-inserted -->
+		<tbeditor id="tbNoAuto" plugins="table" config="${noAuto}" width="500px"/>
+	</vlayout>
+</zk>

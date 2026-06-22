@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5992-AllPlugins.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu May 14 15:53:29 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout>
+		<label value="ZK-5992 — every bundled Trumbowyg plugin, one editor each"/>
+		<label multiline="true">
+What this page shows: one tbeditor per bundled plugin (plugins="&lt;name&gt;").
+
+How to verify (browser developer tools):
+1. Network: each editor requests its own .../ext/plugins/&lt;name&gt;/trumbowyg.&lt;name&gt;.js
+   (and trumbowyg.&lt;name&gt;.css for colors, emoji, specialchars, table).
+2. Toolbar: each plugin's button(s) appear automatically in its own editor (auto-buttons).
+3. Console: no 404 / error for any of these — they are all valid plugins.
+		</label>
+
+		<label value="base64 — embed pasted/inserted images inline as base64 (no upload)"/>
+		<tbeditor id="tb_base64"       plugins="base64"       width="500px"/>
+		<label value="cleanpaste — strip extra styles/markup when pasting (no toolbar button)"/>
+		<tbeditor id="tb_cleanpaste"   plugins="cleanpaste"   width="500px"/>
+		<label value="colors — text and background color pickers"/>
+		<tbeditor id="tb_colors"       plugins="colors"       width="500px"/>
+		<label value="emoji — emoji picker"/>
+		<tbeditor id="tb_emoji"        plugins="emoji"        width="500px"/>
+		<label value="fontfamily — font-family dropdown"/>
+		<tbeditor id="tb_fontfamily"   plugins="fontfamily"   width="500px"/>
+		<label value="fontsize — font-size dropdown"/>
+		<tbeditor id="tb_fontsize"     plugins="fontsize"     width="500px"/>
+		<label value="history — undo / redo buttons"/>
+		<tbeditor id="tb_history"      plugins="history"      width="500px"/>
+		<label value="indent — increase / decrease indentation"/>
+		<tbeditor id="tb_indent"       plugins="indent"       width="500px"/>
+		<label value="insertaudio — insert an audio element"/>
+		<tbeditor id="tb_insertaudio"  plugins="insertaudio"  width="500px"/>
+		<label value="lineheight — line-height control"/>
+		<tbeditor id="tb_lineheight"   plugins="lineheight"   width="500px"/>
+		<label value="noembed — turn pasted links into embeds via the noembed service"/>
+		<tbeditor id="tb_noembed"      plugins="noembed"      width="500px"/>
+		<label value="pasteembed — auto-embed pasted video / media links (no toolbar button)"/>
+		<tbeditor id="tb_pasteembed"   plugins="pasteembed"   width="500px"/>
+		<label value="pasteimage — paste images from the clipboard (no toolbar button)"/>
+		<tbeditor id="tb_pasteimage"   plugins="pasteimage"   width="500px"/>
+		<label value="preformatted — preformatted text / code blocks (&lt;pre&gt;)"/>
+		<tbeditor id="tb_preformatted" plugins="preformatted" width="500px"/>
+		<label value="resizimg — resize images by dragging (no toolbar button)"/>
+		<tbeditor id="tb_resizimg"     plugins="resizimg"     width="500px"/>
+		<label value="ruby — ruby annotations (CJK phonetic text)"/>
+		<tbeditor id="tb_ruby"         plugins="ruby"         width="500px"/>
+		<label value="specialchars — special-character insert panel"/>
+		<tbeditor id="tb_specialchars" plugins="specialchars" width="500px"/>
+		<label value="table — create and edit tables"/>
+		<tbeditor id="tb_table"        plugins="table"        width="500px"/>
+		<label value="template — apply predefined content templates (needs a 'templates' config to show its button)"/>
+		<tbeditor id="tb_template"     plugins="template"     width="500px"/>
+		<label value="upload — upload images to the server"/>
+		<tbeditor id="tb_upload"       plugins="upload"       width="500px"/>
+	</vlayout>
+</zk>
