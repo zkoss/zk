@@ -6,6 +6,7 @@ ZK 10.4.0
   ZK-6097: Add Avatar, Avatargroup, Badge, Chip, Confirmpopup, Breadcrumb, Carousel to CE
   ZK-4305: date range picker
   ZK-6086: code editor
+  ZK-4927: markdown editor component
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
