@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5992.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 04 16:53:15 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout>
+		<label value="ZK-5992 — tbeditor plugin loading (scope resolution)"/>
+		<label multiline="true">
+What this page shows: how the plugin set is resolved across scopes
+(closest scope wins; an empty value clears) and that a bad name is tolerated.
+
+How to verify (browser developer tools → Network / Console):
+1. tbColors: per-component plugins="colors,fontsize" → loads colors.js + fontsize.js.
+2. tbInherited (no plugins=): inherits "emoji" from the window custom-attribute → loads emoji.js.
+3. tbOverride (plugins="colors"): OVERRIDES the inherited emoji → loads colors only, NOT emoji.
+4. tbClear (plugins=""): explicitly clears → loads no plugin at all.
+5. tbUnknown (plugins="z_does_not_exist"): the missing plugin asset fails to load
+   gracefully — its request 503s during the page-load burst (404 on an isolated
+   fetch) — but the editor and page still work.
+   ONE console error for z_does_not_exist is EXPECTED here (unknown-plugin tolerance).
+		</label>
+
+		<!-- AC1: per-component attribute -->
+		<tbeditor id="tbColors" plugins="colors,fontsize" width="500px"/>
+
+		<!-- AC4: custom-attribute walks up the component tree -->
+		<window id="winInherit" border="normal">
+			<custom-attributes org.zkoss.zkmax.zul.tbeditor.plugins="emoji"/>
+
+			<!-- inherits emoji from window's custom-attribute -->
+			<tbeditor id="tbInherited" width="500px"/>
+
+			<!-- AC3 (override): own plugins= REPLACES the inherited custom-attribute
+				(no merge) — resolves to colors only, not colors+emoji. colors is also
+				requested by tbColors above, so it dedupes to a single load (AC6). -->
+			<tbeditor id="tbOverride" plugins="colors" width="500px"/>
+
+			<!-- AC3 (override to none): an explicit empty plugins= clears the inherited
+				'emoji' for this editor — resolves to no plugins. -->
+			<tbeditor id="tbClear" plugins="" width="500px"/>
+		</window>
+
+		<!-- AC5: unknown plugin name should not crash editor or page render. -->
+		<tbeditor id="tbUnknown" plugins="z_does_not_exist" width="500px"/>
+	</vlayout>
+</zk>
