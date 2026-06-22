@@ -89,6 +89,7 @@ const PAGES = [
   '/loading.zul',
   '/loadingbar.zul',
   '/longbox.zul',
+  '/mdeditor.zul',
   '/menubar.zul',
   '/messagebox.zul',
   '/multislider.zul',

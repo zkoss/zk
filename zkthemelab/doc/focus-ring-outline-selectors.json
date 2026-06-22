@@ -92,6 +92,26 @@
       "component": "listheader",
       "raw": ".z-listheader .z-listheader-button:focus-visible"
     },
+    ".z-mdeditor-dark .z-mdeditor-preview-pane": {
+      "page": "mdeditor",
+      "component": "mdeditor",
+      "raw": ".z-mdeditor-dark .z-mdeditor-preview-pane:focus-visible"
+    },
+    ".z-mdeditor-dark .z-mdeditor-toolbar-button": {
+      "page": "mdeditor",
+      "component": "mdeditor",
+      "raw": ".z-mdeditor-dark .z-mdeditor-toolbar-button:focus-visible"
+    },
+    ".z-mdeditor-preview-pane": {
+      "page": "mdeditor",
+      "component": "mdeditor",
+      "raw": ".z-mdeditor-preview-pane:focus-visible"
+    },
+    ".z-mdeditor-toolbar-button": {
+      "page": "mdeditor",
+      "component": "mdeditor",
+      "raw": ".z-mdeditor-toolbar-button:focus-visible"
+    },
     ".z-nav-content": {
       "page": "navbar",
       "component": "nav",
@@ -199,6 +219,7 @@
     "listbox",
     "listbox-grouping",
     "listbox-header",
+    "mdeditor",
     "menubar",
     "messagebox",
     "multislider",
