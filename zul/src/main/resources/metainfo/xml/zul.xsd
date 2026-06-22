@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="11.0.0.202608281758">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="11.0.0.202608311241">
 	<!--
 	SIMPLETYPE
 	-->
@@ -47,6 +47,20 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="normal" />
 					<xs:enumeration value="none" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="mdeditorModeAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="source" />
+					<xs:enumeration value="preview" />
+					<xs:enumeration value="split" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
@@ -792,6 +806,7 @@
 			<xs:element ref="lineitem" />
 			<xs:element ref="listbox" />
 			<xs:element ref="longbox" />
+			<xs:element ref="mdeditor" />
 			<xs:element ref="menubar" />
 			<xs:element ref="menupopup" />
 			<xs:element ref="multislider" />
@@ -908,6 +923,7 @@
 				<xs:element ref="lineitem" />
 				<xs:element ref="listbox" />
 				<xs:element ref="longbox" />
+				<xs:element ref="mdeditor" />
 				<xs:element ref="menubar" />
 				<xs:element ref="menupopup" />
 				<xs:element ref="multislider" />
@@ -2590,6 +2606,24 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="selected" type="booleanType" use="optional" />
 		<xs:attribute name="selectable" type="booleanType" use="optional" />
+	</xs:complexType>
+	<!-- mdeditor -->
+	<xs:element name="mdeditor" type="mdeditorType" />
+	<xs:complexType name="mdeditorType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="mode" type="mdeditorModeAttrType" use="optional" />
+		<xs:attribute name="readonly" type="booleanType" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="lineNumbers" type="booleanType" use="optional" />
+		<xs:attribute name="tabSize" type="intType" use="optional" />
+		<xs:attribute name="theme" type="codeeditorThemeAttrType" use="optional" />
+		<xs:attribute name="onChange" type="xs:string" use="optional" />
+		<xs:attribute name="onChanging" type="xs:string" use="optional" />
+		<xs:attribute name="onFocus" type="xs:string" use="optional" />
+		<xs:attribute name="onBlur" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- menu -->
 	<xs:element name="menu" type="menuType" />
