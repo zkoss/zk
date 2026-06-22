@@ -10,7 +10,7 @@ This is the canonical lookup for valid `z-icon-*` class names in this theme.
 
 See `doc/spec/icon-policy.md` for the full policy.
 
-## FA → Lucide aliases (26 entries, from `scripts/build-css.js` `FA_TO_LUCIDE`)
+## FA → Lucide aliases (30 entries, from `scripts/build-css.js` `FA_TO_LUCIDE`)
 
 These absorb FontAwesome-style class names that ZK widget JS emits at runtime (e.g. `z-icon-caret-down`). A widget-DOM mockup on a preview page uses the exact name the widget emits.
 
@@ -42,6 +42,10 @@ These absorb FontAwesome-style class names that ZK widget JS emits at runtime (e
 | `z-icon-refresh` | `refresh-cw` |
 | `z-icon-rotate-left` | `rotate-ccw` |
 | `z-icon-rotate-right` | `rotate-cw` |
+| `z-icon-header` | `heading` |
+| `z-icon-list-ul` | `list` |
+| `z-icon-list-ol` | `list-ordered` |
+| `z-icon-quote-left` | `quote` |
 
 ## Custom glyphs (1 entries, from `scripts/build-css.js` `CUSTOM_ICONS`)
 
