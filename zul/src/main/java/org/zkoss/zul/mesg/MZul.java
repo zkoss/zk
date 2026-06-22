@@ -110,4 +110,18 @@ public interface MZul extends org.zkoss.mesg.MessageConst {
 	// 0x3713 reserved (see 0x370d note)
 	// 0x3714 reserved (see 0x370d note)
 	static final int RANGE_BEGIN_AFTER_END = 0x3715 + MESSAGE_ID;
+	static final int MDEDITOR_BOLD = 0x3801 + MESSAGE_ID;
+	static final int MDEDITOR_ITALIC = 0x3802 + MESSAGE_ID;
+	static final int MDEDITOR_INLINE_CODE = 0x3803 + MESSAGE_ID;
+	static final int MDEDITOR_HEADING = 0x3804 + MESSAGE_ID;
+	static final int MDEDITOR_LINK = 0x3805 + MESSAGE_ID;
+	static final int MDEDITOR_BULLETED_LIST = 0x3806 + MESSAGE_ID;
+	static final int MDEDITOR_NUMBERED_LIST = 0x3807 + MESSAGE_ID;
+	static final int MDEDITOR_STRIKETHROUGH = 0x3808 + MESSAGE_ID;
+	static final int MDEDITOR_IMAGE = 0x3809 + MESSAGE_ID;
+	static final int MDEDITOR_TASK_LIST = 0x380a + MESSAGE_ID;
+	static final int MDEDITOR_BLOCKQUOTE = 0x380b + MESSAGE_ID;
+	static final int MDEDITOR_CODE_BLOCK = 0x380c + MESSAGE_ID;
+	static final int MDEDITOR_TABLE = 0x380d + MESSAGE_ID;
+	static final int MDEDITOR_HORIZONTAL_RULE = 0x380e + MESSAGE_ID;
 }

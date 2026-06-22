@@ -119,5 +119,19 @@ declare global {
 	| 'CHOSENBOX_SELECTION' // zkmax/inp-a11y
 	| 'CALENDAR_TODAY' // zkmax/db/Daterangebox (consumer); reuses CE Calendar today label
 	| 'RANGE_CLEAR'
+	| 'MDEDITOR_BOLD' // zkex/md/Mdeditor (toolbar titles)
+	| 'MDEDITOR_ITALIC'
+	| 'MDEDITOR_INLINE_CODE'
+	| 'MDEDITOR_HEADING'
+	| 'MDEDITOR_LINK'
+	| 'MDEDITOR_BULLETED_LIST'
+	| 'MDEDITOR_NUMBERED_LIST'
+	| 'MDEDITOR_STRIKETHROUGH'
+	| 'MDEDITOR_IMAGE'
+	| 'MDEDITOR_TASK_LIST'
+	| 'MDEDITOR_BLOCKQUOTE'
+	| 'MDEDITOR_CODE_BLOCK'
+	| 'MDEDITOR_TABLE'
+	| 'MDEDITOR_HORIZONTAL_RULE'
 	, string>;
 }
