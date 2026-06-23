@@ -32,7 +32,7 @@ public class B102_ZK_5615_Zh_Test extends WebDriverTestCase {
     @Override
     protected ChromeOptions getWebDriverOptions() {
         return super.getWebDriverOptions()
-                .addArguments("--lang=" + locale)
+                .addArguments("--lang=" + locale, "--accept-lang=" + locale)
                 .setExperimentalOption("prefs", Map.of(
                         "intl.accept_languages", locale
                 ));

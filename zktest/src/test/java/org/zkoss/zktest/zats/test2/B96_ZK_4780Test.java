@@ -33,7 +33,7 @@ public class B96_ZK_4780Test extends DockerWebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.addArguments("--lang=de-DE")
+				.addArguments("--lang=de-DE", "--accept-lang=de-DE")
 				.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "de-DE"))
 				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
 	}

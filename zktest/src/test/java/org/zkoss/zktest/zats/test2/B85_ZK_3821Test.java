@@ -32,7 +32,7 @@ public class B85_ZK_3821Test extends DockerWebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.addArguments("--lang=de-DE")
+				.addArguments("--lang=de-DE", "--accept-lang=de-DE")
 				.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "de-DE"));
 	}
 

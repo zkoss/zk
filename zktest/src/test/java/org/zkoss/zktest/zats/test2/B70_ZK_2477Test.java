@@ -33,7 +33,7 @@ public class B70_ZK_2477Test extends DockerWebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.addArguments("--lang=ro-RO") // Romanian (Romania)
+				.addArguments("--lang=ro-RO", "--accept-lang=ro-RO") // Romanian (Romania)
 				.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "ro-RO"));
 	}
 
