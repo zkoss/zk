@@ -1,0 +1,82 @@
+@import "~./zul/less/_header.less";
+
+.z-codeeditor {
+	box-sizing: border-box;
+	overflow: hidden;
+	border: 1px solid @baseBorderColor;
+
+	/* Dark-surface customization hooks — override per element via inline style
+	   (style="--zk-codeeditor-background:#000;") or a theme rule. The defaults
+	   give a usable dark editor on any page theme; CodeMirror supplies its own
+	   monospace font and base layout. The surface only paints dark when the
+	   widget adds the -dark modifier (see Codeeditor.ts _applyDarkClass). */
+	--zk-codeeditor-background: #1e1e1e;
+	--zk-codeeditor-color: #d4d4d4;
+	--zk-codeeditor-gutter-color: #858585;
+	--zk-codeeditor-active-line: #2a2a2a;
+
+	/* Dark-mode syntax-token palette, consumed by the dark HighlightStyle in
+	   Codeeditor.ts; override per element/theme just like the surface hooks above. */
+	--zk-codeeditor-token-keyword: #569cd6;
+	--zk-codeeditor-token-string: #ce9178;
+	--zk-codeeditor-token-comment: #6a9955;
+	--zk-codeeditor-token-number: #b5cea8;
+	--zk-codeeditor-token-function: #dcdcaa;
+	--zk-codeeditor-token-type: #4ec9b0;
+	--zk-codeeditor-token-variable: #9cdcfe;
+	--zk-codeeditor-token-tag: #569cd6;
+	--zk-codeeditor-token-attribute: #9cdcfe;
+	--zk-codeeditor-token-meta: #d16969;
+
+	/* Let CodeMirror fill a fixed-height container (height/vflex on the element)
+	   and scroll internally; with no height it grows to content as before. */
+	&-cave,
+	.cm-editor {
+		height: 100%;
+	}
+	.cm-scroller {
+		overflow: auto;
+	}
+
+	&-dark {
+		.cm-editor {
+			background: var(--zk-codeeditor-background);
+			color: var(--zk-codeeditor-color);
+		}
+		.cm-gutters {
+			background: var(--zk-codeeditor-background);
+			color: var(--zk-codeeditor-gutter-color);
+			border: none;
+		}
+		.cm-activeLine {
+			background: var(--zk-codeeditor-active-line);
+		}
+		.cm-cursor,
+		.cm-dropCursor {
+			border-left-color: var(--zk-codeeditor-color);
+		}
+	}
+
+	/* Disabled: dimmed and non-interactive (the widget also makes CodeMirror
+	   non-editable; pointer-events blocks mouse interaction). */
+	&-disabled {
+		opacity: .5;
+		.cm-editor {
+			pointer-events: none;
+		}
+	}
+
+	/* Visually-hidden aria-live region announcing the Tab-key mode to screen
+	   readers; kept in the layout (not display:none) so assistive tech reads it. */
+	&-status {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		border: 0;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
+}
