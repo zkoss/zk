@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6102.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Jun 23 10:58:43 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		0. Deploy this app to Tomcat (start by command line) with
+		   desktop-config/desktop-timeout set to a positive value in zk.xml
+		   so SimpleDesktopCache starts its cleaner timer, e.g.
+		   &lt;desktop-config>&lt;desktop-timeout>3600&lt;/desktop-timeout>&lt;/desktop-config>
+		1. Open this page in several browser sessions (use incognito windows
+		   to get more than one session concurrently).
+		2. Stop / undeploy the app (Tomcat manager or command line).
+		3. You should NOT see any warning like:
+		   "The web application [app] appears to have started a thread named
+		   [Timer-N] but has failed to stop it. This is very likely to create
+		   a memory leak."
+	</label>
+	<div>
+		<label value="ZK-6102 desktop cache cleaner timer leak"/>
+	</div>
+</zk>
