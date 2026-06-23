@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6072.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Apr 13 17:48:19 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <portallayout orient="vertical" hflex="1" vflex="1">
+        <portalchildren title="PENDING" counterVisible="true" hflex="1" sclass="kanban-col-pending">
+            <panel border="normal" hflex="1" title="test" >
+            <panelchildren>
+                    111
+            </panelchildren>
+            </panel>
+            <panel border="normal" hflex="1" >
+            <panelchildren>
+                    222
+            </panelchildren>
+            </panel>
+        </portalchildren>
+
+        <portalchildren title="PROCESSING" counterVisible="true" hflex="1" sclass="kanban-col-processing">
+        </portalchildren>
+
+        <portalchildren title="WAITING" counterVisible="true" hflex="1" sclass="kanban-col-waiting">
+        </portalchildren>
+
+    </portallayout>
+</zk>
