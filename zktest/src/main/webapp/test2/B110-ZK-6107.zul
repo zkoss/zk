@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6107.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Jul 24 16:21:55 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        How to reproduce:
+        1. Drag a goldenpanel by its tab (e.g. the Console panel).
+        2. A drag ghost should appear and follow the cursor.
+        3. Drop it on another panel to dock it there.
+
+        Expected: the panel shows a ghost while dragging and can be dropped on another panel.
+        Bug (ZK-6107): the dragged panel disappears; the browser console reports
+        "Uncaught ReferenceError: side is not defined".
+    </label>
+	<goldenlayout hflex="1" height="420px" orient="vertical">
+		<attribute name="areas">
+			A B C
+			A B C
+			D D D
+		</attribute>
+		<goldenpanel area="A" title="Project" closable="false">Project panel</goldenpanel>
+		<goldenpanel area="A" title="Files">Files panel</goldenpanel>
+		<goldenpanel area="B" title="Main" droppable="false">Main panel</goldenpanel>
+		<goldenpanel area="C" title="Side">Side panel</goldenpanel>
+		<goldenpanel area="D" title="Console" draggable="true">Console panel</goldenpanel>
+	</goldenlayout>
+</zk>
