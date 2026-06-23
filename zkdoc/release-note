@@ -5,6 +5,7 @@ ZK 10.4.0
   ZK-5409: responsive Grid
   ZK-6097: Add Avatar, Avatargroup, Badge, Chip, Confirmpopup, Breadcrumb, Carousel to CE
   ZK-4305: date range picker
+  ZK-5997: Support Content Security Policy Without 'unsafe-inline'
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -24,6 +25,18 @@ ZK 10.4.0
   ZK-6079: zul.xsd : toolbar only allows one child component instead of multiple
 
 * Upgrade Notes
+  ZK-5997: Strict CSP (no 'unsafe-inline' / no 'unsafe-eval') now supported.
+    - window.$eval(code) returns undefined under strict CSP (the nonce-bearing
+      <script> element has no return channel). Callers that need a value must
+      use JSON.parse / jq.evalJSON / zk.toFunction(body)() instead. A one-shot
+      console warning fires the first time $eval is invoked with a nonce set
+      to help locate non-migrated callers.
+    - <csp-enabled>true</csp-enabled> AND <csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>
+      must BOTH be set for nonce emission. Setting strict-dynamic alone logs a
+      WARN at config parse time.
+    - Third-party widgets that call jq.globalEval(code) with one argument are
+      now auto-patched at zk init time to forward zk.cspNonce. No code change
+      required as long as zk.ts is loaded before the third-party module.
 
    --------
 ZK 10.3.0

@@ -1591,7 +1591,7 @@ export namespace au_global {
 					zk.scriptErrorHandlerRegistered = true;
 					jq(window).one('error', scriptErrorHandler);
 				}
-				jq.globalEval(script);
+				jq.globalEval(script, zk.cspNonce ? {nonce: zk.cspNonce} : undefined);
 			}
 			/**
 			 * Asks the client to echo back an AU request, such that
@@ -2060,7 +2060,7 @@ export namespace au_global {
 					if (jq.isFunction(callback)) {
 						callback();
 					} else
-						jq.globalEval(callback);
+						jq.globalEval(callback, zk.cspNonce ? {nonce: zk.cspNonce} : undefined);
 				});
 			}
 			/**

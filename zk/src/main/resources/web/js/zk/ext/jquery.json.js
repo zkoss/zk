@@ -204,10 +204,51 @@
 
             return str('', {'': value});
         };
-//Tom: don't use eval(s) directly, since it won't (and cann't) be compressed)
 	$.evalJSON = function (s) {
-		return (new Function('return (' + s + ')'))(); //won't count on the current scope
-		//return $eval("(" + s + ")"); //assume the current scope
+		// ZK's JsContentRenderer emits single-quoted JS object literals (e.g.
+		// {a:1,b:['x','y']}) — valid JavaScript, NOT strict JSON. Try JSON.parse
+		// first; on failure, fall back to evaluating the JS expression. Under CSP
+		// (when zk.cspNonce is set) the fallback uses a nonce-bearing <script>
+		// element so we never need 'unsafe-eval'. This must be self-contained
+		// because $.evalJSON may be invoked during early bootstrap before the
+		// zk module is fully initialised — zk.cspNonce is injected via the zkopt
+		// handler in widget.ts (`case 'cn':`); any $.evalJSON call before that
+		// runs the legacy new Function path. That ordering is safe because the
+		// boot script is itself nonced by HtmlPageRenders so the very first
+		// zkopt evaluates before any AU response can arrive.
+		try {
+			return JSON.parse(s);
+		} catch (ignored) {
+			var nonce = window.zk && zk.cspNonce;
+			if (nonce) {
+				// Wrap in a function literal so unbalanced parens or stray statements
+				// in `s` syntax-error at parse time rather than executing as a sequence
+				// of statements in the global scope (defence-in-depth — the payload is
+				// from same-origin server but we keep the legacy `(...)` semantics).
+				// Key uses crypto.randomUUID so the harvest slot is unguessable and
+				// consistent with zk.toFunction's key strategy.
+				var rand = (typeof crypto !== 'undefined' && crypto.randomUUID)
+						? crypto.randomUUID().replace(/-/g, '')
+						: Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+				var key = 'zk_eval_' + rand;
+				var script = document.createElement('script');
+				script.setAttribute('nonce', nonce);
+				script.textContent = 'window["' + key + '"]=(function(){return (' + s + ');})();';
+				var parent = document.head || document.documentElement;
+				parent.appendChild(script);
+				parent.removeChild(script);
+				var result = window[key];
+				delete window[key];
+				if (!window._zkEvalJsonFallbackWarned && window.console && console.warn) {
+					window._zkEvalJsonFallbackWarned = true;
+					// eslint-disable-next-line no-console
+					console.warn('zk: $.evalJSON fallback used; server payload is JS literal, not strict JSON. '
+						+ 'First non-strict payload: ' + String(s).substring(0, 80));
+				}
+				return result;
+			}
+			return (new Function('return (' + s + ')'))();
+		}
 	};
 	$.j2d = function (s) { //json to date
 		//yyyy.M.d.H.m.s.S (see org.zkoss.json.JSONs.d2j)

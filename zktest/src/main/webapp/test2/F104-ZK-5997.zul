@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5997.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Apr 14 11:22:25 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<?script content="
+	window.zkDirectiveScriptLoaded = true;
+"?>
+<zk xmlns:w="client">
+	<zscript><![CDATA[
+		org.zkoss.zk.ui.util.CspProvider provider = new org.zkoss.zk.ui.http.CspProviderImpl();
+		provider.getCspNonce();
+		org.zkoss.zul.ListModelList selectboxModel = new org.zkoss.zul.ListModelList(
+				new String[]{"alpha", "beta", "gamma"});
+	]]></zscript>
+
+	<script>
+		window.zkScriptComponentLoaded = true;
+	</script>
+
+	<script src="/test2/F104-ZK-5997-external.js"/>
+
+	<window id="w" title="F104-ZK-5997" border="normal" width="600px"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F103_ZK_5265_VM')">
+		<vlayout>
+			<label id="elNonce">${cspNonce}</label>
+			<label id="result" value="pending"/>
+			<textbox id="eventListener" w:onChange="zk.Widget.$('$result').setValue('listener-ok');"
+					placeholder="Type here to trigger event listener"/>
+			<textbox id="bindingValue" value="@bind(vm.bindingValue)"
+					onChange="@command('onBindingChange')"/>
+			<label id="bindingLabel" value="@load(vm.bindingValue)"/>
+			<button id="checkBtn" label="Check nonces"/>
+
+			<!-- Exercises selectbox.js:17 — items deserialised via JSON.parse under CSP. -->
+			<selectbox id="selectboxCsp" model="${selectboxModel}"/>
+
+			<!-- Exercises au.ts:1594 — Clients.evalJavaScript is wrapped in AuScript, which
+				 the client must execute via jq.globalEval with the page nonce. -->
+			<button id="evalJsBtn" label="Push script via AuScript"
+					onClick='org.zkoss.zk.ui.util.Clients.evalJavaScript("window.zkAuScriptExecuted = true;")'/>
+		</vlayout>
+	</window>
+</zk>

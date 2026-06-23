@@ -14,7 +14,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function selectbox$mold$(out) {
 	out.push('<select', this.domAttrs_(), '>');
-	var s = $eval(this.items) || [];
+	// items arrive already deserialised as a JS array by the widget hydration
+	// pipeline (JsContentRenderer emits items:['a','b',...] which mount.ts
+	// evaluates into a real array). Treat string defensively in case a
+	// non-standard caller passes the raw JSON-like text.
+	var items = this.items,
+		s = Array.isArray(items) ? items
+				: (items ? jq.evalJSON(items) : undefined) || [];
 	for (var i = 0, j = s.length; i < j; i++) {
 		out.push('<option');
 		if (this._selectedIndex > -1 && this._selectedIndex == i)

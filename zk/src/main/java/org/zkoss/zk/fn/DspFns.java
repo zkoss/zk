@@ -19,10 +19,16 @@ package org.zkoss.zk.fn;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.encoder.Encode;
+import org.slf4j.LoggerFactory;
+
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * Utilities to generate ZK related information in DSP pages.
@@ -143,4 +149,34 @@ public class DspFns {
 				(HttpServletRequest) ServletFns.getCurrentRequest(),
 				(HttpServletResponse) ServletFns.getCurrentResponse());
 	}
+
+	/** Returns the CSP nonce attribute string for inline script/style tags.
+	 * If CSP with strict-dynamic is enabled, returns {@code  nonce="..."};
+	 * otherwise returns an empty string.
+	 * <p>This method is designed for use in DSP pages where inline
+	 * {@code <script>} tags need a nonce attribute.
+	 * @since 10.4.0
+	 */
+	public static String cspNonceAttr() {
+		final WebApp wapp = WebApps.getCurrent();
+		if (wapp == null) //called outside an active webapp (e.g. tooling); treat as no CSP
+			return "";
+		final Configuration config = wapp.getConfiguration();
+		if (!(config.isCspEnabled() && config.isCspStrictDynamicEnabled()))
+			return "";
+		try {
+			final String nonce = config.getCspProvider().getCspNonce();
+			return " nonce=\"" + Encode.forHtmlAttribute(nonce) + "\"";
+		} catch (Exception e) {
+			// CspProvider misconfigured or threw at runtime. Returning empty would
+			// silently bypass CSP at every script tag in the DSP — surface it once.
+			if (!_cspNonceAttrErrorLogged) {
+				_cspNonceAttrErrorLogged = true;
+				LoggerFactory.getLogger(DspFns.class)
+						.warn("DspFns.cspNonceAttr(): CspProvider failed; nonce attribute omitted", e);
+			}
+			return "";
+		}
+	}
+	private static volatile boolean _cspNonceAttrErrorLogged;
 }

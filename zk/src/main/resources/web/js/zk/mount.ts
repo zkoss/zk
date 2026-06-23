@@ -538,7 +538,7 @@ export namespace mount_global {
 		zk.mounting = true;
 
 		try {
-			if (js) jq.globalEval(js);
+			if (js) jq.globalEval(js, {nonce: zk.cspNonce});
 
 			var mount = mtAU, infs = _crInfAU0, delay, owner: string | zk.Widget | undefined;
 			if (!extra || !extra.length) { //if 2nd argument not stub, it must be BL (see zkx_)

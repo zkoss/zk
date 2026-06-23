@@ -336,6 +336,10 @@ declare global {
 		find<TElement = HTMLElement>(callback: ((this: Document, $: JQueryStatic) => void)): JQuery<TElement>;
 		find<T extends JQuery.PlainObject>(object: T): JQuery<T>;
 		focusOut(): void;
+		// jQuery 3.5+ accepts an options object for nonce/document — overrides the
+		// outdated single-arg signature shipped in @types/jquery so callers can pass
+		// {nonce} for CSP-safe script execution.
+		globalEval(code: string, options?: { nonce?: string }, doc?: Document): void;
 		head(): HTMLElement | undefined;
 		innerHeight(): number;
 		innerWidth(): number;
