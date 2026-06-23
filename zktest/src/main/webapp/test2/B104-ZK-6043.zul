@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6043.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed May 06 16:10:02 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Click any column and click dropdown
+        2. The checkmark icon should be perfectly centered within the blue checkbox with sufficient internal padding
+    </label>
+	<grid id="grid">
+		<columns menupopup="auto">
+			<column label="Author" sort="auto"/>
+			<column label="Title" sort="auto"/>
+			<column label="Publisher" sort="auto"/>
+			<column label="Hardcover" sort="auto"/>
+		</columns>
+		<rows>
+			<row>
+				<cell>john</cell>
+				<cell>My journey</cell>
+				<cell>Morning Star</cell>
+				<cell>Yes</cell>
+			</row>
+		</rows>
+	</grid>
+</zk>
