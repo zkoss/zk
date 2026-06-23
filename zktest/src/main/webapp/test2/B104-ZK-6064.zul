@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6064.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed May 06 16:35:42 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Run an accessibility audit (e.g., Chrome Lighthouse → Accessibility)
+        2. Check the “signature” buttons in the UI
+        3. Signature buttons should provide an accessible name by adding `aria-label`
+    </label>
+	<signature width="500px" height="500px"/>
+</zk>
