@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6051.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Feb 06 18:10:27 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+    <label multiline="true">
+        1. Visit this page with theme=iceblue_c (or iceblue) and Chrome Device Toolbar set to "iPad Pro".
+        2. Check the badge text "3" in the "Get Started" nav and "5" in the "Contact" navitem.
+        3. Each badge should be vertically aligned with its label (approx. same horizontal line), not too low.
+    </label>
+    <n:h1>vertical navigation</n:h1>
+    <navbar orient="vertical" width="200px" >
+        <navitem label="Home" iconSclass="z-icon-home" />
+        <nav label="Get Started" iconSclass="z-icon-th-list" badgeText="3" id="nav1">
+            <navitem label="Step One" />
+            <navitem label="Step Two" />
+            <navitem label="Step Three" />
+        </nav>
+        <navitem label="About" iconSclass="z-icon-flag" />
+        <navitem label="Contact" iconSclass="z-icon-envelope" badgeText="5" id="navitem1"/>
+    </navbar>
+    <n:h1>horizontal navigation</n:h1>
+    <navbar >
+        <navitem label="Home" iconSclass="z-icon-home" />
+        <nav label="Get Started" iconSclass="z-icon-th-list" badgeText="3" id="nav2">
+            <navitem label="Step One" />
+            <navitem label="Step Two" />
+            <navitem label="Step Three" />
+        </nav>
+        <navitem label="About" iconSclass="z-icon-flag" />
+        <navitem label="Contact" iconSclass="z-icon-envelope" badgeText="5" id="navitem2"/>
+    </navbar>
+</zk>
