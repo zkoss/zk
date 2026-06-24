@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6011.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Jun 24 13:11:06 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6011: an invalid POST request still gets the HTTP response 200.
+
+		Steps to reproduce:
+		1. Send an AU request with no session and no desktop id, e.g.
+		   curl -i -X POST http://localhost:8080/&lt;context&gt;/zkau
+		2. Observe the HTTP status of the response.
+
+		Current (buggy) result:
+		- HTTP/1.1 200 OK with a "ZK-Error: 410" header and an empty body.
+
+		To verify the fix:
+		- Expected: HTTP 467 "Incomplete request" for the malformed request
+		  (the same status the async-update path already uses for a missing dtid),
+		  so security/monitoring tools that check the HTTP status detect it.
+		- A genuine ZK client (which always carries a dtid, including a multipart
+		  upload whose dtid is in the body) still receives the 200 + ZK-Error
+		  session-timeout protocol, so timeout handling is intact.
+
+		This page only serves as the deployed target; the assertion is driven by
+		B104_ZK_6011Test, which fires a cookie-less POST at /zkau.
+	</label>
+</zk>
