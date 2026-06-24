@@ -139,8 +139,22 @@ public class AuMultipartUploader {
 	}
 
 	public static AuDecoder parseRequest(HttpServletRequest request, AuDecoder decoder) throws IOException {
-		Map<String, Object> params = getFileuploadMetaPerWebApp(
-				WebApps.getCurrent());
+		return parseRequest(request, decoder, WebApps.getCurrent());
+	}
+
+	/**
+	 * Parses a multipart AU request against the given web application.
+	 * <p>Same as {@link #parseRequest(HttpServletRequest, AuDecoder)} but takes
+	 * the {@link WebApp} explicitly. This is used by request paths that already
+	 * know the servlet-context Web application but do not have an active session
+	 * yet, such as a session-less AU request. In that state,
+	 * {@link WebApps#getCurrent()} can only use its installation-wide fallback,
+	 * which might not identify the current request's application when ZK
+	 * libraries are shared by multiple web applications.
+	 * @since 10.4.0
+	 */
+	public static AuDecoder parseRequest(HttpServletRequest request, AuDecoder decoder, WebApp wapp) throws IOException {
+		Map<String, Object> params = getFileuploadMetaPerWebApp(wapp);
 		AbstractFileUpload upload = newServletDiskFileUpload(new DiskFileItemFactory.Builder()
 				.setBufferSize((Integer) params.get("sizeThreadHold"))
 				.setPath(((File) params.get("repository")).toPath()).get());
