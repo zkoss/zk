@@ -9,6 +9,19 @@ plugins {
 	id "org.sonarqube" version "4.4.1.3373"
 	id "org.owasp.dependencycheck" version "12.1.9"
 	id 'biz.aQute.bnd.builder' version '6.4.0' apply false
+	id 'org.cyclonedx.bom' version '1.10.0'
+}
+
+// --- SBOM (CycloneDX) for CRA compliance ---
+cyclonedxBom {
+	includeConfigs = ["runtimeClasspath"]
+	skipConfigs    = ["compileClasspath", "testCompileClasspath"]
+	projectType    = "library"
+	schemaVersion  = "1.6"
+	destination    = file("build/reports")
+	outputName     = "bom"
+	outputFormat   = "json"
+	includeBomSerialNumber = true
 }
 
 allprojects {
