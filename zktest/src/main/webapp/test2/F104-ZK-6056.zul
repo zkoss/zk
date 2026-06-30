@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6056.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Apr 30 11:06:35 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+	ZK-6056: How to reproduce
+	1. Click the chosenbox below to open the dropdown.
+	2. Type "US" into the input field.
+
+	Expected (with the fix): locales whose toString contains "US" appear,
+	e.g. en_US, es_US, fr_US.
+
+	Without the fix: nothing matches — the ListSubModel's default
+	STRING_COMPARATOR filters by startsWith on the server, and no
+	Locale.toString() starts with "US".
+
+	The "contains" semantics is requested with the existing
+	org.zkoss.zul.chosenbox.filterLogic attribute (here at component scope
+	via custom-attributes; page / desktop / library scopes work the same
+	way). When filterLogic="contains", the SubModel's startsWith pre-filter
+	is bypassed so the chosenbox-level contains filter runs.
+	]]></label>
+	<zscript><![CDATA[
+        ListModelList model = new ListModelList(Locale.getAvailableLocales());
+        ListSubModel subModel = ListModels.toListSubModel(model);
+    ]]></zscript>
+    <chosenbox width="400px" model="${subModel}">
+        <custom-attributes org.zkoss.zul.chosenbox.filterLogic="contains"/>
+    </chosenbox>
+</zk>
