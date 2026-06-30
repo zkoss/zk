@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Codeeditor"?>
+<?root-attributes lang="en"?>
+<!--
+codeeditor.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jun 18 18:05:10 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Codeeditor</n:h1>
+	</n:header>
+	<n:main>
+		<codeeditor ca:aria-label="java source editor" language="java" height="100px"
+					value="public class A {&#10;    int x = 1;&#10;}"/>
+		<codeeditor ca:aria-label="read only json viewer" language="json" readonly="true"
+					height="80px" value="{ &quot;a&quot;: 1 }"/>
+		<codeeditor ca:aria-label="plain editor without gutter" language="plain"
+					lineNumbers="false" height="60px" value="plain text"/>
+		<codeeditor ca:aria-label="dark themed editor" language="javascript" theme="dark"
+					height="80px" value="const f = () =&gt; 42;"/>
+	</n:main>
+</zk>

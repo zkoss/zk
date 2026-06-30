@@ -1,4 +1,5 @@
 export * as box from './box';
+export * as code from './code';
 export * as db from './db';
 export * as fud from './fud';
 export * as grid from './grid';

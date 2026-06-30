@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Mdeditor"?>
+<?root-attributes lang="en"?>
+<!--
+mdeditor.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jun 24 14:58:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:header>
+		<n:h1>Mdeditor</n:h1>
+	</n:header>
+	<n:main>
+		<mdeditor ca:aria-label="markdown editor split mode" mode="split"
+				  height="160px" value="# Title&#10;&#10;**bold** and `code`"/>
+		<mdeditor ca:aria-label="markdown source editor" mode="source"
+				  height="100px" value="- list&#10;- items"/>
+		<mdeditor ca:aria-label="read only markdown preview" mode="preview" readonly="true"
+				  height="100px" value="# Read only&#10;&#10;text"/>
+	</n:main>
+</zk>

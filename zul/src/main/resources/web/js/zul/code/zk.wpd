@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+zk.wpd
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jun 18 18:06:36 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.code" language="xul/html" depends="zul">
+	<script src="index.js" sourceMap="true"/>
+	<widget name="Codeeditor" moldOnly="true"/>
+</package>

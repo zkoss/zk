@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-4927.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Jun 24 14:58:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:ca="client/attribute">
+	<zscript><![CDATA[
+		String md =
+			"# ZK-4927 Markdown Editor\n"
+			+ "\n"
+			+ "## Subheading\n"
+			+ "\n"
+			+ "Some **bold**, *italic*, ~~struck~~ and `code`.\n"
+			+ "\n"
+			+ "A [link](https://www.zkoss.org) and an image ![alt](/test2/img/sun.jpg).\n"
+			+ "\n"
+			+ "- unordered item\n"
+			+ "- unordered item 2\n"
+			+ "\n"
+			+ "1. ordered item\n"
+			+ "2. ordered item 2\n"
+			+ "\n"
+			+ "> a blockquote\n"
+			+ "\n"
+			+ "```java\n"
+			+ "System.out.println(\"Hello, ZK!\");\n"
+			+ "```\n"
+			+ "\n"
+			+ "| Component | Module |\n"
+			+ "| --- | --- |\n"
+			+ "| mdeditor | zkex |\n"
+			+ "\n"
+			+ "<script>alert('xss-script')</script>\n"
+			+ "\n"
+			+ "<img src=\"x\" onerror=\"alert('xss-img')\">\n"
+			+ "\n"
+			+ "<a href=\"javascript:alert('xss-href')\">bad link</a>\n"
+			+ "\n"
+			+ "<iframe srcdoc=\"x\"></iframe>\n";
+	]]></zscript>
+
+	<!-- primary editor (split) + a preview-only instance used as a display -->
+	<hlayout spacing="20px" valign="top" width="100%">
+		<mdeditor id="mdEditor" value="${md}" mode="split" height="420px" hflex="1"/>
+		<mdeditor id="mdView" value="${md}" mode="preview" readonly="true" height="420px" hflex="1"/>
+	</hlayout>
+	<hlayout spacing="6px">
+		<button id="modeSource" label="source" onClick='mdEditor.setMode("source")'/>
+		<button id="modePreview" label="preview" onClick='mdEditor.setMode("preview")'/>
+		<button id="modeSplit" label="split" onClick='mdEditor.setMode("split")'/>
+	</hlayout>
+
+	<!-- readonly / disabled / theme -->
+	<mdeditor id="mbReadonly" value="# read only" readonly="true" height="80px"/>
+	<mdeditor id="mbDisabled" value="# disabled" disabled="true" height="80px"/>
+	<mdeditor id="mbLight" value="# light" theme="light" height="80px"/>
+	<mdeditor id="mbDark" value="# dark" theme="dark" height="80px"/>
+
+	<!-- focus / blur + typing events -->
+	<mdeditor id="mbFocus" value="focus me" height="80px"
+			  onFocus='focusState.setValue("focused")'
+			  onBlur='focusState.setValue("blurred")'/>
+	<mdeditor id="mbOther" value="other" height="80px"/>
+	<label id="focusState" value=""/>
+
+	<mdeditor id="mbType" value="" height="80px"/>
+	<label id="lblChanging" value=""/>
+	<label id="lblChange" value=""/>
+	<zscript><![CDATA[
+		mbType.addEventListener("onChanging", new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(org.zkoss.zk.ui.event.Event ev) {
+				lblChanging.setValue("changing:" + ((org.zkoss.zk.ui.event.InputEvent) ev).getValue());
+			}
+		});
+		mbType.addEventListener("onChange", new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(org.zkoss.zk.ui.event.Event ev) {
+				lblChange.setValue("change:" + ((org.zkoss.zk.ui.event.InputEvent) ev).getValue());
+			}
+		});
+	]]></zscript>
+
+	<!-- toolbar actions (source, empty) -->
+	<mdeditor id="mbTb" value="" mode="source" height="100px"/>
+
+	<!-- app-supplied ARIA -->
+	<mdeditor id="mbAria" ca:aria-label="my markdown editor" value="# a11y" height="80px"/>
+
+	<!-- dynamic reconfiguration -->
+	<mdeditor id="mbDyn" value="# dyn" mode="source" height="100px"/>
+	<button id="dynMode" label="mode->split" onClick='mbDyn.setMode("split")'/>
+	<button id="dynRO" label="readonly->true" onClick="mbDyn.setReadonly(true)"/>
+	<button id="dynVal" label="setValue" onClick='mbDyn.setValue("# changed by server")'/>
+
+	<!-- two-way binding -->
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_4927VM')">
+		<mdeditor id="mbBind" mode="split" height="100px" value="@bind(vm.source)"/>
+		<mdeditor id="mdBound" mode="preview" readonly="true" value="@load(vm.source)"/>
+	</div>
+</zk>
