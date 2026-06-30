@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202603251558">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202605081738">
 	<!--
 	SIMPLETYPE
 	-->
@@ -2874,6 +2874,7 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="row" />
 			<xs:element ref="group" />
+			<xs:element ref="groupfoot" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>

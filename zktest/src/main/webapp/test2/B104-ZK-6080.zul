@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6080.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri May 08 17:37:27 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<grid id="grid">
+		<columns>
+			<column label="Item" />
+			<column label="Price" />
+		</columns>
+		<rows id="rows">
+			<group id="g1" label="Fruit" />
+			<row>
+				<label value="Apple" />
+				<label value="$1.00" />
+			</row>
+			<row>
+				<label value="Banana" />
+				<label value="$0.50" />
+			</row>
+			<groupfoot id="gf1">
+				<cell colspan="2">
+					<label id="footLabel" value="Fruit subtotal: $1.50" />
+				</cell>
+			</groupfoot>
+		</rows>
+	</grid>
+</zk>
