@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Inputmask"?>
+<?root-attributes lang="en"?>
+<!--
+inputmask.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 14 16:06:11 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<style><![CDATA[
+		/* FIXME: For demonstration only, should apply to theme itself. */
+		:focus {
+			outline: 1px dotted red !important;
+		}
+	]]></style>
+	<n:header>
+		<n:h1>Inputmask</n:h1>
+	</n:header>
+	<n:main>
+		<vbox spacing="10px">
+			<hbox align="center" spacing="8px">
+				<label value="Phone" sclass="z-label" />
+				<inputmask id="phone" mask="9999-999-9999" placeholderChar="_"
+						ca:aria-label="Phone number"
+						ca:autocomplete="tel" />
+			</hbox>
+			<hbox align="center" spacing="8px">
+				<label value="Postal code" sclass="z-label" />
+				<inputmask id="postal" mask="aa-99" placeholderChar="_"
+						ca:aria-label="Postal code"
+						ca:autocomplete="postal-code" />
+			</hbox>
+			<hbox align="center" spacing="8px">
+				<label value="Reference" sclass="z-label" />
+				<inputmask id="ref" mask="***-***" placeholderChar="_" announceProgress="true"
+						ca:aria-label="Reference code" />
+			</hbox>
+		</vbox>
+	</n:main>
+</zk>
