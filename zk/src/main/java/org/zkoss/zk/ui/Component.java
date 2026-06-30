@@ -620,6 +620,51 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public void setStubonly(boolean stubonly);
 
+	/** Returns the descendant stub-only policy declared on this component,
+	 * or null if no policy is set. The value is a comma/space-separated list
+	 * of component names (e.g. {@code "div, label"}) or {@code "*"} to match
+	 * every descendant.
+	 * <p>The default implementation returns {@code null}; subclasses that
+	 * participate in stub-only handling (e.g. {@link AbstractComponent})
+	 * override it.
+	 * @since 10.4.0
+	 * @see #setStubonlyDescendants
+	 */
+	default String getStubonlyDescendants() {
+		return null;
+	}
+
+	/** Declares which descendants of this component should be made stub-only.
+	 * The value is a comma/space-separated list of component names
+	 * (e.g. {@code "div, label"}), or {@code "*"} to match every descendant
+	 * tag. {@code null} or empty clears the policy.
+	 *
+	 * <p>A descendant is stubbed when its name (or any name in its
+	 * {@code extends} chain) is in the union of policies declared by its
+	 * ancestors. A descendant with explicit {@code stubonly="false"} always
+	 * stays live. The anchor (this component) is never matched by its own
+	 * policy — the attribute targets descendants only, hence the name.
+	 *
+	 * <p>The wildcard {@code "*"} differs from {@code stubonly="true"} in
+	 * one place: the anchor stays live (so it can host a composer or
+	 * {@code @Wire}); only its descendants are stubbed. {@code stubonly="true"}
+	 * stubs the anchor too.
+	 *
+	 * <p>The policy is read during the post-render stubbing pass; calling
+	 * this setter after render does not re-stub or un-stub anything.
+	 * Combining with {@code stubonly="true"} on the same component leaves
+	 * the policy as dead code (the legacy cascade wins).
+	 *
+	 * <p>To trace which components a policy actually stubs, enable DEBUG
+	 * logging on {@code org.zkoss.zk.ui.impl.UiEngineExtension}.
+	 *
+	 * @param policy a comma/space-separated list of component names, or
+	 * {@code "*"}; {@code null} or empty clears the policy.
+	 * @since 10.4.0
+	 */
+	default void setStubonlyDescendants(String policy) {
+	}
+
 	/** Returns the parent component, or null if this is the root component.
 	 */
 	public Component getParent();

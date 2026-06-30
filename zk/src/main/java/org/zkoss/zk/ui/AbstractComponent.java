@@ -1665,6 +1665,37 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		setStubonly(stubonly ? "true" : "false");
 	}
 
+	/** Returns the descendant stub-only policy declared on this component,
+	 * or null if no policy is set.
+	 * @since 10.4.0
+	 * @see Component#getStubonlyDescendants
+	 */
+	public String getStubonlyDescendants() {
+		return _auxinf != null ? _auxinf.stubonlyDescendants : null;
+	}
+
+	/** Declares which descendants of this component should be made stub-only.
+	 * The value is a comma/space-separated list of component names (or alias
+	 * names from the {@code extends} chain), or {@code "*"} for every
+	 * descendant; {@code null} or empty clears the policy.
+	 * <p>Refer to {@link Component#setStubonlyDescendants} for the full
+	 * semantics (additive ancestor inheritance, non-propagating policy match,
+	 * override via explicit {@code stubonly="false"}, anchor exclusion, and
+	 * render-once consumption).
+	 * @since 10.4.0
+	 * @see Component#setStubonlyDescendants
+	 */
+	public void setStubonlyDescendants(String policy) {
+		final String v = (policy == null || policy.trim().isEmpty()) ? null : policy;
+		final String old = _auxinf != null ? _auxinf.stubonlyDescendants : null;
+		if (!Objects.equals(old, v))
+			initAuxInfo().stubonlyDescendants = v;
+		//server-side metadata only; no client update needed.
+		//Note: the policy is consumed once during the post-render stubbing
+		//pass; changing it after this component has been rendered does not
+		//re-stub or un-stub anything (same semantics as setStubonly).
+	}
+
 	public boolean isInvalidated() {
 		return _page == null || getAttachedUiEngine().isInvalidated(this);
 	}
@@ -3741,6 +3772,11 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 		/** Whether this component is stub-only (0: inherit, -1: false, 1: true). */
 		private byte stubonly;
+		/** Comma/space-separated list of component names eligible for
+		 * stub-only treatment under this subtree, or {@code "*"}; null when no
+		 * policy is declared. Since 10.4.0 (ZK-6096).
+		 */
+		private String stubonlyDescendants;
 
 		/** Whether annots is shared with other components. */
 		private transient boolean annotsShared;

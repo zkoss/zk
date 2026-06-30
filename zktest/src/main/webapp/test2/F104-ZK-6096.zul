@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6096.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 19 16:10:10 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<?component name="myDiv" extends="div"?>
+<zk>
+	<label multiline="true">
+		ZK-6096 — stubonlyDescendants attribute.
+
+		What this page exercises:
+		1. Plain inherit baseline      — no policy, no stubbing.
+		2. Policy on a parent          — div/label inside g1 should be stubbed; the button (not listed) stays interactive.
+		3. Explicit stubonly="false"   — a div with stubonly="false" inside a matching policy must remain interactive.
+		4. Wildcard policy "*"         — every descendant becomes stubbed except those with stubonly="false".
+		5. Alias chain                  — a user-registered alias (myDiv extends div) is matched when policy lists "div".
+		6. Combined with stubonly="true" — the legacy unconditional cascade wins; the policy on the same comp is dead code.
+
+		How to verify (server side, via Probe button):
+			- Click "Probe" — the result label shows STUB / LIVE for each named target.
+			- A component is STUB when its server-side instance has been replaced by a StubComponent.
+
+		How to verify (browser side):
+			- Stubbed components still render in the DOM (they just shed their server-side state),
+				so visually the page looks identical to a non-stubbed render.
+			- The Probe button must remain clickable (it sits inside a policy-matched wrapper but is not in the policy list).
+	</label>
+
+	<div apply="org.zkoss.zktest.test2.F104_ZK_6096Composer">
+		<!-- (1) baseline: no policy at all -->
+		<vlayout id="g0">
+			<label id="g0lbl" value="g0-label"/>
+			<button id="g0btn" label="g0-button"/>
+		</vlayout>
+
+		<!-- (2) policy on parent: only div, label become stubonly; button stays live -->
+		<vlayout id="g1" stubonlyDescendants="div, label">
+			<div id="g1div">
+				<label id="g1lbl" value="g1-label"/>
+				<button id="g1btn" label="g1-button (live)"/>
+			</div>
+		</vlayout>
+
+		<!-- (3) explicit stubonly="false" wins over policy match -->
+		<vlayout id="g2" stubonlyDescendants="div">
+			<div id="g2divLive" stubonly="false">
+				<label id="g2lbl" value="g2-label-inside-live-div"/>
+			</div>
+			<div id="g2divStub">
+				<label id="g2lblStub" value="g2-label-inside-stub-div"/>
+			</div>
+		</vlayout>
+
+		<!-- (4) wildcard: matches every descendant tag -->
+		<vlayout id="g3" stubonlyDescendants="*">
+			<div id="g3div">
+				<label id="g3lbl" value="g3-label"/>
+				<button id="g3btn" label="g3-button" stubonly="false"/>
+			</div>
+		</vlayout>
+
+		<!-- (5) alias chain: policy lists "div", the comp is <myDiv> which extends div -->
+		<vlayout id="g5" stubonlyDescendants="div">
+			<myDiv id="g5myDiv">
+				<label id="g5lbl" value="g5-label-inside-myDiv"/>
+			</myDiv>
+		</vlayout>
+
+		<!-- (6) combined-use: stubonly="true" on the anchor itself cascades to every
+		         descendant unconditionally; the stubonlyDescendants list on the same
+		         comp is dead code (only fires when the descendant has no explicit
+		         stubonly inherited).  Verifies the dead-code property: g6btn would
+		         normally stay live under stubonlyDescendants="div", but because
+		         stubonly="true" on the anchor cascades, the button also gets stubbed. -->
+		<vlayout id="g6" stubonly="true" stubonlyDescendants="div">
+			<div id="g6div">
+				<label id="g6lbl" value="g6-label"/>
+				<button id="g6btn" label="g6-button"/>
+			</div>
+		</vlayout>
+
+		<separator/>
+		<button id="probe" label="Probe"/>
+		<label id="result"/>
+	</div>
+</zk>
