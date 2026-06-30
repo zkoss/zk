@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6075.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Mar 25 17:09:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6075: URL exception in IBM WebSphere / Open Liberty
+
+		The url.getProtocol() in URLs returns "wsjar" in IBM WebSphere / Open Liberty,
+		which caused MalformedURLException because URLs.sanitizeURL() only handled "jar" protocol.
+
+		Steps to reproduce:
+		1. Deploy a ZK application on IBM WebSphere or Open Liberty
+		2. Open a ZUL page that loads resources from JAR files
+		3. Check server logs for MalformedURLException
+
+		To verify the fix:
+		- Expected: No MalformedURLException in server logs, page loads correctly
+		- The fix handles "wsjar" protocol the same way as "jar" in URLs.sanitizeURL()
+	</label>
+</zk>
