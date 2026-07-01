@@ -100,6 +100,10 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 	/** @internal */
 	_placeholder?: string;
 	/** @internal */
+	_label?: string;
+	/** @internal */
+	_labelPosition = 'left';
+	/** @internal */
 	_inputAttributes?: Record<string, string>;
 	/** @internal */
 	_lastinputAttributes?: Record<string, string>;
@@ -212,6 +216,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				inp.disabled = disabled;
 				var fnm = disabled ? 'addClass' as const : 'removeClass' as const;
 				jq(this.$n())[fnm](this.$s('disabled'));
+				this._syncLabelState();
 			}
 		}
 
@@ -240,6 +245,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 				inp.readOnly = readonly;
 				jq(this.$n())[fnm](this.$s('readonly')); //Merge breeze
+				this._syncLabelState();
 			}
 		}
 
@@ -377,6 +383,127 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 
 		return this;
+	}
+
+	/**
+	 * @returns the associated label text.
+	 * @since 10.4.0
+	 */
+	getLabel(): string | undefined {
+		return this._label;
+	}
+
+	/**
+	 * Sets the associated label text. Empty string is treated as undefined.
+	 * @since 10.4.0
+	 */
+	setLabel(label: string, opts?: Record<string, boolean>): this {
+		const o = this._label;
+		this._label = label || undefined;
+		if ((o !== this._label || opts?.force) && this.desktop) {
+			if (this._label && !o) {
+				this._wrapLabel();
+			} else if (!this._label && o) {
+				this._unwrapLabel();
+			} else if (this._label && o) {
+				const wrap = this._labelWrap();
+				if (wrap) {
+					const labelEl = wrap.querySelector('.z-input-label-text');
+					if (labelEl) labelEl.textContent = this._label;
+				}
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * @returns the label position (left / floating).
+	 * @since 10.4.0
+	 */
+	getLabelPosition(): string {
+		return this._labelPosition;
+	}
+
+	/**
+	 * Sets the label position. Accepts "left" (default) or "floating".
+	 * @since 10.4.0
+	 */
+	setLabelPosition(labelPosition: string, opts?: Record<string, boolean>): this {
+		const o = this._labelPosition;
+		this._labelPosition = labelPosition;
+		if ((o !== labelPosition || opts?.force) && this.desktop && this._label) {
+			// DOM order differs between left and floating; rebuild wrap.
+			this._unwrapLabel();
+			this._wrapLabel();
+		}
+		return this;
+	}
+
+	/** @internal Returns the input-label wrapper element, or undefined if not wrapped. */
+	_labelWrap(): HTMLElement | undefined {
+		const n = this.$n();
+		if (!n) return undefined;
+		const p = n.parentNode as HTMLElement | undefined;
+		return p && jq(p).hasClass('z-input-label') ? p : undefined;
+	}
+
+	/** @internal Wraps the widget DOM with an input-label container and label. */
+	_wrapLabel(): void {
+		const target = this.$n();
+		if (!target || this._labelWrap()) return;
+		const inp = this.getInputNode();
+		if (!inp) return;
+		const position = this._labelPosition;
+		if (!inp.id) inp.id = this.uuid + '-real';
+
+		const wrap = document.createElement('span');
+		wrap.className = 'z-input-label z-input-label-' + position;
+
+		const labelEl = document.createElement('label');
+		labelEl.className = 'z-input-label-text';
+		labelEl.setAttribute('for', inp.id);
+		labelEl.textContent = this._label!;
+
+		target.parentNode!.insertBefore(wrap, target);
+		if (position === 'floating') {
+			// Floating: input first, label as absolute overlay.
+			wrap.appendChild(target);
+			wrap.appendChild(labelEl);
+		} else {
+			// left / top: label first (above or beside), input second.
+			wrap.appendChild(labelEl);
+			wrap.appendChild(target);
+		}
+
+		this._syncLabelState();
+	}
+
+	/** @internal Removes the input-label wrapper. */
+	_unwrapLabel(): void {
+		const wrap = this._labelWrap();
+		if (!wrap) return;
+		const target = this.$n()!;
+		wrap.parentNode!.insertBefore(target, wrap);
+		wrap.parentNode!.removeChild(wrap);
+	}
+
+	/** @internal Syncs floating-mode state classes (no-op for left). */
+	_syncLabelState(): void {
+		const wrap = this._labelWrap();
+		if (!wrap || this._labelPosition !== 'floating') return;
+		const inp = this.getInputNode();
+		if (!inp) return;
+		// ZK-6100: for composite widgets (combobox/datebox/spinner) the focus may
+		// land on a sub-node (e.g. the trigger button), so detect focus anywhere
+		// within the widget's DOM rather than only on the input element.
+		const n = this.$n(),
+		 hasValue = !!inp.value,
+		 focused = !!n && n.contains(document.activeElement);
+		jq(wrap).toggleClass('z-input-label-shrunk', hasValue || focused);
+		jq(wrap).toggleClass('z-input-label-focused', focused);
+		jq(wrap).toggleClass('z-input-label-disabled', !!this._disabled);
+		jq(wrap).toggleClass('z-input-label-readonly', !!this._readonly);
+		jq(wrap).toggleClass('z-input-label-invalid', !!this._errbox);
 	}
 
 	/**
@@ -575,6 +702,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 			var inp = this.getInputNode();
 			if (inp) //check if bind
 				this._defRawVal = this._lastChg = inp.value = value = this.coerceToString_(value as ValueType);
+			this._syncLabelState();
 		}
 		return this;
 	}
@@ -699,6 +827,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				});
 			}
 		}
+		this._syncLabelState();
 	}
 
 	/** @internal */
@@ -727,6 +856,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 				window.scrollTo(windowX, windowY);
 		}
 		this._lastKeyDown = undefined;
+		this._syncLabelState();
 	}
 
 	/** @internal */
@@ -837,6 +967,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}
 		if (revalidate)
 			this._reVald = true; //revalidate required
+		this._syncLabelState();
 	}
 
 	/**
@@ -896,6 +1027,7 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 
 			if (!noOnError)
 				this.fire('onError', {value: val, message: msg});
+			this._syncLabelState();
 		}
 	}
 
@@ -1126,10 +1258,14 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		if (n.form)
 			jq(n.form).on('reset', this.proxy(this._resetForm));
 		zWatch.listen({onShow: this});
+
+		if (this._label) this._wrapLabel();
 	}
 
 	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
+		if (this._label) this._unwrapLabel();
+
 		zWatch.unlisten({onShow: this});
 		InputWidget._stopOnChanging(this);
 		this.clearErrorMessage(true);
@@ -1162,6 +1298,9 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		}, 10);
 		// ZK-4938: fire an onChanging event when users enter a predictive text
 		this._updateValue();
+		// ZK-6100: keep the floating label in sync when the value changes
+		// without a focus event (autofill, programmatic input, predictive text)
+		this._syncLabelState();
 	}
 
 	/** @internal */

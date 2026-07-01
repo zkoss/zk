@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6100.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 19 13:17:46 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6100 — labelPosition="left" (default) matrix.
+
+		Steps to verify:
+		1. Every input renders the associated label inline on the left of the
+		   actual editor.
+		2. Composite popup-trigger components (combobox / bandbox / datebox /
+		   timebox / spinner / doublespinner) keep their own border + button
+		   chrome unchanged in "left" mode.
+		3. Setting labelPosition via the buttons toggles between left / top /
+		   floating without losing value or focus.
+		4. label="" is normalized to null — the input is NOT wrapped.
+
+		Expected: all 13 inputs are wrapped in a span.z-input-label.z-input-label-left
+		except #t_unset which renders as a bare input.
+	</label>
+
+	<style>
+		.fixtures { padding: 12px; }
+		.fixtures &gt; vlayout &gt; * { margin-bottom: 12px; }
+		.group-title { font-weight: bold; margin-top: 12px; }
+	</style>
+
+	<vlayout id="root" sclass="fixtures" spacing="6px">
+
+		<!-- ============================================= -->
+		<!-- Section A: 13 InputElement variants (left, default position) -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="A. 13 InputElement variants (labelPosition=left)"/>
+		<textbox       id="t_textbox"       label="Name"/>
+		<textbox       id="t_textarea"      label="Notes" multiline="true" rows="3"/>
+		<textbox       id="t_searchbox"     label="Find" type="search"/>
+		<intbox        id="t_intbox"        label="Age"/>
+		<longbox       id="t_longbox"       label="Account"/>
+		<doublebox     id="t_doublebox"     label="Latitude"/>
+		<decimalbox    id="t_decimalbox"    label="Amount"/>
+		<spinner       id="t_spinner"       label="Count"/>
+		<doublespinner id="t_doublespinner" label="Rate"/>
+		<datebox       id="t_datebox"       label="Birthday"/>
+		<timebox       id="t_timebox"       label="Departure"/>
+		<combobox      id="t_combobox"      label="Country">
+			<comboitem label="Taiwan"/>
+			<comboitem label="Japan"/>
+		</combobox>
+		<bandbox       id="t_bandbox"       label="Search">
+			<bandpopup><label value="popup content"/></bandpopup>
+		</bandbox>
+
+		<!-- ============================================= -->
+		<!-- Section B: state variants -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="B. State variants (left position)"/>
+		<textbox id="t_prefilled" label="Prefilled" value="hello"/>
+		<textbox id="t_disabled"  label="Disabled"  disabled="true"/>
+		<textbox id="t_readonly"  label="Readonly"  readonly="true" value="locked"/>
+		<textbox id="t_invalid"   label="Required"  constraint="no empty: required"/>
+		<textbox id="t_hint"      label="Email"     placeholder="user@example.com"/>
+		<textbox id="t_inplace"   label="Inplace"   inplace="true" value="Untitled"/>
+
+		<!-- ============================================= -->
+		<!-- Section C: edge cases -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="C. Edge cases (XSS escape / long label / empty)"/>
+		<textbox id="t_xss"   label="&lt;script&gt;alert(1)&lt;/script&gt;"/>
+		<textbox id="t_long"  label="This is an exceptionally long label intended to test ellipsis truncation behavior in narrow inputs"/>
+		<textbox id="t_unset" label=""/>
+
+		<!-- ============================================= -->
+		<!-- Section D: dynamic API + i18n -->
+		<!-- ============================================= -->
+		<label sclass="group-title" value="D. Dynamic API + RTL"/>
+		<textbox id="t_dynamic" label="Initial"/>
+		<div style="direction: rtl;">
+			<textbox id="t_rtl" label="بريد إلكتروني"/>
+		</div>
+
+		<hlayout>
+			<button id="btn_setLabel" label="setLabel('Updated')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabel("Updated");
+				]]></attribute>
+			</button>
+			<button id="btn_unsetLabel" label="setLabel(null)">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabel(null);
+				]]></attribute>
+			</button>
+			<button id="btn_setPosLeft" label="setLabelPosition('left')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("left");
+				]]></attribute>
+			</button>
+			<button id="btn_setPosTop" label="setLabelPosition('top')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("top");
+				]]></attribute>
+			</button>
+			<button id="btn_setPosFloating" label="setLabelPosition('floating')">
+				<attribute name="onClick"><![CDATA[
+					t_dynamic.setLabelPosition("floating");
+				]]></attribute>
+			</button>
+		</hlayout>
+	</vlayout>
+</zk>
