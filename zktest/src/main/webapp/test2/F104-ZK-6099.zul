@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6099.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 18 12:19:51 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Verifies the cross-cutting `skeleton` attribute (ZK-6099) on
+		HtmlBasedComponent. With CE only, the server stores the value and
+		emits it via renderProperties; visual rendering ships in zkex (PE).
+
+		Steps to verify:
+		1. Click "read back skeleton values" — probe label should read
+		    "rect|circle|text|rect".
+		2. Click "clear g1 skeleton" then "read back" — probe should read
+		    "null|circle|text|rect".
+		3. Click "set invalid" — probe should start with "threw:" because
+		    setSkeleton("bogus") raises WrongValueException.
+	</label>
+	<vlayout>
+		<grid id="g1" skeleton="rect" width="200px" height="60px">
+			<columns><column/></columns>
+			<rows><row><label value="hidden by skeleton"/></row></rows>
+		</grid>
+		<image id="i1" skeleton="circle" width="40px" height="40px"/>
+		<label id="l1" skeleton="text" value="placeholder text"/>
+		<button id="b1" label="probe" skeleton="rect" width="80px" height="24px"/>
+		<separator/>
+		<textbox id="probe" readonly="true" width="240px"/>
+		<button id="readBack" label="read back skeleton values"
+				onClick='probe.setValue(g1.getSkeleton() + "|" + i1.getSkeleton() + "|" + l1.getSkeleton() + "|" + b1.getSkeleton());'/>
+		<button id="clear" label="clear g1 skeleton"
+				onClick='g1.setSkeleton(null);'/>
+		<button id="invalid" label="set invalid"
+				onClick='try { g1.setSkeleton("bogus"); probe.setValue("no-throw"); } catch (org.zkoss.zk.ui.WrongValueException ex) { probe.setValue("threw:" + ex.getMessage()); }'/>
+		<button id="setCase" label="set 'Rect' (capital)"
+				onClick='try { l1.setSkeleton("Rect"); probe.setValue("no-throw"); } catch (org.zkoss.zk.ui.WrongValueException ex) { probe.setValue("threw:" + ex.getMessage()); }'/>
+		<button id="setEmpty" label="set empty string"
+				onClick='l1.setSkeleton(""); probe.setValue("" + l1.getSkeleton());'/>
+
+		<!-- Overlay lifecycle/geometry: invalidate i1 to force a full server
+		     rerender (unbind_/bind_), so the test can assert the replaced-root
+		     overlay is torn down and rebuilt cleanly (no orphan) and re-aligned
+		     to the root's offset box on the next bind. -->
+		<button id="invalidateImg" label="invalidate i1"
+				onClick='i1.invalidate();'/>
+
+		<!-- ZK-6099 F-1 regression: replaced/void and form-control roots cannot host
+		     an ::after mask, so the zkex mixin must give them a real overlay div +
+		     z-skeleton-masked instead (the same path as the <img> above). Covers a
+		     multiline Textbox (<textarea>), a Selectbox (<select>) and an Audio
+		     (<audio>); each is wrapped in its own <div> so its overlay has a private
+		     parent for the per-root overlay-count assertion. -->
+		<zscript>
+			org.zkoss.zul.ListModelList sboxModel
+					= new org.zkoss.zul.ListModelList(new String[]{"a", "b", "c"});
+		</zscript>
+		<div><textbox id="t1" multiline="true" skeleton="rect" width="120px" height="40px"/></div>
+		<div><selectbox id="s1" skeleton="circle" model="${sboxModel}" width="120px"/></div>
+		<div><audio id="a1" skeleton="text" width="120px" height="30px"/></div>
+		<button id="readBackOverlay" label="read back overlay-root skeleton values"
+				onClick='probe.setValue(t1.getSkeleton() + "|" + s1.getSkeleton() + "|" + a1.getSkeleton());'/>
+
+		<!-- Dynamic path: g2 starts without skeleton; button sets it post-bind.
+		     Covers the dynamic post-bind path (setSkeleton -> applySkeletonDom). -->
+		<grid id="g2" width="200px" height="60px">
+			<columns><column/></columns>
+			<rows><row><label value="initially visible"/></row></rows>
+		</grid>
+		<button id="setDynamic" label="dynamic setSkeleton(g2, rect)"
+				onClick='g2.setSkeleton("rect");'/>
+
+		<!-- ARIA ownership: l2's aria-busy is forced from the client BEFORE
+		     skeleton is set. Toggling skeleton through a full set/clear cycle
+		     must NOT remove the foreign attribute. -->
+		<label id="l2" value="aria-busy pre-claimed by another feature"/>
+		<button id="toggleSkelOnL2" label="set then clear skeleton on l2"
+				onClick='l2.setSkeleton("text"); l2.setSkeleton(null);'/>
+	</vlayout>
+</zk>
