@@ -504,11 +504,13 @@ export class Panel extends zul.Widget {
 				var l: string, t: string, w: string, h: string,
 				s = node.style,
 				up = this.getMaximizableIconClass_(),
-				down = this.getMaximizedIconClass_();
+				down = this.getMaximizedIconClass_(),
+				max = this.$n('max');
 				if (maximized) {
-					jq(this.$n_('max')).addClass(this.$s('maximized'))
-					.attr('title', msgzul.PANEL_RESTORE)
-					.children('.' + up).removeClass(up).addClass(down);
+					if (max)
+						jq(max).addClass(this.$s('maximized'))
+							.attr('title', msgzul.PANEL_RESTORE)
+							.children('.' + up).removeClass(up).addClass(down);
 					this._hideShadow();
 
 					if (this._collapsible && !this._open) {
@@ -581,11 +583,11 @@ export class Panel extends zul.Widget {
 					w = s.width;
 					h = s.height;
 				} else {
-					var max = this.$n_('max'),
-						$max = jq(max);
-					$max.removeClass(this.$s('maximized'))
-					.attr('title', msgzul.PANEL_MAXIMIZE)
-					.children('.' + down).removeClass(down).addClass(up);
+					if (max) {
+						jq(max).removeClass(this.$s('maximized'))
+							.attr('title', msgzul.PANEL_MAXIMIZE)
+							.children('.' + down).removeClass(down).addClass(up);
+					}
 					if (this._lastSize) {
 						s.left = this._lastSize.l;
 						s.top = this._lastSize.t;

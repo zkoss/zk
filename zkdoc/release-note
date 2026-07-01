@@ -22,6 +22,7 @@ ZK 10.4.0
   ZK-5259: Radiogroup external radio items lost after setPage
   ZK-6092: DOMPurify: Fix XSS vulnerabilities CVE-2026-0540 and CVE-2025-15599
   ZK-6079: zul.xsd : toolbar only allows one child component instead of multiple
+  ZK-6039: $n_ in window setMaximize causes page crashes
 
 * Upgrade Notes
 
