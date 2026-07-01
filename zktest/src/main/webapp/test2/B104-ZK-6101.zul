@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6101.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed May 13 17:15:19 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		To test this case, the bundled B104-ZK-6101-zk.xml configures automatic-timeout with
+		timer-keep-alive=false and a short session-timeout. After ~12s the desktop expires;
+		the ignorable onTimer AU request must still trigger the redirect to /timeout.zul.
+
+		Expected: the page is redirected to "/timeout.zul" within ~15s, even though only the
+		ignorable onTimer request observes the timeout.
+	</label>
+	<zscript><![CDATA[
+	void tick() {
+		// No-op; just keep the timer firing ignorable onTimer requests.
+	}
+	]]></zscript>
+	<timer id="timer" delay="1000" repeats="true" onTimer="tick()" onCreate="self.start()"/>
+</zk>

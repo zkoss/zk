@@ -575,8 +575,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final AuWriter out = AuWriters.newInstance();
 		out.setCompress(compress);
 		out.open(request, response);
-		if (!getAuDecoder(wapp).isIgnorable(request, wapp)) {
-			final String deviceType = getDeviceType(request);
+		final String deviceType = getDeviceType(request);
+		// ZK-6101: when automatic-timeout is enabled, the client expects to be redirected
+		// immediately after the desktop expires, regardless of which AU request observed the
+		// timeout. Treat ignorable requests (onTimer/onMouseOver/...) the same as
+		// non-ignorable ones in that case so the AuSendRedirect / AuObsolete reaches the client.
+		final boolean autoTimeout = wapp != null
+				&& wapp.getConfiguration().isAutomaticTimeout(deviceType);
+		if (autoTimeout || !getAuDecoder(wapp).isIgnorable(request, wapp)) {
 			URIInfo ui = wapp != null ? wapp.getConfiguration().getTimeoutURI(deviceType) : null;
 			String uri = ui != null ? ui.uri : null;
 			out.write(new AuConfirmClose(null)); // Bug: B50-3147382
