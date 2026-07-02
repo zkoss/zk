@@ -417,18 +417,51 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	}
 
 	/**
-	 * Denote HTTP 410 Session timeout response
+	 * Responds to an AU request that arrived without an active session.
+	 * <p>A genuine ZK AU request whose session expired carries a desktop id -
+	 * for a multipart upload the desktop id lives inside the request body, so it
+	 * is parsed first (the same way the async-update path does). Such a request
+	 * is answered with HTTP 200 and the {@code ZK-Error: 410} header (plus the
+	 * obsolete-page / redirect body) so the client can handle the timeout. A
+	 * request that carries no desktop id - i.e. an incomplete/invalid request no
+	 * genuine ZK client would send - is answered with HTTP 467 "Incomplete
+	 * request", consistent with the async-update path, so monitoring and
+	 * security tools that inspect the HTTP status can detect it.
 	 * @since 6.5.2
 	 */
 	public void denoteSessionTimeout(WebApp wapp, HttpServletRequest request, HttpServletResponse response,
 			boolean compress) throws ServletException, IOException {
-		response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); // denote timeout
-
 		// Bug 1849088: rmDesktop might be sent after invalidate
 		// Bug 1859776: need send response to client for redirect or others
-		final String dtid = getAuDecoder(wapp).getDesktopId(request);
-		if (dtid != null)
+		AuDecoder audec = getAuDecoder(wapp);
+		String dtid = null;
+		// ZK-6011: a multipart AU request keeps its dtid inside the request
+		// body, so parse it first (mirror the async-update path) before reading
+		// the dtid.
+		if (wapp != null && AuMultipartUploader.isMultipartContent(request)) {
+			try {
+				audec = AuMultipartUploader.parseRequest(request, audec, wapp);
+			} catch (Exception ex) {
+				// A malformed body no genuine ZK client would send: leave dtid
+				// null so it is answered as an incomplete request (467) below,
+				// not a 500.
+				if (log.isDebugEnabled())
+					log.debug("Failed to parse a session-less multipart AU request\n{}",
+							Servlets.getDetail(request), ex);
+			}
+		}
+		dtid = audec.getDesktopId(request);
+		if (dtid != null) {
+			response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE); // denote timeout
 			sessionTimeout(request, response, wapp, dtid, compress);
+		} else {
+			// ZK-6011: a request without a desktop id is malformed/incomplete (a
+			// genuine ZK client always carries dtid). Respond with HTTP 467
+			// "Incomplete request" - the same status the async-update path uses -
+			// instead of a misleading 200 OK, so monitoring and security tools
+			// that inspect the HTTP status can detect the bad request.
+			response.sendError(467, "Incomplete request");
+		}
 	}
 
 	//-- ASYNC-UPDATE --//
