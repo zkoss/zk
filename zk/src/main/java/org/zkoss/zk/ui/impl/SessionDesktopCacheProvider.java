@@ -16,6 +16,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
+
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.sys.DesktopCache;
@@ -35,21 +39,43 @@ import org.zkoss.zk.ui.sys.SessionCtrl;
  */
 public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 	private WebApp _wapp;
+	/** Live per-session caches, tracked so {@link #stop} can cancel their cleaner
+	 * timers (ZK-5435) without destroying passivatable desktops. Weak keys: an
+	 * armed cache is held reachable by its own running timer, so an abandoned one
+	 * drops out by itself once its timer is cancelled. Every access — and
+	 * {@link #_stopped} — is guarded by this set's monitor. */
+	private final Set<SimpleDesktopCache> _caches = Collections
+			.newSetFromMap(new WeakHashMap<SimpleDesktopCache, Boolean>());
+	/** Latched by {@link #stop} so a late activation cannot re-arm a cancelled timer. */
+	private boolean _stopped;
 
 	//-- DesktopCacheProvider --//
 	public DesktopCache getDesktopCache(Session sess) {
 		final SessionCtrl sessCtrl = (SessionCtrl) sess;
 		DesktopCache dc = sessCtrl.getDesktopCache();
-		if (dc == null) {
-			synchronized (this) {
-				dc = sessCtrl.getDesktopCache();
-				if (dc == null) {
-					dc = new SimpleDesktopCache(_wapp.getConfiguration());
-					sessCtrl.setDesktopCache(dc);
-				}
+		if (dc != null)
+			return dc;
+		synchronized (this) {
+			dc = sessCtrl.getDesktopCache();
+			if (dc == null) {
+				dc = new SimpleDesktopCache(_wapp.getConfiguration());
+				sessCtrl.setDesktopCache(dc);
 			}
 		}
+		registerCleaner(dc); // track on creation only, not per request
 		return dc;
+	}
+
+	private void registerCleaner(DesktopCache dc) {
+		if (dc instanceof SimpleDesktopCache) {
+			final SimpleDesktopCache sdc = (SimpleDesktopCache) dc;
+			synchronized (_caches) {
+				if (_stopped)
+					sdc.shutdownCleaner();
+				else
+					_caches.add(sdc);
+			}
+		}
 	}
 
 	public void sessionDestroyed(Session sess) {
@@ -57,6 +83,11 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 		final DesktopCache dc = sessCtrl.getDesktopCache();
 		if (dc != null) {
 			sessCtrl.setDesktopCache(null);
+			if (dc instanceof SimpleDesktopCache) {
+				synchronized (_caches) {
+					_caches.remove(dc);
+				}
+			}
 			dc.stop();
 		}
 	}
@@ -73,15 +104,29 @@ public class SessionDesktopCacheProvider implements DesktopCacheProvider {
 	 */
 	public void sessionDidActivate(Session sess) {
 		final DesktopCache dc = ((SessionCtrl) sess).getDesktopCache();
-		if (dc != null)
-			dc.sessionDidActivate(sess);
+		if (dc != null) {
+			dc.sessionDidActivate(sess); // re-arms the transient cleaner timer
+			registerCleaner(dc); // track the reactivated cache (or cancel if stopped)
+		}
 	}
 
 	public void start(WebApp wapp) {
+		synchronized (_caches) {
+			_stopped = false;
+		}
 		_wapp = wapp;
 	}
 
 	public void stop(WebApp wapp) {
+		// cancel the cleaner timers without destroying (possibly passivating) desktops
+		final SimpleDesktopCache[] caches;
+		synchronized (_caches) {
+			_stopped = true;
+			caches = _caches.toArray(new SimpleDesktopCache[0]);
+			_caches.clear();
+		}
+		for (SimpleDesktopCache dc : caches)
+			dc.shutdownCleaner();
 		_wapp = null;
 	}
 }

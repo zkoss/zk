@@ -59,15 +59,37 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	//it is possible if we re-boot the server
 
 	private transient Timer _cleaner;
+	/** Latched by {@link #shutdownCleaner} so a late activation cannot re-arm the timer. */
+	private transient boolean _cleanerStopped;
 	public SimpleDesktopCache(Configuration config) {
 		_desktops = new Cache(config);
 
 		// ZK-5435
 		int desktopMaxInactiveInterval = config.getDesktopMaxInactiveInterval();
-		if (desktopMaxInactiveInterval >= 0) {
-			_cleaner = new Timer();
-			_cleaner.scheduleAtFixedRate(new CleanerTask(), desktopMaxInactiveInterval * 1_000L, desktopMaxInactiveInterval * 1_000L);
+		if (desktopMaxInactiveInterval >= 0)
+			startCleaner(desktopMaxInactiveInterval * 1_000L);
+	}
+
+	private synchronized void startCleaner(long period) {
+		if (_cleanerStopped)
+			return;
+		stopCleaner();
+		_cleaner = new Timer();
+		_cleaner.scheduleAtFixedRate(new CleanerTask(), period, period);
+	}
+
+	/** Cancels the desktop cleaner timer, if any. */
+	/*package*/ synchronized void stopCleaner() {
+		if (_cleaner != null) {
+			_cleaner.cancel();
+			_cleaner = null;
 		}
+	}
+
+	/** Cancels the cleaner timer and blocks re-arming; called on web-app stop. */
+	/*package*/ synchronized void shutdownCleaner() {
+		_cleanerStopped = true;
+		stopCleaner();
 	}
 
 	//-- DesktopCache --//
@@ -191,6 +213,7 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 		} finally {
 			_desktops.disableExpunge(old);
 		}
+		stopCleaner(); // transient timer; sessionDidActivate re-arms after restore
 	}
 
 	/** Invokes {@link DesktopCtrl#sessionDidActivate} for each
@@ -209,11 +232,8 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 				((DesktopCtrl) desktop).sessionDidActivate(sess);
 
 			int lifetime = _desktops.getLifetime();
-			if (lifetime >= 0 && lifetime < Integer.MAX_VALUE / 4) {
-				// enable cleaner timer
-				_cleaner = new Timer();
-				_cleaner.scheduleAtFixedRate(new CleanerTask(), lifetime, lifetime);
-			}
+			if (lifetime >= 0 && lifetime < Integer.MAX_VALUE / 4)
+				startCleaner(lifetime);
 		} finally {
 			_desktops.disableExpunge(old);
 		}
@@ -222,23 +242,22 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	public void stop() {
 		if (log.isDebugEnabled())
 			log.debug("Invalidated and remove: {}", _desktops);
-		final boolean old = _desktops.disableExpunge(true);
 		try {
-			ArrayList<Desktop> desktops = null;
-			synchronized (_desktops) {
-				desktops = new ArrayList<Desktop>(_desktops.values());
-				_desktops.clear();
-			}
-			for (Desktop desktop : desktops) {
-				desktopDestroyed(desktop);
+			final boolean old = _desktops.disableExpunge(true);
+			try {
+				ArrayList<Desktop> desktops = null;
+				synchronized (_desktops) {
+					desktops = new ArrayList<Desktop>(_desktops.values());
+					_desktops.clear();
+				}
+				for (Desktop desktop : desktops) {
+					desktopDestroyed(desktop);
+				}
+			} finally {
+				_desktops.disableExpunge(old);
 			}
 		} finally {
-			_desktops.disableExpunge(old);
-		}
-
-		// ZK-5435
-		if (_cleaner != null) {
-			_cleaner.cancel();
+			stopCleaner();
 		}
 	}
 
