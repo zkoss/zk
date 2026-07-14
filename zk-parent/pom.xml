@@ -328,6 +328,28 @@
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>5.1.0.4751</version>
             </plugin>
+            <!-- SBOM (CycloneDX) for CRA compliance -->
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <version>2.9.2</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>makeAggregateBom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputFormat>json</outputFormat>
+                    <schemaVersion>1.6</schemaVersion>
+                    <projectType>library</projectType>
+                    <includeTestScope>false</includeTestScope>
+                    <outputName>zk-sbom-cyclonedx</outputName>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
