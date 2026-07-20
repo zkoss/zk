@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6133.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Jul 20 12:30:42 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<style>
+		.qa-sclass-probe { background-color: rgb(200, 12, 53) !important; }
+	</style>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Load this page. Both the datebox and the daterangebox below declare sclass="qa-sclass-probe",
+			and the style rule above paints any element carrying that class dark red.
+
+		To verify the fix:
+		- Expected: BOTH boxes are painted dark red — each root element renders the user sclass
+			alongside its zclass (e.g. class="qa-sclass-probe z-daterangebox").
+		- Bug: only the datebox is red; the daterangebox root renders class="z-daterangebox" without
+			the user sclass, so the sclass-scoped CSS never applies.
+
+		Runtime paths (guarded against regression):
+		- "change sclass": the daterangebox turns un-red (class becomes qa-sclass-updated) and keeps z-daterangebox.
+		- "clear sclass": the custom class is removed and z-daterangebox survives.
+		- "disable" / "readonly" / "mark invalid" then "change sclass": setSclass resets the root
+			className, so the daterangebox must re-carry its z-daterangebox-disabled / -readonly /
+			-invalid state class — it may not silently lose that state styling. "mark invalid" mirrors
+			the server range-rejection path (snap-back AuInvoke) where both inputs hold parseable text,
+			so the mark cannot be re-derived from input text and must come from a durable field.
+		- "mark invalid" then "change zclass": setZclass rerenders the widget (redraw + rebind).
+			The invalid mark must survive that too — bind_ may not re-derive it from the freshly
+			rendered input text, which would wipe a mark the server is still asserting.
+		- type "abc" in the begin input, then "set begin value", then "change sclass": the mark
+			must be gone after the value push and must NOT come back on the restyle.
+		- "mark invalid" then "set begin value": a pushed value supersedes the server's own
+			earlier rejection, so the mark must clear.
+		- type "abc" in the begin input, then "change locale": the locale change rewrites both
+			input texts, so the mark must clear with them.
+		- focus the begin input: the onOpen listener restyles the box while the input still
+			has focus, and the focus ring must survive that className reset.
+	</label>
+	<datebox id="db" sclass="qa-sclass-probe"/>
+	<!-- onOpen restyles the box while the input still has focus and the picker is
+		open: the className reset must not strip the focus ring. Clicking a button
+		cannot be used instead, because that closes the popup and clears -focused. -->
+	<daterangebox id="drb" sclass="qa-sclass-probe"
+		onOpen='drb.setSclass("qa-sclass-onopen")'/>
+	<button id="btnChange" label="change sclass"
+		onClick='drb.setSclass("qa-sclass-updated")'/>
+	<button id="btnClear" label="clear sclass"
+		onClick='drb.setSclass(null)'/>
+	<button id="btnDisable" label="disable"
+		onClick='drb.setDisabled(true)'/>
+	<button id="btnReadonly" label="readonly"
+		onClick='drb.setReadonly(true)'/>
+	<button id="btnSetLocale" label="change locale"
+		onClick='drb.setLocale(new java.util.Locale("de", "DE"))'/>
+	<button id="btnSetBegin" label="set begin value"
+		onClick='drb.setBeginValue(new java.util.Date())'/>
+	<button id="btnChangeZclass" label="change zclass"
+		onClick='drb.setZclass("qa-zcls")'/>
+	<button id="btnMarkInvalid" label="mark invalid"
+		onClick='org.zkoss.zk.ui.util.Clients.response("invalid", new org.zkoss.zk.au.out.AuInvoke(drb, "_setInvalid", true))'/>
+</zk>
