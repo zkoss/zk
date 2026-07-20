@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6133.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Jul 20 12:30:42 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<style>
+		.qa-sclass-probe { background-color: rgb(200, 12, 53) !important; }
+	</style>
+	<label multiline="true">
+		Both boxes below declare sclass="qa-sclass-probe", and the style rule above paints
+		any element carrying that class dark red.
+
+		- Expected: BOTH boxes are dark red — each root renders the user sclass alongside
+			its zclass (e.g. class="qa-sclass-probe z-daterangebox").
+		- Bug: only the datebox is red; the daterangebox root renders class="z-daterangebox"
+			without the user sclass, so the sclass-scoped CSS never applies.
+
+		The buttons cover the runtime paths: a setSclass must swap the custom class and a
+		setSclass(null) must remove it, and the zclass must survive both.
+	</label>
+	<!-- State modifiers must survive a setSclass too: a setSclass rewrites
+		className wholesale, so anything only ever added with classList is lost
+		unless domClass_() re-emits it. "readonly" then "change sclass" must leave
+		the box both z-daterangebox-readonly and qa-sclass-updated; typing garbage
+		in the begin input then "change sclass" must keep z-daterangebox-invalid.
+		The buttons sit above the boxes because an errorbox opens to its input's
+		right, where it would cover them. -->
+	<div>
+		<button id="btnChange" label="change sclass"
+			onClick='drb.setSclass("qa-sclass-updated")'/>
+		<button id="btnClear" label="clear sclass"
+			onClick='drb.setSclass(null)'/>
+		<button id="btnReadonly" label="readonly"
+			onClick='drb.setReadonly(true)'/>
+	</div>
+	<div>
+		<datebox id="db" sclass="qa-sclass-probe"/>
+	</div>
+	<div>
+		<daterangebox id="drb" sclass="qa-sclass-probe"/>
+	</div>
+</zk>
