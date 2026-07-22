@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6134.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Jul 22 15:35:59 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        Steps to reproduce:
+        1. Open the empty daterangebox popup below.
+        2. Open the seeded (2025-01-10 ~ 2025-01-15) daterangebox popup below.
+
+        The 1st of each shown month must NOT be marked selected.
+    </label>
+	<zscript><![CDATA[
+		java.util.Date b = new java.util.Date(125, 0, 10); // 2025-01-10
+		java.util.Date e = new java.util.Date(125, 0, 15); // 2025-01-15
+	]]></zscript>
+	<vlayout spacing="10px" hflex="1">
+		<label value="ZK-6134 - popup must not mark the 1st of a month as selected"/>
+		<daterangebox id="empty" format="yyyy-MM-dd"/>
+		<daterangebox id="seeded" format="yyyy-MM-dd" beginValue="${b}" endValue="${e}"/>
+	</vlayout>
+</zk>
