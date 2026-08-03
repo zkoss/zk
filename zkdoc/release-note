@@ -1,4 +1,4 @@
-ZK 10.4.0
+ZK 11.0.0
 * Features
   ZK-6068: zk.xsd declares elements for CSP-related settings
   ZK-6059: html element does not have a lang attribute
