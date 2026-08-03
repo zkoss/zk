@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<div id="comp" apply="${composerScopeSingleton}" xmlns="http://www.zkoss.org/2005/zul">
+    <label id="hashLabel"/>
+</div>

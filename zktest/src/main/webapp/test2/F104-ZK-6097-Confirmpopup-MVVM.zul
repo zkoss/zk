@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Confirmpopup-MVVM.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6097_ConfirmpopupVM')">
+		<vlayout spacing="8px" style="padding:16px;">
+			<confirmpopup id="cpMvvm"
+					message="@load(vm.message)"
+					onOK="@command('onOK')"
+					onCancel="@command('onCancel')"/>
+
+			<button id="btnOpen" label="Delete" popup="cpMvvm,position=before_center"/>
+			<label id="mvvmResult" value="@load(vm.result)"/>
+
+			<hlayout spacing="8px">
+				<button id="btnChangeMsg" label="Change message"
+						onClick="@command('changeMessage')"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

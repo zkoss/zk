@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Breadcrumb-MVC.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.zktest.test2.F104_ZK_6097_BreadcrumbComposer">
+		<vlayout spacing="8px" style="padding:16px;">
+			<breadcrumb id="bcMvc">
+				<breadcrumbitem label="Home" href="/"/>
+				<breadcrumbitem label="Products" href="/products"/>
+				<breadcrumbitem label="Item"/>
+			</breadcrumb>
+			<label id="mvcSeparator" value="/"/>
+
+			<hlayout spacing="8px">
+				<button id="btnPipeMvc" label="| separator"/>
+				<button id="btnSlashMvc" label="/ separator"/>
+				<button id="btnAddItem" label="Add item"/>
+				<button id="btnSetMaxItems" label="Max 3 items"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

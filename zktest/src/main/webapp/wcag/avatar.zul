@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Avatar"?>
+<?root-attributes lang="en"?>
+<!--
+avatar.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 14 15:20:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Avatar</n:h1>
+    </n:header>
+    <n:main>
+        <n:section>
+            <n:h2>Image avatar</n:h2>
+            <avatar image="/img/live.gif" ca:alt="Profile picture"/>
+        </n:section>
+        <n:section>
+            <n:h2>Label avatar (initials)</n:h2>
+            <avatar label="AB"/>
+            <avatar label="CD" shape="square"/>
+        </n:section>
+        <n:section>
+            <n:h2>Size variants</n:h2>
+            <avatar label="EF" size="small"/>
+            <avatar label="GH" size="medium"/>
+            <avatar label="IJ" size="large"/>
+        </n:section>
+        <n:section>
+            <n:h2>Icon-only avatar (needs aria-label)</n:h2>
+            <avatar iconSclass="z-icon-user" ca:aria-label="User"/>
+        </n:section>
+    </n:main>
+</zk>

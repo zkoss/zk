@@ -37,6 +37,18 @@ import org.zkoss.zul.ListSubModel;
 public class BindComboitemRenderer extends AbstractRenderer implements ComboitemRenderer<Object> {
 	private static final long serialVersionUID = 1463169907348730644L;
 
+	// ZK-5751: Stop template lookup at Combobox level to avoid picking up parent's (e.g. Grid's) template
+	protected Template lookupTemplate(Component comp, String name) {
+		if (comp == null)
+			return null;
+		Template template = comp.getTemplate(name);
+		if (template != null)
+			return template;
+		if (comp instanceof Combobox)
+			return null;
+		return lookupTemplate(comp.getParent(), name);
+	}
+
 	public void render(final Comboitem item, final Object data, final int index) throws Exception {
 		final Combobox cb = (Combobox) item.getParent();
 		final ListModel<?> model = cb.getModel();

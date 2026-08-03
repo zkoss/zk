@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-auto-sort.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:49 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+        import java.util.*;
+
+        ListModelList contribs = new ListModelList();
+        Map m;
+        String[][] DATA = {
+            {"Dr.", "Jean",   "Dupont",   "ext-101"},
+            {"Mr.", "Tom",    "Yeh",      "ext-215"},
+            {"Ms.", "Anna",   "Smith",    "ext-132"},
+            {"Mr.", "Hans",   "Schmidt",  "ext-414"},
+            {"Dr.", "Carlos", "Garcia",   "ext-329"},
+            {"Ms.", "Linda",  "Brown",    "ext-517"}
+        };
+        for (int i = 0; i < DATA.length; i++) {
+            m = new HashMap();
+            m.put("title",     DATA[i][0]);
+            m.put("firstName", DATA[i][1]);
+            m.put("lastName",  DATA[i][2]);
+            m.put("extension", DATA[i][3]);
+            m.put("fullName",  DATA[i][1] + " " + DATA[i][2]);
+            contribs.add(m);
+        }
+    ]]></zscript>
+
+    <grid id="grid1" responsive="stacking"
+          width="100%" model="${contribs}">
+        <columns>
+            <column label="Title"     sort="auto(title)"     width="80px" />
+            <column label="Name"      sort="auto(firstName, lastName)" />
+            <column label="Extension" sort="auto(extension)" width="120px" responsiveVisible="false" />
+        </columns>
+        <template name="model">
+            <row>
+                <label value="${each.title}" />
+                <label value="${each.fullName}" />
+                <label value="${each.extension}" />
+            </row>
+        </template>
+    </grid>
+</zk>

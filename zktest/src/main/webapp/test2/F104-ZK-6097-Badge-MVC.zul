@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Badge-MVC.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.zktest.test2.F104_ZK_6097_BadgeComposer">
+		<vlayout spacing="8px" style="padding:16px;">
+			<badge id="bdgMvc" count="0">
+				<button label="Inbox"/>
+			</badge>
+			<label id="mvcCount" value="0"/>
+
+			<hlayout spacing="8px">
+				<button id="btnIncrementMvc" label="Increment"/>
+				<button id="btnResetMvc" label="Reset"/>
+				<button id="btnSetDangerMvc" label="Set danger"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

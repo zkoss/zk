@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-col.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:31 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <grid id="grid1" responsive="stacking" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Email" responsiveVisible="false" />
+                <column label="Department" />
+                <column label="" id="colNoLabel" />
+                <column label="Hidden" visible="false" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                    <label value="Engineering" />
+                    <label value="extra-data" />
+                    <label value="hidden-value" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="jane@example.com" />
+                    <label value="Design" />
+                    <label value="extra-data-2" />
+                    <label value="hidden-value-2" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

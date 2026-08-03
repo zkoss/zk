@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-breakpoint-all.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 04 12:52:15 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <label value="Breakpoint matrix — 5 grids, each with a different breakpoint."
+            style="font-weight:600;" />
+        <separator height="10px" />
+
+        <grid id="gridSm" responsive="stacking" responsiveColumns="sm-none" width="100%">
+            <columns><column label="Tier sm (576px)" /><column label="Status" /></columns>
+            <rows><row><label value="row" /><label value="value" /></row></rows>
+        </grid>
+        <separator height="10px" />
+
+        <grid id="gridMd" responsive="stacking" width="100%">
+            <columns><column label="Tier md (768px)" /><column label="Status" /></columns>
+            <rows><row><label value="row" /><label value="value" /></row></rows>
+        </grid>
+        <separator height="10px" />
+
+        <grid id="gridLg" responsive="stacking" responsiveColumns="sm-1 lg-none" width="100%">
+            <columns><column label="Tier lg (992px)" /><column label="Status" /></columns>
+            <rows><row><label value="row" /><label value="value" /></row></rows>
+        </grid>
+        <separator height="10px" />
+
+        <grid id="gridXl" responsive="stacking" responsiveColumns="sm-1 xl-none" width="100%">
+            <columns><column label="Tier xl (1200px)" /><column label="Status" /></columns>
+            <rows><row><label value="row" /><label value="value" /></row></rows>
+        </grid>
+        <separator height="10px" />
+
+        <grid id="gridXxl" responsive="stacking" responsiveColumns="sm-1 xxl-none" width="100%">
+            <columns><column label="Tier xxl (1400px)" /><column label="Status" /></columns>
+            <rows><row><label value="row" /><label value="value" /></row></rows>
+        </grid>
+    </div>
+</zk>

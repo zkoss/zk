@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Daterangebox"?>
+<?root-attributes lang="en"?>
+<!--
+daterangebox.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 29 14:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Daterangebox</n:h1>
+    </n:header>
+    <n:main>
+        <vlayout>
+            <hlayout>
+                Choose a date range:
+                <daterangebox ca:aria-label="Choose a date range"/>
+            </hlayout>
+            <hlayout>
+                Choose a date range with time:
+                <daterangebox ca:aria-label="Choose a date range with time" showTime="true"/>
+            </hlayout>
+            <hlayout>
+                <label value="Booking window" id="lblTarget"/>
+                <daterangebox ca:aria-labelledby="${lblTarget.uuid}"/>
+            </hlayout>
+        </vlayout>
+    </n:main>
+</zk>

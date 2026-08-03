@@ -722,8 +722,8 @@ public class WpdExtendlet extends AbstractExtendlet<Object> {
 				sb.append('\'').append(me.getKey()).append("':'")
 						.append(exposeVer ? value : Utils.obfuscateHashWithSalt(value, verInfoEnabled)).append("',");
 			}
-			removeLast(sb, ',');
 		}
+		removeLast(sb, ',');
 
 		sb.append("},{");
 		if (WebApps.getFeature("ee"))

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-event.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:02 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <label id="clickedRow" value="clicked: none" />
+        <label id="sortStatus" value="sort: none" />
+        <button id="btnSort" label="Trigger Sort">
+            <attribute name="onClick"><![CDATA[
+				// Toggle ascending ↔ descending each click. Column.sort(true)
+				// when already ascending is a no-op (returns false), so we
+				// flip direction based on the current state.
+				String dir = colName.getSortDirection();
+				colName.sort(!"ascending".equals(dir));
+			]]></attribute>
+        </button>
+        <grid id="grid1" responsive="stacking" width="100%">
+            <columns>
+                <column label="Name" sort="auto" id="colName">
+                    <attribute name="onSort"><![CDATA[
+					org.zkoss.zul.Column col = (org.zkoss.zul.Column) event.getTarget();
+					sortStatus.setValue("sort: " + col.getLabel() + " " + (event.isAscending() ? "ascending" : "descending"));
+				]]></attribute>
+                </column>
+                <column label="Email" />
+                <column label="Department" />
+            </columns>
+            <rows>
+                <row>
+                    <attribute name="onClick"><![CDATA[
+					clickedRow.setValue("clicked: row0");
+				]]></attribute>
+                    <label value="Charlie" />
+                    <label value="charlie@example.com" />
+                    <label value="Support" />
+                </row>
+                <row>
+                    <attribute name="onClick"><![CDATA[
+					clickedRow.setValue("clicked: row1");
+				]]></attribute>
+                    <label value="Alice" />
+                    <label value="alice@example.com" />
+                    <label value="Marketing" />
+                </row>
+                <row>
+                    <attribute name="onClick"><![CDATA[
+					clickedRow.setValue("clicked: row2");
+				]]></attribute>
+                    <label value="Bob" />
+                    <label value="bob@example.com" />
+                    <label value="Sales" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

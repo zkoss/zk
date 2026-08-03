@@ -43,6 +43,33 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  */
 public class Utils {
+	/** Validates an enumerated string value against a fixed set of accepted
+	 * tokens — the idiom shared by the enumerated setters of {@code zul}
+	 * components (shape, size, severity, placement, orient, effect, ...).
+	 *
+	 * @param value the incoming value.
+	 * @param defaultValue the value returned when {@code value} is {@code null};
+	 * pass the component's default to reset-on-null, or {@code null} to keep a
+	 * nullable "no override" value.
+	 * @param message the {@link WrongValueException} message prefix; the rejected
+	 * value is appended to it.
+	 * @param allowed the accepted (non-null) tokens.
+	 * @return {@code value} when it is accepted, or {@code defaultValue} when
+	 * {@code value} is {@code null}.
+	 * @throws WrongValueException if {@code value} is non-null and not one of
+	 * {@code allowed}.
+	 * @since 10.4.0
+	 */
+	public static String checkEnum(String value, String defaultValue, String message, String... allowed)
+	throws WrongValueException {
+		if (value == null)
+			return defaultValue;
+		for (String a : allowed)
+			if (a.equals(value))
+				return value;
+		throw new WrongValueException(message + value);
+	}
+
 	/** Parse a list of numbers.
 	 *
 	 * @param defaultValue the value if a number is omitted. For example, ",2"
@@ -308,6 +335,16 @@ public class Utils {
 		addLocaleJS(sb, "ITEMWIDGET_SELECTED", MZul.ITEMWIDGET_SELECTED);
 
 		addLocaleJS(sb, "TREE_SELECT_ALL", MZul.TREE_SELECT_ALL);
+
+		addLocaleJS(sb, "RANGE_CLEAR", MZul.RANGE_CLEAR);
+		// RANGE_SEPARATOR / RANGE_MIN_NIGHTS / RANGE_MAX_NIGHTS are server-side only
+		// (separator is a component property; min/max-nights are thrown server-side),
+		// so they are not shipped in the per-page client locale bundle.
+		addLocaleJS(sb, "RANGE_INVALID", MZul.RANGE_INVALID);
+		// CALENDAR_TODAY is NOT shipped globally: it already has a per-component
+		// home (Datebox/Calendar render it as the todayLinkLabel property), and
+		// Daterangebox now mirrors that via its own todayLinkLabel property —
+		// so a per-page global constant would be a redundant second owner.
 
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')

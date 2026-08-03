@@ -116,5 +116,8 @@ declare global {
 	| 'COLORBOX_COLOR_FIELD' // zkex/inp-a11y
 	| 'CHOSENBOX_CREATE_MESSAGE' // zkmax/inp-a11y
 	| 'CHOSENBOX_SELECTION' // zkmax/inp-a11y
+	| 'CALENDAR_TODAY' // zkmax/db/Daterangebox (consumer); reuses CE Calendar today label
+	| 'RANGE_CLEAR'
+	| 'RANGE_INVALID'
 	, string>;
 }

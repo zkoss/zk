@@ -1,0 +1,64 @@
+@import "~./zul/less/_header.less";
+
+/* Visual language follows Ant Design Avatar.Group (https://ant.design/components/avatar):
+   overlapping stack with negative margins, a "+N" overflow avatar, and optional
+   size/shape cascade from the group element to every child avatar. */
+.z-avatargroup {
+	display: inline-flex;
+	align-items: center;
+
+	/* Customization hook — overlap between adjacent avatars (negative
+	   margin). Override on the element via inline style or a parent rule;
+	   each size cascade redefines this value below. */
+	--zk-avatargroup-overlap: -8px;
+
+	/* Each child avatar overlaps the previous one by --zk-avatargroup-overlap.
+	   Reset the first child so the group starts flush. */
+	> .z-avatar {
+		margin-left: var(--zk-avatargroup-overlap);
+		border: 2px solid #fff;
+		box-sizing: content-box;
+
+		&:first-child { margin-left: 0; }
+	}
+
+	/* Size cascade: setting a size on the group overrides all children. */
+	&-small {
+		--zk-avatargroup-overlap: -6px;
+		> .z-avatar {
+			--zk-avatar-size: 24px;
+			--zk-avatar-font-size: 10px;
+		}
+	}
+	&-medium {
+		--zk-avatargroup-overlap: -8px;
+		> .z-avatar {
+			--zk-avatar-size: 36px;
+			--zk-avatar-font-size: 14px;
+		}
+	}
+	&-large {
+		--zk-avatargroup-overlap: -12px;
+		> .z-avatar {
+			--zk-avatar-size: 48px;
+			--zk-avatar-font-size: 18px;
+		}
+	}
+
+	/* Shape cascade: propagate shape to children. */
+	&-circle > .z-avatar { border-radius: 50%; }
+	&-square > .z-avatar { border-radius: @baseBorderRadius; }
+
+	/* Overflow-collapsed children are hidden by attribute (set in
+	   Avatargroup.ts#_applyOverflow), never via inline style, so an author's
+	   inline `display` survives a re-accounting pass. !important so the hide
+	   still wins if the author did set an inline display. */
+	[data-ag-hidden] { display: none !important; }
+
+	/* "+N" overflow indicator — styled as a plain avatar. */
+	&-overflow {
+		background: #f0f0f0;
+		color: #595959;
+		cursor: default;
+	}
+}

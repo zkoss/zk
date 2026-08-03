@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-exclusion.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:06 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <!-- Grid with Frozen -->
+        <grid id="gridFrozen" responsive="stacking" width="100%">
+            <frozen columns="1" />
+            <columns>
+                <column label="ID" width="80px" />
+                <column label="Name" width="200px" />
+                <column label="Email" width="200px" />
+                <column label="Department" width="200px" />
+                <column label="Status" width="200px" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="001" />
+                    <label value="John" />
+                    <label value="john@example.com" />
+                    <label value="Engineering" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="002" />
+                    <label value="Jane" />
+                    <label value="jane@example.com" />
+                    <label value="Design" />
+                    <label value="Active" />
+                </row>
+            </rows>
+        </grid>
+        <separator height="20px" />
+        <!-- Grid with Auxhead -->
+        <grid id="gridAuxhead" responsive="stacking" width="100%">
+            <auxhead>
+                <auxheader label="Personal Info" colspan="2" />
+                <auxheader label="Work Info" colspan="2" />
+            </auxhead>
+            <columns>
+                <column label="Name" />
+                <column label="Email" />
+                <column label="Department" />
+                <column label="Status" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                    <label value="Engineering" />
+                    <label value="Active" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="jane@example.com" />
+                    <label value="Design" />
+                    <label value="Active" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

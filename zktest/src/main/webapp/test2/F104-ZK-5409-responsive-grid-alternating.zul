@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-alternating.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 21 11:23:50 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div style="padding: 10px;">
+		<label value="Non-monotonic cascade — sm-2 md-none lg-3 xl-none."
+			style="font-weight:600;" />
+		<separator height="10px" />
+
+		<grid id="gridAlt" responsive="stacking"
+				responsiveColumns="sm-2 md-none lg-3 xl-none" width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Value" />
+			</columns>
+			<rows>
+				<row><label value="Alpha" /><label value="A" /></row>
+				<row><label value="Beta" /><label value="B" /></row>
+				<row><label value="Gamma" /><label value="C" /></row>
+			</rows>
+		</grid>
+	</div>
+</zk>

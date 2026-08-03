@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-iterative-renderer.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:36 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+
+        ListModelList langs = new ListModelList();
+        Object[][] DATA = {
+            {"Arabic",   "Ayman",   "iso-8859-6"},
+            {"Chinese",  "Tom Yeh", "UTF-8"},
+            {"French",   "Jean",    "UTF-8"},
+            {"German",   "Hans",    "UTF-8"},
+            {"Japanese", "Taro",    "UTF-8"},
+            {"Spanish",  "Carlos",  "UTF-8"}
+        };
+        for (int i = 0; i < DATA.length; i++) langs.add(DATA[i]);
+    ]]></zscript>
+
+    <grid id="grid1" responsive="stacking"
+        width="100%" model="${langs}">
+        <columns>
+            <column label="Language"    hflex="4" />
+            <column label="Contributor" hflex="5" />
+            <column label="Charset"     hflex="2" responsiveVisible="false" />
+            <column label="Like"        hflex="3" />
+        </columns>
+        <template name="model">
+            <row>
+                <label value="${each[0]}" />
+                <label value="${each[1]}" />
+                <label value="${each[2]}" />
+                <div>
+                    <button label="Thumbs up" />
+                </div>
+            </row>
+        </template>
+    </grid>
+</zk>

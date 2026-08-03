@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-libprop.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue May 12 10:22:52 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<custom-attributes org.zkoss.zul.grid.responsive="stacking" scope="page"/>
+	<label multiline="true">
+		ZK-5409 fallback test — &lt;grid&gt; has NO responsive attribute.
+		A page-scope attribute (org.zkoss.zul.grid.responsive=stacking) is set.
+		Resize the window to &lt; 768px and the grid should still enter
+		stacking mode purely because of the page-scope fallback.
+
+		Expected: at narrow width, grid root carries .z-grid--stacking class.
+	</label>
+	<grid id="g1" width="100%">
+		<columns>
+			<column label="Name"/>
+			<column label="Email"/>
+		</columns>
+		<rows>
+			<row><label value="John"/><label value="john@example.com"/></row>
+			<row><label value="Jane"/><label value="jane@example.com"/></row>
+		</rows>
+	</grid>
+</zk>

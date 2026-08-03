@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-nested.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:27:23 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <style>
+        .order-card .z-row-inner, .order-card .z-cell { vertical-align: top; }
+        .inner-label { font-weight: 600; color: #374151; }
+        .order-nested-wrap {
+            padding: 4px 0;
+            border-top: 1px dashed #d0d7de;
+            margin-top: 6px;
+        }
+    </style>
+    <window title="Orders with Line Items (Nested Responsive Grid)"
+            width="100%" border="normal" vflex="1">
+        <div style="padding: 8px; color: #555;">
+            Resize the window (or DevTools mobile emulation) to see the outer
+            Orders grid collapse into cards. The inner Line Items grid inside
+            each order will ALSO stack independently because it's responsive.
+        </div>
+
+        <grid id="orderGrid" responsive="stacking"
+                width="100%" vflex="1" sclass="order-card">
+            <columns>
+                <column label="Order #"   width="120px" />
+                <column label="Customer"  width="180px" />
+                <column label="Placed"    width="120px" responsiveVisible="false" />
+                <column label="Status"    width="100px" />
+                <column label="Line Items" />
+                <column label="Total"     width="120px" align="right" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="SO-10001" />
+                    <label value="Acme Corp." />
+                    <label value="2026-04-18" />
+                    <label value="Shipped" />
+                    <grid id="linesA" responsive="stacking" width="100%">
+                        <columns>
+                            <column label="SKU"     width="90px" />
+                            <column label="Product" />
+                            <column label="Qty"     width="60px" align="right" />
+                            <column label="Unit"    width="90px" align="right" responsiveVisible="false" />
+                            <column label="Subtotal" width="100px" align="right" />
+                        </columns>
+                        <rows>
+                            <row>
+                                <label value="A-001" /><label value="Widget Alpha" />
+                                <label value="5" /><label value="100.00" /><label value="500.00" />
+                            </row>
+                            <row>
+                                <label value="A-002" /><label value="Widget Beta" />
+                                <label value="2" /><label value="250.00" /><label value="500.00" />
+                            </row>
+                        </rows>
+                    </grid>
+                    <label value="1,000.00" />
+                </row>
+
+                <row>
+                    <label value="SO-10002" />
+                    <label value="Globex LLC" />
+                    <label value="2026-04-19" />
+                    <label value="Processing" />
+                    <grid id="linesB" responsive="stacking" width="100%">
+                        <columns>
+                            <column label="SKU"     width="90px" />
+                            <column label="Product" />
+                            <column label="Qty"     width="60px" align="right" />
+                            <column label="Unit"    width="90px" align="right" responsiveVisible="false" />
+                            <column label="Subtotal" width="100px" align="right" />
+                        </columns>
+                        <rows>
+                            <row>
+                                <label value="B-101" /><label value="Gadget X1" />
+                                <label value="3" /><label value="400.00" /><label value="1,200.00" />
+                            </row>
+                            <row>
+                                <label value="B-102" /><label value="Gadget X2" />
+                                <label value="1" /><label value="900.00" /><label value="900.00" />
+                            </row>
+                            <row>
+                                <label value="B-ACC" /><label value="Cable Set" />
+                                <label value="4" /><label value="30.00" /><label value="120.00" />
+                            </row>
+                        </rows>
+                    </grid>
+                    <label value="2,220.00" />
+                </row>
+
+                <row>
+                    <label value="SO-10003" />
+                    <label value="Initech Ltd." />
+                    <label value="2026-04-20" />
+                    <label value="Pending" />
+                    <grid id="linesC" responsive="stacking" width="100%">
+                        <columns>
+                            <column label="SKU"     width="90px" />
+                            <column label="Product" />
+                            <column label="Qty"     width="60px" align="right" />
+                            <column label="Unit"    width="90px" align="right" responsiveVisible="false" />
+                            <column label="Subtotal" width="100px" align="right" />
+                        </columns>
+                        <rows>
+                            <row>
+                                <label value="C-010" /><label value="TPS Report License" />
+                                <label value="10" /><label value="75.00" /><label value="750.00" />
+                            </row>
+                        </rows>
+                    </grid>
+                    <label value="750.00" />
+                </row>
+            </rows>
+            <foot>
+                <footer label="Totals (3 orders)" />
+                <footer label="" /><footer label="" /><footer label="" /><footer label="" />
+                <footer label="3,970.00" />
+            </foot>
+        </grid>
+    </window>
+</zk>

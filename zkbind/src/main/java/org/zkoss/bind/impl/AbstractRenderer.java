@@ -50,7 +50,7 @@ public abstract class AbstractRenderer implements TemplateRendererCtrl, Serializ
 		_attributeName = name;
 	}
 
-	private Template lookupTemplate(Component comp, String name) {
+	protected Template lookupTemplate(Component comp, String name) {
 		if (comp == null)
 			return null;
 		Template template = comp.getTemplate(name);

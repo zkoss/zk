@@ -1,0 +1,33 @@
+{
+  "folders": [
+    {
+      "name": "zk",
+      "path": ".",
+    },
+    {
+      "name": "zkcml",
+      "path": "../zkcml",
+    },
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "*/bin/**": true,
+      "**/build/**": true,
+      "**/out/**": true,
+      "**/.gradle/**": true,
+    },
+    "files.exclude": {
+      "*/bin/**": true,
+      "**/build/**": true,
+      "**/out/**": true,
+      "**/.gradle/**": true,
+    },
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.project.outputPath": "out",
+    "java.autobuild.enabled": true,
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
+    "git.ignoreLimitWarning": true,
+    "java.import.gradle.java.home": "", // Change to Your JAVA_11_HOME
+  },
+}

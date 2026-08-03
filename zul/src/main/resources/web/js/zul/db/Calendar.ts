@@ -30,8 +30,15 @@ declare global {
 	interface HTMLTableCellElement {
 		/** @internal */
 		_monofs?: number;
+		/** @internal */
+		_rangeRole?: string;
 	}
 }
+
+// The five CSS classes managed by setRangeHighlight/clearRangeHighlight; kept in
+// one place so the strip-on-redraw, per-cell clear, and full-clear paths can't drift.
+const RANGE_HIGHLIGHT_CLASSES = ['z-cell-range-begin', 'z-cell-range-end',
+	'z-cell-range-mid', 'z-cell-range-preview-mid', 'z-cell-range-preview-end'];
 
 function _newDate(year, month, day, bFix, tz?: string): DateImpl {
 	var v = Dates.newInstance([year, month, day], tz);
@@ -1350,6 +1357,16 @@ export class Calendar extends zul.Widget {
 			if (!opts || !opts.sameMonth) {
 				$mid.find('.' + outsideClass).removeClass(outsideClass);
 				$mid.find('.' + disdClass).removeClass(disdClass);
+				// Range-highlight classes are keyed by (anchorYear, anchorMonth,
+				// monofs); a cross-month redraw rebuilds each <td>'s innerHTML
+				// and monofs (see below), so the class plus the _rangeRole
+				// cache must be cleared too — otherwise stale highlights
+				// survive into months the new range no longer covers. Stripped
+				// only here (not on sameMonth click-driven updates) so highlights
+				// applied by callers persist across in-month state changes.
+				$mid.find('td.' + this.$s('cell'))
+					.removeClass(RANGE_HIGHLIGHT_CLASSES.join(' '))
+					.each(function () { (this as HTMLTableCellElement)._rangeRole = ''; });
 			}
 
 			if (v < 0) v += 7;
@@ -1367,8 +1384,16 @@ export class Calendar extends zul.Widget {
 
 							// Bug B65-ZK-1804: check whether the date is out of range
 							if (y >= maxyear && m == 11 && monofs == 1
-									|| y <= minyear && m == 0 && monofs == -1)
+									|| y <= minyear && m == 0 && monofs == -1) {
+								// This trailing cell is skipped entirely (not re-rendered)
+								// at the year extreme, so it keeps the day-key ('value')
+								// from a PRIOR render. Clear it so a later setRangeHighlight
+								// can't phantom-tag this stale cell: with no 'value' the
+								// role block is skipped (raw === undefined) and the existing
+								// no-op short-circuit strips any leftover range class.
+								jq(week.cells[k]).removeData('value');
 								continue;
+							}
 
 							var $cell = jq(week.cells[k]),
 								isSelectDisabled = Renderer.disabled(this, y, m + monofs, v, today);
@@ -1435,5 +1460,175 @@ export class Calendar extends zul.Widget {
 			setTimeout(() => zk(n).focus()); // FIXME: missing timeout argument?
 		else
 			zk(n).focus();
+	}
+
+	/**
+	 * Highlight a date range visually on the day-view of this calendar.
+	 *
+	 * Adds the following CSS classes to the day cells:
+	 * - `z-cell-range-begin` — the cell representing `begin`
+	 * - `z-cell-range-end` — the cell representing `end`
+	 * - `z-cell-range-mid` — cells strictly between `begin` and `end`
+	 * - `z-cell-range-preview-mid` — cells strictly between `begin` and `previewEnd`
+	 *   (only when `end` is `undefined` and `previewEnd` is supplied)
+	 * - `z-cell-range-preview-end` — the cell representing `previewEnd`
+	 *   (only when `end` is `undefined`)
+	 *
+	 * Existing cell state classes (e.g. `z-calendar-disabled`,
+	 * `z-calendar-outside`, `z-calendar-selected`) are not modified —
+	 * only the five `z-cell-range-*` classes are managed here.
+	 *
+	 * This method is additive and a no-op when the widget is not bound,
+	 * not in `day` view, or its day grid cannot be located.
+	 *
+	 * **Timezone caveat** — both the input `begin`/`end`/`previewEnd` values
+	 * and the day cells are matched at the start-of-day boundary read in the
+	 * browser's local timezone. When the host component (e.g. `Daterangebox`)
+	 * is configured for a non-browser timezone, the cell that lights up may
+	 * be off by one day at the edges (typically late-night picks rendered in
+	 * a different-zone UA). This is the same caveat that applies to
+	 * `Datebox` value display; tracked as a known limitation rather than a
+	 * bug. Mitigation: align the page locale/timezone with the component, or
+	 * pass dates whose start-of-day already matches the browser zone.
+	 *
+	 * @param begin - the begin date of the selected range. Required.
+	 * @param end - the end date of the selected range; pass `undefined` for an
+	 *     open-ended range (only `begin` is highlighted, optionally augmented
+	 *     by `previewEnd`).
+	 * @param previewEnd - hover-preview end date; when `end` is `undefined`
+	 *     and `previewEnd` is supplied, cells between `begin` and `previewEnd`
+	 *     are tagged as preview. Has no effect when `end` is defined.
+	 * @returns this widget, to allow method chaining.
+	 * @since 10.4.0
+	 */
+	// eslint-disable-next-line zk/javaStyleSetterSignature
+	setRangeHighlight(begin: Date, end?: Date, previewEnd?: Date): this {
+		var $cells = this._rangeCells$();
+		if (!$cells || !$cells.length) return this;
+
+		var beginMs = this._dayStartMs(begin),
+			endMs = end ? this._dayStartMs(end) : undefined,
+			previewMs = (endMs === undefined && previewEnd) ? this._dayStartMs(previewEnd) : undefined,
+			seldate = this.getTime(),
+			anchorYear = seldate.getFullYear(),
+			anchorMonth = seldate.getMonth();
+
+		$cells.each(function () {
+			var cell = this as HTMLTableCellElement,
+				raw = jq.data(cell, 'value') as number | undefined,
+				role = '';
+			if (raw !== undefined) {
+				var day = zk.parseInt(raw),
+					monofs = cell._monofs ?? 0,
+					cellMs = day ? Date.UTC(anchorYear, anchorMonth + monofs, day) : 0;
+				// Only the in-month cell (monofs === 0) owns a range role. The
+				// adjacent-month "outside" fill cells (monofs !== 0, rendered
+				// visibility:hidden) represent dates that ALSO appear as the real
+				// in-month cell on a neighbouring panel; tagging them too would put
+				// z-cell-range-{begin,end} on two cells for one boundary date,
+				// breaking the single-cell-per-role DOM contract.
+				if (day && monofs === 0) {
+					if (endMs !== undefined) {
+						// Closed range. A single-day pair (beginMs === endMs)
+						// must tag both 'begin' and 'end' on the same cell —
+						// without the && check the begin branch would `return`
+						// first and the end class would never apply, breaking
+						// the documented z-cell-range-end DOM contract for
+						// 1-night ranges.
+						if (cellMs === beginMs && cellMs === endMs) role = 'begin end';
+						else if (cellMs === beginMs) role = 'begin';
+						else if (cellMs === endMs) role = 'end';
+						else if (cellMs > beginMs && cellMs < endMs) role = 'mid';
+					} else if (previewMs !== undefined) {
+						// Open-ended range with hover preview.
+						if (cellMs === beginMs) role = 'begin';
+						else if (cellMs === previewMs) role = 'preview-end';
+						// Forward and reversed preview collapse to a single
+						// min/max test so the two directions share code.
+						else {
+							var lo = beginMs < previewMs ? beginMs : previewMs,
+								hi = beginMs < previewMs ? previewMs : beginMs;
+							if (cellMs > lo && cellMs < hi) role = 'preview-mid';
+						}
+					} else if (cellMs === beginMs) {
+						// Open-ended, no preview.
+						role = 'begin';
+					}
+				}
+			}
+
+			// Short-circuit when the role hasn't changed since the last paint.
+			// classList writes are cheap individually, but on hover-driven
+			// previews this method fires per mousemove; skipping the no-op
+			// avoids style-recalc on cells that aren't transitioning.
+			if (cell._rangeRole === role) return;
+			var cl = cell.classList;
+			cl.remove(...RANGE_HIGHLIGHT_CLASSES);
+			if (role) {
+				var parts = role.split(' ');
+				for (var i = 0; i < parts.length; i++)
+					cl.add('z-cell-range-' + parts[i]);
+			}
+			cell._rangeRole = role;
+		});
+
+		return this;
+	}
+
+	/**
+	 * Clear all range-highlight CSS classes added by {@link setRangeHighlight}.
+	 *
+	 * Removes only `z-cell-range-begin`, `z-cell-range-end`,
+	 * `z-cell-range-mid`, `z-cell-range-preview-mid` and
+	 * `z-cell-range-preview-end`; other cell state classes are untouched.
+	 *
+	 * Safe to call when no highlight is active or before the widget is bound.
+	 * @returns this widget, to allow method chaining.
+	 * @since 10.4.0
+	 */
+	clearRangeHighlight(): this {
+		var $cells = this._rangeCells$();
+		if (!$cells || !$cells.length) return this;
+		$cells.removeClass(RANGE_HIGHLIGHT_CLASSES.join(' '));
+		$cells.each(function () { (this as HTMLTableCellElement)._rangeRole = ''; });
+		return this;
+	}
+
+	/**
+	 * Returns a jQuery collection of day cells in the current day-view, or
+	 * `undefined` when the grid is not present (widget unbound or not in day view).
+	 * @internal
+	 */
+	_rangeCells$(): JQuery | undefined {
+		if (this._view != 'day') return undefined;
+		var mid = this.$n('mid');
+		if (!mid) return undefined;
+		// Day cells are <td> with the calendar's "cell" sclass under the mid grid.
+		return jq(mid).find('td.' + this.$s('cell'));
+	}
+
+	/**
+	 * Returns the UTC midnight ms-timestamp for a Date, used as a stable
+	 * day-level key when comparing range endpoints to a cell's date.
+	 *
+	 * <p>Date.UTC (not `new Date(y, m, d).getTime()`) is intentional.
+	 * Across a DST transition the local-midnight epoch ms shifts by an hour,
+	 * which would make Mar 7 and Mar 8 differ by 23 h or 25 h instead of 24 h
+	 * and could collide with neighbouring days at the boundary; the UTC
+	 * midnight packaging keeps every day on a clean 24 h grid. The cell-side
+	 * `Date.UTC(anchorYear, anchorMonth + monofs, day)` is built the same
+	 * way, so both sides of the comparison use the same key.
+	 *
+	 * @internal
+	 */
+	_dayStartMs(d: Date): number {
+		// Read the endpoint instant in the Calendar's own time zone — the same
+		// basis as the cell anchor (seldate = this.getTime(), tz-aware via
+		// _value.tz(_defaultTzone)). Reading the native browser-local getters on a
+		// box-tz-midnight endpoint would key it to the wrong calendar day whenever
+		// the browser zone differs from the box zone. With no tz configured,
+		// _getTimeZone returns '' → browser-local, identical to the prior behaviour.
+		var di = Dates.newInstance(d.getTime(), _getTimeZone(this));
+		return Date.UTC(di.getFullYear(), di.getMonth(), di.getDate());
 	}
 }

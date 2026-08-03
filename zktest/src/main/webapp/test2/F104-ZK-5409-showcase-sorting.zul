@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-sorting.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:18 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking" width="100%">
+        <columns menupopup="auto">
+            <column label="Author"     sort="auto" />
+            <column label="Title"      sort="auto" />
+            <column label="Publisher"  sort="auto" responsiveVisible="false" />
+            <column label="Hardcover"  responsiveVisible="false" />
+        </columns>
+        <rows>
+            <row><label value="J.R.R. Tolkien"   /><label value="The Hobbit"           /><label value="HarperCollins" /><label value="Yes" /></row>
+            <row><label value="George Orwell"    /><label value="1984"                 /><label value="Secker"        /><label value="Yes" /></row>
+            <row><label value="Frank Herbert"    /><label value="Dune"                 /><label value="Chilton"       /><label value="No"  /></row>
+            <row><label value="J.K. Rowling"     /><label value="Harry Potter 1"       /><label value="Bloomsbury"    /><label value="Yes" /></row>
+            <row><label value="Douglas Adams"    /><label value="Hitchhiker's Guide"   /><label value="Pan Books"     /><label value="No"  /></row>
+            <row><label value="Isaac Asimov"     /><label value="Foundation"           /><label value="Gnome Press"   /><label value="Yes" /></row>
+            <row><label value="Arthur C. Clarke" /><label value="2001: A Space Odyssey"/><label value="Hutchinson"    /><label value="Yes" /></row>
+        </rows>
+    </grid>
+</zk>

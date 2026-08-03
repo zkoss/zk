@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Breadcrumb.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 11 15:06:12 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<vlayout spacing="10px" style="padding:16px;">
+		<!-- Default separator (/) -->
+		<breadcrumb id="bc1">
+			<breadcrumbitem id="bci1" label="Home" href="/"/>
+			<breadcrumbitem id="bci2" label="Products" href="/products"/>
+			<breadcrumbitem id="bci3" label="ZK Framework"/>
+		</breadcrumb>
+
+		<!-- Custom separator -->
+		<breadcrumb id="bc2" separator="&gt;">
+			<breadcrumbitem label="A" href="/a"/>
+			<breadcrumbitem label="B" href="/b"/>
+			<breadcrumbitem label="C"/>
+		</breadcrumb>
+
+		<!-- Disabled item -->
+		<breadcrumb id="bc3">
+			<breadcrumbitem id="bciDis" label="Disabled" href="/x" disabled="true"/>
+			<breadcrumbitem label="Active"/>
+		</breadcrumb>
+
+		<!-- Single item: still has aria-current on the last (and only) item -->
+		<breadcrumb id="bc-single">
+			<breadcrumbitem id="bci-single" label="Only"/>
+		</breadcrumb>
+
+		<!-- Empty (no children) -->
+		<breadcrumb id="bc-empty"/>
+
+		<!-- Item with target -->
+		<breadcrumb id="bc-target">
+			<breadcrumbitem id="bci-target" label="External"
+					href="https://www.zkoss.org" target="_blank"/>
+			<breadcrumbitem label="Final"/>
+		</breadcrumb>
+
+		<!-- href is run through Execution.encodeURL: "~./" must be resolved -->
+		<breadcrumb id="bc-encode">
+			<breadcrumbitem id="bciEnc" label="Encoded" href="~./test.png"/>
+			<breadcrumbitem label="Last"/>
+		</breadcrumb>
+
+		<!-- maxItems collapse: 6 items shown as [first] / … / [last 2] -->
+		<breadcrumb id="bc-collapse" maxItems="3">
+			<breadcrumbitem id="bcc1" label="One"   href="/1"/>
+			<breadcrumbitem id="bcc2" label="Two"   href="/2"/>
+			<breadcrumbitem id="bcc3" label="Three" href="/3"/>
+			<breadcrumbitem id="bcc4" label="Four"  href="/4"/>
+			<breadcrumbitem id="bcc5" label="Five"  href="/5"/>
+			<breadcrumbitem id="bcc6" label="Six"/>
+		</breadcrumb>
+
+		<!-- Icon-form separator (already implemented in mold) -->
+		<breadcrumb id="bc-icon-sep" separator="icon:z-icon-chevron-right">
+			<breadcrumbitem label="Home" href="/"/>
+			<breadcrumbitem label="Docs" href="/docs"/>
+			<breadcrumbitem label="Current"/>
+		</breadcrumb>
+
+		<!-- Dynamic update target + drivers -->
+		<hlayout spacing="10px">
+			<button id="btn-set-sep"     label="| sep"
+					onClick='bc1.setSeparator("|");'/>
+			<button id="btn-clear-sep"   label="default sep"
+					onClick='bc1.setSeparator("");'/>
+			<button id="btn-toggle-disabled" label="Toggle disabled"
+					onClick='bciDis.setDisabled(!bciDis.isDisabled());'/>
+			<button id="btn-bad-maxitems"    label="Bad maxItems"
+					onClick='try { bc1.setMaxItems(-1); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-maxitems-one"    label="maxItems=1"
+					onClick='try { bc1.setMaxItems(1); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-href-tab-bypass" label="href tab bypass"
+					onClick='try { bci1.setHref("java\tscript:alert(1)"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-href-svg-xss"    label="href SVG"
+					onClick='try { bci1.setHref("data:image/svg+xml;base64,PHN2Zw=="); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+		</hlayout>
+
+		<label id="errMsg" value=""/>
+	</vlayout>
+</zk>

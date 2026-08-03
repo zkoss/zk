@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-inline-editing.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking" width="100%">
+        <columns>
+            <column label="Title"        width="330px" />
+            <column label="Publish Date" width="140px" />
+            <column label="# Pages"      width="100px" responsiveVisible="false" align="right" />
+            <column label="Status"       width="160px" />
+        </columns>
+        <rows>
+            <row>
+                <textbox inplace="true" width="100%" value="The Lord of the Rings" />
+                <datebox inplace="true" width="100%" format="MM/dd/yyyy" />
+                <spinner inplace="true" width="100%" value="1178" />
+                <combobox inplace="true" width="100%" readonly="true">
+                    <comboitem label="Published" />
+                    <comboitem label="Reprint" />
+                    <comboitem label="Out of print" />
+                </combobox>
+            </row>
+            <row>
+                <textbox inplace="true" width="100%" value="Dune" />
+                <datebox inplace="true" width="100%" format="MM/dd/yyyy" />
+                <spinner inplace="true" width="100%" value="412" />
+                <combobox inplace="true" width="100%" readonly="true">
+                    <comboitem label="Published" />
+                    <comboitem label="Reprint" />
+                    <comboitem label="Out of print" />
+                </combobox>
+            </row>
+            <row>
+                <textbox inplace="true" width="100%" value="1984" />
+                <datebox inplace="true" width="100%" format="MM/dd/yyyy" />
+                <spinner inplace="true" width="100%" value="328" />
+                <combobox inplace="true" width="100%" readonly="true">
+                    <comboitem label="Published" />
+                    <comboitem label="Reprint" />
+                    <comboitem label="Out of print" />
+                </combobox>
+            </row>
+        </rows>
+    </grid>
+</zk>

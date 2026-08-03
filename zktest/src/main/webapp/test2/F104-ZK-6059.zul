@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6059.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri Feb 06 16:38:54 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Open browser developer tools
+		2. Inspect the &lt;html&gt; element
+		3. Expected: it should have a lang attribute (e.g., lang="en")
+	</label>
+	<label id="msg" value="HTML element should have a lang attribute for WCAG 2.2 compliance"/>
+</zk>

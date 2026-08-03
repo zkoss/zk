@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="win" xmlns="http://www.zkoss.org/2005/zul">
+    <zscript>
+        void doRecreate() {
+            org.zkoss.zk.ui.Component c = win.getFellow("container");
+            c.getChildren().clear();
+            org.zkoss.zk.ui.Executions.createComponents("/test/inner-fqcn.zul", c, null);
+        }
+    </zscript>
+    <div id="container">
+        <div id="comp" apply="org.zkoss.zkplus.spring.ComposerScopeTestComposer">
+            <textbox id="textbox"/>
+            <label id="hashLabel"/>
+        </div>
+    </div>
+    <button id="recreateBtn" label="Recreate" onClick="doRecreate()"/>
+</window>

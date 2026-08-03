@@ -344,6 +344,9 @@ public class Radiogroup extends XulElement implements Disable {
 	/*package*/ void addExternal(Radio radio) {
 		if (_externs == null)
 			_externs = new LinkedList<Radio>();
+		// ZK-5259: prevent duplicate external registration
+		if (_externs.contains(radio))
+			return;
 		_externs.add(radio);
 		if (_disabled)
 			radio.setDisabled(true);

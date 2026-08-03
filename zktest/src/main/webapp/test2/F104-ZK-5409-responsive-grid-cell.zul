@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-cell.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:21 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <label id="clickStatus" value="none" />
+        <grid id="grid1" responsive="stacking" width="100%">
+            <columns>
+                <column label="Name" />
+                <column label="Input" />
+                <column label="Check" />
+                <column label="Action" />
+                <column label="Composite" />
+            </columns>
+            <rows>
+                <row>
+                    <label value="John" />
+                    <textbox id="tb1" value="editable" />
+                    <checkbox id="cb1" label="Yes" />
+                    <button id="btn1" label="Click Me">
+                        <attribute name="onClick"><![CDATA[
+						clickStatus.setValue("btn1-clicked");
+					]]></attribute>
+                    </button>
+                    <hlayout>
+                        <label value="Tag1" />
+                        <label value="Tag2" />
+                        <button label="Edit" />
+                    </hlayout>
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <textbox value="editable2" />
+                    <checkbox label="No" />
+                    <button label="Action" />
+                    <hlayout>
+                        <image src="/img/spacer.gif" width="16px" height="16px" />
+                        <label value="With Image" />
+                    </hlayout>
+                </row>
+                <!-- Row with Cell component and colspan -->
+                <row>
+                    <cell colspan="2">
+                        <label value="Spanning two columns" />
+                    </cell>
+                    <label value="Normal" />
+                    <label value="Normal" />
+                    <label value="Normal" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

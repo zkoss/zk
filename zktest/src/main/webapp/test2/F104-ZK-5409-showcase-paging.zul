@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-paging.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:09 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+        import java.util.*;
+
+        ListModelList purchases = new ListModelList();
+        String[] items = {"Book", "Pen", "Notebook", "Stapler", "Paper Clip Box",
+                        "Marker Set", "Folder", "USB Cable", "Mouse Pad", "Headset",
+                        "Keyboard", "Monitor", "Hard Drive", "SSD", "Webcam",
+                        "Desk Lamp", "Chair Mat"};
+        for (int i = 0; i < items.length; i++) {
+            Map row = new HashMap();
+            row.put("id",   "SO-" + (10001 + i));
+            row.put("item", items[i]);
+            int day = (i % 20) + 1;
+            row.put("time", "2026-04-" + (day < 10 ? "0" + day : "" + day));
+            row.put("paid", Boolean.valueOf(i % 3 != 0));
+            purchases.add(row);
+        }
+    ]]></zscript>
+
+    <grid id="grid1" responsive="stacking"
+        width="100%" model="${purchases}" mold="paging" pageSize="6">
+        <columns>
+            <column label="Order #"         hflex="1" align="left" />
+            <column label="Item Purchased"  hflex="2" align="center" />
+            <column label="Purchased Time"  hflex="2" align="center" responsiveVisible="false" />
+            <column label="Paid"            hflex="1" align="center" />
+        </columns>
+        <template name="model">
+            <row>
+                <label value="${each.id}" />
+                <label value="${each.item}" />
+                <label value="${each.time}" />
+                <checkbox checked="${each.paid}" />
+            </row>
+        </template>
+    </grid>
+</zk>

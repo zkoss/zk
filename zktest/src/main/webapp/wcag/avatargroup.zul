@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Avatargroup"?>
+<?root-attributes lang="en"?>
+<!--
+avatargroup.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 14 15:20:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Avatargroup</n:h1>
+    </n:header>
+    <n:main>
+        <n:section ca:aria-label="Team members">
+            <n:h2>Basic group</n:h2>
+            <avatargroup>
+                <avatar label="AB"/>
+                <avatar label="CD"/>
+                <avatar label="EF"/>
+                <avatar label="GH"/>
+            </avatargroup>
+        </n:section>
+        <n:section ca:aria-label="Project contributors">
+            <n:h2>Group with overflow (+N)</n:h2>
+            <avatargroup maxCount="3">
+                <avatar label="AB"/>
+                <avatar label="CD"/>
+                <avatar label="EF"/>
+                <avatar label="GH"/>
+                <avatar label="IJ"/>
+            </avatargroup>
+        </n:section>
+        <n:section ca:aria-label="Online members">
+            <n:h2>Group cascading size + shape</n:h2>
+            <avatargroup size="small" shape="circle">
+                <avatar label="AB"/>
+                <avatar label="CD"/>
+            </avatargroup>
+            <avatargroup size="large" shape="square">
+                <avatar label="EF"/>
+                <avatar label="GH"/>
+            </avatargroup>
+        </n:section>
+    </n:main>
+</zk>

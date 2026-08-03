@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Style.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 11 15:05:41 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<vlayout spacing="12px" style="padding:24px;">
+		<!-- The reference label whose computed font-family / font-size every
+		     ZK-6097 component should match (or at least inherit). -->
+		<label id="ref" value="Reference label"/>
+
+		<avatar id="av" label="AB"/>
+		<badge id="bd" value="5">
+			<label value="Inbox"/>
+		</badge>
+		<chip id="tg" label="news"/>
+
+		<breadcrumb id="bc">
+			<breadcrumbitem id="bci" label="Home" href="/"/>
+			<breadcrumbitem label="Current"/>
+		</breadcrumb>
+
+		<carousel id="cr" width="240px" height="120px" showArrows="true" showIndicators="false">
+			<carouselitem><label value="Slide 1"/></carouselitem>
+			<carouselitem><label value="Slide 2"/></carouselitem>
+		</carousel>
+
+		<button id="btn-cp" label="Open" onClick="cp.open(self);"/>
+		<confirmpopup id="cp" message="Centered?"/>
+	</vlayout>
+</zk>

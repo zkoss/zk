@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-container.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:39 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div id="mainRoot" style="padding: 10px;">
+		<!-- 1. Grid inside Window -->
+		<window id="winContainer" title="Window Container" width="100%" border="normal">
+			<grid id="gridInWindow" responsive="stacking" width="100%">
+				<columns>
+					<column label="Name" />
+					<column label="Email" />
+					<column label="Department" />
+				</columns>
+				<rows>
+					<row>
+						<label value="John" />
+						<label value="john@example.com" />
+						<label value="Engineering" />
+					</row>
+					<row>
+						<label value="Jane" />
+						<label value="jane@example.com" />
+						<label value="Design" />
+					</row>
+				</rows>
+			</grid>
+		</window>
+		<separator height="20px" />
+
+		<!-- 2. Grid inside Groupbox -->
+		<groupbox id="gbContainer" mold="3d" closable="false" width="100%">
+			<caption label="Groupbox Container" />
+			<grid id="gridInGroupbox" responsive="stacking" width="100%">
+				<columns>
+					<column label="Product" />
+					<column label="Price" />
+				</columns>
+				<rows>
+					<row>
+						<label value="Widget A" />
+						<label value="100" />
+					</row>
+					<row>
+						<label value="Widget B" />
+						<label value="200" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+		<separator height="20px" />
+
+		<!-- 3. Grid inside Tabbox/Tabpanel -->
+		<tabbox id="tabboxContainer" width="100%">
+			<tabs>
+				<tab label="First Tab" />
+				<tab label="Second Tab" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<grid id="gridInTab1" responsive="stacking" width="100%">
+						<columns>
+							<column label="Item" />
+							<column label="Status" />
+						</columns>
+						<rows>
+							<row>
+								<label value="Task 1" />
+								<label value="Active" />
+							</row>
+						</rows>
+					</grid>
+				</tabpanel>
+				<tabpanel>
+					<grid id="gridInTab2" responsive="stacking" width="100%">
+						<columns>
+							<column label="Item" />
+							<column label="Status" />
+						</columns>
+						<rows>
+							<row>
+								<label value="Task 2" />
+								<label value="Pending" />
+							</row>
+						</rows>
+					</grid>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+		<separator height="20px" />
+
+		<!-- 4. Grid inside a narrow sidebar-like div (force stacking regardless of window width) -->
+		<div style="width: 300px; border: 1px dashed gray; padding: 5px;">
+			<grid id="gridInSidebar" responsive="stacking" width="100%">
+				<columns>
+					<column label="Key" />
+					<column label="Value" />
+				</columns>
+				<rows>
+					<row>
+						<label value="Version" />
+						<label value="10.4.0" />
+					</row>
+					<row>
+						<label value="Branch" />
+						<label value="ZK-5409" />
+					</row>
+				</rows>
+			</grid>
+		</div>
+		<separator height="20px" />
+
+		<!-- 5. Grid inside a Popup (triggered by button) -->
+		<button id="btnShowPopup" label="Show Popup">
+			<attribute name="onClick"><![CDATA[
+				gridPopup.open(btnShowPopup);
+			]]></attribute>
+		</button>
+		<popup id="gridPopup" width="400px">
+			<grid id="gridInPopup" responsive="stacking" width="100%">
+				<columns>
+					<column label="Field" />
+					<column label="Data" />
+				</columns>
+				<rows>
+					<row>
+						<label value="First" />
+						<label value="Alpha" />
+					</row>
+					<row>
+						<label value="Second" />
+						<label value="Beta" />
+					</row>
+				</rows>
+			</grid>
+		</popup>
+	</div>
+</zk>

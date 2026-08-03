@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-4305-footer.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri May 08 15:07:40 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-4305 Footer — popup shows Clear and Cancel buttons
+
+		Steps to verify:
+		1. Click the calendar button — the popup opens showing a footer bar at the bottom.
+		2. The footer contains two small buttons: Clear (left) and Cancel (right).
+		3. Click a day to stage begin. Then click Clear — staging is discarded.
+		4. Select a complete range. Then click Clear — inputs revert to empty.
+		5. Stage a begin date. Then click Cancel — popup closes, inputs stay empty.
+
+		Expected result:
+		- Footer always rendered with Clear and Cancel buttons.
+		- Clear resets both staged and committed values.
+		- Cancel closes the popup without committing any staged selection.
+		- Each panel only shows its own month — no faded next/previous-month dates.
+	</label>
+
+	<vlayout spacing="10px" hflex="1">
+		<label value="Basic footer box:"/>
+		<daterangebox id="drFooter" format="yyyy-MM-dd" width="360px"/>
+
+		<label value="Footer with pre-committed range (to test Clear erases committed value):"/>
+		<daterangebox id="drPreset" format="yyyy-MM-dd" width="360px"/>
+		<zscript><![CDATA[
+			import java.util.Calendar;
+			Calendar cal = Calendar.getInstance();
+			cal.set(2026, Calendar.JANUARY, 5, 0, 0, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			java.util.Date begin = cal.getTime();
+			cal.set(Calendar.DAY_OF_MONTH, 20);
+			java.util.Date end = cal.getTime();
+			drPreset.setBeginValue(begin);
+			drPreset.setEndValue(end);
+		]]></zscript>
+	</vlayout>
+</zk>

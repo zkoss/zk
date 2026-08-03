@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-features.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:10 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div style="padding: 10px;">
+		<!-- Status labels for event verification -->
+		<label id="rightClickStatus" value="right: none" />
+		<label id="dblClickStatus" value="double: none" />
+
+		<!-- 1. Grid with column width + hflex + align + sclass -->
+		<grid id="gridFeatures" responsive="stacking" sclass="my-custom-grid" width="100%">
+			<columns>
+				<column label="Name" width="150px" align="left" />
+				<column label="Amount" hflex="1" align="right" />
+				<column label="Status" width="100px" align="center" />
+			</columns>
+			<rows>
+				<row>
+					<attribute name="onRightClick"><![CDATA[
+						rightClickStatus.setValue("right: row0");
+					]]></attribute>
+					<attribute name="onDoubleClick"><![CDATA[
+						dblClickStatus.setValue("double: row0");
+					]]></attribute>
+					<label value="Alpha" />
+					<label value="1000" />
+					<label value="Active" />
+				</row>
+				<row>
+					<label value="Beta" />
+					<label value="2000" />
+					<label value="Inactive" />
+				</row>
+			</rows>
+		</grid>
+		<separator height="20px" />
+
+		<!-- 2. Grid with Image cells + long text -->
+		<grid id="gridImageLong" responsive="stacking" width="100%">
+			<columns>
+				<column label="Icon" width="80px" />
+				<column label="Description" />
+			</columns>
+			<rows>
+				<row>
+					<image src="/img/spacer.gif" width="32px" height="32px" />
+					<label
+						value="This is a very long description text that should wrap inside the stacking cell value area to demonstrate proper text handling in responsive mode across different viewport widths." />
+				</row>
+				<row>
+					<image src="/img/spacer.gif" width="32px" height="32px" />
+					<label value="Another item with normal length text." />
+				</row>
+			</rows>
+		</grid>
+		<separator height="20px" />
+
+		<!-- 3. Grid with toggleable row visibility -->
+		<grid id="gridRowVisible" responsive="stacking" width="100%">
+			<columns>
+				<column label="Item" />
+				<column label="Value" />
+			</columns>
+			<rows id="rowsVisible">
+				<row id="rowA">
+					<label value="Row A" />
+					<label value="Visible" />
+				</row>
+				<row id="rowB" visible="false">
+					<label value="Row B" />
+					<label value="Hidden" />
+				</row>
+				<row id="rowC">
+					<label value="Row C" />
+					<label value="Visible" />
+				</row>
+			</rows>
+		</grid>
+		<button id="btnToggleVis" label="Toggle Row B Visibility">
+			<attribute name="onClick"><![CDATA[
+				rowB.setVisible(!rowB.isVisible());
+			]]></attribute>
+		</button>
+		<separator height="20px" />
+
+		<!-- 4. Grid for dynamic column add/remove -->
+		<grid id="gridDynCol" responsive="stacking" width="100%">
+			<columns id="colsDyn">
+				<column id="col1" label="Col1" />
+				<column id="col2" label="Col2" />
+			</columns>
+			<rows id="rowsDyn">
+				<row>
+					<label value="Val1" />
+					<label value="Val2" />
+				</row>
+			</rows>
+		</grid>
+		<button id="btnAddCol" label="Add Column">
+			<attribute name="onClick"><![CDATA[
+				org.zkoss.zul.Column newCol = new org.zkoss.zul.Column();
+				newCol.setLabel("Col3");
+				colsDyn.appendChild(newCol);
+				for (Object o : rowsDyn.getChildren()) {
+					org.zkoss.zul.Row r = (org.zkoss.zul.Row) o;
+					org.zkoss.zul.Label lb = new org.zkoss.zul.Label();
+					lb.setValue("Val3");
+					r.appendChild(lb);
+				}
+			]]></attribute>
+		</button>
+		<button id="btnRemoveCol" label="Remove Column">
+			<attribute name="onClick"><![CDATA[
+				if (colsDyn.getChildren().size() > 1) {
+					colsDyn.removeChild(colsDyn.getLastChild());
+					for (Object o : rowsDyn.getChildren()) {
+						org.zkoss.zul.Row r = (org.zkoss.zul.Row) o;
+						if (r.getChildren().size() > 1)
+							r.removeChild(r.getLastChild());
+					}
+				}
+			]]></attribute>
+		</button>
+	</div>
+</zk>

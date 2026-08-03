@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-4305-binding.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri May 08 15:07:59 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_4305_BindingVM')" hflex="1">
+		<vlayout spacing="10px">
+			<label value="ZK-4305 MVVM @bind"/>
+			<hlayout>
+				<label value="value (DateRange):"/>
+				<daterangebox id="drValue" value="@bind(vm.range)"/>
+			</hlayout>
+			<hlayout>
+				<label value="vm.range.begin / .end:"/>
+				<label id="lblRangeBegin" value="@load(vm.range.begin)"/>
+				<label value=" ~ "/>
+				<label id="lblRangeEnd" value="@load(vm.range.end)"/>
+			</hlayout>
+			<hlayout>
+				<label value="split begin/end:"/>
+				<daterangebox id="drSplit" beginValue="@bind(vm.from)" endValue="@bind(vm.to)"/>
+			</hlayout>
+			<hlayout>
+				<label id="lblFrom" value="@load(vm.from)"/>
+				<label value=" - "/>
+				<label id="lblTo" value="@load(vm.to)"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-parsing.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 04 14:04:54 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div id="container" style="width: 600px; padding: 0; border: 1px solid #ccc;">
+		<grid id="testGrid" responsive="stacking" hflex="1">
+			<columns>
+				<column label="A" />
+				<column label="B" />
+				<column label="C" />
+			</columns>
+			<rows>
+				<row><label value="a1"/><label value="b1"/><label value="c1"/></row>
+				<row><label value="a2"/><label value="b2"/><label value="c2"/></row>
+				<row><label value="a3"/><label value="b3"/><label value="c3"/></row>
+			</rows>
+		</grid>
+	</div>
+</zk>

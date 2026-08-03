@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Avatargroup-MVC.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed May 13 13:17:28 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<label multiline="true">
+		Avatargroup MVC (Composer) Test
+
+		Steps to verify:
+		1. Group initially shows 3 avatars and "+2" overflow.
+		2. Click "Remove Limit" — all 5 avatars appear.
+		3. Click "Add Avatar" — a new avatar labelled "F" is appended; overflow re-evaluated.
+		4. Click "Set Small Circle" — avatars become small and circular.
+		5. The result label updates after each action.
+
+		Expected result:
+		- Adding a child avatar dynamically updates the overflow count.
+		- Size/shape changes cascade to existing and newly added children.
+	</label>
+
+	<separator />
+
+	<div apply="org.zkoss.zktest.test2.F104_ZK_6097_AvatargroupComposer">
+		<label id="resultLabel" style="display:block;margin-bottom:12px;"/>
+
+		<avatargroup id="agMvc" maxCount="3">
+			<avatar label="A"/>
+			<avatar label="B"/>
+			<avatar label="C"/>
+			<avatar label="D"/>
+			<avatar label="E"/>
+		</avatargroup>
+
+		<separator />
+
+		<button id="btnRemoveLimit" label="Remove Limit"/>
+		<button id="btnAddAvatar"   label="Add Avatar"/>
+		<button id="btnSetSmall"    label="Set Small Circle"/>
+		<button id="btnReset"       label="Reset"/>
+	</div>
+</zk>

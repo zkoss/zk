@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Carousel"?>
+<?root-attributes lang="en"?>
+<!--
+carousel.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 14 15:20:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:header>
+        <n:h1>Carousel</n:h1>
+    </n:header>
+    <n:main>
+        <n:section>
+            <n:h2>Image carousel (slide effect, loop)</n:h2>
+            <carousel ca:aria-label="Product images" width="320px" height="180px">
+                <carouselitem>
+                    <image src="/img/live.gif" ca:alt="Slide 1: Live Messenger"/>
+                </carouselitem>
+                <carouselitem>
+                    <image src="/img/castle.png" ca:alt="Slide 2: Castle"/>
+                </carouselitem>
+                <carouselitem>
+                    <image src="/img/earth.png" ca:alt="Slide 3: Earth"/>
+                </carouselitem>
+            </carousel>
+        </n:section>
+        <n:section>
+            <n:h2>Vertical carousel with fade</n:h2>
+            <carousel ca:aria-label="Featured cards" orient="vertical" effect="fade"
+                      width="240px" height="200px">
+                <carouselitem label="Card A">
+                    <n:p>First card content</n:p>
+                </carouselitem>
+                <carouselitem label="Card B">
+                    <n:p>Second card content</n:p>
+                </carouselitem>
+            </carousel>
+        </n:section>
+        <n:section>
+            <n:h2>Carousel without arrows/indicators</n:h2>
+            <carousel ca:aria-label="Minimal carousel" width="280px" height="120px"
+                      showArrows="false" showIndicators="false">
+                <carouselitem label="A"/>
+                <carouselitem label="B"/>
+            </carousel>
+        </n:section>
+    </n:main>
+</zk>

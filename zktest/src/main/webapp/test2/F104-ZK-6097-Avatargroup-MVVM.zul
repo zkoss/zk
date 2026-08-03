@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Avatargroup-MVVM.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed May 13 13:17:28 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<label multiline="true">
+		Avatargroup MVVM Test
+
+		Steps to verify:
+		1. The group initially shows 3 avatars with a "+2" overflow badge.
+		2. Click "Remove Limit" — all 5 avatars appear, overflow badge disappears.
+		3. Click "Set Limit 2" — only the first 2 avatars are visible and "+3" appears.
+		4. Click "Set Large Square" — all visible avatars become large and square.
+		5. The result label updates after each action.
+
+		Expected result:
+		- Overflow count label reflects the actual number of hidden avatars.
+		- Size/shape cascade applies instantly upon group attribute change.
+	</label>
+
+	<separator />
+
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.F104_ZK_6097_AvatargroupVM')">
+		<label id="resultLabel" value="@load(vm.result)" style="display:block;margin-bottom:12px;"/>
+
+		<avatargroup id="agMvvm"
+				maxCount="@bind(vm.maxCount)"
+				size="@bind(vm.size)"
+				shape="@bind(vm.shape)">
+			<avatar label="A"/>
+			<avatar label="B"/>
+			<avatar label="C"/>
+			<avatar label="D"/>
+			<avatar label="E"/>
+		</avatargroup>
+
+		<separator />
+
+		<button id="btnRemoveLimit" label="Remove Limit"
+				onClick="@command('removeLimit')"/>
+		<button id="btnSetLimit2" label="Set Limit 2"
+				onClick="@command('setLimit2')"/>
+		<button id="btnSetLargeSquare" label="Set Large Square"
+				onClick="@command('setLargeSquare')"/>
+		<button id="btnReset" label="Reset"
+				onClick="@command('reset')"/>
+	</div>
+</zk>

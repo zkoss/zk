@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-no-columns.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:27:27 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <div style="padding: 10px;">
+        <grid id="grid1" responsive="stacking" width="100%">
+            <rows>
+                <row>
+                    <label value="John" />
+                    <label value="john@example.com" />
+                    <label value="Engineering" />
+                </row>
+                <row>
+                    <label value="Jane" />
+                    <label value="jane@example.com" />
+                    <label value="Design" />
+                </row>
+            </rows>
+        </grid>
+    </div>
+</zk>

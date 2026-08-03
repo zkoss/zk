@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-getting-started.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:26:29 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking"
+          mold="paging" pageSize="5" width="100%" sizedByContent="true">
+        <auxhead>
+            <auxheader label="General Specification" colspan="3" />
+            <auxheader label="Tech Specification" colspan="2" />
+        </auxhead>
+        <columns sizable="true">
+            <column label="Model" sort="auto(label)" />
+            <column label="Make" sort="auto(label)" />
+            <column label="Cost" sort="auto(label)" align="right" />
+            <column label="Displacement" responsiveVisible="false" />
+            <column label="Transmission" responsiveVisible="false" />
+        </columns>
+        <rows>
+            <row><label value="Civic"      /><label value="Honda"   /><label value="$ 19,990"/><label value="1.8L"/><label value="5-spd AT"/></row>
+            <row><label value="Corolla"    /><label value="Toyota"  /><label value="$ 18,500"/><label value="1.8L"/><label value="CVT"     /></row>
+            <row><label value="Focus"      /><label value="Ford"    /><label value="$ 17,950"/><label value="2.0L"/><label value="6-spd AT"/></row>
+            <row><label value="3 Series"   /><label value="BMW"     /><label value="$ 41,250"/><label value="2.0L"/><label value="8-spd AT"/></row>
+            <row><label value="A4"         /><label value="Audi"    /><label value="$ 39,900"/><label value="2.0L"/><label value="7-spd AT"/></row>
+            <row><label value="Model 3"    /><label value="Tesla"   /><label value="$ 43,990"/><label value="EV"  /><label value="Direct"  /></row>
+            <row><label value="Impreza"    /><label value="Subaru"  /><label value="$ 20,895"/><label value="2.0L"/><label value="CVT"     /></row>
+            <row><label value="Altima"     /><label value="Nissan"  /><label value="$ 25,300"/><label value="2.5L"/><label value="CVT"     /></row>
+        </rows>
+    </grid>
+</zk>

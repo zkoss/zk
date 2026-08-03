@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Confirmpopup-MVC.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.zktest.test2.F104_ZK_6097_ConfirmpopupComposer">
+		<vlayout spacing="8px" style="padding:16px;">
+			<confirmpopup id="cpMvc" message="Delete this record?"/>
+
+			<button id="btnOpenMvc" label="Delete" popup="cpMvc,position=before_center"/>
+			<label id="mvcResult" value="pending"/>
+
+			<hlayout spacing="8px">
+				<button id="btnChangeMsg" label="Change message"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

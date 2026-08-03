@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>B104-ZK-5670 Embedded Test</title>
+    <script src="/zktest/zkEmbedded"></script>
+    <style>
+        #embeddedZK {
+            height: 300px;
+            border: 1px solid #ccc;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ZK-5670: Embedded ZK progressbox.position Test</h1>
+    <p>
+        <strong>Test Instructions:</strong><br/>
+        1. Make sure zk.xml has: <code>&lt;name&gt;org.zkoss.zul.progressbox.position&lt;/name&gt;&lt;value&gt;center, center&lt;/value&gt;</code><br/>
+        2. Click the "Long Operation" button below.<br/>
+        3. The "Processing..." message should appear at the CENTER of the page.<br/>
+        4. <strong>Bug:</strong> Without the fix, it appears at the top-left corner.
+    </p>
+    <div id="embeddedZK">
+        Loading...
+    </div>
+    <script>
+        zEmbedded.load('embeddedZK', '/zktest/test2/B104-ZK-5670.zul')
+            .then(function(result) {
+                console.log('Embedded ZK is ready.');
+                console.log('Widget UUID:', result.widget.uuid);
+            })
+            .catch(function(error) {
+                console.error('Error loading embedded ZK:', error);
+            });
+    </script>
+</body>
+</html>

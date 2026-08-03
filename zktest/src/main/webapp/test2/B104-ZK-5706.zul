@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5706.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Jan 28 12:39:42 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label>
+        1. set browser zoom level 110% (not equal to 100%, could be 90%)
+        2. scroll to the bottom of page 1
+        3. scroll further, expecting to see page 2
+    </label>
+    <pdfviewer height="500px" src="/test2/B104-ZK-5706.pdf" id="pv"/>
+</zk>

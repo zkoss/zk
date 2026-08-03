@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-4305-attributes.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri May 08 15:07:31 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:ca="client/attribute">
+	<vlayout spacing="6px">
+		<label value="ZK-4305 Daterangebox attribute matrix"/>
+
+		<hlayout>
+			<label value="disabled:"/>
+			<daterangebox id="drDisabled" disabled="true"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="buttonVisible=false:"/>
+			<daterangebox id="drNoButton" buttonVisible="false"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="numberOfMonths=3:"/>
+			<daterangebox id="drNumMonths" showTodayLink="true" numberOfMonths="3"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="format yyyy-MM-dd:"/>
+			<daterangebox id="drFormat" showTodayLink="true" format="yyyy-MM-dd"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="constraint (no past):"/>
+			<daterangebox id="drConstraint" showTodayLink="true" constraint="no past"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="minNights=2:"/>
+			<daterangebox id="drMinNights" showTodayLink="true" minNights="2" allowEmpty="none"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="maxNights=3:"/>
+			<daterangebox id="drMaxNights" maxNights="3" allowEmpty="none"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="showTime:"/>
+			<daterangebox id="drShowTime" showTodayLink="true" showTime="true" format="yyyy-MM-dd HH:mm"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="showTime + minNights=1:"/>
+			<daterangebox id="drShowTimeMinNights" showTime="true" minNights="1" format="yyyy-MM-dd HH:mm" allowEmpty="none"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="showTime + timeZone:"/>
+			<daterangebox id="drShowTimeTz" showTime="true" timeZone="Asia/Tokyo" format="yyyy-MM-dd HH:mm"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="event probe:"/>
+			<daterangebox id="drEvents" format="yyyy-MM-dd"
+				onOpen='lblOpen.setValue(event.isOpen() ? "opened" : "closed");'
+				onChange='var b = event.getBegin(); var e = event.getEnd();
+					lblChange.setValue(
+						(b == null ? "" : String.valueOf(b.getTime())) + "|" +
+						(e == null ? "" : String.valueOf(e.getTime())));'/>
+			<label id="lblOpen" value=""/>
+			<separator orient="vertical"/>
+			<label id="lblChange" value=""/>
+		</hlayout>
+
+		<hlayout>
+			<label value="open-state sync probe:"/>
+			<daterangebox id="drOpenSync"
+				onOpen='lblOpenSync.setValue(event.isOpen() ? "opened" : "closed");'/>
+			<button id="btnReopen" label="reopen via setOpen(true)"
+				onClick='drOpenSync.setOpen(true);'/>
+			<label id="lblOpenSync" value=""/>
+		</hlayout>
+
+		<hlayout>
+			<label value="locale + timezone + weekOfYear:"/>
+			<daterangebox id="drLocaleTzWeek"
+				locale="zh_TW" timeZone="Asia/Tokyo" weekOfYear="true"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="custom aria-label:"/>
+			<daterangebox id="drCustomAria" ca:aria-label="Choose a date range"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="float coordination:"/>
+			<datebox id="dbFloat"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="showTime without explicit format:"/>
+			<daterangebox id="drShowTimeNoFmt" showTime="true"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="position vertical_center:"/>
+			<daterangebox id="drPosVCenter" position="vertical_center"/>
+		</hlayout>
+	</vlayout>
+</zk>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="WCAG: Chip"?>
+<?root-attributes lang="en"?>
+<!--
+chip.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu May 14 15:20:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:n="native">
+    <n:header>
+        <n:h1>Chip</n:h1>
+    </n:header>
+    <n:main>
+        <n:section>
+            <n:h2>Default chips</n:h2>
+            <chip label="React"/>
+            <chip label="TypeScript"/>
+            <chip label="Java"/>
+        </n:section>
+        <n:section>
+            <n:h2>Severity variants</n:h2>
+            <chip label="Info"      severity="info"/>
+            <chip label="Success"   severity="success"/>
+            <chip label="Warning"   severity="warning"/>
+            <chip label="Danger"    severity="danger"/>
+        </n:section>
+        <n:section>
+            <n:h2>Size variants</n:h2>
+            <chip label="Small"   size="small"/>
+            <chip label="Medium"  size="medium"/>
+            <chip label="Large"   size="large"/>
+        </n:section>
+        <n:section>
+            <n:h2>Closable</n:h2>
+            <chip label="Removable" closable="true"/>
+            <chip label="Removable rounded" closable="true" rounded="true"/>
+        </n:section>
+        <n:section>
+            <n:h2>Disabled</n:h2>
+            <chip label="Disabled" disabled="true"/>
+            <chip label="Disabled closable" disabled="true" closable="true"/>
+        </n:section>
+    </n:main>
+</zk>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-simple.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:14 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking" width="100%">
+        <auxhead>
+            <auxheader colspan="4" label="Contributor of ZK International Message" />
+        </auxhead>
+        <columns>
+            <column label="Language"    hflex="5" />
+            <column label="Contributor" hflex="6" />
+            <column label="Charset"     hflex="3" responsiveVisible="false" />
+            <column label="Comment"     hflex="4" />
+        </columns>
+        <rows>
+            <row><label value="Arabic (ar)"    /><label value="Ayman Elgharabawy" /><label value="iso-8859-6"/><textbox hflex="1"/></row>
+            <row><label value="Chinese (zh)"   /><label value="Tom Yeh"           /><label value="UTF-8"     /><textbox hflex="1"/></row>
+            <row><label value="French (fr)"    /><label value="Jean Dupont"       /><label value="UTF-8"     /><textbox hflex="1"/></row>
+            <row><label value="German (de)"    /><label value="Hans Schmidt"      /><label value="UTF-8"     /><textbox hflex="1"/></row>
+            <row><label value="Japanese (ja)"  /><label value="Taro Suzuki"       /><label value="UTF-8"     /><textbox hflex="1"/></row>
+            <row><label value="Spanish (es)"   /><label value="Carlos Garcia"     /><label value="UTF-8"     /><textbox hflex="1"/></row>
+        </rows>
+    </grid>
+</zk>

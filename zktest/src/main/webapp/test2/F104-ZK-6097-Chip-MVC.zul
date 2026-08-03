@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Chip-MVC.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed May 13 13:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window apply="org.zkoss.zktest.test2.F104_ZK_6097_ChipComposer">
+		<vlayout spacing="8px" style="padding:16px;">
+			<chip id="chipMvc" label="MVC Chip" severity="warning" closable="true"/>
+			<label id="mvcResult" value="open"/>
+			<label id="mvcLabel" value="MVC Chip"/>
+
+			<hlayout spacing="8px">
+				<button id="btnChangeSeverity" label="Change severity"/>
+				<button id="btnChangeLabel" label="Change label"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

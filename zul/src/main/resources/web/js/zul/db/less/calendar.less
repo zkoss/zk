@@ -224,3 +224,29 @@
 	}
 
 }
+
+.z-calendar-cell {
+	&.z-cell-range-begin,
+	&.z-cell-range-end {
+		background: @calendarSelectedBackgroundColor;
+		color: @calendarSelectedColor;
+		.borderRadius(@baseBorderRadius);
+	}
+	&.z-cell-range-mid {
+		background: @colorPrimaryLighter;
+		border-radius: 0;
+	}
+	&.z-cell-range-preview-mid {
+		background: @colorPrimaryLighter;
+		opacity: 0.6;
+	}
+	&.z-cell-range-preview-end {
+		outline: 1px dashed @colorPrimary;
+		outline-offset: -1px;
+	}
+}
+
+// Daterangebox styles live in zkcml/zkmax (EE) — see
+// zkmax/src/main/resources/web/js/zkmax/db/less/daterangebox.less.
+// The `.z-cell-range-*` rules above remain in CE because Calendar's
+// public setRangeHighlight() API uses them; daterangebox just consumes them.

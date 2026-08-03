@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-6078.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Mar 25 16:22:16 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        Steps to reproduce:
+        1. The listbox is populated with employees; initially no item is selected.
+        2. Select any employee from the listbox.
+
+        To verify the fix:
+        - Expected: the First Name and Last Name textboxes should update to show the selected employee's values.
+        - Bug: the textboxes remain empty because the form proxy bound to a null selectedEmployee
+            is not properly registered in the tracker, so notifyChange(form, ".") finds no bindings to update.
+    </label>
+
+    <window title="Employee Management"
+            border="normal"
+            width="750px"
+            viewModel="@id('vm') @init('org.zkoss.zktest.test2.B104_ZK_6078VM')">
+
+        <hlayout spacing="20px" width="100%">
+            <vlayout width="320px">
+                <label value="Employees" style="font-weight:bold;" />
+
+                <listbox id="employeeList"
+                        width="100%"
+                        height="250px"
+                        model="@load(vm.employeeList)"
+                        selectedItem="@bind(vm.selectedEmployee)">
+                    <template name="model" var="employee">
+                        <listitem>
+                            <listcell label="${employee.firstName}" />
+                            <listcell label="${employee.lastName}" />
+                        </listitem>
+                    </template>
+                </listbox>
+            </vlayout>
+
+            <vlayout hflex="1">
+                <label value="Employee Form" style="font-weight:bold;" />
+
+                <groupbox mold="3d" hflex="1">
+                    <caption label="Details" />
+
+                    <grid id="employeeForm"
+                        width="100%"
+                        form="@id('fx') @load(vm.selectedEmployee) @save(vm.selectedEmployee, before='save')">
+                        <rows>
+                            <row>
+                                <label value="First Name" />
+                                <textbox id="firstName"
+                                        width="250px"
+                                        value="@bind(fx.firstName)"/>
+                            </row>
+                            <row>
+                                <label value="Last Name" />
+                                <textbox id="lastName"
+                                        width="250px"
+                                        value="@bind(fx.lastName)"/>
+                            </row>
+                        </rows>
+                    </grid>
+
+                    <hlayout spacing="10px">
+                        <button label="Save"
+                                onClick="@command('save')" />
+                        <button label="Cancel"
+                                onClick="@command('cancel')"/>
+                    </hlayout>
+                </groupbox>
+            </vlayout>
+        </hlayout>
+    </window>
+</zk>

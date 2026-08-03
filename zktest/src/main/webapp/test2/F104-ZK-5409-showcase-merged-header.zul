@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-merged-header.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:24:31 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking"
+        width="100%" sizedByContent="true">
+        <auxhead>
+            <auxheader label="H1 '07" colspan="6" />
+            <auxheader label="H2 '07" colspan="6" />
+        </auxhead>
+        <auxhead>
+            <auxheader label="Q1" colspan="3" />
+            <auxheader label="Q2" colspan="3" />
+            <auxheader label="Q3" colspan="3" />
+            <auxheader label="Q4" colspan="3" />
+        </auxhead>
+        <columns>
+            <column label="Jan" align="right" /><column label="Feb" align="right" /><column label="Mar" align="right" />
+            <column label="Apr" align="right" /><column label="May" align="right" /><column label="Jun" align="right" />
+            <column label="Jul" align="right" /><column label="Aug" align="right" /><column label="Sep" align="right" />
+            <column label="Oct" align="right" /><column label="Nov" align="right" /><column label="Dec" align="right" />
+        </columns>
+        <rows>
+            <row>
+                <label value="12" /><label value="15" /><label value="14" /><label value="18" /><label value="21" /><label value="24" />
+                <label value="27" /><label value="29" /><label value="26" /><label value="22" /><label value="19" /><label value="17" />
+            </row>
+            <row>
+                <label value="8" /><label value="9" /><label value="11" /><label value="14" /><label value="17" /><label value="19" />
+                <label value="22" /><label value="23" /><label value="21" /><label value="17" /><label value="13" /><label value="10" />
+            </row>
+        </rows>
+    </grid>
+</zk>

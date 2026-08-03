@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B104-ZK-5259.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Feb 06 14:33:22 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <label multiline="true">
+        1. Click the button
+        2. Expected radiogroup.getItems() returns the 2 external items
+    </label>
+    <div apply="org.zkoss.zktest.test2.B104_ZK_5259Composer">
+		<button id="btn"/>
+	</div>
+</zk>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-responsive-grid-master-detail.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:27:16 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <zscript><![CDATA[
+        import org.zkoss.zul.*;
+        import java.util.*;
+
+        // Per-dept employee lists, stored as a plain Map<String, List<String[]>>.
+        Map deptEmployees = new HashMap();
+        List d01 = new ArrayList();
+        d01.add(new String[]{"E-001", "Alice Chen", "Staff Engineer",  "2019-03-14", "$ 148,000"});
+        d01.add(new String[]{"E-002", "Bob Wang",   "Senior Engineer", "2020-07-01", "$ 122,000"});
+        d01.add(new String[]{"E-007", "Eve Liu",    "Engineer II",     "2022-02-20", "$ 96,500"});
+        d01.add(new String[]{"E-012", "Frank Park", "Engineer I",      "2024-06-03", "$ 78,000"});
+        deptEmployees.put("D01", d01);
+
+        List d02 = new ArrayList();
+        d02.add(new String[]{"E-003", "Carol Z.",   "Design Lead",      "2018-11-05", "$ 138,000"});
+        d02.add(new String[]{"E-004", "Dan Kim",    "Product Designer", "2021-01-17", "$ 104,000"});
+        d02.add(new String[]{"E-015", "Grace Chen", "UX Researcher",    "2023-09-11", "$ 92,000"});
+        deptEmployees.put("D02", d02);
+
+        List d03 = new ArrayList();
+        d03.add(new String[]{"E-008", "Henry Hu",   "Sales Director",    "2017-04-22", "$ 175,000"});
+        d03.add(new String[]{"E-009", "Ivy Ma",     "Account Manager",   "2020-05-30", "$ 112,000"});
+        d03.add(new String[]{"E-010", "Jack Brown", "Account Manager",   "2022-08-14", "$ 108,000"});
+        d03.add(new String[]{"E-011", "Kate Yu",    "Sales Ops Analyst", "2023-12-01", "$ 82,000"});
+        deptEmployees.put("D03", d03);
+
+        List d04 = new ArrayList();
+        d04.add(new String[]{"E-013", "Leo Singh", "HR Business Partner", "2019-08-06", "$ 98,000"});
+        d04.add(new String[]{"E-014", "Mia Z.",    "Recruiter",           "2023-03-15", "$ 74,000"});
+        deptEmployees.put("D04", d04);
+
+        void reloadDetail(String deptId, String deptName) {
+            detailTitle.setValue("Employees in " + deptName + " (" + deptId + ")");
+            detailRows.getChildren().clear();
+            List data = (List) deptEmployees.get(deptId);
+            if (data == null) return;
+            for (int i = 0; i < data.size(); i++) {
+                String[] rowData = (String[]) data.get(i);
+                Row row = new Row();
+                for (int j = 0; j < rowData.length; j++) {
+                    row.appendChild(new Label(rowData[j]));
+                }
+                detailRows.appendChild(row);
+            }
+        }
+    ]]></zscript>
+
+    <style>
+        .md-root { height: 100%; }
+        .md-pane { padding: 8px; }
+        .md-hint { font-size: 12px; color: #6b7280; padding: 6px 8px; }
+    </style>
+
+    <window title="Master-Detail — Departments &amp; Employees"
+            width="100%" border="normal" vflex="1">
+        <borderlayout sclass="md-root" vflex="1">
+            <west size="45%" splittable="true" minsize="280" collapsible="true"
+                  border="0" title="Departments">
+                <div sclass="md-pane" vflex="1" width="100%"
+                     style="display:flex; flex-direction:column;">
+                    <div sclass="md-hint">Click a row to load employees on the right.</div>
+                    <grid id="masterGrid" responsive="stacking"
+                          width="100%" vflex="1">
+                        <columns>
+                            <column label="Dept ID"  width="90px" />
+                            <column label="Name" />
+                            <column label="Head"     width="130px" responsiveVisible="false" />
+                            <column label="Headcount" width="100px" align="right" />
+                            <column label="" width="80px" />
+                        </columns>
+                        <rows>
+                            <row>
+                                <label value="D01" />
+                                <label value="Engineering" />
+                                <label value="A. Chen" />
+                                <label value="4" />
+                                <button id="loadD01" label="View"
+                                    onClick='reloadDetail("D01", "Engineering")' />
+                            </row>
+                            <row>
+                                <label value="D02" />
+                                <label value="Design" />
+                                <label value="C. Zhao" />
+                                <label value="3" />
+                                <button id="loadD02" label="View"
+                                    onClick='reloadDetail("D02", "Design")' />
+                            </row>
+                            <row>
+                                <label value="D03" />
+                                <label value="Sales" />
+                                <label value="H. Hu" />
+                                <label value="4" />
+                                <button id="loadD03" label="View"
+                                    onClick='reloadDetail("D03", "Sales")' />
+                            </row>
+                            <row>
+                                <label value="D04" />
+                                <label value="People Ops" />
+                                <label value="L. Singh" />
+                                <label value="2" />
+                                <button id="loadD04" label="View"
+                                    onClick='reloadDetail("D04", "People Ops")' />
+                            </row>
+                        </rows>
+                    </grid>
+                </div>
+            </west>
+            <center border="0">
+                <div sclass="md-pane" vflex="1" width="100%"
+                     style="display:flex; flex-direction:column;">
+                    <label id="detailTitle" value="Select a department..."
+                           style="font-weight:600; padding: 4px 2px 8px 2px;" />
+                    <grid id="detailGrid" responsive="stacking"
+                          width="100%" vflex="1">
+                        <columns>
+                            <column label="Emp ID"   width="90px" />
+                            <column label="Name" />
+                            <column label="Title" />
+                            <column label="Hired"    width="110px" responsiveVisible="false" />
+                            <column label="Salary"   width="110px" align="right" />
+                        </columns>
+                        <rows id="detailRows" />
+                    </grid>
+                </div>
+            </center>
+        </borderlayout>
+    </window>
+</zk>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-6097-Carousel.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 11 15:06:08 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute">
+	<style>
+		.carousel-slide { display: flex; align-items: center; justify-content: center;
+			width: 100%; height: 100%; box-sizing: border-box; }
+		.carousel-slide img { max-width: 100%; max-height: 100%; object-fit: cover; }
+	</style>
+	<vlayout spacing="10px" style="padding:16px;">
+		<label id="selResult" value="none"/>
+		<label id="changingResult" value="none"/>
+
+		<!-- Default: 3 slides, arrows + indicators, slide effect, loop=true -->
+		<carousel id="cr1" width="320px" height="180px"
+				onChanging='changingResult.setValue("from=" + event.previousValue
+						+ " to=" + event.value);'
+				onSelect='selResult.setValue("i=" + event.getData().get("index"));'>
+			<carouselitem id="ci0">
+				<div sclass="carousel-slide" style="background:#1677ff;">
+					<image src="/img/item1.jpg"/>
+				</div>
+			</carouselitem>
+			<carouselitem id="ci1">
+				<div sclass="carousel-slide" style="background:#52c41a;">
+					<image src="/img/item2.jpg"/>
+				</div>
+			</carouselitem>
+			<carouselitem id="ci2">
+				<div sclass="carousel-slide" style="background:#faad14;">
+					<image src="/img/item3.jpg"/>
+				</div>
+			</carouselitem>
+		</carousel>
+
+		<!-- Seamless infinite loop with autoplay: the track keeps gliding
+		     forward through a phantom slide 1' (a clone of the first item)
+		     after slide 3, then snaps invisibly back to the real slide 1. -->
+		<carousel id="cr-autoloop" width="320px" height="180px"
+				autoplay="true" interval="1800">
+			<carouselitem>
+				<div sclass="carousel-slide" style="background:#1677ff;color:#fff;font-size:48px;">1</div>
+			</carouselitem>
+			<carouselitem>
+				<div sclass="carousel-slide" style="background:#52c41a;color:#fff;font-size:48px;">2</div>
+			</carouselitem>
+			<carouselitem>
+				<div sclass="carousel-slide" style="background:#faad14;color:#fff;font-size:48px;">3</div>
+			</carouselitem>
+		</carousel>
+
+		<!-- showArrows / showIndicators = false -->
+		<carousel id="cr-noarrows" width="320px" height="100px"
+				showArrows="false" showIndicators="false">
+			<carouselitem>
+				<div sclass="carousel-slide" style="background:#e6f4ff;">A</div>
+			</carouselitem>
+			<carouselitem>
+				<div sclass="carousel-slide" style="background:#fff1f0;">B</div>
+			</carouselitem>
+		</carousel>
+
+		<!-- Vertical + fade -->
+		<carousel id="cr-vertical" orient="vertical" effect="fade" width="240px" height="200px">
+			<carouselitem>
+				<div sclass="carousel-slide" style="background:#262626;color:#fff;">V1</div>
+			</carouselitem>
+			<carouselitem>
+				<div sclass="carousel-slide" style="background:#595959;color:#fff;">V2</div>
+			</carouselitem>
+		</carousel>
+
+		<!-- effect=none -->
+		<carousel id="cr-none" effect="none" width="200px" height="80px">
+			<carouselitem><div sclass="carousel-slide">N1</div></carouselitem>
+			<carouselitem><div sclass="carousel-slide">N2</div></carouselitem>
+		</carousel>
+
+		<!-- Single child: per the mold (count > 1), arrows + indicators must not render -->
+		<carousel id="cr-single" width="200px" height="80px">
+			<carouselitem><div sclass="carousel-slide">only</div></carouselitem>
+		</carousel>
+
+		<!-- loop=false: arrow-next from last must NOT wrap to 0 -->
+		<carousel id="cr-noloop" width="200px" height="80px" loop="false" activeIndex="1">
+			<carouselitem id="cinl0"><div sclass="carousel-slide">L0</div></carouselitem>
+			<carouselitem id="cinl1"><div sclass="carousel-slide">L1</div></carouselitem>
+		</carousel>
+
+		<!-- Autoplay at the API minimum (500ms). loop=false so once we
+		     advance to the second slide, autoplay's setInterval keeps trying
+		     but the activeIndex stays parked at the last slide — the assertion
+		     is "did the slide change at all", not "how many times". -->
+		<carousel id="cr-auto" width="200px" height="80px"
+				autoplay="true" interval="500" loop="false">
+			<carouselitem id="cap0"><div sclass="carousel-slide">A0</div></carouselitem>
+			<carouselitem id="cap1"><div sclass="carousel-slide">A1</div></carouselitem>
+		</carousel>
+
+		<!-- pause=false (autoplay must NOT pause on hover) -->
+		<carousel id="cr-nopause" width="200px" height="80px"
+				autoplay="true" interval="500" loop="false" pause="false">
+			<carouselitem id="cnp0"><div sclass="carousel-slide">P0</div></carouselitem>
+			<carouselitem id="cnp1"><div sclass="carousel-slide">P1</div></carouselitem>
+		</carousel>
+
+		<!-- keyboard variants -->
+		<carousel id="cr-kbd" width="200px" height="80px">
+			<carouselitem id="ckb0"><div sclass="carousel-slide">K0</div></carouselitem>
+			<carouselitem id="ckb1"><div sclass="carousel-slide">K1</div></carouselitem>
+			<carouselitem id="ckb2"><div sclass="carousel-slide">K2</div></carouselitem>
+		</carousel>
+		<carousel id="cr-nokbd" width="200px" height="80px" keyboard="false">
+			<carouselitem id="cnk0"><div sclass="carousel-slide">N0</div></carouselitem>
+			<carouselitem id="cnk1"><div sclass="carousel-slide">N1</div></carouselitem>
+		</carousel>
+
+		<!-- Author-supplied region name via ca:aria-label: the za11y augment
+		     must preserve it (cr-aria) and must NOT inject a generic default
+		     onto a carousel that supplies none (cr1), which would duplicate the
+		     aria-roledescription="carousel". -->
+		<carousel id="cr-aria" ca:aria-label="Featured shows" width="200px" height="80px">
+			<carouselitem><div sclass="carousel-slide">R0</div></carouselitem>
+			<carouselitem><div sclass="carousel-slide">R1</div></carouselitem>
+		</carousel>
+
+		<!-- Dynamic update target + drivers -->
+		<hlayout spacing="10px">
+			<button id="btn-next-via-server"  label="Server next"
+					onClick='cr1.setActiveIndex(cr1.getActiveIndex() + 1);'/>
+			<button id="btn-bad-orient"       label="Bad orient"
+					onClick='try { cr1.setOrient("diagonal"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-bad-effect"       label="Bad effect"
+					onClick='try { cr1.setEffect("warp"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-bad-active"       label="Bad activeIndex"
+					onClick='try { cr1.setActiveIndex(-1); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-overflow-active"  label="Overflow activeIndex"
+					onClick='try { cr1.setActiveIndex(99); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-bad-interval"     label="Bad interval"
+					onClick='try { cr1.setInterval(100); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+		</hlayout>
+
+		<label id="errMsg" value=""/>
+	</vlayout>
+</zk>

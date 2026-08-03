@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F104-ZK-5409-showcase-grouping.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sat Apr 25 22:25:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+    <grid id="grid1" responsive="stacking" width="100%">
+        <columns sizable="true">
+            <column label="Model"          sort="auto" />
+            <column label="Processor"      width="170px" sort="auto" responsiveVisible="false" />
+            <column label="Memory"         width="120px" sort="auto" />
+            <column label="Price"          width="110px" sort="auto" align="right" />
+            <column label="Hard Drive"     width="150px" sort="auto" responsiveVisible="false" />
+        </columns>
+        <rows>
+            <group label="Dell" />
+            <row><label value="E4500 2.2 GHz"   /><label value="Intel Core 2 Duo"/><label value="2 GB"  /><label value="$ 599" /><label value="250 GB SATA" /></row>
+            <row><label value="E5400 2.7 GHz"   /><label value="Intel Core 2 Duo"/><label value="4 GB"  /><label value="$ 749" /><label value="500 GB SATA" /></row>
+            <groupfoot>
+                <cell colspan="5"><label value="Dell models — 2 items" style="font-weight:bold;" /></cell>
+            </groupfoot>
+
+            <group label="Compaq" />
+            <row><label value="Presario CQ60"   /><label value="AMD Sempron"     /><label value="3 GB"  /><label value="$ 499" /><label value="160 GB SATA" /></row>
+            <row><label value="Presario CQ60-1" /><label value="Intel Pentium"   /><label value="4 GB"  /><label value="$ 549" /><label value="250 GB SATA" /></row>
+            <groupfoot>
+                <cell colspan="5"><label value="Compaq models — 2 items" style="font-weight:bold;" /></cell>
+            </groupfoot>
+
+            <group label="Asus" />
+            <row><label value="K50 Series"      /><label value="Intel Core i3"   /><label value="4 GB"  /><label value="$ 679" /><label value="320 GB SATA" /></row>
+            <groupfoot>
+                <cell colspan="5"><label value="Asus models — 1 item" style="font-weight:bold;" /></cell>
+            </groupfoot>
+        </rows>
+    </grid>
+</zk>

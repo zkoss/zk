@@ -48,8 +48,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<radiogroup onCheck="choice.value = self.selectedItem.label">
 		<grid xmlns:ca="client/attribute" ca:data-scrollable="false">
 			<rows>
-				<row spans="5">
-				Which one area would you like ZK to improve upon?</row>
+				<row>
+					<cell colspan="5">
+						Which one area would you like ZK to improve upon?
+					</cell>
+				</row>
 				<row>
 					<radio label="IDE Support" />
 					<radio label="Bug Fixing" />

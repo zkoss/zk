@@ -389,7 +389,12 @@ export class Tabs extends zul.Widget {
 
 	/** @internal */
 	_fixHgh(toSel: boolean): void {
-		if (this.getTabbox()!._scrolling) return;
+		// ZK-5928: removed the early return guard added by ZK-3293.
+		// When a vertical tabbox is in scrolling mode and the container is resized back,
+		// skipping _fixHgh prevents tabs.style.height from being updated,
+		// so _scrollcheck cannot detect that scrolling is no longer needed.
+		// if (this.getTabbox()!._scrolling) return;
+        
 		var tabbox = this.getTabbox()!;
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel

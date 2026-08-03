@@ -558,6 +558,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	-->
 	<library-property>
 		<name>org.zkoss.theme.preferred</name>
-		<value>breeze</value>
+		<value>iceblue_c</value>
 	</library-property>
 </zk>

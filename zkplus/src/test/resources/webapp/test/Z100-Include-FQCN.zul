@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="win" xmlns="http://www.zkoss.org/2005/zul">
+    <zscript>
+        void doReload() {
+            org.zkoss.zul.Include inc = (org.zkoss.zul.Include) win.getFellow("inc");
+            String src = inc.getSrc();
+            inc.setSrc(null);
+            inc.setSrc(src);
+        }
+    </zscript>
+    <include id="inc" src="/test/inner-fqcn.zul"/>
+    <button id="reloadBtn" label="Reload" onClick="doReload()"/>
+</window>
