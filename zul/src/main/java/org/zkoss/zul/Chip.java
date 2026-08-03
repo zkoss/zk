@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
  * <p>Default {@link #getZclass}: "z-chip".
  *
  * @author yuehfeng
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Chip extends LabelImageElement implements Disable {
 	private static final long serialVersionUID = -7935159928926565441L;
@@ -172,7 +172,7 @@ public class Chip extends LabelImageElement implements Disable {
 	 * to keep the chip visible. Follows the same pattern as
 	 * {@link Window#onClose} — the framework's event-dispatch machinery
 	 * skips the default handler when a prior listener stops propagation.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void onClose() {
 		// The close button is rendered disabled client-side, but a

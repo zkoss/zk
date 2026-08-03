@@ -58,7 +58,7 @@ public class Utils {
 	 * {@code value} is {@code null}.
 	 * @throws WrongValueException if {@code value} is non-null and not one of
 	 * {@code allowed}.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public static String checkEnum(String value, String defaultValue, String message, String... allowed)
 	throws WrongValueException {

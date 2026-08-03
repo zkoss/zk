@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.Utils;
  * <p>Default {@link #getZclass}: "z-confirmpopup".
  *
  * @author yuehfeng
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Confirmpopup extends Popup {
 	private static final long serialVersionUID = 9019884629051101091L;
@@ -57,7 +57,7 @@ public class Confirmpopup extends Popup {
 
 	/** Returns the optional header (title row) shown above the message body.
 	 * Mirrors PrimeNG Confirmpopup's <code>header</code> property.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getHeader() {
 		return _header;
@@ -67,7 +67,7 @@ public class Confirmpopup extends Popup {
 	 * @param header the header text; {@code null} or an empty string clears it
 	 *        (the popup renders with no title row). Pushes the change to the
 	 *        client via {@code smartUpdate}.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void setHeader(String header) {
 		if (header != null && header.isEmpty())
@@ -80,7 +80,7 @@ public class Confirmpopup extends Popup {
 
 	/** Returns the confirmation message shown in the popup body.
 	 * <p>Default: {@code null} (no message).
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getMessage() {
 		return _message;
@@ -89,7 +89,7 @@ public class Confirmpopup extends Popup {
 	/** Sets the confirmation message shown in the popup body.
 	 * @param message the message text; {@code null} or an empty string clears
 	 *        it. Pushes the change to the client via {@code smartUpdate}.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void setMessage(String message) {
 		if (message != null && message.isEmpty())
@@ -103,7 +103,7 @@ public class Confirmpopup extends Popup {
 	/** Returns the icon CSS class shown beside the message.
 	 * <p>Default: {@value #DEFAULT_ICON_SCLASS}. An empty string means the
 	 * icon is explicitly suppressed (no icon node is rendered).
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getIconSclass() {
 		return _iconSclass;
@@ -131,7 +131,7 @@ public class Confirmpopup extends Popup {
 	/** Returns the severity, which drives the icon/color styling of the popup.
 	 * <p>Default: {@value #DEFAULT_SEVERITY}. One of "info", "success",
 	 * "warning", "danger" or "secondary".
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getSeverity() {
 		return _severity;
@@ -144,7 +144,7 @@ public class Confirmpopup extends Popup {
 	 *        {@code smartUpdate}.
 	 * @throws WrongValueException if {@code severity} is non-null and is not one
 	 *         of the accepted tokens.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void setSeverity(String severity) throws WrongValueException {
 		severity = Utils.checkEnum(severity, DEFAULT_SEVERITY,
@@ -160,7 +160,7 @@ public class Confirmpopup extends Popup {
 	 * @return the placement of this popup relative to the trigger element.
 	 *         One of "top" (default) / "bottom" / "left" / "right". The
 	 *         arrow points from this popup toward the trigger.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getPlacement() {
 		return _placement;
@@ -172,7 +172,7 @@ public class Confirmpopup extends Popup {
 	 *        Pushes the change to the client via {@code smartUpdate}.
 	 * @throws WrongValueException if {@code placement} is non-null and is not
 	 *         one of the accepted tokens.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void setPlacement(String placement) throws WrongValueException {
 		placement = Utils.checkEnum(placement, DEFAULT_PLACEMENT,
@@ -189,7 +189,7 @@ public class Confirmpopup extends Popup {
 	 *         "ok" (default) or "cancel". For destructive operations
 	 *         (severity="danger"), prefer "cancel" so an accidental Enter
 	 *         keypress does not commit the action.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getDefaultFocus() {
 		return _defaultFocus;
@@ -203,7 +203,7 @@ public class Confirmpopup extends Popup {
 	 *        the client via {@code smartUpdate}.
 	 * @throws WrongValueException if {@code defaultFocus} is non-null and is
 	 *         neither "ok" nor "cancel".
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void setDefaultFocus(String defaultFocus) throws WrongValueException {
 		defaultFocus = Utils.checkEnum(defaultFocus, DEFAULT_FOCUS, "defaultFocus must be ok or cancel: ", "ok", "cancel");

@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  * {@code begin} first then {@code end}, treating {@code null} as the smallest value.
  *
  * @author peaker
- * @since 10.4.0
+ * @since 11.0.0
  */
 public final class DateRange implements Serializable, Comparable<DateRange> {
 

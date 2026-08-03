@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: "z-badge".
  *
  * @author yuehfeng
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Badge extends XulElement {
 	private static final long serialVersionUID = 3949753706866419036L;
@@ -106,7 +106,7 @@ public class Badge extends XulElement {
 	 * </ul>
 	 * Useful for server-side test assertions and for binding the same
 	 * visual text into another component without re-implementing the rules.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getDisplayValue() {
 		if (_dot) return "";

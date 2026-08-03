@@ -25,7 +25,7 @@ import org.zkoss.zul.impl.Utils;
  * <p>Default {@link #getZclass}: "z-avatar".
  *
  * @author yuehfeng
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Avatar extends LabelImageElement {
 	private static final long serialVersionUID = 5340791258877187011L;

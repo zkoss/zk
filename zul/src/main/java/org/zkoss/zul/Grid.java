@@ -264,11 +264,11 @@ public class Grid extends MeshElement {
 	private String _emptyMessage;
 	private int _visibleRows; //since 8.5.0
 
-	/** Responsive policy: null (unset), "stacking", "none". @since 10.4.0 */
+	/** Responsive policy: null (unset), "stacking", "none". @since 11.0.0 */
 	private String _responsive;
 	/** Responsive columns token string, e.g. "sm-1 md-2 lg-none". Null means unset
 	 * (client falls back to default "sm-1 md-none"). Server stores the raw string;
-	 * parsing and cascade resolution happen on the client. @since 10.4.0 */
+	 * parsing and cascade resolution happen on the client. @since 11.0.0 */
 	private String _responsiveColumns;
 
 	static {
@@ -278,7 +278,7 @@ public class Grid extends MeshElement {
 		addClientEvent(Grid.class, Events.ON_TOP_PAD, CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, Events.ON_DATA_LOADING, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.0
 		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
-		addClientEvent(Grid.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 10.4.0
+		addClientEvent(Grid.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 11.0.0
 	}
 
 	public Grid() {
@@ -1771,7 +1771,7 @@ public class Grid extends MeshElement {
 	 * <p>Stacking behavior is provided by ZK EE (zkmax); CE stores the value only.
 	 *
 	 * @return the responsive policy, or null if not set.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getResponsive() {
 		return _responsive;
@@ -1791,7 +1791,7 @@ public class Grid extends MeshElement {
 	 * @param responsive the responsive policy
 	 * @throws WrongValueException if {@code responsive} is neither
 	 *     {@code "stacking"}, {@code "none"}, nor {@code null}.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void setResponsive(String responsive) throws WrongValueException {
 		if (responsive != null && responsive.isEmpty())
@@ -1818,7 +1818,7 @@ public class Grid extends MeshElement {
 	 * {@code "sm-1 md-none"} resolved by the client).
 	 *
 	 * @return the responsive columns token string, or null if not set.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getResponsiveColumns() {
 		return _responsiveColumns;
@@ -1836,7 +1836,7 @@ public class Grid extends MeshElement {
 	 * Invalid tokens are silently dropped by the client cascade resolver.
 	 *
 	 * @param columns the responsive columns token string
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void setResponsiveColumns(String columns) {
 		if (columns != null && columns.isEmpty())
@@ -1862,7 +1862,7 @@ public class Grid extends MeshElement {
 	 * <p>Values resolved from the fallback chain are validated; an invalid
 	 * value (anything other than {@code "stacking"}, {@code "none"}, or null)
 	 * is logged as a warning and clamped to null.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	/*package*/ String getEffectiveResponsive() {
 		if (_responsive != null)
@@ -1884,7 +1884,7 @@ public class Grid extends MeshElement {
 	 * Returns the effective responsive columns token string, resolving the
 	 * same fallback chain. Null means the client supplies its own default
 	 * {@code "sm-1 md-none"}.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	/*package*/ String getEffectiveResponsiveColumns() {
 		if (_responsiveColumns != null)

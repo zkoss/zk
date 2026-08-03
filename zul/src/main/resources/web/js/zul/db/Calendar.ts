@@ -1499,7 +1499,7 @@ export class Calendar extends zul.Widget {
 	 *     and `previewEnd` is supplied, cells between `begin` and `previewEnd`
 	 *     are tagged as preview. Has no effect when `end` is defined.
 	 * @returns this widget, to allow method chaining.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	// eslint-disable-next-line zk/javaStyleSetterSignature
 	setRangeHighlight(begin: Date, end?: Date, previewEnd?: Date): this {
@@ -1584,7 +1584,7 @@ export class Calendar extends zul.Widget {
 	 *
 	 * Safe to call when no highlight is active or before the widget is bound.
 	 * @returns this widget, to allow method chaining.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	clearRangeHighlight(): this {
 		var $cells = this._rangeCells$();

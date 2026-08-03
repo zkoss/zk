@@ -128,7 +128,7 @@ public class SimpleDateConstraint extends AbstractSimpleDateTimeConstraint<Date>
 	 * differ from a user's zone-aware expectation. A fully zone-aware
 	 * today-flag check is tracked as a separate enhancement.
 	 *
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public static SimpleDateConstraint forTimeZone(String constraint, TimeZone tzone) {
 		SimpleDateConstraint c = new SimpleDateConstraint(constraint);
@@ -214,7 +214,7 @@ public class SimpleDateConstraint extends AbstractSimpleDateTimeConstraint<Date>
 	 * @param end the end date, or {@code null} if unbounded
 	 * @throws WrongValueException if either bound violates the constraint,
 	 *         or if {@code begin} is later than {@code end}
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void validateRange(Component comp, Date begin, Date end) throws WrongValueException {
 		// Normalise both endpoints to calendar-day start before the reverse

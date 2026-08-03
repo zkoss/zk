@@ -802,7 +802,7 @@ public class Datebox extends DateTimeFormatInputElement {
 	 * @param locale the component locale, or {@code null} for the page locale
 	 * @param comp the component requesting the symbols
 	 * @return the client payload, or {@code null} if no component locale is set
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public static Object[] getRealSymbols(Locale locale, Component comp) {
 		if (locale != null) {
