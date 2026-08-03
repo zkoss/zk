@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: "z-carousel".
  *
  * @author yuehfeng
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Carousel extends XulElement {
 	private static final long serialVersionUID = 6938934209815550099L;
@@ -100,7 +100,7 @@ public class Carousel extends XulElement {
 
 	/** Returns whether the carousel advances through its slides automatically.
 	 * <p>Default: false.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public boolean isAutoplay() {
 		return _autoplay;
@@ -119,7 +119,7 @@ public class Carousel extends XulElement {
 
 	/** Returns the autoplay interval in milliseconds.
 	 * <p>Default: 5000.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public int getInterval() {
 		return _interval;
@@ -141,7 +141,7 @@ public class Carousel extends XulElement {
 
 	/** Returns whether the previous/next navigation arrows are shown.
 	 * <p>Default: true.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public boolean isShowArrows() {
 		return _showArrows;
@@ -159,7 +159,7 @@ public class Carousel extends XulElement {
 
 	/** Returns whether the slide indicators (the position dots) are shown.
 	 * <p>Default: true.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public boolean isShowIndicators() {
 		return _showIndicators;
@@ -178,7 +178,7 @@ public class Carousel extends XulElement {
 	/** Returns whether the carousel wraps around from the last slide back to the
 	 * first (and vice versa).
 	 * <p>Default: true.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public boolean isLoop() {
 		return _loop;
@@ -198,7 +198,7 @@ public class Carousel extends XulElement {
 	/** Whether autoplay pauses while the cursor hovers over the carousel.
 	 * Mirrors Bootstrap's <code>data-bs-pause="hover"</code> behavior.
 	 * <p>Default: true.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public boolean isPause() {
 		return _pause;
@@ -217,7 +217,7 @@ public class Carousel extends XulElement {
 	/** Whether the carousel reacts to left/right arrow keys when focused.
 	 * Mirrors Bootstrap's <code>keyboard</code> option.
 	 * <p>Default: true.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public boolean isKeyboard() {
 		return _keyboard;
@@ -235,7 +235,7 @@ public class Carousel extends XulElement {
 
 	/** Returns the orientation along which the slides advance.
 	 * <p>Default: "horizontal".
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getOrient() {
 		return _orient;
@@ -257,7 +257,7 @@ public class Carousel extends XulElement {
 
 	/** Returns the transition effect used when moving between slides.
 	 * <p>Default: "slide".
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public String getEffect() {
 		return _effect;

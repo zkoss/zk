@@ -23,7 +23,7 @@ import java.util.OptionalLong;
  * handling, same non-swapping policy, same comparison contract.
  *
  * @author peaker
- * @since 10.4.0
+ * @since 11.0.0
  */
 public final class LocalDateRange implements Serializable, Comparable<LocalDateRange> {
 

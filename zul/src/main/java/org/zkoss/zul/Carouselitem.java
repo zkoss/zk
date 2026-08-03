@@ -24,7 +24,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: "z-carouselitem".
  *
  * @author yuehfeng
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Carouselitem extends LabelImageElement {
 	private static final long serialVersionUID = 7943192457786925518L;

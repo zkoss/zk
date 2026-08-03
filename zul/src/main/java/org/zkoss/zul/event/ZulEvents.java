@@ -42,7 +42,7 @@ public class ZulEvents {
 	/**The onResponsiveModeChange event.
 	 * Fired by a responsive {@code Grid} on the client when the resolved
 	 * stacking mode changes between {@code "table"} and {@code "stacking"}.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public static final String ON_RESPONSIVE_MODE_CHANGE = "onResponsiveModeChange";
 }

@@ -26,7 +26,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: "z-breadcrumb".
  *
  * @author yuehfeng
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Breadcrumb extends XulElement {
 	private static final long serialVersionUID = 6240578539271280834L;

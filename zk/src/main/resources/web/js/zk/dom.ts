@@ -445,7 +445,7 @@ export class JQZK {
 	 * @param opt - whether to check if the element is partially visible in the viewport.
 	 * @returns if false, it means the element is not shown.
 	 * @since 7.0.6
-	 * @since 10.4.0 Support partial visibility check via the `opt` parameter.
+	 * @since 11.0.0 Support partial visibility check via the `opt` parameter.
 	 */
 	isRealScrollIntoView(opt?: boolean): boolean {
 		var wgt = this.$();
@@ -476,7 +476,7 @@ export class JQZK {
 	 * @param partial - whether to check if the element is partially visible in the viewport.
 	 * @returns if false, it means the element is not shown.
 	 * @since 6.5.2
-	 * @since 10.4.0 Added the `partial` parameter.
+	 * @since 11.0.0 Added the `partial` parameter.
 	 */
 	isScrollIntoView(recursive?: boolean, partial?: boolean): boolean {// ZK-2069: can check whether the element is shown in parents' viewport.
 		var vOffset = this.viewportOffset(),

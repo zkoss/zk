@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: "z-avatargroup".
  *
  * @author peakerlee
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Avatargroup extends XulElement {
 	private static final long serialVersionUID = -856626047370581203L;

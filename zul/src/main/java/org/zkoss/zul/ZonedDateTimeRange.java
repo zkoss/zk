@@ -27,7 +27,7 @@ import java.util.Objects;
  * and therefore work correctly across zones.
  *
  * @author peaker
- * @since 10.4.0
+ * @since 11.0.0
  */
 public final class ZonedDateTimeRange implements Serializable, Comparable<ZonedDateTimeRange> {
 

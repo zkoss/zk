@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: "z-breadcrumbitem".
  *
  * @author yuehfeng
- * @since 10.4.0
+ * @since 11.0.0
  */
 public class Breadcrumbitem extends LabelImageElement implements Disable {
 	private static final long serialVersionUID = 1674508024320177268L;

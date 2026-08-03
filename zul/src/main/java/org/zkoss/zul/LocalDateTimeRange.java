@@ -24,7 +24,7 @@ import java.util.Objects;
  * closed) instead of a day count.
  *
  * @author peaker
- * @since 10.4.0
+ * @since 11.0.0
  */
 public final class LocalDateTimeRange implements Serializable, Comparable<LocalDateTimeRange> {
 

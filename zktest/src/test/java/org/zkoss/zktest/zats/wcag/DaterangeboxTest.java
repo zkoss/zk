@@ -36,7 +36,7 @@ public class DaterangeboxTest extends WcagTestCase {
 
 		// Open via the calendar icon button (the @daterangebox ZTL widget
 		// selector returns null — Daterangebox doesn't register a ZTL name —
-		// so we drive the icon directly, same as F104_ZK_4305_DaterangeAttributeTest.
+		// so we drive the icon directly, same as F110_ZK_4305_DaterangeAttributeTest.
 		click(jq(".z-daterangebox:eq(0) .z-daterangebox-button"));
 		waitResponse();
 

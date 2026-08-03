@@ -67,7 +67,7 @@ public class Column extends HeaderElement {
 	private boolean _isCustomAscComparator = false;
 	private boolean _isCustomDscComparator = false;
 	/** Responsive column visibility flag. Default true (visible in stacking).
-	 * @since 10.4.0 */
+	 * @since 11.0.0 */
 	private boolean _responsiveVisible = true;
 
 	static {
@@ -626,7 +626,7 @@ public class Column extends HeaderElement {
 	 * <p>Hiding behavior is provided by ZK EE (zkmax); CE stores the value only.
 	 *
 	 * @return {@code true} if visible in stacking mode (default), {@code false} to hide.
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public boolean isResponsiveVisible() {
 		return _responsiveVisible;
@@ -642,7 +642,7 @@ public class Column extends HeaderElement {
 	 * </ul>
 	 *
 	 * @param responsiveVisible visibility flag for stacking mode
-	 * @since 10.4.0
+	 * @since 11.0.0
 	 */
 	public void setResponsiveVisible(boolean responsiveVisible) {
 		if (_responsiveVisible != responsiveVisible) {
