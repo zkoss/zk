@@ -1,0 +1,263 @@
+/* _inputlabel.less
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon May 18 14:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+This program is distributed under LGPL Version 2.1 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+*/
+// Partial — imported by input.less / combo.less / db/less/calendar.less.
+// Theme variables (e.g. @inputBorderColor) are expected to be in scope via
+// the host file's @import of "~./zul/less/_header.less"; no @import here to
+// avoid zkless-engine's nested-import path rewriting limitation.
+
+@inputLabelInsetX: 8px;
+@inputLabelTriggerReserve: 40px;
+
+// === Shared base: applies to both positions ===
+.z-input-label {
+	transition: box-shadow 150ms, border-color 150ms, background-color 150ms;
+
+	& > .z-input-label-text {
+		font-family: var(--zk-base-content-font-family, inherit);
+		font-size: @inputTextSize;
+		line-height: normal;
+		letter-spacing: inherit;
+	}
+}
+
+// === Position: left (default) — inline-flex row, label on the left ===
+.z-input-label-left {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+
+	& > .z-input-label-text {
+		color: @inputColor;
+		flex: 0 0 auto;
+	}
+}
+
+// === Position: top — block layout, label stacked above input ===
+.z-input-label-top {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 4px;
+
+	& > .z-input-label-text {
+		color: @inputColor;
+		display: block;
+		line-height: @baseLineHeight;
+	}
+}
+
+// === Position: floating — outlined chrome + label overlays input ===
+// Background uses a dedicated --zk-input-label-bg hook so themers can override
+// the floating chrome without touching every other input. Falls back to the
+// shared @inputBackgroundColor (= var(--zk-input-background-color)).
+.z-input-label-floating {
+	position: relative;
+	display: inline-block;
+	border: 1px solid @inputBorderColor;
+	.borderRadius(@baseBorderRadius);
+	background: var(--zk-input-label-bg, @inputBackgroundColor);
+
+	& > input,
+	& > textarea {
+		border: none;
+		// The wrap owns the chrome in floating mode; the child input must not
+		// paint over it — !important defeats input.less's &[disabled] rule
+		// which would otherwise inject @inputDisableBackgroundColor.
+		background: transparent !important;
+		outline: none;
+		padding: @inputPadding;
+		width: 100%;
+		font: inherit;
+		color: @inputColor;
+	}
+
+	& > .z-input-label-text {
+		position: absolute;
+		left: @inputLabelInsetX;
+		top: 50%;
+		transform: translateY(-50%);
+		transform-origin: top left;
+		transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+					color 150ms;
+		color: @inputPlaceholderColor;
+		// Label text background must match the wrap so the shrunk label visually
+		// "eats" the border line underneath it.
+		background: var(--zk-input-label-bg, @inputBackgroundColor);
+		padding: 0 4px;
+		pointer-events: none;
+		max-width: calc(100% - 2 * @inputLabelInsetX);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		line-height: 1;
+	}
+
+	&.z-input-label-focused > .z-input-label-text,
+	&.z-input-label-shrunk  > .z-input-label-text {
+		transform: translateY(calc(-50% - ~"@{inputHeight}" / 2)) scale(0.75);
+	}
+
+	&:has(> textarea) > .z-input-label-text {
+		top: 4px;
+		transform: translateY(0);
+	}
+	&.z-input-label-focused:has(> textarea) > .z-input-label-text,
+	&.z-input-label-shrunk:has(> textarea)  > .z-input-label-text {
+		// Land the label's vertical center on the wrap's top border, matching
+		// the single-line behavior. -100% would push it a full label-height
+		// above the wrap and overlap the previous component.
+		transform: translateY(calc(-50% - 4px)) scale(0.75);
+	}
+
+	&.z-input-label-focused {
+		border-color: @inputFocusBorderColor;
+		box-shadow: inset 0 0 0 1px @inputFocusBorderColor;
+		& > .z-input-label-text { color: @inputFocusBorderColor; }
+	}
+	&.z-input-label-invalid {
+		border-color: @invalidBorderColor;
+		box-shadow: inset 0 0 0 1px @invalidBorderColor;
+		& > .z-input-label-text { color: @invalidBorderColor; }
+	}
+	&.z-input-label-disabled,
+	&.z-input-label-readonly {
+		border-color: @inputDisableColor;
+		& > .z-input-label-text { color: @inputDisableColor; }
+	}
+	&.z-input-label-disabled {
+		opacity: 0.62;
+		cursor: not-allowed;
+		// Material disabled affordance: the fill drops out so the field reads
+		// as "deactivated" rather than just "tinted". Border + dimmed label
+		// carry the disabled cue. The label-text background also goes
+		// transparent so the shrunk label doesn't paint a fill island.
+		background: transparent;
+		& > .z-input-label-text { background: transparent; }
+	}
+
+	& > input::placeholder,
+	& > textarea::placeholder {
+		color: transparent;
+		transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+	}
+	&.z-input-label-shrunk > input::placeholder,
+	&.z-input-label-shrunk > textarea::placeholder {
+		color: @inputPlaceholderColor;
+	}
+
+	& > .z-input-label-text:dir(rtl) {
+		left: auto;
+		right: @inputLabelInsetX;
+		transform-origin: top right;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&, & > .z-input-label-text { transition: none !important; }
+	}
+}
+
+// === Composite popup-trigger neutralization (floating mode only) ===
+.z-input-label-floating > .z-bandbox,
+.z-input-label-floating > .z-combobox,
+.z-input-label-floating > .z-datebox,
+.z-input-label-floating > .z-spinner,
+.z-input-label-floating > .z-timebox,
+.z-input-label-floating > .z-doublespinner {
+	border: none !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	height: auto !important;
+}
+.z-input-label-floating > .z-bandbox > input,
+.z-input-label-floating > .z-combobox > input,
+.z-input-label-floating > .z-datebox > input,
+.z-input-label-floating > .z-spinner > input,
+.z-input-label-floating > .z-timebox > input,
+.z-input-label-floating > .z-doublespinner > input {
+	border: none !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+.z-input-label-floating > .z-bandbox > .z-bandbox-button,
+.z-input-label-floating > .z-combobox > .z-combobox-button,
+.z-input-label-floating > .z-datebox > .z-datebox-button,
+.z-input-label-floating > .z-timebox > .z-timebox-button,
+.z-input-label-floating > .z-spinner > .z-spinner-button,
+.z-input-label-floating > .z-doublespinner > .z-doublespinner-button {
+	border: none !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+// Reserve the trigger-button column for the label
+.z-input-label-floating:has(> .z-bandbox) > .z-input-label-text,
+.z-input-label-floating:has(> .z-combobox) > .z-input-label-text,
+.z-input-label-floating:has(> .z-datebox) > .z-input-label-text,
+.z-input-label-floating:has(> .z-timebox) > .z-input-label-text,
+.z-input-label-floating:has(> .z-spinner) > .z-input-label-text,
+.z-input-label-floating:has(> .z-doublespinner) > .z-input-label-text {
+	max-width: calc(100% - 2 * @inputLabelInsetX - @inputLabelTriggerReserve);
+}
+
+// === inplace coexistence (floating only) ===
+.z-textbox-inplace .z-input-label-floating:not(.z-input-label-focused):not(.z-input-label-shrunk) {
+	border-color: transparent !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	& > .z-input-label-text { display: none; }
+}
+
+// === @media (prefers-contrast: more) ===
+@media (prefers-contrast: more) {
+	.z-input-label-floating {
+		border-width: 2px;
+		& > .z-input-label-text { font-weight: bold; }
+		&.z-input-label-focused {
+			box-shadow: inset 0 0 0 3px @inputFocusBorderColor;
+		}
+	}
+}
+
+// === @media (forced-colors: active) — Windows High Contrast Mode ===
+@media (forced-colors: active) {
+	.z-input-label-floating {
+		background: Canvas !important;
+		border-color: ButtonBorder !important;
+
+		& > .z-input-label-text { color: CanvasText !important; }
+		& > input, & > textarea {
+			color: CanvasText !important;
+			background: Canvas !important;
+		}
+		& > input::placeholder,
+		& > textarea::placeholder { color: GrayText !important; }
+
+		&.z-input-label-focused {
+			border-color: Highlight !important;
+			outline: 2px solid Highlight;
+			outline-offset: 1px;
+			box-shadow: none !important;
+		}
+		&.z-input-label-invalid {
+			border-color: Mark !important;
+			box-shadow: none !important;
+		}
+		&.z-input-label-disabled,
+		&.z-input-label-readonly {
+			border-color: GrayText !important;
+			& > .z-input-label-text { color: GrayText !important; }
+		}
+	}
+}
