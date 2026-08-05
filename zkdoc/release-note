@@ -5,6 +5,7 @@ ZK 11.0.0
   ZK-5409: responsive Grid
   ZK-6097: Add Avatar, Avatargroup, Badge, Chip, Confirmpopup, Breadcrumb, Carousel to CE
   ZK-4305: date range picker
+  ZK-5992: tbeditor provides a compile-time setting to include its plugin
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -37,6 +38,12 @@ ZK 11.0.0
   + Upgrade tomcat-jasper-el to 9.0.120 to fix vulnerabilities
   + jasperreports (an optional dependency in zkex) update: JasperReports community edition 7.x contains the fix
     (no fixed 6.x release exists), but upgrading to 7.x requires ZK public API changes so is deferred to ZK 11.
+  + tbeditor bundles 16 Trumbowyg plugins; four upstream plugins are NOT supported and are not shipped:
+    resizimg (requires jquery-resizable-dom, which ZK does not bundle), upload (requires an upload endpoint
+    the application must provide, which ZK does not), noembed and pasteembed (both require a third-party
+    remote service and emit an <iframe>, which tbeditor's DOMPurify sanitization removes). Configuring any
+    of these four names in plugins= (or in the org.zkoss.zkmax.zul.tbeditor.plugins library property) loads
+    nothing; the editor and its other plugins still work.
 
    --------
 ZK 10.3.0
