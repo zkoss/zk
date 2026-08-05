@@ -701,6 +701,9 @@ function mergedFiles() {
     return new Set();
 }
 
+// ZK-5992: vendor stylesheets the widget loads by URL at runtime (zk.loadCSS) — not theme CSS, never a .css.dsp.
+const runtimeLoadedDirs = new Set(['js/zkmax/tbeditor/ext/plugins']);
+
 /**
  * Every *.css under dir, as a path relative to the web root.
  */
@@ -708,10 +711,11 @@ function listCssFiles(dir) {
     const results = [];
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
         const fullPath = path.join(dir, entry.name);
+        const relPath = path.relative(webDir, fullPath).replace(/\\/g, '/');
         if (entry.isDirectory()) {
-            results.push(...listCssFiles(fullPath));
+            if (!runtimeLoadedDirs.has(relPath)) results.push(...listCssFiles(fullPath));
         } else if (entry.name.endsWith('.css')) {
-            results.push(path.relative(webDir, fullPath).replace(/\\/g, '/'));
+            results.push(relPath);
         }
     }
     return results;

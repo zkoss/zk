@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F111-ZK-5992-Custom.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Nov 03 14:30:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout>
+		<label value="ZK-5992 — tbeditor plugins outside the bundled manifest"/>
+		<label multiline="true">
+            Set library-property org.zkoss.zkmax.zul.tbeditor.pluginPath = "/test2/F111-ZK-5992-plugins/" (in zk.xml), reload.
+            1. tbCustom loads zk5992custom, whose script registers the key "zk5992CustomKey" instead of its file name.
+            2. tbNoReg loads zk5992noreg, whose script registers nothing: ZK's error box reports it.
+            3. Click "add late editors": tbLateNone (plugins="") must start no plugin, zk5992CustomKey included;
+                tbLateNoReg loads zk5992noreg again, as a load that registered nothing is not cached.
+		</label>
+		<button id="addLate" label="add late editors">
+			<attribute name="onClick"><![CDATA[
+				org.zkoss.zkmax.zul.Tbeditor none = new org.zkoss.zkmax.zul.Tbeditor();
+				none.setId("tbLateNone");
+				none.setPlugins("");
+				none.setWidth("500px");
+				none.setParent(lateBox);
+				org.zkoss.zkmax.zul.Tbeditor noReg = new org.zkoss.zkmax.zul.Tbeditor();
+				noReg.setId("tbLateNoReg");
+				noReg.setPlugins("zk5992noreg");
+				noReg.setWidth("500px");
+				noReg.setParent(lateBox);
+			]]></attribute>
+		</button>
+
+		<tbeditor id="tbCustom" plugins="zk5992custom" width="500px"/>
+
+		<tbeditor id="tbNoReg" plugins="zk5992noreg" width="500px"/>
+
+		<div id="lateBox"/>
+	</vlayout>
+</zk>
