@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F111-ZK-5992-Buttons.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon Jun 22 12:22:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import java.util.HashMap;
+		java.util.Map noAuto = new HashMap();
+		noAuto.put("autoPluginButtons", Boolean.FALSE);
+		java.util.Map image = new HashMap();
+		image.put("dropdown", java.util.Arrays.asList(new String[] {"insertImage", "base64"}));
+		image.put("ico", "insertImage");
+		java.util.Map defs = new HashMap();
+		defs.put("image", image);
+		java.util.Map inDropdown = new HashMap();
+		inDropdown.put("btnsDef", defs);
+		inDropdown.put("btns", java.util.Arrays.asList(new Object[] {java.util.Arrays.asList(new String[] {"image"})}));
+	]]></zscript>
+	<vlayout>
+		<label value="ZK-5992 — auto toolbar buttons + autoPluginButtons opt-out"/>
+		<label multiline="true">
+            1. tbAuto (plugins="table"): the table toolbar button IS auto-inserted.
+            2. tbNoAuto (plugins="table", config.autoPluginButtons=false): the plugin still LOADS
+            (trumbowyg.table.js is requested) but NO table button is inserted.
+            3. Both: trumbowyg.table.js is requested only once (shared, de-duplicated).
+            4. tbInDropdown (plugins="base64", btnsDef puts base64 in an "image" dropdown, btns=[["image"]]):
+            base64 is offered only inside that dropdown, not again as a toolbar button of its own.
+		</label>
+
+		<tbeditor id="tbAuto" plugins="table" width="500px"/>
+
+		<tbeditor id="tbNoAuto" plugins="table" config="${noAuto}" width="500px"/>
+
+		<tbeditor id="tbInDropdown" plugins="base64" config="${inDropdown}" width="500px"/>
+	</vlayout>
+</zk>
