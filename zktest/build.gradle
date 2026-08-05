@@ -41,10 +41,6 @@ repositories {
 	}
 
 	maven {
-		url = uri('https://maven.seasar.org/maven2')
-	}
-
-	maven {
 		url = uri('https://maven.nuxeo.org/nexus/content/groups/public/')
 	}
 

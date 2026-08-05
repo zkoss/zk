@@ -19,9 +19,16 @@ repositories {
 		url = uri('https://mavensync.zkoss.org/maven2')
 	}
 
-	maven {
-		name = 'maven seasar org'
-		url = uri('https://maven.seasar.org/maven2')
+	exclusiveContent {
+		forRepository {
+			flatDir {
+				name = 'vendored libs'
+				dirs "$rootDir/dist/lib/ext"
+			}
+		}
+		filter {
+			includeGroup 'org.seasar.container'
+		}
 	}
 
 	maven {
