@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6065.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 06 15:00:14 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<grid id="grid" width="500px" height="200px">
+		<frozen id="gridFrozen" columns="2" rightColumns="1"/>
+		<columns sizable="true">
+			<column label="c0" width="120px"/>
+			<column label="c1" width="120px"/>
+			<column label="c2" width="120px"/>
+			<column label="c3" width="120px"/>
+			<column label="c4" width="120px"/>
+			<column label="c5" width="120px"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="a0"/><label value="a1"/><label value="a2"/>
+				<label value="a3"/><label value="a4"/><label value="a5"/>
+			</row>
+			<row>
+				<label value="b0"/><label value="b1"/><label value="b2"/>
+				<label value="b3"/><label value="b4"/><label value="b5"/>
+			</row>
+		</rows>
+	</grid>
+
+	<listbox id="listbox" width="500px" height="200px">
+		<frozen id="listFrozen" columns="2" rightColumns="1"/>
+		<listhead sizable="true">
+			<listheader label="c0" width="120px"/>
+			<listheader label="c1" width="120px"/>
+			<listheader label="c2" width="120px"/>
+			<listheader label="c3" width="120px"/>
+			<listheader label="c4" width="120px"/>
+			<listheader label="c5" width="120px"/>
+		</listhead>
+		<listitem>
+			<listcell label="a0"/><listcell label="a1"/><listcell label="a2"/>
+			<listcell label="a3"/><listcell label="a4"/><listcell label="a5"/>
+		</listitem>
+		<listitem>
+			<listcell label="b0"/><listcell label="b1"/><listcell label="b2"/>
+			<listcell label="b3"/><listcell label="b4"/><listcell label="b5"/>
+		</listitem>
+	</listbox>
+
+	<grid id="gridGroup" width="500px" height="260px">
+		<frozen id="gridGroupFrozen" columns="2" rightColumns="1"/>
+		<columns sizable="true">
+			<column label="c0" width="120px"/>
+			<column label="c1" width="120px"/>
+			<column label="c2" width="120px"/>
+			<column label="c3" width="120px"/>
+			<column label="c4" width="120px"/>
+			<column label="c5" width="120px"/>
+		</columns>
+		<rows>
+			<row>
+				<detail open="false">
+					<label value="detail content"/>
+				</detail>
+				<cell><label value="d1"/></cell>
+				<cell><label value="d2"/></cell>
+				<cell><label value="d3"/></cell>
+				<cell><label value="d4"/></cell>
+				<cell><label value="d5"/></cell>
+			</row>
+			<group label="g0"/>
+			<row>
+				<label value="e0"/><label value="e1"/><label value="e2"/>
+				<label value="e3"/><label value="e4"/><label value="e5"/>
+			</row>
+			<groupfoot>
+				<label value="gf0"/>
+			</groupfoot>
+		</rows>
+	</grid>
+
+	<listbox id="listboxGroup" width="500px" height="260px">
+		<frozen id="listGroupFrozen" columns="2" rightColumns="1"/>
+		<listhead sizable="true">
+			<listheader label="c0" width="120px"/>
+			<listheader label="c1" width="120px"/>
+			<listheader label="c2" width="120px"/>
+			<listheader label="c3" width="120px"/>
+			<listheader label="c4" width="120px"/>
+			<listheader label="c5" width="120px"/>
+		</listhead>
+		<listgroup label="lg0"/>
+		<listitem>
+			<listcell label="f0"/><listcell label="f1"/><listcell label="f2"/>
+			<listcell label="f3"/><listcell label="f4"/><listcell label="f5"/>
+		</listitem>
+		<listgroupfoot>
+			<listcell label="lgf0"/>
+		</listgroupfoot>
+	</listbox>
+
+	<tree id="tree" width="500px" height="200px">
+		<frozen id="treeFrozen" columns="2" rightColumns="1"/>
+		<treecols sizable="true">
+			<treecol label="c0" width="120px"/>
+			<treecol label="c1" width="120px"/>
+			<treecol label="c2" width="120px"/>
+			<treecol label="c3" width="120px"/>
+			<treecol label="c4" width="120px"/>
+			<treecol label="c5" width="120px"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="t0"/><treecell label="t1"/><treecell label="t2"/>
+					<treecell label="t3"/><treecell label="t4"/><treecell label="t5"/>
+				</treerow>
+			</treeitem>
+		</treechildren>
+	</tree>
+
+	<grid id="gridAux" width="500px" height="200px">
+		<frozen id="gridAuxFrozen" columns="2" rightColumns="1"/>
+		<auxhead>
+			<auxheader label="x0"/>
+			<auxheader label="x1"/>
+			<auxheader label="x2"/>
+			<auxheader label="x3"/>
+			<auxheader label="x4"/>
+			<auxheader label="x5"/>
+		</auxhead>
+		<columns sizable="true">
+			<column label="c0" width="120px"/>
+			<column label="c1" width="120px"/>
+			<column label="c2" width="120px"/>
+			<column label="c3" width="120px"/>
+			<column label="c4" width="120px"/>
+			<column label="c5" width="120px"/>
+		</columns>
+		<rows>
+			<row>
+				<label value="h0"/><label value="h1"/><label value="h2"/>
+				<label value="h3"/><label value="h4"/><label value="h5"/>
+			</row>
+		</rows>
+	</grid>
+</zk>

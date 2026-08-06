@@ -1,5 +1,16 @@
 @import "~./zul/less/_header.less";
 
+//frozen-sticky
+.z-column.z-frozen-sticky,
+.z-row .z-row-inner.z-frozen-sticky,
+.z-row .z-cell.z-frozen-sticky,
+.z-group-inner.z-frozen-sticky,
+// .z-row is needed to outweigh zkex's `.z-row .z-detail-outer { position: relative }`
+.z-row .z-detail-outer.z-frozen-sticky {
+	position: sticky;
+	z-index: 1;
+}
+
 //reset table
 .resetTable() {
 	table {
