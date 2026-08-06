@@ -22,6 +22,11 @@
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
+	// outweigh the position above when a frozen column marks this cell sticky
+	&.z-frozen-sticky {
+		position: sticky;
+		z-index: 1;
+	}
 	&-content {
 		.fontStyle(@baseContentFontFamily, @fontSizeMedium, normal, @meshTitleColor);
 		padding: @auxheadContentPadding;

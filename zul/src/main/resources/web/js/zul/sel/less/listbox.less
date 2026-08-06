@@ -1,5 +1,13 @@
 @import "~./zul/less/_header.less";
 
+//frozen-sticky
+.z-listheader.z-frozen-sticky,
+.z-listitem .z-listcell.z-frozen-sticky,
+.z-listgroup-inner.z-frozen-sticky {
+	position: sticky;
+	z-index: 1;
+}
+
 //reset table
 .resetTable() {
 	table {

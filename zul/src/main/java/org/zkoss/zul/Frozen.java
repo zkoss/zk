@@ -33,11 +33,11 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Frozen extends XulElement {
 	static {
-		addClientEvent(Frozen.class, Events.ON_SCROLL_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT); // only used in [ZK EE]
+		addClientEvent(Frozen.class, Events.ON_SCROLL_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT); // only used in smooth mold
 	}
 	private int _columns;
 	private int _start;
-	/** maintain the number of the visible item in Paging mold. Only in smooth mold [ZK EE] */
+	/** maintain the number of the visible item in Paging mold. Only in smooth mold */
 	private int _currentLeft = 0;
 	private int _rightColumns;
 
@@ -106,7 +106,7 @@ public class Frozen extends XulElement {
 	 * Returns the number of right columns to freeze.
 	 * Note: only useful when using smooth Frozen and browsers that supports CSS position: sticky.
 	 * <p>Default: 0
-	 * Only available in ZK EE.
+	 * <p>Before 11.0.0, only available in ZK EE.
 	 * @since 8.6.2
 	 */
 	public int getRightColumns() {
@@ -116,7 +116,7 @@ public class Frozen extends XulElement {
 	/**
 	 * Sets the number of right columns to freeze. (from right to left)
 	 * Note: only useful when using smooth Frozen and browsers that supports CSS position: sticky.
-	 * Only available in ZK EE.
+	 * <p>Before 11.0.0, only available in ZK EE.
 	 * @param rightColumns number of right columns to freeze, positive only
 	 * @since 8.6.2
 	 */
@@ -159,7 +159,7 @@ public class Frozen extends XulElement {
 		if (_columns > 0 && _start > 0)
 			renderer.render("start", _start);
 
-		//F85-ZK-3525: frozen support smooth mode (ee only)
+		//F85-ZK-3525: frozen support smooth mode
 		if (!isSmooth()) {
 			renderer.render("smooth", false);
 		} else {
