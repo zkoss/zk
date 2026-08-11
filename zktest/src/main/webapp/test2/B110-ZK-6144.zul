@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6144.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Aug 11 10:20:31 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Narrow the viewport below the breakpoint
+		2. verify the nested non-responsive grid keeps its table rendering
+		   (its rows are not turned into cards)
+	</label>
+	<div style="padding: 10px;">
+		<grid id="outer" responsive="stacking" width="100%">
+			<columns>
+				<column label="Name" />
+				<column label="Detail" />
+			</columns>
+			<rows>
+				<row>
+					<label value="John" />
+					<grid id="inner" responsive="none" width="200px">
+						<columns>
+							<column label="Inner" />
+						</columns>
+						<rows>
+							<row>
+								<label value="alpha" />
+							</row>
+							<row>
+								<label value="beta" />
+							</row>
+						</rows>
+					</grid>
+				</row>
+			</rows>
+		</grid>
+	</div>
+</zk>
