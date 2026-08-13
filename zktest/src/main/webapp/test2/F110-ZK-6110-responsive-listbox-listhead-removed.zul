@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-listhead-removed.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 13 10:12:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        The second column is responsiveVisible="false", so its cells are hidden while
+        stacked. Detaching the listhead removes the column information altogether, so
+        the hide stamps must be cleared instead of leaving the cells display:none.
+    </label>
+	<div width="100%">
+		<listbox id="lb1" width="100%" responsive="stacking" responsiveColumns="sm-1 md-none">
+			<listhead id="lh">
+				<listheader label="Name" />
+				<listheader label="Secret" responsiveVisible="false" />
+			</listhead>
+			<listitem>
+				<listcell label="John" /><listcell label="john-secret" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" /><listcell label="jane-secret" />
+			</listitem>
+		</listbox>
+		<button id="btnRemoveHead" label="Detach listhead" onClick="lh.detach()" />
+	</div>
+</zk>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-hidden-column.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 06 16:34:23 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div style="padding: 10px;">
+		<listbox id="lb1" responsive="stacking" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" visible="false" />
+				<listheader label="Department" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell label="john@example.com" />
+				<listcell label="Engineering" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" />
+				<listcell label="jane@example.com" />
+				<listcell label="Design" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

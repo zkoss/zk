@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-footer-image.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 13 10:12:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        In stacking mode a footer cell holding an image carries content even though its
+        text is empty, so it must stay visible. A cell that is genuinely empty, and one
+        that only wraps empty markup (an empty label), must both still collapse.
+    </label>
+	<div width="100%">
+		<listbox id="lb1" width="100%" responsive="stacking" responsiveColumns="sm-1 md-none">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+				<listheader label="Total" />
+			</listhead>
+			<listitem>
+				<listcell label="John" /><listcell label="john@example.com" /><listcell label="7" />
+			</listitem>
+			<listfoot>
+				<listfooter id="ftImage">
+					<image id="ftImg" src="./img/sun.jpg" />
+				</listfooter>
+				<listfooter id="ftEmpty" />
+				<listfooter id="ftBlankLabel">
+					<label id="ftBlank" value="" />
+				</listfooter>
+			</listfoot>
+		</listbox>
+	</div>
+</zk>

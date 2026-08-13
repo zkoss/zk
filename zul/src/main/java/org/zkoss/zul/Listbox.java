@@ -346,6 +346,13 @@ public class Listbox extends MeshElement {
 	private boolean _disabled, _checkmark;
 	private boolean _renderAll; //since 5.0.0
 
+	/** Responsive policy: null (unset), "stacking", "none". @since 11.0.0 */
+	private String _responsive;
+	/** Responsive columns token string, e.g. "sm-1 md-2 lg-none". Null means unset
+	 * (client falls back to default "sm-1 md-none"). Server stores the raw string;
+	 * parsing and cascade resolution happen on the client. @since 11.0.0 */
+	private String _responsiveColumns;
+
 	private transient boolean _rod;
 	/** whether to ignore ListDataEvent.SELECTION_CHANGED */
 	private transient boolean _ignoreDataSelectionEvent;
@@ -379,6 +386,8 @@ public class Listbox extends MeshElement {
 		addClientEvent(Listbox.class, Events.ON_ANCHOR_POS, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 		// since 6.5.5 F65-ZK-2014
 		addClientEvent(Listbox.class, Events.ON_CHECK_SELECT_ALL, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		// since 11.0.0 F110-ZK-6110
+		addClientEvent(Listbox.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 	}
 
 	public Listbox() {
@@ -3422,6 +3431,127 @@ public class Listbox extends MeshElement {
 			renderer.render("_listbox$shallUpdateScrollPos", true);
 			_shallUpdateScrollPos = false;
 		}
+
+		String effResp = getEffectiveResponsive(); // ZK-6110: Responsive properties for zkmax
+		if (effResp != null)
+			render(renderer, "responsive", effResp);
+		String effCols = getEffectiveResponsiveColumns();
+		if (effCols != null)
+			render(renderer, "responsiveColumns", effCols);
+	}
+
+	/**
+	 * Returns the responsive policy.
+	 * <p>Default: null (unset — inherits from zk.xml
+	 * {@code org.zkoss.zul.listbox.responsive}, then framework default of no responsive).
+	 *
+	 * <p>Stacking behavior is provided by ZK EE (zkmax); CE stores the value only.
+	 *
+	 * @return the responsive policy, or null if not set.
+	 * @since 11.0.0
+	 */
+	public String getResponsive() {
+		return _responsive;
+	}
+
+	/**
+	 * Sets the responsive policy.
+	 * <p>Supported values: {@code "stacking"}, {@code "none"}, or null (unset).
+	 * <ul>
+	 *   <li>{@code "stacking"} — list items become vertical key-value cards when
+	 *       the container width falls below the breakpoint (EE only).</li>
+	 *   <li>{@code "none"} — explicitly disables responsive, overriding any
+	 *       global setting.</li>
+	 *   <li>{@code null} — inherits from the global library property.</li>
+	 * </ul>
+	 *
+	 * @param responsive the responsive policy
+	 * @throws WrongValueException if {@code responsive} is neither
+	 *     {@code "stacking"}, {@code "none"}, nor {@code null}.
+	 * @since 11.0.0
+	 */
+	public void setResponsive(String responsive) throws WrongValueException {
+		if (responsive != null && responsive.isEmpty())
+			responsive = null;
+		if (!isValidResponsive(responsive))
+			throw new WrongValueException(
+					"responsive cannot be " + responsive
+					+ "; allowed: stacking, none");
+		if (!Objects.equals(_responsive, responsive)) {
+			_responsive = responsive;
+			// Send the effective value: clearing the own value falls back to the
+			// library property, not to "no responsive".
+			smartUpdate("responsive", getEffectiveResponsive());
+		}
+	}
+
+	private static boolean isValidResponsive(String v) {
+		return v == null || "stacking".equals(v) || "none".equals(v);
+	}
+
+	/**
+	 * Returns the responsive columns token string.
+	 * <p>Default: null (unset — inherits from zk.xml
+	 * {@code org.zkoss.zul.listbox.responsive.columns}, then framework default
+	 * {@code "sm-1 md-none"} resolved by the client).
+	 *
+	 * @return the responsive columns token string, or null if not set.
+	 * @since 11.0.0
+	 */
+	public String getResponsiveColumns() {
+		return _responsiveColumns;
+	}
+
+	/**
+	 * Sets the responsive columns token string for stacking mode.
+	 * <p>Bootstrap-style breakpoint tokens separated by whitespace, where
+	 * each token is {@code <breakpoint>-<value>} with breakpoint in
+	 * {sm, md, lg, xl, xxl} and value either a positive integer (cards per
+	 * row in stacking) or {@code none} (switch back to table mode at and
+	 * above this breakpoint).
+	 * <p>The string is stored verbatim — parsing, cascade resolution, and
+	 * matching against the current container width happen on the client side.
+	 * Invalid tokens are silently dropped by the client cascade resolver.
+	 * A value whose kept tokens are all {@code none} without an {@code sm}
+	 * entry is discarded as a whole and the client falls back to its default
+	 * cascade.
+	 *
+	 * @param columns the responsive columns token string
+	 * @since 11.0.0
+	 */
+	public void setResponsiveColumns(String columns) {
+		if (columns != null && columns.isEmpty())
+			columns = null;
+		if (!Objects.equals(_responsiveColumns, columns)) {
+			_responsiveColumns = columns;
+			smartUpdate("responsiveColumns", getEffectiveResponsiveColumns());
+		}
+	}
+
+	/** Own value, else the {@code org.zkoss.zul.listbox.responsive} attribute/library
+	 * fallback chain, else null.
+	 * @since 11.0.0
+	 */
+	/*package*/ String getEffectiveResponsive() {
+		if (_responsive != null)
+			return _responsive;
+		String v = Utils.getStringAttribute(this, "org.zkoss.zul.listbox.responsive", null, true);
+		if (!isValidResponsive(v)) {
+			log.warn("Ignoring invalid org.zkoss.zul.listbox.responsive value: {}; allowed: stacking, none", v);
+			return null;
+		}
+		return v;
+	}
+
+	/** Own value, else the {@code org.zkoss.zul.listbox.responsive.columns}
+	 * attribute/library fallback chain. Null means the client applies its own
+	 * default cascade {@code "sm-1 md-none"}.
+	 * @since 11.0.0
+	 */
+	/*package*/ String getEffectiveResponsiveColumns() {
+		if (_responsiveColumns != null)
+			return _responsiveColumns;
+		return Utils.getStringAttribute(this, "org.zkoss.zul.listbox.responsive.columns", null, true);
 	}
 
 	/** Returns whether to toggle a list item selection on right click

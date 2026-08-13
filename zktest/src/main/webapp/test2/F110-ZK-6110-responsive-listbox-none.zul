@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-none.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jul 23 14:46:41 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        responsive="none": stays in table mode even when narrow (never stacks).
+    </label>
+	<div style="padding: 10px;">
+		<listbox id="lb1" responsive="none" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell label="john@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" />
+				<listcell label="jane@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

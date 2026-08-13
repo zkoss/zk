@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-cell-update.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Aug 05 11:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        Updating a listcell/listfooter label while stacking rerenders its whole td;
+        the responsive stamps (data-label / z-cell-hide-stacking) must survive.
+    </label>
+	<div style="padding: 10px;">
+		<listbox id="lb1" responsive="stacking" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" responsiveVisible="false" />
+				<listheader label="Department" />
+			</listhead>
+			<listitem>
+				<listcell id="nameCell" label="John" />
+				<listcell id="emailCell" label="john@example.com" />
+				<listcell label="Engineering" />
+			</listitem>
+			<listfoot>
+				<listfooter id="footCell" label="Total: 1" />
+				<listfooter label="" />
+				<listfooter label="" />
+			</listfoot>
+		</listbox>
+		<button id="updateName" label="update name" onClick='nameCell.setLabel("Johnny")' />
+		<button id="updateEmail" label="update email" onClick='emailCell.setLabel("johnny@example.com")' />
+		<button id="updateFoot" label="update foot" onClick='footCell.setLabel("Total: 2")' />
+	</div>
+</zk>

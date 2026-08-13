@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-checkmark-edge.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Aug 14 11:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div style="padding: 10px;">
+		<label multiline="true">
+        A responsive-hidden column between the checkmark cell and the first shown
+        field: the card must still have no divider beside the checkbox band.
+    	</label>
+		<listbox id="lbGap" responsive="stacking" checkmark="true" multiple="true" width="100%">
+			<listhead>
+				<listheader label="Name" responsiveVisible="false" />
+				<listheader label="Internal" responsiveVisible="false" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell label="x" />
+				<listcell label="john@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+	<div style="padding: 10px;">
+		<label multiline="true">
+        Control for the case above: no hidden column in between, so the divider
+        suppression already works.
+    	</label>
+		<listbox id="lbGapControl" responsive="stacking" checkmark="true" multiple="true" width="100%">
+			<listhead>
+				<listheader label="Name" responsiveVisible="false" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell label="john@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+	<div style="padding: 10px;">
+		<label multiline="true">
+        Checkmark cell holding only a child component (no label): the markup has
+        no leading separator to cancel, so the component must still line up with
+        the other cells' content edge.
+    	</label>
+		<listbox id="lbNoSep" responsive="stacking" checkmark="true" multiple="true" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell>
+					<button id="noSepBtn" label="Edit" />
+				</listcell>
+				<listcell label="john@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+	<div style="padding: 10px;">
+		<label multiline="true">
+        Dedicated (empty) checkbox column: the cell carries the checkmark and
+        nothing else, so it must lay out as the gutter beside the fields instead
+        of a band of its own.
+    	</label>
+		<listbox id="lbEmptyCm" responsive="stacking" checkmark="true" multiple="true" width="100%">
+			<listhead>
+				<listheader label="" />
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell />
+				<listcell label="John" />
+				<listcell label="john@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

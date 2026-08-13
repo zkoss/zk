@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-checkmark.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jul 23 14:47:53 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        checkmark + multiple: the checkmark is a span inside the first listcell
+    	(not a separate td), so stacking column-label alignment must not shift.
+    </label>
+	<div style="padding: 10px;">
+		<listbox id="lb1" responsive="stacking" checkmark="true" multiple="true" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell label="john@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" />
+				<listcell label="jane@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+	<div style="padding: 10px;">
+		<label multiline="true">
+        checkmark + first column responsiveVisible="false": the checkmark rides inside
+        that first cell, so the cell must stay shown (only its label is suppressed) —
+        otherwise the per-card checkbox would disappear in stacking.
+    	</label>
+		<listbox id="lb2" responsive="stacking" checkmark="true" multiple="true" width="100%">
+			<listhead>
+				<listheader label="Name" responsiveVisible="false" />
+				<listheader label="Email" />
+				<listheader label="Department" />
+			</listhead>
+			<listitem>
+				<listcell label="John">
+					<button id="cmOnlyBtn" label="Edit" />
+				</listcell>
+				<listcell label="john@example.com" />
+				<listcell label="Engineering" />
+			</listitem>
+		</listbox>
+	</div>
+	<div style="padding: 10px;">
+		<label multiline="true">
+        checkmark cell whose listcell hosts a child component: the component must
+        stay in the content column, not be squeezed into the 28px checkbox gutter.
+    	</label>
+		<listbox id="lb3" responsive="stacking" checkmark="true" multiple="true" width="100%">
+			<listhead>
+				<listheader label="Name" />
+			</listhead>
+			<listitem>
+				<listcell label="John">
+					<button id="cellBtn" label="Button" />
+				</listcell>
+			</listitem>
+		</listbox>
+	</div>
+	<div style="padding: 10px;">
+		<label multiline="true">
+        checkmark cell with an image + label: the card keeps them on one content
+        line (no blank row, no fragmented rows).
+    	</label>
+		<listbox id="lb4" responsive="stacking" checkmark="true" multiple="true" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell id="imgCell" image="/img/battery.gif" label="Alice" />
+				<listcell label="alice@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

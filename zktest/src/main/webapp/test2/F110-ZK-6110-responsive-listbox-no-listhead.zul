@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-no-listhead.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 13 10:12:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        A listbox authored without a listhead has no column information at all, so
+        stacking must not stamp anything on its cells — no data-label, no hide class
+        and no checkbox-gutter layout. The checkmarks stay usable.
+    </label>
+	<div width="100%">
+		<listbox id="lb1" width="100%" checkmark="true" multiple="true"
+				responsive="stacking" responsiveColumns="sm-1 md-none">
+			<listitem>
+				<listcell label="John" /><listcell label="john@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" /><listcell label="jane@example.com" />
+			</listitem>
+			<listfoot>
+				<listfooter id="ftEmpty" />
+			</listfoot>
+		</listbox>
+	</div>
+</zk>
