@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-reset-default.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 13 10:12:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        The ancestor attribute sets responsive=stacking. "Opt out" sets responsive="none"
+        on the listbox; "Restore default" clears it back to null, which must return the
+        listbox to the inherited stacking behaviour rather than leaving it non-responsive.
+    </label>
+	<div width="100%">
+		<custom-attributes org.zkoss.zul.listbox.responsive="stacking"
+				org.zkoss.zul.listbox.responsive.columns="sm-1 md-none" />
+		<listbox id="lb1" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="John" /><listcell label="john@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" /><listcell label="jane@example.com" />
+			</listitem>
+		</listbox>
+		<button id="btnOptOut" label="Opt out" onClick='lb1.setResponsive("none")' />
+		<button id="btnRestore" label="Restore default" onClick="lb1.setResponsive(null)" />
+	</div>
+</zk>

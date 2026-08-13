@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.zkoss.org/2005/zul"
-	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="10.4.0.202603251558">
+	targetNamespace="http://www.zkoss.org/2005/zul" elementFormDefault="qualified" version="11.0.0.202608171645">
 	<!--
 	SIMPLETYPE
 	-->
@@ -2074,22 +2074,8 @@
 		<xs:attribute name="span" type="xs:string" use="optional" />
 		<xs:attribute name="pagingDisabled" type="booleanType" use="optional" />
 		<xs:attribute name="activePage" type="intType" use="optional" />
-		<xs:attribute name="responsive" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="" />
-					<xs:enumeration value="stacking" />
-					<xs:enumeration value="none" />
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="responsiveColumns" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:pattern value="\s*((sm|md|lg|xl|xxl)-(\d+|none)\s*)*" />
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="responsive" type="responsiveAttrType" use="optional" />
+		<xs:attribute name="responsiveColumns" type="responsiveColumnsAttrType" use="optional" />
 	</xs:complexType>
 
 	<!-- groupbox -->
@@ -2393,6 +2379,8 @@
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
 		<xs:attribute name="onOK" type="xs:string" use="optional" />
 		<xs:attribute name="onCancel" type="xs:string" use="optional" />
+		<xs:attribute name="responsive" type="responsiveAttrType" use="optional" />
+		<xs:attribute name="responsiveColumns" type="responsiveColumnsAttrType" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="pagingPositionAttrType">
 		<xs:union>
@@ -2401,6 +2389,32 @@
 					<xs:enumeration value="top" />
 					<xs:enumeration value="bottom" />
 					<xs:enumeration value="both" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="responsiveAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="" />
+					<xs:enumeration value="stacking" />
+					<xs:enumeration value="none" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="responsiveColumnsAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="\s*((sm|md|lg|xl|xxl)-(\d+|none)\s*)*" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
@@ -2493,6 +2507,7 @@
 		<xs:attribute name="onGroup" type="xs:string" use="optional" />
 		<xs:attribute name="onUngroup" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
+		<xs:attribute name="responsiveVisible" type="booleanType" use="optional" />
 	</xs:complexType>
 	<!-- listitem -->
 	<xs:element name="listitem" type="listitemType" />

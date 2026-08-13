@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-cascade-fallback.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 13 10:12:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        responsiveColumns="md-none" has no numeric anchor, so the client falls back to
+        the default cascade "sm-1 md-none": stacking with 1 column below md, table at
+        and above md. The fallback must be silent — no error box.
+    </label>
+	<div width="100%">
+		<listbox id="lb1" width="100%" responsive="stacking" responsiveColumns="md-none">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="John" /><listcell label="john@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" /><listcell label="jane@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

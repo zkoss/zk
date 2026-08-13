@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-libdefault.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Aug 06 16:34:08 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        No component-level responsive attribute: lbInherit resolves responsive=stacking
+        and responsiveColumns=sm-2 from the ancestor attribute; lbBad's ancestor value is
+        invalid and must clamp to null (no stacking).
+    </label>
+	<div width="100%">
+		<custom-attributes org.zkoss.zul.listbox.responsive="stacking"
+				org.zkoss.zul.listbox.responsive.columns="sm-2 md-none" />
+		<listbox id="lbInherit" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="John" /><listcell label="john@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" /><listcell label="jane@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+	<div width="100%">
+		<custom-attributes org.zkoss.zul.listbox.responsive="flex" />
+		<listbox id="lbBad" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="Bob" /><listcell label="bob@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

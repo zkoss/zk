@@ -68,6 +68,7 @@ public class Listheader extends HeaderElement {
 	private boolean _ignoreSort = false;
 	private boolean _isCustomAscComparator = false;
 	private boolean _isCustomDscComparator = false;
+	private boolean _responsiveVisible = true; // ZK-6110
 
 	static {
 		addClientEvent(Listheader.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
@@ -760,7 +761,39 @@ public class Listheader extends HeaderElement {
 		if (_maxlength > 0)
 			renderer.render("maxlength", _maxlength);
 
+		if (!_responsiveVisible)
+			renderer.render("responsiveVisible", _responsiveVisible); // ZK-6110
+
 		org.zkoss.zul.impl.Utils.renderCrawlableText(getLabel());
+	}
+
+	/**
+	 * Returns whether this header's column is visible when the listbox is in
+	 * responsive (stacking) mode.
+	 * <p>Default {@code true}. Stacking behavior is provided by ZK EE (zkmax);
+	 * CE stores the value only.
+	 *
+	 * @return {@code true} if visible in stacking mode (default),
+	 *     {@code false} to hide it.
+	 * @since 11.0.0
+	 */
+	public boolean isResponsiveVisible() {
+		return _responsiveVisible;
+	}
+
+	/**
+	 * Sets whether this header's column is visible in responsive (stacking) mode.
+	 * <p>{@code false} hides the column only in stacking mode; it stays visible
+	 * in table mode.
+	 *
+	 * @param responsiveVisible visibility flag for stacking mode
+	 * @since 11.0.0
+	 */
+	public void setResponsiveVisible(boolean responsiveVisible) {
+		if (_responsiveVisible != responsiveVisible) {
+			_responsiveVisible = responsiveVisible;
+			smartUpdate("responsiveVisible", _responsiveVisible);
+		}
 	}
 
 	//Cloneable//

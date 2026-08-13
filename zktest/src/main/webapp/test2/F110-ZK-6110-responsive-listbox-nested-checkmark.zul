@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-nested-checkmark.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Aug 05 11:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        A checkable listbox nested inside a listcell: the OUTER (checkmark-less)
+        stacking listbox must not mistake the nested checkmark for its own
+        (no z-cell-cm-lead / z-cell-cm-only on the outer cells).
+    </label>
+	<div style="padding: 10px;">
+		<listbox id="outer" responsive="stacking" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Choices" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell>
+					<listbox id="inner" checkmark="true" multiple="true" width="200px">
+						<listitem label="alpha" />
+						<listitem label="beta" />
+					</listbox>
+				</listcell>
+			</listitem>
+		</listbox>
+	</div>
+</zk>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-responsivevisible.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jul 23 14:46:49 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        listheader responsiveVisible="false": the Email column is hidden in stacking (its cells get z-cell-hide-stacking) but shown in table mode.
+    </label>
+	<div style="padding: 10px;">
+		<listbox id="lb1" responsive="stacking" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" responsiveVisible="false" />
+				<listheader label="Department" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell label="john@example.com" />
+				<listcell label="Engineering" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" />
+				<listcell label="jane@example.com" />
+				<listcell label="Design" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>

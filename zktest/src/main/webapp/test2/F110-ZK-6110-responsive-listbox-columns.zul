@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-columns.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Jul 23 14:48:13 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        responsiveColumns="sm-2 md-none": 2 cards/row below md, table at md+.
+    </label>
+	<div style="padding: 10px;">
+		<listbox id="lb1" responsive="stacking" responsiveColumns="sm-2 md-none" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell label="john@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" />
+				<listcell label="jane@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Bob" />
+				<listcell label="bob@example.com" />
+			</listitem>
+			<listitem>
+				<listcell label="Amy" />
+				<listcell label="amy@example.com" />
+			</listitem>
+		</listbox>
+	</div>
+</zk>
