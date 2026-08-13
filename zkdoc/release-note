@@ -33,6 +33,7 @@ ZK 11.0.0
   ZK-5751: Combobox without an explicit itemRender mistakenly uses parent's template
   ZK-6136: Responsive Grid visible false column reappears
   ZK-6107: drag a panel in goldenlayout and it disappears
+  ZK-6105: Review semantic correctness of CSS variable names after CSS variable migration
 
 * Upgrade Notes
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
@@ -41,6 +42,97 @@ ZK 11.0.0
   + Upgrade tomcat-jasper-el to 9.0.120 to fix vulnerabilities
   + jasperreports (an optional dependency in zkex) update: JasperReports community edition 7.x contains the fix
     (no fixed 6.x release exists), but upgrading to 7.x requires ZK public API changes so is deferred to ZK 11.
+  + Some CSS variable names are changed for semantic correctness. The values are unchanged; override
+    the new name. The LESS aliases in zul/less/_zkvariables.less follow (@inputTextSize -> @inputFontSize):
+        --zk-text-color-default3 -> --zk-text-color-inverse
+        --zk-color-background1 -> --zk-color-background-subtle
+        --zk-color-background3 -> --zk-color-background-base
+        --zk-checked-color -> --zk-checked-accent-color
+        --zk-container-background -> --zk-container-background-color
+        --zk-container-header-text-size -> --zk-container-header-font-size
+        --zk-container-body-text-size -> --zk-container-body-font-size
+        --zk-input-text-size -> --zk-input-font-size
+        --zk-input-disable-color -> --zk-input-disabled-color
+        --zk-input-disable-background-color -> --zk-input-disabled-background-color
+        --zk-button-disable-color -> --zk-button-disabled-color
+        --zk-button-disable-background-color -> --zk-button-disabled-background-color
+        --zk-button-disable-border-color -> --zk-button-disabled-border-color
+        --zk-button-disable-separator-border-color -> --zk-button-disabled-separator-border-color
+        --zk-scrollbar-bar-hover-background -> --zk-scrollbar-bar-hover-background-color
+        --zk-scrollbar-button-background -> --zk-scrollbar-button-background-color
+        --zk-scrollbar-button-hover-background -> --zk-scrollbar-button-hover-background-color
+        --zk-splitter-button-text-size -> --zk-splitter-button-font-size
+        --zk-tabbox-tab-separator-color -> --zk-tabbox-tab-separator-border-color
+        --zk-tabbox-selected-radius -> --zk-tabbox-selected-border-radius
+        --zk-menu-background -> --zk-menu-background-color
+        --zk-menu-item-background -> --zk-menu-item-background-color
+        --zk-menu-item-hover-background -> --zk-menu-item-hover-background-color
+        --zk-menu-item-active-background -> --zk-menu-item-active-background-color
+        --zk-menu-popup-background -> --zk-menu-popup-background-color
+        --zk-menu-popup-item-background -> --zk-menu-popup-item-background-color
+        --zk-menu-popup-item-hover-background -> --zk-menu-popup-item-hover-background-color
+        --zk-menu-popup-item-active-background -> --zk-menu-popup-item-active-background-color
+        --zk-menu-popup-separator-border -> --zk-menu-popup-separator-border-color
+        --zk-nav-separator-color -> --zk-nav-separator-border-color
+        --zk-multislider-button-color2 -> --zk-multislider-button-secondary-color
+        --zk-multislider-button-hover-color2 -> --zk-multislider-button-secondary-hover-color
+        --zk-multislider-button-active-color2 -> --zk-multislider-button-secondary-active-color
+        --zk-multislider-disabled-button-color2 -> --zk-multislider-disabled-button-secondary-color
+        --zk-pdfviewer-toolbar-separator-color -> --zk-pdfviewer-toolbar-separator-border-color
+        --zk-searchbox-disable-border-color -> --zk-searchbox-disabled-border-color
+        --zk-searchbox-disable-background-color -> --zk-searchbox-disabled-background-color
+        --zk-searchbox-disable-color -> --zk-searchbox-disabled-color
+        --zk-searchbox-disable-icon-color -> --zk-searchbox-disabled-icon-color
+        --zk-portalchildren-frame-radius -> --zk-portalchildren-frame-border-radius
+        --zk-portalchildren-frame-title-font-color -> --zk-portalchildren-frame-title-color
+        --zk-portalchildren-counter-radius -> --zk-portalchildren-counter-border-radius
+        --zk-portalchildren-counter-background -> --zk-portalchildren-counter-background-color
+        --zk-portalchildren-frame-panel-header-text-size -> --zk-portalchildren-frame-panel-header-font-size
+        --zk-linelayout-point-radius -> --zk-linelayout-point-border-radius
+        --zk-coachmark-mask-background -> --zk-coachmark-mask-background-color
+        --zk-cascader-separator-color -> --zk-cascader-separator-border-color
+        --zk-cascader-disable-color -> --zk-cascader-disabled-color
+        --zk-cascader-disable-background-color -> --zk-cascader-disabled-background-color
+  + Some components read their own CSS variable instead of borrowing another component's. Each one
+    defaults to the variable it replaces, so a :root override of the old name still applies; override
+    the new name to style the component independently, or when the override is scoped to a selector
+    rather than :root:
+        Toolbarbutton  --zk-button-border-width -> --zk-toolbar-button-border-width
+                       --zk-button-border-radius -> --zk-toolbar-button-border-radius
+                       --zk-button-hover-color -> --zk-toolbar-button-hover-color
+                       --zk-button-hover-border-color -> --zk-toolbar-button-hover-border-color
+                       --zk-button-hover-background-color -> --zk-toolbar-button-hover-background-color
+                       --zk-button-focus-border-color -> --zk-toolbar-button-focus-border-color
+                       --zk-button-active-color -> --zk-toolbar-button-active-color
+                       --zk-button-active-border-color -> --zk-toolbar-button-active-border-color
+                       --zk-button-active-background-color -> --zk-toolbar-button-active-background-color
+                       --zk-button-disabled-color -> --zk-toolbar-button-disabled-color
+                       --zk-button-disabled-border-color -> --zk-toolbar-button-disabled-border-color
+                       --zk-button-disabled-background-color -> --zk-toolbar-button-disabled-background-color
+        Slider button  --zk-button-background-color -> --zk-slider-button-background-color
+                       --zk-button-hover-background-color -> --zk-slider-button-hover-background-color
+                       --zk-button-active-background-color -> --zk-slider-button-active-background-color
+        Button/Combobutton/Signature tool button
+                       --zk-input-font-size -> --zk-button-font-size
+                       --zk-input-border-radius -> --zk-button-border-radius
+        Listbox/Tree check mark
+                       --zk-checkbox-size -> --zk-mesh-checkable-size
+                       --zk-checkbox-hover-border-color -> --zk-mesh-checkable-hover-border-color
+  + The following also read their own variable, but unlike the above there is no fallback, so
+    overriding the old name no longer styles them:
+        Checkbox/Radio tick
+                       --zk-checked-background-color -> --zk-checked-icon-color
+        Menu checked item
+                       --zk-checked-background-color -> --zk-menu-checked-color
+        Grid/Listbox/Tree outer background
+                       --zk-mask-background-color -> --zk-mesh-outer-background-color
+    --zk-checked-background-color now means only the surface of an unchecked box (Listbox/Tree/Menu
+    check mark) and defaults to --zk-color-background-base instead of the inverse text color, so its
+    value differs in a dark palette; the tick painted on a filled box reads --zk-checked-icon-color.
+    --zk-mask-background-color keeps its original meaning and still applies to the mask itself.
+  + --zk-searchbox-popup-background-color now defaults to --zk-popup-background-color instead of the
+    inverse text color, so a dark palette paints the Searchbox popup like every other popup instead
+    of white.
 
    --------
 ZK 10.3.0

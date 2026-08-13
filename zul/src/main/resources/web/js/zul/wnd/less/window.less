@@ -11,14 +11,14 @@
 	border: 1px solid @containerBorderColor;
 	.borderRadius(@containerBorderRadius);
 	padding: @containerPadding;
-	background-color: @containerBackground;
+	background-color: @containerBackgroundColor;
 
 	&-shadow {
 		.boxShadow('0 3px 6px rgba(0, 0, 0, 0.24)');
 	}
 
 	&-header {
-		.fontStyle(@baseTitleFontFamily, @containerHeaderTextSize, normal, @containerHeaderColor);
+		.fontStyle(@baseTitleFontFamily, @containerHeaderFontSize, normal, @containerHeaderColor);
 		line-height: @baseButtonWidth;
 		padding: @windowHeaderPadding;
 		.defaultOverflowZoom();

@@ -23,7 +23,7 @@
 
 //tree
 .z-tree {
-	background: @maskBackgroundColor;
+	background: @meshOuterBackgroundColor;
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
@@ -156,8 +156,8 @@
 		cursor: col-resize;
 	}
 	&-checkable {
-		.displaySize(inline-block, @checkboxSize, @checkboxSize);
-		.iconFontStyle(@checkedIconSize, @checkedColor);
+		.displaySize(inline-block, @meshCheckableSize, @meshCheckableSize);
+		.iconFontStyle(@checkedIconSize, @checkedAccentColor);
 		border: 1px solid @checkedBorderColor;
 		background: @checkedBackgroundColor;
 		vertical-align: text-top;
@@ -179,7 +179,7 @@
 	//partial
 	&-partial {
 		> .z-treecol-icon {
-			color: @checkedColor;
+			color: @checkedAccentColor;
 			display: block;
 
 			&.z-icon-minus {} //for checkbox partial selected state, use font-awesome
@@ -249,8 +249,8 @@
 	}
 	//check mark
 	&-checkable {
-		.displaySize(inline-block, @checkboxSize, @checkboxSize);
-    	.iconFontStyle(@checkedIconSize, @checkedColor);
+		.displaySize(inline-block, @meshCheckableSize, @meshCheckableSize);
+    	.iconFontStyle(@checkedIconSize, @checkedAccentColor);
     	border: 1px solid @checkedBorderColor;
     	background: @checkedBackgroundColor;
     	vertical-align: text-top;
@@ -305,14 +305,14 @@
 	&-selected {
 		> .z-treecell > .z-treecell-content 
 			> .z-treerow-checkable .z-treerow-icon {
-			color: @checkedColor;
+			color: @checkedAccentColor;
 			display: block;
 			
 			&.z-icon-check {} //for checkbox, use font-awesome
 			&.z-icon-radio { //for radio
 				.size(10px, 10px);
 				.borderRadius(50%);
-				background: @checkedColor;
+				background: @checkedAccentColor;
 				position: relative;
 				top: 50%;
 				left: 50%;
@@ -331,7 +331,7 @@
 	&-partial {
 		> .z-treecell > .z-treecell-content
 		> .z-treerow-checkable .z-treerow-icon {
-			color: @checkedColor;
+			color: @checkedAccentColor;
 			display: block;
 
 			&.z-icon-minus {} //for checkbox partial selected state, use font-awesome

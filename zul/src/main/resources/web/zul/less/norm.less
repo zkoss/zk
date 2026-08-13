@@ -190,22 +190,22 @@ div.z-log {
 	}
 
 	&:checked {
-		border-color: @checkedColor;
+		border-color: @checkedAccentColor;
 		&:before {
-			background-color: @checkedColor;
+			background-color: @checkedAccentColor;
 		}
 	}
 
 	&[disabled] {
 		cursor: default;
-		background-color: @inputDisableBackgroundColor;
+		background-color: @inputDisabledBackgroundColor;
 		&:checked {
-			border-color: @inputDisableColor;
+			border-color: @inputDisabledColor;
 			&:before {
-				background-color: @inputDisableColor;
+				background-color: @inputDisabledColor;
 			}
 			&:hover {
-				border-color: @inputDisableColor;
+				border-color: @inputDisabledColor;
 			}
 		}
 		&:hover {
@@ -219,12 +219,12 @@ div.z-log {
 
 	&:checked::-ms-check {
 		border-color: @checkedBorderColor;
-		color: @checkedColor;
+		color: @checkedAccentColor;
 	}
 
 	&[disabled]:checked::-ms-check {
-		border-color: @inputDisableColor;
-		color: @inputDisableColor;
+		border-color: @inputDisabledColor;
+		color: @inputDisabledColor;
 		border-radius: 50%;
 	}
 }
@@ -243,16 +243,16 @@ div.z-log {
 	}
 
 	&:checked {
-		background-color: @checkedColor;
-		color: @checkedBackgroundColor;
+		background-color: @checkedAccentColor;
+		color: @checkedIconColor;
 		&:before {
 			content: "\f00c";
 		}
 	}
 
 	&:indeterminate {
-		background-color: @checkedColor;
-		color: @checkedBackgroundColor;
+		background-color: @checkedAccentColor;
+		color: @checkedIconColor;
 		&:before {
 			content: "\f068";
 		}
@@ -260,8 +260,8 @@ div.z-log {
 
 	&[disabled] {
 		cursor: default;
-		color: @inputDisableColor;
-		background-color: @inputDisableBackgroundColor;
+		color: @inputDisabledColor;
+		background-color: @inputDisabledBackgroundColor;
 		&:hover {
 			border-color: @inputBorderColor;
 		}
@@ -275,13 +275,13 @@ div.z-log {
 	&:checked::-ms-check {
 		border: 0;
 		background-clip: content-box;
-		background-color: @checkedColor;
-		color: @checkedBackgroundColor;
+		background-color: @checkedAccentColor;
+		color: @checkedIconColor;
 	}
 
 	&[disabled]:checked::-ms-check {
-		background-color: @inputDisableBackgroundColor;
-		color: @inputDisableColor;
+		background-color: @inputDisabledBackgroundColor;
+		color: @inputDisabledColor;
 	}
 }
 
@@ -591,7 +591,7 @@ span.z-upload input {
 		cursor: pointer;
 		z-index: 100;
 		&:hover {
-			background-color: @scrollbarBarHoverBackground;
+			background-color: @scrollbarBarHoverBackgroundColor;
 		}
 	}
 
@@ -619,12 +619,12 @@ span.z-upload input {
 	.buttonBase() {
 		.iconFontStyle(@fontSizeXLarge, @scrollbarButtonColor);
 		.size(@baseIconWidth, @baseIconHeight);
-		background: @scrollbarButtonBackground;
+		background: @scrollbarButtonBackgroundColor;
 		position: absolute;
 		cursor: pointer;
 		&:hover {
 			color: @scrollbarButtonHoverColor;
-			background: @scrollbarButtonHoverBackground;
+			background: @scrollbarButtonHoverBackgroundColor;
 		}
 	}
 

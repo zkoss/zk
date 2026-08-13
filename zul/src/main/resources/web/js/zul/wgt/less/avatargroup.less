@@ -16,7 +16,7 @@
 	   Reset the first child so the group starts flush. */
 	> .z-avatar {
 		margin-left: var(--zk-avatargroup-overlap);
-		border: 2px solid #fff;
+		border: 2px solid @avatargroupAvatarBorderColor;
 		box-sizing: content-box;
 
 		&:first-child { margin-left: 0; }
@@ -57,8 +57,8 @@
 
 	/* "+N" overflow indicator — styled as a plain avatar. */
 	&-overflow {
-		background: #f0f0f0;
-		color: #595959;
+		background: @avatargroupOverflowBackgroundColor;
+		color: @avatargroupOverflowColor;
 		cursor: default;
 	}
 }

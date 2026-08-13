@@ -27,9 +27,10 @@ import org.zkoss.zul.impl.Utils;
  *
  * <p><b>There is no {@code color} attribute on this component.</b> To
  * customize appearance, either set the {@code style} attribute (e.g.
- * {@code style="--zk-chip-bg: #6366f1;"}) or override the CSS custom
- * properties {@code --zk-chip-bg} / {@code --zk-chip-color} /
- * {@code --zk-chip-border} declared in {@code chip.less}.
+ * {@code style="--zk-chip-background-color: #6366f1;"}) or override the CSS
+ * custom properties {@code --zk-chip-background-color} /
+ * {@code --zk-chip-color} / {@code --zk-chip-border-color} declared in
+ * {@code chip.less}.
  *
  * <p>Default {@link #getZclass}: "z-chip".
  *

@@ -272,16 +272,16 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 
 	@Test
 	public void cssvar_hex_applied_via_style_attribute() {
-		// Custom chip colors flow through the --zk-chip-bg / --zk-chip-color
-		// CSS variables declared in chip.less; the chip itself has no `color`
-		// attribute so users pipe values through the standard `style=` path.
-		// The ZUL sets --zk-chip-bg:#6366f1 → rgb(99, 102, 241).
+		// Custom chip colors flow through the --zk-chip-background-color /
+		// --zk-chip-color CSS variables declared in chip.less; the chip itself has
+		// no `color` attribute so users pipe values through the standard `style=`
+		// path. The ZUL sets --zk-chip-background-color:#6366f1 → rgb(99, 102, 241).
 		connect();
 		waitResponse();
 		String style = jq("$chip-cssvar-hex").attr("style");
 		assertNotNull(style, "chip with CSS-var color must carry the inline style attribute");
-		assertTrue(style.contains("--zk-chip-bg"),
-				"CSS-var color must set --zk-chip-bg — got: " + style);
+		assertTrue(style.contains("--zk-chip-background-color"),
+				"CSS-var color must set --zk-chip-background-color — got: " + style);
 		// Resolved computed background must equal the override (#6366f1
 		// → rgb(99, 102, 241)), NOT the severity-default info background
 		// (rgb(230, 244, 255)). Strip spaces and the optional rgba alpha so
@@ -291,7 +291,7 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 		String normalized = bg.replace(" ", "");
 		assertTrue(normalized.startsWith("rgb(99,102,241)")
 						|| normalized.startsWith("rgba(99,102,241"),
-				"computed background-color should resolve --zk-chip-bg=#6366f1 "
+				"computed background-color should resolve --zk-chip-background-color=#6366f1 "
 						+ "to rgb(99, 102, 241) — got: " + bg);
 	}
 
@@ -301,7 +301,7 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 		waitResponse();
 		String style = jq("$chip-cssvar-named").attr("style");
 		assertNotNull(style);
-		assertTrue(style.toLowerCase().contains("--zk-chip-bg:tomato"),
+		assertTrue(style.toLowerCase().contains("--zk-chip-background-color:tomato"),
 				"named-color CSS var must land verbatim in style — got: " + style);
 	}
 
@@ -310,19 +310,19 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 		connect();
 		waitResponse();
 		String before = jq("$chipDyn").attr("style");
-		assertTrue(before == null || !before.contains("--zk-chip-bg"));
+		assertTrue(before == null || !before.contains("--zk-chip-background-color"));
 
 		click(jq("$btn-set-cssvar"));
 		waitResponse();
 		String after = jq("$chipDyn").attr("style");
 		assertNotNull(after);
-		assertTrue(after.contains("--zk-chip-bg"),
-				"setStyle with --zk-chip-bg should propagate to the inline style — got: " + after);
+		assertTrue(after.contains("--zk-chip-background-color"),
+				"setStyle with --zk-chip-background-color should propagate to the inline style — got: " + after);
 
 		click(jq("$btn-clear-cssvar"));
 		waitResponse();
 		String cleared = jq("$chipDyn").attr("style");
-		assertTrue(cleared == null || !cleared.contains("--zk-chip-bg"),
+		assertTrue(cleared == null || !cleared.contains("--zk-chip-background-color"),
 				"setStyle(null) should drop the CSS-var override — got: " + cleared);
 	}
 

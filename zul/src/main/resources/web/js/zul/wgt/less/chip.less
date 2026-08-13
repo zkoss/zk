@@ -2,21 +2,21 @@
 
 /* 1px border, 4px corner radius, 12px font, 20px line-height giving 22px
    total height. Each severity variant resolves three CSS custom properties
-   — --zk-chip-bg, --zk-chip-color, --zk-chip-border — which users can
-   override directly via `style="--zk-chip-bg: #6366f1;"` for one-off
+   — --zk-chip-background-color, --zk-chip-color, --zk-chip-border-color — which users can
+   override directly via `style="--zk-chip-background-color: #6366f1;"` for one-off
    custom colors without needing a dedicated `color` component attribute. */
 .z-chip {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
 	padding: 0 7px;
-	border: 1px solid var(--zk-chip-border, @severityInfoBorder);
+	border: 1px solid var(--zk-chip-border-color, @severityInfoBorderColor);
 	border-radius: 4px;
 	font-family: @baseTitleFontFamily;
 	font-size: 12px;
 	line-height: 20px;
-	background: var(--zk-chip-bg, @severityInfoBg);
-	color: var(--zk-chip-color, @severityInfoText);
+	background: var(--zk-chip-background-color, @severityInfoBackgroundColor);
+	color: var(--zk-chip-color, @severityInfoTextColor);
 	box-sizing: border-box;
 
 	&-rounded { border-radius: 999px; }
@@ -33,11 +33,11 @@
 		cursor: not-allowed;
 	}
 
-	&-info      { --zk-chip-bg: @severityInfoBg;      --zk-chip-border: @severityInfoBorder;      --zk-chip-color: @severityInfoText; }
-	&-success   { --zk-chip-bg: @severitySuccessBg;   --zk-chip-border: @severitySuccessBorder;   --zk-chip-color: @severitySuccessText; }
-	&-warning   { --zk-chip-bg: @severityWarningBg;   --zk-chip-border: @severityWarningBorder;   --zk-chip-color: @severityWarningText; }
-	&-danger    { --zk-chip-bg: @severityDangerBg;    --zk-chip-border: @severityDangerBorder;    --zk-chip-color: @severityDangerText; }
-	&-secondary { --zk-chip-bg: @severitySecondaryBg; --zk-chip-border: @severitySecondaryBorder; --zk-chip-color: @severitySecondaryText; }
+	&-info      { --zk-chip-background-color: @severityInfoBackgroundColor;      --zk-chip-border-color: @severityInfoBorderColor;      --zk-chip-color: @severityInfoTextColor; }
+	&-success   { --zk-chip-background-color: @severitySuccessBackgroundColor;   --zk-chip-border-color: @severitySuccessBorderColor;   --zk-chip-color: @severitySuccessTextColor; }
+	&-warning   { --zk-chip-background-color: @severityWarningBackgroundColor;   --zk-chip-border-color: @severityWarningBorderColor;   --zk-chip-color: @severityWarningTextColor; }
+	&-danger    { --zk-chip-background-color: @severityDangerBackgroundColor;    --zk-chip-border-color: @severityDangerBorderColor;    --zk-chip-color: @severityDangerTextColor; }
+	&-secondary { --zk-chip-background-color: @severitySecondaryBackgroundColor; --zk-chip-border-color: @severitySecondaryBorderColor; --zk-chip-color: @severitySecondaryTextColor; }
 
 	&-close {
 		/* Native <button> brings its own background / border / padding —

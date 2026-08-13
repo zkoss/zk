@@ -31,9 +31,9 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 				 chip.less; one-off overrides go through the standard `style`
 				 attribute instead of a dedicated `color` setter. -->
 			<chip id="chip-cssvar-hex"   label="Custom"
-				  style="--zk-chip-bg:#6366f1;--zk-chip-color:#fff;--zk-chip-border:#4f46e5;"/>
+				  style="--zk-chip-background-color:#6366f1;--zk-chip-color:#fff;--zk-chip-border-color:#4f46e5;"/>
 			<chip id="chip-cssvar-named" label="Tomato"
-				  style="--zk-chip-bg:tomato;--zk-chip-color:#fff;--zk-chip-border:tomato;"/>
+				  style="--zk-chip-background-color:tomato;--zk-chip-color:#fff;--zk-chip-border-color:tomato;"/>
 			<chip id="chip-closable"  label="Closable"  closable="true"/>
 			<chip id="chip-small"     label="SM"        size="small"/>
 			<chip id="chip-medium"    label="MD"        size="medium"/>
@@ -63,7 +63,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<!-- Custom colors flow through CSS variables — exercise the
 				 dynamic path via setStyle() rather than a dedicated setter. -->
 			<button id="btn-set-cssvar"    label="Set css-var color"
-					onClick='chipDyn.setStyle("--zk-chip-bg:#10b981;--zk-chip-color:#fff;--zk-chip-border:#059669;");'/>
+					onClick='chipDyn.setStyle("--zk-chip-background-color:#10b981;--zk-chip-color:#fff;--zk-chip-border-color:#059669;");'/>
 			<button id="btn-clear-cssvar"  label="Clear css-var color"
 					onClick='chipDyn.setStyle(null);'/>
 			<button id="btn-bad-severity"  label="Bad severity"
