@@ -38,7 +38,7 @@
     --zk-text-color-default: rgba(0, 0, 0, 0.9);
     --zk-text-color-light: rgba(0, 0, 0, 0.57);
     --zk-text-color-lighter: rgba(0, 0, 0, 0.34);
-    --zk-text-color-default3: #FFFFFF;
+    --zk-text-color-inverse: #FFFFFF;
     --zk-text-color-active: #0093F9;
 
     --zk-color-primary: #0093F9;
@@ -48,8 +48,8 @@
     --zk-color-accent: #FFA516;
     --zk-color-accent2: #FF4051;
     --zk-color-accent3: #261429; // Tooltip Bg
-    --zk-color-background1: #F9FCFF; // Window Bg, Panel Bg
-    --zk-color-background3: #FFFFFF; // Container Bg
+    --zk-color-background-subtle: #F9FCFF; // Container Bg (Window, Panel, layout canvas)
+    --zk-color-background-base: #FFFFFF; // Default widget Bg
     --zk-color-grey-dark: #A8A8A8;
     --zk-color-grey-light: #D9D9D9; // Btn disabled Bg
     --zk-color-grey-lighter: #F2F2F2; // Field disabled Bg
@@ -60,7 +60,7 @@
     --zk-base-border-color: var(--zk-color-grey-light);
 
     // Background color
-    --zk-base-background-color: var(--zk-color-background3);
+    --zk-base-background-color: var(--zk-color-background-base);
 
     // -------------------------------------
     // Icon font color (used for font-awesome)
@@ -75,9 +75,10 @@
     --zk-mesh-auto-paging-row-height: 32px;
     --zk-mesh-auto-paging-row-padding: var(--zk-mesh-body-padding);
     --zk-mesh-auto-paging-row-line-height: var(--zk-mesh-content-line-height);
-    --zk-mesh-background-color: var(--zk-color-background3);
+    --zk-mesh-background-color: var(--zk-color-background-base);
+    --zk-mesh-outer-background-color: #E0E1E3;
     --zk-mesh-stripe-background-color: var(--zk-mesh-background-color);
-    --zk-mesh-title-color: var(--zk-text-color-default3);
+    --zk-mesh-title-color: var(--zk-text-color-inverse);
     --zk-mesh-title-background-color: var(--zk-color-primary);
     --zk-mesh-title-hover-color: var(--zk-mesh-title-color);
     --zk-mesh-title-hover-background-color: var(--zk-color-primary-light);
@@ -85,15 +86,15 @@
     --zk-mesh-title-active-background-color: var(--zk-color-primary-dark);
     --zk-mesh-title-border-color: var(--zk-color-primary-dark);
     --zk-mesh-content-border-color: var(--zk-color-grey-lighter);
-    --zk-mesh-content-focus-background-color: var(--zk-selected-background-color);
+    --zk-mesh-content-focus-background-color: var(--zk-color-primary-light);
     --zk-mesh-foot-background-color: var(--zk-color-grey-lighter);
     --zk-mesh-group-color: var(--zk-text-color-light);
     --zk-mesh-group-border-color: var(--zk-base-border-color);
-    --zk-mesh-group-background-color: var(--zk-color-background3);
+    --zk-mesh-group-background-color: var(--zk-color-background-base);
     --zk-mesh-group-footer-color: var(--zk-text-color-lighter);
-    --zk-mesh-group-footer-background-color: var(--zk-color-background3);
+    --zk-mesh-group-footer-background-color: var(--zk-color-background-base);
     --zk-mesh-group-open-color: var(--zk-color-primary);
-    --zk-mesh-group-open-background-color: var(--zk-color-background3);
+    --zk-mesh-group-open-background-color: var(--zk-color-background-base);
     --zk-mesh-group-open-border: 2px solid var(--zk-color-primary);
     --zk-mesh-group-footer-open-color: var(--zk-color-primary-light);
     --zk-grid-detail-content-padding: 0 12px 12px 0;
@@ -120,14 +121,14 @@
     // Component State
     // -------------------------------------
     // Active
-    --zk-active-color: var(--zk-text-color-default3);
+    --zk-active-color: var(--zk-text-color-inverse);
     --zk-active-border-color: transparent;
     --zk-active-background-color: var(--zk-color-primary-dark);
     --zk-active-gradient-start: var(--zk-active-background-color);
     --zk-active-gradient-end: var(--zk-active-background-color);
 
     // Focus
-    --zk-focus-color: var(--zk-text-color-default3);
+    --zk-focus-color: var(--zk-text-color-inverse);
     --zk-focus-border-color: var(--zk-color-accent);
     --zk-focus-background-color: var(--zk-color-primary);
     --zk-focus-gradient-start: var(--zk-focus-background-color);
@@ -169,18 +170,19 @@
 
     // Checked (used on menuitem, listbox, tree, toolbarbutton)
     --zk-checked-icon-size: calc(var(--zk-checkbox-size) - 2px);
-    --zk-checked-color: var(--zk-color-primary);
+    --zk-checked-accent-color: var(--zk-color-primary);
     --zk-checked-border-color: var(--zk-base-border-color);
-    --zk-checked-background-color: var(--zk-text-color-default3);
+    --zk-checked-background-color: var(--zk-color-background-base);
+    --zk-checked-icon-color: var(--zk-text-color-inverse);
 
     // Container (Window, Panel)
-    --zk-container-background: var(--zk-color-background1);
+    --zk-container-background-color: var(--zk-color-background-subtle);
     --zk-container-padding: 5px;
     --zk-container-border-color: var(--zk-color-grey-dark);
     --zk-container-border-radius: var(--zk-base-border-radius);
-    --zk-container-header-text-size: var(--zk-font-size-medium);
+    --zk-container-header-font-size: var(--zk-font-size-medium);
     --zk-container-header-color: var(--zk-text-color-light);
-    --zk-container-body-text-size: var(--zk-font-size-medium);
+    --zk-container-body-font-size: var(--zk-font-size-medium);
     --zk-container-body-color: var(--zk-text-color-default);
     --zk-container-button-size: var(--zk-font-size-large);
     --zk-container-button-color: var(--zk-text-color-light);
@@ -226,7 +228,7 @@
     --zk-caption-elements-margin: 4px;
     --zk-caption-button-padding: var(--zk-button-padding);
     --zk-caption-image-max-size: 16px;
-    --zk-caption-button-font-size: var(--zk-input-text-size);
+    --zk-caption-button-font-size: var(--zk-input-font-size);
 
     // Groupbox
     --zk-groupbox-header-font-size: var(--zk-font-size-medium);
@@ -247,10 +249,10 @@
     --zk-toolbar-overflowpopup-button-size: var(--zk-font-size-large);
 
     // Input (used for textbox, intbox, spinner, ...)
-    --zk-input-text-size: var(--zk-font-size-medium);
+    --zk-input-font-size: var(--zk-font-size-medium);
     --zk-input-border-color: var(--zk-base-border-color);
     --zk-input-border-radius: var(--zk-base-border-radius);
-    --zk-input-background-color: var(--zk-color-background3);
+    --zk-input-background-color: var(--zk-color-background-base);
     --zk-input-height: 24px;
     --zk-input-padding: 4px 5px;
     --zk-input-padding-right: 5px;
@@ -258,8 +260,8 @@
     --zk-input-placeholder-color: var(--zk-text-color-lighter);
     --zk-input-hover-border-color: var(--zk-color-grey-dark);
     --zk-input-focus-border-color: var(--zk-color-primary);
-    --zk-input-disable-color: var(--zk-text-color-lighter);
-    --zk-input-disable-background-color: var(--zk-color-grey-lighter);
+    --zk-input-disabled-color: var(--zk-text-color-lighter);
+    --zk-input-disabled-background-color: var(--zk-color-grey-lighter);
     --zk-input-readonly-color: var(--zk-text-color-default);
     --zk-input-readonly-background-color: var(--zk-color-grey-lighter);
     --zk-input-line-height: 14px;
@@ -268,6 +270,8 @@
     --zk-checkbox-size: 18px;
     --zk-checkbox-margin: 0 4px 2px 4px;
     --zk-checkbox-hover-border-color: var(--zk-color-primary);
+    --zk-mesh-checkable-size: var(--zk-checkbox-size);
+    --zk-mesh-checkable-hover-border-color: var(--zk-checkbox-hover-border-color);
     --zk-checkbox-switch-margin: 3px 6px 6px;
     --zk-checkbox-switch-width: 38px;
     --zk-checkbox-switch-height: 14px;
@@ -278,33 +282,47 @@
     --zk-checkbox-toggle-size: 20px;
 
     // Button (used for button, combobutton)
+    --zk-button-font-size: var(--zk-input-font-size);
     --zk-button-padding: 2px 11px;
-    --zk-button-color: var(--zk-text-color-default3);
+    --zk-button-color: var(--zk-text-color-inverse);
     --zk-button-background-color: var(--zk-color-primary);
     --zk-button-border-width: 2px;
     --zk-button-border-color: transparent;
-    --zk-button-hover-color: var(--zk-text-color-default3);
+    --zk-button-border-radius: var(--zk-input-border-radius);
+    --zk-button-hover-color: var(--zk-text-color-inverse);
     --zk-button-hover-background-color: var(--zk-color-primary-light);
     --zk-button-hover-border-color: transparent;
-    --zk-button-focus-color: var(--zk-text-color-default3);
+    --zk-button-focus-color: var(--zk-text-color-inverse);
     --zk-button-focus-background-color: var(--zk-color-primary);
     --zk-button-focus-border-color: var(--zk-color-accent);
-    --zk-button-active-color: var(--zk-text-color-default3);
+    --zk-button-active-color: var(--zk-text-color-inverse);
     --zk-button-active-background-color: var(--zk-color-primary-dark);
     --zk-button-active-border-color: transparent;
-    --zk-button-disable-color: var(--zk-text-color-lighter);
-    --zk-button-disable-background-color: var(--zk-color-grey-light);
-    --zk-button-disable-border-color: transparent;
+    --zk-button-disabled-color: var(--zk-text-color-lighter);
+    --zk-button-disabled-background-color: var(--zk-color-grey-light);
+    --zk-button-disabled-border-color: transparent;
     --zk-button-separator-border-color: var(--zk-color-primary-dark);
-    --zk-button-disable-separator-border-color: var(--zk-base-border-color);
+    --zk-button-disabled-separator-border-color: var(--zk-base-border-color);
 
     // Toolbar button
     --zk-toolbar-button-font-size: var(--zk-font-size-medium);
     --zk-toolbar-button-padding: var(--zk-button-padding);
     --zk-toolbar-button-color: var(--zk-text-color-light);
     --zk-toolbar-button-background-color: transparent;
-    --zk-toolbar-button-checked-color: var(--zk-text-color-default3);
+    --zk-toolbar-button-checked-color: var(--zk-text-color-inverse);
     --zk-toolbar-button-checked-background-color: var(--zk-color-primary);
+    --zk-toolbar-button-border-width: var(--zk-button-border-width);
+    --zk-toolbar-button-border-radius: var(--zk-button-border-radius);
+    --zk-toolbar-button-hover-color: var(--zk-button-hover-color);
+    --zk-toolbar-button-hover-border-color: var(--zk-button-hover-border-color);
+    --zk-toolbar-button-hover-background-color: var(--zk-button-hover-background-color);
+    --zk-toolbar-button-focus-border-color: var(--zk-button-focus-border-color);
+    --zk-toolbar-button-active-color: var(--zk-button-active-color);
+    --zk-toolbar-button-active-border-color: var(--zk-button-active-border-color);
+    --zk-toolbar-button-active-background-color: var(--zk-button-active-background-color);
+    --zk-toolbar-button-disabled-color: var(--zk-button-disabled-color);
+    --zk-toolbar-button-disabled-border-color: var(--zk-button-disabled-border-color);
+    --zk-toolbar-button-disabled-background-color: var(--zk-button-disabled-background-color);
 
     // Combobutton
     --zk-combobutton-padding: 4px calc(6px + var(--zk-combobutton-button-width)) 4px 6px;
@@ -321,7 +339,7 @@
     --zk-combo-button-icon-color: var(--zk-text-color-default);
     --zk-combo-button-hover-border-color: var(--zk-color-primary-light);
     --zk-combo-button-hover-background-color: var(--zk-color-primary-lighter);
-    --zk-combo-button-active-icon-color: var(--zk-text-color-default3);
+    --zk-combo-button-active-icon-color: var(--zk-text-color-inverse);
     --zk-combo-button-active-border-color: var(--zk-color-primary-dark);
     --zk-combo-button-active-background-color: var(--zk-color-primary);
     --zk-combo-popup-border-color: var(--zk-color-primary);
@@ -418,20 +436,20 @@
     --zk-scrollbar-border-color: transparent;
     --zk-scrollbar-background-color: var(--zk-color-grey-light);
     --zk-scrollbar-bar-background-color: var(--zk-color-primary);
-    --zk-scrollbar-bar-hover-background: var(--zk-color-primary-dark);
+    --zk-scrollbar-bar-hover-background-color: var(--zk-color-primary-dark);
     --zk-scrollbar-icon-display: none;
-    --zk-scrollbar-button-background: transparent;
-    --zk-scrollbar-button-hover-background: transparent;
+    --zk-scrollbar-button-background-color: transparent;
+    --zk-scrollbar-button-hover-background-color: transparent;
     --zk-scrollbar-button-color: var(--zk-color-primary);
     --zk-scrollbar-button-hover-color: var(--zk-color-primary-dark);
 
     // drag and drop
     --zk-drag-color: var(--zk-text-color-default);
-    --zk-drag-background-color: var(--zk-popup-background-color);
+    --zk-drag-background-color: var(--zk-color-background-base);
     --zk-drag-hover-background-color: var(--zk-color-primary-lighter);
     --zk-drag-allow-icon-color: var(--zk-color-primary);
     --zk-drag-allow-border-color: var(--zk-color-primary);
-    --zk-drag-allow-background-color: var(--zk-popup-background-color);
+    --zk-drag-allow-background-color: var(--zk-color-background-base);
     --zk-drag-disallow-icon-color: var(--zk-text-color-lighter);
     --zk-drag-disallow-border-color: transparent;
     --zk-drag-disallow-background-color: var(--zk-color-grey-lighter);
@@ -443,22 +461,22 @@
     // splitter (hbox, vbox, borderlayout)
     --zk-splitter-size: 8px;
     --zk-splitter-border-color: var(--zk-base-border-color);
-    --zk-splitter-background-color: var(--zk-color-background1);
+    --zk-splitter-background-color: var(--zk-color-background-subtle);
     --zk-splitter-hover-background-color: var(--zk-color-primary-lighter);
-    --zk-splitter-button-text-size: 12px;
+    --zk-splitter-button-font-size: 12px;
     --zk-splitter-button-text-color: var(--zk-text-color-lighter);
     --zk-splitter-button-text-hover-color: var(--zk-text-color-lighter);
     --zk-splitter-drag-background-color: var(--zk-color-grey-light);
 
     // calendar
-    --zk-calendar-background-color: var(--zk-color-background3);
+    --zk-calendar-background-color: var(--zk-color-background-base);
     --zk-calendar-today-color: var(--zk-text-color-light);
     --zk-calendar-title-color: var(--zk-base-text-color);
     --zk-calendar-title-hover-color: var(--zk-base-text-color);
     --zk-calendar-cell-color: var(--zk-base-text-color);
     --zk-calendar-cell-hover-background-color: var(--zk-color-primary-lighter);
-    --zk-calendar-selected-color: var(--zk-text-color-default3);
-    --zk-calendar-selected-hover-color: var(--zk-text-color-default3);
+    --zk-calendar-selected-color: var(--zk-text-color-inverse);
+    --zk-calendar-selected-hover-color: var(--zk-text-color-inverse);
     --zk-calendar-selected-background-color: var(--zk-color-primary);
     --zk-calendar-selected-hover-background-color: var(--zk-color-primary);
     --zk-calendar-week-title-color: var(--zk-text-color-light);
@@ -484,7 +502,7 @@
     --zk-base-popup-z-index: 88000;
     --zk-popup-padding: 4px 10px;
     --zk-popup-border-color: var(--zk-base-border-color);
-    --zk-popup-background-color: var(--zk-color-background3);
+    --zk-popup-background-color: var(--zk-color-background-base);
 
     // paging
     --zk-paging-color: var(--zk-text-color-default);
@@ -492,7 +510,7 @@
     --zk-paging-border-color: var(--zk-base-border-color);
     --zk-paging-background-color: var(--zk-color-grey-lighter);
     --zk-paging-item-hover-background-color: var(--zk-color-primary-lighter);
-    --zk-paging-item-active-color: var(--zk-text-color-default3);
+    --zk-paging-item-active-color: var(--zk-text-color-inverse);
     --zk-paging-item-active-background-color: var(--zk-color-primary);
     --zk-paging-item-selected-color: var(--zk-color-primary);
     --zk-paging-item-selected-background-color: transparent;
@@ -515,10 +533,13 @@
     --zk-slider-background-color: var(--zk-color-grey-light);
     --zk-slider-area-background-color: var(--zk-color-primary);
     --zk-slider-input-color: var(--zk-text-color-active);
+    --zk-slider-button-background-color: var(--zk-button-background-color);
+    --zk-slider-button-hover-background-color: var(--zk-button-hover-background-color);
+    --zk-slider-button-active-background-color: var(--zk-button-active-background-color);
     --zk-slider-popup-font-size: var(--zk-font-size-medium);
 
     // tooltip (used in slider, fisheyebar)
-    --zk-tooltip-color: var(--zk-text-color-default3);
+    --zk-tooltip-color: var(--zk-text-color-inverse);
     --zk-tooltip-background-color: var(--zk-color-accent3);
 
     // errorbox (input constraint)
@@ -540,26 +561,26 @@
     --zk-error-button-margin-left: 5px;
 
     // severity (shared status palette — Ant Design)
-    --zk-severity-info-color: #1677ff;
-    --zk-severity-success-color: #52c41a;
-    --zk-severity-warning-color: #faad14;
-    --zk-severity-danger-color: #ff4d4f;
-    --zk-severity-secondary-color: #8c8c8c;
-    --zk-severity-info-bg: #e6f4ff;
-    --zk-severity-success-bg: #f6ffed;
-    --zk-severity-warning-bg: #fffbe6;
-    --zk-severity-danger-bg: #fff1f0;
-    --zk-severity-secondary-bg: #fafafa;
-    --zk-severity-info-border: #91caff;
-    --zk-severity-success-border: #b7eb8f;
-    --zk-severity-warning-border: #ffe58f;
-    --zk-severity-danger-border: #ffa39e;
-    --zk-severity-secondary-border: #d9d9d9;
-    --zk-severity-info-text: #0958d9;
-    --zk-severity-success-text: #389e0d;
-    --zk-severity-warning-text: #d48806;
-    --zk-severity-danger-text: #cf1322;
-    --zk-severity-secondary-text: #595959;
+    --zk-severity-info-accent-color: #1677ff;
+    --zk-severity-success-accent-color: #52c41a;
+    --zk-severity-warning-accent-color: #faad14;
+    --zk-severity-danger-accent-color: #ff4d4f;
+    --zk-severity-secondary-accent-color: #8c8c8c;
+    --zk-severity-info-background-color: #e6f4ff;
+    --zk-severity-success-background-color: #f6ffed;
+    --zk-severity-warning-background-color: #fffbe6;
+    --zk-severity-danger-background-color: #fff1f0;
+    --zk-severity-secondary-background-color: #fafafa;
+    --zk-severity-info-border-color: #91caff;
+    --zk-severity-success-border-color: #b7eb8f;
+    --zk-severity-warning-border-color: #ffe58f;
+    --zk-severity-danger-border-color: #ffa39e;
+    --zk-severity-secondary-border-color: #d9d9d9;
+    --zk-severity-info-text-color: #0958d9;
+    --zk-severity-success-text-color: #389e0d;
+    --zk-severity-warning-text-color: #d48806;
+    --zk-severity-danger-text-color: #cf1322;
+    --zk-severity-secondary-text-color: #595959;
 
     // notification
     --zk-notification-info-color: #4AA81B;
@@ -587,56 +608,56 @@
     --zk-loadingbar-height: 6px;
 
     // tabbox
-    --zk-tabbox-background-color: var(--zk-color-background3);
+    --zk-tabbox-background-color: var(--zk-color-background-base);
     --zk-tabbox-icon-padding: 5px 0;
     --zk-tabbox-icon-vertical-padding: 4px 0;
     --zk-tabbox-icon-size: 24px;
-    --zk-tabbox-tabs-background-color: var(--zk-color-background3);
+    --zk-tabbox-tabs-background-color: var(--zk-color-background-base);
     --zk-tabbox-toolbar-background-color: var(--zk-tabbox-tabs-background-color);
     --zk-tabbox-tab-color: var(--zk-text-color-light);
-    --zk-tabbox-tab-background-color: var(--zk-color-background3);
+    --zk-tabbox-tab-background-color: var(--zk-color-background-base);
     --zk-tabbox-tab-hover-color: var(--zk-text-color-default);
-    --zk-tabbox-tab-hover-background-color: var(--zk-color-background3);
+    --zk-tabbox-tab-hover-background-color: var(--zk-color-background-base);
     --zk-tabbox-tab-button-font-size: var(--zk-font-size-medium);
     --zk-tabbox-tab-button-color: var(--zk-icon-color);
     --zk-tabbox-tab-button-hover-color: var(--zk-icon-hover-color);
     --zk-tabbox-tab-button-text-spacing: 8px;
-    --zk-tabbox-tab-separator-color: var(--zk-base-border-color);
+    --zk-tabbox-tab-separator-border-color: var(--zk-base-border-color);
     --zk-tabbox-tab-min-height: 32px;
     --zk-tabbox-tab-padding: 3px 13px;
     --zk-tabbox-tab-vertical-padding: 3px 13px;
     --zk-tabbox-tab-font-size: var(--zk-font-size-medium);
     --zk-tabbox-tab-accordion-button-right: 0;
-    --zk-tabbox-selected-radius: 0;
+    --zk-tabbox-selected-border-radius: 0;
     --zk-tabbox-selected-color: var(--zk-color-primary);
     --zk-tabbox-selected-border-color: var(--zk-color-primary);
     --zk-tabbox-selected-hover-color: var(--zk-color-primary-dark);
-    --zk-tabbox-selected-background-color: var(--zk-color-background3);
-    --zk-tabbox-selected-hover-background-color: var(--zk-color-background3);
+    --zk-tabbox-selected-background-color: var(--zk-color-background-base);
+    --zk-tabbox-selected-hover-background-color: var(--zk-color-background-base);
     --zk-tabbox-scroll-icon-color: var(--zk-icon-color);
     --zk-tabbox-scroll-icon-hover-color: var(--zk-icon-hover-color);
 
     // menu
-    --zk-menu-background: var(--zk-base-background-color);
+    --zk-menu-background-color: var(--zk-base-background-color);
     --zk-menu-item-color: var(--zk-text-color-light);
-    --zk-menu-item-background: var(--zk-base-background-color);
+    --zk-menu-item-background-color: var(--zk-base-background-color);
     --zk-menu-item-hover-color: var(--zk-text-color-light);
-    --zk-menu-item-hover-background: var(--zk-hover-background-color);
+    --zk-menu-item-hover-background-color: var(--zk-hover-background-color);
     --zk-menu-item-active-color: var(--zk-active-color);
-    --zk-menu-item-active-background: var(--zk-color-primary);
+    --zk-menu-item-active-background-color: var(--zk-color-primary);
     --zk-menu-separator-border-color: var(--zk-base-border-color);
     --zk-menu-separator-background-color: var(--zk-color-grey-light);
-    --zk-menu-popup-background: var(--zk-color-background3);
+    --zk-menu-popup-background-color: var(--zk-color-background-base);
     --zk-menu-popup-item-color: var(--zk-text-color-light);
-    --zk-menu-popup-item-background: var(--zk-color-background3);
+    --zk-menu-popup-item-background-color: var(--zk-color-background-base);
     --zk-menu-popup-item-hover-color: var(--zk-text-color-light);
-    --zk-menu-popup-item-hover-background: var(--zk-hover-background-color);
+    --zk-menu-popup-item-hover-background-color: var(--zk-hover-background-color);
     --zk-menu-popup-item-active-color: var(--zk-active-color);
-    --zk-menu-popup-item-active-background: var(--zk-color-primary);
-    --zk-menu-popup-separator-border: var(--zk-color-grey-light);
+    --zk-menu-popup-item-active-background-color: var(--zk-color-primary);
+    --zk-menu-popup-separator-border-color: var(--zk-color-grey-light);
     --zk-menu-image-size: var(--zk-menu-icon-size);
-    --zk-menu-checked-color: var(--zk-checked-background-color);
-    --zk-menu-checked-background-color: var(--zk-checked-color);
+    --zk-menu-checked-color: var(--zk-text-color-inverse);
+    --zk-menu-checked-background-color: var(--zk-checked-accent-color);
     --zk-menu-scrollable-icon-color: var(--zk-icon-color);
     --zk-menu-scrollable-icon-hover-color: var(--zk-icon-hover-color);
     --zk-menubar-padding: 0;
@@ -660,18 +681,18 @@
     --zk-nav-color: var(--zk-text-color-light);
     --zk-nav-hover-color: var(--zk-text-color-default);
     --zk-nav-border-color: var(--zk-base-border-color);
-    --zk-nav-background-color: var(--zk-color-background3);
+    --zk-nav-background-color: var(--zk-color-background-base);
     --zk-nav-hover-background-color: var(--zk-nav-background-color);
     --zk-nav-selected-color: var(--zk-color-primary);
     --zk-nav-selected-background-color: var(--zk-nav-background-color);
     --zk-nav-popup-color: var(--zk-text-color-light);
     --zk-nav-popup-hover-color: var(--zk-text-color-default);
-    --zk-nav-popup-background-color: var(--zk-color-background3);
+    --zk-nav-popup-background-color: var(--zk-color-background-base);
     --zk-nav-popup-hover-background-color: var(--zk-nav-background-color);
     --zk-nav-popup-selected-color: var(--zk-color-primary);
     --zk-nav-popup-selected-background-color: var(--zk-nav-popup-background-color);
     --zk-nav-popup-padding: 0 4px 6px;
-    --zk-nav-separator-color: var(--zk-color-grey-light);
+    --zk-nav-separator-border-color: var(--zk-color-grey-light);
     --zk-nav-collapsed-width: 32px;
     --zk-nav-badge-text-color: var(--zk-text-color-light);
     --zk-nav-badge-background-color: var(--zk-color-grey-light);
@@ -693,7 +714,7 @@
     // chosenbox
     --zk-chosenbox-icon-size: 16px;
     --zk-chosenbox-item-size: var(--zk-font-size-medium);
-    --zk-chosenbox-item-color: var(--zk-text-color-default3);
+    --zk-chosenbox-item-color: var(--zk-text-color-inverse);
     --zk-chosenbox-item-border-color: var(--zk-color-primary-dark);
     --zk-chosenbox-item-background-color: var(--zk-color-primary);
     --zk-chosenbox-item-focus-background-color: var(--zk-color-primary-dark);
@@ -759,15 +780,15 @@
     --zk-rating-disabled-selected: #b4d8ff;
 
     // goldenlayout
-    --zk-golden-layout-background-color: var(--zk-color-background1);
+    --zk-golden-layout-background-color: var(--zk-color-background-subtle);
     --zk-golden-layout-border-color: #d2d2d2;
     --zk-golden-layout-header-color: var(--zk-text-color-light);
     --zk-golden-layout-header-hover-color: var(--zk-text-color-default);
     --zk-golden-layout-header-active-hover-color: var(--zk-color-primary-dark);
-    --zk-golden-layout-header-background-color: var(--zk-color-background3);
+    --zk-golden-layout-header-background-color: var(--zk-color-background-base);
     --zk-golden-layout-selected-border-color: var(--zk-color-primary);
-    --zk-golden-layout-selected-background-color: var(--zk-color-background3);
-    --zk-golden-layout-panel-background-color: var(--zk-color-background3);
+    --zk-golden-layout-selected-background-color: var(--zk-color-background-base);
+    --zk-golden-layout-panel-background-color: var(--zk-color-background-base);
     --zk-golden-layout-proxy-box-shadow-color: rgba(0, 0, 0, 0.19);
     --zk-golden-layout-droptarget-indicator-border-color: var(--zk-color-primary);
     --zk-golden-layout-droptarget-indicator-background-color: rgba(0, 147, 249, 0.15);
@@ -786,7 +807,7 @@
     --zk-organigram-line: 1px solid #9B9B9B;
     --zk-orgnode-padding: 4px 10px;
     --zk-orgnode-color: var(--zk-text-color-default);
-    --zk-orgnode-background-color: var(--zk-color-background3);
+    --zk-orgnode-background-color: var(--zk-color-background-base);
     --zk-orgnode-hover-background-color: #E8F5FF;
     --zk-orgnode-selected-color: #FFFFFF;
     --zk-orgnode-selected-background-color: var(--zk-color-primary);
@@ -813,7 +834,7 @@
     --zk-drawer-close-button-size: 12px;
     --zk-drawer-close-button-right: 8px;
     --zk-drawer-close-button-top: 9px;
-    --zk-drawer-background-color: var(--zk-color-background3);
+    --zk-drawer-background-color: var(--zk-color-background-base);
     --zk-drawer-shadow-color: rgba(0, 0, 0, 0.3);
     --zk-drawer-container-padding: 8px;
 
@@ -855,16 +876,16 @@
     --zk-multislider-button-hover-color: var(--zk-color-primary-light);
     --zk-multislider-button-active-color: var(--zk-color-primary-dark);
     --zk-multislider-button-focus-border-color: var(--zk-color-accent);
-    --zk-multislider-button-color2: var(--zk-color-primary-light);
-    --zk-multislider-button-hover-color2: hsl(from var(--zk-multislider-button-color2) h s calc(l + 15));
-    --zk-multislider-button-active-color2: hsl(from var(--zk-multislider-button-color2) h s calc(l - 20));
+    --zk-multislider-button-secondary-color: var(--zk-color-primary-light);
+    --zk-multislider-button-secondary-hover-color: hsl(from var(--zk-multislider-button-secondary-color) h s calc(l + 15));
+    --zk-multislider-button-secondary-active-color: hsl(from var(--zk-multislider-button-secondary-color) h s calc(l - 20));
     --zk-multislider-border-radius: 2px;
     --zk-multislider-tooltip-background-color: rgba(0, 0, 0, 0.8);
     --zk-multislider-disabled-tooltip-background-color: rgba(0, 0, 0, 0.5);
     --zk-multislider-inner-size: 6px;
     --zk-multislider-disabled-track-color: var(--zk-color-grey-lighter);
     --zk-multislider-disabled-button-color: hsl(from var(--zk-multislider-button-color) h s calc(l + 30));
-    --zk-multislider-disabled-button-color2: hsl(from var(--zk-multislider-button-color2) h s calc(l + 20));
+    --zk-multislider-disabled-button-secondary-color: hsl(from var(--zk-multislider-button-secondary-color) h s calc(l + 20));
 
     // inputgroup
     --zk-inputgroup-text-background-color: #E9ECEF;
@@ -872,19 +893,19 @@
     // pdfviewer
     --zk-pdfviewer-container-background-color: gray;
     --zk-pdfviewer-selection-background-color: blue;
-    --zk-pdfviewer-toolbar-background-color: var(--zk-color-background3);
+    --zk-pdfviewer-toolbar-background-color: var(--zk-color-background-base);
     --zk-pdfviewer-toolbar-border-color: var(--zk-base-border-color);
     --zk-pdfviewer-toolbar-border-radius: var(--zk-base-border-radius);
     --zk-pdfviewer-toolbar-padding: 3px 8px;
     --zk-pdfviewer-toolbar-button-size: 24px;
     --zk-pdfviewer-toolbar-margins: 6px;
     --zk-pdfviewer-toolbar-button-color: var(--zk-text-color-default);
-    --zk-pdfviewer-toolbar-button-background-color: var(--zk-color-background3);
+    --zk-pdfviewer-toolbar-button-background-color: var(--zk-color-background-base);
     --zk-pdfviewer-toolbar-button-hover-color: var(--zk-text-color-default);
     --zk-pdfviewer-toolbar-button-hover-background-color: var(--zk-color-primary-lighter);
-    --zk-pdfviewer-toolbar-button-active-color: var(--zk-text-color-default3);
+    --zk-pdfviewer-toolbar-button-active-color: var(--zk-text-color-inverse);
     --zk-pdfviewer-toolbar-button-active-background-color: var(--zk-color-primary);
-    --zk-pdfviewer-toolbar-separator-color: var(--zk-base-border-color);
+    --zk-pdfviewer-toolbar-separator-border-color: var(--zk-base-border-color);
     --zk-pdfviewer-toolbar-separator-height: 18px;
     --zk-pdfviewer-toolbar-page-active-width: 37px;
 
@@ -904,13 +925,13 @@
     --zk-searchbox-focus-border-color: var(--zk-input-focus-border-color);
     --zk-searchbox-active-border-color: var(--zk-color-primary-dark);
     --zk-searchbox-active-background-color: var(--zk-color-primary);
-    --zk-searchbox-active-color: var(--zk-text-color-default3);
-    --zk-searchbox-active-icon-color: var(--zk-text-color-default3);
-    --zk-searchbox-disable-border-color: var(--zk-input-border-color);
-    --zk-searchbox-disable-background-color: var(--zk-input-disable-background-color);
-    --zk-searchbox-disable-color: var(--zk-input-disable-color);
-    --zk-searchbox-disable-icon-color: var(--zk-icon-disabled-color);
-    --zk-searchbox-popup-background-color: var(--zk-text-color-default3);
+    --zk-searchbox-active-color: var(--zk-text-color-inverse);
+    --zk-searchbox-active-icon-color: var(--zk-text-color-inverse);
+    --zk-searchbox-disabled-border-color: var(--zk-input-border-color);
+    --zk-searchbox-disabled-background-color: var(--zk-input-disabled-background-color);
+    --zk-searchbox-disabled-color: var(--zk-input-disabled-color);
+    --zk-searchbox-disabled-icon-color: var(--zk-icon-disabled-color);
+    --zk-searchbox-popup-background-color: var(--zk-popup-background-color);
     --zk-searchbox-popup-border-color: var(--zk-combo-popup-border-color);
     --zk-searchbox-popup-border-radius: var(--zk-base-border-radius);
     --zk-searchbox-popup-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
@@ -926,7 +947,7 @@
     --zk-searchbox-popup-item-check-border-color: var(--zk-checked-border-color);
     --zk-searchbox-popup-item-check-border-radius: var(--zk-base-border-radius);
     --zk-searchbox-popup-item-check-background-color: var(--zk-base-background-color);
-    --zk-searchbox-popup-item-check-checked-color: var(--zk-text-color-default3);
+    --zk-searchbox-popup-item-check-checked-color: var(--zk-text-color-inverse);
     --zk-searchbox-popup-item-check-checked-background-color: var(--zk-color-primary);
 
     // stepbar
@@ -946,21 +967,21 @@
 
     // portalchildren
     --zk-portalchildren-frame-border-color: var(--zk-color-grey-dark);
-    --zk-portalchildren-frame-radius: 4px;
-    --zk-portalchildren-frame-background-color: var(--zk-color-background1);
+    --zk-portalchildren-frame-border-radius: 4px;
+    --zk-portalchildren-frame-background-color: var(--zk-color-background-subtle);
     --zk-portalchildren-frame-margin: 10px;
     --zk-portalchildren-frame-padding: 8px;
     --zk-portalchildren-frame-title-font-family: var(--zk-base-title-font-family);
     --zk-portalchildren-frame-title-font-size: var(--zk-font-size-medium);
-    --zk-portalchildren-frame-title-font-color: var(--zk-container-header-color);
-    --zk-portalchildren-counter-radius: 10px;
+    --zk-portalchildren-frame-title-color: var(--zk-container-header-color);
+    --zk-portalchildren-counter-border-radius: 10px;
     --zk-portalchildren-counter-padding: 4px;
-    --zk-portalchildren-counter-background: var(--zk-color-grey-light);
+    --zk-portalchildren-counter-background-color: var(--zk-color-grey-light);
     --zk-portalchildren-frame-panel-header-text-color: var(--zk-text-color-active);
-    --zk-portalchildren-frame-panel-header-text-size: var(--zk-font-size-medium);
+    --zk-portalchildren-frame-panel-header-font-size: var(--zk-font-size-medium);
     --zk-portalchildren-frame-panel-header-padding: 6px 10px 0 10px;
     --zk-portalchildren-frame-panel-children-padding: 6px 10px;
-    --zk-portalchildren-frame-panel-background-color: var(--zk-color-background3);
+    --zk-portalchildren-frame-panel-background-color: var(--zk-color-background-base);
     --zk-portalchildren-frame-panel-padding: 8px;
     --zk-portalchildren-frame-drag-button-size: var(--zk-base-icon-width);
     --zk-portalchildren-frame-drag-button-color: var(--zk-color-grey-dark);
@@ -970,10 +991,10 @@
     --zk-linelayout-line-width: 4px;
     --zk-linelayout-cave-padding: 20px;
     --zk-linelayout-point-border: 0;
-    --zk-linelayout-point-radius: 50%;
+    --zk-linelayout-point-border-radius: 50%;
     --zk-linelayout-point-size: 24px;
     --zk-linelayout-point-icon-size: 16px;
-    --zk-linelayout-point-icon-color: var(--zk-text-color-default3);
+    --zk-linelayout-point-icon-color: var(--zk-text-color-inverse);
     --zk-linelayout-point-icon-fix-top: 0;
     --zk-linelayout-point-icon-fix-left: 0;
     --zk-linelayout-point-background-color: var(--zk-color-primary);
@@ -984,8 +1005,8 @@
     --zk-coachmark-padding-left: 10px;
     --zk-coachmark-padding-right: 22px;
     --zk-coachmark-icon-size: 14px;
-    --zk-coachmark-mask-background: rgba(0, 0, 0, 0.5);
-    --zk-coachmark-background-color: var(--zk-color-background3);
+    --zk-coachmark-mask-background-color: rgba(0, 0, 0, 0.5);
+    --zk-coachmark-background-color: var(--zk-color-background-base);
 
     // cascader
     --zk-cascader-height: 24px;
@@ -993,7 +1014,7 @@
     --zk-cascader-color: var(--zk-text-color-default);
     --zk-cascader-font-size: var(--zk-font-size-medium);
     --zk-cascader-padding: 0 5px;
-    --zk-cascader-separator-color: var(--zk-color-grey-light);
+    --zk-cascader-separator-border-color: var(--zk-color-grey-light);
     --zk-cascader-border-color: var(--zk-input-border-color);
     --zk-cascader-border-radius: var(--zk-input-border-radius);
     --zk-cascader-background-color: var(--zk-input-background-color);
@@ -1003,8 +1024,8 @@
     --zk-cascader-active-background-color: var(--zk-color-primary);
     --zk-cascader-hover-border-color: var(--zk-input-hover-border-color);
     --zk-cascader-focus-border-color: var(--zk-input-focus-border-color);
-    --zk-cascader-disable-color: var(--zk-input-disable-color);
-    --zk-cascader-disable-background-color: var(--zk-input-disable-background-color);
+    --zk-cascader-disabled-color: var(--zk-input-disabled-color);
+    --zk-cascader-disabled-background-color: var(--zk-input-disabled-background-color);
     --zk-cascader-popup-border-color: var(--zk-combo-popup-border-color);
     --zk-cascader-popup-cave-padding: 3px;
     --zk-cascader-popup-item-padding: 0px 28px 0px 5px;
@@ -1015,4 +1036,33 @@
     // cropper
     --zk-cropper-toolbar-button-font-size: var(--zk-font-size-medium);
     --zk-cropper-toolbar-button-padding: 5px 11px;
+
+    // badge
+    --zk-badge-indicator-text-color: var(--zk-text-color-inverse);
+
+    // avatargroup
+    --zk-avatargroup-avatar-border-color: #FFFFFF;
+    --zk-avatargroup-overflow-background-color: #f0f0f0;
+    --zk-avatargroup-overflow-color: #595959;
+
+    // caption
+
+    // confirmpopup
+    --zk-confirmpopup-footer-background-color: rgba(0, 0, 0, 0.02);
+    --zk-confirmpopup-button-background-color: var(--zk-color-background-base);
+    --zk-confirmpopup-ok-color: var(--zk-text-color-inverse);
+
+    // carousel
+    --zk-carousel-control-background-color: rgba(0, 0, 0, 0.4);
+    --zk-carousel-control-color: var(--zk-text-color-inverse);
+    --zk-carousel-indicator-background-color: rgba(0, 0, 0, 0.5);
+    --zk-carousel-indicator-border-color: rgba(255, 255, 255, 0.8);
+    // literal white, not a theme token: the active dot inverts the inactive one to keep
+    // WCAG 2.1 SC 1.4.11 contrast against arbitrary slide imagery
+    --zk-carousel-indicator-active-background-color: #FFFFFF;
+    --zk-carousel-indicator-active-border-color: rgba(0, 0, 0, 0.5);
+    --zk-carousel-label-background-color: rgba(0, 0, 0, 0.5);
+    --zk-carousel-label-color: var(--zk-text-color-inverse);
+
+    // panel / window drag feedback
 }

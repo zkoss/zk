@@ -50,8 +50,8 @@
 		width: 36px;
 		height: 36px;
 		border-radius: 50%;
-		background: rgba(0, 0, 0, 0.4);
-		color: #fff;
+		background: @carouselControlBackgroundColor;
+		color: @carouselControlColor;
 		border: 0;
 		font-family: @baseTitleFontFamily;
 		/* The ‹/› glyphs in the mold sit asymmetrically around the baseline,
@@ -128,10 +128,10 @@
 		/* WCAG 2.1 SC 1.4.11 Non-Text Contrast: indicators must stand out
 		   from any slide background. Use opaque grey (≥3:1 against white)
 		   instead of translucent white which is invisible on light slides. */
-		background: rgba(0, 0, 0, 0.5);
-		border: 1px solid rgba(255, 255, 255, 0.8);
+		background: @carouselIndicatorBackgroundColor;
+		border: 1px solid @carouselIndicatorBorderColor;
 	}
-	&-indicator-active::before { background: #fff; border-color: rgba(0, 0, 0, 0.5); }
+	&-indicator-active::before { background: @carouselIndicatorActiveBackgroundColor; border-color: @carouselIndicatorActiveBorderColor; }
 	&-indicator:focus-visible {
 		outline: 2px solid @colorPrimary;
 		outline-offset: 2px;
@@ -187,8 +187,8 @@
 		position: absolute;
 		bottom: 16px;
 		left: 16px;
-		background: rgba(0, 0, 0, 0.5);
-		color: #fff;
+		background: @carouselLabelBackgroundColor;
+		color: @carouselLabelColor;
 		padding: 4px 10px;
 		border-radius: 4px;
 	}

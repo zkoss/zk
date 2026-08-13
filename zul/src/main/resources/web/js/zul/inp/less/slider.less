@@ -16,15 +16,15 @@
 		.size(@baseIconWidth, @baseIconHeight);
 		.borderRadius(@baseBorderRadius);
 		.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
-		background-color: @buttonBackgroundColor;
+		background-color: @sliderButtonBackgroundColor;
 		position: relative;
 		cursor: pointer;
 
 		&:hover {
-			background: @buttonHoverBackgroundColor;
+			background: @sliderButtonHoverBackgroundColor;
 		}
 		&:active {
-			background-color: @buttonActiveBackgroundColor;
+			background-color: @sliderButtonActiveBackgroundColor;
 		}
 	}
 
@@ -57,7 +57,7 @@
 		position: absolute;
 		line-height: 1.5;
 		padding: 1px;
-		.fontStyle(@baseContentFontFamily, @inputTextSize, bold, @sliderInputColor);
+		.fontStyle(@baseContentFontFamily, @inputFontSize, bold, @sliderInputColor);
 
 		&:hover {
 			border-color: @inputHoverBorderColor;

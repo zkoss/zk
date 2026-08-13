@@ -5,12 +5,12 @@
 	vertical-align: middle;
 	min-height: @baseButtonHeight;
 	cursor: pointer;
-	.borderRadius(@inputBorderRadius);
+	.borderRadius(@buttonBorderRadius);
 	.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
 	overflow: hidden;
 
 	&-content {
-		.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @buttonColor);
+		.fontStyle(@baseContentFontFamily, @buttonFontSize, normal, @buttonColor);
 		display: block;
 		min-height: @baseButtonHeight;
 		border: @buttonBorderWidth solid @buttonBorderColor;
@@ -64,7 +64,7 @@
 		}
 		&[disabled] {
 			.z-combobutton-button {
-				border-color: @buttonDisableSeparatorBorderColor;
+				border-color: @buttonDisabledSeparatorBorderColor;
 			}
 		}
 		&.z-combobutton-open {
@@ -98,13 +98,13 @@
 	&[disabled] {
 		cursor: default;
 		.z-combobutton-content {
-			color: @buttonDisableColor;
-			border-color: @buttonDisableBorderColor;
-			background-color: @buttonDisableBackgroundColor;
+			color: @buttonDisabledColor;
+			border-color: @buttonDisabledBorderColor;
+			background-color: @buttonDisabledBackgroundColor;
 			cursor: default;
 		}
 		.z-combobutton-button {
-			border-color: @buttonDisableSeparatorBorderColor;
+			border-color: @buttonDisabledSeparatorBorderColor;
 		}
 	}
 }

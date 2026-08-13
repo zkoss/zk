@@ -32,7 +32,7 @@
 	border-bottom: 1px solid @baseBorderColor;
 	padding: @menubarPadding;
 	position: relative;
-	background: @menuBackground;
+	background: @menuBackgroundColor;
 
 	ul {
 		overflow: hidden;
@@ -103,7 +103,7 @@
 	}
 	&-content {
 		color: @menuItemColor;
-		background: @menuItemBackground;
+		background: @menuItemBackgroundColor;
 		display: block;
 		border: 1px solid transparent;
 		.borderRadius(@baseBorderRadius);
@@ -116,16 +116,16 @@
 		min-height: @menuContentMinHeight;
 		z-index: 20; // the 20 is greater than menupopup-separator's z-index
 		&:hover {
-			.contentStyle(@menuItemHoverColor, @menuItemHoverBackground);
+			.contentStyle(@menuItemHoverColor, @menuItemHoverBackgroundColor);
 		}
 		&:focus {
-			.contentStyle(@menuItemHoverColor, @menuItemHoverBackground);
+			.contentStyle(@menuItemHoverColor, @menuItemHoverBackgroundColor);
 		}
 		&:active {
-			.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
+			.contentStyle(@menuItemActiveColor, @menuItemActiveBackgroundColor);
 		}
 		&[disabled] {
-			.disabledStyle(@menuItemBackground);
+			.disabledStyle(@menuItemBackgroundColor);
 		}
 	}
 
@@ -170,12 +170,12 @@
 		top: @menuIconPositionTop;
 	}
 	&-selected > &-content {
-		.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
+		.contentStyle(@menuItemActiveColor, @menuItemActiveBackgroundColor);
 	}
 }
 .z-menuitem {
 	&-selected > &-content {
-		.contentStyle(@menuItemActiveColor, @menuItemActiveBackground);
+		.contentStyle(@menuItemActiveColor, @menuItemActiveBackgroundColor);
 	}
 }
 
@@ -197,7 +197,7 @@
 	border: 1px solid @baseBorderColor;
 	.borderRadius(4px);
 	padding: 4px;
-	background: @menuPopupBackground;
+	background: @menuPopupBackgroundColor;
 	left: 0;
 	top: 0;
 	white-space: nowrap;
@@ -214,12 +214,12 @@
 	.z-menu-content,
 	.z-menuitem-content {
 		color: @menuPopupItemColor;
-		background: @menuPopupItemBackground;
+		background: @menuPopupItemBackgroundColor;
 		&:active {
-			.contentStyle(@menuPopupItemActiveColor, @menuPopupItemActiveBackground);
+			.contentStyle(@menuPopupItemActiveColor, @menuPopupItemActiveBackgroundColor);
 		}
 		&[disabled] {
-			.disabledStyle(@menuPopupItemBackground);
+			.disabledStyle(@menuPopupItemBackgroundColor);
 		}
 	}
 	.z-menu-image,
@@ -242,7 +242,7 @@
 		display: block;
 		width: auto;
 		min-height: 2px;
-		border-bottom: 1px solid @menuPopupSeparatorBorder;
+		border-bottom: 1px solid @menuPopupSeparatorBorderColor;
 		padding: 0;
 		line-height: 1px;
 		margin: 4px 0;
@@ -259,7 +259,7 @@
 	.z-menu-focus > .z-menu-content,
 	.z-menuitem-hover > .z-menuitem-content,
 	.z-menuitem-focus > .z-menuitem-content {
-		.contentStyle(@menuPopupItemHoverColor, @menuPopupItemHoverBackground);
+		.contentStyle(@menuPopupItemHoverColor, @menuPopupItemHoverBackgroundColor);
 	}
 }
 //define checked menuitem effect in menupopup

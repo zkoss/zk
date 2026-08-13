@@ -24,8 +24,8 @@
 
 // checkbox style
 .checkable() {
-	.displaySize(inline-block, @checkboxSize, @checkboxSize);
-	.iconFontStyle(@checkedIconSize, @checkedColor);
+	.displaySize(inline-block, @meshCheckableSize, @meshCheckableSize);
+	.iconFontStyle(@checkedIconSize, @checkedAccentColor);
 	border: 1px solid @checkedBorderColor;
 	background: @checkedBackgroundColor;
 	vertical-align: text-top;
@@ -37,7 +37,7 @@
 
 //listbox
 .z-listbox {
-	background: @maskBackgroundColor;
+	background: @meshOuterBackgroundColor;
 	border: 1px solid @baseBorderColor;
 	overflow: hidden;
 	zoom: 1;
@@ -232,7 +232,7 @@
 			.borderRadius(50%);
 
 			&:hover {
-				border-color: @checkboxHoverBorderColor;
+				border-color: @meshCheckableHoverBorderColor;
 			}
 		}
 		.z-listitem-icon {
@@ -249,7 +249,7 @@
 				color: @selectedColor;
 
 				> .z-listitem-checkable.z-listitem-radio {
-					border-color: @checkboxHoverBorderColor;
+					border-color: @meshCheckableHoverBorderColor;
 				}
 			}
 		}
@@ -310,7 +310,7 @@
 			&.z-icon-radio { //for radio
 				.size(@listboxRadioIconSize, @listboxRadioIconSize);
 				.borderRadius(50%);
-				background: @checkedColor;
+				background: @checkedAccentColor;
 				position: relative;
 				top: 50%;
 				left: 50%;
@@ -370,7 +370,7 @@
 			cursor: pointer;
 			
 			&:hover {
-				color: @checkedColor;
+				color: @checkedAccentColor;
 			}
 		}
 	}

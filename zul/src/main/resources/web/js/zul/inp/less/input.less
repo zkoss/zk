@@ -5,7 +5,7 @@
 .z-intbox,
 .z-longbox,
 .z-doublebox {
-	.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
+	.fontStyle(@baseContentFontFamily, @inputFontSize, normal, @inputColor);
 	height: @inputHeight;
 	border: 1px solid @inputBorderColor;
 	.borderRadius(@baseBorderRadius);
@@ -52,8 +52,8 @@
 		border-color: @invalidBorderColor;
 	}
 	&[disabled] {
-		color: @inputDisableColor !important;
-		background: @inputDisableBackgroundColor !important;
+		color: @inputDisabledColor !important;
+		background: @inputDisabledBackgroundColor !important;
 		cursor: default !important;
 		&:hover {
 			border-color: @inputBorderColor;

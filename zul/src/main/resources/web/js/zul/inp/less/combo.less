@@ -5,13 +5,13 @@ each(@components, {
 	.@{value} {
 		display: inline-block;
 		height: @comboInputHeight;
-		font-size: @inputTextSize;
+		font-size: @inputFontSize;
 		line-height: normal; //reset for inside other component
 		white-space: nowrap;
 		position: relative;
 
 		&-input {
-			.fontStyle(@baseContentFontFamily, @inputTextSize, normal, @inputColor);
+			.fontStyle(@baseContentFontFamily, @inputFontSize, normal, @inputColor);
 			width: 100%;
 			height: @comboInputHeight;
 			border: 1px solid @inputBorderColor;
@@ -95,14 +95,14 @@ each(@components, {
 			.opacity(@disabledOpacity);
 
 			& > input {
-				color: @inputDisableColor !important;
-				background: @inputDisableBackgroundColor !important;
+				color: @inputDisabledColor !important;
+				background: @inputDisabledBackgroundColor !important;
 				cursor: default !important;
 			}
 
 			& > a, & > span {
-				color: @inputDisableColor !important;
-				background: @inputDisableBackgroundColor !important;
+				color: @inputDisabledColor !important;
+				background: @inputDisabledBackgroundColor !important;
 				cursor: default !important;
 			}
 		}

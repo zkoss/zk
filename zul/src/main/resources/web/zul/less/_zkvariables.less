@@ -42,7 +42,7 @@
 @textColorDefault:             var(--zk-text-color-default);
 @textColorLight:               var(--zk-text-color-light);
 @textColorLighter:             var(--zk-text-color-lighter);
-@textColorDefault3:            var(--zk-text-color-default3);
+@textColorInverse:             var(--zk-text-color-inverse);
 @textColorActive:              var(--zk-text-color-active);
 
 @colorPrimary:                 var(--zk-color-primary);
@@ -52,8 +52,8 @@
 @colorAccent:                  var(--zk-color-accent);
 @colorAccent2:                 var(--zk-color-accent2);
 @colorAccent3:                 var(--zk-color-accent3);
-@colorBackground1:             var(--zk-color-background1);
-@colorBackground3:             var(--zk-color-background3);
+@colorBackgroundSubtle:        var(--zk-color-background-subtle);
+@colorBackgroundBase:          var(--zk-color-background-base);
 @colorGreyDark:                var(--zk-color-grey-dark);
 @colorGreyLight:               var(--zk-color-grey-light);
 @colorGreyLighter:             var(--zk-color-grey-lighter);
@@ -80,6 +80,7 @@
 @meshAutoPagingRowPadding:     var(--zk-mesh-auto-paging-row-padding);
 @meshAutoPagingRowLineHeight:  var(--zk-mesh-auto-paging-row-line-height);
 @meshBackgroundColor:          var(--zk-mesh-background-color);
+@meshOuterBackgroundColor:     var(--zk-mesh-outer-background-color);
 @meshStripeBackgroundColor:    var(--zk-mesh-stripe-background-color);
 @meshTitleColor:               var(--zk-mesh-title-color);
 @meshTitleBackgroundColor:     var(--zk-mesh-title-background-color);
@@ -173,21 +174,23 @@
 
 // Checked (used on menuitem, listbox, tree, toolbarbutton)
 @checkedIconSize:              var(--zk-checked-icon-size);
-@checkedColor:                 var(--zk-checked-color);
+@checkedAccentColor:           var(--zk-checked-accent-color);
 @checkedBorderColor:           var(--zk-checked-border-color);
 @checkedBackgroundColor:       var(--zk-checked-background-color);
+// the tick drawn on top of @checkedAccentColor, not a surface
+@checkedIconColor:             var(--zk-checked-icon-color);
 
 // -------------------------------------
 // Component independent variables
 // -------------------------------------
 // Container (Window, Panel)
-@containerBackground:          var(--zk-container-background);
+@containerBackgroundColor:     var(--zk-container-background-color);
 @containerPadding:             var(--zk-container-padding);
 @containerBorderColor:         var(--zk-container-border-color);
 @containerBorderRadius:        var(--zk-container-border-radius);
-@containerHeaderTextSize:      var(--zk-container-header-text-size);
+@containerHeaderFontSize:      var(--zk-container-header-font-size);
 @containerHeaderColor:         var(--zk-container-header-color);
-@containerBodyTextSize:        var(--zk-container-body-text-size);
+@containerBodyFontSize:        var(--zk-container-body-font-size);
 @containerBodyColor:           var(--zk-container-body-color);
 @containerButtonSize:          var(--zk-container-button-size);
 @containerButtonColors:        var(--zk-container-button-color), var(--zk-container-button-hover-color);
@@ -252,7 +255,7 @@
 @toolbarOverflowpopupButtonSize: var(--zk-toolbar-overflowpopup-button-size);
 
 // Input (used for textbox, intbox, spinner, ...)
-@inputTextSize:                var(--zk-input-text-size);
+@inputFontSize:                var(--zk-input-font-size);
 @inputBorderColor:             var(--zk-input-border-color);
 @inputBorderRadius:            var(--zk-input-border-radius);
 @inputBackgroundColor:         var(--zk-input-background-color);
@@ -263,8 +266,8 @@
 @inputPlaceholderColor:        var(--zk-input-placeholder-color);
 @inputHoverBorderColor:        var(--zk-input-hover-border-color);
 @inputFocusBorderColor:        var(--zk-input-focus-border-color);
-@inputDisableColor:            var(--zk-input-disable-color);
-@inputDisableBackgroundColor:  var(--zk-input-disable-background-color);
+@inputDisabledColor:           var(--zk-input-disabled-color);
+@inputDisabledBackgroundColor: var(--zk-input-disabled-background-color);
 @inputReadonlyColor:           var(--zk-input-readonly-color);
 @inputReadonlyBackgroundColor: var(--zk-input-readonly-background-color);
 @inputLineHeight:              var(--zk-input-line-height);
@@ -273,6 +276,8 @@
 @checkboxSize:                 var(--zk-checkbox-size);
 @checkboxMargin:               var(--zk-checkbox-margin);
 @checkboxHoverBorderColor:     var(--zk-checkbox-hover-border-color);
+@meshCheckableSize:            var(--zk-mesh-checkable-size);
+@meshCheckableHoverBorderColor: var(--zk-mesh-checkable-hover-border-color);
 @checkboxSwitchMargin:         var(--zk-checkbox-switch-margin);
 @checkboxSwitchWidth:          var(--zk-checkbox-switch-width);
 @checkboxSwitchHeight:         var(--zk-checkbox-switch-height);
@@ -283,11 +288,13 @@
 @checkboxToggleSize:           var(--zk-checkbox-toggle-size);
 
 // Button (used for button, combobutton)
+@buttonFontSize:               var(--zk-button-font-size);
 @buttonPadding:                var(--zk-button-padding);
 @buttonColor:                  var(--zk-button-color);
 @buttonBackgroundColor:        var(--zk-button-background-color);
 @buttonBorderWidth:            var(--zk-button-border-width);
 @buttonBorderColor:            var(--zk-button-border-color);
+@buttonBorderRadius:           var(--zk-button-border-radius);
 @buttonHoverColor:             var(--zk-button-hover-color);
 @buttonHoverBackgroundColor:   var(--zk-button-hover-background-color);
 @buttonHoverBorderColor:       var(--zk-button-hover-border-color);
@@ -297,11 +304,11 @@
 @buttonActiveColor:            var(--zk-button-active-color);
 @buttonActiveBackgroundColor:  var(--zk-button-active-background-color);
 @buttonActiveBorderColor:      var(--zk-button-active-border-color);
-@buttonDisableColor:           var(--zk-button-disable-color);
-@buttonDisableBackgroundColor: var(--zk-button-disable-background-color);
-@buttonDisableBorderColor:     var(--zk-button-disable-border-color);
+@buttonDisabledColor:          var(--zk-button-disabled-color);
+@buttonDisabledBackgroundColor: var(--zk-button-disabled-background-color);
+@buttonDisabledBorderColor:    var(--zk-button-disabled-border-color);
 @buttonSeparatorBorderColor:   var(--zk-button-separator-border-color);
-@buttonDisableSeparatorBorderColor: var(--zk-button-disable-separator-border-color);
+@buttonDisabledSeparatorBorderColor: var(--zk-button-disabled-separator-border-color);
 // Toolbar button
 @toolbarButtonFontSize:        var(--zk-toolbar-button-font-size);
 @toolbarButtonPadding:         var(--zk-toolbar-button-padding);
@@ -309,6 +316,18 @@
 @toolbarButtonBackgroundColor: var(--zk-toolbar-button-background-color);
 @toolbarButtonCheckedColor:           var(--zk-toolbar-button-checked-color);
 @toolbarButtonCheckedBackgroundColor: var(--zk-toolbar-button-checked-background-color);
+@toolbarButtonBorderWidth:     var(--zk-toolbar-button-border-width);
+@toolbarButtonBorderRadius:    var(--zk-toolbar-button-border-radius);
+@toolbarButtonHoverColor:      var(--zk-toolbar-button-hover-color);
+@toolbarButtonHoverBorderColor: var(--zk-toolbar-button-hover-border-color);
+@toolbarButtonHoverBackgroundColor: var(--zk-toolbar-button-hover-background-color);
+@toolbarButtonFocusBorderColor: var(--zk-toolbar-button-focus-border-color);
+@toolbarButtonActiveColor:     var(--zk-toolbar-button-active-color);
+@toolbarButtonActiveBorderColor: var(--zk-toolbar-button-active-border-color);
+@toolbarButtonActiveBackgroundColor: var(--zk-toolbar-button-active-background-color);
+@toolbarButtonDisabledColor:   var(--zk-toolbar-button-disabled-color);
+@toolbarButtonDisabledBorderColor: var(--zk-toolbar-button-disabled-border-color);
+@toolbarButtonDisabledBackgroundColor: var(--zk-toolbar-button-disabled-background-color);
 // Combobutton
 @combobuttonPadding:           var(--zk-combobutton-padding);
 @combobuttonButtonWidth:       var(--zk-combobutton-button-width);
@@ -424,10 +443,10 @@
 @scrollbarBorderColor:         var(--zk-scrollbar-border-color);
 @scrollbarBackgroundColor:     var(--zk-scrollbar-background-color);
 @scrollbarBarBackgroundColor:  var(--zk-scrollbar-bar-background-color);
-@scrollbarBarHoverBackground:  var(--zk-scrollbar-bar-hover-background);
+@scrollbarBarHoverBackgroundColor: var(--zk-scrollbar-bar-hover-background-color);
 @scrollbarIconDisplay:         var(--zk-scrollbar-icon-display);
-@scrollbarButtonBackground:    var(--zk-scrollbar-button-background);
-@scrollbarButtonHoverBackground: var(--zk-scrollbar-button-hover-background);
+@scrollbarButtonBackgroundColor: var(--zk-scrollbar-button-background-color);
+@scrollbarButtonHoverBackgroundColor: var(--zk-scrollbar-button-hover-background-color);
 @scrollbarButtonColor:         var(--zk-scrollbar-button-color);
 @scrollbarButtonHoverColor:    var(--zk-scrollbar-button-hover-color);
 
@@ -451,7 +470,7 @@
 @splitterBorderColor:          var(--zk-splitter-border-color);
 @splitterBackgroundColor:      var(--zk-splitter-background-color);
 @splitterHoverBackgroundColor: var(--zk-splitter-hover-background-color);
-@splitterButtonTextSize:       var(--zk-splitter-button-text-size);
+@splitterButtonFontSize:       var(--zk-splitter-button-font-size);
 @splitterButtonTextColors:     var(--zk-splitter-button-text-color), var(--zk-splitter-button-text-hover-color);
 @splitterDragBackgroundColor:  var(--zk-splitter-drag-background-color);
 
@@ -520,6 +539,9 @@
 @sliderBackgroundColor:        var(--zk-slider-background-color);
 @sliderAreaBackgroundColor:    var(--zk-slider-area-background-color);
 @sliderInputColor:             var(--zk-slider-input-color);
+@sliderButtonBackgroundColor:  var(--zk-slider-button-background-color);
+@sliderButtonHoverBackgroundColor: var(--zk-slider-button-hover-background-color);
+@sliderButtonActiveBackgroundColor: var(--zk-slider-button-active-background-color);
 @sliderTicks:                  '~./zul/img/slider/scale-ticks.png';
 @sliderPopupFontSize:          var(--zk-slider-popup-font-size);
 
@@ -562,28 +584,28 @@
 @notificationCloseIconSize:    var(--zk-notification-close-icon-size);
 
 // severity (shared status palette — used by Badge/Chip/Confirmpopup, Ant Design)
-// `*Color` is the solid tone (Badge indicator fill, Confirmpopup icon); the
-// `*Bg`/`*Border`/`*Text` trio is the light "tag" tone (Chip).
-@severityInfoColor:            var(--zk-severity-info-color);
-@severitySuccessColor:         var(--zk-severity-success-color);
-@severityWarningColor:         var(--zk-severity-warning-color);
-@severityDangerColor:          var(--zk-severity-danger-color);
-@severitySecondaryColor:       var(--zk-severity-secondary-color);
-@severityInfoBg:               var(--zk-severity-info-bg);
-@severitySuccessBg:            var(--zk-severity-success-bg);
-@severityWarningBg:            var(--zk-severity-warning-bg);
-@severityDangerBg:             var(--zk-severity-danger-bg);
-@severitySecondaryBg:          var(--zk-severity-secondary-bg);
-@severityInfoBorder:           var(--zk-severity-info-border);
-@severitySuccessBorder:        var(--zk-severity-success-border);
-@severityWarningBorder:        var(--zk-severity-warning-border);
-@severityDangerBorder:         var(--zk-severity-danger-border);
-@severitySecondaryBorder:      var(--zk-severity-secondary-border);
-@severityInfoText:             var(--zk-severity-info-text);
-@severitySuccessText:          var(--zk-severity-success-text);
-@severityWarningText:          var(--zk-severity-warning-text);
-@severityDangerText:           var(--zk-severity-danger-text);
-@severitySecondaryText:        var(--zk-severity-secondary-text);
+// `*AccentColor` is the solid tone (Badge indicator fill, Confirmpopup icon); the
+// `*BackgroundColor`/`*BorderColor`/`*TextColor` trio is the light "tag" tone (Chip).
+@severityInfoAccentColor:      var(--zk-severity-info-accent-color);
+@severitySuccessAccentColor:   var(--zk-severity-success-accent-color);
+@severityWarningAccentColor:   var(--zk-severity-warning-accent-color);
+@severityDangerAccentColor:    var(--zk-severity-danger-accent-color);
+@severitySecondaryAccentColor: var(--zk-severity-secondary-accent-color);
+@severityInfoBackgroundColor:  var(--zk-severity-info-background-color);
+@severitySuccessBackgroundColor: var(--zk-severity-success-background-color);
+@severityWarningBackgroundColor: var(--zk-severity-warning-background-color);
+@severityDangerBackgroundColor: var(--zk-severity-danger-background-color);
+@severitySecondaryBackgroundColor: var(--zk-severity-secondary-background-color);
+@severityInfoBorderColor:      var(--zk-severity-info-border-color);
+@severitySuccessBorderColor:   var(--zk-severity-success-border-color);
+@severityWarningBorderColor:   var(--zk-severity-warning-border-color);
+@severityDangerBorderColor:    var(--zk-severity-danger-border-color);
+@severitySecondaryBorderColor: var(--zk-severity-secondary-border-color);
+@severityInfoTextColor:        var(--zk-severity-info-text-color);
+@severitySuccessTextColor:     var(--zk-severity-success-text-color);
+@severityWarningTextColor:     var(--zk-severity-warning-text-color);
+@severityDangerTextColor:      var(--zk-severity-danger-text-color);
+@severitySecondaryTextColor:   var(--zk-severity-secondary-text-color);
 
 // progressmeter
 @progressmeterBorderColor:     var(--zk-progressmeter-border-color);
@@ -610,13 +632,13 @@
 @tabboxTabButtonColor:         var(--zk-tabbox-tab-button-color);
 @tabboxTabButtonHoverColor:    var(--zk-tabbox-tab-button-hover-color);
 @tabboxTabButtonTextSpacing:   var(--zk-tabbox-tab-button-text-spacing);
-@tabboxTabSeparatorColor:      var(--zk-tabbox-tab-separator-color);
+@tabboxTabSeparatorBorderColor: var(--zk-tabbox-tab-separator-border-color);
 @tabboxTabMinHeight:           var(--zk-tabbox-tab-min-height);
 @tabboxTabPadding:             var(--zk-tabbox-tab-padding);
 @tabboxTabVerticalPadding:     var(--zk-tabbox-tab-vertical-padding);
 @tabboxTabFontSize:            var(--zk-tabbox-tab-font-size);
 @tabboxTabAccordionButtonRight:var(--zk-tabbox-tab-accordion-button-right);
-@tabboxSelectedRadius:         var(--zk-tabbox-selected-radius);
+@tabboxSelectedBorderRadius:   var(--zk-tabbox-selected-border-radius);
 @tabboxSelectedColor:          var(--zk-tabbox-selected-color);
 @tabboxSelectedBorderColor:    var(--zk-tabbox-selected-border-color);
 @tabboxSelectedHoverColor:     var(--zk-tabbox-selected-hover-color);
@@ -626,23 +648,23 @@
 @tabboxScrollIconHoverColor:   var(--zk-tabbox-scroll-icon-hover-color);
 
 // menu
-@menuBackground:               var(--zk-menu-background);
+@menuBackgroundColor:          var(--zk-menu-background-color);
 @menuItemColor:                var(--zk-menu-item-color);
-@menuItemBackground:           var(--zk-menu-item-background);
+@menuItemBackgroundColor:      var(--zk-menu-item-background-color);
 @menuItemHoverColor:           var(--zk-menu-item-hover-color);
-@menuItemHoverBackground:      var(--zk-menu-item-hover-background);
+@menuItemHoverBackgroundColor: var(--zk-menu-item-hover-background-color);
 @menuItemActiveColor:          var(--zk-menu-item-active-color);
-@menuItemActiveBackground:     var(--zk-menu-item-active-background);
+@menuItemActiveBackgroundColor: var(--zk-menu-item-active-background-color);
 @menuSeparatorBorderColor:     var(--zk-menu-separator-border-color);
 @menuSeparatorBackgroundColor: var(--zk-menu-separator-background-color);
-@menuPopupBackground:          var(--zk-menu-popup-background);
+@menuPopupBackgroundColor:     var(--zk-menu-popup-background-color);
 @menuPopupItemColor:           var(--zk-menu-popup-item-color);
-@menuPopupItemBackground:      var(--zk-menu-popup-item-background);
+@menuPopupItemBackgroundColor: var(--zk-menu-popup-item-background-color);
 @menuPopupItemHoverColor:      var(--zk-menu-popup-item-hover-color);
-@menuPopupItemHoverBackground: var(--zk-menu-popup-item-hover-background);
+@menuPopupItemHoverBackgroundColor: var(--zk-menu-popup-item-hover-background-color);
 @menuPopupItemActiveColor:     var(--zk-menu-popup-item-active-color);
-@menuPopupItemActiveBackground: var(--zk-menu-popup-item-active-background);
-@menuPopupSeparatorBorder:     var(--zk-menu-popup-separator-border);
+@menuPopupItemActiveBackgroundColor: var(--zk-menu-popup-item-active-background-color);
+@menuPopupSeparatorBorderColor: var(--zk-menu-popup-separator-border-color);
 @menuImageSize:                var(--zk-menu-image-size);
 @menuCheckedColor:             var(--zk-menu-checked-color);
 @menuCheckedBackgroundColor:   var(--zk-menu-checked-background-color);
@@ -679,7 +701,7 @@
 @navPopupSelectedColor:        var(--zk-nav-popup-selected-color);
 @navPopupSelectedBackgroundColor: var(--zk-nav-popup-selected-background-color);
 @navPopupPadding:              var(--zk-nav-popup-padding);
-@navSeparatorColor:            var(--zk-nav-separator-color);
+@navSeparatorBorderColor:      var(--zk-nav-separator-border-color);
 @navCollapsedWidth:            var(--zk-nav-collapsed-width);
 @navBadgeTextColor:            var(--zk-nav-badge-text-color);
 @navBadgeBackgroundColor:      var(--zk-nav-badge-background-color);
@@ -863,16 +885,16 @@
 @multisliderButtonHoverColor:  var(--zk-multislider-button-hover-color);
 @multisliderButtonActiveColor: var(--zk-multislider-button-active-color);
 @multisliderButtonFocusBorderColor: var(--zk-multislider-button-focus-border-color);
-@multisliderButtonColor2:      var(--zk-multislider-button-color2);
-@multisliderButtonHoverColor2: var(--zk-multislider-button-hover-color2);
-@multisliderButtonActiveColor2: var(--zk-multislider-button-active-color2);
+@multisliderButtonSecondaryColor: var(--zk-multislider-button-secondary-color);
+@multisliderButtonSecondaryHoverColor: var(--zk-multislider-button-secondary-hover-color);
+@multisliderButtonSecondaryActiveColor: var(--zk-multislider-button-secondary-active-color);
 @multisliderBorderRadius:      var(--zk-multislider-border-radius);
 @multisliderTooltipBackgroundColor: var(--zk-multislider-tooltip-background-color);
 @multisliderDisabledTooltipBackgroundColor: var(--zk-multislider-disabled-tooltip-background-color);
 @multisliderInnerSize:         var(--zk-multislider-inner-size);
 @multisliderDisabledTrackColor: var(--zk-multislider-disabled-track-color);
 @multisliderDisabledButtonColor: var(--zk-multislider-disabled-button-color);
-@multisliderDisabledButtonColor2: var(--zk-multislider-disabled-button-color2);
+@multisliderDisabledButtonSecondaryColor: var(--zk-multislider-disabled-button-secondary-color);
 
 // inputgroup
 @inputgroupTextBackgroundColor: var(--zk-inputgroup-text-background-color);
@@ -892,7 +914,7 @@
 @pdfviewerToolbarButtonHoverBackgroundColor: var(--zk-pdfviewer-toolbar-button-hover-background-color);
 @pdfviewerToolbarButtonActiveColor: var(--zk-pdfviewer-toolbar-button-active-color);
 @pdfviewerToolbarButtonActiveBackgroundColor: var(--zk-pdfviewer-toolbar-button-active-background-color);
-@pdfviewerToolbarSeparatorColor: var(--zk-pdfviewer-toolbar-separator-color);
+@pdfviewerToolbarSeparatorBorderColor: var(--zk-pdfviewer-toolbar-separator-border-color);
 @pdfviewerToolbarSeparatorHeight: var(--zk-pdfviewer-toolbar-separator-height);
 @pdfviewerToolbarPageActiveWidth: var(--zk-pdfviewer-toolbar-page-active-width);
 
@@ -914,10 +936,10 @@
 @searchboxActiveBackgroundColor: var(--zk-searchbox-active-background-color);
 @searchboxActiveColor:         var(--zk-searchbox-active-color);
 @searchboxActiveIconColor:     var(--zk-searchbox-active-icon-color);
-@searchboxDisableBorderColor:  var(--zk-searchbox-disable-border-color);
-@searchboxDisableBackgroundColor: var(--zk-searchbox-disable-background-color);
-@searchboxDisableColor:        var(--zk-searchbox-disable-color);
-@searchboxDisableIconColor:    var(--zk-searchbox-disable-icon-color);
+@searchboxDisabledBorderColor: var(--zk-searchbox-disabled-border-color);
+@searchboxDisabledBackgroundColor: var(--zk-searchbox-disabled-background-color);
+@searchboxDisabledColor:       var(--zk-searchbox-disabled-color);
+@searchboxDisabledIconColor:   var(--zk-searchbox-disabled-icon-color);
 @searchboxPopupBackgroundColor: var(--zk-searchbox-popup-background-color);
 @searchboxPopupBorderColor:    var(--zk-searchbox-popup-border-color);
 @searchboxPopupBorderRadius:   var(--zk-searchbox-popup-border-radius);
@@ -954,18 +976,18 @@
 
 // portalchildren
 @portalchildrenFrameBorderColor: var(--zk-portalchildren-frame-border-color);
-@portalchildrenFrameRadius:    var(--zk-portalchildren-frame-radius);
+@portalchildrenFrameBorderRadius: var(--zk-portalchildren-frame-border-radius);
 @portalchildrenFrameBackgroundColor: var(--zk-portalchildren-frame-background-color);
 @portalchildrenFrameMargin:    var(--zk-portalchildren-frame-margin);
 @portalchildrenFramePadding:   var(--zk-portalchildren-frame-padding);
 @portalchildrenFrameTitleFontFamily: var(--zk-portalchildren-frame-title-font-family);
 @portalchildrenFrameTitleFontSize: var(--zk-portalchildren-frame-title-font-size);
-@portalchildrenFrameTitleFontColor: var(--zk-portalchildren-frame-title-font-color);
-@portalchildrenCounterRadius:  var(--zk-portalchildren-counter-radius);
+@portalchildrenFrameTitleColor: var(--zk-portalchildren-frame-title-color);
+@portalchildrenCounterBorderRadius: var(--zk-portalchildren-counter-border-radius);
 @portalchildrenCounterPadding: var(--zk-portalchildren-counter-padding);
-@portalchildrenCounterBackground: var(--zk-portalchildren-counter-background);
+@portalchildrenCounterBackgroundColor: var(--zk-portalchildren-counter-background-color);
 @portalchildrenFramePanelHeaderTextColor: var(--zk-portalchildren-frame-panel-header-text-color);
-@portalchildrenFramePanelHeaderTextSize: var(--zk-portalchildren-frame-panel-header-text-size);
+@portalchildrenFramePanelHeaderFontSize: var(--zk-portalchildren-frame-panel-header-font-size);
 @portalchildrenFramePanelHeaderPadding: var(--zk-portalchildren-frame-panel-header-padding);
 @portalchildrenFramePanelChildrenPadding: var(--zk-portalchildren-frame-panel-children-padding);
 @portalchildrenFramePanelBackgroundColor: var(--zk-portalchildren-frame-panel-background-color);
@@ -978,7 +1000,7 @@
 @linelayoutLineWidth:          var(--zk-linelayout-line-width);
 @linelayoutCavePadding:        var(--zk-linelayout-cave-padding);
 @linelayoutPointBorder:        var(--zk-linelayout-point-border);
-@linelayoutPointRadius:        var(--zk-linelayout-point-radius);
+@linelayoutPointBorderRadius:  var(--zk-linelayout-point-border-radius);
 @linelayoutPointSize:          var(--zk-linelayout-point-size);
 @linelayoutPointIconSize:      var(--zk-linelayout-point-icon-size);
 @linelayoutPointIconColor:      var(--zk-linelayout-point-icon-color);
@@ -992,7 +1014,7 @@
 @coachmarkPaddingLeft:         var(--zk-coachmark-padding-left);
 @coachmarkPaddingRight:        var(--zk-coachmark-padding-right);
 @coachmarkIconSize:            var(--zk-coachmark-icon-size);
-@coachmarkMaskBackground:      var(--zk-coachmark-mask-background);
+@coachmarkMaskBackgroundColor: var(--zk-coachmark-mask-background-color);
 @coachmarkBackgroundColor:     var(--zk-coachmark-background-color);
 
 //cascader
@@ -1001,7 +1023,7 @@
 @cascaderColor:                var(--zk-cascader-color);
 @cascaderFontSize:             var(--zk-cascader-font-size);
 @cascaderPadding:              var(--zk-cascader-padding);
-@cascaderSeparatorColor:       var(--zk-cascader-separator-color);
+@cascaderSeparatorBorderColor: var(--zk-cascader-separator-border-color);
 @cascaderBorderColor:          var(--zk-cascader-border-color);
 @cascaderBorderRadius:         var(--zk-cascader-border-radius);
 @cascaderBackgroundColor:      var(--zk-cascader-background-color);
@@ -1011,8 +1033,8 @@
 @cascaderActiveBackgroundColor: var(--zk-cascader-active-background-color);
 @cascaderHoverBorderColor:     var(--zk-cascader-hover-border-color);
 @cascaderFocusBorderColor:     var(--zk-cascader-focus-border-color);
-@cascaderDisableColor:         var(--zk-cascader-disable-color);
-@cascaderDisableBackgroundColor: var(--zk-cascader-disable-background-color);
+@cascaderDisabledColor:        var(--zk-cascader-disabled-color);
+@cascaderDisabledBackgroundColor: var(--zk-cascader-disabled-background-color);
 @cascaderPopupBorderColor:     var(--zk-cascader-popup-border-color);
 @cascaderPopupCavePadding:     var(--zk-cascader-popup-cave-padding);
 @cascaderPopupItemPadding:     var(--zk-cascader-popup-item-padding);
@@ -1023,3 +1045,26 @@
 // cropper
 @cropperToolbarButtonFontSize: var(--zk-cropper-toolbar-button-font-size);
 @cropperToolbarButtonPadding:  var(--zk-cropper-toolbar-button-padding);
+
+// badge
+@badgeIndicatorTextColor:      var(--zk-badge-indicator-text-color);
+
+// avatargroup
+@avatargroupAvatarBorderColor: var(--zk-avatargroup-avatar-border-color);
+@avatargroupOverflowBackgroundColor: var(--zk-avatargroup-overflow-background-color);
+@avatargroupOverflowColor:     var(--zk-avatargroup-overflow-color);
+
+// confirmpopup
+@confirmpopupFooterBackgroundColor: var(--zk-confirmpopup-footer-background-color);
+@confirmpopupButtonBackgroundColor: var(--zk-confirmpopup-button-background-color);
+@confirmpopupOkColor:          var(--zk-confirmpopup-ok-color);
+
+// carousel
+@carouselControlBackgroundColor: var(--zk-carousel-control-background-color);
+@carouselControlColor:         var(--zk-carousel-control-color);
+@carouselIndicatorBackgroundColor: var(--zk-carousel-indicator-background-color);
+@carouselIndicatorBorderColor: var(--zk-carousel-indicator-border-color);
+@carouselIndicatorActiveBackgroundColor: var(--zk-carousel-indicator-active-background-color);
+@carouselIndicatorActiveBorderColor: var(--zk-carousel-indicator-active-border-color);
+@carouselLabelBackgroundColor: var(--zk-carousel-label-background-color);
+@carouselLabelColor:           var(--zk-carousel-label-color);

@@ -47,7 +47,7 @@
 		gap: 8px;
 		padding: 8px @cp-padding-x;
 		border-top: 1px solid @cp-border;
-		background: rgba(0, 0, 0, 0.02);
+		background: @confirmpopupFooterBackgroundColor;
 		border-radius: 0 0 @baseBorderRadius @baseBorderRadius;
 	}
 	&-cancel,
@@ -58,13 +58,13 @@
 		line-height: 1.5;
 		border-radius: @baseBorderRadius;
 		border: 1px solid @baseBorderColor;
-		background: #fff;
+		background: @confirmpopupButtonBackgroundColor;
 		color: @textColorDefault;
 		cursor: pointer;
 	}
 	&-ok {
 		background: @colorPrimary;
-		color: #fff;
+		color: @confirmpopupOkColor;
 		border-color: @colorPrimary;
 	}
 	/* WCAG 2.1 SC 2.4.7 Focus Visible: surface a keyboard focus ring on
@@ -75,11 +75,11 @@
 		outline-offset: 2px;
 	}
 
-	&-info > &-body > &-icon    { color: @severityInfoColor; }
-	&-success > &-body > &-icon { color: @severitySuccessColor; }
-	&-warning > &-body > &-icon { color: @severityWarningColor; }
-	&-danger > &-body > &-icon  { color: @severityDangerColor; }
-	&-secondary > &-body > &-icon { color: @severitySecondaryColor; }
+	&-info > &-body > &-icon    { color: @severityInfoAccentColor; }
+	&-success > &-body > &-icon { color: @severitySuccessAccentColor; }
+	&-warning > &-body > &-icon { color: @severityWarningAccentColor; }
+	&-danger > &-body > &-icon  { color: @severityDangerAccentColor; }
+	&-secondary > &-body > &-icon { color: @severitySecondaryAccentColor; }
 
 	/* Bootstrap-style triangular arrow drawn with two stacked CSS triangles —
 	   outer in border color, inner in background to hide the seam. */

@@ -138,10 +138,10 @@
 	vertical-align: middle;
 	position: relative;
 	cursor: pointer;
-	.borderRadius(@inputBorderRadius);
+	.borderRadius(@toolbarButtonBorderRadius);
 	overflow: hidden;
 	.fontStyle(@baseTitleFontFamily, @toolbarButtonFontSize, normal, @toolbarButtonColor);
-	border: @buttonBorderWidth solid transparent;
+	border: @toolbarButtonBorderWidth solid transparent;
 	background-color: @toolbarButtonBackgroundColor;
 	padding: @toolbarButtonPadding;
 
@@ -163,22 +163,22 @@
 		}
 	}
 	&:hover {
-		color: @buttonHoverColor;
-		border-color: @buttonHoverBorderColor;
-		background-color: @buttonHoverBackgroundColor;
+		color: @toolbarButtonHoverColor;
+		border-color: @toolbarButtonHoverBorderColor;
+		background-color: @toolbarButtonHoverBackgroundColor;
 	}
 	&:focus {
-		border-color: @buttonFocusBorderColor;
+		border-color: @toolbarButtonFocusBorderColor;
 	}
 	&:active {
-		color: @buttonActiveColor;
-		border-color: @buttonActiveBorderColor;
-		background-color: @buttonActiveBackgroundColor;
+		color: @toolbarButtonActiveColor;
+		border-color: @toolbarButtonActiveBorderColor;
+		background-color: @toolbarButtonActiveBackgroundColor;
 	}
 	&[disabled] {
-		color: @buttonDisableColor !important;
-		border-color: @buttonDisableBorderColor;
-		background-color: @buttonDisableBackgroundColor;
+		color: @toolbarButtonDisabledColor !important;
+		border-color: @toolbarButtonDisabledBorderColor;
+		background-color: @toolbarButtonDisabledBackgroundColor;
 		cursor: default !important;
 	}
 	&-checked {
