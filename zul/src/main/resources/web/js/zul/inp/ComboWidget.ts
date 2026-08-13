@@ -841,7 +841,11 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		var uuidHTML = this.uuid,
 			isButtonVisible = this._buttonVisible;
 
-		out.push('<span', this.domAttrs_({text: true, tabindex: true}), ' role="combobox" aria-expanded="false" aria-owns="', uuidHTML, '-pp" aria-haspopup="dialog"><input id="',
+		// aria-controls is a required property of role="combobox" and must sit on the combobox
+		// element, not the inner input.
+		out.push('<span', this.domAttrs_({text: true, tabindex: true}),
+			' role="combobox" aria-expanded="false" aria-controls="', uuidHTML, '-pp"',
+			' aria-owns="', uuidHTML, '-pp" aria-haspopup="dialog"><input id="',
 			uuidHTML, '-real" class="', this.$s('input'));
 
 		if (!isButtonVisible)
