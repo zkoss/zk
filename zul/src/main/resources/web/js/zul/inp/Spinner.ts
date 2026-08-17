@@ -318,4 +318,9 @@ export class Spinner extends zul.inp.NumberInputWidget<number> {
 	getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
 	}
+
+	/** @internal */
+	override shallHtmlAutocompleteOff_(): boolean {
+		return !this.hasCustomHtmlAutocomplete_();
+	}
 }

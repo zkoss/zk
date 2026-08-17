@@ -36,9 +36,15 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 			model.multiple = true;
 			model.addToSelection("Apple");
 			model.addToSelection("Banana");
+
+			ListModel countryModel = new ListModelList(new String[] {
+				"Taiwan", "Japan", "United States"
+			});
 		]]></zscript>
 		<div hflex="1" vflex="1">
 			<chosenbox model="${model}" width="200px" creatable="true" onSelect="" ca:aria-label="Choose fruit"/>
+			<!-- WCAG 1.3.5 Identify Input Purpose: inputAttributes renders the autocomplete token on the filter input -->
+			<chosenbox model="${countryModel}" width="200px" inputAttributes="autocomplete=country-name" ca:aria-label="Country"/>
 		</div>
 	</n:main>
 </zk>

@@ -756,6 +756,11 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	}
 
 	/** @internal */
+	override shallHtmlAutocompleteOff_(): boolean {
+		return !this.hasCustomHtmlAutocomplete_();
+	}
+
+	/** @internal */
 	static _updFormat(wgt: Timebox, fmt: string): void {
 		var index: TimeHandler[] = [],
 			APM = wgt._localizedSymbols ? wgt._localizedSymbols.APM! : zk.APM;

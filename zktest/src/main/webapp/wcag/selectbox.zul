@@ -22,6 +22,8 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<zscript><![CDATA[
         String[] userName = { "Tony", "Ryan", "Jumper", "Wing", "Sam" };
         ListModelList model = new ListModelList(userName);
+        String[] sex = { "Female", "Male", "Prefer not to say" };
+        ListModelList sexModel = new ListModelList(sex);
     ]]></zscript>
 		<window title="chrome bug: the select outside container can't use keyboard navigation in chrome">
 			<selectbox model="${model}" ca:aria-label="select name">
@@ -33,6 +35,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<selectbox model="${model}" ca:aria-label="select name outside">
 			<template name="model">
 				Name is ${each}
+			</template>
+		</selectbox>
+		<!-- WCAG 1.3.5 Identify Input Purpose: Selectbox root node is a native <select>, so ca:autocomplete lands on it -->
+		<selectbox model="${sexModel}" ca:aria-label="Sex" ca:autocomplete="sex">
+			<template name="model">
+				${each}
 			</template>
 		</selectbox>
 	</n:main>

@@ -832,6 +832,12 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 	onChildRemoved_: _zkf,
 	onChildVisible_: _zkf,
 	*/
+	
+	/** @internal */
+	override shallHtmlAutocompleteOff_(): boolean {
+		return !this.hasCustomHtmlAutocomplete_();
+	}
+
 	/**
 	 * Utility to implement {@link redraw}.
 	 * @param out - an array of HTML fragments.
@@ -851,7 +857,8 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		if (!isButtonVisible)
 			out.push(' ', this.$s('input-full'));
 
-		out.push('" autocomplete="off" aria-autocomplete="none" aria-controls="', uuidHTML, '-pp"',
+		out.push('"', this.shallHtmlAutocompleteOff_() ? ' autocomplete="off"' : '',
+			' aria-autocomplete="none" aria-controls="', uuidHTML, '-pp"',
 			/*safe*/ this.textAttrs_(), '/><a id="', uuidHTML, '-btn" tabindex="-1" role="button" aria-label="', /*safe*/ msgzul.PANEL_EXPAND, '" class="',
 			this.$s('button'));
 
