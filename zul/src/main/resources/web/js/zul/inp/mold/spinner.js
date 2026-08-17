@@ -25,7 +25,7 @@ function spinner$mold$(out) {
 	if (!isButtonVisible)
 		out.push(' ', this.$s('input-full'));
 
-	out.push('" autocomplete="off"',
+	out.push('"', this.hasCustomHtmlAutocomplete_() ? '' : ' autocomplete="off"',
 		/*safe*/ this.textAttrs_(), ' role="spinbutton"/>', '<span id="', uuid, '-btn"',
 		'class="', this.$s('button'));
 

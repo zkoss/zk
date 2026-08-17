@@ -42,6 +42,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 					   iconSclass="z-icon-home"
 					   description="Rich Internet Application by Ajax" />
 		</combobox>
+		<!-- WCAG 1.3.5 Identify Input Purpose: token lands on the input via inputAttributes -->
+		<combobox ca:aria-label="Country" inputAttributes="autocomplete=country-name">
+			<comboitem label="Taiwan"/>
+			<comboitem label="Japan"/>
+			<comboitem label="United States"/>
+		</combobox>
 		<separator/>
 		<label value="Recursice labelledby test" id="target"/>
 		<combobox ca:aria-labelledby="${target.uuid}"/>

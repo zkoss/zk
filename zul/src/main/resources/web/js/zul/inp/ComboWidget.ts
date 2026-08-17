@@ -851,7 +851,8 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 		if (!isButtonVisible)
 			out.push(' ', this.$s('input-full'));
 
-		out.push('" autocomplete="off" aria-autocomplete="none" aria-controls="', uuidHTML, '-pp"',
+		out.push('"', this.hasCustomHtmlAutocomplete_() ? '' : ' autocomplete="off"',
+			' aria-autocomplete="none" aria-controls="', uuidHTML, '-pp"',
 			/*safe*/ this.textAttrs_(), '/><a id="', uuidHTML, '-btn" tabindex="-1" role="button" aria-label="', /*safe*/ msgzul.PANEL_EXPAND, '" class="',
 			this.$s('button'));
 

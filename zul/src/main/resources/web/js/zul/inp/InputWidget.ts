@@ -643,6 +643,21 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		return html;
 	}
 
+	/**
+	 * Whether the author supplied a custom HTML `autocomplete` attribute value via
+	 * {@link setInputAttributes} (distinct from {@link zul.inp.Combobox}'s type-ahead
+	 * `autocomplete`). Molds that emit a default `autocomplete="off"`
+	 * (combobox/spinner, to suppress the browser's native autofill so it doesn't
+	 * overlap their popup) call this to skip that default when a purpose token was
+	 * set — otherwise the two attributes collide and the token is dropped (WCAG 1.3.5
+	 * Identify Input Purpose).
+	 * @returns whether an `autocomplete` entry exists in the input attributes.
+	 * @internal
+	 */
+	hasCustomHtmlAutocomplete_(): boolean {
+		return !!this._inputAttributes && 'autocomplete' in this._inputAttributes;
+	}
+
 	/** @internal */
 	_onChanging(timeout?: number): void {
 		InputWidget._onChanging.call(this, timeout);
