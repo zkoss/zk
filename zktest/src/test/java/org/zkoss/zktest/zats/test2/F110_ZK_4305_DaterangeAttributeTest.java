@@ -21,6 +21,7 @@ import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
@@ -1077,17 +1078,18 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 		});
 	}
 
-	/** Closing the popup must return focus to whatever held it before the
-	 *  popup opened. We open via the calendar button (so the button is the
-	 *  prior-focus element), close via ESC, and assert the button regains
-	 *  focus. */
+	/** Closing the popup must return focus to the box. We open via the calendar
+	 *  button and close via ESC. The button itself is NOT the restore target:
+	 *  it is tabindex="-1" aria-hidden="true" (as zul.inp.ComboWidget renders
+	 *  its trigger), so focus goes to the begin input, which is always
+	 *  focusable and is what a keyboard user can carry on from. */
 	@Test
 	public void testPopupCloseRestoresFocus() {
 		connect("/test2/F110-ZK-4305-attributes.zul");
 		waitResponse();
 
-		// Click the calendar button — it becomes document.activeElement and
-		// triggers _openPopup, which captures it as _returnFocusTo.
+		// Click the calendar button — it triggers _openPopup, which records the
+		// begin input (not the aria-hidden trigger) as _returnFocusTo.
 		click(jq("$drEvents .z-daterangebox-button"));
 		waitResponse();
 		// Wait until focus has actually moved into the popup (so close()'s
@@ -1105,10 +1107,10 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 				+ " {key: 'Escape', bubbles: true}));");
 
 		new WebDriverWait(driver, Duration.ofSeconds(2)).until(d -> {
-			Boolean onBtn = (Boolean) js().executeScript(
+			Boolean onBegin = (Boolean) js().executeScript(
 					"return document.activeElement"
-					+ " === jq('$drEvents .z-daterangebox-button')[0];");
-			return Boolean.TRUE.equals(onBtn);
+					+ " === jq('$drEvents .z-daterangebox-begin')[0];");
+			return Boolean.TRUE.equals(onBegin);
 		});
 	}
 
@@ -1440,12 +1442,14 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 		connect("/test2/F110-ZK-4305-attributes.zul");
 		waitResponse();
 
-		// Open via the (always-focusable) begin input so we can observe the
-		// post-Cancel focus restoration target.
+		// Alt+Down is the only way in on a box with no trigger button; opening from
+		// the input makes it the post-Cancel focus-restoration target.
 		click(jq("$drNoButton .z-daterangebox-begin"));
 		waitResponse();
+		getActions().keyDown(Keys.ALT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.ALT).perform();
+		waitResponse();
 		assertTrue(jq(".z-daterangebox-popup").exists(),
-				"Popup must open for buttonVisible=false box via input click");
+				"Popup must open for buttonVisible=false box via Alt+Down on the input");
 
 		click(jq(".z-daterangebox-popup-cancel"));
 		waitResponse();

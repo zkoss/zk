@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6142.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Aug 18 10:12:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Click the begin input of the first box and, without clicking anywhere else,
+			type 2026/08/07.
+		2. Reload, then Tab out of the textbox above into the box.
+
+		- Expected: focusing an input focuses that input. The characters land in the input
+			on the FIRST click, and tabbing in leaves the calendar closed.
+		- Bug: the calendar opens the moment the input takes focus and moves focus into the
+			role="dialog" popup, so the first click is lost and the keystrokes are eaten by
+			the calendar's arrow-key handler.
+
+		Opening the calendar is a separate, explicit gesture: the trigger button, or Alt+Up /
+			Alt+Down on an input. Either arrow TOGGLES (same as datebox), so whichever one you
+			press opens a closed calendar and closes an open one. The second box has no trigger
+			button, so Alt+Up / Alt+Down is its only keyboard way in.
+
+		Focusing an input rings the box; tabbing out again must remove the ring.
+	</label>
+	<textbox id="before" value="tab from here"/>
+	<daterangebox id="drb" format="yyyy/MM/dd"/>
+	<daterangebox id="drbNoButton" format="yyyy/MM/dd" buttonVisible="false"/>
+</zk>
