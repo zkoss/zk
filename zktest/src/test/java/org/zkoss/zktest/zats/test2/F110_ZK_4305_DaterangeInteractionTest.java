@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class F110_ZK_4305_DaterangeInteractionTest extends WebDriverTestCase {
@@ -136,21 +137,21 @@ public class F110_ZK_4305_DaterangeInteractionTest extends WebDriverTestCase {
 				"Popup must contain exactly two month panels");
 	}
 
-	/** Spec extension: clicking the begin input also opens popup. */
+	/** Focusing an input must not open the popup — only the button or Alt+Down do. */
 	@Test
-	public void testInputClickOpensPopup() {
+	public void testInputClickDoesNotOpenPopup() {
 		connect("/test2/F110-ZK-4305-basic.zul");
 		waitResponse();
 
 		click(jq(".z-daterangebox-begin"));
 		waitResponse();
 
-		assertTrue(jq(".z-daterangebox-popup").exists(),
-				"Popup must open when the begin input is focused");
+		assertFalse(jq(".z-daterangebox-popup:visible").exists(),
+				"Popup must stay closed when the begin input is focused");
 	}
 
 	/**
-	 * Regression: opening the popup via input focus, then clicking Cancel,
+	 * Regression: opening the popup from the input, then clicking Cancel,
 	 * must leave it closed. Previously the popup re-opened because close()
 	 * restores focus to the begin input → focusin → _openPopup → and the
 	 * old guard order had already set _open=false so the early-return
@@ -162,11 +163,13 @@ public class F110_ZK_4305_DaterangeInteractionTest extends WebDriverTestCase {
 		connect("/test2/F110-ZK-4305-basic.zul");
 		waitResponse();
 
-		// Open via the input field so close()'s back.focus() lands on it.
+		// Alt+Down from the input, so close()'s back.focus() restores to it.
 		click(jq(".z-daterangebox-begin"));
 		waitResponse();
+		getActions().keyDown(Keys.ALT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.ALT).perform();
+		waitResponse();
 		assertTrue(jq(".z-daterangebox-popup").exists(),
-				"Popup must open from input focus");
+				"Popup must open from Alt+Down on the input");
 
 		click(jq(".z-daterangebox-popup-cancel"));
 		waitResponse();
