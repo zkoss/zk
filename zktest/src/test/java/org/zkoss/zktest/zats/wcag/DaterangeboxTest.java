@@ -79,4 +79,32 @@ public class DaterangeboxTest extends WcagTestCase {
 		waitResponse();
 		verifyA11y();
 	}
+
+	/** Read-only still opens the picker, so the popup has to audit clean in that
+	 *  state too — the value can only be changed there. */
+	@Test
+	public void testReadonlyPopup() {
+		connect();
+
+		click(jq(".z-daterangebox:eq(3) .z-daterangebox-button"));
+		waitResponse();
+
+		Actions actions = getActions();
+		actions.keyDown(Keys.ALT).sendKeys(Keys.ARROW_DOWN).keyUp(Keys.ALT)
+				.pause(200)
+				.perform();
+		waitResponse();
+		verifyA11y();
+	}
+
+	/** Disabled renders aria-disabled on the root and opens nothing, so this
+	 *  audits the state the user is actually left with. */
+	@Test
+	public void testDisabled() {
+		connect();
+
+		click(jq(".z-daterangebox:eq(4) .z-daterangebox-button"));
+		waitResponse();
+		verifyA11y();
+	}
 }
