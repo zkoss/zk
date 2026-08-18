@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6143.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Aug 18 11:40:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Type "not-a-date" into the datebox and blur, then into the daterangebox begin input
+			and blur. Compare the feedback.
+		2. Press ESC to close the calendar, then click "change format".
+
+		- Expected (step 1): BOTH raise the standard errorbox. The daterangebox says
+			"Invalid range" and also keeps its red border (z-daterangebox-invalid).
+		- Bug (step 1): only the datebox opens an errorbox; the daterangebox writes to the
+			polite live region only — and its border stays unchanged, because the invalid
+			rule painted with the error bubble's own border token, which is transparent.
+		- Expected (step 2): the rejected text is still in the input and the red border is still
+			on the box. The user has not corrected anything yet, so neither may disappear.
+		- Bug (step 2): the repaint rebuilds both inputs from the last committed values, so
+			"not-a-date" is silently discarded.
+
+		Guards:
+		- Correct the text ("2026/08/07"): border and errorbox clear, and a later repaint keeps
+			the corrected value — the rejected text must not become sticky.
+		- Type "2026-08-07" over the bad text but do NOT blur, then click "change format":
+			nothing was committed, so the repaint has to read the input rather than restore what
+			it used to hold — and re-derive the border from it under the new format.
+		- Empty the input entirely: clearing is valid input, so the errorbox goes too.
+		- Empty the input but do NOT blur, then click "change format": clearing is an edit
+			like a correction, so the repaint has to leave the field empty and drop the
+			border instead of restoring the rejected text.
+		- With BOTH inputs holding bad text, fixing only one must NOT drop the feedback —
+			parse-validity is per-field while the mark and the errorbox are whole-widget.
+		- "push begin value" sends an authoritative value from the server: it replaces the
+			rejected text and clears the border.
+		- "server reject" makes the server throw WrongValueException. That has to raise the
+			SAME pair as a client-side parse failure — errorbox AND red border — not the
+			errorbox alone. "server clear" then has to take both away, not leave the border.
+		- Click the errorbox's own X. That means "I have read it", not "the value is fine":
+			the bubble has to go and the red border has to stay, from either origin —
+			unparseable text or a server rejection. It was inert on the first and dropped
+			the border on the second.
+		- "server wrong value" pushes a message the client could never have produced by
+			itself. With unparseable text ALSO in an input, a redraw has to re-raise THAT
+			message, not downgrade it to the generic "Invalid range". And after "server
+			reject" alone — nothing unparseable anywhere — a redraw has to keep the bubble
+			at all, not just the border.
+	</label>
+	<!-- an errorbox opens to its input's right, so the buttons get their own line
+		above to stay clickable while one is showing -->
+	<div>
+		<button id="btnFormat" label="change format"
+			onClick='drb.setFormat("yyyy-MM-dd")'/>
+		<button id="btnSetBegin" label="push begin value"
+			onClick='drb.setBeginValue(new java.util.Date(126, 7, 7))'/>
+		<!-- end first, then a begin AFTER it: setBeginValue rejects the reversed
+			range, so the WrongValueException comes out of the component itself -->
+		<button id="btnReject" label="server reject"
+			onClick='drb.setEndValue(new java.util.Date(126, 7, 1)); drb.setBeginValue(new java.util.Date(126, 7, 20))'/>
+		<button id="btnClear" label="server clear"
+			onClick='org.zkoss.zk.ui.util.Clients.clearWrongValue(drb)'/>
+		<!-- a message the client has no way of producing on its own, so a redraw
+			showing the generic text instead is unambiguous -->
+		<button id="btnWrongValue" label="server wrong value"
+			onClick='org.zkoss.zk.ui.util.Clients.wrongValue(drb, "Outside the booking window")'/>
+	</div>
+	<div>
+		<datebox id="db"/>
+	</div>
+	<div>
+		<daterangebox id="drb" format="yyyy/MM/dd"/>
+	</div>
+</zk>
