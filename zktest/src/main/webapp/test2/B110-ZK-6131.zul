@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6131.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Aug 18 12:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		void echoRange(org.zkoss.zkmax.zul.Daterangebox b) {
+			if (b.getBeginValue() == null || b.getEndValue() == null) {
+				echo.setValue("incomplete");
+			} else {
+				java.text.SimpleDateFormat f = new java.text.SimpleDateFormat("yyyy/MM/dd");
+				echo.setValue(f.format(b.getBeginValue()) + "~" + f.format(b.getEndValue()));
+			}
+		}
+	]]></zscript>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Click the readonly datebox — its calendar opens and a date can be picked.
+		2. Click the readonly daterangebox's calendar button, then pick two days.
+
+		- Expected: both behave the same. readonly means "you can't type", not "you can't
+			pick": the popup opens and the pick commits, as with Combobox / Bandbox / Datebox
+			/ Timepicker.
+		- Bug: the daterangebox is the only one of the family that closes off its popup when
+			readonly, so no range can be picked at all.
+
+		The buttons sit above the boxes so an open popup can never cover them. The timer
+			reports the server's isOpen() without a pointer event — any click outside the
+			popup closes it first, which would make the reading meaningless.
+		Guards: setOpen(true) must open a readonly box, and disabled must still block the
+			popup outright — and a click on a disabled box must not even reach the server
+			(the label below stays empty; the editable box fills it).
+	</label>
+	<hlayout>
+		<button id="btnOpen" label="setOpen(true) on readonly + report isOpen"
+			onClick='drbRo.setOpen(true); tmOpen.start()'/>
+		<label id="echoOpen"/>
+	</hlayout>
+	<timer id="tmOpen" running="false" delay="600" repeats="false"
+		onTimer='echoOpen.setValue(String.valueOf(drbRo.isOpen()))'/>
+	<datebox id="dbRo" readonly="true"/>
+	<daterangebox id="drbRo" readonly="true" format="yyyy/MM/dd"
+		onChange='echoRange(self)'/>
+	<!-- the onClick listeners are what make the client send onClick at all: the
+		event is registered with no CE_IMPORTANT flag, so with no server listener
+		nothing leaves the browser and a disabled box's wasted round-trip would be
+		invisible -->
+	<daterangebox id="drbEdit" format="yyyy/MM/dd" onClick='echoClick.setValue(self.getId())'/>
+	<daterangebox id="drbDisabled" disabled="true" format="yyyy/MM/dd"
+		onClick='echoClick.setValue(self.getId())'/>
+	<label id="echo"/>
+	<label id="echoClick"/>
+</zk>

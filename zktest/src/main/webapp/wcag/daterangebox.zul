@@ -32,6 +32,16 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
                 <label value="Booking window" id="lblTarget"/>
                 <daterangebox ca:aria-labelledby="${lblTarget.uuid}"/>
             </hlayout>
+            <!-- Read-only and disabled are appended, never inserted: the audit
+                selects boxes positionally (.z-daterangebox:eq(n)). -->
+            <hlayout>
+                Read-only range:
+                <daterangebox readonly="true" ca:aria-label="Read-only date range"/>
+            </hlayout>
+            <hlayout>
+                Disabled range:
+                <daterangebox disabled="true" ca:aria-label="Disabled date range"/>
+            </hlayout>
         </vlayout>
     </n:main>
 </zk>
