@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6145.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Aug 18 14:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		java.util.Date b = new java.util.Date(126, 3, 1);    // 2026-04-01
+		java.util.Date eLong = new java.util.Date(127, 5, 30); // 2027-06-30
+		java.util.Date eShort = new java.util.Date(126, 4, 1); // 2026-05-01
+		java.util.Date bEdge = new java.util.Date(129, 11, 1);  // 2029-12-01
+		java.util.Date eEdge = new java.util.Date(129, 11, 31); // 2029-12-31
+		java.util.Date bSpan = new java.util.Date(95, 5, 1);    // 1995-06-01
+		java.util.Date eSpan = new java.util.Date(105, 5, 30);  // 2005-06-30
+	]]></zscript>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Open each component and switch the calendar from the day view to the month view
+			(click the month in the title), then to the year view (click the year).
+		2. Compare the selected indication between the datebox and the date range boxes.
+
+		- Expected: the range boxes keep a selected indication. A month or year is selected
+			when its own calendar interval intersects the range, so
+			2026/04/01~2026/05/01 selects April and May 2026 and the year 2026, and
+			2026/04/01~2027/06/30 selects April 2026 through June 2027 and both 2026 and 2027.
+			Every panel shows the same range state.
+		- Bug: the range boxes show nothing selected in either view — setRangeHighlight is a
+			day-view API, and the per-Calendar mark that remains sits on the panel's display
+			anchor, which the popup styling suppresses.
+
+		A begin-only range selects just the begin value's month and year, and a hover preview
+			in the day view must not turn into a selected month.
+
+		3. Open drbSingle (range 1995/06/01~2005/06/30), drill down to the decade view
+			(month title, then year, then decade), and shift a century with `&gt;`, then
+			back with `&lt;`.
+		- Expected: both centuries paint the 1990s and the 2000s cells — the two decades
+			the range covers — whichever arrow brought that century on screen.
+		- Bug: after `&gt;` the grid paints nothing. The repaint landed on the outgoing
+			grid, which shares its id with the incoming one until the slide ends and is
+			then discarded; `&lt;` happens to order the two the other way round.
+
+		4. With a screen reader, walk the month / year / decade grid of drbYearEdge's SECOND
+			panel. Its range (2029/12/01~2029/12/31) lies entirely outside the months that
+			panel displays.
+		- Expected: the panel announces exactly the cells it paints — nothing in the month
+			view, 2029 in the year view, 2020-2029 in the decade view. The anchor cell keeps
+			the keyboard cursor (aria-activedescendant) without claiming to be selected.
+		- Bug: the anchor announces as selected, so the reader hears "January selected"
+			while the grid paints the range in a different year.
+	</label>
+	<datebox id="db" value="${b}"/>
+	<daterangebox id="drbLong" numberOfMonths="3" format="yyyy/MM/dd"
+		beginValue="${b}" endValue="${eLong}"/>
+	<daterangebox id="drbShort" numberOfMonths="2" format="yyyy/MM/dd"
+		beginValue="${b}" endValue="${eShort}"/>
+	<daterangebox id="drbBeginOnly" numberOfMonths="2" format="yyyy/MM/dd"
+		beginValue="${b}"/>
+	<!-- One panel, so it is both the leftmost and the rightmost: linked panels hide
+		the inner-edge arrow, and this is the shape where a single panel can be
+		shifted BOTH ways. Its range straddles 1999/2000, so BOTH centuries the
+		decade view can reach (the calendar clamps to 1900..2099) paint the same two
+		decades — whichever arrow brought that century on screen. -->
+	<daterangebox id="drbSingle" numberOfMonths="1" format="yyyy/MM/dd"
+		beginValue="${bSpan}" endValue="${eSpan}"/>
+	<!-- A range pinned to the last month of a decade: panel 1 is anchored to
+		2030/01, so its month grid holds none of the range, its year grid holds the
+		range's year but not its own anchor year, and its decade grid holds the
+		range's decade but not its own. The one shape where a panel's anchor is
+		outside the painted range in all three views. -->
+	<daterangebox id="drbYearEdge" numberOfMonths="2" format="yyyy/MM/dd"
+		beginValue="${bEdge}" endValue="${eEdge}"/>
+
+	<label multiline="true">
+		5. Click "push Almaty instant", open drbAlmaty and switch to the month view.
+			1709231400000 is 2024-02-29T18:30:00Z, which Asia/Almaty reads as Feb 29 23:30
+			— within half an hour of the offset change that ends February there.
+		- Expected: Feb 29 is the selected DAY and February the selected month — the day
+			and the month the range's begin instant falls in.
+		- Bug: nothing selected in the day view and March in the month view. Both passes
+			matched by building each month's epoch bounds from wall-clock midnight, and
+			February's upper bound landed on the pre-change offset — an hour BEFORE the
+			instant it was supposed to contain, while March's lower bound landed before
+			it. In the day view that dropped the panel from the overlap test, so its
+			whole highlight was cleared rather than merely shifted a day.
+		6. Same with "push Cairo instant": 1730410200000 is 2024-10-31T21:30:00Z, which
+			Africa/Cairo reads as Oct 31 23:30, in the hour DST end makes ambiguous.
+		- Expected: Oct 31 and October.
+		- Bug: neither — both October's upper bound and November's lower bound fell on
+			the far side of the instant.
+
+		Only a server-pushed instant reaches this: a pick in the popup is box-tz
+			midnight, which never lands within an hour of a month boundary.
+	</label>
+	<button id="btnAlmaty" label="push Almaty instant"
+		onClick='drbAlmaty.setBeginValue(new java.util.Date(1709231400000L))'/>
+	<daterangebox id="drbAlmaty" numberOfMonths="1" format="yyyy/MM/dd"
+		timeZone="Asia/Almaty"/>
+	<button id="btnCairo" label="push Cairo instant"
+		onClick='drbCairo.setBeginValue(new java.util.Date(1730410200000L))'/>
+	<daterangebox id="drbCairo" numberOfMonths="1" format="yyyy/MM/dd"
+		timeZone="Africa/Cairo"/>
+</zk>
