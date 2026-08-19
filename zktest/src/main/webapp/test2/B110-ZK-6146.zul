@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6146.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Aug 19 10:12:03 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout spacing="10px">
+		<label id="lblTitle" value="ZK-6146 — with showTime the completing pick must commit WITHOUT closing the popup, and a time spinner change must commit"/>
+
+		<hlayout>
+			<label value="showTime:"/>
+			<daterangebox id="drTime" showTime="true" format="yyyy-MM-dd HH:mm"
+				onChange='var b = event.getBegin(); var e = event.getEnd();
+					lblTime.setValue(
+						(b == null ? "" : String.valueOf(b.getTime())) + "|" +
+						(e == null ? "" : String.valueOf(e.getTime())));'/>
+			<label id="lblTime" value=""/>
+		</hlayout>
+
+		<hlayout>
+			<label value="date-only:"/>
+			<daterangebox id="drDate" format="yyyy-MM-dd"
+				onChange='var b = event.getBegin(); var e = event.getEnd();
+					lblDate.setValue(
+						(b == null ? "" : String.valueOf(b.getTime())) + "|" +
+						(e == null ? "" : String.valueOf(e.getTime())));'/>
+			<label id="lblDate" value=""/>
+		</hlayout>
+	</vlayout>
+</zk>
