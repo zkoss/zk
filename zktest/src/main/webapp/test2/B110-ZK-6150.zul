@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6150.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Aug 19 10:12:33 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout spacing="10px" hflex="1">
+		<label id="lblTitle" multiline="true">
+			ZK-6150 — the popup must dismiss through the framework, not through its own
+			document listeners.
+
+			1. Open the calendar, then click this label: the popup closes through the
+				framework's own document mousedown (onFloatUp), with no second
+				mousedown listener of the component's own.
+			2. Open it again and Tab / click into the textbox: focus moving out closes it.
+			3. Open it again and press Escape: it closes. It closes even with focus
+				outside the box — ownership is canActivate(), not the key's target — so
+				a float stacked over the calendar keeps Escape for itself.
+		</label>
+		<daterangebox id="dr" format="yyyy-MM-dd"/>
+		<textbox id="tb"/>
+
+		<label multiline="true">
+			4. The plain datebox below shares zul.db.Calendar with the range popup.
+				Open it and move the day cursor / switch to the month view: it must
+				behave exactly as on a page with no daterangebox on it.
+			5. Open the modal window, then open the calendar from the server: Escape
+				belongs to the modal, so the calendar stays open.
+		</label>
+		<datebox id="db" format="yyyy-MM-dd"/>
+		<button id="btnModal" label="open modal" onClick="wnd.doModal()"/>
+		<window id="wnd" title="modal on top" width="240px" visible="false"
+			closable="true">
+			<textbox id="wtb"/>
+		</window>
+	</vlayout>
+</zk>

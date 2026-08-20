@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6150-scroll.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Aug 21 12:13:33 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:ca="client/attribute">
+	<!-- The box is kept at the top of the page on purpose: further down, the
+		popup's viewport clamp would pin its top and hide whether it tracked the
+		box at all. data-scrollable is what makes ZK fire onScroll for a
+		scrolling container (zul.Widget#bind_). -->
+	<div id="sc" height="150px" style="overflow:auto;border:1px solid #888"
+		ca:data-scrollable="true">
+		<div height="30px">filler above</div>
+		<daterangebox id="dr" format="yyyy-MM-dd"/>
+		<div height="800px">filler below</div>
+	</div>
+	<label multiline="true">
+		An open popup must stay with its box while the page scrolls.
+
+		1. Open the calendar, then scroll the bordered container a little: the popup
+			follows the box instead of staying where it opened.
+		2. Keep scrolling until the box leaves the container: the popup closes.
+	</label>
+</zk>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6150-resize.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Aug 24 11:05:12 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<!-- The spacer's height is a share of the viewport WIDTH, so narrowing the
+		window moves the box up without scrolling anything and without changing
+		the room below it — the reflow an open popup has to survive. The box stays
+		near the top so its popup never hits the viewport clamp. -->
+	<div id="spacer" style="height:15vw;background:#f0f0f0"/>
+	<daterangebox id="dr" format="yyyy-MM-dd"/>
+	<label multiline="true">
+		An open popup must stay with its box when the window is resized.
+
+		1. Open the calendar.
+		2. Narrow the browser window (stay above 576px): the grey spacer shrinks
+			and the box moves up — the popup must follow it, not stay where it
+			opened.
+	</label>
+</zk>
