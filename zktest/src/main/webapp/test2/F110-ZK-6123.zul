@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6123.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Aug 19 10:16:22 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<window id="win" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.zktest.test2.F110_ZK_6123_BindingVM')" hflex="1">
+		<vlayout spacing="10px">
+			<label value="ZK-6123 @bind on the begin/end value in the java.time types. Pick a range in each popup; the label beside it must show the picked date."/>
+			<hlayout>
+				<label value="LocalDate (2020-01-05 ~ 2020-01-20):"/>
+				<daterangebox id="drLocalDate" beginValueInLocalDate="@bind(vm.beginLocalDate)" endValueInLocalDate="@bind(vm.endLocalDate)"/>
+				<label id="lblBeginLocalDate" value="@load(vm.beginLocalDateText)"/>
+				<label value=" ~ "/>
+				<label id="lblEndLocalDate" value="@load(vm.endLocalDateText)"/>
+			</hlayout>
+			<hlayout>
+				<label value="LocalDateTime (2020-02-05 ~ 2020-02-20):"/>
+				<daterangebox id="drLocalDateTime" beginValueInLocalDateTime="@bind(vm.beginLocalDateTime)" endValueInLocalDateTime="@bind(vm.endLocalDateTime)"/>
+				<label id="lblBeginLocalDateTime" value="@load(vm.beginLocalDateTimeText)"/>
+				<label value=" ~ "/>
+				<label id="lblEndLocalDateTime" value="@load(vm.endLocalDateTimeText)"/>
+			</hlayout>
+			<hlayout>
+				<label value="ZonedDateTime (2020-03-05 ~ 2020-03-20):"/>
+				<daterangebox id="drZonedDateTime" beginValueInZonedDateTime="@bind(vm.beginZonedDateTime)" endValueInZonedDateTime="@bind(vm.endZonedDateTime)"/>
+				<label id="lblBeginZonedDateTime" value="@load(vm.beginZonedDateTimeText)"/>
+				<label value=" ~ "/>
+				<label id="lblEndZonedDateTime" value="@load(vm.endZonedDateTimeText)"/>
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>
