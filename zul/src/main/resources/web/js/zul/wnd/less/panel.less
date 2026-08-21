@@ -62,12 +62,10 @@
 		color: extract(@containerButtonColors, 1);
 		margin: auto 1px;
 		padding: @containerButtonPadding;
-		text-align: center;
-		overflow: hidden;
 		cursor: pointer;
 		font-size: @containerButtonSize;
-		.displaySize(inline-block, calc(@baseButtonWidth + 4px), @baseButtonHeight);
-		line-height: @baseButtonHeight;
+		// WCAG 1.4.12 Text Spacing: grow-with-floor + flex centring (see .iconBox)
+		.iconBox(calc(@baseButtonWidth + 4px), @baseButtonHeight);
 		border: none;
 
 		&:hover {
