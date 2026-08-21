@@ -44,12 +44,10 @@
 	&-icon {
 		font-size: @containerButtonSize;
 		color: extract(@containerButtonColors, 1);
-		.displaySize(inline-block, calc(@baseButtonWidth + 4px), @baseButtonHeight);
+		// WCAG 1.4.12 Text Spacing: grow-with-floor + flex centring (see .iconBox)
+		.iconBox(calc(@baseButtonWidth + 4px), @baseButtonHeight);
 		margin: auto 1px;
 		padding: @containerButtonPadding;
-		line-height: @baseButtonHeight;
-		text-align: center;
-		overflow: hidden;
 		cursor: pointer;
 		border: none;
 		background: transparent;
