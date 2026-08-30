@@ -821,6 +821,45 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 	}
 
 	@Test
+	public void status_text_seeded_before_live_region_registration() {
+		// The -status span is mold-rendered empty and carries no aria-live of
+		// its own, so the initial "Slide N of M" must be written BEFORE bind_
+		// turns the span into a live region — otherwise every bind announces a
+		// slide change that never happened. The final DOM is identical either
+		// way, so the only observable difference is the mutation ORDER.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		// rerender(-1) rebinds synchronously and takeRecords() drains the
+		// observer queue synchronously — a MutationObserver callback would only
+		// run as a microtask, i.e. after this expression already returned.
+		String seq = getEval(
+				"(function(){"
+				+ " var w = zk.Widget.$(jq('$cr1')[0]);"
+				+ " var host = w.$n().parentNode;"
+				+ " var obs = new MutationObserver(function(){});"
+				+ " obs.observe(host, {subtree:true, childList:true, characterData:true,"
+				+ "   attributes:true, attributeFilter:['aria-live']});"
+				+ " w.rerender(-1);"
+				+ " var recs = obs.takeRecords();"
+				+ " obs.disconnect();"
+				+ " var st = w.$n('status'), seq = [];"
+				+ " for (var i = 0; i < recs.length; i++) {"
+				+ "  var r = recs[i];"
+				+ "  if (r.type == 'attributes') { if (r.target === st) seq.push('live'); }"
+				+ "  else if (r.target === st || r.target.parentNode === st) seq.push('text');"
+				+ " }"
+				+ " return seq.join(',');"
+				+ "})()");
+		int live = seq.indexOf("live");
+		assertTrue(live >= 0,
+				"the observer recorded no aria-live registration at all — got: " + seq);
+		assertEquals(-1, seq.indexOf("text", live),
+				"the status text must be seeded before aria-live registers the region,"
+				+ " otherwise the initial render is announced as a slide change — got: " + seq);
+	}
+
+	@Test
 	public void aria_label_not_injected_when_author_supplies_none() {
 		// 6-11: no generic default name is injected (it would duplicate the
 		// aria-roledescription="carousel"); naming is the author's via ca:.
