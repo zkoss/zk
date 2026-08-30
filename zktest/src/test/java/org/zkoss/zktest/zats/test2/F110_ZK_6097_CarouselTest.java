@@ -252,23 +252,54 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 		click(jq("$btn-bad-active"));
 		waitResponse();
 		String err = jq("$errMsg").text();
-		assertTrue(err.contains("activeIndex cannot be negative"),
+		assertTrue(err.contains("Out of bound: -1"),
 				"negative activeIndex must throw — got: " + err);
 		assertTrue(jq("$ci0").hasClass("z-carouselitem-active"),
 				"failed setActiveIndex must not mutate active slide");
 	}
 
 	@Test
+	public void activeIndex_negative_throws_before_the_first_render() {
+		// The bound check runs against a child count the ZUL page has not filled
+		// yet, so the upper bound is deferred — but a negative index is wrong at
+		// any point, and renderProperties never re-validates it.
+		connect();
+		waitResponse();
+		click(jq("$btn-unrendered-negative"));
+		waitResponse();
+		String err = jq("$errMsg").text();
+		assertTrue(err.contains("Out of bound: -1"),
+				"an unrendered carousel must still reject a negative index — got: " + err);
+	}
+
+	@Test
+	public void activeIndex_above_child_count_is_kept_before_the_first_render() {
+		// The other half of the same guard: with no children attached there is
+		// nothing to compare against, so the value is stored and renderProperties
+		// clamps what it sends to the client.
+		connect();
+		waitResponse();
+		click(jq("$btn-unrendered-overflow"));
+		waitResponse();
+		assertEquals("accepted", jq("$errMsg").text(),
+				"an unrendered carousel must accept an index above its (empty) child list");
+	}
+
+	@Test
 	public void activeIndex_above_child_count_throws() {
+		// Rejected once the carousel has rendered, so a stale index cannot leave
+		// the server pointing at a slide the client never shows. A ZUL page that
+		// sets activeIndex before its slides is the pre-render case and is
+		// clamped by renderProperties instead, not rejected here.
 		connect();
 		waitResponse();
 		click(jq("$btn-overflow-active"));
 		waitResponse();
 		String err = jq("$errMsg").text();
-		assertTrue(err.contains("activeIndex must be less than"),
-				"activeIndex >= child count must throw — got: " + err);
+		assertTrue(err.contains("Out of bound: 99 while size=3"),
+				"an index past the last slide must throw — got: " + err);
 		assertTrue(jq("$ci0").hasClass("z-carouselitem-active"),
-				"overflow setActiveIndex must not mutate active slide");
+				"failed setActiveIndex must not mutate active slide");
 	}
 
 	// ----- autoplay + interval -----
