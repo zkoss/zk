@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-5409-effective-smartupdate-nofallback.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Sun Aug 30 15:40:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<!-- Deliberately NO custom-attributes and no library property: the effective
+	     value is null, so renderProperties omits the property while the setter
+	     smartUpdates an explicit null. -->
+	<div id="container" style="width: 500px; padding: 0; border: 1px solid #ccc;">
+		<grid id="testGrid" width="100%">
+			<columns>
+				<column label="A"/>
+				<column label="B"/>
+			</columns>
+			<rows>
+				<row><label value="a1"/><label value="b1"/></row>
+				<row><label value="a2"/><label value="b2"/></row>
+			</rows>
+		</grid>
+	</div>
+	<button id="btnSetStacking" label='responsive="stacking"'
+			onClick='testGrid.setResponsive("stacking")'/>
+	<button id="btnClearResp" label="clear responsive"
+			onClick="testGrid.setResponsive(null)"/>
+	<button id="btnSetCols" label='responsiveColumns="sm-2 md-none"'
+			onClick='testGrid.setResponsiveColumns("sm-2 md-none")'/>
+	<button id="btnClearCols" label="clear responsiveColumns"
+			onClick="testGrid.setResponsiveColumns(null)"/>
+	<button id="btnInvalidate" label="invalidate"
+			onClick="testGrid.invalidate()"/>
+</zk>
