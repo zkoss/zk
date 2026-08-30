@@ -151,6 +151,17 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<button id="btn-overflow-active"  label="Overflow activeIndex"
 					onClick='try { cr1.setActiveIndex(99); }
 					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<!-- A brand-new Carousel has never rendered, so isInitialized() is
+			     false: the upper bound is deferred, but a negative index must
+			     still be rejected. -->
+			<button id="btn-unrendered-negative" label="Unrendered negative"
+					onClick='try { new org.zkoss.zul.Carousel().setActiveIndex(-1);
+					               errMsg.setValue("accepted"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-unrendered-overflow" label="Unrendered overflow"
+					onClick='try { new org.zkoss.zul.Carousel().setActiveIndex(99);
+					               errMsg.setValue("accepted"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
 			<button id="btn-bad-interval"     label="Bad interval"
 					onClick='try { cr1.setInterval(100); }
 					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
