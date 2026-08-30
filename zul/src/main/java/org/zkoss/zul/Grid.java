@@ -1752,7 +1752,6 @@ public class Grid extends MeshElement {
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("paginal", _pgi);
 
-		// Responsive properties (ZK-5409) — send raw values; client parses cascade.
 		// EE-only behavior: zkmax's grid-responsive.ts augments zul.grid.Grid with
 		// the actual stacking logic. CE without zkmax just stores the values.
 		String effResp = getEffectiveResponsive();
@@ -1802,7 +1801,9 @@ public class Grid extends MeshElement {
 					+ "; allowed: stacking, none");
 		if (!Objects.equals(_responsive, responsive)) {
 			_responsive = responsive;
-			smartUpdate("responsive", _responsive);
+			// Send the effective value: clearing the own value falls back to the
+			// library property, not to "no responsive".
+			smartUpdate("responsive", getEffectiveResponsive());
 		}
 	}
 
@@ -1834,6 +1835,9 @@ public class Grid extends MeshElement {
 	 * <p>The string is stored verbatim — parsing, cascade resolution, and
 	 * matching against the current container width happen on the client side.
 	 * Invalid tokens are silently dropped by the client cascade resolver.
+	 * A value whose kept tokens are all {@code none} without an {@code sm}
+	 * entry is discarded as a whole and the client falls back to its default
+	 * cascade.
 	 *
 	 * @param columns the responsive columns token string
 	 * @since 11.0.0
@@ -1843,7 +1847,7 @@ public class Grid extends MeshElement {
 			columns = null;
 		if (!Objects.equals(_responsiveColumns, columns)) {
 			_responsiveColumns = columns;
-			smartUpdate("responsiveColumns", _responsiveColumns);
+			smartUpdate("responsiveColumns", getEffectiveResponsiveColumns());
 		}
 	}
 
