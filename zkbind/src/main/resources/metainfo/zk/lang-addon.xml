@@ -213,6 +213,22 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<extends>caption</extends>
 	</component-->
 	<component>
+		<component-name>carousel</component-name>
+		<extends>carousel</extends>
+		<annotation>
+			<annotation-name>ZKBIND</annotation-name>
+			<property-name>activeIndex</property-name>
+			<attribute>
+				<attribute-name>SAVE_EVENT</attribute-name>
+				<attribute-value>onSelect</attribute-value>
+			</attribute>
+			<attribute>
+				<attribute-name>ACCESS</attribute-name>
+				<attribute-value>both</attribute-value>
+			</attribute>
+		</annotation>
+	</component>
+	<component>
 		<component-name>center</component-name>
 		<extends>center</extends>
 		<annotation>
