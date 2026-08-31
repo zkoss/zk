@@ -137,8 +137,8 @@
 		outline-offset: 2px;
 	}
 
-	/* WCAG 2.1 SC 4.1.3 Status Messages: visually hide the live region
-	   but keep it announceable. Uses the standard sr-only pattern. */
+	/* WCAG 2.1 SC 4.1.3: hide the live region, keep it announceable. Duplicates
+	   .sr-only on purpose — that class is theme-resolved and absent under a theme. */
 	&-status {
 		position: absolute;
 		width: 1px;
