@@ -11,6 +11,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -425,6 +426,83 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 		waitResponse();
 		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
 		assertEquals("region", jq("$cr1").attr("role"));
+	}
+
+	// ----- status announcer stays visually hidden -----
+
+	@Test
+	public void status_announcer_is_visually_hidden() {
+		// Hidden by carousel's own LESS, not the framework .sr-only — that class
+		// lives in the theme-resolved ~./zul/font/ and is absent under a theme.
+		// Assert the painted result, not the class name.
+		connect();
+		waitResponse();
+		assertAll(
+				() -> assertEquals("absolute", announcerStyle("position"),
+						"announcer is not taken out of flow"),
+				() -> assertEquals("1px", announcerStyle("width"),
+						"announcer is not clamped to 1px wide"),
+				() -> assertEquals("1px", announcerStyle("height"),
+						"announcer is not clamped to 1px tall"),
+				() -> assertEquals("hidden", announcerStyle("overflow"),
+						"announcer does not clip its overflow"),
+				() -> assertTrue(announcerStyle("clip").startsWith("rect("),
+						"announcer has no clipping rect — got: " + announcerStyle("clip")));
+	}
+
+	@Test
+	public void status_announcer_text_does_not_paint() {
+		// Paint-level: put a status string in the announcer and measure the box
+		// it actually occupies. Unhidden, an inline span grows to the width of
+		// "Slide 1 of 3"; hidden, it stays the 1x1 sr-only box.
+		connect();
+		waitResponse();
+		String box = announcerBoxWithText("Slide 1 of 3");
+		String[] wh = box.split("x");
+		assertAll(
+				() -> assertTrue(Double.parseDouble(wh[0]) <= 2,
+						"announcer text paints — box is " + box + ", expected ~1x1"),
+				() -> assertTrue(Double.parseDouble(wh[1]) <= 2,
+						"announcer text paints — box is " + box + ", expected ~1x1"));
+	}
+
+	@Test
+	public void za11y_status_text_stays_hidden() {
+		// End-to-end: za11y really did write "Slide N of M" into the node, and
+		// the node is still the 1x1 sr-only box while holding it.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		String text = getEval("jq('$cr1').find('.z-carousel-status')[0].textContent");
+		assertTrue(text != null && !text.trim().isEmpty(),
+				"za11y must write a status string into the announcer — got: " + text);
+		String box = getEval("(function(){"
+				+ " var r = jq('$cr1').find('.z-carousel-status')[0].getBoundingClientRect();"
+				+ " return r.width + 'x' + r.height;"
+				+ "})()");
+		String[] wh = box.split("x");
+		assertAll(
+				() -> assertTrue(Double.parseDouble(wh[0]) <= 2,
+						"za11y status text paints — box is " + box),
+				() -> assertTrue(Double.parseDouble(wh[1]) <= 2,
+						"za11y status text paints — box is " + box));
+	}
+
+	private String announcerStyle(String cssProp) {
+		return getEval("getComputedStyle(jq('$cr1').find('.z-carousel-status')[0])." + cssProp);
+	}
+
+	/** Writes {@code text} into the announcer, measures its box, then restores it. */
+	private String announcerBoxWithText(String text) {
+		return getEval("(function(){"
+				+ " var n = jq('$cr1').find('.z-carousel-status')[0],"
+				+ "     old = n.textContent;"
+				+ " n.textContent = '" + text + "';"
+				+ " var r = n.getBoundingClientRect(),"
+				+ "     box = r.width + 'x' + r.height;"
+				+ " n.textContent = old;"
+				+ " return box;"
+				+ "})()");
 	}
 
 	@Test
