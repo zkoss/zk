@@ -191,7 +191,7 @@ public class Attributes {
 	 */
 	public static final String STUB_NATIVE = "org.zkoss.zk.ui.stub.native";
 
-	/** A session attribute used to store the ZK session in the native session. 
+	/** A session attribute used to store the ZK session in the native session.
 	 * @since 5.0.8
 	 */
 	public static final String ZK_SESSION = "javax.zkoss.zk.ui.Session";
