@@ -46,8 +46,8 @@ function carousel$mold$(out) {
 		}
 		out.push('</div>');
 	}
-	// Visually-hidden announcer node. The za11y add-on (EE) turns it into a
-	// live region and writes the "Slide N of M" status when activeIndex changes.
+	// Announcer node the za11y add-on (EE) writes "Slide N of M" into. Hidden by
+	// carousel's own LESS: .sr-only is theme-resolved and absent under a theme.
 	out.push('<span id="', uuid, '-status" class="', zclsHtml, '-status"></span>');
 	out.push('</div>');
 }
