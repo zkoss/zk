@@ -278,7 +278,7 @@ public class Grid extends MeshElement {
 		addClientEvent(Grid.class, Events.ON_TOP_PAD, CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, Events.ON_DATA_LOADING, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.0
 		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
-		addClientEvent(Grid.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 11.0.0
+		addClientEvent(Grid.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE); //since 11.0.0
 	}
 
 	public Grid() {
