@@ -651,4 +651,62 @@ public class F110_ZK_6110_ResponsiveListboxTest extends WebDriverTestCase {
 				+ "return ''+(e===cm||cm.contains(e));}())"),
 				"checkbox must actually paint (not clipped by the collapsed cell)");
 	}
+
+	/**
+	 * {@code onResponsiveModeChange} has no server consumer, so it must not be
+	 * registered as an important client event: on a page with no listener the
+	 * server must render no {@code $$onResponsiveModeChange} token.
+	 */
+	@Test
+	public void testResponsiveModeChangeIsNotImportant() {
+		connect("/test2/F110-ZK-6110-responsive-listbox-basic.zul");
+		waitResponse();
+
+		// guard: the map exists and was filled by Listbox's genuine important events
+		assertEquals("false",
+				getEval("'' + (zul.sel.Listbox._importantEvts && zul.sel.Listbox._importantEvts.onScrollPos)"),
+				"probe is live — $$onScrollPos should populate zul.sel.Listbox._importantEvts");
+
+		// _importantEvts is populated only from the server-rendered $$ token
+		assertEquals("undefined",
+				getEval("'' + (zul.sel.Listbox._importantEvts && zul.sel.Listbox._importantEvts.onResponsiveModeChange)"),
+				"onResponsiveModeChange must not be an important event — nothing on the server consumes it");
+	}
+
+	/**
+	 * The negative guard above only proves the {@code $$} token is gone. This is
+	 * the positive half: a ZUL {@code onResponsiveModeChange} listener must still
+	 * reach the server, which needs the {@code addClientEvent} registration to
+	 * stay in place so the {@code $} token is rendered for a listened event.
+	 */
+	@Test
+	public void testOnResponsiveModeChangeEvent() {
+		connect("/test2/F110-ZK-6110-responsive-listbox-event.zul");
+		waitResponse();
+		int h = driver.manage().window().getSize().height;
+
+		driver.manage().window().setSize(new Dimension(WIDE, h));
+		waitResponse();
+
+		driver.manage().window().setSize(new Dimension(NARROW, h));
+		waitResponse();
+		assertTrue(jq("$lbEvt").hasClass("z-listbox--stacking"), "narrow -> stacking");
+		assertEquals("mode: stacking", jq("$modeStatus").text(),
+				"onResponsiveModeChange must reach the server with mode=stacking");
+
+		driver.manage().window().setSize(new Dimension(WIDE, h));
+		waitResponse();
+		assertFalse(jq("$lbEvt").hasClass("z-listbox--stacking"), "widen -> table");
+		assertEquals("mode: table", jq("$modeStatus").text(),
+				"onResponsiveModeChange must reach the server with mode=table");
+
+		// guard: the map exists and was filled by Listbox's genuine duplicate-ignore events
+		assertEquals("true",
+				getEval("'' + (zul.sel.Listbox._duplicateIgnoreEvts && zul.sel.Listbox._duplicateIgnoreEvts.onScrollPos)"),
+				"probe is live — $$0onScrollPos should populate zul.sel.Listbox._duplicateIgnoreEvts");
+
+		assertEquals("true",
+				getEval("'' + (zul.sel.Listbox._duplicateIgnoreEvts && zul.sel.Listbox._duplicateIgnoreEvts.onResponsiveModeChange)"),
+				"a listened onResponsiveModeChange must keep CE_DUPLICATE_IGNORE");
+	}
 }

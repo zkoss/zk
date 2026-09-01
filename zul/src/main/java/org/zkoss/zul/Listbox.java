@@ -387,7 +387,7 @@ public class Listbox extends MeshElement {
 		// since 6.5.5 F65-ZK-2014
 		addClientEvent(Listbox.class, Events.ON_CHECK_SELECT_ALL, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
 		// since 11.0.0 F110-ZK-6110
-		addClientEvent(Listbox.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
+		addClientEvent(Listbox.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE);
 	}
 
 	public Listbox() {
