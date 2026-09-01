@@ -155,9 +155,13 @@ zk.override(zk.Widget.prototype, _xWidget, {
 	_pt: [0, 0],
 	_cancelMouseUp: false,
 	_cancelClick: <number | undefined> undefined,
+	_dbTapNode: <HTMLElement | undefined> undefined,
+	_tapHoldNode: <HTMLElement | undefined> undefined,
 	/** @internal */
 	bindSwipe_() {
-		var node = this.$n() as HTMLElement;
+		var node = this.$n() as HTMLElement | undefined;
+		if (!node) //bound without a node of its own, zk.Swipe needs one
+			return;
 		if (this.isListen('onSwipe') || jq(node).data('swipeable'))
 			this._swipe = new zk.Swipe(this, node);
 	},
@@ -166,7 +170,8 @@ zk.override(zk.Widget.prototype, _xWidget, {
 		var swipe = this._swipe;
 		if (swipe) {
 			this._swipe = undefined;
-			swipe.destroy(this.$n() as HTMLElement);
+			//the widget has no node any more, use the one the swipe was made of
+			swipe.destroy(swipe.node as HTMLElement);
 		}
 	},
 	/** @internal */
@@ -180,16 +185,22 @@ zk.override(zk.Widget.prototype, _xWidget, {
 					wgt._tapValid = false;
 				}, doubleClickTime);
 			};
-			jq(this.$n()).on('touchstart', this.proxy(this._dblTapStart))
+			this._dbTapNode = this.$n() as HTMLElement;
+			jq(this._dbTapNode).on('touchstart', this.proxy(this._dblTapStart))
 				.on('touchend', this.proxy(this._dblTapEnd));
 		}
 	},
 	/** @internal */
 	unbindDoubleTap_() {
-		if (this.isListen('onDoubleClick')) {
+		//gated on the node, not on isListen: the listener may have been removed
+		//since bindDoubleTap_ ran, and the handlers still have to come off
+		var node = this._dbTapNode;
+		if (node) {
 			this._startTap = undefined;
-			jq(this.$n()).off('touchstart', this.proxy(this._dblTapStart))
+			//the widget has no node any more, use the one bindDoubleTap_ listened to
+			jq(node).off('touchstart', this.proxy(this._dblTapStart))
 				.off('touchend', this.proxy(this._dblTapEnd));
+			this._dbTapNode = undefined;
 		}
 	},
 	/** @internal */
@@ -261,7 +272,8 @@ zk.override(zk.Widget.prototype, _xWidget, {
 					this._holdTimeout = undefined;
 				}
 			};
-			jq(this.$n()).on('touchstart', this.proxy(this._tapHoldStart))
+			this._tapHoldNode = this.$n() as HTMLElement;
+			jq(this._tapHoldNode).on('touchstart', this.proxy(this._tapHoldStart))
 				.on('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
 				.on('click', this.proxy(this._tapHoldClick))    //prevent click during hold
 				.on('touchend', this.proxy(this._tapHoldEnd));
@@ -269,12 +281,18 @@ zk.override(zk.Widget.prototype, _xWidget, {
 	},
 	/** @internal */
 	unbindTapHold_() {
-		if (this.isListen('onRightClick') || (window.zul && this instanceof zul.Widget && this.getContext())) { //also register context menu to tapHold event
+		//gated on the node, not on isListen/getContext: either may have gone away
+		//since bindTapHold_ ran, and the handlers still have to come off
+		var node = this._tapHoldNode;
+		if (node) {
+			this._cancelHold?.(); //a hold started before this would fire onRightClick on a dead widget
 			this._startHold = this._cancelHold = undefined;
-			jq(this.$n()).off('touchstart', this.proxy(this._tapHoldStart))
+			//the widget has no node any more, use the one bindTapHold_ listened to
+			jq(node).off('touchstart', this.proxy(this._tapHoldStart))
 				.off('touchmove', this.proxy(this._tapHoldMove)) //cancel hold if moved
 				.off('click', this.proxy(this._tapHoldClick))    //prevent click during hold
 				.off('touchend', this.proxy(this._tapHoldEnd));
+			this._tapHoldNode = undefined;
 		}
 	},
 	/** @internal */

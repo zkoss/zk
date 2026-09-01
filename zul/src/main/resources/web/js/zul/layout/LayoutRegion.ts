@@ -809,6 +809,10 @@ export class LayoutRegion extends zul.Widget {
 			}
 		}
 
+		// afterSlideUp is the only other place that takes this off, and a region can be
+		// unbound while it is still slid down
+		jq(document).off('click', this.proxy(this._docClick));
+
 		this.destroyBar_();
 
 		if (this.$n('split')) {

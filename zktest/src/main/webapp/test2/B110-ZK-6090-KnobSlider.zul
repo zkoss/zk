@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090={errors:[]};window.addEventListener('error',function(evt){window.zk6090.errors.push(''+(evt.message||evt.error));});"?>
+<!--
+B110-ZK-6090-KnobSlider.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Aug 21 11:40:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps:
+		1. Unbind the knob slider: the wheel and focus handlers its knob mold added must
+		   come off, and the knob Draggable must be released.
+		2. Switch the knob slider to another mold: the same teardown must happen, even
+		   though setMold() changes the mold before it redraws.
+	</label>
+
+	<slider id="knob" mold="knob" width="150px" height="150px"/>
+	<!-- so the client also has the plain mold loaded, for the mold switch below -->
+	<slider id="plain" width="200px"/>
+	<button id="dummy" label="keeps the page interactive"/>
+
+	<script><![CDATA[
+	window.zk6090Count = function (node, type) {
+		var e = jq._data(node, 'events') || {};
+		return (e[type] || []).length;
+	};
+	// wheel handlers on the input and the svg, then the a11y focus handlers on the input
+	window.zk6090Handlers = function () {
+		var s = window.zk6090;
+		return [window.zk6090Count(s.inputNode, 'mousewheel'),
+			window.zk6090Count(s.svgNode, 'mousewheel'),
+			window.zk6090Count(s.inputNode, 'focusin'),
+			window.zk6090Count(s.inputNode, 'focusout')].join(',');
+	};
+	zk.afterMount(function () {
+		var knob = zk.Widget.$('$knob');
+		// unbind() drops the widget from zk.Widget.$, and the mold switch throws its
+		// nodes away, so both are captured while they are still reachable
+		window.zk6090.knob = knob;
+		window.zk6090.inputNode = knob.$n('input');
+		window.zk6090.svgNode = knob.$n('knob-svg');
+		window.zk6090.plain = zk.Widget.$('$plain');
+	});
+	]]></script>
+</zk>

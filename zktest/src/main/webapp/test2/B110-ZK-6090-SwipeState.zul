@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6090-SwipeState.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Aug 28 10:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps (touch-enabled desktop emulation):
+		1. Both divs listen to onSwipe, so each of them gets its own zk.Swipe, and
+		   every zk.Swipe shares the same start/stop of the gesture in progress.
+		2. A gesture is started on the first div and the div is unbound before the
+		   gesture ends, so that gesture is never consumed.
+		3. A plain tap on the second div, without any movement at all, must not be
+		   reported as a swipe.
+	</label>
+	Touch Enabled? <label id="touchEnabled"/>
+	aborted onSwipe: <label id="abortedLog"/>
+	tapped onSwipe: <label id="tappedLog"/>
+	<div id="aborted" width="200px" height="80px" onSwipe='abortedLog.setValue(abortedLog.getValue() + "A")'>
+		<label value="the gesture starts here and is unbound before it ends"/>
+	</div>
+	<div id="tapped" width="200px" height="80px" onSwipe='tappedLog.setValue(tappedLog.getValue() + "B")'>
+		<label value="only tapped, must never be swiped"/>
+	</div>
+	<script><![CDATA[
+	window.zk6090s = {
+		errors: [], abortedSwipes: 0, tappedSwipes: 0,
+		hastouch: 'ontouchstart' in window,
+		// without these the gesture below would not be a touch gesture at all, and the
+		// test has to fail loudly instead of silently testing nothing
+		canSynth: typeof TouchEvent == 'function' && typeof Touch == 'function'
+	};
+	window.addEventListener('error', function (evt) {
+		window.zk6090s.errors.push('' + (evt.message || evt.error));
+	});
+	(function () {
+		var S = window.zk6090s;
+		function evtName(kind) {
+			if (S.hastouch)
+				return kind == 'start' ? 'touchstart' : kind == 'move' ? 'touchmove' : 'touchend';
+			return kind == 'start' ? 'mousedown' : kind == 'move' ? 'mousemove' : 'mouseup';
+		}
+		// dispatched straight at the node zk.Swipe bound its handlers to, and not
+		// bubbling, so the simulated gesture cannot leak into the rest of the page
+		function fire(node, kind, x, y) {
+			var type = evtName(kind), evt;
+			if (S.hastouch) {
+				var touch = new Touch({identifier: 1, target: node, clientX: x, clientY: y,
+						pageX: x, pageY: y, screenX: x, screenY: y}),
+					live = kind == 'end' ? [] : [touch];
+				evt = new TouchEvent(type, {touches: live, targetTouches: live,
+					changedTouches: [touch], bubbles: false, cancelable: true, view: window});
+			} else
+				evt = new MouseEvent(type, {clientX: x, clientY: y, bubbles: false,
+					cancelable: true, view: window});
+			node.dispatchEvent(evt);
+		}
+		S.swipe = function (id) {
+			fire(S[id].node, 'start', 100, 100);
+			fire(S[id].node, 'move', 160, 100);
+			fire(S[id].node, 'end', 160, 100);
+		};
+		S.gestureWithoutEnd = function (id) {
+			fire(S[id].node, 'start', 100, 100);
+			fire(S[id].node, 'move', 160, 100);
+		};
+		// far enough from the coordinates above that the stale ones would be read as a
+		// swipe, so a passing test really means the state was dropped
+		S.tap = function (id) {
+			fire(S[id].node, 'start', 300, 300);
+			fire(S[id].node, 'end', 300, 300);
+		};
+		S.hasSwipe = function (id) {
+			return '' + !!S[id].wgt._swipe;
+		};
+		// the .one(touchend) zk.Swipe adds per gesture; 0 after destroy() means
+		// _swipeEnd can never run again and the gesture state is stranded
+		S.endHandlers = function (id) {
+			var e = jq._data(S[id].node, 'events') || {};
+			return '' + ((e[evtName('end')] || []).length);
+		};
+		S.unbind = function (id) {
+			try {
+				S[id].wgt.unbind();
+			} catch (e) {
+				S.errors.push(id + ': ' + (e.message || e));
+			}
+		};
+		zk.afterMount(function () {
+			zk.$('$touchEnabled').setValue('' + !!zk.touchEnabled);
+			['aborted', 'tapped'].forEach(function (id) {
+				// unbind() drops the widget from zk.Widget.$ and clears its node cache
+				var wgt = zk.Widget.$('$' + id), orig = wgt.doSwipe_;
+				S[id] = {wgt: wgt, node: wgt.$n()};
+				wgt.doSwipe_ = function (evt) {
+					S[id + 'Swipes']++;
+					return orig.apply(this, arguments);
+				};
+			});
+		});
+	})();
+	]]></script>
+</zk>

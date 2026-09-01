@@ -82,7 +82,11 @@ export class Swipe extends zk.Object {
 	 * This method must be called to clean up, if you don't want to associate the swipe-able feature to a DOM element.
 	 */
 	destroy(node: HTMLElement): void {
-		jq(node).off(startEvt, this.proxy(this._swipeStart));
+		//a gesture may be in progress: _swipeStart added the move/end handlers
+		//and they would keep running against the state cleared below
+		jq(node).off(startEvt, this.proxy(this._swipeStart))
+			.off(moveEvt, this.proxy(this._swipeMove))
+			.off(endEvt, this.proxy(this._swipeEnd));
 		this.widget = this.node = this.opts = undefined;
 	}
 
@@ -95,6 +99,10 @@ export class Swipe extends zk.Object {
 			time: evt.timeStamp || Date.now(),
 			coords: [data.pageX, data.pageY]
 		};
+		//start/stop are shared by every Swipe and destroy() takes the end handler off a
+		//gesture in progress: a stale stop would fake an onSwipe on the next plain tap
+		// eslint-disable-next-line no-global-assign
+		stop = undefined;
 		jq(this.node)
 			.on(moveEvt, this.proxy(this._swipeMove) as unknown as false)
 			.one(endEvt, this.proxy(this._swipeEnd) as unknown as false);

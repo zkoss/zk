@@ -3888,9 +3888,11 @@ new zul.wnd.Window({
 		if ((zk.mobile || zk.touchEnabled) && after) {
 			after.push(function () {
 				setTimeout(function () {// lazy init
-					self.bindSwipe_();
-					self.bindDoubleTap_();
-					self.bindTapHold_();
+					if (self.desktop) { //might be unbound
+						self.bindSwipe_();
+						self.bindDoubleTap_();
+						self.bindTapHold_();
+					}
 				}, 300);
 			});
 		}

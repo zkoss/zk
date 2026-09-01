@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090={errors:[]};window.addEventListener('error',function(evt){window.zk6090.errors.push(''+(evt.message||evt.error));});"?>
+<!--
+B110-ZK-6090-DocListener.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Aug 21 14:30:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:ca="client/attribute">
+	<label multiline="true">
+		Each widget below puts a listener on document or window while it is bound. Unbinding it
+		has to take that listener off again, otherwise it keeps running against a widget that is
+		no longer there.
+		1. Unbind the anchornav: the window scroll listener must go.
+		2. Slide the collapsed west region out, then unbind it: the document click listener must go.
+		3. Unbind the dropupload: the document dragenter/dragover listeners must go.
+		4. The second anchornav has a dedicated scroll target, so it watches that target
+		   instead of window. Unbinding either side must take the listener off, and losing
+		   the target must hand the anchornav back to the window fallback.
+	</label>
+
+	<anchornav id="an" name="zk6090anchor">
+		<vlayout>
+			<a id="lnk" ca:data-anchornav-target="$sect">Section</a>
+		</vlayout>
+	</anchornav>
+	<div id="sect" height="40px"><label value="section body"/></div>
+
+	<borderlayout id="bl" height="200px" width="400px">
+		<west id="rgn" size="120px" collapsible="true" open="false" title="west">
+			<label value="west body"/>
+		</west>
+		<center>
+			<label value="center"/>
+		</center>
+	</borderlayout>
+
+	<dropupload id="du" detection="browser" content="drop here"/>
+
+	<anchornav id="an2" name="zk6090scroll">
+		<vlayout>
+			<a id="lnk2" ca:data-anchornav-target="$sect2">Section 2</a>
+		</vlayout>
+	</anchornav>
+	<div id="scroller" ca:data-anchornav-scroll="zk6090scroll" height="80px" width="240px"
+		 style="overflow:auto">
+		<div id="sect2" height="300px"><label value="scrolling body"/></div>
+	</div>
+
+	<script><![CDATA[
+	window.zk6090Count = function (target, type) {
+		var e = jq._data(target == 'window' ? window : document, 'events') || {};
+		return (e[type] || []).length;
+	};
+	window.zk6090Unbind = function (name) {
+		try {
+			window.zk6090[name].unbind();
+		} catch (e) {
+			window.zk6090.errors.push(name + ': ' + (e.message || e));
+		}
+	};
+	window.zk6090CountNode = function (node, type) {
+		var e = jq._data(node, 'events') || {};
+		return (e[type] || []).length;
+	};
+	zk.afterMount(function () {
+		// unbind() drops the widgets from zk.Widget.$, so hold on to them first
+		window.zk6090.an = zk.Widget.$('$an');
+		window.zk6090.rgn = zk.Widget.$('$rgn');
+		window.zk6090.du = zk.Widget.$('$du');
+		window.zk6090.an2 = zk.Widget.$('$an2');
+		window.zk6090.scroller = zk.Widget.$('$scroller');
+		// the scroll listener goes on the cave node, which is what has to be cleaned
+		window.zk6090.scrollerCave = window.zk6090.scroller.getCaveNode();
+	});
+	]]></script>
+</zk>

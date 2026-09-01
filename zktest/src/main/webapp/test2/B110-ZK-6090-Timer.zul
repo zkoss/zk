@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6090-Timer.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Aug 28 10:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps:
+		1. A repeating timer registers a zAu error handler every time it plays, and
+		   must take that very handler off again every time it stops.
+		2. The timer starts stopped, so nothing is registered yet.
+		3. Toggling running off and on a few times must leave exactly one handler
+		   behind, not one per cycle.
+	</label>
+	<timer id="tm" delay="100000" repeats="true" running="false"/>
+	<script><![CDATA[
+	window.zk6090tm = {calls: 0, errors: [], patched: false};
+	window.addEventListener('error', function (evt) {
+		window.zk6090tm.errors.push('' + (evt.message || evt.error));
+	});
+	zk.afterMount(function () {
+		// the timer is not running yet, so no handler has been registered from the
+		// unpatched method and every later registration goes through the counter
+		var proto = zul.utl.Timer.prototype, orig = proto._onErr;
+		proto._onErr = function () {
+			window.zk6090tm.calls++;
+			return orig.apply(this, arguments);
+		};
+		window.zk6090tm.patched = true;
+	});
+	window.zk6090tm.cycle = function (times) {
+		var wgt = zk.Widget.$('$tm');
+		for (var i = 0; i < times; i++) {
+			wgt.setRunning(false);
+			wgt.setRunning(true);
+		}
+	};
+	// runs whatever zAu really holds; 0 is not one of the codes zul.utl.Timer acts on
+	window.zk6090tm.probe = function () {
+		window.zk6090tm.calls = 0;
+		zAu.onResponseError({headers: {get: function () { return null; }}}, 0);
+		return window.zk6090tm.calls;
+	};
+	window.zk6090tm.state = function () {
+		var wgt = zk.Widget.$('$tm');
+		return '' + wgt.isRepeats() + '/' + wgt.isRunning();
+	};
+	]]></script>
+</zk>

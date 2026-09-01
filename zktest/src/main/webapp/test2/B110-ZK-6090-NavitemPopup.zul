@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="window.zk6090={errors:[]};window.addEventListener('error',function(evt){window.zk6090.errors.push(''+(evt.message||evt.error));});"?>
+<!--
+B110-ZK-6090-NavitemPopup.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Aug 21 14:10:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		A topmost navitem of a collapsed navbar pops its label out into document.body while the
+		pointer is over it, and closes it again 100ms after the pointer leaves.
+		1. Hover the item, move the pointer away, and let the page unbind the item within
+		   those 100ms.
+		2. The popped-out label must come back with the item, and no JS error may appear.
+	</label>
+
+	<navbar id="nb" collapsed="true" orient="vertical" width="60px">
+		<navitem id="ni" label="Reports" iconSclass="z-icon-cogs"/>
+	</navbar>
+
+	<script><![CDATA[
+	// the popup label is moved to document.body; that is what has to be undone
+	window.zk6090Orphaned = function () {
+		var text = window.zk6090.textNode;
+		return '' + !!(text && text.parentNode === document.body);
+	};
+	window.zk6090Unbind = function () {
+		try {
+			window.zk6090.ni.unbind();
+		} catch (e) {
+			window.zk6090.errors.push('unbind: ' + (e.message || e));
+		}
+	};
+	zk.afterMount(function () {
+		var ni = zk.Widget.$('$ni');
+		// unbind() drops the widget from zk.Widget.$, so hold on to both first
+		window.zk6090.ni = ni;
+		window.zk6090.textNode = ni.$n('text');
+	});
+	]]></script>
+</zk>

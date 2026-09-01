@@ -37,6 +37,7 @@ ZK 11.0.0
   ZK-6107: drag a panel in goldenlayout and it disappears
   ZK-6105: Review semantic correctness of CSS variable names after CSS variable migration
   ZK-6039: $n_ in window setMaximize causes page crashes
+  ZK-6090: Closing a tab containing <cardlayout> throws "Node is not found!" error in mobile/touch simulation mode
 
 * Upgrade Notes
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.

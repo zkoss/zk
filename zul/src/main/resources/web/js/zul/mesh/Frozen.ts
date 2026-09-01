@@ -77,6 +77,10 @@ export class Frozen extends zul.Widget {
 	/** @internal */
 	_delayedScroll?: number;
 	/** @internal */
+	_delayedSize?: number;
+	/** Handle of the sizing timer the smooth onSize schedules. @internal */
+	_delayedSmoothSize?: number;
+	/** @internal */
 	_lastScale?: number;
 	/** @internal */
 	_shallSync?: boolean;
@@ -345,6 +349,20 @@ export class Frozen extends zul.Widget {
 			foot = p.$n('foot'),
 			head = p.$n('head');
 
+		// these timers reach the DOM, so they must not outlive the binding
+		if (this._delayedSmoothSize) {
+			clearTimeout(this._delayedSmoothSize);
+			this._delayedSmoothSize = undefined;
+		}
+		if (this._delayedSize) {
+			clearTimeout(this._delayedSize);
+			this._delayedSize = undefined;
+		}
+		if (this._delayedScroll) {
+			clearTimeout(this._delayedScroll);
+			this._delayedScroll = undefined;
+		}
+
 		if (p._nativebar) {
 			this.domUnlisten_(this.$n_('scrollX'), 'onScroll');
 			p.unlisten({ onScroll: this.proxy(this._onScroll) });
@@ -399,7 +417,10 @@ export class Frozen extends zul.Widget {
 				}
 			}
 		}
-		setTimeout(() => {
+		if (this._delayedSmoothSize)
+			clearTimeout(this._delayedSmoothSize);
+		this._delayedSmoothSize = setTimeout(() => {
+			this._delayedSmoothSize = undefined;
 			this._freezeRightColumns();
 			this._onSizeLater();
 		});
@@ -430,7 +451,10 @@ export class Frozen extends zul.Widget {
 		}
 
 		// Bug 3218078, to do the sizing after the 'setAttr' command
-		setTimeout(() => {
+		if (this._delayedSize)
+			clearTimeout(this._delayedSize);
+		this._delayedSize = setTimeout(() => {
+			this._delayedSize = undefined;
 			_onSizeLater(this);
 			this._syncFrozenNow();
 		});
