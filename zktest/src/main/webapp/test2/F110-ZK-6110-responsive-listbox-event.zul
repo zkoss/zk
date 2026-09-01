@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6110-responsive-listbox-event.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sun Aug 30 14:30:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+        A ZUL onResponsiveModeChange listener must still be delivered to the
+        server after the event stopped being an important client event.
+    </label>
+	<div style="padding: 10px;">
+		<label id="modeStatus" value="mode: unknown" />
+		<listbox id="lbEvt" responsive="stacking" width="100%">
+			<listhead>
+				<listheader label="Name" />
+				<listheader label="Email" />
+				<listheader label="Department" />
+			</listhead>
+			<listitem>
+				<listcell label="John" />
+				<listcell label="john@example.com" />
+				<listcell label="Engineering" />
+			</listitem>
+			<listitem>
+				<listcell label="Jane" />
+				<listcell label="jane@example.com" />
+				<listcell label="Design" />
+			</listitem>
+			<listitem>
+				<listcell label="Bob" />
+				<listcell label="bob@example.com" />
+				<listcell label="Sales" />
+			</listitem>
+			<attribute name="onResponsiveModeChange"><![CDATA[
+				modeStatus.setValue("mode: " + event.getData().get("mode"));
+			]]></attribute>
+		</listbox>
+	</div>
+</zk>
