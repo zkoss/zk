@@ -43,6 +43,16 @@
 		transition: none;
 	}
 
+	/* Only the swipeable track kills selection: a drag that becomes a text
+	   selection or a native image drag fires pointercancel, so the swipe snaps
+	   home instead of changing slide. fade / none install no drag listeners
+	   (see _syncDragListeners), so their content stays selectable. */
+	&-effect-slide > &-track {
+		// Safari still needs the prefix; the repo has no autoprefixer.
+		-webkit-user-select: none;
+		user-select: none;
+	}
+
 	&-arrow {
 		position: absolute;
 		top: 50%;
