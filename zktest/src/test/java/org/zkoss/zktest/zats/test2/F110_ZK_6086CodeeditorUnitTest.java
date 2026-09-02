@@ -225,47 +225,47 @@ public class F110_ZK_6086CodeeditorUnitTest {
 		assertTrue(c.isLineNumbers());
 	}
 
-	// ---- theme ----
+	// ---- colorScheme ----
 	@Test
-	public void themeDefaultLight() {
-		assertEquals("light", new Codeeditor().getTheme(), "default theme is light");
+	public void colorSchemeDefaultLight() {
+		assertEquals("light", new Codeeditor().getColorScheme(), "default color scheme is light");
 	}
 
 	@Test
-	public void themeLight() {
+	public void colorSchemeLight() {
 		Codeeditor c = new Codeeditor();
-		c.setTheme("light");
-		assertEquals("light", c.getTheme());
+		c.setColorScheme("light");
+		assertEquals("light", c.getColorScheme());
 	}
 
 	@Test
-	public void themeDark() {
+	public void colorSchemeDark() {
 		Codeeditor c = new Codeeditor();
-		c.setTheme("dark");
-		assertEquals("dark", c.getTheme());
+		c.setColorScheme("dark");
+		assertEquals("dark", c.getColorScheme());
 	}
 
 	@Test
-	public void themeNullClearsToDefault() {
+	public void colorSchemeNullClearsToDefault() {
 		Codeeditor c = new Codeeditor();
-		c.setTheme("dark");
-		c.setTheme(null);
-		assertEquals("light", c.getTheme());
+		c.setColorScheme("dark");
+		c.setColorScheme(null);
+		assertEquals("light", c.getColorScheme());
 	}
 
 	@Test
-	public void themeRejectsWrongCase() {
-		assertThrows(WrongValueException.class, () -> new Codeeditor().setTheme("Dark"));
+	public void colorSchemeRejectsWrongCase() {
+		assertThrows(WrongValueException.class, () -> new Codeeditor().setColorScheme("Dark"));
 	}
 
 	@Test
-	public void themeRejectsUnknown() {
-		assertThrows(WrongValueException.class, () -> new Codeeditor().setTheme("solarized"));
+	public void colorSchemeRejectsUnknown() {
+		assertThrows(WrongValueException.class, () -> new Codeeditor().setColorScheme("solarized"));
 	}
 
 	@Test
-	public void themeRejectsEmpty() {
-		assertThrows(WrongValueException.class, () -> new Codeeditor().setTheme(""));
+	public void colorSchemeRejectsEmpty() {
+		assertThrows(WrongValueException.class, () -> new Codeeditor().setColorScheme(""));
 	}
 
 	// ---- tabSize ----
