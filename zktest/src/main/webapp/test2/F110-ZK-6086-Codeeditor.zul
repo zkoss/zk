@@ -17,7 +17,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 
 		Steps to verify:
 		1. Each language editor (java/xml/html/css/js/json/sql/markdown) shows highlighted token spans; plain shows none.
-		2. Read-only editor cannot be edited; editable one can. Toggling readonly/lineNumbers/theme/language live takes effect.
+		2. Read-only editor cannot be edited; editable one can. Toggling readonly/lineNumbers/colorScheme/language live takes effect.
 		3. Typing fires onChanging; blurring commits onChange; the bound editor round-trips to the view model.
 		4. Rerender / detach-reattach keep exactly one editor and preserve value.
 	</label>
@@ -62,18 +62,18 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	<!-- ===== tab display width (indent char is always a tab) ===== -->
 	<codeeditor id="ceTabSize2" language="plain" tabSize="2" height="60px" value="x"/>
 
-	<!-- ===== theme light / dark / unset(derived) ===== -->
-	<codeeditor id="ceLight" language="javascript" theme="light" height="60px" value="var a = 1;"/>
-	<codeeditor id="ceDark" language="javascript" theme="dark" height="60px" value="var a = 1;"/>
+	<!-- ===== color scheme light / dark / unset(derived) ===== -->
+	<codeeditor id="ceLight" language="javascript" colorScheme="light" height="60px" value="var a = 1;"/>
+	<codeeditor id="ceDark" language="javascript" colorScheme="dark" height="60px" value="var a = 1;"/>
 	<codeeditor id="ceDerived" language="javascript" height="60px" value="var a = 1;"/>
 
 	<!-- ===== dynamic live reconfiguration ===== -->
-	<codeeditor id="ceDyn" language="plain" readonly="false" lineNumbers="true" theme="light"
+	<codeeditor id="ceDyn" language="plain" readonly="false" lineNumbers="true" colorScheme="light"
 				height="70px" value="select 1"/>
 	<button id="btnLang" label="lang->sql" onClick="ceDyn.setLanguage(&quot;sql&quot;)"/>
 	<button id="btnNoLn" label="lineNumbers->false" onClick="ceDyn.setLineNumbers(false)"/>
 	<button id="btnRO" label="readonly->true" onClick="ceDyn.setReadonly(true)"/>
-	<button id="btnTheme" label="theme->dark" onClick="ceDyn.setTheme(&quot;dark&quot;)"/>
+	<button id="btnColorScheme" label="colorScheme->dark" onClick="ceDyn.setColorScheme(&quot;dark&quot;)"/>
 	<button id="btnSetVal" label="setValue" onClick="ceDyn.setValue(&quot;changed by server&quot;)"/>
 
 	<!-- ===== typing / events ===== -->

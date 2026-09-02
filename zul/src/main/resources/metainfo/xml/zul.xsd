@@ -88,7 +88,7 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
-	<xs:simpleType name="codeeditorThemeAttrType">
+	<xs:simpleType name="codeeditorColorSchemeAttrType">
 		<xs:union>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -1552,7 +1552,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="lineNumbers" type="booleanType" use="optional" />
 		<xs:attribute name="tabSize" type="intType" use="optional" />
-		<xs:attribute name="theme" type="codeeditorThemeAttrType" use="optional" />
+		<xs:attribute name="colorScheme" type="codeeditorColorSchemeAttrType" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />

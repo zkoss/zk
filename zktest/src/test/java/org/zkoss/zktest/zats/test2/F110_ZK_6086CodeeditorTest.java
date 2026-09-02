@@ -250,21 +250,30 @@ public class F110_ZK_6086CodeeditorTest extends WebDriverTestCase {
 		assertFalse(hasGutter("$ceDyn"), "setLineNumbers(false) removed the gutter");
 	}
 
-	// ===== C: theme / appearance =====
+	// ===== C: color scheme / appearance =====
 	@Test
-	public void darkThemeHasDifferentSurfaceThanLight() {
+	public void darkColorSchemeAppliesDarkStateClass() {
+		connect(PAGE);
+		waitResponse();
+		assertTrue(jq("$ceDark").hasClass("z-codeeditor-dark"),
+				"colorScheme=\"dark\" reaches the widget and marks the dark surface");
+		assertFalse(jq("$ceLight").hasClass("z-codeeditor-dark"));
+	}
+
+	@Test
+	public void darkColorSchemeHasDifferentSurfaceThanLight() {
 		connect(PAGE);
 		waitResponse();
 		String dark = getEval("getComputedStyle(jq('$ceDark .cm-editor')[0]).backgroundColor");
 		String light = getEval("getComputedStyle(jq('$ceLight .cm-editor')[0]).backgroundColor");
-		assertNotEquals(light, dark, "dark theme renders a different editor background");
+		assertNotEquals(light, dark, "dark color scheme renders a different editor background");
 	}
 
 	@Test
-	public void darkThemeUsesDarkSyntaxPalette() {
+	public void darkColorSchemeUsesDarkSyntaxPalette() {
 		connect(PAGE);
 		waitResponse();
-		// Regression guard: dark mode used to theme only the surface (background/
+		// Regression guard: dark mode used to color only the surface (background/
 		// gutter) but kept CodeMirror's light defaultHighlightStyle for tokens, so
 		// keywords stayed a dark, low-contrast color on the dark surface. Same
 		// language + content in a light vs dark editor must now color the 'var'
@@ -277,14 +286,14 @@ public class F110_ZK_6086CodeeditorTest extends WebDriverTestCase {
 	}
 
 	@Test
-	public void dynamicThemeToggleAppliesDark() {
+	public void dynamicColorSchemeToggleAppliesDark() {
 		connect(PAGE);
 		waitResponse();
 		String before = getEval("getComputedStyle(jq('$ceDyn .cm-editor')[0]).backgroundColor");
-		click(jq("$btnTheme"));
+		click(jq("$btnColorScheme"));
 		waitResponse();
 		String after = getEval("getComputedStyle(jq('$ceDyn .cm-editor')[0]).backgroundColor");
-		assertNotEquals(before, after, "setTheme(dark) changed the editor surface live");
+		assertNotEquals(before, after, "setColorScheme(dark) changed the editor surface live");
 	}
 
 	// ===== C: tabSize display width =====

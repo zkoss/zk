@@ -24,7 +24,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 					height="80px" value="{ &quot;a&quot;: 1 }"/>
 		<codeeditor ca:aria-label="plain editor without gutter" language="plain"
 					lineNumbers="false" height="60px" value="plain text"/>
-		<codeeditor ca:aria-label="dark themed editor" language="javascript" theme="dark"
+		<codeeditor ca:aria-label="dark themed editor" language="javascript" colorScheme="dark"
 					height="80px" value="const f = () =&gt; 42;"/>
 	</n:main>
 </zk>

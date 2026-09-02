@@ -69,7 +69,7 @@ export class Codeeditor extends zul.Widget {
 	/** @internal */
 	_lineNumbers = true;
 	/** @internal defaults to `'light'`; only `'dark'` renders the dark surface. */
-	_theme = 'light';
+	_colorScheme = 'light';
 	/** @internal */
 	_cm?: EditorView;
 	/** @internal value last synchronized with the server (initial, after a commit, or after a programmatic set); the onChange/blur commit baseline. */
@@ -214,20 +214,21 @@ export class Codeeditor extends zul.Widget {
 	}
 
 	/**
-	 * Returns the editor theme. Defaults to `'light'`.
+	 * Returns the editor color scheme. Defaults to `'light'`.
 	 */
-	getTheme(): string {
-		return this._theme;
+	getColorScheme(): string {
+		return this._colorScheme;
 	}
 
 	/**
-	 * Sets the editor theme.
-	 * @param theme - `light` (the default) or `dark`.
+	 * Sets the editor color scheme, the editor's own light/dark surface rather
+	 * than the page theme.
+	 * @param colorScheme - `light` (the default) or `dark`.
 	 */
-	setTheme(theme: string, opts?: Record<string, boolean>): this {
-		const o = this._theme;
-		this._theme = theme;
-		if (this._cm && (o !== theme || opts?.force)) {
+	setColorScheme(colorScheme: string, opts?: Record<string, boolean>): this {
+		const o = this._colorScheme;
+		this._colorScheme = colorScheme;
+		if (this._cm && (o !== colorScheme || opts?.force)) {
 			this._cm.dispatch({ effects: this._themeComp.reconfigure(this._themeExtension()) });
 			this._applyDarkClass();
 		}
@@ -414,18 +415,19 @@ export class Codeeditor extends zul.Widget {
 		return EditorState.tabSize.of(this._tabSize);
 	}
 
-	/** @internal whether the editor uses its dark surface: only when `theme="dark"` is explicitly set. */
+	/** @internal whether the editor uses its dark surface: only when `colorScheme="dark"` is explicitly set. */
 	_isDark(): boolean {
-		return this._theme === 'dark';
+		return this._colorScheme === 'dark';
 	}
 
 	/**
 	 * @internal Selects the syntax-highlight palette for the current surface, and
 	 * in dark mode also tells CodeMirror it is dark so its built-in extensions
-	 * (selection, matching-bracket…) pick their dark variants. Lives in the theme
-	 * compartment so a live `setTheme` recolors tokens, not just the chrome. The
-	 * surface chrome (background/gutter/cursor) stays in the component LESS
-	 * (`.z-codeeditor-dark`); only the token palette is chosen here.
+	 * (selection, matching-bracket…) pick their dark variants. `theme` here is
+	 * CodeMirror's own `EditorView.theme`, not ZK's page theme; it lives in a
+	 * compartment so a live `setColorScheme` recolors tokens, not just the
+	 * chrome. The surface chrome (background/gutter/cursor) stays in the
+	 * component LESS (`.z-codeeditor-dark`); only the token palette is chosen here.
 	 */
 	_themeExtension(): Extension {
 		return this._isDark()

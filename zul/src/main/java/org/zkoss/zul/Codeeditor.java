@@ -30,11 +30,11 @@ import org.zkoss.zul.impl.XulElement;
  * <p>The Community Edition build provides basic editing: setting/loading the
  * content ({@link #setValue}), choosing the highlight language
  * ({@link #setLanguage}), toggling read-only ({@link #isReadonly}) and line
- * numbers ({@link #setLineNumbers}), and an optional light/dark editor theme
- * ({@link #setTheme}). Edits are reported to the server through the standard
- * {@code onChange}/{@code onChanging} events carrying an {@link InputEvent}, so
- * {@code value} participates in data binding the same way as other input
- * components.
+ * numbers ({@link #setLineNumbers}), and an optional light/dark editor color
+ * scheme ({@link #setColorScheme}). Edits are reported to the server through the
+ * standard {@code onChange}/{@code onChanging} events carrying an
+ * {@link InputEvent}, so {@code value} participates in data binding the same way
+ * as other input components.
  *
  * <p>Advanced capabilities (autocomplete, lint, code folding, multi-cursor,
  * search/replace, diff) are not part of the CE build; they are layered on by
@@ -51,11 +51,11 @@ public class Codeeditor extends XulElement implements Disable, Readonly {
 	 */
 	private static final String[] LANGS = { "plain", "html", "xml", "java", "javascript", "css", "json", "sql",
 			"markdown" };
-	/** The accepted {@link #setTheme} tokens. The default {@code "light"}
-	 * must be present, otherwise explicitly setting {@code theme="light"}
+	/** The accepted {@link #setColorScheme} tokens. The default {@code "light"}
+	 * must be present, otherwise explicitly setting {@code colorScheme="light"}
 	 * would be rejected by {@link Utils#checkEnum}.
 	 */
-	private static final String[] THEMES = { "light", "dark" };
+	private static final String[] COLOR_SCHEMES = { "light", "dark" };
 
 	private String _value = "";
 	private String _language = "plain";
@@ -63,7 +63,7 @@ public class Codeeditor extends XulElement implements Disable, Readonly {
 	private boolean _disabled;
 	private boolean _lineNumbers = true;
 	private int _tabSize = 4;
-	private String _theme = "light";
+	private String _colorScheme = "light";
 
 	static {
 		addClientEvent(Codeeditor.class, Events.ON_CHANGE, CE_IMPORTANT | CE_REPEAT_IGNORE);
@@ -219,27 +219,28 @@ public class Codeeditor extends XulElement implements Disable, Readonly {
 	}
 
 	/**
-	 * Returns the editor theme.
+	 * Returns the editor color scheme.
 	 * <p>Default: {@code "light"}.
 	 */
-	public String getTheme() {
-		return _theme;
+	public String getColorScheme() {
+		return _colorScheme;
 	}
 
 	/**
-	 * Sets the editor theme.
+	 * Sets the editor color scheme. This is the editor's own light/dark surface,
+	 * not the page theme selected through {@link org.zkoss.zul.theme.Themes}.
 	 *
-	 * @param theme {@code light} or {@code dark}; {@code null} resets it to the
-	 * default {@code "light"}.
-	 * @exception WrongValueException if {@code theme} is non-null and neither
+	 * @param colorScheme {@code light} or {@code dark}; {@code null} resets it to
+	 * the default {@code "light"}.
+	 * @exception WrongValueException if {@code colorScheme} is non-null and neither
 	 * {@code light} nor {@code dark}.
 	 * @since 11.0.0
 	 */
-	public void setTheme(String theme) {
-		theme = Utils.checkEnum(theme, "light", "Unknown theme: ", THEMES);
-		if (!Objects.equals(_theme, theme)) {
-			_theme = theme;
-			smartUpdate("theme", _theme);
+	public void setColorScheme(String colorScheme) {
+		colorScheme = Utils.checkEnum(colorScheme, "light", "Unknown color scheme: ", COLOR_SCHEMES);
+		if (!Objects.equals(_colorScheme, colorScheme)) {
+			_colorScheme = colorScheme;
+			smartUpdate("colorScheme", _colorScheme);
 		}
 	}
 
@@ -261,8 +262,8 @@ public class Codeeditor extends XulElement implements Disable, Readonly {
 			renderer.render("lineNumbers", false);
 		if (_tabSize != 4)
 			render(renderer, "tabSize", _tabSize);
-		if (!"light".equals(_theme))
-			render(renderer, "theme", _theme);
+		if (!"light".equals(_colorScheme))
+			render(renderer, "colorScheme", _colorScheme);
 	}
 
 	//-- ComponentCtrl --//
