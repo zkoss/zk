@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -598,6 +599,110 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 		// only assert the CSS contract here, not the pointer wiring.
 		assertTrue(css != null && css.contains("pan-x"),
 				"vertical carousel track must declare touch-action: pan-x, got: " + css);
+	}
+
+	@Test
+	public void native_image_drag_on_a_slide_is_suppressed() {
+		connect();
+		waitResponse();
+		// swipe_on_a_photo_slide_changes_slide drives the whole gesture; this one
+		// pins the guard itself, so a regression names its own cause instead of
+		// showing up as an unchanged activeIndex.
+		String result = getEval("(function(){"
+				+ "var d = new DragEvent('dragstart', {bubbles:true, cancelable:true});"
+				+ "jq('$ci0').find('img')[0].dispatchEvent(d);"
+				+ "return String(d.defaultPrevented);"
+				+ "})()");
+		assertEquals("true", result,
+				"dragstart on a slide photo must be cancelled, or the native image "
+				+ "drag takes over and pointercancel aborts the slide change");
+	}
+
+	@Test
+	public void swipe_on_a_photo_slide_changes_slide() {
+		connect();
+		waitResponse();
+		// The reported gesture end to end: press on the slide's photo and drag
+		// left past the threshold. Unguarded, the browser claims the gesture as
+		// a native image drag and fires pointercancel within the first few px,
+		// so the track snaps home and the slide never changes. Stay on the
+		// horizontal axis — the release point plays no part, and a diagonal
+		// would land on the autoplaying carousel below.
+		getActions().moveToElement(toElement(jq("$ci0").find("img")))
+				.clickAndHold()
+				.moveByOffset(-45, 0)
+				.moveByOffset(-45, 0)
+				.moveByOffset(-45, 0)
+				.release().perform();
+		waitResponse();
+		assertEquals("1", getEval("zk.Widget.$(jq('$cr1')[0])._activeIndex"),
+				"a swipe starting on a slide photo must still advance the carousel");
+	}
+
+	@Test
+	public void dragstart_on_a_text_field_inside_a_slide_is_left_alone() {
+		connect();
+		waitResponse();
+		// zk.Draggable's own carve-out: a text field keeps its native drag, so
+		// selected text can still be dragged out of a slide. The field is made
+		// here rather than on the page — the guard only walks up from the drag
+		// target looking for a control, it reads nothing else about the slide.
+		String result = getEval("(function(){"
+				+ "var slide = jq('$ci0')[0], inp = document.createElement('input');"
+				+ "slide.appendChild(inp);"
+				+ "var d = new DragEvent('dragstart', {bubbles:true, cancelable:true});"
+				+ "inp.dispatchEvent(d);"
+				+ "var prevented = d.defaultPrevented;"
+				+ "slide.removeChild(inp);"
+				+ "return String(prevented);"
+				+ "})()");
+		assertEquals("false", result,
+				"dragstart on a text field inside a slide must not be cancelled");
+	}
+
+	@Test
+	public void dragstart_guard_is_removed_when_the_effect_leaves_slide() {
+		connect();
+		waitResponse();
+		// Everything is unregistered by function reference; removeEventListener
+		// or jq().off() handed any other reference would silently leave it
+		// attached. Assert both halves: _onPointerDown has no _effect check of
+		// its own, so a surviving pointerdown listener would still drag a fade
+		// carousel's track.
+		String result = getEval("(function(){"
+				+ "var w = zk.Widget.$(jq('$cr1')[0]);"
+				+ "w.setEffect('fade');"
+				+ "var d = new DragEvent('dragstart', {bubbles:true, cancelable:true});"
+				+ "jq('$ci0').find('img')[0].dispatchEvent(d);"
+				+ "w.$n('track').dispatchEvent(new PointerEvent('pointerdown', {bubbles:true,"
+				+ " cancelable:true, pointerId:1, pointerType:'mouse', button:0,"
+				+ " buttons:1, clientX:100, clientY:100}));"
+				+ "return d.defaultPrevented + ',' + w._dragging;"
+				+ "})()");
+		assertEquals("false,false", result,
+				"every drag listener must come off when effect leaves 'slide' — got "
+				+ "dragstartPrevented,dragging = " + result);
+	}
+
+	@Test
+	public void slide_track_suppresses_text_selection() {
+		connect();
+		waitResponse();
+		// Without this the swipe paints a text selection across the slides.
+		String css = jq("$cr1").find(".z-carousel-track").css("user-select");
+		assertEquals("none", css,
+				"swipeable carousel track must declare user-select: none, got: " + css);
+	}
+
+	@Test
+	public void non_swipeable_track_keeps_text_selectable() {
+		connect();
+		waitResponse();
+		// cr-none is horizontal like cr1 and differs only in effect, so this
+		// pins the rule to the effect and not to the orientation.
+		String css = jq("$cr-none").find(".z-carousel-track").css("user-select");
+		assertNotEquals("none", css,
+				"a carousel with no swipe must not disable text selection, got: " + css);
 	}
 
 	// ----- interval lower-bound validation -----
