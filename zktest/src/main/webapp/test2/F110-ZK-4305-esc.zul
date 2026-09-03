@@ -11,7 +11,7 @@ F110-ZK-4305-esc.zul
 
 Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 -->
-<zk>
+<zk xmlns:w="client">
 	<label multiline="true">
 		ZK-4305 Escape — an ESC that dismisses the daterangebox popup must not
 		also reach the enclosing modal window's onCancel.
@@ -31,7 +31,9 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			border="normal" onCancel='status.setValue("cancelled")'>
 		<vlayout spacing="10px" hflex="1">
 			<label id="status" value="not-cancelled"/>
-			<daterangebox id="drb" format="yyyy-MM-dd" width="360px"/>
+			<label id="keyStatus" value="no-keydown"/>
+			<daterangebox id="drb" format="yyyy-MM-dd" width="360px"
+					w:onKeyDown="zk.Widget.$('$keyStatus').setValue('keydown-' + event.keyCode)"/>
 		</vlayout>
 	</window>
 </zk>
