@@ -32,7 +32,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	<div apply="org.zkoss.zktest.test2.F110_ZK_6097_AvatargroupComposer">
 		<label id="resultLabel" style="display:block;margin-bottom:12px;"/>
 
-		<avatargroup id="agMvc" maxCount="3">
+		<avatargroup id="agMvc" maxItems="3">
 			<avatar label="A"/>
 			<avatar label="B"/>
 			<avatar label="C"/>

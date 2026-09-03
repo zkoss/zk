@@ -25,8 +25,8 @@ public class F110_ZK_6097_AvatargroupComposer extends SelectorComposer<org.zkoss
 
 	@Listen("onClick = #btnRemoveLimit")
 	public void onRemoveLimit() {
-		agMvc.setMaxCount(0);
-		resultLabel.setValue("maxCount removed — all avatars visible (" + agMvc.getChildren().size() + ")");
+		agMvc.setMaxItems(0);
+		resultLabel.setValue("maxItems removed — all avatars visible (" + agMvc.getChildren().size() + ")");
 	}
 
 	@Listen("onClick = #btnAddAvatar")
@@ -52,9 +52,9 @@ public class F110_ZK_6097_AvatargroupComposer extends SelectorComposer<org.zkoss
 
 	@Listen("onClick = #btnReset")
 	public void onReset() {
-		agMvc.setMaxCount(3);
+		agMvc.setMaxItems(3);
 		agMvc.setSize(null);
 		agMvc.setShape(null);
-		resultLabel.setValue("reset: maxCount=3");
+		resultLabel.setValue("reset: maxItems=3");
 	}
 }
