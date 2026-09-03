@@ -649,8 +649,6 @@
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onOK" type="xs:string" use="optional" />
-		<xs:attribute name="onCancel" type="xs:string" use="optional" />
 		<xs:attribute name="inputAttributes" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="formatInputElementAttrGroup">
@@ -664,7 +662,6 @@
 	</xs:attributeGroup>
 	<xs:attributeGroup name="dateTimeInputElementAttrGroup">
 		<xs:attributeGroup ref="formatInputElementAttrGroup" />
-		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
 		<xs:attribute name="locale" type="xs:string" use="optional" />
 		<xs:attribute name="timeZone" type="timezoneType" use="optional" />
 		<xs:attribute name="value" type="dateType" use="optional" />
@@ -1571,8 +1568,6 @@
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
-		<xs:attribute name="width" type="xs:string" use="optional" />
-		<xs:attribute name="height" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
@@ -1704,7 +1699,6 @@
 		<xs:attribute name="croppedFormat" type="xs:string" use="optional" />
 		<xs:attribute name="crossOrigin" type="crossOriginAttrType" use="optional" />
 		<xs:attribute name="onCrop" type="xs:string" use="optional" />
-		<xs:attribute name="onCancel" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -1768,6 +1762,7 @@
 	<xs:complexType name="dateboxType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="dateTimeInputElementAttrGroup" />
+		<xs:attribute name="constraint" type="datetimeConstraintAttrType" use="optional" />
 		<xs:attribute name="lenient" type="booleanType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
@@ -1992,8 +1987,6 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="area" type="xs:string" use="optional" />
 		<xs:attribute name="title" type="xs:string" use="optional" />
-		<xs:attribute name="draggable" type="booleanType" use="optional" />
-		<xs:attribute name="droppable" type="booleanType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="onPanelDrop" type="xs:string" use="optional" />
 		<xs:attribute name="onActive" type="xs:string" use="optional" />
@@ -2445,8 +2438,6 @@
 		<xs:attribute name="activePage" type="intType" use="optional" />
 		<xs:attribute name="onFocus" type="xs:string" use="optional" />
 		<xs:attribute name="onBlur" type="xs:string" use="optional" />
-		<xs:attribute name="onOK" type="xs:string" use="optional" />
-		<xs:attribute name="onCancel" type="xs:string" use="optional" />
 		<xs:attribute name="responsive" type="responsiveAttrType" use="optional" />
 		<xs:attribute name="responsiveColumns" type="responsiveColumnsAttrType" use="optional" />
 	</xs:complexType>
@@ -3760,8 +3751,6 @@
 		<xs:attribute name="minimized" type="booleanType" use="optional" />
 		<xs:attribute name="minimizable" type="booleanType" use="optional" />
 		<xs:attribute name="contentSclass" type="xs:string" use="optional" />
-		<xs:attribute name="onOK" type="xs:string" use="optional" />
-		<xs:attribute name="onCancel" type="xs:string" use="optional" />
 		<xs:attribute name="onMove" type="xs:string" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attribute name="onClose" type="xs:string" use="optional" />
@@ -4342,8 +4331,6 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
-		<xs:attribute name="onOK" type="xs:string" use="optional" />
-		<xs:attribute name="onCancel" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- carousel -->
