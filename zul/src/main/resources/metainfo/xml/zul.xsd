@@ -758,6 +758,7 @@
 			<xs:element ref="columnlayout" />
 			<xs:element ref="combobox" />
 			<xs:element ref="combobutton" />
+			<xs:element ref="cropper" />
 			<xs:element ref="datebox" />
 			<xs:element ref="daterangebox" />
 			<xs:element ref="decimalbox" />
@@ -767,10 +768,12 @@
 			<xs:element ref="drawer"/>
 			<xs:element ref="dropupload"/>
 			<xs:element ref="fckeditor" />
+			<xs:element ref="fileupload" />
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="forEach" />
 			<xs:element ref="frozen" />
 			<xs:element ref="gmaps" />
+			<xs:element ref="goldenlayout" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
 			<xs:element ref="hbox" />
@@ -784,6 +787,7 @@
 			<xs:element ref="include" />
 			<xs:element ref="inputgroup" />
 			<xs:element ref="intbox" />
+			<xs:element ref="jasperreport" />
 			<xs:element ref="label" />
 			<xs:element ref="linelayout" />
 			<xs:element ref="lineitem" />
@@ -804,6 +808,7 @@
 			<xs:element ref="radio" />
 			<xs:element ref="radiogroup" />
 			<xs:element ref="rangeslider" />
+			<xs:element ref="rating" />
 			<xs:element ref="rowlayout" />
 			<xs:element ref="span" />
 			<xs:element ref="script" />
@@ -874,6 +879,7 @@
 				<xs:element ref="columnlayout" />
 				<xs:element ref="combobox" />
 				<xs:element ref="combobutton" />
+				<xs:element ref="cropper" />
 				<xs:element ref="datebox" />
 				<xs:element ref="daterangebox" />
 				<xs:element ref="decimalbox" />
@@ -883,10 +889,12 @@
 				<xs:element ref="drawer"/>
 				<xs:element ref="dropupload"/>
 				<xs:element ref="fckeditor" />
+				<xs:element ref="fileupload" />
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="forEach" />
 				<xs:element ref="frozen" />
 				<xs:element ref="gmaps" />
+				<xs:element ref="goldenlayout" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
 				<xs:element ref="hbox" />
@@ -900,6 +908,7 @@
 				<xs:element ref="include" />
 				<xs:element ref="inputgroup" />
 				<xs:element ref="intbox" />
+				<xs:element ref="jasperreport" />
 				<xs:element ref="label" />
 				<xs:element ref="linelayout" />
 				<xs:element ref="lineitem" />
@@ -920,6 +929,7 @@
 				<xs:element ref="radio" />
 				<xs:element ref="radiogroup" />
 				<xs:element ref="rangeslider" />
+				<xs:element ref="rating" />
 				<xs:element ref="rowlayout" />
 				<xs:element ref="span" />
 				<xs:element ref="script" />
@@ -1690,10 +1700,10 @@
 		<xs:attribute name="h" type="intType" use="optional" />
 		<xs:attribute name="x" type="intType" use="optional" />
 		<xs:attribute name="y" type="intType" use="optional" />
-		<xs:attribute name="maxHeights" type="intType" use="optional" />
-		<xs:attribute name="maxWidths" type="intType" use="optional" />
-		<xs:attribute name="minHeights" type="intType" use="optional" />
-		<xs:attribute name="minWidths" type="intType" use="optional" />
+		<xs:attribute name="maxHeight" type="intType" use="optional" />
+		<xs:attribute name="maxWidth" type="intType" use="optional" />
+		<xs:attribute name="minHeight" type="intType" use="optional" />
+		<xs:attribute name="minWidth" type="intType" use="optional" />
 		<xs:attribute name="toolbarVisible" type="booleanType" use="optional" />
 		<xs:attribute name="instant" type="booleanType" use="optional" />
 		<xs:attribute name="croppedFormat" type="xs:string" use="optional" />
@@ -2913,7 +2923,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="cancelable" type="booleanType" use="optional" />
-		<xs:attribute name="symbol" type="xs:string" use="optional" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
@@ -4162,7 +4172,7 @@
 	<xs:complexType name="jasperreportType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="source" type="xs:string" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="parameters" type="xs:string" use="optional" />
 		<xs:attribute name="datasource" type="xs:string" use="optional" />
 		<xs:attribute name="exportName" type="xs:string" use="optional"/>
