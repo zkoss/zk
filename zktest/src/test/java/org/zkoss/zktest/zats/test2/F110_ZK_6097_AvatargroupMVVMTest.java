@@ -31,7 +31,7 @@ public class F110_ZK_6097_AvatargroupMVVMTest extends WebDriverTestCase {
 		waitResponse();
 		JQuery ag = jq("$agMvvm");
 		assertTrue(ag.exists(), "agMvvm not found");
-		// maxCount=3 initial, 5 children → overflow "+2"
+		// maxItems=3 initial, 5 children → overflow "+2"
 		JQuery overflow = ag.find(".z-avatargroup-overflow");
 		assertTrue(overflow.exists(), "initial overflow indicator expected");
 		assertTrue(overflow.text().trim().startsWith("+"), "overflow text should start with +");

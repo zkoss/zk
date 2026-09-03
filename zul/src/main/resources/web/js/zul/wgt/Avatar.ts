@@ -102,7 +102,7 @@ export class Avatar extends zul.LabelImageWidget {
 	setGap(gap: number, opts?: Record<string, boolean>): this {
 		// Mirror Avatar.java#setGap (0 <= gap <= 24). Clamp + warn rather than
 		// throw so a bad MVVM binding doesn't collapse the whole load() pass —
-		// the same client-lenient pattern used by Avatargroup#setMaxCount and
+		// the same client-lenient pattern used by Avatargroup#setMaxItems and
 		// the Carousel range setters.
 		if (gap < 0 || gap > 24) {
 			const clamped = Math.max(0, Math.min(24, gap));

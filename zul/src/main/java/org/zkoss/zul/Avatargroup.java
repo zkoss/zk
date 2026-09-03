@@ -23,7 +23,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A group container that stacks multiple {@link Avatar} components with an
- * overlapping layout. When {@link #getMaxCount()} is set, avatars beyond the
+ * overlapping layout. When {@link #getMaxItems()} is set, avatars beyond the
  * limit are hidden and a "+N" overflow indicator is shown.
  *
  * <p>Setting {@link #setSize(String)} or {@link #setShape(String)} on the
@@ -37,26 +37,26 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Avatargroup extends XulElement {
 	private static final long serialVersionUID = -856626047370581203L;
-	private int _maxCount = 0;
+	private int _maxItems = 0;
 	private String _size;
 	private String _shape;
 
 	/** Returns the maximum number of visible avatars.
 	 * <p>Default: 0 (unlimited).
 	 */
-	public int getMaxCount() {
-		return _maxCount;
+	public int getMaxItems() {
+		return _maxItems;
 	}
 
 	/** Sets the maximum number of visible avatars. Excess avatars are hidden and
 	 * replaced with a "+N" overflow indicator. 0 means unlimited.
 	 */
-	public void setMaxCount(int maxCount) {
-		if (maxCount < 0)
-			throw new WrongValueException("maxCount cannot be negative: " + maxCount);
-		if (_maxCount != maxCount) {
-			_maxCount = maxCount;
-			smartUpdate("maxCount", _maxCount);
+	public void setMaxItems(int maxItems) {
+		if (maxItems < 0)
+			throw new WrongValueException("maxItems cannot be negative: " + maxItems);
+		if (_maxItems != maxItems) {
+			_maxItems = maxItems;
+			smartUpdate("maxItems", _maxItems);
 		}
 	}
 
@@ -106,8 +106,8 @@ public class Avatargroup extends XulElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (_maxCount > 0)
-			render(renderer, "maxCount", _maxCount);
+		if (_maxItems > 0)
+			render(renderer, "maxItems", _maxItems);
 		render(renderer, "size", _size);
 		render(renderer, "shape", _shape);
 	}
