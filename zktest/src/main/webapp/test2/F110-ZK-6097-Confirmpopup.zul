@@ -53,12 +53,12 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<confirmpopup id="cpWarning" severity="warning"
 				iconSclass="z-icon-exclamation-triangle" message="Are you sure?"/>
 
-			<button id="btn-danger"  label="Danger"  onClick='cpDanger.open(self);'/>
-			<confirmpopup id="cpDanger"  severity="danger"
+			<button id="btn-error" label="Error" onClick='cpError.open(self);'/>
+			<confirmpopup id="cpError" severity="error"
 				iconSclass="z-icon-times-circle" message="Permanently delete?"/>
 
-			<button id="btn-secondary" label="Secondary" onClick='cpSecondary.open(self);'/>
-			<confirmpopup id="cpSecondary" severity="secondary"
+			<button id="btn-neutral" label="Neutral" onClick='cpNeutral.open(self);'/>
+			<confirmpopup id="cpNeutral" severity="neutral"
 				message="Just FYI"/>
 		</hlayout>
 
@@ -71,7 +71,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 
 			<button id="btn-focus-cancel" label="Focus Cancel"
 					onClick='cpFocusCancel.open(self);'/>
-			<confirmpopup id="cpFocusCancel" defaultFocus="cancel" severity="danger"
+			<confirmpopup id="cpFocusCancel" defaultFocus="cancel" severity="error"
 					message="Destructive — Cancel is focused; Enter is safe"/>
 
 			<button id="btn-bad-focus"    label="Bad defaultFocus"

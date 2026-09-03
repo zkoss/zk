@@ -32,9 +32,9 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
             <confirmpopup id="cpWarn" severity="warning"
                           message="This action affects your subscription."/>
 
-            <button label="Danger popup"
-                    onClick='cpDanger.open(self, "after_pointer")'/>
-            <confirmpopup id="cpDanger" severity="danger"
+            <button label="Error popup"
+                    onClick='cpError.open(self, "after_pointer")'/>
+            <confirmpopup id="cpError" severity="error"
                           message="This action cannot be undone."/>
         </n:section>
         <n:section>

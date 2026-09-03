@@ -130,7 +130,7 @@ public class Confirmpopup extends Popup {
 
 	/** Returns the severity, which drives the icon/color styling of the popup.
 	 * <p>Default: {@value #DEFAULT_SEVERITY}. One of "info", "success",
-	 * "warning", "danger" or "secondary".
+	 * "warning", "error" or "neutral".
 	 * @since 11.0.0
 	 */
 	public String getSeverity() {
@@ -138,8 +138,8 @@ public class Confirmpopup extends Popup {
 	}
 
 	/** Sets the severity, which drives the icon/color styling of the popup.
-	 * @param severity one of "info", "success", "warning", "danger" or
-	 *        "secondary"; {@code null} restores the default
+	 * @param severity one of "info", "success", "warning", "error" or
+	 *        "neutral"; {@code null} restores the default
 	 *        ({@value #DEFAULT_SEVERITY}). Pushes the change to the client via
 	 *        {@code smartUpdate}.
 	 * @throws WrongValueException if {@code severity} is non-null and is not one
@@ -148,8 +148,8 @@ public class Confirmpopup extends Popup {
 	 */
 	public void setSeverity(String severity) throws WrongValueException {
 		severity = Utils.checkEnum(severity, DEFAULT_SEVERITY,
-				"severity must be info/success/warning/danger/secondary: ",
-				"info", "success", "warning", "danger", "secondary");
+				"severity must be info/success/warning/error/neutral: ",
+				"info", "success", "warning", "error", "neutral");
 		if (!Objects.equals(_severity, severity)) {
 			_severity = severity;
 			smartUpdate("severity", _severity);
@@ -187,7 +187,7 @@ public class Confirmpopup extends Popup {
 	/**
 	 * @return which button gets keyboard focus when the popup opens — either
 	 *         "ok" (default) or "cancel". For destructive operations
-	 *         (severity="danger"), prefer "cancel" so an accidental Enter
+	 *         (severity="error"), prefer "cancel" so an accidental Enter
 	 *         keypress does not commit the action.
 	 * @since 11.0.0
 	 */
@@ -198,7 +198,7 @@ public class Confirmpopup extends Popup {
 	/** Sets which button gets keyboard focus when the popup opens.
 	 * @param defaultFocus either "ok" (default) or "cancel"; {@code null}
 	 *        restores the default ({@value #DEFAULT_FOCUS}). For destructive
-	 *        operations (severity="danger"), prefer "cancel" so an accidental
+	 *        operations (severity="error"), prefer "cancel" so an accidental
 	 *        Enter keypress does not commit the action. Pushes the change to
 	 *        the client via {@code smartUpdate}.
 	 * @throws WrongValueException if {@code defaultFocus} is non-null and is
