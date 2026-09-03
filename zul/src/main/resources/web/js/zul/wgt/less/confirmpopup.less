@@ -71,6 +71,9 @@
 	   both buttons so the user can see which one Enter / Space will trigger. */
 	&-cancel:focus-visible,
 	&-ok:focus-visible {
+		// A theme may install a global `*:focus` box-shadow ring (the WCAG
+		// palettes do); two indicators read as a double ring, so drop theirs.
+		box-shadow: none;
 		outline: 2px solid @colorPrimary;
 		outline-offset: 2px;
 	}
