@@ -41,7 +41,7 @@ public class Confirmpopup extends Popup {
 	private static final String DEFAULT_PLACEMENT = "top";
 	private static final String DEFAULT_FOCUS = "ok";
 
-	private String _header;
+	private String _title;
 	private String _message;
 	private String _iconSclass = DEFAULT_ICON_SCLASS;
 	private String _severity = DEFAULT_SEVERITY;
@@ -55,26 +55,25 @@ public class Confirmpopup extends Popup {
 		setMessage(message);
 	}
 
-	/** Returns the optional header (title row) shown above the message body.
-	 * Mirrors PrimeNG Confirmpopup's <code>header</code> property.
+	/** Returns the optional title row shown above the message body.
 	 * @since 11.0.0
 	 */
-	public String getHeader() {
-		return _header;
+	public String getTitle() {
+		return _title;
 	}
 
-	/** Sets the optional header (title row) shown above the message body.
-	 * @param header the header text; {@code null} or an empty string clears it
+	/** Sets the optional title row shown above the message body.
+	 * @param title the title text; {@code null} or an empty string clears it
 	 *        (the popup renders with no title row). Pushes the change to the
 	 *        client via {@code smartUpdate}.
 	 * @since 11.0.0
 	 */
-	public void setHeader(String header) {
-		if (header != null && header.isEmpty())
-			header = null;
-		if (!Objects.equals(_header, header)) {
-			_header = header;
-			smartUpdate("header", _header);
+	public void setTitle(String title) {
+		if (title != null && title.isEmpty())
+			title = null;
+		if (!Objects.equals(_title, title)) {
+			_title = title;
+			smartUpdate("title", _title);
 		}
 	}
 
@@ -222,7 +221,7 @@ public class Confirmpopup extends Popup {
 	@Override
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		render(renderer, "header", _header);
+		render(renderer, "title", _title);
 		render(renderer, "message", _message);
 		// "" is the "explicitly cleared" sentinel — the inherited render()
 		// helper would skip it (AbstractComponent.render treats empty as
