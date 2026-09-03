@@ -295,6 +295,31 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 		assertEquals("alertdialog", jq("$cp1").attr("role"));
 	}
 
+	@Test
+	public void aria_labelledby_author_supplied_via_ca_is_preserved() {
+		// aria-labelledby outranks aria-label, so an unconditional write here
+		// would shadow the author's name instead of visibly replacing it.
+		connect();
+		waitResponse();
+		click(jq("$btn-ca-labelledby"));
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("someExternalId", jq("$cpCa").attr("aria-labelledby"),
+				"author-supplied ca:aria-labelledby must survive the za11y augment");
+	}
+
+	@Test
+	public void aria_labelledby_defaults_to_header_when_author_supplies_none() {
+		connect();
+		waitResponse();
+		click(jq("$btn-with-header"));
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals(getEval("jq('$cpHeader')[0].id") + "-header",
+				jq("$cpHeader").attr("aria-labelledby"),
+				"a confirmpopup with no ca:aria-* is still named from its header");
+	}
+
 	// ----- defaultFocus -----
 
 	@Test
