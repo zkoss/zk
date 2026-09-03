@@ -12,7 +12,7 @@ F110-ZK-6097-Breadcrumb.zul
 Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 -->
 
-<zk xmlns="http://www.zkoss.org/2005/zul">
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute">
 	<vlayout spacing="10px" style="padding:16px;">
 		<!-- Default separator (/) -->
 		<breadcrumb id="bc1">
@@ -70,6 +70,20 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<breadcrumbitem label="Home" href="/"/>
 			<breadcrumbitem label="Docs" href="/docs"/>
 			<breadcrumbitem label="Current"/>
+		</breadcrumb>
+
+		<!-- Author-supplied landmark name: a page with two <nav>s needs to tell
+		     them apart, so ca:aria-label must outrank the generic default. -->
+		<breadcrumb id="bc-ca" ca:aria-label="Product category">
+			<breadcrumbitem label="Home" href="/"/>
+			<breadcrumbitem label="Shoes"/>
+		</breadcrumb>
+
+		<!-- Author-supplied aria-current on a NON-last item: only the author can
+		     say "step"/"location", and the default would delete it outright. -->
+		<breadcrumb id="bc-ca-current">
+			<breadcrumbitem id="bci-ca-step" label="Step 2" href="/2" ca:aria-current="step"/>
+			<breadcrumbitem id="bci-ca-last" label="Step 3"/>
 		</breadcrumb>
 
 		<!-- Dynamic update target + drivers -->

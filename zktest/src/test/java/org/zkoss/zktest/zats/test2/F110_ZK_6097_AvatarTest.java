@@ -263,6 +263,34 @@ public class F110_ZK_6097_AvatarTest extends WebDriverTestCase {
 	}
 
 	@Test
+	public void aria_label_author_supplied_via_ca_is_preserved() {
+		// ca:aria-* is the documented app-supplied ARIA channel; the za11y
+		// augment must not overwrite the accessible name the author chose.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("User", jq("$av-ca").attr("aria-label"),
+				"author-supplied ca:aria-label must survive the za11y augment");
+		assertEquals("Alice Brown", jq("$av-ca-lbl").attr("aria-label"),
+				"ca:aria-label must outrank the initials-derived default");
+	}
+
+	@Test
+	public void aria_label_still_tracks_setLabel_when_author_supplies_none() {
+		// The guard must key off the author's ca: value, not off "an aria-label
+		// is already present" — the latter would freeze the name bind_ wrote.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("AB", jq("$avReDerive").attr("aria-label"),
+				"an avatar with no ca:aria-label keeps the label-derived default");
+		click(jq("$btn-relabel-avatar"));
+		waitResponse();
+		assertEquals("XY", jq("$avReDerive").attr("aria-label"),
+				"setLabel must still re-derive the aria-label it owns");
+	}
+
+	@Test
 	public void aria_image_mode_no_outer_role() {
 		// Image mode: the inner <img alt> is the SR-visible element. Outer
 		// <span> must NOT have role=img to avoid double-role announcements.

@@ -915,6 +915,49 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 	}
 
 	@Test
+	public void aria_roledescription_author_supplied_via_ca_is_preserved() {
+		// ca:aria-roledescription is the only handle an app has on the announced
+		// widget type, on the carousel and on each slide alike.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("custom-carousel", jq("$cr-ca").attr("aria-roledescription"),
+				"author-supplied ca:aria-roledescription must survive on the carousel");
+		assertEquals("custom-slide", jq("$ci-rd").attr("aria-roledescription"),
+				"author-supplied ca:aria-roledescription must survive on the slide");
+		assertEquals("carousel", jq("$cr1").attr("aria-roledescription"),
+				"a carousel with no ca: value still gets the default roledescription");
+		assertEquals("slide", jq("$ci0").attr("aria-roledescription"),
+				"a slide with no ca: value still gets the default roledescription");
+	}
+
+	@Test
+	public void carouselitem_aria_label_author_supplied_via_ca_is_preserved() {
+		// The parent already promises ca:aria-label survives; the child must not
+		// fold the caption + position over it.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("Autumn collection", jq("$ci-ca").attr("aria-label"),
+				"author-supplied ca:aria-label must survive on the slide");
+	}
+
+	@Test
+	public void carouselitem_aria_label_still_tracks_setLabel_when_author_supplies_none() {
+		// The guard must key off the author's ca: value, not off "an aria-label
+		// is already present" — the latter would freeze the name bind_ wrote.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("Card C (Slide 3 of 3)", jq("$ciPlain").attr("aria-label"),
+				"a slide with no ca:aria-label keeps the caption+position default");
+		click(jq("$btn-relabel-slide"));
+		waitResponse();
+		assertEquals("Card Z (Slide 3 of 3)", jq("$ciPlain").attr("aria-label"),
+				"setLabel must still re-derive the aria-label it owns");
+	}
+
+	@Test
 	public void aria_label_not_injected_when_author_supplies_none() {
 		// 6-11: no generic default name is injected (it would duplicate the
 		// aria-roledescription="carousel"); naming is the author's via ca:.

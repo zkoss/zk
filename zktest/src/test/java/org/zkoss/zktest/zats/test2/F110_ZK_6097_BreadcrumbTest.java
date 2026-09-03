@@ -201,6 +201,32 @@ public class F110_ZK_6097_BreadcrumbTest extends WebDriverTestCase {
 		assertEquals("breadcrumb", jq("$bc1").attr("aria-label"));
 	}
 
+	@Test
+	public void aria_label_author_supplied_via_ca_is_preserved() {
+		// Two <nav> landmarks on one page are only distinguishable by their
+		// names, so ca:aria-label must outrank the generic "breadcrumb".
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("Product category", jq("$bc-ca").attr("aria-label"),
+				"author-supplied ca:aria-label must survive the za11y augment");
+		assertEquals("breadcrumb", jq("$bc1").attr("aria-label"),
+				"a breadcrumb with no ca:aria-label still gets the default name");
+	}
+
+	@Test
+	public void aria_current_author_supplied_via_ca_is_preserved() {
+		// aria-current has author-only values the framework never derives, and the
+		// non-last branch REMOVES it — so a ca:aria-current must survive bind_.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("step", jq("$bci-ca-step").attr("aria-current"),
+				"author-supplied ca:aria-current on a non-last item must survive the za11y augment");
+		assertEquals("page", jq("$bci-ca-last").attr("aria-current"),
+				"the last item with no ca:aria-current still gets the default");
+	}
+
 	// ----- maxItems collapse -----
 
 	@Test
