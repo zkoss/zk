@@ -28,8 +28,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 						onClick="@command('increment')"/>
 				<button id="btnReset" label="Reset"
 						onClick="@command('reset')"/>
-				<button id="btnDanger" label="Danger severity"
-						onClick="@command('setDangerSeverity')"/>
+				<button id="btnError" label="Error severity"
+						onClick="@command('setErrorSeverity')"/>
 				<button id="btnToggleDot" label="Toggle dot"
 						onClick="@command('toggleDot')"/>
 			</hlayout>

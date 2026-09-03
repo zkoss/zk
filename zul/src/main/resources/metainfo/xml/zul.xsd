@@ -4328,8 +4328,8 @@
 					<xs:enumeration value="info"/>
 					<xs:enumeration value="success"/>
 					<xs:enumeration value="warning"/>
-					<xs:enumeration value="danger"/>
-					<xs:enumeration value="secondary"/>
+					<xs:enumeration value="error"/>
+					<xs:enumeration value="neutral"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4399,8 +4399,8 @@
 					<xs:enumeration value="info"/>
 					<xs:enumeration value="success"/>
 					<xs:enumeration value="warning"/>
-					<xs:enumeration value="danger"/>
-					<xs:enumeration value="secondary"/>
+					<xs:enumeration value="error"/>
+					<xs:enumeration value="neutral"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -4453,8 +4453,8 @@
 					<xs:enumeration value="info"/>
 					<xs:enumeration value="success"/>
 					<xs:enumeration value="warning"/>
-					<xs:enumeration value="danger"/>
-					<xs:enumeration value="secondary"/>
+					<xs:enumeration value="error"/>
+					<xs:enumeration value="neutral"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>

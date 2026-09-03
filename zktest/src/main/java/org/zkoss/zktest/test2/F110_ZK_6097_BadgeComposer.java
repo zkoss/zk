@@ -37,8 +37,8 @@ public class F110_ZK_6097_BadgeComposer extends SelectorComposer<Component> {
 		mvcCount.setValue("0");
 	}
 
-	@Listen("onClick = #btnSetDangerMvc")
-	public void setDanger() {
-		bdgMvc.setSeverity("danger");
+	@Listen("onClick = #btnSetErrorMvc")
+	public void setError() {
+		bdgMvc.setSeverity("error");
 	}
 }
