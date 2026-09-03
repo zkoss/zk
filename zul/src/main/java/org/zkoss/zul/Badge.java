@@ -178,12 +178,12 @@ public class Badge extends XulElement {
 	}
 
 	/** Sets the severity.
-	 * @param severity "info", "success", "warning", "danger" or "secondary".
+	 * @param severity "info", "success", "warning", "error" or "neutral".
 	 */
 	public void setSeverity(String severity) throws WrongValueException {
 		severity = Utils.checkEnum(severity, DEFAULT_SEVERITY,
-				"severity must be info/success/warning/danger/secondary: ",
-				"info", "success", "warning", "danger", "secondary");
+				"severity must be info/success/warning/error/neutral: ",
+				"info", "success", "warning", "error", "neutral");
 		if (!Objects.equals(_severity, severity)) {
 			_severity = severity;
 			smartUpdate("severity", _severity);

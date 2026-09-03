@@ -65,11 +65,11 @@ public class F110_ZK_6097_BadgeMVCTest extends WebDriverTestCase {
 	public void mvc_wire_badge_set_severity() {
 		connect();
 		waitResponse();
-		assertFalse(jq("$bdgMvc").hasClass("z-badge-danger"), "initial not danger");
+		assertFalse(jq("$bdgMvc").hasClass("z-badge-error"), "initial not error");
 
-		click(jq("$btnSetDangerMvc"));
+		click(jq("$btnSetErrorMvc"));
 		waitResponse();
-		assertTrue(jq("$bdgMvc").hasClass("z-badge-danger"),
-				"Composer setSeverity('danger') must apply z-badge-danger class");
+		assertTrue(jq("$bdgMvc").hasClass("z-badge-error"),
+				"Composer setSeverity('error') must apply z-badge-error class");
 	}
 }
