@@ -33,7 +33,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		<label id="resultLabel" value="@load(vm.result)" style="display:block;margin-bottom:12px;"/>
 
 		<avatargroup id="agMvvm"
-				maxCount="@bind(vm.maxCount)"
+				maxItems="@bind(vm.maxItems)"
 				size="@bind(vm.size)"
 				shape="@bind(vm.shape)">
 			<avatar label="A"/>

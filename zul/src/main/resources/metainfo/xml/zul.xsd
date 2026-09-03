@@ -4554,7 +4554,7 @@
 			<xs:element ref="avatar" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="maxCount" type="intType" use="optional" />
+		<xs:attribute name="maxItems" type="intType" use="optional" />
 		<xs:attribute name="size" type="avatarSizeAttrType" use="optional" />
 		<xs:attribute name="shape" type="avatarShapeAttrType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />

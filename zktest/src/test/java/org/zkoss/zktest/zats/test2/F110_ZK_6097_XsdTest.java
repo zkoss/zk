@@ -269,7 +269,7 @@ public class F110_ZK_6097_XsdTest {
 		@Test
 		public void avatargroupAcceptsBaseGroupBesideItsItems() {
 			assertDoesNotThrow(() -> validate(zul(
-					"<avatargroup maxCount=\"3\">\n"
+					"<avatargroup maxItems=\"3\">\n"
 					+ "  <variables who=\"team\"/>\n"
 					+ "  <avatar label=\"A\"/>\n"
 					+ "  <avatar label=\"B\"/>\n"
