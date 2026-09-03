@@ -12,7 +12,7 @@ F110-ZK-6097-Confirmpopup.zul
 Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 -->
 
-<zk xmlns="http://www.zkoss.org/2005/zul">
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute">
 	<vlayout spacing="20px" style="padding:48px;">
 		<label id="cpResult" value="none"/>
 
@@ -94,6 +94,16 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 					onClick='cpHeader.open(self);'/>
 			<confirmpopup id="cpHeader" header="Confirm action"
 				message="This will permanently remove the record."/>
+		</hlayout>
+
+		<!-- Author-supplied name via ca:aria-labelledby. The reference is
+		     deliberately dangling: this asserts attribute ownership, so keep this
+		     case off any verifyA11y() page or axe will flag the broken idref. -->
+		<hlayout spacing="20px">
+			<button id="btn-ca-labelledby" label="Author labelledby"
+					onClick='cpCa.open(self);'/>
+			<confirmpopup id="cpCa" ca:aria-labelledby="someExternalId"
+				header="Confirm action" message="This will permanently remove the record."/>
 		</hlayout>
 
 		<!-- Default placement (== top) + dynamic update target -->

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6097-Popup.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sun Aug 30 18:10:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute" xmlns:n="native">
+	<vlayout spacing="10px" style="padding:16px;">
+		<!-- Native elements, so the DOM id stays the literal the ca:aria-* IDREFs
+		     name. A zul <label id="..."/> renders its id as the uuid, which would
+		     leave every reference below dangling. -->
+		<n:span id="myHint">Ships in 2 business days</n:span>
+		<n:span id="myOwned">Delivery options</n:span>
+
+		<!-- Author owns the description of the anchor: the popup must neither
+		     take the attribute over on open nor delete it on close. -->
+		<button id="btnCa" label="Shipping" popup="popA"
+				ca:aria-describedby="myHint" ca:aria-owns="myOwned"/>
+		<popup id="popA" width="220px">Popup A body</popup>
+
+		<!-- No ca: → the default popup wiring still applies. -->
+		<button id="btnPlain" label="Plain" popup="popB"/>
+		<popup id="popB" width="220px">Popup B body</popup>
+
+		<!-- The popup anchors on the checkbox's "-real" input, while ca:aria-*
+		     renders on the root span — two different nodes, no conflict. -->
+		<checkbox id="cbCa" label="Subscribe" popup="popC"
+				ca:aria-describedby="myHint"/>
+		<popup id="popC" width="220px">Popup C body</popup>
+	</vlayout>
+</zk>
