@@ -84,9 +84,30 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 
 	<button id="btn" label="Button"/>
 
+	<!-- no size= : the unsized group is the one whose overlap used to be pinned
+	     on .z-avatargroup itself. -->
+	<avatargroup id="ag">
+		<avatar label="A"/>
+		<avatar label="B"/>
+	</avatargroup>
+
+	<button id="cpb" label="Confirm" onClick='cp.open(self);'/>
+	<!-- default placement "top": the arrow's inner triangle is its ::after
+	     border-top-color. -->
+	<confirmpopup id="cp" message="Confirm?"/>
+
 	<listbox id="lbc" checkmark="true" multiple="true" width="400px" height="200px">
 		<listitem id="lic">
 			<listcell label="c0"/>
 		</listitem>
 	</listbox>
+
+	<carousel id="cr" width="320px" height="160px" showArrows="true">
+		<carouselitem id="cri0">
+			<div width="100%" height="100%" style="background:#1677ff;"/>
+		</carouselitem>
+		<carouselitem id="cri1">
+			<div width="100%" height="100%" style="background:#52c41a;"/>
+		</carouselitem>
+	</carousel>
 </zk>
