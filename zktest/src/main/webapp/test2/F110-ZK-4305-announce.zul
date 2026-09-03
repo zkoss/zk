@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-4305-announce.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Sep  3 12:15:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout spacing="10px" hflex="1">
+		<label value="ZK-4305 announce — re-applying the range already shown must still reach the polite live region"/>
+		<!-- format is pinned so the announced text is locale-independent. -->
+		<daterangebox id="dr" format="yyyy-MM-dd"/>
+	</vlayout>
+</zk>
