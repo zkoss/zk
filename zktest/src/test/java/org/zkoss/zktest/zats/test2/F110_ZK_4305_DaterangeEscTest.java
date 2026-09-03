@@ -40,6 +40,9 @@ public class F110_ZK_4305_DaterangeEscTest extends WebDriverTestCase {
 	private static final String STATUS_OPEN = "not-cancelled";
 	private static final String STATUS_CANCELLED = "cancelled";
 
+	private static final String KEY_NONE = "no-keydown";
+	private static final String KEY_ARROW_LEFT = "keydown-37";
+
 	/** Opens the popup with the trigger button; focus lands in the calendar. */
 	private void openPopup() {
 		click(jq("$drb .z-daterangebox-button"));
@@ -152,6 +155,51 @@ public class F110_ZK_4305_DaterangeEscTest extends WebDriverTestCase {
 				+ "zk._noESC = window.__zk4305NoESC;"
 				+ "document.removeEventListener('keydown', window.__zk4305Probe, true);"
 				+ "}()");
+	}
+
+	/**
+	 * Pins the side effect of consuming ESC in capture phase.
+	 *
+	 * <p>{@code zk.mount}'s {@code jq(document).keydown} is the framework's only
+	 * keydown entry point and it is bubble-phase, so stopping the event in
+	 * capture hides that ESC from every route it feeds — not just the window's
+	 * onCancel the tests above cover, but any widget onKeyDown listener too.
+	 * ({@code ctrlKeys="#esc"} is not an alternative probe: the client parser
+	 * knows no {@code esc} token, and ESC is routed only as onCancel.)
+	 *
+	 * <p>ONE line is the contract — the expected value after the ESC. Under
+	 * capture + stopPropagation the listener never runs, so the label still
+	 * shows the arrow key. A bubble implementation would show keydown-27.
+	 */
+	@Test
+	public void testEscInPopupIsHiddenFromWidgetKeyDownListeners() {
+		connect("/test2/F110-ZK-4305-esc.zul");
+		waitResponse();
+		assertEquals(KEY_NONE, jq("$keyStatus").text(),
+				"Pre-condition: no key has reached the box's onKeyDown listener yet");
+
+		// Wiring check: a plain key DOES reach the listener, so a miss after ESC
+		// is about the popup's phase, not a dead probe.
+		click(jq("$drb .z-daterangebox-begin"));
+		waitResponse();
+		getActions().sendKeys(Keys.ARROW_LEFT).perform();
+		waitResponse();
+		assertEquals(KEY_ARROW_LEFT, jq("$keyStatus").text(),
+				"Pre-condition: the widget onKeyDown listener is live on the closed box");
+
+		openPopup();
+		click(jq("$drb .z-daterangebox-begin"));
+		waitResponse();
+		assertNotEquals("none", popupDisplay(),
+				"Pre-condition: focusing the begin input leaves the popup open");
+
+		pressEscape();
+
+		assertPopupClosed();
+		assertEquals(KEY_ARROW_LEFT, jq("$keyStatus").text(),
+				"While the popup is open its capture listener stops the ESC before "
+						+ "zk.mount's bubble-phase document keydown, so no widget onKeyDown "
+						+ "listener sees it either — the price of not cancelling the window");
 	}
 
 	/** Control: with no popup open, ESC must still cancel the window. */
