@@ -4451,7 +4451,7 @@
 	<xs:complexType name="confirmpopupType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="header" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 		<xs:attribute name="message" type="xs:string" use="optional" />
 		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
 		<xs:attribute name="severity" type="severityAttrType" use="optional" />

@@ -88,11 +88,11 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<confirmpopup id="cpNoMsg" message=""/>
 		</hlayout>
 
-		<!-- Header (PrimeNG-style title row) -->
+		<!-- Title row -->
 		<hlayout spacing="20px">
-			<button id="btn-with-header" label="With header"
-					onClick='cpHeader.open(self);'/>
-			<confirmpopup id="cpHeader" header="Confirm action"
+			<button id="btn-with-title" label="With title"
+					onClick='cpTitle.open(self);'/>
+			<confirmpopup id="cpTitle" title="Confirm action"
 				message="This will permanently remove the record."/>
 		</hlayout>
 
@@ -103,7 +103,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<button id="btn-ca-labelledby" label="Author labelledby"
 					onClick='cpCa.open(self);'/>
 			<confirmpopup id="cpCa" ca:aria-labelledby="someExternalId"
-				header="Confirm action" message="This will permanently remove the record."/>
+				title="Confirm action" message="This will permanently remove the record."/>
 		</hlayout>
 
 		<!-- Default placement (== top) + dynamic update target -->
@@ -117,8 +117,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 					onClick='cp1.setMessage("Updated message");'/>
 			<button id="btn-set-icon"         label="Set icon"
 					onClick='cp1.setIconSclass("z-icon-check-circle");'/>
-			<button id="btn-set-header"       label="Set header"
-					onClick='cp1.setHeader("Heads up");'/>
+			<button id="btn-set-title"        label="Set title"
+					onClick='cp1.setTitle("Heads up");'/>
 			<button id="btn-bad-severity"     label="Bad severity"
 					onClick='try { cp1.setSeverity("foo"); }
 					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
