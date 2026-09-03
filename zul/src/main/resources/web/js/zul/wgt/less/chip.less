@@ -55,7 +55,12 @@
 	}
 	&-close:hover { opacity: 1; }
 	&-close:focus-visible {
-		outline: 2px solid @colorGreyDark;
+		// The ring lands inside the chip, on its own fill, where @colorPrimary
+		// is under 3:1 (2.87 on info, 2.92 on error). Back it with the base
+		// colour — which also replaces the theme's global `*:focus` ring, so
+		// the two indicators don't stack.
+		box-shadow: 0 0 0 1px @colorBackgroundBase;
+		outline: 2px solid @colorPrimary;
 		outline-offset: 1px;
 		opacity: 1;
 	}
