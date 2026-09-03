@@ -17,31 +17,31 @@ import org.zkoss.bind.annotation.NotifyChange;
 
 public class F110_ZK_6097_AvatargroupVM {
 
-	private int maxCount = 3;
+	private int maxItems = 3;
 	private String size;
 	private String shape;
-	private String result = "initial: maxCount=3";
+	private String result = "initial: maxItems=3";
 
 	@Init
 	public void init() {}
 
-	public int getMaxCount() { return maxCount; }
+	public int getMaxItems() { return maxItems; }
 	public String getSize()   { return size; }
 	public String getShape()  { return shape; }
 	public String getResult() { return result; }
 
 	@Command
-	@NotifyChange({"maxCount", "result"})
+	@NotifyChange({"maxItems", "result"})
 	public void removeLimit() {
-		maxCount = 0;
-		result = "maxCount removed — all avatars visible";
+		maxItems = 0;
+		result = "maxItems removed — all avatars visible";
 	}
 
 	@Command
-	@NotifyChange({"maxCount", "result"})
+	@NotifyChange({"maxItems", "result"})
 	public void setLimit2() {
-		maxCount = 2;
-		result = "maxCount=2 — 3 avatars hidden (+3 overflow)";
+		maxItems = 2;
+		result = "maxItems=2 — 3 avatars hidden (+3 overflow)";
 	}
 
 	@Command
@@ -53,11 +53,11 @@ public class F110_ZK_6097_AvatargroupVM {
 	}
 
 	@Command
-	@NotifyChange({"maxCount", "size", "shape", "result"})
+	@NotifyChange({"maxItems", "size", "shape", "result"})
 	public void reset() {
-		maxCount = 3;
+		maxItems = 3;
 		size = null;
 		shape = null;
-		result = "reset: maxCount=3";
+		result = "reset: maxItems=3";
 	}
 }
