@@ -249,33 +249,33 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 				+ "not at the click pointer");
 	}
 
-	// ----- header (PrimeNG Confirmpopup) -----
+	// ----- title row -----
 
 	@Test
-	public void header_renders_when_set() {
+	public void title_renders_when_set() {
 		connect();
 		waitResponse();
-		click(jq("$btn-with-header"));
+		click(jq("$btn-with-title"));
 		waitResponse();
-		assertTrue(jq("$cpHeader .z-confirmpopup-header").exists());
-		assertEquals("Confirm action", jq("$cpHeader .z-confirmpopup-header").text());
+		assertTrue(jq("$cpTitle .z-confirmpopup-header").exists());
+		assertEquals("Confirm action", jq("$cpTitle .z-confirmpopup-header").text());
 	}
 
 	@Test
-	public void header_absent_when_not_set() {
+	public void title_absent_when_not_set() {
 		connect();
 		waitResponse();
 		click(jq("$btn-open"));
 		waitResponse();
 		assertFalse(jq("$cp1 .z-confirmpopup-header").exists(),
-				"popup with no header attribute must not render the header div");
+				"popup with no title attribute must not render the title div");
 	}
 
 	@Test
-	public void header_dynamic_set_rerenders() {
+	public void title_dynamic_set_rerenders() {
 		connect();
 		waitResponse();
-		click(jq("$btn-set-header"));
+		click(jq("$btn-set-title"));
 		waitResponse();
 		click(jq("$btn-open"));
 		waitResponse();
@@ -309,15 +309,15 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 	}
 
 	@Test
-	public void aria_labelledby_defaults_to_header_when_author_supplies_none() {
+	public void aria_labelledby_defaults_to_the_title_row_when_author_supplies_none() {
 		connect();
 		waitResponse();
-		click(jq("$btn-with-header"));
+		click(jq("$btn-with-title"));
 		waitResponse();
 		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
-		assertEquals(getEval("jq('$cpHeader')[0].id") + "-header",
-				jq("$cpHeader").attr("aria-labelledby"),
-				"a confirmpopup with no ca:aria-* is still named from its header");
+		assertEquals(getEval("jq('$cpTitle')[0].id") + "-header",
+				jq("$cpTitle").attr("aria-labelledby"),
+				"a confirmpopup with no ca:aria-* is still named from its title row");
 	}
 
 	// ----- defaultFocus -----

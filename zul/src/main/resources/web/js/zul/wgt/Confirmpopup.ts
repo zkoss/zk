@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Confirmpopup')
 export class Confirmpopup extends zul.wgt.Popup {
-	/** @internal */ _header?: string;
+	/** @internal */ _title?: string;
 	/** @internal */ _message?: string;
 	/** @internal */ _iconSclass = 'z-icon-exclamation-triangle';
 	/** @internal */ _severity = 'warning';
@@ -34,19 +34,19 @@ export class Confirmpopup extends zul.wgt.Popup {
 	/** @internal */ _refNode?: HTMLElement;
 
 	/**
-	 * Returns the optional header (title row) shown above the message body.
+	 * Returns the optional title row shown above the message body.
 	 * @defaultValue `null`.
 	 */
-	getHeader(): string | undefined { return this._header; }
+	getTitle(): string | undefined { return this._title; }
 	/**
-	 * Sets the optional header (title row) shown above the message body.
-	 * @param header - the header text; null or an empty string clears it (the
+	 * Sets the optional title row shown above the message body.
+	 * @param title - the title text; null or an empty string clears it (the
 	 * popup renders with no title row).
 	 */
-	setHeader(header: string, opts?: Record<string, boolean>): this {
-		const o = this._header;
-		this._header = header;
-		if (o !== header || opts?.force) this._rerenderOrDeferUntilClose();
+	setTitle(title: string, opts?: Record<string, boolean>): this {
+		const o = this._title;
+		this._title = title;
+		if (o !== title || opts?.force) this._rerenderOrDeferUntilClose();
 		return this;
 	}
 
