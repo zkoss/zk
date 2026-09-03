@@ -561,6 +561,7 @@
     --zk-error-button-margin-left: 5px;
 
     // severity (shared status palette — Ant Design)
+    // Not WCAG AA as white-on-accent; accessible values are opt-in in zkcml's _wcag*.
     --zk-severity-info-accent-color: #1677ff;
     --zk-severity-success-accent-color: #52c41a;
     --zk-severity-warning-accent-color: #faad14;
@@ -1037,13 +1038,25 @@
     --zk-cropper-toolbar-button-font-size: var(--zk-font-size-medium);
     --zk-cropper-toolbar-button-padding: 5px 11px;
 
+    // breadcrumb
+    --zk-breadcrumb-separator-color: var(--zk-color-grey-dark);
+    --zk-breadcrumb-ellipsis-color: var(--zk-color-grey-dark);
+
+    // avatar
+    --zk-avatar-color: var(--zk-color-grey-dark);
+
+    // chip
+    --zk-chip-close-opacity: 0.55;
+
     // badge
     --zk-badge-indicator-text-color: var(--zk-text-color-inverse);
+    --zk-badge-indicator-box-shadow: none;
 
     // avatargroup
     --zk-avatargroup-avatar-border-color: #FFFFFF;
     --zk-avatargroup-overflow-background-color: #f0f0f0;
     --zk-avatargroup-overflow-color: #595959;
+    --zk-avatargroup-overflow-box-shadow: none;
 
     // caption
 
