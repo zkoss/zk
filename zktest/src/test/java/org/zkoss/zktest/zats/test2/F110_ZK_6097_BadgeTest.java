@@ -13,6 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -104,6 +105,60 @@ public class F110_ZK_6097_BadgeTest extends WebDriverTestCase {
 				"za11y must apply role=status to the badge indicator");
 		assertTrue(jq("$b-count .z-badge-indicator").attr("aria-label").contains("5"),
 				"za11y must apply a contextual aria-label to the badge indicator");
+	}
+
+	@Test
+	public void indicator_label_reads_severity_from_the_msgza11y_bundle() {
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y")))
+			return;
+		// getEval stringifies, so a key missing from msgza11y comes back as "null".
+		String info = getEval("msgza11y.BADGE_INFO"),
+				error = getEval("msgza11y.BADGE_ERROR"),
+				compose = getEval("msgza11y.BADGE_COUNT_SEVERITY");
+		assertNotEquals("null", info, "msgza11y must define BADGE_INFO");
+		assertNotEquals("null", error, "msgza11y must define BADGE_ERROR");
+		assertNotEquals("null", compose, "msgza11y must define BADGE_COUNT_SEVERITY");
+		assertEquals(error, jq("$b-dot .z-badge-indicator").attr("aria-label"),
+				"a dot badge announces the bundle's severity word, not the raw token");
+		assertEquals(compose.replace("{0}", "5").replace("{1}", info),
+				jq("$b-count .z-badge-indicator").attr("aria-label"),
+				"a count badge keeps the count and pairs it with the bundle's severity word");
+		// The shipped values are byte-identical to the literals they replaced, so
+		// the assertions above also hold for a widget that never reads the bundle.
+		// Mutate the bundle and re-apply: only a widget that CONSULTS it follows.
+		getEval("(msgza11y.BADGE_WARNING='ZZ-sev',"
+				+ "zk.Widget.$(jq('$b-dot')[0]).setSeverity('warning'),'')");
+		assertEquals("ZZ-sev", jq("$b-dot .z-badge-indicator").attr("aria-label"),
+				"the dot badge's severity word must come from msgza11y, not from _severity");
+		getEval("(msgza11y.BADGE_INFO='ZZ-info',msgza11y.BADGE_COUNT_SEVERITY='{1}#{0}',"
+				+ "zk.Widget.$(jq('$b-count')[0]).setSeverity('info'),'')");
+		assertEquals("ZZ-info#5", jq("$b-count .z-badge-indicator").attr("aria-label"),
+				"the count badge must compose through BADGE_COUNT_SEVERITY, not a hardcoded \"count severity\"");
+	}
+
+	@Test
+	public void indicator_label_reads_success_and_neutral_from_the_msgza11y_bundle() {
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y")))
+			return;
+		// getEval stringifies, so a key missing from msgza11y comes back as "null".
+		assertNotEquals("null", getEval("msgza11y.BADGE_SUCCESS"),
+				"msgza11y must define BADGE_SUCCESS");
+		assertNotEquals("null", getEval("msgza11y.BADGE_NEUTRAL"),
+				"msgza11y must define BADGE_NEUTRAL");
+		// Every shipped value is byte-identical to the token it replaced, so only a
+		// mutated bundle tells a real lookup apart from an echo of _severity.
+		getEval("(msgza11y.BADGE_SUCCESS='ZZ-success',"
+				+ "zk.Widget.$(jq('$b-dot')[0]).setSeverity('success'),'')");
+		assertEquals("ZZ-success", jq("$b-dot .z-badge-indicator").attr("aria-label"),
+				"severity=success must announce msgza11y.BADGE_SUCCESS, not the raw token");
+		getEval("(msgza11y.BADGE_NEUTRAL='ZZ-neutral',"
+				+ "zk.Widget.$(jq('$b-dot')[0]).setSeverity('neutral'),'')");
+		assertEquals("ZZ-neutral", jq("$b-dot .z-badge-indicator").attr("aria-label"),
+				"severity=neutral must announce msgza11y.BADGE_NEUTRAL, not the raw token");
 	}
 
 	// ----- severity -----
