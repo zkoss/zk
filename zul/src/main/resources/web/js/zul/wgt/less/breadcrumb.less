@@ -45,7 +45,10 @@
 		cursor: pointer;
 	}
 	&-ellipsis > button:focus-visible {
-		outline: 2px solid @colorGreyDark;
+		// A theme may install a global `*:focus` box-shadow ring (the WCAG
+		// palettes do); two indicators read as a double ring, so drop theirs.
+		box-shadow: none;
+		outline: 2px solid @colorPrimary;
 		outline-offset: 2px;
 	}
 }
@@ -61,7 +64,9 @@
 	& > a:hover {
 		text-decoration: underline;
 	}
-	& > a:focus-visible {
+	& > a:focus-visible,
+	& > span:focus-visible {
+		box-shadow: none;
 		outline: 2px solid @colorPrimary;
 		outline-offset: 2px;
 		border-radius: 2px;
