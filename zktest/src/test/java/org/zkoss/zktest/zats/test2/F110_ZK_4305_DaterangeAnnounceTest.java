@@ -33,6 +33,9 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 	/** The begin date on its own, announced while the pair is still incomplete. */
 	private static final String BEGIN_ONLY = "2026-01-01";
 
+	/** The end date on its own, which allowEmpty="both" makes a committed state. */
+	private static final String END_ONLY = "2026-01-05";
+
 	// Records the region's text once per mutation batch, which is the
 	// granularity assistive tech processes a live region at: writes made in the
 	// same task are coalesced before it ever reads them.
@@ -94,6 +97,23 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		assertEquals(List.of(RANGE), announced,
 				"only the completed pair may be announced — a lone " + BEGIN_ONLY
 				+ " means the half range was read out before the pair, was: " + announced);
+	}
+
+	/** An end without a begin is a committed state, so it must be announced. */
+	@Test
+	public void testEndOnlyRangeIsAnnounced() {
+		connect("/test2/F110-ZK-4305-announce.zul");
+		waitResponse();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript(OBSERVE);
+
+		// allowEmpty defaults to "both", so an end on its own is a value the
+		// user can commit — by typing into the end input or by a one-sided
+		// binding write. Falling through to "" leaves the edit unspoken.
+		js.executeScript("zk.Widget.$(jq('$dr')[0]).setEndValue(new Date(2026, 0, 5));");
+		sleep(300);
+		assertEquals(List.of(END_ONLY), announced(js),
+				"an end-only range must reach the live region, not the empty string");
 	}
 
 	@SuppressWarnings("unchecked")
