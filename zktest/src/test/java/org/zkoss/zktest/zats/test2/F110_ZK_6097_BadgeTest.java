@@ -115,8 +115,8 @@ public class F110_ZK_6097_BadgeTest extends WebDriverTestCase {
 		assertTrue(jq("$b-info").hasClass("z-badge-info"));
 		assertTrue(jq("$b-success").hasClass("z-badge-success"));
 		assertTrue(jq("$b-warning").hasClass("z-badge-warning"));
-		assertTrue(jq("$b-danger").hasClass("z-badge-danger"));
-		assertTrue(jq("$b-secondary").hasClass("z-badge-secondary"));
+		assertTrue(jq("$b-error").hasClass("z-badge-error"));
+		assertTrue(jq("$b-neutral").hasClass("z-badge-neutral"));
 	}
 
 	@Test
@@ -233,9 +233,9 @@ public class F110_ZK_6097_BadgeTest extends WebDriverTestCase {
 		waitResponse();
 		assertTrue(jq("$bDyn").hasClass("z-badge-info"));
 
-		click(jq("$btn-set-danger"));
+		click(jq("$btn-set-error"));
 		waitResponse();
-		assertTrue(jq("$bDyn").hasClass("z-badge-danger"));
+		assertTrue(jq("$bDyn").hasClass("z-badge-error"));
 		assertFalse(jq("$bDyn").hasClass("z-badge-info"));
 	}
 

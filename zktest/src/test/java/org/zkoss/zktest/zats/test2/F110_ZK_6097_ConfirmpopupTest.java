@@ -151,11 +151,11 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 		click(jq("$btn-warning")); waitResponse();
 		assertTrue(jq("$cpWarning").hasClass("z-confirmpopup-warning"));
 
-		click(jq("$btn-danger")); waitResponse();
-		assertTrue(jq("$cpDanger").hasClass("z-confirmpopup-danger"));
+		click(jq("$btn-error")); waitResponse();
+		assertTrue(jq("$cpError").hasClass("z-confirmpopup-error"));
 
-		click(jq("$btn-secondary")); waitResponse();
-		assertTrue(jq("$cpSecondary").hasClass("z-confirmpopup-secondary"));
+		click(jq("$btn-neutral")); waitResponse();
+		assertTrue(jq("$cpNeutral").hasClass("z-confirmpopup-neutral"));
 	}
 
 	@Test
@@ -405,11 +405,11 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 		sleep(80);
 		assertTrue(jq("$cpTop").hasClass("z-confirmpopup-open"),
 				"baseline: an open confirmpopup carries the open-state class");
-		getEval("(zk.Widget.$(jq('$cpTop')[0]).setSeverity('danger'),'')");
+		getEval("(zk.Widget.$(jq('$cpTop')[0]).setSeverity('error'),'')");
 		sleep(60);
 		assertTrue(jq("$cpTop").hasClass("z-confirmpopup-open"),
 				"setSeverity while open must not wash the z-confirmpopup-open class");
-		assertTrue(jq("$cpTop").hasClass("z-confirmpopup-danger"),
+		assertTrue(jq("$cpTop").hasClass("z-confirmpopup-error"),
 				"the new severity class must be applied");
 	}
 

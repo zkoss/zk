@@ -33,7 +33,7 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 		// (Chip.renderProperties skips rendering when severity == "info").
 		// We assert no other severity class is on the element.
 		assertFalse(jq("$chip-default").hasClass("z-chip-success"));
-		assertFalse(jq("$chip-default").hasClass("z-chip-danger"));
+		assertFalse(jq("$chip-default").hasClass("z-chip-error"));
 	}
 
 	@Test
@@ -58,17 +58,17 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 	}
 
 	@Test
-	public void severity_danger_class() {
+	public void severity_error_class() {
 		connect();
 		waitResponse();
-		assertTrue(jq("$chip-danger").hasClass("z-chip-danger"));
+		assertTrue(jq("$chip-error").hasClass("z-chip-error"));
 	}
 
 	@Test
-	public void severity_secondary_class() {
+	public void severity_neutral_class() {
 		connect();
 		waitResponse();
-		assertTrue(jq("$chip-secondary").hasClass("z-chip-secondary"));
+		assertTrue(jq("$chip-neutral").hasClass("z-chip-neutral"));
 	}
 
 	@Test

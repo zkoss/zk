@@ -67,13 +67,13 @@ public class Chip extends LabelImageElement implements Disable {
 	}
 
 	/** Sets the severity.
-	 * @param severity one of "info", "success", "warning", "danger", "secondary".
+	 * @param severity one of "info", "success", "warning", "error", "neutral".
 	 *        Pass null to reset to the default ("info").
 	 */
 	public void setSeverity(String severity) throws WrongValueException {
 		severity = Utils.checkEnum(severity, DEFAULT_SEVERITY,
-				"severity must be info/success/warning/danger/secondary: ",
-				"info", "success", "warning", "danger", "secondary");
+				"severity must be info/success/warning/error/neutral: ",
+				"info", "success", "warning", "error", "neutral");
 		if (!Objects.equals(_severity, severity)) {
 			_severity = severity;
 			smartUpdate("severity", _severity);
