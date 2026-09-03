@@ -932,6 +932,33 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 	}
 
 	@Test
+	public void aria_roledescription_defaults_come_from_the_msgza11y_bundle() {
+		// aria-roledescription is spoken prose, so it has to be translatable —
+		// a literal in the augment can never be localized or overridden.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		// getEval stringifies, so a key missing from msgza11y comes back as "null".
+		String carousel = getEval("msgza11y.CAROUSEL_ROLEDESC"),
+				slide = getEval("msgza11y.CAROUSELITEM_ROLEDESC");
+		assertNotEquals("null", carousel, "msgza11y must define CAROUSEL_ROLEDESC");
+		assertNotEquals("null", slide, "msgza11y must define CAROUSELITEM_ROLEDESC");
+		assertEquals(carousel, jq("$cr1").attr("aria-roledescription"),
+				"the carousel roledescription must be the bundle value");
+		assertEquals(slide, jq("$ci0").attr("aria-roledescription"),
+				"the slide roledescription must be the bundle value");
+		// The shipped values equal the literals they replaced, so mutate the bundle
+		// and rebind — only an augment that CONSULTS it follows.
+		getEval("(msgza11y.CAROUSEL_ROLEDESC='ZZ-carousel',"
+				+ "msgza11y.CAROUSELITEM_ROLEDESC='ZZ-slide',"
+				+ "zk.Widget.$(jq('$cr1')[0]).rerender(-1),'')");
+		assertEquals("ZZ-carousel", jq("$cr1").attr("aria-roledescription"),
+				"the carousel roledescription must come from msgza11y, not a literal");
+		assertEquals("ZZ-slide", jq("$ci0").attr("aria-roledescription"),
+				"the slide roledescription must come from msgza11y, not a literal");
+	}
+
+	@Test
 	public void carouselitem_aria_label_author_supplied_via_ca_is_preserved() {
 		// The parent already promises ca:aria-label survives; the child must not
 		// fold the caption + position over it.
