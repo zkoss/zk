@@ -3431,7 +3431,9 @@
 			<xs:group ref="anyGroup"/>
 			<xs:element ref="area"/>
 			<xs:element ref="bandpopup"/>
+			<xs:element ref="breadcrumbitem"/>
 			<xs:element ref="caption"/>
+			<xs:element ref="carouselitem"/>
 			<xs:element ref="center"/>
 			<xs:element ref="columns"/>
 			<xs:element ref="column"/>
@@ -4049,7 +4051,9 @@
 			<xs:group ref="anyGroup" />
 			<xs:element ref="area" />
 			<xs:element ref="bandpopup" />
+			<xs:element ref="breadcrumbitem" />
 			<xs:element ref="caption" />
+			<xs:element ref="carouselitem" />
 			<xs:element ref="center" />
 			<xs:element ref="columns" />
 			<xs:element ref="column" />
