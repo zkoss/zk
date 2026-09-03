@@ -1067,12 +1067,15 @@
 @avatargroupOverflowBoxShadow: var(--zk-avatargroup-overflow-box-shadow);
 
 // confirmpopup
+// Sync to zkThemeTemplate together with confirmpopup.less and both profiles — copying only some of the four breaks the template LESS build on an undefined variable.
+@confirmpopupBackgroundColor:  var(--zk-confirmpopup-background-color);
 @confirmpopupFooterBackgroundColor: var(--zk-confirmpopup-footer-background-color);
 @confirmpopupButtonBackgroundColor: var(--zk-confirmpopup-button-background-color);
 @confirmpopupOkColor:          var(--zk-confirmpopup-ok-color);
 
 // carousel
 @carouselControlBackgroundColor: var(--zk-carousel-control-background-color);
+@carouselControlHoverBackgroundColor: var(--zk-carousel-control-hover-background-color);
 @carouselControlColor:         var(--zk-carousel-control-color);
 @carouselIndicatorBackgroundColor: var(--zk-carousel-indicator-background-color);
 @carouselIndicatorBorderColor: var(--zk-carousel-indicator-border-color);
