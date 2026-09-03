@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-5409-effective-smartupdate.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Sun Aug 30 11:27:17 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<!-- Page-scope fallback: clearing the grid's own value must land back here,
+	     not on "no responsive" / the client's built-in cascade. -->
+	<custom-attributes org.zkoss.zul.grid.responsive="stacking"
+			org.zkoss.zul.grid.responsive.columns="sm-2 md-none" scope="page"/>
+	<div id="container" style="width: 500px; padding: 0; border: 1px solid #ccc;">
+		<grid id="testGrid" width="100%">
+			<columns>
+				<column label="A"/>
+				<column label="B"/>
+			</columns>
+			<rows>
+				<row><label value="a1"/><label value="b1"/></row>
+				<row><label value="a2"/><label value="b2"/></row>
+			</rows>
+		</grid>
+	</div>
+	<button id="btnSetNone" label='responsive="none"'
+			onClick='testGrid.setResponsive("none")'/>
+	<button id="btnClearResp" label="clear responsive"
+			onClick="testGrid.setResponsive(null)"/>
+	<button id="btnSetCols" label='responsiveColumns="sm-1 md-none"'
+			onClick='testGrid.setResponsiveColumns("sm-1 md-none")'/>
+	<button id="btnClearCols" label="clear responsiveColumns"
+			onClick="testGrid.setResponsiveColumns(null)"/>
+	<button id="btnInvalidate" label="invalidate"
+			onClick="testGrid.invalidate()"/>
+</zk>

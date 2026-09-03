@@ -222,4 +222,46 @@ public class F110_ZK_5409_ResponsiveGridEventTest extends WebDriverTestCase {
 		assertTrue(jq("$gridAuxhead .z-auxheader").isVisible(),
 				"Auxheader cells should reappear when returning to table mode");
 	}
+
+	/**
+	 * {@code onResponsiveModeChange} has no server consumer, so it must not be
+	 * registered as an important client event: on a page with no listener the
+	 * server must render no {@code $$onResponsiveModeChange} token.
+	 */
+	@Test
+	public void testResponsiveModeChangeIsNotImportant() {
+		connect("/test2/F110-ZK-5409-responsive-grid-basic.zul");
+		waitResponse();
+
+		// guard: the map exists and was filled by Grid's genuine important events
+		assertEquals("false",
+				getEval("'' + (zul.grid.Grid._importantEvts && zul.grid.Grid._importantEvts.onScrollPos)"),
+				"probe is live — $$onScrollPos should populate zul.grid.Grid._importantEvts");
+
+		// _importantEvts is populated only from the server-rendered $$ token
+		assertEquals("undefined",
+				getEval("'' + (zul.grid.Grid._importantEvts && zul.grid.Grid._importantEvts.onResponsiveModeChange)"),
+				"onResponsiveModeChange must not be an important event — nothing on the server consumes it");
+	}
+
+	/**
+	 * Positive half of the flag change: a listened {@code onResponsiveModeChange}
+	 * must still render the {@code $$0} token, so a resize burst coalesces into
+	 * one AU request instead of one per breakpoint crossing.
+	 */
+	@Test
+	public void testResponsiveModeChangeIsDuplicateIgnore() {
+		connect("/test2/F110-ZK-5409-responsive-grid-dynamic.zul");
+		waitResponse();
+
+		// grid1 is the only zul.grid.Grid on the page, so nothing else writes this
+		// class-static; $$0onScrollPos proves the map was populated at all
+		assertEquals("true",
+				getEval("'' + (zul.grid.Grid._duplicateIgnoreEvts && zul.grid.Grid._duplicateIgnoreEvts.onScrollPos)"),
+				"probe is live — $$0onScrollPos should populate zul.grid.Grid._duplicateIgnoreEvts");
+
+		assertEquals("true",
+				getEval("'' + (zul.grid.Grid._duplicateIgnoreEvts && zul.grid.Grid._duplicateIgnoreEvts.onResponsiveModeChange)"),
+				"a listened onResponsiveModeChange must keep CE_DUPLICATE_IGNORE");
+	}
 }

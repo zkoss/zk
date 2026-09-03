@@ -278,7 +278,7 @@ public class Grid extends MeshElement {
 		addClientEvent(Grid.class, Events.ON_TOP_PAD, CE_DUPLICATE_IGNORE); //since 5.0.0
 		addClientEvent(Grid.class, Events.ON_DATA_LOADING, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.0
 		addClientEvent(Grid.class, ZulEvents.ON_PAGE_SIZE, CE_DUPLICATE_IGNORE | CE_IMPORTANT | CE_NON_DEFERRABLE); //since 5.0.2
-		addClientEvent(Grid.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE | CE_IMPORTANT); //since 11.0.0
+		addClientEvent(Grid.class, ZulEvents.ON_RESPONSIVE_MODE_CHANGE, CE_DUPLICATE_IGNORE); //since 11.0.0
 	}
 
 	public Grid() {
@@ -1752,7 +1752,6 @@ public class Grid extends MeshElement {
 		if (_pgi != null && _pgi instanceof Component)
 			renderer.render("paginal", _pgi);
 
-		// Responsive properties (ZK-5409) — send raw values; client parses cascade.
 		// EE-only behavior: zkmax's grid-responsive.ts augments zul.grid.Grid with
 		// the actual stacking logic. CE without zkmax just stores the values.
 		String effResp = getEffectiveResponsive();
@@ -1802,7 +1801,9 @@ public class Grid extends MeshElement {
 					+ "; allowed: stacking, none");
 		if (!Objects.equals(_responsive, responsive)) {
 			_responsive = responsive;
-			smartUpdate("responsive", _responsive);
+			// Send the effective value: clearing the own value falls back to the
+			// library property, not to "no responsive".
+			smartUpdate("responsive", getEffectiveResponsive());
 		}
 	}
 
@@ -1843,7 +1844,7 @@ public class Grid extends MeshElement {
 			columns = null;
 		if (!Objects.equals(_responsiveColumns, columns)) {
 			_responsiveColumns = columns;
-			smartUpdate("responsiveColumns", _responsiveColumns);
+			smartUpdate("responsiveColumns", getEffectiveResponsiveColumns());
 		}
 	}
 
