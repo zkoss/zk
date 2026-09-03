@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6097-Contrast.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Aug 31 17:40:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+	<vlayout spacing="10px" style="padding:24px; background:#FFFFFF;">
+		<!-- Badge: white glyph on the severity accent (SC 1.4.3, 4.5:1). -->
+		<hlayout spacing="20px">
+			<badge id="bg-info"    value="8" severity="info"/>
+			<badge id="bg-success" value="8" severity="success"/>
+			<badge id="bg-warning" value="8" severity="warning"/>
+			<badge id="bg-error"   value="8" severity="error"/>
+			<badge id="bg-neutral" value="8" severity="neutral"/>
+			<!-- Dot renders no text; its ring is the only boundary (SC 1.4.11). -->
+			<badge id="bg-dot" dot="true" severity="warning"/>
+		</hlayout>
+
+		<!-- Chip: severity text on the tinted severity background (SC 1.4.3). -->
+		<hlayout spacing="20px">
+			<chip id="cp-info"    label="INFO"    severity="info"/>
+			<chip id="cp-success" label="SUCCESS" severity="success"/>
+			<chip id="cp-warning" label="WARNING" severity="warning"/>
+			<chip id="cp-error"   label="ERROR"   severity="error"/>
+			<chip id="cp-neutral" label="NEUTRAL" severity="neutral"/>
+		</hlayout>
+
+		<!-- Confirmpopup: severity icon glyph on the popup canvas (SC 1.4.11, 3:1). -->
+		<hlayout spacing="10px">
+			<button id="btn-info"    label="Info"    onClick='pInfo.open(self);'/>
+			<button id="btn-success" label="Success" onClick='pSuccess.open(self);'/>
+			<button id="btn-warning" label="Warning" onClick='pWarning.open(self);'/>
+			<button id="btn-error"   label="Error"   onClick='pError.open(self);'/>
+			<button id="btn-neutral" label="Neutral" onClick='pNeutral.open(self);'/>
+		</hlayout>
+		<confirmpopup id="pInfo"    severity="info"    message="Confirm?"/>
+		<confirmpopup id="pSuccess" severity="success" message="Confirm?"/>
+		<confirmpopup id="pWarning" severity="warning" message="Confirm?"/>
+		<confirmpopup id="pError"   severity="error"   message="Confirm?"/>
+		<confirmpopup id="pNeutral" severity="neutral" message="Confirm?"/>
+	</vlayout>
+</zk>
