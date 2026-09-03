@@ -116,6 +116,27 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 				"an end-only range must reach the live region, not the empty string");
 	}
 
+	/** Changing the format repaints both inputs; the region must follow. */
+	@Test
+	public void testFormatChangeReannouncesInTheNewFormat() {
+		connect("/test2/F110-ZK-4305-announce.zul");
+		waitResponse();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		js.executeScript(APPLY_RANGE);
+		sleep(300);
+		js.executeScript(OBSERVE);
+
+		// setFormat repaints both inputs through _propagateFormatChange. Without a
+		// re-announce the region keeps the yyyy-MM-dd text the inputs no longer show,
+		// and only a value change would ever refresh it.
+		js.executeScript("zk.Widget.$(jq('$dr')[0]).setFormat('dd/MM/yyyy');");
+		sleep(300);
+		List<Object> announced = announced(js);
+		assertEquals(List.of("", "01/01/2026 – 05/01/2026"), announced,
+				"a format change must re-announce the range in the new format, was: " + announced);
+	}
+
 	@SuppressWarnings("unchecked")
 	private static List<Object> announced(JavascriptExecutor js) {
 		return (List<Object>) js.executeScript("return window.__announced;");
