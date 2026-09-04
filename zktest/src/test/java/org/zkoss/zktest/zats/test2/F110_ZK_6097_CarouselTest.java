@@ -18,8 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 
@@ -370,6 +372,59 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 				+ "})()");
 		assertEquals("true", result,
 				"after mouse leaves, the autoplay timer must resume");
+	}
+
+	// ----- focus indicator (WCAG 2.1 SC 2.4.7 / 1.4.11) -----
+
+	// Driven with a real Tab, not element.focus(): :focus-visible does not match a
+	// programmatic focus, so a JS-focused element reports no ring and the
+	// assertion would fail against correct CSS.
+
+	@Test
+	public void keyboard_focus_paints_a_ring_on_the_tabbable_root() {
+		connect();
+		waitResponse();
+		tabTo("$cr1");
+		JQuery root = jq("$cr1");
+		assertAll(
+				// The root is tabindex="0" for arrow nav, so it owes its own indicator.
+				() -> assertEquals("2px", root.css("outline-width"),
+						"the focused carousel root paints no outline"),
+				() -> assertNotEquals("none", root.css("outline-style"),
+						"the focused carousel root paints no outline"),
+				// Drawn outside the box: a positioned .z-carouselitem paints over an
+				// inset ring, and the theme's global *:focus box-shadow is one.
+				() -> assertEquals("2px", root.css("outline-offset"),
+						"a non-positive offset puts the ring under the active slide"),
+				() -> assertEquals("none", root.css("box-shadow"),
+						"the theme's *:focus box-shadow must be cleared, or the root"
+						+ " shows two stacked rings"));
+	}
+
+	@Test
+	public void keyboard_focus_backs_the_arrow_and_dot_rings_for_contrast() {
+		connect();
+		waitResponse();
+		// Both controls float over author media, so a single-tone ring has no
+		// guaranteed contrast — each needs the base-colour backing behind it.
+		tabTo("$cr1 .z-carousel-arrow-next");
+		assertNotEquals("none", jq("$cr1 .z-carousel-arrow-next").css("box-shadow"),
+				"the focused arrow has no contrast backing behind its ring");
+		tabTo("$cr1 .z-carousel-indicator:eq(0)");
+		assertNotEquals("none", jq("$cr1 .z-carousel-indicator:eq(0)").css("box-shadow"),
+				"the focused indicator dot has no contrast backing behind its ring");
+	}
+
+	/** Tabs from the document start until {@code selector} holds focus. */
+	private void tabTo(String selector) {
+		getActions().sendKeys(Keys.TAB).perform();
+		for (int i = 0; i < 40; i++) {
+			if (Boolean.parseBoolean(getEval(
+					"jq('" + selector + "')[0] === document.activeElement")))
+				return;
+			getActions().sendKeys(Keys.TAB).perform();
+		}
+		throw new AssertionError("never reached " + selector + " by tabbing");
 	}
 
 	// ----- keyboard (Bootstrap-style arrow nav) -----
