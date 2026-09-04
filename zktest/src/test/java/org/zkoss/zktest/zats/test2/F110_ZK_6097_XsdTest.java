@@ -219,6 +219,20 @@ public class F110_ZK_6097_XsdTest {
 			assertThrows(SAXException.class, () -> validate(zul("<div>\n  <breadcrumbitem/>\n</div>")),
 					"breadcrumbitem is parent-only and must not be reachable from div");
 		}
+
+		@Test
+		public void parentOnlyItemsAreStillReachableFromTemplateAndZk() {
+			// Parent-only keeps them out of anyGroup, so templateType and zkType are
+			// the only two places left that can name them — and templating a
+			// carousel's slides is the documented way to bind one to a model.
+			for (String name : new String[] { "breadcrumbitem", "carouselitem" }) {
+				assertDoesNotThrow(() -> validate(zul(
+						"<template name=\"model\">\n  <" + name + "/>\n</template>")),
+						"template should accept <" + name + ">");
+				assertDoesNotThrow(() -> validate(zul("<" + name + "/>")),
+						"zk (zkType) should accept a bare <" + name + ">");
+			}
+		}
 	}
 
 	@Nested
