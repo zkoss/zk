@@ -12,6 +12,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 
@@ -44,6 +45,13 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 			+ "var st = jq('$dr .z-daterangebox-status')[0];"
 			+ "new MutationObserver(function () { window.__announced.push(st.textContent); })"
 			+ ".observe(st, {childList: true, characterData: true, subtree: true});";
+
+	// Types into the begin input and commits it the way the browser does, so
+	// the parse path (and its rejection) runs exactly as a user would drive it.
+	private static final String TYPE_BEGIN =
+			"var inp = jq('$dr .z-daterangebox-begin')[0];"
+			+ "inp.value = '%s';"
+			+ "inp.dispatchEvent(new Event('change', {bubbles: true}));";
 
 	// The client-side commit the Apply button performs. fromUser=false keeps
 	// onChange out of the way so the assertions see only the live region.
@@ -135,6 +143,65 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		List<Object> announced = announced(js);
 		assertEquals(List.of("", "01/01/2026 – 05/01/2026"), announced,
 				"a format change must re-announce the range in the new format, was: " + announced);
+	}
+
+	/** An unparseable side must announce the reason, not the stale range. */
+	@Test
+	public void testRejectedInputAnnouncesTheReasonNotTheStaleRange() {
+		connect("/test2/F110-ZK-4305-announce.zul");
+		waitResponse();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		js.executeScript(APPLY_RANGE);
+		sleep(300);
+		js.executeScript(OBSERVE);
+
+		// Both inputs point aria-describedby at this region, so leaving the last
+		// good range in it makes an unparseable field describe itself as correct.
+		js.executeScript(TYPE_BEGIN.replace("%s", "not-a-date"));
+		sleep(400);
+
+		List<Object> announced = announced(js);
+		assertFalse(announced.isEmpty(),
+				"a rejection must reach the live region, but nothing was announced");
+		assertFalse(announced.contains(RANGE),
+				"the stale range must not survive a rejection, was: " + announced);
+		assertEquals(js.executeScript("return msgzul.RANGE_INVALID;"),
+				announced.get(announced.size() - 1),
+				"the region must end holding the rejection reason, was: " + announced);
+	}
+
+	/**
+	 * A server-side rejection reaches the region, and clearing it puts the range
+	 * back. Both inputs stay parseable throughout, so this is the path retyping
+	 * cannot reach: setErrorMessage / clearErrorMessage are what
+	 * WrongValueException and Clients.clearWrongValue land on.
+	 */
+	@Test
+	public void testServerRejectionAndItsClearBothReachTheRegion() {
+		connect("/test2/F110-ZK-4305-announce.zul");
+		waitResponse();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		js.executeScript(APPLY_RANGE);
+		sleep(300);
+		js.executeScript(OBSERVE);
+
+		js.executeScript("zk.Widget.$(jq('$dr')[0]).setErrorMessage('at most 7 nights');");
+		sleep(400);
+		assertEquals("at most 7 nights", last(announced(js)),
+				"a server rejection must reach the region, was: " + announced(js));
+
+		// The region published that reason, so retracting the error owes it an
+		// announce back — otherwise describedby calls a valid field invalid.
+		js.executeScript("zk.Widget.$(jq('$dr')[0]).clearErrorMessage();");
+		sleep(400);
+		assertEquals(RANGE, last(announced(js)),
+				"clearing the error must put the range back, was: " + announced(js));
+	}
+
+	private static Object last(List<Object> announced) {
+		return announced.isEmpty() ? null : announced.get(announced.size() - 1);
 	}
 
 	@SuppressWarnings("unchecked")
