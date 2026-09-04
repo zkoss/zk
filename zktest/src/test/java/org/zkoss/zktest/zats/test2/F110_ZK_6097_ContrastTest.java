@@ -72,6 +72,64 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 				"confirmpopup " + SEVERITIES[i] + " ignored the :root override")));
 	}
 
+	// ----- the single-declaration knobs, each read back off its own node -----
+
+	// One token, one consumer, no second declaration to fall back on: revert the
+	// consumer and only a probe override catches it. A computed-colour comparison
+	// would not — it passes just as happily against the hardcoded literal.
+
+	@Test
+	public void overriding_the_avatar_token_restyles_the_label() {
+		connect();
+		waitResponse();
+		overrideToken("--zk-avatar-color", PROBE);
+		assertEquals(PROBE, computed("jq('$ct-avatar')[0]", "color"),
+				"avatar ignored the :root override, so a _wcag* palette cannot restyle it");
+	}
+
+	@Test
+	public void overriding_the_breadcrumb_tokens_restyles_separator_and_ellipsis() {
+		connect();
+		waitResponse();
+		overrideToken("--zk-breadcrumb-separator-color", PROBE);
+		overrideToken("--zk-breadcrumb-ellipsis-color", PROBE);
+		assertAll(
+				() -> assertEquals(PROBE,
+						computed("jq('$ct-bc').find('.z-breadcrumb-separator')[0]", "color"),
+						"breadcrumb separator ignored the :root override"),
+				// maxItems="3" against 4 items is what injects the ellipsis node.
+				() -> assertEquals(PROBE,
+						computed("jq('$ct-bc').find('.z-breadcrumb-ellipsis')[0]", "color"),
+						"breadcrumb ellipsis ignored the :root override"));
+	}
+
+	@Test
+	public void overriding_the_chip_close_token_restyles_its_opacity() {
+		connect();
+		waitResponse();
+		// 0.5 is not the shipped default, so a stale literal cannot coincide.
+		overrideToken("--zk-chip-close-opacity", "0.5");
+		assertEquals("0.5", computed("jq('$ct-chip').find('.z-chip-close')[0]", "opacity"),
+				"chip close ignored the :root override, so a _wcag* palette cannot restyle it");
+	}
+
+	@Test
+	public void overriding_the_box_shadow_tokens_restyles_badge_and_avatargroup() {
+		connect();
+		waitResponse();
+		String probeShadow = "rgb(1, 2, 3) 0px 0px 0px 4px";
+		overrideToken("--zk-badge-indicator-box-shadow", probeShadow);
+		overrideToken("--zk-avatargroup-overflow-box-shadow", probeShadow);
+		assertAll(
+				() -> assertEquals(probeShadow,
+						computed("jq('$bg-info').find('.z-badge-indicator')[0]", "box-shadow"),
+						"badge indicator ignored the :root override"),
+				// maxItems="2" against 3 avatars is what injects the "+N" node.
+				() -> assertEquals(probeShadow,
+						computed("jq('$ct-ag').find('.z-avatargroup-overflow')[0]", "box-shadow"),
+						"avatargroup overflow ignored the :root override"));
+	}
+
 	// ----- the documented gap is still the gap -----
 
 	@Test

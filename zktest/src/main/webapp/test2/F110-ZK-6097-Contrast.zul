@@ -47,5 +47,25 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		<confirmpopup id="pWarning" severity="warning" message="Confirm?"/>
 		<confirmpopup id="pError"   severity="error"   message="Confirm?"/>
 		<confirmpopup id="pNeutral" severity="neutral" message="Confirm?"/>
+
+		<!-- Knobs whose only consumer is a single declaration: a _wcag* palette
+		     sets them, so each needs a rendered node to read them back from. -->
+		<hlayout spacing="20px">
+			<avatar id="ct-avatar" label="AV"/>
+			<!-- maxItems collapses the middle, which is what injects -ellipsis. -->
+			<breadcrumb id="ct-bc" maxItems="3">
+				<breadcrumbitem label="Home" href="/"/>
+				<breadcrumbitem label="A" href="/a"/>
+				<breadcrumbitem label="B" href="/b"/>
+				<breadcrumbitem label="C"/>
+			</breadcrumb>
+			<chip id="ct-chip" label="CLOSE" closable="true"/>
+			<!-- maxItems short of the child count is what injects "+N". -->
+			<avatargroup id="ct-ag" maxItems="2">
+				<avatar label="A"/>
+				<avatar label="B"/>
+				<avatar label="C"/>
+			</avatargroup>
+		</hlayout>
 	</vlayout>
 </zk>
