@@ -39,6 +39,7 @@ ZK 11.0.0
   ZK-6105: Review semantic correctness of CSS variable names after CSS variable migration
   ZK-6039: $n_ in window setMaximize causes page crashes
   ZK-6060: duplicated attributes in zul.xsd
+  ZK-6081: fileupload missing from anyGroup in zul.xsd
 
 * Upgrade Notes
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
