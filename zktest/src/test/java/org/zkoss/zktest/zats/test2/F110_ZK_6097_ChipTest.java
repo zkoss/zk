@@ -18,8 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 
@@ -389,4 +391,35 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 		assertTrue(aria != null && aria.contains("Bob"),
 				"close-button aria-label must follow the new label after setLabel, was: " + aria);
 	}
+
+	// Driven with a real Tab: :focus-visible does not match a programmatic
+	// focus, so a JS-focused element reports no ring at all.
+	@Test
+	public void keyboard_focus_backs_the_close_ring_for_contrast() {
+		connect();
+		waitResponse();
+		tabTo("$chip-closable .z-chip-close");
+		JQuery close = jq("$chip-closable .z-chip-close");
+		assertEquals("2px", close.css("outline-width"),
+				"the focused chip close button paints no outline");
+		// The ring lands inside the chip, on its own fill, where @colorPrimary is
+		// under 3:1 — the base-colour backing is what carries SC 1.4.11.
+		assertNotEquals("none", close.css("box-shadow"),
+				"the focused close button has no contrast backing behind its ring");
+		assertEquals("1", close.css("opacity"),
+				"the close button must reach full opacity while focused");
+	}
+
+	/** Tabs from the document start until {@code selector} holds focus. */
+	private void tabTo(String selector) {
+		getActions().sendKeys(Keys.TAB).perform();
+		for (int i = 0; i < 60; i++) {
+			if (Boolean.parseBoolean(getEval(
+					"jq('" + selector + "')[0] === document.activeElement")))
+				return;
+			getActions().sendKeys(Keys.TAB).perform();
+		}
+		throw new AssertionError("never reached " + selector + " by tabbing");
+	}
+
 }
