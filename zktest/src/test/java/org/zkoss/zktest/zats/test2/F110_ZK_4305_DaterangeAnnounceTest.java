@@ -11,6 +11,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -202,6 +204,50 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 
 	private static Object last(List<Object> announced) {
 		return announced.isEmpty() ? null : announced.get(announced.size() - 1);
+	}
+
+	/**
+	 * The wiring the announcements rest on. The mold emits the region itself, so
+	 * these hold with or without the za11y tier; only the describedby link is the
+	 * add-on's and is guarded accordingly.
+	 */
+	@Test
+	public void testTheLiveRegionIsWiredAndUnseen() {
+		connect("/test2/F110-ZK-4305-announce.zul");
+		waitResponse();
+
+		String region = "jq('$dr .z-daterangebox-status')[0]";
+		assertAll(
+				() -> assertEquals("status", getEval(region + ".getAttribute('role')"),
+						"the region must be a role=status live region"),
+				() -> assertEquals("polite", getEval(region + ".getAttribute('aria-live')"),
+						"polite, so an announcement never interrupts the user"),
+				// Without atomic the reader may speak only the changed text node,
+				// which for a range is one endpoint out of context.
+				() -> assertEquals("true", getEval(region + ".getAttribute('aria-atomic')"),
+						"the whole range must be read, not the diff"),
+				// Its own rule, not the framework .sr-only: that class lives in a
+				// theme-resolved path no theme jar ships.
+				() -> assertEquals("absolute", getEval(
+						"getComputedStyle(" + region + ").position"),
+						"the region must be out of flow, not laid out inside the box"),
+				() -> assertTrue(Double.parseDouble(getEval(
+						region + ".getBoundingClientRect().width")) <= 1,
+						"the region must not paint its text on screen"));
+	}
+
+	/** Both inputs must resolve their description to the region za11y points them at. */
+	@Test
+	public void testBothInputsAreDescribedByTheRegion() {
+		connect("/test2/F110-ZK-4305-announce.zul");
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+
+		String id = getEval("jq('$dr .z-daterangebox-status')[0].id");
+		assertAll(java.util.Arrays.stream(new String[] { "begin", "end" }).map(side -> () ->
+				assertEquals(id, getEval("jq('$dr .z-daterangebox-" + side
+						+ "')[0].getAttribute('aria-describedby')"),
+						"the " + side + " input must point at the live region")));
 	}
 
 	@SuppressWarnings("unchecked")
