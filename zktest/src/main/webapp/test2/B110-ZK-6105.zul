@@ -103,7 +103,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	</listbox>
 
 	<carousel id="cr" width="320px" height="160px" showArrows="true">
-		<carouselitem id="cri0">
+		<!-- label present so the label-background token has a node to read it off. -->
+		<carouselitem id="cri0" label="Slide one">
 			<div width="100%" height="100%" style="background:#1677ff;"/>
 		</carouselitem>
 		<carouselitem id="cri1">
