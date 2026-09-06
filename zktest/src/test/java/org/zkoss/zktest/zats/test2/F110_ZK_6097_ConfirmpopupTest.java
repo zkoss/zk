@@ -16,9 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.JavascriptExecutor;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 
@@ -476,4 +478,50 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 		assertEquals("z-icon-exclamation-triangle", result,
 				"client setIconSclass(null) must restore the default icon, matching server semantics");
 	}
+
+	// Driven with a real Tab: :focus-visible does not match a programmatic focus.
+	@Test
+	public void keyboard_focus_paints_one_ring_on_both_buttons() {
+		connect();
+		waitResponse();
+		getEval(THEME_RING);
+		click(jq("$btn-top"));
+		waitResponse();
+
+		for (String part : new String[] { "ok", "cancel" }) {
+			String sel = "$cpTop .z-confirmpopup-" + part;
+			tabTo(sel);
+			assertEquals("2px", jq(sel).css("outline-width"),
+					"the focused " + part + " button paints no outline");
+			// The probe ring sits at (0,1,0); the component rule is (0,2,0) and
+			// wins on the same property. Drop it and the button paints the
+			// probe ring under its own outline.
+			assertEquals("none", jq(sel).css("box-shadow"),
+					"the theme ring must be cleared on the " + part + " button");
+		}
+	}
+
+
+	// zktest deploys the DEFAULT theme only, which installs no global *:focus
+	// ring — so asserting box-shadow == "none" straight off passes with and
+	// without the component rule. Inject the ring a WCAG palette would install,
+	// then assert the component still clears it.
+	private static final String THEME_RING =
+			"(function () { var s = document.createElement('style');"
+			+ " s.textContent = '*:focus, *:focus-visible "
+			+ "{ box-shadow: 0 0 0 3px rgb(1, 2, 3); }';"
+			+ " document.head.appendChild(s); return ''; })()";
+
+	/** Tabs from the document start until {@code selector} holds focus. */
+	private void tabTo(String selector) {
+		getActions().sendKeys(Keys.TAB).perform();
+		for (int i = 0; i < 60; i++) {
+			if (Boolean.parseBoolean(getEval(
+					"jq('" + selector + "')[0] === document.activeElement")))
+				return;
+			getActions().sendKeys(Keys.TAB).perform();
+		}
+		throw new AssertionError("never reached " + selector + " by tabbing");
+	}
+
 }
