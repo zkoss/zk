@@ -11,11 +11,13 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
@@ -385,4 +387,66 @@ public class F110_ZK_6097_BreadcrumbTest extends WebDriverTestCase {
 		assertTrue(result != null && !"none".equals(result) && !"NO-BUTTON".equals(result),
 				"clicking ellipsis must reveal collapsed items — got: " + result);
 	}
+
+	// Driven with a real Tab: :focus-visible does not match a programmatic focus,
+	// so a JS-focused element reports no ring and the assertion would fail against
+	// correct CSS. Breadcrumb uses a roving tabindex — only one item per bar is
+	// tabbable and the rest are reached with arrow keys — so tab INTO the bar and
+	// assert on whatever landed, rather than naming an item Tab cannot reach.
+	@Test
+	public void keyboard_focus_paints_one_ring_on_item_and_ellipsis() {
+		connect();
+		waitResponse();
+		getEval(THEME_RING);
+
+		tabInto("$bc1");
+		assertAll(
+				() -> assertEquals("2px", activeCss("outline-width"),
+						"the focused breadcrumb item paints no outline"),
+				// A theme's global *:focus box-shadow would stack with this outline
+				// and read as a double ring, so the component clears it.
+				// The probe ring sits at (0,1,0); the component rule is (0,2,1) and
+				// wins on the same property. Drop it and the item paints the probe
+				// ring under its own outline.
+				() -> assertEquals("none", activeCss("box-shadow"),
+						"the theme ring must be cleared, or the item shows two rings"));
+
+		// maxItems="3" against 6 items is what injects the ellipsis button.
+		tabInto("$bc-collapse");
+		assertAll(
+				() -> assertEquals("2px", activeCss("outline-width"),
+						"the focused ellipsis/item in the collapsed bar paints no outline"),
+				() -> assertEquals("none", activeCss("box-shadow"),
+						"the theme ring must be cleared in the collapsed bar too"));
+	}
+
+
+	// zktest deploys the DEFAULT theme only, which installs no global *:focus
+	// ring — so asserting box-shadow == "none" straight off passes with and
+	// without the component rule. Inject the ring a WCAG palette would install,
+	// then assert the component still clears it.
+	private static final String THEME_RING =
+			"(function () { var s = document.createElement('style');"
+			+ " s.textContent = '*:focus, *:focus-visible "
+			+ "{ box-shadow: 0 0 0 3px rgb(1, 2, 3); }';"
+			+ " document.head.appendChild(s); return ''; })()";
+
+	/** Tabs until focus lands inside {@code selector}. */
+	private void tabInto(String selector) {
+		for (int i = 0; i < 80; i++) {
+			getActions().sendKeys(Keys.TAB).perform();
+			if (Boolean.parseBoolean(getEval(
+					"(function () { var r = jq('" + selector + "')[0], a = document.activeElement;"
+					+ " return !!(r && a && r !== a && r.contains(a)); })()")))
+				return;
+		}
+		throw new AssertionError("never tabbed into " + selector);
+	}
+
+	/** Computed style of whatever currently holds focus. */
+	private String activeCss(String prop) {
+		return getEval("getComputedStyle(document.activeElement).getPropertyValue('" + prop + "')");
+	}
+
+
 }
