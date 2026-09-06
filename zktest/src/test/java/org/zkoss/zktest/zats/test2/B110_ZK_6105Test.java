@@ -103,7 +103,8 @@ public class B110_ZK_6105Test extends WebDriverTestCase {
 						BUTTON_BORDER_RADIUS, "--zk-input-border-radius",
 						"--zk-toolbar-button-border-radius", "7px"),
 				// last: hovering parks the pointer, which would perturb the checks above.
-				() -> assertCarouselArrowHoverBackground());
+				() -> assertCarouselArrowHoverBackground(),
+				() -> assertCarouselRestingAndLabelBackgrounds());
 	}
 
 	/**
@@ -162,6 +163,39 @@ public class B110_ZK_6105Test extends WebDriverTestCase {
 										+ "--zk-carousel-control-hover-background-color");
 					} finally {
 						removeRootVar("--zk-carousel-control-hover-background-color");
+					}
+				});
+	}
+
+	/**
+	 * The resting fill and the slide label had no token a theme could reach either
+	 * — the hover state above is a different variable and does not cover them.
+	 */
+	private void assertCarouselRestingAndLabelBackgrounds() {
+		// The NEXT arrow: assertCarouselArrowHoverBackground leaves the pointer
+		// parked on the prev one, which would report the hover fill instead.
+		String arrow = "jq('$cr').find('.z-carousel-arrow-next')";
+		String label = "jq('$cri0').find('.z-carouselitem-label')";
+
+		assertAll(
+				() -> {
+					setRootVar("--zk-carousel-control-background-color", "rgb(1, 2, 3)");
+					try {
+						assertEquals("rgb(1, 2, 3)", computedStyle(arrow, "backgroundColor"),
+								"carousel arrow does not read "
+										+ "--zk-carousel-control-background-color");
+					} finally {
+						removeRootVar("--zk-carousel-control-background-color");
+					}
+				},
+				() -> {
+					setRootVar("--zk-carousel-label-background-color", "rgb(1, 2, 3)");
+					try {
+						assertEquals("rgb(1, 2, 3)", computedStyle(label, "backgroundColor"),
+								"carouselitem label does not read "
+										+ "--zk-carousel-label-background-color");
+					} finally {
+						removeRootVar("--zk-carousel-label-background-color");
 					}
 				});
 	}
