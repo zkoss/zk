@@ -11,6 +11,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -36,6 +38,13 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 
 	/** The end date on its own, which allowEmpty="both" makes a committed state. */
 	private static final String END_ONLY = "2026-01-05";
+
+	/**
+	 * How long to let the region settle. {@code _announceRange} refills on a
+	 * 200ms timer, so anything close to that races a busy browser and turns a
+	 * real regression into a flake; wait well past it instead.
+	 */
+	private static final long SETTLE_MS = 700;
 
 	// Records the region's text once per mutation batch, which is the
 	// granularity assistive tech processes a live region at: writes made in the
@@ -70,7 +79,7 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		// The region starts empty, so the first apply only has to fill it —
 		// clearing an already-empty region mutates nothing.
 		js.executeScript(APPLY_RANGE);
-		sleep(300); // the region is refilled one task after it is cleared
+		sleep(SETTLE_MS); // the region is refilled one task after it is cleared
 		assertEquals(List.of(RANGE), announced(js),
 				"the first apply must reach the live region");
 
@@ -79,7 +88,7 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		// region has to be seen going empty and back.
 		js.executeScript("window.__announced = [];");
 		js.executeScript(APPLY_RANGE);
-		sleep(300);
+		sleep(SETTLE_MS);
 		assertEquals(List.of("", RANGE), announced(js),
 				"re-applying the range already shown must still reach the live region");
 	}
@@ -95,12 +104,14 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		// setBeginValue and setEndValue landing in separate tasks, closer
 		// together than the refill delay — a server push split over two AU
 		// updates. The half range is on its way to being replaced, so it must
-		// not be read out on its own.
+		// not be read out on its own. The gap is kept far below the 200ms refill
+		// delay: a gap near it would let a stalled browser fire the begin-only
+		// refill first and report a flake as a regression.
 		js.executeScript(
 				"var w = zk.Widget.$(jq('$dr')[0]);"
 				+ "w.setBeginValue(new Date(2026, 0, 1));"
-				+ "window.setTimeout(function () { w.setEndValue(new Date(2026, 0, 5)); }, 50);");
-		sleep(500);
+				+ "window.setTimeout(function () { w.setEndValue(new Date(2026, 0, 5)); }, 10);");
+		sleep(SETTLE_MS);
 		List<Object> announced = announced(js);
 		assertEquals(List.of(RANGE), announced,
 				"only the completed pair may be announced — a lone " + BEGIN_ONLY
@@ -119,7 +130,7 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		// user can commit — by typing into the end input or by a one-sided
 		// binding write. Falling through to "" leaves the edit unspoken.
 		js.executeScript("zk.Widget.$(jq('$dr')[0]).setEndValue(new Date(2026, 0, 5));");
-		sleep(300);
+		sleep(SETTLE_MS);
 		assertEquals(List.of(END_ONLY), announced(js),
 				"an end-only range must reach the live region, not the empty string");
 	}
@@ -132,14 +143,14 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
 		js.executeScript(APPLY_RANGE);
-		sleep(300);
+		sleep(SETTLE_MS);
 		js.executeScript(OBSERVE);
 
 		// setFormat repaints both inputs through _propagateFormatChange. Without a
 		// re-announce the region keeps the yyyy-MM-dd text the inputs no longer show,
 		// and only a value change would ever refresh it.
 		js.executeScript("zk.Widget.$(jq('$dr')[0]).setFormat('dd/MM/yyyy');");
-		sleep(300);
+		sleep(SETTLE_MS);
 		List<Object> announced = announced(js);
 		assertEquals(List.of("", "01/01/2026 – 05/01/2026"), announced,
 				"a format change must re-announce the range in the new format, was: " + announced);
@@ -153,13 +164,13 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
 		js.executeScript(APPLY_RANGE);
-		sleep(300);
+		sleep(SETTLE_MS);
 		js.executeScript(OBSERVE);
 
 		// Both inputs point aria-describedby at this region, so leaving the last
 		// good range in it makes an unparseable field describe itself as correct.
 		js.executeScript(TYPE_BEGIN.replace("%s", "not-a-date"));
-		sleep(400);
+		sleep(SETTLE_MS);
 
 		List<Object> announced = announced(js);
 		assertFalse(announced.isEmpty(),
@@ -184,24 +195,68 @@ public class F110_ZK_4305_DaterangeAnnounceTest extends WebDriverTestCase {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
 		js.executeScript(APPLY_RANGE);
-		sleep(300);
+		sleep(SETTLE_MS);
 		js.executeScript(OBSERVE);
 
 		js.executeScript("zk.Widget.$(jq('$dr')[0]).setErrorMessage('at most 7 nights');");
-		sleep(400);
+		sleep(SETTLE_MS);
 		assertEquals("at most 7 nights", last(announced(js)),
 				"a server rejection must reach the region, was: " + announced(js));
 
 		// The region published that reason, so retracting the error owes it an
 		// announce back — otherwise describedby calls a valid field invalid.
 		js.executeScript("zk.Widget.$(jq('$dr')[0]).clearErrorMessage();");
-		sleep(400);
+		sleep(SETTLE_MS);
 		assertEquals(RANGE, last(announced(js)),
 				"clearing the error must put the range back, was: " + announced(js));
 	}
 
 	private static Object last(List<Object> announced) {
 		return announced.isEmpty() ? null : announced.get(announced.size() - 1);
+	}
+
+	/**
+	 * The wiring the announcements rest on. The mold emits the region itself, so
+	 * these hold with or without the za11y tier; only the describedby link is the
+	 * add-on's and is guarded accordingly.
+	 */
+	@Test
+	public void testTheLiveRegionIsWiredAndUnseen() {
+		connect("/test2/F110-ZK-4305-announce.zul");
+		waitResponse();
+
+		String region = "jq('$dr .z-daterangebox-status')[0]";
+		assertAll(
+				() -> assertEquals("status", getEval(region + ".getAttribute('role')"),
+						"the region must be a role=status live region"),
+				() -> assertEquals("polite", getEval(region + ".getAttribute('aria-live')"),
+						"polite, so an announcement never interrupts the user"),
+				// Without atomic the reader may speak only the changed text node,
+				// which for a range is one endpoint out of context.
+				() -> assertEquals("true", getEval(region + ".getAttribute('aria-atomic')"),
+						"the whole range must be read, not the diff"),
+				// Its own rule, not the framework .sr-only: that class lives in a
+				// theme-resolved path no theme jar ships.
+				() -> assertEquals("absolute", getEval(
+						"getComputedStyle(" + region + ").position"),
+						"the region must be out of flow, not laid out inside the box"),
+				() -> assertTrue(Double.parseDouble(getEval(
+						region + ".getBoundingClientRect().width")) <= 1,
+						"the region must not paint its text on screen"));
+	}
+
+	/** Both inputs must resolve their description to the region za11y points them at. */
+	@Test
+	public void testBothInputsAreDescribedByTheRegion() {
+		connect("/test2/F110-ZK-4305-announce.zul");
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+
+		String id = getEval("jq('$dr .z-daterangebox-status')[0].id");
+		assertAll(java.util.Arrays.stream(new String[] { "begin", "end" }).map(side -> () ->
+				assertEquals(id, getEval("jq('$dr .z-daterangebox-" + side
+						+ "')[0].getAttribute('aria-describedby')"),
+						"the " + side + " input must point at the live region")));
 	}
 
 	@SuppressWarnings("unchecked")
