@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import org.zkoss.lang.Library;
+import org.zkoss.xml.XMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -83,14 +84,14 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 			String viewport = page.getViewport();
 			if (!"auto".equals(viewport))
-				out.write("<meta name=\"viewport\" content=\"" + viewport + "\" > \n");
+				out.write("<meta name=\"viewport\" content=\"" + XMLs.escapeXML(viewport) + "\" > \n");
 			else if (!"true".equals(Library.getProperty("org.zkoss.zul.tablet.meta.viewport.disabled", "false")))
 				out.write(
 						"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" > \n");
 
 			out.write("<title>");
 		}
-		write(out, page.getTitle());
+		write(out, XMLs.escapeXML(page.getTitle()));
 		out.write("</title>\n");
 		outHeaders(exec, page, out);
 		out.write("</head>\n");

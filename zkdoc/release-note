@@ -2,6 +2,7 @@ ZK 9.6.7
 * Features
 
 * Bugs
+  ZK-5161: page directive's attributes are not encoded before rendering into HTML
 
 * Upgrade Notes
 
