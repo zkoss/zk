@@ -32,8 +32,9 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			4. The plain datebox below shares zul.db.Calendar with the range popup.
 				Open it and move the day cursor / switch to the month view: it must
 				behave exactly as on a page with no daterangebox on it.
-			5. Open the modal window, then open the calendar from the server: Escape
-				belongs to the modal, so the calendar stays open.
+			5. Open the modal window, then open the calendar from the server: the
+				calendar is the top of the float stack, so it owns Escape and closes
+				— the modal underneath is left alone.
 		</label>
 		<datebox id="db" format="yyyy-MM-dd"/>
 		<button id="btnModal" label="open modal" onClick="wnd.doModal()"/>
