@@ -3,6 +3,7 @@ ZK 9.6.7
 
 * Bugs
   ZK-5161: page directive's attributes are not encoded before rendering into HTML
+  ZK-5707: avoid invoking a event listener after a session expired
 
 * Upgrade Notes
 
