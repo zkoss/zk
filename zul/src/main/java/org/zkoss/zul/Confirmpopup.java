@@ -240,4 +240,13 @@ public class Confirmpopup extends Popup {
 		if (!DEFAULT_FOCUS.equals(_defaultFocus))
 			render(renderer, "defaultFocus", _defaultFocus);
 	}
+
+	//-- Component --//
+	/** Default: not childable. The mold renders only the title row, the
+	 * message body and the two footer buttons, so a child would never appear.
+	 */
+	@Override
+	public boolean isChildable() {
+		return false;
+	}
 }
