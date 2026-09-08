@@ -62,6 +62,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
@@ -713,7 +714,11 @@ public class UiEngineImpl implements UiEngine {
 
 	private static final Event nextEvent(UiVisualizer uv) {
 		final Event evt = ((ExecutionCtrl) uv.getExecution()).getNextEvent();
-		return evt != null && !uv.isAborting() ? evt : null;
+		if (evt != null && !uv.isAborting() && (Sessions.getCurrent() == null
+				|| !((SessionCtrl) Sessions.getCurrent()).isInvalidated())) {
+			return evt;
+		}
+		return null;
 	}
 
 	/** Cycle 1:
