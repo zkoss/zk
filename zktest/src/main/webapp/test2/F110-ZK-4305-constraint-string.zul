@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-4305-constraint-string.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Sep  2 20:55:34 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-4305 Daterangebox raw constraint accessor
+
+		Steps to verify:
+		1. Click "Read constraint string".
+		2. The four labels below fill in with the raw constraint string of each box.
+
+		Expected result:
+		- declared: no past
+		- declared: between 20260101 and 20261231
+		- undeclared: null
+		- after setConstraint("no future"): no future
+		- after setConstraint(new SimpleConstraint("no empty")): no empty
+	</label>
+
+	<vlayout spacing="6px" hflex="1">
+		<daterangebox id="drNoPast" format="yyyy-MM-dd" constraint="no past"/>
+		<daterangebox id="drBetween" format="yyyy-MM-dd"
+					  constraint="between 20260101 and 20261231"/>
+		<daterangebox id="drNone" format="yyyy-MM-dd"/>
+		<daterangebox id="drSimple" format="yyyy-MM-dd"/>
+
+		<label id="lblNoPast" value="PENDING"/>
+		<label id="lblBetween" value="PENDING"/>
+		<label id="lblNone" value="PENDING"/>
+		<label id="lblAfterSet" value="PENDING"/>
+		<label id="lblSimple" value="PENDING"/>
+
+		<button id="btnRead" label="Read constraint string">
+			<attribute name="onClick"><![CDATA[
+				// "" + x, not String.valueOf(x): BeanShell picks overloads by
+				// runtime value, so a null makes char[]/Object ambiguous.
+				lblNoPast.setValue("" + drNoPast.getConstraintString());
+				lblBetween.setValue("" + drBetween.getConstraintString());
+				lblNone.setValue("" + drNone.getConstraintString());
+				drNone.setConstraint("no future");
+				lblAfterSet.setValue("" + drNone.getConstraintString());
+			]]></attribute>
+		</button>
+
+		<button id="btnSimple" label="Set a plain SimpleConstraint">
+			<attribute name="onClick"><![CDATA[
+				drSimple.setConstraint(new org.zkoss.zul.SimpleConstraint("no empty"));
+				lblSimple.setValue("" + drSimple.getConstraintString());
+			]]></attribute>
+		</button>
+	</vlayout>
+</zk>
