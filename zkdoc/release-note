@@ -6,6 +6,19 @@ ZK 9.6.7
   ZK-5707: avoid invoking a event listener after a session expired
 
 * Upgrade Notes
+  + upgrade dompurify to 3.4.15 to fix vulnerabilities
+  + upgrade jython to 2.7.4 and rhino to 1.7.14.1 (both in zk) to fix vulnerabilities
+  + upgrade tomcat-jasper-el to 9.0.121 and jackson-databind to 2.22.1 (both in zkmax) to fix vulnerabilities
+  + the following dependencies have known vulnerabilities, users are recommended to review them if used:
+    - closure-compiler-unshaded (in zk) cannot be upgraded within ZK 9.6 due to the Java 8 support requirement.
+    - optional acegi-security (in zkplus) with no fixed release exists
+    and org.zkoss.zkplus.acegi package deprecated in ZK 7.0.0.
+    - optional spring-beans, spring-context and spring-web (in zkplus) cannot be upgraded beyond 5.3.x
+    within ZK 9.6 due to the Java 8 support requirement (Spring 6.x requires Java 17), and no 5.3.x
+    release clears them (5.3.39, the last one, is still affected), users may upgrade them in their
+    applications if used.
+    - optional jasperreports (in zkex) cannot be upgraded within ZK 9.6 because upgrading to 7.x
+    requires ZK public API changes so is deferred to ZK 11.
 
    --------
 ZK 9.6.6

@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress>
-        <notes><![CDATA[jruby-1.1.2.jar: optional dependency]]></notes>
-        <packageUrl>pkg:maven/org.jruby/jruby@1.1.2</packageUrl>
-        <cve>CVE-2011-4838</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[jasperreports.jar: false positive https://github.com/TIBCOSoftware/jasperreports/issues/132]]></notes>
-        <packageUrl regex="true">^pkg:maven/net\.sf\.jasperreports/jasperreports@.*$</packageUrl>
-        <cve>CVE-2020-9410</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[itext 2.1.7 modified version by JasperReports: https://github.com/TIBCOSoftware/jasperreports/issues/5]]></notes>
-        <packageUrl>pkg:maven/com.lowagie/itext@2.1.7.js8</packageUrl>
-        <cve>CVE-2017-9096</cve>
-    </suppress>
+	<!--
+		Accepted risks documented in ZK 9.6.7 Upgrade Notes.
+	-->
+	<suppress>
+		<notes><![CDATA[
+			spring stack: spring-beans, spring-context and spring-web are optional dependencies of zkplus;
+			spring-aop, spring-core, spring-expression and spring-jcl are their transitive dependencies,
+			see ZK 9.6.7 Upgrade Notes.
+		]]></notes>
+		<packageUrl regex="true">^pkg:maven/org\.springframework/spring\-(aop|beans|context|core|expression|jcl|web)@5\.3\..*$</packageUrl>
+		<vulnerabilityName regex="true">.*</vulnerabilityName>
+	</suppress>
+	<suppress>
+		<notes><![CDATA[
+			jline shaded inside jython (an optional dependency of zk): not yet fixed in the latest jython release.
+		]]></notes>
+		<packageUrl regex="true">^pkg:maven/jline/jline@2\.14\..*$</packageUrl>
+		<vulnerabilityName regex="true">.*</vulnerabilityName>
+	</suppress>
+	<suppress>
+		<notes><![CDATA[
+			acegi-security: optional dependency of zkplus, no fixed release exists, see ZK 9.6.7 Upgrade Notes.
+		]]></notes>
+		<packageUrl regex="true">^pkg:maven/org\.acegisecurity/acegi\-security@1\.0\.7$</packageUrl>
+		<vulnerabilityName regex="true">.*</vulnerabilityName>
+	</suppress>
+	<suppress>
+		<notes><![CDATA[
+			gson and guava bundled inside closure-compiler-unshaded, a dependency of zk: see ZK 9.6.7 Upgrade Notes.
+		]]></notes>
+		<filePath regex="true">.*closure-compiler-unshaded-v20220601\.jar.*</filePath>
+		<vulnerabilityName regex="true">.*</vulnerabilityName>
+	</suppress>
 </suppressions>
