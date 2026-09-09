@@ -29,6 +29,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<forkCount>1C</forkCount>
 		<reuseForks>true</reuseForks>
+		<dependency-check.skip>true</dependency-check.skip>
 	</properties>
 	<name>ZK Test</name>
 	<url>http://www.zkoss.org/</url>

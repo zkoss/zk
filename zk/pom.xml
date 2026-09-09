@@ -61,13 +61,13 @@
 		<dependency>
 			<groupId>org.python</groupId>
 			<artifactId>jython</artifactId>
-			<version>2.7.2</version>
+			<version>2.7.4</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.mozilla</groupId>
 			<artifactId>rhino</artifactId>
-			<version>1.7.14</version>
+			<version>1.7.14.1</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
