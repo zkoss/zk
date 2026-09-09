@@ -23,7 +23,7 @@ function _shallIgnore(evt: zk.Event): boolean {
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface Checkbox {
 	$n(subId: 'real'): HTMLInputElement | undefined;
-	$n(subId: 'mold'): HTMLLabelElement | undefined;
+	$n(subId: 'mold'): HTMLSpanElement | undefined;
 	$n<T extends HTMLElement = HTMLElement>(subId?: string): T | undefined;
 }
 /**
@@ -356,6 +356,7 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		this.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_')
 			.domListen_(mold, 'onMouseDown', '_doMoldMouseDown')
+			.domListen_(mold, 'onClick', '_doMoldClick')
 			._setTabIndexForMold();
 	}
 
@@ -364,7 +365,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 		const n = this.$n('real')!,
 			mold = this.$n('mold')!;
 
-		this.domUnlisten_(mold, 'onMouseDown', '_doMoldMouseDown')
+		this.domUnlisten_(mold, 'onClick', '_doMoldClick')
+			.domUnlisten_(mold, 'onMouseDown', '_doMoldMouseDown')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_');
 		super.unbind_(skipper, after, keepRod);
@@ -425,6 +427,13 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 	_doMoldMouseDown(evt: zk.Event): void {
 		if (this.isDisabled())
 			evt.stop();
+	}
+
+	/** @internal */
+	_doMoldClick(evt: zk.Event): void {
+		// the mold is a span, so relay the activation the <label for> used to forward natively;
+		// the resulting click is targeted at the real input, which doClick_ already handles
+		this.$n_<HTMLInputElement>('real').click();
 	}
 	/** @internal */
 	// eslint-disable-next-line zk/preferStrictBooleanType

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6067.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Sep 09 15:30:48 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window title="Checkbox must not have multiple labels" border="normal" width="760px">
+		<vlayout spacing="10px" style="padding: 12px;">
+			<label multiline="true">
+				1. Run a WAVE / axe scan on this page (e.g., using the WAVE Evaluation Tool browser extension).
+				2. No checkbox may report "Form field must not have multiple label elements".
+			</label>
+			<separator />
+			<hlayout spacing="8px">
+				<label value="ZK Checkbox:" />
+				<checkbox id="cbA11y" label="Receive notifications" />
+			</hlayout>
+			<hlayout spacing="8px">
+				<label value="ZK Checkbox (switch mold):" />
+				<checkbox mold="switch" label="Receive notifications" />
+			</hlayout>
+			<hlayout spacing="8px">
+				<label value="ZK Checkbox (toggle mold):" />
+				<checkbox mold="toggle" label="Receive notifications" />
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>
