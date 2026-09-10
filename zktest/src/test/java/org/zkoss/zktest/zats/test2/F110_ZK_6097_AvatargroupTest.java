@@ -33,7 +33,7 @@ public class F110_ZK_6097_AvatargroupTest extends WebDriverTestCase {
 	}
 
 	@Test
-	public void testMaxCountOverflow() {
+	public void testMaxItemsOverflow() {
 		connect();
 		waitResponse();
 		JQuery agMax = jq("$agMax");
@@ -73,7 +73,7 @@ public class F110_ZK_6097_AvatargroupTest extends WebDriverTestCase {
 	public void testNoOverflowWhenUnlimited() {
 		connect();
 		waitResponse();
-		// basic group has no maxCount — no overflow indicator
+		// basic group has no maxItems — no overflow indicator
 		JQuery agBasic = jq("$agBasic");
 		assertFalse(agBasic.find(".z-avatargroup-overflow").exists(),
 				"basic group should not have overflow indicator");
@@ -133,5 +133,19 @@ public class F110_ZK_6097_AvatargroupTest extends WebDriverTestCase {
 		assertEquals("true",
 				getEval("'' + (jq('$agImgHidden')[0].getAttribute('data-ag-hidden') === 'true')"),
 				"broken-image avatar must stay hidden after onerror (overflow re-applied)");
+	}
+
+	@Test
+	public void setMaxItems_pushes_the_new_limit_to_the_client() {
+		// Covers both halves of the pair: the server setter/getter name and the
+		// client widget's setMaxItems consumer of the pushed "maxItems" property.
+		connect();
+		waitResponse();
+		click(jq("$btnSetTwo"));
+		waitResponse();
+		assertEquals("maxItems=2", jq("$lblMax").text().trim(),
+				"Avatargroup#setMaxItems/#getMaxItems must exist on the server");
+		assertEquals("+3", jq("$agMax").find(".z-avatargroup-overflow").text().trim(),
+				"the client widget must re-apply overflow from the pushed maxItems");
 	}
 }

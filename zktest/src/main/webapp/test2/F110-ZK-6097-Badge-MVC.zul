@@ -22,7 +22,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<hlayout spacing="8px">
 				<button id="btnIncrementMvc" label="Increment"/>
 				<button id="btnResetMvc" label="Reset"/>
-				<button id="btnSetDangerMvc" label="Set danger"/>
+				<button id="btnSetErrorMvc" label="Set error"/>
 			</hlayout>
 		</vlayout>
 	</window>

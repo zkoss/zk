@@ -33,11 +33,11 @@
 		cursor: not-allowed;
 	}
 
-	&-info      { --zk-chip-background-color: @severityInfoBackgroundColor;      --zk-chip-border-color: @severityInfoBorderColor;      --zk-chip-color: @severityInfoTextColor; }
-	&-success   { --zk-chip-background-color: @severitySuccessBackgroundColor;   --zk-chip-border-color: @severitySuccessBorderColor;   --zk-chip-color: @severitySuccessTextColor; }
-	&-warning   { --zk-chip-background-color: @severityWarningBackgroundColor;   --zk-chip-border-color: @severityWarningBorderColor;   --zk-chip-color: @severityWarningTextColor; }
-	&-danger    { --zk-chip-background-color: @severityDangerBackgroundColor;    --zk-chip-border-color: @severityDangerBorderColor;    --zk-chip-color: @severityDangerTextColor; }
-	&-secondary { --zk-chip-background-color: @severitySecondaryBackgroundColor; --zk-chip-border-color: @severitySecondaryBorderColor; --zk-chip-color: @severitySecondaryTextColor; }
+	&-info    { --zk-chip-background-color: @severityInfoBackgroundColor;    --zk-chip-border-color: @severityInfoBorderColor;    --zk-chip-color: @severityInfoTextColor; }
+	&-success { --zk-chip-background-color: @severitySuccessBackgroundColor; --zk-chip-border-color: @severitySuccessBorderColor; --zk-chip-color: @severitySuccessTextColor; }
+	&-warning { --zk-chip-background-color: @severityWarningBackgroundColor; --zk-chip-border-color: @severityWarningBorderColor; --zk-chip-color: @severityWarningTextColor; }
+	&-error   { --zk-chip-background-color: @severityErrorBackgroundColor;   --zk-chip-border-color: @severityErrorBorderColor;   --zk-chip-color: @severityErrorTextColor; }
+	&-neutral { --zk-chip-background-color: @severityNeutralBackgroundColor; --zk-chip-border-color: @severityNeutralBorderColor; --zk-chip-color: @severityNeutralTextColor; }
 
 	&-close {
 		/* Native <button> brings its own background / border / padding —
@@ -50,12 +50,17 @@
 		cursor: pointer;
 		font-size: 10px;
 		line-height: 1;
-		opacity: 0.55;
+		opacity: @chipCloseOpacity;
 		margin-left: 3px;
 	}
 	&-close:hover { opacity: 1; }
 	&-close:focus-visible {
-		outline: 2px solid @colorGreyDark;
+		// The ring lands inside the chip, on its own fill, where @colorPrimary
+		// is under 3:1 (2.87 on info, 2.92 on error). Back it with the base
+		// colour — which also replaces the theme's global `*:focus` ring, so
+		// the two indicators don't stack.
+		box-shadow: 0 0 0 1px @colorBackgroundBase;
+		outline: 2px solid @colorPrimary;
 		outline-offset: 1px;
 		opacity: 1;
 	}

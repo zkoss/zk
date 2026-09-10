@@ -27,6 +27,7 @@ public class F110_ZK_6097_CarouselVM {
 	}
 
 	public int getActiveIndex() { return activeIndex; }
+	public void setActiveIndex(int activeIndex) { this.activeIndex = activeIndex; }
 	public String getSelResult() { return selResult; }
 	public String getChangingResult() { return changingResult; }
 

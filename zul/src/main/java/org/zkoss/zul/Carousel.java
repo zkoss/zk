@@ -79,19 +79,32 @@ public class Carousel extends XulElement {
 
 	/** Sets the index of the currently active slide.
 	 * @param activeIndex the zero-based index of the slide to activate; must be
-	 *     in {@code [0, slideCount-1]}. Setting a different value pushes the new
-	 *     value to the client via {@code smartUpdate}.
-	 * @throws WrongValueException if {@code activeIndex} is negative, or is not
-	 *     less than the current number of slides.
+	 *     in {@code [0, slideCount-1]} once the carousel has rendered. Setting a
+	 *     different value pushes the new value to the client via {@code smartUpdate}.
+	 * @throws WrongValueException if the carousel has already rendered and
+	 *     {@code activeIndex} is outside {@code [0, slideCount-1]}. Before the
+	 *     first render the value is stored unchecked, because a ZUL page may set
+	 *     it above the carousel's own {@code carouselitem} children.
 	 */
 	public void setActiveIndex(int activeIndex) throws WrongValueException {
+		// A negative index is wrong whatever the render state, so it is rejected
+		// before the guard below — deferring it would let a ZUL page store -1
+		// unchallenged, and renderProperties does not re-validate.
 		if (activeIndex < 0)
-			throw new WrongValueException("activeIndex cannot be negative: " + activeIndex);
+			throw new WrongValueException("Out of bound: " + activeIndex);
+		// ZUL evaluates activeIndex="N" before the slides attach, so the upper
+		// bound has nothing to check against yet — store it and let
+		// renderProperties() clamp what it sends to the client. Same guard as
+		// zkmax Cardlayout / Stepbar.
+		if (!isInitialized()) {
+			_activeIndex = activeIndex;
+			return;
+		}
 		final int count = getChildren().size();
-		if (count > 0 && activeIndex >= count)
-			throw new WrongValueException(
-					"activeIndex must be less than the number of slides ("
-							+ count + "): " + activeIndex);
+		// An empty carousel accepts 0, the only index it could ever activate;
+		// rejecting it would make setActiveIndex(getActiveIndex()) throw.
+		if (activeIndex >= count && !(count == 0 && activeIndex == 0))
+			throw new WrongValueException("Out of bound: " + activeIndex + " while size=" + count);
 		if (_activeIndex != activeIndex) {
 			_activeIndex = activeIndex;
 			smartUpdate("activeIndex", _activeIndex);

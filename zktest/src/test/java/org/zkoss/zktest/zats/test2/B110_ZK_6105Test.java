@@ -20,7 +20,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * ZK-6105: a CSS variable must name the role it fills.
  *
- * <p>Three kinds of decoupling are covered:
+ * <p>Four kinds of decoupling are covered:
  * <ul>
  * <li>the mesh containers (listbox / grid / tree) take their background from a
  * mesh-family variable, not the unrelated {@code --zk-mask-background-color},
@@ -30,6 +30,10 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * <li>the toolbar button, the slider knob and the mesh check mark read
  * component-scoped variables that default to the shared token they used to
  * borrow, so an existing override of the shared name still reaches them.</li>
+ * <li>the confirmpopup surface and the avatargroup overlap are reachable from
+ * the token file at all — one was a colour literal in the component LESS, the
+ * other a default declared on the component's own class, which out-ranks a
+ * {@code :root} override.</li>
  * </ul>
  *
  * <p>Every check runs through {@code assertAll} so that one unfixed decoupling
@@ -57,6 +61,15 @@ public class B110_ZK_6105Test extends WebDriverTestCase {
 	private static final String BUTTON_FONT_SIZE = "16px";
 	private static final String BUTTON_BORDER_RADIUS = "4px";
 
+	// --zk-carousel-control-hover-background-color, the arrow's hover fill.
+	private static final String CAROUSEL_ARROW_HOVER_BG = "rgba(0, 0, 0, 0.6)";
+
+	// --zk-avatargroup-overlap, the negative margin that stacks the avatars.
+	private static final String AVATARGROUP_OVERLAP = "-8px";
+
+	// --zk-popup-background-color, reached through --zk-confirmpopup-background-color.
+	private static final String CONFIRMPOPUP_BG = "rgb(255, 255, 255)";
+
 	@Test
 	public void test() {
 		connect();
@@ -65,6 +78,10 @@ public class B110_ZK_6105Test extends WebDriverTestCase {
 				() -> assertMeshContainerBackground("lb"),
 				() -> assertMeshContainerBackground("gd"),
 				() -> assertMeshContainerBackground("tr"),
+				() -> assertAvatargroupOverlap(),
+				// clicks to open, then closes again so the popup does not cover the
+				// components checked after it.
+				() -> assertConfirmpopupSurface(),
 				() -> assertMenuCheckedTickColor(),
 				() -> assertCheckboxTickColor(),
 				() -> assertComponentScopedVariable("jq('$tbb')", "borderTopWidth",
@@ -84,7 +101,10 @@ public class B110_ZK_6105Test extends WebDriverTestCase {
 						"--zk-button-border-radius", "7px"),
 				() -> assertComponentScopedVariable("jq('$tbb')", "borderTopLeftRadius",
 						BUTTON_BORDER_RADIUS, "--zk-input-border-radius",
-						"--zk-toolbar-button-border-radius", "7px"));
+						"--zk-toolbar-button-border-radius", "7px"),
+				// last: hovering parks the pointer, which would perturb the checks above.
+				() -> assertCarouselArrowHoverBackground(),
+				() -> assertCarouselRestingAndLabelBackgrounds());
 	}
 
 	/**
@@ -121,8 +141,147 @@ public class B110_ZK_6105Test extends WebDriverTestCase {
 				});
 	}
 
+	/**
+	 * The arrow's hover fill was the LESS file's only colour literal, so no theme
+	 * could reach it at all. It now has its own token — note that a theme must set
+	 * it explicitly; it does not derive from the resting-state token.
+	 */
+	private void assertCarouselArrowHoverBackground() {
+		String arrow = "jq('$cr').find('.z-carousel-arrow-prev')";
+		mouseOver(jq("$cr").find(".z-carousel-arrow-prev"));
+
+		assertAll(
+				// 1) regression guard: the hover fill is unchanged by the refactor.
+				() -> assertEquals(CAROUSEL_ARROW_HOVER_BG, computedStyle(arrow, "backgroundColor"),
+						"carousel arrow hover background changed"),
+				// 2) the override point works: the variable must drive the hover fill.
+				() -> {
+					setRootVar("--zk-carousel-control-hover-background-color", "rgb(1, 2, 3)");
+					try {
+						assertEquals("rgb(1, 2, 3)", computedStyle(arrow, "backgroundColor"),
+								"carousel arrow hover does not read "
+										+ "--zk-carousel-control-hover-background-color");
+					} finally {
+						removeRootVar("--zk-carousel-control-hover-background-color");
+					}
+				});
+	}
+
+	/**
+	 * The resting fill and the slide label had no token a theme could reach either
+	 * — the hover state above is a different variable and does not cover them.
+	 */
+	private void assertCarouselRestingAndLabelBackgrounds() {
+		// The NEXT arrow: assertCarouselArrowHoverBackground leaves the pointer
+		// parked on the prev one, which would report the hover fill instead.
+		String arrow = "jq('$cr').find('.z-carousel-arrow-next')";
+		String label = "jq('$cri0').find('.z-carouselitem-label')";
+
+		assertAll(
+				() -> {
+					setRootVar("--zk-carousel-control-background-color", "rgb(1, 2, 3)");
+					try {
+						assertEquals("rgb(1, 2, 3)", computedStyle(arrow, "backgroundColor"),
+								"carousel arrow does not read "
+										+ "--zk-carousel-control-background-color");
+					} finally {
+						removeRootVar("--zk-carousel-control-background-color");
+					}
+				},
+				() -> {
+					setRootVar("--zk-carousel-label-background-color", "rgb(1, 2, 3)");
+					try {
+						assertEquals("rgb(1, 2, 3)", computedStyle(label, "backgroundColor"),
+								"carouselitem label does not read "
+										+ "--zk-carousel-label-background-color");
+					} finally {
+						removeRootVar("--zk-carousel-label-background-color");
+					}
+				});
+	}
+
+	/**
+	 * The overlap had its base default on {@code .z-avatargroup} itself, which
+	 * out-ranks a {@code :root} override, so no theme could retune the stack.
+	 * The per-size cascade keeps its own value and is out of scope here.
+	 */
+	private void assertAvatargroupOverlap() {
+		String second = "jq('$ag').find('.z-avatar:last')";
+
+		assertAll(
+				// 1) regression guard: the stack keeps its spacing after the move.
+				() -> assertEquals(AVATARGROUP_OVERLAP, computedStyle(second, "marginLeft"),
+						"avatargroup overlap changed"),
+				// 2) a guard, not the driver: the first avatar stays flush either way.
+				() -> assertEquals("0px",
+						computedStyle("jq('$ag').find('.z-avatar:first')", "marginLeft"),
+						"the first avatar must start flush"),
+				// 3) the override point works: :root must reach the overlap.
+				() -> {
+					setRootVar("--zk-avatargroup-overlap", "-20px");
+					try {
+						assertEquals("-20px", computedStyle(second, "marginLeft"),
+								"--zk-avatargroup-overlap is not reachable from :root");
+					} finally {
+						removeRootVar("--zk-avatargroup-overlap");
+					}
+				});
+	}
+
+	/**
+	 * The popup surface was a colour literal, so no palette could repaint it.
+	 * Nothing regresses today — the themepack template ships no confirmpopup —
+	 * but a dark palette would paint white-on-white once it does.
+	 */
+	private void assertConfirmpopupSurface() {
+		click(jq("$cpb"));
+		waitResponse();
+		try {
+			assertAll(
+					() -> assertComponentScopedVariable("jq('$cp')", "backgroundColor",
+							CONFIRMPOPUP_BG, "--zk-popup-background-color",
+							"--zk-confirmpopup-background-color", "rgb(1, 2, 3)"),
+					() -> assertConfirmpopupArrowFill());
+		} finally {
+			click(jq("$cp").find(".z-confirmpopup-cancel"));
+			waitResponse();
+		}
+	}
+
+	/**
+	 * The arrow is an empty span whose fill lives only on {@code ::after}, and it
+	 * is a separate declaration from the surface — tokenising the body alone
+	 * would leave four white triangles behind.
+	 */
+	private void assertConfirmpopupArrowFill() {
+		String arrow = "jq('$cp').find('.z-confirmpopup-arrow')";
+
+		assertAll(
+				// 1) regression guard: the arrow keeps the surface colour.
+				() -> assertEquals(CONFIRMPOPUP_BG,
+						computedStyle(arrow, "::after", "borderTopColor"),
+						"confirmpopup arrow fill changed"),
+				// 2) the override point works: the arrow follows the surface token.
+				() -> {
+					setRootVar("--zk-confirmpopup-background-color", "rgb(1, 2, 3)");
+					try {
+						assertEquals("rgb(1, 2, 3)",
+								computedStyle(arrow, "::after", "borderTopColor"),
+								"confirmpopup arrow does not read "
+										+ "--zk-confirmpopup-background-color");
+					} finally {
+						removeRootVar("--zk-confirmpopup-background-color");
+					}
+				});
+	}
+
 	private String computedStyle(String selector, String cssProp) {
 		return getEval("getComputedStyle(" + selector + "[0])." + cssProp);
+	}
+
+	private String computedStyle(String selector, String pseudo, String cssProp) {
+		return getEval("getComputedStyle(" + selector + "[0],'" + pseudo
+				+ "')." + cssProp);
 	}
 
 	/**

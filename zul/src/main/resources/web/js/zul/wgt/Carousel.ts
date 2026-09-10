@@ -13,6 +13,20 @@ This program is distributed under LGPL Version 2.1 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
+// Controls the carousel never claims: the swipe and the arrow/Space keys both
+// decline them, so they keep their own native drag and keyboard behaviour.
+// One list — letting these three guards drift apart is the bug this shares.
+/** @internal */
+const _CTRLS = 'input, textarea, select, button, a, [contenteditable]';
+
+/** @internal */
+function _disableCarouselDragStart(evt: JQuery.TriggeredEvent): boolean {
+	// Native image drag fires pointercancel mid-swipe, snapping the track home
+	// (zk.Draggable dodges the same trap). jq() rather than a bare closest():
+	// a text-selection dragstart can be raised on a Text node.
+	return jq(evt.target as HTMLElement).closest(_CTRLS).length > 0;
+}
+
 /**
  * A carousel (slideshow).
  * @defaultValue {@link getZclass}: "z-carousel".
@@ -43,11 +57,7 @@ export class Carousel extends zul.Widget {
 	/** @internal */ _dragBasePx = 0;
 	/** @internal */ _dragPausedAutoplay = false;
 	/** @internal */ _userPaused = false;
-	/** @internal */ _onPointerDownBound?: (evt: PointerEvent) => void;
-	/** @internal */ _onPointerMoveBound?: (evt: PointerEvent) => void;
-	/** @internal */ _onPointerUpBound?: (evt: PointerEvent) => void;
-	/** @internal */ _onPointerCancelBound?: (evt: PointerEvent) => void;
-	/** @internal */ _onVisibilityChangeBound?: () => void;
+	/** @internal */ _dragListenersOn = false;
 
 	/**
 	 * Returns the zero-based index of the currently active slide.
@@ -266,16 +276,7 @@ export class Carousel extends zul.Widget {
 			// drag instead: pointerup early-returns on _dragging===false, the
 			// browser releases the pointer capture on the next event, and the
 			// track's CSS transition is restored here.
-			if (this._dragging) {
-				this._dragging = false;
-				var track = this.$n('track');
-				if (track) track.style.transition = '';
-				if (this._dragPausedAutoplay) {
-					this._dragPausedAutoplay = false;
-					if (this._autoplay && !(this._pause && this._hovered))
-						this._startTimer();
-				}
-			}
+			this._abortDrag();
 			// A loop wrap animates on the OLD axis via an armed transitionend +
 			// safety timeout; flipping the axis mid-wrap would let _finishWrap
 			// snap on stale coordinates. Cancel it (the advanced _activeIndex is
@@ -335,27 +336,54 @@ export class Carousel extends zul.Widget {
 	_syncDragListeners(): void {
 		var track = this.$n('track');
 		if (!track) return;
-		var want = this._effect === 'slide',
-			have = !!this._onPointerDownBound;
-		if (want && !have) {
-			var self = this;
-			this._onPointerDownBound = function (e): void { self._onPointerDown(e); };
-			this._onPointerMoveBound = function (e): void { self._onPointerMove(e); };
-			this._onPointerUpBound = function (e): void { self._onPointerUp(e); };
-			this._onPointerCancelBound = function (e): void { self._onPointerCancel(e); };
-			track.addEventListener('pointerdown', this._onPointerDownBound);
-			track.addEventListener('pointermove', this._onPointerMoveBound);
-			track.addEventListener('pointerup', this._onPointerUpBound);
-			track.addEventListener('pointercancel', this._onPointerCancelBound);
-		} else if (!want && have) {
-			if (this._onPointerDownBound) track.removeEventListener('pointerdown', this._onPointerDownBound);
-			if (this._onPointerMoveBound) track.removeEventListener('pointermove', this._onPointerMoveBound);
-			if (this._onPointerUpBound) track.removeEventListener('pointerup', this._onPointerUpBound);
-			if (this._onPointerCancelBound) track.removeEventListener('pointercancel', this._onPointerCancelBound);
-			this._onPointerDownBound = this._onPointerMoveBound = undefined;
-			this._onPointerUpBound = this._onPointerCancelBound = undefined;
-			this._dragging = false;
+		// proxy() hands back the same bound function every time, so the removes
+		// below match what was added. jq's on() does not de-duplicate, hence the
+		// install flag rather than relying on addEventListener's idempotence.
+		var want = this._effect === 'slide';
+		if (want && !this._dragListenersOn) {
+			this._dragListenersOn = true;
+			track.addEventListener('pointerdown', this.proxy(this._onPointerDown));
+			track.addEventListener('pointermove', this.proxy(this._onPointerMove));
+			track.addEventListener('pointerup', this.proxy(this._onPointerUp));
+			track.addEventListener('pointercancel', this.proxy(this._onPointerCancel));
+			jq(track).on('dragstart', _disableCarouselDragStart);
+		} else if (!want && this._dragListenersOn) {
+			this._dragListenersOn = false;
+			this._removeDragListeners(track);
+			// _onPointerUp is gone now, so nothing else would ever restore the
+			// track's transition or resume the autoplay this drag paused, and
+			// setEffect re-anchors only when _loop — re-snap here for the rest.
+			this._abortDrag();
+			this._applyTrackPosition();
 		}
+	}
+
+	/** @internal */
+	_onVisibilityChange(): void {
+		if (document.hidden) this._stopTimer();
+		else if (this._autoplay && !(this._pause && this._hovered)) this._startTimer();
+	}
+
+	/** @internal */
+	_abortDrag(): void {
+		if (!this._dragging) return;
+		this._dragging = false;
+		var track = this.$n('track');
+		if (track) track.style.transition = '';
+		if (this._dragPausedAutoplay) {
+			this._dragPausedAutoplay = false;
+			if (this._autoplay && !(this._pause && this._hovered))
+				this._startTimer();
+		}
+	}
+
+	/** @internal */
+	_removeDragListeners(track: HTMLElement): void {
+		track.removeEventListener('pointerdown', this.proxy(this._onPointerDown));
+		track.removeEventListener('pointermove', this.proxy(this._onPointerMove));
+		track.removeEventListener('pointerup', this.proxy(this._onPointerUp));
+		track.removeEventListener('pointercancel', this.proxy(this._onPointerCancel));
+		jq(track).off('dragstart', _disableCarouselDragStart);
 	}
 
 	/**
@@ -414,15 +442,7 @@ export class Carousel extends zul.Widget {
 		// ≥1 Hz but still advance them, so the user returns to a carousel
 		// parked at a random slide. Stop the timer outright when the tab is
 		// hidden and resume on return (respecting hover-pause).
-		var selfVis = this;
-		this._onVisibilityChangeBound = function (): void {
-			if (document.hidden) {
-				selfVis._stopTimer();
-			} else if (selfVis._autoplay && !(selfVis._pause && selfVis._hovered)) {
-				selfVis._startTimer();
-			}
-		};
-		document.addEventListener('visibilitychange', this._onVisibilityChangeBound);
+		document.addEventListener('visibilitychange', this.proxy(this._onVisibilityChange));
 	}
 
 	/** @internal */
@@ -442,23 +462,14 @@ export class Carousel extends zul.Widget {
 			this.domUnlisten_(root, 'onKeyDown', '_onKeyDown');
 		}
 		var track = this.$n('track');
-		if (track) {
-			if (this._onPointerDownBound) track.removeEventListener('pointerdown', this._onPointerDownBound);
-			if (this._onPointerMoveBound) track.removeEventListener('pointermove', this._onPointerMoveBound);
-			if (this._onPointerUpBound) track.removeEventListener('pointerup', this._onPointerUpBound);
-			if (this._onPointerCancelBound) track.removeEventListener('pointercancel', this._onPointerCancelBound);
-		}
-		this._onPointerDownBound = this._onPointerMoveBound = undefined;
-		this._onPointerUpBound = this._onPointerCancelBound = undefined;
+		if (track) this._removeDragListeners(track);
+		this._dragListenersOn = false;
 		this._dragging = false;
 		// Reset hover state: after a rerender the old DOM (and its mouseleave)
 		// is gone, so a stale _hovered=true would suppress autoplay forever on
 		// the rebound widget.
 		this._hovered = false;
-		if (this._onVisibilityChangeBound) {
-			document.removeEventListener('visibilitychange', this._onVisibilityChangeBound);
-			this._onVisibilityChangeBound = undefined;
-		}
+		document.removeEventListener('visibilitychange', this.proxy(this._onVisibilityChange));
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -519,7 +530,7 @@ export class Carousel extends zul.Widget {
 		// Mirrors the same guard in _onPointerDown.
 		var domEvt = evt.domEvent as KeyboardEvent | undefined,
 			t = domEvt?.target as HTMLElement | undefined;
-		if (t && t.closest('input, textarea, select, button, a, [contenteditable]'))
+		if (t && t.closest(_CTRLS))
 			return;
 		var key = domEvt?.key;
 		if (key === 'ArrowRight' || (this._orient === 'vertical' && key === 'ArrowDown')) {
@@ -988,7 +999,7 @@ export class Carousel extends zul.Widget {
 		// the case where the control wraps something that received the
 		// pointerdown (e.g. an icon span inside a button).
 		var t = e.target as HTMLElement | undefined;
-		if (t && t.closest('input, textarea, select, button, a, [contenteditable]'))
+		if (t && t.closest(_CTRLS))
 			return;
 		// finish any in-flight wrap synchronously so the drag base is real
 		if (this._wrapping) this._finishWrap();

@@ -589,23 +589,23 @@
 @severityInfoAccentColor:      var(--zk-severity-info-accent-color);
 @severitySuccessAccentColor:   var(--zk-severity-success-accent-color);
 @severityWarningAccentColor:   var(--zk-severity-warning-accent-color);
-@severityDangerAccentColor:    var(--zk-severity-danger-accent-color);
-@severitySecondaryAccentColor: var(--zk-severity-secondary-accent-color);
+@severityErrorAccentColor:     var(--zk-severity-error-accent-color);
+@severityNeutralAccentColor:   var(--zk-severity-neutral-accent-color);
 @severityInfoBackgroundColor:  var(--zk-severity-info-background-color);
 @severitySuccessBackgroundColor: var(--zk-severity-success-background-color);
 @severityWarningBackgroundColor: var(--zk-severity-warning-background-color);
-@severityDangerBackgroundColor: var(--zk-severity-danger-background-color);
-@severitySecondaryBackgroundColor: var(--zk-severity-secondary-background-color);
+@severityErrorBackgroundColor: var(--zk-severity-error-background-color);
+@severityNeutralBackgroundColor: var(--zk-severity-neutral-background-color);
 @severityInfoBorderColor:      var(--zk-severity-info-border-color);
 @severitySuccessBorderColor:   var(--zk-severity-success-border-color);
 @severityWarningBorderColor:   var(--zk-severity-warning-border-color);
-@severityDangerBorderColor:    var(--zk-severity-danger-border-color);
-@severitySecondaryBorderColor: var(--zk-severity-secondary-border-color);
+@severityErrorBorderColor:     var(--zk-severity-error-border-color);
+@severityNeutralBorderColor:   var(--zk-severity-neutral-border-color);
 @severityInfoTextColor:        var(--zk-severity-info-text-color);
 @severitySuccessTextColor:     var(--zk-severity-success-text-color);
 @severityWarningTextColor:     var(--zk-severity-warning-text-color);
-@severityDangerTextColor:      var(--zk-severity-danger-text-color);
-@severitySecondaryTextColor:   var(--zk-severity-secondary-text-color);
+@severityErrorTextColor:       var(--zk-severity-error-text-color);
+@severityNeutralTextColor:     var(--zk-severity-neutral-text-color);
 
 // progressmeter
 @progressmeterBorderColor:     var(--zk-progressmeter-border-color);
@@ -1046,21 +1046,36 @@
 @cropperToolbarButtonFontSize: var(--zk-cropper-toolbar-button-font-size);
 @cropperToolbarButtonPadding:  var(--zk-cropper-toolbar-button-padding);
 
+// breadcrumb
+@breadcrumbSeparatorColor:     var(--zk-breadcrumb-separator-color);
+@breadcrumbEllipsisColor:      var(--zk-breadcrumb-ellipsis-color);
+
+// avatar
+@avatarColor:                  var(--zk-avatar-color);
+
+// chip
+@chipCloseOpacity:             var(--zk-chip-close-opacity);
+
 // badge
 @badgeIndicatorTextColor:      var(--zk-badge-indicator-text-color);
+@badgeIndicatorBoxShadow:      var(--zk-badge-indicator-box-shadow);
 
 // avatargroup
 @avatargroupAvatarBorderColor: var(--zk-avatargroup-avatar-border-color);
 @avatargroupOverflowBackgroundColor: var(--zk-avatargroup-overflow-background-color);
 @avatargroupOverflowColor:     var(--zk-avatargroup-overflow-color);
+@avatargroupOverflowBoxShadow: var(--zk-avatargroup-overflow-box-shadow);
 
 // confirmpopup
+// Sync to zkThemeTemplate together with confirmpopup.less and both profiles — copying only some of the four breaks the template LESS build on an undefined variable.
+@confirmpopupBackgroundColor:  var(--zk-confirmpopup-background-color);
 @confirmpopupFooterBackgroundColor: var(--zk-confirmpopup-footer-background-color);
 @confirmpopupButtonBackgroundColor: var(--zk-confirmpopup-button-background-color);
 @confirmpopupOkColor:          var(--zk-confirmpopup-ok-color);
 
 // carousel
 @carouselControlBackgroundColor: var(--zk-carousel-control-background-color);
+@carouselControlHoverBackgroundColor: var(--zk-carousel-control-hover-background-color);
 @carouselControlColor:         var(--zk-carousel-control-color);
 @carouselIndicatorBackgroundColor: var(--zk-carousel-indicator-background-color);
 @carouselIndicatorBorderColor: var(--zk-carousel-indicator-border-color);

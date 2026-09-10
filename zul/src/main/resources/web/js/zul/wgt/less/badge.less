@@ -26,8 +26,9 @@
 		height: 20px;
 		padding: 0 6px;
 		border-radius: 10px;
-		background: @severityDangerAccentColor;
+		background: @severityErrorAccentColor;
 		color: @badgeIndicatorTextColor;
+		box-shadow: @badgeIndicatorBoxShadow;
 		font-size: 12px;
 		line-height: 20px;
 		text-align: center;
@@ -65,9 +66,9 @@
 		border-radius: 50%;
 	}
 
-	&-info > .z-badge-indicator      { background: @severityInfoAccentColor; }
-	&-success > .z-badge-indicator   { background: @severitySuccessAccentColor; }
-	&-warning > .z-badge-indicator   { background: @severityWarningAccentColor; }
-	&-danger > .z-badge-indicator    { background: @severityDangerAccentColor; }
-	&-secondary > .z-badge-indicator { background: @severitySecondaryAccentColor; }
+	&-info > .z-badge-indicator    { background: @severityInfoAccentColor; }
+	&-success > .z-badge-indicator { background: @severitySuccessAccentColor; }
+	&-warning > .z-badge-indicator { background: @severityWarningAccentColor; }
+	&-error > .z-badge-indicator   { background: @severityErrorAccentColor; }
+	&-neutral > .z-badge-indicator { background: @severityNeutralAccentColor; }
 }

@@ -7,13 +7,10 @@
 	display: inline-flex;
 	align-items: center;
 
-	/* Customization hook — overlap between adjacent avatars (negative
-	   margin). Override on the element via inline style or a parent rule;
-	   each size cascade redefines this value below. */
-	--zk-avatargroup-overlap: -8px;
-
 	/* Each child avatar overlaps the previous one by --zk-avatargroup-overlap.
-	   Reset the first child so the group starts flush. */
+	   Its base default belongs in the profile token file — declared here it
+	   would out-rank a :root override. Reset the first child so the group
+	   starts flush. */
 	> .z-avatar {
 		margin-left: var(--zk-avatargroup-overlap);
 		border: 2px solid @avatargroupAvatarBorderColor;
@@ -59,6 +56,7 @@
 	&-overflow {
 		background: @avatargroupOverflowBackgroundColor;
 		color: @avatargroupOverflowColor;
+		box-shadow: @avatargroupOverflowBoxShadow;
 		cursor: default;
 	}
 }

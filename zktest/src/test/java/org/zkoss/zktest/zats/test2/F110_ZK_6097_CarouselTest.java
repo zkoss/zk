@@ -11,13 +11,17 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 
@@ -252,23 +256,54 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 		click(jq("$btn-bad-active"));
 		waitResponse();
 		String err = jq("$errMsg").text();
-		assertTrue(err.contains("activeIndex cannot be negative"),
+		assertTrue(err.contains("Out of bound: -1"),
 				"negative activeIndex must throw — got: " + err);
 		assertTrue(jq("$ci0").hasClass("z-carouselitem-active"),
 				"failed setActiveIndex must not mutate active slide");
 	}
 
 	@Test
+	public void activeIndex_negative_throws_before_the_first_render() {
+		// The bound check runs against a child count the ZUL page has not filled
+		// yet, so the upper bound is deferred — but a negative index is wrong at
+		// any point, and renderProperties never re-validates it.
+		connect();
+		waitResponse();
+		click(jq("$btn-unrendered-negative"));
+		waitResponse();
+		String err = jq("$errMsg").text();
+		assertTrue(err.contains("Out of bound: -1"),
+				"an unrendered carousel must still reject a negative index — got: " + err);
+	}
+
+	@Test
+	public void activeIndex_above_child_count_is_kept_before_the_first_render() {
+		// The other half of the same guard: with no children attached there is
+		// nothing to compare against, so the value is stored and renderProperties
+		// clamps what it sends to the client.
+		connect();
+		waitResponse();
+		click(jq("$btn-unrendered-overflow"));
+		waitResponse();
+		assertEquals("accepted", jq("$errMsg").text(),
+				"an unrendered carousel must accept an index above its (empty) child list");
+	}
+
+	@Test
 	public void activeIndex_above_child_count_throws() {
+		// Rejected once the carousel has rendered, so a stale index cannot leave
+		// the server pointing at a slide the client never shows. A ZUL page that
+		// sets activeIndex before its slides is the pre-render case and is
+		// clamped by renderProperties instead, not rejected here.
 		connect();
 		waitResponse();
 		click(jq("$btn-overflow-active"));
 		waitResponse();
 		String err = jq("$errMsg").text();
-		assertTrue(err.contains("activeIndex must be less than"),
-				"activeIndex >= child count must throw — got: " + err);
+		assertTrue(err.contains("Out of bound: 99 while size=3"),
+				"an index past the last slide must throw — got: " + err);
 		assertTrue(jq("$ci0").hasClass("z-carouselitem-active"),
-				"overflow setActiveIndex must not mutate active slide");
+				"failed setActiveIndex must not mutate active slide");
 	}
 
 	// ----- autoplay + interval -----
@@ -339,6 +374,59 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 				"after mouse leaves, the autoplay timer must resume");
 	}
 
+	// ----- focus indicator (WCAG 2.1 SC 2.4.7 / 1.4.11) -----
+
+	// Driven with a real Tab, not element.focus(): :focus-visible does not match a
+	// programmatic focus, so a JS-focused element reports no ring and the
+	// assertion would fail against correct CSS.
+
+	@Test
+	public void keyboard_focus_paints_a_ring_on_the_tabbable_root() {
+		connect();
+		waitResponse();
+		tabTo("$cr1");
+		JQuery root = jq("$cr1");
+		assertAll(
+				// The root is tabindex="0" for arrow nav, so it owes its own indicator.
+				() -> assertEquals("2px", root.css("outline-width"),
+						"the focused carousel root paints no outline"),
+				() -> assertNotEquals("none", root.css("outline-style"),
+						"the focused carousel root paints no outline"),
+				// Drawn outside the box: a positioned .z-carouselitem paints over an
+				// inset ring, and the theme's global *:focus box-shadow is one.
+				() -> assertEquals("2px", root.css("outline-offset"),
+						"a non-positive offset puts the ring under the active slide"),
+				() -> assertEquals("none", root.css("box-shadow"),
+						"the theme's *:focus box-shadow must be cleared, or the root"
+						+ " shows two stacked rings"));
+	}
+
+	@Test
+	public void keyboard_focus_backs_the_arrow_and_dot_rings_for_contrast() {
+		connect();
+		waitResponse();
+		// Both controls float over author media, so a single-tone ring has no
+		// guaranteed contrast — each needs the base-colour backing behind it.
+		tabTo("$cr1 .z-carousel-arrow-next");
+		assertNotEquals("none", jq("$cr1 .z-carousel-arrow-next").css("box-shadow"),
+				"the focused arrow has no contrast backing behind its ring");
+		tabTo("$cr1 .z-carousel-indicator:eq(0)");
+		assertNotEquals("none", jq("$cr1 .z-carousel-indicator:eq(0)").css("box-shadow"),
+				"the focused indicator dot has no contrast backing behind its ring");
+	}
+
+	/** Tabs from the document start until {@code selector} holds focus. */
+	private void tabTo(String selector) {
+		getActions().sendKeys(Keys.TAB).perform();
+		for (int i = 0; i < 40; i++) {
+			if (Boolean.parseBoolean(getEval(
+					"jq('" + selector + "')[0] === document.activeElement")))
+				return;
+			getActions().sendKeys(Keys.TAB).perform();
+		}
+		throw new AssertionError("never reached " + selector + " by tabbing");
+	}
+
 	// ----- keyboard (Bootstrap-style arrow nav) -----
 
 	@Test
@@ -394,6 +482,83 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 		waitResponse();
 		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
 		assertEquals("region", jq("$cr1").attr("role"));
+	}
+
+	// ----- status announcer stays visually hidden -----
+
+	@Test
+	public void status_announcer_is_visually_hidden() {
+		// Hidden by carousel's own LESS, not the framework .sr-only — that class
+		// lives in the theme-resolved ~./zul/font/ and is absent under a theme.
+		// Assert the painted result, not the class name.
+		connect();
+		waitResponse();
+		assertAll(
+				() -> assertEquals("absolute", announcerStyle("position"),
+						"announcer is not taken out of flow"),
+				() -> assertEquals("1px", announcerStyle("width"),
+						"announcer is not clamped to 1px wide"),
+				() -> assertEquals("1px", announcerStyle("height"),
+						"announcer is not clamped to 1px tall"),
+				() -> assertEquals("hidden", announcerStyle("overflow"),
+						"announcer does not clip its overflow"),
+				() -> assertTrue(announcerStyle("clip").startsWith("rect("),
+						"announcer has no clipping rect — got: " + announcerStyle("clip")));
+	}
+
+	@Test
+	public void status_announcer_text_does_not_paint() {
+		// Paint-level: put a status string in the announcer and measure the box
+		// it actually occupies. Unhidden, an inline span grows to the width of
+		// "Slide 1 of 3"; hidden, it stays the 1x1 sr-only box.
+		connect();
+		waitResponse();
+		String box = announcerBoxWithText("Slide 1 of 3");
+		String[] wh = box.split("x");
+		assertAll(
+				() -> assertTrue(Double.parseDouble(wh[0]) <= 2,
+						"announcer text paints — box is " + box + ", expected ~1x1"),
+				() -> assertTrue(Double.parseDouble(wh[1]) <= 2,
+						"announcer text paints — box is " + box + ", expected ~1x1"));
+	}
+
+	@Test
+	public void za11y_status_text_stays_hidden() {
+		// End-to-end: za11y really did write "Slide N of M" into the node, and
+		// the node is still the 1x1 sr-only box while holding it.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		String text = getEval("jq('$cr1').find('.z-carousel-status')[0].textContent");
+		assertTrue(text != null && !text.trim().isEmpty(),
+				"za11y must write a status string into the announcer — got: " + text);
+		String box = getEval("(function(){"
+				+ " var r = jq('$cr1').find('.z-carousel-status')[0].getBoundingClientRect();"
+				+ " return r.width + 'x' + r.height;"
+				+ "})()");
+		String[] wh = box.split("x");
+		assertAll(
+				() -> assertTrue(Double.parseDouble(wh[0]) <= 2,
+						"za11y status text paints — box is " + box),
+				() -> assertTrue(Double.parseDouble(wh[1]) <= 2,
+						"za11y status text paints — box is " + box));
+	}
+
+	private String announcerStyle(String cssProp) {
+		return getEval("getComputedStyle(jq('$cr1').find('.z-carousel-status')[0])." + cssProp);
+	}
+
+	/** Writes {@code text} into the announcer, measures its box, then restores it. */
+	private String announcerBoxWithText(String text) {
+		return getEval("(function(){"
+				+ " var n = jq('$cr1').find('.z-carousel-status')[0],"
+				+ "     old = n.textContent;"
+				+ " n.textContent = '" + text + "';"
+				+ " var r = n.getBoundingClientRect(),"
+				+ "     box = r.width + 'x' + r.height;"
+				+ " n.textContent = old;"
+				+ " return box;"
+				+ "})()");
 	}
 
 	@Test
@@ -489,6 +654,110 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 		// only assert the CSS contract here, not the pointer wiring.
 		assertTrue(css != null && css.contains("pan-x"),
 				"vertical carousel track must declare touch-action: pan-x, got: " + css);
+	}
+
+	@Test
+	public void native_image_drag_on_a_slide_is_suppressed() {
+		connect();
+		waitResponse();
+		// swipe_on_a_photo_slide_changes_slide drives the whole gesture; this one
+		// pins the guard itself, so a regression names its own cause instead of
+		// showing up as an unchanged activeIndex.
+		String result = getEval("(function(){"
+				+ "var d = new DragEvent('dragstart', {bubbles:true, cancelable:true});"
+				+ "jq('$ci0').find('img')[0].dispatchEvent(d);"
+				+ "return String(d.defaultPrevented);"
+				+ "})()");
+		assertEquals("true", result,
+				"dragstart on a slide photo must be cancelled, or the native image "
+				+ "drag takes over and pointercancel aborts the slide change");
+	}
+
+	@Test
+	public void swipe_on_a_photo_slide_changes_slide() {
+		connect();
+		waitResponse();
+		// The reported gesture end to end: press on the slide's photo and drag
+		// left past the threshold. Unguarded, the browser claims the gesture as
+		// a native image drag and fires pointercancel within the first few px,
+		// so the track snaps home and the slide never changes. Stay on the
+		// horizontal axis — the release point plays no part, and a diagonal
+		// would land on the autoplaying carousel below.
+		getActions().moveToElement(toElement(jq("$ci0").find("img")))
+				.clickAndHold()
+				.moveByOffset(-45, 0)
+				.moveByOffset(-45, 0)
+				.moveByOffset(-45, 0)
+				.release().perform();
+		waitResponse();
+		assertEquals("1", getEval("zk.Widget.$(jq('$cr1')[0])._activeIndex"),
+				"a swipe starting on a slide photo must still advance the carousel");
+	}
+
+	@Test
+	public void dragstart_on_a_text_field_inside_a_slide_is_left_alone() {
+		connect();
+		waitResponse();
+		// zk.Draggable's own carve-out: a text field keeps its native drag, so
+		// selected text can still be dragged out of a slide. The field is made
+		// here rather than on the page — the guard only walks up from the drag
+		// target looking for a control, it reads nothing else about the slide.
+		String result = getEval("(function(){"
+				+ "var slide = jq('$ci0')[0], inp = document.createElement('input');"
+				+ "slide.appendChild(inp);"
+				+ "var d = new DragEvent('dragstart', {bubbles:true, cancelable:true});"
+				+ "inp.dispatchEvent(d);"
+				+ "var prevented = d.defaultPrevented;"
+				+ "slide.removeChild(inp);"
+				+ "return String(prevented);"
+				+ "})()");
+		assertEquals("false", result,
+				"dragstart on a text field inside a slide must not be cancelled");
+	}
+
+	@Test
+	public void dragstart_guard_is_removed_when_the_effect_leaves_slide() {
+		connect();
+		waitResponse();
+		// Everything is unregistered by function reference; removeEventListener
+		// or jq().off() handed any other reference would silently leave it
+		// attached. Assert both halves: _onPointerDown has no _effect check of
+		// its own, so a surviving pointerdown listener would still drag a fade
+		// carousel's track.
+		String result = getEval("(function(){"
+				+ "var w = zk.Widget.$(jq('$cr1')[0]);"
+				+ "w.setEffect('fade');"
+				+ "var d = new DragEvent('dragstart', {bubbles:true, cancelable:true});"
+				+ "jq('$ci0').find('img')[0].dispatchEvent(d);"
+				+ "w.$n('track').dispatchEvent(new PointerEvent('pointerdown', {bubbles:true,"
+				+ " cancelable:true, pointerId:1, pointerType:'mouse', button:0,"
+				+ " buttons:1, clientX:100, clientY:100}));"
+				+ "return d.defaultPrevented + ',' + w._dragging;"
+				+ "})()");
+		assertEquals("false,false", result,
+				"every drag listener must come off when effect leaves 'slide' — got "
+				+ "dragstartPrevented,dragging = " + result);
+	}
+
+	@Test
+	public void slide_track_suppresses_text_selection() {
+		connect();
+		waitResponse();
+		// Without this the swipe paints a text selection across the slides.
+		String css = jq("$cr1").find(".z-carousel-track").css("user-select");
+		assertEquals("none", css,
+				"swipeable carousel track must declare user-select: none, got: " + css);
+	}
+
+	@Test
+	public void non_swipeable_track_keeps_text_selectable() {
+		connect();
+		waitResponse();
+		// cr-none is horizontal like cr1 and differs only in effect, so this
+		// pins the rule to the effect and not to the orientation.
+		String css = jq("$cr-none").find(".z-carousel-track").css("user-select");
+		assertNotEquals("none", css,
+				"a carousel with no swipe must not disable text selection, got: " + css);
 	}
 
 	// ----- interval lower-bound validation -----
@@ -604,6 +873,115 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
 		assertEquals("Featured shows", jq("$cr-aria").attr("aria-label"),
 				"author-supplied ca:aria-label must survive the za11y augment");
+	}
+
+	@Test
+	public void status_text_seeded_before_live_region_registration() {
+		// The -status span is mold-rendered empty and carries no aria-live of
+		// its own, so the initial "Slide N of M" must be written BEFORE bind_
+		// turns the span into a live region — otherwise every bind announces a
+		// slide change that never happened. The final DOM is identical either
+		// way, so the only observable difference is the mutation ORDER.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		// rerender(-1) rebinds synchronously and takeRecords() drains the
+		// observer queue synchronously — a MutationObserver callback would only
+		// run as a microtask, i.e. after this expression already returned.
+		String seq = getEval(
+				"(function(){"
+				+ " var w = zk.Widget.$(jq('$cr1')[0]);"
+				+ " var host = w.$n().parentNode;"
+				+ " var obs = new MutationObserver(function(){});"
+				+ " obs.observe(host, {subtree:true, childList:true, characterData:true,"
+				+ "   attributes:true, attributeFilter:['aria-live']});"
+				+ " w.rerender(-1);"
+				+ " var recs = obs.takeRecords();"
+				+ " obs.disconnect();"
+				+ " var st = w.$n('status'), seq = [];"
+				+ " for (var i = 0; i < recs.length; i++) {"
+				+ "  var r = recs[i];"
+				+ "  if (r.type == 'attributes') { if (r.target === st) seq.push('live'); }"
+				+ "  else if (r.target === st || r.target.parentNode === st) seq.push('text');"
+				+ " }"
+				+ " return seq.join(',');"
+				+ "})()");
+		int live = seq.indexOf("live");
+		assertTrue(live >= 0,
+				"the observer recorded no aria-live registration at all — got: " + seq);
+		assertEquals(-1, seq.indexOf("text", live),
+				"the status text must be seeded before aria-live registers the region,"
+				+ " otherwise the initial render is announced as a slide change — got: " + seq);
+	}
+
+	@Test
+	public void aria_roledescription_author_supplied_via_ca_is_preserved() {
+		// ca:aria-roledescription is the only handle an app has on the announced
+		// widget type, on the carousel and on each slide alike.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("custom-carousel", jq("$cr-ca").attr("aria-roledescription"),
+				"author-supplied ca:aria-roledescription must survive on the carousel");
+		assertEquals("custom-slide", jq("$ci-rd").attr("aria-roledescription"),
+				"author-supplied ca:aria-roledescription must survive on the slide");
+		assertEquals("carousel", jq("$cr1").attr("aria-roledescription"),
+				"a carousel with no ca: value still gets the default roledescription");
+		assertEquals("slide", jq("$ci0").attr("aria-roledescription"),
+				"a slide with no ca: value still gets the default roledescription");
+	}
+
+	@Test
+	public void aria_roledescription_defaults_come_from_the_msgza11y_bundle() {
+		// aria-roledescription is spoken prose, so it has to be translatable —
+		// a literal in the augment can never be localized or overridden.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		// getEval stringifies, so a key missing from msgza11y comes back as "null".
+		String carousel = getEval("msgza11y.CAROUSEL_ROLEDESC"),
+				slide = getEval("msgza11y.CAROUSELITEM_ROLEDESC");
+		assertNotEquals("null", carousel, "msgza11y must define CAROUSEL_ROLEDESC");
+		assertNotEquals("null", slide, "msgza11y must define CAROUSELITEM_ROLEDESC");
+		assertEquals(carousel, jq("$cr1").attr("aria-roledescription"),
+				"the carousel roledescription must be the bundle value");
+		assertEquals(slide, jq("$ci0").attr("aria-roledescription"),
+				"the slide roledescription must be the bundle value");
+		// The shipped values equal the literals they replaced, so mutate the bundle
+		// and rebind — only an augment that CONSULTS it follows.
+		getEval("(msgza11y.CAROUSEL_ROLEDESC='ZZ-carousel',"
+				+ "msgza11y.CAROUSELITEM_ROLEDESC='ZZ-slide',"
+				+ "zk.Widget.$(jq('$cr1')[0]).rerender(-1),'')");
+		assertEquals("ZZ-carousel", jq("$cr1").attr("aria-roledescription"),
+				"the carousel roledescription must come from msgza11y, not a literal");
+		assertEquals("ZZ-slide", jq("$ci0").attr("aria-roledescription"),
+				"the slide roledescription must come from msgza11y, not a literal");
+	}
+
+	@Test
+	public void carouselitem_aria_label_author_supplied_via_ca_is_preserved() {
+		// The parent already promises ca:aria-label survives; the child must not
+		// fold the caption + position over it.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("Autumn collection", jq("$ci-ca").attr("aria-label"),
+				"author-supplied ca:aria-label must survive on the slide");
+	}
+
+	@Test
+	public void carouselitem_aria_label_still_tracks_setLabel_when_author_supplies_none() {
+		// The guard must key off the author's ca: value, not off "an aria-label
+		// is already present" — the latter would freeze the name bind_ wrote.
+		connect();
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("Card C (Slide 3 of 3)", jq("$ciPlain").attr("aria-label"),
+				"a slide with no ca:aria-label keeps the caption+position default");
+		click(jq("$btn-relabel-slide"));
+		waitResponse();
+		assertEquals("Card Z (Slide 3 of 3)", jq("$ciPlain").attr("aria-label"),
+				"setLabel must still re-derive the aria-label it owns");
 	}
 
 	@Test

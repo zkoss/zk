@@ -17,7 +17,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 
 		Steps to verify:
 		1. Check that all three basic groups render with overlapping avatars.
-		2. Verify the maxCount group shows only the first 3 avatars and a "+2" overflow.
+		2. Verify the maxItems group shows only the first 3 avatars and a "+2" overflow.
 		3. Confirm size/shape cascade: the small-circle group has small circular avatars,
 		   the large-square group has large square avatars.
 
@@ -43,10 +43,10 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			</avatargroup>
 		</div>
 
-		<!-- maxCount = 3, shows +2 overflow -->
+		<!-- maxItems = 3, shows +2 overflow -->
 		<div>
-			<label value="maxCount=3 (overflow)" style="display:block;margin-bottom:8px;"/>
-			<avatargroup id="agMax" maxCount="3">
+			<label value="maxItems=3 (overflow)" style="display:block;margin-bottom:8px;"/>
+			<avatargroup id="agMax" maxItems="3">
 				<avatar label="A"/>
 				<avatar label="B"/>
 				<avatar label="C"/>
@@ -55,13 +55,16 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			</avatargroup>
 			<button id="btn-setgap-hidden" label="setGap on hidden E"
 					onClick='agMaxE.setGap(8);'/>
+			<button id="btnSetTwo" label="setMaxItems(2)"
+					onClick='agMax.setMaxItems(2); lblMax.setValue("maxItems=" + agMax.getMaxItems());'/>
+			<label id="lblMax" value=""/>
 		</div>
 
 		<!-- P2-7: image-mode avatar HIDDEN behind "+1". A broken image fires
 		     onerror, which rerenders the avatar; the overflow marker must be
 		     re-applied so it stays hidden. -->
 		<div>
-			<avatargroup id="agImgGroup" maxCount="1">
+			<avatargroup id="agImgGroup" maxItems="1">
 				<avatar label="V"/>
 				<avatar id="agImgHidden" image="/img/ZK-Logo.gif"/>
 			</avatargroup>
