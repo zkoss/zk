@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class ChromiumHeadlessDriver extends ChromeDriver {
 	private static final Logger LOG = LoggerFactory.getLogger(ChromiumHeadlessDriver.class);
 	static {
-		WebDriverManager.chromiumdriver().setup();
+		WebDriverManager.chromedriver().setup();
 		System.setProperty("webdriver.chrome.logfile", String.format("%s/chromedriver.log", System.getProperty("java.io.tmpdir")));
 		System.setProperty("webdriver.chrome.verboseLogging", "true");
 	}
