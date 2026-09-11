@@ -33,7 +33,7 @@ public class B36_2973306Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "Nexus 7"));
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "Pixel 9"));
 	}
 
 	@Test
