@@ -1,0 +1,493 @@
+/* MD3 Grid — data table component */
+/* DOM: .z-grid > .z-grid-header > table#…-headtbl (UNCLASSED, not .z-grid-header-inner) > thead > tr > th.z-column
+        .z-grid > .z-grid-body > table > tbody > tr.z-row > td.z-row-inner > div.z-row-content */
+
+/* Default = standalone OUTLINED card: 1px border, NO shadow. The component is
+   assumed to stand alone, and on the near-white page (--zk-color-background #f7f9fc)
+   the elevation-card shadow is invisible, so a border is the only thing that gives the
+   table a readable boundary. Never border + shadow together (MD3 outlined ≠ elevated).
+   See doc/spec/DESIGN.md §11. */
+@layer zk-components {
+.z-grid {
+    background-color: var(--zk-grid-bg);
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    font-family: var(--zk-typescale-font-family);
+    border-radius: var(--zk-grid-radius);
+    border: 1px solid var(--zk-grid-border-color);
+}
+
+/* No-border variant — strip the frame when the grid is nested in another bounded
+   surface (panel/card/form) so it doesn't double-frame. ZK emits no border attribute for
+   grid (unlike window's z-window-noborder), so this is an opt-in theme sclass that mirrors
+   ZK's own naming: sclass="z-grid-noborder". */
+.z-grid-noborder {
+    border: none;
+    box-shadow: none;
+}
+
+/* Auto-noborder inside the known form containers — a grid used as a form layout inside a
+   panel/groupbox should blend into its parent without needing the explicit class. */
+.z-panel-body .z-grid,
+.z-groupbox .z-grid {
+    border: none;
+}
+
+/* Form grid label column: fixed width so label doesn't take 50% */
+.z-groupbox .z-grid .z-row-inner:first-child,
+.z-panel-body .z-grid .z-row-inner:first-child {
+    width: 140px;
+    min-width: 140px;
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-medium-size);
+    white-space: nowrap;
+}
+
+/* Auxhead / auxheader rules live in mesh/css/auxhead.css.
+   Frozen-pane styles live in mesh/css/frozen.css. */
+
+.z-auxhead-bar {
+    background-color: transparent;
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ─── Header area ───────────────────────────────────────────────────────── */
+.z-grid-header {
+    overflow: hidden;
+    background-color: transparent;
+}
+
+/* Sticky header (z-sticky-header, ZK-4795) — opt-in class ZK ships with no CSS.
+   Un-clip the root so the header can escape, pin it to the scroll ancestor, and
+   give it an opaque bg so scrolling rows don't bleed through. */
+.z-grid.z-sticky-header {
+    overflow: visible;
+}
+.z-grid.z-sticky-header .z-grid-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: var(--zk-grid-bg);
+}
+
+/* The header table is emitted unclassed as <table id="…-headtbl"> in ZK 10 (grid.js),
+   NOT as .z-grid-header-inner — that class no longer exists, so a rule keyed on it is
+   dead and the table fell back to the UA default border-spacing:2px, which leaked a
+   white gap between stacked auxhead rows. Target the descendant table and zero the
+   spacing, mirroring tree/listbox (`.z-{comp}-header table`) and the ZK default theme's
+   `table { border-spacing: 0 }` reset. (Already separate by UA default; the explicit
+   value keeps frozen-col TH box-shadow paintable, consistent with tree/listbox.) */
+.z-grid-header table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+/* Column header cell — Mira / MD3 Data Table: no fill, hierarchy via weight + divider */
+.z-column {
+    padding: var(--zk-grid-cell-padding);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
+    color: var(--zk-grid-header-fg);
+    text-align: left;
+    background-color: transparent;
+    border-bottom: 1px solid var(--zk-grid-border-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+    vertical-align: middle;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Sortable column */
+.z-column-sort {
+    cursor: pointer;
+}
+
+.z-column-sort:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+.z-column .z-column-sort-icon,
+.z-column [class*="z-icon-"] {
+    font-size: 14px;
+    margin-left: var(--zk-spacing-1);
+    color: var(--zk-color-on-surface-variant);
+    vertical-align: middle;
+}
+
+/* ─── Column-button (menupopup trigger) ─────────────────────────────────────
+   Only rendered when <column menupopup="..."> is set. Position:
+   absolute at the right edge of the column header. MD3 pattern:
+   progressive disclosure — invisible by default, fade in on column hover
+   (matches the ZK `.z-column-hover` JS class AND the CSS `:hover` state).
+   Icon-button styling: 24x24 with circular state-layer on its own hover. */
+.z-column .z-column-button {
+    position: absolute;
+    top: 50%;
+    right: var(--zk-spacing-1);
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: var(--zk-shape-corner-full);
+    background-color: transparent;
+    color: var(--zk-color-on-surface-variant);
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+                background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    z-index: 2;
+}
+
+.z-column:hover .z-column-button,
+.z-column.z-column-hover .z-column-button,
+.z-column .z-column-button:focus-visible {
+    opacity: 1;
+}
+
+.z-column .z-column-button:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+.z-column .z-column-button:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 1px;
+}
+
+.z-column .z-column-button [class*="z-icon-"] {
+    font-size: 16px;
+    margin-left: 0;
+}
+
+/* Narrow image/icon header column — see listbox.css for the full rationale. A
+   fixed-width icon column minus the default 16px side padding squeezes the header
+   image (global `img{max-width:100%}`) below intrinsic size and inflates the row;
+   collapse the side padding so a 16px icon renders full-size. */
+.z-column:has(img) {
+    padding-left: var(--zk-spacing-1);
+    padding-right: var(--zk-spacing-1);
+    white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
+}
+
+/* ─── Body area ─────────────────────────────────────────────────────────── */
+.z-grid-body {
+    overflow: auto;
+    max-height: 100%;
+    /* position:relative anchors .z-focus-a (see listbox.css for rationale). */
+    position: relative;
+}
+
+.z-grid .z-focus-a {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.z-grid-body table,
+.z-grid-inner {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* Row — TR.z-row */
+.z-row {
+    background-color: var(--zk-grid-bg);
+    border-bottom: 1px solid var(--zk-grid-border-color);
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-row:last-child {
+    border-bottom: none;
+}
+
+/* Row hover: MD3 state layer rgba(on-surface, 0.04) for surfaces */
+.z-row:hover {
+    background-color: var(--zk-grid-row-hover-bg);
+}
+
+/* Odd striping: ZK applies z-row-odd class directly on TR */
+.z-row-odd {
+    background-color: var(--zk-grid-stripe-bg);
+}
+
+.z-row-odd:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-grid-stripe-bg));
+}
+
+/* Grid does NOT support row selection — listbox/tree do, but Grid widget
+   never emits .z-row-selected. Do not add selection rules here. */
+
+/* Disabled row */
+.z-row.z-row-disabled,
+.z-row[disabled] {
+    opacity: var(--zk-state-disabled-opacity, 0.38);
+    pointer-events: none;
+}
+
+/* Focus: ZK uses z-row-focus class added by ItemWidget */
+.z-row.z-row-focus {
+    outline: var(--zk-focus-ring);
+    outline-offset: -2px;
+}
+
+/* Cell — TD.z-row-inner contains DIV.z-row-content */
+.z-row-inner {
+    padding: 0;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+/* Content div inside the TD */
+.z-row-content,
+.z-cell {
+    padding: var(--zk-grid-cell-padding);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    color: var(--zk-color-on-surface);
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+/* Legacy: even/odd striping via grid sclass (fallback, prefer z-row-odd) */
+.z-grid-striped .z-row:nth-child(even) {
+    background-color: var(--zk-color-surface-container-lowest);
+}
+
+/* ─── Foot area ─────────────────────────────────────────────────────────── */
+.z-grid-foot {
+    background-color: var(--zk-grid-foot-bg);
+    border-top: 2px solid var(--zk-color-outline-variant);
+}
+
+.z-foot td,
+.z-foot .z-row-inner {
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-color-on-surface-variant);
+}
+
+/* Footer cell content — match body cell padding so text isn't cramped.
+   Actual DOM: TR.z-foot > TD.z-footer > DIV.z-footer-content. Padding
+   belongs on the content div, not the TD. */
+.z-foot .z-footer {
+    padding: 0;
+    vertical-align: middle;
+}
+
+.z-foot .z-footer-content {
+    padding: var(--zk-grid-cell-padding);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-color-on-surface-variant);
+}
+
+.z-foot .z-foot-bar {
+    padding: 0;
+}
+
+/* ─── Group rows (zkex.grid.Group) ──────────────────────────────────────── */
+/* .z-group is a TR rendered by zkex; .z-group-inner is the TD */
+.z-group {
+    background-color: var(--zk-color-surface-container);
+    border-top: 1px solid var(--zk-color-outline-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    cursor: pointer;
+}
+
+.z-group:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-color-surface-container));
+}
+
+.z-group-inner {
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-color-on-surface);
+}
+
+.z-group-content {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+}
+
+/* Group toggle icon */
+.z-group-icon {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--zk-color-on-surface-variant);
+    font-size: 14px;
+}
+
+/* ─── Groupfoot rows ─────────────────────────────────────────────────────── */
+.z-groupfoot {
+    background-color: var(--zk-color-surface-container-lowest);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+
+.z-groupfoot .z-cell,
+.z-groupfoot .z-row-content {
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    font-size: var(--zk-typescale-body-small-size);
+    font-style: italic;
+    color: var(--zk-color-on-surface-variant);
+}
+
+/* Empty message */
+.z-grid-emph {
+    padding: var(--zk-spacing-8) var(--zk-spacing-4);
+    text-align: center;
+    color: var(--zk-color-on-surface-variant);
+    font-style: italic;
+    font-size: var(--zk-typescale-body-medium-size);
+}
+
+/* ─── Row striping: ZK applies .z-grid-odd directly on even TR elements ──── */
+/* ZK's Row widget adds .z-grid-odd to every other <row> in the body.
+   Specificity 0,2,0 overrides the bare .z-grid-odd rule (0,1,0) below,
+   giving even TRs an explicit OPAQUE background so frozen-cell inherit works. */
+.z-row.z-grid-odd {
+    background-color: var(--zk-grid-stripe-bg);
+}
+
+.z-row.z-grid-odd:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-grid-stripe-bg));
+}
+
+/* ─── Legacy: sclass="z-grid-odd" on the <grid> container ───────────────── */
+/* When the grid DIV itself carries .z-grid-odd the container is transparent;
+   child rows get the stripe via nth-child. */
+.z-grid-odd {
+    background-color: transparent;
+}
+
+.z-grid-odd .z-row:nth-child(odd) {
+    background-color: var(--zk-color-surface-container-lowest);
+}
+
+/* ─── Empty body ─────────────────────────────────────────────────────────── */
+.z-grid-emptybody {
+    display: block;
+    width: 100%;
+}
+
+.z-grid-emptybody-content {
+    padding: var(--zk-spacing-8) var(--zk-spacing-4);
+    text-align: center;
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-style: italic;
+}
+
+/* ─── Loading overlay ────────────────────────────────────────────────────── */
+.z-grid-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.6);
+    z-index: 10;
+}
+
+/* ─── Footer row ─────────────────────────────────────────────────────────── */
+.z-grid-footer {
+    background-color: var(--zk-grid-foot-bg);
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+
+.z-grid-footer .z-cell,
+.z-footer .z-cell,
+.z-grid-footer .z-row-content,
+.z-footer .z-row-content {
+    padding: var(--zk-grid-cell-padding);
+    font-size: var(--zk-typescale-body-small-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-color-on-surface-variant);
+}
+
+.z-group.z-group-open {
+    background-color: var(--zk-color-surface-container);
+}
+
+.z-column-sorticon {
+    display: inline-flex;
+    align-items: center;
+    margin-left: var(--zk-spacing-1);
+    font-size: 12px;
+    color: var(--zk-color-on-surface-variant);
+    vertical-align: middle;
+}
+
+/* Resize affordance (columns sizable="true"). ZK toggles `.z-column-sizing` on the
+   TH itself while the pointer is within the rightmost 8px drag zone
+   (HeaderWidget._insizer / doMouseMove_), removed on mouse-out — it is NOT a
+   separate handle element, so it must not be positioned/sized (the old
+   position:absolute;width:4px deformed the header cell on hover). Show the resize
+   cursor + a primary edge accent. See data-components.md → "Sizable header". */
+.z-column-sizing {
+    cursor: col-resize;
+    box-shadow: inset -2px 0 0 var(--zk-color-primary);
+}
+
+.z-columns {
+    background-color: transparent;
+}
+
+.z-columns-bar {
+    background-color: var(--zk-color-surface-container);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+
+.z-columns-border {
+    border-right: 1px solid var(--zk-color-outline-variant);
+}
+
+.z-groupfoot-content {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+}
+
+.z-groupfoot-inner {
+    flex: 1;
+}
+
+.z-cell-hidden-column {
+    display: none;
+}
+
+.z-grid-paging-top .z-paging {
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    border-top: none;
+}
+
+.z-grid-paging-bottom .z-paging {
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+}

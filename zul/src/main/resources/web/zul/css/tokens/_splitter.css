@@ -1,0 +1,34 @@
+/* Splitter-family tokens — single source for DESIGN.md §14 canonical values.
+ *
+ * Consumed by all four implementations:
+ *   - splitter            js/zul/box/css/box.css        (.z-splitter*)
+ *   - borderlayout        js/zul/layout/css/borderlayout.css  (.z-{west,east,north,south}-splitter*)
+ *   - splitlayout         js/zkmax/layout/css/splitlayout.css (.z-splitlayout-splitter*)
+ *   - goldenlayout        js/zkmax/goldenlayout/css/goldenlayout.css (.lm_splitter)
+ *
+ * Change the family spec HERE (and in DESIGN.md §14) — never restate these
+ * values as literals in component CSS (gap log 2026-06-04 family fragmentation;
+ * 2026-06-06 cursor drift). The bar is borderless family-wide — the
+ * surface-container fill is the divider. The pill never resizes on hover (MD3 hover =
+ * colour, not geometry) — all members keep the 28px long-axis at every state.
+ * The only documented per-component exception stays local:
+ *   - goldenlayout idle fill is `transparent` (gutter ruling 2026-06-06) and its
+ *     hover/drag tints mix over transparent instead of the bar fill
+ */
+:root {
+    /* Bar */
+    --zk-splitter-thickness: var(--zk-spacing-2); /* 8px, both orientations */
+    --zk-splitter-bar-bg: var(--zk-color-surface-container);
+    --zk-splitter-bar-bg-hover: color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%), var(--zk-color-surface-container));
+    --zk-splitter-bar-bg-active: color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-pressed-opacity) * 100%), var(--zk-color-surface-container));
+    --zk-splitter-transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+
+    /* Actuator pill (cross-axis = bar thickness) */
+    --zk-splitter-pill-length: 28px;
+    --zk-splitter-pill-radius: var(--zk-shape-corner-full);
+    --zk-splitter-pill-fill: var(--zk-color-outline-variant);
+    --zk-splitter-pill-fill-hover: var(--zk-color-primary);
+    --zk-splitter-pill-icon: var(--zk-color-on-surface-variant);
+    --zk-splitter-pill-icon-hover: var(--zk-color-on-primary);
+    --zk-splitter-icon-size: 8px; /* grip dots + caret glyph */
+}

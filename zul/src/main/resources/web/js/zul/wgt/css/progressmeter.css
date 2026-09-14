@@ -1,0 +1,77 @@
+/* MD3 Linear Progress (Progressmeter)
+   DOM: <div class="z-progressmeter" style="width:Npx">
+          <span id="{uuid}-img" class="z-progressmeter-image" style="width:X%"/>
+        </div>
+   Indeterminate: <div class="z-progressmeter z-progressmeter-indeterminate">
+                    <span class="z-progressmeter-image"/>
+                  </div>
+*/
+
+/* ─── Base track (MD3 4px linear progress) ───────────────────────────── */
+@layer zk-components {
+.z-progressmeter {
+    width: 100%;
+    height: 4px;
+    background-color: var(--zk-progressmeter-bg);
+    border-radius: var(--zk-progressmeter-radius);
+    overflow: hidden;
+    position: relative;
+}
+
+/* ─── Fill bar ────────────────────────────────────────────────────────── */
+.z-progressmeter-image {
+    display: block;
+    height: 100%;
+    background-color: var(--zk-progressmeter-fill);
+    border-radius: var(--zk-progressmeter-radius);
+    transition: width var(--zk-motion-duration-medium2) var(--zk-motion-easing-standard);
+    min-width: 0;
+}
+
+/* ─── Indeterminate (ZK adds z-progressmeter-indeterminate class) ─────── */
+.z-progressmeter-indeterminate {
+    overflow: hidden;
+    width: 150%;
+}
+
+.z-progressmeter-indeterminate > .z-progressmeter-image {
+    position: absolute;
+    height: 100%;
+    animation: z-progressmeter-decrease 1.5s 0.5s infinite;
+    transition: none;
+}
+
+@keyframes z-progressmeter-decrease {
+    from { left: -80%; width: 80%; }
+    to   { left: 110%; width: 10%; }
+}
+
+/* ─── Color variants (all via tokens) ────────────────────────────────── */
+.z-progressmeter-secondary .z-progressmeter-image {
+    background-color: var(--zk-color-secondary);
+}
+.z-progressmeter-secondary.z-progressmeter {
+    background-color: var(--zk-color-secondary-container);
+}
+
+.z-progressmeter-success .z-progressmeter-image {
+    background-color: var(--zk-color-status-success);
+}
+.z-progressmeter-success.z-progressmeter {
+    background-color: color-mix(in srgb, var(--zk-color-status-success) 20%, transparent);
+}
+
+.z-progressmeter-warning .z-progressmeter-image {
+    background-color: var(--zk-color-status-warning);
+}
+.z-progressmeter-warning.z-progressmeter {
+    background-color: var(--zk-color-warning-container);
+}
+
+.z-progressmeter-error .z-progressmeter-image {
+    background-color: var(--zk-color-error);
+}
+.z-progressmeter-error.z-progressmeter {
+    background-color: var(--zk-color-error-container);
+}
+}

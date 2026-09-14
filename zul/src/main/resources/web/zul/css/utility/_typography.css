@@ -1,0 +1,88 @@
+/* MD3 Utility Classes — Typography (weight, size, alignment, transform, style, line-height, headings) */
+
+@layer zk-utilities {
+
+/* ============================================
+   Font Weight
+   ============================================ */
+.z-fw-light   { font-weight: 300; }
+.z-fw-regular { font-weight: 400; }
+.z-fw-medium  { font-weight: 500; }
+.z-fw-semibold{ font-weight: 600; }
+.z-fw-bold    { font-weight: 700; }
+
+/* Font Size — pure size scale (T-shirt naming).
+   Values map to MD3 typescale sizes from tokens/_typography.css;
+   sizes appearing in multiple roles share one utility (e.g. 16px = title-md = body-lg).
+   ┌──────────────┬─────┬──────────────────────────────────┐
+   │ class        │ px  │ MD3 typescale role(s)            │
+   ├──────────────┼─────┼──────────────────────────────────┤
+   │ z-text-xs    │ 11  │ label-small                      │
+   │ z-text-sm    │ 12  │ body-small, label-medium         │
+   │ z-text-md    │ 13  │ body-medium (default body)       │
+   │ z-text-base  │ 14  │ title-small, label-large         │
+   │ z-text-lg    │ 16  │ title-medium, body-large         │
+   │ z-text-xl    │ 22  │ title-large                      │
+   │ z-text-2xl   │ 24  │ headline-small                   │
+   │ z-text-3xl   │ 28  │ headline-medium                  │
+   │ z-text-4xl   │ 32  │ headline-large                   │
+   │ z-text-5xl   │ 36  │ display-small                    │
+   │ z-text-6xl   │ 45  │ display-medium                   │
+   │ z-text-7xl   │ 57  │ display-large                    │
+   └──────────────┴─────┴──────────────────────────────────┘ */
+.z-text-xs   { font-size: var(--zk-typescale-label-small-size); }
+.z-text-sm   { font-size: var(--zk-typescale-body-small-size); }
+.z-text-md   { font-size: var(--zk-typescale-body-medium-size); }
+.z-text-base { font-size: var(--zk-typescale-title-small-size); }
+.z-text-lg   { font-size: var(--zk-typescale-title-medium-size); }
+.z-text-xl   { font-size: var(--zk-typescale-title-large-size); }
+.z-text-2xl  { font-size: var(--zk-typescale-headline-small-size); }
+.z-text-3xl  { font-size: var(--zk-typescale-headline-medium-size); }
+.z-text-4xl  { font-size: var(--zk-typescale-headline-large-size); }
+.z-text-5xl  { font-size: var(--zk-typescale-display-small-size); }
+.z-text-6xl  { font-size: var(--zk-typescale-display-medium-size); }
+.z-text-7xl  { font-size: var(--zk-typescale-display-large-size); }
+
+/* Text Alignment */
+.z-text-start  { text-align: start; }
+.z-text-center { text-align: center; }
+.z-text-end    { text-align: end; }
+
+/* Text Transform */
+.z-text-lowercase  { text-transform: lowercase; }
+.z-text-uppercase  { text-transform: uppercase; }
+.z-text-capitalize { text-transform: capitalize; }
+.z-text-none       { text-transform: none; }
+
+/* Font Style */
+.z-fst-italic { font-style: italic; }
+.z-fst-normal { font-style: normal; }
+
+/* Line Height */
+.z-lh-1    { line-height: 1; }
+.z-lh-sm   { line-height: 1.25; }
+.z-lh-base { line-height: 1.5; }
+.z-lh-lg   { line-height: 1.75; }
+
+/* White-space */
+.z-text-nowrap { white-space: nowrap; }
+
+/* ── Heading utility classes: z-h1 → z-h7 ──────────────────────
+   Apply as sclass on any ZK component (label, div, span, etc.)
+   ────────────────────────────────────────────────────────────── */
+.z-h1, .z-h2, .z-h3, .z-h4, .z-h5, .z-h6, .z-h7 {
+    font-family: var(--zk-typescale-font-family);
+    color: var(--zk-color-on-surface);
+    display: block;
+    margin: 0;
+}
+
+.z-h1 { font-size: 2rem;     font-weight: 700; line-height: 1.2;  letter-spacing: var(--zk-typescale-tracking-tighter); }
+.z-h2 { font-size: 1.75rem;  font-weight: 700; line-height: 1.2;  letter-spacing: var(--zk-typescale-tracking-tight); }
+.z-h3 { font-size: 1.5rem;   font-weight: 600; line-height: 1.25; }
+.z-h4 { font-size: 1.25rem;  font-weight: 600; line-height: 1.3;  }
+.z-h5 { font-size: 1.125rem; font-weight: 600; line-height: 1.4;  }
+.z-h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.4;  }
+.z-h7 { font-size: 0.75rem;  font-weight: 500; line-height: 1.4;  }
+
+} /* end @layer zk-utilities */

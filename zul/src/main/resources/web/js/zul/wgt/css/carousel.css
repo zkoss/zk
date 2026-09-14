@@ -1,0 +1,263 @@
+/* MD3 Carousel — full-bleed media frame (ZK 10.4.0, CE)
+   DOM:
+   div.z-carousel.z-carousel-{horizontal|vertical}.z-carousel-effect-{slide|fade|none}[tabindex="0"]
+     ├─ div.z-carousel-track
+     │    ├─ div.z-carousel-clone[inert]           (CLIENT-INJECTED, loop mode only)
+     │    ├─ div.z-carouselitem[.z-carouselitem-active]
+     │    │    ├─ img[alt=""][aria-hidden="true"]
+     │    │    └─ div.z-carouselitem-label
+     │    └─ div.z-carousel-clone[inert]           (CLIENT-INJECTED, loop mode only)
+     ├─ button.z-carousel-arrow.z-carousel-arrow-{prev|next}[disabled]
+     ├─ div.z-carousel-indicators
+     │    └─ button.z-carousel-indicator[.z-carousel-indicator-active][data-index]
+     └─ span.z-carousel-status                     (sr-only, always present)
+
+   Because slide content is arbitrary photographic imagery, the overlay chrome
+   (arrows/indicators/caption) cannot key off surface/on-surface tokens — it
+   speaks two brand-independent voices instead: --zk-color-scrim (dark) and
+   --zk-color-inverse-on-surface (light). See doc/contracts/carousel.md Design
+   Contract for the full rationale (including why NOT --zk-color-on-primary). */
+
+@layer zk-components {
+
+/* ─── Root: clips to a rounded-rectangle media frame ───────────────────── */
+.z-carousel {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    border-radius: var(--zk-carousel-radius);
+}
+
+/* ─── Track: flex row (or column) of slides; the widget transforms this to
+   bring the active slide into the clipped viewport ─────────────────────── */
+.z-carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    /* Reserve the swipe axis for the widget's own Pointer Events handler so
+       iOS/Android don't intercept the gesture as a native page scroll. */
+    touch-action: pan-y;
+}
+
+.z-carousel-vertical > .z-carousel-track {
+    flex-direction: column;
+    touch-action: pan-x;
+}
+
+/* effect="none": same track-transform mechanism as slide, just no transition
+   (an instant jump). */
+.z-carousel-effect-none > .z-carousel-track {
+    transition: none;
+}
+
+/* effect="fade": slides leave the flex flow and cross-fade via opacity; the
+   track's own transform is neutralized. Carousel.ts stops writing to the
+   track's inline transform once in fade mode, so a value left over from a
+   prior slide-mode session must be overridden here — !important is required
+   to beat that leftover inline style (same technique ZK stock's own
+   carousel.less uses). */
+.z-carousel-effect-fade > .z-carousel-track {
+    position: relative;
+    transition: none;
+    transform: none !important;
+}
+
+.z-carousel-effect-fade > .z-carousel-track > .z-carouselitem {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-carousel-effect-fade > .z-carousel-track > .z-carouselitem-active {
+    opacity: 1;
+    z-index: 1;
+}
+
+/* ─── Slides + loop clones: one full-viewport slot each ────────────────── */
+.z-carouselitem,
+.z-carousel-clone {
+    flex: 0 0 100%;
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Clones are inert duplicates used only for the peek-past-the-end loop
+   illusion — never a real interaction target. */
+.z-carousel-clone {
+    pointer-events: none;
+}
+
+.z-carousel > img,
+.z-carouselitem > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ─── Caption label: opaque-scrim chip anchored to the slide's bottom-left */
+.z-carouselitem-label {
+    position: absolute;
+    bottom: var(--zk-spacing-4);
+    left: var(--zk-spacing-4);
+    max-width: calc(100% - 2 * var(--zk-spacing-4));
+    background-color: var(--zk-carousel-label-bg);
+    color: var(--zk-carousel-label-fg);
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    border-radius: var(--zk-carousel-radius);
+    font-size: var(--zk-typescale-body-small-size);
+    font-weight: var(--zk-typescale-body-small-weight);
+    line-height: var(--zk-typescale-body-small-line-height);
+}
+
+/* ─── Arrows: circular scrim buttons docked to the left/right edges ─────── */
+.z-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--zk-carousel-arrow-size);
+    height: var(--zk-carousel-arrow-size);
+    border-radius: var(--zk-shape-corner-full);
+    background-color: var(--zk-carousel-arrow-bg);
+    color: var(--zk-carousel-arrow-fg);
+    border: 0;
+    /* The mold's literal ‹/› fallback glyph sits asymmetrically around the
+       baseline; zero it out and draw a deterministic chevron via the
+       ::before rule below instead. */
+    font-size: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* CSS-drawn chevron: an L-shape (two border sides) rotated 45deg, colored via
+   currentColor so it rides on the arrow's own fg knob (and safely follows
+   forced-colors' `color` remap — see doc/contracts/carousel.md). */
+.z-carousel-arrow::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    box-sizing: border-box;
+}
+
+.z-carousel-arrow-prev::before {
+    border-left: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    /* Optical centering: the rotated L-shape's bounding box leaves the
+       visual ink slightly right of geometric center. */
+    margin-left: 2px;
+}
+
+.z-carousel-arrow-next::before {
+    border-right: 2px solid currentColor;
+    border-top: 2px solid currentColor;
+    transform: rotate(45deg);
+    margin-right: 2px;
+}
+
+/* Hover darkens the scrim (rather than a currentColor state-layer overlay,
+   which would lighten the dark scrim toward white — the wrong direction for
+   a light-fg-on-dark-bg control). */
+.z-carousel-arrow:hover {
+    background-color: var(--zk-carousel-arrow-bg-hover);
+}
+
+.z-carousel-arrow:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+.z-carousel-arrow[disabled] {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: default;
+}
+
+.z-carousel-arrow-prev {
+    left: var(--zk-spacing-2);
+}
+
+.z-carousel-arrow-next {
+    right: var(--zk-spacing-2);
+}
+
+/* ─── Indicators: 24px hit area (WCAG 2.5.8 floor) around an 8px dot ────── */
+.z-carousel-indicators {
+    position: absolute;
+    bottom: var(--zk-spacing-2);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--zk-spacing-2);
+    z-index: 2;
+}
+
+.z-carousel-indicator {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Resting = fill/ring pair; active (below) swaps which knob is which, so the
+   two states read as inversions of one idea rather than four independent
+   colors. */
+.z-carousel-indicator::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--zk-carousel-indicator-bg);
+    border: 1px solid var(--zk-carousel-indicator-active-bg);
+    box-sizing: border-box;
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+                background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+                border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-carousel-indicator-active::before {
+    background-color: var(--zk-carousel-indicator-active-bg);
+    border-color: var(--zk-carousel-indicator-bg);
+}
+
+/* Hover is a geometry cue (scale), not a color change: the dot's fill is
+   already one of two different colors depending on resting/active state, so
+   a single "darker fill" hover knob would be correct for one state and wrong
+   for the other. A size bump reads identically regardless of which fill is
+   currently applied. */
+.z-carousel-indicator:hover::before {
+    transform: scale(1.25);
+}
+
+.z-carousel-indicator:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+/* ─── Status: always-present live-region span, visually hidden (sr-only) ── */
+.z-carousel-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+}

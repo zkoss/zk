@@ -1,0 +1,95 @@
+/* MD3 Toolbar Button — Icon button / Icon+text button for toolbar context */
+/* DOM: <a class="z-toolbarbutton [z-toolbarbutton-checked]" [disabled] role="button">
+          <span id="...-cnt" class="z-toolbarbutton-content">
+            <i class="z-icon-*"/> label text
+          </span>
+        </a> */
+
+@layer zk-components {
+.z-toolbarbutton {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 var(--zk-spacing-2);
+    border: none;
+    border-radius: var(--zk-toolbarbutton-radius);
+    background-color: transparent;
+    color: var(--zk-toolbarbutton-fg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    text-decoration: none;
+    outline: none;
+    box-sizing: border-box;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State layer — uses currentColor so app-bar context override works automatically */
+.z-toolbarbutton::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-toolbarbutton:hover::before       { opacity: var(--zk-state-hover-opacity); }
+.z-toolbarbutton:focus-visible::before { opacity: var(--zk-state-focus-opacity); }
+.z-toolbarbutton:active::before      { opacity: var(--zk-state-pressed-opacity); }
+
+.z-toolbarbutton:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+/* Content span — elevate above state layer */
+.z-toolbarbutton-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Checked (toggle) state — primary container background, aligned with other
+   selection states across the theme (listitem/treerow/menu/comboitem/paging) */
+.z-toolbarbutton-checked {
+    background-color: var(--zk-toolbarbutton-checked-bg);
+    color: var(--zk-toolbarbutton-checked-fg);
+}
+
+/* Checked + hover/focus still show state layer (currentColor now = on-primary-container) */
+.z-toolbarbutton-checked:hover::before       { opacity: var(--zk-state-hover-opacity); }
+.z-toolbarbutton-checked:focus-visible::before { opacity: var(--zk-state-focus-opacity); }
+.z-toolbarbutton-checked:active::before      { opacity: var(--zk-state-pressed-opacity); }
+
+/* Checked focus ring uses primary */
+.z-toolbarbutton-checked:focus-visible {
+    outline-color: var(--zk-color-primary);
+}
+
+/* Disabled state — apply opacity to the entire element */
+.z-toolbarbutton[disabled],
+.z-toolbarbutton.z-toolbarbutton-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.z-toolbarbutton[disabled]::before,
+.z-toolbarbutton.z-toolbarbutton-disabled::before {
+    display: none;
+}
+}

@@ -1,0 +1,154 @@
+/* MD3 Input Group — input + addon(s) combined into a single field
+ * DOM: <div class="z-inputgroup [z-inputgroup-vertical]">
+ *        <!-- Labels/icons wrapped as: -->
+ *        <div class="z-inputgroup-text">label text or icon</div>
+ *        <!-- Buttons/inputs rendered directly (no wrapper div):  -->
+ *        <input class="z-textbox ..."/>
+ *        <button class="z-button ..."/>
+ *      </div>
+ * Notes:
+ *  - Label/non-input children get z-inputgroup-text wrapper (from encloseChildHTML_)
+ *  - Border radius applied to :first-child/:last-child only
+ *  - All middle children get border-radius: 0 to connect seamlessly
+ */
+
+@layer zk-components {
+.z-inputgroup {
+    display: inline-flex;
+    align-items: stretch;
+}
+
+/* Remove border-radius from all direct children — override per first/last below */
+.z-inputgroup > :nth-child(n) {
+    border-radius: 0;
+}
+
+/* Left-edge child gets left border-radius (horizontal layout) */
+.z-inputgroup:not(.z-inputgroup-vertical) > :first-child {
+    border-top-left-radius: var(--zk-inputgroup-radius);
+    border-bottom-left-radius: var(--zk-inputgroup-radius);
+}
+
+/* Right-edge child gets right border-radius (horizontal layout) */
+.z-inputgroup:not(.z-inputgroup-vertical) > :last-child {
+    border-top-right-radius: var(--zk-inputgroup-radius);
+    border-bottom-right-radius: var(--zk-inputgroup-radius);
+}
+
+/* Flatten child heights in horizontal mode */
+.z-inputgroup:not(.z-inputgroup-vertical) > :nth-child(n) {
+    height: auto;
+}
+
+/* Text/label addon — the z-inputgroup-text wrapper div */
+.z-inputgroup-text {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 var(--zk-spacing-3);
+    min-height: var(--zk-control-height);
+    background-color: var(--zk-inputgroup-text-bg);
+    border: 1px solid var(--zk-inputgroup-border-color);
+    color: var(--zk-inputgroup-text-fg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    white-space: nowrap;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Collapse duplicate adjacent borders between text addons and inputs.
+ * Axis-aware: in horizontal layout adjacent children share a VERTICAL edge,
+ * so the successor's left border is dropped. The vertical-mode equivalent
+ * (shared horizontal edge → drop top border) lives in the vertical block below. */
+.z-inputgroup:not(.z-inputgroup-vertical) .z-inputgroup-text + .z-inputgroup-text,
+.z-inputgroup:not(.z-inputgroup-vertical) .z-inputgroup-text + .z-textbox,
+.z-inputgroup:not(.z-inputgroup-vertical) .z-inputgroup-text + .z-combobox,
+.z-inputgroup:not(.z-inputgroup-vertical) .z-inputgroup-text + .z-combobox .z-combobox-input {
+    border-left: none;
+}
+
+/* Input inside inputgroup — integrate with the group border */
+.z-inputgroup .z-textbox,
+.z-inputgroup .z-combobox .z-combobox-input {
+    border: 1px solid var(--zk-inputgroup-border-color);
+    border-radius: 0;
+    flex: 1;
+    min-width: 0;
+    height: auto;
+    min-height: var(--zk-control-height);
+    box-sizing: border-box;
+}
+
+/* When input is last child, its right border shows (handled by :last-child above) */
+/* When input is first child, its left border-radius shows */
+
+/* Remove ZK's default textarea height override when multiline */
+.z-inputgroup textarea.z-textbox {
+    min-height: 80px;
+    height: auto;
+    resize: vertical;
+}
+
+/* Focus ring: highlight the whole group when any input is focused */
+.z-inputgroup:focus-within {
+    outline: var(--zk-focus-ring);
+    outline-offset: 0;
+    border-radius: var(--zk-inputgroup-radius);
+}
+
+/* Neutralize the single-input Mechanism-B focus rule (input.css) on grouped
+ * children. The group's :focus-within outline above owns the affordance, so the
+ * child must keep a constant 1px border AND constant rest padding in every state.
+ * input.css's `:focus { padding: 0 calc(spacing-3 - 1px) }` is the compensation
+ * for a 1px→2px border growth — but inside the group the border stays 1px (the
+ * base rule above wins on equal specificity), so that padding shrink has nothing
+ * to offset and the shrink-to-fit group jumps ~2px on focus. Pin both back.
+ * See skill reference/focus-affordance-no-layout-shift.md. */
+.z-inputgroup .z-textbox:focus,
+.z-inputgroup .z-textbox:focus-visible,
+.z-inputgroup .z-combobox .z-combobox-input:focus,
+.z-inputgroup .z-combobox .z-combobox-input:focus-visible {
+    border-width: 1px;
+    padding: 0 var(--zk-spacing-3);
+}
+
+/* Multiline keeps its own (taller) rest padding — the single-line rule above
+ * would otherwise wipe the textarea's vertical padding on focus. */
+.z-inputgroup textarea.z-textbox:focus,
+.z-inputgroup textarea.z-textbox:focus-visible {
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+}
+
+/* Vertical orientation */
+.z-inputgroup-vertical {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.z-inputgroup-vertical > :first-child {
+    border-top-left-radius: var(--zk-inputgroup-radius);
+    border-top-right-radius: var(--zk-inputgroup-radius);
+}
+
+.z-inputgroup-vertical > :last-child {
+    border-bottom-left-radius: var(--zk-inputgroup-radius);
+    border-bottom-right-radius: var(--zk-inputgroup-radius);
+}
+
+.z-inputgroup-vertical .z-inputgroup-text {
+    justify-content: center;
+}
+
+/* Vertical mode collapses the shared HORIZONTAL edge: each stacked successor
+ * drops its top border so the seam is one 1px line, not a doubled 2px line.
+ * Side (left/right) borders stay intact — dropping them was the leaked
+ * horizontal rule that left the textbox without a left border. */
+.z-inputgroup-vertical .z-inputgroup-text + .z-inputgroup-text,
+.z-inputgroup-vertical .z-inputgroup-text + .z-textbox,
+.z-inputgroup-vertical .z-textbox + .z-inputgroup-text,
+.z-inputgroup-vertical .z-inputgroup-text + .z-combobox,
+.z-inputgroup-vertical .z-combobox + .z-inputgroup-text,
+.z-inputgroup-vertical .z-inputgroup-text + .z-combobox .z-combobox-input {
+    border-top: none;
+}
+}

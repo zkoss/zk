@@ -1,0 +1,113 @@
+/* Cascade layer order (lowest → highest priority): zk-base, then zk-components, then zk-utilities.
+   Each source file self-declares its layer: component CSS wraps its rules in a zk-components block,
+   base icons + this reset in a zk-base block, utilities in a zk-utilities block
+   (build-css.js asserts every component/base file is wrapped). So utilities override components,
+   components override base, and unlayered styles — the theme's own tokens/tablet plus ALL downstream
+   USER CSS — win over every layer with any specificity, no !important.
+   The bare order statement below MUST stay OUTSIDE any block and load first (reset.css is served
+   ahead of the component CSS). NOTE: keep this comment free of any literal at-rule "layer <name>;"
+   form — build-css.js extracts bare layer statements by regex (incl. from comments) for a CleanCSS guard. */
+@layer zk-base, zk-components, zk-utilities;
+
+@layer zk-base {
+
+/* CSS Reset for marble — normalize browser defaults */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* page-frame:start — html/body reset. Emitted ONLY in the global (browserDefault=false)
+   variant. In the embed variant (browserDefault=true, JS-Embed host pages) this block is
+   dropped so ZK never restyles the host page's <html>/<body>, and the remaining rules are
+   confined to the ZK subtree via @scope (.z-page). See doc/spec/reset-scoping.md. */
+html {
+    /* DEFINITE height (not min-height) so that body's `min-height: 100%` below
+       has a resolvable containing-block height. A percentage min-height computes
+       to 0 when its containing block's height is indefinite — so `html`
+       MUST give an explicit `height` here, otherwise body collapses to content
+       height. `height: 100%` resolves against the viewport and is scrollbar-aware
+       (unlike `100vh`): when a horizontal scrollbar appears it shrinks with the
+       reduced viewport, so no spurious vertical scrollbar. */
+    height: 100%;
+    /* No font-size override here: keep the browser default (16px) as the rem base, like MUI /
+       Bootstrap / Tailwind. Content text is set explicitly by body/.z-page via px tokens, so
+       this only anchors rem — and the theme's rem values are authored as x/16. */
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    /* min-height: 100% (NOT 100vh) so body FILLS the viewport height.
+       Two things depend on body being viewport-tall:
+       1. Floating-popup dismiss: ZK closes an open popup (colorbox / combobox /
+          datebox / bandbox / menupopup …) only when an outside mousedown lands
+          within `document.body.clientHeight` — see ZK core `mount.ts`
+          `_docMouseDown` (a "not a scrollbar click" guard). If body collapses to
+          content height, every click in the empty area below the content is
+          swallowed and popups never close.
+       2. Background fill without a spurious vertical scrollbar. `100vh` is the
+          full viewport height and ignores the horizontal scrollbar's thickness,
+          so wide content (a horizontal scrollbar) makes body (100vh) exceed the
+          now-shorter visible area and a vertical scrollbar appears on a page
+          whose content fits. `100%` resolves against `html`'s definite height,
+          which DOES shrink with the scrollbar.
+       This `100%` only resolves because `html { height: 100% }` above is
+       definite. */
+    min-height: 100%;
+    margin: 0;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    color: var(--zk-color-on-background);
+    background-color: var(--zk-color-background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* page-frame:end */
+
+.z-page{
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background-color: var(--zk-color-background);
+}
+
+a {
+    color: var(--zk-color-primary);
+    text-decoration: none;
+}
+
+/* Underline only proper content anchors (used inside prose). ZK widgets render
+   many clickable UI elements as `<a>` (menuitem-content, toolbarbutton, tab,
+   listitem, treerow, …) where a hover underline is wrong. Scope underline to
+   anchors that have an explicit href but no `.z-*` widget class. */
+a[href]:not([class*="z-"]):hover {
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+/* Scrollbars — subtle MD3 style */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--zk-color-outline);
+}
+
+}
+

@@ -1,0 +1,289 @@
+/* Miscellaneous shared ZK widget styles */
+
+/* ZK busy box (showBusy / progressbox)
+   DOM (emitted by zk/utl.ts progressbox()):
+     <div id="zk_showBusy" role="alert">
+       <div id="…-m" class="z-modal-mask" style="left:Xpx;top:Ypx"></div>
+       <div id="…-t" class="z-loading"    style="left:Xpx;top:Ypx">
+         <div class="z-loading-indicator">
+           <span class="z-loading-icon"></span> Loading...
+         </div>
+       </div>
+     </div>
+   The JS positions `.z-loading` via inline left/top to center it on screen;
+   it MUST be position: absolute so those inline values take effect, and its
+   z-index MUST be above `.z-modal-mask` (1400) to remain visible above the
+   scrim. */
+@layer zk-components {
+.z-loading {
+    position: absolute;
+    z-index: var(--zk-index-loading);
+    background-color: var(--zk-color-surface-container-high);
+    color: var(--zk-color-on-surface);
+    border-radius: var(--zk-shape-corner-medium);
+    box-shadow: var(--zk-elevation-3);
+    padding: var(--zk-spacing-4) var(--zk-spacing-6);
+    font-family: var(--zk-typescale-font-family);
+    white-space: nowrap;
+    cursor: wait;
+}
+
+.z-loading-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-3);
+    color: var(--zk-color-on-surface);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+}
+
+/* Spinner — CSS-only circular indeterminate progress */
+.z-loading-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--zk-color-primary-container);
+    border-top-color: var(--zk-color-primary);
+    border-radius: 50%;
+    animation: z-loading-spin 0.8s linear infinite;
+}
+
+@keyframes z-loading-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Render-defer placeholder (emitted by zk/widget.ts as <div class="z-renderdefer">
+   while a widget's renderdefer timer has not yet fired). Reuses the same spinner
+   as `.z-loading-icon` so the deferred-render experience matches showBusy. */
+.z-renderdefer {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--zk-color-primary-container);
+    border-top-color: var(--zk-color-primary);
+    border-radius: 50%;
+    animation: z-loading-spin 0.8s linear infinite;
+}
+
+/* Per-widget busy overlay (Clients.showBusy(component, msg) → wgt.showBusy()).
+   DOM (emitted by zk/effect.ts Mask._draw):
+     <div id="…" style="display:none">
+       <div class="z-apply-mask"   style="display:block;top:Y;left:X;width:W;height:H"></div>
+       <div class="z-apply-loading"          style="top:Y;left:X">
+         <div class="z-apply-loading-indicator">
+           <span class="z-apply-loading-icon"></span> Processing...
+         </div>
+       </div>
+     </div>
+   The scrim (.z-apply-mask) and the indicator (.z-apply-loading) are siblings;
+   JS sets their inline top/left/width/height from `revisedOffset()` (document
+   coords). Both MUST be `position: absolute` so those document-Y coords place
+   each element at the component's document position. As the user scrolls the
+   body, the mask + indicator stay locked to that document position (i.e. they
+   keep covering the component area). This is correct: the mask's purpose is
+   to cover the targeted component, not the viewport area.
+
+   Known limitation (CSS alone cannot fix): if the targeted component is
+   nested inside a scrollable DIV (not the body), scrolling that inner
+   container moves the component but not the mask — JS would need to listen
+   for the container's scroll and re-sync the mask offset. Scope of this
+   theme: body scroll only.
+
+   Scrim must match `.z-modal-mask` (Global Busy) — same scrim token, no
+   extra opacity dilution, so Component Busy and Global Busy look identical. */
+.z-apply-mask {
+    position: absolute;
+    background-color: var(--zk-color-scrim);
+    z-index: var(--zk-index-busy-mask);
+}
+
+.z-apply-loading {
+    position: absolute;
+    z-index: var(--zk-index-busy-loading);
+    background-color: var(--zk-color-surface-container-high);
+    color: var(--zk-color-on-surface);
+    border-radius: var(--zk-shape-corner-medium);
+    box-shadow: var(--zk-elevation-3);
+    padding: var(--zk-spacing-4) var(--zk-spacing-6);
+    font-family: var(--zk-typescale-font-family);
+    white-space: nowrap;
+    cursor: wait;
+}
+
+.z-apply-loading-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-3);
+    color: var(--zk-color-on-surface);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+}
+
+.z-apply-loading-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--zk-color-primary-container);
+    border-top-color: var(--zk-color-primary);
+    border-radius: 50%;
+    animation: z-loading-spin 0.8s linear infinite;
+}
+
+/* ZK mask overlay.
+   `position: fixed; inset: 0` is enough to cover the viewport, BUT
+   zk/utl.ts progressbox() always writes inline `style="left:Xpx;top:Ypx"` on
+   .z-modal-mask using the current scroll offset. That inline `top:Ypx` was
+   designed for the legacy `position: absolute` paradigm and is meaningless
+   under `position: fixed` — yet it overrides our `inset: 0` for the top edge,
+   producing a Ypx gap at the top of the scrim. We pin top/left with
+   !important to neutralize the inline values. */
+.z-modal-mask,
+.z-mask {
+    background-color: var(--zk-color-scrim);
+    position: fixed;
+    inset: 0;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1400;
+}
+
+/* Focus ring utility */
+.z-focus-ring:focus-visible {
+    outline: 3px solid var(--zk-color-primary);
+    outline-offset: 2px;
+}
+
+/* ZK shadow host */
+.z-shadow {
+    box-shadow: var(--zk-elevation-2);
+}
+
+/* Error message style */
+.z-error-box {
+    background-color: var(--zk-color-error-container);
+    color: var(--zk-color-on-error-container);
+    border-radius: var(--zk-shape-corner-extra-small);
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-small-size);
+}
+
+/* Floating error panel (emitted by zk/zk.ts `_Erbx` class for zk.error()).
+   DOM:
+     <div class="z-error" id="zk_err">
+       <div id="zk_err-p">
+         <div class="errornumbers">N Errors</div>
+         <div id="zk_err-remove-btn"  class="button"><i class="z-icon-times"></i></div>
+         <div id="zk_err-refresh-btn" class="button"><i class="z-icon-refresh"></i></div>
+       </div>
+       <div class="messagecontent">
+         <div class="messages">…<div class="message">…</div>…</div>
+       </div>
+     </div>
+   .z-error starts `display:none`; ZK calls jq(...).slideDown(1000) to reveal it.
+   Subsequent error pushes append <div class="newmessage"> (also display:none),
+   then ZK renames to .message and slideDown(600) reveals each. */
+/* Aligned with `.z-messagebox-window` (the project's dialog pattern):
+   - `surface` background + `--zk-shape-dialog` corner + `--zk-elevation-dialog`
+     shadow, no outline border (MD3 dialogs rely on elevation, not borders)
+   - header with error icon + title (error color for emphasis) + close/refresh
+     icon buttons; separated from the message list by `outline-variant`
+   - message rows separated by `outline-variant` (same divider as messagebox) */
+.z-error {
+    display: none;
+    position: fixed;
+    top: var(--zk-spacing-4);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 480px;
+    max-width: calc(100vw - var(--zk-spacing-8));
+    color: var(--zk-color-on-surface);
+    background-color: var(--zk-color-surface);
+    border-radius: var(--zk-shape-dialog);
+    box-shadow: var(--zk-elevation-dialog);
+    font-family: var(--zk-typescale-font-family);
+    overflow: hidden;
+    z-index: var(--zk-index-error);
+}
+
+.z-error #zk_err-p {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-3);
+    min-height: 56px;
+    padding: var(--zk-spacing-3) var(--zk-spacing-4) var(--zk-spacing-3) var(--zk-spacing-6);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    cursor: move;
+}
+
+/* Error icon — same SVG as `.z-messagebox-error` for cross-component consistency. */
+.z-error #zk_err-p::before {
+    content: '';
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background-color: var(--zk-color-error);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m15 9-6 6'/%3E%3Cpath d='m9 9 6 6'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m15 9-6 6'/%3E%3Cpath d='m9 9 6 6'/%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+
+.z-error .errornumbers {
+    flex: 1;
+    font-weight: var(--zk-typescale-title-medium-weight);
+    font-size: var(--zk-typescale-title-medium-size);
+    color: var(--zk-color-error);
+}
+
+.z-error .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    color: var(--zk-color-on-surface-variant);
+    border-radius: var(--zk-shape-corner-full);
+    transition: background-color var(--zk-motion-duration-short1) var(--zk-motion-easing-standard);
+}
+
+.z-error .button:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+.z-error .messagecontent {
+    padding: var(--zk-spacing-3) var(--zk-spacing-6) var(--zk-spacing-4);
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: var(--zk-typescale-body-medium-line-height);
+}
+
+.z-error .messages {
+    max-height: 240px;
+    overflow: auto;
+    word-wrap: break-word;
+}
+
+.z-error .messages .message {
+    margin-top: var(--zk-spacing-3);
+    padding-top: var(--zk-spacing-3);
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+
+.z-error .messages .message:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* .newmessage is what `_Erbx.push` appends before swapping the class to .message
+   and slide-down animating. It MUST start hidden so the slideDown effect runs. */
+.z-error .newmessage {
+    display: none;
+}
+}

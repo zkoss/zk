@@ -1,0 +1,27 @@
+/* MD3 HTML component — raw HTML container */
+
+@layer zk-components {
+.z-html {
+    display: block;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-surface);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    box-sizing: border-box;
+}
+
+/* Normalize common HTML elements within z-html */
+.z-html h1 { font-size: var(--zk-typescale-headline-large-size); font-weight: var(--zk-typescale-headline-large-weight); margin: 0 0 var(--zk-spacing-4); color: var(--zk-color-on-surface); }
+.z-html h2 { font-size: var(--zk-typescale-headline-medium-size); font-weight: var(--zk-typescale-headline-medium-weight); margin: 0 0 var(--zk-spacing-3); color: var(--zk-color-on-surface); }
+.z-html h3 { font-size: var(--zk-typescale-headline-small-size); font-weight: var(--zk-typescale-headline-small-weight); margin: 0 0 var(--zk-spacing-3); color: var(--zk-color-on-surface); }
+.z-html h4 { font-size: var(--zk-typescale-title-large-size); font-weight: var(--zk-typescale-title-large-weight); margin: 0 0 var(--zk-spacing-2); color: var(--zk-color-on-surface); }
+.z-html p { margin: 0 0 var(--zk-spacing-3); }
+.z-html a { color: var(--zk-color-primary); text-decoration: none; }
+.z-html a:hover { text-decoration: underline; }
+.z-html ul, .z-html ol { padding-left: var(--zk-spacing-5); margin: 0 0 var(--zk-spacing-3); }
+.z-html code { font-family: var(--zk-typescale-mono-family); font-size: 0.9em; background-color: var(--zk-color-surface-container); padding: 2px 4px; border-radius: 4px; }
+.z-html pre { font-family: var(--zk-typescale-mono-family); background-color: var(--zk-color-surface-container); padding: var(--zk-spacing-3); border-radius: var(--zk-shape-corner-small); overflow: auto; }
+.z-html table { border-collapse: collapse; width: 100%; }
+.z-html th, .z-html td { padding: var(--zk-spacing-2) var(--zk-spacing-3); border: 1px solid var(--zk-color-outline-variant); }
+.z-html th { background-color: var(--zk-color-surface-container-low); font-weight: 600; }
+}

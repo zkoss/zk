@@ -1,0 +1,111 @@
+/* MD3 Loading Bar — thin linear progress indicator
+   DOM (determinate):
+     <div class="z-loadingbar">
+       <div class="z-loadingbar-colorbar" style="width:X%"/>
+     </div>
+
+   DOM (indeterminate):
+     <div class="z-loadingbar z-loadingbar-indeterminate">
+       <div class="z-loadingbar-image"/>
+       <div class="z-loadingbar-effectbar"/>
+     </div>
+
+   DOM (positioned):
+     <div class="z-loadingbar-position z-loadingbar-position-top|-bottom">
+       <div class="z-loadingbar">…</div>
+     </div>
+*/
+
+/* ─── Base ────────────────────────────────────────────────────────────── */
+@layer zk-components {
+.z-loadingbar {
+    width: 100%;
+    height: 3px;
+    overflow: hidden;
+    position: relative;
+    pointer-events: none;
+    background-color: var(--zk-color-primary-container);
+}
+
+/* ─── Determinate fill ────────────────────────────────────────────────── */
+.z-loadingbar-colorbar {
+    background-color: var(--zk-color-primary);
+    height: 100%;
+    transition: width var(--zk-motion-duration-medium2) var(--zk-motion-easing-standard);
+}
+
+/* Hidden when not in indeterminate mode */
+.z-loadingbar-image {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.z-loadingbar-effectbar {
+    display: none;
+}
+
+/* ─── Indeterminate mode (.z-loadingbar-indeterminate on the loadingbar div) */
+.z-loadingbar-indeterminate {
+    overflow: hidden;
+    width: 150%;
+}
+
+.z-loadingbar-indeterminate > .z-loadingbar-image {
+    display: block;
+    position: absolute;
+    height: 100%;
+    background-color: var(--zk-color-primary);
+    animation: z-loadingbar-ani1 3s ease-in infinite;
+}
+
+.z-loadingbar-indeterminate > .z-loadingbar-effectbar {
+    display: block;
+    position: absolute;
+    height: 100%;
+    vertical-align: top;
+    background-color: var(--zk-color-primary);
+    animation: z-loadingbar-ani2 3s ease infinite;
+}
+
+@keyframes z-loadingbar-ani1 {
+    from { left: -10%; width: 10%; }
+    13.33% { width: 10%; }
+    60%  { left: 100%; width: 100%; }
+    to   { left: 100%; }
+}
+
+@keyframes z-loadingbar-ani2 {
+    from { left: -80%; width: 80%; }
+    30%  { width: 80%; }
+    40%  { left: -80%; }
+    96%  { left: 100%; }
+    to   { left: 100%; width: 5%; }
+}
+
+/* ─── Position container ─────────────────────────────────────────────── */
+.z-loadingbar-position {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    pointer-events: none;
+    z-index: var(--zk-index-loadingbar);
+}
+
+/* Alternate bar color for stacked bars */
+.z-loadingbar-position > .z-loadingbar:nth-child(even) .z-loadingbar-colorbar {
+    background-color: var(--zk-color-secondary);
+}
+
+.z-loadingbar-position-top {
+    flex-direction: column;
+    top: 0;
+    bottom: unset;
+}
+
+.z-loadingbar-position-bottom {
+    flex-direction: column-reverse;
+    bottom: 0;
+    top: unset;
+}
+}

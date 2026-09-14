@@ -1,0 +1,96 @@
+/* MD3 Chip — compact status/tag pill (ZK-6097 native component) */
+/* DOM: <span class="z-chip z-chip-{severity} [z-chip-small] [z-chip-rounded]
+          [z-chip-closable] [z-chip-disabled]">
+          <i class="z-icon-*"/>? label text
+          <button type="button" class="z-chip-close"><i class="z-icon-times"/></button>?
+        </span>
+   Severity (info default) resolves --zk-chip-bg / --zk-chip-border / --zk-chip-color,
+   which authors may also override inline (style="--zk-chip-bg:#6366f1;"). */
+
+@layer zk-components {
+.z-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    padding: 0 7px;
+    border: 1px solid var(--zk-chip-border);
+    border-radius: var(--zk-shape-corner-extra-small);
+    background: var(--zk-chip-bg);
+    color: var(--zk-chip-color);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-typescale-label-medium-weight);
+    line-height: 20px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+.z-chip-rounded { border-radius: var(--zk-shape-corner-full); }
+
+.z-chip-small {
+    padding: 0 5px;
+    font-size: var(--zk-typescale-label-small-size);
+    line-height: 16px;
+}
+
+/* Severity variants — soft tint background + readable text, one shared formula.
+   Tint uses the lighter status-* accent; text uses the darker role/status color. */
+.z-chip-info {
+    --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-info) 14%, var(--zk-color-surface));
+    --zk-chip-border: color-mix(in oklch, var(--zk-color-status-info) 32%, var(--zk-color-surface));
+    --zk-chip-color: var(--zk-color-status-info);
+}
+.z-chip-success {
+    --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-success) 15%, var(--zk-color-surface));
+    --zk-chip-border: color-mix(in oklch, var(--zk-color-status-success) 34%, var(--zk-color-surface));
+    --zk-chip-color: var(--zk-color-success);
+}
+.z-chip-warning {
+    --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-warning) 16%, var(--zk-color-surface));
+    --zk-chip-border: color-mix(in oklch, var(--zk-color-status-warning) 36%, var(--zk-color-surface));
+    --zk-chip-color: var(--zk-color-warning);
+}
+.z-chip-danger {
+    --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-error) 14%, var(--zk-color-surface));
+    --zk-chip-border: color-mix(in oklch, var(--zk-color-status-error) 32%, var(--zk-color-surface));
+    --zk-chip-color: var(--zk-color-error);
+}
+.z-chip-secondary {
+    --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-neutral) 18%, var(--zk-color-surface));
+    --zk-chip-border: color-mix(in oklch, var(--zk-color-status-neutral) 36%, var(--zk-color-surface));
+    --zk-chip-color: var(--zk-color-on-surface-variant);
+}
+
+.z-chip-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* Close button — native <button> stripped of its chrome to fit the pill. */
+.z-chip-close {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 3px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 10px;
+    line-height: 1;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+.z-chip-close:hover { opacity: 1; }
+.z-chip-close:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 1px;
+    opacity: 1;
+}
+.z-chip-close:disabled {
+    cursor: default;
+    opacity: 0.3;
+}
+}

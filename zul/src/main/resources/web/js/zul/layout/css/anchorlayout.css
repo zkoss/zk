@@ -1,0 +1,19 @@
+/* MD3 Anchor Layout — anchor-based responsive layout */
+/* ZK renders anchorchildren with inline width% styles; use flexbox for side-by-side columns */
+
+@layer zk-components {
+.z-anchorlayout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zk-spacing-4);
+    width: 100%;
+    box-sizing: border-box;
+    align-items: flex-start;
+}
+
+.z-anchorchildren {
+    flex-shrink: 0;
+    box-sizing: border-box;
+    min-width: 0; /* prevent flex blowout */
+}
+}

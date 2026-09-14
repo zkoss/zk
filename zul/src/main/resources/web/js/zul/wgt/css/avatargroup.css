@@ -1,0 +1,61 @@
+/* MD3 Avatar Group — overlapping avatar stack (ZK-6097 native component) */
+/* DOM: <span class="z-avatargroup [z-avatargroup-{size}] [z-avatargroup-{shape}]">
+          <span class="z-avatar …">…</span> …
+          <span class="z-avatar z-avatargroup-overflow">+N</span>?
+        </span>
+   Children overlap by --zk-avatargroup-overlap; size/shape set on the group
+   cascade to every child. Overflow-collapsed children carry [data-ag-hidden]. */
+
+@layer zk-components {
+.z-avatargroup {
+    display: inline-flex;
+    align-items: center;
+    /* --zk-avatargroup-overlap default lives at :root (tokens/_component-theme.css);
+       size variants (.z-avatargroup-small/-large) override it per-variant. */
+}
+
+.z-avatargroup > .z-avatar {
+    margin-left: var(--zk-avatargroup-overlap);
+    border: 2px solid var(--zk-color-surface);
+    box-sizing: content-box;
+}
+.z-avatargroup > .z-avatar:first-child { margin-left: 0; }
+
+/* Size cascade — overrides every child avatar's size + overlap. */
+.z-avatargroup-small {
+    --zk-avatargroup-overlap: -6px;
+}
+.z-avatargroup-small > .z-avatar {
+    --zk-avatar-size: 32px;
+    --zk-avatar-font-size: var(--zk-typescale-label-small-size);
+}
+.z-avatargroup-medium {
+    --zk-avatargroup-overlap: -8px;
+}
+.z-avatargroup-medium > .z-avatar {
+    --zk-avatar-size: 40px;
+    --zk-avatar-font-size: var(--zk-typescale-label-large-size);
+}
+.z-avatargroup-large {
+    --zk-avatargroup-overlap: -12px;
+}
+.z-avatargroup-large > .z-avatar {
+    --zk-avatar-size: 56px;
+    --zk-avatar-font-size: var(--zk-typescale-title-medium-size);
+}
+
+/* Shape cascade. */
+.z-avatargroup-circle > .z-avatar { border-radius: 50%; }
+.z-avatargroup-square > .z-avatar { border-radius: var(--zk-shape-corner-small); }
+
+/* Overflow-collapsed children hidden by attribute (Avatargroup._applyOverflow);
+   !important so the hide wins over any author inline display. */
+.z-avatargroup [data-ag-hidden] { display: none !important; }
+
+/* "+N" overflow indicator — a muted neutral avatar. */
+.z-avatargroup-overflow {
+    background: var(--zk-color-surface-container-high);
+    color: var(--zk-color-on-surface-variant);
+    cursor: default;
+}
+}

@@ -1,0 +1,137 @@
+/* MD3 Groupbox — bordered container with collapsible header
+   DOM: .z-groupbox > .z-groupbox-header > .z-caption (or .z-groupbox-title)
+                    > .z-groupbox-content (id="{uuid}-cave", $s('content'))
+   Mold variants: default (fieldset-style) and 3d (panel-style, class z-groupbox-3d)
+   State classes on root: z-groupbox-collapsed (closed), z-groupbox-notitle, z-groupbox-readonly
+   Note: when closed at initial render, ZK sets display:none inline on .z-groupbox-content
+         AND adds z-groupbox-collapsed class to the root element.
+   Note: in default mold, .z-groupbox-content has inline border-top:0 when title/caption present. */
+
+@layer zk-components {
+.z-groupbox {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--zk-groupbox-bg);
+    border-radius: var(--zk-groupbox-radius);
+    border: 1px solid var(--zk-groupbox-border-color);
+    box-shadow: var(--zk-groupbox-elevation);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────── */
+.z-groupbox-header {
+    display: flex;
+    align-items: center;
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    border-bottom: 1px solid var(--zk-groupbox-border-color);
+    background-color: var(--zk-groupbox-bg);
+    min-height: var(--zk-groupbox-header-height);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* Readonly header (closable="false") — no pointer */
+.z-groupbox-readonly .z-groupbox-header,
+.z-groupbox-header.z-groupbox-readonly {
+    cursor: default;
+}
+
+/* Caption inside header — .z-caption widget */
+.z-groupbox-header .z-caption {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Caption text — ZK renders it in .z-caption-content (text node), also .z-caption-text if present */
+.z-groupbox-header .z-caption-content,
+.z-groupbox-header .z-caption-text {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-typescale-title-medium-weight);
+    line-height: var(--zk-typescale-title-medium-line-height);
+    color: var(--zk-groupbox-header-fg);
+}
+
+/* Title-based header (no caption child — uses .z-groupbox-title / .z-groupbox-title-content) */
+.z-groupbox-title {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.z-groupbox-title-content {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-typescale-title-medium-weight);
+    line-height: var(--zk-typescale-title-medium-line-height);
+    color: var(--zk-groupbox-header-fg);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.z-groupbox-title-readonly {
+    pointer-events: none;
+    color: var(--zk-color-on-surface-variant);
+}
+
+/* Icons inside header (collapse/expand icon rendered by ZK in .z-icon-*) */
+.z-groupbox-header .z-groupbox-icon,
+.z-groupbox-header [class*="z-icon-"] {
+    font-size: 16px;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: var(--zk-spacing-1);
+    border-radius: var(--zk-shape-corner-full);
+}
+
+.z-groupbox-header .z-groupbox-icon:hover,
+.z-groupbox-header [class*="z-icon-"]:hover {
+    background-color: var(--zk-groupbox-icon-hover-bg);
+}
+
+/* ─── Content area ───────────────────────────────────────────────────────── */
+/* .z-groupbox-content = $s('content') = id="{uuid}-cave" */
+.z-groupbox-content {
+    padding: var(--zk-spacing-4);
+    flex: 1;
+    overflow: auto;
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-medium-size);
+}
+
+/* ─── Collapsed state ────────────────────────────────────────────────────── */
+/* z-groupbox-collapsed is added to root by ZK JS ($s('collapsed')) when default mold is closed.
+   ZK also sets display:none inline on .z-groupbox-content at initial render when _open=false.
+   !important overrides any inline height="Xpx" set via ZUL attribute. */
+.z-groupbox-collapsed {
+    height: auto !important;
+}
+
+.z-groupbox-collapsed .z-groupbox-content {
+    display: none;
+}
+
+/* ─── No-title variant ───────────────────────────────────────────────────── */
+.z-groupbox-notitle .z-groupbox-header {
+    display: none;
+}
+
+/* ─── 3D mold variant ────────────────────────────────────────────────────── */
+/* z-groupbox-3d uses a panel-like header with full-width bottom border */
+.z-groupbox-3d {
+    padding: 0;
+}
+
+.z-groupbox-3d .z-groupbox-header {
+    min-height: var(--zk-spacing-10, 40px);
+    padding: 0 var(--zk-spacing-3);
+    background-color: var(--zk-color-surface-container-low);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+}

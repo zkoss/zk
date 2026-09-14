@@ -149,21 +149,6 @@ subprojects {
 		}
 	}
 
-	task compileCSS() {
-		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
-
-		if (new File("$projectDir/$resources/web/$project.name/css").exists()) {
-			inputs.dir("$projectDir/$resources/web/$project.name/css")
-			outputs.dir("$projectDir/$codegen/web/$project.name/css")
-
-			doLast {
-				exec {
-					commandLine "$rootDir/node_modules/.bin/gulp", 'build:minify-css', "--src=$projectDir/$resources/web/$project.name/css", "--dest=$projectDir/$codegen/web/$project.name/css"
-				}
-			}
-		}
-	}
-
 	java.sourceCompatibility = JavaVersion.VERSION_11
 	tasks.withType(JavaCompile) {
 		options.encoding = 'UTF-8'
@@ -194,17 +179,35 @@ subprojects {
 		dependsOn(jscheck)
 	}
 
-	// Compile LESS
-	task compileLess() {
+	// Marble CSS build (ZK 11 default theme) — the only CSS pipeline; LESS was retired in ZK 11 (ZK-6112).
+	task compileMarbleCss() {
 		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
-		if (new File("$projectDir/$resources/web/$project.name/").exists()) {
-			inputs.dir("$projectDir/$resources/web/$project.name/")
-			outputs.dir("$projectDir/$codegen/web/$project.name/")
+		if (new File("$projectDir/$resources/web/$project.name/css/tokens").exists()) {
+			inputs.dir("$projectDir/$resources/web/$project.name/css")
+			inputs.dir("$projectDir/$resources/web/js/$project.name")
+			outputs.upToDateWhen { false }
 			doLast {
 				exec {
-					commandLine "$rootDir/node_modules/.bin/zklessc", '-s', "$projectDir/$resources/web/", '-o', "$projectDir/$codegen/web/", '-i', "$rootDir/zul/$resources/web/", '-i', "$zkcmlDir/zkmax/$resources/web/", '-c'
+					commandLine 'node', "$rootDir/scripts/build-css.js", '--module', project.name
 				}
 			}
+		}
+	}
+
+	// Verifies every <css-uri> ZK requests resolves to a built .css.dsp;
+	// fails the build otherwise (ZK-6112).
+	task checkMarbleCss() {
+		setOnlyIf { project.ext['gradleFrontendSkip'] == 'false' }
+		if (new File("$projectDir/$resources/web/$project.name/css/tokens").exists()) {
+			dependsOn(compileMarbleCss)
+			doLast {
+				exec {
+					def args = ['node', "$rootDir/scripts/check-css-dsp.js", '--module', project.name]
+					if (project.hasProperty('marbleCssThemeDir')) { args += ['--theme-dir', project.property('marbleCssThemeDir')] }
+					commandLine args
+				}
+			}
+			check.dependsOn(checkMarbleCss)
 		}
 	}
 
@@ -225,8 +228,7 @@ subprojects {
 	processResources() {
 		dependsOn(compileJava)
 		dependsOn(compileTypeScript)
-		dependsOn(compileLess)
-		dependsOn(compileCSS)
+		dependsOn(compileMarbleCss)
 
 		from("$projectDir/$codegen") {
 			setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
@@ -452,8 +454,7 @@ subprojects {
 
 	compileJava.mustRunAfter(rootProject.tasks.named('npm_install'))
 	compileTypeScript.mustRunAfter(rootProject.tasks.named('npm_install'))
-	compileLess.mustRunAfter(rootProject.tasks.named('npm_install'))
-	compileCSS.mustRunAfter(rootProject.tasks.named('npm_install'))
+	compileMarbleCss.mustRunAfter(rootProject.tasks.named('npm_install'))
 }
 
 task tscheck(type: NpmTask, dependsOn: 'npm_install') {

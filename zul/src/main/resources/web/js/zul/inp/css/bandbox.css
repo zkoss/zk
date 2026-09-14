@@ -1,0 +1,174 @@
+/* MD3 Bandbox — combo input with custom band popup */
+/* DOM: .z-bandbox > (.z-bandbox-input + .z-bandbox-button > .z-bandbox-icon.z-icon-search)
+        + .z-bandbox-popup > .z-bandpopup */
+
+/* ─── Wrapper ─────────────────────────────────────────────────────────── */
+@layer zk-components {
+.z-bandbox {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    border: 1px solid var(--zk-bandbox-border-color);
+    border-radius: var(--zk-bandbox-radius);
+    background-color: var(--zk-bandbox-bg);
+    min-height: var(--zk-control-height);
+    box-sizing: border-box;
+    transition:
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-bandbox:hover {
+    border-color: var(--zk-bandbox-border-color-hover);
+}
+
+/* Focus ring as an INSET box-shadow, not a border-width increase (and inset, not outset, to
+   match the input family and stay clip-safe under an ancestor overflow:hidden): border stays
+   1px so the box never grows. See reference/focus-affordance-no-layout-shift.md. */
+.z-bandbox:focus-within {
+    border-color: var(--zk-bandbox-border-color-focus);
+    box-shadow: inset 0 0 0 1px var(--zk-bandbox-border-color-focus);
+}
+
+/* ─── Input field ─────────────────────────────────────────────────────── */
+.z-bandbox-input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    padding: 0 var(--zk-spacing-3);
+    height: 100%;
+    min-height: calc(var(--zk-input-height) - 2px);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-bandbox-fg);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.z-bandbox-input::placeholder {
+    color: var(--zk-color-on-surface-variant);
+    opacity: 1;
+}
+
+/* ─── Toggle button (search icon) ────────────────────────────────────── */
+/* Bandbox uses z-icon-search — no caret rotation on open */
+.z-bandbox-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    min-height: calc(var(--zk-input-height) - 2px);
+    border: none;
+    background: transparent;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 0 var(--zk-bandbox-radius) var(--zk-bandbox-radius) 0;
+    overflow: hidden;
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-bandbox-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-bandbox-button:hover::before { opacity: var(--zk-state-hover-opacity); }
+.z-bandbox-button:active::before { opacity: var(--zk-state-pressed-opacity); }
+
+/* ─── Band popup container ────────────────────────────────────────────── */
+/* ZK renders: <div id="{uuid}-pp" class="z-bandbox-popup" style="display:none"> */
+.z-bandbox-popup {
+    position: absolute;
+    z-index: 1600;
+    margin: 4px 0 0;
+    padding: var(--zk-spacing-2);
+    background-color: var(--zk-bandbox-popup-bg);
+    border-radius: var(--zk-bandbox-popup-radius);
+    box-shadow: var(--zk-elevation-dropdown);
+    border: 1px solid var(--zk-color-outline-variant);
+    min-width: 300px;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+/* ─── Button hidden (buttonVisible="false") ──────────────────────────── */
+/* ZK adds z-bandbox-disabled to the <a> button element when buttonVisible=false */
+.z-bandbox-button.z-bandbox-disabled {
+    display: none;
+}
+
+/* ─── Inplace editing (inplace="true") ───────────────────────────────── */
+/* ZK adds z-bandbox-inplace to root when blurred; removes it on focus */
+.z-bandbox.z-bandbox-inplace {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.z-bandbox.z-bandbox-inplace:hover {
+    border-color: transparent;
+}
+
+.z-bandbox.z-bandbox-inplace .z-bandbox-button {
+    display: none;
+}
+
+/* ─── Disabled ────────────────────────────────────────────────────────── */
+.z-bandbox[disabled],
+.z-bandbox.z-bandbox-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+}
+
+/* ─── Invalid variant ─────────────────────────────────────────────────── */
+.z-bandbox.z-bandbox-invalid {
+    border-color: var(--zk-color-error);
+}
+
+.z-bandbox.z-bandbox-invalid:hover {
+    border-color: var(--zk-color-error);
+}
+
+.z-bandbox.z-bandbox-invalid:focus-within {
+    border-color: var(--zk-color-error);
+    box-shadow: inset 0 0 0 1px var(--zk-color-error);
+}
+
+/* ─── Readonly variant ────────────────────────────────────────────────── */
+/* readonly bandbox is still interactive (the band popup opens), so it must read as
+   an ACTIVE outlined field, not disabled — matching the editable bandbox and the
+   textbox beside it. The greyed/dimmed treatment is reserved for `disabled` above.
+   The input is made non-typeable by ZK's `readonly` attribute, not by styling.
+   See doc/spec/component-state-model.md. */
+.z-bandbox[readonly] .z-bandbox-input,
+.z-bandbox.z-bandbox-readonly .z-bandbox-input,
+.z-bandbox[readonly] .z-bandbox-button,
+.z-bandbox.z-bandbox-readonly .z-bandbox-button {
+    cursor: pointer;
+}
+
+/* ─── Open state ──────────────────────────────────────────────────────── */
+/* Match the :focus-within ring above: an INSET ring, not an outset one (an outset
+   ring is a different halo and is clipped by ancestor overflow:hidden), so icon-open
+   and input-focus look identical. See reference/focus-affordance-no-layout-shift.md. */
+.z-bandbox.z-bandbox-open {
+    border-color: var(--zk-bandbox-border-color-focus);
+    box-shadow: inset 0 0 0 1px var(--zk-bandbox-border-color-focus);
+}
+
+/* ─── Bandpopup ───────────────────────────────────────────────────────── */
+/* bandpopup.css is never served (no <css> in lang.xml); rules must live here */
+/* .z-bandbox-popup already provides border/shadow/radius — no second border here */
+.z-bandpopup {
+    background-color: var(--zk-bandbox-popup-bg);
+    padding: var(--zk-spacing-4);
+}
+}

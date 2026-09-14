@@ -1,0 +1,74 @@
+/* MD3 Select — native select with MD3 outlined appearance.
+
+   NOTE — not the effective ruleset for `.z-select`: Listbox's `css-uri` (every
+   mold, incl. "select") resolves to listbox.css.dsp, never this file's
+   select.css.dsp (confirmed via check:css-dsp: select.css.dsp is unreferenced/
+   "extra"). listbox.css's own `.z-select` block (§ "Select mold") is what
+   actually renders `<listbox mold="select">`; this file is dormant duplicate
+   coverage, kept in case some other loading path resolves it. Both consume
+   the same `--zk-selectbox-*` knobs so they stay in lockstep regardless of
+   which one is ever effective. */
+
+@layer zk-components {
+.z-select {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    min-height: var(--zk-control-height);
+    box-sizing: border-box;
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* Native select element inside .z-select */
+.z-select select,
+select.z-select {
+    appearance: none;
+    -webkit-appearance: none;
+    display: block;
+    width: 100%;
+    min-height: var(--zk-control-height);
+    padding: 0 var(--zk-spacing-8) 0 var(--zk-spacing-3);
+    border: 1px solid var(--zk-selectbox-border-color);
+    border-radius: var(--zk-selectbox-radius);
+    background-color: var(--zk-selectbox-bg);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--zk-spacing-2) center;
+    background-size: 20px;
+    color: var(--zk-selectbox-fg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    cursor: pointer;
+    outline: none;
+    transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+select.z-select:hover,
+.z-select select:hover {
+    border-color: var(--zk-selectbox-border-color-hover);
+}
+
+select.z-select:focus,
+.z-select select:focus {
+    border-color: var(--zk-selectbox-border-color-focus);
+    border-width: 2px;
+    padding-left: calc(var(--zk-spacing-3) - 1px);
+}
+
+select.z-select[disabled],
+.z-select select[disabled],
+.z-select[disabled] select {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Multiple select */
+select.z-select[multiple],
+.z-select select[multiple] {
+    padding-right: var(--zk-spacing-3);
+    background-image: none;
+    min-height: 80px;
+}
+}

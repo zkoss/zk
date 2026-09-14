@@ -1,0 +1,104 @@
+/*
+ * ZK framework drag-and-drop + frozen classes
+ * ============================================
+ * These are JS-toggled global hooks ZK's client engine (zk/widget.ts, zul/mesh/Frozen.ts)
+ * emits at runtime. Stock ZK ships NO CSS for the drag/drop feedback classes (only
+ * `.z-word-nowrap` / `.z-dragged` live in stock norm.less), so a theme that omits them
+ * leaves drag/drop visually unstyled. Marble replaces stock CSS entirely, so every hook
+ *
+ * DOM (verified ZK 10.2.1 zk/widget.ts):
+ *   - Frozen grid/listbox body div   ← .z-word-nowrap            (Frozen.ts bind_, on load)
+ *   - drag source root               ← .z-dragged               (cloneDrag_ 4361)
+ *   - drop-target root               ← .z-drag-over             (dropEffect_ 4311)
+ *   - non-TR drag → clone ghost      = #zk_ddghost.z-drag-ghost (appended to body)
+ *   - TR drag → message ghost        = #zk_ddghost.z-drop-ghost.z-drop-(dis)allow
+ *                                        > .z-drop-content > .z-drop-icon + .z-drop-text
+ * The message ghost carries JS-set inline position:absolute/top/left — never override it.
+ */
+
+/* Frozen columns: keep frozen cell content from wrapping (Frozen.ts toggles this). */
+.z-word-nowrap {
+    white-space: nowrap;
+}
+
+/* Drag source: de-emphasise the element that is being dragged. */
+.z-dragged {
+    opacity: 0.4;
+}
+
+/* Drop target: highlight a region that accepts the current drag. */
+.z-drag-over {
+    background-color: var(--zk-color-primary-container);
+    outline: 2px dashed var(--zk-color-primary);
+    outline-offset: -2px;
+}
+
+/* Clone ghost (non-TR widgets): an elevated, rounded floating copy following the cursor. */
+.z-drag-ghost {
+    list-style: none;
+    opacity: 0.85;
+    border-radius: var(--zk-shape-corner-small);
+    box-shadow: var(--zk-elevation-4);
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 90000; /* dead fallback — ZK sets inline 88800 on the ghost at drag-start (zk/drag.ts) */
+}
+
+/* Message ghost (listitem/row drag): a small elevated chip showing the drag message. */
+.z-drop-ghost {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    max-width: 320px;
+    padding: var(--zk-spacing-1) var(--zk-spacing-3);
+    border-radius: var(--zk-shape-corner-small);
+    background-color: var(--zk-color-inverse-surface);
+    color: var(--zk-color-inverse-on-surface);
+    box-shadow: var(--zk-elevation-3);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-small-size);
+    line-height: var(--zk-typescale-body-small-line-height, 1.33);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 90000; /* dead fallback — ZK sets inline 88800 on the ghost at drag-start (zk/drag.ts) */
+}
+
+.z-drop-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+}
+
+.z-drop-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Icon: a mask-filled glyph (Marble pattern, cf. .z-messagebox-icon). The glyph differs by
+   drop validity — supplied on the state selectors below, not by ZK's unused z-icon-* names. */
+.z-drop-icon {
+    display: inline-flex;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    background-color: currentColor;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+/* Valid drop → plus-circle glyph, accent colour. */
+.z-drop-ghost.z-drop-allow .z-drop-icon {
+    color: var(--zk-color-inverse-primary);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M8 12h8'/%3E%3Cpath d='M12 8v8'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M8 12h8'/%3E%3Cpath d='M12 8v8'/%3E%3C/svg%3E");
+}
+
+/* Invalid drop → ban glyph. */
+.z-drop-ghost.z-drop-disallow .z-drop-icon {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m4.9 4.9 14.2 14.2'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m4.9 4.9 14.2 14.2'/%3E%3C/svg%3E");
+}

@@ -1,0 +1,360 @@
+/* MD3 Text Field (Outlined) — Textbox, Intbox, Decimalbox, Doublebox, Longbox */
+/* DOM: <input class="z-textbox" type="text"> */
+
+/* ─── Shared outlined text field base ──────────────────────────────────── */
+@layer zk-components {
+.z-textbox,
+.z-intbox,
+.z-decimalbox,
+.z-doublebox,
+.z-longbox,
+.z-passwordbox {
+    display: inline-block;
+    min-height: var(--zk-control-height);
+    padding: 0 var(--zk-spacing-3);
+    border: 1px solid var(--zk-input-border-color);
+    border-radius: var(--zk-input-radius);
+    background-color: var(--zk-input-bg);
+    color: var(--zk-input-fg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    outline: none;
+    box-sizing: border-box;
+    vertical-align: middle;
+    /* Only transition border-COLOR. On focus, border-width snaps 1px→2px and the
+       compensating padding (0 spacing-3 → 0 calc(spacing-3 - 1px)) snaps with it, so
+       the content edge stays put. Animating border-width WITHOUT co-animating padding
+       makes the text drift ~1px mid-transition (the reported focus jitter). See
+       reference/focus-affordance-no-layout-shift.md — "do not transition border-width". */
+    transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-textbox::placeholder,
+.z-intbox::placeholder,
+.z-decimalbox::placeholder,
+.z-doublebox::placeholder,
+.z-longbox::placeholder,
+.z-passwordbox::placeholder {
+    color: var(--zk-color-on-surface-variant);
+    opacity: 1;
+}
+
+/* Hover */
+.z-textbox:hover,
+.z-intbox:hover,
+.z-decimalbox:hover,
+.z-doublebox:hover,
+.z-longbox:hover,
+.z-passwordbox:hover {
+    border-color: var(--zk-input-border-color-hover);
+}
+
+/* Focus */
+.z-textbox:focus,
+.z-textbox:focus-visible,
+.z-intbox:focus,
+.z-intbox:focus-visible,
+.z-decimalbox:focus,
+.z-decimalbox:focus-visible,
+.z-doublebox:focus,
+.z-doublebox:focus-visible,
+.z-longbox:focus,
+.z-longbox:focus-visible,
+.z-passwordbox:focus,
+.z-passwordbox:focus-visible {
+    border-color: var(--zk-input-border-color-focus);
+    border-width: 2px;
+    padding: 0 calc(var(--zk-spacing-3) - 1px);
+}
+
+/* Readonly */
+.z-textbox[readonly],
+.z-intbox[readonly],
+.z-decimalbox[readonly],
+.z-doublebox[readonly],
+.z-longbox[readonly],
+.z-passwordbox[readonly] {
+    background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
+    color: var(--zk-color-on-surface-variant);
+}
+
+/* Disabled */
+.z-textbox[disabled],
+.z-intbox[disabled],
+.z-decimalbox[disabled],
+.z-doublebox[disabled],
+.z-longbox[disabled],
+.z-passwordbox[disabled],
+.z-textbox.z-textbox-disabled,
+.z-intbox.z-intbox-disabled,
+.z-decimalbox.z-decimalbox-disabled,
+.z-doublebox.z-doublebox-disabled,
+.z-longbox.z-longbox-disabled,
+.z-passwordbox.z-passwordbox-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Suppress hover border change when disabled or readonly */
+.z-textbox[disabled]:hover,
+.z-intbox[disabled]:hover,
+.z-decimalbox[disabled]:hover,
+.z-doublebox[disabled]:hover,
+.z-longbox[disabled]:hover,
+.z-passwordbox[disabled]:hover,
+.z-textbox.z-textbox-disabled:hover,
+.z-intbox.z-intbox-disabled:hover,
+.z-decimalbox.z-decimalbox-disabled:hover,
+.z-doublebox.z-doublebox-disabled:hover,
+.z-longbox.z-longbox-disabled:hover,
+.z-passwordbox.z-passwordbox-disabled:hover {
+    border-color: var(--zk-color-outline-variant);
+}
+
+.z-textbox[readonly]:hover,
+.z-intbox[readonly]:hover,
+.z-decimalbox[readonly]:hover,
+.z-doublebox[readonly]:hover,
+.z-longbox[readonly]:hover,
+.z-passwordbox[readonly]:hover {
+    border-color: var(--zk-color-outline-variant);
+    cursor: default;
+}
+
+/* Error state (sclass="z-error" applied by developer) */
+.z-textbox.z-error,
+.z-intbox.z-error,
+.z-textbox-error {
+    border-color: var(--zk-input-border-color-error);
+}
+
+.z-textbox.z-error:focus,
+.z-intbox.z-error:focus {
+    border-color: var(--zk-input-border-color-error);
+    border-width: 2px;
+    padding: 0 calc(var(--zk-spacing-3) - 1px);
+}
+
+/* Textarea */
+textarea.z-textbox {
+    min-height: 80px;
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    resize: vertical;
+    line-height: var(--zk-typescale-body-medium-line-height);
+}
+
+/* The shared focus rule above resets padding to `0 …`, which would wipe the
+ * textarea's vertical padding and make its height visibly jump on focus.
+ * Re-assert vertical padding here; the -1px on each axis absorbs the 1px→2px
+ * border growth so the box height stays constant. */
+textarea.z-textbox:focus,
+textarea.z-textbox:focus-visible {
+    padding: calc(var(--zk-spacing-2) - 1px) calc(var(--zk-spacing-3) - 1px);
+}
+
+/* ─── Constraint violation invalid state (numeric boxes) ────────────────── */
+.z-intbox.z-intbox-invalid,
+.z-decimalbox.z-decimalbox-invalid,
+.z-doublebox.z-doublebox-invalid,
+.z-longbox.z-longbox-invalid {
+    border-color: var(--zk-input-border-color-error);
+}
+
+.z-intbox.z-intbox-invalid:focus,
+.z-decimalbox.z-decimalbox-invalid:focus,
+.z-doublebox.z-doublebox-invalid:focus,
+.z-longbox.z-longbox-invalid:focus {
+    border-color: var(--zk-input-border-color-error);
+    border-width: 2px;
+}
+
+.z-textbox-invalid,
+.z-textbox.z-textbox-invalid {
+    border-color: var(--zk-input-border-color-error);
+}
+
+.z-textbox.z-textbox-invalid:focus,
+.z-textbox.z-textbox-invalid:focus-visible {
+    border-color: var(--zk-input-border-color-error);
+    border-width: 2px;
+    padding: 0 calc(var(--zk-spacing-3) - 1px);
+}
+
+/* Passwordbox invalid (same ZK pattern as intbox) */
+.z-passwordbox.z-passwordbox-invalid {
+    border-color: var(--zk-input-border-color-error);
+}
+
+.z-passwordbox.z-passwordbox-invalid:focus {
+    border-color: var(--zk-input-border-color-error);
+    border-width: 2px;
+    padding: 0 calc(var(--zk-spacing-3) - 1px);
+}
+
+/* ─── Inplace ────────────────────────────────────────────────────────────── */
+/* ZK adds z-{comp}-inplace on blur, removes on focus — class never coexists with :focus */
+.z-textbox.z-textbox-inplace,
+.z-intbox.z-intbox-inplace,
+.z-decimalbox.z-decimalbox-inplace,
+.z-doublebox.z-doublebox-inplace,
+.z-longbox.z-longbox-inplace,
+.z-passwordbox.z-passwordbox-inplace {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.z-textbox.z-textbox-inplace:hover,
+.z-intbox.z-intbox-inplace:hover,
+.z-decimalbox.z-decimalbox-inplace:hover,
+.z-doublebox.z-doublebox-inplace:hover,
+.z-longbox.z-longbox-inplace:hover,
+.z-passwordbox.z-passwordbox-inplace:hover {
+    border-color: transparent;
+}
+
+/* ─── Errorbox ───────────────────────────────────────────────────────────── */
+/* Errorbox is a JS-only widget with no <css-uri> in lang.xml, so its rules   */
+/* are merged here to ensure delivery via input.css.dsp.                      */
+
+/* MD3 Errorbox — inline field validation tooltip (extends Notification)
+   DOM: <div class="z-errorbox">
+          <div class="z-errorbox-pointer [z-errorbox-up|down|left|right]"/>
+          <i class="z-errorbox-icon z-icon-exclamation-triangle"/>
+          <div class="z-errorbox-content" title="…">message text</div>
+          <div class="z-errorbox-close">
+            <i class="z-errorbox-icon z-icon-times"/>
+          </div>
+        </div>
+*/
+
+.z-errorbox {
+    color: var(--zk-color-on-error-container);
+    width: 260px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1600;
+    display: table;
+    /* Errorbox._fixarrow() (ZK) writes padding to ONLY the beak-facing side of
+       this node on every reposition (padding-left when the beak points left,
+       padding-top when up, …). Because the content is a table-cell, that
+       one-sided padding shifts the content — but the icon and close button are
+       absolutely positioned against this box and stay put, so they drift 8px
+       between positions, and zeroing the padding instead lets the beak fall
+       INSIDE the content. Override it with SYMMETRIC padding on all four sides,
+       equal to ZK's own beak size (pw/ph = 2 + the 6px pointer border = 8px):
+       the content is now inset equally in every direction, the beak (pointer
+       -4px + 12px-wide triangle) lands flush at the content edge on whichever
+       side it points, and the icon/close keep a constant offset from the
+       content (they add the same --zk-errorbox-beak back). */
+    --zk-errorbox-beak: 8px;
+    padding: var(--zk-errorbox-beak) !important;
+}
+
+.z-errorbox-content {
+    font-family: var(--zk-typescale-font-family);
+    /* body-medium, matching an MD3 rich tooltip's supporting text — the errorbox
+       is an anchored, field-pointing, dismissible popover (rich tooltip class),
+       not a region-level Alert, so it sizes to tooltip not banner. */
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    color: var(--zk-color-on-error-container);
+    width: 100%;
+    border: 1px solid var(--zk-color-error);
+    border-radius: var(--zk-shape-corner-extra-small);
+    /* left padding leaves room for icon */
+    padding: var(--zk-spacing-2) 28px var(--zk-spacing-2) 34px;
+    background: var(--zk-color-error-container);
+    position: relative;
+    overflow: hidden;
+    cursor: move;
+    box-shadow: var(--zk-elevation-2);
+}
+
+.z-errorbox-icon {
+    position: absolute;
+    z-index: 2;
+    /* 18px leading status icon — proportional to the body-medium text, in the
+       rich-tooltip register (not Alert's 22px banner icon). */
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    top: 50%;
+    /* +beak: cancel the symmetric box padding so the icon keeps a 12px gap from
+       the content's left edge in every pointer direction. */
+    left: calc(var(--zk-spacing-3) + var(--zk-errorbox-beak));
+    margin-top: -9px;
+    color: var(--zk-color-error);
+}
+
+.z-errorbox-close {
+    font-size: 14px;
+    width: 18px;
+    height: 18px;
+    padding: 0 1px;
+    position: absolute;
+    top: 50%;
+    /* +beak: cancel the symmetric box padding so the close keeps a 4px gap from
+       the content's right edge in every pointer direction. */
+    right: calc(var(--zk-spacing-1) + var(--zk-errorbox-beak));
+    margin-top: -9px;
+    cursor: pointer;
+    opacity: 0.6;
+    color: var(--zk-color-on-error-container);
+}
+
+.z-errorbox-close:hover { opacity: 1; }
+
+.z-errorbox-close > .z-errorbox-icon {
+    position: static;
+    margin-top: 0;
+    color: inherit;
+    /* Close stays 14px — a subordinate affordance, below the 18px status icon. */
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+}
+
+/* ZK reveals the pointer with jQuery .show() (Errorbox._fixarrow), which only
+   clears an inline display value — it cannot win against a stylesheet
+   `display:none`. So the base must stay visible; with all four borders
+   transparent the triangle is invisible until a direction class colours one
+   side, which is exactly when ZK wants it shown. */
+.z-errorbox-pointer {
+    display: block;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    position: absolute;
+    z-index: 100;
+}
+
+.z-errorbox-left,
+.z-errorbox-right,
+.z-errorbox-up,
+.z-errorbox-down {
+    border: 6px solid transparent;
+}
+
+/* Arrow colour matches the error border so it reads as a clear beak pointing
+   at the source field (error-container is too faint to see on a light page). */
+.z-errorbox-left  { border-right-color:  var(--zk-color-error); }
+.z-errorbox-right { border-left-color:   var(--zk-color-error); }
+.z-errorbox-up    { border-bottom-color: var(--zk-color-error); }
+.z-errorbox-down  { border-top-color:    var(--zk-color-error); }
+
+.z-errorbox-pointer ~ .z-errorbox-content {
+    display: table-cell;
+    vertical-align: middle;
+}
+}

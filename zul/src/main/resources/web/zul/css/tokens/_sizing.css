@@ -1,0 +1,122 @@
+/* Sizing tokens — interactive control dimensions + density system.
+ *
+ * ─── Density model (whole-app compact mode) ──────────────────────────────
+ * Data-dense apps (ERP-class) shrink the ENTIRE UI coherently by overriding a
+ * small seed set at :root — NOT by editing component CSS. The mechanism mirrors
+ * Salesforce Lightning's Comfy/Compact (one root flip re-points token values,
+ * components auto-reflow) with Ant Design / Carbon's discipline (every component
+ * binds to a named ladder rung or semantic alias, never a raw px literal).
+ *
+ * Three layers, all below:
+ *   1. control-height ladder  — the seed rungs (xs…xl). Customer flips these.
+ *   2. semantic alias layer   — maps each component type to a rung BY MEANING.
+ *                               This is where the intentional size *relationships*
+ *                               (input 40 > button 36, toolbar 48 > input 40) live,
+ *                               defined once so they survive a tier change.
+ *   3. data-cell padding       — grid/listbox/tree cell padding knobs.
+ *
+ * To go compact: override the 5 rungs + the 3 off-ladder seeds (button 36/44,
+ * data-row 52) and the cell-padding knobs at :root. See doc/spec/data-dense-mode.md
+ * for the ready-made compact preset. Default values below reproduce the
+ * comfortable desktop rendering exactly — change nothing here for that.
+ *
+ * NOT a touch target: 40px is below the MD3 44/48px minimum. The genuine
+ * touch-target tokens live in the tablet-only layer
+ * (zkmax/css/tablet/_tokens.css: --zk-touch-target-min/-comfortable), which
+ * scales these controls up on mobile UAs.
+ */
+:root {
+    /* ── Layer 1: control-height ladder (the density seed) ──────────────── */
+    --zk-control-height-xs: 28px;   /* sm buttons, close buttons, separators */
+    --zk-control-height-sm: 32px;   /* paging controls, window-close */
+    --zk-control-height-md: 40px;   /* DEFAULT control: inputs, icon-button, menu items, list rows */
+    --zk-control-height-lg: 48px;   /* chrome bars: toolbar, menubar, tabs, panel/groupbox header, notification */
+    --zk-control-height-xl: 56px;   /* prominent: window header, FAB */
+
+    /* Back-compat alias — existing consumers of --zk-control-height keep working. */
+    --zk-control-height: var(--zk-control-height-md);
+
+    /* ── Layer 2: semantic alias layer (component-type → rung, by meaning) ─
+       Off-ladder values (button 36/44, data-row 52) are intentional MD figures
+       kept as their own seeds so they remain single-knob under a compact tier. */
+    --zk-input-height:           var(--zk-control-height-md);  /* 40 */
+    --zk-button-height:          36px;                         /* off-ladder (MD button base) */
+    --zk-button-height-sm:       var(--zk-control-height-xs);  /* 28 */
+    --zk-button-height-lg:       44px;                         /* off-ladder */
+    --zk-icon-button-size:       var(--zk-control-height-md);  /* 40 */
+    --zk-fab-size:               var(--zk-control-height-xl);  /* 56 */
+    --zk-fab-size-sm:            var(--zk-control-height-md);  /* 40 */
+    --zk-toolbar-height:         var(--zk-control-height-lg);  /* 48 */
+    --zk-menubar-height:         var(--zk-control-height-lg);  /* 48 (bar + top-level item) */
+    --zk-menuitem-height:        36px;                         /* off-ladder: popup menu rows (denser than the 40 bar) */
+    --zk-tab-height:             var(--zk-control-height-lg);  /* 48 */
+    --zk-window-header-height:   var(--zk-control-height-xl);  /* 56 */
+    --zk-panel-header-height:    var(--zk-control-height-lg);  /* 48 */
+    /* Window/panel header VERTICAL padding (16px). These headers are tall enough
+       that padding — not min-height — sets their height, so density must shrink
+       the padding too. (groupbox/messagebox use 12px, where min-height is the floor.) */
+    --zk-header-padding-y:       var(--zk-spacing-4);          /* 16 */
+    --zk-groupbox-header-height: var(--zk-control-height-lg);  /* 48 */
+    --zk-notification-height:    var(--zk-control-height-lg);  /* 48 */
+    --zk-paging-control-size:    var(--zk-control-height-sm);  /* 32 */
+    --zk-carousel-arrow-size:    var(--zk-control-height-sm);  /* 32 — same rung as paging's arrow-pair precedent */
+    --zk-data-row-min-height:    52px;                         /* off-ladder: tree data row + grid/list paging bar */
+
+    /* ── Layer 3: data-cell padding ─────────────────────────────────────
+       Defined here at :root (NOT on .z-grid/.z-listbox/.z-tree) so a customer's
+       :root compact override actually reaches them — a custom property declared
+       on the component element shadows any :root value for its descendants. */
+    --zk-grid-cell-padding:      var(--zk-spacing-4);          /* 16 all sides */
+    --zk-listbox-cell-padding:   var(--zk-spacing-4);          /* 16 all sides */
+    --zk-tree-cell-padding:      var(--zk-spacing-2) var(--zk-spacing-4);  /* 8 / 16 */
+}
+
+/* ── Compact density — scope-independent knob ───────────────────────────────
+   Put data-density="compact" on <html> for the whole app, or on any container
+   for one region (it nests). The Java helper MarbleDensity.apply(...) sets it.
+
+   Every value here is a LITERAL, not a var() of a rung. That is deliberate: a
+   var()-derived alias declared at :root is substituted there and inherited
+   frozen, so overriding only the rungs would work at :root but leave the aliases
+   stuck at their comfortable size on any *descendant* (a region). Declaring the
+   consumed tokens as literals here lets them re-resolve at whatever element
+   carries the attribute — root or region alike. The leaf rungs are overridden
+   too (also literals) so the few components that read a rung directly
+   (icon-button/FAB sizes, panel/window close buttons, header min-heights) follow
+   at any scope as well. See doc/spec/data-dense-mode.md.
+   Values mirror doc/marble-compact.css. */
+[data-density="compact"] {
+    /* leaf rungs (read directly by a few components) */
+    --zk-control-height-xs: 24px;
+    --zk-control-height-sm: 28px;
+    --zk-control-height-md: 32px;
+    --zk-control-height-lg: 40px;
+    --zk-control-height-xl: 48px;
+    --zk-control-height: 32px;
+
+    /* semantic aliases (read by most components) — literals so they survive a region scope */
+    --zk-input-height: 32px;
+    --zk-button-height: 30px;
+    --zk-button-height-sm: 24px;
+    --zk-button-height-lg: 38px;
+    --zk-icon-button-size: 32px;
+    --zk-fab-size: 48px;
+    --zk-fab-size-sm: 32px;
+    --zk-toolbar-height: 40px;
+    --zk-menubar-height: 40px;
+    --zk-menuitem-height: 30px;
+    --zk-tab-height: 40px;
+    --zk-window-header-height: 48px;
+    --zk-panel-header-height: 40px;
+    --zk-header-padding-y: 8px;
+    --zk-groupbox-header-height: 40px;
+    --zk-notification-height: 40px;
+    --zk-paging-control-size: 28px;
+    --zk-carousel-arrow-size: 28px;
+    --zk-data-row-min-height: 36px;
+
+    /* data-cell padding (biggest table-density lever) */
+    --zk-grid-cell-padding: 6px 12px;
+    --zk-listbox-cell-padding: 6px 12px;
+    --zk-tree-cell-padding: 4px 12px;
+}

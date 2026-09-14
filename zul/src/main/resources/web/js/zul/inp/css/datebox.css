@@ -1,0 +1,449 @@
+/* MD3 Datebox — date picker input */
+/* DOM:
+   <span class="z-datebox [z-datebox-disabled] [z-datebox-readonly] [z-datebox-open]">
+     <input id="uuid-real" class="z-datebox-input [z-datebox-invalid]">
+     <a id="uuid-btn" class="z-datebox-button [z-datebox-disabled]">
+       <i id="uuid-icon" class="z-datebox-icon z-icon-calendar">
+     </a>
+   </span>
+   <!-- popup (absolute positioned, outside wrapper) -->
+   <div id="uuid-pp" class="z-datebox-popup [z-datebox-open]">
+     <div class="z-calendar">...</div>
+   </div>
+*/
+
+@layer zk-components {
+.z-datebox {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    border: 1px solid var(--zk-datebox-border-color);
+    border-radius: var(--zk-datebox-radius);
+    background-color: var(--zk-datebox-bg);
+    min-height: var(--zk-control-height);
+    box-sizing: border-box;
+    transition:
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-datebox:hover {
+    border-color: var(--zk-datebox-border-color-hover);
+}
+
+/* Focus ring as an INSET box-shadow, not a border-width increase: border stays 1px so the
+   border-box content area never shrinks and the min-height-pinned input/button never force the
+   root taller. See reference/focus-affordance-no-layout-shift.md. */
+.z-datebox:focus-within {
+    border-color: var(--zk-datebox-border-color-focus);
+    box-shadow: inset 0 0 0 1px var(--zk-datebox-border-color-focus);
+}
+
+/* Content-hug (contract dw1/dw2/M1): ZK emits the <input> with no size/width
+   (InputWidget._cols=0 → ComboWidget.redraw_ writes only class/aria/autocomplete;
+   see components/combo-trio.md). The old `flex:1;min-width:0` collapsed the input to
+   a fixed ~108px that ignored its content — short/empty/long all rendered the same
+   width and long formats like "2025/01/15 00:00" were CLIPPED. `field-sizing: content`
+   makes the input hug its date text (short dates hug; long formats grow to fit — no
+   clipping). `flex: 1 1 auto` (basis = content) still lets an hflex / width-forced
+   field grow to fill its container, so form layouts keep working. The `min-width`
+   floor keeps an empty field a usable click target. Left-aligned (no text-align), so
+   hugging simply trims trailing dead space. Browsers without `field-sizing` fall back
+   to the prior look — degradation, not breakage. */
+.z-datebox-input {
+    flex: 1 1 auto;
+    field-sizing: content;
+    min-width: 6.5em;
+    border: none;
+    background: transparent;
+    padding: 0 var(--zk-spacing-3);
+    height: 100%;
+    min-height: calc(var(--zk-input-height) - 2px);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-datebox-fg);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.z-datebox-input::placeholder {
+    color: var(--zk-color-on-surface-variant);
+    opacity: 1;
+}
+
+/* Invalid — class is added to the <input> element by ZK JS */
+.z-datebox-input.z-datebox-invalid {
+    color: var(--zk-color-error);
+}
+
+.z-datebox:has(.z-datebox-invalid) {
+    border-color: var(--zk-color-error);
+}
+
+.z-datebox:has(.z-datebox-invalid):hover {
+    border-color: var(--zk-color-error);
+}
+
+.z-datebox:has(.z-datebox-invalid):focus-within {
+    border-color: var(--zk-color-error);
+    box-shadow: inset 0 0 0 1px var(--zk-color-error);
+}
+
+/* Keep legacy class on wrapper in case server sets it */
+.z-datebox.z-datebox-invalid {
+    border-color: var(--zk-color-error);
+}
+
+.z-datebox.z-datebox-invalid:hover {
+    border-color: var(--zk-color-error);
+}
+
+.z-datebox.z-datebox-invalid:focus-within {
+    border-color: var(--zk-color-error);
+    box-shadow: inset 0 0 0 1px var(--zk-color-error);
+}
+
+.z-datebox-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    min-height: calc(var(--zk-input-height) - 2px);
+    border: none;
+    background: transparent;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 0 var(--zk-datebox-radius) var(--zk-datebox-radius) 0;
+    overflow: hidden;
+    text-decoration: none;
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-datebox-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-datebox-button:hover::before { opacity: var(--zk-state-hover-opacity); }
+.z-datebox-button:active::before { opacity: var(--zk-state-pressed-opacity); }
+
+/* ─── Readonly ─────────────────────────────────────────────────────────────── */
+/* readonly datebox is still interactive (the calendar popup opens), so it must read
+   as an ACTIVE outlined field, not disabled — matching the editable datebox and the
+   textbox beside it. The greyed/dimmed treatment is reserved for `disabled` below.
+   The input is made non-typeable by ZK's `readonly` attribute, not by styling.
+   See doc/spec/component-state-model.md. */
+.z-datebox.z-datebox-readonly .z-datebox-input,
+.z-datebox.z-datebox-readonly .z-datebox-button {
+    cursor: pointer;
+}
+
+/* ─── Disabled ─────────────────────────────────────────────────────────────── */
+.z-datebox.z-datebox-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
+}
+
+/* ─── Open state ───────────────────────────────────────────────────────────── */
+/* Icon-click open must use the SAME affordance as the input-click :focus-within
+   above (Mechanism A: 1px border + inset ring). A border-width:2px here grows the
+   min-height-pinned composite (~1px/side) and reads thicker than the input focus —
+   the two focus styles would diverge. See reference/focus-affordance-no-layout-shift.md. */
+.z-datebox.z-datebox-open {
+    border-color: var(--zk-datebox-border-color-focus);
+    box-shadow: inset 0 0 0 1px var(--zk-datebox-border-color-focus);
+}
+
+.z-datebox.z-datebox-open .z-datebox-button {
+    color: var(--zk-datebox-border-color-focus);
+}
+
+/* ─── Button hidden (buttonVisible="false") ──────────────────────────── */
+/* ZK adds z-datebox-disabled to the <a> button element when buttonVisible=false */
+.z-datebox-button.z-datebox-disabled {
+    display: none;
+}
+
+/* ─── Inplace ──────────────────────────────────────────────────────────────── */
+.z-datebox.z-datebox-inplace {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.z-datebox.z-datebox-inplace:hover {
+    border-color: transparent;
+}
+
+.z-datebox.z-datebox-inplace .z-datebox-button {
+    display: none;
+}
+
+/* ─── Calendar popup ─────────────────────────────────────────────────────────
+ * MD3 picker rule: the popup is the ONE and ONLY elevated surface. Everything
+ * inside (calendar, timebox, timezone select) is "flat content" on that
+ * surface — no nested cards, no internal dividers. A multi-card popup makes
+ * the user's eye chase boundaries instead of values.
+ *
+ * Practical implication for this file:
+ *   1. .z-datebox-popup carries the shadow + radius (below).
+ *   2. .z-datebox-popup .z-calendar overrides calendar.css's standalone
+ *      card-style (border + shadow) so the calendar reads as flat content
+ *      inside the popup, not as a card-within-a-card.
+ *   3. timebox input + timezone select use a "filled-on-surface" border
+ *      treatment (transparent border at rest, primary on focus).
+ */
+.z-datebox-popup {
+    position: absolute;
+    z-index: 1700;
+    background-color: var(--zk-datebox-popup-bg);
+    border-radius: var(--zk-datebox-popup-radius);
+    box-shadow: var(--zk-elevation-dialog);
+    border: none;
+    overflow: hidden;
+    box-sizing: border-box;
+    /* Let the popup auto-fit the calendar (which has its own max-width: 268px
+       in calendar.css). Forcing min-width here leaves a horizontal strip of
+       blank popup background to the right of the calendar — looks like a
+       phantom border. */
+}
+
+/* Calendar-in-popup: flat content. Overrides calendar.css's standalone styling
+ * (which gives .z-calendar its own card border + elevation-2 shadow for use
+ * outside the datebox). No border, no shadow, no radius, transparent bg —
+ * the popup itself is the surface. */
+.z-datebox-popup .z-calendar {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Time section inside datebox popup */
+.z-datebox-popup .z-timebox {
+    display: flex;
+    width: calc(100% - 32px);
+    margin: 12px 16px 16px;
+}
+
+/* Filled-on-surface input treatment inside the popup: no resting border so
+ * timebox/timezone don't read as nested cards; focus shows a primary border
+ * for the affordance. */
+.z-datebox-popup .z-timebox .z-timebox-input,
+.z-datebox-popup .z-datebox-timezone > select {
+    border-color: transparent;
+}
+.z-datebox-popup .z-timebox .z-timebox-input:focus,
+.z-datebox-popup .z-datebox-timezone > select:focus {
+    border-color: var(--zk-color-primary);
+}
+
+/* ─── Timezone selector (rendered when `timezones=` attribute set) ──────────
+   ZK Datebox.ts emits:
+     <div class="z-datebox-timezone">
+       <select>...timezone <option>s...</select>
+     </div>
+   inside the popup as a sibling of .z-calendar / .z-timebox. The wrapper has
+   no default margin, so without the rule below the native <select> sits
+   flush against the popup's bottom-left corner. The inner <select> mirrors
+   the .z-selectbox styling so the timezone picker matches every other native
+   select in the theme.
+
+   The top margin gives the selector breathing room from the calendar grid
+   (the calendar body only carries an 8px bottom padding), matching the 12px
+   top margin the sibling .z-timebox uses above. It is a layout margin, so the
+   gap is identical whether or not forced-colors is active (WHCM strips
+   box-shadow/remaps colors but never touches margins). */
+.z-datebox-timezone {
+    margin: var(--zk-spacing-3);
+}
+
+.z-datebox-timezone > select {
+    /* Layout */
+    display: inline-block;
+    width: 100%;
+    min-height: 36px;
+    box-sizing: border-box;
+    padding: 0 36px 0 var(--zk-spacing-3);
+    vertical-align: middle;
+
+    /* Typography */
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: 1.5;
+    color: var(--zk-color-on-surface);
+
+    /* Surface */
+    background-color: var(--zk-color-surface);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 20px 20px;
+
+    /* Shape */
+    border: 1px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-input);
+
+    /* Interaction */
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+
+    /* A native <select> is intrinsically sized, so a 2px focus border would grow the
+       box outward on both axes AND shift the text. Use Mechanism A: keep border 1px,
+       draw the focus ring as an inset box-shadow. Never transition border-width. See
+       reference/focus-affordance-no-layout-shift.md (§ <select> = Mechanism A). */
+    transition:
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-datebox-timezone > select::-ms-expand {
+    display: none;
+}
+
+.z-datebox-timezone > select:hover {
+    border-color: var(--zk-color-on-surface);
+}
+
+.z-datebox-timezone > select:focus,
+.z-datebox-timezone > select:focus-visible {
+    border-color: var(--zk-color-primary);
+    box-shadow: inset 0 0 0 1px var(--zk-color-primary);
+    outline: none;
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   Customizable Select (HTML spec — Chrome 130+) for the timezone <select>.
+   Mirrors selectbox.css so the popup, options, checkmark, and picker arrow
+   share the same MD3 treatment as every other native select in the theme.
+   Browsers without support keep the native fallback above.
+   ─────────────────────────────────────────────────────────────────────── */
+@supports (appearance: base-select) {
+    .z-datebox-timezone > select,
+    .z-datebox-timezone > select::picker(select) {
+        appearance: base-select;
+    }
+
+    .z-datebox-timezone > select {
+        background-image: none;
+        padding-right: var(--zk-spacing-3);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--zk-spacing-2);
+    }
+
+    .z-datebox-timezone > select::picker-icon {
+        color: var(--zk-color-on-surface-variant);
+        font-size: 16px;
+        transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    }
+
+    .z-datebox-timezone > select:open::picker-icon {
+        transform: rotate(180deg);
+    }
+
+    .z-datebox-timezone > select::picker(select) {
+        background-color: var(--zk-color-surface);
+        color: var(--zk-color-on-surface);
+        border: 1px solid var(--zk-color-outline-variant);
+        border-radius: var(--zk-shape-menu);
+        box-shadow: var(--zk-elevation-3);
+        padding: var(--zk-spacing-1);
+        margin: 0;
+        min-width: anchor-size(width);
+        opacity: 0;
+        transform: translateY(-4px);
+        transition:
+            opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+            transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+            display var(--zk-motion-duration-standard) allow-discrete,
+            overlay var(--zk-motion-duration-standard) allow-discrete;
+    }
+
+    .z-datebox-timezone > select:open::picker(select) {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @starting-style {
+        .z-datebox-timezone > select:open::picker(select) {
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+    }
+
+    .z-datebox-timezone > select option {
+        display: flex;
+        align-items: center;
+        gap: var(--zk-spacing-2);
+        padding: var(--zk-spacing-2) var(--zk-spacing-3);
+        border-radius: var(--zk-shape-corner-small);
+        font-size: var(--zk-typescale-body-medium-size);
+        font-family: var(--zk-typescale-font-family);
+        color: var(--zk-color-on-surface);
+        cursor: pointer;
+        transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    }
+
+    .z-datebox-timezone > select option:hover,
+    .z-datebox-timezone > select option:focus {
+        background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+        outline: none;
+    }
+
+    .z-datebox-timezone > select option:active {
+        background-color: color-mix(in srgb, var(--zk-color-on-surface) 12%, transparent);
+    }
+
+    .z-datebox-timezone > select option:checked {
+        background-color: var(--zk-color-secondary-container);
+        color: var(--zk-color-on-secondary-container);
+    }
+
+    .z-datebox-timezone > select option:checked:hover {
+        background-color: color-mix(in srgb, var(--zk-color-on-secondary-container) 8%, var(--zk-color-secondary-container));
+    }
+
+    .z-datebox-timezone > select option::checkmark {
+        order: -1;
+        content: '';
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        background-color: currentColor;
+        -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>");
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>");
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        opacity: 0;
+    }
+
+    .z-datebox-timezone > select option:checked::checkmark {
+        opacity: 1;
+    }
+
+    .z-datebox-timezone > select selectedcontent {
+        font-family: var(--zk-typescale-font-family);
+        font-size: var(--zk-typescale-body-medium-size);
+        color: var(--zk-color-on-surface);
+        flex: 1;
+    }
+}
+}

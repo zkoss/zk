@@ -1,0 +1,164 @@
+/* MD3 Notification — floating alert with optional directional pointer
+   DOM: <div class="z-notification [z-notification-info|warning|error]">
+          <div class="z-notification-pointer [z-notification-up|down|left|right]"/>  (optional)
+          <i class="z-notification-icon z-icon-*"/>
+          <div class="z-notification-content">…</div>
+          <div class="z-notification-close"><i class="z-notification-icon z-icon-times"/></div>
+        </div>
+*/
+
+@layer zk-components {
+.z-notification {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: table;
+}
+
+/* ─── Content box (the visible card) ───────────────────────────────────── */
+.z-notification-content {
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    width: 288px;
+    min-height: var(--zk-notification-height);
+    /* center the message vertically: min-height (48px default) exceeds a single line's
+       natural height (~43.5px incl. padding), so plain block layout would top-align
+       the text and leave bottom slack, misaligning it with the centered icon.
+       Block-level align-content, not flex: a flex container wraps each contiguous
+       inline run of an HTML message in an anonymous block item, which strips the
+       spaces around inline markup ("do <span>HTML</span>." -> "doHTML."). */
+    display: block;
+    align-content: center;
+    padding: var(--zk-spacing-3) var(--zk-spacing-4) var(--zk-spacing-3) 52px;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--zk-notification-radius);
+    box-shadow: var(--zk-elevation-2);
+    background-color: var(--zk-notification-bg);
+    color: var(--zk-notification-fg);
+    line-height: 1.5;
+}
+
+/* No left accent stripe: MD3 alerts/snackbars carry severity with the leading
+   icon plus the container tint, not a leading colour bar. Severity cues live in
+   the type variants below (icon colour + tinted fill). */
+
+/* ─── Icon (absolute inside the content area) ──────────────────────────── */
+.z-notification-icon {
+    position: absolute;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 16px;
+    font-size: 20px;
+    line-height: 20px;
+    margin-top: -10px;
+}
+
+/* Offset when pointer is present */
+.z-notification-pointer + .z-notification-icon { left: 12px; }
+.z-notification-left + .z-notification-icon   { left: 24px; }
+.z-notification-up + .z-notification-icon     { margin-top: -7px; }
+.z-notification-down + .z-notification-icon   { margin-top: -13px; }
+
+/* ─── Close button ──────────────────────────────────────────────────────── */
+.z-notification-close {
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    padding: 0 2px;
+    line-height: 14px;
+    position: absolute;
+    top: var(--zk-spacing-2);
+    right: var(--zk-spacing-2);
+    cursor: pointer;
+    opacity: 0.6;
+    color: inherit;
+}
+
+.z-notification-close:hover { opacity: 1; }
+
+/* Close icon inherits type color */
+.z-notification-close > .z-notification-icon {
+    position: static;
+    transform: none;
+    margin-top: 0;
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+}
+
+/* When pointer is present, shift close button */
+.z-notification-right ~ .z-notification-close { right: 16px; }
+.z-notification-up ~ .z-notification-close    { top: 16px; }
+
+/* ─── Pointer (arrow) ───────────────────────────────────────────────────── */
+.z-notification-pointer {
+    display: none;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    position: absolute;
+    z-index: 100;
+}
+
+.z-notification-left,
+.z-notification-right,
+.z-notification-up,
+.z-notification-down {
+    border: 10px solid transparent;
+}
+
+/* When pointer is used, content renders as table-cell */
+.z-notification-pointer ~ .z-notification-content {
+    display: table-cell;
+    width: 260px;
+    vertical-align: middle;
+}
+
+/* ─── Semantic variants ─────────────────────────────────────────────────── */
+
+/* info */
+.z-notification-info .z-notification-icon          { color: var(--zk-color-status-info); }
+.z-notification-info .z-notification-close > .z-notification-icon { color: var(--zk-color-on-surface); }
+.z-notification-info .z-notification-content {
+    /* opaque tint — a floating notification overlays arbitrary page content,
+       so the fill must not be translucent or that content bleeds through */
+    background-color: color-mix(in srgb, var(--zk-color-status-info) 12%, var(--zk-color-surface));
+    color: var(--zk-color-on-surface);
+}
+.z-notification-info .z-notification-left  { border-right-color:  var(--zk-color-status-info); }
+.z-notification-info .z-notification-right { border-left-color:   var(--zk-color-surface-container-highest); }
+.z-notification-info .z-notification-up    { border-bottom-color: var(--zk-color-surface-container-highest); }
+.z-notification-info .z-notification-down  { border-top-color:    var(--zk-color-surface-container-highest); }
+
+/* warning */
+/* on-*-container, not status-*: with the accent stripe gone the icon is the
+   primary severity cue, and the bright status tone sat at 1.9:1 against its own
+   container tint — below the 3:1 WCAG 1.4.11 floor for non-text UI. */
+.z-notification-warning .z-notification-icon          { color: var(--zk-color-on-warning-container); }
+.z-notification-warning .z-notification-close > .z-notification-icon { color: var(--zk-color-on-surface); }
+.z-notification-warning .z-notification-content {
+    background-color: color-mix(in srgb, var(--zk-color-warning) 12%, var(--zk-color-surface));
+    color: var(--zk-color-on-surface);
+}
+.z-notification-warning .z-notification-left  { border-right-color:  var(--zk-color-status-warning); }
+.z-notification-warning .z-notification-right { border-left-color:   color-mix(in srgb, var(--zk-color-warning) 12%, transparent); }
+.z-notification-warning .z-notification-up    { border-bottom-color: color-mix(in srgb, var(--zk-color-warning) 12%, transparent); }
+.z-notification-warning .z-notification-down  { border-top-color:    color-mix(in srgb, var(--zk-color-warning) 12%, transparent); }
+
+/* error */
+.z-notification-error .z-notification-icon          { color: var(--zk-color-on-error-container); }
+.z-notification-error .z-notification-close > .z-notification-icon { color: var(--zk-color-on-surface); }
+.z-notification-error .z-notification-content {
+    background-color: color-mix(in srgb, var(--zk-color-error) 12%, var(--zk-color-surface));
+    color: var(--zk-color-on-surface);
+}
+.z-notification-error .z-notification-left  { border-right-color:  var(--zk-color-status-error); }
+.z-notification-error .z-notification-right { border-left-color:   color-mix(in srgb, var(--zk-color-error) 12%, transparent); }
+.z-notification-error .z-notification-up    { border-bottom-color: color-mix(in srgb, var(--zk-color-error) 12%, transparent); }
+.z-notification-error .z-notification-down  { border-top-color:    color-mix(in srgb, var(--zk-color-error) 12%, transparent); }
+}

@@ -1,0 +1,10 @@
+/* MD3 Utility Classes — Elevation shadows */
+
+@layer zk-utilities {
+
+.z-elevation-0 { box-shadow: var(--zk-elevation-0); }
+.z-elevation-1 { box-shadow: var(--zk-elevation-1); }
+.z-elevation-2 { box-shadow: var(--zk-elevation-2); }
+.z-elevation-3 { box-shadow: var(--zk-elevation-3); }
+
+} /* end @layer zk-utilities */

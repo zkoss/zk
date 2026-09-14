@@ -1,0 +1,7 @@
+@layer zk-components {
+.z-captcha {
+    display: block;
+    border-radius: var(--zk-shape-corner-extra-small, 4px);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+}

@@ -1,0 +1,190 @@
+/* MD3 Slider — range input with track and thumb */
+/* Real ZK DOM (horizontal):
+   <div class="z-slider z-slider-horizontal" role="slider">
+     <div id="{uuid}-inner" class="z-slider-center">
+       <div id="{uuid}-area"  class="z-slider-area"   style="position:absolute; width:{px}"></div>
+       <div id="{uuid}-btn"   class="z-slider-button" style="left:{px}"></div>
+     </div>
+   </div>
+   Vertical adds z-slider-vertical instead of z-slider-horizontal.
+*/
+
+/* ── Outer container ──────────────────────────────────── */
+@layer zk-components {
+.z-slider {
+    position: relative;
+    padding: var(--zk-spacing-3) 0;
+    cursor: pointer;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+/* ── Track wrapper (center) ───────────────────────────── */
+/* ZK JS sets width/height of .z-slider-center via _fixSize() */
+.z-slider-center {
+    position: relative;
+    height: 4px;
+    background-color: var(--zk-slider-track-bg);
+    border-radius: var(--zk-slider-radius);
+    /* horizontal: small vertical margin so thumb doesn't clip parent */
+    margin-block: 10px;
+}
+
+/* ── Filled portion of track (active fill) ────────────── */
+.z-slider-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: var(--zk-slider-accent);
+    border-radius: var(--zk-slider-radius);
+}
+
+/* ── Thumb ────────────────────────────────────────────── */
+/* ZK JS positions .z-slider-button with left:{px} relative to .z-slider-center */
+.z-slider-button {
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    /* center the 20px thumb on the 4px track */
+    margin-top: -10px;
+    /* center thumb on its JS-set left position */
+    margin-left: -10px;
+    border-radius: var(--zk-slider-radius);
+    background-color: var(--zk-slider-accent);
+    box-shadow: var(--zk-slider-elevation);
+    cursor: grab;
+    transition:
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        transform   var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State-layer ring via box-shadow (MUI Slider pattern: 16% alpha, not MD3 8%) */
+.z-slider-button:hover {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-slider-accent) 16%, transparent);
+}
+
+.z-slider-button:focus-visible {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-slider-accent) 16%, transparent);
+}
+
+.z-slider-button:active {
+    cursor: grabbing;
+    box-shadow: 0 0 0 14px color-mix(in srgb, var(--zk-slider-accent) 16%, transparent);
+}
+
+/* ── Horizontal slider ────────────────────────────────── */
+.z-slider-horizontal {
+    /* default width comes from ZK attribute width="" or style; override min */
+    min-width: 120px;
+}
+
+.z-slider-horizontal .z-slider-center {
+    width: 100%;
+    height: 4px;
+}
+
+/* ── Vertical slider ──────────────────────────────────── */
+.z-slider-vertical {
+    display: inline-block;
+    width: auto;
+    padding: 0 var(--zk-spacing-3);
+}
+
+.z-slider-vertical .z-slider-center {
+    width: 4px;
+    height: 100%;
+    margin-block: 0;
+    margin-inline: 10px;
+}
+
+/* Vertical area fills downward from top (ZK _fixPos sets area.height = btn.top, so
+   area must anchor at top to grow toward the thumb). min=top, max=bottom. */
+.z-slider-vertical .z-slider-area {
+    width: 100%;
+    height: auto; /* ZK JS sets height directly */
+    top: 0;
+    bottom: auto;
+}
+
+/* Vertical thumb: left-center, JS sets top */
+.z-slider-vertical .z-slider-button {
+    left: 50%;
+    top: auto;
+    margin-left: -10px;
+    /* JS sets `top` = the value position (thumb CENTER); pull up half the 20px
+       thumb so its center — not its top edge — lands there (mirrors horizontal
+       margin-left). margin-top:0 left every vertical thumb 10px low. */
+    margin-top: -10px;
+}
+
+/* ── Sphere mold — 3D gradient thumb ────────────────── */
+.z-slider-sphere .z-slider-button {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--zk-color-primary-container), var(--zk-color-primary) 60%, var(--zk-color-on-primary-container) 100%);
+}
+
+/* ── Knob mold (PE) ───────────────────────────────────── */
+/* SVG arc strokes — stroke-width and arc geometry are JS-controlled (NOT CSS-themable) */
+.z-slider-knob-inner {
+    stroke: var(--zk-slider-track-bg);
+    fill: none;
+}
+
+.z-slider-knob-area {
+    stroke: var(--zk-slider-accent);
+    fill: none;
+}
+
+/* Numeric input overlay — position:absolute required so JS top/left take effect */
+.z-slider-input {
+    position: absolute;
+    background-color: var(--zk-color-surface-container);
+    border: 1px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-corner-extra-small);
+    box-sizing: border-box;
+    color: var(--zk-color-primary);
+    font-weight: 600;
+    text-align: center;
+    /* k7 — suppress native number-input spinners (iceblue parity; the JS box is
+       sized from digit count, so reserved spinner space de-centers the value) */
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.z-slider-input::-webkit-outer-spin-button,
+.z-slider-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* ── Disabled ─────────────────────────────────────────── */
+.z-slider[disabled],
+.z-slider.z-slider-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.z-slider[disabled] .z-slider-button,
+.z-slider.z-slider-disabled .z-slider-button {
+    cursor: not-allowed;
+}
+
+/* ── Tooltip (slidetip) ───────────────────────────────── */
+/* ZK renders: <div id="zul_slidetip" class="z-slider-popup"> */
+.z-slider-popup {
+    position: absolute;
+    z-index: var(--zk-index-slider-tooltip);
+    padding: 4px 8px;
+    background-color: var(--zk-color-inverse-surface);
+    color: var(--zk-color-inverse-on-surface);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-small-size);
+    border-radius: var(--zk-shape-corner-extra-small);
+    box-shadow: var(--zk-elevation-1);
+    pointer-events: none;
+    white-space: nowrap;
+}
+}

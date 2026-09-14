@@ -1,0 +1,580 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Checkbox  (ZK mold: default)
+   ═══════════════════════════════════════════════════════════════════════════
+   ZK checkbox DOM structure (mold = "default"):
+     <span class="z-checkbox z-checkbox-default z-checkbox-off">
+       <input type="checkbox" id="uuid-real">      ← hidden; only for label association + focus
+       <label id="uuid-mold" class="z-checkbox-mold"></label>  ← visual control
+       <label id="uuid-cnt"  class="z-checkbox-content">…</label>  ← text label
+     </span>
+   State classes on wrapper span:
+     z-checkbox-off          → unchecked
+     z-checkbox-on           → checked
+     z-checkbox-indeterminate → indeterminate
+     z-checkbox-disabled     → disabled (also sets disabled attr on input)
+
+   Component Theme Variables (doc/spec/component-theme-variables.md): the default
+   mold reads --zk-checkbox-fg / -border-color / -radius / -accent (defaults in
+   tokens/_component-theme.css). The switch/toggle molds below keep reading base
+   tokens directly — out of scope for this pass. The radio/radiogroup rules
+   further down this file read their own --zk-radio-* knobs — see that section.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Wrapper ──────────────────────────────────────────────────────────────── */
+@layer zk-components {
+.z-checkbox {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    color: var(--zk-checkbox-fg);
+    /* 40px minimum touch-target height */
+    min-height: var(--zk-control-height);
+}
+
+/* ── Hide native input; still needed for focus / label association ─────────── */
+.z-checkbox input[type="checkbox"] {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+/* ── Mold label = visual checkbox box ─────────────────────────────────────── */
+.z-checkbox-mold {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--zk-checkbox-border-color);
+    border-radius: var(--zk-checkbox-radius);
+    background-color: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    /* State-layer ring for hover/focus */
+    /* Horizontal gap only; the wrapper's flex `align-items:center` handles vertical
+       centering, so the box stays centered at any --zk-control-height (compact mode). */
+    margin: 0 11px;
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State-layer pseudo (ripple ring) */
+.z-checkbox-mold::before {
+    content: '';
+    position: absolute;
+    inset: -11px;   /* expands to 40×40 touch area */
+    border-radius: 50%;
+    background-color: var(--zk-color-on-surface);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+/* Checkmark icon (SVG via ::after) */
+.z-checkbox-mold::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    display: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath fill='%23ffffff' d='M7 14l-4-4 1.4-1.4L7 11.2l6.6-6.6L15 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    pointer-events: none;
+}
+
+/* ── Label text ───────────────────────────────────────────────────────────── */
+.z-checkbox-content {
+    cursor: pointer;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    color: var(--zk-checkbox-fg);
+    padding-inline-end: var(--zk-spacing-2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Checked state  (.z-checkbox-on on wrapper)
+   The `tristate` mold emits mold-PREFIXED state classes
+   (.z-checkbox-tristate-on / -indeterminate) — see the checkbox skill entry —
+   so every default-mold state selector below is paired with its tristate twin.
+   ═══════════════════════════════════════════════════════════════════ */
+.z-checkbox-on > .z-checkbox-mold,
+.z-checkbox-tristate-on > .z-checkbox-mold {
+    background-color: var(--zk-checkbox-accent);
+    border-color: var(--zk-checkbox-accent);
+}
+
+.z-checkbox-on > .z-checkbox-mold::before,
+.z-checkbox-tristate-on > .z-checkbox-mold::before {
+    background-color: var(--zk-checkbox-accent);
+}
+
+.z-checkbox-on > .z-checkbox-mold::after,
+.z-checkbox-tristate-on > .z-checkbox-mold::after {
+    display: block;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Indeterminate state  (.z-checkbox-indeterminate on wrapper)
+   ═══════════════════════════════════════════════════════════════════ */
+.z-checkbox-indeterminate > .z-checkbox-mold,
+.z-checkbox-tristate-indeterminate > .z-checkbox-mold {
+    background-color: var(--zk-checkbox-accent);
+    border-color: var(--zk-checkbox-accent);
+}
+
+.z-checkbox-indeterminate > .z-checkbox-mold::before,
+.z-checkbox-tristate-indeterminate > .z-checkbox-mold::before {
+    background-color: var(--zk-checkbox-accent);
+}
+
+.z-checkbox-indeterminate > .z-checkbox-mold::after,
+.z-checkbox-tristate-indeterminate > .z-checkbox-mold::after {
+    display: block;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Crect fill='%23ffffff' x='3' y='8' width='12' height='2'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Hover states
+   ═══════════════════════════════════════════════════════════════════ */
+/* Unchecked hover */
+.z-checkbox-off:not(.z-checkbox-disabled):hover > .z-checkbox-mold::before,
+.z-checkbox-tristate-off:not(.z-checkbox-disabled):hover > .z-checkbox-mold::before {
+    opacity: var(--zk-state-hover-opacity);
+}
+
+/* Checked/indeterminate hover */
+.z-checkbox-on:not(.z-checkbox-disabled):hover > .z-checkbox-mold::before,
+.z-checkbox-indeterminate:not(.z-checkbox-disabled):hover > .z-checkbox-mold::before,
+.z-checkbox-tristate-on:not(.z-checkbox-disabled):hover > .z-checkbox-mold::before,
+.z-checkbox-tristate-indeterminate:not(.z-checkbox-disabled):hover > .z-checkbox-mold::before {
+    opacity: var(--zk-state-hover-opacity);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Focus-visible: ring on the mold via input:focus-visible + sibling
+   ZK focuses the <input>, not the mold, so use :has() to bubble up
+   ═══════════════════════════════════════════════════════════════════ */
+.z-checkbox:has(input[type="checkbox"]:focus-visible) > .z-checkbox-mold {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+.z-checkbox:has(input[type="checkbox"]:focus-visible) > .z-checkbox-mold::before {
+    opacity: var(--zk-state-focus-opacity);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Disabled state  (.z-checkbox-disabled on wrapper)
+   ═══════════════════════════════════════════════════════════════════ */
+.z-checkbox-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Disabled unchecked */
+.z-checkbox-disabled.z-checkbox-off > .z-checkbox-mold,
+.z-checkbox-disabled.z-checkbox-tristate-off > .z-checkbox-mold {
+    border-color: var(--zk-color-on-surface);
+    opacity: var(--zk-state-disabled-opacity);
+}
+
+/* Disabled checked */
+.z-checkbox-disabled.z-checkbox-on > .z-checkbox-mold,
+.z-checkbox-disabled.z-checkbox-tristate-on > .z-checkbox-mold {
+    background-color: var(--zk-color-on-surface);
+    border-color: transparent;
+    opacity: var(--zk-state-disabled-opacity);
+}
+
+/* Disabled indeterminate */
+.z-checkbox-disabled.z-checkbox-indeterminate > .z-checkbox-mold,
+.z-checkbox-disabled.z-checkbox-tristate-indeterminate > .z-checkbox-mold {
+    background-color: var(--zk-color-on-surface);
+    border-color: transparent;
+    opacity: var(--zk-state-disabled-opacity);
+}
+
+/* Disabled label text */
+.z-checkbox-disabled > .z-checkbox-content {
+    opacity: var(--zk-state-disabled-opacity);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Radio  (no z-radio-mold element — input[type="radio"] IS the visual)
+   ═══════════════════════════════════════════════════════════════════════════
+   ZK radio DOM structure:
+     <span class="z-radio z-radio-default z-radio-off [z-radio-disabled]">
+       <input type="radio" id="uuid-real">
+       <label id="uuid-cnt" class="z-radio-content">…</label>
+       [<br/>]  ← only when radiogroup orient="vertical"
+     </span>
+   State classes on wrapper span:
+     z-radio-off     → unselected
+     z-radio-on      → selected
+     z-radio-disabled
+
+   Component Theme Variables (doc/spec/component-theme-variables.md): reads
+   --zk-radio-fg / -border-color / -accent (defaults in tokens/_component-theme.css).
+   The circular shape (border-radius: 50%) stays hardcoded — a fixed shape
+   concern, not a knob (same convention as badge's dot mode).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Radio wrapper ────────────────────────────────────────────────────────── */
+.z-radio {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    color: var(--zk-radio-fg);
+    min-height: var(--zk-control-height);
+}
+
+/* Hide ZK-generated <br> inside flex context */
+.z-radio br {
+    display: none;
+}
+
+/* ── Native radio input as visual control ─────────────────────────────────── */
+.z-radio input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: 2px solid var(--zk-radio-border-color);
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    /* Horizontal gap only; wrapper flex `align-items:center` centers it vertically,
+       so it stays centered at any --zk-control-height (compact mode). */
+    margin: 0 10px;
+    transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State-layer ring around radio */
+.z-radio input[type="radio"]::before {
+    content: '';
+    position: absolute;
+    inset: -10px;   /* expands 20px element to 40px state-layer */
+    border-radius: 50%;
+    background-color: var(--zk-color-on-surface);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+/* Inner filled dot (shown when selected) */
+.z-radio input[type="radio"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--zk-radio-accent);
+    pointer-events: none;
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* ── Label text ───────────────────────────────────────────────────────────── */
+.z-radio-content {
+    cursor: pointer;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    color: var(--zk-radio-fg);
+    padding-inline-end: var(--zk-spacing-2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Selected state  (.z-radio-on on wrapper)
+   ═══════════════════════════════════════════════════════════════════ */
+.z-radio-on > input[type="radio"] {
+    border-color: var(--zk-radio-accent);
+}
+
+.z-radio-on > input[type="radio"]::before {
+    background-color: var(--zk-radio-accent);
+}
+
+.z-radio-on > input[type="radio"]::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Hover states
+   ═══════════════════════════════════════════════════════════════════ */
+/* Unselected hover */
+.z-radio-off:not(.z-radio-disabled):hover > input[type="radio"]::before {
+    opacity: var(--zk-state-hover-opacity);
+}
+
+/* Selected hover */
+.z-radio-on:not(.z-radio-disabled):hover > input[type="radio"]::before {
+    opacity: var(--zk-state-hover-opacity);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Focus-visible
+   ═══════════════════════════════════════════════════════════════════ */
+.z-radio input[type="radio"]:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+.z-radio input[type="radio"]:focus-visible::before {
+    opacity: var(--zk-state-focus-opacity);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Disabled state  (.z-radio-disabled on wrapper)
+   ═══════════════════════════════════════════════════════════════════ */
+.z-radio-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.z-radio-disabled > input[type="radio"],
+.z-radio-disabled > .z-radio-content {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Radiogroup  —  horizontal (default) and vertical layouts
+   ═══════════════════════════════════════════════════════════════════
+   ZK radiogroup DOM:
+     <span class="z-radiogroup z-radiogroup-horizontal">
+       [radio spans…]
+     </span>
+   Orient class: z-radiogroup-horizontal | z-radiogroup-vertical
+   ─────────────────────────────────────────────────────────────────── */
+.z-radiogroup {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+}
+
+.z-radiogroup-horizontal {
+    flex-direction: row;
+}
+
+.z-radiogroup-vertical {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Switch variant  (mold="switch" → z-checkbox-switch on the wrapper)
+   MUI v7 Switch (medium) values — see doc/contracts/checkbox.md sw1–sw9.
+   Track 34×14 (radius 7, no border); 20px thumb overhangs the track 3px on
+   every side; checked travel = 20px. Do NOT use the MD3 spec-sheet sizes.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Wrapper holds inline-block layout */
+.z-checkbox-switch {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    min-height: var(--zk-control-height);
+    gap: var(--zk-spacing-2);
+}
+
+/* Hide the real input */
+.z-checkbox-switch input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* The mold element IS the switch track; the thumb overhangs it (no overflow clip) */
+.z-checkbox-switch > .z-checkbox-mold {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 14px;
+    min-width: 34px;
+    border-radius: 7px;
+    /* ≈ rgba(0,0,0,.38) — MUI off-track is #000 @ .38; on-surface is 87% black, so 44% of it ≈ .38 */
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 44%, transparent);
+    border: none;
+    overflow: visible;
+    cursor: pointer;
+    flex-shrink: 0;
+    /* Horizontal gap only; wrapper flex `align-items:center` centers the track
+       vertically, so it stays centered at any --zk-control-height (compact mode). */
+    margin: 0 4px;
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State-layer halo: 38px circle centered on the thumb, follows its travel */
+.z-checkbox-switch > .z-checkbox-mold::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -12px;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--zk-color-on-surface);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
+        left var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Thumb (knob) — 20px, overhangs the 14px track by 3px on every side */
+.z-checkbox-switch > .z-checkbox-mold::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -3px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--zk-color-surface);
+    box-shadow: var(--zk-elevation-1);
+    display: block;
+    background-image: none;
+    transition:
+        left var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Hover state-layer (focus-visible opacity comes from the base .z-checkbox rule) */
+.z-checkbox-switch:not(.z-checkbox-switch-disabled):hover > .z-checkbox-mold::before {
+    opacity: var(--zk-state-hover-opacity);
+}
+
+/* Switch ON state */
+.z-checkbox-switch-on > .z-checkbox-mold {
+    background-color: color-mix(in srgb, var(--zk-color-primary) 50%, transparent);
+}
+
+.z-checkbox-switch-on > .z-checkbox-mold::before {
+    left: calc(100% - 26px);
+    background-color: var(--zk-color-primary);
+}
+
+.z-checkbox-switch-on > .z-checkbox-mold::after {
+    left: calc(100% - 17px);
+    background-color: var(--zk-color-primary);
+    background-image: none;
+}
+
+/* Switch disabled */
+.z-checkbox-switch-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: var(--zk-state-disabled-opacity);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Toggle mold  (mold="toggle")
+   DOM: .z-checkbox.z-checkbox-toggle.z-checkbox-toggle-{off|on}[.z-checkbox-toggle-disabled]
+     > input[type="checkbox"] (hidden)
+     > .z-checkbox-mold  ← the entire visual button
+     > .z-checkbox-content
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.z-checkbox-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+    cursor: pointer;
+    user-select: none;
+    min-height: unset;
+}
+
+.z-checkbox-toggle input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* The mold is rendered EMPTY by ZK (label is a sibling), so the fill is the only
+   on/off signal: ON = solid primary (MD3 "selected = filled container" reading, no
+   glyph, no inset shadow). See doc/contracts/checkbox.md tg1–tg7. */
+.z-checkbox-toggle > .z-checkbox-mold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: unset;
+    padding: 0;
+    border-radius: 4px;
+    border: 1px solid var(--zk-color-outline-variant);
+    background-color: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin: 0;
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Cancel out the default mold ::before (checkbox state-layer ring) */
+.z-checkbox-toggle > .z-checkbox-mold::before,
+.z-checkbox-toggle > .z-checkbox-mold::after {
+    display: none;
+}
+
+/* OFF hover — neutral state layer (MUI unselected hover is neutral, not primary) */
+.z-checkbox-toggle-off:not(.z-checkbox-toggle-disabled) > .z-checkbox-mold:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+/* ON — solid primary fill (the fill IS the signal; no glyph, no inset shadow) */
+.z-checkbox-toggle-on > .z-checkbox-mold {
+    background-color: var(--zk-color-primary);
+    border-color: var(--zk-color-primary);
+}
+
+/* ON hover — on-primary state layer over the fill (filled-button convention) */
+.z-checkbox-toggle-on:not(.z-checkbox-toggle-disabled) > .z-checkbox-mold:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-primary) 8%, var(--zk-color-primary));
+}
+
+/* Disabled */
+.z-checkbox-toggle-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.z-checkbox-toggle-disabled > .z-checkbox-mold {
+    opacity: var(--zk-state-disabled-opacity);
+}
+}

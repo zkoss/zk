@@ -1,0 +1,224 @@
+/* MD3 Color Tokens — --zk-color-* — blue-indigo palette */
+/*
+ * Naming convention — the `on-` prefix (Material Design):
+ *   --zk-color-<x>      a BASE color: a fill / background / container.
+ *   --zk-color-on-<x>   the FOREGROUND (text / icon) color drawn ON TOP of
+ *                       --zk-color-<x>, chosen for legible contrast.
+ * They pair up:  background: var(--zk-color-light);  color: var(--zk-color-on-light);
+ *
+ * Not every base needs an `on-` partner. Add one only when content sits on the
+ * base AND its color isn't the universal white — e.g. light/dark need both
+ * (dark text on light, white text on dark), whereas success/warning/error use
+ * plain white text and share that implicit foreground.
+ */
+:root {
+    /* -----------------------------------------------------------------------
+     * FEATURE: Brand-color override recipe (oklch absolute tone) — 2026-07-03,
+     *          upgraded to oklch(from …) relative color 2026-07-07.
+     *
+     * The semantic ROLES below (primary / error / warning / success) are SEEDS.
+     * `secondary` is NOT a seed — MD3 derives it from the same source color as
+     * primary (same hue, reduced chroma), so it is derived here too; see its own
+     * comment below. Every seed's `*-container` (light tint) and
+     * `on-*-container` (dark tint)
+     * partners are DERIVED from the seed via oklch(from <seed> L c h) instead of
+     * hand-picked hex, so overriding ONE seed at :root re-derives a coherent
+     * palette — containers, overlays (already currentColor/color-mix of the seed),
+     * the focus ring (--zk-focus-ring references --zk-color-primary) and every
+     * selected-row / alert / badge tint cascade automatically. No generator,
+     * no build step. See doc/spec/brand-override.md for the customer contract.
+     *
+     * Why oklch(from …), not color-mix(): it pins an ABSOLUTE lightness (L) while
+     * keeping the seed's hue (h) and a scaled chroma (calc(c * k)). A fixed-ratio
+     * color-mix inherits the seed's own lightness, so a container tuned for the
+     * default blue turns out too dark for a teal or too pale for a yellow. Pinning
+     * L makes every hue land at the same tone: the container stays light and the
+     * on-container stays dark for ANY brand color — MD3's tonal-palette model in
+     * miniature. (Empirically: container L holds ~0.92 across blue/green/yellow/
+     * violet seeds; every on-/container pair stays ≥ 6.6:1, i.e. WCAG AA.)
+     *
+     * Per role: L reproduces the previous hand-picked hex's measured OKLab
+     * lightness and `k` scales chroma to that pastel/rich level; the trailing
+     * comment on each line is that legacy value. Keeping the seed hue (not the
+     * legacy container's hue) is intentional — it makes containers brand-coherent;
+     * the warning container is the one that visibly shifts (its legacy hex leaned
+     * yellower than the orange seed).
+     *
+     * Contrast caveat: the derived on-/container PAIRS are safe at any seed
+     * lightness. What stays literal is `on-<role>` — the white text on the SOLID
+     * role fill (buttons, filled chips). That still assumes a MID-TO-DARK seed;
+     * for a light brand color, also override the matching `--zk-color-on-<role>`
+     * to a dark value. (Auto-deriving it needs contrast-color(), not yet baseline.)
+     *
+     * Escape hatch: these are plain custom properties — pin any single derived
+     * tone by overriding it directly at :root (no special variable needed).
+     * --------------------------------------------------------------------- */
+
+    /* Primary — #376fd0 blue (seed) */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: oklch(from var(--zk-color-primary) 0.92 calc(c * 0.25) h);    /* ≈ #d6e4ff */
+    --zk-color-on-primary-container: oklch(from var(--zk-color-primary) 0.23 calc(c * 0.45) h); /* ≈ #001c3d */
+
+    /* Secondary — DERIVED from primary, not a seed (marble-issue#2).
+       MD3 builds secondary out of the source color: same hue, lower chroma. The
+       previous #4db6ac teal sat 74° away in hue and read as a second, unrelated
+       brand. L is pinned to 0.54 — the same lightness the `-fill` cap enforces —
+       so white-on-secondary clears WCAG AA (5.07:1) for ANY brand seed, and the
+       secondary-vs-primary relationship survives a brand override: with a literal,
+       data-brand="rose" would leave a blue-grey secondary beside a crimson primary,
+       which is the complaint that was filed. c × 0.41 reproduces the tonal step
+       the designer asked for (#5a6f96); it resolves to #586f95 on the default seed.
+       Override --zk-color-secondary directly to opt out. */
+    --zk-color-secondary: oklch(from var(--zk-color-primary) 0.54 calc(c * 0.41) h);  /* ≈ #586f95 */
+    --zk-color-on-secondary: #ffffff;
+    --zk-color-secondary-container: oklch(from var(--zk-color-secondary) 0.87 calc(c * 0.48) h);    /* ≈ #c9d5ea */
+    --zk-color-on-secondary-container: oklch(from var(--zk-color-secondary) 0.235 calc(c * 0.48) h); /* ≈ #151e2d */
+
+    /* Error (seed) */
+    --zk-color-error: #d32f2f;
+    --zk-color-on-error: #ffffff;
+    --zk-color-error-container: oklch(from var(--zk-color-error) 0.89 calc(c * 0.28) h);    /* ≈ #ffcdd2 */
+    --zk-color-on-error-container: oklch(from var(--zk-color-error) 0.375 calc(c * 0.77) h); /* ≈ #7f0000 */
+
+    /* Warning (non-standard MD3, needed for badges) — seed */
+    /* main — filled controls AND text/outline; status-warning is the lighter accent.
+       #bd3f00, not the previous #ed6c02: the seed is used as TEXT (.z-text-warning,
+       the outlined/text button variants, .z-messagebox-exclamation, the warning
+       chip's label) and #ed6c02 measured 3.11:1 on white — 2.74:1 on the warning
+       chip's own tint — against a 4.5:1 floor. #bd3f00 is exactly the value the
+       `-fill` cap already produced, so the solid Warning surfaces do not move
+       (#bd3f00 -> #bc3e00, imperceptible) and warning now has ONE colour instead of
+       a bright text tone and a dark fill tone. Every path clears its floor: text on
+       white 5.42:1, chip label on its tint 4.78:1, container pair 6.85:1. The seed
+       darkening does NOT drag the containers down — both are tone-pinned (L 0.92 /
+       L 0.42 absolute), so only their chroma tracks the seed. */
+    --zk-color-warning: #bd3f00;
+    --zk-color-on-warning: #ffffff;
+    --zk-color-warning-container: oklch(from var(--zk-color-warning) 0.92 calc(c * 0.38) h);    /* ≈ #ffd7c5 */
+    --zk-color-on-warning-container: oklch(from var(--zk-color-warning) 0.42 calc(c * 0.59) h); /* ≈ #7a361e */
+
+    /* Success (seed) — completes the semantic role set (primary/secondary/error/
+       warning/success). main #2e7d32 = filled/text controls; status-success
+       #4caf50 remains the lighter badge/chip accent. */
+    --zk-color-success: #2e7d32;
+    --zk-color-on-success: #ffffff;
+    --zk-color-success-container: oklch(from var(--zk-color-success) 0.90 calc(c * 0.33) h);    /* ≈ #c8e6c9 */
+    --zk-color-on-success-container: oklch(from var(--zk-color-success) 0.38 calc(c * 0.78) h); /* ≈ #1b5e20 */
+
+    /* Neutral (light/dark filled-control variants — e.g. .z-button-light/-dark) */
+    --zk-color-light: #f5f5f5;
+    --zk-color-on-light: #333333;
+    --zk-color-light-outline: #e0e0e0;
+    --zk-color-dark: #212121;
+    --zk-color-on-dark: #ffffff;
+
+    /* Surface & Background */
+    --zk-color-background: #ffffff;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+
+    /* Surface containers (elevation tiers) */
+    --zk-color-surface-container-lowest: #ffffff;
+    --zk-color-surface-container-low: #f7f9fc;
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+    --zk-color-surface-container-highest: #e0e8f4;
+
+    /* Outline */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Inverse */
+    --zk-color-inverse-surface: #2d3748;
+    --zk-color-inverse-on-surface: #f0f4fa;
+    --zk-color-inverse-primary: oklch(from var(--zk-color-primary) 0.81 calc(c * 0.58) h); /* ≈ #9ec3ff — light primary for dark surfaces */
+
+    /* Scrim */
+    --zk-color-scrim: rgba(0, 0, 0, 0.5);
+
+    /* State layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+    --zk-state-dragged-opacity: 0.16;
+    --zk-state-disabled-opacity: 0.38;
+    --zk-state-disabled-container-opacity: 0.12;
+
+    /* Keyboard focus affordance — the standard 2px primary outline ring.
+       `outline-offset` stays per-component (2px default; ±1/2px inset on dense
+       rows like grid/tree/listbox). The 3px `.z-focus-ring` utility and the
+       border-/box-shadow-based focus styles (text fields, selects, sliders)
+       are intentionally separate and do NOT use this token. */
+    --zk-focus-ring: 2px solid var(--zk-color-primary);
+
+    /* Semantic / Role colors for ZK components */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+    --zk-color-disabled-container: rgba(0, 0, 0, 0.12);
+
+    /* Status colors — badge/chip semantic palette */
+    --zk-color-status-success: #4caf50;
+    --zk-color-status-warning: #ff9800;
+    --zk-color-status-error:   #ef5350;
+    /* info: hue 231, not 243 (marble-issue#2) — the old #0288d1 sat 17° from the
+       primary hue and was hard to tell apart from it. L 0.56 keeps every path this
+       token feeds above its floor: white on the solid 4.54:1, the token as text on
+       a white surface 4.54:1, and the notification icon on its own 12% tint 3.88:1
+       (WCAG 1.4.11 wants 3:1 for non-text). Do not lighten it. */
+    --zk-color-status-info:    #007fab;
+    --zk-color-status-neutral: #9e9e9e;
+    --zk-color-on-status:      #ffffff;
+
+    /* -----------------------------------------------------------------------
+     * Filled-surface variants (`-fill`) — cap OKLCh lightness at 0.54 so white
+     * on-text always clears WCAG AA (4.5:1) on the fill, for ANY brand/status
+     * hue. `min(l, 0.54)` only darkens colors lighter than the cap (secondary,
+     * success, warning, info); already-dark roles (primary/error) are
+     * effectively unchanged. Consumed by the filled `.z-bg-*` utilities so a
+     * role/status color used as a button or surface fill stays legible and
+     * visually consistent with white text — including a customer's rebrand seed.
+     *
+     * Membership = one fill per `.z-bg-*` variant: the five semantic roles
+     * (primary/secondary/success/warning/error) plus `status-info` (info has no
+     * brand role). success/warning fills derive from the ROLE seed, not the
+     * lighter `status-*` accent, keeping the utility lineage consistent.
+     *
+     * Raw seeds/status stay full-strength everywhere else (text, links, borders,
+     * icons, progress/loading bars, badges) where bright is correct and there is
+     * no text on top. 0.54 is the highest cap where every hue — incl. worst-case
+     * cyan/lime — clears AA; see doc/spec/brand-override.md.
+     * --------------------------------------------------------------------- */
+    --zk-color-primary-fill:     oklch(from var(--zk-color-primary)     min(l, 0.54) c h);
+    --zk-color-secondary-fill:   oklch(from var(--zk-color-secondary)   min(l, 0.54) c h);
+    --zk-color-success-fill:     oklch(from var(--zk-color-success)     min(l, 0.54) c h);
+    --zk-color-warning-fill:     oklch(from var(--zk-color-warning)     min(l, 0.54) c h);
+    --zk-color-error-fill:       oklch(from var(--zk-color-error)       min(l, 0.54) c h);
+    --zk-color-status-info-fill: oklch(from var(--zk-color-status-info) min(l, 0.54) c h);
+}
+
+/* -----------------------------------------------------------------------
+ * FEATURE: Built-in brand-color presets — flip via a data-brand attribute
+ * on the document root (<html>), toggled by the MarbleBrand Java helper.
+ *
+ * Each preset overrides ONLY the primary SEED. Everything else re-derives
+ * through the oklch(from …) cascade above — containers, on-containers, the
+ * L-capped `-fill` variants, state-layer overlays, --zk-focus-ring and
+ * --zk-color-inverse-primary — so a single line rebrands the whole palette.
+ * This is the same single-seed contract customers use (doc/spec/brand-override.md);
+ * the presets are just a curated set exposed as a runtime switch.
+ *
+ * :root[data-brand="…"] (specificity 0,2,0) beats the base :root block above
+ * (0,1,0) regardless of bundle source order. There is no "default" block —
+ * MarbleBrand.Brand.DEFAULT removes the attribute and the base :root wins.
+ *
+ * All five presets are MID-TO-DARK, so the literal white `--zk-color-on-primary`
+ * stays AA on the solid fill. A light brand seed would also need on-primary
+ * overridden (the caveat noted at the top of this file).
+ * --------------------------------------------------------------------- */
+:root[data-brand="marine"] { --zk-color-primary: #00729c; }
+:root[data-brand="slate"]  { --zk-color-primary: #506274; }
+:root[data-brand="copper"] { --zk-color-primary: #b45309; }
+:root[data-brand="rose"]   { --zk-color-primary: #be185d; }
