@@ -13,6 +13,7 @@ package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -317,14 +318,24 @@ public class B110_ZK_6150Test extends WebDriverTestCase {
 
 	// ----- Escape: the document listener vs the framework's escPressed_ -----
 
+	/** The inline z-index the float stack wrote on a float root, as a number. */
+	private long floatZIndexOf(String nodeExpression) {
+		String zIndex = getEval("String((" + nodeExpression + ").style.zIndex || '')");
+		assertNotEquals("", zIndex,
+				"pre-condition: the float stack must have assigned " + nodeExpression
+						+ " an inline z-index");
+		return Long.parseLong(zIndex.trim());
+	}
+
 	/**
-	 * The other half of the question: the document listener must not be too wide
-	 * either. With a modal `Window` stacked over it the popup is not the active
-	 * float, `canActivate({checkOnly: true})` says so (`zk/widget.ts:4514`), and
-	 * Escape has to stay with the modal.
+	 * The other half of the question: ownership follows the float stack, not the
+	 * modal. `open()` registers the popup as a float and then takes the top of
+	 * that stack, so the Bug #3201879 clause in `canActivate`
+	 * (`zk/widget.ts:4528`) hands activation to the popup even under a modal —
+	 * the same deal `zul.inp.ComboWidget#open` gives datebox and combobox.
 	 */
 	@Test
-	public void testEscapeStaysWithAModalStackedOverThePopup() {
+	public void testEscapeBelongsToThePopupStackedOverAModal() {
 		connect("/test2/B110-ZK-6150.zul");
 		waitResponse();
 
@@ -339,15 +350,22 @@ public class B110_ZK_6150Test extends WebDriverTestCase {
 		waitResponse();
 		assertTrue(popupOpen(), "pre-condition: the calendar popup must be open");
 
-		assertFalse(Boolean.parseBoolean(getEval(
+		// Pins the reason for the ownership below: drop the popup out of the float
+		// stack again and this goes red instead of quietly passing.
+		long popupZIndex = floatZIndexOf("zk.Widget.$('$dr')._rangePopup.$n()"),
+				modalZIndex = floatZIndexOf("jq('$wnd')[0]");
+		assertTrue(popupZIndex > modalZIndex,
+				"pre-condition: the popup must be the top of the float stack; popup="
+						+ popupZIndex + ", modal=" + modalZIndex);
+		assertTrue(Boolean.parseBoolean(getEval(
 						"zk.Widget.$('$dr')._rangePopup.canActivate({checkOnly: true})")),
-				"pre-condition: a popup under a modal must not own activation");
+				"pre-condition: the topmost float owns activation, modal or not");
 
 		getActions().sendKeys(Keys.ESCAPE).perform();
 		waitResponse();
 
-		assertTrue(popupOpen(),
-				"Escape belongs to the modal, so the popup must stay open instead of "
-						+ "closing just because the key reached the document");
+		assertFalse(popupOpen(),
+				"Escape belongs to the float that owns activation, so it must close the "
+						+ "popup rather than be left to the modal underneath");
 	}
 }
