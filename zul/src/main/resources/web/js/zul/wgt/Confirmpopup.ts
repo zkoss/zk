@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
  */
 @zk.WrapClass('zul.wgt.Confirmpopup')
 export class Confirmpopup extends zul.wgt.Popup {
-	/** @internal */ _header?: string;
+	/** @internal */ _title?: string;
 	/** @internal */ _message?: string;
 	/** @internal */ _iconSclass = 'z-icon-exclamation-triangle';
 	/** @internal */ _severity = 'warning';
@@ -34,19 +34,19 @@ export class Confirmpopup extends zul.wgt.Popup {
 	/** @internal */ _refNode?: HTMLElement;
 
 	/**
-	 * Returns the optional header (title row) shown above the message body.
+	 * Returns the optional title row shown above the message body.
 	 * @defaultValue `null`.
 	 */
-	getHeader(): string | undefined { return this._header; }
+	getTitle(): string | undefined { return this._title; }
 	/**
-	 * Sets the optional header (title row) shown above the message body.
-	 * @param header - the header text; null or an empty string clears it (the
+	 * Sets the optional title row shown above the message body.
+	 * @param title - the title text; null or an empty string clears it (the
 	 * popup renders with no title row).
 	 */
-	setHeader(header: string, opts?: Record<string, boolean>): this {
-		const o = this._header;
-		this._header = header;
-		if (o !== header || opts?.force) this._rerenderOrDeferUntilClose();
+	setTitle(title: string, opts?: Record<string, boolean>): this {
+		const o = this._title;
+		this._title = title;
+		if (o !== title || opts?.force) this._rerenderOrDeferUntilClose();
 		return this;
 	}
 
@@ -139,15 +139,15 @@ export class Confirmpopup extends zul.wgt.Popup {
 
 	/**
 	 * Returns the severity, which drives the icon/color styling of the popup. One
-	 * of "info", "success", "warning", "danger" or "secondary".
+	 * of "info", "success", "warning", "error" or "neutral".
 	 * @defaultValue `warning`.
 	 */
 	getSeverity(): string { return this._severity; }
 	/**
 	 * Sets the severity, which drives the icon/color styling of the popup. null
 	 * restores the default (`warning`).
-	 * @param severity - one of "info", "success", "warning", "danger" or
-	 * "secondary".
+	 * @param severity - one of "info", "success", "warning", "error" or
+	 * "neutral".
 	 */
 	setSeverity(severity: string, opts?: Record<string, boolean>): this {
 		// null/undefined → default so a stateless binding can't emit a dead
@@ -161,7 +161,7 @@ export class Confirmpopup extends zul.wgt.Popup {
 
 	/**
 	 * Returns which button gets keyboard focus when the popup opens — either "ok"
-	 * or "cancel". For destructive operations (severity="danger"), prefer
+	 * or "cancel". For destructive operations (severity="error"), prefer
 	 * "cancel" so an accidental Enter keypress does not commit the action.
 	 * @defaultValue `ok`.
 	 */
@@ -169,7 +169,7 @@ export class Confirmpopup extends zul.wgt.Popup {
 	/**
 	 * Sets which button gets keyboard focus when the popup opens. Accepts "ok" or
 	 * "cancel"; any other value is coerced to "ok". For destructive operations
-	 * (severity="danger"), prefer "cancel" so an accidental Enter keypress does
+	 * (severity="error"), prefer "cancel" so an accidental Enter keypress does
 	 * not commit the action.
 	 * @param defaultFocus - either "ok" or "cancel".
 	 */
@@ -189,8 +189,8 @@ export class Confirmpopup extends zul.wgt.Popup {
 		this._defaultFocus = defaultFocus;
 		// Honor a change made while the popup is already open: move keyboard
 		// focus to the new default button. Otherwise a server-driven switch to
-		// 'cancel' on a danger popup (the documented safety knob) would leave
-		// focus on OK, and Enter would still commit the destructive action
+		// 'cancel' on an error-severity popup (the documented safety knob) would
+		// leave focus on OK, and Enter would still commit the destructive action
 		// until the popup was closed and reopened.
 		//
 		// Only move focus when it currently rests INSIDE the popup (e.g. on the
@@ -527,7 +527,7 @@ export class Confirmpopup extends zul.wgt.Popup {
 			// header (e.g. user clicked to select text), Enter must not
 			// commit OK unprompted — that would fire a destructive action
 			// the user did not intend. Route through _defaultFocus instead
-			// so a danger popup with defaultFocus='cancel' stays safe.
+			// so an error-severity popup with defaultFocus='cancel' stays safe.
 			var active = document.activeElement,
 				cancelBtn = this.$n('cancel'),
 				okBtn = this.$n('ok');

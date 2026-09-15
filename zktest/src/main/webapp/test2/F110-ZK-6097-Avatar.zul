@@ -12,7 +12,7 @@ F110-ZK-6097-Avatar.zul
 Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 -->
 
-<zk xmlns="http://www.zkoss.org/2005/zul">
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute">
 	<vlayout spacing="10px" style="padding:16px;">
 		<!-- Render fallback chain: image > label > icon -->
 		<hlayout spacing="10px">
@@ -42,6 +42,16 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<avatar id="av-gap-default" label="DG"/>
 			<avatar id="av-gap-0"       label="ZG" gap="0"/>
 			<avatar id="av-gap-8"       label="EG" gap="8"/>
+		</hlayout>
+
+		<!-- Author-supplied accessible name via ca:aria-label. avReDerive
+		     supplies none, so its aria-label must keep tracking setLabel. -->
+		<hlayout spacing="10px">
+			<avatar id="av-ca"     iconSclass="z-icon-user" ca:aria-label="User"/>
+			<avatar id="av-ca-lbl" label="AB" ca:aria-label="Alice Brown"/>
+			<avatar id="avReDerive" label="AB"/>
+			<button id="btn-relabel-avatar" label="Relabel"
+					onClick='avReDerive.setLabel("XY");'/>
 		</hlayout>
 
 		<!-- Dynamic update target + drivers -->

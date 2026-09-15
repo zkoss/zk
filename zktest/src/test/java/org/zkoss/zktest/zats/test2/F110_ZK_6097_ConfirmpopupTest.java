@@ -16,9 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.JavascriptExecutor;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 
@@ -151,11 +153,11 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 		click(jq("$btn-warning")); waitResponse();
 		assertTrue(jq("$cpWarning").hasClass("z-confirmpopup-warning"));
 
-		click(jq("$btn-danger")); waitResponse();
-		assertTrue(jq("$cpDanger").hasClass("z-confirmpopup-danger"));
+		click(jq("$btn-error")); waitResponse();
+		assertTrue(jq("$cpError").hasClass("z-confirmpopup-error"));
 
-		click(jq("$btn-secondary")); waitResponse();
-		assertTrue(jq("$cpSecondary").hasClass("z-confirmpopup-secondary"));
+		click(jq("$btn-neutral")); waitResponse();
+		assertTrue(jq("$cpNeutral").hasClass("z-confirmpopup-neutral"));
 	}
 
 	@Test
@@ -249,33 +251,33 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 				+ "not at the click pointer");
 	}
 
-	// ----- header (PrimeNG Confirmpopup) -----
+	// ----- title row -----
 
 	@Test
-	public void header_renders_when_set() {
+	public void title_renders_when_set() {
 		connect();
 		waitResponse();
-		click(jq("$btn-with-header"));
+		click(jq("$btn-with-title"));
 		waitResponse();
-		assertTrue(jq("$cpHeader .z-confirmpopup-header").exists());
-		assertEquals("Confirm action", jq("$cpHeader .z-confirmpopup-header").text());
+		assertTrue(jq("$cpTitle .z-confirmpopup-header").exists());
+		assertEquals("Confirm action", jq("$cpTitle .z-confirmpopup-header").text());
 	}
 
 	@Test
-	public void header_absent_when_not_set() {
+	public void title_absent_when_not_set() {
 		connect();
 		waitResponse();
 		click(jq("$btn-open"));
 		waitResponse();
 		assertFalse(jq("$cp1 .z-confirmpopup-header").exists(),
-				"popup with no header attribute must not render the header div");
+				"popup with no title attribute must not render the title div");
 	}
 
 	@Test
-	public void header_dynamic_set_rerenders() {
+	public void title_dynamic_set_rerenders() {
 		connect();
 		waitResponse();
-		click(jq("$btn-set-header"));
+		click(jq("$btn-set-title"));
 		waitResponse();
 		click(jq("$btn-open"));
 		waitResponse();
@@ -293,6 +295,31 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 		waitResponse();
 		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
 		assertEquals("alertdialog", jq("$cp1").attr("role"));
+	}
+
+	@Test
+	public void aria_labelledby_author_supplied_via_ca_is_preserved() {
+		// aria-labelledby outranks aria-label, so an unconditional write here
+		// would shadow the author's name instead of visibly replacing it.
+		connect();
+		waitResponse();
+		click(jq("$btn-ca-labelledby"));
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals("someExternalId", jq("$cpCa").attr("aria-labelledby"),
+				"author-supplied ca:aria-labelledby must survive the za11y augment");
+	}
+
+	@Test
+	public void aria_labelledby_defaults_to_the_title_row_when_author_supplies_none() {
+		connect();
+		waitResponse();
+		click(jq("$btn-with-title"));
+		waitResponse();
+		if (!Boolean.valueOf(getEval("!!window.za11y"))) return;
+		assertEquals(getEval("jq('$cpTitle')[0].id") + "-header",
+				jq("$cpTitle").attr("aria-labelledby"),
+				"a confirmpopup with no ca:aria-* is still named from its title row");
 	}
 
 	// ----- defaultFocus -----
@@ -405,11 +432,11 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 		sleep(80);
 		assertTrue(jq("$cpTop").hasClass("z-confirmpopup-open"),
 				"baseline: an open confirmpopup carries the open-state class");
-		getEval("(zk.Widget.$(jq('$cpTop')[0]).setSeverity('danger'),'')");
+		getEval("(zk.Widget.$(jq('$cpTop')[0]).setSeverity('error'),'')");
 		sleep(60);
 		assertTrue(jq("$cpTop").hasClass("z-confirmpopup-open"),
 				"setSeverity while open must not wash the z-confirmpopup-open class");
-		assertTrue(jq("$cpTop").hasClass("z-confirmpopup-danger"),
+		assertTrue(jq("$cpTop").hasClass("z-confirmpopup-error"),
 				"the new severity class must be applied");
 	}
 
@@ -451,4 +478,50 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 		assertEquals("z-icon-exclamation-triangle", result,
 				"client setIconSclass(null) must restore the default icon, matching server semantics");
 	}
+
+	// Driven with a real Tab: :focus-visible does not match a programmatic focus.
+	@Test
+	public void keyboard_focus_paints_one_ring_on_both_buttons() {
+		connect();
+		waitResponse();
+		getEval(THEME_RING);
+		click(jq("$btn-top"));
+		waitResponse();
+
+		for (String part : new String[] { "ok", "cancel" }) {
+			String sel = "$cpTop .z-confirmpopup-" + part;
+			tabTo(sel);
+			assertEquals("2px", jq(sel).css("outline-width"),
+					"the focused " + part + " button paints no outline");
+			// The probe ring sits at (0,1,0); the component rule is (0,2,0) and
+			// wins on the same property. Drop it and the button paints the
+			// probe ring under its own outline.
+			assertEquals("none", jq(sel).css("box-shadow"),
+					"the theme ring must be cleared on the " + part + " button");
+		}
+	}
+
+
+	// zktest deploys the DEFAULT theme only, which installs no global *:focus
+	// ring — so asserting box-shadow == "none" straight off passes with and
+	// without the component rule. Inject the ring a WCAG palette would install,
+	// then assert the component still clears it.
+	private static final String THEME_RING =
+			"(function () { var s = document.createElement('style');"
+			+ " s.textContent = '*:focus, *:focus-visible "
+			+ "{ box-shadow: 0 0 0 3px rgb(1, 2, 3); }';"
+			+ " document.head.appendChild(s); return ''; })()";
+
+	/** Tabs from the document start until {@code selector} holds focus. */
+	private void tabTo(String selector) {
+		getActions().sendKeys(Keys.TAB).perform();
+		for (int i = 0; i < 60; i++) {
+			if (Boolean.parseBoolean(getEval(
+					"jq('" + selector + "')[0] === document.activeElement")))
+				return;
+			getActions().sendKeys(Keys.TAB).perform();
+		}
+		throw new AssertionError("never reached " + selector + " by tabbing");
+	}
+
 }

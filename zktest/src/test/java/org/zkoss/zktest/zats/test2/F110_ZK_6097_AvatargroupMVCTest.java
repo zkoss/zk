@@ -32,7 +32,7 @@ public class F110_ZK_6097_AvatargroupMVCTest extends WebDriverTestCase {
 		JQuery ag = jq("$agMvc");
 		assertTrue(ag.exists(), "agMvc not found");
 		assertTrue(ag.find(".z-avatargroup-overflow").exists(),
-				"initial overflow indicator expected (maxCount=3, 5 children)");
+				"initial overflow indicator expected (maxItems=3, 5 children)");
 	}
 
 	@Test
