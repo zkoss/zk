@@ -27,6 +27,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		2. Click "select second tab", then "open in hidden tab" — the popup must
 		   now open, anchored under the box.
 		3. Click "open invisible box" — no popup, and isOpen must echo "false".
+		4. Click "show the invisible box", then open it — the popup must now open.
 	</label>
 
 	<vlayout spacing="10px" hflex="1">
@@ -53,6 +54,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<button id="btnSelectTab" label="select second tab" onClick='tab2.setSelected(true)'/>
 			<button id="btnOpenHidden" label="open invisible box"
 					onClick='drbHidden.setOpen(true); hiddenOpen.setValue("" + drbHidden.isOpen())'/>
+			<button id="btnShowHidden" label="show the invisible box"
+					onClick='drbHidden.setVisible(true)'/>
 		</hlayout>
 	</vlayout>
 </zk>
