@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-4305-hidden-open.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Sep  2 14:49:55 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-4305 Hidden open — setOpen(true) on a daterangebox that is not really
+		visible must be ignored, the way Combobox.setOpen ignores it.
+
+		The popup is positioned against the box's client rect. A hidden anchor
+		measures as all zeros, so the viewport clamp pins the two-month calendar
+		to the page's top-left corner, floating over unrelated content with
+		nothing to associate it with.
+
+		Steps to verify:
+		1. With "second" NOT selected, click "open in hidden tab" — NO popup may
+		   appear anywhere on the page (look at the top-left corner).
+		2. Click "select second tab", then "open in hidden tab" — the popup must
+		   now open, anchored under the box.
+		3. Click "open invisible box" — no popup, and isOpen must echo "false".
+	</label>
+
+	<vlayout spacing="10px" hflex="1">
+		<tabbox id="tbx" width="520px">
+			<tabs>
+				<tab id="tab1" label="first"/>
+				<tab id="tab2" label="second"/>
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<label value="nothing here"/>
+				</tabpanel>
+				<tabpanel>
+					<daterangebox id="drbTab" format="yyyy-MM-dd" width="360px"/>
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+
+		<daterangebox id="drbHidden" format="yyyy-MM-dd" width="360px" visible="false"/>
+		<label id="hiddenOpen" value="unset"/>
+
+		<hlayout spacing="10px">
+			<button id="btnOpenTab" label="open in hidden tab" onClick='drbTab.setOpen(true)'/>
+			<button id="btnSelectTab" label="select second tab" onClick='tab2.setSelected(true)'/>
+			<button id="btnOpenHidden" label="open invisible box"
+					onClick='drbHidden.setOpen(true); hiddenOpen.setValue("" + drbHidden.isOpen())'/>
+		</hlayout>
+	</vlayout>
+</zk>
