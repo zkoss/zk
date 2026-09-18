@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-Rangeslider.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for Rangeslider / Multislider.
+
+	Description:
+		Each log label records every onRangeValueChange that reaches the server,
+		so a test can assert both that nothing fires on the down-event and that
+		exactly one change fires per gesture.
+
+	History:
+		Tue Aug 25 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Press the track and hold: no handle may move.
+		Release over the component and the nearest handle jumps to the pointer;
+		release anywhere else and the values stay untouched.
+	</label>
+	<separator/>
+	<hlayout>Rangeslider changes: <label id="rslog" value=""/></hlayout>
+	<rangeslider id="rs" width="300px" startValue="10" endValue="50"
+				 onRangeValueChange='rslog.setValue(rslog.getValue() + "[" + rs.getStartValue() + "," + rs.getEndValue() + "]")'/>
+	<separator height="30px"/>
+	<hlayout>Multislider changes: <label id="mslog" value=""/></hlayout>
+	<multislider id="ms" width="300px">
+		<sliderbuttons id="sb" startValue="10" endValue="50"
+					   onRangeValueChange='mslog.setValue(mslog.getValue() + "[" + sb.getStartValue() + "," + sb.getEndValue() + "]")'/>
+	</multislider>
+</zk>
