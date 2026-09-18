@@ -53,6 +53,8 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	timerId?: number;
 	/** @internal */
 	_currentbtn?: HTMLElement;
+	/** @internal which half of the spin button was pressed; used only when {@link shallStepOnRelease_} */
+	_stepUp_?: boolean;
 	/** @internal */
 	_fixedDigits?: number;
 
@@ -240,21 +242,42 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 			this._currentbtn = btn;
 		}
 
-		this.checkValue();
-
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight / 2;
 
-		if (isOverUpBtn) { //up
-			this._increase(true);
-			this._startAutoIncProc(true);
-		} else {	// down
-			this._increase(false);
-			this._startAutoIncProc(false);
+		if (this.shallStepOnRelease_())
+			this._stepUp_ = isOverUpBtn; // _btnUp does the work
+		else {
+			this._btnStep_(isOverUpBtn);
+			this._startAutoIncProc(isOverUpBtn);
 		}
 
 		// disable browser's text selection
 		evt.stop();
+	}
+
+	/**
+	 * Whether the spin buttons step on the up-event instead of the down-event, without
+	 * auto-repeat, so that pressing an arrow and releasing elsewhere leaves the value
+	 * untouched (WCAG 2.5.2 Pointer Cancellation, Level A).
+	 *
+	 * @returns `false`; the za11y module overrides this to `true`.
+	 * @internal
+	 */
+	shallStepOnRelease_(): boolean {
+		return false;
+	}
+
+	/**
+	 * Performs one step of the spin button. Kept separate from {@link _btnDown} so it
+	 * can also be invoked from {@link _btnUp} when {@link shallStepOnRelease_} returns
+	 * true.
+	 *
+	 * @internal
+	 */
+	_btnStep_(isUp: boolean): void {
+		this.checkValue();
+		this._increase(isUp);
 	}
 
 	/**
@@ -281,7 +304,10 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	_btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
-		this._onChanging();
+		if (this.shallStepOnRelease_())
+			this._btnStep_(!!this._stepUp_); // _increase fires _onChanging itself
+		else
+			this._onChanging();
 		this._stopAutoIncProc();
 
 		var inp = this.getInputNode()!;
