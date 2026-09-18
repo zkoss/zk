@@ -54,15 +54,15 @@ public class F110_ZK_6097_BadgeMVVMTest extends WebDriverTestCase {
 		waitResponse();
 		assertEquals("info", jq("$mvvmSeverity").text());
 		assertTrue(jq("$bdgMvvm").hasClass("z-badge-info") ||
-				!jq("$bdgMvvm").hasClass("z-badge-danger"),
+				!jq("$bdgMvvm").hasClass("z-badge-error"),
 				"initial severity should be info");
 
-		click(jq("$btnDanger"));
+		click(jq("$btnError"));
 		waitResponse();
-		assertEquals("danger", jq("$mvvmSeverity").text(),
-				"@command setDangerSeverity must update severity and notify");
-		assertTrue(jq("$bdgMvvm").hasClass("z-badge-danger"),
-				"badge CSS class must switch to danger");
+		assertEquals("error", jq("$mvvmSeverity").text(),
+				"@command setErrorSeverity must update severity and notify");
+		assertTrue(jq("$bdgMvvm").hasClass("z-badge-error"),
+				"badge CSS class must switch to error");
 	}
 
 	// reset @command resets multiple fields via @NotifyChange({...})
@@ -72,10 +72,10 @@ public class F110_ZK_6097_BadgeMVVMTest extends WebDriverTestCase {
 		waitResponse();
 		click(jq("$btnIncrement"));
 		waitResponse();
-		click(jq("$btnDanger"));
+		click(jq("$btnError"));
 		waitResponse();
 		assertEquals("1", jq("$mvvmCount").text());
-		assertEquals("danger", jq("$mvvmSeverity").text());
+		assertEquals("error", jq("$mvvmSeverity").text());
 
 		click(jq("$btnReset"));
 		waitResponse();

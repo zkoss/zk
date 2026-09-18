@@ -21,9 +21,9 @@ function confirmpopup$mold$(out) {
 		zclsHtml = this.getZclass();
 	out.push('<div', this.domAttrs_(), '>');
 	out.push('<span class="', zclsHtml, '-arrow"></span>');
-	if (this._header) {
+	if (this._title) {
 		out.push('<div id="', uuid, '-header" class="', zclsHtml, '-header">',
-			zUtl.encodeXML(this._header), '</div>');
+			zUtl.encodeXML(this._title), '</div>');
 	}
 	out.push('<div class="', zclsHtml, '-body">');
 	if (this._iconSclass) {

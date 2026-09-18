@@ -15,13 +15,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 /**
  * A group container for {@link Avatar} widgets.
- * Renders overlapping avatars; when `maxCount` is set, excess children are
+ * Renders overlapping avatars; when `maxItems` is set, excess children are
  * hidden and a "+N" indicator is appended.
  * @defaultValue {@link getZclass}: "z-avatargroup".
  */
 @zk.WrapClass('zul.wgt.Avatargroup')
 export class Avatargroup extends zul.Widget {
-	/** @internal */ _maxCount = 0;
+	/** @internal */ _maxItems = 0;
 	/** @internal */ _size?: string;
 	/** @internal */ _shape?: string;
 	/** @internal */ _overflowNode?: HTMLElement;
@@ -30,27 +30,27 @@ export class Avatargroup extends zul.Widget {
 	 * Returns the maximum number of visible avatars. 0 means unlimited.
 	 * @defaultValue `0`.
 	 */
-	getMaxCount(): number { return this._maxCount; }
+	getMaxItems(): number { return this._maxItems; }
 	/**
 	 * Sets the maximum number of visible avatars. Excess avatars are hidden and
 	 * replaced with a "+N" overflow indicator; 0 means unlimited. A negative
 	 * value is clamped to 0 (unlimited).
-	 * @param maxCount - the maximum number of visible avatars, or 0 for unlimited.
+	 * @param maxItems - the maximum number of visible avatars, or 0 for unlimited.
 	 */
-	setMaxCount(maxCount: number, opts?: Record<string, boolean>): this {
-		// Mirror Avatargroup.java#setMaxCount, which throws on a negative value.
+	setMaxItems(maxItems: number, opts?: Record<string, boolean>): this {
+		// Mirror Avatargroup.java#setMaxItems, which throws on a negative value.
 		// A negative slips past _applyOverflow's `if (!max) return` unlimited
 		// guard and makes every `idx >= max` test true, hiding ALL avatars
 		// behind a "+N" badge. Clamp to 0 (unlimited) + warn rather than throw
 		// so a bad MVVM binding doesn't collapse the whole load() pass.
-		if (maxCount < 0) {
-			zk.error('Avatargroup: maxCount cannot be negative — '
-					+ maxCount + ' clamped to 0 (unlimited)');
-			maxCount = 0;
+		if (maxItems < 0) {
+			zk.error('Avatargroup: maxItems cannot be negative — '
+					+ maxItems + ' clamped to 0 (unlimited)');
+			maxItems = 0;
 		}
-		const o = this._maxCount;
-		this._maxCount = maxCount;
-		if (o !== maxCount || opts?.force) this._applyOverflow();
+		const o = this._maxItems;
+		this._maxItems = maxItems;
+		if (o !== maxItems || opts?.force) this._applyOverflow();
 		return this;
 	}
 
@@ -155,12 +155,12 @@ export class Avatargroup extends zul.Widget {
 		// Always clean up previous overflow state first
 		this._removeOverflow();
 
-		var max = this._maxCount;
+		var max = this._maxItems;
 		if (!max) return;
 
 		// Only count children that are actually rendered. A server-side
 		// appendChild that fires onChildAdded_ before its DOM is in place
-		// would otherwise consume a maxCount slot with an unrendered ghost,
+		// would otherwise consume a maxItems slot with an unrendered ghost,
 		// pushing a real avatar into the hidden bucket and stranding it
 		// behind a "+N" indicator that doesn't match the visible count.
 		var idx = 0, hidden = 0;

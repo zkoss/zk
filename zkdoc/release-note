@@ -46,6 +46,7 @@ ZK 11.0.0
   ZK-6071: Unexpected JS error when using datebox in nested groupbox
   ZK-6066: Extra double quote in the attributes of checkbox when using WCAG module
   ZK-6067: Form field must not have multiple label elements when using WCAG module
+  ZK-6132: chip/badge/confirmpopup: severity values "danger"/"secondary" are inconsistent with ZK's own vocabulary
 
 * Upgrade Notes
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.

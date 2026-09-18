@@ -27,10 +27,10 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
         </n:section>
         <n:section>
             <n:h2>Severity variants</n:h2>
-            <chip label="Info"      severity="info"/>
-            <chip label="Success"   severity="success"/>
-            <chip label="Warning"   severity="warning"/>
-            <chip label="Danger"    severity="danger"/>
+            <chip label="Info"    severity="info"/>
+            <chip label="Success" severity="success"/>
+            <chip label="Warning" severity="warning"/>
+            <chip label="Error"   severity="error"/>
         </n:section>
         <n:section>
             <n:h2>Size variants</n:h2>

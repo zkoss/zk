@@ -5,6 +5,16 @@
 	overflow: hidden;
 	display: inline-block;
 
+	/* The root is tabindex="0" for arrow-key nav and Space-to-pause, so it
+	   needs its own indicator. Trap: a negative outline-offset draws nothing
+	   here — the positioned .z-carouselitem paints over the root's own outline
+	   — so the ring has to sit outside the box, on the page background. */
+	&:focus-visible {
+		box-shadow: none;
+		outline: 2px solid @colorPrimary;
+		outline-offset: 2px;
+	}
+
 	&-track {
 		display: flex;
 		transition: transform 0.4s ease;
@@ -41,6 +51,16 @@
 
 	&-effect-none > &-track {
 		transition: none;
+	}
+
+	/* Only the swipeable track kills selection: a drag that becomes a text
+	   selection or a native image drag fires pointercancel, so the swipe snaps
+	   home instead of changing slide. fade / none install no drag listeners
+	   (see _syncDragListeners), so their content stays selectable. */
+	&-effect-slide > &-track {
+		// Safari still needs the prefix; the repo has no autoprefixer.
+		-webkit-user-select: none;
+		user-select: none;
 	}
 
 	&-arrow {
@@ -86,10 +106,13 @@
 		transform: rotate(45deg);
 		margin-right: 2px;
 	}
-	&-arrow:hover { background: rgba(0, 0, 0, 0.6); }
+	&-arrow:hover { background: @carouselControlHoverBackgroundColor; }
 	/* WCAG 2.1 SC 2.4.7 Focus Visible: keep a clearly visible indicator
-	   when the arrow receives keyboard focus. */
+	   when the arrow receives keyboard focus. The control floats over author
+	   media, so the single-tone ring has no guaranteed contrast — back it with
+	   the base colour, which also replaces the theme's global *:focus ring. */
 	&-arrow:focus-visible {
+		box-shadow: 0 0 0 2px @colorBackgroundBase;
 		outline: 2px solid @colorPrimary;
 		outline-offset: 2px;
 	}
@@ -132,13 +155,16 @@
 		border: 1px solid @carouselIndicatorBorderColor;
 	}
 	&-indicator-active::before { background: @carouselIndicatorActiveBackgroundColor; border-color: @carouselIndicatorActiveBorderColor; }
+	/* Same as the arrow: the dot sits on the slide, so the ring needs the
+	   base-colour backing to contrast with any author media. */
 	&-indicator:focus-visible {
+		box-shadow: 0 0 0 2px @colorBackgroundBase;
 		outline: 2px solid @colorPrimary;
 		outline-offset: 2px;
 	}
 
-	/* WCAG 2.1 SC 4.1.3 Status Messages: visually hide the live region
-	   but keep it announceable. Uses the standard sr-only pattern. */
+	/* WCAG 2.1 SC 4.1.3: hide the live region, keep it announceable. Duplicates
+	   .sr-only on purpose — that class is theme-resolved and absent under a theme. */
 	&-status {
 		position: absolute;
 		width: 1px;
