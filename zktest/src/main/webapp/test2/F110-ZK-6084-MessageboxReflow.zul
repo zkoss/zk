@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-MessageboxReflow.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Sep 18 10:00:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+	<n:h1>Messagebox reflow at 320 CSS px</n:h1>
+	<label multiline="true">
+		WCAG 1.4.10 asks for no two-dimensional scrolling at 320 CSS px wide, which is a
+		1280px viewport zoomed to 400%. Use DevTools' device toolbar at width 320, or
+		size the window to 1280 and zoom to 400%.
+
+		1. at 320px, click "Show messagebox" - the dialog must fit, with no horizontal page
+		   scrollbar
+		2. at 1280px, open it first and only then narrow to 320 - the dialog must re-centre.
+		   A 'highlighted' window keeps the left it computed for the old viewport otherwise,
+		   and drifts off the right edge.
+	</label>
+	<button id="show" label="Show messagebox">
+		<!-- long enough to need more than one line once the dialog is capped to a 320px viewport -->
+		<attribute name="onClick"><![CDATA[
+			Messagebox.show("At a 320px viewport this message has to wrap. A dialog frozen at its "
+					+ "desktop width pushes the text sideways instead, so the page scrolls in two "
+					+ "dimensions.",
+					"Messagebox reflow", Messagebox.OK | Messagebox.CANCEL, Messagebox.INFORMATION);
+		]]></attribute>
+	</button>
+</zk>
