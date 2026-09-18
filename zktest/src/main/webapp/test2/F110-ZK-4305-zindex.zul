@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-4305-zindex.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu Sep  3 11:30:38 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-4305 stacking — the daterangebox popup must be raised by the
+		framework's float stack, not by a hardcoded z-index in the theme.
+
+		Steps to verify:
+		1. Click the calendar button inside the modal window below.
+		2. The popup must be fully clickable — no part of it may sit under the
+		   modal mask.
+		3. In devtools, the popup root must carry an INLINE style.zIndex
+		   assigned by zk.Widget#setFloatZIndex_ (a value in the 1800+ band),
+		   not the theme's old class-level 90000.
+	</label>
+
+	<window id="win" title="ZK-4305 z-index" mode="modal" width="520px"
+			border="normal">
+		<vlayout spacing="10px" hflex="1">
+			<label value="A modal window raises its own z-index and paints a mask."/>
+			<daterangebox id="drb" format="yyyy-MM-dd" width="360px"/>
+		</vlayout>
+	</window>
+</zk>
