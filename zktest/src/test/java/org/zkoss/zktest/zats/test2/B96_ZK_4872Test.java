@@ -11,9 +11,12 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import java.time.Duration;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
@@ -25,6 +28,9 @@ public class B96_ZK_4872Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		waitResponse();
+		// the selection arrives on the onAfterSize round trip, which starts after waitResponse() returns
+		new WebDriverWait(driver, Duration.ofSeconds(5))
+				.until(d -> !jq(":selected").text().isEmpty());
 		Assertions.assertEquals("item 1-1", jq(":selected").text());
 
 		new Select(toElement(jq("@select"))).selectByVisibleText("item 2-2");
