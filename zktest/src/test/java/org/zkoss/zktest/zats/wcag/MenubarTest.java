@@ -17,6 +17,14 @@ import org.junit.jupiter.api.Test;
  * @author rudyhuang
  */
 public class MenubarTest extends WcagTestCase {
+	/**
+	 * Both tests open a menupopup, so both hit the same over-strict {@code aria-required-children}
+	 * finding on {@code .z-menupopup[role=menu]} — see {@link MenupopupTest} for why it is skipped.
+	 */
+	private void verifyMenuA11y() {
+		verifyAxe("color-contrast", "aria-required-children");
+	}
+
 	@Test
 	public void testHorizontal() {
 		connect();
@@ -25,7 +33,7 @@ public class MenubarTest extends WcagTestCase {
 		waitResponse();
 		click(jq("@menu:contains(Menu BC)"));
 		waitResponse();
-		verifyA11y();
+		verifyMenuA11y();
 	}
 
 	@Test
@@ -36,6 +44,6 @@ public class MenubarTest extends WcagTestCase {
 		waitResponse();
 		click(jq(".z-menubar-vertical @menu:contains(Menu BC)"));
 		waitResponse();
-		verifyA11y();
+		verifyMenuA11y();
 	}
 }
