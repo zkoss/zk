@@ -1,0 +1,79 @@
+/* MD3 Badge — overlay count / dot indicator (ZK-6097 native component) */
+/* DOM: <span class="z-badge z-badge-{severity}
+          [z-badge-{placement}|z-badge-standalone] [z-badge-dot]">
+          host children…?
+          <span class="z-badge-indicator">count | value</span>
+        </span>
+   Wrap mode floats the indicator over a host's corner; standalone mode (no
+   children) flows it inline. The widget omits the indicator when hidden
+   (count 0 without showZero, empty value), so CSS only styles what renders.
+   NOTE: the host overhangs its corner — keep it in a non-clipping flex row
+   (z-d-flex / z-hstack), never inside an overflow:hidden container.
+   Theming: the indicator resolves --zk-badge-bg / --zk-badge-fg / --zk-badge-radius
+   (base defaults at :root in tokens/_component-theme.css). --zk-badge-fg / -radius
+   apply to every badge; --zk-badge-bg controls the default (info) fill and is
+   region/inline overridable, while non-default severities pin their own fill. */
+
+@layer zk-components {
+.z-badge {
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* Standalone (no host children) — indicator flows inline, not positioned. */
+.z-badge-standalone {
+    display: inline-flex;
+    align-items: center;
+}
+.z-badge-standalone > .z-badge-indicator {
+    position: static;
+    transform: none;
+}
+
+.z-badge-indicator {
+    position: absolute;
+    z-index: 1;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--zk-badge-radius);
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-typescale-label-medium-weight);
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--zk-badge-fg);
+    background: var(--zk-badge-bg);
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-emphasized-decelerate);
+}
+
+/* Corner placement (wrap mode). */
+.z-badge-top_right > .z-badge-indicator    { top: 0; right: 0; transform: translate(50%, -50%); }
+.z-badge-top_left > .z-badge-indicator     { top: 0; left: 0;  transform: translate(-50%, -50%); }
+.z-badge-bottom_right > .z-badge-indicator { bottom: 0; right: 0; transform: translate(50%, 50%); }
+.z-badge-bottom_left > .z-badge-indicator  { bottom: 0; left: 0;  transform: translate(-50%, 50%); }
+
+/* Dot mode — small circle, no count. */
+.z-badge-dot > .z-badge-indicator {
+    min-width: 8px;
+    height: 8px;
+    padding: 0;
+    border-radius: 50%;
+}
+
+/* Severity → indicator color. info is the widget default and is intentionally
+   NOT emitted here: it flows through the base --zk-badge-bg (info) declared at
+   :root, so a default badge stays region/inline overridable. The non-default
+   severities set --zk-badge-bg per-variant on the indicator (which shadows a
+   :root/inline override — expected, they carry their semantic color). */
+.z-badge-success > .z-badge-indicator   { --zk-badge-bg: var(--zk-color-status-success); }
+.z-badge-warning > .z-badge-indicator   { --zk-badge-bg: var(--zk-color-status-warning); }
+.z-badge-danger > .z-badge-indicator     { --zk-badge-bg: var(--zk-color-status-error); }
+.z-badge-secondary > .z-badge-indicator { --zk-badge-bg: var(--zk-color-status-neutral); }
+}

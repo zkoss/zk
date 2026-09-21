@@ -1,0 +1,223 @@
+/* MD3 Paging — pagination controls */
+/* Default mold DOM: nav.z-paging > ul > li > button.z-paging-button.z-paging-previous/next/first/last */
+/*      OS mold DOM: nav.z-paging.z-paging-os > ul > li[.z-paging-navigate] > a.z-paging-button[.z-paging-selected][.z-paging-noborder] */
+
+/* ─── Shared base container ─────────────────────────────────────────────── */
+@layer zk-components {
+.z-paging {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-paging-fg);
+    box-sizing: border-box;
+}
+
+/* ─── Shared list reset ─────────────────────────────────────────────────── */
+.z-paging ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.z-paging ul li {
+    display: flex;
+    align-items: center;
+}
+
+/* ─── Shared button base ────────────────────────────────────────────────── */
+.z-paging-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--zk-paging-control-size);
+    height: var(--zk-paging-control-size);
+    padding: 0 var(--zk-spacing-1);
+    border: none;
+    background: transparent;
+    color: var(--zk-paging-fg);
+    border-radius: var(--zk-paging-radius);
+    cursor: pointer;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    text-decoration: none;
+    overflow: hidden;
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State layer overlay (::before for hover/press; ::after for SVG icons in nav buttons) */
+.z-paging-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-paging-button:hover::before { opacity: var(--zk-state-hover-opacity); }
+.z-paging-button:active::before { opacity: var(--zk-state-pressed-opacity); }
+
+.z-paging-button:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+/* ─── Active / selected page ────────────────────────────────────────────── */
+.z-paging-selected {
+    background-color: var(--zk-paging-selected-bg);
+    color: var(--zk-paging-selected-fg);
+    font-weight: var(--zk-typescale-label-large-weight);
+}
+
+/* ─── Disabled button ───────────────────────────────────────────────────── */
+.z-paging-button[disabled] {
+    color: var(--zk-color-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.z-paging-selected[disabled] {
+    background-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+}
+
+/* ─── OS mold nav buttons (prev/next/first/last) ────────────────────────── */
+/* Nav items: li.z-paging-navigate > a.z-paging-button.z-paging-noborder */
+.z-paging-os ul > li.z-paging-navigate .z-paging-noborder {
+    width: var(--zk-paging-control-size);
+    min-width: var(--zk-paging-control-size);
+    font-size: 0;               /* hide the text label */
+}
+
+/* SVG icon via ::after (::before is the state-layer) */
+.z-paging-os ul > li.z-paging-navigate .z-paging-noborder::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: currentColor;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    pointer-events: none;
+}
+
+/* Per-direction icons. OS mold emits 4 nav buttons in order:
+   First (1st child), Prev (2nd), [page-number li's...], Next (last-1), Last (last).
+   `.z-paging-navigate:nth-child(N)` matches the element at position N that is
+   ALSO a navigate-type li — works because page-number li's never occupy
+   positions 1, 2, last-1, or last. */
+
+/* First button — chevrons-left (double left) */
+.z-paging-os ul > li.z-paging-navigate:first-child .z-paging-noborder::after {
+    -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m11 17-5-5 5-5'/><path d='m18 17-5-5 5-5'/></svg>");
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m11 17-5-5 5-5'/><path d='m18 17-5-5 5-5'/></svg>");
+}
+
+/* Prev button — chevron-left */
+.z-paging-os ul > li.z-paging-navigate:nth-child(2) .z-paging-noborder::after {
+    -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m15 18-6-6 6-6'/></svg>");
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m15 18-6-6 6-6'/></svg>");
+}
+
+/* Next button — chevron-right */
+.z-paging-os ul > li.z-paging-navigate:nth-last-child(2) .z-paging-noborder::after {
+    -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m9 18 6-6-6-6'/></svg>");
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m9 18 6-6-6-6'/></svg>");
+}
+
+/* Last button — chevrons-right (double right) */
+.z-paging-os ul > li.z-paging-navigate:last-child .z-paging-noborder::after {
+    -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 17 5-5-5-5'/><path d='m13 17 5-5-5-5'/></svg>");
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 17 5-5-5-5'/><path d='m13 17 5-5-5-5'/></svg>");
+}
+
+/* ─── Default mold nav icons (angle-left/right from ZK icon font) ────────── */
+/* Default mold uses <button> + <i class="z-paging-icon z-icon-angle-*"> inside */
+.z-paging .z-paging-icon {
+    font-size: 16px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* ─── Detail info ("[ 1 / 200 ]") ─────────────────────────────────────── */
+.z-paging-info {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 var(--zk-spacing-2);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-paging-fg);
+}
+
+/* ─── Page text info ("1 / 10") ─────────────────────────────────────────── */
+.z-paging-text {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 var(--zk-spacing-2);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-paging-fg);
+    white-space: nowrap;
+}
+
+.z-paging-text-disabled {
+    color: var(--zk-color-disabled);
+    pointer-events: none;
+    cursor: default;
+}
+
+/* ─── Page number input (default mold) ─────────────────────────────────── */
+.z-paging-input {
+    display: inline-flex;
+    align-items: center;
+    height: var(--zk-paging-control-size);
+    min-height: var(--zk-paging-control-size);
+    width: 48px;
+    text-align: center;
+    border: 1px solid var(--zk-paging-input-border-color);
+    border-radius: var(--zk-shape-corner-extra-small);
+    background-color: var(--zk-paging-input-bg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-paging-input-fg);
+    outline: none;
+    padding: 0 var(--zk-spacing-1);
+    box-sizing: border-box;
+    transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-paging-input:hover {
+    border-color: var(--zk-color-on-surface);
+}
+
+.z-paging-input:focus {
+    border-color: var(--zk-color-primary);
+    outline: none;
+}
+
+.z-paging-input[disabled] {
+    color: var(--zk-color-disabled);
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: default;
+    pointer-events: none;
+}
+}

@@ -1,0 +1,69 @@
+/* MD3 Typography Tokens — --zk-typescale-* — Inter font family */
+:root {
+    /* Font families */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+        'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --zk-typescale-mono-family: 'SFMono-Regular', Consolas, 'Liberation Mono',
+        Menlo, Courier, monospace;
+
+    /* Tracking (letter-spacing) — large headings tighten per MD3; the larger the
+     * size the tighter the tracking. Consumed by the .z-h1/.z-h2 utilities. */
+    --zk-typescale-tracking-tight: -0.25px;
+    --zk-typescale-tracking-tighter: -0.5px;
+
+    /* Display */
+    --zk-typescale-display-large-size: 57px;
+    --zk-typescale-display-large-weight: 400;
+    --zk-typescale-display-large-line-height: 64px;
+    --zk-typescale-display-medium-size: 45px;
+    --zk-typescale-display-medium-weight: 400;
+    --zk-typescale-display-medium-line-height: 52px;
+    --zk-typescale-display-small-size: 36px;
+    --zk-typescale-display-small-weight: 400;
+    --zk-typescale-display-small-line-height: 44px;
+
+    /* Headline */
+    --zk-typescale-headline-large-size: 32px;
+    --zk-typescale-headline-large-weight: 400;
+    --zk-typescale-headline-large-line-height: 40px;
+    --zk-typescale-headline-medium-size: 28px;
+    --zk-typescale-headline-medium-weight: 400;
+    --zk-typescale-headline-medium-line-height: 36px;
+    --zk-typescale-headline-small-size: 24px;
+    --zk-typescale-headline-small-weight: 400;
+    --zk-typescale-headline-small-line-height: 32px;
+
+    /* Title */
+    --zk-typescale-title-large-size: 22px;
+    --zk-typescale-title-large-weight: 400;
+    --zk-typescale-title-large-line-height: 28px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-typescale-title-medium-weight: 500;
+    --zk-typescale-title-medium-line-height: 24px;
+    --zk-typescale-title-small-size: 14px;
+    --zk-typescale-title-small-weight: 500;
+    --zk-typescale-title-small-line-height: 20px;
+
+    /* Body */
+    --zk-typescale-body-large-size: 16px;
+    --zk-typescale-body-large-weight: 400;
+    --zk-typescale-body-large-line-height: 24px;
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-medium-weight: 400;
+    --zk-typescale-body-medium-line-height: 20px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-body-small-weight: 400;
+    --zk-typescale-body-small-line-height: 16px;
+
+    /* Label */
+    --zk-typescale-label-large-size: 14px;
+    --zk-typescale-label-large-weight: 500;
+    --zk-typescale-label-large-line-height: 20px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-label-medium-weight: 500;
+    --zk-typescale-label-medium-line-height: 16px;
+    --zk-typescale-label-small-size: 11px;
+    --zk-typescale-label-small-weight: 500;
+    --zk-typescale-label-small-line-height: 16px;
+
+}

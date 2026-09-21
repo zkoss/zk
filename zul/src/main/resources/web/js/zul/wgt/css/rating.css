@@ -1,0 +1,83 @@
+/* MD3 Rating component — star rating
+ * DOM: <div class="z-rating z-rating-horizontal|z-rating-vertical" role="slider">
+ *        <i class="z-rating-icon z-icon-star [z-rating-selected] [z-rating-hover]
+ *                  [z-rating-disabled] [z-rating-readonly]" aria-hidden="true"></i>
+ *      </div>
+ * Notes:
+ *  - z-rating-selected/hover/disabled/readonly are on each <i> child, not the wrapper
+ *  - z-rating-hover is toggled by JS on mouseover (all icons up to cursor position)
+ *  - Default is an outline star; selected/hover swaps to a filled-star mask so the
+ *    visual fill matches MD3 / MUI Rating (outline → filled, not just colour change).
+ *  - We use SVG masks instead of the icon font so the glyph itself swaps.
+ */
+
+@layer zk-components {
+.z-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* Each star — outline glyph via SVG mask, currentColor-driven */
+.z-rating-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-color: currentColor;
+    color: var(--zk-rating-fg);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: 24px 24px;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 24px 24px;
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Suppress the icon-font glyph that ZK would otherwise render via ::before. */
+.z-rating-icon::before {
+    content: none;
+}
+
+/* Filled star (selected/hover) — same SVG with fill='currentColor'. */
+.z-rating-icon.z-rating-selected,
+.z-rating-icon.z-rating-hover {
+    color: var(--zk-rating-accent);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='currentColor' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='currentColor' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E");
+}
+
+.z-rating-icon.z-rating-hover {
+    transform: scale(1.1);
+}
+
+/* Disabled — on each <i> element */
+.z-rating-icon.z-rating-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: default;
+    pointer-events: none;
+    transform: none;
+}
+
+/* Readonly — no hover or click, but full opacity to show rating state */
+.z-rating-icon.z-rating-readonly {
+    cursor: default;
+    pointer-events: none;
+    transform: none;
+}
+
+/* Vertical orientation */
+.z-rating-vertical {
+    flex-direction: column;
+    align-items: center;
+}
+}

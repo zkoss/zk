@@ -1,0 +1,41 @@
+/* MD3 Utility Classes — Colors (text + background) */
+
+@layer zk-utilities {
+
+/* ============================================
+   Text Colors
+   ============================================ */
+.z-text-primary     { color: var(--zk-color-primary); }
+.z-text-secondary   { color: var(--zk-color-on-surface-variant); }
+.z-text-muted       { color: var(--zk-color-on-surface-variant); }
+.z-text-success     { color: var(--zk-color-success); }
+.z-text-warning     { color: var(--zk-color-warning); }
+.z-text-error       { color: var(--zk-color-error); }
+.z-text-info        { color: var(--zk-color-status-info); }
+.z-text-neutral     { color: var(--zk-color-status-neutral); }
+.z-text-disabled    { color: var(--zk-color-disabled); }
+.z-text-inverse     { color: var(--zk-color-inverse-on-surface); }
+.z-text-on-primary  { color: var(--zk-color-on-primary); }
+.z-text-on-surface  { color: var(--zk-color-on-surface); }
+
+/* ============================================
+   Background Colors
+   ============================================ */
+.z-bg-primary            { background-color: var(--zk-color-primary-fill);        color: var(--zk-color-on-primary); }
+.z-bg-primary-container  { background-color: var(--zk-color-primary-container);  color: var(--zk-color-on-primary-container); }
+.z-bg-secondary          { background-color: var(--zk-color-secondary-fill);      color: var(--zk-color-on-secondary); }
+.z-bg-secondary-container{ background-color: var(--zk-color-secondary-container);color: var(--zk-color-on-secondary-container); }
+.z-bg-error              { background-color: var(--zk-color-error-fill);          color: var(--zk-color-on-error); }
+.z-bg-error-container    { background-color: var(--zk-color-error-container);    color: var(--zk-color-on-error-container); }
+.z-bg-success            { background-color: var(--zk-color-success-fill);        color: var(--zk-color-on-success); }
+.z-bg-success-container  { background-color: var(--zk-color-success-container);  color: var(--zk-color-on-success-container); }
+.z-bg-warning            { background-color: var(--zk-color-warning-fill);        color: var(--zk-color-on-warning); }
+.z-bg-warning-container  { background-color: var(--zk-color-warning-container);  color: var(--zk-color-on-warning-container); }
+.z-bg-info               { background-color: var(--zk-color-status-info-fill);    color: var(--zk-color-on-status); }
+.z-bg-surface            { background-color: var(--zk-color-surface); }
+.z-bg-surface-variant    { background-color: var(--zk-color-surface-variant); }
+.z-bg-surface-low        { background-color: var(--zk-color-surface-container-low); }
+.z-bg-surface-container  { background-color: var(--zk-color-surface-container); }
+.z-bg-transparent        { background-color: transparent; }
+
+} /* end @layer zk-utilities */

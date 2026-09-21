@@ -1,0 +1,353 @@
+/* MD3 Utility Classes — Layout (display, grid, flex, gap, sizing, overflow, position, truncation) */
+
+/* ============================================
+   Design principle: one utility = one CSS declaration; `display` is its own utility
+   --------------------------------------------
+   `display` is NEVER bundled into a layout-property utility. Always pair an explicit
+   display class with the property classes, e.g. `z-d-grid z-grid-cols-3 z-gap-4` or
+   `z-d-flex z-justify-center`.
+
+   Why not fold `display:grid` into `z-grid-cols-*` (since it's inert without it)?
+   - `gap`, `justify-*`, and `align-*` are valid on BOTH flex and grid containers.
+     `z-d-grid z-grid-cols-3 z-gap-4 z-justify-center` decorates a GRID — if
+     `z-justify-center` baked in `display:flex` it would clobber the grid display.
+     So display cannot be bundled into those at all.
+   - Keeping display standalone means no utility fights another's display, display can
+     change independently (e.g. responsive `z-d-block` → `z-d-grid` while `z-grid-cols-3`
+     stays put), and the call site self-documents (`z-d-grid z-grid-cols-3` reads as
+     "3-col grid"). Cost is one extra token; consistency (Tailwind model) outweighs it.
+   - Bundling only `z-grid-cols-*` would be safe but makes it the lone 2-property
+     exception and still wouldn't help the flex side — not worth fragmenting the model.
+   See doc/utility-display-bundling-decision.md.
+   ============================================ */
+
+@layer zk-utilities {
+
+/* ============================================
+   Display
+   ============================================ */
+.z-d-none         { display: none; }
+.z-d-block        { display: block; }
+.z-d-inline       { display: inline; }
+.z-d-inline-block { display: inline-block; }
+.z-d-flex         { display: flex; }
+.z-d-inline-flex  { display: inline-flex; }
+.z-d-grid         { display: grid; }
+.z-d-contents     { display: contents; }
+
+/* ============================================
+   Responsive display — by VIEWPORT width (mobile-first / min-width)
+   --------------------------------------------
+   `.z-d-{value}-{bp}` = "at viewport width >= bp, set display:{value}".
+   Mobile-first (min-width), aligned with MUI/Tailwind — the base `.z-d-*`
+   above covers the xs (0) range; a `-{bp}` class layers on top at that width
+   and up. Compose a base display with one breakpoint override to hide/show:
+
+     hide a sidebar on phones, show it >= md:   z-d-none  z-d-block-md
+     show a hamburger only below md:            z-d-block z-d-none-md
+
+   Breakpoints follow the MUI scale (see doc/spec/responsive-design.md §5):
+     sm = 600px, md = 900px, lg = 1200px, xl = 1536px.  (xs = 0 = the base.)
+   Values are literal px — a media-query condition cannot read a CSS var().
+   Value set is deliberately curated (none/block/flex/grid/inline-block):
+   these cover hide/show + layout switching; add more only on a real need.
+   ============================================ */
+@media (min-width: 600px) {
+    .z-d-none-sm         { display: none; }
+    .z-d-block-sm        { display: block; }
+    .z-d-flex-sm         { display: flex; }
+    .z-d-grid-sm         { display: grid; }
+    .z-d-inline-block-sm { display: inline-block; }
+}
+@media (min-width: 900px) {
+    .z-d-none-md         { display: none; }
+    .z-d-block-md        { display: block; }
+    .z-d-flex-md         { display: flex; }
+    .z-d-grid-md         { display: grid; }
+    .z-d-inline-block-md { display: inline-block; }
+}
+@media (min-width: 1200px) {
+    .z-d-none-lg         { display: none; }
+    .z-d-block-lg        { display: block; }
+    .z-d-flex-lg         { display: flex; }
+    .z-d-grid-lg         { display: grid; }
+    .z-d-inline-block-lg { display: inline-block; }
+}
+@media (min-width: 1536px) {
+    .z-d-none-xl         { display: none; }
+    .z-d-block-xl        { display: block; }
+    .z-d-flex-xl         { display: flex; }
+    .z-d-grid-xl         { display: grid; }
+    .z-d-inline-block-xl { display: inline-block; }
+}
+
+/* ============================================
+   Container queries — adapt to the CONTAINER'S width, not the viewport
+   --------------------------------------------
+   `.z-container` marks an element as an inline-size query container; any
+   descendant carrying a `.z-cq-{value}-{bp}` class then reacts to THAT
+   container's inline size (not the viewport). This is the intrinsic
+   counterpart to the viewport classes above — a card/panel/split-pane can
+   switch its own layout based on how much room it was actually given, so the
+   same component adapts wherever it is placed.
+
+     <div class="z-container">                 <!-- query container -->
+         <div class="z-cq-none z-cq-flex-md">  <!-- flex once the container is >= 900px -->
+
+   `z-cq-*` require a `.z-container` ancestor to have anything to measure —
+   always pair them. Breakpoints reuse the same sm/md/lg/xl scale as the
+   viewport classes (measured against the container's inline size). Same
+   curated value set. `z-cq-{value}` (no suffix) is the base within a
+   container; `z-cq-{value}-{bp}` layers on at that container width and up. */
+.z-container { container-type: inline-size; }
+
+.z-cq-none         { display: none; }
+.z-cq-block        { display: block; }
+.z-cq-flex         { display: flex; }
+.z-cq-grid         { display: grid; }
+.z-cq-inline-block { display: inline-block; }
+
+@container (min-width: 600px) {
+    .z-cq-none-sm         { display: none; }
+    .z-cq-block-sm        { display: block; }
+    .z-cq-flex-sm         { display: flex; }
+    .z-cq-grid-sm         { display: grid; }
+    .z-cq-inline-block-sm { display: inline-block; }
+}
+@container (min-width: 900px) {
+    .z-cq-none-md         { display: none; }
+    .z-cq-block-md        { display: block; }
+    .z-cq-flex-md         { display: flex; }
+    .z-cq-grid-md         { display: grid; }
+    .z-cq-inline-block-md { display: inline-block; }
+}
+@container (min-width: 1200px) {
+    .z-cq-none-lg         { display: none; }
+    .z-cq-block-lg        { display: block; }
+    .z-cq-flex-lg         { display: flex; }
+    .z-cq-grid-lg         { display: grid; }
+    .z-cq-inline-block-lg { display: inline-block; }
+}
+@container (min-width: 1536px) {
+    .z-cq-none-xl         { display: none; }
+    .z-cq-block-xl        { display: block; }
+    .z-cq-flex-xl         { display: flex; }
+    .z-cq-grid-xl         { display: grid; }
+    .z-cq-inline-block-xl { display: inline-block; }
+}
+
+/* ============================================
+   Grid — template columns
+   `minmax(0, 1fr)` lets children shrink below their min-content width,
+   preventing long inline content from forcing column overflow.
+   ============================================ */
+.z-grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.z-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.z-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.z-grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.z-grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.z-grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.z-grid-cols-auto-1fr { grid-template-columns: auto 1fr; }
+
+/* Auto-sized leading column + N equal fill columns — for "label + N values"
+   layouts where the rows must align (state/variant matrices, comparison and
+   spec tables, pricing rows). The first column sizes to its content (`auto`),
+   the rest split the remaining width equally. Set the count per-instance with
+   `style="--zk-cols: 4"` (default 1, i.e. equivalent to .z-grid-cols-auto-1fr).
+   Use this instead of .z-grid-fill when a fixed leading label column and
+   cross-row alignment are required.
+
+   `--zk-col-min` (default 0) is each data column's minimum width. Keep it 0 to
+   let columns shrink freely; set it (e.g. `--zk-col-min: 140px`) and wrap the
+   grid in an `.z-overflow-x-auto` container to get a responsive data table:
+   columns fill when wide, hold their min and scroll horizontally when narrow —
+   instead of squeezing unusably. */
+.z-grid-cols-auto { grid-template-columns: auto repeat(var(--zk-cols, 1), minmax(var(--zk-col-min, 0), 1fr)); }
+
+/* Auto-fit fill column-width tokens — the default minimum and the named steps
+   below are declared here so they can be retuned in one place (override at
+   `:root`, or per-instance via `style="--zk-grid-min: …"`). */
+:root {
+    --zk-grid-min: 180px;     /* default auto-fit minimum column width */
+    --zk-grid-min-xs: 96px;
+    --zk-grid-min-sm: 140px;
+    --zk-grid-min-lg: 240px;
+    --zk-grid-min-xl: 320px;
+}
+
+/* Auto-fit fill — responsive by intrinsic sizing, no breakpoints needed.
+   Children flow into as many equal columns as fit, each at least
+   `--zk-grid-min` wide (default 180px), wrapping to new rows when they don't.
+   Set `display: grid` (.z-d-grid) and a gap, then override the minimum
+   per-instance with `style="--zk-grid-min: 220px"` when a wider card is wanted.
+   Prefer this over fixed `.z-grid-cols-N` whenever the cards are independent
+   (no cross-row column alignment required). */
+.z-grid-fill {
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--zk-grid-min, 180px), 100%), 1fr));
+}
+
+/* Cell-size steps for .z-grid-fill — set the auto-fit minimum by class instead of
+   an inline `style="--zk-grid-min: …"`. Each maps to a `:root`-overridable token
+   above. Compose with .z-d-grid .z-grid-fill, e.g. a dense, uniform gallery:
+   `sclass="z-d-grid z-grid-fill z-grid-fill-xs z-gap-3"`.
+   General-purpose: icon galleries, chip clouds, avatar/thumbnail grids, KPI tiles. */
+.z-grid-fill-xs { --zk-grid-min: var(--zk-grid-min-xs); }
+.z-grid-fill-sm { --zk-grid-min: var(--zk-grid-min-sm); }
+.z-grid-fill-lg { --zk-grid-min: var(--zk-grid-min-lg); }
+.z-grid-fill-xl { --zk-grid-min: var(--zk-grid-min-xl); }
+
+/* Grid — item placement: span every column (full grid width), e.g. a section
+   title sitting above a multi-column body. Tailwind parallel: `col-span-full`. */
+.z-grid-col-full { grid-column: 1 / -1; }
+
+/* ============================================
+   Flex — direction & wrap
+   ============================================ */
+.z-flex-row         { flex-direction: row; }
+.z-flex-col         { flex-direction: column; }
+.z-flex-row-reverse { flex-direction: row-reverse; }
+.z-flex-col-reverse { flex-direction: column-reverse; }
+.z-flex-wrap        { flex-wrap: wrap; }
+.z-flex-nowrap      { flex-wrap: nowrap; }
+
+/* Flex — justify-content */
+.z-justify-start   { justify-content: flex-start; }
+.z-justify-center  { justify-content: center; }
+.z-justify-end     { justify-content: flex-end; }
+.z-justify-between { justify-content: space-between; }
+.z-justify-around  { justify-content: space-around; }
+.z-justify-evenly  { justify-content: space-evenly; }
+
+/* Flex — align-items */
+.z-align-start    { align-items: flex-start; }
+.z-align-center   { align-items: center; }
+.z-align-end      { align-items: flex-end; }
+.z-align-stretch  { align-items: stretch; }
+.z-align-baseline { align-items: baseline; }
+
+/* Flex — grow / shrink / fill */
+.z-flex-1       { flex: 1 1 0; }
+.z-flex-auto    { flex: 1 1 auto; }
+.z-flex-none    { flex: none; }
+.z-flex-grow-0  { flex-grow: 0; }
+.z-flex-grow-1  { flex-grow: 1; }
+.z-flex-shrink-0{ flex-shrink: 0; }
+.z-flex-shrink-1{ flex-shrink: 1; }
+
+/* ============================================
+   Gap
+   ============================================ */
+.z-gap-0 { gap: var(--zk-spacing-0); }
+.z-gap-1 { gap: var(--zk-spacing-1); }
+.z-gap-2 { gap: var(--zk-spacing-2); }
+.z-gap-3 { gap: var(--zk-spacing-3); }
+.z-gap-4 { gap: var(--zk-spacing-4); }
+.z-gap-5 { gap: var(--zk-spacing-5); }
+.z-gap-6 { gap: var(--zk-spacing-6); }
+.z-gap-8 { gap: var(--zk-spacing-8); }
+
+.z-col-gap-0 { column-gap: var(--zk-spacing-0); }
+.z-col-gap-1 { column-gap: var(--zk-spacing-1); }
+.z-col-gap-2 { column-gap: var(--zk-spacing-2); }
+.z-col-gap-3 { column-gap: var(--zk-spacing-3); }
+.z-col-gap-4 { column-gap: var(--zk-spacing-4); }
+.z-col-gap-5 { column-gap: var(--zk-spacing-5); }
+.z-col-gap-6 { column-gap: var(--zk-spacing-6); }
+
+.z-row-gap-0 { row-gap: var(--zk-spacing-0); }
+.z-row-gap-1 { row-gap: var(--zk-spacing-1); }
+.z-row-gap-2 { row-gap: var(--zk-spacing-2); }
+.z-row-gap-3 { row-gap: var(--zk-spacing-3); }
+.z-row-gap-4 { row-gap: var(--zk-spacing-4); }
+
+/* ============================================
+   Width & Height
+   ============================================ */
+.z-w-25   { width: 25%; }
+.z-w-50   { width: 50%; }
+.z-w-75   { width: 75%; }
+.z-w-full { width: 100%; }
+.z-w-auto { width: auto; }
+.z-min-w-0{ min-width: 0; }
+
+.z-h-25   { height: 25%; }
+.z-h-50   { height: 50%; }
+.z-h-75   { height: 75%; }
+.z-h-full { height: 100%; }
+.z-h-auto { height: auto; }
+.z-min-h-0{ min-height: 0; }
+
+/* ============================================
+   Overflow
+   ============================================ */
+.z-overflow-auto    { overflow: auto; }
+.z-overflow-hidden  { overflow: hidden; }
+.z-overflow-visible { overflow: visible; }
+.z-overflow-scroll  { overflow: scroll; }
+.z-overflow-x-auto  { overflow-x: auto; }
+.z-overflow-x-hidden{ overflow-x: hidden; }
+.z-overflow-y-auto  { overflow-y: auto; }
+.z-overflow-y-hidden{ overflow-y: hidden; }
+
+/* ============================================
+   Position
+   ============================================ */
+.z-position-static  { position: static; }
+.z-position-relative{ position: relative; }
+.z-position-absolute{ position: absolute; }
+.z-position-fixed   { position: fixed; }
+.z-position-sticky  { position: sticky; }
+
+.z-top-0    { top: 0; }
+.z-bottom-0 { bottom: 0; }
+.z-start-0  { inset-inline-start: 0; }
+.z-end-0    { inset-inline-end: 0; }
+
+/* Float */
+.z-float-start { float: inline-start; }
+.z-float-end   { float: inline-end; }
+.z-float-none  { float: none; }
+
+.z-clearfix::after {
+    display: block;
+    content: '';
+    clear: both;
+}
+
+/* ============================================
+   Stacking (z-index) — see doc/spec/zindex-scale.md
+   ============================================ */
+/* For APP-authored positioned elements, NOT ZK widgets: ZK stamps floating-widget
+   z-index inline at runtime (base 1800), so these classes never control a ZK popup.
+   Compose with a .z-position-* class (z-index needs a positioned element). To sit
+   UNDER ZK popups keep below --zk-index-float-fallback (1800); to sit OVER them
+   prefer a real ZK widget / setTopmost() over out-bidding the runtime counter. */
+.z-index-nav            { z-index: var(--zk-index-nav); }
+.z-index-float-fallback { z-index: var(--zk-index-float-fallback); }
+.z-index-loading        { z-index: var(--zk-index-loading); }
+.z-index-loadingbar     { z-index: var(--zk-index-loadingbar); }
+.z-index-error          { z-index: var(--zk-index-error); }
+
+/* ============================================
+   Truncation & Accessibility
+   ============================================ */
+.z-text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.z-visually-hidden,
+.z-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+} /* end @layer zk-utilities */

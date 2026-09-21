@@ -1,0 +1,940 @@
+/* MD3 Listbox — selection list component */
+/* DOM: .z-listbox > .z-listbox-header > table > thead > tr.z-listhead > th.z-listheader
+        .z-listbox > .z-listbox-body > table > tbody > tr.z-listitem > td.z-listcell > div.z-listcell-content */
+
+/* Default = standalone OUTLINED card: 1px border, NO shadow (was border + shadow, which
+   is double-emphasis — MD3 outlined ≠ elevated). On the near-white page the elevation
+   shadow is invisible, so the border carries the boundary. See
+   doc/spec/DESIGN.md §11. */
+@layer zk-components {
+.z-listbox {
+    background-color: var(--zk-listbox-bg);
+    border-radius: var(--zk-listbox-radius);
+    border: 1px solid var(--zk-listbox-border-color);
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* No-border variant — strip the frame when nested in another bounded surface. ZK emits no
+   border attribute for listbox, so this is an opt-in sclass mirroring ZK's z-window-noborder
+   naming: sclass="z-listbox-noborder". */
+.z-listbox-noborder {
+    border: none;
+    box-shadow: none;
+}
+
+.z-panel-body .z-listbox,
+.z-groupbox .z-listbox {
+    border: none;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────── */
+.z-listbox-header {
+    overflow: hidden;
+    background-color: transparent;
+}
+
+/* Sticky header (z-sticky-header, ZK-4795) — opt-in class ZK ships with no CSS.
+   Un-clip the root so the header can escape, pin it to the scroll ancestor, and
+   give it an opaque bg so scrolling rows don't bleed through. */
+.z-listbox.z-sticky-header {
+    overflow: visible;
+}
+.z-listbox.z-sticky-header .z-listbox-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: var(--zk-listbox-bg);
+}
+
+/* Header cell — Mira / MD3 Data Table: no fill, hierarchy via weight + divider */
+.z-listheader {
+    padding: var(--zk-listbox-cell-padding);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
+    color: var(--zk-listbox-header-fg);
+    text-align: left;
+    background-color: transparent;
+    border-bottom: 1px solid var(--zk-listbox-border-color);
+    /* Allow long labels to wrap onto a second line so they never collide with
+       the absolute-positioned listheader-button. Per-cell padding-right below
+       still reserves slot for the button. */
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    user-select: none;
+    vertical-align: middle;
+    position: relative;
+    box-sizing: border-box;
+    cursor: default;
+}
+
+/* Reserve right-side space for the hover-revealed listheader-button so wrapped
+   header text never collides with the icon slot. ZK nests the button inside
+   `.z-listheader-content`, so descendant `:has()` (no `>`) is required. */
+.z-listheader:has(.z-listheader-button) {
+    padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
+}
+
+.z-listhead {
+    background-color: transparent;
+}
+
+.z-listheader-sort {
+    cursor: pointer;
+}
+
+.z-listheader-sort:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+/* Resize affordance (listhead sizable="true"). ZK toggles `.z-listheader-sizing`
+   on the TH itself while the pointer is within the rightmost 8px drag zone
+   (HeaderWidget._insizer / doMouseMove_), and removes it on mouse-out. ZK emits
+   NO persistent "sizable" class, so the cue can only be a hover-time one (matches
+   MUI DataGrid's on-hover column separator). Show the resize cursor + a primary
+   accent on the edge being dragged. See data-components.md → "Sizable header". */
+.z-listheader-sizing {
+    cursor: col-resize;
+    box-shadow: inset -2px 0 0 var(--zk-color-primary);
+}
+
+/* ─── Listheader-button (menupopup trigger) ─────────────────────────────────
+   Rendered when <listheader menupopup="..."> is set. Same MD3 progressive-
+   disclosure pattern as Grid's column-button: invisible by default, fades in
+   on header hover (CSS :hover OR ZK's .z-listheader-hover JS class).
+   Icon-button styling: 24x24, fully-rounded state-layer. */
+.z-listheader .z-listheader-button {
+    position: absolute;
+    top: 50%;
+    right: var(--zk-spacing-1);
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: var(--zk-shape-corner-full);
+    background-color: transparent;
+    color: var(--zk-color-on-surface-variant);
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+                background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    z-index: 2;
+}
+
+.z-listheader:hover .z-listheader-button,
+.z-listheader.z-listheader-hover .z-listheader-button,
+.z-listheader .z-listheader-button:focus-visible {
+    opacity: 1;
+}
+
+.z-listheader .z-listheader-button:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+.z-listheader .z-listheader-button:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 1px;
+}
+
+.z-listheader .z-listheader-button [class*="z-icon-"] {
+    font-size: 16px;
+    margin-left: 0;
+}
+
+/* Sort icon: inline next to the header label (mirrors grid's .z-column-sorticon). */
+.z-listheader-sorticon {
+    display: inline-flex;
+    align-items: center;
+    margin-left: var(--zk-spacing-1);
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+/* Sort direction icons */
+.z-listheader-sorticon .z-icon-caret-up,
+.z-listheader-sorticon .z-icon-caret-down {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-color: var(--zk-color-on-surface-variant);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+
+.z-listheader-sorticon .z-icon-caret-up {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 15-6-6-6 6'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 15-6-6-6 6'/%3E%3C/svg%3E");
+}
+
+.z-listheader-sorticon .z-icon-caret-down {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* ─── Body ─────────────────────────────────────────────────────────────── */
+.z-listbox-body {
+    overflow: auto;
+    /* position:relative anchors the hidden .z-focus-a focus-trap (which ZK
+       renders as position:absolute; top:0; left:0). Without it, focus-a
+       resolves against <body>, and ZK's `focusEl.focus()` call after a
+       listitem click scrolls the page to (0,0). */
+    position: relative;
+}
+
+/* Hidden focus-trap div used by SelectWidget — keep it tiny + invisible.
+   Same pattern shared with calendar/menu (see those files). */
+.z-listbox .z-focus-a {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Header table uses separate borders so box-shadow and border-inline-end
+   on frozen-col TH cells are visible (border-collapse:collapse clips them). */
+.z-listbox-header table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+.z-listbox-body table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* List item row */
+.z-listitem {
+    background-color: var(--zk-listbox-bg);
+    border-bottom: 1px solid var(--zk-listbox-border-color);
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    cursor: pointer;
+}
+
+.z-listitem:last-child {
+    border-bottom: none;
+}
+
+/* Row hover: MD3 state layer rgba(on-surface, 0.08) */
+.z-listitem:hover {
+    background-color: var(--zk-listbox-row-hover-bg);
+}
+
+/* Odd striping: ZK applies z-listitem-odd class directly on TR */
+.z-listitem-odd {
+    background-color: var(--zk-listbox-stripe-bg);
+}
+
+.z-listitem-odd:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-listbox-stripe-bg));
+}
+
+/* Selected row
+ * MD3 selection family: LIST-ROW ("the row I'm on") — must use primary-container
+ * with on-primary-container text. Same family as combobox dropdown / tree row /
+ * menu item / searchbox dropdown; deliberately different from chip (secondary-
+ * container) and single-point picker (filled primary disc, e.g. calendar day).
+ * See reference/selected-state-families.md. */
+.z-listitem.z-listitem-selected,
+.z-listitem.z-selected {
+    background-color: var(--zk-listbox-selected-bg);
+    color: var(--zk-listbox-selected-fg);
+}
+
+/* Selected + hover: state layer on top of the selected fill */
+.z-listitem.z-listitem-selected:hover,
+.z-listitem.z-selected:hover {
+    background-color: color-mix(in srgb, var(--zk-listbox-selected-fg) 8%, var(--zk-listbox-selected-bg));
+}
+
+/* Focus — outline on <tr> clips at cell boundaries; use box-shadow on the first cell instead */
+.z-listitem:focus-visible .z-listcell:first-child,
+.z-listitem.z-listitem-focus .z-listcell:first-child {
+    box-shadow: inset 3px 0 0 var(--zk-color-primary);
+}
+
+/* Cell */
+.z-listcell {
+    padding: 0;
+    vertical-align: middle;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ZK renders cell content as DIV.z-listcell-content inside TD.z-listcell */
+.z-listcell-cnt,
+.z-listcell-content {
+    display: block;
+    padding: var(--zk-listbox-cell-padding);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    color: var(--zk-color-on-surface);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Cell text in selected row uses on-primary-container (the paired text token
+ * for primary-container background). MD3 colour-role pairing rule. */
+.z-listitem.z-listitem-selected .z-listcell-cnt,
+.z-listitem.z-listitem-selected .z-listcell-content,
+.z-listitem.z-selected .z-listcell-cnt,
+.z-listitem.z-selected .z-listcell-content {
+    color: var(--zk-listbox-selected-fg);
+}
+
+/* ─── Listgroup (collapsible group header rows) ────────────────────── */
+/* Visual: tonal band on the row + bottom divider only. The previous design
+   stacked border-top + border-bottom on three nested elements (td + cnt +
+   content), which rendered as 3 lines on top and 3 on the bottom of every
+   group row. Put the divider once, on the row itself. */
+.z-listgroup {
+    background-color: var(--zk-color-surface-container);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+
+.z-listgroup td,
+.z-listgroup .z-listcell-cnt,
+.z-listgroup .z-listcell-content {
+    background-color: transparent;
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+}
+
+.z-listgroup > td:first-child {
+    border-left: 3px solid var(--zk-color-primary);
+    padding-left: calc(var(--zk-spacing-4) - 3px);
+}
+
+/* Group open/close toggle arrow */
+.z-listgroup .z-listgroup-icon {
+    margin-right: var(--zk-spacing-2);
+    color: var(--zk-color-on-surface-variant);
+    font-size: 12px;
+}
+
+/* ─── Listgroupfoot (group subtotal rows) ──────────────────────────── */
+/* Visual: same single-border treatment as listgroup, but on TOP to separate
+   subtotals from the data above. */
+.z-listgroupfoot {
+    background-color: var(--zk-color-surface-container-low);
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+
+.z-listgroupfoot td,
+.z-listgroupfoot .z-listcell-cnt,
+.z-listgroupfoot .z-listcell-content {
+    background-color: transparent;
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    white-space: nowrap;
+    overflow: visible;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────── */
+.z-listbox-footer {
+    background-color: var(--zk-color-surface-container-low);
+    border-top: 2px solid var(--zk-color-outline-variant);
+}
+
+.z-listfoot .z-listfooter,
+.z-listfoot td {
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-medium-size);
+}
+
+/* Empty */
+.z-listbox-emph {
+    padding: var(--zk-spacing-8) var(--zk-spacing-4);
+    text-align: center;
+    color: var(--zk-color-on-surface-variant);
+    font-style: italic;
+    font-size: var(--zk-typescale-body-medium-size);
+}
+
+/* Checkbox cell in listbox */
+.z-listcell .z-checkbox {
+    margin: 0;
+}
+
+/* ─── Plain / simple-list variant (.z-listbox-plain) ──────────────────── */
+/* Compact list appearance: no header, lighter separators, smaller cell padding */
+.z-listbox-plain .z-listcell-cnt,
+.z-listbox-plain .z-listcell-content {
+    font-size: var(--zk-typescale-body-medium-size);
+    padding: var(--zk-spacing-2) var(--zk-spacing-2);
+}
+
+.z-listbox-plain .z-listitem {
+    border-bottom: 1px solid var(--zk-color-surface-container-high);
+}
+
+.z-listbox-plain .z-listitem:hover {
+    background-color: var(--zk-color-surface-container-low);
+}
+
+/* ─── Checkmark column (listbox checkmark="true") ──────────────────────── */
+/* Override the generic mask-icon approach: render as a proper checkbox box.
+   No !important needed: these rules live in @layer zk-components, which outranks
+   _icons.css's generic glyph rule in @layer zk-base. Don't re-add !important.
+   See doc/spec/layer-architecture-review.md. */
+.z-listitem-icon.z-icon-check::before,
+.z-listheader-icon.z-icon-check::before {
+    background-color: transparent;
+    -webkit-mask-image: none;
+    mask-image: none;
+    border: 1.5px solid var(--zk-color-outline, #79747e);
+    border-radius: 2px;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    vertical-align: -3px;
+}
+
+.z-listitem:hover .z-listitem-icon.z-icon-check::before {
+    border-color: var(--zk-color-primary, #376fd0);
+}
+
+/* Selected row: filled blue box with white checkmark */
+.z-listitem.z-listitem-selected .z-listitem-icon.z-icon-check::before,
+.z-listitem.z-selected .z-listitem-icon.z-icon-check::before {
+    background-color: var(--zk-color-primary, #376fd0);
+    border-color: var(--zk-color-primary, #376fd0);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-size: 11px 11px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Header "select all" checkbox — checked state */
+.z-listheader-checkable.z-listheader-checked .z-listheader-icon.z-icon-check::before {
+    background-color: var(--zk-color-primary, #376fd0);
+    border-color: var(--zk-color-primary, #376fd0);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-size: 11px 11px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ─── Radio (single-selection checkmark) ──────────────────────────────────
+   With single selection, ZK emits `z-icon-radio` (not `z-icon-check`) — see
+   data-components.md "Checkmark column renders a checkbox OR a radio". Override
+   the generic mask glyph and draw a Material radio circle. */
+.z-listitem-icon.z-icon-radio::before {
+    background-color: transparent;
+    background-image: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    border: 1.5px solid var(--zk-color-outline, #79747e);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    vertical-align: -3px;
+}
+
+.z-listitem:hover .z-listitem-icon.z-icon-radio::before {
+    border-color: var(--zk-color-primary, #376fd0);
+}
+
+/* Selected row: primary ring + filled centre dot */
+.z-listitem.z-listitem-selected .z-listitem-icon.z-icon-radio::before,
+.z-listitem.z-selected .z-listitem-icon.z-icon-radio::before {
+    border-color: var(--zk-color-primary, #376fd0);
+    background-image: radial-gradient(circle at center, var(--zk-color-primary, #376fd0) 0 4px, transparent 4px);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Checkmark cell column — compact padding */
+.z-listitem-checkable,
+.z-listheader-checkable {
+    width: 40px;
+    padding: 0 var(--zk-spacing-3);
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Checkbox-only header column (typically width="40px"): the default
+   16px-each-side padding leaves only 8px for the 16px check icon, clipping
+   its right edge. Collapse side padding so the icon fits.
+   Cell side: `.z-listcell-content` has padding 16px from its own rule, so
+   collapse the inner content padding the same way when the cell hosts a
+   `.z-listitem-checkable` span (the inline span is 40px wide and overflows
+   the right edge if the outer padding isn't reduced to match the header). */
+.z-listheader:has(.z-listheader-checkable) {
+    padding-left: var(--zk-spacing-1);
+    padding-right: var(--zk-spacing-1);
+    /* Keep the select-all icon on one line. `.z-listheader` is `white-space: normal`
+       (so long text labels wrap), but the checkable span is 40px wide inside the ~32px
+       content box — with `normal` it wraps to a 2nd line and inflates the whole header
+       ROW (53→74px). An icon column never needs wrapping. */
+    white-space: nowrap;
+}
+
+/* Narrow image/icon header column — same squeeze as the checkable column. A
+   fixed-width icon column (e.g. width="40px") minus the default 16px side padding
+   leaves only 8px of content width; the header image (ZK emits `<img>` with no
+   class, subject to the global `img{max-width:100%}`) then shrinks below its
+   intrinsic size AND the squeezed content wraps to a 2nd line, inflating the
+   whole header ROW. Collapse the side padding so a 16px icon renders full-size and
+   the row keeps its default height. See data-components.md → "Narrow icon/image
+   column". */
+.z-listheader:has(img) {
+    padding-left: var(--zk-spacing-1);
+    padding-right: var(--zk-spacing-1);
+    white-space: nowrap;
+}
+
+/* The always-present sort-icon slot has margin-left:4px and precedes the
+   checkable span, pushing the header checkbox 4px right of the row checkboxes
+   (broken vertical column line). A checkbox column is never sorted — zero it
+   so header and row checkboxes share one vertical axis. */
+.z-listheader:has(.z-listheader-checkable) .z-listheader-sorticon {
+    margin-left: 0;
+}
+
+.z-listcell:has(.z-listitem-checkable) > .z-listcell-content {
+    padding-left: var(--zk-spacing-1);
+    padding-right: var(--zk-spacing-1);
+    /* This cell holds a control, not clipping text. The default cell content is
+       `white-space:nowrap; overflow:hidden; text-overflow:ellipsis`; the checkable
+       span (16px icon + its own inline padding) is ~8px wider than the narrow
+       content box, so an `ellipsis` would paint a stray "…" to the right of the
+       checkbox. Clip instead so no ellipsis renders. */
+    text-overflow: clip;
+}
+
+
+/* ─── Built-in paging (listbox mold="paging") ──────────────────────────── */
+.z-listbox-paging-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--zk-spacing-4);
+    min-height: var(--zk-data-row-min-height);
+    border-top: 1px solid var(--zk-color-outline-variant);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface-variant);
+}
+
+.z-listbox-paging-bottom .z-paging {
+    display: flex;
+    align-items: center;
+}
+
+.z-listbox-paging-bottom .z-paging ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--zk-spacing-1);
+}
+
+.z-listbox-paging-bottom .z-paging ul li {
+    display: flex;
+    align-items: center;
+}
+
+/* Prev / Next icon buttons */
+.z-listbox-paging-bottom .z-paging-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: var(--zk-shape-corner-full);
+    color: var(--zk-color-on-surface-variant);
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-listbox-paging-bottom .z-paging-button:not(:disabled):hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+.z-listbox-paging-bottom .z-paging-button:disabled,
+.z-listbox-paging-bottom .z-paging-button[disabled] {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Paging navigation icon glyphs */
+.z-listbox-paging-bottom .z-paging-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: currentColor;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    vertical-align: middle;
+}
+
+.z-listbox-paging-bottom .z-icon-angle-left {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m15 18-6-6 6-6'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m15 18-6-6 6-6'/%3E%3C/svg%3E");
+}
+
+.z-listbox-paging-bottom .z-icon-angle-right {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+}
+
+.z-listbox-paging-bottom .z-icon-angle-double-left {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m11 17-5-5 5-5'/%3E%3Cpath d='m18 17-5-5 5-5'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m11 17-5-5 5-5'/%3E%3Cpath d='m18 17-5-5 5-5'/%3E%3C/svg%3E");
+}
+
+.z-listbox-paging-bottom .z-icon-angle-double-right {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 17 5-5-5-5'/%3E%3Cpath d='m13 17 5-5-5-5'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 17 5-5-5-5'/%3E%3Cpath d='m13 17 5-5-5-5'/%3E%3C/svg%3E");
+}
+
+/* "1 / 2" page info */
+.z-listbox-paging-bottom .z-paging-input {
+    width: 32px;
+    height: 28px;
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-extra-small);
+    text-align: center;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface);
+    background: var(--zk-color-surface);
+    padding: 0 var(--zk-spacing-1);
+    box-sizing: border-box;
+    outline: none;
+}
+
+.z-listbox-paging-bottom .z-paging-text {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    white-space: nowrap;
+    padding: 0 var(--zk-spacing-1);
+}
+
+/* ─── Odd row stripe via parent sclass (legacy fallback) ─────────────────── */
+/* ZK normally applies z-listitem-odd directly on the TR; this covers the legacy parent-sclass approach */
+.z-listbox-odd .z-listitem:nth-child(odd) {
+    background-color: var(--zk-color-surface-container-lowest);
+}
+
+/* ─── Empty body ─────────────────────────────────────────────────────────── */
+.z-listbox-emptybody {
+    display: block;
+    width: 100%;
+}
+
+.z-listbox-emptybody-content {
+    padding: var(--zk-spacing-8) var(--zk-spacing-4);
+    text-align: center;
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-style: italic;
+}
+
+/* ─── Loading overlay ────────────────────────────────────────────────────── */
+.z-listbox-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.6);
+    z-index: 10;
+}
+
+/* ─── Disabled listitem ──────────────────────────────────────────────────── */
+/* ZK applies z-listitem-disabled on TR via ItemWidget.domClass_ */
+.z-listitem.z-listitem-disabled,
+.z-listitem[disabled] {
+    opacity: var(--zk-state-disabled-opacity, 0.38);
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* ─── Radio mode listitem ────────────────────────────────────────────────── */
+.z-listitem-radio .z-listcell:first-child {
+    padding-left: calc(var(--zk-spacing-4) + 4px);
+}
+
+.z-listgroup.z-listgroup-open {
+    background-color: var(--zk-color-surface-container);
+}
+
+.z-listgroup.z-listgroup-selected {
+    background-color: var(--zk-color-primary-container);
+    color: var(--zk-color-on-primary-container);
+}
+
+.z-listgroup-checkable .z-listcell:first-child {
+    padding-left: calc(var(--zk-spacing-4) + 4px);
+}
+
+.z-listgroup-content {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+}
+
+/* The group row's <td> carries colspan="N" — must stay `display: table-cell`,
+   otherwise the cell collapses to a single column width (display:flex/grid
+   on a <td> disables its table-cell rendering and breaks colspan). Put the
+   flex layout on the inner content div instead. */
+td.z-listgroup-inner {
+    display: table-cell;
+}
+
+.z-listgroup-inner > .z-listcell-content {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+}
+
+.z-listcell-hidden-header {
+    display: none;
+}
+
+.z-listhead-bar {
+    background-color: var(--zk-color-surface-container);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+
+.z-listhead-border {
+    border-right: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ─── Select mold ──────────────────────────────────────────────────────────
+   `<listbox mold="select">` renders as a native `<select class="z-select">`
+   with `<option class="z-option">` children — structurally identical to
+   Selectbox (`.z-selectbox`). Mirror Selectbox's styling so both native-select
+   controls look the same. (Kept here, not in selectbox.css, because that file's
+   bundle only loads when a Selectbox widget is on the page.)
+
+   This is the effective ruleset for `.z-select` — `css-uri` for Listbox (every
+   mold, incl. "select") resolves to this file's `.css.dsp`, not select.css.dsp
+   (confirmed via check:css-dsp: select.css.dsp is unreferenced/"extra"). Reads
+   the `--zk-selectbox-*` knobs (declared once in _component-theme.css, shared
+   with select.css) so region/whole-app overrides reach the rendered element. */
+.z-select {
+    display: inline-block;
+    min-height: var(--zk-control-height);
+    min-width: 120px;
+    box-sizing: border-box;
+    padding: 0 36px 0 var(--zk-spacing-3);
+    vertical-align: middle;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: 1.5;
+    color: var(--zk-selectbox-fg);
+    background-color: var(--zk-selectbox-bg);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 20px 20px;
+    border: 1px solid var(--zk-selectbox-border-color);
+    border-radius: var(--zk-selectbox-radius);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition:
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-select::-ms-expand {
+    display: none;
+}
+
+.z-select:hover {
+    border-color: var(--zk-selectbox-border-color-hover);
+}
+
+/* Focus ring: keep the border at 1px and draw the 2nd ring pixel as an inset
+   box-shadow. A <select> is intrinsically sized (no fixed outer dimension), so a
+   2px border would grow the box outward — same layout-shift trap as textbox.
+   See reference/focus-affordance-no-layout-shift.md → "<select>". */
+.z-select:focus,
+.z-select:focus-visible {
+    border-color: var(--zk-selectbox-border-color-focus);
+    box-shadow: inset 0 0 0 1px var(--zk-selectbox-border-color-focus);
+    outline: none;
+}
+
+.z-select[disabled],
+.z-select:disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: var(--zk-color-surface-container-low);
+}
+
+/* Customizable Select (Chrome 130+) — opt-in styled popup, identical to Selectbox. */
+@supports (appearance: base-select) {
+    .z-select,
+    .z-select::picker(select) {
+        appearance: base-select;
+    }
+
+    .z-select {
+        background-image: none;
+        padding-right: var(--zk-spacing-3);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--zk-spacing-2);
+    }
+
+    /* A sized (rows>1 → size>1) or multiple select is an in-page LIST box, not a
+       popup. base-select is popup-only; its inline-flex trigger layout above would
+       flow the <optgroup>s (from <listgroup>) side-by-side into columns. Opt these
+       back out to a native vertical list. See selectbox.md → "Sized / multiple
+       select is an in-page list box". */
+    .z-select[multiple],
+    .z-select[size]:not([size="1"]) {
+        appearance: none;
+        -webkit-appearance: none;
+        display: block;
+    }
+
+    .z-select::picker-icon {
+        color: var(--zk-color-on-surface-variant);
+        font-size: 16px;
+        transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    }
+
+    .z-select:open::picker-icon {
+        transform: rotate(180deg);
+    }
+
+    .z-select::picker(select) {
+        background-color: var(--zk-color-surface);
+        color: var(--zk-color-on-surface);
+        border: 1px solid var(--zk-color-outline-variant);
+        /* Same radius token as every other floating menu popup (combobox,
+           bandbox, menu, tbeditor) so all popups share one corner shape. */
+        border-radius: var(--zk-shape-menu);
+        box-shadow: var(--zk-elevation-3);
+        padding: var(--zk-spacing-1);
+        margin: 0;
+        min-width: anchor-size(width);
+        opacity: 0;
+        transform: translateY(-4px);
+        transition:
+            opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+            transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+            display var(--zk-motion-duration-standard) allow-discrete,
+            overlay var(--zk-motion-duration-standard) allow-discrete;
+    }
+
+    .z-select:open::picker(select) {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @starting-style {
+        .z-select:open::picker(select) {
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+    }
+
+    .z-select option {
+        display: flex;
+        align-items: center;
+        gap: var(--zk-spacing-2);
+        padding: var(--zk-spacing-2) var(--zk-spacing-3);
+        border-radius: var(--zk-shape-corner-small);
+        font-size: var(--zk-typescale-body-medium-size);
+        font-family: var(--zk-typescale-font-family);
+        color: var(--zk-color-on-surface);
+        cursor: pointer;
+        transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    }
+
+    .z-select option:hover,
+    .z-select option:focus {
+        background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+        outline: none;
+    }
+
+    .z-select option:active {
+        background-color: color-mix(in srgb, var(--zk-color-on-surface) 12%, transparent);
+    }
+
+    /* Selected option = LIST-ROW family (primary-container), identical to
+       `.z-selectbox option:checked`. A <select> popup/list option is "the row I'm
+       on", NOT a chip — must match selectbox, never secondary-container.
+       See reference/selected-state-families.md. */
+    .z-select option:checked {
+        background-color: var(--zk-color-primary-container);
+        color: var(--zk-color-on-primary-container);
+    }
+
+    .z-select option:checked:hover {
+        background-color: color-mix(in srgb, var(--zk-color-on-primary-container) 8%, var(--zk-color-primary-container));
+    }
+
+    .z-select option::checkmark {
+        order: -1;
+        content: '';
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        background-color: currentColor;
+        -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>");
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>");
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        opacity: 0;
+    }
+
+    .z-select option:checked::checkmark {
+        opacity: 1;
+    }
+
+    .z-select selectedcontent {
+        font-family: var(--zk-typescale-font-family);
+        font-size: var(--zk-typescale-body-medium-size);
+        color: var(--zk-color-on-surface);
+        flex: 1;
+    }
+}
+}

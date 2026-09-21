@@ -1,0 +1,7 @@
+/* MD3 Div — block div wrapper */
+
+@layer zk-components {
+.z-div {
+    box-sizing: border-box;
+}
+}

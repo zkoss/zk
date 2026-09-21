@@ -1,0 +1,351 @@
+/* MD3 Calendar — date picker / inline calendar */
+/* ZK calendar actual DOM structure:
+   .z-calendar[.z-calendar-wk]
+     div.z-focus-a (hidden focus trap)
+     .z-calendar-header
+       A.z-calendar-icon.z-calendar-left  (prev nav)
+       A.z-calendar-title
+         SPAN.z-calendar-text (month name)
+         SPAN.z-calendar-text (year)
+       A.z-calendar-icon.z-calendar-right (next nav)
+     TABLE.z-calendar-body  (day view, month view = .z-calendar-body.z-calendar-month, etc.)
+       THEAD > TR > TH.z-calendar-weekday / .z-calendar-weekend
+       TBODY > TR > TD.z-calendar-cell.z-calendar-weekday/.z-calendar-weekend
+                      [+ .z-calendar-selected  = selected day]
+                      [+ .z-calendar-outside   = previous/next month]
+                      [+ .z-calendar-disabled  = disabled day]
+     .z-calendar-header.z-calendar-today  (showTodayLink footer — only when showTodayLink=true)
+       A.z-calendar-title                 (the Today link anchor)
+
+   NOTE: ZK does NOT add a "today" class to the current-day cell.
+         .z-calendar-selected is added to the selected cell only.
+*/
+
+@layer zk-components {
+.z-calendar {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--zk-calendar-bg);
+    border-radius: var(--zk-calendar-radius);
+    border: 1px solid var(--zk-calendar-border-color);
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 268px;
+    min-width: 200px;
+    font-family: var(--zk-typescale-font-family);
+    user-select: none;
+}
+
+/* ─── Calendar header (month/year navigation) ────────────────────────────── */
+.z-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    background-color: var(--zk-calendar-bg);
+    min-height: 48px;
+    box-sizing: border-box;
+}
+
+/* Month/year title anchor — clickable to switch view */
+.z-calendar-title {
+    font-size: var(--zk-typescale-title-small-size);
+    font-weight: var(--zk-typescale-title-small-weight);
+    color: var(--zk-calendar-fg);
+    cursor: pointer;
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    border-radius: var(--zk-shape-button);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-calendar-title:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+.z-calendar-text {
+    pointer-events: none;
+}
+
+/* Prev/Next navigation icon buttons */
+.z-calendar-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--zk-shape-corner-full);
+    color: var(--zk-calendar-header-fg);
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-calendar-icon:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+    color: var(--zk-color-on-surface);
+}
+
+/* Disabled nav icon (out of range) */
+.z-calendar-icon[disabled] {
+    color: var(--zk-color-disabled);
+    pointer-events: none;
+    cursor: default;
+}
+
+/* ─── Calendar body TABLE ────────────────────────────────────────────────── */
+.z-calendar-body {
+    border-collapse: collapse;
+    border-spacing: 0;
+    padding: 0 var(--zk-spacing-2) var(--zk-spacing-2);
+    width: 100%;
+    box-sizing: border-box;
+    table-layout: fixed;
+}
+
+/* ─── Day-of-week header (TH) ────────────────────────────────────────────── */
+.z-calendar-body thead th {
+    text-align: center;
+    vertical-align: middle;
+    height: 36px;
+    color: var(--zk-calendar-header-fg);
+    font-weight: var(--zk-typescale-label-medium-weight);
+    padding: 0;
+    font-size: var(--zk-typescale-label-medium-size);
+}
+
+/* Weekend TH — no red, same as weekday */
+.z-calendar-body thead th.z-calendar-weekend {
+    color: var(--zk-calendar-header-fg);
+}
+
+/* ─── Day cells (TD) ─────────────────────────────────────────────────────── *
+ * The hover/selected highlight is a FIXED-SIZE circular disc rendered via
+ * `::before`, NOT a `background-color` on the TD. Reason: a TD background
+ * tracks the table-layout column width, which shrinks when a week-of-year
+ * column is added → previously the same `border-radius: full` painted an
+ * oval on narrow cells (default view circle, week-of-year view ellipse).
+ * A fixed 36×36 pseudo-element guarantees the same circle in every variant.
+ *
+ * Layering note: `isolation: isolate` confines the pseudo-elements'
+ * `z-index: -1` to the cell's stacking context so the disc paints BEHIND
+ * the day-number text without disappearing under the page.
+ * ─────────────────────────────────────────────────────────────────────────── */
+.z-calendar-cell {
+    position: relative;
+    isolation: isolate;
+    text-align: center;
+    vertical-align: middle;
+    height: 40px;
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    color: var(--zk-calendar-fg);
+    cursor: pointer;
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Hover/selected disc — fixed 32×32 circle centred on the cell, behind the text.
+ * Sized 4px smaller than the 38px-wide TD so the leftmost/rightmost selected
+ * day's disc has ~3px breathing room from the calendar's outer border instead
+ * of nearly touching it. Stays fixed-size (does NOT scale with cell width)
+ * so the same disc renders identically in the default 7-col view and the
+ * week-of-year 8-col view (where columns shrink). */
+.z-calendar-cell::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: transparent;
+    pointer-events: none;
+    z-index: -1;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-calendar-cell:hover::before {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+/* Weekend body cells — no red, same as weekday */
+.z-calendar-body tbody td.z-calendar-weekend {
+    color: var(--zk-calendar-fg);
+}
+
+/* ─── Outside-month days ─────────────────────────────────────────────────── */
+/* Cells from previous/next month that fill out the grid rows */
+.z-calendar-cell.z-calendar-outside {
+    opacity: 0.38;
+}
+
+/* ─── Selected day (ZK adds .z-calendar-selected to the active date cell) ── *
+ * Selector specificity (0,3,2) is bumped above `.z-calendar-body tbody
+ * td.z-calendar-weekend` (0,2,2) so the `on-primary` text colour wins on a
+ * weekend-selected day instead of staying `on-surface` (dark). The disc fill
+ * is painted by `::before` (same pseudo-element as hover) to keep the shape
+ * identical across cell widths. */
+.z-calendar-body tbody td.z-calendar-cell.z-calendar-selected {
+    color: var(--zk-calendar-accent-fg);
+    font-weight: var(--zk-typescale-label-large-weight);
+}
+
+.z-calendar-body tbody td.z-calendar-cell.z-calendar-selected::before {
+    background-color: var(--zk-calendar-accent);
+}
+
+.z-calendar-body tbody td.z-calendar-cell.z-calendar-selected:hover::before {
+    background-color: color-mix(in srgb, var(--zk-calendar-accent) 85%, var(--zk-calendar-accent-fg));
+}
+
+/* ─── Today's date cell (z-calendar-today class added by ZK when present) ── */
+/* Circular outline ring via `::after` (the disc slot `::before` is reserved
+ * for hover/selected fill). Hidden when also selected — the filled disc IS
+ * the indicator. */
+.z-calendar-cell.z-calendar-today::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 28px;
+    height: 28px;
+    transform: translate(-50%, -50%);
+    border: 1px solid var(--zk-calendar-accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.z-calendar-cell.z-calendar-today.z-calendar-selected::after {
+    display: none;
+}
+
+/* ─── Disabled day cells ─────────────────────────────────────────────────── *
+ * Distinguished from `.z-calendar-outside` by a MD3 strike-through and a
+ * `not-allowed` cursor. Outside-month days are merely de-emphasised (still
+ * conceptually valid dates from a neighbouring month); disabled days are
+ * actually forbidden (constraint="no past/future", min/max range, etc.). */
+.z-calendar-cell.z-calendar-disabled {
+    color: var(--zk-color-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
+    text-decoration: line-through;
+    text-decoration-color: currentColor;
+}
+.z-calendar-cell.z-calendar-disabled::before {
+    background-color: transparent;
+}
+
+/* ─── Out-of-range cells (yearView/decadeView disabled cells) ─────────────── */
+.z-calendar-cell.z-calendar-outrange {
+    color: var(--zk-color-outline);
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ─── Week-of-year column ────────────────────────────────────────────────── */
+.z-calendar-weekofyear {
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-outline);
+    text-align: center;
+    vertical-align: middle;
+    font-style: italic;
+    user-select: none;
+    pointer-events: none;
+    cursor: default;
+}
+
+/* ─── Month / Year / Decade picker views ─────────────────────────────────── */
+/* These TABLE classes are added to .z-calendar-body in the respective views.
+   The individual cells are still .z-calendar-cell with same hover/selected rules. */
+.z-calendar-body.z-calendar-month,
+.z-calendar-body.z-calendar-year,
+.z-calendar-body.z-calendar-decade {
+    padding-top: var(--zk-spacing-2);
+}
+
+.z-calendar-body.z-calendar-month .z-calendar-cell,
+.z-calendar-body.z-calendar-year .z-calendar-cell,
+.z-calendar-body.z-calendar-decade .z-calendar-cell {
+    height: 40px;
+    font-size: var(--zk-typescale-body-medium-size);
+    padding: 0 var(--zk-spacing-2);
+}
+
+/* Month / Year / Decade pill: override the day-cell circular disc to a
+ * cell-shaped pill (these chips are content-shaped, not date-circle-shaped).
+ * `inset: 4px` keeps the pill 4px short of each cell edge so neighbouring
+ * pills don't paint edge-to-edge and the selected pill doesn't touch the
+ * popup border — both produced a visually "fused" grid that read as a
+ * single block instead of selectable items. */
+.z-calendar-body.z-calendar-month .z-calendar-cell::before,
+.z-calendar-body.z-calendar-year .z-calendar-cell::before,
+.z-calendar-body.z-calendar-decade .z-calendar-cell::before {
+    inset: 4px;
+    transform: none;
+    width: auto;
+    height: auto;
+    border-radius: var(--zk-shape-button);
+}
+
+/* ─── Today link footer (showTodayLink=true) ─────────────────────────────── */
+/* DOM: .z-calendar-header.z-calendar-today > a.z-calendar-title */
+.z-calendar-header.z-calendar-today {
+    border-top: 1px solid var(--zk-calendar-border-color);
+    min-height: 40px;
+    padding: var(--zk-spacing-1) var(--zk-spacing-3);
+    justify-content: center;
+}
+
+.z-calendar-header.z-calendar-today .z-calendar-title {
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-calendar-accent);
+    padding: var(--zk-spacing-1) var(--zk-spacing-3);
+    border-radius: var(--zk-shape-corner-full);
+}
+
+.z-calendar-header.z-calendar-today .z-calendar-title:hover {
+    background-color: color-mix(in srgb, var(--zk-color-primary) 8%, transparent);
+}
+
+/* ─── Datebox popup wrapper ──────────────────────────────────────────────── */
+.z-datebox-popup {
+    position: absolute;
+}
+
+/* Standalone calendar (used outside of .z-datebox-popup) gets its own card
+ * shell — border + radius + shadow — so it looks like a self-contained
+ * component when dropped into a page or panel.
+ *
+ * INSIDE .z-datebox-popup the popup is already the elevated surface, so
+ * datebox.css overrides ALL of these back to flat content (no border, no
+ * shadow, no radius, transparent bg). The :not() guard below makes sure
+ * this rule doesn't bleed into the popup case and force authors to override
+ * three properties twice.
+ * See MD3 selection / picker guidance. */
+.z-calendar:not(.z-datebox-popup .z-calendar) {
+    background: var(--zk-calendar-bg);
+    border: 1px solid var(--zk-calendar-border-color);
+    border-radius: var(--zk-calendar-radius);
+    box-shadow: var(--zk-elevation-2);
+}
+
+/* ─── Focus trap element ─────────────────────────────────────────────────── */
+.z-focus-a {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+}

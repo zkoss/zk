@@ -1,0 +1,336 @@
+/* MD3 Button — base styles + utility class system */
+
+/* ─── Base: Filled button ─────────────────────────────────────────────── */
+@layer zk-components {
+.z-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* MD3 icon/image-to-label gap. The graphic (img.z-button-image or i.z-icon-*)
+       and the label are adjacent flex children separated only by a plain space
+       text node, which collapses in this align-items:center flex box — so set an
+       explicit gap or the graphic glues to the label. Order-independent, so it
+       also spaces dir="reverse" (label→graphic). A single flex item (text-only or
+       icon-only button) is unaffected. Vertical (:has(br)) overrides to 2px below. */
+    gap: var(--zk-spacing-2);
+    overflow: hidden;
+    min-height: var(--zk-button-height);
+    padding: var(--zk-button-padding-y) var(--zk-button-padding-x);
+    box-shadow: var(--zk-button-elevation);
+    border: none;
+    border-radius: var(--zk-button-radius);
+    background-color: var(--zk-button-bg);
+    color: var(--zk-button-fg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;
+    outline: none;
+    /* No built-in margin. For horizontal spacing wrap buttons in
+       <hlayout>, <toolbar>, or a `<div sclass="z-hstack">` container
+       (all flex+gap). See doc/spec/spacing-policy.md. */
+    margin: 0;
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State layer */
+.z-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--zk-button-overlay-color);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-button:hover::before { opacity: var(--zk-button-hover-opacity); }
+.z-button:focus-visible::before { opacity: var(--zk-button-focus-opacity); }
+.z-button:active::before { opacity: var(--zk-button-active-opacity); }
+
+/* Contained/filled hover — MD3: state layer + elevation lift.
+   Scoped to filled variants only; flat (outlined/text/icon) & FAB variants excluded
+   so they stay flat or keep their own shadow. */
+.z-button:hover:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not([class*="z-button-fab"]):not([disabled]) {
+    box-shadow: var(--zk-elevation-2);
+}
+.z-button:hover:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not([class*="z-button-fab"]):not([disabled])::before {
+    opacity: 0.12; /* small bump over the 0.08 global token; stays within the MD3 state-layer range */
+}
+
+.z-button:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+
+/* ─── Disabled state ─────────────────────────────────────────────────── */
+.z-button[disabled],
+.z-button.z-button-disabled {
+    background-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+    border-color: transparent;
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.z-button[disabled]::before,
+.z-button.z-button-disabled::before {
+    display: none;
+}
+
+/* Disabled overrides for outlined and text utility variants */
+.z-button-outlined.z-button[disabled] {
+    background-color: transparent;
+    border-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+}
+
+.z-button-text.z-button[disabled] {
+    background-color: transparent;
+    border: none;
+    color: var(--zk-color-disabled);
+}
+
+/* ─── Upload button variant ──────────────────────────────────────────── */
+.z-uploadbutton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    min-height: var(--zk-button-height);
+    padding: 0 var(--zk-spacing-4);
+    border: none;
+    border-radius: var(--zk-button-radius);
+    background-color: var(--zk-button-bg);
+    color: var(--zk-button-fg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Utility Class System
+   All button variants are additive classes on top of .z-button.
+   Single source of truth — do not add button variants in page CSS.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Layout helper ──────────────────────────────────────────────────── */
+.z-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ─── Contained — color variants ─────────────────────────────────────── */
+/* (default .z-button = primary filled; these add semantic color variants)
+   secondary / warning / info fill from the L-capped `-fill` token, not the raw
+   seed: white on the raw seed measured 2.44:1 / 3.11:1 / 3.86:1, all below the
+   WCAG AA 4.5:1 floor for the label, while the capped fill clears it at
+   4.81:1 / 5.46:1 / 4.94:1. The `.z-bg-*` utilities already route this way.
+   primary / success / error keep the raw seed — they already pass, and switching
+   them would shift a shipped color with nothing asking for it (error would move
+   #d32f2f → #c92226). The outlined/text WARNING variants below are fine now: the
+   warning SEED was darkened to #bd3f00 (5.42:1 on white) rather than given a
+   separate tone, so --zk-color-warning-fill resolves to the same color and the
+   solid variant is unchanged. */
+.z-button-secondary.z-button { background-color: var(--zk-color-secondary-fill); color: #fff; }
+.z-button-success.z-button   { background-color: var(--zk-color-success, #2e7d32); color: #fff; }
+.z-button-warning.z-button   { background-color: var(--zk-color-warning-fill); color: #fff; }
+.z-button-error.z-button     { background-color: var(--zk-color-error, #d32f2f); color: #fff; }
+.z-button-info.z-button      { background-color: var(--zk-color-status-info-fill); color: #fff; }
+.z-button-light.z-button     { background-color: var(--zk-color-light, #f5f5f5); color: var(--zk-color-on-light, #333); border: 1px solid var(--zk-color-light-outline, #e0e0e0); }
+.z-button-dark.z-button      { background-color: var(--zk-color-dark, #212121); color: var(--zk-color-on-dark, #fff); }
+
+/* State layers for color variants — white overlay on colored backgrounds */
+.z-button-secondary.z-button::before,
+.z-button-success.z-button::before,
+.z-button-warning.z-button::before,
+.z-button-error.z-button::before,
+.z-button-info.z-button::before,
+.z-button-dark.z-button::before { background-color: #fff; }
+.z-button-light.z-button::before { background-color: #000; }
+
+/* Disabled overrides for contained color variants (spec 0,3,0 > 0,2,0 variant rules) */
+.z-button-secondary.z-button[disabled],
+.z-button-success.z-button[disabled],
+.z-button-warning.z-button[disabled],
+.z-button-error.z-button[disabled],
+.z-button-info.z-button[disabled],
+.z-button-light.z-button[disabled],
+.z-button-dark.z-button[disabled] {
+    background-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+    border-color: transparent;
+    box-shadow: none;
+}
+
+/* ─── Outlined — color variants ──────────────────────────────────────── */
+.z-button-outlined.z-button {
+    background-color: transparent;
+    color: var(--zk-color-primary);
+    border: 1px solid var(--zk-color-primary);
+    box-shadow: none;
+}
+.z-button-outlined.z-button::before { background-color: var(--zk-color-primary); }
+
+.z-button-outlined-secondary.z-button { background-color: transparent; color: var(--zk-color-secondary); border: 1px solid var(--zk-color-secondary); }
+.z-button-outlined-success.z-button   { background-color: transparent; color: var(--zk-color-success, #2e7d32); border: 1px solid var(--zk-color-success, #2e7d32); }
+.z-button-outlined-warning.z-button   { background-color: transparent; color: var(--zk-color-warning); border: 1px solid var(--zk-color-warning); }
+.z-button-outlined-error.z-button     { background-color: transparent; color: var(--zk-color-error, #d32f2f); border: 1px solid var(--zk-color-error, #d32f2f); }
+.z-button-outlined-info.z-button      { background-color: transparent; color: var(--zk-color-status-info); border: 1px solid var(--zk-color-status-info); }
+
+.z-button-outlined-secondary.z-button::before { background-color: var(--zk-color-secondary); }
+.z-button-outlined-success.z-button::before   { background-color: var(--zk-color-success, #2e7d32); }
+.z-button-outlined-warning.z-button::before   { background-color: var(--zk-color-warning); }
+.z-button-outlined-error.z-button::before     { background-color: var(--zk-color-error, #d32f2f); }
+.z-button-outlined-info.z-button::before      { background-color: var(--zk-color-status-info); }
+
+/* Disabled overrides for outlined color variants (spec 0,3,0 > 0,2,0 variant rules) */
+.z-button-outlined-secondary.z-button[disabled],
+.z-button-outlined-success.z-button[disabled],
+.z-button-outlined-warning.z-button[disabled],
+.z-button-outlined-error.z-button[disabled],
+.z-button-outlined-info.z-button[disabled] {
+    background-color: transparent;
+    border-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+    box-shadow: none;
+}
+
+/* ─── Text — color variants ──────────────────────────────────────────── */
+.z-button-text.z-button {
+    background-color: transparent;
+    color: var(--zk-color-primary);
+    border: none;
+    box-shadow: none;
+}
+.z-button-text.z-button::before { background-color: var(--zk-color-primary); }
+
+.z-button-text-secondary.z-button { background-color: transparent; color: var(--zk-color-secondary); border: none; }
+.z-button-text-success.z-button   { background-color: transparent; color: var(--zk-color-success, #2e7d32); border: none; }
+.z-button-text-warning.z-button   { background-color: transparent; color: var(--zk-color-warning); border: none; }
+.z-button-text-error.z-button     { background-color: transparent; color: var(--zk-color-error, #d32f2f); border: none; }
+.z-button-text-info.z-button      { background-color: transparent; color: var(--zk-color-status-info); border: none; }
+
+.z-button-text-secondary.z-button::before { background-color: var(--zk-color-secondary); }
+.z-button-text-success.z-button::before   { background-color: var(--zk-color-success, #2e7d32); }
+.z-button-text-warning.z-button::before   { background-color: var(--zk-color-warning); }
+.z-button-text-error.z-button::before     { background-color: var(--zk-color-error, #d32f2f); }
+.z-button-text-info.z-button::before      { background-color: var(--zk-color-status-info); }
+
+/* Disabled overrides for text color variants (spec 0,3,0 > 0,2,0 variant rules) */
+.z-button-text-secondary.z-button[disabled],
+.z-button-text-success.z-button[disabled],
+.z-button-text-warning.z-button[disabled],
+.z-button-text-error.z-button[disabled],
+.z-button-text-info.z-button[disabled] {
+    background-color: transparent;
+    border: none;
+    color: var(--zk-color-disabled);
+    box-shadow: none;
+}
+
+/* ─── Sizes ───────────────────────────────────────────────────────────── */
+.z-button-sm.z-button { min-height: var(--zk-button-height-sm); padding: 0 10px; font-size: 12px; }
+.z-button-lg.z-button { min-height: var(--zk-button-height-lg); padding: 0 22px; font-size: 15px; }
+
+/* Icon button size overrides (must come after base sizes to win specificity) */
+.z-button-icon.z-button-sm.z-button { width: var(--zk-control-height-xs); height: var(--zk-control-height-xs); min-height: var(--zk-control-height-xs); padding: 0; font-size: 14px; }
+.z-button-icon.z-button-lg.z-button { width: var(--zk-control-height-lg); height: var(--zk-control-height-lg); min-height: var(--zk-control-height-lg); padding: 0; font-size: 24px; }
+
+/* FAB xs — smaller than sm (for size demonstration row) */
+.z-button-fab.z-button-xs.z-button { width: var(--zk-control-height-xs); height: var(--zk-control-height-xs); min-height: var(--zk-control-height-xs); font-size: 14px; }
+
+/* ─── Icon button ─────────────────────────────────────────────────────── */
+.z-button-icon.z-button {
+    background-color: transparent;
+    color: var(--zk-color-on-surface-variant);
+    border: none;
+    border-radius: 50%;
+    width: var(--zk-icon-button-size);
+    height: var(--zk-icon-button-size);
+    min-height: var(--zk-icon-button-size);
+    padding: 0;
+    font-size: 20px;
+}
+.z-button-icon.z-button::before { background-color: var(--zk-color-on-surface-variant); }
+
+/* Color variants for icon button */
+.z-button-icon.z-button-primary.z-button   { color: var(--zk-color-primary); }
+.z-button-icon.z-button-secondary.z-button { color: var(--zk-color-secondary); background-color: transparent; }
+.z-button-icon.z-button-error.z-button     { color: var(--zk-color-error, #d32f2f); background-color: transparent; }
+
+.z-button-icon.z-button-primary.z-button::before   { background-color: var(--zk-color-primary); }
+.z-button-icon.z-button-secondary.z-button::before { background-color: var(--zk-color-secondary); }
+.z-button-icon.z-button-error.z-button::before     { background-color: var(--zk-color-error, #d32f2f); }
+
+/* ─── FAB (Floating Action Button) ───────────────────────────────────── */
+.z-button-fab.z-button {
+    border-radius: 50%;
+    width: var(--zk-fab-size);
+    height: var(--zk-fab-size);
+    min-height: var(--zk-fab-size);
+    padding: 0;
+    font-size: 24px;
+    box-shadow:
+        0px 3px 5px -1px rgba(0,0,0,0.20),
+        0px 6px 10px 0px rgba(0,0,0,0.14),
+        0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+.z-button-fab.z-button-sm.z-button { width: var(--zk-fab-size-sm); height: var(--zk-fab-size-sm); min-height: var(--zk-fab-size-sm); font-size: 20px; }
+
+/* FAB extended (wide, with label) */
+.z-button-fab-extended.z-button {
+    border-radius: 16px;
+    height: var(--zk-fab-size);
+    min-height: var(--zk-fab-size);
+    padding: 0 20px;
+    /* gap inherited from base .z-button (var(--zk-spacing-2) = 8px) */
+    box-shadow:
+        0px 3px 5px -1px rgba(0,0,0,0.20),
+        0px 6px 10px 0px rgba(0,0,0,0.14),
+        0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+
+/* ─── Vertical orient — icon stacked above label ────────────────────────── */
+.z-button:has(br) {
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 16px;
+    min-height: var(--zk-control-height-lg);
+    line-height: 1;
+}
+.z-button:has(br) br { display: none; }
+
+/* ─── Editor toolbar button — minimal, borderless, for WYSIWYG toolbars ── */
+.m-editor-toolbar-btn.z-button {
+    background-color: transparent;
+    color: var(--zk-color-on-surface-variant, #49454f);
+    border: none;
+    border-radius: 4px;
+    padding: 4px 6px;
+    min-width: var(--zk-button-height-sm);
+    min-height: var(--zk-button-height-sm);
+    height: var(--zk-button-height-sm);
+    font-size: 14px;
+}
+.m-editor-toolbar-btn.z-button::before { background-color: var(--zk-color-on-surface); }
+.m-editor-toolbar-btn.z-button:hover::before { opacity: var(--zk-state-hover-opacity, 0.08); }
+}

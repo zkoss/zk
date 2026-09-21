@@ -1,0 +1,40 @@
+/* MD3 Stacking Tokens — --zk-index-*
+ *
+ * ⚠️ READ THIS BEFORE CHANGING A VALUE.
+ *
+ * ZK's JS client sets z-index at RUNTIME on every floating widget. When a
+ * floating widget (Window, Popup, Menupopup, Combobox/Bandbox/Datebox dropdown,
+ * Panel, Drawer, Toast, Errorbox, Searchbox…) is shown, `_topZIndex()`
+ * (zk/widget.ts:589, base 1800) stamps an INLINE `z-index` >= 1800 on it via a
+ * flat, global, monotonically-increasing counter — whichever floats last wins.
+ * An inline style always beats a stylesheet rule, so for those widgets the CSS
+ * z-index is only a pre-paint fallback and does NOT control final stacking.
+ *
+ * Therefore this file only tokenizes the values that are genuinely LOAD-BEARING
+ * — the elements ZK does NOT manage as floating widgets, where the CSS value is
+ * the real stacking authority. Everything else keeps its cosmetic CSS fallback
+ * (1000–2000 range) and is documented as fallback-only in doc/spec/zindex-scale.md.
+ *
+ * Values equal the pre-existing hard-coded numbers — naming them is zero visual
+ * regression. Three hard constraints must hold (see the spec):
+ *   1. busy-mask  <  busy-loading      (busy scrim never covers its own spinner)
+ *   2. loading    >  .z-modal-mask 1400 (JS derives the paired mask as loading − 1)
+ *   3. error must outrank absolutely everything, incl. the runtime 1800+N counter
+ */
+:root {
+    /* ZK runtime floating base. Floating widgets get an inline z-index >= this
+       at show time; use it as the honest fallback for ZK-managed floats and as
+       the reference point for app-authored overlays ("stay below to sit under
+       ZK popups"). */
+    --zk-index-float-fallback: 1800;
+
+    /* ── Load-bearing: CSS is the real stacking authority (non-floating) ── */
+    --zk-index-nav: 1000;          /* navbar dropdown (never made _floating) */
+    --zk-index-loading: 1450;      /* global "please wait" — MUST stay > 1400 */
+    --zk-index-loadingbar: 2000;   /* top progress bar (never made _floating) */
+    --zk-index-slider-tooltip: 60000; /* slider drag tooltip (static, no float) */
+    --zk-index-busy-mask: 89000;   /* per-widget busy scrim — MUST stay < busy-loading */
+    --zk-index-busy-loading: 89500;/* per-widget busy spinner (sits above its scrim) */
+    --zk-index-fullscreen: 99999;  /* tbeditor full-screen cover */
+    --zk-index-error: 9999999;     /* fatal JS-exception box — outranks everything */
+}

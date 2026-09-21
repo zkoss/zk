@@ -1,0 +1,15 @@
+/* MD3 Spacing Tokens — --zk-spacing-* — 4dp baseline grid */
+:root {
+    --zk-spacing-0: 0px;
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-7: 28px;
+    --zk-spacing-8: 32px;
+    --zk-spacing-10: 40px;
+    --zk-spacing-12: 48px;
+    --zk-spacing-16: 64px;
+}

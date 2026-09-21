@@ -1,0 +1,1259 @@
+/* Component Theme Variables — per-component APPEARANCE variables (informally "knobs").
+ *
+ * Lets an adopter restyle ONE component's look (color / border / radius / state)
+ * WITHOUT forking the theme. Set these `--zk-<comp>-*` custom properties either
+ * at :root (whole app) or on any container element (one region — descendants
+ * inherit it). The defaults below reproduce the stock Marble rendering EXACTLY,
+ * so declaring nothing changes nothing; overriding is purely additive.
+ *
+ * ── Rules (full spec: doc/spec/component-theme-variables.md) ────────────────
+ *   1. Declared HERE at :root, NEVER on the component element. A custom property
+ *      declared on .z-button itself would shadow a :root/region override for its
+ *      own subtree — the same trap tokens/_sizing.css layer-3 documents.
+ *   2. Components consume these from inside @layer zk-components. These token defs
+ *      are UNLAYERED, so an adopter's unlayered :root override WINS the cascade
+ *      regardless of specificity — provided their stylesheet loads AFTER
+ *      norm.css.dsp, or raises specificity (e.g. :root[data-brand], as the brand
+ *      presets in _colors.css already do). A region override (on an ancestor
+ *      element) always wins by inheritance distance — no load-order concern.
+ *   3. This file is the APPEARANCE dimension. The SIZE dimension already ships in
+ *      tokens/_sizing.css (--zk-button-height, --zk-input-height, …); reuse those.
+ *
+ * Pilot component: button (filled base). input / window / grid follow.
+ */
+:root {
+    /* ── Button — filled base ────────────────────────────────────────────
+       The color VARIANTS (.z-button-secondary/-success/…, outlined, text, icon,
+       fab) keep their own colors via higher-specificity rules; these knobs drive
+       the default filled button. State is an MD3 ::before overlay (a tint whose
+       opacity animates), NOT a per-state background — so the knobs are an overlay
+       color + per-state opacities, matching the real implementation. */
+    --zk-button-bg:             var(--zk-color-primary);
+    --zk-button-fg:             var(--zk-color-on-primary);
+    --zk-button-radius:         var(--zk-shape-button);
+    --zk-button-elevation:      var(--zk-elevation-resting);
+    --zk-button-padding-y:      6px;                    /* off-token literal (kept as default) */
+    --zk-button-padding-x:      var(--zk-spacing-4);    /* 16px */
+    --zk-button-overlay-color:  var(--zk-color-on-primary);
+    --zk-button-hover-opacity:  var(--zk-state-hover-opacity);    /* .08 */
+    --zk-button-focus-opacity:  var(--zk-state-focus-opacity);    /* .12 */
+    --zk-button-active-opacity: var(--zk-state-pressed-opacity);  /* .12 */
+    /* height → --zk-button-height (tokens/_sizing.css, semantic alias layer). */
+
+    /* ── Input — outlined text field ─────────────────────────────────────
+       Shared by textbox / intbox / decimalbox / doublebox / longbox /
+       passwordbox. State is a per-state border-COLOR change (no overlay), so
+       the knobs are per-state border colors + the surface/text fill. */
+    --zk-input-bg:                 var(--zk-color-surface);
+    --zk-input-fg:                 var(--zk-color-on-surface);
+    --zk-input-radius:             var(--zk-shape-input);
+    --zk-input-border-color:       var(--zk-color-outline);
+    --zk-input-border-color-hover: var(--zk-color-on-surface);
+    --zk-input-border-color-focus: var(--zk-color-primary);
+    --zk-input-border-color-error: var(--zk-color-error);
+    /* height → --zk-input-height (tokens/_sizing.css). */
+
+    /* ── Window — surface + chrome ───────────────────────────────────────
+       Elevation stays MODE-driven (embedded/overlapped/modal → _elevation.css),
+       not a knob. The header shares the window surface fill. */
+    --zk-window-bg:             var(--zk-color-surface);
+    --zk-window-border-color:   var(--zk-color-outline-variant);
+    --zk-window-radius:         var(--zk-shape-corner-extra-small);
+    --zk-window-header-fg:      var(--zk-color-on-surface);
+    --zk-window-icon-hover-bg:  var(--zk-color-surface-container);
+    --zk-window-close-hover-bg: var(--zk-color-error-container);
+    /* header height / padding → --zk-window-header-height / --zk-header-padding-y. */
+
+    /* ── Grid — outlined data table ──────────────────────────────────────
+       Curated to the grid "lines" + fills. Secondary accents (group/foot
+       separators, legacy striping fallbacks) stay on the base tokens.
+       row-hover keeps its stock rgba literal (zero regression). */
+    --zk-grid-bg:           var(--zk-color-surface);
+    --zk-grid-border-color: var(--zk-color-outline-variant);
+    --zk-grid-radius:       var(--zk-shape-card);
+    --zk-grid-header-fg:    var(--zk-color-on-surface-variant);
+    --zk-grid-row-hover-bg: rgba(0, 0, 0, 0.04);
+    --zk-grid-stripe-bg:    var(--zk-color-surface-container-lowest);
+    --zk-grid-foot-bg:      var(--zk-color-surface-container-low);
+    /* cell padding → --zk-grid-cell-padding (tokens/_sizing.css). */
+
+    /* ── Listbox — outlined data table WITH row selection ────────────────
+       Grid's model plus selection (primary-container fill + paired text).
+       Foot/group accents + legacy striping fallbacks stay on base tokens. */
+    --zk-listbox-bg:           var(--zk-color-surface);
+    --zk-listbox-border-color: var(--zk-color-outline-variant);
+    --zk-listbox-radius:       var(--zk-shape-card);
+    --zk-listbox-header-fg:    var(--zk-color-on-surface-variant);
+    --zk-listbox-row-hover-bg: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-color-surface));
+    --zk-listbox-stripe-bg:    var(--zk-color-surface-container-lowest);
+    --zk-listbox-selected-bg:  var(--zk-color-primary-container);
+    --zk-listbox-selected-fg:  var(--zk-color-on-primary-container);
+    /* cell padding → --zk-listbox-cell-padding (tokens/_sizing.css). */
+
+    /* ── Tree — outlined tree table WITH row selection ───────────────────
+       Same as listbox, minus striping (trees don't stripe). */
+    --zk-tree-bg:           var(--zk-color-surface);
+    --zk-tree-border-color: var(--zk-color-outline-variant);
+    --zk-tree-radius:       var(--zk-shape-card);
+    --zk-tree-header-fg:    var(--zk-color-on-surface-variant);
+    --zk-tree-row-hover-bg: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-color-surface));
+    --zk-tree-selected-bg:  var(--zk-color-primary-container);
+    --zk-tree-selected-fg:  var(--zk-color-on-primary-container);
+    /* cell padding → --zk-tree-cell-padding (tokens/_sizing.css). */
+
+    /* ── Panel — card surface + header (window-like; has resting elevation) */
+    --zk-panel-bg:            var(--zk-color-surface);
+    --zk-panel-border-color:  var(--zk-color-outline-variant);
+    --zk-panel-radius:        var(--zk-shape-card);
+    --zk-panel-elevation:     var(--zk-elevation-resting);
+    --zk-panel-header-fg:     var(--zk-color-on-surface);
+    --zk-panel-icon-hover-bg: var(--zk-color-surface-container);
+    /* header height → --zk-panel-header-height (tokens/_sizing.css). */
+
+    /* ── Groupbox — bordered container + header ──────────────────────────── */
+    --zk-groupbox-bg:            var(--zk-color-surface);
+    --zk-groupbox-border-color:  var(--zk-color-outline-variant);
+    --zk-groupbox-radius:        var(--zk-shape-card);
+    --zk-groupbox-elevation:     var(--zk-elevation-card);
+    --zk-groupbox-header-fg:     var(--zk-color-on-surface);
+    --zk-groupbox-icon-hover-bg: var(--zk-color-surface-container);
+    /* header height → --zk-groupbox-header-height (tokens/_sizing.css). */
+
+    /* ── Combobox — outlined input field + dropdown popup + option selection.
+       Head of the dropdown-input family; datebox/timebox/spinner/bandbox share
+       this field-knob vocabulary (bg/fg/radius + per-state border colors). Note
+       combobox uses a SPLIT-border DOM (input + button each carry half the
+       border, focus grows border-width 1px→2px); the other four use a
+       WRAPPER-border DOM (border on the root, focus = inset ring). Same knobs,
+       different plumbing. */
+    --zk-combobox-bg:                 var(--zk-color-surface);
+    --zk-combobox-fg:                 var(--zk-color-on-surface);
+    --zk-combobox-radius:             var(--zk-shape-input);
+    --zk-combobox-border-color:       var(--zk-color-outline);
+    --zk-combobox-border-color-hover: var(--zk-color-on-surface);
+    --zk-combobox-border-color-focus: var(--zk-color-primary);
+    --zk-combobox-popup-bg:           var(--zk-color-surface);
+    --zk-combobox-popup-radius:       var(--zk-shape-menu);
+    --zk-combobox-item-hover-bg:      rgba(0, 0, 0, 0.08);
+    --zk-combobox-selected-bg:        var(--zk-color-primary-container);
+    --zk-combobox-selected-fg:        var(--zk-color-on-primary-container);
+
+    /* ── Datebox — outlined date-picker field + calendar popup ───────────
+       Wrapper-border model: border sits on .z-datebox and focus is an inset
+       ring (Mechanism A). border-color-focus tints BOTH the outline and the
+       ring. Invalid/error states stay on --zk-color-error (not a knob). The
+       nested timezone <select> inside the popup keeps its own selectbox styling. */
+    --zk-datebox-bg:                 var(--zk-color-surface);
+    --zk-datebox-fg:                 var(--zk-color-on-surface);
+    --zk-datebox-radius:             var(--zk-shape-input);
+    --zk-datebox-border-color:       var(--zk-color-outline);
+    --zk-datebox-border-color-hover: var(--zk-color-on-surface);
+    --zk-datebox-border-color-focus: var(--zk-color-primary);
+    --zk-datebox-popup-bg:           var(--zk-color-surface);
+    --zk-datebox-popup-radius:       var(--zk-shape-corner-medium);
+
+    /* ── Timebox — outlined time field + up/down stepper (no popup) ─────── */
+    --zk-timebox-bg:                 var(--zk-color-surface);
+    --zk-timebox-fg:                 var(--zk-color-on-surface);
+    --zk-timebox-radius:             var(--zk-shape-input);
+    --zk-timebox-border-color:       var(--zk-color-outline);
+    --zk-timebox-border-color-hover: var(--zk-color-on-surface);
+    --zk-timebox-border-color-focus: var(--zk-color-primary);
+
+    /* ── Spinner — numeric stepper field (no popup).
+       .z-doublespinner shares this ruleset, so it reads the same --zk-spinner-*
+       knobs (the two are styled by one selector list). */
+    --zk-spinner-bg:                 var(--zk-color-surface);
+    --zk-spinner-fg:                 var(--zk-color-on-surface);
+    --zk-spinner-radius:             var(--zk-shape-input);
+    --zk-spinner-border-color:       var(--zk-color-outline);
+    --zk-spinner-border-color-hover: var(--zk-color-on-surface);
+    --zk-spinner-border-color-focus: var(--zk-color-primary);
+
+    /* ── Bandbox — outlined field + arbitrary band popup ─────────────────── */
+    --zk-bandbox-bg:                 var(--zk-color-surface);
+    --zk-bandbox-fg:                 var(--zk-color-on-surface);
+    --zk-bandbox-radius:             var(--zk-shape-input);
+    --zk-bandbox-border-color:       var(--zk-color-outline);
+    --zk-bandbox-border-color-hover: var(--zk-color-on-surface);
+    --zk-bandbox-border-color-focus: var(--zk-color-primary);
+    --zk-bandbox-popup-bg:           var(--zk-color-surface);
+    --zk-bandbox-popup-radius:       var(--zk-shape-menu);
+
+    /* ── Daterangebox — two-ended date-range picker field + range-calendar popup
+       (EE, zkmax). Same wrapper-border model as datebox/timebox/spinner/bandbox:
+       border sits on .z-daterangebox and focus is an inset ring (Mechanism A);
+       border-color-focus tints both the outline and the ring. The trigger
+       button's border-radius reuses this same radius knob (it caps one corner
+       of the shared field). Invalid state stays on --zk-color-error (not a
+       knob, same convention as datebox); disabled's surface/border likewise
+       stay on base tokens, not knob-driven. */
+    --zk-daterangebox-bg:                 var(--zk-color-surface);
+    --zk-daterangebox-fg:                 var(--zk-color-on-surface);
+    --zk-daterangebox-radius:             var(--zk-shape-corner-extra-small);
+    --zk-daterangebox-border-color:       var(--zk-color-outline);
+    --zk-daterangebox-border-color-hover: var(--zk-color-on-surface);
+    --zk-daterangebox-border-color-focus: var(--zk-color-primary);
+    --zk-daterangebox-popup-bg:           var(--zk-color-surface);
+    --zk-daterangebox-popup-radius:       var(--zk-shape-menu);
+
+    /* ── Timepicker — outlined time field + time-list popup (EE, zkmax).
+       Same wrapper-border model as datebox/timebox/spinner/bandbox: border sits
+       on .z-timepicker and focus is an inset ring (Mechanism A); border-color-focus
+       tints both the outline and the focus-ring overlay. The clock-trigger button's
+       border-radius reuses this same radius knob (it caps one corner of the shared
+       field, same precedent as datebox/daterangebox's trigger button). Invalid state
+       stays on --zk-color-error (not a knob, same convention as datebox/timebox);
+       the trigger button's hover background and disabled's opacity dim likewise
+       stay on base tokens, not knob-driven. */
+    --zk-timepicker-bg:                 var(--zk-color-surface);
+    --zk-timepicker-fg:                 var(--zk-color-on-surface);
+    --zk-timepicker-radius:             var(--zk-shape-corner-extra-small);
+    --zk-timepicker-border-color:       var(--zk-color-outline);
+    --zk-timepicker-border-color-hover: var(--zk-color-on-surface);
+    --zk-timepicker-border-color-focus: var(--zk-color-primary);
+    --zk-timepicker-popup-bg:           var(--zk-color-surface);
+    --zk-timepicker-popup-radius:       var(--zk-shape-menu);
+
+    /* ── Chosenbox — multi-select input field + option popup (EE, zkmax).
+       Same wrapper-border model as datebox/timebox/spinner/bandbox/daterangebox/
+       timepicker: border sits on .z-chosenbox and focus is a box-shadow inset
+       ring; border-color-focus tints both. --zk-chosenbox-fg covers BOTH the
+       search input's text AND each selected chip's text (both read
+       var(--zk-color-on-surface) today, so one shared knob keeps them in
+       lockstep — the same "one knob, several roles" precedent as tab/
+       calendar's accent). The chip fill has its own resting/defining-state
+       pair: --zk-chosenbox-item-bg is the resting chip fill, and
+       --zk-chosenbox-item-focus-bg is the fill a chip swaps to once clicked
+       (armed for keyboard delete) — the defining state, same "one knob per
+       state" precedent as listbox/tree's selected-bg. The delete-button hover
+       fill, the popup option hover fill, and the creatable-option accent stay
+       on base tokens, not knob-driven — minor sub-features kept out of the
+       curated surface (same convention as calendar/toolbar's minor
+       sub-features). Disabled stays on its own surface token, not knob-driven
+       (same convention as input/button). */
+    --zk-chosenbox-bg:                 var(--zk-color-surface);
+    --zk-chosenbox-fg:                 var(--zk-color-on-surface);
+    --zk-chosenbox-radius:             var(--zk-shape-input);
+    --zk-chosenbox-border-color:       var(--zk-color-outline);
+    --zk-chosenbox-border-color-hover: var(--zk-color-on-surface);
+    --zk-chosenbox-border-color-focus: var(--zk-color-primary);
+    --zk-chosenbox-popup-bg:           var(--zk-color-surface);
+    --zk-chosenbox-popup-radius:       var(--zk-shape-menu);
+    --zk-chosenbox-item-bg:            var(--zk-color-surface-container-high);
+    --zk-chosenbox-item-focus-bg:      var(--zk-color-primary-container);
+
+    /* ── Tab (tabbox) — nav chrome + active accent ───────────────────────
+       State is a ::before overlay; the accent colors the state-layer tint,
+       the selected label, and the bottom indicator. */
+    --zk-tab-bg:           var(--zk-color-surface);
+    --zk-tab-border-color: var(--zk-color-outline-variant);
+    --zk-tab-fg:           var(--zk-color-on-surface-variant);
+    --zk-tab-fg-hover:     var(--zk-color-on-surface);
+    --zk-tab-accent:       var(--zk-color-primary);
+
+    /* ── Menu — menubar surface + dropdown popup + selected item ─────────── */
+    --zk-menubar-bg:             var(--zk-color-surface-container);
+    --zk-menupopup-bg:           var(--zk-color-surface);
+    --zk-menupopup-radius:       var(--zk-shape-menu);
+    --zk-menupopup-border-color: var(--zk-color-outline-variant);
+    --zk-menuitem-selected-bg:   var(--zk-color-primary-container);
+
+    /* ── Badge (native, ZK-6097) — the indicator resolves these. ZK always stamps
+       a severity class (default `info`), and the indicator is a CHILD of it, so a
+       per-severity rule on the indicator shadows any inherited :root/inline value.
+       We therefore route the default `info` fill through --zk-badge-bg here (no
+       explicit .z-badge-info rule) so default badges stay region/inline overridable;
+       the non-default severities (.z-badge-success/-warning/-danger/-secondary) set
+       --zk-badge-bg per-variant and keep their semantic color. --zk-badge-fg and
+       --zk-badge-radius have no per-severity override, so they apply to every badge.
+       Dot-mode radius stays 50% in badge.css (shape mode, not a themeable knob). */
+    /* Every badge fill is a BRIGHT accent, so the label is DARK, not white.
+       MD3's contract is the tonal pair — a light tone carries a dark on-colour;
+       white on a light tone is the one combination MD3 never produces. With white
+       text four of the five severities missed the AA 4.5:1 floor that 12px text
+       needs (success 2.78, warning 2.16, danger 3.49, secondary 2.68); with the
+       dark label every one clears it by a wide margin (6.64 / 8.37 / 5.43 / 6.84),
+       and no background moved. The same --zk-color-on-surface tone already labels
+       the warning/error toast on its tinted container, so this is an established
+       pattern here, not a new one.
+
+       The four non-default severities read the already-bright
+       --zk-color-status-{success,warning,error,neutral} in badge.css. The default
+       (info) needs a bright counterpart derived here, because
+       --zk-color-status-info is deliberately DARK — it is mostly a text/icon token
+       (.z-text-info, the notification and confirmpopup icons, --zk-toast-accent),
+       and marble-issue#2 darkened it to 4.54:1 on white. L 0.70 sits with the four
+       siblings (0.65-0.77) and c * 1.3 restores the chroma parity that darkening
+       cost it — the only chroma scale in this file that goes UP, for that reason.
+       Dark label on it: 7.17:1. */
+    --zk-badge-bg:     oklch(from var(--zk-color-status-info) 0.70 calc(c * 1.3) h);  /* ≈ #00ade9 */
+    --zk-badge-fg:     var(--zk-color-on-surface);
+    --zk-badge-radius: 10px;
+
+    /* ── Chip (native, ZK-6097) — base default hoisted here so a :root/region
+       override reaches plain chips; severity variants (.z-chip-info/-success/…)
+       still set these per-variant on the element. */
+    --zk-chip-bg:     var(--zk-color-surface-container-high);
+    --zk-chip-border: var(--zk-color-outline-variant);
+    --zk-chip-color:  var(--zk-color-on-surface-variant);
+
+    /* ── Avatar / avatar-group (native, ZK-6097) — base defaults hoisted here
+       (were declared on .z-avatar, which shadowed region overrides). Size
+       variants (.z-avatar-small/-large) still set size/font per-variant. */
+    --zk-avatar-bg:           var(--zk-color-primary-container);
+    --zk-avatar-fg:           var(--zk-color-on-primary-container);
+    --zk-avatar-size:         40px;
+    --zk-avatar-font-size:    var(--zk-typescale-label-large-size);
+    --zk-avatargroup-overlap: -8px;
+
+    /* ── Rating — star glyph fill. No bg/border/radius (icon-only, no container
+       box). Resting stars read the fg knob; selected + hover swap to the accent
+       knob (the defining state). Disabled/readonly dim via opacity only, not
+       knob-driven, so the accent still shows through (dimmed) under an override. */
+    --zk-rating-fg:     var(--zk-color-outline);
+    --zk-rating-accent: var(--zk-color-primary);
+
+    /* ── Progressmeter — MD3 linear progress (track + fill) ──────────────
+       The color VARIANTS (.z-progressmeter-secondary/-success/-warning/-error)
+       keep their own semantic colors via higher-specificity rules (same
+       treatment as button's color variants); these knobs drive the default
+       (primary) bar. No border/text — an icon-less, two-layer bar, so the
+       knobs are the track fill, the fill-bar color, and the shared radius. */
+    --zk-progressmeter-bg:     var(--zk-color-primary-container);
+    --zk-progressmeter-fill:   var(--zk-color-primary);
+    --zk-progressmeter-radius: 2px;                     /* off-token literal (kept as default) */
+
+    /* ── Paging — pagination controls ────────────────────────────────────
+       State is a per-page background swap (selected/current page), not an
+       overlay — --zk-paging-selected-bg/-fg is the defining state (the
+       current page). --zk-paging-radius is the shared pill shape for every
+       pager button. The jump-to-page input (default mold only) gets its own
+       small fill/text/border set. Disabled buttons/input stay on
+       --zk-color-disabled* directly, not knob-driven (same convention as
+       button/input); the input's hover/focus border tints likewise stay on
+       base tokens (a minor sub-feature, kept out of the curated surface). */
+    --zk-paging-fg:                  var(--zk-color-on-surface-variant);
+    --zk-paging-radius:              var(--zk-shape-corner-full);
+    --zk-paging-selected-bg:         var(--zk-color-primary-container);
+    --zk-paging-selected-fg:         var(--zk-color-primary);
+    --zk-paging-input-bg:            var(--zk-color-surface);
+    --zk-paging-input-fg:            var(--zk-color-on-surface);
+    --zk-paging-input-border-color:  var(--zk-color-outline);
+
+    /* ── Combobutton — split button (filled base + dropdown arrow) ───────
+       Shares the button family's overlay state model: state is an MD3
+       ::before overlay on the content area (a tint whose opacity animates),
+       not a per-state background, so the knobs are bg/fg + radius + an
+       overlay color/opacities pair, matching the real implementation. The
+       divider between the content and arrow areas is its own accent knob.
+       The toolbar mold is a color VARIANT (like button's outlined/text
+       variants) and keeps its own colors via higher-specificity rules;
+       disabled likewise stays off the knobs — both intentionally not
+       knob-driven, same convention as button. */
+    --zk-combobutton-bg:             var(--zk-color-primary);
+    --zk-combobutton-fg:             var(--zk-color-on-primary);
+    --zk-combobutton-radius:         var(--zk-shape-button);
+    --zk-combobutton-divider-color:  rgba(255, 255, 255, 0.3);
+    --zk-combobutton-overlay-color:  var(--zk-color-on-primary);
+    --zk-combobutton-hover-opacity:  var(--zk-state-hover-opacity);
+    --zk-combobutton-focus-opacity:  var(--zk-state-focus-opacity);
+    --zk-combobutton-active-opacity: var(--zk-state-pressed-opacity);
+
+    /* ── Selectbox — native <select> element (Listbox "select" mold, `.z-select`)
+       Renders as a single native <select class="z-select">, no wrapper. State is
+       a per-state border-color change (no overlay), same model as Input. Disabled
+       uses opacity only, not knob-driven (same convention as input/button). The
+       dropdown chevron is a literal-color SVG baked into a background-image data
+       URI — a CSS custom property can't be interpolated inside a url() string, so
+       its stroke color stays a hardcoded literal, not a knob. */
+    --zk-selectbox-bg:                 var(--zk-color-surface);
+    --zk-selectbox-fg:                 var(--zk-color-on-surface);
+    --zk-selectbox-radius:             var(--zk-shape-input);
+    --zk-selectbox-border-color:       var(--zk-color-outline);
+    --zk-selectbox-border-color-hover: var(--zk-color-on-surface);
+    --zk-selectbox-border-color-focus: var(--zk-color-primary);
+
+    /* ── Inputgroup — input + addon(s) combined into a single field ──────
+       The addon (.z-inputgroup-text) carries its own fill/text pair. The
+       border color is shared by the addon AND the grouped input/combobox
+       border override, so the whole group reads as one continuous outline;
+       the radius likewise applies to the group's rounded ends (horizontal
+       and vertical) and the focus-within ring's corner. Focus stays on the
+       global --zk-focus-ring (same as button/window/grid), not a knob. */
+    --zk-inputgroup-text-bg:      var(--zk-color-surface-container-low);
+    --zk-inputgroup-text-fg:      var(--zk-color-on-surface-variant);
+    --zk-inputgroup-border-color: var(--zk-color-outline);
+    --zk-inputgroup-radius:       var(--zk-shape-input);
+
+    /* ── Calendar — self-contained month grid + nav header (also the shell
+       used inside a datebox popup, which flattens it back to flat content —
+       see the :not() guard in calendar.css). --zk-calendar-fg is the day-
+       number/title text; --zk-calendar-header-fg is the muted weekday-label
+       + nav-icon (resting) text. --zk-calendar-accent / -accent-fg is a
+       single defining-state pair — it colors the selected-day fill, that
+       day's own hover blend, the today ring, and the Today-link label (all
+       four read var(--zk-color-primary)/-on-primary today), the same "one
+       knob, several roles" precedent as tab's --zk-tab-accent. Hover state
+       layers (title/icon/day-cell hover tints, the Today-link hover tint)
+       stay on base tokens, not knob-driven (same convention as menu's
+       ::before overlay). Disabled/outside/out-of-range days, the
+       week-of-year column, and the month/year/decade picker's pill radius
+       also stay on base tokens — secondary/minor sub-features kept out of
+       the curated surface (same convention as grid/listbox). */
+    --zk-calendar-bg:           var(--zk-color-surface);
+    --zk-calendar-fg:           var(--zk-color-on-surface);
+    --zk-calendar-header-fg:    var(--zk-color-on-surface-variant);
+    --zk-calendar-border-color: var(--zk-color-outline-variant);
+    --zk-calendar-radius:       var(--zk-shape-card);
+    --zk-calendar-accent:       var(--zk-color-primary);
+    --zk-calendar-accent-fg:    var(--zk-color-on-primary);
+
+    /* ── Toolbar — chrome bar (bg + divider line) ─────────────────────────
+       A plain surface bar, no radius (full-width chrome, like menubar). One
+       shared border-color knob drives every divider in the family: the bar's
+       own edge (border-bottom horizontal / border-right vertical) AND the
+       .z-toolbarseparator item divider (both orientations) — same precedent
+       as tab's --zk-tab-border-color driving every tab-family border. The
+       app-bar context variant (.z-north .z-toolbar, incl. its toolbarseparator
+       color-mix tint) is a distinct color VARIANT (like combobutton's toolbar
+       mold) and keeps its own colors, not knob-driven; likewise the tabs-host
+       variant (.z-toolbar-tabs, transparent/no-border) and the overflow popup
+       (.z-toolbar-popup, a minor sub-feature) stay on base tokens. */
+    --zk-toolbar-bg:           var(--zk-color-surface);
+    --zk-toolbar-border-color: var(--zk-color-outline-variant);
+    /* height → --zk-toolbar-height (tokens/_sizing.css). */
+
+    /* ── Toolbarbutton — icon/text button rendered inside toolbar chrome
+       (zul/wgt/css/toolbarbutton.css). Its own widget/knob family, not a
+       --zk-button variant. State is an MD3 ::before overlay that reads
+       currentColor, so --zk-toolbarbutton-fg drives BOTH the resting
+       text/icon color AND the overlay tint automatically — no separate
+       overlay-color knob needed (unlike button/combobutton, whose overlay
+       color differs from their bg). --zk-toolbarbutton-radius is the pill
+       shape (the overlay clips to it via border-radius: inherit).
+       --zk-toolbarbutton-checked-bg / -checked-fg is the one defining state
+       (mode="toggle" checked="true") — a resting/defining-state fill+text
+       pair, the same precedent as listbox/tree's selected-bg/-fg; the
+       checked fg also re-tints the checked-state overlay via currentColor.
+       The checked focus-ring recolor (outline-color: --zk-color-primary)
+       and the hover/focus/active overlay opacities stay on base tokens, not
+       knob-driven (same convention as menu's ::before overlay); so does
+       disabled (opacity only, same convention as button/input/rating). The
+       app-bar context variant (.z-north .z-toolbar .z-toolbarbutton, in
+       toolbar.css) is a distinct color VARIANT that pins on-primary directly
+       at higher specificity (same treatment as combobutton's toolbar mold),
+       so it does not read these knobs. */
+    --zk-toolbarbutton-fg:         var(--zk-color-primary);
+    --zk-toolbarbutton-radius:     var(--zk-shape-corner-full);
+    --zk-toolbarbutton-checked-bg: var(--zk-color-primary-container);
+    --zk-toolbarbutton-checked-fg: var(--zk-color-on-primary-container);
+
+    /* ── Slider — MD3 range input (track + fill + thumb) ─────────────────
+       No text/border — a track-and-thumb control, so the knobs are the
+       resting track color, a single defining accent, a shared radius, and
+       the thumb's resting elevation. --zk-slider-accent covers the active
+       fill AND the thumb (both read var(--zk-color-primary) today, so one
+       shared knob keeps them in lockstep), the same "one knob, several
+       roles" precedent as tab/calendar's accent; the thumb's hover/focus/
+       active state-layer ring is a color-mix tint of this same accent, and
+       the knob mold (PE)'s SVG arc strokes mirror the identical track/fill
+       concept, so both read these same knobs too. The sphere mold's 3D
+       gradient thumb is a color VARIANT (like button's outlined/text
+       variants) and keeps its own colors, not knob-driven. The numeric
+       input overlay (.z-slider-input) and the value tooltip
+       (.z-slider-popup) are minor sub-features kept on base tokens (same
+       convention as calendar's week-of-year column). Disabled dims via
+       opacity only, not knob-driven (same convention as button/input/
+       rating). */
+    --zk-slider-track-bg:  var(--zk-color-outline-variant);
+    --zk-slider-accent:    var(--zk-color-primary);
+    --zk-slider-radius:    var(--zk-shape-corner-full);
+    --zk-slider-elevation: var(--zk-elevation-1);
+
+    /* ── Rangeslider (PE) — MD3 dual-thumb range input (track + active-range
+       fill + thumb), zkex/slider/css/rangeslider.css. Shares Slider's track/
+       accent/radius/elevation vocabulary above. --zk-rangeslider-track-bg is
+       the resting track fill (also the resting mark-dot's border-color, a
+       secondary role). --zk-rangeslider-accent is the one defining-state
+       color — it drives the active-range fill between the two thumbs
+       (.z-sliderbuttons-area), each thumb's fill (.z-sliderbuttons-button),
+       and the thumb's hover/focus state-layer ring (::before) — merging the
+       file's former separate area-color/button-color into one shared knob,
+       the same "one knob, several roles" precedent as tab/calendar/slider's
+       accent. --zk-rangeslider-radius is shared by the track and the
+       active-range fill (the thumb stays a hardcoded circular 50%, a fixed
+       shape like radio/badge's dot mode, not knob-driven). --zk-rangeslider-
+       elevation is the thumb's resting shadow (the pressed/active-state
+       shadow stays on its own elevation token, not knob-driven). The marks
+       system (mark dots, mark labels, the active-mark dot's border-color)
+       and the value tooltip are minor sub-features kept on base tokens, not
+       knob-driven (same convention as calendar's week-of-year column /
+       slider's numeric-input-overlay and tooltip exclusions). Disabled dims
+       via opacity only, not knob-driven (same convention as button/input/
+       rating/slider). multislider (EE, zkmax/slider/css/multislider.css)
+       shares this same Sliderbuttons sub-widget markup and vocabulary — see
+       its own knob family below. */
+    --zk-rangeslider-track-bg:  var(--zk-color-outline-variant);
+    --zk-rangeslider-accent:    var(--zk-color-primary);
+    --zk-rangeslider-radius:    var(--zk-shape-corner-full);
+    --zk-rangeslider-elevation: var(--zk-elevation-1);
+
+    /* ── Multislider (EE) — MD3 multi-range slider (track + N active-range
+       fills + N thumbs), zkmax/slider/css/multislider.css. Shares Slider/
+       Rangeslider's track/accent/radius/elevation vocabulary above (same
+       Sliderbuttons sub-widget markup — .z-sliderbuttons-area /
+       .z-sliderbuttons-button — as rangeslider). --zk-multislider-track-bg
+       is the resting track fill (also each mark dot's fill, a secondary
+       role). --zk-multislider-accent is the one defining-state color — it
+       drives every active-range fill (.z-sliderbuttons-area), every
+       thumb's fill (.z-sliderbuttons-button), and each thumb's hover/focus
+       state-layer ring (::before), the same "one knob, several roles"
+       precedent as tab/calendar/slider/rangeslider's accent.
+       --zk-multislider-radius is shared by the track and each active-range
+       fill (thumbs stay a hardcoded circular 50%, a fixed shape like
+       rangeslider's thumb, not knob-driven). --zk-multislider-elevation is
+       each thumb's resting shadow (the pressed/active-state shadow stays on
+       its own elevation token, not knob-driven). Mark labels and the value
+       tooltip are minor sub-features kept on base tokens, not knob-driven
+       (same convention as rangeslider's marks/tooltip exclusions).
+       Disabled dims via opacity only, not knob-driven (same convention as
+       button/input/rating/slider/rangeslider). */
+    --zk-multislider-track-bg:  var(--zk-color-outline-variant);
+    --zk-multislider-accent:    var(--zk-color-primary);
+    --zk-multislider-radius:    var(--zk-shape-corner-full);
+    --zk-multislider-elevation: var(--zk-elevation-1);
+
+    /* ── Checkbox — selection control (default mold only) ────────────────
+       Resting (unchecked) reads the border/text knobs; checked and
+       indeterminate swap to a single accent (mold fill + border + the
+       hover-ring tint), the defining state — same "one knob, several
+       roles" precedent as tab/calendar's accent. The checkmark/dash glyph
+       is a literal-color SVG baked into a background-image data URI (same
+       limitation as selectbox's chevron), so it stays hardcoded, not a
+       knob. Disabled dims via opacity only, not knob-driven (same
+       convention as button/input/rating). Out of scope for this pass: the
+       switch/toggle molds are distinct visual treatments and keep reading
+       base tokens directly; radio/radiogroup are a separate widget. */
+    --zk-checkbox-fg:           var(--zk-color-on-surface);
+    --zk-checkbox-border-color: var(--zk-color-on-surface-variant);
+    --zk-checkbox-radius:       2px;                     /* off-token literal (kept as default) */
+    --zk-checkbox-accent:       var(--zk-color-primary);
+
+    /* ── Radio (radiogroup) — selection control. No z-radio-mold element:
+       input[type="radio"] IS the visual, so there is no separate mold
+       element to knob (unlike checkbox). Resting (unselected) reads the
+       border/text knobs; selected swaps the border AND the ring/inner-dot
+       fill to a single accent, the defining state — the same "one knob,
+       several roles" precedent as checkbox's accent. The circular shape
+       (border-radius: 50%) is a fixed shape concern, not a knob (same
+       convention as badge's dot mode / stepbar's icon circle). Disabled
+       dims via opacity only, not knob-driven (same convention as
+       button/input/rating/checkbox). */
+    --zk-radio-fg:           var(--zk-color-on-surface);
+    --zk-radio-border-color: var(--zk-color-on-surface-variant);
+    --zk-radio-accent:       var(--zk-color-primary);
+
+    /* ── Messagebox — MD3 alert dialog (Messagebox.show()) ───────────────
+       Distinct family from --zk-window-*: the dialog overrides window's
+       mode-driven chrome with its own fixed surface + border + a single
+       static elevation (always modal — no mode variation), so it gets its
+       own knobs rather than reusing --zk-window-*. --zk-messagebox-bg
+       covers the dialog surface, header, and content areas alike (all
+       three read the same surface fill, same "one knob, several roles"
+       precedent as window's header sharing its surface fill).
+       --zk-messagebox-border-color covers both divider lines (the header's
+       border-bottom AND the button row's border-top), the same "one knob,
+       several dividers" precedent as toolbar's --zk-toolbar-border-color.
+       The icon-type colors (information/exclamation/error/question) are
+       semantic status colors tied to the message type — kept on their own
+       tokens, not knob-driven (same convention as button/progressmeter's
+       color variants). */
+    --zk-messagebox-bg:           var(--zk-color-surface);
+    --zk-messagebox-fg:           var(--zk-color-on-surface-variant);
+    --zk-messagebox-header-fg:    var(--zk-color-on-surface);
+    --zk-messagebox-border-color: var(--zk-color-outline-variant);
+    --zk-messagebox-radius:       var(--zk-shape-dialog);
+    --zk-messagebox-elevation:    var(--zk-elevation-dialog);
+
+    /* ── Popup — floating surface (tooltips, dropdowns, overlays) ────────
+       .z-popup is the base surface; --zk-popup-fg covers .z-popup-content's
+       text. The tooltip variant (.z-popup-tooltip.z-popup — dark bg, white
+       text, small radius, no border) is a distinct color VARIANT that keeps
+       its own colors via higher-specificity rules (same treatment as
+       button's outlined/text variants), so it is intentionally not
+       knob-driven. Region scoping (CTV-3) is structurally N/A: Popup.ts's
+       open() reparents the widget's DOM node to document.body (zk.makeVParent()),
+       so a container override cannot reach it — only the whole-app :root
+       override applies (same class of exception as messagebox, different
+       root cause; see the tracker). */
+    --zk-popup-bg:           var(--zk-color-surface);
+    --zk-popup-fg:           var(--zk-color-on-surface);
+    --zk-popup-border-color: var(--zk-color-outline-variant);
+    --zk-popup-radius:       var(--zk-shape-corner-extra-small);
+    --zk-popup-elevation:    var(--zk-elevation-dropdown);
+
+    /* ── Notification — floating alert (Clients.showNotification()) ──────
+       .z-notification-content is the untyped/default card surface; the
+       info/warning/error type variants (.z-notification-info/-warning/-error)
+       pin their own bg/fg/accent via higher-specificity compound selectors
+       (same treatment as button/progressmeter's color variants), so only an
+       untyped notification responds to these knobs. There is no accent knob:
+       the left accent stripe was removed (MD3 alerts carry severity with the
+       leading icon + container tint, not a leading color bar), and an untyped
+       notification renders no icon glyph at all — ZK picks the glyph class from
+       its type map, so with no type there is nothing left for an accent color to
+       paint. Elevation (box-shadow) stays on
+       its base token, not knob-driven — a deliberate curation choice to keep
+       the surface small (same convention as calendar/slider's minor
+       sub-features); height/width stay in tokens/_sizing.css (size
+       dimension, not appearance). The close-button icon's `color: inherit`
+       reads from .z-notification, not .z-notification-content, so it is
+       unaffected by these knobs — unchanged behavior either way. */
+    --zk-notification-bg:     var(--zk-color-surface-container-highest);
+    --zk-notification-fg:     var(--zk-color-on-surface);
+    --zk-notification-radius: var(--zk-shape-corner-extra-small);
+
+    /* ── Toast — MD3 snackbar (zkmax) ─────────────────────────────────────
+       Every toast always carries a type variant (Toast.show() defaults a
+       null type to "info"), so unlike notification there is no untyped base
+       fill to route through — these knobs drive the INFO (default) variant;
+       warning/error pin their own bg/fg/accent via higher-specificity rules
+       (same treatment as notification's type variants), so a typed toast is
+       unaffected by an override. --zk-toast-accent colors the icon. (It also
+       colored a left accent stripe until that was removed for MD3 fidelity;
+       unlike notification the knob survives, because Toast.show() defaults a
+       null type to "info", so a toast always carries a type and therefore
+       always renders an icon glyph for the knob to paint.)
+       --zk-toast-radius is shared by EVERY toast (declared on the base
+       .z-toast-content rule, not per-type). The close-icon color per type
+       stays on its own token, not knob-driven (same convention as
+       notification's close icon). */
+    --zk-toast-bg:     var(--zk-color-surface-container-highest);
+    --zk-toast-fg:     var(--zk-color-on-surface);
+    --zk-toast-radius: var(--zk-shape-corner-extra-small);
+    --zk-toast-accent: var(--zk-color-status-info);
+
+    /* ── A (anchor/link) — MD3 text link ──────────────────────────────────
+       Text-only component: no bg/border/radius. Resting AND hover text color
+       are the same value (var(--zk-color-primary)) today, so a single fg
+       knob covers both — the same "one knob, several roles" precedent as
+       tab/calendar's accent. Focus stays on the global --zk-focus-ring (same
+       convention as button/window/grid), not a knob. Disabled dims via its
+       own --zk-color-disabled literal, not knob-driven (same convention as
+       button/input/rating). */
+    --zk-a-fg: var(--zk-color-primary);
+
+    /* ── Cascader (EE, zkmax) — read-only trigger + right-expanding tree popup
+       (zkmax/inp/css/cascader.css). Same wrapper-border model as datebox/
+       timebox/spinner/bandbox/daterangebox/timepicker/chosenbox: border sits
+       on the root .z-cascader and focus/open is an inset ring (box-shadow),
+       so --zk-cascader-border-color-focus tints both the outline and the
+       ring. --zk-cascader-fg covers BOTH the trigger's selected-path label
+       text AND each popup item's text (both read var(--zk-color-on-surface)
+       today, so one shared knob keeps them in lockstep — the same "one
+       knob, several roles" precedent as chosenbox's fg). --zk-cascader-accent
+       is the defining state: the selected item's text color inside the
+       popup (the only path-selection signal this widget renders). The
+       placeholder text, trigger/item icons, item hover/active background
+       (rgba literal), the cave column-divider border, and the popup's own
+       border-color stay on base tokens — secondary sub-features kept out of
+       the curated surface (same convention as calendar/toolbar/timepicker's
+       minor sub-features). Disabled dims via opacity only, not knob-driven
+       (same convention as button/input/rating). */
+    --zk-cascader-bg:                 var(--zk-color-surface);
+    --zk-cascader-fg:                 var(--zk-color-on-surface);
+    --zk-cascader-radius:             var(--zk-shape-input);
+    --zk-cascader-border-color:       var(--zk-color-outline);
+    --zk-cascader-border-color-hover: var(--zk-color-on-surface);
+    --zk-cascader-border-color-focus: var(--zk-color-primary);
+    --zk-cascader-popup-bg:           var(--zk-color-surface);
+    --zk-cascader-popup-radius:       var(--zk-shape-menu);
+    --zk-cascader-accent:             var(--zk-color-primary);
+
+    /* ── Searchbox (EE, zkmax) — multi-select dropdown trigger + detached
+       search popup (zkmax/inp/css/searchbox.css). Same wrapper-border model
+       as datebox/timebox/spinner/bandbox/daterangebox/timepicker/chosenbox/
+       cascader: border sits on the root .z-searchbox and focus/open adds a
+       box-shadow inset ring, so --zk-searchbox-border-color-focus tints both
+       the outline and the ring. --zk-searchbox-fg covers the trigger's
+       selected-label text, the popup's own text color, the search input's
+       text, and each (non-selected) item's text — all four read
+       var(--zk-color-on-surface) today, the same "one knob, several roles"
+       precedent as chosenbox/cascader's fg. The selected item is the
+       LIST-ROW selection family (primary-container fill + paired text, NOT
+       the chip/secondary-container family — see doc/contracts/searchbox.md),
+       the defining state: --zk-searchbox-selected-bg / -selected-fg, the
+       same pairing precedent as combobox's selected-bg/-fg. The placeholder
+       text, trigger/item icons, item hover/active background, the search
+       input's own bg/border/radius, and the multi-select check-icon's fill
+       stay on base tokens — secondary sub-features kept out of the curated
+       surface (same convention as chosenbox/cascader's minor sub-features).
+       Disabled dims via opacity (plus its own surface token), not
+       knob-driven (same convention as button/input). */
+    --zk-searchbox-bg:                 var(--zk-color-surface);
+    --zk-searchbox-fg:                 var(--zk-color-on-surface);
+    --zk-searchbox-radius:             var(--zk-shape-input);
+    --zk-searchbox-border-color:       var(--zk-color-outline);
+    --zk-searchbox-border-color-hover: var(--zk-color-on-surface);
+    --zk-searchbox-border-color-focus: var(--zk-color-primary);
+    --zk-searchbox-popup-bg:           var(--zk-color-surface);
+    --zk-searchbox-popup-radius:       var(--zk-shape-corner-medium);
+    --zk-searchbox-selected-bg:        var(--zk-color-primary-container);
+    --zk-searchbox-selected-fg:        var(--zk-color-on-primary-container);
+
+    /* ── Drawer (EE, zkmax) — sliding side-sheet panel + header + close button
+       (zkmax/wgt/css/drawer.css). --zk-drawer-elevation is a single STATIC
+       shadow (every position — left/right/top/bottom — gets the same shadow,
+       unlike window's mode-driven elevation), same convention as panel's
+       resting elevation knob. --zk-drawer-border-color is the header's bottom
+       divider (same convention as window/panel's shared border-color knob).
+       The close button's hover fill (--zk-drawer-close-hover-bg) mirrors
+       window/panel/groupbox's icon-hover-bg precedent; its resting/hover text
+       color and the backdrop mask's scrim color stay on base tokens, not
+       knob-driven (same convention as window's icon text color and the shared
+       modal-mask scrim). No radius knob: the panel renders edge-to-edge with
+       no border-radius today. CTV-3 (region scoping) is structurally N/A,
+       same class of exception as messagebox/popup: Drawer's setVisible()
+       calls makeVParent() on open() and undoVParent() on close() (confirmed
+       in the compiled zkmax widget bundle), reparenting the ENTIRE .z-drawer
+       root to the floating root while visible, so a region override on an
+       ancestor of the trigger button cannot reach an open drawer — only the
+       whole-app :root override path is exercised (see the tracker). */
+    --zk-drawer-bg:             var(--zk-color-surface);
+    --zk-drawer-border-color:   var(--zk-color-outline-variant);
+    --zk-drawer-elevation:      var(--zk-elevation-3);
+    --zk-drawer-header-fg:      var(--zk-color-on-surface);
+    --zk-drawer-close-hover-bg: var(--zk-color-surface-container);
+
+    /* ── Nav (EE, zkmax) — navbar container + collapsible nav group + leaf
+       navitem sidebar/top navigation (zkmax/nav/css/nav.css).
+       --zk-navbar-bg is the container's own tonal surface (MD3 Navigation
+       Drawer — always a tonal step, not inherited page background).
+       --zk-navitem-fg / -radius are shared by BOTH the collapsible group
+       header link (.z-nav-content) AND the leaf item link
+       (.z-navitem-content) — one ruleset styles both today, the same "one
+       knob, several roles" precedent as tab/calendar's accent. The selected
+       leaf item is the defining state — a rounded tonal pill (MD3
+       Navigation Drawer active indicator, no left-edge accent bar, see
+       doc/contracts/navbar.md c7) — so it gets its own fill/text pair,
+       --zk-navitem-selected-bg / -fg, the same pairing precedent as
+       listbox/tree's selected-bg/-fg. The group header's own open/selected
+       color swap (.z-nav-open/.z-nav-selected > .z-nav-content), the hover
+       state layer (::before overlay + navitem's rgba hover fill), the
+       group-label text (.z-nav-header), the horizontal mode's submenu/
+       overflow popup surface (.z-nav-popup, .z-navbar-horizontal .z-nav >
+       ul), and the badge (.z-nav-info/-navitem-info) stay on base tokens —
+       secondary sub-features kept out of the curated surface (same
+       convention as calendar/toolbar's minor sub-features). Disabled dims
+       via its own --zk-color-disabled literal, not knob-driven (same
+       convention as button/input/rating). */
+    --zk-navbar-bg:           var(--zk-color-surface-container-low);
+    --zk-navitem-fg:          var(--zk-color-on-surface-variant);
+    --zk-navitem-radius:      var(--zk-shape-corner-small);
+    --zk-navitem-selected-bg: color-mix(in srgb, var(--zk-color-primary) 12%, transparent);
+    --zk-navitem-selected-fg: var(--zk-color-primary);
+
+    /* ── Anchornav (EE, zkmax) — anchor-link navigation list built on a plain
+       listbox (zkmax/nav/css/anchornav.css): .z-anchornav wraps a listbox
+       whose item links (.z-a) jump to page sections. --zk-anchornav-fg is
+       the resting (non-active) item link's text color. The active item is
+       the component's one defining state — --zk-anchornav-accent colors
+       BOTH the left border indicator and the active item's own link text
+       (both read var(--zk-color-primary) today), the same "one knob,
+       several roles" precedent as tab/calendar/nav's accent. The
+       indicator's border-left WIDTH (3px) stays hardcoded, same convention
+       as tab's border-bottom-color knob leaving its indicator width fixed.
+       The underlying listbox chrome (.z-listbox / .z-listitem) is already
+       a separate conformant family (its own --zk-listbox-* knobs);
+       text-decoration:none is structural, not a themeable axis. */
+    --zk-anchornav-fg:     var(--zk-color-on-surface-variant);
+    --zk-anchornav-accent: var(--zk-color-primary);
+
+    /* ── Stepbar (EE, zkmax) — connected-circle step-progress indicator
+       (zkmax/wgt/css/stepbar.css). --zk-stepbar-connector-color is the
+       resting (upcoming) connector-line color, shared by BOTH the inline
+       .z-step::before segment and the wrapped-label mode's
+       .z-step-content::before/::after overlay (both read the same token
+       today), the same "one knob, several roles" precedent as
+       toolbar/messagebox's shared border-color. --zk-stepbar-icon-border-color
+       is the upcoming (empty) step circle's ring color. Active and complete
+       are the SAME defining state visually (a filled primary circle) — a
+       single --zk-stepbar-accent drives the icon fill + border AND the lit
+       connector (inline, vertical, and wrapped-label variants alike), the
+       same "one knob, several roles" precedent as tab/calendar's accent;
+       --zk-stepbar-accent-fg is the paired glyph color inside that filled
+       circle (same pairing precedent as calendar's accent/accent-fg).
+       --zk-stepbar-fg is the resting AND complete step title text (both
+       read the same token today); --zk-stepbar-fg-active is the active
+       step's title text — the same "resting + active pair" precedent as
+       tab's fg/fg-hover. Error state (icon fill/border/text + title) stays
+       on --zk-color-error/-on-error, not knob-driven (same convention as
+       datebox/timebox/timepicker's invalid state). The icon circle's
+       border-radius (50%) is a fixed shape concern, not a knob (same
+       convention as badge's dot mode / avatar). No bg knob: the root
+       renders background: transparent by design — it embeds in the page
+       surface, not a card (doc/contracts/stepbar.md s5). */
+    --zk-stepbar-connector-color:   var(--zk-color-outline-variant);
+    --zk-stepbar-icon-border-color: var(--zk-color-outline);
+    --zk-stepbar-fg:                var(--zk-color-on-surface-variant);
+    --zk-stepbar-fg-active:         var(--zk-color-on-surface);
+    --zk-stepbar-accent:            var(--zk-color-primary);
+    --zk-stepbar-accent-fg:         var(--zk-color-on-primary);
+
+    /* ── Coachmark (EE, zkmax) — guided-tour rich-tooltip card pointing at a
+       target element (zkmax/nav/css/coachmark.css): .z-coachmark-content card
+       + .z-coachmark-pointer directional triangle + .z-coachmark-close button.
+       --zk-coachmark-bg is shared by BOTH the card's own fill AND all four
+       pointer-triangle variants' border-color (up/down/left/right — all four
+       read the same token today, so the triangle always reads as an extension
+       of the card), the same "one knob, several roles" precedent as tab/
+       calendar's accent. The close button's icon color, its hover/focus
+       overlay tint, and the pointer triangle's fixed 10px border-width stay
+       on base tokens/literals, not knob-driven — minor sub-features kept out
+       of the curated surface (same convention as calendar/toolbar's minor
+       sub-features). CTV-3 (region scoping) is structurally N/A, the same
+       class of exception as drawer: Coachmark's _open() calls
+       zk.makeVParent() on the root .z-coachmark node (confirmed in the
+       compiled zkmax 10.4 widget bundle), reparenting the ENTIRE root
+       (content + pointer + close) to the floating root while visible, with
+       undoVParent() restoring it on close — so there is no in-place remnant
+       to test region scoping against; only the whole-app :root override path
+       is exercised (see the tracker). */
+    --zk-coachmark-bg:        var(--zk-color-surface-container-low);
+    --zk-coachmark-fg:        var(--zk-color-on-surface);
+    --zk-coachmark-radius:    var(--zk-shape-card);
+    --zk-coachmark-elevation: var(--zk-elevation-2);
+
+    /* ── Colorbox (PE, zkex) — color-picker swatch trigger + gradient/palette
+       popup (zkex/inp/css/colorbox.css). Unlike the other wrapper-border field
+       components (datebox/timebox/spinner/bandbox/daterangebox/…), .z-colorbox
+       has NO focus/open border state — only resting + hover — so there is no
+       border-color-focus knob. There is also no fg/text knob: the root shows
+       no text, only the swatch (its color set inline per selection) and a
+       caret icon. The popup (.z-colorbox-popup, shared with the .z-menu-popup
+       menu-content mold) gets the same bg/radius pair as the other family
+       members' popups; its border-color and box-shadow stay on base tokens,
+       same convention as combobox/datebox/bandbox's popups. The swatch's own
+       border (.z-colorbox-current) and the caret-button icon color
+       (.z-colorbox-button) stay on base tokens too, not knob-driven — minor
+       sub-features kept out of the curated surface (same convention as
+       cascader/searchbox's trigger icons). Disabled dims via opacity only,
+       not knob-driven (same convention as button/input/rating); its :hover
+       border stays the resting outline literal, same convention as
+       datebox/timebox/timepicker's disabled treatment. */
+    --zk-colorbox-bg:                 var(--zk-color-surface);
+    --zk-colorbox-radius:             var(--zk-shape-input);
+    --zk-colorbox-border-color:       var(--zk-color-outline);
+    --zk-colorbox-border-color-hover: var(--zk-color-on-surface);
+    --zk-colorbox-popup-bg:           var(--zk-color-surface);
+    --zk-colorbox-popup-radius:       var(--zk-shape-menu);
+
+    /* ── Biglistbox (EE, zkmax) — outlined virtual/lazy-loading data table
+       (zkmax/big/css/biglistbox.css). Same curated surface as Grid (no
+       stripe/foot rows exist in this component): border-color is shared by
+       the wrapper's own border, the header's border-bottom, and each row's
+       border-bottom — one knob, several roles, the same precedent as
+       grid-border-color. row-hover keeps its stock rgba literal (zero
+       regression, same as grid-row-hover-bg). The sort-icon color, the
+       sort-hover tint, and the custom WScroll scrollbar's thumb/track colors
+       stay on base tokens — minor sub-features kept out of the curated
+       surface (same convention as grid's column-sort-icon/sort-hover). Cell
+       text color also stays on the base token, matching Grid (no --zk-grid-fg
+       exists either). */
+    --zk-biglistbox-bg:           var(--zk-color-surface);
+    --zk-biglistbox-border-color: var(--zk-color-outline-variant);
+    --zk-biglistbox-radius:       var(--zk-shape-card);
+    --zk-biglistbox-header-fg:    var(--zk-color-on-surface-variant);
+    --zk-biglistbox-row-hover-bg: rgba(0, 0, 0, 0.04);
+
+    /* ── Fisheye / Fisheyebar (PE, zkex) — magnetic dock icon bar
+       (zkex/menu/css/fisheye.css): .z-fisheyebar container + .z-fisheye item
+       (.z-fisheye-image icon + .z-fisheye-text label). Magnification is
+       JS-driven (zul.menu.Fisheye sets inline width/height on mousemove), so
+       there is no hover/selected color state to expose — the knob surface is
+       just the label text and the icon's corner radius. --zk-fisheye-fg is
+       the label text color; --zk-fisheye-radius is the icon image's
+       border-radius. No bg/border knob: .z-fisheyebar renders
+       background: transparent by design — it's a floating dock overlay, not
+       a card (same convention as stepbar's transparent root). */
+    --zk-fisheye-fg:     var(--zk-color-on-surface);
+    --zk-fisheye-radius: var(--zk-shape-corner-extra-small);
+
+    /* ── Pdfviewer (PE, zkex) — PDF document viewer (zkex/pdfviewer/css/
+       pdfviewer.css): .z-pdfviewer root wrapper + .z-pdfviewer-container
+       scrollable canvas + a floating, bottom-centred .z-pdfviewer-toolbar
+       (pill-shaped, icon buttons). --zk-pdfviewer-border-color is shared by
+       BOTH the root wrapper's own border AND the toolbar separator's
+       border-left (both read the same token today), the same "one knob,
+       several roles" precedent as toolbar/messagebox's shared border-color.
+       The canvas area (--zk-pdfviewer-container-bg) and the floating toolbar
+       (--zk-pdfviewer-toolbar-bg / -radius / -fg) get their own knobs since
+       they are visually distinct surfaces from the root card. The per-page
+       box-shadow (paper-lift effect) and the floating toolbar's own
+       box-shadow stay on base tokens, not knob-driven — same convention as
+       the wrapper-border family's popup box-shadow (combobox/datebox/
+       bandbox). Toolbar-button hover/active state-layer tints (color-mix on
+       --zk-color-on-surface) and the disabled icon color also stay on base
+       tokens, not knob-driven — minor sub-features kept out of the curated
+       surface (same convention as calendar/toolbar's minor sub-features). */
+    --zk-pdfviewer-bg:             var(--zk-color-surface);
+    --zk-pdfviewer-border-color:   var(--zk-color-outline-variant);
+    --zk-pdfviewer-radius:         var(--zk-shape-corner-medium);
+    --zk-pdfviewer-container-bg:   var(--zk-color-surface-variant);
+    --zk-pdfviewer-toolbar-bg:     var(--zk-color-surface-container-high);
+    --zk-pdfviewer-toolbar-radius: var(--zk-shape-corner-full);
+    --zk-pdfviewer-toolbar-fg:     var(--zk-color-on-surface);
+
+    /* ── Tbeditor (EE, zkmax) — MD3 outlined rich-text editor
+       (zkmax/tbeditor/css/tbeditor.css): .z-tbeditor-box outer wrapper +
+       .z-tbeditor-button-pane toolbar + .z-tbeditor-editor contenteditable
+       canvas (+ .z-tbeditor-textarea HTML-source view) + .z-tbeditor-dropdown
+       formatting/link popup. --zk-tbeditor-bg is shared by the wrapper, the
+       editor canvas, AND the source textarea (all three read the same token
+       today), the same "one knob, several roles" precedent as tab/calendar's
+       accent; --zk-tbeditor-fg likewise covers the editor/textarea text AND
+       the dropdown button labels. The wrapper's only border state is resting
+       + focus-within (no hover), so there is no border-color-hover knob —
+       same convention as colorbox's no-focus-knob exception, mirrored.
+       --zk-tbeditor-elevation is the wrapper's static resting shadow (not
+       mode-driven), the same convention as panel/groupbox's resting
+       elevation. --zk-tbeditor-toolbar-bg is the button-pane's own tonal
+       surface, a distinct fill from the wrapper (same convention as
+       pdfviewer's floating toolbar). --zk-tbeditor-active-bg is the toggled
+       formatting button's fill (.z-tbeditor-active, e.g. Bold when the
+       caret is inside bold text) — the defining state. The dropdown popup
+       gets its own bg/radius pair, following the same vocabulary as the
+       rest of the family's popups; its border-color and box-shadow stay on
+       base tokens, same convention as combobox/datebox/bandbox/colorbox's
+       popups. Toolbar-button hover/active state-layer tints (color-mix on
+       --zk-color-primary), the SVG icon fill (resting/hover/active), the
+       dropdown-caret affordance, and the button-group separator stay on
+       base tokens — minor sub-features kept out of the curated surface
+       (same convention as calendar/toolbar's minor sub-features). Disabled
+       dims the toolbar buttons via opacity only and keeps the wrapper's
+       border on its own muted literal, not knob-driven (same convention as
+       datebox/timebox/timepicker's disabled treatment); fullscreen mode's
+       border/radius/box-shadow reset to none, also not knob-driven. */
+    --zk-tbeditor-bg:                 var(--zk-color-surface);
+    --zk-tbeditor-fg:                 var(--zk-color-on-surface);
+    --zk-tbeditor-radius:             var(--zk-shape-corner-small);
+    --zk-tbeditor-border-color:       var(--zk-color-outline);
+    --zk-tbeditor-border-color-focus: var(--zk-color-primary);
+    --zk-tbeditor-elevation:          var(--zk-elevation-1);
+    --zk-tbeditor-toolbar-bg:         var(--zk-color-surface-container);
+    --zk-tbeditor-active-bg:          var(--zk-color-primary-container);
+    --zk-tbeditor-popup-bg:           var(--zk-color-surface);
+    --zk-tbeditor-popup-radius:       var(--zk-shape-menu);
+
+    /* ── Signature (EE, zkmax) — signature-pad canvas field (zkmax/signature/
+       css/signature.css): .z-signature root wrapper (canvas + a floating
+       toolbar of icon-only tool buttons). The wrapper's only border states
+       are resting + focus-within (no hover), so there is no
+       border-color-hover knob — same convention as tbeditor's no-hover
+       exception. There is also no fg/text knob: the root shows no text, only
+       the canvas and the toolbar's icon-only buttons. The floating toolbar's
+       tool buttons (background/border/hover/active state, icon color,
+       box-shadow) stay on base tokens, not knob-driven — a secondary
+       sub-feature kept out of the curated surface (same convention as
+       calendar/toolbar's minor sub-features). Disabled dims via opacity only,
+       not knob-driven (same convention as button/input/rating). */
+    --zk-signature-bg:                 var(--zk-color-surface);
+    --zk-signature-radius:             var(--zk-shape-corner-medium);
+    --zk-signature-border-color:       var(--zk-color-outline);
+    --zk-signature-border-color-focus: var(--zk-color-primary);
+
+    /* ── Cropper (EE, zkmax) — image-crop field (zkmax/cropper/css/
+       cropper.css): .z-cropper root wrapper (shrink-wraps border to the image)
+       + a floating, pill-shaped .z-cropper-toolbar with two text action links
+       (Crop / Cancel). No bg knob on the root: .z-cropper paints no
+       background of its own — it wraps the (opaque) image, so only its
+       border + radius are exposed. No border-color-hover knob either: the
+       wrapper has no interactive hover state, just a resting border — same
+       convention as tbeditor/signature's no-hover exception. The floating
+       toolbar is the component's one filled surface, so it gets its own
+       bg/radius pair (--zk-cropper-toolbar-bg / -toolbar-radius), the same
+       convention as pdfviewer's floating toolbar; its box-shadow stays on
+       the base elevation token, not knob-driven, same convention as
+       pdfviewer/tbeditor's popup and toolbar shadows. The two action links
+       read the rating-style resting/accent pair: --zk-cropper-fg is the
+       Cancel (dismissive, neutral) link text, --zk-cropper-accent is the
+       Crop (confirming) link text — the defining action. Both links' hover/
+       active state-layer tint is a currentColor overlay, so it automatically
+       follows whichever of -fg/-accent is in effect — no separate state-layer
+       knob needed. The Jcrop-injected selection geometry (drag handles,
+       dragbars, selection outline/lines) keeps its literal white — an
+       intentional Jcrop visibility convention over a dimmed photo, not a
+       token, and not adopter-facing appearance. */
+    --zk-cropper-border-color:   var(--zk-color-outline-variant);
+    --zk-cropper-radius:         var(--zk-shape-corner-extra-small);
+    --zk-cropper-toolbar-bg:     var(--zk-color-surface-container);
+    --zk-cropper-toolbar-radius: var(--zk-shape-corner-full);
+    --zk-cropper-fg:             var(--zk-color-on-surface-variant);
+    --zk-cropper-accent:         var(--zk-color-primary);
+
+    /* ── Dropupload (EE, zkmax) — HTML5 drag-and-drop file-upload drop zone
+       (zkmax/wgt/css/dropupload.css): .z-dropupload root is the ONLY
+       themeable surface — a resting box (border + radius + background). ZK
+       emits no drag-over or disabled state class (verified against
+       Dropupload.ts/.java): drag feedback is the native browser cursor only, so
+       there is no hover/focus/disabled knob to expose. There is also no
+       fg/text knob: the `content` attribute is arbitrary author HTML
+       appended as a child of the root and toggled visible/hidden, never
+       restyled by the component. border-width (2px) and border-style
+       (dashed) stay literal — same convention as every other family (only
+       border-color is exposed, never width/style). */
+    --zk-dropupload-bg:           transparent;
+    --zk-dropupload-border-color: var(--zk-color-outline);
+    --zk-dropupload-radius:       var(--zk-shape-corner-extra-small);
+
+    /* ── Organigram (EE, zkmax) — org-chart tree (zkmax/layout/css/
+       organigram.css): .z-organigram root + .z-orgnode card (the visible
+       chip) + .z-orgchildren/.z-orgitem connector lines (bus + drop-down/
+       drop-out ::before/::after segments) + .z-orgnode-icon expand/collapse
+       glyph. --zk-organigram-border-color is shared by the node card's own
+       resting border AND every connector-line role (bus segments, both
+       drop directions) — one knob, several roles, the same convention as
+       grid/messagebox/toolbar's shared border-color. Hover swaps the card's
+       border to -border-color-hover and its fill to -hover-bg (kept as the
+       stock rgba literal, same convention as grid/combobox's row-hover-bg).
+       Selected is the defining state — its own bg/border/fg triad, the same
+       three-axis shape as chip's bg/border/color; the selected node's icon
+       reads the same -selected-fg (one knob, several roles, same convention
+       as tab/calendar's accent). The resting icon color gets its own
+       -icon-fg. Disabled dims via opacity only and keeps its bg on the base
+       --zk-color-surface token, not the knob, so it doesn't inherit an
+       override and lose its state distinction (same convention as
+       button/input/rating's disabled treatment). Focus stays on the global
+       --zk-focus-ring (same convention as button/window/grid), not a knob.
+       .z-organigram renders in place with no client-side reparenting, so
+       region scoping works normally. */
+    --zk-organigram-bg:                    var(--zk-color-surface);
+    --zk-organigram-fg:                    var(--zk-color-on-surface);
+    --zk-organigram-border-color:          var(--zk-color-outline-variant);
+    --zk-organigram-border-color-hover:    var(--zk-color-on-surface);
+    --zk-organigram-radius:                var(--zk-shape-card);
+    --zk-organigram-hover-bg:              rgba(0, 0, 0, 0.04);
+    --zk-organigram-selected-bg:           var(--zk-color-primary-container);
+    --zk-organigram-selected-border-color: var(--zk-color-primary);
+    --zk-organigram-selected-fg:           var(--zk-color-on-primary-container);
+    --zk-organigram-icon-fg:               var(--zk-color-on-surface-variant);
+
+    /* ── Goldenlayout (EE, zkmax) — dockable tab layout (zkmax/goldenlayout/
+       css/goldenlayout.css): .lm_header tab strip (fill + bottom divider) +
+       .lm_tab (resting/hover/active text) + .z-goldenpanel content card
+       (fill + border + radius). --zk-goldenlayout-border-color is shared by
+       the header strip's bottom divider AND the goldenpanel's own border
+       (both read the same token today) — one knob, several roles, the same
+       convention as grid/messagebox/toolbar's shared border-color.
+       --zk-goldenlayout-radius likewise drives BOTH the header's top corners
+       and the goldenpanel's corners (both read --zk-shape-card today), the
+       same convention as calendar's bg covering card + header fill.
+       --zk-goldenlayout-fg / -fg-hover are the resting/hover text shared by
+       the tab label, the close-tab icon, and the header-controls icon (all
+       three read the same values today) — the same "one knob, several
+       roles" precedent as tab's fg/fg-hover. --zk-goldenlayout-accent is the
+       one defining-state color: the active tab's label + underline, the
+       tab's MD3 state-layer overlay tint, and the header-controls hover
+       icon (all read var(--zk-color-primary) today) — the same "one knob,
+       several roles" precedent as tab/calendar's accent.
+       --zk-goldenlayout-panel-elevation is the goldenpanel's static resting
+       shadow (not mode-driven), the same convention as panel/groupbox's
+       resting elevation. The drag-proxy (.z-goldenlayout-dragProxy), the
+       drop-target indicator, and the overflow-tab dropdown
+       (.z-goldenlayout-dropdown) stay on base tokens — transient/secondary
+       sub-features kept out of the curated surface (same convention as
+       calendar/toolbar's minor sub-features). */
+    --zk-goldenlayout-header-bg:       var(--zk-color-surface-container);
+    --zk-goldenlayout-panel-bg:        var(--zk-color-surface);
+    --zk-goldenlayout-border-color:    var(--zk-color-outline-variant);
+    --zk-goldenlayout-radius:          var(--zk-shape-card);
+    --zk-goldenlayout-fg:              var(--zk-color-on-surface-variant);
+    --zk-goldenlayout-fg-hover:        var(--zk-color-on-surface);
+    --zk-goldenlayout-accent:          var(--zk-color-primary);
+    --zk-goldenlayout-panel-elevation: var(--zk-elevation-1);
+
+    /* ── Portallayout (EE, zkmax) — transparent multi-column drag-drop
+       dashboard shell (zkmax/layout/css/portallayout.css): .z-portallayout
+       root + .z-portalchildren column (both always background: transparent
+       by design — a layout shell, not a card, same convention as
+       stepbar/fisheyebar's transparent root) + the OPTIONAL
+       .z-portalchildren-frame card chrome (shown only when a column carries
+       a title="" attribute) + its .z-portalchildren-title text +
+       .z-portalchildren-counter-on panel-count badge.
+       --zk-portallayout-bg / -border-color / -radius style the frame — the
+       component's ONLY filled/carded surface (a plain, unframed column has
+       nothing to knob); --zk-portallayout-fg is the frame's title text
+       color. The panel-count badge is a visually distinct sub-part with its
+       own bg/fg/radius triad (--zk-portallayout-counter-bg / -fg / -radius),
+       the same "sub-part gets its own knob set" precedent as pdfviewer's
+       toolbar/container knobs. The drag ghost (.z-panel-move-ghost) and drop
+       placeholder (.z-panel-move-block) are transient drag-feedback
+       surfaces — kept on base tokens, not knob-driven, the same convention
+       as goldenlayout's drag-proxy / drop-target indicator. */
+    --zk-portallayout-bg:             var(--zk-color-surface);
+    --zk-portallayout-border-color:   var(--zk-color-outline-variant);
+    --zk-portallayout-radius:         var(--zk-shape-card);
+    --zk-portallayout-fg:             var(--zk-color-on-surface-variant);
+    --zk-portallayout-counter-bg:     var(--zk-color-primary-container);
+    --zk-portallayout-counter-fg:     var(--zk-color-primary);
+    --zk-portallayout-counter-radius: var(--zk-shape-corner-full);
+
+    /* ── Confirmpopup (native, CE, zul/wgt/css/confirmpopup.css) — lightweight
+       anchored confirmation popover (Popover-analog, not a modal dialog). Extends
+       Popup and inherits its open() -> makeVParent() reparenting to document.body
+       (see Confirmpopup.ts's override open(), which calls super.open()), the
+       identical root cause as --zk-popup-*, its closest sibling — so, like
+       messagebox/popup/coachmark, region scoping (CTV-3) is structurally N/A; only
+       the whole-app :root override applies (see the tracker).
+       --zk-confirmpopup-bg covers BOTH the card's own fill AND the arrow's inner
+       ::after layer (all four placements read the same surface token today), the
+       same "one knob, several roles" precedent as tab/calendar/coachmark's shared
+       fill. --zk-confirmpopup-header-fg covers BOTH the root's own text color AND
+       the optional header's title text (both read on-surface today); the message
+       body reads the muted on-surface-variant tone via its own --zk-confirmpopup-fg,
+       the same "header vs body" fg pairing precedent as messagebox's
+       -header-fg/-fg. --zk-confirmpopup-border-color covers the arrow's outer
+       ::before edge (all four placements) AND both dividers (header's
+       border-bottom, footer's border-top) — the same "one knob, several dividers"
+       precedent as toolbar/messagebox's shared border-color. Severity recolors
+       ONLY the icon (identical severity->status-token mapping as chip/badge) and
+       stays on its own semantic tokens, intentionally not knob-driven (same
+       convention as button/progressmeter/messagebox's color/type variants).
+       The footer's OK/Cancel are plain native <button> elements, NOT .z-button
+       widgets, so they get their own knobs rather than reusing --zk-button-*:
+       --zk-confirmpopup-button-radius is shared by both (one shape, same
+       precedent as slider's shared track/fill/thumb radius); OK is the
+       high-emphasis filled/committing action (-ok-bg/-ok-fg, the latter also
+       driving its ::before state-layer tint — same value today, one knob);
+       Cancel is the low-emphasis outlined/dismissal action (-cancel-border-color/
+       -cancel-fg, the latter likewise driving its own ::before tint). Both
+       buttons' focus ring stays on the global --zk-focus-ring, not a knob (same
+       convention as button/window/grid). */
+    --zk-confirmpopup-bg:                  var(--zk-color-surface-container-low);
+    --zk-confirmpopup-fg:                  var(--zk-color-on-surface-variant);
+    --zk-confirmpopup-header-fg:           var(--zk-color-on-surface);
+    --zk-confirmpopup-border-color:        var(--zk-color-outline-variant);
+    --zk-confirmpopup-radius:              var(--zk-shape-card);
+    --zk-confirmpopup-elevation:           var(--zk-elevation-2);
+    --zk-confirmpopup-button-radius:       var(--zk-shape-button);
+    --zk-confirmpopup-ok-bg:               var(--zk-color-primary);
+    --zk-confirmpopup-ok-fg:               var(--zk-color-on-primary);
+    --zk-confirmpopup-cancel-border-color: var(--zk-color-outline);
+    --zk-confirmpopup-cancel-fg:           var(--zk-color-on-surface-variant);
+
+    /* ── Breadcrumb (native, CE, zul/wgt/css/breadcrumb.css) — plain inline nav
+       trail: no card surface (borderless text chrome, the same curation choice
+       as `a`/`caption`), so there is no -bg/-border-color/-radius knob to expose.
+       --zk-breadcrumb-fg covers THREE roles: the separator, the ellipsis
+       button (resting), and a link item (resting) — all three read the muted
+       on-surface-variant tone today, the same "one knob, several roles"
+       precedent as tab's --zk-tab-fg / calendar's --zk-calendar-accent.
+       --zk-breadcrumb-fg-hover covers link-hover/focus AND ellipsis-hover/
+       focus together (same precedent). --zk-breadcrumb-current-fg is the one
+       defining-state knob — the terminal "you are here" item's full-emphasis
+       color, the same "one knob per defining state" precedent as chosenbox's
+       -item-focus-bg / tab's -accent. The focus ring stays on the global
+       --zk-focus-ring (button/window/grid convention), not a knob. */
+    --zk-breadcrumb-fg:         var(--zk-color-on-surface-variant);
+    --zk-breadcrumb-fg-hover:   var(--zk-color-on-surface);
+    --zk-breadcrumb-current-fg: var(--zk-color-on-surface);
+
+    /* ── Carousel (native, CE, zul/wgt/css/carousel.css) — full-bleed media frame:
+       flex track of slides + overlay arrows/indicators/caption atop arbitrary
+       photographic content. --zk-carousel-radius is shared by BOTH the root
+       frame's clip AND the caption chip's own corners (c1/c27) — both are
+       "containers" under DESIGN.md §5's container/control rule, the same "one
+       knob, several roles" precedent as tab/calendar's accent. Because the
+       slide content underneath is arbitrary imagery, none of the overlay chrome
+       can safely key off surface/on-surface tokens (it would vanish against a
+       photo) — all three overlay regions (arrow / indicator / label) instead
+       speak exactly two brand-independent voices, each exposed per-region
+       rather than shared: a "dark voice" defaulting to --zk-color-scrim (the
+       theme's existing translucent-black overlay token) and a "light voice"
+       defaulting to --zk-color-inverse-on-surface — a literal hex, never
+       re-derived from --zk-color-primary, deliberately NOT --zk-color-on-primary
+       (brand-override.md documents that token as one integrators repoint to a
+       DARK value for a light-primary rebrand, which would flip every carousel
+       overlay foreground dark-on-dark against the always-dark scrim fill — see
+       doc/contracts/carousel.md Design Contract). --zk-carousel-arrow-bg-hover is
+       the one non-token-rooted default (a hand-picked darkening of the scrim,
+       matching the existing --zk-grid-row-hover-bg / --zk-combobox-item-hover-bg
+       literal-hover-color precedent) — hover darkens the scrim rather than
+       layering a currentColor state-layer overlay, since the arrow's foreground
+       is already light and a standard tint would lighten the dark scrim toward
+       white, the wrong direction. The indicator ring color is NOT a separate
+       knob — it is whichever of -indicator-bg/-indicator-active-bg is not the
+       current fill, so overriding either knob recolors both a fill and a ring.
+       Hover/focus/disabled opacities and the chevron/dot geometry stay on base
+       tokens or literal geometry, not knob-driven (same convention as
+       button/input/rating). Arrow size lives in tokens/_sizing.css
+       (--zk-carousel-arrow-size, density-bound); the indicator hit-area stays a
+       fixed 24px literal (WCAG 2.1 SC 2.5.8 floor, exempt from density in
+       either direction). */
+    --zk-carousel-radius:              var(--zk-shape-card);
+    --zk-carousel-arrow-bg:            var(--zk-color-scrim);
+    --zk-carousel-arrow-bg-hover:      rgba(0, 0, 0, 0.65);
+    --zk-carousel-arrow-fg:            var(--zk-color-inverse-on-surface);
+    --zk-carousel-indicator-bg:        var(--zk-color-scrim);
+    --zk-carousel-indicator-active-bg: var(--zk-color-inverse-on-surface);
+    --zk-carousel-label-bg:            var(--zk-color-scrim);
+    --zk-carousel-label-fg:            var(--zk-color-inverse-on-surface);
+
+    /* ── Codeeditor — CodeMirror 6 source editor (CE, @since ZK 11.0.0) ───
+       TWO families of knobs, and the split is deliberate.
+
+       (a) The LIGHT chrome below is Marble's own, named like every other field
+       (-bg/-fg/-radius/-border-color…), and reuses the outlined-text-field roles so
+       a codeeditor sits next to a textbox without looking imported.
+
+       (b) The DARK surface keeps the four names ZK CORE authored —
+       --zk-codeeditor-background / -color / -gutter-color / -active-line. Those are
+       a documented public API (the componentreference page tells app authors to set
+       them per element, e.g. style="--zk-codeeditor-background:#0b1021"), so the
+       spelling is fixed and must not be normalized to Marble's -bg/-fg convention.
+       -active-line is NOT declared: the CE extension set never emits .cm-activeLine,
+       so a default here would be an orphan token (see css/codeeditor.css).
+
+       WHY THE DARK SURFACE IS A LITERAL NEAR-BLACK, NOT --zk-color-inverse-surface:
+       the ten syntax colors (--zk-codeeditor-token-*) live in the widget JS as VS
+       Code Dark+ literals and are NOT theme-derived, so the surface has to keep them
+       legible. Measured WCAG contrast of the shipped palette (2026-09-08):
+         · on #1e1e1e            → all 12 foregrounds pass AA (worst 4.52:1, gutter)
+         · on #2d3748 (inverse-surface) → 5 of 12 fail AA (keyword/tag 4.07, comment
+           3.60, meta 3.39, gutter 3.25)
+       So the code surface stays a neutral near-black and does not follow the brand —
+       the same "contrast can't key off theme tokens here" carve-out the carousel
+       overlay chrome documents above. */
+    --zk-codeeditor-bg:                  var(--zk-color-surface);
+    --zk-codeeditor-fg:                  var(--zk-color-on-surface);
+    --zk-codeeditor-radius:              var(--zk-shape-input);
+    --zk-codeeditor-border-color:        var(--zk-color-outline);
+    --zk-codeeditor-border-color-hover:  var(--zk-color-on-surface);
+    --zk-codeeditor-border-color-focus:  var(--zk-color-primary);
+    --zk-codeeditor-gutter-bg:           var(--zk-color-surface-container-low);
+    --zk-codeeditor-gutter-fg:           var(--zk-color-on-surface-variant);
+    --zk-codeeditor-gutter-border-color: var(--zk-color-outline-variant);
+    /* dark surface — ZK-core-authored names, exact spelling required */
+    --zk-codeeditor-background:          #1e1e1e;
+    --zk-codeeditor-color:               #d4d4d4;
+    --zk-codeeditor-gutter-color:        #858585;
+    /* dark surface frame — light alphas, NOT the shared black-alpha border knobs.
+       Composited over the opaque #1e1e1e fill the black-alpha pair collapses onto
+       the fill (rest rgb(23,23,23), hover rgb(4,4,4) — a 1.14:1 change), so dark
+       mode had no visible hover state; these mirror the light surface instead and
+       clear the 3:1 UI-state bar (rgb(82,82,82) -> rgb(165,165,165), 3.17:1).
+
+       FOCUS NEEDS ITS OWN DARK TONE. It used to reuse the light knob on the reasoning
+       that primary #376fd0 "already clears 3.45:1" against the near-black fill — true
+       against the 3:1 UI-component floor, but MD3 does not put the light-scheme primary
+       on a dark surface at all: the dark scheme carries primary at tone 80. Designer
+       review 2026-09-08 reported the ring as unreadable, and 3.45:1 for a 2px line on
+       near-black is exactly the marginal case the tone rule exists to prevent. Derived
+       by ABSOLUTE OKLCH lightness off the same seed as the palette's containers, so a
+       brand override (doc/spec/brand-override.md) stays hue-consistent instead of
+       hard-coding a blue. Measured against the #1e1e1e fill: 8.45:1 (was 3.45:1). */
+    --zk-codeeditor-dark-border-color:       rgba(255, 255, 255, 0.23);
+    --zk-codeeditor-dark-border-color-hover: rgba(255, 255, 255, 0.6);
+    --zk-codeeditor-dark-border-color-focus: oklch(from var(--zk-color-primary) 0.8 c h); /* ≈ #80bdff */
+}

@@ -168,11 +168,12 @@ task testGroupForkJVMTestOnly(type: Test) {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/testGroupForkJVMTestOnly")
 		useJUnitPlatform {
 			includeTags 'ForkJVMTestOnly'
-			excludeTags 'WcagTestOnly'
+			excludeTags 'WcagTestOnly', 'IceBlueOnly'
 		}
 	} else {
 		useJUnitPlatform {
 			includeTags 'ForkJVMTestOnly'
+			excludeTags 'IceBlueOnly'
 		}
 	}
 	systemProperty "zkWebdriverContextPath", "/zktest"
@@ -217,6 +218,37 @@ task testWCAGOnly(type: Test) {
 		events("standardOut", "started", "passed", "skipped", "failed")
 	}
 }
+
+// IceBlue-only tests: assertions that hold only under the IceBlue theme (see .claude/rules/iceblue-tests.md).
+// Skipped by test and testGroupForkJVMTestOnly while the default theme is Marble; run them on purpose here.
+task testIceBlueOnly(type: Test) {
+	forkEvery = 1
+	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
+	if (project.hasProperty('maxParallelForks'))
+		maxParallelForks = project.maxParallelForks as int
+
+	exclude 'org/zkoss/zktest/zats/wcag/**'
+
+	useJUnitPlatform {
+		includeTags 'IceBlueOnly'
+	}
+	systemProperty "zkWebdriverContextPath", "/zktest"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zktest.zats"
+
+	// a way to pass -Dtags=...
+	options {
+		systemProperties(System.getProperties())
+	}
+
+	// for Jenkins' info
+	testLogging {
+		events("standardOut", "started", "passed", "skipped", "failed")
+	}
+
+	maxHeapSize = "1024m"
+	jvmArgs '-XX:MaxMetaspaceSize=1024m'
+}
+
 test {
 	forkEvery = 1
 	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
@@ -228,11 +260,11 @@ test {
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/test")
 		useJUnitPlatform {
-			excludeTags 'WcagTestOnly', 'ForkJVMTestOnly'
+			excludeTags 'WcagTestOnly', 'ForkJVMTestOnly', 'IceBlueOnly'
 		}
 	} else {
 		useJUnitPlatform {
-			excludeTags 'ForkJVMTestOnly'
+			excludeTags 'ForkJVMTestOnly', 'IceBlueOnly'
 		}
 	}
 	systemProperty "zkWebdriverContextPath", "/zktest"

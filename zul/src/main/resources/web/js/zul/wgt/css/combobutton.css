@@ -1,0 +1,161 @@
+/* MD3 Combobutton — split button (primary action + dropdown arrow) */
+/*
+ * ZK DOM structure (verified from ZK source):
+ *   <span class="z-combobutton [z-combobutton-toolbar] [z-combobutton-open]">
+ *     <span class="z-combobutton-content">   ← main label + image area (positon:relative)
+ *       <img class="z-combobutton-image"/>     ← optional image
+ *       label text
+ *       <span class="z-combobutton-button">   ← dropdown arrow area (position:absolute, right)
+ *         <i class="z-combobutton-icon z-icon-caret-down"/>
+ *       </span>
+ *     </span>
+ *   </span>
+ */
+
+@layer zk-components {
+.z-combobutton {
+    display: inline-flex;
+    align-items: stretch;
+    border-radius: var(--zk-combobutton-radius);
+    overflow: hidden;
+    cursor: pointer;
+    vertical-align: middle;
+    box-shadow: none;
+    position: relative;
+}
+
+/* Main content area — acts as the filled button */
+.z-combobutton-content {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    /* MD3 image-to-label gap — same collapsing-plain-space issue as .z-button.
+       The .z-combobutton-button arrow is position:absolute (out of flow), so this
+       gap spaces the image from the label without shifting the arrow. */
+    gap: var(--zk-spacing-2);
+    overflow: hidden;
+    min-height: var(--zk-button-height);
+    padding: 0 var(--zk-spacing-4);
+    /* Leave room on the right for the arrow button */
+    padding-right: calc(var(--zk-spacing-4) + 32px);
+    border: none;
+    border-radius: 0;
+    background-color: var(--zk-combobutton-bg);
+    color: var(--zk-combobutton-fg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
+    white-space: nowrap;
+    user-select: none;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State layer for main content */
+.z-combobutton-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--zk-combobutton-overlay-color);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-combobutton:hover .z-combobutton-content::before { opacity: var(--zk-combobutton-hover-opacity); }
+.z-combobutton:active .z-combobutton-content::before { opacity: var(--zk-combobutton-active-opacity); }
+.z-combobutton:focus-within .z-combobutton-content::before { opacity: var(--zk-combobutton-focus-opacity); }
+
+/* Dropdown arrow portion — positioned absolutely on the right */
+.z-combobutton-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--zk-combobutton-divider-color);
+    background-color: var(--zk-combobutton-bg);
+    color: var(--zk-combobutton-fg);
+    z-index: 1;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Icon inside arrow area */
+.z-combobutton-icon {
+    font-size: 14px;
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Open state — rotate the arrow icon */
+.z-combobutton-open .z-combobutton-icon {
+    transform: rotate(180deg);
+}
+
+/* Open state — pressed appearance on the wrapper */
+.z-combobutton-open .z-combobutton-content::before {
+    opacity: var(--zk-combobutton-active-opacity);
+}
+
+/* ─── Toolbar mold ─────────────────────────────────────────────────────── */
+/* Border lives on the root so the rounded corners are part of the same element
+   that draws the outline — without this the corners show 4 gaps where the
+   inner rectangular border on `.z-combobutton-content` is clipped by the
+   root's `border-radius + overflow: hidden`. */
+.z-combobutton-toolbar {
+    box-shadow: none;
+    border: 1px solid var(--zk-color-outline);
+}
+
+.z-combobutton-toolbar .z-combobutton-content {
+    background-color: transparent;
+    color: var(--zk-color-on-surface-variant);
+    border: none;
+}
+
+.z-combobutton-toolbar .z-combobutton-content::before {
+    background-color: var(--zk-color-on-surface-variant);
+}
+
+.z-combobutton-toolbar .z-combobutton-button {
+    background-color: transparent;
+    color: var(--zk-color-on-surface-variant);
+    border-left-color: var(--zk-color-outline);
+}
+
+/* ─── Disabled state ──────────────────────────────────────────────────── */
+.z-combobutton[disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.z-combobutton[disabled] .z-combobutton-content {
+    background-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+    cursor: not-allowed;
+}
+
+.z-combobutton[disabled] .z-combobutton-content::before {
+    display: none;
+}
+
+.z-combobutton[disabled] .z-combobutton-button {
+    background-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+    border-left-color: transparent;
+}
+
+.z-combobutton-toolbar[disabled] .z-combobutton-content {
+    background-color: transparent;
+    border-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+}
+
+.z-combobutton-toolbar[disabled] .z-combobutton-button {
+    background-color: transparent;
+    border-left-color: var(--zk-color-disabled-container);
+    color: var(--zk-color-disabled);
+}
+}

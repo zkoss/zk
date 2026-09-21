@@ -1,0 +1,388 @@
+/* MD3 Combobox — dropdown text field */
+/* DOM: <span class="z-combobox"><input class="z-combobox-input"><a class="z-combobox-button"><i class="z-combobox-icon z-icon-caret-down"></i></a><div class="z-combobox-popup">...</div></span> */
+
+/* ─── Wrapper ─────────────────────────────────────────────────────────── */
+@layer zk-components {
+.z-combobox {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    background-color: var(--zk-combobox-bg);
+    min-height: var(--zk-control-height);
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+.z-combobox:hover .z-combobox-input,
+.z-combobox:hover .z-combobox-button {
+    border-color: var(--zk-combobox-border-color-hover);
+}
+
+.z-combobox:focus-within .z-combobox-input,
+.z-combobox:focus-within .z-combobox-button {
+    border-color: var(--zk-combobox-border-color-focus);
+    border-width: 2px;
+}
+
+/* The input's left border grows 1px→2px on focus (border-right is none), which
+   with box-sizing:border-box shrinks its content box on the left → the text would
+   shift ~1px right. Absorb it by trimming padding-left by 1px. border-width is NOT
+   transitioned (see the inputs no-shift regression test), so this snaps in step with
+   the border and the text never moves. */
+.z-combobox:focus-within .z-combobox-input {
+    padding-left: calc(var(--zk-spacing-3) - 1px);
+}
+
+/* ─── Input field ─────────────────────────────────────────────────────── */
+.z-combobox-input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--zk-combobox-border-color);
+    border-right: none;
+    border-radius: var(--zk-combobox-radius) 0 0 var(--zk-combobox-radius);
+    background: transparent;
+    padding: 0 var(--zk-spacing-3);
+    height: 100%;
+    min-height: var(--zk-control-height);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    color: var(--zk-combobox-fg);
+    outline: none;
+    box-sizing: border-box;
+    /* Only border-COLOR animates; border-width snaps with its padding compensator on
+       focus so the text never drifts. See reference/focus-affordance-no-layout-shift.md. */
+    transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-combobox-input::placeholder {
+    color: var(--zk-color-on-surface-variant);
+    opacity: 1;
+}
+
+/* ─── Dropdown arrow icon (ZK renders z-icon-caret-down, Lucide has chevron-down) ─── */
+.z-combobox-icon,
+.z-combobox-button .z-icon-caret-down {
+    --_icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    -webkit-mask-image: var(--_icon);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: var(--_icon);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    font-size: 14px;
+}
+
+/* Suppress any Font Awesome glyph on the caret-down icon */
+.z-combobox-button .z-icon-caret-down::before {
+    content: '';
+    font-family: inherit;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    -webkit-mask-image: var(--_icon);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: var(--_icon);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+
+/* ─── Dropdown button ─────────────────────────────────────────────────── */
+.z-combobox-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    min-height: var(--zk-control-height);
+    border: 1px solid var(--zk-combobox-border-color);
+    border-left: none;
+    background: transparent;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 0 var(--zk-combobox-radius) var(--zk-combobox-radius) 0;
+    /* border-width is intentionally NOT transitioned — it snaps 1px→2px on focus in
+       step with the input's padding compensation so nothing drifts. */
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+                border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    overflow: hidden;
+}
+
+.z-combobox-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-combobox-button:hover::before { opacity: var(--zk-state-hover-opacity); }
+.z-combobox-button:active::before { opacity: var(--zk-state-pressed-opacity); }
+
+/* ─── Popup dropdown ──────────────────────────────────────────────────── */
+/* ZK renders: <div class="z-combobox-popup"><ul class="z-combobox-content"><li class="z-comboitem">...</li></ul></div> */
+.z-combobox-content {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.z-combobox-popup {
+    position: absolute;
+    z-index: 1600;
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    background-color: var(--zk-combobox-popup-bg);
+    border-radius: var(--zk-combobox-popup-radius);
+    box-shadow: var(--zk-elevation-dropdown);
+    border: none;
+    max-height: 280px;
+    overflow: hidden auto;
+    box-sizing: border-box;
+}
+
+/* Comboitem */
+.z-comboitem {
+    display: flex;
+    align-items: center;
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-surface);
+    cursor: pointer;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Leading icon / image: separate it from the label. The mold renders
+   `.z-comboitem-icon`/`.z-comboitem-image` and `.z-comboitem-text` as adjacent
+   flex children with no built-in gap, so without this the glyph touches the
+   label. A container `gap` can't be used: a plain item always emits an empty
+   `.z-comboitem-image` span, which `gap` would turn into a phantom indent.
+   Hence margin on the leading element only (icon always has content; image
+   guarded with :not(:empty)). */
+.z-comboitem-icon,
+.z-comboitem-image:not(:empty) {
+    flex-shrink: 0;
+    margin-right: var(--zk-spacing-3);
+}
+
+.z-comboitem:hover {
+    background-color: var(--zk-combobox-item-hover-bg);
+}
+
+.z-comboitem.z-comboitem-selected,
+.z-comboitem.z-selected {
+    background-color: var(--zk-combobox-selected-bg);
+    color: var(--zk-combobox-selected-fg);
+}
+
+/* Disabled */
+.z-combobox[disabled],
+.z-combobox.z-combobox-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.z-combobox[disabled]:hover .z-combobox-input,
+.z-combobox[disabled]:hover .z-combobox-button,
+.z-combobox.z-combobox-disabled:hover .z-combobox-input,
+.z-combobox.z-combobox-disabled:hover .z-combobox-button {
+    border-color: var(--zk-color-outline);
+}
+
+.z-combobox[disabled] .z-combobox-input,
+.z-combobox.z-combobox-disabled .z-combobox-input {
+    cursor: not-allowed;
+}
+
+/* ─── Error variant ───────────────────────────────────────────────────────── */
+.z-combobox.z-combobox-error .z-combobox-input,
+.z-combobox.z-combobox-error .z-combobox-button {
+    border-color: var(--zk-color-error);
+}
+
+.z-combobox.z-combobox-error:hover .z-combobox-input,
+.z-combobox.z-combobox-error:hover .z-combobox-button {
+    border-color: var(--zk-color-error);
+}
+
+.z-combobox.z-combobox-error:focus-within .z-combobox-input,
+.z-combobox.z-combobox-error:focus-within .z-combobox-button {
+    border-color: var(--zk-color-error);
+}
+
+.z-combobox.z-combobox-error .z-combobox-input {
+    color: var(--zk-color-error);
+}
+
+/* ─── Standard (underline-only) variant ──────────────────────────────────── */
+/* Standard variant: bottom border only, no box */
+.z-combobox.z-combobox-standard {
+    background-color: transparent;
+    min-height: 32px;
+    position: relative;
+}
+
+/* Static bottom line */
+.z-combobox.z-combobox-standard::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid var(--zk-color-outline);
+    pointer-events: none;
+    transition: border-bottom-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Animated focus indicator */
+.z-combobox.z-combobox-standard::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 2px solid var(--zk-color-primary);
+    transform: scaleX(0);
+    transition: transform var(--zk-motion-duration-medium2) var(--zk-motion-easing-standard);
+    pointer-events: none;
+}
+
+.z-combobox.z-combobox-standard:focus-within::after {
+    transform: scaleX(1);
+}
+
+.z-combobox.z-combobox-standard:hover .z-combobox-input,
+.z-combobox.z-combobox-standard:hover .z-combobox-button,
+.z-combobox.z-combobox-standard:focus-within .z-combobox-input,
+.z-combobox.z-combobox-standard:focus-within .z-combobox-button {
+    border: none;
+}
+
+.z-combobox.z-combobox-standard .z-combobox-input,
+.z-combobox.z-combobox-standard .z-combobox-button {
+    border: none;
+    border-radius: 0;
+}
+
+.z-combobox.z-combobox-standard:hover::before {
+    border-bottom-width: 2px;
+    border-bottom-color: var(--zk-color-on-surface);
+}
+
+.z-combobox.z-combobox-standard .z-combobox-input {
+    padding: 4px 0 5px;
+    min-height: 30px;
+}
+
+.z-combobox.z-combobox-standard .z-combobox-button {
+    border-radius: 0;
+    min-height: 30px;
+}
+
+/* ─── Invalid variant ─────────────────────────────────────────────────────── */
+.z-combobox.z-combobox-invalid .z-combobox-input,
+.z-combobox.z-combobox-invalid .z-combobox-button {
+    border-color: var(--zk-color-error);
+}
+
+.z-combobox.z-combobox-invalid:hover .z-combobox-input,
+.z-combobox.z-combobox-invalid:hover .z-combobox-button {
+    border-color: var(--zk-color-error);
+}
+
+.z-combobox.z-combobox-invalid:focus-within .z-combobox-input,
+.z-combobox.z-combobox-invalid:focus-within .z-combobox-button {
+    border-color: var(--zk-color-error);
+    border-width: 2px;
+}
+
+/* ─── Readonly variant ────────────────────────────────────────────────────── */
+/* In ZK, `readonly="true"` is the normal "select-only" state for a combobox, so it
+   must read as an ACTIVE outlined field — identical to the editable combobox and the
+   textbox beside it — not as disabled. It stays fully interactive (the dropdown opens,
+   including via the arrow button). The greyed/dimmed treatment is reserved for the
+   genuine `disabled` state above. The input is made non-typeable by ZK's `readonly`
+   attribute on the <input>, not by styling, so readonly needs no visual de-emphasis
+   at all — only a pointer cursor to signal the whole control opens a menu. */
+.z-combobox[readonly] .z-combobox-input,
+.z-combobox.z-combobox-readonly .z-combobox-input,
+.z-combobox[readonly] .z-combobox-button,
+.z-combobox.z-combobox-readonly .z-combobox-button {
+    cursor: pointer;
+}
+
+/* ─── Open state ──────────────────────────────────────────────────────────── */
+.z-combobox.z-combobox-open .z-combobox-input,
+.z-combobox.z-combobox-open .z-combobox-button {
+    border-color: var(--zk-color-primary);
+    border-width: 2px;
+}
+
+.z-combobox.z-combobox-open .z-combobox-button [class*="z-icon-"] {
+    transform: rotate(180deg);
+}
+
+.z-combobox-empty-search-message {
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-style: italic;
+    text-align: center;
+}
+
+.z-combobox-empty-search-message-hidden {
+    display: none;
+}
+
+/* ─── Button hidden (buttonVisible="false") ──────────────────────────── */
+/* ZK adds z-combobox-disabled to the <a> button element when buttonVisible=false,
+   and z-combobox-input-full to the input. Combobox uses split-border pattern
+   (input + button each carry half the border), so hiding the button leaves the
+   input's right edge open — restore the right border + full corner radius. */
+.z-combobox-button.z-combobox-disabled {
+    display: none;
+}
+
+.z-combobox-input.z-combobox-input-full {
+    border-right: 1px solid var(--zk-color-outline);
+    border-radius: var(--zk-combobox-radius);
+}
+
+/* ─── Inplace ─────────────────────────────────────────────────────────── */
+.z-combobox.z-combobox-inplace {
+    background-color: transparent;
+}
+
+.z-combobox.z-combobox-inplace .z-combobox-input {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.z-combobox.z-combobox-inplace:hover .z-combobox-input {
+    border-color: transparent;
+}
+
+.z-combobox.z-combobox-inplace .z-combobox-button {
+    display: none;
+}
+}

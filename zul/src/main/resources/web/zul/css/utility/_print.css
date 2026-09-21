@@ -1,0 +1,64 @@
+/* MD3 Utility Classes — Print (@media print visibility + standard reset) */
+
+@layer zk-utilities {
+
+@media print {
+
+    /* ============================================
+       Opt-in print visibility
+       Mirrors the viewport set in _layout.css (.z-d-{value}-{bp});
+       no breakpoint — these apply whenever the page is printed.
+       value ∈ none / block / flex / grid / inline-block
+       ============================================ */
+    .z-d-print-none         { display: none; }
+    .z-d-print-block        { display: block; }
+    .z-d-print-flex         { display: flex; }
+    .z-d-print-grid         { display: grid; }
+    .z-d-print-inline-block { display: inline-block; }
+
+    /* ============================================
+       Standard reset — automatic, no opt-in.
+       zk-utilities is the top cascade layer, so these override the
+       component styles (box-shadow / sticky / overflow) declared in
+       zk-components without any !important.
+       ============================================ */
+
+    /* Hide fixed-position overlay chrome that must never appear on paper:
+       modal scrims, drag/resize fakers, toasts, the loading bar, drawers,
+       and the floating error panel. */
+    .z-modal-mask, .z-mask,
+    .z-toast-position-wrapper,
+    .z-loadingbar-position,
+    .z-drawer,
+    .z-window-resize-faker,
+    .z-panel-move-block, .z-panel-resize-faker,
+    .z-error { display: none; }
+
+    /* Un-stick opt-in sticky headers (.z-sticky-header) so a long table
+       paginates across pages instead of pinning its header on every one.
+       NOTE: ZK frozen columns (<frozen>) are JS-driven (translateX on
+       scrollLeft), NOT CSS position:sticky, so they cannot be fully
+       expanded from CSS alone — a documented limitation. */
+    .z-grid.z-sticky-header .z-grid-header,
+    .z-listbox.z-sticky-header .z-listbox-header,
+    .z-tree.z-sticky-header .z-tree-header { position: static; }
+
+    /* Expand the scroll bodies of mesh widgets so their full content prints
+       instead of being clipped to the on-screen scroll viewport. */
+    .z-grid-body, .z-listbox-body, .z-tree-body {
+        overflow: visible;
+        height: auto;
+        max-height: none;
+    }
+
+    /* Flatten elevation to a hairline border: shadows don't render on paper,
+       so keep the surface boundary visible without the (invisible) shadow.
+       Brand colors / backgrounds are intentionally kept (no ink-saving). */
+    [class*="z-elevation-"],
+    .z-window, .z-panel, .z-card, .z-groupbox {
+        box-shadow: none;
+        border: 1px solid var(--zk-color-outline-variant);
+    }
+}
+
+} /* end @layer zk-utilities */

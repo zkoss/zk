@@ -1,0 +1,56 @@
+/* MD3 Utility Classes — Stack utilities (opt-in container spacing) */
+
+@layer zk-utilities {
+
+/* ============================================
+   Stack utilities — opt-in container spacing
+   ============================================
+   Naming aligns with Bootstrap 5 / SwiftUI: `vstack` = vertical group,
+   `hstack` = horizontal group. The axis is in the name so users don't
+   have to memorize which is which.
+
+   ── .z-vstack — vertical stack ─────────────────────────────────────
+   Lobotomized Owl pattern: every direct child gets top-margin except
+   the first. Use when you need consistent gap between stacked items
+   (e.g. cards in a sidebar, form fields, sections of a page).
+
+     <div sclass="z-vstack">
+       <textbox/>
+       <textbox/>
+       <button label="Submit"/>
+     </div>
+
+   Size variants: z-vstack-sm (8px), default (12px), z-vstack-md (16px),
+   z-vstack-lg (24px), z-vstack-0 (none — collapse rhythm for nested use). */
+.z-vstack > * + * { margin-top: var(--zk-spacing-3); }
+.z-vstack-sm > * + * { margin-top: var(--zk-spacing-2); }
+.z-vstack-md > * + * { margin-top: var(--zk-spacing-4); }
+.z-vstack-lg > * + * { margin-top: var(--zk-spacing-6); }
+.z-vstack-0 > * + * { margin-top: 0; }
+
+/* ── .z-hstack — horizontal stack (flex + gap, wraps) ──────────────
+   The canonical pattern for spacing buttons / chips / atomic widgets
+   in a row. Mirrors Bootstrap `.hstack`, SwiftUI `HStack`, MUI
+   `<Stack direction="row">`.
+
+     <div sclass="z-hstack">
+       <button label="Save"/>
+       <button label="Cancel"/>
+     </div>
+
+   Size variants: z-hstack-sm (8px), default (12px), z-hstack-md (16px),
+   z-hstack-lg (24px). For other gaps use .z-gap-* with .z-d-flex. */
+.z-hstack,
+.z-hstack-sm,
+.z-hstack-md,
+.z-hstack-lg {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.z-hstack    { gap: var(--zk-spacing-3); }
+.z-hstack-sm { gap: var(--zk-spacing-2); }
+.z-hstack-md { gap: var(--zk-spacing-4); }
+.z-hstack-lg { gap: var(--zk-spacing-6); }
+
+} /* end @layer zk-utilities */

@@ -1,0 +1,213 @@
+/* MD3 Selectbox — lightweight dropdown (renders as a single <select> element) */
+/* DOM: <select class="z-selectbox"> <option>...</option> </select> */
+
+/* Chevron-down SVG arrow (encoded, color-independent mask approach not possible on
+   background-image since SVG fill must be a literal color, not a CSS variable.
+   We use a neutral dark arrow via stroke color matching on-surface-variant at ~60% opacity) */
+@layer zk-components {
+.z-selectbox {
+    /* Layout */
+    display: inline-block;
+    min-height: var(--zk-control-height);
+    min-width: 120px;
+    box-sizing: border-box;
+    padding: 0 36px 0 var(--zk-spacing-3);
+    vertical-align: middle;
+
+    /* Typography */
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: 1.5;
+    color: var(--zk-color-on-surface);
+
+    /* Surface */
+    background-color: var(--zk-color-surface);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 20px 20px;
+
+    /* Shape */
+    border: 1px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-input);
+
+    /* Interaction */
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+
+    /* Transition */
+    transition:
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Remove IE dropdown arrow */
+.z-selectbox::-ms-expand {
+    display: none;
+}
+
+.z-selectbox:hover {
+    border-color: var(--zk-color-on-surface);
+}
+
+/* Focus ring: 1px border + inset box-shadow (NOT border-width:2px). A <select> is
+   intrinsically sized, so a 2px border grows the box. Mirrors `.z-select`.
+   See reference/focus-affordance-no-layout-shift.md → "<select>". */
+.z-selectbox:focus,
+.z-selectbox:focus-visible {
+    border-color: var(--zk-color-primary);
+    box-shadow: inset 0 0 0 1px var(--zk-color-primary);
+    outline: none;
+}
+
+/* ─── Disabled ────────────────────────────────────────────────────────── */
+.z-selectbox[disabled],
+.z-selectbox:disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: var(--zk-color-surface-container-low);
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   Customizable Select (HTML spec — Chrome 130+).
+   https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select
+
+   Opt-in via `appearance: base-select`. Browsers without support keep the
+   native fallback above; supporting browsers get an MD3 styled popup with
+   hover/checked option states, themed picker arrow, and checkmark marker.
+   ─────────────────────────────────────────────────────────────────────── */
+@supports (appearance: base-select) {
+    .z-selectbox,
+    .z-selectbox::picker(select) {
+        appearance: base-select;
+    }
+
+    /* Replace background-image arrow with spec's ::picker-icon */
+    .z-selectbox {
+        background-image: none;
+        padding-right: var(--zk-spacing-3);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--zk-spacing-2);
+    }
+
+    .z-selectbox::picker-icon {
+        color: var(--zk-color-on-surface-variant);
+        font-size: 16px;
+        transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    }
+
+    .z-selectbox:open::picker-icon {
+        transform: rotate(180deg);
+    }
+
+    /* The popup.
+       NOTE: `:open` is a pseudo-class on the originating <select>, NOT on
+       `::picker`. Writing `::picker(select):not(:open)` ALWAYS matches because
+       the picker never has `:open` — that was hiding the popup forever.
+       Correct form: chain `:open` on the select side, e.g. `select:open::picker(select)`. */
+    .z-selectbox::picker(select) {
+        background-color: var(--zk-color-surface);
+        color: var(--zk-color-on-surface);
+        border: 1px solid var(--zk-color-outline-variant);
+        /* Same radius token as every other floating menu popup (combobox,
+           bandbox, menu, tbeditor) so all popups share one corner shape. */
+        border-radius: var(--zk-shape-menu);
+        box-shadow: var(--zk-elevation-3);
+        padding: var(--zk-spacing-1);
+        margin: 0;
+        min-width: anchor-size(width);
+        opacity: 0;
+        transform: translateY(-4px);
+        transition:
+            opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+            transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+            display var(--zk-motion-duration-standard) allow-discrete,
+            overlay var(--zk-motion-duration-standard) allow-discrete;
+    }
+
+    .z-selectbox:open::picker(select) {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @starting-style {
+        .z-selectbox:open::picker(select) {
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+    }
+
+    /* Options */
+    .z-selectbox option {
+        display: flex;
+        align-items: center;
+        gap: var(--zk-spacing-2);
+        padding: var(--zk-spacing-2) var(--zk-spacing-3);
+        border-radius: var(--zk-shape-corner-small);
+        font-size: var(--zk-typescale-body-medium-size);
+        font-family: var(--zk-typescale-font-family);
+        color: var(--zk-color-on-surface);
+        cursor: pointer;
+        transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    }
+
+    .z-selectbox option:hover,
+    .z-selectbox option:focus {
+        background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+        outline: none;
+    }
+
+    .z-selectbox option:active {
+        background-color: color-mix(in srgb, var(--zk-color-on-surface) 12%, transparent);
+    }
+
+    /* MD3 list-row family — selectbox option is an arrow-key-navigable
+     * dropdown row, same as combobox / listbox / searchbox dropdowns. Must
+     * use primary-container, NOT secondary-container (that's the chip
+     * family). See reference/selected-state-families.md. */
+    .z-selectbox option:checked {
+        background-color: var(--zk-color-primary-container);
+        color: var(--zk-color-on-primary-container);
+    }
+
+    .z-selectbox option:checked:hover {
+        background-color: color-mix(in srgb, var(--zk-color-on-primary-container) 8%, var(--zk-color-primary-container));
+    }
+
+    /* Spec-provided checkmark marker for the selected option */
+    .z-selectbox option::checkmark {
+        order: -1;
+        content: '';
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        background-color: currentColor;
+        -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>");
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>");
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        opacity: 0;
+    }
+
+    .z-selectbox option:checked::checkmark {
+        opacity: 1;
+    }
+
+    /* `selectedcontent` displays the currently selected option's content */
+    .z-selectbox selectedcontent {
+        font-family: var(--zk-typescale-font-family);
+        font-size: var(--zk-typescale-body-medium-size);
+        color: var(--zk-color-on-surface);
+        flex: 1;
+    }
+}
+}

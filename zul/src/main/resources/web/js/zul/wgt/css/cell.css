@@ -1,0 +1,13 @@
+/* MD3 Cell — generic cell container */
+
+@layer zk-components {
+.z-cell {
+    display: table-cell;
+    vertical-align: middle;
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-surface);
+    box-sizing: border-box;
+}
+}

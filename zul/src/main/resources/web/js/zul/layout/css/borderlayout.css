@@ -1,0 +1,441 @@
+/* MD3 BorderLayout — north/south/east/west/center panel layout */
+/* ZK uses absolute positioning for all regions. JS calculates left/top/width/height inline.
+   DO NOT use flexbox on .z-borderlayout — it will break JS layout calculations.
+   DOM: .z-borderlayout (position:relative) > .z-north/.z-south/.z-west/.z-east/.z-center (position:absolute)
+        Each region has a "-body" child for scrollable content, a "-splitter" drag handle,
+        and a "-collapsed" placeholder when closed. */
+
+/* ─── Container ───────────────────────────────────────────────────────────── */
+@layer zk-components {
+.z-borderlayout {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+/* ─── All regions: absolute positioned by ZK JS ───────────────────────────── */
+.z-north,
+.z-south,
+.z-west,
+.z-east,
+.z-center {
+    position: absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ─── North (top) ─────────────────────────────────────────────────────────── */
+.z-north {
+    background-color: var(--zk-color-surface);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    z-index: 16;
+}
+
+.z-north-noborder {
+    border-bottom: none;
+}
+
+.z-north-body {
+    overflow: auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* ─── South (bottom) ──────────────────────────────────────────────────────── */
+.z-south {
+    background-color: var(--zk-color-surface);
+    border-top: 1px solid var(--zk-color-outline-variant);
+    z-index: 14;
+}
+
+.z-south-noborder {
+    border-top: none;
+}
+
+.z-south-body {
+    overflow: auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* ─── West (left sidebar) ─────────────────────────────────────────────────── */
+.z-west {
+    background-color: var(--zk-color-surface-container-low);
+    border-right: 1px solid var(--zk-color-outline-variant);
+    z-index: 12;
+}
+
+.z-west-noborder {
+    border-right: none;
+}
+
+.z-west-body {
+    overflow: auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* ─── East (right sidebar) ────────────────────────────────────────────────── */
+.z-east {
+    background-color: var(--zk-color-surface-container-low);
+    border-left: 1px solid var(--zk-color-outline-variant);
+    z-index: 10;
+}
+
+.z-east-noborder {
+    border-left: none;
+}
+
+.z-east-body {
+    overflow: auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* ─── Center (main content) ───────────────────────────────────────────────── */
+.z-center {
+    background-color: var(--zk-color-background);
+    z-index: 8;
+}
+
+.z-center-noborder {
+    border: none;
+}
+
+.z-center-body {
+    overflow: auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* ─── Splitters ──────────────────────────────────────────────────────────── *
+ * The strip is an 8px tonal bar (surface-container) — DESIGN.md §14 splitter
+ * family spec. The tonal fill replaces the previous 1px hairline + transparent
+ * pattern (hairline was redundant once the strip became visibly tinted).
+ *
+ * Hover treatment: the entire strip tints with the primary color-mix so the
+ * user sees the resize affordance across the full 8px hit area.
+ *
+ * z-index:20 keeps the strip's pill above neighbouring regions (north 16,
+ * center 8). Without it the pill's overhang gets visually clipped.
+ * ─────────────────────────────────────────────────────────────────────────── */
+.z-west-splitter,
+.z-east-splitter {
+    position: absolute;
+    width: var(--zk-splitter-thickness);
+    cursor: col-resize; /* family cursor (DESIGN.md §14) — was ew-resize, drift fixed 2026-06-06 (c43) */
+    overflow: visible;
+    background-color: var(--zk-splitter-bar-bg);
+    z-index: 20;
+    transition: var(--zk-splitter-transition);
+}
+
+.z-north-splitter,
+.z-south-splitter {
+    position: absolute;
+    height: var(--zk-splitter-thickness);
+    cursor: row-resize; /* family cursor (DESIGN.md §14) — was ns-resize, drift fixed 2026-06-06 (c44) */
+    overflow: visible;
+    background-color: var(--zk-splitter-bar-bg);
+    z-index: 20;
+    transition: var(--zk-splitter-transition);
+}
+
+.z-west-splitter:hover,
+.z-east-splitter:hover,
+.z-north-splitter:hover,
+.z-south-splitter:hover {
+    background-color: var(--zk-splitter-bar-bg-hover);
+}
+
+.z-west-splitter:active,
+.z-east-splitter:active,
+.z-north-splitter:active,
+.z-south-splitter:active {
+    background-color: var(--zk-splitter-bar-bg-active);
+}
+
+/* ─── Splitter buttons (collapse toggle) ─────────────────────────────────── *
+ * ZK mold (layoutregion.js) renders the button with 3 stacked icons:
+ *   <span class="z-{pos}-splitter-button">
+ *     <i class="z-{pos}-icon z-icon-ellipsis-{v|h}"></i>   ← grip dot 1
+ *     <i class="z-{pos}-icon z-icon-caret-{up|down|left|right}"></i>  ← caret
+ *     <i class="z-{pos}-icon z-icon-ellipsis-{v|h}"></i>   ← grip dot 2
+ *   </span>
+ *
+ * MD3 has no formal "splitter" component; the closest analogues are the
+ * Bottom-Sheet drag handle (a 4×32dp inline pill) and the surface-tinted
+ * divider. We compose the two:
+ *   - Strip: 8px tonal bar (above) — provides the drag affordance.
+ *   - Actuator pill: a slim 8×28 inline pill that fits flush inside the
+ *     8px strip (pill cross-axis == bar thickness; no margin offset needed).
+ *     Outline fill at idle, primary fill on hover. NO elevation lift.
+ *
+ * The caret glyph is HIDDEN at idle so the pill reads as a pure drag handle
+ * (grip dots only). On hover the caret fades in to communicate "click to
+ * collapse" without crowding the idle state. ──────────────────────────── */
+.z-west-splitter-button,
+.z-east-splitter-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: absolute;
+    background-color: var(--zk-splitter-pill-fill);
+    border: none;
+    border-radius: var(--zk-splitter-pill-radius);
+    box-shadow: none;
+    width: var(--zk-splitter-thickness);
+    height: var(--zk-splitter-pill-length);
+    /* No margin-left: pill cross-axis (8px) == bar width (8px); JS manages long-axis via margin-top */
+    cursor: pointer;
+    color: var(--zk-splitter-pill-icon);
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-north-splitter-button,
+.z-south-splitter-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: absolute;
+    background-color: var(--zk-splitter-pill-fill);
+    border: none;
+    border-radius: var(--zk-splitter-pill-radius);
+    box-shadow: none;
+    width: var(--zk-splitter-pill-length);
+    height: var(--zk-splitter-thickness);
+    /* No margin-top: pill cross-axis (8px) == bar height (8px); JS manages long-axis via margin-left */
+    cursor: pointer;
+    color: var(--zk-splitter-pill-icon);
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Active / hover state — primary fill + on-primary icons, family-consistent.
+ * MD3 signals hover via the state layer (colour), NOT geometry, so the pill
+ * keeps its 28px long-axis — it does NOT grow (the caret already has its space
+ * at idle via opacity:0; the former 28→44px growth was the family outlier,
+ * retired 2026-06-23, gap log + DESIGN.md §14). Matches splitter/splitlayout.
+ *
+ * Why `.z-{pos}-splitter:active .z-{pos}-splitter-button` for the dragging
+ * case? `:active` on the parent strip persists for the duration of a
+ * mousedown-hold (which is exactly the duration of a resize drag), AND it
+ * is scoped to the one strip the user grabbed. We previously used
+ * `body:has(.z-splitter-ghost)`, which fired the active state for every
+ * splitter on the page whenever any one was being dragged. Hover on the
+ * parent strip is wired in too: moving the cursor anywhere on the 8px strip
+ * (not just on the pill) tints the pill, a generous activation zone. ──────── */
+.z-west-splitter:hover .z-west-splitter-button,
+.z-west-splitter:active .z-west-splitter-button,
+.z-east-splitter:hover .z-east-splitter-button,
+.z-east-splitter:active .z-east-splitter-button {
+    background-color: var(--zk-splitter-pill-fill-hover);
+    color: var(--zk-splitter-pill-icon-hover);
+}
+
+.z-north-splitter:hover .z-north-splitter-button,
+.z-north-splitter:active .z-north-splitter-button,
+.z-south-splitter:hover .z-south-splitter-button,
+.z-south-splitter:active .z-south-splitter-button {
+    background-color: var(--zk-splitter-pill-fill-hover);
+    color: var(--zk-splitter-pill-icon-hover);
+}
+
+/* Keyboard-focus ring. :focus-visible (not :focus) — the ring should appear
+ * only when the user is navigating with the keyboard, not when they click
+ * with a mouse. MD3 a11y guideline. */
+.z-west-splitter-button:focus-visible,
+.z-east-splitter-button:focus-visible,
+.z-north-splitter-button:focus-visible,
+.z-south-splitter-button:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+/* Grip dots (`⋮` west/east, `⋯` north/south) are the persistent affordance.
+ * Sized to fit the 8px pill thickness — 8px square — so they sit comfortably
+ * inside the slim handle without overflowing. */
+.z-west-icon,
+.z-east-icon,
+.z-north-icon,
+.z-south-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--zk-splitter-icon-size);
+    line-height: 1;
+    color: inherit;
+}
+
+.z-west-icon.z-icon-ellipsis-v,
+.z-east-icon.z-icon-ellipsis-v,
+.z-north-icon.z-icon-ellipsis-h,
+.z-south-icon.z-icon-ellipsis-h {
+    opacity: 1;
+}
+
+/* Caret is the collapse-toggle hint. Hidden at idle so the pill reads as a
+ * pure drag handle; fades in on hover to communicate the click action. The
+ * pill itself grows on the long axis to make room when the caret appears.
+ * Uses [class*="z-icon-caret"] to match all four directions in one rule. */
+.z-west-icon[class*="z-icon-caret"],
+.z-east-icon[class*="z-icon-caret"],
+.z-north-icon[class*="z-icon-caret"],
+.z-south-icon[class*="z-icon-caret"] {
+    opacity: 0;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-west-splitter:hover .z-west-icon[class*="z-icon-caret"],
+.z-west-splitter:active .z-west-icon[class*="z-icon-caret"],
+.z-east-splitter:hover .z-east-icon[class*="z-icon-caret"],
+.z-east-splitter:active .z-east-icon[class*="z-icon-caret"],
+.z-north-splitter:hover .z-north-icon[class*="z-icon-caret"],
+.z-north-splitter:active .z-north-icon[class*="z-icon-caret"],
+.z-south-splitter:hover .z-south-icon[class*="z-icon-caret"],
+.z-south-splitter:active .z-south-icon[class*="z-icon-caret"] {
+    opacity: 1;
+}
+
+/* Hide disabled caret icons (closable=false — button renders but caret hidden) */
+.z-west-splitter-button-disabled [class*="z-icon-caret"],
+.z-east-splitter-button-disabled [class*="z-icon-caret"],
+.z-north-splitter-button-disabled [class*="z-icon-caret"],
+.z-south-splitter-button-disabled [class*="z-icon-caret"] {
+    display: none;
+}
+
+/* ─── Collapsed panel placeholders ───────────────────────────────────────── *
+ * ZK's JS uses the unexpanded region's `size` for N/S height / W/E width, but
+ * when no explicit size hint exists it collapses to the title's intrinsic box
+ * (~22px / ~20px) — far below MD3's 48dp minimum touch target. We enforce a
+ * 48px minimum on the actuator axis (height for N/S, width for W/E) so the
+ * collapsed strip is always operable. The inline `height:` / `width:` set by
+ * layoutregion.js stays in effect for any value ≥ 48px (a region with a real
+ * collapsed size honours its own dimension); only the too-thin default is
+ * lifted.
+ *
+ * W/E use `flex-direction: column` and `gap` so the angle-icon and the rotated
+ * region title stack on the strip's centreline. The rotated title uses
+ * `transform-origin: center` (NOT `left bottom`) so the rotated text stays
+ * centred in its laid-out box instead of sliding down-and-right of it —
+ * otherwise the icon and the text fall on different x-positions and look
+ * disconnected. ───────────────────────────────────────────────────────────── */
+.z-north-collapsed,
+.z-south-collapsed,
+.z-west-collapsed,
+.z-east-collapsed {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--zk-color-surface-container);
+    border: 1px solid var(--zk-color-outline-variant);
+    cursor: pointer;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.z-north-collapsed,
+.z-south-collapsed {
+    flex-direction: row;
+    gap: var(--zk-spacing-2);
+    min-height: var(--zk-control-height-lg);
+    padding: 0 var(--zk-spacing-4);
+}
+
+.z-west-collapsed,
+.z-east-collapsed {
+    flex-direction: column;
+    gap: var(--zk-spacing-2);
+    min-width: 48px;
+    padding: var(--zk-spacing-4) 0;
+}
+
+.z-north-collapsed:hover,
+.z-south-collapsed:hover,
+.z-west-collapsed:hover,
+.z-east-collapsed:hover {
+    background-color: var(--zk-color-surface-container-high);
+}
+
+/* ─── Panel headers inside border layout regions ───────────────────────────
+ * MD3 Navigation Drawer subsection pattern: the section title and its
+ * trailing affordance (here, the collapse-angle icon) are GROUPED at the
+ * leading edge, separated by an 8dp gap — NOT pushed to opposite ends like
+ * a Top App Bar. This reads as "label + chevron belong to the same control"
+ * rather than "title on one side, action far away" (which previously felt
+ * disconnected when title text was short).
+ * 16dp horizontal inset (--zk-spacing-4), 8dp gap (--zk-spacing-2). */
+.z-north-header,
+.z-south-header,
+.z-west-header,
+.z-east-header,
+.z-center-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--zk-spacing-2);
+    height: 40px;
+    padding: 0 var(--zk-spacing-4);
+    background-color: var(--zk-color-surface-container);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    font-size: var(--zk-typescale-title-small-size);
+    font-weight: var(--zk-typescale-title-small-weight);
+    color: var(--zk-color-on-surface-variant);
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ─── Region title (collapsed rotation) ──────────────────────────────────── *
+ * `transform-origin: center` (the default) keeps the rotated text's visual
+ * centre on its laid-out box centre, so the flex column places the icon and
+ * the rotated title on the same vertical line. Using `left bottom` (the old
+ * value) pivoted around the box's bottom-left corner and pushed the visible
+ * text down-and-right of its layout position — that's what made the icon and
+ * title fall on different x-coordinates.
+ *
+ * ZK's layoutregion.js writes an inline `width: <stripHeight>px` on this
+ * element (so the OLD `left bottom` rotation could make the text span the
+ * full strip). That width is no longer needed once we rotate around centre,
+ * and worse, it stretches the pre-rotation box well beyond the icon's
+ * horizontal centre — `width: auto !important` is required because we cannot
+ * intercept the JS-set inline style any other way. ──────────────────────── */
+.z-west-title,
+.z-east-title {
+    transform: rotate(90deg);
+    width: auto !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.z-north-title,
+.z-south-title,
+.z-west-title,
+.z-east-title {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-typescale-label-medium-weight);
+    color: var(--zk-color-on-surface-variant);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ─── Drag ghost ──────────────────────────────────────────────────────────── */
+.z-splitter-ghost {
+    background-color: var(--zk-color-primary);
+    opacity: 0.3;
+    position: absolute;
+}
+}

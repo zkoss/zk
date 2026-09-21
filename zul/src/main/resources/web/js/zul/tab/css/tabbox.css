@@ -1,0 +1,629 @@
+/* MD3 Tabbox — tab navigation */
+/*
+ * Standard mold DOM:
+ *   div.z-tabbox[.z-tabbox-top/.z-tabbox-bottom/.z-tabbox-left/.z-tabbox-right]
+ *     div.z-tabs
+ *       ul.z-tabs-content  (role="tablist")
+ *         li.z-tab[.z-tab-selected/.z-tab-disabled]
+ *           div.z-tab-content
+ *             [div.z-tab-button  (close button, only when closable=true)]
+ *             span.z-tab-text
+ *     div.z-tabpanels
+ *       div.z-tabpanel
+ *
+ * Accordion mold DOM:
+ *   div.z-tabbox.z-tabbox-accordion
+ *     div.z-tabpanels
+ *       div.z-tabpanel.z-tabpanel-content   ← section wrapper (gets .z-tabpanel-content in accordion)
+ *         div.z-tab[.z-tab-selected/.z-tab-disabled]   ← accordion header/trigger
+ *           div.z-tab-content
+ *             span.z-tab-text
+ *         div#uuid-cave                     ← expandable content area
+ */
+
+/* ─── Outer container ───────────────────────────────────────────────────── */
+/* flex-column relies on toolbar AND scroll arrows being position:absolute
+ * (out of flex flow). ZK's Tabs._scrollcheck calculates .z-tabs inline
+ * width as (tabbox.contentWidth - toolbar.offsetWidth); that arithmetic
+ * is only correct when the toolbar overlays (absolute) rather than sharing
+ * the flex row. */
+@layer zk-components {
+.z-tabbox {
+    position: relative;  /* anchor for absolutely-positioned scroll arrows + toolbar */
+    display: flex;
+    flex-direction: column;
+    background-color: var(--zk-tab-bg);
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* overflow:hidden only on strip molds (top/bottom/left/right). Accordion
+ * mode must allow content to grow vertically — its panels lay out in
+ * normal flow and the root height should follow content (or scroll if
+ * the user constrains it via height=). */
+.z-tabbox-top,
+.z-tabbox-bottom,
+.z-tabbox-left,
+.z-tabbox-right,
+.z-tabbox-vertical {
+    overflow: hidden;
+}
+
+/* ─── Tab bar (.z-tabs) ─────────────────────────────────────────────────── */
+.z-tabs {
+    position: relative;
+    border-bottom: 1px solid var(--zk-tab-border-color);
+    background-color: var(--zk-tab-bg);
+    flex-shrink: 0;
+    overflow: hidden;   /* ZK manages scroll via JS scroll buttons */
+    min-height: var(--zk-tab-height);
+    line-height: 1;
+}
+
+/* Inner tab list */
+.z-tabs-content {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-height: var(--zk-tab-height);
+}
+
+/* Spacer element ZK inserts */
+.z-tabs-space {
+    flex: 1;
+}
+
+/* ─── Individual tab ────────────────────────────────────────────────────── */
+.z-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    flex-shrink: 0;   /* keeps natural width so ZK JS can detect overflow */
+    min-height: var(--zk-tab-height);
+    cursor: pointer;
+    color: var(--zk-tab-fg);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
+    white-space: nowrap;
+    user-select: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    overflow: hidden;
+    background: transparent;
+    transition:
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State layer */
+.z-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--zk-tab-accent);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-tab:hover {
+    color: var(--zk-tab-fg-hover);
+}
+
+.z-tab:hover::before { opacity: var(--zk-state-hover-opacity); }
+.z-tab:focus-visible::before { opacity: var(--zk-state-focus-opacity); }
+
+/* ─── Selected tab ───────────────────────────────────────────────────────── */
+.z-tab.z-tab-selected {
+    color: var(--zk-tab-accent);
+    border-bottom-color: var(--zk-tab-accent);
+}
+
+/* ─── Disabled tab ───────────────────────────────────────────────────────── */
+.z-tab.z-tab-disabled {
+    color: var(--zk-color-disabled);
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ─── Tab inner content wrapper ─────────────────────────────────────────── */
+.z-tab-content {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ─── Tab text label ─────────────────────────────────────────────────────── */
+.z-tab-text {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    pointer-events: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ─── Tab close button (.z-tab-button, not z-tab-close) ─────────────────── */
+/* ZK emits the button BEFORE .z-tab-text — order:1 flips it to trailing
+   (dismiss affordances trail the content; c31, doc/md3-close-affordance-
+   placement.md). Label–icon gap comes from .z-tab-content's 4px flex gap
+   alone (c32) — the old margin-left would double it once trailing. */
+.z-tab-button {
+    position: relative;
+    z-index: 1;
+    order: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: none;
+    background: transparent;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    border-radius: var(--zk-shape-corner-full);
+    font-size: 12px;
+    padding: 0;
+    pointer-events: auto;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Closable tabs: trailing inset = half the 16px text inset — 16/4/8
+   leading/gap/trailing (c33, GL close-7 parity). Accordion is exempt via
+   cascade: c22i (.z-tabbox-accordion .z-tab-content { padding: 0 }) has
+   equal specificity (0,2,0) and comes later in this file. */
+.z-tab-content:has(> .z-tab-button) {
+    padding-right: var(--zk-spacing-2);
+}
+
+.z-tab-button:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) 12%, transparent);
+    color: var(--zk-color-on-surface);
+}
+
+.z-tab-selected .z-tab-button {
+    color: var(--zk-color-primary);
+}
+
+.z-tab-selected .z-tab-button:hover {
+    background-color: color-mix(in srgb, var(--zk-color-primary) 12%, transparent);
+}
+
+/* ─── Tab icon / image ───────────────────────────────────────────────────── */
+.z-tab-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    position: static;
+    transform: none;
+}
+
+.z-tab-image {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+/* ─── Tab scroll arrows ─────────────────────────────────────────────────── */
+/* Hidden by default; shown only when ZK adds .z-tabbox-scroll to the root. */
+.z-tabbox-left-scroll,
+.z-tabbox-right-scroll,
+.z-tabbox-up-scroll,
+.z-tabbox-down-scroll {
+    display: none;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+    /* Opaque strip-coloured background so a partially-scrolled tab slides
+     * cleanly *under* the arrow instead of bleeding through it. ZK reserves
+     * arrow space via _getArrowSize() but its measurement can lag our rendered
+     * arrow width, leaving the last tab a few px under the arrow — the opaque
+     * fill makes that the intended MUI "tab scrolls under the button" look. */
+    background-color: var(--zk-color-surface);
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    z-index: 1;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Directional edge anchors — buttons overlay the strip ends (c22b).
+ * Up/down scroll buttons MUST follow the tabs' side: left for orient=left,
+ * right for orient=right. Default `left: 0` covers .z-tabbox-left and
+ * .z-tabbox-vertical (legacy alias for left); .z-tabbox-right overrides
+ * to anchor right. Regression-prone — keep .z-tabbox-right override pair
+ * in sync with .z-tabbox-left/.z-tabbox-vertical defaults. (c22j) */
+.z-tabbox-left-scroll  { left: 0;   top: 0;    }
+.z-tabbox-right-scroll { right: 0;  top: 0;    }
+.z-tabbox-up-scroll    { left: 0;   top: 0;    width: 100%; }
+.z-tabbox-down-scroll  { left: 0;   bottom: 0; width: 100%; }
+
+.z-tabbox-right > .z-tabbox-up-scroll,
+.z-tabbox-right > .z-tabbox-down-scroll {
+    left: auto;
+    right: 0;
+}
+
+/* Horizontal scroll buttons: visible when overflow detected */
+.z-tabbox-scroll > .z-tabbox-left-scroll,
+.z-tabbox-scroll > .z-tabbox-right-scroll {
+    display: flex;
+    width: 40px;
+    min-height: var(--zk-tab-height);
+}
+
+/* Vertical scroll buttons: visible when overflow detected.
+ * ZK's Tabs._scrollcheck sets inline `style.width` on these to match
+ * `.z-tabs.style.width` (which may be the user-provided <tabs width="..."> value).
+ * That can render narrower than the rendered strip when our CSS applies a
+ * `min-width: 120px` to `.z-tabs`, producing a visible step. Enforce the
+ * same min-width on the buttons so they always span the rendered strip. */
+.z-tabbox-scroll > .z-tabbox-up-scroll,
+.z-tabbox-scroll > .z-tabbox-down-scroll {
+    display: flex;
+    height: 40px;
+    min-width: 120px;
+}
+
+/* Strip margin: reserve 40px at each end so the absolute-positioned scroll
+ * arrows overlay the strip's leading/trailing edge without disturbing ZK's
+ * inline width calc (tabs.style.width = tbx.offsetWidth - toolbarWidth).
+ * Margin (not padding) is required because ZK's width is set on the .z-tabs
+ * content box; padding would compound and shrink the usable area. (c22c/c22d) */
+.z-tabbox-scroll.z-tabbox-top > .z-tabs,
+.z-tabbox-scroll.z-tabbox-bottom > .z-tabs {
+    margin: 0 40px;
+}
+
+.z-tabbox-scroll.z-tabbox-left > .z-tabs,
+.z-tabbox-scroll.z-tabbox-right > .z-tabs {
+    margin: 40px 0;
+}
+
+/* Chevron glyph inside scroll buttons */
+.z-tabbox-left-scroll > i,
+.z-tabbox-right-scroll > i,
+.z-tabbox-up-scroll > i,
+.z-tabbox-down-scroll > i {
+    font-size: var(--zk-typescale-body-medium-size);
+}
+
+/* Hover state-layer tint on scroll buttons */
+.z-tabbox-left-scroll:hover,
+.z-tabbox-right-scroll:hover,
+.z-tabbox-up-scroll:hover,
+.z-tabbox-down-scroll:hover {
+    background-color: color-mix(in srgb, var(--zk-color-primary) var(--zk-state-hover-opacity-pct, 8%), var(--zk-color-surface));
+}
+
+/* ─── Toolbar nested in tabbox ─────────────────────────────────────────────
+ * ZK's Toolbar.domClass_ appends `.z-toolbar-tabs` when the toolbar's
+ * parent is a Tabbox. The toolbar must be absolutely positioned so ZK's
+ * inline width calc (tabs.style.width = tabbox.offsetWidth - toolbar.offsetWidth)
+ * works — the toolbar OVERLAYS the right portion of the tab strip's row
+ * rather than consuming a flex row of its own. */
+.z-tabbox > .z-toolbar.z-toolbar-tabs {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background-color: var(--zk-color-surface);
+}
+
+.z-tabbox-bottom > .z-toolbar.z-toolbar-tabs {
+    top: auto;
+    bottom: 0;
+}
+
+/* ─── Tab panels container ───────────────────────────────────────────────── */
+.z-tabpanels {
+    flex: 1;
+    overflow: auto;
+    background-color: var(--zk-color-surface);
+    position: relative;
+    border: 1px solid var(--zk-tab-border-color);
+    border-top: none;
+    border-radius: 0 0 var(--zk-shape-card) var(--zk-shape-card);
+}
+
+.z-tabpanel {
+    padding: var(--zk-spacing-4);
+    background-color: var(--zk-color-surface);
+    min-height: 80px;
+    color: var(--zk-color-on-surface);
+}
+
+/* ─── Placement molds ────────────────────────────────────────────────────── */
+.z-tabbox-top .z-tabs {
+    border-bottom: 1px solid var(--zk-tab-border-color);
+}
+
+/* Bottom orientation: ZK mold renders tabpanels FIRST then tabs in DOM,
+   so default flex column order already places panels on top, tabs on bottom. */
+.z-tabbox-bottom .z-tabs {
+    border-top: 1px solid var(--zk-tab-border-color);
+    border-bottom: none;
+}
+
+/* Tabpanels border adjustment for bottom: border is on top/sides/none at bottom */
+.z-tabbox-bottom .z-tabpanels {
+    border-top: 1px solid var(--zk-tab-border-color);
+    border-bottom: none;
+    border-radius: var(--zk-shape-card) var(--zk-shape-card) 0 0;
+}
+
+.z-tabbox-bottom .z-tab {
+    border-bottom: none;
+    border-top: 2px solid transparent;
+    margin-top: -1px;
+    margin-bottom: 0;
+}
+
+.z-tabbox-bottom .z-tab.z-tab-selected {
+    border-top-color: var(--zk-color-primary);
+}
+
+/* orient="vertical" → z-tabbox-vertical; orient="left" → z-tabbox-left */
+.z-tabbox-left,
+.z-tabbox-vertical {
+    flex-direction: row;
+}
+
+.z-tabbox-left .z-tabs,
+.z-tabbox-vertical .z-tabs {
+    flex-direction: column;
+    border-bottom: none;
+    border-right: 1px solid var(--zk-tab-border-color);
+    min-width: 120px;
+    width: auto;
+    overflow: hidden;
+}
+
+.z-tabbox-left .z-tabs-content,
+.z-tabbox-vertical .z-tabs-content {
+    flex-direction: column;
+}
+
+.z-tabbox-left .z-tab,
+.z-tabbox-vertical .z-tab {
+    border-bottom: none;
+    border-right: 2px solid transparent;
+    margin-bottom: 0;
+    margin-right: -1px;
+    justify-content: flex-start;
+}
+
+.z-tabbox-left .z-tab.z-tab-selected,
+.z-tabbox-vertical .z-tab.z-tab-selected {
+    border-right-color: var(--zk-color-primary);
+    color: var(--zk-color-primary);
+}
+
+/* Closable in vertical orients: bars are ≥ 120px wide, so order alone leaves
+   the × adjacent to a short label mid-bar. Content spans the bar (c34) and
+   the auto margin pushes the × to the bar's trailing edge (c34a); the 8px
+   inset comes from the closable padding-right rule above (c33). */
+.z-tabbox-left .z-tab-content,
+.z-tabbox-vertical .z-tab-content,
+.z-tabbox-right .z-tab-content {
+    flex: 1 1 auto;
+}
+
+.z-tabbox-left .z-tab-button,
+.z-tabbox-vertical .z-tab-button,
+.z-tabbox-right .z-tab-button {
+    margin-left: auto;
+}
+
+.z-tabbox-right {
+    flex-direction: row-reverse;
+}
+
+.z-tabbox-right .z-tabs {
+    flex-direction: column;
+    border-bottom: none;
+    border-left: 1px solid var(--zk-tab-border-color);
+    min-width: 120px;
+    width: auto;
+    overflow: hidden;
+}
+
+.z-tabbox-right .z-tabs-content {
+    flex-direction: column;
+}
+
+.z-tabbox-right .z-tab {
+    border-bottom: none;
+    border-left: 2px solid transparent;
+    margin-bottom: 0;
+    margin-left: -1px;
+    justify-content: flex-start;
+}
+
+.z-tabbox-right .z-tab.z-tab-selected {
+    border-left-color: var(--zk-color-primary);
+    color: var(--zk-color-primary);
+}
+
+/* ─── Accordion mold ─────────────────────────────────────────────────────── */
+/*
+ * In accordion mode:
+ *   - .z-tabbox-accordion class added by ZK to the outer div
+ *   - .z-tabs is NOT rendered
+ *   - Each section is: .z-tabpanel.z-tabpanel-content
+ *       > .z-tab (accordion header)
+ *       > div#uuid-cave (expandable content)
+ */
+
+.z-tabbox-accordion {
+    display: block;
+    /* No `overflow: hidden` here — it interferes with `jq.slideDown` height
+     * measurement on the inner `.z-tabpanel-content` when the tabbox carries an
+     * explicit height (e.g. height="300px"). The animation gets stuck at
+     * height:0 and never restores natural height. See doc/skill-gaps.md
+     * 2026-05-21 entry. */
+    border: 1px solid var(--zk-tab-border-color);
+    /* No border-radius — MD3 expansion-panel groups render flat at the edges.
+     * Adding radius to the parent while children (.z-tab headers, panel-content)
+     * remain square produces sharp corners peeking out from under the rounded
+     * container. We can't `overflow: hidden` to clip (slideDown breaks), and
+     * rounding the first/last children adds fragile sibling-position math.
+     * Flat container per MD style is the simpler, correct choice. (c22k) */
+}
+
+.z-tabbox-accordion .z-tabpanels {
+    display: block;
+    overflow: visible;
+    background: var(--zk-color-surface);
+    padding: 0;
+}
+
+/* Each accordion section wrapper.
+ * Override the base `.z-tabpanel { min-height: 80px }` — in accordion mode
+ * the section's intrinsic height should be just its header (~52px) when the
+ * cave is collapsed. Without this reset, ZK's `Tabpanel._fixPanelHgh`
+ * subtracts inflated sibling offsetHeights from the tabbox height and
+ * clamps the selected cave's height to 0 (B50-ZK-298 path). */
+.z-tabbox-accordion .z-tabpanel {
+    border-bottom: 1px solid var(--zk-tab-border-color);
+    padding: 0;
+    min-height: 0;
+}
+
+.z-tabbox-accordion .z-tabpanel:last-child {
+    border-bottom: none;
+}
+
+/* Accordion header (the .z-tab that acts as expand trigger).
+ * MD3 expansion panel header: 48px minimum. Kept tight so that several
+ * collapsed sections fit inside a height-constrained tabbox — otherwise
+ * ZK's `Tabpanel._fixPanelHgh` clamps the selected cave height to 0. */
+.z-tabbox-accordion .z-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    min-height: var(--zk-tab-height);
+    cursor: pointer;
+    color: var(--zk-color-on-surface);
+    background: var(--zk-color-surface);
+    font-size: var(--zk-typescale-body-large-size);
+    font-weight: var(--zk-typescale-title-small-weight);
+    border: none;
+    border-bottom: none;
+    border-right: none;
+    border-left: none;
+    margin: 0;
+    overflow: hidden;
+    user-select: none;
+    transition:
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-tabbox-accordion .z-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--zk-color-on-surface);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-tabbox-accordion .z-tab:hover::before {
+    opacity: var(--zk-state-hover-opacity);
+}
+
+/* Selected (expanded) accordion header */
+.z-tabbox-accordion .z-tab.z-tab-selected {
+    color: var(--zk-color-on-primary-container);
+    background-color: var(--zk-color-primary-container);
+}
+
+.z-tabbox-accordion .z-tab.z-tab-selected::before {
+    background-color: var(--zk-color-on-primary-container);
+}
+
+/* Disabled accordion header */
+.z-tabbox-accordion .z-tab.z-tab-disabled {
+    color: var(--zk-color-disabled);
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+    background: var(--zk-color-surface);
+}
+
+/* Inner content row (text + chevron).
+ * Override the base `.z-tab-content { padding: 12px 16px }` — in accordion
+ * mode the outer `.z-tab` already supplies vertical padding, so double-
+ * padding bloats the header to ~60px and starves the cave of vertical
+ * space inside a height-constrained tabbox. */
+.z-tabbox-accordion .z-tab-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: var(--zk-spacing-2);
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.z-tabbox-accordion .z-tab-text {
+    flex: 1;
+    pointer-events: none;
+}
+
+/* Accordion NEVER shows the close icon, regardless of closable (contract c11a,
+   user ruling 2026-06-07): accordion header = MD3 expansion panel, whose only
+   trailing affordance is the chevron — no inline dismiss
+   (doc/spec/md3-close-affordance-placement.md). ZK still emits .z-tab-button in the
+   accordion DOM when closable="true" (skill — Notes); closing remains available
+   programmatically. */
+.z-tabbox-accordion .z-tab-button {
+    display: none;
+}
+
+/* Chevron — right-side arrow via ::after on .z-tab-content.
+   order: 2 keeps it the outermost trailing element now that .z-tab-button
+   carries order: 1 — closable header sequence: label(flex:1) … × chevron (c35). */
+.z-tabbox-accordion .z-tab-content::after {
+    content: '';
+    display: inline-block;
+    order: 2;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--zk-color-on-surface-variant);
+    border-bottom: 2px solid var(--zk-color-on-surface-variant);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-tabbox-accordion .z-tab.z-tab-selected .z-tab-content::after {
+    transform: rotate(-135deg);
+    border-color: var(--zk-color-on-primary-container);
+}
+
+/* Expandable content area (div#uuid-cave inside .z-tabpanel) */
+.z-tabbox-accordion .z-tabpanel > [id$="-cave"] {
+    padding: var(--zk-spacing-4);
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: 1.6;
+    background: var(--zk-color-surface);
+}
+}

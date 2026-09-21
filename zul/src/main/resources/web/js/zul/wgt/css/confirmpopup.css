@@ -1,0 +1,247 @@
+/* MD3 ConfirmPopup — lightweight anchored confirmation popover (ZK 10.4.0, CE)
+   DOM:
+   .z-confirmpopup.z-confirmpopup-{severity}.z-confirmpopup-placement-{top|bottom|left|right}
+     ├─ .z-confirmpopup-arrow                 (<span> — two-layer CSS triangle pointer)
+     ├─ .z-confirmpopup-header                (OPTIONAL — present only when `header` is set)
+     ├─ .z-confirmpopup-body                  (unconditional icon+message row)
+     │   ├─ .z-confirmpopup-icon              (OPTIONAL <i> — also carries raw iconSclass)
+     │   └─ .z-confirmpopup-message           (OPTIONAL — present only when `message` is set)
+     └─ .z-confirmpopup-footer                (unconditional; DOM order is always cancel→ok)
+         ├─ button.z-confirmpopup-cancel
+         └─ button.z-confirmpopup-ok
+   Not a modal dialog and NOT the generic Popup's `.z-popup > .z-popup-content` pattern —
+   header/body/footer are direct children of the root. Severity recolors ONLY the icon
+   (identical severity→token mapping as chip.css/badge.css). See doc/contracts/confirmpopup.md. */
+
+@layer zk-components {
+
+/* ─── Root: elevated popover card ─────────────────────────────────────── */
+.z-confirmpopup {
+    position: absolute;
+    z-index: 1500;
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 320px;
+    background-color: var(--zk-confirmpopup-bg);
+    color: var(--zk-confirmpopup-header-fg);
+    border: none;
+    border-radius: var(--zk-confirmpopup-radius);
+    /* shadow alone supplies separation from the page (MUI Popover pattern) — no border drawn */
+    box-shadow: var(--zk-confirmpopup-elevation);
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* Reserve room, opposite the placement, for the arrow's own thickness so its tip
+   touches the trigger edge with no gap/overlap (see skill Composition invariants).
+   Do NOT add independent spacing between the box and the arrow beyond this. */
+.z-confirmpopup.z-confirmpopup-placement-top    { margin-bottom: 8px; }
+.z-confirmpopup.z-confirmpopup-placement-bottom { margin-top: 8px; }
+.z-confirmpopup.z-confirmpopup-placement-left   { margin-right: 8px; }
+.z-confirmpopup.z-confirmpopup-placement-right  { margin-left: 8px; }
+
+/* ─── Arrow: two stacked CSS triangles (outer edge + inner fill) ─────────
+   ::before = thin outline-variant edge; ::after = surface fill, inset 1px so the
+   arrow reads as a seamless extension of the card rather than a separate shape.
+   The JS-owned cross-axis offset (arrow.style.left / .top, written by
+   Confirmpopup._repositionArrow) MUST win over any static CSS position on the
+   arrow itself — never override it with !important or position:static. A plain
+   `left: 50%` / `top: 50%` default (per the widget source) is the pre-JS fallback,
+   intentionally not centered exactly (JS refines on the next tick). */
+.z-confirmpopup-arrow {
+    position: absolute;
+    display: block;
+    pointer-events: none;
+}
+.z-confirmpopup-arrow::before,
+.z-confirmpopup-arrow::after {
+    content: '';
+    position: absolute;
+    display: block;
+    border-style: solid;
+    border-color: transparent;
+}
+
+.z-confirmpopup-placement-top > .z-confirmpopup-arrow,
+.z-confirmpopup-placement-bottom > .z-confirmpopup-arrow {
+    left: 50%;
+    width: 16px;
+    height: 8px;
+}
+.z-confirmpopup-placement-left > .z-confirmpopup-arrow,
+.z-confirmpopup-placement-right > .z-confirmpopup-arrow {
+    top: 50%;
+    width: 8px;
+    height: 16px;
+}
+
+/* placement-top: box sits above the trigger — arrow is on the box's BOTTOM edge, pointing down */
+.z-confirmpopup-placement-top > .z-confirmpopup-arrow { bottom: -8px; }
+.z-confirmpopup-placement-top > .z-confirmpopup-arrow::before {
+    bottom: 1px;
+    border-width: 8px 8px 0;
+    border-top-color: var(--zk-confirmpopup-border-color);
+}
+.z-confirmpopup-placement-top > .z-confirmpopup-arrow::after {
+    bottom: 2px;
+    left: 1px;
+    border-width: 7px 7px 0;
+    border-top-color: var(--zk-confirmpopup-bg);
+}
+
+/* placement-bottom: box sits below the trigger — arrow is on the box's TOP edge, pointing up */
+.z-confirmpopup-placement-bottom > .z-confirmpopup-arrow { top: -8px; }
+.z-confirmpopup-placement-bottom > .z-confirmpopup-arrow::before {
+    top: 1px;
+    border-width: 0 8px 8px;
+    border-bottom-color: var(--zk-confirmpopup-border-color);
+}
+.z-confirmpopup-placement-bottom > .z-confirmpopup-arrow::after {
+    top: 2px;
+    left: 1px;
+    border-width: 0 7px 7px;
+    border-bottom-color: var(--zk-confirmpopup-bg);
+}
+
+/* placement-left: box sits left of the trigger — arrow is on the box's RIGHT edge, pointing right */
+.z-confirmpopup-placement-left > .z-confirmpopup-arrow { right: -8px; }
+.z-confirmpopup-placement-left > .z-confirmpopup-arrow::before {
+    right: 1px;
+    border-width: 8px 0 8px 8px;
+    border-left-color: var(--zk-confirmpopup-border-color);
+}
+.z-confirmpopup-placement-left > .z-confirmpopup-arrow::after {
+    right: 2px;
+    top: 1px;
+    border-width: 7px 0 7px 7px;
+    border-left-color: var(--zk-confirmpopup-bg);
+}
+
+/* placement-right: box sits right of the trigger — arrow is on the box's LEFT edge, pointing left */
+.z-confirmpopup-placement-right > .z-confirmpopup-arrow { left: -8px; }
+.z-confirmpopup-placement-right > .z-confirmpopup-arrow::before {
+    left: 1px;
+    border-width: 8px 8px 8px 0;
+    border-right-color: var(--zk-confirmpopup-border-color);
+}
+.z-confirmpopup-placement-right > .z-confirmpopup-arrow::after {
+    left: 2px;
+    top: 1px;
+    border-width: 7px 7px 7px 0;
+    border-right-color: var(--zk-confirmpopup-bg);
+}
+
+/* ─── Header (optional) — DialogTitle analog ─────────────────────────── */
+.z-confirmpopup-header {
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    border-bottom: 1px solid var(--zk-confirmpopup-border-color);
+    color: var(--zk-confirmpopup-header-fg);
+    font-size: var(--zk-typescale-title-small-size);
+    font-weight: var(--zk-typescale-title-small-weight);
+    line-height: var(--zk-typescale-title-small-line-height);
+}
+
+/* ─── Body: icon + message row — DialogContent analog ────────────────── */
+.z-confirmpopup-body {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--zk-spacing-3);
+    padding: var(--zk-spacing-4);
+}
+
+/* Icon: a real `.z-icon-*` element (mask + currentColor, see base/_icons.css) — only
+   `color` and `font-size` (1em mask sizing) are set here. Severity below recolors it. */
+.z-confirmpopup-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--zk-color-on-surface-variant);
+}
+
+.z-confirmpopup-message {
+    color: var(--zk-confirmpopup-fg);
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    word-break: break-word;
+}
+
+/* ─── Severity → icon color (icon-only; identical mapping to chip.css) ─── */
+.z-confirmpopup-info .z-confirmpopup-icon      { color: var(--zk-color-status-info); }
+.z-confirmpopup-success .z-confirmpopup-icon   { color: var(--zk-color-success); }
+.z-confirmpopup-warning .z-confirmpopup-icon   { color: var(--zk-color-warning); }
+.z-confirmpopup-danger .z-confirmpopup-icon    { color: var(--zk-color-error); }
+.z-confirmpopup-secondary .z-confirmpopup-icon { color: var(--zk-color-on-surface-variant); }
+
+/* ─── Footer: right-aligned Cancel/OK row — DialogActions analog ────────
+   DOM order is always cancel→ok and is NOT reversed here, so the natural
+   left-to-right flex flow already puts Cancel left of OK (fixed tab order
+   preserved regardless of `defaultFocus`). */
+.z-confirmpopup-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--zk-spacing-2);
+    padding: var(--zk-spacing-2) var(--zk-spacing-4) var(--zk-spacing-3);
+    border-top: 1px solid var(--zk-confirmpopup-border-color);
+}
+
+.z-confirmpopup-ok,
+.z-confirmpopup-cancel {
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    min-width: 64px;
+    min-height: var(--zk-button-height-sm);
+    padding: 0 var(--zk-spacing-4);
+    border-radius: var(--zk-confirmpopup-button-radius);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* State layer (MD3 canonical, matching .z-button::before) */
+.z-confirmpopup-ok::before,
+.z-confirmpopup-cancel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+.z-confirmpopup-ok:hover::before,
+.z-confirmpopup-cancel:hover::before { opacity: var(--zk-state-hover-opacity); }
+.z-confirmpopup-ok:focus-visible::before,
+.z-confirmpopup-cancel:focus-visible::before { opacity: var(--zk-state-focus-opacity); }
+.z-confirmpopup-ok:active::before,
+.z-confirmpopup-cancel:active::before { opacity: var(--zk-state-pressed-opacity); }
+
+.z-confirmpopup-ok:focus-visible,
+.z-confirmpopup-cancel:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+/* OK — high-emphasis, filled (the committing action) */
+.z-confirmpopup-ok {
+    border: none;
+    background-color: var(--zk-confirmpopup-ok-bg);
+    color: var(--zk-confirmpopup-ok-fg);
+}
+.z-confirmpopup-ok::before { background-color: var(--zk-confirmpopup-ok-fg); }
+
+/* Cancel — low-emphasis, outlined (the dismissal action; never confusable with OK) */
+.z-confirmpopup-cancel {
+    background-color: transparent;
+    border: 1px solid var(--zk-confirmpopup-cancel-border-color);
+    color: var(--zk-confirmpopup-cancel-fg);
+}
+.z-confirmpopup-cancel::before { background-color: var(--zk-confirmpopup-cancel-fg); }
+}

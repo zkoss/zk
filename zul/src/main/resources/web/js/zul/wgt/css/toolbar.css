@@ -1,0 +1,270 @@
+/* MD3 Toolbar
+ *
+ * Actual DOM (from ZK source):
+ *
+ * Default mold:
+ *   <div class="z-toolbar [z-toolbar-panel] [z-toolbar-vertical] [z-toolbar-tabs]
+ *                         [z-toolbar-overflowpopup z-toolbar-overflowpopup-off]">
+ *     <div class="z-toolbar-content z-toolbar-start|center|end" id="uuid-cave">
+ *       children (toolbarbutton, button, separator, etc.)
+ *     </div>
+ *     [<i class="z-toolbar-overflowpopup-button z-icon-ellipsis-h z-icon-fw">]
+ *     [<div class="z-toolbar-popup z-toolbar-popup-close|open">]
+ *     <div class="z-clear"></div>
+ *   </div>
+ *
+ * Panel mold:
+ *   <div class="z-toolbar z-toolbar-panel">
+ *     <table class="z-toolbar-content z-toolbar-start" ...><tbody>
+ *       <tr><td class="z-toolbar-horizontal"> child </td></tr>  (horizontal orient)
+ *       <tr><td class="z-toolbar-vertical"> child </td></tr>    (vertical orient)
+ *     </tbody></table>
+ *     <div class="z-clear"></div>
+ *   </div>
+ *
+ * State classes on root div:
+ *   z-toolbar-panel    — panel mold (rendered as table)
+ *   z-toolbar-vertical — vertical orientation
+ *   z-toolbar-tabs     — inside a tabbox
+ *   z-toolbar-overflowpopup / z-toolbar-overflowpopup-on / z-toolbar-overflowpopup-off
+ */
+
+/* ─── Base toolbar ───────────────────────────────────────────────────────── */
+@layer zk-components {
+.z-toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: var(--zk-toolbar-height);
+    background-color: var(--zk-toolbar-bg);
+    border-bottom: 1px solid var(--zk-toolbar-border-color);
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* ─── Toolbar content (flex container for children) ─────────────────────── */
+.z-toolbar-content {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    flex: 1;
+    gap: var(--zk-spacing-1);
+    padding: 0 var(--zk-spacing-4);
+    min-height: inherit;
+    box-sizing: border-box;
+}
+
+/* Alignment zones */
+.z-toolbar-start {
+    justify-content: flex-start;
+}
+
+.z-toolbar-center {
+    justify-content: center;
+}
+
+.z-toolbar-end {
+    justify-content: flex-end;
+}
+
+/* ─── App bar variant: toolbar inside borderlayout north ─────────────────── */
+.z-north .z-toolbar {
+    background-color: var(--zk-color-primary);
+    border-bottom: none;
+    color: var(--zk-color-on-primary);
+}
+
+/* Menubar inside app bar north: transparent, no shadow */
+.z-north .z-toolbar .z-menubar {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+    min-height: var(--zk-toolbar-height);
+}
+
+/* Menu content text in app bar */
+.z-north .z-toolbar .z-menubar .z-menu-content {
+    color: var(--zk-color-on-primary);
+}
+
+/* Toolbarbuttons in app bar */
+.z-north .z-toolbar .z-toolbarbutton {
+    color: var(--zk-color-on-primary);
+}
+
+.z-north .z-toolbar .z-toolbarbutton::before {
+    background-color: var(--zk-color-on-primary);
+}
+
+/* App title / brand text */
+.z-north .z-toolbar .z-span,
+.z-north .z-toolbar .z-label {
+    color: var(--zk-color-on-primary);
+    font-size: var(--zk-typescale-title-large-size);
+    font-weight: var(--zk-typescale-title-large-weight);
+}
+
+/* Toolbarseparator in app bar */
+.z-north .z-toolbar .z-toolbarseparator {
+    background-color: color-mix(in srgb, var(--zk-color-on-primary) 30%, transparent);
+}
+
+/* ─── Toolbarseparator (visual divider between toolbar items) ────────────── */
+.z-toolbarseparator {
+    display: inline-block;
+    width: 1px;
+    height: 24px;
+    background-color: var(--zk-toolbar-border-color);
+    margin: 0 var(--zk-spacing-1);
+    flex-shrink: 0;
+    align-self: center;
+}
+
+/* ─── Separator inside toolbar (flex spacer) ─────────────────────────────── */
+/* <separator/> component — acts as a flex spacer pushing items apart */
+.z-toolbar .z-separator,
+.z-toolbar-content .z-separator {
+    flex: 1 1 auto;
+    width: auto !important;
+    height: 0;
+    background-color: transparent;
+    border: none;
+}
+
+/* ─── Vertical toolbar ───────────────────────────────────────────────────── */
+.z-toolbar-vertical {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: unset;
+    min-width: var(--zk-toolbar-height);
+    border-bottom: none;
+    border-right: 1px solid var(--zk-toolbar-border-color);
+}
+
+.z-toolbar-vertical .z-toolbar-content {
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--zk-spacing-2) 0;
+    gap: var(--zk-spacing-1);
+    min-height: unset;
+}
+
+/* Toolbarseparator in vertical toolbar: horizontal rule */
+.z-toolbar-vertical .z-toolbarseparator {
+    width: 24px;
+    height: 1px;
+    margin: var(--zk-spacing-1) 0;
+    align-self: center;
+}
+
+/* ─── Panel mold toolbar ─────────────────────────────────────────────────── */
+/* Panel mold renders children in a TABLE instead of a div, but the
+   outer .z-toolbar still applies. Table cells provide alignment. */
+.z-toolbar-panel {
+    /* Same surface styling; no change needed beyond base */
+}
+
+.z-toolbar-panel .z-toolbar-content {
+    /* Table element — reset flex on the content wrapper */
+    display: table;
+    width: 100%;
+    padding: 0;
+}
+
+/* Panel mold table cells (scoped inside .z-toolbar-panel to avoid colliding with
+   the .z-toolbar-vertical orientation class on the toolbar root div) */
+.z-toolbar-panel .z-toolbar-horizontal,
+.z-toolbar-panel td.z-toolbar-vertical {
+    vertical-align: middle;
+    padding: 0 var(--zk-spacing-1);
+}
+
+/* ─── Toolbar inside tabbox ──────────────────────────────────────────────── */
+.z-toolbar-tabs {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: transparent;
+    border: none;
+    min-height: var(--zk-control-height);
+    z-index: 1;
+    overflow: hidden;
+}
+
+.z-toolbar-tabs .z-toolbar-content {
+    padding: 0 var(--zk-spacing-2);
+    min-height: var(--zk-control-height);
+}
+
+/* ─── Overflow popup ─────────────────────────────────────────────────────── */
+/* The overflow button (ellipsis icon) */
+.z-toolbar-overflowpopup-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--zk-button-height);
+    height: var(--zk-button-height);
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--zk-color-on-surface-variant);
+    border-radius: var(--zk-shape-corner-full);
+    position: relative;
+    overflow: hidden;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-toolbar-overflowpopup-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.z-toolbar-overflowpopup-button:hover::before {
+    opacity: var(--zk-state-hover-opacity);
+}
+
+/* Show/hide overflow button based on ZK's on/off class */
+.z-toolbar-overflowpopup-off > .z-toolbar-overflowpopup-button {
+    display: none;
+}
+
+.z-toolbar-overflowpopup-on > .z-toolbar-overflowpopup-button {
+    display: inline-flex;
+}
+
+/* Overflow popup dropdown */
+.z-toolbar-popup {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1600;
+    margin-top: var(--zk-spacing-1);
+    padding: var(--zk-spacing-1) 0;
+    background-color: var(--zk-color-surface);
+    border-radius: var(--zk-shape-menu);
+    box-shadow: var(--zk-elevation-dropdown);
+    border: 1px solid var(--zk-color-outline-variant);
+    min-width: 160px;
+    overflow: auto;
+    max-height: 350px;
+    box-sizing: border-box;
+}
+
+.z-toolbar-popup-open {
+    visibility: visible;
+}
+
+.z-toolbar-popup-close {
+    visibility: hidden;
+}
+
+/* ─── ZK clear div (layout artifact) ────────────────────────────────────── */
+.z-toolbar .z-clear {
+    clear: both;
+    height: 0;
+    overflow: hidden;
+}
+}

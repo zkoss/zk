@@ -1,0 +1,132 @@
+/* MD3 Errorbox — inline field validation tooltip (extends Notification)
+   DOM: <div class="z-errorbox">
+          <div class="z-errorbox-pointer [z-errorbox-up|down|left|right]"/>
+          <i class="z-errorbox-icon z-icon-exclamation-triangle"/>
+          <div class="z-errorbox-content" title="…">message text</div>
+          <div class="z-errorbox-close">
+            <i class="z-errorbox-icon z-icon-times"/>
+          </div>
+        </div>
+*/
+
+@layer zk-components {
+.z-errorbox {
+    color: var(--zk-color-on-error-container);
+    width: 260px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1600;
+    display: table;
+    /* Errorbox._fixarrow() (ZK) writes padding to ONLY the beak-facing side of
+       this node on every reposition (padding-left when the beak points left,
+       padding-top when up, …). Because the content is a table-cell, that
+       one-sided padding shifts the content — but the icon and close button are
+       absolutely positioned against this box and stay put, so they drift 8px
+       between positions, and zeroing the padding instead lets the beak fall
+       INSIDE the content. Override it with SYMMETRIC padding on all four sides,
+       equal to ZK's own beak size (pw/ph = 2 + the 6px pointer border = 8px):
+       the content is now inset equally in every direction, the beak (pointer
+       -4px + 12px-wide triangle) lands flush at the content edge on whichever
+       side it points, and the icon/close keep a constant offset from the
+       content (they add the same --zk-errorbox-beak back). */
+    --zk-errorbox-beak: 8px;
+    padding: var(--zk-errorbox-beak) !important;
+}
+
+/* ─── Content box ───────────────────────────────────────────────────────── */
+.z-errorbox-content {
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-small-size);
+    font-weight: var(--zk-typescale-body-small-weight);
+    line-height: 1.4;
+    color: var(--zk-color-on-error-container);
+    width: 100%;
+    border: 1px solid var(--zk-color-error);
+    border-radius: var(--zk-shape-corner-extra-small);
+    /* left padding leaves room for icon */
+    padding: var(--zk-spacing-2) 28px var(--zk-spacing-2) 34px;
+    background: var(--zk-color-error-container);
+    position: relative;
+    overflow: hidden;
+    cursor: move;
+    box-shadow: var(--zk-elevation-2);
+}
+
+/* ─── Icon (direct sibling before content, absolute inside errorbox) ─────── */
+.z-errorbox-icon {
+    position: absolute;
+    z-index: 2;
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    top: 50%;
+    /* +beak: cancel the symmetric box padding so the icon keeps a 12px gap from
+       the content's left edge in every pointer direction. */
+    left: calc(var(--zk-spacing-3) + var(--zk-errorbox-beak));
+    margin-top: -7px;
+    color: var(--zk-color-error);
+}
+
+/* ─── Close button ──────────────────────────────────────────────────────── */
+.z-errorbox-close {
+    font-size: 14px;
+    width: 18px;
+    height: 18px;
+    padding: 0 1px;
+    position: absolute;
+    top: 50%;
+    /* +beak: cancel the symmetric box padding so the close keeps a 4px gap from
+       the content's right edge in every pointer direction. */
+    right: calc(var(--zk-spacing-1) + var(--zk-errorbox-beak));
+    margin-top: -9px;
+    cursor: pointer;
+    opacity: 0.6;
+    color: var(--zk-color-on-error-container);
+}
+
+.z-errorbox-close:hover { opacity: 1; }
+
+/* Close icon inside close button */
+.z-errorbox-close > .z-errorbox-icon {
+    position: static;
+    margin-top: 0;
+    color: inherit;
+}
+
+/* ─── Arrow pointer ──────────────────────────────────────────────────────── */
+/* ZK reveals the pointer with jQuery .show() (Errorbox._fixarrow), which only
+   clears an inline display value — it cannot win against a stylesheet
+   `display:none`. So the base must stay visible; with all four borders
+   transparent the triangle is invisible until a direction class colours one
+   side, which is exactly when ZK wants it shown. */
+.z-errorbox-pointer {
+    display: block;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    position: absolute;
+    z-index: 100;
+}
+
+.z-errorbox-left,
+.z-errorbox-right,
+.z-errorbox-up,
+.z-errorbox-down {
+    border: 6px solid transparent;
+}
+
+/* Arrow colour matches the error border so it reads as a clear beak pointing
+   at the source field (error-container is too faint to see on a light page). */
+.z-errorbox-left  { border-right-color:  var(--zk-color-error); }
+.z-errorbox-right { border-left-color:   var(--zk-color-error); }
+.z-errorbox-up    { border-bottom-color: var(--zk-color-error); }
+.z-errorbox-down  { border-top-color:    var(--zk-color-error); }
+
+/* When pointer is present, content renders as table-cell (mirrors notification) */
+.z-errorbox-pointer ~ .z-errorbox-content {
+    display: table-cell;
+    vertical-align: middle;
+}
+}

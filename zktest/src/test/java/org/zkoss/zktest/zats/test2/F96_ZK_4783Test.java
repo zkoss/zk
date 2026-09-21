@@ -12,6 +12,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -19,6 +20,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F96_ZK_4783Test extends WebDriverTestCase {
 	@Test
+	@Tag("IceBlueOnly")
 	public void testIceblue() {
 		connect();
 		click(jq("@a:contains(Default)"));

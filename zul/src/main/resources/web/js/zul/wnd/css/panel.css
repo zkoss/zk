@@ -1,0 +1,198 @@
+/* MD3 Panel — card-style container with header
+   DOM (with title): .z-panel > .z-panel-head > .z-panel-header > .z-caption >
+                       .z-caption-content + .z-panel-icons > buttons
+   DOM (no title):   .z-panel > .z-panel-drag-button (minus icon, move handle)
+   Panel body:       .z-panel > .z-panel-body > .z-panel-top? + .z-panelchildren + .z-panel-bottom? + .z-panel-footer?
+   Control button base class: z-panel-icon ($s('icon')). Additional specific classes:
+     z-panel-expand (collapse toggle), z-panel-close, z-panel-maximize, z-panel-minimize.
+   State classes on root: z-panel-collapsed, z-panel-noborder, z-panel-noheader, z-panel-noframe */
+
+@layer zk-components {
+.z-panel {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--zk-panel-bg);
+    border-radius: var(--zk-panel-radius);
+    box-shadow: var(--zk-panel-elevation);
+    border: 1px solid var(--zk-panel-border-color);
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* ─── Panel head ─────────────────────────────────────────────────────────── */
+.z-panel-head {
+    flex-shrink: 0;
+    background-color: var(--zk-panel-bg);
+    border-bottom: 1px solid var(--zk-panel-border-color);
+}
+
+.z-panel-header {
+    display: flex;
+    align-items: center;
+    padding: var(--zk-header-padding-y) var(--zk-spacing-4);
+    min-height: var(--zk-panel-header-height);
+    /* Title-mold renders the title as a BARE text node (not a .z-caption child),
+       so the .z-caption-content/.z-label nowrap rules below don't reach it. Without
+       nowrap a long title wraps to multiple lines and inflates the header height
+       (e.g. a 280px panel). nowrap on the flex container is inherited by the
+       anonymous text flex item; the panel's own overflow:hidden clips any excess. */
+    white-space: nowrap;
+    /* Typography for title text node */
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-typescale-title-medium-weight);
+    line-height: var(--zk-typescale-title-medium-line-height);
+    color: var(--zk-panel-header-fg);
+}
+
+.z-panel-header-move {
+    cursor: move;
+}
+
+/* .z-caption is the caption child widget — flex: 1 to fill header, icons push right */
+.z-panel-header .z-caption {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Caption text inside .z-caption-content or direct .z-label children */
+.z-panel-header .z-caption-content,
+.z-panel-header .z-caption-text,
+.z-panel-header .z-label {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-typescale-title-medium-weight);
+    line-height: var(--zk-typescale-title-medium-line-height);
+    color: var(--zk-panel-header-fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ─── Control icons container ────────────────────────────────────────────── */
+/* Rendered by caption.js mold as p.$s('icons') = z-panel-icons */
+.z-panel-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+/* ─── Individual control buttons ─────────────────────────────────────────── */
+/* z-panel-icon is the base class ($s('icon')) on every control button.
+   Additional specific classes: z-panel-expand, z-panel-close, z-panel-maximize, z-panel-minimize. */
+.z-panel-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--zk-control-height-xs);
+    height: var(--zk-control-height-xs);
+    border: none;
+    background: transparent;
+    color: var(--zk-color-on-surface-variant);
+    border-radius: var(--zk-shape-corner-full);
+    cursor: pointer;
+    font-size: 14px;
+    position: relative;
+    overflow: hidden;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+                color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-panel-icon:hover {
+    background-color: var(--zk-panel-icon-hover-bg);
+    color: var(--zk-color-on-surface);
+}
+
+/* ─── Panel toolbar wrappers ─────────────────────────────────────────────── */
+/* Rendered by panel mold: $s('top'), $s('bottom'), $s('footer') */
+.z-panel-top,
+.z-panel-bottom,
+.z-panel-footer {
+    background-color: var(--zk-color-surface-container-low);
+}
+
+/* Top toolbar separates from content below */
+.z-panel-top {
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+
+/* Bottom toolbar and footer separate from content above */
+.z-panel-bottom,
+.z-panel-footer {
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+
+/* Drag handle shown when panel has no title — hidden visually (DK parity),
+   kept in DOM for JS drag wiring. Sibling body fills remaining flex space via flex:1. */
+.z-panel-drag-button {
+    display: none;
+}
+
+/* ─── Panel body ─────────────────────────────────────────────────────────── */
+.z-panel-body {
+    flex: 1;
+    overflow: auto;
+    background-color: var(--zk-panel-bg);
+}
+
+/* z-panelchildren is the content wrapper rendered by ZK inside z-panel-body */
+.z-panelchildren {
+    padding: var(--zk-spacing-4) var(--zk-spacing-4) var(--zk-spacing-6);
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-medium-size);
+    box-sizing: border-box;
+}
+
+/* ─── State classes ──────────────────────────────────────────────────────── */
+/* Collapsed: z-panel-collapsed added to root; body hidden (also via inline display:none at initial render).
+   height: auto !important overrides any inline height="Xpx" set via ZUL attribute. */
+.z-panel-collapsed {
+    height: auto !important;
+}
+
+.z-panel-collapsed .z-panel-body {
+    display: none;
+}
+
+/* Noborder: no border or shadow */
+.z-panel-noborder {
+    border: none;
+    box-shadow: none;
+}
+
+.z-panel-noborder .z-panel-head {
+    border-bottom: none;
+}
+
+/* Shadow: elevated shadow for floating panels */
+.z-panel-shadow {
+    box-shadow: var(--zk-elevation-dialog);
+}
+
+/* Noframe: non-rounded border (border="normal" in ZK, not "rounded") */
+.z-panel-noframe {
+    border-radius: 0;
+}
+
+/* ─── Drag / resize utilities ────────────────────────────────────────────── */
+.z-panel-move-ghost {
+    opacity: 0.5;
+    outline: var(--zk-focus-ring);
+    outline-offset: -2px;
+}
+
+.z-panel-move-block {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    cursor: move;
+}
+
+.z-panel-resize-faker {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    cursor: se-resize;
+}
+}

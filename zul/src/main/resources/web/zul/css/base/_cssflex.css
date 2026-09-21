@@ -1,0 +1,61 @@
+/* ============================================================================
+ * ZK framework css-flex classes — z-flex / z-flex-row / z-flex-column / z-flex-item
+ * ============================================================================
+ *
+ * NECESSITY — these are FRAMEWORK classes, not theme utilities. ZK's client
+ * engine toggles them at runtime; a theme that omits or renames them silently
+ * breaks `hflex`/`vflex` sizing everywhere (the container stays display:block
+ * and flexed children collapse to intrinsic size). Marble originally shipped
+ * only renamed utility variants (`.z-d-flex`, `.z-flex-col`), leaving the
+ * JS-added class names undefined — ZK's css-flex engine was inert theme-wide
+ * (gap log doc/skill-gaps.md 2026-06-05).
+ *
+ * MECHANISM — zk/flex.ts:
+ *   applyCSSFlex()  adds `z-flex` + `z-flex-row` (or `z-flex-column`) to the
+ *                   flex CONTAINER and `z-flex-item` to each flexed CHILD,
+ *                   whenever children use positive hflex/vflex.
+ *   clearCSSFlex()  removes them again — e.g. zkmax Splitlayout's drag-end
+ *                   (`_doDragEndResize`) calls setHflex(false)/setVflex(false)
+ *                   on its children so it can persist the dragged pane sizes
+ *                   as inline px width/height on the cave divs. Layout must
+ *                   therefore work in BOTH states: with these classes (flex)
+ *                   and without them (block/inline-block + inline sizes).
+ *
+ * RELATED WIDGETS — any container whose children use hflex/vflex: div, window,
+ * hlayout/vlayout, splitlayout caves, tabbox panels, borderlayout region
+ * content, grid/listbox cell content, … Splitlayout is the proven failure
+ * case: hard-coding `display:flex` on its root + `flex: 1 1 0` on caves broke
+ * drag persistence (contract rows M10/M11 in doc/contracts/splitlayout.md).
+ *
+ * SOURCE OF TRUTH — stock ZK `zk/zul/src/main/resources/web/zul/less/footer.less`.
+ * Keep the values byte-equivalent to stock. Loaded last via footer.css.dsp
+ * (footerFiles in scripts/build-css.js), mirroring stock load order.
+ *
+ * RULES — never rename these selectors; never hard-code their effect (e.g.
+ * `display: flex`) onto a component root that ZK JS manages; never give a
+ * JS-sized child `flex-basis: 0` in component CSS — `z-flex-item` is the only
+ * legitimate carrier of `flex: 1 1 0`, because ZK removes it before writing
+ * inline sizes. The same fix pattern may apply to other widgets later.
+ * ========================================================================== */
+
+.z-flex {
+    display: flex;
+}
+
+.z-flex > :not(.z-flex-item) {
+    flex-shrink: 0;
+}
+
+.z-flex-row {
+    flex-direction: row;
+}
+
+.z-flex-column {
+    flex-direction: column;
+}
+
+.z-flex-item {
+    flex: 1 1 0;
+    min-height: 0;
+    min-width: 0;
+}

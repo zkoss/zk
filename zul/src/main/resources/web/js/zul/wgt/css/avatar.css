@@ -1,0 +1,62 @@
+/* MD3 Avatar — photo / initials circle (ZK-6097 native component) */
+/* DOM: <span class="z-avatar z-avatar-{shape} z-avatar-{size}">
+          <img src alt>                         (image mode)
+          | <i class="z-icon-*"/>                (icon mode)
+          | <span class="z-avatar-text">AB</span> (initials fallback)
+        </span>
+   shape = circle (default) | square; size = small | medium (default) | large.
+   Dimensions read the --zk-avatar-size / --zk-avatar-font-size hooks so an
+   author can size a one-off avatar via inline style. */
+
+@layer zk-components {
+.z-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    user-select: none;
+    background: var(--zk-avatar-bg);
+    color: var(--zk-avatar-fg);
+    font-family: var(--zk-typescale-font-family);
+
+    /* Size/color defaults live at :root (tokens/_component-theme.css) so a
+       :root/region override reaches plain avatars; size classes
+       (.z-avatar-small/-large) override per-variant below. */
+    width: var(--zk-avatar-size);
+    height: var(--zk-avatar-size);
+    font-size: var(--zk-avatar-font-size);
+}
+
+.z-avatar-circle { border-radius: 50%; }
+.z-avatar-square { border-radius: var(--zk-shape-corner-small); }
+
+.z-avatar-small {
+    --zk-avatar-size: 32px;
+    --zk-avatar-font-size: var(--zk-typescale-label-small-size);
+}
+.z-avatar-medium {
+    --zk-avatar-size: 40px;
+    --zk-avatar-font-size: var(--zk-typescale-label-large-size);
+}
+.z-avatar-large {
+    --zk-avatar-size: 56px;
+    --zk-avatar-font-size: var(--zk-typescale-title-medium-size);
+}
+
+.z-avatar > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.z-avatar-text {
+    padding: 0 4px;
+    line-height: 1;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+}

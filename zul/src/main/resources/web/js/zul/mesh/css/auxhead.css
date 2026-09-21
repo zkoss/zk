@@ -1,0 +1,52 @@
+/* MD3 Auxhead — auxiliary multi-level column header row (ZK-only).
+   DOM: TR.z-auxhead > TH.z-auxheader (with colspan) > DIV.z-auxheader-content
+   Design (see doc/spec/DESIGN.md): faint tonal band on the ROW, cells transparent.
+   The band gives a 4th hierarchy tier (auxhead-row → header-row → body → footer)
+   without competing with the column-header divider. */
+
+@layer zk-components {
+.z-auxhead {
+    background-color: var(--zk-color-surface-container-low);
+}
+
+.z-auxheader {
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-color-on-surface-variant);
+    text-align: center;
+    background-color: transparent;
+    /* Divider on the TH, not the .z-auxhead TR: tree/listbox header tables are
+       border-collapse:separate, where TR borders do NOT paint. Grid (collapse)
+       painted the TR border by accident; the TH border is uniform across all
+       three and lets two adjacent <auxhead> rows separate. See data-components.md. */
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    border-inline-end: 1px solid var(--zk-color-outline-variant);
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+/* Strip the inline-end (right) border from the rightmost VISIBLE auxheader so it
+   does not double with the container's own frame border. ZK appends a zero-width
+   `TH.z-auxhead-bar` filler to every auxhead row, so the visible-last auxheader is
+   NOT `:last-child` (the bar is) — match the cell immediately before the bar too.
+   See data-components.md → "The trailing `.z-auxhead-bar` filler is the row's real
+   :last-child". */
+.z-auxheader:last-child,
+.z-auxheader:has(+ .z-auxhead-bar) {
+    border-inline-end: none;
+}
+
+.z-auxheader-content {
+    display: block;
+}
+
+/* Frozen-aligned auxheader cell — stronger right-edge boundary marker */
+.z-auxheader.z-frozen-col:not(:has(+ .z-frozen-col)) {
+    border-inline-end: 2px solid var(--zk-color-outline-variant);
+}
+}

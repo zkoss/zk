@@ -1,0 +1,16 @@
+/* MD3 Image Map component */
+
+@layer zk-components {
+.z-imagemap {
+    display: inline-block;
+    position: relative;
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+.z-imagemap img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+}

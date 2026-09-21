@@ -1,0 +1,65 @@
+/* MD3 Popup — floating surface for tooltips, dropdowns, overlays */
+
+@layer zk-components {
+.z-popup {
+    position: absolute;
+    z-index: 1500;
+    background-color: var(--zk-popup-bg);
+    border-radius: var(--zk-popup-radius);
+    box-shadow: var(--zk-popup-elevation);
+    border: 1px solid var(--zk-popup-border-color);
+    padding: var(--zk-spacing-1) 0;
+    min-width: 160px;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.z-popup-content {
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-popup-fg);
+}
+
+/* ─── Tooltip-style popup ─────────────────────────────────────────────────── */
+/* Tooltip-style popup: dark bg, small radius, small text */
+.z-popup-tooltip.z-popup {
+    background-color: rgba(97, 97, 97, 0.92);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    box-shadow: var(--zk-elevation-2);
+    min-width: 0;
+    max-width: 300px;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    word-wrap: break-word;
+}
+.z-popup-tooltip.z-popup .z-label {
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 500;
+}
+.z-popup-tooltip .z-popup-content{
+    padding: 0;
+}
+
+/* ─── Popup animation utilities ───────────────────────────────────────────── */
+.z-popup-anim-fade { animation: z-popup-fade 0.15s ease; }
+.z-popup-anim-zoom { animation: z-popup-zoom 0.15s ease; }
+.z-popup-anim-grow { animation: z-popup-grow 0.15s ease; transform-origin: top center; }
+
+@keyframes z-popup-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes z-popup-zoom {
+    from { opacity: 0; transform: scale(0.75); }
+    to   { opacity: 1; transform: scale(1); }
+}
+@keyframes z-popup-grow {
+    from { opacity: 0; transform: scaleY(0.5); }
+    to   { opacity: 1; transform: scaleY(1); }
+}
+}

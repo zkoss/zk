@@ -709,7 +709,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- Default theme -->
 	<library-property>
 		<name>org.zkoss.theme.preferred</name>
-		<value>iceblue</value>
+		<value>marble</value>
 	</library-property>
 
 	<!-- B85-ZK-3527 -->

@@ -534,6 +534,23 @@ module.exports = {
         'no-console': 'off',
         'one-var': 'off'
       }
+    },
+    {
+      'files': [
+        'scripts/*.js'
+      ],
+      'env': {
+        'browser': false,
+        'node': true
+      },
+      'parserOptions': {
+        'ecmaVersion': 2020
+      },
+      'rules': {
+        'no-console': 'off',
+        'one-var': 'off',
+        'zk/noMixedHtml': 'off'
+      }
     }
   ]
 };

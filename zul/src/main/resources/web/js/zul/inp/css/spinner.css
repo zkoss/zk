@@ -1,0 +1,224 @@
+/* MD3 Spinner / Doublespinner — numeric stepper input */
+/* DOM:
+   <span class="z-spinner [z-spinner-disabled] [z-spinner-readonly]">
+     <input id="uuid-real" class="z-spinner-input [z-spinner-input-full] [z-spinner-invalid]">
+     <span id="uuid-btn" class="z-spinner-button [z-spinner-disabled]">
+       <a id="uuid-btn-up" class="z-spinner-icon z-spinner-up"><i class="z-icon-angle-up"/></a>
+       <i class="z-spinner-separator"></i>
+       <a id="uuid-btn-down" class="z-spinner-icon z-spinner-down"><i class="z-icon-angle-down"/></a>
+     </span>
+   </span>
+   (Doublespinner is identical with z-doublespinner prefix)
+*/
+
+@layer zk-components {
+.z-spinner,
+.z-doublespinner {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    border: 1px solid var(--zk-spinner-border-color);
+    border-radius: var(--zk-spinner-radius);
+    background-color: var(--zk-spinner-bg);
+    min-height: var(--zk-control-height);
+    box-sizing: border-box;
+    transition:
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-spinner:hover,
+.z-doublespinner:hover {
+    border-color: var(--zk-spinner-border-color-hover);
+}
+
+/* Focus ring as an INSET box-shadow, not a border-width increase: border stays 1px so the
+   border-box content area never shrinks and the min-height-pinned input/button never force the
+   root taller. See reference/focus-affordance-no-layout-shift.md. */
+.z-spinner:focus-within,
+.z-doublespinner:focus-within {
+    border-color: var(--zk-spinner-border-color-focus);
+    box-shadow: inset 0 0 0 1px var(--zk-spinner-border-color-focus);
+}
+
+.z-spinner-input,
+.z-doublespinner-input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    padding: 0 var(--zk-spacing-3);
+    height: 100%;
+    min-height: calc(var(--zk-input-height) - 2px);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-spinner-fg);
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* When button is hidden, input expands full width */
+.z-spinner-input-full,
+.z-doublespinner-input-full {
+    border-radius: var(--zk-spinner-radius);
+}
+
+/* Invalid — class is added to the <input> element by ZK JS at runtime */
+.z-spinner-input.z-spinner-invalid,
+.z-doublespinner-input.z-doublespinner-invalid {
+    color: var(--zk-color-error);
+}
+
+/* When ZK JS sets invalid on input child, propagate border to wrapper */
+.z-spinner:has(.z-spinner-invalid),
+.z-doublespinner:has(.z-doublespinner-invalid) {
+    border-color: var(--zk-color-error);
+}
+
+.z-spinner:has(.z-spinner-invalid):hover,
+.z-doublespinner:has(.z-doublespinner-invalid):hover {
+    border-color: var(--zk-color-error);
+}
+
+.z-spinner:has(.z-spinner-invalid):focus-within,
+.z-doublespinner:has(.z-doublespinner-invalid):focus-within {
+    border-color: var(--zk-color-error);
+    box-shadow: inset 0 0 0 1px var(--zk-color-error);
+}
+
+/* When sclass="z-spinner-invalid" is on the wrapper (server-side approach) */
+.z-spinner.z-spinner-invalid,
+.z-doublespinner.z-doublespinner-invalid {
+    border-color: var(--zk-color-error);
+}
+
+.z-spinner.z-spinner-invalid:hover,
+.z-doublespinner.z-doublespinner-invalid:hover {
+    border-color: var(--zk-color-error);
+}
+
+.z-spinner.z-spinner-invalid:focus-within,
+.z-doublespinner.z-doublespinner-invalid:focus-within {
+    border-color: var(--zk-color-error);
+    box-shadow: inset 0 0 0 1px var(--zk-color-error);
+}
+
+/* ─── Button container ─────────────────────────────────────────────────────── */
+/* class is z-spinner-button (from $s('button') in spinner mold) */
+.z-spinner-button,
+.z-doublespinner-button {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex-shrink: 0;
+    width: 28px;
+    align-self: stretch;
+    border-left: 1px solid var(--zk-color-outline-variant);
+    border-radius: 0 var(--zk-spinner-radius) var(--zk-spinner-radius) 0;
+    overflow: hidden;
+}
+
+/* Invisible when buttonVisible=false */
+.z-spinner-button.z-spinner-disabled,
+.z-doublespinner-button.z-doublespinner-disabled {
+    display: none;
+}
+
+/* ─── Up / Down icon links ─────────────────────────────────────────────────── */
+/* classes: z-spinner-icon z-spinner-up  /  z-spinner-icon z-spinner-down */
+.z-spinner-icon,
+.z-doublespinner-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    cursor: pointer;
+    color: var(--zk-color-on-surface-variant);
+    text-decoration: none;
+    overflow: hidden;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-spinner-icon::before,
+.z-doublespinner-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-spinner-icon:hover::before,
+.z-doublespinner-icon:hover::before {
+    opacity: var(--zk-state-hover-opacity);
+}
+
+.z-spinner-icon:active::before,
+.z-doublespinner-icon:active::before {
+    opacity: var(--zk-state-pressed-opacity);
+}
+
+/* Separator between up and down */
+.z-spinner-separator,
+.z-doublespinner-separator {
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: var(--zk-color-outline-variant);
+    flex-shrink: 0;
+}
+
+/* ─── Readonly ─────────────────────────────────────────────────────────────── */
+.z-spinner.z-spinner-readonly,
+.z-doublespinner.z-doublespinner-readonly {
+    background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
+}
+
+.z-spinner.z-spinner-readonly .z-spinner-input,
+.z-doublespinner.z-doublespinner-readonly .z-doublespinner-input {
+    color: var(--zk-color-on-surface-variant);
+}
+
+.z-spinner.z-spinner-readonly:hover,
+.z-doublespinner.z-doublespinner-readonly:hover {
+    border-color: var(--zk-color-outline-variant);
+}
+
+.z-spinner.z-spinner-readonly .z-spinner-button,
+.z-doublespinner.z-doublespinner-readonly .z-doublespinner-button {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* ─── Inplace ──────────────────────────────────────────────────────────────── */
+.z-spinner.z-spinner-inplace,
+.z-doublespinner.z-doublespinner-inplace {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.z-spinner.z-spinner-inplace:hover,
+.z-doublespinner.z-doublespinner-inplace:hover {
+    border-color: transparent;
+}
+
+.z-spinner.z-spinner-inplace .z-spinner-button,
+.z-doublespinner.z-doublespinner-inplace .z-doublespinner-button {
+    display: none;
+}
+
+/* ─── Disabled ─────────────────────────────────────────────────────────────── */
+.z-spinner.z-spinner-disabled,
+.z-doublespinner.z-doublespinner-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
+}
+}
