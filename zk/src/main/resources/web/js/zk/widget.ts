@@ -75,8 +75,8 @@ var _binds: Record<string, Widget> = {}, //{uuid, wgt}: bind but no node
 	_noChildCallback, _noParentCallback, //used by removeChild/appendChild/insertBefore
 	_syncdt: number | undefined, //timer ID to sync destkops
 	_rdque: zk.Widget[] = [], _rdtid: number | undefined, //async rerender's queue and timeout ID
-	_ignCanActivate; //whether canActivate always returns true
-
+	_ignCanActivate, //whether canActivate always returns true
+	_pendingFloatUp: ((up?: zk.Widget) => void)[] | undefined;
 
 // cache the naming lookup
 type SetterFunc = (wgt, nm, val, extra) => Widget;
@@ -159,7 +159,10 @@ function _domEvtProxy0(wgt: Widget, f: CallableFunction, keyword?: unknown): JQu
 				if (wgt.canActivate()) {
 					zk.currentFocus = wgt;
 					//add triggerByFocus option for notification
-					zWatch.fire('onFloatUp', wgt, {triggerByFocus: true}); //notify all
+					// A press can move focus before release. Its pending dismissal covers this
+					// notification; keyboard input cancels the pending press before moving focus.
+					if (!_pendingFloatUp)
+						zWatch.fire('onFloatUp', wgt, {triggerByFocus: true}); //notify all
 					break;
 				}
 				return; //ignore it
@@ -5672,7 +5675,28 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 		return undefined;
 	}
 
-	/** Called to mimic the mouse down event fired by the browser.
+	/** Whether pointer dismissal waits for release. Enabled by za11y. @internal */
+	static dismissFloatOnRelease = false;
+
+	/** Records the floats before the press can focus or open another widget. @internal */
+	static beginFloatUp_(wgt?: zk.Widget, which?: number): void {
+		if (Widget.dismissFloatOnRelease) {
+			_pendingFloatUp = wgt ? [zWatch.deferFloatUp_(wgt, {triggerByClick: which})]
+				: Object.keys(zk.Desktop.all).map(id => zWatch.deferFloatUp_(zk.Desktop.all[id]));
+		}
+	}
+
+	/** Completes or cancels one press; no state survives into hover or keyboard events. @internal */
+	static endFloatUp_(wgt?: zk.Widget, cancelled?: boolean): void {
+		const pending = _pendingFloatUp;
+		_pendingFloatUp = undefined;
+		if (Widget.dismissFloatOnRelease && !cancelled && pending)
+			for (const fire of pending)
+				fire(wgt);
+	}
+
+	/**
+	 * Called to mimic the mouse down event fired by the browser.
 	 * It is used for implement a widget. In most cases, you don't need to
 	 * invoke this method.
 	 * <p>However, it is useful if the widget you are implemented will 'eat'
@@ -5684,6 +5708,9 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 	 * @internal
 	 */
 	static mimicMouseDown_(wgt?: zk.Widget, noFocusChange?: boolean, which?: number): void { //called by mount
+		// A replay from mount's mouseup must not start a second dismissal.
+		if (!noFocusChange)
+			Widget.beginFloatUp_(wgt, which);
 		var modal = zk.currentModal;
 		if (modal && !wgt) {
 			var cf = zk.currentFocus;
@@ -5700,6 +5727,8 @@ this.domListen_(fn, 'onBlur', 'doBlur_');
 				//turn it off later since onBlur_ needs it
 			}
 		}
+		if (Widget.dismissFloatOnRelease)
+			return;
 		if (wgt) // F70-ZK-2007: Add the button number information.
 			zWatch.fire('onFloatUp', wgt, {triggerByClick: which}); //notify all
 		else

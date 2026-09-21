@@ -502,8 +502,8 @@ function _reversefns(fns: undefined | [CallableFunction, zk.Widget][], args: unk
 			oldp = newp;
 		}
 }
-function _fire(name: string, org: zk.Object & {bindLevel?}, opts: EventOptions | undefined | unknown, vararg: IArguments): void {
-	const wts = _watches[name];
+function _fire(name: string, org: zk.Object & {bindLevel?}, opts: EventOptions | undefined | unknown, vararg: ArrayLike<unknown>, watches?: WatchInfo[]): void {
+	const wts = watches ?? _watches[name];
 	if (wts && wts.length) {
 		const down = opts && (opts as EventOptions).down && org.bindLevel != null;
 		if (down) _sync();
@@ -577,6 +577,32 @@ export namespace evt_global {
 	 * <p>The watch listener is added in the parent-first sequence if it has a method called getParent, or a member called parent (a typical example is {@link Widget}). Thus, the parent will be called before its children, if they are all registered to the same action.
 	 */
 	export class zWatch {
+		/**
+		 * Prepares one pointer dismissal without changing normal onFloatUp delivery.
+		 * Only listeners already visible at the press can receive it on release.
+		 * @internal
+		 */
+		static deferFloatUp_(origin: zk.Object, opts?: {triggerByClick?: number}): (up?: zk.Widget) => void {
+			const targets = new Map<zk.Widget, {listeners: WatchInfo[1]; floating: boolean}>();
+			for (const [wgt, listeners] of _watches.onFloatUp ?? []) {
+				if (!(wgt instanceof zk.Widget) || (wgt.desktop && wgt.isRealVisible()))
+					targets.set(wgt, {listeners: listeners.slice(), floating: wgt instanceof zk.Widget && wgt.isFloating_()});
+			}
+			return (up) => {
+				const watches: WatchInfo[] = [];
+				// Read the current registrations: a float might have been detached while held.
+				for (const [wgt, listeners] of _watches.onFloatUp ?? []) {
+					const target = targets.get(wgt);
+					if (!target || (wgt instanceof zk.Widget && (!wgt.desktop
+							|| (!target.floating && wgt.isFloating_())
+							|| zUtl.isAncestor(wgt, origin) || (up && zUtl.isAncestor(wgt, up)))))
+						continue;
+					watches.push([wgt, listeners.filter(listener => target.listeners.includes(listener))]);
+				}
+				_fire('onFloatUp', origin, opts, ['onFloatUp', origin, opts], watches);
+			};
+		}
+
 		/**
 		 * ```ts
 		 * zWatch.listen({

@@ -745,9 +745,16 @@ jq(function () {
 		return wgt.afterKeyDown_(wevt, true);
 	}
 
-	var lastTimestamp, lastTarget;
+	var lastTimestamp, lastTarget, touchStart: zk.Offset | undefined;
+	/** @internal */
+	function _cancelFloatUp(): void {
+		touchStart = undefined;
+		Widget.endFloatUp_(undefined, true);
+	}
+
 	jq(document)
 		.keydown(function (evt) {
+			_cancelFloatUp();
 			const wgt = Widget.$(evt, {child: true})!,
 				wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), undefined, evt);
 			if (wgt) {
@@ -797,7 +804,9 @@ jq(function () {
 			}
 			return true;
 		})
-		.on('zmousedown', function (evt: JQuery.MouseEventBase) {
+		.on('zmousedown', function (evt: JQuery.MouseEventBase & {touchEvent?: TouchEvent}) {
+			if (Widget.dismissFloatOnRelease && evt.touchEvent?.type == 'touchstart')
+				touchStart = [evt.pageX || 0, evt.pageY || 0];
 			if (zk.mobile) {
 				zk.currentPointer[0] = evt.pageX || 0;
 				zk.currentPointer[1] = evt.pageY || 0;
@@ -809,6 +818,10 @@ jq(function () {
 		})
 		.on('zmouseup', function (evt: JQuery.MouseUpEvent) {
 			var e = zk.Draggable.ignoreMouseUp(), wgt;
+			// Use the physical release target, before mouse capture or a replayed down-event.
+			// domtouch already resolves touchend to the widget under the released finger.
+			Widget.endFloatUp_(Widget.$(evt, {child: true}), e === true);
+			touchStart = undefined;
 			if (e === true)
 				return; //ignore
 
@@ -824,11 +837,15 @@ jq(function () {
 		.on('zmousemove', function (evt: JQuery.MouseMoveEvent) {
 			zk.currentPointer[0] = evt.pageX || 0;
 			zk.currentPointer[1] = evt.pageY || 0;
+			if (touchStart && (Math.abs(zk.currentPointer[0] - touchStart[0]) > 3
+					|| Math.abs(zk.currentPointer[1] - touchStart[1]) > 3))
+				_cancelFloatUp(); // scrolling is not an outside tap
 
 			var wgt = zk.mouseCapture;
 			if (!wgt) wgt = Widget.$(evt, {child: true});
 			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), undefined, evt));
 		})
+		.on('touchcancel pointercancel', _cancelFloatUp)
 		.mouseover(function (evt) {
 			if (zk.mobile) return; // unsupported on touch device for better performance
 			zk.currentPointer[0] = evt.pageX || 0;
@@ -941,8 +958,9 @@ jq(function () {
 	}
 
 	jq(window).scroll(function () {
+		if (touchStart) _cancelFloatUp();
 		zWatch.fire('onScroll', zk.Desktop._dt!); //notify all
-	}).on('unload', function () {
+	}).on('blur', _cancelFloatUp).on('unload', function () {
 		zk.unloading = true; //to disable error message
 
 		if (!zk.rmDesktoping) {
