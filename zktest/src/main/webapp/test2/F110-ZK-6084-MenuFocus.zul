@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-MenuFocus.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Sep 16 14:00:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+    <n:h1>Menu.focus_ on a non-topmost menu</n:h1>
+    <label multiline="true">
+        1. click "Top" to open the popup
+        2. press ArrowDown twice - focus should be on "Submenu"
+        3. press ArrowRight then ArrowLeft - focus should be back on "Submenu", not on the menupopup
+        The row highlights either way, so check document.activeElement rather than the highlight.
+    </label>
+    <menubar id="mb">
+        <menu id="top" label="Top">
+            <menupopup id="pp">
+                <menuitem id="first" label="Item 1"/>
+                <menu id="sub" label="Submenu">
+                    <menupopup id="subpp">
+                        <menuitem id="nested" label="Nested 1"/>
+                    </menupopup>
+                </menu>
+                <menuitem id="last" label="Item 2"/>
+            </menupopup>
+        </menu>
+    </menubar>
+    <n:h2>with an ancestor holding ctrlKeys</n:h2>
+    <label multiline="true">
+        4. click "Top (ctrlKeys)" and press ArrowDown three times - focus should reach "Item 2"
+    </label>
+    <div ctrlKeys="#down" onCtrlKey='Clients.log("onCtrlKey")'>
+        <menubar id="mb2">
+            <menu id="top2" label="Top (ctrlKeys)">
+                <menupopup id="pp2">
+                    <menuitem id="first2" label="Item 1"/>
+                    <menu id="sub2" label="Submenu" onOK='Clients.log("onOK")'>
+                        <menupopup id="subpp2">
+                            <menuitem id="nested2" label="Nested 1"/>
+                        </menupopup>
+                    </menu>
+                    <menuitem id="last2" label="Item 2"/>
+                </menupopup>
+            </menu>
+        </menubar>
+    </div>
+</zk>
