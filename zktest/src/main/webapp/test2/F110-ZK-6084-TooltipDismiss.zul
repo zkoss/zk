@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-TooltipDismiss.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Sep 08 17:40:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+    <n:h1>WCAG 2.1 - 1.4.13 content on hover or focus (tooltip)</n:h1>
+    <label multiline="true">
+        1. hover "hover me" and wait ~1s - the tooltip appears at the pointer
+        2. press ESC without moving the mouse - the tooltip goes away
+        3. keep the mouse still - it must not come back on its own
+        4. move off the button and back on - it appears again
+        5. hover "trigger A", then move onto "trigger B" - only one tooltip is ever open
+        6. the following must NOT react to ESC, neither is revealed by hover:
+           press "click for popup", then ESC - the popup stays open
+           type "x" in the e-mail box, click the heading to blur, then ESC - the errorbox stays open
+    </label>
+    <separator/>
+
+    <n:h2>1. tooltip</n:h2>
+    <button id="tooltipTrigger" label="hover me" tooltip="myTooltip"/>
+    <popup id="myTooltip" width="200px">
+        <vlayout>
+            <label value="Tooltip line 1"/>
+            <label value="Tooltip line 2"/>
+        </vlayout>
+    </popup>
+
+    <n:h2>5. only one tooltip at a time</n:h2>
+    <hlayout>
+        <button id="tipTriggerA" label="trigger A" tooltip="tipA"/>
+        <button id="tipTriggerB" label="trigger B" tooltip="tipB"/>
+    </hlayout>
+    <popup id="tipA" width="160px"><label value="Tooltip A"/></popup>
+    <popup id="tipB" width="160px"><label value="Tooltip B"/></popup>
+
+    <n:h2>6a. control: click-opened popup, out of scope</n:h2>
+    <button id="clickTrigger" label="click for popup" popup="clickPopup"/>
+    <popup id="clickPopup" width="220px"><label value="Click-opened popup"/></popup>
+
+    <n:h2>6b. control: errorbox, exempt</n:h2>
+    <textbox id="constrained" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"/>
+    <button id="blurTarget" label="click here to blur"/>
+</zk>
