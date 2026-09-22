@@ -15,17 +15,21 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
+import java.net.Socket;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -79,15 +83,55 @@ public abstract class WebDriverTestCase {
 	private static final String HOST;
 
 	static {
-		String host = "127.0.0.1";
+		String host = System.getProperty("Host", "127.0.0.1");
 		if (IS_JENKINS) {
-			try {
-				host = InetAddress.getLocalHost().getHostAddress();
-			} catch (UnknownHostException e) {
-				log.error("getLocalHost failed", e);
+			// lookup IP for support Docker Chrome instance
+			try (Socket socket = new Socket()) {
+				socket.connect(new InetSocketAddress("google.com", 80));
+				host = socket.getLocalAddress().getHostAddress();
+			} catch (IOException e) {
+				try {
+					host = getLocalHostLANAddress().getHostAddress();
+				} catch (UnknownHostException ex) {
+					log.error("getLocalHostLANAddress failed", ex);
+				}
 			}
 		}
 		HOST = host;
+	}
+
+	/** Returns a non-loopback address of this machine, so that a browser running
+	 * in a container can reach the test server. InetAddress.getLocalHost() returns
+	 * a loopback address when the host name maps to 127.0.0.1 in /etc/hosts, which
+	 * leaves the server bound where the container cannot reach it.
+	 */
+	private static InetAddress getLocalHostLANAddress() throws UnknownHostException {
+		try {
+			InetAddress candidateAddress = null;
+			for (Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+					ifaces.hasMoreElements();) {
+				for (Enumeration<InetAddress> inetAddrs = ifaces.nextElement().getInetAddresses();
+						inetAddrs.hasMoreElements();) {
+					final InetAddress inetAddr = inetAddrs.nextElement();
+					if (!inetAddr.isLoopbackAddress()) {
+						if (inetAddr.isSiteLocalAddress())
+							return inetAddr;
+						if (candidateAddress == null)
+							candidateAddress = inetAddr;
+					}
+				}
+			}
+			if (candidateAddress != null)
+				return candidateAddress;
+			final InetAddress jdkSuppliedAddress = InetAddress.getLocalHost();
+			if (jdkSuppliedAddress == null)
+				throw new UnknownHostException("The JDK InetAddress.getLocalHost() method unexpectedly returned null.");
+			return jdkSuppliedAddress;
+		} catch (SocketException e) {
+			final UnknownHostException ex = new UnknownHostException("Failed to determine LAN address: " + e);
+			ex.initCause(e);
+			throw ex;
+		}
 	}
 
 	protected WebDriver driver;
@@ -127,17 +171,8 @@ public abstract class WebDriverTestCase {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected boolean isUsingRemoteWebDriver(ChromeOptions driverOptions) {
-		// There are 2 situations needed to be run on remote
-		// 1. lang
-		// 2. mobileEmulation (TouchActions)
-		if (IS_JENKINS) {
-			Map<String, Object> caps = (Map<String, Object>) driverOptions.asMap().get(ChromeOptions.CAPABILITY);
-			List<String> args = (List<String>) caps.get("args");
-			return args.stream().anyMatch(arg -> arg.contains("lang=")) || caps.containsKey("mobileEmulation");
-		}
-		return false;
+		return isUseDocker();
 	}
 
 	/**
@@ -215,7 +250,9 @@ public abstract class WebDriverTestCase {
 
 	@BeforeClass
 	public static void init() throws Exception {
-		static_server = new Server(new InetSocketAddress(getHost(), 0));
+		// Bind every interface: getHost() may name a Docker bridge that disappears
+		// when a container stops, and binding to it then fails.
+		static_server = new Server(new InetSocketAddress(0));
 
 		final WebAppContext context = new WebAppContext();
 		context.setContextPath(getContextPath());
