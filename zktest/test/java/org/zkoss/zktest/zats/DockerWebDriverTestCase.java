@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import com.palantir.docker.compose.DockerComposeRule;
+import com.palantir.docker.compose.configuration.ShutdownStrategy;
 import com.palantir.docker.compose.connection.waiting.HealthChecks;
 import org.junit.ClassRule;
 
@@ -62,7 +63,10 @@ public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
 	@ClassRule
 	public final static DockerComposeRule docker = new DockerComposeRule.Builder()
 		.file(exportResource("docker/docker-compose.yml"))
+		.useDockerComposeV2(Boolean.parseBoolean(System.getProperty("useDockerComposeV2", "true")))
 		.waitingForService("hub", HealthChecks.toRespondOverHttp(4444, (port) -> port.inFormat("http://$HOST:$EXTERNAL_PORT/ui/index.html")))
 		.waitingForService("chrome", HealthChecks.toHaveAllPortsOpen())
+		.shutdownStrategy(ShutdownStrategy.KILL_DOWN)
+		.removeConflictingContainersOnStartup(true)
 		.build();
 }
