@@ -119,6 +119,5 @@ declare global {
 	| 'CHOSENBOX_SELECTION' // zkmax/inp-a11y
 	| 'CALENDAR_TODAY' // zkmax/db/Daterangebox (consumer); reuses CE Calendar today label
 	| 'RANGE_CLEAR'
-	| 'RANGE_INVALID'
 	, string>;
 }
