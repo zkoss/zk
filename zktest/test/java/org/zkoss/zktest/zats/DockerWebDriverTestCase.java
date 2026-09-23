@@ -23,6 +23,7 @@ import com.palantir.docker.compose.DockerComposeRule;
 import com.palantir.docker.compose.configuration.ShutdownStrategy;
 import com.palantir.docker.compose.connection.waiting.HealthChecks;
 import org.junit.ClassRule;
+import org.junit.rules.TestRule;
 
 /**
  * A local Docker container to support a linux based remote WebDriver for
@@ -59,14 +60,21 @@ public abstract class DockerWebDriverTestCase extends WebDriverTestCase {
 		}
 	}
 
+	private static DockerComposeRule docker;
+
 	// remove the docker env. if the bug has fixed - https://tracker.zkoss.org/browse/ZK-5092
 	@ClassRule
-	public final static DockerComposeRule docker = new DockerComposeRule.Builder()
-		.file(exportResource("docker/docker-compose.yml"))
-		.useDockerComposeV2(Boolean.parseBoolean(System.getProperty("useDockerComposeV2", "true")))
-		.waitingForService("hub", HealthChecks.toRespondOverHttp(4444, (port) -> port.inFormat("http://$HOST:$EXTERNAL_PORT/ui/index.html")))
-		.waitingForService("chrome", HealthChecks.toHaveAllPortsOpen())
-		.shutdownStrategy(ShutdownStrategy.KILL_DOWN)
-		.removeConflictingContainersOnStartup(true)
-		.build();
+	public final static TestRule DOCKER = (base, description) -> {
+		// A new rule for every run: the rule caches the hub's host port, which is
+		// random, so a reused rule would check the previous run's port.
+		docker = new DockerComposeRule.Builder()
+			.file(exportResource("docker/docker-compose.yml"))
+			.useDockerComposeV2(Boolean.parseBoolean(System.getProperty("useDockerComposeV2", "true")))
+			.waitingForService("hub", HealthChecks.toRespondOverHttp(4444, (port) -> port.inFormat("http://$HOST:$EXTERNAL_PORT/ui/index.html")))
+			.waitingForService("chrome", HealthChecks.toHaveAllPortsOpen())
+			.shutdownStrategy(ShutdownStrategy.KILL_DOWN)
+			.removeConflictingContainersOnStartup(true)
+			.build();
+		return docker.apply(base, description);
+	};
 }
