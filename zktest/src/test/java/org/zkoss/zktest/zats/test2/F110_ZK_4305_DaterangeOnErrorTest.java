@@ -41,7 +41,7 @@ public class F110_ZK_4305_DaterangeOnErrorTest extends WebDriverTestCase {
 		// value carries the rejected text the user typed (locale-independent).
 		assertTrue(cap.endsWith(";val=not-a-date"),
 				"ErrorEvent.getValue() must carry the rejected text, was: " + cap);
-		// getMessage() must be populated (the localized RANGE_INVALID reason);
+		// getMessage() must be populated (the localized DATE_REQUIRED reason);
 		// the exact string is locale-dependent, so only assert it is non-empty.
 		assertFalse(cap.contains("msg=;") || cap.contains("msg=null"),
 				"ErrorEvent.getMessage() must carry a reason, was: " + cap);
