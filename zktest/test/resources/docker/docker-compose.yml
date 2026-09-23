@@ -34,8 +34,5 @@ services:
 
   hub:
     image: selenium/hub:4.1.4-20220427
-    container_name: hub
     ports:
-      - "4442:4442"
-      - "4443:4443"
-      - "5555:4444"
+      - "4444"
