@@ -36,6 +36,8 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 	/** @invalidBorderColor, spaces stripped so the compare is layout-independent. */
 	private static final String INVALID_BORDER = "rgb(255,64,81)";
 
+	private static final String PARSE_MESSAGE = "You must specify a date. Format: yyyy/MM/dd";
+
 	private JavascriptExecutor js() {
 		return (JavascriptExecutor) driver;
 	}
@@ -159,9 +161,11 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 				"a redraw must not silently discard the rejected text");
 		assertTrue(jq("$drb").hasClass(INVALID),
 				"a redraw must not silently discard the invalid mark");
-		// unbind_ destroys the errorbox, so the redraw has to raise it again
-		assertTrue(jq(".z-errorbox").exists(),
-				"a redraw must keep the errorbox with the mark");
+		assertNoErrorbox("a redraw is not news, so it must not raise the bubble again");
+		focus(jq(BEGIN));
+		waitErrorboxShown();
+		assertTrue(jq(".z-errorbox").text().contains(PARSE_MESSAGE),
+				"focusing the input must bring the bubble back, was: " + jq(".z-errorbox").text());
 	}
 
 	/** The rejected text must not stick: a correction clears the mark for good. */
@@ -244,7 +248,7 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 
 		type(jq(BEGIN), "not-a-date");
 		waitResponse();
-		assertTrue(jq(".z-errorbox").text().contains("Invalid range"),
+		assertTrue(jq(".z-errorbox").text().contains(PARSE_MESSAGE),
 				"daterangebox must raise the standard errorbox on unparseable input, was: "
 						+ jq(".z-errorbox").text());
 		assertTrue(jq("$drb").hasClass(INVALID),
@@ -509,17 +513,16 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 				"the border must still differ from the valid one, both were: " + border);
 	}
 
-	/** A redraw re-raises the bubble from scratch, so it has to remember WHICH
-	 *  message raised it. With unparseable text in an input AND a server-pushed
-	 *  reason, re-deriving from the text alone downgrades the server's reason to
-	 *  the generic one — the only text on screen naming the real problem. */
+	/** The bubble a focus raises after a redraw has to remember WHICH message raised
+	 *  it: with unparseable text AND a server-pushed reason, re-deriving from the text
+	 *  alone downgrades the server's reason to the generic one. */
 	@Test
 	public void testRedrawKeepsTheServerMessageOverTheGenericOne() {
 		connect();
 		waitResponse();
 
 		commitText(BEGIN, "not-a-date");
-		assertTrue(jq(".z-errorbox").text().contains("Invalid range"),
+		assertTrue(jq(".z-errorbox").text().contains(PARSE_MESSAGE),
 				"precondition: the parse failure raises the generic message, was: "
 						+ jq(".z-errorbox").text());
 
@@ -530,23 +533,23 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 						+ jq(".z-errorbox").text());
 
 		rerenderBox();
+		assertNoErrorbox("a redraw must not raise the bubble again");
+		focus(jq(BEGIN));
+		waitErrorboxShown();
 
-		assertTrue(jq(".z-errorbox").exists(),
-				"the redraw must re-raise the errorbox");
 		String text = jq(".z-errorbox").text();
 		assertTrue(text.contains("Outside the booking window"),
-				"the redraw must re-raise the server's own message, was: " + text);
-		assertFalse(text.contains("Invalid range"),
+				"focusing the input must raise the server's own message, was: " + text);
+		assertFalse(text.contains(PARSE_MESSAGE),
 				"and must not downgrade it to the generic one, was: " + text);
 		assertTrue(jq("$drb").hasClass(INVALID),
 				"the mark must survive the redraw with it");
 	}
 
-	/** A server rejection populates no rejected text, so a redraw that keys only
-	 *  off that text drops the bubble entirely and leaves the red border alone on
-	 *  screen with nothing naming the problem. */
+	/** A server rejection populates no rejected text, so a redraw that keys only off
+	 *  that text would drop the mark, and a focus would have nothing to raise. */
 	@Test
-	public void testRedrawKeepsTheServerErrorbox() {
+	public void testRedrawKeepsTheServerRejectionForTheNextFocus() {
 		connect();
 		waitResponse();
 
@@ -561,14 +564,16 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 
 		rerenderBox();
 
-		assertTrue(jq(".z-errorbox").exists(),
-				"a redraw must keep the bubble a server rejection raised, not just the border");
-		assertEquals(before, jq(".z-errorbox").text(),
-				"and must re-raise the same message");
+		assertNoErrorbox("a redraw must not raise the bubble again, only keep the border");
 		assertTrue(jq("$drb").hasClass(INVALID),
 				"the mark must survive the redraw too");
 		String border = jq("$drb").css("border-top-color");
 		assertEquals(INVALID_BORDER, border.replace(" ", ""),
 				"the red border must still be painted after the redraw, was: " + border);
+
+		focus(jq(BEGIN));
+		waitErrorboxShown();
+		assertEquals(before, jq(".z-errorbox").text(),
+				"focusing an input must raise the message the server sent");
 	}
 }

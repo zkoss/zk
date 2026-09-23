@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6161-announce.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Sep  3 12:15:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<zscript><![CDATA[
+		java.util.Date b = new java.util.Date(126, 0, 1); // 2026-01-01
+		java.util.Date e = new java.util.Date(126, 0, 5); // 2026-01-05
+	]]></zscript>
+	<vlayout spacing="10px" hflex="1">
+		<label value="ZK-6161 announce — only a changed range reaches the polite live region; page load, a rerender, re-applying the same range and an error do not"/>
+		<!-- format is pinned so the announced text is locale-independent. -->
+		<daterangebox id="dr" format="yyyy-MM-dd"/>
+		<daterangebox id="seeded" format="yyyy-MM-dd" beginValue="${b}" endValue="${e}" minNights="2"/>
+		<daterangebox id="vetoed" format="yyyy-MM-dd" beginValue="${b}" endValue="${e}"
+			onChange='throw new org.zkoss.zk.ui.WrongValueException(self, "Not available")'/>
+		<daterangebox id="stopped" format="yyyy-MM-dd" w:onChange="event.stop()"/>
+	</vlayout>
+</zk>
