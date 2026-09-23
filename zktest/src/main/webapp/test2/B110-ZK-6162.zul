@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6162.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Sep 24 15:18:55 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<div>
+		<button id="btnReset" label="setValue(getValue())" onClick="drb.setValue(drb.getValue())"/>
+		<button id="btnSetBegin" label="setBeginValue(Sep 1, 2025)"
+			onClick="drb.setBeginValue(new java.util.GregorianCalendar(2025, 8, 1).getTime())"/>
+		<button id="btnErrmsg" label="getErrorMessage()" onClick='errmsg.setValue("" + drb.getErrorMessage())'/>
+		<button id="btnAppReject" label="throw WrongValueException"
+			onClick='throw new org.zkoss.zk.ui.WrongValueException(drb, "Booked")'/>
+		<button id="btnClearErr" label="clearErrorMessage()" onClick="drb.clearErrorMessage()"/>
+		<label id="errmsg"/>
+	</div>
+	<div>
+		<daterangebox id="drb" format="MMM d, yyyy" numberOfMonths="2"
+			onChange='var e = event.getEnd();
+				committedEnd.setValue(e == null ? "none" : String.valueOf(e.getTime()));'/>
+	</div>
+	<label id="committedEnd"/>
+	<div>
+		<daterangebox id="drbJira" width="330px" format="MMM d, yyyy" numberOfMonths="2"
+			minNights="1" maxNights="14" allowEmpty="none"
+			beginPlaceholder="Check-in" endPlaceholder="Check-out"
+			onChange='jiraCommitted.setValue("committed")'/>
+	</div>
+	<label id="jiraCommitted"/>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Type "Sep 2, 2026" into begin, "Sep 4, 2025" into end (reversed), blur.
+
+		- Expected: the errorbox names the reversed range AND both inputs still
+			show what was typed, so the user can correct the year instead of
+			retyping the pair.
+		- Bug: the end input was wiped by the server snap-back, leaving an empty
+			field plus an error about an entry no longer on screen.
+
+		Guards, after step 1:
+		- Correct the begin year to 2025 and blur: the pair on screen commits, so the
+			label below the box shows an end value, not "none".
+		- A redraw keeps both entries and the errorbox, also after a constraint change.
+		- "setValue(getValue())": the box shows the server's range again, without
+			the invalid mark.
+		- "setBeginValue": only begin is replaced; the end keeps its rejected entry
+			and the mark.
+		- "getErrorMessage()" shows the rejection, and "null" after "setValue(getValue())".
+		- "throw WrongValueException": "getErrorMessage()" shows "Booked", and
+			"clearErrorMessage()" removes the mark.
+
+		2. Open the calendar and pick a later day first, then an earlier day.
+
+		- Expected: the two days commit as one range with the earlier day as the
+			begin; a calendar pick carries no order, unlike typed input.
+
+		3. Click "throw WrongValueException", then open the calendar and click Clear.
+
+		- Expected: "getErrorMessage()" shows "null".
+
+		4. In the second box (the Jira setup), type "Sep 2, 2026" into begin and blur,
+			then "Sep 4, 2025" into end and blur.
+
+		- Expected: the reversed range is rejected and both entries stay as typed;
+			correcting the end year to 2026 commits the range.
+	</label>
+</zk>
