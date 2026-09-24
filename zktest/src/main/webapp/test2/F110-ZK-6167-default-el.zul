@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6167-default-el.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Mon Sep 28 13:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<?evaluator name="default"?>
+<zk>
+	<label multiline="true">
+		ZK-6167: on JDK 17 or later, the "default" evaluator (zcommons-el) must reach a public JDK class whose package is not exported.
+
+		Both labels below must show a value (28800000 and r), with no "An error occurred while getting property".
+	</label>
+	<window viewModel="@id('vm') @init('org.zkoss.zktest.test2.F110_ZK_6167VM')">
+		<label id="elProp" value="${vm.tz.rawOffset}"/>
+		<label id="elXml" value="${vm.xdoc.documentElement.tagName}"/>
+	</window>
+</zk>

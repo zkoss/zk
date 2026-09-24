@@ -24,7 +24,8 @@ public class B96_ZK_5036Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		assertEquals("14 de out de 2021", jq("@datebox").eq(0).find("input").val());
+		// ZK-6167: since JDK 17, CLDR abbreviates the Portuguese month with a period
+		assertEquals("14 de out. de 2021", jq("@datebox").eq(0).find("input").val());
 		assertEquals("14 de outubro de 2021", jq("@datebox").eq(1).find("input").val());
 	}
 }

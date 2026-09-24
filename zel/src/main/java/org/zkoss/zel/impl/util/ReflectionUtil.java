@@ -417,6 +417,18 @@ public class ReflectionUtil {
      * the code in sync.
      */
     private static Method getMethod(Class<?> type, Method m) {
+        Method mp = getPublicMethod(type, m);
+        // ZK-6167: JDK 17 refuses a package its module does not export, so prefer the override an exported supertype declares
+        if (mp != null && !Modifier.isStatic(mp.getModifiers()) && !isExported(mp.getDeclaringClass())) {
+            Method exported = getExportedMethod(type, mp);
+            if (exported != null) {
+                return exported;
+            }
+        }
+        return mp;
+    }
+
+    private static Method getPublicMethod(Class<?> type, Method m) {
         if (m == null || Modifier.isPublic(type.getModifiers())) {
             return m;
         }
@@ -425,7 +437,7 @@ public class ReflectionUtil {
         for (int i = 0; i < inf.length; i++) {
             try {
                 mp = inf[i].getMethod(m.getName(), m.getParameterTypes());
-                mp = getMethod(mp.getDeclaringClass(), mp);
+                mp = getPublicMethod(mp.getDeclaringClass(), mp);
                 if (mp != null) {
                     return mp;
                 }
@@ -437,7 +449,7 @@ public class ReflectionUtil {
         if (sup != null) {
             try {
                 mp = sup.getMethod(m.getName(), m.getParameterTypes());
-                mp = getMethod(mp.getDeclaringClass(), mp);
+                mp = getPublicMethod(mp.getDeclaringClass(), mp);
                 if (mp != null) {
                     return mp;
                 }
@@ -446,6 +458,35 @@ public class ReflectionUtil {
             }
         }
         return null;
+    }
+
+    private static Method getExportedMethod(Class<?> type, Method m) {
+        if (isAccessible(type)) {
+            try {
+                Method mp = type.getMethod(m.getName(), m.getParameterTypes());
+                if (!Modifier.isStatic(mp.getModifiers()) && isAccessible(mp.getDeclaringClass())) {
+                    return mp;
+                }
+            } catch (NoSuchMethodException e) {
+                return null;
+            }
+        }
+        for (Class<?> inf : type.getInterfaces()) {
+            Method mp = getExportedMethod(inf, m);
+            if (mp != null) {
+                return mp;
+            }
+        }
+        Class<?> sup = type.getSuperclass();
+        return sup != null ? getExportedMethod(sup, m) : null;
+    }
+
+    private static boolean isAccessible(Class<?> type) {
+        return Modifier.isPublic(type.getModifiers()) && isExported(type);
+    }
+
+    private static boolean isExported(Class<?> type) {
+        return type.getModule().isExported(type.getPackageName(), ReflectionUtil.class.getModule());
     }
 
 

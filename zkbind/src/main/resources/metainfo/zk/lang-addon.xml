@@ -50,11 +50,6 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 	<zscript language="Groovy" each-time="true">
 	import org.zkoss.bind.*
 	</zscript>
-	<zscript language="Ruby">
-	module Java
-		include_package 'org.zkoss.bind'
-	end
-	</zscript>
 
 	<!--component>
 		<component-name>area</component-name>
