@@ -66,6 +66,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 			waitResponse();
 			String id = "p" + Character.toUpperCase(SEVERITIES[i].charAt(0)) + SEVERITIES[i].substring(1);
 			measured[i] = computed("jq('$" + id + "').find('.z-confirmpopup-icon')[0]", "color");
+			// ZK-6164: an open popup can sit over the next trigger, so close it first
+			click(jq("$" + id).find(".z-confirmpopup-cancel"));
+			waitResponse();
 		}
 		assertAll(java.util.stream.IntStream.range(0, SEVERITIES.length).mapToObj(i -> () -> assertEquals(
 				PROBE, measured[i],
