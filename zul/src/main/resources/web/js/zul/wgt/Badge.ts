@@ -202,12 +202,7 @@ export class Badge extends zul.Widget {
 		var n = this.$n();
 		if (!n) return;
 		// Find the indicator span by scanning the badge root's direct
-		// children for the indicator class. `lastElementChild` is unsafe:
-		// a server-driven appendChild of a wrap-mode child after bind lands
-		// AFTER the indicator span (the mold renders children first, the
-		// indicator last; subsequent zk.Widget.insertChildHTML_ appends to
-		// the parent's end). Trusting lastElementChild then creates a
-		// SECOND indicator on the next setCount.
+		// children for the indicator class.
 		var indicatorCls = this.$s('indicator'),
 			indicator: HTMLElement | undefined;
 		for (var c = n.firstElementChild; c; c = c.nextElementSibling) {
