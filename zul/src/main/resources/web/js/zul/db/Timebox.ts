@@ -56,6 +56,8 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	_constraint?: string;
 	/** @internal */
 	_currentbtn?: HTMLElement;
+	/** @internal which half of the spin button was pressed; used only when {@link shallStepOnRelease_} */
+	_stepUp_?: boolean;
 
 	constructor() {
 		super();
@@ -530,34 +532,15 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 			this._currentbtn = btn;
 		}
 
-		// if btn down before blur, needs to convert to real time string first
-		if (inp.value && Timebox._unformater)
-			inp.value = this.coerceToString_(this.coerceFromString_(inp.value));
-		if (!inp.value)
-			inp.value = this.coerceToString_();
-
 		var ofs = zk(btn).revisedOffset(),
 			isOverUpBtn = (evt.pageY - ofs[1]) < btn!.offsetHeight / 2;
-		if (zk.webkit) {
-			zk(inp).focus(); //Bug ZK-1527: chrome and safari will trigger focus if executing setSelectionRange, focus it early here
+
+		if (this.shallStepOnRelease_())
+			this._stepUp_ = isOverUpBtn; // _btnUp does the work
+		else {
+			this._btnStep_(isOverUpBtn);
+			this._startAutoIncProc(isOverUpBtn);
 		}
-
-		var newLastPos = this._getPos();
-
-		// Chrome and Firefox get wrong position at initial case
-		if (this._lastPos != newLastPos)
-			zk(inp).setSelectionRange(this._lastPos);
-
-		if (isOverUpBtn) { //up
-			this._doUp();
-			this._startAutoIncProc(true);
-		} else {
-			this._doDown();
-			this._startAutoIncProc(false);
-		}
-
-		this._changed = true;
-		delete this._shortcut;
 
 		zk.Widget.mimicMouseDown_(this); //set zk.currentFocus
 		zk(inp).focus(); //we have to set it here; otherwise, if it is in popup of
@@ -567,6 +550,51 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		evt.stop();
 	}
 
+	/**
+	 * Whether the spin buttons step on the up-event instead of the down-event, without
+	 * auto-repeat, so that pressing an arrow and releasing elsewhere leaves the value
+	 * untouched (WCAG 2.5.2 Pointer Cancellation, Level A).
+	 *
+	 * @returns `false`; the za11y module overrides this to `true`.
+	 * @internal
+	 */
+	shallStepOnRelease_(): boolean {
+		return false;
+	}
+
+	/**
+	 * Performs one step of the spin button: normalises the displayed value, restores
+	 * the caret cached in `_lastPos`, then steps the time field the caret sits in.
+	 *
+	 * @internal
+	 */
+	_btnStep_(isUp: boolean): void {
+		var inp = this.getInputNode()!;
+
+		// if btn down before blur, needs to convert to real time string first
+		if (inp.value && Timebox._unformater)
+			inp.value = this.coerceToString_(this.coerceFromString_(inp.value));
+		if (!inp.value)
+			inp.value = this.coerceToString_();
+
+		if (zk.webkit) {
+			zk(inp).focus(); //Bug ZK-1527: chrome and safari will trigger focus if executing setSelectionRange, focus it early here
+		}
+
+		// Chrome and Firefox get wrong position at initial case
+		var lastPos = this._lastPos ?? this._getPos();
+		if (lastPos != this._getPos())
+			zk(inp).setSelectionRange(lastPos);
+
+		if (isUp)
+			this._doUp();
+		else
+			this._doDown();
+
+		this._changed = true;
+		delete this._shortcut;
+	}
+
 	/** @internal */
 	_btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
@@ -574,7 +602,10 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 		if (zk.opera) zk(this.getInputNode()).focus();
 			//unfortunately, in opera, it won't gain focus if we set in _btnDown
 
-		this._onChanging();
+		if (this.shallStepOnRelease_())
+			this._btnStep_(!!this._stepUp_); // _doUp/_doDown fire _onChanging themselves
+		else
+			this._onChanging();
 		this._stopAutoIncProc();
 
 		if (zk.webkit && this._lastPos)

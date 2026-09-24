@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-FloatDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for float dismissal.
+
+	Description:
+		With za11y enabled, pressing outside must keep floats open until release,
+		including when the press moves focus. Hover and keyboard dismissal still work.
+
+	History:
+		Tue Aug 25 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		Open the combobox or the menu, then press and hold on the grey box below.
+		The popup must stay open while the button is held, and close on release.
+	</label>
+	<separator/>
+	<combobox id="cb">
+		<comboitem label="Simple and Rich"/>
+		<comboitem label="Cool!"/>
+		<comboitem label="Ajax and RIA"/>
+	</combobox>
+	<combobox id="cbOther">
+		<comboitem label="Opened on release"/>
+	</combobox>
+	<menubar id="mb">
+		<menu id="mn" label="File">
+			<menupopup id="mp">
+				<menuitem label="New"/>
+				<menuitem label="Open"/>
+			</menupopup>
+		</menu>
+	</menubar>
+	<menubar id="auto" autodrop="true">
+		<menu id="autoFirst" label="Hover first">
+			<menupopup id="autoFirstPopup">
+				<menuitem label="First item"/>
+			</menupopup>
+		</menu>
+		<menu id="autoSecond" label="Hover second">
+			<menupopup id="autoSecondPopup">
+				<menuitem label="Second item"/>
+			</menupopup>
+		</menu>
+	</menubar>
+	<textbox id="outsideInput"/>
+	<separator/>
+	<div id="empty" width="300px" height="200px" style="border: 1px solid #ccc; background: #eee">
+		<label value="press and hold here"/>
+	</div>
+</zk>

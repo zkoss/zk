@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-Notification.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Sep 07 16:10:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+	<n:h1>WCAG 2.1 - 4.1.3 status messages</n:h1>
+    <label multiline="true">
+        1. open devtools and find #za11y-announcer, 
+           it holds two regions: [role=log][aria-live=assertive] and [role=log][aria-live=polite]
+        2. press "info" - a div reading "Info: Your changes have been saved." appears in the POLITE region
+        3. press "warning" then "error" - those go to the ASSERTIVE region instead, prefixed "Warning: " / "Error: "
+        4. type something that is not an e-mail address in the Email box, then click the page heading to blur it
+           the errorbox opens AND the assertive region receives the constraint message, with no prefix
+        5. in every case the notification and the errorbox themselves must have
+           no role, no aria-live and no aria-label - announcing is the announcer's job
+        6. with a screen reader on, steps 2 to 4 should be spoken without focus moving
+    </label>
+    <vlayout spacing="10px" hflex="1">
+        <hlayout>
+            <button id="info" label="info"
+                onClick='Clients.showNotification("Your changes have been saved.", "info", null, null, -1, true)'/>
+            <button id="warning" label="warning"
+                onClick='Clients.showNotification("The system is busy.", "warning", null, null, -1, true)'/>
+            <button id="error" label="error"
+                onClick='Clients.showNotification("Could not reach the server.", "error", null, null, -1, true)'/>
+        </hlayout>
+        <hlayout>
+            <label value="Email:"/>
+            <textbox id="email" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"/>
+        </hlayout>
+    </vlayout>
+</zk>

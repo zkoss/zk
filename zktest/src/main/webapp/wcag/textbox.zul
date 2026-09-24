@@ -28,8 +28,10 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<button label="readonly" onClick="readonly.setReadonly(!readonly.isReadonly())"/>
 		<textbox id="disabled" ca:aria-label="disabled" value="2" disabled="true"/>
 		<button label="disabled" onClick="disabled.setDisabled(!disabled.isDisabled())"/>
-		<textbox ca:aria-label="textbox3" value="secret" type="password" />
+		<textbox ca:aria-label="textbox3" value="secret" type="password" inputAttributes="autocomplete=current-password"/>
 		<textbox ca:aria-label="textbox4" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address" />
+		<!-- WCAG 1.3.5 Identify Input Purpose: token lands on the input via inputAttributes -->
+		<textbox ca:aria-label="Email" inputAttributes="autocomplete=email"/>
 		<textbox ca:aria-label="textbox5" rows="5" cols="40">
 			<attribute name="value">
 				text line1...

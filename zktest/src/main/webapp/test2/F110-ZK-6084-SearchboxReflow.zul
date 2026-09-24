@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-SearchboxReflow.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Sep 18 18:00:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:h1>Searchbox popup capped to the viewport</n:h1>
+    <label multiline="true">
+        The searchbox popup follows the viewport down instead of keeping the width it was
+        opened at. Open it at 1280px, THEN narrow to 320.
+    </label>
+    <div apply="org.zkoss.zktest.test2.F90_ZK_4380Composer">
+        <searchbox id="myComp" hflex="1" multiple="false" autoclose="false" ca:aria-label="Choose something">
+            <template name="model">
+                <html><![CDATA[<span class="name">${each}</span>]]></html>
+            </template>
+        </searchbox>
+    </div>
+</zk>
