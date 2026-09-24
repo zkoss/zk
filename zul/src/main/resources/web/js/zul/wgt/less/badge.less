@@ -1,9 +1,10 @@
 @import "~./zul/less/_header.less";
 
-/* Visual language follows Ant Design Badge (https://ant.design/components/badge):
-   solid colored pill (default red) with white text, ~20px tall, 12px font,
-   pill-rounded. Dot mode collapses to a 6px circle. Standalone mode flows
-   inline with no absolute positioning. */
+@badgeIndicatorSize: 20px;
+@badgeDotSize: 6px;
+@badgeOverhang: (@badgeIndicatorSize / 2);
+@badgeDotOverhang: (@badgeDotSize / 2);
+
 .z-badge {
 	position: relative;
 	display: inline-block;
@@ -14,23 +15,22 @@
 	&-standalone {
 		display: inline-flex;
 		align-items: center;
-		& > .z-badge-indicator {
-			position: static;
-			transform: none;
+		& > .z-badge-cave {
+			order: 1;
 		}
 	}
 
 	&-indicator {
-		position: absolute;
-		min-width: 20px;
-		height: 20px;
+		position: relative;
+		min-width: @badgeIndicatorSize;
+		height: @badgeIndicatorSize;
 		padding: 0 6px;
-		border-radius: 10px;
+		border-radius: @badgeOverhang;
 		background: @severityErrorAccentColor;
 		color: @badgeIndicatorTextColor;
 		box-shadow: @badgeIndicatorBoxShadow;
 		font-size: 12px;
-		line-height: 20px;
+		line-height: @badgeIndicatorSize;
 		text-align: center;
 		white-space: nowrap;
 		box-sizing: border-box;
@@ -38,32 +38,78 @@
 		font-weight: normal;
 	}
 
-	&-top_right > .z-badge-indicator {
-		top: 0;
-		right: 0;
-		transform: translate(50%, -50%);
+	&-top_right, &-top_left, &-bottom_right, &-bottom_left {
+		display: inline-grid;
+		> .z-badge-cave, > .z-badge-indicator {
+			grid-row: 1;
+		}
+		> .z-badge-cave {
+			align-self: baseline;
+			height: 100%;
+		}
 	}
-	&-top_left > .z-badge-indicator {
-		top: 0;
-		left: 0;
-		transform: translate(-50%, -50%);
+	&-top_right, &-bottom_right {
+		grid-template-columns: 1fr minmax(@badgeOverhang, auto) minmax(@badgeOverhang, auto);
+		> .z-badge-cave {
+			grid-column-start: 1;
+			grid-column-end: 3;
+		}
+		> .z-badge-indicator {
+			grid-column-start: 2;
+			grid-column-end: 4;
+		}
 	}
-	&-bottom_right > .z-badge-indicator {
-		bottom: 0;
-		right: 0;
-		transform: translate(50%, 50%);
+	&-top_left, &-bottom_left {
+		grid-template-columns: minmax(@badgeOverhang, auto) minmax(@badgeOverhang, auto) 1fr;
+		> .z-badge-cave {
+			grid-column-start: 2;
+			grid-column-end: 4;
+		}
+		> .z-badge-indicator {
+			grid-column-start: 1;
+			grid-column-end: 3;
+		}
 	}
-	&-bottom_left > .z-badge-indicator {
-		bottom: 0;
-		left: 0;
-		transform: translate(-50%, 50%);
+	&-top_right, &-top_left {
+		> .z-badge-cave {
+			padding-top: @badgeOverhang;
+		}
+		> .z-badge-indicator {
+			align-self: start;
+		}
+	}
+	&-bottom_right, &-bottom_left {
+		> .z-badge-cave {
+			padding-bottom: @badgeOverhang;
+		}
+		> .z-badge-indicator {
+			align-self: end;
+		}
 	}
 
-	&-dot > .z-badge-indicator {
-		min-width: 6px;
-		height: 6px;
-		padding: 0;
-		border-radius: 50%;
+	&-dot {
+		&.z-badge-top_right, &.z-badge-bottom_right {
+			grid-template-columns: 1fr minmax(@badgeDotOverhang, auto) minmax(@badgeDotOverhang, auto);
+		}
+		&.z-badge-top_left, &.z-badge-bottom_left {
+			grid-template-columns: minmax(@badgeDotOverhang, auto) minmax(@badgeDotOverhang, auto) 1fr;
+		}
+		&.z-badge-top_right, &.z-badge-top_left {
+			> .z-badge-cave {
+				padding-top: @badgeDotOverhang;
+			}
+		}
+		&.z-badge-bottom_right, &.z-badge-bottom_left {
+			> .z-badge-cave {
+				padding-bottom: @badgeDotOverhang;
+			}
+		}
+		> .z-badge-indicator {
+			min-width: @badgeDotSize;
+			height: @badgeDotSize;
+			padding: 0;
+			border-radius: 50%;
+		}
 	}
 
 	&-info > .z-badge-indicator    { background: @severityInfoAccentColor; }

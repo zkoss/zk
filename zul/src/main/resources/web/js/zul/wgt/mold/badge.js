@@ -14,10 +14,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 function badge$mold$(out) {
-	out.push('<span', this.domAttrs_(), '>');
+	// ZK-6166: the cave is rendered even standalone, so a child appended after bind lands in it.
+	out.push('<span', this.domAttrs_(), '><span id="', this.uuid, '-cave" class="', this.$s('cave'), '">');
 	for (var w = this.firstChild; w; w = w.nextSibling) {
 		w.redraw(out);
 	}
+	out.push('</span>');
 	if (this._shouldRenderIndicator()) {
 		// role=status + contextual aria-label are layered on by the za11y
 		// add-on (EE); the CE mold emits the bare visual indicator only.
