@@ -1,5 +1,6 @@
 ZK 11.0.0
 * Features
+  ZK-6167: Change Java compiler source/target to 17
   ZK-6068: zk.xsd declares elements for CSP-related settings
   ZK-6059: html element does not have a lang attribute
   ZK-5409: responsive Grid
@@ -49,13 +50,42 @@ ZK 11.0.0
   ZK-6132: chip/badge/confirmpopup: severity values "danger"/"secondary" are inconsistent with ZK's own vocabulary
 
 * Upgrade Notes
+  + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
+    JVM 11 they fail to load with UnsupportedClassVersionError. ZK 11 still uses javax.servlet: the
+    server must be a javax (Servlet 3.1/4.0) line that runs on JVM 17.
+  + On JVM 17, no evaluator (EL, MVVM or zscript) can read a property or static method that only a
+    JDK-internal class (sun.*, jdk.internal.*) declares, with no public supertype declaring it; read
+    the value through a ViewModel method instead.
+  + BeanShell property syntax on a JDK-internal object, such as tz.rawOffset in a <zscript>, fails on
+    JVM 17 with "Cannot access field"; call the getter, tz.getRawOffset(), instead.
+  + An EL call to an overloaded method with the same number of parameters, e.g.
+    ${s.replace('ab', 'Z')}, may pick another overload on JVM 17; call it from a ViewModel instead.
+  + Ruby zscript is removed (org.zkoss.zk.scripting.jruby.JRubyInterpreter): a page with
+    <zscript language="ruby"> or zscriptLanguage="ruby" no longer runs. Rewrite such scripts in
+    another zscript language or in Java, or register your own interpreter with <zscript-config>.
+  + The mvel evaluator of ZK EE cannot reach JDK-internal types or call methods of non-public JDK
+    classes on JVM 17, and mvel14 1.2.21 cannot start on JVM 21 or later; use another evaluator.
+  + The Gson-based JSON converters of ZK EE handle java.time and TimeZone on JVM 17, but other JDK
+    types such as Optional, File or Pattern fail; use a plain type or your own converter.
+  + Seasar2 AOP aspects and SMART deploy fail on JVM 16 or later; start the JVM with
+    --add-opens java.base/java.lang=ALL-UNNAMED, or move to the Spring or CDI variable resolver.
+  + JVM 17's newer CLDR data changes some date, time, number and currency formats, including the
+    Datebox and Timebox defaults, and Indonesian, Hebrew and Yiddish resolve as id, he and yi: rename
+    resource files such as zk-label_in.properties to zk-label_id.properties.
+  + JVM 17's helpful NullPointerException messages can show class, field or method names in ZK's
+    error alert; use a custom error handler or -XX:-ShowCodeDetailsInExceptionMessages to hide them.
+  + Newer JVMs change more. JVM 19+: regex \b and \B are ASCII-only. JVM 20+: English time formats,
+    including the Timebox default, put U+202F before AM/PM, so Timebox.setText("2:00 PM") fails on
+    JVM 21; specify format="h:mm:ss a". JVM 23+: -Djava.locale.providers=COMPAT is ignored. JVM 24+: a
+    ZUL page nested deeper than 100 levels fails to load; raise -Djdk.xml.maxElementDepth or split it.
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
   + Borderlayout is extended from XulElement since ZK 11.0.0, so it also accepts the context, popup and tooltip attributes.
   + Upgrade httpcore5 to 5.4.3 to fix vulnerabilities
   + Upgrade jackson-databind to 2.22.1 to fix vulnerabilities
   + Upgrade tomcat-jasper-el to 9.0.120 to fix vulnerabilities
+  + Upgrade groovy (optional, for Groovy zscript) to 5.0.8. With 5.0.0-alpha-1, a Groovy zscript that uses JDK classes fails on JDK 22 or later with "Unsupported class file major version".
   + jasperreports (an optional dependency in zkex) update: JasperReports community edition 7.x contains the fix
-    (no fixed 6.x release exists), but upgrading to 7.x requires ZK public API changes so is deferred to ZK 11.
+    (no fixed 6.x release exists), but upgrading to 7.x requires ZK public API changes so is deferred to ZK 11+.
   + Some CSS variable names are changed for semantic correctness. The values are unchanged; override
     the new name. The LESS aliases in zul/less/_zkvariables.less follow (@inputTextSize -> @inputFontSize):
         --zk-text-color-default3 -> --zk-text-color-inverse

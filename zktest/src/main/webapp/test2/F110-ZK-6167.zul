@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6167.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Sun Sep 27 19:54:57 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6167: on JDK 17 or later, EL and MVVM must reach a public JDK class whose package is not exported.
+
+		Every label below must show a value (28800000 or r), with no IllegalAccessException.
+		Type 3600000 in the intbox and tab out: the "mvProp" label must show 3600000.
+	</label>
+	<window viewModel="@id('vm') @init('org.zkoss.zktest.test2.F110_ZK_6167VM')">
+		<label id="elProp" value="${vm.tz.rawOffset}"/>
+		<label id="elCall" value="${vm.tz.getRawOffset()}"/>
+		<label id="elXml" value="${vm.xdoc.documentElement.tagName}"/>
+		<label id="mvProp" value="@load(vm.tz.rawOffset)"/>
+		<label id="mvCall" value="@load(vm.tz.getRawOffset())"/>
+		<label id="mvXml" value="@load(vm.xdoc.documentElement.tagName)"/>
+		<intbox id="box" value="@bind(vm.tz.rawOffset)"/>
+	</window>
+</zk>
