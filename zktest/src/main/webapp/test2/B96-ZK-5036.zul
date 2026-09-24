@@ -17,7 +17,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
     <label multiline="true">
     1. display a datebox using the Portuguese locale in 'medium' or 'long' format
     2. Expected result:
-        medium: "14 de out de 2021"
+        medium: "14 de out. de 2021"
         long: "14 de outubro de 2021"
     </label>
     <datebox locale="pt" format="medium" onCreate="self.setValue(new Date(121, 9, 14));" width="300px"/>

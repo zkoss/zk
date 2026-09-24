@@ -11,17 +11,19 @@ Copyright (C) 2018 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.jul.JDK14LoggerFactory;
 
 import org.zkoss.lang.Threads;
 import org.zkoss.zats.mimic.DesktopAgent;
@@ -34,22 +36,33 @@ import org.zkoss.zktest.zats.ZATSTestCase;
 public class B85_ZK_3935Test extends ZATSTestCase {
 	@Test
 	public void test() throws Exception {
-		Logger logger = mock(Logger.class);
-		setFinalStatic(DesktopImpl.class.getDeclaredField("log"), logger);
+		// ZK-6167: the logger is static final, so capture its records through JUL (slf4j-jdk14)
+		assertInstanceOf(JDK14LoggerFactory.class, LoggerFactory.getILoggerFactory());
+		Logger logger = Logger.getLogger(DesktopImpl.class.getName());
+		List<LogRecord> records = new CopyOnWriteArrayList<>();
+		Handler handler = new Handler() {
+			@Override
+			public void publish(LogRecord record) {
+				records.add(record);
+			}
 
-		DesktopAgent desktop = connect();
-		Threads.sleep(1500);
-		desktop.query("button").click();
+			@Override
+			public void flush() {
+			}
 
-		verify(logger, never()).error(anyString(), any(Throwable.class));
-	}
+			@Override
+			public void close() {
+			}
+		};
+		logger.addHandler(handler);
+		try {
+			DesktopAgent desktop = connect();
+			Threads.sleep(1500);
+			desktop.query("button").click();
 
-	// https://stackoverflow.com/a/30703932
-	private static void setFinalStatic(Field field, Object newValue) throws Exception {
-		field.setAccessible(true);
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		field.set(null, newValue);
+			assertTrue(records.stream().noneMatch(r -> r.getLevel() == Level.SEVERE && r.getThrown() != null));
+		} finally {
+			logger.removeHandler(handler);
+		}
 	}
 }
