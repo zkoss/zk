@@ -52,20 +52,32 @@
 	}
 	&-cancel,
 	&-ok {
-		padding: 4px 12px;
-		font-family: inherit;
-		font-size: @fontSizeMedium;
-		line-height: 1.5;
-		border-radius: @baseBorderRadius;
-		border: 1px solid @baseBorderColor;
-		background: @confirmpopupButtonBackgroundColor;
-		color: @textColorDefault;
+		.fontStyle(@baseTitleFontFamily, @buttonFontSize, normal, @buttonColor);
+		min-height: @baseButtonHeight;
+		padding: @buttonPadding;
+		line-height: normal;
+		border: @buttonBorderWidth solid @buttonBorderColor;
+		.borderRadius(@buttonBorderRadius);
+		background-color: @buttonBackgroundColor;
+		.boxShadow('0 2px 4px 0 rgba(0,0,0,0.16)');
 		cursor: pointer;
-	}
-	&-ok {
-		background: @colorPrimary;
-		color: @confirmpopupOkColor;
-		border-color: @colorPrimary;
+		white-space: nowrap;
+
+		&:hover {
+			color: @buttonHoverColor;
+			border-color: @buttonHoverBorderColor;
+			background-color: @buttonHoverBackgroundColor;
+		}
+		&:focus {
+			color: @buttonFocusColor;
+			border-color: @buttonFocusBorderColor;
+			background-color: @buttonFocusBackgroundColor;
+		}
+		&:active {
+			color: @buttonActiveColor;
+			border-color: @buttonActiveBorderColor;
+			background-color: @buttonActiveBackgroundColor;
+		}
 	}
 	/* WCAG 2.1 SC 2.4.7 Focus Visible: surface a keyboard focus ring on
 	   both buttons so the user can see which one Enter / Space will trigger. */
