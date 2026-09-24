@@ -4,6 +4,12 @@
    solid colored pill (default red) with white text, ~20px tall, 12px font,
    pill-rounded. Dot mode collapses to a 6px circle. Standalone mode flows
    inline with no absolute positioning. */
+// The placement padding reserves the overhang, so it must stay half the indicator size.
+@badgeIndicatorSize: 20px;
+@badgeDotSize: 6px;
+@badgeOverhang: (@badgeIndicatorSize / 2);
+@badgeDotOverhang: (@badgeDotSize / 2);
+
 .z-badge {
 	position: relative;
 	display: inline-block;
@@ -16,21 +22,20 @@
 		align-items: center;
 		& > .z-badge-indicator {
 			position: static;
-			transform: none;
 		}
 	}
 
 	&-indicator {
 		position: absolute;
-		min-width: 20px;
-		height: 20px;
+		min-width: @badgeIndicatorSize;
+		height: @badgeIndicatorSize;
 		padding: 0 6px;
-		border-radius: 10px;
+		border-radius: @badgeOverhang;
 		background: @severityErrorAccentColor;
 		color: @badgeIndicatorTextColor;
 		box-shadow: @badgeIndicatorBoxShadow;
 		font-size: 12px;
-		line-height: 20px;
+		line-height: @badgeIndicatorSize;
 		text-align: center;
 		white-space: nowrap;
 		box-sizing: border-box;
@@ -38,32 +43,49 @@
 		font-weight: normal;
 	}
 
-	&-top_right > .z-badge-indicator {
-		top: 0;
-		right: 0;
-		transform: translate(50%, -50%);
+	// ZK-6166: reserve the overhang as padding (no transform: it would push the indicator back out), even
+	// with no indicator rendered (count 0), so showing or hiding it never moves the layout.
+	&-top_right {
+		padding: @badgeOverhang @badgeOverhang 0 0;
+		> .z-badge-indicator {
+			top: 0;
+			right: 0;
+		}
 	}
-	&-top_left > .z-badge-indicator {
-		top: 0;
-		left: 0;
-		transform: translate(-50%, -50%);
+	&-top_left {
+		padding: @badgeOverhang 0 0 @badgeOverhang;
+		> .z-badge-indicator {
+			top: 0;
+			left: 0;
+		}
 	}
-	&-bottom_right > .z-badge-indicator {
-		bottom: 0;
-		right: 0;
-		transform: translate(50%, 50%);
+	&-bottom_right {
+		padding: 0 @badgeOverhang @badgeOverhang 0;
+		> .z-badge-indicator {
+			bottom: 0;
+			right: 0;
+		}
 	}
-	&-bottom_left > .z-badge-indicator {
-		bottom: 0;
-		left: 0;
-		transform: translate(-50%, 50%);
+	&-bottom_left {
+		padding: 0 0 @badgeOverhang @badgeOverhang;
+		> .z-badge-indicator {
+			bottom: 0;
+			left: 0;
+		}
 	}
 
-	&-dot > .z-badge-indicator {
-		min-width: 6px;
-		height: 6px;
-		padding: 0;
-		border-radius: 50%;
+	// A dot overhangs by half its own size — reserve that, not the pill's.
+	&-dot {
+		&.z-badge-top_right { padding: @badgeDotOverhang @badgeDotOverhang 0 0; }
+		&.z-badge-top_left { padding: @badgeDotOverhang 0 0 @badgeDotOverhang; }
+		&.z-badge-bottom_right { padding: 0 @badgeDotOverhang @badgeDotOverhang 0; }
+		&.z-badge-bottom_left { padding: 0 0 @badgeDotOverhang @badgeDotOverhang; }
+		> .z-badge-indicator {
+			min-width: @badgeDotSize;
+			height: @badgeDotSize;
+			padding: 0;
+			border-radius: 50%;
+		}
 	}
 
 	&-info > .z-badge-indicator    { background: @severityInfoAccentColor; }
