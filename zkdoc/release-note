@@ -46,6 +46,7 @@ ZK 11.0.0
   ZK-6071: Unexpected JS error when using datebox in nested groupbox
   ZK-6066: Extra double quote in the attributes of checkbox when using WCAG module
   ZK-6067: Form field must not have multiple label elements when using WCAG module
+  ZK-6168: Remove unused IILineitemCtrl, a duplicate of ILineitemCtrl
 
 * Upgrade Notes
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
@@ -157,6 +158,8 @@ ZK 11.0.0
     'unsafe-eval' is still required and still emitted; removing it is tracked separately.
     style-src likewise still requires 'unsafe-inline': components emit inline style attributes,
     which a nonce cannot authorise.
+  + ZK-6168: org.zkoss.stateless.sul.IILineitemCtrl is removed; it was a misnamed duplicate of
+    org.zkoss.stateless.sul.ILineitemCtrl and was never used by the framework.
 
    --------
 ZK 10.3.0
