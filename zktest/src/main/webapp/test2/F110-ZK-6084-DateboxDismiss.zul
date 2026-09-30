@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-DateboxDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for Datebox.
+
+	Description:
+		Closing the calendar commits the date being typed. With za11y, an outside press closes it
+		only on release, and a release back on the calendar keeps it open, including on the time
+		box of a datebox whose format has a time.
+
+	History:
+		Tue Sep 29 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<datebox id="db" format="yyyy/MM/dd" onChange='events.setValue(events.getValue() + "C")'/>
+	<hlayout>events: <label id="events"/></hlayout>
+	<datebox id="dbt" format="yyyy/MM/dd HH:mm" onChange='timeEvents.setValue(timeEvents.getValue() + "C")'/>
+	<hlayout>time events: <label id="timeEvents"/></hlayout>
+	<label multiline="true" style="position: absolute; left: 10px; top: 320px">
+		Open the calendar and type a date. Press and hold on an empty part of the page: the calendar must stay
+		open and "events" empty until you release. Releasing there closes it and commits the date (C).
+		With the second datebox, moving back onto the time box inside its calendar before releasing also
+		keeps it open.
+	</label>
+</zk>
