@@ -175,6 +175,16 @@ task validateOSGiHeaders {
 					}
 				}
 
+				// ZK-6167: every class must be class file 61.0 (Java 17); bnd's osgi.ee only reflects the highest version in the jar
+				new java.util.jar.JarFile(jarFile).withCloseable { jf ->
+					def bad = jf.entries().toList().findAll { it.name.endsWith('.class') }.findResults { e ->
+						def v = new DataInputStream(jf.getInputStream(e)).withCloseable { it.readInt(); [it.readUnsignedShort(), it.readUnsignedShort()] }
+						v == [0, 61] ? null : "${e.name} (${v[1]}.${v[0]})"
+					}
+					if (bad)
+						projectErrors << "class file not 61.0: ${bad.take(5).join(', ')}${bad.size() > 5 ? " (+${bad.size() - 5})" : ''}"
+				}
+
 				if (projectErrors.isEmpty()) {
 					successCount++
 					println "✅ [$projectName] ($jarType) ${jarFile.name}"

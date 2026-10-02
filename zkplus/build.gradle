@@ -35,11 +35,6 @@ repositories {
 		name = 'jboss-repo'
 		url = uri('https://repository.jboss.org/nexus/content/groups/public-jboss/')
 	}
-
-	maven {
-		name = 'nuxeo'
-		url = uri('https://maven.nuxeo.org/nexus/content/groups/public/')
-	}
 }
 
 dependencies {
