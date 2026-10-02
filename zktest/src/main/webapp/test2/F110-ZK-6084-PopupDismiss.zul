@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-PopupDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for Popup and Notification.
+
+	Description:
+		With za11y enabled, a press outside a popup or a default notification closes it only
+		on release, and a release back inside it keeps it open.
+
+	History:
+		Tue Sep 29 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button id="openPopup" label="Popup" popup="pp, position=after_start"/>
+	<popup id="pp">
+		<label id="ppContent" value="closes only when the press is released outside"/>
+	</popup>
+	<button id="notify" label="Notify" style="position: absolute; left: 10px; top: 200px"
+		onClick='Clients.showNotification("Saved", "info", self, "end_center", -1)'/>
+	<!-- Kept to the right, clear of the popup (below its button) and the notification (right of its button). -->
+	<textbox id="outsideInput" style="position: absolute; left: 480px; top: 10px"/>
+	<label multiline="true" style="position: absolute; left: 10px; top: 300px">
+		Click "Popup" (or "Notify"), then press and hold on an empty part of the page: the popup (or
+		notification) must stay until you release. Releasing there closes it; moving back onto it
+		before releasing keeps it open.
+	</label>
+</zk>

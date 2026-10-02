@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-CombobuttonDismiss.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Sep 18 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+	<n:h1>WCAG 2.1 - 1.4.13 content on hover or focus: autodrop combobutton</n:h1>
+	<label multiline="true">
+		1. hover the arrow of "autodrop" - the popup drops without a click
+		2. press Esc without moving the mouse - the popup closes
+		3. keep the mouse still - it must stay closed, not reappear after a moment
+		4. move away, hover the arrow again - the popup drops again
+		5. press "open the click-only popup from the server", then press Esc - that popup
+		   must stay open: it was not revealed by hover, and nothing focused it
+	</label>
+	<separator/>
+	<combobutton id="autoCb" label="autodrop" autodrop="true">
+		<popup id="autoPopup" width="200px">
+			<label value="autodrop popup content"/>
+		</popup>
+	</combobutton>
+	<separator height="30px"/>
+	<combobutton id="plainCb" label="click-only">
+		<popup id="plainPopup" width="200px">
+			<label value="click-only popup content"/>
+		</popup>
+	</combobutton>
+	<button id="openPlain" label="open the click-only popup from the server"
+			onClick="plainCb.setOpen(true)"/>
+	<separator height="80px"/>
+	<button id="away" label="park the pointer here"/>
+</zk>

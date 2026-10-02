@@ -11,6 +11,7 @@ ZK 11.0.0
   ZK-6086: code editor
   ZK-5997: Support Content Security Policy Without 'unsafe-inline'
   ZK-6095: Support ctrlKeys in borderlayout
+  ZK-6084: Accessibility Optimization: WCAG 2.1 AA Advanced Audit
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul

@@ -36,7 +36,6 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
             <n:h2>Size variants</n:h2>
             <chip label="Small"   size="small"/>
             <chip label="Medium"  size="medium"/>
-            <chip label="Large"   size="large"/>
         </n:section>
         <n:section>
             <n:h2>Closable</n:h2>

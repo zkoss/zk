@@ -203,7 +203,11 @@ each(@components, {
 		z-index: 2; // greater than arrow icon
 	}
 	& > a {
-		display: block;
+		// ZK-6084 (WCAG 1.4.12): flex-centre the arrow glyph so line-height
+		// cannot push it out of the fixed-height half.
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		color: @textColorDefault;
 		.z-timebox-disabled &,
 		.z-spinner-disabled &,
@@ -212,7 +216,6 @@ each(@components, {
 		}
 		height: @spinnerButtonIconHeight;
 		padding: @spinnerButtonPadding;
-		overflow: hidden;
 		text-decoration: none;
 
 		> i {

@@ -40,6 +40,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				<listcell label="${each}-1" />
 			</listitem>
 		</listbox>
+		<!-- WCAG 1.3.5 Identify Input Purpose: mold="select" renders a native <select>, so ca:autocomplete lands on it (like Selectbox) -->
+		<listbox mold="select" ca:aria-label="Country" ca:autocomplete="country-name">
+			<listitem label="Taiwan"/>
+			<listitem label="Japan"/>
+			<listitem label="United States"/>
+		</listbox>
 		<listbox model="${model}" width="250px" height="300px" ca:aria-label="a listbox">
 		</listbox>
 		<hlayout>
