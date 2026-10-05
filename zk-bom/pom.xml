@@ -121,6 +121,11 @@
             </dependency>
             <dependency>
                 <groupId>org.zkoss.theme</groupId>
+                <artifactId>iceblue</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zkoss.theme</groupId>
                 <artifactId>iceblue_c</artifactId>
                 <version>${project.version}</version>
             </dependency>
