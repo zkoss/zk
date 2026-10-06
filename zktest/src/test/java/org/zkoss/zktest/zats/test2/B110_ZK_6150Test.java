@@ -104,17 +104,17 @@ public class B110_ZK_6150Test extends WebDriverTestCase {
 				"pointer dismissal must go through onFloatUp, not a second document mousedown");
 	}
 
-	/** Escape must work wherever focus sits — e.g. a popup opened server-side —
-	 *  so it is gated on canActivate(), not on the event's target. */
+	/** Escape follows focus, as on zul.db.Datebox: the box's doKeyDown_ owns it, so
+	 *  with focus on no widget at all nothing receives it and the popup stays open. */
 	@Test
-	public void testEscapeClosesPopupWhenFocusIsOutsideTheBox() {
+	public void testEscapeWithFocusOnNoWidgetLeavesPopupOpen() {
 		connect("/test2/B110-ZK-6150.zul");
 		waitResponse();
 
 		openPopupViaButton();
 		assertTrue(popupOpen(), "pre-condition: the calendar popup must be open");
 
-		// blur fires no focusin, so only the Escape below can close the popup
+		// blur fires no focusin, so the focus-out dismissal does not run either
 		eval("document.activeElement && document.activeElement.blur()");
 		assertTrue(popupOpen(), "pre-condition: blurring alone must not close the popup");
 		assertFalse(Boolean.parseBoolean(getEval(FOCUS_IN_POPUP)),
@@ -123,7 +123,7 @@ public class B110_ZK_6150Test extends WebDriverTestCase {
 		getActions().sendKeys(Keys.ESCAPE).perform();
 		waitResponse();
 
-		assertFalse(popupOpen(), "Escape must still close the popup with focus outside it");
+		assertTrue(popupOpen(), "Escape with focus on no widget must not reach the popup");
 	}
 
 	private static final String SCROLL_PAGE = "/test2/B110-ZK-6150-scroll.zul";
@@ -316,7 +316,7 @@ public class B110_ZK_6150Test extends WebDriverTestCase {
 		assertEquals("", getEval("window.__err.join('|')"), "no JS error on the plain datebox");
 	}
 
-	// ----- Escape: the document listener vs the framework's escPressed_ -----
+	// ----- Escape with the popup stacked over a modal -----
 
 	/** The inline z-index the float stack wrote on a float root, as a number. */
 	private long floatZIndexOf(String nodeExpression) {
@@ -328,11 +328,11 @@ public class B110_ZK_6150Test extends WebDriverTestCase {
 	}
 
 	/**
-	 * The other half of the question: ownership follows the float stack, not the
-	 * modal. `open()` registers the popup as a float and then takes the top of
-	 * that stack, so the Bug #3201879 clause in `canActivate`
-	 * (`zk/widget.ts:4528`) hands activation to the popup even under a modal —
-	 * the same deal `zul.inp.ComboWidget#open` gives datebox and combobox.
+	 * Escape follows focus, not the modal: `open()` puts focus in the calendar
+	 * even with a modal up, so the box — not the modal underneath — receives it.
+	 * The popup still has to top the float stack: the Bug #3201879 clause in
+	 * `canActivate` (`zk/widget.ts:4528`) is what lets the calendar take focus back
+	 * after a month change (`Calendar#_shift` → `focus()`) under that modal.
 	 */
 	@Test
 	public void testEscapeBelongsToThePopupStackedOverAModal() {
@@ -353,8 +353,9 @@ public class B110_ZK_6150Test extends WebDriverTestCase {
 		waitResponse();
 		assertTrue(popupOpen(), "pre-condition: the calendar popup must be open");
 
-		// Pins the reason for the ownership below: drop the popup out of the float
-		// stack again and this goes red instead of quietly passing.
+		assertTrue(Boolean.parseBoolean(getEval(FOCUS_IN_POPUP)),
+				"pre-condition: open() must have put focus in the calendar, which routes Escape to the box");
+		// Keeps the calendar able to re-take focus under the modal (see the Javadoc).
 		long popupZIndex = floatZIndexOf("zk.Widget.$('$dr')._rangePopup.$n()"),
 				modalZIndex = floatZIndexOf("jq('$wnd')[0]");
 		assertTrue(popupZIndex > modalZIndex,
@@ -368,8 +369,8 @@ public class B110_ZK_6150Test extends WebDriverTestCase {
 		waitResponse();
 
 		assertFalse(popupOpen(),
-				"Escape belongs to the float that owns activation, so it must close the "
-						+ "popup rather than be left to the modal underneath");
+				"Escape follows focus to the box, so it must close the popup rather "
+						+ "than be left to the modal underneath");
 		// The other half of "owns": consuming the key must not also hand it on.
 		// Without this the test would pass on an implementation that closes the
 		// popup AND cancels the window with the same keystroke.
