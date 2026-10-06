@@ -317,10 +317,8 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 				+ "}");
 		waitResponse();
 
-		// Press ESC.
-		js().executeScript(
-				"var ev = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });"
-				+ "document.dispatchEvent(ev);");
+		// Press ESC on the calendar, where open() put focus.
+		getActions().sendKeys(Keys.ESCAPE).perform();
 		waitForPopupClosed();
 		waitResponse();
 
@@ -1101,10 +1099,8 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 			return Boolean.TRUE.equals(inside);
 		});
 
-		// Close via ESC (capture-phase keydown handler).
-		js().executeScript(
-				"document.dispatchEvent(new KeyboardEvent('keydown',"
-				+ " {key: 'Escape', bubbles: true}));");
+		// Close via ESC, sent to the focused calendar like a real keystroke.
+		getActions().sendKeys(Keys.ESCAPE).perform();
 
 		new WebDriverWait(driver, Duration.ofSeconds(2)).until(d -> {
 			Boolean onBegin = (Boolean) js().executeScript(
