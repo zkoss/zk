@@ -629,7 +629,6 @@
 					<xs:enumeration value="Java" />
 					<xs:enumeration value="JavaScript" />
 					<xs:enumeration value="Groovy" />
-					<xs:enumeration value="Ruby" />
 					<xs:enumeration value="Python" />
 				</xs:restriction>
 			</xs:simpleType>

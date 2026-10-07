@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-4305-esc.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Sep  2 14:18:29 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		ZK-4305 Escape — an ESC that dismisses the daterangebox popup must not
+		also reach the enclosing modal window's onCancel.
+
+		The status label below is the only observable: it flips to "cancelled"
+		the moment the window's onCancel fires, so a lost form entry is visible
+		without detaching anything.
+
+		Steps to verify:
+		1. Click the calendar button, then press ESC — the popup closes and the
+		   status must STAY "not-cancelled".
+		2. Press ESC again with the popup closed — the status must become
+		   "cancelled", proving ESC still reaches the window.
+	</label>
+
+	<window id="win" title="ZK-4305 ESC" mode="modal" width="480px"
+			border="normal" onCancel='status.setValue("cancelled")'>
+		<vlayout spacing="10px" hflex="1">
+			<label id="status" value="not-cancelled"/>
+			<label id="keyStatus" value="no-keydown"/>
+			<daterangebox id="drb" format="yyyy-MM-dd" width="360px"
+					w:onKeyDown="zk.Widget.$('$keyStatus').setValue('keydown-' + event.keyCode)"/>
+		</vlayout>
+	</window>
+</zk>

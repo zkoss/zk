@@ -400,6 +400,11 @@ public class BytecodeReadingParanamer implements Paranamer {
         static final int MHANDLE = 15;
 
         /**
+         * The type of CONSTANT_Dynamic constant pool items.
+         */
+        static final int CONDY = 17;
+
+        /**
         * The type of CONSTANT_InvokeDynamic constant pool items.
         */
         static final int INVOKEDYN = 18;
@@ -445,6 +450,7 @@ public class BytecodeReadingParanamer implements Paranamer {
                     case IMETH:
                     case INT:
                     case FLOAT:
+                    case CONDY:
                     case INVOKEDYN:
                     case NAME_TYPE:
                         size = 5;
@@ -465,6 +471,7 @@ public class BytecodeReadingParanamer implements Paranamer {
                         break;
                         // case HamConstants.CLASS:
                         // case HamConstants.STR:
+                        // ZK-6167: CONSTANT_MethodType (16), CONSTANT_Module (19) and CONSTANT_Package (20) are 3 bytes too
                     default:
                         size = 3;
                         break;

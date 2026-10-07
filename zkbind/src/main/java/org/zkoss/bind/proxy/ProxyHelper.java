@@ -140,6 +140,9 @@ public class ProxyHelper {
 			return (T) new ListProxy((Collection) origin, annotations);
 		} else if (origin.getClass().isArray()) {
 			throw new UnsupportedOperationException("Array cannot be a proxy object!");
+		} else if (origin.getClass().isSealed()) {
+			// ZK-6167: a proxy cannot subclass a sealed class, so the bean is left as is, like a final one
+			return origin;
 		} else {
 			factory.setFilter(BeanProxyHandler.BEAN_METHOD_FILTER);
 			factory.setSuperclass(getTargetClassIfProxied(origin.getClass()));
@@ -238,6 +241,8 @@ public class ProxyHelper {
 	 * Creates a proxy form object from the given origin object, if any.
 	 * @param origin the origin data object
 	 * @param type the class type of the data object
+	 * @throws UiException if the class type is a sealed class or interface, since a proxy cannot extend or
+	 * implement it
 	 */
 	@SuppressWarnings({"rawtypes" })
 	public static <T> T createFormProxy(T origin, Class<?> type) {
@@ -249,6 +254,8 @@ public class ProxyHelper {
 	 * @param origin the origin data object
 	 * @param type the class type of the data object
 	 * @param interfaces the interface type of the data object, if any.
+	 * @throws UiException if the class type is a sealed class or interface, since a proxy cannot extend or
+	 * implement it
 	 * @since 8.0.1
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -264,6 +271,10 @@ public class ProxyHelper {
 			type = ((FormProxyObject) origin).getOriginObject().getClass();
 		else if (origin != null)
 			type = getTargetClassIfProxied(origin.getClass());
+
+		// ZK-6167: the JVM rejects a proxy that extends or implements a sealed type
+		if (type.isSealed())
+			throw new UiException("Cannot create a form proxy object:[" + type.getName() + "], a sealed class or interface cannot be proxied.");
 
 		// set super class
 		boolean isTypeInterface = type.isInterface();

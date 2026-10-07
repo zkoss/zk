@@ -35,6 +35,7 @@ task validateOSGiHeaders {
 		// Check if we should fail on missing JARs (default: warn only)
 		def failOnMissing = project.hasProperty('validateOSGi.failOnMissing') ?
 			project.property('validateOSGi.failOnMissing').toBoolean() : false
+		def expectedJavaVersion = JavaVersion.toVersion(jdkVersion)
 
 		// Helper function to validate a single JAR
 		def validateJar = { File jarFile, String projectName, boolean isEval ->
@@ -173,6 +174,16 @@ task validateOSGiHeaders {
 					} else if (!fragmentHost.contains('zweb')) {
 						projectErrors << "Fragment-Host should reference 'zweb', got '${fragmentHost}'"
 					}
+				}
+
+				// ZK-6167: every class must target jdkVersion; bnd's osgi.ee only reflects the highest version in the jar
+				new java.util.jar.JarFile(jarFile).withCloseable { jf ->
+					def bad = jf.entries().toList().findAll { it.name.endsWith('.class') }.findResults { e ->
+						def v = new DataInputStream(jf.getInputStream(e)).withCloseable { it.readInt(); [it.readUnsignedShort(), it.readUnsignedShort()] }
+						v[0] == 0 && JavaVersion.forClassVersion(v[1]) == expectedJavaVersion ? null : "${e.name} (${v[1]}.${v[0]})"
+					}
+					if (bad)
+						projectErrors << "class file not Java ${jdkVersion}: ${bad.take(5).join(', ')}${bad.size() > 5 ? " (+${bad.size() - 5})" : ''}"
 				}
 
 				if (projectErrors.isEmpty()) {

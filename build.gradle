@@ -12,6 +12,10 @@ plugins {
 	id 'org.cyclonedx.bom' version '1.10.0'
 }
 
+if (!JavaVersion.current().isCompatibleWith(JavaVersion.toVersion(jdkVersion)))
+	throw new GradleException("ZK 11 must be built with JDK ${jdkVersion} or later, but Gradle runs on Java ${JavaVersion.current()} at ${System.getProperty('java.home')}; point JAVA_HOME or org.gradle.java.home at a JDK ${jdkVersion}")
+logger.lifecycle("zk: building with JDK ${System.getProperty('java.version')} at ${System.getProperty('java.home')}")
+
 // --- SBOM (CycloneDX) for CRA compliance ---
 cyclonedxBom {
 	includeConfigs = ["runtimeClasspath"]
@@ -104,6 +108,12 @@ if (project.ext['gradleFrontendSkip'] == 'false') {
 	classes.dependsOn buildESLintPlugin
 }
 
+// ZK-6167: the root project applies 'java' too, and subprojects {} does not cover it
+tasks.withType(JavaCompile).configureEach {
+	options.release = jdkVersion as int
+	options.encoding = 'UTF-8'
+}
+
 subprojects {
 	// Apply bnd plugin for OSGi manifest generation
 	apply plugin: 'biz.aQute.bnd.builder'
@@ -164,8 +174,8 @@ subprojects {
 		}
 	}
 
-	java.sourceCompatibility = JavaVersion.VERSION_11
 	tasks.withType(JavaCompile) {
+		options.release = jdkVersion as int
 		options.encoding = 'UTF-8'
 		options.warnings = false
 	}

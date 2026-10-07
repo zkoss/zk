@@ -28,9 +28,10 @@ public class F50_3287044Test extends WebDriverTestCase {
 		Assertions.assertEquals("2,000.02", jq("@decimalbox:eq(0)").val());
 		Assertions.assertEquals("2,000.02", jq("@doublespinner:eq(0) input").val());
 
-		Assertions.assertEquals("2\u00A0000,02", jq("@doublebox:eq(1)").val());
-		Assertions.assertEquals("2\u00A0000,02", jq("@decimalbox:eq(1)").val());
-		Assertions.assertEquals("2\u00A0000,02", jq("@doublespinner:eq(1) input").val());
+		// ZK-6167: JDK 17's CLDR data uses U+202F instead of U+00A0 as the French grouping separator
+		Assertions.assertEquals("2\u202F000,02", jq("@doublebox:eq(1)").val());
+		Assertions.assertEquals("2\u202F000,02", jq("@decimalbox:eq(1)").val());
+		Assertions.assertEquals("2\u202F000,02", jq("@doublespinner:eq(1) input").val());
 
 		Assertions.assertEquals("2.000,02", jq("@doublebox:eq(2)").val());
 		Assertions.assertEquals("2.000,02", jq("@decimalbox:eq(2)").val());
