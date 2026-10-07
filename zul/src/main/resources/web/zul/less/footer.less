@@ -27,6 +27,15 @@
 		min-height: 0;
 		min-width: 0;
 	}
+
+	// ZK-6076: a content-sized container keeps its items at their content size instead of collapsing them
+	&-content&-column > &-item {
+		min-height: auto;
+	}
+
+	&-content&-row > &-item {
+		min-width: auto;
+	}
 }
 
 #footer.append-style();
