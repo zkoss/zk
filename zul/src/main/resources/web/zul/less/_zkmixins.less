@@ -297,6 +297,15 @@
 	display: @display;
 	.size(@width, @height);
 }
+// WCAG 1.4.12: an icon slot that keeps its nominal size but GROWS (never clips) when the
+// user raises line-height.
+.iconBox(@width, @height) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: @width;
+	min-height: @height;
+}
 .fontStyle(@family, @size, @weight, @color) {
 	font-family: @family;
 	font-size: @size;

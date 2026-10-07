@@ -38,6 +38,11 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
                 <datebox ca:aria-labelledby="${lbl2.uuid}" displayedTimeZones="GMT+8,GMT+9"/>
                 <datebox ca:aria-labelledby="${lbl2.uuid}" format="long+medium" displayedTimeZones="GMT+8,GMT+9"/>
             </hlayout>
+            <!-- WCAG 1.3.5 Identify Input Purpose: token lands on the input via inputAttributes. Kept last to preserve existing datebox :eq() indices used by DateboxTest. -->
+            <hlayout>
+                Date of birth:
+                <datebox ca:aria-label="Date of birth" inputAttributes="autocomplete=bday"/>
+            </hlayout>
         </vlayout>
     </n:main>
 </zk>
