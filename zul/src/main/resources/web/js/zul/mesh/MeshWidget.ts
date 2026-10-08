@@ -930,7 +930,8 @@ export abstract class MeshWidget extends zul.Widget {
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : undefined,
 			frozen = this.frozen;
-		if (td && frozen) {
+		// ZK-6170: a mouse press must not scroll.
+		if (td && frozen && !zk._cfByMD) {
 			const frozenCols = frozen.getColumns()!,
 				scrollableIndex = index - frozenCols;
 

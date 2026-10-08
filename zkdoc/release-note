@@ -61,6 +61,7 @@ ZK 11.0.0
   ZK-5906: external link and zk event race condition for timeout redirect
   ZK-5860: cannot change hour and minute in a datebox after changing its constraint
   ZK-6090: Closing a tab containing <cardlayout> throws "Node is not found!" error in mobile/touch simulation mode
+  ZK-6170: Clicking a partly visible input in a listbox with frozen columns scrolls the columns and loses the click
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
