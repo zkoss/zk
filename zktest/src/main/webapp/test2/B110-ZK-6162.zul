@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6162.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Sep 24 15:18:55 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Type "Sep 2, 2026" into begin, "Sep 4, 2025" into end (reversed), blur.
+
+		- Expected: the errorbox names the reversed range AND both inputs still
+			show what was typed, so the user can correct the year instead of
+			retyping the pair.
+		- Bug: the end input was wiped by the server snap-back, leaving an empty
+			field plus an error about an entry no longer on screen.
+
+		Guards, after step 1:
+		- Correct the begin year to 2025 and blur: the pair on screen commits, so the
+			label below the box shows an end value, not "none".
+		- A redraw keeps both entries and the errorbox.
+
+		2. Open the calendar and pick a later day first, then an earlier day.
+
+		- Expected, changed by this ticket: the earlier second pick is NOT
+			silently swapped into a valid range; it is rejected like a typed
+			reversed pair, so both entry paths follow one rule.
+	</label>
+	<div>
+		<daterangebox id="drb" format="MMM d, yyyy" numberOfMonths="2"
+			onChange='var e = event.getEnd();
+				committedEnd.setValue(e == null ? "none" : String.valueOf(e.getTime()));'/>
+	</div>
+	<label id="committedEnd"/>
+</zk>

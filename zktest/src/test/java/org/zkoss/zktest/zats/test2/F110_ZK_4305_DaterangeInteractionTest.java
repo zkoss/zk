@@ -601,32 +601,6 @@ public class F110_ZK_4305_DaterangeInteractionTest extends WebDriverTestCase {
 				"Double-click on the completing cell must still commit the end date");
 	}
 
-	/** N1 (swap path): when the later day is picked first and the EARLIER day
-	 *  completes the range, the completing pick lands on stagedBegin (via the
-	 *  swap branch). A double-click on that earlier cell must still commit —
-	 *  the guard matches either endpoint, not just stagedEnd. */
-	@Test
-	public void testDoubleClickEarlierCompletingCellCommitsRange() {
-		connect("/test2/F110-ZK-4305-basic.zul");
-		waitResponse();
-
-		openPopupViaButton();
-		clickCellInPanel(0, 15);        // begin = the later day
-		waitResponse();
-		doubleClickCellInPanel(0, 10);  // double-click the earlier completing cell (swap)
-		sleep(300);
-		waitResponse();
-
-		String beginVal = (String) js().executeScript(
-				"return document.querySelector('.z-daterangebox-begin').value;");
-		String endVal = (String) js().executeScript(
-				"return document.querySelector('.z-daterangebox-end').value;");
-		assertFalse(beginVal == null || beginVal.isEmpty(),
-				"Double-click on the earlier completing cell (swap) must still commit begin");
-		assertFalse(endVal == null || endVal.isEmpty(),
-				"Double-click on the earlier completing cell (swap) must still commit end");
-	}
-
 	/** X2: a valid edit on one input must NOT commit while the OTHER input holds
 	 *  unparseable text — otherwise the sibling's stale last-valid value is sent
 	 *  to the server silently. Observed via the drEvents onChange handler, which
