@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6170.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Oct 05 18:00:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click the visible part of the textbox under Header 3, which is cut off at the right edge.
+		2. Scroll until the textbox under Header 2 is partly behind the frozen column, and click its visible part.
+		Each time, the textbox should be focused, its header should be printed in the zk log, and the columns should not scroll.
+	</label>
+	<listbox width="500px">
+		<listhead>
+			<listheader label="Header 1" width="150px"/>
+			<listheader label="Header 2" width="200px"/>
+			<listheader label="Header 3" width="200px"/>
+			<listheader label="Header 4" width="200px"/>
+		</listhead>
+		<frozen columns="1"/>
+		<listitem>
+			<listcell label="1"/>
+			<listcell><textbox width="100%" onClick='Clients.log("Header 2")'/></listcell>
+			<listcell><textbox width="100%" onClick='Clients.log("Header 3")'/></listcell>
+			<listcell/>
+		</listitem>
+	</listbox>
+</zk>
