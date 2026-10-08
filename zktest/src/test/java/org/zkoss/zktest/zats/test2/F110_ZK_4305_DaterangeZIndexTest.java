@@ -96,8 +96,6 @@ public class F110_ZK_4305_DaterangeZIndexTest extends WebDriverTestCase {
 				"The float stack's z-index must be a positive number, was: " + inlineZIndex);
 
 		// And it must still win against the modal window it is opened inside.
-		// STRICTLY greater: canActivate's Bug #3201879 clause hands the popup
-		// activation only on `>`, so a tie would leave Escape with the modal.
 		String winZIndex = getEval("String(jq('$win')[0].style.zIndex || 0)");
 		assertTrue(Integer.parseInt(inlineZIndex) > Integer.parseInt(winZIndex),
 				"The popup must stack above its own modal window (popup=" + inlineZIndex
