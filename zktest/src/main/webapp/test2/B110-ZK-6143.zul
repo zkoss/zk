@@ -19,7 +19,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		2. Press ESC to close the calendar, then click "change format".
 
 		- Expected (step 1): BOTH raise the standard errorbox. The daterangebox says
-			"Invalid range" and also keeps its red border (z-daterangebox-invalid).
+			"You must specify a date. Format: yyyy/MM/dd" (ZK-6161) and also keeps its red
+			border (z-daterangebox-invalid).
 		- Bug (step 1): only the datebox opens an errorbox; the daterangebox writes to the
 			polite live region only — and its border stays unchanged, because the invalid
 			rule painted with the error bubble's own border token, which is transparent.
@@ -50,10 +51,9 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			unparseable text or a server rejection. It was inert on the first and dropped
 			the border on the second.
 		- "server wrong value" pushes a message the client could never have produced by
-			itself. With unparseable text ALSO in an input, a redraw has to re-raise THAT
-			message, not downgrade it to the generic "Invalid range". And after "server
-			reject" alone — nothing unparseable anywhere — a redraw has to keep the bubble
-			at all, not just the border.
+			itself. With unparseable text ALSO in an input, a redraw keeps the red border but
+			not the bubble; focusing an input brings back THAT message, not the generic format
+			message. The same after "server reject" alone, with nothing unparseable anywhere.
 	</label>
 	<!-- an errorbox opens to its input's right, so the buttons get their own line
 		above to stay clickable while one is showing -->
