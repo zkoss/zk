@@ -62,6 +62,7 @@ ZK 11.0.0
   ZK-5860: cannot change hour and minute in a datebox after changing its constraint
   ZK-6090: Closing a tab containing <cardlayout> throws "Node is not found!" error in mobile/touch simulation mode
   ZK-6170: Clicking a partly visible input in a listbox with frozen columns scrolls the columns and loses the click
+  ZK-6171: The horizontal scroll of a listbox with frozen columns lands in a different place after a re-render while an input in it has focus
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
