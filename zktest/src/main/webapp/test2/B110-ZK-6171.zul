@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6171.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Oct 08 15:40:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. Scroll the listbox to the right until the textboxes under Header 4 and Header 5 are in view, with Header 6 still cut off.
+		2. Click the textbox under Header 4: the listbox is re-rendered on the server.
+		3. Click the textbox under Header 5: the listbox is re-rendered on the client.
+		Each time, the textbox should keep the focus, and the columns should not move.
+	</label>
+	<listbox id="lb" width="500px">
+		<listhead>
+			<listheader label="Header 1" width="150px"/>
+			<listheader label="Header 2" width="200px"/>
+			<listheader label="Header 3" width="200px"/>
+			<listheader label="Header 4" width="120px"/>
+			<listheader label="Header 5" width="120px"/>
+			<listheader label="Header 6" width="200px"/>
+		</listhead>
+		<frozen columns="1"/>
+		<listitem>
+			<listcell label="1"/>
+			<listcell/>
+			<listcell/>
+			<listcell><textbox width="100%" onClick="lb.invalidate()"/></listcell>
+			<listcell><textbox width="100%" w:onClick="zk.$('$lb').rerender()"/></listcell>
+			<listcell/>
+		</listitem>
+	</listbox>
+</zk>
