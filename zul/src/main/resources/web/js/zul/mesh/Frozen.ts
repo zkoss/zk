@@ -309,7 +309,8 @@ export class Frozen extends zul.Widget {
 			// ZK-2583: native IE bug, add 1px in scroll div's height for workaround
 			this.$n_().style.height = this.$n_('cave').style.height = this.$n_('right').style.height = scroll.style.height
 				= (scroll.firstChild as HTMLElement).style.height = jq.px0(scrollbarWidth);
-			p._currentLeft = 0;
+			// ZK-6171: smooth frozen scrolls the mesh itself, keep the position for MeshWidget.onSize to restore
+			p._currentLeft = this._smoothFrozenEnabled() ? this._currentLeft ?? 0 : 0;
 			this.domListen_(scroll, 'onScroll');
 
 			var head = p.$n('head');
@@ -399,6 +400,9 @@ export class Frozen extends zul.Widget {
 				}
 			}
 		}
+		// ZK-6171: MeshWidget.onSize has restored the position, move the frozen cells with it
+		if (p._nativebar)
+			this._syncFrozenCellsPosition();
 		setTimeout(() => {
 			this._freezeRightColumns();
 			this._onSizeLater();
@@ -478,7 +482,13 @@ export class Frozen extends zul.Widget {
 				bufferWidth = ehead.scrollWidth - ehead.clientWidth;
 			meshTotalScrollWidth += bufferWidth;
 			(scroll.firstChild as HTMLElement).style.width = jq.px0(meshTotalScrollWidth);
+			// ZK-6171: keep a scroll made since MeshWidget.onSize restored the position (a re-render's refocus)
+			const left = mesh._currentLeft;
+			if (this._currentLeft != null)
+				this._currentLeft = ehead.scrollLeft != left ? ehead.scrollLeft : ebody ? ebody.scrollLeft : left;
 			this.syncScroll();
+			// ZK-6171: the position may have been restored after onSize, e.g. after the header flex
+			this._syncFrozenCellsPosition();
 		}
 	}
 

@@ -50,6 +50,7 @@ ZK 11.0.0
   ZK-6067: Form field must not have multiple label elements when using WCAG module
   ZK-6132: chip/badge/confirmpopup: severity values "danger"/"secondary" are inconsistent with ZK's own vocabulary
   ZK-6168: Remove unused IILineitemCtrl, a duplicate of ILineitemCtrl
+  ZK-6171: The horizontal scroll of a listbox with frozen columns lands in a different place after a re-render while an input in it has focus
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
