@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6166.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Sep 24 15:18:55 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+	<label multiline="true">
+		Steps to reproduce:
+		1. Look at the top edge of each indicator below. None of them has any
+			author-side CSS.
+
+		2. The last row wraps each badge in a box that clips on all four sides
+			and hugs it; check every placement, pill and dot.
+
+		3. Click "count = 5", then "count = 0"; Mail and Next must not move.
+
+		- Expected: every indicator is drawn whole.
+		- Bug: .z-badge-indicator is absolutely positioned with
+			transform: translate(50%, -50%), so a 20px indicator overhung its
+			anchor by 10px while .z-groupbox-content is overflow: hidden with only
+			8px of top padding — and the same happened in any overflow: hidden box.
+	</label>
+	<groupbox id="gb" title="Notification badges">
+		<hlayout spacing="28px" valign="middle">
+			<badge id="bInbox" count="5">
+				<button label="Inbox" iconSclass="z-icon-envelope"/>
+			</badge>
+			<badge id="bAlerts" count="120" max="99" severity="warning">
+				<button label="Alerts" iconSclass="z-icon-bell"/>
+			</badge>
+			<badge id="bDot" dot="true" severity="info">
+				<button label="Feed"/>
+			</badge>
+		</hlayout>
+	</groupbox>
+	<n:div id="clip" style="height:70px;overflow:hidden;border:1px solid #bbb;padding:8px 16px">
+		<badge id="bTasks" count="7">
+			<button label="Tasks"/>
+		</badge>
+	</n:div>
+	<style>.tight { display: inline-flex; overflow: hidden; margin: 8px; }</style>
+	<n:div>
+		<n:span class="tight"><badge id="pTopRight" count="4"><button label="TR"/></badge></n:span>
+		<n:span class="tight"><badge id="pTopLeft" count="4" placement="top_left"><button label="TL"/></badge></n:span>
+		<n:span class="tight"><badge id="pBottomRight" count="4" placement="bottom_right"><button label="BR"/></badge></n:span>
+		<n:span class="tight"><badge id="pBottomLeft" count="4" placement="bottom_left"><button label="BL"/></badge></n:span>
+		<n:span class="tight"><badge id="dTopRight" dot="true"><button label="TR"/></badge></n:span>
+		<n:span class="tight"><badge id="dTopLeft" dot="true" placement="top_left"><button label="TL"/></badge></n:span>
+		<n:span class="tight"><badge id="dBottomRight" dot="true" placement="bottom_right"><button label="BR"/></badge></n:span>
+		<n:span class="tight"><badge id="dBottomLeft" dot="true" placement="bottom_left"><button label="BL"/></badge></n:span>
+	</n:div>
+	<hlayout id="hlZero" valign="middle">
+		<badge id="bZero"><button id="zeroBtn" label="Mail"/></badge>
+		<button id="zeroNext" label="Next"/>
+	</hlayout>
+	<button id="toFive" label="count = 5" onClick="bZero.setCount(5)"/>
+	<button id="toZero" label="count = 0" onClick="bZero.setCount(0)"/>
+</zk>
