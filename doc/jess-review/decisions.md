@@ -74,8 +74,8 @@ Issue 欄的 #數字為 Jess 追蹤 repo 的 issue 編號；「—」表示該�
 | D117 | gallery 預覽頁 | 只有預覽頁標題文字差異的頁面視為預期變更，重切 baseline（根因 47d26068ed）。 |
 | D118-B | gallery 11 頁 | 11 頁一併重切；progressmeter 等待 fill 寬度等於 aria-valuenow；gallery 容差由 0.01 收緊為 0.002。 |
 | D119-B | C 線 follow-up 9, 13, 14, 19 | 9 tab 省略號已修（帶圖示的標籤除外）；14 平板 frozen 表頭已修；13 不重現；19 不屬 CSS，轉 D120。 |
+| D120 | C 線 follow-up 19 | 平板 scrollable menubar 不是 ZK bug，是 Marble 平板 CSS 缺 `overflow: auto`；改 zkcml `tablet/_menu.css` 一條規則，不開 Jira。 |
 
 ## 尚無最終結論
 
-- **D120：** 平板 UA 下 scrollable menubar 不顯示捲動箭頭，屬 ZK server／widget 問題，交另一個 session 調查，結果待定。
 - **D58：** 推送；`marble` 已推送，裁示未另記。

@@ -388,7 +388,7 @@ Batch 4 did not cover: the touch variant (`zkmax/css/tablet/_scrollbar.css`), `f
 
 ## 19. The tablet scrollable menubar overflows its bar
 
-**Not CSS (2026-10-10).** On a tablet UA the widget's `_scrollable` is false, so there are no arrows and no `z-menubar-scroll` class; `Menubar.java` and `Menubar.ts` have no mobile branch. Why the server side does not apply `setScrollable(true)` there is under investigation in another session (decision D120).
+**Done 2026-10-11** (Jess review batch 16). A Marble regression, not a ZK bug: on a tablet UA zkmax's touch menubar makes `setScrollable()` a no-op and expects native scroll, which the old IceBlue tablet stylesheet provided with `.z-menubar { overflow: auto }`. Added `.z-menubar-horizontal { overflow: auto }` to zkcml `tablet/_menu.css`; `menubar-tablet.png` regenerated. Evidence: `doc/jess-review/gates/batch16-final.md`.
 
 Found while regenerating `menubar-tablet.png` (2026-10-09, D63; commit `8cc85e8a6c`). In the "Scrollable Menubar" block at the tablet viewport, items 3–5 run past the end of the grey bar and there are no scroll arrows. The desktop gallery (`menubar-gallery.png`) shows the same block correctly (arrows, clipped items). It may be how the tablet layout has always behaved or a regression; the regenerated baseline now stores the current picture.
 

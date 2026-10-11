@@ -59,11 +59,10 @@ ZK Jira 共 5 個 key。前三行涵蓋 6 個 issue；ZK-6175、ZK-6176 是 #37�
 | 批次 15 第 9 節：tab 標籤省略號 | 已修；帶圖示的標籤仍無省略號（已知限制） | `01f7010144` |
 | 批次 15 第 14 節：平板 frozen 表頭錯位 | 已修（grid、listbox、tree，補上 `position: sticky`） | `01f7010144` |
 | 批次 15 第 13 節：表頭文字偏 4px | 不重現；未找出哪個提交修好 | — |
-| 批次 15 第 19 節：平板 scrollable menubar | 不是 CSS（widget `_scrollable` 為 false）；server 端原因未查出，交由另一個 session | — |
+| 批次 16 第 19 節：平板 scrollable menubar | 已修：Marble 回歸，平板 CSS 缺 `.z-menubar { overflow: auto }`（touch menubar 沒有捲動按鈕，要原生捲動）；證據 [gates/batch16-final.md](gates/batch16-final.md) | `85e0d4940`（zkcml） |
 
 ## 未決事項
 
 - **推送：** `marble` 已推到 `hawkchen/marble`（含 batch 14、15）。
 - **關單：** 82 個 issue 在 tracker 上全部仍是 OPEN（2026-10-11 重查），等設計師關單。
-- **D120：** 平板 scrollable menubar 的 server 端原因由另一個 session 調查中。
 - **merge 與 close 決定：** 屬於使用者。
