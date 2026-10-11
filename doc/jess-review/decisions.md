@@ -1,7 +1,7 @@
 # Jess 設計審查裁示索引（Marble 主題）
 
 本檔只列 Jess design review 每個裁示 ID 的最終結論，不含過程、被取代的裁示或 RED／FAIL 紀錄。被取代的裁示只在取代它的那一列標示。
-ID 在整份 Jess review 內全域唯一，範圍 D1..D120；D 編號沿用各批文件，不重新編號。
+ID 在整份 Jess review 內全域唯一，範圍 D1..D125；D 編號沿用各批文件，不重新編號。
 Issue 欄的 #數字為 Jess 追蹤 repo 的 issue 編號；「—」表示該裁示不對應單一 issue；「未標」表示來源未註明。
 證據與量測報告在 [gates/](gates/)；工作規則見 [rules.md](rules.md)。
 
@@ -16,7 +16,7 @@ Issue 欄的 #數字為 Jess 追蹤 repo 的 issue 編號；「—」表示該�
 | D11-B | #65（拖動游標） | 拖動游標的 JS 相關步驟不在本批處理，另開 ZK Jira。 |
 | D13-A | #52 | 指示線量測扣除兩端反鋸齒，最小寬 24px 以同法計，容差 ±0.5px。 |
 | D14-A | 未標 | tab 太窄時沒有省略號不屬於 #52，另記為待辦；該待辦後於 D119-B 修好。（結論見 gates/batch1-52.md） |
-| D16-B | — | Jess 留言直接貼出，不另經草稿。 |
+| D16-B | — | Jess 留言直接貼出，不另經草稿；已由 D125-A 取代（留言由使用者確認後才貼）。 |
 | D18-A | #23, #41（後半） | 依 D10-A 同時修改七個元件的清單列選取色（第二批驗證方法核准）。 |
 | D19-A | follow-up 8 | 過時的截圖 baseline 先列 diff 經使用者核准，才以 Playwright 更新失敗項目。 |
 | D20-A | 非 Jess issue | 非 Jess 的前置工作依同一流程：先訂並核准驗證方法，再動手。 |
@@ -33,7 +33,7 @@ Issue 欄的 #數字為 Jess 追蹤 repo 的 issue 編號；「—」表示該�
 | D32-C | #37 | CSS 先修，同時開 ZK Jira；取代 D29（純 CSS 做不到才開 Jira）。 |
 | D33 | #37 | colspan 列不做位置斷言（規格上不支援），只記錄現象，並要求版面不位移。 |
 | D34-A | 未標 | 長標籤被排序圖示壓住：本批不改佈景，可用的 CSS 寫法記入 follow-up 11。 |
-| D35 | 全部批次 | 最終判定改用 Fable。 |
+| D35 | 全部批次 | 最終判定改用 Fable；已由 D124 取代（Opus 5.5 為主，Fable 為替代）。 |
 | D37 | grid, listbox, tree, paging-tablet | 核准重生這四組 baseline。 |
 | D38-A | grid-tablet | 核准重生 grid-tablet baseline；既有凍結表頭問題記為 follow-up 14（後於 D119-B 修好）。 |
 | D39-A | #31 | 軌道不蓋表頭；放得下的方向完全不畫軌道。 |
@@ -75,6 +75,9 @@ Issue 欄的 #數字為 Jess 追蹤 repo 的 issue 編號；「—」表示該�
 | D118-B | gallery 11 頁 | 11 頁一併重切；progressmeter 等待 fill 寬度等於 aria-valuenow；gallery 容差由 0.01 收緊為 0.002。 |
 | D119-B | C 線 follow-up 9, 13, 14, 19 | 9 tab 省略號已修（帶圖示的標籤除外）；14 平板 frozen 表頭已修；13 不重現；19 不屬 CSS，轉 D120。 |
 | D120 | C 線 follow-up 19 | 平板 scrollable menubar 不是 ZK bug，是 Marble 平板 CSS 缺 `overflow: auto`；改 zkcml `tablet/_menu.css` 一條規則，不開 Jira。 |
+| D123-A | gates/ | 未提交的 509 個過程檔先打包到 repo 外（`~/Documents/jess-gates-untracked-20261011.tar.gz`），再從 gates/ 刪除。 |
+| D124 | Verifier | Opus 5.5 為主，Fable 為替代；取代 D35。 |
+| D125-A | Jess 留言 | 我備好草稿，使用者確認後才貼出；取代 D16-B。 |
 
 ## 尚無最終結論
 

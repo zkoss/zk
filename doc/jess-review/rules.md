@@ -57,7 +57,7 @@
 
 - **Planner：** 主 session。寫方法、裁定方法歧義（看到結果後才裁，並寫明理由與反面讀法）、範圍檢查、提交、留言、回報。
 - **Generator：** Sonnet subagent。只改 CSS，不量測。
-- **Verifier：** Fable subagent，看不到 CSS diff。Sonnet 只用於不下判斷的截圖工作。
+- **Verifier：** 獨立的 Opus 5.5 subagent，看不到 CSS diff；Fable 為替代（Opus 無法使用時）。Sonnet 只用於不下判斷的截圖工作。（D124）
 - 非技術文件工作：Haiku 5.5（使用者 2026-10-10 規定）。
 
 ## 4. 可以直接做、不必問；必須停下來問
