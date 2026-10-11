@@ -1,4 +1,0 @@
-col 0 ascending iconOverText rest/hover true true btnOverIcon false btnOverText true text {"l":49,"r":231.78125,"t":388.484375,"b":405.484375} icon {"l":157,"r":171,"t":387.484375,"b":407.484375} clip {"l":49,"r":187} visible clip nowrap btn {"l":175,"r":199,"t":385.484375,"b":409.484375}
-col 1 ascending iconOverText rest/hover false false btnOverIcon false btnOverText false text {"l":219,"r":255.34375,"t":388.484375,"b":405.484375} icon {"l":327,"r":341,"t":387.484375,"b":407.484375} clip {"l":219,"r":357} visible clip nowrap btn {"l":345,"r":369,"t":385.484375,"b":409.484375}
-col 2 ascending iconOverText rest/hover true true btnOverIcon false btnOverText true text {"l":389,"r":693.640625,"t":388.484375,"b":405.484375} icon {"l":497,"r":511,"t":387.484375,"b":407.484375} clip {"l":389,"r":527} visible clip nowrap btn {"l":515,"r":539,"t":385.484375,"b":409.484375}
-forced divider {"x0":433,"header":100,"rows":[0,0,0,0]}

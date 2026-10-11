@@ -3,7 +3,7 @@
 # 批次 10 RED run 報告（#4 button、#6 calendar、#40 label、#47 fisheyebar、#61 tbeditor）
 
 - 日期：2026-10-08；Verifier：Fable；`PREVIEW_URL=http://127.0.0.1:8105`（B 線）；Playwright 1.59.1（jess-b `zkpreview/node_modules`），viewport 1280×900、DPR 2，transition／animation 關閉。
-- 方法依 [lines/line-b-plan.md](../../lines/line-b-plan.md) 第七之二節；未修改任何 CSS／TS／Java／預覽頁／baseline。所有腳本、JSON、截圖都在本目錄（`lib.js` 複製自 `batch9-red/lib.js`，只改第一行註解）。
+- 方法依 lines/line-b-plan.md（過程資料已清除） 第七之二節；未修改任何 CSS／TS／Java／預覽頁／baseline。所有腳本、JSON、截圖都在本目錄（`lib.js` 複製自 `batch9-red/lib.js`，只改第一行註解）。
 - 色差一律 CIE76 ΔE（`lib.js` 的 `dE`）。
 
 ## 一、結論摘要表

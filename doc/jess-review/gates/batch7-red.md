@@ -4,7 +4,7 @@
 
 - **伺服器：** 8085，java pid 58306（16:04 由 `tail -f /dev/null | withjdk.sh 17 ./gradlew appRun -PhttpPort=8085` 啟動，16:06 開始聽）。**沒有 kill、沒有重啟、沒有碰 8105。** 新鮮度：`zul/src` 與 `zul/build/resources/main` 的 `selectbox.css` md5 相同（`2f57456c…`）；伺服的 `selectbox.css.dsp`、`listbox.css.dsp`、`bandpopup.css.dsp` 與 `zul/build/resources/main/web/...` 的檔案 md5 **逐一相同**；`zul/src`、`zul/build`、`zkcml/{zkmax,zkex}/src` 底下沒有任何 `.css/.css.dsp/.svg/.xml` 比伺服器啟動時間（`build/gretty_ports.properties` 16:06:15）新 → 伺服的是現在的 build。
 - **日期：** 2026-10-08，Verifier，量現在的程式碼（Playwright 1.59.1、Chromium 147.0.7727.15、viewport 1280×900、deviceScaleFactor 2；注入 `*{transition:none!important;animation:none!important}`、等 `document.fonts.ready`、游標停在 (2,2)；每個狀態都在重新載入的頁面上量）。後備路徑另用 WebKit 26.4、Firefox 148.0.2（本次 `npx playwright install webkit firefox` 裝進 `~/Library/Caches/ms-playwright`，沒有動 repo）。
-- **方法：** [lines/line-a-plan.md](../lines/line-a-plan.md) 第二節（共用量法、#29、#3）。ΔE 一律 **CIE76**（lib.js）。
+- **方法：** lines/line-a-plan.md（過程資料已清除） 第二節（共用量法、#29、#3）。ΔE 一律 **CIE76**（lib.js）。
 - **腳本與原始輸出：** `gates/batch7-red/`：`lib.js`（複製自 batch6-red）、`probe-dom.js/.json` + `probe-*.png`（DOM 形狀探針）、`probe-scrollbar.js/.json`（捲軸寬度探針，見 #3 的環境備註）、`red29.js/.json` + `red29-{rest,preselected,disabled,hover,hoverArrow,focus,open,open-page,combobox,forced,fallback-webkit,fallback-firefox}.png`、`red29-md3.js/.json`（Jess 參考圖的箭頭 ink）、`red3.js/.json` + `red3-*.png`、`pw/forced-colors-spec.log`（forced-colors 套件）、`ref/jess-{29-current,29-md3,3-current}.png`（Jess 的 issue 截圖）。
 - **沒有修改**任何 theme／CSS／TS／Java／預覽頁檔案，沒有看 diff，沒有 commit；頁內只注入 lib.js 的停動畫規則。#3 的「補充實例」是在瀏覽器裡用 widget API `setHeight('150px')` 改執行期狀態，不是改檔、不是注入樣式（下文標明）。
 - **選取 widget 的方式：** DOM id 是 uuid，一律用 class + 頁面順序（`document.querySelectorAll('.z-selectbox')[i]` 等）。

@@ -21,4 +21,4 @@
 
 仍然是 `auto`，跟 RED 時一樣。拖動中沒有任何 class 能讓 CSS 判斷方向，要改 `Splitlayout.ts`。使用者裁示 D11-B（2026-10-06）：另開 ZK Jira，不在 Jess 這一批處理。
 
-取證放在 [batch1-65/](batch1-65/)。
+取證放在 batch1-65/（過程資料已清除）。

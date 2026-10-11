@@ -1,7 +1,7 @@
 # Gate：第四批 RED run 第二輪（r2），biglistbox 捲軸（#31、#78）—— 修正後的方法
 
 - **日期：** 2026-10-07，Verifier，量現在的程式碼（8085，Chromium，viewport 1280×900，deviceScaleFactor 2，已注入 no-animation、等 `document.fonts.ready`，量測前游標移到 (2,2)）。
-- **目的：** 用 Planner 裁定的「方法修正 1–5」（[jess-review-verification-plan.md](../jess-review-verification-plan.md) §第四批 RED run 結果）重跑一次 RED run，確認今天每一項判定都失敗、每一項保護項都通過。第一輪報告：[batch4-red.md](batch4-red.md)。
+- **目的：** 用 Planner 裁定的「方法修正 1–5」（jess-review-verification-plan.md（過程資料已清除） §第四批 RED run 結果）重跑一次 RED run，確認今天每一項判定都失敗、每一項保護項都通過。第一輪報告：[batch4-red.md](batch4-red.md)。
 - **腳本與原始輸出：** `gates/batch4-red/r2-*`（第一輪的檔案未覆寫）：`r2-lib.js`（= `lib.js` 原樣複製）、`r2-doc-scrollbar.js/.json/.png`、`r2-red31.js/.json` + `r2-red31-*.png`、`r2-red78.js/.json` + `r2-red78-*.png`、`r2-protect.js/.json` + `r2-protect-*.png`。
 - **來源未動：** 沒有修改任何 theme/CSS/TS/Java 檔，沒有看 diff。`biglistbox.css`（`../zkcml/zkmax/.../big/css/`）mtime 2026-07-21 23:02、`scrollbar.css`（`zul/.../wgt/css/`）mtime 2026-06-30 16:22，都早於第一輪（今天 15:14–15:31），兩輪量的是同一份程式碼。
 - **暫時頁：** `zkpreview/src/main/webapp/web/biglistbox-fits.zul`（`FakerMatrixModel(2, 3)`，200px 高，沿用 biglistbox.zul 的 template；實際渲染 2 欄 × 3 列，兩個方向的 thumb 都 `display:none`）本輪重建、量完已刪除，`git status zkpreview/` 乾淨。8085 沒有重啟；ZK 快取著頁面定義，刪除後 `curl` 仍回 200（第一輪同樣情形）。本輪的 fits widget box 是 32–1248 × 100–300（第一輪 112–312，標題區高度不同），不影響任何判定。

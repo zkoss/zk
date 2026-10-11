@@ -1,6 +1,0 @@
-
-Running 1 test using 1 worker
-
-  ✓  1 [chromium] › src/test/playwright/screenshot.spec.ts:1392:7 › notification › shell-is-bare-and-no-stripe (1.0s)
-
-  1 passed (1.8s)

@@ -1,8 +1,0 @@
-[
- "Leaf Node [z-treerow] outline=none 3px",
- "Expanded [z-treerow] outline=none 3px",
- "Child 1 [z-treerow] outline=none 3px",
- "Child 2 [z-treerow] outline=none 3px",
- "Collapsed [z-treerow z-treerow-selected z-treerow-focus] outline=solid 2px",
- "Selected [z-treerow] outline=none 3px"
-]

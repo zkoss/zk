@@ -1,8 +1,0 @@
-
-Running 3 tests using 1 worker
-
-  ✓  1 [hit-target] › src/test/playwright/hit-target.spec.ts:68:7 › multislider: every knob owns its own centre (252ms)
-  ✓  2 [hit-target] › src/test/playwright/hit-target.spec.ts:68:7 › rangeslider: every knob owns its own centre (299ms)
-  ✓  3 [hit-target] › src/test/playwright/hit-target.spec.ts:68:7 › slider: every knob owns its own centre (217ms)
-
-  3 passed (1.3s)

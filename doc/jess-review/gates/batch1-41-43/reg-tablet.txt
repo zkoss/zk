@@ -1,7 +1,0 @@
-
-Running 3 tests using 1 worker
-
-[1A[2K[1/3] [tablet] › src/test/playwright/tablet.spec.ts:469:9 › tablet-listbox › gallery
-[1A[2K[2/3] [tablet] › src/test/playwright/tablet.spec.ts:469:9 › tablet-tree › gallery
-[1A[2K[3/3] [tablet] › src/test/playwright/tablet.spec.ts:469:9 › tablet-biglistbox › gallery
-[1A[2K  3 passed (4.0s)

@@ -1,5 +1,0 @@
-9cae05b38091a44f9d86fbb1c65925a9  js/zul/wgt/css/selectbox.css.dsp
-46bae7b75e616276d7c4f5d2d26902dc  js/zul/sel/css/listbox.css.dsp
-74230a4675ce520146cce2a071cfeb63  js/zul/menu/css/menu.css.dsp
-b4bd343ef094ffc45447f2af32547a6a  js/zul/nav/css/nav.css.dsp
-8f516df5aec0bba47ea2353fe9617515  js/zul/inp/css/combo.css.dsp

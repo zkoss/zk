@@ -2,7 +2,7 @@
 
 - **使用 8085**（共用的 zkpreview；本次沒有 kill、沒有重啟、沒有開第二個 port；整個 run 期間沒有中斷）。8085 伺服的是重啟後的新 build：`slider.css.dsp` 回應 3252 bytes（批次 6 最終判定時 3056）；`zk.wcs` 路徑 `/zkres/web/80d82a3c/zul/css/zk.wcs`。
 - **日期：** 2026-10-08，Verifier。Playwright 1.59.1、Chromium 147、viewport 1280×900、DPR 2、注入 `*{transition:none!important;animation:none!important}`、等 `document.fonts.ready`、量前游標移到 (2,2)、每個 slider 在重新載入的頁面上量。
-- **方法：** [jess-review-verification-plan.md](../jess-review-verification-plan.md)「第六批」#25 一節 + 檔尾「#25 更正與定稿」（定稿取代舊措辭：J25-1／J25-2 為判定，J25-3 為保護項）。RED 基準：[batch6-red.md](batch6-red.md) #25 小節（`batch6-red/red25.json`）。
+- **方法：** jess-review-verification-plan.md（過程資料已清除）「第六批」#25 一節 + 檔尾「#25 更正與定稿」（定稿取代舊措辭：J25-1／J25-2 為判定，J25-3 為保護項）。RED 基準：[batch6-red.md](batch6-red.md) #25 小節（`batch6-red/red25.json`）。
 - **腳本與原始輸出：** `gates/batch6b-final/`：`lib.js`、`final25.js`（複製自 `batch6-red/red25.js`，只改輸出檔名）→ `final25.json`／`final25.log`／`final25-s{0..4}-*.png`；`pixcheck25.js` → `pixcheck25.json`／`.log`（從 PNG 像素另算提示框中心，交叉驗證 DOM rect）；`probe25-others.js` → `probe25-others.json`／`.log`／`probe25-others-*.png`（三頁靜止時與按住時的 `.z-slider-popup`／tooltip class 盤點）；`diffpng.js`（複製自 batch6-final）+ `diff-fresh.log`、`pw/fresh/`（slider／multislider／rangeslider gallery 重拍）；回歸 `pw-regression.log`。
 - **沒有修改**任何 theme／CSS／TS／Java／預覽頁／baseline 檔案，沒有看 diff 或 CSS 內容，沒有 commit；頁內只注入 lib.js 的停動畫規則。（`git status` 裡的 `slider.css` 修改是 Generator 的工作樹狀態，本次沒碰。）
 

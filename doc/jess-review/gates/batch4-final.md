@@ -2,7 +2,7 @@
 
 - **判定：PASS**（2026-10-07，post-fix）。#31 判定 1–4、也必須成立、保護項全部通過；#78 判定 1、3、5、6 與 token 換色全部通過，保護項全部通過。D40 退路（轉 C）**沒有觸發**。
 - **Verifier：** Fable，全新 context。沒有看修正的 diff，沒有讀 `gates/batch4-gen-brief.md` 以外的 Generator 文件（brief 也只為了找暫時頁的定義而 grep 一行，沒有讀內容）；只讀了驗證計畫「第四批」一節到檔尾（含「裁示」「RED run 結果」的方法修正 1–5、「RED run 第二輪」）、`batch4-red-r2.md`、`batch3-final.md`（格式）。
-- **方法：** 照 [jess-review-verification-plan.md](../jess-review-verification-plan.md)「第四批」定稿版（r2）。RED 第二輪的腳本原樣複製到 [batch4-final/](batch4-final/) 重跑，只改 `require`／輸出檔前綴：`final-lib.js`、`final-doc-scrollbar.js`、`final-red31.js`、`final-red78.js`、`final-protect.js`；文件捲軸的參考檔 `doc-scrollbar.json` 沿用第一輪的那份（複製進來），並由 `final-doc-scrollbar.js` 重量一次確認未變。另外新寫 `final-classify.js`（baseline 差異分群與對照裁圖）。
+- **方法：** 照 jess-review-verification-plan.md（過程資料已清除）「第四批」定稿版（r2）。RED 第二輪的腳本原樣複製到 batch4-final/（過程資料已清除） 重跑，只改 `require`／輸出檔前綴：`final-lib.js`、`final-doc-scrollbar.js`、`final-red31.js`、`final-red78.js`、`final-protect.js`；文件捲軸的參考檔 `doc-scrollbar.json` 沿用第一輪的那份（複製進來），並由 `final-doc-scrollbar.js` 重量一次確認未變。另外新寫 `final-classify.js`（baseline 差異分群與對照裁圖）。
 - **環境：** 8085，Playwright Chromium，viewport 1280×900、DPR 2，注入 no-animation，等 `document.fonts.ready`，量測前游標移到 (2,2)，全部用真的滾輪／滑鼠。
 - **確認服務的是新 CSS：** 我開始時 8085（PID 40209，15:47 啟動）服務的 `biglistbox.css.dsp` 是舊的 `zkmax/build/resources/main` 那份（3256 bytes），與 15:51 重新產生的 `zkmax/codegen/.../biglistbox.css.dsp`（2959 bytes）不同。正要重啟時，另一個 session 已經在 15:53 重啟它（PID 60485，15:54:53 起聽）；用 `cmp` 比對 8085 回傳的 `biglistbox.css.dsp` 與 codegen 版 **完全相同**，之後才開始量。本輪所有判定腳本在 15:55–15:56 跑完，都對著這份 CSS。
 - **8085 中途被停掉一次、由我重啟一次：** 回歸跑到 `chromium` 第 62 個測試時（約 16:02），8085 被另一個 session 停掉（`ERR_CONNECTION_REFUSED`，lsof 無人監聽、無 appRun 程序），`chromium` 69 失敗、`tablet` 55 失敗全部是連線被拒，不是像素差異。依 brief 允許，我用和原本相同的方式重啟（`tail -f /dev/null | withjdk.sh 17 ./gradlew appRun -PhttpPort=8085 --console=plain`，log 在 scratchpad），16:06:25 起聽（PID 94453），再次 `cmp` 確認服務的 CSS 等於 codegen 版，然後重跑 `focus-scan`、`chromium`、`tablet`。沒有開其他 port。
@@ -179,6 +179,6 @@ thumb 34–80.5 × 891–899；看得見的內框下緣 = box.b − 1 = 899；B.
 4. `#31` 判定 3 對 `#stripedBiglist` 記錄到 10.82 是 thumb 本身（方法本就只對暫時頁判定 3），`vflex=min` 的 `#biglist` 也一樣；若以後要對有 thumb 的 widget 做判定 3，要先把 thumb 的範圍排除。
 5. thumb 對白底 ΔE 剛好 10.82，與保護項門檻「≥ 10」只差 0.82；若將來 `--zk-color-outline-variant` 再變淺，「該有的軌道還在」會先倒，到時應改用 `-drag` rect 或把門檻改成「對底色 ΔE ≥ 文件 rail 對底色 ΔE − 1」。
 
-取證放在 [batch4-final/](batch4-final/)：`final-*.json`／`final-*.png`、`final-classify.json`、`diff-tablet_*.png`、`biglistbox-fits.zul.copy`。
+取證放在 batch4-final/（過程資料已清除）：`final-*.json`／`final-*.png`、`final-classify.json`、`diff-tablet_*.png`、`biglistbox-fits.zul.copy`。
 
 GATE4-FINAL: PASS

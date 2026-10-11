@@ -15,4 +15,4 @@
 
 **回歸：** `chromium -g errorbox` 1/1、`forced-colors` 17/17、`smoke` 118/118，全部通過。
 
-取證放在 [batch1-67/](batch1-67/)。
+取證放在 batch1-67/（過程資料已清除）。

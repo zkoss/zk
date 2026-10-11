@@ -228,8 +228,7 @@ That blocker is now gone: the names are final and `doc/spec/utility-naming.md` i
 **Done 2026-10-06** (Jess review prerequisite, rulings D19-A to D25-A). 33 baselines regenerated
 after per-image review, the organigram and tree/listbox row forced-colors focus checks fixed in the
 test, the `chromium` threshold tightened to 0.05 and 4 dropdown/chip shots added. Verifier verdict
-PASS: `doc/jess-review/gates/baseline-verify.md`. Plan and rulings: the baseline sections of
-`doc/jess-review/jess-review-verification-plan.md`.
+PASS: `doc/jess-review/gates/baseline-verify.md`. Rulings: `doc/jess-review/decisions.md` (D19–D25).
 
 Goal: get `screenshot.spec.ts` and `focus-ring-scan.spec.ts` back to green, so a real
 regression is visible instead of being buried under 28 known failures.
@@ -252,7 +251,7 @@ before the LESS-to-Marble CSS pipeline replacement (`2100200284`) and everything
       `:focus-visible` on the `.z-treerow` itself, a state ZK never produces (the row ring is
       gated on the tree's `.z-focus-a:focus-visible` since #43). In the real state the ring is
       HighlightText on Highlight. See the baseline section of
-      `doc/jess-review/jess-review-verification-plan.md`.
+      `doc/jess-review/gates/baseline-verify.md`.
 - [ ] Beware: `forced-colors-gallery.spec.ts` is a visual-review spec that **rewrites** ~100
       tracked PNGs on every run. Revert those before staging unless they are the point of
       the commit.
@@ -266,6 +265,8 @@ before the LESS-to-Marble CSS pipeline replacement (`2100200284`) and everything
   (20px) is why a one-step font change is invisible to these shots.
 
 ## 9. A truncated tab label never shows an ellipsis
+
+**Done 2026-10-10** (Jess review batch 15, `01f7010144`). `min-width: 0` on `.z-tab-content` and `.z-tab-text`, and a text-only label is a block so `text-overflow` applies. Limit: a label with an icon child keeps the flex row and shows no ellipsis. Evidence: `doc/jess-review/gates/batch15-final-r2.md`.
 
 Found while verifying Jess #52 (2026-10-06, user ruling D14-A: tracked here, not part of #52).
 
@@ -334,6 +335,8 @@ Measured on the Basic grid, Author column at 130px: ellipsis alone still leaves 
 
 ## 13. Header text is 4px off the body text in listbox and tree
 
+**Not reproducible 2026-10-10.** Header and body text are 0px apart in grid, listbox and tree, before and after sorting. The commit that fixed it was not identified. The frozen-cell hover alpha note below still stands.
+
 Found while measuring Jess #39: listbox and tree show the same 4px offset in non-first columns (first columns vary with indentation and structure). #39 only fixed the grid header (`.z-column-sorticon`); `.z-listheader` and `.z-treecol` have their own sort icon rules.
 
 - [ ] Measure and fix the listbox and tree headers with the same method.
@@ -341,6 +344,8 @@ Found while measuring Jess #39: listbox and tree show the same 4px offset in non
 
 
 ## 14. The tablet grid gallery shows a broken frozen header
+
+**Done 2026-10-10** (`01f7010144`). The cause was not the tablet viewport but the mobile UA: ZK adds `z-frozen-sticky` and an inline `left` and expects `position: sticky`, and that rule was dropped in `2100200284`. Restored for grid, listbox, tree and their footers; `grid-tablet.png` and `listbox-tablet.png` regenerated.
 
 Found while classifying the batch 3 baselines (2026-10-07; user ruling D38-A: baseline regenerated anyway, tracked here).
 
@@ -367,6 +372,8 @@ Found while verifying Jess #78 (batch 4, 2026-10-07). Under `forced-colors: acti
 
 ## 17. The tablet baselines for slider and calendar are stale
 
+**Done 2026-10-09** (Jess review batch 14, S6). Both baselines regenerated.
+
 Found while classifying batch 4 (2026-10-07; user ruling D42-A: not part of the Jess batch). `slider-tablet.png` has not been regenerated since `64f1c07b9d` (vertical slider default height), and `calendar-tablet.png` since `778b5a809f` (datebox follows `cols`). The `tablet` project fails on both until someone regenerates them through the usual classify → confirmation page → approve flow.
 
 - [ ] Regenerate `slider-tablet.png` and `calendar-tablet.png` (by the work that owns those commits).
@@ -380,6 +387,8 @@ Batch 4 did not cover: the touch variant (`zkmax/css/tablet/_scrollbar.css`), `f
 - [ ] Decide whether DESIGN.md needs a biglistbox scrollbar note.
 
 ## 19. The tablet scrollable menubar overflows its bar
+
+**Not CSS (2026-10-10).** On a tablet UA the widget's `_scrollable` is false, so there are no arrows and no `z-menubar-scroll` class; `Menubar.java` and `Menubar.ts` have no mobile branch. Why the server side does not apply `setScrollable(true)` there is under investigation in another session (decision D120).
 
 Found while regenerating `menubar-tablet.png` (2026-10-09, D63; commit `8cc85e8a6c`). In the "Scrollable Menubar" block at the tablet viewport, items 3–5 run past the end of the grey bar and there are no scroll arrows. The desktop gallery (`menubar-gallery.png`) shows the same block correctly (arrows, clipped items). It may be how the tablet layout has always behaved or a regression; the regenerated baseline now stores the current picture.
 
@@ -410,6 +419,8 @@ Measured for Jess #10 (batch 12). The switch track border is 2.13:1 against a wh
 - [ ] Decide whether Marble's `--zk-color-outline` should be darker (design call; touches many components).
 
 ## 23. `grid-paging` gallery flipped between runs
+
+**Not reproduced 2026-10-10.** The gallery project passed 82/82 on three consecutive runs after batch 14. The cause of the earlier flip was not identified.
 
 `gallery › grid-paging` failed in the merge-1 regression (2026-10-09) and passed in the batch 12 regression the same day. Someone may have regenerated `grid-paging-gallery.png` in between; the 1% pixel tolerance may also hide it.
 

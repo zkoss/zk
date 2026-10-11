@@ -54,4 +54,4 @@
 - RED run 的 `rows2.js` 在 menu 那一段就中止了，所以沒有產生 `rows2.json`，改用 `rows.json` 對照。
 - 既有的文字落差不只有灰階反鋸齒，還會讓輸入類元件的 gallery 版面位移約 2px。這屬於 follow-up item 8 的範圍。
 
-取證放在 [batch2/](batch2/)。
+取證放在 batch2/（過程資料已清除）。

@@ -2,7 +2,7 @@
 
 - **使用 8085**（共用的 zkpreview，本次沒有 kill、沒有重啟、沒有開第二個 port；整個 run 期間沒有中斷）。
 - **日期：** 2026-10-08，Verifier，量現在的程式碼（Playwright 1.59.1、Chromium 147.0.7727.15、viewport 1280×900、deviceScaleFactor 2，已注入 `*{transition:none!important;animation:none!important}`、等 `document.fonts.ready`，量測前游標移到 (2,2)；每個狀態都在重新載入的頁面上量）。
-- **方法：** [jess-review-verification-plan.md](../jess-review-verification-plan.md) 第六批一節 + 共用規則。ΔE 一律 **CIE76**（lib.js）。
+- **方法：** jess-review-verification-plan.md（過程資料已清除） 第六批一節 + 共用規則。ΔE 一律 **CIE76**（lib.js）。
 - **腳本與原始輸出：** `gates/batch6-red/`：`lib.js`（複製自 batch5-red：幾何、截圖解碼、ΔE）、`probe-dom.js/.json` + `probe-*.png`（六頁 DOM 形狀探針）、`red18.js/.json` + `red18-*.png`、`probe18-active.js/.json` + `probe18-*.png`（#18 的 :active／focus 分離探針）、`red19.js/.json` + `red19-*.png`、`red22.js/.json` + `red22-g*.png`、`red24.js` + `red24-{multislider,rangeslider,slider}.json`（每頁分開跑，檔內是 `pages.<page>.widgets[]`，每點含座標、cursor、命中元素、是否移動）+ `red24-*.png`、`red25.js/.json` + `red25-s*-*.png`、`red26.js/.json` + `red26-*.png`、`red27.js/.json` + `red27-r*-*.png`、`ref/jess-*.png`（Jess 的 issue 截圖）。
 - **沒有修改**任何 theme／CSS／TS／Java／預覽頁檔案，沒有看 diff，沒有 commit；沒有在頁內注入任何樣式（只有 lib.js 的停動畫規則）。
 - **選取 widget 的方式：** DOM id 是 uuid，一律用 class + 在頁面上的順序（`document.querySelectorAll('.z-xxx')[i]`），widget 屬性用 `zk.$(n)._disabled` 等讀。

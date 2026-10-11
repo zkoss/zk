@@ -3,7 +3,7 @@
 # 批次 10 最終判定報告（GATE10-FINAL：#4 button、#6 calendar、#40 label／radio、#61 tbeditor；#47 不量）
 
 - 日期：2026-10-08；Verifier：Fable；`PREVIEW_URL=http://127.0.0.1:8105`（B 線 jess-b worktree）。Playwright 1.59.1、viewport 1280×900、DPR 2、transition／animation 關閉；色差一律 CIE76 ΔE。
-- 方法：[lines/line-b-plan.md](../../lines/line-b-plan.md) 第七之二節 J4／J6／J40／J61 + 「批次 10 RED 結果與方法定稿」第 1–4、6 點。腳本從 `batch10-red/` 複製（`lib.js` 原樣），調整處列於第四節。
+- 方法：lines/line-b-plan.md（過程資料已清除） 第七之二節 J4／J6／J40／J61 + 「批次 10 RED 結果與方法定稿」第 1–4、6 點。腳本從 `batch10-red/` 複製（`lib.js` 原樣），調整處列於第四節。
 - 本目錄只新增腳本、JSON、截圖與 Playwright 輸出／log；未改 CSS／TS／Java／預覽頁／baseline／文件，未 commit，未用 `--update-snapshots`。
 
 ## 〇、build 確認

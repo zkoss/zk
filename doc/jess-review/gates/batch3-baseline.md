@@ -3,7 +3,7 @@
 - 日期：2026-10-07
 - 角色：Verifier（唯讀量測）。未修改任何 CSS、TS、ZUL、spec、config，未修改 `zkpreview/doc/screenshots` 下任何 PNG，未執行 `--update-snapshots`。
 - 格式參考：[baseline-classify.md](baseline-classify.md)（E/D/U 定義與 `measure.js` 方法）。
-- 取證目錄：[batch3-baseline/](batch3-baseline/)
+- 取證目錄：batch3-baseline/（過程資料已清除）
 
 ## 結論
 

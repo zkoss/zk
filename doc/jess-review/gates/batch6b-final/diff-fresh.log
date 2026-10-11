@@ -1,6 +1,0 @@
-slider vs-batch6-final-fresh expected [ 1280, 1111 ] actual [ 1280, 1111 ] diffPixels(>8) 0 rows -1 .. -1 x 1000000000 .. -1 bands {} firstRows []
-slider vs-baseline expected [ 1280, 1111 ] actual [ 1280, 1111 ] diffPixels(>8) 0 rows -1 .. -1 x 1000000000 .. -1 bands {} firstRows []
-multislider vs-batch6-final-fresh expected [ 1280, 1348 ] actual [ 1280, 1348 ] diffPixels(>8) 0 rows -1 .. -1 x 1000000000 .. -1 bands {} firstRows []
-multislider vs-baseline expected [ 1280, 1348 ] actual [ 1280, 1348 ] diffPixels(>8) 9463 rows 33 .. 1216 x 32 .. 303 bands {"0":1054,"100":978,"200":462,"300":367,"800":1761,"900":1641,"1000":1890,"1100":373,"1200":937} firstRows [[33,6],[34,28],[35,30],[36,28],[37,31],[38,71],[39,77],[40,78]]
-rangeslider vs-batch6-final-fresh expected [ 1280, 1312 ] actual [ 1280, 1312 ] diffPixels(>8) 0 rows -1 .. -1 x 1000000000 .. -1 bands {} firstRows []
-rangeslider vs-baseline expected [ 1280, 1312 ] actual [ 1280, 1312 ] diffPixels(>8) 18857 rows 33 .. 1184 x 32 .. 286 bands {"0":1198,"100":905,"200":688,"300":1518,"400":1739,"500":2002,"600":1707,"700":1857,"800":2029,"900":2142,"1000":2135,"1100":937} firstRows [[33,3],[34,21],[35,22],[36,21],[37,25],[38,77],[39,88],[40,81]]

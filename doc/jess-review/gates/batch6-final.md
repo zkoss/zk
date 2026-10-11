@@ -3,7 +3,7 @@
 - **使用 8085**（共用的 zkpreview；本次沒有 kill、沒有重啟、沒有開第二個 port。第一次派工時 8085 伺服的是 14:37 的舊 build，已回報並由 Planner 重啟；本報告是重啟後從頭跑的完整結果）。
 - **日期：** 2026-10-08，Fable Verifier。
 - **8085 build 確認：** 頁面載入的 `/zkres/web/80d82a3f/zul/css/zk.wcs` 含 `z-combobutton-button:before` 1 處；`combobutton／rating／slider／multislider／rangeslider .css.dsp` 回應大小 3899／1608／3056／3926／4982 bytes = 15:21 的 codegen 輸出。
-- **方法：** [jess-review-verification-plan.md](../jess-review-verification-plan.md)「第六批」+「第六批 RED run 結果與方法定稿」（定稿修正取代舊措辭）。ΔE 一律 **CIE76**（lib.js）；Playwright 1.59.1、Chromium 147、viewport 1280×900、DPR 2、注入 `*{transition:none!important;animation:none!important}`、等 `document.fonts.ready`、量前游標移到 (2,2)、每個狀態在重新載入的頁面上量。
+- **方法：** jess-review-verification-plan.md（過程資料已清除）「第六批」+「第六批 RED run 結果與方法定稿」（定稿修正取代舊措辭）。ΔE 一律 **CIE76**（lib.js）；Playwright 1.59.1、Chromium 147、viewport 1280×900、DPR 2、注入 `*{transition:none!important;animation:none!important}`、等 `document.fonts.ready`、量前游標移到 (2,2)、每個狀態在重新載入的頁面上量。
 - **腳本與原始輸出：** `gates/batch6-final/`：`lib.js` 與 `red18/19/22/24/25/26/27.js`（複製自 batch6-red，只改輸出檔名；`red24.js` 依定稿改：thumb 上 = 距中心 ≤ 10px、格點區域 = root ∪ track、另加每個 mark／mark-dot／mark-label 的中心），輸出 `final*.json`／`final*.png`／`final*.log`；本次新增探針 `probe18-active.js`（:active 與 focus 分離）、`probe24-ring.js`（光環與軌道分離，無 click 的乾淨序列）、`probe24-focus.js`（確認 click 後的全亮環是 focus-within）、`probe26-ink.js`（knob 輸入框文字 ink 位置）。回歸：`pw-regression.log` + `pw/`。
 - **沒有看 diff、沒有讀 CSS 修改內容**（只為確認 build 新舊 grep 了規則名 `z-combobutton-button:before`），沒有修改任何 theme／CSS／TS／Java／預覽頁／baseline 檔案，沒有 `--update-snapshots`，沒有 commit。
 

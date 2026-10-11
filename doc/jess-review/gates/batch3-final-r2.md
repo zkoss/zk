@@ -2,7 +2,7 @@
 
 - **判定：PASS**（2026-10-07）。上一輪（[batch3-final.md](batch3-final.md)）#34、#35、#36、#38、#39 已通過，只有 #37 因巢狀元件保護項 FAIL；本輪只重跑 #37 與 `frozen.css` 牽動的回歸。
 - **Verifier：** Fable，全新 context。沒有看修正的 diff，沒有讀 `gates/batch3-gen.md`；只讀了驗證計畫「第三批」#37 與 D32、D33、D34、D35 裁示，以及上一輪的報告和腳本。沒有修改任何 CSS／TS／ZUL（暫時頁除外，已刪），沒有更新 baseline。
-- **方法：** 上一輪腳本複製到 [batch3-final-r2/](batch3-final-r2/) 重跑（`lib.js` 仍指向 RED 的共用 helper）。新增：`gen-zul.js` 加 3 個巢狀版面、`i37-layouts.js` 加 12 個量測目標、`extra-pages.js`（所有含 `<frozen>` 的預覽頁）、`eyeball.js`。
+- **方法：** 上一輪腳本複製到 batch3-final-r2/（過程資料已清除） 重跑（`lib.js` 仍指向 RED 的共用 helper）。新增：`gen-zul.js` 加 3 個巢狀版面、`i37-layouts.js` 加 12 個量測目標、`extra-pages.js`（所有含 `<frozen>` 的預覽頁）、`eyeball.js`。
 - **環境：** 8085，Playwright Chromium，viewport 1280×900，注入 no-animation。
 
 ## 先確認服務的是新 CSS
@@ -91,6 +91,6 @@ baseline 差異用上一輪的 `classify.js` 分群，再與上一輪的 `classi
 1. 這次一開始服務的是舊 CSS，若沒有先確認就量，巢狀項會再 FAIL 一次。以後 `frozen.css` 這類改動的最終判定，第一步固定為「讀服務中的規則文字」，而不是只看某個 computed 值。
 2. 「巢狀凍結元件」的判定方式：內層與外層各自當成量測目標，各自只允許在自己的 x0−1 出現新線；外層列的掃描不會把內層的短線算進去（垂直線要佔該列 90% 高度才算），所以兩者互不干擾。
 
-取證放在 [batch3-final-r2/](batch3-final-r2/)。
+取證放在 batch3-final-r2/（過程資料已清除）。
 
 GATE3-FINAL-R2: PASS

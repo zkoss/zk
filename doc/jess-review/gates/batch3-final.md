@@ -2,7 +2,7 @@
 
 - **判定：FAIL（#37 一項保護項）**，其餘 5 個 issue PASS（2026-10-07，post-fix）。
 - **Verifier：** Fable，全新 context。沒有看修正的 diff，沒有讀 `gates/batch3-gen.md`、`gates/batch3.md`；只讀了驗證計畫第三批各節、`batch3-red.md`、`batch3-red-i35-rerun.md`。
-- **方法：** 照 [jess-review-verification-plan.md](../jess-review-verification-plan.md)「第三批」及其後的 D32、D33、D34、D35 裁示。RED 腳本原樣複製到 [batch3-final/](batch3-final/) 重跑（共用 `lib.js`），另外新寫 `i37-layouts.js`（D32 的額外版面）、`long-fc.js`（D34 記錄、forced-colors 分界線）、`classify.js`（baseline 差異分類）。
+- **方法：** 照 jess-review-verification-plan.md（過程資料已清除）「第三批」及其後的 D32、D33、D34、D35 裁示。RED 腳本原樣複製到 [batch3-final/](batch3-final/) 重跑（共用 `lib.js`），另外新寫 `i37-layouts.js`（D32 的額外版面）、`long-fc.js`（D34 記錄、forced-colors 分界線）、`classify.js`（baseline 差異分類）。
 - **環境：** 8085（沒有重啟，也沒有開其他 port），Playwright Chromium，viewport 1280×900，注入 no-animation，全部用真的 click / hover。
 - **確認服務的是新 CSS：** `grid-grouping.zul` 的 `.z-group` 與其 `td` 的 `cursor` 都是 `auto`（RED 時是 `pointer`）。
 - **沒有修改** 任何 CSS／TS／ZUL；`zkpreview/doc/screenshots` 的 `git status` 跑前跑後都是空的。暫時頁 `zkpreview/src/main/webapp/web/tmp-b3final-frozen.zul` 量完已刪除（gretty 同步到 `build/inplaceWebapp/web/` 的那一份也刪了，URL 回 404）；頁面內容留存在 `batch3-final/tmp-b3final-frozen.zul.copy`。

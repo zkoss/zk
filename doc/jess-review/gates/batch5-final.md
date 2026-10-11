@@ -4,7 +4,7 @@
 
 - **判定：PASS**（2026-10-07，post-fix）。五個 issue 的判定檢查（RED 時全部失敗）現在全部通過；保護項全部通過；回歸只有本批預期的 chosenbox 晶片截圖（3 張）與兩張早已知的 tablet baseline（calendar、slider，與第四批相同、非本批）。
 - **Verifier：** Fable，全新 context。沒有看任何 diff、沒有讀 `combobox.css`／`cascader.css`／`chosenbox.css` 的內容（只用 `cmp` 比對 8085 回傳的 `.css.dsp` 與 codegen 檔是否相同，見下）；沒有讀 `batch5-gen-brief.md`。只讀了驗證計畫「第五批」一節到檔尾（含「裁示」「第五批 RED run 結果」的方法修正 1–5、「D48-A」）、`batch5-red.md`、`batch4-final.md`（格式）與 RED 腳本。
-- **方法：** 照 [jess-review-verification-plan.md](../jess-review-verification-plan.md)「第五批」定稿版（RED 方法修正 1–5 + D48-A）。RED 腳本原樣複製到 [batch5-final/](batch5-final/) 重跑，只改 `require`／輸出檔前綴：`final-lib.js`、`final-red8.js`、`final-red12.js`、`final-red13.js`、`final-red16.js`。另外新寫：`final-red17.js`（D48-A 的新判定：加「從下拉挑選之後」那一幀，像素基準取**同一焦點狀態**的收合幀；非唯讀的反白可見度）、`final-red8-band.js`（RED 的空帶座標 x = 260／277.5／295 命中與點擊）、`final-red8-protect.js`（欄高、cave 捲動、展開、關閉、三層）、`final-copper.js`（#8／#13／#17 的 copper 一次性記錄；#12／#16 的 copper 由原腳本產生）。
+- **方法：** 照 jess-review-verification-plan.md（過程資料已清除）「第五批」定稿版（RED 方法修正 1–5 + D48-A）。RED 腳本原樣複製到 batch5-final/（過程資料已清除） 重跑，只改 `require`／輸出檔前綴：`final-lib.js`、`final-red8.js`、`final-red12.js`、`final-red13.js`、`final-red16.js`。另外新寫：`final-red17.js`（D48-A 的新判定：加「從下拉挑選之後」那一幀，像素基準取**同一焦點狀態**的收合幀；非唯讀的反白可見度）、`final-red8-band.js`（RED 的空帶座標 x = 260／277.5／295 命中與點擊）、`final-red8-protect.js`（欄高、cave 捲動、展開、關閉、三層）、`final-copper.js`（#8／#13／#17 的 copper 一次性記錄；#12／#16 的 copper 由原腳本產生）。
 - **環境：** 8085，Playwright Chromium，viewport 1280×900、DPR 2，注入 `*{transition:none!important;animation:none!important}`，等 `document.fonts.ready`，量測前游標移到 (2,2)。
 - **確認服務的是新 CSS（我重啟了 8085 一次）：** 開始時 8085（PID 66666，17:03:04 起）回傳的 `cascader.css.dsp` 是 2789 bytes = `zkmax/build/resources/main` 的 17:01:49 舊檔，而三個來源檔 17:18:24–17:18:32 才改、codegen 的 `cascader.css.dsp`（2892）、`chosenbox.css.dsp`（3688）、`combo.css.dsp`（28194，combobox 併在這一支）都是 17:18:37 — 也就是舊 server 服務的是修正前的 CSS。依 brief 允許，17:21 kill 66666，用 `tail -f /dev/null | withjdk.sh 17 ./gradlew appRun -PhttpPort=8085 --console=plain`（log 在 scratchpad）重啟，17:22:42 起聽（PID 20251）；`cmp` 比對 8085 回傳的三支 `.css.dsp` 與 codegen 版 **完全相同** 後才開始量。本輪所有判定腳本 17:23–17:26 跑完、回歸 17:26–17:36，全程同一個 server，**沒有被別的 session 中斷**（跑完後 8085 仍是 PID 20251）。
 - **沒有修改** 任何 CSS／TS／Java／ZUL／測試檔、沒有改任何 baseline PNG（沒用 `--update-snapshots`，Playwright 輸出都寫到 scratchpad；跑完 `git status` 兩個 repo 都沒有已追蹤的 PNG 被修改）。**沒有建立**暫時頁（三個現成頁面夠用），所以沒有東西要刪。工作樹上另一個 session 的 `.gitignore`／`.mcp.json`／`data-dense-mode.md`／未追蹤 `doc/*.md`、zkcml 的 `lib/spel2js`／`zk85themebuilder/` 沒有碰。
@@ -128,7 +128,7 @@ token：`--zk-color-on-surface-variant` = `#0009` → `rgba(0,0,0,0.6)` ✓；`-
 
 ## 回歸
 
-`PREVIEW_URL=http://127.0.0.1:8085`，從 `zkpreview/` 執行，`--output` 指到 scratchpad，沒有寫進 repo，沒有用 `--update-snapshots`。17:26:39–17:32:28 依序跑完，8085 全程沒有中斷。Log 在 [batch5-final/pw-logs/](batch5-final/pw-logs/)。
+`PREVIEW_URL=http://127.0.0.1:8085`，從 `zkpreview/` 執行，`--output` 指到 scratchpad，沒有寫進 repo，沒有用 `--update-snapshots`。17:26:39–17:32:28 依序跑完，8085 全程沒有中斷。Log 在 batch5-final/pw-logs/（過程資料已清除）。
 
 | Project | 結果 | 第四批結束時 |
 |---|---|---|
@@ -141,7 +141,7 @@ token：`--zk-color-on-surface-variant` = `#0009` → `rgba(0,0,0,0.6)` ✓；`-
 
 另外補跑 `gallery -g "chosenbox|combobox|cascader"`：cascader、chosenbox gallery 都在容差內通過（這個 project 用 `maxDiffPixelRatio: 0.01`，晶片字型的差異落在容差內；combobox 沒有 gallery case）。
 
-### baseline 差異分類（diff 圖在 [batch5-final/](batch5-final/) `diff-*.png`、`actual-*.png`）
+### baseline 差異分類（diff 圖在 batch5-final/（過程資料已清除） `diff-*.png`、`actual-*.png`）
 
 | 截圖（baseline） | 差異像素 | 區域 | 分類 |
 |---|---|---|---|
@@ -167,6 +167,6 @@ token：`--zk-color-on-surface-variant` = `#0009` → `rgba(0,0,0,0.6)` ✓；`-
 4. 三層 cascader 預覽頁沒有，仍然量不到；要驗三層得加預覽 model（看板 follow-up，不擋本批）。
 5. `chromium` project 多了 2 個 case（130 → 132），不是本批加的，順便記錄。
 
-取證放在 [batch5-final/](batch5-final/)：`final-*.js`／`final-*.json`／`final-*.png`、`diff-*.png`／`actual-*.png`、`pw-logs/`。
+取證放在 batch5-final/（過程資料已清除）：`final-*.js`／`final-*.json`／`final-*.png`、`diff-*.png`／`actual-*.png`、`pw-logs/`。
 
 GATE5-FINAL: PASS
