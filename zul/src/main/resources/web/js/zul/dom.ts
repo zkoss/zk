@@ -27,11 +27,16 @@ var $alert = jq.alert,
 		INFORMATION: 'z-messagebox-icon z-messagebox-information',
 		ERROR: 'z-messagebox-icon z-messagebox-error',
 		NONE: 'z-messagebox z-messagebox-none'
-	};
+	},
+	// ZK-6187: only these keys get a kind class; a custom key gets none rather than a free-text class name
+	kinds = ['OK', 'CANCEL', 'YES', 'NO', 'RETRY', 'ABORT', 'IGNORE', 'RELOAD'];
 
 function newButton(nm: string, f?: unknown): zul.wgt.Button {
+	const kind = nm.toUpperCase();
 	return new zul.wgt.Button({
-		label: msgzul[nm.toUpperCase()] || nm,
+		label: msgzul[kind] || nm,
+		// ZK-6187: MessageboxDlg's kind class; no z-messagebox-button, which IceBlue sizes
+		sclass: kinds.includes(kind) ? 'z-messagebox-button-' + kind.toLowerCase() : '',
 		listeners: {
 			onClick: function (this: zul.wgt.Button, evt: zk.Event) {
 				if (typeof f == 'function')
@@ -58,7 +63,7 @@ function getButtons(opts: Record<string, unknown>): zul.wgt.Button[] {
 		btns.push(newButton(nm, typeof f == 'function' ? f : null));
 	}
 	if (!btns.length)
-		btns.push(newButton(msgzul.OK));
+		btns.push(newButton('OK')); // ZK-6187: the key, not the localized msgzul.OK, names the kind class
 	return btns;
 }
 
