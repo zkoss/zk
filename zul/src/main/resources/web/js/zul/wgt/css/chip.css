@@ -51,12 +51,12 @@
     --zk-chip-border: color-mix(in oklch, var(--zk-color-status-warning) 36%, var(--zk-color-surface));
     --zk-chip-color: var(--zk-color-warning);
 }
-.z-chip-danger {
+.z-chip-error {
     --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-error) 14%, var(--zk-color-surface));
     --zk-chip-border: color-mix(in oklch, var(--zk-color-status-error) 32%, var(--zk-color-surface));
     --zk-chip-color: var(--zk-color-error);
 }
-.z-chip-secondary {
+.z-chip-neutral {
     --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-neutral) 18%, var(--zk-color-surface));
     --zk-chip-border: color-mix(in oklch, var(--zk-color-status-neutral) 36%, var(--zk-color-surface));
     --zk-chip-color: var(--zk-color-on-surface-variant);

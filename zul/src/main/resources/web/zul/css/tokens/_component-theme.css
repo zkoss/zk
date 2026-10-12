@@ -264,7 +264,7 @@
        per-severity rule on the indicator shadows any inherited :root/inline value.
        We therefore route the default `info` fill through --zk-badge-bg here (no
        explicit .z-badge-info rule) so default badges stay region/inline overridable;
-       the non-default severities (.z-badge-success/-warning/-danger/-secondary) set
+       the non-default severities (.z-badge-success/-warning/-error/-neutral) set
        --zk-badge-bg per-variant and keep their semantic color. --zk-badge-fg and
        --zk-badge-radius have no per-severity override, so they apply to every badge.
        Dot-mode radius stays 50% in badge.css (shape mode, not a themeable knob). */
@@ -272,7 +272,7 @@
        MD3's contract is the tonal pair — a light tone carries a dark on-colour;
        white on a light tone is the one combination MD3 never produces. With white
        text four of the five severities missed the AA 4.5:1 floor that 12px text
-       needs (success 2.78, warning 2.16, danger 3.49, secondary 2.68); with the
+       needs (success 2.78, warning 2.16, error 3.49, neutral 2.68); with the
        dark label every one clears it by a wide margin (6.64 / 8.37 / 5.43 / 6.84),
        and no background moved. The same --zk-color-on-surface tone already labels
        the warning/error toast on its tinted container, so this is an established

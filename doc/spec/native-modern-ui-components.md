@@ -32,7 +32,7 @@ utility classes.
   "+N" overflow = `.z-avatargroup-overflow`.
 
 ## Severities: fixed native set vs. old utility variants
-Native severities are **info · success · warning · danger · secondary**. The old utility palette
+Native severities are **info · success · warning · error · neutral** (renamed from danger/secondary by ZK-6132). The old utility palette
 had extra names; migration mapping (applied to all ZUL usages):
 
 | old utility variant | native severity |
@@ -40,8 +40,8 @@ had extra names; migration mapping (applied to all ZUL usages):
 | `z-chip-info` / `z-badge-info` | `info` |
 | `z-chip-success` / `z-badge-success` | `success` |
 | `z-chip-warning` / `z-badge-warning` | `warning` |
-| `z-chip-error` / `z-badge-error` | **`danger`** |
-| `z-chip-neutral` | **`secondary`** |
+| `z-chip-error` / `z-badge-error` | **`error`** |
+| `z-chip-neutral` | **`neutral`** |
 | `z-chip-primary` | **`info`** |
 | `z-chip-on-primary` | **dropped** (no equivalent) |
 
@@ -50,7 +50,7 @@ Dedicated pages: `badge.zul`, `chip.zul`, `avatar.zul` (component browser → **
 Showcase: `utility/surface.zul`. Migrated real usages: `usecase/ticket-inbox`,
 `inventory-table`, `ops-dashboard`, `item-editor`.
 
-## Naming: `severity` (`danger`/`secondary`) — proposed ZK API change
+## Naming: `severity` (`danger`/`secondary`) — proposed ZK API change (adopted upstream as `error`/`neutral`, ZK-6132)
 
 The native `severity` values `danger` and `secondary` are Bootstrap-lineage palette words that
 are inconsistent with ZK's own vocabulary (`notification`/`messagebox` already use `error`) and

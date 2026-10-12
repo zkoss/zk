@@ -69,7 +69,7 @@
                     <label value="Safety Gear"/>
                     <label value="0"/>
                     <label value="B-08"/>
-                    <chip label="Out" severity="danger" rounded="true"/>
+                    <chip label="Out" severity="error" rounded="true"/>
                     <progressmeter value="0" width="140px"/>
                     <button iconSclass="z-icon-ellipsis-vertical" sclass="z-button-icon"/>
                 </row>

@@ -38,7 +38,7 @@ Notes:
 Exactly one class from each of the following two sets is always present on the root (never absent, never
 more than one per set):
 
-- `.z-confirmpopup-{severity}` — `severity` ∈ `info | success | warning | danger | secondary` (default `warning`).
+- `.z-confirmpopup-{severity}` — `severity` ∈ `info | success | warning | error | neutral` (default `warning`).
   The same five-token severity enum is used by ZK's other severity-driven widgets (`badge`, `chip`).
 - `.z-confirmpopup-placement-{placement}` — `placement` ∈ `top | bottom | left | right` (default `top`). The
   arrow points from the popup toward the trigger; `placement` describes which side of the trigger the popup
@@ -105,7 +105,7 @@ No disabled/readonly states exist for this component.
 - Extends `Popup` for its positioning/anchoring primitives (see `components/popup.md`), but overrides
   `open()`/`close()`/class-composition almost entirely — do not assume confirmpopup reuses `Popup`'s own
   `.z-popup` / `.z-popup-content` visual classes; they are absent here.
-- The `severity` enum (`info/success/warning/danger/secondary`) is shared verbatim with ZK's native `badge`
+- The `severity` enum (`info/success/warning/error/neutral`) is shared verbatim with ZK's native `badge`
   and `chip` components — the same five tokens, same meaning, same default (`warning` here vs `info` on
   badge/chip — check the per-component default, the enum itself is identical).
 

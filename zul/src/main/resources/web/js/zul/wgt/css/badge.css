@@ -74,6 +74,6 @@
    :root/inline override — expected, they carry their semantic color). */
 .z-badge-success > .z-badge-indicator   { --zk-badge-bg: var(--zk-color-status-success); }
 .z-badge-warning > .z-badge-indicator   { --zk-badge-bg: var(--zk-color-status-warning); }
-.z-badge-danger > .z-badge-indicator     { --zk-badge-bg: var(--zk-color-status-error); }
-.z-badge-secondary > .z-badge-indicator { --zk-badge-bg: var(--zk-color-status-neutral); }
+.z-badge-error > .z-badge-indicator     { --zk-badge-bg: var(--zk-color-status-error); }
+.z-badge-neutral > .z-badge-indicator { --zk-badge-bg: var(--zk-color-status-neutral); }
 }

@@ -9,8 +9,8 @@
             <chip label="Info"      severity="info"/>
             <chip label="Success"   severity="success"/>
             <chip label="Warning"   severity="warning"/>
-            <chip label="Danger"    severity="danger"/>
-            <chip label="Secondary" severity="secondary"/>
+            <chip label="Danger"    severity="error"/>
+            <chip label="Secondary" severity="neutral"/>
         </div>
     </div>
 
