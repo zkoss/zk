@@ -212,7 +212,7 @@
             </tree>
         </div>
         <div sclass="z-py-3">
-            <div sclass="z-text-on-surface-variant z-mb-2"><label sclass="z-text-sm z-fw-medium" value="Single selection — renders a radio, not a checkbox"/></div>
+            <div sclass="z-text-secondary z-mb-2"><label sclass="z-text-sm z-fw-medium" value="Single selection — renders a radio, not a checkbox"/></div>
             <tree rows="4" checkmark="true">
                 <treecols>
                     <treecol label="Name"/>
@@ -309,7 +309,7 @@
         tristateModel.recompute(tristateRoot);   // derive parent states (parentC stays empty)
         ]]></zscript>
         <div sclass="z-py-3">
-            <div sclass="z-text-on-surface-variant z-mb-2"><label sclass="z-text-sm z-fw-medium" value="Tristate — toggle a child and its parent recomputes (all→checked, some→indeterminate, none→unchecked); toggle a parent and it cascades to its children"/></div>
+            <div sclass="z-text-secondary z-mb-2"><label sclass="z-text-sm z-fw-medium" value="Tristate — toggle a child and its parent recomputes (all→checked, some→indeterminate, none→unchecked); toggle a parent and it cascades to its children"/></div>
             <tree model="${tristateModel}" checkmark="true" multiple="true" width="320px">
                 <treecols>
                     <treecol label="Node"/>
