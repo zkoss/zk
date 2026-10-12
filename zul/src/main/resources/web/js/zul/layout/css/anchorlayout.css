@@ -1,11 +1,11 @@
 /* MD3 Anchor Layout — anchor-based responsive layout */
-/* ZK renders anchorchildren with inline width% styles; use flexbox for side-by-side columns */
+/* ZK renders anchorchildren with inline width% styles; use flexbox for side-by-side columns.
+   No gap: the widths are inline percentages, so any gap would overflow the row and wrap 50%+50% / 33%x3. */
 
 @layer zk-components {
 .z-anchorlayout {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--zk-spacing-4);
     width: 100%;
     box-sizing: border-box;
     align-items: flex-start;

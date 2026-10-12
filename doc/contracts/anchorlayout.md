@@ -13,38 +13,36 @@ js-source-files:
 js-source-hash: 7eca7284bfb4dc16c1b8573f06a80c75b5c156407ced18278340aa13b9bb40f7
 closest-sibling: none — novel anchor-sizing pattern
 mockup-needed: N
-mockup-rationale: ZKDoc canonical image exists; Marble applies only gap/flex-wrap over a transparent container — no surface paint, no significant visual divergence from the ZKDoc layout diagram
+mockup-rationale: ZKDoc canonical image exists; Marble applies only flex-wrap over a transparent container — no surface paint, no significant visual divergence from the ZKDoc layout diagram
 
 ## References
 - MUI CSS: Layout/Stack.css — flex-wrap row layout is the closest structural analog; no visual theming borrowed
-- DESIGN.md sections: §4 (Spacing Scale)
 - Iceblue baseline: doc/contracts/baselines/anchorlayout-iceblue.png
 - ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKComRef_Anchorlayout_Example.png
-- Divergence from baseline: iceblue renders anchor-children **flush** (float model, no gutter); Marble intentionally introduces a `var(--zk-spacing-4)` (16px) gap via flex-wrap. This is the only visual difference from the ZKDoc/iceblue ground truth and is by design (grid-gutter consistency).
+- Divergence from baseline: iceblue renders anchor-children **flush** (float model, no gutter); Marble also renders them flush (no `gap`): anchor widths are inline percentages, so any gap makes 50%+50% / 33%x3 overflow and wrap (zkdemo B6 Z1). Flex-wrap is kept only as a safety net for children whose percentages sum above 100%.
 
 ## Design Contract
 
 Anchorlayout is a transparent layout shell — it paints no surface, no border, and no shadow.
-Its sole visual contribution to the Marble theme is the gap between child columns/rows. Children
-flow left-to-right and wrap to a new row when they exceed the parent width. Marble overrides
-iceblue's float-based model with `display: flex; flex-wrap: wrap` so that gap can be applied
-uniformly via the `gap` property. A `gap` of `var(--zk-spacing-4)` (16px) provides comfortable
-breathing room between anchor-sized children — consistent with the grid gutter used across the
-theme's card layouts. The root carries `width: 100%` and `box-sizing: border-box` so that
-percentage-anchored children resolve correctly against the parent container width. Children carry
-`flex-shrink: 0` to prevent the flex algorithm from compressing below the JS-set inline widths,
-`min-width: 0` to prevent flex blowout from wide content, and `box-sizing: border-box` for a
-sizing model consistent with the root container.
+Children carry inline percentage widths set by the JS engine, so they sit flush side by side
+exactly as in iceblue: 50%+50% share one row and 33%x3 share one row. Marble overrides iceblue's
+float-based model with `display: flex; flex-wrap: wrap` and deliberately sets **no `gap`** —
+a gap would push percentage-sized siblings past 100% and wrap them (zkdemo B6 Z1). The root
+carries `width: 100%` and `box-sizing: border-box` so that percentage-anchored children resolve
+correctly against the parent container width. Children carry `flex-shrink: 0` to prevent the flex
+algorithm from compressing below the JS-set inline widths, `min-width: 0` to prevent flex blowout
+from wide content, and `box-sizing: border-box` for a sizing model consistent with the root
+container.
 
 ## Outcome assertions
 
 | id | predicate | rationale |
 |----|-----------|-----------|
 | M1 | `.z-anchorlayout` bbox.width > 0 AND `.z-anchorchildren` count ≥ 1 with bbox.width > 0 | layout is engaged — root and at least one child have non-zero widths |
-| M2 | For any two horizontally adjacent `.z-anchorchildren` nodes (bbox.top overlap > 50%): gap between right edge of left child and left edge of right child ≥ 8px | children are not flush against each other |
+| M2 | For any two horizontally adjacent `.z-anchorchildren` nodes (bbox.top overlap > 50%): `.z-anchorchildren` with anchor percentages summing ≤ 100% share the same `bbox.top` (no wrap) | children are not pushed onto a new row |
 | M3 | No two `.z-anchorchildren` nodes have overlapping bounding boxes (intersection area = 0) | children do not z-fight or overlap |
 | M4 | `.z-anchorlayout` has background = transparent OR rgba(0,0,0,0) AND box-shadow = none AND border-width = 0 | layout shell is invisible — it must not paint a card frame |
-| M5 | A `.z-anchorchildren` with anchor="50%" has bbox.width ≈ 0.5 × `.z-anchorlayout` bbox.width (±10px tolerance — the 16px flex gap deducts ~8px per 50% child, so a tight window would false-fail) | percentage anchor sizing is correctly resolved by the JS engine |
+| M5 | A `.z-anchorchildren` with anchor="50%" has bbox.width ≈ 0.5 × `.z-anchorlayout` bbox.width (±2px tolerance — no gap, so the width is exact) | percentage anchor sizing is correctly resolved by the JS engine |
 
 ## Expected values
 
@@ -52,7 +50,7 @@ sizing model consistent with the root container.
 |----|----------|----------|----------------------------|--------|
 | c1 | `.z-anchorlayout` | display | `flex` | Marble flex override (replaces iceblue float) |
 | c2 | `.z-anchorlayout` | flex-wrap | `wrap` | Marble layout policy — wrapping anchor layout |
-| c3 | `.z-anchorlayout` | gap | `var(--zk-spacing-4)` | DESIGN.md §4 — 16px grid gutter |
+| c3 | `.z-anchorlayout` | gap | `normal` (0) — none declared | inline % widths; any gap overflows and wraps the row |
 | c4 | `.z-anchorlayout` | width | `100%` | required for % anchors to resolve against parent |
 | c5 | `.z-anchorlayout` | box-sizing | `border-box` | required so 100% width includes any padding |
 | c6 | `.z-anchorlayout` | align-items | `flex-start` | children should not stretch to the tallest sibling |
