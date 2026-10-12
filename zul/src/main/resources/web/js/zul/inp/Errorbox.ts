@@ -259,13 +259,15 @@ export class Errorbox extends zul.wgt.Notification {
 			dir = dy < 0 ? 'd' : 'u';
 
 		node.style.padding = '0';
+		var ps = pointer.style;
+		// ZK-6188: clear with '', assigning undefined is ignored and the previous direction's side would win
+		ps.left = ps.top = ps.right = ps.bottom = '';
 		// for setting the pointer position
 		if (dir == 'd' || dir == 'u') {
 			var md = (Math.max(dx, 0) + Math.min(node.offsetWidth + dx, parent.offsetWidth)) / 2 - dx - 6,
 				mx = node.offsetWidth - 11;
 			pointer.style.left = `${md > mx ? mx : md < 1 ? 1 : md}px`;
 			if (dir == 'd') {
-				pointer.style.top = undefined as unknown as string;
 				pointer.style.bottom = '-4px';
 				s.paddingBottom = `${ph}px`;
 			} else {
@@ -278,7 +280,6 @@ export class Errorbox extends zul.wgt.Notification {
 				mx = node.offsetHeight - 11;
 			pointer.style.top = `${md > mx ? mx : md < 1 ? 1 : md}px`;
 			if (dir == 'r') {
-				pointer.style.left = undefined as unknown as string;
 				pointer.style.right = '-4px';
 				s.paddingRight = `${pw}px`;
 			} else {
@@ -287,8 +288,6 @@ export class Errorbox extends zul.wgt.Notification {
 			}
 
 		} else {
-			var ps = pointer.style;
-			ps.left = ps.top = ps.right = ps.bottom = undefined as unknown as string;
 			switch (dir) {
 				case 'lu':
 					ps.left = '0px';

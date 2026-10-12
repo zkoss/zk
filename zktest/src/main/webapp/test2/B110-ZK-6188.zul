@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6188.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Oct 12 10:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Focus the textbox, then click outside: an errorbox opens on its right, its pointer on the box's left edge.
+		2. Drag the errorbox (press on its message) above the textbox and release.
+		   The pointer must sit on the bottom edge of the box, pointing down at the textbox.
+		3. Reload, open the errorbox again and drag it to the left of the textbox.
+		   The pointer must sit on the right edge of the box, pointing at the textbox.
+		4. Reload, open the errorbox again, drag it below-left of the textbox, then above-left of it.
+		   The pointer must sit on the bottom-right corner of the box, pointing down.
+	</label>
+	<window title="ZK-6188" border="normal" width="900px">
+		<div style="padding: 150px 0 50px 400px">
+			<textbox id="tb" width="150px" constraint="no empty"/>
+		</div>
+	</window>
+</zk>
