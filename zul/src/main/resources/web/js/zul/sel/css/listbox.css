@@ -349,9 +349,18 @@
     color: var(--zk-color-on-surface);
     font-size: var(--zk-typescale-body-medium-size);
     font-weight: var(--zk-typescale-label-large-weight);
-    padding: var(--zk-spacing-2) var(--zk-spacing-4);
     white-space: nowrap;
     overflow: visible;
+}
+
+/* Pad only the content, like a normal listcell, so the text is not indented twice. */
+.z-listgroupfoot td {
+    padding: 0;
+}
+
+.z-listgroupfoot .z-listcell-cnt,
+.z-listgroupfoot .z-listcell-content {
+    padding: var(--zk-listbox-cell-padding);
 }
 
 /* ─── Footer ─────────────────────────────────────────────────────────── */
