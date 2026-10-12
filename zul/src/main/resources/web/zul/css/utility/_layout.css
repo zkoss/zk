@@ -376,7 +376,9 @@
     white-space: nowrap;
 }
 
-.z-visually-hidden {
+/* .sr-only: emitted by Paging detailed="true"; IceBlue got it from FontAwesome */
+.z-visually-hidden,
+.sr-only {
     position: absolute;
     width: 1px;
     height: 1px;
