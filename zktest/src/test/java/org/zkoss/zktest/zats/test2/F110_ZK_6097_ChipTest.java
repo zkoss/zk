@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -272,7 +273,9 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 
 	// ----- custom color via CSS variables -----
 
+	// IceBlue-only: reads IceBlue's --zk-chip-background-color; Marble's chip uses --zk-chip-bg.
 	@Test
+	@Tag("IceBlueOnly")
 	public void cssvar_hex_applied_via_style_attribute() {
 		// Custom chip colors flow through the --zk-chip-background-color /
 		// --zk-chip-color CSS variables declared in chip.less; the chip itself has

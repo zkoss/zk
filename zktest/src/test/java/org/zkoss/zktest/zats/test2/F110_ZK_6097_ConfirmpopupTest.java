@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.JavascriptExecutor;
@@ -480,7 +481,9 @@ public class F110_ZK_6097_ConfirmpopupTest extends WebDriverTestCase {
 	}
 
 	// Driven with a real Tab: :focus-visible does not match a programmatic focus.
+	// IceBlue-only: the probe injects an unlayered *:focus-visible box-shadow that outranks Marble's @layer zk-components rules, so the box-shadow == none assertion cannot hold on Marble.
 	@Test
+	@Tag("IceBlueOnly")
 	public void keyboard_focus_paints_one_ring_on_both_buttons() {
 		connect();
 		waitResponse();

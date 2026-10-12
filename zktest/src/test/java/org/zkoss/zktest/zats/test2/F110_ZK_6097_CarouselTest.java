@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -380,7 +381,9 @@ public class F110_ZK_6097_CarouselTest extends WebDriverTestCase {
 	// programmatic focus, so a JS-focused element reports no ring and the
 	// assertion would fail against correct CSS.
 
+	// IceBlue-only: the probe injects an unlayered *:focus-visible box-shadow that outranks Marble's @layer zk-components rules, so the box-shadow == none assertion cannot hold on Marble.
 	@Test
+	@Tag("IceBlueOnly")
 	public void keyboard_focus_paints_a_ring_on_the_tabbable_root() {
 		connect();
 		waitResponse();
