@@ -8,16 +8,4 @@
     line-height: var(--zk-typescale-body-medium-line-height);
     color: var(--zk-color-on-surface);
 }
-
-/* Pre-formatted label */
-.z-label-pre {
-    white-space: pre-wrap;
-    font-family: var(--zk-typescale-mono-family);
-}
-
-/* Multiline label */
-.z-label-multiline {
-    display: block;
-    white-space: pre-wrap;
-}
 }
