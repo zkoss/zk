@@ -1184,7 +1184,7 @@
     <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Confirmpopup (default)"/></div>
     <div sclass="z-hstack z-mb-8">
         <button label="Show Confirmpopup" popup="confirmpopupThemingDefault"/>
-        <confirmpopup id="confirmpopupThemingDefault" severity="warning" header="Confirm"
+        <confirmpopup id="confirmpopupThemingDefault" severity="warning" title="Confirm"
                       message="Default confirmpopup, zero override applied."/>
     </div>
 
