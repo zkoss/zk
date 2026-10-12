@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-CascaderReflow.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Sep 18 16:00:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:h1>Cascader popup capped to the viewport</n:h1>
+    <label multiline="true">
+        The cascader popup is capped to the viewport, scrolling its caves horizontally inside
+        rather than widening the page.
+    </label>
+    <zscript><![CDATA[
+        import org.zkoss.zktest.test2.F90_ZK_4392Model;
+        TreeModel m1 = new F90_ZK_4392Model("A");
+    ]]></zscript>
+    <cascader id="cas" model="${m1}" width="300px" placeholder="empty" ca:aria-label="Choose something">
+        <template name="model">
+            ${each}
+        </template>
+    </cascader>
+</zk>

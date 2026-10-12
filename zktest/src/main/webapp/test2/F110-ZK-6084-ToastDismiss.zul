@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-ToastDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for Toast.
+
+	Description:
+		A toast that is not closable and has no duration stays until the user clicks outside
+		it, and that click removes it for good. With za11y, it goes only on the release, and a
+		release back on the toast keeps it.
+
+	History:
+		Tue Sep 29 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button id="show" label="Show toast"
+		onClick='org.zkoss.zkmax.ui.util.Toast.show("Saved", "info", "top_right", 0, false)'/>
+	<label multiline="true" style="position: absolute; left: 10px; top: 200px">
+		Click "Show toast": the toast stays until you click outside it. Press and hold on an empty part
+		of the page: the toast must stay until you release. Releasing there dismisses it; moving back
+		onto the toast before releasing keeps it.
+	</label>
+</zk>

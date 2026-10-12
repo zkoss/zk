@@ -41,7 +41,7 @@ public class Confirmpopup extends Popup {
 	private static final String DEFAULT_PLACEMENT = "top";
 	private static final String DEFAULT_FOCUS = "ok";
 
-	private String _header;
+	private String _title;
 	private String _message;
 	private String _iconSclass = DEFAULT_ICON_SCLASS;
 	private String _severity = DEFAULT_SEVERITY;
@@ -55,26 +55,25 @@ public class Confirmpopup extends Popup {
 		setMessage(message);
 	}
 
-	/** Returns the optional header (title row) shown above the message body.
-	 * Mirrors PrimeNG Confirmpopup's <code>header</code> property.
+	/** Returns the optional title row shown above the message body.
 	 * @since 11.0.0
 	 */
-	public String getHeader() {
-		return _header;
+	public String getTitle() {
+		return _title;
 	}
 
-	/** Sets the optional header (title row) shown above the message body.
-	 * @param header the header text; {@code null} or an empty string clears it
+	/** Sets the optional title row shown above the message body.
+	 * @param title the title text; {@code null} or an empty string clears it
 	 *        (the popup renders with no title row). Pushes the change to the
 	 *        client via {@code smartUpdate}.
 	 * @since 11.0.0
 	 */
-	public void setHeader(String header) {
-		if (header != null && header.isEmpty())
-			header = null;
-		if (!Objects.equals(_header, header)) {
-			_header = header;
-			smartUpdate("header", _header);
+	public void setTitle(String title) {
+		if (title != null && title.isEmpty())
+			title = null;
+		if (!Objects.equals(_title, title)) {
+			_title = title;
+			smartUpdate("title", _title);
 		}
 	}
 
@@ -130,7 +129,7 @@ public class Confirmpopup extends Popup {
 
 	/** Returns the severity, which drives the icon/color styling of the popup.
 	 * <p>Default: {@value #DEFAULT_SEVERITY}. One of "info", "success",
-	 * "warning", "danger" or "secondary".
+	 * "warning", "error" or "neutral".
 	 * @since 11.0.0
 	 */
 	public String getSeverity() {
@@ -138,8 +137,8 @@ public class Confirmpopup extends Popup {
 	}
 
 	/** Sets the severity, which drives the icon/color styling of the popup.
-	 * @param severity one of "info", "success", "warning", "danger" or
-	 *        "secondary"; {@code null} restores the default
+	 * @param severity one of "info", "success", "warning", "error" or
+	 *        "neutral"; {@code null} restores the default
 	 *        ({@value #DEFAULT_SEVERITY}). Pushes the change to the client via
 	 *        {@code smartUpdate}.
 	 * @throws WrongValueException if {@code severity} is non-null and is not one
@@ -148,8 +147,8 @@ public class Confirmpopup extends Popup {
 	 */
 	public void setSeverity(String severity) throws WrongValueException {
 		severity = Utils.checkEnum(severity, DEFAULT_SEVERITY,
-				"severity must be info/success/warning/danger/secondary: ",
-				"info", "success", "warning", "danger", "secondary");
+				"severity must be info/success/warning/error/neutral: ",
+				"info", "success", "warning", "error", "neutral");
 		if (!Objects.equals(_severity, severity)) {
 			_severity = severity;
 			smartUpdate("severity", _severity);
@@ -187,7 +186,7 @@ public class Confirmpopup extends Popup {
 	/**
 	 * @return which button gets keyboard focus when the popup opens — either
 	 *         "ok" (default) or "cancel". For destructive operations
-	 *         (severity="danger"), prefer "cancel" so an accidental Enter
+	 *         (severity="error"), prefer "cancel" so an accidental Enter
 	 *         keypress does not commit the action.
 	 * @since 11.0.0
 	 */
@@ -198,7 +197,7 @@ public class Confirmpopup extends Popup {
 	/** Sets which button gets keyboard focus when the popup opens.
 	 * @param defaultFocus either "ok" (default) or "cancel"; {@code null}
 	 *        restores the default ({@value #DEFAULT_FOCUS}). For destructive
-	 *        operations (severity="danger"), prefer "cancel" so an accidental
+	 *        operations (severity="error"), prefer "cancel" so an accidental
 	 *        Enter keypress does not commit the action. Pushes the change to
 	 *        the client via {@code smartUpdate}.
 	 * @throws WrongValueException if {@code defaultFocus} is non-null and is
@@ -222,7 +221,7 @@ public class Confirmpopup extends Popup {
 	@Override
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
 		super.renderProperties(renderer);
-		render(renderer, "header", _header);
+		render(renderer, "title", _title);
 		render(renderer, "message", _message);
 		// "" is the "explicitly cleared" sentinel — the inherited render()
 		// helper would skip it (AbstractComponent.render treats empty as
@@ -240,5 +239,14 @@ public class Confirmpopup extends Popup {
 			render(renderer, "placement", _placement);
 		if (!DEFAULT_FOCUS.equals(_defaultFocus))
 			render(renderer, "defaultFocus", _defaultFocus);
+	}
+
+	//-- Component --//
+	/** Default: not childable. The mold renders only the title row, the
+	 * message body and the two footer buttons, so a child would never appear.
+	 */
+	@Override
+	public boolean isChildable() {
+		return false;
 	}
 }

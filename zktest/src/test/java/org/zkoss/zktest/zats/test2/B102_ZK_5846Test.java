@@ -36,7 +36,7 @@ public class B102_ZK_5846Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		ChromeOptions options = super.getWebDriverOptions();
-		options.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
+		options.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad Mini"));
 		options.setCapability("goog:loggingPrefs", Collections.singletonMap(LogType.BROWSER, Level.ALL));
 		return options;
 	}

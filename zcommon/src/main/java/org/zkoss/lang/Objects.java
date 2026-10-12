@@ -411,7 +411,14 @@ public class Objects {
 
 			if (o instanceof Cloneable) {
 				try {
-					return kls.getMethod("clone").invoke(o);
+					Method m;
+					try {
+						// ZK-6167: JDK 17 refuses a clone() declared in a package its module does not export
+						m = Classes.getMethodInPublic(kls, "clone", null);
+					} catch (NoSuchMethodException ex) {
+						m = kls.getMethod("clone");
+					}
+					return m.invoke(o);
 				} catch (NoSuchMethodException ex) {
 					if (log.isDebugEnabled())
 						log.debug("No clone() for {}", kls);

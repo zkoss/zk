@@ -56,7 +56,6 @@ public class PackageData {
 																		new DirectoryTreeNode(new PackageDataUnit("bsh.jar", "Scripting in Java interpreter for zscript (BeanShell)")),
 																		new DirectoryTreeNode(new PackageDataUnit("rhino.jar", "Scripting in JavaScript (Rhino)")),
 																		new DirectoryTreeNode(new PackageDataUnit("groovy.jar", "Scripting in Groovy")),
-																		new DirectoryTreeNode(new PackageDataUnit("jruby.jar", "Scripting in Ruby (JRuby)")),
 																		new DirectoryTreeNode(new PackageDataUnit("jython.jar", "Scripting in Python (Jython)")),
 																		new DirectoryTreeNode(new PackageDataUnit("Filters.jar", "Captcha Component.")),
 																		new DirectoryTreeNode(new PackageDataUnit("mvel.jar", "Evaluate the expressions (MVEL)")),

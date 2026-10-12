@@ -12,24 +12,27 @@ def applyJavadocOptions(Task task) {
 	task.options.addBooleanOption("-allow-script-in-comments", true)
 	task.options.addBooleanOption('Xdoclint:none', true)
 	task.options.addBooleanOption("breakiterator", true)
-	task.options.addStringOption("-source ${version}")
+	task.options.addStringOption("source", jdkVersion)
 }
 def footerMessage = '<p class="legalCopy"><small>Copyright &copy; 2005-' + "${currentYear}" + ' Potix Corporation. All Rights Reserved.\n' +
 		'<script type="text/javascript">if (location.href.indexOf(\'zkoss.org\') >= 0) {var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));}</script><script type="text/javascript">if (location.href.indexOf(\'zkoss.org\') >= 0) {var pageTracker = _gat._getTracker("UA-121377-3");pageTracker._setDomainName("zkoss.org");pageTracker._initData();pageTracker._trackPageview();}</script>\n' +
 		'\t </small></p>\n'
 
 def addJavadocFooter(dir, footerMessage) {
+	def touched = 0
 	fileTree(dir: dir).matching {
 		include "**/*.html"
 	}.each { htmlFile ->
-		synchronized(ant) {
-			ant.replaceregexp(
-					file: htmlFile,
-					match: '<!-- ======== END OF BOTTOM NAVBAR ======= -->\n',
-					replace: '<!-- ======== END OF BOTTOM NAVBAR ======= -->\n' + footerMessage
-			)
-		}
+		def text = htmlFile.getText('UTF-8')
+		def at = text.lastIndexOf('</main>')
+		if (at < 0)
+			return
+		at += '</main>'.length()
+		htmlFile.write(text.substring(0, at) + footerMessage + text.substring(at), 'UTF-8')
+		touched++
 	}
+	if (touched == 0)
+		throw new GradleException("addJavadocFooter matched no page under ${dir}; the javadoc page template changed")
 }
 
 // generate javadoc
@@ -110,7 +113,6 @@ subprojects {
 		title = "$project.description ${version} API"
 		options.setWindowTitle("$project.description ${version} API")
 		applyJavadocOptions(it)
-		options.links 'https://docs.oracle.com/javase/8/docs/api/'
 		source sourceSets.main.allJava
 
 		// Can't get package.html into javadoc with gradle
@@ -129,7 +131,7 @@ subprojects {
 		})
 
 		doLast {
-			def shortFooterMessage = '<p class="legalCopy"><small>Copyright &#169; ' + "${currentYear}." + ' All rights reserved.</small></p>\n'
+			def shortFooterMessage = '<p class="legalCopy"><small>Copyright &#169; ' + "${currentYear}" + ' Potix Corporation. All rights reserved.</small></p>\n'
 			addJavadocFooter("$buildDir/docs/javadoc", shortFooterMessage)
 		}
 	}

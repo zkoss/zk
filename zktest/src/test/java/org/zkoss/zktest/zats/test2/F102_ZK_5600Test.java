@@ -12,17 +12,15 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.zk.ui.http.DHtmlLayoutServlet;
@@ -31,37 +29,64 @@ import org.zkoss.zk.ui.impl.UiEngineImpl;
 public class F102_ZK_5600Test extends WebDriverTestCase {
 	@Test
 	public void test1() throws Exception {
-		Logger logger = mock(Logger.class);
-		setFinalStatic(UiEngineImpl.class.getDeclaredField("log"), logger);
-		String path = "/test2/F102-ZK-5600-1.zul";
-		connect(path);
+		Logger logger = Logger.getLogger(UiEngineImpl.class.getName());
+		List<LogRecord> records = new CopyOnWriteArrayList<>();
+		Handler handler = capture(records);
+		logger.addHandler(handler);
+		try {
+			String path = "/test2/F102-ZK-5600-1.zul";
+			connect(path);
 
-		click(jq("@button").eq(0));
-		waitResponse();
-		verify(logger, times(1)).error(eq("at [{}]"), eq(path), any(Exception.class));
-		click(jq(".z-window-close"));
-		waitResponse();
-		click(jq("@button").eq(1));
-		waitResponse();
-		verify(logger, times(2)).error(eq("at [{}]"), eq(path), any(Exception.class));
+			click(jq("@button").eq(0));
+			waitResponse();
+			assertEquals(1, countErrorsAt(records, path));
+			click(jq(".z-window-close"));
+			waitResponse();
+			click(jq("@button").eq(1));
+			waitResponse();
+			assertEquals(2, countErrorsAt(records, path));
+		} finally {
+			logger.removeHandler(handler);
+		}
 	}
 
 	@Test
 	public void test2() throws Exception {
-		Logger logger = mock(Logger.class);
-		setFinalStatic(DHtmlLayoutServlet.class.getDeclaredField("log"), logger);
-		String path = "/test2/F102-ZK-5600-2.zul";
-		final String address = getAddress();
-		assertEquals(500, getStatusCode(address + path));
-		verify(logger, times(1)).error(eq("at [{}]"), eq(path), any(Exception.class));
+		Logger logger = Logger.getLogger(DHtmlLayoutServlet.class.getName());
+		List<LogRecord> records = new CopyOnWriteArrayList<>();
+		Handler handler = capture(records);
+		logger.addHandler(handler);
+		try {
+			String path = "/test2/F102-ZK-5600-2.zul";
+			final String address = getAddress();
+			assertEquals(500, getStatusCode(address + path));
+			assertEquals(1, countErrorsAt(records, path));
+		} finally {
+			logger.removeHandler(handler);
+		}
 	}
 
-	// https://stackoverflow.com/a/30703932
-	private static void setFinalStatic(Field field, Object newValue) throws Exception {
-		field.setAccessible(true);
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		field.set(null, newValue);
+	// ZK-6167: the logger is static final, so capture its records through JUL (slf4j-jdk14)
+	private static Handler capture(List<LogRecord> records) {
+		return new Handler() {
+			@Override
+			public void publish(LogRecord record) {
+				records.add(record);
+			}
+
+			@Override
+			public void flush() {
+			}
+
+			@Override
+			public void close() {
+			}
+		};
+	}
+
+	/** Counts the {@code log.error("at [{}]", path, exception)} records. */
+	private static long countErrorsAt(List<LogRecord> records, String path) {
+		return records.stream().filter(r -> r.getLevel() == Level.SEVERE && ("at [" + path + "]").equals(r.getMessage())
+				&& r.getThrown() instanceof Exception).count();
 	}
 }

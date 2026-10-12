@@ -27,7 +27,9 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 		<intbox ca:aria-label="intbox3" format="#,##0.##"/>
 		<intbox ca:aria-label="intbox4" constraint="no negative: it shall not be negative" placeholder="no negative"/>
 		<intbox ca:aria-label="intbox5" constraint="no empty" placeholder="no empty" />
-		
+		<!-- WCAG 1.3.5 Identify Input Purpose: token lands on the input via inputAttributes -->
+		<intbox ca:aria-label="Card expiry month" inputAttributes="autocomplete=cc-exp-month"/>
+
 		<separator/>
 		
 		<longbox ca:aria-label="longbox1" value="1" />

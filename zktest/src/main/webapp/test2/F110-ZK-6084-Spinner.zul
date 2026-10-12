@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-Spinner.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) — spin buttons must not act on
+		the down-event: pressing an arrow does nothing until the pointer is
+		released over it, and holding does not auto-repeat.
+
+	Description:
+		Only visible with za11y enabled.
+
+	History:
+		Tue Aug 19 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript>
+		import java.util.Date;
+
+		Date tbTime = new Date(70, 0, 1, 10, 20, 30);
+	</zscript>
+	<vlayout>
+		<label style="font-weight:bold" multiline="true">
+Requires za11y. Without it the spin buttons step on press and repeat while held,
+and none of the checks below will hold.
+		</label>
+		<label multiline="true">
+Press and HOLD an arrow: the value must not change.
+Release over the arrow: the value steps exactly once.
+Press, drag off the arrow, release: the value must not change.
+		</label>
+
+		<hlayout>
+			<label value="spinner:"/>
+			<spinner id="sp" value="5" step="1"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="doublespinner:"/>
+			<doublespinner id="dsp" value="1.5" step="0.5"/>
+		</hlayout>
+
+		<hlayout>
+			<label value="timebox (caret picks the field):"/>
+			<timebox id="tb" format="HH:mm:ss" value="${tbTime}"/>
+		</hlayout>
+	</vlayout>
+</zk>

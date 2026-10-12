@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-SliderTooltip.zul
+
+	Purpose:
+
+	Description:
+		The change logs record every onRangeValueChange that reaches the server, so a
+		test can assert that pressing the tooltip starts no drag.
+
+	History:
+		Fri Sep 18 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:h1>WCAG 2.1 - 1.4.13 content on hover or focus: slider knob tooltip</n:h1>
+	<label multiline="true">
+		Hovering a knob reveals its value in a tooltip above (beside, when vertical) it.
+		1. hover a knob, press Esc without moving the mouse - the tooltip disappears
+		2. keep the mouse still - it must stay hidden
+		3. leave the knob and hover it again - the tooltip is back
+		4. hover a knob and move the pointer up onto the tooltip - it must not vanish
+		   on the way, and the text must be selectable there
+		5. press on the tooltip and drag - no knob may move
+		6. the pointer over the tooltip must not look clickable
+		7. the pinned slider ignores Esc: its tooltip is not revealed by hover
+	</label>
+	<separator/>
+	<hlayout>horizontal changes: <label id="hrslog" value=""/></hlayout>
+	<rangeslider id="hrs" width="300px" startValue="10" endValue="50" ca:aria-label="range value"
+				 onRangeValueChange='hrslog.setValue(hrslog.getValue() + "[" + hrs.getStartValue() + "," + hrs.getEndValue() + "]")'/>
+	<separator height="30px"/>
+	<hlayout>vertical</hlayout>
+	<rangeslider id="vrs" orient="vertical" height="200px" startValue="10" endValue="50"
+				 ca:aria-label="vertical range value"/>
+	<separator height="30px"/>
+	<hlayout>multislider changes: <label id="mslog" value=""/></hlayout>
+	<multislider id="ms" width="300px" ca:aria-label="range value">
+		<sliderbuttons id="sb" startValue="10" endValue="50"
+					   onRangeValueChange='mslog.setValue(mslog.getValue() + "[" + sb.getStartValue() + "," + sb.getEndValue() + "]")'/>
+	</multislider>
+	<separator height="30px"/>
+	<hlayout>pinned (tooltipVisible)</hlayout>
+	<rangeslider id="pinned" width="300px" startValue="10" endValue="50" tooltipVisible="true"
+				 ca:aria-label="pinned range value"/>
+	<separator height="40px"/>
+	<button id="away" label="park the pointer here"/>
+</zk>

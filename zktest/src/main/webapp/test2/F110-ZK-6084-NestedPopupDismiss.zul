@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-NestedPopupDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for a popup inside a popup.
+
+	Description:
+		An open popup is moved to the end of <body>, so a child popup's DOM is outside its
+		parent's. With za11y, a release inside the child still counts as inside the parent.
+
+	History:
+		Tue Sep 29 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button id="openOuter" label="Outer" popup="outer, position=after_start"/>
+	<popup id="outer">
+		<vlayout>
+			<label value="outer popup"/>
+			<button id="openInner" label="Inner" popup="inner, position=end_before"/>
+			<popup id="inner">
+				<label id="innerContent" value="inner popup, a child of the outer one"/>
+			</popup>
+		</vlayout>
+	</popup>
+	<label multiline="true" style="position: absolute; left: 10px; top: 300px">
+		Click "Outer", then "Inner". Press and hold on an empty part of the page, move onto the inner
+		popup and release there: both popups must stay open.
+	</label>
+</zk>

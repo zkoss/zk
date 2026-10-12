@@ -42,7 +42,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
             <badge count="7" severity="warning">
                 <button iconSclass="z-icon-exclamation" ca:aria-label="Warnings"/>
             </badge>
-            <badge count="2" severity="danger">
+            <badge count="2" severity="error">
                 <button iconSclass="z-icon-times" ca:aria-label="Errors"/>
             </badge>
         </n:section>

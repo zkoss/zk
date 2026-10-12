@@ -289,6 +289,119 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<xs:simpleType name="severityAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="info" />
+					<xs:enumeration value="success" />
+					<xs:enumeration value="warning" />
+					<xs:enumeration value="error" />
+					<xs:enumeration value="neutral" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="confirmpopupPlacementAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="top" />
+					<xs:enumeration value="bottom" />
+					<xs:enumeration value="left" />
+					<xs:enumeration value="right" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="confirmpopupDefaultFocusAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ok" />
+					<xs:enumeration value="cancel" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="carouselEffectAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="slide" />
+					<xs:enumeration value="fade" />
+					<xs:enumeration value="none" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="chipSizeAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="small" />
+					<xs:enumeration value="medium" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="badgePlacementAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="top_right" />
+					<xs:enumeration value="top_left" />
+					<xs:enumeration value="bottom_right" />
+					<xs:enumeration value="bottom_left" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="avatarShapeAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="circle" />
+					<xs:enumeration value="square" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="avatarSizeAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="small" />
+					<xs:enumeration value="medium" />
+					<xs:enumeration value="large" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
 	<xs:simpleType name="crossOriginAttrType">
 		<xs:union>
 			<xs:simpleType>
@@ -516,7 +629,6 @@
 					<xs:enumeration value="Java" />
 					<xs:enumeration value="JavaScript" />
 					<xs:enumeration value="Groovy" />
-					<xs:enumeration value="Ruby" />
 					<xs:enumeration value="Python" />
 				</xs:restriction>
 			</xs:simpleType>
@@ -733,22 +845,28 @@
 			<xs:element ref="audio" />
 			<xs:element ref="video" />
 			<xs:element ref="camera" />
+			<xs:element ref="avatar" />
+			<xs:element ref="avatargroup" />
+			<xs:element ref="badge" />
 			<xs:element ref="bandbox" />
 			<xs:element ref="barcode" />
 			<xs:element ref="barcodescanner" />
 			<xs:element ref="biglistbox" />
 			<xs:element ref="borderlayout" />
 			<xs:element ref="box" />
+			<xs:element ref="breadcrumb" />
 			<xs:element ref="button" />
 			<xs:element ref="calendar" />
 			<xs:element ref="calendars" />
 			<xs:element ref="captcha" />
 			<xs:element ref="cardlayout" />
+			<xs:element ref="carousel" />
 			<xs:element ref="cascader" />
 			<xs:element ref="cell" />
 			<xs:element ref="chart" />
 			<xs:element ref="charts" />
 			<xs:element ref="checkbox" />
+			<xs:element ref="chip" />
 			<xs:element ref="coachmark" />
 			<xs:element ref="choose" />
 			<xs:element ref="chosenbox" />
@@ -758,6 +876,8 @@
 			<xs:element ref="columnlayout" />
 			<xs:element ref="combobox" />
 			<xs:element ref="combobutton" />
+			<xs:element ref="confirmpopup" />
+			<xs:element ref="cropper" />
 			<xs:element ref="datebox" />
 			<xs:element ref="daterangebox" />
 			<xs:element ref="decimalbox" />
@@ -767,10 +887,12 @@
 			<xs:element ref="drawer"/>
 			<xs:element ref="dropupload"/>
 			<xs:element ref="fckeditor" />
+			<xs:element ref="fileupload" />
 			<xs:element ref="fisheyebar" />
 			<xs:element ref="forEach" />
 			<xs:element ref="frozen" />
 			<xs:element ref="gmaps" />
+			<xs:element ref="goldenlayout" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
 			<xs:element ref="hbox" />
@@ -784,6 +906,7 @@
 			<xs:element ref="include" />
 			<xs:element ref="inputgroup" />
 			<xs:element ref="intbox" />
+			<xs:element ref="jasperreport" />
 			<xs:element ref="label" />
 			<xs:element ref="linelayout" />
 			<xs:element ref="lineitem" />
@@ -804,6 +927,7 @@
 			<xs:element ref="radio" />
 			<xs:element ref="radiogroup" />
 			<xs:element ref="rangeslider" />
+			<xs:element ref="rating" />
 			<xs:element ref="rowlayout" />
 			<xs:element ref="span" />
 			<xs:element ref="script" />
@@ -829,6 +953,7 @@
 			<xs:element ref="timepicker" />
 			<xs:element ref="toolbar" />
 			<xs:element ref="toolbarbutton" />
+			<xs:element ref="nodom" />
 			<xs:element ref="tree" />
 			<xs:element ref="vbox" />
 			<xs:element ref="vlayout" />
@@ -849,22 +974,28 @@
 				<xs:element ref="audio" />
 				<xs:element ref="video" />
 				<xs:element ref="camera" />
+				<xs:element ref="avatar" />
+				<xs:element ref="avatargroup" />
+				<xs:element ref="badge" />
 				<xs:element ref="bandbox" />
 				<xs:element ref="barcode" />
 				<xs:element ref="barcodescanner" />
 				<xs:element ref="biglistbox" />
 				<xs:element ref="borderlayout" />
 				<xs:element ref="box" />
+				<xs:element ref="breadcrumb" />
 				<xs:element ref="button" />
 				<xs:element ref="calendar" />
 				<xs:element ref="calendars" />
 				<xs:element ref="captcha" />
 				<xs:element ref="cardlayout" />
+				<xs:element ref="carousel" />
 				<xs:element ref="cascader" />
 				<xs:element ref="cell" />
 				<xs:element ref="chart" />
 				<xs:element ref="charts" />
 				<xs:element ref="checkbox" />
+				<xs:element ref="chip" />
 				<xs:element ref="coachmark" />
 				<xs:element ref="choose" />
 				<xs:element ref="chosenbox" />
@@ -874,6 +1005,8 @@
 				<xs:element ref="columnlayout" />
 				<xs:element ref="combobox" />
 				<xs:element ref="combobutton" />
+				<xs:element ref="confirmpopup" />
+				<xs:element ref="cropper" />
 				<xs:element ref="datebox" />
 				<xs:element ref="daterangebox" />
 				<xs:element ref="decimalbox" />
@@ -883,10 +1016,12 @@
 				<xs:element ref="drawer"/>
 				<xs:element ref="dropupload"/>
 				<xs:element ref="fckeditor" />
+				<xs:element ref="fileupload" />
 				<xs:element ref="fisheyebar" />
 				<xs:element ref="forEach" />
 				<xs:element ref="frozen" />
 				<xs:element ref="gmaps" />
+				<xs:element ref="goldenlayout" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
 				<xs:element ref="hbox" />
@@ -900,6 +1035,7 @@
 				<xs:element ref="include" />
 				<xs:element ref="inputgroup" />
 				<xs:element ref="intbox" />
+				<xs:element ref="jasperreport" />
 				<xs:element ref="label" />
 				<xs:element ref="linelayout" />
 				<xs:element ref="lineitem" />
@@ -920,6 +1056,7 @@
 				<xs:element ref="radio" />
 				<xs:element ref="radiogroup" />
 				<xs:element ref="rangeslider" />
+				<xs:element ref="rating" />
 				<xs:element ref="rowlayout" />
 				<xs:element ref="span" />
 				<xs:element ref="script" />
@@ -937,6 +1074,7 @@
 				<xs:element ref="stepbar" />
 				<xs:element ref="style" />
 				<xs:element ref="tabbox" />
+				<xs:element ref="tablelayout" />
 				<xs:element ref="tbeditor" />
 				<xs:element ref="textbox" />
 				<xs:element ref="timer" />
@@ -1241,7 +1379,7 @@
 			<xs:element ref="west" minOccurs="0" maxOccurs="1" />
 			<xs:element ref="east" minOccurs="0" maxOccurs="1" />
 		</xs:all>
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 		<xs:attribute name="animationDisabled" type="booleanType" use="optional" />
 	</xs:complexType>
@@ -1517,6 +1655,7 @@
 		<xs:attribute name="createMessage" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="emptyMessage" type="xs:string" use="optional" />
+		<xs:attribute name="inputAttributes" type="xs:string" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="noResultsText" type="xs:string" use="optional" />
@@ -1690,13 +1829,14 @@
 		<xs:attribute name="h" type="intType" use="optional" />
 		<xs:attribute name="x" type="intType" use="optional" />
 		<xs:attribute name="y" type="intType" use="optional" />
-		<xs:attribute name="maxHeights" type="intType" use="optional" />
-		<xs:attribute name="maxWidths" type="intType" use="optional" />
-		<xs:attribute name="minHeights" type="intType" use="optional" />
-		<xs:attribute name="minWidths" type="intType" use="optional" />
+		<xs:attribute name="maxHeight" type="intType" use="optional" />
+		<xs:attribute name="maxWidth" type="intType" use="optional" />
+		<xs:attribute name="minHeight" type="intType" use="optional" />
+		<xs:attribute name="minWidth" type="intType" use="optional" />
 		<xs:attribute name="toolbarVisible" type="booleanType" use="optional" />
 		<xs:attribute name="instant" type="booleanType" use="optional" />
 		<xs:attribute name="croppedFormat" type="xs:string" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="crossOrigin" type="crossOriginAttrType" use="optional" />
 		<xs:attribute name="onCrop" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
@@ -1755,7 +1895,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
-		<xs:attribute name="autocomplete" type="xs:string" use="optional" />
+		<xs:attribute name="inputAttributes" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- datebox -->
 	<xs:element name="datebox" type="dateboxType" />
@@ -1900,12 +2040,17 @@
 	<xs:element name="fileupload" type="fileuploadType" />
 	<xs:complexType name="fileuploadType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="label" type="xs:string" use="optional" />
-		<xs:attribute name="native" type="xs:string" use="optional" />
-		<xs:attribute name="number" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+		<xs:attribute name="orient" type="orientAttrType" use="optional" />
+		<xs:attribute name="dir" type="dirAttrType" use="optional" />
+		<xs:attribute name="type" type="buttonTypeAttrType" use="optional" />
+		<xs:attribute name="href" type="xs:string" use="optional" />
+		<xs:attribute name="target" type="xs:string" use="optional" />
+		<xs:attribute name="disabled" type="booleanType" use="optional" />
+		<xs:attribute name="autodisable" type="xs:string" use="optional" />
 		<xs:attribute name="upload" type="xs:string" use="optional" />
 		<xs:attribute name="onUpload" type="xs:string" use="optional" />
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 
 	<!-- fisheye -->
@@ -2913,7 +3058,7 @@
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="cancelable" type="booleanType" use="optional" />
-		<xs:attribute name="symbol" type="xs:string" use="optional" />
+		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
 		<xs:attribute name="onChange" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
@@ -3286,7 +3431,9 @@
 			<xs:group ref="anyGroup"/>
 			<xs:element ref="area"/>
 			<xs:element ref="bandpopup"/>
+			<xs:element ref="breadcrumbitem"/>
 			<xs:element ref="caption"/>
+			<xs:element ref="carouselitem"/>
 			<xs:element ref="center"/>
 			<xs:element ref="columns"/>
 			<xs:element ref="column"/>
@@ -3904,7 +4051,9 @@
 			<xs:group ref="anyGroup" />
 			<xs:element ref="area" />
 			<xs:element ref="bandpopup" />
+			<xs:element ref="breadcrumbitem" />
 			<xs:element ref="caption" />
+			<xs:element ref="carouselitem" />
 			<xs:element ref="center" />
 			<xs:element ref="columns" />
 			<xs:element ref="column" />
@@ -4163,11 +4312,13 @@
 	<xs:complexType name="jasperreportType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="source" type="xs:string" use="optional" />
+		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="parameters" type="xs:string" use="optional" />
 		<xs:attribute name="datasource" type="xs:string" use="optional" />
 		<xs:attribute name="exportName" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="jasperreportTypeAttrType" use="optional" />
+		<xs:attribute name="hibernate" type="booleanType" use="optional" />
+		<xs:attribute name="jasperreporteExporterFactory" type="xs:string" use="optional" />
 	</xs:complexType>
 	<xs:simpleType name="jasperreportTypeAttrType">
 		<xs:union>
@@ -4298,48 +4449,24 @@
 	<!-- confirmpopup -->
 	<xs:element name="confirmpopup" type="confirmpopupType" />
 	<xs:complexType name="confirmpopupType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="header" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 		<xs:attribute name="message" type="xs:string" use="optional" />
 		<xs:attribute name="iconSclass" type="xs:string" use="optional" />
-		<xs:attribute name="severity" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="info"/>
-					<xs:enumeration value="success"/>
-					<xs:enumeration value="warning"/>
-					<xs:enumeration value="danger"/>
-					<xs:enumeration value="secondary"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="placement" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="top"/>
-					<xs:enumeration value="bottom"/>
-					<xs:enumeration value="left"/>
-					<xs:enumeration value="right"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="defaultFocus" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="ok"/>
-					<xs:enumeration value="cancel"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="severity" type="severityAttrType" use="optional" />
+		<xs:attribute name="placement" type="confirmpopupPlacementAttrType" use="optional" />
+		<xs:attribute name="defaultFocus" type="confirmpopupDefaultFocusAttrType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- carousel -->
 	<xs:element name="carousel" type="carouselType" />
 	<xs:complexType name="carouselType">
-		<xs:sequence>
-			<xs:element ref="carouselitem" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="carouselitem" />
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="activeIndex" type="intType" use="optional" />
 		<xs:attribute name="autoplay" type="booleanType" use="optional" />
@@ -4350,48 +4477,24 @@
 		<xs:attribute name="pause" type="booleanType" use="optional" />
 		<xs:attribute name="keyboard" type="booleanType" use="optional" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
-		<xs:attribute name="effect" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="slide"/>
-					<xs:enumeration value="fade"/>
-					<xs:enumeration value="none"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="effect" type="carouselEffectAttrType" use="optional" />
 		<xs:attribute name="onSelect" type="xs:string" use="optional" />
 		<xs:attribute name="onChanging" type="xs:string" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<xs:element name="carouselitem" type="carouselitemType" />
 	<xs:complexType name="carouselitemType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- chip -->
 	<xs:element name="chip" type="chipType" />
 	<xs:complexType name="chipType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
-		<xs:attribute name="severity" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="info"/>
-					<xs:enumeration value="success"/>
-					<xs:enumeration value="warning"/>
-					<xs:enumeration value="danger"/>
-					<xs:enumeration value="secondary"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="size" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="small"/>
-					<xs:enumeration value="medium"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="severity" type="severityAttrType" use="optional" />
+		<xs:attribute name="size" type="chipSizeAttrType" use="optional" />
 		<xs:attribute name="rounded" type="booleanType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
@@ -4401,9 +4504,10 @@
 	<!-- breadcrumb -->
 	<xs:element name="breadcrumb" type="breadcrumbType" />
 	<xs:complexType name="breadcrumbType">
-		<xs:sequence>
-			<xs:element ref="breadcrumbitem" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="breadcrumbitem" />
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="separator" type="xs:string" use="optional" />
 		<xs:attribute name="maxItems" type="intType" use="optional" />
@@ -4411,6 +4515,7 @@
 	</xs:complexType>
 	<xs:element name="breadcrumbitem" type="breadcrumbitemType" />
 	<xs:complexType name="breadcrumbitemType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="href" type="xs:string" use="optional" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
@@ -4420,85 +4525,38 @@
 	<!-- badge -->
 	<xs:element name="badge" type="badgeType" />
 	<xs:complexType name="badgeType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="count" type="intType" use="optional" />
 		<xs:attribute name="max" type="intType" use="optional" />
 		<xs:attribute name="showZero" type="booleanType" use="optional" />
 		<xs:attribute name="dot" type="booleanType" use="optional" />
-		<xs:attribute name="severity" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="info"/>
-					<xs:enumeration value="success"/>
-					<xs:enumeration value="warning"/>
-					<xs:enumeration value="danger"/>
-					<xs:enumeration value="secondary"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="placement" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="top_right"/>
-					<xs:enumeration value="top_left"/>
-					<xs:enumeration value="bottom_right"/>
-					<xs:enumeration value="bottom_left"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="severity" type="severityAttrType" use="optional" />
+		<xs:attribute name="placement" type="badgePlacementAttrType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- avatar -->
 	<xs:element name="avatar" type="avatarType" />
 	<xs:complexType name="avatarType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
-		<xs:attribute name="shape" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="circle"/>
-					<xs:enumeration value="square"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="size" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="small"/>
-					<xs:enumeration value="medium"/>
-					<xs:enumeration value="large"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="shape" type="avatarShapeAttrType" use="optional" />
+		<xs:attribute name="size" type="avatarSizeAttrType" use="optional" />
 		<xs:attribute name="gap" type="intType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- avatargroup -->
 	<xs:element name="avatargroup" type="avatargroupType" />
 	<xs:complexType name="avatargroupType">
-		<xs:sequence>
-			<xs:element ref="avatar" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="avatar" />
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="maxCount" type="intType" use="optional" />
-		<xs:attribute name="size" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="small"/>
-					<xs:enumeration value="medium"/>
-					<xs:enumeration value="large"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="shape" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="circle"/>
-					<xs:enumeration value="square"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="maxItems" type="intType" use="optional" />
+		<xs:attribute name="size" type="avatarSizeAttrType" use="optional" />
+		<xs:attribute name="shape" type="avatarShapeAttrType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 </xs:schema>

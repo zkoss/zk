@@ -150,8 +150,8 @@ export class Badge extends zul.Widget {
 	getSeverity(): string { return this._severity; }
 	/**
 	 * Sets the severity (color theme). null restores the default (`info`).
-	 * @param severity - one of "info", "success", "warning", "danger" or
-	 * "secondary".
+	 * @param severity - one of "info", "success", "warning", "error" or
+	 * "neutral".
 	 */
 	setSeverity(severity: string, opts?: Record<string, boolean>): this {
 		if (severity == null) severity = 'info';

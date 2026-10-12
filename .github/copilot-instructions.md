@@ -27,7 +27,7 @@ To update version:
 
 ## Tech Stack
 - **Frontend:** TypeScript 5.3.3 + JavaScript, Gulp 5 + Webpack 5
-- **Backend:** Java 11, Gradle
+- **Backend:** Java 17, Gradle
 - **CI:** GitHub Actions (`.github/workflows/`)
 
 ## Build Commands

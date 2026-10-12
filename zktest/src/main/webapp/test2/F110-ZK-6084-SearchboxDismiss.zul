@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-SearchboxDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for Searchbox.
+
+	Description:
+		Closing the list commits the item picked in it. With za11y, an outside press closes it only
+		on release, and a release back on the list keeps it open.
+
+	History:
+		Tue Sep 29 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>org.zkoss.zul.ListModelList model = new org.zkoss.zul.ListModelList(new String[] {"Apple", "Banana", "Cherry"});</zscript>
+	<searchbox id="sb" model="${model}" onSelect='events.setValue(events.getValue() + "S")'/>
+	<hlayout>events: <label id="events"/></hlayout>
+	<label multiline="true" style="position: absolute; left: 10px; top: 320px">
+		Open the list and click an item. Press and hold on an empty part of the page: the list must stay open and
+		"events" empty until you release. Releasing there closes it and commits the pick (S).
+	</label>
+</zk>

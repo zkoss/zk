@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * A border layout is a layout container for arranging and resizing
@@ -76,7 +76,7 @@ import org.zkoss.zk.ui.UiException;
  * @author jumperchen
  * @since 5.0.0
  */
-public class Borderlayout extends HtmlBasedComponent {
+public class Borderlayout extends XulElement {
 	private static final Logger log = LoggerFactory.getLogger(Borderlayout.class);
 
 	/**

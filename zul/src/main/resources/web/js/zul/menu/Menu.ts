@@ -302,7 +302,9 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 
 	/** @internal */
 	override focus_(timeout?: number, ignoreActive?: boolean/* used for Menupopup.js*/): boolean {
-		if (this.isTopmost() && zk(this.getAnchor_()).focus(timeout)) {
+		// No isTopmost() gate, as in Menuitem: the root <li> is role="none" with no tabindex,
+		// so the Widget.focus_ fallback cannot focus a submenu row.
+		if (zk(this.getAnchor_()).focus(timeout)) {
 			// fixed for pressing TAB key from menupopup when the menupopup
 			// is the last one, in IE it will delay to show the active effect.
 			// We have to use the ignoreActive to avoid adding the active effect
@@ -399,6 +401,13 @@ export class Menu extends zul.LabelImageWidget implements zul.LabelImageWidgetWi
 			}
 		}
 		super.doKeyDown_(evt);
+	}
+
+	/** @internal */
+	override afterKeyDown_(evt: zk.Event, simulated?: boolean): boolean {
+		// ZK-5805, as in Menuitem: the arrows must reach the menupopup rather than be consumed
+		// as an ancestor's CtrlKey.
+		return evt.keyCode >= 37 && evt.keyCode <= 40 ? false : super.afterKeyDown_(evt, simulated);
 	}
 
 	/** @internal */

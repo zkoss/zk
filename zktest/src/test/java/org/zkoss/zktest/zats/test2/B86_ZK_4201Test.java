@@ -30,7 +30,7 @@ public class B86_ZK_4201Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad Mini"));
 	}
 	
 	@Test

@@ -11,19 +11,36 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.wcag;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.deque.html.axecore.args.AxeRuleOptions;
+import com.deque.html.axecore.args.AxeRunOnlyOptions;
+import com.deque.html.axecore.args.AxeRunOptions;
+import com.deque.html.axecore.results.Results;
+import com.deque.html.axecore.selenium.AxeBuilder;
+import com.deque.html.axecore.selenium.AxeReporter;
 import org.junit.jupiter.api.Assertions;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import org.zkoss.json.JSONObject;
-import org.zkoss.json.parser.JSONParser;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 /**
- * A basic test case class for accessibility
+ * A basic test case class for accessibility.
  * @author rudyhuang
  */
 public abstract class WcagTestCase extends WebDriverTestCase {
+
+	/** WCAG A + AA rule tags across 2.0 / 2.1 — the conformance set. */
+	private static final List<String> WCAG_AA_TAGS =
+			Arrays.asList("wcag2a", "wcag2aa", "wcag21a", "wcag21aa");
+
+	/**
+	 * WCAG 2.1 rules that axe ships as {@code experimental}: 1.3.4 Orientation and 2.5.3 Label in Name.
+	 */
+	private static final List<String> EXPERIMENTAL_WCAG21_RULES =
+			Arrays.asList("css-orientation-lock", "label-content-name-mismatch");
 
 	@Override
 	protected String getFileLocation() {
@@ -38,33 +55,50 @@ public abstract class WcagTestCase extends WebDriverTestCase {
 	 * If there is any issue, test will fail.
 	 */
 	protected void verifyA11y() {
-		try {
-			String url = getAddress() + getFileLocation(), failmsg = "", data = "", line = "";
-			boolean pass = true;
-			int count = 1;
+		verifyAxe("color-contrast");
+	}
 
-			// get whole lighthouse a11y results
-			Process process = Runtime.getRuntime().exec("lighthouse " + url + " --output=json --chrome-flags=\"--headless\" --only-categories=\"accessibility\"");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			while ((line = reader.readLine()) != null) data += line;
-			JSONParser parser = new JSONParser();
-			JSONObject audits = (JSONObject)((JSONObject) parser.parse(data)).get("audits");
+	/**
+	 * As {@link #verifyA11y()} but gates on every rule, {@code color-contrast} included — for runs
+	 * under a WCAG theme.
+	 */
+	protected void verifyAxe() {
+		verifyAxe(new String[0]);
+	}
 
-			// check results
-			for (Object key : audits.keySet()) {
-				JSONObject audit = (JSONObject)audits.get((String)key);
-				// Disable color-contrast because it only passes when using wcag theme, general theme does not need to pass
-				if (String.valueOf(audit.get("score")).equals("0") && !String.valueOf(audit.get("id")).equals("color-contrast")) {
-					pass = false;
-					failmsg += "\n================== " + (count++) + " ==================\n"
-							+ ">>> id : " + audit.get("id") + "\n"
-							+ ">>> title : " + audit.get("title") + "\n"
-							+ ">>> description : " + audit.get("description") + "\n";
-				}
-			}
-			if (!pass) Assertions.fail(failmsg);
-		} catch (IOException e) {
-			Assertions.fail("\n================== Exception ==================\n" + e.getMessage() + "\n");
+	/**
+	 * Runs an axe-core WCAG A/AA scan on the page <b>in its current state</b> and fails on any
+	 * violation. Because it scans the live Selenium session, call it <b>after</b> driving the
+	 * component into the state under test (open the popup, expand the tree, select a row…), not
+	 * just after {@code connect()}.
+	 *
+	 * @param disabledRules axe rule ids to skip (may be empty)
+	 */
+	protected void verifyAxe(String... disabledRules) {
+		AxeRunOnlyOptions runOnly = new AxeRunOnlyOptions();
+		runOnly.setType("tag");
+		runOnly.setValues(new ArrayList<>(WCAG_AA_TAGS));
+
+		Map<String, AxeRuleOptions> rules = new HashMap<>();
+		for (String rule : EXPERIMENTAL_WCAG21_RULES)
+			rules.put(rule, ruleOption(true));
+		for (String rule : disabledRules)
+			rules.put(rule, ruleOption(false));
+
+		AxeRunOptions options = new AxeRunOptions();
+		options.setRunOnly(runOnly);
+		options.setRules(rules);
+
+		Results results = new AxeBuilder().withOptions(options).analyze(getWebDriver());
+		if (!results.violationFree()) {
+			AxeReporter.getReadableAxeResults("WCAG", getWebDriver(), results.getViolations());
+			Assertions.fail(AxeReporter.getAxeResultString());
 		}
+	}
+
+	private static AxeRuleOptions ruleOption(boolean enabled) {
+		AxeRuleOptions option = new AxeRuleOptions();
+		option.setEnabled(enabled);
+		return option;
 	}
 }

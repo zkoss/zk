@@ -153,7 +153,9 @@ public class BeanELResolver extends ELResolver {
 				for (Method method : ReflectionUtil.getSetter(baseClass, property.toString())) {
 					Class<?>[] clazzes = method.getParameterTypes();
 					if (ClassUtil.isInstance(value, clazzes[0])) {
-						m = method;
+						// ZK-6167: getSetter returns raw getMethods() entries, so invoke the counterpart this resolver can reach
+						final Method accessible = Util.getMethod(baseClass, method);
+						m = accessible != null ? accessible : method;
 						break;
 					}
 				}

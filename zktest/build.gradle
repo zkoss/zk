@@ -15,10 +15,20 @@ war {
 
 // TODO: don't use gretty since gretty not supporting jetty 10.0.5 and gretty 4.0.0 only support jetty11+
 
-java.sourceCompatibility = JavaVersion.VERSION_11
 tasks.withType(JavaCompile) {
+	options.release = 17
 	options.encoding = 'UTF-8'
 	options.warnings = false
+}
+
+// ZK-6167: -PtestJavaHome=<JDK home> runs the tests on that JDK, e.g. the current LTS
+def forwardedSystemProperties = System.getProperties()
+if (project.hasProperty('testJavaHome')) {
+	tasks.withType(Test).configureEach {
+		executable = "${project.testJavaHome}/bin/java"
+	}
+	// ZK-6167: forward the -D arguments such as -Dtags, but not the Gradle JVM's own java.home and the like, which break a test JVM of another JDK
+	forwardedSystemProperties = forwardedSystemProperties.findAll { k, v -> !(k ==~ /(java|jdk|sun|os|file|path|line|native|stdout|stderr|awt)\..*/) } + project.gradle.startParameter.systemPropertiesArgs
 }
 
 repositories {
@@ -38,14 +48,6 @@ repositories {
 
 	maven {
 		url = uri('https://repo.maven.apache.org/maven2/')
-	}
-
-	maven {
-		url = uri('https://maven.nuxeo.org/nexus/content/groups/public/')
-	}
-
-	maven {
-		url = uri('https://maven.java.net/content/groups/public/')
 	}
 
 	maven {
@@ -117,13 +119,13 @@ dependencies {
 	implementation 'org.jboss.weld.servlet:weld-servlet-core:3.1.9.Final'
 
 	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
-	runtimeOnly 'org.apache.groovy:groovy:5.0.0-alpha-1'
+	runtimeOnly 'org.apache.groovy:groovy:5.0.8'
 	runtimeOnly 'org.mozilla:rhino:1.8.1'
-//	testImplementation 'org.jruby:jruby-core:1.7.27'
 	runtimeOnly 'org.python:jython-slim:2.7.4'
+	runtimeOnly 'org.mvel:mvel14:1.2.21'
 	testImplementation 'org.zkoss.zats:zats-mimic-ext:10.1.0-FL-2024082716'
 	testImplementation 'net.jcip:jcip-annotations:1.0'
-	testImplementation 'com.deque.html.axe-core:selenium:4.7.0'
+	testImplementation 'com.deque.html.axe-core:selenium:4.13.0'
 	testImplementation 'org.springframework.session:spring-session-core:2.1.6.RELEASE'
 	testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
 	testImplementation "org.mockito:mockito-inline:4.7.0"
@@ -132,7 +134,7 @@ dependencies {
 	testImplementation 'org.eclipse.jetty:apache-jsp:10.0.11'
 	testImplementation 'org.junit.platform:junit-platform-launcher:1.9.0'
 	testImplementation 'xml-apis:xml-apis:1.4.01'
-	testImplementation 'org.zkoss.test:zk-webdriver:1.4.43.0.0'
+	testImplementation 'org.zkoss.test:zk-webdriver:1.4.43.0.2'
 
 	testImplementation "org.seleniumhq.selenium:selenium-java:4.43.0"
 	testImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
@@ -181,7 +183,7 @@ task testGroupForkJVMTestOnly(type: Test) {
 
 	// a way to pass -Dtags=...
 	options {
-		systemProperties(System.getProperties())
+		systemProperties(forwardedSystemProperties)
 	}
 
 	// for Jenkins' info
@@ -190,12 +192,7 @@ task testGroupForkJVMTestOnly(type: Test) {
 	}
 }
 
-task npmInstallLighthouse(type: Exec) {
-	outputs.dir("${project.buildDir}/lighthouse/")
-	commandLine 'npm', 'install', '-g', 'lighthouse@12.2.0'
-}
 task testWCAGOnly(type: Test) {
-	dependsOn npmInstallLighthouse
 	forkEvery = 1 // a new test process is started for every test class
 	maxParallelForks = 1 // default 1 process, because it will hang in Jenkins
 	if (project.hasProperty('maxParallelForks'))
@@ -208,7 +205,7 @@ task testWCAGOnly(type: Test) {
 
 	// a way to pass -Dtags=...
 	options {
-		systemProperties(System.getProperties())
+		systemProperties(forwardedSystemProperties)
 	}
 
 	useJUnitPlatform();
@@ -272,7 +269,7 @@ test {
 
 	// a way to pass -Dtags=...
 	options {
-		systemProperties(System.getProperties())
+		systemProperties(forwardedSystemProperties)
 	}
 
 	// for Jenkins' info

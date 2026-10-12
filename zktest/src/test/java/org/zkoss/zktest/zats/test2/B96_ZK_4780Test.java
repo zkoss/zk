@@ -35,7 +35,7 @@ public class B96_ZK_4780Test extends DockerWebDriverTestCase {
 		return super.getWebDriverOptions()
 				.addArguments("--lang=de-DE")
 				.setExperimentalOption("prefs", Collections.singletonMap("intl.accept_languages", "de-DE"))
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad Mini"));
 	}
 
 	@Test

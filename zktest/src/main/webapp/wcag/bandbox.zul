@@ -36,6 +36,12 @@ Copyright (C) 2020 Potix Corporation. All Rights Reserved.
 				hello!
 			</bandpopup>
 		</bandbox>
+		<!-- WCAG 1.3.5 Identify Input Purpose: token lands on the input via inputAttributes -->
+		<bandbox ca:aria-label="Street address" inputAttributes="autocomplete=street-address">
+			<bandpopup ca:aria-label="address popup">
+				<textbox ca:aria-label="address line"/>
+			</bandpopup>
+		</bandbox>
 		<separator/>
 		<label value="Recursice labelledby test" id="target"/>
 		<bandbox ca:aria-labelledby="${target.uuid}"/>

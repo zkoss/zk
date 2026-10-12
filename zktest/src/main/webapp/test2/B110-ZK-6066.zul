@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6066.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Sep 08 17:55:23 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<window title="Checkbox mold a11y attributes" border="normal" width="760px">
+		<vlayout spacing="10px" style="padding: 12px;">
+			<label multiline="true">
+				1. run this page with the za11y (WCAG) module
+				2. inspect the mold element of the switch checkbox
+				3. role, aria-checked and aria-disabled must not be wrapped in extra double quotes
+			</label>
+			<separator />
+			<hlayout spacing="8px">
+				<label value="ZK Checkbox:" />
+				<checkbox id="cbA11y" label="Receive notifications" />
+			</hlayout>
+			<hlayout spacing="8px">
+				<label value="ZK Checkbox (switch mold):" />
+				<checkbox mold="switch" label="Receive notifications" />
+			</hlayout>
+		</vlayout>
+	</window>
+</zk>

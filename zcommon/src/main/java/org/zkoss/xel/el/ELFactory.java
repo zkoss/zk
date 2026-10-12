@@ -41,7 +41,8 @@ public class ELFactory implements ExpressionFactory {
 	private final ExpressionEvaluatorImpl _eval;
 
 	public ELFactory() {
-		_eval = new ExpressionEvaluatorImpl();
+		// ZK-6167: of the published zcommons-el versions only 1.1.0 is _v103, the parse tree ExportedExpressionEvaluator is written against
+		_eval = _v103 ? new ExportedExpressionEvaluator() : new ExpressionEvaluatorImpl();
 	}
 
 	//ExpressionFactory//

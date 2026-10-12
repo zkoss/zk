@@ -16,12 +16,12 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	<vlayout spacing="10px" style="padding:16px;">
 		<!-- Severity variants -->
 		<hlayout spacing="10px">
-			<chip id="chip-default"   label="DEF"/>
-			<chip id="chip-info"      label="INFO"      severity="info"/>
-			<chip id="chip-success"   label="SUCCESS"   severity="success"/>
-			<chip id="chip-warning"   label="WARNING"   severity="warning"/>
-			<chip id="chip-danger"    label="DANGER"    severity="danger"/>
-			<chip id="chip-secondary" label="SEC"       severity="secondary"/>
+			<chip id="chip-default" label="DEF"/>
+			<chip id="chip-info"    label="INFO"    severity="info"/>
+			<chip id="chip-success" label="SUCCESS" severity="success"/>
+			<chip id="chip-warning" label="WARNING" severity="warning"/>
+			<chip id="chip-error"   label="ERROR"   severity="error"/>
+			<chip id="chip-neutral" label="NEUTRAL" severity="neutral"/>
 		</hlayout>
 
 		<!-- Modifiers -->

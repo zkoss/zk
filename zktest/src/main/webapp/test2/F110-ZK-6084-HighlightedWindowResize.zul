@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-HighlightedWindowResize.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Oct 06 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+	click "show", then make the browser narrower. if the window moves to stay centered horizontally and stays near the top, it's correct.
+	</label>
+	<button label="show" onClick="win.doHighlighted()"/>
+	<window id="win" title="highlighted" border="normal" width="300px" visible="false">
+		no position is set, so ZK places this window
+	</window>
+</zk>

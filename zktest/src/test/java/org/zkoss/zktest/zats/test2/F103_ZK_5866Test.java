@@ -37,7 +37,8 @@ public class F103_ZK_5866Test extends WebDriverTestCase {
         sendKeys(inp, "ka");
         waitResponse();
         options = jq(".z-chosenbox-option");
-        Assertions.assertEquals(6, getVisibleCount(options));
+        // ZK-6167: since JDK 17, Locale.getAvailableLocales() also lists script variants (e.g. kk_KZ_#Cyrl, ar_EG_#Arab)
+        Assertions.assertEquals(9, getVisibleCount(options));
         type(inp, "");
         waitResponse();
 
@@ -76,7 +77,8 @@ public class F103_ZK_5866Test extends WebDriverTestCase {
         sendKeys(inp, "ka");
         waitResponse();
         options = jq(".z-chosenbox-option");
-        Assertions.assertEquals(6, getVisibleCount(options));
+        // ZK-6167: since JDK 17, Locale.getAvailableLocales() also lists script variants (e.g. kk_KZ_#Cyrl, ar_EG_#Arab)
+        Assertions.assertEquals(9, getVisibleCount(options));
         type(inp, "");
         waitResponse();
 

@@ -28,7 +28,7 @@ public class F110_ZK_6065MobileTest extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad"));
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "iPad Mini"));
 	}
 
 	@Test

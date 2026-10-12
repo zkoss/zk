@@ -42,9 +42,9 @@ public class B65_ZK_1739_Composer extends GenericForwardComposer<Window> {
 	public void onClick$start() {
 		thread.start();
 	}
-	@SuppressWarnings("deprecation")
 	public void onClick$toggle() {
-		thread.stop();
+		// ZK-6167: Thread.stop() throws UnsupportedOperationException on JDK 20+
+		thread.stopUpdates();
 	}
 	
 	private void fillTree(Tree myTree, DefaultTreeModel<TestObject> mymodel, String treeName) {
@@ -102,9 +102,14 @@ public class B65_ZK_1739_Composer extends GenericForwardComposer<Window> {
 		DefaultTreeModel<TestObject> mymodelA;
 
 		private volatile boolean updating = true;
+		private volatile boolean stopped;
 		
 		public void toggleUpdates() {
 			updating = !updating;
+		}
+		
+		public void stopUpdates() {
+			stopped = true;
 		}
 		
 		public TestThread(Tree tree, DefaultTreeModel<TestObject> model) {
@@ -115,7 +120,7 @@ public class B65_ZK_1739_Composer extends GenericForwardComposer<Window> {
 		
 	    public void run() {
 	    	boolean disconnect=false;
-	    	while (!disconnect) {
+	    	while (!disconnect && !stopped) {
 	            try {
 	            	if(updating) {
 	            		if (desktop == null || !desktop.isAlive() || !desktop.isServerPushEnabled()) {

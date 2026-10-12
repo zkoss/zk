@@ -122,7 +122,7 @@ public class Classes {
 				continue; //not found; next
 
 			if (Modifier.isPublic(ms[j].getDeclaringClass().getModifiers()))
-				return ms[j]; //found
+				return toExported(cls, ms[j]); //found
 			try {
 				return getMethodInPublic(
 					cls, ms[j].getName(), ms[j].getParameterTypes());
@@ -742,11 +742,20 @@ public class Classes {
 	 * <p>This method will search all its public classes to look for
 	 * the method that is 'real' public.
 	 *
-	 * <p>NoSuchMethodException is thrown if no public 
+	 * <p>If the public class found is in a package that its module does not
+	 * export, such as {@code sun.util.calendar}, the same method declared by a
+	 * public supertype in an exported package is returned instead, if any.
+	 *
+	 * <p>NoSuchMethodException is thrown if no public
 	 * class/interface is found to have the method.
 	 */
 	public static final Method
 	getMethodInPublic(Class<?> cls, String name, Class<?>[] argTypes)
+	throws NoSuchMethodException {
+		return toExported(cls, getPublicMethod(cls, name, argTypes));
+	}
+	private static Method
+	getPublicMethod(Class<?> cls, String name, Class<?>[] argTypes)
 	throws NoSuchMethodException {
 		final Method m = cls.getMethod(name, argTypes);
 		if (Modifier.isPublic(m.getDeclaringClass().getModifiers()))
@@ -755,18 +764,49 @@ public class Classes {
 		final Class<?>[] clses = cls.getInterfaces();
 		for (int j = 0; j< clses.length; ++j)
 			try {
-				return getMethodInPublic(clses[j], name, argTypes);
+				return getPublicMethod(clses[j], name, argTypes);
 			} catch (NoSuchMethodException ex) { //ignore it
 			}
 
 		final Class<?> basecls = cls.getSuperclass();
 		if (basecls != null)
 			try {
-				return getMethodInPublic(basecls, name, argTypes);
+				return getPublicMethod(basecls, name, argTypes);
 			} catch (NoSuchMethodException ex) { //ignore it
 			}
 
 		throw newNoSuchMethodException(cls, name, argTypes);
+	}
+	private static Method toExported(Class<?> cls, Method m) {
+		// ZK-6167: JDK 17 refuses a package its module does not export; keep m when no exported supertype overrides it
+		if (Modifier.isStatic(m.getModifiers()) || isExported(m.getDeclaringClass()))
+			return m;
+		final Method mp = getExportedMethod(cls, m);
+		return mp != null ? mp : m;
+	}
+	private static Method getExportedMethod(Class<?> cls, Method m) {
+		if (isAccessible(cls)) {
+			try {
+				final Method mp = cls.getMethod(m.getName(), m.getParameterTypes());
+				if (!Modifier.isStatic(mp.getModifiers()) && isAccessible(mp.getDeclaringClass()))
+					return mp;
+			} catch (NoSuchMethodException ex) {
+				return null;
+			}
+		}
+		for (Class<?> c : cls.getInterfaces()) {
+			final Method mp = getExportedMethod(c, m);
+			if (mp != null)
+				return mp;
+		}
+		final Class<?> basecls = cls.getSuperclass();
+		return basecls != null ? getExportedMethod(basecls, m) : null;
+	}
+	private static boolean isAccessible(Class<?> cls) {
+		return Modifier.isPublic(cls.getModifiers()) && isExported(cls);
+	}
+	private static boolean isExported(Class<?> cls) {
+		return cls.getModule().isExported(cls.getPackageName(), Classes.class.getModule());
 	}
 	private static NoSuchMethodException newNoSuchMethodException(Class cls,
 	String name, Object[] args) {
@@ -904,7 +944,7 @@ public class Classes {
 			for (int k = 0;; ++k) {
 				if (k == argTypes.length) { //all matched
 					if (bPublic)
-						return ms[j];
+						return toExported(cls, ms[j]);
 					try {
 						return getMethodInPublic(
 							cls, ms[j].getName(), ms[j].getParameterTypes());
@@ -974,7 +1014,7 @@ public class Classes {
 			for (int k = 0;; ++k) {
 				if (k == argTypes.length) { //all matched
 					if (bPublic) {
-						mtds.add(ms[j]);
+						mtds.add(toExported(cls, ms[j]));
 					} else {
 						try {
 							mtds.add(getMethodInPublic(

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-ImageReflow.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Sep 18 20:00:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:h1>Image capped to its container</n:h1>
+    <label multiline="true">
+        An image is capped to its container, so it shrinks to fit.
+    </label>
+    <image id="earth" src="/img/earth.png" ca:alt="The earth, 326px wide"/>
+    <image id="castle" src="/img/castle.png" ca:alt="A castle, 433px wide"/>
+</zk>
