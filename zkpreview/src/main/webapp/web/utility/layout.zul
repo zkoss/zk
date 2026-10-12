@@ -236,7 +236,7 @@
 
     <!-- Align Items -->
     <div sclass="z-paper">
-        <label value="Align Items  (.z-align-*)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <label value="Align Items  (.z-items-*)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
         <div sclass="z-d-flex z-gap-4 z-flex-wrap">
             <div>
                 <div class="z-bg-surface-container-low z-rounded z-p-3 z-border z-d-flex z-items-start z-gap-2" style="height:80px">
@@ -348,7 +348,7 @@
 
     <!-- Gap -->
     <div sclass="z-paper">
-        <label value="Gap  (.z-gap-* / .z-col-gap-* / .z-row-gap-*)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <label value="Gap  (.z-gap-* / .z-gap-x-* / .z-gap-y-*)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
         <div sclass="z-d-flex z-gap-6 z-flex-wrap">
             <div>
                 <div class="z-bg-surface-container-low z-rounded z-p-3 z-border z-d-flex z-gap-0">
