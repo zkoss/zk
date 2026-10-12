@@ -16,6 +16,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
+import java.util.Locale;
+
 import org.zkoss.mesg.Messages;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -65,7 +67,11 @@ public class MessageboxDlg extends Window {
 		return false;
 	}
 
-	/** Sets what buttons are allowed. */
+	/** Sets what buttons are allowed.
+	 * Each button created here carries the template's {@code button.sclass} plus
+	 * {@code z-messagebox-button-<kind>}, the lower-cased {@link Messagebox.Button} name,
+	 * e.g. {@code z-messagebox-button-cancel} (since 11.0.0).
+	 */
 	public void setButtons(Messagebox.Button[] buttons, String[] btnLabels) {
 		_buttons = buttons;
 
@@ -78,6 +84,7 @@ public class MessageboxDlg extends Window {
 				final Button mbtn = new Button();
 				mbtn.setButton(_buttons[j], btnLabels != null && j < btnLabels.length ? btnLabels[j] : null);
 				mbtn.setSclass(sclass);
+				mbtn.addSclass("z-messagebox-button-" + _buttons[j].name().toLowerCase(Locale.ROOT));
 				mbtn.setAutodisable("self");
 				parent.appendChild(mbtn);
 			}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6187.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Oct 12 18:26:44 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		Steps to reproduce:
+		1. Click each button below and inspect the buttons in .z-messagebox-buttons.
+
+		- Expected: every button keeps "z-messagebox-button z-button" and also carries the class
+			of its kind: z-messagebox-button-ok, -cancel, -yes, -no, -abort, -retry, -ignore.
+		- Bug: every button has only "z-messagebox-button z-button", so a theme cannot style
+			Cancel / No differently from OK.
+		- With custom labels (Save / Discard) the class still names the button's kind (ok / cancel).
+
+		2. Click each button in the second row; jq.alert builds these messageboxes in the browser.
+
+		- Expected: every button keeps "z-button" (no z-messagebox-button) and also carries
+			z-messagebox-button- plus its key in lower case: -ok ... -ignore, -reload.
+			A custom key (Don't save / Save as) gets no kind class; Cancel beside it still gets -cancel.
+			The default button of Clients.alert is -ok and keeps its localized label (Tamam).
+		- Bug: every button has only "z-button".
+	</label>
+	<hlayout>
+		<button id="okCancel" label="OK | CANCEL"
+				onClick='Messagebox.show("Proceed?", "ZK-6187", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION)'/>
+		<button id="yesNoCancel" label="CANCEL | YES | NO"
+				onClick='Messagebox.show("Save changes?", "ZK-6187", Messagebox.CANCEL | Messagebox.YES | Messagebox.NO, Messagebox.QUESTION)'/>
+		<button id="abortRetryIgnore" label="ABORT | RETRY | IGNORE"
+				onClick='Messagebox.show("Disk error.", "ZK-6187", Messagebox.ABORT | Messagebox.RETRY | Messagebox.IGNORE, Messagebox.ERROR)'/>
+		<button id="customLabels" label="OK | CANCEL labelled Save | Discard"
+				onClick='Messagebox.show("Save changes?", "ZK-6187", new Messagebox.Button[] {Messagebox.Button.OK, Messagebox.Button.CANCEL}, new String[] {"Save", "Discard"}, Messagebox.QUESTION, null, null)'/>
+	</hlayout>
+	<hlayout>
+		<button id="alertKinds" label="jq.alert OK | CANCEL | YES | NO | RETRY | ABORT | IGNORE"
+				w:onClick="jq.alert('Pick one.', {button: {OK: true, CANCEL: true, YES: true, NO: true, RETRY: true, ABORT: true, IGNORE: true}})"/>
+		<button id="alertReload" label="jq.alert Reload | Cancel"
+				w:onClick="jq.alert('Session expired.', {icon: 'ERROR', button: {Reload: function () {}, Cancel: true}})"/>
+		<button id="alertCustomKey" label="jq.alert Don't save | 'Save as' | Cancel"
+				w:onClick="jq.alert('Save changes?', {button: {'Don\'t save': true, 'Save as': true, Cancel: true}})"/>
+		<button id="clientsAlert" label="Clients.alert, OK localized as Tamam"
+				w:onClick="msgzul.OK = 'Tamam'" onClick='Clients.alert("Saved.")'/>
+	</hlayout>
+</zk>
