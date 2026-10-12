@@ -1115,7 +1115,7 @@ test.describe('tablet-isolation', () => {
 
 // -------------------------------------------------------
 // Viewport-fill guard — the `100vh` footgun
-// The base reset must use `body { min-height: 100% }`, NOT `100vh`. `100vh` is
+// The base reset must use `body { height: 100% }`, NOT `100vh`. `100vh` is
 // blind to scrollbars: when any wide content triggers a horizontal scrollbar,
 // a `100vh` body exceeds the now-shorter visible area and spawns a SPURIOUS
 // vertical scrollbar on a page whose content fits. We force the horizontal
@@ -1140,7 +1140,9 @@ test.describe('viewport-fill', () => {
       const d = document.documentElement;
       const pageEl = document.querySelector('.z-page') as HTMLElement;
       return {
-        contentBottom: Math.round(pageEl.getBoundingClientRect().bottom),
+        // .z-page itself is viewport-tall (inline height:100% against body's height:100%),
+        // so measure the real content through its children.
+        contentBottom: Math.round(Math.max(...[...pageEl.children].map(c => c.getBoundingClientRect().bottom))),
         innerH: window.innerHeight,
         hScroll: d.scrollWidth > d.clientWidth,
         vScroll: d.scrollHeight > d.clientHeight,
@@ -1160,7 +1162,7 @@ test.describe('viewport-fill', () => {
   // (mount.ts `_docMouseDown`, a "not a scrollbar click" guard). So `body` MUST
   // fill the viewport height; if it collapses to content height, clicks below
   // the content are silently swallowed and open popups never close. This guards
-  // the regression where `body { min-height: 100% }` failed to resolve (its
+  // the regression where `body { height: 100% }` failed to resolve (its
   // containing block <html> had no definite height) and body shrank to content.
   test('colorbox popup dismisses on a click in the empty area below content', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });

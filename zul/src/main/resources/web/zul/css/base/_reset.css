@@ -19,9 +19,9 @@
    dropped so ZK never restyles the host page's <html>/<body>, and the remaining rules are
    confined to the ZK subtree via @scope (.z-page). See doc/spec/reset-scoping.md. */
 html {
-    /* DEFINITE height (not min-height) so that body's `min-height: 100%` below
-       has a resolvable containing-block height. A percentage min-height computes
-       to 0 when its containing block's height is indefinite — so `html`
+    /* DEFINITE height (not min-height) so that body's `height: 100%` below
+       has a resolvable containing-block height. A percentage height computes
+       to auto when its containing block's height is indefinite — so `html`
        MUST give an explicit `height` here, otherwise body collapses to content
        height. `height: 100%` resolves against the viewport and is scrollbar-aware
        (unlike `100vh`): when a horizontal scrollbar appears it shrinks with the
@@ -34,8 +34,8 @@ html {
 }
 
 body {
-    /* min-height: 100% (NOT 100vh) so body FILLS the viewport height.
-       Two things depend on body being viewport-tall:
+    /* height: 100% (NOT 100vh, NOT min-height) so body FILLS the viewport height.
+       Three things depend on body being viewport-tall:
        1. Floating-popup dismiss: ZK closes an open popup (colorbox / combobox /
           datebox / bandbox / menupopup …) only when an outside mousedown lands
           within `document.body.clientHeight` — see ZK core `mount.ts`
@@ -48,9 +48,19 @@ body {
           now-shorter visible area and a vertical scrollbar appears on a page
           whose content fits. `100%` resolves against `html`'s definite height,
           which DOES shrink with the scrollbar.
+       3. The root ZK page. Its widget renders inline `height: 100%` (zk.Page
+          `_style`), which resolves only against a DEFINITE body height; with
+          `min-height` it computed to auto and `.z-page` collapsed to content
+          height, so a press on the empty page area landed on BODY (no widget)
+          and ZK fired onFloatUp without `{triggerByClick}` (a non-closable
+          Toast never dismissed, ZK-6084). IceBlue gets the same viewport-tall
+          `.z-page` from `html, body { height: 100% }` in norm.less.
+       Long content simply overflows the body box into the viewport scroll,
+       as in IceBlue; no double scrollbar, and `clientY <= body.clientHeight`
+       in (1) compares viewport coordinates, so it stays true.
        This `100%` only resolves because `html { height: 100% }` above is
        definite. */
-    min-height: 100%;
+    height: 100%;
     margin: 0;
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-body-medium-size);

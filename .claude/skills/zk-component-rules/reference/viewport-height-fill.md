@@ -1,13 +1,13 @@
-# Viewport-height fill: `html { height: 100% }` + `body { min-height: 100% }`, never `100vh`
+# Viewport-height fill: `html { height: 100% }` + `body { height: 100% }`, never `100vh`
 
 **Rule:** the base reset must give the page two co-operating declarations:
 
 ```css
 html { height: 100%; }       /* definite height — required, see below */
-body { min-height: 100%; }   /* NOT 100vh, NOT bare 100% without the html rule */
+body { height: 100%; }       /* NOT 100vh, NOT min-height (see root page below) */
 ```
 
-`body` must end up **as tall as the viewport** (and grow with content). Two
+`body` must end up **as tall as the viewport** (long content overflows into the viewport scroll, as in IceBlue). Two
 distinct things break if it collapses to content height — one cosmetic, one
 functional.
 
@@ -41,6 +41,14 @@ area and a **spurious vertical scrollbar** appears on a page whose content fits.
 (`100dvh` has the same flaw — it accounts for browser UI chrome, not scrollbars.)
 `min-height: 100%` resolves against the containing block, which **does** shrink
 with the scrollbar.
+
+## Why `height`, not `min-height` — the root page
+
+ZK's root `zk.Page` div renders inline `height:100%`. A percentage height resolves only against a
+**definite** parent height: `body { min-height: 100% }` is not definite, so `.z-page` collapsed to
+content height, a press on the empty page area hit BODY (no widget) and ZK fired `onFloatUp`
+without `{triggerByClick}` (non-closable Toast never dismissed, ZK-6084). IceBlue's
+`html, body { height: 100% }` makes `.z-page` viewport-tall; Marble matches it with `body { height: 100% }`.
 
 ## The trap: `min-height: 100%` needs a definite containing-block height
 
