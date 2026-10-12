@@ -19,7 +19,8 @@
     border-radius: var(--zk-messagebox-radius);
     box-shadow: var(--zk-messagebox-elevation);
     border: none;
-    max-width: 560px;
+    /* WCAG 1.4.10 Reflow: never wider than the viewport (min() keeps 560px as the cap above it). */
+    max-width: min(560px, 100%);
     min-width: 280px;
     width: 480px;
     font-family: var(--zk-typescale-font-family);
