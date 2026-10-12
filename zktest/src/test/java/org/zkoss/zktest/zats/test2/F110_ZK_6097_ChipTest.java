@@ -397,7 +397,10 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 
 	// Driven with a real Tab: :focus-visible does not match a programmatic
 	// focus, so a JS-focused element reports no ring at all.
+	// IceBlue-only: asserts IceBlue's box-shadow backing behind the ring; Marble's
+	// close ring already reaches 3:1 on the chip fill without a backing.
 	@Test
+	@Tag("IceBlueOnly")
 	public void keyboard_focus_backs_the_close_ring_for_contrast() {
 		connect();
 		waitResponse();
