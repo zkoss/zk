@@ -247,6 +247,7 @@ on the base tokens. `--zk-grid-row-hover-bg` keeps its stock `rgba` literal for 
 | `--zk-grid-stripe-bg` | `var(--zk-color-surface-container-lowest)` |
 | `--zk-grid-foot-bg` | `var(--zk-color-surface-container-low)` |
 | `--zk-grid-cell-padding` (size — in `_sizing.css`) | `var(--zk-spacing-4)` |
+| `--zk-grid-detail-padding` (size — in `_sizing.css`) | `var(--zk-spacing-3)` |
 
 ### Listbox — shipped
 

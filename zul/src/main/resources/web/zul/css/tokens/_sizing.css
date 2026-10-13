@@ -67,6 +67,7 @@
        :root compact override actually reaches them — a custom property declared
        on the component element shadows any :root value for its descendants. */
     --zk-grid-cell-padding:      var(--zk-spacing-4);          /* 16 all sides */
+    --zk-grid-detail-padding:    var(--zk-spacing-3);          /* 12: pads grid detail content top/right/bottom; left follows --zk-grid-cell-padding */
     --zk-listbox-cell-padding:   var(--zk-spacing-4);          /* 16 all sides */
     --zk-tree-cell-padding:      var(--zk-spacing-2) var(--zk-spacing-4);  /* 8 / 16 */
 }
@@ -117,6 +118,7 @@
 
     /* data-cell padding (biggest table-density lever) */
     --zk-grid-cell-padding: 6px 12px;
+    --zk-grid-detail-padding: 6px;
     --zk-listbox-cell-padding: 6px 12px;
     --zk-tree-cell-padding: 4px 12px;
 }
