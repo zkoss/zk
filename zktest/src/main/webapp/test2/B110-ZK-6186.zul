@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6186.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Oct 13 10:41:12 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Click "Disable", then run zk.Widget.$('$rg').isDisabled() in the browser console.
+		- Expected: true, and every radio (including "External") is disabled.
+		- Bug: the radios were disabled, but isDisabled() of the radiogroup widget stayed false.
+		2. Click "Add radio": the added radio is disabled.
+		3. Click "Enable": isDisabled() is false and every radio is enabled again.
+		4. The second radiogroup is disabled on load: its isDisabled() is true.
+		5. Reload, click "Disable + add an enabled radio", then "Server state": "Same" is enabled in the browser and on the server.
+		6. Reload, click "Disable", then another button of that row, then "Server state":
+		- Expected: the radio it adds or redraws is disabled in the browser exactly when the server shows "=true".
+		7. Reload, click "Enable + add a radio", then "Server state": "Disabled on load" and "Late" are enabled on both sides.
+	</label>
+	<zscript><![CDATA[
+		String states(Radiogroup group) {
+			StringBuilder sb = new StringBuilder();
+			for (Radio r : group.getItems())
+				sb.append(r.getId() + "=" + r.isDisabled() + " ");
+			return sb.toString();
+		}
+	]]></zscript>
+	<vlayout>
+		<radiogroup id="rg">
+			<radio id="cash" label="Cash" selected="true"/>
+			<radio id="credit" label="Credit"/>
+			<div id="nest"/>
+		</radiogroup>
+		<radio id="ext" label="External" radiogroup="rg"/>
+		<hlayout>
+			<button id="disable" label="Disable" onClick="rg.setDisabled(true)"/>
+			<button id="enable" label="Enable" onClick="rg.setDisabled(false)"/>
+			<button id="add" label="Add radio" onClick='Radio r = new Radio("Added"); r.setId("added"); rg.appendChild(r);'/>
+		</hlayout>
+		<hlayout>
+			<button id="disableAddEnabled" label="Disable + add an enabled radio"
+				onClick='rg.setDisabled(true); Radio r = new Radio("Same"); r.setId("same"); rg.appendChild(r); r.setDisabled(false);'/>
+			<button id="enableAddDisabled" label="Enable + add a disabled radio"
+				onClick='rg.setDisabled(false); Radio r = new Radio("Locked"); r.setId("locked"); r.setDisabled(true); rg.appendChild(r);'/>
+			<button id="addEnabled" label="Add an enabled radio"
+				onClick='Radio r = new Radio("Later"); r.setId("later"); rg.appendChild(r); r.setDisabled(false);'/>
+			<button id="addNested" label="Add a nested radio"
+				onClick='Radio r = new Radio("Nested"); r.setId("nested"); nest.appendChild(r);'/>
+			<button id="redrawExt" label="Enable and redraw External" onClick="ext.setDisabled(false); ext.invalidate();"/>
+		</hlayout>
+		<radiogroup id="rg2" disabled="true">
+			<radio id="initial" label="Disabled on load"/>
+		</radiogroup>
+		<hlayout>
+			<button id="enable2" label="Enable + add a radio"
+				onClick='rg2.setDisabled(false); Radio r = new Radio("Late"); r.setId("late"); rg2.appendChild(r);'/>
+			<button id="check" label="Server state" onClick="srv.setValue(states(rg) + states(rg2))"/>
+			<label id="srv"/>
+		</hlayout>
+	</vlayout>
+</zk>
