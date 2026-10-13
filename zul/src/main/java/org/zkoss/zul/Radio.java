@@ -244,6 +244,8 @@ public class Radio extends Checkbox {
 					_attachExternal = true;
 				}
 				newgp.fixOnAdd(this, _explictGroup);
+				if (newgp.isDisabled())
+					setDisabled(true);
 			}
 		}
 	}

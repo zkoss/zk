@@ -75,6 +75,7 @@ ZK 11.0.0
   ZK-6193: cascader: closing the popup after clicking a non-leaf item leaves an uncommitted selection (blank field with a clear icon, stale path on reopen)
   ZK-6187: messagebox: the buttons carry no per-button class, so a theme cannot give Cancel / No a different emphasis than OK
   ZK-6188: errorbox: the pointer keeps stale left/top after the box changes direction, so it ends up detached from the box
+  ZK-6186: radiogroup: server-side setDisabled does not reach the client, the widget's isDisabled() stays false
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on

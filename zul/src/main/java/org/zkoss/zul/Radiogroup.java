@@ -389,6 +389,7 @@ public class Radiogroup extends XulElement implements Disable {
 	public void setDisabled(boolean disabled) {
 		if (this._disabled != disabled) {
 			this._disabled = disabled;
+			smartUpdate("_disabled", _disabled);
 			List<Radio> items = getItems();
 			for (Radio radio : items) {
 				radio.setDisabled(disabled);
@@ -403,7 +404,7 @@ public class Radiogroup extends XulElement implements Disable {
 		if (!"horizontal".equals(_orient))
 			render(renderer, "orient", _orient);
 		if (isDisabled()) {
-			render(renderer, "disabled", true);
+			render(renderer, "_disabled", true);
 		}
 		if (_jsel >= 0) {
 			render(renderer, "selectedIndex", _jsel);
