@@ -7,8 +7,8 @@
         <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Count + dot on icons"/></div>
         <div sclass="z-d-flex z-gap-8 z-items-center" style="padding:8px 4px;">
             <badge count="4"><label sclass="z-icon-mail" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
-            <badge count="7" severity="danger"><label sclass="z-icon-bell" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
-            <badge dot="true" severity="danger"><label sclass="z-icon-message-square" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
+            <badge count="7" severity="error"><label sclass="z-icon-bell" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
+            <badge dot="true" severity="error"><label sclass="z-icon-message-square" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
         </div>
     </div>
 
@@ -18,17 +18,17 @@
             <badge count="4" severity="info"/>
             <badge count="4" severity="success"/>
             <badge count="4" severity="warning"/>
-            <badge count="4" severity="danger"/>
-            <badge count="4" severity="secondary"/>
+            <badge count="4" severity="error"/>
+            <badge count="4" severity="neutral"/>
         </div>
     </div>
 
     <div>
         <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Max overflow &amp; showZero"/></div>
         <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
-            <badge count="99"  severity="danger"/>
-            <badge count="120" max="99" severity="danger"/>
-            <badge count="0"   showZero="true" severity="secondary"/>
+            <badge count="99"  severity="error"/>
+            <badge count="120" max="99" severity="error"/>
+            <badge count="0"   showZero="true" severity="neutral"/>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
     <div>
         <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Button host"/></div>
         <div sclass="z-d-flex z-gap-8 z-items-center" style="padding:8px 4px;">
-            <badge count="4"  severity="danger"><button label="Notifications"/></badge>
+            <badge count="4"  severity="error"><button label="Notifications"/></badge>
             <badge count="10" severity="info"><button label="Messages"/></badge>
         </div>
     </div>

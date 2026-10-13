@@ -72,20 +72,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<zscript language="Groovy">
 	alert = {m -> Messagebox.show(m)}
 	</zscript>
-	<zscript language="Ruby">
-	require 'java'
-	module Java
-		include_package 'java.util'
-		include_package 'java.lang'
-		include_class 'org.zkoss.zk.ui.util.Clients'
-		include_package 'org.zkoss.zk.ui.event'
-		include_package 'org.zkoss.zk.ui'
-		include_package 'org.zkoss.zul'
-	end
-	def alert (m)
-		Java::Messagebox.show m
-	end
-	</zscript>
 	<zscript language="Python">
 import java.util
 import java.lang

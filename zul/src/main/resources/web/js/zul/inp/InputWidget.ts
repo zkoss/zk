@@ -406,6 +406,8 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 					var val = this._inputAttributes[key];
 					inpNode.setAttribute(key, val);
 				}
+				if (this.shallHtmlAutocompleteOff_())
+					inpNode.setAttribute('autocomplete', 'off');
 			}
 			this._lastinputAttributes = inputAttributes;
 		}
@@ -641,6 +643,31 @@ export class InputWidget<ValueType = unknown> extends zul.Widget<HTMLInputElemen
 		if (s) html += ' style="' + /*safe*/ s + '"';
 
 		return html;
+	}
+
+	/**
+	 * Whether the author supplied a custom HTML `autocomplete` attribute value via
+	 * {@link setInputAttributes} (distinct from {@link zul.inp.Combobox}'s type-ahead
+	 * `autocomplete`). {@link shallHtmlAutocompleteOff_} uses this to drop its default
+	 * `autocomplete="off"` when a purpose token was set — otherwise the two attributes
+	 * collide and the token is dropped (WCAG 1.3.5 Identify Input Purpose).
+	 * @returns whether an `autocomplete` entry exists in the input attributes.
+	 * @internal
+	 */
+	hasCustomHtmlAutocomplete_(): boolean {
+		return !!this._inputAttributes && 'autocomplete' in this._inputAttributes;
+	}
+
+	/**
+	 * Whether the input carries `autocomplete="off"`, both when rendered and after
+	 * {@link setInputAttributes}.
+	 * @returns `false`; widgets whose popup or buttons the browser's autofill would
+	 * cover (combobox, spinner) override it to return `true` unless
+	 * {@link hasCustomHtmlAutocomplete_}.
+	 * @internal
+	 */
+	shallHtmlAutocompleteOff_(): boolean {
+		return false;
 	}
 
 	/** @internal */

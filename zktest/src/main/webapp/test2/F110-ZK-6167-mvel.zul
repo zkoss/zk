@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6167-mvel.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu Oct  1 12:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<?evaluator name="mvel"?>
+<window id="w" title="mvel">
+	<label multiline="true">
+		ZK-6167: on JDK 17, the "mvel" evaluator must evaluate ordinary expressions (MVEL's default ASM optimizer cannot define classes there).
+
+		The labels below must show 3 and mvel.
+	</label>
+	<label id="sum" value="${1 + 2}"/>
+	<label id="title" value="${w.title}"/>
+</window>

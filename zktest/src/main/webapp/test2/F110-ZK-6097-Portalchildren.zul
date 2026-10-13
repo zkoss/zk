@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6097-Portalchildren.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sun Aug 30 18:10:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute" xmlns:n="native">
+	<vlayout spacing="10px" style="padding:16px;">
+		<!-- Native element, so the DOM id stays the literal the ca:aria-labelledby
+		     below names. A zul <label id="..."/> renders its id as the uuid, which
+		     would leave the reference dangling. -->
+		<n:span id="myLabel">Recommended for you</n:span>
+
+		<portallayout id="pl" width="600px" height="220px">
+			<!-- Author-supplied column name: "Col A" is the visible heading, the
+			     accessible name is meant to be the richer one. -->
+			<portalchildren id="pcCa" width="50%" title="Col A"
+					ca:aria-labelledby="myLabel">
+				<panel id="pnlA" title="Panel A" border="normal">
+					<panelchildren>A</panelchildren>
+				</panel>
+			</portalchildren>
+			<!-- No ca: → the title node still names the column. -->
+			<portalchildren id="pcPlain" width="50%" title="Col B">
+				<panel id="pnlB" title="Panel B" border="normal">
+					<panelchildren>B</panelchildren>
+				</panel>
+			</portalchildren>
+		</portallayout>
+
+		<hlayout spacing="10px">
+			<button id="btnRetitle" label="Retitle"
+					onClick='pcCa.setTitle("Renamed A"); pcPlain.setTitle("Renamed B");'/>
+			<button id="btnClearTitle" label="Clear title"
+					onClick='pcCa.setTitle(null); pcPlain.setTitle(null);'/>
+		</hlayout>
+	</vlayout>
+</zk>

@@ -168,8 +168,8 @@
 .z-confirmpopup-info .z-confirmpopup-icon      { color: var(--zk-color-status-info); }
 .z-confirmpopup-success .z-confirmpopup-icon   { color: var(--zk-color-success); }
 .z-confirmpopup-warning .z-confirmpopup-icon   { color: var(--zk-color-warning); }
-.z-confirmpopup-danger .z-confirmpopup-icon    { color: var(--zk-color-error); }
-.z-confirmpopup-secondary .z-confirmpopup-icon { color: var(--zk-color-on-surface-variant); }
+.z-confirmpopup-error .z-confirmpopup-icon    { color: var(--zk-color-error); }
+.z-confirmpopup-neutral .z-confirmpopup-icon { color: var(--zk-color-on-surface-variant); }
 
 /* ─── Footer: right-aligned Cancel/OK row — DialogActions analog ────────
    DOM order is always cancel→ok and is NOT reversed here, so the natural

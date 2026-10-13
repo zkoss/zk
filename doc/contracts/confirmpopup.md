@@ -86,8 +86,8 @@ own focus trap (see skill) can land keyboard focus on either button.
 | c10 | `.z-confirmpopup-info .z-confirmpopup-icon` | color | `var(--zk-color-status-info)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-info` |
 | c11 | `.z-confirmpopup-success .z-confirmpopup-icon` | color | `var(--zk-color-success)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-success` |
 | c12 | `.z-confirmpopup-warning .z-confirmpopup-icon` | color | `var(--zk-color-warning)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-warning` |
-| c13 | `.z-confirmpopup-danger .z-confirmpopup-icon` | color | `var(--zk-color-error)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-danger` |
-| c14 | `.z-confirmpopup-secondary .z-confirmpopup-icon` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-secondary` |
+| c13 | `.z-confirmpopup-error .z-confirmpopup-icon` | color | `var(--zk-color-error)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-error` |
+| c14 | `.z-confirmpopup-neutral .z-confirmpopup-icon` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-neutral` |
 | c15 | `.z-confirmpopup-ok` | background-color | `var(--zk-color-primary)` | DESIGN.md §3 — high-emphasis committing action |
 | c16 | `.z-confirmpopup-ok` | color | `var(--zk-color-on-primary)` | DESIGN.md §3 |
 | c17 | `.z-confirmpopup-ok`, `.z-confirmpopup-cancel` | border-radius | `var(--zk-shape-button)` | DESIGN.md §5 |
@@ -109,8 +109,8 @@ own focus trap (see skill) can land keyboard focus on either button.
 | severity-info | `.z-confirmpopup-info .z-confirmpopup-icon` | c10, M8 |
 | severity-success | `.z-confirmpopup-success .z-confirmpopup-icon` | c11, M8 |
 | severity-warning | `.z-confirmpopup-warning .z-confirmpopup-icon` | c12, M8 |
-| severity-danger | `.z-confirmpopup-danger .z-confirmpopup-icon` | c13, M8 |
-| severity-secondary | `.z-confirmpopup-secondary .z-confirmpopup-icon` | c14, M8 |
+| severity-error | `.z-confirmpopup-error .z-confirmpopup-icon` | c13, M8 |
+| severity-neutral | `.z-confirmpopup-neutral .z-confirmpopup-icon` | c14, M8 |
 | placement-top | `.z-confirmpopup-placement-top` | c22, c23, M7 |
 | placement-bottom | `.z-confirmpopup-placement-bottom` | c22, c23, M7 |
 | placement-left | `.z-confirmpopup-placement-left` | c22, c23, M7 |
@@ -128,8 +128,8 @@ own focus trap (see skill) can land keyboard focus on either button.
 - [ ] severity-info
 - [ ] severity-success
 - [ ] severity-warning
-- [ ] severity-danger
-- [ ] severity-secondary
+- [ ] severity-error
+- [ ] severity-neutral
 - [ ] placement-top
 - [ ] placement-bottom
 - [ ] placement-left

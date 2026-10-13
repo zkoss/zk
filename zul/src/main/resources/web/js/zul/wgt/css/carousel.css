@@ -28,6 +28,13 @@
     border-radius: var(--zk-carousel-radius);
 }
 
+/* The root is tabindex="0" (arrow keys / Space). Keep the offset positive: a
+   negative offset would be painted over by the positioned .z-carouselitem. */
+.z-carousel:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
 /* ─── Track: flex row (or column) of slides; the widget transforms this to
    bring the active slide into the clipped viewport ─────────────────────── */
 .z-carousel-track {
@@ -43,6 +50,14 @@
 .z-carousel-vertical > .z-carousel-track {
     flex-direction: column;
     touch-action: pan-x;
+}
+
+/* effect="slide" only: the swipeable track must not turn a drag into a text
+   selection (that fires pointercancel and snaps the track home). fade / none
+   keep their content selectable. */
+.z-carousel-effect-slide > .z-carousel-track {
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 /* effect="none": same track-transform mechanism as slide, just no transition
@@ -174,6 +189,8 @@
 .z-carousel-arrow:focus-visible {
     outline: var(--zk-focus-ring);
     outline-offset: 2px;
+    /* Light halo backs the ring over author media; brand-independent overlay colour. */
+    box-shadow: 0 0 0 2px var(--zk-color-inverse-on-surface);
 }
 
 .z-carousel-arrow[disabled] {
@@ -245,6 +262,8 @@
 .z-carousel-indicator:focus-visible {
     outline: var(--zk-focus-ring);
     outline-offset: 2px;
+    /* Light halo backs the ring over author media; brand-independent overlay colour. */
+    box-shadow: 0 0 0 2px var(--zk-color-inverse-on-surface);
 }
 
 /* ─── Status: always-present live-region span, visually hidden (sr-only) ── */

@@ -44,8 +44,8 @@ public class F110_ZK_6097_BadgeVM {
 
 	@Command
 	@NotifyChange("severity")
-	public void setDangerSeverity() {
-		severity = "danger";
+	public void setErrorSeverity() {
+		severity = "error";
 	}
 
 	@Command

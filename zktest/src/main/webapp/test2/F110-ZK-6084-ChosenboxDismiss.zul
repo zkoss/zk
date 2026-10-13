@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-ChosenboxDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for Chosenbox.
+
+	Description:
+		Closing the list, and the blur that follows a press elsewhere, clear the typed text. With
+		za11y, both wait for the release, and a release back on the list keeps the text.
+
+	History:
+		Tue Sep 29 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>org.zkoss.zul.ListModelList model = new org.zkoss.zul.ListModelList(new String[] {"Apple", "Banana", "Cherry"});</zscript>
+	<chosenbox id="cb" model="${model}" width="200px"/>
+	<label multiline="true" style="position: absolute; left: 10px; top: 320px">
+		Type "Ap". Press and hold on an empty part of the page for a moment: the list and the typed text must
+		stay until you release. Releasing there closes the list and clears the text.
+	</label>
+</zk>

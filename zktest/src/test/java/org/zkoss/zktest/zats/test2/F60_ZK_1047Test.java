@@ -50,7 +50,8 @@ public class F60_ZK_1047Test extends ZATSTestCase {
 		Assertions.assertEquals("2012-12-21", desktop.query("#i11").as(Label.class).getValue());
 		assertThat(desktop.query("#i12").as(Label.class).getValue(), anyOf(
 				equalTo("12/21/12 2:00 AM"),
-				equalTo("12/21/12, 2:00 AM") // since Java 9 uses Unicode CLDR
+				equalTo("12/21/12, 2:00 AM"), // since Java 9 uses Unicode CLDR
+				equalTo("12/21/12, 2:00\u202FAM") // ZK-6167: since Java 20 CLDR 42 puts U+202F before AM
 		));
 		assertThat(desktop.query("#i13").as(Label.class).getValue(), allOf(
 				startsWith("20 décembre 2012"),

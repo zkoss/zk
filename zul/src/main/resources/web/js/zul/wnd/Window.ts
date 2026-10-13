@@ -1161,7 +1161,8 @@ export class Window extends zul.ContainerWidget {
 		if (this._maximized)
 			_syncMaximized(this);
 		this._fixHgh(true);
-		if (this._mode == 'modal')
+		// a highlighted window is placed like a modal one when shown, so re-place both on resize
+		if (_isModal(this._mode))
 			_updDomPos(this, true, false, true); // B70-ZK-2892
 		else
 			_updDomPos(this);

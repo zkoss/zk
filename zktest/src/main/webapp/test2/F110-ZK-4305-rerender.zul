@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-4305-rerender.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Sep  2 09:36:08 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-4305 Rerender — a client-side rerender after the popup has been created
+		must not abort the box's mount.
+
+		"z-daterangebox" is already the default zclass, so setZclass() below
+		rerenders the widget without changing a single class name — the rerender
+		itself is what is under test, not any CSS effect of it.
+
+		Steps to verify:
+		1. Click the calendar button once, then close the popup with Cancel.
+		2. Click "rerender" — no JavaScript error may appear.
+		3. Click the calendar button again — the popup must open.
+	</label>
+
+	<vlayout spacing="10px" hflex="1">
+		<daterangebox id="drb" format="yyyy-MM-dd" width="360px"/>
+		<hlayout>
+			<button id="btnRerender" label="rerender" onClick='drb.setZclass("z-daterangebox")'/>
+		</hlayout>
+	</vlayout>
+</zk>

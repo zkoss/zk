@@ -42,6 +42,11 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
                 Disabled range:
                 <daterangebox disabled="true" ca:aria-label="Disabled date range"/>
             </hlayout>
+            <!-- WCAG 1.3.5 Identify Input Purpose: inputAttributes renders the autocomplete token on both range inputs -->
+            <hlayout>
+                Date range with input purpose:
+                <daterangebox ca:aria-label="Date range with input purpose" inputAttributes="autocomplete=bday"/>
+            </hlayout>
         </vlayout>
     </n:main>
 </zk>

@@ -55,7 +55,7 @@
                     <label value="Cordless Drill 18V"/>
                     <label value="Retail"/>
                     <label value="12"/>
-                    <chip label="Backorder" severity="danger"/>
+                    <chip label="Backorder" severity="error"/>
                     <progressmeter value="10" hflex="1"/>
                 </row>
                 <row>

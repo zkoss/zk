@@ -135,6 +135,23 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<carouselitem><div sclass="carousel-slide">R1</div></carouselitem>
 		</carousel>
 
+		<!-- Author-supplied ca:aria-* down at the slide level; ciPlain supplies
+		     none, so the framework defaults (and their setLabel re-derive) must
+		     still apply to it. -->
+		<carousel id="cr-ca" ca:aria-roledescription="custom-carousel" width="200px" height="80px">
+			<carouselitem id="ci-ca" label="Card A" ca:aria-label="Autumn collection">
+				<div sclass="carousel-slide">C0</div>
+			</carouselitem>
+			<carouselitem id="ci-rd" ca:aria-roledescription="custom-slide">
+				<div sclass="carousel-slide">C1</div>
+			</carouselitem>
+			<carouselitem id="ciPlain" label="Card C">
+				<div sclass="carousel-slide">C2</div>
+			</carouselitem>
+		</carousel>
+		<button id="btn-relabel-slide" label="Relabel plain slide"
+				onClick='ciPlain.setLabel("Card Z");'/>
+
 		<!-- Dynamic update target + drivers -->
 		<hlayout spacing="10px">
 			<button id="btn-next-via-server"  label="Server next"
@@ -150,6 +167,17 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
 			<button id="btn-overflow-active"  label="Overflow activeIndex"
 					onClick='try { cr1.setActiveIndex(99); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<!-- A brand-new Carousel has never rendered, so isInitialized() is
+			     false: the upper bound is deferred, but a negative index must
+			     still be rejected. -->
+			<button id="btn-unrendered-negative" label="Unrendered negative"
+					onClick='try { new org.zkoss.zul.Carousel().setActiveIndex(-1);
+					               errMsg.setValue("accepted"); }
+					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
+			<button id="btn-unrendered-overflow" label="Unrendered overflow"
+					onClick='try { new org.zkoss.zul.Carousel().setActiveIndex(99);
+					               errMsg.setValue("accepted"); }
 					         catch (Exception e) { errMsg.setValue(e.getMessage()); }'/>
 			<button id="btn-bad-interval"     label="Bad interval"
 					onClick='try { cr1.setInterval(100); }

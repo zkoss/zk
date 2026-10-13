@@ -17,9 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 
@@ -33,7 +36,7 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 		// (Chip.renderProperties skips rendering when severity == "info").
 		// We assert no other severity class is on the element.
 		assertFalse(jq("$chip-default").hasClass("z-chip-success"));
-		assertFalse(jq("$chip-default").hasClass("z-chip-danger"));
+		assertFalse(jq("$chip-default").hasClass("z-chip-error"));
 	}
 
 	@Test
@@ -58,17 +61,17 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 	}
 
 	@Test
-	public void severity_danger_class() {
+	public void severity_error_class() {
 		connect();
 		waitResponse();
-		assertTrue(jq("$chip-danger").hasClass("z-chip-danger"));
+		assertTrue(jq("$chip-error").hasClass("z-chip-error"));
 	}
 
 	@Test
-	public void severity_secondary_class() {
+	public void severity_neutral_class() {
 		connect();
 		waitResponse();
-		assertTrue(jq("$chip-secondary").hasClass("z-chip-secondary"));
+		assertTrue(jq("$chip-neutral").hasClass("z-chip-neutral"));
 	}
 
 	@Test
@@ -270,7 +273,9 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 
 	// ----- custom color via CSS variables -----
 
+	// IceBlue-only: reads IceBlue's --zk-chip-background-color; Marble's chip uses --zk-chip-bg.
 	@Test
+	@Tag("IceBlueOnly")
 	public void cssvar_hex_applied_via_style_attribute() {
 		// Custom chip colors flow through the --zk-chip-background-color /
 		// --zk-chip-color CSS variables declared in chip.less; the chip itself has
@@ -389,4 +394,38 @@ public class F110_ZK_6097_ChipTest extends WebDriverTestCase {
 		assertTrue(aria != null && aria.contains("Bob"),
 				"close-button aria-label must follow the new label after setLabel, was: " + aria);
 	}
+
+	// Driven with a real Tab: :focus-visible does not match a programmatic
+	// focus, so a JS-focused element reports no ring at all.
+	// IceBlue-only: asserts IceBlue's box-shadow backing behind the ring; Marble's
+	// close ring already reaches 3:1 on the chip fill without a backing.
+	@Test
+	@Tag("IceBlueOnly")
+	public void keyboard_focus_backs_the_close_ring_for_contrast() {
+		connect();
+		waitResponse();
+		tabTo("$chip-closable .z-chip-close");
+		JQuery close = jq("$chip-closable .z-chip-close");
+		assertEquals("2px", close.css("outline-width"),
+				"the focused chip close button paints no outline");
+		// The ring lands inside the chip, on its own fill, where @colorPrimary is
+		// under 3:1 — the base-colour backing is what carries SC 1.4.11.
+		assertNotEquals("none", close.css("box-shadow"),
+				"the focused close button has no contrast backing behind its ring");
+		assertEquals("1", close.css("opacity"),
+				"the close button must reach full opacity while focused");
+	}
+
+	/** Tabs from the document start until {@code selector} holds focus. */
+	private void tabTo(String selector) {
+		getActions().sendKeys(Keys.TAB).perform();
+		for (int i = 0; i < 60; i++) {
+			if (Boolean.parseBoolean(getEval(
+					"jq('" + selector + "')[0] === document.activeElement")))
+				return;
+			getActions().sendKeys(Keys.TAB).perform();
+		}
+		throw new AssertionError("never reached " + selector + " by tabbing");
+	}
+
 }

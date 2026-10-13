@@ -30,7 +30,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
         </n:section>
         <n:section ca:aria-label="Project contributors">
             <n:h2>Group with overflow (+N)</n:h2>
-            <avatargroup maxCount="3">
+            <avatargroup maxItems="3">
                 <avatar label="AB"/>
                 <avatar label="CD"/>
                 <avatar label="EF"/>

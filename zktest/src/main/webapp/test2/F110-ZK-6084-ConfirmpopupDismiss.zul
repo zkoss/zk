@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-ConfirmpopupDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for Confirmpopup.
+
+	Description:
+		With za11y enabled, a press outside the confirmation answers Cancel only on release,
+		and a release back inside the confirmation keeps it open.
+
+	History:
+		Tue Sep 29 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<button id="open" label="Delete" onClick='cp.open(self, "after_start")'/>
+	<confirmpopup id="cp" message="Delete this item?"
+		onCancel='events.setValue(events.getValue() + "C")'/>
+	<hlayout>events: <label id="events"/></hlayout>
+	<!-- Kept to the right, clear of the confirmation, which opens below the button. -->
+	<textbox id="outsideInput" style="position: absolute; left: 420px; top: 10px"/>
+	<label multiline="true" style="position: absolute; left: 10px; top: 260px">
+		Click "Delete", then press and hold on an empty part of the page: the confirmation must stay
+		open, and "events" must stay empty, until you release. Releasing there cancels it ("events"
+		shows C). Moving back onto the confirmation before releasing keeps it open.
+	</label>
+</zk>

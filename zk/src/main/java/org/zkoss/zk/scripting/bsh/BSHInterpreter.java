@@ -246,9 +246,17 @@ public class BSHInterpreter extends GenericInterpreter implements SerializableAw
 		super.init(owner, zslang);
 
 		_ip = new bsh.Interpreter();
-		_ip.setClassLoader(Classes.getContextClassLoader(BSHInterpreter.class));
+		final ClassLoader cl = Classes.getContextClassLoader(BSHInterpreter.class);
+		_ip.setClassLoader(cl);
 
-		_bshns = new GlobalNS(_ip.getClassManager(), "global");
+		BshClassManager bcm;
+		try {
+			// ZK-6167: resolves the Java calls BeanShell 2.0b6 cannot invoke on JDK 16+
+			bcm = ModuleAwareClassManager.newInstance(_ip, cl);
+		} catch (LinkageError ex) { //a BeanShell without bsh.classpath
+			bcm = _ip.getClassManager();
+		}
+		_bshns = new GlobalNS(bcm, "global");
 		_ip.setNameSpace(_bshns);
 	}
 

@@ -24,7 +24,7 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
     ]]></zscript>
     <label multiline="true">
         1. select "1967-05-01 00:00:00"
-        2. the label under datebox should be "Mon May 01 00:00:00 PST 1967"
+        2. the label under datebox should be "Mon May 01 00:00:00 MST 1967" (PST on JDK 11; the zone name is JDK data, the time must be 00:00:00)
     </label>
     <datebox timeZone="Canada/Yukon" width="50%" onChange="day.setValue(self.getValue().toString())" format="yyyy-MM-dd HH:mm:ss"/>
     <label id="day"/>

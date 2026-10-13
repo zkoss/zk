@@ -49,7 +49,8 @@ public class F103_ZK_5865Test extends WebDriverTestCase{
         sendKeys(cb2Inp, "kk");
         waitResponse();
         JQuery currentOptions2 = jq(".z-chosenbox-select").find(".z-chosenbox-option");
-        Assertions.assertEquals(4, getVisibleCount(currentOptions2));
+        // ZK-6167: since JDK 17, Locale.getAvailableLocales() also lists script variants (e.g. kk_KZ_#Cyrl, ar_EG_#Arab)
+        Assertions.assertEquals(6, getVisibleCount(currentOptions2));
         assertNoAnyError();
     }
 
@@ -67,7 +68,8 @@ public class F103_ZK_5865Test extends WebDriverTestCase{
         sendKeys(cb3Inp, "ar_E");
         waitResponse();
         JQuery currentOptions3 = jq(".z-chosenbox-select").find(".z-chosenbox-option");
-        Assertions.assertEquals(3, getVisibleCount(currentOptions3));
+        // ZK-6167: since JDK 17, Locale.getAvailableLocales() also lists script variants (e.g. kk_KZ_#Cyrl, ar_EG_#Arab)
+        Assertions.assertEquals(4, getVisibleCount(currentOptions3));
         assertNoJSError();
     }
 
@@ -85,7 +87,8 @@ public class F103_ZK_5865Test extends WebDriverTestCase{
         sendKeys(cb4Inp, "ar_E");
         waitResponse();
         JQuery currentOptions4 = jq(".z-chosenbox-select").find(".z-chosenbox-option");
-        Assertions.assertEquals(3, getVisibleCount(currentOptions4));
+        // ZK-6167: since JDK 17, Locale.getAvailableLocales() also lists script variants (e.g. kk_KZ_#Cyrl, ar_EG_#Arab)
+        Assertions.assertEquals(4, getVisibleCount(currentOptions4));
         type(cb4Inp, "");
         waitResponse();
         currentOptions4 = jq(".z-chosenbox-select").find(".z-chosenbox-option");

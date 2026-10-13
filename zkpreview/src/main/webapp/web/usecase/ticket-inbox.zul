@@ -16,7 +16,7 @@
                     <listcell>
                         <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
                             <div sclass="z-d-flex z-flex-row z-items-center z-gap-2">
-                                <chip label="High" severity="danger"/>
+                                <chip label="High" severity="error"/>
                                 <label value="Login fails after password reset" sclass="z-fw-medium"/>
                             </div>
                             <div sclass="z-text-xs z-text-secondary">
@@ -44,7 +44,7 @@
                     <listcell>
                         <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
                             <div sclass="z-d-flex z-flex-row z-items-center z-gap-2">
-                                <chip label="Low" severity="secondary"/>
+                                <chip label="Low" severity="neutral"/>
                                 <label value="Feature request: dark mode"/>
                             </div>
                             <div sclass="z-text-xs z-text-secondary">
@@ -58,12 +58,12 @@
                     <listcell>
                         <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
                             <div sclass="z-d-flex z-flex-row z-items-center z-gap-2">
-                                <chip label="Low" severity="secondary"/>
+                                <chip label="Low" severity="neutral"/>
                                 <label value="Thanks for the quick fix!"/>
                             </div>
                             <div sclass="z-text-xs z-text-secondary">
                                 <label value="Owen T. · Mon"/>
-                                <chip label="Closed" severity="secondary" sclass="z-ms-2"/>
+                                <chip label="Closed" severity="neutral" sclass="z-ms-2"/>
                             </div>
                         </div>
                     </listcell>

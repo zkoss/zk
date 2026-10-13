@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6167-zscript-groovy.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Sun Sep 27 22:29:05 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<?page zscriptLanguage="Groovy"?>
+<zk>
+	<label multiline="true">
+		On JDK 17 or later, the row below must show 28800000, true, k and Label, not an error.
+	</label>
+	<zscript><![CDATA[
+		rawOffset = "" + java.util.TimeZone.getTimeZone("Asia/Taipei").getRawOffset()
+		listEmpty = "" + java.util.Collections.unmodifiableList(new java.util.ArrayList()).isEmpty()
+		entryKey = "" + new java.util.HashMap(java.util.Collections.singletonMap("k", "v")).entrySet().iterator().next().getKey()
+		labelName = Label.class.getSimpleName()
+	]]></zscript>
+	<hlayout>
+		<label id="offset" value="${rawOffset}"/>
+		<label id="list" value="${listEmpty}"/>
+		<label id="entry" value="${entryKey}"/>
+		<label id="simpleName" value="${labelName}"/>
+	</hlayout>
+</zk>

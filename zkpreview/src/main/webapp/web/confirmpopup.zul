@@ -54,7 +54,7 @@
             </div>
             <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
                 <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Danger"/></div>
-                <h:div class="z-confirmpopup z-confirmpopup-danger z-confirmpopup-placement-top" style="position:relative;">
+                <h:div class="z-confirmpopup z-confirmpopup-error z-confirmpopup-placement-top" style="position:relative;">
                     <h:span class="z-confirmpopup-arrow"/>
                     <h:div class="z-confirmpopup-header">Delete item?</h:div>
                     <h:div class="z-confirmpopup-body">
@@ -69,7 +69,7 @@
             </div>
             <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
                 <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Secondary"/></div>
-                <h:div class="z-confirmpopup z-confirmpopup-secondary z-confirmpopup-placement-top" style="position:relative;">
+                <h:div class="z-confirmpopup z-confirmpopup-neutral z-confirmpopup-placement-top" style="position:relative;">
                     <h:span class="z-confirmpopup-arrow"/>
                     <h:div class="z-confirmpopup-header">Confirm</h:div>
                     <h:div class="z-confirmpopup-body">
@@ -177,18 +177,18 @@
         </div>
     </div>
 
-    <confirmpopup id="cpInfo" severity="info" header="Confirm" message="Here is some info for you."/>
-    <confirmpopup id="cpSuccess" severity="success" header="Confirm" message="The operation completed successfully."/>
-    <confirmpopup id="cpWarning" severity="warning" header="Confirm" message="This action may have side effects."/>
-    <confirmpopup id="cpDanger" severity="danger" header="Delete item?" message="This cannot be undone." defaultFocus="cancel"/>
-    <confirmpopup id="cpSecondary" severity="secondary" header="Confirm" message="Would you like to proceed?"/>
+    <confirmpopup id="cpInfo" severity="info" title="Confirm" message="Here is some info for you."/>
+    <confirmpopup id="cpSuccess" severity="success" title="Confirm" message="The operation completed successfully."/>
+    <confirmpopup id="cpWarning" severity="warning" title="Confirm" message="This action may have side effects."/>
+    <confirmpopup id="cpDanger" severity="error" title="Delete item?" message="This cannot be undone." defaultFocus="cancel"/>
+    <confirmpopup id="cpSecondary" severity="neutral" title="Confirm" message="Would you like to proceed?"/>
 
     <confirmpopup id="cpTop" placement="top" message="Box above trigger, arrow bottom edge."/>
     <confirmpopup id="cpBottom" placement="bottom" message="Box below trigger, arrow top edge."/>
     <confirmpopup id="cpLeft" placement="left" message="Box left of trigger, arrow right edge."/>
     <confirmpopup id="cpRight" placement="right" message="Box right of trigger, arrow left edge."/>
 
-    <confirmpopup id="cpDelete" severity="danger" header="Delete item?" message="This cannot be undone." defaultFocus="cancel">
+    <confirmpopup id="cpDelete" severity="error" title="Delete item?" message="This cannot be undone." defaultFocus="cancel">
         <attribute name="onOK">deleteResult.setValue("OK — item deleted.");</attribute>
         <attribute name="onCancel">deleteResult.setValue("Cancelled.");</attribute>
     </confirmpopup>

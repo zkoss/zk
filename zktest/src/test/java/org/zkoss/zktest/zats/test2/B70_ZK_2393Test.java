@@ -35,7 +35,7 @@ public class B70_ZK_2393Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions()
-				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "Pixel 2"));
+				.setExperimentalOption("mobileEmulation", Collections.singletonMap("deviceName", "Pixel 9"));
 	}
 
 	@Test

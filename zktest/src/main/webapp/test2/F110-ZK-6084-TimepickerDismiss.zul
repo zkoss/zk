@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-TimepickerDismiss.zul
+
+	Purpose:
+		WCAG 2.5.2 Pointer Cancellation (Level A) for Timepicker.
+
+	Description:
+		Closing the list commits a time browsed with the arrow keys. With za11y, an outside press
+		closes it only on release, and a release back on the list keeps it open.
+
+	History:
+		Tue Sep 29 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<timepicker id="tp" onChange='events.setValue(events.getValue() + "C")'/>
+	<hlayout>events: <label id="events"/></hlayout>
+	<label multiline="true" style="position: absolute; left: 10px; top: 320px">
+		Open the list and press the down arrow. Press and hold on an empty part of the page: the list must stay
+		open and "events" empty until you release. Releasing there closes it and commits the time (C).
+	</label>
+</zk>

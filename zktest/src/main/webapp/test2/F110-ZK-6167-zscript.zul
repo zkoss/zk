@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6167-zscript.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Sun Sep 27 19:54:58 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. On JDK 17 or later, both rows below must show values (28800000, b, x, k and 28800000, x), not an error.
+		2. Open F110-ZK-6167-zscript-class.zul, then reload this page: it must still show them.
+	</label>
+	<zscript><![CDATA[
+		String offset = "" + java.util.TimeZone.getTimeZone("Asia/Taipei").getRawOffset();
+		org.w3c.dom.Document doc = javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder()
+			.parse(new org.xml.sax.InputSource(new java.io.StringReader("<a><b/></a>")));
+		String tag = doc.getDocumentElement().getFirstChild().getNodeName();
+		Iterator it = new ArrayList(Arrays.asList(new Object[] {"x"})).iterator();
+		String next = "" + it.next();
+		String key = "" + new HashMap(Collections.singletonMap("k", "v")).entrySet().iterator().next().getKey();
+	]]></zscript>
+	<hlayout>
+		<label id="offset" value="${offset}"/>
+		<label id="tag" value="${tag}"/>
+		<label id="next" value="${next}"/>
+		<label id="key" value="${key}"/>
+	</hlayout>
+	<window id="win">
+		<zscript><![CDATA[
+			String winOffset = "" + java.util.TimeZone.getTimeZone("Asia/Taipei").getRawOffset();
+			String winNext = "" + new ArrayList(Arrays.asList(new Object[] {"x"})).iterator().next();
+		]]></zscript>
+		<hlayout>
+			<label id="winOffset" value="${winOffset}"/>
+			<label id="winNext" value="${winNext}"/>
+		</hlayout>
+	</window>
+</zk>

@@ -22,10 +22,7 @@ dependencies {
 	compileOnly 'javax.websocket:javax.websocket-api:1.1'
 
 	optionalImplementation 'com.google.javascript:closure-compiler-unshaded:v20230802'
-	optionalImplementation 'org.apache.groovy:groovy:5.0.0-alpha-1'
-	optionalImplementation('org.jruby:jruby-core:1.7.27') {
-		exclude group: '*', module: '*'
-	}
+	optionalImplementation 'org.apache.groovy:groovy:5.0.8'
 	optionalImplementation 'org.python:jython:2.7.4'
 	optionalImplementation 'org.mozilla:rhino:1.8.1'
 }

@@ -53,6 +53,8 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	timerId?: number;
 	/** @internal */
 	_currentbtn?: HTMLElement;
+	/** @internal which half of the spin button was pressed; used only when {@link shallStepOnRelease_} */
+	_stepUp?: boolean;
 	/** @internal */
 	_fixedDigits?: number;
 
@@ -221,9 +223,11 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 
 	/** @internal */
 	_ondropbtnup(evt: zk.Event): void {
-		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup');
+		this.domUnlisten_(document.body, 'onZMouseup', '_ondropbtnup')
+			.domUnlisten_(document.body, 'onTouchCancel', '_ondropbtnup');
 		this._stopAutoIncProc();
 		this._currentbtn = undefined;
+		this._stepUp = undefined;
 	}
 
 	/** @internal */
@@ -236,25 +240,51 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 			if (this._currentbtn) // just in case
 				this._ondropbtnup(evt);
 
-			this.domListen_(document.body, 'onZMouseup', '_ondropbtnup');
+			this.domListen_(document.body, 'onZMouseup', '_ondropbtnup')
+				.domListen_(document.body, 'onTouchCancel', '_ondropbtnup');
 			this._currentbtn = btn;
 		}
 
-		this.checkValue();
+		var isOverUpBtn = this._isUpHalf(btn, evt);
 
-		var ofs = zk(btn).revisedOffset(),
-			isOverUpBtn = (evt.pageY - ofs[1]) < btn.offsetHeight / 2;
-
-		if (isOverUpBtn) { //up
-			this._increase(true);
-			this._startAutoIncProc(true);
-		} else {	// down
-			this._increase(false);
-			this._startAutoIncProc(false);
+		if (this.shallStepOnRelease_())
+			this._stepUp = isOverUpBtn; // _btnUp does the work
+		else {
+			this._btnStep(isOverUpBtn);
+			this._startAutoIncProc(isOverUpBtn);
 		}
 
 		// disable browser's text selection
 		evt.stop();
+	}
+
+	/**
+	 * Whether the spin buttons step on the up-event instead of the down-event, without
+	 * auto-repeat, so that pressing an arrow and releasing elsewhere leaves the value
+	 * untouched (WCAG 2.5.2 Pointer Cancellation, Level A).
+	 *
+	 * @returns `false`; the za11y module overrides this to `true`.
+	 * @internal
+	 */
+	shallStepOnRelease_(): boolean {
+		return false;
+	}
+
+	/**
+	 * Performs one step of the spin button. Kept separate from {@link _btnDown} so it
+	 * can also be invoked from {@link _btnUp} when {@link shallStepOnRelease_} returns
+	 * true.
+	 *
+	 * @internal
+	 */
+	_btnStep(isUp: boolean): void {
+		this.checkValue();
+		this._increase(isUp);
+	}
+
+	/** @internal */
+	_isUpHalf(btn: HTMLElement, evt: zk.Event): boolean {
+		return (evt.pageY - zk(btn).revisedOffset()[1]) < btn.offsetHeight / 2;
 	}
 
 	/**
@@ -281,7 +311,12 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	_btnUp(evt: zk.Event): void {
 		if (!this._buttonVisible || this._disabled || zk.dragging) return;
 
-		this._onChanging();
+		if (this.shallStepOnRelease_()) {
+			const btn = this._currentbtn;
+			if (btn && jq.isAncestor(btn, evt.domTarget) && this._isUpHalf(btn, evt) === this._stepUp)
+				this._btnStep(!!this._stepUp); // _increase fires _onChanging itself
+		} else
+			this._onChanging();
 		this._stopAutoIncProc();
 
 		var inp = this.getInputNode()!;
@@ -402,5 +437,10 @@ export class Doublespinner extends zul.inp.NumberInputWidget<number> {
 	/** @internal */
 	getBtnDownIconClass_(): string {
 		return 'z-icon-angle-down';
+	}
+
+	/** @internal */
+	override shallHtmlAutocompleteOff_(): boolean {
+		return !this.hasCustomHtmlAutocomplete_();
 	}
 }

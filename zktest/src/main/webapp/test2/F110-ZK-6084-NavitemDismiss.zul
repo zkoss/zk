@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-NavitemDismiss.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Sep 18 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:h1>WCAG 2.1 - 1.4.13 content on hover or focus: collapsed navbar</n:h1>
+	<label multiline="true">
+		A collapsed navbar shows icons only, so hovering an item reveals its label
+		beside it, and hovering a nav reveals its children.
+		1. hover "Leaf navitem" - its label appears to the right of the icon
+		2. press Esc without moving the mouse - the label disappears
+		3. keep the mouse still - it must stay hidden
+		4. move away, hover the item again - the label is back
+		5. hover the first icon (the nav) and press Esc - its child list closes too
+	</label>
+	<separator/>
+	<navbar id="navbar" orient="vertical" collapsed="true" width="60px" ca:aria-label="Collapsed nav">
+		<nav id="navWithChildren" iconSclass="z-icon-home" label="Nav with children">
+			<navitem id="navChild1" iconSclass="z-icon-home" label="Child 1"/>
+			<navitem id="navChild2" iconSclass="z-icon-home" label="Child 2"/>
+		</nav>
+		<navitem id="leafItem" iconSclass="z-icon-star" label="Leaf navitem"/>
+	</navbar>
+	<separator height="80px"/>
+	<button id="away" label="park the pointer here"/>
+</zk>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6192.zul
+
+	Purpose:
+
+	Description:
+		A vertical rangeslider / multislider puts the knob tooltip on the right of the knob,
+		unless the right side has no room (viewport edge or an overflow:hidden container),
+		in which case it goes on the left. The control slider has room, so it stays on the right.
+
+	History:
+		Tue Oct 13 2026, Created by hawkchen
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Hover each knob of the slider at the right edge of the page: the tooltip is fully visible, on the left of the knob.
+		2. Hover each knob of the slider in the clipped box: the tooltip is fully visible inside the box, on the left of the knob.
+		3. Hover each knob of the slider at the left (control): the tooltip stays on the right of the knob.
+	</label>
+	<div id="edge" style="position:absolute; right:0; top:120px">
+		<rangeslider id="rs" orient="vertical" height="200px" max="1000" startValue="5" endValue="500"/>
+	</div>
+	<div id="box" style="position:absolute; left:20px; top:120px; width:220px; overflow:hidden; border:1px solid #888; display:flex; justify-content:flex-end">
+		<multislider id="ms" orient="vertical" height="200px" max="1000">
+			<sliderbuttons startValue="5" endValue="500"/>
+		</multislider>
+	</div>
+	<div style="position:absolute; left:300px; top:120px">
+		<rangeslider id="ctrl" orient="vertical" height="200px" max="1000" startValue="5" endValue="500"/>
+	</div>
+</zk>

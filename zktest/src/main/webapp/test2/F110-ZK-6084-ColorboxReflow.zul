@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-ColorboxReflow.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Sep 18 16:00:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+    <n:h1>Colorbox popup capped to the viewport</n:h1>
+    <label multiline="true">
+        The colorbox popup is capped to the viewport.
+    </label>
+    <colorbox id="cb" ca:aria-label="Click to choose color"/>
+</zk>
