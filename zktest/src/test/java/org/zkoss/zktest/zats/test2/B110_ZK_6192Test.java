@@ -74,8 +74,9 @@ public class B110_ZK_6192Test extends WebDriverTestCase {
 		waitResponse();
 		double[] box = boxRange();
 		for (int i = 0; i < 2; i++)
-			// both tooltips must be fully inside the padding box; the "5" one overflows it by less than the border
-			assertInside("$ms", i, box[0], box[1], true);
+			// every tooltip must be fully inside the padding box; the side is only asserted for "500", which overflows
+			// on the right in every theme ("5" may fit on the right, depending on the theme's geometry)
+			assertInside("$ms", i, box[0], box[1], i == 1);
 	}
 
 	@Test
