@@ -211,3 +211,82 @@ commit 訊息依 D4 改為 `ZK-6112: … (ZK-XXXX)`（2026-10-12）。
 - 主 checkout 的 `marble` 以 `git merge --ff-only marble-merge` 跟上，再推送到 `hawkchen`。
 - 下一輪：上游 `master` 已到 zk `f2a605bea1`、zkcml `0ae496f5b`（各 3 個 commit，含 `confirmpopup.less`、`_zkvariables.less`、`daterangebox.less` 要逐筆評估）。
 - 已知：垂直 rangeslider 的預設刻度文字會讓靠右緣的頁面多出約 11px 水平捲動（與提示框無關，合併前就有）。
+
+## 9. 第二輪同步（到 zk `c69b09bcad`、zkcml `27f7aafcc`，2026-10-13）
+
+上游 `master` 新增 zk 7 個、zkcml 6 個 commit。本機 `master` 已 fast-forward（`hawkchen/master` 待推送）。
+
+| # | 上游 commit | 主題相關檔案 | 待判斷 |
+|---|---|---|---|
+| 1 | ZK-6164 Confirmpopup OK/Cancel 不沿用標準按鈕樣式 | `confirmpopup.less`、`_zkvariables.less`、`profiles/_compact.less`、`_default.less` | Marble 的 confirmpopup 按鈕是否同樣有問題 |
+| 2 | ZK-6161、ZK-4305 Daterangebox | zkmax `daterangebox.less`（−15 行）、TS | 刪掉的規則在 Marble CSS 是否也要刪 |
+| 3 | ZK-6051 nav 裡的 badge 文字太低 | zkmax `tablet/compact/_nav.less` | Marble tablet 是否同樣 |
+| 4 | ZK-6043 Grid menupopup 勾選圖示錯位（mobile） | zkmax `tablet/default/_menu.less` | 同上 |
+| 5 | ZK-6044 Tree 展開圖示壓到文字 | zkmax `tablet/default/_tree.less` | 同上 |
+| 6 | ZK-6042 panel 圖示在 mobile 顯示不完整 | 待查 | 同上 |
+| 7 | ZK-6167 zkthemebuilder 改 Java 17 | `zkthemebuilder/pom.xml` | 直接合併 |
+
+另有 27 個 test2 檔案（新測試與 zul），要在 Marble 上跑；IceBlue 專屬的斷言加 `@Tag("IceBlueOnly")`，不刪不改。
+
+流程同第一輪：`ZK10/sync2/{zk,zkcml}` 從 `marble` 開 `marble-sync-<sha>` → merge `master`（`.less` 衝突保留刪除）→ 逐筆判斷、需要的改寫成 Marble CSS（`ZK-6112: … (ZK-XXXX)`）→ 獨立驗證 → 合併進 `marble`（ff-only）並推送前先請使用者確認。
+
+### 9.1 判斷結果（2026-10-13，工程師）
+
+完整報告：`ZK10/sync2/triage-report.md`，截圖 `ZK10/sync2/triage/`。
+
+| # | 判定 | commit |
+|---|---|---|
+| 1 ZK-6164 | **待使用者決定（D11）**：Marble 的 OK/Cancel 是刻意的 28px compact（Cancel outlined、無 shadow），與 `.z-button` 36px 不同 | — |
+| 2 ZK-6161 / 4305 | 移植：上游不再渲染 `.z-daterangebox-status`，Marble 那條規則已是死碼，刪除；status 改用 `.sr-only`，無視覺變化 | zkcml `f1d77b256` |
+| 3–6 ZK-6051 / 6043 / 6044 / 6042 | 不適用：Marble tablet 量測沒有同樣問題。ZK-6042 在 master 只有測試，找不到樣式修正 commit | — |
+| 7 ZK-6167 | 直接合併 | merge |
+
+- merge：zk `dbb6f402c4`、zkcml `5acd6d8fd`，只有 8 個 `.less` modify/delete 衝突，全部保留刪除。
+- IceBlueOnly 標記（zk `d746709a0d`、`65059971c99`）：`B110_ZK_6143Test` 4 個 method、`B110_ZK_6164Test` 整個 class、`F110_ZK_4305_DaterangeAttributeTest` 1 個 method、`B110_ZK_6042/6043/6044Test`（ForkJVMTestOnly，Docker 沒開，未實跑，交給驗證者補跑）。
+- Playwright：chromium 135、hit-target 3、gallery 82、tablet 57 全過，基準圖不需重切。
+- 事故：工程師清理 8115 時用了寬鬆的 `pkill -f "gretty_ports|Runner"`，可能誤殺其他 session 的 preview。事後 8085 已在 13:56 重新啟動。
+
+### 9.2 D11 確認彈窗按鈕（ZK-6164）：已決 B（2026-10-13）
+
+截圖與選項：https://claude.ai/artifact/PuJhBM9Fz4ZbTCWhpQ7nVd （來源 `ZK10/sync2/d11/`）。
+
+- 決定：OK / Cancel 改用 `--zk-button-height` 與 `--zk-button-padding-y/x`，與一般按鈕同高；OK 實心、Cancel 外框、無陰影不變。tablet 補規則，讓彈窗按鈕與 tablet 的一般按鈕同為 44px。
+- 附帶：重切 confirmpopup 相關的 Playwright 基準圖；新增不分主題的 Marble 測試：彈窗按鈕高度 = 一般按鈕高度（desktop 與 tablet）。上游 `B110_ZK_6164Test` 維持 IceBlueOnly。
+- commit：`ZK-6112: size the confirmpopup OK/Cancel like a plain button in Marble (ZK-6164)`。
+- 順序：等第二輪的獨立驗證結束後，在 `sync2` 實作，再交給驗證者複驗這一段。
+
+### 9.3 第二輪獨立驗證（2026-10-13）：PASS
+
+報告：`ZK10/sync2/verify-report.md`。
+
+- 結果：merge、triage、IceBlueOnly 標記、zktest（125 個 test，1 個是瀏覽器環境失敗，重跑通過）、Playwright（chromium 135、hit-target 3、gallery 82、tablet 58）、lint 都通過。
+- IceBlueOnly 標記沒有掩蓋 Marble 的 bug：
+  - 6143 在 Marble 會以 `--zk-color-error` 顯示 invalid 邊框；
+  - 停用的 daterangebox 用滑鼠、JS、鍵盤都打不開；
+  - 6042、6043、6044 開 Docker 實跑，在 Marble 上確實失敗。
+- 後續處理（交給工程師，與 D11-B 一起做）：
+  - F1：sync 分支落後 `marble` 一個 commit，先 merge `marble`；
+  - F3：`B110_ZK_6164Test` 由整個 class 標記改成只標記仍失敗的 method；
+  - F4–F6：補註解、更新 skill 文件、DOM 註解補 `aria-atomic`。
+- 未處理：
+  - F2：上游的 `B110_ZK_6042Test` 用裝置名稱 `"iPad"`，現在的 ChromeDriver 不接受，任何主題都跑不起來。要回報上游。
+- 8115 不是驗證者停的：另一個 session 重啟 8085 時用了 `pkill -f org.akhikhl.gretty.Runner`，連帶停掉 8115。
+
+### 9.4 D11-B 實作與複驗（2026-10-13）
+
+- 實作報告：`ZK10/sync2/d11-impl-report.md`。commit：
+  - zk：`5757bb7f79` merge marble、`f833a5349d` 按鈕尺寸與新測試 `B110_ZK_6112_ConfirmpopupButtonSizeTest`、`5024a54e3e` 6164 的 tag 改成標在 method、`ef87bd4ce6` 註解與 skill 文件、`b1adcdf929` 重切 `confirmpopup-gallery.png`；
+  - zkcml：`d895f4b16` merge marble、`aee12e973` tablet `_buttons.css`、`88e477c9c` DOM 註解。
+- 複驗：`ZK10/sync2/verify-report-d11.md`。
+  - D11 本身全部通過：desktop 36/36/36、tablet 44/44/44；focus ring 與 hover 正常；zktest 與 Playwright 都過。
+  - 判定 FAIL 的唯一原因：zk 的 `marble` 在 merge 之後又多了 3 個 commit（`9e1f7ee5a5`、`37f80c6122`、`60f0c3c36c`），還不能 ff。`merge-tree` 確認沒有衝突。
+  - 這是其他 session 還在推 `marble` 時一定會出現的情況，留到合併當下處理：其他 session 暫停後，再 merge 一次 `marble`，重跑 `html-table-alignment`、chromium、gallery，然後 ff。
+- 新發現（V2，不阻擋）：compact 密度下，Marble 的實心按鈕 32px、外框按鈕 34px，但 token `--zk-button-height` 是 30px。D11 讓這個差異也出現在確認彈窗裡（OK 32、Cancel 34）。另外追蹤。
+
+### 9.5 合併進 `marble`（2026-10-13，D13-A）
+
+- 其他 session 暫停後，再 merge 一次 `marble`（zk `1547ac6a44`，無衝突；這時 `marble` 已比上次多 6 個 commit，含 listbox/tree 排序圖示的 CSS）。zkcml 已包含最新的 `marble`，不需要再 merge。
+- Playwright（8115，`html-table`、chromium、gallery、hit-target、tablet，共 281 個）：280 過。`tabbox › gallery` 失敗原因是「無法取得兩張連續穩定的截圖」，用 `screenshot.spec.ts:776` 單獨重跑兩次都通過，判定為 flaky。沒有任何基準圖變動。
+- `--ff-only`：zk `marble` → `1547ac6a44`，zkcml `marble` → `88e477c9c`。
+- 推送：`hawkchen/master`（zk `c69b09bcad`、zkcml `27f7aafcc`）與 `hawkchen/marble`。
+- 下一輪：從新的上游 `master` 開始，流程同 §5。V2（compact 按鈕高度）併入 NS9。
