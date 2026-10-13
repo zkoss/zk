@@ -1,0 +1,16 @@
+<!-- Jess #32: biglistbox frozenCols=3, frozen and scrollable header panes should sit side by side.
+     FakerMatrixModel lives in zk.example (zkpreview) / org.zkoss.zktest.test2.big (zktest). -->
+<zk>
+	<zscript><![CDATA[
+		import zk.example.FakerMatrixModel;
+		FakerMatrixModel model = new FakerMatrixModel(10, 20);
+	]]></zscript>
+	<biglistbox id="big" width="600px" height="300px" colWidth="130px" frozenCols="3" model="${model}">
+		<template name="heads">
+			<html><![CDATA[<div title="x=${matrixInfo[0]},y=${matrixInfo[1]}">${each[matrixInfo[0]]}</div>]]></html>
+		</template>
+		<template name="rows">
+			<html><![CDATA[<div title="x=${matrixInfo[0]},y=${matrixInfo[1]}">${each[matrixInfo[0]]}</div>]]></html>
+		</template>
+	</biglistbox>
+</zk>

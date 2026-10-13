@@ -2,20 +2,18 @@
 
 本頁列出目前刻意不在範圍內的 Jess 設計審查 issue。「延後」代表暫不處理，不代表關閉或駁回；以下所有 issue 在 `hawkchen/marble-issue` 中皆為 OPEN。Group A 為 ZK core 行為，theme CSS 無法修正，需另開 ZK Jira；Group B 為 preview 頁面缺陷，theme 本身正確，demo 頁有誤，修正成本低但優先度低。
 
-## Group A：ZK core（11）
+## Group A：ZK core（7）
+
+> 2026-10-13 重現結果（[repro/report.md](repro/report.md)）改寫了本組的分類：#9、#44 是 ZK bug（ZK-6193、ZK-5941）；#32、#20、#50、#75 只在 Marble 出現，屬主題回歸，已在批次 17 修正並移出本表；#28、#56、#14、#58 為設計如此；#21 為設計如此，附帶的 Cancel 問題開了 ZK-6194。下表的 Note 是重現前的判斷，保留作紀錄。
 
 | Issue | Symptom | Note |
 |---|---|---|
 | #58 | borderlayout 收合的 region 無法重新停靠：flyout header 的還原 chevron 為 `display: none` | **最高嚴重度**，是功能性死路。開 Jira 前先確認來源，`z-borderlayout-icon` 未出現在 theme CSS 中 |
-| #32 | biglistbox `frozenCols=3` 時，凍結區與可捲動區渲染為上下兩列 header，而非單一連續列 | 先確認 theme CSS 是否有貢獻 |
 | #9 | cascader 會提交僅含父層的選取（如 Japan 未選 Tokyo），欄位空白卻仍顯示清除 "×"；重新開啟後狀態不一致 | 兩個缺陷：部分提交，以及開關時未重設暫態 |
 | #21 | daterangebox 無法儲存時間設定：沒有儲存按鈕，關閉 picker 即捨棄 | |
-| #20 | daterangebox 把額外日期畫成 selected（1 月 1 日、2 月 1 日與真正端點外觀相同） | 已知為 ZK artifact，非 theme 錯誤：空白或預設 popup 會把錨點月份的 1 日畫成 `z-calendar-selected`。開單前先查是否已有 ZK issue |
 | #28 | searchbox 重新開啟後仍保留舊輸入 | |
 | #44 | anchornav 會更新 active 高亮，但不會捲動到目標區段 | |
-| #50 | navbar 下拉選單開啟後無法關閉 | |
 | #56 | window popup 開在頁面下方，超出 viewport | 先確認 theme 未設定 `position`、`transform` 或 `height` |
-| #75 | confirmpopup 的 left/top 定位與其觸發按鈕重疊 | 先檢查 theme 的 arrow 與 margin 尺寸 |
 | #14 | chosenbox 搜尋無結果時沒有 "no result" 空狀態 | 可能是尚未實作的功能而非 bug，開單前先定義框架 |
 
 ## Group B：preview 頁面（14）

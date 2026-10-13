@@ -1,0 +1,10 @@
+<!-- Jess #58: collapsed borderlayout region cannot be restored (re-dock chevron hidden in the flyout header) -->
+<zk>
+	<borderlayout width="600px" height="300px">
+		<center>Center</center>
+		<north title="North" size="20%" collapsible="true">North content</north>
+		<south title="South" size="20%" collapsible="true">South content</south>
+		<west title="West" size="25%" collapsible="true">West content</west>
+		<east title="East" size="25%" collapsible="true">East content</east>
+	</borderlayout>
+</zk>

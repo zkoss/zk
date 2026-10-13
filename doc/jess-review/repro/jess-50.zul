@@ -1,0 +1,27 @@
+<!-- Jess #50: navbar dropdown popup cannot be closed -->
+<zk>
+	<navbar id="h" orient="horizontal">
+		<navitem label="Home"/>
+		<nav label="Get Started">
+			<navitem label="Step One"/>
+			<navitem label="Step Two"/>
+		</nav>
+		<navitem label="About"/>
+	</navbar>
+	<separator height="40px"/>
+	<navbar id="hc" orient="horizontal" collapsed="true">
+		<navitem label="Home" iconSclass="z-icon-home"/>
+		<nav label="Get Started" iconSclass="z-icon-layout-list">
+			<navitem label="Step One"/>
+			<navitem label="Step Two"/>
+		</nav>
+	</navbar>
+	<separator height="40px"/>
+	<navbar id="v" orient="vertical" width="200px" collapsed="true">
+		<navitem label="Home" iconSclass="z-icon-home"/>
+		<nav label="Get Started" iconSclass="z-icon-layout-list">
+			<navitem label="Step One"/>
+			<navitem label="Step Two"/>
+		</nav>
+	</navbar>
+</zk>

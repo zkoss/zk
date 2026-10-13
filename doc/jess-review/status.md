@@ -1,13 +1,13 @@
 # Jess 設計審查 Marble 主題：現況看板
 
-議題追蹤在 `hawkchen/marble-issue`（#1–#82）。tracker 狀態與 commit 於 2026-10-11 核對。本文只記錄目前的最終狀態。
+議題追蹤在 `hawkchen/marble-issue`（#1–#82）。tracker 狀態與 commit 於 2026-10-11 核對，批次 17 於 2026-10-13 補入。本文只記錄目前的最終狀態。
 
 ## 摘要
 
-- 82 個 issue 中，**51 個**已在 `marble` 上修正或答覆，等待設計師關單。
-- **6 個** issue 轉入 ZK Jira（#73 #74 #1 #30 #68 #69，對應 ZK-6187、ZK-6188、ZK-6191）。另有 ZK-6175、ZK-6176，是 #37、#65 的 widget 部分，這兩個 issue 已計入 51。
-- **25 個** issue 不在目前範圍，見 [deferred.md](deferred.md)（DEMO 14、ZK-CORE 11）。
-- 51 + 6 + 25 = 82，與 issue 總數相符。
+- 82 個 issue 中，**55 個**已在 `marble` 上修正或答覆，等待設計師關單。
+- **6 個** issue 轉入 ZK Jira（#73 #74 #1 #30 #68 #69，對應 ZK-6187、ZK-6188、ZK-6191）。另有 ZK-6175、ZK-6176，是 #37、#65 的 widget 部分，這兩個 issue 已計入 55。
+- **21 個** issue 不在目前範圍，見 [deferred.md](deferred.md)（DEMO 14、ZK-CORE 7）。
+- 55 + 6 + 21 = 82，與 issue 總數相符。
 
 ## 已完成
 
@@ -26,8 +26,9 @@
 | 10 | button、calendar、radio、tbeditor、fisheyebar | #4、#6、#40、#47、#61 | `5a663c9ef1` | [gates/batch10-final2/report.md](gates/batch10-final2/report.md)、[gates/batch47-final/report.md](gates/batch47-final/report.md)、[gates/rebase-d85/report.md](gates/rebase-d85/report.md) |
 | 11 | tabbox accordion、panel、window、borderlayout demo | #53、#54、#55、#57（修在預覽頁，不在主題） | `1dda0e855d` | [gates/batch11-final.md](gates/batch11-final.md) |
 | 12 | checkbox switch | #10（修正）、#11（答覆，未改程式碼） | `11217ddc48` | [gates/batch12-final.md](gates/batch12-final.md) |
+| 17 | biglistbox、daterangebox、navbar、confirmpopup | #32、#20、#50、#75（原列 ZK core，重現後確認只有 Marble 有，見 [repro/report.md](repro/report.md)） | `fd7b62f81` `38d86e41f` `3f4a55237`（zkcml）`aad52811ba` | [gates/batch17-final.md](gates/batch17-final.md) |
 
-合計 51 個不重複 issue（#41 出現在 batch 1 與 2，只計一次）。
+合計 55 個不重複 issue（#41 出現在 batch 1 與 2，只計一次）。
 
 ## 已開 ZK Jira
 
@@ -40,6 +41,14 @@
 | #65（drag 部分） | ZK-6176 | splitlayout 拖曳時 ghost 沒有 cursor 或 orientation class |
 
 ZK Jira 共 5 個 key。前三行涵蓋 6 個 issue；ZK-6175、ZK-6176 是 #37、#65 的 widget 部分，這兩個 issue 已計入已完成。
+
+2026-10-13 重現 Group A 的 11 個 issue 後（[repro/report.md](repro/report.md)），新增以下 Jira。這些 issue 仍計在 deferred 的 21 個內。
+
+| Issue | ZK key | 主題 |
+|---|---|---|
+| #9 | [ZK-6193](https://zkoss.atlassian.net/browse/ZK-6193) | cascader 點非葉節點後關閉，留下未提交的選取 |
+| #44 | [ZK-5941](https://zkoss.atlassian.net/browse/ZK-5941)（既有，補留言） | anchornav 點連結不捲動：`overflow:visible` 的祖先被當成可捲動 |
+| #21（附帶） | [ZK-6194](https://zkoss.atlassian.net/browse/ZK-6194) | daterangebox 的 Cancel／Escape 會提交未儲存的時間修改（ZK-6146 引入） |
 
 ## Line C 的 follow-up（不是 tracker issue）
 

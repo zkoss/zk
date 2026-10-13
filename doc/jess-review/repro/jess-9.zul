@@ -1,0 +1,18 @@
+<!-- Jess #9: cascader commits a parent-only selection -->
+<zk>
+	<zscript><![CDATA[
+		DefaultTreeModel model = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+			Arrays.asList(new DefaultTreeNode[]{
+				new DefaultTreeNode("USA", Arrays.asList(new TreeNode[]{
+					new DefaultTreeNode("New York"), new DefaultTreeNode("Los Angeles")})),
+				new DefaultTreeNode("Japan", Arrays.asList(new TreeNode[]{
+					new DefaultTreeNode("Tokyo"), new DefaultTreeNode("Kyoto")}))})));
+	]]></zscript>
+	<cascader id="c" model="${model}" width="200px">
+		<attribute name="onSelect"><![CDATA[
+			log.setValue("onSelect selectedObjects=" + event.getSelectedObjects()
+				+ " cascader.selectedItem=" + c.getSelectedItem());
+		]]></attribute>
+	</cascader>
+	<label id="log"/>
+</zk>

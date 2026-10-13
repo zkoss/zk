@@ -1,0 +1,13 @@
+<!-- Jess #75: confirmpopup placement left/top overlaps the trigger button -->
+<zk>
+	<div style="padding:200px 300px">
+		<button id="bLeft" label="Left" popup="cpLeft"/>
+		<button id="bTop" label="Top" popup="cpTop"/>
+		<button id="bRight" label="Right" popup="cpRight"/>
+		<button id="bBottom" label="Bottom" popup="cpBottom"/>
+	</div>
+	<confirmpopup id="cpLeft" placement="left" message="Placement left"/>
+	<confirmpopup id="cpTop" placement="top" message="Placement top"/>
+	<confirmpopup id="cpRight" placement="right" message="Placement right"/>
+	<confirmpopup id="cpBottom" placement="bottom" message="Placement bottom"/>
+</zk>
