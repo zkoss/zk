@@ -1803,7 +1803,11 @@
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			<xs:sequence minOccurs="0" maxOccurs="1">
-				<xs:element ref="popup" />
+				<xs:choice>
+					<xs:element ref="popup" />
+					<xs:element ref="menupopup" />
+					<xs:element ref="confirmpopup" />
+				</xs:choice>
 				<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			</xs:sequence>
 		</xs:sequence>
