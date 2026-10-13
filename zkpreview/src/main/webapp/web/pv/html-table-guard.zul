@@ -1,0 +1,21 @@
+<?page title="Html table header alignment" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for html-table-alignment.spec.ts: an html component holding tables. Lives under pv/ so
+     gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk>
+<div sclass="z-p-8">
+    <html><![CDATA[
+        <table id="plain">
+            <tr><th>Name</th><th>Quantity</th></tr>
+            <tr><td>Apple</td><td>12</td></tr>
+        </table>
+        <table id="th-align">
+            <tr><th>Name</th><th align="right">Quantity</th></tr>
+            <tr><td>Apple</td><td align="right">12</td></tr>
+        </table>
+        <table id="tr-align">
+            <tr align="right"><th>Name</th><th>Quantity</th></tr>
+            <tr><td>Apple</td><td>12</td></tr>
+        </table>
+    ]]></html>
+</div>
+</zk>
