@@ -2149,12 +2149,13 @@
 				<xs:element ref="auxhead" />
 				<xs:element ref="frozen" />
 			</xs:choice>
-			<xs:choice>
+			<xs:choice minOccurs="0">
 				<xs:sequence>
 					<xs:element ref="columns" />
 					<xs:choice minOccurs="0" maxOccurs="unbounded">
 						<xs:group ref="baseGroup" />
 						<xs:element ref="auxhead" />
+						<xs:element ref="frozen" />
 					</xs:choice>
 					<xs:choice minOccurs="0" maxOccurs="1">
 						<xs:sequence minOccurs="0" maxOccurs="1">
@@ -2162,12 +2163,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="foot" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -2176,12 +2179,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="rows" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -2193,6 +2198,7 @@
 					<xs:choice minOccurs="0" maxOccurs="unbounded">
 						<xs:group ref="baseGroup" />
 						<xs:element ref="auxhead" />
+						<xs:element ref="frozen" />
 					</xs:choice>
 					<xs:choice minOccurs="0" maxOccurs="1">
 						<xs:sequence minOccurs="0" maxOccurs="1">
@@ -2200,12 +2206,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="foot" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -2214,12 +2222,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="columns" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -2231,6 +2241,7 @@
 					<xs:choice minOccurs="0" maxOccurs="unbounded">
 						<xs:group ref="baseGroup" />
 						<xs:element ref="auxhead" />
+						<xs:element ref="frozen" />
 					</xs:choice>
 					<xs:choice minOccurs="0" maxOccurs="1">
 						<xs:sequence minOccurs="0" maxOccurs="1">
@@ -2238,12 +2249,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="rows" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -2252,12 +2265,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="columns" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -2511,7 +2526,7 @@
 				<xs:element ref="listgroupfoot" />
 				<xs:element ref="frozen" />
 			</xs:choice>
-			<xs:choice>
+			<xs:choice minOccurs="0">
 				<xs:sequence>
 					<xs:element ref="listhead" />
 					<xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -2520,6 +2535,7 @@
 						<xs:element ref="listitem" />
 						<xs:element ref="listgroup" />
 						<xs:element ref="listgroupfoot" />
+						<xs:element ref="frozen" />
 					</xs:choice>
 					<xs:sequence minOccurs="0" maxOccurs="1">
 						<xs:element ref="listfoot" />
@@ -2529,6 +2545,7 @@
 							<xs:element ref="listitem" />
 							<xs:element ref="listgroup" />
 							<xs:element ref="listgroupfoot" />
+							<xs:element ref="frozen" />
 						</xs:choice>
 					</xs:sequence>
 				</xs:sequence>
@@ -2541,6 +2558,7 @@
 						<xs:element ref="listitem" />
 						<xs:element ref="listgroup" />
 						<xs:element ref="listgroupfoot" />
+						<xs:element ref="frozen" />
 					</xs:choice>
 					<xs:sequence minOccurs="0" maxOccurs="1">
 						<xs:element ref="listhead" />
@@ -2550,6 +2568,7 @@
 							<xs:element ref="listitem" />
 							<xs:element ref="listgroup" />
 							<xs:element ref="listgroupfoot" />
+							<xs:element ref="frozen" />
 						</xs:choice>
 					</xs:sequence>
 				</xs:sequence>
@@ -3607,12 +3626,13 @@
 				<xs:element ref="auxhead" />
 				<xs:element ref="frozen" />
 			</xs:choice>
-			<xs:choice>
+			<xs:choice minOccurs="0">
 				<xs:sequence>
 					<xs:element ref="treecols" />
 					<xs:choice minOccurs="0" maxOccurs="unbounded">
 						<xs:group ref="baseGroup" />
 						<xs:element ref="auxhead" />
+						<xs:element ref="frozen" />
 					</xs:choice>
 					<xs:choice minOccurs="0" maxOccurs="1">
 						<xs:sequence minOccurs="0" maxOccurs="1">
@@ -3620,12 +3640,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="treefoot" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -3634,12 +3656,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="treechildren" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -3651,6 +3675,7 @@
 					<xs:choice minOccurs="0" maxOccurs="unbounded">
 						<xs:group ref="baseGroup" />
 						<xs:element ref="auxhead" />
+						<xs:element ref="frozen" />
 					</xs:choice>
 					<xs:choice minOccurs="0" maxOccurs="1">
 						<xs:sequence minOccurs="0" maxOccurs="1">
@@ -3658,12 +3683,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="treefoot" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -3672,12 +3699,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="treecols" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -3689,6 +3718,7 @@
 					<xs:choice minOccurs="0" maxOccurs="unbounded">
 						<xs:group ref="baseGroup" />
 						<xs:element ref="auxhead" />
+						<xs:element ref="frozen" />
 					</xs:choice>
 					<xs:choice minOccurs="0" maxOccurs="1">
 						<xs:sequence minOccurs="0" maxOccurs="1">
@@ -3696,12 +3726,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="treechildren" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
@@ -3710,12 +3742,14 @@
 							<xs:choice minOccurs="0" maxOccurs="unbounded">
 								<xs:group ref="baseGroup" />
 								<xs:element ref="auxhead" />
+								<xs:element ref="frozen" />
 							</xs:choice>
 							<xs:sequence minOccurs="0" maxOccurs="1">
 								<xs:element ref="treecols" />
 								<xs:choice minOccurs="0" maxOccurs="unbounded">
 									<xs:group ref="baseGroup" />
 									<xs:element ref="auxhead" />
+									<xs:element ref="frozen" />
 								</xs:choice>
 							</xs:sequence>
 						</xs:sequence>
