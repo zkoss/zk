@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6173.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Oct 13 10:32:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps to reproduce (ZK EE, zkmax on the classpath):
+		1. Load the page.
+		- Expected: the select lists "Net 30" and "Net 60", and the label under the
+			buttons renders.
+		- Bug: the listhead inside the select-mold listbox failed the whole mount with
+			"_syncStacking is not a function", so nothing on the page rendered.
+		2. Click "Relabel the listheader", then "Hide the listheader in stacking".
+		- Expected: no error, and the select still lists both options.
+	</label>
+	<listbox id="lb" mold="select" rows="1">
+		<listhead>
+			<listheader id="hdr" label="Term"/>
+		</listhead>
+		<listitem label="Net 30"/>
+		<listitem label="Net 60"/>
+	</listbox>
+	<button id="relabel" label="Relabel the listheader" onClick='hdr.setLabel("Payment term")'/>
+	<button id="hide" label="Hide the listheader in stacking" onClick="hdr.setResponsiveVisible(false)"/>
+	<label id="after" value="Rendered after the listbox"/>
+</zk>
