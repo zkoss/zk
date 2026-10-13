@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-4305-dismiss.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Oct  7 17:09:45 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<daterangebox id="drb" format="yyyy-MM-dd" width="360px"/>
+	<textbox id="tb"/>
+	<label multiline="true" style="position: absolute; left: 10px; top: 420px">
+		WCAG 2.5.2 (za11y): open the calendar, then press and hold on an empty part of the page —
+		the popup must stay open until you release. Moving back onto the popup or the box before
+		releasing keeps it open. Pressing on the textbox closes it only on release too.
+	</label>
+</zk>

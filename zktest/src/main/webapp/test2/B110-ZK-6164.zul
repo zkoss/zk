@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6164.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Thu Sep 24 15:18:55 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Open the confirmpopup and compare its OK / Cancel with the plain button
+			beside it.
+
+		- Expected: the same geometry and the same fill, because both are buttons
+			and ZK has one button identity.
+		- Bug: confirmpopup.less styled them from scratch — hardcoded padding and
+			line-height, no min-height, no hover/focus/active, no shadow — so a theme that
+			moves --zk-button-* moved every button on the page except these two.
+	</label>
+	<hlayout spacing="24px" valign="middle">
+		<button id="plain" label="Plain button"/>
+		<button id="opener" label="Open confirmpopup" onClick="pc.open(self)"/>
+	</hlayout>
+	<confirmpopup id="pc" severity="info" title="Publish changes"
+				  message="Make these changes visible to everyone?" defaultFocus="ok"/>
+</zk>
