@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -30,6 +31,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * blue checkbox container on the tablet UI, so the glyph overflowed and sat
  * off-centre. The fix shrinks the icon and centres it inside the box.
  */
+// IceBlue-only: it measures the checkmark inside IceBlue's 24px blue .z-menuitem-image box; Marble has no such box (the image node is 0x0) and draws a bare checkmark.
+@Tag("IceBlueOnly")
 @ForkJVMTestOnly
 public class B110_ZK_6043Test extends WebDriverTestCase {
 	@RegisterExtension
