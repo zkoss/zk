@@ -117,6 +117,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Grid groupfoot follows the column align (grid.css). See grid-groupfoot-alignment.spec.ts.
+      name: 'grid-groupfoot',
+      testMatch: /grid-groupfoot-alignment\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Stacking scale: --zk-index-* tokens + .z-index-* utilities resolve to
       // their values, and the token ladder's three hard constraints hold. See
       // zindex-scale.spec.ts and doc/spec/zindex-scale.md.

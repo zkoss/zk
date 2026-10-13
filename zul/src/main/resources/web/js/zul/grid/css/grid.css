@@ -356,9 +356,6 @@
 }
 
 .z-groupfoot-content {
-    display: flex;
-    align-items: center;
-    gap: var(--zk-spacing-2);
     /* td.z-groupfoot-inner > div.z-groupfoot-content: same padding as .z-row-content */
     padding: var(--zk-grid-cell-padding);
     color: var(--zk-color-on-surface);
