@@ -16,7 +16,13 @@ The panes are floated again, as in the old theme. The frozen and scrollable head
 
 # Result
 
-![frozenCols 3](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/32-frozen3.png?raw=true)
+Same steps as your screenshot (Change frozenCols → 3):
+
+![frozenCols 3](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/32-after.png?raw=true)
+
+After scrolling horizontally: x=0–2 stay pinned on the left, followed by x=5 onward.
+
+![frozenCols 3, scrolled](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/32-after-scrolled.png?raw=true)
 
 ## #20
 
@@ -30,7 +36,9 @@ Inside the daterangebox popup, a day carrying that class but not belonging to th
 
 # Result
 
-![range 10 to 15](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/20-seeded.png?raw=true)
+Seeded range (Jan 10 – Jan 15, 2025), same popup as your screenshot. Jan 1 and Feb 1 now look like ordinary days:
+
+![seeded range](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/20-after.png?raw=true)
 
 ## #50
 
@@ -48,11 +56,11 @@ Note: clicking outside or pressing Escape does not close an expanded horizontal 
 
 Open:
 
-![open](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/50-dropdown-open.png?raw=true)
+![open](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/50-after-open.png?raw=true)
 
 After clicking "Get Started" again:
 
-![closed](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/50-dropdown-closed.png?raw=true)
+![closed](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/50-after-closed.png?raw=true)
 
 ## #75
 
@@ -64,17 +72,15 @@ For the left and top positions, Marble reserved room for the arrow with a bottom
 
 The arrow room is now reserved on the side ZK takes into account. Left and top popups keep an 8px gap to the button (before 0), the same as right and bottom. Arrow and popup sizes are unchanged.
 
-On the preview page, the Left button sits too close to the window edge for a 283px popup, so that popup is pushed against the edge. That is the page layout, not the component.
-
 # Result
 
 Left:
 
-![left](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/75-left.png?raw=true)
+![left](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/75-after-left.png?raw=true)
 
 Top:
 
-![top](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/75-top.png?raw=true)
+![top](https://github.com/hawkchen/marble-issue/blob/main/screenshots/batch17/75-after-top.png?raw=true)
 
 ## Part B: ZK behaviour (reproduced in both themes)
 
