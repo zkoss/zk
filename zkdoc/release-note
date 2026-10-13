@@ -2,6 +2,7 @@ ZK 11.1.0
 * Features
 
 * Bugs
+  ZK-6184: zul.xsd: combobutton accepts only popup, so <combobutton><menupopup/></combobutton> fails validation
   ZK-6179: zul.xsd: inputgroup accepts no child elements, so <inputgroup><label/><textbox/></inputgroup> fails validation
   ZK-6177: zul.xsd: spinner value is typed xs:dateTime (and step xs:integer), so <spinner value="5"/> fails validation
   ZK-6172: zul.xsd: listbox with listitems but no listhead/listfoot fails validation
