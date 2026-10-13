@@ -28,6 +28,7 @@ function _fixForEmpty(wgt: zul.grid.Grid): void {
 			// ZK-2365 table cell needs the "display:table-cell" when colspan is enable.
 			empty.style.display = 'table-cell';
 		}
+		wgt._updateEmptyBody();
 	}
 	wgt._shallFixEmpty = false;
 }
@@ -79,6 +80,7 @@ export class Grid extends zul.mesh.MeshWidget {
 				else
 					emptyContentDiv.removeClass(emptyContentClz);
 				emptyContentDiv.text(emptyMessage);
+				this._updateEmptyBody();
 			}
 		}
 
