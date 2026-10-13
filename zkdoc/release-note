@@ -71,6 +71,7 @@ ZK 11.0.0
   ZK-6189: zul.xsd: a does not accept child components, so <a><div/></a> fails validation
   ZK-5515: open portallayout navigation popup produces a javascript error
   ZK-6076: Incorrect rendering of Groupboxes with vflex
+  ZK-6185: checkbox: indeterminate is not reflected in the default mold, a clicked indeterminate checkbox keeps showing the minus sign
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
