@@ -129,6 +129,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Icon avatar glyph is 60% of the avatar (avatar.css). See avatar-icon-size.spec.ts.
+      name: 'avatar-icon',
+      testMatch: /avatar-icon-size\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Stacking scale: --zk-index-* tokens + .z-index-* utilities resolve to
       // their values, and the token ladder's three hard constraints hold. See
       // zindex-scale.spec.ts and doc/spec/zindex-scale.md.

@@ -53,6 +53,13 @@
     display: block;
 }
 
+/* Icon mode: size the glyph from the avatar, not the initials font size, so it
+   fills 60% of the avatar (24px at the 40px medium, MD3's icon size) at every
+   size, including the avatargroup size cascade and an inline --zk-avatar-size. */
+.z-avatar i {
+    font-size: calc(var(--zk-avatar-size) * 0.6);
+}
+
 .z-avatar-text {
     padding: 0 4px;
     line-height: 1;
