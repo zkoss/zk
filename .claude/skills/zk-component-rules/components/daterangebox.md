@@ -13,7 +13,7 @@ div.z-daterangebox[role=group]
 ├─ input.z-daterangebox-input.z-daterangebox-end        (end text field)
 ├─ a.z-daterangebox-button[role=button][tabindex=0][aria-haspopup=dialog]   (trigger — present in the initial DOM ONLY when buttonVisible=true at render time; see Attribute support)
 │  └─ i.z-icon-calendar
-└─ div.z-daterangebox-status[role=status][aria-live=polite][aria-atomic=true]   (visually-hidden live region; always present, always in the DOM regardless of buttonVisible)
+└─ div.sr-only[role=status][aria-live=polite][aria-atomic=true]   (visually-hidden live region; no longer rendered by the widget — za11y appends it on init, so it is absent without za11y)
 ```
 
 `role="group"` is the default; an app-supplied `domExtraAttrs.role` overrides it (rare).
@@ -62,7 +62,7 @@ On calendar cells inside the popup panels (managed by the Calendar widget, not d
 - `allowEmpty` → gates presence of the footer's Clear button (`.z-daterangebox-popup-clear`) — present only when the resolved value is `"both"`.
 - `showTodayLink` → gates presence of the footer's Today button (`.z-daterangebox-popup-today`).
 - `weekOfYear` → forwarded to every popup Calendar panel (see `components/calendar.md`'s `.z-calendar-wk` cell).
-- `separator` → literal text content of `.z-daterangebox-separator` (an `aria-hidden` decorative span — not read by assistive tech; the accessible announcement of the current range lives in `.z-daterangebox-status` instead).
+- `separator` → literal text content of `.z-daterangebox-separator` (an `aria-hidden` decorative span — not read by assistive tech; the accessible announcement of the current range lives in the za11y-appended `.sr-only` live region instead).
 - `position` → popup anchor token; purely a JS-computed inline `top`/`left`, no class involved.
 - `placeholder` / `beginPlaceholder` / `endPlaceholder` → also become the input's `aria-label` when the corresponding placeholder is non-empty (a placeholder is otherwise the input's only visible cue, so it doubles as the accessible name).
 
@@ -72,7 +72,7 @@ On calendar cells inside the popup panels (managed by the Calendar widget, not d
 - The `.z-daterangebox-popup-times` grid must use the **same column count** as `.z-daterangebox-popup-panels` (both consume `--panels`) so each Timebox lines up under its corresponding Calendar panel.
 - The popup is a `<body>`-mounted sibling of everything else on the page (not a DOM descendant of `.z-daterangebox`) whenever it exists — a theme must not rely on any ancestor/descendant CSS relationship between `.z-daterangebox` and `.z-daterangebox-popup`; positioning is entirely inline-style/JS-driven.
 - The trigger button, when present, must remain focusable (native `tabindex="0"` on an `<a>` without `href`) — this is required both for keyboard access and because closing the popup can programmatically restore focus to it.
-- `.z-daterangebox-status` exists in the DOM unconditionally (even when `buttonVisible=false` omits the trigger) — it is not a candidate for `display:none` removal by a theme; WCAG 4.1.3 depends on it staying in the accessibility tree (visually hidden is fine; DOM-absent is not).
+- The live region is a `div.sr-only` appended by za11y (the widget no longer renders `.z-daterangebox-status`; ZK-6161). A theme must not `display:none` it; WCAG 4.1.3 depends on it staying in the accessibility tree (visually hidden via `.sr-only` is fine; DOM-absent is not).
 - **The two `<input>` elements ship with no `size` or `width`.** `redraw()` (`Daterangebox.ts`) writes only `class`, `aria-label`, `placeholder`, and `autocomplete` on each input — never a `size` attribute — so each falls back to the browser default `size=20` (~20ch, ~172px). Because there are **two** of them (plus separator + trigger), an unbounded theme renders a field roughly twice a single-input datebox's width; and if the theme also centers the input text, a short date sits mid-box with large symmetric gutters. **Any theme must bound the input width** — e.g. `field-sizing: content` (hug the date; degrades to the ~20ch default where unsupported) or an explicit width — or accept the ~20ch-per-input default. This is structural (true for every theme), not a Marble color/spacing choice.
 
 ## Sibling decomposition

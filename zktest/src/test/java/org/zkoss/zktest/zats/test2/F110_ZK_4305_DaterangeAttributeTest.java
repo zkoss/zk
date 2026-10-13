@@ -92,7 +92,7 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 	// ===== D1 boolean =====
 
 	/** D1+E: disabled=true must block popup from opening on icon click. */
-	// IceBlue-only: Marble disables the whole box with pointer-events:none, so WebDriver cannot click the button at all; IceBlue lets the click through and relies on the widget guard.
+	// IceBlue-only: Marble disables the whole box with pointer-events:none, so WebDriver cannot click the button at all; IceBlue lets the click through and relies on the widget guard. Behaviour verified on Marble: the popup cannot be opened by mouse, JS click or keyboard, and the WebDriver click is intercepted by pointer-events:none.
 	@Test
 	@Tag("IceBlueOnly")
 	public void testDisabledBlocksPopupOpen() {
