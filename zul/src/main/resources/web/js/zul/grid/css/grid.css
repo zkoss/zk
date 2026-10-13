@@ -345,16 +345,30 @@
 
 /* ─── Groupfoot rows ─────────────────────────────────────────────────────── */
 .z-groupfoot {
-    background-color: var(--zk-color-surface-container-lowest);
-    border-bottom: 1px solid var(--zk-color-outline-variant);
+    background-color: var(--zk-color-surface-container-low);
+    border-top: 1px solid var(--zk-color-outline-variant);
 }
 
-.z-groupfoot .z-cell,
-.z-groupfoot .z-row-content {
-    padding: var(--zk-spacing-2) var(--zk-spacing-4);
-    font-size: var(--zk-typescale-body-small-size);
-    font-style: italic;
-    color: var(--zk-color-on-surface-variant);
+.z-groupfoot .z-cell {
+    color: var(--zk-color-on-surface);
+    font-weight: var(--zk-typescale-label-large-weight);
+    font-style: normal;
+}
+
+.z-groupfoot-content {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+    /* td.z-groupfoot-inner > div.z-groupfoot-content: same padding as .z-row-content */
+    padding: var(--zk-grid-cell-padding);
+    color: var(--zk-color-on-surface);
+    font-weight: var(--zk-typescale-label-large-weight);
+    font-style: normal;
+}
+
+.z-groupfoot .z-label {
+    color: inherit;
+    font-weight: inherit;
 }
 
 /* Empty message */
@@ -491,14 +505,9 @@
     border-right: 1px solid var(--zk-color-outline-variant);
 }
 
-.z-groupfoot-content {
-    display: flex;
-    align-items: center;
-    gap: var(--zk-spacing-2);
-}
-
 .z-groupfoot-inner {
     flex: 1;
+    padding: 0;
 }
 
 .z-cell-hidden-column {
