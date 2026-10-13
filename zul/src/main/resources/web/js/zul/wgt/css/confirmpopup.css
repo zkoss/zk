@@ -192,8 +192,8 @@
     overflow: hidden;
     box-sizing: border-box;
     min-width: 64px;
-    min-height: var(--zk-button-height-sm);
-    padding: 0 var(--zk-spacing-4);
+    min-height: var(--zk-button-height);
+    padding: var(--zk-button-padding-y) var(--zk-button-padding-x);
     border-radius: var(--zk-confirmpopup-button-radius);
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-label-large-size);
