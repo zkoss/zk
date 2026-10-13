@@ -2453,8 +2453,38 @@
 	</xs:complexType>
 	<!-- inputgroup -->
 	<xs:element name="inputgroup" type="inputgroupType" />
-	<xs:complexType name="inputgroupType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+	<xs:complexType name="inputgroupType" mixed="true">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="a" />
+			<xs:element ref="apply" />
+			<xs:element ref="avatar" />
+			<xs:element ref="bandbox" />
+			<xs:element ref="button" />
+			<xs:element ref="checkbox" />
+			<xs:element ref="chip" />
+			<xs:element ref="choose" />
+			<xs:element ref="combobox" />
+			<xs:element ref="combobutton" />
+			<xs:element ref="datebox" />
+			<xs:element ref="decimalbox" />
+			<xs:element ref="doublebox" />
+			<xs:element ref="doublespinner" />
+			<xs:element ref="fileupload" />
+			<xs:element ref="forEach" />
+			<xs:element ref="if" />
+			<xs:element ref="intbox" />
+			<xs:element ref="label" />
+			<xs:element ref="longbox" />
+			<xs:element ref="orgnode" />
+			<xs:element ref="radio" />
+			<xs:element ref="spinner" />
+			<xs:element ref="textbox" />
+			<xs:element ref="timebox" />
+			<xs:element ref="timepicker" />
+			<xs:element ref="toolbarbutton" />
+			<xs:element ref="zscript" />
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
