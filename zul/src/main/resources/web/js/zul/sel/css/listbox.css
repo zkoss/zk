@@ -160,6 +160,8 @@
     transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
+    font-size: 12px;
+    color: var(--zk-color-on-surface-variant);
     pointer-events: none;
 }
 
@@ -169,29 +171,14 @@
 }
 
 /* Sort direction = arrow (up = ascending, down = descending), distinct from the
-   column-menu caret. */
-.z-listheader-sorticon .z-icon-caret-up,
-.z-listheader-sorticon .z-icon-caret-down {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    background-color: var(--zk-color-on-surface-variant);
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-}
-
+   column-menu caret. Drawn through the shared --_icon mask on the icon's ::before
+   (as grid and tree), so it paints once and survives forced colors. */
 .z-listheader-sorticon .z-icon-caret-up {
-    -webkit-mask-image: url(~./zul/img/marble/sort-up.svg);
-    mask-image: url(~./zul/img/marble/sort-up.svg);
+    --_icon: url(~./zul/img/marble/sort-up.svg);
 }
 
 .z-listheader-sorticon .z-icon-caret-down {
-    -webkit-mask-image: url(~./zul/img/marble/sort-down.svg);
-    mask-image: url(~./zul/img/marble/sort-down.svg);
+    --_icon: url(~./zul/img/marble/sort-down.svg);
 }
 
 /* ─── Body ─────────────────────────────────────────────────────────────── */
