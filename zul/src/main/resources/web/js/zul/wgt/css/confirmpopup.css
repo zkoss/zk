@@ -31,12 +31,14 @@
     font-family: var(--zk-typescale-font-family);
 }
 
-/* Reserve room, opposite the placement, for the arrow's own thickness so its tip
-   touches the trigger edge with no gap/overlap (see skill Composition invariants).
-   Do NOT add independent spacing between the box and the arrow beyond this. */
-.z-confirmpopup.z-confirmpopup-placement-top    { margin-bottom: 8px; }
+/* Reserve room for the arrow's own thickness so its tip touches the trigger edge with no
+   gap/overlap (see skill Composition invariants). ZK's popup positioning reads only
+   margin-top / margin-left of the popup (Popup._posInfo), so top and left use a NEGATIVE
+   margin on that axis; margin-bottom / margin-right would be ignored and leave the arrow
+   over the trigger. Do NOT add independent spacing between the box and the arrow. */
+.z-confirmpopup.z-confirmpopup-placement-top    { margin-top: -8px; }
 .z-confirmpopup.z-confirmpopup-placement-bottom { margin-top: 8px; }
-.z-confirmpopup.z-confirmpopup-placement-left   { margin-right: 8px; }
+.z-confirmpopup.z-confirmpopup-placement-left   { margin-left: -8px; }
 .z-confirmpopup.z-confirmpopup-placement-right  { margin-left: 8px; }
 
 /* ─── Arrow: two stacked CSS triangles (outer edge + inner fill) ─────────
