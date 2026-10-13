@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -91,7 +92,9 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 	// ===== D1 boolean =====
 
 	/** D1+E: disabled=true must block popup from opening on icon click. */
+	// IceBlue-only: Marble disables the whole box with pointer-events:none, so WebDriver cannot click the button at all; IceBlue lets the click through and relies on the widget guard.
 	@Test
+	@Tag("IceBlueOnly")
 	public void testDisabledBlocksPopupOpen() {
 		connect("/test2/F110-ZK-4305-attributes.zul");
 		waitResponse();

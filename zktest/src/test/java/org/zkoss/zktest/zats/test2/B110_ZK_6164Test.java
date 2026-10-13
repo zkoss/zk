@@ -14,11 +14,15 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
+// IceBlue-only: asserts IceBlue's --zk-button-* token names and that the popup buttons match .z-button
+// geometry and shadow; Marble keeps its own --zk-confirmpopup-* tokens and a compact, outlined Cancel.
+@Tag("IceBlueOnly")
 public class B110_ZK_6164Test extends WebDriverTestCase {
 
 	private void openPopup() {
