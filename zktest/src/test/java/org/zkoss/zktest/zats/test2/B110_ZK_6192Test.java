@@ -46,7 +46,7 @@ public class B110_ZK_6192Test extends WebDriverTestCase {
 		double[] r = rects(slider, index);
 		assertTrue(!mustBeLeft || r[1] <= r[2] + 1, slider + " knob " + index + ": tooltip should be on the left of the knob, tooltip right "
 				+ r[1] + " knob left " + r[2]);
-		assertTrue(r[0] >= minLeft - 1 && r[1] <= maxRight + 1, slider + " knob " + index
+		assertTrue(r[0] >= minLeft && r[1] <= maxRight, slider + " knob " + index
 				+ ": tooltip [" + r[0] + "," + r[1] + "] should be inside [" + minLeft + "," + maxRight + "]");
 	}
 
@@ -74,8 +74,8 @@ public class B110_ZK_6192Test extends WebDriverTestCase {
 		waitResponse();
 		double[] box = boxRange();
 		for (int i = 0; i < 2; i++)
-			// the tooltip of "5" is narrow enough to fit on the right, "500" is not
-			assertInside("$ms", i, box[0], box[1], i == 1);
+			// both tooltips must be fully inside the padding box; the "5" one overflows it by less than the border
+			assertInside("$ms", i, box[0], box[1], true);
 	}
 
 	@Test
