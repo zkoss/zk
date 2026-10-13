@@ -1,0 +1,13 @@
+<!-- Jess #14: chosenbox shows no "no result" state when the search has no match -->
+<zk>
+	<zscript><![CDATA[
+		ListModelList model = new ListModelList(new String[]{"Apple", "Banana", "Cherry", "Date"});
+		model.setMultiple(true);
+	]]></zscript>
+	<vlayout>
+		<label value="default"/>
+		<chosenbox id="plain" model="${model}" width="240px"/>
+		<label value="noResultsText=No results"/>
+		<chosenbox id="withText" model="${model}" noResultsText="No results" width="240px"/>
+	</vlayout>
+</zk>

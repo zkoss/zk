@@ -444,3 +444,9 @@ Batch 14 (S1) moved `.z-selectbox::picker-icon { background-color: CanvasText }`
 
 - [ ] If an older browser must be supported, keep the two rules in separate blocks the minifier cannot merge.
 
+
+## 27. ConfirmPopup preview samples sit closer to their labels
+
+Batch 17 (#75) moved the top/left arrow room from `margin-bottom` / `margin-right` to a negative `margin-top` / `margin-left`, because ZK's popup positioning reads only the latter. The static placement samples on `confirmpopup.zul` carry the same `z-confirmpopup-placement-*` classes, so the top samples moved up 8px: the gap to their caption (INFO, TOP, …) shrank from about 13px to about 5px. Live popups are correct; this is preview-page layout only.
+
+- [ ] Add spacing to the preview's static samples if the tighter caption gap reads badly.
