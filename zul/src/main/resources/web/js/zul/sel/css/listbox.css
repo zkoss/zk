@@ -334,8 +334,18 @@
 }
 
 .z-listgroup > td:first-child {
-    border-left: 3px solid var(--zk-color-primary);
-    padding-left: calc(var(--zk-spacing-4) - 3px);
+    box-shadow: inset 3px 0 0 var(--zk-color-primary);
+    padding-left: var(--zk-spacing-4);
+}
+
+/* An inset shadow takes no layout space (a border here shifts every collapsed-border
+   row 1.5px right) but forced colors drops box-shadow, so fall back to a real border. */
+@media (forced-colors: active) {
+    .z-listgroup > td:first-child {
+        box-shadow: none;
+        border-left: 3px solid Highlight;
+        padding-left: calc(var(--zk-spacing-4) - 3px);
+    }
 }
 
 /* Group open/close toggle arrow */
