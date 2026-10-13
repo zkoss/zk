@@ -2,6 +2,7 @@ ZK 11.1.0
 * Features
 
 * Bugs
+  ZK-6172: zul.xsd: listbox with listitems but no listhead/listfoot fails validation
 
 * Upgrade Notes
 
