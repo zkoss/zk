@@ -17,21 +17,21 @@
                 <rows>
                     <group label="Dell" open="true"/>
                     <row>
-                        <label style="padding-left:15px" value="Dell E4500 2.2GHz"/>
+                        <label value="Dell E4500 2.2GHz"/>
                         <label value="Intel Core 2 Duo"/>
                         <label value="2GB RAM"/>
                         <label value="$261.00" style="color:green"/>
                         <label value="500GB"/>
                     </row>
                     <row>
-                        <label style="padding-left:15px" value="XP-Pro Slim Dell-Inspiron-530-s"/>
+                        <label value="XP-Pro Slim Dell-Inspiron-530-s"/>
                         <label value="Intel Core 2 Duo"/>
                         <label value="2GB RAM"/>
                         <label value="$498.93" style="color:green"/>
                         <label value="500GB"/>
                     </row>
                     <row>
-                        <label style="padding-left:15px" value="Dell P4 3.2 GHz"/>
+                        <label value="Dell P4 3.2 GHz"/>
                         <label value="Intel Pentium 4"/>
                         <label value="4GB RAM"/>
                         <label value="$377.99" style="color:green"/>
@@ -39,14 +39,14 @@
                     </row>
                     <group label="Compaq"/>
                     <row>
-                        <label style="padding-left:15px" value="Compaq SR5113WM"/>
+                        <label value="Compaq SR5113WM"/>
                         <label value="Intel Core Duo"/>
                         <label value="1GB RAM"/>
                         <label value="$279.00" style="color:green"/>
                         <label value="160GB"/>
                     </row>
                     <row>
-                        <label style="padding-left:15px" value="Compaq HP XW4200"/>
+                        <label value="Compaq HP XW4200"/>
                         <label value="Intel Pentium 4"/>
                         <label value="4GB RAM"/>
                         <label value="$980" style="color:green"/>

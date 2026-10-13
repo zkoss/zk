@@ -149,38 +149,36 @@
     margin-left: 0;
 }
 
-/* Sort icon: inline next to the header label (mirrors grid's .z-column-sorticon). */
+/* Sort icon: taken out of the text flow and parked in the header cell's right padding
+   (same side as the column-menu button), so the label starts at the same x as the body
+   cell text whether or not the column is sorted. The header cell is the positioning
+   context (position:relative on .z-listheader). */
 .z-listheader-sorticon {
+    position: absolute;
+    top: 50%;
+    right: var(--zk-spacing-1);
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
-    margin-left: var(--zk-spacing-1);
-    vertical-align: middle;
+    font-size: 12px;
+    color: var(--zk-color-on-surface-variant);
     pointer-events: none;
 }
 
-/* Sort direction icons */
-.z-listheader-sorticon .z-icon-caret-up,
-.z-listheader-sorticon .z-icon-caret-down {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    background-color: var(--zk-color-on-surface-variant);
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
+/* With a column-menu button, sit the sort icon just left of it. */
+.z-listheader:has(.z-listheader-button) .z-listheader-sorticon {
+    right: calc(var(--zk-spacing-1) * 2 + 24px);
 }
 
+/* Sort direction = arrow (up = ascending, down = descending), distinct from the
+   column-menu caret. Drawn through the shared --_icon mask on the icon's ::before
+   (as grid and tree), so it paints once and survives forced colors. */
 .z-listheader-sorticon .z-icon-caret-up {
-    -webkit-mask-image: url(~./zul/img/marble/chevron-up.svg);
-    mask-image: url(~./zul/img/marble/chevron-up.svg);
+    --_icon: url(~./zul/img/marble/sort-up.svg);
 }
 
 .z-listheader-sorticon .z-icon-caret-down {
-    -webkit-mask-image: url(~./zul/img/marble/chevron-down.svg);
-    mask-image: url(~./zul/img/marble/chevron-down.svg);
+    --_icon: url(~./zul/img/marble/sort-down.svg);
 }
 
 /* ─── Body ─────────────────────────────────────────────────────────────── */
@@ -323,8 +321,18 @@
 }
 
 .z-listgroup > td:first-child {
-    border-left: 3px solid var(--zk-color-primary);
-    padding-left: calc(var(--zk-spacing-4) - 3px);
+    box-shadow: inset 3px 0 0 var(--zk-color-primary);
+    padding-left: var(--zk-spacing-4);
+}
+
+/* An inset shadow takes no layout space (a border here shifts every collapsed-border
+   row 1.5px right) but forced colors drops box-shadow, so fall back to a real border. */
+@media (forced-colors: active) {
+    .z-listgroup > td:first-child {
+        box-shadow: none;
+        border-left: 3px solid Highlight;
+        padding-left: calc(var(--zk-spacing-4) - 3px);
+    }
 }
 
 /* Group open/close toggle arrow */
@@ -518,14 +526,6 @@
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
     white-space: nowrap;
-}
-
-/* The always-present sort-icon slot has margin-left:4px and precedes the
-   checkable span, pushing the header checkbox 4px right of the row checkboxes
-   (broken vertical column line). A checkbox column is never sorted — zero it
-   so header and row checkboxes share one vertical axis. */
-.z-listheader:has(.z-listheader-checkable) .z-listheader-sorticon {
-    margin-left: 0;
 }
 
 .z-listcell:has(.z-listitem-checkable) > .z-listcell-content {

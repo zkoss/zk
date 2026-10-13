@@ -32,7 +32,7 @@
                 <listgroupfoot label="more about Dell"/>
                 <listgroup label="Compaq"/>
                 <listitem>
-                    <listcell style="padding-left:15px" label="Compaq SR5113WM"/>
+                    <listcell label="Compaq SR5113WM"/>
                     <listcell label="Intel Core Duo" />
                     <listcell label="1GB RAM"/>
                     <listcell label="$279.00" />
