@@ -149,16 +149,27 @@
     margin-left: 0;
 }
 
-/* Sort icon: inline next to the header label (mirrors grid's .z-column-sorticon). */
+/* Sort icon: taken out of the text flow and parked in the header cell's right padding
+   (same side as the column-menu button), so the label starts at the same x as the body
+   cell text whether or not the column is sorted. The header cell is the positioning
+   context (position:relative on .z-listheader). */
 .z-listheader-sorticon {
+    position: absolute;
+    top: 50%;
+    right: var(--zk-spacing-1);
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
-    margin-left: var(--zk-spacing-1);
-    vertical-align: middle;
     pointer-events: none;
 }
 
-/* Sort direction icons */
+/* With a column-menu button, sit the sort icon just left of it. */
+.z-listheader:has(.z-listheader-button) .z-listheader-sorticon {
+    right: calc(var(--zk-spacing-1) * 2 + 24px);
+}
+
+/* Sort direction = arrow (up = ascending, down = descending), distinct from the
+   column-menu caret. */
 .z-listheader-sorticon .z-icon-caret-up,
 .z-listheader-sorticon .z-icon-caret-down {
     display: inline-block;
@@ -174,13 +185,13 @@
 }
 
 .z-listheader-sorticon .z-icon-caret-up {
-    -webkit-mask-image: url(~./zul/img/marble/chevron-up.svg);
-    mask-image: url(~./zul/img/marble/chevron-up.svg);
+    -webkit-mask-image: url(~./zul/img/marble/sort-up.svg);
+    mask-image: url(~./zul/img/marble/sort-up.svg);
 }
 
 .z-listheader-sorticon .z-icon-caret-down {
-    -webkit-mask-image: url(~./zul/img/marble/chevron-down.svg);
-    mask-image: url(~./zul/img/marble/chevron-down.svg);
+    -webkit-mask-image: url(~./zul/img/marble/sort-down.svg);
+    mask-image: url(~./zul/img/marble/sort-down.svg);
 }
 
 /* ─── Body ─────────────────────────────────────────────────────────────── */
@@ -518,14 +529,6 @@
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
     white-space: nowrap;
-}
-
-/* The always-present sort-icon slot has margin-left:4px and precedes the
-   checkable span, pushing the header checkbox 4px right of the row checkboxes
-   (broken vertical column line). A checkbox column is never sorted — zero it
-   so header and row checkboxes share one vertical axis. */
-.z-listheader:has(.z-listheader-checkable) .z-listheader-sorticon {
-    margin-left: 0;
 }
 
 .z-listcell:has(.z-listitem-checkable) > .z-listcell-content {

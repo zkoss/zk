@@ -76,6 +76,8 @@
     user-select: none;
     vertical-align: middle;
     overflow: hidden;
+    /* positioning context for the out-of-flow .z-treecol-sorticon */
+    position: relative;
 }
 
 .z-treecol-content {
@@ -377,20 +379,41 @@
     background-position: center;
 }
 
-/* Compact checkable column + keep header select-all box on the same vertical
-   axis as the row controls. Unlike listbox (where the sorticon's own
-   margin-left:4px is the offset), `.z-treecol-content` is `display:flex;
-   gap:4px`, so the always-present zero-width sorticon is still a flex item and
-   the 4px flex GAP — not a margin — pushes the checkable span right. Remove the
-   sorticon from flex flow on select-all headers so the gap collapses. */
+/* Sort icon: taken out of the text flow and parked in the header cell's right padding,
+   so the label starts at the same x as the body cell text whether or not the column is
+   sorted (and a select-all header needs no special case). */
+.z-treecol-sorticon {
+    position: absolute;
+    top: 50%;
+    right: var(--zk-spacing-1);
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    color: var(--zk-color-on-surface-variant);
+    pointer-events: none;
+}
+
+/* With a column-menu button, sit the sort icon just left of it. */
+.z-treecol:has(.z-treecol-button) .z-treecol-sorticon {
+    right: calc(var(--zk-spacing-1) * 2 + 24px);
+}
+
+/* Sort direction = arrow (up = ascending, down = descending), distinct from the
+   caret used by the tree open/close icon and the column menu. */
+.z-treecol-sorticon .z-icon-caret-up {
+    --_icon: url(~./zul/img/marble/sort-up.svg);
+}
+
+.z-treecol-sorticon .z-icon-caret-down {
+    --_icon: url(~./zul/img/marble/sort-down.svg);
+}
+
+/* Compact checkable column. */
 .z-treerow-checkable,
 .z-treecol-checkable {
     text-align: center;
     vertical-align: middle;
-}
-
-.z-treecol:has(.z-treecol-checkable) .z-treecol-sorticon {
-    display: none;
 }
 
 /* Resize affordance (treecols sizable="true"). ZK toggles `.z-treecol-sizing` on the
