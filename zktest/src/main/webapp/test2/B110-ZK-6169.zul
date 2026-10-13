@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6169.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Oct 08 18:02:39 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		The grids and the listboxes have no header, so the empty message is the only content of role="grid".
+		1. Run axe (e.g. axe DevTools): there should be no aria-required-children violation.
+		2. Click "add a row" and run axe again: there should be no aria-required-children violation.
+		3. Click "remove the row" and run axe again: there should be no aria-required-children violation.
+		4. Click "clear the message" and run axe again: there should be no aria-required-children violation.
+	</label>
+	<grid id="grid" emptyMessage="No data">
+		<rows id="rows"/>
+	</grid>
+	<grid id="emptyGrid" emptyMessage="No data"/>
+	<listbox id="listbox" emptyMessage="No data"/>
+	<grid id="loadedGrid" emptyMessage="No data">
+		<rows>
+			<row><label value="1"/></row>
+		</rows>
+	</grid>
+	<listbox id="loadedListbox" emptyMessage="No data">
+		<listitem label="1"/>
+	</listbox>
+	<button id="add" label="add a row">
+		<attribute name="onClick">
+			Row row = new Row();
+			row.appendChild(new Label("1"));
+			rows.appendChild(row);
+			listbox.appendChild(new Listitem("1"));
+		</attribute>
+	</button>
+	<button id="remove" label="remove the row" onClick="rows.getChildren().clear(); listbox.getItems().clear();"/>
+	<button id="clear" label="clear the message" onClick='grid.setEmptyMessage(""); listbox.setEmptyMessage("");'/>
+</zk>

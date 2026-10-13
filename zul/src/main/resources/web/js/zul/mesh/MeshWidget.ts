@@ -537,6 +537,16 @@ export abstract class MeshWidget extends zul.Widget {
 		// Empty on purpose. To be inherited.
 	}
 
+	/**
+	 * @internal
+	 * Hook called after the empty message is shown, hidden or changed. CE keeps it
+	 * as a no-op; the za11y add-on (EE) augments it to keep the empty row out of
+	 * the accessibility tree unless it shows a message.
+	 */
+	_updateEmptyBody(): void {
+		// Empty on purpose. Augmented by za11y.
+	}
+
 	constructor() {
 		super(); // FIXME: arguments?
 		this.heads = [];
