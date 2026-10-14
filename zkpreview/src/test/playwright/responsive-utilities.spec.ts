@@ -5,7 +5,7 @@ import { test, expect, Page } from '@playwright/test';
 // src/test/resources/web/utility/responsive.zul:
 //   (a) viewport visibility  .z-d-{bp}-{value}   (mobile-first / min-width @media)
 //   (b) container queries     .z-container + .z-cq-{bp}-{value}   (@container)
-// MUI breakpoints: sm 600, md 900, lg 1200, xl 1536.
+// Bootstrap breakpoints: sm 576, md 768, lg 992, xl 1200.
 //
 // The breakpoint-reference chips (scenario 1.4) share their class combos with
 // the teaching scenarios above them (e.g. the 1.1 sidebar is also
@@ -17,11 +17,11 @@ const URL = '/utility/responsive.zul';
 
 // Scenario 1.4 chip labels — exact rendered text, one element each.
 const CHIP = {
-  ltSm: 'Visible < sm (<600)',
-  geSm: 'Visible ≥ sm (600)',
-  geMd: 'Visible ≥ md (900)',
-  geLg: 'Visible ≥ lg (1200)',
-  geXl: 'Visible ≥ xl (1536)',
+  ltSm: 'Visible < sm (<576)',
+  geSm: 'Visible ≥ sm (576)',
+  geMd: 'Visible ≥ md (768)',
+  geLg: 'Visible ≥ lg (992)',
+  geXl: 'Visible ≥ xl (1200)',
 };
 
 async function open(page: Page) {
@@ -44,7 +44,7 @@ test.describe('viewport-visibility', () => {
     await open(page);
     const chip = (t: string) => page.getByText(t, { exact: true });
 
-    // Below sm (< 600): only the "< sm" chip shows; every min-width chip is hidden.
+    // Below sm (< 576): only the "< sm" chip shows; every min-width chip is hidden.
     await page.setViewportSize({ width: 500, height: 900 });
     await expect(chip(CHIP.ltSm)).toBeVisible();
     await expect(chip(CHIP.geSm)).toBeHidden();
@@ -52,21 +52,21 @@ test.describe('viewport-visibility', () => {
     await expect(chip(CHIP.geLg)).toBeHidden();
     await expect(chip(CHIP.geXl)).toBeHidden();
 
-    // md range (>= 900, < 1200): sm + md show; < sm hides; lg/xl still hidden.
-    await page.setViewportSize({ width: 1000, height: 900 });
+    // md range (>= 768, < 992): sm + md show; < sm hides; lg/xl still hidden.
+    await page.setViewportSize({ width: 850, height: 900 });
     await expect(chip(CHIP.ltSm)).toBeHidden();
     await expect(chip(CHIP.geSm)).toBeVisible();
     await expect(chip(CHIP.geMd)).toBeVisible();
     await expect(chip(CHIP.geLg)).toBeHidden();
     await expect(chip(CHIP.geXl)).toBeHidden();
 
-    // >= lg (1200): lg shows too; xl (1536) still hidden.
-    await page.setViewportSize({ width: 1300, height: 900 });
+    // >= lg (992): lg shows too; xl (1200) still hidden.
+    await page.setViewportSize({ width: 1100, height: 900 });
     await expect(chip(CHIP.geLg)).toBeVisible();
     await expect(chip(CHIP.geXl)).toBeHidden();
 
-    // >= xl (1536): xl shows.
-    await page.setViewportSize({ width: 1600, height: 900 });
+    // >= xl (1200): xl shows.
+    await page.setViewportSize({ width: 1300, height: 900 });
     await expect(chip(CHIP.geXl)).toBeVisible();
   });
 

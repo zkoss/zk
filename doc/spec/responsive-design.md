@@ -177,8 +177,7 @@
 
 - `z-grid-fill` 與 `z-grid-cols-auto`（第 2、2.5 節）都**不用** breakpoint（intrinsic / 捲動容器處理 RWD）——
   能用 intrinsic 就優先用，這是本 theme 的取向。
-- 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組對齊 **MUI**
-  的響應式 display utility。**breakpoint 尺度**：`sm` 600 / `md` 900 / `lg` 1200 / `xl` 1536（`xs` 0 = base）。
+- 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組響應式 display utility。**breakpoint 尺度**採 Bootstrap：`sm` 576 / `md` 768 / `lg` 992 / `xl` 1200（`xs` 0 = base），與 EE 的 Grid／Listbox `responsive` 使用同一組值（決議見 `doc/breakpoint-unified-spec-proposal.md` §9；`scripts/build-css.js --module zkmax` 會檢查兩邊一致）。
   互動教學頁：`usecase/index.zul#utility/responsive`（原始檔 `zkpreview/src/main/webapp/web/utility/responsive.zul`）。
 
 ### 5.1 依 viewport —— `z-d-{value}-{bp}`（mobile-first / min-width）
@@ -196,7 +195,7 @@
 <div sclass="z-d-block z-d-md-flex z-gap-3"> … </div>
 ```
 
-> 注意：`@media` 條件**不能**用 `var()`，故 breakpoint 為字面 px（於 `_layout.css` 註解列出 MUI 尺度）。
+> 注意：`@media` 條件**不能**用 `var()`，故 breakpoint 為字面 px（於 `_layout.css` 註解列出尺度）。
 
 ### 5.2 依容器 —— `z-container` + `z-cq-{value}-{bp}`（container queries）
 

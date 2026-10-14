@@ -25,6 +25,7 @@ const fs = require('fs');
 const path = require('path');
 const { transform: lightningTransform } = require('lightningcss');
 const { buildUtilityManifest } = require('./utility-manifest');
+const { checkBreakpoints } = require('./check-breakpoints');
 
 function argFor(flag) {
     const i = process.argv.indexOf(flag);
@@ -652,6 +653,23 @@ function assertNoOrphanComponentCss() {
     }
 }
 
+// The framework breakpoint scale lives in two places that cannot read each other: the width
+// conditions of @media/@container in CSS, and the Grid/Listbox `responsive` constants in zkmax.
+// Fail the build when they differ (doc/breakpoint-unified-spec-proposal.md §9). Needs the zkmax
+// JS source, so it runs only for --module zkmax; a CE-only build has nothing to compare against.
+function assertBreakpointsConsistent() {
+    const zkmaxJs = path.join(ZKCML_ROOT, 'zkmax/src/main/resources/web/js/zkmax');
+    const errors = checkBreakpoints({
+        jsFiles: ['grid-responsive.ts', 'listbox-responsive.ts'].map(f => path.join(zkmaxJs, f)),
+        cssRoots: [MODULES.zul.webDir, MODULES.zkmax.webDir, MODULES.zkex.webDir].filter(d => fs.existsSync(d)),
+    });
+    if (errors.length) {
+        throw new Error('Breakpoint consistency check failed:\n' + errors.map(e => '  - ' + e).join('\n') +
+            '\nThe CSS width conditions must match _DEFAULT_BREAKPOINTS in zkmax grid-responsive.ts and ' +
+            'listbox-responsive.ts.\nSee doc/breakpoint-unified-spec-proposal.md §9.');
+    }
+}
+
 // The html/body page-frame block, delimited by markers in _reset.css.
 const PAGE_FRAME_RE = /\/\* page-frame:start[\s\S]*?page-frame:end \*\//;
 
@@ -717,6 +735,9 @@ function copyFonts() {
 function build() {
     // 0. Fail fast if any no-css-uri component CSS would be emitted as an orphaned 1:1 dsp.
     assertNoOrphanComponentCss();
+
+    // 0b. Fail fast if the CSS breakpoints drifted from the zkmax Grid/Listbox ones.
+    if (moduleName === 'zkmax') assertBreakpointsConsistent();
 
     // 0a. Write empty stubs for unimplemented components belonging to this module.
     const moduleStubs = stubPaths.filter(p => belongsToModule(p, moduleName));
