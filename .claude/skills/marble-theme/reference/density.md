@@ -53,7 +53,7 @@ A normal customer flips only the 5 rungs plus 3 off-ladder seeds (button 36/44, 
 alias follows automatically.
 
 **Layer 3 — data-cell padding:** `--zk-grid-cell-padding`, `--zk-grid-detail-padding`, `--zk-listbox-cell-padding`,
-`--zk-tree-cell-padding`. **All four must be declared at `:root`**, not on the component —
+`--zk-tree-cell-padding`, `--zk-tree-header-padding`. **All five must be declared at `:root`**, not on the component —
 see the cascade-shadowing trap in `reference/tokens.md`.
 
 ## The switch

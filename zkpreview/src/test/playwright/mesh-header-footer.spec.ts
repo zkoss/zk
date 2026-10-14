@@ -21,6 +21,8 @@ import { test, expect, Page } from '@playwright/test';
 //    overflow vertically) on the font-size of the header, so zkmax cannot size the glyph box of the span;
 //  - a select-all header that also holds the sort arrow and/or the column-menu button keeps its label box
 //    clear of them (D11 follow-through);
+//  - a Tree header is as tall as the Grid header with the same labels in default, compact and tablet density,
+//    and on a tablet the data rows are as tall as well (D17);
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -221,6 +223,31 @@ function registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap }: { guard
   }
 }
 
+const SUB_PIXEL_PX = 0.01;
+
+const boxHeight = (page: Page, selector: string) => page.locator(selector).first()
+  .evaluate((el) => el.getBoundingClientRect().height);
+
+// Tree and Grid with the same labels: both header rows must come out at the same height.
+function registerTreeHeaderMatchesGrid() {
+  const compare = async (page: Page) => {
+    const tree = await boxHeight(page, '.mhf-tree-vs-grid th.z-treecol');
+    const grid = await boxHeight(page, '.mhf-grid-vs-tree th.z-column');
+    expect(Math.abs(tree - grid), `tree header ${tree}, grid header ${grid}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+  };
+
+  test('.mhf-tree-vs-grid: the tree header is as tall as the grid header', async ({ page }) => {
+    await open(page);
+    await compare(page);
+  });
+
+  test('.mhf-tree-vs-grid: the tree header is as tall as the grid header in compact density', async ({ page }) => {
+    await open(page);
+    await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+    await compare(page);
+  });
+}
+
 const sortedHeader = (mesh: Mesh) => `${mesh.root} ${mesh.header}:nth-child(${SORTED_COLUMN})`;
 
 test.describe('mesh header and footer', () => {
@@ -360,6 +387,7 @@ test.describe('mesh header and footer', () => {
   registerSelectAllHeaderVersusGrid();
   registerSelectAllBoxIsNotClipped();
   registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap: true });
+  registerTreeHeaderMatchesGrid();
 
   // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
   test.describe('select-all header on a tablet @tablet', () => {
@@ -386,6 +414,14 @@ test.describe('mesh header and footer', () => {
     registerSelectAllHeaderVersusGrid();
     registerSelectAllBoxIsNotClipped();
     registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap: false });
+    registerTreeHeaderMatchesGrid();
+
+    test('.mhf-tree-vs-grid: the tree data row is as tall as the grid data row', async ({ page }) => {
+      await open(page);
+      const tree = await boxHeight(page, '.mhf-tree-vs-grid tr.z-treerow');
+      const grid = await boxHeight(page, '.mhf-grid-vs-tree tr.z-row');
+      expect(Math.abs(tree - grid), `tree row ${tree}, grid row ${grid}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+    });
 
     test('.mhf-listbox-select-all-centre: the centred box lines up with the row checkbox', async ({ page }) => {
       await open(page);

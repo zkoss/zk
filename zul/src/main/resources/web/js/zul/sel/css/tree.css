@@ -65,7 +65,7 @@
 }
 
 .z-treecol {
-    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    padding: var(--zk-tree-header-padding);
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);
     color: var(--zk-tree-header-fg);
