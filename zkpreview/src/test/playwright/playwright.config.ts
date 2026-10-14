@@ -117,6 +117,13 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Grid, Listbox and Tree header arrow size, label-to-arrow room and footer column x
+      // (grid.css, listbox.css, tree.css). See mesh-header-footer.spec.ts.
+      name: 'mesh-header-footer',
+      testMatch: /mesh-header-footer\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Grid groupfoot follows the column align (grid.css). See grid-groupfoot-alignment.spec.ts.
       name: 'grid-groupfoot',
       testMatch: /grid-groupfoot-alignment\.spec\.ts/,

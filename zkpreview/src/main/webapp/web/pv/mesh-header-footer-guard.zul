@@ -1,0 +1,67 @@
+<?page title="Mesh header and footer" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for mesh-header-footer.spec.ts: Grid, Listbox and Tree with a narrow ascending-sorted
+     "Department" column (96px, the label does not fit), a footer row, and a Grid/Listbox variant
+     whose columns carry a column-menu button. Lives under pv/ so gallery-scan, forced-colors-gallery
+     and font-size-equivalence do not pick it up as a page. -->
+<zk>
+<div sclass="z-p-8">
+    <grid sclass="mhf-grid" width="360px">
+        <columns>
+            <column label="Name" width="120px"/>
+            <column label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <column label="Salary" width="120px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/><label value="100"/></row>
+            <row><label value="Bob"/><label value="Sales"/><label value="90"/></row>
+        </rows>
+        <foot>
+            <footer label="Total"/><footer label="2"/><footer label="190"/>
+        </foot>
+    </grid>
+    <grid sclass="mhf-grid-menu" width="360px">
+        <columns menupopup="auto">
+            <column label="Name" width="120px"/>
+            <column label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <column label="Salary" width="120px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/><label value="100"/></row>
+        </rows>
+    </grid>
+    <listbox sclass="mhf-listbox" width="360px">
+        <listhead>
+            <listheader label="Name" width="120px"/>
+            <listheader label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <listheader label="Salary" width="120px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/><listcell label="100"/></listitem>
+        <listitem><listcell label="Bob"/><listcell label="Sales"/><listcell label="90"/></listitem>
+        <listfoot>
+            <listfooter label="Total"/><listfooter label="2"/><listfooter label="190"/>
+        </listfoot>
+    </listbox>
+    <listbox sclass="mhf-listbox-menu" width="360px">
+        <listhead menupopup="auto">
+            <listheader label="Name" width="120px"/>
+            <listheader label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <listheader label="Salary" width="120px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/><listcell label="100"/></listitem>
+    </listbox>
+    <tree sclass="mhf-tree" width="360px">
+        <treecols>
+            <treecol label="Name" width="120px"/>
+            <treecol label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <treecol label="Salary" width="120px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/><treecell label="100"/></treerow></treeitem>
+            <treeitem><treerow><treecell label="Bob"/><treecell label="Sales"/><treecell label="90"/></treerow></treeitem>
+        </treechildren>
+        <treefoot>
+            <treefooter label="Total"/><treefooter label="2"/><treefooter label="190"/>
+        </treefoot>
+    </tree>
+</div>
+</zk>
