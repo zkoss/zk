@@ -1268,3 +1268,12 @@
     --zk-codeeditor-dark-border-color-hover: rgba(255, 255, 255, 0.6);
     --zk-codeeditor-dark-border-color-focus: oklch(from var(--zk-color-primary) 0.8 c h); /* ≈ #80bdff */
 }
+
+/* Compact density: a 20px label line plus the default 6px padding is 32px, taller than the
+   30px --zk-button-height, and an outlined button adds its 1px borders on top of that. 4px
+   leaves room for those borders, so every button variant, the confirmpopup and messagebox
+   buttons included, ends up exactly --zk-button-height. Declared here, after :root, because
+   html[data-density="compact"] is :root itself and an earlier rule would lose to the default. */
+[data-density="compact"] {
+    --zk-button-padding-y: 4px;
+}

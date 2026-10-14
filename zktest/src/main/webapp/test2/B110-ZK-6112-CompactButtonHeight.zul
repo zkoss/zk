@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-CompactButtonHeight.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Oct 14 2026, Created for ZK-6112.
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Every button variant is --zk-button-height tall (36px by default, 30px under data-density="compact"),
+		except the icon-only button, which is --zk-icon-button-size (40px, 32px compact).
+	</label>
+	<hlayout spacing="12px" valign="middle">
+		<button id="filled" label="Filled"/>
+		<button id="outlined" label="Outlined" sclass="z-button-outlined"/>
+		<button id="text" label="Text" sclass="z-button-text"/>
+		<button id="iconLabel" label="With icon" iconSclass="z-icon-home"/>
+		<button id="iconOnly" iconSclass="z-icon-home" sclass="z-button-icon" tooltiptext="Home"/>
+	</hlayout>
+	<hlayout spacing="12px">
+		<button id="openConfirmpopup" label="Open confirmpopup" onClick="cp.open(self)"/>
+		<button id="openMessagebox" label="Open messagebox"
+				onClick='Messagebox.show("Proceed?", "Confirm", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION)'/>
+	</hlayout>
+	<confirmpopup id="cp" message="Delete this?"/>
+</zk>
