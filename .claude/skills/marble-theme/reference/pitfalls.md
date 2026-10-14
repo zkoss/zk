@@ -47,8 +47,9 @@ ever citing `DOC/zkdoc/zk_component_ref/cropper.md` or its `ZKCompRef_Cropper.pn
 canonical reference ZK itself provides.
 
 **Rule:** for any component, check `DOC/zkdoc/zk_component_ref/<component>.md` +
-`images/ZKCompRef_<Component>*.png` **first**. The ZKDoc image is the visual ground truth that
-anchors the `mockup-needed` decision.
+`images/ZKCompRef_<Component>*.png` **first**. The ZKDoc image is the structural ground truth
+(which elements exist, where, how many) that anchors the `mockup-needed` decision; its IceBlue
+styling is not a target (`decision-principles.md` V5).
 
 **Rule (separate, and it bit twice):** **the ZKDoc edition badge is authoritative for PE/EE
 classification, never the source jar or directory.** The slider knob mold was labelled EE across

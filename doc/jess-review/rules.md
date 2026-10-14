@@ -4,31 +4,12 @@
 
 ## 1. 原則
 
-- **兩條基本原則（使用者訂）：**
-  1. **盡量遵循 MD3。** 設計描述與 MD3 衝突或未寫明時以 MD3 為準（色彩用 tonal pair、狀態層，字級用 typescale token）。
-  2. **框架內設計彼此一致。** 同族元件用同一套視覺語彙；決定狀態樣式前先找框架內已驗證的同族例子照做，不另創樣式。
-- 兩條衝突時不自行決定，列為例外問使用者（見第 4 節）。
-- 設計師指定的 token 或數值照用。
-- 只修 issue 寫的事；其他發現記進 follow-up，不順手改相鄰程式碼。
+- 外觀判斷的通用原則已移到 `.claude/skills/marble-theme/reference/decision-principles.md`（2026-10-14，D18-A）：誰負責修（Marble、ZK Jira、預覽頁）、MD3／MUI／ZK API／IceBlue 誰優先、同族基準表、何時才問使用者。原本此處的「兩條基本原則」（盡量遵循 MD3、框架內設計彼此一致）與「同族基準」都在該檔；新元件的結論補進該檔 §3，不補在此處。
+- 以下只列 Jess review 專屬的規則：
 - 做不到時用事先寫明的退路：不改、在 contract 註明差異、回覆設計師。貼出前須使用者同意。
-- 只用 `--zk-` token，不寫死色值。不用 `!important`；非加不可時停下問使用者。
-- 能用純 CSS 解決就用純 CSS。需要改 widget TypeScript／Java（行為、DOM）時不在此做：純 CSS 的那一半先修，widget 的那一半開 ZK Jira，兩邊留言說清楚。
-- 問題出在預覽頁（demo）而非元件：歸為 DEMO，修預覽頁，不改 theme。
-- 設計描述含糊時取範圍最小的解讀，RED run 先重現設計師的畫面，確認後才修。
-- 瀏覽器限制使字面要求做不到時，達成視覺意圖即可，並在留言說明差異。
 - 目標與既有 contract 衝突時，以原則為準更新 contract，並在 diff 與看板記錄。要退掉 contract 中一整條規格，列為例外。
-- 色彩對比：文字 ≥ 4.5:1，圖形元件 ≥ 3:1；達不到要在報告中標出。
+- 色彩對比達不到下限時，要在報告中標出。
 - 已知既有失敗（`calendar-tablet`、`slider-tablet`、`grid-header-gallery`）不在本批處理，記進 follow-up。
-
-### 同族基準（遇到同類問題直接套用；新元件的結論補進此處）
-
-- 清單列、下拉選項被選取：底 `secondary-container`，字 `on-secondary-container`。
-- 捲軸：與 `zul.Scrollbar` 靜止狀態一致（`outline-variant`、8px、圓角、無軌道槽）；hover 深一階為 `outline`。清單與表頭的捲軸欄位與表頭同色。
-- 唯讀輸入框：不出現會被誤認為可編輯的選取反白。
-- 通知、toast：不用左側色條；圖示用 `on-*-container`。
-- hover 底色：同一元件內每列相同，不受奇偶條紋影響。
-- 不可點的地方：預設游標，不用 pointer 或 move。
-- 下拉箭頭（selectbox、combobox、bandbox、accordion 展開箭頭）：同一個 chevron-down 遮罩，ink 約 8×5，右緣距約 12px；forced-colors 下用 `CanvasText`。`margin-right` 以量到的右緣距為準，不照抄其他元件。
 
 ## 2. 每批的流程
 

@@ -91,7 +91,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 重派失敗的項目用全新 run，不用 resume（workflow 的 cache 依呼叫位置，不依 prompt 內容）。
 
 ### 主題（Marble）
-- widget 的 TS／JS 把顏色、字型、邊框等外觀寫成 inline style（例：`FileuploadDlg.ts` 的 `background:#F4F8FF`），視為 bug：兩個主題都有，所以另開 Jira，不只在 Marble 端繞過。外觀一律放 CSS class；只有執行時動態計算的值（位置、尺寸）才留在 JS。這類 Jira（例：ZK-6198、ZK-6199）交給核心團隊修，本 session 不改 widget TS、IceBlue LESS 或 zul 的 ZUL；Marble 端等修正進來後再補樣式，不先用脆弱的選擇器繞過。
+- 外觀問題（用哪個 token 或樣式、同族元件要不要一致、缺陷歸 Marble／ZK Jira／預覽頁）先依 `.claude/skills/marble-theme/reference/decision-principles.md` 自行決定並在回報中引用原則編號；只有該檔 §4 的情況才問使用者。widget TS 寫死外觀、核心團隊負責的 Jira 等規則都在該檔 §1。
 - 某主題 jar 缺某檔，先查同一 ZK 版本的同一主題 jar；版本落差要描述為版本不一致，不寫成主題本身的特性。
 - RD 文件只提支援的主題（ZK 10+：iceblue_c、Theme Pack）；breeze、sapphire、silvertail、atlantic 自 10.0.0 已棄用。
 - 舊主題缺的檔案若另一主題以不同名稱存在（`button.css` vs `button.css.dsp`），在該主題內 fallback；只屬 Marble 的檔案（`reset.css`、`fonts.css`）不 fallback。

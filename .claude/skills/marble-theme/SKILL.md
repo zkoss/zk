@@ -12,7 +12,9 @@ description: >-
   end up", "which port is the preview app on", or "why is there an `!important` here" — even if
   they never say "Marble". Also covers auditing CSS hygiene — orphan tokens, hardcoded colours,
   duplicate shadows, or redundant `display` declarations — and removing, reducing or justifying
-  an `!important`.
+  an `!important`. Also use it to settle an appearance question — which style or token, whether
+  sibling components should match, whether Marble, a ZK Jira or the preview page owns a defect —
+  and to decide whether the question needs the owner at all.
 ---
 
 # Maintaining Marble
@@ -39,6 +41,13 @@ vocabulary Marble does not share (see `reference/iceblue-parity.md`).
 5. **Surgical changes.** Touch only what the task requires; match the surrounding style. When a
    theme-global invention collides with a ZK JS assumption, the first option to evaluate is
    *deleting the invention*, not engineering exceptions around it.
+
+## Decide, don't ask
+
+Before putting an appearance question to the owner — which colour or token, whether siblings
+should match, who fixes a defect — read `reference/decision-principles.md`. Settle what it
+settles, cite the principle IDs in the report, and ask only for the cases in its §4. After the
+owner rules, fold the ruling back into that file (its §5).
 
 ## Where things live
 
@@ -105,6 +114,7 @@ and the Playwright projects: `reference/verification.md`.
 | `reference/density.md` | Compact / data-dense mode; anything about control heights |
 | `reference/css-dsp.md` | Adding or renaming a CSS file; a component renders unstyled; a stylesheet 404s |
 | `reference/verification.md` | Running the preview app, the Playwright suite, or screenshot baselines; the tablet gate; A/B against another theme |
+| `reference/decision-principles.md` | **Before asking the owner any appearance question.** Who fixes it, which source wins (MD3, MUI, ZK API, IceBlue), same-family baselines, and the only cases that still need the owner |
 | `reference/pitfalls.md` | **Read this before any non-trivial change.** Mistakes already made once |
 | `reference/bug-filing.md` | The defect is ZK's, not the theme's, and needs a Jira ticket |
 | `reference/iceblue-parity.md` | Questions about IceBlue, the `--zk-*` public API break, or Theme Pack palettes |
