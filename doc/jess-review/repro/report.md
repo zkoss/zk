@@ -6,7 +6,7 @@
 
 - ZK 11.0.0-SNAPSHOT。
 - Marble：zk `f498236cea`（branch `marble`）+ zkcml `e787aed4d`，zkpreview 8085。
-- IceBlue：`ZK10/sync-ice` 的 master `65c55120a2`，zktest 8125。
+- IceBlue：master `65c55120a2` 的獨立 worktree（`ZK10/sync-ice`，已於 2026-10-14 刪除），zktest 8125。
 - 瀏覽器：Playwright 1.59.1 Chromium 147.0.7727.15（headless）。
 - 重現頁：本目錄 `jess-<N>.zul`（#44 另有 `jess-44-plain.zul`）；截圖 `img/jess-<N>-{marble,iceblue}.png`。各步驟的過程截圖沒有提交（依 D123，過程檔不進 repo）。
 
@@ -48,7 +48,7 @@
 
 - CaseFoundry MCP 全部回 `Invalid request parameters`；既有 Jira 改用 Atlassian JQL 關鍵字搜尋，不如語意搜尋完整。
 - gretty 的 `build/inplaceWebapp` 是啟動時複製的，新增 zul 要同時複製進去才會被伺服。
-- 本目錄以外的暫存重現頁（untracked）：`zkpreview/src/main/webapp/repro/`、`ZK10/sync-ice/zk/zktest/src/main/webapp/jess/`，以及兩者的 `build/inplaceWebapp` 複本。
+- 本目錄以外的暫存重現頁（untracked）：`zkpreview/src/main/webapp/repro/` 與其 `build/inplaceWebapp` 複本。IceBlue 端的複本（`ZK10/sync-ice/zk/zktest/src/main/webapp/jess/`）已隨該 worktree 於 2026-10-14 刪除；要重跑時從本目錄的 `jess-<N>.zul` 複製。
 
 ## 獨立覆核（Opus verifier，盲測，未看本報告）
 

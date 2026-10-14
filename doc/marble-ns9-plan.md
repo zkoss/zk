@@ -26,7 +26,7 @@
 ## 3. 限制
 
 - 不用 8085、8095、8105；停伺服器只 kill 記下的 PID。
-- 不動主 checkout `ZK10/zk`、`ZK10/zkcml` 的未提交檔案；不動 `sync-ice/`、`zk6192/`。
+- 不動主 checkout `ZK10/zk`、`ZK10/zkcml` 的未提交檔案；不動 `zk6192/`（`sync-ice/` 已於 2026-10-14 刪除）。
 - `@Tag("IceBlueOnly")` 測試不刪不改。
 
 ## 4. 結果
