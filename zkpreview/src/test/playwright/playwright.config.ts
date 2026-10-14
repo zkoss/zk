@@ -142,6 +142,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Warning container hue sits apart from error (tokens/_colors.css). See warning-container-hue.spec.ts.
+      name: 'warning-container',
+      testMatch: /warning-container-hue\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Stacking scale: --zk-index-* tokens + .z-index-* utilities resolve to
       // their values, and the token ladder's three hard constraints hold. See
       // zindex-scale.spec.ts and doc/spec/zindex-scale.md.

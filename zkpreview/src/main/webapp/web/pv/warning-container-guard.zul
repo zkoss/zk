@@ -1,0 +1,8 @@
+<?page title="Warning container hue" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for warning-container-hue.spec.ts: a warning and an error notification side by side.
+     Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it
+     up as a page. -->
+<zk>
+<zscript>import org.zkoss.zk.ui.util.Notification;</zscript>
+<div onCreate='Notification.show("Warning: stock is low.", "warning", null, "top_left", 0); Notification.show("Error: payment failed.", "error", null, "top_right", 0);'/>
+</zk>

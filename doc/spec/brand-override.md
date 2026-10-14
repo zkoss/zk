@@ -160,15 +160,17 @@ quite right for your brand, **pin it directly** — no special variable is requi
 | `--zk-color-on-secondary-container` | secondary | `L 0.235`, `c × 0.48` | `#00251a` (now ≈ `#151e2d`) |
 | `--zk-color-error-container` | error | `L 0.89`, `c × 0.28` | `#ffcdd2` |
 | `--zk-color-on-error-container` | error | `L 0.375`, `c × 0.77` | `#7f0000` |
-| `--zk-color-warning-container` | warning | `L 0.92`, `c × 0.38` | `#ffe0b2` (now ≈ `#ffd7c5`) |
+| `--zk-color-warning-container` | warning | `L 0.92`, `c × 0.38`, `h + 35` | `#ffe0b2` (now ≈ `#ffdfb5`) |
 | `--zk-color-on-warning-container` | warning | `L 0.42`, `c × 0.59` | `#7a3900` (now ≈ `#7a361e`) |
 | `--zk-color-inverse-primary` | primary | `L 0.81`, `c × 0.58` | `#9ec3ff` |
 
 `L` was set to each legacy hex's measured OKLab lightness and the chroma scale `k` to
 its measured chroma level, so the **default** palette reproduces the previous look
-within a small, verified ΔE. The `warning-container` shifts most visibly — it renders a
-touch more orange than the legacy `#ffe0b2` because the recipe keeps the *seed's* hue
-(brand-coherent) rather than the legacy container's yellower hand-picked hue.
+within a small, verified ΔE. The `warning-container` is the one derivation that also
+turns the hue: `h + 35` rotates the seed's hue toward yellow. With the seed's own hue
+(39.6° after the darkening below) it sat 13° from `error-container` and the two read as
+the same peach side by side (zkdemo B7 Z6); the +35° step lands on the legacy amber and,
+being relative, still follows an overridden warning seed.
 
 Two seeds have since moved away from their legacy hex on purpose (marble-issue#2 and its
 follow-up), so the "reproduces the previous look" claim no longer covers them:

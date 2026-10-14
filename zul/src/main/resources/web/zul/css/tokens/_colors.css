@@ -92,10 +92,15 @@
        a bright text tone and a dark fill tone. Every path clears its floor: text on
        white 5.42:1, chip label on its tint 4.78:1, container pair 6.85:1. The seed
        darkening does NOT drag the containers down — both are tone-pinned (L 0.92 /
-       L 0.42 absolute), so only their chroma tracks the seed. */
+       L 0.42 absolute), so only their chroma tracks the seed.
+       The container turns the seed hue 35° toward yellow (h 39.6 -> 74.6): with the
+       seed's own hue it sat 13° from error-container and the two read as the same
+       peach side by side (zkdemo B7 Z6). +35 lands on the legacy amber #ffe0b2 and is
+       relative, so an overridden seed still drives it. on-container keeps the seed
+       hue; the pair rises to 6.94:1. */
     --zk-color-warning: #bd3f00;
     --zk-color-on-warning: #ffffff;
-    --zk-color-warning-container: oklch(from var(--zk-color-warning) 0.92 calc(c * 0.38) h);    /* ≈ #ffd7c5 */
+    --zk-color-warning-container: oklch(from var(--zk-color-warning) 0.92 calc(c * 0.38) calc(h + 35));    /* ≈ #ffdfb5 */
     --zk-color-on-warning-container: oklch(from var(--zk-color-warning) 0.42 calc(c * 0.59) h); /* ≈ #7a361e */
 
     /* Success (seed) — completes the semantic role set (primary/secondary/error/
