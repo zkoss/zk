@@ -77,13 +77,18 @@
 }
 
 /* ZK-6112: `overflow: hidden` clips at the padding box, which cut the focus ring (outline 2px +
-   offset 2px) of a control placed in the header. `clip` with a 4px clip margin lets the ring
-   through and still truncates the text box with an ellipsis. Only headers that hold a native
-   control get it: a select-all-only header has none and keeps `hidden`. Safari ignores
-   `overflow-clip-margin` and clips at the padding box as before. */
+   offset 2px) of a control placed in the header. Browsers without `overflow-clip-margin`
+   (Safari) cannot keep the ring and the ellipsis together, so a header that holds a native
+   control gives up the ellipsis: a long label is cut at the cell edge by the header cell. A
+   select-all-only header has no native control and keeps `hidden`. Unlike `.z-column` and
+   `.z-treecol`, `.z-listheader` does not clip, so it does so here to keep the label out of the
+   next cell. */
 .z-listheader-content:has(:is(button, a, input, select, textarea)) {
-    overflow: clip;
-    overflow-clip-margin: 4px;
+    overflow: visible;
+}
+
+.z-listheader:has(.z-listheader-content :is(button, a, input, select, textarea)) {
+    overflow: hidden;
 }
 
 /* Reserve right-side space for the hover-revealed listheader-button so the header text never
