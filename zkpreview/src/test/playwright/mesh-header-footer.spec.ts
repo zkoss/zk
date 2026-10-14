@@ -14,7 +14,7 @@ import { test, expect, Page } from '@playwright/test';
 //    height, or the inline-block select-all span picks it up): the label of a select-all header clears the box, the header is
 //    not taller than a plain Listbox header beyond the known offset, and a centred box lines up with the rows;
 //  - a Tree header holding only the select-all box in a 40px column shows the whole 16px box, at the x of the
-//    row checkbox, with no ellipsis (D15);
+//    row checkbox, with no ellipsis painted, on desktop and on a tablet (D15);
 //  - Grid and Listbox headers with a column-menu button keep the label box clear of the button and of the sort
 //    arrow, and the sort arrow clear of the button, on desktop and on a tablet where the button is 44px (D11);
 //  - a Listbox header with a select-all box is as tall as the Grid header with the same labels, its labels sit
@@ -280,6 +280,41 @@ function registerMenuHeaderClearsArrowAndButton() {
   }
 }
 
+// A select-all-only 40px Tree header (D15): the whole 16px box lies inside the content box, at the x of the
+// row checkbox, and the header paints no ellipsis. The content box overflows by the trailing `&nbsp;` (scrollWidth
+// 29 against clientWidth 16 on a tablet), so overflow cannot stand for the ellipsis; the pixels do: the header
+// looks the same with `text-overflow: clip`.
+function registerTreeSelectAllOnlyHeader() {
+  const HEADER = '.mhf-tree-checkbox-only th.z-treecol:nth-child(1)';
+
+  test('.mhf-tree-checkbox-only: a select-all-only 40px header holds the whole box at the x of the row box', async ({ page }) => {
+    await open(page);
+    const measured = await page.locator(HEADER).evaluate((th) => {
+      const content = th.querySelector('.z-treecol-content')!.getBoundingClientRect();
+      const icon = th.querySelector('.z-treecol-icon')!.getBoundingClientRect();
+      const rowIcon = th.closest('.z-tree')!.querySelector('.z-treerow-icon')!.getBoundingClientRect();
+      return {
+        iconLeft: icon.left, iconRight: icon.right, rowIconLeft: rowIcon.left,
+        contentLeft: content.left, contentRight: content.right,
+      };
+    });
+    expect.soft(measured.iconLeft >= measured.contentLeft && measured.iconRight <= measured.contentRight,
+      `icon ${measured.iconLeft}-${measured.iconRight}, content ${measured.contentLeft}-${measured.contentRight}`).toBe(true);
+    expect(Math.abs(measured.iconLeft - measured.rowIconLeft),
+      `header box x ${measured.iconLeft}, row box x ${measured.rowIconLeft}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  test('.mhf-tree-checkbox-only: a select-all-only 40px header paints no ellipsis', async ({ page }) => {
+    await open(page);
+    const header = page.locator(HEADER);
+    const content = header.locator('.z-treecol-content');
+    const withEllipsis = await header.screenshot({ animations: 'disabled' });
+    await content.evaluate((el) => { el.style.textOverflow = 'clip'; });
+    const clipped = await header.screenshot({ animations: 'disabled' });
+    expect(withEllipsis.equals(clipped), 'the header looks different with text-overflow clip, so an ellipsis is painted').toBe(true);
+  });
+}
+
 const SUB_PIXEL_PX = 0.01;
 
 const boxHeight = (page: Page, selector: string) => page.locator(selector).first()
@@ -421,26 +456,7 @@ test.describe('mesh header and footer', () => {
       `icon ${measured.iconLeft}-${measured.iconRight}, cell ${measured.cellLeft}-${measured.cellRight}`).toBe(true);
   });
 
-  test('.mhf-tree-checkbox-only: a select-all-only 40px header shows the whole box at the x of the row box', async ({ page }) => {
-    await open(page);
-    const measured = await page.locator('.mhf-tree-checkbox-only th.z-treecol:nth-child(1)').evaluate((th) => {
-      const content = th.querySelector('.z-treecol-content')!;
-      const icon = th.querySelector('.z-treecol-icon')!.getBoundingClientRect();
-      const box = content.getBoundingClientRect();
-      const rowIcon = th.closest('.z-tree')!.querySelector('.z-treerow-icon')!.getBoundingClientRect();
-      return {
-        iconLeft: icon.left, iconRight: icon.right, iconWidth: icon.width, rowIconLeft: rowIcon.left,
-        contentLeft: box.left, contentRight: box.right,
-        scrollWidth: content.scrollWidth, clientWidth: content.clientWidth,
-      };
-    });
-    expect.soft(measured.iconLeft >= measured.contentLeft && measured.iconRight <= measured.contentRight,
-      `icon ${measured.iconLeft}-${measured.iconRight}, content ${measured.contentLeft}-${measured.contentRight}`).toBe(true);
-    expect.soft(measured.scrollWidth, 'content overflows, the ellipsis would paint').toBeLessThanOrEqual(measured.clientWidth);
-    expect(Math.abs(measured.iconLeft - measured.rowIconLeft),
-      `header box x ${measured.iconLeft}, row box x ${measured.rowIconLeft}`).toBeLessThanOrEqual(TOLERANCE_PX);
-  });
-
+  registerTreeSelectAllOnlyHeader();
   registerSelectAllHeaderVersusGrid();
   registerSelectAllBoxIsNotClipped();
   registerSelectAllHeaderClearsArrowAndButton();
@@ -469,7 +485,8 @@ test.describe('mesh header and footer', () => {
       expect(selectAll - plain, `select-all ${selectAll}, plain ${plain}`).toBeLessThanOrEqual(MAX_HEADER_HEIGHT_OFFSET_PX);
     });
 
-      registerSelectAllHeaderVersusGrid();
+    registerTreeSelectAllOnlyHeader();
+    registerSelectAllHeaderVersusGrid();
     registerSelectAllBoxIsNotClipped();
     registerSelectAllHeaderClearsArrowAndButton();
     registerMenuHeaderClearsArrowAndButton();
