@@ -290,3 +290,47 @@ commit 訊息依 D4 改為 `ZK-6112: … (ZK-XXXX)`（2026-10-12）。
 - `--ff-only`：zk `marble` → `1547ac6a44`，zkcml `marble` → `88e477c9c`。
 - 推送：`hawkchen/master`（zk `c69b09bcad`、zkcml `27f7aafcc`）與 `hawkchen/marble`。
 - 下一輪：從新的上游 `master` 開始，流程同 §5。V2（compact 按鈕高度）併入 NS9。
+- D12（`B110_ZK_6042Test` 的 `deviceName "iPad"`）：上游已有修正 PR zkoss/zk#3638（yuehfeng，2026-10-13 開，改成 `"iPad Mini"`，原因是 Chrome 153 移除了 iPad 裝置），尚未合併。不另開 Jira；下一輪同步時會帶進來，這個 test 在 Marble 仍維持 IceBlueOnly。
+
+## 10. 第三輪同步（到 zk `a447efa068`，2026-10-13）
+
+上游 zk 新增 1 個 commit，zkcml 沒有新 commit。本機 zk `master` 已 fast-forward（`hawkchen/master` 待推送）。
+
+| # | 上游 commit | 改動 | 待判斷 |
+|---|---|---|---|
+| 1 | ZK-6166 Badge 的指示點被 `overflow:hidden` 容器（例如 groupbox）切掉 | `badge.less` 從絕對定位外凸改成 `inline-grid`，用 padding 預留外凸空間；mold 多一層 `<span class="z-badge-cave">` 包住子元件（DOM 結構改變）；`Badge.ts` 只改註解；新增 `F110_ZK_6166Test` | ① DOM 多一層 cave 後，Marble 的 `badge.css` 是否仍正確；② Marble 是否同樣被切；③ 若移植，badge 會在宿主元件上方/旁邊多佔空間，屬於畫面變化，要做 Artifact 給使用者看 |
+
+worktree：`ZK10/sync3/zk`（分支 `marble-sync-a447efa`，從 `marble`）、`ZK10/sync3/zkcml`（detached `marble`，只供 build）。流程同 §5。
+
+### 10.1 判斷結果（2026-10-13，工程師）
+
+報告：`ZK10/sync3/triage-report.md`，截圖 `ZK10/sync3/triage/`。
+
+- merge：zk `b797e30127`，唯一衝突是 `badge.less` modify/delete，保留刪除。
+- DOM：新增的 `z-badge-cave` 沒有弄壞 Marble，因為 `badge.css` 只用 `> .z-badge-indicator`。
+- 裁切：Marble 也被切，count 10px、dot 4px、99+ 17.57px、NEW 20.18px。已依上游做法移植（`13c808ea3d`），移植後被切 0px，Marble 的尺寸與 token 不變。
+- 代價：badge 會多佔版面，count 10px、dot 4px、寬的指示點約 18–20px，與 IceBlue 上游一致。這是畫面變化，交給使用者決定（D14，https://claude.ai/artifact/FTi5Pz6Jm6rq39LieAUGFa ）。
+- `F110_ZK_6166Test` 在 Marble 上 11/11 通過，不需要 IceBlueOnly。Playwright 只有 `badge-gallery.png` 需要重切（`0af952103b`）。
+- 10px / 4px 維持字面值，與原本 20px / 8px 的寫法一致，不新增 token。
+
+### 10.2 第三輪獨立驗證（2026-10-13）：PASS
+
+報告：`ZK10/sync3/verify-report.md`。
+
+- 已檢查：merge、CSS、實機（測試頁、gallery、tablet、compact、forced-colors，被切 0px）、zktest（72 個，只有既有的 `F110_ZK_6097_StyleTest` 失敗）、Playwright（6 個 project 共 298 個 + component-theming 107 個）、lint。結果全部通過。
+- F1（Medium）：在 `dir=rtl` 下，`top_right` 的指示點畫在宿主的左上角，左右顛倒。原因是 grid 的欄位會跟著文字方向翻轉。移植前 Marble 是照物理方向放的。上游 IceBlue 用的是同一套寫法，正在確認 IceBlue 是否也一樣（證據放在 `ZK10/sync3/rtl-iceblue/`）。如果兩個主題都有，就另開 Jira bug（ZK-6166 已 Closed）。
+- F2：`marble` 又多了 `b002ee752c`，合併當下再 merge，`merge-tree` 確認沒有衝突。
+- F4：forced-colors 下 dot 完全看不見，這是移植前就有的問題，併入 NS9。
+- F1 已確認：IceBlue 在上游 master（`a447efa068`）的 RTL 下也會左右顛倒，ZK-6166 之前則維持物理方向（`ZK10/sync3/rtl-iceblue/`）。兩個主題都有，已開 **ZK-6195**（Affects 11.0.0.FL）。截圖要由使用者手動附上：`ltr-rtl-after.png`、`ltr-rtl-before.png`。
+- D14：使用者選 A，接受移植（`13c808ea3d`）。badge 周圍多佔的 4–20px 要寫進 release note。
+
+### 10.3 合併進 `marble`（2026-10-14）
+
+- 合併前 `marble` 比 10.2 驗證時多了 25 個 commit（`b002ee752c`…`353501aacd`），zkcml `marble` 多了 `f21e0ae70`。兩邊改到的檔案和第三輪的 7 個檔案（badge 的 `Badge.ts`、mold、`badge.css`、`badge-gallery.png`、`F110_ZK_6166Test` 與測試頁、`config.properties`）沒有重疊；`merge-tree` 沒有衝突；新 commit 改到的 token（`--zk-color-warning-container`、carousel indicator）`badge.css` 都沒有用到。
+- 在 `sync3/zk` merge `4b534abe6a`（`eee1353883`），`sync3/zkcml` 切到 `f21e0ae70`，重建 jar 後在 8115 重測：
+  - Playwright chromium、gallery、hit-target、tablet、html-table：281 個全部通過。
+  - component-theming、mesh-header-footer（含 tablet）、grid-groupfoot、messagebox-multiline、avatar-icon、warning-container、responsive、forced-colors、forced-colors-gallery：271 個全部通過。forced-colors-gallery 會重寫 92 張 `*-forced-colors.png`，已還原。
+  - zktest `F110_ZK_6166Test`：11/11 通過。
+- 測試期間 `marble` 又多了 `353501aacd`，只改 `doc/`，沒有重測，直接 merge（`0655c45ce5`）。
+- zk `marble` 用 `--ff-only` 快轉到 `0655c45ce5`。zkcml 這一輪沒有變更，`marble` 不動。
+- 尚未推送：zk `hawkchen/master`（`a447efa068`）、zk `hawkchen/marble`。
