@@ -527,11 +527,14 @@
 .z-listheader:has(.z-listheader-checkable) {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
-    /* Keep the select-all icon on one line. `.z-listheader` is `white-space: normal`
-       (so long text labels wrap), but the checkable span is 40px wide inside the ~32px
-       content box — with `normal` it wraps to a 2nd line and inflates the whole header
-       ROW (53→74px). An icon column never needs wrapping. */
-    white-space: nowrap;
+}
+
+/* An inline span ignores `max-width`, so in a width="40px" header its 40px (icon plus padding)
+   overflowed the ~32px content box and `.z-listheader-content` painted its ellipsis right of the
+   box. As an inline-block capped at the content width it fits, and the icon keeps its x. */
+.z-listheader-checkable {
+    display: inline-block;
+    max-width: 100%;
 }
 
 /* Narrow image/icon header column — same squeeze as the checkable column. A
@@ -539,13 +542,11 @@
    leaves only 8px of content width; the header image (ZK emits `<img>` with no
    class, subject to the global `img{max-width:100%}`) then shrinks below its
    intrinsic size AND the squeezed content wraps to a 2nd line, inflating the
-   whole header ROW. Collapse the side padding so a 16px icon renders full-size and
-   the row keeps its default height. See data-components.md → "Narrow icon/image
-   column". */
+   whole header ROW. Collapse the side padding so a 16px icon renders full-size. See
+   data-components.md → "Narrow icon/image column". */
 .z-listheader:has(img) {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
-    white-space: nowrap;
 }
 
 /* A sortable header with an image still needs the sort icon's room, which the rule above (higher

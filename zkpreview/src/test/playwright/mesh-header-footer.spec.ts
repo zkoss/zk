@@ -3,8 +3,11 @@ import { test, expect, Page } from '@playwright/test';
 // Guard for the Grid, Listbox and Tree header and footer CSS (ZK-6112, D11-D13):
 //  - the sort arrow is 12x12 in all three (grid.css gave Grid 14px through `.z-column [class*="z-icon-"]`);
 //  - the label box of a narrow sorted column stops short of the arrow, with and without a column-menu
-//    button and with an image in the header (Grid, Listbox and Tree clip with an ellipsis);
+//    button and with an image in the header (Grid and Listbox clip with an ellipsis; a Tree header with an
+//    image clips without one, the accepted trade-off of 5830d574ee because it keeps the flex centring);
 //  - a narrow Listbox header stays on one line, as tall as the Grid header;
+//  - a Listbox header holding only the select-all box in a 40px column paints no ellipsis and keeps the box
+//    inside the header cell;
 //  - a Tree header holding an image, an icon or the select-all box keeps the label centred on it and the
 //    header at the height the old flex layout gave it;
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
@@ -175,4 +178,28 @@ test.describe('mesh header and footer', () => {
         .toBeCloseTo(expectedHeight, 0);
     });
   }
+
+  test('.mhf-listbox-checkable: a select-all-only 40px header paints no ellipsis and holds the whole box', async ({ page }) => {
+    await open(page);
+    const header = page.locator('.mhf-listbox-checkable th.z-listheader:nth-child(1)');
+    const measured = await header.evaluate((th) => {
+      const content = th.querySelector('.z-listheader-content')!;
+      const icon = th.querySelector('.z-listheader-icon')!.getBoundingClientRect();
+      const cell = th.getBoundingClientRect();
+      return {
+        overflows: content.scrollWidth > content.clientWidth,
+        textOverflow: getComputedStyle(content).textOverflow,
+        scrollWidth: content.scrollWidth,
+        clientWidth: content.clientWidth,
+        iconInsideCell: icon.left >= cell.left && icon.right <= cell.right,
+        iconLeft: icon.left, iconRight: icon.right, cellLeft: cell.left, cellRight: cell.right,
+      };
+    });
+    // An ellipsis only paints when the content overflows.
+    expect(measured.overflows && measured.textOverflow === 'ellipsis',
+      `scrollWidth ${measured.scrollWidth} > clientWidth ${measured.clientWidth} with text-overflow ${measured.textOverflow}`)
+      .toBe(false);
+    expect(measured.iconInsideCell,
+      `icon ${measured.iconLeft}-${measured.iconRight}, cell ${measured.cellLeft}-${measured.cellRight}`).toBe(true);
+  });
 });

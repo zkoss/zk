@@ -133,5 +133,13 @@
             <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/></treerow></treeitem>
         </treechildren>
     </tree>
+    <!-- A select-all-only 40px header column: the box must not push an ellipsis into the header. -->
+    <listbox sclass="mhf-listbox-checkable" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="40px"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
 </div>
 </zk>
