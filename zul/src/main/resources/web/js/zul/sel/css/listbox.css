@@ -90,6 +90,16 @@
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
 }
 
+/* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
+.z-listheader-sort {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
+/* With the column-menu button as well, the sort icon sits just left of the button. */
+.z-listheader-sort:has(.z-listheader-button) {
+    padding-right: calc(var(--zk-spacing-1) * 3 + 24px + 12px);
+}
+
 /* Resize affordance (listhead sizable="true"). ZK toggles `.z-listheader-sizing`
    on the TH itself while the pointer is within the rightmost 8px drag zone
    (HeaderWidget._insizer / doMouseMove_), and removes it on mouse-out. ZK emits

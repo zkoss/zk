@@ -80,13 +80,35 @@
     position: relative;
 }
 
+/* Block, not flex: the ellipsis needs a block container; an image or icon stays inline with the
+   text. */
 .z-treecol-content {
-    display: flex;
-    align-items: center;
-    gap: var(--zk-spacing-1);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);
     color: var(--zk-tree-header-fg);
+}
+
+/* Inline header media no longer sits in a centring flex container, so each one needs the
+   vertical-align that keeps the label centred and the header row at its 45px height: the
+   `align="absmiddle"` image otherwise sits ~1.7px below the label's centre, and the select-all box
+   (middle, from the rule below) stretches the line box by ~1px. */
+.z-treecol-content img {
+    vertical-align: text-bottom;
+}
+
+/* The select-all box is followed by `&nbsp;` and the label; the flex gap that used to sit between
+   them is now a margin. Images and icons are followed by a plain space, which already gives the gap. */
+.z-treecol-content .z-treecol-checkable {
+    vertical-align: baseline;
+    margin-right: var(--zk-spacing-1);
+}
+
+/* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
+.z-treecol-sort {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* Splitter bar between columns */
