@@ -165,5 +165,33 @@
         </listhead>
         <listitem><listcell/><listcell label="Alice"/></listitem>
     </listbox>
+    <!-- A select-all-only 40px Tree header column (D15): the 16px box must not be clipped by the header padding. -->
+    <tree sclass="mhf-tree-checkbox-only" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="40px"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- A select-all Listbox header next to a Grid with the same labels (D16): the header rows must be as tall
+         as each other and the select-all box must sit on the label centre. -->
+    <listbox sclass="mhf-listbox-vs-grid" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Type" width="160px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+    </listbox>
+    <grid sclass="mhf-grid-vs-listbox" width="360px">
+        <columns>
+            <column label="Name" width="160px"/>
+            <column label="Type" width="160px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/></row>
+        </rows>
+    </grid>
 </div>
 </zk>

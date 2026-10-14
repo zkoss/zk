@@ -13,6 +13,10 @@ import { test, expect, Page } from '@playwright/test';
 //  - under the tablet project (zkmax `tablet/_mesh.css` must not give `.z-listheader-checkable` a width or
 //    height, or the inline-block select-all span picks it up): the label of a select-all header clears the box, the header is
 //    not taller than a plain Listbox header beyond the known offset, and a centred box lines up with the rows;
+//  - a Tree header holding only the select-all box in a 40px column shows the whole 16px box, at the x of the
+//    row checkbox, with no ellipsis (D15);
+//  - a Listbox header with a select-all box is as tall as the Grid header with the same labels, its labels sit
+//    at the same top offset and the box is centred on the label, on desktop and on a tablet (D16);
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -87,6 +91,56 @@ function textLeft(page: Page, cell: string): Promise<number> {
     const range = document.createRange();
     range.selectNodeContents(text);
     return range.getBoundingClientRect().left;
+  });
+}
+
+// Top of the first text node's rendered text.
+function textTop(page: Page, cell: string): Promise<number> {
+  return page.locator(cell).first().evaluate((el) => {
+    const text = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
+    }).nextNode() as Text;
+    const range = document.createRange();
+    range.selectNodeContents(text);
+    return range.getBoundingClientRect().top;
+  });
+}
+
+// A Listbox with a select-all box next to a Grid with the same labels: same header height, labels of one
+// row at one top offset, box centred on its label.
+function registerSelectAllHeaderVersusGrid() {
+  test('.mhf-listbox-vs-grid: the select-all header is as tall as the Grid header', async ({ page }) => {
+    await open(page);
+    const headerHeight = (root: string, header: string) => page.locator(`${root} ${header}:nth-child(1)`)
+      .evaluate((th) => th.getBoundingClientRect().height);
+    const listbox = await headerHeight('.mhf-listbox-vs-grid', 'th.z-listheader');
+    const grid = await headerHeight('.mhf-grid-vs-listbox', 'th.z-column');
+    expect(listbox, `listbox header ${listbox}, grid header ${grid}`).toBeCloseTo(grid, 1);
+  });
+
+  test('.mhf-listbox-vs-grid: the labels of the header row share one top offset', async ({ page }) => {
+    await open(page);
+    const first = await textTop(page, '.mhf-listbox-vs-grid th.z-listheader:nth-child(1) .z-listheader-content');
+    const second = await textTop(page, '.mhf-listbox-vs-grid th.z-listheader:nth-child(2) .z-listheader-content');
+    expect(Math.abs(first - second), `Name top ${first}, Type top ${second}`).toBeLessThanOrEqual(0.1);
+  });
+
+  test('.mhf-listbox-vs-grid: the select-all box is centred on its label', async ({ page }) => {
+    await open(page);
+    const header = '.mhf-listbox-vs-grid th.z-listheader:nth-child(1)';
+    const iconCentre = await page.locator(`${header} .z-listheader-icon`)
+      .evaluate((icon) => { const r = icon.getBoundingClientRect(); return (r.top + r.bottom) / 2; });
+    const labelCentre = await page.locator(`${header} .z-listheader-content`).evaluate((el) => {
+      const text = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+        acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
+      }).nextNode() as Text;
+      const range = document.createRange();
+      range.selectNodeContents(text);
+      const rect = range.getBoundingClientRect();
+      return (rect.top + rect.bottom) / 2;
+    });
+    expect(Math.abs(iconCentre - labelCentre), `box centre ${iconCentre}, label centre ${labelCentre}`)
+      .toBeLessThanOrEqual(0.5);
   });
 }
 
@@ -206,6 +260,28 @@ test.describe('mesh header and footer', () => {
       `icon ${measured.iconLeft}-${measured.iconRight}, cell ${measured.cellLeft}-${measured.cellRight}`).toBe(true);
   });
 
+  test('.mhf-tree-checkbox-only: a select-all-only 40px header shows the whole box at the x of the row box', async ({ page }) => {
+    await open(page);
+    const measured = await page.locator('.mhf-tree-checkbox-only th.z-treecol:nth-child(1)').evaluate((th) => {
+      const content = th.querySelector('.z-treecol-content')!;
+      const icon = th.querySelector('.z-treecol-icon')!.getBoundingClientRect();
+      const box = content.getBoundingClientRect();
+      const rowIcon = th.closest('.z-tree')!.querySelector('.z-treerow-icon')!.getBoundingClientRect();
+      return {
+        iconLeft: icon.left, iconRight: icon.right, iconWidth: icon.width, rowIconLeft: rowIcon.left,
+        contentLeft: box.left, contentRight: box.right,
+        scrollWidth: content.scrollWidth, clientWidth: content.clientWidth,
+      };
+    });
+    expect.soft(measured.iconLeft >= measured.contentLeft && measured.iconRight <= measured.contentRight,
+      `icon ${measured.iconLeft}-${measured.iconRight}, content ${measured.contentLeft}-${measured.contentRight}`).toBe(true);
+    expect.soft(measured.scrollWidth, 'content overflows, the ellipsis would paint').toBeLessThanOrEqual(measured.clientWidth);
+    expect(Math.abs(measured.iconLeft - measured.rowIconLeft),
+      `header box x ${measured.iconLeft}, row box x ${measured.rowIconLeft}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  registerSelectAllHeaderVersusGrid();
+
   // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
   test.describe('select-all header on a tablet @tablet', () => {
     // Listbox headers are known to be taller than Grid and plain Listbox headers by 1.17px (desktop) and
@@ -228,6 +304,8 @@ test.describe('mesh header and footer', () => {
       const plain = await headerHeight('.mhf-listbox-plain');
       expect(selectAll - plain, `select-all ${selectAll}, plain ${plain}`).toBeLessThanOrEqual(MAX_HEADER_HEIGHT_OFFSET_PX);
     });
+
+    registerSelectAllHeaderVersusGrid();
 
     test('.mhf-listbox-select-all-centre: the centred box lines up with the row checkbox', async ({ page }) => {
       await open(page);
