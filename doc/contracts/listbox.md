@@ -86,6 +86,18 @@ Resizable Headers" section (first `<listheader width="40px" image="…ArrowsUpDo
 | ni3 | image header row not inflated | image-header `.z-listhead` row height vs a no-image `.z-listhead` row | height | equal (≈53px) — the image must not make the header taller | getBoundingClientRect |
 | ni4 | checkbox/icon header stays single-line | `.z-listheader:has(.z-listheader-checkable)`, `.z-listheader:has(img)` | white-space | `nowrap` (default `normal` wraps the over-wide icon span → row inflates) | computedStyle |
 | ni5 | select-all checkbox header row not inflated | the `multiple checkmark` listbox's `.z-listhead` (40px select-all column) | height | ≈53px, equal to a text-only header row (NOT ~74px) | getBoundingClientRect |
+| ni6 | image-only header with the column-menu button, at the minimum width | `.z-listheader:has(.z-listheader-button) img` in a `<listhead menupopup="auto">` | width, and its right edge against the button's left edge | `16px` wide and clear of the button, at 58px (desktop) / 78px (tablet) | getBoundingClientRect (`mesh-header-footer.spec.ts`, `.mhf-listbox-icon-menu`) |
+
+### Minimum width of an image-only header column with the menu button
+
+A `<listhead menupopup="…">` (and the same for Grid `<columns menupopup="…">`) puts the column-menu button in
+every header, and the header's `padding-right` reserves room for it: `--zk-spacing-1` + the button + `--zk-spacing-2`
+(24px button on desktop, 44px touch button on a tablet) on top of the 4px each side of an image column. A 16px
+image therefore needs a column of at least **58px on desktop and 78px on a tablet** (measured; 56px and 76px
+squeeze the image to 14px, and a narrower column hides it). Below that width the layout is not supported: the
+image shrinks to the room left (on a tablet to 0px at 62px or less). Marble does not engineer a smaller
+column (no hiding of the button, no overlap of the button over the image); give the column the minimum width, or
+leave `menupopup` off the head. This applies to Listbox and Grid alike; Tree has no column-menu button.
 
 ## States to evaluate
 - [ ] default rows, header, hover, selected, focus, disabled, striped, frozen columns

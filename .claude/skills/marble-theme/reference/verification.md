@@ -90,7 +90,7 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
 
 ## Screenshot baselines — the parts that bite
 
-- **The baselines are in place: 184 compared PNGs plus 99 `*-forced-colors.png` review captures, in
+- **The baselines are in place: 188 compared PNGs plus 99 `*-forced-colors.png` review captures, in
   `zkpreview/doc/screenshots/`, beside `focus-ring-known-clips.json`.** They arrived with item 3.18b,
   so a run now *compares* — the earlier "can only create, never compare" caveat is gone.
   `playwright.config.ts:13`'s `snapshotDir: '../../../doc/screenshots'` resolves, from
@@ -104,7 +104,7 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   — the gallery (98), state (55) and tablet (30) families came back byte-identical.
 - **Always `await document.fonts.ready`.** A uniform vertical drift across every page is the Inter
   font-load race, not a CSS change. Baselines are flat files in one directory, not nested.
-- **Tolerance is not one number.** `gallery-scan.spec.ts` allows `maxDiffPixelRatio: 0.01` —
+- **Tolerance is not one number.** `gallery-scan.spec.ts` allows `maxDiffPixelRatio: 0.002` (0.2%) —
   thousands of pixels on a full page — `tablet.spec.ts` opts into 2% for `tabbox` and `window`, and
   `screenshot.spec.ts`'s `padShot()` carries `maxDiffPixels: 20` for every hover/focus/active shot
   (chat D80, 2026-09-14 — `doc/screenshot-tolerance-policy.md`). The state shots use an absolute

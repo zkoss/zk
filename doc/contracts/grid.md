@@ -84,6 +84,14 @@ UNCLASSED".
 |----|-------|----------|----------|----------|--------|
 | hs1 | header table has no inter-cell gap | `.z-grid-header table` | `border-spacing` | `0px` (UA default 2px would leak white gaps between auxhead cells/rows under separate border-collapse) | computedStyle |
 
+## Image-only header column with the column-menu button
+
+A `<columns menupopup="…">` header that holds only an image needs a column of at least **58px on desktop and 78px
+on a tablet** for the 16px image to render at full size clear of the menu button; narrower columns are not
+supported and Marble does not engineer around them. The reasoning and measurements are in
+`listbox.md` → "Minimum width of an image-only header column with the menu button" (same CSS rules in `grid.css`).
+Guard: `mesh-header-footer.spec.ts`, `.mhf-grid-icon-menu`.
+
 ## Outer frame (container)
 
 Default = standalone **outlined** card: border, NO shadow (never both). No-border variant
