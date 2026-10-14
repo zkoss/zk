@@ -10,8 +10,8 @@ import { test, expect, Page } from '@playwright/test';
 //    inside the header cell;
 //  - a Tree header holding an image, an icon or the select-all box keeps the label centred on it and the
 //    header at the height the old flex layout gave it;
-//  - under the tablet project (zkmax `tablet/_mesh.css` sizes `.z-listheader-checkable` to 24px, which the
-//    inline-block select-all span would pick up): the label of a select-all header clears the box, the header is
+//  - under the tablet project (zkmax `tablet/_mesh.css` must not give `.z-listheader-checkable` a width or
+//    height, or the inline-block select-all span picks it up): the label of a select-all header clears the box, the header is
 //    not taller than a plain Listbox header beyond the known offset, and a centred box lines up with the rows;
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
