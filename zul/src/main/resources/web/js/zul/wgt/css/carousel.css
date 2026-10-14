@@ -141,6 +141,8 @@
     background-color: var(--zk-carousel-arrow-bg);
     color: var(--zk-carousel-arrow-fg);
     border: 0;
+    /* A <button> does not inherit the font from its container. */
+    font-family: var(--zk-typescale-font-family);
     /* The mold's literal ‹/› fallback glyph sits asymmetrically around the
        baseline; zero it out and draw a deterministic chevron via the
        ::before rule below instead. */
