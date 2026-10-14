@@ -22,7 +22,9 @@ conclusions only.
 
 - **O1 — Reproduce in IceBlue first.** Run the same page on master with IceBlue at the same ZK
   version before deciding who fixes. Absent in IceBlue → Marble caused it → fix it in Marble CSS on
-  `marble` with a `ZK-6112: …` commit; no new Jira.
+  `marble` with a `ZK-6112: …` commit; no new Jira. The same applies when IceBlue does not
+  support the feature or mode at all (forced-colors mode, for instance, has no IceBlue rules):
+  check that IceBlue claims the capability before calling its behaviour a defect.
 - **O2 — Both themes, cause in shared code** (widget TS/JS, Java, ZUL, IceBlue LESS) → a ZK Jira
   (zk-bug-filing skill, Affects Version, screenshot). The core team fixes it; the Marble session
   does not. Filing the Jira is decided here; only the filing itself is confirmed (E6). When the

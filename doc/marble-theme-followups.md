@@ -484,3 +484,20 @@ under O10. The 44px touch button needs 56px of padding-right (68px with a sort a
   desktop only); measured correct today (68px, label 157–181, sort 185–197, button 201–245).
 - Older than the reservation: a 40px select-all-only listheader with `menupopup` already clips the box
   on desktop (padding-right 36px, content 0), and on tablet the 44px button overflows the cell by 8px.
+
+## 31. Forced-colors buttons are 2px taller
+
+Found while verifying NS9 (`doc/marble-ns9-plan.md`); deferred under O10. Under
+`forced-colors: active`, `_forced-colors.css` gives `.z-button` a 1px border that the filled
+variant does not have otherwise, so filled buttons grow by 2px (not measured per density yet).
+
+## 32. `.z-carousel-indicator` has no font-family
+
+NS9 item 1 gave `.z-carousel-arrow` the theme font; the indicator dots are the same bare `<button>`
+and still fall back to the UA font. No text is drawn today, so nothing is visible.
+
+## 33. `_sizing.css` cites a file that does not exist
+
+A comment in `zul/src/main/resources/web/zul/css/tokens/_sizing.css` says the compact values
+"mirror doc/marble-compact.css", which is not in the repo. Point it at
+`doc/spec/data-dense-mode.md` or drop the reference.
