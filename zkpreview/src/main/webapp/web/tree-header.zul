@@ -21,7 +21,7 @@
                     <treecols>
                         <treecol label="Align Left" align="left"/>
                         <treecol label="Align Center" align="center"/>
-                        <treecol label="Align Right" align="right"/>
+                        <treecol align="right"><button label="Go"/></treecol>
                     </treecols>
                     <auxhead>
                         <auxheader label="C"/>
