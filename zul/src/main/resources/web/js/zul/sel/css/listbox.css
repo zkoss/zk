@@ -533,10 +533,16 @@
    overflowed the ~32px content box and `.z-listheader-content` painted its ellipsis right of the
    box. As an inline-block capped at the content width it fits, and the icon keeps its x.
    zkmax tablet/_mesh.css leaves this span's width and height alone, so the inline-block cap
-   is not widened to the 24px touch box there. */
+   is not widened to the 24px touch box there.
+   The baseline-aligned inline-block also grew the header's line box (54.17px against the 53px of a
+   Grid header; on a tablet the 24px font-size of that rule pushes the 16px glyph further down), which
+   moved the label of this header below the other labels of the row. Pinning the span to the label's
+   line height and the top of the line box keeps the header as tall as a Grid header. */
 .z-listheader-checkable {
     display: inline-block;
     max-width: 100%;
+    vertical-align: top;
+    height: var(--zk-typescale-label-large-line-height);
 }
 
 /* Narrow image/icon header column — same squeeze as the checkable column. A
