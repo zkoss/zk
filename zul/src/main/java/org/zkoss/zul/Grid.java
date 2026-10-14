@@ -1827,9 +1827,9 @@ public class Grid extends MeshElement {
 
 	/**
 	 * Sets the responsive columns token string for stacking mode.
-	 * <p>Bootstrap-style breakpoint tokens separated by whitespace, where
+	 * <p>Breakpoint tokens separated by whitespace, where
 	 * each token is {@code <breakpoint>-<value>} with breakpoint in
-	 * {sm, md, lg, xl, xxl} and value either a positive integer (cards per
+	 * {sm, md, lg, xl} and value either a positive integer (cards per
 	 * row in stacking) or {@code none} (switch back to table mode at and
 	 * above this breakpoint).
 	 * <p>The string is stored verbatim — parsing, cascade resolution, and

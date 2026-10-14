@@ -37,7 +37,7 @@ public class F110_ZK_5409_BreakpointMatrixTest extends WebDriverTestCase {
 						+ expectStacking + " but was " + actual);
 	}
 
-	/** At 380px window (~365px container), the md/lg/xl/xxl grids stack.
+	/** At 380px window (~365px container), the md/lg/xl grids stack.
 	 *
 	 *  <p>gridSm uses {@code responsiveColumns="sm-none"}; under the cascade
 	 *  rules every tier (including xs at 380 px) resolves to {@code none},
@@ -52,11 +52,10 @@ public class F110_ZK_5409_BreakpointMatrixTest extends WebDriverTestCase {
 		assertStacking("gridMd",  true, 380);
 		assertStacking("gridLg",  true, 380);
 		assertStacking("gridXl",  true, 380);
-		assertStacking("gridXxl", true, 380);
 	}
 
 	/** 700px window (~685px container) crosses the sm boundary (576) — sm
-	 *  grid returns to table; md/lg/xl/xxl still stack. */
+	 *  grid returns to table; md/lg/xl still stack. */
 	@Test
 	public void testSmRestoresAt700() {
 		connect(PATH);
@@ -67,11 +66,10 @@ public class F110_ZK_5409_BreakpointMatrixTest extends WebDriverTestCase {
 		assertStacking("gridMd",  true,  700);
 		assertStacking("gridLg",  true,  700);
 		assertStacking("gridXl",  true,  700);
-		assertStacking("gridXxl", true,  700);
 	}
 
 	/** 900px window (~885px container) crosses md (768) — sm and md restore;
-	 *  lg/xl/xxl still stack. Tablet-landscape scenario. */
+	 *  lg/xl still stack. Tablet-landscape scenario. */
 	@Test
 	public void testMdRestoresAt900() {
 		connect(PATH);
@@ -82,11 +80,10 @@ public class F110_ZK_5409_BreakpointMatrixTest extends WebDriverTestCase {
 		assertStacking("gridMd",  false, 900);
 		assertStacking("gridLg",  true,  900);
 		assertStacking("gridXl",  true,  900);
-		assertStacking("gridXxl", true,  900);
 	}
 
 	/** 1100px window (~1085px container) crosses lg (992) — sm/md/lg restore;
-	 *  xl/xxl still stack. Small laptop. */
+	 *  xl still stacks. Small laptop. */
 	@Test
 	public void testLgRestoresAt1100() {
 		connect(PATH);
@@ -97,10 +94,9 @@ public class F110_ZK_5409_BreakpointMatrixTest extends WebDriverTestCase {
 		assertStacking("gridMd",  false, 1100);
 		assertStacking("gridLg",  false, 1100);
 		assertStacking("gridXl",  true,  1100);
-		assertStacking("gridXxl", true,  1100);
 	}
 
-	/** 1300px window (~1285px container) crosses xl (1200) — only xxl stacks. */
+	/** 1300px window (~1285px container) crosses xl (1200) — every grid restores. */
 	@Test
 	public void testXlRestoresAt1300() {
 		connect(PATH);
@@ -111,7 +107,6 @@ public class F110_ZK_5409_BreakpointMatrixTest extends WebDriverTestCase {
 		assertStacking("gridMd",  false, 1300);
 		assertStacking("gridLg",  false, 1300);
 		assertStacking("gridXl",  false, 1300);
-		assertStacking("gridXxl", true,  1300);
 	}
 
 	/** 1500px window (~1485px container) — every tier's threshold is below
@@ -126,7 +121,6 @@ public class F110_ZK_5409_BreakpointMatrixTest extends WebDriverTestCase {
 		assertStacking("gridMd",  false, 1500);
 		assertStacking("gridLg",  false, 1500);
 		assertStacking("gridXl",  false, 1500);
-		assertStacking("gridXxl", false, 1500);
 	}
 
 	/** Round-trip: shrink down to 380 then grow back to 1500 in a single
@@ -134,22 +128,22 @@ public class F110_ZK_5409_BreakpointMatrixTest extends WebDriverTestCase {
 	 *
 	 *  <p>gridSm cannot be used here because under the cascade rules
 	 *  {@code responsiveColumns="sm-none"} resolves to table at every
-	 *  width. We use gridXxl + gridLg, both of which round-trip cleanly. */
+	 *  width. We use gridXl + gridLg, both of which round-trip cleanly. */
 	@Test
 	public void testRoundTrip() {
 		connect(PATH);
 		waitResponse();
 
 		resize(1500);
-		assertStacking("gridXxl", false, 1500);
+		assertStacking("gridXl",  false, 1500);
 		assertStacking("gridLg",  false, 1500);
 
 		resize(380);
-		assertStacking("gridXxl", true, 380);
+		assertStacking("gridXl",  true, 380);
 		assertStacking("gridLg",  true, 380);
 
 		resize(1500);
-		assertStacking("gridXxl", false, 1500);
+		assertStacking("gridXl",  false, 1500);
 		assertStacking("gridLg",  false, 1500);
 	}
 }

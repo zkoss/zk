@@ -31,8 +31,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  *   sm (576..767)    sm-2                 -&gt; stacking, 2 cols
  *   md (768..991)    md-none              -&gt; table
  *   lg (992..1199)   lg-3                 -&gt; stacking, 3 cols
- *   xl (1200..1399)  xl-none              -&gt; table
- *   xxl (&gt;=1400)     xl-none (cascade-up) -&gt; table
+ *   xl (&gt;=1200)     xl-none              -&gt; table
  * </pre>
  *
  * <p>Container width tracks window width minus the browser chrome
@@ -116,9 +115,9 @@ public class F110_ZK_5409_AlternatingCascadeTest extends WebDriverTestCase {
 		assertStacking(false, 1300);
 	}
 
-	/** xxl tier: no xxl token → cascade-up picks {@code xl-none}. */
+	/** A container past 1400 px has no tier above xl → still {@code xl-none}. */
 	@Test
-	public void testXxlTable() {
+	public void testWideStaysXlTable() {
 		connect(PATH);
 		waitResponse();
 		resize(1500);
@@ -133,7 +132,7 @@ public class F110_ZK_5409_AlternatingCascadeTest extends WebDriverTestCase {
 		connect(PATH);
 		waitResponse();
 
-		resize(1500); assertStacking(false, 1500);                       // xxl
+		resize(1500); assertStacking(false, 1500);                       // xl (wide)
 		resize(1300); assertStacking(false, 1300);                       // xl
 		resize(1100); assertStacking(true, 1100);  assertCols(3, 1100);  // lg
 		resize(900);  assertStacking(false, 900);                        // md
@@ -142,6 +141,6 @@ public class F110_ZK_5409_AlternatingCascadeTest extends WebDriverTestCase {
 
 		// Grow back through the same tiers.
 		resize(1100); assertStacking(true, 1100);  assertCols(3, 1100);  // lg
-		resize(1500); assertStacking(false, 1500);                       // xxl
+		resize(1500); assertStacking(false, 1500);                       // xl (wide)
 	}
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6197.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Oct 14 15:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		xxl is no longer a breakpoint: "xxl-none" is dropped, so at any width the grid and listbox below
+		stay stacked (sm-1 cascades up). The "xl-none" grid and listbox are a table once their container is 1200px wide
+		(a window of about 1240px), and stack again below it.
+	</label>
+	<div style="padding: 10px;">
+		<grid id="gridXxl" responsive="stacking" responsiveColumns="sm-1 xxl-none" width="100%">
+			<columns><column label="Name" /><column label="Status" /></columns>
+			<rows><row><label value="row" /><label value="value" /></row></rows>
+		</grid>
+		<separator height="10px" />
+		<grid id="gridXl" responsive="stacking" responsiveColumns="sm-1 xl-none" width="100%">
+			<columns><column label="Name" /><column label="Status" /></columns>
+			<rows><row><label value="row" /><label value="value" /></row></rows>
+		</grid>
+		<separator height="10px" />
+		<listbox id="lbXxl" responsive="stacking" responsiveColumns="sm-1 xxl-none" width="100%">
+			<listhead><listheader label="Name" /><listheader label="Status" /></listhead>
+			<listitem><listcell label="row" /><listcell label="value" /></listitem>
+		</listbox>
+		<separator height="10px" />
+		<listbox id="lbXl" responsive="stacking" responsiveColumns="sm-1 xl-none" width="100%">
+			<listhead><listheader label="Name" /><listheader label="Status" /></listhead>
+			<listitem><listcell label="row" /><listcell label="value" /></listitem>
+		</listbox>
+	</div>
+</zk>
