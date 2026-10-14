@@ -530,7 +530,8 @@
 }
 
 /* A select-all header that is sortable or has the column-menu button still needs their room, which the
-   rule above (higher specificity than the sort and button rules) would otherwise drop to 4px. Same
+   rule above (higher specificity than the sort rule, equal to the button rule and later in the source,
+   so it wins both) would otherwise drop to 4px. Same
    numbers as the plain-header rules: sort arrow, menu button, and both. */
 .z-listheader-sort:has(.z-listheader-checkable) {
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);

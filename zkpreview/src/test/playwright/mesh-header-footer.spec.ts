@@ -14,7 +14,9 @@ import { test, expect, Page } from '@playwright/test';
 //    height, or the inline-block select-all span picks it up): the label of a select-all header clears the box, the header is
 //    not taller than a plain Listbox header beyond the known offset, and a centred box lines up with the rows;
 //  - a Tree header holding only the select-all box in a 40px column shows the whole 16px box, at the x of the
-//    row checkbox, with no ellipsis (D15);
+//    row checkbox, with no ellipsis painted, on desktop and on a tablet (D15);
+//  - Grid and Listbox headers with a column-menu button keep the label box clear of the button and of the sort
+//    arrow, and the sort arrow clear of the button, on desktop and on a tablet where the button is 44px (D11);
 //  - a Listbox header with a select-all box is as tall as the Grid header with the same labels, its labels sit
 //    at the same top offset and the painted box is centred on the label, on desktop and on a tablet (D16);
 //  - every checkmark Listbox header keeps its select-all box unclipped (`.z-listheader-content` does not
@@ -186,9 +188,7 @@ function registerSelectAllBoxIsNotClipped() {
 
 // A select-all header holding the sort arrow and/or the column-menu button reserves the same room as the
 // plain header with the same controls (D11), and the label box ends before the controls.
-// The menu button is 44px wide on a tablet (zkmax) against the 24px the right padding reserves, so plain
-// Grid and Listbox headers overlap it there as well; the gap to the button is only guarded on desktop.
-function registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap }: { guardButtonGap: boolean }) {
+function registerSelectAllHeaderClearsArrowAndButton() {
   const cases: Array<{ root: string; plain: string; controls: string[] }> = [
     { root: '.mhf-listbox-select-all-sort', plain: '.mhf-listbox th.z-listheader:nth-child(2)', controls: ['.z-listheader-sorticon'] },
     { root: '.mhf-listbox-select-all-menu', plain: '.mhf-listbox-menu th.z-listheader:nth-child(1)', controls: ['.z-listheader-button'] },
@@ -207,20 +207,112 @@ function registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap }: { guard
       expect(selectAll, `select-all ${selectAll}px, plain ${plainHeader}px`).toBe(plainHeader);
     });
 
-    const guarded = controls.filter((control) => guardButtonGap || control !== '.z-listheader-button');
-    if (guarded.length === 0) continue;
-    test(`${root}: the label box ends before ${guarded.join(' and ')}`, async ({ page }) => {
+    test(`${root}: the label box ends before ${controls.join(' and ')}`, async ({ page }) => {
       await open(page);
       const header = page.locator(`${root} th.z-listheader:nth-child(1)`);
       const labelBoxRight = await header.locator('.z-listheader-content')
         .evaluate((content) => content.getBoundingClientRect().right);
-      for (const control of guarded) {
+      for (const control of controls) {
         const controlLeft = await header.locator(control).evaluate((el) => el.getBoundingClientRect().left);
         expect(controlLeft - labelBoxRight, `label box right ${labelBoxRight}, ${control} left ${controlLeft}`)
           .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
       }
+      if (controls.length < 2) return;
+      const arrowRight = await header.locator('.z-listheader-sorticon i').evaluate((el) => el.getBoundingClientRect().right);
+      const buttonLeft = await header.locator('.z-listheader-button').evaluate((el) => el.getBoundingClientRect().left);
+      expect(buttonLeft - arrowRight, `arrow right ${arrowRight}, button left ${buttonLeft}`)
+        .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
     });
   }
+}
+
+interface MenuHeader {
+  name: string;
+  header: string;
+  sortIcon?: string;
+  button: string;
+  content: string;
+}
+
+const MENU_HEADERS: MenuHeader[] = [
+  { name: 'grid, button only', header: '.mhf-grid-menu th.z-column:nth-child(1)', button: '.z-column-button', content: '.z-column-content' },
+  {
+    name: 'grid, sort and button', header: '.mhf-grid-menu th.z-column:nth-child(2)', button: '.z-column-button',
+    content: '.z-column-content', sortIcon: '.z-column-sorticon i',
+  },
+  {
+    name: 'listbox, button only', header: '.mhf-listbox-menu th.z-listheader:nth-child(1)', button: '.z-listheader-button',
+    content: '.z-listheader-content',
+  },
+  {
+    name: 'listbox, sort and button', header: '.mhf-listbox-menu th.z-listheader:nth-child(2)', button: '.z-listheader-button',
+    content: '.z-listheader-content', sortIcon: '.z-listheader-sorticon i',
+  },
+];
+
+// The column-menu button is 24px on desktop and 44px on a tablet (zkmax tablet/_mesh.css); the header's right
+// padding and the sort arrow's offset must follow it, or the label and the arrow run under the button box.
+function registerMenuHeaderClearsArrowAndButton() {
+  const left = (page: Page, selector: string) => page.locator(selector).evaluate((el) => el.getBoundingClientRect().left);
+  const right = (page: Page, selector: string) => page.locator(selector).evaluate((el) => el.getBoundingClientRect().right);
+
+  for (const { name, header, button, content, sortIcon } of MENU_HEADERS) {
+    test(`${name}: the label box ends before the menu button`, async ({ page }) => {
+      await open(page);
+      const labelRight = await right(page, `${header} ${content}`);
+      const buttonLeft = await left(page, `${header} ${button}`);
+      expect(buttonLeft - labelRight, `label box right ${labelRight}, button left ${buttonLeft}`)
+        .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
+    });
+
+    if (!sortIcon) continue;
+    test(`${name}: the label box ends before the sort arrow and the arrow before the menu button`, async ({ page }) => {
+      await open(page);
+      const labelRight = await right(page, `${header} ${content}`);
+      const arrowLeft = await left(page, `${header} ${sortIcon}`);
+      const arrowRight = await right(page, `${header} ${sortIcon}`);
+      const buttonLeft = await left(page, `${header} ${button}`);
+      expect(arrowLeft - labelRight, `label box right ${labelRight}, arrow left ${arrowLeft}`)
+        .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
+      expect(buttonLeft - arrowRight, `arrow right ${arrowRight}, button left ${buttonLeft}`)
+        .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
+    });
+  }
+}
+
+// A select-all-only 40px Tree header (D15): the whole 16px box lies inside the content box, at the x of the
+// row checkbox, and the header paints no ellipsis. The content box overflows by the trailing `&nbsp;` (scrollWidth
+// 29 against clientWidth 16 on a tablet), so overflow cannot stand for the ellipsis; the pixels do: the header
+// looks the same with `text-overflow: clip`.
+function registerTreeSelectAllOnlyHeader() {
+  const HEADER = '.mhf-tree-checkbox-only th.z-treecol:nth-child(1)';
+
+  test('.mhf-tree-checkbox-only: a select-all-only 40px header holds the whole box at the x of the row box', async ({ page }) => {
+    await open(page);
+    const measured = await page.locator(HEADER).evaluate((th) => {
+      const content = th.querySelector('.z-treecol-content')!.getBoundingClientRect();
+      const icon = th.querySelector('.z-treecol-icon')!.getBoundingClientRect();
+      const rowIcon = th.closest('.z-tree')!.querySelector('.z-treerow-icon')!.getBoundingClientRect();
+      return {
+        iconLeft: icon.left, iconRight: icon.right, rowIconLeft: rowIcon.left,
+        contentLeft: content.left, contentRight: content.right,
+      };
+    });
+    expect.soft(measured.iconLeft >= measured.contentLeft && measured.iconRight <= measured.contentRight,
+      `icon ${measured.iconLeft}-${measured.iconRight}, content ${measured.contentLeft}-${measured.contentRight}`).toBe(true);
+    expect(Math.abs(measured.iconLeft - measured.rowIconLeft),
+      `header box x ${measured.iconLeft}, row box x ${measured.rowIconLeft}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  test('.mhf-tree-checkbox-only: a select-all-only 40px header paints no ellipsis', async ({ page }) => {
+    await open(page);
+    const header = page.locator(HEADER);
+    const content = header.locator('.z-treecol-content');
+    const withEllipsis = await header.screenshot({ animations: 'disabled' });
+    await content.evaluate((el) => { el.style.textOverflow = 'clip'; });
+    const clipped = await header.screenshot({ animations: 'disabled' });
+    expect(withEllipsis.equals(clipped), 'the header looks different with text-overflow clip, so an ellipsis is painted').toBe(true);
+  });
 }
 
 const SUB_PIXEL_PX = 0.01;
@@ -364,29 +456,11 @@ test.describe('mesh header and footer', () => {
       `icon ${measured.iconLeft}-${measured.iconRight}, cell ${measured.cellLeft}-${measured.cellRight}`).toBe(true);
   });
 
-  test('.mhf-tree-checkbox-only: a select-all-only 40px header shows the whole box at the x of the row box', async ({ page }) => {
-    await open(page);
-    const measured = await page.locator('.mhf-tree-checkbox-only th.z-treecol:nth-child(1)').evaluate((th) => {
-      const content = th.querySelector('.z-treecol-content')!;
-      const icon = th.querySelector('.z-treecol-icon')!.getBoundingClientRect();
-      const box = content.getBoundingClientRect();
-      const rowIcon = th.closest('.z-tree')!.querySelector('.z-treerow-icon')!.getBoundingClientRect();
-      return {
-        iconLeft: icon.left, iconRight: icon.right, iconWidth: icon.width, rowIconLeft: rowIcon.left,
-        contentLeft: box.left, contentRight: box.right,
-        scrollWidth: content.scrollWidth, clientWidth: content.clientWidth,
-      };
-    });
-    expect.soft(measured.iconLeft >= measured.contentLeft && measured.iconRight <= measured.contentRight,
-      `icon ${measured.iconLeft}-${measured.iconRight}, content ${measured.contentLeft}-${measured.contentRight}`).toBe(true);
-    expect.soft(measured.scrollWidth, 'content overflows, the ellipsis would paint').toBeLessThanOrEqual(measured.clientWidth);
-    expect(Math.abs(measured.iconLeft - measured.rowIconLeft),
-      `header box x ${measured.iconLeft}, row box x ${measured.rowIconLeft}`).toBeLessThanOrEqual(TOLERANCE_PX);
-  });
-
+  registerTreeSelectAllOnlyHeader();
   registerSelectAllHeaderVersusGrid();
   registerSelectAllBoxIsNotClipped();
-  registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap: true });
+  registerSelectAllHeaderClearsArrowAndButton();
+  registerMenuHeaderClearsArrowAndButton();
   registerTreeHeaderMatchesGrid();
 
   // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
@@ -411,9 +485,11 @@ test.describe('mesh header and footer', () => {
       expect(selectAll - plain, `select-all ${selectAll}, plain ${plain}`).toBeLessThanOrEqual(MAX_HEADER_HEIGHT_OFFSET_PX);
     });
 
+    registerTreeSelectAllOnlyHeader();
     registerSelectAllHeaderVersusGrid();
     registerSelectAllBoxIsNotClipped();
-    registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap: false });
+    registerSelectAllHeaderClearsArrowAndButton();
+    registerMenuHeaderClearsArrowAndButton();
     registerTreeHeaderMatchesGrid();
 
     test('.mhf-tree-vs-grid: the tree data row is as tall as the grid data row', async ({ page }) => {

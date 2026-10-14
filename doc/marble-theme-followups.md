@@ -471,3 +471,16 @@ Found while verifying zkdemo NS10 (`doc/zkdemo-b6-marble-fixes.md`, D16); deferr
 `gallery-scan.spec.ts` uses `maxDiffPixelRatio: 0.002` (0.2%), while
 `.claude/skills/marble-theme/reference/verification.md` still says 0.01 and "184 compared PNGs".
 Update both from the spec and a fresh `ls` of `zkpreview/doc/screenshots/`.
+
+## 30. Narrow header columns with `menupopup` on tablet
+
+Found while verifying the tablet menu-button reservation (zkcml `7680717b6`, zkdemo NS10); deferred
+under O10. The 44px touch button needs 56px of padding-right (68px with a sort arrow), so:
+
+- An image-only column with `menupopup` loses its icon on tablet below about 76px wide (desktop: about
+  56px). Repro: `<columns menupopup="auto"><column width="60px" image="/web/img/received.png"/>`;
+  tablet shows a 0px image.
+- Tablet has no guard for image + sort + menu headers (`GRID_IMAGE_MENU`, `LISTBOX_IMAGE_MENU` run on
+  desktop only); measured correct today (68px, label 157–181, sort 185–197, button 201–245).
+- Older than the reservation: a 40px select-all-only listheader with `menupopup` already clips the box
+  on desktop (padding-right 36px, content 0), and on tablet the 44px button overflows the cell by 8px.

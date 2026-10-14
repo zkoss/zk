@@ -99,7 +99,7 @@
     --zk-tree-row-hover-bg: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-color-surface));
     --zk-tree-selected-bg:  var(--zk-color-secondary-container);
     --zk-tree-selected-fg:  var(--zk-color-on-secondary-container);
-    /* cell padding → --zk-tree-cell-padding (tokens/_sizing.css). */
+    /* cell padding → --zk-tree-cell-padding, header padding → --zk-tree-header-padding (tokens/_sizing.css). */
 
     /* ── Panel — card surface + header (window-like; has resting elevation) */
     --zk-panel-bg:            var(--zk-color-surface);
