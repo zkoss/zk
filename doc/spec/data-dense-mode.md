@@ -101,6 +101,7 @@ than the shipped rule, so it wins regardless of load order — and set any token
 | `--zk-grid-detail-padding` | 12px | 6px | grid detail content (top/right/bottom) |
 | `--zk-listbox-cell-padding` | 16px | 6px 12px | listbox cells |
 | `--zk-tree-cell-padding` | 8px / 16px | 4px 12px | tree cells |
+| `--zk-tree-header-padding` | 16px | 6px 12px | tree header cells (same header height as grid/listbox) |
 
 ### Finer control
 

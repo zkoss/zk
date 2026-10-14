@@ -3,7 +3,8 @@
      "Department" column (96px, the label does not fit), a footer row, and a Grid/Listbox variant
      whose columns carry a column-menu button, the same sorted column with an image (Grid, Listbox, Tree),
      Trees whose headers hold images, an icon and the select-all box, and Listboxes with a plain, a labelled
-     select-all and a centred select-all header for the tablet guard. Lives under pv/ so
+     select-all and a centred select-all header for the tablet guard, and a Tree/Grid pair with the same labels
+     for the header height guard. Lives under pv/ so
      gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
 <zk>
 <div sclass="z-p-8">
@@ -185,6 +186,49 @@
         <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
     </listbox>
     <grid sclass="mhf-grid-vs-listbox" width="360px">
+        <columns>
+            <column label="Name" width="160px"/>
+            <column label="Type" width="160px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/></row>
+        </rows>
+    </grid>
+    <!-- Select-all headers that also hold the sort arrow, the column-menu button or both (D11 follow-through):
+         the label box must stop short of each. -->
+    <listbox sclass="mhf-listbox-select-all-sort" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Department" width="120px" sort="auto" sortDirection="ascending"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell label="Engineering"/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-menu" width="360px" checkmark="true" multiple="true">
+        <listhead menupopup="auto">
+            <listheader label="Department" width="120px"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell label="Engineering"/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-sort-menu" width="360px" checkmark="true" multiple="true">
+        <listhead menupopup="auto">
+            <listheader label="Department" width="120px" sort="auto" sortDirection="ascending"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell label="Engineering"/><listcell label="Alice"/></listitem>
+    </listbox>
+    <!-- A Tree next to a Grid with the same labels (D17): the header rows are as tall as each other in default,
+         compact and tablet, and so are the data rows on a tablet. -->
+    <tree sclass="mhf-tree-vs-grid" width="360px">
+        <treecols>
+            <treecol label="Name" width="160px"/>
+            <treecol label="Type" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <grid sclass="mhf-grid-vs-tree" width="360px">
         <columns>
             <column label="Name" width="160px"/>
             <column label="Type" width="160px"/>

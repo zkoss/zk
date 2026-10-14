@@ -65,7 +65,7 @@
 }
 
 .z-treecol {
-    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    padding: var(--zk-tree-header-padding);
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);
     color: var(--zk-tree-header-fg);
@@ -463,10 +463,11 @@
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
-/* Checkbox-only header column (typically width="40px") — same squeeze as the image column above and
-   as `.z-listheader:has(.z-listheader-checkable)` in listbox.css: the default 16px side padding leaves
-   8px for the 16px select-all icon and clips it. Only the right padding shrinks, so the icon keeps the
-   x of the row checkbox. */
+/* Header column holding the select-all box (typically a checkbox-only width="40px" column, but any treecol
+   with the box) — same squeeze as the image column above and as `.z-listheader:has(.z-listheader-checkable)`
+   in listbox.css: the default 16px side padding leaves 8px for the 16px select-all icon in a 40px column
+   and clips it. Only the right padding shrinks (16px to 4px, also for a labelled column), so the icon keeps
+   the x of the row checkbox. */
 .z-treecol:has(.z-treecol-checkable) {
     padding-right: var(--zk-spacing-1);
 }

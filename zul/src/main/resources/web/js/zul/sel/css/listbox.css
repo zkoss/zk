@@ -529,20 +529,33 @@
     padding-right: var(--zk-spacing-1);
 }
 
+/* A select-all header that is sortable or has the column-menu button still needs their room, which the
+   rule above (higher specificity than the sort and button rules) would otherwise drop to 4px. Same
+   numbers as the plain-header rules: sort arrow, menu button, and both. */
+.z-listheader-sort:has(.z-listheader-checkable) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
+.z-listheader:has(.z-listheader-checkable):has(.z-listheader-button) {
+    padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
+}
+
+.z-listheader-sort:has(.z-listheader-checkable):has(.z-listheader-button) {
+    padding-right: calc(var(--zk-spacing-1) * 3 + 24px + 12px);
+}
+
 /* An inline span ignores `max-width`, so in a width="40px" header its 40px (icon plus padding)
    overflowed the ~32px content box and `.z-listheader-content` painted its ellipsis right of the
    box. As an inline-block capped at the content width it fits, and the icon keeps its x.
-   zkmax tablet/_mesh.css leaves this span's width and height alone, so the inline-block cap
-   is not widened to the 24px touch box there.
+   zkmax tablet/_mesh.css leaves this span's size alone, so the inline-block cap is not widened to the
+   24px touch box there.
    The baseline-aligned inline-block also grew the header's line box (54.17px against the 53px of a
-   Grid header; on a tablet the 24px font-size of that rule pushes the 16px glyph further down), which
-   moved the label of this header below the other labels of the row. Pinning the span to the label's
-   line height and the top of the line box keeps the header as tall as a Grid header. */
+   Grid header) and moved the label of this header below the other labels of the row. Aligning the span
+   to the top of the line box keeps the header as tall as a Grid header. */
 .z-listheader-checkable {
     display: inline-block;
     max-width: 100%;
     vertical-align: top;
-    height: var(--zk-typescale-label-large-line-height);
 }
 
 /* Narrow image/icon header column — same squeeze as the checkable column. A

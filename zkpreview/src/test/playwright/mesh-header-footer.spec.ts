@@ -16,7 +16,13 @@ import { test, expect, Page } from '@playwright/test';
 //  - a Tree header holding only the select-all box in a 40px column shows the whole 16px box, at the x of the
 //    row checkbox, with no ellipsis (D15);
 //  - a Listbox header with a select-all box is as tall as the Grid header with the same labels, its labels sit
-//    at the same top offset and the box is centred on the label, on desktop and on a tablet (D16);
+//    at the same top offset and the painted box is centred on the label, on desktop and on a tablet (D16);
+//  - every checkmark Listbox header keeps its select-all box unclipped (`.z-listheader-content` does not
+//    overflow vertically) on the font-size of the header, so zkmax cannot size the glyph box of the span;
+//  - a select-all header that also holds the sort arrow and/or the column-menu button keeps its label box
+//    clear of them (D11 follow-through);
+//  - a Tree header is as tall as the Grid header with the same labels in default, compact and tablet density,
+//    and on a tablet the data rows are as tall as well (D17);
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -125,11 +131,21 @@ function registerSelectAllHeaderVersusGrid() {
     expect(Math.abs(first - second), `Name top ${first}, Type top ${second}`).toBeLessThanOrEqual(0.1);
   });
 
-  test('.mhf-listbox-vs-grid: the select-all box is centred on its label', async ({ page }) => {
+  test('.mhf-listbox-vs-grid: the painted select-all box is centred on its label', async ({ page }) => {
     await open(page);
     const header = '.mhf-listbox-vs-grid th.z-listheader:nth-child(1)';
-    const iconCentre = await page.locator(`${header} .z-listheader-icon`)
-      .evaluate((icon) => { const r = icon.getBoundingClientRect(); return (r.top + r.bottom) / 2; });
+    // The 16px glyph is the icon's ::before, which getBoundingClientRect cannot see. A zero-size marker in
+    // the icon gives the baseline the glyph hangs from; the glyph box is `vertical-align` below it.
+    const boxCentre = await page.locator(`${header} .z-listheader-icon`).evaluate((icon) => {
+      const marker = document.createElement('span');
+      marker.style.cssText = 'display:inline-block;width:0;height:0';
+      icon.appendChild(marker);
+      const baseline = marker.getBoundingClientRect().bottom;
+      marker.remove();
+      const glyph = getComputedStyle(icon, '::before');
+      const bottom = baseline - parseFloat(glyph.verticalAlign);
+      return bottom - parseFloat(glyph.height) / 2;
+    });
     const labelCentre = await page.locator(`${header} .z-listheader-content`).evaluate((el) => {
       const text = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
         acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
@@ -139,8 +155,96 @@ function registerSelectAllHeaderVersusGrid() {
       const rect = range.getBoundingClientRect();
       return (rect.top + rect.bottom) / 2;
     });
-    expect(Math.abs(iconCentre - labelCentre), `box centre ${iconCentre}, label centre ${labelCentre}`)
-      .toBeLessThanOrEqual(0.5);
+    expect(Math.abs(boxCentre - labelCentre), `box centre ${boxCentre}, label centre ${labelCentre}`)
+      .toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+}
+
+const CHECKMARK_LISTBOXES = ['.mhf-listbox-checkable', '.mhf-listbox-select-all-label', '.mhf-listbox-select-all-centre',
+  '.mhf-listbox-vs-grid', '.mhf-listbox-select-all-sort', '.mhf-listbox-select-all-menu',
+  '.mhf-listbox-select-all-sort-menu'];
+
+// The select-all box must not be cut by the header content (overflow hidden) and the span must not be
+// resized by zkmax, which put the 16px glyph on a 24px baseline and clipped its bottom edge.
+function registerSelectAllBoxIsNotClipped() {
+  for (const root of CHECKMARK_LISTBOXES) {
+    test(`${root}: the select-all box is not clipped and the span keeps the header font-size`, async ({ page }) => {
+      await open(page);
+      const measured = await page.locator(`${root} th.z-listheader:nth-child(1)`).evaluate((th) => {
+        const content = th.querySelector('.z-listheader-content')!;
+        return {
+          scrollHeight: content.scrollHeight, clientHeight: content.clientHeight,
+          headerFontSize: getComputedStyle(th).fontSize,
+          boxFontSize: getComputedStyle(th.querySelector('.z-listheader-checkable')!).fontSize,
+        };
+      });
+      expect.soft(measured.scrollHeight, 'content clips the box vertically').toBeLessThanOrEqual(measured.clientHeight);
+      expect(measured.boxFontSize).toBe(measured.headerFontSize);
+    });
+  }
+}
+
+// A select-all header holding the sort arrow and/or the column-menu button reserves the same room as the
+// plain header with the same controls (D11), and the label box ends before the controls.
+// The menu button is 44px wide on a tablet (zkmax) against the 24px the right padding reserves, so plain
+// Grid and Listbox headers overlap it there as well; the gap to the button is only guarded on desktop.
+function registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap }: { guardButtonGap: boolean }) {
+  const cases: Array<{ root: string; plain: string; controls: string[] }> = [
+    { root: '.mhf-listbox-select-all-sort', plain: '.mhf-listbox th.z-listheader:nth-child(2)', controls: ['.z-listheader-sorticon'] },
+    { root: '.mhf-listbox-select-all-menu', plain: '.mhf-listbox-menu th.z-listheader:nth-child(1)', controls: ['.z-listheader-button'] },
+    {
+      root: '.mhf-listbox-select-all-sort-menu', plain: '.mhf-listbox-menu th.z-listheader:nth-child(2)',
+      controls: ['.z-listheader-sorticon', '.z-listheader-button'],
+    },
+  ];
+  for (const { root, plain, controls } of cases) {
+    test(`${root}: the right padding is the one of the plain header with ${controls.join(' and ')}`, async ({ page }) => {
+      await open(page);
+      const paddingRight = (selector: string) => page.locator(selector)
+        .evaluate((th) => parseFloat(getComputedStyle(th).paddingRight));
+      const selectAll = await paddingRight(`${root} th.z-listheader:nth-child(1)`);
+      const plainHeader = await paddingRight(plain);
+      expect(selectAll, `select-all ${selectAll}px, plain ${plainHeader}px`).toBe(plainHeader);
+    });
+
+    const guarded = controls.filter((control) => guardButtonGap || control !== '.z-listheader-button');
+    if (guarded.length === 0) continue;
+    test(`${root}: the label box ends before ${guarded.join(' and ')}`, async ({ page }) => {
+      await open(page);
+      const header = page.locator(`${root} th.z-listheader:nth-child(1)`);
+      const labelBoxRight = await header.locator('.z-listheader-content')
+        .evaluate((content) => content.getBoundingClientRect().right);
+      for (const control of guarded) {
+        const controlLeft = await header.locator(control).evaluate((el) => el.getBoundingClientRect().left);
+        expect(controlLeft - labelBoxRight, `label box right ${labelBoxRight}, ${control} left ${controlLeft}`)
+          .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
+      }
+    });
+  }
+}
+
+const SUB_PIXEL_PX = 0.01;
+
+const boxHeight = (page: Page, selector: string) => page.locator(selector).first()
+  .evaluate((el) => el.getBoundingClientRect().height);
+
+// Tree and Grid with the same labels: both header rows must come out at the same height.
+function registerTreeHeaderMatchesGrid() {
+  const compare = async (page: Page) => {
+    const tree = await boxHeight(page, '.mhf-tree-vs-grid th.z-treecol');
+    const grid = await boxHeight(page, '.mhf-grid-vs-tree th.z-column');
+    expect(Math.abs(tree - grid), `tree header ${tree}, grid header ${grid}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+  };
+
+  test('.mhf-tree-vs-grid: the tree header is as tall as the grid header', async ({ page }) => {
+    await open(page);
+    await compare(page);
+  });
+
+  test('.mhf-tree-vs-grid: the tree header is as tall as the grid header in compact density', async ({ page }) => {
+    await open(page);
+    await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+    await compare(page);
   });
 }
 
@@ -281,12 +385,14 @@ test.describe('mesh header and footer', () => {
   });
 
   registerSelectAllHeaderVersusGrid();
+  registerSelectAllBoxIsNotClipped();
+  registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap: true });
+  registerTreeHeaderMatchesGrid();
 
   // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
   test.describe('select-all header on a tablet @tablet', () => {
-    // Listbox headers are known to be taller than Grid and plain Listbox headers by 1.17px (desktop) and
-    // 1.67px (tablet); that is a separate issue, this guard only stops it from growing.
-    const MAX_HEADER_HEIGHT_OFFSET_PX = 2;
+    // A select-all Listbox header is as tall as a plain one; the tolerance only absorbs sub-pixel rounding.
+    const MAX_HEADER_HEIGHT_OFFSET_PX = 0.01;
 
     test('.mhf-listbox-select-all-label: the label starts at or after the right edge of the box', async ({ page }) => {
       await open(page);
@@ -306,6 +412,16 @@ test.describe('mesh header and footer', () => {
     });
 
     registerSelectAllHeaderVersusGrid();
+    registerSelectAllBoxIsNotClipped();
+    registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap: false });
+    registerTreeHeaderMatchesGrid();
+
+    test('.mhf-tree-vs-grid: the tree data row is as tall as the grid data row', async ({ page }) => {
+      await open(page);
+      const tree = await boxHeight(page, '.mhf-tree-vs-grid tr.z-treerow');
+      const grid = await boxHeight(page, '.mhf-grid-vs-tree tr.z-row');
+      expect(Math.abs(tree - grid), `tree row ${tree}, grid row ${grid}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+    });
 
     test('.mhf-listbox-select-all-centre: the centred box lines up with the row checkbox', async ({ page }) => {
       await open(page);
