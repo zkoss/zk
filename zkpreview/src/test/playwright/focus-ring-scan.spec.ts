@@ -243,9 +243,13 @@ async function measureClipping(page: Page) {
         const pcs = getComputedStyle(p);
         if (pcs.overflowX === 'visible' && pcs.overflowY === 'visible') continue;
         const pr = p.getBoundingClientRect();
+        // `overflow: clip` paints up to `overflow-clip-margin` beyond the padding box; `hidden` ignores it.
+        const margin = pcs.overflowX === 'clip' && pcs.overflowY === 'clip'
+          ? parseFloat(pcs.overflowClipMargin.split(/\s+/).pop() ?? '') || 0
+          : 0;
         const s = Math.max(
-          pr.left - ring.left, ring.right - pr.right,
-          pr.top - ring.top, ring.bottom - pr.bottom,
+          pr.left - margin - ring.left, ring.right - (pr.right + margin),
+          pr.top - margin - ring.top, ring.bottom - (pr.bottom + margin),
         );
         if (s > 0.5) {
           const own = typeof p.className === 'string' ? p.className.trim() : '';
