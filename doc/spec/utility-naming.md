@@ -59,7 +59,7 @@ This is not cosmetic. While breakpoints were a suffix, the same four tokens mean
 things and nothing in the name said which:
 
 ```
-z-d-block-md     display:block at >= 900px     (a breakpoint)
+z-d-block-md     display:block at >= 768px     (a breakpoint)
 z-hstack-md      gap: 16px, at every width     (a size)
 z-grid-fill-md   min column width 200px        (a size)
 ```
@@ -154,4 +154,4 @@ The catalogue is generated at build time to
 - `doc/utility-class-naming-review.md` — the review this page condenses; evidence, rejected
   options, and the verification method in full
 - `doc/spec/spacing-policy.md` — the 4px scale the spacing classes expose
-- `doc/spec/responsive-design.md` — the MUI breakpoint values used by R3
+- `doc/spec/responsive-design.md` — the Bootstrap breakpoint values used by R3

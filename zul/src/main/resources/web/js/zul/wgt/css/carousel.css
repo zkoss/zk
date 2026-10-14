@@ -15,8 +15,9 @@
    Because slide content is arbitrary photographic imagery, the overlay chrome
    (arrows/indicators/caption) cannot key off surface/on-surface tokens — it
    speaks two brand-independent voices instead: --zk-color-scrim (dark) and
-   --zk-color-inverse-on-surface (light). See doc/contracts/carousel.md Design
-   Contract for the full rationale (including why NOT --zk-color-on-primary). */
+   --zk-color-inverse-on-surface (light). The active indicator is the exception:
+   a primary pill ringed with on-primary. See doc/contracts/carousel.md Design
+   Contract for the full rationale. */
 
 @layer zk-components {
 
@@ -229,16 +230,18 @@
     justify-content: center;
 }
 
-/* Resting = fill/ring pair; active (below) swaps which knob is which, so the
-   two states read as inversions of one idea rather than four independent
-   colors. */
+/* Resting = an 8px scrim dot ringed with the light overlay voice. Active (below)
+   is a 22px primary pill ringed with on-primary: a brand-coloured fill carries
+   the "current" state on light slides, where the old light-fill dot looked
+   hollow, and the pill shape marks it without relying on colour alone. The
+   22px width keeps the pill inside the 24px hit area. */
 .z-carousel-indicator::before {
     content: '';
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background-color: var(--zk-carousel-indicator-bg);
-    border: 1px solid var(--zk-carousel-indicator-active-bg);
+    border: 1px solid var(--zk-carousel-indicator-ring);
     box-sizing: border-box;
     transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
                 background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
@@ -246,8 +249,10 @@
 }
 
 .z-carousel-indicator-active::before {
+    width: 22px;
+    border-radius: var(--zk-shape-corner-full);
     background-color: var(--zk-carousel-indicator-active-bg);
-    border-color: var(--zk-carousel-indicator-bg);
+    border-color: var(--zk-carousel-indicator-active-ring);
 }
 
 /* Hover is a geometry cue (scale), not a color change: the dot's fill is

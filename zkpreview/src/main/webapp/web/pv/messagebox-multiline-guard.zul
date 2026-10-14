@@ -1,0 +1,6 @@
+<?page title="Messagebox multiline" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for messagebox-multiline.spec.ts: opens a three-line message on load. Lives under pv/ so
+     gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk>
+<div onCreate='Messagebox.show("Line 1\nLine 2\nLine 3", "Title", Messagebox.OK, Messagebox.INFORMATION)'/>
+</zk>

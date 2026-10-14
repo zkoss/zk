@@ -1562,21 +1562,23 @@ scoping (CTV-3) works normally — unlike popup/messagebox/confirmpopup.
 Full-bleed media frame (CE, `zul/wgt/css/carousel.css`) — `.z-carousel` root (clipped to a
 rounded rectangle) + `.z-carousel-track` flex track + `.z-carouselitem` slides + overlay
 `.z-carousel-arrow-prev`/`-next` + overlay `.z-carousel-indicators`/`.z-carousel-indicator` + an
-optional `.z-carouselitem-label` caption chip. Eight knobs. One shape knob (`--zk-carousel-radius`)
+optional `.z-carouselitem-label` caption chip. Ten knobs. One shape knob (`--zk-carousel-radius`)
 is shared by the root frame **and** the caption chip — both are "containers" under DESIGN.md §5's
-container/control rule, so one knob moves both together (see c1/c27). The seven color knobs split
+container/control rule, so one knob moves both together (see c1/c27). The nine color knobs split
 three ways by overlay region (arrow / indicator / label), each region pairing a "dark voice"
 (defaults to `--zk-color-scrim`) with a "light voice" (defaults to `--zk-color-inverse-on-surface`
 — brand-**independent** by design, **not** `--zk-color-on-primary`, which a light-primary rebrand
 would flip dark; see the contract), because the slides underneath are arbitrary imagery and the
-overlay chrome cannot key off surface/on-surface tokens. The one exception is
+overlay chrome cannot key off surface/on-surface tokens. There are two exceptions: the active
+indicator pill (`-indicator-active-bg` / `-indicator-active-ring`, primary / on-primary, below) and
 `--zk-carousel-arrow-bg-hover`, the single non-token-rooted literal default (`rgba(0, 0, 0, 0.65)`
 — a hand-picked darkening of the scrim with no token to derive from), matching the
 `--zk-grid-row-hover-bg` / `--zk-combobox-item-hover-bg` literal-hover precedent. The indicator
-ring color is **not** a separate knob — it is whichever of `-indicator-bg`/`-indicator-active-bg`
-is not the current fill (resting and active swap fill and ring), so overriding either knob
-recolors both a fill and a ring somewhere in the component, by design. Hover/focus/disabled
-opacities and the chevron/dot geometry stay on base tokens or literal geometry, not knob-driven
+has four knobs, one per paint: resting fill and ring (`-indicator-bg`, `-indicator-ring`) and
+the active pill's fill and ring (`-indicator-active-bg`, `-indicator-active-ring`). The active
+pill is primary with an on-primary ring — the one overlay part that uses brand tokens — so it
+reads on light slides; inactive dots are the scrim/inverse-on-surface dots as before.
+Hover/focus/disabled opacities and the chevron/dot geometry stay on base tokens or literal geometry, not knob-driven
 (same convention as button/input/rating) — the one exception is the indicator's hover cue
 (`transform: scale(1.25)`, c30), which is geometry rather than a color/opacity token specifically
 because it must work against either fill knob. Arrow size is density-bound via the new
@@ -1592,8 +1594,10 @@ popup/messagebox/confirmpopup.
 | `--zk-carousel-arrow-bg` | `var(--zk-color-scrim)` | arrow resting background |
 | `--zk-carousel-arrow-bg-hover` | `rgba(0, 0, 0, 0.65)` | arrow hover background (literal — no darker-scrim token) |
 | `--zk-carousel-arrow-fg` | `var(--zk-color-inverse-on-surface)` | arrow chevron color |
-| `--zk-carousel-indicator-bg` | `var(--zk-color-scrim)` | resting dot fill / active dot ring |
-| `--zk-carousel-indicator-active-bg` | `var(--zk-color-inverse-on-surface)` | active dot fill / resting dot ring |
+| `--zk-carousel-indicator-bg` | `var(--zk-color-scrim)` | resting dot fill |
+| `--zk-carousel-indicator-ring` | `var(--zk-color-inverse-on-surface)` | resting dot ring |
+| `--zk-carousel-indicator-active-bg` | `var(--zk-color-primary)` | active pill fill |
+| `--zk-carousel-indicator-active-ring` | `var(--zk-color-on-primary)` | active pill ring |
 | `--zk-carousel-label-bg` | `var(--zk-color-scrim)` | caption chip backdrop |
 | `--zk-carousel-label-fg` | `var(--zk-color-inverse-on-surface)` | caption text |
 

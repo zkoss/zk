@@ -382,11 +382,11 @@
     .z-slider-area,
     .z-sliderbuttons-area   { background-color: Highlight; }
 
-    /* Carousel indicator — resting vs. active is carried ONLY by which of two
-       overlay fills is applied (no shape/icon/text difference); once both
-       force-map toward the same neutral the active dot becomes indistinguishable
-       from a resting one. Same "selection" risk as (2a)'s listbox/tree/paging
-       rows and this block's own slider track/fill. */
+    /* Carousel indicator — resting vs. active is carried by the fill and by
+       the pill shape of the active one; the fills still need to differ, so the
+       active pill keeps the Highlight mapping rather than the resting
+       GrayText. Same "selection" risk as (2a)'s listbox/tree/paging rows and
+       this block's own slider track/fill. */
     .z-carousel-indicator::before          { background-color: GrayText; border-color: GrayText; }
     .z-carousel-indicator-active::before   { background-color: Highlight; border-color: Highlight; }
 

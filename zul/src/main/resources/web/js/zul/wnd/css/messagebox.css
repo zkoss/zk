@@ -73,8 +73,9 @@
     max-width: calc(var(--zk-messagebox-icon-size, 28px) + 100%);
 }
 
+/* No pre-wrap: the label is multiline, so ZK already writes "<br/>\n" per line;
+   pre-wrap would break on the "\n" as well and double every line break. */
 .z-messagebox .z-label {
-    white-space: pre-wrap;
     word-break: break-word;
     display: block;
 }

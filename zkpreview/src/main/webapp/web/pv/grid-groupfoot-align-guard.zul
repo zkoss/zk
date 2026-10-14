@@ -1,0 +1,21 @@
+<?page title="Grid groupfoot alignment" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for grid-groupfoot-alignment.spec.ts: a grouped grid whose columns are left, right and
+     centre aligned. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence
+     do not pick it up as a page. -->
+<zk>
+<div sclass="z-p-8">
+    <grid sclass="groupfoot-guard" width="480px">
+        <columns>
+            <column label="Name"/>
+            <column label="Quantity" align="right"/>
+            <column label="Status" align="center"/>
+        </columns>
+        <rows>
+            <group label="Fruit"/>
+            <row><label value="Apple"/><label value="12"/><label value="ok"/></row>
+            <row><label value="Banana"/><label value="345"/><label value="late"/></row>
+            <groupfoot><label value="Total"/><label value="357"/><label value="2"/></groupfoot>
+        </rows>
+    </grid>
+</div>
+</zk>

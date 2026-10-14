@@ -88,7 +88,9 @@
     --zk-carousel-arrow-bg-hover: rgba(0, 0, 0, 0.65);
     --zk-carousel-arrow-fg: var(--zk-color-inverse-on-surface);
     --zk-carousel-indicator-bg: var(--zk-color-scrim);
-    --zk-carousel-indicator-active-bg: var(--zk-color-inverse-on-surface);
+    --zk-carousel-indicator-ring: var(--zk-color-inverse-on-surface);
+    --zk-carousel-indicator-active-bg: var(--zk-color-primary);
+    --zk-carousel-indicator-active-ring: var(--zk-color-on-primary);
     --zk-carousel-label-bg: var(--zk-color-scrim);
     --zk-carousel-label-fg: var(--zk-color-inverse-on-surface);
 }
@@ -281,15 +283,17 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
     height: 8px;
     border-radius: 50%;
     background-color: var(--zk-carousel-indicator-bg);
-    border: 1px solid var(--zk-carousel-indicator-active-bg);
+    border: 1px solid var(--zk-carousel-indicator-ring);
     box-sizing: border-box;
     transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
                 background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
                 border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 .z-carousel-indicator-active::before {
+    width: 22px;
+    border-radius: var(--zk-shape-corner-full);
     background-color: var(--zk-carousel-indicator-active-bg);
-    border-color: var(--zk-carousel-indicator-bg);
+    border-color: var(--zk-carousel-indicator-active-ring);
 }
 /* Hover cue is geometric (scale), not a color/fill change: the fill is already one of
    two different colors depending on resting/active state, so a single "darker fill"

@@ -51,34 +51,36 @@
      hide a sidebar on phones, show it >= md:   z-d-none  z-d-md-block
      show a hamburger only below md:            z-d-block z-d-md-none
 
-   Breakpoints follow the MUI scale (see doc/spec/responsive-design.md §5):
-     sm = 600px, md = 900px, lg = 1200px, xl = 1536px.  (xs = 0 = the base.)
+   Breakpoints follow the Bootstrap scale (see doc/spec/responsive-design.md §5):
+     sm = 576px, md = 768px, lg = 992px, xl = 1200px.  (xs = 0 = the base.)
+   The same values are used by the Grid/Listbox `responsive` feature in zkmax;
+   scripts/build-css.js (--module zkmax) fails the build if they drift apart.
    Values are literal px — a media-query condition cannot read a CSS var().
    Value set is deliberately curated (none/block/flex/grid/inline-block):
    these cover hide/show + layout switching; add more only on a real need.
    ============================================ */
-@media (min-width: 600px) {
+@media (min-width: 576px) {
     .z-d-sm-none         { display: none; }
     .z-d-sm-block        { display: block; }
     .z-d-sm-flex         { display: flex; }
     .z-d-sm-grid         { display: grid; }
     .z-d-sm-inline-block { display: inline-block; }
 }
-@media (min-width: 900px) {
+@media (min-width: 768px) {
     .z-d-md-none         { display: none; }
     .z-d-md-block        { display: block; }
     .z-d-md-flex         { display: flex; }
     .z-d-md-grid         { display: grid; }
     .z-d-md-inline-block { display: inline-block; }
 }
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
     .z-d-lg-none         { display: none; }
     .z-d-lg-block        { display: block; }
     .z-d-lg-flex         { display: flex; }
     .z-d-lg-grid         { display: grid; }
     .z-d-lg-inline-block { display: inline-block; }
 }
-@media (min-width: 1536px) {
+@media (min-width: 1200px) {
     .z-d-xl-none         { display: none; }
     .z-d-xl-block        { display: block; }
     .z-d-xl-flex         { display: flex; }
@@ -97,7 +99,7 @@
    same component adapts wherever it is placed.
 
      <div class="z-container">                 <!-- query container -->
-         <div class="z-cq-none z-cq-md-flex">  <!-- flex once the container is >= 900px -->
+         <div class="z-cq-none z-cq-md-flex">  <!-- flex once the container is >= 768px -->
 
    `z-cq-*` require a `.z-container` ancestor to have anything to measure —
    always pair them. Breakpoints reuse the same sm/md/lg/xl scale as the
@@ -112,28 +114,28 @@
 .z-cq-grid         { display: grid; }
 .z-cq-inline-block { display: inline-block; }
 
-@container (min-width: 600px) {
+@container (min-width: 576px) {
     .z-cq-sm-none         { display: none; }
     .z-cq-sm-block        { display: block; }
     .z-cq-sm-flex         { display: flex; }
     .z-cq-sm-grid         { display: grid; }
     .z-cq-sm-inline-block { display: inline-block; }
 }
-@container (min-width: 900px) {
+@container (min-width: 768px) {
     .z-cq-md-none         { display: none; }
     .z-cq-md-block        { display: block; }
     .z-cq-md-flex         { display: flex; }
     .z-cq-md-grid         { display: grid; }
     .z-cq-md-inline-block { display: inline-block; }
 }
-@container (min-width: 1200px) {
+@container (min-width: 992px) {
     .z-cq-lg-none         { display: none; }
     .z-cq-lg-block        { display: block; }
     .z-cq-lg-flex         { display: flex; }
     .z-cq-lg-grid         { display: grid; }
     .z-cq-lg-inline-block { display: inline-block; }
 }
-@container (min-width: 1536px) {
+@container (min-width: 1200px) {
     .z-cq-xl-none         { display: none; }
     .z-cq-xl-block        { display: block; }
     .z-cq-xl-flex         { display: flex; }

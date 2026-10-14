@@ -80,13 +80,36 @@
     position: relative;
 }
 
+/* Block, not flex: the ellipsis needs a block container; an icon stays inline with the text. */
 .z-treecol-content {
-    display: flex;
-    align-items: center;
-    gap: var(--zk-spacing-1);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);
     color: var(--zk-tree-header-fg);
+}
+
+/* A header image keeps the flex centring of the label. Inline, `middle` would centre the image on
+   the x-height, ~0.12em below the label's centre, which moves the label off the row centre once the
+   image is taller than the text. The cost: the label next to an image is clipped at the box edge,
+   without an ellipsis (an anonymous flex item cannot show one). */
+.z-treecol-content:has(img) {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+}
+
+/* The select-all box is followed by `&nbsp;` and the label; the flex gap that used to sit between
+   them is now a margin. Images and icons are followed by a plain space, which already gives the gap. */
+.z-treecol-content .z-treecol-checkable {
+    vertical-align: baseline;
+    margin-right: var(--zk-spacing-1);
+}
+
+/* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
+.z-treecol-sort {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* Splitter bar between columns */
@@ -432,6 +455,25 @@
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
     white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
+}
+
+/* A sortable header with an image still needs the sort icon's room, which the rule above (higher
+   specificity than .z-treecol-sort) would otherwise drop to the 4px icon-column padding. */
+.z-treecol-sort:has(img) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
+/* Checkbox-only header column (typically width="40px") — same squeeze as the image column above and
+   as `.z-listheader:has(.z-listheader-checkable)` in listbox.css: the default 16px side padding leaves
+   8px for the 16px select-all icon and clips it. Only the right padding shrinks, so the icon keeps the
+   x of the row checkbox. */
+.z-treecol:has(.z-treecol-checkable) {
+    padding-right: var(--zk-spacing-1);
+}
+
+/* A sortable select-all header still needs the sort icon's room (same reasoning as the image rule). */
+.z-treecol-sort:has(.z-treecol-checkable) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* Indeterminate / tristate (partial) — filled primary box with a white minus.

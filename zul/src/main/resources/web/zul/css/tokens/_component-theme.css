@@ -1171,7 +1171,7 @@
        knob, several roles" precedent as tab/calendar's accent. Because the
        slide content underneath is arbitrary imagery, none of the overlay chrome
        can safely key off surface/on-surface tokens (it would vanish against a
-       photo) — all three overlay regions (arrow / indicator / label) instead
+       photo) — the arrow, the resting indicator dots and the label instead
        speak exactly two brand-independent voices, each exposed per-region
        rather than shared: a "dark voice" defaulting to --zk-color-scrim (the
        theme's existing translucent-black overlay token) and a "light voice"
@@ -1180,15 +1180,20 @@
        (brand-override.md documents that token as one integrators repoint to a
        DARK value for a light-primary rebrand, which would flip every carousel
        overlay foreground dark-on-dark against the always-dark scrim fill — see
-       doc/contracts/carousel.md Design Contract). --zk-carousel-arrow-bg-hover is
-       the one non-token-rooted default (a hand-picked darkening of the scrim,
+       doc/contracts/carousel.md Design Contract). The active indicator pill is
+       the one exception to the two voices (primary fill, on-primary ring, see
+       below), and --zk-carousel-arrow-bg-hover is the one non-token-rooted
+       default (a hand-picked darkening of the scrim,
        matching the existing --zk-grid-row-hover-bg / --zk-combobox-item-hover-bg
        literal-hover-color precedent) — hover darkens the scrim rather than
        layering a currentColor state-layer overlay, since the arrow's foreground
        is already light and a standard tint would lighten the dark scrim toward
-       white, the wrong direction. The indicator ring color is NOT a separate
-       knob — it is whichever of -indicator-bg/-indicator-active-bg is not the
-       current fill, so overriding either knob recolors both a fill and a ring.
+       white, the wrong direction. The resting dot is -indicator-bg (fill) ringed
+       with -indicator-ring; the active dot is the one overlay part that uses
+       brand tokens: a primary pill (-indicator-active-bg) ringed with
+       -indicator-active-ring, so it stays readable on light slides.
+       Overriding -indicator-active-bg recolors only the active pill's fill;
+       -indicator-ring recolors only the resting dots' ring.
        Hover/focus/disabled opacities and the chevron/dot geometry stay on base
        tokens or literal geometry, not knob-driven (same convention as
        button/input/rating). Arrow size lives in tokens/_sizing.css
@@ -1200,7 +1205,9 @@
     --zk-carousel-arrow-bg-hover:      rgba(0, 0, 0, 0.65);
     --zk-carousel-arrow-fg:            var(--zk-color-inverse-on-surface);
     --zk-carousel-indicator-bg:        var(--zk-color-scrim);
-    --zk-carousel-indicator-active-bg: var(--zk-color-inverse-on-surface);
+    --zk-carousel-indicator-ring:      var(--zk-color-inverse-on-surface);
+    --zk-carousel-indicator-active-bg: var(--zk-color-primary);
+    --zk-carousel-indicator-active-ring: var(--zk-color-on-primary);
     --zk-carousel-label-bg:            var(--zk-color-scrim);
     --zk-carousel-label-fg:            var(--zk-color-inverse-on-surface);
 

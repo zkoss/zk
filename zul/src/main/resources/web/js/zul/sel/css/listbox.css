@@ -58,12 +58,10 @@
     text-align: left;
     background-color: transparent;
     border-bottom: 1px solid var(--zk-listbox-border-color);
-    /* Allow long labels to wrap onto a second line so they never collide with
-       the absolute-positioned listheader-button. Per-cell padding-right below
-       still reserves slot for the button. */
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: normal;
+    /* One line, truncated with an ellipsis (see .z-listheader-content) like Grid and Tree. The
+       per-cell padding-right below reserves the slot of the absolute-positioned listheader-button
+       and the sort icon, so a long label never collides with them. */
+    white-space: nowrap;
     user-select: none;
     vertical-align: middle;
     position: relative;
@@ -71,8 +69,15 @@
     cursor: default;
 }
 
-/* Reserve right-side space for the hover-revealed listheader-button so wrapped
-   header text never collides with the icon slot. ZK nests the button inside
+/* Truncate the label inside the padded header; on .z-listheader the ellipsis would not apply
+   because the text is not a direct child. */
+.z-listheader-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Reserve right-side space for the hover-revealed listheader-button so the header text never
+   collides with the icon slot. ZK nests the button inside
    `.z-listheader-content`, so descendant `:has()` (no `>`) is required. */
 .z-listheader:has(.z-listheader-button) {
     padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
@@ -88,6 +93,16 @@
 
 .z-listheader-sort:hover {
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
+}
+
+/* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
+.z-listheader-sort {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
+/* With the column-menu button as well, the sort icon sits just left of the button. */
+.z-listheader-sort:has(.z-listheader-button) {
+    padding-right: calc(var(--zk-spacing-1) * 3 + 24px + 12px);
 }
 
 /* Resize affordance (listhead sizable="true"). ZK toggles `.z-listheader-sizing`
@@ -377,6 +392,11 @@
     border-top: 2px solid var(--zk-color-outline-variant);
 }
 
+/* The UA default `border-spacing: 2px` would push every footer column right of its body column. */
+.z-listbox-footer table {
+    border-spacing: 0;
+}
+
 .z-listfoot .z-listfooter,
 .z-listfoot td {
     padding: var(--zk-spacing-3) var(--zk-spacing-4);
@@ -507,11 +527,22 @@
 .z-listheader:has(.z-listheader-checkable) {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
-    /* Keep the select-all icon on one line. `.z-listheader` is `white-space: normal`
-       (so long text labels wrap), but the checkable span is 40px wide inside the ~32px
-       content box — with `normal` it wraps to a 2nd line and inflates the whole header
-       ROW (53→74px). An icon column never needs wrapping. */
-    white-space: nowrap;
+}
+
+/* An inline span ignores `max-width`, so in a width="40px" header its 40px (icon plus padding)
+   overflowed the ~32px content box and `.z-listheader-content` painted its ellipsis right of the
+   box. As an inline-block capped at the content width it fits, and the icon keeps its x.
+   zkmax tablet/_mesh.css leaves this span's width and height alone, so the inline-block cap
+   is not widened to the 24px touch box there.
+   The baseline-aligned inline-block also grew the header's line box (54.17px against the 53px of a
+   Grid header; on a tablet the 24px font-size of that rule pushes the 16px glyph further down), which
+   moved the label of this header below the other labels of the row. Pinning the span to the label's
+   line height and the top of the line box keeps the header as tall as a Grid header. */
+.z-listheader-checkable {
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: top;
+    height: var(--zk-typescale-label-large-line-height);
 }
 
 /* Narrow image/icon header column — same squeeze as the checkable column. A
@@ -519,13 +550,17 @@
    leaves only 8px of content width; the header image (ZK emits `<img>` with no
    class, subject to the global `img{max-width:100%}`) then shrinks below its
    intrinsic size AND the squeezed content wraps to a 2nd line, inflating the
-   whole header ROW. Collapse the side padding so a 16px icon renders full-size and
-   the row keeps its default height. See data-components.md → "Narrow icon/image
-   column". */
+   whole header ROW. Collapse the side padding so a 16px icon renders full-size. See
+   data-components.md → "Narrow icon/image column". */
 .z-listheader:has(img) {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
-    white-space: nowrap;
+}
+
+/* A sortable header with an image still needs the sort icon's room, which the rule above (higher
+   specificity than .z-listheader-sort) would otherwise drop to the 4px icon-column padding. */
+.z-listheader-sort:has(img) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 .z-listcell:has(.z-listitem-checkable) > .z-listcell-content {

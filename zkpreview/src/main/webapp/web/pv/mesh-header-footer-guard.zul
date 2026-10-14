@@ -1,0 +1,197 @@
+<?page title="Mesh header and footer" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for mesh-header-footer.spec.ts: Grid, Listbox and Tree with a narrow ascending-sorted
+     "Department" column (96px, the label does not fit), a footer row, and a Grid/Listbox variant
+     whose columns carry a column-menu button, the same sorted column with an image (Grid, Listbox, Tree),
+     Trees whose headers hold images, an icon and the select-all box, and Listboxes with a plain, a labelled
+     select-all and a centred select-all header for the tablet guard. Lives under pv/ so
+     gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk>
+<div sclass="z-p-8">
+    <grid sclass="mhf-grid" width="360px">
+        <columns>
+            <column label="Name" width="120px"/>
+            <column label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <column label="Salary" width="120px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/><label value="100"/></row>
+            <row><label value="Bob"/><label value="Sales"/><label value="90"/></row>
+        </rows>
+        <foot>
+            <footer label="Total"/><footer label="2"/><footer label="190"/>
+        </foot>
+    </grid>
+    <grid sclass="mhf-grid-menu" width="360px">
+        <columns menupopup="auto">
+            <column label="Name" width="120px"/>
+            <column label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <column label="Salary" width="120px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/><label value="100"/></row>
+        </rows>
+    </grid>
+    <listbox sclass="mhf-listbox" width="360px">
+        <listhead>
+            <listheader label="Name" width="120px"/>
+            <listheader label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <listheader label="Salary" width="120px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/><listcell label="100"/></listitem>
+        <listitem><listcell label="Bob"/><listcell label="Sales"/><listcell label="90"/></listitem>
+        <listfoot>
+            <listfooter label="Total"/><listfooter label="2"/><listfooter label="190"/>
+        </listfoot>
+    </listbox>
+    <listbox sclass="mhf-listbox-menu" width="360px">
+        <listhead menupopup="auto">
+            <listheader label="Name" width="120px"/>
+            <listheader label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <listheader label="Salary" width="120px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/><listcell label="100"/></listitem>
+    </listbox>
+    <tree sclass="mhf-tree" width="360px">
+        <treecols>
+            <treecol label="Name" width="120px"/>
+            <treecol label="Department" width="96px" sort="auto" sortDirection="ascending"/>
+            <treecol label="Salary" width="120px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/><treecell label="100"/></treerow></treeitem>
+            <treeitem><treerow><treecell label="Bob"/><treecell label="Sales"/><treecell label="90"/></treerow></treeitem>
+        </treechildren>
+        <treefoot>
+            <treefooter label="Total"/><treefooter label="2"/><treefooter label="190"/>
+        </treefoot>
+    </tree>
+    <grid sclass="mhf-grid-image" width="360px">
+        <columns>
+            <column label="Name" width="120px"/>
+            <column label="Department" width="96px" sort="auto" sortDirection="ascending" image="/web/img/received.png"/>
+            <column label="Salary" width="120px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/><label value="100"/></row>
+        </rows>
+    </grid>
+    <grid sclass="mhf-grid-image-menu" width="360px">
+        <columns menupopup="auto">
+            <column label="Name" width="120px"/>
+            <column label="Department" width="96px" sort="auto" sortDirection="ascending" image="/web/img/received.png"/>
+            <column label="Salary" width="120px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/><label value="100"/></row>
+        </rows>
+    </grid>
+    <listbox sclass="mhf-listbox-image" width="360px">
+        <listhead>
+            <listheader label="Name" width="120px"/>
+            <listheader label="Department" width="96px" sort="auto" sortDirection="ascending" image="/web/img/received.png"/>
+            <listheader label="Salary" width="120px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/><listcell label="100"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-image-menu" width="360px">
+        <listhead menupopup="auto">
+            <listheader label="Name" width="120px"/>
+            <listheader label="Department" width="96px" sort="auto" sortDirection="ascending" image="/web/img/received.png"/>
+            <listheader label="Salary" width="120px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/><listcell label="100"/></listitem>
+    </listbox>
+    <tree sclass="mhf-tree-image" width="360px">
+        <treecols>
+            <treecol label="Name" width="120px"/>
+            <treecol label="Department" width="96px" sort="auto" sortDirection="ascending" image="/web/img/received.png"/>
+            <treecol label="Salary" width="120px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/><treecell label="100"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- Header media next to a label: plain column first, then 16px, 24px and 30px images and an icon. -->
+    <tree sclass="mhf-tree-media" width="560px">
+        <treecols>
+            <treecol label="Plain" width="100px"/>
+            <treecol label="Img16" width="100px" image="/web/img/received.png"/>
+            <treecol label="Img24" width="100px" image="/web/img/Centigrade-Widget-Icons/Listbox-24x24.png"/>
+            <treecol label="Img30" width="100px" image="/web/img/inet.png"/>
+            <treecol label="Icon" width="100px" iconSclass="z-icon-home"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="a"/><treecell label="b"/><treecell label="c"/><treecell label="d"/><treecell label="e"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- The checkable (select-all) column. -->
+    <tree sclass="mhf-tree-checkable" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol label="Name" width="120px"/>
+            <treecol label="Department" width="120px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- A select-all-only 40px header column: the box must not push an ellipsis into the header. -->
+    <listbox sclass="mhf-listbox-checkable" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="40px"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <!-- Select-all headers on the tablet guard: one carries a label, one is a centred box-only column.
+         The first listbox is the plain-header reference for the header height. -->
+    <listbox sclass="mhf-listbox-plain" width="360px">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Department" width="160px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-label" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Department" width="160px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-centre" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="60px" align="center"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <!-- A select-all-only 40px Tree header column (D15): the 16px box must not be clipped by the header padding. -->
+    <tree sclass="mhf-tree-checkbox-only" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="40px"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- A select-all Listbox header next to a Grid with the same labels (D16): the header rows must be as tall
+         as each other and the select-all box must sit on the label centre. -->
+    <listbox sclass="mhf-listbox-vs-grid" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Type" width="160px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+    </listbox>
+    <grid sclass="mhf-grid-vs-listbox" width="360px">
+        <columns>
+            <column label="Name" width="160px"/>
+            <column label="Type" width="160px"/>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/></row>
+        </rows>
+    </grid>
+</div>
+</zk>

@@ -114,6 +114,29 @@
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
 }
 
+/* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap, so the label
+   never paints under it; the ellipsis on .z-column-content truncates what does not fit. */
+.z-column-sort {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
+/* Room for the column-menu button (24px, right: spacing-1) and, when sorted, the sort icon
+   next to it. */
+.z-column:has(.z-column-button) {
+    padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
+}
+
+.z-column-sort:has(.z-column-button) {
+    padding-right: calc(var(--zk-spacing-1) * 3 + 24px + 12px);
+}
+
+/* The label lives in .z-column-content, so the ellipsis has to be there; on .z-column it
+   would not apply because the text is not a direct child. */
+.z-column-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .z-column .z-column-sort-icon,
 .z-column [class*="z-icon-"] {
     font-size: 14px;
@@ -179,6 +202,12 @@
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
     white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
+}
+
+/* A sortable header with an image still needs the sort icon's room, which the rule above (higher
+   specificity than .z-column-sort) would otherwise drop to the 4px icon-column padding. */
+.z-column-sort:has(img) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* ─── Body area ─────────────────────────────────────────────────────────── */
@@ -356,9 +385,6 @@
 }
 
 .z-groupfoot-content {
-    display: flex;
-    align-items: center;
-    gap: var(--zk-spacing-2);
     /* td.z-groupfoot-inner > div.z-groupfoot-content: same padding as .z-row-content */
     padding: var(--zk-grid-cell-padding);
     color: var(--zk-color-on-surface);
@@ -434,6 +460,11 @@
     border-top: 1px solid var(--zk-color-outline-variant);
 }
 
+/* The UA default `border-spacing: 2px` would push every footer column right of its body column. */
+.z-grid-footer table {
+    border-spacing: 0;
+}
+
 .z-grid-footer .z-cell,
 .z-footer .z-cell,
 .z-grid-footer .z-row-content,
@@ -471,6 +502,8 @@
    column-menu caret. Scoped to the grid column sort icon only. */
 .z-column .z-column-sorticon [class*="z-icon-"] {
     margin-left: 0;
+    /* beat the 14px of `.z-column [class*="z-icon-"]` so the arrow is 12px like Listbox and Tree */
+    font-size: inherit;
 }
 
 .z-column-sorticon .z-icon-caret-up {

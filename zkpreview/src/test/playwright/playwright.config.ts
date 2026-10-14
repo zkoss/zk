@@ -8,6 +8,18 @@ const IPAD_USER_AGENT =
   'AppleWebKit/605.1.15 (KHTML, like Gecko) ' +
   'Version/16.0 Mobile/15E148 Safari/604.1';
 
+// iPad Air portrait viewport with the mobile UA and touch, shared by every tablet project.
+const TABLET_USE = {
+  ...devices['Desktop Chrome'],
+  viewport: { width: 834, height: 1112 },
+  userAgent: IPAD_USER_AGENT,
+  // ZK sets zk.mobile from the UA server-side and enables the (otherwise
+  // disabled) tablet stylesheet client-side on DOMContentLoaded. hasTouch
+  // makes the emulation a faithful tablet so touch code paths run too.
+  hasTouch: true,
+  isMobile: true,
+};
+
 export default defineConfig({
   testDir: '.',
   snapshotDir: '../../../doc/screenshots',
@@ -117,6 +129,46 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Grid, Listbox and Tree header arrow size, label-to-arrow room and footer column x
+      // (grid.css, listbox.css, tree.css). See mesh-header-footer.spec.ts.
+      name: 'mesh-header-footer',
+      testMatch: /mesh-header-footer\.spec\.ts/,
+      grepInvert: /@tablet/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // The @tablet tests of mesh-header-footer.spec.ts: zkmax tablet/_mesh.css only loads under the
+      // mobile UA of TABLET_USE.
+      name: 'mesh-header-footer-tablet',
+      testMatch: /mesh-header-footer\.spec\.ts/,
+      grep: /@tablet/,
+      use: TABLET_USE,
+    },
+    {
+      // Grid groupfoot follows the column align (grid.css). See grid-groupfoot-alignment.spec.ts.
+      name: 'grid-groupfoot',
+      testMatch: /grid-groupfoot-alignment\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Multiline messagebox keeps single line breaks (messagebox.css). See messagebox-multiline.spec.ts.
+      name: 'messagebox-multiline',
+      testMatch: /messagebox-multiline\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Icon avatar glyph is 60% of the avatar (avatar.css). See avatar-icon-size.spec.ts.
+      name: 'avatar-icon',
+      testMatch: /avatar-icon-size\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Warning container hue sits apart from error (tokens/_colors.css). See warning-container-hue.spec.ts.
+      name: 'warning-container',
+      testMatch: /warning-container-hue\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Stacking scale: --zk-index-* tokens + .z-index-* utilities resolve to
       // their values, and the token ladder's three hard constraints hold. See
       // zindex-scale.spec.ts and doc/spec/zindex-scale.md.
@@ -163,16 +215,7 @@ export default defineConfig({
     {
       name: 'tablet',
       testMatch: /tablet\.spec\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        viewport: { width: 834, height: 1112 },
-        userAgent: IPAD_USER_AGENT,
-        // ZK sets zk.mobile from the UA server-side and enables the (otherwise
-        // disabled) tablet stylesheet client-side on DOMContentLoaded. hasTouch
-        // makes the emulation a faithful tablet so touch code paths run too.
-        hasTouch: true,
-        isMobile: true,
-      },
+      use: TABLET_USE,
     },
   ],
 });

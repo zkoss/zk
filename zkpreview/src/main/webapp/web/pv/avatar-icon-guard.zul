@@ -1,0 +1,14 @@
+<?page title="Avatar icon size" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for avatar-icon-size.spec.ts: icon avatars at every size, alone and in a sized
+     avatargroup. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence
+     do not pick it up as a page. -->
+<zk>
+<div sclass="z-p-8">
+    <avatar sclass="icon-small" iconSclass="z-icon-user" size="small"/>
+    <avatar sclass="icon-medium" iconSclass="z-icon-user"/>
+    <avatar sclass="icon-large" iconSclass="z-icon-user" size="large"/>
+    <avatargroup size="large">
+        <avatar sclass="icon-group" iconSclass="z-icon-user"/>
+    </avatargroup>
+</div>
+</zk>
