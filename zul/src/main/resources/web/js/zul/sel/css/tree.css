@@ -80,8 +80,7 @@
     position: relative;
 }
 
-/* Block, not flex: the ellipsis needs a block container; an image or icon stays inline with the
-   text. */
+/* Block, not flex: the ellipsis needs a block container; an icon stays inline with the text. */
 .z-treecol-content {
     display: block;
     overflow: hidden;
@@ -91,12 +90,14 @@
     color: var(--zk-tree-header-fg);
 }
 
-/* Inline header media no longer sits in a centring flex container, so each one needs the
-   vertical-align that keeps the label centred and the header row at its 45px height: the
-   `align="absmiddle"` image otherwise sits ~1.7px below the label's centre, and the select-all box
-   (middle, from the rule below) stretches the line box by ~1px. */
-.z-treecol-content img {
-    vertical-align: text-bottom;
+/* A header image keeps the flex centring of the label. Inline, `middle` would centre the image on
+   the x-height, ~0.12em below the label's centre, which moves the label off the row centre once the
+   image is taller than the text. The cost: the label next to an image is clipped at the box edge,
+   without an ellipsis (an anonymous flex item cannot show one). */
+.z-treecol-content:has(img) {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
 }
 
 /* The select-all box is followed by `&nbsp;` and the label; the flex gap that used to sit between
