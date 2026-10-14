@@ -2619,7 +2619,7 @@
 		<xs:union>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:pattern value="\s*((sm|md|lg|xl|xxl)-(\d+|none)\s*)*" />
+					<xs:pattern value="\s*((sm|md|lg|xl)-(\d+|none)\s*)*" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>
