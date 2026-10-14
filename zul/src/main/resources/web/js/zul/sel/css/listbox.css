@@ -517,6 +517,13 @@
     vertical-align: middle;
 }
 
+/* `middle` on an inline span grows the row's line box by 1.45px (53.45px against the 52px of a Grid row,
+   33.45 against 32 in compact density). Aligned to the top of the line box the 16px box sits on the label
+   centre and the row is as tall as a Grid row. */
+.z-listitem-checkable {
+    vertical-align: top;
+}
+
 /* Checkbox-only header column (typically width="40px"): the default
    16px-each-side padding leaves only 8px for the 16px check icon, clipping
    its right edge. Collapse side padding so the icon fits.

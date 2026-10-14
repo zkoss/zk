@@ -237,5 +237,35 @@
             <row><label value="Alice"/><label value="Engineering"/></row>
         </rows>
     </grid>
+    <!-- Image-only header columns that carry the column-menu button, at the documented minimum widths (58px on
+         desktop, 78px on a tablet; see data-components.md, "Narrow icon/image column"). -->
+    <grid sclass="mhf-grid-icon-menu" width="360px">
+        <columns menupopup="auto">
+            <column width="58px" image="/web/img/received.png"/>
+            <column width="78px" image="/web/img/received.png"/>
+            <column label="Name" width="200px"/>
+        </columns>
+        <rows>
+            <row><label value="a"/><label value="b"/><label value="Alice"/></row>
+        </rows>
+    </grid>
+    <listbox sclass="mhf-listbox-icon-menu" width="360px">
+        <listhead menupopup="auto">
+            <listheader width="58px" image="/web/img/received.png"/>
+            <listheader width="78px" image="/web/img/received.png"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell label="a"/><listcell label="b"/><listcell label="Alice"/></listitem>
+    </listbox>
+    <!-- A checkmark Tree next to the Tree/Grid pair above: the data rows are as tall as the Grid rows. -->
+    <tree sclass="mhf-tree-checkmark" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol label="Name" width="160px"/>
+            <treecol label="Type" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/></treerow></treeitem>
+        </treechildren>
+    </tree>
 </div>
 </zk>

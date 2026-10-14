@@ -25,6 +25,12 @@ import { test, expect, Page } from '@playwright/test';
 //    clear of them (D11 follow-through);
 //  - a Tree header is as tall as the Grid header with the same labels in default, compact and tablet density,
 //    and on a tablet the data rows are as tall as well (D17);
+//  - a checkmark Listbox row and a checkmark Tree row are as tall as the Grid row (the Tree row as the plain Tree
+//    row in compact density, where Tree has its own 36px row) in default, compact and tablet density, the
+//    painted box is centred on the label within 1px, and on a tablet the box keeps its 24px height (follow-up 28);
+//  - an image-only header column that carries the column-menu button, at the documented minimum width (58px on
+//    desktop, 78px on a tablet, contracts/listbox.md), shows the whole 16px image clear of the button (follow-up 30);
+//  - an image + sort + menu header keeps the label, arrow and button in that order on a tablet too (follow-up 30);
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -34,6 +40,7 @@ const TOLERANCE_PX = 1;
 const ARROW_SIZE_PX = 12;
 const MIN_LABEL_ARROW_GAP_PX = 2;
 const SORTED_COLUMN = 2;
+const ICON_IMAGE_PX = 16;
 
 interface Mesh {
   root: string;
@@ -342,6 +349,135 @@ function registerTreeHeaderMatchesGrid() {
 
 const sortedHeader = (mesh: Mesh) => `${mesh.root} ${mesh.header}:nth-child(${SORTED_COLUMN})`;
 
+const TOUCH_BOX_PX = 24;
+const MIN_IMAGE_COLUMN_DESKTOP = 1;
+const MIN_IMAGE_COLUMN_TABLET = 2;
+
+interface CheckmarkRows {
+  name: string;
+  root: string;
+  row: string;
+  icon: string;
+  checkable: string;
+  text: string;
+  // Compact Tree has its own 36px row, so its reference there is the plain Tree row, not the Grid row.
+  gridRow: string;
+  compactReferenceRow: string;
+}
+
+const CHECKMARK_ROWS: CheckmarkRows[] = [
+  {
+    name: 'listbox', root: '.mhf-listbox-vs-grid', row: 'tr.z-listitem', icon: '.z-listitem-icon',
+    checkable: '.z-listitem-checkable', text: '.z-listcell-content', gridRow: '.mhf-grid-vs-listbox tr.z-row',
+    compactReferenceRow: '.mhf-grid-vs-listbox tr.z-row',
+  },
+  {
+    name: 'tree', root: '.mhf-tree-checkmark', row: 'tr.z-treerow', icon: '.z-treerow-icon',
+    checkable: '.z-treerow-checkable', text: '.z-treecell-content', gridRow: '.mhf-grid-vs-tree tr.z-row',
+    compactReferenceRow: '.mhf-tree-vs-grid tr.z-treerow',
+  },
+];
+
+// A checkmark row is as tall as the row without the box, and the painted box is centred on the label. Follow-up 28:
+// `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox line box.
+function registerCheckmarkRowsMatchGrid(density: 'default' | 'compact' | 'tablet') {
+  for (const { name, root, row, icon, text, gridRow, compactReferenceRow } of CHECKMARK_ROWS) {
+    const reference = density === 'compact' ? compactReferenceRow : gridRow;
+    const prepare = async (page: Page) => {
+      await open(page);
+      if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+    };
+
+    test(`${root}: the checkmark ${name} row is as tall as the reference row in ${density} density`, async ({ page }) => {
+      await prepare(page);
+      const checkmark = await boxHeight(page, `${root} ${row}`);
+      const expected = await boxHeight(page, reference);
+      expect(Math.abs(checkmark - expected), `checkmark row ${checkmark}, reference row ${expected}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+    });
+
+    test(`${root}: the painted box of the checkmark ${name} row is centred on its label in ${density} density`, async ({ page }) => {
+      await prepare(page);
+      const measured = await page.locator(`${root} ${row}`).first().evaluate((tr, selectors) => {
+        const centre = (rect: DOMRect) => (rect.top + rect.bottom) / 2;
+        // The 16px glyph is the icon's `::before`; a zero-size marker gives the baseline it hangs from.
+        const icon = tr.querySelector(selectors.icon)!;
+        const marker = document.createElement('span');
+        marker.style.cssText = 'display:inline-block;width:0;height:0';
+        icon.appendChild(marker);
+        const baseline = marker.getBoundingClientRect().bottom;
+        marker.remove();
+        const glyph = getComputedStyle(icon, '::before');
+        const glyphCentre = baseline - parseFloat(glyph.verticalAlign) - parseFloat(glyph.height) / 2;
+        const textNode = document.createTreeWalker(tr.querySelector(selectors.text)!, NodeFilter.SHOW_TEXT, {
+          acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
+        }).nextNode() as Text;
+        const label = document.createRange();
+        label.selectNodeContents(textNode);
+        return { glyph: glyphCentre, label: centre(label.getBoundingClientRect()) };
+      }, { text, icon });
+      expect(Math.abs(measured.glyph - measured.label), `box centre ${measured.glyph}, label centre ${measured.label}`)
+        .toBeLessThanOrEqual(TOLERANCE_PX);
+    });
+  }
+}
+
+// On a tablet the row box keeps the 24px touch height, although it no longer stretches the row.
+function registerCheckmarkBoxKeepsTouchHeight() {
+  for (const { name, root, row, checkable } of CHECKMARK_ROWS) {
+    test(`${root}: the checkmark ${name} row box keeps the ${TOUCH_BOX_PX}px touch height`, async ({ page }) => {
+      await open(page);
+      const height = await boxHeight(page, `${root} ${row} ${checkable}`);
+      expect(height).toBe(TOUCH_BOX_PX);
+    });
+  }
+}
+
+// The documented minimum width of an image-only header column with the menu button (contracts/listbox.md): the
+// whole 16px image shows and ends before the button.
+function registerImageOnlyMenuHeaderAtMinimumWidth(column: number) {
+  const cases = [
+    { root: '.mhf-grid-icon-menu', header: 'th.z-column', button: '.z-column-button' },
+    { root: '.mhf-listbox-icon-menu', header: 'th.z-listheader', button: '.z-listheader-button' },
+  ];
+  for (const { root, header, button } of cases) {
+    test(`${root}: an image-only column of the minimum width shows the whole image clear of the menu button`, async ({ page }) => {
+      await open(page);
+      const th = `${root} ${header}:nth-child(${column})`;
+      const image = await page.locator(`${th} img`).evaluate((img) => {
+        const rect = img.getBoundingClientRect();
+        return { width: rect.width, left: rect.left, right: rect.right };
+      });
+      const buttonLeft = await page.locator(`${th} ${button}`).evaluate((el) => el.getBoundingClientRect().left);
+      const headerLeft = await page.locator(th).evaluate((el) => el.getBoundingClientRect().left);
+      expect.soft(image.width, 'image width').toBe(ICON_IMAGE_PX);
+      expect.soft(image.left - headerLeft, 'image left of the header edge').toBeGreaterThanOrEqual(0);
+      expect(buttonLeft - image.right, `image right ${image.right}, button left ${buttonLeft}`).toBeGreaterThanOrEqual(0);
+    });
+  }
+}
+
+// An image + sort + menu header (`GRID_IMAGE_MENU`, `LISTBOX_IMAGE_MENU`): the label box, the sort arrow and the
+// menu button keep that order and the 16px image is not squeezed.
+function registerImageSortMenuHeaderOrder(meshes: Mesh[]) {
+  for (const mesh of meshes) {
+    test(`${mesh.root}: the label box ends before the arrow, the arrow before the menu button, and the image is whole`, async ({ page }) => {
+      await open(page);
+      const header = sortedHeader(mesh);
+      const left = (selector: string) => page.locator(`${header} ${selector}`).evaluate((el) => el.getBoundingClientRect().left);
+      const right = (selector: string) => page.locator(`${header} ${selector}`).evaluate((el) => el.getBoundingClientRect().right);
+      const button = mesh === GRID_IMAGE_MENU ? '.z-column-button' : '.z-listheader-button';
+      const labelRight = await right(mesh.headerContent);
+      const arrowLeft = await left(mesh.sortIcon);
+      const arrowRight = await right(mesh.sortIcon);
+      const buttonLeft = await left(button);
+      const imageWidth = await page.locator(`${header} img`).evaluate((img) => img.getBoundingClientRect().width);
+      expect.soft(arrowLeft - labelRight, `label box right ${labelRight}, arrow left ${arrowLeft}`).toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
+      expect.soft(buttonLeft - arrowRight, `arrow right ${arrowRight}, button left ${buttonLeft}`).toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
+      expect(imageWidth).toBe(ICON_IMAGE_PX);
+    });
+  }
+}
+
 test.describe('mesh header and footer', () => {
   for (const mesh of [GRID, LISTBOX, TREE]) {
     test(`${mesh.root}: footer text starts where the body text starts`, async ({ page }) => {
@@ -462,6 +598,10 @@ test.describe('mesh header and footer', () => {
   registerSelectAllHeaderClearsArrowAndButton();
   registerMenuHeaderClearsArrowAndButton();
   registerTreeHeaderMatchesGrid();
+  registerCheckmarkRowsMatchGrid('default');
+  registerCheckmarkRowsMatchGrid('compact');
+  registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_DESKTOP);
+  registerImageSortMenuHeaderOrder([GRID_IMAGE_MENU, LISTBOX_IMAGE_MENU]);
 
   // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
   test.describe('select-all header on a tablet @tablet', () => {
@@ -491,6 +631,10 @@ test.describe('mesh header and footer', () => {
     registerSelectAllHeaderClearsArrowAndButton();
     registerMenuHeaderClearsArrowAndButton();
     registerTreeHeaderMatchesGrid();
+    registerCheckmarkRowsMatchGrid('tablet');
+    registerCheckmarkBoxKeepsTouchHeight();
+    registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_TABLET);
+    registerImageSortMenuHeaderOrder([GRID_IMAGE_MENU, LISTBOX_IMAGE_MENU]);
 
     test('.mhf-tree-vs-grid: the tree data row is as tall as the grid data row', async ({ page }) => {
       await open(page);
