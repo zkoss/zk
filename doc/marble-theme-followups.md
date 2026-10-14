@@ -450,3 +450,24 @@ Batch 14 (S1) moved `.z-selectbox::picker-icon { background-color: CanvasText }`
 Batch 17 (#75) moved the top/left arrow room from `margin-bottom` / `margin-right` to a negative `margin-top` / `margin-left`, because ZK's popup positioning reads only the latter. The static placement samples on `confirmpopup.zul` carry the same `z-confirmpopup-placement-*` classes, so the top samples moved up 8px: the gap to their caption (INFO, TOP, …) shrank from about 13px to about 5px. Live popups are correct; this is preview-page layout only.
 
 - [ ] Add spacing to the preview's static samples if the tighter caption gap reads badly.
+
+## 28. Checkmark Listbox data rows are taller than Grid rows
+
+Found while verifying zkdemo NS10 (`doc/zkdemo-b6-marble-fixes.md`, D16); deferred under O10.
+
+- Measured: 53.45 / 33.45 / 61.95px (desktop / compact / tablet) against Grid 52 / 32 / 60.
+  IceBlue 10.3.1 shows no difference (33px with and without checkmark), so Marble caused it (O1).
+- Cause: `.z-listitem-checkable { vertical-align: middle }` on an inline span grows the line box,
+  the same mechanism as the D16 header. On tablet, zkmax `tablet/_mesh.css` also gives
+  `.z-listitem-checkable` a 24px font-size, width and height (the row touch box).
+- A/B: desktop `vertical-align: top` gives 52 and centres the glyph on the label. Tablet needs
+  `display:inline-block; vertical-align:top; height:20px` to reach 60, which leaves the glyph 3px
+  below the label centre — decide first whether the 24px touch box is still wanted on tablet.
+- Reproduce: `/web/pv/mesh-header-footer-guard.zul`, compare `.mhf-listbox-vs-grid tr.z-listitem`
+  with `.mhf-grid-vs-listbox tr.z-row`.
+
+## 29. `verification.md` quotes a stale gallery tolerance and PNG count
+
+`gallery-scan.spec.ts` uses `maxDiffPixelRatio: 0.002` (0.2%), while
+`.claude/skills/marble-theme/reference/verification.md` still says 0.01 and "184 compared PNGs".
+Update both from the spec and a fresh `ls` of `zkpreview/doc/screenshots/`.
