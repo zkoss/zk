@@ -463,6 +463,19 @@
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
+/* Checkbox-only header column (typically width="40px") — same squeeze as the image column above and
+   as `.z-listheader:has(.z-listheader-checkable)` in listbox.css: the default 16px side padding leaves
+   8px for the 16px select-all icon and clips it. Only the right padding shrinks, so the icon keeps the
+   x of the row checkbox. */
+.z-treecol:has(.z-treecol-checkable) {
+    padding-right: var(--zk-spacing-1);
+}
+
+/* A sortable select-all header still needs the sort icon's room (same reasoning as the image rule). */
+.z-treecol-sort:has(.z-treecol-checkable) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
 /* Indeterminate / tristate (partial) — filled primary box with a white minus.
    When a TristateModel reports a node in getPartials(), ZK adds `z-treerow-partial`
    to the row and switches the icon class to `z-icon-minus`; the header select-all
