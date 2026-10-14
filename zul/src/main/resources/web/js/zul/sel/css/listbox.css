@@ -532,17 +532,22 @@
     vertical-align: middle;
 }
 
-/* `middle` on an inline span grew the row's line box by 1.45px (53.45px against the 52px of a Grid row,
-   33.45 against 32 in compact density), and `top` kept the box at the top of a row that holds a taller
-   control (a textbox or a button in the first cell), 8 to 10px above that control. So the box stays
-   `middle` and the negative block margins keep it from growing the line box: its margin box is only
-   ~10px tall. `middle` puts the box 1.45px below the label centre and the control centre where the
-   label text sits; margins that are 1.5px uneven move it up by 0.75px, so it stays within 1px of both. */
+/* The checkmark of a row sits in a flex row, as the Tree cell content already does, so the box shares its
+   centre line with the label or with a control in the cell whatever the font, the line-height or the pixel
+   ratio. An inline span would need `vertical-align`, which a taller control in the cell defeats. The span
+   keeps the line height of the label as its minimum height, and its icon is a flex container so that the
+   16px box inside is centred too. */
 .z-listitem-checkable {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
     width: auto;
-    vertical-align: middle;
-    margin-block: -6px -4.5px;
+    min-height: var(--zk-typescale-body-medium-line-height);
+}
+
+.z-listitem-checkable > .z-listitem-icon {
+    display: flex;
 }
 
 /* Checkbox-only header column (typically width="40px"): the default
@@ -606,6 +611,8 @@
 }
 
 .z-listcell:has(.z-listitem-checkable) > .z-listcell-content {
+    display: flex;
+    align-items: center;
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
     /* This cell holds a control, not clipping text. The default cell content is
@@ -614,6 +621,17 @@
        content box, so an `ellipsis` would paint a stray "…" to the right of the
        checkbox. Clip instead so no ellipsis renders. */
     text-overflow: clip;
+}
+
+/* A column's `align` is rendered as an inline text-align on the TD, which a flex row ignores: map it to
+   justify-content, as Tree does for its cells. */
+.z-listcell:has(.z-listitem-checkable):is([style*="text-align:right"], [style*="text-align: right"],
+    [style*="text-align:end"], [style*="text-align: end"]) > .z-listcell-content {
+    justify-content: flex-end;
+}
+
+.z-listcell:has(.z-listitem-checkable):is([style*="text-align:center"], [style*="text-align: center"]) > .z-listcell-content {
+    justify-content: center;
 }
 
 

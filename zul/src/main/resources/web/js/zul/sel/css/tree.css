@@ -448,6 +448,20 @@
     vertical-align: middle;
 }
 
+/* The Tree cell content is a flex row, so the row's box is a flex item too: it keeps the line height of the
+   label as its minimum height, and its icon is a flex container so that the 16px box inside is centred on
+   the label or on a control in the cell whatever the font, the line-height or the pixel ratio. */
+.z-treerow-checkable {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--zk-typescale-body-medium-line-height);
+}
+
+.z-treerow-checkable > .z-treerow-icon {
+    display: flex;
+}
+
 /* Resize affordance (treecols sizable="true"). ZK toggles `.z-treecol-sizing` on the
    TH while the pointer is within the rightmost 8px drag zone, removed on mouse-out;
    no persistent "sizable" class exists. Show the resize cursor + a primary edge

@@ -27,7 +27,8 @@ import { test, expect, Locator, Page } from '@playwright/test';
 //    and on a tablet the data rows are as tall as well (D17);
 //  - a checkmark Listbox row and a checkmark Tree row are as tall as the Grid row (the Tree row as the plain Tree
 //    row in compact density, where Tree has its own 36px row) in default, compact and tablet density, the
-//    painted box is centred on the label within 1px, and on a tablet the box keeps its 24px height (follow-up 28);
+//    painted box is centred on the label and on a control in the first cell within 1px, under the default type scale,
+//    a 16px/24px one and Arial, and on a tablet the box keeps its 24px height (follow-up 28);
 //  - an image-only header column that carries the column-menu button, at the documented minimum width (56px on
 //    desktop, 76px on a tablet, contracts/listbox.md), shows the whole 16px image clear of the button, and a
 //    select-all-only header at its minimum width (68px / 88px) paints the whole box inside the content box and clear of the
@@ -392,78 +393,134 @@ const CONTROL_ROWS: ControlRows[] = [
   { name: 'tree', controlRoot: '.mhf-tree-control-row', controlGridRoot: '.mhf-grid-control-row', icon: '.z-treerow-icon' },
 ];
 
-// The vertical centre of the painted 16px box of a checkmark row, and of the thing it is centred on: the first text
-// of `text`, or the box of the control that `text` selects when `control` is set.
-async function paintedBoxAndTargetCentres(
-  tr: Locator, selectors: { text: string; icon: string; control?: boolean },
-): Promise<{ glyph: number; target: number }> {
-  return tr.evaluate((row, { text, icon, control }) => {
+const GLYPH_PX = 16;
+
+// The type scales a checkmark row must stay centred under: the box is centred by the flex row of its cell, not by
+// margins tuned to one font and one line height (NS13 F1).
+const TYPE_SCALES: Record<string, string> = {
+  default: '',
+  '16px/24px': ':root{--zk-typescale-body-medium-size:16px;--zk-typescale-body-medium-line-height:24px}',
+  Arial: ':root{--zk-typescale-font-family: Arial}',
+};
+
+// A row's own separator lines are not part of the box that is measured.
+const ROW_EDGE_PX = 3;
+const INK_THRESHOLD = 150;
+
+// The vertical centre and height of the box a checkmark row paints, read off a screenshot of the icon's column: how the
+// box is placed (inline, flex, margins) does not matter, and a box that is merely laid out well but not painted is not
+// counted. The ink is every pixel that differs from the row background.
+async function paintedBox(page: Page, tr: Locator, icon: string): Promise<{ centre: number; height: number }> {
+  const column = await tr.evaluate((row, iconSelector) => {
+    const rowRect = row.getBoundingClientRect();
+    const iconRect = row.querySelector(iconSelector)!.getBoundingClientRect();
+    return { x: iconRect.left, width: iconRect.width, top: rowRect.top + window.scrollY, height: rowRect.height };
+  }, icon);
+  const top = column.top + ROW_EDGE_PX;
+  const png = await page.screenshot({
+    fullPage: true,
+    clip: { x: column.x, y: top, width: column.width, height: column.height - 2 * ROW_EDGE_PX },
+  });
+  const ink = await page.evaluate(async ({ base64, threshold }) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${base64}`;
+    await image.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const context = canvas.getContext('2d')!;
+    context.drawImage(image, 0, 0);
+    const { data } = context.getImageData(0, 0, image.width, image.height);
+    let first = -1;
+    let last = -1;
+    for (let y = 0; y < image.height; y++) {
+      for (let x = 0; x < image.width; x++) {
+        const i = (y * image.width + x) * 4;
+        const difference = Math.abs(data[i] - data[0]) + Math.abs(data[i + 1] - data[1]) + Math.abs(data[i + 2] - data[2]);
+        if (difference <= threshold) continue;
+        if (first < 0) first = y;
+        last = y;
+      }
+    }
+    return { first, last, pixels: image.height };
+  }, { base64: png.toString('base64'), threshold: INK_THRESHOLD });
+  expect(ink.first, 'the checkmark box paints nothing in the icon column').toBeGreaterThanOrEqual(0);
+  const scale = ink.pixels / (column.height - 2 * ROW_EDGE_PX);
+  return { centre: top + (ink.first + ink.last + 1) / 2 / scale, height: (ink.last - ink.first + 1) / scale };
+}
+
+// The vertical centre of the first text of `text`, or of the box of the control that `text` selects when `control` is set.
+function targetCentre(tr: Locator, selectors: { text: string; control?: boolean }): Promise<number> {
+  return tr.evaluate((row, { text, control }) => {
     const centre = (rect: DOMRect) => (rect.top + rect.bottom) / 2;
-    // The 16px glyph is the icon's `::before`; a zero-size marker gives the baseline it hangs from.
-    const iconElement = row.querySelector(icon)!;
-    const marker = document.createElement('span');
-    marker.style.cssText = 'display:inline-block;width:0;height:0';
-    iconElement.appendChild(marker);
-    const baseline = marker.getBoundingClientRect().bottom;
-    marker.remove();
-    const glyph = getComputedStyle(iconElement, '::before');
-    const glyphCentre = baseline - parseFloat(glyph.verticalAlign) - parseFloat(glyph.height) / 2;
-    if (control) return { glyph: glyphCentre, target: centre(row.querySelector(text)!.getBoundingClientRect()) };
+    if (control) return centre(row.querySelector(text)!.getBoundingClientRect());
     const textNode = document.createTreeWalker(row.querySelector(text)!, NodeFilter.SHOW_TEXT, {
       acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
     }).nextNode() as Text;
     const label = document.createRange();
     label.selectNodeContents(textNode);
-    return { glyph: glyphCentre, target: centre(label.getBoundingClientRect()) };
+    return centre(label.getBoundingClientRect());
   }, selectors);
 }
 
-// A checkmark row is as tall as the row without the box, and the painted box is centred on the label. Follow-up 28:
-// `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox line box.
+async function expectBoxCentredOn(page: Page, tr: Locator, icon: string, target: { text: string; control?: boolean }, what: string) {
+  const box = await paintedBox(page, tr, icon);
+  const targetY = await targetCentre(tr, target);
+  expect(Math.abs(box.height - GLYPH_PX), `painted box height ${box.height}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  expect(Math.abs(box.centre - targetY), `box centre ${box.centre}, ${what} centre ${targetY}`).toBeLessThanOrEqual(TOLERANCE_PX);
+}
+
+// A checkmark row is as tall as the row without the box, and the painted box is centred on the label and on a control
+// in the first cell. Follow-up 28: `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox
+// line box; asymmetric margins that undid it only fitted Inter 13px/20px (NS13 F1).
 function registerCheckmarkRowsMatchGrid(density: 'default' | 'compact' | 'tablet') {
-  const prepare = async (page: Page) => {
-    await open(page);
-    if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
-  };
+  for (const [scaleName, scaleCss] of Object.entries(TYPE_SCALES)) {
+    const inDensity = scaleName === 'default' ? `${density} density` : `${density} density with the ${scaleName} type scale`;
+    const prepare = async (page: Page) => {
+      await open(page);
+      if (scaleCss) await page.addStyleTag({ content: scaleCss });
+      if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+      await page.evaluate(() => document.fonts.ready.then(() => true));
+    };
+    // Tree compares to the Grid row only where the two are equal by design: its own row height differs in compact
+    // density and under a larger type scale, so there the reference is the Tree row without a checkmark.
+    const ownRowHeight = density === 'compact' || scaleName !== 'default';
 
-  for (const { name, root, row, icon, text, gridRow, compactReferenceRow } of CHECKMARK_ROWS) {
-    const reference = density === 'compact' ? compactReferenceRow : gridRow;
+    for (const { name, root, row, icon, text, gridRow, compactReferenceRow } of CHECKMARK_ROWS) {
+      const reference = ownRowHeight ? compactReferenceRow : gridRow;
 
-    test(`${root}: the checkmark ${name} row is as tall as the reference row in ${density} density`, async ({ page }) => {
-      await prepare(page);
-      const checkmark = await boxHeight(page, `${root} ${row}`);
-      const expected = await boxHeight(page, reference);
-      expect(Math.abs(checkmark - expected), `checkmark row ${checkmark}, reference row ${expected}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
-    });
+      test(`${root}: the checkmark ${name} row is as tall as the reference row in ${inDensity}`, async ({ page }) => {
+        await prepare(page);
+        const checkmark = await boxHeight(page, `${root} ${row}`);
+        const expected = await boxHeight(page, reference);
+        expect(Math.abs(checkmark - expected), `checkmark row ${checkmark}, reference row ${expected}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+      });
 
-    test(`${root}: the painted box of the checkmark ${name} row is centred on its label in ${density} density`, async ({ page }) => {
-      await prepare(page);
-      const measured = await paintedBoxAndTargetCentres(page.locator(`${root} ${row}`).first(), { text, icon });
-      expect(Math.abs(measured.glyph - measured.target), `box centre ${measured.glyph}, label centre ${measured.target}`)
-        .toBeLessThanOrEqual(TOLERANCE_PX);
-    });
-  }
+      test(`${root}: the painted box of the checkmark ${name} row is centred on its label in ${inDensity}`, async ({ page }) => {
+        await prepare(page);
+        await expectBoxCentredOn(page, page.locator(`${root} ${row}`).first(), icon, { text }, 'label');
+      });
+    }
 
-  // M1: a taller control in the first cell (textbox, button) takes the row height, and the box stays centred on it.
-  for (const { name, controlRoot, controlGridRoot, icon } of CONTROL_ROWS) {
-    for (const control of ['textbox', 'button']) {
-      const rowSelector = `${controlRoot} .mhf-${control}-row`;
-      const controlSelector = control === 'textbox' ? '.z-textbox' : '.z-button';
-      test(`${controlRoot}: the painted box of the checkmark ${name} row is centred on a ${control} in the first cell in ${density} density`,
-        async ({ page }) => {
-          await prepare(page);
-          const measured = await paintedBoxAndTargetCentres(page.locator(rowSelector).first(), { text: controlSelector, icon, control: true });
-          expect(Math.abs(measured.glyph - measured.target), `box centre ${measured.glyph}, ${control} centre ${measured.target}`)
-            .toBeLessThanOrEqual(TOLERANCE_PX);
-        });
+    // M1: a taller control in the first cell (textbox, button) takes the row height, and the box stays centred on it.
+    for (const { name, controlRoot, controlGridRoot, icon } of CONTROL_ROWS) {
+      for (const control of ['textbox', 'button']) {
+        const rowSelector = `${controlRoot} .mhf-${control}-row`;
+        const controlSelector = control === 'textbox' ? '.z-textbox' : '.z-button';
+        test(`${controlRoot}: the painted box of the checkmark ${name} row is centred on a ${control} in the first cell in ${inDensity}`,
+          async ({ page }) => {
+            await prepare(page);
+            await expectBoxCentredOn(page, page.locator(rowSelector).first(), icon, { text: controlSelector, control: true }, control);
+          });
 
-      if (name === 'listbox') {
-        test(`${controlRoot}: the checkmark listbox row with a ${control} is as tall as the grid row in ${density} density`, async ({ page }) => {
-          await prepare(page);
-          const listbox = await boxHeight(page, `${controlRoot} .mhf-${control}-row`);
-          const grid = await boxHeight(page, `${controlGridRoot} .mhf-${control}-row`);
-          expect(Math.abs(listbox - grid), `listbox row ${listbox}, grid row ${grid}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
-        });
+        if (name === 'listbox') {
+          test(`${controlRoot}: the checkmark listbox row with a ${control} is as tall as the grid row in ${inDensity}`, async ({ page }) => {
+            await prepare(page);
+            const listbox = await boxHeight(page, `${controlRoot} .mhf-${control}-row`);
+            const grid = await boxHeight(page, `${controlGridRoot} .mhf-${control}-row`);
+            expect(Math.abs(listbox - grid), `listbox row ${listbox}, grid row ${grid}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+          });
+        }
       }
     }
   }
