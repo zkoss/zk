@@ -1186,9 +1186,12 @@
        literal-hover-color precedent) — hover darkens the scrim rather than
        layering a currentColor state-layer overlay, since the arrow's foreground
        is already light and a standard tint would lighten the dark scrim toward
-       white, the wrong direction. The indicator ring color is NOT a separate
-       knob — it is whichever of -indicator-bg/-indicator-active-bg is not the
-       current fill, so overriding either knob recolors both a fill and a ring.
+       white, the wrong direction. The resting indicator ring is NOT a separate
+       knob — it is -indicator-active-bg, so overriding that knob recolors both
+       the ring and the label-style light voice. The active indicator is a
+       primary pill and is the one overlay part that does use brand tokens:
+       -indicator-current-bg (fill) and -indicator-current-ring, so it stays
+       readable on light slides.
        Hover/focus/disabled opacities and the chevron/dot geometry stay on base
        tokens or literal geometry, not knob-driven (same convention as
        button/input/rating). Arrow size lives in tokens/_sizing.css
@@ -1201,6 +1204,8 @@
     --zk-carousel-arrow-fg:            var(--zk-color-inverse-on-surface);
     --zk-carousel-indicator-bg:        var(--zk-color-scrim);
     --zk-carousel-indicator-active-bg: var(--zk-color-inverse-on-surface);
+    --zk-carousel-indicator-current-bg:   var(--zk-color-primary);
+    --zk-carousel-indicator-current-ring: var(--zk-color-on-primary);
     --zk-carousel-label-bg:            var(--zk-color-scrim);
     --zk-carousel-label-fg:            var(--zk-color-inverse-on-surface);
 
