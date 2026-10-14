@@ -51,7 +51,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 ### 量測與回報
 - 量測結果照實寫成量測值（例：「zul/lang.xml 有 40 個 `.css.dsp` css-uri」）。不要加上「blocker」「broken」「會失敗」這類嚴重度詞，除非已讀過後果所依賴的另一側系統；要論述影響前先讀消費端，或改寫成問題。
 - 對方請你驗證 X 時，通常已經知道 X；他們要的多半是「X 仍成立」的確認，不是新發現的宣告。
-- 報告「有差異」的數字時，同時寫出容忍值（例：gallery 每張 1%、零容忍 6/183）。通過容忍值只代表在預算內，不代表與原始碼一致。
+- 報告「有差異」的數字時，同時寫出容忍值（例：gallery 每張 0.2%、零容忍 6/183）。通過容忍值只代表在預算內，不代表與原始碼一致。
 - 幾何對齊以 PNG 像素為準，不以 live DOM 的 `getBoundingClientRect` 為準。
 - 檔名從 `ls` 複製，不手打。
 

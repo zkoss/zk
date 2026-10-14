@@ -455,7 +455,21 @@ Batch 17 (#75) moved the top/left arrow room from `margin-bottom` / `margin-righ
 
 **Resolved** in zk `642266f933` (`listbox.css`, guards) and zkcml `5a82b3171` (`tablet/_mesh.css`): the rows are
 52 / 32 / 60px, equal to Grid, and the glyph is centred on the label. The tablet Tree checkmark row had the same
-excess (64px against 60px) and is fixed by the same zkcml rule. The text below is the original finding.
+excess (64px against 60px) and is fixed by the same zkcml rule. `vertical-align: top` left the box at the top of a
+row whose first cell holds a taller control (a textbox or a button): 10.5px (textbox) and 8.5px (button) above the
+control centre on desktop (6 / 5px in compact density, measured), 14.5 / 12.5px on a tablet. It is replaced by `vertical-align: middle` with negative block
+margins (zul `listbox.css`, zkcml `tablet/_mesh.css`), which keep the rows at Grid height and the box within 1px of
+the label and of the control, and guarded for Listbox and Tree in default, compact and tablet density. The text below
+is the original finding.
+
+**Reworked (NS13 F1)** in zk `aa8198f3d1` and zkcml `e3bca9748`: the negative margins above only fitted Inter 13px/20px
+(off by up to 2px under a 16px/24px type scale, 2.9px on a tablet, 1.75px next to a control under Arial, 1.6px at a
+device pixel ratio of 1.25). The first cell of a checkmark Listbox row is a flex row with `align-items: center`, as the
+Tree cell content already was, the span and its icon are flex containers, and the tablet 24px box gets the symmetric
+margin `(line-height - touch-icon-size) / 2` from the tokens. The guard measures the painted box off a screenshot and
+runs under the default, a 16px/24px and an Arial type scale in all three densities. Correction to the `894fc2c6ba`
+message: the pre-fix offsets of the box above a textbox and a button re-measure 0.5px lower, 10 / 8px on desktop and
+14 / 12px on a tablet (it says 10.5 / 8.5 and 14.5 / 12.5).
 
 Found while verifying zkdemo NS10 (`doc/zkdemo-b6-marble-fixes.md`, D16); deferred under O10.
 
@@ -482,10 +496,13 @@ Update both from the spec and a fresh `ls` of `zkpreview/doc/screenshots/`.
 ## 30. Narrow header columns with `menupopup` on tablet
 
 **Resolved** in zk `c128d70b36` and `73203f131d`: (a) the
-minimum width of an image-only column with the menu button, **56px desktop / 76px tablet**, and (c) the minimum
-width of a select-all-only column with the menu button, **60px desktop / 80px tablet**, are documented in
-`doc/contracts/listbox.md` and `grid.md` and guarded on both; (b) the tablet guard for image + sort + menu headers
-is in zk `642266f933`. (c) was first planned as "hide the button on that header"; CSS cannot tell that header from a
+minimum width of an image-only column with the menu button, **56px desktop / 76px tablet**, is documented in
+`doc/contracts/listbox.md` (and referenced from `grid.md`, whose Grid has the same image rule) and guarded on both;
+(c) the minimum width of a select-all-only column with the menu button is documented in `listbox.md` only (Grid has
+no select-all column) and guarded on both; (b) the tablet guard for image + sort + menu headers is in zk
+`642266f933`. (c) first said 60px desktop / 80px tablet; the NS13 verifier found that the box paints only 8px there,
+and a fresh measurement (DOM and painted pixels) gives **68px desktop / 88px tablet**, which the guard now asserts
+through the icon's right edge against the content box's right edge. (c) was first planned as "hide the button on that header"; CSS cannot tell that header from a
 labelled one (no class or attribute differs), so it follows the same rule as (a): unsupported widths are
 documented and guarded, not engineered. (The first 30a numbers, 58 / 78px, came from resizing a rendered column
 and were 2px too wide; a fresh render gives 56 / 76px.) The text below is the original finding.
@@ -523,3 +540,61 @@ A comment in `zul/src/main/resources/web/zul/css/tokens/_sizing.css` says the co
 Found while measuring item 28: in `data-density="compact"` a Tree row (with or without a checkmark) is 36px and a
 Grid or Listbox row 32px (`--zk-data-row-min-height: 36px` in `tokens/_sizing.css`). Default (52px) and tablet
 (60px) rows are equal across the three. Not caused by the checkmark; left as found (O10).
+
+## 35. A header that holds a control lets a long label paint under the sort arrow and the menu button (M2)
+
+Found by the NS13 verifier. After zk `eb46b0656c`, a Grid, Listbox or Tree header that holds a native control
+(`button`, `a`, `input`, `select`, `textarea`) has `overflow: visible` on its content, so the label no longer ends in
+an ellipsis before the sort arrow and the menu button.
+
+- Repro (desktop, Inter 13px): a Listbox with
+  `<listhead menupopup="auto"><listheader width="160px" sort="auto" label="A very long header label"><button label="Go"/></listheader><listheader label="Other"/></listhead>`,
+  measured from the left edge of the header cell, in three steps:
+  1. Not sorted, not hovered: the content is 16-112px, the label text runs to 178.5px, the sort arrow has no width (it
+     is a 0px box at 128px) and the menu button is at 132-156px.
+  2. Sorted: add `sortDirection="ascending"` to the `listheader`. Content and text are unchanged, the arrow is at
+     116-128px, so the label paints under the arrow and under the button.
+  3. Not sorted, hovered: the same as step 1, the arrow stays 0px wide.
+  Grid (`<columns menupopup="auto"><column … sort="auto" label="A very long header label"><button/></column>`) gives
+  the same numbers. A Tree header (Treecols has no `menupopup`) has the content at 16-140px, the text to 178.5px and the
+  arrow at 144-156px when sorted, so the label paints under the arrow only.
+- Accepted trade-off of `eb46b0656c`: a whole focus ring in every browser, Safari included, is worth more than this
+  narrow combination (control, long label and sort or menu button in one header), and it matches the state before D11,
+  when these headers had no ellipsis either.
+- Option to evaluate later: `@supports (overflow-clip-margin: 4px) { overflow: clip; overflow-clip-margin: 4px; }` on
+  the same `:has()` rule, which keeps the ellipsis and the ring on Chromium and Firefox, and leaves `overflow: visible`
+  elsewhere (Safari has no `overflow-clip-margin`). The first attempt with `overflow: clip` everywhere (`6bde2fb120`)
+  was replaced because it left the ring cut in Safari.
+
+## 36. The Listbox toolbarbutton focus ring is covered by the neighbouring menubar (L1, pre-existing)
+
+On `listbox-header`, the bottom 4px of the `.z-toolbarbutton` focus ring is covered by the adjacent `.z-menubar`
+(`position: relative; z-index: 100`, `menu.css:66`). It is an overlap and not a clip, so `focus-ring-scan` cannot see
+it. It is older than ZK-6112 and was left as found (O10).
+
+## 37. Gaps in `focus-ring-scan` (L3, pre-existing)
+
+The scan (`focus-ring-scan.spec.ts`, `measureClipping` and `clippingCandidates`) does not model:
+
+- the standalone `translate`, `rotate` and `scale` properties as creating a containing block (only `transform`,
+  `perspective`, `filter`, `contain` and `will-change` are);
+- `contain: paint` and `clip-path` as clippers;
+- the padding box: it measures against the border box, so a border thicker than 0 hides a clip;
+- `overflow-x: clip` with `overflow-y: visible`: the y axis is still checked, as the scan skips an ancestor only when
+  both axes are `visible`.
+
+Left as found (O10).
+
+## 38. A Tree row whose first cell holds a control is shorter than the Grid row (pre-existing)
+
+Found while measuring item 28 (NS13 F1), with or without a checkmark: a Tree row with a control in the first cell is
+shorter than the Grid row with the same control.
+
+- Measured, desktop: a textbox row is 56.5px in a Tree against 72.5px in a Grid, a button row 52.5px against 68.5px.
+  In compact density 40.5 / 38.5px against 44.5 / 42.5px; on a tablet both are 88.5 / 84.5px and equal. Rows with only
+  text are equal (52px).
+- Reproduce: `/web/pv/mesh-header-footer-guard.zul`, compare `.mhf-tree-control-row .mhf-textbox-row` (and
+  `.mhf-button-row`) with `.mhf-grid-control-row .mhf-textbox-row`, or build a `<tree>` and a `<grid>` whose first cell
+  holds `<textbox value="Alice"/>` or `<button label="Go"/>` and compare `tr.z-treerow` with `tr.z-row`.
+- Not touched by the NS13 F1 rework: the checkmark Tree row keeps the height of a Tree row without a checkmark.
+  Left as found (O10).

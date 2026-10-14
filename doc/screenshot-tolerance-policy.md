@@ -26,7 +26,7 @@ The everyday regression gate is the Playwright suite in
 
 | Option | Unit | Current use in this repo |
 |---|---|---|
-| `maxDiffPixelRatio` | fraction of the shot's pixels | `gallery-scan.spec.ts:73` → `0.01`; `tablet.spec.ts` per-case → `0.02` |
+| `maxDiffPixelRatio` | fraction of the shot's pixels | `gallery-scan.spec.ts:81` → `0.002`; `tablet.spec.ts` per-case → `0.02` |
 | `maxDiffPixels` | absolute pixel count | **not used anywhere** |
 | `threshold` | per-pixel YIQ colour distance (default `0.2`) | `0.05` on the `chromium` project (`playwright.config.ts`, 2026-10-06); default `0.2` everywhere else |
 | `mask: [locator]` | blanks a region before comparing | not used — the obvious fix for the date-dependent case 04 |
