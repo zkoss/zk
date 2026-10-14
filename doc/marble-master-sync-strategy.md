@@ -323,6 +323,8 @@ worktree：`ZK10/sync3/zk`（分支 `marble-sync-a447efa`，從 `marble`）、`Z
 - F4：forced-colors 下 dot 完全看不見，這是移植前就有的問題，併入 NS9。
 - F1 已確認：IceBlue 在上游 master（`a447efa068`）的 RTL 下也會左右顛倒，ZK-6166 之前則維持物理方向（`ZK10/sync3/rtl-iceblue/`）。兩個主題都有，已開 **ZK-6195**（Affects 11.0.0.FL）。截圖要由使用者手動附上：`ltr-rtl-after.png`、`ltr-rtl-before.png`。
 - D14：使用者選 A，接受移植（`13c808ea3d`）。badge 周圍多佔的 4–20px 要寫進 release note。
+- 數據修正（2026-10-14）：先前寫「IceBlue 左到右正確」不對，當時只看指示點離哪個角落最近，沒看距離。上游 IceBlue 在左到右時，top_right、bottom_right 離角落 20.7px，dot top_right 18px，左側的 placement 是 0px（`rtl-iceblue/measure.json`）。Marble 移植版在左到右時誤差在 0.01px 以內，不受影響。D17-A：已改寫 ZK-6195 的描述，一併寫入左到右的偏移，並註明 `ltr-rtl-before.png` 是預期結果、`ltr-rtl-after.png` 是目前結果。
+- D15-A：ZK-6195 交給上游修，修好後由下一輪 master 同步帶進 Marble。
 
 ### 10.3 合併進 `marble`（2026-10-14）
 
