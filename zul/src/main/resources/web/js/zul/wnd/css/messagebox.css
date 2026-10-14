@@ -69,8 +69,6 @@
     color: var(--zk-messagebox-fg);
     font-size: var(--zk-typescale-body-medium-size);
     line-height: var(--zk-typescale-body-medium-line-height);
-    /* Limit width so it stays within dialog bounds */
-    max-width: calc(var(--zk-messagebox-icon-size, 28px) + 100%);
 }
 
 /* No pre-wrap: the label is multiline, so ZK already writes "<br/>\n" per line;
