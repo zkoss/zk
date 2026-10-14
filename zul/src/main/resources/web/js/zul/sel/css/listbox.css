@@ -531,10 +531,16 @@
 
 /* An inline span ignores `max-width`, so in a width="40px" header its 40px (icon plus padding)
    overflowed the ~32px content box and `.z-listheader-content` painted its ellipsis right of the
-   box. As an inline-block capped at the content width it fits, and the icon keeps its x. */
+   box. As an inline-block capped at the content width it fits, and the icon keeps its x.
+   Inline-block also activates the width and height that zkmax tablet/_mesh.css sets on
+   `.z-listheader-checkable` (24px touch box); they had no effect while the span was inline. That rule
+   is unlayered and this file is in the zk-components layer, so only `!important` beats it, whatever
+   the selector specificity. */
 .z-listheader-checkable {
     display: inline-block;
     max-width: 100%;
+    width: auto !important;
+    height: auto !important;
 }
 
 /* Narrow image/icon header column — same squeeze as the checkable column. A

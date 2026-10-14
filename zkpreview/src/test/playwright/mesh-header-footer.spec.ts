@@ -10,6 +10,9 @@ import { test, expect, Page } from '@playwright/test';
 //    inside the header cell;
 //  - a Tree header holding an image, an icon or the select-all box keeps the label centred on it and the
 //    header at the height the old flex layout gave it;
+//  - under the tablet project (zkmax `tablet/_mesh.css` sizes `.z-listheader-checkable` to 24px, which the
+//    inline-block select-all span would pick up): the label of a select-all header clears the box, the header is
+//    not taller than a plain Listbox header beyond the known offset, and a centred box lines up with the rows;
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -201,5 +204,38 @@ test.describe('mesh header and footer', () => {
       .toBe(false);
     expect(measured.iconInsideCell,
       `icon ${measured.iconLeft}-${measured.iconRight}, cell ${measured.cellLeft}-${measured.cellRight}`).toBe(true);
+  });
+
+  // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
+  test.describe('select-all header on a tablet @tablet', () => {
+    // Listbox headers are known to be taller than Grid and plain Listbox headers by 1.17px (desktop) and
+    // 1.67px (tablet); that is a separate issue, this guard only stops it from growing.
+    const MAX_HEADER_HEIGHT_OFFSET_PX = 2;
+
+    test('.mhf-listbox-select-all-label: the label starts at or after the right edge of the box', async ({ page }) => {
+      await open(page);
+      const header = page.locator('.mhf-listbox-select-all-label th.z-listheader:nth-child(1)');
+      const iconRight = await header.locator('.z-listheader-icon').evaluate((icon) => icon.getBoundingClientRect().right);
+      const labelLeft = await textLeft(page, '.mhf-listbox-select-all-label th.z-listheader:nth-child(1) .z-listheader-content');
+      expect(labelLeft, `label left ${labelLeft}, box right ${iconRight}`).toBeGreaterThanOrEqual(iconRight);
+    });
+
+    test('.mhf-listbox-select-all-label: the select-all header is not taller than a plain Listbox header', async ({ page }) => {
+      await open(page);
+      const headerHeight = (root: string) => page.locator(`${root} th.z-listheader:nth-child(1)`)
+        .evaluate((th) => th.getBoundingClientRect().height);
+      const selectAll = await headerHeight('.mhf-listbox-select-all-label');
+      const plain = await headerHeight('.mhf-listbox-plain');
+      expect(selectAll - plain, `select-all ${selectAll}, plain ${plain}`).toBeLessThanOrEqual(MAX_HEADER_HEIGHT_OFFSET_PX);
+    });
+
+    test('.mhf-listbox-select-all-centre: the centred box lines up with the row checkbox', async ({ page }) => {
+      await open(page);
+      const iconLeft = (selector: string) => page.locator(selector).first()
+        .evaluate((icon) => icon.getBoundingClientRect().left);
+      const header = await iconLeft('.mhf-listbox-select-all-centre th.z-listheader .z-listheader-icon');
+      const row = await iconLeft('.mhf-listbox-select-all-centre tr.z-listitem .z-listitem-icon');
+      expect(Math.abs(header - row), `header box x ${header}, row box x ${row}`).toBeLessThanOrEqual(TOLERANCE_PX);
+    });
   });
 });

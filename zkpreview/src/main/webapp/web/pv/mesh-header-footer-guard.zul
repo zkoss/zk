@@ -2,7 +2,8 @@
 <!-- Fixture for mesh-header-footer.spec.ts: Grid, Listbox and Tree with a narrow ascending-sorted
      "Department" column (96px, the label does not fit), a footer row, and a Grid/Listbox variant
      whose columns carry a column-menu button, the same sorted column with an image (Grid, Listbox, Tree),
-     and Trees whose headers hold images, an icon and the select-all box. Lives under pv/ so
+     Trees whose headers hold images, an icon and the select-all box, and Listboxes with a plain, a labelled
+     select-all and a centred select-all header for the tablet guard. Lives under pv/ so
      gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
 <zk>
 <div sclass="z-p-8">
@@ -137,6 +138,29 @@
     <listbox sclass="mhf-listbox-checkable" width="360px" checkmark="true" multiple="true">
         <listhead>
             <listheader width="40px"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <!-- Select-all headers on the tablet guard: one carries a label, one is a centred box-only column.
+         The first listbox is the plain-header reference for the header height. -->
+    <listbox sclass="mhf-listbox-plain" width="360px">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Department" width="160px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-label" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Department" width="160px"/>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-centre" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="60px" align="center"/>
             <listheader label="Name" width="160px"/>
         </listhead>
         <listitem><listcell/><listcell label="Alice"/></listitem>
