@@ -532,11 +532,17 @@
     vertical-align: middle;
 }
 
-/* `middle` on an inline span grows the row's line box by 1.45px (53.45px against the 52px of a Grid row,
-   33.45 against 32 in compact density). Aligned to the top of the line box the 16px box sits on the label
-   centre and the row is as tall as a Grid row. */
+/* `middle` on an inline span grew the row's line box by 1.45px (53.45px against the 52px of a Grid row,
+   33.45 against 32 in compact density), and `top` kept the box at the top of a row that holds a taller
+   control (a textbox or a button in the first cell), 8 to 10px above that control. So the box stays
+   `middle` and the negative block margins keep it from growing the line box: its margin box is only
+   ~10px tall. `middle` puts the box 1.45px below the label centre and the control centre where the
+   label text sits; margins that are 1.5px uneven move it up by 0.75px, so it stays within 1px of both. */
 .z-listitem-checkable {
-    vertical-align: top;
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+    margin-block: -6px -4.5px;
 }
 
 /* Checkbox-only header column (typically width="40px"): the default

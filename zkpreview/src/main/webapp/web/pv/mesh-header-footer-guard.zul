@@ -194,6 +194,36 @@
             <row><label value="Alice"/><label value="Engineering"/></row>
         </rows>
     </grid>
+    <!-- A control in the first cell of a checkmark Listbox or Tree row: the row box stays centred on it, and the Listbox
+         row is as tall as the Grid row below. -->
+    <listbox sclass="mhf-listbox-control-row" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Type" width="160px"/>
+        </listhead>
+        <listitem sclass="mhf-textbox-row"><listcell><textbox value="Alice"/></listcell><listcell label="Engineering"/></listitem>
+        <listitem sclass="mhf-button-row"><listcell><button label="Go"/></listcell><listcell label="Engineering"/></listitem>
+    </listbox>
+    <grid sclass="mhf-grid-control-row" width="360px">
+        <columns>
+            <column label="Name" width="160px"/>
+            <column label="Type" width="160px"/>
+        </columns>
+        <rows>
+            <row sclass="mhf-textbox-row"><textbox value="Alice"/><label value="Engineering"/></row>
+            <row sclass="mhf-button-row"><button label="Go"/><label value="Engineering"/></row>
+        </rows>
+    </grid>
+    <tree sclass="mhf-tree-control-row" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol label="Name" width="160px"/>
+            <treecol label="Type" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow sclass="mhf-textbox-row"><treecell><textbox value="Alice"/></treecell><treecell label="Engineering"/></treerow></treeitem>
+            <treeitem><treerow sclass="mhf-button-row"><treecell><button label="Go"/></treecell><treecell label="Engineering"/></treerow></treeitem>
+        </treechildren>
+    </tree>
     <!-- Select-all headers that also hold the sort arrow, the column-menu button or both (D11 follow-through):
          the label box must stop short of each. -->
     <listbox sclass="mhf-listbox-select-all-sort" width="360px" checkmark="true" multiple="true">

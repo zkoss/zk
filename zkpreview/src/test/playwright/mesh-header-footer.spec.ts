@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Locator, Page } from '@playwright/test';
 
 // Guard for the Grid, Listbox and Tree header and footer CSS (ZK-6112, D11-D13):
 //  - the sort arrow is 12x12 in all three (grid.css gave Grid 14px through `.z-column [class*="z-icon-"]`);
@@ -380,15 +380,54 @@ const CHECKMARK_ROWS: CheckmarkRows[] = [
   },
 ];
 
+interface ControlRows {
+  name: string;
+  controlRoot: string;
+  controlGridRoot: string;
+  icon: string;
+}
+
+const CONTROL_ROWS: ControlRows[] = [
+  { name: 'listbox', controlRoot: '.mhf-listbox-control-row', controlGridRoot: '.mhf-grid-control-row', icon: '.z-listitem-icon' },
+  { name: 'tree', controlRoot: '.mhf-tree-control-row', controlGridRoot: '.mhf-grid-control-row', icon: '.z-treerow-icon' },
+];
+
+// The vertical centre of the painted 16px box of a checkmark row, and of the thing it is centred on: the first text
+// of `text`, or the box of the control that `text` selects when `control` is set.
+async function paintedBoxAndTargetCentres(
+  tr: Locator, selectors: { text: string; icon: string; control?: boolean },
+): Promise<{ glyph: number; target: number }> {
+  return tr.evaluate((row, { text, icon, control }) => {
+    const centre = (rect: DOMRect) => (rect.top + rect.bottom) / 2;
+    // The 16px glyph is the icon's `::before`; a zero-size marker gives the baseline it hangs from.
+    const iconElement = row.querySelector(icon)!;
+    const marker = document.createElement('span');
+    marker.style.cssText = 'display:inline-block;width:0;height:0';
+    iconElement.appendChild(marker);
+    const baseline = marker.getBoundingClientRect().bottom;
+    marker.remove();
+    const glyph = getComputedStyle(iconElement, '::before');
+    const glyphCentre = baseline - parseFloat(glyph.verticalAlign) - parseFloat(glyph.height) / 2;
+    if (control) return { glyph: glyphCentre, target: centre(row.querySelector(text)!.getBoundingClientRect()) };
+    const textNode = document.createTreeWalker(row.querySelector(text)!, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
+    }).nextNode() as Text;
+    const label = document.createRange();
+    label.selectNodeContents(textNode);
+    return { glyph: glyphCentre, target: centre(label.getBoundingClientRect()) };
+  }, selectors);
+}
+
 // A checkmark row is as tall as the row without the box, and the painted box is centred on the label. Follow-up 28:
 // `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox line box.
 function registerCheckmarkRowsMatchGrid(density: 'default' | 'compact' | 'tablet') {
+  const prepare = async (page: Page) => {
+    await open(page);
+    if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+  };
+
   for (const { name, root, row, icon, text, gridRow, compactReferenceRow } of CHECKMARK_ROWS) {
     const reference = density === 'compact' ? compactReferenceRow : gridRow;
-    const prepare = async (page: Page) => {
-      await open(page);
-      if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
-    };
 
     test(`${root}: the checkmark ${name} row is as tall as the reference row in ${density} density`, async ({ page }) => {
       await prepare(page);
@@ -399,27 +438,34 @@ function registerCheckmarkRowsMatchGrid(density: 'default' | 'compact' | 'tablet
 
     test(`${root}: the painted box of the checkmark ${name} row is centred on its label in ${density} density`, async ({ page }) => {
       await prepare(page);
-      const measured = await page.locator(`${root} ${row}`).first().evaluate((tr, selectors) => {
-        const centre = (rect: DOMRect) => (rect.top + rect.bottom) / 2;
-        // The 16px glyph is the icon's `::before`; a zero-size marker gives the baseline it hangs from.
-        const icon = tr.querySelector(selectors.icon)!;
-        const marker = document.createElement('span');
-        marker.style.cssText = 'display:inline-block;width:0;height:0';
-        icon.appendChild(marker);
-        const baseline = marker.getBoundingClientRect().bottom;
-        marker.remove();
-        const glyph = getComputedStyle(icon, '::before');
-        const glyphCentre = baseline - parseFloat(glyph.verticalAlign) - parseFloat(glyph.height) / 2;
-        const textNode = document.createTreeWalker(tr.querySelector(selectors.text)!, NodeFilter.SHOW_TEXT, {
-          acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
-        }).nextNode() as Text;
-        const label = document.createRange();
-        label.selectNodeContents(textNode);
-        return { glyph: glyphCentre, label: centre(label.getBoundingClientRect()) };
-      }, { text, icon });
-      expect(Math.abs(measured.glyph - measured.label), `box centre ${measured.glyph}, label centre ${measured.label}`)
+      const measured = await paintedBoxAndTargetCentres(page.locator(`${root} ${row}`).first(), { text, icon });
+      expect(Math.abs(measured.glyph - measured.target), `box centre ${measured.glyph}, label centre ${measured.target}`)
         .toBeLessThanOrEqual(TOLERANCE_PX);
     });
+  }
+
+  // M1: a taller control in the first cell (textbox, button) takes the row height, and the box stays centred on it.
+  for (const { name, controlRoot, controlGridRoot, icon } of CONTROL_ROWS) {
+    for (const control of ['textbox', 'button']) {
+      const rowSelector = `${controlRoot} .mhf-${control}-row`;
+      const controlSelector = control === 'textbox' ? '.z-textbox' : '.z-button';
+      test(`${controlRoot}: the painted box of the checkmark ${name} row is centred on a ${control} in the first cell in ${density} density`,
+        async ({ page }) => {
+          await prepare(page);
+          const measured = await paintedBoxAndTargetCentres(page.locator(rowSelector).first(), { text: controlSelector, icon, control: true });
+          expect(Math.abs(measured.glyph - measured.target), `box centre ${measured.glyph}, ${control} centre ${measured.target}`)
+            .toBeLessThanOrEqual(TOLERANCE_PX);
+        });
+
+      if (name === 'listbox') {
+        test(`${controlRoot}: the checkmark listbox row with a ${control} is as tall as the grid row in ${density} density`, async ({ page }) => {
+          await prepare(page);
+          const listbox = await boxHeight(page, `${controlRoot} .mhf-${control}-row`);
+          const grid = await boxHeight(page, `${controlGridRoot} .mhf-${control}-row`);
+          expect(Math.abs(listbox - grid), `listbox row ${listbox}, grid row ${grid}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+        });
+      }
+    }
   }
 }
 
