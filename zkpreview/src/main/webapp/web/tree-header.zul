@@ -21,7 +21,7 @@
                     <treecols>
                         <treecol label="Align Left" align="left"/>
                         <treecol label="Align Center" align="center"/>
-                        <treecol align="right"><button label="Go"/></treecol>
+                        <treecol label="Align Right" align="right"/>
                     </treecols>
                     <auxhead>
                         <auxheader label="C"/>
@@ -483,6 +483,22 @@
                     <treefooter label="footer width Image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png"
                                 hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
                 </treefoot>
+            </tree>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Control in Treecol"/></div>
+        <div sclass="z-py-3">
+            <tree width="400px">
+                <treecols>
+                    <treecol label="Name" width="200px"/>
+                    <treecol width="200px"><button label="Go"/></treecol>
+                </treecols>
+                <treechildren>
+                    <treeitem><treerow><treecell label="alpha"/><treecell label="folder"/></treerow></treeitem>
+                    <treeitem><treerow><treecell label="beta"/><treecell label="file"/></treerow></treeitem>
+                </treechildren>
             </tree>
         </div>
     </div>
