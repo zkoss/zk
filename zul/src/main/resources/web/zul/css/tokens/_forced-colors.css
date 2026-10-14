@@ -355,6 +355,17 @@
         border-color: GrayText;
     }
 
+    /* (3c) Badge indicator: a background-only pill, so it force-maps to Canvas and a dot
+       (no text, no border of its own) disappears into the page. A border delineates the
+       count pill; the dot is filled with the foreground system colour, the same way (4a)
+       paints the slider thumbs. */
+    .z-badge-indicator {
+        border: 1px solid CanvasText;
+    }
+    .z-badge-dot > .z-badge-indicator {
+        background-color: CanvasText;
+    }
+
     /* (3a) Checked toolbarbutton shows "on" only via a primary-container pill →
        force-maps to Canvas (= unchecked). Toolbarbuttons have no default border, so a
        Highlight border is the non-colour checked affordance. */
