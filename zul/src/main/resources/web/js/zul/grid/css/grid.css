@@ -468,6 +468,8 @@
    column-menu caret. Scoped to the grid column sort icon only. */
 .z-column .z-column-sorticon [class*="z-icon-"] {
     margin-left: 0;
+    /* beat the 14px of `.z-column [class*="z-icon-"]` so the arrow is 12px like Listbox and Tree */
+    font-size: inherit;
 }
 
 .z-column-sorticon .z-icon-caret-up {
