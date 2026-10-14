@@ -32,12 +32,13 @@
     align-items: center;
     padding: var(--zk-header-padding-y) var(--zk-spacing-4);
     min-height: var(--zk-panel-header-height);
-    /* Title-mold renders the title as a BARE text node (not a .z-caption child),
-       so the .z-caption-content/.z-label nowrap rules below don't reach it. Without
-       nowrap a long title wraps to multiple lines and inflates the header height
-       (e.g. a 280px panel). nowrap on the flex container is inherited by the
-       anonymous text flex item; the panel's own overflow:hidden clips any excess. */
-    white-space: nowrap;
+    /* Title-mold renders the title as a BARE text node (not a .z-caption child), an
+       anonymous flex item that no selector can reach to truncate. It may wrap, and break
+       inside a word (anywhere shrinks its min-content), so that when the title and the
+       non-shrinking icons do not fit - a narrow panel, or WCAG text spacing - the title
+       gives way and the icons stay inside the panel instead of being clipped by its
+       overflow:hidden. */
+    overflow-wrap: anywhere;
     /* Typography for title text node */
     font-size: var(--zk-typescale-title-medium-size);
     font-weight: var(--zk-typescale-title-medium-weight);

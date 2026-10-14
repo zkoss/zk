@@ -55,11 +55,13 @@
     min-height: var(--zk-window-header-height);
     position: relative;
     cursor: default;
-    /* Title-mold renders the title as a BARE text node (not a .z-caption child),
-       so the .z-caption-content/.z-label nowrap rules below don't reach it. nowrap
-       on the flex container is inherited by the anonymous text flex item, keeping
-       a long title on one line; the window's overflow:hidden clips any excess. */
-    white-space: nowrap;
+    /* Title-mold renders the title as a BARE text node (not a .z-caption child), an
+       anonymous flex item that no selector can reach to truncate. It may wrap, and break
+       inside a word (anywhere shrinks its min-content), so that when the title and the
+       non-shrinking icons do not fit - a narrow window, or WCAG text spacing - the title
+       gives way and the icons stay inside the window instead of being clipped by its
+       overflow:hidden. */
+    overflow-wrap: anywhere;
     /* Typography for the title text node */
     font-size: var(--zk-typescale-title-medium-size);
     font-weight: var(--zk-typescale-title-medium-weight);
