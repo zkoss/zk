@@ -1569,15 +1569,16 @@ three ways by overlay region (arrow / indicator / label), each region pairing a 
 (defaults to `--zk-color-scrim`) with a "light voice" (defaults to `--zk-color-inverse-on-surface`
 — brand-**independent** by design, **not** `--zk-color-on-primary`, which a light-primary rebrand
 would flip dark; see the contract), because the slides underneath are arbitrary imagery and the
-overlay chrome cannot key off surface/on-surface tokens. The one exception is
+overlay chrome cannot key off surface/on-surface tokens. There are two exceptions: the active
+indicator pill (`-indicator-active-bg` / `-indicator-active-ring`, primary / on-primary, below) and
 `--zk-carousel-arrow-bg-hover`, the single non-token-rooted literal default (`rgba(0, 0, 0, 0.65)`
 — a hand-picked darkening of the scrim with no token to derive from), matching the
 `--zk-grid-row-hover-bg` / `--zk-combobox-item-hover-bg` literal-hover precedent. The indicator
 has four knobs, one per paint: resting fill and ring (`-indicator-bg`, `-indicator-ring`) and
 the active pill's fill and ring (`-indicator-active-bg`, `-indicator-active-ring`). The active
 pill is primary with an on-primary ring — the one overlay part that uses brand tokens — so it
-reads on light slides; inactive dots are the scrim/inverse-on-surface dots as before. Hover/focus/disabled
-opacities and the chevron/dot geometry stay on base tokens or literal geometry, not knob-driven
+reads on light slides; inactive dots are the scrim/inverse-on-surface dots as before.
+Hover/focus/disabled opacities and the chevron/dot geometry stay on base tokens or literal geometry, not knob-driven
 (same convention as button/input/rating) — the one exception is the indicator's hover cue
 (`transform: scale(1.25)`, c30), which is geometry rather than a color/opacity token specifically
 because it must work against either fill knob. Arrow size is density-bound via the new

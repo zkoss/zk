@@ -1171,7 +1171,7 @@
        knob, several roles" precedent as tab/calendar's accent. Because the
        slide content underneath is arbitrary imagery, none of the overlay chrome
        can safely key off surface/on-surface tokens (it would vanish against a
-       photo) — all three overlay regions (arrow / indicator / label) instead
+       photo) — the arrow, the resting indicator dots and the label instead
        speak exactly two brand-independent voices, each exposed per-region
        rather than shared: a "dark voice" defaulting to --zk-color-scrim (the
        theme's existing translucent-black overlay token) and a "light voice"
@@ -1180,8 +1180,10 @@
        (brand-override.md documents that token as one integrators repoint to a
        DARK value for a light-primary rebrand, which would flip every carousel
        overlay foreground dark-on-dark against the always-dark scrim fill — see
-       doc/contracts/carousel.md Design Contract). --zk-carousel-arrow-bg-hover is
-       the one non-token-rooted default (a hand-picked darkening of the scrim,
+       doc/contracts/carousel.md Design Contract). The active indicator pill is
+       the one exception to the two voices (primary fill, on-primary ring, see
+       below), and --zk-carousel-arrow-bg-hover is the one non-token-rooted
+       default (a hand-picked darkening of the scrim,
        matching the existing --zk-grid-row-hover-bg / --zk-combobox-item-hover-bg
        literal-hover-color precedent) — hover darkens the scrim rather than
        layering a currentColor state-layer overlay, since the arrow's foreground

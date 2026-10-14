@@ -78,7 +78,8 @@ theme-wide: `--zk-color-scrim` (the theme's existing translucent-black overlay t
 every dark overlay fill — arrow resting background, inactive indicator dot, caption
 backdrop — and `--zk-color-inverse-on-surface` (the theme's existing brand-**independent**
 light-on-dark foreground token, `#f0f4fa`) for every light foreground — arrow chevron
-color, resting indicator ring, caption text. The active indicator is the one exception: a `--zk-color-primary` pill ringed with `--zk-color-on-primary` (see "Indicators"). **Correction from an earlier pass:** the light
+color, resting indicator ring, caption text. The active indicator is the one exception: a `--zk-color-primary`
+pill ringed with `--zk-color-on-primary` (see "Indicators"). **Correction from an earlier pass:** the light
 voice was originally `--zk-color-on-primary`, which reads identically against the default
 Marble palette (`#ffffff` vs. `#f0f4fa` is not a visible difference) but is the *wrong*
 role — `doc/spec/brand-override.md` documents `--zk-color-on-primary` as a token
@@ -153,7 +154,9 @@ else (c29). This is the same category of move as the arrow's own departure from 
 "currentColor state-layer" default (DESIGN.md §8's usual *mechanism*, not its intent) —
 the state-differs *requirement* (hover must be visually distinguishable from resting) is
 satisfied by whichever mechanism actually works for the component's specific color model,
-and a size cue is the one mechanism that is fill-color-agnostic by construction. The active pill scales to about 28px on hover, 2px past each side of its 24px button; the button and `.z-carousel-indicators` are `overflow: visible`, so it is not clipped (accepted).
+and a size cue is the one mechanism that is fill-color-agnostic by construction. The active pill scales to about 28px on hover, 2px past each side of
+its 24px button; the button and `.z-carousel-indicators` are `overflow: visible`, so it is not
+clipped (accepted).
 
 **Caption label** (`.z-carouselitem-label`) is a small opaque-scrim **chip** anchored to
 the bottom-left of the slide (`--zk-spacing-4`, exactly matching ZK stock's 16px — no
@@ -343,12 +346,14 @@ DESIGN.md §5's container/control rule, so one knob moves both together; see c1/
 nine color knobs split three ways by overlay region (arrow / indicator /
 label), each region pairing a "dark voice" (defaults to `--zk-color-scrim`) with a "light
 voice" (defaults to `--zk-color-inverse-on-surface` — **corrected** from
-`--zk-color-on-primary`, which is brand-coupled; see Design Contract), except
-`-arrow-bg-hover` which is the one literal (non-token-rooted) default, matching the
+`--zk-color-on-primary`, which is brand-coupled; see Design Contract), except the active
+indicator pill (`-indicator-active-bg` / `-indicator-active-ring`, primary / on-primary) and
+`-arrow-bg-hover`, which is the one literal (non-token-rooted) default, matching the
 existing `--zk-grid-row-hover-bg`-style hover-literal precedent. The indicator has four
 knobs, one per paint: `-indicator-bg` (resting fill), `-indicator-ring` (resting ring),
 `-indicator-active-bg` (active pill fill, primary) and `-indicator-active-ring` (active ring,
-on-primary); the active pair is the one place the overlay uses brand tokens. Hover/focus/disabled opacities and the
+on-primary); the active pair is the one place the overlay uses brand tokens.
+Hover/focus/disabled opacities and the
 chevron/dot geometry itself stay on base tokens or literal geometry, not knob-driven (same
 convention as button/input/rating) — the one exception is the indicator's hover cue
 (`transform: scale(1.25)`, c30), which is geometry rather than a color/opacity token
