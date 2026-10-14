@@ -19,6 +19,8 @@ import { test, expect, Page } from '@playwright/test';
 //    at the same top offset and the painted box is centred on the label, on desktop and on a tablet (D16);
 //  - every checkmark Listbox header keeps its select-all box unclipped (`.z-listheader-content` does not
 //    overflow vertically) on the font-size of the header, so zkmax cannot size the glyph box of the span;
+//  - a select-all header that also holds the sort arrow and/or the column-menu button keeps its label box
+//    clear of them (D11 follow-through);
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -157,7 +159,8 @@ function registerSelectAllHeaderVersusGrid() {
 }
 
 const CHECKMARK_LISTBOXES = ['.mhf-listbox-checkable', '.mhf-listbox-select-all-label', '.mhf-listbox-select-all-centre',
-  '.mhf-listbox-vs-grid'];
+  '.mhf-listbox-vs-grid', '.mhf-listbox-select-all-sort', '.mhf-listbox-select-all-menu',
+  '.mhf-listbox-select-all-sort-menu'];
 
 // The select-all box must not be cut by the header content (overflow hidden) and the span must not be
 // resized by zkmax, which put the 16px glyph on a 24px baseline and clipped its bottom edge.
@@ -175,6 +178,45 @@ function registerSelectAllBoxIsNotClipped() {
       });
       expect.soft(measured.scrollHeight, 'content clips the box vertically').toBeLessThanOrEqual(measured.clientHeight);
       expect(measured.boxFontSize).toBe(measured.headerFontSize);
+    });
+  }
+}
+
+// A select-all header holding the sort arrow and/or the column-menu button reserves the same room as the
+// plain header with the same controls (D11), and the label box ends before the controls.
+// The menu button is 44px wide on a tablet (zkmax) against the 24px the right padding reserves, so plain
+// Grid and Listbox headers overlap it there as well; the gap to the button is only guarded on desktop.
+function registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap }: { guardButtonGap: boolean }) {
+  const cases: Array<{ root: string; plain: string; controls: string[] }> = [
+    { root: '.mhf-listbox-select-all-sort', plain: '.mhf-listbox th.z-listheader:nth-child(2)', controls: ['.z-listheader-sorticon'] },
+    { root: '.mhf-listbox-select-all-menu', plain: '.mhf-listbox-menu th.z-listheader:nth-child(1)', controls: ['.z-listheader-button'] },
+    {
+      root: '.mhf-listbox-select-all-sort-menu', plain: '.mhf-listbox-menu th.z-listheader:nth-child(2)',
+      controls: ['.z-listheader-sorticon', '.z-listheader-button'],
+    },
+  ];
+  for (const { root, plain, controls } of cases) {
+    test(`${root}: the right padding is the one of the plain header with ${controls.join(' and ')}`, async ({ page }) => {
+      await open(page);
+      const paddingRight = (selector: string) => page.locator(selector)
+        .evaluate((th) => parseFloat(getComputedStyle(th).paddingRight));
+      const selectAll = await paddingRight(`${root} th.z-listheader:nth-child(1)`);
+      const plainHeader = await paddingRight(plain);
+      expect(selectAll, `select-all ${selectAll}px, plain ${plainHeader}px`).toBe(plainHeader);
+    });
+
+    const guarded = controls.filter((control) => guardButtonGap || control !== '.z-listheader-button');
+    if (guarded.length === 0) continue;
+    test(`${root}: the label box ends before ${guarded.join(' and ')}`, async ({ page }) => {
+      await open(page);
+      const header = page.locator(`${root} th.z-listheader:nth-child(1)`);
+      const labelBoxRight = await header.locator('.z-listheader-content')
+        .evaluate((content) => content.getBoundingClientRect().right);
+      for (const control of guarded) {
+        const controlLeft = await header.locator(control).evaluate((el) => el.getBoundingClientRect().left);
+        expect(controlLeft - labelBoxRight, `label box right ${labelBoxRight}, ${control} left ${controlLeft}`)
+          .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
+      }
     });
   }
 }
@@ -317,6 +359,7 @@ test.describe('mesh header and footer', () => {
 
   registerSelectAllHeaderVersusGrid();
   registerSelectAllBoxIsNotClipped();
+  registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap: true });
 
   // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
   test.describe('select-all header on a tablet @tablet', () => {
@@ -342,6 +385,7 @@ test.describe('mesh header and footer', () => {
 
     registerSelectAllHeaderVersusGrid();
     registerSelectAllBoxIsNotClipped();
+    registerSelectAllHeaderClearsArrowAndButton({ guardButtonGap: false });
 
     test('.mhf-listbox-select-all-centre: the centred box lines up with the row checkbox', async ({ page }) => {
       await open(page);

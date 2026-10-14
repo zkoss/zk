@@ -193,5 +193,28 @@
             <row><label value="Alice"/><label value="Engineering"/></row>
         </rows>
     </grid>
+    <!-- Select-all headers that also hold the sort arrow, the column-menu button or both (D11 follow-through):
+         the label box must stop short of each. -->
+    <listbox sclass="mhf-listbox-select-all-sort" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Department" width="120px" sort="auto" sortDirection="ascending"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell label="Engineering"/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-menu" width="360px" checkmark="true" multiple="true">
+        <listhead menupopup="auto">
+            <listheader label="Department" width="120px"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell label="Engineering"/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-sort-menu" width="360px" checkmark="true" multiple="true">
+        <listhead menupopup="auto">
+            <listheader label="Department" width="120px" sort="auto" sortDirection="ascending"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell label="Engineering"/><listcell label="Alice"/></listitem>
+    </listbox>
 </div>
 </zk>
