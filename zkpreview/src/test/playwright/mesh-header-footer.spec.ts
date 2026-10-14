@@ -30,7 +30,8 @@ import { test, expect, Page } from '@playwright/test';
 //    painted box is centred on the label within 1px, and on a tablet the box keeps its 24px height (follow-up 28);
 //  - an image-only header column that carries the column-menu button, at the documented minimum width (56px on
 //    desktop, 76px on a tablet, contracts/listbox.md), shows the whole 16px image clear of the button, and a
-//    select-all-only header at its minimum width (60px / 80px) shows the whole box clear of the button (follow-up 30);
+//    select-all-only header at its minimum width (68px / 88px) paints the whole box inside the content box and clear of the
+//    button (follow-up 30);
 //  - an image + sort + menu header keeps the label, arrow and button in that order on a tablet too (follow-up 30);
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
@@ -458,7 +459,8 @@ function registerImageOnlyMenuHeaderAtMinimumWidth(column: number) {
 }
 
 // The documented minimum width of a select-all-only header with the menu button (contracts/listbox.md): the whole
-// 16px box lies inside the header cell and its content box, and ends before the button.
+// 16px box lies inside the header cell and inside the content box, whose `overflow: hidden` paints nothing beyond
+// its right edge, and ends before the button.
 function registerSelectAllOnlyMenuHeaderAtMinimumWidth(root: string) {
   test(`${root}: a select-all-only column of the minimum width shows the whole box clear of the menu button`, async ({ page }) => {
     await open(page);
@@ -469,12 +471,14 @@ function registerSelectAllOnlyMenuHeaderAtMinimumWidth(root: string) {
       return {
         iconLeft: icon.left, iconRight: icon.right, iconWidth: icon.width, cellLeft: cell.left, cellRight: cell.right,
         buttonLeft: th.querySelector('.z-listheader-button')!.getBoundingClientRect().left,
-        contentWidth: content.clientWidth,
+        contentWidth: content.clientWidth, contentRight: content.getBoundingClientRect().right,
       };
     });
     expect.soft(measured.contentWidth, 'content box width').toBeGreaterThanOrEqual(measured.iconWidth);
     expect.soft(measured.iconLeft >= measured.cellLeft && measured.iconRight <= measured.cellRight,
       `icon ${measured.iconLeft}-${measured.iconRight}, cell ${measured.cellLeft}-${measured.cellRight}`).toBe(true);
+    expect.soft(measured.iconRight, `icon right ${measured.iconRight}, content right ${measured.contentRight}`)
+      .toBeLessThanOrEqual(measured.contentRight);
     expect(measured.buttonLeft - measured.iconRight, `icon right ${measured.iconRight}, button left ${measured.buttonLeft}`)
       .toBeGreaterThanOrEqual(0);
   });

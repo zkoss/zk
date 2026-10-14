@@ -87,7 +87,7 @@ Resizable Headers" section (first `<listheader width="40px" image="…ArrowsUpDo
 | ni4 | checkbox/icon header stays single-line | `.z-listheader:has(.z-listheader-checkable)`, `.z-listheader:has(img)` | white-space | `nowrap` (default `normal` wraps the over-wide icon span → row inflates) | computedStyle |
 | ni5 | select-all checkbox header row not inflated | the `multiple checkmark` listbox's `.z-listhead` (40px select-all column) | height | ≈53px, equal to a text-only header row (NOT ~74px) | getBoundingClientRect |
 | ni6 | image-only header with the column-menu button, at the minimum width | `.z-listheader:has(.z-listheader-button) img` in a `<listhead menupopup="auto">` | width, and its right edge against the button's left edge | `16px` wide and clear of the button, at 56px (desktop) / 76px (tablet) | getBoundingClientRect (`mesh-header-footer.spec.ts`, `.mhf-listbox-icon-menu`) |
-| ni7 | select-all-only header with the column-menu button, at the minimum width | `.z-listheader` holding only `.z-listheader-checkable`, in a `<listhead menupopup="auto">` | content box width, icon inside the cell, icon right edge against the button's left edge | content box at least 16px, icon inside the cell, clear of the button, at 60px (desktop) / 80px (tablet) | getBoundingClientRect (`mesh-header-footer.spec.ts`, `.mhf-listbox-select-all-only-menu-*`) |
+| ni7 | select-all-only header with the column-menu button, at the minimum width | `.z-listheader` holding only `.z-listheader-checkable`, in a `<listhead menupopup="auto">` | icon right edge against the content box's right edge, and against the button's left edge | whole 16px box inside the content box (the content box paints nothing beyond its right edge) and clear of the button, at 68px (desktop) / 88px (tablet) | getBoundingClientRect (`mesh-header-footer.spec.ts`, `.mhf-listbox-select-all-only-menu-*`) |
 
 ### Minimum width of an image-only header column with the menu button
 
@@ -101,9 +101,12 @@ of the button, no overlap of the button over the image); give the column the min
 off the head. This applies to Listbox and Grid alike; Tree has no column-menu button.
 
 The same applies to a header that holds only the select-all box (`checkmark="true" multiple="true"`, no label, no
-image) and carries the menu button (ni7): its 16px box needs a content box of 16px (56px / 76px) and, to end
-before the button, a column of at least **60px on desktop and 80px on a tablet**. Narrower, the box is clipped by
-the content box and, from 4px narrower, lies under the button. The header keeps the button and its reservation
+image) and carries the menu button (ni7): the box starts 16px into the cell (the 12px padding of its own span plus
+the 4px header padding), so the content box has to reach 32px, and the reservation for the button comes on top:
+a column of at least **68px on desktop (32px + 36px) and 88px on a tablet (32px + 56px)**. Measured on freshly
+rendered columns, with the width of the painted box read off the screenshot as well: the box is whole from 68px
+(88px), 2px narrower it paints 14px, and at the earlier 60px (80px) only its first 8px, because the content box's
+`overflow: hidden` ends at 24px and the button is still clear of it. The header keeps the button and its reservation
 because the button is the same element as in the labelled headers, and nothing in the DOM (no class, no
 attribute) tells a select-all-only header from a labelled one, so CSS cannot hide the button on it alone.
 

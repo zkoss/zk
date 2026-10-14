@@ -257,18 +257,18 @@
         </listhead>
         <listitem><listcell label="a"/><listcell label="b"/><listcell label="Alice"/></listitem>
     </listbox>
-    <!-- Select-all-only headers that carry the column-menu button, at the documented minimum widths (60px on
-         desktop, 80px on a tablet; contracts/listbox.md). -->
+    <!-- Select-all-only headers that carry the column-menu button, at the documented minimum widths (68px on
+         desktop, 88px on a tablet; contracts/listbox.md). -->
     <listbox sclass="mhf-listbox-select-all-only-menu-desktop" width="360px" checkmark="true" multiple="true">
         <listhead menupopup="auto">
-            <listheader width="60px"/>
+            <listheader width="68px"/>
             <listheader label="Name" width="200px"/>
         </listhead>
         <listitem><listcell/><listcell label="Alice"/></listitem>
     </listbox>
     <listbox sclass="mhf-listbox-select-all-only-menu-tablet" width="360px" checkmark="true" multiple="true">
         <listhead menupopup="auto">
-            <listheader width="80px"/>
+            <listheader width="88px"/>
             <listheader label="Name" width="200px"/>
         </listhead>
         <listitem><listcell/><listcell label="Alice"/></listitem>
