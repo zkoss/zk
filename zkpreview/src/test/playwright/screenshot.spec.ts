@@ -1266,10 +1266,23 @@ test.describe('container-header-height', () => {
 
       const m = await page.evaluate((sel) => {
         const headers = [...document.querySelectorAll(sel)] as HTMLElement[];
-        return headers.map(h => ({
-          boxSizing: getComputedStyle(h).boxSizing,
-          height: Math.round(h.getBoundingClientRect().height),
-        }));
+        return headers.map(h => {
+          // A title that wraps (a narrow panel: the icons keep their room and the title gives
+          // way) legitimately adds a line, so count the title's lines and allow one
+          // line-height per extra line. The content-box blow-up adds padding, not lines.
+          const text = document.createTreeWalker(h, NodeFilter.SHOW_TEXT, {
+            acceptNode: n => (n.textContent || '').trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT,
+          }).nextNode();
+          const range = document.createRange();
+          if (text) range.selectNodeContents(text);
+          const lineTops = new Set([...(text ? range.getClientRects() : [])].map(r => Math.round(r.top)));
+          return {
+            boxSizing: getComputedStyle(h).boxSizing,
+            height: Math.round(h.getBoundingClientRect().height),
+            extraLines: Math.max(0, lineTops.size - 1),
+            lineHeight: parseFloat(getComputedStyle(h).lineHeight) || 0,
+          };
+        });
       }, selector);
 
       expect(m.length, `no ${selector} found on ${url}`).toBeGreaterThan(0);
@@ -1277,7 +1290,8 @@ test.describe('container-header-height', () => {
         // Precise cause: the reset must reach the header.
         expect(h.boxSizing, `${name} header box-sizing`).toBe('border-box');
         // Visible symptom: height must stay within the intended band.
-        expect(h.height, `${name} header height is ${h.height}px`).toBeLessThanOrEqual(maxHeight);
+        const allowed = maxHeight + h.extraLines * h.lineHeight;
+        expect(h.height, `${name} header height is ${h.height}px (${h.extraLines} extra title lines)`).toBeLessThanOrEqual(allowed);
       }
     });
   }
