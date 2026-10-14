@@ -237,12 +237,12 @@
             <row><label value="Alice"/><label value="Engineering"/></row>
         </rows>
     </grid>
-    <!-- Image-only header columns that carry the column-menu button, at the documented minimum widths (58px on
-         desktop, 78px on a tablet; see data-components.md, "Narrow icon/image column"). -->
+    <!-- Image-only header columns that carry the column-menu button, at the documented minimum widths (56px on
+         desktop, 76px on a tablet; see data-components.md, "Narrow icon/image column"). -->
     <grid sclass="mhf-grid-icon-menu" width="360px">
         <columns menupopup="auto">
-            <column width="58px" image="/web/img/received.png"/>
-            <column width="78px" image="/web/img/received.png"/>
+            <column width="56px" image="/web/img/received.png"/>
+            <column width="76px" image="/web/img/received.png"/>
             <column label="Name" width="200px"/>
         </columns>
         <rows>
@@ -251,11 +251,27 @@
     </grid>
     <listbox sclass="mhf-listbox-icon-menu" width="360px">
         <listhead menupopup="auto">
-            <listheader width="58px" image="/web/img/received.png"/>
-            <listheader width="78px" image="/web/img/received.png"/>
+            <listheader width="56px" image="/web/img/received.png"/>
+            <listheader width="76px" image="/web/img/received.png"/>
             <listheader label="Name" width="200px"/>
         </listhead>
         <listitem><listcell label="a"/><listcell label="b"/><listcell label="Alice"/></listitem>
+    </listbox>
+    <!-- Select-all-only headers that carry the column-menu button, at the documented minimum widths (60px on
+         desktop, 80px on a tablet; contracts/listbox.md). -->
+    <listbox sclass="mhf-listbox-select-all-only-menu-desktop" width="360px" checkmark="true" multiple="true">
+        <listhead menupopup="auto">
+            <listheader width="60px"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-select-all-only-menu-tablet" width="360px" checkmark="true" multiple="true">
+        <listhead menupopup="auto">
+            <listheader width="80px"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
     </listbox>
     <!-- A checkmark Tree next to the Tree/Grid pair above: the data rows are as tall as the Grid rows. -->
     <tree sclass="mhf-tree-checkmark" width="360px" checkmark="true" multiple="true">

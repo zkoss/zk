@@ -28,8 +28,9 @@ import { test, expect, Page } from '@playwright/test';
 //  - a checkmark Listbox row and a checkmark Tree row are as tall as the Grid row (the Tree row as the plain Tree
 //    row in compact density, where Tree has its own 36px row) in default, compact and tablet density, the
 //    painted box is centred on the label within 1px, and on a tablet the box keeps its 24px height (follow-up 28);
-//  - an image-only header column that carries the column-menu button, at the documented minimum width (58px on
-//    desktop, 78px on a tablet, contracts/listbox.md), shows the whole 16px image clear of the button (follow-up 30);
+//  - an image-only header column that carries the column-menu button, at the documented minimum width (56px on
+//    desktop, 76px on a tablet, contracts/listbox.md), shows the whole 16px image clear of the button, and a
+//    select-all-only header at its minimum width (60px / 80px) shows the whole box clear of the button (follow-up 30);
 //  - an image + sort + menu header keeps the label, arrow and button in that order on a tablet too (follow-up 30);
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
@@ -456,6 +457,29 @@ function registerImageOnlyMenuHeaderAtMinimumWidth(column: number) {
   }
 }
 
+// The documented minimum width of a select-all-only header with the menu button (contracts/listbox.md): the whole
+// 16px box lies inside the header cell and its content box, and ends before the button.
+function registerSelectAllOnlyMenuHeaderAtMinimumWidth(root: string) {
+  test(`${root}: a select-all-only column of the minimum width shows the whole box clear of the menu button`, async ({ page }) => {
+    await open(page);
+    const measured = await page.locator(`${root} th.z-listheader:nth-child(1)`).evaluate((th) => {
+      const icon = th.querySelector('.z-listheader-icon')!.getBoundingClientRect();
+      const cell = th.getBoundingClientRect();
+      const content = th.querySelector('.z-listheader-content')!;
+      return {
+        iconLeft: icon.left, iconRight: icon.right, iconWidth: icon.width, cellLeft: cell.left, cellRight: cell.right,
+        buttonLeft: th.querySelector('.z-listheader-button')!.getBoundingClientRect().left,
+        contentWidth: content.clientWidth,
+      };
+    });
+    expect.soft(measured.contentWidth, 'content box width').toBeGreaterThanOrEqual(measured.iconWidth);
+    expect.soft(measured.iconLeft >= measured.cellLeft && measured.iconRight <= measured.cellRight,
+      `icon ${measured.iconLeft}-${measured.iconRight}, cell ${measured.cellLeft}-${measured.cellRight}`).toBe(true);
+    expect(measured.buttonLeft - measured.iconRight, `icon right ${measured.iconRight}, button left ${measured.buttonLeft}`)
+      .toBeGreaterThanOrEqual(0);
+  });
+}
+
 // An image + sort + menu header (`GRID_IMAGE_MENU`, `LISTBOX_IMAGE_MENU`): the label box, the sort arrow and the
 // menu button keep that order and the 16px image is not squeezed.
 function registerImageSortMenuHeaderOrder(meshes: Mesh[]) {
@@ -601,6 +625,7 @@ test.describe('mesh header and footer', () => {
   registerCheckmarkRowsMatchGrid('default');
   registerCheckmarkRowsMatchGrid('compact');
   registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_DESKTOP);
+  registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-desktop');
   registerImageSortMenuHeaderOrder([GRID_IMAGE_MENU, LISTBOX_IMAGE_MENU]);
 
   // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
@@ -634,6 +659,7 @@ test.describe('mesh header and footer', () => {
     registerCheckmarkRowsMatchGrid('tablet');
     registerCheckmarkBoxKeepsTouchHeight();
     registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_TABLET);
+    registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-tablet');
     registerImageSortMenuHeaderOrder([GRID_IMAGE_MENU, LISTBOX_IMAGE_MENU]);
 
     test('.mhf-tree-vs-grid: the tree data row is as tall as the grid data row', async ({ page }) => {

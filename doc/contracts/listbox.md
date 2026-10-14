@@ -86,18 +86,26 @@ Resizable Headers" section (first `<listheader width="40px" image="…ArrowsUpDo
 | ni3 | image header row not inflated | image-header `.z-listhead` row height vs a no-image `.z-listhead` row | height | equal (≈53px) — the image must not make the header taller | getBoundingClientRect |
 | ni4 | checkbox/icon header stays single-line | `.z-listheader:has(.z-listheader-checkable)`, `.z-listheader:has(img)` | white-space | `nowrap` (default `normal` wraps the over-wide icon span → row inflates) | computedStyle |
 | ni5 | select-all checkbox header row not inflated | the `multiple checkmark` listbox's `.z-listhead` (40px select-all column) | height | ≈53px, equal to a text-only header row (NOT ~74px) | getBoundingClientRect |
-| ni6 | image-only header with the column-menu button, at the minimum width | `.z-listheader:has(.z-listheader-button) img` in a `<listhead menupopup="auto">` | width, and its right edge against the button's left edge | `16px` wide and clear of the button, at 58px (desktop) / 78px (tablet) | getBoundingClientRect (`mesh-header-footer.spec.ts`, `.mhf-listbox-icon-menu`) |
+| ni6 | image-only header with the column-menu button, at the minimum width | `.z-listheader:has(.z-listheader-button) img` in a `<listhead menupopup="auto">` | width, and its right edge against the button's left edge | `16px` wide and clear of the button, at 56px (desktop) / 76px (tablet) | getBoundingClientRect (`mesh-header-footer.spec.ts`, `.mhf-listbox-icon-menu`) |
+| ni7 | select-all-only header with the column-menu button, at the minimum width | `.z-listheader` holding only `.z-listheader-checkable`, in a `<listhead menupopup="auto">` | content box width, icon inside the cell, icon right edge against the button's left edge | content box at least 16px, icon inside the cell, clear of the button, at 60px (desktop) / 80px (tablet) | getBoundingClientRect (`mesh-header-footer.spec.ts`, `.mhf-listbox-select-all-only-menu-*`) |
 
 ### Minimum width of an image-only header column with the menu button
 
 A `<listhead menupopup="…">` (and the same for Grid `<columns menupopup="…">`) puts the column-menu button in
 every header, and the header's `padding-right` reserves room for it: `--zk-spacing-1` + the button + `--zk-spacing-2`
 (24px button on desktop, 44px touch button on a tablet) on top of the 4px each side of an image column. A 16px
-image therefore needs a column of at least **58px on desktop and 78px on a tablet** (measured; 56px and 76px
-squeeze the image to 14px, and a narrower column hides it). Below that width the layout is not supported: the
-image shrinks to the room left (on a tablet to 0px at 62px or less). Marble does not engineer a smaller
-column (no hiding of the button, no overlap of the button over the image); give the column the minimum width, or
-leave `menupopup` off the head. This applies to Listbox and Grid alike; Tree has no column-menu button.
+image therefore needs a column of at least **56px on desktop and 76px on a tablet** (measured on freshly rendered
+columns; 2px narrower shows a 14px image, and on a tablet a column of 60px or less hides it). Below that width the
+layout is not supported: the image shrinks to the room left. Marble does not engineer a smaller column (no hiding
+of the button, no overlap of the button over the image); give the column the minimum width, or leave `menupopup`
+off the head. This applies to Listbox and Grid alike; Tree has no column-menu button.
+
+The same applies to a header that holds only the select-all box (`checkmark="true" multiple="true"`, no label, no
+image) and carries the menu button (ni7): its 16px box needs a content box of 16px (56px / 76px) and, to end
+before the button, a column of at least **60px on desktop and 80px on a tablet**. Narrower, the box is clipped by
+the content box and, from 4px narrower, lies under the button. The header keeps the button and its reservation
+because the button is the same element as in the labelled headers, and nothing in the DOM (no class, no
+attribute) tells a select-all-only header from a labelled one, so CSS cannot hide the button on it alone.
 
 ## States to evaluate
 - [ ] default rows, header, hover, selected, focus, disabled, striped, frozen columns
