@@ -543,6 +543,12 @@
     white-space: nowrap;
 }
 
+/* A sortable header with an image still needs the sort icon's room, which the rule above (higher
+   specificity than .z-listheader-sort) would otherwise drop to the 4px icon-column padding. */
+.z-listheader-sort:has(img) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
 .z-listcell:has(.z-listitem-checkable) > .z-listcell-content {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);

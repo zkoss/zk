@@ -204,6 +204,12 @@
     white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
 }
 
+/* A sortable header with an image still needs the sort icon's room, which the rule above (higher
+   specificity than .z-column-sort) would otherwise drop to the 4px icon-column padding. */
+.z-column-sort:has(img) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
 /* ─── Body area ─────────────────────────────────────────────────────────── */
 .z-grid-body {
     overflow: auto;

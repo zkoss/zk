@@ -457,6 +457,12 @@
     white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
 }
 
+/* A sortable header with an image still needs the sort icon's room, which the rule above (higher
+   specificity than .z-treecol-sort) would otherwise drop to the 4px icon-column padding. */
+.z-treecol-sort:has(img) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
 /* Indeterminate / tristate (partial) — filled primary box with a white minus.
    When a TristateModel reports a node in getPartials(), ZK adds `z-treerow-partial`
    to the row and switches the icon class to `z-icon-minus`; the header select-all
