@@ -453,6 +453,10 @@ Batch 17 (#75) moved the top/left arrow room from `margin-bottom` / `margin-righ
 
 ## 28. Checkmark Listbox data rows are taller than Grid rows
 
+**Resolved** in zk `642266f933` (`listbox.css`, guards) and zkcml `5a82b3171` (`tablet/_mesh.css`): the rows are
+52 / 32 / 60px, equal to Grid, and the glyph is centred on the label. The tablet Tree checkmark row had the same
+excess (64px against 60px) and is fixed by the same zkcml rule. The text below is the original finding.
+
 Found while verifying zkdemo NS10 (`doc/zkdemo-b6-marble-fixes.md`, D16); deferred under O10.
 
 - Measured: 53.45 / 33.45 / 61.95px (desktop / compact / tablet) against Grid 52 / 32 / 60.
@@ -468,11 +472,23 @@ Found while verifying zkdemo NS10 (`doc/zkdemo-b6-marble-fixes.md`, D16); deferr
 
 ## 29. `verification.md` quotes a stale gallery tolerance and PNG count
 
+**Resolved** in zk `c128d70b36` (0.002, 188 compared PNGs plus 99 forced-colors captures). The text below is the
+original finding.
+
 `gallery-scan.spec.ts` uses `maxDiffPixelRatio: 0.002` (0.2%), while
 `.claude/skills/marble-theme/reference/verification.md` still says 0.01 and "184 compared PNGs".
 Update both from the spec and a fresh `ls` of `zkpreview/doc/screenshots/`.
 
 ## 30. Narrow header columns with `menupopup` on tablet
+
+**Resolved** in zk `c128d70b36` and `73203f131d`: (a) the
+minimum width of an image-only column with the menu button, **56px desktop / 76px tablet**, and (c) the minimum
+width of a select-all-only column with the menu button, **60px desktop / 80px tablet**, are documented in
+`doc/contracts/listbox.md` and `grid.md` and guarded on both; (b) the tablet guard for image + sort + menu headers
+is in zk `642266f933`. (c) was first planned as "hide the button on that header"; CSS cannot tell that header from a
+labelled one (no class or attribute differs), so it follows the same rule as (a): unsupported widths are
+documented and guarded, not engineered. (The first 30a numbers, 58 / 78px, came from resizing a rendered column
+and were 2px too wide; a fresh render gives 56 / 76px.) The text below is the original finding.
 
 Found while verifying the tablet menu-button reservation (zkcml `7680717b6`, zkdemo NS10); deferred
 under O10. The 44px touch button needs 56px of padding-right (68px with a sort arrow), so:
@@ -501,3 +517,9 @@ and still fall back to the UA font. No text is drawn today, so nothing is visibl
 A comment in `zul/src/main/resources/web/zul/css/tokens/_sizing.css` says the compact values
 "mirror doc/marble-compact.css", which is not in the repo. Point it at
 `doc/spec/data-dense-mode.md` or drop the reference.
+
+## 34. Compact Tree rows are 36px against 32px Grid rows
+
+Found while measuring item 28: in `data-density="compact"` a Tree row (with or without a checkmark) is 36px and a
+Grid or Listbox row 32px (`--zk-data-row-min-height: 36px` in `tokens/_sizing.css`). Default (52px) and tablet
+(60px) rows are equal across the three. Not caused by the checkmark; left as found (O10).
