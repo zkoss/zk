@@ -78,6 +78,12 @@ using a height token and the rest hardcoding 28/32/36/40/44/48/56.
   this; without it the header stays at 57px while everything around it shrinks.
 - **Cascade shadowing.** The three cell-padding tokens were declared on the component and
   shadowed the `:root` override. Hoisted. Any new overridable token needs the same check.
+- **Button padding in compact.** A 20px label line plus the default 6px `--zk-button-padding-y` is
+  32px, taller than the 30px compact `--zk-button-height`, and an outlined button adds its 1px
+  borders on top (34px). Compact sets `--zk-button-padding-y: 4px` (in `_component-theme.css`,
+  after `:root`, because `html[data-density=compact]` is `:root` itself), so filled, text,
+  icon+label, outlined, confirmpopup and messagebox buttons are all exactly 30px; icon-only stays
+  at `--zk-icon-button-size` (32px). Default (36px) is unchanged.
 
 ## Verifying a density change
 
@@ -92,6 +98,6 @@ using a height token and the rest hardcoding 28/32/36/40/44/48/56.
    fixed `margin: 11px`, or the 18/20px mold decentres at other control heights.
 4. `bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>` — no new hardcoded-px regressions; new tokens show as referenced.
 
-The last verified probe run was 8/8: button 36→32, tabs 49→46, window header 57→48, tree row
+The last verified probe run was 8/8: button 36→30 (every variant, outlined included), tabs 49→46, window header 57→48, tree row
 52→36, datebox 40→32 (inner 38→30), textbox 40→32, checkbox row 40→32, grid cell padding
 16px→6px 12px.

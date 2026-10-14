@@ -189,7 +189,7 @@ implementation, not a per-state background.
 | `--zk-button-fg` | `var(--zk-color-on-primary)` |
 | `--zk-button-radius` | `var(--zk-shape-button)` |
 | `--zk-button-elevation` | `var(--zk-elevation-resting)` |
-| `--zk-button-padding-y` / `-padding-x` | `6px` / `var(--zk-spacing-4)` |
+| `--zk-button-padding-y` / `-padding-x` | `6px` (`4px` under `data-density="compact"`, so every variant is exactly `--zk-button-height` = 30px) / `var(--zk-spacing-4)` |
 | `--zk-button-overlay-color` | `var(--zk-color-on-primary)` |
 | `--zk-button-hover-opacity` / `-focus-opacity` / `-active-opacity` | state-layer opacity tokens |
 | `--zk-button-height` (size — in `_sizing.css`) | `36px` |
