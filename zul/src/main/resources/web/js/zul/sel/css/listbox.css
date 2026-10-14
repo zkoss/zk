@@ -387,6 +387,11 @@
     border-top: 2px solid var(--zk-color-outline-variant);
 }
 
+/* The UA default `border-spacing: 2px` would push every footer column right of its body column. */
+.z-listbox-footer table {
+    border-spacing: 0;
+}
+
 .z-listfoot .z-listfooter,
 .z-listfoot td {
     padding: var(--zk-spacing-3) var(--zk-spacing-4);

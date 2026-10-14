@@ -454,6 +454,11 @@
     border-top: 1px solid var(--zk-color-outline-variant);
 }
 
+/* The UA default `border-spacing: 2px` would push every footer column right of its body column. */
+.z-grid-footer table {
+    border-spacing: 0;
+}
+
 .z-grid-footer .z-cell,
 .z-footer .z-cell,
 .z-grid-footer .z-row-content,
