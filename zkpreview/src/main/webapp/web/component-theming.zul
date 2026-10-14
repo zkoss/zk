@@ -1236,7 +1236,7 @@
     </div>
     <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Carousel (regional override)"/></div>
     <div sclass="z-hstack z-mb-8 z-p-4 z-bg-surface-variant z-rounded"
-         style="--zk-carousel-arrow-bg:#6750a4; --zk-carousel-indicator-current-bg:#6750a4">
+         style="--zk-carousel-arrow-bg:#6750a4; --zk-carousel-indicator-active-bg:#6750a4">
         <carousel width="240px" height="140px">
             <carouselitem label="Slide 1">
                 <div sclass="z-w-100 z-h-100 z-bg-primary-container"/>

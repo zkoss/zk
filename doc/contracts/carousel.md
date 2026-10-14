@@ -78,7 +78,7 @@ theme-wide: `--zk-color-scrim` (the theme's existing translucent-black overlay t
 every dark overlay fill — arrow resting background, inactive indicator dot, caption
 backdrop — and `--zk-color-inverse-on-surface` (the theme's existing brand-**independent**
 light-on-dark foreground token, `#f0f4fa`) for every light foreground — arrow chevron
-color, active indicator dot, caption text. **Correction from an earlier pass:** the light
+color, resting indicator ring, caption text. The active indicator is the one exception: a `--zk-color-primary` pill ringed with `--zk-color-on-primary` (see "Indicators"). **Correction from an earlier pass:** the light
 voice was originally `--zk-color-on-primary`, which reads identically against the default
 Marble palette (`#ffffff` vs. `#f0f4fa` is not a visible difference) but is the *wrong*
 role — `doc/spec/brand-override.md` documents `--zk-color-on-primary` as a token
@@ -131,17 +131,21 @@ the theme.
 *hit area*: the clickable `<button>` stays a 24×24 CSS-pixel box (WCAG 2.1 SC 2.5.8 Target
 Size Minimum — this is an accessibility **floor**, not a density choice, so it is not
 bound to the compact-mode ladder; see "Density" below) while only the centered 8px `::before`
-disc is visibly painted. Active vs. resting is carried by swapping which of the two overlay
-tokens is the fill and which is the ring: resting = `--zk-carousel-indicator-bg` fill +
-`--zk-carousel-indicator-active-bg` ring; active = the reverse. Reusing the same two knobs
-for both roles (rather than adding a third "ring color" knob) keeps the indicator's two
-states looking like inversions of one idea instead of four independent colors.
+disc is visibly painted. Resting = an 8px circle, `--zk-carousel-indicator-bg` fill (scrim) with a
+`--zk-carousel-indicator-ring` ring (inverse-on-surface). Active = a 22px pill
+(`--zk-shape-corner-full`) with a `--zk-carousel-indicator-active-bg` fill (primary) and a
+`--zk-carousel-indicator-active-ring` ring (on-primary). The old light-filled active dot looked
+hollow on light slides; a brand-coloured fill reads on both light and dark slides, and the
+pill shape marks the current slide without relying on colour alone. The 22px width keeps the
+pill inside the 24px hit area. `-indicator-active-bg` keeps its meaning as the active
+indicator's fill, so overriding it recolours the active pill; `-indicator-ring` only
+recolours the resting dots' ring. Inactive dots are unchanged from before the pill.
 
 **Indicator hover** cannot reuse the arrow's "darken the fill" recipe unmodified: an
 indicator's fill is *already* one of two different colors depending on active/resting
-state (scrim on resting, inverse-on-surface on active), so a single darker-fill hover knob
+state (scrim on resting, primary on active), so a single darker-fill hover knob
 would be correct for one state and wrong for the other — darkening an
-already-near-white active dot toward grey would read as "disabled," not "hovered."
+already-saturated active pill toward grey would read as "disabled," not "hovered."
 Instead, hover is carried by a **geometry** cue that works identically regardless of which
 fill is currently applied: the visible dot scales up (`transform: scale(1.25)` on
 `::before`, c30), transitioning on the same standard duration/easing pair as everything
@@ -149,7 +153,7 @@ else (c29). This is the same category of move as the arrow's own departure from 
 "currentColor state-layer" default (DESIGN.md §8's usual *mechanism*, not its intent) —
 the state-differs *requirement* (hover must be visually distinguishable from resting) is
 satisfied by whichever mechanism actually works for the component's specific color model,
-and a size cue is the one mechanism that is fill-color-agnostic by construction.
+and a size cue is the one mechanism that is fill-color-agnostic by construction. The active pill scales to about 28px on hover, 2px past each side of its 24px button; the button and `.z-carousel-indicators` are `overflow: visible`, so it is not clipped (accepted).
 
 **Caption label** (`.z-carouselitem-label`) is a small opaque-scrim **chip** anchored to
 the bottom-left of the slide (`--zk-spacing-4`, exactly matching ZK stock's 16px — no
@@ -239,9 +243,10 @@ rather than a `visual-goal: trivial` declaration.
 | c16 | `.z-carousel-indicator` | width / height (hit area) | `24px` (literal) | no | WCAG 2.1 SC 2.5.8 accessibility floor — see Cross-cutting §Density; not density-bound |
 | c17 | `.z-carousel-indicator::before` | width / height (visible dot) | `8px` (literal) | no | decorative sub-hit-area mark, not a themed role |
 | c18 | `.z-carousel-indicator::before` | background-color | `var(--zk-carousel-indicator-bg)` → `var(--zk-color-scrim)` | yes | `tokens/_colors.css` (see c7) |
-| c19 | `.z-carousel-indicator::before` | border-color | `var(--zk-carousel-indicator-active-bg)` → `var(--zk-color-inverse-on-surface)` | yes | ring is the *other* knob from the fill — see Design Contract. **Corrected** from `--zk-color-on-primary` |
-| c20 | `.z-carousel-indicator-active::before` | background-color | `var(--zk-carousel-indicator-active-bg)` → `var(--zk-color-inverse-on-surface)` | yes | DESIGN.md §2 — the defining state; brand-independent — see Design Contract. **Corrected** from `--zk-color-on-primary` |
-| c21 | `.z-carousel-indicator-active::before` | border-color | `var(--zk-carousel-indicator-bg)` → `var(--zk-color-scrim)` | yes | ring/fill swap, mirrors c18/c19 |
+| c19 | `.z-carousel-indicator::before` | border-color | `var(--zk-carousel-indicator-ring)` → `var(--zk-color-inverse-on-surface)` | yes | resting ring has its own knob — see Design Contract. **Corrected** from `--zk-color-on-primary` |
+| c20 | `.z-carousel-indicator-active::before` | background-color | `var(--zk-carousel-indicator-active-bg)` → `var(--zk-color-primary)` | yes | DESIGN.md §2 — the defining state; primary pill so it reads on light slides — see Design Contract |
+| c21 | `.z-carousel-indicator-active::before` | border-color | `var(--zk-carousel-indicator-active-ring)` → `var(--zk-color-on-primary)` | yes | ring contrasts with the primary fill, mirrors c18/c19 |
+| c21a | `.z-carousel-indicator-active::before` | width / border-radius | `22px` (literal) / `var(--zk-shape-corner-full)` | no | pill shape marks the active state without colour alone; stays inside the 24px hit area |
 | c22 | `.z-carousel-indicator:focus-visible` | outline | `var(--zk-focus-ring)` | yes | DESIGN.md §8 — global focus convention |
 | c23 | `.z-carouselitem-label` | background-color | `var(--zk-carousel-label-bg)` → `var(--zk-color-scrim)` | yes | `tokens/_colors.css` (see c7) |
 | c24 | `.z-carouselitem-label` | color | `var(--zk-carousel-label-fg)` → `var(--zk-color-inverse-on-surface)` | yes | `tokens/_colors.css`; brand-independent — see Design Contract. **Corrected** from `--zk-color-on-primary` |
@@ -328,22 +333,22 @@ than relying on positional selectors.
 ### Component Theme Variables
 ctv: shipped
 ctv-knobs: --zk-carousel-radius, --zk-carousel-arrow-bg, --zk-carousel-arrow-bg-hover,
-  --zk-carousel-arrow-fg, --zk-carousel-indicator-bg, --zk-carousel-indicator-active-bg,
-  --zk-carousel-label-bg, --zk-carousel-label-fg
+  --zk-carousel-arrow-fg, --zk-carousel-indicator-bg, --zk-carousel-indicator-ring,
+  --zk-carousel-indicator-active-bg, --zk-carousel-indicator-active-ring, --zk-carousel-label-bg, --zk-carousel-label-fg
 ctv-probe: { knob: --zk-carousel-arrow-fg, property: color, value: rgb(255, 0, 0) }
 
-Eight knobs covering every color role the Design Contract identifies: one shape knob
+Ten knobs covering every color role the Design Contract identifies: one shape knob
 (`-radius`, shared by the root frame **and** the caption chip — both are "containers" under
 DESIGN.md §5's container/control rule, so one knob moves both together; see c1/c27) and
-seven color knobs split three ways by overlay region (arrow / indicator /
+nine color knobs split three ways by overlay region (arrow / indicator /
 label), each region pairing a "dark voice" (defaults to `--zk-color-scrim`) with a "light
 voice" (defaults to `--zk-color-inverse-on-surface` — **corrected** from
 `--zk-color-on-primary`, which is brand-coupled; see Design Contract), except
 `-arrow-bg-hover` which is the one literal (non-token-rooted) default, matching the
-existing `--zk-grid-row-hover-bg`-style hover-literal precedent. The indicator ring color
-is **not** a separate knob — it is whichever of `-indicator-bg`/`-indicator-active-bg` is
-not the current fill (see Design Contract), so overriding either knob recolors both a fill
-and a ring somewhere in the component, by design. Hover/focus/disabled opacities and the
+existing `--zk-grid-row-hover-bg`-style hover-literal precedent. The indicator has four
+knobs, one per paint: `-indicator-bg` (resting fill), `-indicator-ring` (resting ring),
+`-indicator-active-bg` (active pill fill, primary) and `-indicator-active-ring` (active ring,
+on-primary); the active pair is the one place the overlay uses brand tokens. Hover/focus/disabled opacities and the
 chevron/dot geometry itself stay on base tokens or literal geometry, not knob-driven (same
 convention as button/input/rating) — the one exception is the indicator's hover cue
 (`transform: scale(1.25)`, c30), which is geometry rather than a color/opacity token
@@ -407,11 +412,12 @@ the existing global `--zk-focus-ring` override):
   to `.z-button` — carousel's arrow needs the same treatment under its own selector, since
   it is not itself `.z-button`.
 - **`selection`** — the indicator's active/resting distinction is carried *only* by which
-  of two overlay fills is currently applied (no shape, icon, or text difference) — the same
+  of two fills is currently applied (plus the pill shape of the active one; the fills still
+  need to differ) — the same
   pattern the existing guard already fixes for listbox/tree/paging/navitem rows (block
   "(2a)") and for slider's track/fill (block "(4)"). Both `::before` fill and its paired
-  ring color must be repointed or the active dot becomes indistinguishable from a resting
-  one once both force-map toward the same neutral.
+  ring color must be repointed or the active pill becomes indistinguishable from a resting
+  dot once both force-map toward the same neutral.
 
 **Why `.z-carouselitem-label` is deliberately not a third risk.** The caption chip also
 paints an unbordered `background-color`-only shape atop arbitrary imagery — structurally

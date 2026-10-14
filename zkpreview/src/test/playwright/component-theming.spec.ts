@@ -1652,16 +1652,16 @@ test.describe('Component Theme Variables', () => {
   // ── carousel (native, CE): full-bleed slideshow frame with overlay arrows/
   // indicators/caption atop arbitrary slide content — none of the overlay chrome
   // keys off surface/on-surface tokens. --zk-carousel-arrow-bg is the arrow's
-  // resting scrim fill; --zk-carousel-indicator-current-bg is the active
+  // resting scrim fill; --zk-carousel-indicator-active-bg is the active
   // indicator dot's fill (read off its ::before pseudo-element, not the button
   // itself). Renders in place (no client-side reparenting), so region scoping
   // works normally. ─────────────────────────────────────────────────────────
-  test('carousel — regional arrow-bg/indicator-current-bg override, sibling untouched', async ({ page }) => {
+  test('carousel — regional arrow-bg/indicator-active-bg override, sibling untouched', async ({ page }) => {
     const def = page.locator('.z-carousel').first();
     const scoped = page.locator('div[style*="--zk-carousel-arrow-bg"] .z-carousel').first();
 
     // Scoped carousel's arrow picks up the arrow-bg override; its active
-    // indicator dot picks up the indicator-current-bg override.
+    // indicator dot picks up the indicator-active-bg override.
     expect(await bgOf(scoped.locator('.z-carousel-arrow').first())).toBe(SCOPED_PURPLE);
     expect(await pseudoBgOf(scoped.locator('.z-carousel-indicator-active').first(), '::before')).toBe(SCOPED_PURPLE);
 

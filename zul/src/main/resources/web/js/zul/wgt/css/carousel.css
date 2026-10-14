@@ -241,7 +241,7 @@
     height: 8px;
     border-radius: 50%;
     background-color: var(--zk-carousel-indicator-bg);
-    border: 1px solid var(--zk-carousel-indicator-active-bg);
+    border: 1px solid var(--zk-carousel-indicator-ring);
     box-sizing: border-box;
     transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
                 background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
@@ -251,8 +251,8 @@
 .z-carousel-indicator-active::before {
     width: 22px;
     border-radius: var(--zk-shape-corner-full);
-    background-color: var(--zk-carousel-indicator-current-bg);
-    border-color: var(--zk-carousel-indicator-current-ring);
+    background-color: var(--zk-carousel-indicator-active-bg);
+    border-color: var(--zk-carousel-indicator-active-ring);
 }
 
 /* Hover is a geometry cue (scale), not a color change: the dot's fill is
