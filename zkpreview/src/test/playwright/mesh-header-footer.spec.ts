@@ -3,7 +3,8 @@ import { test, expect, Page } from '@playwright/test';
 // Guard for the Grid, Listbox and Tree header and footer CSS (ZK-6112, D11-D13):
 //  - the sort arrow is 12x12 in all three (grid.css gave Grid 14px through `.z-column [class*="z-icon-"]`);
 //  - the label box of a narrow sorted column stops short of the arrow, with and without a column-menu
-//    button and with an image in the header (Grid and Tree clip, Listbox wraps);
+//    button and with an image in the header (Grid, Listbox and Tree clip with an ellipsis);
+//  - a narrow Listbox header stays on one line, as tall as the Grid header;
 //  - a Tree header holding an image, an icon or the select-all box keeps the label centred on it and the
 //    header at the height the old flex layout gave it;
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
@@ -117,11 +118,20 @@ test.describe('mesh header and footer', () => {
       const arrowLeft = await page.locator(`${header} ${mesh.sortIcon}`)
         .evaluate((icon) => icon.getBoundingClientRect().left);
       // The box, not the text: it is what the header's padding-right reserves, so the result does not
-      // depend on how long the label is or whether the header wraps (Listbox) or clips (Grid, Tree).
+      // depend on how long the label is.
       const labelBoxRight = await page.locator(`${header} ${mesh.headerContent}`)
         .evaluate((content) => content.getBoundingClientRect().right);
       expect(arrowLeft - labelBoxRight, `label box right ${labelBoxRight}, arrow left ${arrowLeft}`)
         .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
+    });
+  }
+
+  for (const [listbox, grid] of [[LISTBOX, GRID], [LISTBOX_MENU, GRID_MENU]]) {
+    test(`${listbox.root}: the narrow sorted header stays on one line, as tall as the ${grid.root} header`, async ({ page }) => {
+      await open(page);
+      const headerHeight = (mesh: Mesh) => page.locator(sortedHeader(mesh))
+        .evaluate((header) => header.getBoundingClientRect().height);
+      expect(await headerHeight(listbox)).toBeCloseTo(await headerHeight(grid), 0);
     });
   }
 

@@ -58,12 +58,10 @@
     text-align: left;
     background-color: transparent;
     border-bottom: 1px solid var(--zk-listbox-border-color);
-    /* Allow long labels to wrap onto a second line so they never collide with
-       the absolute-positioned listheader-button. Per-cell padding-right below
-       still reserves slot for the button. */
-    white-space: normal;
-    overflow-wrap: anywhere;
-    word-break: normal;
+    /* One line, truncated with an ellipsis (see .z-listheader-content) like Grid and Tree. The
+       per-cell padding-right below reserves the slot of the absolute-positioned listheader-button
+       and the sort icon, so a long label never collides with them. */
+    white-space: nowrap;
     user-select: none;
     vertical-align: middle;
     position: relative;
@@ -71,8 +69,15 @@
     cursor: default;
 }
 
-/* Reserve right-side space for the hover-revealed listheader-button so wrapped
-   header text never collides with the icon slot. ZK nests the button inside
+/* Truncate the label inside the padded header; on .z-listheader the ellipsis would not apply
+   because the text is not a direct child. */
+.z-listheader-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Reserve right-side space for the hover-revealed listheader-button so the header text never
+   collides with the icon slot. ZK nests the button inside
    `.z-listheader-content`, so descendant `:has()` (no `>`) is required. */
 .z-listheader:has(.z-listheader-button) {
     padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
