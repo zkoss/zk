@@ -16,7 +16,9 @@ import { test, expect, Page } from '@playwright/test';
 //  - a Tree header holding only the select-all box in a 40px column shows the whole 16px box, at the x of the
 //    row checkbox, with no ellipsis (D15);
 //  - a Listbox header with a select-all box is as tall as the Grid header with the same labels, its labels sit
-//    at the same top offset and the box is centred on the label, on desktop and on a tablet (D16);
+//    at the same top offset and the painted box is centred on the label, on desktop and on a tablet (D16);
+//  - every checkmark Listbox header keeps its select-all box unclipped (`.z-listheader-content` does not
+//    overflow vertically) on the font-size of the header, so zkmax cannot size the glyph box of the span;
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -125,11 +127,21 @@ function registerSelectAllHeaderVersusGrid() {
     expect(Math.abs(first - second), `Name top ${first}, Type top ${second}`).toBeLessThanOrEqual(0.1);
   });
 
-  test('.mhf-listbox-vs-grid: the select-all box is centred on its label', async ({ page }) => {
+  test('.mhf-listbox-vs-grid: the painted select-all box is centred on its label', async ({ page }) => {
     await open(page);
     const header = '.mhf-listbox-vs-grid th.z-listheader:nth-child(1)';
-    const iconCentre = await page.locator(`${header} .z-listheader-icon`)
-      .evaluate((icon) => { const r = icon.getBoundingClientRect(); return (r.top + r.bottom) / 2; });
+    // The 16px glyph is the icon's ::before, which getBoundingClientRect cannot see. A zero-size marker in
+    // the icon gives the baseline the glyph hangs from; the glyph box is `vertical-align` below it.
+    const boxCentre = await page.locator(`${header} .z-listheader-icon`).evaluate((icon) => {
+      const marker = document.createElement('span');
+      marker.style.cssText = 'display:inline-block;width:0;height:0';
+      icon.appendChild(marker);
+      const baseline = marker.getBoundingClientRect().bottom;
+      marker.remove();
+      const glyph = getComputedStyle(icon, '::before');
+      const bottom = baseline - parseFloat(glyph.verticalAlign);
+      return bottom - parseFloat(glyph.height) / 2;
+    });
     const labelCentre = await page.locator(`${header} .z-listheader-content`).evaluate((el) => {
       const text = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
         acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
@@ -139,9 +151,32 @@ function registerSelectAllHeaderVersusGrid() {
       const rect = range.getBoundingClientRect();
       return (rect.top + rect.bottom) / 2;
     });
-    expect(Math.abs(iconCentre - labelCentre), `box centre ${iconCentre}, label centre ${labelCentre}`)
-      .toBeLessThanOrEqual(0.5);
+    expect(Math.abs(boxCentre - labelCentre), `box centre ${boxCentre}, label centre ${labelCentre}`)
+      .toBeLessThanOrEqual(TOLERANCE_PX);
   });
+}
+
+const CHECKMARK_LISTBOXES = ['.mhf-listbox-checkable', '.mhf-listbox-select-all-label', '.mhf-listbox-select-all-centre',
+  '.mhf-listbox-vs-grid'];
+
+// The select-all box must not be cut by the header content (overflow hidden) and the span must not be
+// resized by zkmax, which put the 16px glyph on a 24px baseline and clipped its bottom edge.
+function registerSelectAllBoxIsNotClipped() {
+  for (const root of CHECKMARK_LISTBOXES) {
+    test(`${root}: the select-all box is not clipped and the span keeps the header font-size`, async ({ page }) => {
+      await open(page);
+      const measured = await page.locator(`${root} th.z-listheader:nth-child(1)`).evaluate((th) => {
+        const content = th.querySelector('.z-listheader-content')!;
+        return {
+          scrollHeight: content.scrollHeight, clientHeight: content.clientHeight,
+          headerFontSize: getComputedStyle(th).fontSize,
+          boxFontSize: getComputedStyle(th.querySelector('.z-listheader-checkable')!).fontSize,
+        };
+      });
+      expect.soft(measured.scrollHeight, 'content clips the box vertically').toBeLessThanOrEqual(measured.clientHeight);
+      expect(measured.boxFontSize).toBe(measured.headerFontSize);
+    });
+  }
 }
 
 const sortedHeader = (mesh: Mesh) => `${mesh.root} ${mesh.header}:nth-child(${SORTED_COLUMN})`;
@@ -281,12 +316,12 @@ test.describe('mesh header and footer', () => {
   });
 
   registerSelectAllHeaderVersusGrid();
+  registerSelectAllBoxIsNotClipped();
 
   // Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs only it.
   test.describe('select-all header on a tablet @tablet', () => {
-    // Listbox headers are known to be taller than Grid and plain Listbox headers by 1.17px (desktop) and
-    // 1.67px (tablet); that is a separate issue, this guard only stops it from growing.
-    const MAX_HEADER_HEIGHT_OFFSET_PX = 2;
+    // A select-all Listbox header is as tall as a plain one; the tolerance only absorbs sub-pixel rounding.
+    const MAX_HEADER_HEIGHT_OFFSET_PX = 0.01;
 
     test('.mhf-listbox-select-all-label: the label starts at or after the right edge of the box', async ({ page }) => {
       await open(page);
@@ -306,6 +341,7 @@ test.describe('mesh header and footer', () => {
     });
 
     registerSelectAllHeaderVersusGrid();
+    registerSelectAllBoxIsNotClipped();
 
     test('.mhf-listbox-select-all-centre: the centred box lines up with the row checkbox', async ({ page }) => {
       await open(page);
