@@ -189,6 +189,37 @@ async function measureClipping(page: Page) {
       idx: number; tag: string; cls: string; offset: number; width: number;
       clipper: string | null; overflow: string; short: number;
     }[] = [];
+    const createsContainingBlock = (e: Element, includePositioned: boolean) => {
+      const s = getComputedStyle(e);
+      return (includePositioned && s.position !== 'static')
+        || s.transform !== 'none' || s.perspective !== 'none' || s.filter !== 'none'
+        || /\b(layout|paint|strict|content)\b/.test(s.contain)
+        || /\b(transform|perspective|filter)\b/.test(s.willChange);
+    };
+    /**
+     * The ancestors whose overflow can clip `el`: those on its containing-block chain.
+     * An absolutely positioned box is not clipped by an ancestor that sits between it and its
+     * containing block; a fixed box escapes every ancestor except a transformed one.
+     */
+    const clippingCandidates = (el: Element): Element[] => {
+      const chain: Element[] = [];
+      let box: Element = el;
+      while (box.parentElement && box.parentElement !== document.documentElement) {
+        const position = getComputedStyle(box).position;
+        let anchor: Element | null = box.parentElement;
+        if (position === 'absolute' || position === 'fixed') {
+          const includePositioned = position === 'absolute';
+          while (anchor && anchor !== document.documentElement
+                 && !createsContainingBlock(anchor, includePositioned)) {
+            anchor = anchor.parentElement;
+          }
+        }
+        if (!anchor || anchor === document.documentElement) break;
+        chain.push(anchor);
+        box = anchor;
+      }
+      return chain;
+    };
     for (const el of Array.from(document.querySelectorAll('[data-fs-idx]'))) {
       const cs = getComputedStyle(el);
       const width = parseFloat(cs.outlineWidth) || 0;
@@ -208,7 +239,7 @@ async function measureClipping(page: Page) {
       let clipper: string | null = null;
       let overflow = '';
       let short = 0;
-      for (let p = el.parentElement; p && p !== document.documentElement; p = p.parentElement) {
+      for (const p of clippingCandidates(el)) {
         const pcs = getComputedStyle(p);
         if (pcs.overflowX === 'visible' && pcs.overflowY === 'visible') continue;
         const pr = p.getBoundingClientRect();
