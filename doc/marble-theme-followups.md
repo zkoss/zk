@@ -703,3 +703,15 @@ Same in the 2026-09-11 and the refreshed captures; not regressions. Left as foun
 - **tbeditor toolbar icons are grey, not CanvasText** (about 5.7:1, still legible; thinner since the 14px icons of
   `829a6952f`).
 - **An invalid combobox draws its button as a separate double-bordered box** (cosmetic).
+
+## 45. Forced-colours separator: two edge cases left by the follow-up 42 fix (NS20 verification)
+
+Low; left as found (O10).
+
+- A `<separator bar="true"/>` with no spacing inside a horizontal toolbar is invisible in normal mode (`toolbar.css`
+  `.z-toolbar .z-separator { height: 0; flex: 1 }`), but under forced colours `bb04fc90aa` now draws a full-width 1px
+  line through the toolbar's middle. Decide which mode is right before changing either.
+- For a 1px bar with no spacing, the `::before` at `top: 50%` lands 0.5px down and paints in the row below the box (box at
+  y60, line at y61, Chromium/Firefox/WebKit); normal mode paints y60. The forced-colours guard screenshots only the bar's
+  own box, so it would see 0 rows if a no-spacing bar were added to `separator.zul`. The page's "Default spacing" bar
+  actually uses `spacing="8px"`, so the real default is not covered by the page or the guard.
