@@ -631,3 +631,15 @@ Found while measuring item 28 (NS14), the same at `aa8198f3d1` and with the gap 
   that is not a space), or build a checkmark `<listbox>` whose first cell is `<label value="Alice "/><a label="link"/>` next
   to one with `label="Alice"`.
 - Not fixed: outside NS14, left as found (O10).
+
+## 40. Listbox group rows are taller than Grid group rows (unverified, found in NS17)
+
+Seen in passing by the NS17 implementer while measuring item 4 of NS17 (last-row heights); not investigated.
+
+- Measured on an NS17 probe page (deleted): a Listbox `<listgroup>` row was 52.5px on desktop, 52.5px in compact and
+  64.5px on tablet, while a Grid `<group>` row was 37px on desktop and 41px on tablet. The probe's Listbox may have used
+  `org.zkoss.zul.listbox.groupSelect=true` (a checkbox in the group row), which could account for part of it.
+- Reproduce: a `<grid>` with `<group label="G"/>` and rows next to a `<listbox>` with `<listgroup label="G"/>` and
+  listitems, with and without `checkmark="true"` and groupSelect; compare `tr.z-group` with `tr.z-listgroup` in desktop,
+  compact (`data-density="compact"` on `<html>`) and tablet.
+- Next step: confirm the numbers on a clean page before deciding whether the two group rows should match (V6).
