@@ -713,6 +713,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<name>org.zkoss.theme.preferred</name>
 		<value>iceblue</value>
 	</library-property>
+	<!-- -Dzktest.theme=<name> overrides the theme above -->
+	<listener>
+		<listener-class>org.zkoss.zktest.http.ZKTestThemeWebAppInit</listener-class>
+	</listener>
 
 	<!-- B85-ZK-3527 -->
 	<!--<library-property>-->
