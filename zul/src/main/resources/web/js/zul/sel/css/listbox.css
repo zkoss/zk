@@ -544,6 +544,10 @@
     flex: none;
     width: auto;
     min-height: var(--zk-typescale-body-medium-line-height);
+    /* The gap of the cell content sits between this span and the next item and would move the text 4px right of
+       the header label: the span gives that gap up from its own padding, so the text stays on the keyline of the
+       header (NS14, D18). */
+    padding-inline-end: calc(var(--zk-spacing-3) - var(--zk-spacing-1));
 }
 
 .z-listitem-checkable > .z-listitem-icon {
@@ -610,9 +614,13 @@
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
+/* Every child of the flex row is a flex item, and a flex item drops the whitespace around its text, so the
+   space between an image and its label, or between a label and a link, is gone. The 4px gap of the Tree cell
+   content stands in for it (NS14, D18); text inside one label keeps its spaces. */
 .z-listcell:has(.z-listitem-checkable) > .z-listcell-content {
     display: flex;
     align-items: center;
+    gap: var(--zk-spacing-1);
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
     /* This cell holds a control, not clipping text. The default cell content is
@@ -621,6 +629,21 @@
        content box, so an `ellipsis` would paint a stray "…" to the right of the
        checkbox. Clip instead so no ellipsis renders. */
     text-overflow: clip;
+}
+
+/* A cell with `image=` is rendered as `<span class="z-listitem-checkable">…</span>&nbsp;<img …> label`. The
+   `&nbsp;` is a flex item of its own, so the gap is added twice before the image and the image would land one
+   gap right of the keyline: pull it back by one gap (NS14, D18). */
+.z-listitem-checkable + img {
+    margin-inline-start: calc(-1 * var(--zk-spacing-1));
+}
+
+/* A centred or end-aligned column does not follow the keyline, and its checkmark must stay where the header
+   box of the same column is: give the span back the symmetric padding it shares with the header span. */
+.z-listcell:has(.z-listitem-checkable):is([style*="text-align:right"], [style*="text-align: right"],
+    [style*="text-align:end"], [style*="text-align: end"], [style*="text-align:center"],
+    [style*="text-align: center"]) > .z-listcell-content > .z-listitem-checkable {
+    padding-inline-end: var(--zk-spacing-3);
 }
 
 /* A column's `align` is rendered as an inline text-align on the TD, which a flex row ignores: map it to

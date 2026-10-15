@@ -194,6 +194,28 @@
             <row><label value="Alice"/><label value="Engineering"/></row>
         </rows>
     </grid>
+    <!-- Other content in the first cell of a checkmark Listbox row (NS14, D18): the image, the label and the link are
+         flex items with a 4px gap and the text stays on the keyline of the header label. -->
+    <listbox sclass="mhf-listbox-first-cell" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Type" width="160px"/>
+        </listhead>
+        <listitem sclass="mhf-text-row"><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+        <listitem sclass="mhf-image-row"><listcell image="/web/img/received.png" label="With image"/><listcell label="Engineering"/></listitem>
+        <listitem sclass="mhf-inline-row"><listcell><label value="Alice "/><a label="link"/></listcell><listcell label="Engineering"/></listitem>
+    </listbox>
+    <grid sclass="mhf-grid-first-cell" width="360px">
+        <columns>
+            <column label="Name" width="160px"/>
+            <column label="Type" width="160px"/>
+        </columns>
+        <rows>
+            <row sclass="mhf-text-row"><label value="Alice"/><label value="Engineering"/></row>
+            <row sclass="mhf-image-row"><label value="With image"/><label value="Engineering"/></row>
+            <row sclass="mhf-inline-row"><label value="Alice link"/><label value="Engineering"/></row>
+        </rows>
+    </grid>
     <!-- A control in the first cell of a checkmark Listbox or Tree row: the row box stays centred on it, and the Listbox
          row is as tall as the Grid row below. -->
     <listbox sclass="mhf-listbox-control-row" width="360px" checkmark="true" multiple="true">

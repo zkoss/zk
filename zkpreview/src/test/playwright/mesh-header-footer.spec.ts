@@ -29,6 +29,9 @@ import { test, expect, Locator, Page } from '@playwright/test';
 //    row in compact density, where Tree has its own 36px row) in default, compact and tablet density, the
 //    painted box is centred on the label and on a control in the first cell within 1px, under the default type scale,
 //    a 16px/24px one and Arial, and on a tablet the box keeps its 24px height (follow-up 28);
+//  - the first cell of a checkmark Listbox row keeps its text, or its image when it has one, on the keyline of the
+//    header label and 4px between the image and its label and between a label and a link, in the same three
+//    densities and type scales (follow-up 28, D18);
 //  - an image-only header column that carries the column-menu button, at the documented minimum width (56px on
 //    desktop, 76px on a tablet, contracts/listbox.md), shows the whole 16px image clear of the button, and a
 //    select-all-only header at its minimum width (68px / 88px) paints the whole box inside the content box and clear of the
@@ -470,6 +473,92 @@ async function expectBoxCentredOn(page: Page, tr: Locator, icon: string, target:
   expect(Math.abs(box.centre - targetY), `box centre ${box.centre}, ${what} centre ${targetY}`).toBeLessThanOrEqual(TOLERANCE_PX);
 }
 
+const FIRST_CELL_ROOT = '.mhf-listbox-first-cell';
+const FIRST_CELL_GAP_MIN_PX = 3;
+const FIRST_CELL_GAP_MAX_PX = 5;
+
+interface FirstCellGeometry {
+  textLefts: number[];
+  textRights: number[];
+  imageLeft: number | null;
+  imageRight: number | null;
+  linkLeft: number | null;
+}
+
+// Horizontal positions in the content of a cell: where the glyphs of every non-blank text node start and end (a Range
+// from the first character that is not a space or a no-break space, as ZK renders `&nbsp;` before the text of a
+// cell and the header label), the image and the link.
+function firstCellGeometry(page: Page, contentSelector: string): Promise<FirstCellGeometry> {
+  return page.locator(contentSelector).first().evaluate((content) => {
+    const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) => (node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
+    });
+    const textRects: DOMRect[] = [];
+    for (let node = walker.nextNode() as Text | null; node; node = walker.nextNode() as Text | null) {
+      const range = document.createRange();
+      range.setStart(node, node.data.search(/[^\s\u00a0]/));
+      range.setEnd(node, node.length);
+      textRects.push(range.getBoundingClientRect());
+    }
+    const image = content.querySelector('img')?.getBoundingClientRect();
+    const link = content.querySelector('a')?.getBoundingClientRect();
+    return {
+      textLefts: textRects.map((rect) => rect.left),
+      textRights: textRects.map((rect) => rect.right),
+      imageLeft: image?.left ?? null,
+      imageRight: image?.right ?? null,
+      linkLeft: link?.left ?? null,
+    };
+  });
+}
+
+function expectGapBetween(gap: number, what: string) {
+  expect(gap, `${what} gap ${gap}`).toBeGreaterThanOrEqual(FIRST_CELL_GAP_MIN_PX);
+  expect(gap, `${what} gap ${gap}`).toBeLessThanOrEqual(FIRST_CELL_GAP_MAX_PX);
+}
+
+// Rows with an image or several inline items in the first cell (D18). Their items are flex items, which trim the
+// whitespace between them: the 4px gap stands in for it, and two compensations keep the text on the keyline.
+function registerCheckmarkFirstCell(prepare: (page: Page) => Promise<void>, inDensity: string) {
+  const headerTextLeft = async (page: Page) =>
+    (await firstCellGeometry(page, `${FIRST_CELL_ROOT} th.z-listheader .z-listheader-content`)).textLefts[0];
+  const rowGeometry = (page: Page, row: string) => firstCellGeometry(page, `${FIRST_CELL_ROOT} ${row} .z-listcell-content`);
+
+  test(`${FIRST_CELL_ROOT}: the text of a checkmark row is on the keyline of the header label in ${inDensity}`, async ({ page }) => {
+    await prepare(page);
+    const cell = await rowGeometry(page, '.mhf-text-row');
+    const header = await headerTextLeft(page);
+    expect(Math.abs(cell.textLefts[0] - header), `text left ${cell.textLefts[0]}, header text left ${header}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  test(`${FIRST_CELL_ROOT}: the image of a checkmark row is on the keyline and 4px from its label in ${inDensity}`,
+    async ({ page }) => {
+      await prepare(page);
+      const cell = await rowGeometry(page, '.mhf-image-row');
+      const header = await headerTextLeft(page);
+      expect(Math.abs(cell.imageLeft! - header), `image left ${cell.imageLeft}, header text left ${header}`).toBeLessThanOrEqual(TOLERANCE_PX);
+      expectGapBetween(cell.textLefts[0] - cell.imageRight!, 'image to label');
+    });
+
+  test(`${FIRST_CELL_ROOT}: a label and a link in a checkmark row are 4px apart in ${inDensity}`, async ({ page }) => {
+    await prepare(page);
+    const cell = await rowGeometry(page, '.mhf-inline-row');
+    expectGapBetween(cell.linkLeft! - cell.textRights[0], 'label to link');
+  });
+
+  for (const row of ['.mhf-text-row', '.mhf-image-row', '.mhf-inline-row']) {
+    test(`${FIRST_CELL_ROOT} ${row}: the row is as tall as the Grid row and the painted box is centred on the text in ${inDensity}`,
+      async ({ page }) => {
+        await prepare(page);
+        const listbox = await boxHeight(page, `${FIRST_CELL_ROOT} ${row}`);
+        const grid = await boxHeight(page, `.mhf-grid-first-cell ${row}`);
+        expect(Math.abs(listbox - grid), `listbox row ${listbox}, grid row ${grid}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+        await expectBoxCentredOn(page, page.locator(`${FIRST_CELL_ROOT} ${row}`).first(), '.z-listitem-icon',
+          { text: '.z-listcell-content' }, 'text');
+      });
+  }
+}
+
 // A checkmark row is as tall as the row without the box, and the painted box is centred on the label and on a control
 // in the first cell. Follow-up 28: `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox
 // line box; asymmetric margins that undid it only fitted Inter 13px/20px (NS13 F1).
@@ -523,6 +612,8 @@ function registerCheckmarkRowsMatchGrid(density: 'default' | 'compact' | 'tablet
         }
       }
     }
+
+    registerCheckmarkFirstCell(prepare, inDensity);
   }
 }
 
