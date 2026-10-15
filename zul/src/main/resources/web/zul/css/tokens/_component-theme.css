@@ -876,11 +876,12 @@
        JS-driven (zul.menu.Fisheye sets inline width/height on mousemove), so
        there is no hover/selected color state to expose — the knob surface is
        just the label text and the icon's corner radius. --zk-fisheye-fg is
-       the label text color; --zk-fisheye-radius is the icon image's
+       the label text color (on the inverse-surface tooltip chip, like
+       .z-slider-popup); --zk-fisheye-radius is the icon image's
        border-radius. No bg/border knob: .z-fisheyebar renders
        background: transparent by design — it's a floating dock overlay, not
        a card (same convention as stepbar's transparent root). */
-    --zk-fisheye-fg:     var(--zk-color-on-surface);
+    --zk-fisheye-fg:     var(--zk-color-inverse-on-surface);
     --zk-fisheye-radius: var(--zk-shape-corner-extra-small);
 
     /* ── Pdfviewer (PE, zkex) — PDF document viewer (zkex/pdfviewer/css/

@@ -636,6 +636,8 @@ shorter than the Grid row with the same control.
 
 ## 39. A checkmark Listbox row that starts with a `<label>` starts 3.7px left of the header text (pre-existing)
 
+**Closed, not filed** (owner ruling D20 in `doc/zkdemo-b6-marble-fixes.md`, 2026-10-16): the cause is `Listcell.ts` adding `&nbsp;` only after a `label=` text, shared code and the same in IceBlue (O2); left as ZK behaviour, no Jira.
+
 Found while measuring item 28 (NS14), the same at `aa8198f3d1` and with the gap fix, and the same before NS13 (NS14 round 2 verifier).
 
 - Measured, with `7f6cf9852a`: the first glyph of `<listcell><label value="Alice "/><a label="link"/> tail</listcell>`
@@ -914,4 +916,16 @@ The `ID | Product Name | Price` listbox (y≈4337-4496 in `listbox-header-galler
 57/228/82 (full text) and 56/225/82 (text truncated: "0…", "Super Long Product Name H…"); about 4,300px, within the 0.2%
 gallery tolerance, before and after NS24. The truncated state correlates with a later font `loadingdone`, so probably a
 font-load race in ZK's size-by-content measurement; not confirmed. The committed baseline holds the truncated state.
+
+## 58. Leftovers from the NS25 verification
+
+- Inside an inputgroup a focused combobox draws its input border 1px and its button border 2px (valid or invalid); the
+  group's `:focus` rule pins the input at 1px. Mentioned in item 55's finding, not addressed by its fix.
+- `waitForProgressmeterBars` (`forced-colors-gallery.spec.ts`) reads `aria-valuenow`, which za11y (EE) adds; without
+  za11y it returns at once. It also assumes the meter has no horizontal padding. Fine for zkpreview today.
+- A centred select-all header with the menu button cannot meet cm5 (header vs row box centre -10px at 68px, -16px at 88px
+  desktop, -20px at 88px tablet, the same before NS24); at 68px on tablet the header box is fully clipped
+  (`.z-listheader-content` 8px wide, `overflow: hidden`), below the documented 88px tablet minimum.
+- The input-invalid guards measured the focus colour at the first frame of a border transition, so a wrong focus colour
+  passed; fixed in `c3834f6ac5` (transitions disabled in the spec), proved by a lime focus mutation failing 5 guards.
 

@@ -33,14 +33,14 @@ The captcha may be surrounded by an inputgroup (label + textbox for the answer +
 
 | id | selector | property | expected | source |
 |----|----------|----------|----------|--------|
-| c1 | `img.z-captcha` | border | 1px solid rgba(0, 0, 0, 0.12) (subtle outline-variant) | DESIGN.md §11 |
-| c2 | `img.z-captcha` | border-radius | 4px | DESIGN.md §5 |
+| c1 | `img.z-captcha` | border | none (0px): the frame is the `frame` attribute, drawn inside the image by the CaptchaEngine | owner ruling 2026-10-16 (zkdemo B9 Z8, D1) |
+| c2 | `img.z-captcha` | border-radius | 0px (a radius clips the corners of the engine-drawn frame) | owner ruling 2026-10-16 (zkdemo B9 Z8, D1) |
 | c3 | `img.z-captcha` | display | inline-block OR block | infer |
 | c4 | `img.z-captcha` | background-color | rgb(255,255,255) | DESIGN.md §1 |
 | c5 | `img.z-captcha` | min-height | 39–48px (matches input rhythm so it lines up with the answer textbox beside it) | DESIGN.md §10 |
 
 ## States to evaluate
-- [ ] default rendered (image visible, wrapper bordered)
+- [ ] default rendered (image visible, no theme border; `frame="true"` shows exactly one frame line)
 - [ ] (no hover / focus / disabled states meaningful on an image)
 
 ## Notes for Generator

@@ -1247,7 +1247,7 @@ with no client-side reparenting, so region scoping works normally.
 
 | Knob | Default | Scope |
 |------|---------|-------|
-| `--zk-fisheye-fg` | `var(--zk-color-on-surface)` | label text |
+| `--zk-fisheye-fg` | `var(--zk-color-inverse-on-surface)` | label text (tooltip chip on `inverse-surface`) |
 | `--zk-fisheye-radius` | `var(--zk-shape-corner-extra-small)` | icon corners |
 
 ### Pdfviewer — shipped

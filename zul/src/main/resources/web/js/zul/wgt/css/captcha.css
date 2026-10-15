@@ -1,7 +1,9 @@
 @layer zk-components {
+/* No theme border or corner radius: the captcha's frame is the `frame` attribute,
+   which the CaptchaEngine draws inside the image (JHLabsCaptchaEngine drawRect). A
+   theme border doubled it as a rounded box around a square one, and the widget
+   (an empty zul.wgt.Image subclass) emits nothing CSS could key the frame state on. */
 .z-captcha {
     display: block;
-    border-radius: var(--zk-shape-corner-extra-small, 4px);
-    border: 1px solid var(--zk-color-outline-variant);
 }
 }

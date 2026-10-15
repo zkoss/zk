@@ -8,7 +8,7 @@
         <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
             <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
                 <div><label sclass="z-text-xs z-text-secondary" value="Toggle attach edge"/></div>
-                <checkbox label="AttachEdge bottom" onCheck='fsb.attachEdge=self.checked?"bottom":"top"' />
+                <checkbox label="AttachEdge bottom" checked="true" onCheck='fsb.attachEdge=self.checked?"bottom":"top"' />
             </div>
             <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
                 <div><label sclass="z-text-xs z-text-secondary" value="Toggle orientation"/></div>
