@@ -643,3 +643,16 @@ Seen in passing by the NS17 implementer while measuring item 4 of NS17 (last-row
   listitems, with and without `checkmark="true"` and groupSelect; compare `tr.z-group` with `tr.z-listgroup` in desktop,
   compact (`data-density="compact"` on `<html>`) and tablet.
 - Next step: confirm the numbers on a clean page before deciding whether the two group rows should match (V6).
+
+## 41. The Listbox group checkbox (groupSelect) has no box (found in NS17 verification)
+
+Seen by the NS17 verifier on a probe page; not investigated and not compared with IceBlue yet.
+
+- With `<custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>` on a `multiple="true" checkmark="true"` Listbox,
+  each `<listgroup>` renders `SPAN.z-listgroup-checkable.z-listgroup-checkbox` inside its first `.z-listcell-content`
+  (`Listcell.ts` `_colHtmlPre`). On desktop and tablet it paints as a bare small check glyph with no box, and a selected
+  group looks the same as an unselected one.
+- `listbox.css` has no rule for `.z-listgroup-checkable` / `.z-listgroup-icon` (the only one, which never matched, was
+  removed in `ea65737cc4`); only zkmax `tablet/_mesh.css` sizes it.
+- Next step: reproduce on a clean page, compare with IceBlue (O1), then decide whether it should share the listitem
+  checkbox look (V6).
