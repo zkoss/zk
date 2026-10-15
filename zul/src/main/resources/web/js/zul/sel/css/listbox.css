@@ -104,15 +104,12 @@
 
 .z-listheader-sort {
     cursor: pointer;
+    /* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 .z-listheader-sort:hover {
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
-}
-
-/* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
-.z-listheader-sort {
-    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* With the column-menu button as well, the sort icon sits just left of the button. */
