@@ -383,7 +383,17 @@
     .z-progressmeter-image  { background-color: Highlight; }
 
     /* Separator / space (bar="true") dividers — 1px hairlines */
-    .z-separator-horizontal-bar { background: linear-gradient(CanvasText, CanvasText) center / 100% 1px no-repeat; }
+    /* The horizontal bar is a gradient in normal mode (separator.css); forced colors computes
+       `background-image: none` and a transparent background-color, so the line is redrawn as a
+       centred 1px pseudo-element filled with a system colour, which survives. */
+    .z-separator-horizontal-bar { position: relative; }
+    .z-separator-horizontal-bar::before {
+        content: "";
+        position: absolute;
+        inset: 50% 0 auto;
+        height: 1px;
+        background-color: CanvasText;
+    }
     .z-separator-vertical-bar { background-color: CanvasText; }
 
     /* Slider / rangeslider / multislider — rail + active fill (thumbs bordered above) */

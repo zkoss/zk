@@ -210,6 +210,34 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(chevron).toBe(highlightText);
   });
 
+  test('horizontal separator bars paint a line (a gradient background is dropped under forced colors)', async ({ page }) => {
+    await page.goto('/separator.zul', { waitUntil: 'domcontentloaded' });
+    const bars = page.locator('.z-separator-horizontal-bar');
+    await bars.first().waitFor({ state: 'attached', timeout: 10000 });
+    await page.evaluate(() => document.fonts.ready);
+    const count = await bars.count();
+    expect(count, 'the page shows default and large-spacing bars').toBeGreaterThanOrEqual(2);
+    for (let i = 0; i < count; i++) {
+      // Read the PNG, not the computed style: the line is ink that must survive the palette swap.
+      const png = (await bars.nth(i).screenshot()).toString('base64');
+      const inkRows = await page.evaluate(async (b64) => {
+        const bitmap = await createImageBitmap(await (await fetch('data:image/png;base64,' + b64)).blob());
+        const canvas = document.createElement('canvas');
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+        const ctx = canvas.getContext('2d')!;
+        ctx.drawImage(bitmap, 0, 0);
+        const { data } = ctx.getImageData(0, 0, bitmap.width, bitmap.height);
+        const rows = new Set<number>();
+        for (let p = 0; p < data.length; p += 4) {
+          if (data[p] < 128 && data[p + 1] < 128 && data[p + 2] < 128) rows.add(Math.floor(p / 4 / bitmap.width));
+        }
+        return rows.size;
+      }, png);
+      expect(inkRows, `bar #${i} must paint exactly one dark 1px row`).toBe(1);
+    }
+  });
+
   test('datebox popup gains a border (box-shadow elevation is stripped)', async ({ page }) => {
     await page.goto('/datebox.zul', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.z-datebox-button', { timeout: 10000 });
