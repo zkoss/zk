@@ -374,11 +374,12 @@
     /* (3) Buttons have no border — add one so the shape is delineated against Canvas.
        The border is an inset ::after, not a real border: a real 1px border grew every
        borderless button by 2px (follow-up 31). Outlined and light buttons already own a real
-       border, which forced colors maps to a system colour. */
+       border, which forced colors maps to a system colour. :where() keeps the ::after rule
+       below the disabled one. */
     .z-button {
         border-color: ButtonText;
     }
-    .z-button:not([class*="z-button-outlined"]):not(.z-button-light)::after {
+    .z-button:where(:not([class*="z-button-outlined"]):not(.z-button-light))::after {
         content: "";
         position: absolute;
         inset: 0;

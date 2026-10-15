@@ -397,6 +397,19 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     }
   });
 
+  test('disabled buttons keep a GrayText border (own border or inset ::after)', async ({ page }) => {
+    await page.goto('/button.zul', { waitUntil: 'domcontentloaded' });
+    const disabled = page.locator('.z-button[disabled]');
+    await disabled.first().waitFor({ state: 'attached', timeout: 10000 });
+    const grayText = await systemColor(page, 'GrayText');
+    const borders = await disabled.evaluateAll(els => els.map(el => {
+      const own = getComputedStyle(el);
+      return parseFloat(own.borderTopWidth) >= 1 ? own.borderTopColor : getComputedStyle(el, '::after').borderTopColor;
+    }));
+    expect(borders.length).toBeGreaterThanOrEqual(5);
+    expect([...new Set(borders)]).toEqual([grayText]);
+  });
+
   // Follow-up 44a: listbox paging-bottom paints its glyph mask on the icon element itself.
   test('listbox paging-bottom icons are painted CanvasText (the mask sits on the element, not ::before)', async ({ page }) => {
     await page.goto('/listbox-header.zul', { waitUntil: 'domcontentloaded' });
