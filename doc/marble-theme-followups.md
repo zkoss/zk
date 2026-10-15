@@ -653,6 +653,6 @@ Seen by the NS17 verifier on a probe page; not investigated and not compared wit
   (`Listcell.ts` `_colHtmlPre`). On desktop and tablet it paints as a bare small check glyph with no box, and a selected
   group looks the same as an unselected one.
 - `listbox.css` has no rule for `.z-listgroup-checkable` / `.z-listgroup-icon` (the only one, which never matched, was
-  removed in `ea65737cc4`); only zkmax `tablet/_mesh.css` sizes it.
+  removed in `8a3d151566`); only zkmax `tablet/_mesh.css` sizes it.
 - Next step: reproduce on a clean page, compare with IceBlue (O1), then decide whether it should share the listitem
   checkbox look (V6).
