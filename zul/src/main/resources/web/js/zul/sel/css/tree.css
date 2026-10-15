@@ -395,7 +395,6 @@
     width: 16px;
     height: 16px;
     box-sizing: border-box;
-    vertical-align: -3px;
 }
 
 .z-treerow:hover .z-treerow-icon.z-icon-radio::before {

@@ -507,7 +507,6 @@
     width: 16px;
     height: 16px;
     box-sizing: border-box;
-    vertical-align: -3px;
 }
 
 .z-listitem:hover .z-listitem-icon.z-icon-radio::before {
