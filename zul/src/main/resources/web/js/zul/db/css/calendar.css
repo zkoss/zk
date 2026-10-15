@@ -244,11 +244,13 @@
  * Distinguished from `.z-calendar-outside` by a MD3 strike-through and a
  * `not-allowed` cursor. Outside-month days are merely de-emphasised (still
  * conceptually valid dates from a neighbouring month); disabled days are
- * actually forbidden (constraint="no past/future", min/max range, etc.). */
+ * actually forbidden (constraint="no past/future", min/max range, etc.).
+ * The cell must receive pointer events to show the cursor: Calendar.ts
+ * `_chooseDate` ignores a click on `.z-calendar-disabled`, and the `::before`
+ * rule below suppresses the hover disc. */
 .z-calendar-cell.z-calendar-disabled {
     color: var(--zk-color-disabled);
     cursor: not-allowed;
-    pointer-events: none;
     text-decoration: line-through;
     text-decoration-color: currentColor;
 }
