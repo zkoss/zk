@@ -85,8 +85,7 @@
    carries the attribute — root or region alike. The leaf rungs are overridden
    too (also literals) so the few components that read a rung directly
    (icon-button/FAB sizes, panel/window close buttons, header min-heights) follow
-   at any scope as well. See doc/spec/data-dense-mode.md.
-   Values mirror doc/marble-compact.css. */
+   at any scope as well. See doc/spec/data-dense-mode.md. */
 [data-density="compact"] {
     /* leaf rungs (read directly by a few components) */
     --zk-control-height-xs: 24px;

@@ -226,6 +226,8 @@
     padding: 0;
     border: 0;
     background: transparent;
+    /* A <button> does not inherit the font from its container. */
+    font-family: var(--zk-typescale-font-family);
     cursor: pointer;
     display: flex;
     align-items: center;
