@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, devices, type Page } from '@playwright/test';
 
 // Regression guard for the forced-colors / Windows High-Contrast a11y layer
 // (GAP 5 — see doc/spec/forced-colors.md). Runs under the `forced-colors`
@@ -20,6 +20,36 @@ import { test, expect } from '@playwright/test';
 // Requires the preview app on ${PREVIEW_URL}
 //   withjdk.sh 17 mvn test exec:java@preview-app
 // Run: npm run test:forced-colors   (or: playwright test --project=forced-colors)
+
+// Resolves a CSS system colour keyword to the computed rgb() string under the emulated palette.
+async function systemColor(page: Page, keyword: string): Promise<string> {
+  return page.evaluate(kw => {
+    const probe = document.createElement('span');
+    probe.style.color = kw;
+    document.body.appendChild(probe);
+    const resolved = getComputedStyle(probe).color;
+    probe.remove();
+    return resolved;
+  }, keyword);
+}
+
+// Counts the distinct rows of a PNG that hold dark ink (r, g and b all below 128).
+async function darkInkRows(page: Page, png: Buffer): Promise<number> {
+  return page.evaluate(async b64 => {
+    const bitmap = await createImageBitmap(await (await fetch('data:image/png;base64,' + b64)).blob());
+    const canvas = document.createElement('canvas');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    const ctx = canvas.getContext('2d')!;
+    ctx.drawImage(bitmap, 0, 0);
+    const { data } = ctx.getImageData(0, 0, bitmap.width, bitmap.height);
+    const rows = new Set<number>();
+    for (let p = 0; p < data.length; p += 4) {
+      if (data[p] < 128 && data[p + 1] < 128 && data[p + 2] < 128) rows.add(Math.floor(p / 4 / bitmap.width));
+    }
+    return rows.size;
+  }, png.toString('base64'));
+}
 
 test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   // Emulate WHCM at runtime. This CDP-backed call (Emulation.setEmulatedMedia)
@@ -92,8 +122,10 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   test('buttons are delineated by a border', async ({ page }) => {
     await page.goto('/button.zul', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.z-button', { timeout: 10000 });
-    const style = await page.locator('.z-button').first().evaluate(el => getComputedStyle(el).borderTopStyle);
-    expect(style).toBe('solid');
+    // A borderless button draws its border on an inset ::after (follow-up 31); an outlined one keeps its own.
+    const styles = await page.locator('.z-button').first().evaluate(el =>
+      [getComputedStyle(el).borderTopStyle, getComputedStyle(el, '::after').borderTopStyle]);
+    expect(styles).toContain('solid');
   });
 
   // --- tail coverage (the 27 audited components); a representative case per bucket ---
@@ -309,5 +341,176 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     // margin. WHCM strips box-shadow / remaps colors but never touches margins, so the
     // separation must be byte-identical to normal mode (12px, matching the timebox).
     await expect(tz).toHaveCSS('margin-top', '12px');
+  });
+  // Follow-up 31: the forced-colors button border must not change the button's box.
+  const IPAD_USER_AGENT =
+    'Mozilla/5.0 (iPad; CPU OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1';
+
+  async function expectButtonBoxesUnchangedByForcedColors(page: Page, density: 'default' | 'compact') {
+    await page.goto('/button.zul', { waitUntil: 'domcontentloaded' });
+    await page.locator('.z-button').first().waitFor({ state: 'attached', timeout: 10000 });
+    await page.evaluate(() => document.fonts.ready);
+    if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+    const sizes = () => page.evaluate(() => [...document.querySelectorAll('.z-button')].map(b => {
+      const { width, height } = b.getBoundingClientRect();
+      return `${b.className}: ${width.toFixed(2)}x${height.toFixed(2)}`;
+    }));
+    await page.emulateMedia({ forcedColors: 'none' });
+    const normal = await sizes();
+    await page.emulateMedia({ forcedColors: 'active' });
+    const forced = await sizes();
+    expect(normal.length, 'the button page shows many variants').toBeGreaterThanOrEqual(20);
+    expect(forced).toEqual(normal);
+    // The border is the affordance: every button keeps a 1px one, either its own or the inset ::after.
+    const unbordered = await page.evaluate(() => [...document.querySelectorAll('.z-button')].filter(b => {
+      const own = parseFloat(getComputedStyle(b).borderTopWidth);
+      const inset = parseFloat(getComputedStyle(b, '::after').borderTopWidth);
+      return own < 1 && !(inset >= 1);
+    }).map(b => b.className));
+    expect(unbordered, 'buttons without a visible border').toEqual([]);
+  }
+
+  test('button box is the same size as in normal mode (default density)', async ({ page }) => {
+    await expectButtonBoxesUnchangedByForcedColors(page, 'default');
+  });
+
+  test('button box is the same size as in normal mode (compact density)', async ({ page }) => {
+    await expectButtonBoxesUnchangedByForcedColors(page, 'compact');
+  });
+
+  test('button box is the same size as in normal mode (tablet)', async ({ browser }) => {
+    const context = await browser.newContext({
+      ...devices['Desktop Chrome'],
+      viewport: { width: 834, height: 1112 },
+      userAgent: IPAD_USER_AGENT,
+      hasTouch: true,
+      isMobile: true,
+    });
+    const page = await context.newPage();
+    try {
+      await expectButtonBoxesUnchangedByForcedColors(page, 'default');
+      const tabletSheet = await page.evaluate(() =>
+        [...document.styleSheets].some(sheet => sheet.href?.includes('zkmax/css/tablet.css')));
+      expect(tabletSheet, 'the tablet stylesheet must be active, or this runs the desktop CSS').toBe(true);
+    } finally {
+      await context.close();
+    }
+  });
+
+  // Follow-up 44a: listbox paging-bottom paints its glyph mask on the icon element itself.
+  test('listbox paging-bottom icons are painted CanvasText (the mask sits on the element, not ::before)', async ({ page }) => {
+    await page.goto('/listbox-header.zul', { waitUntil: 'domcontentloaded' });
+    const icons = page.locator('.z-listbox-paging-bottom .z-paging-button:not([disabled]) .z-paging-icon');
+    await icons.first().waitFor({ state: 'attached', timeout: 10000 });
+    const canvasText = await systemColor(page, 'CanvasText');
+    const fills = await icons.evaluateAll(els => els.map(el => getComputedStyle(el).backgroundColor));
+    expect(fills.length, 'the listbox shows enabled paging icons').toBeGreaterThanOrEqual(1);
+    expect(fills.every(fill => fill === canvasText), `icon fills ${JSON.stringify(fills)} must all be ${canvasText}`).toBe(true);
+  });
+
+  // Follow-up 44b: a disabled paging button must not look like an enabled one.
+  // The glyph is the icon's ::before (default mold) or the icon element itself (listbox paging-bottom).
+  // The OS mold draws its glyph on the button's ::after but never renders a disabled button.
+  const pagingGlyphFills = (page: Page, selector: string) => page.locator(selector).evaluateAll(buttons =>
+    buttons.map(button => {
+      const icon = button.querySelector('[class*="z-icon-"]')!;
+      return getComputedStyle(icon, button.closest('.z-listbox-paging-bottom') ? null : '::before').backgroundColor;
+    }));
+
+  test('disabled paging glyphs are GrayText, enabled ones CanvasText (default mold, listbox)', async ({ page }) => {
+    const grayText = await systemColor(page, 'GrayText');
+    const canvasText = await systemColor(page, 'CanvasText');
+    expect(grayText, 'the palette must tell the two apart').not.toBe(canvasText);
+
+    await page.goto('/paging.zul', { waitUntil: 'domcontentloaded' });
+    await page.locator('.z-paging-button[disabled]').first().waitFor({ state: 'attached', timeout: 10000 });
+    const disabled = await pagingGlyphFills(page, '.z-paging:not(.z-paging-os) .z-paging-button[disabled]');
+    const enabled = await pagingGlyphFills(page, '.z-paging:not(.z-paging-os) .z-paging-button:not([disabled]):not(.z-paging-selected)');
+    expect(disabled.length, 'the page shows disabled paging buttons').toBeGreaterThanOrEqual(1);
+    expect(enabled.length, 'the page shows enabled paging buttons').toBeGreaterThanOrEqual(1);
+    expect(disabled.every(c => c === grayText), `disabled glyphs ${JSON.stringify(disabled)} must be ${grayText}`).toBe(true);
+    expect(enabled.every(c => c === canvasText), `enabled glyphs ${JSON.stringify(enabled)} must be ${canvasText}`).toBe(true);
+
+    await page.goto('/listbox-header.zul', { waitUntil: 'domcontentloaded' });
+    await page.locator('.z-listbox-paging-bottom .z-paging-button[disabled]').first().waitFor({ state: 'attached', timeout: 10000 });
+    const listboxDisabled = await pagingGlyphFills(page, '.z-listbox-paging-bottom .z-paging-button[disabled]');
+    expect(listboxDisabled.every(c => c === grayText), `listbox disabled glyphs ${JSON.stringify(listboxDisabled)} must be ${grayText}`).toBe(true);
+  });
+
+  // Follow-up 44c: a caption inside the selected accordion tab sets its own text colour.
+  test('caption text in a selected accordion tab is HighlightText', async ({ page }) => {
+    await page.goto('/tabbox-misc.zul', { waitUntil: 'domcontentloaded' });
+    const content = page.locator('.z-tabbox-accordion .z-tab.z-tab-selected .z-caption-content');
+    await content.first().waitFor({ state: 'attached', timeout: 10000 });
+    const highlightText = await systemColor(page, 'HighlightText');
+    const colors = await page.locator(
+      '.z-tabbox-accordion .z-tab.z-tab-selected .z-caption-content, .z-tabbox-accordion .z-tab.z-tab-selected .z-caption-label',
+    ).evaluateAll(els => els.map(el => getComputedStyle(el).color));
+    expect(colors.length).toBeGreaterThanOrEqual(1);
+    expect(colors.every(c => c === highlightText), `caption colours ${JSON.stringify(colors)} must be ${highlightText}`).toBe(true);
+  });
+
+  // Follow-up 44d: an invalid daterangebox shows the same double border as the other inputs.
+  test('invalid daterangebox shows the double border', async ({ page }) => {
+    await page.goto('/pv/daterangebox-content.zul', { waitUntil: 'domcontentloaded' });
+    const invalid = page.locator('.z-daterangebox.z-daterangebox-invalid');
+    await expect(invalid).toHaveCount(2);   // the class arrives through an AuInvoke after mount (ZK-6133 workaround)
+    const borders = await invalid.evaluateAll(els => els.map(el => {
+      const cs = getComputedStyle(el);
+      return `${cs.borderTopStyle} ${cs.borderTopWidth}`;
+    }));
+    expect(borders).toEqual(['double 3px', 'double 3px']);
+  });
+
+  // Follow-up 44e: tbeditor SVG glyphs carry opacity 0.6 on a solid fill; the fill already maps to
+  // CanvasText, so the opacity alone turns the icons grey.
+  test('tbeditor toolbar glyphs are fully opaque', async ({ page }) => {
+    await page.goto('/tbeditor.zul', { waitUntil: 'domcontentloaded' });
+    const icons = page.locator('.z-tbeditor-button-pane svg');
+    await icons.first().waitFor({ state: 'attached', timeout: 10000 });
+    const opacities = await icons.evaluateAll(els => els.map(el => getComputedStyle(el).opacity));
+    expect(opacities.length).toBeGreaterThanOrEqual(5);
+    expect([...new Set(opacities)], 'every toolbar glyph must be fully opaque').toEqual(['1']);
+  });
+
+  // Follow-up 44f: the combobox splits one outline between input and button; the double border
+  // must not close the seam, or the button draws as a second double-bordered box.
+  test('invalid combobox is one double-bordered box (the input/button seam stays open)', async ({ page }) => {
+    await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
+    const combo = page.locator('.z-combobox.z-combobox-invalid:has(.z-combobox-input:not(.z-combobox-input-full)) ').first();
+    await combo.waitFor({ state: 'visible', timeout: 10000 });
+    const seam = await combo.evaluate(el => {
+      const input = getComputedStyle(el.querySelector('.z-combobox-input')!);
+      const button = getComputedStyle(el.querySelector('.z-combobox-button')!);
+      return {
+        inputLeft: input.borderLeftStyle, inputRight: input.borderRightStyle,
+        buttonLeft: button.borderLeftStyle, buttonRight: button.borderRightStyle,
+        inputTop: input.borderTopStyle, buttonTop: button.borderTopStyle,
+      };
+    });
+    expect(seam).toEqual({
+      inputLeft: 'double', inputRight: 'none', buttonLeft: 'none', buttonRight: 'double',
+      inputTop: 'double', buttonTop: 'double',
+    });
+  });
+
+  // Follow-up 45 F2: a no-spacing bar is a 1px box; the line must paint inside it, not in the row below.
+  test('a no-spacing horizontal separator bar paints its line inside its own 1px box', async ({ page }) => {
+    await page.goto('/separator.zul', { waitUntil: 'domcontentloaded' });
+    const source = page.locator('.z-separator-horizontal-bar').first();
+    await source.waitFor({ state: 'attached', timeout: 10000 });
+    await page.evaluate(() => document.fonts.ready);
+    // The page's bars all carry a spacing; clone one and drop the inline height to get the default bar.
+    await source.evaluate(el => {
+      const bar = el.cloneNode(true) as HTMLElement;
+      bar.removeAttribute('id');
+      bar.removeAttribute('style');
+      bar.setAttribute('data-probe', 'no-spacing-bar');
+      el.parentElement!.appendChild(bar);
+    });
+    const bar = page.locator('[data-probe="no-spacing-bar"]');
+    expect((await bar.boundingBox())!.height, 'the default bar is a 1px box').toBe(1);
+    const inkRows = await darkInkRows(page, await bar.screenshot());
+    expect(inkRows, 'the 1px box must hold exactly one dark row').toBe(1);
   });
 });

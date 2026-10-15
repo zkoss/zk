@@ -151,10 +151,22 @@
     .z-doublespinner:has(.z-doublespinner-invalid),
     .z-doublespinner.z-doublespinner-invalid,
     .z-bandbox.z-bandbox-invalid,
+    .z-daterangebox.z-daterangebox-invalid,
     .z-combobox.z-combobox-invalid .z-combobox-input,
     .z-combobox.z-combobox-invalid .z-combobox-button {
         border-style: double;
         border-width: 3px;
+    }
+
+    /* (1c-combobox) The combobox splits one outline between the input and the button
+       (input has no right border, button no left border). The double border above must keep
+       that seam open, or the button draws as a second double-bordered box beside the input.
+       A hidden button leaves the input full width with its own right border, so it is excluded. */
+    .z-combobox.z-combobox-invalid .z-combobox-input:not(.z-combobox-input-full) {
+        border-right-style: none;
+    }
+    .z-combobox.z-combobox-invalid .z-combobox-button {
+        border-left-style: none;
     }
 
     /* (2a) Selected rows lose their primary-container tint → map to the system
@@ -226,6 +238,12 @@
     .z-searchbox-selected,
     .z-orgitem-selected > .z-orgnode {
         forced-color-adjust: none;
+    }
+
+    /* (2a caption) A caption inside the selected accordion tab sets its own text colour, and the
+       opt-out above leaves that authored colour (black) on the Highlight fill. */
+    .z-tabbox-accordion .z-tab.z-tab-selected .z-caption-content {
+        color: HighlightText;
     }
 
     /* (2a-tab) Tab active indicator is a painted bar (background-color); forced-colors
@@ -310,6 +328,26 @@
         background-color: CanvasText;
     }
 
+    /* (2e-cont) Listbox paging-bottom paints the glyph mask on the icon element itself, so
+       (2d)'s ::before path leaves its background at the translucent theme value. */
+    .z-listbox-paging-bottom .z-paging-icon {
+        background-color: CanvasText;
+    }
+
+    /* (2e-disabled) A disabled paging button keeps its CanvasText glyph from (2d)/(2e), so it
+       reads as enabled. GrayText matches the label colour the component CSS already gives it.
+       Listed after (2d)/(2e) at equal or higher specificity so it wins. */
+    .z-paging-button[disabled] [class*="z-icon-"]::before,
+    .z-listbox-paging-bottom .z-paging-button[disabled] .z-paging-icon {
+        background-color: GrayText;
+    }
+
+    /* tbeditor toolbar glyphs are SVG with `opacity: 0.6` on a solid fill; the fill maps to
+       CanvasText, so the opacity alone turns the icons grey. */
+    .z-tbeditor-button-pane svg {
+        opacity: 1;
+    }
+
     /* dnd drop glyph (.z-drop-icon): per-state rules set a light color for the dark
        ghost chip; in forced-colors the chip flattens to Canvas → light-on-white. Match
        that specificity and repaint. forced-color-adjust:none is required — Chromium
@@ -333,13 +371,28 @@
         forced-color-adjust: none;
     }
 
-    /* (3) Buttons have no border — add one so the shape is delineated against Canvas. */
+    /* (3) Buttons have no border — add one so the shape is delineated against Canvas.
+       The border is an inset ::after, not a real border: a real 1px border grew every
+       borderless button by 2px (follow-up 31). Outlined and light buttons already own a real
+       border, which forced colors maps to a system colour. */
     .z-button {
+        border-color: ButtonText;
+    }
+    .z-button:not([class*="z-button-outlined"]):not(.z-button-light)::after {
+        content: "";
+        position: absolute;
+        inset: 0;
         border: 1px solid ButtonText;
+        border-radius: inherit;
+        pointer-events: none;
     }
     .z-button[disabled],
     .z-button.z-button-disabled {
         color: GrayText;
+        border-color: GrayText;
+    }
+    .z-button[disabled]::after,
+    .z-button.z-button-disabled::after {
         border-color: GrayText;
     }
 
@@ -385,12 +438,13 @@
     /* Separator / space (bar="true") dividers — 1px hairlines */
     /* The horizontal bar is a gradient in normal mode (separator.css); forced colors computes
        `background-image: none` and a transparent background-color, so the line is redrawn as a
-       centred 1px pseudo-element filled with a system colour, which survives. */
+       centred 1px pseudo-element filled with a system colour, which survives.
+       The -0.5px keeps the line inside a 1px box: at plain 50% it lands on the row below. */
     .z-separator-horizontal-bar { position: relative; }
     .z-separator-horizontal-bar::before {
         content: "";
         position: absolute;
-        inset: 50% 0 auto;
+        inset: calc(50% - 0.5px) 0 auto;
         height: 1px;
         background-color: CanvasText;
     }
