@@ -471,6 +471,23 @@ runs under the default, a 16px/24px and an Arial type scale in all three densiti
 message: the pre-fix offsets of the box above a textbox and a button re-measure 0.5px lower, 10 / 8px on desktop and
 14 / 12px on a tablet (it says 10.5 / 8.5 and 14.5 / 12.5).
 
+**First-cell spacing (NS14, D18)** in zk `7f6cf9852a`: the flex row of `aa8198f3d1` trimmed the whitespace around each
+child of the first cell (`<listcell image="…" label="…"/>` showed the image touching the label, `<label value="Alice "/><a
+label="link"/>` showed "Alicelink"). `listbox.css` adds `gap: var(--zk-spacing-1)` to the cell content, a 4px shorter
+end padding on `.z-listitem-checkable` and a `-4px` start margin on `.z-listitem-checkable + img`, so the text and the image
+stay on the header keyline and the rows keep Grid height. One rule beyond the owner's three: a centred or end-aligned
+column keeps the symmetric 12px padding, as the shorter padding moved the box 2px from the header box
+(`.mhf-listbox-select-all-centre`, tablet). Side effects accepted by the owner, and stacked block content unsupported:
+`doc/contracts/listbox.md`, "Checkmark column". Guards: `registerCheckmarkFirstCell` in `mesh-header-footer.spec.ts`.
+
+**First-cell spacing, round 2 (NS14, D18)** in zk `b535d283aa`: the verifier measured that the extra rule for centred and
+end-aligned columns moved the box of rows with an image, a `<label>` plus a link or a `label=` text 2px (centred) or 4px
+(right-aligned) left of the pre-NS13 position. The rule is narrowed to `.z-listitem-checkable:last-child`: the
+checkbox-only cell stays under the header box, an image or component cell is back within 0.5px of pre-NS13. A `label=` cell
+is indistinguishable from a checkbox-only one in CSS (they differ by a text node) and keeps the 2px / 4px shift, accepted to
+protect the common narrow checkbox column (`doc/contracts/listbox.md`, rule 4). New desktop and tablet guard:
+`registerCheckmarkBoxInAlignedFirstColumn` (cm11, cm12).
+
 Found while verifying zkdemo NS10 (`doc/zkdemo-b6-marble-fixes.md`, D16); deferred under O10.
 
 - Measured: 53.45 / 33.45 / 61.95px (desktop / compact / tablet) against Grid 52 / 32 / 60.
@@ -598,3 +615,19 @@ shorter than the Grid row with the same control.
   holds `<textbox value="Alice"/>` or `<button label="Go"/>` and compare `tr.z-treerow` with `tr.z-row`.
 - Not touched by the NS13 F1 rework: the checkmark Tree row keeps the height of a Tree row without a checkmark.
   Left as found (O10).
+
+## 39. A checkmark Listbox row that starts with a `<label>` starts 3.7px left of the header text (pre-existing)
+
+Found while measuring item 28 (NS14), the same at `aa8198f3d1` and with the gap fix, and the same before NS13 (NS14 round 2 verifier).
+
+- Measured, with `7f6cf9852a`: the first glyph of `<listcell><label value="Alice "/><a label="link"/> tail</listcell>`
+  is 3.72px (Chromium), 3.73px (Firefox) and 3.00px (WebKit) left of the first glyph of the header label, at 13px and at
+  16px type. A cell with `label="Alice link tail"` is on the header glyph (-0.06px). Before NS13 the offset is the same:
+  DOM -3.72 (Chromium), -3.73 (Firefox), -3.00 (WebKit); on the PNG -4.5px at 13px and -4px at 16px.
+- Cause: ZK renders both the header label and a `label=` cell as `&nbsp;` followed by the text, so their glyphs start one
+  space (3.66px) after the span, while a `<label>` component has no `&nbsp;` in front of it.
+- Reproduce: `/web/pv/mesh-header-footer-guard.zul`, compare the first glyph of `.mhf-listbox-first-cell .mhf-inline-row
+  .z-listcell-content` with `.mhf-listbox-first-cell th.z-listheader .z-listheader-content` (a Range from the first character
+  that is not a space), or build a checkmark `<listbox>` whose first cell is `<label value="Alice "/><a label="link"/>` next
+  to one with `label="Alice"`.
+- Not fixed: outside NS14, left as found (O10).

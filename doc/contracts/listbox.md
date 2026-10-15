@@ -53,6 +53,56 @@ single-selection checkmark case.
 "Sorting and Resizable Headers" section of `listbox-header.zul` (narrow `width="40px"`
 checkbox column with empty `<listcell/>` first cells).
 
+**The first cell is a flex row (NS14, D18, 2026-10-15).** `.z-listcell:has(.z-listitem-checkable) > .z-listcell-content`
+is a flex row with `align-items: center`, so the row box shares its centre line with the label or the control in every
+font. Each child of the cell is a flex item and drops the whitespace around its text, so:
+
+- `gap: var(--zk-spacing-1)` (4px, as the Tree cell content) stands in for the space between an image and its label
+  (`<listcell image="…" label="…"/>`) and between inline components (`<label value="Alice "/><a label="link"/>`).
+  Text inside one label keeps its spaces (3.64px at 13px).
+- Two compensations keep the text on the keyline of the header label (the glyphs, not the `&nbsp;` before them):
+  `.z-listitem-checkable` ends its padding 4px early (`--zk-spacing-3` minus `--zk-spacing-1`), so the gap does not push
+  the text right; and `.z-listitem-checkable + img` has a `-4px` start margin, because ZK emits
+  `<span class="z-listitem-checkable">…</span>&nbsp;<img …> label` and the `&nbsp;` is a flex item of its own, so the gap is
+  added twice before the image.
+- Rule 4, centred and end-aligned columns (NS14 round 2, b535d283aa): in a centred or right-aligned first column, a span
+  that is the last child of the cell content (`.z-listitem-checkable:last-child`) gets its symmetric 12px padding back, so
+  the box of a checkbox-only row stays at the x of the header box (without it +2px centred, +4px right-aligned).
+  `:last-child` ignores text nodes, so an image or a component after the span keeps the compensation and stays within
+  0.5px of where it was before NS13 (-0.17px centred, -0.35px right-aligned). CSS cannot tell a checkbox-only cell from a
+  `label=` cell (they differ only by a text node), so a `label=` row takes rule 4 too. Cost, accepted to keep the common
+  narrow checkbox-only column aligned with its header: in a centred first column the box of a `label=` row sits 2px left of
+  where it was before NS13 (its text 2px right), and in a right-aligned first column 4px left.
+- Accepted side effects (owner ruling D18): two adjacent items that were laid out without a space
+  (`<label value="$"/><label value="100"/>`) are now 4px apart; an item that ends in `&#160;` followed by another is
+  3.66 + 4 = 7.66px apart.
+- Not supported: stacked block content in that cell (two `<div>`s, a `vlayout`) becomes a row of items. It is not
+  engineered for and has no guard.
+- Measured (`measure` run of NS14, Chromium / Firefox / WebKit, desktop, compact and tablet, 13px/20px and 16px/24px):
+  rows equal the Grid row, the box is 0 off the text, a textbox and a button (WebKit up to 0.02), the image and the
+  text start -0.08 to 0.78px from the header glyphs (WebKit 0 to 1.5px, its `&nbsp;` is 0.5px wider), the image-to-label
+  and label-to-link gaps are 4px.
+
+| id | check | selector | property | expected | method |
+|----|-------|----------|----------|----------|--------|
+| cm7 | text of a checkmark row on the header keyline | `.mhf-listbox-first-cell .mhf-text-row .z-listcell-content` vs `th.z-listheader .z-listheader-content` | left of the first glyph | within ±1px | Range from the first non-space character |
+| cm8 | image of a checkmark row on the header keyline | `.mhf-image-row .z-listcell-content img` vs the header label | left | within ±1px | getBoundingClientRect, Range |
+| cm9 | gaps in the first cell | `.mhf-image-row` image to label, `.mhf-inline-row` label to link | distance | 3 to 5px | Range, getBoundingClientRect |
+| cm10 | rows equal the Grid row and the box is centred on the text | `.mhf-listbox-first-cell` rows vs `.mhf-grid-first-cell` rows | height, painted box centre | height equal (0.01px), centre within 1px | screenshot ink, in default, compact and tablet density under the default, 16px/24px and Arial type scales |
+| cm11 | box of a checkbox-only row in a centred or right-aligned first column | `.mhf-listbox-align-center` / `-right` `.mhf-box-row .z-listitem-icon` vs `th.z-listheader .z-listheader-icon` | left | within ±1px | getBoundingClientRect |
+| cm12 | box of an image row in a centred or right-aligned first column keeps the first-cell compensation | `.mhf-image-row .z-listitem-icon` as rendered vs the same box with `padding-inline-end: calc(--zk-spacing-3 - --zk-spacing-1)` set inline | left | within 0.5px | getBoundingClientRect |
+
+Guard: `mesh-header-footer.spec.ts`, `registerCheckmarkFirstCell`; fixture `pv/mesh-header-footer-guard.zul`
+(`.mhf-listbox-first-cell`, `.mhf-grid-first-cell`); cm11 and cm12: `registerCheckmarkBoxInAlignedFirstColumn` (`.mhf-listbox-align-center`,
+`.mhf-listbox-align-right`), on desktop and on a tablet. cm12 compares with the inline padding computed from the tokens
+because the box x of a centred or right-aligned image row depends on the width of its content, so no fixed offset from the
+header box is stable.
+Mutations (NS14 round 2, Chromium; failures per project, `mesh-header-footer` / `mesh-header-footer-tablet`):
+removing the gap fails cm7, cm8 and cm9 (18 / 9: the three checks in each of the six density and type-scale runs on desktop,
+in the three on a tablet); removing rule 4 fails cm11 (2 / 2) and, on a tablet, `.mhf-listbox-select-all-centre` (0 / 1);
+dropping `:last-child` from rule 4 fails cm12 (2 / 2). Round 1 (not re-run in round 2): removing the
+padding compensation fails cm7 and cm8, removing the image margin fails cm8.
+
 ## Sizable header resize affordance (`<listhead sizable="true">`)
 
 ZK lets the user drag the rightmost 8px of each header cell to resize it, toggling
