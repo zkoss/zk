@@ -69,7 +69,8 @@ font. Each child of the cell is a flex item and drops the whitespace around its 
   that is the last child of the cell content (`.z-listitem-checkable:last-child`) gets its symmetric 12px padding back, so
   the box of a checkbox-only row stays at the x of the header box (without it +2px centred, +4px right-aligned).
   `:last-child` ignores text nodes, so an image or a component after the span keeps the compensation and stays within
-  0.5px of where it was before NS13 (-0.17px centred, -0.35px right-aligned). CSS cannot tell a checkbox-only cell from a
+  0.5px of where it was before NS13 in the DOM (13px type: -0.17px centred, -0.35px right-aligned; 16px/24px type:
+  +0.25px centred, +0.50px right-aligned), up to 1px in the PNG where the shift crosses a pixel boundary. CSS cannot tell a checkbox-only cell from a
   `label=` cell (they differ only by a text node), so a `label=` row takes rule 4 too. Cost, accepted to keep the common
   narrow checkbox-only column aligned with its header: in a centred first column the box of a `label=` row sits 2px left of
   where it was before NS13 (its text 2px right), and in a right-aligned first column 4px left.
