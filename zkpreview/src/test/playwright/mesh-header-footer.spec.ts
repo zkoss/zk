@@ -641,6 +641,26 @@ function registerCheckmarkBoxColumns(density: 'default' | 'compact' | 'tablet') 
   }
 }
 
+// A centred select-all-only column that carries the column-menu button keeps the box where the inline header span puts
+// it, in the cell the button leaves: 16px from the column edge at 68px, and at 88px 20px on desktop and 16px on a tablet
+// (the 44px button). Centring it on the whole cell, as a centred column without the button is, moved it 6px left
+// (follow-up 52; the 68px tablet box then left the column). Offsets measured before follow-up 52.
+function registerCentredMenuHeaderBox(density: 'default' | 'compact' | 'tablet') {
+  const BOX_OFFSET_PX: Record<number, number> = density === 'tablet' ? { 68: 16, 88: 16 } : { 68: 16, 88: 20 };
+  for (const width of [68, 88]) {
+    const root = `.mhf-listbox-centre-menu-${width}`;
+    test(`${root}: the header box of a centred select-all-only column with the menu button stays ${BOX_OFFSET_PX[width]}px from the column edge in ${density} density`,
+      async ({ page }) => {
+        await open(page);
+        if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+        await page.evaluate(() => document.fonts.ready.then(() => true));
+        const offset = await page.locator(`${root} th.z-listheader`).first().evaluate((th) =>
+          th.querySelector('.z-listheader-icon')!.getBoundingClientRect().left - th.getBoundingClientRect().left);
+        expect(offset, `header box ${offset}px from the column edge`).toBeCloseTo(BOX_OFFSET_PX[width], 0);
+      });
+  }
+}
+
 // A checkmark row is as tall as the row without the box, and the painted box is centred on the label and on a control
 // in the first cell. Follow-up 28: `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox
 // line box; asymmetric margins that undid it only fitted Inter 13px/20px (NS13 F1).
@@ -1071,6 +1091,8 @@ test.describe('mesh header and footer', () => {
   registerCheckmarkBoxInAlignedFirstColumn();
   registerCheckmarkBoxColumns('default');
   registerCheckmarkBoxColumns('compact');
+  registerCentredMenuHeaderBox('default');
+  registerCentredMenuHeaderBox('compact');
   registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_DESKTOP);
   registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-desktop');
   registerImageSortMenuHeaderOrder([GRID_IMAGE_MENU, LISTBOX_IMAGE_MENU]);
@@ -1110,6 +1132,7 @@ test.describe('mesh header and footer', () => {
     registerGroupArrowIgnoresGroupSelect();
     registerCheckmarkBoxInAlignedFirstColumn();
     registerCheckmarkBoxColumns('tablet');
+    registerCentredMenuHeaderBox('tablet');
     registerCheckmarkBoxKeepsTouchHeight();
     registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_TABLET);
     registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-tablet');

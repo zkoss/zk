@@ -1,11 +1,24 @@
 <?page title="Real invalid combobox and bandbox" contentType="text/html;charset=UTF-8"?>
 <!-- Fixture for input-invalid.spec.ts and forced-colors.spec.ts: a combobox and a bandbox with a
-     real constraint. The spec types, deletes and blurs, so ZK itself puts z-*-invalid on the
+     real constraint, the same inputs inside an inputgroup (follow-up 55) and as inplace inputs (follow-up 56). The spec types, deletes and blurs, so ZK itself puts z-*-invalid on the
      <input>, which the sclass-based preview pages cannot reproduce. Lives under pv/ so
      gallery-scan and forced-colors-gallery do not pick it up as a page. -->
 <zk>
 <vlayout spacing="16px">
-    <combobox id="combo" constraint="no empty"><comboitem label="Item 1"/><comboitem label="Item 2"/></combobox>
-    <bandbox id="band" constraint="no empty"><bandpopup>Content</bandpopup></bandbox>
+    <div sclass="iig-single">
+        <combobox id="combo" constraint="no empty"><comboitem label="Item 1"/><comboitem label="Item 2"/></combobox>
+        <bandbox id="band" constraint="no empty"><bandpopup>Content</bandpopup></bandbox>
+    </div>
+    <inputgroup sclass="iig-group-textbox"><label value="A"/><textbox constraint="no empty"/></inputgroup>
+    <inputgroup sclass="iig-group-intbox"><label value="A"/><intbox constraint="no empty"/></inputgroup>
+    <inputgroup sclass="iig-group-longbox"><label value="A"/><longbox constraint="no empty"/></inputgroup>
+    <inputgroup sclass="iig-group-doublebox"><label value="A"/><doublebox constraint="no empty"/></inputgroup>
+    <inputgroup sclass="iig-group-decimalbox"><label value="A"/><decimalbox constraint="no empty"/></inputgroup>
+    <inputgroup sclass="iig-group-combobox"><label value="A"/><combobox constraint="no empty"><comboitem label="Item 1"/></combobox></inputgroup>
+    <div sclass="iig-inplace">
+        <textbox sclass="iig-inplace-textbox" inplace="true" constraint="no empty"/>
+        <combobox sclass="iig-inplace-combobox" inplace="true" constraint="no empty"><comboitem label="Item 1"/></combobox>
+        <bandbox sclass="iig-inplace-bandbox" inplace="true" constraint="no empty"><bandpopup>Content</bandpopup></bandbox>
+    </div>
 </vlayout>
 </zk>

@@ -629,14 +629,16 @@
    capped at the content width and its padding cannot shrink, which parks the box at the left padding and
    pushes the whole overflow to the right. A flex row of its own centres the box instead, and the 12px that
    the span kept as padding become the margin of the icon, which a flex item may overflow evenly (follow-up 52).
-   A left-aligned header keeps the keyline of the row box. */
-.z-listheader:is([style*="text-align:center"], [style*="text-align: center"]) > .z-listheader-content > .z-listheader-checkable {
+   A left-aligned header keeps the keyline of the row box. A header with the column-menu button keeps the inline
+   span: its padding-right reserves the button's room, so the box already sits in the cell the button leaves, and
+   centring it on the whole cell moved it 6px left in a 68px column (follow-up 52). */
+.z-listheader:is([style*="text-align:center"], [style*="text-align: center"]):not(:has(.z-listheader-button)) > .z-listheader-content > .z-listheader-checkable {
     display: inline-flex;
     justify-content: center;
     padding-inline: 0;
 }
 
-.z-listheader:is([style*="text-align:center"], [style*="text-align: center"]) > .z-listheader-content > .z-listheader-checkable > .z-listheader-icon {
+.z-listheader:is([style*="text-align:center"], [style*="text-align: center"]):not(:has(.z-listheader-button)) > .z-listheader-content > .z-listheader-checkable > .z-listheader-icon {
     margin-inline: var(--zk-spacing-3);
 }
 

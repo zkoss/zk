@@ -94,6 +94,14 @@
     box-sizing: border-box;
 }
 
+/* The shorthand above is as specific as the invalid rules of input.css and combobox.css and loads after them, so it
+ * repainted the error border of a failed constraint in the group colour (follow-up 55). An invalid input keeps the error
+ * colour at rest, hover and focus, as outside the group; the width stays 1px, the group outline owns the focus. */
+.z-inputgroup :is(.z-textbox-invalid, .z-intbox-invalid, .z-longbox-invalid, .z-doublebox-invalid, .z-decimalbox-invalid),
+.z-inputgroup .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input {
+    border-color: var(--zk-input-border-color-error);
+}
+
 /* When input is last child, its right border shows (handled by :last-child above) */
 /* When input is first child, its left border-radius shows */
 

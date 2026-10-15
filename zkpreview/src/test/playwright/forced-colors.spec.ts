@@ -526,7 +526,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   test('a real invalid combobox and bandbox show the double border (one box, seam open)', async ({ page }) => {
     await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
     for (const widget of ['combobox', 'bandbox']) {
-      const input = page.locator(`.z-${widget}-input`);
+      const input = page.locator(`.iig-single .z-${widget}-input`);
       await input.click();
       await page.keyboard.type('a');
       await page.keyboard.press('Backspace');
@@ -538,12 +538,30 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
       return `${cs[`border${s}Style` as 'borderTopStyle']} ${cs[`border${s}Width` as 'borderTopWidth']}`;
     }, side);
 
-    expect(await border('.z-bandbox', 'Top'), 'bandbox box').toBe('double 3px');
-    expect(await border('.z-combobox-input', 'Top'), 'combobox input top').toBe('double 3px');
-    expect(await border('.z-combobox-button', 'Top'), 'combobox button top').toBe('double 3px');
-    expect(await border('.z-combobox-input', 'Right'), 'seam, input side').toMatch(/^none /);
-    expect(await border('.z-combobox-button', 'Left'), 'seam, button side').toMatch(/^none /);
-    expect(await border('.z-combobox-button', 'Right'), 'combobox button right').toBe('double 3px');
+    expect(await border('.iig-single .z-bandbox', 'Top'), 'bandbox box').toBe('double 3px');
+    expect(await border('.iig-single .z-combobox-input', 'Top'), 'combobox input top').toBe('double 3px');
+    expect(await border('.iig-single .z-combobox-button', 'Top'), 'combobox button top').toBe('double 3px');
+    expect(await border('.iig-single .z-combobox-input', 'Right'), 'seam, input side').toMatch(/^none /);
+    expect(await border('.iig-single .z-combobox-button', 'Left'), 'seam, button side').toMatch(/^none /);
+    expect(await border('.iig-single .z-combobox-button', 'Right'), 'combobox button right').toBe('double 3px');
+  });
+
+  // Follow-up 55: the inputgroup border shorthand must not take the double border from an invalid input in the group.
+  test('a real invalid input in an inputgroup shows the double border', async ({ page }) => {
+    await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
+    for (const widget of ['textbox', 'intbox', 'longbox', 'doublebox', 'decimalbox', 'combobox']) {
+      const input = page.locator(widget === 'combobox' ? '.iig-group-combobox .z-combobox-input' : `.iig-group-${widget} input.z-${widget}`);
+      await input.click();
+      await page.keyboard.type('1');
+      await page.keyboard.press('Backspace');
+      await page.locator('body').click({ position: { x: 600, y: 700 } });
+      await expect(input).toHaveClass(/z-\w+-invalid/);
+      const border = await input.evaluate(el => {
+        const cs = getComputedStyle(el);
+        return `${cs.borderTopStyle} ${cs.borderTopWidth}`;
+      });
+      expect(border, `${widget} in an inputgroup`).toBe('double 3px');
+    }
   });
 
   // Follow-up 45 F2: a no-spacing bar is a 1px box; the line must paint inside it, not in the row below.

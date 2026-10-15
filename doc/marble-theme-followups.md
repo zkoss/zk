@@ -820,6 +820,14 @@ progressmeter width before capturing, then re-cut that PNG.
 `d0866b6bea` (`component-theming-forced-colors.png`, the only PNG that run changed): the Highlight fill is now visible at
 60% of both bars.
 
+**Correction** in zk `263f687d69` and `5f75db4e00` (`forced-colors-gallery.spec.ts`): the frame-stability wait of `2fc179bc97`
+also waited on the indeterminate progressmeter of `progressmeter.zul`, whose bar animates forever (1.5s to more than 15s per
+run). `waitForProgressmeterBars` now waits until every determinate bar is as wide as its `aria-valuenow` says (within 1px) and
+skips a meter without a value: 376ms on `progressmeter.zul`, 143ms on `component-theming`. The first form, `style.width ===
+value%` as in `gallery-scan.spec.ts`, returned before the width transition ran and cut a `component-theming` capture without
+the Highlight fill, so the rendered width is the condition. `component-theming-forced-colors.png` re-cut three times with the
+new wait is 0 pixels different from `d0866b6bea`.
+
 ## 52. A centred 40px checkmark column: the row checkbox is 4px left of the header checkbox (NS22 verification)
 
 Breaks cm5 in `doc/contracts/listbox.md` (header and row box centres within ±1px). On `/listbox-header.zul`, last
@@ -838,6 +846,13 @@ header span of a centred column is an inline flex row, its 12px padding is the m
 differ by 0px (was 12 at 24px, 4 at 40px, 0 at 48 and 160px) in default, compact and tablet; a left-aligned column keeps both
 boxes 16px from the column edge at 24, 40, 48 and 160px. `listbox-header-gallery.png` was not re-cut: a re-cut also moved
 about 4,300 px of a listbox further down the page (its width), which this batch does not explain.
+
+**Correction** in zk `5995c81a09` (`listbox.css`, guard `registerCentredMenuHeaderBox` on `.mhf-listbox-centre-menu-68` and
+`-88`): the centred-header rule of `6a27255cec` also moved the box of a centred select-all-only header that carries the
+column-menu button (68px column: 16 to 10px from the column edge on desktop and compact, 16 to 0 on a tablet; 88px: 16 to 10
+on a tablet, unchanged at 20 on desktop). Such a header keeps its inline span, whose `padding-right` reserves the button's
+room, so both rules now skip `:has(.z-listheader-button)`; a centred header without the button keeps the NS24 result. The
+guard asserts the pre-NS24 offsets and is red on `6a27255cec` (10 against 16, 0 against 16, 10 against 16).
 
 ## 53. NS22 leftovers (NS22 verification)
 
@@ -862,3 +877,41 @@ the column's left edge (x 33-49 in a column 33-73), the header box at x 49-65, s
 (compact) and 20px (tablet); at 160px the row box is 12px left of the column centre. A left-aligned 160px Tree column differs
 by -4px on a tablet (header 53-69, row 57-73). Cause not investigated: the Tree cell holds the box and a `z-tree-line`
 spacer, and `tree.css` has no centred rule for them. Not fixed (O10, and the brief for item 52 forbids moving the rows).
+
+## 55. Invalid inputs inside an inputgroup are only partly red (NS24 verification)
+
+After a real `constraint="no empty"` failure in `<inputgroup><label value="A"/><combobox constraint="no empty"/></inputgroup>`
+the combobox button is red at rest but the input keeps `rgba(0,0,0,.23)` (both red on hover; on focus input 1px, button 2px).
+`inputgroup.css` ~87 `.z-inputgroup .z-combobox .z-combobox-input { border: ... }` has the same specificity as the
+`combobox.css` invalid rule and loads later. The `sclass` form looked the same before follow-up 47; a textbox in an
+inputgroup shows no red at all when invalid. Pre-existing.
+
+**Resolved** in zk `e94d419410` (`inputgroup.css`, guards in `input-invalid.spec.ts` and `forced-colors.spec.ts` on
+`pv/input-invalid-guard.zul`): one rule after the group's border shorthand gives an invalid textbox, intbox, longbox, doublebox,
+decimalbox (`.z-inputgroup :is(.z-*-invalid)`) and the combobox input (`:is(.z-combobox-invalid, :has(> .z-combobox-invalid))`) the
+`--zk-input-border-color-error` colour at the specificity of the shorthand and after it, no `!important`. Measured on a real
+`constraint="no empty"` failure: border `rgb(211, 47, 47)` at rest, hover and focus (was `rgba(0, 0, 0, 0.23)` at rest and
+hover for the five boxes, and at rest for the combobox input). The width stays 1px in the group on focus, where the group outline owns
+the focus; valid inputs in a group keep `--zk-inputgroup-border-color`. Forced colours: `double 3px` for all six, the same
+before (the unlayered (1c) rule wins there). A bandbox, datebox and spinner in a group were already red; the timebox does not
+fail under the type-delete-blur steps and was not measured.
+
+## 56. An invalid inplace bandbox is red at rest (NS24 verification)
+
+An invalid `inplace="true"` bandbox shows a red wrapper border at rest, while an invalid inplace combobox or textbox stays
+transparent until hover/focus: `bandbox.css` ~110 (inplace) and ~133 (invalid) have equal specificity and the invalid rule
+comes later. The `sclass` form already did this; since follow-up 47 a real failure does too.
+
+**Resolved** in zk `3b2fe3d150` (`bandbox.css`, guard `an invalid inplace bandbox is transparent at rest and on hover ...` in
+`input-invalid.spec.ts`): the rest and hover invalid rules take `:not(.z-bandbox-inplace)`, so the inplace rules decide while the
+class is on. Measured on a real failure: the inplace textbox, combobox input and bandbox wrapper are `rgba(0, 0, 0, 0)` at rest and
+on hover and `rgb(211, 47, 47)` on focus (the bandbox wrapper was red at rest and hover); forced colours unchanged (`double 3px`
+on all three).
+
+## 57. The `sizedByContent` listbox on `listbox-header` renders in two states (NS24 verification)
+
+The `ID | Product Name | Price` listbox (y≈4337-4496 in `listbox-header-gallery.png`) alternates between columns
+57/228/82 (full text) and 56/225/82 (text truncated: "0…", "Super Long Product Name H…"); about 4,300px, within the 0.2%
+gallery tolerance, before and after NS24. The truncated state correlates with a later font `loadingdone`, so probably a
+font-load race in ZK's size-by-content measurement; not confirmed. The committed baseline holds the truncated state.
+

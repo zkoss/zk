@@ -38,25 +38,20 @@ const SKIP = new Set([
   'camera', 'barcodescanner', 'captcha', 'video', 'audio', 'fileupload', 'loading', 'loadingbar',
 ]);
 
-// ZK animates a progressmeter's value bar with a jQuery animation that `animations: 'disabled'` does not stop, and
-// networkidle can return before it ends. Resolves once every bar has kept its width for two animation frames; a page
-// without a progressmeter resolves at once.
+// ZK steps a progressmeter's value bar up to its value with a jQuery animation, and the bar's width then transitions;
+// `animations: 'disabled'` stops neither early enough, and networkidle can return before they end. Resolves once every
+// determinate bar is as wide as its aria-valuenow says (within a pixel), as gallery-scan.spec.ts waits for the inline
+// width. An indeterminate meter has no value and its bar animates forever, so it is skipped, and a page without a
+// progressmeter resolves at once.
+const PROGRESSMETER_WIDTH_TOLERANCE_PX = 1;
+
 async function waitForProgressmeterBars(page: Page): Promise<void> {
-  await page.evaluate(() => new Promise<void>(resolve => {
-    const bars = [...document.querySelectorAll('.z-progressmeter-image')];
-    if (!bars.length) return resolve();
-    const widths = () => bars.map(bar => bar.getBoundingClientRect().width).join();
-    let previous = widths();
-    let stableFrames = 0;
-    const onFrame = () => {
-      const current = widths();
-      stableFrames = current === previous ? stableFrames + 1 : 0;
-      previous = current;
-      if (stableFrames >= 2) resolve();
-      else requestAnimationFrame(onFrame);
-    };
-    requestAnimationFrame(onFrame);
-  }));
+  await page.waitForFunction((tolerance) => [...document.querySelectorAll('.z-progressmeter')].every(meter => {
+    const value = meter.getAttribute('aria-valuenow');
+    const bar = meter.querySelector('.z-progressmeter-image');
+    if (value === null || !bar) return true;
+    return Math.abs(bar.getBoundingClientRect().width - meter.clientWidth * Number(value) / 100) <= tolerance;
+  }), PROGRESSMETER_WIDTH_TOLERANCE_PX);
 }
 
 const pages = fs.readdirSync(WEB_DIR)

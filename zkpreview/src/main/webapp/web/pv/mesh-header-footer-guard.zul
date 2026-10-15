@@ -401,6 +401,22 @@
         <listgroup label="Disabled group" disabled="true"/>
         <listitem><listcell label="Bob"/><listcell label="Engineering"/></listitem>
     </listbox>
+    <!-- A centred select-all-only column that carries the column-menu button, at 68 and 88px (follow-up 52): the header keeps
+         its box in the cell the button leaves; only a centred column without the button is centred on the whole cell. -->
+    <listbox sclass="mhf-listbox-centre-menu-68" width="360px" checkmark="true" multiple="true">
+        <listhead menupopup="auto">
+            <listheader width="68px" align="center"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-centre-menu-88" width="360px" checkmark="true" multiple="true">
+        <listhead menupopup="auto">
+            <listheader width="88px" align="center"/>
+            <listheader label="Name" width="200px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
     <!-- A select-all-only column of 24 to 160px, centred and left-aligned, in a checkmark Listbox (follow-up 52): the header box and the row box share one centre. -->
     <listbox sclass="mhf-listbox-box-column mhf-box-column-center-24" width="360px" checkmark="true" multiple="true">
         <listhead>

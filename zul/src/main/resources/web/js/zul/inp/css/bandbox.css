@@ -129,12 +129,14 @@
 }
 
 /* ─── Invalid variant ─────────────────────────────────────────────────── */
-/* ZK adds z-bandbox-invalid to the <input> after a failed constraint; an sclass puts it on the wrapper. */
-.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)) {
+/* ZK adds z-bandbox-invalid to the <input> after a failed constraint; an sclass puts it on the wrapper.
+   An inplace bandbox stays transparent at rest and on hover like the inplace combobox and textbox, and shows the error
+   border on focus, when ZK has removed z-bandbox-inplace (follow-up 56). */
+.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):not(.z-bandbox-inplace) {
     border-color: var(--zk-color-error);
 }
 
-.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):hover {
+.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):not(.z-bandbox-inplace):hover {
     border-color: var(--zk-color-error);
 }
 
