@@ -537,6 +537,16 @@ export abstract class MeshWidget extends zul.Widget {
 		// Empty on purpose. To be inherited.
 	}
 
+	/**
+	 * @internal
+	 * Hook called after the empty message is shown, hidden or changed. CE keeps it
+	 * as a no-op; the za11y add-on (EE) augments it to keep the empty row out of
+	 * the accessibility tree unless it shows a message.
+	 */
+	_updateEmptyBody(): void {
+		// Empty on purpose. Augmented by za11y.
+	}
+
 	constructor() {
 		super(); // FIXME: arguments?
 		this.heads = [];
@@ -930,7 +940,8 @@ export abstract class MeshWidget extends zul.Widget {
 		//B50-3178977 navigating the input in hiddin column.
 		var td = this.ehdfaker ? this.ehdfaker.childNodes[index] as HTMLTableCellElement | undefined : undefined,
 			frozen = this.frozen;
-		if (td && frozen) {
+		// ZK-6170: a mouse press must not scroll.
+		if (td && frozen && !zk._cfByMD) {
 			const frozenCols = frozen.getColumns()!,
 				scrollableIndex = index - frozenCols;
 
@@ -2266,7 +2277,8 @@ export abstract class MeshWidget extends zul.Widget {
 			this._setOrGetVisibleRows(nRows);
 		}
 
-		if (nRows) {
+		// ZK-5584: under CSS flex, a row taller than the vflex height rounds nRows to 0 but the body still needs that height
+		if (nRows || (hgh && firstVisiRow && this._cssflex && this.parent!.getFlexContainer_() != null)) {
 			if (!hgh) {
 				if (!nVisiRows) {
 					hgh = this._headHgh(20, true) * nRows;

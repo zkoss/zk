@@ -1896,6 +1896,7 @@
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attribute name="inputAttributes" type="xs:string" use="optional" />
+		<xs:attribute name="errorMessage" type="xs:string" use="optional" />
 	</xs:complexType>
 	<!-- datebox -->
 	<xs:element name="datebox" type="dateboxType" />

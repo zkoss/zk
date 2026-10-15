@@ -13,12 +13,14 @@ ZK 11.0.0
   ZK-5997: Support Content Security Policy Without 'unsafe-inline'
   ZK-6095: Support ctrlKeys in borderlayout
   ZK-6084: Accessibility Optimization: WCAG 2.1 AA Advanced Audit
+  ZK-6089: Support ~./ prefix in <label-location> entries in zk.xml
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
   ZK-5689: ZK font-awesome leaks to default font-awesome shortcut fas, fass, far, fabb
   ZK-6024: load theme-based font-awesome.css.dsp from a wrong path
   ZK-5706: pdfviewer: scrolling cannot change pages when the browser zoom level is not 100%
+  ZK-5671: pdfviewer blurry on scaled monitor
   ZK-5767: Grid or Listbox column with hflex=min and CSS text-transform: uppercase - wrong width
   ZK-5523: chosenbox loses its selection in a model after invalidate()
   ZK-5990: SimpleNumberInputConstraint causes NPE
@@ -54,6 +56,16 @@ ZK 11.0.0
   ZK-6042: panel icons don't display completely on a mobile browser
   ZK-6044: Tree item toggle icons are overlapping text
   ZK-6051: badge text in nav is too low
+  ZK-6101: Automatic timeout redirect is skipped when an ignorable AU request receives ZK-Error 410
+  ZK-6064: Signature buttons does not support accessibility
+  ZK-5686: zk failed to parse an attribute with a namespace in an injected zul
+  ZK-5584: Mesh doesn't set height on body when using CSS flex
+  ZK-5906: external link and zk event race condition for timeout redirect
+  ZK-5860: cannot change hour and minute in a datebox after changing its constraint
+  ZK-6090: Closing a tab containing <cardlayout> throws "Node is not found!" error in mobile/touch simulation mode
+  ZK-6170: Clicking a partly visible input in a listbox with frozen columns scrolls the columns and loses the click
+  ZK-6171: The horizontal scroll of a listbox with frozen columns lands in a different place after a re-render while an input in it has focus
+  ZK-6169: Grid / Listbox emptybody is missing ARIA roles (rowgroup / row / gridcell) under role="grid"
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on

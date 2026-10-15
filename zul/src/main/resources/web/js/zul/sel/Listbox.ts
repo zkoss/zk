@@ -35,6 +35,7 @@ function _fixForEmpty(wgt: zul.sel.Listbox): void {
 			// ZK-2365 table cell needs the "display:table-cell" when colspan is enable.
 			empty.style.display = 'table-cell';
 		}
+		wgt._updateEmptyBody();
 	}
 	wgt._shallFixEmpty = false;
 }
@@ -107,6 +108,7 @@ export class Listbox extends zul.sel.SelectWidget {
 				else
 					emptyContentDiv.removeClass(emptyContentClz);
 				emptyContentDiv.text(emptyMessage);
+				this._updateEmptyBody();
 			}
 		}
 
