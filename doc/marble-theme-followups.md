@@ -543,10 +543,14 @@ variant does not have otherwise, so filled buttons grow by 2px (not measured per
 
 ## 32. `.z-carousel-indicator` has no font-family
 
+**Resolved** in zk `e4f389714b`: `.z-carousel-indicator` takes `--zk-typescale-font-family`, as the arrow does.
+
 NS9 item 1 gave `.z-carousel-arrow` the theme font; the indicator dots are the same bare `<button>`
 and still fall back to the UA font. No text is drawn today, so nothing is visible.
 
 ## 33. `_sizing.css` cites a file that does not exist
+
+**Resolved** in zk `e4f389714b`: the reference is dropped; the comment already points at `doc/spec/data-dense-mode.md`.
 
 A comment in `zul/src/main/resources/web/zul/css/tokens/_sizing.css` says the compact values
 "mirror doc/marble-compact.css", which is not in the repo. Point it at
