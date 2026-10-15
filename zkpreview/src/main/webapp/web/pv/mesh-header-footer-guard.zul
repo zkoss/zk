@@ -166,6 +166,29 @@
         </listhead>
         <listitem><listcell/><listcell label="Alice"/></listitem>
     </listbox>
+    <!-- A centred and a right-aligned first column of a checkmark Listbox (NS14 round 2, D18): the box of a row that holds
+         only the checkmark stays under the header box, and an image or a component after the box keeps the position
+         the compensation of the first cell gives it. The label and inline rows are measured by the report only. -->
+    <listbox sclass="mhf-listbox-align-center" width="240px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="160px" align="center"/>
+            <listheader label="Type" width="60px"/>
+        </listhead>
+        <listitem sclass="mhf-box-row"><listcell/><listcell label="A"/></listitem>
+        <listitem sclass="mhf-label-row"><listcell label="Label"/><listcell label="B"/></listitem>
+        <listitem sclass="mhf-image-row"><listcell image="/web/img/received.png" label="Image"/><listcell label="C"/></listitem>
+        <listitem sclass="mhf-inline-row"><listcell><label value="Label "/><a label="link"/></listcell><listcell label="D"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-align-right" width="240px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="160px" align="right"/>
+            <listheader label="Type" width="60px"/>
+        </listhead>
+        <listitem sclass="mhf-box-row"><listcell/><listcell label="A"/></listitem>
+        <listitem sclass="mhf-label-row"><listcell label="Label"/><listcell label="B"/></listitem>
+        <listitem sclass="mhf-image-row"><listcell image="/web/img/received.png" label="Image"/><listcell label="C"/></listitem>
+        <listitem sclass="mhf-inline-row"><listcell><label value="Label "/><a label="link"/></listcell><listcell label="D"/></listitem>
+    </listbox>
     <!-- A select-all-only 40px Tree header column (D15): the 16px box must not be clipped by the header padding. -->
     <tree sclass="mhf-tree-checkbox-only" width="360px" checkmark="true" multiple="true">
         <treecols>

@@ -638,11 +638,17 @@
     margin-inline-start: calc(-1 * var(--zk-spacing-1));
 }
 
-/* A centred or end-aligned column does not follow the keyline, and its checkmark must stay where the header
-   box of the same column is: give the span back the symmetric padding it shares with the header span. */
+/* A centred or end-aligned column does not follow the keyline, and a checkmark that is alone in its cell must
+   stay where the header box of the same column is: give the span back the symmetric padding it shares with the
+   header span. `:last-child` ignores text nodes, so this reaches the checkbox-only cell and, because CSS cannot
+   tell it from a `label=` cell (they differ only by a text node), the `label=` cell too; an image or a component
+   after the span keeps the compensation above and stays where it was before NS13.
+   Cost (NS14, D18): in a centred or right-aligned first column, the box of a `label=` row sits 2px (centred)
+   or 4px (right-aligned) left of where it was before NS13, and its text 2px right in a centred column. This is
+   accepted to keep the common narrow checkbox-only column aligned with its header. */
 .z-listcell:has(.z-listitem-checkable):is([style*="text-align:right"], [style*="text-align: right"],
     [style*="text-align:end"], [style*="text-align: end"], [style*="text-align:center"],
-    [style*="text-align: center"]) > .z-listcell-content > .z-listitem-checkable {
+    [style*="text-align: center"]) > .z-listcell-content > .z-listitem-checkable:last-child {
     padding-inline-end: var(--zk-spacing-3);
 }
 

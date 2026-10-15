@@ -32,6 +32,9 @@ import { test, expect, Locator, Page } from '@playwright/test';
 //  - the first cell of a checkmark Listbox row keeps its text, or its image when it has one, on the keyline of the
 //    header label and 4px between the image and its label and between a label and a link, in the same three
 //    densities and type scales (follow-up 28, D18);
+//  - in a centred and a right-aligned checkmark first column the box of a checkbox-only row is under the header box, and
+//    the box of a row with an image after it is where the first-cell compensation puts it, desktop and tablet (rule 4
+//    of listbox.css and its `:last-child` narrowing, NS14 round 2, D18);
 //  - an image-only header column that carries the column-menu button, at the documented minimum width (56px on
 //    desktop, 76px on a tablet, contracts/listbox.md), shows the whole 16px image clear of the button, and a
 //    select-all-only header at its minimum width (68px / 88px) paints the whole box inside the content box and clear of the
@@ -559,6 +562,40 @@ function registerCheckmarkFirstCell(prepare: (page: Page) => Promise<void>, inDe
   }
 }
 
+// In a centred or right-aligned first column, the checkmark of a row that holds only the box stays under the header
+// box (rule 4 of listbox.css), and the box of a row with an image after it stays where the compensation of the first
+// cell puts it, not 2px / 4px to the left (rule 4 is narrowed to `:last-child`, NS14 round 2). The expected x of the
+// image row is the x of the same row with the compensated padding set inline from the tokens: it wins over rule 4
+// wherever rule 4 applies, so the two agree only while rule 4 leaves the row alone.
+function registerCheckmarkBoxInAlignedFirstColumn() {
+  const ICON = '.z-listitem-icon';
+  const SAME_POSITION_PX = 0.5;
+  const COMPENSATED_PADDING = 'calc(var(--zk-spacing-3) - var(--zk-spacing-1))';
+  const boxLeft = (page: Page, selector: string) => page.locator(selector).first()
+    .evaluate((icon) => icon.getBoundingClientRect().left);
+
+  for (const align of ['center', 'right']) {
+    const root = `.mhf-listbox-align-${align}`;
+
+    test(`${root}: the box of a checkbox-only row is under the header box`, async ({ page }) => {
+      await open(page);
+      const header = await boxLeft(page, `${root} th.z-listheader .z-listheader-icon`);
+      const row = await boxLeft(page, `${root} .mhf-box-row ${ICON}`);
+      expect(Math.abs(row - header), `header box x ${header}, row box x ${row}`).toBeLessThanOrEqual(TOLERANCE_PX);
+    });
+
+    test(`${root}: the box of an image row stays where the first-cell compensation puts it`, async ({ page }) => {
+      await open(page);
+      const span = `${root} .mhf-image-row .z-listitem-checkable`;
+      const actual = await boxLeft(page, `${span} ${ICON}`);
+      await page.locator(span).evaluate((el, padding) => { el.style.paddingInlineEnd = padding; }, COMPENSATED_PADDING);
+      const compensated = await boxLeft(page, `${span} ${ICON}`);
+      expect(Math.abs(actual - compensated), `box x ${actual}, with the compensated padding ${compensated}`)
+        .toBeLessThanOrEqual(SAME_POSITION_PX);
+    });
+  }
+}
+
 // A checkmark row is as tall as the row without the box, and the painted box is centred on the label and on a control
 // in the first cell. Follow-up 28: `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox
 // line box; asymmetric margins that undid it only fitted Inter 13px/20px (NS13 F1).
@@ -822,6 +859,7 @@ test.describe('mesh header and footer', () => {
   registerTreeHeaderMatchesGrid();
   registerCheckmarkRowsMatchGrid('default');
   registerCheckmarkRowsMatchGrid('compact');
+  registerCheckmarkBoxInAlignedFirstColumn();
   registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_DESKTOP);
   registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-desktop');
   registerImageSortMenuHeaderOrder([GRID_IMAGE_MENU, LISTBOX_IMAGE_MENU]);
@@ -855,6 +893,7 @@ test.describe('mesh header and footer', () => {
     registerMenuHeaderClearsArrowAndButton();
     registerTreeHeaderMatchesGrid();
     registerCheckmarkRowsMatchGrid('tablet');
+    registerCheckmarkBoxInAlignedFirstColumn();
     registerCheckmarkBoxKeepsTouchHeight();
     registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_TABLET);
     registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-tablet');
