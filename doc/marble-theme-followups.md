@@ -653,6 +653,46 @@ Seen by the NS17 verifier on a probe page; not investigated and not compared wit
   (`Listcell.ts` `_colHtmlPre`). On desktop and tablet it paints as a bare small check glyph with no box, and a selected
   group looks the same as an unselected one.
 - `listbox.css` has no rule for `.z-listgroup-checkable` / `.z-listgroup-icon` (the only one, which never matched, was
-  removed in `8a3d151566`); only zkmax `tablet/_mesh.css` sizes it.
+  removed in `ea65737cc4`); only zkmax `tablet/_mesh.css` sizes it.
 - Next step: reproduce on a clean page, compare with IceBlue (O1), then decide whether it should share the listitem
   checkbox look (V6).
+
+## 42. Forced colours: the horizontal separator bar disappears (regression, NS18)
+
+Found while reviewing the refreshed forced-colors screenshots (`704262d610`). Not fixed: outside NS18 (O10).
+
+- `separator-forced-colors.png`, y≈159–261, x 32–521: the "Default spacing" and "Large spacing (20px)" bars paint no
+  pixel between "Above" and "Below". The 2026-09-11 capture showed solid (too thick) bars.
+- Cause: `0b331d3db0` (2026-10-10) draws `.z-separator-horizontal-bar` as `background: linear-gradient(CanvasText,
+  CanvasText) center / 100% 1px no-repeat` (`separator.css` and `_forced-colors.css` ~line 386). Under forced colours
+  Chromium computes `background-image: none` and a transparent `background-color`. The vertical bar uses
+  `background-color: CanvasText` and still shows.
+- Possible fix: a 1px pseudo-element or border painted with `CanvasText`, or `forced-color-adjust: none` on this rule
+  (re-measure either way). Check whether `forced-colors.spec.ts` should guard it.
+
+## 43. Forced colours: the selected accordion tab chevron is black on Highlight (regression, NS18)
+
+- `tabbox-forced-colors.png` y≈3965–4012 (chevrons at about x 604 and x 1223), `tabbox-misc-forced-colors.png` about
+  x 276–290, y 812–824: the chevron of the selected accordion tab is black on rgb(55,51,109), about 1.9:1. The
+  2026-09-11 capture showed it in HighlightText.
+- Cause: `1dda0e855d` (2026-10-09) moved the chevron to a mask on `.z-tabbox-accordion .z-tab-content::after`; the
+  forced-colours block in `tabbox.css` (~lines 712–716) paints it `CanvasText` in every state.
+- Possible fix: `.z-tabbox-accordion .z-tab.z-tab-selected .z-tab-content::after { background-color: HighlightText; }`.
+
+## 44. Forced colours: pre-existing defects seen in the NS18 review
+
+Same in the 2026-09-11 and the refreshed captures; not regressions. Left as found (O10).
+
+- **Listbox paging icons nearly invisible** (`listbox-header`, y 3390–3426, x≈490–680): `listbox.css` ~line 723
+  `.z-listbox-paging-bottom .z-paging-icon` paints the mask on the element itself, not on `::before`, so the
+  `_forced-colors.css` (2d)/(2e) rules miss it (live background `rgba(255,255,255,.6/.38)`). Present since
+  `2100200284`. The `grid-paging` and `paging` pages are fine.
+- **Disabled paging buttons look enabled** (`paging`, "first page / last page" sample, y≈460–500): (2d) paints every
+  `::before` `CanvasText`; there is no `GrayText` for the disabled state.
+- **Caption text in a selected accordion tab is black on Highlight** (`tabbox-misc`, "search" tab, y 812–830, x 80–150,
+  about 1.9:1): the (2a) backplate covers `.z-tab-text` but not a `.z-caption` inside the tab.
+- **Invalid daterangebox looks like the default one**: other inputs show a double border when invalid; daterangebox
+  keeps a single border.
+- **tbeditor toolbar icons are grey, not CanvasText** (about 5.7:1, still legible; thinner since the 14px icons of
+  `829a6952f`).
+- **An invalid combobox draws its button as a separate double-bordered box** (cosmetic).
