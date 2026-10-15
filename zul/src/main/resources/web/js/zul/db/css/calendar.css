@@ -38,8 +38,9 @@
 }
 
 /* ZK writes the `width` and `hflex` attributes as an inline width, which the default
-   `max-width` above would cap at 268px; without one the calendar keeps its default size. */
-.z-calendar[style*="width"] {
+   `max-width` above would cap at 268px; without one the calendar keeps its default size.
+   Anchored at the start of the declaration so `min-width` and `border-width` do not match. */
+.z-calendar:is([style^="width"], [style*=";width"], [style*="; width"]) {
     max-width: none;
 }
 
