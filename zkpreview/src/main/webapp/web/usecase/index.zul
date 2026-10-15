@@ -6,7 +6,7 @@
 <borderlayout height="100vh" viewModel="@id('vm') @init('zk.example.UseCaseVM')"
     onBookmarkChange="@command('handleBookmarkChange', bookmark=event.bookmark)">
 
-    <west size="258px" border="none" collapsible="false">
+    <west size="258px" border="none" collapsible="false" autoscroll="true">
         <div sclass="z-p-2">
             <div sclass="sidebar-brand z-d-flex z-items-baseline z-gap-2">
                 <label value="Marble"/>
