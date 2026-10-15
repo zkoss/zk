@@ -102,3 +102,27 @@
     -webkit-mask-image: url(~./zul/img/marble/drop-disallow.svg);
     mask-image: url(~./zul/img/marble/drop-disallow.svg);
 }
+
+/* Upload: zul/Upload.ts inserts `<span class="z-upload"><form><input type="file"></form></span>` after
+   every `upload` button, and opens the file dialog by clicking that hidden input. The span must take no
+   space in the layout (stock norm.less `span.z-upload`; the LESS-to-CSS move dropped it, leaving a
+   line-high gap under the button in flex columns). Upload.ts sync() sets the input's inline size, so
+   stock's `font-size: 45pt` on the input is not needed. */
+span.z-upload {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    font-size: 0;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+span.z-upload input {
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+    z-index: -1;
+}
