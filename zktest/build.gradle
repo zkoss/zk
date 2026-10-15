@@ -35,6 +35,7 @@ repositories {
 	mavenLocal() {
 		content {
 			excludeGroupByRegex "io\\.netty\\.*"
+			excludeModule "org.zkoss.theme", "iceblue"
 		}
 	}
 
@@ -72,6 +73,7 @@ dependencies {
 	implementation "org.zkoss.theme:silvertail:10.0.1.1-Eval"
 	implementation "org.zkoss.theme:sapphire:10.0.1.1-Eval"
 	implementation "org.zkoss.theme:atlantic:10.0.1.1-Eval"
+	implementation "org.zkoss.theme:iceblue:11.0.0+"
 	implementation 'commons-logging:commons-logging:1.1.1'
 	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M4'
 	implementation 'commons-io:commons-io:2.17.0'
@@ -170,11 +172,12 @@ task testGroupForkJVMTestOnly(type: Test) {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/testGroupForkJVMTestOnly")
 		useJUnitPlatform {
 			includeTags 'ForkJVMTestOnly'
-			excludeTags 'WcagTestOnly'
+			excludeTags 'WcagTestOnly', 'IceBlueOnly'
 		}
 	} else {
 		useJUnitPlatform {
 			includeTags 'ForkJVMTestOnly'
+			excludeTags 'IceBlueOnly'
 		}
 	}
 	systemProperty "zkWebdriverContextPath", "/zktest"
@@ -214,6 +217,47 @@ task testWCAGOnly(type: Test) {
 		events("standardOut", "started", "passed", "skipped", "failed")
 	}
 }
+
+// IceBlue-only tests: assertions that hold only under the IceBlue theme.
+// Skipped by test and testGroupForkJVMTestOnly once the default theme is no longer IceBlue; run them on purpose here.
+task testIceBlueOnly(type: Test) {
+	forkEvery = 1
+	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
+	if (project.hasProperty('maxParallelForks'))
+		maxParallelForks = project.maxParallelForks as int
+
+	exclude 'org/zkoss/zktest/zats/wcag/**'
+
+	if (project.ext['zktestWithoutA11y'] != 'false') {
+		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/testIceBlueOnly")
+		useJUnitPlatform {
+			includeTags 'IceBlueOnly'
+			excludeTags 'WcagTestOnly'
+		}
+	} else {
+		useJUnitPlatform {
+			includeTags 'IceBlueOnly'
+		}
+	}
+	systemProperty "zkWebdriverContextPath", "/zktest"
+	systemProperty "zkWebdriverTestURLPackage", "org.zkoss.zktest.zats"
+
+	// a way to pass -Dtags=...
+	options {
+		systemProperties(forwardedSystemProperties)
+	}
+	// after the forwarded properties, so a -Dzktest.theme cannot override it
+	systemProperty "zktest.theme", "iceblue"
+
+	// for Jenkins' info
+	testLogging {
+		events("standardOut", "started", "passed", "skipped", "failed")
+	}
+
+	maxHeapSize = "1024m"
+	jvmArgs '-XX:MaxMetaspaceSize=1024m'
+}
+
 test {
 	forkEvery = 1
 	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(4) ?: 1
@@ -225,11 +269,11 @@ test {
 	if (project.ext['zktestWithoutA11y'] != 'false') {
 		reports.junitXml.destination = file("$buildDir/test-results/no-A11Y/test")
 		useJUnitPlatform {
-			excludeTags 'WcagTestOnly', 'ForkJVMTestOnly'
+			excludeTags 'WcagTestOnly', 'ForkJVMTestOnly', 'IceBlueOnly'
 		}
 	} else {
 		useJUnitPlatform {
-			excludeTags 'ForkJVMTestOnly'
+			excludeTags 'ForkJVMTestOnly', 'IceBlueOnly'
 		}
 	}
 	systemProperty "zkWebdriverContextPath", "/zktest"
