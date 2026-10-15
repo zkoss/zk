@@ -563,6 +563,11 @@ A comment in `zul/src/main/resources/web/zul/css/tokens/_sizing.css` says the co
 
 ## 34. Compact Tree rows are 36px against 32px Grid rows
 
+**Resolved** in zk `5fe3305c81` (`tokens/_sizing.css`, `tree.css`, guards in `mesh-header-footer.spec.ts`): the Tree cell padding
+defaults to the Grid padding (16px, compact 6px 12px) and `.z-treecell-content` has no `min-height`, so Tree rows are 52 /
+32 / 60px, as Grid rows, in default, compact and tablet density. Baseline re-cut in `977f4ca8c3`. The text below is the
+finding as filed.
+
 Found while measuring item 28: in `data-density="compact"` a Tree row (with or without a checkmark) is 36px and a
 Grid or Listbox row 32px (`--zk-data-row-min-height: 36px` in `tokens/_sizing.css`). Default (52px) and tablet
 (60px) rows are equal across the three. Not caused by the checkmark; left as found (O10).
@@ -613,6 +618,10 @@ Left as found (O10).
 
 ## 38. A Tree row whose first cell holds a control is shorter than the Grid row (pre-existing)
 
+**Resolved** in zk `5fe3305c81`, with item 34 (same cause: the 52px floor and the 8px vertical padding of the Tree cell): a
+textbox row is 72px and a button row 68px in default density, 44 / 42px compact, 88 / 84px on a tablet, equal to the Grid
+rows. Baseline re-cut in `977f4ca8c3`. The text below is the finding as filed.
+
 Found while measuring item 28 (NS13 F1), with or without a checkmark: a Tree row with a control in the first cell is
 shorter than the Grid row with the same control.
 
@@ -643,6 +652,11 @@ Found while measuring item 28 (NS14), the same at `aa8198f3d1` and with the gap 
 
 ## 40. Listbox group rows are taller than Grid group rows (unverified, found in NS17)
 
+**Resolved** in zk `7be498d084` (`listbox.css`) and zkcml `6c507aca6` (`tablet/_mesh.css`): the group row pads once, on its td, as
+the Grid group row does. It is 36.5px in default and compact density and 40.5px on a tablet (Grid 37 / 37 / 41; the 0.5px is
+the Grid group's border-top and is accepted), also with `checkmark` and `groupSelect`. Baselines re-cut in `977f4ca8c3`. The
+text below is the finding as filed.
+
 Seen in passing by the NS17 implementer while measuring item 4 of NS17 (last-row heights); not investigated.
 
 - Measured on an NS17 probe page (deleted): a Listbox `<listgroup>` row was 52.5px on desktop, 52.5px in compact and
@@ -654,6 +668,11 @@ Seen in passing by the NS17 implementer while measuring item 4 of NS17 (last-row
 - Next step: confirm the numbers on a clean page before deciding whether the two group rows should match (V6).
 
 ## 41. The Listbox group checkbox (groupSelect) has no box (found in NS17 verification)
+
+**Resolved** in zk `8cea3c7645` (`listbox.css`, `_forced-colors.css`) and zkcml `2db8c92e7` (`tablet/_mesh.css`): the group checkbox
+shares the box, hover, selected and forced-colours rules of the row checkbox, a disabled group dims its checkbox, and on a
+tablet it sits at the x of the row checkbox. ZK renders no group radio (`Listcell._colHtmlPre` draws the group checkbox only
+when `groupSelect` and `multiple` are set). The text below is the finding as filed.
 
 Seen by the NS17 verifier on a probe page; not investigated and not compared with IceBlue yet.
 

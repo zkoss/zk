@@ -96,11 +96,11 @@ than the shipped rule, so it wins regardless of load order — and set any token
 | `--zk-button-height` | 36px | 30px | filled/outlined/text button, combobutton, overflow button |
 | `--zk-button-height-lg` | 44px | 38px | `.z-button-lg` |
 | `--zk-menuitem-height` | 36px | 30px | popup menu rows |
-| `--zk-data-row-min-height` | 52px | 36px | tree data rows, grid/listbox paging bar |
+| `--zk-data-row-min-height` | 52px | 36px | grid/listbox paging bar |
 | `--zk-grid-cell-padding` | 16px | 6px 12px | grid cells |
 | `--zk-grid-detail-padding` | 12px | 6px | grid detail content (top/right/bottom) |
 | `--zk-listbox-cell-padding` | 16px | 6px 12px | listbox cells |
-| `--zk-tree-cell-padding` | 8px / 16px | 4px 12px | tree cells |
+| `--zk-tree-cell-padding` | 16px | 6px 12px | tree cells (same as grid and listbox, so a tree row is as tall as a grid row) |
 | `--zk-tree-header-padding` | 16px | 6px 12px | tree header cells (same header height as grid/listbox) |
 
 ### Finer control

@@ -274,6 +274,7 @@
     .z-checkbox-indeterminate > .z-checkbox-mold::after,
     .z-listitem.z-listitem-selected .z-listitem-icon.z-icon-check::before,
     .z-listitem.z-selected .z-listitem-icon.z-icon-check::before,
+    .z-listgroup.z-listgroup-selected .z-listgroup-checkable > .z-listgroup-icon.z-icon-check::before,
     .z-listheader-checkable.z-listheader-checked .z-listheader-icon.z-icon-check::before,
     .z-treerow.z-treerow-selected .z-treerow-icon.z-icon-check::before,
     .z-treerow.z-selected .z-treerow-icon.z-icon-check::before {

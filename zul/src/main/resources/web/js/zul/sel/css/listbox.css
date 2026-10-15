@@ -338,13 +338,21 @@
 }
 
 .z-listgroup td,
-.z-listgroup .z-listcell-cnt,
 .z-listgroup .z-listcell-content {
     background-color: transparent;
     color: var(--zk-color-on-surface);
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);
+}
+
+/* One padding layer, on the td, as Grid's `.z-group-inner`: a second one on the content put the group text 16px
+   right of the data-row text and made the row 15px taller than a Grid group row (follow-up 40). */
+.z-listgroup td {
     padding: var(--zk-spacing-2) var(--zk-spacing-4);
+}
+
+.z-listgroup .z-listcell-content {
+    padding: 0;
 }
 
 .z-listgroup > td:first-child {
@@ -453,7 +461,8 @@
    _icons.css's generic glyph rule in @layer zk-base. Don't re-add !important.
    See doc/spec/layer-architecture-review.md. */
 .z-listitem-icon.z-icon-check::before,
-.z-listheader-icon.z-icon-check::before {
+.z-listheader-icon.z-icon-check::before,
+.z-listgroup-checkable > .z-listgroup-icon.z-icon-check::before {
     background-color: transparent;
     -webkit-mask-image: none;
     mask-image: none;
@@ -465,13 +474,15 @@
     vertical-align: -3px;
 }
 
-.z-listitem:hover .z-listitem-icon.z-icon-check::before {
+.z-listitem:hover .z-listitem-icon.z-icon-check::before,
+.z-listgroup:hover .z-listgroup-checkable > .z-listgroup-icon.z-icon-check::before {
     border-color: var(--zk-color-primary, #376fd0);
 }
 
 /* Selected row: filled blue box with white checkmark */
 .z-listitem.z-listitem-selected .z-listitem-icon.z-icon-check::before,
-.z-listitem.z-selected .z-listitem-icon.z-icon-check::before {
+.z-listitem.z-selected .z-listitem-icon.z-icon-check::before,
+.z-listgroup.z-listgroup-selected .z-listgroup-checkable > .z-listgroup-icon.z-icon-check::before {
     background-color: var(--zk-color-primary, #376fd0);
     border-color: var(--zk-color-primary, #376fd0);
     background-image: url(~./zul/img/marble/check-white.svg);
@@ -548,6 +559,27 @@
 
 .z-listitem-checkable > .z-listitem-icon {
     display: flex;
+}
+
+/* The group checkbox (groupSelect) is laid out like the row checkbox, so its box shares the centre line of the group
+   label. `margin-right: 0` takes back the arrow's 8px, which `.z-listgroup .z-listgroup-icon` also puts on this icon:
+   the gap of the cell content already separates it. */
+.z-listgroup-checkable {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    min-height: var(--zk-typescale-body-medium-line-height);
+}
+
+.z-listgroup-checkable > .z-listgroup-icon {
+    display: flex;
+    margin-right: 0;
+}
+
+/* A disabled row is dimmed as a whole; a disabled group keeps its label and dims only its checkbox. */
+.z-listgroup-checkable.z-listgroup-disabled {
+    opacity: var(--zk-state-disabled-opacity, 0.38);
 }
 
 /* Checkbox-only header column (typically width="40px"): the default

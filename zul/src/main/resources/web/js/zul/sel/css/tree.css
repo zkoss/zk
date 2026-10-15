@@ -224,7 +224,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-height: var(--zk-data-row-min-height);
     box-sizing: border-box;
 }
 

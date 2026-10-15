@@ -280,7 +280,7 @@ Same as listbox, minus striping (`.z-tree` / `.z-treerow` / `.z-treecol`).
 | `--zk-tree-row-hover-bg` | `color-mix(… on-surface 8%, surface)` |
 | `--zk-tree-selected-bg` | `var(--zk-color-secondary-container)` |
 | `--zk-tree-selected-fg` | `var(--zk-color-on-secondary-container)` |
-| `--zk-tree-cell-padding` (size — in `_sizing.css`) | `var(--zk-spacing-2) var(--zk-spacing-4)` |
+| `--zk-tree-cell-padding` (size — in `_sizing.css`) | `var(--zk-spacing-4)` |
 | `--zk-tree-header-padding` (size — in `_sizing.css`) | `var(--zk-spacing-4)` |
 
 ### Panel — shipped

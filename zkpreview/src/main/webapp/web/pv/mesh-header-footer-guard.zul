@@ -358,5 +358,48 @@
             <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/></treerow></treeitem>
         </treechildren>
     </tree>
+    <!-- A Tree whose first cell holds plain text, a textbox or a button, next to the Grids above: the rows are as tall as
+         the Grid rows (follow-ups 34 and 38). -->
+    <tree sclass="mhf-tree-plain-control-row" width="360px">
+        <treecols>
+            <treecol label="Name" width="160px"/>
+            <treecol label="Type" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow sclass="mhf-textbox-row"><treecell><textbox value="Alice"/></treecell><treecell label="Engineering"/></treerow></treeitem>
+            <treeitem><treerow sclass="mhf-button-row"><treecell><button label="Go"/></treecell><treecell label="Engineering"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- A Listbox group row next to a Grid group row (follow-up 40). -->
+    <listbox sclass="mhf-listbox-group" width="360px">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Type" width="160px"/>
+        </listhead>
+        <listgroup label="Group"/>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+    </listbox>
+    <grid sclass="mhf-grid-group" width="360px">
+        <columns>
+            <column label="Name" width="160px"/>
+            <column label="Type" width="160px"/>
+        </columns>
+        <rows>
+            <group label="Group"/>
+            <row><label value="Alice"/><label value="Engineering"/></row>
+        </rows>
+    </grid>
+    <!-- A Listbox whose groups are selectable (groupSelect), one of them disabled (follow-up 41). -->
+    <listbox sclass="mhf-listbox-group-select" width="360px" checkmark="true" multiple="true">
+        <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Type" width="160px"/>
+        </listhead>
+        <listgroup label="Group"/>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+        <listgroup label="Disabled group" disabled="true"/>
+        <listitem><listcell label="Bob"/><listcell label="Engineering"/></listitem>
+    </listbox>
 </div>
 </zk>

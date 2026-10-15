@@ -25,10 +25,16 @@ import { test, expect, Locator, Page } from '@playwright/test';
 //    clear of them (D11 follow-through);
 //  - a Tree header is as tall as the Grid header with the same labels in default, compact and tablet density,
 //    and on a tablet the data rows are as tall as well (D17);
-//  - a checkmark Listbox row and a checkmark Tree row are as tall as the Grid row (the Tree row as the plain Tree
-//    row in compact density, where Tree has its own 36px row) in default, compact and tablet density, the
-//    painted box is centred on the label and on a control in the first cell within 1px, under the default type scale,
+//  - a checkmark Listbox row and a checkmark Tree row are as tall as the Grid row in default, compact and tablet
+//    density, the painted box is centred on the label and on a control in the first cell within 1px, under the default type scale,
 //    a 16px/24px one and Arial, and on a tablet the box keeps its 24px height (follow-up 28);
+//  - a Tree row holding text, a textbox or a button is as tall as the Grid row in default, compact and tablet density
+//    (follow-ups 34 and 38);
+//  - a Listbox group row is as tall as a Grid group row (within the 0.5px of the Grid group's border-top) and its toggle
+//    icon starts on the keyline of the data-row text, in default, compact and tablet density (follow-up 40);
+//  - the checkbox of a selectable Listbox group (groupSelect) paints the box of the row checkbox, unchecked, hovered
+//    and checked, sits on the keyline of the row checkbox, is centred on the group label, and leaves the toggle arrow
+//    alone (follow-up 41);
 //  - the first cell of a checkmark Listbox row keeps its text, or its image when it has one, on the keyline of the
 //    header label and 4px between the image and its label and between a label and a link, in the same three
 //    densities and type scales (follow-up 28, D18);
@@ -369,21 +375,17 @@ interface CheckmarkRows {
   icon: string;
   checkable: string;
   text: string;
-  // Compact Tree has its own 36px row, so its reference there is the plain Tree row, not the Grid row.
   gridRow: string;
-  compactReferenceRow: string;
 }
 
 const CHECKMARK_ROWS: CheckmarkRows[] = [
   {
     name: 'listbox', root: '.mhf-listbox-vs-grid', row: 'tr.z-listitem', icon: '.z-listitem-icon',
     checkable: '.z-listitem-checkable', text: '.z-listcell-content', gridRow: '.mhf-grid-vs-listbox tr.z-row',
-    compactReferenceRow: '.mhf-grid-vs-listbox tr.z-row',
   },
   {
     name: 'tree', root: '.mhf-tree-checkmark', row: 'tr.z-treerow', icon: '.z-treerow-icon',
     checkable: '.z-treerow-checkable', text: '.z-treecell-content', gridRow: '.mhf-grid-vs-tree tr.z-row',
-    compactReferenceRow: '.mhf-tree-vs-grid tr.z-treerow',
   },
 ];
 
@@ -608,18 +610,13 @@ function registerCheckmarkRowsMatchGrid(density: 'default' | 'compact' | 'tablet
       if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
       await page.evaluate(() => document.fonts.ready.then(() => true));
     };
-    // Tree compares to the Grid row only where the two are equal by design: its own row height differs in compact
-    // density and under a larger type scale, so there the reference is the Tree row without a checkmark.
-    const ownRowHeight = density === 'compact' || scaleName !== 'default';
 
-    for (const { name, root, row, icon, text, gridRow, compactReferenceRow } of CHECKMARK_ROWS) {
-      const reference = ownRowHeight ? compactReferenceRow : gridRow;
-
-      test(`${root}: the checkmark ${name} row is as tall as the reference row in ${inDensity}`, async ({ page }) => {
+    for (const { name, root, row, icon, text, gridRow } of CHECKMARK_ROWS) {
+      test(`${root}: the checkmark ${name} row is as tall as the grid row in ${inDensity}`, async ({ page }) => {
         await prepare(page);
         const checkmark = await boxHeight(page, `${root} ${row}`);
-        const expected = await boxHeight(page, reference);
-        expect(Math.abs(checkmark - expected), `checkmark row ${checkmark}, reference row ${expected}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+        const expected = await boxHeight(page, gridRow);
+        expect(Math.abs(checkmark - expected), `checkmark row ${checkmark}, grid row ${expected}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
       });
 
       test(`${root}: the painted box of the checkmark ${name} row is centred on its label in ${inDensity}`, async ({ page }) => {
@@ -663,6 +660,153 @@ function registerCheckmarkBoxKeepsTouchHeight() {
       expect(height).toBe(TOUCH_BOX_PX);
     });
   }
+}
+
+type Density = 'default' | 'compact' | 'tablet';
+
+async function openInDensity(page: Page, density: Density) {
+  await open(page);
+  if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+}
+
+// A Tree row is as tall as the Grid row with the same content: the Tree pads its cell content as the Grid does and has no
+// row-height floor, so a textbox or a button in the first cell is not shorter than in the Grid (follow-ups 34 and 38).
+function registerTreeRowsMatchGrid(density: Density) {
+  const cases = [
+    { name: 'text', tree: '.mhf-tree-vs-grid tr.z-treerow', grid: '.mhf-grid-vs-tree tr.z-row' },
+    { name: 'textbox', tree: '.mhf-tree-plain-control-row .mhf-textbox-row', grid: '.mhf-grid-control-row .mhf-textbox-row' },
+    { name: 'button', tree: '.mhf-tree-plain-control-row .mhf-button-row', grid: '.mhf-grid-control-row .mhf-button-row' },
+  ];
+  for (const { name, tree, grid } of cases) {
+    test(`${tree}: a tree row with ${name} is as tall as the grid row in ${density} density`, async ({ page }) => {
+      await openInDensity(page, density);
+      const treeHeight = await boxHeight(page, tree);
+      const gridHeight = await boxHeight(page, grid);
+      expect(Math.abs(treeHeight - gridHeight), `tree row ${treeHeight}, grid row ${gridHeight}`).toBeLessThanOrEqual(SUB_PIXEL_PX);
+    });
+  }
+}
+
+// The Grid group row has a border-top that the Listbox group row lacks; the 0.5px it adds is accepted.
+const GROUP_ROW_RESIDUAL_PX = 0.5;
+
+// A Listbox group row pads once, as the Grid group row does: it is as tall as the Grid group row and its toggle icon
+// starts where the Grid group's toggle starts, and in default density where the text of a data row starts (follow-up 40).
+function registerListboxGroupRows(density: Density) {
+  test(`.mhf-listbox-group: the listbox group row is as tall as the grid group row in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    const listbox = await boxHeight(page, '.mhf-listbox-group tr.z-listgroup');
+    const grid = await boxHeight(page, '.mhf-grid-group tr.z-group');
+    expect(Math.abs(listbox - grid), `listbox group ${listbox}, grid group ${grid}`).toBeLessThanOrEqual(GROUP_ROW_RESIDUAL_PX + SUB_PIXEL_PX);
+  });
+
+  test(`.mhf-listbox-group: the group toggle icon starts where the grid group toggle starts in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    const left = (selector: string) => page.locator(selector).first().evaluate((el) => el.getBoundingClientRect().left);
+    const listbox = await left('.mhf-listbox-group tr.z-listgroup span.z-listgroup-icon');
+    const grid = await left('.mhf-grid-group tr.z-group .z-group-icon');
+    expect(Math.abs(listbox - grid), `listbox group icon x ${listbox}, grid group icon x ${grid}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  // Group rows pad by the fixed 16px in both Grid and Listbox, while data cells follow the density (12px compact, 20px
+  // tablet), so the keyline is the data-row text only at the default density (follow-up 46).
+  if (density !== 'default') return;
+  test('.mhf-listbox-group: the group toggle icon starts on the keyline of the row text', async ({ page }) => {
+    await openInDensity(page, density);
+    const icon = await page.locator('.mhf-listbox-group tr.z-listgroup span.z-listgroup-icon').first()
+      .evaluate((el) => el.getBoundingClientRect().left);
+    const rowText = await textLeft(page, '.mhf-listbox-group tr.z-listitem .z-listcell-content');
+    expect(Math.abs(icon - rowText), `group icon x ${icon}, row text x ${rowText}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+}
+
+const GROUP_SELECT = '.mhf-listbox-group-select';
+const GROUP_CHECKBOX = `${GROUP_SELECT} tr.z-listgroup:not(.z-listgroup-disabled) i.z-listgroup-icon.z-icon-check`;
+const ITEM_CHECKBOX = `${GROUP_SELECT} tr.z-listitem i.z-listitem-icon.z-icon-check`;
+const CHECKBOX_BOX_PROPERTIES = [
+  'width', 'height', 'box-sizing', 'border-top-width', 'border-top-style', 'border-top-color', 'border-top-left-radius',
+  'background-color', 'background-image', 'background-size', 'mask-image',
+];
+
+// The box a checkbox pseudo-element paints, as computed style: the group checkbox must read the same values as the row
+// checkbox in the same Listbox.
+function checkboxBox(page: Page, selector: string): Promise<Record<string, string>> {
+  return page.locator(selector).first().evaluate((icon, properties) => {
+    const style = getComputedStyle(icon, '::before');
+    return Object.fromEntries(properties.map((property) => [property, style.getPropertyValue(property)]));
+  }, CHECKBOX_BOX_PROPERTIES);
+}
+
+// A selectable group (groupSelect) paints the checkbox of the row checkbox, in every state, and keeps the toggle arrow
+// as it was (follow-up 41). The icon of the group checkbox also carries `z-listgroup-icon`, as the arrow's span does.
+function registerGroupCheckbox(density: Density) {
+  test(`${GROUP_SELECT}: the unchecked group checkbox paints the box of the row checkbox in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    expect(await checkboxBox(page, GROUP_CHECKBOX)).toEqual(await checkboxBox(page, ITEM_CHECKBOX));
+  });
+
+  test(`${GROUP_SELECT}: the hovered group checkbox paints the box of the hovered row checkbox in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    await page.locator(`${GROUP_SELECT} tr.z-listgroup`).first().hover();
+    const group = await checkboxBox(page, GROUP_CHECKBOX);
+    await page.locator(`${GROUP_SELECT} tr.z-listitem`).first().hover();
+    expect(group).toEqual(await checkboxBox(page, ITEM_CHECKBOX));
+  });
+
+  test(`${GROUP_SELECT}: the checked group checkbox paints the box of the checked row checkbox in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    await page.locator(`${GROUP_SELECT} tr.z-listgroup span.z-listgroup-checkable`).first().click();
+    await expect(page.locator(`${GROUP_SELECT} tr.z-listgroup-selected`)).toHaveCount(1);
+    await page.locator(`${GROUP_SELECT} tr.z-listitem span.z-listitem-checkable`).first().click();
+    await expect(page.locator(`${GROUP_SELECT} tr.z-listitem-selected`)).toHaveCount(1);
+    await page.mouse.move(0, 0);
+    const group = await checkboxBox(page, GROUP_CHECKBOX);
+    expect(group['background-image'], 'the checked group checkbox paints its tick').toContain('check-white');
+    expect(group).toEqual(await checkboxBox(page, ITEM_CHECKBOX));
+  });
+
+  test(`${GROUP_SELECT}: the group checkbox is under the row checkbox and centred on the group label in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+    const left = (selector: string) => page.locator(selector).first().evaluate((icon) => icon.getBoundingClientRect().left);
+    const groupLeft = await left(GROUP_CHECKBOX);
+    const itemLeft = await left(ITEM_CHECKBOX);
+    expect(Math.abs(groupLeft - itemLeft), `group box x ${groupLeft}, row box x ${itemLeft}`).toBeLessThanOrEqual(TOLERANCE_PX);
+    const size = (selector: string) => page.locator(selector).first().evaluate((icon) => {
+      const rect = icon.getBoundingClientRect();
+      return `${rect.width}x${rect.height}`;
+    });
+    expect(await size(GROUP_CHECKBOX), 'icon box of the group checkbox').toBe(await size(ITEM_CHECKBOX));
+    await expectBoxCentredOn(page, page.locator(`${GROUP_SELECT} tr.z-listgroup`).first(), 'i.z-listgroup-icon.z-icon-check',
+      { text: '.z-listcell-content' }, 'group label');
+  });
+
+  test(`${GROUP_SELECT}: the disabled group keeps the checkbox box and dims it like a disabled row in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    const disabled = `${GROUP_SELECT} tr.z-listgroup-disabled`;
+    expect(await checkboxBox(page, `${disabled} i.z-listgroup-icon.z-icon-check`)).toEqual(await checkboxBox(page, ITEM_CHECKBOX));
+    const opacity = await page.locator(`${disabled} span.z-listgroup-checkable`)
+      .evaluate((span) => ({
+        painted: Number(getComputedStyle(span).opacity),
+        token: Number(getComputedStyle(document.documentElement).getPropertyValue('--zk-state-disabled-opacity')),
+      }));
+    expect(opacity.painted, 'opacity of the disabled group checkbox').toBe(opacity.token);
+  });
+}
+
+// zkmax `tablet/_mesh.css` sizes the toggle arrow through `.z-listgroup-icon`, a class the group checkbox's icon also
+// carries. The checkbox icon is left out of that rule; this is a non-regression guard that the arrow keeps its size with
+// and without groupSelect, so it passes before and after the change.
+function registerGroupArrowIgnoresGroupSelect() {
+  test(`${GROUP_SELECT}: the toggle arrow is the size of the arrow of a group without groupSelect`, async ({ page }) => {
+    await open(page);
+    const size = (selector: string) => page.locator(selector).first().evaluate((arrow) => {
+      const rect = arrow.getBoundingClientRect();
+      return `${rect.width}x${rect.height}`;
+    });
+    expect(await size(`${GROUP_SELECT} tr.z-listgroup span.z-listgroup-icon`))
+      .toBe(await size('.mhf-listbox-group tr.z-listgroup span.z-listgroup-icon'));
+  });
 }
 
 // The documented minimum width of an image-only header column with the menu button (contracts/listbox.md): the
@@ -859,6 +1003,11 @@ test.describe('mesh header and footer', () => {
   registerTreeHeaderMatchesGrid();
   registerCheckmarkRowsMatchGrid('default');
   registerCheckmarkRowsMatchGrid('compact');
+  for (const density of ['default', 'compact'] as const) {
+    registerTreeRowsMatchGrid(density);
+    registerListboxGroupRows(density);
+    registerGroupCheckbox(density);
+  }
   registerCheckmarkBoxInAlignedFirstColumn();
   registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_DESKTOP);
   registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-desktop');
@@ -893,6 +1042,10 @@ test.describe('mesh header and footer', () => {
     registerMenuHeaderClearsArrowAndButton();
     registerTreeHeaderMatchesGrid();
     registerCheckmarkRowsMatchGrid('tablet');
+    registerTreeRowsMatchGrid('tablet');
+    registerListboxGroupRows('tablet');
+    registerGroupCheckbox('tablet');
+    registerGroupArrowIgnoresGroupSelect();
     registerCheckmarkBoxInAlignedFirstColumn();
     registerCheckmarkBoxKeepsTouchHeight();
     registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_TABLET);
