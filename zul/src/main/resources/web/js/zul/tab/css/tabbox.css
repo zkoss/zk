@@ -714,5 +714,10 @@
     .z-tabbox-accordion .z-tab-content::after {
         background-color: CanvasText;
     }
+
+    /* The selected tab is filled with Highlight (_forced-colors.css 2a); CanvasText on it is ~1.9:1. */
+    .z-tabbox-accordion .z-tab.z-tab-selected .z-tab-content::after {
+        background-color: HighlightText;
+    }
 }
 }

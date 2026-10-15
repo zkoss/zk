@@ -194,6 +194,22 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(color).not.toBe(bg);
   });
 
+  test('selected accordion tab chevron is painted HighlightText (readable on the Highlight fill)', async ({ page }) => {
+    // The chevron is a mask painted by background-color; CanvasText on the Highlight fill is ~1.9:1.
+    await page.goto('/tabbox.zul', { waitUntil: 'domcontentloaded' });
+    const content = page.locator('.z-tabbox-accordion .z-tab.z-tab-selected .z-tab-content').first();
+    await content.waitFor({ state: 'visible', timeout: 10000 });
+    const { chevron, highlightText } = await content.evaluate(el => {
+      const probe = document.createElement('span');
+      probe.style.color = 'HighlightText';
+      document.body.appendChild(probe);
+      const highlightText = getComputedStyle(probe).color;
+      probe.remove();
+      return { chevron: getComputedStyle(el, '::after').backgroundColor, highlightText };
+    });
+    expect(chevron).toBe(highlightText);
+  });
+
   test('datebox popup gains a border (box-shadow elevation is stripped)', async ({ page }) => {
     await page.goto('/datebox.zul', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.z-datebox-button', { timeout: 10000 });
