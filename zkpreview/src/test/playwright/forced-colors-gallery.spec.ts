@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -38,6 +38,27 @@ const SKIP = new Set([
   'camera', 'barcodescanner', 'captcha', 'video', 'audio', 'fileupload', 'loading', 'loadingbar',
 ]);
 
+// ZK animates a progressmeter's value bar with a jQuery animation that `animations: 'disabled'` does not stop, and
+// networkidle can return before it ends. Resolves once every bar has kept its width for two animation frames; a page
+// without a progressmeter resolves at once.
+async function waitForProgressmeterBars(page: Page): Promise<void> {
+  await page.evaluate(() => new Promise<void>(resolve => {
+    const bars = [...document.querySelectorAll('.z-progressmeter-image')];
+    if (!bars.length) return resolve();
+    const widths = () => bars.map(bar => bar.getBoundingClientRect().width).join();
+    let previous = widths();
+    let stableFrames = 0;
+    const onFrame = () => {
+      const current = widths();
+      stableFrames = current === previous ? stableFrames + 1 : 0;
+      previous = current;
+      if (stableFrames >= 2) resolve();
+      else requestAnimationFrame(onFrame);
+    };
+    requestAnimationFrame(onFrame);
+  }));
+}
+
 const pages = fs.readdirSync(WEB_DIR)
   .filter(f => f.endsWith('.zul'))
   .map(f => f.replace(/\.zul$/, ''))
@@ -57,6 +78,7 @@ test.describe('forced-colors-gallery (visual review)', () => {
       await page.goto(`/${comp}.zul`, { waitUntil: 'networkidle' });
       // Wait for the Inter web font to settle so the shot isn't taken mid font-swap.
       await page.evaluate(() => document.fonts.ready.then(() => true));
+      await waitForProgressmeterBars(page);
       const wrapper = page.locator('.z-p-8').first();
       await expect(
         wrapper,

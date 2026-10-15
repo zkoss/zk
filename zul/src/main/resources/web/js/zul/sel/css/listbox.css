@@ -475,7 +475,7 @@
 }
 
 .z-listitem:hover .z-listitem-icon.z-icon-check::before,
-.z-listgroup:hover .z-listgroup-checkable > .z-listgroup-icon.z-icon-check::before {
+.z-listgroup:not(.z-listgroup-disabled):hover .z-listgroup-checkable > .z-listgroup-icon.z-icon-check::before {
     border-color: var(--zk-color-primary, #376fd0);
 }
 
@@ -622,6 +622,22 @@
     display: inline-block;
     max-width: 100%;
     vertical-align: top;
+}
+
+/* In a centred column the row centres the box in its flex row, so a 40px span that overflows the cell
+   overflows by the same amount on both sides and the box stays at the column centre. The header span is
+   capped at the content width and its padding cannot shrink, which parks the box at the left padding and
+   pushes the whole overflow to the right. A flex row of its own centres the box instead, and the 12px that
+   the span kept as padding become the margin of the icon, which a flex item may overflow evenly (follow-up 52).
+   A left-aligned header keeps the keyline of the row box. */
+.z-listheader:is([style*="text-align:center"], [style*="text-align: center"]) > .z-listheader-content > .z-listheader-checkable {
+    display: inline-flex;
+    justify-content: center;
+    padding-inline: 0;
+}
+
+.z-listheader:is([style*="text-align:center"], [style*="text-align: center"]) > .z-listheader-content > .z-listheader-checkable > .z-listheader-icon {
+    margin-inline: var(--zk-spacing-3);
 }
 
 /* Narrow image/icon header column — same squeeze as the checkable column. A

@@ -99,5 +99,5 @@ using a height token and the rest hardcoding 28/32/36/40/44/48/56.
 4. `bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>` — no new hardcoded-px regressions; new tokens show as referenced.
 
 The last verified probe run was 8/8: button 36→30 (every variant, outlined included), tabs 49→46, window header 57→48, tree row
-52→36, datebox 40→32 (inner 38→30), textbox 40→32, checkbox row 40→32, grid cell padding
+52→32, datebox 40→32 (inner 38→30), textbox 40→32, checkbox row 40→32, grid cell padding
 16px→6px 12px.

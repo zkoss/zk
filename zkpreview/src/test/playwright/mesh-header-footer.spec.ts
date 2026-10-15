@@ -598,6 +598,49 @@ function registerCheckmarkBoxInAlignedFirstColumn() {
   }
 }
 
+// A select-all-only column of 24 to 160px: in a centred column the header box and the row box share one centre
+// (cm5 of contracts/listbox.md), also where the 40px checkable span overflows the cell, where a centred row splits the
+// overflow both ways and the header must do the same (follow-up 52). A left-aligned column keeps its box on the keyline,
+// 16px from the column edge in the header and in the row.
+function registerCheckmarkBoxColumns(density: 'default' | 'compact' | 'tablet') {
+  const WIDTHS_PX = [24, 40, 48, 160];
+  const KEYLINE_PX = 16;
+  const boxRect = (page: Page, root: string, selector: string) => page.locator(`${root} ${selector}`).first()
+    .evaluate((icon) => {
+      const { left, right } = icon.getBoundingClientRect();
+      return { left, centre: (left + right) / 2 };
+    });
+  const columnLeft = (page: Page, root: string) => page.locator(`${root} th.z-listheader`).first()
+    .evaluate((th) => th.getBoundingClientRect().left);
+  const prepare = async (page: Page) => {
+    await open(page);
+    if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+  };
+
+  for (const width of WIDTHS_PX) {
+    const centred = `.mhf-box-column-center-${width}`;
+    test(`${centred}: the header box and the row box of a centred ${width}px checkmark column share one centre in ${density} density`,
+      async ({ page }) => {
+        await prepare(page);
+        const header = await boxRect(page, centred, 'th.z-listheader .z-listheader-icon');
+        const row = await boxRect(page, centred, 'tr.z-listitem .z-listitem-icon');
+        expect(Math.abs(header.centre - row.centre), `header box centre ${header.centre}, row box centre ${row.centre}`)
+          .toBeLessThanOrEqual(TOLERANCE_PX);
+      });
+
+    const left = `.mhf-box-column-left-${width}`;
+    test(`${left}: a left-aligned ${width}px checkmark column keeps both boxes on the keyline in ${density} density`, async ({ page }) => {
+      await prepare(page);
+      const edge = await columnLeft(page, left);
+      const header = await boxRect(page, left, 'th.z-listheader .z-listheader-icon');
+      const row = await boxRect(page, left, 'tr.z-listitem .z-listitem-icon');
+      expect(header.left - edge, `header box ${header.left}, column edge ${edge}`).toBeCloseTo(KEYLINE_PX, 0);
+      expect(row.left - edge, `row box ${row.left}, column edge ${edge}`).toBeCloseTo(KEYLINE_PX, 0);
+    });
+  }
+}
+
 // A checkmark row is as tall as the row without the box, and the painted box is centred on the label and on a control
 // in the first cell. Follow-up 28: `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox
 // line box; asymmetric margins that undid it only fitted Inter 13px/20px (NS13 F1).
@@ -779,6 +822,23 @@ function registerGroupCheckbox(density: Density) {
     expect(await size(GROUP_CHECKBOX), 'icon box of the group checkbox').toBe(await size(ITEM_CHECKBOX));
     await expectBoxCentredOn(page, page.locator(`${GROUP_SELECT} tr.z-listgroup`).first(), 'i.z-listgroup-icon.z-icon-check',
       { text: '.z-listcell-content' }, 'group label');
+  });
+
+  test(`${GROUP_SELECT}: the checkbox of a disabled group keeps its border colour on hover in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    const box = `${GROUP_SELECT} tr.z-listgroup-disabled i.z-listgroup-icon.z-icon-check`;
+    const border = () => page.locator(box).evaluate((icon) => getComputedStyle(icon, '::before').borderTopColor);
+    await page.locator(box).scrollIntoViewIfNeeded();
+    await page.mouse.move(0, 0);
+    const atRest = await border();
+    const { x, y } = await page.locator(box).evaluate((icon) => {
+      const rect = icon.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    });
+    await page.mouse.move(x, y);
+    expect(await page.locator(`${GROUP_SELECT} tr.z-listgroup-disabled`).evaluate((row) => row.matches(':hover')),
+      'the pointer is over the disabled group row').toBe(true);
+    expect(await border(), `border at rest ${atRest}`).toBe(atRest);
   });
 
   test(`${GROUP_SELECT}: the disabled group keeps the checkbox box and dims it like a disabled row in ${density} density`, async ({ page }) => {
@@ -1009,6 +1069,8 @@ test.describe('mesh header and footer', () => {
     registerGroupCheckbox(density);
   }
   registerCheckmarkBoxInAlignedFirstColumn();
+  registerCheckmarkBoxColumns('default');
+  registerCheckmarkBoxColumns('compact');
   registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_DESKTOP);
   registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-desktop');
   registerImageSortMenuHeaderOrder([GRID_IMAGE_MENU, LISTBOX_IMAGE_MENU]);
@@ -1047,6 +1109,7 @@ test.describe('mesh header and footer', () => {
     registerGroupCheckbox('tablet');
     registerGroupArrowIgnoresGroupSelect();
     registerCheckmarkBoxInAlignedFirstColumn();
+    registerCheckmarkBoxColumns('tablet');
     registerCheckmarkBoxKeepsTouchHeight();
     registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_TABLET);
     registerSelectAllOnlyMenuHeaderAtMinimumWidth('.mhf-listbox-select-all-only-menu-tablet');

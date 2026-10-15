@@ -20,18 +20,15 @@ Most components fall here. ZK adds a state class on the root element.
 
 **Do not** assume the HTML `disabled` attribute is also present at the selector level you care about — the attribute may be on the inner `<input>`, not on the root the class is on. Always prefer the class selector.
 
-## 3. sclass-based (`-invalid`)
+## 3. Added by ZK to the input node (`-invalid`)
 
-Validation state is **not** automatic. The convention is for the developer to set `sclass="z-{component}-invalid"` on the component when validation fails. The CSS rule looks like:
+A constraint failure is automatic: `InputWidget._markError` adds `z-{component}-invalid` to the **input node** (`getInputNode()`), and removes it when the value is valid again. Which element that is depends on the widget:
 
-```css
-.z-textbox.z-textbox-invalid { border-color: <error>; color: <error>; }
-.z-intbox.z-intbox-invalid    { ... }
-.z-datebox.z-datebox-invalid  { ... }
-.z-combobox.z-combobox-invalid { ... }
-```
+- **Single-input widgets** (textbox, intbox, longbox, decimalbox, doublebox, passwordbox): the `<input>` is the root, so the class sits next to the base class: `.z-intbox.z-intbox-invalid`.
+- **Composite widgets** (combobox, bandbox, datebox, timebox, timepicker, spinner, doublespinner): the class lands on the inner `<input>`, `span.z-combobox > input.z-combobox-input.z-combobox-invalid`. A border drawn on the wrapper needs `:has()`: `.z-datebox:has(.z-datebox-invalid)`.
+- **daterangebox**: its `domClass_` puts the class on the root `<div>`.
 
-These selectors are **stacked** (`.z-textbox.z-textbox-invalid`), not standalone (`.z-textbox-invalid`). The double-class form is necessary because ZK only outputs the class on the root component, and you need both the base class (for layout) and the modifier class (for the invalid colour) to apply.
+A developer can also write `sclass="z-{component}-invalid"`, which puts the class on the **wrapper** of a composite widget. Preview pages use this to show the state without a constraint. A theme that wants both to work lists both forms: `.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid))`.
 
 ## Checkbox mold-prefixed state classes
 
@@ -52,11 +49,11 @@ Most inputs (textbox, intbox, datebox, timebox, spinner, combobox, bandbox) emit
 
 | Component | disabled | readonly | invalid |
 |-----------|----------|----------|---------|
-| textbox / intbox / longbox / decimalbox / doublebox / passwordbox | ✓ class | ✓ attr | ✓ sclass |
-| combobox | ✓ class | ✓ attr | ✓ sclass |
-| bandbox | ✓ class | ✓ attr | ✓ sclass |
-| datebox / timebox | ✓ class | ✓ attr | ✓ sclass |
-| spinner / doublespinner | ✓ class | ✓ attr | ✓ sclass |
+| textbox / intbox / longbox / decimalbox / doublebox / passwordbox | ✓ class | ✓ attr | ✓ ZK-added |
+| combobox | ✓ class | ✓ attr | ✓ ZK-added |
+| bandbox | ✓ class | ✓ attr | ✓ ZK-added |
+| datebox / timebox | ✓ class | ✓ attr | ✓ ZK-added |
+| spinner / doublespinner | ✓ class | ✓ attr | ✓ ZK-added |
 | selectbox | ✓ attr  | — | — |
 | searchbox | ✓ attr | — | — |
 | chosenbox | ✓ attr  | — | — |

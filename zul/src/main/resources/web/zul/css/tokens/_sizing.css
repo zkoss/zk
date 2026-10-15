@@ -60,7 +60,7 @@
     --zk-notification-height:    var(--zk-control-height-lg);  /* 48 */
     --zk-paging-control-size:    var(--zk-control-height-sm);  /* 32 */
     --zk-carousel-arrow-size:    var(--zk-control-height-sm);  /* 32 — same rung as paging's arrow-pair precedent */
-    --zk-data-row-min-height:    52px;                         /* off-ladder: grid/list paging bar */
+    --zk-data-row-min-height:    52px;                         /* off-ladder: listbox paging bar (listbox.css) */
 
     /* ── Layer 3: data-cell padding ─────────────────────────────────────
        Defined here at :root (NOT on .z-grid/.z-listbox/.z-tree) so a customer's

@@ -75,7 +75,7 @@ The icon class is whatever the developer sets in `iconSclass` (any class is allo
 
 - `.z-combobox-disabled` on root
 - `[readonly]` on the inner input
-- `.z-combobox-invalid` (sclass)
+- `.z-combobox-invalid` on the inner `<input>` after a failed constraint (on the root when set through `sclass`)
 - `.z-combobox-inplace` on root when inplace + unfocused
 - `.z-combobox-open` on root when popup is open
 

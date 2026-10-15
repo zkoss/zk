@@ -129,15 +129,16 @@
 }
 
 /* ─── Invalid variant ─────────────────────────────────────────────────── */
-.z-bandbox.z-bandbox-invalid {
+/* ZK adds z-bandbox-invalid to the <input> after a failed constraint; an sclass puts it on the wrapper. */
+.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)) {
     border-color: var(--zk-color-error);
 }
 
-.z-bandbox.z-bandbox-invalid:hover {
+.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):hover {
     border-color: var(--zk-color-error);
 }
 
-.z-bandbox.z-bandbox-invalid:focus-within {
+.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):focus-within {
     border-color: var(--zk-color-error);
     box-shadow: inset 0 0 0 1px var(--zk-color-error);
 }

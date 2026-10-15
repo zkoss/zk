@@ -215,6 +215,20 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     }
   });
 
+  // Follow-up 53: without the (2b) line for a selected group, the group checkbox is a white box with a white tick.
+  test('a selected Listbox group checkbox keeps its baked box (forced-color-adjust: none)', async ({ page }) => {
+    await page.goto('/pv/mesh-header-footer-guard.zul', { waitUntil: 'domcontentloaded' });
+    const group = page.locator('.mhf-listbox-group-select tr.z-listgroup:not(.z-listgroup-disabled)').first();
+    await group.locator('span.z-listgroup-checkable').click();
+    await expect(group).toHaveClass(/z-listgroup-selected/);
+    const check = await group.locator('i.z-listgroup-icon.z-icon-check').evaluate(el => {
+      const cs = getComputedStyle(el, '::before');
+      return { fca: cs.forcedColorAdjust, bgImg: cs.backgroundImage };
+    });
+    expect(check.fca).toBe('none');
+    expect(check.bgImg).toContain('check-white');
+  });
+
   test('accordion selected tab uses the system selection color', async ({ page }) => {
     await page.goto('/tabbox.zul', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.z-tabbox-accordion .z-tab.z-tab-selected', { timeout: 10000 });
@@ -505,6 +519,31 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
       inputLeft: 'double', inputRight: 'none', buttonLeft: 'none', buttonRight: 'double',
       inputTop: 'double', buttonTop: 'double',
     });
+  });
+
+  // Follow-up 47: a real constraint failure puts z-combobox-invalid / z-bandbox-invalid on the <input>,
+  // not on the wrapper that the sclass-based preview pages style. Driven the way a user does it.
+  test('a real invalid combobox and bandbox show the double border (one box, seam open)', async ({ page }) => {
+    await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
+    for (const widget of ['combobox', 'bandbox']) {
+      const input = page.locator(`.z-${widget}-input`);
+      await input.click();
+      await page.keyboard.type('a');
+      await page.keyboard.press('Backspace');
+      await page.locator('body').click({ position: { x: 600, y: 400 } });
+      await expect(input).toHaveClass(new RegExp(`z-${widget}-invalid`));
+    }
+    const border = (selector: string, side: 'Top' | 'Left' | 'Right') => page.locator(selector).evaluate((el, s) => {
+      const cs = getComputedStyle(el);
+      return `${cs[`border${s}Style` as 'borderTopStyle']} ${cs[`border${s}Width` as 'borderTopWidth']}`;
+    }, side);
+
+    expect(await border('.z-bandbox', 'Top'), 'bandbox box').toBe('double 3px');
+    expect(await border('.z-combobox-input', 'Top'), 'combobox input top').toBe('double 3px');
+    expect(await border('.z-combobox-button', 'Top'), 'combobox button top').toBe('double 3px');
+    expect(await border('.z-combobox-input', 'Right'), 'seam, input side').toMatch(/^none /);
+    expect(await border('.z-combobox-button', 'Left'), 'seam, button side').toMatch(/^none /);
+    expect(await border('.z-combobox-button', 'Right'), 'combobox button right').toBe('double 3px');
   });
 
   // Follow-up 45 F2: a no-spacing bar is a 1px box; the line must paint inside it, not in the row below.

@@ -311,18 +311,19 @@
 }
 
 /* ─── Invalid variant ─────────────────────────────────────────────────────── */
-.z-combobox.z-combobox-invalid .z-combobox-input,
-.z-combobox.z-combobox-invalid .z-combobox-button {
+/* ZK adds z-combobox-invalid to the <input> after a failed constraint; an sclass puts it on the wrapper. */
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input,
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-button {
     border-color: var(--zk-color-error);
 }
 
-.z-combobox.z-combobox-invalid:hover .z-combobox-input,
-.z-combobox.z-combobox-invalid:hover .z-combobox-button {
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):hover .z-combobox-input,
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):hover .z-combobox-button {
     border-color: var(--zk-color-error);
 }
 
-.z-combobox.z-combobox-invalid:focus-within .z-combobox-input,
-.z-combobox.z-combobox-invalid:focus-within .z-combobox-button {
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):focus-within .z-combobox-input,
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):focus-within .z-combobox-button {
     border-color: var(--zk-color-error);
     border-width: 2px;
 }

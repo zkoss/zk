@@ -150,10 +150,10 @@
     .z-spinner.z-spinner-invalid,
     .z-doublespinner:has(.z-doublespinner-invalid),
     .z-doublespinner.z-doublespinner-invalid,
-    .z-bandbox.z-bandbox-invalid,
+    .z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)),
     .z-daterangebox.z-daterangebox-invalid,
-    .z-combobox.z-combobox-invalid .z-combobox-input,
-    .z-combobox.z-combobox-invalid .z-combobox-button {
+    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input,
+    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-button {
         border-style: double;
         border-width: 3px;
     }
@@ -162,10 +162,10 @@
        (input has no right border, button no left border). The double border above must keep
        that seam open, or the button draws as a second double-bordered box beside the input.
        A hidden button leaves the input full width with its own right border, so it is excluded. */
-    .z-combobox.z-combobox-invalid .z-combobox-input:not(.z-combobox-input-full) {
+    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input:not(.z-combobox-input-full) {
         border-right-style: none;
     }
-    .z-combobox.z-combobox-invalid .z-combobox-button {
+    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-button {
         border-left-style: none;
     }
 

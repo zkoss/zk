@@ -401,5 +401,62 @@
         <listgroup label="Disabled group" disabled="true"/>
         <listitem><listcell label="Bob"/><listcell label="Engineering"/></listitem>
     </listbox>
+    <!-- A select-all-only column of 24 to 160px, centred and left-aligned, in a checkmark Listbox (follow-up 52): the header box and the row box share one centre. -->
+    <listbox sclass="mhf-listbox-box-column mhf-box-column-center-24" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="24px" align="center"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-box-column mhf-box-column-center-40" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="40px" align="center"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-box-column mhf-box-column-center-48" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="48px" align="center"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-box-column mhf-box-column-center-160" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="160px" align="center"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-box-column mhf-box-column-left-24" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="24px" align="left"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-box-column mhf-box-column-left-40" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="40px" align="left"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-box-column mhf-box-column-left-48" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="48px" align="left"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
+    <listbox sclass="mhf-listbox-box-column mhf-box-column-left-160" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader width="160px" align="left"/>
+            <listheader label="Name" width="160px"/>
+        </listhead>
+        <listitem><listcell/><listcell label="Alice"/></listitem>
+    </listbox>
 </div>
 </zk>

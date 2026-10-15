@@ -30,7 +30,7 @@ The combination `buttonVisible="false"` + `inplace="true"` is **valid** — show
 
 - `.z-bandbox-disabled` on root for `disabled="true"`
 - `[readonly]` on the inner `<input>` for `readonly="true"`
-- `.z-bandbox-invalid` (set via sclass) for validation failure
+- `.z-bandbox-invalid` on the inner `<input>` after a failed constraint (on the root when set through `sclass`)
 - `.z-bandbox-inplace` on root when `inplace="true"` and unfocused
 - `.z-bandbox-open` on root when the popup is open
 

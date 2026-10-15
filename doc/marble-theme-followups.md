@@ -779,6 +779,15 @@ fixes only cover that. Datebox works (`:has(.z-datebox-invalid)`). IceBlue style
 
 - Repro: `<combobox constraint="no empty"/>` and `<bandbox constraint="no empty"/>`; type a character, delete it, click outside.
 
+**Resolved** in zk `8431675cca` (`combobox.css`, `bandbox.css`, `_forced-colors.css` (1c), guards in `input-invalid.spec.ts` and
+`forced-colors.spec.ts` on `pv/input-invalid-guard.zul`): both selector lists now take the class on the wrapper (`sclass`, the
+preview pages) or on the child input (`:is(.z-combobox-invalid, :has(> .z-combobox-invalid))`), at the specificity of the old
+rule. Measured on a real `constraint="no empty"` failure: input and button border `rgb(211, 47, 47)` at rest, hover and
+focus; forced colours: bandbox `double 3px`, combobox input and button `double 3px` with the seam open. The other input
+widgets already match: single-input widgets carry the class on the root input, datebox, timebox, timepicker, spinner and
+doublespinner use `:has()`, daterangebox sets it on its root; cascader, searchbox and chosenbox are not `InputWidget`s.
+`state-classes.md` and the two component notes now say where ZK puts the class.
+
 ## 48. Disabled paging text stays CanvasText under forced colours (NS21)
 
 `.z-paging-text-disabled` uses `var(--zk-color-disabled)`, which forced colours maps to CanvasText, so disabled paging
@@ -805,3 +814,51 @@ buttons. Left as found (O10).
 value fill; the live page has the fill at 120/200px after 1.5s but 32px at 300ms. `forced-colors-gallery.spec.ts`
 captures after `networkidle` with `animations: 'disabled'`, which does not stop ZK's width transition. Wait for the
 progressmeter width before capturing, then re-cut that PNG.
+
+**Resolved** in zk `2fc179bc97` (`forced-colors-gallery.spec.ts`: `waitForProgressmeterBars` waits until every
+`.z-progressmeter-image` keeps its width for two animation frames, and returns at once on a page without one) and
+`d0866b6bea` (`component-theming-forced-colors.png`, the only PNG that run changed): the Highlight fill is now visible at
+60% of both bars.
+
+## 52. A centred 40px checkmark column: the row checkbox is 4px left of the header checkbox (NS22 verification)
+
+Breaks cm5 in `doc/contracts/listbox.md` (header and row box centres within ±1px). On `/listbox-header.zul`, last
+`multiple checkmark` Listbox (`<listheader align="center" width="40px"/>`): header box x 49-64, row box x 45-60 (PNG, the
+same in default, compact and tablet); the column centre is 53, so the row box is centred and the header box is 4px right.
+
+- Cause: `aa8198f3d1` made the cell content flex with `justify-content: center` for centred checkmark cells (`listbox.css`
+  `.z-listcell:has(.z-listitem-checkable):is([style*="text-align:center"]...) > .z-listcell-content`). The 40px checkable
+  span overflows the 32px content box by 8px; flex centring splits the overflow 4/4, while the header (inline,
+  `text-align: center`) puts all of it on the right.
+- Missed because 352px is 0.0046% of the gallery PNG (tolerance 0.2%) and the guard fixture's column is 160px wide.
+  `listbox-header-gallery.png` absorbed the shift in `977f4ca8c3`.
+
+**Resolved** in zk `6a27255cec` (`listbox.css`, guard `registerCheckmarkBoxColumns` in `mesh-header-footer.spec.ts`): the
+header span of a centred column is an inline flex row, its 12px padding is the margin of the icon. Header and row box centres
+differ by 0px (was 12 at 24px, 4 at 40px, 0 at 48 and 160px) in default, compact and tablet; a left-aligned column keeps both
+boxes 16px from the column edge at 24, 40, 48 and 160px. `listbox-header-gallery.png` was not re-cut: a re-cut also moved
+about 4,300 px of a listbox further down the page (its width), which this batch does not explain.
+
+## 53. NS22 leftovers (NS22 verification)
+
+- `_forced-colors.css` (2b) line for `.z-listgroup.z-listgroup-selected` (added in `8cea3c7645`) has no guard: without it a
+  selected group checkbox is a white box with a white check under forced colours, and all guards still pass.
+- A disabled group checkbox turns its border primary on row hover (`listbox.css` `.z-listgroup:hover
+  .z-listgroup-checkable > ...::before` also matches `.z-listgroup-disabled`); a disabled listitem keeps the outline colour.
+- Docs: `doc/spec/data-dense-mode.md` ~99 and `_sizing.css` ~63 say `--zk-data-row-min-height` serves the grid/listbox
+  paging bar, but only `listbox.css` (~701) reads it; `.claude/skills/marble-theme/reference/density.md` ~101 still quotes
+  "tree row 52→36".
+
+**Resolved** in zk `63b258389a`: (a) guard `a selected Listbox group checkbox keeps its baked box` in `forced-colors.spec.ts`
+(red with the (2b) line removed: `forced-color-adjust` is `auto`); (b) `listbox.css` hover rule now has
+`:not(.z-listgroup-disabled)`, guard `the checkbox of a disabled group keeps its border colour on hover` (border
+`rgb(55, 111, 208)` on hover before, `rgba(0, 0, 0, 0.23)` now); (c) the three doc statements; the tree row is 52→32 now.
+
+## 54. A centred checkmark column in a Tree: the row box is not centred and the header box is off (NS24)
+
+Found while checking item 52 for Tree. `<treecol width="40px" align="center"/>` in a `checkmark multiple` Tree (fixture
+`.mhf-tree-box-column` in `mesh-header-footer-guard.zul` was used for the measurement and removed again): the row box sits at
+the column's left edge (x 33-49 in a column 33-73), the header box at x 49-65, so the centres differ by 16px (default), 14px
+(compact) and 20px (tablet); at 160px the row box is 12px left of the column centre. A left-aligned 160px Tree column differs
+by -4px on a tablet (header 53-69, row 57-73). Cause not investigated: the Tree cell holds the box and a `z-tree-line`
+spacer, and `tree.css` has no centred rule for them. Not fixed (O10, and the brief for item 52 forbids moving the rows).
