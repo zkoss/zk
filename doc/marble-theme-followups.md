@@ -723,10 +723,13 @@ Same in the 2026-09-11 and the refreshed captures; not regressions. Left as foun
 
 **Resolved** in zk `51d4eacbba` for the second bullet only (`inset: calc(50% - 0.5px)`; guard clones a bar without inline height):
 the line now sits on the same row as in normal mode in Chromium, Firefox and WebKit.
-**Not changed** for the first bullet: IceBlue (master `separator.less`, `toolbar.less`) renders the separator as a block `div`
-(`height: 7px`, a 1px `:after` line at 50%) and `.z-toolbar-content` has no separator rule, so a horizontal bar in a toolbar
-is a visible full-width line there, not a spacer (V5). The forced-colours line matches IceBlue; the normal-mode Marble rule
-(`toolbar.css`, `height: 0`) is the odd one out. Reading of the CSS only; IceBlue was not rendered. The text below is the finding as filed.
+**Still open** for the first bullet. IceBlue (master `separator.less`, `toolbar.less`, read only, not rendered) draws a
+horizontal bar in a toolbar as a block `div` (`height: 7px`, a 1px `:after` line at 50%, `opacity: .69`), which breaks the
+floated `.z-toolbar-start` content onto its own 7px row as wide as the float, so it is a visible line, not a spacer. Marble
+normal mode turns every `<separator>` in a toolbar into an invisible `flex: 1` spacer (`toolbar.css` "Separator inside toolbar",
+since `2100200284`), and Marble forced colours draws a line through the middle of the toolbar row next to the buttons. Neither
+Marble mode matches IceBlue and the two modes disagree; decide what `bar="true"` in a toolbar should look like (V4: honour the
+attribute) before changing either. The text below is the finding as filed.
 
 Low; left as found (O10).
 
@@ -737,3 +740,49 @@ Low; left as found (O10).
   y60, line at y61, Chromium/Firefox/WebKit); normal mode paints y60. The forced-colours guard screenshots only the bar's
   own box, so it would see 0 rows if a no-spacing bar were added to `separator.zul`. The page's "Default spacing" bar
   actually uses `spacing="8px"`, so the real default is not covered by the page or the guard.
+
+## 46. Grid group rows do not shrink in compact density (NS22 measurement)
+
+A Grid `<group>` row is 37px in default and in compact (`data-density="compact"`), 41px on tablet, while data rows go
+52.5 / 32.5 / 60.5. The Listbox group row matches the Grid group row after the NS22 fix, so both stay 37px in compact.
+Existing behaviour; left as found (O10). Decide with `doc/spec/data-dense-mode.md` whether group rows follow the density.
+
+## 47. A real invalid combobox or bandbox gets no invalid styling (NS21 verification, Medium)
+
+`InputWidget.ts` (~line 910) adds `z-combobox-invalid` / `z-bandbox-invalid` to the `<input>` node, but Marble matches
+it only on the wrapper: `combobox.css` "Invalid variant" (`.z-combobox.z-combobox-invalid .z-combobox-input`, ~314-325),
+`bandbox.css` ~132-140 and `_forced-colors.css` (1c) and the combobox seam rules. After a real `constraint="no empty"`
+failure the DOM is `span.z-combobox > input.z-combobox-input.z-combobox-invalid`: grey border in normal mode, single 1px
+border in forced colours. The preview pages fake the state with `sclass` on the wrapper, so they and the follow-up 44
+fixes only cover that. Datebox works (`:has(.z-datebox-invalid)`). IceBlue styles the class on the input itself (master
+`combo.less:117-122`), so this is Marble-caused (O1). `zk-component-rules/reference/state-classes.md` says invalid is
+"set via sclass", which is wrong for these two widgets.
+
+- Repro: `<combobox constraint="no empty"/>` and `<bandbox constraint="no empty"/>`; type a character, delete it, click outside.
+
+## 48. Disabled paging text stays CanvasText under forced colours (NS21)
+
+`.z-paging-text-disabled` uses `var(--zk-color-disabled)`, which forced colours maps to CanvasText, so disabled paging
+text looks enabled; follow-up 44 made the disabled paging icons `GrayText` but not this text. The preview pages also have
+no `mold="os"` paging sample with disabled buttons. Left as found (O10).
+
+## 49. Forced colours: two observations from the NS21 verification (unrelated to NS21)
+
+Same under the old and new CSS; left as found (O10).
+
+- A disabled icon-only `z-button-icon` with `iconSclass="z-icon-settings"` shows the text "con" under forced colours.
+- In `tabbox-misc.zul`, the selected `.z-tab` intercepts clicks on the combobox inside the accordion caption (check whether
+  it is the page, the theme or ZK before filing anything).
+
+## 50. Invalid inputs grow 4px under forced colours (NS21 verification)
+
+The (1c) double border (`border-width: 3px`) makes every invalid input 4px larger under forced colours; on the
+`daterangebox` page each invalid box pushes the next row down by 4px. Same kind of box growth as item 31 removed for
+buttons. Left as found (O10).
+
+## 51. The `component-theming` forced-colors screenshot catches the progressmeter mid-transition (NS21 verification)
+
+`component-theming-forced-colors.png` (`7ebed7f28d`) shows both progressmeter bars as solid GrayText with no Highlight
+value fill; the live page has the fill at 120/200px after 1.5s but 32px at 300ms. `forced-colors-gallery.spec.ts`
+captures after `networkidle` with `animations: 'disabled'`, which does not stop ZK's width transition. Wait for the
+progressmeter width before capturing, then re-cut that PNG.
