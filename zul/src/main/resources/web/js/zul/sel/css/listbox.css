@@ -831,10 +831,6 @@
     color: var(--zk-color-on-secondary-container);
 }
 
-.z-listgroup-checkable .z-listcell:first-child {
-    padding-left: calc(var(--zk-spacing-4) + 4px);
-}
-
 .z-listgroup-content {
     display: flex;
     align-items: center;
