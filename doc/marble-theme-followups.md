@@ -537,6 +537,11 @@ under O10. The 44px touch button needs 56px of padding-right (68px with a sort a
 
 ## 31. Forced-colors buttons are 2px taller
 
+**Resolved** in zk `51d4eacbba`, `b73326c302` (`_forced-colors.css`, guards in `forced-colors.spec.ts`): measured on `button.zul`, 37 of 49
+buttons were 2px wider in forced colours (default, compact and tablet alike; the vertical button was 0.25 to 2px taller).
+The border is now an inset `::after`, so all 49 boxes match normal mode in the three densities. Outlined and light buttons keep
+their own border. The text below is the finding as filed.
+
 Found while verifying NS9 (`doc/marble-ns9-plan.md`); deferred under O10. Under
 `forced-colors: active`, `_forced-colors.css` gives `.z-button` a 1px border that the filled
 variant does not have otherwise, so filled buttons grow by 2px (not measured per density yet).
@@ -692,6 +697,12 @@ The text below is the finding as filed.
 
 ## 44. Forced colours: pre-existing defects seen in the NS18 review
 
+**Resolved** in zk `51d4eacbba` (`_forced-colors.css`, guards in `forced-colors.spec.ts`), per sub-item: listbox paging icons
+(`.z-listbox-paging-bottom .z-paging-icon` painted CanvasText); disabled paging glyphs (GrayText, default mold and listbox;
+the OS mold never renders a disabled button, so it has no rule); caption text in a selected accordion tab (HighlightText);
+invalid daterangebox (double border); tbeditor glyphs (`opacity: 1`); invalid combobox (input/button seam kept open, one box).
+The text below is the finding as filed.
+
 Same in the 2026-09-11 and the refreshed captures; not regressions. Left as found (O10).
 
 - **Listbox paging icons nearly invisible** (`listbox-header`, y 3390–3426, x≈490–680): `listbox.css` ~line 723
@@ -709,6 +720,13 @@ Same in the 2026-09-11 and the refreshed captures; not regressions. Left as foun
 - **An invalid combobox draws its button as a separate double-bordered box** (cosmetic).
 
 ## 45. Forced-colours separator: two edge cases left by the follow-up 42 fix (NS20 verification)
+
+**Resolved** in zk `51d4eacbba` for the second bullet only (`inset: calc(50% - 0.5px)`; guard clones a bar without inline height):
+the line now sits on the same row as in normal mode in Chromium, Firefox and WebKit.
+**Not changed** for the first bullet: IceBlue (master `separator.less`, `toolbar.less`) renders the separator as a block `div`
+(`height: 7px`, a 1px `:after` line at 50%) and `.z-toolbar-content` has no separator rule, so a horizontal bar in a toolbar
+is a visible full-width line there, not a spacer (V5). The forced-colours line matches IceBlue; the normal-mode Marble rule
+(`toolbar.css`, `height: 0`) is the odd one out. Reading of the CSS only; IceBlue was not rendered. The text below is the finding as filed.
 
 Low; left as found (O10).
 
