@@ -661,6 +661,10 @@ Seen by the NS17 verifier on a probe page; not investigated and not compared wit
 
 Found while reviewing the refreshed forced-colors screenshots (`704262d610`). Not fixed: outside NS18 (O10).
 
+**Resolved** in zk `bb04fc90aa` (`_forced-colors.css`, guard in `forced-colors.spec.ts`): under forced colours the bar is
+a centred 1px `::before` filled with `CanvasText`; the normal-mode gradient is untouched. Screenshot re-cut in `8b34ed6652`.
+The text below is the finding as filed.
+
 - `separator-forced-colors.png`, y≈159–261, x 32–521: the "Default spacing" and "Large spacing (20px)" bars paint no
   pixel between "Above" and "Below". The 2026-09-11 capture showed solid (too thick) bars.
 - Cause: `0b331d3db0` (2026-10-10) draws `.z-separator-horizontal-bar` as `background: linear-gradient(CanvasText,
@@ -671,6 +675,9 @@ Found while reviewing the refreshed forced-colors screenshots (`704262d610`). No
   (re-measure either way). Check whether `forced-colors.spec.ts` should guard it.
 
 ## 43. Forced colours: the selected accordion tab chevron is black on Highlight (regression, NS18)
+
+**Resolved** in zk `82677c0c02` (`tabbox.css`, guard in `forced-colors.spec.ts`): the selected tab's chevron is painted
+`HighlightText`. Screenshot re-cut in `8b34ed6652`. The text below is the finding as filed.
 
 - `tabbox-forced-colors.png` y≈3965–4012 (chevrons at about x 604 and x 1223), `tabbox-misc-forced-colors.png` about
   x 276–290, y 812–824: the chevron of the selected accordion tab is black on rgb(55,51,109), about 1.9:1. The
