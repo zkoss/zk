@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-5515.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Oct 15 11:31:32 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. press Tab until "Calendar" is focused and press Space: a menu opens with focus on the second column, as the first column is hidden, and there should be no javascript error
+		2. click the second column: "Calendar" moves to the second column
+		3. press Tab until "Translate" is focused, press Space and then Enter: "Translate" moves to the second column, below "Calendar"
+		4. press Tab until the collapse button of "Translate" is focused and press Space: "Translate" collapses, and no menu opens
+	</label>
+	<portallayout>
+		<portalchildren visible="false"/>
+		<portalchildren id="column2" width="30%"/>
+		<portalchildren width="30%">
+			<panel id="calendar" title="Calendar" border="normal"/>
+			<panel id="translate" title="Translate" border="normal" collapsible="true"/>
+		</portalchildren>
+	</portallayout>
+</zk>
