@@ -37,6 +37,12 @@
     user-select: none;
 }
 
+/* ZK writes the `width` and `hflex` attributes as an inline width, which the default
+   `max-width` above would cap at 268px; without one the calendar keeps its default size. */
+.z-calendar[style*="width"] {
+    max-width: none;
+}
+
 /* ─── Calendar header (month/year navigation) ────────────────────────────── */
 .z-calendar-header {
     display: flex;
@@ -107,6 +113,7 @@
     width: 100%;
     box-sizing: border-box;
     table-layout: fixed;
+    flex: 1 1 auto;
 }
 
 /* ─── Day-of-week header (TH) ────────────────────────────────────────────── */
