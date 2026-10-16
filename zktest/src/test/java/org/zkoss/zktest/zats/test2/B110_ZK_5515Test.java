@@ -38,7 +38,7 @@ public class B110_ZK_5515Test extends WebDriverTestCase {
 
 		sendKeys(jq("$translate"), Keys.SPACE);
 		waitResponse();
-		getActions().sendKeys(Keys.ENTER).perform();
+		getActions().sendKeys(Keys.ENTER, Keys.ARROW_DOWN, Keys.ENTER).perform();
 		waitResponse();
 		Assertions.assertEquals(2, column2.nChildren());
 		Assertions.assertEquals("translate", column2.lastChild().id(),
