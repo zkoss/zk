@@ -1,0 +1,37 @@
+/* MD3 Elevation Tokens — --zk-elevation-* */
+:root {
+    /* Level 0 — no shadow */
+    --zk-elevation-0: none;
+
+    /* Level 1 — card resting */
+    --zk-elevation-1:
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12),
+        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
+
+    /* Level 2 — card hover / dropdown */
+    --zk-elevation-2:
+        0px 2px 6px 0px rgba(0, 0, 0, 0.12),
+        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
+
+    /* Level 3 — dialog / modal */
+    --zk-elevation-3:
+        0px 4px 12px 0px rgba(0, 0, 0, 0.12),
+        0px 2px 4px 0px rgba(0, 0, 0, 0.14);
+
+    /* Level 4 — navigation drawer */
+    --zk-elevation-4:
+        0px 6px 16px 0px rgba(0, 0, 0, 0.14),
+        0px 3px 6px 0px rgba(0, 0, 0, 0.12);
+
+    /* Level 5 — top app bar / window */
+    --zk-elevation-5:
+        0px 8px 24px 0px rgba(0, 0, 0, 0.14),
+        0px 4px 8px 0px rgba(0, 0, 0, 0.12);
+
+    /* Semantic aliases */
+    --zk-elevation-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Resting shadow — subtle two-layer (button + panel) */
+    --zk-elevation-resting: rgba(50,50,93,0.024) 0px 2px 5px -1px, rgba(0,0,0,0.05) 0px 1px 3px -1px;
+    --zk-elevation-dropdown: var(--zk-elevation-2);
+    --zk-elevation-dialog: var(--zk-elevation-3);
+}

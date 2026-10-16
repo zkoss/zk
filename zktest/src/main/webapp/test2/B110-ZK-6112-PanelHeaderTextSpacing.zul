@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-PanelHeaderTextSpacing.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Oct 14 2026, Created for ZK-6112.
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Each header icon (collapse, minimize, maximize, close) stays inside its 280px panel or window,
+		also under WCAG 1.4.12 text spacing: the title wraps instead of pushing the icons out.
+	</label>
+	<vlayout spacing="16px">
+		<panel id="rounded" border="rounded" height="200px" width="280px" maximizable="true" minimizable="true"
+			   collapsible="true" closable="true" title="Panel (rounded)">
+			<panelchildren>Panel Content</panelchildren>
+		</panel>
+		<panel id="normal" border="normal" height="200px" width="280px" maximizable="true" minimizable="true"
+			   collapsible="true" closable="true" title="Panel (normal)">
+			<panelchildren>Panel Content</panelchildren>
+		</panel>
+		<panel id="none" height="200px" width="280px" maximizable="true" minimizable="true"
+			   collapsible="true" closable="true" title="Panel (no border)">
+			<panelchildren>Panel Content</panelchildren>
+		</panel>
+		<panel id="wide" border="normal" width="480px" maximizable="true" minimizable="true"
+			   collapsible="true" closable="true" title="Panel (wide)">
+			<panelchildren>Panel Content</panelchildren>
+		</panel>
+		<window id="window" border="normal" mode="embedded" height="120px" width="280px" maximizable="true"
+				minimizable="true" closable="true" title="Window (normal)">
+			Window Content
+		</window>
+	</vlayout>
+</zk>

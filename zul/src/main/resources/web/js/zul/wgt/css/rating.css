@@ -1,0 +1,108 @@
+/* MD3 Rating component — star rating
+ * DOM: <div class="z-rating z-rating-horizontal|z-rating-vertical" role="slider">
+ *        <i class="z-rating-icon z-icon-star [z-rating-selected] [z-rating-hover]
+ *                  [z-rating-disabled] [z-rating-readonly]" aria-hidden="true"></i>
+ *      </div>
+ * Notes:
+ *  - z-rating-selected/hover/disabled/readonly are on each <i> child, not the wrapper
+ *  - z-rating-hover is toggled by JS on mouseover (all icons up to cursor position)
+ *  - Default is an outline star; selected/hover swaps to a filled-star mask so the
+ *    visual fill matches MD3 / MUI Rating (outline → filled, not just colour change).
+ *  - We use SVG masks instead of the icon font so the glyph itself swaps.
+ *  - Only the default z-icon-star is drawn here; any other iconSclass keeps the theme's own icon
+ *    (colour changes only), so iconSclass picks the glyph.
+ */
+
+@layer zk-components {
+.z-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* Readonly / disabled icons are pointer-events:none, so the pointer lands on this wrapper. */
+.z-rating:has(> .z-rating-readonly, > .z-rating-disabled) {
+    cursor: default;
+}
+
+/* Each icon. The glyph comes from the icon font (iconSclass) unless the icon is the
+ * default z-icon-star, which Marble draws itself — see the star block below. */
+.z-rating-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    color: var(--zk-rating-fg);
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Custom iconSclass: size the icon-font glyph to the 32px box. */
+.z-rating-icon:not(.z-icon-star) {
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+}
+
+/* Default star — outline glyph via SVG mask, currentColor-driven. Scoped to z-icon-star so a
+ * custom iconSclass keeps its own glyph (ZK-6112). */
+.z-rating-icon.z-icon-star {
+    background-color: currentColor;
+    -webkit-mask-image: url(~./zul/img/marble/star-outline.svg);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: 24px 24px;
+    mask-image: url(~./zul/img/marble/star-outline.svg);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 24px 24px;
+}
+
+/* Suppress the icon-font glyph that ZK would otherwise render via ::before (default star only). */
+.z-rating-icon.z-icon-star::before {
+    content: none;
+}
+
+/* Selected / hover — colour for every icon; a custom iconSclass changes by colour only. */
+.z-rating-icon.z-rating-selected,
+.z-rating-icon.z-rating-hover {
+    color: var(--zk-rating-accent);
+}
+
+/* Filled star (selected/hover) — same SVG with fill='currentColor'. */
+.z-rating-icon.z-icon-star.z-rating-selected,
+.z-rating-icon.z-icon-star.z-rating-hover {
+    -webkit-mask-image: url(~./zul/img/marble/star-filled.svg);
+    mask-image: url(~./zul/img/marble/star-filled.svg);
+}
+
+.z-rating-icon.z-rating-hover {
+    transform: scale(1.1);
+}
+
+/* Disabled — on each <i> element */
+.z-rating-icon.z-rating-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: default;
+    pointer-events: none;
+    transform: none;
+}
+
+/* Readonly — no hover or click, but full opacity to show rating state */
+.z-rating-icon.z-rating-readonly {
+    cursor: default;
+    pointer-events: none;
+    transform: none;
+}
+
+/* Vertical orientation */
+.z-rating-vertical {
+    flex-direction: column;
+    align-items: center;
+}
+}

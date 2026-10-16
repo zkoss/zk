@@ -1,0 +1,51 @@
+/* MD3 Caption — title component for panels, groupboxes, windows */
+/* DOM: <div class="z-caption"><div class="z-caption-content"><i class="z-icon-*"/><span class="z-caption-text">Title</span></div></div> */
+
+@layer zk-components {
+.z-caption {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+/* ZK renders caption label as a text node inside .z-caption-content (no .z-caption-text child) */
+.z-caption-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+    min-width: 0;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-title-medium-weight);
+    line-height: var(--zk-typescale-title-medium-line-height);
+    color: var(--zk-color-on-surface);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Also target .z-caption-text for cases where ZK does render it */
+.z-caption-text {
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-title-medium-weight);
+    line-height: var(--zk-typescale-title-medium-line-height);
+    color: var(--zk-color-on-surface);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Icon before the caption text */
+.z-caption-content [class*="z-icon-"] {
+    font-size: 18px;
+    color: var(--zk-color-primary);
+    flex-shrink: 0;
+}
+
+.z-caption-readonly {
+    color: var(--zk-color-on-surface-variant);
+    pointer-events: none;
+}
+}

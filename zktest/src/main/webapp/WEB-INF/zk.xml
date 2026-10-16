@@ -711,8 +711,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- Default theme -->
 	<library-property>
 		<name>org.zkoss.theme.preferred</name>
-		<value>iceblue</value>
+		<value>marble</value>
 	</library-property>
+	<!-- -Dzktest.theme=<name> overrides the theme above in Test tasks only; under appRun use ?zktheme=<name> -->
+	<listener>
+		<listener-class>org.zkoss.zktest.http.ZKTestThemeWebAppInit</listener-class>
+	</listener>
 
 	<!-- B85-ZK-3527 -->
 	<!--<library-property>-->

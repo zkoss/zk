@@ -21,6 +21,8 @@ import java.io.Writer;
 import java.util.regex.Pattern;
 
 import org.owasp.encoder.Encode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.zkoss.lang.Library;
 import org.zkoss.util.Locales;
@@ -33,6 +35,8 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zul.theme.MarbleBrand.Brand;
+import org.zkoss.zul.theme.MarbleDensity.Density;
 
 /**
  * The page render for ZUL pages.
@@ -41,7 +45,13 @@ import org.zkoss.zk.ui.sys.PageCtrl;
  * @since 5.0.0
  */
 public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
+	private static final Logger log = LoggerFactory.getLogger(PageRenderer.class);
 	private static final Pattern LANG_ATTRIBUTE_PATTERN = Pattern.compile("(?i)(?:^|\\s)lang\\s*=");
+	private static final String DENSITY_PROPERTY = "org.zkoss.theme.marble.density";
+	private static final String BRAND_PROPERTY = "org.zkoss.theme.marble.brand";
+	private static final Pattern HEX_COLOR_PATTERN = Pattern.compile("#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})");
+	private static final Pattern DENSITY_ATTRIBUTE_PATTERN = Pattern.compile("(?i)(?:^|\\s)data-density\\s*=");
+	private static final Pattern BRAND_ATTRIBUTE_PATTERN = Pattern.compile("(?i)(?:^|\\s)data-brand\\s*=");
 
 	public void render(Page page, Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
@@ -71,14 +81,16 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 		final PageCtrl pageCtrl = (PageCtrl) page;
 		final String rootAttrs = pageCtrl.getRootAttributes();
+		final MarbleThemeDefaults themeDefaults = parseThemeDefaults();
 		write(out, HtmlPageRenders.outFirstLine(exec, page)); //might null
 		write(out, HtmlPageRenders.outDocType(exec, page)); //might null
-		Double number = exec.getBrowser("mobile");
+		final Double number = exec.getBrowser("mobile");
 
 		out.write("<html");
 		if (!containsLangAttribute(rootAttrs))
 			out.write(" lang=\"" + Locales.getCurrent().toLanguageTag() + "\"");
 		write(out, rootAttrs);
+		write(out, outThemeRootAttributes(themeDefaults, rootAttrs));
 		if (number == null || number.intValue() == 0) {
 			out.write(">\n<head>\n"
 					// B70-ZK-2065: Remove meta for validation.
@@ -100,7 +112,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		}
 		write(out, Encode.forHtml(page.getTitle()));
 		out.write("</title>\n");
-		outHeaders(exec, page, out);
+		outHeaders(exec, page, out, themeDefaults);
 		out.write("</head>\n");
 
 		out.write("<body>\n");
@@ -115,13 +127,110 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		out.write("\n</body>\n</html>\n");
 	}
 
-	private static void outHeaders(Execution exec, Page page, Writer out) throws IOException {
+	private static void outHeaders(Execution exec, Page page, Writer out, MarbleThemeDefaults themeDefaults)
+			throws IOException {
 		out.write(HtmlPageRenders.outHeaders(exec, page, true));
 		//F70-ZK-2495: place init-crash-script before zk.wpd
 		out.write(HtmlPageRenders.outInitCrashScript(exec, null));
 		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
 		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
+		//ZK-6112: after the theme stylesheets so the seed wins, before the page's own headers so they can override it
+		write(out, outThemeStyle(themeDefaults));
 		out.write(HtmlPageRenders.outHeaders(exec, page, false));
+	}
+
+	/** Reads the Marble defaults configured in zk.xml (ZK-6112). An invalid value is logged and ignored.
+	 */
+	static MarbleThemeDefaults parseThemeDefaults() {
+		String density = null, brand = null, primaryColor = null;
+
+		String value = trimToNull(Library.getProperty(DENSITY_PROPERTY));
+		if (value != null) {
+			final Density d = findDensity(value);
+			if (d == null)
+				log.warn("Ignored {}={}: expected comfortable or compact", DENSITY_PROPERTY, value);
+			else if (d != Density.COMFORTABLE)
+				density = d.token();
+		}
+
+		value = trimToNull(Library.getProperty(BRAND_PROPERTY));
+		if (value != null) {
+			if (HEX_COLOR_PATTERN.matcher(value).matches()) {
+				primaryColor = value;
+			} else {
+				final Brand b = findBrand(value);
+				if (b == null)
+					log.warn("Ignored {}={}: expected #rgb, #rrggbb or a preset name", BRAND_PROPERTY, value);
+				else if (b != Brand.DEFAULT)
+					brand = b.token();
+			}
+		}
+		return new MarbleThemeDefaults(density, brand, primaryColor);
+	}
+
+	/** Returns the attributes to append to the html element, or null if none.
+	 * An attribute already given by the page's root-attributes directive wins.
+	 */
+	static String outThemeRootAttributes(MarbleThemeDefaults themeDefaults, String rootAttrs) {
+		final StringBuilder sb = new StringBuilder();
+		if (themeDefaults.density != null && !containsAttribute(rootAttrs, DENSITY_ATTRIBUTE_PATTERN))
+			sb.append(" data-density=\"").append(themeDefaults.density).append('"');
+		if (themeDefaults.brand != null && !containsAttribute(rootAttrs, BRAND_ATTRIBUTE_PATTERN))
+			sb.append(" data-brand=\"").append(themeDefaults.brand).append('"');
+		return sb.length() > 0 ? sb.toString() : null;
+	}
+
+	/** Returns the style overriding the primary seed, or null if no brand color is configured.
+	 * It must follow the theme stylesheets.
+	 */
+	static String outThemeStyle(MarbleThemeDefaults themeDefaults) {
+		if (themeDefaults.primaryColor == null)
+			return null;
+		return HtmlPageRenders.outCspNonceAttr(
+				"<style>:root{--zk-color-primary:" + themeDefaults.primaryColor + "}</style>\n");
+	}
+
+	private static Density findDensity(String token) {
+		for (Density d : Density.values())
+			if (d.token().equalsIgnoreCase(token))
+				return d;
+		return null;
+	}
+
+	private static Brand findBrand(String token) {
+		for (Brand b : Brand.values())
+			if (b.token().equalsIgnoreCase(token))
+				return b;
+		return null;
+	}
+
+	private static String trimToNull(String s) {
+		if (s == null)
+			return null;
+		s = s.trim();
+		return s.isEmpty() ? null : s;
+	}
+
+	private static boolean containsAttribute(String rootAttrs, Pattern pattern) {
+		return rootAttrs != null && pattern.matcher(rootAttrs).find();
+	}
+
+	/** The Marble defaults read from zk.xml library properties; a null field means "not configured".
+	 * Values are validated, so they are safe to render without encoding.
+	 */
+	static final class MarbleThemeDefaults {
+		/** The data-density token, e.g. "compact". */
+		final String density;
+		/** The data-brand preset token, e.g. "slate"; exclusive with {@link #primaryColor}. */
+		final String brand;
+		/** A validated #rgb or #rrggbb primary seed. */
+		final String primaryColor;
+
+		MarbleThemeDefaults(String density, String brand, String primaryColor) {
+			this.density = density;
+			this.brand = brand;
+			this.primaryColor = primaryColor;
+		}
 	}
 
 	private static void write(Writer out, String s) throws IOException {

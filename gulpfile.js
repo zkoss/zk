@@ -40,7 +40,6 @@ const print = require('gulp-print').default;
  */
 const tap = require('gulp-tap');
 const gulpIgnore = require('gulp-ignore');
-const postcss = require('gulp-postcss');
 const mergeStream = require('merge-stream');
 /**
  * The signature should be `createResolver(config, options).resolve(key, ...)`.
@@ -291,48 +290,6 @@ function typescript_dev_subproject(subprojectPath, since) {
 		// we can make it work.
 	);
 }
-
-exports['build:minify-css'] = function () {
-	const sources = stripQuotes(options.src);
-	const destDir = stripQuotes(options.dest);
-	const force = options.force;
-	if (!fs.existsSync(sources)) {
-		return gulp.src('.');// ignore
-	}
-	return gulp.src(sources + '/**/**')
-		.pipe(ignoreSameFile(destDir, force))
-		.pipe(tap(function (file) {
-			if (file.path.endsWith('.css.dsp')) {
-				// ignore DSP syntax
-				file.contents = Buffer.from(/** @type {NonNullable<typeof file.contents>} */(file.contents).toString('utf-8')
-					.replace(/<%/g, '/*!<%')
-					.replace(/\${([^}]*)}/g, (match, g1) => `\\9${g1}\\0`)
-					.replace(/<c:/g, '<%c--')
-					.replace(/%>/g, '%>*/')
-					.replace(/\/>/g, '--c%>'), 'utf-8');
-			}
-		}))
-		.pipe(tap(function (file, t) {
-			if (file.path.endsWith('.css.dsp')) {
-				return /** @type {Required<NonNullable<typeof t>>} */(t).through(postcss, [[require('cssnano')]]);
-			} else {
-				console.log('copy...', file.path);
-			}
-		}))
-		.pipe(tap(function (file) {
-			if (file.path.endsWith('.css.dsp')) {
-				// revert DSP syntax
-				file.contents = Buffer.from(/** @type {NonNullable<typeof file.contents>} */(file.contents).toString('utf-8')
-					.replace(/\/\*!<%/g, '<%')
-					.replace(/\\9([^\\0]*)\\0/g, (match, g1) => `\${${g1}}`)
-					.replace(/<%c--/g, '<c:')
-					.replace(/--c%>/g, '/>')
-					.replace(/%>\*\//g, '%>'), 'utf-8');
-			}
-		}))
-		.pipe(gulp.dest(destDir))
-		.pipe(print());
-};
 
 const dtsEntry = 'index.d.ts';
 

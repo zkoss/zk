@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -31,6 +32,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * grow vertically and lifts the icon's line-height so each icon renders
  * within its bounding box.
  */
+// IceBlue-only: its tablet sanity check expects IceBlue's 22px panel icon font-size; Marble's tablet icons are 24px in 44px boxes and render completely (checked in the preview).
+@Tag("IceBlueOnly")
 @ForkJVMTestOnly
 public class B110_ZK_6042Test extends WebDriverTestCase {
 	@RegisterExtension
