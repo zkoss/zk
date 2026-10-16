@@ -1,0 +1,150 @@
+/* MD3 Messagebox (Alert Dialog)
+   DOM: .z-messagebox-window.z-window
+          > .z-window-header.z-window-header-move
+              > .z-window-icons
+                  > .z-window-icon  (close button)
+          > .z-window-content
+              > .z-messagebox-viewport.z-div
+                  > .z-messagebox-icon.z-messagebox-{information|exclamation|error|question}.z-div
+                  > .z-messagebox.z-div
+                      > .z-label
+              > .z-messagebox-buttons.z-hlayout
+                  > button.z-messagebox-button.z-button
+*/
+
+/* ─── Dialog window overrides ─────────────────────────────────────────── */
+@layer zk-components {
+.z-messagebox-window.z-window {
+    background-color: var(--zk-messagebox-bg);
+    border-radius: var(--zk-messagebox-radius);
+    box-shadow: var(--zk-messagebox-elevation);
+    border: none;
+    /* WCAG 1.4.10 Reflow: never wider than the viewport (min() keeps 560px as the cap above it). */
+    max-width: min(560px, 100%);
+    min-width: 280px;
+    width: 480px;
+    font-family: var(--zk-typescale-font-family);
+    overflow: hidden;
+}
+
+/* ─── Title bar ───────────────────────────────────────────────────────── */
+.z-messagebox-window .z-window-header {
+    background-color: var(--zk-messagebox-bg);
+    padding: var(--zk-spacing-3) var(--zk-spacing-4) var(--zk-spacing-3) var(--zk-spacing-6);
+    border-bottom: 1px solid var(--zk-messagebox-border-color);
+    min-height: var(--zk-window-header-height);
+    display: flex;
+    align-items: center;
+}
+
+.z-messagebox-window .z-caption-text {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-typescale-title-medium-weight);
+    color: var(--zk-messagebox-header-fg);
+}
+
+/* ─── Content area ────────────────────────────────────────────────────── */
+.z-messagebox-window .z-window-content {
+    background-color: var(--zk-messagebox-bg);
+    padding: 0;
+    overflow: visible;
+}
+
+/* ─── Viewport: flex row — icon left, message right ──────────────────── */
+.z-messagebox-viewport {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--zk-spacing-3);
+    padding: var(--zk-spacing-4) var(--zk-spacing-6);
+    overflow: auto visible;
+    /* Do NOT set white-space:nowrap here — message text must wrap */
+    margin-bottom: 0;
+}
+
+/* ─── Message text container ──────────────────────────────────────────── */
+.z-messagebox {
+    display: inline-block;
+    white-space: normal;
+    word-break: break-word;
+    color: var(--zk-messagebox-fg);
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: var(--zk-typescale-body-medium-line-height);
+}
+
+/* No pre-wrap: the label is multiline, so ZK already writes "<br/>\n" per line;
+   pre-wrap would break on the "\n" as well and double every line break. */
+.z-messagebox .z-label {
+    word-break: break-word;
+    display: block;
+}
+
+/* ─── Icon container — base ───────────────────────────────────────────── */
+.z-messagebox-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+}
+
+.z-messagebox-icon::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 28px;
+    background-color: currentColor;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+}
+
+/* ─── Icon type variants ──────────────────────────────────────────────── */
+
+.z-messagebox-information { color: var(--zk-color-primary); }
+.z-messagebox-information::before {
+    -webkit-mask-image: url(~./zul/img/marble/msg-info.svg);
+    mask-image: url(~./zul/img/marble/msg-info.svg);
+}
+
+.z-messagebox-exclamation { color: var(--zk-color-warning); }
+.z-messagebox-exclamation::before {
+    -webkit-mask-image: url(~./zul/img/marble/msg-warning.svg);
+    mask-image: url(~./zul/img/marble/msg-warning.svg);
+}
+
+.z-messagebox-error { color: var(--zk-color-error); }
+.z-messagebox-error::before {
+    -webkit-mask-image: url(~./zul/img/marble/error-close.svg);
+    mask-image: url(~./zul/img/marble/error-close.svg);
+}
+
+.z-messagebox-question { color: var(--zk-color-secondary); }
+.z-messagebox-question::before {
+    -webkit-mask-image: url(~./zul/img/marble/msg-question.svg);
+    mask-image: url(~./zul/img/marble/msg-question.svg);
+}
+
+/* ─── Button row ──────────────────────────────────────────────────────── */
+.z-messagebox-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--zk-spacing-2);
+    padding: var(--zk-spacing-2) var(--zk-spacing-6) var(--zk-spacing-4);
+    border-top: 1px solid var(--zk-messagebox-border-color);
+    /* Reset hlayout margin-left sticky */
+    position: static;
+    left: auto;
+}
+
+/* Undo hlayout's > * margin-left stacking (layered rule wins on 10.3.0.1 — no !important needed) */
+.z-messagebox-buttons > * {
+    margin-left: 0;
+}
+
+.z-messagebox-button {
+    min-width: 64px;
+}
+}

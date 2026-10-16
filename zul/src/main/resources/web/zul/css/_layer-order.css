@@ -1,0 +1,11 @@
+/* Cascade layer order, lowest → highest priority. The first entry of norm.css.dsp, which is the
+   first sheet in zk.wcs, so it fixes the order before any layer is used — whether or not reset.css
+   (zk-base only) loads ahead of it.
+
+   Each source file wraps its own rules in one of these layers: the reset and base styles in
+   zk-base, component CSS in zk-components, utility classes in zk-utilities. Unlayered styles —
+   the theme's tokens and tablet CSS plus all downstream user CSS — beat every layer.
+
+   The minifier (Lightning CSS) does not keep this statement verbatim: it emits the layer blocks
+   in this order instead, which declares the same order. */
+@layer zk-base, zk-components, zk-utilities;

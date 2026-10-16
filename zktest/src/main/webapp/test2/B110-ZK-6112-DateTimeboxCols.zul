@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-DateTimeboxCols.zul
+
+	Purpose:
+		cols must change the width of datebox / timebox under Marble.
+	Description:
+
+	History:
+		Wed Oct 07 2026, Created for ZK-6112.
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. datebox/timebox with cols="8" must be narrower than the ones with cols="30".
+	</label>
+	<div>
+		<datebox id="d8" cols="8"/>
+		<datebox id="d30" cols="30"/>
+	</div>
+	<div>
+		<timebox id="t8" cols="8"/>
+		<timebox id="t30" cols="30"/>
+	</div>
+</zk>

@@ -1,0 +1,10 @@
+/* MD3 Span — inline span container */
+
+@layer zk-components {
+.z-span {
+    box-sizing: border-box;
+    font-family: var(--zk-typescale-font-family);
+    font-size: inherit;
+    color: inherit;
+}
+}

@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
@@ -39,6 +40,9 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * <p>Every check runs through {@code assertAll} so that one unfixed decoupling
  * does not hide the state of the checks after it.
  */
+// IceBlue-only: asserts IceBlue token names, pixel sizes and colour values (#E0E1E3, rgb(0, 147, 249), ...)
+// that Marble does not share; it was already failing at the merge base on Marble.
+@Tag("IceBlueOnly")
 public class B110_ZK_6105Test extends WebDriverTestCase {
 
 	// #E0E1E3 — the container "extra space" fill introduced by ZK-5921.

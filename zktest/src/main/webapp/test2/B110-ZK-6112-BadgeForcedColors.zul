@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-BadgeForcedColors.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Oct 14 2026, Created for ZK-6112.
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Under forced-colors (Windows High Contrast) every badge dot is a visible mark, not the page colour,
+		and the count badge keeps a readable number.
+	</label>
+	<hlayout spacing="32px" style="padding:24px" valign="middle">
+		<badge id="wrapped" dot="true"><button label="Inbox"/></badge>
+		<badge id="corner" dot="true" severity="error" placement="bottom_left"><button label="Alerts"/></badge>
+		<badge id="count" count="5"><button label="Mail"/></badge>
+		<badge id="standalone" dot="true" severity="warning"/>
+	</hlayout>
+</zk>

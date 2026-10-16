@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -386,7 +387,9 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 	/** A server-side rejection has to raise the same pair as a client-side parse
 	 *  failure. `zk.AuCmd0.wrongValue` routes through the widget's
 	 *  setErrorMessage; without it the fallback opens the errorbox alone. */
+	// IceBlue-only: asserts IceBlue's @invalidBorderColor (rgb(255,64,81)); Marble paints --zk-color-error.
 	@Test
+	@Tag("IceBlueOnly")
 	public void testServerRejectionPaintsTheInvalidBorder() {
 		connect();
 		waitResponse();
@@ -459,7 +462,9 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 	/** The close button on a client-side parse failure. It has to drop the bubble
 	 *  even though the input still holds unparseable text — re-deriving the mark
 	 *  from that text keeps it raised, so a close that only re-derives is inert. */
+	// IceBlue-only: asserts IceBlue's @invalidBorderColor (rgb(255,64,81)); Marble paints --zk-color-error.
 	@Test
+	@Tag("IceBlueOnly")
 	public void testErrorboxCloseDropsBubbleAndKeepsBorderOnUnparseableText() {
 		connect();
 		waitResponse();
@@ -488,7 +493,9 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 	/** Same button after a server-side rejection, where nothing is unparseable:
 	 *  clearing the mark as well would leave the box looking accepted while the
 	 *  server still holds the old value. */
+	// IceBlue-only: asserts IceBlue's @invalidBorderColor (rgb(255,64,81)); Marble paints --zk-color-error.
 	@Test
+	@Tag("IceBlueOnly")
 	public void testErrorboxCloseKeepsBorderAfterServerRejection() {
 		connect();
 		waitResponse();
@@ -548,7 +555,9 @@ public class B110_ZK_6143Test extends WebDriverTestCase {
 
 	/** A server rejection populates no rejected text, so a redraw that keys only off
 	 *  that text would drop the mark, and a focus would have nothing to raise. */
+	// IceBlue-only: asserts IceBlue's @invalidBorderColor (rgb(255,64,81)); Marble paints --zk-color-error.
 	@Test
+	@Tag("IceBlueOnly")
 	public void testRedrawKeepsTheServerRejectionForTheNextFocus() {
 		connect();
 		waitResponse();

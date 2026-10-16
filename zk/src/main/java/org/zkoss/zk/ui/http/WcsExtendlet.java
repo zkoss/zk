@@ -19,6 +19,8 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 import org.zkoss.lang.Library;
 import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.http.HttpBufferedResponse;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.util.resource.ExtendletConfig;
@@ -54,6 +57,9 @@ import org.zkoss.zk.ui.util.ThemeProvider;
  * @since 5.0.0
  */
 public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
+	/** {@code url(~./…)}, with or without quotes. Group 2 is the {@code ~./} URI. */
+	private static final Pattern CLASS_URL = Pattern.compile("url\\(\\s*(['\"]?)(~\\./[^'\")\\s]+)\\1\\s*\\)");
+
 	public void init(ExtendletConfig config) {
 		init(config, new WcsLoader());
 		config.addCompressExtension("wcs");
@@ -147,6 +153,11 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 			} catch (Throwable ex) {
 				log.error("Unable to load " + footerUri, ex);
 			}
+
+			// @since 11.0.0 a plain stylesheet can write url(~./...) with no DSP; every one is
+			// encoded here, in the whole response, the way ${c:encodeURL("~./...")} would be.
+			if (sw.getBuffer().indexOf("~./") >= 0)
+				encodeClassWebURLs(request, response, sw);
 		} finally {
 			((ExecutionCtrl) exec).onDeactivate();
 			ExecutionsCtrl.setCurrent(olde);
@@ -162,6 +173,24 @@ public class WcsExtendlet extends AbstractExtendlet<WcsInfo> {
 		response.setContentLength(data.length);
 		response.getOutputStream().write(data);
 		response.flushBuffer();
+	}
+
+	/** Replaces every {@code url(~./...)} in the buffer by its encoded URL (context path and build prefix included). */
+	private void encodeClassWebURLs(HttpServletRequest request, HttpServletResponse response, StringWriter sw)
+			throws ServletException {
+		final String css = sw.toString();
+		final Matcher m = CLASS_URL.matcher(css);
+		if (!m.find())
+			return;
+		final StringBuffer sb = new StringBuffer(css.length());
+		do {
+			final String url = Encodes.encodeURL(getServletContext(), request, response, m.group(2));
+			m.appendReplacement(sb, Matcher.quoteReplacement("url(\"" + url + "\")"));
+		} while (m.find());
+		m.appendTail(sb);
+		final StringBuffer buf = sw.getBuffer();
+		buf.setLength(0);
+		buf.append(sb);
 	}
 
 	private WcsInfo parse(InputStream is, String path) throws Exception {

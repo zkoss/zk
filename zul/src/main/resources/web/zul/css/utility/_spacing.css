@@ -1,0 +1,221 @@
+/* MD3 Utility Classes — Spacing (padding + margin)
+   n: 0=0px 1=4px 2=8px 3=12px 4=16px 5=20px 6=24px 7=28px 8=32px 10=40px 12=48px 16=64px */
+
+@layer zk-utilities {
+
+/* ============================================
+   Padding — all 4 sides
+   ============================================ */
+.z-p-0  { padding: var(--zk-spacing-0); }
+.z-p-1  { padding: var(--zk-spacing-1); }
+.z-p-2  { padding: var(--zk-spacing-2); }
+.z-p-3  { padding: var(--zk-spacing-3); }
+.z-p-4  { padding: var(--zk-spacing-4); }
+.z-p-5  { padding: var(--zk-spacing-5); }
+.z-p-6  { padding: var(--zk-spacing-6); }
+.z-p-7  { padding: var(--zk-spacing-7); }
+.z-p-8  { padding: var(--zk-spacing-8); }
+.z-p-10 { padding: var(--zk-spacing-10); }
+.z-p-12 { padding: var(--zk-spacing-12); }
+.z-p-16 { padding: var(--zk-spacing-16); }
+
+/* Padding — horizontal (left + right) */
+.z-px-0  { padding-left: var(--zk-spacing-0);  padding-right: var(--zk-spacing-0); }
+.z-px-1  { padding-left: var(--zk-spacing-1);  padding-right: var(--zk-spacing-1); }
+.z-px-2  { padding-left: var(--zk-spacing-2);  padding-right: var(--zk-spacing-2); }
+.z-px-3  { padding-left: var(--zk-spacing-3);  padding-right: var(--zk-spacing-3); }
+.z-px-4  { padding-left: var(--zk-spacing-4);  padding-right: var(--zk-spacing-4); }
+.z-px-5  { padding-left: var(--zk-spacing-5);  padding-right: var(--zk-spacing-5); }
+.z-px-6  { padding-left: var(--zk-spacing-6);  padding-right: var(--zk-spacing-6); }
+.z-px-7  { padding-left: var(--zk-spacing-7);  padding-right: var(--zk-spacing-7); }
+.z-px-8  { padding-left: var(--zk-spacing-8);  padding-right: var(--zk-spacing-8); }
+.z-px-10 { padding-left: var(--zk-spacing-10); padding-right: var(--zk-spacing-10); }
+.z-px-12 { padding-left: var(--zk-spacing-12); padding-right: var(--zk-spacing-12); }
+.z-px-16 { padding-left: var(--zk-spacing-16); padding-right: var(--zk-spacing-16); }
+
+/* Padding — vertical (top + bottom) */
+.z-py-0  { padding-top: var(--zk-spacing-0);  padding-bottom: var(--zk-spacing-0); }
+.z-py-1  { padding-top: var(--zk-spacing-1);  padding-bottom: var(--zk-spacing-1); }
+.z-py-2  { padding-top: var(--zk-spacing-2);  padding-bottom: var(--zk-spacing-2); }
+.z-py-3  { padding-top: var(--zk-spacing-3);  padding-bottom: var(--zk-spacing-3); }
+.z-py-4  { padding-top: var(--zk-spacing-4);  padding-bottom: var(--zk-spacing-4); }
+.z-py-5  { padding-top: var(--zk-spacing-5);  padding-bottom: var(--zk-spacing-5); }
+.z-py-6  { padding-top: var(--zk-spacing-6);  padding-bottom: var(--zk-spacing-6); }
+.z-py-7  { padding-top: var(--zk-spacing-7);  padding-bottom: var(--zk-spacing-7); }
+.z-py-8  { padding-top: var(--zk-spacing-8);  padding-bottom: var(--zk-spacing-8); }
+.z-py-10 { padding-top: var(--zk-spacing-10); padding-bottom: var(--zk-spacing-10); }
+.z-py-12 { padding-top: var(--zk-spacing-12); padding-bottom: var(--zk-spacing-12); }
+.z-py-16 { padding-top: var(--zk-spacing-16); padding-bottom: var(--zk-spacing-16); }
+
+/* Padding — top */
+.z-pt-0  { padding-top: var(--zk-spacing-0); }
+.z-pt-1  { padding-top: var(--zk-spacing-1); }
+.z-pt-2  { padding-top: var(--zk-spacing-2); }
+.z-pt-3  { padding-top: var(--zk-spacing-3); }
+.z-pt-4  { padding-top: var(--zk-spacing-4); }
+.z-pt-5  { padding-top: var(--zk-spacing-5); }
+.z-pt-6  { padding-top: var(--zk-spacing-6); }
+.z-pt-7  { padding-top: var(--zk-spacing-7); }
+.z-pt-8  { padding-top: var(--zk-spacing-8); }
+.z-pt-10 { padding-top: var(--zk-spacing-10); }
+.z-pt-12 { padding-top: var(--zk-spacing-12); }
+.z-pt-16 { padding-top: var(--zk-spacing-16); }
+
+/* Padding — bottom */
+.z-pb-0  { padding-bottom: var(--zk-spacing-0); }
+.z-pb-1  { padding-bottom: var(--zk-spacing-1); }
+.z-pb-2  { padding-bottom: var(--zk-spacing-2); }
+.z-pb-3  { padding-bottom: var(--zk-spacing-3); }
+.z-pb-4  { padding-bottom: var(--zk-spacing-4); }
+.z-pb-5  { padding-bottom: var(--zk-spacing-5); }
+.z-pb-6  { padding-bottom: var(--zk-spacing-6); }
+.z-pb-7  { padding-bottom: var(--zk-spacing-7); }
+.z-pb-8  { padding-bottom: var(--zk-spacing-8); }
+.z-pb-10 { padding-bottom: var(--zk-spacing-10); }
+.z-pb-12 { padding-bottom: var(--zk-spacing-12); }
+.z-pb-16 { padding-bottom: var(--zk-spacing-16); }
+
+/* Padding — single-side horizontal (inline-start / inline-end)
+   Uses logical properties instead of left/right so layouts stay correct
+   under dir="rtl". `inline-start` = left in LTR, right in RTL; `inline-end`
+   = right in LTR, left in RTL. By intentionally NOT shipping physical
+   z-pl-* / z-pr-* counterparts, we keep single-side horizontal spacing
+   RTL-safe by default. (Pair `z-px-*` uses physical left+right because
+   both sides are set symmetrically, so RTL doesn't matter there.) */
+.z-ps-0  { padding-inline-start: var(--zk-spacing-0); }
+.z-ps-1  { padding-inline-start: var(--zk-spacing-1); }
+.z-ps-2  { padding-inline-start: var(--zk-spacing-2); }
+.z-ps-3  { padding-inline-start: var(--zk-spacing-3); }
+.z-ps-4  { padding-inline-start: var(--zk-spacing-4); }
+.z-ps-5  { padding-inline-start: var(--zk-spacing-5); }
+.z-ps-6  { padding-inline-start: var(--zk-spacing-6); }
+.z-ps-7  { padding-inline-start: var(--zk-spacing-7); }
+.z-ps-8  { padding-inline-start: var(--zk-spacing-8); }
+.z-ps-10 { padding-inline-start: var(--zk-spacing-10); }
+.z-ps-12 { padding-inline-start: var(--zk-spacing-12); }
+.z-ps-16 { padding-inline-start: var(--zk-spacing-16); }
+
+/* Padding — inline-end (see note above z-ps-* for logical-property rationale) */
+.z-pe-0  { padding-inline-end: var(--zk-spacing-0); }
+.z-pe-1  { padding-inline-end: var(--zk-spacing-1); }
+.z-pe-2  { padding-inline-end: var(--zk-spacing-2); }
+.z-pe-3  { padding-inline-end: var(--zk-spacing-3); }
+.z-pe-4  { padding-inline-end: var(--zk-spacing-4); }
+.z-pe-5  { padding-inline-end: var(--zk-spacing-5); }
+.z-pe-6  { padding-inline-end: var(--zk-spacing-6); }
+.z-pe-7  { padding-inline-end: var(--zk-spacing-7); }
+.z-pe-8  { padding-inline-end: var(--zk-spacing-8); }
+.z-pe-10 { padding-inline-end: var(--zk-spacing-10); }
+.z-pe-12 { padding-inline-end: var(--zk-spacing-12); }
+.z-pe-16 { padding-inline-end: var(--zk-spacing-16); }
+
+/* ============================================
+   Margin — all 4 sides
+   ============================================ */
+.z-m-0    { margin: var(--zk-spacing-0); }
+.z-m-1    { margin: var(--zk-spacing-1); }
+.z-m-2    { margin: var(--zk-spacing-2); }
+.z-m-3    { margin: var(--zk-spacing-3); }
+.z-m-4    { margin: var(--zk-spacing-4); }
+.z-m-5    { margin: var(--zk-spacing-5); }
+.z-m-6    { margin: var(--zk-spacing-6); }
+.z-m-7    { margin: var(--zk-spacing-7); }
+.z-m-8    { margin: var(--zk-spacing-8); }
+.z-m-10   { margin: var(--zk-spacing-10); }
+.z-m-12   { margin: var(--zk-spacing-12); }
+.z-m-16   { margin: var(--zk-spacing-16); }
+.z-m-auto { margin: auto; }
+
+/* Margin — horizontal */
+.z-mx-0    { margin-left: var(--zk-spacing-0);  margin-right: var(--zk-spacing-0); }
+.z-mx-1    { margin-left: var(--zk-spacing-1);  margin-right: var(--zk-spacing-1); }
+.z-mx-2    { margin-left: var(--zk-spacing-2);  margin-right: var(--zk-spacing-2); }
+.z-mx-3    { margin-left: var(--zk-spacing-3);  margin-right: var(--zk-spacing-3); }
+.z-mx-4    { margin-left: var(--zk-spacing-4);  margin-right: var(--zk-spacing-4); }
+.z-mx-5    { margin-left: var(--zk-spacing-5);  margin-right: var(--zk-spacing-5); }
+.z-mx-6    { margin-left: var(--zk-spacing-6);  margin-right: var(--zk-spacing-6); }
+.z-mx-7    { margin-left: var(--zk-spacing-7);  margin-right: var(--zk-spacing-7); }
+.z-mx-8    { margin-left: var(--zk-spacing-8);  margin-right: var(--zk-spacing-8); }
+.z-mx-10   { margin-left: var(--zk-spacing-10); margin-right: var(--zk-spacing-10); }
+.z-mx-12   { margin-left: var(--zk-spacing-12); margin-right: var(--zk-spacing-12); }
+.z-mx-16   { margin-left: var(--zk-spacing-16); margin-right: var(--zk-spacing-16); }
+.z-mx-auto { margin-left: auto; margin-right: auto; }
+
+/* Margin — vertical */
+.z-my-0  { margin-top: var(--zk-spacing-0);  margin-bottom: var(--zk-spacing-0); }
+.z-my-1  { margin-top: var(--zk-spacing-1);  margin-bottom: var(--zk-spacing-1); }
+.z-my-2  { margin-top: var(--zk-spacing-2);  margin-bottom: var(--zk-spacing-2); }
+.z-my-3  { margin-top: var(--zk-spacing-3);  margin-bottom: var(--zk-spacing-3); }
+.z-my-4  { margin-top: var(--zk-spacing-4);  margin-bottom: var(--zk-spacing-4); }
+.z-my-5  { margin-top: var(--zk-spacing-5);  margin-bottom: var(--zk-spacing-5); }
+.z-my-6  { margin-top: var(--zk-spacing-6);  margin-bottom: var(--zk-spacing-6); }
+.z-my-7  { margin-top: var(--zk-spacing-7);  margin-bottom: var(--zk-spacing-7); }
+.z-my-8  { margin-top: var(--zk-spacing-8);  margin-bottom: var(--zk-spacing-8); }
+.z-my-10 { margin-top: var(--zk-spacing-10); margin-bottom: var(--zk-spacing-10); }
+.z-my-12 { margin-top: var(--zk-spacing-12); margin-bottom: var(--zk-spacing-12); }
+.z-my-16 { margin-top: var(--zk-spacing-16); margin-bottom: var(--zk-spacing-16); }
+
+/* Margin — top */
+.z-mt-0    { margin-top: var(--zk-spacing-0); }
+.z-mt-1    { margin-top: var(--zk-spacing-1); }
+.z-mt-2    { margin-top: var(--zk-spacing-2); }
+.z-mt-3    { margin-top: var(--zk-spacing-3); }
+.z-mt-4    { margin-top: var(--zk-spacing-4); }
+.z-mt-5    { margin-top: var(--zk-spacing-5); }
+.z-mt-6    { margin-top: var(--zk-spacing-6); }
+.z-mt-7    { margin-top: var(--zk-spacing-7); }
+.z-mt-8    { margin-top: var(--zk-spacing-8); }
+.z-mt-10   { margin-top: var(--zk-spacing-10); }
+.z-mt-12   { margin-top: var(--zk-spacing-12); }
+.z-mt-16   { margin-top: var(--zk-spacing-16); }
+.z-mt-auto { margin-top: auto; }
+
+/* Margin — bottom */
+.z-mb-0    { margin-bottom: var(--zk-spacing-0); }
+.z-mb-1    { margin-bottom: var(--zk-spacing-1); }
+.z-mb-2    { margin-bottom: var(--zk-spacing-2); }
+.z-mb-3    { margin-bottom: var(--zk-spacing-3); }
+.z-mb-4    { margin-bottom: var(--zk-spacing-4); }
+.z-mb-5    { margin-bottom: var(--zk-spacing-5); }
+.z-mb-6    { margin-bottom: var(--zk-spacing-6); }
+.z-mb-7    { margin-bottom: var(--zk-spacing-7); }
+.z-mb-8    { margin-bottom: var(--zk-spacing-8); }
+.z-mb-10   { margin-bottom: var(--zk-spacing-10); }
+.z-mb-12   { margin-bottom: var(--zk-spacing-12); }
+.z-mb-16   { margin-bottom: var(--zk-spacing-16); }
+.z-mb-auto { margin-bottom: auto; }
+
+/* Margin — single-side horizontal (inline-start / inline-end)
+   Same rationale as z-ps-* / z-pe-* above: logical properties keep layouts
+   correct under dir="rtl", and we intentionally do not ship physical
+   z-ml-* / z-mr-* so single-side horizontal margins remain RTL-safe. */
+.z-ms-0    { margin-inline-start: var(--zk-spacing-0); }
+.z-ms-1    { margin-inline-start: var(--zk-spacing-1); }
+.z-ms-2    { margin-inline-start: var(--zk-spacing-2); }
+.z-ms-3    { margin-inline-start: var(--zk-spacing-3); }
+.z-ms-4    { margin-inline-start: var(--zk-spacing-4); }
+.z-ms-5    { margin-inline-start: var(--zk-spacing-5); }
+.z-ms-6    { margin-inline-start: var(--zk-spacing-6); }
+.z-ms-7    { margin-inline-start: var(--zk-spacing-7); }
+.z-ms-8    { margin-inline-start: var(--zk-spacing-8); }
+.z-ms-10   { margin-inline-start: var(--zk-spacing-10); }
+.z-ms-12   { margin-inline-start: var(--zk-spacing-12); }
+.z-ms-16   { margin-inline-start: var(--zk-spacing-16); }
+.z-ms-auto { margin-inline-start: auto; }
+
+/* Margin — inline-end (see note above z-ms-* for logical-property rationale) */
+.z-me-0    { margin-inline-end: var(--zk-spacing-0); }
+.z-me-1    { margin-inline-end: var(--zk-spacing-1); }
+.z-me-2    { margin-inline-end: var(--zk-spacing-2); }
+.z-me-3    { margin-inline-end: var(--zk-spacing-3); }
+.z-me-4    { margin-inline-end: var(--zk-spacing-4); }
+.z-me-5    { margin-inline-end: var(--zk-spacing-5); }
+.z-me-6    { margin-inline-end: var(--zk-spacing-6); }
+.z-me-7    { margin-inline-end: var(--zk-spacing-7); }
+.z-me-8    { margin-inline-end: var(--zk-spacing-8); }
+.z-me-10   { margin-inline-end: var(--zk-spacing-10); }
+.z-me-12   { margin-inline-end: var(--zk-spacing-12); }
+.z-me-16   { margin-inline-end: var(--zk-spacing-16); }
+.z-me-auto { margin-inline-end: auto; }
+
+} /* end @layer zk-utilities */
