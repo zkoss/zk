@@ -1665,6 +1665,37 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		setStubonly(stubonly ? "true" : "false");
 	}
 
+	/** Returns the component names declared on this component, or null if not specified.
+	 * @since 11.0.0
+	 * @see #setStubonlyDescendants
+	 */
+	public String getStubonlyDescendants() {
+		return _auxinf != null ? _auxinf.stubonlyDescendants : null;
+	}
+
+	/** Sets the names of the descendant components that are stub-only.
+	 * <p>A descendant becomes stub-only if this component or any other ancestor
+	 * lists its component name, or lists "*". The component name is the name of
+	 * its component definition, i.e., the ZUL element name (case-sensitive).
+	 * A component that specifies "true" or "false" by {@link #setStubonly(String)}
+	 * is not matched, and neither are its descendants by the names of its ancestors.
+	 * A component in the paging mold or hosting shadow elements, such as forEach,
+	 * and all its descendants are never matched, even by the names they declare.
+	 * Unlike {@link #setStubonly(String)}, a matched descendant does not make its
+	 * own children stub-only, and this component itself is not affected.
+	 * <p>Do not match the children that a live component manages, such as
+	 * listitem, row, treeitem, tab or comboitem. List listcell, cell or treecell
+	 * instead only if the server neither sorts nor reads them.
+	 * <p>Default: null.
+	 * @param names the component names separated by comma or space,
+	 * such as "div, label", or "*" for all descendants.
+	 * @since 11.0.0
+	 */
+	public void setStubonlyDescendants(String names) {
+		if (!Objects.equals(getStubonlyDescendants(), names))
+			initAuxInfo().stubonlyDescendants = names;
+	}
+
 	public boolean isInvalidated() {
 		return _page == null || getAttachedUiEngine().isInvalidated(this);
 	}
@@ -3741,6 +3772,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 		/** Whether this component is stub-only (0: inherit, -1: false, 1: true). */
 		private byte stubonly;
+		/** The names of the descendant components that are stub-only. */
+		private String stubonlyDescendants;
 
 		/** Whether annots is shared with other components. */
 		private transient boolean annotsShared;
@@ -3781,15 +3814,18 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		/** Clone for the stub component ({@link #replaceWith(AbstractComponent, boolean, boolean, boolean)}). */
 		private AuxInfo cloneStub(AbstractComponent owner, boolean bListener) {
 			//No need to clone visible since it is meaningless in StubComponent
-			if (bListener && (evthds != null || listeners != null)) {
+			final boolean lsn = bListener && (evthds != null || listeners != null);
+			if (!lsn && stubonlyDescendants == null)
+				return null;
+			final AuxInfo clone = new AuxInfo();
+			clone.stubonlyDescendants = stubonlyDescendants; //still applies to live descendants rendered later
+			if (lsn) {
 				//No need to make a copy of  evthds and listeners since Stub replaced the old one
-				final AuxInfo clone = new AuxInfo();
 				clone.evthdsShared = evthdsShared;
 				clone.evthds = evthds;
 				clone.listeners = listeners;
-				return clone;
 			}
-			return null;
+			return clone;
 		}
 
 		/** 2nd phase of clone (after children are cloned). */

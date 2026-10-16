@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6096.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 19 16:10:10 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click "Probe"; it lists the IDs of the components that became stub-only.
+		2. Expected: g1div g1lbl g2divStub g3div g3lbl g4lbl g5div g5lbl
+		3. Click "Append", then "Probe". Expected: g1div g1lbl g2divStub g3div g3lbl g4lbl g4newLbl g5div g5lbl g5newLbl
+		4. Go to the next page of both grids. Expected: rows r3, r4 and s3, s4 are shown without error.
+		5. Click "Add c", then "Remove first". Expected: the textboxes below show b and c.
+	</label>
+	<div apply="org.zkoss.zktest.test2.F110_ZK_6096Composer">
+		<vlayout id="g1" stubonlyDescendants="div, label">
+			<div id="g1div">
+				<label id="g1lbl" value="g1-label"/>
+				<button id="g1btn" label="g1-button"/>
+			</div>
+		</vlayout>
+		<vlayout id="g2" stubonlyDescendants="div">
+			<div id="g2divLive" stubonly="false">
+				<label id="g2lbl" value="g2-label"/>
+			</div>
+			<div id="g2divStub">
+				<label id="g2lblStub" value="g2-label"/>
+			</div>
+		</vlayout>
+		<vlayout id="g3" stubonlyDescendants="*">
+			<div id="g3div">
+				<label id="g3lbl" value="g3-label"/>
+				<button id="g3btn" label="g3-button" stubonly="false"/>
+			</div>
+		</vlayout>
+		<vlayout id="g4" stubonlyDescendants="div">
+			<div id="g4live" stubonly="false" stubonlyDescendants="label">
+				<label id="g4lbl" value="g4-label"/>
+				<div id="g4div"/>
+			</div>
+		</vlayout>
+		<vlayout id="g5" stubonlyDescendants="div">
+			<div id="g5div" stubonlyDescendants="label">
+				<hlayout id="g5live">
+					<label id="g5lbl" value="g5-label"/>
+				</hlayout>
+			</div>
+		</vlayout>
+		<vlayout id="g6" stubonlyDescendants="label">
+			<grid id="g6grid" mold="paging" pageSize="2">
+				<rows>
+					<row><label value="r1"/></row>
+					<row><label value="r2"/></row>
+					<row><label value="r3"/></row>
+					<row><label value="r4"/></row>
+				</rows>
+			</grid>
+		</vlayout>
+		<grid id="g7grid" mold="paging" pageSize="2" stubonlyDescendants="label">
+			<rows>
+				<row><label value="s1"/></row>
+				<row><label value="s2"/></row>
+				<row><label value="s3"/></row>
+				<row><label value="s4"/></row>
+			</rows>
+		</grid>
+		<zscript><![CDATA[
+			org.zkoss.zul.ListModelList g8model = new org.zkoss.zul.ListModelList(new String[] {"a", "b"});
+		]]></zscript>
+		<vlayout id="g8" stubonlyDescendants="div, label">
+			<div id="g8div">
+				<forEach items="${g8model}">
+					<label value="${each}"/>
+					<textbox value="${each}"/>
+				</forEach>
+			</div>
+		</vlayout>
+		<button id="g8add" label="Add c" onClick='g8model.add("c")'/>
+		<button id="g8remove" label="Remove first" onClick="g8model.remove(0)"/>
+		<button id="append" label="Append"/>
+		<button id="probe" label="Probe"/>
+		<label id="result"/>
+	</div>
+</zk>

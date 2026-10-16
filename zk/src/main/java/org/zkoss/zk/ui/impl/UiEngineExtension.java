@@ -13,10 +13,14 @@ Copyright (C) 2010 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.ext.Native;
@@ -44,7 +48,7 @@ public class UiEngineExtension implements Extension {
 		for (Iterator it = comps.iterator(); it.hasNext();) {
 			final Component c = (Component) it.next();
 			boolean[] stubinf = getStubInfo(c.getParent(), stubinfs);
-			stub(c, stubinf[0], stubinf[1]);
+			stub(c, stubinf[0], stubinf[1], getStubonlyNames(c.getParent()));
 		}
 	}
 
@@ -73,6 +77,38 @@ public class UiEngineExtension implements Extension {
 		return stubinf;
 	}
 
+	/** Returns the stubonlyDescendants names declared by the given component and its ancestors,
+	 * up to the nearest one that specifies stubonly, or null if any of them disables names. */
+	private static final Set<String> getStubonlyNames(Component comp) {
+		Set<String> names = Collections.emptySet();
+		boolean shielded = false;
+		for (Component c = comp; c != null; c = c.getParent()) {
+			if (disablesNames(c))
+				return null;
+			if (!shielded) {
+				names = addStubonlyNames(names, c);
+				shielded = shallStubonly(c) != null;
+			}
+		}
+		return names;
+	}
+
+	private static final Set<String> addStubonlyNames(Set<String> names, Component comp) {
+		final String s = comp instanceof AbstractComponent ? ((AbstractComponent) comp).getStubonlyDescendants() : null;
+		if (s == null || names == null)
+			return names;
+		names = new HashSet<String>(names);
+		Collections.addAll(names, s.trim().split("[\\s,]+"));
+		return names;
+	}
+
+	/** Returns whether no names apply to the given component and its descendants:
+	 * rows of other pages are rendered later in paging mold, and shadow elements
+	 * (such as forEach) track the original components of their host. */
+	private static final boolean disablesNames(Component comp) {
+		return "paging".equals(comp.getMold()) || !((ComponentCtrl) comp).getShadowRoots().isEmpty();
+	}
+
 	private static final Boolean shallStubNative(Component comp) {
 		final Object sn = comp.getAttribute(Attributes.STUB_NATIVE);
 		if (sn != null)
@@ -95,7 +131,7 @@ public class UiEngineExtension implements Extension {
 	/** Makes a component as a stub-only component.
 	 * @return whether if components in the whole sub-tree are all StubComponent
 	 */
-	private static final boolean stub(Component comp, boolean stubnative, boolean stubonly) {
+	private static final boolean stub(Component comp, boolean stubnative, boolean stubonly, Set<String> names) {
 		if (comp instanceof StubsComponent)
 			return true; //nothing to do if stubs (i.e., merged stub components)
 		//returns true so the parent will keep merging (aggressive algorithm)
@@ -106,17 +142,25 @@ public class UiEngineExtension implements Extension {
 		val = shallStubonly(comp);
 		if (val != null)
 			stubonly = val.booleanValue();
+		//ZK-6096: a name match stubs this component only; unlike stubonly, it is not inherited
+		if (disablesNames(comp))
+			names = null;
+		final boolean matched = names != null && val == null && !(comp instanceof StubComponent)
+				&& (names.contains("*") || names.contains(comp.getDefinition().getName()));
+		if (val != null && names != null)
+			names = Collections.emptySet(); //explicit stubonly shields the subtree from ancestors' names
+		names = addStubonlyNames(names, comp);
 
 		boolean allstub = true, anychild = false;
 		for (Component child = comp.getFirstChild(); child != null; anychild = true) {
 			Component n = child.getNextSibling();
-			if (!stub(child, stubnative, stubonly))
+			if (!stub(child, stubnative, stubonly, names))
 				allstub = false;
 			child = n;
 		}
 
 		final boolean bNative = comp instanceof Native;
-		if ((bNative && !stubnative) || (!bNative && !stubonly))
+		if ((bNative && !stubnative) || (!bNative && !stubonly && !matched))
 			return false;
 
 		if (allstub && anychild) {
