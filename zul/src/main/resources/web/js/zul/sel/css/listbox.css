@@ -359,16 +359,23 @@
 /* One padding layer, on the td, as Grid's `.z-group-inner`: a second one on the content put the group text 16px
    right of the data-row text and made the row 15px taller than a Grid group row (follow-up 40). */
 .z-listgroup td {
-    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    padding: var(--zk-group-padding-y) var(--zk-group-padding-x);
 }
 
 .z-listgroup .z-listcell-content {
     padding: 0;
 }
 
+/* The box of a row checkbox sits 16px from the cell edge whatever the density (its span carries the padding), so a group
+   of a checkmark Listbox keeps that 16px and its own checkbox (groupSelect) and toggle arrow stay under the row boxes
+   in compact density, where the cell padding is 12px (follow-up 46). */
+.z-listgroup:has(.z-listgroup-checkable),
+.z-listgroup:has(~ .z-listitem .z-listitem-checkable) {
+    --zk-group-padding-x: var(--zk-spacing-4);
+}
+
 .z-listgroup > td:first-child {
     box-shadow: inset 3px 0 0 var(--zk-color-primary);
-    padding-left: var(--zk-spacing-4);
 }
 
 /* An inset shadow takes no layout space (a border here shifts every collapsed-border
@@ -377,7 +384,7 @@
     .z-listgroup > td:first-child {
         box-shadow: none;
         border-left: 3px solid Highlight;
-        padding-left: calc(var(--zk-spacing-4) - 3px);
+        padding-left: calc(var(--zk-group-padding-x) - 3px);
     }
 }
 

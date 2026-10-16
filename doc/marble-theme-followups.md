@@ -646,6 +646,13 @@ keyboard-focused button in a scrolling row over the opt-in `.z-sticky-header` he
 asks `elementFromPoint` at the centre of the focused button: the button before, the header after. The item-36 guard stays green. The
 z-index of the sticky header is unchanged, so the global stacking is not touched.
 
+**Extended in zk `0038822856`** (NS27, F1; `toolbarbutton.css`, guard `a toolbarbutton that follows a menubar paints its whole ring over the
+menubar` in `focus-ring-scan.spec.ts`, fixture `pv/toolbarbutton-menubar-before-guard.zul`): the rule also reads
+`.z-menubar ~ .z-toolbarbutton:focus-visible`, so a toolbarbutton after a menubar in the same container is raised too. The guard reads the
+pixel just inside the outer edge of the ring, left of the button: the menubar colour `[240,244,250]` before, the outline colour after; the
+sticky-header guard stays green. Known limit, left as found: a toolbarbutton wrapped in another element next to a menubar is not a sibling of
+it, so its ring is still covered (no cheap selector reaches it); neither the preview pages nor NS23 and earlier handled it.
+
 ## 37. Gaps in `focus-ring-scan` (L3, pre-existing)
 
 The scan (`focus-ring-scan.spec.ts`, `measureClipping` and `clippingCandidates`) does not model:
@@ -825,6 +832,24 @@ Low; left as found (O10).
 A Grid `<group>` row is 37px in default and in compact (`data-density="compact"`), 41px on tablet, while data rows go
 52.5 / 32.5 / 60.5. The Listbox group row matches the Grid group row after the NS22 fix, so both stay 37px in compact.
 Existing behaviour; left as found (O10). Decide with `doc/spec/data-dense-mode.md` whether group rows follow the density.
+
+**Resolved** in zk `e9f02fafa2` (NS27; `_sizing.css`, `grid.css`, `listbox.css`; guards in `mesh-header-footer.spec.ts`). Decided: group rows follow the
+density (V6, same role same look; the purpose of compact is more rows per viewport). Two tokens, `--zk-group-padding-y/x`, default 8px 16px
+(unchanged), compact 6px 12px, read by Grid `.z-group-inner` and Listbox `.z-listgroup td`; a tablet keeps 8px 16px. Measured (px, Chromium,
+`pv`-style probe with group, one data row and a groupfoot):
+
+| | default | compact | tablet |
+|---|---|---|---|
+| Grid group row | 37 -> 37 | 37 -> 33 | 41 -> 41 |
+| Listbox group row | 36.5 -> 36.5 | 36.5 -> 32.5 | 40.5 -> 40.5 |
+| Grid / Listbox data row | 53 / 53 | 33 / 33 | 61 / 61 |
+| groupfoot (Grid / Listbox) | 52.5 / 52.5 | 32.5 / 32.5 | 60.5 / 60.5 |
+
+The groupfoot already read the cell paddings, so it followed the density before. In compact the group toggle icon moves from 16px to 12px, the
+keyline of the data-row text (the existing keyline guard now runs in default and compact). A group of a checkmark Listbox (groupSelect, or a
+plain group above checkmark rows) keeps 16px sideways through a row-scoped `--zk-group-padding-x`, because the box of a row checkbox sits 16px
+from the cell edge in every density; without it the group checkbox and arrow would sit 4px left of the row boxes in compact. No baseline PNG
+changed (no baseline holds a compact group row).
 
 ## 47. A real invalid combobox or bandbox gets no invalid styling (NS21 verification, Medium)
 
@@ -1008,6 +1033,24 @@ The `ID | Product Name | Price` listbox (y≈4337-4496 in `listbox-header-galler
 gallery tolerance, before and after NS24. The truncated state correlates with a later font `loadingdone`, so probably a
 font-load race in ZK's size-by-content measurement; not confirmed. The committed baseline holds the truncated state.
 
+**Diagnosed in NS27: ZK measures before the webfont loads and never re-measures (core; not fixed, no Jira filed, E6).** The test is not at
+fault: `gallery` already awaits `document.fonts.ready`, and the state is stable after it.
+- Reproduction (Chromium, 20 fresh loads of `/listbox-header.zul`, `document.fonts` `loadingdone` timestamps recorded): 16/20 loads gave
+  57/228/82 with the Inter `loadingdone` at 101-216ms; 4/20 gave 56/225/82 with the truncated text and `loadingdone` at 223-305ms. The width
+  read at `networkidle`, after `fonts.ready` and 1.5s later was identical in every load, so the state is not transient.
+- Cause: `MeshWidget.onSize` calls `_adjHeadWd` for `sizedByContent` (`MeshWidget.ts` ~1558); it takes the column widths from `_calcMinWds` ->
+  `_calcMinWd` (a `nowrap` measure of the cells), caches them in `_minWd`, and writes them as `px` on the header, body and footer column
+  fakers. `_minWd` is cleared only by `onChildAdded_` (head added) and `_clearCachedSize` (header changes). Nothing in `zul/` or `zk/`
+  listens to `document.fonts` or `loadingdone`. When the measure runs in the fallback font, the later Inter text is wider than the fixed
+  columns and is clipped (the "0..." and "Super Long Product Name H..." states).
+- Deterministic proof: delaying the two Inter `.woff2` responses by 600ms gives 20/20 truncated 56/225/82. In such a page,
+  `wgt._clearCachedSize(); wgt.onSize()` after the font has loaded re-measures to `[57,228,82]` and the columns open up.
+- Can Marble avoid it without widget code? `fonts.css` already uses `font-display: swap`. Measured with the font delayed by 600ms,
+  `block` and `optional` still give 20/20 truncated; with the natural timing `optional` gives 20/20 truncated too (the fallback is kept for the
+  whole page, which changes every screen). A `<link rel="preload" as="font" crossorigin>` for `inter-latin-variable.woff2` in the page head
+  gave 20/20 stable 57/228/82, but a theme stylesheet cannot add it: an application would have to, per page. Nothing was committed; the
+  committed baseline still holds the truncated state and the 0.2% gallery tolerance covers either.
+
 ## 58. Leftovers from the NS25 verification
 
 - Inside an inputgroup a focused combobox draws its input border 1px and its button border 2px (valid or invalid); the
@@ -1106,3 +1149,8 @@ font-load race in ZK's size-by-content measurement; not confirmed. The committed
 chromium multislider/rangeslider hover/focus (4) and gallery `component-theming` baselines are stale since zkdemo B9 (zkcml `33623a6ce`,
 `5d29d14b0`) made the sliders taller (crops 48/52 → 110px; component-theming 18,407 vs 18,647px); fail identically on `605bd62e89`; not
 re-cut (owner: the B9 batch).
+
+## 61. WebKit only: the `.mhf-listbox-first-cell` image and the header text differ by 1.5px (NS32 verification)
+
+WebKit only: the `.mhf-listbox-first-cell` image against the header text keyline differs by 1.5px (tolerance 1px) in both density
+variants; same on pre-NS23 CSS; repo projects run Chromium only (NS32 verification). Left as found (O10).

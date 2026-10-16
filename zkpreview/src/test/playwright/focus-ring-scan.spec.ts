@@ -507,6 +507,45 @@ test.describe('focus-ring scan — ring painted over by a neighbour', () => {
     expect(difference, `ring bottom is ${JSON.stringify(painted)}, outline ${JSON.stringify(ring.colour)}`).toBeLessThanOrEqual(24);
   });
 
+  // A menubar before the toolbarbutton in the same container covers the side of the ring that reaches towards it, so the
+  // pixel just inside the outer edge of the ring, left of the button, is read (follow-up 36, F1).
+  test('a toolbarbutton that follows a menubar paints its whole ring over the menubar', async ({ page }) => {
+    await page.goto('/pv/toolbarbutton-menubar-before-guard.zul', { waitUntil: 'domcontentloaded' });
+    const button = page.locator('.tmb-row .z-toolbarbutton');
+    await button.waitFor();
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+    await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
+    await page.keyboard.press('Tab');
+    await button.focus();
+    const ring = await button.evaluate((el) => {
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return {
+        left: rect.left + window.scrollX, y: rect.top + window.scrollY + rect.height / 2,
+        reach: (parseFloat(style.outlineWidth) || 0) + (parseFloat(style.outlineOffset) || 0),
+        colour: (style.outlineColor.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number),
+        menubarBefore: !!el.parentElement!.querySelector('.z-menubar'),
+      };
+    });
+    expect(ring.menubarBefore, 'the toolbarbutton has a menubar before it').toBe(true);
+    const png = await page.screenshot({
+      fullPage: true, clip: { x: Math.floor(ring.left - ring.reach + 1), y: Math.floor(ring.y), width: 1, height: 1 },
+    });
+    const painted = await page.evaluate(async (base64) => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${base64}`;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = 1;
+      canvas.height = 1;
+      const context = canvas.getContext('2d')!;
+      context.drawImage(image, 0, 0);
+      return Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3));
+    }, png.toString('base64'));
+    const difference = painted.reduce((sum, channel, i) => sum + Math.abs(channel - ring.colour[i]), 0);
+    expect(difference, `ring left edge is ${JSON.stringify(painted)}, outline ${JSON.stringify(ring.colour)}`).toBeLessThanOrEqual(24);
+  });
+
   // The `z-index: 101` that lifts the ring above the menubar belongs to a toolbarbutton that has a menubar after it. On any
   // other toolbarbutton it paints a keyboard-focused button over the opt-in `.z-sticky-header` header (z-index 2) once the
   // row has been scrolled under it.

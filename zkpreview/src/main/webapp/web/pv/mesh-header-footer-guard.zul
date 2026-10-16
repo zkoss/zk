@@ -389,6 +389,15 @@
             <row><label value="Alice"/><label value="Engineering"/></row>
         </rows>
     </grid>
+    <!-- A checkmark Listbox with a plain group: its toggle arrow stays under the row checkboxes (follow-up 46). -->
+    <listbox sclass="mhf-listbox-group-check" width="360px" checkmark="true" multiple="true">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Type" width="160px"/>
+        </listhead>
+        <listgroup label="Group"/>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
+    </listbox>
     <!-- A Listbox whose groups are selectable (groupSelect), one of them disabled (follow-up 41). -->
     <listbox sclass="mhf-listbox-group-select" width="360px" checkmark="true" multiple="true">
         <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>

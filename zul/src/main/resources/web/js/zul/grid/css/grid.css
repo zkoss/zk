@@ -370,7 +370,7 @@
 }
 
 .z-group-inner {
-    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    padding: var(--zk-group-padding-y) var(--zk-group-padding-x);
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);

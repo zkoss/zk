@@ -1210,15 +1210,43 @@ function registerListboxGroupRows(density: Density) {
     expect(Math.abs(listbox - grid), `listbox group icon x ${listbox}, grid group icon x ${grid}`).toBeLessThanOrEqual(TOLERANCE_PX);
   });
 
-  // Group rows pad by the fixed 16px in both Grid and Listbox, while data cells follow the density (12px compact, 20px
-  // tablet), so the keyline is the data-row text only at the default density (follow-up 46).
-  if (density !== 'default') return;
-  test('.mhf-listbox-group: the group toggle icon starts on the keyline of the row text', async ({ page }) => {
+  test(`.mhf-listbox-group-check: the toggle arrow of a plain group is under the row checkbox in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    const left = (selector: string) => page.locator(selector).first().evaluate((el) => el.getBoundingClientRect().left);
+    const arrow = await left('.mhf-listbox-group-check tr.z-listgroup span.z-listgroup-icon');
+    const box = await left('.mhf-listbox-group-check tr.z-listitem i.z-icon-check');
+    expect(Math.abs(arrow - box), `group arrow x ${arrow}, row box x ${box}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  // A group row pads like a data row in default and compact density (follow-up 46); a tablet keeps the fixed 16px
+  // sideways against the 20px of its data cells, so the keyline is shared by the first two only.
+  if (density === 'tablet') return;
+  test(`.mhf-listbox-group: the group toggle icon starts on the keyline of the row text in ${density} density`, async ({ page }) => {
     await openInDensity(page, density);
     const icon = await page.locator('.mhf-listbox-group tr.z-listgroup span.z-listgroup-icon').first()
       .evaluate((el) => el.getBoundingClientRect().left);
     const rowText = await textLeft(page, '.mhf-listbox-group tr.z-listitem .z-listcell-content');
     expect(Math.abs(icon - rowText), `group icon x ${icon}, row text x ${rowText}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  test(`.mhf-grid-group: the group toggle icon starts on the keyline of the row text in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    const icon = await page.locator('.mhf-grid-group tr.z-group .z-group-icon').first()
+      .evaluate((el) => el.getBoundingClientRect().left);
+    const rowText = await textLeft(page, '.mhf-grid-group tr.z-row .z-row-content');
+    expect(Math.abs(icon - rowText), `group icon x ${icon}, row text x ${rowText}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  // Compact only: in default density a group row keeps its 8px 16px against the 16px of a data cell (follow-up 46).
+  if (density !== 'compact') return;
+  test('.mhf-group: the group row pads like a data row in Grid and Listbox in compact density', async ({ page }) => {
+    await openInDensity(page, density);
+    const padding = (selector: string) => page.locator(selector).first().evaluate((el) => {
+      const style = getComputedStyle(el);
+      return [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].join(' ');
+    });
+    expect(await padding('.mhf-grid-group td.z-group-inner'), 'grid group padding').toBe(await padding('.mhf-grid-group tr.z-row .z-row-content'));
+    expect(await padding('.mhf-listbox-group tr.z-listgroup td'), 'listbox group padding').toBe(await padding('.mhf-listbox-group tr.z-listitem .z-listcell-content'));
   });
 }
 

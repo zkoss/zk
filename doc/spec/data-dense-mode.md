@@ -19,7 +19,8 @@ The density system has three layers, all defined in
    a rung *by meaning*. The intentional size *relationships* (input 40 > button 36,
    toolbar 48 > input 40) live here, defined once — so they survive any tier change.
 3. **Data-cell padding** — `--zk-grid-cell-padding`, `--zk-listbox-cell-padding`,
-   `--zk-tree-cell-padding` (the biggest lever for table density).
+   `--zk-tree-cell-padding` (the biggest lever for table density), and `--zk-group-padding-y/x`
+   for the group rows of Grid and Listbox (default and tablet keep 8px 16px).
 
 Every component's CSS binds to a rung or an alias — never a raw px. Marble ships a
 `[data-density="compact"]` rule (in _sizing.css) that re-points all of them to their
@@ -102,6 +103,8 @@ than the shipped rule, so it wins regardless of load order — and set any token
 | `--zk-listbox-cell-padding` | 16px | 6px 12px | listbox cells |
 | `--zk-tree-cell-padding` | 16px | 6px 12px | tree cells (same as grid and listbox, so a tree row is as tall as a grid row) |
 | `--zk-tree-header-padding` | 16px | 6px 12px | tree header cells (same header height as grid/listbox) |
+| `--zk-group-padding-y` | 8px | 6px | Grid `<group>` and Listbox `<listgroup>` rows, top/bottom (the same as a compact data cell) |
+| `--zk-group-padding-x` | 16px | 12px | the same rows, left/right; a group of a checkmark Listbox keeps 16px so its checkbox and arrow stay under the row checkboxes |
 
 ### Finer control
 

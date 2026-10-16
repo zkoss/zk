@@ -71,6 +71,8 @@
     --zk-listbox-cell-padding:   var(--zk-spacing-4);          /* 16 all sides */
     --zk-tree-cell-padding:      var(--zk-spacing-4);          /* 16 all sides: same row height as grid/listbox */
     --zk-tree-header-padding:    var(--zk-spacing-4);          /* 16 all sides: same header height as grid/listbox */
+    --zk-group-padding-y:        var(--zk-spacing-2);          /* 8: Grid and Listbox group rows; a tablet keeps it */
+    --zk-group-padding-x:        var(--zk-spacing-4);          /* 16: ditto; the tablet data cell is 20 */
 }
 
 /* ── Compact density — scope-independent knob ───────────────────────────────
@@ -122,4 +124,6 @@
     --zk-listbox-cell-padding: 6px 12px;
     --zk-tree-cell-padding: 6px 12px;
     --zk-tree-header-padding: 6px 12px;
+    --zk-group-padding-y: 6px;
+    --zk-group-padding-x: 12px;
 }
