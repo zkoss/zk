@@ -46,6 +46,27 @@ public class F110_ZK_6085_PortallayoutDraggingMovementsTest extends WebDriverTes
 	}
 
 	@Test
+	public void thePopupIsAMenu() {
+		connect();
+		clickTitleBar("translate");
+		JQuery menu = jq(".z-portallayout-popup-open .z-portallayout-popup-content").eq(0);
+		Assertions.assertEquals("menu", menu.attr("role"));
+		Assertions.assertEquals("Move Translate", menu.attr("aria-label"));
+		Assertions.assertEquals("menuitem", columns().eq(1).attr("role"));
+		Assertions.assertEquals("menu", columns().eq(1).attr("aria-haspopup"));
+		Assertions.assertEquals("false", columns().eq(1).attr("aria-expanded"));
+
+		click(columns().eq(1));
+		waitResponse();
+		JQuery submenu = jq(".z-portallayout-popup-open .z-portallayout-popup-content").eq(1);
+		Assertions.assertEquals("true", columns().eq(1).attr("aria-expanded"), "The column whose positions are open should be expanded");
+		Assertions.assertEquals(submenu.attr("id"), columns().eq(1).attr("aria-controls"));
+		Assertions.assertEquals("menu", submenu.attr("role"));
+		Assertions.assertEquals(columns().eq(1).attr("id"), submenu.attr("aria-labelledby"), "The positions should be named after their column");
+		Assertions.assertEquals("menuitem", positions().eq(0).attr("role"));
+	}
+
+	@Test
 	public void upOrDownClosesTheOpenPositions() {
 		connect();
 		clickTitleBar("translate");
