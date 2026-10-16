@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6085-BiglistboxTargetSize.zul
+
+	Purpose:
+		WCAG 2.5.8 Target Size (Minimum) - the Biglistbox scrollbars and frozen-column tick.
+
+	Description:
+		Only visible with za11y enabled.
+
+	History:
+		Fri Oct 02 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+Requires za11y.
+1. look at both scrollbars and at the tick at the bottom of the frozen-column divider: every button, both drag handles and the tick are at least 24px square and drawn in full
+2. look at the tick: it does not cover the horizontal scrollbar's first button
+3. click the End button of each scrollbar, then its Home button: the biglistbox scrolls to the last row or column, then back to the first
+4. drag the tick one column to the right: a third column is frozen
+	</label>
+	<zscript><![CDATA[
+		import org.zkoss.zktest.test2.big.*;
+		FakerMatrixModel bigData = new FakerMatrixModel(100, 300);
+	]]></zscript>
+	<biglistbox id="big" frozenCols="2" colWidth="130px" width="800px" height="400px" model="${bigData}"/>
+</zk>

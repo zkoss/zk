@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6085-PortallayoutMovedPanelFocus.zul
+
+	Purpose:
+		A panel moved with Portallayout's move popup keeps the focus.
+
+	Description:
+		With za11y, the server replaces a moved panel, which drops its focus; the focus should
+		return to the panel once the move is done, whether it was chosen by key or by click.
+
+	History:
+		Fri Oct 16 12:42:03 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. press Tab until "Mail" is focused, press Space, Enter, Down and Enter: "Mail" moves to "Right", below "News", and is still focused
+		2. press Space and click "Left": "Mail" moves back to "Left" and is still focused
+	</label>
+	<portallayout>
+		<portalchildren id="left" title="Left" width="30%">
+			<panel id="mail" title="Mail"/>
+		</portalchildren>
+		<portalchildren id="right" title="Right" width="30%">
+			<panel id="news" title="News"/>
+		</portalchildren>
+	</portallayout>
+</zk>
