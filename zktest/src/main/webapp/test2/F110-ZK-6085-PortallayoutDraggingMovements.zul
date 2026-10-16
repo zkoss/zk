@@ -15,7 +15,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	<label multiline="true">
 		1. click the title bar of "Translate": a popup under the panel lists "Todo (current)", "Doing" and "Done"
 		2. click "Doing": its positions open on the right, "Move to top" and "Move to bottom"; click "Move to bottom": "Translate" moves below "News"
-		3. press Tab until "Translate" is focused, then Space, Down and Right: the positions are "Move to top" and "Move up"; press Left and Enter: the positions open again; press Down and Enter: "Translate" moves above "News" and keeps the focus
+		3. press Tab until "Translate" is focused, then Space, Down and Right: the positions are "Move to top" and "Move up"; press Left and Enter: the positions open again; press Escape: they close and "Doing (current)" is focused, as with Left; press Enter, Down and Enter: "Translate" moves above "News" and keeps the focus
 		4. click the title bar of "Translate" and click "Doing (current)": the positions are "Move to top", "Move up", "Move down" and "Move to bottom"; click "Move down": "Translate" moves below "News"
 		5. click the title bar of "Calendar" and click "Done": "Calendar" moves to "Done" at once
 		6. click the title bar of "Mail" twice: the popup opens and closes again
