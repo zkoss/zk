@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6085-ErrorboxFocusNotObscured.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Oct 01 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk xmlns:ca="client/attribute">
+	<label multiline="true">
+		1. Click the first textbox of a row and press Tab (in row 2, type something first).
+		2. An error box appears beside it. The textbox that now has focus should not be covered by it.
+		3. In row 3, also scroll the area a little afterwards. The focused textbox should stay uncovered.
+		4. Click the textbox in the window, then click the title bar of the window. The error box should open at its default place, to the right of the textbox, and stay there when you resize the browser.
+	</label>
+	<vlayout spacing="100px">
+		<hlayout>
+			<textbox id="client" constraint="no empty"/>
+			<textbox id="client1"/>
+		</hlayout>
+		<hlayout>
+			<textbox id="server" onChange='throw new WrongValueException(self, "Rejected")'/>
+			<textbox id="server1"/>
+		</hlayout>
+		<div id="scroller" ca:data-scrollable="true" height="150px" style="overflow: auto">
+			<hlayout>
+				<textbox id="scroll" constraint="no empty"/>
+				<textbox id="scroll1"/>
+			</hlayout>
+			<div height="300px"/>
+		</div>
+		<window id="win" title="Overlapped" mode="overlapped" border="normal" width="400px" height="150px">
+			<textbox id="inWindow" constraint="no empty"/>
+		</window>
+	</vlayout>
+</zk>
