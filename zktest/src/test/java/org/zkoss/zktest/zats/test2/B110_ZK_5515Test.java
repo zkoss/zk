@@ -29,10 +29,10 @@ public class B110_ZK_5515Test extends WebDriverTestCase {
 		sendKeys(jq("$calendar"), Keys.SPACE);
 		waitResponse();
 		assertNoJSError();
-		Assertions.assertTrue(jq(".z-portallayout-popup-nav").eq(1).is(":focus"),
+		Assertions.assertTrue(jq(".z-portallayout-popup-nav:visible").eq(0).is(":focus"),
 				"Space should open the menu with focus on its first visible item");
 
-		click(jq(".z-portallayout-popup-nav").eq(1));
+		click(jq(".z-portallayout-popup-nav:visible").eq(0));
 		waitResponse();
 		Assertions.assertEquals("calendar", column2.firstChild().id(), "Calendar should move to the second column");
 
