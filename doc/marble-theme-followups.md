@@ -980,6 +980,55 @@ font-load race in ZK's size-by-content measurement; not confirmed. The committed
   header unit is now centred on the column: box x 62px against 66px in a 160px column with a short label, 4px against 16px in the 100px
   column whose label overflows (the box starts 4px from the column edge). A header identical to the old one needs a hook in
   `Treecol.ts` (for example the label in its own element); core team, not done.
+  The shift against pre-NS26 per density (short label in 160px / long label overflowing 100px): default -4 / -12px, compact -2 / -8px,
+  tablet -6 / -16px. In the overflow case the header box no longer sits on the row-box keyline (12 / 8 / 20px off in default / compact /
+  tablet); PM accepted it, because it occurs only when the label overflows a narrow column.
+
+  **Narrowed** (NS29, follow-up 59 / 54): the row rules reached more than the box-only cells. A centred first column whose cells hold the
+  box and a component lost one indent level per child row (textbox cells: child box 29 / component 73, as the parent; pre-NS26 17 / 85);
+  nested box-only columns kept the container-row box 12px left of the column centre and put the level-0 and level-1 boxes on one x
+  (61/61/49 against 61/49/37; the same for a radio column). Indentation carries the hierarchy, so (PM) the rules now match a level-0 leaf
+  box-only cell only (`.z-treecell-content:has(> .z-treerow-checkable + .z-tree-spacer:last-child)`); every other cell renders as before
+  NS26. Guard `.mhf-tree-nested-*` (box -12px per level, box to component +24px per level), red on the previous CSS, green on the new.
+
+  **Scoped to flat trees** (NS30, follow-up 59): in a tree that mixed level-0 containers and level-0 leaves, the centred leaf box sat 12px right
+  of its container sibling (container 93, leaf 105 in a 160px column at x 33), one nesting step the wrong way, and a container that lost
+  its last child jumped 12px. All four centring rules (the unlabelled header, the header box margin, the row padding and the spacer) now
+  apply to `.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon))`, a tree without a container row (the open icon
+  follows the box in an open or a closed container). A tree with a container row renders header and rows as before follow-up 54: the
+  leaf box is on the container keyline (93 and 93, default, compact and tablet), identical to the same tree with the four rules deleted,
+  and the header box is right of the column centre again (4px default, 2px compact, 6px tablet), so there header and rows are not on one
+  keyline (header 109, rows 93, the state before NS26). A flat tree keeps the NS26 result (header and leaf centre 113 = column centre,
+  centre difference 0). The `.mhf-tree-label-*` fixtures have nested rows, so their header is the pre-follow-up-54 one now: the box 16 / 12 / 20px
+  from the edge of the 100px column, 0 / 0 / 4px off the row keyline (it was 12 / 8 / 20px off), 65.6px in the 160px column.
+  Guard `.mhf-tree-mixed-box` (leaf box x equals the open and the closed container box x; header box offset), red on the NS29 CSS (leaf 105, containers
+  93 and 93; header offset 0), green on the new, in three densities.
+  Cost of the `:has()` on the tree root (Chrome `RecalcStyleDuration`, median of 5 runs for the flat tree and 3 for the nested and mixed
+  ones, 1,000 rows, ms; the four rules deleted / NS29 rules / NS30 rules; the rules were swapped through the CSSOM, so the three columns share
+  one page): flat tree 20 forced full recalcs 1695 / 1762 / 1777, add and remove 100 rows ten times 1947 / 1950 / 1985, flip a container icon
+  twenty times 3565 / 3502 / 3606, toggle the selected class of 200 rows ten times 34 / 35 / 43; nested tree (50 open containers, 19 leaves each)
+  1756 / 1749 / 1744, open and close 5 containers four times 5770 / 5727 / 5802, add and remove rows 1987 / 1981 / 1981, flip 3698 / 3659 / 3593,
+  select 33 / 34 / 34; mixed tree (20 containers, 800 leaves) 1738 / 1716 / 1757, toggle 5968 / 6072 / 6189, add and remove 1990 / 2005 / 2031,
+  flip 3635 / 3646 / 3854, select 38 / 35 / 35. NS30 against NS29: -2% to +3% on every operation, +6% at most (flip, mixed tree) and 8ms more
+  on the selected-class toggle of the flat tree (35 to 43); the 1,000-row table costs 1.7s of recalc for 20 full invalidations whatever the rules are.
+
+  **Anchored to the tree's own rows** (NS31, follow-up 59): the `:has()` of NS30 was a descendant match, so an outer flat tree whose cell held
+  a nested checkmark Tree with a container row lost its centring. The prefix is now
+  `.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon))`, and the rules reach the
+  header and the rows of that tree only (`.z-tree:not(...) > .z-tree-header .z-treecol` and
+  `.z-tree:not(...) > .z-tree-body > table > tbody > tr > .z-treecell`). Anchoring the check alone was not enough: the descendant rules of the
+  outer tree still centred the cells of the inner tree (leaf box 12px right of its container, guard red), so the rules take child paths too. A tree is
+  judged on its own rows. The path holds in a plain tree, with a treefoot, with frozen columns, `sizedByContent` and the paging mold, and in a
+  nested tree (probed in the live page). Measured in default, compact and tablet density: the outer tree's header and row box centre = column centre
+  (0px in all three), the inner tree keeps its own keyline (leaf box x = container box x: 270 / 270, 266 / 266, 274 / 274; header box 4 / 2 / 6px
+  right of the column centre). Flat labelled header (`.mhf-tree-label-flat-100` and `-160`, leaves only): the unit (box with its 4px margin, label)
+  is centred on the 160px column (0px), starts at the edge of the 100px column where the long label is cut with the ellipsis (box 4px from the
+  edge), the box is inside the column and the gap to the label is 4px, the same in the three densities. Guards: `.mhf-tree-outer-box`,
+  `.mhf-tree-inner-box`, `.mhf-tree-label-flat-*`; red on the NS30 CSS (outer 3 of 3) and, for the labelled header, on the pre-follow-up-54 CSS
+  (6 of 6, and the outer tree 3 of 3); green on the new.
+  **Accepted limitation** (NS31, verifier F2): with the paging mold or opt-in ROD the CSS sees the rendered rows only, so a page that holds
+  leaves only is centred and a page that holds a container row is not, and an ROD tree jumps 12px (the box moves by one nesting step) when a
+  container row loads. Excluding those molds would take the centring from a flat paging tree; CSS cannot see rows that are not in the DOM.
 - `.z-spinner` is 43px tall and `.z-timebox` 37px in compact density, against 40px and 32px for the other inputs (its two 20px
   icons and separator pin the button column). Same under old and new CSS.
 - Already red before NS26, found while running the baselines: `chromium` `screenshot.spec.ts` navbar selected item, multislider

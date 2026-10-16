@@ -586,5 +586,137 @@
             </treeitem>
         </treechildren>
     </tree>
+    <!-- A centred first column of nested rows (follow-up 54, narrowed in follow-up 59): the box-only centring rules reach a level-0 leaf cell only, so a container row and a child row keep the indent that carries the hierarchy. -->
+    <tree sclass="mhf-tree-nested-box mhf-tree-nested-box-check" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="160px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem open="true">
+                <treerow><treecell/><treecell label="Parent"/></treerow>
+                <treechildren>
+                    <treeitem open="true">
+                        <treerow><treecell/><treecell label="Child"/></treerow>
+                        <treechildren>
+                            <treeitem><treerow><treecell/><treecell label="Grandchild"/></treerow></treeitem>
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-nested-box mhf-tree-nested-box-radio" width="360px" checkmark="true">
+        <treecols>
+            <treecol width="160px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem open="true">
+                <treerow><treecell/><treecell label="Parent"/></treerow>
+                <treechildren>
+                    <treeitem open="true">
+                        <treerow><treecell/><treecell label="Child"/></treerow>
+                        <treechildren>
+                            <treeitem><treerow><treecell/><treecell label="Grandchild"/></treerow></treeitem>
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-nested-component" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="160px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem open="true">
+                <treerow><treecell><textbox/></treecell><treecell label="Parent"/></treerow>
+                <treechildren>
+                    <treeitem open="true">
+                        <treerow><treecell><textbox/></treecell><treecell label="Child"/></treerow>
+                        <treechildren>
+                            <treeitem><treerow><treecell><label value="Label"/></treecell><treecell label="Grandchild"/></treerow></treeitem>
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+    <!-- A centred box-only first column of a Tree that mixes level-0 containers (open and closed) and level-0 leaves (follow-up 59, NS30): the centring rules apply to a tree without a container row only, so a leaf box sits on the keyline of its container sibling. -->
+    <tree sclass="mhf-tree-mixed-box" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="160px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem open="true">
+                <treerow><treecell/><treecell label="Open container"/></treerow>
+                <treechildren>
+                    <treeitem><treerow><treecell/><treecell label="Child"/></treerow></treeitem>
+                </treechildren>
+            </treeitem>
+            <treeitem>
+                <treerow><treecell/><treecell label="Closed container"/></treerow>
+                <treechildren>
+                    <treeitem><treerow><treecell/><treecell label="Child"/></treerow></treeitem>
+                </treechildren>
+            </treeitem>
+            <treeitem><treerow><treecell/><treecell label="Leaf"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- A centred first column that carries a label in a tree of leaves only (follow-up 59, NS31): the header unit, box and label, is centred on the column. -->
+    <tree sclass="mhf-tree-label-column mhf-tree-label-flat-100" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol label="Select everything in this tree" width="100px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alpha"/><treecell label="Alice"/></treerow></treeitem>
+            <treeitem><treerow><treecell label="Beta"/><treecell label="Bob"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-label-column mhf-tree-label-flat-160" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol label="All" width="160px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alpha"/><treecell label="Alice"/></treerow></treeitem>
+            <treeitem><treerow><treecell label="Beta"/><treecell label="Bob"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- A flat centred box-only tree whose cell holds a tree with a container row (follow-up 59, NS31): a tree is judged on its own rows, so the outer tree keeps its centring and the inner one, which has a container row, keeps its own keyline. -->
+    <tree sclass="mhf-tree-outer-box" width="560px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="160px" align="center"/>
+            <treecol label="Inner tree" width="360px"/>
+        </treecols>
+        <treechildren>
+            <treeitem>
+                <treerow>
+                    <treecell/>
+                    <treecell>
+                        <tree sclass="mhf-tree-inner-box" width="340px" checkmark="true" multiple="true">
+                            <treecols>
+                                <treecol width="160px" align="center"/>
+                                <treecol label="Name" width="160px"/>
+                            </treecols>
+                            <treechildren>
+                                <treeitem open="true">
+                                    <treerow><treecell/><treecell label="Container"/></treerow>
+                                    <treechildren>
+                                        <treeitem><treerow><treecell/><treecell label="Child"/></treerow></treeitem>
+                                    </treechildren>
+                                </treeitem>
+                                <treeitem><treerow><treecell/><treecell label="Leaf"/></treerow></treeitem>
+                            </treechildren>
+                        </tree>
+                    </treecell>
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </tree>
 </div>
 </zk>

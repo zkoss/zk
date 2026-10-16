@@ -751,6 +751,129 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
         }
       });
   }
+
+  // Indentation carries the hierarchy, so the row rules centre a level-0 leaf cell only: a container row and a child row of a
+  // centred first column keep the indent they had before follow-up 54. A centred cell grows by one 24px indent per level and
+  // sits on the column centre, so its box moves by half of it, 12px, per level. Centring the box of every cell put the box of
+  // a container row 12px left of the centre and the boxes of level 0 and 1 on one x.
+  const nestedRows = (page: Page, root: string) => page.locator(root).evaluate((tree) =>
+    [...tree.querySelectorAll('tr.z-treerow')].map((tr) => {
+      const box = tr.querySelector('.z-treerow-icon')!.getBoundingClientRect();
+      const component = tr.querySelector('.z-treecell-content > :is(input, .z-label)')?.getBoundingClientRect();
+      return { boxLeft: box.left, componentLeft: component?.left };
+    }));
+  const HALF_INDENT_PX = INDENT_PER_LEVEL_PX / 2;
+
+  for (const kind of ['check', 'radio']) {
+    const root = `.mhf-tree-nested-box-${kind}`;
+    test(`${root}: the boxes of a centred ${kind} column move ${HALF_INDENT_PX}px left per nesting level in ${density} density`, async ({ page }) => {
+      await prepare(page);
+      const rows = await nestedRows(page, root);
+      for (const level of [1, 2]) {
+        expect(rows[level - 1].boxLeft - rows[level].boxLeft, `level ${level - 1} box ${rows[level - 1].boxLeft}, level ${level} box ${rows[level].boxLeft}`)
+          .toBeCloseTo(HALF_INDENT_PX, 0);
+      }
+    });
+  }
+
+  test(`.mhf-tree-nested-component: a centred column of boxes and components keeps ${INDENT_PER_LEVEL_PX}px of indent per level in ${density} density`,
+    async ({ page }) => {
+      await prepare(page);
+      const rows = await nestedRows(page, '.mhf-tree-nested-component');
+      const indents = rows.map(row => row.componentLeft! - row.boxLeft);
+      for (const level of [1, 2]) {
+        expect(indents[level] - indents[level - 1], `box to component: ${JSON.stringify(indents)}`).toBeCloseTo(INDENT_PER_LEVEL_PX, 0);
+      }
+    });
+
+  // The centring rules apply to a tree without a container row only (follow-up 59, NS30): beside a container, whose box keeps its
+  // indent, a centred level-0 leaf sat 12px right of it, one nesting step the wrong way. In a tree with a container, open or
+  // closed, the leaf box is on the keyline of the container boxes and the header is as before follow-up 54, its box right of the
+  // column centre (the 16px / 4px padding and the 4px margin of the box).
+  const MIXED = '.mhf-tree-mixed-box';
+  const HEADER_BOX_RIGHT_OF_CENTRE_PX = { default: 4, compact: 2, tablet: 6 }[density];
+  const mixedBoxes = async (page: Page) => {
+    await prepare(page);
+    return page.locator(MIXED).evaluate((tree) => {
+      const boxLeft = (tr: Element) => tr.querySelector('.z-treerow-icon')!.getBoundingClientRect().left;
+      const rows = [...tree.querySelectorAll('tr.z-treerow')];
+      return {
+        containers: rows.filter(tr => tr.querySelector('.z-tree-icon')).map(boxLeft),
+        leaf: boxLeft(rows[rows.length - 1]),
+      };
+    });
+  };
+
+  test(`${MIXED}: the box of a level-0 leaf is on the keyline of the open and the closed container beside it in ${density} density`, async ({ page }) => {
+    const { containers, leaf } = await mixedBoxes(page);
+    expect(containers, 'an open and a closed container').toHaveLength(2);
+    for (const container of containers) {
+      expect(Math.abs(leaf - container), `leaf box ${leaf}, container boxes ${JSON.stringify(containers)}`).toBeLessThanOrEqual(TOLERANCE_PX);
+    }
+  });
+
+  test(`${MIXED}: the header box of a tree with a container sits ${HEADER_BOX_RIGHT_OF_CENTRE_PX}px right of the column centre in ${density} density`,
+    async ({ page }) => {
+      await prepare(page);
+      const column = await columnRect(page, MIXED);
+      const header = await boxRect(page, MIXED, 'th.z-treecol .z-treecol-icon');
+      expect(header.centre - column.centre, `header box centre ${header.centre}, column centre ${column.centre}`)
+        .toBeCloseTo(HEADER_BOX_RIGHT_OF_CENTRE_PX, 0);
+    });
+
+  // In a tree of leaves only, the labelled header unit (box, 4px gap, label) is centred on the column (follow-up 59, NS31): the
+  // box is inside the column, the gap to the label is 4px, the long label is cut with the ellipsis. The fixtures of the nested
+  // `.mhf-tree-label-*` trees have a container row and therefore the pre-follow-up-54 header, so only these two guard it.
+  for (const width of [100, 160]) {
+    const root = `.mhf-tree-label-flat-${width}`;
+    test(`${root}: the header unit of a centred ${width}px labelled Tree column of leaves is centred on the column in ${density} density`,
+      async ({ page }) => {
+        const found = await labelled(page, root);
+        // The unit starts at the margin of the box, which is as wide as the gap to the label.
+        const unitLeft = found.box.left - LABEL_BOX_GAP_PX;
+        const unitCentre = (unitLeft + found.label.right) / 2;
+        const columnCentre = (found.column.left + found.column.right) / 2;
+        expect(found.box.left, `header box ${found.box.left}, column ${found.column.left}`).toBeGreaterThanOrEqual(found.column.left);
+        expect(found.box.right, `header box ${found.box.right}, column ${found.column.right}`).toBeLessThanOrEqual(found.column.right);
+        expect(Math.abs(found.label.left - found.box.right - LABEL_BOX_GAP_PX), `box ${found.box.right}, label ${found.label.left}`)
+          .toBeLessThanOrEqual(TOLERANCE_PX);
+        expect(found.textOverflow).toBe('ellipsis');
+        expect(found.overflowing, 'the long label of the 100px column overflows and is cut with the ellipsis, the short one fits')
+          .toBe(width === 100);
+        if (width === 160) {
+          expect(Math.abs(unitCentre - columnCentre), `unit centre ${unitCentre}, column centre ${columnCentre}`).toBeLessThanOrEqual(TOLERANCE_PX);
+        } else {
+          expect(Math.abs(unitLeft - found.column.left), `unit left ${unitLeft}, column ${found.column.left}`).toBeLessThanOrEqual(TOLERANCE_PX);
+        }
+      });
+  }
+
+  // A tree is judged on its own rows (follow-up 59, NS31): an outer tree of leaves whose cell holds a tree with a container row
+  // keeps its centring, and the inner tree, which has a container row, keeps its own pre-follow-up-54 keyline.
+  const OUTER = '.mhf-tree-outer-box';
+  const INNER = '.mhf-tree-inner-box';
+  test(`${OUTER}: a flat centred box column whose cell holds a tree with a container row keeps both boxes on the column centre in ${density} density`,
+    async ({ page }) => {
+      await prepare(page);
+      const column = await columnRect(page, OUTER);
+      const header = await boxRect(page, OUTER, 'th.z-treecol .z-treecol-icon');
+      const row = await boxRect(page, OUTER, 'tr.z-treerow .z-treerow-icon');
+      expect(Math.abs(header.centre - column.centre), `header box centre ${header.centre}, column centre ${column.centre}`).toBeLessThanOrEqual(TOLERANCE_PX);
+      expect(Math.abs(row.centre - column.centre), `row box centre ${row.centre}, column centre ${column.centre}`).toBeLessThanOrEqual(TOLERANCE_PX);
+    });
+
+  test(`${INNER}: the tree inside keeps its own keyline, the leaf box on the container box and the header box ${HEADER_BOX_RIGHT_OF_CENTRE_PX}px right of the column centre in ${density} density`,
+    async ({ page }) => {
+      await prepare(page);
+      const column = await columnRect(page, INNER);
+      const header = await boxRect(page, INNER, 'th.z-treecol .z-treecol-icon');
+      const boxes = await page.locator(`${INNER} tr.z-treerow .z-treerow-icon`).evaluateAll(
+        icons => icons.map(icon => icon.getBoundingClientRect().left));
+      expect(boxes, 'container, child and leaf rows').toHaveLength(3);
+      expect(Math.abs(boxes[2] - boxes[0]), `leaf box ${boxes[2]}, container box ${boxes[0]}`).toBeLessThanOrEqual(TOLERANCE_PX);
+      expect(header.centre - column.centre, `header box centre ${header.centre}, column centre ${column.centre}`)
+        .toBeCloseTo(HEADER_BOX_RIGHT_OF_CENTRE_PX, 0);
+    });
 }
 
 // A centred select-all-only column that carries the column-menu button keeps the box where the inline header span puts

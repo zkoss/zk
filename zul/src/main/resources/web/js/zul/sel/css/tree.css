@@ -506,22 +506,30 @@
    overflow (follow-up 59; a flex row put the box of a 100px column outside it). A sorted header keeps its padding for
    the sort icon, and a header with the column-menu button keeps the room the button reserves.
    Row: the spacer after the box of a leaf (20px and a 4px gap) was centred with the box and pushed it 12px left of
-   centre; its 16px side padding put a 24px column's box 4px right of centre. Both apply to a cell without a label
-   only: next to a label the padding keeps the box off the column edge, and the spacers are the indent of a child
-   row (follow-up 59). */
-.z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)):has(.z-treecol-checkable) {
+   centre; its 16px side padding put a 24px column's box 4px right of centre. Both apply to a level-0 leaf cell that
+   holds the box and that one spacer only (the box is followed by the spacer and nothing else). Next to a label or a
+   component the padding keeps the box off the column edge, and in a container row or a child row the spacers and the
+   open icon are the indent: centring there would drop a level of hierarchy (follow-up 59, 54).
+   All four rules apply to a tree without a container row only (follow-up 59, NS30). A level-0 leaf centred beside a
+   level-0 container, whose box keeps its indent, sat 12px right of it, one nesting step the wrong way, and a container
+   that lost its last child jumped 12px. A tree with a container row, open or closed (a box followed by the open icon),
+   renders header and rows as before follow-up 54: one keyline, the header box right of the column centre. The check is
+   anchored to the rows of the tree itself, and the rules reach the header and the rows of that tree only, so a tree is
+   judged on its own rows and does not centre or judge a tree that one of its cells holds (follow-up 59, NS31). With
+   the paging mold or ROD only the rendered rows count: a page of leaves is centred, a page with a container row is not. */
+.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-header .z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)):has(.z-treecol-checkable) {
     padding-inline: 0;
 }
 
-.z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)) > .z-treecol-content > .z-treecol-checkable {
+.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-header .z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)) > .z-treecol-content > .z-treecol-checkable {
     margin-inline: var(--zk-spacing-1);
 }
 
-.z-treecell:is([style*="text-align:center"], [style*="text-align: center"]) > .z-treecell-content:has(> .z-treerow-checkable):not(:has(> .z-treecell-text)) {
+.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-body > table > tbody > tr > .z-treecell:is([style*="text-align:center"], [style*="text-align: center"]) > .z-treecell-content:has(> .z-treerow-checkable + .z-tree-spacer:last-child) {
     padding-inline: 0;
 }
 
-.z-treecell:is([style*="text-align:center"], [style*="text-align: center"]) > .z-treecell-content:not(:has(> .z-treecell-text)) > .z-treerow-checkable + .z-tree-spacer {
+.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-body > table > tbody > tr > .z-treecell:is([style*="text-align:center"], [style*="text-align: center"]) > .z-treecell-content > .z-treerow-checkable + .z-tree-spacer:last-child {
     display: none;
 }
 
