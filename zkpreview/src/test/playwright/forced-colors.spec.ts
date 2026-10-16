@@ -464,6 +464,51 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(listboxDisabled.every(c => c === grayText), `listbox disabled glyphs ${JSON.stringify(listboxDisabled)} must be ${grayText}`).toBe(true);
   });
 
+  // Follow-up 48: the text of a disabled paging resolved `--zk-color-disabled` to CanvasText, as an enabled one is. One test
+  // per mold, so that a failure in the default mold does not stop the OS mold from being checked.
+  test('disabled default-mold paging total is GrayText, enabled total CanvasText', async ({ page }) => {
+    const grayText = await systemColor(page, 'GrayText');
+    const canvasText = await systemColor(page, 'CanvasText');
+    expect(grayText, 'the palette must tell the two apart').not.toBe(canvasText);
+
+    await page.goto('/paging.zul', { waitUntil: 'domcontentloaded' });
+    await page.locator('.pv-paging-disabled-os').waitFor({ state: 'attached', timeout: 10000 });
+    const colours = (selector: string) => page.locator(selector).evaluateAll(els => els.map(el => getComputedStyle(el).color));
+    const disabledTotal = await colours('.pv-paging-disabled-default .z-paging-text-disabled');
+    const enabledTotal = await colours('.z-paging:not(.pv-paging-disabled-default) .z-paging-text');
+    expect(disabledTotal.length, 'the page shows the disabled total').toBeGreaterThanOrEqual(1);
+    expect(enabledTotal.length, 'the page shows an enabled total').toBeGreaterThanOrEqual(1);
+    expect(disabledTotal.every(c => c === grayText), `disabled totals ${JSON.stringify(disabledTotal)} must be ${grayText}`).toBe(true);
+    expect(enabledTotal.every(c => c === canvasText), `enabled totals ${JSON.stringify(enabledTotal)} must be ${canvasText}`).toBe(true);
+  });
+
+  // The OS mold disables its anchors: the page numbers read `color`, the « » chevrons are masked glyphs on the anchor's
+  // ::after and read `background-color` (follow-up 48 and its chevron addendum, NS28).
+  test('disabled OS-mold paging page numbers and chevrons are GrayText, enabled ones CanvasText', async ({ page }) => {
+    const grayText = await systemColor(page, 'GrayText');
+    const canvasText = await systemColor(page, 'CanvasText');
+    expect(grayText, 'the palette must tell the two apart').not.toBe(canvasText);
+
+    await page.goto('/paging.zul', { waitUntil: 'domcontentloaded' });
+    await page.locator('.pv-paging-disabled-os').waitFor({ state: 'attached', timeout: 10000 });
+    const colours = (selector: string) => page.locator(selector).evaluateAll(els => els.map(el => getComputedStyle(el).color));
+    const fills = (selector: string) => page.locator(selector)
+      .evaluateAll(els => els.map(el => getComputedStyle(el, '::after').backgroundColor));
+    const found = {
+      disabledPages: await colours('.pv-paging-disabled-os .z-paging-button[disabled]:not(.z-paging-selected)'),
+      enabledPages: await colours('.z-paging-os:not(.pv-paging-disabled-os) .z-paging-button:not(.z-paging-selected)'),
+      disabledChevrons: await fills('.pv-paging-disabled-os .z-paging-noborder[disabled]'),
+      enabledChevrons: await fills('.z-paging-os:not(.pv-paging-disabled-os) .z-paging-noborder'),
+    };
+    for (const [name, values] of Object.entries(found)) {
+      expect(values.length, `the page shows ${name}`).toBeGreaterThanOrEqual(1);
+    }
+    expect(found.disabledPages.every(c => c === grayText), `disabled OS page numbers ${JSON.stringify(found.disabledPages)} must be ${grayText}`).toBe(true);
+    expect(found.enabledPages.every(c => c === canvasText), `enabled OS page numbers ${JSON.stringify(found.enabledPages)} must be ${canvasText}`).toBe(true);
+    expect(found.disabledChevrons.every(c => c === grayText), `disabled OS chevrons ${JSON.stringify(found.disabledChevrons)} must be ${grayText}`).toBe(true);
+    expect(found.enabledChevrons.every(c => c === canvasText), `enabled OS chevrons ${JSON.stringify(found.enabledChevrons)} must be ${canvasText}`).toBe(true);
+  });
+
   // Follow-up 44c: a caption inside the selected accordion tab sets its own text colour.
   test('caption text in a selected accordion tab is HighlightText', async ({ page }) => {
     await page.goto('/tabbox-misc.zul', { waitUntil: 'domcontentloaded' });
@@ -477,13 +522,14 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(colors.every(c => c === highlightText), `caption colours ${JSON.stringify(colors)} must be ${highlightText}`).toBe(true);
   });
 
-  // Follow-up 44d: an invalid daterangebox shows the same double border as the other inputs.
+  // Follow-up 44d: an invalid daterangebox shows the same double border as the other inputs. A wrapper draws it as an
+  // overlay on its 1px border, so the box keeps its size (follow-up 50).
   test('invalid daterangebox shows the double border', async ({ page }) => {
     await page.goto('/pv/daterangebox-content.zul', { waitUntil: 'domcontentloaded' });
     const invalid = page.locator('.z-daterangebox.z-daterangebox-invalid');
     await expect(invalid).toHaveCount(2);   // the class arrives through an AuInvoke after mount (ZK-6133 workaround)
     const borders = await invalid.evaluateAll(els => els.map(el => {
-      const cs = getComputedStyle(el);
+      const cs = getComputedStyle(el, '::before');
       return `${cs.borderTopStyle} ${cs.borderTopWidth}`;
     }));
     expect(borders).toEqual(['double 3px', 'double 3px']);
@@ -533,12 +579,12 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
       await page.locator('body').click({ position: { x: 600, y: 400 } });
       await expect(input).toHaveClass(new RegExp(`z-${widget}-invalid`));
     }
-    const border = (selector: string, side: 'Top' | 'Left' | 'Right') => page.locator(selector).evaluate((el, s) => {
-      const cs = getComputedStyle(el);
+    const border = (selector: string, side: 'Top' | 'Left' | 'Right', pseudo: '::before' | null = null) => page.locator(selector).evaluate((el, [s, p]) => {
+      const cs = getComputedStyle(el, p);
       return `${cs[`border${s}Style` as 'borderTopStyle']} ${cs[`border${s}Width` as 'borderTopWidth']}`;
-    }, side);
+    }, [side, pseudo] as const);
 
-    expect(await border('.iig-single .z-bandbox', 'Top'), 'bandbox box').toBe('double 3px');
+    expect(await border('.iig-single .z-bandbox', 'Top', '::before'), 'bandbox box (overlay)').toBe('double 3px');
     expect(await border('.iig-single .z-combobox-input', 'Top'), 'combobox input top').toBe('double 3px');
     expect(await border('.iig-single .z-combobox-button', 'Top'), 'combobox button top').toBe('double 3px');
     expect(await border('.iig-single .z-combobox-input', 'Right'), 'seam, input side').toMatch(/^none /);
@@ -563,6 +609,41 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
       expect(border, `${widget} in an inputgroup`).toBe('double 3px');
     }
   });
+
+  // Follow-up 50: the double border of (1c) must not make an invalid input larger than the valid one. The class goes where
+  // ZK puts it: on the control, or on the <input> inside the wrapper; the daterangebox takes it on its root.
+  // Each input is compared with its own valid state: the heights differ (spinner 43px, compact timebox 37px, against 40px or 32px).
+  const INVALID_INPUTS = ['intbox', 'decimalbox', 'doublebox', 'longbox', 'textbox', 'passwordbox', 'datebox', 'timebox',
+    'timepicker', 'spinner', 'doublespinner', 'bandbox', 'daterangebox', 'combobox'];
+  const sizeOf = (page: Page, name: string) => page.locator(`.isg-${name}`).first().evaluate(root => {
+    const boxes = { root, input: root.querySelector('.z-combobox-input'), button: root.querySelector('.z-combobox-button') };
+    return Object.fromEntries(Object.entries(boxes).filter(([, el]) => el).map(([key, el]) => {
+      const { width, height } = el!.getBoundingClientRect();
+      return [key, { width, height }];
+    }));
+  });
+  for (const name of INVALID_INPUTS) {
+    for (const density of ['default', 'compact', 'tablet']) {
+      test(`an invalid ${name} is as large as the valid one in ${density} density${density === 'tablet' ? ' @tablet' : ''}`, async ({ page }) => {
+        await page.goto('/pv/invalid-size-guard.zul', { waitUntil: 'networkidle' });
+        await page.evaluate(() => document.fonts.ready.then(() => true));
+        if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+        const valid = await sizeOf(page, name);
+        const invalidClass = `z-${name === 'passwordbox' ? 'textbox' : name}-invalid`;
+        await page.locator(`.isg-${name}`).first().evaluate((root, cls) => {
+          const host = root.matches('input') || root.matches('.z-daterangebox') ? root : root.querySelector('input')!;
+          host.classList.add(cls);
+        }, invalidClass);
+        const doubled = await page.locator(`.isg-${name}`).first().evaluate(root => {
+          const bordered = root.querySelector('.z-combobox-input') ?? root;
+          const own = getComputedStyle(bordered);
+          return own.borderTopStyle === 'double' ? 'double' : getComputedStyle(bordered, '::before').borderTopStyle;
+        });
+        expect(doubled, `the invalid ${name} shows the double border, so the size check is not vacuous`).toBe('double');
+        expect(await sizeOf(page, name)).toEqual(valid);
+      });
+    }
+  }
 
   // Follow-up 45 F2: a no-spacing bar is a 1px box; the line must paint inside it, not in the row below.
   test('a no-spacing horizontal separator bar paints its line inside its own 1px box', async ({ page }) => {

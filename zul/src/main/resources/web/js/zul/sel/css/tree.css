@@ -498,6 +498,33 @@
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
+/* A centred checkmark column keeps the header box and the row box on one centre, which is the column centre
+   (follow-up 54, cm6 of contracts/tree.md; the Listbox solution of follow-up 52).
+   Header: the asymmetric padding (16px left, 4px right) and the margin of the box parked it right of centre. No padding
+   and a 4px margin on each side of the box centre it, also in a 24px column. The content stays a block, so a header
+   that holds a label keeps its ellipsis, and a label wider than the column starts at the box instead of centring the
+   overflow (follow-up 59; a flex row put the box of a 100px column outside it). A sorted header keeps its padding for
+   the sort icon, and a header with the column-menu button keeps the room the button reserves.
+   Row: the spacer after the box of a leaf (20px and a 4px gap) was centred with the box and pushed it 12px left of
+   centre; its 16px side padding put a 24px column's box 4px right of centre. Both apply to a cell without a label
+   only: next to a label the padding keeps the box off the column edge, and the spacers are the indent of a child
+   row (follow-up 59). */
+.z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)):has(.z-treecol-checkable) {
+    padding-inline: 0;
+}
+
+.z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)) > .z-treecol-content > .z-treecol-checkable {
+    margin-inline: var(--zk-spacing-1);
+}
+
+.z-treecell:is([style*="text-align:center"], [style*="text-align: center"]) > .z-treecell-content:has(> .z-treerow-checkable):not(:has(> .z-treecell-text)) {
+    padding-inline: 0;
+}
+
+.z-treecell:is([style*="text-align:center"], [style*="text-align: center"]) > .z-treecell-content:not(:has(> .z-treecell-text)) > .z-treerow-checkable + .z-tree-spacer {
+    display: none;
+}
+
 /* Indeterminate / tristate (partial) — filled primary box with a white minus.
    When a TristateModel reports a node in getPartials(), ZK adds `z-treerow-partial`
    to the row and switches the icon class to `z-icon-minus`; the header select-all

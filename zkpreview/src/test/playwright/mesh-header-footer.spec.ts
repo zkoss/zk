@@ -641,6 +641,118 @@ function registerCheckmarkBoxColumns(density: 'default' | 'compact' | 'tablet') 
   }
 }
 
+// The same for a checkmark Tree: the header box and the row box of a centred select-all-only column share one centre, the
+// column centre (cm6 of contracts/tree.md; the row box sat at the left edge, or 12px left of centre in a 160px column, and
+// the header box right of centre, follow-up 54), and in a left-aligned column both boxes stay on the keyline.
+function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'tablet') {
+  const WIDTHS_PX = [24, 40, 48, 160];
+  const boxRect = (page: Page, root: string, selector: string) => page.locator(`${root} ${selector}`).first()
+    .evaluate((icon) => {
+      const { left, right } = icon.getBoundingClientRect();
+      return { left, centre: (left + right) / 2 };
+    });
+  const columnRect = (page: Page, root: string) => page.locator(`${root} th.z-treecol`).first()
+    .evaluate((th) => {
+      const { left, right } = th.getBoundingClientRect();
+      return { left, centre: (left + right) / 2 };
+    });
+  const prepare = async (page: Page) => {
+    await open(page);
+    if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+  };
+
+  for (const width of WIDTHS_PX) {
+    const centred = `.mhf-tree-box-column-center-${width}`;
+    test(`${centred}: the header box and the row box of a centred ${width}px checkmark Tree column both sit on the column centre in ${density} density`,
+      async ({ page }) => {
+        await prepare(page);
+        const column = await columnRect(page, centred);
+        const header = await boxRect(page, centred, 'th.z-treecol .z-treecol-icon');
+        const row = await boxRect(page, centred, 'tr.z-treerow .z-treerow-icon');
+        expect(Math.abs(header.centre - row.centre), `header box centre ${header.centre}, row box centre ${row.centre}`)
+          .toBeLessThanOrEqual(TOLERANCE_PX);
+        expect(Math.abs(row.centre - column.centre), `row box centre ${row.centre}, column centre ${column.centre}`)
+          .toBeLessThanOrEqual(TOLERANCE_PX);
+      });
+
+    const left = `.mhf-tree-box-column-left-${width}`;
+    test(`${left}: a left-aligned ${width}px checkmark Tree column keeps the header box and the row box on one keyline in ${density} density`,
+      async ({ page }) => {
+        await prepare(page);
+        const header = await boxRect(page, left, 'th.z-treecol .z-treecol-icon');
+        const row = await boxRect(page, left, 'tr.z-treerow .z-treerow-icon');
+        expect(Math.abs(header.left - row.left), `header box ${header.left}, row box ${row.left}`).toBeLessThanOrEqual(TOLERANCE_PX);
+      });
+  }
+
+  // A centred first column that carries a label is not a box-only column: the rules above must leave its rows as they were
+  // (16px / 12px / 24px of cell padding in front of the box, 24px of indent per nesting level), and its header must keep the
+  // select-all box inside the column, the 4px gap to the label and the ellipsis (follow-up 59). A flex header put the box of the
+  // 100px column 61px outside it and painted no ellipsis (an anonymous flex item cannot show one: the container is not `block`).
+  const ROW_BOX_OFFSET_PX = { default: 16, compact: 12, tablet: 24 }[density];
+  const LABEL_BOX_GAP_PX = 4;
+  const INDENT_PER_LEVEL_PX = 24;
+  const labelled = async (page: Page, root: string) => {
+    await prepare(page);
+    return page.locator(root).evaluate((tree) => {
+      const edges = (el: Element | Range) => { const { left, right } = el.getBoundingClientRect(); return { left, right }; };
+      const column = tree.querySelector('th.z-treecol')!;
+      const content = tree.querySelector('.z-treecol-content')!;
+      const label = document.createRange();
+      label.selectNodeContents([...content.childNodes].filter(n => n.nodeType === Node.TEXT_NODE).pop()!);
+      const style = getComputedStyle(content);
+      const rows = [...tree.querySelectorAll('tr.z-treerow')].map(tr => ({
+        box: edges(tr.querySelector('.z-treerow-icon')!),
+        text: edges(tr.querySelector('.z-treecell-text')!),
+        spacerWidths: [...tr.querySelector('td')!.querySelectorAll('.z-tree-spacer')].map(sp => (sp as HTMLElement).offsetWidth),
+      }));
+      return {
+        column: edges(column), box: edges(tree.querySelector('th .z-treecol-icon')!), label: edges(label),
+        display: style.display, textOverflow: style.textOverflow, overflow: style.overflow,
+        overflowing: content.scrollWidth > content.clientWidth, rows,
+      };
+    });
+  };
+
+  for (const width of [100, 160]) {
+    const root = `.mhf-tree-label-${width}`;
+    test(`${root}: the header of a centred ${width}px labelled Tree column keeps its box inside the column, the ${LABEL_BOX_GAP_PX}px gap and the ellipsis in ${density} density`,
+      async ({ page }) => {
+        const found = await labelled(page, root);
+        expect(found.box.left, `header box ${found.box.left}, column ${found.column.left}`).toBeGreaterThanOrEqual(found.column.left);
+        expect(found.box.right, `header box ${found.box.right}, column ${found.column.right}`).toBeLessThanOrEqual(found.column.right);
+        expect(Math.abs(found.label.left - found.box.right - LABEL_BOX_GAP_PX), `box ${found.box.right}, label ${found.label.left}`)
+          .toBeLessThanOrEqual(TOLERANCE_PX);
+        expect(found.display, 'only a block container paints the ellipsis').toBe('block');
+        expect(found.textOverflow).toBe('ellipsis');
+        expect(found.overflow).toBe('hidden');
+        expect(found.overflowing, 'the long label of the 100px column overflows and is cut with the ellipsis, the short one fits')
+          .toBe(width === 100);
+      });
+
+    test(`${root}: the rows of a centred ${width}px labelled Tree column keep their cell padding and their indent in ${density} density`,
+      async ({ page }) => {
+        const found = await labelled(page, root);
+        // The nested rows of the 100px column overflow it: their boxes are centred with the indent, as before follow-up 54.
+        const keyline = width === 100 ? found.rows.slice(0, 1) : found.rows;
+        for (const row of keyline) {
+          expect(Math.abs(row.box.left - found.column.left - ROW_BOX_OFFSET_PX), `row box ${row.box.left}, column ${found.column.left}`)
+            .toBeLessThanOrEqual(TOLERANCE_PX);
+        }
+        for (const [level, row] of found.rows.entries()) {
+          expect(row.spacerWidths.length >= (level > 0 ? 1 : 0), `level ${level} has its spacers`).toBe(true);
+          expect(row.spacerWidths.every(w => w > 0), `level ${level}: spacers ${JSON.stringify(row.spacerWidths)} are shown`).toBe(true);
+        }
+        if (width === 160) {
+          const [parent, child, grandchild] = found.rows;
+          expect(child.text.left - parent.text.left, 'indent of the child').toBeCloseTo(INDENT_PER_LEVEL_PX, 0);
+          expect(grandchild.text.left - child.text.left, 'indent of the grandchild').toBeCloseTo(INDENT_PER_LEVEL_PX, 0);
+        }
+      });
+  }
+}
+
 // A centred select-all-only column that carries the column-menu button keeps the box where the inline header span puts
 // it, in the cell the button leaves: 16px from the column edge at 68px, and at 88px 20px on desktop and 16px on a tablet
 // (the 44px button). Centring it on the whole cell, as a centred column without the button is, moved it 6px left
@@ -1090,7 +1202,9 @@ test.describe('mesh header and footer', () => {
   }
   registerCheckmarkBoxInAlignedFirstColumn();
   registerCheckmarkBoxColumns('default');
+  registerTreeCheckmarkBoxColumns('default');
   registerCheckmarkBoxColumns('compact');
+  registerTreeCheckmarkBoxColumns('compact');
   registerCentredMenuHeaderBox('default');
   registerCentredMenuHeaderBox('compact');
   registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_DESKTOP);
@@ -1132,6 +1246,7 @@ test.describe('mesh header and footer', () => {
     registerGroupArrowIgnoresGroupSelect();
     registerCheckmarkBoxInAlignedFirstColumn();
     registerCheckmarkBoxColumns('tablet');
+    registerTreeCheckmarkBoxColumns('tablet');
     registerCentredMenuHeaderBox('tablet');
     registerCheckmarkBoxKeepsTouchHeight();
     registerImageOnlyMenuHeaderAtMinimumWidth(MIN_IMAGE_COLUMN_TABLET);

@@ -199,10 +199,18 @@ export default defineConfig({
       // the source of truth. See forced-colors.spec.ts and doc/spec/forced-colors.md.
       name: 'forced-colors',
       testMatch: /forced-colors\.spec\.ts/,
+      grepInvert: /@tablet/,
       use: {
         ...devices['Desktop Chrome'],
         forcedColors: 'active',
       },
+    },
+    {
+      // The @tablet tests of forced-colors.spec.ts: zkmax tablet/_inputs.css only loads under the mobile UA of TABLET_USE.
+      name: 'forced-colors-tablet',
+      testMatch: /forced-colors\.spec\.ts/,
+      grep: /@tablet/,
+      use: TABLET_USE,
     },
     {
       // Forced-colors VISUAL review pass — one screenshot per page under WHCM

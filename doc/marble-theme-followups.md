@@ -796,6 +796,19 @@ doublespinner use `:has()`, daterangebox sets it on its root; cascader, searchbo
 text looks enabled; follow-up 44 made the disabled paging icons `GrayText` but not this text. The preview pages also have
 no `mold="os"` paging sample with disabled buttons. Left as found (O10).
 
+**Resolved** in zk `67e3fe0411` (`_forced-colors.css` (2e-disabled-text), guard `disabled paging text is GrayText, enabled paging text
+CanvasText` in `forced-colors.spec.ts`, sample section "Disabled Paging" in `paging.zul`): `.z-paging-text-disabled` and the disabled,
+non-selected anchors of the OS mold are `GrayText`. Only a default-mold paging with `disabled="true"` carries the class
+(`Paging.ts` `_drawDisabled`); the OS mold disables its anchors, which also read CanvasText, so the rule covers both. The guard
+is red on the old CSS (disabled total `CanvasText`) and green on the new. `paging-gallery.png`, `paging-tablet.png` and
+`paging-forced-colors.png` were re-cut for the added section only.
+
+**Addendum** in zk `552bcbc224` (`_forced-colors.css` (2e-disabled), guard `disabled OS-mold paging page numbers and chevrons are
+GrayText, enabled ones CanvasText`): the « » chevrons of a disabled OS-mold paging (`.z-paging-noborder[disabled]::after`) stayed
+`CanvasText` (the (2d) rule had no disabled branch); they are `GrayText` now, enabled ones stay `CanvasText`. The old guard stopped at
+its first failing assertion, so it is split into one test per mold (`disabled default-mold paging total ...` and the OS-mold one above).
+The OS-mold test is red with the rule removed (`rgb(0, 0, 0)` against `rgb(96, 0, 0)`) and green with it.
+
 ## 49. Forced colours: two observations from the NS21 verification (unrelated to NS21)
 
 Same under the old and new CSS; left as found (O10).
@@ -809,6 +822,15 @@ Same under the old and new CSS; left as found (O10).
 The (1c) double border (`border-width: 3px`) makes every invalid input 4px larger under forced colours; on the
 `daterangebox` page each invalid box pushes the next row down by 4px. Same kind of box growth as item 31 removed for
 buttons. Left as found (O10).
+
+**Resolved** in zk `a055b3fc43` (`_forced-colors.css` (1c-size), (1c-wrapper); guard `an invalid <input> is as large as the valid one` in
+`forced-colors.spec.ts`, fixture `pv/invalid-size-guard.zul`, new project `forced-colors-tablet`): the border box of an invalid
+input equals the valid one for all 14 components in default, compact and tablet density (before: +4 wide for intbox, decimalbox,
+doublebox, longbox, textbox, passwordbox; +4 x +4 for datebox, timebox, timepicker, spinner, doublespinner, bandbox, daterangebox;
++2 wide for the combobox input and root). A control that carries its own border gives the 2px to its padding (text keeps its x);
+a wrapper keeps its 1px border and draws the double 3px border as an out-of-flow `::before` at `inset: -1px`, because the
+min-height of its children is a token that differs per density and on a tablet. Padding was not usable on wrappers.
+Guard: 42 of 42 cases red on the old CSS, green on the new. Forced-colors PNGs re-cut and checked by eye: the 13 input pages and paging.
 
 ## 51. The `component-theming` forced-colors screenshot catches the progressmeter mid-transition (NS21 verification)
 
@@ -880,6 +902,17 @@ the column's left edge (x 33-49 in a column 33-73), the header box at x 49-65, s
 by -4px on a tablet (header 53-69, row 57-73). Cause not investigated: the Tree cell holds the box and a `z-tree-line`
 spacer, and `tree.css` has no centred rule for them. Not fixed (O10, and the brief for item 52 forbids moving the rows).
 
+**Resolved** in zk `e5af7af626` (`tree.css`, guard `registerTreeCheckmarkBoxColumns` in `mesh-header-footer.spec.ts`, fixtures
+`.mhf-tree-box-column-*`) and zkcml `091c5ab48` (`tablet/_mesh.css`): header and row box centres are the column centre (0px
+apart, was 16/14/20px at 40px default/compact/tablet and 20/18 at 160px) at 24, 40, 48 and 160px in default, compact and
+tablet. Causes: the 20px `.z-tree-spacer` (+4px gap) after a leaf's box was centred with it; the header padding 16/4px and the
+box margin; the 16px cell padding in a 24px column. A left-aligned column keeps both boxes on one keyline; the tablet -4px was
+the 24px `.z-treerow-checkable` span centring its 16px icon, now `justify-content: flex-start` there (the label keeps its x, only the
+box moves 4px left: `tree-tablet.png` re-cut). The guard is red on the old CSS (13 of 24 cases) and green on the new. IceBlue was not
+measured live (no IceBlue server from this tree); its `tree.less` puts the box and a `@baseIconWidth` spacer in one inline run, so
+an inline-centred cell would offset the box by half the spacer the same way. Not done for: a sorted centred header (keeps the sort
+padding) and a centred header with the menu button.
+
 ## 55. Invalid inputs inside an inputgroup are only partly red (NS24 verification)
 
 After a real `constraint="no empty"` failure in `<inputgroup><label value="A"/><combobox constraint="no empty"/></inputgroup>`
@@ -929,3 +962,34 @@ font-load race in ZK's size-by-content measurement; not confirmed. The committed
 - The input-invalid guards measured the focus colour at the first frame of a border transition, so a wrong focus colour
   passed; fixed in `c3834f6ac5` (transitions disabled in the spec), proved by a lime focus mutation failing 5 guards.
 
+## 59. Leftovers from NS26
+
+- A centred Tree header that holds a label next to the select-all box is a flex row now, so its label loses the ellipsis and the
+  4px margin of the box (the `&nbsp;` remains); a sorted or menu-button centred select-all Tree header keeps the old padding and
+  is not centred on the column. Unmeasured; no such header is in the preview.
+
+  **Resolved** (labelled centred column, header and rows) in zk `d82bc99539` (`tree.css`, guard `registerTreeCheckmarkBoxColumns`,
+  fixtures `.mhf-tree-label-100` and `-160`): NS26 reached it wider than recorded (100px column with a long label: the box at x
+  -22..-6 in a column 33..133, outside and unclickable; rows flush on the column edge; child indent spacers hidden). Now the rows are
+  the pre-NS26 rows (box 16 / 12 / 24px from the column edge in default / compact / tablet, indent 24px per level, spacers shown) and
+  the header is a block again (ellipsis painted, box inside the column, 4px gap to the label). The row rules apply to cells without a
+  `.z-treecell-text` only. Box-only columns keep the NS26 result (header and row centre = column centre, 0px at 24, 40, 48 and 160px in
+  all three densities, read off PNG pixels as well). The guard is red on the NS26 CSS (12 of 12 new cases) and green on the new.
+  **Not identical to pre-NS26 in the header**: a header cannot tell a label from no label (the label is a bare text node after the
+  box), so the padding that parked the box 4px right of centre cannot go for box-only columns and stay for labelled ones. The labelled
+  header unit is now centred on the column: box x 62px against 66px in a 160px column with a short label, 4px against 16px in the 100px
+  column whose label overflows (the box starts 4px from the column edge). A header identical to the old one needs a hook in
+  `Treecol.ts` (for example the label in its own element); core team, not done.
+- `.z-spinner` is 43px tall and `.z-timebox` 37px in compact density, against 40px and 32px for the other inputs (its two 20px
+  icons and separator pin the button column). Same under old and new CSS.
+- Already red before NS26, found while running the baselines: `chromium` `screenshot.spec.ts` navbar selected item, multislider
+  and rangeslider hover and focus (5 cases); `gallery` `component-theming` (18407px expected, 18647px received, identical with the
+  old `tree.css`).
+- `forced-colors-gallery` rewrote 21 forced-colors PNGs; the 7 that did not change because of NS26 (fisheyebar, grid-header,
+  multislider, pdfviewer, rangeslider, tree, component-theming) were restored, not committed.
+
+## 60. `chromium` multislider/rangeslider hover/focus and `gallery` `component-theming` baselines are stale (NS26 verification)
+
+chromium multislider/rangeslider hover/focus (4) and gallery `component-theming` baselines are stale since zkdemo B9 (zkcml `33623a6ce`,
+`5d29d14b0`) made the sliders taller (crops 48/52 → 110px; component-theming 18,407 vs 18,647px); fail identically on `605bd62e89`; not
+re-cut (owner: the B9 batch).

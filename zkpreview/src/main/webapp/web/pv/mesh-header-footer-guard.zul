@@ -474,5 +474,117 @@
         </listhead>
         <listitem><listcell/><listcell label="Alice"/></listitem>
     </listbox>
+    <!-- A select-all-only column of 24 to 160px, centred and left-aligned, in a checkmark Tree (follow-up 54): same guard as the Listbox above. -->
+    <tree sclass="mhf-tree-box-column mhf-tree-box-column-center-24" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="24px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-box-column mhf-tree-box-column-center-40" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="40px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-box-column mhf-tree-box-column-center-48" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="48px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-box-column mhf-tree-box-column-center-160" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="160px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-box-column mhf-tree-box-column-left-24" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="24px" align="left"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-box-column mhf-tree-box-column-left-40" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="40px" align="left"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-box-column mhf-tree-box-column-left-48" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="48px" align="left"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-box-column mhf-tree-box-column-left-160" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="160px" align="left"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- A centred first column that carries a label next to the select-all box, 100px with a label far wider than the column and 160px with a short one, with nested items (follow-up 59): the box-only rules of follow-up 54 must not reach it. -->
+    <tree sclass="mhf-tree-label-column mhf-tree-label-100" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol label="Select everything in this tree" width="100px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem open="true">
+                <treerow><treecell label="Parent"/><treecell label="Alice"/></treerow>
+                <treechildren>
+                    <treeitem open="true">
+                        <treerow><treecell label="Child"/><treecell label="Bob"/></treerow>
+                        <treechildren>
+                            <treeitem><treerow><treecell label="Grandchild"/><treecell label="Carol"/></treerow></treeitem>
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
+    <tree sclass="mhf-tree-label-column mhf-tree-label-160" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol label="All" width="160px" align="center"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem open="true">
+                <treerow><treecell label="Parent"/><treecell label="Alice"/></treerow>
+                <treechildren>
+                    <treeitem open="true">
+                        <treerow><treecell label="Child"/><treecell label="Bob"/></treerow>
+                        <treechildren>
+                            <treeitem><treerow><treecell label="Grandchild"/><treecell label="Carol"/></treerow></treeitem>
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </treeitem>
+        </treechildren>
+    </tree>
 </div>
 </zk>

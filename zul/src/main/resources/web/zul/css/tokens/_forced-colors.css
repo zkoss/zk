@@ -133,7 +133,11 @@
        CanvasText (= a valid field). Border width+style survive the remap (colour
        doesn't), so a double border is the non-colour error affordance; focus stays
        on outline (1b) so the two signals never collide. Some inputs border the
-       wrapper (via `:has`), some the control itself. */
+       wrapper (via `:has`), some the control itself.
+       The 3px border must not make the input larger (follow-up 50, 1c-size). A control that
+       carries its own border gives the 2px it gained to the padding, so the text stays where it
+       was; a wrapper keeps its 1px border and gets the double border as an overlay (1c-wrapper),
+       because the min-height of its children, which differs per density and on a tablet, pins the content box. */
     .z-intbox.z-intbox-invalid,
     .z-decimalbox.z-decimalbox-invalid,
     .z-doublebox.z-doublebox-invalid,
@@ -141,21 +145,51 @@
     .z-textbox-invalid,
     .z-textbox.z-textbox-invalid,
     .z-passwordbox.z-passwordbox-invalid,
-    .z-datebox:has(.z-datebox-invalid),
-    .z-datebox.z-datebox-invalid,
-    .z-timebox:has(.z-timebox-invalid),
-    .z-timebox.z-timebox-invalid,
-    .z-timepicker:has(.z-timepicker-invalid),
-    .z-spinner:has(.z-spinner-invalid),
-    .z-spinner.z-spinner-invalid,
-    .z-doublespinner:has(.z-doublespinner-invalid),
-    .z-doublespinner.z-doublespinner-invalid,
-    .z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)),
-    .z-daterangebox.z-daterangebox-invalid,
     .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input,
     .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-button {
         border-style: double;
         border-width: 3px;
+    }
+
+    /* (1c-size) The text of a control keeps its x: the border grew by 2px a side. The combobox input
+       only borders its left (and its right when the button is hidden); its button has a fixed size. */
+    .z-intbox.z-intbox-invalid,
+    .z-decimalbox.z-decimalbox-invalid,
+    .z-doublebox.z-doublebox-invalid,
+    .z-longbox.z-longbox-invalid,
+    .z-textbox-invalid,
+    .z-textbox.z-textbox-invalid,
+    .z-passwordbox.z-passwordbox-invalid {
+        padding-inline: calc(var(--zk-spacing-3) - 2px);
+    }
+    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input {
+        padding-left: calc(var(--zk-spacing-3) - 2px);
+    }
+    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input-full {
+        padding-right: calc(var(--zk-spacing-3) - 2px);
+    }
+
+    /* (1c-wrapper) The double border of a bordered wrapper is drawn by an out-of-flow overlay on the
+       1px border and 2px inside it, so the border box is the one of the valid input. Every wrapper is
+       `position: relative`; the overlay is pointer-transparent, and `::before` is free (the timepicker's
+       focus ring is its `::after`). */
+    .z-datebox:has(.z-datebox-invalid)::before,
+    .z-datebox.z-datebox-invalid::before,
+    .z-timebox:has(.z-timebox-invalid)::before,
+    .z-timebox.z-timebox-invalid::before,
+    .z-timepicker:has(.z-timepicker-invalid)::before,
+    .z-spinner:has(.z-spinner-invalid)::before,
+    .z-spinner.z-spinner-invalid::before,
+    .z-doublespinner:has(.z-doublespinner-invalid)::before,
+    .z-doublespinner.z-doublespinner-invalid::before,
+    .z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid))::before,
+    .z-daterangebox.z-daterangebox-invalid::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border: 3px double;
+        border-radius: inherit;
+        pointer-events: none;
     }
 
     /* (1c-combobox) The combobox splits one outline between the input and the button
@@ -339,8 +373,17 @@
        reads as enabled. GrayText matches the label colour the component CSS already gives it.
        Listed after (2d)/(2e) at equal or higher specificity so it wins. */
     .z-paging-button[disabled] [class*="z-icon-"]::before,
-    .z-listbox-paging-bottom .z-paging-button[disabled] .z-paging-icon {
+    .z-listbox-paging-bottom .z-paging-button[disabled] .z-paging-icon,
+    .z-paging-os ul > li.z-paging-navigate .z-paging-noborder[disabled]::after {
         background-color: GrayText;
+    }
+
+    /* (2e-disabled-text) The text of a disabled paging resolves `--zk-color-disabled` to CanvasText, so the
+       "/ 20" of the default mold (`.z-paging-text-disabled`) and the page numbers of the OS mold (disabled
+       anchors, the selected tint excepted) read as enabled; the glyphs above are GrayText already. */
+    .z-paging-text-disabled,
+    .z-paging-os .z-paging-button[disabled]:not(.z-paging-selected) {
+        color: GrayText;
     }
 
     /* tbeditor toolbar glyphs are SVG with `opacity: 0.6` on a solid fill; the fill maps to
