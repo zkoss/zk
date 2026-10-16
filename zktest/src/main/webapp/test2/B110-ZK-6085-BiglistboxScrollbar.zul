@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6085-BiglistboxScrollbar.zul
+
+	Purpose:
+		The Biglistbox scrollbars lie inside the biglistbox.
+
+	Description:
+		The body used to be sized from the biglistbox's height including its border,
+		which pushed the horizontal scrollbar partly outside the biglistbox.
+
+	History:
+		Fri Oct 02 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+1. look at the first biglistbox: both scrollbars are drawn in full, and the bottom edge of the horizontal scrollbar's buttons is not cut off by its border
+2. look at the second biglistbox, whose height follows its rows: the same holds
+	</label>
+	<zscript><![CDATA[
+		import org.zkoss.zktest.test2.big.*;
+		FakerMatrixModel bigData = new FakerMatrixModel(100, 300);
+	]]></zscript>
+	<biglistbox id="fixed" frozenCols="2" colWidth="130px" width="700px" height="300px" model="${bigData}"/>
+	<separator/>
+	<biglistbox id="min" colWidth="130px" width="700px" vflex="min" rows="5" autoRows="false" model="${bigData}"/>
+</zk>
