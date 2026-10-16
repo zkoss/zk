@@ -1,0 +1,53 @@
+/* Layout — hlayout and vlayout.
+   ZK's zul.box.Layout writes inline `padding-right` (hlayout) / `padding-bottom`
+   (vlayout) on every non-last `.z-{h|v}layout-inner` to realise the widget's
+   `spacing` attribute (default 5px). Themes MUST NOT use `display:flex`+`gap`
+   on the root, or `padding-{right|bottom}:0 !important` on the inner — both
+   patterns wipe ZK's inline spacing and break the `spacing` attribute. */
+
+/* Horizontal layout — inline-block children flow on a single line. */
+@layer zk-components {
+.z-hlayout {
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.z-hlayout-cell,
+.z-hlayout-inner {
+    display: inline-block;
+    vertical-align: top;
+    white-space: normal;
+    box-sizing: border-box;
+}
+
+/* valign modifiers from Hlayout.ts */
+.z-valign-bottom > .z-hlayout-inner { vertical-align: bottom; }
+.z-valign-top    > .z-hlayout-inner { vertical-align: top; }
+.z-valign-middle > .z-hlayout-inner { vertical-align: middle; }
+
+/* hflex children — ZK sizes the chdex inline; just don't shrink it away. */
+.z-hlayout-inner.z-flex-item {
+    min-width: 0;
+}
+
+/* Vertical layout — `.z-vlayout-inner` is rendered as a <div> by ZK, so block
+   flow already stacks children vertically and gives each `width: 100%`. No
+   `display: flex` needed on the root. Inter-item spacing is provided by ZK's
+   inline `padding-bottom` on each `.z-vlayout-inner` (driven by the `spacing`
+   attribute, default 5px). Do NOT add a parent `gap` here: it stacks on top
+   of ZK's inline padding and prevents `spacing="0"` from collapsing to 0. */
+.z-vlayout {
+    box-sizing: border-box;
+}
+
+.z-vlayout-inner {
+    box-sizing: border-box;
+}
+
+.z-vlayout-cell {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+}
+}

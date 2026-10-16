@@ -1,0 +1,33 @@
+/* MD3 Utility Classes — Border & Shape */
+
+@layer zk-utilities {
+
+.z-border         { border: 1px solid var(--zk-color-outline-variant); }
+.z-border-0       { border: none; }
+.z-border-top     { border-top: 1px solid var(--zk-color-outline-variant); }
+.z-border-bottom  { border-bottom: 1px solid var(--zk-color-outline-variant); }
+.z-border-start   { border-inline-start: 1px solid var(--zk-color-outline-variant); }
+.z-border-end     { border-inline-end: 1px solid var(--zk-color-outline-variant); }
+
+/* Width, style and colour modify a border set by the classes above, so they come after them */
+.z-border-2       { border-width: 2px; }
+.z-border-dashed  { border-style: dashed; }
+.z-border-dotted  { border-style: dotted; }
+
+.z-border-outline   { border-color: var(--zk-color-outline); }
+.z-border-primary   { border-color: var(--zk-color-primary); }
+.z-border-secondary { border-color: var(--zk-color-secondary); }
+.z-border-success   { border-color: var(--zk-color-success); }
+.z-border-warning   { border-color: var(--zk-color-warning); }
+.z-border-error     { border-color: var(--zk-color-error); }
+.z-border-info      { border-color: var(--zk-color-status-info); }
+
+.z-rounded-none { border-radius: var(--zk-shape-corner-none); }
+.z-rounded-xs   { border-radius: var(--zk-shape-corner-extra-small); }
+.z-rounded      { border-radius: var(--zk-shape-corner-small); }
+.z-rounded-md   { border-radius: var(--zk-shape-corner-medium); }
+.z-rounded-lg   { border-radius: var(--zk-shape-corner-large); }
+.z-rounded-xl   { border-radius: var(--zk-shape-corner-extra-large); }
+.z-rounded-full { border-radius: var(--zk-shape-corner-full); }
+
+} /* end @layer zk-utilities */

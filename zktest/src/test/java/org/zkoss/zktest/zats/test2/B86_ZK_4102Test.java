@@ -12,10 +12,12 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
+@Tag("IceBlueOnly")
 public class B86_ZK_4102Test extends WebDriverTestCase {
 	@Test
 	public void test() {

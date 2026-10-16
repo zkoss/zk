@@ -250,6 +250,14 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 	}
 
 	/** @internal */
+	override domClass_(no?: zk.DomClassOptions): string {
+		let /*safe*/ sc = super.domClass_(no);
+		if (!no?.zclass && this.getDir() == 'reverse')
+			sc += ' ' + this.$s('reverse');
+		return sc;
+	}
+
+	/** @internal */
 	override domAttrs_(no?: zk.DomAttrsOptions): string {
 		var /*safe*/ attr = super.domAttrs_(no),
 			v: string | undefined;

@@ -1,0 +1,18 @@
+/* MD3 Utility Classes — Surface utilities
+   .z-paper is the elevated surface primitive — MUI's <Paper>. It is deliberately not named
+   .z-card: every ZK widget renders .z-<widgetname>, so a Card component would collide with it
+   from a different cascade layer and silently win or lose. The --zk-shape-card and
+   --zk-elevation-card tokens keep the word "card" because they name a treatment shared by
+   Grid, Listbox, Tree, Panel, Groupbox and Calendar, none of which are cards. */
+
+@layer zk-utilities {
+
+.z-paper {
+    background-color: var(--zk-color-surface);
+    border-radius: var(--zk-shape-card);
+    box-shadow: var(--zk-elevation-card);
+    padding: var(--zk-spacing-4);
+    overflow: hidden;
+}
+
+} /* end @layer zk-utilities */

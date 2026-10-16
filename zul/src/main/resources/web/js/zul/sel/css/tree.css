@@ -1,0 +1,545 @@
+/* MD3 Tree — hierarchical list component */
+/* Actual DOM structure:
+   .z-tree > .z-tree-header > TABLE > THEAD > TR.z-treecols > TH.z-treecol > DIV.z-treecol-content
+   .z-tree > .z-tree-body  > TABLE > TBODY.z-treechildren > TR.z-treerow > TD.z-treecell > DIV.z-treecell-content > SPAN.z-tree-icon + SPAN.z-treecell-text
+   .z-tree > .z-tree-footer
+*/
+
+/* Default = standalone OUTLINED card: 1px border, NO shadow (was border + shadow, which
+   is double-emphasis — MD3 outlined ≠ elevated). On the near-white page the elevation
+   shadow is invisible, so the border carries the boundary. */
+@layer zk-components {
+.z-tree {
+    background-color: var(--zk-tree-bg);
+    border-radius: var(--zk-tree-radius);
+    border: 1px solid var(--zk-tree-border-color);
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* No-border variant — strip the frame when nested in another bounded surface. ZK emits no
+   border attribute for tree, so this is an opt-in sclass mirroring ZK's z-window-noborder
+   naming: sclass="z-tree-noborder". */
+.z-tree-noborder {
+    border: none;
+    box-shadow: none;
+}
+
+.z-panel-body .z-tree,
+.z-groupbox .z-tree {
+    border: none;
+}
+
+/* ─── Header ─ Mira / MD3 Data Table: no fill, hierarchy via weight + divider */
+.z-tree-header {
+    overflow: hidden;
+    background-color: transparent;
+}
+
+/* Sticky header (z-sticky-header, ZK-4795) — opt-in class ZK ships with no CSS.
+   Un-clip the root so the header can escape, pin it to the scroll ancestor, and
+   give it an opaque bg so scrolling rows don't bleed through. */
+.z-tree.z-sticky-header {
+    overflow: visible;
+}
+.z-tree.z-sticky-header .z-tree-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: var(--zk-tree-bg);
+}
+
+/* Header table uses separate borders so box-shadow and border-inline-end
+   on frozen-col TH cells are visible (border-collapse:collapse clips them). */
+.z-tree-header table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+.z-treecols {
+    background-color: transparent;
+}
+
+.z-treecol {
+    padding: var(--zk-tree-header-padding);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-tree-header-fg);
+    text-align: left;
+    border-bottom: 1px solid var(--zk-tree-border-color);
+    background-color: transparent;
+    white-space: nowrap;
+    user-select: none;
+    vertical-align: middle;
+    overflow: hidden;
+    /* positioning context for the out-of-flow .z-treecol-sorticon */
+    position: relative;
+}
+
+/* Block, not flex: the ellipsis needs a block container; an icon stays inline with the text. */
+.z-treecol-content {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-tree-header-fg);
+}
+
+/* ZK-6112: `overflow: hidden` clips at the padding box, which cut the focus ring (outline 2px +
+   offset 2px) of a control placed in the header. Browsers without `overflow-clip-margin`
+   (Safari) cannot keep the ring and the ellipsis together, so a header that holds a native
+   control gives up the ellipsis: a long label is cut at the cell edge by the header cell. A
+   select-all-only header has no native control and keeps `hidden`. */
+.z-treecol-content:has(:is(button, a, input, select, textarea)) {
+    overflow: visible;
+}
+
+/* A header image keeps the flex centring of the label. Inline, `middle` would centre the image on
+   the x-height, ~0.12em below the label's centre, which moves the label off the row centre once the
+   image is taller than the text. The cost: the label next to an image is clipped at the box edge,
+   without an ellipsis (an anonymous flex item cannot show one). */
+.z-treecol-content:has(img) {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+}
+
+/* The select-all box is followed by `&nbsp;` and the label; the flex gap that used to sit between
+   them is now a margin. Images and icons are followed by a plain space, which already gives the gap. */
+.z-treecol-content .z-treecol-checkable {
+    vertical-align: baseline;
+    margin-right: var(--zk-spacing-1);
+}
+
+/* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
+.z-treecol-sort {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
+/* Splitter bar between columns */
+.z-treecols-bar {
+    width: 8px;
+    cursor: col-resize;
+    background-color: var(--zk-color-outline-variant);
+}
+
+/* ─── Body ─────────────────────────────────────────────────────────────── */
+.z-tree-body {
+    overflow: auto;
+    /* position:relative anchors .z-focus-a (see listbox.css for rationale). */
+    position: relative;
+}
+
+.z-tree .z-focus-a {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.z-tree-body table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* Treechildren = TBODY */
+.z-treechildren {
+    /* native table body */
+}
+
+/* Tree item row — TR.z-treerow */
+.z-treerow {
+    background-color: var(--zk-tree-bg);
+    border-bottom: 1px solid var(--zk-tree-border-color);
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    cursor: pointer;
+}
+
+.z-treerow:last-child {
+    border-bottom: none;
+}
+
+/* Row hover: MD3 state layer rgba(on-surface, 0.08) */
+.z-treerow:hover {
+    background-color: var(--zk-tree-row-hover-bg);
+}
+
+/* Selected row — z-treerow-selected set by Treerow.domClass_ */
+.z-treerow.z-treerow-selected,
+.z-treerow.z-selected {
+    background-color: var(--zk-tree-selected-bg);
+}
+
+/* Selected row text color via cell content */
+.z-treerow.z-treerow-selected .z-treecell-content,
+.z-treerow.z-selected .z-treecell-content {
+    color: var(--zk-tree-selected-fg);
+}
+
+/* Selected + hover: slightly darker tint */
+.z-treerow.z-treerow-selected:hover,
+.z-treerow.z-selected:hover {
+    background-color: color-mix(in srgb, var(--zk-tree-selected-fg) 8%, var(--zk-tree-selected-bg));
+}
+
+/* Disabled row — z-treerow-disabled set by Treerow.domClass_ */
+.z-treerow.z-treerow-disabled,
+.z-treerow[disabled] {
+    opacity: var(--zk-state-disabled-opacity, 0.38);
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* Focus — keyboard navigation only: gate on the hidden .z-focus-a trap's
+ * :focus-visible (see listbox.css) so a mouse click shows no ring. */
+.z-tree:has(.z-focus-a:focus-visible) .z-treerow.z-treerow-focus {
+    outline: var(--zk-focus-ring);
+    outline-offset: -2px;
+}
+
+/* ─── Cell — TD.z-treecell ─────────────────────────────────────────────── */
+.z-treecell {
+    padding: 0;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+/* Content wrapper inside TD */
+.z-treecell-content {
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    padding: var(--zk-tree-cell-padding);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    color: var(--zk-color-on-surface);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: var(--zk-data-row-min-height);
+    box-sizing: border-box;
+}
+
+/* align on treecol is rendered as inline text-align on the TD; the flex content
+   box ignores it, so map it to justify-content */
+.z-treecell[style*="text-align: right"] > .z-treecell-content,
+.z-treecell[style*="text-align: end"] > .z-treecell-content { justify-content: flex-end; }
+.z-treecell[style*="text-align: center"] > .z-treecell-content { justify-content: center; }
+
+.z-treecell-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+/* ─── Toggle / expand icon ─────────────────────────────────────────────── */
+/* Parent rows: SPAN.z-tree-icon > I.z-icon-caret-down.z-tree-open */
+.z-tree-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--zk-color-on-surface-variant);
+    font-size: 16px;
+    border-radius: var(--zk-shape-corner-full);
+    cursor: pointer;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-tree-icon:hover {
+    background-color: var(--zk-color-surface-container);
+}
+
+/* Rotation transition: unified chevron-right SVG rotates 90deg on open */
+.z-tree-icon i {
+    --_chevron: url(~./zul/img/marble/listbox-next.svg);
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    -webkit-mask-image: var(--_chevron);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: var(--_chevron);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    transform: rotate(0deg);
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* Suppress Font Awesome glyph — SVG mask is the visual */
+.z-tree-icon i::before {
+    content: '';
+}
+
+/* Open state: rotate 90deg to point downward */
+.z-tree-icon i.z-tree-open {
+    transform: rotate(90deg);
+}
+
+/* ─── Indentation spacers ──────────────────────────────────────────────── */
+/* Child rows: each nesting level adds a SPAN.z-tree-line.z-tree-spacer */
+.z-tree-spacer {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.z-tree-line {
+    display: inline-block;
+    width: 20px;
+    flex-shrink: 0;
+}
+
+/* ─── Footer ────────────────────────────────────────────────────────────── */
+.z-tree-footer {
+    background-color: var(--zk-color-surface-container-low);
+    border-top: 2px solid var(--zk-color-outline-variant);
+    /* overflow-x:hidden lets ZK's efoot.scrollLeft sync work so frozen footer
+       cells stay in place when the body scrolls horizontally. */
+    overflow-x: hidden;
+}
+
+.z-tree-footer table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.z-treefooter {
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    color: var(--zk-color-on-surface-variant);
+    vertical-align: middle;
+}
+
+/* ─── Paging (mold="paging") ───────────────────────────────────────────────
+   ZK wraps the bar in .z-tree-paging-top / .z-tree-paging-bottom (mirrors grid's
+   .z-grid-paging-*). The last .z-treerow strips its own border-bottom, so the host
+   must supply the divider between the bar and the rows. */
+.z-tree-paging-top .z-paging {
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    border-top: none;
+}
+
+.z-tree-paging-bottom .z-paging {
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+
+/* Disabled state handled at TR level in row section above */
+
+/* ─── Checkmark column (tree checkmark="true") ─────────────────────────────
+   Mirrors listbox. multiple → icon `z-icon-check` (render checkbox box);
+   single selection → icon `z-icon-radio` (render radio circle).
+   The checkable class lives on the inner SPAN (`z-treerow-checkable`), so a
+   compound `.z-treerow.z-treerow-checkable` selector is DEAD — scope through
+   the icon / span instead. */
+
+/* Checkbox box (multiple) — row cell + header select-all.
+   No !important needed: these rules live in @layer zk-components, which outranks
+   _icons.css's generic glyph rule in @layer zk-base. Don't re-add !important. */
+.z-treerow-icon.z-icon-check::before,
+.z-treecol-icon.z-icon-check::before {
+    background-color: transparent;
+    -webkit-mask-image: none;
+    mask-image: none;
+    border: 1.5px solid var(--zk-color-outline, #79747e);
+    border-radius: 2px;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    vertical-align: -3px;
+}
+
+.z-treerow:hover .z-treerow-icon.z-icon-check::before {
+    border-color: var(--zk-color-primary, #376fd0);
+}
+
+/* Selected row: filled blue box with white checkmark */
+.z-treerow.z-treerow-selected .z-treerow-icon.z-icon-check::before,
+.z-treerow.z-selected .z-treerow-icon.z-icon-check::before,
+.z-treecol-checkable.z-treecol-checked .z-treecol-icon.z-icon-check::before {
+    background-color: var(--zk-color-primary, #376fd0);
+    border-color: var(--zk-color-primary, #376fd0);
+    background-image: url(~./zul/img/marble/check-white.svg);
+    background-size: 11px 11px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Radio (single selection) */
+.z-treerow-icon.z-icon-radio::before {
+    background-color: transparent;
+    background-image: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    border: 1.5px solid var(--zk-color-outline, #79747e);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+}
+
+.z-treerow:hover .z-treerow-icon.z-icon-radio::before {
+    border-color: var(--zk-color-primary, #376fd0);
+}
+
+/* Selected row: primary ring + filled centre dot */
+.z-treerow.z-treerow-selected .z-treerow-icon.z-icon-radio::before,
+.z-treerow.z-selected .z-treerow-icon.z-icon-radio::before {
+    border-color: var(--zk-color-primary, #376fd0);
+    background-image: radial-gradient(circle at center, var(--zk-color-primary, #376fd0) 0 4px, transparent 4px);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Sort icon: taken out of the text flow and parked in the header cell's right padding,
+   so the label starts at the same x as the body cell text whether or not the column is
+   sorted (and a select-all header needs no special case). */
+.z-treecol-sorticon {
+    position: absolute;
+    top: 50%;
+    right: var(--zk-spacing-1);
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    color: var(--zk-color-on-surface-variant);
+    pointer-events: none;
+}
+
+/* With a column-menu button, sit the sort icon just left of it. */
+.z-treecol:has(.z-treecol-button) .z-treecol-sorticon {
+    right: calc(var(--zk-spacing-1) * 2 + 24px);
+}
+
+/* Sort direction = arrow (up = ascending, down = descending), distinct from the
+   caret used by the tree open/close icon and the column menu. */
+.z-treecol-sorticon .z-icon-caret-up {
+    --_icon: url(~./zul/img/marble/sort-up.svg);
+}
+
+.z-treecol-sorticon .z-icon-caret-down {
+    --_icon: url(~./zul/img/marble/sort-down.svg);
+}
+
+/* Compact checkable column. */
+.z-treerow-checkable,
+.z-treecol-checkable {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* The Tree cell content is a flex row, so the row's box is a flex item too: it keeps the line height of the
+   label as its minimum height, and its icon is a flex container so that the 16px box inside is centred on
+   the label or on a control in the cell whatever the font, the line-height or the pixel ratio. */
+.z-treerow-checkable {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--zk-typescale-body-medium-line-height);
+}
+
+.z-treerow-checkable > .z-treerow-icon {
+    display: flex;
+}
+
+/* Resize affordance (treecols sizable="true"). ZK toggles `.z-treecol-sizing` on the
+   TH while the pointer is within the rightmost 8px drag zone, removed on mouse-out;
+   no persistent "sizable" class exists. Show the resize cursor + a primary edge
+   accent. */
+.z-treecol-sizing {
+    cursor: col-resize;
+    box-shadow: inset -2px 0 0 var(--zk-color-primary);
+}
+
+/* Narrow image/icon header column — same squeeze as the checkable column (see
+   listbox.css). Collapse side padding so a 16px header icon renders full-size and
+   the header row keeps its default height. */
+.z-treecol:has(img) {
+    padding-left: var(--zk-spacing-1);
+    padding-right: var(--zk-spacing-1);
+    white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
+}
+
+/* A sortable header with an image still needs the sort icon's room, which the rule above (higher
+   specificity than .z-treecol-sort) would otherwise drop to the 4px icon-column padding. */
+.z-treecol-sort:has(img) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
+/* Header column holding the select-all box (typically a checkbox-only width="40px" column, but any treecol
+   with the box) — same squeeze as the image column above and as `.z-listheader:has(.z-listheader-checkable)`
+   in listbox.css: the default 16px side padding leaves 8px for the 16px select-all icon in a 40px column
+   and clips it. Only the right padding shrinks (16px to 4px, also for a labelled column), so the icon keeps
+   the x of the row checkbox. */
+.z-treecol:has(.z-treecol-checkable) {
+    padding-right: var(--zk-spacing-1);
+}
+
+/* A sortable select-all header still needs the sort icon's room (same reasoning as the image rule). */
+.z-treecol-sort:has(.z-treecol-checkable) {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
+/* Indeterminate / tristate (partial) — filled primary box with a white minus.
+   When a TristateModel reports a node in getPartials(), ZK adds `z-treerow-partial`
+   to the row and switches the icon class to `z-icon-minus`; the header select-all
+   icon also becomes `z-icon-minus` when only some rows are selected. `z-icon-minus`
+   ships as the same flat mask glyph as check/radio — override and rebuild as an MD3
+   indeterminate box. (The old `.z-treerow.z-treerow-partial` compound selector was
+   dead: `z-treerow-partial` is on the TR but ZK's real path scopes through the icon.) */
+.z-treerow-partial .z-treerow-icon.z-icon-minus::before,
+.z-treecol-icon.z-icon-minus::before {
+    background-color: var(--zk-color-primary, #376fd0);
+    border: 1.5px solid var(--zk-color-primary, #376fd0);
+    border-radius: 2px;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    vertical-align: -3px;
+    -webkit-mask-image: none;
+    mask-image: none;
+    background-image: url(~./zul/img/marble/minus-white.svg);
+    background-size: 11px 11px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.z-tree-emptybody {
+    display: block;
+    width: 100%;
+}
+
+.z-tree-emptybody-content {
+    padding: var(--zk-spacing-8) var(--zk-spacing-4);
+    text-align: center;
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-style: italic;
+}
+
+.z-tree-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.6);
+    z-index: 10;
+}
+}

@@ -1,0 +1,60 @@
+/* MD3 Separator — horizontal and vertical dividers */
+/* NOTE: ZK <space> also renders as .z-separator-vertical with inline size styles.
+   Keep the base transparent; only bar separators get color. */
+
+@layer zk-components {
+.z-separator {
+    border: 0;
+    background-color: transparent;
+    flex-shrink: 0;
+}
+
+/* Horizontal bar divider (<separator bar="true">).
+   ZK writes the widget's `spacing` attribute as inline `height`, so the box can be taller
+   than the line. Paint the hairline as a centred 1px background image instead of filling
+   the box: the inline height then becomes the space above and below the line (the
+   counterpart of .z-separator-vertical-bar, which pins `width: 1px !important`). */
+.z-separator-horizontal-bar {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(var(--zk-color-outline-variant), var(--zk-color-outline-variant))
+        center / 100% 1px no-repeat;
+    margin: var(--zk-spacing-2) 0;
+}
+
+/* An explicit spacing already provides the gap. */
+.z-separator-horizontal-bar[style*="height"] {
+    margin: 0;
+}
+
+/* Horizontal (default, no bar) — acts as spacer */
+.z-separator-horizontal:not(.z-separator-horizontal-bar) {
+    display: block;
+    width: 100%;
+    height: var(--zk-spacing-2);
+    background-color: transparent;
+}
+
+/* Vertical — spacer or inline divider */
+.z-separator-vertical {
+    display: inline-block;
+    background-color: transparent;
+    vertical-align: middle;
+}
+
+/* Vertical bar divider (<space bar="true"> or <separator orient="vertical" bar="true">).
+   Space.ts defaults orient to "vertical", so <space bar="true"> always lands here.
+   ZK writes the widget's `spacing` attribute as inline `width`; force 1px so the
+   divider is always a hairline (symmetric with .z-separator-horizontal-bar, which
+   paints a 1px line inside the inline-height box). Use margin for the visual gap. */
+.z-separator-vertical-bar {
+    display: inline-block;
+    width: 1px !important;
+    min-height: 1em;
+    background-color: var(--zk-color-outline-variant);
+    margin: 0 var(--zk-spacing-2);
+    vertical-align: middle;
+    align-self: stretch;
+}
+}

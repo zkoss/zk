@@ -15,6 +15,7 @@ ZK 11.0.0
   ZK-6084: Accessibility Optimization: WCAG 2.1 AA Advanced Audit
   ZK-6089: Support ~./ prefix in <label-location> entries in zk.xml
   ZK-6056: Configurable Filter Logic for Chosenbox with ListSubModel
+  ZK-6112: a theme of Material Design 3
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -115,7 +116,7 @@ ZK 11.0.0
   + jasperreports (an optional dependency in zkex) update: JasperReports community edition 7.x contains the fix
     (no fixed 6.x release exists), but upgrading to 7.x requires ZK public API changes so is deferred to ZK 11+.
   + Some CSS variable names are changed for semantic correctness. The values are unchanged; override
-    the new name. The LESS aliases in zul/less/_zkvariables.less follow (@inputTextSize -> @inputFontSize):
+    the new name (the matching LESS aliases were removed with the LESS pipeline -- see below):
         --zk-text-color-default3 -> --zk-text-color-inverse
         --zk-color-background1 -> --zk-color-background-subtle
         --zk-color-background3 -> --zk-color-background-base
@@ -219,6 +220,26 @@ ZK 11.0.0
   + org.zkoss.stateless.sul.IILineitemCtrl is removed; it was a misnamed duplicate of
     org.zkoss.stateless.sul.ILineitemCtrl and was never used by the framework.
     Code that called IILineitemCtrl.from(Lineitem) should call ILineitemCtrl.from(Lineitem) instead.
+  + The default theme is replaced with Marble. IceBlue is packaged as an external theme.
+  + Marble is a pure-CSS Material Design theme and is the built-in look-and-feel:
+    StandardTheme.DEFAULT_NAME is now "marble", it is served from the unprefixed ~./zul/css/
+    path, and it needs no theme-pack jar. An application that never sets
+    org.zkoss.theme.preferred picks it up automatically.
+  + To keep the previous look, install the IceBlue theme pack and leave
+    org.zkoss.theme.preferred=iceblue in place. The name no longer short-circuits to the
+    built-in theme -- it is resolved through the theme registry -- so the pack has to be on
+    the classpath. When no pack of that name is registered the default theme is served
+    instead.
+  + The LESS theme pipeline is retired. zul/less/** and the zkless-engine dependency are removed, and
+    the compileLess and compileCSS gradle tasks are replaced by compileMarbleCss and checkMarbleCss
+    (scripts/build-css.js). Theming is done entirely through --zk-* custom properties at runtime, so
+    a colour change no longer needs a build step.
+  + Marble does not implement every --zk-* variable IceBlue exposed. Overriding a variable Marble does
+    not read has no effect and reports no error. Re-check any customisation built on the IceBlue
+    variable set against the tokens under zul/src/main/resources/web/zul/css/tokens/.
+  + The ZK85Icons and Font Awesome webfonts are removed. Icons are Lucide SVG masks generated into
+    norm.css.dsp, font-awesome.css.dsp is no longer served, and a z-icon-* name outside the Font
+    Awesome alias map no longer resolves.
 
    --------
 ZK 10.3.0

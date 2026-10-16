@@ -1,0 +1,16 @@
+/* MD3 Image component */
+
+@layer zk-components {
+.z-image {
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: middle;
+    border-radius: var(--zk-shape-corner-extra-small);
+}
+
+.z-image img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+}

@@ -1,0 +1,153 @@
+/* MD3 Toast / Snackbar (zkmax component)
+   DOM: <div class="z-toast [z-toast-info|warning|error]">
+          <i class="z-toast-icon z-icon-*"/>           (absolute-positioned)
+          <div class="z-toast-content">…</div>
+          <div class="z-toast-close">                  (optional, if closable)
+            <i class="z-toast-icon z-icon-times"/>
+          </div>
+        </div>
+   Position wrapper: .z-toast-position-wrapper > .z-toast-position.z-toast-position-{pos}
+*/
+
+@layer zk-components {
+.z-toast {
+    position: relative;
+    will-change: opacity;
+}
+
+/* ─── Content box ───────────────────────────────────────────────────────── */
+/* padding-left reserves room for the absolute-positioned `.z-toast-icon`
+   (sibling at left:16px width:20px);
+   padding-right reserves room for the absolute-positioned close button
+   (sibling at right:12px width:20px). */
+.z-toast-content {
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    width: 320px;
+    min-height: var(--zk-notification-height);
+    /* center vertically: min-height exceeds a single line + padding, so plain block
+       layout top-aligns the text away from the centered icon (mirrors notification).
+       Block-level align-content, not flex: a flex container wraps each contiguous
+       inline run of an HTML message in an anonymous block item, which strips the
+       spaces around inline markup ("with <b>bold</b> content" -> "withboldcontent"). */
+    display: block;
+    align-content: center;
+    padding: 12px 48px;
+    border-radius: var(--zk-toast-radius);
+    box-shadow: var(--zk-elevation-3);
+    position: relative;
+    overflow: hidden;
+    /* No base background/color: the Java API (Toast.show) always defaults a
+       null type to "info", so every toast carries a type variant that supplies
+       its own (light) fill + text color. A typeless base is unreachable via the
+       server API; keeping a dark-scrim fallback here was dead style. */
+    line-height: 1.5;
+}
+
+/* No left accent stripe: MD3 snackbars carry severity with the leading icon plus
+   the container tint, not a leading colour bar. Severity cues live in the type
+   variants below (icon colour + tinted fill). */
+
+/* ─── Icon (absolute-positioned, mirrors notification pattern) ──────────── */
+.z-toast-icon {
+    position: absolute;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 16px;
+    font-size: 20px;
+    line-height: 20px;
+    margin-top: -10px;
+}
+
+/* ─── Close button ──────────────────────────────────────────────────────── */
+.z-toast-close {
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    padding: 0 2px;
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    cursor: pointer;
+    margin-top: -10px;
+    opacity: 0.7;
+    color: inherit;
+}
+
+.z-toast-close:hover { opacity: 1; }
+
+/* Close icon inside close button */
+.z-toast-close > .z-toast-icon {
+    position: static;
+    transform: none;
+    margin-top: 0;
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+}
+
+/* ─── Semantic variants ─────────────────────────────────────────────────── */
+
+/* info */
+.z-toast-info .z-toast-icon                       { color: var(--zk-toast-accent); }
+.z-toast-info .z-toast-close > .z-toast-icon      { color: var(--zk-color-on-surface); }
+.z-toast-info .z-toast-content {
+    background-color: var(--zk-toast-bg);
+    color: var(--zk-toast-fg);
+}
+
+/* warning */
+/* on-*-container, not status-*: with the accent stripe gone the icon is the
+   primary severity cue, and the bright status tone sat at 1.6:1 against its own
+   container tint — below the 3:1 WCAG 1.4.11 floor for non-text UI.
+   The message text and close glyph stay neutral (on-surface, as notification
+   does) so the icon is the only chromatic mark and actually reads as the cue. */
+.z-toast-warning .z-toast-icon                    { color: var(--zk-color-on-warning-container); }
+.z-toast-warning .z-toast-close > .z-toast-icon   { color: var(--zk-color-on-surface); }
+.z-toast-warning .z-toast-content {
+    background-color: var(--zk-color-warning-container);
+    color: var(--zk-color-on-surface);
+}
+
+/* error */
+.z-toast-error .z-toast-icon                      { color: var(--zk-color-on-error-container); }
+.z-toast-error .z-toast-close > .z-toast-icon     { color: var(--zk-color-on-surface); }
+.z-toast-error .z-toast-content {
+    background-color: var(--zk-color-error-container);
+    color: var(--zk-color-on-surface);
+}
+
+/* ─── Position container ─────────────────────────────────────────────────── */
+.z-toast-position-wrapper {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1800;
+}
+
+.z-toast-position {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    gap: var(--zk-spacing-2);
+    padding: var(--zk-spacing-3);
+}
+
+.z-toast-position > .z-toast {
+    pointer-events: auto;
+}
+
+.z-toast-position-top-left     { flex-direction: column-reverse; top: 0; left: 0; }
+.z-toast-position-top-center   { flex-direction: column-reverse; top: 0; left: 50%; transform: translateX(-50%); }
+.z-toast-position-top-right    { flex-direction: column-reverse; top: 0; right: 0; }
+.z-toast-position-middle-left  { top: 50%; transform: translateY(-50%); left: 0; }
+.z-toast-position-middle-center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.z-toast-position-middle-right { top: 50%; transform: translateY(-50%); right: 0; }
+.z-toast-position-bottom-left   { bottom: 0; left: 0; }
+.z-toast-position-bottom-center { bottom: 0; left: 50%; transform: translateX(-50%); }
+.z-toast-position-bottom-right  { bottom: 0; right: 0; }
+}
