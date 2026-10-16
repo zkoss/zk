@@ -24,6 +24,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		9. press Tab until "Locked" (draggable="false") is focused and press Space, then click its title bar: no popup opens
 		10. click the maximize button of "Mail": no popup opens; press Space on "Mail" or click its title bar: no popup either; restore it
 		11. click the title bar of "Weather", click "Doing" and press Down: "Done" is focused and the positions of "Doing" close
+		12. click the title bar of "Translate", click "Doing (current)" and point at, or press Right and Down through, its positions: a dashed bar shows where each would move "Translate"; press Escape: the bar goes
 	</label>
 	<portallayout>
 		<portalchildren id="todo" title="Todo" width="30%">

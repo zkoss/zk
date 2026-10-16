@@ -67,6 +67,39 @@ public class F110_ZK_6085_PortallayoutDraggingMovementsTest extends WebDriverTes
 	}
 
 	@Test
+	public void aPositionPreviewsWhereThePanelGoes() {
+		connect();
+		clickTitleBar("translate");
+		getActions().moveToElement(toElement(columns().eq(2))).perform();
+		waitResponse();
+		Assertions.assertTrue(jq("$done").find(".z-panel-move-block").exists(), "Done is empty and takes the panel at once, so pointing at it should preview it there");
+		getActions().moveToElement(toElement(columns().eq(1))).perform();
+		waitResponse();
+		Assertions.assertFalse(preview().exists(), "A click on Doing opens its positions, so pointing at it should preview nothing");
+		getActions().sendKeys(Keys.ARROW_DOWN).perform();
+		waitResponse();
+		Assertions.assertFalse(preview().exists(), "Enter on Doing opens its positions too, so focusing it should preview nothing");
+
+		click(columns().eq(0));
+		waitResponse();
+		Assertions.assertFalse(preview().exists(), "The panel's own column takes it nowhere, so nothing should be previewed");
+		getActions().sendKeys(Keys.ARROW_RIGHT).perform();
+		waitResponse();
+		Assertions.assertTrue(middleOf(preview()) <= jq("$calendar").offsetTop(), "Move to top should be previewed above Calendar");
+		getActions().sendKeys(Keys.ARROW_DOWN, Keys.ARROW_DOWN, Keys.ARROW_DOWN).perform();
+		waitResponse();
+		JQuery weather = jq("$weather");
+		Assertions.assertTrue(middleOf(preview()) >= weather.offsetTop() + weather.outerHeight(), "Move to bottom should be previewed below Weather");
+
+		getActions().moveToElement(toElement(positions().eq(0))).perform();
+		waitResponse();
+		Assertions.assertTrue(middleOf(preview()) <= jq("$calendar").offsetTop(), "The hovered position should be previewed");
+		getActions().sendKeys(Keys.ESCAPE).perform();
+		waitResponse();
+		Assertions.assertFalse(preview().exists(), "Closing the popup should remove the preview");
+	}
+
+	@Test
 	public void upOrDownClosesTheOpenPositions() {
 		connect();
 		clickTitleBar("translate");
@@ -154,6 +187,9 @@ public class F110_ZK_6085_PortallayoutDraggingMovementsTest extends WebDriverTes
 		Assertions.assertEquals("Row 2", columns().eq(1).text());
 		click(columns().eq(0));
 		waitResponse();
+		getActions().moveToElement(toElement(positions().eq(0))).perform();
+		waitResponse();
+		Assertions.assertTrue(preview().offsetLeft() + preview().outerWidth() / 2 <= jq("$left").offsetLeft(), "Move to start should be previewed left of Left");
 		Assertions.assertEquals(4, positions().length());
 		Assertions.assertEquals("Move to start", positions().eq(0).text());
 		Assertions.assertEquals("Move left", positions().eq(1).text());
@@ -205,6 +241,14 @@ public class F110_ZK_6085_PortallayoutDraggingMovementsTest extends WebDriverTes
 	private void clickTitleBar(String panel) {
 		click(jq("$" + panel).find(".z-panel-header"));
 		waitResponse();
+	}
+
+	private JQuery preview() {
+		return jq(".z-portalchildren .z-panel-move-block");
+	}
+
+	private int middleOf(JQuery bar) {
+		return bar.offsetTop() + bar.outerHeight() / 2;
 	}
 
 	private JQuery columns() {
