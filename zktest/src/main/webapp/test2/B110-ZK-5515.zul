@@ -15,7 +15,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	<label multiline="true">
 		1. press Tab until "Calendar" is focused and press Space: a menu opens with focus on the second column, as the first column is hidden, and there should be no javascript error
 		2. click the second column: "Calendar" moves to the second column
-		3. press Tab until "Translate" is focused, press Space and then Enter: "Translate" moves to the second column, below "Calendar"
+		3. press Tab until "Translate" is focused, press Space, Enter, Down and Enter: "Translate" moves to the second column, below "Calendar"
 		4. press Tab until the collapse button of "Translate" is focused and press Space: "Translate" collapses, and no menu opens
 	</label>
 	<portallayout>

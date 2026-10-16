@@ -21,7 +21,8 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * Portallayout's move popup lists the columns the portallayout has when it opens, including one
- * added after the portallayout rendered and not one removed since.
+ * added after the portallayout rendered and not one removed since. Enter on a column removed while
+ * the popup is open moves nothing.
  */
 @Tag("WcagTestOnly")
 public class F110_ZK_6085_PortallayoutPopupColumnsTest extends WebDriverTestCase {
@@ -44,7 +45,7 @@ public class F110_ZK_6085_PortallayoutPopupColumnsTest extends WebDriverTestCase
 		connect();
 		open();
 		Assertions.assertEquals(2, columns().length());
-		Assertions.assertEquals("Left", columns().eq(0).text());
+		Assertions.assertEquals("Left (current)", columns().eq(0).text());
 		Assertions.assertEquals("Right", columns().eq(1).text());
 		close();
 
@@ -53,13 +54,20 @@ public class F110_ZK_6085_PortallayoutPopupColumnsTest extends WebDriverTestCase
 		open();
 		Assertions.assertEquals(3, columns().length(), "A column added later should be listed");
 		Assertions.assertEquals("Later", columns().eq(2).text());
-		close();
-
-		click(jq("$removeColumn"));
+		getActions().sendKeys(Keys.ARROW_DOWN).perform();
 		waitResponse();
+		// not a click, whose press would close the popup
+		eval("zAu.send(new zk.Event(zk.Widget.$('$removeColumn'), 'onClick', {}, {toServer: true}))");
+		waitResponse();
+		getActions().sendKeys(Keys.ENTER).perform();
+		waitResponse();
+		assertNoJSError();
+		Assertions.assertFalse(jq(".z-portallayout-popup-open").exists(), "Enter on a column removed while the popup is open should close the popup");
+		Assertions.assertEquals("mail", widget("$layout").firstChild().firstChild().id(), "and move nothing");
+
 		open();
 		Assertions.assertEquals(2, columns().length(), "A removed column should not be listed");
-		Assertions.assertEquals("Left", columns().eq(0).text());
+		Assertions.assertEquals("Left (current)", columns().eq(0).text());
 		Assertions.assertEquals("Later", columns().eq(1).text());
 		getActions().sendKeys(Keys.ARROW_DOWN, Keys.ENTER).perform();
 		waitResponse();

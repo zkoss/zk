@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6085-PortallayoutDraggingMovements.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Oct 15 15:22:19 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:ca="client/attribute">
+	<label multiline="true">
+		1. click the title bar of "Translate": a popup under the panel lists "Todo (current)", "Doing" and "Done"
+		2. click "Doing": its positions open on the right, "Move to top" and "Move to bottom"; click "Move to bottom": "Translate" moves below "News"
+		3. press Tab until "Translate" is focused, then Space, Down and Right: the positions are "Move to top" and "Move up"; press Left and Enter: the positions open again; press Down and Enter: "Translate" moves above "News" and keeps the focus
+		4. click the title bar of "Translate" and click "Doing (current)": the positions are "Move to top", "Move up", "Move down" and "Move to bottom"; click "Move down": "Translate" moves below "News"
+		5. click the title bar of "Calendar" and click "Done": "Calendar" moves to "Done" at once
+		6. click the title bar of "Mail" twice: the popup opens and closes again
+		7. click the title bar of "Middle": the popup lists "Row 1 (current)" and "Row 2"; click "Row 1 (current)": the positions are "Move to start", "Move left", "Move right" and "Move to end"; click "Move left": "Middle" moves to the start
+		8. click the drag grip at the top of the untitled panel: its positions open at once, "Move to top" and "Move up"; click "Move to top": the untitled panel moves above "Lone"
+		9. press Tab until "Locked" (draggable="false") is focused and press Space, then click its title bar: no popup opens
+		10. click the maximize button of "Mail": no popup opens; press Space on "Mail" or click its title bar: no popup either; restore it
+		11. click the title bar of "Weather", click "Doing" and press Down: "Done" is focused and the positions of "Doing" close
+		12. press Tab until "Nested" (inside "Lone", ca:tabindex="0") is focused and press Space, then click its title bar: no popup opens
+	</label>
+	<portallayout>
+		<portalchildren id="todo" title="Todo" width="30%">
+			<panel id="calendar" title="Calendar"/>
+			<panel id="translate" title="Translate"/>
+			<panel id="weather" title="Weather"/>
+		</portalchildren>
+		<portalchildren id="doing" title="Doing" width="30%">
+			<panel id="mail" title="Mail" maximizable="true"/>
+			<panel id="news" title="News"/>
+		</portalchildren>
+		<portalchildren id="done" title="Done" width="30%"/>
+	</portallayout>
+	<portallayout orient="horizontal">
+		<portalchildren id="row1" height="60px">
+			<panel id="left" title="Left" width="100px"/>
+			<panel id="middle" title="Middle" width="100px"/>
+			<panel id="right" title="Right" width="100px"/>
+		</portalchildren>
+		<portalchildren id="row2" height="60px"/>
+	</portallayout>
+	<portallayout id="single">
+		<portalchildren id="only" title="Only" width="30%">
+			<panel id="lone" title="Lone">
+				<panelchildren>
+					<panel id="nested" title="Nested" ca:tabindex="0"/>
+				</panelchildren>
+			</panel>
+			<panel id="locked" title="Locked" draggable="false"/>
+			<panel id="untitled">
+				<panelchildren>untitled</panelchildren>
+			</panel>
+		</portalchildren>
+	</portallayout>
+</zk>

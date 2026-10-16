@@ -29,6 +29,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	<portallayout id="layout">
 		<portalchildren title="Left" width="30%">
 			<panel id="mail" title="Mail"/>
+			<panel id="calendar" title="Calendar"/>
 		</portalchildren>
 		<portalchildren id="right" title="Right" width="30%">
 			<panel id="news" title="News"/>

@@ -7,7 +7,8 @@ F110-ZK-6085-PortallayoutPopupColumns.zul
 
 	Description:
 		With za11y, a column added or removed after the portallayout rendered shows up in, or
-		disappears from, the move popup, and a panel can be moved into the added column.
+		disappears from, the move popup, and a panel can be moved into the added column. Enter on a
+		column removed while the popup is open moves nothing.
 
 	History:
 		Fri Oct 16 12:01:32 CST 2026, Created by peggypeng
@@ -17,14 +18,16 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<label multiline="true">
-		1. press Tab until "Mail" is focused and press Space: the popup lists "Left" and "Right"; press Escape
-		2. click "add a column", focus "Mail" and press Space: the popup lists "Left", "Right" and "Later"; press Escape
-		3. click "remove Right", focus "Mail" and press Space: the popup lists "Left" and "Later"
-		4. press Down and Enter: "Mail" moves to "Later", and there is no error
+		1. press Tab until "Mail" is focused and press Space: the popup lists "Left (current)" and "Right"; press Escape
+		2. click "add a column", focus "Mail" and press Space: the popup lists "Left (current)", "Right" and "Later"
+		3. press Down; with the popup still open, remove "Right" by running zAu.send(new zk.Event(zk.$('$removeColumn'), 'onClick', {}, {toServer: true})) in the console, as a click would close the popup; press Enter: the popup closes, nothing moves, and there is no error
+		4. press Space: the popup lists "Left (current)" and "Later"
+		5. press Down and Enter: "Mail" moves to "Later", and there is no error
 	</label>
 	<portallayout id="layout">
 		<portalchildren title="Left" width="30%">
 			<panel id="mail" title="Mail"/>
+			<panel id="calendar" title="Calendar"/>
 		</portalchildren>
 		<portalchildren id="right" title="Right" width="30%">
 			<panel id="news" title="News"/>

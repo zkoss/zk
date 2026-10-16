@@ -32,7 +32,7 @@ public class F110_ZK_6085_PortallayoutMovedPanelFocusTest extends WebDriverTestC
 	public void test() {
 		connect();
 		open();
-		getActions().sendKeys(Keys.ARROW_DOWN, Keys.ENTER).perform();
+		getActions().sendKeys(Keys.ENTER, Keys.ARROW_DOWN, Keys.ENTER).perform();
 		waitResponse();
 		Assertions.assertEquals("mail", widget("$right").lastChild().id(), "Mail should move to Right");
 		Assertions.assertTrue(jq("$mail").is(":focus"), "The moved panel should keep the focus");
