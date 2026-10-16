@@ -718,5 +718,50 @@
             </treeitem>
         </treechildren>
     </tree>
+    <!-- A header that holds a native control (follow-up 35). Column 1 is sorted with a long label, the last long-label
+         column is not (Grid, Listbox): the label is cut before the sort arrow and the menu button. The "Run" column has
+         a short label that leaves the control in view: its focus ring is whole. The "Name" column holds a textbox that
+         is as wide as, or wider than, the column: the control stays visible and clickable. -->
+    <grid sclass="mhf-grid-control" width="620px">
+        <columns menupopup="auto">
+            <column width="160px" sort="auto" sortDirection="ascending" label="A very long header label"><button label="Go"/></column>
+            <column width="160px" label="Run"><button label="Go"/></column>
+            <column width="160px" sort="auto" label="A very long header label"><button label="Go"/></column>
+            <column width="140px" label="Name"><textbox/></column>
+        </columns>
+        <rows>
+            <row><label value="Alice"/><label value="Engineering"/><label value="Sales"/><label value="100"/></row>
+        </rows>
+    </grid>
+    <listbox sclass="mhf-listbox-control" width="620px">
+        <listhead menupopup="auto">
+            <listheader width="160px" sort="auto" sortDirection="ascending" label="A very long header label"><button label="Go"/></listheader>
+            <listheader width="160px" label="Run"><button label="Go"/></listheader>
+            <listheader width="160px" sort="auto" label="A very long header label"><button label="Go"/></listheader>
+            <listheader width="140px" label="Name"><textbox/></listheader>
+        </listhead>
+        <listitem><listcell label="Alice"/><listcell label="Engineering"/><listcell label="Sales"/><listcell label="100"/></listitem>
+    </listbox>
+    <tree sclass="mhf-tree-control" width="460px">
+        <treecols>
+            <treecol width="160px" sort="auto" sortDirection="ascending" label="A very long header label"><button label="Go"/></treecol>
+            <treecol width="160px" label="Run"><button label="Go"/></treecol>
+            <treecol width="140px" label="Name"><textbox/></treecol>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell label="Alice"/><treecell label="Engineering"/><treecell label="Sales"/></treerow></treeitem>
+        </treechildren>
+    </tree>
+    <!-- A hand-written `style="text-align:center"` (no space after the colon) on a treecell: the box of a checkmark cell is
+         centred on the cell as the box of the column `align="center"` is (follow-up 59, F1). -->
+    <tree sclass="mhf-tree-style-no-space" width="360px" checkmark="true" multiple="true">
+        <treecols>
+            <treecol width="160px"/>
+            <treecol label="Name" width="160px"/>
+        </treecols>
+        <treechildren>
+            <treeitem><treerow><treecell style="text-align:center"/><treecell label="Alice"/></treerow></treeitem>
+        </treechildren>
+    </tree>
 </div>
 </zk>

@@ -23,8 +23,10 @@ import * as path from 'path';
 //      generalise (navbar, for one, has a roving tabindex: Tab enters the whole
 //      widget once and arrow keys move inside).
 //   3. Inflate the element's rect by `outline-offset + outline-width` and walk
-//      its ancestors. If an ancestor that clips overflow has a smaller rect on
-//      any side, the ring is clipped — report it.
+//      its ancestors. If an ancestor that clips has a smaller region on any side
+//      it clips, the ring is clipped — report it. An ancestor clips through
+//      `overflow` per axis, `contain: paint` (also via `strict` and `content`) and
+//      `clip-path`; it clips at its padding box (`clip-path`: border box).
 //
 // A second pass repeats step 2 under forced-colors emulation for items that are
 // SELECTED as well as focused: the selection fill and `--zk-focus-ring` both
@@ -192,7 +194,8 @@ async function measureClipping(page: Page) {
     const createsContainingBlock = (e: Element, includePositioned: boolean) => {
       const s = getComputedStyle(e);
       return (includePositioned && s.position !== 'static')
-        || s.transform !== 'none' || s.perspective !== 'none' || s.filter !== 'none'
+        || s.transform !== 'none' || s.translate !== 'none' || s.rotate !== 'none' || s.scale !== 'none'
+        || s.perspective !== 'none' || s.filter !== 'none'
         || /\b(layout|paint|strict|content)\b/.test(s.contain)
         || /\b(transform|perspective|filter)\b/.test(s.willChange);
     };
@@ -220,6 +223,40 @@ async function measureClipping(page: Page) {
       }
       return chain;
     };
+    /**
+     * The region an ancestor lets painting through, per axis; an axis it does not clip is unbounded.
+     * `overflow` (other than `visible`) and `contain: paint` clip at the padding box, which
+     * `overflow: clip` extends by `overflow-clip-margin`; `clip-path` clips at the border box (the
+     * shape is taken as that box). Returns null when the ancestor clips nothing.
+     */
+    const clipRegion = (p: Element) => {
+      const pcs = getComputedStyle(p);
+      const box = p.getBoundingClientRect();
+      const px = (value: string) => parseFloat(value) || 0;
+      const clipMargin = (overflow: string) =>
+        overflow === 'clip' ? px(pcs.overflowClipMargin.split(/\s+/).pop() ?? '') : 0;
+      const paintContained = /\b(paint|strict|content)\b/.test(pcs.contain);
+      const region = { left: -Infinity, right: Infinity, top: -Infinity, bottom: Infinity };
+      const reasons: string[] = [];
+      if (paintContained || pcs.overflowX !== 'visible') {
+        region.left = box.left + px(pcs.borderLeftWidth) - clipMargin(pcs.overflowX);
+        region.right = box.right - px(pcs.borderRightWidth) + clipMargin(pcs.overflowX);
+      }
+      if (paintContained || pcs.overflowY !== 'visible') {
+        region.top = box.top + px(pcs.borderTopWidth) - clipMargin(pcs.overflowY);
+        region.bottom = box.bottom - px(pcs.borderBottomWidth) + clipMargin(pcs.overflowY);
+      }
+      if (pcs.overflowX !== 'visible' || pcs.overflowY !== 'visible') reasons.push(`overflow ${pcs.overflowX}/${pcs.overflowY}`);
+      if (paintContained) reasons.push(`contain ${pcs.contain}`);
+      if (pcs.clipPath !== 'none') {
+        region.left = Math.max(region.left, box.left);
+        region.right = Math.min(region.right, box.right);
+        region.top = Math.max(region.top, box.top);
+        region.bottom = Math.min(region.bottom, box.bottom);
+        reasons.push('clip-path');
+      }
+      return reasons.length ? { region, reasons: reasons.join(', ') } : null;
+    };
     for (const el of Array.from(document.querySelectorAll('[data-fs-idx]'))) {
       const cs = getComputedStyle(el);
       const width = parseFloat(cs.outlineWidth) || 0;
@@ -240,17 +277,10 @@ async function measureClipping(page: Page) {
       let overflow = '';
       let short = 0;
       for (const p of clippingCandidates(el)) {
-        const pcs = getComputedStyle(p);
-        if (pcs.overflowX === 'visible' && pcs.overflowY === 'visible') continue;
-        const pr = p.getBoundingClientRect();
-        // `overflow: clip` paints up to `overflow-clip-margin` beyond the padding box; `hidden` ignores it.
-        const margin = pcs.overflowX === 'clip' && pcs.overflowY === 'clip'
-          ? parseFloat(pcs.overflowClipMargin.split(/\s+/).pop() ?? '') || 0
-          : 0;
-        const s = Math.max(
-          pr.left - margin - ring.left, ring.right - (pr.right + margin),
-          pr.top - margin - ring.top, ring.bottom - (pr.bottom + margin),
-        );
+        const clip = clipRegion(p);
+        if (!clip) continue;
+        const { left, right, top, bottom } = clip.region;
+        const s = Math.max(left - ring.left, ring.right - right, top - ring.top, ring.bottom - bottom);
         if (s > 0.5) {
           const own = typeof p.className === 'string' ? p.className.trim() : '';
           const host = p.parentElement && typeof p.parentElement.className === 'string'
@@ -258,7 +288,7 @@ async function measureClipping(page: Page) {
             : '';
           clipper = own ? `${p.tagName}.${own.split(/\s+/).join('.')}`
                         : `${p.tagName} (unclassed, inside .${host})`;
-          overflow = `${pcs.overflowX}/${pcs.overflowY}`;
+          overflow = clip.reasons;
           short = Math.round(s * 100) / 100;
           break;
         }
@@ -331,7 +361,7 @@ test.describe('focus-ring scan', () => {
         detail.set(keyOf(f),
           `${f.selector} (${f.tag}.${f.cls.split(/\s+/).join('.')}) ` +
           `outline ${f.width}px @ offset ${f.offset}px is clipped by ${f.clipper} ` +
-          `(overflow ${f.overflow}) — overshoots by ${f.short}px`);
+          `(${f.overflow}) — overshoots by ${f.short}px`);
       }
       const seen = [...detail.keys()].sort();
 
@@ -361,6 +391,152 @@ test.describe('focus-ring scan', () => {
       ).toEqual([]);
     });
   }
+});
+
+// The clipping model itself, on synthetic markup appended to a page that has the theme loaded (follow-up 37). Each case
+// puts a `.z-button` in a box that is exactly as large as the button, so the 4px ring has no room: a positive case must be
+// reported, a negative one must not. The first four gaps were missed by the scan before: standalone `translate`, `rotate`
+// and `scale` make a containing block (the clipper above is on the chain of an absolutely positioned button), `contain:
+// paint` and `clip-path` clip, `overflow` clips at the padding box (a border thicker than the ring hid it), and
+// `overflow-x: clip` leaves the y axis visible.
+const FIXTURE_PAGE = '/button.zul';
+const BUTTON = '<button class="z-button" style="display:block;width:100%;height:100%;margin:0;box-sizing:border-box">Go</button>';
+const ABSOLUTE_BUTTON = BUTTON.replace('style="', 'style="position:absolute;left:0;top:0;');
+const BOX = 'width:80px;height:36px';
+
+const MODEL_CASES: { name: string; html: string; clipped: boolean }[] = [
+  ...[['translate', '0px 0px'], ['rotate', '0deg'], ['scale', '1']].map(([property, value]) => ({
+    name: `${property} makes a containing block, so the overflow clipper above an absolutely positioned control clips it`,
+    html: `<div style="position:relative"><div style="overflow:hidden;${BOX}">` +
+      `<div style="${property}:${value};width:100%;height:100%">${ABSOLUTE_BUTTON}</div></div></div>`,
+    clipped: true,
+  })),
+  ...['paint', 'strict', 'content'].map((value) => ({
+    name: `contain: ${value} clips the ring`,
+    html: `<div style="contain:${value};${BOX}">${BUTTON}</div>`,
+    clipped: true,
+  })),
+  { name: 'clip-path clips the ring', html: `<div style="clip-path:inset(0);${BOX}">${BUTTON}</div>`, clipped: true },
+  {
+    name: 'overflow clips at the padding box, so a border around it does not hide the clip',
+    html: `<div style="overflow:hidden;box-sizing:content-box;${BOX};border:8px solid #ccc">${BUTTON}</div>`,
+    clipped: true,
+  },
+  {
+    name: 'overflow-x: clip clips the ring on the x axis',
+    html: `<div style="overflow-x:clip;overflow-y:visible;${BOX}">${BUTTON}</div>`,
+    clipped: true,
+  },
+  {
+    name: 'overflow-x: clip leaves the y axis visible, so a ring that only overshoots in y is not clipped',
+    html: `<div style="overflow-x:clip;overflow-y:visible;width:200px"><div style="${BOX};margin:0 auto">${BUTTON}</div></div>`,
+    clipped: false,
+  },
+  {
+    name: 'a ring inside the padding box of a clipper with room is not clipped',
+    html: `<div style="overflow:hidden;box-sizing:content-box;width:80px;height:36px;padding:8px">${BUTTON}</div>`,
+    clipped: false,
+  },
+];
+
+test.describe('focus-ring scan — clipping model', () => {
+  for (const { name, html, clipped } of MODEL_CASES) {
+    test(name, async ({ page, context }) => {
+      await page.goto(FIXTURE_PAGE, { waitUntil: 'domcontentloaded' });
+      await page.waitForSelector('.z-page', { timeout: 15000 });
+      await page.evaluate(() => document.fonts.ready.then(() => true));
+      await page.evaluate((markup) => {
+        const host = document.createElement('div');
+        host.style.cssText = 'position:relative;margin:40px';
+        host.innerHTML = markup;
+        document.body.append(host);
+        host.querySelector('button')!.setAttribute('data-fs-idx', '0');
+      }, html);
+      const cdp = await context.newCDPSession(page);
+      await cdp.send('DOM.enable');
+      await cdp.send('CSS.enable');
+      await forceFocus(cdp, 1, true);
+      const found = await measureClipping(page);
+      await forceFocus(cdp, 1, false);
+      await cdp.detach();
+      expect(found.length, `findings: ${JSON.stringify(found)}`).toBe(clipped ? 1 : 0);
+    });
+  }
+});
+
+// A ring can be painted over by a neighbour as well as clipped: the scan above cannot see that. The toolbarbutton of
+// listbox-header.zul is followed by a `.z-menubar` (z-index 100) that covered the 4px of its ring reaching into it
+// (follow-up 36). Read off a screenshot: what is painted in the ring band is the ring colour.
+test.describe('focus-ring scan — ring painted over by a neighbour', () => {
+  test('listbox-header: the ring of a toolbarbutton is painted over the menubar that follows it', async ({ page }) => {
+    await page.goto('/listbox-header.zul', { waitUntil: 'domcontentloaded' });
+    const button = page.locator('.z-listheader .z-toolbarbutton').first();
+    await button.waitFor();
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+    await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
+    await button.scrollIntoViewIfNeeded();
+    await page.keyboard.press('Tab');
+    await button.focus();
+    const ring = await button.evaluate((el) => {
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2, bottom: rect.bottom + window.scrollY,
+        reach: (parseFloat(style.outlineWidth) || 0) + (parseFloat(style.outlineOffset) || 0),
+        colour: (style.outlineColor.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number),
+        menubarBelow: !!el.parentElement!.querySelector('.z-menubar'),
+      };
+    });
+    expect(ring.menubarBelow, 'the toolbarbutton has a menubar next to it').toBe(true);
+    // The pixel row just inside the outer edge of the ring, under the toolbarbutton.
+    const png = await page.screenshot({
+      fullPage: true, clip: { x: Math.floor(ring.x), y: Math.floor(ring.bottom + ring.reach - 1), width: 1, height: 1 },
+    });
+    const painted = await page.evaluate(async (base64) => {
+      const image = new Image();
+      image.src = `data:image/png;base64,${base64}`;
+      await image.decode();
+      const canvas = document.createElement('canvas');
+      canvas.width = 1;
+      canvas.height = 1;
+      const context = canvas.getContext('2d')!;
+      context.drawImage(image, 0, 0);
+      return Array.from(context.getImageData(0, 0, 1, 1).data.slice(0, 3));
+    }, png.toString('base64'));
+    const difference = painted.reduce((sum, channel, i) => sum + Math.abs(channel - ring.colour[i]), 0);
+    expect(difference, `ring bottom is ${JSON.stringify(painted)}, outline ${JSON.stringify(ring.colour)}`).toBeLessThanOrEqual(24);
+  });
+
+  // The `z-index: 101` that lifts the ring above the menubar belongs to a toolbarbutton that has a menubar after it. On any
+  // other toolbarbutton it paints a keyboard-focused button over the opt-in `.z-sticky-header` header (z-index 2) once the
+  // row has been scrolled under it.
+  test('a focused toolbarbutton scrolled under a sticky header stays under it', async ({ page }) => {
+    await page.goto('/pv/toolbarbutton-sticky-guard.zul', { waitUntil: 'domcontentloaded' });
+    const button = page.locator('.tsg-scroller .z-toolbarbutton').nth(4);
+    await button.waitFor();
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+    await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
+    await page.keyboard.press('Tab');
+    await button.evaluate((el) => {
+      const scroller = el.closest('.tsg-scroller') as HTMLElement;
+      const header = scroller.querySelector('.z-listbox-header') as HTMLElement;
+      const buttonTop = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+      scroller.scrollTop = buttonTop - header.getBoundingClientRect().height / 2;
+      (el as HTMLElement).focus({ preventScroll: true });
+    });
+    const topmost = await button.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      const header = el.closest('.tsg-scroller')!.querySelector('.z-listbox-header')!.getBoundingClientRect();
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      return {
+        focused: el.matches(':focus-visible'), underHeader: rect.top + rect.height / 2 < header.bottom,
+        header: !!hit?.closest('.z-listbox-header'), hit: hit?.className,
+      };
+    });
+    expect(topmost.focused, 'the toolbarbutton has keyboard focus').toBe(true);
+    expect(topmost.underHeader, 'the centre of the toolbarbutton is under the header').toBe(true);
+    expect(topmost.header, `the header is on top of the button, the topmost element is "${topmost.hit}"`).toBe(true);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

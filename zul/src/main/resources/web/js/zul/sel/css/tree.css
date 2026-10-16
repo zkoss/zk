@@ -92,11 +92,22 @@
 
 /* ZK-6112: `overflow: hidden` clips at the padding box, which cut the focus ring (outline 2px +
    offset 2px) of a control placed in the header. Browsers without `overflow-clip-margin`
-   (Safari) cannot keep the ring and the ellipsis together, so a header that holds a native
-   control gives up the ellipsis: a long label is cut at the cell edge by the header cell. A
+   (Safari) cannot keep the ring and the ellipsis together, so there a header that holds a native
+   control gives up the ellipsis: a long label is cut at the cell edge by the header cell.
+   Elsewhere `overflow: clip` with a 4px clip margin (the ring's reach) keeps the ring, and
+   `text-overflow: clip` keeps the control: an ellipsis hides a control that does not fit, so the
+   label is cut at the first obstacle instead. A
    select-all-only header has no native control and keeps `hidden`. */
 .z-treecol-content:has(:is(button, a, input, select, textarea)) {
     overflow: visible;
+}
+
+@supports (overflow-clip-margin: 4px) {
+    .z-treecol-content:has(:is(button, a, input, select, textarea)) {
+        overflow: clip;
+        overflow-clip-margin: 4px;
+        text-overflow: clip;
+    }
 }
 
 /* A header image keeps the flex centring of the label. Inline, `middle` would centre the image on
@@ -228,10 +239,10 @@
 }
 
 /* align on treecol is rendered as inline text-align on the TD; the flex content
-   box ignores it, so map it to justify-content */
-.z-treecell[style*="text-align: right"] > .z-treecell-content,
-.z-treecell[style*="text-align: end"] > .z-treecell-content { justify-content: flex-end; }
-.z-treecell[style*="text-align: center"] > .z-treecell-content { justify-content: center; }
+   box ignores it, so map it to justify-content. A hand-written style has no space after the colon. */
+.z-treecell:is([style*="text-align: right"], [style*="text-align:right"]) > .z-treecell-content,
+.z-treecell:is([style*="text-align: end"], [style*="text-align:end"]) > .z-treecell-content { justify-content: flex-end; }
+.z-treecell:is([style*="text-align: center"], [style*="text-align:center"]) > .z-treecell-content { justify-content: center; }
 
 .z-treecell-text {
     overflow: hidden;

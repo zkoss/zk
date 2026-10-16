@@ -597,11 +597,54 @@ an ellipsis before the sort arrow and the menu button.
   elsewhere (Safari has no `overflow-clip-margin`). The first attempt with `overflow: clip` everywhere (`6bde2fb120`)
   was replaced because it left the ring cut in Safari.
 
+**Resolved** in zk `c793d81149` (`grid.css`, `listbox.css`, `tree.css`, guard `registerHeaderControlKeepsEllipsisAndRing` in
+`mesh-header-footer.spec.ts`, fixtures `.mhf-grid-control`, `.mhf-listbox-control` and `.mhf-tree-control`): the option above, on the same
+`:has()` rules. The margin is the reach of the ring, measured: outline 2px + offset 2px = 4px. Chromium and Firefox: the content is
+`overflow: clip` with `overflow-clip-margin: 4px`, the header paints the ellipsis (the header looks different with `text-overflow: clip`; it
+looked the same before) and the top and bottom pixels of the ring are the outline colour. WebKit: `CSS.supports('overflow-clip-margin', '4px')`
+is false, the content stays `overflow: visible`, the guard passes there as the unchanged state. The ring guard is red with
+`overflow: hidden` in Firefox and WebKit (6 of 6 cases; the ring is whole on the previous CSS in Chromium, so it holds a regression there only), the ellipsis guard is red on the previous CSS in Chromium (3 of 3). In the fixture
+the control follows the label, so a long label pushes it out of the cell (button x 211-262 in a header 33-193): the ellipsis cases read the
+long-label column, the ring cases a second column with a short label that leaves the button in view.
+
+**Regression of `c793d81149`, fixed in the NS32 commit** (`grid.css`, `listbox.css`, `tree.css`; guards in `mesh-header-footer.spec.ts`): with
+`overflow: clip` the base `text-overflow: ellipsis` took effect, and an ellipsis hides an atomic inline control that does not fit.
+`<listheader width="140px" label="Name"><textbox/></listheader>` (also Grid, Tree) lost its textbox at 1px of overflow: invisible in Chromium
+and Firefox. The fixture of `c793d81149` kept the button outside the cell, so no guard saw it. Fix: `text-overflow: clip` inside the three
+`@supports (overflow-clip-margin: 4px)` blocks (O1: a control that is visible and usable is worth more than the ellipsis glyph). Measured, a
+`<textbox/>` made 1px and 20px wider than the content box: visible (the top border is painted) and `elementFromPoint` at the visible centre
+returns the textbox, in Chromium and Firefox, Grid, Listbox and Tree; a long label is cut at the content box + 4px, which is the first
+obstacle (the sort arrow at 116px in Grid and Listbox, 144px in Tree; the menu button is further right), so it never paints under the arrow
+or the menu button, and the ring is whole. WebKit has no `overflow-clip-margin`, the block does not apply, it is unchanged. The ellipsis
+glyph is gone in Chromium and Firefox (accepted). Guards (red on the CSS of `c793d81149`, green after): the label ink does not cross the
+first obstacle (sorted, not sorted, not sorted and hovered; not in Safari, where the label paints under the arrow as before), and the textbox
+column `<…header width="140px" label="Name"><textbox/></…header>` at +1px and +20px, read off the screenshot and by `elementFromPoint`.
+
+Remaining cost, accepted: a lone control wider than the content box is clipped at the content box + 4px, not at the edge of the `th`. In a
+120px column that is 12px less visible than before `c793d81149`. It occurs only when the control is wider than the column.
+
 ## 36. The Listbox toolbarbutton focus ring is covered by the neighbouring menubar (L1, pre-existing)
 
 On `listbox-header`, the bottom 4px of the `.z-toolbarbutton` focus ring is covered by the adjacent `.z-menubar`
 (`position: relative; z-index: 100`, `menu.css:66`). It is an overlap and not a clip, so `focus-ring-scan` cannot see
 it. It is older than ZK-6112 and was left as found (O10).
+
+**Resolved** in zk `0b51eeefc6` (`toolbarbutton.css`, guard `listbox-header: the ring of a toolbarbutton is painted over the menubar that
+follows it` in `focus-ring-scan.spec.ts`). Owner (O1): Marble. IceBlue draws the focus of a toolbarbutton as a border colour inside the box
+(`toolbar.less` `&:focus`), so there is no ring to cover, and its `.z-menubar` is `position: relative` without a `z-index`; the 4px ring and the
+`z-index: 100` of the menubar (`menu.css:66`, the sticky chrome layer of `doc/zindex-audit.md`) are both Marble's. The `z-index` stays: dropping
+it would not help, a later positioned sibling still paints over the outline of an earlier one. A focused `.z-toolbarbutton` is `z-index: 101`.
+Only this control is covered: a `z-button` after the menubar, and the menu items, have rings that do not reach into it. Guard: the pixel just
+inside the outer edge of the ring under the button is `[240,244,250]` before (the menubar), the outline colour after (channel differences add up to 24 at most). The
+guard reads pixels because `elementFromPoint` does not see an outline and answers with the menubar before and after.
+
+**Narrowed in the NS32 commit** (`toolbarbutton.css`; guard `a focused toolbarbutton scrolled under a sticky header stays under it` in
+`focus-ring-scan.spec.ts`, fixture `pv/toolbarbutton-sticky-guard.zul`): a `z-index: 101` on every focused toolbarbutton painted a
+keyboard-focused button in a scrolling row over the opt-in `.z-sticky-header` header (z-index 2). The rule is now
+`.z-toolbarbutton:focus-visible:has(~ .z-menubar)`. In `listbox-header.zul` the toolbarbutton and the menubar are siblings in
+`.z-listheader-content`, the menubar after the button (`:has(~ .z-menubar)` matches it). The guard scrolls a row under the header and
+asks `elementFromPoint` at the centre of the focused button: the button before, the header after. The item-36 guard stays green. The
+z-index of the sticky header is unchanged, so the global stacking is not touched.
 
 ## 37. Gaps in `focus-ring-scan` (L3, pre-existing)
 
@@ -615,6 +658,21 @@ The scan (`focus-ring-scan.spec.ts`, `measureClipping` and `clippingCandidates`)
   both axes are `visible`.
 
 Left as found (O10).
+
+**Resolved** in zk `d24685cac8` (`focus-ring-scan.spec.ts`: `createsContainingBlock`, a new `clipRegion`, and the `focus-ring scan — clipping
+model` cases). An ancestor now clips through `overflow` per axis (the axis that is `visible` is not checked), `contain: paint` (also `strict`
+and `content`) and `clip-path` (the shape is taken as the border box), at its padding box, which `overflow: clip` extends by
+`overflow-clip-margin` on the axis that is `clip`. Synthetic markup on `/button.zul` puts a `.z-button` in a box as large as the button; on the
+previous scan 9 of the 11 cases fail: `translate`, `rotate` and `scale` (3, the overflow clipper above an absolutely positioned control was
+not on the chain), `contain: paint`, `strict`, `content` and `clip-path` (4, no clip seen), the padding box (a border of 8px hid the clip), and
+`overflow-x: clip` with a ring that overshoots in y only (reported, but y is visible); the two that pass on both are the controls (a ring that
+overshoots in x is reported, a ring with room in the padding box is not). The real scan: 69 passed and 47 skipped, against 57 and 47 before
+(the 12 added are the 11 model cases and the toolbarbutton guard of item 36), no new clip on a preview page and no known clip gone. The model
+still does not read `mask`, `clip-path` shapes smaller than the border box, a `will-change` of `translate`, `rotate` or `scale`, or the area
+a scrollbar takes from the padding box.
+
+Known false positives of the model, left as found: `clip-path` is taken as the border box, so `inset(-Npx)` or any shape larger than the
+border box is reported as a clip; `contain: paint` clips at the padding box and ignores `overflow-clip-margin`.
 
 ## 38. A Tree row whose first cell holds a control is shorter than the Grid row (pre-existing)
 
@@ -1029,6 +1087,12 @@ font-load race in ZK's size-by-content measurement; not confirmed. The committed
   **Accepted limitation** (NS31, verifier F2): with the paging mold or opt-in ROD the CSS sees the rendered rows only, so a page that holds
   leaves only is centred and a page that holds a container row is not, and an ROD tree jumps 12px (the box moves by one nesting step) when a
   container row loads. Excluding those molds would take the centring from a flat paging tree; CSS cannot see rows that are not in the DOM.
+
+  **F1 resolved** (NS23) in zk `ed08f1abc8` (`tree.css`, guard `.mhf-tree-style-no-space` in `mesh-header-footer.spec.ts`): the flex alignment
+  of a cell (`justify-content` for `text-align` right, end and center) took the spelling with a space only, while the centring rules take both,
+  so a hand-written `<treecell style="text-align:center"/>` lost its padding and was not centred (box centre 41, cell centre 113). Both
+  spellings match now; the guard is red on the previous CSS (72px off) and green on the new. **F2 resolved** in `6545f9e52d`: cm9 of
+  `doc/contracts/tree.md` and the spec comment name `.mhf-tree-label-100` and `.mhf-tree-label-160` as the nested label fixtures.
 - `.z-spinner` is 43px tall and `.z-timebox` 37px in compact density, against 40px and 32px for the other inputs (its two 20px
   icons and separator pin the button column). Same under old and new CSS.
 - Already red before NS26, found while running the baselines: `chromium` `screenshot.spec.ts` navbar selected item, multislider

@@ -46,6 +46,8 @@ import { test, expect, Locator, Page } from '@playwright/test';
 //    select-all-only header at its minimum width (68px / 88px) paints the whole box inside the content box and clear of the
 //    button (follow-up 30);
 //  - an image + sort + menu header keeps the label, arrow and button in that order on a tablet too (follow-up 30);
+//  - a header that holds a native control cuts a long label before the sort arrow and the menu button, keeps the
+//    control visible and clickable at any overflow, and keeps the whole focus ring of the control (follow-up 35);
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -335,6 +337,194 @@ function registerTreeSelectAllOnlyHeader() {
     const clipped = await header.screenshot({ animations: 'disabled' });
     expect(withEllipsis.equals(clipped), 'the header looks different with text-overflow clip, so an ellipsis is painted').toBe(true);
   });
+}
+
+// A header that holds a native control keeps the control usable and its focus ring whole (follow-up 35). The ring
+// (2px outline + 2px offset) lies 4px outside the control, so the header content clips with `overflow: clip` and a 4px
+// `overflow-clip-margin` where the browser has the property. Safari does not: there the content stays `overflow: visible`.
+// `text-overflow: clip` goes with it: an ellipsis hides a control that does not fit, so the label is cut at the first
+// obstacle instead (the sort arrow or the menu button) and the control stays visible and clickable.
+const RING_REACH_PX = 4;
+const RING_COLOUR_TOLERANCE = 24;
+const INK_TOLERANCE = 48;
+const LABEL_OBSTACLE_TOLERANCE_PX = 1;
+const CELL_BORDER_INSET_PX = 3;
+const BORDER_STRIP_START_PX = 8;
+const BORDER_STRIP_WIDTH_PX = 20;
+const BORDER_STRIP_HEIGHT_PX = 3;
+const MIN_BORDER_INK_PIXELS = BORDER_STRIP_WIDTH_PX / 2;
+const OVERFLOWS_PX = [1, 20];
+
+interface ControlHeader {
+  root: string;
+  header: string;
+  content: string;
+  sortIcon: string;
+  menuButton: string;
+  // 1-based header columns, see the fixture: the sorted long label, an unsorted one (Grid and Listbox), the textbox.
+  sortedColumn: number;
+  unsortedColumn?: number;
+  nameColumn: number;
+}
+
+const CONTROL_HEADERS: ControlHeader[] = [
+  { root: '.mhf-grid-control', header: 'th.z-column', content: '.z-column-content', sortIcon: '.z-column-sorticon',
+    menuButton: '.z-column-button', sortedColumn: 1, unsortedColumn: 3, nameColumn: 4 },
+  { root: '.mhf-listbox-control', header: 'th.z-listheader', content: '.z-listheader-content', sortIcon: '.z-listheader-sorticon',
+    menuButton: '.z-listheader-button', sortedColumn: 1, unsortedColumn: 3, nameColumn: 4 },
+  { root: '.mhf-tree-control', header: 'th.z-treecol', content: '.z-treecol-content', sortIcon: '.z-treecol-sorticon',
+    menuButton: '.z-treecol-button', sortedColumn: 1, nameColumn: 3 },
+];
+const RING_COLUMN = 2;
+
+const supportsClipMargin = (page: Page) => page.evaluate(() => CSS.supports('overflow-clip-margin', '4px'));
+
+// Decodes a PNG in the page and hands its RGBA pixels to `read`, so a spec can look at what is painted.
+function decodePixels<T, A>(
+  page: Page, png: Buffer, argument: A,
+  read: (pixels: Uint8ClampedArray, width: number, height: number, argument: A) => T,
+): Promise<T> {
+  return page.evaluate(async ({ base64, source, argument }) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${base64}`;
+    await image.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const context = canvas.getContext('2d')!;
+    context.drawImage(image, 0, 0);
+    const { data } = context.getImageData(0, 0, image.width, image.height);
+    return new Function('pixels', 'width', 'height', 'argument', `return (${source})(pixels, width, height, argument)`)(data, image.width, image.height, argument);
+  }, { base64: png.toString('base64'), source: read.toString(), argument });
+}
+
+// The colour of the pixel at (x, y) of the page, read off a screenshot.
+async function pixelAt(page: Page, x: number, y: number): Promise<number[]> {
+  const png = await page.screenshot({ fullPage: true, clip: { x: Math.floor(x), y: Math.floor(y), width: 1, height: 1 } });
+  return decodePixels(page, png, null, (pixels) => Array.from(pixels.slice(0, 3)));
+}
+
+// How many pixels of a page region differ from `background` by more than `tolerance`, and the rightmost such column.
+async function inkIn(page: Page, clip: { x: number; y: number; width: number; height: number }, background: number[]) {
+  const png = await page.screenshot({ fullPage: true, animations: 'disabled', clip });
+  return decodePixels(page, png, { background, tolerance: INK_TOLERANCE }, (pixels, width, height, { background, tolerance }) => {
+    let count = 0;
+    let rightmost = -1;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const i = (y * width + x) * 4;
+        const difference = Math.abs(pixels[i] - background[0]) + Math.abs(pixels[i + 1] - background[1]) + Math.abs(pixels[i + 2] - background[2]);
+        if (difference > tolerance) {
+          count++;
+          rightmost = Math.max(rightmost, x);
+        }
+      }
+    }
+    return { count, rightmost };
+  });
+}
+
+function registerHeaderControlStaysUsableAndRingWhole() {
+  for (const spec of CONTROL_HEADERS) {
+    const { root, header, content } = spec;
+    const th = (column: number) => `${root} ${header}:nth-child(${column})`;
+
+    // The label ink, read with the controls and obstacles hidden: where is the label painted, and where is the first
+    // obstacle (the sort arrow or the menu button, whichever is wider than 0 and leftmost).
+    async function labelAgainstObstacle(page: Page, column: number, hover: boolean) {
+      const cell = page.locator(th(column));
+      if (hover) await cell.hover();
+      await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
+      const measured = await cell.evaluate((el, { sortIcon, menuButton }) => {
+        const rect = el.getBoundingClientRect();
+        const obstacles = [...el.querySelectorAll(`${sortIcon}, ${menuButton}`)]
+          .map((obstacle) => obstacle.getBoundingClientRect())
+          .filter((box) => box.width > 0)
+          .map((box) => box.left - rect.left);
+        for (const hidden of el.querySelectorAll(`${sortIcon}, ${menuButton}, button, input`)) (hidden as HTMLElement).style.visibility = 'hidden';
+        return { left: rect.left, top: rect.top + window.scrollY, width: rect.width, height: rect.height, obstacle: Math.min(...obstacles) };
+      }, spec);
+      // Inset: the cell border (a column divider, the bottom border) is ink too, and not the label.
+      const clip = {
+        x: measured.left, y: measured.top + CELL_BORDER_INSET_PX,
+        width: measured.width - CELL_BORDER_INSET_PX, height: measured.height - 2 * CELL_BORDER_INSET_PX,
+      };
+      const background = await pixelAt(page, measured.left + 2, measured.top + CELL_BORDER_INSET_PX);
+      const ink = await inkIn(page, clip, background);
+      return { ...measured, ink };
+    }
+
+    for (const [state, column, hover] of [
+      ['sorted', spec.sortedColumn, false],
+      ...(spec.unsortedColumn ? [['not sorted', spec.unsortedColumn, false], ['not sorted and hovered', spec.unsortedColumn, true]] : []),
+    ] as [string, number, boolean][]) {
+      test(`${root}: a long label (${state}) is cut before the first obstacle`, async ({ page }) => {
+        await open(page);
+        test.skip(!(await supportsClipMargin(page)), 'Safari has no overflow-clip-margin: the header keeps overflow visible there, a long label paints under the arrow as before');
+        const { obstacle, ink } = await labelAgainstObstacle(page, column, hover);
+        expect(Number.isFinite(obstacle), 'the header has a sort arrow or a menu button wider than 0').toBe(true);
+        expect(ink.rightmost, 'the label is painted').toBeGreaterThan(0);
+        expect(ink.rightmost, `label ink ends at x=${ink.rightmost}, the first obstacle starts at x=${obstacle}`)
+          .toBeLessThanOrEqual(obstacle + LABEL_OBSTACLE_TOLERANCE_PX);
+      });
+    }
+
+    test(`${root}: the focus ring of a control is whole`, async ({ page }) => {
+      await open(page);
+      const button = page.locator(`${th(RING_COLUMN)} button`);
+      await page.keyboard.press('Tab');
+      await button.focus();
+      await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
+      const box = await button.evaluate((el) => {
+        const rect = el.getBoundingClientRect();
+        return {
+          centreX: rect.left + rect.width / 2, top: rect.top + window.scrollY, bottom: rect.bottom + window.scrollY,
+          colour: (getComputedStyle(el).outlineColor.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number),
+        };
+      });
+      const middleOfRing = RING_REACH_PX - 1;
+      for (const [side, y] of [['top', box.top - middleOfRing], ['bottom', box.bottom + middleOfRing - 1]] as const) {
+        const painted = await pixelAt(page, box.centreX, y);
+        const difference = painted.reduce((sum, channel, i) => sum + Math.abs(channel - box.colour[i]), 0);
+        expect(difference, `${side} of the ring is ${JSON.stringify(painted)}, outline ${JSON.stringify(box.colour)}`)
+          .toBeLessThanOrEqual(RING_COLOUR_TOLERANCE);
+      }
+    });
+
+    for (const overflow of OVERFLOWS_PX) {
+      test(`${root}: a textbox ${overflow}px wider than the content box stays visible and clickable`, async ({ page }) => {
+        await open(page);
+        const input = page.locator(`${th(spec.nameColumn)} input`);
+        await input.evaluate((el) => el.scrollIntoView({ block: 'center' }));
+        const clipMargin = (await supportsClipMargin(page)) ? RING_REACH_PX : 0;
+        const probe = await input.evaluate((el, { over, contentSelector }) => {
+          const cellContent = el.closest(contentSelector) as HTMLElement;
+          const input = el as HTMLInputElement;
+          const contentRight = () => cellContent.getBoundingClientRect().left + cellContent.clientWidth
+            - parseFloat(getComputedStyle(cellContent).paddingRight);
+          // Where a browser sizes the columns by their content, the width of the textbox moves the content box: settle it.
+          input.style.width = '';
+          for (let pass = 0; pass < 3; pass++) {
+            input.style.width = `${input.getBoundingClientRect().width + contentRight() + over - input.getBoundingClientRect().right}px`;
+          }
+          const rect = input.getBoundingClientRect();
+          return { left: rect.left, right: rect.right, top: rect.top, pageTop: rect.top + window.scrollY, height: rect.height, contentRight: contentRight() };
+        }, { over: overflow, contentSelector: content });
+        // Hit-test first: a full-page screenshot may move the scroll position in some engines.
+        const visibleRight = Math.min(probe.right, probe.contentRight + clipMargin);
+        const hit = await input.evaluate((el, point) => document.elementFromPoint(point.x, point.y) === el, {
+          x: (probe.left + visibleRight) / 2, y: probe.top + probe.height / 2,
+        });
+        expect(hit, 'elementFromPoint at the visible centre of the textbox is the textbox').toBe(true);
+        // The top border of the textbox, away from its rounded corners and from the label: an ellipsis paints at the baseline
+        // and never reaches it.
+        const background = await pixelAt(page, probe.left + BORDER_STRIP_START_PX, probe.pageTop - BORDER_STRIP_START_PX);
+        const border = { x: probe.left + BORDER_STRIP_START_PX, y: probe.pageTop, width: BORDER_STRIP_WIDTH_PX, height: BORDER_STRIP_HEIGHT_PX };
+        const ink = await inkIn(page, border, background);
+        expect(ink.count, `the top border of the textbox paints ${ink.count} pixels`).toBeGreaterThanOrEqual(MIN_BORDER_INK_PIXELS);
+      });
+    }
+  }
 }
 
 const SUB_PIXEL_PX = 0.01;
@@ -641,6 +831,20 @@ function registerCheckmarkBoxColumns(density: 'default' | 'compact' | 'tablet') 
   }
 }
 
+// A hand-written `style="text-align:center"` (no space after the colon) centres the box of a checkmark cell as the column
+// `align="center"` does: the flex alignment rules of tree.css take both spellings (follow-up 59, F1).
+function registerTreeCellStyleWithoutSpace() {
+  test('.mhf-tree-style-no-space: the box of a cell with style="text-align:center" sits on the centre of the cell', async ({ page }) => {
+    await open(page);
+    const root = '.mhf-tree-style-no-space';
+    const box = await page.locator(`${root} tr.z-treerow .z-treerow-icon`).first()
+      .evaluate((icon) => { const { left, right } = icon.getBoundingClientRect(); return (left + right) / 2; });
+    const cell = await page.locator(`${root} tr.z-treerow td.z-treecell`).first()
+      .evaluate((td) => { const { left, right } = td.getBoundingClientRect(); return (left + right) / 2; });
+    expect(Math.abs(box - cell), `box centre ${box}, cell centre ${cell}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+}
+
 // The same for a checkmark Tree: the header box and the row box of a centred select-all-only column share one centre, the
 // column centre (cm6 of contracts/tree.md; the row box sat at the left edge, or 12px left of centre in a 160px column, and
 // the header box right of centre, follow-up 54), and in a left-aligned column both boxes stay on the keyline.
@@ -822,8 +1026,8 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
     });
 
   // In a tree of leaves only, the labelled header unit (box, 4px gap, label) is centred on the column (follow-up 59, NS31): the
-  // box is inside the column, the gap to the label is 4px, the long label is cut with the ellipsis. The fixtures of the nested
-  // `.mhf-tree-label-*` trees have a container row and therefore the pre-follow-up-54 header, so only these two guard it.
+  // box is inside the column, the gap to the label is 4px, the long label is cut with the ellipsis. The nested
+  // `.mhf-tree-label-100` and `.mhf-tree-label-160` trees have a container row and therefore the pre-follow-up-54 header, so only these two guard it.
   for (const width of [100, 160]) {
     const root = `.mhf-tree-label-flat-${width}`;
     test(`${root}: the header unit of a centred ${width}px labelled Tree column of leaves is centred on the column in ${density} density`,
@@ -1315,6 +1519,7 @@ test.describe('mesh header and footer', () => {
   registerSelectAllBoxIsNotClipped();
   registerSelectAllHeaderClearsArrowAndButton();
   registerMenuHeaderClearsArrowAndButton();
+  registerHeaderControlStaysUsableAndRingWhole();
   registerTreeHeaderMatchesGrid();
   registerCheckmarkRowsMatchGrid('default');
   registerCheckmarkRowsMatchGrid('compact');
@@ -1326,6 +1531,7 @@ test.describe('mesh header and footer', () => {
   registerCheckmarkBoxInAlignedFirstColumn();
   registerCheckmarkBoxColumns('default');
   registerTreeCheckmarkBoxColumns('default');
+  registerTreeCellStyleWithoutSpace();
   registerCheckmarkBoxColumns('compact');
   registerTreeCheckmarkBoxColumns('compact');
   registerCentredMenuHeaderBox('default');

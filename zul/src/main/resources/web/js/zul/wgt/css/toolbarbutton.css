@@ -48,9 +48,16 @@
 .z-toolbarbutton:focus-visible::before { opacity: var(--zk-state-focus-opacity); }
 .z-toolbarbutton:active::before      { opacity: var(--zk-state-pressed-opacity); }
 
+/* A `.z-menubar` (z-index 100, menu.css) after the button would paint over the 4px of the ring
+   that reaches into it, so the focused button rises above it. Any other toolbarbutton keeps the
+   default stacking: 101 would paint it over the opt-in `.z-sticky-header` (z-index 2). */
 .z-toolbarbutton:focus-visible {
     outline: var(--zk-focus-ring);
     outline-offset: 2px;
+}
+
+.z-toolbarbutton:focus-visible:has(~ .z-menubar) {
+    z-index: 101;
 }
 
 /* Content span — elevate above state layer */
