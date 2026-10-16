@@ -46,6 +46,27 @@ public class F110_ZK_6085_PortallayoutDraggingMovementsTest extends WebDriverTes
 	}
 
 	@Test
+	public void thePopupIsAMenu() {
+		connect();
+		clickTitleBar("translate");
+		JQuery menu = jq(".z-portallayout-popup-open .z-portallayout-popup-content").eq(0);
+		Assertions.assertEquals("menu", menu.attr("role"));
+		Assertions.assertEquals("Move Translate", menu.attr("aria-label"));
+		Assertions.assertEquals("menuitem", columns().eq(1).attr("role"));
+		Assertions.assertEquals("menu", columns().eq(1).attr("aria-haspopup"));
+		Assertions.assertEquals("false", columns().eq(1).attr("aria-expanded"));
+
+		click(columns().eq(1));
+		waitResponse();
+		JQuery submenu = jq(".z-portallayout-popup-open .z-portallayout-popup-content").eq(1);
+		Assertions.assertEquals("true", columns().eq(1).attr("aria-expanded"), "The column whose positions are open should be expanded");
+		Assertions.assertEquals(submenu.attr("id"), columns().eq(1).attr("aria-controls"));
+		Assertions.assertEquals("menu", submenu.attr("role"));
+		Assertions.assertEquals(columns().eq(1).attr("id"), submenu.attr("aria-labelledby"), "The positions should be named after their column");
+		Assertions.assertEquals("menuitem", positions().eq(0).attr("role"));
+	}
+
+	@Test
 	public void upOrDownClosesTheOpenPositions() {
 		connect();
 		clickTitleBar("translate");
@@ -57,6 +78,26 @@ public class F110_ZK_6085_PortallayoutDraggingMovementsTest extends WebDriverTes
 		Assertions.assertEquals("Done", jq(":focus").text());
 		Assertions.assertFalse(positions().exists(), "Moving to another column should close the positions of the one before");
 		Assertions.assertFalse(columns().eq(1).is(".z-portallayout-popup-selected"));
+	}
+
+	@Test
+	public void escapeClosesOnlyThePositions() {
+		connect();
+		clickTitleBar("translate");
+		click(columns().eq(1));
+		waitResponse();
+		getActions().sendKeys(Keys.ARROW_RIGHT).perform();
+		waitResponse();
+		Assertions.assertEquals("Move to top", jq(":focus").text(), "precondition: Right moved the focus into the positions of Doing");
+		getActions().sendKeys(Keys.ESCAPE).perform();
+		waitResponse();
+		Assertions.assertFalse(positions().exists(), "Escape on a position should close only the positions, as in a submenu");
+		Assertions.assertEquals("Doing", jq(":focus").text(), "The focus should go back to the column the positions belong to");
+		Assertions.assertEquals("false", columns().eq(1).attr("aria-expanded"), "Doing should no longer be expanded");
+		getActions().sendKeys(Keys.ESCAPE).perform();
+		waitResponse();
+		Assertions.assertFalse(jq(".z-portallayout-popup-open").exists(), "A second Escape should close the popup");
+		Assertions.assertTrue(jq("$translate").is(":focus"), "The focus should go back to the panel");
 	}
 
 	@Test
