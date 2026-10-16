@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6085-TabCloseTargetSize.zul
+
+	Purpose:
+		WCAG 2.5.8 Target Size (Minimum) - the close button inside a closable tab.
+
+	Description:
+		Only visible with za11y enabled.
+
+	History:
+		Fri Oct 02 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+	<n:h1>Tab close buttons</n:h1>
+	<label multiline="true">
+Requires za11y.
+1. in each tabbox below, look at the close button of the second tab: it is at least 24px square and lies inside its tab
+2. click each close button just inside its top-left corner: the tab closes instead of being selected
+3. reload the page and compare the second tab of the tabboxes with tabs on the left and on the right: the label keeps as clear of its close button on the right as on the left
+	</label>
+	<tabbox id="top">
+		<tabs>
+			<tab label="Top A"/>
+			<tab id="topClose" label="Top B" closable="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>Top A</tabpanel>
+			<tabpanel>Top B</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<tabbox id="bottom" orient="bottom">
+		<tabs>
+			<tab label="Bottom A"/>
+			<tab id="bottomClose" label="Bottom B" closable="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>Bottom A</tabpanel>
+			<tabpanel>Bottom B</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<tabbox id="left" orient="left">
+		<tabs>
+			<tab label="Left A"/>
+			<tab id="leftClose" label="Left B" closable="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>Left A</tabpanel>
+			<tabpanel>Left B</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<tabbox id="right" orient="right">
+		<tabs>
+			<tab label="Right A"/>
+			<tab id="rightClose" label="Right B" closable="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>Right A</tabpanel>
+			<tabpanel>Right B</tabpanel>
+		</tabpanels>
+	</tabbox>
+	<tabbox id="accordion" mold="accordion">
+		<tabs>
+			<tab label="Accordion A"/>
+			<tab id="accordionClose" label="Accordion B" closable="true"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>Accordion A</tabpanel>
+			<tabpanel>Accordion B</tabpanel>
+		</tabpanels>
+	</tabbox>
+</zk>
