@@ -20,8 +20,9 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
- * Portallayout's move popup: a click on the portallayout's own area, outside the popup, closes
- * it, and a press on the popup's padding focuses the popup itself, where its keys still work.
+ * Portallayout's move popup: a press on the portallayout's own area, outside the popup, closes
+ * it, on the release (WCAG 2.5.2), and a release back on the popup keeps it open. A press on the
+ * popup's padding focuses the popup itself, where its keys still work.
  */
 @Tag("WcagTestOnly")
 public class F110_ZK_6085_PortallayoutDismissTest extends WebDriverTestCase {
@@ -41,15 +42,45 @@ public class F110_ZK_6085_PortallayoutDismissTest extends WebDriverTestCase {
 		waitResponse();
 	}
 
+	private void moveToThePortallayout() {
+		// a column width past the right column's centre: on the portallayout itself, beside its columns
+		JQuery right = jq("$right");
+		getActions().moveToElement(toElement(right)).moveByOffset(right.outerWidth(), 0).perform();
+	}
+
 	@Test
 	public void clickOnThePortallayoutClosesThePopup() {
 		connect();
 		open();
-		// a column width past the right column's centre: on the portallayout itself, beside its columns
-		JQuery right = jq("$right");
-		getActions().moveToElement(toElement(right)).moveByOffset(right.outerWidth(), 0).click().perform();
+		moveToThePortallayout();
+		getActions().click().perform();
 		waitResponse();
 		Assertions.assertFalse(jq(POPUP).exists(), "a click on the portallayout outside the popup closes it");
+	}
+
+	@Test
+	public void pressOnThePortallayoutClosesThePopupOnRelease() {
+		connect();
+		open();
+		moveToThePortallayout();
+		getActions().clickAndHold().perform();
+		waitResponse();
+		Assertions.assertTrue(jq(POPUP).exists(), "a press outside must not close the popup");
+		getActions().release().perform();
+		waitResponse();
+		Assertions.assertFalse(jq(POPUP).exists(), "releasing on the portallayout outside the popup closes it");
+	}
+
+	@Test
+	public void releaseBackOnThePopupKeepsItOpen() {
+		connect();
+		open();
+		moveToThePortallayout();
+		getActions().clickAndHold().perform();
+		waitResponse();
+		getActions().moveToElement(toElement(jq(POPUP))).release().perform();
+		waitResponse();
+		Assertions.assertTrue(jq(POPUP).exists(), "a release back on the popup aborts the dismissal");
 	}
 
 	@Test

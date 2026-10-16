@@ -3,11 +3,13 @@
 F110-ZK-6085-PortallayoutDismiss.zul
 
 	Purpose:
-		Dismissing Portallayout's move popup with the pointer.
+		Dismissing Portallayout's move popup with the pointer, and WCAG 2.5.2 Pointer Cancellation
+		(Level A) for it.
 
 	Description:
-		With za11y, a click on the portallayout's own area, outside the popup, closes the popup. A
-		press on the popup's padding focuses the popup itself, where its keys still work.
+		With za11y, a press on the portallayout's own area, outside the popup, closes the popup on
+		the release, and a release back on the popup keeps it open. A press on the popup's padding
+		focuses the popup itself, where its keys still work.
 
 	History:
 		Fri Oct 16 10:53:34 CST 2026, Created by peggypeng
@@ -18,10 +20,11 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 <zk>
 	<label multiline="true">
 		1. press Tab until "Mail" is focused and press Space: its move popup opens
-		2. click the empty right part of the portallayout: the popup closes
-		3. open the popup again and click its padding, beside an item: the popup stays open and is focused
-		4. press Down: the first item is focused; click the padding again and press Up: the last item is focused
-		5. click the padding again and press Enter: nothing happens; press Escape: the popup closes and "Mail" is focused
+		2. press and hold on the empty right part of the portallayout: the popup stays open until you release there, which closes it
+		3. open the popup again, press and hold on the portallayout, then release on the popup: the popup stays open
+		4. click the popup's padding, beside an item: the popup stays open and is focused
+		5. press Down: the first item is focused; click the padding again and press Up: the last item is focused
+		6. click the padding again and press Enter: nothing happens; press Escape: the popup closes and "Mail" is focused
 	</label>
 	<portallayout id="layout">
 		<portalchildren title="Left" width="30%">
