@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6085-AnchornavTargetSize.zul
+
+	Purpose:
+		WCAG 2.5.8 Target Size (Minimum) - the links an anchornav tracks.
+
+	Description:
+		Only visible with za11y enabled. The page adds no styling of its own.
+
+	History:
+		Wed Oct 14 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:h1>Anchornav links</n:h1>
+	<label multiline="true">
+Requires za11y. Every link in the navigation below, in the list, the vlayout and the hlayout, is at
+least 24px tall and 24px wide. Clicking a link scrolls to its section and marks the link active.
+	</label>
+	<anchornav>
+		<div id="list">
+			<n:ul>
+				<n:li><a label="Section 1" ca:data-anchornav-target="$s1"/></n:li>
+				<n:li><a label="Section 2" ca:data-anchornav-target="$s2"/></n:li>
+				<n:li><a label="Section 3" ca:data-anchornav-target="$s3"/></n:li>
+			</n:ul>
+		</div>
+		<vlayout id="column">
+			<a label="Section 1" ca:data-anchornav-target="$s1"/>
+			<a label="Section 2" ca:data-anchornav-target="$s2"/>
+			<a label="Section 3" ca:data-anchornav-target="$s3"/>
+		</vlayout>
+		<hlayout id="row">
+			<a label="Section 1" ca:data-anchornav-target="$s1"/>
+			<a label="Section 2" ca:data-anchornav-target="$s2"/>
+			<a label="Section 3" ca:data-anchornav-target="$s3"/>
+		</hlayout>
+	</anchornav>
+	<div id="s1" height="600px"><n:h2>Section 1</n:h2></div>
+	<div id="s2" height="600px"><n:h2>Section 2</n:h2></div>
+	<div id="s3" height="600px"><n:h2>Section 3</n:h2></div>
+</zk>
