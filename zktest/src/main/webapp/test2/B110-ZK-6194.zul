@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6194.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Fri Oct 16 15:30:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label id="lblTitle" multiline="true">
+		1. The committed range starts at 2026-08-07 09:00–10:00.
+		2. Open the popup and change dates and both times: the count must remain 0 until dismissal.
+		3. Click Cancel or press Escape: discard all changes, including Clear or Today, and keep the initial range.
+		4. Change 09:00–10:00 to 11:00–12:00: changing fields must not show an intermediate range error.
+		5. Click outside: submit the final combined range once.
+	</label>
+	<daterangebox id="d" showTime="true" showTodayLink="true" format="yyyy-MM-dd HH:mm" width="360px">
+		<attribute name="onChange"><![CDATA[
+			count.setValue("" + (Integer.parseInt(count.getValue()) + 1));
+			java.text.SimpleDateFormat f = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+			serverRange.setValue((event.getBegin() == null ? "" : f.format(event.getBegin()))
+				+ "|" + (event.getEnd() == null ? "" : f.format(event.getEnd())));
+		]]></attribute>
+	</daterangebox>
+	<label id="count" value="0"/>
+	<label id="serverRange" value="2026-08-07 09:00|2026-08-07 10:00"/>
+	<zscript><![CDATA[
+		java.text.SimpleDateFormat f = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+		d.setBeginValue(f.parse("2026-08-07 09:00"));
+		d.setEndValue(f.parse("2026-08-07 10:00"));
+	]]></zscript>
+</zk>

@@ -13,7 +13,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 -->
 <zk xmlns:ca="client/attribute">
 	<vlayout spacing="6px">
-		<label value="ZK-4305 Daterangebox attribute matrix"/>
+		<label id="lblTitle" value="ZK-4305 Daterangebox attribute matrix"/>
 
 		<hlayout>
 			<label value="disabled:"/>

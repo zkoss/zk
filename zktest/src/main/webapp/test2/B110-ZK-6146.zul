@@ -13,26 +13,28 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<vlayout spacing="10px">
-		<label id="lblTitle" value="ZK-6146 — with showTime the completing pick must commit WITHOUT closing the popup, and a time spinner change must commit"/>
+		<label id="lblTitle" value="With showTime, stage dates and times until an outside click; Cancel and Escape discard the entire edit. Date-only selection still applies immediately."/>
 
 		<hlayout>
 			<label value="showTime:"/>
 			<daterangebox id="drTime" showTime="true" format="yyyy-MM-dd HH:mm"
-				onChange='var b = event.getBegin(); var e = event.getEnd();
-					lblTime.setValue(
-						(b == null ? "" : String.valueOf(b.getTime())) + "|" +
-						(e == null ? "" : String.valueOf(e.getTime())));'/>
+				onChange='java.text.SimpleDateFormat f = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+					lblTime.setValue((event.getBegin() == null ? "" : f.format(event.getBegin()))
+						+ "|" + (event.getEnd() == null ? "" : f.format(event.getEnd())));
+					countTime.setValue("" + (Integer.parseInt(countTime.getValue()) + 1));'/>
 			<label id="lblTime" value=""/>
+			<label id="countTime" value="0"/>
 		</hlayout>
 
 		<hlayout>
 			<label value="date-only:"/>
 			<daterangebox id="drDate" format="yyyy-MM-dd"
-				onChange='var b = event.getBegin(); var e = event.getEnd();
-					lblDate.setValue(
-						(b == null ? "" : String.valueOf(b.getTime())) + "|" +
-						(e == null ? "" : String.valueOf(e.getTime())));'/>
+				onChange='java.text.SimpleDateFormat f = new java.text.SimpleDateFormat("yyyy-MM-dd");
+					lblDate.setValue((event.getBegin() == null ? "" : f.format(event.getBegin()))
+						+ "|" + (event.getEnd() == null ? "" : f.format(event.getEnd())));
+					countDate.setValue("" + (Integer.parseInt(countDate.getValue()) + 1));'/>
 			<label id="lblDate" value=""/>
+			<label id="countDate" value="0"/>
 		</hlayout>
 	</vlayout>
 </zk>
