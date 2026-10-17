@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6166-1.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sun Oct 18 18:09:32 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native">
+	<label multiline="true">
+		1. Each row below is a flex container too narrow for its badges.
+		- Expected: every badge is at least as wide as its button, so no button overlaps its neighbour,
+			and every indicator is centred on the button corner its placement names.
+		- Bug: each badge shrank to its indicator (20px, 6px for a dot), so the buttons overlapped and the
+			right-side indicators sat inside the button.
+	</label>
+	<n:div id="row" style="display:flex; width:240px; gap:8px; padding:24px">
+		<badge id="tr" count="5" placement="top_right"><button label="Inbox"/></badge>
+		<badge id="tl" count="5" placement="top_left"><button label="Inbox"/></badge>
+		<badge id="br" count="5" placement="bottom_right"><button label="Inbox"/></badge>
+		<badge id="bl" count="5" placement="bottom_left"><button label="Inbox"/></badge>
+	</n:div>
+	<n:div id="dots" style="display:flex; width:120px; gap:8px; padding:24px">
+		<badge id="dtr" dot="true" placement="top_right"><button label="Feed"/></badge>
+		<badge id="dtl" dot="true" placement="top_left"><button label="Feed"/></badge>
+		<badge id="dbr" dot="true" placement="bottom_right"><button label="Feed"/></badge>
+	</n:div>
+</zk>
