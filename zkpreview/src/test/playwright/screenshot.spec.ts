@@ -1,4 +1,8 @@
 import { test, expect, Locator, Page } from '@playwright/test';
+import { expectSectionShots } from './section-shots';
+
+// Absolute per-section pixel budget of the sectioned gallery shots; set from measured noise.
+const SECTION_MAX_DIFF_PIXELS = 20;
 
 type DynamicState = { name: string; action: (loc: Locator) => Promise<void> };
 
@@ -64,7 +68,7 @@ test.describe('button', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   const variants = [
@@ -178,7 +182,7 @@ test.describe('textbox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   for (const { name, action } of hoverFocusStates) {
@@ -202,7 +206,7 @@ test.describe('checkbox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   for (const { name, action } of hoverFocusStates) {
@@ -398,7 +402,7 @@ test.describe('combobox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   for (const { name, action } of hoverFocusStates) {
@@ -465,7 +469,7 @@ test.describe('listbox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   test('hover', async ({ page }) => {
@@ -487,7 +491,7 @@ test.describe('grid', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   test('hover', async ({ page }) => {
@@ -509,7 +513,7 @@ test.describe('datebox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   for (const { name, action } of hoverFocusStates) {
@@ -617,7 +621,7 @@ test.describe('timebox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   for (const { name, action } of hoverFocusStates) {
@@ -698,7 +702,7 @@ test.describe('spinner', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   for (const { name, action } of hoverFocusStates) {
@@ -723,7 +727,7 @@ test.describe('bandbox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   for (const { name, action } of hoverFocusStates) {
@@ -750,7 +754,7 @@ test.describe('selectbox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   for (const { name, action } of hoverFocusStates) {
@@ -774,7 +778,7 @@ test.describe('tabbox', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   test('hover', async ({ page }) => {
@@ -796,7 +800,7 @@ test.describe('tree', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   test('hover', async ({ page }) => {
@@ -818,7 +822,17 @@ test.describe('window', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
+    // Overlapped windows positioned against the viewport (`right, bottom`) land below every section
+    // once the viewport is as tall as the page (section-shots.ts), so shoot each one on its own.
+    const overlapped = page.locator('.z-window-overlapped');
+    const count = await overlapped.count();
+    expect(count, 'window.zul has no overlapped window').toBeGreaterThan(0);
+    for (let i = 0; i < count; i++) {
+      await expect(overlapped.nth(i)).toHaveScreenshot(`${DIR}-overlapped-${String(i).padStart(2, '0')}.png`, {
+        maxDiffPixels: SECTION_MAX_DIFF_PIXELS,
+      });
+    }
   });
 });
 
@@ -834,7 +848,7 @@ test.describe('panel', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 });
 
@@ -1492,7 +1506,7 @@ test.describe('toast', () => {
   });
 
   test('gallery', async ({ page }) => {
-    await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${DIR}-gallery.png`);
+    await expectSectionShots(page, DIR, SECTION_MAX_DIFF_PIXELS);
   });
 
   test('base-content-has-no-dark-scrim-fill', async ({ page }) => {

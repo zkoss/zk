@@ -4,7 +4,7 @@
     <div sclass="z-border-bottom z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Avatar"/></div>
 
     <div>
-        <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Sizes (initials)"/></div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Sizes (initials)"/></div>
         <div sclass="z-d-flex z-gap-6 z-items-end">
             <avatar label="AB" size="small"/>
             <avatar label="AB" size="medium"/>
@@ -13,7 +13,7 @@
     </div>
 
     <div>
-        <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Shapes"/></div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Shapes"/></div>
         <div sclass="z-d-flex z-gap-6 z-items-center">
             <avatar label="CD" size="medium" shape="circle"/>
             <avatar label="CD" size="medium" shape="square"/>
@@ -21,7 +21,7 @@
     </div>
 
     <div>
-        <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Colored initials"/></div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Colored initials"/></div>
         <div sclass="z-d-flex z-gap-3 z-items-center">
             <avatar label="HW" size="medium" style="background:var(--zk-color-primary);color:var(--zk-color-on-primary)"/>
             <avatar label="JL" size="medium" style="background:var(--zk-color-secondary);color:var(--zk-color-on-secondary)"/>
@@ -30,7 +30,7 @@
     </div>
 
     <div>
-        <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Image (with initials fallback on load error)"/></div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Image (with initials fallback on load error)"/></div>
         <div sclass="z-d-flex z-gap-6 z-items-center">
             <avatar image="~./img/item1.jpg" size="large"/>
             <avatar image="~./img/does-not-exist.jpg" label="FB" size="large"/>
@@ -38,7 +38,7 @@
     </div>
 
     <div>
-        <div sclass="z-text-uppercase z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Avatar Group"/></div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Avatar Group"/></div>
         <avatargroup size="medium">
             <avatar label="HW" style="background:var(--zk-color-primary);color:var(--zk-color-on-primary)"/>
             <avatar label="JL" style="background:var(--zk-color-secondary);color:var(--zk-color-on-secondary)"/>

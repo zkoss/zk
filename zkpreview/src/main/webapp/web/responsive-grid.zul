@@ -1,9 +1,11 @@
 <?page title="Responsive Grid" contentType="text/html;charset=UTF-8"?>
 <zk>
 <div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Responsive Grid (stacking)"/></div>
+    <div>
+        <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Responsive Grid (stacking)"/></div>
 
-    <div sclass="z-py-3 z-mb-6"><label sclass="z-text-sm z-text-secondary" value="A grid with responsive=&quot;stacking&quot; reflows its table into a card-per-row layout when the grid's own width drops below a breakpoint (default 768px). Each row becomes a card; each cell becomes a labelled value. The check is against the grid's container width — not the viewport — so a grid in a narrow column or popup stacks too. (Stacking transformation ships in ZK EE / zkmax; ZK-5409.)"/></div>
+        <div sclass="z-py-3 z-mb-6"><label sclass="z-text-sm z-text-secondary" value="A grid with responsive=&quot;stacking&quot; reflows its table into a card-per-row layout when the grid's own width drops below a breakpoint (default 768px). Each row becomes a card; each cell becomes a labelled value. The check is against the grid's container width — not the viewport — so a grid in a narrow column or popup stacks too. (Stacking transformation ships in ZK EE / zkmax; ZK-5409.)"/></div>
+    </div>
 
     <!-- 1. Basic stacking: a narrow grid always renders as cards -->
     <div sclass="z-mb-8">
