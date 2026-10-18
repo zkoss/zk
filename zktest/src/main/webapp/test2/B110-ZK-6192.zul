@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6192.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Oct 19 14:44:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<style>.z-rangeslider-marks, .z-multislider-marks { display: none; }</style>
+	<rangeslider id="edgeRange" orient="vertical" height="200px" max="1000" startValue="5" endValue="500"
+		style="position:absolute;right:0;top:20px;"/>
+	<div id="clip" style="position:absolute;left:20px;top:20px;width:220px;overflow:hidden;border:1px solid;display:flex;justify-content:flex-end;">
+		<multislider id="edgeMulti" orient="vertical" height="200px" max="1000">
+			<sliderbuttons startValue="5" endValue="500"/>
+		</multislider>
+	</div>
+	<rangeslider id="fixedRange" orient="vertical" height="200px" max="1000" startValue="5" endValue="500"
+		tooltipVisible="true" style="position:absolute;right:0;top:300px;"/>
+	<div id="fixedClip" style="position:absolute;left:20px;top:300px;width:220px;overflow:hidden;border:1px solid;display:flex;justify-content:flex-end;">
+		<multislider id="fixedMulti" orient="vertical" height="200px" max="1000" tooltipVisible="true">
+			<sliderbuttons startValue="5" endValue="500"/>
+		</multislider>
+	</div>
+	<div id="scaledClip" style="position:absolute;left:300px;top:20px;width:220px;overflow:hidden;border:1px solid;display:flex;justify-content:flex-end;transform:scale(.5);transform-origin:top left;">
+		<rangeslider id="scaledRange" orient="vertical" height="200px" max="1000" startValue="5" endValue="500" tooltipVisible="true"/>
+	</div>
+	<div id="scrollClip" style="position:absolute;left:500px;top:20px;width:220px;height:500px;overflow:auto;border:1px solid;">
+		<div style="position:relative;width:600px;height:480px;">
+			<rangeslider id="scrollRange" orient="vertical" height="200px" max="1000" startValue="5" endValue="500"
+				tooltipVisible="true" style="position:absolute;left:180px;top:0;width:40px;"/>
+			<multislider id="scrollMulti" orient="vertical" height="200px" max="1000" tooltipVisible="true"
+				style="position:absolute;left:180px;top:240px;width:40px;">
+				<sliderbuttons startValue="5" endValue="500"/>
+			</multislider>
+		</div>
+	</div>
+	<div id="narrowClip" style="position:absolute;left:20px;top:560px;width:60px;overflow:hidden;border:1px solid;">
+		<multislider id="narrowMulti" orient="vertical" height="200px" max="1000" tooltipVisible="true">
+			<sliderbuttons startValue="5" endValue="500"/>
+		</multislider>
+	</div>
+	<button id="room" label="Move sliders away from the right edge" style="position:absolute;left:300px;top:240px;"
+		onClick='edgeRange.setStyle("position:absolute;right:200px;top:20px;");
+			clip.setStyle("position:absolute;left:20px;top:20px;width:220px;overflow:hidden;border:1px solid;display:flex;justify-content:flex-start;");'/>
+	<button id="show" label="Show both tooltips" style="position:absolute;left:300px;top:280px;"
+		onClick='edgeRange.setTooltipVisible(true); edgeMulti.setTooltipVisible(true);'/>
+</zk>

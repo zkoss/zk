@@ -78,6 +78,7 @@ ZK 11.0.0
   ZK-6186: radiogroup: server-side setDisabled does not reach the client, the widget's isDisabled() stays false
   ZK-6196: notification: a ref-less bottom/middle notification moves up by the page scroll offset
   ZK-6199: fileupload: the Fileupload.get dialog hard-codes the picked-file row's colours and font as inline styles in JavaScript, so a theme cannot style it
+  ZK-6192: rangeslider / multislider: the vertical tooltip is cut off when the slider sits at the right edge of the page or of an overflow:hidden container
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
