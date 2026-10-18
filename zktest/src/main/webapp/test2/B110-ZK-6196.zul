@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6196.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Sun Oct 18 18:08:04 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		import org.zkoss.zk.au.out.AuInvoke;
+	]]></zscript>
+	<div width="2400px" height="2400px"/>
+	<vlayout style="position:fixed;left:200px;top:100px">
+		<label id="instructions" value="Scroll the page, then open a notification or popup at the selected viewport position."/>
+		<listbox id="position" mold="select">
+			<listitem label="bottom_right" selected="true"/>
+			<listitem label="bottom_center"/>
+			<listitem label="bottom_left"/>
+			<listitem label="middle_right"/>
+			<listitem label="middle_center"/>
+			<listitem label="middle_left"/>
+			<listitem label="top_right"/>
+			<listitem label="top_center"/>
+			<listitem label="top_left"/>
+		</listbox>
+		<button id="notification" label="Notification"
+			onClick='Clients.showNotification("Viewport notification", "info", null, position.getSelectedItem().getLabel(), 0, true)'/>
+		<button id="openPopup" label="Popup"
+			onClick='Clients.response(new AuInvoke(popup, "open", new Object[] {null, null, position.getSelectedItem().getLabel()}))'/>
+		<button id="reference" label="Popup below this button" onClick='popup.open(self, "after_start")'/>
+		<button id="coordinates" label="Popup at (600, 500)" onClick='popup.open(600, 500)'/>
+		<button id="closePopup" label="Close popup" onClick='popup.close()'/>
+	</vlayout>
+	<popup id="popup" width="120px" height="60px" style="margin:0">
+		<label value="Viewport popup"/>
+	</popup>
+</zk>

@@ -76,6 +76,7 @@ ZK 11.0.0
   ZK-6187: messagebox: the buttons carry no per-button class, so a theme cannot give Cancel / No a different emphasis than OK
   ZK-6188: errorbox: the pointer keeps stale left/top after the box changes direction, so it ends up detached from the box
   ZK-6186: radiogroup: server-side setDisabled does not reach the client, the widget's isDisabled() stays false
+  ZK-6196: notification: a ref-less bottom/middle notification moves up by the page scroll offset
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
