@@ -94,8 +94,9 @@ This is the common case and needs no special load order:
 <button label="Default"/>            <!-- untouched — sibling, not a descendant -->
 ```
 
-A runnable demo of both is [`component-theming.zul`](../../zkpreview/src/main/webapp/web/component-theming.zul);
-the knob contract is regression-tested in [`component-theming.spec.ts`](../../zkpreview/src/test/playwright/component-theming.spec.ts).
+There is no dedicated demo page. Each component's own preview page (for example `button.zul`) shows its
+default look, and the knob contract is regression-tested on those pages in
+[`component-theming.spec.ts`](../../zkpreview/src/test/playwright/component-theming.spec.ts).
 
 ## Cascade & load-order rules (important)
 
@@ -162,13 +163,13 @@ mechanics / hygiene / verification that keep them true.
 |----|-----------|--------------|
 | **CTV-1** | **Zero-regression default.** Every `--zk-<comp>-*` default resolves to the component's exact pre-existing value; overriding nothing renders identically to before the variables existed. | Default in `_component-theme.css` equals the old token/literal; computed style unchanged before/after. |
 | **CTV-2** | **Isolation from global tokens (core purpose).** The exposed appearance properties are read *through* the component's own variables, so an adopter restyles them by overriding only `--zk-<comp>-*` — **never** a global `--zk-color-*` / `--zk-shape-*` / …. No exposed property still reads a global token directly, bypassing the variable. | Overriding the component variable changes only this component; the global token it defaults to and other components are unaffected. |
-| **CTV-3** | **Region scoping.** Setting a variable on a container restyles only that subtree's instances; siblings outside are unchanged. | Playwright: scoped instance takes the value, sibling default does not. Documented per-variant exceptions (e.g. severity-pinned chip/badge) are stated in the component entry. |
+| **CTV-3** | **Region scoping.** Setting a variable on a container restyles only that subtree's instances; siblings outside are unchanged. | Holds by CSS inheritance (a custom property set on an ancestor reaches only its descendants), so no test re-checks it. Documented per-variant exceptions (e.g. severity-pinned chip/badge) are stated in the component entry. |
 | **CTV-4** | **Whole-app override wins.** A `:root` override loaded after `norm.css.dsp` (or at higher specificity) wins for all instances. | Inject a `:root` override; assert it applies. |
 | **CTV-5** | **Declared at `:root`, unlayered, not on the element.** Defaults live in `tokens/_component-theme.css` at `:root`; not declared on the base component element (which would shadow region overrides for its own subtree). Variant/modifier re-parameterization is allowed but must be documented. | Grep the component CSS: no base `.z-<comp> { --zk-<comp>-*: … }`; default present in `_component-theme.css`. |
 | **CTV-6** | **Meaningful coverage.** The variables cover the component's salient appearance axes (as applicable: fill, text, border, radius, the defining state/accent) — enough for a recognizable restyle without forking. Size lives in `_sizing.css`; elevation may be intentionally mode-driven. | Review against the component's DOM + states; record deliberate exclusions. |
 | **CTV-7** | **State integrity.** Disabled / readonly / selected / error treatments stay correct under an override (they don't accidentally inherit a fill/border variable and lose their state distinction) — unless a state is itself an intentional, documented variable. | Override the region; assert the disabled (etc.) instance keeps its treatment. |
 | **CTV-8** | **Documented.** Variable names + defaults (+ scope/exceptions) are listed in this doc's per-family table. | This file's reference section has the entry. |
-| **CTV-9** | **Regression-tested.** A demo instance in `component-theming.zul` + a Playwright assertion in `component-theming.spec.ts` prove CTV-1/2/3/4. | Test exists and is green. |
+| **CTV-9** | **Regression-tested.** A test in `component-theming.spec.ts`, run on the component's own preview page, reads the stock value, injects a `:root` override after the theme bundle and reads again. That proves CTV-1/2/4/5: a hardcoded value or a default declared on the component element would shadow the inherited `:root` value and fail the second read. | Test exists and is green. |
 
 > CTV-6 and CTV-7 are judgment calls (what counts as "enough" coverage / a preserved state);
 > the tracker records the rationale, not just a checkmark.
@@ -629,10 +630,10 @@ trio, curated separately from the pager buttons.
 
 Numbered page buttons — and therefore `.z-paging-selected` — only render in
 the **`os`** mold; the default mold shows prev/next buttons plus the
-jump-to-page input, with no page numbers. `component-theming.zul` demos
-paging with `mold="os"` so `--zk-paging-selected-bg/-fg/-radius` are actually
-exercised; the jump-to-page input knobs are shipped but not demoed on that
-page (it uses the `os` mold, which never renders the input). Disabled
+jump-to-page input, with no page numbers. `component-theming.spec.ts` reads the
+`.z-paging-selected` button that `paging.zul` renders in the `os` mold, so
+`--zk-paging-selected-bg/-fg/-radius` are actually exercised; the jump-to-page input
+knobs are shipped but not tested (the `os` mold never renders the input). Disabled
 buttons/input are intentionally not knob-driven (same convention as
 button/input). The jump-input's `border-radius` also stays hardcoded on
 `--zk-shape-corner-extra-small` rather than exposed as a knob — a defensible
@@ -1683,9 +1684,10 @@ Validated by the button pilot; repeat per component (then update the
    token/literal — surgically, only the exposed properties, no behavior change.
 4. **Build** (`npm run build:css`) and confirm the knob appears in `norm.css.dsp` and is
    consumed in the component's `.css.dsp`; `npm run check:css-dsp` stays green.
-5. **Demo + test**: add the component to `component-theming.zul` and assert the knob contract
-   in `component-theming.spec.ts` (scoped override applies, sibling unaffected, whole-app
-   override wins, defaults unchanged).
+5. **Test**: add the component to `component-theming.spec.ts`, on the component's own preview page,
+   and assert the knob contract (stock values unchanged, then a `:root` override wins). If the page
+   does not render a state a knob needs (selected row, open popup), create it in the test with a real
+   click or the client widget API.
 
 ## Status
 

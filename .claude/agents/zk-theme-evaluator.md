@@ -441,7 +441,7 @@ PASS iff `overridden` equals `VALUE` (normalized) AND `restored === before`.
 ```bash
 npx playwright test --config zkpreview/src/test/playwright/playwright.config.ts --project=component-theming -g "<component>"
 ```
-PASS iff exit 0 AND ≥ 1 test ran. **"No tests found" is a FAIL** — it means the `component-theming.zul` demo block / spec tests were never added.
+PASS iff exit 0 AND ≥ 1 test ran. **"No tests found" is a FAIL** — it means the component's test in `component-theming.spec.ts` (which runs on the component's own preview page) was never added.
 
 **x-density** (when `density: bound`) — the control actually shrinks under a density override. For each token in `density-tokens`: read its resolved px value from `documentElement`, read the control's rendered height, `setProperty(token, <value − 8>px)`, assert the rendered height shrinks by ~8px (±2px), then `removeProperty` and confirm restore. A control whose height doesn't move is pinned by a raw px somewhere — FAIL with the observed heights.
 

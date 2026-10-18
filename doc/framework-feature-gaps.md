@@ -6,7 +6,7 @@
 > **進度更新（2026-07-23）— Tier 1 #1 已交付。** 「元件級主題變數（Component Theme Variables）」
 > 從 3 元件 pilot 擴為**全面完工並入庫**：每個有專屬 stylesheet 的視覺元件都已套上可覆寫的
 > `--zk-<comp>-*`（`_component-theme.css` 共 **73** 個 `--zk-<comp>-` 家族、tracker A 表 **61** 列元件），
-> 含 **CTV-1…9** 檢驗條件、`component-theming` 測試 **105 綠**、涵蓋全 **172** 元件的進度 tracker（**B / D 皆清空**——
+> 含 **CTV-1…9** 檢驗條件、`component-theming` 測試 **63 綠**（各元件自己的預覽頁上，2026-10-18 起；原 105 條跑在已刪除的 `component-theming.zul` 頁上）、涵蓋全 **172** 元件的進度 tracker（**B / D 皆清空**——
 > 連原本受阻、無 base CSS 的 breadcrumb / carousel 也已補齊 base 元件 CSS + 變數）。另補 **Authoring rule 5**：
 > typography 屬全域 typescale、非元件旋鈕。實作採 generator（sonnet）↔ 獨立 Opus checker 的雙角色 workflow。
 > 規範見 [`spec/component-theme-variables.md`](spec/component-theme-variables.md)；逐元件進度見
@@ -77,7 +77,7 @@ Marble 同時橫跨兩種角色 —— 既是「元件主題」（對齊 MUI）�
 
 | # | 落差 | 主流框架怎麼做 | Marble 現況 | 為何重要 |
 |---|------|---------------|------------|---------|
-| 1 | **元件級主題變數(Component Theme Variables)** ✅ | MUI `theme.components.MuiButton.styleOverrides` / `variants`；Ant `ConfigProvider theme.components.Button.*`；Chakra component theme | **✅ 已完成**：所有有 stylesheet 的視覺元件皆宣告可覆寫 `--zk-<comp>-*`（**73** 家族／A 表 **61** 列元件），含 CTV-1…9 檢驗條件 + 全 **172** 元件 tracker（B/D 清空）、`component-theming` **105** 測試綠（原為缺口，現已系統化並完工） | **MUI / Ant 最大賣點**。企業客戶最常要「只改我們的 button / grid 樣式而不 fork 主題」 |
+| 1 | **元件級主題變數(Component Theme Variables)** ✅ | MUI `theme.components.MuiButton.styleOverrides` / `variants`；Ant `ConfigProvider theme.components.Button.*`；Chakra component theme | **✅ 已完成**：所有有 stylesheet 的視覺元件皆宣告可覆寫 `--zk-<comp>-*`（**73** 家族／A 表 **61** 列元件），含 CTV-1…9 檢驗條件 + 全 **172** 元件 tracker（B/D 清空）、`component-theming` **63** 測試綠（各元件自己的預覽頁；原為缺口，現已系統化並完工） | **MUI / Ant 最大賣點**。企業客戶最常要「只改我們的 button / grid 樣式而不 fork 主題」 |
 | 2 | **裝置自適應控制**（container queries + 響應可見性） ✅ | Tailwind `@container` / `md:`；Bootstrap `.d-md-none` 響應顯示；MUI breakpoints | **✅ 已完成**：`_layout.css` 新增 viewport `.z-d-{value}-{bp}`（mobile-first / min-width，sm 600 / md 900 / lg 1200 / xl 1536）＋ container query `.z-container` / `.z-cq-{value}-{bp}`（`container-type: inline-size` + `@container`）；預覽頁 `utility/responsive.zul`、`responsive` Playwright 專案 4 綠、`responsive-design.md` §5 更新 | Dashboard / ERP 常需「依容器寬度切換」。**Container queries** 比 breakpoint 更貼合 Marble 的 intrinsic 哲學 |
 | 3 | **列印樣式** `@media print` ✅ | Bootstrap `.d-print-*` + print reset | **✅ 已完成**：`utility/_print.css` 提供 opt-in `.z-d-print-*` 可見性 + 自動列印 reset（隱藏浮層 chrome、解除 sticky 表頭、展開卷軸、陰影→邊框）；`print` 專案 2 綠。規範 `doc/spec/print-styles.md`（原為 0 覆蓋，現已補齊） | ERP / CRM 天天印報表、發票、清單。目標客群最需要，卻曾是 0 覆蓋 |
 | 4 | **z-index / 疊層尺度** ✅ | MUI `theme.zIndex`（appBar / drawer / modal / snackbar / tooltip）；Bootstrap `$zindex-*`；Chakra `zIndices` | **✅ 已完成**：`tokens/_zindex.css` 提供 `--zk-index-*`（只 token 化 load-bearing 值）+ `.z-index-*` utility。**關鍵發現**：ZK runtime 以 base 1800 **inline** 覆寫浮層 z-index，故元件 CSS 只是 fallback → 不造假 ladder；清 searchbox/drag-ghost 兩死值；規範 [`spec/zindex-scale.md`](spec/zindex-scale.md)、稽核 [`zindex-audit.md`](zindex-audit.md)、`zindex` 專案 2 綠 | 框架衛生。避免企業 App 自訂 overlay 時的 z-index 大戰；主題自身 overlay 排序也該有文件化尺度 |

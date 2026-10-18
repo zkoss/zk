@@ -47,7 +47,7 @@ zero-reference but correct ladder member, kept under the scale-completeness rule
 Marble exposes `--zk-<component>-*` properties so an adopter can restyle one component without
 overriding a global token that would ripple everywhere. 18 component families declare them;
 the normative spec is `doc/spec/component-theme-variables.md` and `component-theming.spec.ts` covers
-it with 19 tests.
+it with per-component tests that run on each component's own preview page.
 
 **Call them "Component Theming Variables", and use "knob" as the informal shorthand.** They were
 once called an "API", which is a stretch: there is no imperative surface, it is purely declarative

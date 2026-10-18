@@ -1,6 +1,5 @@
 {
   "inputs": "All input components (textbox, combobox, datebox, ...) on one page; each component also has its own page.",
   "overview": "A tour of many components on one page; each component also has its own page.",
-  "preview": "The human-only listing that applies every other preview page; each page is also served on its own.",
-  "component-theming": "Many components restyled through their --zk-<comp>-* variables on one page; each component also has its own page."
+  "preview": "The human-only listing that applies every other preview page; each page is also served on its own."
 }

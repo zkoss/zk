@@ -71,8 +71,8 @@ More than 2/3 of all tests selected (rounded up: 897 of 1,345) also gives `full`
 
 ## Aggregate pages
 
-`aggregate-pages.json` lists the pages that combine many components (`inputs`, `overview`, `preview`,
-`component-theming`; each component also has its own page). Their tests are selected only when that page's own
+`aggregate-pages.json` lists the pages that combine many components (`inputs`, `overview`, `preview`;
+each component also has its own page). Their tests are selected only when that page's own
 file changes: its `.zul` or its baseline PNG. A CSS rule, a class, a widget, or a `pv/*-content.zul` template change
 never selects them (`reasons` lists the aggregate pages left out). They are left out of the class -> pages map, so a
 class that appears only on an aggregate page falls through to the name-prefix and own-component steps. A full run is

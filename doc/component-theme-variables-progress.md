@@ -20,12 +20,14 @@
 | CTV-6 | 覆蓋有意義的外觀軸(fill/text/border/radius/state-accent) |
 | CTV-7 | 狀態完整(disabled/readonly/selected/error 在覆寫下仍正確) |
 | CTV-8 | 已文件化(spec 內有該 family 的變數表) |
-| CTV-9 | 有回歸測試(`component-theming.zul` demo + `component-theming.spec.ts` 斷言) |
+| CTV-9 | 有回歸測試(`component-theming.spec.ts` 在該元件自己的預覽頁上讀 stock 值、注入 `:root` 覆寫後再讀;2026-10-18 起不再有專屬的 `component-theming.zul` 頁) |
 
 **圖例**:✅ 通過 · 🟡 通過但有已載明的例外 · ⬜ 未開始 · ➖ 刻意不納入(N/A)
 
 > 表中 ✅ 的依據:CTV-1/2/5/6/7/8 = spec 的 Recipe 不變式 + build 驗證 + 已載明的判斷;
-> CTV-3/4/9 = `component-theming.spec.ts` 綠燈斷言(見下方測試對照)。
+> CTV-4/9 = `component-theming.spec.ts` 綠燈斷言(見下方測試對照);CTV-3(區域隔離)由 CSS 繼承保證,2026-10-18 起不再有測試重複驗證。
+>
+> **2026-10-18 注意:** 下方各列的敘述與「測試對照」段落寫成時,測試跑在專屬的 `component-theming.zul` 頁上(含區域覆寫容器與 sibling 對照),當時的測試數(85、87、101、105 等)是那個階段的快照。該頁與舊測試已刪除,現況是 63 個測試跑在各元件自己的預覽頁,細節見 [`component-theming-page-retirement-plan.md`](component-theming-page-retirement-plan.md)。各列的 ✅／🟡 判定沒有重新評估;凡寫到「`component-theming.zul` 的 Default／regional override 列」的敘述都是歷史紀錄。
 
 > **完整性**:本表以 [`zk-edition-components.md`](zk-edition-components.md)(ZK 10.4 全元件清單,
 > 依 jar 分 CE/PE/EE)為母體逐一盤點,確保**每個元件都被歸類**(A / A-涵蓋 / B / C / D)。見末〈完整性斷言〉。

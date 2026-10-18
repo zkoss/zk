@@ -69,7 +69,33 @@
 - **notification test 現況：** Info 的 bg／fg／radius 覆寫、Warning 與 Error 在覆寫後語意色不變，共 3 個 test。Info 那個在尚未重建 zul jar 的 8085 上會失敗（背景仍是 `rgb(224, 232, 244)`，期望 `rgb(238, 242, 255)`），要等 zul 重建並重啟後才會通過。Warning、Error 與 toast 的 test 現在已通過。
 - toast icon 的 stock 值是 color-mix 結果（`color(srgb 0 0.409018 0.550725 / 0.974118)`），這個 test 對它只斷言「覆寫前不是紫色」，沒有寫死字面值。
 
-尚未遷移（留給第三批）：浮動元件 7 個中的 popup、notification、toast、drawer、coachmark、confirmpopup（messagebox 已在試做）、selectbox、radio、checkbox 的其餘狀態、tabbox、menubar 以外的導覽類（nav、anchornav、stepbar）、paging、inputgroup、calendar、combobutton、toolbarbutton、organigram、goldenlayout、portallayout、pdfviewer、tbeditor、signature、cropper、dropupload、fisheye、badge。
+### S2 第三批結果（2026-10-18）
+
+新增 22 個 test：tabbox、paging、combobutton、inputgroup、calendar、toolbarbutton、checkbox、radio、nav、anchornav、stepbar、fisheye、pdfviewer、tbeditor、signature、cropper、dropupload、organigram、goldenlayout、portallayout、badge、chosenbox（chosenbox 補回第一批因互動而略過的項目）。Playwright project `component-theming-borrowed` 共 63 passed（試做 2 + 第一批 30 + 第二批 9 + 第三批 22；試做的 checkbox test 已由第三批的 checkbox 取代而刪除）。
+
+- 產生方式同第一批，但腳本改為解析舊 spec 的完整常數與鏈式選擇器（舊版只處理單一預設元素）。
+- 變異驗證：對 21 個 test 所用的 31 個選擇器注入寫死樣式，21 個全敗，對照組 21 個通過。chosenbox 的 test 是之後補的，沒有單獨做變異驗證。
+- 覆蓋比對：舊 spec 的 60 個元件名稱，新 spec 都有；舊 `whole-app` test 所用的 knob 全部出現在新 test 注入的 knob 內（缺口 0 個）。button 在舊 spec 以不同標題存在，所以名稱比對會顯示為「新有舊無」，不是新增的元件。
+- **預覽頁沒有現成狀態實例的情況：**
+  - 該元件的狀態實例在頁面上存在，但不在第一個容器內：paging 的 `.z-paging-selected`、stepbar 的 `.z-step-complete`、organigram 的 `.z-orgitem-selected`、portallayout 的 `.z-portalchildren-frame`。測試改成不限定第一個容器，直接找頁面上第一個該狀態的元素。
+  - 頁面上完全沒有：navbar 沒有 selected 的 navitem，測試用真實點擊選取第一個 `.z-navitem`；anchornav 沒有 selected 的 listitem，點擊也不會選取，測試改用 client widget API（`zk.Widget.$(listitem).setSelected(true)`）選取第二個項目，第一個項目保持為 resting link。
+- **限制：** 這些 stock 值是各借用頁自己的值，不是舊 spec 的字面值；與舊 spec 有成對 stock 斷言的項目沒有發現不一致，但舊 spec 沒斷言的項目沒有對照。anchornav 的 selected 狀態是 widget API 造成的，不是使用者操作。
+
+全部 60 個元件已有借用頁的 test。
+
+### S3–S6 結果（2026-10-18，D13 選項 A）
+
+- **S3（元件清單比對）：** 舊 spec 的 60 個元件名稱，新 spec 都有（見第三批結果）。
+- **基準圖的消費者（刪除前查證）：** `component-theming-gallery.png` 與 `component-theming-forced-colors.png` 由 `gallery-scan.spec.ts` 與 `forced-colors-gallery.spec.ts` 產生，這兩支 spec 都用 `fs.readdirSync(WEB_DIR)` 列舉 `.zul` 頁，沒有寫死 `component-theming`。頁面刪除後，這兩個 test 就不再產生，所以兩張 PNG 一併刪除。`render-smoke.spec.ts` 沒有列這一頁。
+- **S4（已 commit）：** 刪除 `component-theming.zul` 頁、舊 spec、兩張基準圖；借用版 spec 更名為 `component-theming.spec.ts`；`playwright.config.ts` 移除暫時的 `component-theming-borrowed` Playwright project。`--project=component-theming` 現在跑 63 個 test，63 passed。
+- **S5：**
+  - 更新 `doc/spec/component-theme-variables.md`（示範頁連結、CTV-3、CTV-9、paging 的說明、建立新元件的第 5 步）與 `doc/spec/new-component-checklist.md`。
+  - 更新 `.claude/agents/zk-theme-evaluator.md`、`zk-theme-generator.md`，`.claude/skills/marble-theme/reference/verification.md`、`tokens.md`。
+  - 更新 `zkpreview/README.md`（刪表格一列）、`zkpreview/scripts/aggregate-pages.json`、`zkpreview/scripts/README-select-tests.md`。
+  - 從 `zkpreview/doc/class-index.json` 與 `font-size-baseline.json` 刪除 `component-theming.zul` 的項目（兩檔都先確認「讀入再寫出」與原檔逐字相同，再刪除該鍵，diff 只有刪除）。
+  - **CTV-3（區域隔離）：** 規範改成「由 CSS 繼承保證，不再有測試重複驗證」，這是 D1 起討論後的結論，不是遺漏。
+  - **沒有改的：** `doc/` 底下其他提到 `component-theming` 的文件（`zkdemo-b6-marble-fixes.md`、`marble-test-*.md`、`zats-1117-fix-plan.md` 等）是歷史紀錄，保留原樣；`select-tests.mjs` 第 373 行的註解以 `component-theming-100-x` 當檔名範例，沒有行為影響，沒改。
+- **S6：** 刪除 `zkpreview/build/inplaceWebapp/web/component-theming.zul`，`http://localhost:8085/component-theming.zul` 由 200 變 404；`build` 底下沒有其他 `component-theming*` 檔案。
 
 ## 3. 步驟
 

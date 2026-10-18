@@ -83,7 +83,6 @@ token. Under `web/utility/`.
 
 | Page | What it is |
 |---|---|
-| `component-theming.zul` | Default-vs-override pairs for the `--zk-<comp>-*` per-component variables (pilots: button, input, window, grid). Backs `component-theming.spec.ts`. |
 | `icons-lucide.zul` | All 1947 Lucide icons with their `z-icon-<name>` class names |
 | `overview.zul` | Older mixed-widget sampler, pre-dates the per-component pages |
 | `preview.zul` | The all-on-one-page index itself |
