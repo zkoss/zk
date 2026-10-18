@@ -52,6 +52,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 量測結果照實寫成量測值（例：「zul/lang.xml 有 40 個 `.css.dsp` css-uri」）。不要加上「blocker」「broken」「會失敗」這類嚴重度詞，除非已讀過後果所依賴的另一側系統；要論述影響前先讀消費端，或改寫成問題。
 - 對方請你驗證 X 時，通常已經知道 X；他們要的多半是「X 仍成立」的確認，不是新發現的宣告。
 - 報告「有差異」的數字時，同時寫出容忍值（例：gallery 每張 0.2%、零容忍 6/183）。通過容忍值只代表在預算內，不代表與原始碼一致。
+- 對使用者講的是頁面時寫「`<name>.zul` 頁」，講測試時寫 spec 檔名；「project」只留給 `playwright.config.ts` 的 project，而且要寫明「Playwright project」。即使 project 與頁面同名（例：`component-theming`），也不要用 project 指頁面。
 - 幾何對齊以 PNG 像素為準，不以 live DOM 的 `getBoundingClientRect` 為準。
 - 檔名從 `ls` 複製，不手打。
 
@@ -78,7 +79,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 ### Playwright
 - 比對 screenshot 基準時，跑 repo 內的 config：`npx playwright test -c src/test/playwright/playwright.config.ts ...`。臨時 config 必須複製 `snapshotDir` 與 `snapshotPathTemplate`，否則會寫出新 PNG 並假通過。跑完檢查 `git status`，出現新 PNG 代表沒有真正比對。
 - Playwright 1.59 的裸 `--update-snapshots` 預設為 `changed`；寫明模式：`--update-snapshots=changed`，並在 commit 前用 `git status --porcelain <基準目錄>` 確認檔案數。
-- `-g` 比對的是以空白連接的標題路徑（`file describe title`），用 `describe title$` 錨定，不要套 `--list` 的 `›` 格式。
+- `-g` 比對的是以空白連接的標題路徑，開頭含 project 名稱（`project file describe title`，例：`chromium screenshot.spec.ts tabbox gallery`）。結尾用 `describe title$` 錨定；要用 `^` 開頭錨定就必須包含 project。不要套 `--list` 的 `›` 格式。
 
 ### 測試與驗證
 - 互動測試要用使用者實際的輸入（`page.mouse` 拖曳、真實 click），不用 Range 或 `element.click()` 繞過瀏覽器限制。
