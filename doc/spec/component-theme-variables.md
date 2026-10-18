@@ -960,21 +960,22 @@ works normally.
 | `--zk-messagebox-radius` | `var(--zk-shape-dialog)` | dialog corners |
 | `--zk-messagebox-elevation` | `var(--zk-elevation-dialog)` | dialog shadow (static — always modal, not mode-driven) |
 
-### Notification — shipped (untyped/default card only)
+### Notification — shipped (info-default variant)
 
-Floating alert card created by `Clients.showNotification()` (`.z-notification` wrapper +
-`.z-notification-content` card). Only the **untyped**
-(`type=null`) default card reads these knobs: `--zk-notification-bg` / `-fg` / `-radius` color
-the content card's fill, text, and corners. There is **no accent knob**: the left accent stripe
-was removed for MD3 fidelity (alerts carry severity with the leading icon plus the container
-tint, not a leading color bar), and an untyped notification renders no icon glyph at all — ZK
-picks the glyph class from its type map, so with no type there is nothing for an accent color to
-paint. The
-`.z-notification-info/-warning/-error` type variants pin their own bg/fg via
-higher-specificity compound selectors (e.g. `.z-notification-info .z-notification-content`) —
-the same color-**variant** convention as button/progressmeter — so these knobs affect only an
-untyped notification; a typed notification's semantic color is unaffected by an override
-(CTV-7). Elevation (`box-shadow`) stays on its base token, not knob-driven — a deliberate
+Floating alert card created by `Clients.showNotification()` / `Notification.show()` (`.z-notification`
+wrapper + `.z-notification-content` card). `Notification.show()` turns a `null` type into `"info"`, so a
+notification made through the public API always carries a type variant. `--zk-notification-bg` / `-fg`
+therefore drive the **info** (default) variant's fill and text, plus the pointer arrows, which follow the
+fill; an untyped card (only reachable by calling `Clients.showNotification()` with no type) reads the same
+two knobs on the base rule. `--zk-notification-radius` colors the corners of every type (declared on the
+base `.z-notification-content` rule). There is **no accent knob**: the left accent stripe was removed for
+MD3 fidelity (alerts carry severity with the leading icon plus the container tint, not a leading color
+bar), and an untyped notification renders no icon glyph at all — ZK picks the glyph class from its type
+map, so with no type there is nothing for an accent color to paint. The
+`.z-notification-warning/-error` variants pin their own bg/fg via higher-specificity compound selectors
+(e.g. `.z-notification-error .z-notification-content`) — the same color-**variant** convention as
+button/progressmeter and toast — so a warning or error notification's semantic color is unaffected by an
+override (CTV-7). Elevation (`box-shadow`) stays on its base token, not knob-driven — a deliberate
 curation choice to keep the surface small (same convention as calendar/slider's minor
 sub-features). Width/height are a size-dimension concern and already have their own knob
 (`--zk-notification-height` in `tokens/_sizing.css`), not duplicated here. The close button's
@@ -983,9 +984,9 @@ unaffected by these knobs either way.
 
 | Knob | Default | Scope |
 |------|---------|-------|
-| `--zk-notification-bg` | `var(--zk-color-surface-container-highest)` | untyped card fill |
-| `--zk-notification-fg` | `var(--zk-color-on-surface)` | untyped card text |
-| `--zk-notification-radius` | `var(--zk-shape-corner-extra-small)` | untyped card corners |
+| `--zk-notification-bg` | `var(--zk-color-surface-container-highest)` | info/untyped card fill and pointer arrows |
+| `--zk-notification-fg` | `var(--zk-color-on-surface)` | info/untyped card text |
+| `--zk-notification-radius` | `var(--zk-shape-corner-extra-small)` | card corners, all types |
 
 ### Toast — shipped (info-default variant only)
 

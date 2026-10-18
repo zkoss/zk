@@ -125,19 +125,21 @@
    the solid colour of its severity's content fill, so the pointer reads as part of
    the card and no elevation shadow shows through it. */
 
-/* info */
+/* info — the default type (Notification.show() turns a null type into "info"), so
+   it reads the --zk-notification-bg/-fg knobs and the pointer arrows follow the fill
+   (same as toast). warning/error keep their semantic containers. */
 /* status-info mixed 20% toward on-surface: the raw tone is 3.88:1 on this fill,
    below the 4.5:1 floor. */
 .z-notification-info .z-notification-icon          { color: color-mix(in srgb, var(--zk-color-status-info) 80%, var(--zk-color-on-surface)); }
 .z-notification-info .z-notification-close > .z-notification-icon { color: var(--zk-color-on-surface); }
 .z-notification-info .z-notification-content {
-    background-color: var(--zk-color-surface-container-highest);
-    color: var(--zk-color-on-surface);
+    background-color: var(--zk-notification-bg);
+    color: var(--zk-notification-fg);
 }
-.z-notification-info .z-notification-left  { border-right-color:  var(--zk-color-surface-container-highest); }
-.z-notification-info .z-notification-right { border-left-color:   var(--zk-color-surface-container-highest); }
-.z-notification-info .z-notification-up    { border-bottom-color: var(--zk-color-surface-container-highest); }
-.z-notification-info .z-notification-down  { border-top-color:    var(--zk-color-surface-container-highest); }
+.z-notification-info .z-notification-left  { border-right-color:  var(--zk-notification-bg); }
+.z-notification-info .z-notification-right { border-left-color:   var(--zk-notification-bg); }
+.z-notification-info .z-notification-up    { border-bottom-color: var(--zk-notification-bg); }
+.z-notification-info .z-notification-down  { border-top-color:    var(--zk-notification-bg); }
 
 /* warning */
 /* on-*-container, not status-*: with the accent stripe gone the icon is the

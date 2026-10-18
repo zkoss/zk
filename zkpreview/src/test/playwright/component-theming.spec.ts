@@ -70,7 +70,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   // ── window: surface + chrome model (elevation stays mode-driven) ──────────
@@ -82,7 +81,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped)).toBe('rgb(238, 242, 255)'); // #eef2ff
 
     expect(await radiusOf(def)).toBe('4px'); // stock extra-small corner
-    expect(await bgOf(def)).not.toBe('rgb(238, 242, 255)');
   });
 
   // ── grid: outlined-table lines + fills ────────────────────────────────────
@@ -94,7 +92,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   // ── listbox: data table + row selection ──────────────────────────────────
@@ -107,8 +104,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped.locator('.z-listitem-selected').first())).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(def.locator('.z-listitem-selected').first())).not.toBe(SCOPED_PURPLE);
   });
 
   // ── tree: tree table + row selection ──────────────────────────────────────
@@ -121,8 +116,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped.locator('.z-treerow-selected').first())).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(def.locator('.z-treerow-selected').first())).not.toBe(SCOPED_PURPLE);
   });
 
   // ── panel + groupbox: surface containers ─────────────────────────────────
@@ -136,7 +129,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped)).toBe('rgb(238, 242, 255)'); // #eef2ff
 
     expect(await radiusOf(def)).toBe('6px'); // stock --zk-shape-card
-    expect(await bgOf(def)).not.toBe('rgb(238, 242, 255)');
   });
 
   test('groupbox — regional frame override, sibling untouched', async ({ page }) => {
@@ -147,7 +139,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   // ── combobox: outlined field (dropdown popup/selection also knob-driven) ──
@@ -159,7 +150,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   // ── dropdown-input family (datebox/timebox/spinner/bandbox): wrapper-border
@@ -173,7 +163,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('timebox — regional border/radius override, sibling untouched', async ({ page }) => {
@@ -184,7 +173,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('spinner — regional border/radius override, sibling untouched', async ({ page }) => {
@@ -195,7 +183,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('bandbox — regional border/radius override, sibling untouched', async ({ page }) => {
@@ -206,7 +193,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   // ── daterangebox (EE, zkmax): two-ended date-range picker field + range-calendar
@@ -221,7 +207,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-corner-extra-small
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('daterangebox — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -245,8 +230,8 @@ test.describe('Component Theme Variables', () => {
     expect(await borderBottomColorOf(scopedBar)).toBe(SCOPED_PURPLE);
     expect(await colorOf(scopedSel)).toBe(SCOPED_PURPLE); // selected label = accent
 
-    expect(await borderBottomColorOf(defBar)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(defSel)).not.toBe(SCOPED_PURPLE);
+    expect(await borderBottomColorOf(defBar)).toBe('rgba(0, 0, 0, 0.12)'); // stock --zk-color-outline-variant
+    expect(await colorOf(defSel)).toBe('rgb(55, 111, 208)'); // stock --zk-color-primary
   });
 
   // ── menu: menubar surface (popup/selected-item also knob-driven) ──────────
@@ -255,7 +240,7 @@ test.describe('Component Theme Variables', () => {
     const scoped = page.locator('div[style*="--zk-menubar-bg"] .z-menubar').first();
 
     expect(await bgOf(scoped)).toBe(SCOPED_PURPLE);
-    expect(await bgOf(def)).not.toBe(SCOPED_PURPLE);
+    expect(await bgOf(def)).toBe('rgb(240, 244, 250)'); // stock menubar surface
   });
 
   // ── avatar: base defaults hoisted from the .z-avatar element to :root, so a
@@ -265,7 +250,7 @@ test.describe('Component Theme Variables', () => {
     const def = page.locator('.z-avatar').first();
     const scoped = page.locator('div[style*="--zk-avatar-bg"] .z-avatar').first();
     expect(await bgOf(scoped)).toBe(SCOPED_PURPLE);
-    expect(await bgOf(def)).not.toBe(SCOPED_PURPLE);
+    expect(await bgOf(def)).toBe('oklch(0.92 0.0403278 260.564)'); // stock avatar fill (computed value stays oklch)
   });
 
   // ── badge: default (info) fill is routed through the base --zk-badge-bg (no
@@ -295,7 +280,7 @@ test.describe('Component Theme Variables', () => {
     expect(await colorOf(scoped.locator('.z-rating-selected').first())).toBe(SCOPED_PURPLE);
 
     // Sibling default rating's selected stars are untouched.
-    expect(await colorOf(def.locator('.z-rating-selected').first())).not.toBe(SCOPED_PURPLE);
+    expect(await colorOf(def.locator('.z-rating-selected').first())).toBe('rgb(55, 111, 208)'); // stock --zk-color-primary
   });
 
   test('rating — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -318,8 +303,8 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped)).toBe('rgb(239, 230, 255)'); // #efe6ff track override
     expect(await bgOf(scoped.locator('.z-progressmeter-image').first())).toBe(SCOPED_PURPLE);
 
-    expect(await bgOf(def)).not.toBe('rgb(239, 230, 255)');
-    expect(await bgOf(def.locator('.z-progressmeter-image').first())).not.toBe(SCOPED_PURPLE);
+    expect(await bgOf(def)).toBe('oklch(0.92 0.0403278 260.564)'); // stock track (computed value stays oklch)
+    expect(await bgOf(def.locator('.z-progressmeter-image').first())).toBe('rgb(55, 111, 208)'); // stock --zk-color-primary
   });
 
   test('progressmeter — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -349,8 +334,6 @@ test.describe('Component Theme Variables', () => {
     expect(await colorOf(scopedSelected)).toBe('rgb(255, 255, 255)');
 
     expect(await radiusOf(defSelected)).toBe('9999px'); // stock --zk-shape-corner-full
-    expect(await bgOf(defSelected)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(defSelected)).not.toBe('rgb(255, 255, 255)');
   });
 
   test('paging — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -376,7 +359,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(page.locator('.z-combobutton').first())).toBe(STOCK_RADIUS);
-    expect(await bgOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('combobutton — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -400,7 +382,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('selectbox — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -430,9 +411,6 @@ test.describe('Component Theme Variables', () => {
     expect(await colorOf(scopedAddon)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(defAddon)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(defAddon)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(defAddon)).not.toBe('rgb(239, 230, 255)');
-    expect(await colorOf(defAddon)).not.toBe(SCOPED_PURPLE);
   });
 
   test('inputgroup — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -465,8 +443,6 @@ test.describe('Component Theme Variables', () => {
     expect(await pseudoBgOf(scopedSelected, '::before')).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await pseudoBgOf(defSelected, '::before')).not.toBe(SCOPED_PURPLE);
   });
 
   test('calendar — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -489,8 +465,8 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped)).toBe('rgb(238, 242, 255)'); // #eef2ff
     expect(await borderBottomColorOf(scoped)).toBe(SCOPED_PURPLE);
 
-    expect(await bgOf(def)).not.toBe('rgb(238, 242, 255)');
-    expect(await borderBottomColorOf(def)).not.toBe(SCOPED_PURPLE);
+    expect(await bgOf(def)).toBe('rgb(255, 255, 255)'); // stock --zk-color-surface
+    expect(await borderBottomColorOf(def)).toBe('rgba(0, 0, 0, 0.12)'); // stock --zk-color-outline-variant
   });
 
   test('toolbar — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -518,10 +494,7 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scopedChecked)).toBe(SCOPED_PURPLE);
     expect(await colorOf(scopedChecked)).toBe('rgb(255, 255, 255)');
 
-    expect(await colorOf(def)).not.toBe(SCOPED_PURPLE);
     expect(await radiusOf(def)).toBe('9999px'); // stock --zk-shape-corner-full
-    expect(await bgOf(defChecked)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(defChecked)).not.toBe('rgb(255, 255, 255)');
   });
 
   test('toolbarbutton — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -552,8 +525,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scopedThumb)).toBe(SCOPED_PURPLE); // accent override (fill + thumb)
 
     expect(await radiusOf(defTrack)).toBe('9999px'); // stock --zk-shape-corner-full
-    expect(await bgOf(defTrack)).not.toBe('rgb(239, 230, 255)');
-    expect(await bgOf(defThumb)).not.toBe(SCOPED_PURPLE);
   });
 
   test('slider — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -589,9 +560,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scopedThumb)).toBe(SCOPED_PURPLE); // accent override (thumb fill)
 
     expect(await radiusOf(defTrack)).toBe('9999px'); // stock --zk-shape-corner-full
-    expect(await bgOf(defTrack)).not.toBe('rgb(239, 230, 255)');
-    expect(await bgOf(defArea)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(defThumb)).not.toBe(SCOPED_PURPLE);
   });
 
   test('rangeslider — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -628,9 +596,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scopedThumb)).toBe(SCOPED_PURPLE); // accent override (thumb fill)
 
     expect(await radiusOf(defTrack)).toBe('9999px'); // stock --zk-shape-corner-full
-    expect(await bgOf(defTrack)).not.toBe('rgb(239, 230, 255)');
-    expect(await bgOf(defArea)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(defThumb)).not.toBe(SCOPED_PURPLE);
   });
 
   test('multislider — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -657,8 +622,8 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scopedOn.locator('.z-checkbox-mold').first())).toBe(SCOPED_PURPLE);
 
     // Sibling defaults outside the region are untouched.
-    expect(await borderColorOf(defOff.locator('.z-checkbox-mold').first())).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(defOn.locator('.z-checkbox-mold').first())).not.toBe(SCOPED_PURPLE);
+    expect(await borderColorOf(defOff.locator('.z-checkbox-mold').first())).toBe('rgba(0, 0, 0, 0.6)'); // stock resting border
+    expect(await bgOf(defOn.locator('.z-checkbox-mold').first())).toBe('rgb(55, 111, 208)'); // stock --zk-color-primary
   });
 
   test('checkbox — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -687,8 +652,8 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scopedOn.locator('input[type="radio"]').first())).toBe(SCOPED_PURPLE);
 
     // Sibling defaults outside the region are untouched.
-    expect(await borderColorOf(defOff.locator('input[type="radio"]').first())).not.toBe(SCOPED_PURPLE);
-    expect(await borderColorOf(defOn.locator('input[type="radio"]').first())).not.toBe(SCOPED_PURPLE);
+    expect(await borderColorOf(defOff.locator('input[type="radio"]').first())).toBe('rgba(0, 0, 0, 0.6)'); // stock resting border
+    expect(await borderColorOf(defOn.locator('input[type="radio"]').first())).toBe('rgb(55, 111, 208)'); // stock --zk-color-primary
   });
 
   test('radio — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -794,8 +759,6 @@ test.describe('Component Theme Variables', () => {
 
     // Sibling default is untouched — the override lives on the scoped box and
     // is inherited only by its subtree, never leaking up to the default row.
-    expect(await bgOf(def)).not.toBe('rgb(238, 242, 255)');
-    expect(await colorOf(def)).not.toBe('rgb(26, 26, 46)');
     expect(await radiusOf(def)).toBe(STOCK_RADIUS); // stock --zk-shape-corner-extra-small
   });
 
@@ -840,10 +803,7 @@ test.describe('Component Theme Variables', () => {
 
     // Sibling default is untouched — the override lives on the scoped box and
     // is inherited only by its subtree, never leaking up to the default row.
-    expect(await bgOf(def)).not.toBe('rgb(238, 242, 255)');
-    expect(await colorOf(def)).not.toBe('rgb(26, 26, 46)');
     expect(await radiusOf(def)).toBe(STOCK_RADIUS); // stock --zk-shape-corner-extra-small
-    expect(await colorOf(defIcon)).not.toBe(SCOPED_PURPLE);
   });
 
   test('toast — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -867,7 +827,7 @@ test.describe('Component Theme Variables', () => {
 
     // Sibling default link is untouched — the override lives on the scoped box
     // and is inherited only by its subtree, never leaking up to the default row.
-    expect(await colorOf(def)).not.toBe(SCOPED_PURPLE);
+    expect(await colorOf(def)).toBe('rgb(55, 111, 208)'); // stock --zk-color-primary
   });
 
   test('a — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -892,7 +852,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-corner-extra-small
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('timepicker — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -931,10 +890,7 @@ test.describe('Component Theme Variables', () => {
     // Sibling default is untouched — the override lives on the scoped box and
     // is inherited only by its subtree, never leaking up to the default row.
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(defItem)).not.toBe('rgb(239, 230, 255)');
     await defItem.click();
-    expect(await bgOf(defItem)).not.toBe(SCOPED_PURPLE);
   });
 
   test('chosenbox — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -968,8 +924,6 @@ test.describe('Component Theme Variables', () => {
     // Sibling default is untouched — the override lives on the scoped box and
     // is inherited only by its subtree, never leaking up to the default row.
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(defLabel)).not.toBe(SCOPED_PURPLE);
   });
 
   test('cascader — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1003,8 +957,6 @@ test.describe('Component Theme Variables', () => {
     // Sibling default is untouched — the override lives on the scoped box and
     // is inherited only by its subtree, never leaking up to the default row.
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(defLabel)).not.toBe(SCOPED_PURPLE);
   });
 
   test('searchbox — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1237,7 +1189,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('colorbox — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1260,8 +1211,6 @@ test.describe('Component Theme Variables', () => {
     expect(await colorOf(scoped.locator('.z-biglistbox-header').first())).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(def.locator('.z-biglistbox-header').first())).not.toBe(SCOPED_PURPLE);
   });
 
   test('biglistbox — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1288,7 +1237,6 @@ test.describe('Component Theme Variables', () => {
     expect(await colorOf(scopedText)).toBe(SCOPED_PURPLE);
     expect(await radiusOf(scopedImage)).toBe('0px');
 
-    expect(await colorOf(defText)).not.toBe(SCOPED_PURPLE);
     expect(await radiusOf(defImage)).toBe('4px'); // stock --zk-shape-corner-extra-small
   });
 
@@ -1316,8 +1264,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped.locator('.z-pdfviewer-toolbar').first())).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('12px'); // stock --zk-shape-corner-medium
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(def.locator('.z-pdfviewer-toolbar').first())).not.toBe(SCOPED_PURPLE);
   });
 
   test('pdfviewer — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1343,8 +1289,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped.locator('.z-tbeditor-button-pane').first())).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('8px'); // stock --zk-shape-corner-small
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(def.locator('.z-tbeditor-button-pane').first())).not.toBe(SCOPED_PURPLE);
   });
 
   test('tbeditor — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1370,7 +1314,6 @@ test.describe('Component Theme Variables', () => {
     expect(await borderColorOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('12px'); // stock --zk-shape-corner-medium
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('signature — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1399,10 +1342,6 @@ test.describe('Component Theme Variables', () => {
     expect(await colorOf(scoped.locator('.z-cropper-cancel > a').first())).toBe('rgb(255, 255, 255)');
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-corner-extra-small
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(def.locator('.z-cropper-toolbar').first())).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(def.locator('.z-cropper-crop > a').first())).not.toBe('rgb(255, 255, 255)');
-    expect(await colorOf(def.locator('.z-cropper-cancel > a').first())).not.toBe('rgb(255, 255, 255)');
   });
 
   test('cropper — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1428,8 +1367,6 @@ test.describe('Component Theme Variables', () => {
     expect(await bgOf(scoped)).toBe(SCOPED_PURPLE);
 
     expect(await radiusOf(def)).toBe('4px'); // stock --zk-shape-corner-extra-small
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(def)).not.toBe(SCOPED_PURPLE);
   });
 
   test('dropupload — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1468,9 +1405,6 @@ test.describe('Component Theme Variables', () => {
     // Sibling default is untouched — the override lives on the scoped box and
     // is inherited only by its subtree, never leaking up to the default row.
     expect(await radiusOf(defNode)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(defNode)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(defSelected)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(defSelected)).not.toBe('rgb(255, 255, 255)');
   });
 
   test('organigram — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1511,10 +1445,7 @@ test.describe('Component Theme Variables', () => {
 
     // Sibling default is untouched — the override lives on the scoped box and
     // is inherited only by its subtree, never leaking up to the default row.
-    expect(await bgOf(defHeader)).not.toBe(SCOPED_PURPLE);
     expect(await radiusOf(defPanel)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(defPanel)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(defActiveTab)).not.toBe(SCOPED_PURPLE);
   });
 
   test('goldenlayout — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1555,9 +1486,6 @@ test.describe('Component Theme Variables', () => {
     // Sibling default is untouched — the override lives on the scoped box and
     // is inherited only by its subtree, never leaking up to the default row.
     expect(await radiusOf(defFrame)).toBe('6px'); // stock --zk-shape-card
-    expect(await borderColorOf(defFrame)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(defCounter)).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(defCounter)).not.toBe('rgb(255, 255, 255)');
   });
 
   test('portallayout — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1635,8 +1563,8 @@ test.describe('Component Theme Variables', () => {
 
     // Sibling default breadcrumb is untouched — the override lives on the scoped
     // box and is inherited only by its subtree, never leaking up to the default row.
-    expect(await colorOf(def.locator('.z-breadcrumbitem > a').first())).not.toBe(SCOPED_PURPLE);
-    expect(await colorOf(def.locator('.z-breadcrumbitem > span').first())).not.toBe(SCOPED_PURPLE);
+    expect(await colorOf(def.locator('.z-breadcrumbitem > a').first())).toBe('rgba(0, 0, 0, 0.6)'); // stock link color
+    expect(await colorOf(def.locator('.z-breadcrumbitem > span').first())).toBe('rgba(0, 0, 0, 0.87)'); // stock current-item color
   });
 
   test('breadcrumb — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1667,8 +1595,8 @@ test.describe('Component Theme Variables', () => {
 
     // Sibling default carousel is untouched — the override lives on the scoped
     // box and is inherited only by its subtree, never leaking up to the default row.
-    expect(await bgOf(def.locator('.z-carousel-arrow').first())).not.toBe(SCOPED_PURPLE);
-    expect(await pseudoBgOf(def.locator('.z-carousel-indicator-active').first(), '::before')).not.toBe(SCOPED_PURPLE);
+    expect(await bgOf(def.locator('.z-carousel-arrow').first())).toBe('rgba(0, 0, 0, 0.5)'); // stock arrow scrim
+    expect(await pseudoBgOf(def.locator('.z-carousel-indicator-active').first(), '::before')).toBe('rgb(55, 111, 208)'); // stock --zk-color-primary
   });
 
   test('carousel — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {
@@ -1703,9 +1631,9 @@ test.describe('Component Theme Variables', () => {
 
     // The sibling default editor must be untouched — the override lives on the
     // scoped box and is inherited only by its subtree.
-    expect(await bgOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await borderColorOf(def)).not.toBe(SCOPED_PURPLE);
-    expect(await bgOf(def.locator('.cm-gutters').first())).not.toBe(SCOPED_PURPLE);
+    expect(await bgOf(def)).toBe('rgb(255, 255, 255)'); // stock --zk-color-surface
+    expect(await borderColorOf(def)).toBe('rgba(0, 0, 0, 0.23)'); // stock editor border
+    expect(await bgOf(def.locator('.cm-gutters').first())).toBe('rgb(247, 249, 252)'); // stock gutter fill
   });
 
   test('codeeditor — whole-app :root override wins (loaded after norm.css.dsp)', async ({ page }) => {

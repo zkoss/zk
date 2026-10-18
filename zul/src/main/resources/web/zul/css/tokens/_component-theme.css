@@ -594,18 +594,19 @@
     --zk-popup-elevation:    var(--zk-elevation-dropdown);
 
     /* ── Notification — floating alert (Clients.showNotification()) ──────
-       .z-notification-content is the untyped/default card surface; the
-       info/warning/error type variants (.z-notification-info/-warning/-error)
-       pin their own bg/fg/accent via higher-specificity compound selectors
-       (same treatment as button/progressmeter's color variants), so only an
-       untyped notification responds to these knobs. There is no accent knob:
-       the left accent stripe was removed (MD3 alerts carry severity with the
-       leading icon + container tint, not a leading color bar), and an untyped
-       notification renders no icon glyph at all — ZK picks the glyph class from
-       its type map, so with no type there is nothing left for an accent color to
-       paint. Elevation (box-shadow) stays on
-       its base token, not knob-driven — a deliberate curation choice to keep
-       the surface small (same convention as calendar/slider's minor
+       Notification.show() turns a null type into "info", so these knobs drive
+       the INFO (default) variant's fill/text and its pointer arrows, plus the
+       untyped base .z-notification-content; warning/error pin their own
+       bg/fg via higher-specificity compound selectors (same treatment as
+       toast and button/progressmeter's color variants), so a typed
+       warning/error notification is unaffected by an override. There is no
+       accent knob: the left accent stripe was removed (MD3 alerts carry
+       severity with the leading icon + container tint, not a leading color
+       bar), and an untyped notification renders no icon glyph at all — ZK
+       picks the glyph class from its type map, so with no type there is
+       nothing left for an accent color to paint. Elevation (box-shadow) stays
+       on its base token, not knob-driven — a deliberate curation choice to
+       keep the surface small (same convention as calendar/slider's minor
        sub-features); height/width stay in tokens/_sizing.css (size
        dimension, not appearance). The close-button icon's `color: inherit`
        reads from .z-notification, not .z-notification-content, so it is

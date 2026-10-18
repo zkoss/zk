@@ -78,6 +78,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Pilot: the same knob contract asserted on each component's own preview page.
+      name: 'component-theming-borrowed',
+      testMatch: /component-theming-borrowed\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'reset',
       testMatch: /reset-scoping\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
