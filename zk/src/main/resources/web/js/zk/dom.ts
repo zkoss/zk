@@ -898,7 +898,7 @@ export class JQZK {
 	/**
 	 * Position the first matched element to the specified location.
 	 *
-	 * @param dim - the dimension of the anchor location
+	 * @param dim - the dimension of the anchor location. If omitted, the visible viewport is used.
 	 * @param where - where to position. Default: `overlap`<br/>
 	 * Allowed values:</br>
 	 * <ul>
@@ -936,7 +936,7 @@ export class JQZK {
 	 * Position the first matched element to the specified location.
 	 *
 	 * @param dim - the element used to get the dimension of the achor location.
-	 * (by use of {@link dimension})
+	 * (by use of {@link dimension}). If omitted, the visible viewport is used.
 	 * @param where - where to position. Default: `overlap`<br/>
 	 * Allowed values: refer to {@link position}.
 	 * @param opts - a map of addition options.<br/>
@@ -948,10 +948,9 @@ export class JQZK {
 		where = where || 'overlap';
 
 		if (!dim) {
-			var bd = jq('body')[0];
 			dim = {
-				left: 0, top: 0,
-				width: bd.offsetWidth, height: bd.offsetHeight
+				left: jq.innerX(), top: jq.innerY(),
+				width: jq.innerWidth(), height: jq.innerHeight()
 			};
 		}
 
