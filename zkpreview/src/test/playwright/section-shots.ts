@@ -2,9 +2,9 @@ import { expect, Page, test } from '@playwright/test';
 
 // Sectioned gallery screenshots (doc/marble-sectioned-gallery-brief.md, D7).
 //
-// A whole-page gallery shot tolerates maxDiffPixelRatio * page-area pixels (tree 16,481 px,
-// component-theming 47,121 px), so the budget grows with page height and a 1px border change on
-// one control hides inside it. Here every section gets its own shot and an absolute pixel budget.
+// A whole-page gallery shot tolerates maxDiffPixelRatio * page-area pixels (tree 16,481 px), so
+// the budget grows with page height and a 1px border change on one control hides inside it. Here
+// every section gets its own shot and an absolute pixel budget.
 //
 // Section = the parent element of a standard heading row `.z-text-uppercase.z-border-bottom`
 // inside the page's `.z-p-8` wrapper. The first child of the wrapper, when it holds no heading,
@@ -75,7 +75,7 @@ export async function expectSectionShots(
   const listed = await listSections(page, comp);
   const sections = listed.map((s, n) => ({ ...s, n })).filter(s => !skipTitle?.test(s.title));
   // Each section is a clipped full-page capture (about 1s on a tall page); the default 30s test
-  // timeout would cut component-theming (112 sections on an 18,000px page) short.
+  // timeout would cut a page with over a hundred sections short.
   test.setTimeout(30_000 + 2_000 * sections.length);
   const root = page.locator('.z-p-8').first();
   // ZK recomputes widget sizes on every window resize, and some demos respond to each resize
