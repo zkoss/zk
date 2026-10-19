@@ -35,5 +35,49 @@
             <div><label sclass="z-text-xs z-text-secondary" value="Right"/></div>
         </div>
     </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="In a toolbar"/></div>
+        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="bar: divider between the items"/></div>
+                <toolbar>
+                    <toolbarbutton label="New"/>
+                    <toolbarbutton label="Open"/>
+                    <separator bar="true"/>
+                    <toolbarbutton label="Cut"/>
+                    <toolbarbutton label="Copy"/>
+                </toolbar>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="orient=vertical bar: the same divider"/></div>
+                <toolbar>
+                    <toolbarbutton label="New"/>
+                    <toolbarbutton label="Open"/>
+                    <separator orient="vertical" bar="true"/>
+                    <toolbarbutton label="Cut"/>
+                    <toolbarbutton label="Copy"/>
+                </toolbar>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="no bar: spacer that pushes the items apart"/></div>
+                <toolbar width="320px">
+                    <toolbarbutton label="New"/>
+                    <toolbarbutton label="Open"/>
+                    <separator/>
+                    <toolbarbutton label="Help"/>
+                </toolbar>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2" style="width:160px">
+                <div><label sclass="z-text-xs z-text-secondary" value="vertical toolbar with a bar"/></div>
+                <toolbar orient="vertical">
+                    <toolbarbutton label="New"/>
+                    <toolbarbutton label="Open"/>
+                    <separator bar="true"/>
+                    <toolbarbutton label="Cut"/>
+                    <toolbarbutton label="Copy"/>
+                </toolbar>
+            </div>
+        </div>
+    </div>
 </div>
 </zk>

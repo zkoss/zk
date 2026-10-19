@@ -131,6 +131,23 @@
     border: none;
 }
 
+/* A separator with bar="true" between the items of a toolbar is a divider (follow-up 45, D21 = B), in the
+   toolbar's own axis, whichever orient the separator has. It reads like .z-toolbarseparator: 1px x 24px.
+   The box holds `&nbsp;`, so `font-size: 0` and `overflow: hidden` keep the 1px flex item from stretching to
+   the width of that glyph. `flex-basis` and `min-width` set the size because the spacer rule above makes
+   `width: auto` important. Panel mold (a table) is left out: its separators are not flex items. */
+.z-toolbar-content > .z-separator:is(.z-separator-horizontal-bar, .z-separator-vertical-bar) {
+    flex: 0 0 1px;
+    align-self: center;
+    min-width: 0;
+    min-height: 0;
+    height: 24px;
+    margin: 0 var(--zk-spacing-1);
+    overflow: hidden;
+    font-size: 0;
+    background: var(--zk-color-outline-variant);
+}
+
 /* ─── Vertical toolbar ───────────────────────────────────────────────────── */
 .z-toolbar-vertical {
     flex-direction: column;
@@ -147,6 +164,13 @@
     padding: var(--zk-spacing-2) 0;
     gap: var(--zk-spacing-1);
     min-height: unset;
+}
+
+/* Bar separator in vertical toolbar: the same divider across the toolbar axis (24px x 1px) */
+.z-toolbar-vertical > .z-toolbar-content > .z-separator:is(.z-separator-horizontal-bar, .z-separator-vertical-bar) {
+    min-width: 24px;
+    height: 1px;
+    margin: var(--zk-spacing-1) 0;
 }
 
 /* Toolbarseparator in vertical toolbar: horizontal rule */

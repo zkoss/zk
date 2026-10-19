@@ -258,7 +258,8 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
 
   test('horizontal separator bars paint a line (a gradient background is dropped under forced colors)', async ({ page }) => {
     await page.goto('/separator.zul', { waitUntil: 'domcontentloaded' });
-    const bars = page.locator('.z-separator-horizontal-bar');
+    // A bar between toolbar items is a 24px divider, covered by its own guard below.
+    const bars = page.locator('.z-separator-horizontal-bar:not(.z-toolbar-content > .z-separator-horizontal-bar)');
     await bars.first().waitFor({ state: 'attached', timeout: 10000 });
     await page.evaluate(() => document.fonts.ready);
     const count = await bars.count();
@@ -663,5 +664,49 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect((await bar.boundingBox())!.height, 'the default bar is a 1px box').toBe(1);
     const inkRows = await darkInkRows(page, await bar.screenshot());
     expect(inkRows, 'the 1px box must hold exactly one dark row').toBe(1);
+  });
+
+  // Follow-up 45 F1 (D21 = B). Fixture: web/pv/separator-toolbar-guard.zul
+  const SEPARATOR_TOOLBAR_FIXTURE = '/pv/separator-toolbar-guard.zul';
+  async function openSeparatorToolbarFixture(page: Page) {
+    await page.goto(SEPARATOR_TOOLBAR_FIXTURE, { waitUntil: 'domcontentloaded' });
+    await page.locator('.gs-outside-row').waitFor();
+    await page.evaluate(() => document.fonts.ready);
+  }
+
+  test('a bar between toolbar items is a CanvasText divider of 1px x 24px, in both toolbar orientations', async ({ page }) => {
+    await openSeparatorToolbarFixture(page);
+    const canvasText = await systemColor(page, 'CanvasText');
+    const expected = [
+      { wrapper: 'gs-horizontal-bar', width: 1, height: 24 },
+      { wrapper: 'gs-vertical-bar', width: 1, height: 24 },
+      { wrapper: 'gs-toolbar-vertical', width: 24, height: 1 },
+      { wrapper: 'gs-vertical-toolbar-vertical-bar', width: 24, height: 1 },
+    ];
+    for (const { wrapper, width, height } of expected) {
+      const measured = await page.locator(`.${wrapper} .z-separator`).evaluate(el => {
+        const box = el.getBoundingClientRect();
+        return { width: box.width, height: box.height, background: getComputedStyle(el).backgroundColor };
+      });
+      expect(measured, wrapper).toEqual({ width, height, background: canvasText });
+    }
+  });
+
+  test('a bar between toolbar items draws no line through the toolbar row', async ({ page }) => {
+    await openSeparatorToolbarFixture(page);
+    for (const wrapper of ['gs-horizontal-bar', 'gs-toolbar-vertical']) {
+      const content = await page.locator(`.${wrapper} .z-separator-horizontal-bar`)
+        .evaluate(el => getComputedStyle(el, '::before').content);
+      expect(content, `${wrapper}: the full-width pseudo-element line of a bar outside a toolbar`).toBe('none');
+    }
+  });
+
+  test('a vertical bar outside a toolbar is one continuous line, not ticks at its ends', async ({ page }) => {
+    await openSeparatorToolbarFixture(page);
+    // The `&nbsp;` in the box gets a text backplate under forced colours; it used to cover the middle of the line.
+    const bar = page.locator('.gs-outside-row .z-separator');
+    const height = (await bar.boundingBox())!.height;
+    const inkRows = await darkInkRows(page, await bar.screenshot());
+    expect(inkRows, `the ${height}px bar must paint ink on every row`).toBe(height);
   });
 });

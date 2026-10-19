@@ -2257,6 +2257,69 @@ test.describe('important-removal-guards', () => {
   });
 });
 
+// Follow-up 45 F1 (D21 = B): a bar separator between toolbar items is a 1px x 24px divider in the toolbar's own axis,
+// whichever orient it has, and the items after it stay next to it; a separator without a bar stays a flex spacer.
+// Fixture: web/pv/separator-toolbar-guard.zul
+test.describe('separator in a toolbar (follow-up 45 F1)', () => {
+  const FIXTURE = '/pv/separator-toolbar-guard.zul';
+  const DIVIDER_LONG_PX = 24;
+  const TOOLBAR_GAP_PX = 4.5;
+  const DIVIDER_GAP_MAX_PX = 2 * TOOLBAR_GAP_PX;
+
+  async function measure(page: Page, wrapper: string) {
+    return page.evaluate((cls) => {
+      const root = document.querySelector('.' + cls) as HTMLElement;
+      const box = (el: Element) => el.getBoundingClientRect();
+      const sep = root.querySelector('.z-separator') as HTMLElement;
+      const [first, last] = Array.from(root.querySelectorAll('.z-toolbarbutton'));
+      const toolbar = root.querySelector('.z-toolbar') as HTMLElement;
+      return {
+        width: box(sep).width, height: box(sep).height,
+        background: getComputedStyle(sep).backgroundColor,
+        centreX: box(sep).left + box(sep).width / 2, centreY: box(sep).top + box(sep).height / 2,
+        toolbarCentreX: box(toolbar).left + box(toolbar).width / 2, toolbarContentCentreY: box(first).top + box(first).height / 2,
+        gapAfterX: box(last).left - box(sep).right, gapAfterY: box(last).top - box(sep).bottom,
+        gapBeforeX: box(sep).left - box(first).right,
+      };
+    }, wrapper);
+  }
+
+  async function open(page: Page) {
+    await page.goto(FIXTURE, { waitUntil: 'domcontentloaded' });
+    await page.locator('.gs-plain').waitFor();
+    await page.evaluate(() => document.fonts.ready);
+  }
+
+  for (const wrapper of ['gs-horizontal-bar', 'gs-vertical-bar']) {
+    test(`${wrapper}: a bar in a horizontal toolbar is a 1px x ${DIVIDER_LONG_PX}px divider between adjacent items`, async ({ page }) => {
+      await open(page);
+      const m = await measure(page, wrapper);
+      expect({ width: m.width, height: m.height }).toEqual({ width: 1, height: DIVIDER_LONG_PX });
+      expect(m.background, 'the divider is painted').not.toBe('rgba(0, 0, 0, 0)');
+      expect(Math.abs(m.centreY - m.toolbarContentCentreY), 'centred on the items').toBeLessThanOrEqual(1);
+      expect(m.gapAfterX, 'the next item stays next to the divider').toBeLessThanOrEqual(DIVIDER_GAP_MAX_PX);
+      expect(m.gapBeforeX, 'the previous item stays next to the divider').toBeLessThanOrEqual(DIVIDER_GAP_MAX_PX);
+    });
+  }
+
+  for (const wrapper of ['gs-toolbar-vertical', 'gs-vertical-toolbar-vertical-bar']) {
+    test(`${wrapper}: a bar in a vertical toolbar is a ${DIVIDER_LONG_PX}px x 1px divider between adjacent items`, async ({ page }) => {
+      await open(page);
+      const m = await measure(page, wrapper);
+      expect({ width: m.width, height: m.height }).toEqual({ width: DIVIDER_LONG_PX, height: 1 });
+      expect(Math.abs(m.centreX - m.toolbarCentreX), 'centred across the toolbar').toBeLessThanOrEqual(1);
+      expect(m.gapAfterY, 'the next item stays next to the divider').toBeLessThanOrEqual(DIVIDER_GAP_MAX_PX);
+    });
+  }
+
+  test('gs-plain: a separator without a bar is still a spacer that pushes the next item to the end', async ({ page }) => {
+    await open(page);
+    const m = await measure(page, 'gs-plain');
+    expect(m.width, 'the spacer takes the free width').toBeGreaterThan(100);
+    expect(m.gapAfterX, 'the next item is one flex gap from the spacer, at the far end').toBeLessThanOrEqual(TOOLBAR_GAP_PX);
+  });
+});
+
 // =======================================================
 // Remaining input / form-control state coverage
 // Goal: EVERY ZK input component carries a hover + focus baseline, not just the

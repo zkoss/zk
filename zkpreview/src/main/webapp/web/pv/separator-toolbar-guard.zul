@@ -1,0 +1,29 @@
+<?page title="Separator bars in toolbars" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for the separator-in-toolbar guards of mesh-header-footer.spec.ts and forced-colors.spec.ts (follow-up 45 F1,
+     D21 = B): a bar separator between toolbar items is a 1px x 24px divider, a plain separator stays a flex spacer, and a
+     vertical bar outside a toolbar is a continuous line. Lives under pv/ so the galleries do not pick it up as a page. -->
+<zk>
+<div sclass="z-p-8">
+    <div sclass="gs-horizontal-bar"><toolbar>
+        <toolbarbutton label="One"/><separator bar="true"/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-vertical-bar"><toolbar>
+        <toolbarbutton label="One"/><separator orient="vertical" bar="true"/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-plain"><toolbar>
+        <toolbarbutton label="One"/><separator/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-toolbar-vertical" style="width:160px"><toolbar orient="vertical">
+        <toolbarbutton label="One"/><separator bar="true"/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-vertical-toolbar-vertical-bar" style="width:160px"><toolbar orient="vertical">
+        <toolbarbutton label="One"/><separator orient="vertical" bar="true"/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-outside" style="display:flex; align-items:center; gap:16px; height:80px;">
+        <label value="Left"/><separator orient="vertical" bar="true" spacing="16px"/><label value="Right"/>
+    </div>
+    <div sclass="gs-outside-row" style="display:flex; align-items:center; gap:16px;">
+        <label value="Left"/><separator orient="vertical" bar="true" spacing="16px"/><label value="Right"/>
+    </div>
+</div>
+</zk>

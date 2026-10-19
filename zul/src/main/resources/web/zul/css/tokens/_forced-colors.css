@@ -493,7 +493,14 @@
         height: 1px;
         background-color: CanvasText;
     }
-    .z-separator-vertical-bar { background-color: CanvasText; }
+    /* The text backplate that forced colours paints behind the `&nbsp;` of the box covers the middle of the
+       1px line, so it breaks into ticks at the ends; opting the box out of the colour adjustment removes it. */
+    .z-separator-vertical-bar { background-color: CanvasText; forced-color-adjust: none; }
+    /* A bar between toolbar items is a 1px x 24px divider (toolbar.css), not a line through the row or a block. */
+    .z-toolbar-content > .z-separator:is(.z-separator-horizontal-bar, .z-separator-vertical-bar) {
+        background-color: CanvasText;
+    }
+    .z-toolbar-content > .z-separator-horizontal-bar::before { content: none; }
 
     /* Slider / rangeslider / multislider — rail + active fill (thumbs bordered above) */
     .z-slider-center,
