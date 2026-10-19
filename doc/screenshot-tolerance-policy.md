@@ -96,6 +96,19 @@ pixels in `listbox-gallery.png` were not counted as differences and the old colo
 Limit: a colour change whose YIQ distance is below 0.05 still passes. `padShot`'s `maxDiffPixels: 20`
 is unchanged and applies on top of the threshold.
 
+### 5.1 `compact` and `brand` projects use 0.02 (2026-10-19, batch 3, `doc/marble-compact-brand-batch3-report.md`)
+
+The `compact` project (compact density) and the `brand` project (copper seed) set `threshold: 0.02`, tighter than
+the `chromium` project's 0.05.
+
+Why: a brand test must see a container tone moved from 0.92 to 0.88. The pixelmatch YIQ distance of that change is
+0.0500 for the stock seed `#376fd0` and 0.0492 for the copper seed `#b45309` (0.92 -> 0.90: 0.0246 and 0.0243), so the
+threshold has to be below 0.0492. At the 0.2 default every screenshot passed that mutation; at 0.02 the tabbox, toolbar
+and paging shots failed in both projects. The noise of the 180 (now 150) new baselines is 0 px, so the tighter
+threshold costs nothing on this machine; cross-machine anti-aliasing at 0.02 is unmeasured. The residual scan in
+`brand-override.spec.ts` does not use `toHaveScreenshot`. The per-section `maxDiffPixels: 20` (inherited from
+`gallery-scan.spec.ts`) applies on top.
+
 ## 6. What no option changes
 
 The zero-tolerance equivalence run stays at zero — that is its purpose. When it is re-run (a move, a

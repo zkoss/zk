@@ -2,6 +2,7 @@ import { test, expect, Page, TestInfo } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 import { AGGREGATE_PAGES } from './aggregate-pages';
+import { expectVariantSectionShots, VARIANT_PAGES } from './variant-gallery';
 
 // Brand-colour override guard (doc/marble-test-gaps-round2-plan.md section 6).
 //
@@ -372,6 +373,16 @@ async function readComputedTokens(page: Page): Promise<Record<string, string>> {
     return out;
   }, Object.keys(DERIVED_TOKENS));
 }
+
+// Pixel baselines of the representative pages in copper, `<page>-brand-<NN>-<slug>.png` (variant-gallery.ts).
+// Where the residual scan answers "did every primary-family pixel move", these pin what the copper page looks like.
+test.describe('brand-gallery', () => {
+  for (const comp of VARIANT_PAGES) {
+    test(comp, async ({ page }) => {
+      await expectVariantSectionShots(page, comp, 'brand', () => { document.documentElement.dataset.brand = 'copper'; });
+    });
+  }
+});
 
 test.describe('brand-derived-tokens', () => {
   test('derived primary-family tokens follow the copper seed', async ({ page }) => {

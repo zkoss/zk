@@ -397,6 +397,22 @@ function galleryPageOfBaseline(name, pageKeys) {
   return pagesByLength.find(page => name.startsWith(`${page}-`) && GALLERY_BASELINE_TAIL.test(name.slice(page.length + 1))) ?? null;
 }
 
+const VARIANT_BASELINE_TAIL = /^(compact|brand)-\d{2}-.+$/;
+
+/**
+ * The page and variant of a variant gallery baseline `<page>-compact-<NN>-<slug>.png` / `<page>-brand-<NN>-<slug>.png`
+ * (compact-density.spec.ts, brand-override.spec.ts: describe `<variant>-gallery`, test `<page>`). The longest page name wins.
+ */
+function variantGalleryOfBaseline(name, pageKeys) {
+  const pagesByLength = [...pageKeys].sort((a, b) => b.length - a.length);
+  for (const page of pagesByLength) {
+    if (!name.startsWith(`${page}-`)) continue;
+    const m = VARIANT_BASELINE_TAIL.exec(name.slice(page.length + 1));
+    if (m) return { page, variant: m[1] };
+  }
+  return null;
+}
+
 /** The tests that compare gallery baselines: gallery-scan.spec.ts (project `gallery`) and `test('gallery')` in screenshot.spec.ts. */
 function isGalleryTest(test) {
   return test.project === 'gallery' || (test.project === 'chromium' && test.title === 'gallery'); // tablet galleries write `<page>-tablet.png`
@@ -509,6 +525,8 @@ function buildTestsForPage(tests, pageKeys) {
   }
   const testsForPage = pageKey => byPage.get(pageKey) ?? new Set();
   testsForPage.galleryOnly = pageKey => new Set([...testsForPage(pageKey)].filter(id => isGalleryTest(tests[id])));
+  testsForPage.variantGallery = (pageKey, variant) => new Set([...testsForPage(pageKey)]
+    .filter(id => tests[id].project === variant && tests[id].describes[0] === `${variant}-gallery`));
   testsForPage.tierCounts = tierCounts;
   return testsForPage;
 }
@@ -681,6 +699,13 @@ function resolvePreviewZul(where, key, ctx, sel) {
 }
 
 function resolveBaselinePng(where, name, ctx, sel) {
+  const variantGallery = variantGalleryOfBaseline(name, ctx.classes.pageKeys);
+  if (variantGallery) {
+    const { page, variant } = variantGallery;
+    sel.reasons.push(`${where}: ${variant} gallery baseline image of page ${page}`);
+    addPagesAndTests(sel, [page], pageKey => ctx.testsForPage.variantGallery(pageKey, variant), [page]);
+    return;
+  }
   const galleryPage = galleryPageOfBaseline(name, ctx.classes.pageKeys);
   if (galleryPage) {
     sel.reasons.push(`${where}: gallery baseline image of page ${galleryPage}`);

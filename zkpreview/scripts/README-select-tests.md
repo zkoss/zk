@@ -70,7 +70,7 @@ gains `describe.serial`, a `beforeAll` its tests rely on, or a module-level obje
    exception, see "Aggregate pages".
 5. Spec file -> that spec only. Baseline PNG -> the page named by its file name; a gallery baseline
    (`<page>-gallery.png`, the sectioned `<page>-<NN>-<slug>.png`, or the slug-less
-   `<page>-<name>-<NN>.png` such as `window-overlapped-00.png`) -> only that page's desktop gallery tests. `zkpreview/doc/*.json` -> the specs reading it.
+   `<page>-<name>-<NN>.png` such as `window-overlapped-00.png`) -> only that page's desktop gallery tests. `<page>-compact-<NN>-<slug>.png` and `<page>-brand-<NN>-<slug>.png` -> only that page's `compact-gallery` / `brand-gallery` test (`variantGalleryOfBaseline`). `zkpreview/doc/*.json` -> the specs reading it.
 6. Widget source (`<Name>.ts`) -> pages containing `z-<name>`.
 7. Anything else -> `full`.
 

@@ -63,9 +63,21 @@ export default defineConfig({
     },
     {
       // Brand-colour override: with <html data-brand="copper"> no pixel may keep a stock primary-family
-      // colour, and the derived tokens must follow the seed. See brand-override.spec.ts.
+      // colour, the derived tokens must follow the seed, and the representative pages have sectioned
+      // screenshots in copper. See brand-override.spec.ts.
       name: 'brand',
       testMatch: /brand-override\.spec\.ts/,
+      // A per-pixel colour distance of 0.02 (the 0.2 default let a container tone moved from 0.92 to 0.88 pass,
+      // doc/marble-compact-brand-batch3-report.md, evidence c-ii). The residual scan does not use toHaveScreenshot.
+      expect: { toHaveScreenshot: { threshold: 0.02 } },
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Compact density (<html data-density="compact">): sectioned screenshots of the representative pages and the
+      // height of every ladder-tier control against its alias. See compact-density.spec.ts.
+      name: 'compact',
+      testMatch: /compact-density\.spec\.ts/,
+      expect: { toHaveScreenshot: { threshold: 0.02 } },
       use: { ...devices['Desktop Chrome'] },
     },
     {
