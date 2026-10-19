@@ -96,7 +96,7 @@ This is the common case and needs no special load order:
 
 There is no dedicated demo page. Each component's own preview page (for example `button.zul`) shows its
 default look, and the knob contract is regression-tested on those pages in
-[`component-theming.spec.ts`](../../zkpreview/src/test/playwright/component-theming.spec.ts).
+[`component-theme-variables.spec.ts`](../../zkpreview/src/test/playwright/component-theme-variables.spec.ts).
 
 ## Cascade & load-order rules (important)
 
@@ -169,7 +169,7 @@ mechanics / hygiene / verification that keep them true.
 | **CTV-6** | **Meaningful coverage.** The variables cover the component's salient appearance axes (as applicable: fill, text, border, radius, the defining state/accent) — enough for a recognizable restyle without forking. Size lives in `_sizing.css`; elevation may be intentionally mode-driven. | Review against the component's DOM + states; record deliberate exclusions. |
 | **CTV-7** | **State integrity.** Disabled / readonly / selected / error treatments stay correct under an override (they don't accidentally inherit a fill/border variable and lose their state distinction) — unless a state is itself an intentional, documented variable. | Override the region; assert the disabled (etc.) instance keeps its treatment. |
 | **CTV-8** | **Documented.** Variable names + defaults (+ scope/exceptions) are listed in this doc's per-family table. | This file's reference section has the entry. |
-| **CTV-9** | **Regression-tested.** A test in `component-theming.spec.ts`, run on the component's own preview page, reads the stock value, injects a `:root` override after the theme bundle and reads again. That proves CTV-1/2/4/5: a hardcoded value or a default declared on the component element would shadow the inherited `:root` value and fail the second read. | Test exists and is green. |
+| **CTV-9** | **Regression-tested.** A test in `component-theme-variables.spec.ts`, run on the component's own preview page, reads the stock value, injects a `:root` override after the theme bundle and reads again. That proves CTV-1/2/4/5: a hardcoded value or a default declared on the component element would shadow the inherited `:root` value and fail the second read. | Test exists and is green. |
 
 > CTV-6 and CTV-7 are judgment calls (what counts as "enough" coverage / a preserved state);
 > the tracker records the rationale, not just a checkmark.
@@ -630,7 +630,7 @@ trio, curated separately from the pager buttons.
 
 Numbered page buttons — and therefore `.z-paging-selected` — only render in
 the **`os`** mold; the default mold shows prev/next buttons plus the
-jump-to-page input, with no page numbers. `component-theming.spec.ts` reads the
+jump-to-page input, with no page numbers. `component-theme-variables.spec.ts` reads the
 `.z-paging-selected` button that `paging.zul` renders in the `os` mold, so
 `--zk-paging-selected-bg/-fg/-radius` are actually exercised; the jump-to-page input
 knobs are shipped but not tested (the `os` mold never renders the input). Disabled
@@ -1684,7 +1684,7 @@ Validated by the button pilot; repeat per component (then update the
    token/literal — surgically, only the exposed properties, no behavior change.
 4. **Build** (`npm run build:css`) and confirm the knob appears in `norm.css.dsp` and is
    consumed in the component's `.css.dsp`; `npm run check:css-dsp` stays green.
-5. **Test**: add the component to `component-theming.spec.ts`, on the component's own preview page,
+5. **Test**: add the component to `component-theme-variables.spec.ts`, on the component's own preview page,
    and assert the knob contract (stock values unchanged, then a `:root` override wins). If the page
    does not render a state a knob needs (selected row, open popup), create it in the test with a real
    click or the client widget API.

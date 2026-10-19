@@ -439,9 +439,9 @@ PASS iff `overridden` equals `VALUE` (normalized) AND `restored === before`.
 
 **x-ctv-suite** (when `ctv: shipped`) — the CTV-9 regression net exists and is green:
 ```bash
-npx playwright test --config zkpreview/src/test/playwright/playwright.config.ts --project=component-theming -g "<component>"
+npx playwright test --config zkpreview/src/test/playwright/playwright.config.ts --project=component-theme-variables -g "<component>"
 ```
-PASS iff exit 0 AND ≥ 1 test ran. **"No tests found" is a FAIL** — it means the component's test in `component-theming.spec.ts` (which runs on the component's own preview page) was never added.
+PASS iff exit 0 AND ≥ 1 test ran. **"No tests found" is a FAIL** — it means the component's test in `component-theme-variables.spec.ts` (which runs on the component's own preview page) was never added.
 
 **x-density** (when `density: bound`) — the control actually shrinks under a density override. For each token in `density-tokens`: read its resolved px value from `documentElement`, read the control's rendered height, `setProperty(token, <value − 8>px)`, assert the rendered height shrinks by ~8px (±2px), then `removeProperty` and confirm restore. A control whose height doesn't move is pinned by a raw px somewhere — FAIL with the observed heights.
 
@@ -703,7 +703,7 @@ Allowed:
 - `Write` / `Edit` for:
   - `doc/harness/eval-reports/*.md`
   - `doc/screenshots/<component>-*` (flat visual artefacts — `<component>-<scenario>.png`)
-- `Bash` for `curl` health-check, the §3a `npx playwright screenshot` capture fallback, and the §3e cross-cutting runs (`npx playwright test --project=component-theming|forced-colors-gallery`, `npm run test:forced-colors`, grep of the `shared-css-file`)
+- `Bash` for `curl` health-check, the §3a `npx playwright screenshot` capture fallback, and the §3e cross-cutting runs (`npx playwright test --project=component-theme-variables|forced-colors-gallery`, `npm run test:forced-colors`, grep of the `shared-css-file`)
 
 Forbidden:
 - Any write outside `doc/harness/eval-reports/` and `doc/screenshots/`

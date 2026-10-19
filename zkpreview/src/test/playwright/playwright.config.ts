@@ -74,8 +74,8 @@ export default defineConfig({
     {
       // Component Theme Variables knob-contract regression (--zk-<comp>-* overrides),
       // asserted on each component's own preview page.
-      name: 'component-theming',
-      testMatch: /component-theming\.spec\.ts/,
+      name: 'component-theme-variables',
+      testMatch: /component-theme-variables\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
     {

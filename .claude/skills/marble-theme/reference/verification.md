@@ -75,7 +75,7 @@ Config: `zkpreview/src/test/playwright/playwright.config.ts`.
 | `gallery` | full-page component galleries — the bulk of the baselines |
 | `smoke` | every preview ZUL renders (xmllint passing is **not** proof it renders) |
 | `framework` | framework-class compliance |
-| `component-theming` | the per-component knob tests, one or more per component, each on that component's own preview page |
+| `component-theme-variables` | the per-component knob tests, one or more per component, each on that component's own preview page |
 | `reset` | reset scoping |
 | `hit-target` | minimum touch-target sizes |
 | `responsive` | breakpoint behaviour |

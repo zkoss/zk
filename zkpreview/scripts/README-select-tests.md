@@ -119,7 +119,7 @@ Changes that touch only blank lines or comments select nothing. Changed rules wi
   (`'/pv/...zul'`; paths in comments and titles do not count). Rebuild it after a full run, with the preview server up:
   `node scripts/build-class-index.mjs --url http://127.0.0.1:8085`. It fails (and writes nothing) if any page errors.
   Rebuild it whenever a spec starts navigating to a new fixture page.
-* `component-theming.spec.ts` opens its page from the test title (`/${PAGES[comp] ?? comp}.zul`). `computedUrlPage`
+* `component-theme-variables.spec.ts` opens its page from the test title (`/${PAGES[comp] ?? comp}.zul`). `computedUrlPage`
   in `select-tests.mjs` parses its `PAGES*` maps and applies them to the title; it is the only place that knows this.
   Comments in a spec are ignored when looking for the pages a test opens.
 * The page -> test mapping is one function, `buildTestsForPage` (and `titleNamesPage` beside it) in `select-tests.mjs`.

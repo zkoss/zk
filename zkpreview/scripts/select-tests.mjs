@@ -407,7 +407,7 @@ function titleNamesPage(test, pageKey) {
 }
 
 /**
- * COMPUTED-URL SPECS (component-theming.spec.ts). Its describes open the page in `beforeEach` from the test title:
+ * COMPUTED-URL SPECS (component-theme-variables.spec.ts). Its describes open the page in `beforeEach` from the test title:
  * `page.goto(`/${PAGES[comp] ?? comp}.zul`)`, where `comp` is the text before ' — ' and `PAGES`, `PAGES3` are
  * `Record<string, string>` maps for the components whose page has another name. No `.zul` literal exists to scan,
  * so the page is rebuilt here: parse the maps, apply them to the title. Nothing else in the selector knows this spec.
