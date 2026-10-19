@@ -398,6 +398,19 @@
         <listgroup label="Group"/>
         <listitem><listcell label="Alice"/><listcell label="Engineering"/></listitem>
     </listbox>
+    <!-- A plain Listbox whose later item holds a checkmark Listbox in a cell: the outer group is not a group of a checkmark
+         Listbox, so its toggle arrow stays on the keyline of the outer text (follow-up 46 F2). -->
+    <listbox sclass="mhf-listbox-group-nested" width="360px">
+        <listhead>
+            <listheader label="Name" width="160px"/>
+            <listheader label="Detail" width="200px"/>
+        </listhead>
+        <listgroup label="Group"/>
+        <listitem>
+            <listcell label="Alice"/>
+            <listcell><listbox checkmark="true" multiple="true" width="160px"><listitem label="Inner"/></listbox></listcell>
+        </listitem>
+    </listbox>
     <!-- A Listbox whose groups are selectable (groupSelect), one of them disabled (follow-up 41). -->
     <listbox sclass="mhf-listbox-group-select" width="360px" checkmark="true" multiple="true">
         <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>

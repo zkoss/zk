@@ -809,13 +809,32 @@ Same in the 2026-09-11 and the refreshed captures; not regressions. Left as foun
 
 **Resolved** in zk `51d4eacbba` for the second bullet only (`inset: calc(50% - 0.5px)`; guard clones a bar without inline height):
 the line now sits on the same row as in normal mode in Chromium, Firefox and WebKit.
-**Still open** for the first bullet. IceBlue (master `separator.less`, `toolbar.less`, read only, not rendered) draws a
+**First bullet resolved** in the NS33 commit (D21 = B, owner ruling 2026-10-19; see below). IceBlue (master `separator.less`, `toolbar.less`, read only, not rendered) draws a
 horizontal bar in a toolbar as a block `div` (`height: 7px`, a 1px `:after` line at 50%, `opacity: .69`), which breaks the
 floated `.z-toolbar-start` content onto its own 7px row as wide as the float, so it is a visible line, not a spacer. Marble
 normal mode turns every `<separator>` in a toolbar into an invisible `flex: 1` spacer (`toolbar.css` "Separator inside toolbar",
 since `2100200284`), and Marble forced colours draws a line through the middle of the toolbar row next to the buttons. Neither
 Marble mode matches IceBlue and the two modes disagree; decide what `bar="true"` in a toolbar should look like (V4: honour the
 attribute) before changing either. The text below is the finding as filed.
+
+**Resolved (first bullet) in the NS33 commits** (D21 = B, owner ruling 2026-10-19; `toolbar.css`, `_forced-colors.css`; guards in `screenshot.spec.ts`
+`separator in a toolbar` and `forced-colors.spec.ts`, fixture `pv/separator-toolbar-guard.zul`). A `<separator bar="true"/>` between the items of a
+toolbar, horizontal or vertical `orient`, is a divider in the toolbar's own axis: 1px x 24px in a horizontal toolbar, 24px x 1px in a vertical one
+(`orient="vertical"` on the toolbar), `--zk-color-outline-variant`, 4px margin on the toolbar axis, centred across it, the items after it stay next to it.
+A separator without a bar is still the `flex: 1` spacer. Panel mold (a table, no flex items) is unchanged. Forced colours: the divider is `CanvasText`, the
+full-width pseudo-element line through the row and the ~252x13px block are gone (measured below). Measured in Chromium (x, y, width, height, px):
+
+| | before | after |
+|---|---|---|
+| horizontal bar, horizontal toolbar | 708.5 x 0 spacer (line through the row in forced colours) | 1 x 24 at x 99.4, items at 91.4 and 108.4 |
+| vertical-orient bar, horizontal toolbar | 692.5 x 13 (black block in forced colours) | 1 x 24 |
+| plain separator, horizontal toolbar | 708.5 x 0 spacer, next item at the far end | unchanged |
+| bar, vertical toolbar | 159 x 0 / 143 x 13 | 24 x 1, next item 8px below |
+
+Also fixed (Marble defect, O1): a vertical bar outside a toolbar painted ticks at its ends under forced colours, because the text backplate of the
+`&nbsp;` in its box covered the middle of the line; `forced-color-adjust: none` on `.z-separator-vertical-bar` removes it (a 20px bar: 4 of 20 rows
+inked before, 20 after). The second bullet below is unchanged. Left as found: a `spacing` attribute on a bar between toolbar items is written inline
+as `height` and overrides the 24px.
 
 Low; left as found (O10).
 
@@ -850,6 +869,19 @@ keyline of the data-row text (the existing keyline guard now runs in default and
 plain group above checkmark rows) keeps 16px sideways through a row-scoped `--zk-group-padding-x`, because the box of a row checkbox sits 16px
 from the cell edge in every density; without it the group checkbox and arrow would sit 4px left of the row boxes in compact. No baseline PNG
 changed (no baseline holds a compact group row).
+
+**Follow-ups resolved in the NS33 commits** (D22 = A, owner ruling 2026-10-19; `listbox.css`, zkcml `tablet/_mesh.css`; guards in `mesh-header-footer.spec.ts`,
+fixture `pv/mesh-header-footer-guard.zul`):
+
+- **F1, tablet + compact:** `tablet/_mesh.css` sets the cell padding on `.z-grid` and `.z-listbox`, which shadowed compact, but not the group tokens, so a compact
+  tablet shrank the group rows (Grid 41 -> 37, Listbox 40.5 -> 36.5, icon x 49 -> 45) while the data rows stayed 61. The same two rules now set
+  `--zk-group-padding-y/x` to the tablet values; tablet + compact group rows equal tablet default (41 / 40.5, icon x 49).
+- **F2, nested checkmark Listbox:** `:has(~ .z-listitem .z-listitem-checkable)` also matched a checkmark Listbox nested in the cell of a later item. It now reads
+  `:has(~ .z-listitem > .z-listcell > .z-listcell-content > .z-listitem-checkable)` (the DOM chain of a row checkbox, measured), so only a checkbox of the
+  Listbox's own rows counts. A plain outer Listbox in compact with a nested checkmark Listbox keeps its group arrow on the text keyline (x 45 = 45; the
+  guard fails in compact before, default passes).
+- **F3, known limit (no code change):** a trailing empty group of a checkmark Listbox has no later item, so the row-scoped override does not select it and the
+  group keeps the 12px of compact while the row boxes above it sit at 16px. Left as found.
 
 ## 47. A real invalid combobox or bandbox gets no invalid styling (NS21 verification, Medium)
 

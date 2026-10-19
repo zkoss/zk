@@ -1229,6 +1229,15 @@ function registerListboxGroupRows(density: Density) {
     expect(Math.abs(icon - rowText), `group icon x ${icon}, row text x ${rowText}`).toBeLessThanOrEqual(TOLERANCE_PX);
   });
 
+  // Follow-up 46 F2: a checkmark Listbox nested in a later cell is no reason to keep the 16px of a checkmark group.
+  test(`.mhf-listbox-group-nested: the group toggle icon of a plain Listbox starts on the keyline of the row text in ${density} density`, async ({ page }) => {
+    await openInDensity(page, density);
+    const icon = await page.locator('.mhf-listbox-group-nested tr.z-listgroup span.z-listgroup-icon').first()
+      .evaluate((el) => el.getBoundingClientRect().left);
+    const rowText = await textLeft(page, '.mhf-listbox-group-nested tr.z-listitem .z-listcell-content');
+    expect(Math.abs(icon - rowText), `group icon x ${icon}, row text x ${rowText}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
   test(`.mhf-grid-group: the group toggle icon starts on the keyline of the row text in ${density} density`, async ({ page }) => {
     await openInDensity(page, density);
     const icon = await page.locator('.mhf-grid-group tr.z-group .z-group-icon').first()
@@ -1248,6 +1257,27 @@ function registerListboxGroupRows(density: Density) {
     expect(await padding('.mhf-grid-group td.z-group-inner'), 'grid group padding').toBe(await padding('.mhf-grid-group tr.z-row .z-row-content'));
     expect(await padding('.mhf-listbox-group tr.z-listgroup td'), 'listbox group padding').toBe(await padding('.mhf-listbox-group tr.z-listitem .z-listcell-content'));
   });
+}
+
+// Follow-up 46 F1: a tablet keeps the group rows of a tablet in every density, as it does the data rows (zkmax
+// `tablet/_mesh.css` sets the cell padding on `.z-grid` and `.z-listbox`, which shadows the compact tokens).
+function registerTabletGroupRowsIgnoreCompact() {
+  const cases = [
+    { name: 'grid', row: '.mhf-grid-group tr.z-group', icon: '.mhf-grid-group tr.z-group .z-group-icon' },
+    { name: 'listbox', row: '.mhf-listbox-group tr.z-listgroup', icon: '.mhf-listbox-group tr.z-listgroup span.z-listgroup-icon' },
+  ];
+  for (const { name, row, icon } of cases) {
+    test(`.mhf-${name}-group: the group row and its toggle icon are the same in compact density as in default density on a tablet`, async ({ page }) => {
+      await open(page);
+      const measure = async () => ({
+        height: await boxHeight(page, row),
+        iconLeft: await page.locator(icon).first().evaluate((el) => el.getBoundingClientRect().left),
+      });
+      const tablet = await measure();
+      await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
+      expect(await measure()).toEqual(tablet);
+    });
+  }
 }
 
 const GROUP_SELECT = '.mhf-listbox-group-select';
@@ -1599,6 +1629,7 @@ test.describe('mesh header and footer', () => {
     registerCheckmarkRowsMatchGrid('tablet');
     registerTreeRowsMatchGrid('tablet');
     registerListboxGroupRows('tablet');
+    registerTabletGroupRowsIgnoreCompact();
     registerGroupCheckbox('tablet');
     registerGroupArrowIgnoresGroupSelect();
     registerCheckmarkBoxInAlignedFirstColumn();

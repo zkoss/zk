@@ -368,9 +368,10 @@
 
 /* The box of a row checkbox sits 16px from the cell edge whatever the density (its span carries the padding), so a group
    of a checkmark Listbox keeps that 16px and its own checkbox (groupSelect) and toggle arrow stay under the row boxes
-   in compact density, where the cell padding is 12px (follow-up 46). */
+   in compact density, where the cell padding is 12px (follow-up 46). The checkbox is matched through the item's own cell, so a
+   checkmark Listbox nested in a later cell does not count. */
 .z-listgroup:has(.z-listgroup-checkable),
-.z-listgroup:has(~ .z-listitem .z-listitem-checkable) {
+.z-listgroup:has(~ .z-listitem > .z-listcell > .z-listcell-content > .z-listitem-checkable) {
     --zk-group-padding-x: var(--zk-spacing-4);
 }
 

@@ -22,3 +22,4 @@ zk-version: 10.2.1-jakarta
 
 ## States to evaluate
 - [ ] horizontal, vertical, containing buttons/toolbarbutton/separator
+- [ ] `<separator bar="true"/>` between items (horizontal or vertical `orient`) is a divider: 1px x 24px in a horizontal toolbar, 24px x 1px in a vertical one, `--zk-color-outline-variant` (`CanvasText` under forced colours), items adjacent; `<separator/>` without a bar stays a flex spacer (follow-up 45 F1, D21 = B)
