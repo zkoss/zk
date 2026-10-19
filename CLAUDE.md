@@ -77,10 +77,8 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 預覽頁的互動示範用 server-side listener（`onClick`、`onCheck`）呼叫 `Notification.show(..., "middle_center", ...)` 顯示結果，讓審查者看得到；`Notification` 需在 zscript 中自行 import。
 
 ### Playwright
-- 比對 screenshot 基準時，跑 repo 內的 config：`npx playwright test -c src/test/playwright/playwright.config.ts ...`。臨時 config 必須複製 `snapshotDir` 與 `snapshotPathTemplate`，否則會寫出新 PNG 並假通過。跑完檢查 `git status`，出現新 PNG 代表沒有真正比對。
-- Playwright 1.59 的裸 `--update-snapshots` 預設為 `changed`；寫明模式：`--update-snapshots=changed`，並在 commit 前用 `git status --porcelain <基準目錄>` 確認檔案數。
-- 改了 CSS、預覽頁或 spec 之後，先跑 `node zkpreview/scripts/select-tests.mjs --base <base>`。結果是 `partial` 就在本機跑它給的指令；結果是 `full` 時不要自行跑全測，回報選擇器的原因，由使用者決定何時全測（2026-10-19 裁示；Jenkins 暫不接）。
-- `-g` 比對的是以空白連接的標題路徑，開頭含 project 名稱（`project file describe title`，例：`chromium screenshot.spec.ts tabbox gallery`）。結尾用 `describe title$` 錨定；要用 `^` 開頭錨定就必須包含 project。不要套 `--list` 的 `›` 格式。
+- 跑 Playwright、或改了 CSS／預覽頁／spec 之後，先讀 `.claude/skills/marble-theme/reference/verification.md` 的「Which tests to run after a change」與「Running Playwright」。
+- 比對基準只用 repo 內的 config，臨時 config 會假通過；`select-tests.mjs` 回 `full` 時不自行跑全測，回報原因由使用者決定。
 
 ### 測試與驗證
 - 除錯或調查 bug 時，先做一個最小可重現頁面（`zkpreview/src/main/webapp/web/pv/<主題>-repro.zul`：只放觸發問題的元件與最少設定，不放頁面外框、標題、其他區段），在這個頁面上重現、量測、驗證修法，不在完整的 gallery 頁面上除錯：頁面上其他元件、樣式、載入順序都是無關的潛在影響因素。要比較修法就各做一個只差一處的變體頁。這些頁面是暫時性的，除錯完刪除（含 `build/inplaceWebapp` 的複本），不 commit；需要長期保留的回歸測試另外寫進正式的 spec。
@@ -101,6 +99,4 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 留在 repo 的孤兒產物：先問哪個主題或功能仍請求它；若只有範圍外的消費者（IceBlue、退役流程）會請求，建議移除，並把範圍外的消費者記錄下來。
 
 ### 設計師審查（Jess）
-- 回覆設計師的截圖，先打開對方原圖，以相同頁面、URL、UI 步驟、viewport、DPR、裁切重現；若對方的狀態看不出修正，補一張能看出修正的截圖。量測用截圖只是內部證據，不是給對方的結果。
-- 「先決定驗證方法」指的是即將開始的那一批，不是整個 backlog；範圍不確定時取較窄的解讀，或先問再派 agent。
-- 會議紀錄只讀：評價另開 `doc/` 檔案，引用該紀錄的路徑與 issue ID，不寫進紀錄本身。
+- 回覆設計師截圖、派驗證批次、或處理會議紀錄前，先讀 `.claude/skills/marble-theme/reference/jess-review.md`。

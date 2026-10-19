@@ -73,6 +73,12 @@ prints against your local preview server. When it answers `full`, do not start a
 own: report the selector's reasons and let the owner decide when the full suite runs. The suite
 runs locally only; it is not wired to CI or Jenkins (owner's ruling, 2026-10-19).
 
+## Running Playwright — flags that bite
+
+- Compare against the baselines with the repo config: `npx playwright test -c src/test/playwright/playwright.config.ts ...`. A temporary config must copy `snapshotDir` and `snapshotPathTemplate`; otherwise the run writes new PNGs and passes falsely. After the run check `git status`: a new PNG means nothing was compared.
+- In Playwright 1.59 a bare `--update-snapshots` defaults to `changed`. Name the mode (`--update-snapshots=changed`) and, before committing, confirm the file count with `git status --porcelain <baseline directory>`.
+- `-g` matches the title path joined by spaces and starting with the Playwright project name (`project file describe title`, e.g. `chromium screenshot.spec.ts tabbox gallery`). Anchor the end with `describe title$`; anchoring the start with `^` requires the project name. Do not paste the `›` form that `--list` prints.
+
 ## Playwright projects
 
 Config: `zkpreview/src/test/playwright/playwright.config.ts`.
