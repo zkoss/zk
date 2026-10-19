@@ -228,6 +228,14 @@ export default defineConfig({
       },
     },
     {
+      // Pixel baselines of pop-up layers and API-created elements (dropdowns, menus, toast, messagebox, ...)
+      // that only exist after a user opens them. See popup-gallery.spec.ts and doc/marble-popup-gallery-report.md.
+      name: 'popup',
+      testMatch: /popup-gallery\.spec\.ts/,
+      expect: { toHaveScreenshot: { threshold: 0.05 } },
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'tablet',
       testMatch: /tablet\.spec\.ts/,
       use: TABLET_USE,

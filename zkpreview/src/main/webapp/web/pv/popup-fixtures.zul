@@ -1,0 +1,26 @@
+<?page title="Pop-up fixtures" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for popup-gallery.spec.ts: triggers that no preview page offers. Lives under pv/ so
+     gallery-scan and forced-colors-gallery do not pick it up as a page.
+     Notification: every button on notification.zul passes ref = null, so the pointer (z-notification-pointer,
+     -up/-down/-left/-right) is never drawn there. Here the notification is anchored to a component:
+     the position names where the notification sits relative to the anchor, the pointer faces back to it. -->
+<zk>
+<div sclass="z-p-8">
+    <div sclass="z-d-flex z-gap-4 z-flex-wrap z-mb-8">
+        <button id="below" label="Below the anchor"
+                onClick='Clients.showNotification("Below the anchor", Clients.NOTIFICATION_TYPE_INFO, anchor, "after_center", 3000, true)'/>
+        <button id="above" label="Above the anchor"
+                onClick='Clients.showNotification("Above the anchor", Clients.NOTIFICATION_TYPE_WARNING, anchor, "before_center", 3000, true)'/>
+        <button id="right" label="Right of the anchor"
+                onClick='Clients.showNotification("Right of the anchor", Clients.NOTIFICATION_TYPE_ERROR, anchor, "end_center", 3000, true)'/>
+        <button id="left" label="Left of the anchor"
+                onClick='Clients.showNotification("Left of the anchor", Clients.NOTIFICATION_TYPE_INFO, anchor, "start_center", 3000, true)'/>
+    </div>
+    <div style="margin: 120px 0 120px 440px">
+        <button id="anchor" label="Anchor"/>
+    </div>
+    <div style="text-align: right">
+        <textbox id="atEdge" constraint="no empty" width="200px"/>
+    </div>
+</div>
+</zk>
