@@ -109,6 +109,7 @@ const PAGES = [
   '/selectbox.zul',
   '/separator.zul',
   '/signature.zul',
+  '/skeleton.zul',
   '/slider.zul',
   '/space.zul',
   '/spinner.zul',

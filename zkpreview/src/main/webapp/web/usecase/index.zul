@@ -83,6 +83,7 @@
                     <navitem label="Listbox (Header)"       selected="@load(vm.currentPage eq '~./listbox-header.zul')" onClick="@command('navigate', page='~./listbox-header.zul')" />
                     <navitem label="Organigram"             selected="@load(vm.currentPage eq '~./organigram.zul')" onClick="@command('navigate', page='~./organigram.zul')" />
                     <navitem label="Paging"                 selected="@load(vm.currentPage eq '~./paging.zul')" onClick="@command('navigate', page='~./paging.zul')" />
+                    <navitem label="Skeleton"               selected="@load(vm.currentPage eq '~./skeleton.zul')" onClick="@command('navigate', page='~./skeleton.zul')" />
                     <navitem label="Tree"                   selected="@load(vm.currentPage eq '~./tree.zul')" onClick="@command('navigate', page='~./tree.zul')" />
                     <navitem label="Tree (Header)"          selected="@load(vm.currentPage eq '~./tree-header.zul')" onClick="@command('navigate', page='~./tree-header.zul')" />
                 </nav>

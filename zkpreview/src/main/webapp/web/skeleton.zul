@@ -1,0 +1,75 @@
+<?page title="Skeleton" contentType="text/html;charset=UTF-8"?>
+<zk>
+<zscript><![CDATA[
+    import org.zkoss.zk.ui.util.Notification;
+    import org.zkoss.zul.ListModelList;
+    ListModelList sboxModel = new ListModelList(new String[]{"a", "b", "c"});
+]]></zscript>
+<div sclass="z-p-8 z-d-flex z-flex-col z-gap-6">
+    <div sclass="z-border-bottom z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Skeleton"/></div>
+
+    <div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Shapes"/></div>
+        <div sclass="z-d-flex z-gap-8 z-items-center" style="padding:8px 4px;">
+            <label skeleton="rect" value="rect placeholder" style="display:inline-block;width:140px;height:48px;"/>
+            <label skeleton="circle" value="circle" style="display:inline-block;width:48px;height:48px;"/>
+            <label skeleton="text" value="text placeholder" style="display:inline-block;width:160px;height:16px;"/>
+        </div>
+    </div>
+
+    <div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Ordinary element roots"/></div>
+        <div sclass="z-d-flex z-gap-8 z-items-start" style="padding:8px 4px;">
+            <grid id="gridSkel" skeleton="rect" width="240px" height="80px">
+                <columns><column label="Name"/><column label="Qty"/></columns>
+                <rows><row><label value="hidden by skeleton"/><label value="12"/></row></rows>
+            </grid>
+            <button label="Save" skeleton="rect" width="96px" height="36px"/>
+            <div skeleton="rect" style="width:120px;height:36px;">content of a div</div>
+        </div>
+    </div>
+
+    <div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Replaced and form-control roots"/></div>
+        <div sclass="z-d-flex z-gap-8 z-items-start" style="padding:8px 4px;">
+            <div><image id="imgSkel" src="~./img/sun.jpg" skeleton="circle" width="56px" height="56px"/></div>
+            <div><textbox id="tbSkel" value="typed value" skeleton="rect" width="140px"/></div>
+            <div><textbox id="taSkel" multiline="true" value="multi line value" skeleton="rect" width="140px" height="56px"/></div>
+            <div><selectbox id="sbSkel" model="${sboxModel}" skeleton="text" width="140px"/></div>
+        </div>
+    </div>
+
+    <div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Loaded versus skeleton"/></div>
+        <div sclass="z-d-flex z-gap-8 z-items-start" style="padding:8px 4px;">
+            <div sclass="z-d-flex z-flex-col z-gap-2">
+                <label sclass="z-text-xs z-text-secondary" value="Loaded"/>
+                <div sclass="z-d-flex z-gap-3 z-items-center">
+                    <image src="~./img/sun.jpg" width="48px" height="48px"/>
+                    <label value="Jane Cooper"/>
+                    <button label="Follow"/>
+                </div>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-gap-2">
+                <label sclass="z-text-xs z-text-secondary" value="Skeleton"/>
+                <div sclass="z-d-flex z-gap-3 z-items-center">
+                    <div><image src="~./img/sun.jpg" skeleton="circle" width="48px" height="48px"/></div>
+                    <label skeleton="text" value="Jane Cooper" style="display:inline-block;width:96px;height:16px;"/>
+                    <button label="Follow" skeleton="rect" width="72px" height="32px"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Toggle at runtime"/></div>
+        <div sclass="z-d-flex z-gap-4 z-items-center" style="padding:8px 4px;">
+            <label id="dynLabel" value="Toggled content" style="display:inline-block;width:160px;height:24px;"/>
+            <button id="dynOn" label="Set skeleton"
+                    onClick='dynLabel.setSkeleton("rect"); Notification.show("skeleton = " + dynLabel.getSkeleton(), "info", null, "middle_center", 2000);'/>
+            <button id="dynOff" label="Clear skeleton"
+                    onClick='dynLabel.setSkeleton(null); Notification.show("skeleton = " + dynLabel.getSkeleton(), "info", null, "middle_center", 2000);'/>
+        </div>
+    </div>
+</div>
+</zk>

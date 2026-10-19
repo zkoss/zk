@@ -130,6 +130,13 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Skeleton placeholder (ZK-6099, PE): shapes, masking, replaced-root overlay, reduced
+      // motion, --zk-skeleton-* overrides and the runtime toggle. See skeleton.spec.ts.
+      name: 'skeleton',
+      testMatch: /skeleton\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Grid, Listbox and Tree header arrow size, label-to-arrow room and footer column x
       // (grid.css, listbox.css, tree.css). See mesh-header-footer.spec.ts.
       name: 'mesh-header-footer',
