@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6199.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Oct 19 14:32:24 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true" value="Open the upload dialog and choose a file. Its row should retain the usual styling. Cancel the row, choose a replacement, and submit; the result should contain only the replacement file."/>
+	<button id="open" label="Open upload dialog">
+		<attribute name="onClick"><![CDATA[
+			Fileupload.get(1, new org.zkoss.zk.ui.event.EventListener() {
+				public void onEvent(org.zkoss.zk.ui.event.Event event) {
+					org.zkoss.util.media.Media[] media = ((org.zkoss.zk.ui.event.UploadEvent) event).getMedias();
+					result.setValue(media == null ? "none" : media.length + ":" + media[0].getName());
+				}
+			});
+		]]></attribute>
+	</button>
+	<label id="result"/>
+</zk>
