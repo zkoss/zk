@@ -1154,3 +1154,12 @@ re-cut (owner: the B9 batch).
 
 WebKit only: the `.mhf-listbox-first-cell` image against the header text keyline differs by 1.5px (tolerance 1px) in both density
 variants; same on pre-NS23 CSS; repo projects run Chromium only (NS32 verification). Left as found (O10).
+
+## 62. Leftovers from the pop-up screenshot verification (2026-10-19)
+
+Found while verifying `popup-gallery.spec.ts` (`doc/marble-popup-gallery-verification.md`, branch `marble-popup-gallery`). Left as found (O10).
+
+- **Colorpalette focus ring:** hovering a swatch moves focus to `div.z-colorpalette`, which matches `:focus-visible` and shows Chrome's default `outline: auto rgb(0, 95, 204)`. Neither Marble's `colorbox.css` nor IceBlue's `colorbox.less` styles it. Check IceBlue on the same page before deciding ownership (O1). The baseline `colorbox-popup-palette-selected.png` records the current rendering and will be re-cut when this is styled.
+- **`errorbox.zul:46`:** the label says the errorbox turns to the left of the field; it renders below (`-up`). Preview page text (O5).
+- **Drawer:** no space between the text and the Close button on the drawer preview page.
+- **Possibly unused CSS:** mutations of `bandpopup.css` and `errorbox.css` had no visible effect; the served rules come from `bandbox.css` and `input.css`. Check whether those two files are registered at all before editing them.
