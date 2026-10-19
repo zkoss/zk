@@ -1,0 +1,36 @@
+<?page title="Pop-up API fixtures" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for popup-gallery.spec.ts: triggers that no preview page offers. Lives under pv/ so
+     gallery-scan and forced-colors-gallery do not pick it up as a page. Kept apart from pv/popup-fixtures.zul:
+     the baselines of that page's notification and errorbox shots include the page around the pop-up.
+     Combobox: no preview page sets emptySearchMessage or gives a comboitem an image.
+     Window: window.zul has no modal window; doModal() is the only way to get z-window-modal.
+     Loadingbar: loadingbar.zul only has hand-written markup; the bottom position (z-loadingbar-position-bottom)
+     comes from the Loadingbar API. A bar that is not indeterminate and below 100 stays where it is. -->
+<zk>
+<div sclass="z-p-8 z-d-flex z-gap-8">
+    <div>
+        <div><label sclass="z-text-xs z-text-secondary" value="Empty search message"/></div>
+        <combobox id="emptySearch" autodrop="true" autocomplete="true" emptySearchMessage="No matching item"/>
+    </div>
+    <div>
+        <div><label sclass="z-text-xs z-text-secondary" value="Comboitem with image"/></div>
+        <combobox id="withImage">
+            <comboitem label="Sent" image="~./img/sent.png"/>
+            <comboitem label="Received" image="~./img/received.png"/>
+        </combobox>
+    </div>
+    <div>
+        <button id="openModal" label="Open modal window" onClick="modalWin.doModal()"/>
+    </div>
+    <div>
+        <button id="bottomBar" label="Start a loading bar at the bottom"
+                onClick='org.zkoss.zkmax.ui.util.Loadingbar.createLoadingbar("fixtureBar").start(40, "bottom")'/>
+    </div>
+</div>
+<window id="modalWin" title="Modal window" border="normal" closable="true" width="320px" visible="false">
+    <div sclass="z-p-4"><label value="Content of the modal window"/></div>
+</window>
+<zscript><![CDATA[
+    emptySearch.setModel(new SimpleListModel(new String[] {"Apple", "Apricot", "Banana", "Blueberry"}));
+]]></zscript>
+</zk>

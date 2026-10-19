@@ -1207,3 +1207,15 @@ Found while verifying `popup-gallery.spec.ts` (`doc/marble-popup-gallery-verific
 - **`errorbox.zul:46`:** the label says the errorbox turns to the left of the field; it renders below (`-up`). Preview page text (O5).
 - **Drawer:** no space between the text and the Close button on the drawer preview page.
 - **Possibly unused CSS:** mutations of `bandpopup.css` and `errorbox.css` had no visible effect; the served rules come from `bandbox.css` and `input.css`. Check whether those two files are registered at all before editing them.
+
+## 63. Leftovers from the pop-up batch 2 and brand-override checks (2026-10-19)
+
+Found while building and verifying `popup-gallery.spec.ts` batch 2 (`doc/marble-popup-batch2-report.md`, `doc/marble-popup-batch2-verification.md`) and `brand-override.spec.ts` (`doc/marble-brand-batch1-report.md`). Left as found (O10).
+
+- **Hardcoded ROD loading overlay colour:** `grid.css:473`, `listbox.css:876`, `tree.css:590` paint the `-loading` overlay with `rgba(255, 255, 255, 0.6)` instead of a `--zk-*` token. The batch 2 ROD assertions pin this value; update them together with the CSS.
+- **ROD loading overlay leaves its component:** during loading the body box jumps from the component to `[0,0,1280,145]` and covers the top of the page. Tracked as G7/F1 in `doc/zats-1117-fix-plan.md`; add a "body box unchanged while loading" assertion once G7 lands.
+- **Rules for classes ZK never emits (measured in a browser, batch 2):** `.z-mask` (`misc.css`; ZK emits `z-modal-mask` / `z-apply-mask`), `.z-comboitem.z-selected` (`combobox.css`), `.z-menuitem.z-selected` (`menu.css`), `.z-bandpopup-content` (`bandpopup.css`), `.z-colorpalette-button` (zkex `colorbox.css`). Candidates for removal after checking no other theme or page requests them.
+- **Comboitem image is not size-limited:** a large `image` on a comboitem stretches the popup at its natural size. IceBlue not compared; may be intended.
+- **Selector gap:** `select-tests.mjs --only window.css` does not select the three messagebox `popup` tests, although `.z-window-modal` styles them; those screenshots also cannot tell elevation-3 from elevation-1 (shadow on the scrim is under the compare threshold).
+- **Intermittent `datebox.zul: open calendar with the timezone selector`:** 2 failures in about 13 full `popup` runs, both right after server start; the input text was present but `getValue()` was `undefined` and focus had moved. Cause not found (32 standalone runs did not reproduce).
+- **Brand check limits:** `brand-override.spec.ts` scans the resting page only; 50 pages have no primary-family pixel at rest, and `color-mix()` tints / translucent overlays of the primary are not in the family list.

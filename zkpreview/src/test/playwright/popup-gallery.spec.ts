@@ -96,6 +96,24 @@ async function popupShot(page: Page, selector: string, classes: string[], file: 
   return popup;
 }
 
+/**
+ * Whether `target` computes the same value of `property` as an element styled with `declaration`, e.g.
+ * `box-shadow: var(--zk-elevation-3)`. Compares against the token instead of a pasted string, so a rule that
+ * moves to another elevation fails even where the pixels barely differ (a shadow on a 50 % black scrim).
+ */
+async function expectComputedLike(target: Locator, property: string, tokenValue: string): Promise<void> {
+  const [actual, reference] = await target.evaluate((el, [prop, value]) => {
+    const probe = document.createElement('div');
+    probe.style.setProperty(prop, value);
+    document.body.appendChild(probe);
+    const expected = getComputedStyle(probe).getPropertyValue(prop);
+    probe.remove();
+    return [getComputedStyle(el).getPropertyValue(prop), expected];
+  }, [property, tokenValue]);
+  expect(reference, `the reference ${property} must not be empty`).not.toBe('none');
+  expect(actual, `${property} of the element`).toBe(reference);
+}
+
 // Enabled, editable instance that is not in a state variant: the "Default" cell of a matrix row.
 const PLAIN = ':not([class*="-disabled"]):not([class*="-readonly"]):not([class*="-invalid"]):not([class*="-inplace"])';
 
@@ -144,6 +162,38 @@ test.describe('combobox', () => {
     await labelled(page, 'With icon', 'z-combobox').locator('.z-combobox-button').click();
     await parkCursor(page);
     await popupShot(page, '.z-combobox-popup', ['z-combobox-open', 'z-comboitem', 'z-comboitem-icon'], 'combobox-popup-open-icon.png');
+  });
+
+  // combobox.zul sets no emptySearchMessage and no comboitem image: both are on pv/popup-api-fixtures.zul.
+  const emptySearchCombobox = (page: Page) => labelled(page, 'Empty search message', 'z-combobox');
+
+  test('combobox.zul: type a value with no match to show the empty search message (pv/popup-api-fixtures.zul)', async ({ page }) => {
+    await openPage(page, '/pv/popup-api-fixtures.zul');
+    await emptySearchCombobox(page).locator('input').click();
+    // Typed one key at a time: the server filters the items after each change, and a burst of keys can outrun it.
+    await page.keyboard.type('Zzz', { delay: 100 });
+    await expect(page.locator('.z-combobox-empty-search-message:visible')).toHaveCount(1);
+    await parkCursor(page);
+    await popupShot(page, '.z-combobox-popup', ['z-combobox-open', 'z-combobox-empty-search-message'], 'combobox-popup-empty-search.png');
+  });
+
+  // The message element stays in the popup and is hidden while items match: nothing is painted for it, so this is
+  // asserted on the DOM and the computed style, not on a baseline that would repeat the dropdown shots.
+  test('combobox.zul: type a value with matches to hide the empty search message (pv/popup-api-fixtures.zul)', async ({ page }) => {
+    await openPage(page, '/pv/popup-api-fixtures.zul');
+    await emptySearchCombobox(page).locator('input').click();
+    await page.keyboard.type('Ap', { delay: 100 });
+    await expect(page.locator('.z-comboitem:visible')).toHaveCount(2);
+    const message = page.locator('.z-combobox-empty-search-message');
+    await expect(message).toHaveClass(/z-combobox-empty-search-message-hidden/);
+    await expect(message).toHaveCSS('display', 'none');
+  });
+
+  test('combobox.zul: open dropdown of items with an image (pv/popup-api-fixtures.zul)', async ({ page }) => {
+    await openPage(page, '/pv/popup-api-fixtures.zul');
+    await labelled(page, 'Comboitem with image', 'z-combobox').locator('.z-combobox-button').click();
+    await parkCursor(page);
+    await popupShot(page, '.z-combobox-popup', ['z-combobox-open', 'z-comboitem', 'z-comboitem-image'], 'combobox-popup-open-image.png');
   });
 });
 
@@ -265,7 +315,7 @@ test.describe('chosenbox', () => {
     await labelled(page, 'createMessage + noResultsText', 'z-chosenbox').click();
     await page.keyboard.type('Zzz');
     await parkCursor(page);
-    await popupShot(page, '.z-chosenbox-popup', ['z-chosenbox-create'], 'chosenbox-popup-create.png');
+    await popupShot(page, '.z-chosenbox-popup', ['z-chosenbox-create', 'z-chosenbox-empty-creatable'], 'chosenbox-popup-create.png');
   });
 });
 
@@ -334,6 +384,22 @@ test.describe('menubar', () => {
     await menu(page, 'View').click();
     await parkCursor(page);
     await popupShot(page, '.z-menupopup', ['z-menupopup', 'z-menuitem-checked'], 'menubar-popup-open-checked.png');
+  });
+
+  // Every menupopup renders a <div class="z-menupopup-separator"> above its list; Marble hides it on purpose
+  // (menu.css: "the decorative separator at the top of every menupopup"), so it has no box to photograph.
+  // The line between items is the <menuseparator> (li.z-menuseparator), which the shots above paint.
+  test('menubar.zul: the decorative separator on top of a menupopup stays hidden', async ({ page }) => {
+    await menu(page, 'Project').click();
+    const popup = page.locator('.z-menupopup:visible');
+    await expect(popup).toHaveCount(1);
+    const separator = popup.locator('.z-menupopup-separator');
+    await expect(separator).toHaveCount(1);
+    await expect(separator).toHaveCSS('display', 'none');
+    expect(await separator.boundingBox()).toBeNull();
+    // The visible line of the menu is the menuseparator item.
+    await expect(popup.locator('.z-menuseparator')).toHaveCount(1);
+    await expect(popup.locator('.z-menuseparator')).toBeVisible();
   });
 });
 
@@ -560,4 +626,136 @@ test.describe('notification', () => {
       await popupShot(page, '.z-notification-open', ['z-notification-open', 'z-notification-pointer'], `notification-popup-pointer-${pointer}.png`, [`z-notification-${pointer}`]);
     });
   }
+});
+
+// -------------------------------------------------------
+// loading: the global busy mask and the busy mask of one component (Clients.showBusy)
+// -------------------------------------------------------
+/** The scrim of a modal window or a global busy: fixed over the whole window, painted with the scrim token. */
+async function expectScrimOverWindow(page: Page): Promise<void> {
+  const mask = page.locator('.z-modal-mask');
+  await expect(mask).toHaveCount(1);
+  const viewport = page.viewportSize()!;
+  expect(await mask.boundingBox()).toEqual({ x: 0, y: 0, width: viewport.width, height: viewport.height });
+  await expectComputedLike(mask, 'background-color', 'var(--zk-color-scrim)');
+}
+
+test.describe('loading', () => {
+  test.beforeEach(({ page }) => openPage(page, '/loading.zul'));
+
+  // The two "Show Busy" buttons of loading.zul: the first is the global busy, the second the busy of the demo window.
+  const showBusyButton = (page: Page, n: number) => page.getByRole('button', { name: 'Show Busy', exact: true }).nth(n);
+
+  test('loading.zul: global busy', async ({ page }) => {
+    await showBusyButton(page, 0).click();
+    // The page clears the global busy by itself after 14 s; the shot is taken a moment after it shows.
+    await expect(page.locator('.z-loading')).toHaveCount(1);
+    await parkCursor(page);
+    // The scrim covers the window and is not in the shot (it would pull the whole page into the baseline).
+    await expectScrimOverWindow(page);
+    await expectComputedLike(page.locator('.z-loading'), 'box-shadow', 'var(--zk-elevation-3)');
+    await popupShot(page, '.z-loading', ['z-modal-mask', 'z-loading', 'z-loading-indicator', 'z-loading-icon'], 'loading-popup-global-busy.png');
+  });
+
+  test('loading.zul: busy of one component', async ({ page }) => {
+    await showBusyButton(page, 1).click();
+    await expect(page.locator('.z-apply-loading')).toHaveCount(1);
+    await parkCursor(page);
+    await popupShot(page, '.z-apply-mask', ['z-apply-mask', 'z-apply-loading', 'z-apply-loading-indicator', 'z-apply-loading-icon'], 'loading-popup-component-busy.png');
+  });
+});
+
+// -------------------------------------------------------
+// window: a modal window (doModal), on pv/popup-api-fixtures.zul because window.zul has none
+// -------------------------------------------------------
+test.describe('window', () => {
+  test('window.zul: open a modal window (pv/popup-api-fixtures.zul)', async ({ page }) => {
+    await openPage(page, '/pv/popup-api-fixtures.zul');
+    await page.getByRole('button', { name: 'Open modal window', exact: true }).click();
+    await expect(page.locator('.z-window-modal')).toHaveCount(1);
+    await parkCursor(page);
+    // The scrim is asserted, not shot: the shot is the window plus PAD, so the page behind stays out of the baseline.
+    await expectScrimOverWindow(page);
+    await expectComputedLike(page.locator('.z-window-modal'), 'box-shadow', 'var(--zk-elevation-3)');
+    await popupShot(page, '.z-window-modal', ['z-window-modal', 'z-modal-mask'], 'window-popup-modal.png');
+  });
+});
+
+// -------------------------------------------------------
+// loadingbar: the bar the Loadingbar API pins to the bottom of the window
+// -------------------------------------------------------
+test.describe('loadingbar', () => {
+  test('loadingbar.zul: a bar at the bottom of the window (pv/popup-api-fixtures.zul)', async ({ page }) => {
+    await openPage(page, '/pv/popup-api-fixtures.zul');
+    await page.getByRole('button', { name: 'Start a loading bar at the bottom', exact: true }).click();
+    await parkCursor(page);
+    const bar = page.locator('.z-loadingbar-position-bottom:visible');
+    await expect(bar, 'exactly one visible bottom bar').toHaveCount(1);
+    await expectClassesInDom(page, ['z-loadingbar-position-wrapper', 'z-loadingbar-position-bottom', 'z-loadingbar', 'z-loadingbar-colorbar']);
+    // The bar is fixed to the bottom edge of the window, so the capture stops at the window instead of adding PAD below it.
+    const box = await settledBox(page, bar);
+    const viewport = page.viewportSize()!;
+    const top = Math.max(0, box.y - PAD);
+    const file = 'loadingbar-popup-bottom.png';
+    await expect(page).toHaveScreenshot(file, {
+      clip: { x: 0, y: top, width: viewport.width, height: viewport.height - top },
+      animations: 'disabled',
+      maxDiffPixels: maxDiffFor(file),
+    });
+  });
+});
+
+// -------------------------------------------------------
+// grid, listbox, tree: the loading overlay of rendering on demand (ROD)
+// -------------------------------------------------------
+
+/**
+ * The loading class sits on the scrolling body only while the next rows are on their way (about 60-90 ms on a local
+ * server). The AU request that fetches them (`onDataLoading` for grid and listbox, `onRender` for tree) is held until
+ * `release()` is called, so the state can be read instead of raced; the action that starts it is a real mouse wheel
+ * over the body. The URL is matched loosely: ZK appends `;jsessionid=...` to `/zkau`.
+ */
+async function holdDataLoadingRequests(page: Page): Promise<() => void> {
+  let release!: () => void;
+  const released = new Promise<void>(resolve => { release = resolve; });
+  await page.route(/\/zkau/, async route => {
+    if (/onDataLoading|onRender/.test(route.request().postData() ?? '')) await released;
+    await route.continue();
+  });
+  return release;
+}
+
+/** Scroll the body of a ROD widget with the mouse wheel and read the overlay while the request is held. */
+async function expectRodLoadingOverlay(page: Page, bodyClass: string, loadingClass: string): Promise<void> {
+  await openPage(page, '/pv/popup-rod-fixtures.zul');
+  const body = page.locator(`.${bodyClass}`);
+  // The pads that stand in for the rows not rendered yet arrive a moment after the widget is bound.
+  await expect.poll(() => body.evaluate(el => el.scrollHeight > 2 * el.clientHeight)).toBe(true);
+  const release = await holdDataLoadingRequests(page);
+  const box = (await body.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.wheel(0, 3000);
+  await expect(body).toHaveClass(new RegExp(loadingClass));
+  // 60 % white over the rows: the one declaration every rule of this overlay keeps.
+  await expect(body).toHaveCSS('background-color', 'rgba(255, 255, 255, 0.6)');
+  release();
+  await expect(body).not.toHaveClass(new RegExp(loadingClass));
+}
+
+test.describe('grid', () => {
+  test('grid.zul: scroll a ROD grid to show the loading overlay (pv/popup-rod-fixtures.zul)', async ({ page }) => {
+    await expectRodLoadingOverlay(page, 'z-grid-body', 'z-grid-loading');
+  });
+});
+
+test.describe('listbox', () => {
+  test('listbox.zul: scroll a ROD listbox to show the loading overlay (pv/popup-rod-fixtures.zul)', async ({ page }) => {
+    await expectRodLoadingOverlay(page, 'z-listbox-body', 'z-listbox-loading');
+  });
+});
+
+test.describe('tree', () => {
+  test('tree.zul: scroll a ROD tree to show the loading overlay (pv/popup-rod-fixtures.zul)', async ({ page }) => {
+    await expectRodLoadingOverlay(page, 'z-tree-body', 'z-tree-loading');
+  });
 });

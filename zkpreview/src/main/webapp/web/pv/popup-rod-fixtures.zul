@@ -1,0 +1,33 @@
+<?page title="Pop-up ROD fixtures" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for popup-gallery.spec.ts: a grid, a listbox and a tree that render on demand (ROD).
+     While the next rows are fetched after a scroll, the widget puts z-grid-loading / z-listbox-loading /
+     z-tree-loading on the scrolling body; no preview page has a model large and short enough to scroll.
+     Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it up as a page. -->
+<zk>
+<zscript><![CDATA[
+    import java.util.*;
+
+    List rows = new ArrayList();
+    for (int i = 1; i <= 1000; i++) rows.add("Row " + i);
+    ListModelList gridModel = new ListModelList(rows);
+    ListModelList listModel = new ListModelList(rows);
+    List nodes = new ArrayList();
+    for (int i = 1; i <= 1000; i++) nodes.add(new DefaultTreeNode("Node " + i));
+    DefaultTreeModel treeModel = new DefaultTreeModel(new DefaultTreeNode("root", nodes));
+]]></zscript>
+<div sclass="z-p-8 z-d-flex z-gap-8">
+    <grid id="rodGrid" width="240px" height="200px" model="${gridModel}">
+        <custom-attributes org.zkoss.zul.grid.rod="true"/>
+        <columns><column label="Grid"/></columns>
+        <template name="model"><row><label value="${each}"/></row></template>
+    </grid>
+    <listbox id="rodListbox" width="240px" height="200px" model="${listModel}">
+        <custom-attributes org.zkoss.zul.listbox.rod="true"/>
+        <listhead><listheader label="Listbox"/></listhead>
+        <template name="model"><listitem label="${each}"/></template>
+    </listbox>
+    <tree id="rodTree" width="240px" height="200px" model="${treeModel}">
+        <treecols><treecol label="Tree"/></treecols>
+    </tree>
+</div>
+</zk>
