@@ -371,3 +371,38 @@ Medium 另有 67 列，例如 inplace 按鈕用 `visibility` 或 `display`（ZK-
 - **D7 → ZK-5940**（D14 = A：使用者 2025-05 開的同一錯誤，改寫為完整描述）：summary 改為涵蓋兩個症狀，Affects 加 10.3.1，附 IceBlue 與新主題截圖。
 - **D4 → ZK-6216**（D15 = A，新開）：Affects 10.3.1，附截圖。送出前實測 `Inter Fallback`（commit `8b6e04bf95`，10-19 加入 `marble`，不在 z1117 基準內）：`B50-2980383.zul` 在 8117 各 10 次，沒有 fallback 時最後一個 tab 差 80px，加上 fallback（注入相同 `@font-face` 與 `--zk-typescale-font-family`）差 122px，兩者都是 0/10 通過（測試容許 2px）。macOS 上沒有 fallback 時換字前是 -apple-system，fallback 是放大 107.4% 的 Arial，對以數字為主的標籤反而差更多；Linux（Jenkins）上沒有 -apple-system，結果可能不同，未量測。結論：fallback 不能讓 `B50_2980383` 通過，需等核心修正。
 - 2026-10-20 早上本程序曾失去 `~/Documents` 存取權（TCC），8117／8118 的 java 因此結束；權限恢復後以 `z1117` 重啟 8117（gradle 44384、tail 44385、java 45702，記錄在 `$S/repro4/pids.txt`）。8118 未重啟。
+
+## 移到 `marble`（D11 = A、D16 = A，2026-10-20）
+
+`D16` 是 push 時一起推出本機 `marble` 上其他 session 的 commit（zk 44 個、zkcml 9 個），使用者選 A，一起推。這題在對話中誤編為 D15，與上一節 D4 的 D15 重號，改記為 D16。
+
+試合併（2026-10-20）：修正分支的基礎（zk `ce6c74b62f`、zkcml `e3bca9748`）之後，`marble` 的歷史被整理過；`git merge` 會帶回 13 個不等價的舊 commit，並在 `CLAUDE.md` 等檔案衝突，所以不 merge，只 cherry-pick 修正 commit。
+
+1. 在 `z1117/{zk,zkcml}` 從 `marble`（zk `237bfa8586`、zkcml `fe6323380`）開 `marble-1117-onto-marble`，cherry-pick zk `5fb2b7d97f`、zkcml `46c9c5f18`。
+   - 預期衝突：zk `listbox.css`、`groupbox.css`、`inputgroup.css`，zkcml `pdfviewer.css`。
+   - 驗證：衝突都解掉，`git diff marble` 只含修正的意圖。
+2. 不 cherry-pick `a76c2ee0c0`。`marble` 10-17 起改成分段截圖、10-19 把 `component-theming.spec.ts` 改名為 component-theme-variables，在新結構上重拍受影響的基準。
+   - 驗證：依 `verification.md` 的「Which tests to run after a change」與 `select-tests.mjs` 跑相關 Playwright（含 `mesh-header-footer.spec.ts` frozen 23 個）；差異逐張說明。
+3. Opus 驗證（另一個 agent，唯讀）通過後，本機 `marble` 快轉到該分支。
+4. 回報使用者後才 push `hawkchen/marble`，從 `hawkchen:marble` 對 zkoss/zk、zkoss/zkcml 開 draft PR，用 `pr/N` 跑 `ZK-Gradle-ZATS-Test`。
+
+8117 的舊伺服器已停（gradle 44384、tail 44385；java 45702 先前已結束）。
+
+### 執行結果（2026-10-20）
+
+**D18 = A（使用者）：** 清掉 8117 上的 java `19396`。**D19 = A（使用者）：** 用舊 CSS（`237bfa8586`）A/B 歸因基準圖差異。同日使用者核准之後的 `git commit --amend`。
+
+- **commit（`marble` 快轉到 zk `1b34553a24`、zkcml `76b51e9e6`，尚未 push）：** zk 四個 commit：修正（cherry-pick）、`clip-path` 調整、`popup.css` 補回 `min-width: 160px`、7 張基準圖。zkcml 一個 commit。
+- **`padding-right: 0` 的測試結果：** `mesh-header-footer` 與 `mesh-header-footer-tablet` 有 6 個斷言失敗（`.mhf-tree-mixed-box`、`.mhf-tree-inner-box`，三種密度）。採用 `clip-path: inset(0 var(--zk-spacing-1) 0 0)`，兩個 project 423/423 通過。先前交接檔寫「兩種做法都通過」不成立。
+- **A/B（舊 CSS 對修正 CSS）：** `timepicker-01-formats`（167 對 171px）、`daterangebox-03-states-readonly-invalid`（42px）、popup `daterangebox-popup-open-today`（47px）在舊 CSS 下數字完全相同，不是修正造成，沒有更新，待另外處理。`popup-popup-open`（184 對 149px）是修正把外層 `.z-popup` 的 `min-width: 160px` 弄丟，已補回，不更新基準。
+- **更新的 7 張基準圖與歸因（Opus 獨立驗證）：**
+  - `checkbox-01`、`listbox-header-10`、`grid-header-08`、`colorbox-popup-picker`、`tabbox-11`：把對應宣告改回原值後與舊基準相同（grid-header 剩 17px 抗鋸齒，在預算內），歸因成立。
+  - `tabbox-misc-01`：204px 差異全在 tab caption 裡的 combobox（`combobox.css` 結構改動使 Tab2 的按鈕完整顯示），與分隔線無關。上一份報告把它歸給分隔線是錯的；畫面是改善。
+  - `colorbox-tablet-popup-picker`：像素數和位置與 desktop 相同，但沒有單獨做改回測試，屬推論。
+- **Opus 驗證（唯讀）：PASS-WITH-FINDINGS。** 指定 9 個 Playwright project 823 通過、1 失敗（上述已知差異之一）、46 skip（focus-scan 的條件 skip）；gallery、tablet、chromium 299 通過、2 失敗，都是上述已知差異；frozen 23 條全過。
+- **遺留項目：**
+  - `_component-theme.css:580` 註解仍寫 `.z-popup` 是 base surface，surface 已搬到 `.z-popup-content`。
+  - `_forced-colors.css:28-29` 對 `.z-popup` 與 `.z-popup-content` 各畫一框，現在緊貼，只通過 67/67 斷言，未做像素比對。
+  - `grid.css:502-503`、`listbox.css:912-913` 的「Loading tint」標題連續出現兩次。
+  - `_dnd.css:28-35` 的 `z-index: 16800` 是寫死的數值，註解寫明取自 IceBlue。
+- **push 前注意：** `hawkchen/marble` 在這段期間已被別的 session 更新（本機領先數 zk 45→6、zkcml 9→1），push 前先 fetch。

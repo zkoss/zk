@@ -21,6 +21,19 @@
     white-space: nowrap;
 }
 
+/* ZK-817 (IceBlue rule): drag.ts appends this overlay to <body> while dragging, so that a drag over an
+   iframe is not swallowed by the iframe. It must be out of flow, or it doubles the page height.
+   16800 is IceBlue's value: above the first floating widgets (runtime counter starts at 1800, see
+   --zk-index-float-fallback) and below the drag ghost (inline 88800). */
+.z-dd-stackup {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 16800;
+}
+
 /* Drag source: de-emphasise the element that is being dragged. */
 .z-dragged {
     opacity: 0.4;

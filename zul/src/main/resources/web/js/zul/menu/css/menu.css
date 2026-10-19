@@ -287,7 +287,10 @@
     min-width: 160px;
     box-sizing: border-box;
     font-family: var(--zk-typescale-font-family);
-    overflow: hidden;
+    /* ZK-4131: a long menu scrolls inside the popup; the clip keeps the rounded corners */
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* The inner UL that contains the actual items */

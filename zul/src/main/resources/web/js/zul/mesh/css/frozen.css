@@ -96,11 +96,16 @@
    so target them via the frozen container class + background-color:inherit so
    each cell copies its row's computed background color. */
 
-/* Header — explicit surface fill */
-.z-column.z-frozen-col,
-.z-listheader.z-frozen-col,
-.z-treecol.z-frozen-col {
+/* Header — explicit surface fill. The right frozen cells (.z-frozen-right-col) and the mobile sticky
+   ones (.z-frozen-sticky) also stay in place over scrolled cells, so they need the same fill. */
+:is(.z-column, .z-listheader, .z-treecol):is(.z-frozen-col, .z-frozen-right-col, .z-frozen-sticky) {
     background-color: var(--zk-color-surface);
+}
+
+/* Auxheader — the tonal band is painted on the row (auxhead.css) and the cells are transparent, so a
+   cell that stays in place repeats the band colour. */
+.z-auxheader:is(.z-frozen-col, .z-frozen-right-col, .z-frozen-sticky) {
+    background-color: var(--zk-color-surface-container-low);
 }
 
 /* Body cells in a frozen grid — inherit the row background so every state
@@ -133,6 +138,43 @@
     background-color: inherit;
 }
 
+/* Scrollbar-gutter filler cells (.z-*-bar) of a mesh with right frozen columns are sticky too (the
+   `.z-frozen-right-col` rule below) and sit over the scrolled cells, so each repeats, opaque, what its
+   own row shows: the header fill, the auxhead band, the footer tint. The tree's bar is the translucent
+   outline-variant strip over the surface, composited here with a gradient layer so it looks the same. */
+.z-listhead-bar.z-frozen-right-col {
+    background-color: var(--zk-color-surface);
+}
+
+.z-treecols-bar.z-frozen-right-col {
+    background-color: var(--zk-color-surface);
+    background-image: linear-gradient(var(--zk-color-outline-variant), var(--zk-color-outline-variant));
+}
+
+.z-auxhead-bar.z-frozen-right-col {
+    background-color: var(--zk-color-surface-container-low);
+}
+
+.z-foot-bar.z-frozen-right-col {
+    background-color: var(--zk-grid-foot-bg);
+}
+
+.z-listfoot-bar.z-frozen-right-col,
+.z-treefoot-bar.z-frozen-right-col {
+    background-color: var(--zk-color-surface-container-low);
+}
+
+/* Footer cells in a frozen grid and listbox — the footer bar's tint, opaque, so the frozen footer cells
+   (like the tree's below) cover the cells scrolled behind them. ZK adds no .z-frozen-col to the left
+   footer cells, so the frozen container selects them all. */
+.z-grid:has(.z-grid-frozen) .z-foot .z-footer {
+    background-color: var(--zk-grid-foot-bg);
+}
+
+.z-listbox:has(.z-listbox-frozen) .z-listfoot .z-listfooter {
+    background-color: var(--zk-color-surface-container-low);
+}
+
 /* Footer cells in a frozen tree — must be opaque so frozen footer cells
    properly cover non-frozen cells scrolled behind them. */
 .z-tree:has(.z-tree-frozen) .z-treefoot .z-treefooter {
@@ -152,11 +194,13 @@
 .z-row .z-row-inner.z-frozen-sticky,
 .z-row .z-cell.z-frozen-sticky,
 .z-group-inner.z-frozen-sticky,
+.z-groupfoot-inner.z-frozen-sticky,
 .z-row .z-detail-outer.z-frozen-sticky,
 .z-auxheader.z-frozen-sticky,
 .z-listheader.z-frozen-sticky,
 .z-listitem .z-listcell.z-frozen-sticky,
 .z-listgroup-inner.z-frozen-sticky,
+.z-listgroupfoot-inner.z-frozen-sticky,
 .z-treecol.z-frozen-sticky,
 .z-treerow .z-treecell.z-frozen-sticky,
 .z-footer.z-frozen-sticky,
@@ -164,6 +208,25 @@
 .z-treefooter.z-frozen-sticky {
     position: sticky;
     z-index: 1;
+}
+
+/* ZK-4212 (IceBlue rule): Frozen.ts `_calcRightPosition` adds .z-frozen-right-col plus an inline `right`
+   to the last N cells of the head, body and foot rows; they only stay in place when sticky. The
+   selectors name the cell classes so they outrank the `position: relative` of the header cells and
+   of the ZK-3864 body cells (grid.css, listbox.css, tree.css) without `!important`. */
+.z-frozen-right-col,
+.z-column.z-frozen-right-col,
+.z-listheader.z-frozen-right-col,
+.z-treecol.z-frozen-right-col,
+.z-row .z-row-inner.z-frozen-right-col,
+.z-row .z-cell.z-frozen-right-col,
+.z-listitem .z-listcell.z-frozen-right-col,
+.z-treerow .z-treecell.z-frozen-right-col {
+    position: sticky;
+}
+
+.z-frozen-right-col:first-child {
+    left: 0;
 }
 
 /* Frozen pane boundary — last .z-frozen-col cell in each row.

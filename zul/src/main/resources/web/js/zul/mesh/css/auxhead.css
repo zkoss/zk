@@ -10,7 +10,9 @@
 }
 
 .z-auxheader {
-    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    /* Padding sits on .z-auxheader-content, not on the TH (IceBlue's model): widget JS reads the TH
+       as a border box (MeshWidget._getMinWd). */
+    padding: 0;
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-label-medium-size);
     font-weight: var(--zk-typescale-label-large-weight);
@@ -42,6 +44,7 @@
 }
 
 .z-auxheader-content {
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
     display: block;
 }
 

@@ -1,5 +1,5 @@
 <zk>
-<apply templateURI="~./pv/matrix.zul" title="States"
+<apply templateURI="~./pv/matrix.zul" title="States" colMin="max-content"
        cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
        rowsTemplate="combobox-rows">
     <template name="combobox-rows">

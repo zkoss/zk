@@ -22,7 +22,9 @@
     line-height: var(--zk-typescale-body-medium-line-height);
     outline: none;
     box-sizing: border-box;
-    vertical-align: middle;
+    /* Same baseline alignment as the inline-flex composites (datebox, chosenbox) so a row of
+       sibling inputs shares one bottom edge (B86_ZK_4048). */
+    vertical-align: baseline;
     /* Only transition border-COLOR. On focus, border-width snaps 1px→2px and the
        compensating padding (0 spacing-3 → 0 calc(spacing-3 - 1px)) snaps with it, so
        the content edge stays put. Animating border-width WITHOUT co-animating padding
@@ -143,6 +145,7 @@
 
 /* Textarea */
 textarea.z-textbox {
+    vertical-align: middle;
     min-height: 80px;
     padding: var(--zk-spacing-2) var(--zk-spacing-3);
     resize: vertical;
@@ -184,6 +187,16 @@ textarea.z-textbox:focus-visible {
     border-color: var(--zk-input-border-color-error);
     border-width: 2px;
     padding: 0 calc(var(--zk-spacing-3) - 1px);
+}
+
+/* The focused invalid/error rules above reset padding to `0 …` with a higher specificity than
+   the textarea focus rule, so a focused invalid textarea lost its vertical padding and the
+   box shrank by 16px on focus; the layout shift under the pointer swallows the next click
+   (F50_3316591). Re-assert the textarea padding at the higher specificity. */
+textarea.z-textbox.z-textbox-invalid:focus,
+textarea.z-textbox.z-textbox-invalid:focus-visible,
+textarea.z-textbox.z-error:focus {
+    padding: calc(var(--zk-spacing-2) - 1px) calc(var(--zk-spacing-3) - 1px);
 }
 
 /* Passwordbox invalid (same ZK pattern as intbox) */

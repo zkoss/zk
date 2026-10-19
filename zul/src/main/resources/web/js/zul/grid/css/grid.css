@@ -48,12 +48,16 @@
    Frozen-pane styles live in mesh/css/frozen.css. */
 
 .z-auxhead-bar {
+    padding: 0;
     background-color: transparent;
     border-bottom: 1px solid var(--zk-color-outline-variant);
 }
 
 /* ─── Header area ───────────────────────────────────────────────────────── */
 .z-grid-header {
+    /* Positioned like the body: with the positioned header and body cells, jQuery position() of a header
+       cell and of a body cell are both relative to their own scroll box (B86-ZK-4044). */
+    position: relative;
     overflow: hidden;
     background-color: transparent;
 }
@@ -79,15 +83,20 @@
    `table { border-spacing: 0 }` reset. (Already separate by UA default; the explicit
    value keeps frozen-col TH box-shadow paintable, consistent with tree/listbox.) */
 .z-grid-header table {
-    width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    table-layout: fixed;
 }
 
-/* Column header cell — Mira / MD3 Data Table: no fill, hierarchy via weight + divider */
+/* Header cell — Mira / MD3 Data Table: no fill, hierarchy via weight + divider.
+   The cell padding sits on .z-column-content, not on the TH (IceBlue's model): widget JS reads
+   the TH as a border box (MeshWidget._getMinWd, Frozen's hidden-column `offsetWidth < 2`,
+   HeaderWidget._insizer), and a padded TH makes a hflex="min" or hidden column 32px too wide. */
 .z-column {
-    padding: var(--zk-grid-cell-padding);
+    padding: 0;
+    /* Header and body cells are both positioned (the body cells for ZK-3864): a positioned cell's
+       offsetParent is its own scroll box, so jQuery position() of a header cell matches the body cell
+       after a horizontal scroll. With only the body cells positioned they drift apart (B86-ZK-4044). */
+    position: relative;
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);
@@ -101,7 +110,6 @@
     text-overflow: ellipsis;
     user-select: none;
     vertical-align: middle;
-    position: relative;
     box-sizing: border-box;
 }
 
@@ -116,23 +124,27 @@
 
 /* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap, so the label
    never paints under it; the ellipsis on .z-column-content truncates what does not fit. */
-.z-column-sort {
+.z-column-sort .z-column-content {
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* Room for the column-menu button (24px, right: spacing-1) and, when sorted, the sort icon
    next to it. */
-.z-column:has(.z-column-button) {
+.z-column:has(.z-column-button) .z-column-content {
     padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
 }
 
-.z-column-sort:has(.z-column-button) {
+.z-column-sort:has(.z-column-button) .z-column-content {
     padding-right: calc(var(--zk-spacing-1) * 3 + 24px + 12px);
 }
 
 /* The label lives in .z-column-content, so the ellipsis has to be there; on .z-column it
    would not apply because the text is not a direct child. */
 .z-column-content {
+    /* Positioning context for the out-of-flow sort icon and menu button (IceBlue's model: the content
+       div is positioned as well as the TH). */
+    position: relative;
+    padding: var(--zk-grid-cell-padding);
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -152,7 +164,9 @@
 @supports (overflow-clip-margin: 4px) {
     .z-column-content:has(:is(button, a, input, select, textarea)) {
         overflow: clip;
-        overflow-clip-margin: 4px;
+        /* Clip at the content box (+ the ring's 4px reach), not at the padding box: the padding of the content div
+           reserves the slot of the sort icon and the menu button, and a long label must not paint into it. */
+        overflow-clip-margin: content-box 4px;
         text-overflow: clip;
     }
 }
@@ -219,20 +233,26 @@
    image (global `img{max-width:100%}`) below intrinsic size and inflates the row;
    collapse the side padding so a 16px icon renders full-size. */
 .z-column:has(img) {
+    white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
+}
+
+.z-column:has(img) .z-column-content {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
-    white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
 }
 
 /* A sortable header with an image still needs the sort icon's room, which the rule above (higher
    specificity than .z-column-sort) would otherwise drop to the 4px icon-column padding. */
-.z-column-sort:has(img) {
+.z-column-sort:has(img) .z-column-content {
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* ─── Body area ─────────────────────────────────────────────────────────── */
 .z-grid-body {
     overflow: auto;
+    /* ZK-3263 / ZK-4733: ROD sets scrollTop itself after replacing rows and resizing the pads;
+       Chrome scroll anchoring would shift it again. IceBlue had the same rule. */
+    overflow-anchor: none;
     max-height: 100%;
     /* position:relative anchors .z-focus-a (see listbox.css for rationale). */
     position: relative;
@@ -249,8 +269,13 @@
 
 .z-grid-body table,
 .z-grid-inner {
-    width: 100%;
     border-collapse: collapse;
+}
+
+/* Tables inside a cell or detail keep the fixed full-width layout they had when this rule covered every
+   table of the body; only the mesh's own table is left to ZK's inline style. */
+.z-grid-body table table {
+    width: 100%;
     table-layout: fixed;
 }
 
@@ -305,9 +330,20 @@
     box-sizing: border-box;
 }
 
-/* Content div inside the TD */
+/* ZK-3864 (IceBlue rule): a positioned, z-index 0 cell makes each cell its own stacking context, so
+   absolutely positioned content inside a scrolled cell cannot paint over the frozen columns.
+   `.z-frozen-sticky` cells keep their `position: sticky; z-index: 1` (frozen.css, higher specificity). */
+.z-row .z-cell,
+.z-row .z-row-inner {
+    position: relative;
+    z-index: 0;
+}
+
+/* Content div inside the TD. `.z-cell` is scoped to the grid: the Cell component is also a plain
+   layout container (vbox, hbox), where a nowrap, overflow-hidden cell pins the box to its unwrapped
+   content width (F70-ZK-112). */
 .z-row-content,
-.z-cell {
+.z-grid .z-cell {
     padding: var(--zk-grid-cell-padding);
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-body-medium-size);
@@ -463,21 +499,21 @@
     font-style: italic;
 }
 
-/* ─── Loading overlay ────────────────────────────────────────────────────── */
+/* ─── Loading tint ────────────────────────────────────────────────────── */
+/* Loading tint. ZK's ROD toggles this class on the scrolling body (-body) itself, not on a separate overlay
+   element, so it must not change the body's position or display: a flex, absolutely positioned body re-lays
+   out its pads and rows and shrinks scrollHeight mid-scroll (B96-ZK-4834). */
 .z-grid-loading {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: rgba(255, 255, 255, 0.6);
-    z-index: 10;
 }
 
 /* ─── Footer row ─────────────────────────────────────────────────────────── */
 .z-grid-footer {
     background-color: var(--zk-grid-foot-bg);
     border-top: 1px solid var(--zk-color-outline-variant);
+    /* IceBlue rule: MeshWidget.ts sets efoot.scrollLeft to follow the body's horizontal scroll,
+       which only takes effect on a non-visible overflow. */
+    overflow: hidden;
 }
 
 /* The UA default `border-spacing: 2px` would push every footer column right of its body column. */
@@ -550,6 +586,7 @@
 }
 
 .z-columns-bar {
+    padding: 0;
     background-color: var(--zk-color-surface-container);
     border-bottom: 1px solid var(--zk-color-outline-variant);
 }
@@ -563,8 +600,10 @@
     padding: 0;
 }
 
+/* Not `display: none`, for the same reason as .z-listcell-hidden-header in listbox.css. */
 .z-cell-hidden-column {
-    display: none;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .z-grid-paging-top .z-paging {

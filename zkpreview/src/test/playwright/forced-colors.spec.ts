@@ -133,12 +133,19 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   test('elevation surface (groupbox) gains a border', async ({ page }) => {
     await page.goto('/groupbox.zul', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.z-groupbox', { timeout: 10000 });
-    const { style, width } = await page.locator('.z-groupbox').first().evaluate(el => {
+    // The groupbox frame is drawn by the header (not the root), which keeps its border
+    // under forced colors; the root must not add a second layer.
+    const { style, width } = await page.locator('.z-groupbox-header').first().evaluate(el => {
       const cs = getComputedStyle(el);
       return { style: cs.borderTopStyle, width: cs.borderTopWidth };
     });
     expect(style).toBe('solid');
     expect(width).toBe('1px');
+    const rootBorderWidths = await page.locator('.z-groupbox').first().evaluate(el => {
+      const cs = getComputedStyle(el);
+      return [cs.borderTopWidth, cs.borderRightWidth, cs.borderBottomWidth, cs.borderLeftWidth];
+    });
+    expect(rootBorderWidths).toEqual(['0px', '0px', '0px', '0px']);
   });
 
   test('paging current page uses the system selection color', async ({ page }) => {

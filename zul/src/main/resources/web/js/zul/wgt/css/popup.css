@@ -1,21 +1,27 @@
 /* MD3 Popup — floating surface for tooltips, dropdowns, overlays */
 
 @layer zk-components {
+/* The visible surface (border, radius, background, shadow) is on .z-popup-content, as in IceBlue.
+   The outer .z-popup stays a plain square box: a popup that opens at the pointer (ZK-4339) puts
+   its top-left corner exactly under the cursor, and a rounded outer corner is not hit-testable at
+   that pixel, so the button underneath keeps the hover and never fires mouseout, which leaves its
+   tooltip timer running. */
 .z-popup {
     position: absolute;
     z-index: 1500;
-    background-color: var(--zk-popup-bg);
-    border-radius: var(--zk-popup-radius);
-    box-shadow: var(--zk-popup-elevation);
-    border: 1px solid var(--zk-popup-border-color);
-    padding: var(--zk-spacing-1) 0;
-    min-width: 160px;
-    overflow: auto;
     box-sizing: border-box;
+    min-width: 160px;
 }
 
 .z-popup-content {
-    padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--zk-popup-bg);
+    border: 1px solid var(--zk-popup-border-color);
+    border-radius: var(--zk-popup-radius);
+    box-shadow: var(--zk-popup-elevation);
+    padding: calc(var(--zk-spacing-1) + var(--zk-spacing-2)) var(--zk-spacing-4);
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-body-medium-size);
     color: var(--zk-popup-fg);
@@ -24,25 +30,24 @@
 /* ─── Tooltip-style popup ─────────────────────────────────────────────────── */
 /* Tooltip-style popup: dark bg, small radius, small text */
 .z-popup-tooltip.z-popup {
-    background-color: rgba(97, 97, 97, 0.92);
     color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 4px 8px;
-    box-shadow: var(--zk-elevation-2);
     min-width: 0;
     max-width: 300px;
     font-size: 0.6875rem;
     font-weight: 500;
     word-wrap: break-word;
 }
+.z-popup-tooltip .z-popup-content {
+    background-color: rgba(97, 97, 97, 0.92);
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    box-shadow: var(--zk-elevation-2);
+}
 .z-popup-tooltip.z-popup .z-label {
     color: #fff;
     font-size: 0.6875rem;
     font-weight: 500;
-}
-.z-popup-tooltip .z-popup-content{
-    padding: 0;
 }
 
 /* ─── Popup animation utilities ───────────────────────────────────────────── */

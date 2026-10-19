@@ -146,7 +146,9 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
   test('groupbox — stock values, then :root override reaches it', async ({ page }) => {
     const root = page.locator('.z-groupbox').first();
     const c0 = root;
-    const c1 = root;
+    // The frame border is drawn by the header and the content, not by the root (B95-ZK-4505),
+    // so read its colour from the header.
+    const c1 = root.locator('.z-groupbox-header').first();
     expect(await radiusOf(c0)).toBe('6px'); // stock
     expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.12)'); // stock
     await page.addStyleTag({ content: ':root{--zk-groupbox-radius:0px;--zk-groupbox-border-color:#6750a4}' });
@@ -436,9 +438,11 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 2)', () 
 
   test('popup — stock values, then :root override reaches it', async ({ page }) => {
     await open(page, '/popup.zul', 'Show Popup');
-    const pop = page.locator('.z-popup.z-popup-open');
-    await expect(pop).toBeVisible();
+    const popup = page.locator('.z-popup.z-popup-open');
+    await expect(popup).toBeVisible();
     await settle(page);
+    // The surface (radius, fill, border) is on .z-popup-content; the outer .z-popup is a square box.
+    const pop = popup.locator('.z-popup-content');
 
     expect(await radiusOf(pop)).toBe('4px'); // stock --zk-shape-corner-extra-small
     expect(await bgOf(pop)).toBe('rgb(255, 255, 255)'); // stock --zk-color-surface

@@ -24,7 +24,6 @@
     height: 100%;
     background-color: var(--zk-progressmeter-fill);
     border-radius: var(--zk-progressmeter-radius);
-    transition: width var(--zk-motion-duration-medium2) var(--zk-motion-easing-standard);
     min-width: 0;
 }
 

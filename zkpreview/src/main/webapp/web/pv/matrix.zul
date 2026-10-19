@@ -4,8 +4,11 @@
      "auto label column + N equal columns" track (count via the inline zk-cols var),
      z-overflow-x-auto scrolls on narrow screens, and z-d-contents flattens each
      row wrapper so its cells become direct grid children and align across rows.
-     The section title spans the whole grid via z-grid-col-full. No custom CSS. -->
-<div sclass="z-mb-6 z-d-grid z-grid-cols-auto z-overflow-x-auto z-gap-x-6 z-gap-y-2 z-items-start" style="--zk-cols:${arg.cols.size()}; --zk-col-min:min-content">
+     The section title spans the whole grid via z-grid-col-full. No custom CSS.
+     Optional colMin sets the data column minimum (default min-content). A page whose
+     controls have a percentage-width input (combobox) passes max-content: such an input
+     contributes 0 to a min-content track, so the track would squeeze it. -->
+<div sclass="z-mb-6 z-d-grid z-grid-cols-auto z-overflow-x-auto z-gap-x-6 z-gap-y-2 z-items-start" style="--zk-cols:${arg.cols.size()}; --zk-col-min:${empty arg.colMin ? 'min-content' : arg.colMin}">
     <div sclass="z-grid-col-full z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="${arg.title}"/></div>
     <div sclass="z-d-contents">
         <div/>

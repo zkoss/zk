@@ -1,4 +1,4 @@
-import { test, expect, Locator, Page } from '@playwright/test';
+import { test, expect, chromium, Browser, BrowserContext, Locator, Page } from '@playwright/test';
 
 // Guard for the Grid, Listbox and Tree header and footer CSS (ZK-6112, D11-D13):
 //  - the sort arrow is 12x12 in all three (grid.css gave Grid 14px through `.z-column [class*="z-icon-"]`);
@@ -56,6 +56,11 @@ const FIXTURE = '/pv/mesh-header-footer-guard.zul';
 const TOLERANCE_PX = 1;
 const ARROW_SIZE_PX = 12;
 const MIN_LABEL_ARROW_GAP_PX = 2;
+
+// The header padding sits on the content div, as in IceBlue, so the room the header reserves for the arrow
+// and the menu button is the content's padding-right: the label box ends at the content box, not at the border box.
+const contentBoxRight = (content: Element) =>
+  content.getBoundingClientRect().right - parseFloat(getComputedStyle(content).paddingRight);
 const SORTED_COLUMN = 2;
 const ICON_IMAGE_PX = 16;
 
@@ -224,8 +229,8 @@ function registerSelectAllHeaderClearsArrowAndButton() {
   for (const { root, plain, controls } of cases) {
     test(`${root}: the right padding is the one of the plain header with ${controls.join(' and ')}`, async ({ page }) => {
       await open(page);
-      const paddingRight = (selector: string) => page.locator(selector)
-        .evaluate((th) => parseFloat(getComputedStyle(th).paddingRight));
+      const paddingRight = (selector: string) => page.locator(`${selector} .z-listheader-content`)
+        .evaluate((content) => parseFloat(getComputedStyle(content).paddingRight));
       const selectAll = await paddingRight(`${root} th.z-listheader:nth-child(1)`);
       const plainHeader = await paddingRight(plain);
       expect(selectAll, `select-all ${selectAll}px, plain ${plainHeader}px`).toBe(plainHeader);
@@ -234,8 +239,7 @@ function registerSelectAllHeaderClearsArrowAndButton() {
     test(`${root}: the label box ends before ${controls.join(' and ')}`, async ({ page }) => {
       await open(page);
       const header = page.locator(`${root} th.z-listheader:nth-child(1)`);
-      const labelBoxRight = await header.locator('.z-listheader-content')
-        .evaluate((content) => content.getBoundingClientRect().right);
+      const labelBoxRight = await header.locator('.z-listheader-content').evaluate(contentBoxRight);
       for (const control of controls) {
         const controlLeft = await header.locator(control).evaluate((el) => el.getBoundingClientRect().left);
         expect(controlLeft - labelBoxRight, `label box right ${labelBoxRight}, ${control} left ${controlLeft}`)
@@ -278,7 +282,7 @@ const MENU_HEADERS: MenuHeader[] = [
 // padding and the sort arrow's offset must follow it, or the label and the arrow run under the button box.
 function registerMenuHeaderClearsArrowAndButton() {
   const left = (page: Page, selector: string) => page.locator(selector).evaluate((el) => el.getBoundingClientRect().left);
-  const right = (page: Page, selector: string) => page.locator(selector).evaluate((el) => el.getBoundingClientRect().right);
+  const right = (page: Page, selector: string) => page.locator(selector).evaluate(contentBoxRight);
 
   for (const { name, header, button, content, sortIcon } of MENU_HEADERS) {
     test(`${name}: the label box ends before the menu button`, async ({ page }) => {
@@ -1445,8 +1449,9 @@ function registerImageSortMenuHeaderOrder(meshes: Mesh[]) {
       const header = sortedHeader(mesh);
       const left = (selector: string) => page.locator(`${header} ${selector}`).evaluate((el) => el.getBoundingClientRect().left);
       const right = (selector: string) => page.locator(`${header} ${selector}`).evaluate((el) => el.getBoundingClientRect().right);
+      const contentRight = (selector: string) => page.locator(`${header} ${selector}`).evaluate(contentBoxRight);
       const button = mesh === GRID_IMAGE_MENU ? '.z-column-button' : '.z-listheader-button';
-      const labelRight = await right(mesh.headerContent);
+      const labelRight = await contentRight(mesh.headerContent);
       const arrowLeft = await left(mesh.sortIcon);
       const arrowRight = await right(mesh.sortIcon);
       const buttonLeft = await left(button);
@@ -1491,8 +1496,7 @@ test.describe('mesh header and footer', () => {
         .evaluate((icon) => icon.getBoundingClientRect().left);
       // The box, not the text: it is what the header's padding-right reserves, so the result does not
       // depend on how long the label is.
-      const labelBoxRight = await page.locator(`${header} ${mesh.headerContent}`)
-        .evaluate((content) => content.getBoundingClientRect().right);
+      const labelBoxRight = await page.locator(`${header} ${mesh.headerContent}`).evaluate(contentBoxRight);
       expect(arrowLeft - labelBoxRight, `label box right ${labelBoxRight}, arrow left ${arrowLeft}`)
         .toBeGreaterThanOrEqual(MIN_LABEL_ARROW_GAP_PX);
     });
@@ -1523,7 +1527,8 @@ test.describe('mesh header and footer', () => {
       const mediaRect = content.querySelector(mediaSelector)?.getBoundingClientRect();
       const result = {
         headerHeight: header.getBoundingClientRect().height,
-        contentHeight: content.getBoundingClientRect().height,
+        contentHeight: content.clientHeight - parseFloat(getComputedStyle(content).paddingTop)
+          - parseFloat(getComputedStyle(content).paddingBottom),
         labelCentre: centre(label.getBoundingClientRect()),
         mediaCentre: mediaRect && centre(mediaRect),
         mediaHeight: mediaRect?.height ?? 0,
@@ -1656,5 +1661,152 @@ test.describe('mesh header and footer', () => {
       const row = await iconLeft('.mhf-listbox-select-all-centre tr.z-listitem .z-listitem-icon');
       expect(Math.abs(header - row), `header box x ${header}, row box x ${row}`).toBeLessThanOrEqual(TOLERANCE_PX);
     });
+  });
+});
+
+// Frozen columns (ZK-4212, ZK-3864): the right frozen cells are `position: sticky` and the cells that stay
+// in place cover the cells scrolled behind them. Rows built with <cell> render TD.z-cell, which grid.css
+// positions for ZK-3864 and which must still be sticky.
+const FROZEN_FIXTURE = '/pv/frozen-cells-guard.zul';
+const FROZEN_WHEEL_DELTA_X = 40;
+const FROZEN_ALIGN_PX = 1;
+const FROZEN_MESHES = [
+  { root: '.fz-grid-both', header: 'th.z-column', body: 'tbody tr.z-row:first-child td' },
+  { root: '.fz-grid-right', header: 'th.z-column', body: 'tbody tr.z-row:first-child td' },
+  { root: '.fz-listbox', header: 'th.z-listheader', body: 'tbody tr.z-listitem:first-child td' },
+  { root: '.fz-tree', header: 'th.z-treecol', body: 'tbody tr.z-treerow:first-child td' },
+];
+
+async function openFrozenFixture(page: Page) {
+  const resp = await page.goto(FROZEN_FIXTURE, { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready.then(() => true));
+}
+
+// A real wheel over the frozen scroll tray moves ZK's frozen scrollbar.
+async function wheelFrozenTray(page: Page, root: string) {
+  const tray = page.locator(`${root} .z-frozen-inner`);
+  await tray.scrollIntoViewIfNeeded();
+  const box = (await tray.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.wheel(FROZEN_WHEEL_DELTA_X, 0);
+  await expect.poll(() => tray.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+}
+
+// What a cell paints: its own colour, and the colour of a one-colour gradient layer on top of it (the tree bar's
+// outline-variant strip), composited over the backgrounds of the ancestors up to the first opaque one.
+// `expectedOver` is a custom property that must lie over the ancestors instead; null means the ancestors alone.
+interface Paint { painted: string; expected: string; ownAlpha: number }
+
+function paintOfStickyCell(page: Page, selector: string, expected: { token: string | null; over: string | null }): Promise<Paint> {
+  return page.locator(selector).first().evaluate((cell, { token, over }) => {
+    type Rgba = [number, number, number, number];
+    const parse = (css: string): Rgba => {
+      const m = css.match(/rgba?\(([^)]+)\)/)!;
+      const [r, g, b, a = 1] = m[1].split(/[ ,/]+/).filter(Boolean).map(Number);
+      return [r, g, b, a];
+    };
+    const over_ = (top: Rgba, bottom: Rgba): Rgba => {
+      const a = top[3] + bottom[3] * (1 - top[3]);
+      if (a === 0) return [0, 0, 0, 0];
+      const mix = (i: number) => (top[i] * top[3] + bottom[i] * bottom[3] * (1 - top[3])) / a;
+      return [mix(0), mix(1), mix(2), a];
+    };
+    const tokenColour = (name: string): Rgba => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = `var(${name})`;
+      document.body.appendChild(probe);
+      const colour = parse(getComputedStyle(probe).backgroundColor);
+      probe.remove();
+      return colour;
+    };
+    const behind = (el: Element | null): Rgba => {
+      let colour: Rgba = [0, 0, 0, 0];
+      for (; el && colour[3] < 1; el = el.parentElement) colour = over_(colour, parse(getComputedStyle(el).backgroundColor));
+      return colour;
+    };
+    const style = getComputedStyle(cell);
+    const gradient = style.backgroundImage.match(/linear-gradient\((rgba?\([^)]+\))/);
+    const own = parse(style.backgroundColor);
+    const painted = over_(gradient ? parse(gradient[1]) : [0, 0, 0, 0], over_(own, behind(cell.parentElement)));
+    const ground = token ? tokenColour(token) : behind(cell.parentElement);
+    const expectedColour = over ? over_(tokenColour(over), ground) : ground;
+    const text = (c: Rgba) => c.map((v) => Math.round(v)).join(',');
+    return { painted: text(painted), expected: text(expectedColour), ownAlpha: own[3] };
+  }, expected);
+}
+
+// Cells and bars that stay in place, with the colour each must show: the row behind them for the header,
+// the footer row and the auxhead band; the filler of the columns row is the one tinted bar.
+const FROZEN_STICKY_CELLS = [
+  { root: '.fz-grid-both', selector: 'th.z-column.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-grid-both', selector: 'th.z-auxheader.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-grid-both', selector: 'td.z-footer.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-grid-both', selector: 'td.z-footer:first-child', token: null, over: null },
+  { root: '.fz-grid-both', selector: 'th.z-auxhead-bar.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-grid-both', selector: 'th.z-columns-bar.z-frozen-right-col', token: '--zk-color-surface-container', over: null },
+  { root: '.fz-grid-both', selector: 'td.z-foot-bar.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-grid-right', selector: 'th.z-column.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-listbox', selector: 'th.z-listheader.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-listbox', selector: 'td.z-listfooter.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-listbox', selector: 'td.z-listfooter:first-child', token: null, over: null },
+  { root: '.fz-listbox', selector: 'th.z-listhead-bar.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-listbox', selector: 'td.z-listfoot-bar.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-tree', selector: 'th.z-treecol.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-tree', selector: 'td.z-treefooter.z-frozen-right-col', token: null, over: null },
+  { root: '.fz-tree', selector: 'td.z-treefooter:first-child', token: null, over: null },
+  { root: '.fz-tree', selector: 'th.z-treecols-bar.z-frozen-right-col', token: null, over: '--zk-color-outline-variant' },
+  { root: '.fz-tree', selector: 'td.z-treefoot-bar.z-frozen-right-col', token: null, over: null },
+];
+
+test.describe('frozen columns', () => {
+  // The scrollbar-gutter filler cells are 0px wide under Playwright's default --hide-scrollbars, and
+  // `test.use({ launchOptions })` cannot be scoped to a describe, so these tests launch their own browser.
+  let browser: Browser;
+  let context: BrowserContext;
+  let page: Page;
+
+  test.beforeAll(async () => {
+    browser = await chromium.launch({ ignoreDefaultArgs: ['--hide-scrollbars'] });
+  });
+  test.afterAll(() => browser.close());
+  test.beforeEach(async ({ baseURL }) => {
+    context = await browser.newContext({ baseURL });
+    page = await context.newPage();
+  });
+  test.afterEach(() => context.close());
+
+  for (const mesh of FROZEN_MESHES) {
+    test(`${mesh.root}: the right frozen body cell stays under its header cell after a wheel scroll`, async () => {
+      await openFrozenFixture(page);
+      await wheelFrozenTray(page, mesh.root);
+      const left = (selector: string) => page.locator(`${mesh.root} ${selector}.z-frozen-right-col`).first()
+        .evaluate((el) => el.getBoundingClientRect().left);
+      const header = await left(mesh.header);
+      const body = await left(mesh.body);
+      expect(Math.abs(header - body), `header x ${header}, body x ${body}`).toBeLessThanOrEqual(FROZEN_ALIGN_PX);
+    });
+  }
+
+  for (const { root, selector, token, over } of FROZEN_STICKY_CELLS) {
+    test(`${root} ${selector}: paints the opaque colour of the row behind it`, async () => {
+      await openFrozenFixture(page);
+      await wheelFrozenTray(page, root);
+      const width = await page.locator(`${root} ${selector}`).first().evaluate((el) => el.getBoundingClientRect().width);
+      expect(width, 'the cell must take width, else a filler cell paints nothing and the test is vacuous').toBeGreaterThan(0);
+      const paint = await paintOfStickyCell(page, `${root} ${selector}`, { token, over });
+      expect(paint.ownAlpha, 'own background-color must be opaque so scrolled cells do not show through').toBe(1);
+      expect(paint.painted).toBe(paint.expected);
+    });
+  }
+
+  test('.fz-grid-both: the left frozen <cell> body cell stays under its header cell after a wheel scroll', async () => {
+    await openFrozenFixture(page);
+    await wheelFrozenTray(page, '.fz-grid-both');
+    const left = (selector: string) => page.locator(`.fz-grid-both ${selector}`).first()
+      .evaluate((el) => el.getBoundingClientRect().left);
+    const header = await left('th.z-column.z-frozen-col');
+    const body = await left('tbody tr.z-row:first-child td.z-cell');
+    expect(Math.abs(header - body), `header x ${header}, body x ${body}`).toBeLessThanOrEqual(FROZEN_ALIGN_PX);
   });
 });

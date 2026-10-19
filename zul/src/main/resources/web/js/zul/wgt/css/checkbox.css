@@ -34,6 +34,8 @@
     color: var(--zk-checkbox-fg);
     /* 40px minimum touch-target height */
     min-height: var(--zk-control-height);
+    /* ZK-4585: baseline alignment would lift the 32px switch track above the 18px default box */
+    vertical-align: middle;
 }
 
 /* ── Hide native input; still needed for focus / label association ─────────── */
@@ -551,6 +553,15 @@
     margin: 0;
     transition:
         background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* The toggle mold fills its whole 32px box, so a ring drawn outside it is clipped by a
+   container that ends at the box edge. Draw it inside, as other Marble controls without
+   spare room do (listbox/grid focus use -2px). The first selector also covers the browser's
+   own focus ring on the mold. */
+.z-checkbox-toggle > .z-checkbox-mold,
+.z-checkbox-toggle:has(input[type="checkbox"]:focus-visible) > .z-checkbox-mold {
+    outline-offset: -2px;
 }
 
 /* Cancel out the default mold ::before (checkbox state-layer ring) */

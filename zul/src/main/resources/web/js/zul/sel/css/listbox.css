@@ -31,6 +31,9 @@
 
 /* ─── Header ───────────────────────────────────────────────────────────── */
 .z-listbox-header {
+    /* Positioned like the body: with the positioned header and body cells, jQuery position() of a header
+       cell and of a body cell are both relative to their own scroll box (B86-ZK-4044). */
+    position: relative;
     overflow: hidden;
     background-color: transparent;
 }
@@ -50,7 +53,14 @@
 
 /* Header cell — Mira / MD3 Data Table: no fill, hierarchy via weight + divider */
 .z-listheader {
-    padding: var(--zk-listbox-cell-padding);
+    /* The cell padding sits on .z-listheader-content, not on the TH (IceBlue's model): widget JS reads
+       the TH as a border box (MeshWidget._getMinWd, Frozen's hidden-column `offsetWidth < 2`,
+       HeaderWidget._insizer). */
+    padding: 0;
+    /* Header and body cells are both positioned (the body cells for ZK-3864): a positioned cell's
+       offsetParent is its own scroll box, so jQuery position() of a header cell matches the body cell
+       after a horizontal scroll. With only the body cells positioned they drift apart (B86-ZK-4044). */
+    position: relative;
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);
     line-height: var(--zk-typescale-label-large-line-height);
@@ -64,7 +74,6 @@
     white-space: nowrap;
     user-select: none;
     vertical-align: middle;
-    position: relative;
     box-sizing: border-box;
     cursor: default;
 }
@@ -72,6 +81,10 @@
 /* Truncate the label inside the padded header; on .z-listheader the ellipsis would not apply
    because the text is not a direct child. */
 .z-listheader-content {
+    /* Positioning context for the out-of-flow sort icon and menu button (IceBlue's model: the content
+       div is positioned as well as the TH). */
+    position: relative;
+    padding: var(--zk-listbox-cell-padding);
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -93,7 +106,9 @@
 @supports (overflow-clip-margin: 4px) {
     .z-listheader-content:has(:is(button, a, input, select, textarea)) {
         overflow: clip;
-        overflow-clip-margin: 4px;
+        /* Clip at the content box (+ the ring's 4px reach), not at the padding box: the padding of the content div
+           reserves the slot of the sort icon and the menu button, and a long label must not paint into it. */
+        overflow-clip-margin: content-box 4px;
         text-overflow: clip;
     }
 }
@@ -105,7 +120,7 @@
 /* Reserve right-side space for the hover-revealed listheader-button so the header text never
    collides with the icon slot. ZK nests the button inside
    `.z-listheader-content`, so descendant `:has()` (no `>`) is required. */
-.z-listheader:has(.z-listheader-button) {
+.z-listheader:has(.z-listheader-button) .z-listheader-content {
     padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
 }
 
@@ -115,16 +130,19 @@
 
 .z-listheader-sort {
     cursor: pointer;
-    /* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
-    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 .z-listheader-sort:hover {
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
 }
 
+/* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
+.z-listheader-sort .z-listheader-content {
+    padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
+}
+
 /* With the column-menu button as well, the sort icon sits just left of the button. */
-.z-listheader-sort:has(.z-listheader-button) {
+.z-listheader-sort:has(.z-listheader-button) .z-listheader-content {
     padding-right: calc(var(--zk-spacing-1) * 3 + 24px + 12px);
 }
 
@@ -222,6 +240,9 @@
 /* ─── Body ─────────────────────────────────────────────────────────────── */
 .z-listbox-body {
     overflow: auto;
+    /* ZK-3263 / ZK-4733: ROD sets scrollTop itself after replacing rows and resizing the pads;
+       Chrome scroll anchoring would shift it again. IceBlue had the same rule. */
+    overflow-anchor: none;
     /* position:relative anchors the hidden .z-focus-a focus-trap (which ZK
        renders as position:absolute; top:0; left:0). Without it, focus-a
        resolves against <body>, and ZK's `focusEl.focus()` call after a
@@ -242,16 +263,22 @@
 
 /* Header table uses separate borders so box-shadow and border-inline-end
    on frozen-col TH cells are visible (border-collapse:collapse clips them). */
+/* No `width` / `table-layout` here: ZK renders both inline on every mesh table, and with sizedByContent
+   (MeshWidget) clears them to measure the content. A stylesheet value would win back over the cleared
+   inline style and skew the header against the body columns (B86-ZK-4044). */
 .z-listbox-header table {
-    width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    table-layout: fixed;
 }
 
 .z-listbox-body table {
-    width: 100%;
     border-collapse: collapse;
+}
+
+/* Tables inside a cell or detail keep the fixed full-width layout they had when this rule covered every
+   table of the body; only the mesh's own table is left to ZK's inline style. */
+.z-listbox-body table table {
+    width: 100%;
     table-layout: fixed;
 }
 
@@ -314,6 +341,13 @@
     vertical-align: middle;
     overflow: hidden;
     box-sizing: border-box;
+}
+
+/* ZK-3864 (IceBlue rule): own stacking context, so absolutely positioned content in a scrolled cell
+   cannot paint over the frozen columns. `.z-frozen-sticky` keeps its sticky position (frozen.css). */
+.z-listitem .z-listcell {
+    position: relative;
+    z-index: 0;
 }
 
 /* ZK renders cell content as DIV.z-listcell-content inside TD.z-listcell */
@@ -429,6 +463,9 @@
 .z-listbox-footer {
     background-color: var(--zk-color-surface-container-low);
     border-top: 2px solid var(--zk-color-outline-variant);
+    /* IceBlue rule: MeshWidget.ts sets efoot.scrollLeft to follow the body's horizontal scroll,
+       which only takes effect on a non-visible overflow (same as .z-tree-footer). */
+    overflow: hidden;
 }
 
 /* The UA default `border-spacing: 2px` would push every footer column right of its body column. */
@@ -436,12 +473,18 @@
     border-spacing: 0;
 }
 
+/* The padding sits on .z-listfooter-content, not on the TD (IceBlue's model): widget JS and the
+   header-to-footer alignment tests read the TD as a border box (B86-ZK-3883). */
 .z-listfoot .z-listfooter,
 .z-listfoot td {
-    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    padding: 0;
     font-weight: var(--zk-typescale-label-large-weight);
     color: var(--zk-color-on-surface-variant);
     font-size: var(--zk-typescale-body-medium-size);
+}
+
+.z-listfooter-content {
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
 }
 
 /* Empty */
@@ -608,7 +651,7 @@
    collapse the inner content padding the same way when the cell hosts a
    `.z-listitem-checkable` span (the inline span is 40px wide and overflows
    the right edge if the outer padding isn't reduced to match the header). */
-.z-listheader:has(.z-listheader-checkable) {
+.z-listheader:has(.z-listheader-checkable) .z-listheader-content {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
 }
@@ -617,15 +660,15 @@
    rule above (higher specificity than the sort rule, equal to the button rule and later in the source,
    so it wins both) would otherwise drop to 4px. Same
    numbers as the plain-header rules: sort arrow, menu button, and both. */
-.z-listheader-sort:has(.z-listheader-checkable) {
+.z-listheader-sort:has(.z-listheader-checkable) .z-listheader-content {
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
-.z-listheader:has(.z-listheader-checkable):has(.z-listheader-button) {
+.z-listheader:has(.z-listheader-checkable):has(.z-listheader-button) .z-listheader-content {
     padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
 }
 
-.z-listheader-sort:has(.z-listheader-checkable):has(.z-listheader-button) {
+.z-listheader-sort:has(.z-listheader-checkable):has(.z-listheader-button) .z-listheader-content {
     padding-right: calc(var(--zk-spacing-1) * 3 + 24px + 12px);
 }
 
@@ -668,14 +711,14 @@
    intrinsic size AND the squeezed content wraps to a 2nd line, inflating the
    whole header ROW. Collapse the side padding so a 16px icon renders full-size. See
    data-components.md → "Narrow icon/image column". */
-.z-listheader:has(img) {
+.z-listheader:has(img) .z-listheader-content {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
 }
 
 /* A sortable header with an image still needs the sort icon's room, which the rule above (higher
    specificity than .z-listheader-sort) would otherwise drop to the 4px icon-column padding. */
-.z-listheader-sort:has(img) {
+.z-listheader-sort:has(img) .z-listheader-content {
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
@@ -866,15 +909,12 @@
     font-style: italic;
 }
 
-/* ─── Loading overlay ────────────────────────────────────────────────────── */
+/* ─── Loading tint ────────────────────────────────────────────────────── */
+/* Loading tint. ZK's ROD toggles this class on the scrolling body (-body) itself, not on a separate overlay
+   element, so it must not change the body's position or display: a flex, absolutely positioned body re-lays
+   out its pads and rows and shrinks scrollHeight mid-scroll (B96-ZK-4834). */
 .z-listbox-loading {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: rgba(255, 255, 255, 0.6);
-    z-index: 10;
 }
 
 /* ─── Disabled listitem ──────────────────────────────────────────────────── */
@@ -920,11 +960,18 @@ td.z-listgroup-inner {
     gap: var(--zk-spacing-2);
 }
 
+/* Not `display: none`: the cell must stay in the table so that the collapsed <col> of the hidden header
+   (visibility: collapse, set by ZK) still lines up with it. A removed cell shifts every cell after it
+   one column left (B86-ZK-3994, ZK-5037). */
 .z-listcell-hidden-header {
-    display: none;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .z-listhead-bar {
+    /* The filler is a TH without a content div: the UA 1px padding would give widget JS a negative
+       content width (B30-1826606 compares it with the missing body cell). */
+    padding: 0;
     /* Header cell above the vertical scrollbar: same fill as every other
        .z-listheader (transparent over the listbox surface), not a tinted bar. */
     background-color: transparent;

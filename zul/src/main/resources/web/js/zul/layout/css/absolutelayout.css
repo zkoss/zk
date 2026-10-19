@@ -5,6 +5,7 @@
     position: relative;
     display: block;
     box-sizing: border-box;
+    height: 100%;
     overflow: hidden;
 }
 

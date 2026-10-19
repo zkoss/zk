@@ -26,6 +26,12 @@
 .z-valign-top    > .z-hlayout-inner { vertical-align: top; }
 .z-valign-middle > .z-hlayout-inner { vertical-align: middle; }
 
+/* css-flex mode (.z-flex is added by zk.flex): the root is a flex row, so
+   vertical-align on the inner cells has no effect and valign maps to align-items. */
+.z-hlayout.z-valign-bottom.z-flex { align-items: flex-end; }
+.z-hlayout.z-valign-top.z-flex    { align-items: flex-start; }
+.z-hlayout.z-valign-middle.z-flex { align-items: center; }
+
 /* hflex children — ZK sizes the chdex inline; just don't shrink it away. */
 .z-hlayout-inner.z-flex-item {
     min-width: 0;

@@ -3,10 +3,18 @@
 
 /* ─── Wrapper ─────────────────────────────────────────────────────────── */
 @layer zk-components {
+/* The root is an inline-block with the button absolutely positioned at its right edge, not an
+   inline-flex container. A position:absolute root (ZK-5612) computes `display: flex` for
+   inline-flex, and zk(n).offsetHeight() only trusts the real height of a SPAN whose display is
+   `block`; otherwise it measures a detached clone, which collapses to 0 for an absolutely
+   positioned root, so the popup opened over the input instead of below it. The root keeps no
+   padding: the hflex="min" math (getContentEdgeWidth_) adds the root's padding to the width, so
+   the room for the button is the input's right padding instead. */
 .z-combobox {
-    display: inline-flex;
-    align-items: center;
+    --zk-combobox-button-width: 32px;
+    display: inline-block;
     position: relative;
+    white-space: nowrap;
     background-color: var(--zk-combobox-bg);
     min-height: var(--zk-control-height);
     overflow: visible;
@@ -35,13 +43,17 @@
 
 /* ─── Input field ─────────────────────────────────────────────────────── */
 .z-combobox-input {
-    flex: 1;
+    /* Same structure as IceBlue: the input spans the whole root and its right padding reserves the
+       room for the absolutely positioned button (plus the usual inner padding), so the text never
+       runs under the button. */
+    width: 100%;
     min-width: 0;
+    margin: 0;
     border: 1px solid var(--zk-combobox-border-color);
     border-right: none;
     border-radius: var(--zk-combobox-radius) 0 0 var(--zk-combobox-radius);
     background: transparent;
-    padding: 0 var(--zk-spacing-3);
+    padding: 0 calc(var(--zk-combobox-button-width) + var(--zk-spacing-3)) 0 var(--zk-spacing-3);
     height: 100%;
     min-height: var(--zk-control-height);
     font-family: var(--zk-typescale-font-family);
@@ -53,6 +65,9 @@
     /* Only border-COLOR animates; border-width snaps with its padding compensator on
        focus so the text never drifts. See reference/focus-affordance-no-layout-shift.md. */
     transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    /* The input spans the whole root, so its top and bottom border would run under the button and
+       double the semi-transparent border colour there; paint only the part left of the button. */
+    clip-path: inset(0 var(--zk-combobox-button-width) 0 0);
 }
 
 .z-combobox-input::placeholder {
@@ -99,18 +114,24 @@
 
 /* ─── Dropdown button ─────────────────────────────────────────────────── */
 .z-combobox-button {
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
+    width: var(--zk-combobox-button-width);
+    /* hflex="min" (flex.ts _fixMinFlex) adds the offset width of every child element, an absolutely
+       positioned one included, so the button would widen the measured width by its own width. The
+       negative margin cancels it; an absolutely positioned box ignores its own left margin. */
+    margin-left: calc(-1 * var(--zk-combobox-button-width));
     min-height: var(--zk-control-height);
     border: 1px solid var(--zk-combobox-border-color);
     border-left: none;
     background: transparent;
     color: var(--zk-color-on-surface-variant);
     cursor: pointer;
-    flex-shrink: 0;
     border-radius: 0 var(--zk-combobox-radius) var(--zk-combobox-radius) 0;
     /* border-width is intentionally NOT transitioned — it snaps 1px→2px on focus in
        step with the input's padding compensation so nothing drifts. */
@@ -301,7 +322,7 @@
 }
 
 .z-combobox.z-combobox-standard .z-combobox-input {
-    padding: 4px 0 5px;
+    padding: 4px var(--zk-combobox-button-width) 5px 0;
     min-height: 30px;
 }
 
@@ -385,6 +406,8 @@
 }
 
 .z-combobox-input.z-combobox-input-full {
+    padding-right: var(--zk-spacing-3);
+    clip-path: none;
     border-right: 1px solid var(--zk-color-outline);
     border-radius: var(--zk-combobox-radius);
 }
@@ -395,6 +418,8 @@
 }
 
 .z-combobox.z-combobox-inplace .z-combobox-input {
+    padding-right: var(--zk-spacing-3);
+    clip-path: none;
     border-color: transparent;
     background-color: transparent;
     box-shadow: none;

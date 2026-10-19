@@ -34,6 +34,9 @@
 
 /* ─── Header ─ Mira / MD3 Data Table: no fill, hierarchy via weight + divider */
 .z-tree-header {
+    /* Positioned like the body: with the positioned header and body cells, jQuery position() of a header
+       cell and of a body cell are both relative to their own scroll box (B86-ZK-4044). */
+    position: relative;
     overflow: hidden;
     background-color: transparent;
 }
@@ -51,13 +54,13 @@
     background-color: var(--zk-tree-bg);
 }
 
+/* No `width` / `table-layout` on the mesh tables: ZK renders both inline and, with sizedByContent
+   (MeshWidget), clears them to measure the content; see listbox.css (B86-ZK-4044). */
 /* Header table uses separate borders so box-shadow and border-inline-end
    on frozen-col TH cells are visible (border-collapse:collapse clips them). */
 .z-tree-header table {
-    width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    table-layout: fixed;
 }
 
 .z-treecols {
@@ -65,7 +68,14 @@
 }
 
 .z-treecol {
-    padding: var(--zk-tree-header-padding);
+    /* The header padding sits on .z-treecol-content, not on the TH (IceBlue's model): widget JS reads
+       the TH as a border box (MeshWidget._getMinWd, Frozen's hidden-column `offsetWidth < 2`,
+       HeaderWidget._insizer). */
+    padding: 0;
+    /* Header and body cells are both positioned (the body cells for ZK-3864): a positioned cell's
+       offsetParent is its own scroll box, so jQuery position() of a header cell matches the body cell
+       after a horizontal scroll. With only the body cells positioned they drift apart (B86-ZK-4044). */
+    position: relative;
     font-size: var(--zk-typescale-label-large-size);
     font-weight: var(--zk-typescale-label-large-weight);
     color: var(--zk-tree-header-fg);
@@ -76,12 +86,14 @@
     user-select: none;
     vertical-align: middle;
     overflow: hidden;
-    /* positioning context for the out-of-flow .z-treecol-sorticon */
-    position: relative;
 }
 
 /* Block, not flex: the ellipsis needs a block container; an icon stays inline with the text. */
 .z-treecol-content {
+    /* Positioning context for the out-of-flow sort icon and menu button (IceBlue's model: the content
+       div is positioned as well as the TH). */
+    position: relative;
+    padding: var(--zk-tree-header-padding);
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -105,7 +117,9 @@
 @supports (overflow-clip-margin: 4px) {
     .z-treecol-content:has(:is(button, a, input, select, textarea)) {
         overflow: clip;
-        overflow-clip-margin: 4px;
+        /* Clip at the content box (+ the ring's 4px reach), not at the padding box: the padding of the content div
+           reserves the slot of the sort icon and the menu button, and a long label must not paint into it. */
+        overflow-clip-margin: content-box 4px;
         text-overflow: clip;
     }
 }
@@ -128,12 +142,13 @@
 }
 
 /* Room for the out-of-flow sort icon (12px, right: spacing-1) plus a spacing-1 gap. */
-.z-treecol-sort {
+.z-treecol-sort .z-treecol-content {
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* Splitter bar between columns */
 .z-treecols-bar {
+    padding: 0;
     width: 8px;
     cursor: col-resize;
     background-color: var(--zk-color-outline-variant);
@@ -142,6 +157,9 @@
 /* ─── Body ─────────────────────────────────────────────────────────────── */
 .z-tree-body {
     overflow: auto;
+    /* ZK-3263 / ZK-4733: ROD sets scrollTop itself after replacing rows and resizing the pads;
+       Chrome scroll anchoring would shift it again. IceBlue had the same rule. */
+    overflow-anchor: none;
     /* position:relative anchors .z-focus-a (see listbox.css for rationale). */
     position: relative;
 }
@@ -156,8 +174,13 @@
 }
 
 .z-tree-body table {
-    width: 100%;
     border-collapse: collapse;
+}
+
+/* Tables inside a cell or detail keep the fixed full-width layout they had when this rule covered every
+   table of the body; only the mesh's own table is left to ZK's inline style. */
+.z-tree-body table table {
+    width: 100%;
     table-layout: fixed;
 }
 
@@ -221,6 +244,13 @@
     padding: 0;
     vertical-align: middle;
     overflow: hidden;
+}
+
+/* ZK-3864 (IceBlue rule): own stacking context, so absolutely positioned content in a scrolled cell
+   cannot paint over the frozen columns. `.z-frozen-sticky` keeps its sticky position (frozen.css). */
+.z-treerow .z-treecell {
+    position: relative;
+    z-index: 0;
 }
 
 /* Content wrapper inside TD */
@@ -325,17 +355,21 @@
 }
 
 .z-tree-footer table {
-    width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
 }
 
+/* The padding sits on .z-treefooter-content, not on the TD (IceBlue's model): widget JS and the
+   header-to-footer alignment tests read the TD as a border box (B86-ZK-3883). */
 .z-treefooter {
-    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    padding: 0;
     font-size: var(--zk-typescale-body-medium-size);
     font-weight: var(--zk-typescale-label-large-weight);
     color: var(--zk-color-on-surface-variant);
     vertical-align: middle;
+}
+
+.z-treefooter-content {
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
 }
 
 /* ─── Paging (mold="paging") ───────────────────────────────────────────────
@@ -484,14 +518,17 @@
    listbox.css). Collapse side padding so a 16px header icon renders full-size and
    the header row keeps its default height. */
 .z-treecol:has(img) {
+    white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
+}
+
+.z-treecol:has(img) .z-treecol-content {
     padding-left: var(--zk-spacing-1);
     padding-right: var(--zk-spacing-1);
-    white-space: nowrap;   /* icon column stays one line so the row doesn't inflate */
 }
 
 /* A sortable header with an image still needs the sort icon's room, which the rule above (higher
    specificity than .z-treecol-sort) would otherwise drop to the 4px icon-column padding. */
-.z-treecol-sort:has(img) {
+.z-treecol-sort:has(img) .z-treecol-content {
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
@@ -500,18 +537,28 @@
    in listbox.css: the default 16px side padding leaves 8px for the 16px select-all icon in a 40px column
    and clips it. Only the right padding shrinks (16px to 4px, also for a labelled column), so the icon keeps
    the x of the row checkbox. */
-.z-treecol:has(.z-treecol-checkable) {
+.z-treecol:has(.z-treecol-checkable) .z-treecol-content {
     padding-right: var(--zk-spacing-1);
 }
 
+/* The trailing `&nbsp;` after the select-all box overflows the narrow content box (on a tablet, where the box is
+   24px). `overflow: hidden` clips at the padding box, so with the padding on the content div the ellipsis lands in the
+   right padding, where it used to be clipped away with the padding on the TH. Clip the paint at the content box again
+   instead of dropping the ellipsis, which a labelled select-all header keeps (mesh-header-footer.spec.ts:
+   `.mhf-tree-checkbox-only` paints no ellipsis). A sortable header or one with the column-menu button keeps the room
+   its icon uses inside that padding. */
+.z-treecol:not(.z-treecol-sort, :has(.z-treecol-button)) > .z-treecol-content:has(.z-treecol-checkable) {
+    clip-path: inset(0 var(--zk-spacing-1) 0 0);
+}
+
 /* A sortable select-all header still needs the sort icon's room (same reasoning as the image rule). */
-.z-treecol-sort:has(.z-treecol-checkable) {
+.z-treecol-sort:has(.z-treecol-checkable) .z-treecol-content {
     padding-right: calc(var(--zk-spacing-1) * 2 + 12px);
 }
 
 /* A centred checkmark column keeps the header box and the row box on one centre, which is the column centre
    (follow-up 54, cm6 of contracts/tree.md; the Listbox solution of follow-up 52).
-   Header: the asymmetric padding (16px left, 4px right) and the margin of the box parked it right of centre. No padding
+   Header: the asymmetric padding of the content (16px left, 4px right) and the margin of the box parked it right of centre. No padding
    and a 4px margin on each side of the box centre it, also in a 24px column. The content stays a block, so a header
    that holds a label keeps its ellipsis, and a label wider than the column starts at the box instead of centring the
    overflow (follow-up 59; a flex row put the box of a 100px column outside it). A sorted header keeps its padding for
@@ -528,7 +575,7 @@
    anchored to the rows of the tree itself, and the rules reach the header and the rows of that tree only, so a tree is
    judged on its own rows and does not centre or judge a tree that one of its cells holds (follow-up 59, NS31). With
    the paging mold or ROD only the rendered rows count: a page of leaves is centred, a page with a container row is not. */
-.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-header .z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)):has(.z-treecol-checkable) {
+.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-header .z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)):has(.z-treecol-checkable) > .z-treecol-content {
     padding-inline: 0;
 }
 
@@ -581,13 +628,10 @@
     font-style: italic;
 }
 
+/* Loading tint. ZK's ROD toggles this class on the scrolling body (-body) itself, not on a separate overlay
+   element, so it must not change the body's position or display: a flex, absolutely positioned body re-lays
+   out its pads and rows and shrinks scrollHeight mid-scroll (B96-ZK-4834). */
 .z-tree-loading {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: rgba(255, 255, 255, 0.6);
-    z-index: 10;
 }
 }

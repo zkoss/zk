@@ -155,6 +155,12 @@
     border-color: var(--zk-input-border-color-error);
 }
 
+/* The combobox input keeps the right padding that reserves the room for its button. */
+.z-inputgroup .z-combobox .z-combobox-input:focus,
+.z-inputgroup .z-combobox .z-combobox-input:focus-visible {
+    padding-right: calc(var(--zk-combobox-button-width) + var(--zk-spacing-3));
+}
+
 /* Multiline keeps its own (taller) rest padding — the single-line rule above
  * would otherwise wipe the textarea's vertical padding on focus. */
 .z-inputgroup textarea.z-textbox:focus,

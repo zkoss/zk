@@ -1539,9 +1539,15 @@ test.describe('tooltip', () => {
     await page.locator('button:has-text("Click")').first().click();
     const tip = page.locator('.z-popup-tooltip.z-popup-open').first();
     await tip.waitFor({ state: 'visible' });
+    // The fill lives on .z-popup-content (the outer .z-popup is a square hit-test box); text
+    // colour and size are set on the outer .z-popup.
     const m = await tip.evaluate(el => {
       const s = getComputedStyle(el);
-      return { bg: s.backgroundColor, color: s.color, fontSize: s.fontSize };
+      return {
+        bg: getComputedStyle(el.querySelector('.z-popup-content')!).backgroundColor,
+        color: s.color,
+        fontSize: s.fontSize,
+      };
     });
     expect(m.bg, '.z-popup-tooltip background must be the dark tooltip fill').toBe('rgba(97, 97, 97, 0.92)');
     expect(m.color, '.z-popup-tooltip text must be white').toBe('rgb(255, 255, 255)');

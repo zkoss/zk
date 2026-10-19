@@ -74,10 +74,6 @@
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
 }
 
-.z-calendar-text {
-    pointer-events: none;
-}
-
 /* Prev/Next navigation icon buttons */
 .z-calendar-icon {
     display: inline-flex;
@@ -102,7 +98,6 @@
 /* Disabled nav icon (out of range) */
 .z-calendar-icon[disabled] {
     color: var(--zk-color-disabled);
-    pointer-events: none;
     cursor: default;
 }
 
@@ -276,7 +271,6 @@
     vertical-align: middle;
     font-style: italic;
     user-select: none;
-    pointer-events: none;
     cursor: default;
 }
 

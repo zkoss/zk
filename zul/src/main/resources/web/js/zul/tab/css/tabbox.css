@@ -212,7 +212,6 @@
     padding: min(var(--zk-spacing-3), calc((var(--zk-tab-height) - var(--zk-typescale-label-large-line-height) - 2px) / 2)) var(--zk-spacing-4);
     position: relative;
     z-index: 1;
-    pointer-events: none;
 }
 
 /* ─── Tab text label ─────────────────────────────────────────────────────── */
@@ -221,7 +220,6 @@
     align-items: center;
     gap: var(--zk-spacing-1);
     min-width: 0;
-    pointer-events: none;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -464,6 +462,16 @@
     flex-direction: row;
 }
 
+/* Tabs._fixHgh writes the tallest panel height into .z-tabs and the tabbox inline and
+   later measures .z-tabpanels.scrollHeight to shrink them again. A stretched .z-tabpanels
+   would keep the stale height and never report a smaller one (B50-ZK-298); IceBlue floats
+   the tabs so the panels always keep their content height. */
+.z-tabbox-left > .z-tabpanels,
+.z-tabbox-vertical > .z-tabpanels,
+.z-tabbox-right > .z-tabpanels {
+    align-self: flex-start;
+}
+
 .z-tabbox-left .z-tabs,
 .z-tabbox-vertical .z-tabs {
     flex-direction: column;
@@ -577,14 +585,17 @@
  * cave is collapsed. Without this reset, ZK's `Tabpanel._fixPanelHgh`
  * subtracts inflated sibling offsetHeights from the tabbox height and
  * clamps the selected cave's height to 0 (B50-ZK-298 path). */
+/* The separator is a border-top on every non-first section (IceBlue structure):
+ * _fixPanelHgh subtracts the sibling sections' borders but not the open
+ * section's own, and the first section is the one open by default. */
 .z-tabbox-accordion .z-tabpanel {
-    border-bottom: 1px solid var(--zk-tab-border-color);
+    border-top: 1px solid var(--zk-tab-border-color);
     padding: 0;
     min-height: 0;
 }
 
-.z-tabbox-accordion .z-tabpanel:last-child {
-    border-bottom: none;
+.z-tabbox-accordion .z-tabpanel:first-child {
+    border-top: none;
 }
 
 /* Accordion header (the .z-tab that acts as expand trigger).
@@ -660,12 +671,10 @@
     padding: 0;
     position: relative;
     z-index: 1;
-    pointer-events: none;
 }
 
 .z-tabbox-accordion .z-tab-text {
     flex: 1;
-    pointer-events: none;
 }
 
 /* Accordion NEVER shows the close icon, regardless of closable (contract c11a,
