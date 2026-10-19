@@ -219,20 +219,37 @@
     top: 0;
     background-color: transparent;
     border: none;
-    min-height: var(--zk-control-height);
+    /* Tabs.ts copies the tab strip's offsetHeight into the inline height after the first layout:
+       the tab alias plus the strip's 1px bottom border. The same floor here avoids the jump. */
+    min-height: calc(var(--zk-tab-height) + 1px);
     z-index: 1;
     overflow: hidden;
 }
 
 .z-toolbar-tabs .z-toolbar-content {
     padding: 0 var(--zk-spacing-2);
-    min-height: var(--zk-control-height);
+    min-height: calc(var(--zk-tab-height) + 1px);
 }
 
 /* ─── Overflow popup ─────────────────────────────────────────────────────── */
-/* Items ZK judged as fitting must stay on one row; the rest is moved into the popup */
+/* Items ZK judged as fitting must stay on one row; the rest is moved into the popup.
+   Toolbar.ts (_adjustContent) budgets `jq(toolbar).width() - overflow button` and sums the children with
+   outerWidth(true): it counts the toolbar's own content box and the children's margins, but not the content
+   box's padding or flex gap. So in overflow mode the 16px start inset sits on the toolbar (jq().width() leaves
+   it out) and the 4px gap between items is a margin on each item but the first (outerWidth(true) counts it);
+   otherwise a budget that fits still overflows by padding + gaps (compact: 32 + 16px). */
+.z-toolbar-overflowpopup {
+    padding-inline-start: var(--zk-spacing-4);
+}
+
 .z-toolbar-overflowpopup > .z-toolbar-content {
     flex-wrap: nowrap;
+    padding-inline: 0;
+    gap: 0;
+}
+
+.z-toolbar-overflowpopup > .z-toolbar-content > * + * {
+    margin-inline-start: var(--zk-spacing-1);
 }
 
 /* The overflow button (ellipsis icon). The icon itself is the element's ::before

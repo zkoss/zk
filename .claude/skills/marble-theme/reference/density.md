@@ -42,7 +42,7 @@ toolbar-48 *relationships* survive a tier change because the relationship is def
 --zk-tab-height:             var(--zk-control-height-lg);
 --zk-window-header-height:   var(--zk-control-height-xl);
 --zk-panel-header-height:    var(--zk-control-height-lg);
---zk-groupbox-header-height: var(--zk-control-height-lg);
+--zk-groupbox-header-height: var(--zk-control-height-lg);   /* default mold; the 3D mold reads --zk-control-height-md (40/32) */
 --zk-notification-height:    var(--zk-control-height-lg);
 --zk-paging-control-size:    var(--zk-control-height-sm);
 --zk-data-row-min-height:    52px;                          /* off-ladder */

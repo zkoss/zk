@@ -212,9 +212,9 @@ knob** (the `data-density` attribute); *how* it gets set is the application's ca
 
 That keeps the contract framework-agnostic and genuinely reusable.
 
-### The 4 places that read a rung directly
+### The 5 places that read a rung directly
 
-Four component files read a **leaf rung** directly rather than through a semantic alias:
+Five component files read a **leaf rung** directly rather than through a semantic alias:
 
 | File | Use | Rung read |
 |------|-----|-----------|
@@ -222,13 +222,16 @@ Four component files read a **leaf rung** directly rather than through a semanti
 | `js/zul/layout/css/borderlayout.css` | header min-height | `lg` |
 | `js/zul/wnd/css/window.css` | close-button square size | `sm` |
 | `js/zul/wnd/css/panel.css` | close-button square size | `xs` |
+| `js/zul/wgt/css/groupbox.css` | 3D-mold header min-height (40 → 32, keeps comfortable at today's 40px) | `md` |
 
 The concern was that if `[data-density="compact"]` overrode only the semantic aliases,
-these four would not shrink under a region scope. The fix: the `[data-density="compact"]`
+these would not shrink under a region scope. The fix: the `[data-density="compact"]`
 block **also re-points the leaf rungs as literals** (not only the aliases). A rung is a
 literal, not a `var()`-derived value, so it is immune to the freeze problem — wherever the
 block is mounted, any "reads-rung-directly" component in that subtree picks up the override.
-So all four shrink correctly under both whole-app and region scope, with no re-pointing.
+So all of them shrink correctly under both whole-app and region scope, with no re-pointing.
+Because the 3D-mold groupbox header reads the `md` rung, a customer override of
+`--zk-groupbox-header-height` changes only the default-mold header, not the 3D one.
 
 ### One-line summary
 

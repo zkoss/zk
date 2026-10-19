@@ -16,7 +16,8 @@ whose selectors stay entirely inside one component's own classes can skip steps 
    `node scripts/select-tests.mjs --json <changed paths>` (see
    `zkpreview/scripts/README-select-tests.md`). For every selector the batch will change, write
    down which other components' classes it can match and which pages carry them. If the answer
-   is `full`, or `uncovered` is not empty, run the full suite; do not narrow it by hand. Write
+   is `full`, or `uncovered` is not empty, do not narrow it by hand and do not start the full
+   suite yourself: report the reason and let the owner decide when it runs (CLAUDE.md, 2026-10-19). Write
    the list into the batch's record file so the verifier can read it.
 3. **Check the selector form.** No substring attribute selectors such as `[style*="width"]`
    (they also match `min-width` and `max-width`). If an attribute selector is unavoidable, match

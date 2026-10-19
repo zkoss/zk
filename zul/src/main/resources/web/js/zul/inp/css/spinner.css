@@ -133,6 +133,10 @@
     align-items: center;
     justify-content: center;
     flex: 1;
+    /* The icon boxes share the height the input leaves; an inherited 20px line-height made the button
+       column 41px and the spinner 43px, above --zk-input-height (40 / 32). */
+    min-height: 0;
+    line-height: 1;
     cursor: pointer;
     color: var(--zk-color-on-surface-variant);
     text-decoration: none;

@@ -31,9 +31,6 @@
     "space": [
       ".z-button ⊂ DIV.z-hlayout"
     ],
-    "tabbox": [
-      ".z-toolbarbutton ⊂ DIV.z-toolbar.z-toolbar-tabs"
-    ],
     "toolbar": [
       ".z-toolbarbutton ⊂ DIV.z-toolbar-popup.z-toolbar-popup-close"
     ]

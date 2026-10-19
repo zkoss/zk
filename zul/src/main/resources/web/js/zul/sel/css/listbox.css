@@ -766,8 +766,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: var(--zk-paging-control-size);
+    height: var(--zk-paging-control-size);
     padding: 0;
     border: none;
     background: transparent;

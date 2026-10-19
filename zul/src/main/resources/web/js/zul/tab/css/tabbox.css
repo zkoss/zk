@@ -207,7 +207,9 @@
     align-items: center;
     gap: var(--zk-spacing-1);
     min-width: 0;
-    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    /* 12px, but never more than what leaves the tab at --zk-tab-height: (height - label line - the
+       2px indicator slot of .z-tab) / 2, so compact reaches the 40px alias; comfortable keeps 12px. */
+    padding: min(var(--zk-spacing-3), calc((var(--zk-tab-height) - var(--zk-typescale-label-large-line-height) - 2px) / 2)) var(--zk-spacing-4);
     position: relative;
     z-index: 1;
     pointer-events: none;

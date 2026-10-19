@@ -48,11 +48,10 @@ against a container that clips.
 This is the widest-reaching group: a button inside an hlayout is completely
 ordinary usage, and `.z-button` is the theme's most-used component.
 
-### 2. `.z-toolbarbutton` inside a toolbar — 2 pairs
+### 2. `.z-toolbarbutton` inside a toolbar — 1 pair (the `.z-toolbar-tabs` clip was fixed by the toolbar-tabs min-height change, 2026-10-20)
 
 | Clipper | Pages | Overshoot |
 |---|---|---|
-| `.z-toolbar.z-toolbar-tabs` | tabbox | 2px |
 | `.z-toolbar-popup.z-toolbar-popup-close` | toolbar | 3px |
 
 `.z-toolbar`'s `overflow: hidden` is load-bearing for the overflow-popup

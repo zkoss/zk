@@ -127,7 +127,9 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 17px;
+    /* 17px, but never taller than half the button column the input height leaves (minus the 1px separator),
+       so the box can reach --zk-input-height in compact. */
+    height: min(17px, calc((var(--zk-input-height) - 3px) / 2));
     cursor: pointer;
     color: var(--zk-color-on-surface-variant);
     text-decoration: none;

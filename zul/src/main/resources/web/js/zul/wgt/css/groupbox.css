@@ -23,7 +23,9 @@
 .z-groupbox-header {
     display: flex;
     align-items: center;
-    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    /* 12px, but never more than what leaves the header at --zk-groupbox-header-height:
+       (height - title line - the 1px bottom border) / 2, so the header follows the density alias. */
+    padding: min(var(--zk-spacing-3), calc((var(--zk-groupbox-header-height) - var(--zk-typescale-title-medium-line-height) - 1px) / 2)) var(--zk-spacing-4);
     border-bottom: 1px solid var(--zk-groupbox-border-color);
     background-color: var(--zk-groupbox-bg);
     min-height: var(--zk-groupbox-header-height);
@@ -129,7 +131,7 @@
 }
 
 .z-groupbox-3d .z-groupbox-header {
-    min-height: var(--zk-spacing-10, 40px);
+    min-height: var(--zk-control-height-md);
     padding: 0 var(--zk-spacing-3);
     background-color: var(--zk-color-surface-container-low);
     border-bottom: 1px solid var(--zk-color-outline-variant);

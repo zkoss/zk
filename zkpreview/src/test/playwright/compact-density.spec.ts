@@ -37,6 +37,10 @@ interface Tier {
   /** The custom property whose runtime value is the expected height (box tiers). */
   alias: string;
   selector: string;
+  /** The tab overlaps the tab-strip divider by its 1px negative bottom margin (tabbox.css .z-tab), so the alias is its height less that overlap. */
+  overlapsDivider?: boolean;
+  /** Pixels on top of the alias that the element's height includes (a border of the neighbour it copies its height from). */
+  extraHeight?: number;
 }
 
 // class -> alias mapping, from the consumers of each alias in the component CSS (grep `var(--zk-<alias>)`):
@@ -46,7 +50,8 @@ interface Tier {
 //   toolbar      --zk-toolbar-height        toolbar.css:38, :82 (horizontal; vertical has no fixed height)
 //   menubar      --zk-menubar-height        menu.css:60, :81, :128, :189
 //   tab          --zk-tab-height            tabbox.css:58, :70, :86 (top/bottom tabs; left/right/accordion are not measured)
-//   *-header     --zk-window-/panel-/groupbox-header-height   window.css:55, panel.css:34, groupbox.css:29
+//   groupbox-header  --zk-groupbox-header-height   groupbox.css:29 (min-height) and the padding that follows it (groupbox.css:26)
+//   window-/panel-header: padding-driven, see PADDED_HEADER_TIERS
 //   paging       --zk-paging-control-size   paging.css:41, :42
 // Box heights are compared as `height` or `height - own vertical borders`: a bar whose child fills the alias
 // and whose own border sits outside it (toolbar 40 + 1px) is on the alias.
@@ -65,13 +70,27 @@ const BOX_TIERS: Tier[] = [
     selector: '.z-button-icon.z-button:not(.z-button-sm):not(.z-button-lg)' },
   { name: 'fab', alias: '--zk-fab-size',
     selector: '.z-button-fab.z-button:not(.z-button-sm):not(.z-button-xs)' },
-  { name: 'toolbar', alias: '--zk-toolbar-height', selector: '.z-toolbar:not(.z-toolbar-vertical)' },
+  { name: 'toolbar', alias: '--zk-toolbar-height', selector: '.z-toolbar:not(.z-toolbar-vertical):not(.z-toolbar-tabs)' },
+  // A toolbar inside a tabbox gets the height of the tab strip as an inline style (Tabs.ts:430-437, tb.style.height =
+  // tabs.offsetHeight): the tab alias plus the strip's 1px bottom border (tabbox.css .z-tabs).
+  { name: 'toolbar-tabs', alias: '--zk-tab-height', extraHeight: 1, selector: '.z-toolbar-tabs' },
   { name: 'menubar', alias: '--zk-menubar-height', selector: '.z-menubar-horizontal' },
-  { name: 'tab', alias: '--zk-tab-height', selector: '.z-tabbox-top > .z-tabs .z-tab, .z-tabbox-bottom > .z-tabs .z-tab' },
-  { name: 'window-header', alias: '--zk-window-header-height', selector: '.z-window-header' },
-  { name: 'panel-header', alias: '--zk-panel-header-height', selector: '.z-panel-header' },
-  { name: 'groupbox-header', alias: '--zk-groupbox-header-height', selector: '.z-groupbox-header' },
+  { name: 'tab', alias: '--zk-tab-height', overlapsDivider: true,
+    selector: '.z-tabbox-top > .z-tabs .z-tab, .z-tabbox-bottom > .z-tabs .z-tab' },
+  { name: 'groupbox-header', alias: '--zk-groupbox-header-height', selector: '.z-groupbox:not(.z-groupbox-3d) .z-groupbox-header' },
+  // The 3D mold header is panel-like but denser: it binds the md rung (groupbox.css .z-groupbox-3d .z-groupbox-header), 40 / 32.
+  { name: 'groupbox-3d-header', alias: '--zk-control-height-md', selector: '.z-groupbox-3d .z-groupbox-header' },
   { name: 'paging-button', alias: '--zk-paging-control-size', selector: '.z-paging-button' },
+];
+
+// Window and panel headers are padding-driven (density.md "Padding-driven headers"): the alias is their min-height and
+// the 24px title line plus `--zk-header-padding-y` above and below is what sets the height (56px panel, 57px window with
+// its border in comfortable; the floor, 40 / 48, in compact). So the rule is not "height equals the alias" but "height is
+// at least the alias and the vertical padding is the density token", which fails for a header that stops following the density.
+interface PaddedHeaderTier { name: string; alias: string; paddingToken: string; selector: string }
+const PADDED_HEADER_TIERS: PaddedHeaderTier[] = [
+  { name: 'window-header', alias: '--zk-window-header-height', paddingToken: '--zk-header-padding-y', selector: '.z-window-header' },
+  { name: 'panel-header', alias: '--zk-panel-header-height', paddingToken: '--zk-header-padding-y', selector: '.z-panel-header' },
 ];
 
 // Data rows have no ladder alias: their height is the cell padding plus the text line (density.md, layer 3),
@@ -95,7 +114,7 @@ interface Deviation {
 }
 
 /** Runs in the page. Returns the controls whose height is not the expected one, and how many were measured. */
-function measureTiers([boxTiers, rowTiers, epsilon, borderAllowance]: [Tier[], RowTier[], number, number]) {
+function measureTiers([boxTiers, headerTiers, rowTiers, epsilon, borderAllowance]: [Tier[], PaddedHeaderTier[], RowTier[], number, number]) {
   const probe = document.createElement('div');
   probe.style.cssText = 'position:absolute;visibility:hidden';
   document.body.appendChild(probe);
@@ -119,14 +138,30 @@ function measureTiers([boxTiers, rowTiers, epsilon, borderAllowance]: [Tier[], R
   const measured: Record<string, number> = {};
 
   for (const tier of boxTiers) {
-    const expected = px('height', tier.alias);
+    const expected = px('height', tier.alias) + (tier.extraHeight ?? 0);
     for (const el of Array.from(document.querySelectorAll(tier.selector)).filter(shown)) {
       measured[tier.name] = (measured[tier.name] ?? 0) + 1;
       const style = getComputedStyle(el);
       const height = el.getBoundingClientRect().height;
       const borders = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
-      const onAlias = Math.abs(height - expected) < epsilon || Math.abs(height - borders - expected) < epsilon;
+      const overlap = tier.overlapsDivider ? parseFloat(style.marginTop) + parseFloat(style.marginBottom) : 0;
+      const onAlias = Math.abs(height - expected) < epsilon || Math.abs(height - borders - expected) < epsilon
+        || Math.abs(height + overlap - expected) < epsilon;
       if (!onAlias) deviations.push({ tier: tier.name, element: signature(el), section: sectionOf(el), height, expected });
+    }
+  }
+
+  for (const tier of headerTiers) {
+    const expected = px('height', tier.alias);
+    const paddingY = px('height', tier.paddingToken);
+    for (const el of Array.from(document.querySelectorAll(tier.selector)).filter(shown)) {
+      measured[tier.name] = (measured[tier.name] ?? 0) + 1;
+      const style = getComputedStyle(el);
+      const height = el.getBoundingClientRect().height;
+      const onRule = height >= expected - epsilon
+        && Math.abs(parseFloat(style.paddingTop) - paddingY) < epsilon
+        && Math.abs(parseFloat(style.paddingBottom) - paddingY) < epsilon;
+      if (!onRule) deviations.push({ tier: tier.name, element: signature(el), section: sectionOf(el), height, expected });
     }
   }
 
@@ -188,18 +223,17 @@ const EXCEPTIONS: Listed[] = [
     ],
   },
   {
-    reason: 'the caption holds a 30px image next to the text (content-driven); the header padding is separate',
+    reason: 'the caption holds a 30px image next to the text (content-driven): the groupbox header is the image plus its padding',
     keys: [
-      'comfortable|caption|panel-header|Caption in Window and Panel|68',
-      'comfortable|caption|window-header|Caption in Window and Panel|69',
-      'compact|caption|panel-header|Caption in Window and Panel|46',
+      'comfortable|caption|groupbox-header|Caption in Groupbox|60',
+      'compact|caption|groupbox-header|Caption in Groupbox|46',
     ],
   },
   {
     reason: 'two wrapped rows of 28px chips; content-driven',
     keys: [
       'comfortable|chosenbox|input|States|70',
-      'compact|chosenbox|input|States|70',
+      'compact|chosenbox|input|States|64',
     ],
   },
   {
@@ -237,127 +271,16 @@ const EXCEPTIONS: Listed[] = [
     ],
   },
   {
-    reason: 'a tab whose caption carries an image (content 56px, comfortable 66px); the toolbar-tabs box follows it through its inline height',
+    reason: 'a tab whose caption carries an image (content-driven: 66px comfortable, 52px compact); the toolbar-tabs box follows it through its inline height',
     keys: [
       'comfortable|tabbox-misc|tab|Horizontal with Caption in Tab|66',
-      'comfortable|tabbox-misc|toolbar|Horizontal with Caption in Tab|66',
-      'compact|tabbox-misc|tab|Horizontal with Caption in Tab|58',
-      'compact|tabbox-misc|toolbar|Horizontal with Caption in Tab|58',
+      'comfortable|tabbox-misc|toolbar-tabs|Horizontal with Caption in Tab|66',
+      'compact|tabbox-misc|tab|Horizontal with Caption in Tab|52',
+      'compact|tabbox-misc|toolbar-tabs|Horizontal with Caption in Tab|52',
     ],
   },
 ];
-const KNOWN_DEFECTS: Listed[] = [
-  {
-    reason: 'groupbox.css:26 header padding is spacing-3 spacing-4 (12px 16px), not density-aware: 12+12+caption+1px border, the same 49px in comfortable and compact (caption with a 30px image: 61 / 55)',
-    keys: [
-      'comfortable|caption|groupbox-header|Caption in Groupbox|61',
-      'compact|caption|groupbox-header|Caption in Groupbox|55',
-      'compact|groupbox|groupbox-header|Default Mold|49',
-    ],
-  },
-  {
-    reason: 'groupbox 3D mold header is 40px in both densities (padding 0 12px, min-height 40px at the comfortable 48px alias): it does not follow the density, and it equals the compact alias only by coincidence',
-    keys: [
-      'comfortable|caption|groupbox-header|Caption in Groupbox|40',
-      'comfortable|groupbox|groupbox-header|3D Mold — Caption Variants|40',
-      'comfortable|groupbox|groupbox-header|3D Mold — Edge Cases|40',
-    ],
-  },
-  {
-    reason: 'zkmax chosenbox.css:15,39 padding 4px 6px and a literal 28px chip/input: 28+8+2 border = 38px, the min-height alias (32px) cannot be reached',
-    keys: [
-      'compact|chosenbox|input|Messages and Placeholder|38',
-      'compact|chosenbox|input|States|38',
-    ],
-  },
-  {
-    reason: 'padding-driven header: window.css:51 / panel.css:33 pad the header with --zk-header-padding-y (16px comfortable, 8px compact) around a 24px title line, so it is 56px (panel) or 64-65px (window with controls) in comfortable, 4-16px above the 48px / 56px alias; a wrapped title adds a line (60, 80). density.md "Padding-driven headers" and its probe (window 57 -> 48) describe the same mechanism',
-    keys: [
-      'comfortable|columnlayout|panel-header|Three Column Layout|60',
-      'comfortable|panel|panel-header|Collapsed State|60',
-      'comfortable|panel|panel-header|No Border — Full Controls|80',
-      'comfortable|panel|panel-header|Overflow / Scroll|56',
-      'comfortable|panel|panel-header|Panel — State Gallery|56',
-      'comfortable|panel|panel-header|Rounded Border — Full Controls|60',
-      'comfortable|panel|panel-header|Rounded Border — Full Controls|80',
-      'comfortable|panel|panel-header|Without Toolbar|60',
-      'comfortable|panel|panel-header|Without Toolbar|80',
-      'comfortable|portallayout|panel-header|Draggable Portal Panels|56',
-      'comfortable|portallayout|panel-header|Framed Column (title on portalchildren)|56',
-      'comfortable|portallayout|panel-header|Horizontal Orientation|56',
-      'comfortable|tablelayout|panel-header|2-Column Table Layout|60',
-      'comfortable|window|window-header|Embedded|64',
-      'comfortable|window|window-header|Embedded|65',
-      'comfortable|window|window-header|title|64',
-      'comfortable|window|window-header|title|65',
-    ],
-  },
-  {
-    reason: 'spinner.css:105-140 the up/down button column is 41px tall (two 20px icon boxes + 1px separator) in comfortable and compact (outer box 43px, alias 40 / 32); the inplace spinner (no buttons) is on the alias',
-    keys: [
-      'comfortable|doublespinner|input|States|43',
-      'comfortable|signature|input|Customization|43',
-      'comfortable|spinner|input|States — Doublespinner|43',
-      'comfortable|spinner|input|States — Spinner|43',
-      'compact|doublespinner|input|States|43',
-      'compact|signature|input|Customization|43',
-      'compact|spinner|input|States — Doublespinner|43',
-      'compact|spinner|input|States — Spinner|43',
-    ],
-  },
-  {
-    reason: 'listbox.css:765-770 .z-listbox-paging-bottom .z-paging-button has literal width/height 32px, bypassing --zk-paging-control-size (28px in compact); the other paging buttons are on the alias',
-    keys: [
-      'compact|listbox-header|paging-button|Grouping|32',
-    ],
-  },
-  {
-    reason: 'zkmax searchbox.css:63 .z-searchbox-placeholder line-height is a literal 38px ("match trigger inner height"), so the empty trigger is 40px; with a selection (label empty) it is 32px',
-    keys: [
-      'compact|searchbox|input|Selected + Multiple + Clear + searchMessage|40',
-      'compact|searchbox|input|States|40',
-    ],
-  },
-  {
-    reason: 'the tab widget sets inline height from the tab strip (compact 46, comfortable 49; one comfortable toolbar-tabs is 40), so it follows the tab defect (tabbox.css:210)',
-    keys: [
-      'comfortable|tabbox|toolbar|Bottom with Toolbar|49',
-      'comfortable|tabbox|toolbar|Horizontal with Toolbar|40',
-      'comfortable|tabbox|toolbar|Horizontal — Scroll (many tabs)|49',
-      'compact|tabbox|toolbar|Bottom with Toolbar|46',
-      'compact|tabbox|toolbar|Horizontal with Toolbar|46',
-      'compact|tabbox|toolbar|Horizontal — Scroll (many tabs)|46',
-    ],
-  },
-  {
-    reason: 'tabbox.css:210 .z-tab-content pads 12px 16px: 12+12+20 line + the 2px indicator slot (tabbox.css:~79 .z-tab) = 46 in compact (49 in comfortable, alias 48); density.md lists the compact tab as 46, not as the 40 alias',
-    keys: [
-      'comfortable|tabbox|tab|Bottom with Toolbar|49',
-      'comfortable|tabbox|tab|Bottom — plain|49',
-      'comfortable|tabbox|tab|Horizontal with Tab Images|49',
-      'comfortable|tabbox|tab|Horizontal with Toolbar|49',
-      'comfortable|tabbox|tab|Horizontal — Scroll (many tabs)|49',
-      'comfortable|tabbox|tab|Icon-only Tabs|49',
-      'comfortable|tabbox|tab|Tabbox — State Gallery|49',
-      'comfortable|tabbox|tab|tabscroll=false|49',
-      'compact|tabbox|tab|Bottom with Toolbar|46',
-      'compact|tabbox|tab|Bottom — plain|46',
-      'compact|tabbox|tab|Horizontal with Tab Images|46',
-      'compact|tabbox|tab|Horizontal with Toolbar|46',
-      'compact|tabbox|tab|Horizontal — Scroll (many tabs)|46',
-      'compact|tabbox|tab|Icon-only Tabs|46',
-      'compact|tabbox|tab|Tabbox — State Gallery|46',
-      'compact|tabbox|tab|tabscroll=false|46',
-    ],
-  },
-  {
-    reason: 'timebox.css:130 up/down icons are fixed 17px (17+1+17 = 35px button column, box 37px); comfortable box is 40px so it is under the alias there',
-    keys: [
-      'compact|timebox|input|Seeded value|37',
-      'compact|timebox|input|States|37',
-    ],
-  },
-];
+const KNOWN_DEFECTS: Listed[] = [];
 const listedKeys = (listed: Listed[]) => listed.flatMap(entry => entry.keys);
 
 type Density = 'comfortable' | 'compact';
@@ -373,7 +296,7 @@ async function measureBothDensities(page: Page): Promise<Record<Density, Awaited
   return { comfortable, compact };
 }
 const measureOnce = (page: Page) =>
-  page.evaluate(measureTiers, [BOX_TIERS, ROW_TIERS, HEIGHT_EPSILON, ROW_BORDER_ALLOWANCE]);
+  page.evaluate(measureTiers, [BOX_TIERS, PADDED_HEADER_TIERS, ROW_TIERS, HEIGHT_EPSILON, ROW_BORDER_ALLOWANCE]);
 
 test.describe('compact-height', () => {
   for (const comp of pages) {
@@ -425,17 +348,14 @@ test.describe('compact-height-synthetic', () => {
   });
 });
 
-// Toolbar overflow button under compact. KNOWN DEFECT, expected to fail (test.fail): with overflowPopup="true" the
-// overflow button lands outside the toolbar (x 344-374 against a toolbar right edge of 332; comfortable: inside).
-// Root cause (doc/marble-compact-brand-batch3-verification.md F2-a): Toolbar.ts:243 budgets
-// `jq(toolbar).width() - jq(overflow button).width()` and sums the children with `outerWidth(true)` (:255), neither of
-// which counts the `padding: 0 var(--zk-spacing-4)` and `gap: var(--zk-spacing-1)` Marble puts on `.z-toolbar-content`
-// (toolbar.css:51-52); in compact the 6px smaller button leaves room for one more item, which then overflows by 32 + 16px.
-// The baseline toolbar-compact-07-overflow-popup.png pins this layout; when the defect is fixed this test passes
-// unexpectedly: remove test.fail() and re-cut that baseline.
+// Toolbar overflow button under compact: with overflowPopup="true" the overflow button stays inside the toolbar.
+// Toolbar.ts:243 budgets `jq(toolbar).width() - jq(overflow button).width()` and sums the children with
+// `outerWidth(true)` (:255), which count the toolbar's content box and the children's margins but not the padding and
+// flex gap of `.z-toolbar-content`. In overflow mode the inset therefore sits on the toolbar and the gap is a margin on
+// each item (toolbar.css .z-toolbar-overflowpopup); before that fix the button landed at x 344-374 against a toolbar
+// right edge of 332 in compact (doc/marble-compact-brand-batch3-verification.md F2-a).
 test.describe('compact-geometry', () => {
   test('toolbar: overflow button stays inside the toolbar', async ({ page }) => {
-    test.fail();
     await page.goto('/toolbar.zul', { waitUntil: 'networkidle' });
     await waitForCompactLayout(page);
     const { toolbar, button } = await page.evaluate(() => {
