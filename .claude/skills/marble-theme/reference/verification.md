@@ -28,6 +28,11 @@ returns. `appRun` waits for a key on stdin and treats EOF as that key, so keep s
 in an interactive terminal, or hold a FIFO open from a script. The first start builds the composite
 build (minutes); a warm start serves in about 10 s.
 
+Every Playwright test opens a new HTTP session, and ZK keeps one `Timer` thread per session until
+the session expires, so a full suite leaves about 1,300 threads behind. The preview app therefore
+sets a 5-minute session timeout in its `web.xml`. If you still run several full suites back to back,
+restart the server between them. Filed as ZK-6213; background: [`doc/zkpreview-thread-leak.md`](../../../../doc/zkpreview-thread-leak.md).
+
 Stop by pressing a key in the `appRun` terminal (closing stdin has the same effect).
 **`./gradlew appStop` does not work against an `appRun` server** — it fails with
 `java.net.ConnectException: Connection refused`. Under `appRun` only the `statusPort` in

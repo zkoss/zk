@@ -80,6 +80,11 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<url-pattern>/zkres/*</url-pattern>
 	</servlet-mapping>
 
+	<!-- Every Playwright test opens a session and ZK keeps one Timer thread per session (ZK-6213); see doc/zkpreview-thread-leak.md -->
+	<session-config>
+		<session-timeout>5</session-timeout>
+	</session-config>
+
 	<welcome-file-list>
 		<!-- index.zul is the link index of every preview page; smoke.zul stays as the
 		     minimal "did the server and the theme come up" fallback. -->
