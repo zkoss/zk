@@ -123,6 +123,45 @@ for (const widget of INPUTGROUP_WIDGETS) {
   });
 }
 
+// A focused combobox in an inputgroup drew its input border 1px and its button border 2px (follow-up 58): the
+// group's :focus rule pinned the input while combobox.css grew the button. Both parts keep the width and the colour
+// a focused textbox in the group has, the group outline owning the focus; an invalid combobox keeps the error colour.
+const borderOf = (locator: Locator) =>
+  locator.evaluate(el => {
+    const style = getComputedStyle(el);
+    return { width: style.borderTopWidth, color: style.borderTopColor };
+  });
+
+for (const state of ['valid', 'invalid']) {
+  test(`a focused ${state} combobox in an inputgroup draws the border of its input and button as a focused textbox does`, async ({ page }) => {
+    const input = groupInput(page, 'combobox');
+    const button = page.locator('.iig-group-combobox .z-combobox-button');
+    if (state === 'invalid') await failConstraintOf(page, input);
+    await page.mouse.move(0, 0);
+    await groupInput(page, 'textbox').focus();
+    const reference = await borderOf(groupInput(page, 'textbox'));
+    await input.focus();
+    const expectedColor = state === 'invalid' ? await errorColor(page) : reference.color;
+
+    expect(reference.width, 'the textbox in the group keeps its 1px border on focus').toBe('1px');
+    await expect.poll(() => borderOf(input), 'input border').toEqual({ width: reference.width, color: expectedColor });
+    await expect.poll(() => borderOf(button), 'button border').toEqual({ width: reference.width, color: expectedColor });
+  });
+}
+
+// A combobox given the error variant by sclass (z-combobox-error) rather than by a failed constraint: the group's
+// focus rule for the button must not paint it grey while the input is red (follow-up 58).
+test('a focused z-combobox-error combobox in an inputgroup draws the error border on its input and button', async ({ page }) => {
+  const input = page.locator('.iig-group-combobox-error .z-combobox-input');
+  const button = page.locator('.iig-group-combobox-error .z-combobox-button');
+  const error = await errorColor(page);
+
+  await page.mouse.move(0, 0);
+  await input.focus();
+  await expect.poll(() => borderOf(input), 'input border').toEqual({ width: '1px', color: error });
+  await expect.poll(() => borderOf(button), 'button border').toEqual({ width: '1px', color: error });
+});
+
 // The border sits on the wrapper of a bandbox and on the input of a textbox and a combobox.
 const INPLACE_BORDERS: Record<string, string> = {
   textbox: '.iig-inplace-textbox',

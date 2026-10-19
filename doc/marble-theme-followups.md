@@ -942,6 +942,25 @@ Same under the old and new CSS; left as found (O10).
 - In `tabbox-misc.zul`, the selected `.z-tab` intercepts clicks on the combobox inside the accordion caption (check whether
   it is the page, the theme or ZK before filing anything).
 
+**Diagnosed and resolved in NS35.**
+- "con" (not reproduced, left as found): the disabled icon-only button was measured under emulated forced colours in Chromium on
+  `button.zul` (default, tablet UA, 360px viewport) and on a probe page with `sclass="z-button-icon"` (the class the item names;
+  only `usecase/inventory-table.zul` uses it, with an ellipsis icon). The DOM is `<button class="z-button" disabled><i
+  class="z-icon-settings" aria-hidden="true"></i> </button>`: the only text node is one space, `::before` of the icon is a mask
+  glyph with `content: ""`, the button's own `::before` is `display: none`, and the 3x PNG shows the gear in CanvasText inside a
+  GrayText border, with no text. No Marble rule and no widget markup produces the letters, so there is nothing to fix or to file;
+  a reading of the small gear as "con" in a screenshot, or a Windows-only rendering, is the open possibility.
+- Selected tab intercepts the click: caused by Marble. `tabbox.css` sets `pointer-events: none` on `.z-tab-content` and
+  `.z-tab-text` (not in IceBlue's `tabbox.less`) and the property is inherited, so the combobox in the caption computed
+  `pointer-events: none` and `elementFromPoint` returned the `.z-tab`. Resolved in zk `79f3eb4b52` (`tabbox.css`: the
+  `.z-caption` of an enabled tab is `pointer-events: auto`; the click still reaches the Tab widget by bubbling; a disabled tab keeps
+  its own `none`; guard `the combobox in an accordion tab caption takes the click and opens its popup` in
+  `tab-ellipsis-screenshot.spec.ts`, red with the old rule re-injected, green on the new build).
+- Not fixed, left as found (O10): the second accordion tab of `tabbox-misc.zul` holds a textbox (174px) and a combobox (205px),
+  465px of content in a 399px caption, so the combobox button (x 482-514) lies outside the 446px tab and is clipped by its
+  `overflow: hidden`; in the horizontal tabbox the combobox tab is scrolled out of the tab strip. Page markup (`width="450px"`)
+  against Marble's default input widths; the guard checks only that tab's input.
+
 ## 50. Invalid inputs grow 4px under forced colours (NS21 verification)
 
 The (1c) double border (`border-width: 3px`) makes every invalid input 4px larger under forced colours; on the
@@ -1104,6 +1123,37 @@ fault: `gallery` already awaits `document.fonts.ready`, and the state is stable 
   (`.z-listheader-content` 8px wide, `overflow: hidden`), below the documented 88px tablet minimum.
 - The input-invalid guards measured the focus colour at the first frame of a border transition, so a wrong focus colour
   passed; fixed in `c3834f6ac5` (transitions disabled in the spec), proved by a lime focus mutation failing 5 guards.
+
+**NS35:**
+1. Resolved in zk `05419183cf` (`inputgroup.css`, guard `a focused valid|invalid combobox in an inputgroup draws the border of its
+   input and button as a focused textbox does` in `input-invalid.spec.ts`). Reference measured first: a focused textbox in a group
+   keeps 1px in the group colour; datebox, bandbox, spinner, timebox and doublespinner keep 1px on the wrapper. The combobox button
+   was 2px in the focus colour (valid and invalid, error colour for invalid); it now keeps 1px and the colour of the input
+   (`--zk-inputgroup-border-color`, the error colour once invalid). Red on the previous build (button 2px), green on the new.
+2. Resolved in zk `fe3387d4aa` (`forced-colors-gallery.spec.ts`): `waitForProgressmeterBars` waits until every visible determinate bar
+   keeps its width for two animation frames and equals the widget value (not `aria-valuenow`) as a fraction of the meter's content
+   box (padding subtracted), 10s timeout, 0.1px tolerance. `progressmeter-forced-colors.png` re-captured three times: 0 pixels
+   different from the committed PNG. A first form used an async predicate in `waitForFunction`, which treats the returned Promise as
+   truthy and returned after 30ms with bars at 175-189px; the frames are awaited in one `evaluate` now. With a 1px tolerance the wait
+   ended in the tail of the width transition (bars 1px short in 2 of 6 captures); 0.1px does not.
+3. Left as found (O10): the centred select-all header with the menu button, 68px on tablet, is below the documented 88px tablet
+   minimum; cm5 unchanged.
+4. Already fixed in `c3834f6ac5`.
+
+**NS36:**
+1. Resolved (`inputgroup.css`, guard `a focused z-combobox-error combobox in an inputgroup draws the error border on its input and button`
+   in `input-invalid.spec.ts`, fixture `.iig-group-combobox-error` in `pv/input-invalid-guard.zul`). The NS35 button rule
+   `.z-inputgroup .z-combobox:focus-within .z-combobox-button` (0,4,0, later) beat `.z-combobox.z-combobox-error:focus-within
+   .z-combobox-button` of `combobox.css`, so a focused `sclass="z-combobox-error"` combobox in a group had a red input and a button
+   in `rgba(0, 0, 0, 0.23)`. `.z-combobox-error` is in the `:is()` of the second NS35 rule now. Red on the previous build (button
+   colour `rgba(0, 0, 0, 0.23)`, expected `rgb(211, 47, 47)`), green on the new; the 21 `input-invalid` cases pass.
+   Left as found: the same variant at rest has a grey input and a red button, in the base and now. Cause not traced; a rest rule would
+   be a different change from this focus fix.
+2. Resolved (`forced-colors-gallery.spec.ts`): `waitForProgressmeterBars` took the content width from `meter.clientWidth`, an integer.
+   It now takes `getBoundingClientRect().width` minus the left and right border and padding. `/usecase/ops-dashboard.zul` (7 meters,
+   `z-flex-1`, rect 244.594 against clientWidth 245): the old form did not settle within 10s (largest difference 0.27px against the
+   0.1px tolerance); the new one settles in 19ms (largest difference 0.012px). `progressmeter` forced-colors capture run twice:
+   `git status` of `zkpreview/doc/screenshots` clean.
 
 ## 59. Leftovers from NS26
 

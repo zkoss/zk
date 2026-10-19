@@ -143,6 +143,18 @@
     padding: 0 var(--zk-spacing-3);
 }
 
+/* The combobox button grows to 2px and turns primary on focus (combobox.css) while the input above stays 1px; the group
+ * outline owns the focus, so the button keeps the 1px border and the colour of the input, error colour once invalid
+ * (follow-up 58). */
+.z-inputgroup .z-combobox:focus-within .z-combobox-button {
+    border-width: 1px;
+    border-color: var(--zk-inputgroup-border-color);
+}
+
+.z-inputgroup .z-combobox:is(.z-combobox-invalid, .z-combobox-error, :has(> .z-combobox-invalid)):focus-within .z-combobox-button {
+    border-color: var(--zk-input-border-color-error);
+}
+
 /* Multiline keeps its own (taller) rest padding — the single-line rule above
  * would otherwise wipe the textarea's vertical padding on focus. */
 .z-inputgroup textarea.z-textbox:focus,

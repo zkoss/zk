@@ -42,18 +42,40 @@ const SKIP = new Set([
 
 // ZK steps a progressmeter's value bar up to its value with a jQuery animation, and the bar's width then transitions;
 // `animations: 'disabled'` stops neither early enough, and networkidle can return before they end. Resolves once every
-// determinate bar is as wide as its aria-valuenow says (within a pixel), as gallery-scan.spec.ts waits for the inline
-// width. An indeterminate meter has no value and its bar animates forever, so it is skipped, and a page without a
-// progressmeter resolves at once.
-const PROGRESSMETER_WIDTH_TOLERANCE_PX = 1;
+// visible determinate bar has kept its width for two animation frames and that width is the widget's value as a
+// fraction of the meter's content box (percentage widths exclude the padding). The box comes from the bounding rect:
+// clientWidth is an integer and never matches a fractional width (a z-flex-1 meter) within the tolerance. The value comes from the widget, not
+// from aria-valuenow, which only za11y (EE) adds. An indeterminate meter's bar animates forever, so it is skipped, and
+// a page without a progressmeter resolves at once. The frames are awaited inside one evaluate: waitForFunction treats
+// the Promise of an async predicate as truthy and would return on its first poll.
+// The tail of the width transition changes by less than a pixel per frame, so a looser tolerance returns before the end.
+const PROGRESSMETER_WIDTH_TOLERANCE_PX = 0.1;
+const PROGRESSMETER_WAIT_TIMEOUT_MS = 10_000;
 
 async function waitForProgressmeterBars(page: Page): Promise<void> {
-  await page.waitForFunction((tolerance) => [...document.querySelectorAll('.z-progressmeter')].every(meter => {
-    const value = meter.getAttribute('aria-valuenow');
-    const bar = meter.querySelector('.z-progressmeter-image');
-    if (value === null || !bar) return true;
-    return Math.abs(bar.getBoundingClientRect().width - meter.clientWidth * Number(value) / 100) <= tolerance;
-  }), PROGRESSMETER_WIDTH_TOLERANCE_PX);
+  await page.evaluate(async ({ tolerance, timeout }) => {
+    const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+    const meters = [...document.querySelectorAll('.z-progressmeter:not(.z-progressmeter-indeterminate)')]
+      .filter(meter => meter.getClientRects().length > 0 && meter.querySelector('.z-progressmeter-image'));
+    const barWidths = () => meters.map(meter => meter.querySelector('.z-progressmeter-image')!.getBoundingClientRect().width);
+    const expectedWidth = (meter: Element) => {
+      const style = getComputedStyle(meter);
+      const horizontalInsets = ['borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight']
+        .reduce((sum, property) => sum + parseFloat(style[property as 'paddingLeft']), 0);
+      const contentWidth = meter.getBoundingClientRect().width - horizontalInsets;
+      const widget = (window as unknown as { zk: { Widget: { $(n: Element): { getValue(): number } } } }).zk.Widget.$(meter);
+      return contentWidth * widget.getValue() / 100;
+    };
+    const deadline = performance.now() + timeout;
+    for (;;) {
+      const before = barWidths();
+      await nextFrame();
+      await nextFrame();
+      const after = barWidths();
+      if (meters.every((meter, i) => before[i] === after[i] && Math.abs(after[i] - expectedWidth(meter)) <= tolerance)) return;
+      if (performance.now() > deadline) throw new Error(`a progressmeter bar did not settle within ${timeout}ms`);
+    }
+  }, { tolerance: PROGRESSMETER_WIDTH_TOLERANCE_PX, timeout: PROGRESSMETER_WAIT_TIMEOUT_MS });
 }
 
 const pages = fs.readdirSync(WEB_DIR)

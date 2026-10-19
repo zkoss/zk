@@ -15,6 +15,7 @@
     <inputgroup sclass="iig-group-doublebox"><label value="A"/><doublebox constraint="no empty"/></inputgroup>
     <inputgroup sclass="iig-group-decimalbox"><label value="A"/><decimalbox constraint="no empty"/></inputgroup>
     <inputgroup sclass="iig-group-combobox"><label value="A"/><combobox constraint="no empty"><comboitem label="Item 1"/></combobox></inputgroup>
+    <inputgroup sclass="iig-group-combobox-error"><label value="A"/><combobox sclass="z-combobox-error"><comboitem label="Item 1"/></combobox></inputgroup>
     <div sclass="iig-inplace">
         <textbox sclass="iig-inplace-textbox" inplace="true" constraint="no empty"/>
         <combobox sclass="iig-inplace-combobox" inplace="true" constraint="no empty"><comboitem label="Item 1"/></combobox>
