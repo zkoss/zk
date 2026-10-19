@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Locator } from '@playwright/test';
 
 // A tab label that does not fit a fixed narrow tab must be truncated with an ellipsis
 // (Jess review batch 15, follow-up 9). Without `min-width: 0` on .z-tab-content and
@@ -34,5 +34,34 @@ test.describe('tab label truncation', () => {
     // text-overflow does not apply to a flex container: the label must be a block-level box
     // for the ellipsis to be painted (a flex label is hard-clipped, e.g. "A ve").
     expect(m.display, 'a text-only label must not be a flex container, or no ellipsis is drawn').toBe('block');
+  });
+});
+
+// A component inside a tab caption must receive the click (follow-up 49b). .z-tab-content and
+// .z-tab-text set `pointer-events: none` so a click on the label lands on the tab, and the
+// property is inherited: the combobox in the caption was never the hit-test target and its
+// input and button were dead. The click still reaches the Tab widget by event bubbling.
+// The page's second accordion tab holds a textbox and a combobox wider than its 450px tabbox
+// (the combobox button is clipped by the tab), so only its input is checked.
+test.describe('component in a tab caption', () => {
+  const hitsPart = (combobox: Locator, part: string) =>
+    combobox.locator(part).evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+      return !!hit && el.contains(hit);
+    });
+
+  test('the combobox in an accordion tab caption takes the click and opens its popup', async ({ page }) => {
+    await page.goto('/tabbox-misc.zul');
+    await page.waitForLoadState('networkidle');
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+    const comboboxes = page.locator('.z-tabbox-accordion .z-tab .z-combobox');
+    for (const part of ['.z-combobox-input', '.z-combobox-button']) {
+      expect(await hitsPart(comboboxes.nth(0), part), `selected tab: ${part} must be the hit-test target`).toBe(true);
+    }
+    expect(await hitsPart(comboboxes.nth(1), '.z-combobox-input'), 'unselected tab: input must be the hit-test target').toBe(true);
+
+    await comboboxes.nth(0).locator('.z-combobox-button').click({ timeout: 3000 });
+    await expect(page.locator('.z-combobox-popup:visible')).toHaveCount(1);
   });
 });

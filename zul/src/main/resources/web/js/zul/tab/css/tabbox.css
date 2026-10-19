@@ -231,6 +231,14 @@
     display: block;
 }
 
+/* A component in the tab caption (follow-up 49b) must take the click: .z-tab-content and
+   .z-tab-text are pointer-events: none, which their descendants inherit, so a combobox there
+   was never the hit-test target. The click still reaches the Tab widget by event bubbling;
+   a disabled tab keeps its own pointer-events: none. */
+.z-tab:not(.z-tab-disabled) .z-tab-text .z-caption {
+    pointer-events: auto;
+}
+
 /* ─── Tab close button (.z-tab-button, not z-tab-close) ─────────────────── */
 /* ZK emits the button BEFORE .z-tab-text — order:1 flips it to trailing
    (dismiss affordances trail the content; c31, doc/md3-close-affordance-
