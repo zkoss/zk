@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6214.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon Oct 19 14:40:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		format.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Taipei"));
+		java.util.Date begin = format.parse("2026-10-10");
+		java.util.Date end = format.parse("2026-10-20");
+	]]></zscript>
+	<vlayout>
+		<daterangebox id="twoMonths" format="yyyy-MM-dd" timeZone="Asia/Taipei"
+			numberOfMonths="2" beginValue="${begin}" endValue="${end}"
+			onChange='changes.setValue(String.valueOf(Integer.parseInt(changes.getValue()) + 1))'/>
+		<daterangebox id="threeMonths" format="yyyy-MM-dd" timeZone="Asia/Taipei"
+			numberOfMonths="3" beginValue="${begin}" endValue="${end}"
+			onChange='changes.setValue(String.valueOf(Integer.parseInt(changes.getValue()) + 1))'/>
+		<daterangebox id="constrained" format="yyyy-MM-dd" timeZone="Asia/Taipei"
+			numberOfMonths="2" beginValue="${begin}" endValue="${end}"
+			constraint="between 20261005 and 20261125"
+			onChange='changes.setValue(String.valueOf(Integer.parseInt(changes.getValue()) + 1))'/>
+		<label id="changes" value="0"/>
+		<label multiline="true">
+			1. Open the first box, click the left calendar's month title, and choose December.
+			   Expected: December 2026 / January 2027.
+			2. Reopen it, click the right calendar's month title, and choose January.
+			   Expected: December 2025 / January 2026.
+			3. Open the second box, click the middle calendar's year title, choose 2027,
+			   then January. Expected: December 2026 / January 2027 / February 2027.
+			4. Open the third box and click the right calendar's right arrow.
+			   Expected: November 2026 / December 2026. Click the left calendar's left arrow twice.
+			   Expected: October 2026 / November 2026, then September 2026 / October 2026.
+			The selected range must stay October 10–20, 2026, and the counter must stay 0.
+		</label>
+	</vlayout>
+</zk>
