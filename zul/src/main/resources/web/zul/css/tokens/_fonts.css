@@ -24,3 +24,27 @@
     src: url("~./zul/font/inter-latin-ext-variable.woff2") format("woff2");
     unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
+/* Metric-matched fallback for Inter. ZK measures a widget once when it mounts (a sizedByContent
+   column, the Tabs scroll width) and does not measure again when a web font arrives, so text
+   laid out in the fallback face and then redrawn in Inter would overflow what was measured: a
+   sizedByContent cell is cut by an ellipsis whenever Inter takes longer than ZK's first
+   measurement (a 150 ms font delay is enough; reproduced with a one-listbox page). This face
+   makes the fallback about as wide as Inter, so the measurement stays close to the final width.
+   It is only used until Inter has loaded and needs no download: local() takes the installed
+   Arial (or its metric-compatible Liberation Sans); where neither exists the face is skipped and
+   the stack falls through to the next family as before. The values scale Arial to Inter's
+   average advance width and line metrics; text dominated by narrow glyphs (i, l) can still end
+   up slightly wider in Inter than measured. Listed after 'Inter' in --zk-typescale-font-family.
+   The unicode-range is Inter's latin range: without it Arial would also draw the characters
+   Inter does not cover (an arrow such as U+2192) instead of the next family in the stack, which
+   changed how they look. */
+@font-face {
+    font-family: 'Inter Fallback';
+    src: local('Arial'), local('Liberation Sans');
+    size-adjust: 107.4%;
+    ascent-override: 90.2%;
+    descent-override: 22.5%;
+    line-gap-override: 0%;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

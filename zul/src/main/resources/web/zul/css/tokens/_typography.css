@@ -1,7 +1,7 @@
 /* MD3 Typography Tokens — --zk-typescale-* — Inter font family */
 :root {
     /* Font families */
-    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+    --zk-typescale-font-family: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont,
         'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --zk-typescale-mono-family: 'SFMono-Regular', Consolas, 'Liberation Mono',
         Menlo, Courier, monospace;
