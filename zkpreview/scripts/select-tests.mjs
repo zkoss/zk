@@ -289,6 +289,17 @@ function classResolver({ pageKeys, pagesByClass }) {
     return pages;
   }
 
+  /**
+   * Pages of the class's owner component, wherever the class itself is not drawn at rest (a pop-up class of a
+   * combobox is only on screen while its pop-up is open): the longest present name prefix, else the root class of
+   * the component the CSS file is named after.
+   */
+  function ownerPages(c, component) {
+    const prefixed = pagesByNamePrefix(c);
+    if (prefixed) return prefixed.pages;
+    return component ? pagesWithClass(`z-${component}`) : new Set();
+  }
+
   /** Returns { pages, trace } where trace says how each class was resolved. */
   function resolve(classes, attributePatterns, component) {
     const pages = new Set();
@@ -296,6 +307,7 @@ function classResolver({ pageKeys, pagesByClass }) {
     const byPrefix = [];
     const byComponent = [];
     for (const c of classes) {
+      ownerPages(c, component).forEach(p => pages.add(p));
       const atRest = pagesWithClass(c);
       if (atRest.size) { atRest.forEach(p => pages.add(p)); continue; }
       const prefixed = pagesByNamePrefix(c);
@@ -395,6 +407,25 @@ function titleNamesPage(test, pageKey) {
 }
 
 /**
+ * COMPUTED-URL SPECS (component-theming.spec.ts). Its describes open the page in `beforeEach` from the test title:
+ * `page.goto(`/${PAGES[comp] ?? comp}.zul`)`, where `comp` is the text before ' — ' and `PAGES`, `PAGES3` are
+ * `Record<string, string>` maps for the components whose page has another name. No `.zul` literal exists to scan,
+ * so the page is rebuilt here: parse the maps, apply them to the title. Nothing else in the selector knows this spec.
+ */
+const PAGE_MAP_DECLARATION = /const PAGES\d*: Record<string, string> = (\{[^}]*\});/g;
+const COMPUTED_URL_USE = /\bPAGES\d*\[/;
+const TITLE_SEPARATOR = ' — ';
+
+function computedUrlPage(test, specLines, pageKeys) {
+  const setUp = test.ancestors.map(a => specLines.slice(a.line - 1, a.firstChildLine - 1).join('\n')).join('\n');
+  if (!COMPUTED_URL_USE.test(setUp) || !test.title.includes(TITLE_SEPARATOR)) return [];
+  const pageNames = Object.assign({}, ...[...specLines.join('\n').matchAll(PAGE_MAP_DECLARATION)].map(m => JSON.parse(m[1])));
+  const component = test.title.split(TITLE_SEPARATOR)[0];
+  const page = pageNames[component] ?? component;
+  return pageKeys.has(page) ? [page] : [];
+}
+
+/**
  * Pages a test opens, from the most to the least specific evidence, stopping at the first that finds any:
  *   1. its title, a data-table row (`{ name: 'tablet-x', url: '/x.zul' }`) that generates it, or the page
  *      mentioned in its own source lines plus its enclosing describes' set-up lines (beforeEach);
@@ -408,8 +439,11 @@ function pagesOfTestFactory(tests, pageKeys) {
     if (!sources.has(file)) sources.set(file, fs.readFileSync(path.join(SPEC_DIR, file), 'utf8').split('\n'));
     return sources.get(file);
   };
+  // A comment that names a page ("toast.zul and notification.zul buttons ...") is no navigation; the one after a
+  // describe would otherwise count for the last test above it.
+  const withoutComments = text => text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   const refsInRange = (file, fromLine, toLineExclusive) =>
-    [...sourceRefs(linesOf(file).slice(fromLine - 1, Math.min(toLineExclusive - 1, linesOf(file).length)).join('\n'))]
+    [...sourceRefs(withoutComments(linesOf(file).slice(fromLine - 1, Math.min(toLineExclusive - 1, linesOf(file).length)).join('\n')))]
       .filter(key => pageKeys.has(key));
   const boundaries = new Map(); // file -> sorted start lines of every test and describe
   for (const t of tests) {
@@ -437,6 +471,7 @@ function pagesOfTestFactory(tests, pageKeys) {
   return function pagesOfTest(test) {
     const pages = new Set();
     for (const key of pageKeys) if (titleNamesPage(test, key)) pages.add(key);
+    computedUrlPage(test, linesOf(test.file), pageKeys).forEach(p => pages.add(p));
     const row = rowsOf(test.file).get(test.describes[0]) ?? rowsOf(test.file).get(test.title);
     if (row) pages.add(row);
     refsInRange(test.file, test.line, nextBoundary(test.file, test.line)).forEach(p => pages.add(p));
@@ -572,6 +607,13 @@ function resolveChange(change, ctx, sel) {
   sel.fullReasons.push(`${where}: unrecognised path type, cannot decide what it affects`);
 }
 
+/** A component's own preview page (`combobox.zul` for combobox.css or Combobox.ts) is always selected, whatever the rule. */
+function addOwnPage(pages, component, ctx) {
+  const hasOwnPage = ctx.zuls.some(z => z.key === component);
+  if (hasOwnPage) pages.add(component);
+  return hasOwnPage ? component : null;
+}
+
 function resolveComponentCss(change, where, component, ctx, sel) {
   if (SHARED_CSS_FILES.has(component)) {
     sel.fullReasons.push(`${where}: shared CSS file (${component}.css) treated like base`);
@@ -588,7 +630,9 @@ function resolveComponentCss(change, where, component, ctx, sel) {
     return;
   }
   const { pages, unresolved, byPrefix, byComponent } = ctx.classes.resolve(parsed.classes, parsed.attributePatterns, component);
+  const ownPage = addOwnPage(pages, component, ctx);
   const notes = [`parsed ${parsed.parseMode}`, `${parsed.classes.size} classes -> ${pages.size} pages`];
+  if (ownPage) notes.push(`own page ${ownPage}.zul always selected`);
   if (byPrefix.length) notes.push(`${byPrefix.length} resolved by name prefix (${byPrefix.slice(0, 3).join(', ')}${byPrefix.length > 3 ? ', ...' : ''})`);
   if (byComponent.length) notes.push(`${byComponent.length} resolved by the file's own component z-${component}`);
   sel.reasons.push(`${where}: ${notes.join('; ')}`);
@@ -599,7 +643,8 @@ function resolveComponentCss(change, where, component, ctx, sel) {
 function resolveWidget(where, name, ctx, sel) {
   const rootClass = `z-${name.toLowerCase()}`;
   const { pages, unresolved } = ctx.classes.resolve([rootClass], [], null);
-  sel.reasons.push(`${where}: widget root class .${rootClass} -> ${pages.size} pages`);
+  const ownPage = addOwnPage(pages, name.toLowerCase(), ctx);
+  sel.reasons.push(`${where}: widget root class .${rootClass} -> ${pages.size} pages${ownPage ? `, own page ${ownPage}.zul always selected` : ''}`);
   unresolved.forEach(c => sel.uncovered.push(`widget ${where}: root class .${c} is on no preview page`));
   addPagesAndTests(sel, pages, ctx.testsForPage);
 }

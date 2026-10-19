@@ -57,7 +57,12 @@ gains `describe.serial`, a `beforeAll` its tests rely on, or a module-level obje
    to look at (see "Which rules are read" below), then per class:
    present on a page at rest -> those pages; else the longest present name prefix (`z-datebox-popup` -> `z-datebox`);
    else the pages of the file's own component (`combobox.css` -> `z-combobox`); else it is reported in `uncovered`
-   and the result is `full`. `misc.css` is shared and always `full`.
+   and the result is `full`. `misc.css` is shared and always `full`. Two rules apply on top of that, for every class:
+   * **Own page.** `<name>.css` always selects the top-level page `<name>.zul` when it exists, and with it every
+     test that opens it (including the `popup` project). The same holds for the widget `<Name>.ts`.
+   * **Owner pages.** The owner of a class (its longest present name prefix, else the CSS file's component) always
+     contributes the pages where the owner's root class is present, even when the class itself is also on a page
+     at rest.
 4. Preview `.zul` -> that page; a `pv/` template -> every page that applies it, transitively. Aggregate pages are the
    exception, see "Aggregate pages".
 5. Spec file -> that spec only. Baseline PNG -> the page named by its file name; a gallery baseline
@@ -99,11 +104,24 @@ Changes that touch only blank lines or comments select nothing. Changed rules wi
 
 ## Keeping it current
 
+* **Build the index from a server with client ROD off**, and run the tests against a server with the default:
+  ```bash
+  cd zkpreview
+  tail -f /dev/null | JAVA_TOOL_OPTIONS=-Dorg.zkoss.zul.client.rod=false withjdk.sh 17 bash ./gradlew appRun -PhttpPort=<port> --console=plain
+  node scripts/build-class-index.mjs --url http://127.0.0.1:<port>
+  ```
+  With `org.zkoss.zul.client.rod=false` the combobox, bandbox, datebox, menu and popup pop-ups are rendered at page
+  load, so more pop-up classes are present at rest and map straight to their pages (measured in
+  doc/client-rod-probe.md: no page loses a class). Never run the Playwright tests against that server: a Tree
+  renders without its ROD spacers and `tree-header` fails by about 16,000 pixels. Stop that server before the tests.
 * `zkpreview/doc/class-index.json` is the page -> classes index, keyed by URL path (`a.zul`, `pv/input-invalid-guard.zul`,
   `utility/print.zul`). It covers every top-level page plus every `.zul` a spec names as a string literal URL
   (`'/pv/...zul'`; paths in comments and titles do not count). Rebuild it after a full run, with the preview server up:
   `node scripts/build-class-index.mjs --url http://127.0.0.1:8085`. It fails (and writes nothing) if any page errors.
   Rebuild it whenever a spec starts navigating to a new fixture page.
+* `component-theming.spec.ts` opens its page from the test title (`/${PAGES[comp] ?? comp}.zul`). `computedUrlPage`
+  in `select-tests.mjs` parses its `PAGES*` maps and applies them to the title; it is the only place that knows this.
+  Comments in a spec are ignored when looking for the pages a test opens.
 * The page -> test mapping is one function, `buildTestsForPage` (and `titleNamesPage` beside it) in `select-tests.mjs`.
   Gallery baselines are recognised by `galleryPageOfBaseline` and `isGalleryTest`; if the gallery test titles change, adjust those.
 * Each generated `-g` pattern is checked against the inventory before it is printed; the script throws if it would
