@@ -1,6 +1,7 @@
 import { test, expect, type Page, type CDPSession } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
+import { AGGREGATE_PAGES } from './aggregate-pages';
 
 // Scan-driven guard for keyboard focus rings (doc/skill-gaps.md 2026-09-04,
 // decision D13). The navbar defect that prompted this was reported by a human
@@ -43,9 +44,10 @@ const WEB_DIR = path.resolve(__dirname, '../../main/webapp/web');
 
 // Pages this scan cannot read anything useful from.
 const SKIP = new Set([
+  ...AGGREGATE_PAGES,
   // Non-visual / structural / meta pages, and the pages whose content is an
   // opaque third-party viewport (nothing of ours to focus).
-  'area', 'html', 'iframe', 'imagemap', 'overview', 'preview', 'inputs',
+  'area', 'html', 'iframe', 'imagemap',
   // Hardware / external-resource / animated pages — the DOM is not stable
   // enough for a geometry assertion.
   'camera', 'barcodescanner', 'captcha', 'video', 'audio', 'fileupload',

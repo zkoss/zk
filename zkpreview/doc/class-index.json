@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-10-19T03:57:17.875Z",
- "commit": "841c3fc13d",
+ "generatedAt": "2026-10-19T05:02:39.588Z",
+ "commit": "73f20c85b7",
  "pages": {
   "a.zul": [
    "z-a",
@@ -194,6 +194,7 @@
    "z-mb-3",
    "z-p-8",
    "z-page",
+   "z-pb-2",
    "z-pb-3",
    "z-text-2xl",
    "z-text-on-surface",
@@ -236,6 +237,7 @@
    "z-mb-3",
    "z-p-8",
    "z-page",
+   "z-pb-2",
    "z-pb-3",
    "z-text-2xl",
    "z-text-on-surface",
@@ -975,6 +977,7 @@
    "z-mb-3",
    "z-p-8",
    "z-page",
+   "z-pb-2",
    "z-pb-3",
    "z-text-2xl",
    "z-text-on-surface",

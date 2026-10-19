@@ -65,6 +65,14 @@ handles `@Init` restore, the `navigate` command and `handleBookmarkChange` for b
 Because deep-linking is **hash**-based, it survives a server-side redirect — a fragment never
 reaches the server. Nothing in the harness uses a query string.
 
+## Which tests to run after a change
+
+Run `node zkpreview/scripts/select-tests.mjs --base <base>` from the repository root (usage:
+`zkpreview/scripts/README-select-tests.md`). When it answers `partial`, run the single command it
+prints against your local preview server. When it answers `full`, do not start a full run on your
+own: report the selector's reasons and let the owner decide when the full suite runs. The suite
+runs locally only; it is not wired to CI or Jenkins (owner's ruling, 2026-10-19).
+
 ## Playwright projects
 
 Config: `zkpreview/src/test/playwright/playwright.config.ts`.

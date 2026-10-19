@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
+import { AGGREGATE_PAGES } from './aggregate-pages';
 
 // Forced-colors VISUAL review pass (see doc/spec/forced-colors.md).
 //
@@ -33,8 +34,9 @@ const SNAP_DIR = path.resolve(__dirname, '../../../doc/screenshots');
 // screenshot can't meaningfully or stably capture (non-visual primitives,
 // hardware/external-resource/animated pages that produce flaky shots).
 const SKIP = new Set([
+  ...AGGREGATE_PAGES,
   'area', 'html', 'iframe', 'imagemap',
-  'scrollbar', 'overview', 'preview', 'inputs',
+  'scrollbar',
   'camera', 'barcodescanner', 'captcha', 'video', 'audio', 'fileupload', 'loading', 'loadingbar',
 ]);
 

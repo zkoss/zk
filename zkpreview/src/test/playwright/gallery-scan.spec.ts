@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 import { expectSectionShots } from './section-shots';
+import { AGGREGATE_PAGES } from './aggregate-pages';
 
 // Scan-driven gallery coverage (test-architecture.md §6, roadmap step 2).
 //
@@ -29,9 +30,11 @@ const COVERED_ELSEWHERE = new Set([
 
 // Pages a static gallery screenshot can't meaningfully or stably capture.
 const SKIP = new Set([
+  // Aggregate pages (scripts/aggregate-pages.json): each component has its own page
+  ...AGGREGATE_PAGES,
   // Non-visual primitives / structural / meta pages
    'area', 'html', 'iframe', 'imagemap', 
-  'scrollbar',  'overview', 'preview', 'inputs',
+  'scrollbar',
   // Non-deterministic / hardware / external-resource / animated → flaky baselines
   'camera', 'barcodescanner', 'captcha', 'video', 'audio', 'fileupload', 'loading', 'loadingbar',
   // Auto-generated icon catalog (all Lucide icons) — a whole-page listing, not an ordinary

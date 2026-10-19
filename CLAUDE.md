@@ -79,6 +79,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 ### Playwright
 - 比對 screenshot 基準時，跑 repo 內的 config：`npx playwright test -c src/test/playwright/playwright.config.ts ...`。臨時 config 必須複製 `snapshotDir` 與 `snapshotPathTemplate`，否則會寫出新 PNG 並假通過。跑完檢查 `git status`，出現新 PNG 代表沒有真正比對。
 - Playwright 1.59 的裸 `--update-snapshots` 預設為 `changed`；寫明模式：`--update-snapshots=changed`，並在 commit 前用 `git status --porcelain <基準目錄>` 確認檔案數。
+- 改了 CSS、預覽頁或 spec 之後，先跑 `node zkpreview/scripts/select-tests.mjs --base <base>`。結果是 `partial` 就在本機跑它給的指令；結果是 `full` 時不要自行跑全測，回報選擇器的原因，由使用者決定何時全測（2026-10-19 裁示；Jenkins 暫不接）。
 - `-g` 比對的是以空白連接的標題路徑，開頭含 project 名稱（`project file describe title`，例：`chromium screenshot.spec.ts tabbox gallery`）。結尾用 `describe title$` 錨定；要用 `^` 開頭錨定就必須包含 project。不要套 `--list` 的 `›` 格式。
 
 ### 測試與驗證

@@ -376,13 +376,13 @@ function sourceRefs(text) {
   return new Set([...text.matchAll(ZUL_REFERENCE)].map(m => m[1]));
 }
 
-// What may follow the page name in a gallery baseline: `gallery`, a sectioned `<NN>-<slug>` (two or three digits),
+// What may follow the page name in a gallery baseline: `gallery`, a sectioned `<NN>-<slug>`,
 // or a slug-less `<name>-<NN>` such as `window-overlapped-00`.
-const GALLERY_BASELINE_TAIL = /^(?:gallery|\d{2,3}-.+|.+-\d{2,3})$/;
+const GALLERY_BASELINE_TAIL = /^(?:gallery|\d{2}-.+|.+-\d{2})$/;
 
 /**
  * The page a gallery baseline belongs to: `<page>-gallery.png`, the sectioned `<page>-<NN>-<slug>.png`
- * (e.g. `tree-03-tree-live-data`, `component-theming-100-x`) or `<page>-<name>-<NN>.png` (`window-overlapped-00`).
+ * (e.g. `tree-03-tree-live-data`) or `<page>-<name>-<NN>.png` (`window-overlapped-00`).
  * The longest page name that fits wins (`tree-header-02-x` is tree-header, not tree). Null for any other
  * baseline name (`button-hover`, `bandbox-tablet`, ...).
  */
