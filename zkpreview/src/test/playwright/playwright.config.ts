@@ -62,6 +62,13 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Brand-colour override: with <html data-brand="copper"> no pixel may keep a stock primary-family
+      // colour, and the derived tokens must follow the seed. See brand-override.spec.ts.
+      name: 'brand',
+      testMatch: /brand-override\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'smoke',
       testMatch: /render-smoke\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
