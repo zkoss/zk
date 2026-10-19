@@ -19,6 +19,21 @@
     <div sclass="gs-vertical-toolbar-vertical-bar" style="width:160px"><toolbar orient="vertical">
         <toolbarbutton label="One"/><separator orient="vertical" bar="true"/><toolbarbutton label="Two"/>
     </toolbar></div>
+    <div sclass="gs-spacing-horizontal"><toolbar>
+        <toolbarbutton label="One"/><separator bar="true" spacing="40px"/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-spacing-vertical-orient"><toolbar>
+        <toolbarbutton label="One"/><separator orient="vertical" bar="true" spacing="40px"/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-spacing-toolbar-vertical" style="width:160px"><toolbar orient="vertical">
+        <toolbarbutton label="One"/><separator bar="true" spacing="40px"/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-spacing-vertical-toolbar-vertical-bar" style="width:160px"><toolbar orient="vertical">
+        <toolbarbutton label="One"/><separator orient="vertical" bar="true" spacing="40px"/><toolbarbutton label="Two"/>
+    </toolbar></div>
+    <div sclass="gs-panel"><toolbar mold="panel">
+        <toolbarbutton label="One"/><separator orient="vertical" bar="true"/><toolbarbutton label="Two"/>
+    </toolbar></div>
     <div sclass="gs-outside" style="display:flex; align-items:center; gap:16px; height:80px;">
         <label value="Left"/><separator orient="vertical" bar="true" spacing="16px"/><label value="Right"/>
     </div>

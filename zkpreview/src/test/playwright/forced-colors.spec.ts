@@ -701,6 +701,12 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     }
   });
 
+  test('a bar in a panel-mold toolbar paints no CanvasText block, as in normal mode', async ({ page }) => {
+    await openSeparatorToolbarFixture(page);
+    const background = await page.locator('.gs-panel .z-separator').evaluate(el => getComputedStyle(el).backgroundColor);
+    expect(background, 'a panel-mold bar is transparent').toBe('rgba(0, 0, 0, 0)');
+  });
+
   test('a vertical bar outside a toolbar is one continuous line, not ticks at its ends', async ({ page }) => {
     await openSeparatorToolbarFixture(page);
     // The `&nbsp;` in the box gets a text backplate under forced colours; it used to cover the middle of the line.

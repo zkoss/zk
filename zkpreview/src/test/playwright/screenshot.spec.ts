@@ -2312,6 +2312,23 @@ test.describe('separator in a toolbar (follow-up 45 F1)', () => {
     });
   }
 
+  // ZK writes `spacing` inline (height on a horizontal bar, width on a vertical-orient bar); the divider keeps its 24px.
+  for (const wrapper of ['gs-spacing-horizontal', 'gs-spacing-vertical-orient']) {
+    test(`${wrapper}: a bar with spacing="40px" in a horizontal toolbar is still a 1px x ${DIVIDER_LONG_PX}px divider`, async ({ page }) => {
+      await open(page);
+      const m = await measure(page, wrapper);
+      expect({ width: m.width, height: m.height }).toEqual({ width: 1, height: DIVIDER_LONG_PX });
+    });
+  }
+
+  for (const wrapper of ['gs-spacing-toolbar-vertical', 'gs-spacing-vertical-toolbar-vertical-bar']) {
+    test(`${wrapper}: a bar with spacing="40px" in a vertical toolbar is still a ${DIVIDER_LONG_PX}px x 1px divider`, async ({ page }) => {
+      await open(page);
+      const m = await measure(page, wrapper);
+      expect({ width: m.width, height: m.height }).toEqual({ width: DIVIDER_LONG_PX, height: 1 });
+    });
+  }
+
   test('gs-plain: a separator without a bar is still a spacer that pushes the next item to the end', async ({ page }) => {
     await open(page);
     const m = await measure(page, 'gs-plain');

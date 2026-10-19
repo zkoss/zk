@@ -833,8 +833,18 @@ full-width pseudo-element line through the row and the ~252x13px block are gone 
 
 Also fixed (Marble defect, O1): a vertical bar outside a toolbar painted ticks at its ends under forced colours, because the text backplate of the
 `&nbsp;` in its box covered the middle of the line; `forced-color-adjust: none` on `.z-separator-vertical-bar` removes it (a 20px bar: 4 of 20 rows
-inked before, 20 after). The second bullet below is unchanged. Left as found: a `spacing` attribute on a bar between toolbar items is written inline
-as `height` and overrides the 24px.
+inked before, 20 after). The second bullet below is unchanged.
+
+**F1 and F2 resolved in NS34.** F1: a `spacing` attribute on a horizontal bar between the items of a horizontal toolbar is written inline as `height`
+and used to override the 24px (`spacing="40px"` gave 1 x 40); `max-height: 24px` on the divider rule (`toolbar.css`) keeps it 1 x 24. A vertical-orient bar
+(inline `width`) and either bar in a vertical toolbar (the `flex-basis` and `width: auto !important` of the rules win) were already unaffected, measured
+24 x 1 / 1 x 24. F2: a vertical-orient bar in a panel-mold toolbar is invisible in normal mode (transparent, 3.66 x 13); under forced colours it was a
+hollow box and, since the NS33 `forced-color-adjust: none`, a solid CanvasText block. `.z-toolbar-panel .z-separator { background-color: transparent }`
+(`_forced-colors.css`) makes it transparent again. Guards: `screenshot.spec.ts` `separator in a toolbar`, `forced-colors.spec.ts`, fixture
+`pv/separator-toolbar-guard.zul`.
+
+**F3, accepted (O10):** with `overflowPopup="true"`, when the items after a divider move into the popup, the divider stays at the end of the visible row
+beside the "..." button. Cosmetic and only while the toolbar overflows; left as found.
 
 Low; left as found (O10).
 
@@ -1181,6 +1191,8 @@ fault: `gallery` already awaits `document.fonts.ready`, and the state is stable 
 chromium multislider/rangeslider hover/focus (4) and gallery `component-theming` baselines are stale since zkdemo B9 (zkcml `33623a6ce`,
 `5d29d14b0`) made the sliders taller (crops 48/52 → 110px; component-theming 18,407 vs 18,647px); fail identically on `605bd62e89`; not
 re-cut (owner: the B9 batch).
+
+**Resolved:** `component-theming` and the slider state baselines pass again (slider baselines refreshed by another session in `962aacf42f`; `component-theming` passed in the NS33 runs and its verification, 2026-10-19).
 
 ## 61. WebKit only: the `.mhf-listbox-first-cell` image and the header text differ by 1.5px (NS32 verification)
 

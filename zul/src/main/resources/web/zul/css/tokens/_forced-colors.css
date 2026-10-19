@@ -501,6 +501,8 @@
         background-color: CanvasText;
     }
     .z-toolbar-content > .z-separator-horizontal-bar::before { content: none; }
+    /* Panel mold (a table) draws no bar in normal mode; without this the bar is a solid CanvasText block. */
+    .z-toolbar-panel .z-separator { background-color: transparent; }
 
     /* Slider / rangeslider / multislider — rail + active fill (thumbs bordered above) */
     .z-slider-center,
