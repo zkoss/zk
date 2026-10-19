@@ -83,6 +83,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - `-g` 比對的是以空白連接的標題路徑，開頭含 project 名稱（`project file describe title`，例：`chromium screenshot.spec.ts tabbox gallery`）。結尾用 `describe title$` 錨定；要用 `^` 開頭錨定就必須包含 project。不要套 `--list` 的 `›` 格式。
 
 ### 測試與驗證
+- 除錯或調查 bug 時，先做一個最小可重現頁面（`zkpreview/src/main/webapp/web/pv/<主題>-repro.zul`：只放觸發問題的元件與最少設定，不放頁面外框、標題、其他區段），在這個頁面上重現、量測、驗證修法，不在完整的 gallery 頁面上除錯：頁面上其他元件、樣式、載入順序都是無關的潛在影響因素。要比較修法就各做一個只差一處的變體頁。這些頁面是暫時性的，除錯完刪除（含 `build/inplaceWebapp` 的複本），不 commit；需要長期保留的回歸測試另外寫進正式的 spec。
 - 互動測試要用使用者實際的輸入（`page.mouse` 拖曳、真實 click），不用 Range 或 `element.click()` 繞過瀏覽器限制。
 - 互動類元件的 outcome 至少要有一列執行互動並斷言狀態改變（例：捲動要量位置變化，不只量 thumb 存在）。
 - 對比度計算要跳過透明背景，取第一個不透明祖先；斷言要用 mutation 證明會失敗。
