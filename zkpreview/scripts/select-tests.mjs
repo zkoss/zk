@@ -71,18 +71,20 @@ const NO_TEST_PATHS = [
 // ---------------------------------------------------------------------------------------------
 
 function parseArgs(argv) {
-  const opts = { json: false, base: null, zkcmlBase: null, threshold: FULL_RUN_TEST_FRACTION, paths: [] };
+  const opts = { json: false, base: null, zkcmlBase: null, only: false, threshold: FULL_RUN_TEST_FRACTION, paths: [] };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === '--json') opts.json = true;
     else if (arg === '--base') opts.base = argv[++i];
     else if (arg === '--zkcml-base') opts.zkcmlBase = argv[++i];
+    else if (arg === '--only') opts.only = true;
     else if (arg === '--threshold') opts.threshold = Number(argv[++i]);
     else if (arg.startsWith('--')) fail(`unknown option ${arg}`);
     else opts.paths.push(arg);
   }
   if (!(opts.threshold > 0 && opts.threshold <= 1)) fail('--threshold is a fraction of all tests, greater than 0 and at most 1 (e.g. 0.5)');
   if (!opts.base && !opts.zkcmlBase && opts.paths.length === 0) fail('give changed paths, or --base <rev>');
+  if (opts.only && !opts.base && !opts.zkcmlBase) fail('--only needs --base or --zkcml-base');
   return opts;
 }
 
@@ -117,11 +119,15 @@ function resolveInputPath(input) {
 }
 
 function collectChanges(opts) {
-  const changes = opts.paths.map(resolveInputPath).map(c => ({ ...c, base: null }));
+  const given = opts.paths.map(resolveInputPath);
+  // --only: the given paths filter the diff against the base instead of being added as bare paths.
+  const changes = opts.only ? [] : given.map(c => ({ ...c, base: null }));
   if (opts.base) changes.push(...changedSince('zk', opts.base).map(rel => ({ repo: 'zk', rel, base: opts.base })));
   if (opts.zkcmlBase) changes.push(...changedSince('zkcml', opts.zkcmlBase).map(rel => ({ repo: 'zkcml', rel, base: opts.zkcmlBase })));
+  const keep = new Set(given.map(c => `${c.repo}:${c.rel}`));
   const seen = new Set();
-  return changes.filter(c => !seen.has(`${c.repo}:${c.rel}`) && seen.add(`${c.repo}:${c.rel}`));
+  return changes.filter(c => (!opts.only || keep.has(`${c.repo}:${c.rel}`))
+    && !seen.has(`${c.repo}:${c.rel}`) && seen.add(`${c.repo}:${c.rel}`));
 }
 
 // ---------------------------------------------------------------------------------------------

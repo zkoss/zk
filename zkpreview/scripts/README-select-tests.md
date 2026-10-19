@@ -14,6 +14,9 @@ node scripts/select-tests.mjs zul/src/main/resources/web/js/zul/wgt/css/button.c
 # everything changed since a revision, uncommitted and untracked files included
 node scripts/select-tests.mjs --base HEAD --zkcml-base HEAD
 
+# only these paths, each diffed against the base (changed rules only, not the whole file)
+node scripts/select-tests.mjs --base <rev> --only zul/src/main/resources/web/js/zul/wgt/css/button.css
+
 # machine-readable
 node scripts/select-tests.mjs --json <paths>
 ```
