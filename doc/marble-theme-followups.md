@@ -1251,7 +1251,7 @@ variants; same on pre-NS23 CSS; repo projects run Chromium only (NS32 verificati
 
 ## 62. Leftovers from the pop-up screenshot verification (2026-10-19)
 
-Found while verifying `popup-gallery.spec.ts` (`doc/marble-popup-gallery-verification.md`, branch `marble-popup-gallery`). Left as found (O10).
+Found while verifying `popup-gallery.spec.ts` (`doc/marble-popup-gallery-conclusion.md`, branch `marble-popup-gallery`). Left as found (O10).
 
 - **Colorpalette focus ring:** hovering a swatch moves focus to `div.z-colorpalette`, which matches `:focus-visible` and shows Chrome's default `outline: auto rgb(0, 95, 204)`. Neither Marble's `colorbox.css` nor IceBlue's `colorbox.less` styles it. Check IceBlue on the same page before deciding ownership (O1). The baseline `colorbox-popup-palette-selected.png` records the current rendering and will be re-cut when this is styled.
 - **`errorbox.zul:46`:** the label says the errorbox turns to the left of the field; it renders below (`-up`). Preview page text (O5).
@@ -1260,7 +1260,7 @@ Found while verifying `popup-gallery.spec.ts` (`doc/marble-popup-gallery-verific
 
 ## 63. Leftovers from the pop-up batch 2 and brand-override checks (2026-10-19)
 
-Found while building and verifying `popup-gallery.spec.ts` batch 2 (`doc/marble-popup-batch2-report.md`, `doc/marble-popup-batch2-verification.md`) and `brand-override.spec.ts` (`doc/marble-brand-batch1-report.md`). Left as found (O10).
+Found while building and verifying `popup-gallery.spec.ts` batch 2 (`doc/marble-popup-gallery-conclusion.md`, `doc/marble-popup-gallery-conclusion.md`) and `brand-override.spec.ts` (`doc/marble-brand-density-conclusion.md`). Left as found (O10).
 
 - **Hardcoded ROD loading overlay colour:** `grid.css:473`, `listbox.css:876`, `tree.css:590` paint the `-loading` overlay with `rgba(255, 255, 255, 0.6)` instead of a `--zk-*` token. The batch 2 ROD assertions pin this value; update them together with the CSS.
 - **ROD loading overlay leaves its component:** during loading the body box jumps from the component to `[0,0,1280,145]` and covers the top of the page. Tracked as G7/F1 in `doc/zats-1117-fix-plan.md`; add a "body box unchanged while loading" assertion once G7 lands.
@@ -1272,4 +1272,17 @@ Found while building and verifying `popup-gallery.spec.ts` batch 2 (`doc/marble-
 
 ## 64. Toolbar overflow button still overshoots near each wrap threshold (2026-10-20)
 
-After the density batch moved the `.z-toolbar-content` start padding onto `.z-toolbar-overflowpopup` and turned the gap into child margins (`9064f77890`), the overflow button sits inside the toolbar at almost every width. Within about 2px of each item-wrap threshold it still overshoots the toolbar's right edge by 1.9–3.9px (12 of 362 sampled widths per density; before the fix 288–300 samples, up to 43.9px). Cause: `Toolbar.ts:241-257` measures the items without the remaining margins. Core widget code (decision-principles O2); the user chose not to file a Jira for now (D35 = A). The preview page's 300px toolbar is outside the affected widths. Evidence: `doc/marble-density-fix-batch4-verification.md` F3.
+After the density batch moved the `.z-toolbar-content` start padding onto `.z-toolbar-overflowpopup` and turned the gap into child margins (`9064f77890`), the overflow button sits inside the toolbar at almost every width. Within about 2px of each item-wrap threshold it still overshoots the toolbar's right edge by 1.9–3.9px (12 of 362 sampled widths per density; before the fix 288–300 samples, up to 43.9px). Cause: `Toolbar.ts:241-257` measures the items without the remaining margins. Core widget code (decision-principles O2); the user chose not to file a Jira for now (D35 = A). The preview page's 300px toolbar is outside the affected widths. Evidence: `doc/marble-brand-density-conclusion.md` F3.
+
+## 65. Tablet pop-up defects found by the tablet pop-up screenshots (2026-10-20)
+
+Found while building and verifying the `tablet-popup` tests (`doc/marble-tablet-popup-batch5-report.md`, `doc/marble-tablet-popup-batch5-verification.md`). Marble CSS, ZK-6112. Left as found (O10).
+
+- **F2 Colorpicker rows overlap on tablet:** the three input rows are 48px tall but zkex `colorbox.css` places them at `top: 0/43/86` inside `height: 460px; overflow: hidden`, so they overlap by 5px and the HEX input is cut by 4px. `colorbox-tablet-popup-picker.png` records the defect; re-cut it after the fix and add a "rows do not overlap" assertion.
+- **F3 Tapping a colorbox scrolls the page:** on a scrollable page the tap jumps scrollY 0 → 579 and the trigger leaves the screen; Marble already overrides ZK's anchoring for the combobox sheet and the wheels but not for the colorbox. Probe: `position: fixed; inset: auto 0 0; transform: none` stops the jump. A fix that needs a new `!important` goes to the owner first (E5); add a scrollable-page test.
+- **F4 Combobox sheet cuts its last row by 20px:** desktop `combobox.css:153` `max-height: 280px` applies to the 300px touch sheet; add `max-height: none` in the tablet CSS and re-cut the two combobox tablet baselines.
+- **F5 Tablet window/panel header rules:** `--zk-touch-target-comfortable` is 48px; the tablet `.z-window-header` rule lowers `min-height` from 56 to 48 and the `.z-panel-header` rule has no effect. Remove both and fix the `_window.css` comment.
+- **F6 Dead `.z-treecol-button` rules:** tablet `_mesh.css:38` and `tree.css:439/531/535`; `Treecols` has no menupopup path (Java, TS, mold). Marble clean-up.
+- **F9 Datebox wheel-time seam:** the date band and the time band each have their own rounded corners, leaving a notch where they meet.
+
+By design, not handled: the combobox sheet's fixed five-row height (empty space with few items) and the 358px colorbox width come from ZK touch JS (O6).
