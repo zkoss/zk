@@ -6,7 +6,7 @@
     // Fixed past date so the screenshot baseline is deterministic: ZK bakes the server's
     // "now" into a &lt;calendar&gt;'s default value, so the today-highlight moved every day and
     // portallayout-gallery.png drifted with it. A past month is unambiguously "past", so the
-    // highlight never shows. Same idiom as calendar.zul; see doc/test-architecture.md §5.
+    // highlight never shows. Same idiom as calendar.zul; see doc/playwright-visual-test-guide.md §5.
     Calendar _c = Calendar.getInstance();
     _c.set(2020, Calendar.MARCH, 15, 10, 30, 0);
     Date fixedDate = _c.getTime();

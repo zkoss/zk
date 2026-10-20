@@ -6,7 +6,7 @@
     // Fixed past date so the screenshot baseline is deterministic: a past month is
     // unambiguously "past" vs any real today, so the today-highlight never appears
     // and the no-past/no-future greying is stable. Assign to every calendar via
-    // value="${fixedDate}". (See doc/test-architecture.md §5 calendar note.)
+    // value="${fixedDate}". (See doc/playwright-visual-test-guide.md §5 calendar note.)
     Calendar _c = Calendar.getInstance();
     _c.set(2020, Calendar.MARCH, 15, 10, 30, 0);
     Date fixedDate = _c.getTime();

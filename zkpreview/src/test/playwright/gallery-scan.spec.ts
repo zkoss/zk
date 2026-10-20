@@ -4,7 +4,7 @@ import * as path from 'path';
 import { expectSectionShots } from './section-shots';
 import { AGGREGATE_PAGES } from './aggregate-pages';
 
-// Scan-driven gallery coverage (test-architecture.md §6, roadmap step 2).
+// Scan-driven gallery coverage (doc/playwright-visual-test-guide.md §5).
 //
 // This spec discovers preview pages by SCANNING src/test/resources/web/*.zul at
 // collection time, so a NEW component page is covered by a baseline screenshot the

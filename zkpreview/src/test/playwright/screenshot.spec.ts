@@ -1967,7 +1967,7 @@ test.describe('inputgroup', () => {
 });
 
 // =======================================================
-// State-depth blocks (test-architecture.md §6 step 3)
+// State-depth blocks (doc/playwright-visual-test-guide.md §4)
 // Distinct interactive controls whose hover/focus state layer is worth a baseline
 // beyond the breadth gallery shot in gallery-scan.spec.ts.
 // =======================================================
