@@ -354,3 +354,20 @@ Medium 另有 67 列，例如 inplace 按鈕用 `visibility` 或 `display`（ZK-
 - `z1117/zk`：`a76c2ee0c0999c82d6cfa598053f6efe3503420d` ZK-6112: update the gallery baselines for the accepted ZATS #1117 fix diffs（6 張：checkbox、component-theming、grid-header、listbox-header、tabbox、timepicker；重切前確認差異數字與 verify4 相同，重切後 6/6 通過）
 - 主工作樹 `ZK10/zk`（branch `marble`）：本計畫與相關 `doc/zats-1117-*`、`doc/jenkins-zats-fork-run.md`。
 - 下一步：合回 `marble` 的方式、push 到 fork 並依 D9 開 draft PR 跑 Jenkins，都等使用者同意。
+
+## D4、D7 最小重現（Sonnet，2026-10-19）
+
+說明頁：https://claude.ai/artifact/MD9dhVLxriubeAoFNMzvJm 。頁面在 `z1117`、`z1117rr` 的 `zkpreview/build/inplaceWebapp/repro1117/`（`d4-tabs-webfont.zul`、`d7-anchornav-fixed.zul`），截圖與量測在 `$S/repro-d4d7/`。
+
+- **D4：** Marble 8117／8118 都是 10/10（scrollLeft 3881、max 4245，最後一個 tab 被切 364px）。頁面自己用 `@font-face`（`font-display: swap`）載入字型，與主題無關；字型網址目前指向 Marble 的 Inter，開 Jira 時要換成任何版本都抓得到的網址。原因：`Tabbox.ts:350-358` afterMount `_scrollcheck('sel')`、`Tabs.ts:246-251` 用載入前寬度；沒有 `document.fonts` 掛勾（@ `85c7731da4`）。
+- **D7：** wheel／scrollbar drag／End 三種方式在 Marble 8117／8118 都是 10/10 沒套上 class 且丟錯（冷啟動第一次偶爾正常）。原因：`Anchornav.ts:150` `jq.find()` 回傳陣列，第 157–158 行 `jqTarget.offset()` 丟錯；Anchornav 在 `bind_`（第 61 行）註冊的 window scroll handler 通常排在 ZK 的 `onScroll`（`mount.ts:943-944`）之前，丟錯後 `_handlePosition` 不會執行。
+- **IceBlue 未量測：** 工程 agent 要停 8118 切 IceBlue，被權限分類器以 "Interfere With Workloads" 拒絕，沒有繞過。待使用者同意。
+- **D12 = A（使用者，2026-10-19）：** 本 session 停掉 8118 baseline（30196／30197／44052），以 init script 把 `iceblue_c.jar` 加到 z1117rr zkpreview 的 runtime classpath 後重啟 8118（gradle 59499、tail 59500、java 60649，記錄在 `$S/ice8118/pids.txt`）。不改 `zk.xml`：帶 cookie `zktheme=iceblue_c` 時是 IceBlue，不帶時仍是 Marble baseline。量測交工程 agent（只量測，不碰伺服器）。
+- **IceBlue 量測結果：** D4 IceBlue 10/10（Jira 版頁面 `d4-tabs-webfont-jira.zul`：公開 Google Fonts 字型，只套 `.z-tab-text`；IceBlue 3162／3430，Marble 3881／4194）。D7 IceBlue 每次丟錯；沒套上 class：wheel 7/10、drag 9/10、End 9/10，有套上的 run 剛好是 ZK handler 排第一的 run。兩者都是共用 widget 的缺陷（O2），Jira 草稿已寫進 `doc/zats-1117-jira-drafts.md`（D4、D7 節），D4 的頁面層級 workaround 試了三種都不可靠，不寫。待使用者確認後送出。
+
+## Jira（2026-10-20）
+
+- **D3 → ZK-6215**（新開）：slider decimal 取模；Affects 10.3.1（已確認 v10.3.1 有同樣程式）。
+- **D7 → ZK-5940**（D14 = A：使用者 2025-05 開的同一錯誤，改寫為完整描述）：summary 改為涵蓋兩個症狀，Affects 加 10.3.1，附 IceBlue 與新主題截圖。
+- **D4 → ZK-6216**（D15 = A，新開）：Affects 10.3.1，附截圖。送出前實測 `Inter Fallback`（commit `8b6e04bf95`，10-19 加入 `marble`，不在 z1117 基準內）：`B50-2980383.zul` 在 8117 各 10 次，沒有 fallback 時最後一個 tab 差 80px，加上 fallback（注入相同 `@font-face` 與 `--zk-typescale-font-family`）差 122px，兩者都是 0/10 通過（測試容許 2px）。macOS 上沒有 fallback 時換字前是 -apple-system，fallback 是放大 107.4% 的 Arial，對以數字為主的標籤反而差更多；Linux（Jenkins）上沒有 -apple-system，結果可能不同，未量測。結論：fallback 不能讓 `B50_2980383` 通過，需等核心修正。
+- 2026-10-20 早上本程序曾失去 `~/Documents` 存取權（TCC），8117／8118 的 java 因此結束；權限恢復後以 `z1117` 重啟 8117（gradle 44384、tail 44385、java 45702，記錄在 `$S/repro4/pids.txt`）。8118 未重啟。
