@@ -1,0 +1,14 @@
+<?page title="Tablet pop-up fixtures" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for the tablet pop-up tests of tablet.spec.ts: triggers that no preview page offers. Lives under pv/ so
+     gallery-scan and forced-colors-gallery do not pick it up as a page.
+     Confirmpopup: confirmpopup.zul only holds static markup of the pop-up; the real component opens through open().
+     The button sits 200 px down and in the middle so that the pop-up, which opens above it, fits in the window without touching its edges. -->
+<zk>
+<div sclass="z-p-8">
+    <div sclass="z-d-flex z-justify-center" style="margin-top: 200px">
+    <button id="deleteItem" label="Delete item" onClick="deletePopup.open(self)"/>
+    </div>
+    <confirmpopup id="deletePopup" severity="error" iconSclass="z-icon-times-circle" title="Delete item?"
+                  message="This cannot be undone."/>
+</div>
+</zk>

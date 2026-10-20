@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Locator, Page } from '@playwright/test';
 
 // Runs under the `tablet` Playwright project (iPad viewport + mobile UA). ZK
 // delivers zkmax/css/tablet.css.dsp as a DISABLED <link> and sets zk.mobile
@@ -692,5 +692,299 @@ test.describe('tablet-scrollview-affordance', () => {
       bar.style.opacity = '1';
     });
     await expect(page.locator('.z-p-8').first()).toHaveScreenshot('scrollview-tablet.png');
+  });
+});
+
+// -------------------------------------------------------
+// Pop-ups that look different on a tablet. The desktop pop-up baselines (popup-gallery.spec.ts) never see them: the
+// mobile UA swaps the combobox dropdown, the datebox calendar and the timebox stepper for bottom sheets and wheels,
+// and zkmax tablet/*.css resizes the touch targets inside every other pop-up. The pop-up is opened by a real tap
+// (page.touchscreen.tap) and shot with a PAD margin, like the desktop shots; the assertions are the properties that
+// make the pop-up a tablet one. Why these tests live here and not in a new spec file: a new file needs a
+// `testMatch` entry in playwright.config.ts, and a change there makes select-tests.mjs answer `full`. Each title
+// names the page it opens (`x.zul:`), which is what select-tests.mjs reads to map a CSS change to these tests.
+// Rationale and measurements: doc/marble-tablet-popup-batch5-report.md.
+// -------------------------------------------------------
+const POPUP_PAD = 12;
+
+// Absolute count of differing pixels tolerated per pop-up shot; measured in doc/marble-tablet-popup-batch5-report.md.
+const POPUP_MAX_DIFF = process.env.POPUP_MAX_DIFF !== undefined ? Number(process.env.POPUP_MAX_DIFF) : 10;
+// Per-pixel colour distance, 0.02 as in the brand and compact projects: 0.05 let an 8% state layer on a 24px close button pass.
+// POPUP_THRESHOLD overrides it for the noise measurement.
+const POPUP_THRESHOLD = process.env.POPUP_THRESHOLD !== undefined ? Number(process.env.POPUP_THRESHOLD) : 0.02;
+
+type Box = { x: number; y: number; width: number; height: number };
+
+async function openTabletPage(page: Page, url: string): Promise<void> {
+  await page.goto(url);
+  await page.waitForLoadState('networkidle');
+  // A cold server answers networkidle before the widgets are bound; a tap then does nothing.
+  await page.waitForFunction(() => {
+    const zk = (window as any).zk;
+    return zk && zk.booted && !zk.loading && !zk.mounting && !zk.processing;
+  });
+  await page.evaluate(() => document.fonts.ready.then(() => true));
+}
+
+/** A real tap on the centre of `target`, scrolled into view first. */
+async function tapCentre(page: Page, target: Locator): Promise<void> {
+  await target.scrollIntoViewIfNeeded();
+  const box = await target.boundingBox();
+  await page.touchscreen.tap(box!.x + box!.width / 2, box!.y + box!.height / 2);
+}
+
+/** Box of an element once it has stopped moving: sheets slide up with a JS-set transform that CSS cannot disable. */
+async function settledBox(page: Page, target: Locator): Promise<Box> {
+  const SAME_READS = 3;
+  let previous = '';
+  let same = 0;
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const box = await target.boundingBox();
+    const current = JSON.stringify(box);
+    same = box && current === previous ? same + 1 : 0;
+    if (box && same >= SAME_READS) return box;
+    previous = current;
+    await page.waitForTimeout(100);
+  }
+  throw new Error('settledBox: the element kept moving for 5 s');
+}
+
+/**
+ * The only visible element matching `selector`, shot with a POPUP_PAD margin that stops at the viewport edge (a bottom
+ * sheet has no room below it). `classes` must exist in the DOM now: the shot is only worth taking if it can paint them.
+ */
+async function tabletPopupShot(page: Page, selector: string, classes: string[], file: string): Promise<Locator> {
+  const popup = page.locator(`${selector}:visible`);
+  await expect(popup, `exactly one visible ${selector}`).toHaveCount(1);
+  const absent = await page.evaluate(cs => cs.filter(c => !document.querySelector(`.${CSS.escape(c)}`)), classes);
+  expect(absent, 'classes absent from the DOM after opening').toEqual([]);
+  const box = await settledBox(page, popup);
+  const viewport = page.viewportSize()!;
+  const x = Math.max(0, box.x - POPUP_PAD);
+  const y = Math.max(0, box.y - POPUP_PAD);
+  await expect(page).toHaveScreenshot(file, {
+    clip: {
+      x, y,
+      width: Math.min(viewport.width, box.x + box.width + POPUP_PAD) - x,
+      height: Math.min(viewport.height, box.y + box.height + POPUP_PAD) - y,
+    },
+    animations: 'disabled',
+    maxDiffPixels: POPUP_MAX_DIFF,
+    threshold: POPUP_THRESHOLD,
+  });
+  return popup;
+}
+
+/** The widget next to a small caption label, e.g. labelledWidget(page, 'With icon', 'z-combobox'). */
+const labelledWidget = (page: Page, caption: string, widgetClass: string): Locator =>
+  page.locator(`span:text-is("${caption}"), label:text-is("${caption}")`).first()
+    .locator(`xpath=ancestor::div[.//*[contains(concat(' ', normalize-space(@class), ' '), ' ${widgetClass} ')]][1]`)
+    .locator(`.${widgetClass}`).first();
+
+/** Enabled, editable instance that is not in a state variant: the "Default" cell of a matrix row. */
+const PLAIN_WIDGET = ':not([class*="-disabled"]):not([class*="-readonly"]):not([class*="-invalid"]):not([class*="-inplace"])';
+
+/** The bottom sheet of ZK's touch molds: pinned to the viewport bottom, 10px in from both sides. */
+async function expectBottomSheet(page: Page, popup: Locator): Promise<void> {
+  const viewport = page.viewportSize()!;
+  await expect(popup, 'sheet is fixed to the viewport').toHaveCSS('position', 'fixed');
+  await expect(popup, 'sheet left inset').toHaveCSS('left', '10px');
+  await expect(popup, 'sheet right inset').toHaveCSS('right', '10px');
+  await expect(popup, 'sheet bottom inset').toHaveCSS('bottom', '0px');
+  const box = await settledBox(page, popup);
+  expect(box.y + box.height, 'sheet bottom edge sits on the viewport bottom').toBeGreaterThanOrEqual(viewport.height - 2);
+  expect(box.y + box.height, 'sheet does not hang below the viewport').toBeLessThanOrEqual(viewport.height + 2);
+  expect(box.width, 'sheet spans the viewport minus both insets').toBeCloseTo(viewport.width - 20, 0);
+}
+
+/** Every box in `targets` is at least `min` px tall (and wide, when `alsoWide`): the MD3 touch target of the tablet CSS. */
+async function expectTouchTargets(targets: Locator, min: number, what: string, alsoWide = false): Promise<void> {
+  const boxes = await targets.evaluateAll(els => els.map(e => {
+    const r = e.getBoundingClientRect();
+    return { width: Math.round(r.width), height: Math.round(r.height) };
+  }));
+  expect(boxes.length, `${what} found`).toBeGreaterThan(0);
+  for (const b of boxes) {
+    expect(b.height, `${what} height`).toBeGreaterThanOrEqual(min);
+    if (alsoWide) expect(b.width, `${what} width`).toBeGreaterThanOrEqual(min);
+  }
+}
+
+test.describe('tablet-popup', () => {
+  // ---- combobox: bottom sheet (tablet/_inputs.css) ----
+  test('combobox.zul: tap the arrow to open the bottom sheet', async ({ page }) => {
+    await openTabletPage(page, '/combobox.zul');
+    await tapCentre(page, page.locator(`.z-combobox${PLAIN_WIDGET} .z-combobox-button`).first());
+    const popup = await tabletPopupShot(page, '.z-combobox-popup', ['z-combobox-popup', 'z-comboitem'], 'combobox-tablet-popup-sheet.png');
+    await expectBottomSheet(page, popup);
+    await expectTouchTargets(popup.locator('.z-comboitem'), 44, 'comboitem');
+  });
+
+  test('combobox.zul: the bottom sheet of items with a description', async ({ page }) => {
+    await openTabletPage(page, '/combobox.zul');
+    await tapCentre(page, labelledWidget(page, 'With description', 'z-combobox').locator('.z-combobox-button'));
+    const popup = await tabletPopupShot(page, '.z-combobox-popup', ['z-combobox-popup', 'z-comboitem', 'z-comboitem-inner'], 'combobox-tablet-popup-description.png');
+    await expectBottomSheet(page, popup);
+    await expectTouchTargets(popup.locator('.z-comboitem'), 44, 'comboitem with a description');
+  });
+
+  // ---- datebox and timebox: wheel in a bottom sheet (tablet/_wheel.css) ----
+  test('datebox.zul: tap the button to open the date wheel', async ({ page }) => {
+    await openTabletPage(page, '/datebox.zul');
+    await tapCentre(page, labelledWidget(page, 'Seeded value (content-fit)', 'z-datebox').locator('.z-datebox-button'));
+    const popup = await tabletPopupShot(page, '.z-datebox-popup',
+      ['z-calendar-wheel-cave', 'z-calendar-wheel-list', 'z-calendar-wheel-list-selected', 'z-calendar-wheel-line', 'z-calendar-wheel-button'],
+      'datebox-tablet-popup-wheel.png');
+    await expectBottomSheet(page, popup);
+    // a wheel, not the grid of the desktop calendar
+    await expect(popup.locator('.z-calendar-wheel-cave')).toHaveCount(1);
+    await expect(popup.locator('td')).toHaveCount(0);
+    await expectTouchTargets(popup.locator('.z-calendar-wheel-button'), 44, 'wheel button');
+  });
+
+  test('datebox.zul: the date wheel with the time in the popup', async ({ page }) => {
+    await openTabletPage(page, '/datebox.zul');
+    await tapCentre(page, labelledWidget(page, 'Time in popup (yyyy/MM/dd HH:mm)', 'z-datebox').locator('.z-datebox-button'));
+    const popup = await tabletPopupShot(page, '.z-datebox-popup',
+      ['z-calendar-wheel-cave', 'z-calendar-wheel-list-selected', 'z-timebox-wheel-time'],
+      'datebox-tablet-popup-wheel-time.png');
+    await expectBottomSheet(page, popup);
+    // the time wheel is nested in the date wheel
+    await expect(popup.locator('.z-calendar-wheel-cave .z-timebox-wheel-time')).toHaveCount(1);
+    await expectTouchTargets(popup.locator('.z-calendar-wheel-button'), 44, 'wheel button');
+  });
+
+  test('timebox.zul: tap the button to open the time wheel', async ({ page }) => {
+    await openTabletPage(page, '/timebox.zul');
+    await tapCentre(page, page.locator('.z-timebox .z-timebox-button').first());
+    const popup = await tabletPopupShot(page, '.z-timebox-popup',
+      ['z-timebox-wheel-cave', 'z-timebox-wheel-list', 'z-timebox-wheel-list-selected', 'z-timebox-wheel-line', 'z-timebox-wheel-button'],
+      'timebox-tablet-popup-wheel.png');
+    await expectBottomSheet(page, popup);
+    await expectTouchTargets(popup.locator('.z-timebox-wheel-button'), 44, 'wheel button');
+  });
+
+  // ---- colorbox: palette and picker ----
+  // The popup slides in with `transition: transform 300ms` from top = viewport height, so a read taken right after
+  // an openPopup() API call finds it below the viewport (y 1112): that is why the NS22 measurement saw no visible
+  // z-colorbox-popup. A tap and settledBox() find it at rest.
+  test('colorbox.zul: tap to open the palette', async ({ page }) => {
+    await openTabletPage(page, '/colorbox.zul');
+    await tapCentre(page, page.locator('.z-colorbox:not(.z-colorbox-disabled)').first());
+    const popup = await tabletPopupShot(page, '.z-colorbox-popup',
+      ['z-colorbox-popup', 'z-colorpalette', 'z-colorpalette-color', 'z-colorpalette-input'], 'colorbox-tablet-popup-palette.png');
+    await expect(popup, 'detached to <body> as a pop-up layer').toHaveCSS('position', 'absolute');
+    expect(await popup.evaluate(el => el.parentElement!.tagName)).toBe('BODY');
+    const box = await settledBox(page, popup);
+    expect(box.y + box.height, 'palette rests on the viewport bottom').toBeCloseTo(page.viewportSize()!.height, -1);
+  });
+
+  // KNOWN MARBLE DEFECT RECORDED IN THIS BASELINE: on a tablet the three input rows of the picker overlap by 5px and the
+  // HEX box is cut by 4px (zkex colorbox.css pins the rows at top 0/43/86px, tablet _inputs.css makes the inputs 48px high).
+  // colorbox-tablet-popup-picker.png must be re-cut once that is fixed.
+  test('colorbox.zul: tap the picker icon to switch the popup to the picker', async ({ page }) => {
+    await openTabletPage(page, '/colorbox.zul');
+    await tapCentre(page, page.locator('.z-colorbox:not(.z-colorbox-disabled)').nth(1));
+    await tapCentre(page, page.locator('.z-colorbox-pickericon:visible'));
+    const popup = await tabletPopupShot(page, '.z-colorbox-popup', ['z-colorpicker'], 'colorbox-tablet-popup-picker.png');
+    await expect(popup.locator('.z-colorpicker:visible')).toHaveCount(1);
+    await expect(popup.locator('.z-colorpalette-color:visible')).toHaveCount(0);
+  });
+
+  // ---- menu, combobutton, column menu: the rows grow to the touch target (tablet/_menu.css, _buttons.css, _mesh.css) ----
+  const menuLabel = (page: Page, label: string) => page.getByText(label, { exact: true }).first();
+
+  test('menubar.zul: tap a menu to open its pop-up', async ({ page }) => {
+    await openTabletPage(page, '/menubar.zul');
+    await tapCentre(page, menuLabel(page, 'Project'));
+    const popup = await tabletPopupShot(page, '.z-menupopup', ['z-menupopup', 'z-menupopup-content', 'z-menuitem-content'], 'menubar-tablet-popup-open.png');
+    await expectTouchTargets(popup.locator('.z-menuitem-content'), 44, 'menuitem');
+  });
+
+  test('menubar.zul: tap a menu with a checked menuitem', async ({ page }) => {
+    await openTabletPage(page, '/menubar.zul');
+    await tapCentre(page, menuLabel(page, 'View'));
+    await tapCentre(page, page.locator('.z-menuitem:visible', { hasText: 'Sort by Name' })); // autocheck closes the menu
+    await tapCentre(page, menuLabel(page, 'View'));
+    const popup = await tabletPopupShot(page, '.z-menupopup', ['z-menupopup', 'z-menuitem-checked', 'z-menuitem-icon'], 'menubar-tablet-popup-open-checked.png');
+    await expectTouchTargets(popup.locator('.z-menuitem-content'), 44, 'menuitem');
+    // the check mark grows to the touch icon size (24px)
+    await expectTouchTargets(popup.locator('.z-menuitem-checked .z-menuitem-icon'), 24, 'check mark', true);
+  });
+
+  test('combobutton.zul: tap the arrow to open the menu', async ({ page }) => {
+    await openTabletPage(page, '/combobutton.zul');
+    const arrow = page.locator('.z-combobutton:not(.z-combobutton-disabled):not(.z-combobutton-toolbar) .z-combobutton-button').first();
+    await expectTouchTargets(arrow, 44, 'combobutton arrow', true);
+    await tapCentre(page, arrow);
+    const popup = await tabletPopupShot(page, '.z-menupopup', ['z-combobutton-open', 'z-menupopup'], 'combobutton-tablet-popup-open.png');
+    await expectTouchTargets(popup.locator('.z-menuitem-content'), 44, 'menuitem');
+  });
+
+  test('grid.zul: tap the column menu button to open the column menu', async ({ page }) => {
+    await openTabletPage(page, '/grid.zul');
+    const button = page.locator('.z-column-button:visible').first();
+    await expectTouchTargets(button, 44, 'column menu button', true);
+    await tapCentre(page, button);
+    const popup = await tabletPopupShot(page, '.z-menupopup', ['z-menupopup', 'z-columns-menuascending', 'z-menuitem-checkable'], 'grid-tablet-popup-column-menu.png');
+    await expectTouchTargets(popup.locator('.z-menuitem-content:visible'), 44, 'column menu item');
+  });
+
+  test('listbox.zul: tap the header menu button to open the header menu', async ({ page }) => {
+    await openTabletPage(page, '/listbox.zul');
+    const button = page.locator('.z-listheader-button:visible').first();
+    await expectTouchTargets(button, 44, 'header menu button', true);
+    await tapCentre(page, button);
+    const popup = await tabletPopupShot(page, '.z-menupopup', ['z-menupopup', 'z-listheader-button'], 'listbox-tablet-popup-header-menu.png');
+    await expectTouchTargets(popup.locator('.z-menuitem-content:visible'), 44, 'header menu item');
+  });
+
+  // ---- errorbox and notification: the close button grows to the touch icon size (tablet/_feedback.css) ----
+  test('errorbox.zul: tap a field, leave it empty and tap away to open the errorbox', async ({ page }) => {
+    await openTabletPage(page, '/errorbox.zul');
+    await tapCentre(page, page.locator('input[placeholder="Required field"]'));
+    // Type a character and delete it: the constraint fails on blur and ZK opens the errorbox. The keys stand for the soft keyboard.
+    await page.keyboard.type('a');
+    await page.keyboard.press('Backspace');
+    await page.touchscreen.tap(400, 20);
+    const popup = await tabletPopupShot(page, '.z-errorbox.z-errorbox-open', ['z-errorbox-open', 'z-errorbox-close'], 'errorbox-tablet-popup-open.png');
+    await expectTouchTargets(popup.locator('.z-errorbox-close'), 24, 'errorbox close button', true);
+  });
+
+  test('notification.zul: tap Info to show a notification', async ({ page }) => {
+    // notification.zul auto-closes after 3000 ms (Notification.ts setTimeout): drop exactly that timer, as popup-gallery.spec.ts does.
+    const AUTO_CLOSE_MS = 3000;
+    await page.addInitScript(ms => {
+      const realSetTimeout = window.setTimeout.bind(window);
+      window.setTimeout = ((handler: TimerHandler, delay?: number, ...args: unknown[]) =>
+        delay === ms ? 0 : realSetTimeout(handler, delay, ...args)) as typeof window.setTimeout;
+    }, AUTO_CLOSE_MS);
+    await openTabletPage(page, '/notification.zul');
+    await tapCentre(page, page.getByRole('button', { name: 'Info', exact: true }));
+    await expect(page.locator('.z-notification-open')).toHaveCount(1);
+    const popup = await tabletPopupShot(page, '.z-notification-open', ['z-notification-open', 'z-notification-close'], 'notification-tablet-popup-info.png');
+    await expectTouchTargets(popup.locator('.z-notification-close'), 24, 'notification close button', true);
+  });
+
+  // ---- window: the modal window's header and header buttons (tablet/_window.css) ----
+  test('window.zul: tap to open a modal window (pv/popup-api-fixtures.zul)', async ({ page }) => {
+    await openTabletPage(page, '/pv/popup-api-fixtures.zul');
+    await tapCentre(page, page.getByRole('button', { name: 'Open modal window', exact: true }));
+    await expect(page.locator('.z-window-modal')).toHaveCount(1);
+    const viewport = page.viewportSize()!;
+    expect(await page.locator('.z-modal-mask').boundingBox(), 'the scrim covers the viewport')
+      .toEqual({ x: 0, y: 0, width: viewport.width, height: viewport.height });
+    const popup = await tabletPopupShot(page, '.z-window-modal', ['z-window-modal', 'z-modal-mask', 'z-window-header', 'z-window-icon'], 'window-tablet-popup-modal.png');
+    await expectTouchTargets(popup.locator('.z-window-header'), 56, 'window header');
+    await expectTouchTargets(popup.locator('.z-window-icon'), 44, 'window close button', true);
+  });
+
+  // ---- confirmpopup: the OK and Cancel buttons grow to the touch target (tablet/_buttons.css) ----
+  test('confirmpopup.zul: tap to open the confirm pop-up (pv/popup-tablet-fixtures.zul)', async ({ page }) => {
+    await openTabletPage(page, '/pv/popup-tablet-fixtures.zul');
+    await tapCentre(page, page.getByRole('button', { name: 'Delete item', exact: true }));
+    const popup = await tabletPopupShot(page, '.z-confirmpopup-open',
+      ['z-confirmpopup-open', 'z-confirmpopup-ok', 'z-confirmpopup-cancel'], 'confirmpopup-tablet-popup-open.png');
+    await expectTouchTargets(popup.locator('.z-confirmpopup-ok, .z-confirmpopup-cancel'), 44, 'confirm button');
   });
 });

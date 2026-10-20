@@ -5,9 +5,11 @@
      Combobox: no preview page sets emptySearchMessage or gives a comboitem an image.
      Window: window.zul has no modal window; doModal() is the only way to get z-window-modal.
      Loadingbar: loadingbar.zul only has hand-written markup; the bottom position (z-loadingbar-position-bottom)
-     comes from the Loadingbar API. A bar that is not indeterminate and below 100 stays where it is. -->
+     comes from the Loadingbar API. A bar that is not indeterminate and below 100 stays where it is.
+     The row wraps: its four cells are 1001 px wide, more than the 834 px of the tablet viewport (tablet.spec.ts);
+     the desktop window (1280 px) is wide enough to keep them on one line. -->
 <zk>
-<div sclass="z-p-8 z-d-flex z-gap-8">
+<div sclass="z-p-8 z-d-flex z-flex-wrap z-gap-8">
     <div>
         <div><label sclass="z-text-xs z-text-secondary" value="Empty search message"/></div>
         <combobox id="emptySearch" autodrop="true" autocomplete="true" emptySearchMessage="No matching item"/>
