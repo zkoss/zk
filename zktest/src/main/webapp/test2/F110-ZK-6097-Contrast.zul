@@ -52,6 +52,9 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		     sets them, so each needs a rendered node to read them back from. -->
 		<hlayout spacing="20px">
 			<avatar id="ct-avatar" label="AV"/>
+			<avatar id="ct-avatar-small" label="AV" size="small"/>
+			<avatar id="ct-avatar-large" label="AV" size="large"/>
+			<avatar id="ct-avatar-icon" iconSclass="z-icon-user"/>
 			<!-- maxItems collapses the middle, which is what injects -ellipsis. -->
 			<breadcrumb id="ct-bc" maxItems="3">
 				<breadcrumbitem label="Home" href="/"/>
