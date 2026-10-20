@@ -2,7 +2,9 @@
 <!-- Fixture for the tablet pop-up tests of tablet.spec.ts: triggers that no preview page offers. Lives under pv/ so
      gallery-scan and forced-colors-gallery do not pick it up as a page.
      Confirmpopup: confirmpopup.zul only holds static markup of the pop-up; the real component opens through open().
-     The button sits 200 px down and in the middle so that the pop-up, which opens above it, fits in the window without touching its edges. -->
+     The button sits 200 px down and in the middle so that the pop-up, which opens above it, fits in the window without touching its edges.
+     Colorbox: the spacer below makes the page scrollable, so the test can see a pop-up that scrolls the page when it opens.
+     Combobox: 8 items, more than the 5 rows (5 x 60px) of the bottom sheet, so the list scrolls and a row touches the sheet's bottom edge. -->
 <zk>
 <div sclass="z-p-8">
     <div sclass="z-d-flex z-justify-center" style="margin-top: 200px">
@@ -10,5 +12,19 @@
     </div>
     <confirmpopup id="deletePopup" severity="error" iconSclass="z-icon-times-circle" title="Delete item?"
                   message="This cannot be undone."/>
+    <div sclass="z-d-flex z-gap-4" style="margin-top: 100px">
+        <combobox id="manyItems">
+            <comboitem label="Item 1"/><comboitem label="Item 2"/><comboitem label="Item 3"/><comboitem label="Item 4"/>
+            <comboitem label="Item 5"/><comboitem label="Item 6"/><comboitem label="Item 7"/><comboitem label="Item 8"/>
+        </combobox>
+        <combobox id="manyItemsWithDescription">
+            <comboitem label="Item 1" description="Description of item 1"/><comboitem label="Item 2" description="Description of item 2"/>
+            <comboitem label="Item 3" description="Description of item 3"/><comboitem label="Item 4" description="Description of item 4"/>
+            <comboitem label="Item 5" description="Description of item 5"/><comboitem label="Item 6" description="Description of item 6"/>
+            <comboitem label="Item 7" description="Description of item 7"/><comboitem label="Item 8" description="Description of item 8"/>
+        </combobox>
+    </div>
+    <div style="margin-top: 100px"><colorbox id="scrollProbe"/></div>
+    <div style="height: 1500px"/>
 </div>
 </zk>

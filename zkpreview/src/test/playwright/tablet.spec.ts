@@ -797,6 +797,26 @@ async function expectBottomSheet(page: Page, popup: Locator): Promise<void> {
   expect(box.width, 'sheet spans the viewport minus both insets').toBeCloseTo(viewport.width - 20, 0);
 }
 
+/** The sheet is as tall as the JS asked for (inline height): a max-height inherited from the desktop rule would hide the last rows. */
+async function expectSheetKeepsJsHeight(popup: Locator): Promise<void> {
+  const { rendered, requested } = await popup.evaluate(el => ({ rendered: el.getBoundingClientRect().height, requested: parseFloat(el.style.height) }));
+  expect(requested, 'the touch mold sets an inline height').toBeGreaterThan(0);
+  expect(rendered, 'sheet is as tall as its inline height').toBeCloseTo(requested, 0);
+}
+
+/** More items than the sheet shows: the last row that fits completely ends on the sheet's bottom edge, none is cut. */
+async function expectLastVisibleRowEndsOnSheetBottom(popup: Locator): Promise<void> {
+  const { items, rowsInside, lastInsideBottom, sheetBottom } = await popup.evaluate(el => {
+    const sheet = el.getBoundingClientRect();
+    const rows = Array.from(el.querySelectorAll('.z-comboitem'), row => row.getBoundingClientRect());
+    const inside = rows.filter(row => row.bottom <= sheet.bottom + 1);
+    return { items: rows.length, rowsInside: inside.length, lastInsideBottom: inside[inside.length - 1].bottom, sheetBottom: sheet.bottom };
+  });
+  expect(items, 'more items than the 5 rows of the sheet').toBeGreaterThan(5);
+  expect(rowsInside, 'the sheet shows 5 complete rows').toBe(5);
+  expect(Math.abs(lastInsideBottom - sheetBottom), 'the 5th row ends on the sheet bottom edge').toBeLessThanOrEqual(1);
+}
+
 /** Every box in `targets` is at least `min` px tall (and wide, when `alsoWide`): the MD3 touch target of the tablet CSS. */
 async function expectTouchTargets(targets: Locator, min: number, what: string, alsoWide = false): Promise<void> {
   const boxes = await targets.evaluateAll(els => els.map(e => {
@@ -812,17 +832,22 @@ async function expectTouchTargets(targets: Locator, min: number, what: string, a
 
 test.describe('tablet-popup', () => {
   // ---- combobox: bottom sheet (tablet/_inputs.css) ----
-  test('combobox.zul: tap the arrow to open the bottom sheet', async ({ page }) => {
-    await openTabletPage(page, '/combobox.zul');
-    await tapCentre(page, page.locator(`.z-combobox${PLAIN_WIDGET} .z-combobox-button`).first());
+  // 8 items on pv/popup-tablet-fixtures.zul: the sheet shows 5 rows (5 x 60px), so the list scrolls and a row meets the bottom edge.
+  test('combobox: tap the arrow of a list with more items than the sheet shows, the 5th row ends on the sheet bottom (pv/popup-tablet-fixtures.zul)', async ({ page }) => {
+    await openTabletPage(page, '/pv/popup-tablet-fixtures.zul');
+    await tapCentre(page, page.locator('.z-combobox-button').first());
+    await expectSheetKeepsJsHeight(page.locator('.z-combobox-popup:visible'));
+    await expectLastVisibleRowEndsOnSheetBottom(page.locator('.z-combobox-popup:visible'));
     const popup = await tabletPopupShot(page, '.z-combobox-popup', ['z-combobox-popup', 'z-comboitem'], 'combobox-tablet-popup-sheet.png');
     await expectBottomSheet(page, popup);
     await expectTouchTargets(popup.locator('.z-comboitem'), 44, 'comboitem');
   });
 
-  test('combobox.zul: the bottom sheet of items with a description', async ({ page }) => {
-    await openTabletPage(page, '/combobox.zul');
-    await tapCentre(page, labelledWidget(page, 'With description', 'z-combobox').locator('.z-combobox-button'));
+  test('combobox: the bottom sheet of 8 items with a description (pv/popup-tablet-fixtures.zul)', async ({ page }) => {
+    await openTabletPage(page, '/pv/popup-tablet-fixtures.zul');
+    await tapCentre(page, page.locator('.z-combobox-button').nth(1));
+    await expectSheetKeepsJsHeight(page.locator('.z-combobox-popup:visible'));
+    await expectLastVisibleRowEndsOnSheetBottom(page.locator('.z-combobox-popup:visible'));
     const popup = await tabletPopupShot(page, '.z-combobox-popup', ['z-combobox-popup', 'z-comboitem', 'z-comboitem-inner'], 'combobox-tablet-popup-description.png');
     await expectBottomSheet(page, popup);
     await expectTouchTargets(popup.locator('.z-comboitem'), 44, 'comboitem with a description');
@@ -845,6 +870,16 @@ test.describe('tablet-popup', () => {
   test('datebox.zul: the date wheel with the time in the popup', async ({ page }) => {
     await openTabletPage(page, '/datebox.zul');
     await tapCentre(page, labelledWidget(page, 'Time in popup (yyyy/MM/dd HH:mm)', 'z-datebox').locator('.z-datebox-button'));
+    // the date band and the time band meet edge to edge, with square inner corners: no notch between them
+    const sheet = page.locator('.z-datebox-popup:visible');
+    await expect(sheet, 'exactly one visible datebox popup').toHaveCount(1);
+    const dateBand = sheet.locator('.z-calendar-wheel-date .z-calendar-wheel-line');
+    const timeBand = sheet.locator('.z-timebox-wheel-time .z-timebox-wheel-line');
+    await settledBox(page, sheet);
+    const [dateBox, timeBox] = [(await dateBand.boundingBox())!, (await timeBand.boundingBox())!];
+    expect(dateBox.x + dateBox.width, 'the date band ends where the time band starts').toBeCloseTo(timeBox.x, 0);
+    for (const corner of ['top-right', 'bottom-right']) await expect(dateBand, `date band ${corner} corner`).toHaveCSS(`border-${corner}-radius`, '0px');
+    for (const corner of ['top-left', 'bottom-left']) await expect(timeBand, `time band ${corner} corner`).toHaveCSS(`border-${corner}-radius`, '0px');
     const popup = await tabletPopupShot(page, '.z-datebox-popup',
       ['z-calendar-wheel-cave', 'z-calendar-wheel-list-selected', 'z-timebox-wheel-time'],
       'datebox-tablet-popup-wheel-time.png');
@@ -873,22 +908,54 @@ test.describe('tablet-popup', () => {
     await tapCentre(page, page.locator('.z-colorbox:not(.z-colorbox-disabled)').first());
     const popup = await tabletPopupShot(page, '.z-colorbox-popup',
       ['z-colorbox-popup', 'z-colorpalette', 'z-colorpalette-color', 'z-colorpalette-input'], 'colorbox-tablet-popup-palette.png');
-    await expect(popup, 'detached to <body> as a pop-up layer').toHaveCSS('position', 'absolute');
+    await expect(popup, 'detached to <body> as a pop-up layer, pinned to the viewport').toHaveCSS('position', 'fixed');
     expect(await popup.evaluate(el => el.parentElement!.tagName)).toBe('BODY');
     const box = await settledBox(page, popup);
     expect(box.y + box.height, 'palette rests on the viewport bottom').toBeCloseTo(page.viewportSize()!.height, -1);
   });
 
-  // KNOWN MARBLE DEFECT RECORDED IN THIS BASELINE: on a tablet the three input rows of the picker overlap by 5px and the
-  // HEX box is cut by 4px (zkex colorbox.css pins the rows at top 0/43/86px, tablet _inputs.css makes the inputs 48px high).
-  // colorbox-tablet-popup-picker.png must be re-cut once that is fixed.
   test('colorbox.zul: tap the picker icon to switch the popup to the picker', async ({ page }) => {
     await openTabletPage(page, '/colorbox.zul');
     await tapCentre(page, page.locator('.z-colorbox:not(.z-colorbox-disabled)').nth(1));
     await tapCentre(page, page.locator('.z-colorbox-pickericon:visible'));
+    // The picker pins its RGB / HSV / HEX rows with fixed offsets; the 48px touch inputs must not overlap or leave the picker.
+    const picker = page.locator('.z-colorpicker:visible');
+    await expect(picker).toHaveCount(1);
+    await settledBox(page, picker);
+    const rows = await Promise.all(['rgb', 'hsv', 'hex'].map(async row => (await picker.locator(`.z-colorpicker-${row} .z-colorpicker-input`).first().boundingBox())!));
+    const pickerBox = (await picker.boundingBox())!;
+    expect(rows[0].y + rows[0].height, 'RGB row ends above the HSV row').toBeLessThanOrEqual(rows[1].y);
+    expect(rows[1].y + rows[1].height, 'HSV row ends above the HEX row').toBeLessThanOrEqual(rows[2].y);
+    expect(rows[2].y + rows[2].height, 'HEX input ends inside the picker').toBeLessThanOrEqual(pickerBox.y + pickerBox.height);
     const popup = await tabletPopupShot(page, '.z-colorbox-popup', ['z-colorpicker'], 'colorbox-tablet-popup-picker.png');
     await expect(popup.locator('.z-colorpicker:visible')).toHaveCount(1);
     await expect(popup.locator('.z-colorpalette-color:visible')).toHaveCount(0);
+  });
+
+  test('colorbox: tap to open the popup on a scrolled page, the page does not scroll (pv/popup-tablet-fixtures.zul)', async ({ page }) => {
+    await openTabletPage(page, '/pv/popup-tablet-fixtures.zul');
+    const trigger = page.locator('.z-colorbox');
+    await page.evaluate(() => window.scrollTo(0, 100));
+    const scrollBefore = await page.evaluate(() => window.scrollY);
+    expect(scrollBefore, 'the fixture page is scrollable').toBeGreaterThan(0);
+    await tapCentre(page, trigger);
+    const popupBox = await settledBox(page, page.locator('.z-colorbox-popup:visible'));
+    expect(popupBox.y + popupBox.height, 'the popup rests on the viewport bottom, not on the bottom of the page').toBeCloseTo(page.viewportSize()!.height, -1);
+    const viewportWidth = page.viewportSize()!.width;
+    const [leftGap, rightGap] = [popupBox.x, viewportWidth - (popupBox.x + popupBox.width)];
+    expect(Math.abs(leftGap - rightGap), `the sheet is centred: left gap ${leftGap}px, right gap ${rightGap}px`).toBeLessThanOrEqual(1);
+    const content = await page.locator('.z-colorbox-popup:visible').evaluate(el => {
+      const padding = parseFloat(getComputedStyle(el).paddingLeft) + parseFloat(getComputedStyle(el).paddingRight);
+      const border = parseFloat(getComputedStyle(el).borderLeftWidth) + parseFloat(getComputedStyle(el).borderRightWidth);
+      const widest = Math.max(...Array.from(el.children, child => child.getBoundingClientRect().width));
+      return widest + padding + border;
+    });
+    expect(popupBox.width, 'the sheet is as wide as its content').toBeLessThanOrEqual(content + 1);
+    expect(popupBox.width, 'the sheet is clearly narrower than the viewport').toBeLessThan(viewportWidth * 0.6);
+    expect(await page.evaluate(() => window.scrollY), 'opening the popup does not scroll the page').toBe(scrollBefore);
+    const triggerBox = (await trigger.boundingBox())!;
+    expect(triggerBox.y, 'the trigger is still in the viewport').toBeGreaterThanOrEqual(0);
+    expect(triggerBox.y + triggerBox.height, 'the trigger is still in the viewport').toBeLessThanOrEqual(page.viewportSize()!.height);
   });
 
   // ---- menu, combobutton, column menu: the rows grow to the touch target (tablet/_menu.css, _buttons.css, _mesh.css) ----
@@ -986,5 +1053,46 @@ test.describe('tablet-popup', () => {
     const popup = await tabletPopupShot(page, '.z-confirmpopup-open',
       ['z-confirmpopup-open', 'z-confirmpopup-ok', 'z-confirmpopup-cancel'], 'confirmpopup-tablet-popup-open.png');
     await expectTouchTargets(popup.locator('.z-confirmpopup-ok, .z-confirmpopup-cancel'), 44, 'confirm button');
+  });
+});
+
+// -------------------------------------------------------
+// The bottom sheets are position:fixed. A page wider than the screen makes the browser enlarge the layout viewport that
+// fixed boxes are measured against (window.innerHeight 1668 against 1112 visible here), so `bottom: 0` sank below the
+// visible area. The sheet must sit in the VISIBLE area, which is visualViewport.
+// -------------------------------------------------------
+test.describe('tablet-popup-page-wider-than-screen', () => {
+  test.use({ viewport: { width: 600, height: 1112 } });
+
+  const sheets = [
+    { name: 'colorbox', trigger: '.z-colorbox', popup: '.z-colorbox-popup' },
+    { name: 'combobox', trigger: '.z-combobox-button', popup: '.z-combobox-popup' },
+    { name: 'datebox wheel', trigger: '.z-datebox-button', popup: '.z-datebox-popup' },
+  ];
+
+  test('the colorbox, combobox and datebox sheets stay inside the visible area (pv/popup-tablet-overflow-fixtures.zul)', async ({ page }) => {
+    for (const { name, trigger, popup } of sheets) {
+      await openTabletPage(page, '/pv/popup-tablet-overflow-fixtures.zul');
+      const layoutWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+      expect(layoutWidth, 'the fixture page is wider than the 600px screen').toBeGreaterThan(page.viewportSize()!.width);
+      await tapCentre(page, page.locator(trigger));
+      await settledBox(page, page.locator(`${popup}:visible`));
+
+      const { sheet, visible, scrollY } = await page.locator(`${popup}:visible`).evaluate(el => {
+        const rect = el.getBoundingClientRect();
+        const vv = window.visualViewport!;
+        return {
+          sheet: { left: rect.left, right: rect.right, bottom: rect.bottom },
+          visible: { left: vv.offsetLeft, right: vv.offsetLeft + vv.width, bottom: vv.offsetTop + vv.height },
+          scrollY: window.scrollY,
+        };
+      });
+      expect(Math.abs(sheet.bottom - visible.bottom), `${name}: the sheet bottom sits on the bottom of the visible area`).toBeLessThanOrEqual(1);
+      expect(sheet.left, `${name}: the sheet starts inside the visible area`).toBeGreaterThanOrEqual(visible.left - 1);
+      expect(sheet.right, `${name}: the sheet ends inside the visible area`).toBeLessThanOrEqual(visible.right + 1);
+      expect(scrollY, `${name}: opening the sheet does not scroll the page`).toBe(0);
+      const triggerBox = (await page.locator(trigger).boundingBox())!;
+      expect(triggerBox.y + triggerBox.height, `${name}: the trigger is still in the visible area`).toBeLessThanOrEqual(visible.bottom);
+    }
   });
 });

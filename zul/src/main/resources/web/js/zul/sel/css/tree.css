@@ -469,11 +469,6 @@
     pointer-events: none;
 }
 
-/* With a column-menu button, sit the sort icon just left of it. */
-.z-treecol:has(.z-treecol-button) .z-treecol-sorticon {
-    right: calc(var(--zk-spacing-1) * 2 + 24px);
-}
-
 /* Sort direction = arrow (up = ascending, down = descending), distinct from the
    caret used by the tree open/close icon and the column menu. */
 .z-treecol-sorticon .z-icon-caret-up {
@@ -545,9 +540,8 @@
    24px). `overflow: hidden` clips at the padding box, so with the padding on the content div the ellipsis lands in the
    right padding, where it used to be clipped away with the padding on the TH. Clip the paint at the content box again
    instead of dropping the ellipsis, which a labelled select-all header keeps (mesh-header-footer.spec.ts:
-   `.mhf-tree-checkbox-only` paints no ellipsis). A sortable header or one with the column-menu button keeps the room
-   its icon uses inside that padding. */
-.z-treecol:not(.z-treecol-sort, :has(.z-treecol-button)) > .z-treecol-content:has(.z-treecol-checkable) {
+   `.mhf-tree-checkbox-only` paints no ellipsis). A sortable header keeps the room its icon uses inside that padding. */
+.z-treecol:not(.z-treecol-sort) > .z-treecol-content:has(.z-treecol-checkable) {
     clip-path: inset(0 var(--zk-spacing-1) 0 0);
 }
 
@@ -562,7 +556,7 @@
    and a 4px margin on each side of the box centre it, also in a 24px column. The content stays a block, so a header
    that holds a label keeps its ellipsis, and a label wider than the column starts at the box instead of centring the
    overflow (follow-up 59; a flex row put the box of a 100px column outside it). A sorted header keeps its padding for
-   the sort icon, and a header with the column-menu button keeps the room the button reserves.
+   the sort icon.
    Row: the spacer after the box of a leaf (20px and a 4px gap) was centred with the box and pushed it 12px left of
    centre; its 16px side padding put a 24px column's box 4px right of centre. Both apply to a level-0 leaf cell that
    holds the box and that one spacer only (the box is followed by the spacer and nothing else). Next to a label or a
@@ -575,11 +569,11 @@
    anchored to the rows of the tree itself, and the rules reach the header and the rows of that tree only, so a tree is
    judged on its own rows and does not centre or judge a tree that one of its cells holds (follow-up 59, NS31). With
    the paging mold or ROD only the rendered rows count: a page of leaves is centred, a page with a container row is not. */
-.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-header .z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)):has(.z-treecol-checkable) > .z-treecol-content {
+.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-header .z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort):has(.z-treecol-checkable) > .z-treecol-content {
     padding-inline: 0;
 }
 
-.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-header .z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort, :has(.z-treecol-button)) > .z-treecol-content > .z-treecol-checkable {
+.z-tree:not(:has(> .z-tree-body > table > tbody > tr > td > .z-treecell-content > .z-treerow-checkable + .z-tree-icon)) > .z-tree-header .z-treecol:is([style*="text-align:center"], [style*="text-align: center"]):not(.z-treecol-sort) > .z-treecol-content > .z-treecol-checkable {
     margin-inline: var(--zk-spacing-1);
 }
 
