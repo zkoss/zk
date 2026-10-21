@@ -1,13 +1,13 @@
 <?page title="Imagemap" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Imagemap"/></div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Clickable Image Map"/></div>
-        <div sclass="z-py-3 z-d-flex z-flex-col z-gap-4">
-            <div><label sclass="z-text-xs z-text-secondary" value="Click anywhere on the image to see the coordinates."/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Imagemap</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Clickable Image Map</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-flex-col z-gap-4">
+            <h:div><h:span class="z-text-xs z-text-secondary">Click anywhere on the image to see the coordinates.</h:span></h:div>
             <imagemap src="~./img/sun.jpg" onClick="alert(event.x + &quot;, &quot; + event.y)"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

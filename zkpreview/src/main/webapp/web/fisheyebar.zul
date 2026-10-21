@@ -1,25 +1,25 @@
 <?page title="Fisheyebar" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Fisheyebar"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Fisheyebar</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Controls"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Toggle attach edge"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Controls</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Toggle attach edge</h:span></h:div>
                 <checkbox label="AttachEdge bottom" checked="true" onCheck='fsb.attachEdge=self.checked?"bottom":"top"' />
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Toggle orientation"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Toggle orientation</h:span></h:div>
                 <checkbox label="Vertical orient" onCheck='fsb.orient=self.checked?"vertical":"horizontal"' />
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Fisheyebar"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Fisheyebar</h:span></h:div>
+        <h:div class="z-py-3">
             <fisheyebar id="fsb"
                         attachEdge="bottom" itemWidth="80" itemHeight="80" itemMaxHeight="160" itemMaxWidth="160">
                 <fisheye image="~./img/Centigrade-Widget-Icons/FolderABlue-128x128.png" label="Folder" />
@@ -29,8 +29,8 @@
                 <fisheye image="~./img/Centigrade-Widget-Icons/Globe-128x128.png" label="Globe" />
                 <fisheye image="~./img/Centigrade-Widget-Icons/Spyglass-128x128.png" label="Spyglass" />
             </fisheyebar>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-</div>
+</h:div>
 </zk>

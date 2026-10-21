@@ -8,8 +8,8 @@ chosenModel.setMultiple(true);
 chosenModel.addToSelection(chosenModel.get(0));
 chosenModel.addToSelection(chosenModel.get(1));
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Chosenbox"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Chosenbox</h:span></h:div>
     <apply templateURI="~./pv/chosenbox-content.zul"/>
-</div>
+</h:div>
 </zk>

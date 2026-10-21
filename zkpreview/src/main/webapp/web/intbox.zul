@@ -1,7 +1,7 @@
 <?page title="Intbox" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Intbox"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Intbox</h:span></h:div>
     <apply templateURI="~./pv/intbox-content.zul"/>
-</div>
+</h:div>
 </zk>

@@ -1,11 +1,11 @@
 <?page title="Menubar" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Menubar"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Menubar</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Horizontal"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal</h:span></h:div>
+        <h:div class="z-py-3">
             <menubar id="menubar1" width="100%">
                 <menu label="Project" image="~./img/Centigrade-Widget-Icons/Briefcase-16x16.png">
                     <menupopup>
@@ -44,12 +44,12 @@
                 <menuitem label="Menuitem" onClick="alert(self.label)" />
                 <menuitem image="~./img/Centigrade-Widget-Icons/Spyglass-16x16.png" disabled="true" label="Menuitem (disabled)" onClick="alert(self.label)" />
             </menubar>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Horizontal with Icons"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal with Icons</h:span></h:div>
+        <h:div class="z-py-3">
             <menubar>
                 <menu label="File" iconSclass="z-icon-file">
                     <menupopup>
@@ -73,12 +73,12 @@
                 <menuseparator/>
                 <menuitem label="Help" iconSclass="z-icon-circle-help"/>
             </menubar>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical</h:span></h:div>
+        <h:div class="z-py-3">
             <menubar width="200px" orient="vertical">
                 <menu label="Project" image="~./img/Centigrade-Widget-Icons/Briefcase-16x16.png" disabled="true">
                     <menupopup>
@@ -110,12 +110,12 @@
                 <menuitem label="Menuitem" onClick="alert(self.label)" />
                 <menuitem disabled="true" label="Menuitem (disabled)" onClick="alert(self.label)" />
             </menubar>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Menupopup (standalone)"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Menupopup (standalone)</h:span></h:div>
+        <h:div class="z-py-3">
             <button label="Open menupopup" popup="menupopup1"/>
             <menupopup id="menupopup1">
                 <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New" onClick="alert(self.label)" />
@@ -124,12 +124,12 @@
                 <menuseparator />
                 <menuitem label="Exit" image="~./img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
             </menupopup>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Auto Drop"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auto Drop</h:span></h:div>
+        <h:div class="z-py-3">
             <menubar id="menubar2" width="100%">
                 <attribute name="onCreate">self.setAutodrop(true);</attribute>
                 <menu label="Project" image="~./img/Centigrade-Widget-Icons/Briefcase-16x16.png">
@@ -154,12 +154,12 @@
                 </menu>
                 <menuitem label="Exit"/>
             </menubar>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Scrollable Menubar"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Scrollable Menubar</h:span></h:div>
+        <h:div class="z-py-3">
             <menubar width="200px">
                 <attribute name="onCreate">self.setScrollable(true);</attribute>
                 <menuitem label="item 1" iconSclass="z-icon-circle"/>
@@ -168,8 +168,8 @@
                 <menuitem label="item 4" iconSclass="z-icon-circle"/>
                 <menuitem label="item 5" iconSclass="z-icon-circle"/>
             </menubar>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-</div>
+</h:div>
 </zk>

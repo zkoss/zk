@@ -1,64 +1,64 @@
 <?page title="Opacity Utilities" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
 <style src="~./usecase/usecase.css"/>
-<div sclass="z-p-8 z-d-flex z-flex-col z-gap-4">
+<h:div class="z-p-8 z-d-flex z-flex-col z-gap-4">
 
-    <label value="Opacity Utilities" sclass="z-h2"/>
-    <label value="Applied with sclass on the ZK widget itself; the class lands on the widget's root element." sclass="z-text-secondary z-text-sm"/>
+    <h:span class="z-h2">Opacity Utilities</h:span>
+    <h:span class="z-text-secondary z-text-sm">Applied with sclass on the ZK widget itself; the class lands on the widget's root element.</h:span>
 
     <!-- Scale on Button -->
-    <div sclass="z-paper">
-        <label value="Scale  (.z-opacity-0 / 25 / 50 / 75 / 100) on Button" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
-        <div sclass="z-d-flex z-gap-4 z-flex-wrap z-items-end">
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1">
+    <h:div class="z-paper">
+        <h:span class="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3">Scale  (.z-opacity-0 / 25 / 50 / 75 / 100) on Button</h:span>
+        <h:div class="z-d-flex z-gap-4 z-flex-wrap z-items-end">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-1">
                 <button label="Save" sclass="z-opacity-0 pv-opacity-0"/>
-                <label value=".z-opacity-0" sclass="z-text-secondary z-text-xs"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1">
+                <h:span class="z-text-secondary z-text-xs">.z-opacity-0</h:span>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-1">
                 <button label="Save" sclass="z-opacity-25 pv-opacity-25"/>
-                <label value=".z-opacity-25" sclass="z-text-secondary z-text-xs"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1">
+                <h:span class="z-text-secondary z-text-xs">.z-opacity-25</h:span>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-1">
                 <button label="Save" sclass="z-opacity-50 pv-opacity-50"/>
-                <label value=".z-opacity-50" sclass="z-text-secondary z-text-xs"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1">
+                <h:span class="z-text-secondary z-text-xs">.z-opacity-50</h:span>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-1">
                 <button label="Save" sclass="z-opacity-75 pv-opacity-75"/>
-                <label value=".z-opacity-75" sclass="z-text-secondary z-text-xs"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1">
+                <h:span class="z-text-secondary z-text-xs">.z-opacity-75</h:span>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-1">
                 <button label="Save" sclass="z-opacity-100 pv-opacity-100"/>
-                <label value=".z-opacity-100" sclass="z-text-secondary z-text-xs"/>
-            </div>
-        </div>
-    </div>
+                <h:span class="z-text-secondary z-text-xs">.z-opacity-100</h:span>
+            </h:div>
+        </h:div>
+    </h:div>
 
     <!-- Other widgets -->
-    <div sclass="z-paper">
-        <label value="Other widgets" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
-        <div sclass="z-d-flex z-gap-6 z-flex-wrap z-items-center">
-            <div sclass="z-d-flex z-flex-col z-gap-1">
+    <h:div class="z-paper">
+        <h:span class="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3">Other widgets</h:span>
+        <h:div class="z-d-flex z-gap-6 z-flex-wrap z-items-center">
+            <h:div class="z-d-flex z-flex-col z-gap-1">
                 <image src="~./img/sun.jpg" width="96px" sclass="z-opacity-50 z-rounded pv-opacity-image"/>
-                <label value="Image .z-opacity-50" sclass="z-text-secondary z-text-xs"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-gap-1">
+                <h:span class="z-text-secondary z-text-xs">Image .z-opacity-50</h:span>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-gap-1">
                 <textbox value="Read-only look" sclass="z-opacity-75 pv-opacity-textbox"/>
-                <label value="Textbox .z-opacity-75" sclass="z-text-secondary z-text-xs"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-gap-1">
+                <h:span class="z-text-secondary z-text-xs">Textbox .z-opacity-75</h:span>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-gap-1">
                 <label value="Archived item" sclass="z-opacity-50 z-fw-medium pv-opacity-label"/>
-                <label value="Label .z-opacity-50" sclass="z-text-secondary z-text-xs"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-gap-1">
+                <h:span class="z-text-secondary z-text-xs">Label .z-opacity-50</h:span>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-gap-1">
                 <groupbox sclass="z-opacity-50 pv-opacity-groupbox" width="200px">
                     <caption label="Inactive section"/>
                     <checkbox label="Option" checked="true"/>
                 </groupbox>
-                <label value="Groupbox .z-opacity-50 — the whole subtree fades" sclass="z-text-secondary z-text-xs"/>
-            </div>
-        </div>
-        <label value="Opacity only changes how it looks: a faded widget still takes clicks and focus. Use disabled for that." sclass="z-text-secondary z-text-xs z-mt-3"/>
-    </div>
+                <h:span class="z-text-secondary z-text-xs">Groupbox .z-opacity-50 — the whole subtree fades</h:span>
+            </h:div>
+        </h:div>
+        <h:span class="z-text-secondary z-text-xs z-mt-3">Opacity only changes how it looks: a faded widget still takes clicks and focus. Use disabled for that.</h:span>
+    </h:div>
 
-</div>
+</h:div>
 </zk>

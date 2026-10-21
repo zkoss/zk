@@ -3,7 +3,7 @@
      While the next rows are fetched after a scroll, the widget puts z-grid-loading / z-listbox-loading /
      z-tree-loading on the scrolling body; no preview page has a model large and short enough to scroll.
      Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it up as a page. -->
-<zk>
+<zk xmlns:h="native">
 <zscript><![CDATA[
     import java.util.*;
 
@@ -15,7 +15,7 @@
     for (int i = 1; i <= 1000; i++) nodes.add(new DefaultTreeNode("Node " + i));
     DefaultTreeModel treeModel = new DefaultTreeModel(new DefaultTreeNode("root", nodes));
 ]]></zscript>
-<div sclass="z-p-8 z-d-flex z-gap-8">
+<h:div class="z-p-8 z-d-flex z-gap-8">
     <grid id="rodGrid" width="240px" height="200px" model="${gridModel}">
         <custom-attributes org.zkoss.zul.grid.rod="true"/>
         <columns><column label="Grid"/></columns>
@@ -29,5 +29,5 @@
     <tree id="rodTree" width="240px" height="200px" model="${treeModel}">
         <treecols><treecol label="Tree"/></treecols>
     </tree>
-</div>
+</h:div>
 </zk>

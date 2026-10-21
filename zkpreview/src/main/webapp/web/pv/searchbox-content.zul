@@ -1,4 +1,4 @@
-<zk>
+<zk xmlns:h="native">
 <zscript><![CDATA[
     import org.zkoss.zul.ListModelList;
     ListModelList searchboxSingle = new ListModelList(new String[]{
@@ -33,21 +33,21 @@
     </template>
 </apply>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Selected + Multiple + Clear + searchMessage"/></div>
-    <div sclass="z-d-flex z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Selected + Multiple + Clear + searchMessage</h:span></h:div>
+    <h:div class="z-d-flex z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Single — pre-selected (clear icon visible)</label>
             <searchbox model="${searchboxSingle}" searchMessage="Type to search…"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Multiple — two items pre-selected (chips)</label>
             <searchbox model="${searchboxMulti}" multiple="true"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">searchMessage placeholder (empty)</label>
             <searchbox model="${searchModel}" searchMessage="Find a fruit"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

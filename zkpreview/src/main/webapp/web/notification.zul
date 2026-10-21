@@ -4,63 +4,63 @@
     import org.zkoss.zk.ui.util.*;
     import org.zkoss.zul.*;
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Notification"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Notification</h:span></h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Notification — State Gallery"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-md z-fw-bold z-text-secondary">Notification — State Gallery</h:span></h:div>
 
-        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Info"/></div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Info</h:span></h:div>
                 <h:div class="z-notification z-notification-info" style="position:relative;">
                     <h:i class="z-notification-icon z-icon-info"/>
                     <h:div class="z-notification-content">Info notification message</h:div>
                 </h:div>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Warning"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Warning</h:span></h:div>
                 <h:div class="z-notification z-notification-warning" style="position:relative;">
                     <h:i class="z-notification-icon z-icon-circle-alert"/>
                     <h:div class="z-notification-content">Warning notification message</h:div>
                 </h:div>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Error"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Error</h:span></h:div>
                 <h:div class="z-notification z-notification-error" style="position:relative;">
                     <h:i class="z-notification-icon z-icon-circle-x"/>
                     <h:div class="z-notification-content">Error notification message</h:div>
                 </h:div>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Types"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Types</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Info" onClick='Clients.showNotification("This is an info message.", Clients.NOTIFICATION_TYPE_INFO, null, "top_right", 3000, true)'/>
             <button label="Warning" onClick='Clients.showNotification("This is a warning.", Clients.NOTIFICATION_TYPE_WARNING, null, "top_right", 3000, true)'/>
             <button label="Error" onClick='Clients.showNotification("This is an error.", Clients.NOTIFICATION_TYPE_ERROR, null, "top_right", 3000, true)'/>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Positions"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Positions</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Top Left" onClick='Clients.showNotification("Top left notification", Clients.NOTIFICATION_TYPE_INFO, null, "top_left", 3000, true)'/>
             <button label="Top Center" onClick='Clients.showNotification("Top center notification", Clients.NOTIFICATION_TYPE_INFO, null, "top_center", 3000, true)'/>
             <button label="Top Right" onClick='Clients.showNotification("Top right notification", Clients.NOTIFICATION_TYPE_INFO, null, "top_right", 3000, true)'/>
             <button label="Middle Center" onClick='Clients.showNotification("Middle center notification", Clients.NOTIFICATION_TYPE_INFO, null, "middle_center", 3000, true)'/>
             <button label="Bottom Left" onClick='Clients.showNotification("Bottom left notification", Clients.NOTIFICATION_TYPE_INFO, null, "bottom_left", 3000, true)'/>
             <button label="Bottom Right" onClick='Clients.showNotification("Bottom right notification", Clients.NOTIFICATION_TYPE_INFO, null, "bottom_right", 3000, true)'/>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Options"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Options</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="With HTML content" onClick='Clients.showNotification("Also possible to do &lt;span style=&apos;font-weight:bold&apos;&gt;HTML&lt;/span&gt;.", Clients.NOTIFICATION_TYPE_INFO, null, "top_right", 3000, true)'/>
             <button label="Non-closable" onClick='Clients.showNotification("This notification cannot be dismissed (auto-closes in 2s).", Clients.NOTIFICATION_TYPE_INFO, null, "top_right", 2000, false)'/>
             <button label="Long text" onClick='Clients.showNotification("This is a longer notification message that spans multiple lines so we can verify text wrapping, the left accent stripe height, icon alignment to the first line, and the close button position when the content grows well beyond a single line.", Clients.NOTIFICATION_TYPE_WARNING, null, "top_right", 6000, true)'/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

@@ -1,41 +1,41 @@
 <?page title="Space" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Space"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Space</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Space (bar=false, default)"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Default (no bar)"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Space (bar=false, default)</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Default (no bar)</h:span></h:div>
                 <hlayout>
                     <button label="Left"/>
                     <space/>
                     <button label="Right"/>
                 </hlayout>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Space (bar=true — renders separator bar)"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="bar=&quot;true&quot;"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Space (bar=true — renders separator bar)</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">bar=&quot;true&quot;</h:span></h:div>
                 <hlayout>
                     <button label="Left"/>
                     <space bar="true"/>
                     <button label="Right"/>
                 </hlayout>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Space with Spacing"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="spacing=&quot;20px&quot; / bar + spacing=&quot;40px&quot;"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Space with Spacing</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">spacing=&quot;20px&quot; / bar + spacing=&quot;40px&quot;</h:span></h:div>
                 <hlayout>
                     <button label="A"/>
                     <space spacing="20px"/>
@@ -43,9 +43,9 @@
                     <space spacing="40px" bar="true"/>
                     <button label="C"/>
                 </hlayout>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-</div>
+</h:div>
 </zk>

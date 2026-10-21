@@ -1,56 +1,56 @@
 <?page title="Chip" contentType="text/html;charset=UTF-8"?>
-<zk>
-<div sclass="z-p-8 z-d-flex z-flex-col z-gap-6">
-    <div sclass="z-border-bottom z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Chip"/></div>
+<zk xmlns:h="native">
+<h:div class="z-p-8 z-d-flex z-flex-col z-gap-6">
+    <h:div class="z-border-bottom z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Chip</h:span></h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Severities"/></div>
-        <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Severities</h:span></h:div>
+        <h:div class="z-d-flex z-gap-3 z-flex-wrap z-items-center">
             <chip label="Info"      severity="info"/>
             <chip label="Success"   severity="success"/>
             <chip label="Warning"   severity="warning"/>
             <chip label="Danger"    severity="error"/>
             <chip label="Secondary" severity="neutral"/>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Sizes"/></div>
-        <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Sizes</h:span></h:div>
+        <h:div class="z-d-flex z-gap-3 z-flex-wrap z-items-center">
             <chip label="Small"  severity="info" size="small"/>
             <chip label="Medium" severity="info" size="medium"/>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Rounded"/></div>
-        <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Rounded</h:span></h:div>
+        <h:div class="z-d-flex z-gap-3 z-flex-wrap z-items-center">
             <chip label="Rounded Info"    severity="info" rounded="true"/>
             <chip label="Rounded Success" severity="success" rounded="true"/>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Closable"/></div>
-        <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Closable</h:span></h:div>
+        <h:div class="z-d-flex z-gap-3 z-flex-wrap z-items-center">
             <chip label="Closable"          severity="info" closable="true"/>
             <chip label="Closable Rounded"  severity="success" closable="true" rounded="true"/>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Disabled"/></div>
-        <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Disabled</h:span></h:div>
+        <h:div class="z-d-flex z-gap-3 z-flex-wrap z-items-center">
             <chip label="Disabled"          severity="info" disabled="true"/>
             <chip label="Disabled Closable" severity="info" disabled="true" closable="true"/>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Custom color (style hook)"/></div>
-        <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Custom color (style hook)</h:span></h:div>
+        <h:div class="z-d-flex z-gap-3 z-flex-wrap z-items-center">
             <chip label="Custom" style="--zk-chip-bg:#ede7f6;--zk-chip-border:#d1c4e9;--zk-chip-color:#5e35b1"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

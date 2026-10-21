@@ -3,8 +3,8 @@
      `.z-menubar` (z-index 100) in the same container, with no gap, so the 4px of its focus ring that reach towards the
      menubar are painted over it unless the focused button rises above the menubar. Lives under pv/ so gallery-scan,
      forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
-<zk>
-<div sclass="z-p-8">
+<zk xmlns:h="native">
+<h:div class="z-p-8">
     <div sclass="tmb-row" style="display:flex; align-items:center;">
         <menubar>
             <menu label="File">
@@ -15,5 +15,5 @@
         </menubar>
         <toolbarbutton label="After the menubar"/>
     </div>
-</div>
+</h:div>
 </zk>

@@ -1,13 +1,13 @@
 <?page title="Codeeditor" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Codeeditor"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Codeeditor</h:span></h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="States"/></div>
-        <div sclass="z-d-flex z-flex-wrap z-gap-6">
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="Default"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">States</h:span></h:div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6">
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">Default</h:span></h:div>
                 <codeeditor language="java" width="320px" height="130px">
                     <attribute name="value"><![CDATA[class Greeter {
 	void hello() {
@@ -15,9 +15,9 @@
 	}
 }]]></attribute>
                 </codeeditor>
-            </div>
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="Readonly (focusable, copyable)"/></div>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">Readonly (focusable, copyable)</h:span></h:div>
                 <codeeditor language="java" readonly="true" width="320px" height="130px">
                     <attribute name="value"><![CDATA[class Greeter {
 	void hello() {
@@ -25,9 +25,9 @@
 	}
 }]]></attribute>
                 </codeeditor>
-            </div>
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="Disabled"/></div>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">Disabled</h:span></h:div>
                 <codeeditor language="java" disabled="true" width="320px" height="130px">
                     <attribute name="value"><![CDATA[class Greeter {
 	void hello() {
@@ -35,15 +35,15 @@
 	}
 }]]></attribute>
                 </codeeditor>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Surface"/></div>
-        <div sclass="z-d-flex z-flex-wrap z-gap-6">
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="colorScheme=&quot;light&quot; (default)"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Surface</h:span></h:div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6">
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">colorScheme=&quot;light&quot; (default)</h:span></h:div>
                 <codeeditor language="json" width="360px" height="150px">
                     <attribute name="value"><![CDATA[{
 	"upstream": "order-api-v3",
@@ -52,9 +52,9 @@
 	"circuitBreaker": { "enabled": true }
 }]]></attribute>
                 </codeeditor>
-            </div>
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="colorScheme=&quot;dark&quot;"/></div>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">colorScheme=&quot;dark&quot;</h:span></h:div>
                 <codeeditor language="json" colorScheme="dark" width="360px" height="150px">
                     <attribute name="value"><![CDATA[{
 	"upstream": "order-api-v3",
@@ -63,24 +63,24 @@
 	"circuitBreaker": { "enabled": true }
 }]]></attribute>
                 </codeeditor>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Gutter and indent"/></div>
-        <div sclass="z-d-flex z-flex-wrap z-gap-6">
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="lineNumbers=&quot;false&quot;"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Gutter and indent</h:span></h:div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6">
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">lineNumbers=&quot;false&quot;</h:span></h:div>
                 <codeeditor language="sql" lineNumbers="false" width="360px" height="110px">
                     <attribute name="value"><![CDATA[SELECT customer_id, SUM(total) AS revenue
 FROM orders
 WHERE status = 'SHIPPED'
 GROUP BY customer_id]]></attribute>
                 </codeeditor>
-            </div>
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="tabSize=&quot;8&quot;"/></div>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">tabSize=&quot;8&quot;</h:span></h:div>
                 <codeeditor language="xml" tabSize="8" width="360px" height="110px">
                     <attribute name="value"><![CDATA[<routes>
 	<route path="/orders">
@@ -88,15 +88,15 @@ GROUP BY customer_id]]></attribute>
 	</route>
 </routes>]]></attribute>
                 </codeeditor>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Languages"/></div>
-        <div sclass="z-d-flex z-flex-wrap z-gap-6">
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="javascript"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Languages</h:span></h:div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6">
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">javascript</h:span></h:div>
                 <codeeditor language="javascript" colorScheme="dark" width="360px" height="120px">
                     <attribute name="value"><![CDATA[/* dark palette: keyword, string, comment, number */
 const limit = 25;
@@ -104,25 +104,25 @@ function pick(rows) {
 	return rows.filter(r => r.total > limit);
 }]]></attribute>
                 </codeeditor>
-            </div>
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="markdown"/></div>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">markdown</h:span></h:div>
                 <codeeditor language="markdown" width="360px" height="120px">
                     <attribute name="value"><![CDATA[# Release notes
 
 - gutter uses the theme surface
 - caret uses the on-surface color]]></attribute>
                 </codeeditor>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Component Theme Variables"/></div>
-        <div sclass="z-mb-4"><label sclass="z-text-sm z-text-secondary" value="One element, repainted through the ZK-core hooks. The light chrome uses Marble's own knobs; the dark surface and the ten syntax colors use ZK's fixed names."/></div>
-        <div sclass="z-d-flex z-flex-wrap z-gap-6">
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="light chrome repainted"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Component Theme Variables</h:span></h:div>
+        <h:div class="z-mb-4"><h:span class="z-text-sm z-text-secondary">One element, repainted through the ZK-core hooks. The light chrome uses Marble's own knobs; the dark surface and the ten syntax colors use ZK's fixed names.</h:span></h:div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6">
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">light chrome repainted</h:span></h:div>
                 <codeeditor language="css" width="360px" height="120px"
                         style="--zk-codeeditor-radius:12px; --zk-codeeditor-border-color:var(--zk-color-primary); --zk-codeeditor-gutter-bg:var(--zk-color-primary-container); --zk-codeeditor-gutter-fg:var(--zk-color-on-primary-container)">
                     <attribute name="value"><![CDATA[.z-button {
@@ -130,9 +130,9 @@ function pick(rows) {
 	padding: 6px 14px;
 }]]></attribute>
                 </codeeditor>
-            </div>
-            <div sclass="z-vstack z-gap-2">
-                <div><label sclass="z-text-sm z-text-secondary" value="dark surface repainted"/></div>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">dark surface repainted</h:span></h:div>
                 <codeeditor language="javascript" colorScheme="dark" width="360px" height="120px"
                         style="--zk-codeeditor-background:#0b1021; --zk-codeeditor-color:#c0caf5; --zk-codeeditor-gutter-color:#3b4261; --zk-codeeditor-token-keyword:#bb9af7; --zk-codeeditor-token-string:#9ece6a; --zk-codeeditor-token-number:#ff9e64; --zk-codeeditor-token-comment:#565f89">
                     <attribute name="value"><![CDATA[// repainted by seven custom properties
@@ -141,18 +141,18 @@ function boot(cfg) {
 	return cfg.enabled ? "started" : "skipped";
 }]]></attribute>
                 </codeeditor>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Focus order"/></div>
-        <div sclass="z-mb-4"><label sclass="z-text-sm z-text-secondary" value="Tab moves through the editor rather than being trapped by it."/></div>
-        <div sclass="z-hstack z-gap-3 z-items-center">
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Focus order</h:span></h:div>
+        <h:div class="z-mb-4"><h:span class="z-text-sm z-text-secondary">Tab moves through the editor rather than being trapped by it.</h:span></h:div>
+        <h:div class="z-hstack z-gap-3 z-items-center">
             <textbox placeholder="Tab from here"/>
             <codeeditor language="sql" width="300px" height="80px" value="SELECT * FROM orders"/>
             <button label="the next stop"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

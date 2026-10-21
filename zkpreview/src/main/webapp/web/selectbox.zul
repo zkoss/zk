@@ -5,8 +5,8 @@ String[] selectNames = {"Alice", "Bob", "Charlie", "David", "Eve"};
 ListModelList selectModel = new ListModelList(selectNames);
     selectModel.addToSelection("Bob"); // pre-select "Bob" on load
 </zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Selectbox"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Selectbox</h:span></h:div>
     <apply templateURI="~./pv/selectbox-content.zul"/>
-</div>
+</h:div>
 </zk>

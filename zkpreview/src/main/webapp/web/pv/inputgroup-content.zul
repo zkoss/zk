@@ -1,68 +1,68 @@
-<zk>
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Examples"/></div>
-    <div sclass="z-d-flex z-flex-col z-items-start z-gap-4 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Prefix text"/></div>
+<zk xmlns:h="native">
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Examples</h:span></h:div>
+    <h:div class="z-d-flex z-flex-col z-items-start z-gap-4 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Prefix text</h:span></h:div>
             <inputgroup>@<textbox/></inputgroup>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Suffix text"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Suffix text</h:span></h:div>
             <inputgroup><textbox placeholder="Recipient's username"/>@example.com</inputgroup>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Both sides"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Both sides</h:span></h:div>
             <inputgroup>$<textbox/>.00</inputgroup>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Number boxes with prefix and suffix"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Number boxes with prefix and suffix</h:span></h:div>
             <inputgroup>$<intbox value="72"/>.00</inputgroup>
             <inputgroup><decimalbox value="72.5"/>kg</inputgroup>
             <inputgroup><doublebox value="1.5"/>m</inputgroup>
             <inputgroup>#<longbox value="1234567"/></inputgroup>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="With multiline"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">With multiline</h:span></h:div>
             <inputgroup>
                 With textarea
                 <textbox multiline="true" rows="3" cols="30"/>
             </inputgroup>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Input + Button"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Input + Button</h:span></h:div>
             <inputgroup>
                 <textbox placeholder="Search"/>
                 <button label="Go" sclass="z-button-primary"/>
             </inputgroup>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Disabled State"/></div>
-    <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Prefix + disabled textbox"/></div>
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Disabled State</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Prefix + disabled textbox</h:span></h:div>
             <inputgroup>@<textbox disabled="true" value="disabled@example.com"/></inputgroup>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Both sides + disabled textbox"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Both sides + disabled textbox</h:span></h:div>
             <inputgroup>$<textbox disabled="true" value="0"/>.00</inputgroup>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical Orientation"/></div>
-    <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="orient=&quot;vertical&quot; (rounded top/bottom corners)"/></div>
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical Orientation</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">orient=&quot;vertical&quot; (rounded top/bottom corners)</h:span></h:div>
             <inputgroup orient="vertical">
                 Username
                 <textbox placeholder="Enter username"/>
                 @example.com
             </inputgroup>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

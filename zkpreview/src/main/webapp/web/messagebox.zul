@@ -9,11 +9,11 @@
         "--Come up, Kinch! Come up, you fearful jesuit!\n\n" +
         "-by James Joyce, from Ulysses at Project Gutenberg";
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Messagebox"/></div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Types"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Messagebox</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Types</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Information">
                 <attribute name="onClick">
                     Messagebox.show("Some information", "Information", Messagebox.OK, Messagebox.INFORMATION);
@@ -34,11 +34,11 @@
                     Messagebox.show("A question. Are you sure?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);
                 </attribute>
             </button>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Multi-line Messages"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Multi-line Messages</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Multi-line Warning">
                 <attribute name="onClick">
                     Messagebox.show("A warning message\nEven more warning message", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
@@ -49,21 +49,21 @@
                     Messagebox.show("Is this a question?\nDoes it make sense?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);
                 </attribute>
             </button>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Long Message"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Long Message</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Long Text (Ulysses)">
                 <attribute name="onClick">
                     Messagebox.show(longmsg, "Ulysses", Messagebox.OK, Messagebox.INFORMATION);
                 </attribute>
             </button>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Extended Button Sets"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Extended Button Sets</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="YES / NO">
                 <attribute name="onClick">
                     Messagebox.show("Apply changes?", "Confirm", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
@@ -79,7 +79,7 @@
                     Messagebox.show("Working…", "Please wait", 0, Messagebox.INFORMATION);
                 </attribute>
             </button>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

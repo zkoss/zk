@@ -1,53 +1,53 @@
 <?page title="Badge" contentType="text/html;charset=UTF-8"?>
-<zk>
-<div sclass="z-p-8 z-d-flex z-flex-col z-gap-6">
-    <div sclass="z-border-bottom z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Badge"/></div>
+<zk xmlns:h="native">
+<h:div class="z-p-8 z-d-flex z-flex-col z-gap-6">
+    <h:div class="z-border-bottom z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Badge</h:span></h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Count + dot on icons"/></div>
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Count + dot on icons</h:span></h:div>
         <div sclass="z-d-flex z-gap-8 z-items-center" style="padding:8px 4px;">
             <badge count="4"><label sclass="z-icon-mail" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
             <badge count="7" severity="error"><label sclass="z-icon-bell" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
             <badge dot="true" severity="error"><label sclass="z-icon-message-square" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
         </div>
-    </div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Severities (standalone)"/></div>
-        <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Severities (standalone)</h:span></h:div>
+        <h:div class="z-d-flex z-gap-3 z-flex-wrap z-items-center">
             <badge count="4" severity="info"/>
             <badge count="4" severity="success"/>
             <badge count="4" severity="warning"/>
             <badge count="4" severity="error"/>
             <badge count="4" severity="neutral"/>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Max overflow &amp; showZero"/></div>
-        <div sclass="z-d-flex z-gap-3 z-flex-wrap z-items-center">
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Max overflow &amp; showZero"/></h:div>
+        <h:div class="z-d-flex z-gap-3 z-flex-wrap z-items-center">
             <badge count="99"  severity="error"/>
             <badge count="120" max="99" severity="error"/>
             <badge count="0"   showZero="true" severity="neutral"/>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Placement"/></div>
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Placement</h:span></h:div>
         <div sclass="z-d-flex z-gap-8 z-items-center" style="padding:12px 8px;">
             <badge count="3" placement="top_right"><label sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
             <badge count="3" placement="top_left"><label sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
             <badge count="3" placement="bottom_right"><label sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
             <badge count="3" placement="bottom_left"><label sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
         </div>
-    </div>
+    </h:div>
 
-    <div>
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Button host"/></div>
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Button host</h:span></h:div>
         <div sclass="z-d-flex z-gap-8 z-items-center" style="padding:8px 4px;">
             <badge count="4"  severity="error"><button label="Notifications"/></badge>
             <badge count="10" severity="info"><button label="Messages"/></badge>
         </div>
-    </div>
-</div>
+    </h:div>
+</h:div>
 </zk>

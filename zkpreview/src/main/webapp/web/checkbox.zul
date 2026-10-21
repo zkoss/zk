@@ -1,7 +1,7 @@
 <?page title="Checkbox" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Checkbox"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Checkbox</h:span></h:div>
 
     <div sclass="z-mb-6 z-d-grid z-grid-cols-auto z-overflow-x-auto z-gap-x-6 z-gap-y-2 z-items-start" style="--zk-cols:4; --zk-col-min:min-content">
         <div sclass="z-grid-col-full z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="States"/></div>
@@ -42,32 +42,32 @@
         </div>
     </div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Switch"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Switch</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
             <checkbox mold="switch" label="Off"/>
             <checkbox mold="switch" label="On" checked="true"/>
             <checkbox mold="switch" label="Disabled" disabled="true"/>
             <checkbox mold="switch" label="Dis+On" disabled="true" checked="true"/>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Tristate Mold"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="mold=&quot;tristate&quot; (unchecked)"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Tristate Mold</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">mold=&quot;tristate&quot; (unchecked)</h:span></h:div>
                 <checkbox mold="tristate" label="Tristate"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="mold=&quot;tristate&quot; checked"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">mold=&quot;tristate&quot; checked</h:span></h:div>
                 <checkbox mold="tristate" label="Tristate" checked="true"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="mold=&quot;tristate&quot; indeterminate"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">mold=&quot;tristate&quot; indeterminate</h:span></h:div>
                 <checkbox mold="tristate" label="Tristate" indeterminate="true"/>
-            </div>
-        </div>
-    </div>
-</div>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

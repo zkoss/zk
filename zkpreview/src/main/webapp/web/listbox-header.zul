@@ -1,12 +1,12 @@
 <?page title="Listbox Header" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Listbox Header"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Listbox Header</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Auxhead + Listhead Combinations"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-gap-4 z-items-start">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auxhead + Listhead Combinations</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
                 <listbox width="400px">
                     <auxhead>
                         <auxheader label="A+B" colspan="2" />
@@ -84,14 +84,14 @@
                         <listfooter label="footer 3" />
                     </listfoot>
                 </listbox>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Sorting and Resizable Headers"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-gap-4 z-items-start">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Sorting and Resizable Headers</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
                 <listbox width="400px">
                     <listhead sizable="true">
                         <listheader align="center" width="40px"
@@ -193,14 +193,14 @@
                         <listfooter label="image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png" hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
                     </listfoot>
                 </listbox>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Static Sort Direction"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-gap-4 z-items-start">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Static Sort Direction</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
                 <listbox width="400px">
                     <listhead>
                         <listheader label="Subject (asc)" sort="auto" sortDirection="ascending" />
@@ -230,14 +230,14 @@
                         <listcell label="2008/11/14 13:23:07" />
                     </listitem>
                 </listbox>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Grouping"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-gap-4 z-items-start">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Grouping</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
                 <listbox>
                     <listhead sizable="true">
                         <listheader label="Brand" />
@@ -373,14 +373,14 @@
                         </listgroupfoot>
                     </listbox>
                 </vlayout>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Select Mold with Optgroup (listgroup)"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-gap-4 z-items-start">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Select Mold with Optgroup (listgroup)</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
                 <listbox mold="select" rows="1">
                     <listgroup label="Fruits"/>
                     <listitem label="Apple"/>
@@ -403,14 +403,14 @@
                     <listitem label="Spring Boot"/>
                     <listitem label="Django"/>
                 </listbox>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Auxheader Rowspan"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-gap-4 z-items-start">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auxheader Rowspan</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
                 <listbox width="400px">
                     <auxhead>
                         <auxheader label="Group A" colspan="2"/>
@@ -462,14 +462,14 @@
                         <listcell label="m"/>
                     </listitem>
                 </listbox>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="sizedByContent + Span Header"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-gap-4 z-items-start">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">sizedByContent + Span Header</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
                 <listbox sizedByContent="true">
                     <listhead sizable="true">
                         <listheader label="ID"/>
@@ -505,13 +505,13 @@
                         <listcell label="Y"/>
                     </listitem>
                 </listbox>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Frozen Right (Start Columns Scroll)"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Frozen Right (Start Columns Scroll)</h:span></h:div>
+        <h:div class="z-py-3">
             <listbox width="500px">
                 <frozen columns="2" start="1"/>
                 <listhead>
@@ -539,12 +539,12 @@
                     <listcell label="200"/><listcell label="$24.50"/><listcell label="Edit"/>
                 </listitem>
             </listbox>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Sticky Header (z-sticky-header)"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Sticky Header (z-sticky-header)</h:span></h:div>
+        <h:div class="z-py-3">
             <div style="height:200px; overflow-y:auto; border:1px solid var(--zk-color-outline);">
                 <listbox sclass="z-sticky-header" width="500px">
                     <listhead>
@@ -574,12 +574,12 @@
                     <listitem><listcell label="20"/><listcell label="Release Notes 10.x"/><listcell label="2024-01-20"/></listitem>
                 </listbox>
             </div>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Complex Header with Embedded Components"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Complex Header with Embedded Components</h:span></h:div>
+        <h:div class="z-py-3">
             <listbox>
                 <auxhead>
                     <auxheader colspan="2">
@@ -640,7 +640,7 @@
                     <listcell label="MALE" />
                 </listitem>
             </listbox>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

@@ -24,64 +24,64 @@ DefaultTreeModel cascaderModel = new DefaultTreeModel(new DefaultTreeNode("ROOT"
             new DefaultTreeNode("Auckland"), new DefaultTreeNode("Queenstown")}))}
     )));
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Inputs"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Inputs</h:span></h:div>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Textbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Textbox</h:span></h:div>
     <apply templateURI="~./pv/textbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Intbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Intbox</h:span></h:div>
     <apply templateURI="~./pv/intbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Longbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Longbox</h:span></h:div>
     <apply templateURI="~./pv/longbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Decimalbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Decimalbox</h:span></h:div>
     <apply templateURI="~./pv/decimalbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Doublebox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Doublebox</h:span></h:div>
     <apply templateURI="~./pv/doublebox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Combobox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Combobox</h:span></h:div>
     <apply templateURI="~./pv/combobox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Datebox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Datebox</h:span></h:div>
     <apply templateURI="~./pv/datebox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Timebox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Timebox</h:span></h:div>
     <apply templateURI="~./pv/timebox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Timepicker"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Timepicker</h:span></h:div>
     <apply templateURI="~./pv/timepicker-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Bandbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Bandbox</h:span></h:div>
     <apply templateURI="~./pv/bandbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Spinner"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Spinner</h:span></h:div>
     <apply templateURI="~./pv/spinner-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Selectbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Selectbox</h:span></h:div>
     <apply templateURI="~./pv/selectbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Searchbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Searchbox</h:span></h:div>
     <apply templateURI="~./pv/searchbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Chosenbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Chosenbox</h:span></h:div>
     <apply templateURI="~./pv/chosenbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Cascader"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Cascader</h:span></h:div>
     <apply templateURI="~./pv/cascader-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Colorbox"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Colorbox</h:span></h:div>
     <apply templateURI="~./pv/colorbox-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Slider"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Slider</h:span></h:div>
     <apply templateURI="~./pv/slider-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Rating"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Rating</h:span></h:div>
     <apply templateURI="~./pv/rating-content.zul"/>
 
-    <div sclass="z-mt-6 z-mb-2"><label sclass="z-text-lg z-fw-medium z-text-on-surface" value="Input Group"/></div>
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Input Group</h:span></h:div>
     <apply templateURI="~./pv/inputgroup-content.zul"/>
-</div>
+</h:div>
 </zk>

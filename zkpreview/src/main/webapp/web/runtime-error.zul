@@ -1,10 +1,10 @@
 <?page title="Error" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Error"/></div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Client-Side Error"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Error</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Client-Side Error</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Trigger Error">
                 <attribute name="onClick">
                     Clients.evalJavaScript("zk.error('Sample error message.')");
@@ -15,17 +15,17 @@
                     Clients.evalJavaScript("zk.error('First error message.'); zk.error('Second error message.')");
                 </attribute>
             </button>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Server-Side Error"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Server-Side Error</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Throw Exception">
                 <attribute name="onClick">
                     throw new RuntimeException("Sample server-side exception for testing error display.");
                 </attribute>
             </button>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

@@ -1,11 +1,11 @@
 <?page title="Columnlayout" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Columnlayout"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Columnlayout</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Three Column Layout"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Three Column Layout</h:span></h:div>
+        <h:div class="z-py-3">
             <columnlayout>
                 <columnchildren width="33%" style="padding: 5px">
                     <panel height="100px" title="Column 1 — Row 1" closable="true" collapsible="true"
@@ -33,8 +33,8 @@
                     </panel>
                 </columnchildren>
             </columnlayout>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-</div>
+</h:div>
 </zk>

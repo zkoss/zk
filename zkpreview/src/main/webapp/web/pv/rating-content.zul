@@ -1,4 +1,4 @@
-<zk>
+<zk xmlns:h="native">
 <apply templateURI="~./pv/matrix.zul" title="States"
        cols="${['Default','Disabled','Readonly']}"
        rowsTemplate="rating-rows">
@@ -12,53 +12,53 @@
     </template>
 </apply>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Max Stars"/></div>
-    <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="3 max"/></div>
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Max Stars</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">3 max</h:span></h:div>
             <rating max="3" rating="2"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="5 max (default)"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">5 max (default)</h:span></h:div>
             <rating max="5" rating="3"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="10 max"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">10 max</h:span></h:div>
             <rating max="10" rating="7"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Custom Icon (iconSclass)"/></div>
-    <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="z-icon-bolt (3/5)"/></div>
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Custom Icon (iconSclass)</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">z-icon-bolt (3/5)</h:span></h:div>
             <rating iconSclass="z-icon-bolt" rating="3"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="z-icon-gift (2/5)"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">z-icon-gift (2/5)</h:span></h:div>
             <rating iconSclass="z-icon-gift" rating="2"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical"/></div>
-    <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Vertical (3/5)"/></div>
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Vertical (3/5)</h:span></h:div>
             <rating orient="vertical" rating="3"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Vertical disabled"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Vertical disabled</h:span></h:div>
             <rating orient="vertical" rating="3" disabled="true"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="Vertical readonly"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Vertical readonly</h:span></h:div>
             <rating orient="vertical" rating="3" readonly="true"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

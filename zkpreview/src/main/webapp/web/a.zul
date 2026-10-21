@@ -1,7 +1,7 @@
 <?page title="A (Link)" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="A (Link)"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">A (Link)</h:span></h:div>
 
     <div sclass="z-mb-6 z-d-grid z-grid-cols-auto z-overflow-x-auto z-gap-x-6 z-gap-y-2 z-items-start" style="--zk-cols:2; --zk-col-min:min-content">
         <div sclass="z-grid-col-full z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="States"/></div>
@@ -21,5 +21,5 @@
             <div><a href="https://www.zkoss.org" label="ZK" iconSclass="z-icon-external-link" disabled="true"/></div>
         </div>
     </div>
-</div>
+</h:div>
 </zk>

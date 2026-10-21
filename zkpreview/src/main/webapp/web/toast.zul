@@ -5,51 +5,51 @@
     import org.zkoss.zkmax.ui.util.*;
     import org.zkoss.zul.*;
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Toast"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Toast</h:span></h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Toast — State Gallery"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-md z-fw-bold z-text-secondary">Toast — State Gallery</h:span></h:div>
 
-        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Info"/></div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Info</h:span></h:div>
                 <h:div class="z-toast z-toast-info">
                     <h:i class="z-toast-icon z-icon-info"></h:i>
                     <h:div class="z-toast-content">Info message</h:div>
                     <h:div class="z-toast-close"><h:i class="z-toast-icon z-icon-x"></h:i></h:div>
                 </h:div>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Warning"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Warning</h:span></h:div>
                 <h:div class="z-toast z-toast-warning">
                     <h:i class="z-toast-icon z-icon-circle-alert"></h:i>
                     <h:div class="z-toast-content">Warning message</h:div>
                     <h:div class="z-toast-close"><h:i class="z-toast-icon z-icon-x"></h:i></h:div>
                 </h:div>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Error"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Error</h:span></h:div>
                 <h:div class="z-toast z-toast-error">
                     <h:i class="z-toast-icon z-icon-circle-x"></h:i>
                     <h:div class="z-toast-content">Error message</h:div>
                     <h:div class="z-toast-close"><h:i class="z-toast-icon z-icon-x"></h:i></h:div>
                 </h:div>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Types"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Types</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Info" onClick='Toast.show("This is an info toast.", Clients.NOTIFICATION_TYPE_INFO, "top_right", 3000, true)'/>
             <button label="Warning" onClick='Toast.show("This is a warning toast.", Clients.NOTIFICATION_TYPE_WARNING, "top_right", 3000, true)'/>
             <button label="Error" onClick='Toast.show("This is an error toast.", Clients.NOTIFICATION_TYPE_ERROR, "top_right", 3000, true)'/>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Positions"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Positions</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Top Left" onClick='Toast.show("Top left toast", Clients.NOTIFICATION_TYPE_INFO, "top_left", 3000, true)'/>
             <button label="Top Center" onClick='Toast.show("Top center toast", Clients.NOTIFICATION_TYPE_INFO, "top_center", 3000, true)'/>
             <button label="Top Right" onClick='Toast.show("Top right toast", Clients.NOTIFICATION_TYPE_INFO, "top_right", 3000, true)'/>
@@ -59,14 +59,14 @@
             <button label="Bottom Left" onClick='Toast.show("Bottom left toast", Clients.NOTIFICATION_TYPE_INFO, "bottom_left", 3000, true)'/>
             <button label="Bottom Center" onClick='Toast.show("Bottom center toast", Clients.NOTIFICATION_TYPE_INFO, "bottom_center", 3000, true)'/>
             <button label="Bottom Right" onClick='Toast.show("Bottom right toast", Clients.NOTIFICATION_TYPE_INFO, "bottom_right", 3000, true)'/>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Options"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Options</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Persistent (closable)" onClick='Toast.show("Click X to dismiss this toast.", Clients.NOTIFICATION_TYPE_INFO, "top_right", -1, true)'/>
             <button label="With HTML" onClick='Toast.show("Toast with &lt;b&gt;bold&lt;/b&gt; content.", Clients.NOTIFICATION_TYPE_INFO, "top_right", 3000, false)'/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

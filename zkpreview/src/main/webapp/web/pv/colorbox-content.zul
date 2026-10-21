@@ -1,4 +1,4 @@
-<zk>
+<zk xmlns:h="native">
 <apply templateURI="~./pv/matrix.zul" title="States"
        cols="${['Default','Disabled']}"
        rowsTemplate="colorbox-rows">
@@ -21,9 +21,9 @@
     </template>
 </apply>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Colorbox in Menu"/></div>
-    <div sclass="z-py-3">
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Colorbox in Menu</h:span></h:div>
+    <h:div class="z-py-3">
         <menubar>
             <menu label="Format">
                 <menupopup>
@@ -35,6 +35,6 @@
             </menu>
             <menu label="Quick Colour" content="#color=#2e7d32"/>
         </menubar>
-    </div>
-</div>
+    </h:div>
+</h:div>
 </zk>

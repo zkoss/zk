@@ -3,18 +3,18 @@
 <zscript><![CDATA[
     Object[] rows = new Object[50];
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Scrollbar"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Scrollbar</h:span></h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Scrollbar — State Gallery"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-md z-fw-bold z-text-secondary">Scrollbar — State Gallery</h:span></h:div>
 
         <!-- This gallery mirrors the live zul.Scrollbar DOM, which emits the FA-style
              caret-up/down/left/right icon classes (aliased to chevrons via FA_TO_LUCIDE)
              — keep them verbatim so the mockup matches the real widget; do NOT rename to chevron. -->
-        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical"/></div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical</h:span></h:div>
                 <h:div style="position:relative;width:16px;height:120px;background:var(--zk-color-surface-container-low);border-radius:4px;">
                     <h:div class="z-scrollbar z-scrollbar-vertical" style="display:block;right:0;">
                         <h:div class="z-scrollbar-up"><h:i class="z-icon-caret-up"/></h:div>
@@ -25,9 +25,9 @@
                         <h:div class="z-scrollbar-down"><h:i class="z-icon-caret-down"/></h:div>
                     </h:div>
                 </h:div>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Horizontal"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal</h:span></h:div>
                 <h:div style="position:relative;width:120px;height:16px;background:var(--zk-color-surface-container-low);border-radius:4px;">
                     <h:div class="z-scrollbar z-scrollbar-horizontal" style="display:block;bottom:0;">
                         <h:div class="z-scrollbar-left"><h:i class="z-icon-caret-left"/></h:div>
@@ -38,14 +38,14 @@
                         <h:div class="z-scrollbar-right"><h:i class="z-icon-caret-right"/></h:div>
                     </h:div>
                 </h:div>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Default (Mouse Over)"/></div>
-        <div sclass="z-d-flex z-items-start z-gap-8 z-py-4 z-border-bottom">
-            <div sclass="z-grow-0">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Default (Mouse Over)</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-gap-8 z-py-4 z-border-bottom">
+            <h:div class="z-grow-0">
                 <grid width="240px" height="200px" ca:data-embedscrollbar="false">
                     <custom-attributes org.zkoss.zul.nativebar="false"/>
                     <columns>
@@ -63,14 +63,14 @@
                         </row>
                     </rows>
                 </grid>
-            </div>
-            <div sclass="z-flex-1 z-d-flex z-flex-col z-gap-2">
-                <div><label sclass="z-text-sm z-fw-medium z-text-on-surface" value="Overlay scrollbar"/></div>
-                <div><label sclass="z-text-sm z-text-secondary" value="Simulated overlay bar (nativebar=false, data-embedscrollbar=false). Hidden at rest — a slim bar fades in only while the pointer is over the grid body, floats on top of the content, and reserves no layout space. It fades out again on mouse-leave."/></div>
-            </div>
-        </div>
-        <div sclass="z-d-flex z-items-start z-gap-8 z-py-4 z-border-bottom">
-            <div sclass="z-grow-0">
+            </h:div>
+            <h:div class="z-flex-1 z-d-flex z-flex-col z-gap-2">
+                <h:div><h:span class="z-text-sm z-fw-medium z-text-on-surface">Overlay scrollbar</h:span></h:div>
+                <h:div><h:span class="z-text-sm z-text-secondary">Simulated overlay bar (nativebar=false, data-embedscrollbar=false). Hidden at rest — a slim bar fades in only while the pointer is over the grid body, floats on top of the content, and reserves no layout space. It fades out again on mouse-leave.</h:span></h:div>
+            </h:div>
+        </h:div>
+        <h:div class="z-d-flex z-items-start z-gap-8 z-py-4 z-border-bottom">
+            <h:div class="z-grow-0">
                 <grid width="240px" height="200px" ca:data-embedscrollbar="true">
                     <custom-attributes org.zkoss.zul.nativebar="false"/>
                     <columns>
@@ -88,14 +88,14 @@
                         </row>
                     </rows>
                 </grid>
-            </div>
-            <div sclass="z-flex-1 z-d-flex z-flex-col z-gap-2">
-                <div><label sclass="z-text-sm z-fw-medium z-text-on-surface" value="Embedded scrollbar"/></div>
-                <div><label sclass="z-text-sm z-text-secondary" value="Simulated embedded bar (nativebar=false, data-embedscrollbar=true). A thin rail stays visible at all times inside a reserved gutter; hovering the grid body thickens it into the full draggable indicator. The gutter permanently narrows the content area."/></div>
-            </div>
-        </div>
-        <div sclass="z-d-flex z-items-start z-gap-8 z-py-4">
-            <div sclass="z-grow-0">
+            </h:div>
+            <h:div class="z-flex-1 z-d-flex z-flex-col z-gap-2">
+                <h:div><h:span class="z-text-sm z-fw-medium z-text-on-surface">Embedded scrollbar</h:span></h:div>
+                <h:div><h:span class="z-text-sm z-text-secondary">Simulated embedded bar (nativebar=false, data-embedscrollbar=true). A thin rail stays visible at all times inside a reserved gutter; hovering the grid body thickens it into the full draggable indicator. The gutter permanently narrows the content area.</h:span></h:div>
+            </h:div>
+        </h:div>
+        <h:div class="z-d-flex z-items-start z-gap-8 z-py-4">
+            <h:div class="z-grow-0">
                 <grid width="240px" height="200px">
                     <custom-attributes org.zkoss.zul.nativebar="true"/>
                     <columns>
@@ -113,12 +113,12 @@
                         </row>
                     </rows>
                 </grid>
-            </div>
-            <div sclass="z-flex-1 z-d-flex z-flex-col z-gap-2">
-                <div><label sclass="z-text-sm z-fw-medium z-text-on-surface" value="Native scrollbar"/></div>
-                <div><label sclass="z-text-sm z-text-secondary" value="Browser / OS native bar (nativebar=true). ZK draws no scrollbar widget, so the look follows the platform default and always occupies layout space. The theme can only restyle it through CSS ::-webkit-scrollbar."/></div>
-            </div>
-        </div>
-    </div>
-</div>
+            </h:div>
+            <h:div class="z-flex-1 z-d-flex z-flex-col z-gap-2">
+                <h:div><h:span class="z-text-sm z-fw-medium z-text-on-surface">Native scrollbar</h:span></h:div>
+                <h:div><h:span class="z-text-sm z-text-secondary">Browser / OS native bar (nativebar=true). ZK draws no scrollbar widget, so the look follows the platform default and always occupies layout space. The theme can only restyle it through CSS ::-webkit-scrollbar.</h:span></h:div>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

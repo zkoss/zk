@@ -4,8 +4,8 @@
     java.util.Date sampleBegin = new java.util.Date(125, 0, 10);  // 2025-01-10
     java.util.Date sampleEnd   = new java.util.Date(125, 0, 15);  // 2025-01-15
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="DateRangeBox"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">DateRangeBox</h:span></h:div>
     <apply templateURI="~./pv/daterangebox-content.zul"/>
-</div>
+</h:div>
 </zk>

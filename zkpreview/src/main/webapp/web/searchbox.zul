@@ -5,8 +5,8 @@ ListModel searchModel = new ListModelArray(new String[]{
     "North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
 });
 </zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Searchbox"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Searchbox</h:span></h:div>
     <apply templateURI="~./pv/searchbox-content.zul"/>
-</div>
+</h:div>
 </zk>

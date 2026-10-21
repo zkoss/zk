@@ -8,64 +8,64 @@
     marks.put(75, "High");
     marks.put(100, "Max");
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Multislider"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Multislider</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Horizontal"/></div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-4 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="3 ranges"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-4 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">3 ranges</h:span></h:div>
                 <multislider width="500px">
                     <sliderbuttons startValue="10" endValue="70"/>
                     <sliderbuttons startValue="20" endValue="50"/>
                     <sliderbuttons startValue="30" endValue="40"/>
                 </multislider>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="2 ranges"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">2 ranges</h:span></h:div>
                 <multislider min="5" max="120" orient="vertical" height="500px">
                     <sliderbuttons startValue="5" endValue="100"/>
                     <sliderbuttons startValue="20" endValue="50"/>
                 </multislider>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Marks / Disabled / Tooltip Visible"/></div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-8 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Numeric tick labels every 10 (markScale)"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Marks / Disabled / Tooltip Visible</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-8 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Numeric tick labels every 10 (markScale)</h:span></h:div>
                 <multislider width="500px" markScale="10">
                     <sliderbuttons startValue="20" endValue="60"/>
                 </multislider>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Custom text marks (Min/Low/Mid/High/Max)"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Custom text marks (Min/Low/Mid/High/Max)</h:span></h:div>
                 <multislider width="500px" marks="${marks}">
                     <sliderbuttons startValue="25" endValue="75"/>
                 </multislider>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Disabled"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Disabled</h:span></h:div>
                 <multislider width="500px" disabled="true">
                     <sliderbuttons startValue="20" endValue="60"/>
                 </multislider>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-8">
-                <div><label sclass="z-text-xs z-text-secondary" value="Always-visible tooltips"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-8">
+                <h:div><h:span class="z-text-xs z-text-secondary">Always-visible tooltips</h:span></h:div>
                 <multislider width="500px" tooltipVisible="true">
                     <sliderbuttons startValue="30" endValue="70"/>
                 </multislider>
-            </div>
-        </div>
-    </div>
-</div>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

@@ -2,8 +2,8 @@
 <!-- Fixture for grid-groupfoot-alignment.spec.ts: a grouped grid whose columns are left, right and
      centre aligned. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence
      do not pick it up as a page. -->
-<zk>
-<div sclass="z-p-8">
+<zk xmlns:h="native">
+<h:div class="z-p-8">
     <grid sclass="groupfoot-guard" width="480px">
         <columns>
             <column label="Name"/>
@@ -17,5 +17,5 @@
             <groupfoot><label value="Total"/><label value="357"/><label value="2"/></groupfoot>
         </rows>
     </grid>
-</div>
+</h:div>
 </zk>

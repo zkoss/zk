@@ -1,112 +1,112 @@
 <?page title="Stepbar" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Stepbar"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Stepbar</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Basic Stepbar"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Active: first step"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Basic Stepbar</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Active: first step</h:span></h:div>
                 <stepbar activeIndex="0" width="600px">
                     <step title="First Step" />
                     <step title="Second Step" />
                     <step title="Third Step"/>
                 </stepbar>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Active Index Variants"/></div>
-        <div sclass="z-d-flex z-flex-col z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Active: second step"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Active Index Variants</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Active: second step</h:span></h:div>
                 <stepbar activeIndex="1" width="600px">
                     <step title="First Step" />
                     <step title="Second Step" />
                     <step title="Third Step"/>
                 </stepbar>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Active: third step (complete)"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Active: third step (complete)</h:span></h:div>
                 <stepbar activeIndex="2" width="600px">
                     <step title="First Step" />
                     <step title="Second Step" />
                     <step title="Third Step"/>
                 </stepbar>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Error Step"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Middle step in error state (step.error=&quot;true&quot;)"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Error Step</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Middle step in error state (step.error=&quot;true&quot;)</h:span></h:div>
                 <stepbar activeIndex="2" width="600px">
                     <step title="First Step" />
                     <step title="Second Step" error="true"/>
                     <step title="Third Step"/>
                 </stepbar>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical Orientation"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="orient=&quot;vertical&quot; — connector becomes a vertical stripe"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical Orientation</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">orient=&quot;vertical&quot; — connector becomes a vertical stripe</h:span></h:div>
                 <stepbar activeIndex="1" orient="vertical">
                     <step title="First Step" />
                     <step title="Second Step" />
                     <step title="Third Step"/>
                 </stepbar>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Non-Linear (Clickable) Mode"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="linear=&quot;false&quot; — steps are clickable, cursor: pointer"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Non-Linear (Clickable) Mode</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">linear=&quot;false&quot; — steps are clickable, cursor: pointer</h:span></h:div>
                 <stepbar activeIndex="1" linear="false" width="600px">
                     <step title="First Step" />
                     <step title="Second Step" />
                     <step title="Third Step"/>
                 </stepbar>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Wrapped Label"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="wrappedLabels=&quot;true&quot; — title stacks below icon; long labels wrap"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Wrapped Label</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">wrappedLabels=&quot;true&quot; — title stacks below icon; long labels wrap</h:span></h:div>
                 <stepbar activeIndex="1" wrappedLabels="true" width="600px">
                     <step title="Submit Order Details" />
                     <step title="Review and Confirm Your Purchase" />
                     <step title="Payment Processing" />
                     <step title="Done" />
                 </stepbar>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Single-Child Generation"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Single step — no connectors rendered"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Single-Child Generation</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Single step — no connectors rendered</h:span></h:div>
                 <stepbar activeIndex="0" width="600px">
                     <step title="Only Step" />
                 </stepbar>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-</div>
+</h:div>
 </zk>

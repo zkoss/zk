@@ -3,8 +3,8 @@
      `z-sticky-header` class in a scrolling container, whose rows hold a toolbarbutton. A focused toolbarbutton that has
      been scrolled under the header must stay under it. Lives under pv/ so gallery-scan, forced-colors-gallery and
      font-size-equivalence do not pick it up as a page. -->
-<zk>
-<div sclass="z-p-8">
+<zk xmlns:h="native">
+<h:div class="z-p-8">
     <div sclass="tsg-scroller" style="height:160px; overflow-y:auto; width:400px;">
         <listbox sclass="z-sticky-header" width="380px">
             <listhead>
@@ -23,5 +23,5 @@
             <listitem><listcell label="10"/><listcell><toolbarbutton label="Open 10"/></listcell></listitem>
         </listbox>
     </div>
-</div>
+</h:div>
 </zk>

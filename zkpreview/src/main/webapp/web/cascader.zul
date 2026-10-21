@@ -11,8 +11,8 @@ DefaultTreeModel cascaderModel = new DefaultTreeModel(new DefaultTreeNode("ROOT"
             new DefaultTreeNode("Auckland"), new DefaultTreeNode("Queenstown")}))}
     )));
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Cascader"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Cascader</h:span></h:div>
     <apply templateURI="~./pv/cascader-content.zul"/>
-</div>
+</h:div>
 </zk>

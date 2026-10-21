@@ -14,13 +14,13 @@
     DefaultTreeModel orgModel = new DefaultTreeModel(root);
     orgModel.addOpenPaths(new int[][]{{0}, {0, 0}, {0, 1}});
 ]]></zscript>
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Organigram"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Organigram</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Basic Organigram"/></div>
-        <div sclass="z-py-3">
-            <label value="Selected item: "/>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Basic Organigram</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:span>Selected item: </h:span>
             <label id="label"/>
             <organigram id="organigram">
                 <orgchildren>
@@ -53,13 +53,13 @@
                     </attribute>
                 </button>
             </hlayout>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Organigram with Model"/></div>
-        <div sclass="z-py-3">
-            <label value="Selected item: "/>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Organigram with Model</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:span>Selected item: </h:span>
             <label id="label2"/>
             <organigram model="${orgModel}"/>
             <hlayout>
@@ -80,13 +80,13 @@
                     </attribute>
                 </button>
             </hlayout>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Node State Gallery"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-mb-3"><label sclass="z-text-xs z-text-secondary" value="Selected, disabled, non-selectable, and closed branch — static state samples"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Node State Gallery</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-mb-3"><h:span class="z-text-xs z-text-secondary">Selected, disabled, non-selectable, and closed branch — static state samples</h:span></h:div>
             <organigram id="stateOrg">
                 <orgchildren>
                     <orgitem id="rootItem" label="Root">
@@ -113,7 +113,7 @@
                     </orgitem>
                 </orgchildren>
             </organigram>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

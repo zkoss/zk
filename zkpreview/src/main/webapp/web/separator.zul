@@ -1,10 +1,10 @@
 <?page title="Separator" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Separator"/></div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Horizontal"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Separator</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
             <div sclass="z-d-flex z-flex-col z-items-start z-gap-2" style="width:200px">
                 <div><label sclass="z-text-xs z-text-secondary" value="Above"/></div>
                 <separator orient="horizontal" bar="true" spacing="8px"/>
@@ -23,10 +23,10 @@
                 <div><label sclass="z-text-xs z-text-secondary" value="Below"/></div>
                 <div><label sclass="z-text-xs z-text-secondary" value="No bar"/></div>
             </div>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical"/></div>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical</h:span></h:div>
         <div sclass="z-d-flex z-items-center z-gap-4 z-py-3" style="height:80px">
             <div><label sclass="z-text-xs z-text-secondary" value="Left"/></div>
             <separator orient="vertical" bar="true" spacing="16px"/>
@@ -34,12 +34,12 @@
             <separator orient="vertical" bar="true" spacing="16px"/>
             <div><label sclass="z-text-xs z-text-secondary" value="Right"/></div>
         </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="In a toolbar"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="bar: divider between the items"/></div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">In a toolbar</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">bar: divider between the items</h:span></h:div>
                 <toolbar>
                     <toolbarbutton label="New"/>
                     <toolbarbutton label="Open"/>
@@ -47,9 +47,9 @@
                     <toolbarbutton label="Cut"/>
                     <toolbarbutton label="Copy"/>
                 </toolbar>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="orient=vertical bar: the same divider"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">orient=vertical bar: the same divider</h:span></h:div>
                 <toolbar>
                     <toolbarbutton label="New"/>
                     <toolbarbutton label="Open"/>
@@ -57,16 +57,16 @@
                     <toolbarbutton label="Cut"/>
                     <toolbarbutton label="Copy"/>
                 </toolbar>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="no bar: spacer that pushes the items apart"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">no bar: spacer that pushes the items apart</h:span></h:div>
                 <toolbar width="320px">
                     <toolbarbutton label="New"/>
                     <toolbarbutton label="Open"/>
                     <separator/>
                     <toolbarbutton label="Help"/>
                 </toolbar>
-            </div>
+            </h:div>
             <div sclass="z-d-flex z-flex-col z-items-start z-gap-2" style="width:160px">
                 <div><label sclass="z-text-xs z-text-secondary" value="vertical toolbar with a bar"/></div>
                 <toolbar orient="vertical">
@@ -77,7 +77,7 @@
                     <toolbarbutton label="Copy"/>
                 </toolbar>
             </div>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

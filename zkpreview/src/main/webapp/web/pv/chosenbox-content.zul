@@ -1,4 +1,4 @@
-<zk>
+<zk xmlns:h="native">
 <zscript><![CDATA[
     import org.zkoss.zul.ListModelList;
     ListModelList chosenboxEmpty = new ListModelList(new String[]{
@@ -24,17 +24,17 @@
     </template>
 </apply>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Messages and Placeholder"/></div>
-    <div sclass="z-d-flex z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Messages and Placeholder</h:span></h:div>
+    <h:div class="z-d-flex z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">emptyMessage (nothing selected)</label>
             <chosenbox model="${chosenboxEmpty}" emptyMessage="Pick one or more…" width="220px"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">createMessage + noResultsText</label>
             <chosenbox model="${chosenboxEmpty}" creatable="true" createMessage="Add new {0}" noResultsText="No matches found" width="220px"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

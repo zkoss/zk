@@ -1,21 +1,21 @@
 <?page title="Audio" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Audio"/></div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Player"/></div>
-        <div sclass="z-py-3 z-d-flex z-flex-col z-gap-4">
-            <div><label sclass="z-text-xs z-text-secondary" value="Note: provide a valid audio URL via src attribute (e.g. an .mp3 or .wav file)."/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Audio</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Player</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-flex-col z-gap-4">
+            <h:div><h:span class="z-text-xs z-text-secondary">Note: provide a valid audio URL via src attribute (e.g. an .mp3 or .wav file).</h:span></h:div>
             <audio id="audio" src="music.wav" controls="true"/>
-        </div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Controls"/></div>
-        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Controls</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
             <button label="Play" onClick="audio.play()"/>
             <button label="Pause" onClick="audio.pause()"/>
             <button label="Stop" onClick="audio.stop()"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

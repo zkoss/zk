@@ -5,8 +5,8 @@
      The button sits 200 px down and in the middle so that the pop-up, which opens above it, fits in the window without touching its edges.
      Colorbox: the spacer below makes the page scrollable, so the test can see a pop-up that scrolls the page when it opens.
      Combobox: 8 items, more than the 5 rows (5 x 60px) of the bottom sheet, so the list scrolls and a row touches the sheet's bottom edge. -->
-<zk>
-<div sclass="z-p-8">
+<zk xmlns:h="native">
+<h:div class="z-p-8">
     <div sclass="z-d-flex z-justify-center" style="margin-top: 200px">
     <button id="deleteItem" label="Delete item" onClick="deletePopup.open(self)"/>
     </div>
@@ -26,5 +26,5 @@
     </div>
     <div style="margin-top: 100px"><colorbox id="scrollProbe"/></div>
     <div style="height: 1500px"/>
-</div>
+</h:div>
 </zk>

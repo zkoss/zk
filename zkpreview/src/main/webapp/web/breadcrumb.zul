@@ -1,50 +1,50 @@
 <?page title="Breadcrumb" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Breadcrumb"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Breadcrumb</h:span></h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Default (links + current page)"/></div>
-        <div sclass="z-d-flex z-flex-col z-gap-2 z-py-3">
-            <div><label sclass="z-text-sm z-text-secondary" value="Trail with 3 link items and a terminal current-page item"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Default (links + current page)</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2 z-py-3">
+            <h:div><h:span class="z-text-sm z-text-secondary">Trail with 3 link items and a terminal current-page item</h:span></h:div>
             <breadcrumb id="pv-breadcrumb-default">
                 <breadcrumbitem label="Home" href="#"/>
                 <breadcrumbitem label="Products" href="#"/>
                 <breadcrumbitem label="Category" href="#"/>
                 <breadcrumbitem label="Current Item"/>
             </breadcrumb>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Disabled item"/></div>
-        <div sclass="z-d-flex z-flex-col z-gap-2 z-py-3">
-            <div><label sclass="z-text-sm z-text-secondary" value="Middle item disabled (dimmed, non-interactive even though it has an href)"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Disabled item</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2 z-py-3">
+            <h:div><h:span class="z-text-sm z-text-secondary">Middle item disabled (dimmed, non-interactive even though it has an href)</h:span></h:div>
             <breadcrumb id="pv-breadcrumb-disabled">
                 <breadcrumbitem label="Home" href="#"/>
                 <breadcrumbitem label="Archived" href="#" disabled="true"/>
                 <breadcrumbitem label="Current Item"/>
             </breadcrumb>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Icon separator"/></div>
-        <div sclass="z-d-flex z-flex-col z-gap-2 z-py-3">
-            <div><label sclass="z-text-sm z-text-secondary" value="separator=&quot;icon:z-icon-chevron-right&quot; instead of the plain-text default"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Icon separator</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2 z-py-3">
+            <h:div><h:span class="z-text-sm z-text-secondary">separator=&quot;icon:z-icon-chevron-right&quot; instead of the plain-text default</h:span></h:div>
             <breadcrumb id="pv-breadcrumb-icon-separator" separator="icon:z-icon-chevron-right">
                 <breadcrumbitem label="Home" href="#"/>
                 <breadcrumbitem label="Products" href="#"/>
                 <breadcrumbitem label="Category" href="#"/>
                 <breadcrumbitem label="Current Item"/>
             </breadcrumb>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Collapsed (maxItems)"/></div>
-        <div sclass="z-d-flex z-flex-col z-gap-2 z-py-3">
-            <div><label sclass="z-text-sm z-text-secondary" value="maxItems=3 with 6 items — client-side JS collapses the middle into an ellipsis button"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Collapsed (maxItems)</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2 z-py-3">
+            <h:div><h:span class="z-text-sm z-text-secondary">maxItems=3 with 6 items — client-side JS collapses the middle into an ellipsis button</h:span></h:div>
             <breadcrumb id="pv-breadcrumb-collapsed" maxItems="3">
                 <breadcrumbitem label="Home" href="#"/>
                 <breadcrumbitem label="Level 1" href="#"/>
@@ -53,7 +53,7 @@
                 <breadcrumbitem label="Level 4" href="#"/>
                 <breadcrumbitem label="Current Item"/>
             </breadcrumb>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

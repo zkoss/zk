@@ -1,37 +1,37 @@
-<zk>
+<zk xmlns:h="native">
 <!-- Default-state timepickers set readonly="false" explicitly as a workaround for ZK-6122:
      a bare <timepicker/> renders readonly=true on the client (dropdown-only) even though
      isReadonly() and the docs report the default as false. -->
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Formats"/></div>
-    <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="HH:mm"/></div>
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Formats</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">HH:mm</h:span></h:div>
             <timepicker format="HH:mm" readonly="false"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="HH:mm a"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">HH:mm a</h:span></h:div>
             <timepicker format="HH:mm a" readonly="false"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="HH:mm:ss"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">HH:mm:ss</h:span></h:div>
             <timepicker format="HH:mm:ss" readonly="false"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="hh:mm:ss a"/></div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">hh:mm:ss a</h:span></h:div>
             <timepicker format="hh:mm:ss a" readonly="false"/>
-        </div>
+        </h:div>
         <!-- Seeded HH:mm:ss content-fit example. ZK hardcodes the input at size="5"
              (fits HH:mm only), so without field-sizing the "10:30:00" value would clip
              (scrollWidth > clientWidth); field-sizing:content lets it hug/grow to fit.
              With the fixed widths removed above, every cell now sizes to its content —
              this seeded cell is one of the timepicker content-fit guard's targets. -->
-        <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-            <div><label sclass="z-text-xs z-text-secondary" value="HH:mm:ss (seeded)"/></div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">HH:mm:ss (seeded)</h:span></h:div>
             <timepicker format="HH:mm:ss" value="${sampleTime}"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 
 <apply templateURI="~./pv/matrix.zul" title="States"
        cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"

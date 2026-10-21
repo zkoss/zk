@@ -1,103 +1,103 @@
 <?page title="Window" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Window"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Window</h:span></h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Window — State Gallery"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-md z-fw-bold z-text-secondary">Window — State Gallery</h:span></h:div>
 
-        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Default"/></div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Default</h:span></h:div>
                 <window title="Window" border="normal" width="200px">Content</window>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="No Border"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">No Border</h:span></h:div>
                 <window title="Window" border="none" width="200px">Content</window>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Embedded"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Normal border, full controls"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Embedded</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Normal border, full controls</h:span></h:div>
                 <window title="With Title" border="normal"
                     closable="true" sizable="true" maximizable="true" minimizable="true"
                     width="300px" height="180px">
                     Window Content
                 </window>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No border, full controls"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No border, full controls</h:span></h:div>
                 <window title="With Title"
                     closable="true" sizable="true" maximizable="true" minimizable="true"
                     width="300px" height="180px">
                     Window Content
                 </window>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Normal border, no title"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Normal border, no title</h:span></h:div>
                 <window border="normal" closable="true"
                     width="300px" height="180px">
                     Window Content
                 </window>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No border, no title"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No border, no title</h:span></h:div>
                 <window closable="true" width="300px" height="180px">
                     Window Content
                 </window>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Overlapped Mode"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Normal border, mode=&quot;overlapped&quot;"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Overlapped Mode</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Normal border, mode=&quot;overlapped&quot;</h:span></h:div>
                 <window title="Overlapped" border="normal" mode="overlapped"
                     closable="true" sizable="true" maximizable="true" minimizable="true"
                     width="300px" height="180px" position="right, bottom">
                     position="right, bottom"
                 </window>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No border, mode=&quot;overlapped&quot;"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No border, mode=&quot;overlapped&quot;</h:span></h:div>
                 <window title="Overlapped" mode="overlapped"
                     closable="true" sizable="true" maximizable="true" minimizable="true"
                     width="300px" height="180px" position="right, top">
                     position="right, top"
                 </window>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Popup and Modal"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Normal border, mode=&quot;popup&quot;"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Popup and Modal</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Normal border, mode=&quot;popup&quot;</h:span></h:div>
                 <window id="popup_normal" title="Window: Popup" border="normal" mode="popup"
                     closable="true" sizable="true" maximizable="true" minimizable="true"
                     width="300px" height="180px">
                     Window Content
                 </window>
                 <button label="Show Popup" onClick="popup_normal.doPopup();"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No border, mode=&quot;popup&quot;"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No border, mode=&quot;popup&quot;</h:span></h:div>
                 <window id="popup_nb" title="Window: Popup" mode="popup"
                     closable="true" sizable="true" maximizable="true" minimizable="true"
                     width="300px" height="180px">
                     mode="popup" , no border
                 </window>
                 <button label="Show Popup" onClick="popup_nb.doPopup();"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="Normal border, mode=&quot;modal&quot;"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Normal border, mode=&quot;modal&quot;</h:span></h:div>
                 <window id="modal_normal" title="Window: Modal" border="normal" visible="false"
                     closable="true" sizable="true" maximizable="true" minimizable="true"
                     width="300px" height="180px">
@@ -107,9 +107,9 @@
                     </vbox>
                 </window>
                 <button label="Show Modal" onClick="modal_normal.doModal();"/>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No border, mode=&quot;modal&quot;"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No border, mode=&quot;modal&quot;</h:span></h:div>
                 <window id="modal_nb" title="Window: Modal" visible="false"
                     closable="true" sizable="true" maximizable="true" minimizable="true"
                     width="300px" height="180px">
@@ -119,9 +119,9 @@
                     </vlayout>
                 </window>
                 <button label="Show Modal" onClick="modal_nb.doModal();"/>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-</div>
+</h:div>
 </zk>

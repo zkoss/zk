@@ -1,26 +1,26 @@
 <?page title="Panel" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Panel"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Panel</h:span></h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Panel — State Gallery"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-md z-fw-bold z-text-secondary">Panel — State Gallery</h:span></h:div>
 
-        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Default"/></div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Default</h:span></h:div>
                 <panel title="Panel" border="rounded" width="220px">
                     <panelchildren>Content</panelchildren>
                 </panel>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Rounded Border — Full Controls"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="border=&quot;rounded&quot;"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Rounded Border — Full Controls</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">border=&quot;rounded&quot;</h:span></h:div>
                 <panel border="rounded" height="250px" width="280px"
                     maximizable="true" minimizable="true" collapsible="true" closable="true"
                     title="Panel (rounded)">
@@ -28,9 +28,9 @@
                     <panelchildren>Panel Content</panelchildren>
                     <toolbar mold="panel">Footer Toolbar</toolbar>
                 </panel>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="border=&quot;normal&quot;"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">border=&quot;normal&quot;</h:span></h:div>
                 <panel border="normal" height="250px" width="280px"
                     maximizable="true" minimizable="true" collapsible="true" closable="true"
                     title="Panel (normal)">
@@ -38,15 +38,15 @@
                     <panelchildren>Panel Content</panelchildren>
                     <toolbar mold="panel">Footer Toolbar</toolbar>
                 </panel>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="No Border — Full Controls"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No border, with title"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">No Border — Full Controls</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No border, with title</h:span></h:div>
                 <panel height="250px" width="280px"
                     maximizable="true" minimizable="true" collapsible="true" closable="true"
                     title="Panel (no border)">
@@ -54,89 +54,89 @@
                     <panelchildren>Panel Content</panelchildren>
                     <toolbar mold="panel">Footer Toolbar</toolbar>
                 </panel>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Without Toolbar"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="border=&quot;rounded&quot;"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Without Toolbar</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">border=&quot;rounded&quot;</h:span></h:div>
                 <panel border="rounded" height="200px" width="280px"
                     maximizable="true" minimizable="true" collapsible="true" closable="true"
                     title="Panel (rounded)">
                     <panelchildren>Panel Content</panelchildren>
                 </panel>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="border=&quot;normal&quot;"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">border=&quot;normal&quot;</h:span></h:div>
                 <panel border="normal" height="200px" width="280px"
                     maximizable="true" minimizable="true" collapsible="true" closable="true"
                     title="Panel (normal)">
                     <panelchildren>Panel Content</panelchildren>
                 </panel>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No border, with title"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No border, with title</h:span></h:div>
                 <panel height="200px" width="280px"
                     maximizable="true" minimizable="true" collapsible="true" closable="true"
                     title="Panel (no border)">
                     <panelchildren>Panel Content</panelchildren>
                 </panel>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No title, rounded"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No title, rounded</h:span></h:div>
                 <panel border="rounded" height="200px" width="280px">
                     <panelchildren>Panel Content (no title)</panelchildren>
                 </panel>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No title, normal"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No title, normal</h:span></h:div>
                 <panel border="normal" height="200px" width="280px">
                     <panelchildren>Panel Content (no title)</panelchildren>
                 </panel>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="No title, no border"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">No title, no border</h:span></h:div>
                 <panel height="200px" width="280px">
                     <panelchildren>Panel Content (no title)</panelchildren>
                 </panel>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Overflow / Scroll"/></div>
-        <div sclass="z-py-3">
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Overflow / Scroll</h:span></h:div>
+        <h:div class="z-py-3">
             <panel title="Panel with Overflow Content" border="normal" width="300px" height="200px">
                 <panelchildren style="overflow:auto;">
                     <label style="white-space:nowrap" value="The Panel component in ZK is a versatile container that serves as a foundational building block for application-oriented user interfaces. It offers a variety of structural components such as top, bottom, and foot toolbars, along with distinct header, footer, and body sections."/>
                 </panelchildren>
             </panel>
-        </div>
-    </div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Collapsed State"/></div>
-        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="collapsed (open=&quot;false&quot;)"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Collapsed State</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">collapsed (open=&quot;false&quot;)</h:span></h:div>
                 <panel title="Collapsed Panel" border="rounded" width="280px"
                     collapsible="true" open="false">
                     <panelchildren>Panel Content</panelchildren>
                 </panel>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
-                <div><label sclass="z-text-xs z-text-secondary" value="expanded (open=&quot;true&quot;)"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">expanded (open=&quot;true&quot;)</h:span></h:div>
                 <panel title="Expanded Panel" border="rounded" width="280px"
                     collapsible="true" open="true">
                     <panelchildren>Panel Content</panelchildren>
                 </panel>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
 
-</div>
+</h:div>
 </zk>

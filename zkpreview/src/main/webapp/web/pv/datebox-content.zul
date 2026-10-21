@@ -1,46 +1,46 @@
-<zk>
+<zk xmlns:h="native">
 <zscript><![CDATA[
     import org.zkoss.util.Locales;
     import java.util.Locale;
 ]]></zscript>
 
-<div sclass="z-mb-6">
-    <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Calendar Popup Variants"/></div>
-    <div sclass="z-d-flex z-flex-wrap z-gap-6 z-py-3">
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Calendar Popup Variants</h:span></h:div>
+    <h:div class="z-d-flex z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Seeded value (content-fit)</label>
             <datebox value="${sampleDate}"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Today link</label>
             <datebox showTodayLink="true"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Week of year</label>
             <datebox weekOfYear="true"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Time in popup (yyyy/MM/dd HH:mm)</label>
             <datebox format="yyyy/MM/dd HH:mm" cols="16" value="${sampleDate}"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Timezone selector</label>
             <datebox displayedTimeZones="GMT-8,GMT,GMT+8"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Month grid (selectLevel=month)</label>
             <datebox selectLevel="month"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">Year grid (selectLevel=year)</label>
             <datebox selectLevel="year"/>
-        </div>
-        <div sclass="z-d-flex z-flex-col z-gap-2">
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
             <label sclass="z-text-xs z-text-secondary">ROC calendar (locale=zh_TW)</label>
             <datebox locale="zh_TW"/>
-        </div>
-    </div>
-</div>
+        </h:div>
+    </h:div>
+</h:div>
 
 <apply templateURI="~./pv/matrix.zul" title="States"
        cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"

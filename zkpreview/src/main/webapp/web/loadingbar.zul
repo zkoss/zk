@@ -1,47 +1,47 @@
 <?page title="Loadingbar" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Loadingbar"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Loadingbar</h:span></h:div>
 
-    <div sclass="z-mb-8">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Loadingbar — State Gallery"/></div>
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-md z-fw-bold z-text-secondary">Loadingbar — State Gallery</h:span></h:div>
 
-        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="30%"/></div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">30%</h:span></h:div>
                 <h:div class="z-loadingbar" style="width:240px;">
                     <h:div class="z-loadingbar-colorbar" style="width:30%"/>
                 </h:div>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="70%"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">70%</h:span></h:div>
                 <h:div class="z-loadingbar" style="width:240px;">
                     <h:div class="z-loadingbar-colorbar" style="width:70%"/>
                 </h:div>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="100%"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">100%</h:span></h:div>
                 <h:div class="z-loadingbar" style="width:240px;">
                     <h:div class="z-loadingbar-colorbar" style="width:100%"/>
                 </h:div>
-            </div>
-            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
-                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Indeterminate"/></div>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Indeterminate</h:span></h:div>
                 <h:div class="z-loadingbar" style="width:240px;overflow:hidden;">
                     <h:div class="z-loadingbar-indeterminate">
                         <h:div class="z-loadingbar-image"/>
                         <h:div class="z-loadingbar-effectbar"/>
                     </h:div>
                 </h:div>
-            </div>
-        </div>
-    </div>
+            </h:div>
+        </h:div>
+    </h:div>
 
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Top Position"/></div>
-        <div sclass="z-py-3">
-            <div sclass="z-d-flex z-items-start z-gap-2 z-flex-col">
-                <div><label sclass="z-text-sm z-text-secondary" value="Simulated top loading bar (position:relative for demo):"/></div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Top Position</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-items-start z-gap-2 z-flex-col">
+                <h:div><h:span class="z-text-sm z-text-secondary">Simulated top loading bar (position:relative for demo):</h:span></h:div>
                 <h:div style="position:relative;width:100%;height:20px;">
                     <h:div class="z-loadingbar-position z-loadingbar-position-top" style="position:relative;width:100%;">
                         <h:div class="z-loadingbar">
@@ -49,8 +49,8 @@
                         </h:div>
                     </h:div>
                 </h:div>
-            </div>
-        </div>
-    </div>
-</div>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
 </zk>

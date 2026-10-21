@@ -1,9 +1,9 @@
 <?page title="Dropupload" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
-<div sclass="z-p-8">
-    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Dropupload"/></div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Default (detection=&quot;none&quot;)"/></div>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Dropupload</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Default (detection=&quot;none&quot;)</h:span></h:div>
         <dropupload maxsize="5120" detection="none">
             <attribute name="content"><![CDATA[
                 <b>Drop Here</b><br/>
@@ -13,10 +13,10 @@
                 org.zkoss.util.media.Media media = event.getMedia();
             </attribute>
         </dropupload>
-        <div sclass="z-mt-2"><label sclass="z-text-xs z-text-secondary" value="Drag feedback is the browser's native copy cursor — the box has no drag-over highlight or disabled state (ZK emits no such class)."/></div>
-    </div>
-    <div sclass="z-mb-6">
-        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="detection=&quot;self&quot;"/></div>
+        <h:div class="z-mt-2"><h:span class="z-text-xs z-text-secondary">Drag feedback is the browser's native copy cursor — the box has no drag-over highlight or disabled state (ZK emits no such class).</h:span></h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">detection=&quot;self&quot;</h:span></h:div>
         <dropupload maxsize="5120" detection="self">
             <attribute name="content"><![CDATA[
                 <b>Drop Here</b><br/>
@@ -26,7 +26,7 @@
                 org.zkoss.util.media.Media media = event.getMedia();
             </attribute>
         </dropupload>
-        <div sclass="z-mt-2"><label sclass="z-text-xs z-text-secondary" value="Same box styling as Default — only the behavior differs: the content stays hidden until a file is dragged over the zone."/></div>
-    </div>
-</div>
+        <h:div class="z-mt-2"><h:span class="z-text-xs z-text-secondary">Same box styling as Default — only the behavior differs: the content stays hidden until a file is dragged over the zone.</h:span></h:div>
+    </h:div>
+</h:div>
 </zk>
