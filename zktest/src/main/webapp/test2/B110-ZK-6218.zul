@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6218.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Oct 21 10:30:48 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click the textbox in the window, then click "other": an error box opens to the right of the textbox in the window
+		2. click the title bar of the window: the error box should stay to the right of the textbox and does not move
+	</label>
+	<textbox id="other" placeholder="other"/>
+	<window id="win" title="Overlapped" mode="overlapped" border="normal" width="400px" height="150px">
+		<textbox id="inWindow" constraint="no empty"/>
+	</window>
+</zk>
