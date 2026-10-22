@@ -442,7 +442,7 @@ used only when no jar resolves.
 - **Limit:** skills are a convention of Claude Code / Cursor and similar tools, not a standard.
   The customer still has to install it.
 - **Reading order (decided 2026-10-02, D1-A in
-  [utility-discovery-without-manifest.md](utility-discovery-without-manifest.md)):** the manifest
+  utility-discovery-without-manifest.md, kept locally under `tasks/`, not in the repository):** the manifest
   is the list and the source CSS is the detail. The alternative — consumers parse the shipped CSS
   themselves, no manifest — was evaluated and rejected because every consumer would re-implement
   the extraction rules of §5.1/§5.12 and the CSS file layout would become public API. The skill

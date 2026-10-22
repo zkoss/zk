@@ -1,8 +1,0 @@
-HARD RULES (every item)
-- Begin EVERY Bash call with an absolute `cd` — the shell's cwd resets between calls. Use `/usr/bin/grep`, never bare `grep`, inside compound commands.
-- Budget: read + write at most 100 KB of file content in total; read only what the brief names (for the copy items: nothing).
-- Never run `git add`, `git commit`, `git checkout`, `git stash`, `git reset` or anything that changes the index or branch, in either repository. The zk checkout carries other people's uncommitted files (`.gitignore`, `lang-addon.xsd`, `logs/`, `tasks/`) — leave everything you were not told to touch exactly as it is.
-- zk is on git branch `marble`. Do NOT touch `zul/`, `zk/`, `zkcml`, `scripts/`, `zkpreview/`, `zktest/`, the root `build.gradle`, `package.json` or `.gitignore` — other items own those. Other P3 items may be writing other paths under zk/doc or zk/.claude at the same time; never read, list or "tidy" a path your item does not own.
-- Copies come from the template's COMMITTED tree only (`git archive HEAD … | tar -x`), never from a filesystem walk; `.DS_Store` must never reach zk.
-- Artifacts are English. If a write is denied by permissions, stop, do not work around it, and report it in blockers.
-- Never background a command, never poll, never `sleep`; a command still running at its timeout is a failure to report, not to retry.

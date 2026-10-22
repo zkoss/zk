@@ -112,7 +112,7 @@ referenced evidence, **not** test baselines, and must not be pruned: `cascader-p
 ## 7. Related docs
 
 - [marble-test-architecture.html](marble-test-architecture.html): layers, coverage matrix, who runs what
-- [marble-test-gaps.md](marble-test-gaps.md): open gaps and progress
-- [marble-test-infra-conclusion.md](marble-test-infra-conclusion.md): selector rules, baseline run, measurements
+- marble-test-gaps.md (kept locally under `tasks/`, not in the repository): open gaps and progress
+- marble-test-infra-conclusion.md (kept locally under `tasks/`, not in the repository): selector rules, baseline run, measurements
 - [spec/index.md](spec/index.md): normative design specs (what it must look like)
 - [harness-decisions.md](../.claude/skills/marble-theme/reference/harness-decisions.md), [harness-playbook.md](../.claude/skills/marble-theme/reference/harness-playbook.md): the agent loop
