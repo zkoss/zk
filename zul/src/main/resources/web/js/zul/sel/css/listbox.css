@@ -53,6 +53,9 @@
 
 /* Header cell — Mira / MD3 Data Table: no fill, hierarchy via weight + divider */
 .z-listheader {
+    /* A hidden column's header is a zero-width TH whose content div keeps the cell padding: without a clip
+       the first 2 x 16px of its label paint over the next header. Same as .z-column and .z-treecol. */
+    overflow: hidden;
     /* The cell padding sits on .z-listheader-content, not on the TH (IceBlue's model): widget JS reads
        the TH as a border box (MeshWidget._getMinWd, Frozen's hidden-column `offsetWidth < 2`,
        HeaderWidget._insizer). */
@@ -96,8 +99,8 @@
    Elsewhere `overflow: clip` with a 4px clip margin (the ring's reach) keeps the ring, and
    `text-overflow: clip` keeps the control: an ellipsis hides a control that does not fit, so the
    label is cut at the first obstacle instead. A
-   select-all-only header has no native control and keeps `hidden`. Unlike `.z-column` and
-   `.z-treecol`, `.z-listheader` does not clip, so it does so here to keep the label out of the
+   select-all-only header has no native control and keeps `hidden`. The header cell itself clips
+   as well (`.z-listheader`, like `.z-column` and `.z-treecol`), which keeps the label out of the
    next cell. */
 .z-listheader-content:has(:is(button, a, input, select, textarea)) {
     overflow: visible;

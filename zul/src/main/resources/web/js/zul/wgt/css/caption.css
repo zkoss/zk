@@ -46,6 +46,5 @@
 
 .z-caption-readonly {
     color: var(--zk-color-on-surface-variant);
-    pointer-events: none;
 }
 }

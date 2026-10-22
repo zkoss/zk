@@ -1298,3 +1298,11 @@ Left as found (O10), not fixed by this batch:
 - **Colorbox at 340px and narrower:** the sheet is the viewport width and the palette scrolls horizontally inside it (`colorbox.css` `overflow-x: auto`); it did before.
 - **`datebox.zul: open calendar with the timezone selector` (desktop UA, added in `07feed51a6`) fails in the full `popup` run (3 of 6 runs; 0 of 20 alone).** After Tab, `updateChange_` is not called. Not caused by the tablet CSS.
 - **`daterangebox-popup-open-today.png` re-cut (2026-10-21).** It failed in `popup` (47px against a 10px budget) after the zkcml commit `76b51e9e6` (ZK-6131, a read-only daterangebox keeps its button usable) turned the icon of the read-only daterangebox under the pop-up from faded to opaque. Re-cut in `c2115d05e7`; 67 pixels in an 11 × 11 box differ; `popup` 56/56 twice, `tablet` 76.
+
+## 66. Tablet header-button focus ring is clipped 3px by the listheader clip (NS21, 2026-10-21)
+
+`.z-listheader { overflow: hidden }` (added in NS21 to stop a hidden column's header from painting its label over the next header, as IceBlue and `.z-column` / `.z-treecol` already clip) clips the focus ring of `.z-listheader-button` by 3px on the right: in `pv/mesh-header-footer-guard.zul` on a tablet UA, header 36 (image + menupopup, 56px wide), the ring reaches x=92 and the header cell ends at 89. At HEAD the content div clipped at 93, so the ring was whole.
+
+Only a programmatic `focus()` after a key press shows it: the button has `tabindex=-1`, Tab does not reach it, and a real tap does not give it `:focus-visible`. Accepted (owner, NS21 D12 = A), not fixed. A fix would need `overflow-clip-margin` on the header cell, which brings back the hidden-header leak in Safari (no `overflow-clip-margin`) and needs the leak measurement and mutation redone. Revisit if a real input path to that focus appears.
+
+Also left as found: `.z-listheader:has(.z-listheader-content :is(button, a, input, select, textarea)) { overflow: hidden }` in `listbox.css` now repeats the base rule's value.
