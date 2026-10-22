@@ -463,7 +463,8 @@ export class Combobox extends zul.inp.ComboWidget {
 	_select(sel: zul.inp.Comboitem | undefined, opts: Record<string, unknown>): void {
 		var inp = this.getInputNode()!,
 			val = inp.value = sel ? sel.getLabel() : '';
-		this.valueSel_ = val;
+		// not in _hilite2: _typeahead calls it after autocompleting; onChanging must send typed text
+		this.valueSel_ = this.valueEnter_ = val;
 		this._hilite2(sel, opts);
 
 		// Fixed IE/Safari/Chrome

@@ -118,6 +118,11 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			if (n) {
 				//B70-ZK-2057: prop() method can access right property values;
 				jq(n).prop('checked', checked);
+				// ZK-6185: only once rendered, the initial render sets indeterminate before checked
+				if (o !== checked && this._indeterminate) {
+					this._indeterminate = false;
+					jq(n).prop('indeterminate', false);
+				}
 
 				this.clearStateClassName_();
 				jq(this.$n()).addClass(this.getClassNameByState_());
@@ -290,10 +295,8 @@ export class Checkbox extends zul.LabelImageWidget implements zul.LabelImageWidg
 			const n = this.$n('real');
 			if (n) {
 				jq(n).prop('indeterminate', indeterminate);
-				if (!this._isDefaultMold()) {
-					this.clearStateClassName_();
-					jq(this.$n()).addClass(this.getClassNameByState_());
-				}
+				this.clearStateClassName_();
+				jq(this.$n()).addClass(this.getClassNameByState_());
 			}
 		}
 

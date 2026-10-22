@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6056LibraryProperties.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Oct 13 21:24:40 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true"><![CDATA[
+	Run with library property org.zkoss.zul.chosenbox.filterLogic=contains.
+	1. Click the chosenbox below and type "US".
+	Expected: locales whose toString contains "US" appear, e.g. en_US, es_US.
+	]]></label>
+	<zscript><![CDATA[
+		ListSubModel subModel = ListModels.toListSubModel(new ListModelList(Locale.getAvailableLocales()));
+	]]></zscript>
+	<chosenbox width="400px" model="${subModel}"/>
+</zk>

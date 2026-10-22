@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6203.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Oct 20 15:35:32 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Type 0 in "Intbox" inside the "Edit" window.
+		2. Click "Cancel". The window should close.
+		3. Wait at least 1 second and check the browser console: there should be no JavaScript error.
+	</label>
+	<intbox id="quantity" constraint="no negative, no zero: Quantity must be at least 1"/>
+	<window id="win" title="Edit" border="normal" width="300px">
+		<hlayout valign="middle">
+			<label value="Intbox:"/>
+			<intbox constraint="no zero"/>
+		</hlayout>
+		<button label="Cancel" onClick="Thread.sleep(150); win.detach();"/>
+	</window>
+</zk>

@@ -60,12 +60,11 @@ export class ModalFileViewer extends zk.Object {
 			uploaded = wgt.$f('uploaded')!,
 			max = wgt.$o<zul.fud.FileuploadDlg>()!.max ?? 0, //max is stored in FileuploadDlg (i.e., $o())
 			uri = zk.ajaxURI('/web/zk/img/progress2.gif', {resource: true}),
-			html = '<div id="' + /*safe*/ id + '" style="min-height:16px;background:#F4F8FF;border: 1px solid #99AABD;font-family:'
-			+ 'arial,sans-serif;font-size: 11px;padding: 2px;'
-			+ 'color: #0F3B82;"><img style="float: left;" src="' + /*safe*/ uri + '"/>'
-			+ '<div id="' + /*safe*/ id + '-cnt"><a id="' + /*safe*/ id + '-cancel" style="float: left;padding-left: 2px; color: #0366AC;'
-			+ ' font-weight: bold;cursor: pointer;">' + /*safe*/ msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + /*safe*/ filenm
-			+ '</div><div style="padding-left: 24px">'
+			html = '<div id="' + /*safe*/ id + '" class="z-fileupload-file">'
+			+ '<img class="z-fileupload-icon" src="' + /*safe*/ uri + '"/>'
+			+ '<div id="' + /*safe*/ id + '-cnt"><a id="' + /*safe*/ id + '-cancel" class="z-fileupload-cancel">'
+			+ /*safe*/ msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + /*safe*/ filenm
+			+ '</div><div class="z-fileupload-size">'
 			+ /*safe*/ msgzk.FILE_SIZE + '&nbsp;&nbsp;<span id="' + /*safe*/ id + '-sent">0</span> of '
 			+ '<span id="' + /*safe*/ id + '-total">0</span></div></div>';
 

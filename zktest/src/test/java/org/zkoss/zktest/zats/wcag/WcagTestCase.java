@@ -32,9 +32,9 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  */
 public abstract class WcagTestCase extends WebDriverTestCase {
 
-	/** WCAG A + AA rule tags across 2.0 / 2.1 — the conformance set. */
+	/** WCAG A + AA rule tags across 2.0 / 2.1 / 2.2 — the conformance set. */
 	private static final List<String> WCAG_AA_TAGS =
-			Arrays.asList("wcag2a", "wcag2aa", "wcag21a", "wcag21aa");
+			Arrays.asList("wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa");
 
 	/**
 	 * WCAG 2.1 rules that axe ships as {@code experimental}: 1.3.4 Orientation and 2.5.3 Label in Name.

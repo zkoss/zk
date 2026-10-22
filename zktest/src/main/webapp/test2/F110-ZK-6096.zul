@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6096.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue May 19 16:10:10 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<?component name="idspaceMacro" macroURI="F110-ZK-6096-macro.zul" inline="false"?>
+<zk>
+	<label multiline="true">
+		1. Click "Probe"; it lists the IDs of the components that became stub-only.
+		2. Expected: g1div g1lbl g2divStub g3div g3lbl g4lbl g5div g5lbl
+		3. Click "Append", then "Probe". Expected: g1div g1lbl g2divStub g3div g3lbl g4lbl g4newLbl g5div g5lbl g5newLbl
+		4. Go to the next page of both grids. Expected: rows r3, r4 and s3, s4 are shown without error.
+		5. Click "Add c", then "Remove first". Expected: the textboxes below show b and c.
+		6. Click "Grid row 80", then "Grid row 0". Expected: the corresponding ROD rows appear without error.
+		7. Click "Listbox item 80", then "Listbox item 0". Expected: the corresponding ROD items appear without error.
+		8. Click "Change status". Expected: both bound labels change from old to new; the static label remains stub-only.
+		9. Type in the textbox, then click "Probe wildcard bindings". Expected: its bound label updates; "Change wildcard status" sets both to new.
+		10. Click "Check Window IdSpace". Expected: the Window remains the space owner and its static label is stub-only.
+		11. Click "Check Macro IdSpace". Expected: the non-inline macro remains the space owner and its static label is stub-only.
+		12. Click "Sortable values" twice. Expected: Grid rows sort a, b, c then c, b, a without error; the static label outside the Grid remains stub-only.
+		13. Click "Enable sorting", then "Dynamically sortable values" twice. Expected: Grid rows sort a, b, c then c, b, a without error.
+		14. Click "g1-button", then "g3-button". Expected: "g1btn clicked", then "g3btn clicked".
+		15. Click "Model Grid row 80", "Model Grid row 0", then "Update model row". Expected: row 0 updates without error and its server component remains a Label.
+		16. Click "Append nested container", "Append nested label", then "Update nested labels". Expected: both protected labels update; only the control labels become stubs.
+		17. Click "Append native label" or "Redraw native content", then "Update native labels". Expected: the native wrapper stays stubbed and its original labels update.
+		18. Click "Probe empty names". Expected: "empty: null; live: true; comma stub: true".
+	</label>
+	<div apply="org.zkoss.zktest.test2.F110_ZK_6096Composer">
+		<vlayout id="g1" stubonlyDescendants="div, label">
+			<div id="g1div">
+				<label id="g1lbl" value="g1-label"/>
+				<button id="g1btn" label="g1-button"/>
+			</div>
+		</vlayout>
+		<vlayout id="g2" stubonlyDescendants="div">
+			<div id="g2divLive" stubonly="false">
+				<label id="g2lbl" value="g2-label"/>
+			</div>
+			<div id="g2divStub">
+				<label id="g2lblStub" value="g2-label"/>
+			</div>
+		</vlayout>
+		<vlayout id="g3" stubonlyDescendants="*">
+			<div id="g3div">
+				<label id="g3lbl" value="g3-label"/>
+				<button id="g3btn" label="g3-button" stubonly="false"/>
+			</div>
+		</vlayout>
+		<vlayout id="g4" stubonlyDescendants="div">
+			<div id="g4live" stubonly="false" stubonlyDescendants="label">
+				<label id="g4lbl" value="g4-label"/>
+				<div id="g4div"/>
+			</div>
+		</vlayout>
+		<vlayout id="g5" stubonlyDescendants="div">
+			<div id="g5div" stubonlyDescendants="label">
+				<hlayout id="g5live">
+					<label id="g5lbl" value="g5-label"/>
+				</hlayout>
+			</div>
+		</vlayout>
+		<vlayout id="g6" stubonlyDescendants="label">
+			<grid id="g6grid" mold="paging" pageSize="2">
+				<rows>
+					<row><label value="r1"/></row>
+					<row><label value="r2"/></row>
+					<row><label value="r3"/></row>
+					<row><label value="r4"/></row>
+				</rows>
+			</grid>
+		</vlayout>
+		<grid id="g7grid" mold="paging" pageSize="2" stubonlyDescendants="label">
+			<rows>
+				<row><label value="s1"/></row>
+				<row><label value="s2"/></row>
+				<row><label value="s3"/></row>
+				<row><label value="s4"/></row>
+			</rows>
+		</grid>
+		<zscript><![CDATA[
+			org.zkoss.zul.ListModelList g8model = new org.zkoss.zul.ListModelList(new String[] {"a", "b"});
+		]]></zscript>
+		<vlayout id="g8" stubonlyDescendants="div, label">
+			<div id="g8div">
+				<forEach items="${g8model}">
+					<label value="${each}"/>
+					<textbox value="${each}"/>
+				</forEach>
+			</div>
+		</vlayout>
+		<button id="g8add" label="Add c" onClick='g8model.add("c")'/>
+		<button id="g8remove" label="Remove first" onClick="g8model.remove(0)"/>
+		<vlayout id="g9" stubonlyDescendants="label">
+			<grid id="g9grid" height="220px" width="600px">
+				<custom-attributes org.zkoss.zul.grid.rod="true" org.zkoss.zul.grid.initRodSize="10"/>
+				<rows/>
+			</grid>
+			<button id="g9jump80" label="Grid row 80" onClick="g9grid.scrollToIndex(80)"/>
+			<button id="g9jump0" label="Grid row 0" onClick="g9grid.scrollToIndex(0)"/>
+		</vlayout>
+		<listbox id="g10listbox" height="220px" width="600px" stubonlyDescendants="label">
+			<custom-attributes org.zkoss.zul.listbox.rod="true" org.zkoss.zul.listbox.initRodSize="10"/>
+		</listbox>
+		<button id="g10jump80" label="Listbox item 80" onClick="g10listbox.scrollToIndex(80)"/>
+		<button id="g10jump0" label="Listbox item 0" onClick="g10listbox.scrollToIndex(0)"/>
+		<button id="append" label="Append"/>
+		<button id="probe" label="Probe"/>
+		<label id="result"/>
+		<vlayout stubonlyDescendants="label">
+			<grid id="g17grid" height="220px" width="600px">
+				<custom-attributes org.zkoss.zul.grid.rod="true" org.zkoss.zul.grid.initRodSize="10"/>
+			</grid>
+			<button id="g17jump80" label="Model Grid row 80" onClick="g17grid.scrollToIndex(80)"/>
+			<button id="g17jump0" label="Model Grid row 0" onClick="g17grid.scrollToIndex(0)"/>
+			<button id="g17update" label="Update model row"/>
+			<label id="g17result" stubonly="false"/>
+		</vlayout>
+		<vlayout stubonlyDescendants="label">
+			<grid id="g18grid" width="600px">
+				<custom-attributes org.zkoss.zul.grid.rod="false"/>
+				<rows>
+					<row><div id="g18shield" stubonly="false"/></row>
+				</rows>
+			</grid>
+			<div id="g18control" stubonly="false"/>
+			<button id="g18appendContainer" label="Append nested container"/>
+			<button id="g18appendLabel" label="Append nested label"/>
+			<button id="g18update" label="Update nested labels"/>
+			<label id="g18result" stubonly="false"/>
+		</vlayout>
+		<vlayout stubonlyDescendants="label">
+			<n:div xmlns:n="native" xmlns:zk="zk" zk:stubonly="false">
+				<hlayout id="g19live">
+					<label id="g19first" value="native-first"/>
+				</hlayout>
+			</n:div>
+			<button id="g19append" label="Append native label"/>
+			<button id="g19invalidate" label="Redraw native content" onClick="g19live.invalidate()"/>
+			<button id="g19update" label="Update native labels"/>
+			<label id="g19result" stubonly="false"/>
+		</vlayout>
+	</div>
+	<vlayout>
+		<vlayout id="g20empty" stubonlyDescendants="">
+			<label value="g20-live"/>
+		</vlayout>
+		<vlayout id="g20comma" stubonlyDescendants=", label">
+			<label value="g20-label"/>
+		</vlayout>
+		<button id="g20probe" label="Probe empty names"
+			onClick='g20result.setValue("empty: " + g20empty.getStubonlyDescendants() + "; live: " + (g20empty.getFirstChild() instanceof Label) + "; comma stub: " + (g20comma.getFirstChild() instanceof org.zkoss.zk.ui.sys.StubComponent))'/>
+		<label id="g20result"/>
+	</vlayout>
+	<vlayout id="g11" apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('org.zkoss.zktest.test2.F110_ZK_6096VM')" stubonlyDescendants="label">
+		<label id="g11load" value="@load(vm.status)"/>
+		<label id="g11programmatic"/>
+		<label id="g11static" value="static"/>
+		<button id="g11change" label="Change status" onClick="@command('changeStatus')"/>
+		<button id="g11probe" label="Probe bound labels" onClick="@command('probeStubs')"/>
+		<label id="g11stubs" value="@load(vm.stubState)" stubonly="false"/>
+	</vlayout>
+	<vlayout stubonlyDescendants="*">
+		<vlayout id="g12view" apply="org.zkoss.bind.BindComposer"
+				viewModel="@id('vm') @init('org.zkoss.zktest.test2.F110_ZK_6096VM')">
+			<div id="g12container">
+				<textbox id="g12input" value="@bind(vm.status)"/>
+				<label id="g12load" value="@load(vm.status)"/>
+				<label id="g12static" value="static"/>
+			</div>
+			<button id="g12change" label="Change wildcard status" onClick="@command('changeStatus')"/>
+			<button id="g12probe" label="Probe wildcard bindings" onClick="@command('probeStubs')"/>
+			<label id="g12stubs" value="@load(vm.stubState)" stubonly="false"/>
+		</vlayout>
+	</vlayout>
+	<vlayout stubonlyDescendants="window, label">
+		<window id="g13window" apply="org.zkoss.zktest.test2.F110_ZK_6096IdSpaceComposer">
+			<button id="spaceButton" label="Check Window IdSpace" stubonly="false"/>
+			<label id="spaceResult" sclass="idspace-result" stubonly="false"/>
+			<label id="spaceStatic" value="static in Window"/>
+		</window>
+	</vlayout>
+	<vlayout stubonlyDescendants="*">
+		<idspaceMacro id="g14macro" apply="org.zkoss.zktest.test2.F110_ZK_6096IdSpaceComposer"/>
+	</vlayout>
+	<vlayout stubonlyDescendants="label">
+		<grid id="g15grid" width="600px">
+			<custom-attributes org.zkoss.zul.grid.rod="false"/>
+			<columns>
+				<column id="g15column" label="Sortable values" sort="auto"/>
+			</columns>
+			<rows>
+				<row><label value="c"/></row>
+				<row><label value="a"/></row>
+				<row><label value="b"/></row>
+			</rows>
+		</grid>
+		<div id="g15staticContainer">
+			<label value="static outside Grid"/>
+		</div>
+		<button id="g15probe" label="Probe sorting labels"
+				onClick='g15result.setValue("static stub: " + (g15staticContainer.getFirstChild() instanceof org.zkoss.zk.ui.sys.StubComponent))'/>
+		<label id="g15result" stubonly="false"/>
+	</vlayout>
+	<grid id="g16grid" width="600px" stubonlyDescendants="*">
+		<custom-attributes org.zkoss.zul.grid.rod="false"/>
+		<columns>
+			<column id="g16column" label="Dynamically sortable values"/>
+		</columns>
+		<rows>
+			<row><label value="c"/></row>
+			<row><label value="a"/></row>
+			<row><label value="b"/></row>
+		</rows>
+	</grid>
+	<button id="g16enable" label="Enable sorting" onClick='g16column.setSort("auto")'/>
+</zk>

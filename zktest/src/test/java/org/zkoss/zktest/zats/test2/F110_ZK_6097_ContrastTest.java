@@ -99,6 +99,25 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 				"avatar ignored the :root override, so a _wcag* palette cannot restyle it");
 	}
 
+	@Test
+	public void default_avatar_foreground_has_sufficient_contrast() {
+		connect();
+		waitResponse();
+		for (String id : new String[] { "ct-avatar-small", "ct-avatar", "ct-avatar-large", "ct-avatar-icon" }) {
+			String avatar = "jq('$" + id + "')[0]";
+			String glyph = avatar + (id.equals("ct-avatar-icon") ? ".querySelector('i')"
+					: ".querySelector('.z-avatar-text')");
+			assertEquals("true", getEval("(function (n) {"
+					+ " n.scrollIntoView({block: 'center'});"
+					+ " var r = n.getBoundingClientRect();"
+					+ " var t = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2)[0];"
+					+ " return !!t && (n === t || n.contains(t));"
+					+ "})(" + avatar + ")"), id + " must be painted at its centre");
+			double ratio = contrastRatio(computed(glyph, "color"), computed(avatar, "background-color"));
+			assertTrue(ratio >= 4.5, id + " foreground contrast must be at least 4.5:1, was " + ratio + ":1");
+		}
+	}
+
 	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
 	@Tag("IceBlueOnly")
@@ -191,6 +210,33 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 
 	private String computed(String elementJs, String prop) {
 		return getEval("getComputedStyle(" + elementJs + ").getPropertyValue('" + prop + "')");
+	}
+
+	private static double contrastRatio(String foreground, String background) {
+		double[] fg = rgba(foreground);
+		double[] bg = rgba(background);
+		assertEquals(1.0, bg[3], "the avatar contrast fixture must have an opaque background");
+		for (int i = 0; i < 3; i++) {
+			fg[i] = fg[i] * fg[3] + bg[i] * (1 - fg[3]);
+		}
+		double fgLuminance = luminance(fg);
+		double bgLuminance = luminance(bg);
+		return (Math.max(fgLuminance, bgLuminance) + 0.05) / (Math.min(fgLuminance, bgLuminance) + 0.05);
+	}
+
+	private static double[] rgba(String color) {
+		String[] channels = color.substring(color.indexOf('(') + 1, color.indexOf(')')).split(",");
+		return new double[] { Double.parseDouble(channels[0].trim()), Double.parseDouble(channels[1].trim()),
+				Double.parseDouble(channels[2].trim()), channels.length == 4 ? Double.parseDouble(channels[3].trim()) : 1 };
+	}
+
+	private static double luminance(double[] color) {
+		double[] linear = new double[3];
+		for (int i = 0; i < 3; i++) {
+			double channel = color[i] / 255;
+			linear[i] = channel <= 0.04045 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);
+		}
+		return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
 	}
 
 	private void overrideToken(String name, String value) {

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6085-ChosenboxRemoveTargetSize.zul
+
+	Purpose:
+		WCAG 2.5.8 Target Size (Minimum) - the remove button on a Chosenbox item.
+
+	Description:
+		Only visible with za11y enabled.
+
+	History:
+		Fri Oct 02 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:n="native" xmlns:ca="client/attribute">
+	<n:h1>Chosenbox remove buttons</n:h1>
+	<label multiline="true">
+Requires za11y.
+1. look at the remove button on each item of the first chosenbox: it is at least 24px square, lies inside its item and is clear of the item's label
+2. click each remove button just inside its top-left corner: the item is removed instead of the list opening
+3. look at the second chosenbox, whose items wrap onto more than one row: each remove button lies inside its own item
+4. look at the disabled chosenbox: its items show no remove button
+	</label>
+	<zscript><![CDATA[
+		ListModelList threeSelected() {
+			ListModelList model = new ListModelList(new String[] {"Apple", "Banana", "Cherry", "Durian"});
+			model.setMultiple(true);
+			model.addToSelection("Apple");
+			model.addToSelection("Banana");
+			model.addToSelection("Cherry");
+			return model;
+		}
+		ListModelList fruits = threeSelected(), wrapped = threeSelected(), locked = threeSelected();
+	]]></zscript>
+	<chosenbox id="fruits" model="${fruits}" width="320px" ca:aria-label="Fruits"/>
+	<separator/>
+	<chosenbox id="wrapped" model="${wrapped}" width="160px" ca:aria-label="Wrapped fruits"/>
+	<separator/>
+	<chosenbox id="disabled" model="${locked}" width="320px" disabled="true" ca:aria-label="Disabled fruits"/>
+</zk>

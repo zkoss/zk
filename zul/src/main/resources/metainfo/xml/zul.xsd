@@ -702,6 +702,7 @@
 		<xs:attribute name="onCreate" type="xs:string" use="optional" />
 		<xs:attribute name="onFulfill" type="xs:string" use="optional" />
 		<xs:attribute name="stubonly" type="xs:string" use="optional" />
+		<xs:attribute name="stubonlyDescendants" type="xs:string" use="optional" />
 		<xs:attribute name="use" type="xs:string" use="optional" />
 		<xs:attribute name="viewModel" type="xs:string" use="optional" />
 		<xs:attribute name="validationMessages" type="xs:string" use="optional" />
@@ -1099,8 +1100,8 @@
 	-->
 	<!-- a -->
 	<xs:element name="a" type="aType" />
-	<xs:complexType name="aType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+	<xs:complexType name="aType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="dir" type="dirAttrType" use="optional" />
 		<xs:attribute name="href" type="xs:string" use="optional" />
@@ -1672,8 +1673,8 @@
 	</xs:complexType>
 	<!-- coachmark -->
 	<xs:element name="coachmark" type="coachmarkType" />
-	<xs:complexType name="coachmarkType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+	<xs:complexType name="coachmarkType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attribute name="target" type="xs:string" use="optional" />
 		<xs:attribute name="position" type="coachmarkPositionAttrType" use="optional" />
 		<xs:attribute name="next" type="xs:string" use="optional" />
@@ -1968,8 +1969,8 @@
 	</xs:complexType>
 	<!-- drawer -->
 	<xs:element name="drawer" type="drawerType" />
-	<xs:complexType name="drawerType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+	<xs:complexType name="drawerType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
@@ -2102,9 +2103,9 @@
 
 	<!-- frozen -->
 	<xs:element name="frozen" type="frozenType" />
-	<xs:complexType name="frozenType">
+	<xs:complexType name="frozenType" mixed="true">
 		<xs:sequence>
-			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="columns" type="intType" use="optional" />
@@ -2619,7 +2620,7 @@
 		<xs:union>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:pattern value="\s*((sm|md|lg|xl|xxl)-(\d+|none)\s*)*" />
+					<xs:pattern value="\s*((sm|md|lg|xl)-(\d+|none)\s*)*" />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType>

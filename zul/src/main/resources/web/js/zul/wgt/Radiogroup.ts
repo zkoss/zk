@@ -100,6 +100,8 @@ export class Radiogroup extends zul.Widget {
 	/** @internal */
 	_disabled?: boolean;
 	/** @internal */
+	_srvRadios?: boolean;
+	/** @internal */
 	_externs: zul.wgt.Radio[];
 
 	constructor() {
@@ -166,7 +168,7 @@ export class Radiogroup extends zul.Widget {
 
 		if (o !== disabled || opts?.force) {
 			this.getItems().forEach((r) => {
-				if (r.desktop) {
+				if (r.desktop && !(opts?.fromServer && r.inServer)) {
 					r.setDisabled(disabled);
 				}
 			});
@@ -182,6 +184,12 @@ export class Radiogroup extends zul.Widget {
 	 */
 	isDisabled(): boolean {
 		return !!this._disabled;
+	}
+
+	// eslint-disable-next-line zk/javaStyleSetterSignature
+	set_disabled(disabled: boolean): void {
+		this._srvRadios = true;
+		this.setDisabled(disabled, {fromServer: true});
 	}
 
 	/**
@@ -284,7 +292,7 @@ export class Radiogroup extends zul.Widget {
 			this._fixSelectedIndex();
 		}
 		// handle this disabled state for stateless.
-		if (this.isDisabled()) {
+		if (this.isDisabled() && !(child.inServer && this._srvRadios)) {
 			child.setDisabled(true);
 		}
 	}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6185.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Oct 13 10:28:40 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Open devtools to observe the class names of "Partly selected".
+		1. Click "Partly selected": it becomes checked.
+		- Expected: it carries z-checkbox-on, no longer z-checkbox-indeterminate.
+		- Bug: z-checkbox-indeterminate stays, so a theme drawing the state by class keeps the minus sign.
+		2. Untick it, then tick "Make the first one indeterminate" (the server calls setIndeterminate(true)).
+		- Expected: "Partly selected" carries z-checkbox-indeterminate again.
+		- Bug: no z-checkbox-indeterminate class is added in the default mold.
+		3. Click "Tristate" three times: its class must follow indeterminate, on, off as before;
+			"Tristate, partly" starts indeterminate.
+		4. Reload, then run zk.Widget.$('$cb').setChecked(true) in the console:
+			"Partly selected" must carry z-checkbox-on, without z-checkbox-indeterminate.
+		With the WCAG module:
+		5. Click "clear indeterminate" (the server calls setIndeterminate(false)), before or after step 2:
+			"Partly selected" must carry aria-checked="false", not "mixed".
+		6. Toggle "Switch": aria-checked of its mold (role="switch") must follow.
+	</label>
+	<vlayout>
+		<checkbox id="cb" label="Partly selected" indeterminate="true"/>
+		<checkbox id="other" label="Make the first one indeterminate"
+			onCheck='cb.setChecked(false); cb.setIndeterminate(true)'/>
+		<checkbox id="tri" mold="tristate" label="Tristate"/>
+		<checkbox id="triMixed" mold="tristate" indeterminate="true" label="Tristate, partly"/>
+		<button id="log" label="log server state" onClick='Clients.log("" + cb.getState() + "," + tri.getState())'/>
+		<button id="clear" label="clear indeterminate" onClick="cb.setIndeterminate(false)"/>
+		<checkbox id="sw" mold="switch" label="Switch"/>
+	</vlayout>
+</zk>

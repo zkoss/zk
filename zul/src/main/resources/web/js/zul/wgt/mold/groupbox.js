@@ -16,7 +16,6 @@ function groupbox$mold$(out, skipper) {
 	var uuid = this.uuid,
 		cap = this.caption,
 		title = this.getTitle();
-	title = title && !cap ? zUtl.encodeXML(title) : undefined;
 
 	out.push('<div ', this.domAttrs_(), '>');
 

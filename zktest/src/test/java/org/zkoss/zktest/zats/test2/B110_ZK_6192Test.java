@@ -1,93 +1,209 @@
 /* B110_ZK_6192Test.java
 
-	Purpose:
-
-	Description:
-
-	History:
-		Tue Oct 13 2026, Created by hawkchen
+        Purpose:
+                
+        Description:
+                
+        History:
+                Mon Oct 19 14:44:56 CST 2026, Created by peakerlee
 
 Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Duration;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
-/**
- * The tooltip of a vertical slider flips to the left of the knob when the right side has no room.
- */
 public class B110_ZK_6192Test extends WebDriverTestCase {
-	private static final String KNOB = " .z-sliderbuttons-button";
-	private static final String TOOLTIP = " .z-sliderbuttons-tooltip";
-
-	private void hoverKnob(String slider, int index) {
-		getActions().moveToElement(toElement(jq(slider + KNOB).eq(index))).perform();
-		waitResponse();
-		assertTrue(jq(slider + TOOLTIP).eq(index).isVisible(), "hovering the knob should reveal its tooltip");
-	}
-
-	// left, right of the n-th tooltip and knob, as "tl,tr,kl,kr"
-	private double[] rects(String slider, int index) {
-		String[] v = getEval("(function(){var t=jq('" + slider + TOOLTIP + "')[" + index + "].getBoundingClientRect(),"
-				+ "k=jq('" + slider + KNOB + "')[" + index + "].getBoundingClientRect();"
-				+ "return [t.left,t.right,k.left,k.right].join(',');})()").split(",");
-		double[] r = new double[4];
-		for (int i = 0; i < 4; i++)
-			r[i] = Double.parseDouble(v[i]);
-		return r;
-	}
-
-	private void assertInside(String slider, int index, double minLeft, double maxRight, boolean mustBeLeft) {
-		hoverKnob(slider, index);
-		double[] r = rects(slider, index);
-		assertTrue(!mustBeLeft || r[1] <= r[2] + 1, slider + " knob " + index + ": tooltip should be on the left of the knob, tooltip right "
-				+ r[1] + " knob left " + r[2]);
-		assertTrue(r[0] >= minLeft && r[1] <= maxRight, slider + " knob " + index
-				+ ": tooltip [" + r[0] + "," + r[1] + "] should be inside [" + minLeft + "," + maxRight + "]");
-	}
-
-	private double viewportWidth() {
-		return Double.parseDouble(getEval("document.documentElement.clientWidth"));
-	}
-
-	private double[] boxRange() {
-		String[] v = getEval("(function(){var e=jq('$box')[0],b=e.getBoundingClientRect();return [b.left+e.clientLeft,b.left+e.clientLeft+e.clientWidth].join(',');})()")
-				.split(",");
-		return new double[] {Double.parseDouble(v[0]), Double.parseDouble(v[1])};
-	}
+	private static final String[] EDGE = {"edgeRange", "edgeMulti"};
+	private static final Map<String, String> CLIP = Map.of("edgeMulti", "clip", "fixedMulti", "fixedClip",
+			"scaledRange", "scaledClip", "scrollRange", "scrollClip", "scrollMulti", "scrollClip");
 
 	@Test
-	public void viewportEdge() {
+	public void hoverTooltipsAvoidViewportAndAncestorClipping() {
 		connect();
-		waitResponse();
-		for (int i = 0; i < 2; i++)
-			assertInside("$rs", i, 0, viewportWidth(), true);
-	}
-
-	@Test
-	public void clippedContainer() {
-		connect();
-		waitResponse();
-		double[] box = boxRange();
-		for (int i = 0; i < 2; i++)
-			// every tooltip must be fully inside the padding box; the side is only asserted for "500", which overflows
-			// on the right in every theme ("5" may fit on the right, depending on the theme's geometry)
-			assertInside("$ms", i, box[0], box[1], i == 1);
-	}
-
-	@Test
-	public void controlStaysOnTheRight() {
-		connect();
-		waitResponse();
-		for (int i = 0; i < 2; i++) {
-			hoverKnob("$ctrl", i);
-			double[] r = rects("$ctrl", i);
-			assertTrue(r[0] >= r[3] - 1, "tooltip should stay on the right of the knob, tooltip left "
-					+ r[0] + " knob right " + r[3]);
+		for (String id : EDGE) {
+			for (int i = 0; i < 2; i++) {
+				hover(id, i);
+				assertTooltipVisible(id, i);
+			}
+			assertTooltipSide(id, 1, true);
+			assertEquals("true", getEval("document.documentElement.scrollWidth <= document.documentElement.clientWidth"),
+					"showing a tooltip should not create horizontal document overflow");
 		}
+	}
+
+	@Test
+	public void fixedTooltipsAvoidClippingOnInitialRenderAndUpdate() {
+		connect();
+		for (String id : new String[] {"fixedRange", "fixedMulti"}) {
+			assertTooltipVisible(id, 0);
+			assertTooltipVisible(id, 1);
+			assertTooltipSide(id, 1, true);
+		}
+		click(jq("$show"));
+		waitResponse();
+		for (String id : EDGE) {
+			assertTooltipVisible(id, 0);
+			assertTooltipVisible(id, 1);
+			assertTooltipSide(id, 1, true);
+		}
+	}
+
+	@Test
+	public void hoverReturnsTooltipsToRightWhenSpaceBecomesAvailable() {
+		connect();
+		for (String id : EDGE) {
+			hover(id, 1);
+			assertTooltipSide(id, 1, true);
+		}
+		click(jq("$room"));
+		waitResponse();
+		for (String id : EDGE) {
+			for (int i = 0; i < 2; i++) {
+				hover(id, i);
+				assertTooltipVisible(id, i);
+				assertTooltipSide(id, i, false);
+			}
+		}
+	}
+
+	@Test
+	public void tooltipStaysRightWhenLeftSideHasLessRoom() {
+		connect();
+		assertTooltipSide("narrowMulti", 1, false);
+	}
+
+	@Test
+	public void bodyOverflowDoesNotFlipTooltips() {
+		connect();
+		click(jq("$room"));
+		waitResponse();
+		// body's overflow propagates to the viewport, so its own box clips nothing
+		getEval("document.body.style.cssText = 'overflow:hidden;width:100px'");
+		for (int i = 0; i < 2; i++) {
+			hover("edgeRange", i);
+			assertTooltipVisible("edgeRange", i);
+			assertTooltipSide("edgeRange", i, false);
+		}
+	}
+
+	@Test
+	public void draggingKeepsTooltipsVisible() {
+		connect();
+		for (String id : EDGE) {
+			hover(id, 1);
+			// ZK-6192: dismiss the A11Y hover bridge before grabbing the knob beneath it.
+			getActions().sendKeys(Keys.ESCAPE).clickAndHold().pause(Duration.ofMillis(100))
+					.moveByOffset(0, 40).perform();
+			try {
+				waitResponse();
+				assertTrue(Integer.parseInt(jq("$" + id + " .z-sliderbuttons-tooltip").eq(1).text()) > 500,
+						id + " end handle should move while dragging");
+				assertTooltipVisible(id, 1);
+				assertTooltipSide(id, 1, true);
+			} finally {
+				getActions().release().perform();
+				waitResponse();
+			}
+			hover(id, 1);
+			assertTooltipVisible(id, 1);
+			assertTooltipSide(id, 1, true);
+		}
+	}
+
+	@Test
+	public void leftTooltipRemainsHoverableAndDismissibleWithA11y() {
+		connect();
+		if (!Boolean.parseBoolean(getEval("!!window.za11y"))) return;
+		for (String id : EDGE) {
+			hover(id, 1);
+			int gapOffset = Integer.parseInt(getEval(
+					buttonScript(id, 1, "Math.round((t.right + r.left) / 2 - r.left - r.width / 2)")));
+			getActions().moveByOffset(gapOffset, 0).perform();
+			waitResponse();
+			assertTooltipVisible(id, 1);
+			getActions().moveToElement(toElement(jq("$" + id + " .z-sliderbuttons-tooltip").eq(1))).perform();
+			waitResponse();
+			assertTooltipVisible(id, 1);
+
+			hover(id, 1);
+			getActions().sendKeys(Keys.ESCAPE).moveByOffset(1, 0).perform();
+			waitResponse();
+			assertEquals("none", jq("$" + id + " .z-sliderbuttons-tooltip").eq(1).css("display"),
+					"Escape should keep the tooltip hidden while its knob stays hovered");
+			getActions().moveToElement(toElement(jq("$room"))).perform();
+			waitResponse();
+			hover(id, 1);
+			assertTooltipVisible(id, 1);
+		}
+	}
+
+	@Test
+	public void scaledContainerKeepsTooltipsVisible() {
+		connect();
+		for (int i = 0; i < 2; i++) {
+			assertTooltipVisible("scaledRange", i);
+		}
+		assertTooltipSide("scaledRange", 1, true);
+	}
+
+	@Test
+	public void nativeAncestorScrollRepositionsFixedTooltips() {
+		connect();
+		for (String id : new String[] {"scrollRange", "scrollMulti"}) {
+			assertTooltipVisible(id, 1);
+			assertTooltipSide(id, 1, true);
+		}
+		getEval("jq('$scrollClip')[0].scrollLeft = 181");
+		waitResponse();
+		for (String id : new String[] {"scrollRange", "scrollMulti"}) {
+			for (int i = 0; i < 2; i++) {
+				assertTooltipVisible(id, i);
+				assertTooltipSide(id, i, false);
+			}
+		}
+		getEval("jq('$scrollClip')[0].scrollLeft = 0");
+		waitResponse();
+		for (String id : new String[] {"scrollRange", "scrollMulti"}) {
+			assertTooltipVisible(id, 1);
+			assertTooltipSide(id, 1, true);
+		}
+	}
+
+	private void hover(String id, int index) {
+		getActions().moveToElement(toElement(jq("$" + id + " .z-sliderbuttons-button").eq(index))).perform();
+		waitResponse();
+	}
+
+	private void assertTooltipSide(String id, int index, boolean left) {
+		assertEquals("true", getEval(buttonScript(id, index, left ? "t.right <= r.left" : "t.left >= r.right")),
+				id + " tooltip " + index + " should appear on the " + (left ? "left" : "right"));
+	}
+
+	static String buttonScript(String id, int index, String expr) {
+		return "(function (b) {var r = b.getBoundingClientRect(),"
+				+ "t = b.querySelector('.z-sliderbuttons-tooltip').getBoundingClientRect();"
+				+ "return " + expr + ";})(jq('$" + id + " .z-sliderbuttons-button')[" + index + "])";
+	}
+
+	private void assertTooltipVisible(String id, int index) {
+		String boundary = CLIP.containsKey(id) ? "jq('$" + CLIP.get(id) + "')[0]" : "document.documentElement";
+		assertEquals("true", getEval("(function (t, p) {var r = t.getBoundingClientRect(),"
+				+ "b = p.getBoundingClientRect(), scale = p === document.documentElement ? 1 : b.width / p.offsetWidth,"
+				+ "left = p === document.documentElement ? 0 : b.left + p.clientLeft * scale,"
+				+ "right = left + p.clientWidth * scale;"
+				+ "return r.width > 0 && r.height > 0 && r.left >= left && r.right <= right"
+				+ " && document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2).indexOf(t) >= 0;"
+				+ "})(jq('$" + id + " .z-sliderbuttons-tooltip')[" + index + "], " + boundary + ")"),
+				id + " tooltip " + index + " should be painted inside its clipping boundary");
 	}
 }

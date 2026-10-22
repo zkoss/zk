@@ -1665,6 +1665,17 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		setStubonly(stubonly ? "true" : "false");
 	}
 
+	public String getStubonlyDescendants() {
+		return _auxinf != null ? _auxinf.stubonlyDescendants : null;
+	}
+
+	public void setStubonlyDescendants(String names) {
+		if (names != null && names.length() == 0)
+			names = null;
+		if (!Objects.equals(getStubonlyDescendants(), names))
+			initAuxInfo().stubonlyDescendants = names;
+	}
+
 	public boolean isInvalidated() {
 		return _page == null || getAttachedUiEngine().isInvalidated(this);
 	}
@@ -3741,6 +3752,8 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 
 		/** Whether this component is stub-only (0: inherit, -1: false, 1: true). */
 		private byte stubonly;
+		/** The names of the descendant components that are stub-only. */
+		private String stubonlyDescendants;
 
 		/** Whether annots is shared with other components. */
 		private transient boolean annotsShared;
@@ -3781,15 +3794,18 @@ public class AbstractComponent implements Component, ComponentCtrl, java.io.Seri
 		/** Clone for the stub component ({@link #replaceWith(AbstractComponent, boolean, boolean, boolean)}). */
 		private AuxInfo cloneStub(AbstractComponent owner, boolean bListener) {
 			//No need to clone visible since it is meaningless in StubComponent
-			if (bListener && (evthds != null || listeners != null)) {
+			final boolean lsn = bListener && (evthds != null || listeners != null);
+			if (!lsn && stubonlyDescendants == null)
+				return null;
+			final AuxInfo clone = new AuxInfo();
+			clone.stubonlyDescendants = stubonlyDescendants; //still applies to live descendants rendered later
+			if (lsn) {
 				//No need to make a copy of  evthds and listeners since Stub replaced the old one
-				final AuxInfo clone = new AuxInfo();
 				clone.evthdsShared = evthdsShared;
 				clone.evthds = evthds;
 				clone.listeners = listeners;
-				return clone;
 			}
-			return null;
+			return clone;
 		}
 
 		/** 2nd phase of clone (after children are cloned). */

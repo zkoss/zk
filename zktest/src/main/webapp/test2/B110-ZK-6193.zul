@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6193.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Oct 13 10:36:56 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps to reproduce:
+		1. Open the cascader, click "Japan" (do not pick Tokyo or Kyoto), then click the grey area.
+		- Expected: the icon is the dropdown arrow, not the clear icon (×), and the server-side
+			selection below stays "none" with no onSelect.
+		2. Open the cascader again.
+		- Expected: nothing is highlighted and only the first column is shown.
+		3. Repeat 1-2, closing the popup with Escape, with Tab, by clicking the field, or by
+			clicking the arrow icon instead.
+		4. Pick Japan > Tokyo. Open the cascader, click "USA", then click the grey area.
+		- Expected: the field still reads "Japan/Tokyo", and reopening highlights Japan and Tokyo,
+			not USA.
+		- Bug: the clicked parent was kept as the selection when the popup closed without a pick.
+		5. Pick Japan > Tokyo, click the clear icon (×), open the cascader, then click the grey area.
+		- Expected: the icon is the dropdown arrow, and reopening highlights nothing.
+		6. Reload, press Tab to focus the empty cascader, then press Backspace.
+		- Expected: the onSelect count stays 0.
+		7. Pick Japan > Tokyo, click "cas.setDisabled(true)", click the cascader, then press Backspace.
+		- Expected: the field still reads "Japan/Tokyo", and the server keeps Tokyo.
+	</label>
+	<zscript><![CDATA[
+	DefaultTreeNode newYork = new DefaultTreeNode("New York");
+	DefaultTreeModel model = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+		Arrays.asList(new DefaultTreeNode[]{
+			new DefaultTreeNode("USA", Arrays.asList(new TreeNode[]{newYork, new DefaultTreeNode("Los Angeles")})),
+			new DefaultTreeNode("Japan", Arrays.asList(new TreeNode[]{new DefaultTreeNode("Tokyo"), new DefaultTreeNode("Kyoto")}))
+		})));
+	]]></zscript>
+	<cascader id="cas" width="300px" model="${model}" placeholder="Pick a city"
+			  onSelect='sel.setValue(self.getSelectedItem() == null ? "none" : self.getSelectedItem().toString());
+			  count.setValue(String.valueOf(Integer.parseInt(count.getValue()) + 1));'/>
+	<hlayout>
+		<label value="Selected item (server):"/>
+		<label id="sel" value="none"/>
+		<label value="onSelect count:"/>
+		<label id="count" value="0"/>
+	</hlayout>
+	<hlayout>
+		<button id="serverClose" label="cas.setOpen(false)" onClick="cas.setOpen(false)"/>
+		<button id="serverSelect" label="cas.setSelectedItem(New York)"
+				onClick="cas.setSelectedItem(newYork); sel.setValue(cas.getSelectedItem().toString());"/>
+		<button id="serverDisable" label="cas.setDisabled(true)" onClick="cas.setDisabled(true)"/>
+	</hlayout>
+	<div id="outside" height="120px" style="background: #eee">outside</div>
+</zk>

@@ -616,7 +616,7 @@ public class Column extends HeaderElement {
 	 * <p>Default: {@code true}.
 	 *
 	 * <p>Naming note: the grid-wide attribute is {@code responsiveColumns}
-	 * (a Bootstrap-style breakpoint token list); this column-level
+	 * (a breakpoint token list); this column-level
 	 * attribute is {@code responsiveVisible} (a single boolean flag).
 	 * The two attributes have fundamentally different semantics — keeping
 	 * distinct names prevents grep / IDE auto-complete collision and

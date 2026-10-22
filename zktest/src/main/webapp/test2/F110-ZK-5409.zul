@@ -69,7 +69,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
         <div sclass="menu-list">
             <a sclass="menu-link" href="F110-ZK-5409-responsive-grid-basic.zul">Responsive Grid Basic</a>
             <a sclass="menu-link" href="F110-ZK-5409-responsive-grid-breakpoint.zul">Responsive Grid Breakpoint</a>
-            <a sclass="menu-link" href="F110-ZK-5409-responsive-grid-breakpoint-all.zul">Responsive Grid Breakpoint - All Tiers (sm/md/lg/xl/xxl)</a>
+            <a sclass="menu-link" href="F110-ZK-5409-responsive-grid-breakpoint-all.zul">Responsive Grid Breakpoint - All Tiers (sm/md/lg/xl)</a>
             <a sclass="menu-link" href="F110-ZK-5409-responsive-grid-cell.zul">Responsive Grid Cell</a>
             <a sclass="menu-link" href="F110-ZK-5409-responsive-grid-child.zul">Responsive Grid Child</a>
             <a sclass="menu-link" href="F110-ZK-5409-responsive-grid-col.zul">Responsive Grid Col</a>

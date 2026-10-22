@@ -598,6 +598,10 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 				+ "pick(box._rangePopup._panels[0], 15);");
 		waitResponse();
 
+		assertEquals("", getEval("jq('$drShowTime .z-daterangebox-begin')[0].value"),
+				"showTime date selection must stay staged until the popup closes");
+		click(jq("$lblTitle"));
+		waitForPopupClosed();
 		waitForBeginInputPopulated("$drShowTime");
 		waitResponse();
 
@@ -701,8 +705,7 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 		click(jq("$drShowTime .z-daterangebox-button"));
 		waitResponse();
 
-		// Stage Timebox values BEFORE picking the second cell, so the
-		// auto-apply (fired 200ms after the second click) picks them up.
+		// Stage the chosen times before selecting the date range.
 		js().executeScript(
 				"var box = zk.Widget.$(jq('$drShowTime')[0]);"
 				+ "var pop = box._rangePopup;"
@@ -712,9 +715,7 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 				+ "pop._endTime.setValue(Dates.newInstance(t2.getTime()));");
 		waitResponse();
 
-		// Pick begin then end. Auto-apply fires 200ms after the second
-		// click, merging the (already-set) Timebox values into the
-		// committed range.
+		// An outside click commits the selected dates together with the staged times.
 		js().executeScript(
 				"function pick(p, day) {"
 				+ "  var pane = p.$n();"
@@ -729,6 +730,9 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 				+ "var box = zk.Widget.$(jq('$drShowTime')[0]);"
 				+ "pick(box._rangePopup._panels[0], 10);"
 				+ "pick(box._rangePopup._panels[0], 15);");
+		waitResponse();
+		click(jq("$lblTitle"));
+		waitForPopupClosed();
 		waitForJs("(function(){var v=jq('$drShowTime .z-daterangebox-begin')[0].value;"
 				+ "return v && v.endsWith('09:30');})()");
 		waitResponse();
@@ -772,6 +776,8 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 				+ "var t2 = new Date(); t2.setHours(20, 45, 0, 0);"
 				+ "box._rangePopup._endTime.setValue(Dates.newInstance(t2.getTime()));");
 		waitResponse();
+		click(jq("$lblTitle"));
+		waitForPopupClosed();
 		waitForJs("(function(){var v=jq('$drShowTime .z-daterangebox-begin')[0].value;"
 				+ "return v && v.endsWith('08:15');})()");
 		waitResponse();
@@ -930,8 +936,10 @@ public class F110_ZK_4305_DaterangeAttributeTest extends WebDriverTestCase {
 				+ "var beginT = new Date(); beginT.setHours(23,0,0,0);"
 				+ "var endT = new Date(); endT.setHours(9,0,0,0);"
 				+ "popup._beginTime.setValue(beginT);"
-				+ "popup._endTime.setValue(endT);"
-				+ "popup._doApply();");
+				+ "popup._endTime.setValue(endT);");
+		waitResponse();
+		click(jq("$lblTitle"));
+		waitForPopupClosed();
 		waitResponse();
 
 		String beginVal = (String) js().executeScript(

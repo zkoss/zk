@@ -14,6 +14,9 @@ ZK 11.0.0
   ZK-6095: Support ctrlKeys in borderlayout
   ZK-6084: Accessibility Optimization: WCAG 2.1 AA Advanced Audit
   ZK-6089: Support ~./ prefix in <label-location> entries in zk.xml
+  ZK-6056: Configurable Filter Logic for Chosenbox with ListSubModel
+  ZK-6096: Component-level stubonly Policy (Conditional Inheritance)
+  ZK-6085: WCAG 2.2 AA Feasibility Study
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -66,6 +69,19 @@ ZK 11.0.0
   ZK-6170: Clicking a partly visible input in a listbox with frozen columns scrolls the columns and loses the click
   ZK-6171: The horizontal scroll of a listbox with frozen columns lands in a different place after a re-render while an input in it has focus
   ZK-6169: Grid / Listbox emptybody is missing ARIA roles (rowgroup / row / gridcell) under role="grid"
+  ZK-6073: instantSelect combobox sends incorrect onChanging when navigating through Up/down
+  ZK-6189: zul.xsd: a does not accept child components, so <a><div/></a> fails validation
+  ZK-5515: open portallayout navigation popup produces a javascript error
+  ZK-6076: Incorrect rendering of Groupboxes with vflex
+  ZK-6185: checkbox: indeterminate is not reflected in the default mold, a clicked indeterminate checkbox keeps showing the minus sign
+  ZK-6193: cascader: closing the popup after clicking a non-leaf item leaves an uncommitted selection (blank field with a clear icon, stale path on reopen)
+  ZK-6187: messagebox: the buttons carry no per-button class, so a theme cannot give Cancel / No a different emphasis than OK
+  ZK-6188: errorbox: the pointer keeps stale left/top after the box changes direction, so it ends up detached from the box
+  ZK-6186: radiogroup: server-side setDisabled does not reach the client, the widget's isDisabled() stays false
+  ZK-6196: notification: a ref-less bottom/middle notification moves up by the page scroll offset
+  ZK-6199: fileupload: the Fileupload.get dialog hard-codes the picked-file row's colours and font as inline styles in JavaScript, so a theme cannot style it
+  ZK-6192: rangeslider / multislider: the vertical tooltip is cut off when the slider sits at the right edge of the page or of an overflow:hidden container
+  ZK-6218: errorbox: jumps above its field when the window holding the field is clicked
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on

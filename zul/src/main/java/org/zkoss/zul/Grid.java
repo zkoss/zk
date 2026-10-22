@@ -55,6 +55,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SerializableEventListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.ext.render.StubonlyControl;
 import org.zkoss.zk.ui.sys.IntegerPropertyAccess;
 import org.zkoss.zk.ui.sys.PropertyAccess;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
@@ -1827,9 +1828,9 @@ public class Grid extends MeshElement {
 
 	/**
 	 * Sets the responsive columns token string for stacking mode.
-	 * <p>Bootstrap-style breakpoint tokens separated by whitespace, where
+	 * <p>Breakpoint tokens separated by whitespace, where
 	 * each token is {@code <breakpoint>-<value>} with breakpoint in
-	 * {sm, md, lg, xl, xxl} and value either a positive integer (cards per
+	 * {sm, md, lg, xl} and value either a positive integer (cards per
 	 * row in stacking) or {@code none} (switch back to table mode at and
 	 * above this breakpoint).
 	 * <p>The string is stored verbatim — parsing, cascade resolution, and
@@ -1920,7 +1921,12 @@ public class Grid extends MeshElement {
 	/** A utility class to implement {@link #getExtraCtrl}.
 	 * It is used only by component developers.
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Padding {
+	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Padding, StubonlyControl {
+		public boolean isStubonlyDescendantsAllowed() {
+			// ZK-6096: the default RowComparator reads the row's Label children, and sorting can be enabled later.
+			return getModel() != null;
+		}
+
 		//-- Padding --//
 		public int getHeight() {
 			return _topPad;
