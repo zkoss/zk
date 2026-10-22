@@ -19,7 +19,7 @@
    `z-text-md` (13) and `z-text-base` (14), but `base` means "the default size" in Tailwind,
    and Marble's default body is the 13px one — so reaching for `z-text-base` to mean "normal
    text" silently gave you one step too big. Every step is now a size word whose order you can
-   guess. See doc/utility-class-naming-review.md D3.
+   guess. See doc/spec/utility-naming.md R7.
 
    ┌─────────────┬─────┬──────────────────────────────────┐
    │ class       │ px  │ MD3 typescale role(s)            │

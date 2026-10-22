@@ -125,7 +125,7 @@ test.describe('font-size equivalence', () => {
     fs.writeFileSync(BASELINE_FILE,
       JSON.stringify({
         note: 'Computed font-size histogram per preview page. Oracle for the z-text-* '
-          + 'renumber (doc/utility-class-naming-review.md D3). Regenerate with '
+          + 'renumber (doc/spec/utility-naming.md R7). Regenerate with '
           + 'UPDATE_FONT_BASELINE=1 npx playwright test --project=font-size',
         pages: Object.fromEntries(Object.keys(captured).sort().map(k => [k, captured[k]])),
       }, null, 2) + '\n');

@@ -4,7 +4,7 @@
    from a different cascade layer and silently win or lose. The --zk-shape-card and
    --zk-elevation-card tokens keep the word "card" because they name a treatment shared by
    Grid, Listbox, Tree, Panel, Groupbox and Calendar, none of which are cards.
-   See doc/utility-class-naming-review.md D5. */
+   See doc/spec/utility-naming.md R5. */
 
 @layer zk-utilities {
 
