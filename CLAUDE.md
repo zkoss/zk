@@ -91,6 +91,14 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - dry-run 停在設計的 marker 上，不代表後面的階段正確；要在複本上跑完全部階段。
 - 重派失敗的項目用全新 run，不用 resume（workflow 的 cache 依呼叫位置，不依 prompt 內容）。
 
+### 文件（doc/ 與 tasks/）
+- 儲存庫的 `doc/` 只放規格、架構、設計文件；進度追蹤表、待辦清單、已完成的工作計畫、驗證報告、一次性調查與 Jira 草稿放 `tasks/`（已被 gitignore，只留本機），不 commit。
+- 文件的結論已經寫進 `doc/spec/`，該文件就可以移到 `tasks/`。
+- 決策評估類文件若決策已實作進產品：先把決策寫進 `doc/spec/`，再把原文件移到 `tasks/`，並在檔名註明「已加進 SPEC」。
+- 確定不做的評估（例如已決定不採用的方案）也可以移到 `tasks/`，不必先併入 spec。
+- 移出 `doc/` 的文件，同步改掉 `CLAUDE.md`、`.claude/`、`doc/spec/`、`zkpreview` 註解裡對它的路徑引用；`doc/spec/` 與 `doc/contracts/` 整個保留。
+- 整理文件、改寫清單、改引用路徑這類文件工作交給 `doc-writer` agent；搬檔與 commit 在主 session 做。
+
 ### 主題（Marble）
 - 外觀問題（用哪個 token 或樣式、同族元件要不要一致、缺陷歸 Marble／ZK Jira／預覽頁）先依 `.claude/skills/marble-theme/reference/decision-principles.md` 自行決定並在回報中引用原則編號；只有該檔 §4 的情況才問使用者。widget TS 寫死外觀、核心團隊負責的 Jira 等規則都在該檔 §1。
 - 某主題 jar 缺某檔，先查同一 ZK 版本的同一主題 jar；版本落差要描述為版本不一致，不寫成主題本身的特性。

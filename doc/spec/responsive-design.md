@@ -178,6 +178,7 @@
 - `z-grid-fill` 與 `z-grid-cols-auto`（第 2、2.5 節）都**不用** breakpoint（intrinsic / 捲動容器處理 RWD）——
   能用 intrinsic 就優先用，這是本 theme 的取向。
 - 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組響應式 display utility。**breakpoint 尺度**採 Bootstrap：`sm` 576 / `md` 768 / `lg` 992 / `xl` 1200（`xs` 0 = base），與 EE 的 Grid／Listbox `responsive` 使用同一組值（決議見 `doc/breakpoint-unified-spec-proposal.md` §9；`scripts/build-css.js --module zkmax` 會檢查兩邊一致）。
+  **不寫自訂寬度的 `@media` / `@container`**：寬度條件只能取上述尺度（`min-width` 為 576／768／992／1200，`max-width` 為其減 1），由 `scripts/check-breakpoints.js` 檢查（`scripts/build-css.js --module zkmax` 時執行）。
   互動教學頁：`usecase/index.zul#utility/responsive`（原始檔 `zkpreview/src/main/webapp/web/utility/responsive.zul`）。
 
 ### 5.1 依 viewport —— `z-d-{value}-{bp}`（mobile-first / min-width）

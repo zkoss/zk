@@ -35,6 +35,7 @@ under [`../`](../).
 | [zindex-scale.md](zindex-scale.md) | Stacking scale — `--zk-index-*` tokens + `.z-index-*` utilities. **Key fact:** ZK stamps floating-widget z-index inline at runtime (base 1800, flat global counter), so only non-floating values are load-bearing; the 1000–2000 component values are cosmetic fallback. Enterprise guidance: stay below 1800 or use `setTopmost()`, don't out-bid the counter |
 | [zk-mui-structural-gaps.md](zk-mui-structural-gaps.md) | ZK↔MUI differences unresolvable by CSS alone (floating label, multi-select, calendar today-marker, ripple) — expected limits, not bugs |
 | [native-modern-ui-components.md](native-modern-ui-components.md) | Native `badge`/`chip`/`avatar`/`avatargroup` (ZK 10.4+) — class/attribute contract; old-utility → native-severity mapping; replaces the former `.z-badge`/`.z-chip`/`.z-avatar` utility CSS |
+| [screenshot-tolerance.md](screenshot-tolerance.md) | Playwright screenshot gate tolerance — `maxDiffPixels` floor for state shots, per-project `threshold`, `maxDiffPixelRatio` opt-ins; the zero-tolerance equivalence run stays at zero |
 
 ## Related
 

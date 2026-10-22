@@ -76,7 +76,7 @@ reference image for comparison.
 - **Popups:** open them with the gesture a user makes, assert exactly one visible match, park the cursor
   after the trigger. The full rules are in the header comment of `popup-gallery.spec.ts`.
 - **Tolerances** are absolute pixel budgets per shot, not ratios; see
-  [screenshot-tolerance-policy.md](screenshot-tolerance-policy.md) and the constants at the top of each spec.
+  [screenshot-tolerance.md](spec/screenshot-tolerance.md) and the constants at the top of each spec.
 
 ## 5. Which pages get a gallery shot
 

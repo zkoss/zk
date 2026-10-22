@@ -5,7 +5,7 @@
 
 > 互動教學頁:<${PREVIEW_URL}/utility/zindex.zul>(原始檔 `zkpreview/src/main/webapp/web/utility/zindex.zul`)。
 > 定義:`zul/src/main/resources/web/zul/css/tokens/_zindex.css`;utility:`utility/_layout.css`;回歸測試:`zkpreview/src/test/playwright/zindex-scale.spec.ts`(`zindex` 專案)。
-> 稽核全紀錄(每個現有 z-index 的歸類):[`../zindex-audit.md`](../zindex-audit.md)。
+> 稽核全紀錄(每個現有 z-index 的 selector 逐一歸類)保存於本機 `tasks/` 下,不在版本庫中;本文件保留其中的決議與理由。
 
 ---
 
@@ -82,6 +82,12 @@
 | Combobox / Menupopup / Bandbox / Errorbox / Toolbar / Colorbox / Chosenbox / Timepicker / Bandpopup | 1600 | inline ≥1800 |
 | Datebox / DaterangeBox 下拉 | 1700 | inline ≥1800 |
 | Toast | 1800 | inline ≥1800 |
+
+### 不收編的值（z 1–40 與 99／100 帶）
+
+- **規則**:元件內部堆疊的 z-index 1–40，以及 z 99／100 的混合帶，維持原值、不收編進 `--zk-index-*` 尺度。
+- **理由（1–40）**:這些值只在元件自己的 DOM 內相對排列（表頭蓋內容、beak／箭頭、frozen 欄、tab 重疊、拖曳把手等），數值小、彼此不跨元件比較；收編進全域尺度沒有意義且有風險。
+- **理由（99／100）**:語意混雜（例如 `.z-menubar`、自繪捲軸、errorbox／notification 的 beak、coachmark），不屬於浮層排序的問題。若日後要新增 `sticky`／`fixed` 語意層，menubar 與捲軸可再評估收編；beak 與連接線維持元件內。
 
 ---
 

@@ -33,7 +33,7 @@ async function padShot(page: Page, target: Locator, name: string | string[],
     // Absolute floor for anti-aliasing flicker. These crops are small (a selectbox
     // focus shot is 144x64) and high-contrast at the ring's edge, so a 1-2px AA
     // flicker that no eye can see turns the shot red run to run (chat D80; the
-    // selectbox focus shot differed by 2px — doc/screenshot-tolerance-policy.md). An absolute
+    // selectbox focus shot differed by 2px — doc/spec/screenshot-tolerance.md). An absolute
     // count, not maxDiffPixelRatio: 1% of ~9000px would be 92px — enough to hide a
     // whole mis-rendered ring segment. The gallery/tablet projects keep their own
     // ratio-based policy; this applies to state shots only.
@@ -2220,7 +2220,7 @@ test.describe('codeeditor', () => {
 // These assert the computed value that a now-deleted `!important` used to force
 // is still produced by the plain cascade on ZK 10.3.0.1. Each was proven
 // render-neutral before the keyword was removed (see doc/spec/important-inventory.md
-// + doc/important-decisions.md). If a future ZK/@layer change lets a lower rule
+// + doc/spec/important-inventory.md). If a future ZK/@layer change lets a lower rule
 // win again, these fail — the signal to restore the override.
 // =======================================================
 test.describe('important-removal-guards', () => {

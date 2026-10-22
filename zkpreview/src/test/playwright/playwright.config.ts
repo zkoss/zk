@@ -50,7 +50,7 @@ export default defineConfig({
       // Per-pixel YIQ colour distance for toHaveScreenshot, tightened from the 0.2 default.
       // Jess review batch 2 moved the listbox selected row from rgb(213,230,255) to
       // rgb(200,213,234): YIQ 0.0625, so 41,628 changed pixels were invisible at 0.2.
-      // Colour changes below 0.05 still pass. See doc/screenshot-tolerance-policy.md.
+      // Colour changes below 0.05 still pass. See doc/spec/screenshot-tolerance.md.
       expect: { toHaveScreenshot: { threshold: 0.05 } },
       use: { ...devices['Desktop Chrome'] },
     },
@@ -122,7 +122,7 @@ export default defineConfig({
       // Font-size equivalence: the computed font-size distribution of every preview page must
       // not move. The oracle for the z-text-* renumber, which is a shift within a closed set
       // and so invisible to the orphan-based guards. See font-size-equivalence.spec.ts and
-      // doc/utility-class-naming-review.md section 6.2.
+      // doc/spec/utility-naming.md section 3.2.
       name: 'font-size',
       testMatch: /font-size-equivalence\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },

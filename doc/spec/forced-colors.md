@@ -105,7 +105,7 @@ npm run review:forced-colors    # builds doc/forced-colors-review.html (a templa
 ```
 
 The committed regression gate is the **assertion** spec (`forced-colors.spec.ts`, 13
-computed-style probes) plus the coverage linter (`check:forced-colors`) — not the screenshots.
+computed-style probes) — not the screenshots.
 
 ## Approach rationale (vs a dedicated high-contrast theme)
 
@@ -123,13 +123,9 @@ Because the guard is one central file keyed by ZK class, adding coverage for a n
 (or previously-missed) component is a small, repeatable edit — no new file, no build
 wiring. The process:
 
-1. **Detect** — run the audit, which greps every component CSS for the four fragile
-   patterns and reports any whose class is not yet in the guard file:
-   ```bash
-   npm run check:forced-colors          # advisory report
-   npm run check:forced-colors -- --strict   # exit 1 if anything uncovered (for CI)
-   ```
-   (Heuristic linter — treat each hit as "review against this spec", not a hard error.)
+1. **Detect** — 對照下方第 2 步的表，檢查新元件的 CSS 是否含有其中的 fragile pattern，以及該 class 是否已列在 guard 檔中。
+   原先的覆蓋檢查指令 `npm run check:forced-colors` 已不在 zk 中（`.claude/skills/marble-theme/SKILL.md` 第 102 行），
+   marble-theme SKILL.md 未指定替代指令；**待確認**。
 2. **Classify** the component's fragile pattern(s) and pick the matching remedy:
    | Pattern found | Remedy → which list in `_forced-colors.css` |
    |---|---|
@@ -152,18 +148,18 @@ wiring. The process:
 **All ambiguous items closed.** The 2026-07-16 pass resolved the seven residual judgment-call
 cases (see "Resolved ambiguous cases"): three took one guard block each (1c, 1d/3a/4a, 5), two
 needed no code (embedded calendar already covered; decorative blocks by-design), and two were
-resolved earlier. The guard now carries ~163 classes; `npm run check:forced-colors` → **0 gaps**
+resolved earlier. The guard now carries ~163 classes; the coverage check (`check:forced-colors`, no longer in zk) reported **0 gaps**
 and `npm run test:forced-colors` → **13/13 pass** (no regression).
 
 **Full component coverage.** After the initial anchor pass, the audit's tail of 27
 lower-frequency components (calendar selected day, accordion selected tab, paging current
 page, drawer/toast/notification/groupbox surfaces, slider/selectbox/timepicker/searchbox
 focus, cascader/chosenbox/goldenlayout/organigram/nav, etc.) was folded into the central
-lists via the process above. `npm run check:forced-colors -- --strict` now **exits 0** —
+lists via the process above. The strict coverage check (`check:forced-colors -- --strict`) then **exited 0** —
 every component CSS with a fragile pattern is represented in the guard. This coverage was
 produced with a Planner–Generator–Evaluator loop and verified by an independent
-computed-style probe across all four buckets (see `doc/gap-5-tail-pge.md`). New
-components should keep it at strict-zero using the checklist above.
+computed-style probe across all four buckets. New components should be checked against
+the checklist above (the strict check is no longer in zk; see Detect in step 1).
 
 **Masked-icon fill (pattern 5, added after the initial pass).** A field report —
 "the spinner up/down arrows disappear under emulated high-contrast" — surfaced a

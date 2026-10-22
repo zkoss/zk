@@ -31,7 +31,7 @@ build (minutes); a warm start serves in about 10 s.
 Every Playwright test opens a new HTTP session, and ZK keeps one `Timer` thread per session until
 the session expires, so a full suite leaves about 1,300 threads behind. The preview app therefore
 sets a 5-minute session timeout in its `web.xml`. If you still run several full suites back to back,
-restart the server between them. Filed as ZK-6213; background: [`doc/zkpreview-thread-leak.md`](../../../../doc/zkpreview-thread-leak.md).
+restart the server between them. Filed as ZK-6213.
 
 Stop by pressing a key in the `appRun` terminal (closing stdin has the same effect).
 **`./gradlew appStop` does not work against an `appRun` server** — it fails with
@@ -126,7 +126,7 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
 - **Tolerance is not one number.** `gallery-scan.spec.ts` allows `maxDiffPixelRatio: 0.002` (0.2%) —
   thousands of pixels on a full page — `tablet.spec.ts` opts into 2% for `tabbox` and `window`, and
   `screenshot.spec.ts`'s `padShot()` carries `maxDiffPixels: 20` for every hover/focus/active shot
-  (chat D80, 2026-09-14 — `doc/screenshot-tolerance-policy.md`). The state shots use an absolute
+  (chat D80, 2026-09-14 — `doc/spec/screenshot-tolerance.md`). The state shots use an absolute
   count, not a ratio: those crops run about 9 000 px, where 1% would be 92 px — enough to hide a
   whole mis-rendered focus ring. That is a *regression* gate. An equivalence check (did a refactor or a move change anything?) needs a one-off
   **zero-tolerance** run with every diff explained.

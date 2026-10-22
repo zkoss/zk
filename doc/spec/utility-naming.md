@@ -1,8 +1,10 @@
 # Utility Class Naming
 
-Normative rules for naming Marble's `z-*` utility classes. Derived from the full review in
-`doc/utility-class-naming-review.md`, which carries the evidence and the rejected alternatives;
-this page is the short form to follow when adding a class or a whole category.
+Normative rules for naming Marble's `z-*` utility classes. The review this page was derived from
+is kept locally under `tasks/` and is not in the repository; its durable content (the rules, the
+text-size scale, and the rename verification method) is carried in this page. The review's
+evidence and the alternatives it compared are not kept in the repository. Follow this page when
+adding a class or a whole category.
 
 Marble ships **423 authorable utility classes**. They are Marble's public vocabulary from ZK
 11.0 onward, and `sclass` is a plain string with no compiler behind it — once released, a rename
@@ -49,6 +51,10 @@ manifest parses names as `prefix-property-value`.
 
 Two spellings for one behaviour means two things to document, two to complete, and two to keep
 in sync. `z-sr-only` and `z-text-muted` were removed for exactly this.
+
+The same reasoning renamed `z-fw-regular` to **`z-fw-normal`**. The CSS keyword is `normal`,
+Bootstrap writes `fw-normal`, and the sibling `z-fst-normal` already uses `normal`. One family
+should not say `regular` and `normal` for the same idea. `z-fw-regular` is no longer a valid name.
 
 ### R3 — A trailing `-xs/-sm/-md/-lg/-xl` always means a size
 
@@ -105,14 +111,30 @@ is.
 `xs sm md lg xl 2xl 3xl …`, each step guessable from its neighbours. The font-size scale
 previously carried both `md` (13px) and `base` (14px); `base` means "the default size" in
 Tailwind while Marble's default body was the 13px step, so the obvious reach gave the wrong
-size silently.
+size silently. The scale now has no `base` step. Its current px values, as listed in the header
+comment of `zul/src/main/resources/web/zul/css/utility/_typography.css`:
+
+| class | px | MD3 typescale role(s) |
+|---|---|---|
+| `z-text-xs` | 11 | label-small |
+| `z-text-sm` | 12 | body-small, label-medium |
+| `z-text-md` | 13 | body-medium (default body) |
+| `z-text-lg` | 14 | title-small, label-large |
+| `z-text-xl` | 16 | title-medium, body-large |
+| `z-text-2xl` | 22 | title-large |
+| `z-text-3xl` | 24 | headline-small |
+| `z-text-4xl` | 28 | headline-medium |
+| `z-text-5xl` | 32 | headline-large |
+| `z-text-6xl` | 36 | display-small |
+| `z-text-7xl` | 45 | display-medium |
+| `z-text-8xl` | 57 | display-large |
 
 ---
 
 ## 3. Changing an existing name
 
-Renames are mechanical but the verification is not. `doc/utility-class-naming-review.md` §6
-carries the full method; the parts that matter every time:
+Renames are mechanical but the verification is not. The method below is the part that matters
+every time; the original review it came from is kept locally under `tasks/`, not in the repository.
 
 - **Anchor the sweep** on `(?<![\w-])name(?![\w-])`. `sclass` is space-separated, and an
   unanchored match rewrites `z-text-xl` inside `z-text-2xl` — and `z-cardlayout` inside `z-card`.
@@ -126,6 +148,57 @@ carries the full method; the parts that matter every time:
   (`zkpreview/src/test/playwright/font-size-equivalence.spec.ts`, project `font-size`).
 - **Screenshots are not the gate.** `screenshot.spec.ts` compares state crops at
   `maxDiffPixels: 20`; a one-step font change on a short label fits inside that floor.
+
+### 3.1 Sweep mechanics (every rename)
+
+- Within a single pass, replace the longest name first, or route through temporaries (3.2).
+- Exclude `../zkcml` entirely, and `zkpreview/build/`, because build output regenerates.
+- Exclude this page from the sweep. It records old → new pairs, and a sweep would rewrite the
+  "before" column.
+- **A removal is not a rename.** Rewriting the call sites of a deleted class to its survivor is
+  correct in component markup but wrong in a gallery page, where it can produce two identical
+  demo rows or a caption naming the same class twice. After any removal, grep the gallery pages
+  for duplicated demo labels.
+- Generated files need their **generator** changed too, or the next run reinstates the old name.
+  For example, `scripts/build-css.js` emits `icons-lucide.zul`, and its template held
+  `z-align-center`.
+- If a file also holds someone else's uncommitted changes, sweep it for correctness but stage only
+  your own hunks.
+- Screenshot specs of the "visual review" kind (for example `forced-colors-gallery.spec.ts`)
+  rewrite their baseline PNGs on every run. Revert those images before staging.
+
+### 3.2 Shifts within a closed set (for example the text-size renumber)
+
+A shift keeps the old name and gives it a new value, so the orphan check cannot see a missed call
+site. Apply it as follows:
+
+1. **Two-phase sweep through temporaries.** Phase 1 moves every old name to a temporary name keyed
+   by its current px value. Phase 2 moves each temporary to the final name for that px value.
+   Each token is rewritten exactly once, so a chained sweep cannot walk a class up the scale
+   several times.
+
+   ```
+   phase 1:  z-text-{xs,sm,md,base,lg,xl,2xl…7xl}  →  z-tmptext-{11,12,13,14,16,22,24,28,32,36,45,57}
+   phase 2:  z-tmptext-{px}                        →  the final name for that px value
+   ```
+
+2. **Gate 1 (after phase 1).** Run `grep -rE 'z-text-(xs|sm|md|base|lg|xl|[2-7]xl)\b'` over
+   `**/*.zul`, `**/*.ts`, `**/*.java` and `doc/**/*.md`. It must return zero hits. Any hit is a
+   missed call site and is named and located before phase 2.
+3. **Gate 2 (computed font-size equivalence).** Before any edit, capture the baseline with
+   `UPDATE_FONT_BASELINE=1 npx playwright test --project=font-size`. The spec
+   `zkpreview/src/test/playwright/font-size-equivalence.spec.ts` records a computed font-size
+   histogram per preview page into `zkpreview/doc/font-size-baseline.json`. After both phases,
+   run the same project without the env var. It must show an empty diff. A non-empty diff names
+   the page and the buckets.
+4. **Gate 3 (manifest purity).** Dump the manifest before the edit, apply the intended rename map
+   to it mechanically, and diff the result against the manifest generated after the edit. It must
+   be identical. This shows that no declaration, `var()` reference or media prelude changed.
+
+Gates 1 to 3 apply to a shift. Gate 4 applies to every rename: the manifest class count matches the
+expected number, every manifest entry resolves in the built `norm.css.dsp`, and the full Playwright
+suite is clean. If failures already existed before the change, the failing set must be the same
+before and after the change.
 
 ---
 
@@ -151,7 +224,8 @@ The catalogue is generated at build time to
 
 ## 5. Related
 
-- `doc/utility-class-naming-review.md` — the review this page condenses; evidence, rejected
-  options, and the verification method in full
+- The original review this page was derived from — kept locally under `tasks/`, not in the
+  repository. Its durable content is carried in this page; its evidence is not kept in the
+  repository.
 - `doc/spec/spacing-policy.md` — the 4px scale the spacing classes expose
 - `doc/spec/responsive-design.md` — the Bootstrap breakpoint values used by R3

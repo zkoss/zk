@@ -80,7 +80,7 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 		<url-pattern>/zkres/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- Every Playwright test opens a session and ZK keeps one Timer thread per session (ZK-6213); see doc/zkpreview-thread-leak.md -->
+	<!-- Every Playwright test opens a session and ZK keeps one Timer thread per session (ZK-6213) -->
 	<session-config>
 		<session-timeout>5</session-timeout>
 	</session-config>

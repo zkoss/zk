@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Font-size equivalence oracle for the z-text-* size renumber
-// (doc/utility-class-naming-review.md D3, verification layer 2).
+// (doc/spec/utility-naming.md §3.2, Gate 2).
 //
 // Why this exists: every other rename in that series REMOVES the old name, so a missed call
 // site becomes an orphan and the coverage guard fires. D3 is different — it is a SHIFT within a

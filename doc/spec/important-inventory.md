@@ -4,7 +4,7 @@ Durable record of every `!important` in the theme CSS source: what it does, whet
 removed or kept, and the **evidence** for that verdict. Purpose: stop re-investigation — a
 survivor here has already been empirically tested against the current ZK runtime.
 
-**Method** (Planner → Generator → Evaluator, see `~/.claude/plans/…` + `doc/important-decisions.md`):
+**Method** (Planner → Generator → Evaluator, see `~/.claude/plans/…`):
 each candidate's `!important` was deleted, the CSS rebuilt (`npm run build:css`), and the computed
 value / behavior re-measured on the running **ZK 10.3.0.1-jakarta** preview app. Removed only when
 proven **byte-identical** (empirical-proof bar); otherwise kept, with the failing evidence recorded.

@@ -106,7 +106,7 @@ Gate 2 backfill happens opportunistically. Pilot component: goldenlayout.
 
 Scope note: DR-1 and DR-2 shape the **agent harness** (authoring-time contract verification). This one
 shapes the **Playwright suite** (the regression guard). Full working:
-`doc/screenshot-tolerance-policy.md`.
+`doc/spec/screenshot-tolerance.md`.
 
 ### Trigger
 Three screenshot pairs from the zero-tolerance equivalence run — `progressmeter-gallery` (202 differing

@@ -96,7 +96,7 @@ const emitDocs = process.argv.includes('--emit-docs');
 //   --x:9999999   -> 10000000      --x:2147483647 -> 2147480000
 //   --x:1000001   -> 1000000       --x:0.123456789 -> .123457
 // This bit `--zk-index-error: 9999999` (the fatal-JS-error stacking value, deliberately
-// copied from ZK core's own theme CSS — see doc/zindex-audit.md), which shipped as
+// copied from ZK core's own theme CSS — see doc/spec/zindex-scale.md), which shipped as
 // 10000000 and broke the zindex project's computed-style assertion.
 // Mask those tokens with an inert identifier — legal anywhere in a custom property's token
 // stream — and restore them verbatim afterwards.

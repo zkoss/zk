@@ -14,7 +14,7 @@ import { test, expect, Page } from '@playwright/test';
 // (the demo chips all carry .z-position-relative). Token :root values are read
 // straight off document.documentElement.
 //
-// See doc/spec/zindex-scale.md and the audit doc/zindex-audit.md.
+// See doc/spec/zindex-scale.md.
 
 const URL = '/utility/zindex.zul';
 
