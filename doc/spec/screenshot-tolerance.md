@@ -66,7 +66,7 @@ Playwright offers four options. The table lists the unit of each and where the r
 Verification of this rule, recorded when it was made (not re-run since):
 
 1. `npx playwright test --config src/test/playwright/playwright.config.ts --project=chromium --list`,
-   run from the `zkpreview/` module root, lists 126 tests in 1 file, so the spec parses. From the repo
+   run from the `zkpreview/` module root, lists the tests of that one file, so the spec parses. From the repo
    root, `npx` resolves a second `@playwright/test` and every `test.describe` throws.
 2. A standalone probe with a 100×100 page compared against a baseline with an exact pixel count, at
    `maxDiffPixels: 20`: 10 differing pixels pass; 30 differing pixels fail with "30 pixels (ratio 0.01

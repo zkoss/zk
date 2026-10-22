@@ -44,7 +44,8 @@ The IDs below (D13 etc.) are the decision ids used in the original evaluation ke
 ### D14: customers who need Font Awesome (including brand logos) stay on `iceblue11` in ZK 11
 
 - Font Awesome is retired per theme, not from the framework: Marble drops it, `iceblue11`
-  keeps it.
+  keeps it. Font Awesome is not part of Marble; per the evaluation, it is provided by the iceblue
+  theme, and the contents of the iceblue theme jar are outside this repository. ZK's own font-awesome.css.dsp sets `font-family: ZK85Icons, FontAwesome` on `z-icon-*` elements, and Marble resets that font-family in `_icons.css` so that no Font Awesome glyph bleeds through; the icon is rendered entirely by the `::before` mask-image, not by a font glyph.
 - Brand logos are not a Marble gate. Marble documentation should describe an alternative
   (the evaluation record gives Simple Icons as an example).
 - The Font Awesome name gap is a theme-choice migration note, not a hard break.

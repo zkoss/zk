@@ -28,7 +28,7 @@ Target customers (government / finance / EU accessibility-directive) frequently 
 
 Why one central file instead of per-component guards:
 
-- **Unlayered beats layered.** Component CSS lives in `@layer zk-components`; token files are unlayered. In the cascade, unlayered rules win over *any* named layer regardless of specificity — so the guards override component styles **without `!important`** and **without editing ~20 component files**.
+- **Unlayered beats layered.** Component CSS lives in `@layer zk-components`; token files are unlayered. In the cascade, unlayered rules win over *any* named layer regardless of specificity — so the guards override component styles **without `!important`** and **without editing the component files**.
 - All selectors are global ZK class names, so no component-local context is needed.
 - Single file = one place to review, and one place to re-verify survives CleanCSS minification.
 
@@ -40,7 +40,7 @@ Blocks are labelled with the same codes used in the comments of `tokens/_forced-
 
 - **(1a) Elevation-only surfaces** → `border: 1px solid CanvasText` on `.z-window`, `.z-panel`, `.z-popup(-content)`, `.z-menupopup`, `.z-menu-popup`, `.z-combobox-popup`, `.z-bandbox-popup`, `.z-datebox-popup`, `.z-daterangebox-popup`, `.z-listbox`, `.z-grid`, `.z-paper`; plus audited additions (pdfviewer page/toolbar, cropper toolbar, signature tool button, drawer, tbeditor box, groupbox, calendar, errorbox, loading, notification, toast), floating popups (cascader/chosenbox shadows, searchbox/timepicker popups, toolbar/nav/tbeditor dropdowns, bandpopup, goldenlayout, `.z-confirmpopup`), and slider thumbs/tooltips. The datebox/daterangebox calendar popups are shadow-only surfaces (`--zk-elevation-dialog`, `border:none`); the pre-existing in-popup `.z-calendar` border merges with the new frame so no card-within-a-card appears.
 - **(1b) Text-input focus** → `outline: 2px solid Highlight; outline-offset: -1px` on `:focus-within` for `.z-datebox`, `.z-timebox`, `.z-spinner`, `.z-doublespinner`, `.z-bandbox`, `.z-combobox`, `.z-timepicker`, `.z-searchbox-search`, `.z-selectbox`. Round slider thumb uses `outline-offset: 2px`.
-- **(1c) Invalid inputs** → `border-style: double; border-width: 3px` on a control that carries its own border, a double-border overlay on a wrapper. Invalid state is otherwise signalled *only* by a red border colour, which force-maps to `CanvasText` (identical to a valid field). Border **width and style survive** the remap while colour does not, so a double border is the non-colour error affordance. Focus stays on `outline` (1b) so the two signals never collide. Covers 14 input components (intbox/decimalbox/doublebox/longbox/textbox/passwordbox on the control; datebox/timebox/timepicker/spinner/doublespinner via `:has()` on the wrapper; bandbox and daterangebox on the wrapper; combobox on input+button, with the seam between them kept open (`border-right-style` / `border-left-style: none`) so the pair reads as one box). **The invalid input is as large as the valid one (1c-size, 1c-wrapper, follow-up 50):** a control gives the 2px its border gained to its padding (`calc(var(--zk-spacing-3) - 2px)`, the combobox input only on the side that is bordered), so the text keeps its x; a wrapper (datebox, timebox, timepicker, spinner, doublespinner, bandbox, daterangebox) keeps its 1px border and draws the 3px double border on an out-of-flow `::before` at `inset: -1px`, because the min-height of its children, which differs per density and on a tablet, pins the content box. Measured width x height, valid = invalid, in default, compact and tablet density (before: +4 wide on every control, +4 x +4 on every wrapper, +2 wide on the combobox input and root). Guard: `an invalid <input> is as large as the valid one` in `forced-colors.spec.ts` (fixture `pv/invalid-size-guard.zul`; the tablet cases run in `forced-colors-tablet`).
+- **(1c) Invalid inputs** → `border-style: double; border-width: 3px` on a control that carries its own border, a double-border overlay on a wrapper. Invalid state is otherwise signalled *only* by a red border colour, which force-maps to `CanvasText` (identical to a valid field). Border **width and style survive** the remap while colour does not, so a double border is the non-colour error affordance. Focus stays on `outline` (1b) so the two signals never collide. Covers the input components (intbox/decimalbox/doublebox/longbox/textbox/passwordbox on the control; datebox/timebox/timepicker/spinner/doublespinner via `:has()` on the wrapper; bandbox and daterangebox on the wrapper; combobox on input+button, with the seam between them kept open (`border-right-style` / `border-left-style: none`) so the pair reads as one box). **The invalid input is as large as the valid one (1c-size, 1c-wrapper, follow-up 50):** a control gives the 2px its border gained to its padding (`calc(var(--zk-spacing-3) - 2px)`, the combobox input only on the side that is bordered), so the text keeps its x; a wrapper (datebox, timebox, timepicker, spinner, doublespinner, bandbox, daterangebox) keeps its 1px border and draws the 3px double border on an out-of-flow `::before` at `inset: -1px`, because the min-height of its children, which differs per density and on a tablet, pins the content box. Measured width x height, valid = invalid, in default, compact and tablet density (before: +4 wide on every control, +4 x +4 on every wrapper, +2 wide on the combobox input and root). Guard: `an invalid <input> is as large as the valid one` in `forced-colors.spec.ts` (fixture `pv/invalid-size-guard.zul`; the tablet cases run in `forced-colors-tablet`).
 - **(1d) Triangle beak pointers** → `forced-color-adjust: none` on `.z-coachmark-pointer`, `.z-confirmpopup-arrow`, `.z-errorbox-pointer`. These are CSS triangles (transparent border sides + one coloured); forced-colors force-maps the transparent sides to `CanvasText`, collapsing the beak into an opaque square. Opting out preserves the transparency so the triangle shape survives. (`forced-color-adjust` inherits, so setting it on the arrow element also covers its `::before`/`::after` triangle layers.)
 - **(2a) Selected rows / tinted selections** → `background-color: Highlight; color: HighlightText` on selected `.z-listitem` / `.z-treerow` (and their cell content), plus paging current page, nav item, accordion selected tab, searchbox row, organigram node. A **UA "backplate"** paints an opaque Canvas rectangle behind inline text on these fills (hiding the near-white label); a companion `forced-color-adjust: none` on the label text kills it. The **calendar selected day** opts out too, so its primary-disc / on-primary-number pairing is reproduced (the unscoped selector also covers the portallayout-embedded calendar).
 - **(2b) Compound glyph indicators** → `forced-color-adjust: none` on the checked/indeterminate `.z-checkbox-mold` (+ its `::after`) and the selected-row / select-all check icons. A *designed fill+glyph pairing* (blue box + white check) whose contrast is guaranteed by design; opting out keeps it legible rather than letting the box flip to `Canvas` under a check that can't follow.
@@ -52,7 +52,7 @@ Blocks are labelled with the same codes used in the comments of `tokens/_forced-
 - **(4) Background-color shape fills** → whole shapes painted with `background-color` (not a masked `::before` glyph) force-map to Canvas and vanish. Re-pointed to `GrayText` for inert track/rail, `Highlight` for the active/value fill: progressmeter (track + image), separator/space bars (a vertical bar also opts out of the colour adjustment, `forced-color-adjust: none`, so the text backplate of its `&nbsp;` does not break the line into ticks; a horizontal bar is redrawn as a centred 1px `::before` of `CanvasText`; a bar between the items of a toolbar is a 1px x 24px `CanvasText` divider with no `::before`, follow-up 45 F1, D21 = B; a bar in a panel-mold toolbar stays transparent as in normal mode, follow-up 45 F2), slider/rangeslider/multislider rail + area, checkbox switch mold + toggle mold, stepbar step connectors.
 - **(4a) Slider thumbs** → solid `background-color: CanvasText` disc (+ the 1a 1px border), with the `::before` state-layer halo set transparent, so slider/rangeslider/multislider thumbs render as one identical disc instead of mixed hollow rings and stray dots.
 - **(5) Colour-content** → `forced-color-adjust: none` on `.z-colorbox-current` (the closed swatch — covers standalone colorbox, the portallayout embed, and signature's pen/bg colorboxes) and the palette/picker colour surfaces. The inline `background-color` ZK sets here *is* the information; the forced-colors spec names colour pickers as the canonical opt-out. Surrounding chrome (frame, caret, hex inputs, OK button) still follows the system palette.
-- **(focus token) `--zk-focus-ring`** retargeted to `2px solid Highlight` (explicit; `outline-color` is force-mapped anyway, but this makes intent clear for its 17 consumers).
+- **(focus token) `--zk-focus-ring`** retargeted to `2px solid Highlight` (explicit; `outline-color` is force-mapped anyway, but this makes intent clear for its consumers).
 
 ## Intentionally NOT handled
 
@@ -96,15 +96,15 @@ tree / accordion labels hidden behind the UA text backplate; radio checked-dots;
 current-page digit; dnd drag-ghost status glyphs; and every `background-color` shape fill
 (progressmeter, separator/space, sliders, checkbox switch/toggle, stepbar connectors).
 
-**Visual review sheet (regenerable artifact).** A side-by-side contact sheet of all 89 pairs
+**Visual review sheet (regenerable artifact).** A side-by-side contact sheet of all pairs
 can be rebuilt on demand — it is **not** committed:
 
 ```bash
-npm run capture:forced-colors   # writes doc/screenshots/<page>-forced-colors.png (89 PNGs)
+npm run capture:forced-colors   # writes doc/screenshots/<page>-forced-colors.png
 npm run review:forced-colors    # builds doc/forced-colors-review.html (a template-side build output; not built in zk) (gitignored)
 ```
 
-The committed regression gate is the **assertion** spec (`forced-colors.spec.ts`, 13
+The committed regression gate is the **assertion** spec (`forced-colors.spec.ts`,
 computed-style probes) — not the screenshots.
 
 ## Approach rationale (vs a dedicated high-contrast theme)
@@ -148,10 +148,10 @@ wiring. The process:
 **All ambiguous items closed.** The 2026-07-16 pass resolved the seven residual judgment-call
 cases (see "Resolved ambiguous cases"): three took one guard block each (1c, 1d/3a/4a, 5), two
 needed no code (embedded calendar already covered; decorative blocks by-design), and two were
-resolved earlier. The guard now carries ~163 classes; the coverage check (`check:forced-colors`, no longer in zk) reported **0 gaps**
+resolved earlier. The guard now covers every class in the blocks listed under "What the guard restores"; the coverage check (`check:forced-colors`, no longer in zk) reported **0 gaps**
 and `npm run test:forced-colors` → **13/13 pass** (no regression).
 
-**Full component coverage.** After the initial anchor pass, the audit's tail of 27
+**Full component coverage.** After the initial anchor pass, the audit's tail of
 lower-frequency components (calendar selected day, accordion selected tab, paging current
 page, drawer/toast/notification/groupbox surfaces, slider/selectbox/timepicker/searchbox
 focus, cascader/chosenbox/goldenlayout/organigram/nav, etc.) was folded into the central

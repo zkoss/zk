@@ -121,7 +121,7 @@
 `z-grid-cols-auto` 之所以能讓 `auto` 標籤欄跨列對齊，前提是**所有 cell 都是同一個 grid 的直接子元素**（`auto` 欄由全體最寬的標籤算一次、共用）。如果你的每一列被包成**獨立的 wrapper 元素**（例如為了逐列邊框），各列就會各自算自己的 `auto` 欄寬而失準。
 
 兩種解法：
-1. **`display: contents`（預覽頁採用）**：把 row wrapper 設成 layout-transparent，裡面的 cell 就「升級」成父 grid 的直接子元素 → 回到單一 grid → 天生對齊，且**不必改動 18 個內容模板**。
+1. **`display: contents`（預覽頁採用）**：把 row wrapper 設成 layout-transparent，裡面的 cell 就「升級」成父 grid 的直接子元素 → 回到單一 grid → 天生對齊，且**不必改動任何內容模板**。
 2. **`subgrid`**：容器當 grid、各列 `grid-template-columns: subgrid` 共用父層軌道。功能等價，但 row wrapper 仍是獨立盒子（可保留逐列邊框）。
 
 ---
@@ -156,7 +156,7 @@
 - **桌機 / 平板（≥600px）**：對齊表格，欄位撐滿、跨列對齊（與教學頁同一套機制）。
 - **手機（<600px）**：表格在自己的容器內**水平捲動**（`z-overflow-x-auto`），輸入元件維持自然可用大小；文件本身不溢出 → 無幻影垂直捲軸。
 
-> 這是把「可通用的部分全部交給通用 utility」的成果：State Matrix 從「8 個 `pv-cols-*` + subgrid + `@media` 卡片重排 + `--pv-col-N` 注入 + 一整個 `pv.css`」縮成「純 `z-grid-cols-auto` + `z-d-contents` + `z-grid-col-full` + `z-overflow-x-auto`」，**零客製 CSS**。手機 UX 由「堆疊卡片」改為「水平捲動」（標準資料表 RWD）。
+> 這是把「可通用的部分全部交給通用 utility」的成果：State Matrix 從「`pv-cols-*` + subgrid + `@media` 卡片重排 + `--pv-col-N` 注入 + 一整個 `pv.css`」縮成「純 `z-grid-cols-auto` + `z-d-contents` + `z-grid-col-full` + `z-overflow-x-auto`」，**零客製 CSS**。手機 UX 由「堆疊卡片」改為「水平捲動」（標準資料表 RWD）。
 
 ---
 
@@ -220,7 +220,7 @@
 ### 5.3 客製 breakpoint
 
 **斷點數值不是 runtime CSS 變數。** CSS 規定 `@media` / `@container` 的條件**不能**讀 `var()`，故 sm/md/lg/xl 是
-**編譯期常數**。要調整就改 `_layout.css` 的 4 組 `@media` 與 4 組 `@container` 區塊（同一處），再 `npm run build:css`。
+**編譯期常數**。要調整就改 `_layout.css` 的 `@media` 與 `@container` 區塊（同一處），再 `npm run build:css`。
 真正可在 runtime（`:root` 或 inline）覆寫的是 intrinsic grid 的旋鈕——`--zk-grid-min`（及 `-xs/-sm/-lg/-xl`）、
 `--zk-cols`、`--zk-col-min`（見第 2、2.5 節），這些不是斷點。互動教學頁 `utility/responsive.zul` 第 3 部分有完整範例。
 

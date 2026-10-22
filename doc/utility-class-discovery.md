@@ -102,15 +102,17 @@ and cannot go stale.
 - **ZK plugin:** completion for `sclass` reads the manifest from the project's `zul.jar`, with
   the declarations as hover text (D3 settled that there is no `description` field). Falls back to
   a bundled copy when no ZK jar resolves.
-- **Docs:** generate `doc/spec/utility-index.md` from the manifest, as `icon-index.md` is
+- **Docs (planned; `doc/spec/utility-index.md` does not exist yet):** generate it from the manifest, as `icon-index.md` is
   generated today, and point the `marble-theme` skill's `zul-authoring.md` at it instead of at
   the raw CSS directory.
 - **CI guard:** assert that every class in the manifest resolves in the built bundle. Note that
   the drift risk the original plan worried about does not exist: the manifest is generated into
   the gitignored `codegen/` tree on every build, never committed, so it cannot fall behind the
   CSS. The guard that is still worth having is the *coverage* one.
-- **Breakpoint warning:** the generated index page must carry the table from §5.11, and
-  `_layout.css` must stop claiming the scale is "aligned with MUI/Tailwind" when only MUI matches.
+- **Breakpoint note:** the `_layout.css` part is done. Its comment now says the breakpoints follow
+  the Bootstrap scale and no longer claims MUI/Tailwind alignment. The generated index page is not
+  written yet; the MUI table it was to carry has been removed from §5.11, and the scale itself is
+  stated in `doc/spec/responsive-design.md` §5 and the `_layout.css` comment.
 
 ### Phase 4 — The agent skill — **deferred until Marble itself is complete**
 
@@ -147,8 +149,9 @@ is finished.
   `css` only. `padding: var(--zk-spacing-4)` explains `z-p-4` to a human and to an agent alike,
   and the handful of classes whose names are terms of art are cheaper to explain once in the
   generated index page than to carry as a field on 425 entries. **Consequence to absorb
-  elsewhere:** the breakpoint suffixes are the known trap (§5.11) — with no `description`, that
-  warning has to live in the generated docs page and in the CSS comments, not in the manifest.
+  elsewhere:** the breakpoint suffixes were a known trap (§5.11), now resolved by aligning the scale
+  with Bootstrap. With no `description`, the scale is stated in the `_layout.css` comments and in
+  `doc/spec/responsive-design.md`, not in the manifest.
 - **D4** — whether a Java CLI is needed at all, now that the manifest ships as a file.
   *Recommendation: drop it.* The jar entry is readable with `unzip -p` and a running app serves
   it over HTTP; a `main` in a public package would add an API surface to re-implement what `jq`
@@ -285,7 +288,7 @@ as Spring Boot's IDE support merges per-jar metadata.
   "classes": [
     {"name": "z-p-4", "category": "spacing", "css": "padding: var(--zk-spacing-4)"},
     {"name": "z-d-sm-none", "category": "layout", "css": "display: none",
-     "media": "(min-width: 600px)"},
+     "media": "(min-width: 576px)"},
     {"name": "z-vstack", "category": "stack", "css": "margin-top: var(--zk-spacing-3)",
      "selector": ".z-vstack > * + *"},
     {"name": "z-grid-cols-auto", "category": "layout",
@@ -499,29 +502,17 @@ for its readers; what was wrong is that it sent them to grep the raw CSS for the
 the generated manifest as the list and the sources as detail. The customer-facing equivalent
 belongs to the Phase 4 skill.
 
-### 5.11 The breakpoint suffixes are a migration trap
+### 5.11 The breakpoint suffixes use the Bootstrap scale
 
-Responsive and print utilities exist because customers asked for them; until now the answer to
-"does ZK do responsive design" was "integrate the Bootstrap grid". That history is the problem.
+`.z-d-{value}-{bp}` uses the Bootstrap breakpoint scale: `sm` 576px, `md` 768px, `lg` 992px,
+`xl` 1200px (`xs` is the base range, 0). The scale is aligned with Bootstrap, and with the
+`responsive` breakpoints of the EE Grid and Listbox, which use the same values. The rule, and the
+build check that enforces it (`scripts/check-breakpoints.js`), are described in
+`doc/spec/responsive-design.md` §5.
 
-`.z-d-{value}-{bp}` uses the **MUI** scale, exactly:
-
-| Suffix | Marble | Bootstrap 5 | Tailwind |
-|---|---|---|---|
-| `sm` | 600px | 576px | 640px |
-| `md` | 900px | **768px** | 768px |
-| `lg` | 1200px | 992px | 1024px |
-| `xl` | 1536px | 1200px | 1280px |
-
-A customer arriving from the Bootstrap advice writes `z-d-md-none` expecting 768px and gets 900px.
-Nothing errors; the layout is simply wrong on tablets. The `_layout.css` comment says the scale is
-"aligned with MUI/Tailwind", which overstates it — only `xl`/`1536` coincides with Tailwind, and
-nothing coincides with Bootstrap.
-
-With D3 decided as "no `description` field", the manifest will not carry this warning. It therefore
-has to appear in two places that a reader actually reaches: the generated index page (Phase 3), and
-the `_layout.css` comment, which should drop the "/Tailwind" claim and state plainly that the scale
-is MUI's and differs from Bootstrap's.
+The suffixes originally followed the MUI scale (600px, 900px, 1200px, 1536px). A customer arriving
+with Bootstrap advice who wrote `z-d-md-none` expecting 768px would have got 900px, with no error.
+That is why earlier notes in this document describe a migration trap; the trap no longer applies.
 
 ### 5.12 Defect, now fixed — an EE component class leaked into the catalogue
 

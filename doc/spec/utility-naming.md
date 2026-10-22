@@ -3,7 +3,9 @@
 Normative rules for naming Marble's `z-*` utility classes. The review this page was derived from
 is kept locally under `tasks/` and is not in the repository; its durable content (the rules, the
 text-size scale, and the rename verification method) is carried in this page. The review's
-evidence and the alternatives it compared are not kept in the repository. Follow this page when
+evidence and full comparison are kept locally under `tasks/`, not in the repository. The decisions
+are in this page, and the options that were rejected are summarized in the "Rejected alternatives"
+section. Follow this page when
 adding a class or a whole category.
 
 Marble ships **authorable utility classes**; the full list is the generated catalogue described in §4. They are Marble's public vocabulary from ZK
@@ -30,7 +32,7 @@ applied inconsistently rather than places where it was wrong.
 | `z-border-top`, `z-rounded-lg`, `z-w-100` | `z-flex-col`, `z-grid-cols-3`, `z-text-xs` |
 | `z-hstack`, `z-vstack`, `z-visually-hidden` | `z-min-w-0`, `z-flex-1` |
 
-Marble deliberately diverges from both for `z-elevation-0…3`: Bootstrap and Tailwind say
+Marble deliberately diverges from both for `z-elevation-0…5`: Bootstrap and Tailwind say
 `shadow-*`, but Marble is an MD3 theme, the tokens are `--zk-elevation-*`, and consistency with
 the token layer directly beneath the `z-elevation-*` classes beats cross-framework familiarity.
 
@@ -222,10 +224,40 @@ The catalogue is generated at build time to
 
 ---
 
+## Rejected alternatives
+
+The review this page was derived from is kept locally under `tasks/` and is not part of the
+repository. It compared the options below. For each decided question, this lists
+the options it did not choose and the reason the review gives. The review does not state a
+separate verdict for these options; the reasons are its cost and risk statements.
+
+- **D1, breakpoint slot.** Option B (move print to the suffix slot) does not resolve the
+  size-versus-breakpoint collision and gives up the Bootstrap-verbatim `z-d-print-none`. Option C
+  (leave it and document it) makes the collision permanent at 11.0.
+- **D2, `z-visually-hidden` and `z-sr-only`.** Option B (keep `z-sr-only`) keeps a name that
+  Bootstrap 5 renamed, because the content is not screen-reader only. Option C (`z-hidden`) is
+  unsafe: it collides with `display:none` (`z-d-none`), contradicts the HTML `hidden` attribute, and
+  does not say who can reach the content, so it claims a removal that did not happen.
+- **D3, `z-text-base`.** Option B (swap the 13px and 14px names) changes the meaning of two
+  existing class names, which the review calls the worst kind of silent breakage. Option C (drop
+  `z-text-base` and leave 14px without a size utility) loses a step that MD3 uses for `title-small`
+  and `label-large`.
+- **D4, utility sub-prefix.** Option B (`zu-` prefix) renames every utility class, touches every
+  zkpreview page, the manifest, the skill docs and the slide deck, and loses the Bootstrap/Tailwind
+  recognition (`zu-m-1` no longer reads as Bootstrap's `m-1`).
+- **D5, `z-card`.** Option B (`z-surface`) sits awkwardly beside `z-bg-surface` and
+  `z-bg-surface-variant`, so the names do not show that `z-surface` is the full treatment while
+  `z-bg-surface` is only the colour. Option C (keep `z-card` and record a reservation) means a future
+  Card component either takes a worse class name or forces a breaking change, and the person who
+  pays is not the person deciding. Option D (`z-surface-card`) is rejected on length.
+
+---
+
 ## 5. Related
 
 - The original review this page was derived from — kept locally under `tasks/`, not in the
-  repository. Its durable content is carried in this page; its evidence is not kept in the
-  repository.
+  repository. Its durable content is carried in this page; its evidence and full comparison are
+  kept locally under `tasks/`, not in the repository. The decisions are in this page, and the
+  options that were rejected are summarized in the "Rejected alternatives" section.
 - `doc/spec/spacing-policy.md` — the 4px scale the spacing classes expose
 - `doc/spec/responsive-design.md` — the Bootstrap breakpoint values used by R3

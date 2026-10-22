@@ -73,7 +73,7 @@ inject layers; it concatenates the source and **verifies** the wrapper is presen
    panel/groupbox heights) — no cascade layer can beat an inline style — plus `prefers-reduced-motion` resets and
    add-on internals. The small tail (menu separator, messagebox) is **also irreducible** — those are same-layer
    (`zk-components`) author-vs-author conflicts where the layer order gives no help; they correctly keep `!important`.
-   Net: the 63 icon overrides were the only cluster the layer order made redundant.
+   Net: the icon overrides were the only cluster the layer order made redundant.
 3. **Can users customize without `!important`?** Yes, two clean paths: (a) override `--zk-*` tokens at `:root`
    (tokens are unlayered, so a later `:root` wins by source order); (b) write any unlayered CSS — it beats every
    theme layer regardless of specificity, no `!important` needed. The only exceptions are the remaining 109
