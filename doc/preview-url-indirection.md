@@ -20,7 +20,7 @@ Three properties make this worse than ordinary duplication:
 1. **No machine reads the value.** Nothing in `scripts/`, no `.js`/`.ts`/`.sh` file parses the
    `preview:` field. It is consumed only by humans and by LLM agents reading the contract. So the
    90-file diff bought exactly zero functional correctness — it was pure bookkeeping.
-2. **The address is already wrong in places.** `doc/multislider-knob-hit-target-analysis.md` and
+2. **The address is already wrong in places.** `tasks/multislider-knob-hit-target-analysis.md` and
    `doc/daterangebox-focus-ux-review.md` still say `8080`; the multislider doc even carries a note
    that "CLAUDE.md's localhost:8080 table is stale". Restated values drift silently.
 3. **It hides a real gotcha.** `.claude/agents/zk-theme-evaluator.md` has to carry a standing
@@ -132,7 +132,7 @@ places. Verified 2026-09-09:
 - `render-smoke.spec.ts` against the live app — **115/115 passed**, proving `baseURL` is wired.
 - Override honoured: `PREVIEW_URL=http://127.0.0.1:9090` resolves `baseURL` to that value.
 
-Two pre-existing defects were corrected as a side effect: `doc/multislider-knob-hit-target-analysis.md`
+Two pre-existing defects were corrected as a side effect: `tasks/multislider-knob-hit-target-analysis.md`
 and `doc/daterangebox-focus-ux-review.md` were still on port 8080, and the former carried a note that
 CLAUDE.md's table was stale. The now-dead "rewrite `localhost` to `127.0.0.1`" instruction in
 `.claude/agents/zk-theme-evaluator.md` was removed; the IPv6 rationale it existed for is preserved at

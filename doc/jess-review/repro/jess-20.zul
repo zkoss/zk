@@ -1,9 +1,0 @@
-<!-- Jess #20: daterangebox draws extra dates (1st of the anchor month) as selected -->
-<zk>
-	<zscript><![CDATA[
-		java.util.Date begin = new java.util.Date(125, 9, 10);  // 2025-10-10
-		java.util.Date end = new java.util.Date(125, 9, 15);    // 2025-10-15
-	]]></zscript>
-	<daterangebox id="seeded" beginValue="${begin}" endValue="${end}"/>
-	<daterangebox id="empty"/>
-</zk>

@@ -11,7 +11,7 @@ bookkeeping; no role certifies its own work).
 **Scope**: applies to every contract that carries a `## Cross-cutting features` section —
 mandatory for all contracts authored or re-authored after 2026-07-22. **Legacy contracts**
 (no section) are grandfathered: their rows flip to `VERIFIED` under the old rules, and
-their CTV state is governed by [`../component-theme-variables-progress.md`](../component-theme-variables-progress.md).
+their CTV state is governed by [`../../tasks/component-theme-variables-progress.md`](../../tasks/component-theme-variables-progress.md).
 When a legacy contract is re-authored for any reason (js-source drift, Gate-2 revision),
 `zk-spec-author` adds the section then.
 
@@ -100,7 +100,7 @@ contract)` and the eval report notes it.
 For a contract carrying the section, `GATE2: PASS` alone no longer flips `VERIFIED`.
 The orchestrator (sole writer of status/tracker docs) first confirms:
 
-1. **CTV tracker row** exists in `doc/component-theme-variables-progress.md`
+1. **CTV tracker row** exists in `tasks/component-theme-variables-progress.md`
    (a `ctv: N/A` decision is recorded as ➖ with the rationale — the tracker's
    completeness audit must not go stale).
 2. **CTV spec family table** — when `ctv: shipped`, the contract's knob table is ported
@@ -112,7 +112,7 @@ The orchestrator (sole writer of status/tracker docs) first confirms:
 
 ## Known limits / follow-ups (not yet implemented)
 
-Work steps for these items live in [`../../doc/marble-theme-followups.md`](../../doc/marble-theme-followups.md).
+Work steps for these items live in [`../../tasks/marble-theme-followups.md`](../../tasks/marble-theme-followups.md).
 
 - No automated **brand-flip** regression project (override `--zk-color-primary` at
   `:root`, assert key surfaces recolor) — `x-brand-decl` guards the declaration level only.

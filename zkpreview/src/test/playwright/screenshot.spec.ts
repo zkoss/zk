@@ -2398,7 +2398,7 @@ for (const { comp, focus, shot } of FORM_CONTROL_STATES) {
 // Searchbox: the second default searchbox has a pre-selected item, which carries
 // `.z-searchbox-selected` (secondary-container). Chosenbox dropdown: ArrowDown moves
 // `.z-chosenbox-option-hover`, whose fill is hardcoded (follow-up item 10 in
-// doc/marble-theme-followups.md), so that shot does NOT cover batch 2's colour. The
+// tasks/marble-theme-followups.md), so that shot does NOT cover batch 2's colour. The
 // chosenbox chip shot below covers batch 2's `--zk-chosenbox-item-focus-bg`
 // (`.z-chosenbox-item-focus`).
 // -------------------------------------------------------

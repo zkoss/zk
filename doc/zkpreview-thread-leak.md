@@ -1,6 +1,6 @@
 # zkpreview 執行緒數隨 Playwright 執行次數累積
 
-對應 `doc/marble-test-gaps.md` #10 與 `doc/marble-test-phase1-verification-2.md`。本文件只記錄量測到的事實，不含修正。
+對應 `tasks/marble-test-gaps.md` #10 與 `doc/marble-test-phase1-verification-2.md`。本文件只記錄量測到的事實，不含修正。
 
 ## 結論（量測值）
 

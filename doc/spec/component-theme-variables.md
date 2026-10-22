@@ -20,7 +20,7 @@ Variables generalize it to the **appearance** dimension (color / border / radius
 document it as a public, supported surface.
 
 > **Progress tracking:** conformance of each component against the criteria below is tracked
-> separately in [`../component-theme-variables-progress.md`](../component-theme-variables-progress.md).
+> separately in [`../../tasks/component-theme-variables-progress.md`](../../tasks/component-theme-variables-progress.md).
 
 ## How it works
 
@@ -155,7 +155,7 @@ region — by overriding **only that component's** `--zk-<comp>-*` variables, **
 global token, and with **zero regression** when they override nothing.*
 
 A component **conforms** when it satisfies every applicable criterion below. The
-[progress tracker](../component-theme-variables-progress.md) records each component's status
+[progress tracker](../../tasks/component-theme-variables-progress.md) records each component's status
 against these IDs. CTV-1…4 are the load-bearing *purpose* gates; CTV-5…9 are the
 mechanics / hygiene / verification that keep them true.
 
@@ -1674,7 +1674,7 @@ component with a per-widget dark-surface modifier inherits this trap.
 ## Recipe — adding a component
 
 Validated by the button pilot; repeat per component (then update the
-[progress tracker](../component-theme-variables-progress.md)):
+[progress tracker](../../tasks/component-theme-variables-progress.md)):
 
 1. **Audit** the component CSS: which properties are worth exposing, and how are states
    implemented (overlay vs border-color vs background swap)? The knob names follow that model.

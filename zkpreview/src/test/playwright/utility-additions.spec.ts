@@ -1,6 +1,6 @@
 import { test, expect, Page, Locator } from '@playwright/test';
 
-// The utilities added from doc/utility-class-gap-analysis.md (P1, the Bootstrap / Lumo subset),
+// The utilities added from tasks/utility-class-gap-analysis.md (P1, the Bootstrap / Lumo subset),
 // each checked ON A ZK WIDGET in the preview pages, not on a bare element. Two layers per class:
 //   1. the computed value is what the class declares (so a component-layer rule did not win), and
 //   2. the effect a developer wants actually happens — a click passes through, a row reorders,

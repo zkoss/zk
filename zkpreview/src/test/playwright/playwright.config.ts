@@ -106,7 +106,7 @@ export default defineConfig({
       // Interaction guard: an interactive knob must be reachable at its own
       // centre (elementFromPoint), not merely rendered. Catches a sibling
       // overlay swallowing the pointer — invisible to every style-based check.
-      // See hit-target.spec.ts and doc/multislider-knob-hit-target-analysis.md.
+      // See hit-target.spec.ts and tasks/multislider-knob-hit-target-analysis.md.
       name: 'hit-target',
       testMatch: /hit-target\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
@@ -136,7 +136,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // Utilities added from doc/utility-class-gap-analysis.md, each checked on a ZK widget:
+      // Utilities added from tasks/utility-class-gap-analysis.md, each checked on a ZK widget:
       // computed value plus the intended effect. See utility-additions.spec.ts.
       name: 'utility-additions',
       testMatch: /utility-additions\.spec\.ts/,

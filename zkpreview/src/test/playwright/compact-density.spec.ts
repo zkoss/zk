@@ -4,7 +4,7 @@ import * as path from 'path';
 import { AGGREGATE_PAGES } from './aggregate-pages';
 import { expectVariantSectionShots, VARIANT_PAGES } from './variant-gallery';
 
-// Compact density guard (doc/marble-test-gaps-round2-plan.md section 10, doc/spec/data-dense-mode.md).
+// Compact density guard (tasks/marble-test-gaps-round2-plan.md section 10, doc/spec/data-dense-mode.md).
 //
 //   1. compact-gallery: sectioned screenshots of the representative pages with <html data-density="compact">.
 //   2. compact-height: on every non-aggregate page, each rendered control of a ladder tier has the height of

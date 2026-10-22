@@ -1,9 +1,0 @@
-<!-- Jess #21: daterangebox with showTime - no way to save the time setting -->
-<zk>
-	<daterangebox id="d" showTime="true" format="yyyy-MM-dd HH:mm" width="360px">
-		<attribute name="onChange"><![CDATA[
-			log.setValue("onChange " + event.getBegin() + " -> " + event.getEnd());
-		]]></attribute>
-	</daterangebox>
-	<label id="log"/>
-</zk>

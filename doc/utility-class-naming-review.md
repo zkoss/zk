@@ -546,7 +546,7 @@ Written against what commits 1–6 actually hit. Each bullet after the first thr
 - Generated files need their **generator** changed too, or the next run reinstates the old name.
   `scripts/build-css.js` emits `icons-lucide.zul`; its template held `z-align-center`.
 - Some files in the tree belong to other in-flight work (`scripts/build-css.js`,
-  `scripts/utility-manifest.js`, `doc/slides/`). Sweep them for correctness, but stage only your
+  `scripts/utility-manifest.js`, `tasks/slides/`). Sweep them for correctness, but stage only your
   own hunks — `git show HEAD:<file>` piped through the same rename, then `git hash-object -w` +
   `git update-index --cacheinfo`, stages one line without touching a neighbour's work.
 - Screenshot specs of the "visual review" kind (`forced-colors-gallery.spec.ts`) **rewrite** their

@@ -271,7 +271,7 @@ footer code { font-size: 11.5px; }
       <text class="s" x="750" y="185" text-anchor="middle">只改文件 · 彙整頁只在自己被改時才測</text>
     </svg>
   </div>
-  <p class="caption">class 索引（<code>zkpreview/doc/class-index.json</code>）由 <code>build-class-index.mjs</code> 產生，目前涵蓋 143 頁（115 頂層、16 個 <code>pv/</code>、12 個 <code>utility/</code>）；新增頁面後要重跑。實測（2026-10-20，共 1,692 個測試）：整檔解析 <code>combobox.css</code> 會選出 1,248 個，超過門檻 1,128，所以回答全測；改 token 檔也直接回答全測。只改單一規則時的選出數見 <code>doc/marble-test-infra-conclusion.md</code>（1,345 個測試時：<code>button.css</code> 選出 646，combobox 128 個）。</p>
+  <p class="caption">class 索引（<code>zkpreview/doc/class-index.json</code>）由 <code>build-class-index.mjs</code> 產生，目前涵蓋 143 頁（115 頂層、16 個 <code>pv/</code>、12 個 <code>utility/</code>）；新增頁面後要重跑。實測（2026-10-20，共 1,692 個測試）：整檔解析 <code>combobox.css</code> 會選出 1,248 個，超過門檻 1,128，所以回答全測；改 token 檔也直接回答全測。只改單一規則時的選出數見 <code>tasks/marble-test-infra-conclusion.md</code>（1,345 個測試時：<code>button.css</code> 選出 646，combobox 128 個）。</p>
 </section>
 
 <section>
@@ -350,7 +350,7 @@ footer code { font-size: 11.5px; }
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
         <tr><td>hover、focus、active 狀態變了<small>23 個表單元件有狀態截圖；其他元件只有靜止畫面</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
-        <tr><td>只有彈出層打開時才看得到的樣式<small>26 個預覽頁、56 個測試；tablet 上的彈出層尚未量測（<code>doc/marble-tablet-popup-coverage-measure.md</code>）</small></td>
+        <tr><td>只有彈出層打開時才看得到的樣式<small>26 個預覽頁、56 個測試；tablet 上的彈出層尚未量測（<code>tasks/marble-tablet-popup-coverage-measure.md</code>）</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
         <tr><td>平板版跑掉<small>tablet project，iPad UA</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td></tr>
@@ -385,17 +385,17 @@ footer code { font-size: 11.5px; }
     </div>
     <div class="ob done">
       <h3>規則：部分測本機跑，全測人工決定</h3>
-      <p>改動後先跑選擇器。回答「部分測」就在本機跑它給的指令；回答「全測」時不自動跑，回報原因，由負責人決定何時全測。使用者機器上的 Claude Code hook（<code>.claude/hooks/marble-select-tests.mjs</code>，不進 git）會在 session 改到 CSS、預覽頁或 spec 的那一輪結束時自動跑選擇器。Jenkins 接線計畫暫緩，結論見 <code>doc/marble-test-infra-conclusion.md</code>。</p>
+      <p>改動後先跑選擇器。回答「部分測」就在本機跑它給的指令；回答「全測」時不自動跑，回報原因，由負責人決定何時全測。使用者機器上的 Claude Code hook（<code>.claude/hooks/marble-select-tests.mjs</code>，不進 git）會在 session 改到 CSS、預覽頁或 spec 的那一輪結束時自動跑選擇器。Jenkins 接線計畫暫緩，結論見 <code>tasks/marble-test-infra-conclusion.md</code>。</p>
     </div>
     <div class="ob">
       <h3>ZATS 由核心團隊觸發</h3>
-      <p>Jenkins <code>ZK-Gradle-ZATS-Test</code> 平日 8–19 點輪詢加手動，跑在 PR 分支上（參數 <code>pr/N</code>）。從 fork 開 draft PR 就能用同一個 job 跑，見 <code>doc/jenkins-zats-fork-run.md</code>。</p>
+      <p>Jenkins <code>ZK-Gradle-ZATS-Test</code> 平日 8–19 點輪詢加手動，跑在 PR 分支上（參數 <code>pr/N</code>）。從 fork 開 draft PR 就能用同一個 job 跑，見 <code>tasks/jenkins-zats-fork-run.md</code>。</p>
     </div>
   </div>
 </section>
 
 <footer>
-  <div>來源（量測於 2026-10-20）：<code>zkpreview/src/test/playwright/playwright.config.ts</code>（29 個 project）、<code>npx playwright test --list</code> 與 <code>select-tests.mjs --json</code>（1,692 個測試）、<code>zkpreview/doc/screenshots/</code>（706 張非 forced-colors PNG、99 張 forced-colors 審查圖）、<code>zkpreview/doc/class-index.json</code>（143 頁）、<code>doc/contracts/</code>（94 份 .md、19 份 .html 範本）、<code>zktest/src/test/java</code>（3,939 個 <code>@Test</code>）、<code>.github/workflows/</code>、<code>zkpreview/src/main/webapp/WEB-INF/web.xml</code>。文字依據：<code>doc/marble-test-gaps.md</code>、<code>doc/marble-test-infra-conclusion.md</code>、<code>doc/marble-popup-gallery-conclusion.md</code>、<code>doc/zkpreview-thread-leak.md</code>、<code>doc/jenkins-zats-fork-run.md</code>。</div>
+  <div>來源（量測於 2026-10-20）：<code>zkpreview/src/test/playwright/playwright.config.ts</code>（29 個 project）、<code>npx playwright test --list</code> 與 <code>select-tests.mjs --json</code>（1,692 個測試）、<code>zkpreview/doc/screenshots/</code>（706 張非 forced-colors PNG、99 張 forced-colors 審查圖）、<code>zkpreview/doc/class-index.json</code>（143 頁）、<code>doc/contracts/</code>（94 份 .md、19 份 .html 範本）、<code>zktest/src/test/java</code>（3,939 個 <code>@Test</code>）、<code>.github/workflows/</code>、<code>zkpreview/src/main/webapp/WEB-INF/web.xml</code>。文字依據：<code>tasks/marble-test-gaps.md</code>、<code>tasks/marble-test-infra-conclusion.md</code>、<code>tasks/marble-popup-gallery-conclusion.md</code>、<code>doc/zkpreview-thread-leak.md</code>、<code>tasks/jenkins-zats-fork-run.md</code>。</div>
   <div>怎麼跑、截圖規則、固定日期做法：見 <code>doc/playwright-visual-test-guide.md</code>。</div>
   <div>未在本次重驗：Jenkins 一次約 2.5 小時；部分測的秒數與 380 秒全測基準（來自 marble-test-infra-conclusion.md 的 2026-10-16～18 量測，當時共 1,345 個測試）。</div>
 </footer>

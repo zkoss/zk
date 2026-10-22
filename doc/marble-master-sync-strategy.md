@@ -109,7 +109,7 @@ git push hawkchen master
 ## 6.2 本次執行紀錄（2026-10-12）
 
 - 評估細節：`ZK10/sync/triage-zk.md`、`ZK10/sync/triage-zkcml.md`。
-- 決策（2026-10-12）：D2 = A（za11y 的修正寫進 Marble 元件 CSS，所有使用者適用）；D3 = A（WCAG 色盤這次不做，併入 `doc/marble-theme-followups.md` §22）。
+- 決策（2026-10-12）：D2 = A（za11y 的修正寫進 Marble 元件 CSS，所有使用者適用）；D3 = A（WCAG 色盤這次不做，併入 `tasks/marble-theme-followups.md` §22）。
 - 上游 remote 已加：`zk` → `upstream` = `https://github.com/zkoss/zk.git`；`zkcml` → `upstream` = `git@github.com:zkoss/zkcml.git`。
 - 本機 `master` 已 fast-forward：`zk` 到 `65c55120a2`，`zkcml` 到 `5fe712072`。**尚未 push 到 `hawkchen`。**
 - worktree：`ZK10/sync/zk`（分支 `marble-sync-65c5512`，merge commit `c4696ad699f`）、`ZK10/sync/zkcml`（分支 `marble-sync-5fe7120`，merge commit `939423216`）。**`marble` 本身尚未變動。**

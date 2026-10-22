@@ -22,7 +22,7 @@ import { test, expect, Page } from '@playwright/test';
 // topmost range is always reachable, so any spot check that happens to pick it —
 // `.first()` included, depending on markup order — reports a false green.
 //
-// See doc/multislider-knob-hit-target-analysis.md.
+// See tasks/multislider-knob-hit-target-analysis.md.
 
 interface Variant {
   name: string;

@@ -1,6 +1,6 @@
 # z-index 稽核 — Marble 疊層尺度（Tier 1 #4 前置）
 
-實作 `doc/framework-feature-gaps.md` Tier 1 #4「z-index / 疊層尺度」的**第一步**：把主題現有每一個 `z-index`
+實作 `tasks/framework-feature-gaps.md` Tier 1 #4「z-index / 疊層尺度」的**第一步**：把主題現有每一個 `z-index`
 盤點、歸類到「屬於哪一層」,並標記哪些值**可自由收編進尺度**、哪些**必須與 ZK runtime 對齊不可亂動**。
 
 > 資料來源:`src/main/resources/web/**/*.css`(掃描日 2026-07-27)。

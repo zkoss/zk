@@ -4,7 +4,7 @@ import * as path from 'path';
 import { AGGREGATE_PAGES } from './aggregate-pages';
 import { expectVariantSectionShots, VARIANT_PAGES } from './variant-gallery';
 
-// Brand-colour override guard (doc/marble-test-gaps-round2-plan.md section 6).
+// Brand-colour override guard (tasks/marble-test-gaps-round2-plan.md section 6).
 //
 // The promise (doc/spec/brand-override.md): overriding the one seed --zk-color-primary re-derives the
 // whole primary family. Two checks keep it:

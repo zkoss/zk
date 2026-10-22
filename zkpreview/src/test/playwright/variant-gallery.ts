@@ -5,7 +5,7 @@ import { expectSectionShots } from './section-shots';
 // Same shots as gallery-scan.spec.ts (section-shots.ts), with the variant name in the file name:
 // `<page>-<variant>-<NN>-<slug>.png`. See doc/marble-compact-brand-batch3-report.md.
 
-// The page list of doc/marble-test-gaps-round2-plan.md section 10. `textbox` stands for the aggregate
+// The page list of tasks/marble-test-gaps-round2-plan.md section 10. `textbox` stands for the aggregate
 // `inputs.zul`, which a component CSS change never selects (D12).
 export const VARIANT_PAGES = [
   'textbox', 'button', 'grid', 'listbox', 'tree', 'tabbox', 'toolbar', 'menubar',

@@ -703,11 +703,11 @@ test.describe('tablet-scrollview-affordance', () => {
 // make the pop-up a tablet one. Why these tests live here and not in a new spec file: a new file needs a
 // `testMatch` entry in playwright.config.ts, and a change there makes select-tests.mjs answer `full`. Each title
 // names the page it opens (`x.zul:`), which is what select-tests.mjs reads to map a CSS change to these tests.
-// Rationale and measurements: doc/marble-tablet-popup-batch5-report.md.
+// Rationale and measurements: tasks/marble-tablet-popup-batch5-report.md.
 // -------------------------------------------------------
 const POPUP_PAD = 12;
 
-// Absolute count of differing pixels tolerated per pop-up shot; measured in doc/marble-tablet-popup-batch5-report.md.
+// Absolute count of differing pixels tolerated per pop-up shot; measured in tasks/marble-tablet-popup-batch5-report.md.
 const POPUP_MAX_DIFF = process.env.POPUP_MAX_DIFF !== undefined ? Number(process.env.POPUP_MAX_DIFF) : 10;
 // Per-pixel colour distance, 0.02 as in the brand and compact projects: 0.05 let an 8% state layer on a 24px close button pass.
 // POPUP_THRESHOLD overrides it for the noise measurement.

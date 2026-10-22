@@ -5,9 +5,9 @@ are what those rulings have in common. Apply them yourself: a question they sett
 asked. Only the cases in §4 go to the owner.
 
 Where each principle came from (D-ids, issues, dates) stays in the documents that recorded the
-rulings — `doc/jess-review/decisions.md`, `doc/zkdemo-b6-marble-fixes.md`,
-`doc/zkdemo-b8-triage.md`, `doc/marble-master-sync-strategy.md`, `doc/spec/`. This file holds
-conclusions only.
+rulings — `tasks/jess-review/decisions.md`, `tasks/zkdemo-b6-marble-fixes.md`,
+`tasks/zkdemo-b8-triage.md`, `doc/marble-master-sync-strategy.md`, `doc/spec/`. The `tasks/`
+files are local-only (gitignored) and absent from a fresh clone. This file holds conclusions only.
 
 ## How to decide
 
@@ -54,7 +54,7 @@ conclusions only.
   new attribute) → a New Feature Jira, not theme CSS.
 - **O9 — Accessibility fixes live in component CSS** or the central `_forced-colors.css`, never
   in an optional add-on sheet Marble does not load.
-- **O10 — Stay inside the reported issue.** Other findings go to `doc/marble-theme-followups.md`;
+- **O10 — Stay inside the reported issue.** Other findings go to `tasks/marble-theme-followups.md`;
   no drive-by fixes in adjacent code.
 
 ## 2. Precedence: which source wins

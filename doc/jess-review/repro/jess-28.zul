@@ -1,9 +1,0 @@
-<!-- Jess #28: searchbox keeps the old search input after the popup is reopened -->
-<zk>
-	<zscript><![CDATA[
-		ListModel model = new ListModelArray(new String[]{
-			"North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"});
-	]]></zscript>
-	<searchbox id="s" model="${model}" placeholder="Search regions..." width="240px"/>
-	<button id="outside" label="Somewhere else"/>
-</zk>
