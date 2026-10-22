@@ -6,7 +6,7 @@ text-size scale, and the rename verification method) is carried in this page. Th
 evidence and the alternatives it compared are not kept in the repository. Follow this page when
 adding a class or a whole category.
 
-Marble ships **423 authorable utility classes**. They are Marble's public vocabulary from ZK
+Marble ships **authorable utility classes**; the full list is the generated catalogue described in §4. They are Marble's public vocabulary from ZK
 11.0 onward, and `sclass` is a plain string with no compiler behind it — once released, a rename
 is a breaking change in customer markup that no deprecation cycle can cheaply cover. Get the
 name right the first time.
@@ -32,7 +32,7 @@ applied inconsistently rather than places where it was wrong.
 
 Marble deliberately diverges from both for `z-elevation-0…3`: Bootstrap and Tailwind say
 `shadow-*`, but Marble is an MD3 theme, the tokens are `--zk-elevation-*`, and consistency with
-the token layer directly beneath four classes beats cross-framework familiarity.
+the token layer directly beneath the `z-elevation-*` classes beats cross-framework familiarity.
 
 ---
 

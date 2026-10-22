@@ -98,6 +98,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 確定不做的評估（例如已決定不採用的方案）也可以移到 `tasks/`，不必先併入 spec。
 - 移出 `doc/` 的文件，同步改掉 `CLAUDE.md`、`.claude/`、`doc/spec/`、`zkpreview` 註解裡對它的路徑引用；`doc/spec/` 與 `doc/contracts/` 整個保留。
 - 整理文件、改寫清單、改引用路徑這類文件工作交給 `doc-writer` agent；搬檔與 commit 在主 session 做。
+- 文件記錄結構與規則，不寫可由程式重算的數量（類別數、圖示數、測試數、檔案數等）；數量用腳本計算。由腳本產生的文件（例如 `doc/spec/icon-index.md`）可以含腳本寫入的數字。量測值、閾值與尺度值（斷點、字級、z-index、容忍像素）是規格，照寫。
 
 ### 主題（Marble）
 - 外觀問題（用哪個 token 或樣式、同族元件要不要一致、缺陷歸 Marble／ZK Jira／預覽頁）先依 `.claude/skills/marble-theme/reference/decision-principles.md` 自行決定並在回報中引用原則編號；只有該檔 §4 的情況才問使用者。widget TS 寫死外觀、核心團隊負責的 Jira 等規則都在該檔 §1。

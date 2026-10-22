@@ -657,7 +657,7 @@ function assertNoOrphanComponentCss() {
 
 // The framework breakpoint scale lives in two places that cannot read each other: the width
 // conditions of @media/@container in CSS, and the Grid/Listbox `responsive` constants in zkmax.
-// Fail the build when they differ (doc/breakpoint-unified-spec-proposal.md §9). Needs the zkmax
+// Fail the build when they differ (doc/spec/responsive-design.md). Needs the zkmax
 // JS source, so it runs only for --module zkmax; a CE-only build has nothing to compare against.
 function assertBreakpointsConsistent() {
     const zkmaxJs = path.join(ZKCML_ROOT, 'zkmax/src/main/resources/web/js/zkmax');
@@ -668,7 +668,7 @@ function assertBreakpointsConsistent() {
     if (errors.length) {
         throw new Error('Breakpoint consistency check failed:\n' + errors.map(e => '  - ' + e).join('\n') +
             '\nThe CSS width conditions must match _DEFAULT_BREAKPOINTS in zkmax grid-responsive.ts and ' +
-            'listbox-responsive.ts.\nSee doc/breakpoint-unified-spec-proposal.md §9.');
+            'listbox-responsive.ts.\nSee doc/spec/responsive-design.md.');
     }
 }
 

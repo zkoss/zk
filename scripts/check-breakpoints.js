@@ -2,7 +2,7 @@
 
 // Breakpoint consistency check — used by scripts/build-css.js (--module zkmax).
 //
-// The framework has one breakpoint scale (doc/breakpoint-unified-spec-proposal.md §9). Its values
+// The framework has one breakpoint scale (doc/spec/responsive-design.md). Its values
 // exist in two places that cannot read each other: the width conditions of `@media` / `@container`
 // in CSS (a condition cannot use var()), and the `_DEFAULT_BREAKPOINTS` constant of the zkmax
 // Grid and Listbox `responsive` feature. This check fails the build when they drift apart:
