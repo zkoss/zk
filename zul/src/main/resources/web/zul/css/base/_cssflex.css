@@ -60,3 +60,13 @@
     min-height: 0;
     min-width: 0;
 }
+
+/* ZK-6076: zk/flex.ts adds `z-flex-content` to a flex container whose children are all
+   flexed; their automatic minimum size must then apply so a vflex groupbox does not clip. */
+.z-flex-content.z-flex-column > .z-flex-item {
+    min-height: auto;
+}
+
+.z-flex-content.z-flex-row > .z-flex-item {
+    min-width: auto;
+}

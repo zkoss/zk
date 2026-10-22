@@ -62,6 +62,8 @@
    A wider pill ("99+", "NEW") widens its tracks, so it stays centred. */
 .z-badge-top_right, .z-badge-top_left, .z-badge-bottom_right, .z-badge-bottom_left {
     display: inline-grid;
+    /* ZK-6166: in a narrow flex container the host would shrink below its content and overlap its neighbour */
+    min-width: max-content;
 }
 .z-badge-top_right > .z-badge-cave, .z-badge-top_left > .z-badge-cave,
 .z-badge-bottom_right > .z-badge-cave, .z-badge-bottom_left > .z-badge-cave {

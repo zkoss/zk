@@ -203,6 +203,8 @@ const normFiles = [
     'js/zul/wgt/css/toast.css',
     // Captcha has no css-uri in lang.xml (mold only), must be bundled here.
     'js/zul/wgt/css/captcha.css',
+    // The Fileupload.get dialog's picked-file rows (zul.fud.FileuploadDlg) have no css-uri either.
+    'js/zul/fud/css/fileupload.css',
     // misc.css holds page-level styles (z-modal-mask, z-loading, z-loading-icon, tooltip…)
     // that are emitted directly by ZK core (zAu.cmd0.showBusy / zUtl.progressbox),
     // not by any widget — so it must always be in the global bundle.

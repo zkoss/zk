@@ -1,0 +1,38 @@
+/* Picked-file rows of the Fileupload.get dialog, written by zul.fud.FileuploadDlg.
+   ZK-6199 replaced the inline colours and font with these classes.
+   DOM: <div class="z-fileupload-file">
+          <img class="z-fileupload-icon"/>              (16px progress gif, floated left)
+          <div><a class="z-fileupload-cancel"/> name</div>
+          <div class="z-fileupload-size">…</div>       (indented under the name)
+        </div>
+   The dialog has no css-uri in lang.xml, so this file is bundled into norm.css.dsp. */
+
+@layer zk-components {
+.z-fileupload-file {
+    box-sizing: content-box;
+    min-height: 16px;
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    border: 1px solid var(--zk-color-outline-variant);
+    background: var(--zk-color-surface-container-low);
+    color: var(--zk-color-on-surface);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-small-size);
+}
+
+.z-fileupload-icon {
+    float: left;
+}
+
+.z-fileupload-cancel {
+    float: left;
+    padding-left: var(--zk-spacing-1);
+    color: var(--zk-color-primary);
+    font-weight: var(--zk-typescale-label-medium-weight);
+    cursor: pointer;
+}
+
+/* 16px icon + one spacing-2 gap, so the size line starts under the file name */
+.z-fileupload-size {
+    padding-left: var(--zk-spacing-6);
+}
+}
