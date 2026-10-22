@@ -16,7 +16,7 @@ const PAD = 12;
 // Absolute count of differing pixels tolerated per shot. Measured run-to-run noise: 0 differing pixels in every shot
 // over at least three runs in separate Playwright processes (doc/marble-popup-gallery-report.md), so the budget is a margin of
 // 10 px for a crop, 20 px for the two shots that cover a whole 1280x720 viewport. Not a ratio: a ratio of the
-// viewport shots would hide a mis-painted border (DR-3 in doc/verification-harness-decisions.md).
+// viewport shots would hide a mis-painted border (DR-3 in .claude/skills/marble-theme/reference/harness-decisions.md).
 // POPUP_MAX_DIFF overrides it for the measurement itself (`POPUP_MAX_DIFF=0` shows the raw noise).
 const DEFAULT_MAX_DIFF = 10;
 const MAX_DIFF: Record<string, number> = {
@@ -286,7 +286,7 @@ test.describe('colorbox', () => {
     // The swatch under the cursor is the one that carries z-colorpalette-selected, so the cursor stays on it.
     await page.locator('.z-colorpalette-color:visible').nth(10).hover();
     // The hover moves focus to div.z-colorpalette, so the browser's default focus ring is in the baseline on purpose:
-    // it records the current rendering; whether Marble should style it is follow-up #62 in doc/marble-theme-followups.md.
+    // it records the current rendering; whether Marble should style it is follow-up #62 in tasks/marble-theme-followups.md.
     await popupShot(page, '.z-colorbox-popup', ['z-colorpalette-popup', 'z-colorpalette-selected'], 'colorbox-popup-palette-selected.png');
   });
 

@@ -1,7 +1,7 @@
 # Verification Harness — Decision Records
 
 Why the verification harness is shaped the way it is. **Operational rules do NOT live here** — read:
-`doc/orchestrator-playbook.md`, `.claude/agents/zk-spec-author.md`, `.claude/agents/zk-theme-evaluator.md`,
+`.claude/skills/marble-theme/reference/harness-playbook.md`, `.claude/agents/zk-spec-author.md`, `.claude/agents/zk-theme-evaluator.md`,
 `.claude/agents/md3-design-verifier.md`, `.claude/skills/zk-component-rules/authoring/contract-tiers.md`,
 `scripts/eval-sanity-tier.js`.
 
@@ -34,7 +34,7 @@ derived downstream. Key mechanisms adopted:
 - **Sanity tier** (`scripts/eval-sanity-tier.js`) — runs on all components every dispatch; catches
   sibling-generator collateral cheaply.
 - **Escalation channel** — non-CSS root causes (widget JS, library config) go to
-  `ESCALATED_LIBRARY_CONFIG` + `doc/harness/library-config-issues.md` instead of false-VERIFIED.
+  `ESCALATED_LIBRARY_CONFIG` + `tasks/harness/library-config-issues.md` instead of false-VERIFIED.
 - **Wave-driven outcome-row minimums** — Wave 1 ≥ 6 … Wave 5 ≥ 0 with `visual-goal: trivial`
   (see `zk-spec-author.md` Step 6).
 

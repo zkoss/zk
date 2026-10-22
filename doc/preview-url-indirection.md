@@ -91,7 +91,7 @@ port is meant to be permanent.
 
 ## What is deliberately NOT migrated
 
-`doc/harness/eval-reports/*.md` (5 files) keep their literal `8080` URLs. They are machine-written,
+`tasks/harness/eval-reports/*.md` (5 files) keep their literal `8080` URLs. They are machine-written,
 point-in-time records of runs that really did curl `8080`; CLAUDE.md marks the directory
 "do not hand-edit". Rewriting them would falsify the record.
 

@@ -214,7 +214,7 @@ glyph-row rule does not apply to this component — this is a deliberate absence
 > were dead code and are gone. The ids are **not reused**. The caret that actually paints is the
 > browser's native one (`caret-color` on `.cm-content`, UA default: pure black on light, pure white
 > on dark, rather than the theme foregrounds) — a knowingly accepted deviation, D7 option B. Found
-> by the first real Gate-1 pass; see `doc/harness/eval-reports/codeeditor.md`.
+> by the first real Gate-1 pass; see `tasks/harness/eval-reports/codeeditor.md`.
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|

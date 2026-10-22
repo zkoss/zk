@@ -10,7 +10,7 @@
 | Layer | What it is | Where it's documented |
 |-------|-----------|------------------------|
 | **A. Runnable test suite** (Playwright) | Automated checks against the live preview app: visual baselines, computed-style guards, smoke, framework classes, reset scoping, tablet, popups, brand and density. | [marble-test-architecture.html](marble-test-architecture.html), this guide |
-| **B. AI verification harness** | The human+agent loop that authors and signs off component design: contracts, evaluator/generator agents, dual gates. | [verification-harness-decisions.md](verification-harness-decisions.md), [orchestrator-playbook.md](orchestrator-playbook.md), [zk-component-rules skill](../.claude/skills/zk-component-rules/SKILL.md) |
+| **B. AI verification harness** | The human+agent loop that authors and signs off component design: contracts, evaluator/generator agents, dual gates. | [harness-decisions.md](../.claude/skills/marble-theme/reference/harness-decisions.md), [harness-playbook.md](../.claude/skills/marble-theme/reference/harness-playbook.md), [zk-component-rules skill](../.claude/skills/zk-component-rules/SKILL.md) |
 
 Layer B decides whether a component "looks right"; Layer A keeps it from silently regressing.
 
@@ -115,4 +115,4 @@ referenced evidence, **not** test baselines, and must not be pruned: `cascader-p
 - [marble-test-gaps.md](marble-test-gaps.md): open gaps and progress
 - [marble-test-infra-conclusion.md](marble-test-infra-conclusion.md): selector rules, baseline run, measurements
 - [spec/index.md](spec/index.md): normative design specs (what it must look like)
-- [verification-harness-decisions.md](verification-harness-decisions.md), [orchestrator-playbook.md](orchestrator-playbook.md): the agent loop
+- [harness-decisions.md](../.claude/skills/marble-theme/reference/harness-decisions.md), [harness-playbook.md](../.claude/skills/marble-theme/reference/harness-playbook.md): the agent loop

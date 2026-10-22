@@ -547,7 +547,7 @@ test.describe('tablet-colorbox-dismiss', () => {
 // These guard doc/contracts/scrollview.md M1-M6. They exist because the contract
 // previously asserted only `overflow` and `background-color` — two values ZK's own
 // JS and the CSS defaults already produce — so scrollview was recorded VERIFIED
-// while its stylesheet was an empty placeholder file (doc/harness/work-status.md).
+// while its stylesheet was an empty placeholder file (tasks/harness/work-status.md).
 // Measured against that empty stylesheet (RED re-run 2026-09-12): M1, M3, M4, M5
 // and M8 fail; M2 and M6 pass on it by construction, because they assert an
 // ABSENCE (no surface, no layout space) that an empty file also satisfies —

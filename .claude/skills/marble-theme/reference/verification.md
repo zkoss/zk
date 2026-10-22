@@ -194,7 +194,7 @@ and one-line device emulation — the last is essential because the tablet style
 under a mobile UA. Reach for ZK WebDriver only for a genuinely functional end-to-end need.
 
 The Playwright suite is the regression guard; the agent harness (evaluator computed-style checks
-plus visual review, dual-gate VERIFIED per `doc/verification-harness-decisions.md`) is the
+plus visual review, dual-gate VERIFIED per `.claude/skills/marble-theme/reference/harness-decisions.md`) is the
 authoring-time deep verification. They are complements.
 
 ## Flaky galleries, and how to prove neutrality without them

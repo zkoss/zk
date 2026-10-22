@@ -11,7 +11,7 @@ You are the **Spec-Author** of the ZK-Material theme harness. Your job runs **on
 **Required reading (Step 0):** Before doing anything else, read `.claude/skills/zk-component-rules/authoring/contract-tiers.md`. It defines the two-tier contract model, the A/B/C/D predicate classification (Structural / Relational / State-differs / Token-bound), the iceblue-CSS-mining workflow (with path-search-then-ask fallback), and the refuse-to-emit rules. This agent's §3 (categories) and §9 (boundary checks) below are operational shorthand for the rules in that file — when in doubt, the skill file wins.
 
 **Role boundary — strict:**
-- You NEVER edit CSS files. You NEVER edit `doc/harness/work-status.md`, `doc/harness/eval-reports/`, `doc/harness/gen-reports/`.
+- You NEVER edit CSS files. You NEVER edit `tasks/harness/work-status.md`, `tasks/harness/eval-reports/`, `tasks/harness/gen-reports/`.
 - You NEVER run the CSS build (`node scripts/build-css.js`) or open Chrome to *measure* (you may open Chrome only to *read* the iceblue baseline DOM in Phase 3 — see §4).
 - The Evaluator/Generator do the loop; you produce the contract they consume.
 
@@ -373,7 +373,7 @@ Examples:
 
 **Then proceed to Step 7 only when `mockup-needed: Y`.** When `N`, skip Step 7 entirely and add the ZKDoc image citation to the contract's `## References` block (`- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKCompRef_<Component>.png`).
 
-The orchestrator's status registry (`doc/harness/outcome-migration-status.md`) reads `mockup-needed` from the frontmatter to populate the `mockup` column.
+The orchestrator's status registry (`tasks/harness/outcome-migration-status.md`) reads `mockup-needed` from the frontmatter to populate the `mockup` column.
 
 ### 7. Author the HTML contract mockup (only if Step 6.5 set `mockup-needed: Y`)
 
@@ -451,7 +451,7 @@ Allowed:
 
 Forbidden:
 - Any edit to CSS files
-- Any edit to `doc/harness/work-status.md`, `doc/harness/eval-reports/`, `doc/harness/gen-reports/`
+- Any edit to `tasks/harness/work-status.md`, `tasks/harness/eval-reports/`, `tasks/harness/gen-reports/`
 - Flipping `contract-approved` to `true` (human review required)
 - Running the CSS build (`node scripts/build-css.js --module <module>`)
 - Running the preview app

@@ -8,9 +8,9 @@
 
 | 內容 | 位置 | 理由 |
 |---|---|---|
-| 決策順序、可自行決定的條件、必須問使用者的例外、同族基準表 | `.claude/skills/marble-theme/reference/decision-principles.md`（新檔） | 任何 session 動到 Marble CSS 都會載入此 skill；決策發生的當下就讀得到。Jess review 結束後原則仍有效，不該綁在 `doc/jess-review/` |
+| 決策順序、可自行決定的條件、必須問使用者的例外、同族基準表 | `.claude/skills/marble-theme/reference/decision-principles.md`（新檔） | 任何 session 動到 Marble CSS 都會載入此 skill；決策發生的當下就讀得到。Jess review 結束後原則仍有效，不該綁在 `tasks/jess-review/` |
 | `SKILL.md` 的入口 | `SKILL.md` 新增一小節「Decide or escalate」，加一列到 Reference 表 | 讓 agent 在問使用者之前先查原則 |
-| 每條原則的出處（D 編號、issue、日期） | 留在原文件：`doc/jess-review/decisions.md`、`doc/zkdemo-b*`、`doc/marble-master-sync-strategy.md` 等 | skill 每次載入都佔 context，出處只用一個檔名指回去 |
+| 每條原則的出處（D 編號、issue、日期） | 留在原文件：`tasks/jess-review/decisions.md`、`tasks/zkdemo-b*`、`doc/marble-master-sync-strategy.md` 等 | skill 每次載入都佔 context，出處只用一個檔名指回去 |
 | 元件規格（某元件應長怎樣） | 維持在 `doc/spec/`、`doc/contracts/` | 那是「結果」，不是「決策方法」；原則表只指向它們 |
 
 不放在 `CLAUDE.md`：它每個 session 都載入，包括與主題無關的工作。
@@ -18,17 +18,17 @@
 
 **語言：** skill 現有檔案全是英文，依「沿用該檔語言」的規則，新檔用英文。出處文件維持原語言。
 
-**去重：** `doc/jess-review/rules.md` §1 的「同族基準」與 §4「可直接做／必須停下來問」搬進新檔後，原處改成一行指向 skill；`CLAUDE.md` 工作守則「主題（Marble）」中屬於外觀判斷的條目同樣搬過去，流程類（git、port、Playwright）留在 `CLAUDE.md`。
+**去重：** `tasks/jess-review/rules.md` §1 的「同族基準」與 §4「可直接做／必須停下來問」搬進新檔後，原處改成一行指向 skill；`CLAUDE.md` 工作守則「主題（Marble）」中屬於外觀判斷的條目同樣搬過去，流程類（git、port、Playwright）留在 `CLAUDE.md`。
 
 ## 2. 來源
 
 1. 使用者在 65 個 session 中的 553 則發言（抽取檔在 session scratchpad；多數是「dN - a」，題目內容要回到記錄文件找）。
 2. 記錄裁示的文件：
-   - Jess review：`doc/jess-review/{decisions,rules,deferred,status}.md`
-   - zkdemo 修正：`doc/zkdemo-b6-marble-fixes.md`、`doc/zkdemo-b7-z5-jira-draft.md`、`doc/zkdemo-b8-*.md`、`doc/zkdemo-b8-z5-verification.md`
+   - Jess review：`tasks/jess-review/{decisions,rules,deferred,status}.md`
+   - zkdemo 修正：`tasks/zkdemo-b6-marble-fixes.md`、`tasks/zkdemo-b7-z5-jira-draft.md`、`tasks/zkdemo-b8-*.md`、`tasks/zkdemo-b8-z5-verification.md`
    - 同步：`doc/marble-master-sync-strategy.md`
    - 規格與架構：`doc/spec/{design-decisions,DESIGN,component-state-model,navigation-surface-rules,window-design-rules,md3-close-affordance-placement,auto-contrast-text,utility-naming,responsive-design,icon-policy,spacing-policy}.md`、`doc/important-decisions.md`、`doc/design-review-feedback.md`、`doc/utility-class-naming-review.md`、`doc/breakpoint-unified-spec-proposal.md`
-   - 測試與基準：`doc/screenshot-tolerance-policy.md`、`doc/verification-harness-decisions.md`
+   - 測試與基準：`doc/screenshot-tolerance-policy.md`、`.claude/skills/marble-theme/reference/harness-decisions.md`
    - memory：`marble-regressions-fix-under-zk6112`、`core-bugs-left-to-core-team`、`jess-review-autonomous-principles`、`visual-issues-via-artifact-with-images`
 3. 範圍只收**外觀**決策（顏色、尺寸、間距、狀態樣式、圖示、跨元件一致性、主題範圍歸屬）。流程類決策（推送、git、port、模型分工）不收，除非它決定「這個外觀問題歸誰修」。
 
@@ -43,7 +43,7 @@
    → 驗證：每條原則至少有一筆裁示支持；沒有支持的不寫。
 3. **回測**（獨立 Opus verifier，看不到使用者的選擇）：從抽取結果保留約 20 筆過去的外觀裁示，只給題目與選項，要它依原則作答，再與使用者當時的選擇比對。
    → 驗證：記錄一致率；不一致的每一筆要嘛修原則、要嘛列為例外，並寫明哪一種。
-4. **寫入**：新增 `reference/decision-principles.md`，改 `SKILL.md`，把 `doc/jess-review/rules.md` 與 `CLAUDE.md` 的重複內容改成指向新檔。
+4. **寫入**：新增 `reference/decision-principles.md`，改 `SKILL.md`，把 `tasks/jess-review/rules.md` 與 `CLAUDE.md` 的重複內容改成指向新檔。
    → 驗證：`git diff --stat` 只含這幾個檔案；skill 檔不含客戶名稱等內部資訊（repo 是公開的）。
 5. **提交**：`ZK-6112: …`，逐路徑暫存。推送另行確認。
 

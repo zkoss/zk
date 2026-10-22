@@ -120,6 +120,9 @@ and the Playwright projects: `reference/verification.md`.
 | `reference/iceblue-parity.md` | Questions about IceBlue, the `--zk-*` public API break, or Theme Pack palettes |
 | `reference/css-audit.md` | Auditing CSS hygiene — orphan tokens, hardcoded colours, repeated shadows, `display` declarations that restate a default; what `scripts/audit-css.sh` reports and how to triage it |
 | `reference/important-reduction.md` | Removing, reducing or justifying an `!important`; the count and probe scripts; the render-neutral proof bar |
+| `reference/harness-playbook.md` | Driving the per-component verification loop (Evaluator, Generator, Design-Verifier) as the orchestrator |
+| `reference/harness-status.md` | The harness status vocabulary, tier legend and serialization rule; where the local state in `tasks/harness/` lives |
+| `reference/harness-decisions.md` | Why the harness is built the way it is (architecture decision records) |
 | `reference/batch-workflow.md` | Running a batch of Marble fixes (an NS batch) that edits a shared selector: impact list before editing, separate engineer and verifier, local commit |
 | `reference/jess-review.md` | Answering a screenshot from the designer (Jess), starting a verification batch for her issues, or touching a meeting record |
 

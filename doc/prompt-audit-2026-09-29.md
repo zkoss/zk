@@ -474,7 +474,7 @@ None of these have been probed behaviourally — the audit is static. Before app
   `package.json` in this run. They carry no behavioural risk; the current text is wrong.
 - **Hunks 3, 7, 8 are removals.** Grep for the removed strings before deleting — in particular
   check whether anything parses the `Examples:` block out of an agent description, and whether
-  `doc/orchestrator-playbook.md` or `doc/harness/` reference the `zkThemeTemplate` memory path.
+  `.claude/skills/marble-theme/reference/harness-playbook.md` or `tasks/harness/` reference the `zkThemeTemplate` memory path.
 - **Hunks 7 and 8 are the two worth re-probing**: run one `md3-design-verifier` contract-audit
   before and after on the same component and compare the findings tables. If the finding count or
   severity assignment moves, re-add the state-layer/disabled thresholds into Step 2 in their
@@ -541,7 +541,7 @@ but it is no longer the cheaper path by the margin the body of this report assum
 `zk-theme-creator` is a **superseded predecessor**, not a peer of `zk-theme-generator`. Five
 independent lines of evidence agree:
 
-1. **It is not in the loop's roster.** `doc/orchestrator-playbook.md` — identical in both repos —
+1. **It is not in the loop's roster.** `.claude/skills/marble-theme/reference/harness-playbook.md` — identical in both repos —
    mentions `md3-design-verifier` 7 times, `zk-theme-evaluator` 6, `zk-spec-author` 6,
    `zk-theme-generator` 2, and **`zk-theme-creator` zero times**.
 2. **Its memory stops before the harness starts.** Files in
