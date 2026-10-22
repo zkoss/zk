@@ -44,5 +44,23 @@
             </listbox>
         </h:div>
     </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Selectable Groups (groupSelect)</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox width="360px" checkmark="true" multiple="true">
+                <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>
+                <listhead>
+                    <listheader label="Brand" width="180px"/>
+                    <listheader label="Price" width="180px"/>
+                </listhead>
+                <listgroup label="Dell"/>
+                <listitem><listcell label="Dell E4500"/><listcell label="$261.00"/></listitem>
+                <listitem><listcell label="Dell P4"/><listcell label="$377.99"/></listitem>
+                <listgroup label="Compaq"/>
+                <listitem><listcell label="Compaq SR5113WM"/><listcell label="$279.00"/></listitem>
+            </listbox>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

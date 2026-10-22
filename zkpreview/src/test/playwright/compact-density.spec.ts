@@ -230,6 +230,13 @@ const EXCEPTIONS: Listed[] = [
     ],
   },
   {
+    reason: 'the caption holds a button next to the text (content-driven): the groupbox header is the button plus its padding',
+    keys: [
+      'comfortable|caption|groupbox-header|Caption in Non-Closable Groupbox|61',
+      'compact|caption|groupbox-header|Caption in Non-Closable Groupbox|47',
+    ],
+  },
+  {
     reason: 'two wrapped rows of 28px chips; content-driven',
     keys: [
       'comfortable|chosenbox|input|States|70',

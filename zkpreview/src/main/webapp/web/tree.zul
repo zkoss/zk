@@ -446,5 +446,20 @@
             </tree>
         </div>
     </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Paging Position Top"/></div>
+        <div sclass="z-py-3">
+            <tree mold="paging" pageSize="3" pagingPosition="top">
+                <treecols><treecol label="Name"/><treecol label="Value"/></treecols>
+                <treechildren>
+                    <treeitem><treerow><treecell>Alpha</treecell><treecell>1</treecell></treerow></treeitem>
+                    <treeitem><treerow><treecell>Beta</treecell><treecell>2</treecell></treerow></treeitem>
+                    <treeitem><treerow><treecell>Gamma</treecell><treecell>3</treecell></treerow></treeitem>
+                    <treeitem><treerow><treecell>Delta</treecell><treecell>4</treecell></treerow></treeitem>
+                    <treeitem><treerow><treecell>Epsilon</treecell><treecell>5</treecell></treerow></treeitem>
+                </treechildren>
+            </tree>
+        </div>
+    </div>
 </div>
 </zk>

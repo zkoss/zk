@@ -123,5 +123,16 @@
         </h:div>
     </h:div>
 
+    <!-- The two popup windows of the section above are shown at load and hang about 120px below it; the margin keeps this section clear of them. -->
+    <div sclass="z-mb-6" style="margin-top: 160px">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Maximize Inside a Bounded Container</h:span></h:div>
+        <h:div class="z-py-3">
+            <div sclass="z-border z-overflow-hidden" width="480px" height="260px">
+                <window title="Maximizable" border="normal" maximizable="true" width="300px" height="180px">
+                    Window Content
+                </window>
+            </div>
+        </h:div>
+    </div>
 </h:div>
 </zk>

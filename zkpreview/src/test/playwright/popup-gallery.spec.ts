@@ -759,3 +759,32 @@ test.describe('tree', () => {
     await expectRodLoadingOverlay(page, 'z-tree-body', 'z-tree-loading');
   });
 });
+
+// -------------------------------------------------------
+// coachmark-positions
+// -------------------------------------------------------
+// Three coachmarks opened at once stack three 50 % scrims and make the page unreadable, and the pointer
+// direction class exists only on an open coachmark. So each position is opened on its own, with the
+// click a user makes on the target, and closed with the close button before the next one.
+test.describe('coachmark-positions', () => {
+  test.beforeEach(({ page }) => openPage(page, '/coachmark-positions.zul'));
+
+  const positions = [
+    { name: 'above its target (before_center)', trigger: 'Show coachmark above', direction: 'z-coachmark-down', file: 'coachmark-positions-popup-down.png' },
+    { name: 'at the end of its target (end_center)', trigger: 'Show coachmark at the end', direction: 'z-coachmark-left', file: 'coachmark-positions-popup-left.png' },
+    { name: 'at the start of its target (start_center)', trigger: 'Show coachmark at the start', direction: 'z-coachmark-right', file: 'coachmark-positions-popup-right.png' },
+  ];
+
+  for (const { name, trigger, direction, file } of positions) {
+    test(`coachmark-positions.zul: open the coachmark ${name}`, async ({ page }) => {
+      await expect(page.locator('.z-coachmark-mask'), 'no scrim before the click').toHaveCount(0);
+      await page.getByRole('button', { name: trigger, exact: true }).click();
+      await parkCursor(page);
+      const popup = await popupShot(page, '.z-coachmark.z-coachmark-open', ['z-coachmark-open', direction], file, [direction]);
+      await expect(page.locator('.z-coachmark-mask'), 'one scrim while one coachmark is open').toHaveCount(1);
+      await popup.locator('.z-coachmark-close').click();
+      await expect(popup).toBeHidden();
+      await expect(page.locator('.z-coachmark-mask')).toHaveCount(0);
+    });
+  }
+});

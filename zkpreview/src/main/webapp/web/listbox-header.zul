@@ -642,5 +642,27 @@
             </listbox>
         </h:div>
     </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Hidden Listheader</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox width="360px">
+                <listhead>
+                    <listheader label="Visible A"/>
+                    <listheader label="Hidden B" visible="false"/>
+                    <listheader label="Visible C"/>
+                </listhead>
+                <listitem>
+                    <listcell label="A1"/>
+                    <listcell label="B1"/>
+                    <listcell label="C1"/>
+                </listitem>
+                <listitem>
+                    <listcell label="A2"/>
+                    <listcell label="B2"/>
+                    <listcell label="C2"/>
+                </listitem>
+            </listbox>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

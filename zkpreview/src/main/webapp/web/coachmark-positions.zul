@@ -1,0 +1,36 @@
+<?page title="Coachmark Positions" contentType="text/html;charset=UTF-8"?>
+<zk>
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Coachmark Positions"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Above the target (before_center)"/></div>
+        <div sclass="z-py-3">
+            <button id="aboveTarget" label="Show coachmark above" onClick="aboveMark.open()"/>
+            <coachmark id="aboveMark" target="aboveTarget" position="before_center" visible="false">
+                <label>The coachmark sits above its target.</label>
+            </coachmark>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="At the end of the target (end_center)"/></div>
+        <div sclass="z-py-3">
+            <button id="endTarget" label="Show coachmark at the end" onClick="endMark.open()"/>
+            <coachmark id="endMark" target="endTarget" position="end_center" visible="false">
+                <label>The coachmark sits at the end of its target.</label>
+            </coachmark>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="At the start of the target (start_center)"/></div>
+        <div sclass="z-py-3 z-d-flex z-justify-end">
+            <button id="startTarget" label="Show coachmark at the start" onClick="startMark.open()"/>
+            <coachmark id="startMark" target="startTarget" position="start_center" visible="false">
+                <label>The coachmark sits at the start of its target.</label>
+            </coachmark>
+        </div>
+    </div>
+</div>
+</zk>

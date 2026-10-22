@@ -279,5 +279,23 @@
             </grid>
         </h:div>
     </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Paging Position Top</h:span></h:div>
+        <h:div class="z-py-3">
+            <grid mold="paging" pageSize="3" pagingPosition="top">
+                <columns>
+                    <column label="Author"/>
+                    <column label="Title"/>
+                </columns>
+                <rows>
+                    <row><label value="Philip Hensher"/><label value="The Northern Clemency"/></row>
+                    <row><label value="Philip Hensher"/><label value="The Fit"/></row>
+                    <row><label value="Philip Hensher"/><label value="Kitchen Venom"/></row>
+                    <row><label value="Michael Greenberg"/><label value="Hurry Down Sunshine"/></row>
+                    <row><label value="Rick Perlstein"/><label value="Nixonland"/></row>
+                </rows>
+            </grid>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

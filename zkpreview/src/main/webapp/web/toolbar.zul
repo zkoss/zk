@@ -163,5 +163,24 @@
             </h:div>
         </h:div>
     </h:div>
+    <h:div class="z-mb-6 z-mt-16">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Alignment (align)</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-4 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">align=&quot;center&quot;</h:span></h:div>
+                <toolbar align="center" width="400px">
+                    <toolbarbutton label="Button 1"/>
+                    <toolbarbutton label="Button 2"/>
+                </toolbar>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">align=&quot;end&quot;</h:span></h:div>
+                <toolbar align="end" width="400px">
+                    <toolbarbutton label="Button 1"/>
+                    <toolbarbutton label="Button 2"/>
+                </toolbar>
+            </h:div>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

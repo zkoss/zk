@@ -91,6 +91,7 @@
                     <navitem label="Anchornav"             selected="@load(vm.currentPage eq '~./anchornav.zul')" onClick="@command('navigate', page='~./anchornav.zul')" />
                     <navitem label="Breadcrumb"            selected="@load(vm.currentPage eq '~./breadcrumb.zul')" onClick="@command('navigate', page='~./breadcrumb.zul')" />
                     <navitem label="Coachmark"             selected="@load(vm.currentPage eq '~./coachmark.zul')" onClick="@command('navigate', page='~./coachmark.zul')" />
+                    <navitem label="Coachmark Positions"   selected="@load(vm.currentPage eq '~./coachmark-positions.zul')" onClick="@command('navigate', page='~./coachmark-positions.zul')" />
                     <navitem label="Drawer"                selected="@load(vm.currentPage eq '~./drawer.zul')" onClick="@command('navigate', page='~./drawer.zul')" />
                     <navitem label="Fisheyebar"            selected="@load(vm.currentPage eq '~./fisheyebar.zul')" onClick="@command('navigate', page='~./fisheyebar.zul')" />
                     <navitem label="Link"                  selected="@load(vm.currentPage eq '~./a.zul')" onClick="@command('navigate', page='~./a.zul')" />

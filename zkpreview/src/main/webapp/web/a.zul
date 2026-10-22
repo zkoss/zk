@@ -21,5 +21,11 @@
             <div><a href="https://www.zkoss.org" label="ZK" iconSclass="z-icon-external-link" disabled="true"/></div>
         </div>
     </div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Reverse Direction (dir)</h:span></h:div>
+        <h:div class="z-py-3">
+            <a dir="reverse" label="ZK" iconSclass="z-icon-external-link" href="https://www.zkoss.org"/>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

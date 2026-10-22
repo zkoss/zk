@@ -39,6 +39,7 @@ const PAGES = [
   '/chip.zul',
   '/chosenbox.zul',
   '/coachmark.zul',
+  '/coachmark-positions.zul',
   '/codeeditor.zul',
   '/colorbox.zul',
   '/columnlayout.zul',

@@ -16,5 +16,17 @@
         </div>
     </div>
 
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Horizontal Orientation (orient)"/></div>
+        <div sclass="z-py-3">
+            <scrollview orient="horizontal" width="300px" height="120px">
+                <zk forEach="1,2,3,4,5">
+                    <window title="Window ${each}" border="normal" width="160px">
+                        This is Window ${each}
+                    </window>
+                </zk>
+            </scrollview>
+        </div>
+    </div>
 </div>
 </zk>

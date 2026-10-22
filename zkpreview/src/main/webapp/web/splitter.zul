@@ -48,5 +48,15 @@
         </h:div>
     </h:div>
 
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Collapsed (open=false)</h:span></h:div>
+        <h:div class="z-py-3">
+            <hbox spacing="0" height="160px" style="border: 1px solid rgba(0, 0, 0, 0.15)">
+                Hbox Left
+                <splitter collapse="before" open="false"/>
+                Hbox Right
+            </hbox>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

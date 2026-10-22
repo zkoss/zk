@@ -140,5 +140,21 @@ dsc = Comparators.dscRowDetailComparator;
             </grid>
         </div>
     </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Hidden Column"/></div>
+        <div sclass="z-py-3">
+            <grid>
+                <columns>
+                    <column label="Visible A"/>
+                    <column label="Hidden B" visible="false"/>
+                    <column label="Visible C"/>
+                </columns>
+                <rows>
+                    <row><cell>A1</cell><cell>B1</cell><cell>C1</cell></row>
+                    <row><cell>A2</cell><cell>B2</cell><cell>C2</cell></row>
+                </rows>
+            </grid>
+        </div>
+    </div>
 </div>
 </zk>

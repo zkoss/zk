@@ -1,5 +1,8 @@
 <?page title="Caption" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
+<zscript>
+    import org.zkoss.zk.ui.util.Notification;
+</zscript>
 <h:div class="z-p-8">
     <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Caption</h:span></h:div>
 
@@ -84,5 +87,27 @@
         </h:div>
     </h:div>
 
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Caption in Non-Closable Groupbox</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Groupbox closable=&quot;false&quot;</h:span></h:div>
+                <groupbox width="380px" height="200px" closable="false">
+                    <caption label="Readonly caption"/>
+                    Groupbox Content
+                </groupbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Button inside the caption</h:span></h:div>
+                <groupbox width="380px" height="200px" closable="false">
+                    <caption label="Readonly caption">
+                        <button id="readonlyCaptionButton" label="Button"
+                            onClick='Notification.show("Caption button clicked", "info", null, "middle_center", 2000);'/>
+                    </caption>
+                    Groupbox Content
+                </groupbox>
+            </h:div>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

@@ -47,5 +47,14 @@
             <avatar label="+5"/>
         </avatargroup>
     </h:div>
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Avatar Group — maxItems</h:span></h:div>
+        <avatargroup size="medium" maxItems="2">
+            <avatar label="HW" style="background:var(--zk-color-primary);color:var(--zk-color-on-primary)"/>
+            <avatar label="JL" style="background:var(--zk-color-secondary);color:var(--zk-color-on-secondary)"/>
+            <avatar label="MK"/>
+            <avatar label="SA"/>
+        </avatargroup>
+    </h:div>
 </h:div>
 </zk>

@@ -146,5 +146,20 @@
         </h:div>
     </h:div>
 
+    <div sclass="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Item Stretch (vflex)</h:span></h:div>
+        <div sclass="z-py-3">
+            <linelayout orient="horizontal" height="160px">
+                <lineitem vflex="1">
+                    <label value="8 am"/>
+                    <button label="good morning"/>
+                </lineitem>
+                <lineitem vflex="1">
+                    <label value="12 pm"/>
+                    <button label="lunch time"/>
+                </lineitem>
+            </linelayout>
+        </div>
+    </div>
 </h:div>
 </zk>

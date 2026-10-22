@@ -122,5 +122,13 @@
         </h:div>
     </h:div>
 
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Non-Closable (closable=false)</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <groupbox width="240px" title="Not closable" closable="false">
+                Groupbox Content
+            </groupbox>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

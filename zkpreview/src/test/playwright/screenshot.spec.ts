@@ -20,7 +20,8 @@ const PAD = 12;
 // colour, inset ring, state-layer glow) right at — or just outside — their edge,
 // so an edge-tight element screenshot clips it. We screenshot the PAGE with a
 // clip expanded around the element's box (clamped to the page top-left).
-async function padShot(page: Page, target: Locator, name: string | string[]) {
+async function padShot(page: Page, target: Locator, name: string | string[],
+    tolerance: { threshold?: number; maxDiffPixels?: number } = {}) {
   await target.scrollIntoViewIfNeeded();
   const box = await target.boundingBox();
   if (!box) throw new Error(`padShot: no bounding box for "${name}"`);
@@ -37,6 +38,7 @@ async function padShot(page: Page, target: Locator, name: string | string[]) {
     // whole mis-rendered ring segment. The gallery/tablet projects keep their own
     // ratio-based policy; this applies to state shots only.
     maxDiffPixels: 20,
+    ...tolerance,
   });
 }
 
@@ -2591,4 +2593,673 @@ test.describe('orphaned-helper-css', () => {
       ).toBe(true);
     });
   }
+});
+
+// "Not closable" and "collapsed" are states ZK marks with a class whose only styling at rest is
+// the cursor, so a gallery screenshot cannot see a regression in them. Pin the computed cursor.
+test.describe('not-closable-cursor', () => {
+  const cursorOf = async (page: Page, selector: string) => {
+    await page.waitForLoadState('networkidle');
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+    return page.locator(selector).first().evaluate((el) => getComputedStyle(el).cursor);
+  };
+
+  test('groupbox header of a non-closable groupbox has no pointer cursor', async ({ page }) => {
+    await page.goto('/groupbox.zul');
+    expect(await cursorOf(page, '.z-groupbox-header.z-groupbox-readonly')).toBe('default');
+    expect(await cursorOf(page, '.z-groupbox-header:not(.z-groupbox-readonly)'),
+      'a closable header keeps its pointer').toBe('pointer');
+  });
+
+  test('a collapsed splitter has no resize cursor', async ({ page }) => {
+    await page.goto('/splitter.zul');
+    expect(await cursorOf(page, '.z-splitter.z-splitter-nosplitter')).toBe('default');
+  });
+
+  // z-caption-readonly only marks "not closable", it is not an input state: a control placed in
+  // the caption must stay clickable (IceBlue keeps it clickable; Marble once set pointer-events: none).
+  test('a button in the caption of a non-closable groupbox still receives a real click', async ({ page }) => {
+    await page.goto('/caption.zul');
+    await page.waitForLoadState('networkidle');
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+    const button = page.locator('.z-groupbox-readonly .z-caption .z-button', { hasText: 'Button' }).first();
+    await button.scrollIntoViewIfNeeded();
+    const box = await button.boundingBox();
+    await page.mouse.click(box!.x + box!.width / 2, box!.y + box!.height / 2);
+    await expect(page.locator('.z-notification', { hasText: 'Caption button clicked' })).toBeVisible();
+  });
+});
+
+// -------------------------------------------------------
+// NS21 batch 2 (round 1): state classes that ZK adds only after a real interaction.
+// Each test (1) asserts the class is absent, (2) interacts with real mouse/keyboard input only,
+// (3) asserts the class on the one element that should carry it, (4) asserts a computed style the
+// class changes, (5) takes a state shot where the effect is visible. doc/marble-variant-gap-ns21-batch2-plan.md.
+// -------------------------------------------------------
+
+// 0.02 instead of the project's 0.05: the 0.05 threshold hides small background changes (plan D1); maxDiffPixels stays at padShot's 20.
+const NS21_STATE_SHOT = { threshold: 0.02 };
+const MAX_TAB_PRESSES = 60;
+
+async function openPreview(page: Page, path: string) {
+  await page.goto(path);
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => document.fonts.ready.then(() => true));
+}
+
+// Resolves once every running CSS transition has ended (cancelled ones count as ended), so that computed
+// styles and screenshots show the settled state instead of the first frame of a transition.
+async function settleTransitions(page: Page) {
+  await page.evaluate(() => Promise.all(document.getAnimations()
+    .filter(animation => animation instanceof CSSTransition)
+    .map(animation => animation.finished.catch(() => undefined))));
+}
+
+async function settledShot(page: Page, target: Locator, name: string) {
+  await settleTransitions(page);
+  await padShot(page, target, name, NS21_STATE_SHOT);
+}
+
+async function styleOf(target: Locator, property: string, pseudo?: string) {
+  await settleTransitions(target.page());
+  return target.evaluate((el, [prop, pseudoElement]) =>
+    getComputedStyle(el, pseudoElement || null).getPropertyValue(prop), [property, pseudo ?? '']);
+}
+
+async function hasFocusInside(target: Locator) {
+  return target.evaluate(el => el.contains(document.activeElement));
+}
+
+// Presses the real Tab key from the top of the page until the focus is inside `target`.
+async function tabInto(page: Page, target: Locator) {
+  for (let i = 0; i < MAX_TAB_PRESSES; i++) {
+    await page.keyboard.press('Tab');
+    if (await hasFocusInside(target)) return;
+  }
+  throw new Error(`Tab did not reach the target within ${MAX_TAB_PRESSES} presses`);
+}
+
+async function centerOf(target: Locator) {
+  await target.scrollIntoViewIfNeeded();
+  const box = await target.boundingBox();
+  if (!box) throw new Error('no bounding box');
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2, box };
+}
+
+function classPattern(cls: string) {
+  return new RegExp(`(^|\\s)${cls}(\\s|$)`);
+}
+
+test.describe('ns21 batch 2: calendar view classes', () => {
+  // The title is two text spans; ZK picks the view from the span that is clicked (Calendar._changeView):
+  // month label -> month view, year label -> year view, the "2019 - 2030" range label -> decade view.
+  const views = [
+    { cls: 'z-calendar-month', shot: 'calendar-view-month.png', open: async (c: Locator) => {
+        await c.locator('.z-calendar-title .z-calendar-text').nth(0).click();
+      } },
+    { cls: 'z-calendar-year', shot: 'calendar-view-year.png', open: async (c: Locator) => {
+        await c.locator('.z-calendar-title .z-calendar-text').nth(1).click();
+      } },
+    { cls: 'z-calendar-decade', shot: 'calendar-view-decade.png', open: async (c: Locator) => {
+        await c.locator('.z-calendar-title .z-calendar-text').nth(1).click();
+        await c.locator('.z-calendar-title .z-calendar-text').click();
+      } },
+  ];
+
+  for (const { cls, shot, open } of views) {
+    test(`${cls} is set on the calendar body by clicking the title text`, async ({ page }) => {
+      await openPreview(page, '/calendar.zul');
+      const calendar = page.locator('.z-calendar').nth(0);
+      const body = calendar.locator('table.z-calendar-body');
+      const cell = body.locator('.z-calendar-cell').nth(0);
+      await expect(body).toHaveCount(1);
+      await expect(body).not.toHaveClass(classPattern(cls));
+      const before = { paddingTop: await styleOf(body, 'padding-top'), cellPadding: await styleOf(cell, 'padding-left') };
+
+      await open(calendar);
+      await page.mouse.move(0, 0);
+
+      await expect(body).toHaveClass(classPattern(cls));
+      expect(await styleOf(body, 'padding-top'), 'the picker views pad the grid').not.toBe(before.paddingTop);
+      expect(await styleOf(cell, 'padding-left'), 'picker cells are padded sideways').not.toBe(before.cellPadding);
+      await padShot(page, calendar, shot, NS21_STATE_SHOT);
+    });
+  }
+});
+
+test.describe('ns21 batch 2: focus classes of the EE input family', () => {
+  test('z-cascader-focus is set by tabbing into the cascader', async ({ page }) => {
+    await openPreview(page, '/cascader.zul');
+    const cascader = page.locator('.z-cascader:not(.z-cascader-disabled)').nth(0);
+    await expect(cascader).not.toHaveClass(classPattern('z-cascader-focus'));
+    const before = await styleOf(cascader, 'box-shadow');
+
+    await tabInto(page, cascader);
+
+    await expect(cascader).toHaveClass(classPattern('z-cascader-focus'));
+    await expect(cascader).not.toHaveClass(classPattern('z-cascader-open'));
+    expect(await styleOf(cascader, 'box-shadow'), 'the focus ring').not.toBe(before);
+    await settledShot(page, cascader, 'cascader-tab-focus.png');
+  });
+
+  test('z-chosenbox-focus is set by tabbing into the chosenbox', async ({ page }) => {
+    await openPreview(page, '/chosenbox.zul');
+    const chosenbox = page.locator('.z-chosenbox:not(.z-chosenbox-disabled)').nth(0);
+    await expect(chosenbox).not.toHaveClass(classPattern('z-chosenbox-focus'));
+    const before = await styleOf(chosenbox, 'box-shadow');
+
+    await tabInto(page, chosenbox);
+
+    await expect(chosenbox).toHaveClass(classPattern('z-chosenbox-focus'));
+    expect(await styleOf(chosenbox, 'box-shadow'), 'the focus ring').not.toBe(before);
+    await settledShot(page, chosenbox, 'chosenbox-tab-focus.png');
+  });
+
+  // The existing 'chip focus' test above already holds the screenshot (chosenbox-chip-focus.png).
+  test('z-chosenbox-item-focus is set on the clicked chip only', async ({ page }) => {
+    await openPreview(page, '/chosenbox.zul');
+    const chosenbox = page.locator('.z-chosenbox:has(.z-chosenbox-item)').nth(0);
+    const chips = chosenbox.locator('.z-chosenbox-item');
+    await expect(chips).toHaveCount(2);
+    await expect(chosenbox.locator('.z-chosenbox-item-focus')).toHaveCount(0);
+    const before = await styleOf(chips.nth(0), 'background-color');
+
+    await chips.nth(0).locator('.z-chosenbox-item-content').click();
+    await page.mouse.move(0, 0);
+
+    await expect(chosenbox.locator('.z-chosenbox-item-focus')).toHaveCount(1);
+    await expect(chips.nth(0)).toHaveClass(classPattern('z-chosenbox-item-focus'));
+    await expect(chips.nth(1)).not.toHaveClass(classPattern('z-chosenbox-item-focus'));
+    expect(await styleOf(chips.nth(0), 'background-color'), 'the focused chip fill').not.toBe(before);
+    expect(await styleOf(chips.nth(1), 'background-color'), 'the other chip keeps its fill').toBe(before);
+  });
+
+  // daterangebox.css lists `.z-daterangebox-focused` and `:focus-within` in one selector list and real input sets
+  // both, so this test proves the class is added and the ring is drawn, not that the class selector is required.
+  test('z-daterangebox-focused is set by tabbing into the begin input', async ({ page }) => {
+    await openPreview(page, '/daterangebox.zul');
+    const range = page.locator('.z-daterangebox').nth(0);
+    await expect(range).not.toHaveClass(classPattern('z-daterangebox-focused'));
+    const before = await styleOf(range, 'box-shadow');
+
+    await tabInto(page, range);
+
+    await expect(range).toHaveClass(classPattern('z-daterangebox-focused'));
+    expect(await styleOf(range, 'box-shadow'), 'the inset focus ring').not.toBe(before);
+    await settledShot(page, range, 'daterangebox-tab-focus.png');
+  });
+
+  test('z-searchbox-focus is set by tabbing into the searchbox', async ({ page }) => {
+    await openPreview(page, '/searchbox.zul');
+    const searchbox = page.locator('.z-searchbox:not(.z-searchbox-disabled)').nth(0);
+    await expect(searchbox).not.toHaveClass(classPattern('z-searchbox-focus'));
+    const before = await styleOf(searchbox, 'box-shadow');
+
+    await tabInto(page, searchbox);
+
+    await expect(searchbox).toHaveClass(classPattern('z-searchbox-focus'));
+    await expect(searchbox).not.toHaveClass(classPattern('z-searchbox-open'));
+    expect(await styleOf(searchbox, 'box-shadow'), 'the focus ring').not.toBe(before);
+    await settledShot(page, searchbox, 'searchbox-tab-focus.png');
+  });
+});
+
+// A demo section of a preview page: the `.z-mb-6` block whose heading label reads `heading`.
+function sectionOf(page: Page, heading: string) {
+  return page.locator('.z-mb-6').filter({ has: page.getByText(heading, { exact: true }) });
+}
+
+// HeaderWidget adds the sizing class while the pointer is in the rightmost 8px of a header cell.
+async function moveIntoSizerZone(page: Page, header: Locator) {
+  const { box } = await centerOf(header);
+  await page.mouse.move(box.x + box.width - 4, box.y + box.height / 2);
+}
+
+test.describe('ns21 batch 2: header classes', () => {
+  const SIZING_EDGE = 'rgb(55, 111, 208) -2px 0px 0px 0px inset';
+
+  test('z-column-sizing is set while the pointer is in the right edge of a sizable column', async ({ page }) => {
+    await openPreview(page, '/grid-header.zul');
+    // Not the sizedByContent grid of the page: its column widths flip between 228 and 232px from load to load.
+    const column = sectionOf(page, 'Embedded Components in Header').locator('.z-column', { hasText: 'Content' });
+    await expect(column).toHaveCount(1);
+    await expect(column).not.toHaveClass(classPattern('z-column-sizing'));
+    const before = { shadow: await styleOf(column, 'box-shadow'), cursor: await styleOf(column, 'cursor') };
+
+    await moveIntoSizerZone(page, column);
+
+    await expect(column).toHaveClass(classPattern('z-column-sizing'));
+    expect(await styleOf(column, 'cursor'), 'resize cursor').toBe('col-resize');
+    expect(before.cursor).not.toBe('col-resize');
+    const shadow = await styleOf(column, 'box-shadow');
+    expect(shadow, 'primary edge accent').not.toBe(before.shadow);
+    expect(shadow).toBe(SIZING_EDGE);
+    await settledShot(page, column, 'grid-header-column-sizing.png');
+
+    await page.mouse.move(0, 0);
+    await expect(column).not.toHaveClass(classPattern('z-column-sizing'));
+  });
+
+  test('z-listheader-sizing is set while the pointer is in the right edge of a sizable listheader', async ({ page }) => {
+    await openPreview(page, '/listbox-header.zul');
+    const header = sectionOf(page, 'Sorting and Resizable Headers').locator('.z-listbox').nth(0)
+      .locator('.z-listheader', { hasText: 'Received' });
+    await expect(header).toHaveCount(1);
+    await expect(header).not.toHaveClass(classPattern('z-listheader-sizing'));
+    const before = { shadow: await styleOf(header, 'box-shadow'), cursor: await styleOf(header, 'cursor') };
+
+    await moveIntoSizerZone(page, header);
+
+    await expect(header).toHaveClass(classPattern('z-listheader-sizing'));
+    expect(await styleOf(header, 'cursor'), 'resize cursor').toBe('col-resize');
+    expect(before.cursor).not.toBe('col-resize');
+    const shadow = await styleOf(header, 'box-shadow');
+    expect(shadow, 'primary edge accent').not.toBe(before.shadow);
+    expect(shadow).toBe(SIZING_EDGE);
+    await settledShot(page, header, 'listbox-header-listheader-sizing.png');
+
+    await page.mouse.move(0, 0);
+    await expect(header).not.toHaveClass(classPattern('z-listheader-sizing'));
+  });
+
+  test('z-treecol-sizing is set while the pointer is in the right edge of a sizable treecol', async ({ page }) => {
+    await openPreview(page, '/tree-header.zul');
+    // Two trees of the section have these headers; the second one has sizable="true".
+    const treecol = sectionOf(page, 'Treecols Only and Auxhead Only')
+      .locator('.z-tree', { hasText: 'Align Center' }).nth(1).locator('.z-treecol', { hasText: 'Align Center' });
+    await expect(treecol).toHaveCount(1);
+    await expect(treecol).not.toHaveClass(classPattern('z-treecol-sizing'));
+    const before = { shadow: await styleOf(treecol, 'box-shadow'), cursor: await styleOf(treecol, 'cursor') };
+
+    await moveIntoSizerZone(page, treecol);
+
+    await expect(treecol).toHaveClass(classPattern('z-treecol-sizing'));
+    expect(await styleOf(treecol, 'cursor'), 'resize cursor').toBe('col-resize');
+    expect(before.cursor).not.toBe('col-resize');
+    const shadow = await styleOf(treecol, 'box-shadow');
+    expect(shadow, 'primary edge accent').not.toBe(before.shadow);
+    expect(shadow).toBe(SIZING_EDGE);
+    await settledShot(page, treecol, 'tree-header-treecol-sizing.png');
+
+    await page.mouse.move(0, 0);
+    await expect(treecol).not.toHaveClass(classPattern('z-treecol-sizing'));
+  });
+
+  // The class only has an effect on a header that has a menupopup button (grid.css: the button fades in
+  // on `.z-column-hover`); grid-header.zul has no such column, grid.zul's "Basic" grid does.
+  // grid.css lists `.z-column-hover` and `:hover` in one selector list and the pointer sets both, so this test proves
+  // the class is added and the button fades in, not that the class selector is required.
+  test('z-column-hover is set by the pointer and fades the column menu button in', async ({ page }) => {
+    await openPreview(page, '/grid.zul');
+    const column = sectionOf(page, 'Basic').locator('.z-column', { hasText: 'Title' });
+    const button = column.locator('.z-column-button');
+    await expect(column).toHaveCount(1);
+    await expect(column).not.toHaveClass(classPattern('z-column-hover'));
+    expect(await styleOf(button, 'opacity')).toBe('0');
+
+    const { x, y } = await centerOf(column);
+    await page.mouse.move(x - 20, y);
+
+    await expect(column).toHaveClass(classPattern('z-column-hover'));
+    await expect.poll(() => styleOf(button, 'opacity'), 'the menu button fades in').toBe('1');
+    await settledShot(page, column, 'grid-column-hover.png');
+  });
+
+  // Real input that isolates the class from `:hover` (SortWidget keeps `-hover` while the pointer is on the header's
+  // menupopup): open the header menu and move the pointer into it. The header is then not :hover, yet the menu
+  // button stays visible, and only `.z-listheader.z-listheader-hover .z-listheader-button` can do that.
+  test('z-listheader-hover keeps the menu button visible while the pointer is on the opened header menu', async ({ page }) => {
+    await openPreview(page, '/listbox.zul');
+    const header = sectionOf(page, 'Checkmarks').locator('.z-listheader', { hasText: 'Role' });
+    const button = header.locator('.z-listheader-button');
+    const menupopup = page.locator('.z-menupopup:visible');
+    await expect(header).toHaveCount(1);
+    await expect(header).not.toHaveClass(classPattern('z-listheader-hover'));
+    expect(await styleOf(button, 'opacity')).toBe('0');
+
+    const { x, y } = await centerOf(header);
+    await page.mouse.move(x - 20, y);
+    await button.click();
+    await expect(menupopup).toHaveCount(1);
+    const popup = await centerOf(menupopup);
+    await page.mouse.move(popup.x, popup.y);
+
+    await expect(header).toHaveClass(classPattern('z-listheader-hover'));
+    expect(await header.evaluate(el => el.matches(':hover')), 'the pointer is not on the header').toBe(false);
+    expect(await styleOf(button, 'opacity'), 'the menu button stays visible').toBe('1');
+    // The menu button the class keeps visible (28px of the header): the pointer is on the popup, so nothing else paints it.
+    await settledShot(page, header, 'listbox-listheader-hover-menu.png');
+
+    await page.keyboard.press('Escape');
+    await expect(menupopup).toHaveCount(0);
+  });
+});
+
+test.describe('ns21 batch 2: select-all header checkbox classes', () => {
+  const CHECKED_FILL = 'rgb(55, 111, 208)';
+
+  test('z-listheader-checked is set by clicking the select-all checkbox', async ({ page }) => {
+    await openPreview(page, '/listbox.zul');
+    const checkable = sectionOf(page, 'Checkmarks').locator('.z-listheader-checkable');
+    await expect(checkable).toHaveCount(1);
+    await expect(checkable).not.toHaveClass(classPattern('z-listheader-checked'));
+    const box = checkable.locator('.z-listheader-icon');
+    const before = await styleOf(box, 'background-color', '::before');
+
+    await checkable.click();
+    await page.mouse.move(0, 0);
+
+    await expect(checkable).toHaveClass(classPattern('z-listheader-checked'));
+    expect(await styleOf(box, 'background-color', '::before'), 'filled check box').toBe(CHECKED_FILL);
+    expect(before).not.toBe(CHECKED_FILL);
+    await settledShot(page, sectionOf(page, 'Checkmarks').locator('.z-listbox'), 'listbox-listheader-checked.png');
+
+    await checkable.click();
+    await expect(checkable).not.toHaveClass(classPattern('z-listheader-checked'));
+  });
+
+  test('z-treecol-checked is set by clicking the select-all checkbox', async ({ page }) => {
+    await openPreview(page, '/tree.zul');
+    const tree = sectionOf(page, 'Tree with Checkmark').locator('.z-tree').nth(0);
+    const checkable = tree.locator('.z-treecol-checkable');
+    await expect(checkable).toHaveCount(1);
+    await expect(checkable).not.toHaveClass(classPattern('z-treecol-checked'));
+    const box = checkable.locator('.z-treecol-icon');
+    const before = await styleOf(box, 'background-color', '::before');
+
+    await checkable.click();
+    await page.mouse.move(0, 0);
+
+    await expect(checkable).toHaveClass(classPattern('z-treecol-checked'));
+    expect(await styleOf(box, 'background-color', '::before'), 'filled check box').toBe(CHECKED_FILL);
+    expect(before).not.toBe(CHECKED_FILL);
+    await settledShot(page, tree, 'tree-treecol-checked.png');
+
+    await checkable.click();
+    await expect(checkable).not.toHaveClass(classPattern('z-treecol-checked'));
+  });
+});
+
+test.describe('ns21 batch 2: listbox row focus class', () => {
+  // listbox.css draws the ring only while the hidden `.z-focus-a` trap is :focus-visible, i.e. after keyboard input.
+  test('z-listitem-focus is set on the row the arrow key moved to', async ({ page }) => {
+    await openPreview(page, '/listbox.zul');
+    const listbox = sectionOf(page, 'Checkmarks').locator('.z-listbox');
+    const items = listbox.locator('.z-listitem');
+    await expect(listbox.locator('.z-listitem-focus')).toHaveCount(0);
+    expect(await styleOf(items.nth(0), 'outline-style')).toBe('none');
+
+    await items.nth(0).locator('.z-listcell').nth(1).click();
+    await page.keyboard.press('ArrowDown');
+    await page.mouse.move(0, 0);
+
+    await expect(listbox.locator('.z-listitem-focus')).toHaveCount(1);
+    await expect(items.nth(1)).toHaveClass(classPattern('z-listitem-focus'));
+    expect(await styleOf(items.nth(1), 'outline-style'), 'the keyboard focus ring').not.toBe('none');
+    expect(await styleOf(items.nth(0), 'outline-style'), 'the previous row has no ring').toBe('none');
+    await settledShot(page, listbox, 'listbox-listitem-focus.png');
+  });
+});
+
+test.describe('ns21 batch 2: menu, nav and rating classes', () => {
+  // The state layer of a top-level menu is its `.z-menu-content::before`; hover and focus differ only in its opacity.
+  const stateLayerOpacity = async (menu: Locator) =>
+    parseFloat(await styleOf(menu.locator('.z-menu-content'), 'opacity', '::before'));
+  const stateOpacityToken = async (page: Page, state: 'hover' | 'focus') =>
+    parseFloat(await page.evaluate(
+      name => getComputedStyle(document.documentElement).getPropertyValue(name), `--zk-state-${state}-opacity`));
+
+  // menu.css lists `.z-menu-hover` and `.z-menu-content:hover` in one selector list and the pointer sets both, so this
+  // test proves the class is added and the layer is lit, not that the class selector is required.
+  test('z-menu-hover is set on the menu under the pointer and lights its state layer', async ({ page }) => {
+    await openPreview(page, '/menubar.zul');
+    const menu = page.locator('.z-menubar-horizontal').nth(0).locator('.z-menu').nth(0);
+    await expect(menu).not.toHaveClass(classPattern('z-menu-hover'));
+    expect(await stateLayerOpacity(menu)).toBe(0);
+
+    const { x, y } = await centerOf(menu);
+    await page.mouse.move(x, y);
+
+    await expect(menu).toHaveClass(classPattern('z-menu-hover'));
+    expect(await stateLayerOpacity(menu), 'hover state layer').toBe(await stateOpacityToken(page, 'hover'));
+    await settledShot(page, menu, 'menubar-menu-hover.png');
+
+    await page.mouse.move(0, 0);
+    await expect(menu).not.toHaveClass(classPattern('z-menu-hover'));
+  });
+
+  // menu.css lists `.z-menu-focus` and `.z-menu-content:focus-visible` in one selector list and Tab sets both, so this
+  // test proves the class is added and the layer is lit, not that the class selector is required.
+  test('z-menu-focus is set on the top-level menu that Tab reaches and lights its state layer', async ({ page }) => {
+    await openPreview(page, '/menubar.zul');
+    const menu = page.locator('.z-menubar-horizontal').nth(0).locator('.z-menu').nth(0);
+    await expect(menu).not.toHaveClass(classPattern('z-menu-focus'));
+    expect(await stateLayerOpacity(menu)).toBe(0);
+
+    await tabInto(page, menu);
+
+    await expect(menu).toHaveClass(classPattern('z-menu-focus'));
+    expect(await stateLayerOpacity(menu), 'focus state layer').toBe(await stateOpacityToken(page, 'focus'));
+    await settledShot(page, menu, 'menubar-menu-focus.png');
+  });
+
+  test('z-nav-selected is set on the nav that holds the clicked navitem', async ({ page }) => {
+    await openPreview(page, '/navbar.zul');
+    const navbar = page.locator('.z-navbar-vertical').nth(0);
+    const nav = navbar.locator('.z-nav').nth(0);
+    const content = nav.locator(':scope > .z-nav-content');
+    await expect(navbar.locator('.z-nav-selected')).toHaveCount(0);
+    const before = await styleOf(content, 'color');
+
+    await content.click();
+    await expect(nav).toHaveClass(classPattern('z-nav-open'));
+    await nav.locator('.z-navitem-content').nth(0).click();
+    // `.z-nav-open` has the same colour rule, so collapse the group to see what `.z-nav-selected` alone does.
+    await content.click();
+    await page.mouse.move(0, 0);
+
+    await expect(nav).not.toHaveClass(classPattern('z-nav-open'));
+    await expect(nav.locator(':scope > ul')).toBeHidden();
+    await expect(navbar.locator('.z-nav-selected')).toHaveCount(1);
+    await expect(nav).toHaveClass(classPattern('z-nav-selected'));
+    await content.evaluate(el => Promise.all(el.getAnimations().map(a => a.finished)));
+    expect(await styleOf(content, 'color'), 'the group label turns to on-surface').not.toBe(before);
+    await settledShot(page, navbar, 'navbar-nav-selected.png');
+  });
+
+  test('z-rating-hover is set on the stars up to the pointer and scales and tints them', async ({ page }) => {
+    await openPreview(page, '/rating.zul');
+    const rating = page.locator('.z-rating:not(.z-rating-disabled):not(.z-rating-readonly)').nth(0);
+    const stars = rating.locator('.z-rating-icon');
+    await expect(stars).toHaveCount(5);
+    await expect(rating.locator('.z-rating-hover')).toHaveCount(0);
+    const before = { color: await styleOf(stars.nth(3), 'color'), transform: await styleOf(stars.nth(3), 'transform') };
+
+    await stars.nth(3).hover();
+
+    await expect(rating.locator('.z-rating-hover')).toHaveCount(4);
+    await expect(stars.nth(4)).not.toHaveClass(classPattern('z-rating-hover'));
+    expect(await styleOf(stars.nth(3), 'color'), 'accent colour').not.toBe(before.color);
+    expect(await styleOf(stars.nth(3), 'transform'), 'scaled up').not.toBe(before.transform);
+    expect(await styleOf(stars.nth(4), 'transform'), 'stars past the pointer keep their size').toBe(before.transform);
+    // The existing 'hover' test of the rating describe already holds the screenshot (rating-hover.png).
+  });
+});
+
+// -------------------------------------------------------
+// NS21 batch 2 (round 2): classes that need a page section of their own, EE editors or a layout condition.
+// -------------------------------------------------------
+
+test.describe('ns21 batch 2: listgroup, multislider tooltip and window classes', () => {
+  test('z-listgroup-selected is set by clicking the group row check box of a groupSelect listbox', async ({ page }) => {
+    await openPreview(page, '/listbox-grouping.zul');
+    const listbox = sectionOf(page, 'Selectable Groups (groupSelect)').locator('.z-listbox');
+    const group = listbox.locator('.z-listgroup').nth(0);
+    const checkBox = group.locator('.z-listgroup-checkable .z-listgroup-icon');
+    await expect(group).toHaveCount(1);
+    await expect(group).not.toHaveClass(classPattern('z-listgroup-selected'));
+    const before = { fill: await styleOf(group, 'background-color'), box: await styleOf(checkBox, 'background-color', '::before') };
+
+    await group.locator('.z-listgroup-checkable').click();
+    await page.mouse.move(0, 0);
+
+    await expect(listbox.locator('.z-listgroup-selected')).toHaveCount(1);
+    await expect(group).toHaveClass(classPattern('z-listgroup-selected'));
+    expect(await styleOf(group, 'background-color'), 'selected row fill').toBe('oklch(0.87 0.0317461 260.564)');
+    expect(before.fill).not.toBe('oklch(0.87 0.0317461 260.564)');
+    expect(await styleOf(checkBox, 'background-color', '::before'), 'filled check box').toBe('rgb(55, 111, 208)');
+    expect(before.box).not.toBe('rgb(55, 111, 208)');
+    await settledShot(page, listbox, 'listbox-listgroup-selected.png');
+
+    await group.locator('.z-listgroup-checkable').click();
+    await expect(group).not.toHaveClass(classPattern('z-listgroup-selected'));
+  });
+
+  // The class is chosen by layout: a vertical tooltip opens on the right of its knob and flips to the left only when the
+  // right side would leave the clip rect of an overflow:hidden ancestor (Sliderbuttons._placeTooltip, ZK-6192). The section
+  // puts the knob at the right edge of such a container; the hover (mouseenter) places the tooltip.
+  test('z-sliderbuttons-tooltip-start is set when the right-hand tooltip would leave the clipping container', async ({ page }) => {
+    await openPreview(page, '/multislider.zul');
+    const section = sectionOf(page, 'Vertical Tooltip at the Clip Edge');
+    const container = section.locator('.z-overflow-hidden');
+    const startKnob = container.locator('.z-sliderbuttons-button').nth(0);
+    const startTooltip = startKnob.locator('.z-sliderbuttons-tooltip');
+    await expect(startTooltip).toHaveCount(1);
+    await expect(startTooltip).not.toHaveClass(classPattern('z-sliderbuttons-tooltip-start'));
+    expect(await styleOf(startTooltip, 'right'), 'right-hand tooltip').toBe('auto');
+
+    await startKnob.hover();
+
+    await expect(container.locator('.z-sliderbuttons-tooltip-start')).toHaveCount(1);
+    await expect(startTooltip).toHaveClass(classPattern('z-sliderbuttons-tooltip-start'));
+    expect(await styleOf(startTooltip, 'right'), 'mirrored to the left of the knob').toBe('26px');
+    await expect(startTooltip).toBeVisible();
+    const box = await startTooltip.boundingBox();
+    const clip = await container.boundingBox();
+    expect(box!.x, 'the flipped tooltip stays inside the container').toBeGreaterThanOrEqual(clip!.x);
+    await settledShot(page, container, 'multislider-tooltip-start.png');
+
+    await page.mouse.move(0, 0);
+    await expect(startTooltip).toBeHidden();
+  });
+
+  // window.css gives `.z-window-maximized` an empty rule (the icon swap is done by Window.ts), so the class itself has no
+  // computed style to assert; the test asserts what it marks: the swapped icon and the window filling its parent.
+  test('z-window-maximized is set on the maximize button and the window fills its container', async ({ page }) => {
+    await openPreview(page, '/window.zul');
+    const container = sectionOf(page, 'Maximize Inside a Bounded Container').locator('.z-overflow-hidden');
+    const window = container.locator('.z-window');
+    const button = window.locator('.z-window-maximize');
+    await expect(button).toHaveCount(1);
+    await expect(button).not.toHaveClass(classPattern('z-window-maximized'));
+    await expect(button.locator('.z-icon-expand')).toHaveCount(1);
+    expect(await styleOf(window, 'width')).toBe('300px');
+
+    await button.click();
+    await page.mouse.move(0, 0);
+
+    await expect(container.locator('.z-window-maximized')).toHaveCount(1);
+    await expect(button).toHaveClass(classPattern('z-window-maximized'));
+    await expect(button.locator('.z-icon-compress')).toHaveCount(1);
+    const containerSize = await container.evaluate(el => ({ width: el.clientWidth, height: el.clientHeight }));
+    expect(await styleOf(window, 'width'), 'fills the container width').toBe(`${containerSize.width}px`);
+    expect(await styleOf(window, 'height'), 'fills the container height').toBe(`${containerSize.height}px`);
+    await settledShot(page, container, 'window-maximized.png');
+
+    await button.click();
+    await expect(button).not.toHaveClass(classPattern('z-window-maximized'));
+    expect(await styleOf(window, 'width')).toBe('300px');
+  });
+});
+
+test.describe('ns21 batch 2: tbeditor toolbar classes', () => {
+  const ACTIVE_BUTTON_FILL = 'oklch(0.92 0.0403278 260.564)';
+
+  async function openEditor(page: Page) {
+    await openPreview(page, '/tbeditor.zul');
+    return {
+      box: page.locator('.z-tbeditor-box'),
+      viewHtml: page.locator('.z-tbeditor-viewHTML-button'),
+      fullscreen: page.locator('.z-tbeditor-fullscreen-button'),
+    };
+  }
+
+  test('z-tbeditor-active is set on the pressed View HTML button', async ({ page }) => {
+    const { viewHtml } = await openEditor(page);
+    const icon = viewHtml.locator('svg');
+    await expect(viewHtml).toHaveCount(1);
+    await expect(viewHtml).not.toHaveClass(classPattern('z-tbeditor-active'));
+    const before = { fill: await styleOf(viewHtml, 'background-color'), opacity: await styleOf(icon, 'opacity') };
+
+    await viewHtml.click();
+    // Away from the button and its focus: only the class can then tint the button and the icon.
+    await page.mouse.click(2, 2);
+
+    await expect(page.locator('.z-tbeditor-button-pane .z-tbeditor-active')).toHaveCount(1);
+    await expect(viewHtml).toHaveClass(classPattern('z-tbeditor-active'));
+    expect(await viewHtml.evaluate(el => el.matches(':hover, :focus')), 'neither hovered nor focused').toBe(false);
+    expect(await styleOf(viewHtml, 'background-color'), 'active button fill').toBe(ACTIVE_BUTTON_FILL);
+    expect(before.fill).not.toBe(ACTIVE_BUTTON_FILL);
+    expect(await styleOf(icon, 'opacity'), 'full-strength icon').toBe('1');
+    expect(before.opacity).not.toBe('1');
+    await settledShot(page, page.locator('.z-tbeditor-button-pane'), 'tbeditor-active-button.png');
+
+    await viewHtml.click();
+    await expect(viewHtml).not.toHaveClass(classPattern('z-tbeditor-active'));
+  });
+
+  test('z-tbeditor-editor-hidden is set while the HTML source is shown and hides the editor', async ({ page }) => {
+    const { box, viewHtml } = await openEditor(page);
+    const editor = box.locator('.z-tbeditor-editor');
+    await expect(box).toHaveCount(1);
+    await expect(box).not.toHaveClass(classPattern('z-tbeditor-editor-hidden'));
+    expect(await styleOf(editor, 'display')).not.toBe('none');
+
+    await viewHtml.click();
+    await page.mouse.move(0, 0);
+
+    await expect(box).toHaveClass(classPattern('z-tbeditor-editor-hidden'));
+    expect(await styleOf(editor, 'display'), 'the editor is replaced by the source').toBe('none');
+    await settledShot(page, box, 'tbeditor-editor-hidden.png');
+
+    await viewHtml.click();
+    await expect(box).not.toHaveClass(classPattern('z-tbeditor-editor-hidden'));
+  });
+
+  test('z-tbeditor-fullscreen is set on the box and pins it over the viewport', async ({ page }) => {
+    const { box, fullscreen } = await openEditor(page);
+    await expect(box).toHaveCount(1);
+    await expect(box).not.toHaveClass(classPattern('z-tbeditor-fullscreen'));
+    expect(await styleOf(box, 'position')).not.toBe('fixed');
+
+    await fullscreen.click();
+    await page.mouse.move(0, 0);
+
+    await expect(box).toHaveClass(classPattern('z-tbeditor-fullscreen'));
+    expect(await styleOf(box, 'position'), 'pinned to the viewport').toBe('fixed');
+    const rect = await box.evaluate(el => {
+      const { x, y, width, height } = el.getBoundingClientRect();
+      return { x, y, width, height, viewport: { width: innerWidth, height: innerHeight } };
+    });
+    expect(rect).toEqual({ x: 0, y: 0, width: rect.viewport.width, height: rect.viewport.height, viewport: rect.viewport });
+    await settledShot(page, box, 'tbeditor-fullscreen.png');
+
+    await fullscreen.click();
+    await expect(box).not.toHaveClass(classPattern('z-tbeditor-fullscreen'));
+  });
+
+  test('z-tbeditor-body-fullscreen is set on <body> and stops the page from scrolling', async ({ page }) => {
+    const { fullscreen } = await openEditor(page);
+    const body = page.locator('body');
+    await expect(body).not.toHaveClass(classPattern('z-tbeditor-body-fullscreen'));
+    expect(await styleOf(body, 'overflow')).not.toBe('hidden');
+
+    await fullscreen.click();
+
+    await expect(body).toHaveClass(classPattern('z-tbeditor-body-fullscreen'));
+    expect(await styleOf(body, 'overflow'), 'the page behind the editor does not scroll').toBe('hidden');
+
+    await fullscreen.click();
+    await expect(body).not.toHaveClass(classPattern('z-tbeditor-body-fullscreen'));
+  });
 });

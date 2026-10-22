@@ -70,5 +70,24 @@
             </biglistbox>
         </vlayout>
     </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="frozenCols (Frozen Columns)"/></div>
+        <div sclass="z-py-3">
+            <div sclass="z-mb-2"><label sclass="z-text-xs z-text-secondary" value="frozenCols=&quot;2&quot; (5 rows)"/></div>
+            <zscript>
+                FakerMatrixModel frozenModel = new FakerMatrixModel(5, 5);
+            </zscript>
+            <biglistbox id="frozenBiglist" frozenCols="2"
+                        model="${frozenModel}"
+                        hflex="1" height="200px" colWidth="130px">
+                <template name="heads">
+                    <html><![CDATA[<div>${each[matrixInfo[0]]}</div>]]></html>
+                </template>
+                <template name="rows">
+                    <html><![CDATA[<div>${each[matrixInfo[0]]}</div>]]></html>
+                </template>
+            </biglistbox>
+        </div>
+    </div>
 </div>
 </zk>
