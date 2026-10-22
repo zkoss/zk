@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 // page-smoke.js — open every listed page in headless Chromium and report whether it composed.
 //
-// Usage:  node doc/migration/tools/page-smoke.js <baseURL> <listfile> [concurrency]
-//         (run from anywhere; resolves the template's own `playwright` dependency, so the
-//         template's `npm ci` must have run)
+// Usage:  NODE_PATH=zkpreview/node_modules node bin/page-smoke.js <baseURL> <listfile> [concurrency]
+//         (run from the zk root; `playwright` is resolved from zkpreview, so `npm ci` there must have run)
 //
 // <baseURL> is the directory the page paths are relative to, WITH its trailing slash, e.g.
 //   http://127.0.0.1:8085/zkpreview/web/
