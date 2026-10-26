@@ -10,15 +10,19 @@
 //   zul      | ZK_ROOT/zul/src/main/resources/web      | ZK_ROOT/zul/codegen/resources/web    | ZK_ROOT/zul/src/main/resources/metainfo/zk/lang.xml
 //   zkmax    | ZKCML_ROOT/zkmax/src/main/resources/web | ZKCML_ROOT/zkmax/codegen/resources/web | ZKCML_ROOT/zkmax/src/main/resources/metainfo/zk/lang-addon.xml
 //   zkex     | ZKCML_ROOT/zkex/src/main/resources/web  | ZKCML_ROOT/zkex/codegen/resources/web  | ZKCML_ROOT/zkex/src/main/resources/metainfo/zk/lang-addon.xml
+//   za11y    | ZKCML_ROOT/za11y/src/main/resources/web | ZKCML_ROOT/za11y/codegen/resources/web | (none — loaded by A11yThemeURIHandler via za11y's themes.properties, not a lang file)
 //
 // where ZK_ROOT = path.resolve(__dirname, '..') (this repo) and
 // ZKCML_ROOT = path.resolve(ZK_ROOT, '../zkcml') (the enterprise sibling repo).
+//
+// za11y only: the partials js/za11y/{zul,zkmax,zkex}/css/_*-a11y.css are concatenated into the one
+// za11y/css/marble.css.dsp (see a11yFiles and build() stage 6).
 //
 // zul only, this also vendors the Inter web font from the @fontsource-variable/inter npm
 // package (ZK_ROOT/node_modules) into zul/font/ under the zul output root — see FONT_SOURCES.
 //
 // Usage:
-//   node scripts/build-css.js --module zul|zkmax|zkex [--out <dir>] [--dev] [--emit-docs]
+//   node scripts/build-css.js --module zul|zkmax|zkex|za11y [--out <dir>] [--dev] [--emit-docs]
 // Exit: 2 = missing/unknown --module (usage error)
 
 const fs = require('fs');
@@ -49,11 +53,15 @@ const MODULES = {
         webDir: path.join(ZKCML_ROOT, 'zkex/src/main/resources/web'),
         outDir: path.join(ZKCML_ROOT, 'zkex/codegen/resources/web'),
     },
+    za11y: {
+        webDir: path.join(ZKCML_ROOT, 'za11y/src/main/resources/web'),
+        outDir: path.join(ZKCML_ROOT, 'za11y/codegen/resources/web'),
+    },
 };
 
 const moduleName = argFor('--module');
 if (!moduleName || !MODULES[moduleName]) {
-    console.error('Usage: node scripts/build-css.js --module zul|zkmax|zkex [--out <dir>] [--dev] [--emit-docs]');
+    console.error('Usage: node scripts/build-css.js --module zul|zkmax|zkex|za11y [--out <dir>] [--dev] [--emit-docs]');
     process.exit(2);
 }
 
@@ -280,6 +288,26 @@ const footerFiles = [
     'zul/css/base/_dnd.css',
 ];
 
+// marble.css.dsp = za11y's accessibility rules, one sheet for Marble. za11y only.
+// Partials are discovered, not listed, so adding one needs no build change; the order is fixed
+// (zul, zkmax, zkex, then by name) to keep the output reproducible.
+const A11Y_PARTIAL_PACKAGES = ['zul', 'zkmax', 'zkex'];
+const A11Y_PARTIAL_RE = /^_.+-a11y\.css$/;
+
+function findA11yPartials() {
+    const files = [];
+    for (const pkg of A11Y_PARTIAL_PACKAGES) {
+        const cssDir = `js/za11y/${pkg}/css`;
+        const dir = path.join(webDir, cssDir);
+        if (!fs.existsSync(dir)) continue;
+        files.push(...fs.readdirSync(dir).filter(name => A11Y_PARTIAL_RE.test(name)).sort()
+            .map(name => `${cssDir}/${name}`));
+    }
+    return files;
+}
+
+const a11yFiles = moduleName === 'za11y' ? findA11yPartials() : [];
+
 // Files merged into another CSS file (excluded from 1:1 auto-scan). zul only.
 // errorbox.css is merged into input.css because lang.xml registers no css-uri for errorbox.
 const extraMergedFiles = [
@@ -290,7 +318,7 @@ const extraMergedFiles = [
 // have no merge lists above, so their auto-scan runs 1:1 with nothing excluded.
 const mergedFiles = moduleName === 'zul'
     ? new Set([...normFiles.filter(f => f.startsWith('js/')), ...comboFiles, ...footerFiles, ...extraMergedFiles])
-    : new Set();
+    : new Set(a11yFiles);
 
 // --- Orphan-CSS guard data (see assertNoOrphanComponentCss + doc/skill-gaps.md 2026-06-30) ---
 //
@@ -840,6 +868,15 @@ function build() {
             writeDsp('zkmax/css/tablet.css.dsp', tabletCSS);
             console.log('  zkmax/css/tablet.css.dsp');
         }
+    }
+
+    if (moduleName === 'za11y') {
+        // 6. Build marble.css.dsp (every partial self-wraps in zk-components). With no partial yet
+        //    it still emits the empty layer, so the sheet always exists for the themes.properties entry.
+        a11yFiles.forEach(f => assertLayer(f, readFile(f), 'zk-components'));
+        const a11yCSS = a11yFiles.map(f => readFile(f)).join('\n');
+        writeDsp('za11y/css/marble.css.dsp', a11yCSS.trim() ? a11yCSS : '@layer zk-components {}');
+        console.log(`  za11y/css/marble.css.dsp (${a11yFiles.length} partials)`);
     }
 
     console.log(`\nCSS build complete for --module ${moduleName} (${isDev ? 'dev — unminified' : 'minified'}).`);

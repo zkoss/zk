@@ -35,11 +35,19 @@
 // ZKCML_ROOT = path.resolve(ZK_ROOT, '../zkcml') (the enterprise sibling repo), unless
 // overridden by --zk-home <workspace-root-containing-both-zk-and-zkcml>.
 //
+// --module za11y is different: za11y has no lang file. A11yThemeURIHandler requests
+// ~./za11y/css/<sheet>.css.dsp for the sheet that themes.properties maps the current theme to, and
+// silently skips a sheet that does not exist. So the check reads themes.properties and asserts the
+// Marble entry's sheet was built. Only Marble can be checked: the IceBlue sheets are produced
+// outside this checkout, so they are not in the output dir.
+//
+//   za11y    | ZKCML_ROOT/za11y/src/main/resources/metainfo/org/zkoss/za11y/theme/themes.properties | ZKCML_ROOT/za11y/codegen/resources/web
+//
 // font-awesome.css.dsp is neither requested nor built: ZK 11 dropped its line from zul/css/zk.wcs
 // (Marble renders icons via Lucide masks) and build-css.js emits no stub for it (item 1.10).
 //
 // Usage:
-//   node scripts/check-css-dsp.js --module zul|zkmax|zkex [--theme-dir <dir>] [--zk-home <dir>]
+//   node scripts/check-css-dsp.js --module zul|zkmax|zkex|za11y [--theme-dir <dir>] [--zk-home <dir>]
 // Exit: 0 = all present · 1 = missing file(s) · 2 = cannot run (bad --module, or lang file not found)
 
 const fs = require('fs');
@@ -78,11 +86,20 @@ const MODULES = {
         outDir: path.join(ZKCML_ROOT, 'zkex/codegen/resources/web'),
         globalBundles: [],
     },
+    za11y: {
+        langFiles: [],
+        outDir: path.join(ZKCML_ROOT, 'za11y/codegen/resources/web'),
+        globalBundles: [],
+        themesFile: path.join(ZKCML_ROOT, 'za11y/src/main/resources/metainfo/org/zkoss/za11y/theme/themes.properties'),
+    },
 };
+
+// The theme name Themes.getCurrentTheme() returns for Marble (StandardTheme.DEFAULT_NAME).
+const MARBLE_THEME = 'marble';
 
 const moduleName = argFor('--module');
 if (!moduleName || !MODULES[moduleName]) {
-    console.error('Usage: node scripts/check-css-dsp.js --module zul|zkmax|zkex [--theme-dir <dir>] [--zk-home <dir>]');
+    console.error('Usage: node scripts/check-css-dsp.js --module zul|zkmax|zkex|za11y [--theme-dir <dir>] [--zk-home <dir>]');
     process.exit(2);
 }
 
@@ -162,7 +179,39 @@ function isThemed(p) {
     return THEMED_PREFIXES.some(pre => p.startsWith(pre));
 }
 
+// za11y: the sheet themes.properties maps Marble to must exist in the build output.
+function checkA11yMarbleSheet() {
+    const { themesFile } = MODULES.za11y;
+    if (!fs.existsSync(themesFile)) {
+        console.error('✖ Cannot run: themes.properties not found: ' + themesFile);
+        process.exit(2);
+    }
+    if (!fs.existsSync(THEME_DIR)) {
+        console.error('✖ Theme build dir not found: ' + THEME_DIR + '\n  Run `node scripts/build-css.js --module za11y` first.');
+        process.exit(2);
+    }
+    const entry = fs.readFileSync(themesFile, 'utf8').split(/\r?\n/)
+        .map(line => line.split('='))
+        .find(([key]) => key.trim() === MARBLE_THEME);
+    if (!entry) {
+        console.error(`✖ ${themesFile} has no "${MARBLE_THEME}" entry, so za11y adds no sheet for Marble.`);
+        process.exit(1);
+    }
+    const sheet = `za11y/css/${entry[1].trim()}.css.dsp`;
+    if (!fs.existsSync(path.join(THEME_DIR, sheet))) {
+        console.error(`✖ MISSING — themes.properties maps "${MARBLE_THEME}" to ${sheet} but the build does not contain it:`);
+        console.error('    ' + path.join(THEME_DIR, sheet));
+        console.error('  Fix: run `node scripts/build-css.js --module za11y`.');
+        process.exit(1);
+    }
+    console.log(`\n✓ za11y sheet for "${MARBLE_THEME}" is present: ${sheet}\n`);
+}
+
 function main() {
+    if (moduleName === 'za11y') {
+        checkA11yMarbleSheet();
+        return;
+    }
     // 0. Verify the module's lang file is reachable; without it we cannot know what ZK requests.
     const missingLang = LANG_FILES.filter(f => !fs.existsSync(f));
     if (missingLang.length) {
