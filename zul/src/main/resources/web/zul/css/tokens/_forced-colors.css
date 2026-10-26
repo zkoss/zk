@@ -225,7 +225,7 @@
     .z-paging-selected,
     .z-navitem-selected > .z-navitem-content,
     .z-navitem.z-navitem-selected > .z-navitem-content,
-    .z-tabbox-accordion .z-tab.z-tab-selected,
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected,
     .z-searchbox-selected,
     .z-orgitem-selected > .z-orgnode {
         background-color: Highlight;
@@ -264,7 +264,7 @@
     .z-listitem.z-selected .z-listcell-content,
     .z-treerow.z-treerow-selected .z-treecell-content,
     .z-treerow.z-selected .z-treecell-content,
-    .z-tabbox-accordion .z-tab.z-tab-selected .z-tab-text,
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected > .z-tab-content > .z-tab-text,
     .z-paging-selected,
     .z-navitem-selected > .z-navitem-content,
     .z-navitem.z-navitem-selected > .z-navitem-content,
@@ -275,8 +275,28 @@
 
     /* (2a caption) A caption inside the selected accordion tab sets its own text colour, and the
        opt-out above leaves that authored colour (black) on the Highlight fill. */
-    .z-tabbox-accordion .z-tab.z-tab-selected .z-caption-content {
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected .z-caption-content {
         color: HighlightText;
+    }
+
+    /* (2a close) The × of a closable accordion header is a mask painted by the glyph's ::before
+       background-color, which (2d) sets to CanvasText (~1.9:1 on the Highlight fill). Pin it to
+       HighlightText like the label and the chevron. The hover circle inverts (HighlightText
+       fill, Highlight glyph) because the authored 12% tint would be nearly invisible on
+       Highlight; the button opts out of forced colors so that authored fill is replaced.
+       The child chain keeps a strip tabbox nested in a panel out of scope, and its eight classes
+       outrank (2d). */
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected > .z-tab-content > .z-tab-button {
+        forced-color-adjust: none;
+    }
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected > .z-tab-content > .z-tab-button > .z-tab-icon::before {
+        background-color: HighlightText;
+    }
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected > .z-tab-content > .z-tab-button:hover {
+        background-color: HighlightText;
+    }
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected > .z-tab-content > .z-tab-button:hover > .z-tab-icon::before {
+        background-color: Highlight;
     }
 
     /* (2a-tab) Tab active indicator is a painted bar (background-color); forced-colors

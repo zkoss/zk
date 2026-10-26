@@ -9,6 +9,10 @@
 		minimum. za11y enlarges them in zkmax/less/_big-a11y.less and starts the
 		horizontal track past the tick in zkmax/big-a11y.ts.
 
+		IceBlue only: it asserts the scrollbar buttons, which Marble does not render
+		(its thin overlay scrollbar has none). Meeting 2.5.7 there needs a click-on-track
+		paging behaviour in WScroll, which is outside the Marble theme.
+
 	History:
 		Fri Oct 02 2026, Created by peggypeng
 
@@ -29,6 +33,7 @@ import org.zkoss.test.webdriver.ztl.JQuery;
  * WCAG 2.5.8 Target Size (Minimum) - https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum
  */
 @Tag("WcagTestOnly")
+@Tag("IceBlueOnly")
 public class F110_ZK_6085_BiglistboxTargetSizeTest extends WebDriverTestCase {
 	/** The minimum width and height of a pointer target, in CSS px. */
 	private static final double MIN = 24;

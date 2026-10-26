@@ -1,4 +1,4 @@
-import { test, expect, devices, type Page } from '@playwright/test';
+import { test, expect, devices, type Locator, type Page } from '@playwright/test';
 
 // Regression guard for the forced-colors / Windows High-Contrast a11y layer
 // (GAP 5 — see doc/spec/forced-colors.md). Runs under the `forced-colors`
@@ -520,14 +520,55 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   // Follow-up 44c: a caption inside the selected accordion tab sets its own text colour.
   test('caption text in a selected accordion tab is HighlightText', async ({ page }) => {
     await page.goto('/tabbox-misc.zul', { waitUntil: 'domcontentloaded' });
-    const content = page.locator('.z-tabbox-accordion .z-tab.z-tab-selected .z-caption-content');
+    // Child chain: a descendant selector would also match a selected tab of a strip tabbox nested in a panel.
+    const content = page.locator('.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected .z-caption-content');
     await content.first().waitFor({ state: 'attached', timeout: 10000 });
     const highlightText = await systemColor(page, 'HighlightText');
     const colors = await page.locator(
-      '.z-tabbox-accordion .z-tab.z-tab-selected .z-caption-content, .z-tabbox-accordion .z-tab.z-tab-selected .z-caption-label',
+      '.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected .z-caption-content, .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected .z-caption-label',
     ).evaluateAll(els => els.map(el => getComputedStyle(el).color));
     expect(colors.length).toBeGreaterThanOrEqual(1);
     expect(colors.every(c => c === highlightText), `caption colours ${JSON.stringify(colors)} must be ${highlightText}`).toBe(true);
+  });
+
+  // The × of a closable accordion header is a ::before mask painted by background-color; (2d) paints it CanvasText,
+  // which is ~1.9:1 on the Highlight fill of the selected header.
+  test('the × of a closable accordion header has 3:1 contrast against the header fill', async ({ page }) => {
+    await page.goto('/tabbox.zul', { waitUntil: 'domcontentloaded' });
+    // Child chain: a descendant selector would also match the tabs of a strip tabbox nested in a panel.
+    const header = '.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab';
+    const glyphOf = (state: string) => page.locator(`${header}${state} > .z-tab-content > .z-tab-button > .z-tab-icon`).first();
+    await glyphOf('.z-tab-selected').waitFor({ state: 'attached', timeout: 10000 });
+
+    const contrastOf = (glyph: Locator) => glyph.evaluate(el => {
+      const parse = (css: string) => css.match(/[\d.]+/g)!.map(Number);
+      const over = (top: number[], bottom: number[]) => {
+        const alpha = top.length > 3 ? top[3] : 1;
+        return [0, 1, 2].map(i => top[i] * alpha + bottom[i] * (1 - alpha));
+      };
+      const luminance = (rgb: number[]) => {
+        const [r, g, b] = rgb.map(c => { const v = c / 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      // The fill is the header's background composited over the first opaque ancestor.
+      const layers: number[][] = [];
+      for (let node: Element | null = el.closest('.z-tab'); node; node = node.parentElement) {
+        const layer = parse(getComputedStyle(node).backgroundColor);
+        if (layer.length > 3 && layer[3] === 0) continue;
+        layers.push(layer);
+        if (layer.length === 3 || layer[3] === 1) break;
+      }
+      const fill = layers.reduceRight((below, layer) => over(layer, below), [255, 255, 255]);
+      const glyphColor = getComputedStyle(el, '::before').backgroundColor;
+      const glyph = over(parse(glyphColor), fill);
+      const [lighter, darker] = [luminance(glyph), luminance(fill)].sort((a, b) => b - a);
+      return { glyphColor, contrast: (lighter + 0.05) / (darker + 0.05) };
+    });
+
+    const selected = await contrastOf(glyphOf('.z-tab-selected'));
+    expect(selected.contrast, `selected header × ${selected.glyphColor}`).toBeGreaterThanOrEqual(3);
+    const unselected = await contrastOf(glyphOf(':not(.z-tab-selected):not(.z-tab-disabled)'));
+    expect(unselected.contrast, `unselected header × ${unselected.glyphColor}`).toBeGreaterThanOrEqual(3);
   });
 
   // Follow-up 44d: an invalid daterangebox shows the same double border as the other inputs. A wrapper draws it as an

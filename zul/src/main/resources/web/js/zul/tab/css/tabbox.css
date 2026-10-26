@@ -19,6 +19,11 @@
  *           div.z-tab-content
  *             span.z-tab-text
  *         div#uuid-cave                     ← expandable content area
+ *
+ * Every accordion rule below is a child-combinator chain from .z-tabbox-accordion, never a
+ * descendant selector: a tabbox nested in an accordion panel (strip molds) must look like the
+ * same tabbox outside it, so the accordion's rules may not reach its .z-tabpanels, .z-tab,
+ * .z-tab-content or .z-tab-button.
  */
 
 /* ─── Outer container ───────────────────────────────────────────────────── */
@@ -266,8 +271,8 @@
 
 /* Closable tabs: trailing inset = half the 16px text inset — 16/4/8
    leading/gap/trailing (c33, GL close-7 parity). Accordion is exempt via
-   cascade: c22i (.z-tabbox-accordion .z-tab-content { padding: 0 }) has
-   equal specificity (0,2,0) and comes later in this file. */
+   cascade: c22i (the accordion's .z-tab-content padding: 0, child-combinator chain) has higher
+   specificity. */
 .z-tab-content:has(> .z-tab-button) {
     padding-right: var(--zk-spacing-2);
 }
@@ -283,6 +288,42 @@
 
 .z-tab-selected .z-tab-button:hover {
     background-color: color-mix(in srgb, var(--zk-color-primary) 12%, transparent);
+}
+
+/* WCAG 2.5.8 hit area (owner ruling 2026-10-25). Tab.ts binds the close click on this <i>
+   (#uuid-cls), not on the 16px wrapper, and a click anywhere else in the tab selects it, so the
+   <i> itself is the target. It is taken out of flow and centred on the wrapper: the layout
+   (16/4/8, c31-c34a) and the 18px glyph stay as they are. 24px is the most the strip molds can
+   give without covering the 4px label gap and the 8px trailing inset: it ends 4px inside the tab
+   edge. The wrapper keeps the 16px hover circle. */
+.z-tab-button > .z-tab-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+}
+
+/* The glyph is the ::before mask, an inline-block 1em box lowered by vertical-align: -0.125em
+   (_icons.css), so its position follows the <i>'s baseline. At 16px wrapper height the old
+   in-flow <i> was a 20px line box centred on the wrapper (top -2px). A flex <i> would drop that
+   baseline shift and sit the glyph about 0.6px lower, which rounds to 1px. A block <i> whose
+   line-height equals its 24px height keeps the baseline where it was for any font metrics: the
+   box is 4px higher (top -4px) and the half-leading is (24 - 20) / 2 = 2px larger. text-align
+   keeps the glyph horizontally centred, as the flex wrapper did. The accordion rules below keep
+   the flex layout, so this applies to the strip molds only. */
+.z-tabbox-top > .z-tabs .z-tab-button > .z-tab-icon,
+.z-tabbox-bottom > .z-tabs .z-tab-button > .z-tab-icon,
+.z-tabbox-left > .z-tabs .z-tab-button > .z-tab-icon,
+.z-tabbox-vertical > .z-tabs .z-tab-button > .z-tab-icon,
+.z-tabbox-right > .z-tabs .z-tab-button > .z-tab-icon {
+    display: block;
+    line-height: 24px;
+    text-align: center;
 }
 
 /* ─── Tab icon / image ───────────────────────────────────────────────────── */
@@ -572,7 +613,7 @@
      * Flat container per MD style is the simpler, correct choice. (c22k) */
 }
 
-.z-tabbox-accordion .z-tabpanels {
+.z-tabbox-accordion > .z-tabpanels {
     display: block;
     overflow: visible;
     background: var(--zk-color-surface);
@@ -588,13 +629,13 @@
 /* The separator is a border-top on every non-first section (IceBlue structure):
  * _fixPanelHgh subtracts the sibling sections' borders but not the open
  * section's own, and the first section is the one open by default. */
-.z-tabbox-accordion .z-tabpanel {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel {
     border-top: 1px solid var(--zk-tab-border-color);
     padding: 0;
     min-height: 0;
 }
 
-.z-tabbox-accordion .z-tabpanel:first-child {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel:first-child {
     border-top: none;
 }
 
@@ -602,7 +643,7 @@
  * MD3 expansion panel header: 48px minimum. Kept tight so that several
  * collapsed sections fit inside a height-constrained tabbox — otherwise
  * ZK's `Tabpanel._fixPanelHgh` clamps the selected cave height to 0. */
-.z-tabbox-accordion .z-tab {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab {
     position: relative;
     display: flex;
     align-items: center;
@@ -625,7 +666,7 @@
         background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
-.z-tabbox-accordion .z-tab::before {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -635,22 +676,22 @@
     transition: var(--zk-state-layer-transition);
 }
 
-.z-tabbox-accordion .z-tab:hover::before {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab:hover::before {
     opacity: var(--zk-state-hover-opacity);
 }
 
 /* Selected (expanded) accordion header */
-.z-tabbox-accordion .z-tab.z-tab-selected {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected {
     color: var(--zk-color-on-primary-container);
     background-color: var(--zk-color-primary-container);
 }
 
-.z-tabbox-accordion .z-tab.z-tab-selected::before {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected::before {
     background-color: var(--zk-color-on-primary-container);
 }
 
 /* Disabled accordion header */
-.z-tabbox-accordion .z-tab.z-tab-disabled {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-disabled {
     color: var(--zk-color-disabled);
     opacity: var(--zk-state-disabled-opacity);
     cursor: not-allowed;
@@ -663,7 +704,7 @@
  * mode the outer `.z-tab` already supplies vertical padding, so double-
  * padding bloats the header to ~60px and starves the cave of vertical
  * space inside a height-constrained tabbox. */
-.z-tabbox-accordion .z-tab-content {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content {
     display: flex;
     align-items: center;
     width: 100%;
@@ -673,24 +714,55 @@
     z-index: 1;
 }
 
-.z-tabbox-accordion .z-tab-text {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content > .z-tab-text {
     flex: 1;
 }
 
-/* Accordion NEVER shows the close icon, regardless of closable (contract c11a,
-   user ruling 2026-06-07): accordion header = MD3 expansion panel, whose only
-   trailing affordance is the chevron — no inline dismiss
-   (doc/spec/md3-close-affordance-placement.md). ZK still emits .z-tab-button in the
-   accordion DOM when closable="true" (skill — Notes); closing remains available
-   programmatically. */
-.z-tabbox-accordion .z-tab-button {
+/* A closable accordion header shows a close button INSTEAD of the chevron (owner ruling
+   2026-10-25, supersedes c11a / 2026-06-07; doc/spec/md3-close-affordance-placement.md).
+   The button's centre sits on the chevron keyline, 16px from the header edge: margin-right of
+   half its width moves its right edge to (16px - half width) from the header edge, so the hover
+   circle is not clipped by .z-tab { overflow: hidden }. The size is the largest circle that
+   keeps the header at --zk-tab-height next to the non-closable ones (header height minus the
+   2 x 8px .z-tab padding): 32px at 48px, 24px at the compact 40px; never below the WCAG 2.5.8
+   24px. The <i> fills the wrapper, so the whole circle is the click target.
+   The selectors follow the accordion's own DOM (tabbox > tabpanels > tabpanel > tab > content >
+   button) with child combinators, so a tabbox nested in a panel keeps its own rules. */
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content > .z-tab-button {
+    --zk-tab-close-size: max(24px, min(32px, calc(var(--zk-tab-height) - 2 * var(--zk-spacing-2))));
+    order: 2;
+    width: var(--zk-tab-close-size);
+    height: var(--zk-tab-close-size);
+    margin-right: calc(var(--zk-tab-close-size) / -2);
+    flex-shrink: 0;
+}
+
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content > .z-tab-button > .z-tab-icon {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+}
+
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab-selected > .z-tab-content > .z-tab-button {
+    color: var(--zk-color-on-primary-container);
+}
+
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab-selected > .z-tab-content > .z-tab-button:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-primary-container) 12%, transparent);
+}
+
+/* The close button replaces the chevron on a closable header. */
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content:has(> .z-tab-button)::after {
     display: none;
 }
 
 /* Chevron — right-side arrow via ::after on .z-tab-content.
    order: 2 keeps it the outermost trailing element now that .z-tab-button
-   carries order: 1 — closable header sequence: label(flex:1) … × chevron (c35). */
-.z-tabbox-accordion .z-tab-content::after {
+   carries order: 1 — non-closable header: label(flex:1) … chevron; a closable one hides it
+   and shows the close button instead (c35). */
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content::after {
     content: '';
     display: inline-block;
     order: 2;
@@ -712,14 +784,14 @@
     transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
-.z-tabbox-accordion .z-tab.z-tab-selected .z-tab-content::after {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected > .z-tab-content::after {
     /* Expanded: flip the chevron about its box centre; color drives the mask fill via currentColor */
     transform: rotate(180deg);
     color: var(--zk-color-on-primary-container);
 }
 
 /* Expandable content area (div#uuid-cave inside .z-tabpanel) */
-.z-tabbox-accordion .z-tabpanel > [id$="-cave"] {
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > [id$="-cave"] {
     padding: var(--zk-spacing-4);
     color: var(--zk-color-on-surface-variant);
     font-size: var(--zk-typescale-body-medium-size);
@@ -730,12 +802,12 @@
 /* The chevron is a mask painted with background-color; forced-colors maps that to Canvas and the
    arrow vanishes (selected state included, it only changes color). Same fix as selectbox. */
 @media (forced-colors: active) {
-    .z-tabbox-accordion .z-tab-content::after {
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content::after {
         background-color: CanvasText;
     }
 
     /* The selected tab is filled with Highlight (_forced-colors.css 2a); CanvasText on it is ~1.9:1. */
-    .z-tabbox-accordion .z-tab.z-tab-selected .z-tab-content::after {
+    .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected > .z-tab-content::after {
         background-color: HighlightText;
     }
 }

@@ -25,7 +25,7 @@ closest-sibling: none — distinct chrome+payload composition; sibling reuse lim
 
 Tabs use a borderless strip with an underline indicator on the active tab (`top`/`bottom` orients) or a side-bar indicator on the active tab (`left`/`right` orients). Inactive tabs use on-surface-variant text colour and tint with the primary state-layer on hover. The active tab and its 2px indicator use `--zk-color-primary`. The strip carries a 1px outline-variant divider along its content edge.
 
-Closable tabs place the close button **trailing the label** with a reduced trailing inset — closable geometry is **16/4/8** (leading inset / label–icon gap / trailing inset), per the dismiss-affordance placement convention (`doc/spec/md3-close-affordance-placement.md`; user ruling 2026-06-05, mirrors goldenlayout close-7). ZK emits `.z-tab-button` *before* `.z-tab-text` in the DOM (iceblue repositions it absolutely; Marble flips it with flex `order`), so the trailing position must be asserted, not assumed — the pre-2026-06-05 theme shipped the × on the *leading* side (`× Tab1`) because nothing checked the button's side. In `left`/`right`/`vertical` orients the tab bar is wider than the label, so the × additionally hugs the bar's trailing edge (`margin-left: auto`). In accordion mold the × is **never shown at all** — regardless of `closable` (user ruling 2026-06-07, supersedes the earlier "trailing cluster, before the chevron" spec): the accordion's MD3 analog is the expansion panel, which carries no inline dismiss affordance (see c11a and `doc/spec/md3-close-affordance-placement.md`).
+Closable tabs place the close button **trailing the label** with a reduced trailing inset — closable geometry is **16/4/8** (leading inset / label–icon gap / trailing inset), per the dismiss-affordance placement convention (`doc/spec/md3-close-affordance-placement.md`; user ruling 2026-06-05, mirrors goldenlayout close-7). ZK emits `.z-tab-button` *before* `.z-tab-text` in the DOM (iceblue repositions it absolutely; Marble flips it with flex `order`), so the trailing position must be asserted, not assumed — the pre-2026-06-05 theme shipped the × on the *leading* side (`× Tab1`) because nothing checked the button's side. In `left`/`right`/`vertical` orients the tab bar is wider than the label, so the × additionally hugs the bar's trailing edge (`margin-left: auto`). In accordion mold a closable header shows a 32px (24px in compact) × button **instead of the chevron** (owner ruling 2026-10-25, supersedes the 2026-06-07 "never shown" ruling): WCAG 2.5.8 needs a ≥ 24×24 close target, and Tab.ts binds the close click on the `<i>` inside the button, so a header without one has no pointer way to close it. The × is centred on the chevron's keyline (16px from the header edge); non-closable headers keep the chevron (see c11a, c35 and `doc/spec/md3-close-affordance-placement.md`). The close target is the `<i id=…-cls>` (not the 16px wrapper): in strip molds it is a 24×24 box centred on the wrapper, taken out of flow so the 16/4/8 geometry is unchanged (c36).
 
 Scroll buttons in strip mode are flat, square-ish hit-targets that sit at the leading and trailing edges of the strip. They display only the chevron glyph (no border, no background) at `--zk-color-on-surface-variant`, picking up the primary state-layer tint on hover (matching the inactive-tab hover treatment). They are always present in the DOM in strip modes but are visually hidden until ZK adds `.z-tabbox-scroll` to the root. When the strip has reached an end-of-scroll position there is no class to react to, so the buttons remain at their full default appearance and clicks are silent no-ops (acceptable trade-off — ZK does not surface this state).
 
@@ -55,13 +55,15 @@ Icon-only tabs (`iconSclass` set, no `label`) render the icon centred in the tab
 | c9  | `.z-tabbox-accordion` | border | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §1 |
 | c10 | `.z-tabbox-accordion` | border-radius | `0` (see c22k — flat container; do NOT use `--zk-shape-corner-medium` here) | DESIGN.md §1 + skill — Layout invariants |
 | c11 | `.z-tabbox-accordion .z-tab` | min-height | 52px | DESIGN.md §5 |
-| c11a | `.z-tabbox-accordion .z-tab-button` | display | `none` — accordion NEVER shows the close icon, regardless of `closable` (corrected 2026-06-07, failing-first; supersedes the iceblue-baseline "visible, no override" ruling — accordion = MD3 expansion panel, which has no inline dismiss affordance, `doc/spec/md3-close-affordance-placement.md`) | user ruling 2026-06-07 |
+| c11a | `.z-tabbox-accordion .z-tab-button` | width / height / order / margin-right | `max(24px, min(32px, --zk-tab-height − 16px))` (32px at 48px, 24px at compact 40px) / same / `2` / half the size, negative (−16px / −12px) — a closable accordion header shows the × (replaces the 2026-06-07 `display: none`, retired by owner ruling 2026-10-25). Centre on the chevron keyline (16px from the header edge); the circle stays inside the header so it is not clipped by `.z-tab { overflow: hidden }`, and the header keeps `--zk-tab-height` like a non-closable one. 40px would stick out 4px. Applies only to the accordion's own header (`.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content > .z-tab-button`, same chain for c35 and the selected colour); a tabbox nested in a panel keeps its own rules | owner ruling 2026-10-25, supersedes user ruling 2026-06-07 |
 | c12 | `.z-tabbox-accordion .z-tab` | background-color | `var(--zk-color-surface)` | DESIGN.md §1 |
 | c13 | `.z-tabbox-accordion .z-tab` | color | `var(--zk-color-on-surface)` | DESIGN.md §1 |
 | c14 | `.z-tabbox-accordion .z-tab.z-tab-selected` | background-color | `var(--zk-color-primary-container)` | DESIGN.md §1 |
 | c15 | `.z-tabbox-accordion .z-tab.z-tab-selected` | color | `var(--zk-color-on-primary-container)` | DESIGN.md §1 |
 | c16 | `.z-tabbox-accordion .z-tabpanel-content` | padding | `var(--zk-spacing-4)` (16px) | DESIGN.md §5 |
 | c17 | `.z-tabbox-accordion .z-tabpanel + .z-tabpanel` | border-top | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §1 |
+
+**Nested isolation (owner ruling 2026-10-25, principle V6 same role same look).** The accordion selectors in c11–c17, c22h, c22i, c35 and c11a are shorthand: in `tabbox.css` each is a child-combinator chain from the accordion root (`.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content …`). A strip tabbox nested in an accordion panel therefore looks and measures exactly like the same tabbox outside it, and an accordion nested in anything equals an un-nested accordion. Do not write accordion rules as descendant selectors.
 
 ### Orientation indicators — c18–c21
 
@@ -114,7 +116,8 @@ Executes the deferred tabbox side-flip pass (`doc/skill-gaps.md` 2026-06-05 gold
 | c33 | `.z-tab-content:has(> .z-tab-button)` | padding-right | `var(--zk-spacing-2)` | trailing inset = half the 16px text inset (16/4/8), mirrors GL close-7. Cascade note: accordion's c22i (`padding: 0`) has equal specificity (0,2,0) and MUST come later in the file so accordion headers stay at padding 0 |
 | c34 | `.z-tabbox-left .z-tab-content`, `.z-tabbox-vertical .z-tab-content`, `.z-tabbox-right .z-tab-content` | flex | `1 1 auto` (content row spans the full bar width) | prerequisite for c34a — without it the content box shrink-wraps and `margin-left: auto` has no room to act |
 | c34a | `.z-tabbox-left .z-tab-button`, `.z-tabbox-vertical .z-tab-button`, `.z-tabbox-right .z-tab-button` | margin-left | `auto` | vertical-orient bars are ≥ 120px wide — order alone leaves the × adjacent to a short label mid-bar; `auto` margin pushes it to the bar's trailing edge |
-| c35 | `.z-tabbox-accordion .z-tab-content::after` | order | `2` | accordion header sequence: label (`flex: 1`) … chevron (`order: 2`) — the chevron stays the outermost trailing element. (The × is hidden in accordion per c11a, 2026-06-07; `order: 2` is kept so the chevron stays trailing even though c31's `order: 1` button no longer renders) |
+| c35 | `.z-tabbox-accordion .z-tab-content::after` | order / display | `2`; `display: none` on `.z-tab-content:has(> .z-tab-button)::after` | non-closable header: label (`flex: 1`) … chevron (`order: 2`). Closable header: label … × (c11a) — the × replaces the chevron (owner ruling 2026-10-25, supersedes the 2026-06-07 ruling under which the × was hidden and the chevron kept) |
+| c36 | `.z-tab-button > .z-tab-icon` | position / width / height | `absolute` centred (`top/left: 50%`, `translate(-50%,-50%)`) / `24px` / `24px` | WCAG 2.5.8 hit area for strip molds (top/bottom/left/right/vertical). The `<i>` is the click target (Tab.ts `_doCloseClick`); out of flow so c31–c34a geometry and the 18px glyph are unchanged; 24px ends 4px inside the tab edge (8px trailing inset − 4px). In accordion the `<i>` fills the 32px (compact 24px) wrapper | owner ruling 2026-10-25 |
 
 ## Outcome assertions
 
@@ -122,7 +125,7 @@ Outcome-level predicates gating VERIFIED (first backfilled M-row for this pre-ou
 
 | id | predicate | rationale |
 |----|-----------|-----------|
-| M1 | for every visible closable tab (`.z-tab` containing a `.z-tab-button`): the button's bbox is **trailing** (`button.bbox.left ≥ text.bbox.right`) — AND in strip molds (`top`/`bottom`) the trailing inset `tab.bbox.right − button.bbox.right` is `8px ±2`; in `left`/`right`/`vertical` orients the same inset measured against the tab bar is `10px ±3` (8px padding + up to 2px indicator border); in accordion mold the button must NOT be visible at all — zero rendered bbox / `display: none` — regardless of `closable` (c11a, user ruling 2026-06-07; supersedes the earlier trailing-cluster clause). | Added 2026-06-05 — pre-fix the × rendered on the *leading* side (measured: `gap label→icon = −50px`, trailing inset 50px) while c11a (visibility-only) passed; the button's *side* was never asserted in any row. Encoded failing-first per `doc/skill-feedback-loop.md` Step 1. |
+| M1 | for every visible closable tab (`.z-tab` containing a `.z-tab-button`): the button's bbox is **trailing** (`button.bbox.left ≥ text.bbox.right`) — AND in strip molds (`top`/`bottom`) the trailing inset `tab.bbox.right − button.bbox.right` is `8px ±2`; in `left`/`right`/`vertical` orients the same inset measured against the tab bar is `10px ±3` (8px padding + up to 2px indicator border); in accordion mold a closable header's button is visible, 32×32 (24×24 in compact), its centre 16px (±1) from the header's right edge, and the chevron of that header is not rendered; a non-closable header keeps the chevron (c11a, c35; owner ruling 2026-10-25, supersedes user ruling 2026-06-07). In every mold the close `<i>` (`$n('cls')`) is ≥ 24×24 and inside its tab (c36, WCAG 2.5.8). | Added 2026-06-05 — pre-fix the × rendered on the *leading* side (measured: `gap label→icon = −50px`, trailing inset 50px) while c11a (visibility-only) passed; the button's *side* was never asserted in any row. Encoded failing-first per `doc/skill-feedback-loop.md` Step 1. |
 
 ## State matrix
 
@@ -139,6 +142,7 @@ Outcome-level predicates gating VERIFIED (first backfilled M-row for this pre-ou
 | accordion — header selected | `.z-tabbox-accordion .z-tab.z-tab-selected` | c14, c15 |
 | accordion — panel content | `.z-tabbox-accordion .z-tabpanel-content` | c16 |
 | accordion — closable header | `.z-tabbox-accordion .z-tab .z-tab-button` | c11a, c35, M1 |
+| close target (all molds) | `.z-tab-button > .z-tab-icon` | c36, M1 |
 | accordion — section divider | `.z-tabbox-accordion .z-tabpanel + .z-tabpanel` | c17 |
 | bottom — selected indicator | `.z-tabbox-bottom .z-tab.z-tab-selected` | c18 |
 | left — selected indicator | `.z-tabbox-left .z-tab.z-tab-selected` | c19 |
@@ -173,8 +177,9 @@ Outcome-level predicates gating VERIFIED (first backfilled M-row for this pre-ou
 - [ ] section divider (c17)
 - [ ] header hover (state-layer tint on `var(--zk-color-on-surface)`)
 - [ ] header disabled (opacity + cursor)
-- [ ] close button visible when closable=true (`.z-tab-button` inherits strip-mode visibility) — c11a
-- [ ] closable: × at trailing end of header row, immediately before the chevron (c35, M1)
+- [ ] closable: 32×32 (compact 24×24) close button visible, header height unchanged, hover circle not clipped by the header (c11a)
+- [ ] closable: × replaces the chevron on the keyline; non-closable keeps the chevron (c35, M1)
+- [ ] close `<i>` ≥ 24×24 and inside its tab in every mold (c36, M1)
 
 ### Scroll buttons
 - [ ] horizontal scroll arrows visible when overflow + `.z-tabbox-scroll` on root (c22, c24, c25, c27, c28, c29)
