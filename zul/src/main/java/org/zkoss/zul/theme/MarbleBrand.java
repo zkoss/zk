@@ -43,7 +43,10 @@ import org.zkoss.zk.ui.util.Clients;
  * <p><b>When to use this vs. the library property.</b> This API is for <em>runtime</em>
  * switching (a user picking a brand). For a fixed whole-app brand, prefer the
  * {@code org.zkoss.theme.marble.brand} library property in {@code zk.xml} — a preset
- * name or a {@code #rgb}/{@code #rrggbb} seed, rendered with the page. A static
+ * name or a {@code #rgb}/{@code #rrggbb} seed, rendered with the page. The property
+ * applies only when ZK renders the whole HTML document (a top-level ZUL page); a
+ * {@code .zhtml} page, a {@code <?page complete="true"?>} page or an included page owns
+ * its {@code <html>} tag, so put {@code data-brand} or the seed there instead. A static
  * {@code :root { --zk-color-primary: #…; }} rule loaded after the theme CSS (the
  * {@code brand-override.md} recipe) also works. Calling {@link #apply(Brand)} on page
  * load runs after the first paint and can cause a brief color flash (FOUC).
