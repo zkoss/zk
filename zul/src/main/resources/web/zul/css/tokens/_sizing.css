@@ -127,3 +127,46 @@
     --zk-group-padding-y: 6px;
     --zk-group-padding-x: 12px;
 }
+
+/* ── Comfortable density — restores the defaults inside a compact scope ─────
+   Without this block a region carrying data-density="comfortable" would keep
+   inheriting the compact literals of an ancestor (or of <html> under
+   org.zkoss.theme.marble.density=compact), because :root's defaults only apply
+   where nothing closer re-points them. Same literals as :root above, for the
+   same freeze reason as the compact block. Keep both blocks in step with :root. */
+[data-density="comfortable"] {
+    --zk-control-height-xs: 28px;
+    --zk-control-height-sm: 32px;
+    --zk-control-height-md: 40px;
+    --zk-control-height-lg: 48px;
+    --zk-control-height-xl: 56px;
+    --zk-control-height: 40px;
+
+    --zk-input-height: 40px;
+    --zk-button-height: 36px;
+    --zk-button-height-sm: 28px;
+    --zk-button-height-lg: 44px;
+    --zk-icon-button-size: 40px;
+    --zk-fab-size: 56px;
+    --zk-fab-size-sm: 40px;
+    --zk-toolbar-height: 48px;
+    --zk-menubar-height: 48px;
+    --zk-menuitem-height: 36px;
+    --zk-tab-height: 48px;
+    --zk-window-header-height: 56px;
+    --zk-panel-header-height: 48px;
+    --zk-header-padding-y: 16px;
+    --zk-groupbox-header-height: 48px;
+    --zk-notification-height: 48px;
+    --zk-paging-control-size: 32px;
+    --zk-carousel-arrow-size: 32px;
+    --zk-data-row-min-height: 52px;
+
+    --zk-grid-cell-padding: 16px;
+    --zk-grid-detail-padding: 12px;
+    --zk-listbox-cell-padding: 16px;
+    --zk-tree-cell-padding: 16px;
+    --zk-tree-header-padding: 16px;
+    --zk-group-padding-y: 8px;
+    --zk-group-padding-x: 16px;
+}

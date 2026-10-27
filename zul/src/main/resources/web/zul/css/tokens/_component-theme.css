@@ -1279,3 +1279,7 @@
 [data-density="compact"] {
     --zk-button-padding-y: 4px;
 }
+/* A comfortable region inside a compact scope takes the default back. */
+[data-density="comfortable"] {
+    --zk-button-padding-y: 6px;
+}

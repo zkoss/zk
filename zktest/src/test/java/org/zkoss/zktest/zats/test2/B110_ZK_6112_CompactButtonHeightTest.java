@@ -43,6 +43,17 @@ public class B110_ZK_6112_CompactButtonHeightTest extends WebDriverTestCase {
 		assertButtonHeights(30, 32);
 	}
 
+	@Test
+	public void testComfortableRegionInsideCompactRootRestoresTheDefaults() {
+		connect();
+		waitResponse();
+		getEval("document.documentElement.setAttribute('data-density', 'compact')");
+		getEval("zk.Widget.$('$region').$n().setAttribute('data-density', 'comfortable')");
+		for (String button : BUTTONS)
+			assertEquals(36, height(button), button);
+		assertEquals(40, height("$iconOnly"), "$iconOnly");
+	}
+
 	private void assertButtonHeights(int buttonHeight, int iconButtonHeight) {
 		for (String button : BUTTONS)
 			assertEquals(buttonHeight, height(button), button);

@@ -16,7 +16,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		Every button variant is --zk-button-height tall (36px by default, 30px under data-density="compact"),
 		except the icon-only button, which is --zk-icon-button-size (40px, 32px compact).
 	</label>
-	<hlayout spacing="12px" valign="middle">
+	<hlayout id="region" spacing="12px" valign="middle">
 		<button id="filled" label="Filled"/>
 		<button id="outlined" label="Outlined" sclass="z-button-outlined"/>
 		<button id="text" label="Text" sclass="z-button-text"/>
