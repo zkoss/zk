@@ -1,10 +1,6 @@
 {
   "//": "Marble theme — focused CSS hygiene config. Intentionally does NOT extend stylelint-config-standard: the full standard set produces ~989 mostly-stylistic findings (class-pattern flags every .z-*/.lm_*, vendor-prefix flags required -webkit-, descending-specificity flags intentional cascade) that bury the real signal. These rules target only duplication / redundancy / dead CSS — the concerns this theme actually cares about. See the marble-theme skill's CSS audit page (.claude/skills/marble-theme/reference/css-audit.md).",
   "//fix-warning": "Run `npm run lint:css` to REPORT only. Do NOT blindly run stylelint --fix on this repo: --fix escapes `<!--` to `\\3c !--` inside /* */ comments that document DOM structure (corrupts docs). Apply --fix to a narrow glob and review the diff.",
-  "//ignore": "tokens/_fonts.css is the only CE stylesheet carrying DSP EL (url(${c:encodeURL(...)})), which no CSS parser accepts. EE/PE CSS lives in the sibling ../zkcml checkout and is linted from there.",
-  "ignoreFiles": [
-    "**/zul/css/tokens/_fonts.css"
-  ],
   "rules": {
     "no-duplicate-selectors": [true, { "severity": "warning" }],
     "declaration-block-no-duplicate-properties": [true, { "ignore": ["consecutive-duplicates-with-different-values"] }],
