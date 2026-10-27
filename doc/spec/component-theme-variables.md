@@ -1097,15 +1097,14 @@ structural exceptions.
 
 ### Anchornav — shipped
 
-Anchor-link navigation list (EE, `zkmax/nav/css/anchornav.css`) — `.z-anchornav` wraps a plain
-listbox whose item links (`.z-a`) jump to page sections. No background, border, or radius knob
-applies — the container paints no fill/border of its own; the listbox's chrome is already its own
-established variable family (`--zk-listbox-*`) and isn't re-exposed here. Only two color axes:
-`--zk-anchornav-fg` is the resting (non-active) item link's text color. The active item is the
-component's one defining state — `--zk-anchornav-accent` colors **both** the left-edge border
-indicator (`.z-listitem-selected`'s `border-left`) and the active item's own link text — both read
-`var(--zk-color-primary)` today, one knob keeping them in sync, the same "one knob, several roles"
-precedent as tab/calendar/nav's accent. The indicator's border width (`3px`) stays a literal, not
+Anchor-link navigation (EE, `zkmax/nav/css/anchornav.css`) — `.z-anchornav` wraps `a` or `button`
+links that jump to page sections. No background, border, or radius knob applies — the container
+paints no fill/border of its own. Only two color axes: `--zk-anchornav-fg` is the resting link's
+text color. The active link is the component's one defining state — Anchornav.ts adds
+`.z-anchornav-link-active` to it, and `--zk-anchornav-accent` colors an `a` link's text (with a
+heavier weight) and the outline of a `button` link (a `button` is already a filled primary
+button, so its text color cannot carry the state). One knob keeps both in sync, the same "one knob,
+several roles" precedent as tab/calendar/nav's accent. The outline's width and offset stay literals, not
 knob-driven (same convention as tab's `border-bottom-color` knob — width stays fixed, only color is
 exposed). `text-decoration: none` is a structural declaration, not a themeable appearance axis, so
 it isn't exposed. `.z-anchornav` renders in place with no client-side reparenting, so region
@@ -1114,7 +1113,7 @@ scoping works normally — unlike messagebox/popup/drawer's structural exception
 | Knob | Default | Scope |
 |------|---------|-------|
 | `--zk-anchornav-fg` | `var(--zk-color-on-surface-variant)` | resting item link text |
-| `--zk-anchornav-accent` | `var(--zk-color-primary)` | active item's left-edge border indicator + link text |
+| `--zk-anchornav-accent` | `var(--zk-color-primary)` | active `a` link text, active `button` link outline |
 
 ### Stepbar — shipped
 

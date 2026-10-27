@@ -758,18 +758,15 @@
     --zk-navitem-selected-bg: color-mix(in srgb, var(--zk-color-primary) 12%, transparent);
     --zk-navitem-selected-fg: var(--zk-color-primary);
 
-    /* ── Anchornav (EE, zkmax) — anchor-link navigation list built on a plain
-       listbox (zkmax/nav/css/anchornav.css): .z-anchornav wraps a listbox
-       whose item links (.z-a) jump to page sections. --zk-anchornav-fg is
-       the resting (non-active) item link's text color. The active item is
-       the component's one defining state — --zk-anchornav-accent colors
-       BOTH the left border indicator and the active item's own link text
-       (both read var(--zk-color-primary) today), the same "one knob,
-       several roles" precedent as tab/calendar/nav's accent. The
-       indicator's border-left WIDTH (3px) stays hardcoded, same convention
-       as tab's border-bottom-color knob leaving its indicator width fixed.
-       The underlying listbox chrome (.z-listbox / .z-listitem) is already
-       a separate conformant family (its own --zk-listbox-* knobs);
+    /* ── Anchornav (EE, zkmax) — anchor-link navigation (zkmax/nav/css/anchornav.css):
+       .z-anchornav wraps a / button links that jump to page sections.
+       --zk-anchornav-fg is the resting link's text color. The active link
+       (.z-anchornav-link-active) is the component's one defining state —
+       --zk-anchornav-accent colors an a link's text and the outline
+       of a button link (both read var(--zk-color-primary) today), the same
+       "one knob, several roles" precedent as tab/calendar/nav's accent. The
+       outline's width and offset stay hardcoded, same convention as tab's
+       border-bottom-color knob leaving its indicator width fixed.
        text-decoration:none is structural, not a themeable axis. */
     --zk-anchornav-fg:     var(--zk-color-on-surface-variant);
     --zk-anchornav-accent: var(--zk-color-primary);

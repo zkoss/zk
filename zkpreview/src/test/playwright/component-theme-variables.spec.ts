@@ -56,7 +56,6 @@ test.describe('Component Theme Variables (borrowed preview pages)', () => {
 // Each test: read stock values, inject the region's knobs at :root after the theme bundle, read again.
 const SCOPED_PURPLE = PURPLE;
 const borderBottomColorOf = (loc: Locator) => loc.evaluate((el) => getComputedStyle(el).borderBottomColor);
-const borderLeftColorOf = (loc: Locator) => loc.evaluate((el) => getComputedStyle(el).borderLeftColor);
 const pseudoBgOf = (loc: Locator, pseudo: string) =>
   loc.evaluate((el, p) => getComputedStyle(el, p).backgroundColor, pseudo);
 
@@ -722,22 +721,38 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
   });
 
   test('anchornav — stock values, then :root override reaches it', async ({ page }) => {
-    // anchornav.zul renders no selected row; select the second item (the first stays the resting link)
-    // through the client widget API, because clicking an item does not select it.
-    await page.evaluate(() => zk.Widget.$(document.querySelectorAll('.z-anchornav .z-listitem')[1]).setSelected(true));
-    const c0 = page.locator('.z-anchornav').first().locator('.z-a').first();
-    const c1 = page.locator('.z-anchornav').first().locator('.z-listitem-selected').first();
-    const c2 = page.locator('.z-anchornav').first().locator('.z-listitem-selected').first().locator('.z-a').first();
+    // anchornav.zul renders no active link; click the second link (the first stays the resting link).
+    // The active class is added after the scroll animation, so wait for it.
+    const links = page.locator('.z-anchornav').first().locator('a.z-a');
+    const c0 = links.first();
+    const c1 = links.nth(1);
     await c0.waitFor({ state: 'attached' });
-    await c1.waitFor({ state: 'attached' });
-    await c2.waitFor({ state: 'attached' });
+    await c1.click();
+    await expect(c1).toHaveClass(/z-anchornav-link-active/);
+    await page.waitForTimeout(300); // the link color has a transition
     expect(await colorOf(c0)).toBe('rgba(0, 0, 0, 0.6)'); // stock
-    expect(await borderLeftColorOf(c1)).toBe('rgb(55, 111, 208)'); // stock
-    expect(await colorOf(c2)).toBe('rgb(55, 111, 208)'); // stock
+    expect(await colorOf(c1)).toBe('rgb(55, 111, 208)'); // stock
     await page.addStyleTag({ content: ':root{--zk-anchornav-fg:#6750a4;--zk-anchornav-accent:#6750a4}' });
+    await page.waitForTimeout(300);
     expect(await colorOf(c0)).toBe(SCOPED_PURPLE);
-    expect(await borderLeftColorOf(c1)).toBe(SCOPED_PURPLE);
-    expect(await colorOf(c2)).toBe(SCOPED_PURPLE);
+    expect(await colorOf(c1)).toBe(SCOPED_PURPLE);
+  });
+
+  test('anchornav — button link: the active link gets an accent outline, :root override reaches it', async ({ page }) => {
+    // The second anchornav on anchornav.zul has button links; a filled button cannot show the state by text color.
+    const buttons = page.locator('.z-anchornav').nth(1).locator('button');
+    const c0 = buttons.first();
+    const c1 = buttons.nth(1);
+    await c0.waitFor({ state: 'attached' });
+    await c1.click();
+    await expect(c1).toHaveClass(/z-anchornav-link-active/);
+    await page.mouse.move(0, 0); // the button's hover rule is not what is measured
+    await page.waitForTimeout(300);
+    const outlineOf = (loc: Locator) => loc.evaluate((el) => { const c = getComputedStyle(el); return `${c.outlineStyle} ${c.outlineWidth} ${c.outlineColor}`; });
+    expect(await outlineOf(c0)).toMatch(/^none /); // stock: the resting link has no outline
+    expect(await outlineOf(c1)).toBe('solid 2px rgb(55, 111, 208)'); // stock
+    await page.addStyleTag({ content: ':root{--zk-anchornav-accent:#6750a4}' });
+    expect(await outlineOf(c1)).toBe(`solid 2px ${SCOPED_PURPLE}`);
   });
 
   test('stepbar — stock values, then :root override reaches it', async ({ page }) => {
