@@ -290,6 +290,14 @@
     background-color: color-mix(in srgb, var(--zk-color-primary) 12%, transparent);
 }
 
+/* A disabled tab does not close: the wrapper's pointer-events: auto above (inherited by the 24px
+   <i>) would otherwise keep the hover colour, circle and pointer cursor alive inside the tab's
+   own pointer-events: none. cursor falls back to the tab's not-allowed. Applies to every mold. */
+.z-tab-disabled .z-tab-button {
+    pointer-events: none;
+    cursor: inherit;
+}
+
 /* WCAG 2.5.8 hit area (owner ruling 2026-10-25). Tab.ts binds the close click on this <i>
    (#uuid-cls), not on the 16px wrapper, and a click anywhere else in the tab selects it, so the
    <i> itself is the target. It is taken out of flow and centred on the wrapper: the layout

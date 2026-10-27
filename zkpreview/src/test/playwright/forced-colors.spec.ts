@@ -571,6 +571,39 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(unselected.contrast, `unselected header × ${unselected.glyphColor}`).toBeGreaterThanOrEqual(3);
   });
 
+  // A disabled tab does not close, so its close icon must not look or feel clickable: no hover colour,
+  // no hover circle, no pointer cursor (pointer-events: none on the wrapper, inherited by the icon).
+  test('the close icon of a disabled tab ignores the pointer, an enabled one does not (strip and accordion)', async ({ page }) => {
+    await page.goto('/tabbox.zul', { waitUntil: 'domcontentloaded' });
+    const accordionTab = '.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab';
+    await page.locator(`${accordionTab}.z-tab-disabled .z-tab-button > .z-tab-icon`).first()
+      .waitFor({ state: 'attached', timeout: 10000 });
+
+    const pointerOf = (tab: Locator) => tab.locator('.z-tab-button > .z-tab-icon').first().evaluate(el => {
+      const cs = getComputedStyle(el);
+      return { pointerEvents: cs.pointerEvents, cursor: cs.cursor };
+    });
+
+    // The preview page has no disabled closable strip tab: disable a closable top-mold tab through its class, which is
+    // all the rule keys on.
+    const closableStripTabs = page.locator('.z-tabbox-top > .z-tabs .z-tab:has(> .z-tab-content > .z-tab-button)');
+    const enabledStrip = await pointerOf(closableStripTabs.nth(0));
+    await closableStripTabs.nth(1).evaluate(el => el.classList.add('z-tab-disabled'));
+    const disabledStrip = await pointerOf(closableStripTabs.nth(1));
+
+    const disabledAccordion = await pointerOf(page.locator(`${accordionTab}.z-tab-disabled:has(> .z-tab-content > .z-tab-button)`).first());
+    const enabledAccordion = await pointerOf(page.locator(`${accordionTab}:not(.z-tab-disabled):has(> .z-tab-content > .z-tab-button)`).first());
+
+    for (const [name, disabled] of [['strip', disabledStrip], ['accordion', disabledAccordion]] as const) {
+      expect(disabled.pointerEvents, `disabled ${name} close icon pointer-events`).toBe('none');
+      expect(disabled.cursor, `disabled ${name} close icon cursor`).not.toBe('pointer');
+    }
+    for (const [name, enabled] of [['strip', enabledStrip], ['accordion', enabledAccordion]] as const) {
+      expect(enabled.pointerEvents, `enabled ${name} close icon pointer-events`).toBe('auto');
+      expect(enabled.cursor, `enabled ${name} close icon cursor`).toBe('pointer');
+    }
+  });
+
   // Follow-up 44d: an invalid daterangebox shows the same double border as the other inputs. A wrapper draws it as an
   // overlay on its 1px border, so the box keeps its size (follow-up 50).
   test('invalid daterangebox shows the double border', async ({ page }) => {
