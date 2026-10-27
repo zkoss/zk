@@ -601,10 +601,25 @@ function addPagesAndTests(sel, pages, testsForPage, namedPages = []) {
   }
 }
 
+/** True when a changed .css file differs from its base only in comments or whitespace; false without a base to compare. */
+function isCommentOnlyCssChange(change) {
+  if (!change.base || !change.rel.endsWith('.css')) return false;
+  const file = path.join(REPO_ROOTS[change.repo], change.rel);
+  if (!fs.existsSync(file)) return false;
+  let oldText;
+  try { oldText = git(change.repo, ['show', `${change.base}:${change.rel}`]); } catch { return false; } // new file
+  const normalise = text => text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, '');
+  return normalise(oldText) === normalise(fs.readFileSync(file, 'utf8'));
+}
+
 function resolveChange(change, ctx, sel) {
   const where = change.repo === 'zk' ? change.rel : `zkcml:${change.rel}`;
   const { rel } = change;
 
+  if (isCommentOnlyCssChange(change)) {
+    sel.reasons.push(`${where}: no tests needed (comment/whitespace-only change, rendered CSS is unaffected)`);
+    return;
+  }
   for (const [pattern, why] of FULL_RUN_TRIGGERS) {
     if (pattern.test(rel)) { sel.fullReasons.push(`${where}: ${why}`); return; }
   }

@@ -52,8 +52,15 @@ gains `describe.serial`, a `beforeAll` its tests rely on, or a module-level obje
 
 ## How a path is resolved
 
-1. Full-run triggers: token/base/utility CSS, `_layer-order.css`, any `.wcs`, `lang.xml`/`lang-addon.xml`,
-   CSS build scripts, `*.gradle`, font files, `playwright.config.ts`, `package.json`/lockfiles.
+0. A changed `.css` file whose content differs from its `--base` version only in `/* … */` comments or whitespace
+   is treated as "no tests needed" (reported as "comment/whitespace-only change, rendered CSS is unaffected"). This
+   check runs before the full-run triggers in step 1, and applies to every `.css` file, including token/base/utility
+   CSS and `_layer-order.css`. Without `--base` (bare paths) there is nothing to compare, so the usual path rules
+   still apply. Non-CSS triggers (`.wcs`, `lang.xml`, gradle, fonts) are unchanged. Implementation:
+   `isCommentOnlyCssChange` in `select-tests.mjs`.
+1. Full-run triggers: token/base/utility CSS (except comment/whitespace-only changes, see step 0), `_layer-order.css`
+   (same exception), any `.wcs`, `lang.xml`/`lang-addon.xml`, CSS build scripts, `*.gradle`, font files,
+   `playwright.config.ts`, `package.json`/lockfiles.
 2. No-test paths: `doc/**`, `*.md`, `.claude/**`, `tasks/**`, `logs/**`, `node_modules`, `zkpreview/scripts/**`,
    `*-forced-colors.png` (review artifacts).
 3. Component CSS (`js/<module>/<pkg>/css/*.css` in zul, zkmax, zkex; `zkmax/css/tablet/*.css`): the `.z-*` classes
