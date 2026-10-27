@@ -77,6 +77,15 @@ Build output lands in `zul/codegen/resources/web/` (CE) and `../zkcml/zkmax/code
 / `../zkcml/zkex/codegen/resources/web/` (EE/PE). `_`-prefixed files are **partials** — they are
 bundled by `build-css.js`, never shipped individually.
 
+### The za11y sheet (WCAG-only overrides)
+
+Marble rules that exist only for accessibility (WCAG) live in the `za11y` module, not in the component CSS:
+
+- Partials: `../zkcml/za11y/src/main/resources/web/js/za11y/{zul,zkmax,zkex}/css/_*-a11y.css`. Running `node scripts/build-css.js --module za11y` (from the zk repo root) merges them into `za11y/css/marble.css.dsp`. The `.less` files beside them are the IceBlue version and are not part of Marble.
+- `A11yThemeURIHandler` inserts that sheet after the framework sheets (`afterFrameworkSheets`). It shares the layer `zk-components`, so at equal specificity the za11y rule wins. It is loaded only when za11y is active.
+- Only WCAG rules go in these partials. Every other fix, including the accordion close button and the biglistbox frozen-column tick, goes in the component CSS.
+- Without za11y the WCAG-only rules are absent: anchornav links stay 17px, the chosenbox remove button is 20×20, and the strip close icon is 18×20. Check the sheet with `node scripts/check-css-dsp.js --module za11y`.
+
 ## Commands
 
 ```bash

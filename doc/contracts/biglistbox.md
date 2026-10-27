@@ -55,3 +55,4 @@ preview: ${PREVIEW_URL}/biglistbox.zul
   element. Measuring scroll requires the wscroll DOM, not `overflow`/`scrollHeight`.
 - For modest datasets ZK caps the scroll `scale` at 1, so the fixed-size thumb sits in the
   upper region of the track — inherent WScroll behavior, not a theme defect (see skill).
+- The frozen-column tick (`.z-biglistbox-verticalbar-tick`, 10×14) is component CSS in this file, not in za11y. za11y's `big-a11y.ts` reads its `offsetWidth` to set the horizontal bar start.

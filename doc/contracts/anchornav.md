@@ -24,5 +24,7 @@ preview: ${PREVIEW_URL}/anchornav.zul
 | c3 | `.z-anchornav-item-active` | color | rgb(55, 111, 208) |
 | c4 | `.z-anchornav-item-active` | border-left or indicator | 2–4px solid rgb(55, 111, 208) |
 
+WCAG 2.5.8 target: the `:where(a[data-anchornav-target])` rule (inline-flex, min 24×24) lives in za11y `zkmax/css/_nav-a11y.css` (zkcml repo) and is loaded only when za11y is active; without za11y the links are not enlarged.
+
 ## States to evaluate
 - [ ] default, active/highlighted

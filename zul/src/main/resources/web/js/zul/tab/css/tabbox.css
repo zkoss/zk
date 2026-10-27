@@ -290,49 +290,17 @@
     background-color: color-mix(in srgb, var(--zk-color-primary) 12%, transparent);
 }
 
-/* A disabled tab does not close: the wrapper's pointer-events: auto above (inherited by the 24px
-   <i>) would otherwise keep the hover colour, circle and pointer cursor alive inside the tab's
-   own pointer-events: none. cursor falls back to the tab's not-allowed. Applies to every mold. */
+/* A disabled tab does not close: the wrapper's pointer-events: auto above (inherited by the <i>)
+   would otherwise keep the hover colour, circle and pointer cursor alive inside the tab's own
+   pointer-events: none. cursor falls back to the tab's not-allowed. Applies to every mold. */
 .z-tab-disabled .z-tab-button {
     pointer-events: none;
     cursor: inherit;
 }
 
-/* WCAG 2.5.8 hit area (owner ruling 2026-10-25). Tab.ts binds the close click on this <i>
-   (#uuid-cls), not on the 16px wrapper, and a click anywhere else in the tab selects it, so the
-   <i> itself is the target. It is taken out of flow and centred on the wrapper: the layout
-   (16/4/8, c31-c34a) and the 18px glyph stay as they are. 24px is the most the strip molds can
-   give without covering the 4px label gap and the 8px trailing inset: it ends 4px inside the tab
-   edge. The wrapper keeps the 16px hover circle. */
-.z-tab-button > .z-tab-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    transform: translate(-50%, -50%);
-}
-
-/* The glyph is the ::before mask, an inline-block 1em box lowered by vertical-align: -0.125em
-   (_icons.css), so its position follows the <i>'s baseline. At 16px wrapper height the old
-   in-flow <i> was a 20px line box centred on the wrapper (top -2px). A flex <i> would drop that
-   baseline shift and sit the glyph about 0.6px lower, which rounds to 1px. A block <i> whose
-   line-height equals its 24px height keeps the baseline where it was for any font metrics: the
-   box is 4px higher (top -4px) and the half-leading is (24 - 20) / 2 = 2px larger. text-align
-   keeps the glyph horizontally centred, as the flex wrapper did. The accordion rules below keep
-   the flex layout, so this applies to the strip molds only. */
-.z-tabbox-top > .z-tabs .z-tab-button > .z-tab-icon,
-.z-tabbox-bottom > .z-tabs .z-tab-button > .z-tab-icon,
-.z-tabbox-left > .z-tabs .z-tab-button > .z-tab-icon,
-.z-tabbox-vertical > .z-tabs .z-tab-button > .z-tab-icon,
-.z-tabbox-right > .z-tabs .z-tab-button > .z-tab-icon {
-    display: block;
-    line-height: 24px;
-    text-align: center;
-}
+/* The 24px WCAG 2.5.8 hit target on the strip molds' close <i> lives in za11y's Marble sheet
+   (za11y/.../zul/css/_tab-a11y.css), not here: without za11y the <i> stays the in-flow 18px
+   glyph inside the 16px wrapper. The accordion's close button below does not depend on it. */
 
 /* ─── Tab icon / image ───────────────────────────────────────────────────── */
 .z-tab-icon {
@@ -746,8 +714,12 @@
 }
 
 .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content > .z-tab-button > .z-tab-icon {
+    position: absolute;
     top: 0;
     left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
     transform: none;
