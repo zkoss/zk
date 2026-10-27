@@ -48,7 +48,8 @@ import org.zkoss.zk.ui.util.Clients;
  * in {@code zk.xml}, which renders {@code data-density} on {@code <html>} with the page.
  * The property applies only when ZK renders the whole HTML document (a top-level ZUL
  * page); a {@code .zhtml} page, a {@code <?page complete="true"?>} page or an included
- * page owns its {@code <html>} tag, so put {@code data-density} there instead. Calling {@link #apply(Density)} on page load runs after the first paint and can cause
+ * page owns its {@code <html>} tag, so put {@code data-density} there instead. Calling
+ * {@link #apply(Density)} on page load runs after the first paint and can cause
  * a brief comfortable→compact flash (FOUC).
  *
  * @since 11.0.0
