@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-6180.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Sat Oct 24 19:09:19 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. click "push" three times: each time both grids show the rows of that push ("push n, row i")
+		2. click "others", then "push": no error, and both grids show the rows of the latest push
+	</label>
+	<script><![CDATA[
+		// record whether the grid already points at the rows being drawn, as a redraw reading grid.rows needs
+		zk.afterLoad('zul.grid', function () {
+			var _xRows = {};
+			zk.override(zul.grid.Rows.prototype, _xRows, {
+				redraw: function () {
+					if (this.parent)
+						this.parent._rowsAtRedraw = this.parent.rows === this;
+					_xRows.redraw.apply(this, arguments);
+				}
+			});
+		});
+	]]></script>
+	<div apply="org.zkoss.zktest.test2.B111_ZK_6180Composer">
+		<button id="push" label="push"/>
+		<button id="others" label="others"/>
+		<grid id="grid" width="300px">
+			<columns id="cols">
+				<column label="c1" width="200px"/>
+				<column label="c2" width="200px"/>
+			</columns>
+			<frozen id="frozen" columns="1"/>
+			<rows id="rows">
+				<row><label value="initial, row 1"/><label value="x"/></row>
+				<row><label value="initial, row 2"/><label value="x"/></row>
+			</rows>
+			<foot id="foot">
+				<footer label="f1"/>
+				<footer label="f2"/>
+			</foot>
+		</grid>
+		<grid id="pgrid" mold="paging" pageSize="2">
+			<columns>
+				<column label="c"/>
+			</columns>
+			<rows id="prows">
+				<row><label value="initial, row 1"/></row>
+				<row><label value="initial, row 2"/></row>
+				<row><label value="initial, row 3"/></row>
+			</rows>
+		</grid>
+	</div>
+</zk>
