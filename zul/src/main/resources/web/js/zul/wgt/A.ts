@@ -102,8 +102,11 @@ export class A extends zul.LabelImageWidget<HTMLAnchorElement> implements zul.La
 
 		if (o !== dir || opts?.force) {
 			var n = this.$n();
-			// eslint-disable-next-line @microsoft/sdl/no-inner-html
-			if (n) n.innerHTML = DOMPurify.sanitize(this.domContent_());
+			if (n) {
+				// eslint-disable-next-line @microsoft/sdl/no-inner-html
+				n.innerHTML = DOMPurify.sanitize(this.domContent_());
+				jq(n).toggleClass(this.$s('reverse'), dir == 'reverse');
+			}
 		}
 
 		return this;
