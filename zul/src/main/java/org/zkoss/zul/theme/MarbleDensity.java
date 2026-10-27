@@ -45,8 +45,10 @@ import org.zkoss.zk.ui.util.Clients;
  * <p><b>When to use this vs. the library property.</b> This API is for <em>runtime</em>
  * switching (a user flipping a density preference). For a fixed whole-app
  * <em>default</em>, prefer the {@code org.zkoss.theme.marble.density} library property
- * in {@code zk.xml}, which renders {@code data-density} on {@code <html>} with the page —
- * calling {@link #apply(Density)} on page load runs after the first paint and can cause
+ * in {@code zk.xml}, which renders {@code data-density} on {@code <html>} with the page.
+ * The property applies only when ZK renders the whole HTML document (a top-level ZUL
+ * page); a {@code .zhtml} page, a {@code <?page complete="true"?>} page or an included
+ * page owns its {@code <html>} tag, so put {@code data-density} there instead. Calling {@link #apply(Density)} on page load runs after the first paint and can cause
  * a brief comfortable→compact flash (FOUC).
  *
  * @since 11.0.0
