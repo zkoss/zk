@@ -1,4 +1,4 @@
-// zkpreview: the Marble preview host (ZK-6112).
+// zkthemelab: the Marble preview host (ZK-6112).
 // Its composite build (settings.gradle) mirrors zktest's dependencySubstitution
 // against live zk/zkcml sources; its container setup here mirrors zksandbox's gretty skeleton.
 
@@ -46,7 +46,7 @@ dependencies {
 }
 
 war {
-	archiveFileName = 'zkpreview.war'
+	archiveFileName = 'zkthemelab.war'
 }
 
 description = 'ZK Marble preview host'

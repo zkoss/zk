@@ -158,7 +158,7 @@ footer code { font-size: 11.5px; }
       <path class="ar" d="M605 200 V236" marker-end="url(#arr)"/>
       <path class="ar" d="M865 200 V236" marker-end="url(#arr)"/>
       <rect class="box" x="270" y="240" width="220" height="64" rx="8"/>
-      <text class="t" x="380" y="266" text-anchor="middle">預覽站 zkpreview</text>
+      <text class="t" x="380" y="266" text-anchor="middle">預覽站 zkthemelab</text>
       <text class="s" x="380" y="288" text-anchor="middle">115 個預覽頁＋測試專用頁</text>
       <rect class="box" x="510" y="240" width="190" height="64" rx="8"/>
       <text class="t" x="605" y="266" text-anchor="middle">zktest 測試站</text>
@@ -242,7 +242,7 @@ footer code { font-size: 11.5px; }
 <section>
   <div class="eyebrow">三 · 選擇器</div>
   <h2>只改一個元件時，只跑相關的測試</h2>
-  <p><code>zkpreview/scripts/select-tests.mjs</code> 讀 git 的改動，回答「全測」「部分測」或「不測」，並輸出一個可直接執行的指令。</p>
+  <p><code>zkthemelab/scripts/select-tests.mjs</code> 讀 git 的改動，回答「全測」「部分測」或「不測」，並輸出一個可直接執行的指令。</p>
   <div class="figure">
     <svg viewBox="0 0 1000 220" role="img" aria-label="選擇器對應流程圖">
       <defs>
@@ -271,7 +271,7 @@ footer code { font-size: 11.5px; }
       <text class="s" x="750" y="185" text-anchor="middle">只改文件 · 彙整頁只在自己被改時才測</text>
     </svg>
   </div>
-  <p class="caption">class 索引（<code>zkpreview/doc/class-index.json</code>）由 <code>build-class-index.mjs</code> 產生，目前涵蓋 143 頁（115 頂層、16 個 <code>pv/</code>、12 個 <code>utility/</code>）；新增頁面後要重跑。實測（2026-10-20，共 1,692 個測試）：整檔解析 <code>combobox.css</code> 會選出 1,248 個，超過門檻 1,128，所以回答全測；改 token 檔也直接回答全測。只改單一規則時的選出數見 <code>tasks/marble-test-infra-conclusion.md</code>（1,345 個測試時：<code>button.css</code> 選出 646，combobox 128 個）。</p>
+  <p class="caption">class 索引（<code>zkthemelab/doc/class-index.json</code>）由 <code>build-class-index.mjs</code> 產生，目前涵蓋 143 頁（115 頂層、16 個 <code>pv/</code>、12 個 <code>utility/</code>）；新增頁面後要重跑。實測（2026-10-20，共 1,692 個測試）：整檔解析 <code>combobox.css</code> 會選出 1,248 個，超過門檻 1,128，所以回答全測；改 token 檔也直接回答全測。只改單一規則時的選出數見 <code>tasks/marble-test-infra-conclusion.md</code>（1,345 個測試時：<code>button.css</code> 選出 646，combobox 128 個）。</p>
 </section>
 
 <section>
@@ -327,7 +327,7 @@ footer code { font-size: 11.5px; }
       <path class="ar" d="M610 342 H812 V246 H826" marker-end="url(#arr2)"/>
     </svg>
   </div>
-  <p class="caption">新元件或整個元件重做時，步驟 1 之前會先走 Agent 驗證流程：先寫 contract，Gate 1（<code>zk-theme-evaluator</code>）量測實作是否符合 contract，Gate 2（<code>md3-design-verifier</code>）判斷設計是否符合 Material Design。預覽站在 <code>web.xml</code> 設 5 分鐘 session 逾時，避免連跑時 ZK 每個 session 一條的 Timer 執行緒堆積（ZK-6213，見 <code>tasks/zkpreview-thread-leak.md</code>）。</p>
+  <p class="caption">新元件或整個元件重做時，步驟 1 之前會先走 Agent 驗證流程：先寫 contract，Gate 1（<code>zk-theme-evaluator</code>）量測實作是否符合 contract，Gate 2（<code>md3-design-verifier</code>）判斷設計是否符合 Material Design。預覽站在 <code>web.xml</code> 設 5 分鐘 session 逾時，避免連跑時 ZK 每個 session 一條的 Timer 執行緒堆積（ZK-6213，見 <code>tasks/zkthemelab-thread-leak.md</code>）。</p>
 </section>
 
 <section>
@@ -377,7 +377,7 @@ footer code { font-size: 11.5px; }
   <div class="obs">
     <div class="ob">
       <h3>GitHub Actions 不跑外觀測試</h3>
-      <p><code>zk-build</code> 只跑 <code>./gradlew clean build</code>，並把 <code>includeBuild</code>（含 zkpreview）註解掉；<code>sync-marble-theme</code> 只把 CSS 同步到 zkThemeTemplate。沒有任何 workflow 或 git hook 執行 Playwright。</p>
+      <p><code>zk-build</code> 只跑 <code>./gradlew clean build</code>，並把 <code>includeBuild</code>（含 zkthemelab）註解掉；<code>sync-marble-theme</code> 只把 CSS 同步到 zkThemeTemplate。沒有任何 workflow 或 git hook 執行 Playwright。</p>
     </div>
     <div class="ob">
       <h3>Playwright 仍靠人在本機跑</h3>
@@ -395,7 +395,7 @@ footer code { font-size: 11.5px; }
 </section>
 
 <footer>
-  <div>來源（量測於 2026-10-20）：<code>zkpreview/src/test/playwright/playwright.config.ts</code>（29 個 project）、<code>npx playwright test --list</code> 與 <code>select-tests.mjs --json</code>（1,692 個測試）、<code>zkpreview/doc/screenshots/</code>（706 張非 forced-colors PNG、99 張 forced-colors 審查圖）、<code>zkpreview/doc/class-index.json</code>（143 頁）、<code>doc/contracts/</code>（94 份 .md、19 份 .html 範本）、<code>zktest/src/test/java</code>（3,939 個 <code>@Test</code>）、<code>.github/workflows/</code>、<code>zkpreview/src/main/webapp/WEB-INF/web.xml</code>。文字依據：<code>tasks/marble-test-gaps.md</code>、<code>tasks/marble-test-infra-conclusion.md</code>、<code>tasks/marble-popup-gallery-conclusion.md</code>、<code>tasks/zkpreview-thread-leak.md</code>、<code>tasks/jenkins-zats-fork-run.md</code>。</div>
+  <div>來源（量測於 2026-10-20）：<code>zkthemelab/src/test/playwright/playwright.config.ts</code>（29 個 project）、<code>npx playwright test --list</code> 與 <code>select-tests.mjs --json</code>（1,692 個測試）、<code>zkthemelab/doc/screenshots/</code>（706 張非 forced-colors PNG、99 張 forced-colors 審查圖）、<code>zkthemelab/doc/class-index.json</code>（143 頁）、<code>doc/contracts/</code>（94 份 .md、19 份 .html 範本）、<code>zktest/src/test/java</code>（3,939 個 <code>@Test</code>）、<code>.github/workflows/</code>、<code>zkthemelab/src/main/webapp/WEB-INF/web.xml</code>。文字依據：<code>tasks/marble-test-gaps.md</code>、<code>tasks/marble-test-infra-conclusion.md</code>、<code>tasks/marble-popup-gallery-conclusion.md</code>、<code>tasks/zkthemelab-thread-leak.md</code>、<code>tasks/jenkins-zats-fork-run.md</code>。</div>
   <div>怎麼跑、截圖規則、固定日期做法：見 <code>doc/playwright-visual-test-guide.md</code>。</div>
   <div>未在本次重驗：Jenkins 一次約 2.5 小時；部分測的秒數與 380 秒全測基準（來自 marble-test-infra-conclusion.md 的 2026-10-16～18 量測，當時共 1,345 個測試）。</div>
 </footer>

@@ -388,7 +388,7 @@ Theme stance:
 - The theme does **not** auto-centre a bare `<label>` — alignment is a container concern, never a `.z-label` property (a label must still baseline-align in running text and wrap as a caption). See skill `reference/inline-label-alignment.md`.
 - The flex centre is **required only for selection controls** (radio / checkbox): a label beside a `textbox`/`combobox` already centres in a plain block row, so leave those alone. For a radio/checkbox row, wrap it: `<div sclass="z-d-flex z-items-center z-gap-3">` (verified 0px; `z-gap-*` sets the label↔field gap since flex collapses inter-element whitespace). `<hlayout valign="middle">` / `<hbox valign="middle">` are equivalent ZK-attribute alternatives. Applying the wrapper to an input row is harmless but unnecessary; for a column of mixed rows you may apply it uniformly for visual consistency.
 - A bare `<div>` row is a **baseline context**: it coincidentally centres single-line inputs (textbox via `vertical-align:middle`, combobox via baseline-at-centre) but drops radio/checkbox labels ~4–5px (their baseline is the caption text, below the box centre). The default `<hlayout>` (`valign="top"`) puts every label ~10px high. Neither is a reliable form-row container — the divergence is correct CSS for the mode, not a theme defect.
-- Live demo of both states: `zkpreview/src/main/webapp/web/label.zul` (a "Default block row" group showing the radio/checkbox drop, and a "Correct" flex-centred group).
+- Live demo of both states: `zkthemelab/src/main/webapp/web/label.zul` (a "Default block row" group showing the radio/checkbox drop, and a "Correct" flex-centred group).
 
 ---
 

@@ -6,7 +6,7 @@ Regenerate with `npm run build:css`.
 This is the canonical lookup for valid `z-icon-*` class names in this theme.
 - **Theme generator** consults this file before writing any `z-icon-*` selector.
 - **Theme evaluator** validates that every `z-icon-*` reference resolves here.
-- **Preview ZULs** (`zkpreview/src/main/webapp/web/**/*.zul`) MUST use a name that resolves to a served class — a Lucide name OR a ZK FA/custom alias listed below; invented/misspelled names are rejected. Lucide names are preferred for new content. Enforced by `scripts/check-icon-coverage.sh`.
+- **Preview ZULs** (`zkthemelab/src/main/webapp/web/**/*.zul`) MUST use a name that resolves to a served class — a Lucide name OR a ZK FA/custom alias listed below; invented/misspelled names are rejected. Lucide names are preferred for new content. Enforced by `scripts/check-icon-coverage.sh`.
 
 See `doc/spec/icon-policy.md` for the full policy.
 

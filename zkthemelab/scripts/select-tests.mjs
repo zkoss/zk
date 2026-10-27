@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Decides which zkpreview Playwright tests a set of changed files needs: a full run, a partial
+// Decides which zkthemelab Playwright tests a set of changed files needs: a full run, a partial
 // run (with ready-to-run commands) or nothing. Rules: doc/marble-selective-test-rules.md §3-§4.
 // Usage and accepted path forms: scripts/README-select-tests.md.
 import { execFileSync } from 'node:child_process';
@@ -8,13 +8,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 
-const ZKPREVIEW_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ZK_ROOT = path.resolve(ZKPREVIEW_DIR, '..');
+const ZKTHEMELAB_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ZK_ROOT = path.resolve(ZKTHEMELAB_DIR, '..');
 const ZKCML_ROOT = path.resolve(ZK_ROOT, '../zkcml');
 const REPO_ROOTS = { zk: ZK_ROOT, zkcml: ZKCML_ROOT };
-const WEBAPP_DIR = path.join(ZKPREVIEW_DIR, 'src/main/webapp');
-const SPEC_DIR = path.join(ZKPREVIEW_DIR, 'src/test/playwright');
-const CLASS_INDEX_FILE = path.join(ZKPREVIEW_DIR, 'doc/class-index.json');
+const WEBAPP_DIR = path.join(ZKTHEMELAB_DIR, 'src/main/webapp');
+const SPEC_DIR = path.join(ZKTHEMELAB_DIR, 'src/test/playwright');
+const CLASS_INDEX_FILE = path.join(ZKTHEMELAB_DIR, 'doc/class-index.json');
 const AGGREGATE_PAGES_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'aggregate-pages.json');
 const PLAYWRIGHT_CONFIG = 'src/test/playwright/playwright.config.ts';
 const RUN_PREFIX = `npx playwright test -c ${PLAYWRIGHT_CONFIG}`;
@@ -37,11 +37,11 @@ const COMPONENT_CSS = /^(?:zul|zkmax|zkex)\/src\/main\/resources\/web\/js\/(?:zu
 const TABLET_CSS = /^zkmax\/src\/main\/resources\/web\/zkmax\/css\/tablet\/([^/]+)\.css$/;
 const WIDGET_SOURCE = /^(?:zul|zkmax|zkex)\/src\/main\/resources\/web\/js\/(?:zul|zkmax|zkex)\/[^/]+\/([A-Za-z0-9_]+)\.(?:ts|js)$/;
 const SHARED_CSS_FILES = new Set(['misc']); // rules §4: shared by many components, treated like base
-const PREVIEW_ZUL = /^zkpreview\/src\/main\/webapp\/(.+)\.zul$/;
-const SPEC_FILE = /^zkpreview\/src\/test\/playwright\/([^/]+\.spec\.ts)$/;
-const BASELINE_PNG = /^zkpreview\/doc\/screenshots\/(.+)\.png$/;
+const PREVIEW_ZUL = /^zkthemelab\/src\/main\/webapp\/(.+)\.zul$/;
+const SPEC_FILE = /^zkthemelab\/src\/test\/playwright\/([^/]+\.spec\.ts)$/;
+const BASELINE_PNG = /^zkthemelab\/doc\/screenshots\/(.+)\.png$/;
 const REVIEW_ARTIFACT_PNG = /-forced-colors\.png$/;
-const SPEC_DATA_FILE = /^zkpreview\/doc\/([^/]+\.json)$/;
+const SPEC_DATA_FILE = /^zkthemelab\/doc\/([^/]+\.json)$/;
 
 const FULL_RUN_TRIGGERS = [
   [/^zul\/src\/main\/resources\/web\/zul\/css\/(?:tokens|base|utility)\//, 'token/base/utility CSS affects every page'],
@@ -51,7 +51,7 @@ const FULL_RUN_TRIGGERS = [
   [/^(?:gulpfile\.js|webpack\.config\.js|scripts\/(?:build-css|check-css-dsp|utility-manifest)\.js)$/, 'CSS build script: output may change as a whole'],
   [/(^|\/)(?:build|settings)\.gradle(?:\.kts)?$|(^|\/)gradle\.properties$/, 'gradle build: CSS output may change as a whole'],
   [/\.(?:woff2?|ttf|otf|eot)$/, 'font file affects text measurement on every page'],
-  [/^zkpreview\/src\/test\/playwright\/playwright\.config\.ts$/, 'Playwright config changes the baseline rendering environment'],
+  [/^zkthemelab\/src\/test\/playwright\/playwright\.config\.ts$/, 'Playwright config changes the baseline rendering environment'],
   [/(^|\/)package(?:-lock)?\.json$/, 'package.json / lockfile may change the Playwright or Chromium version'],
 ];
 
@@ -61,8 +61,8 @@ const NO_TEST_PATHS = [
   [/^\.claude\//, 'Claude configuration'],
   [/^(?:tasks|logs)\//, 'working notes / logs'],
   [/(^|\/)node_modules(\/|$)/, 'installed dependencies'],
-  [/^zkpreview\/scripts\//, 'zkpreview tooling scripts (do not affect rendered output)'],
-  [/^zkpreview\/doc\/class-index\.json$/, 'class index (selector data)'],
+  [/^zkthemelab\/scripts\//, 'zkthemelab tooling scripts (do not affect rendered output)'],
+  [/^zkthemelab\/doc\/class-index\.json$/, 'class index (selector data)'],
   [REVIEW_ARTIFACT_PNG, 'forced-colors review artifact (written by a spec, not compared)'],
 ];
 
@@ -340,7 +340,7 @@ function classResolver({ pageKeys, pagesByClass }) {
 
 function listAllTests() {
   const json = execFileSync('npx', ['playwright', 'test', '-c', PLAYWRIGHT_CONFIG, '--list', '--reporter=json'],
-    { cwd: ZKPREVIEW_DIR, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
+    { cwd: ZKTHEMELAB_DIR, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
   const tests = [];
   // `ancestors` are the enclosing describes, outermost first; their `firstChildLine` is filled in during the walk.
   const visit = (suite, ancestors) => {
@@ -844,7 +844,7 @@ function printSummary(result) {
     result.uncovered.forEach(u => console.log(`  - ${u}`));
   }
   if (result.mode !== 'none') {
-    console.log('run from zkpreview/ (set PREVIEW_URL for a port other than 8085):');
+    console.log('run from zkthemelab/ (set PREVIEW_URL for a port other than 8085):');
     result.commands.forEach(c => console.log(`  ${c}`));
   }
 }

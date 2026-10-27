@@ -10,7 +10,7 @@ import { test, expect } from '@playwright/test';
 // whose live-reload script keeps the network busy so `networkidle` never settles.)
 //
 // Requires the preview app running on ${PREVIEW_URL}
-//   cd zkpreview && ./start.sh
+//   cd zkthemelab && ./start.sh
 
 const PAGES = [
   '/a.zul',

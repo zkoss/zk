@@ -219,4 +219,4 @@ Measure rest geometry with transitions disabled, programmatically focus the inne
 reflow, re-measure. Any non-zero delta is the permanent layout-shift bug. (When measuring computed
 `box-shadow`/`border-color`, disable the element's `transition` first — otherwise you read
 mid-animation values, not the focus target.) The Playwright guard for both lives in
-`zkpreview/src/test/playwright/screenshot.spec.ts › input focus (no layout shift)`.
+`zkthemelab/src/test/playwright/screenshot.spec.ts › input focus (no layout shift)`.

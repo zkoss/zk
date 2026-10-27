@@ -115,7 +115,7 @@ Before navigating to the preview, verify every `z-icon-*` reference for this
 component is renderable. Two scopes per `doc/spec/icon-policy.md`:
 
 **Scope A — preview content (Rule 2)**: Extract every `z-icon-{name}` literal
-from the component's preview ZULs (e.g. `zkpreview/src/main/webapp/web/<component>.zul`
+from the component's preview ZULs (e.g. `zkthemelab/src/main/webapp/web/<component>.zul`
 and any included partials). Each `{name}` MUST satisfy:
 
 ```bash
@@ -142,7 +142,7 @@ Navigate to the preview URL (use `mcp__claude-in-chrome__navigate`; reuse tab wh
 
 **When measuring transition-carrying properties** (border-color, box-shadow on focus/hover), disable CSS transitions on the element first — `getComputedStyle` otherwise returns the transition's start frame (false "no focus ring"); see the Transition-freeze trap below.
 
-Screenshots use a **flat** layout — write each capture directly to `doc/screenshots/<component>-<scenario>.png`, one file per (component, scenario), with **no per-component subdirectory**. This is the committed baseline convention (see `zkpreview/src/test/playwright/playwright.config.ts` → `snapshotPathTemplate: '{snapshotDir}/{arg}{ext}'`). `doc/screenshots/` already exists — do NOT create a `doc/screenshots/<component>/` folder.
+Screenshots use a **flat** layout — write each capture directly to `doc/screenshots/<component>-<scenario>.png`, one file per (component, scenario), with **no per-component subdirectory**. This is the committed baseline convention (see `zkthemelab/src/test/playwright/playwright.config.ts` → `snapshotPathTemplate: '{snapshotDir}/{arg}{ext}'`). `doc/screenshots/` already exists — do NOT create a `doc/screenshots/<component>/` folder.
 
 ---
 
@@ -206,7 +206,7 @@ For T3 layout components with no state matrix (`goldenlayout`, `borderlayout`, `
 
 #### Static states matrix
 
-Preview pages lay out states as matrices from `zkpreview/src/main/webapp/web/pv/matrix.zul` (pure `z-*` utilities — the old `pv-*` classes no longer exist). Query the matrices on the page via `mcp__claude-in-chrome__javascript_tool`:
+Preview pages lay out states as matrices from `zkthemelab/src/main/webapp/web/pv/matrix.zul` (pure `z-*` utilities — the old `pv-*` classes no longer exist). Query the matrices on the page via `mcp__claude-in-chrome__javascript_tool`:
 ```js
 [...document.querySelectorAll('.z-d-grid.z-grid-cols-auto')]
   .map(m => m.querySelector('.z-grid-col-full')?.textContent.trim())
@@ -439,7 +439,7 @@ PASS iff `overridden` equals `VALUE` (normalized) AND `restored === before`.
 
 **x-ctv-suite** (when `ctv: shipped`) — the CTV-9 regression net exists and is green:
 ```bash
-npx playwright test --config zkpreview/src/test/playwright/playwright.config.ts --project=component-theme-variables -g "<component>"
+npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project=component-theme-variables -g "<component>"
 ```
 PASS iff exit 0 AND ≥ 1 test ran. **"No tests found" is a FAIL** — it means the component's test in `component-theme-variables.spec.ts` (which runs on the component's own preview page) was never added.
 
@@ -447,10 +447,10 @@ PASS iff exit 0 AND ≥ 1 test ran. **"No tests found" is a FAIL** — it means 
 
 **x-fc-capture** — forced-colors snapshot for this page:
 ```bash
-npx playwright test --config zkpreview/src/test/playwright/playwright.config.ts --project=forced-colors-gallery -g "^<component>$"
+npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project=forced-colors-gallery -g "^<component>$"
 ```
-PASS iff `doc/screenshots/<component>-forced-colors.png` exists with size > 0. Append that path to `visual_artefacts` so §3d reviews it — and when `fc-risk` names risks, §3d MUST check each named risk in that snapshot (mask glyphs still visible? focus/selection still distinguishable?). Additionally, if the latest `tasks/harness/gen-reports/<component>.md` touched `tokens/_forced-colors.css`, run `cd zkpreview && npm run test:forced-colors` and FAIL this row if the suite is red
-(the script and Playwright live in `zkpreview/package.json`, not the repo root) (central-guard regression).
+PASS iff `doc/screenshots/<component>-forced-colors.png` exists with size > 0. Append that path to `visual_artefacts` so §3d reviews it — and when `fc-risk` names risks, §3d MUST check each named risk in that snapshot (mask glyphs still visible? focus/selection still distinguishable?). Additionally, if the latest `tasks/harness/gen-reports/<component>.md` touched `tokens/_forced-colors.css`, run `cd zkthemelab && npm run test:forced-colors` and FAIL this row if the suite is red
+(the script and Playwright live in `zkthemelab/package.json`, not the repo root) (central-guard regression).
 
 **x-brand-decl** — declaration-level token discipline (computed-value equality is NOT enough):
 1. `grep -nE "#[0-9a-fA-F]{3,8}|rgba?\(|hsla?\(|oklch\(" <shared-css-file>` — discard comment lines and matches that are `var(--zk-…)`-rooted (including `oklch(from var(--zk-…))` derivations). Every remaining color literal must be whitelisted in the contract's `brand-allowed-literals`; any other hit → FAIL with the line numbers.

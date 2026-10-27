@@ -2,7 +2,7 @@
 # check-icon-coverage.sh — enforces the icon-naming policy in `doc/spec/icon-policy.md`.
 #
 # Rule 2 (preview/example content): every `z-icon-{name}` referenced in
-#   zkpreview/src/main/webapp/web/**/*.zul MUST resolve to a real served icon class —
+#   zkthemelab/src/main/webapp/web/**/*.zul MUST resolve to a real served icon class —
 #   i.e. one that build-css.js actually emits. That is the union of:
 #     - a Lucide name (`node_modules/lucide-static/icons/{name}.svg` exists),
 #     - a `FA_TO_LUCIDE` alias key (the FA-style names ZK widget JS emits, e.g.
@@ -36,7 +36,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 LUCIDE_DIR="$PROJECT_ROOT/node_modules/lucide-static/icons"
-ZUL_DIR="$PROJECT_ROOT/zkpreview/src/main/webapp/web"
+ZUL_DIR="$PROJECT_ROOT/zkthemelab/src/main/webapp/web"
 
 if [ ! -d "$LUCIDE_DIR" ]; then
     echo "ERROR: $LUCIDE_DIR not found. Run 'npm install' first." >&2

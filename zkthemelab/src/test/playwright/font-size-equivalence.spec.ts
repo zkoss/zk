@@ -21,7 +21,7 @@ import path from 'path';
 //   UPDATE_FONT_BASELINE=1 npx playwright test --project=font-size
 // Then, after the rename, run it with no env var. Any diff names the page and the buckets.
 
-// Beside the focus-ring baseline, in zkpreview/doc/ — three levels up from src/test/playwright.
+// Beside the focus-ring baseline, in zkthemelab/doc/ — three levels up from src/test/playwright.
 const BASELINE_FILE = path.resolve(__dirname, '../../../doc/font-size-baseline.json');
 const WEB_DIR = path.resolve(__dirname, '../../main/webapp/web');
 const UPDATING = process.env.UPDATE_FONT_BASELINE === '1';

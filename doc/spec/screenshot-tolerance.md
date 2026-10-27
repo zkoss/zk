@@ -19,7 +19,7 @@ shot red from one run to the next. Without a floor, the gate fails on noise that
   refactor or version bump change a single pixel?", so it ignores nothing. No setting in
   `playwright.config.ts` affects it. Its re-shoot rule ("re-shoot up to 3×") belongs to this tool,
   not to the Playwright suite.
-- **Everyday regression gate.** The Playwright suite in `zkpreview/src/test/playwright/`. It carries
+- **Everyday regression gate.** The Playwright suite in `zkthemelab/src/test/playwright/`. It carries
   the tolerances described below.
 
 Differences found by the equivalence run are not gate failures. Reading them as gate failures is a
@@ -66,7 +66,7 @@ Playwright offers four options. The table lists the unit of each and where the r
 Verification of this rule, recorded when it was made (not re-run since):
 
 1. `npx playwright test --config src/test/playwright/playwright.config.ts --project=chromium --list`,
-   run from the `zkpreview/` module root, lists the tests of that one file, so the spec parses. From the repo
+   run from the `zkthemelab/` module root, lists the tests of that one file, so the spec parses. From the repo
    root, `npx` resolves a second `@playwright/test` and every `test.describe` throws.
 2. A standalone probe with a 100×100 page compared against a baseline with an exact pixel count, at
    `maxDiffPixels: 20`: 10 differing pixels pass; 30 differing pixels fail with "30 pixels (ratio 0.01

@@ -1,6 +1,6 @@
 # Authoring ZUL pages for the preview app
 
-The preview corpus — `zkpreview/src/main/webapp/web/*.zul`, 162 pages — is the theme's completion
+The preview corpus — `zkthemelab/src/main/webapp/web/*.zul`, 162 pages — is the theme's completion
 criterion, not the component list. Two reasons: some components never get a page of their own
 because they are sub-components (listitem), and some styled features map to no single component
 (notification). **The theme is done only when every preview page is verified.** These are the
@@ -78,7 +78,7 @@ on-surface for months, with nothing erroring.
 **Put typography on the label** (`sclass="z-text-xl z-fw-bold z-text-primary"`). When auditing,
 treat "font or colour declared on a container of ZK text" as a suspected dead declaration and
 verify with `getComputedStyle` on the `.z-label`, not the wrapper. Cheap probe without a browser:
-write a throwaway `.zul` into `zkpreview/build/inplaceWebapp/` (gitignored, served live) and `curl`
+write a throwaway `.zul` into `zkthemelab/build/inplaceWebapp/` (gitignored, served live) and `curl`
 it to read the widget tree.
 
 ## ZK `hflex` / `vflex` overwrite CSS `flex-direction`

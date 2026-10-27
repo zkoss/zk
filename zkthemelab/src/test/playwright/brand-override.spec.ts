@@ -56,7 +56,7 @@ const MAX_CLIP_HEIGHT = 16000;
 const CONTENT_SELECTOR = 'img, canvas, video';
 // CodeMirror text anti-aliasing coincides with a family colour; only .cm-content (the text lines and caret) is hidden,
 // the gutter and the editor background stay scanned. The editor background #0b1021 is set per element by the
-// preview page (zkpreview/src/main/webapp/web/codeeditor.zul:137), so it is not the theme's job to follow the seed.
+// preview page (zkthemelab/src/main/webapp/web/codeeditor.zul:137), so it is not the theme's job to follow the seed.
 const EXTRA_HIDDEN: Record<string, string> = { codeeditor: '.cm-content' };
 // The page whose family-pixel count must be positive: proves the family colours were read and matched.
 const CANARY_PAGE = 'button';

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds zkpreview/doc/class-index.json: for every top-level preview page
+// Builds zkthemelab/doc/class-index.json: for every top-level preview page
 // (src/main/webapp/web/*.zul), and for every other .zul a spec navigates to (pv/..., utility/...),
 // the sorted list of `z-*` classes present in the DOM once the page is idle. Keyed by URL path
 // (`a.zul`, `pv/input-invalid-guard.zul`). select-tests.mjs reads it to map a changed CSS class to pages.
@@ -13,10 +13,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ZKPREVIEW_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const WEB_DIR = path.join(ZKPREVIEW_DIR, 'src/main/webapp/web');
-const SPEC_DIR = path.join(ZKPREVIEW_DIR, 'src/test/playwright');
-const OUTPUT_FILE = path.join(ZKPREVIEW_DIR, 'doc/class-index.json');
+const ZKTHEMELAB_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const WEB_DIR = path.join(ZKTHEMELAB_DIR, 'src/main/webapp/web');
+const SPEC_DIR = path.join(ZKTHEMELAB_DIR, 'src/test/playwright');
+const OUTPUT_FILE = path.join(ZKTHEMELAB_DIR, 'doc/class-index.json');
 const DEFAULT_URL = 'http://127.0.0.1:8086';
 const VIEWPORT = { width: 1280, height: 900 };
 const PAGE_TIMEOUT_MS = 60000;
@@ -52,7 +52,7 @@ function pagesToIndex() {
 }
 
 function currentCommit() {
-  return execFileSync('git', ['rev-parse', '--short=10', 'HEAD'], { cwd: ZKPREVIEW_DIR }).toString().trim();
+  return execFileSync('git', ['rev-parse', '--short=10', 'HEAD'], { cwd: ZKTHEMELAB_DIR }).toString().trim();
 }
 
 function collectZClasses() {

@@ -177,4 +177,4 @@ values are *inputs* to JS. Only the second kind can turn a dropped declaration i
 **Rule:** for any component whose purpose *is* an interaction (scroll, drag, resize, toggle), at
 least one outcome row must perform the interaction and assert that state changed. Playwright's
 touchscreen API has no drag — drive it through CDP `Input.dispatchTouchEvent` (see
-`zkpreview/src/test/playwright/tablet.spec.ts`, "a touch drag moves the content").
+`zkthemelab/src/test/playwright/tablet.spec.ts`, "a touch drag moves the content").

@@ -144,7 +144,7 @@ failure modes instead.
 
 ## Preview anchors
 
-**No preview ZUL exists yet.** `zkpreview/src/main/webapp/web/breadcrumb.zul` is absent — this is
+**No preview ZUL exists yet.** `zkthemelab/src/main/webapp/web/breadcrumb.zul` is absent — this is
 a brand-new component with no existing preview page in either the Marble or iceblue apps.
 Before the Evaluator can run against this contract, a preview page must be authored that
 exercises every row in "States to evaluate" below, including:

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Start the Marble preview app (zkpreview).
+# Start the Marble preview app (zkthemelab).
 # Page inventory and URL forms: see README.md in this directory.
 #
 #   Usage:  ./start.sh [port]      # port defaults to 8085

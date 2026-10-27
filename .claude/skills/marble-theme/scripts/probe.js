@@ -22,8 +22,8 @@
  * script that drives the interaction then measures. See the colorbox worked
  * example in SKILL.md for the pattern (chromium + devices['iPad …'] contexts).
  */
-// zk: @playwright/test is installed under zkpreview/ only (P2 item 2.3); let Node resolve it from there.
-module.paths.push(require('path').resolve(__dirname, '../../../../zkpreview/node_modules'));
+// zk: @playwright/test is installed under zkthemelab/ only (P2 item 2.3); let Node resolve it from there.
+module.paths.push(require('path').resolve(__dirname, '../../../../zkthemelab/node_modules'));
 const { chromium } = require('@playwright/test');
 
 (async () => {

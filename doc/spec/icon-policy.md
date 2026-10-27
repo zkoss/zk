@@ -5,7 +5,7 @@ This theme delivers all icons via the [Lucide](https://lucide.dev/) icon set, re
 | Source | Examples | Naming rule |
 |--------|----------|-------------|
 | ZK widget JS (compiled, immutable) | `<i class="z-icon-caret-down">` injected by `Scrollbar.ts`; `domIconHTML('left')` in `tab/mold/tabbox.js` emitting `z-icon-chevron-left` | Cannot rename. FA-style names that are not in Lucide MUST be aliased in `FA_TO_LUCIDE` (see `scripts/build-css.js`). |
-| Preview / example ZULs (`zkpreview/src/main/webapp/web/**/*.zul`) | `iconSclass="z-icon-settings"`, `sclass="z-icon-trash-2"` | MUST resolve to a **served** class: a real Lucide name **or** a ZK built-in FA/custom alias (`FA_TO_LUCIDE` / `CUSTOM_ICONS`). Invented / misspelled names are FORBIDDEN. Lucide names are preferred for new content. |
+| Preview / example ZULs (`zkthemelab/src/main/webapp/web/**/*.zul`) | `iconSclass="z-icon-settings"`, `sclass="z-icon-trash-2"` | MUST resolve to a **served** class: a real Lucide name **or** a ZK built-in FA/custom alias (`FA_TO_LUCIDE` / `CUSTOM_ICONS`). Invented / misspelled names are FORBIDDEN. Lucide names are preferred for new content. |
 
 ## Library decision: keep Lucide for ZK 11.0
 
@@ -228,7 +228,7 @@ appearing name must be either present in Lucide or added to `FA_TO_LUCIDE`.
 
 ## Rule 2 — Preview / example content (must resolve to a served class)
 
-Every `z-icon-{name}` literal in `zkpreview/src/main/webapp/web/**/*.zul` MUST resolve to a
+Every `z-icon-{name}` literal in `zkthemelab/src/main/webapp/web/**/*.zul` MUST resolve to a
 class that `scripts/build-css.js` actually serves — i.e. `{name}` is one of:
 
 ```
@@ -251,7 +251,7 @@ node_modules/lucide-static/icons/{name}.svg  EXISTS   (a Lucide name)
   isn't a ZK-emitted alias, pick a different Lucide icon.
 
 **Excluded catalogs** (performance — these are whole-page icon listings, not ordinary
-content): `zkpreview/src/main/webapp/web/icons-lucide.zul` (regenerated from
+content): `zkthemelab/src/main/webapp/web/icons-lucide.zul` (regenerated from
 `lucide-static` on every build) and `utility/icons.zul` (the "All Lucide Icons" page,
 which also hosts the FA-compat alias demo). Both are skipped by `check-icon-coverage.sh`.
 

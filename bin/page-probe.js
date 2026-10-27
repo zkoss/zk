@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // page-probe.js — open one URL in headless Chromium and report what the browser actually loaded.
 //
-// Usage:  NODE_PATH=zkpreview/node_modules node bin/page-probe.js <url>
-//         (run from the zk root; `playwright` is resolved from zkpreview, so `npm ci` there must have run)
+// Usage:  NODE_PATH=zkthemelab/node_modules node bin/page-probe.js <url>
+//         (run from the zk root; `playwright` is resolved from zkthemelab, so `npm ci` there must have run)
 //
 // Prints one JSON object:
 //   status       HTTP status of the navigation response

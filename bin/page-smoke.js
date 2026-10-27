@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // page-smoke.js — open every listed page in headless Chromium and report whether it composed.
 //
-// Usage:  NODE_PATH=zkpreview/node_modules node bin/page-smoke.js <baseURL> <listfile> [concurrency]
-//         (run from the zk root; `playwright` is resolved from zkpreview, so `npm ci` there must have run)
+// Usage:  NODE_PATH=zkthemelab/node_modules node bin/page-smoke.js <baseURL> <listfile> [concurrency]
+//         (run from the zk root; `playwright` is resolved from zkthemelab, so `npm ci` there must have run)
 //
 // <baseURL> is the directory the page paths are relative to, WITH its trailing slash, e.g.
-//   http://127.0.0.1:8085/zkpreview/web/
+//   http://127.0.0.1:8085/zkthemelab/web/
 // The paths are joined with `new URL(path, baseURL)`, never with a leading slash — a leading
 // slash would drop the context path (execution plan gates/2.1.md, Planner notes).
 //

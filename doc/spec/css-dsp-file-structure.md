@@ -137,7 +137,7 @@ The path ZK *requests* a `.css.dsp` from is **not** decided by the theme's Java.
     _window.css      # window / panel headers + affordances
     _scrollbar.css   # biglistbox WScroll touch width
   ```
-  Regression-guarded by the Playwright `tablet` project (`zkpreview/src/test/playwright/tablet.spec.ts`).
+  Regression-guarded by the Playwright `tablet` project (`zkthemelab/src/test/playwright/tablet.spec.ts`).
 
 ### Date
 - `js/zkmax/db/css/daterangebox.css.dsp` — new in ZK 10.4.0 (date-range picker)

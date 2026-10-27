@@ -3,9 +3,9 @@
 本文說明 Marble 的列印樣式：一組 opt-in 的列印可見性 utility，加上一套自動觸發的列印 reset。
 目標客群（ERP / CRM）天天列印報表、發票、清單，因此這是 Tier 1 的企業級落差之一。
 
-> 互動教學頁：<${PREVIEW_URL}/utility/print.zul>（原始檔 `zkpreview/src/main/webapp/web/utility/print.zul`）。
+> 互動教學頁：<${PREVIEW_URL}/utility/print.zul>（原始檔 `zkthemelab/src/main/webapp/web/utility/print.zul`）。
 > 所有效果**只在瀏覽器「列印預覽」（Ctrl-P / Cmd-P）下可見**。
-> 實作：`zul/src/main/resources/web/zul/css/utility/_print.css`；回歸測試：`zkpreview/src/test/playwright/print-utilities.spec.ts`（`print` 專案）。
+> 實作：`zul/src/main/resources/web/zul/css/utility/_print.css`；回歸測試：`zkthemelab/src/test/playwright/print-utilities.spec.ts`（`print` 專案）。
 
 ---
 
@@ -106,7 +106,7 @@
 - `.z-elevation-2` 表面在 print 下 `box-shadow:none`（screen 下有陰影）。
 
 ```bash
-npx playwright test -c zkpreview/src/test/playwright/playwright.config.ts --project=print
+npx playwright test -c zkthemelab/src/test/playwright/playwright.config.ts --project=print
 ```
 
 ---

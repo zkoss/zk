@@ -1,6 +1,6 @@
 # component-theming.spec.ts 測試分類（選項 A 的前置盤點）
 
-來源：`zkpreview/src/test/playwright/component-theming.spec.ts`（1721 行、107 個 test）
+來源：`zkthemelab/src/test/playwright/component-theming.spec.ts`（1721 行、107 個 test）
 相關：`doc/spec/component-theme-variables.md`（CTV-1…9）
 狀態：**只分類，尚未刪除或修改任何測試。**
 

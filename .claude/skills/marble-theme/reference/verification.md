@@ -4,9 +4,9 @@
 
 | App | Port | Entry point |
 |---|---|---|
-| **Marble preview** | **8085** | `zkpreview/build.gradle` (`httpPort`) |
+| **Marble preview** | **8085** | `zkthemelab/build.gradle` (`httpPort`) |
 
-The IceBlue baseline app exists only in the template until P4 — `zkpreview` has no IceBlue
+The IceBlue baseline app exists only in the template until P4 — `zkthemelab` has no IceBlue
 counterpart yet.
 
 **Use `127.0.0.1`, not `localhost`.** Chrome resolves `localhost` to IPv6 `::1` while the preview
@@ -19,8 +19,8 @@ Override the port with `-PhttpPort=<n>` on the `appRun` command below; there is 
 ## Launching
 
 ```bash
-cd zkpreview && ./start.sh          # wraps the command below; carries the same three gotchas
-cd zkpreview && ./gradlew appRun -PhttpPort=8085 --console=plain
+cd zkthemelab && ./start.sh          # wraps the command below; carries the same three gotchas
+cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain
 ```
 
 **`appRun`, never `appStart`.** Under gretty 3.1.1 on Gradle 8.10, `appStart`'s client never
@@ -45,7 +45,7 @@ HTML. Marble is zk's core theme, so the reset link carries **no theme segment** 
 `org.zkoss.zul.theme.browserDefault=true`) — and it precedes `zk.wcs`. `screenshot.spec.ts` derives
 the theme prefix from that `reset.css` link.
 
-**No live-reload.** `zkpreview` has no watcher and no live-reload client. After a CSS change,
+**No live-reload.** `zkthemelab` has no watcher and no live-reload client. After a CSS change,
 rebuild (`./gradlew :zul:compileMarbleCss`, or the matching `zkcml` task for EE) and restart
 `appRun`; the two live-reload `<script>` tags some preview pages still carry are inert.
 
@@ -53,7 +53,7 @@ rebuild (`./gradlew :zul:compileMarbleCss`, or the matching `zkcml` task for EE)
 
 `http://127.0.0.1:8085/<page>.zul` — the module answers at the context root; a filter forwards
 `/<page>.zul` to `/web/<page>.zul` when the page exists, and `~./` class-web resources resolve
-unchanged. Sources live in `zkpreview/src/main/webapp/web/*.zul` (159 pages). Smoke page:
+unchanged. Sources live in `zkthemelab/src/main/webapp/web/*.zul` (159 pages). Smoke page:
 `/smoke.zul`.
 
 The **UseCase SPA** supports hash deep-links: `usecase/index.zul#<bookmark>`, where the bookmark is
@@ -67,8 +67,8 @@ reaches the server. Nothing in the harness uses a query string.
 
 ## Which tests to run after a change
 
-Run `node zkpreview/scripts/select-tests.mjs --base <base>` from the repository root (usage:
-`zkpreview/scripts/README-select-tests.md`). When it answers `partial`, run the single command it
+Run `node zkthemelab/scripts/select-tests.mjs --base <base>` from the repository root (usage:
+`zkthemelab/scripts/README-select-tests.md`). When it answers `partial`, run the single command it
 prints against your local preview server. When it answers `full`, do not start a full run on your
 own: report the selector's reasons and let the owner decide when the full suite runs. The suite
 runs locally only; it is not wired to CI or Jenkins (owner's ruling, 2026-10-19).
@@ -81,7 +81,7 @@ runs locally only; it is not wired to CI or Jenkins (owner's ruling, 2026-10-19)
 
 ## Playwright projects
 
-Config: `zkpreview/src/test/playwright/playwright.config.ts`.
+Config: `zkthemelab/src/test/playwright/playwright.config.ts`.
 
 | Project | Covers |
 |---|---|
@@ -100,25 +100,25 @@ Config: `zkpreview/src/test/playwright/playwright.config.ts`.
 | `tablet` | needs a mobile UA to trigger `tablet.css.dsp` injection |
 
 ```bash
-cd zkpreview && npx playwright test --config src/test/playwright/playwright.config.ts --project=<project>
+cd zkthemelab && npx playwright test --config src/test/playwright/playwright.config.ts --project=<project>
 ```
 
-**Run it from `zkpreview/`, not the repository root.** From the root, npx resolves a second copy of
+**Run it from `zkthemelab/`, not the repository root.** From the root, npx resolves a second copy of
 `@playwright/test` and every spec dies with `Playwright Test did not expect test.describe() to be
 called here` / `Total: 0 tests` — which looks exactly like a broken spec.
 
 ## Screenshot baselines — the parts that bite
 
 - **The baselines are in place: 188 compared PNGs plus 99 `*-forced-colors.png` review captures, in
-  `zkpreview/doc/screenshots/`, beside `focus-ring-known-clips.json`.** They arrived with item 3.18b,
+  `zkthemelab/doc/screenshots/`, beside `focus-ring-known-clips.json`.** They arrived with item 3.18b,
   so a run now *compares* — the earlier "can only create, never compare" caveat is gone.
   `playwright.config.ts:13`'s `snapshotDir: '../../../doc/screenshots'` resolves, from
-  `zkpreview/src/test/playwright/`, to that directory. The forced-colors images are **human-review
+  `zkthemelab/src/test/playwright/`, to that directory. The forced-colors images are **human-review
   artifacts that are always dirty** and never compared. (183 at the 2026-09-11 re-cut;
   `scrollview-tablet.png` made 184.)
-- The harness resolves its `doc/` paths three levels up from `zkpreview/src/test/playwright/` — the MODULE root (`zkpreview/` in zk, the template's own root in the template), never the repository root; the baselines directory above and `focus-ring-known-clips.json` both live there. (Planner addendum after the 3.5 verdict, 2026-09-11 — see the migration's gates/3.5.md.)
+- The harness resolves its `doc/` paths three levels up from `zkthemelab/src/test/playwright/` — the MODULE root (`zkthemelab/` in zk, the template's own root in the template), never the repository root; the baselines directory above and `focus-ring-known-clips.json` both live there. (Planner addendum after the 3.5 verdict, 2026-09-11 — see the migration's gates/3.5.md.)
 - **The zero-tolerance comparison (P2 items 2.6–2.8) is the equivalence check that was actually
-  run**: the template's unchanged specs against `zkpreview`, every PNG compared at `threshold: 0,
+  run**: the template's unchanged specs against `zkthemelab`, every PNG compared at `threshold: 0,
   maxDiffPixels: 0` with the tracked tools under `zkThemeTemplate/doc/migration/tools/zero-tolerance/`
   — the gallery (98), state (55) and tablet (30) families came back byte-identical.
 - **Always `await document.fonts.ready`.** A uniform vertical drift across every page is the Inter
@@ -135,7 +135,7 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   the `tablet` project. The 2026-09-11 typography sweep re-cut its 4 desktop diffs and re-verified
   `gallery` green — and left 29 stale tablet baselines behind, found only when an unrelated server
   restart ran the full `tablet` project the next day. After any change under
-  `zkpreview/src/main/webapp/web/*.zul`, run **both** `--project gallery` and `--project tablet`
+  `zkthemelab/src/main/webapp/web/*.zul`, run **both** `--project gallery` and `--project tablet`
   before committing, and re-cut with `--update-snapshots=changed` so only the mismatching files move.
 - **`git log -1 -- <png>` lies when a commit only renamed the file.** Do not date a baseline that
   way.
@@ -208,7 +208,7 @@ no change applied — check that before trusting the gate. Run ad-hoc probes wit
 
 ## Cross-theme A/B: the determinism floor
 
-The IceBlue baseline app is template-only until P4 — `zkpreview` has no IceBlue counterpart to run
+The IceBlue baseline app is template-only until P4 — `zkthemelab` has no IceBlue counterpart to run
 this comparison against yet.
 
 Serving Marble's preview corpus under a different theme jar needs no edit here: ZK's
@@ -271,6 +271,6 @@ or put probes in a throwaway file from the start.
 
 ## Theme-done criterion
 
-The theme is complete only when **every preview page** under `zkpreview/src/main/webapp/web/*.zul` is
+The theme is complete only when **every preview page** under `zkthemelab/src/main/webapp/web/*.zul` is
 verified. The page set, not the component list, is the checklist — see
 `reference/zul-authoring.md` for why.

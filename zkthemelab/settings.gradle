@@ -1,7 +1,7 @@
-rootProject.name = 'zkpreview'
+rootProject.name = 'zkthemelab'
 
-// Enable more logs when needed: ./gradlew -Dzkpreview.composite.debug=true
-def debugComposite = System.getProperty("zkpreview.composite.debug") == "true"
+// Enable more logs when needed: ./gradlew -Dzkthemelab.composite.debug=true
+def debugComposite = System.getProperty("zkthemelab.composite.debug") == "true"
 
 // ---- Helper: Resolve Path Safely ----
 File resolveProjectDir(String relativePath) {
@@ -13,16 +13,16 @@ File resolveProjectDir(String relativePath) {
                 .canonicalFile
 
         if (dir.exists() && dir.isDirectory()) {
-            logger.lifecycle("[zkpreview] Found composite build: ${dir}")
+            logger.lifecycle("[zkthemelab] Found composite build: ${dir}")
             return dir
         } else {
-            logger.lifecycle("[zkpreview] Composite build NOT found: ${dir} (skipping)")
+            logger.lifecycle("[zkthemelab] Composite build NOT found: ${dir} (skipping)")
             return null
         }
     } catch (Exception e) {
-        logger.lifecycle("[zkpreview] Composite build resolve failed for '${relativePath}' (skipping)")
+        logger.lifecycle("[zkthemelab] Composite build resolve failed for '${relativePath}' (skipping)")
         if (debugComposite) {
-            logger.lifecycle("[zkpreview] resolve error: ${e.class.name}: ${e.message}")
+            logger.lifecycle("[zkthemelab] resolve error: ${e.class.name}: ${e.message}")
         }
         return null
     }
@@ -49,7 +49,7 @@ if (zkDir != null) {
         }
     }
 } else {
-    logger.lifecycle("[zkpreview] WARNING: '../../zk' NOT FOUND. Source debugging for zk projects will NOT work.")
+    logger.lifecycle("[zkthemelab] WARNING: '../../zk' NOT FOUND. Source debugging for zk projects will NOT work.")
 }
 
 // ---- 3. Include ZKCML (optional) ----

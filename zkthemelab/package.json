@@ -1,8 +1,8 @@
 {
-  "name": "zkpreview",
+  "name": "zkthemelab",
   "version": "0.0.0",
   "private": true,
-  "description": "Playwright harness for the Marble preview host (zkpreview)",
+  "description": "Playwright harness for the Marble preview host (zkthemelab)",
   "scripts": {
     "test:focus-scan": "playwright test --config src/test/playwright/playwright.config.ts --project=focus-scan",
     "test:hit-target": "playwright test --config src/test/playwright/playwright.config.ts --project=hit-target",

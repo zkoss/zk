@@ -1,4 +1,4 @@
-# zkpreview — the Marble preview host
+# zkthemelab — the Marble preview host
 
 A WAR that serves 162 ZUL pages against the **live `zk` / `zkcml` sources**, so you can see what
 Marble actually renders. `settings.gradle` is a composite build that substitutes
@@ -95,7 +95,7 @@ token. Under `web/utility/`.
 - `web/img/`, `web/media/video.mp4`, `web/link-annotation.pdf` — page assets.
 - `src/main/java/zk/example/` — the models, composers and ViewModels the pages bind to
   (`UseCaseVM` drives the SPA's `@Init` restore, `navigate` command and `handleBookmarkChange`).
-- `src/main/java/org/zkoss/zkpreview/http/` — `PreviewPathFilter` (the `/web` forward) and
+- `src/main/java/org/zkoss/zkthemelab/http/` — `PreviewPathFilter` (the `/web` forward) and
   `ZKPreviewServlet`.
 - `src/main/webapp/index.zul` + `PageIndexVM` — the home page link index. It lives at the webapp
   root next to `smoke.zul`, **not** under `/web`, so it is not itself one of the 162 pages.

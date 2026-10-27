@@ -96,7 +96,7 @@ This is the common case and needs no special load order:
 
 There is no dedicated demo page. Each component's own preview page (for example `button.zul`) shows its
 default look, and the knob contract is regression-tested on those pages in
-[`component-theme-variables.spec.ts`](../../zkpreview/src/test/playwright/component-theme-variables.spec.ts).
+[`component-theme-variables.spec.ts`](../../zkthemelab/src/test/playwright/component-theme-variables.spec.ts).
 
 ## Cascade & load-order rules (important)
 

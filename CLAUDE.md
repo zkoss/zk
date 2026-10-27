@@ -72,7 +72,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 停自己的伺服器只 kill 啟動時記下的 PID（含 `tail -f /dev/null` 這類 stdin holder），不用 `pkill -f`、`killall` 等 pattern：別的 session 的 appRun 用同一個 holder，pattern 會一起殺掉。派工給 agent 時也要寫明這點。
 - 8085 是共用的預覽伺服器。若佔用 8085 的程序不是自己啟動的，先問使用者，不停止它；不要改用 8085 以外的 port 硬跑在同一個 worktree 上。自己的第二個伺服器只能從自己的 git worktree 啟動。
 - 不在執行中的預覽伺服器上重建 jar：zul、zkmax 的 jar 是共用的，會造成 500 或 `NoClassDefFoundError`。第二個伺服器只能從自己的 git worktree 啟動。
-- 重新命名或刪除 zkpreview 的 `.zul` 後，同步刪除 `zkpreview/build/inplaceWebapp` 內的舊檔，並確認舊 URL 回 404（gretty 的 inplace 複製只新增與更新，不刪除）。
+- 重新命名或刪除 zkthemelab 的 `.zul` 後，同步刪除 `zkthemelab/build/inplaceWebapp` 內的舊檔，並確認舊 URL 回 404（gretty 的 inplace 複製只新增與更新，不刪除）。
 - 預覽頁探針不放在 `src/main/webapp`（會被複製到 inplaceWebapp，刪了來源仍會被 serve）；直接放在 `build/inplaceWebapp`，用完刪除。
 - 預覽頁的互動示範用 server-side listener（`onClick`、`onCheck`）呼叫 `Notification.show(..., "middle_center", ...)` 顯示結果，讓審查者看得到；`Notification` 需在 zscript 中自行 import。
 
@@ -81,7 +81,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 比對基準只用 repo 內的 config，臨時 config 會假通過；`select-tests.mjs` 回 `full` 時不自行跑全測，回報原因由使用者決定。
 
 ### 測試與驗證
-- 除錯或調查 bug 時，先做一個最小可重現頁面（`zkpreview/src/main/webapp/web/pv/<主題>-repro.zul`：只放觸發問題的元件與最少設定，不放頁面外框、標題、其他區段），在這個頁面上重現、量測、驗證修法，不在完整的 gallery 頁面上除錯：頁面上其他元件、樣式、載入順序都是無關的潛在影響因素。要比較修法就各做一個只差一處的變體頁。這些頁面是暫時性的，除錯完刪除（含 `build/inplaceWebapp` 的複本），不 commit；需要長期保留的回歸測試另外寫進正式的 spec。
+- 除錯或調查 bug 時，先做一個最小可重現頁面（`zkthemelab/src/main/webapp/web/pv/<主題>-repro.zul`：只放觸發問題的元件與最少設定，不放頁面外框、標題、其他區段），在這個頁面上重現、量測、驗證修法，不在完整的 gallery 頁面上除錯：頁面上其他元件、樣式、載入順序都是無關的潛在影響因素。要比較修法就各做一個只差一處的變體頁。這些頁面是暫時性的，除錯完刪除（含 `build/inplaceWebapp` 的複本），不 commit；需要長期保留的回歸測試另外寫進正式的 spec。
 - 互動測試要用使用者實際的輸入（`page.mouse` 拖曳、真實 click），不用 Range 或 `element.click()` 繞過瀏覽器限制。
 - 互動類元件的 outcome 至少要有一列執行互動並斷言狀態改變（例：捲動要量位置變化，不只量 thumb 存在）。
 - 對比度計算要跳過透明背景，取第一個不透明祖先；斷言要用 mutation 證明會失敗。
@@ -96,7 +96,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 文件的結論已經寫進 `doc/spec/`，該文件就可以移到 `tasks/`。
 - 決策評估類文件若決策已實作進產品：先把決策寫進 `doc/spec/`，再把原文件移到 `tasks/`，並在檔名註明「已加進 SPEC」。
 - 確定不做的評估（例如已決定不採用的方案）也可以移到 `tasks/`，不必先併入 spec。
-- 移出 `doc/` 的文件，同步改掉 `CLAUDE.md`、`.claude/`、`doc/spec/`、`zkpreview` 註解裡對它的路徑引用；`doc/spec/` 與 `doc/contracts/` 整個保留。
+- 移出 `doc/` 的文件，同步改掉 `CLAUDE.md`、`.claude/`、`doc/spec/`、`zkthemelab` 註解裡對它的路徑引用；`doc/spec/` 與 `doc/contracts/` 整個保留。
 - 整理文件、改寫清單、改引用路徑這類文件工作交給 `doc-writer` agent；搬檔與 commit 在主 session 做。
 - 文件記錄結構與規則，不寫可由程式重算的數量（類別數、圖示數、測試數、檔案數等）；數量用腳本計算。由腳本產生的文件（例如 `doc/spec/icon-index.md`）可以含腳本寫入的數字。量測值、閾值與尺度值（斷點、字級、z-index、容忍像素）是規格，照寫。
 

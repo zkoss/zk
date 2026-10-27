@@ -85,9 +85,9 @@ These ids count toward `failing-set` exactly like `c*`/`M*` rows; all are
 |----|---------------------|
 | `x-ctv-root` | Set `ctv-probe.knob` to `ctv-probe.value` via `document.documentElement.style.setProperty(…)` → the anchor's `ctv-probe.property` computes to the value; `removeProperty` → default restored |
 | `x-ctv-region` | Set the same knob inline on a container holding one instance → that instance changes, an instance outside does not; then clean up |
-| `x-ctv-suite` | `npx playwright test --config zkpreview/src/test/playwright/playwright.config.ts --project=component-theme-variables -g "<component>"` is green; **0 matched tests = FAIL** (CTV-9 test missing; it runs on the component's own preview page) |
+| `x-ctv-suite` | `npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project=component-theme-variables -g "<component>"` is green; **0 matched tests = FAIL** (CTV-9 test missing; it runs on the component's own preview page) |
 | `x-density` | For each `density-tokens` entry: shrink it by 8px at `documentElement` → the control's rendered height shrinks accordingly (±2px); clean up |
-| `x-fc-capture` | `npx playwright test --config zkpreview/src/test/playwright/playwright.config.ts --project=forced-colors-gallery -g "<component>"` produces `doc/screenshots/<comp>-forced-colors.png` (>0 bytes); the snapshot joins the §3d review inputs, reviewed against the `fc-risk` list |
+| `x-fc-capture` | `npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project=forced-colors-gallery -g "<component>"` produces `doc/screenshots/<comp>-forced-colors.png` (>0 bytes); the snapshot joins the §3d review inputs, reviewed against the `fc-risk` list |
 | `x-brand-decl` | Grep `shared-css-file` for color literals (`#hex`, `rgb/rgba/hsl/oklch(` without `var(--zk-`): every hit must be whitelisted in `brand-allowed-literals`; plus every Expected-values row flagged `token-rooted? yes` must be *declared* via its token (computed-value equality is not enough) |
 
 When `ctv: N/A` / `density: N/A` / `fc-risk: none`, the matching probes are `SKIPPED
@@ -105,7 +105,7 @@ The orchestrator (sole writer of status/tracker docs) first confirms:
    completeness audit must not go stale).
 2. **CTV spec family table** — when `ctv: shipped`, the contract's knob table is ported
    into `component-theme-variables.md` (CTV-8) and the Shipped list updated.
-3. **Render smoke** — `zkpreview/src/test/playwright/render-smoke.spec.ts` `PAGES` contains
+3. **Render smoke** — `zkthemelab/src/test/playwright/render-smoke.spec.ts` `PAGES` contains
    `/<comp>.zul` (mechanical one-liner; the orchestrator adds it if missing).
 4. **Forced-colors snapshot** — `doc/screenshots/<comp>-forced-colors.png` exists
    (produced by `x-fc-capture`).

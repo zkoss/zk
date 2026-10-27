@@ -87,7 +87,7 @@ currently produces — that's the invariant the Evaluator asserts.
 ### 3 — Launch the app (the runtime oracle)
 
 ```bash
-cd zkpreview && ./gradlew appRun -PhttpPort=8085 --console=plain     # ${PREVIEW_URL}
+cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain     # ${PREVIEW_URL}
 ```
 
 The *running app* is the oracle for "what inline style does ZK actually set" and "does the

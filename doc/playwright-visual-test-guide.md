@@ -16,11 +16,11 @@ Layer B decides whether a component "looks right"; Layer A keeps it from silentl
 
 ## 2. Configuration
 
-Config: [zkpreview/src/test/playwright/playwright.config.ts](../zkpreview/src/test/playwright/playwright.config.ts).
+Config: [zkthemelab/src/test/playwright/playwright.config.ts](../zkthemelab/src/test/playwright/playwright.config.ts).
 The project list lives there; run `npx playwright test --list` for the current test inventory.
 
 - `baseURL` is `${PREVIEW_URL}` (default `http://localhost:8085`); the preview app must be running.
-- `snapshotDir` is `zkpreview/doc/screenshots`, snapshot path `{snapshotDir}/{arg}{ext}`.
+- `snapshotDir` is `zkthemelab/doc/screenshots`, snapshot path `{snapshotDir}/{arg}{ext}`.
 - **Flat layout:** one file per (page, scenario) named `<page>-<scenario>.png`, e.g. `button-gallery.png`,
   `button-default-hover.png`, `button-tablet.png`. Each spec passes its snapshot name as one hyphenated
   string. Desktop and tablet are told apart by the filename suffix.
@@ -32,9 +32,9 @@ Start the preview app first (it is the prerequisite of every project), see
 [.claude/skills/marble-theme/reference/verification.md](../.claude/skills/marble-theme/reference/verification.md):
 
 ```bash
-cd zkpreview && ./start.sh                 # http://127.0.0.1:8085
+cd zkthemelab && ./start.sh                 # http://127.0.0.1:8085
 
-# From zkpreview/:
+# From zkthemelab/:
 npm run screenshot:test                    # the whole suite
 npm run screenshot:update                  # playwright --update-snapshots
 npx playwright test -c src/test/playwright/playwright.config.ts --project=<project>
@@ -80,7 +80,7 @@ reference image for comparison.
 
 ## 5. Which pages get a gallery shot
 
-- `gallery-scan.spec.ts` discovers pages by scanning `zkpreview/src/main/webapp/web/*.zul` at collection
+- `gallery-scan.spec.ts` discovers pages by scanning `zkthemelab/src/main/webapp/web/*.zul` at collection
   time, so a new preview page is covered the moment it is added.
 - Pages in its `SKIP` set (aggregate pages, non-visual primitives, hardware or animated pages) are
   excluded on purpose; the `Set` in the spec is the authoritative list, tune it there.

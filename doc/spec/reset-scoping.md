@@ -77,12 +77,12 @@ behavior of ZK's legacy `.z-page `-prefix approach.
 
 ## Tests
 
-[`zkpreview/src/test/playwright/reset-scoping.spec.ts`](../../zkpreview/src/test/playwright/reset-scoping.spec.ts)
+[`zkthemelab/src/test/playwright/reset-scoping.spec.ts`](../../zkthemelab/src/test/playwright/reset-scoping.spec.ts)
 (project `reset`) verifies, against the running preview app:
 - default mode links `reset.css` ahead of `zk.wcs` and does not link `reset-embed.css`;
 - `reset.css` is unscoped and keeps the `html`/`body` frame;
 - `reset-embed.css` is `@scope (.z-page)`-confined with the frame dropped;
 - the extracted reset still takes effect (body `margin:0`, widgets `border-box`).
 
-Run: `npx playwright test --config zkpreview/src/test/playwright/playwright.config.ts --project reset`
+Run: `npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project reset`
 (needs `withjdk.sh 17 mvn test exec:java@preview-app`).

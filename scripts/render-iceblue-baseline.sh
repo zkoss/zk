@@ -17,8 +17,8 @@ SEED=(stepbar signature tbeditor organigram pdfviewer)
 COMPONENTS=("${@:-${SEED[@]}}")
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-# @playwright/test lives under zkpreview/, not at the zk root.
-export NODE_PATH="$PROJECT_ROOT/zkpreview/node_modules${NODE_PATH:+:$NODE_PATH}"
+# @playwright/test lives under zkthemelab/, not at the zk root.
+export NODE_PATH="$PROJECT_ROOT/zkthemelab/node_modules${NODE_PATH:+:$NODE_PATH}"
 BASE_URL="${ICEBLUE_URL:-http://localhost:8082}"
 OUTPUT_DIR="$PROJECT_ROOT/doc/contracts/baselines"
 

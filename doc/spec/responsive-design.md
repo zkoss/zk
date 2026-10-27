@@ -3,7 +3,7 @@
 本文件說明 Marble 目前的響應式版面做法、設計取捨，以及如何使用。
 
 > **互動式教學頁**（由淺入深 + 企業應用範例）：啟動 preview app 後開啟
-> <${PREVIEW_URL}/utility/grid-layout.zul>（原始檔 `zkpreview/src/main/webapp/web/utility/grid-layout.zul`）。
+> <${PREVIEW_URL}/utility/grid-layout.zul>（原始檔 `zkthemelab/src/main/webapp/web/utility/grid-layout.zul`）。
 
 ## 0. TL;DR
 
@@ -130,7 +130,7 @@
 
 預覽頁的「狀態矩陣」是**對齊的二維表格**（共用表頭 + 多列資料列）。它**沒有任何客製的 grid 或手機重排 CSS**——grid 與 RWD 全部來自通用 utility，連結構膠水都不需要（舊有的 `pv.css` / `.pv-cols` 已完全移除）。
 
-### 機制（`zkpreview/src/main/webapp/web/pv/matrix.zul`）
+### 機制（`zkthemelab/src/main/webapp/web/pv/matrix.zul`）
 
 容器直接掛通用 utility，用 `display:contents` 攤平列 wrapper，只注入欄數：
 
@@ -181,7 +181,7 @@
   **不寫自訂寬度的 `@media` / `@container`**：寬度條件只能取上述尺度（`min-width` 為 576／768／992／1200，`max-width` 為其減 1），由 `scripts/check-breakpoints.js` 檢查（`scripts/build-css.js --module zkmax` 時執行）。
   **EE 的兩個常數必須一致**：zkmax 的 Grid 與 Listbox `responsive` 功能中的 `_DEFAULT_BREAKPOINTS` 常數必須彼此相等，不一致時建置失敗；此檢查只在 `--module zkmax` 時執行（CE-only 建置沒有可比對的對象）。
   **`xxl` 不屬於此尺度**：JS 端正逐步移除（Jira ZK-6197；`grid-responsive.ts` 仍有 `xxl: 1400`），`scripts/check-breakpoints.js` 忽略它；它既不是必要值，也不被接受為 CSS 值。
-  互動教學頁：`usecase/index.zul#utility/responsive`（原始檔 `zkpreview/src/main/webapp/web/utility/responsive.zul`）。
+  互動教學頁：`usecase/index.zul#utility/responsive`（原始檔 `zkthemelab/src/main/webapp/web/utility/responsive.zul`）。
 
 ### 5.1 依 viewport —— `z-d-{value}-{bp}`（mobile-first / min-width）
 
@@ -226,7 +226,7 @@
 
 ## 6. 測試守則
 
-響應式版面的回歸測試放在 `zkpreview/src/test/playwright/tablet.spec.ts`（mobile UA 專案）：
+響應式版面的回歸測試放在 `zkthemelab/src/test/playwright/tablet.spec.ts`（mobile UA 專案）：
 
 - `tablet-no-horizontal-overflow`：頁面在平板寬度下 `scrollWidth <= clientWidth`（防止橫向溢出→幻影垂直捲軸）。
 - `tablet-matrix-scroll-usable`：在 390px 確認 matrix 容器**內部可水平捲動**（`scrollWidth > clientWidth`）且輸入元件守住 ≥130px（防止「擠壓而非捲動」）。

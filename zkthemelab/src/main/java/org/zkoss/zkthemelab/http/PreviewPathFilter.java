@@ -12,7 +12,7 @@
 
 Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 */
-package org.zkoss.zkpreview.http;
+package org.zkoss.zkthemelab.http;
 
 import java.io.IOException;
 

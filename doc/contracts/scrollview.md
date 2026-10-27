@@ -106,7 +106,7 @@ rather than failing.
 - [x] touch path, drag scrolls the content — `tablet` project, `M-touch-drag-scrolls` (CDP touch sequence; Playwright's touchscreen API has no drag)
 - [ ] horizontal orient — M7, c6–c8 are **authored but not yet evaluated**: the preview
       page carries only a vertical scrollview, so exercising them needs a horizontal
-      instance added to `zkpreview/src/main/webapp/web/scrollview.zul` (which re-cuts
+      instance added to `zkthemelab/src/main/webapp/web/scrollview.zul` (which re-cuts
       `scrollview-gallery.png`)
 - [ ] overscroll — load hint shown (c19–c22): needs an `onScroll` listener on the
       component plus a touch drag past the boundary; `_loadBoundary()` only runs when

@@ -565,9 +565,9 @@ ${lucideList}
 }
 
 // Side output — only written with --emit-docs (see build() stage 1b). Never touches
-// zkpreview/ on a default run; the directory is created here because it does not exist by default.
+// zkthemelab/ on a default run; the directory is created here because it does not exist by default.
 function generateIconsZul(iconNames) {
-    const destPath = path.join(ZK_ROOT, 'zkpreview/src/main/webapp/icons-lucide.zul');
+    const destPath = path.join(ZK_ROOT, 'zkthemelab/src/main/webapp/icons-lucide.zul');
     const entries = iconNames.map(name =>
         `            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1 z-text-center"><span sclass="z-icon-${name}" style="font-size:24px; color:var(--zk-color-primary)"/><label sclass="z-text-xs z-text-secondary" style="word-break:break-all" value="${name}"/></div>`
     ).join('\n');
@@ -794,7 +794,7 @@ function build() {
         // 1b/1c. Side outputs — icons-lucide.zul + doc/spec/icon-index.md — only with --emit-docs.
         if (emitDocs) {
             generateIconsZul(lucideIcons);
-            console.log(`  zkpreview/src/main/webapp/icons-lucide.zul (${lucideIcons.length} icons)`);
+            console.log(`  zkthemelab/src/main/webapp/icons-lucide.zul (${lucideIcons.length} icons)`);
             generateIconIndexMd(lucideIcons);
             console.log(`  doc/spec/icon-index.md (${lucideIcons.length} lucide + ${Object.keys(FA_TO_LUCIDE).length} aliases)`);
         }

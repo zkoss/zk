@@ -100,7 +100,7 @@ bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>              
 node .claude/skills/marble-theme/scripts/check-default-display.js --out <file>    # check 5 of the audit
 node .claude/skills/marble-theme/scripts/count-important.js [<css root>]          # !important inventory
 node .claude/skills/marble-theme/scripts/probe.js …                              # needs the preview module up
-cd zkpreview && ./gradlew appRun -PhttpPort=8085 --console=plain   # preview app — keep stdin open, see below
+cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain   # preview app — keep stdin open, see below
 ```
 
 **The preview app is on `http://127.0.0.1:8085`.** Use `127.0.0.1`, never `localhost`. `appRun`
@@ -137,10 +137,10 @@ and the Playwright projects: `reference/verification.md`.
 
 ## ZK version coordinates
 
-`zkpreview` resolves **no published ZK artifact**. Its `settings.gradle` points every `org.zkoss.*`
+`zkthemelab` resolves **no published ZK artifact**. Its `settings.gradle` points every `org.zkoss.*`
 module at the working trees in `../../zk` and `../../zkcml` via `includeBuild` +
 `dependencySubstitution`, so what you preview is the source you just edited. There is no
-`zkpreview/pom.xml` and no `<zk.version>` to bump — the version lives in `gradle.properties`.
+`zkthemelab/pom.xml` and no `<zk.version>` to bump — the version lives in `gradle.properties`.
 
 Everything below applies only to a **separate** app that consumes published FL/Eval jars, not to
 anything in this repository.
@@ -152,7 +152,7 @@ repository, and `dependency:resolve` succeeding does **not** tell you which one 
 - jakarta: `11.0.0-jakarta.FL.<date>-Eval` — `-jakarta` sits **before** `.FL`, not at the end
 
 A Spring Boot 3 app needs the **jakarta** flavour; the wrong one fails at startup with
-`Failed to introspect … ZkAutoConfiguration: javax/servlet/…`. `zkpreview` is the opposite case:
+`Failed to introspect … ZkAutoConfiguration: javax/servlet/…`. `zkthemelab` is the opposite case:
 it compiles against `javax.servlet:servlet-api:2.4` and runs on gretty/Jetty. List candidates with
 `curl -s https://mavensync.zkoss.org/eval/org/zkoss/zk/zk/maven-metadata.xml | grep '<version>11'`;
 check a resolved jar's flavour with

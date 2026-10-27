@@ -2,7 +2,7 @@
 
 `select-tests.mjs` takes changed files and answers `full`, `partial` (with exact commands) or `none`.
 The rules it implements are in `doc/marble-selective-test-rules.md` (section 3 and 4).
-Run everything from `zkpreview/`. Node only, no extra npm dependencies, no preview server needed
+Run everything from `zkthemelab/`. Node only, no extra npm dependencies, no preview server needed
 (the test inventory comes from `playwright test --list`).
 
 ## Usage
@@ -25,7 +25,7 @@ Accepted path forms:
 
 | form | meaning |
 |---|---|
-| `zul/src/...`, `zkpreview/src/...`, `doc/...` | relative to the zk repo root |
+| `zul/src/...`, `zkthemelab/src/...`, `doc/...` | relative to the zk repo root |
 | `zkcml:zkmax/src/...` | relative to the sibling `zkcml` repo (`../zkcml` of the zk repo) |
 | `/abs/path/...` | absolute, under either repo |
 
@@ -33,7 +33,7 @@ Accepted path forms:
 (a fraction, `0 < F <= 1`; default `2/3`, e.g. `--threshold 0.5`).
 
 Output: `mode`, `reasons`, `pages`, `uncovered`, `commands`, and the selected/total test counts. With `--json`
-the object carries `selectedTests`, `totalTests` and `tests` (selected test count per Playwright project). Commands are meant to be run from `zkpreview/`;
+the object carries `selectedTests`, `totalTests` and `tests` (selected test count per Playwright project). Commands are meant to be run from `zkthemelab/`;
 set `PREVIEW_URL` when the preview server is not on 8085.
 
 A partial run is ONE command, `npx playwright test -c src/test/playwright/playwright.config.ts [--fully-parallel]
@@ -61,7 +61,7 @@ gains `describe.serial`, a `beforeAll` its tests rely on, or a module-level obje
 1. Full-run triggers: token/base/utility CSS (except comment/whitespace-only changes, see step 0), `_layer-order.css`
    (same exception), any `.wcs`, `lang.xml`/`lang-addon.xml`, CSS build scripts, `*.gradle`, font files,
    `playwright.config.ts`, `package.json`/lockfiles.
-2. No-test paths: `doc/**`, `*.md`, `.claude/**`, `tasks/**`, `logs/**`, `node_modules`, `zkpreview/scripts/**`,
+2. No-test paths: `doc/**`, `*.md`, `.claude/**`, `tasks/**`, `logs/**`, `node_modules`, `zkthemelab/scripts/**`,
    `*-forced-colors.png` (review artifacts).
 3. Component CSS (`js/<module>/<pkg>/css/*.css` in zul, zkmax, zkex; `zkmax/css/tablet/*.css`): the `.z-*` classes
    to look at (see "Which rules are read" below), then per class:
@@ -77,7 +77,7 @@ gains `describe.serial`, a `beforeAll` its tests rely on, or a module-level obje
    exception, see "Aggregate pages".
 5. Spec file -> that spec only. Baseline PNG -> the page named by its file name; a gallery baseline
    (`<page>-gallery.png`, the sectioned `<page>-<NN>-<slug>.png`, or the slug-less
-   `<page>-<name>-<NN>.png` such as `window-overlapped-00.png`) -> only that page's desktop gallery tests. `<page>-compact-<NN>-<slug>.png` and `<page>-brand-<NN>-<slug>.png` -> only that page's `compact-gallery` / `brand-gallery` test (`variantGalleryOfBaseline`). `zkpreview/doc/*.json` -> the specs reading it.
+   `<page>-<name>-<NN>.png` such as `window-overlapped-00.png`) -> only that page's desktop gallery tests. `<page>-compact-<NN>-<slug>.png` and `<page>-brand-<NN>-<slug>.png` -> only that page's `compact-gallery` / `brand-gallery` test (`variantGalleryOfBaseline`). `zkthemelab/doc/*.json` -> the specs reading it.
 6. Widget source (`<Name>.ts`) -> pages containing `z-<name>`.
 7. Anything else -> `full`.
 
@@ -116,7 +116,7 @@ Changes that touch only blank lines or comments select nothing. Changed rules wi
 
 * **Build the index from a server with client ROD off**, and run the tests against a server with the default:
   ```bash
-  cd zkpreview
+  cd zkthemelab
   tail -f /dev/null | JAVA_TOOL_OPTIONS=-Dorg.zkoss.zul.client.rod=false withjdk.sh 17 bash ./gradlew appRun -PhttpPort=<port> --console=plain
   node scripts/build-class-index.mjs --url http://127.0.0.1:<port>
   ```
@@ -124,7 +124,7 @@ Changes that touch only blank lines or comments select nothing. Changed rules wi
   load, so more pop-up classes are present at rest and map straight to their pages (measured in
   doc/client-rod-probe.md: no page loses a class). Never run the Playwright tests against that server: a Tree
   renders without its ROD spacers and `tree-header` fails by about 16,000 pixels. Stop that server before the tests.
-* `zkpreview/doc/class-index.json` is the page -> classes index, keyed by URL path (`a.zul`, `pv/input-invalid-guard.zul`,
+* `zkthemelab/doc/class-index.json` is the page -> classes index, keyed by URL path (`a.zul`, `pv/input-invalid-guard.zul`,
   `utility/print.zul`). It covers every top-level page plus every `.zul` a spec names as a string literal URL
   (`'/pv/...zul'`; paths in comments and titles do not count). Rebuild it after a full run, with the preview server up:
   `node scripts/build-class-index.mjs --url http://127.0.0.1:8085`. It fails (and writes nothing) if any page errors.

@@ -3,8 +3,8 @@
 本文說明 Marble 的 z-index 疊層尺度:一組 `--zk-index-*` token、對應的 `.z-index-*` utility,以及——**最重要的**
 ——ZK runtime 如何在背後動態決定浮層順序,因此哪些 z-index 值真正「說了算」、哪些只是 fallback。
 
-> 互動教學頁:<${PREVIEW_URL}/utility/zindex.zul>(原始檔 `zkpreview/src/main/webapp/web/utility/zindex.zul`)。
-> 定義:`zul/src/main/resources/web/zul/css/tokens/_zindex.css`;utility:`utility/_layout.css`;回歸測試:`zkpreview/src/test/playwright/zindex-scale.spec.ts`(`zindex` 專案)。
+> 互動教學頁:<${PREVIEW_URL}/utility/zindex.zul>(原始檔 `zkthemelab/src/main/webapp/web/utility/zindex.zul`)。
+> 定義:`zul/src/main/resources/web/zul/css/tokens/_zindex.css`;utility:`utility/_layout.css`;回歸測試:`zkthemelab/src/test/playwright/zindex-scale.spec.ts`(`zindex` 專案)。
 > 稽核全紀錄(每個現有 z-index 的 selector 逐一歸類)保存於本機 `tasks/` 下,不在版本庫中;本文件保留其中的決議與理由。
 
 ---
@@ -117,7 +117,7 @@
 - `.z-index-loading (1450) > 1400`。
 
 ```bash
-npx playwright test -c zkpreview/src/test/playwright/playwright.config.ts --project=zindex
+npx playwright test -c zkthemelab/src/test/playwright/playwright.config.ts --project=zindex
 ```
 
 ---

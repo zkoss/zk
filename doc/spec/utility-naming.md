@@ -141,20 +141,20 @@ every time; the original review it came from is kept locally under `tasks/`, not
 - **Anchor the sweep** on `(?<![\w-])name(?![\w-])`. `sclass` is space-separated, and an
   unanchored match rewrites `z-text-xl` inside `z-text-2xl` — and `z-cardlayout` inside `z-card`.
 - **Sweep every file type**, verified by a repo-wide grep with no extension filter. Baselines
-  live in `.json` (`zkpreview/doc/focus-ring-known-clips.json` keys on a string embedding a whole
+  live in `.json` (`zkthemelab/doc/focus-ring-known-clips.json` keys on a string embedding a whole
   class list), and generated files need their *generator* changed too.
 - **Ask whether the change is a rename or a shift.** A rename removes the old name, so a missed
   call site becomes an orphan and the coverage guard fires. A *shift within a closed set* — the
   font-size renumber — leaves the old name valid with a new meaning, and no orphan guard can see
   it. Those need the two-phase sweep through temporaries plus the font-size equivalence oracle
-  (`zkpreview/src/test/playwright/font-size-equivalence.spec.ts`, project `font-size`).
+  (`zkthemelab/src/test/playwright/font-size-equivalence.spec.ts`, project `font-size`).
 - **Screenshots are not the gate.** `screenshot.spec.ts` compares state crops at
   `maxDiffPixels: 20`; a one-step font change on a short label fits inside that floor.
 
 ### 3.1 Sweep mechanics (every rename)
 
 - Within a single pass, replace the longest name first, or route through temporaries (3.2).
-- Exclude `../zkcml` entirely, and `zkpreview/build/`, because build output regenerates.
+- Exclude `../zkcml` entirely, and `zkthemelab/build/`, because build output regenerates.
 - Exclude this page from the sweep. It records old → new pairs, and a sweep would rewrite the
   "before" column.
 - **A removal is not a rename.** Rewriting the call sites of a deleted class to its survivor is
@@ -189,8 +189,8 @@ site. Apply it as follows:
    missed call site and is named and located before phase 2.
 3. **Gate 2 (computed font-size equivalence).** Before any edit, capture the baseline with
    `UPDATE_FONT_BASELINE=1 npx playwright test --project=font-size`. The spec
-   `zkpreview/src/test/playwright/font-size-equivalence.spec.ts` records a computed font-size
-   histogram per preview page into `zkpreview/doc/font-size-baseline.json`. After both phases,
+   `zkthemelab/src/test/playwright/font-size-equivalence.spec.ts` records a computed font-size
+   histogram per preview page into `zkthemelab/doc/font-size-baseline.json`. After both phases,
    run the same project without the env var. It must show an empty diff. A non-empty diff names
    the page and the buckets.
 4. **Gate 3 (manifest purity).** Dump the manifest before the edit, apply the intended rename map
@@ -243,7 +243,7 @@ separate verdict for these options; the reasons are its cost and risk statements
   `z-text-base` and leave 14px without a size utility) loses a step that MD3 uses for `title-small`
   and `label-large`.
 - **D4, utility sub-prefix.** Option B (`zu-` prefix) renames every utility class, touches every
-  zkpreview page, the manifest, the skill docs and the slide deck, and loses the Bootstrap/Tailwind
+  zkthemelab page, the manifest, the skill docs and the slide deck, and loses the Bootstrap/Tailwind
   recognition (`zu-m-1` no longer reads as Bootstrap's `m-1`).
 - **D5, `z-card`.** Option B (`z-surface`) sits awkwardly beside `z-bg-surface` and
   `z-bg-surface-variant`, so the names do not show that `z-surface` is the full treatment while
