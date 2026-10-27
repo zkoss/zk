@@ -95,5 +95,27 @@
         </h:div>
     </h:div>
 
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Move Popup (za11y)</h:span></h:div>
+        <h:div class="z-mb-2"><h:span class="z-text-sm z-text-secondary">Click a panel title bar (or its drag grip) to open a popup that moves the panel without dragging (WCAG 2.5.7). Styled by za11y's _layout-a11y.css.</h:span></h:div>
+        <h:div class="z-py-3">
+            <portallayout height="300px">
+                <portalchildren width="50%" title="Todo">
+                    <panel height="90px" title="Draft" border="normal">
+                        <panelchildren>Draft notes</panelchildren>
+                    </panel>
+                    <panel height="90px" title="Review" border="normal">
+                        <panelchildren>Review notes</panelchildren>
+                    </panel>
+                </portalchildren>
+                <portalchildren width="50%" title="Done">
+                    <panel height="90px" title="Publish" border="normal">
+                        <panelchildren>Publish notes</panelchildren>
+                    </panel>
+                </portalchildren>
+            </portallayout>
+        </h:div>
+    </h:div>
+
 </h:div>
 </zk>

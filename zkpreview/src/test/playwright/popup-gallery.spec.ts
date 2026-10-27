@@ -788,3 +788,45 @@ test.describe('coachmark-positions', () => {
     });
   }
 });
+
+// -------------------------------------------------------
+// portallayout (za11y move popup)
+// -------------------------------------------------------
+test.describe('portallayout', () => {
+  test.beforeEach(({ page }) => openPage(page, '/portallayout.zul'));
+
+  test('portallayout.zul: open the move popup of a panel and select a column', async ({ page }) => {
+    const layout = page.locator('.z-portallayout').last();
+    const titleBar = layout.locator('.z-panel', { hasText: 'Draft' }).first().locator('.z-panel-header');
+    const panelBelow = layout.locator('.z-panel', { hasText: 'Review' }).first();
+    const popup = page.locator('.z-portallayout-popup-open');
+    // Page coordinates: clicking scrolls the page, which changes the viewport-relative box.
+    const pageBox = () => panelBelow.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return [r.x + scrollX, r.y + scrollY, r.width, r.height];
+    });
+    const boxBefore = await pageBox();
+
+    await titleBar.click();
+    await expect(popup, 'exactly one open move popup').toHaveCount(1);
+    await popup.locator('.z-portallayout-popup-nav', { hasText: 'Todo' }).click();
+    await parkCursor(page);
+
+    await expect(popup).toHaveCSS('position', 'absolute');
+    await expect(popup).toHaveCSS('display', 'flex');
+    const lists = popup.locator('.z-portallayout-popup-content');
+    await expect(lists, 'the column list and the position list').toHaveCount(2);
+    const [columns, positions] = await Promise.all([lists.nth(0).boundingBox(), lists.nth(1).boundingBox()]);
+    expect(positions!.x, 'the position list sits right of the column list').toBeGreaterThanOrEqual(columns!.x + columns!.width);
+    expect(positions!.y, 'both lists start on the same row').toBe(columns!.y);
+    await expect(lists.nth(0)).toHaveCSS('list-style-type', 'none');
+    await expect(lists.nth(1)).toHaveCSS('list-style-type', 'none');
+    expect(await pageBox(), 'opening the popup shifts no panel').toEqual(boxBefore);
+
+    await popupShot(page, '.z-portallayout-popup-open', ['z-portallayout-popup-open', 'z-portallayout-popup-nav'], 'portallayout-popup-open.png');
+
+    await titleBar.click();
+    await expect(popup).toHaveCount(0);
+    await expect(page.locator('.z-portallayout-popup').first()).toHaveCSS('display', 'none');
+  });
+});
