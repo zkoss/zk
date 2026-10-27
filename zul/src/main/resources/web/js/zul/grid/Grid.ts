@@ -203,6 +203,13 @@ export class Grid extends zul.mesh.MeshWidget {
 			this.frozen._syncColumnBorders();
 	}
 
+	// ZK-6180: point at the new rows before replaceWidget draws them, since a Rows redraw may read grid.rows (EE stateless)
+	/** @internal */
+	override beforeChildReplaced_(oldc: zk.Widget, newc: zk.Widget): void {
+		if (newc instanceof zul.grid.Rows)
+			this.rows = newc;
+	}
+
 	/** @internal */
 	override onChildRemoved_(child: zk.Widget): void {
 		super.onChildRemoved_(child);
