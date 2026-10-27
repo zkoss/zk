@@ -379,41 +379,14 @@ const WCS_SERVED_ALLOWLIST = new Set([
 // These prevent FileNotFoundException errors at runtime. Filtered to the selected module
 // by path prefix at the point of use (see build() stage 0a).
 const stubPaths = [
-    // NOTE: confirmpopup, breadcrumb, and carousel graduated out of this stub
-    // list — they now ship real Marble CSS at js/zul/wgt/css/confirmpopup.css /
-    // breadcrumb.css / carousel.css (auto-scanned 1:1; css-uri-backed below).
-    // zkex
-    'js/zkex/grid/css/grid.css.dsp',
-    'js/zkex/inp/css/colorbox.css.dsp',
-    'js/zkex/layout/css/columnlayout.css.dsp',
-    // sliderbuttons widget is nested in rangeslider/multislider; its styles live in
-    // rangeslider.css / multislider.css, so this stub just prevents a 404 from ZK's
-    // per-widget CSS lookup.
+    // The other zkex/zkmax components ship real CSS in zkcml (auto-scanned 1:1 below), so they need no stub.
+    // These four have no source file; the stub prevents a 404 from ZK's per-widget CSS lookup.
+    // sliderbuttons is nested in rangeslider/multislider; its styles live in rangeslider.css / multislider.css.
     'js/zkex/slider/css/sliderbuttons.css.dsp',
-    // zkmax
-    // NOTE: scrollview graduated out of this stub list — it now ships real Marble
-    // CSS at js/zkmax/layout/css/scrollview.css (auto-scanned 1:1; css-uri-backed).
-    // NOTE: zkmax/css/tablet.css.dsp is NOT stubbed — it is built for real from
-    // the web/zkmax/css/tablet/_*.css partials (see tabletFiles + build stage 5).
-    'js/zkmax/inp/css/cascader.css.dsp',
-    'js/zkmax/inp/css/chosenbox.css.dsp',
-    'js/zkmax/inp/css/searchbox.css.dsp',
-    'js/zkmax/layout/css/cardlayout.css.dsp',
+    // goldenlayout's real CSS lives at js/zkmax/goldenlayout/css/, not at this css-uri path.
     'js/zkmax/layout/css/goldenlayout.css.dsp',
-    'js/zkmax/layout/css/linelayout.css.dsp',
-    'js/zkmax/layout/css/portallayout.css.dsp',
-    'js/zkmax/layout/css/rowlayout.css.dsp',
-    'js/zkmax/layout/css/splitlayout.css.dsp',
-    'js/zkmax/layout/css/tablelayout.css.dsp',
     'js/zkmax/med/css/video.css.dsp',
-    'js/zkmax/nav/css/anchornav.css.dsp',
-    'js/zkmax/nav/css/nav.css.dsp',
-    'js/zkmax/sel/css/listbox.css.dsp',
     'js/zkmax/sel/css/tree.css.dsp',
-
-    'js/zkmax/big/css/biglistbox.css.dsp',
-    'js/zkmax/grid/css/grid.css.dsp',
-    'js/zkmax/slider/css/multislider.css.dsp',
 ];
 
 function minifySvg(svg) {
