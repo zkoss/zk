@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "casefoundry": {
+      "command": "npx",
+      "args": [
+        "mcp-remote@latest",
+        "${CASEFOUNDRY_URL}",
+        "--header",
+        "Authorization: Bearer ${CASEFOUNDRY_API_KEY}",
+        "--allow-http",
+        "--transport",
+        "sse-only"
+      ]
+    }
+  }
+}
