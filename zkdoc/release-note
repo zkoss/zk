@@ -35,8 +35,6 @@ ZK 11.0.0
   ZK-6047: Notification doesn't show when its reference component is partially visible
   ZK-5765: InaccessibleWidgetBlockService blocks listheaders from being made visible by autopaging
   ZK-5259: Radiogroup external radio items lost after setPage
-  ZK-6092: DOMPurify: Fix XSS vulnerabilities CVE-2026-0540 and CVE-2025-15599
-  ZK-6127: Upgrade dompurify to 3.4.11
   ZK-6079: zul.xsd : toolbar only allows one child component instead of multiple
   ZK-6075: URL exception in IBM WebSphere / Open Liberty
   ZK-6011: an invalid post request still gets the http response 200
@@ -118,6 +116,9 @@ ZK 11.0.0
   + Upgrade httpcore5 to 5.4.3 to fix vulnerabilities
   + Upgrade jackson-databind to 2.22.1 to fix vulnerabilities
   + Upgrade tomcat-jasper-el to 9.0.120 to fix vulnerabilities
+  + Upgrade guava to 33.7.2-jre to fix vulnerabilities
+  + Upgrade DOMPurify to 3.4.17 to fix vulnerabilities
+  + Upgrade moment.js to 2.31.0 to fix vulnerabilities
   + Upgrade groovy (optional, for Groovy zscript) to 5.0.8. With 5.0.0-alpha-1, a Groovy zscript that uses JDK classes fails on JDK 22 or later with "Unsupported class file major version".
   + The following optional dependencies have known vulnerabilities that ZK 11.0.0 does not fix; review them if your
     application uses them:
