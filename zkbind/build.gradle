@@ -31,8 +31,8 @@ publishing {
 				description = 'ZK Bind API'
 				licenses {
 					license {
-						name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 3'
-						url = 'https://www.gnu.org/licenses/lgpl.html'
+						name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1'
+						url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html'
 						distribution = 'repo'
 					}
 				}
@@ -96,8 +96,8 @@ publishing {
 				description = 'ZK Bind Implementation'
 				licenses {
 					license {
-						name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 3'
-						url = 'https://www.gnu.org/licenses/lgpl.html'
+						name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1'
+						url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html'
 						distribution = 'repo'
 					}
 				}

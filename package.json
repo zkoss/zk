@@ -20,7 +20,7 @@
     "lint:css": "stylelint \"zul/src/main/resources/web/**/*.css\""
   },
   "author": "Potix",
-  "license": "LGPL-2.0-or-later",
+  "license": "LGPL-2.1-only",
   "private": true,
   "devDependencies": {
     "@babel/core": "^7.23.9",
