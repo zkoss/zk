@@ -551,6 +551,7 @@ task prepareBin() {
 		// doc
 		copy {
 			into "$buildDir/tmp/eebin/doc"
+			from "$rootDir/SECURITY.md"
 			from("$rootDir/zkdoc") {
 				include "**/release-note"
 				include "**/THIRD-PARTY-LICENSES"
@@ -586,6 +587,7 @@ task prepareBin() {
 		}
 		copy {
 			into "$buildDir/tmp/cebin/doc"
+			from "$rootDir/SECURITY.md"
 			from "$rootDir/zkdoc"
 		}
 	}
@@ -713,6 +715,7 @@ task prepareSrc() {
 		// doc
 		copy {
 			into "$buildDir/tmp/src/doc"
+			from "$rootDir/SECURITY.md"
 			from("$rootDir/zkdoc") {
 				include "**/release-note"
 			}
@@ -746,6 +749,7 @@ task prepareSrc() {
 		}
 		copy {
 			into "$buildDir/tmp/cesrc/doc"
+			from "$rootDir/SECURITY.md"
 			from "$rootDir/zkdoc"
 		}
 	}
