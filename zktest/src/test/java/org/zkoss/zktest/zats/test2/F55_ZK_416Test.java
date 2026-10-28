@@ -27,9 +27,10 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 		connect();
 
 		Actions actions = getActions();
-		actions.dragAndDrop(
-					toElement(jq("@listitem:contains(ZK Forge)")),
-					toElement(jq("@listitem:contains(ZK Studio)")))
+		actions.clickAndHold(toElement(jq("@listitem:contains(ZK Forge)")))
+				.moveByOffset(10, 0)
+				.moveToElement(toElement(jq("@listitem:contains(ZK Studio)")))
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertFalse(jq("$left @listitem:contains(ZK Forge)").exists());
@@ -37,9 +38,10 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 
 		click(jq("@listitem:contains(ZK Mobile)"));
 		waitResponse();
-		actions.dragAndDrop(
-					toElement(jq("@listitem:contains(ZK Mobile)")),
-					toElement(jq("@listitem:contains(ZK Studio)")))
+		actions.clickAndHold(toElement(jq("@listitem:contains(ZK Mobile)")))
+				.moveByOffset(10, 0)
+				.moveToElement(toElement(jq("@listitem:contains(ZK Studio)")))
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertFalse(jq("$left @listitem:contains(ZK Mobile)").exists());
@@ -47,9 +49,10 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 
 		click(jq("@listitem:contains(ZK GWT)"));
 		waitResponse();
-		actions.dragAndDrop(
-					toElement(jq("@listitem:contains(ZK JSF)")),
-					toElement(jq("@listitem:contains(ZK Studio)")))
+		actions.clickAndHold(toElement(jq("@listitem:contains(ZK JSF)")))
+				.moveByOffset(10, 0)
+				.moveToElement(toElement(jq("@listitem:contains(ZK Studio)")))
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertFalse(jq("$left @listitem:contains(ZK GWT)").exists());
@@ -69,9 +72,10 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 		actions.keyDown(Keys.CONTROL)
 				.click(toElement(jq("@listitem:contains(ZK GWT)")))
 				.keyUp(Keys.CONTROL)
-				.dragAndDrop(
-						toElement(jq("@listitem:contains(ZK GWT)")),
-						toElement(jq("@listitem:contains(ZK Studio)")))
+				.clickAndHold(toElement(jq("@listitem:contains(ZK GWT)")))
+				.moveByOffset(10, 0)
+				.moveToElement(toElement(jq("@listitem:contains(ZK Studio)")))
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertFalse(jq("$left @listitem:contains(ZK Forge)").exists());
@@ -84,9 +88,10 @@ public class F55_ZK_416Test extends WebDriverTestCase {
 		actions.keyDown(Keys.SHIFT)
 				.click(toElement(jq("@listitem:contains(ZK JSP)")))
 				.keyUp(Keys.SHIFT)
-				.dragAndDrop(
-						toElement(jq("@listitem:contains(ZK Spring)")),
-						toElement(jq("@listitem:contains(ZK Studio)")))
+				.clickAndHold(toElement(jq("@listitem:contains(ZK Spring)")))
+				.moveByOffset(10, 0)
+				.moveToElement(toElement(jq("@listitem:contains(ZK Studio)")))
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertFalse(jq("$left @listitem:contains(ZK Mobile)").exists());

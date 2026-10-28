@@ -14,18 +14,21 @@ package org.zkoss.zktest.zats.test2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
 public class B50_ZK_937Test extends WebDriverTestCase {
 	@Test
 	public void test() {
-		Actions act = new Actions(connect());
+		connect();
 		waitResponse();
 		WebElement first = toElement(jq(".z-tab").eq(0));
 		WebElement fourth = toElement(jq(".z-tab").eq(3));
-		act.dragAndDrop(first, fourth).perform();
+		getActions().clickAndHold(first)
+				.moveByOffset(10, 0)
+				.moveToElement(fourth)
+				.release()
+				.perform();
 		waitResponse();
 		Assertions.assertEquals("first", jq(".z-tab").eq(2).text());
 		Assertions.assertEquals("block", jq(".z-tabpanels div:contains(3)").css("display"));
