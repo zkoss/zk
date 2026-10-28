@@ -49,8 +49,6 @@
     height: 20px;
     /* center the 20px thumb on the 4px track */
     margin-top: -10px;
-    /* center thumb on its JS-set left position */
-    margin-left: -10px;
     border-radius: var(--zk-slider-radius);
     background-color: var(--zk-slider-accent);
     box-shadow: var(--zk-slider-elevation);
@@ -113,11 +111,12 @@
 .z-slider-vertical .z-slider-button {
     left: 50%;
     top: auto;
+    /* cross axis: centre the 20px thumb on the 4px track */
     margin-left: -10px;
-    /* JS sets `top` = the value position (thumb CENTER); pull up half the 20px
-       thumb so its center — not its top edge — lands there (mirrors horizontal
-       margin-left). margin-top:0 left every vertical thumb 10px low. */
-    margin-top: -10px;
+    /* No margin on the sliding axis (top here, left when horizontal): Slider.ts
+       derives the Draggable snap grid from the thumb's offset, so a margin there
+       shifts every snap position by 10px (ZK-2085). */
+    margin-top: 0;
 }
 
 /* ── Sphere mold — 3D gradient thumb ────────────────── */
