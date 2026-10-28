@@ -119,8 +119,17 @@ ZK 11.0.0
   + Upgrade jackson-databind to 2.22.1 to fix vulnerabilities
   + Upgrade tomcat-jasper-el to 9.0.120 to fix vulnerabilities
   + Upgrade groovy (optional, for Groovy zscript) to 5.0.8. With 5.0.0-alpha-1, a Groovy zscript that uses JDK classes fails on JDK 22 or later with "Unsupported class file major version".
-  + jasperreports (an optional dependency in zkex) update: JasperReports community edition 7.x contains the fix
-    (no fixed 6.x release exists), but upgrading to 7.x requires ZK public API changes so is deferred to ZK 11+.
+  + The following optional dependencies have known vulnerabilities that ZK 11.0.0 does not fix; review them if your
+    application uses them:
+    - jasperreports 6.20.5 (in zkex, also in lib/ext of the EE binary distribution): CVE-2025-10492 is fixed only in
+      JasperReports 7.x, which needs ZK public API changes. If you do not use the Jasperreport component, remove
+      jasperreports.jar; otherwise see https://community.jaspersoft.com/knowledgebase/faq/update-details-about-the-java-vulnerability-r4897/.
+    - jackson-databind 2.14.1 and commons-beanutils 1.9.4, dependencies of jasperreports 6.20.5: upgrade them in your
+      application if you use jasperreports.
+    - spring-beans, spring-context and spring-web 5.3.33 (in zkplus): no open-source Spring 5.3.x release fixes them, and
+      Spring 6 needs jakarta.servlet; use a commercially supported Spring 5.3.x release if you have one.
+    - tomcat-jasper-el 9.0.120 (in zkmax): upgrade it to the latest 9.0.x in your application.
+    - jline 2.14.6, shaded in jython 2.7.4 (in zk): the reported CVEs are in JLine 3 modules that jline 2 does not contain.
   + Some CSS variable names are changed for semantic correctness. The values are unchanged; override
     the new name. The LESS aliases in the ZK theme template's _zkvariables.less follow (@inputTextSize -> @inputFontSize):
         --zk-text-color-default3 -> --zk-text-color-inverse

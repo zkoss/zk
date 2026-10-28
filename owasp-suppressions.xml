@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
 	<!--
-		Accepted risks documented in ZK 10.3.0 Upgrade Notes.
-		Suppressions expire 2026-09-01 to be re-evaluated for the ZK 11 beta release.
+		Accepted risks documented in ZK 11.0.0 Upgrade Notes.
+		Suppressions expire 2027-04-01 to be re-evaluated.
 	-->
 	<suppress until="2026-09-01Z">
 		<notes><![CDATA[
@@ -18,20 +18,28 @@
 		<packageUrl regex="true">^pkg:maven/com\.google\.protobuf/protobuf\-java@3\.21\..*$</packageUrl>
 		<vulnerabilityName regex="true">.*</vulnerabilityName>
 	</suppress>
-	<suppress until="2026-09-01Z">
+	<suppress until="2027-04-01Z">
 		<notes><![CDATA[
 			spring stack: spring-beans, spring-context and spring-web are optional dependencies of zkplus;
 			spring-aop, spring-core, spring-expression and spring-jcl are their transitive dependencies,
-			see ZK 10.3.0 Upgrade Notes.
+			see ZK 11.0.0 Upgrade Notes.
 		]]></notes>
 		<packageUrl regex="true">^pkg:maven/org\.springframework/spring\-(aop|beans|context|core|expression|jcl|web)@5\.3\..*$</packageUrl>
 		<vulnerabilityName regex="true">.*</vulnerabilityName>
 	</suppress>
-	<suppress until="2026-09-01Z">
+	<suppress until="2027-04-01Z">
 		<notes><![CDATA[
-			jline  shaded inside jython (an optional dependency of zk): not yet fixed in the latest jython release.
+			jline  shaded inside jython (an optional dependency of zk): not yet fixed in the latest jython release,
+			see ZK 11.0.0 Upgrade Notes.
 		]]></notes>
 		<packageUrl regex="true">^pkg:maven/jline/jline@2\.14\..*$</packageUrl>
+		<vulnerabilityName regex="true">.*</vulnerabilityName>
+	</suppress>
+	<suppress until="2027-04-01Z">
+		<notes><![CDATA[
+			brace-expansion 1.x: build-time only (eslint-plugin-zk -> jscodeshift -> minimatch 3), not shipped in any ZK artifact.
+		]]></notes>
+		<packageUrl regex="true">^pkg:npm/brace\-expansion@1\..*$</packageUrl>
 		<vulnerabilityName regex="true">.*</vulnerabilityName>
 	</suppress>
 </suppressions>
