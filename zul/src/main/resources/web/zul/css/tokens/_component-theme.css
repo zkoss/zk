@@ -994,6 +994,16 @@
     --zk-cropper-fg:             var(--zk-color-on-surface-variant);
     --zk-cropper-accent:         var(--zk-color-primary);
 
+    /* ── Fileupload — picked-file rows of the Fileupload.get dialog
+       (zul/fud/css/fileupload.css). The five names are defined by ZK-6199 (the
+       IceBlue LESS variables of the same name), so an application that overrides
+       them restyles the rows in either theme. */
+    --zk-fileupload-font-family:      var(--zk-typescale-font-family);
+    --zk-fileupload-background-color: var(--zk-color-surface-container-low);
+    --zk-fileupload-border-color:     var(--zk-color-outline-variant);
+    --zk-fileupload-color:            var(--zk-color-on-surface);
+    --zk-fileupload-cancel-color:     var(--zk-color-primary);
+
     /* ── Dropupload (EE, zkmax) — HTML5 drag-and-drop file-upload drop zone
        (zkmax/wgt/css/dropupload.css): .z-dropupload root is the ONLY
        themeable surface — a resting box (border + radius + background). ZK

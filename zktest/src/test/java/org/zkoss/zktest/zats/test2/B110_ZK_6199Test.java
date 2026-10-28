@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Locale;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.openqa.selenium.By;
@@ -32,37 +33,10 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 public class B110_ZK_6199Test extends WebDriverTestCase {
 	@Test
 	public void styleUploadRowsAndRemoveCompletedFiles(@TempDir Path directory) throws IOException {
-		Path file = Files.write(directory.resolve("ZK-6199.txt"), "upload".getBytes(StandardCharsets.UTF_8));
-		connect();
-		click(jq("$open"));
-		waitResponse();
-
-		// ZK-6199: hold the first upload so the progress row survives until its styles are checked.
-		eval("(function () {var start = zul.Uploader.prototype.start;"
-				+ "zul.Uploader.prototype.start = function () {"
-				+ "zul.Uploader.prototype.start = start; window.zk6199Uploader = this; return true;};})()");
-		driver.findElement(By.cssSelector("input[type=file]")).sendKeys(file.toAbsolutePath().toString());
-		waitResponse();
-
+		Path file = holdFirstUpload(directory);
 		assertTrue(jq(".z-fileupload-file").exists(), "the upload row must expose a stylesheet hook");
 		assertFalse(jq(".z-fileupload-file[style], .z-fileupload-file [style]").exists(),
 				"row styles must not override application stylesheets");
-		assertEquals("rgb(244, 248, 255)", jq(".z-fileupload-file").css("background-color"));
-		assertEquals("rgb(15, 59, 130)", jq(".z-fileupload-file").css("color"));
-		assertEquals("rgb(153, 170, 189)", jq(".z-fileupload-file").css("border-top-color"));
-		assertEquals("1px", jq(".z-fileupload-file").css("border-top-width"));
-		assertEquals("2px", jq(".z-fileupload-file").css("padding-left"));
-		assertEquals("16px", jq(".z-fileupload-file").css("min-height"));
-		assertEquals("content-box", jq(".z-fileupload-file").css("box-sizing"));
-		assertEquals("11px", jq(".z-fileupload-file").css("font-size"));
-		assertEquals("arial, sans-serif", jq(".z-fileupload-file").css("font-family").toLowerCase(Locale.ROOT));
-		assertEquals("left", jq(".z-fileupload-cancel").css("float"));
-		assertEquals("2px", jq(".z-fileupload-cancel").css("padding-left"));
-		assertEquals("rgb(3, 102, 172)", jq(".z-fileupload-cancel").css("color"));
-		assertEquals("700", jq(".z-fileupload-cancel").css("font-weight"));
-		assertEquals("pointer", jq(".z-fileupload-cancel").css("cursor"));
-		assertEquals("left", jq(".z-fileupload-icon").css("float"));
-		assertEquals("24px", jq(".z-fileupload-size").css("padding-left"));
 		assertFalse(jq("$fileupload").isVisible(), "the browse button must hide at the one-file limit");
 		new WebDriverWait(driver, Duration.ofSeconds(5)).until(d ->
 				"true".equals(getEval("document.querySelector('.z-fileupload-icon').naturalWidth > 0")));
@@ -117,6 +91,44 @@ public class B110_ZK_6199Test extends WebDriverTestCase {
 		click(jq("$submit"));
 		waitResponse();
 		assertEquals("1:ZK-6199.txt", jq("$result").text(), "only the replacement file must reach the callback");
+	}
+
+	// IceBlueOnly: the expected values are the IceBlue defaults of the ZK-6199 variables; Marble keeps its own.
+	@Test
+	@Tag("IceBlueOnly")
+	public void styleUploadRowsWithIceBlueDefaults(@TempDir Path directory) throws IOException {
+		holdFirstUpload(directory);
+		assertEquals("rgb(244, 248, 255)", jq(".z-fileupload-file").css("background-color"));
+		assertEquals("rgb(15, 59, 130)", jq(".z-fileupload-file").css("color"));
+		assertEquals("rgb(153, 170, 189)", jq(".z-fileupload-file").css("border-top-color"));
+		assertEquals("1px", jq(".z-fileupload-file").css("border-top-width"));
+		assertEquals("2px", jq(".z-fileupload-file").css("padding-left"));
+		assertEquals("16px", jq(".z-fileupload-file").css("min-height"));
+		assertEquals("content-box", jq(".z-fileupload-file").css("box-sizing"));
+		assertEquals("11px", jq(".z-fileupload-file").css("font-size"));
+		assertEquals("arial, sans-serif", jq(".z-fileupload-file").css("font-family").toLowerCase(Locale.ROOT));
+		assertEquals("left", jq(".z-fileupload-cancel").css("float"));
+		assertEquals("2px", jq(".z-fileupload-cancel").css("padding-left"));
+		assertEquals("rgb(3, 102, 172)", jq(".z-fileupload-cancel").css("color"));
+		assertEquals("700", jq(".z-fileupload-cancel").css("font-weight"));
+		assertEquals("pointer", jq(".z-fileupload-cancel").css("cursor"));
+		assertEquals("left", jq(".z-fileupload-icon").css("float"));
+		assertEquals("24px", jq(".z-fileupload-size").css("padding-left"));
+	}
+
+	private Path holdFirstUpload(Path directory) throws IOException {
+		Path file = Files.write(directory.resolve("ZK-6199.txt"), "upload".getBytes(StandardCharsets.UTF_8));
+		connect();
+		click(jq("$open"));
+		waitResponse();
+
+		// ZK-6199: hold the first upload so the progress row survives until its styles are checked.
+		eval("(function () {var start = zul.Uploader.prototype.start;"
+				+ "zul.Uploader.prototype.start = function () {"
+				+ "zul.Uploader.prototype.start = start; window.zk6199Uploader = this; return true;};})()");
+		driver.findElement(By.cssSelector("input[type=file]")).sendKeys(file.toAbsolutePath().toString());
+		waitResponse();
+		return file;
 	}
 
 	private void waitForUpload() {
