@@ -12,6 +12,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -22,7 +23,18 @@ public class B96_ZK_4915Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 2; i++) {
+			checkBadgeAligned(i);
+		}
+	}
+
+	// IceBlueOnly: a collapsed navbar centres the badge on the icon in IceBlue; Marble overlaps the icon's corner.
+	@Test
+	@Tag("IceBlueOnly")
+	public void collapsedBadgeCenteredOnIcon() {
+		connect();
+
+		for (int i = 2; i < 4; i++) {
 			checkBadgeAligned(i);
 		}
 	}
