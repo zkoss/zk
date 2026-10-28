@@ -331,8 +331,8 @@ subprojects {
 						description = project.description
 						licenses {
 							license {
-								name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 3'
-								url = 'https://www.gnu.org/licenses/lgpl.html'
+								name = project.name == 'zel' ? 'Apache License, Version 2.0' : 'GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1'
+								url = project.name == 'zel' ? 'https://www.apache.org/licenses/LICENSE-2.0' : 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html'
 								distribution = 'repo'
 							}
 						}
