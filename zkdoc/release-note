@@ -17,6 +17,7 @@ ZK 11.0.0
   ZK-6056: Configurable Filter Logic for Chosenbox with ListSubModel
   ZK-6096: Component-level stubonly Policy (Conditional Inheritance)
   ZK-6085: WCAG 2.2 AA Feasibility Study
+  ZK-6112: a theme of Material Design 3
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -121,7 +122,7 @@ ZK 11.0.0
   + jasperreports (an optional dependency in zkex) update: JasperReports community edition 7.x contains the fix
     (no fixed 6.x release exists), but upgrading to 7.x requires ZK public API changes so is deferred to ZK 11+.
   + Some CSS variable names are changed for semantic correctness. The values are unchanged; override
-    the new name. The LESS aliases in zul/less/_zkvariables.less follow (@inputTextSize -> @inputFontSize):
+    the new name. The LESS aliases in the ZK theme template's _zkvariables.less follow (@inputTextSize -> @inputFontSize):
         --zk-text-color-default3 -> --zk-text-color-inverse
         --zk-color-background1 -> --zk-color-background-subtle
         --zk-color-background3 -> --zk-color-background-base
@@ -225,6 +226,12 @@ ZK 11.0.0
   + org.zkoss.stateless.sul.IILineitemCtrl is removed; it was a misnamed duplicate of
     org.zkoss.stateless.sul.ILineitemCtrl and was never used by the framework.
     Code that called IILineitemCtrl.from(Lineitem) should call ILineitemCtrl.from(Lineitem) instead.
+  + The default theme is now Marble (Material Design 3). Marble uses its own CSS variable
+    names, so most overrides written for IceBlue (e.g. --zk-button-background-color) no longer take
+    effect. To keep the IceBlue look, add the org.zkoss.theme:iceblue jar (iceblue_c for the compact
+    variant) and set the library property org.zkoss.theme.preferred to iceblue.
+  + zul no longer ships LESS sources (~./zul/less/*). A custom theme that imports them must be built
+    from the ZK theme template (https://github.com/zkoss/zkThemeTemplate) instead.
 
    --------
 ZK 10.3.0
