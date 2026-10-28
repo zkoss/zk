@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — portallayout</title>
+<!--
+  Self-contained marble design contract mockup.
+  Open in any browser (no server, no JS) to compare against
+  doc/contracts/baselines/portallayout-iceblue.png
+
+  Class names match the DOM tree in:
+    .claude/skills/zk-component-rules/components/portallayout.md
+
+  Only --zk-* tokens carry design values.
+-->
+<style>
+/* ── Inlined tokens ──────────────────────────────────────────────────── */
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-error: #d32f2f;
+    --zk-color-warning: #f57c00;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-extra-small: 4px;
+    --zk-shape-card: 6px;
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --zk-typescale-body-medium-size: 14px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-1: rgba(50,50,93,0.024) 0px 2px 5px -1px, rgba(0,0,0,0.05) 0px 1px 3px -1px;
+    --zk-elevation-2: 0 2px 6px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+    --zk-elevation-3: 0 4px 12px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.14);
+
+    /* Motion */
+    --zk-motion-duration-short3: 250ms;
+    --zk-motion-easing-legacy: cubic-bezier(0.4, 0, 0.2, 1);
+    --zk-motion-transition-standard: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+    --zk-state-dragged-opacity: 0.16;
+    --zk-state-disabled-opacity: 0.38;
+}
+
+/* ── Mockup chrome ───────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: var(--zk-spacing-2);
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ── Panel stub (simplified panel chrome for mockup context) ─────────── */
+.z-panel {
+    background: var(--zk-color-surface);
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-card);
+    margin-bottom: var(--zk-spacing-3);
+    overflow: hidden;
+}
+.z-panel:last-child { margin-bottom: 0; }
+.z-panel-head {
+    display: flex;
+    align-items: center;
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    background: var(--zk-color-surface);
+}
+.z-panel-header {
+    flex: 1;
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface);
+}
+.z-panelchildren {
+    padding: var(--zk-spacing-3);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-surface-variant);
+    min-height: 60px;
+}
+
+/* ── portallayout shell ──────────────────────────────────────────────── */
+.z-portallayout {
+    overflow: hidden;
+    background: transparent;
+}
+.z-portallayout-vertical > .z-portalchildren {
+    height: 100%;
+    float: left;
+}
+.z-portallayout::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+/* float-clear sentinel equivalent */
+.z-clear { clear: both; }
+
+/* ── portalchildren — plain (no frame) ──────────────────────────────── */
+.z-portalchildren {
+    overflow: hidden;
+    padding: 0 var(--zk-spacing-2);
+}
+.z-portalchildren-content {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+/* ── portalchildren-title (always in DOM, hidden by default) ─────────── */
+.z-portalchildren-title {
+    display: none;
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    padding-bottom: var(--zk-spacing-3);
+    overflow: hidden;
+}
+
+/* ── portalchildren-counter badge ───────────────────────────────────── */
+.z-portalchildren-counter {
+    display: none;
+    background: var(--zk-color-primary-container);
+    color: var(--zk-color-primary);
+    border-radius: var(--zk-shape-corner-full);
+    font-size: var(--zk-typescale-body-small-size);
+    font-weight: var(--zk-font-weight-semibold);
+    padding: 0 var(--zk-spacing-1);
+    margin-right: var(--zk-spacing-1);
+    vertical-align: middle;
+}
+.z-portalchildren-counter-on {
+    display: inline;
+}
+
+/* ── portalchildren — framed variant ────────────────────────────────── */
+.z-portalchildren-frame {
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-card);
+    background: var(--zk-color-surface);
+    overflow: hidden;
+    padding: var(--zk-spacing-3);
+    padding-bottom: 0;
+    margin-right: var(--zk-spacing-3);
+}
+.z-portalchildren-frame:last-child {
+    margin-right: 0;
+}
+.z-portalchildren-frame > .z-portalchildren-title {
+    display: block;
+}
+.z-portalchildren-frame > .z-portalchildren-content > .z-panel {
+    margin-bottom: var(--zk-spacing-3);
+}
+.z-portalchildren-frame > .z-portalchildren-content > .z-panel:last-child {
+    margin-bottom: var(--zk-spacing-3);
+}
+
+/* ── drag ghost ─────────────────────────────────────────────────────── */
+.z-panel-move-ghost {
+    background: var(--zk-color-surface);
+    opacity: var(--zk-state-dragged-opacity);
+    border: 1px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-card);
+    pointer-events: none;
+}
+
+/* ── drop placeholder block ─────────────────────────────────────────── */
+.z-panel-move-block {
+    background: var(--zk-color-primary-container);
+    border-radius: var(--zk-shape-corner-extra-small);
+    height: 10px;
+    width: auto;
+    margin-bottom: var(--zk-spacing-3);
+}
+
+/* ── draggable header cursor ────────────────────────────────────────── */
+.z-panel-header-move {
+    cursor: move;
+}
+
+/* ── mockup helpers: simulate live width splits ─────────────────────── */
+.demo-portallayout-wrap {
+    overflow: hidden;
+    background: var(--zk-color-background);
+    padding: var(--zk-spacing-3);
+    border-radius: var(--zk-shape-card);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+.demo-col-50 { width: 50%; float: left; padding-right: var(--zk-spacing-2); }
+.demo-col-33 { width: 33.33%; float: left; padding-right: var(--zk-spacing-2); }
+.demo-col-33:last-child { padding-right: 0; }
+.demo-col-50:last-child { padding-right: 0; }
+.demo-clearfix::after { content: ''; display: table; clear: both; }
+</style>
+</head>
+<body>
+
+<h1>portallayout — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T1</span>
+    <span>closest-sibling: none (novel shell) — panel governs child chrome</span>
+</div>
+
+<!-- ── 1. Plain vertical layout (default) ─────────────────────────── -->
+<section class="matrix-section">
+    <h2>Plain vertical layout (default — no column title)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default shell<br>(transparent, 2 cols 50%)</div>
+        <div class="state-cell">
+            <div class="demo-portallayout-wrap demo-clearfix">
+                <!-- Column 1 — plain (no title) -->
+                <div class="demo-col-50">
+                    <div class="z-portalchildren">
+                        <div class="z-portalchildren-title">
+                            <!-- hidden by default — counter always present in DOM -->
+                            <span class="z-portalchildren-counter">2</span>
+                        </div>
+                        <div class="z-portalchildren-content">
+                            <div class="z-panel">
+                                <div class="z-panel-head">
+                                    <div class="z-panel-header">Calendar</div>
+                                </div>
+                                <div class="z-panelchildren">panel content</div>
+                            </div>
+                            <div class="z-panel">
+                                <div class="z-panel-head">
+                                    <div class="z-panel-header">Colorbox</div>
+                                </div>
+                                <div class="z-panelchildren">panel content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column 2 — plain -->
+                <div class="demo-col-50">
+                    <div class="z-portalchildren">
+                        <div class="z-portalchildren-title">
+                            <span class="z-portalchildren-counter">1</span>
+                        </div>
+                        <div class="z-portalchildren-content">
+                            <div class="z-panel">
+                                <div class="z-panel-head">
+                                    <div class="z-panel-header">Editor</div>
+                                </div>
+                                <div class="z-panelchildren" style="min-height: 120px;">panel content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ── 2. Framed column variant ────────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Framed column variant (portalchildren with title=)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">framed column<br>(title + counter-on)</div>
+        <div class="state-cell">
+            <div class="demo-portallayout-wrap demo-clearfix">
+                <!-- Column 1 — framed with title -->
+                <div class="demo-col-50">
+                    <div class="z-portalchildren z-portalchildren-frame">
+                        <div class="z-portalchildren-title">
+                            <span class="z-portalchildren-counter z-portalchildren-counter-on">2</span>
+                            Left Column
+                        </div>
+                        <div class="z-portalchildren-content">
+                            <div class="z-panel">
+                                <div class="z-panel-head">
+                                    <div class="z-panel-header">Panel A</div>
+                                </div>
+                                <div class="z-panelchildren">panel content</div>
+                            </div>
+                            <div class="z-panel">
+                                <div class="z-panel-head">
+                                    <div class="z-panel-header">Panel B</div>
+                                </div>
+                                <div class="z-panelchildren">panel content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column 2 — framed -->
+                <div class="demo-col-50">
+                    <div class="z-portalchildren z-portalchildren-frame">
+                        <div class="z-portalchildren-title">
+                            <span class="z-portalchildren-counter z-portalchildren-counter-on">1</span>
+                            Right Column
+                        </div>
+                        <div class="z-portalchildren-content">
+                            <div class="z-panel">
+                                <div class="z-panel-head">
+                                    <div class="z-panel-header">Panel C</div>
+                                </div>
+                                <div class="z-panelchildren">panel content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">counter hidden<br>(counterVisible=false)</div>
+        <div class="state-cell">
+            <div class="demo-portallayout-wrap demo-clearfix">
+                <div class="demo-col-50">
+                    <div class="z-portalchildren z-portalchildren-frame">
+                        <div class="z-portalchildren-title">
+                            <!-- counter in DOM but NOT .z-portalchildren-counter-on -->
+                            <span class="z-portalchildren-counter">1</span>
+                            Column — counter off
+                        </div>
+                        <div class="z-portalchildren-content">
+                            <div class="z-panel">
+                                <div class="z-panel-head">
+                                    <div class="z-panel-header">Panel A</div>
+                                </div>
+                                <div class="z-panelchildren">panel content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-col-50">
+                    <div class="z-portalchildren z-portalchildren-frame">
+                        <div class="z-portalchildren-title">
+                            <span class="z-portalchildren-counter">0</span>
+                            Empty Column
+                        </div>
+                        <div class="z-portalchildren-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ── 3. Three-column framed layout ──────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Three-column framed layout</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">3 cols × 33%</div>
+        <div class="state-cell">
+            <div class="demo-portallayout-wrap demo-clearfix">
+                <div class="demo-col-33">
+                    <div class="z-portalchildren z-portalchildren-frame">
+                        <div class="z-portalchildren-title">
+                            <span class="z-portalchildren-counter z-portalchildren-counter-on">1</span>
+                            To Do
+                        </div>
+                        <div class="z-portalchildren-content">
+                            <div class="z-panel">
+                                <div class="z-panel-head"><div class="z-panel-header">Task A</div></div>
+                                <div class="z-panelchildren">content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-col-33">
+                    <div class="z-portalchildren z-portalchildren-frame">
+                        <div class="z-portalchildren-title">
+                            <span class="z-portalchildren-counter z-portalchildren-counter-on">2</span>
+                            In Progress
+                        </div>
+                        <div class="z-portalchildren-content">
+                            <div class="z-panel">
+                                <div class="z-panel-head"><div class="z-panel-header">Task B</div></div>
+                                <div class="z-panelchildren">content</div>
+                            </div>
+                            <div class="z-panel">
+                                <div class="z-panel-head"><div class="z-panel-header">Task C</div></div>
+                                <div class="z-panelchildren">content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-col-33">
+                    <div class="z-portalchildren z-portalchildren-frame">
+                        <div class="z-portalchildren-title">
+                            <span class="z-portalchildren-counter z-portalchildren-counter-on">0</span>
+                            Done
+                        </div>
+                        <div class="z-portalchildren-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ── 4. Drag-and-drop states ─────────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Drag-and-drop states</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">drag ghost<br>(.z-panel-move-ghost)</div>
+        <div class="state-cell">
+            <!-- Ghost is normally position:absolute on body; here shown inline for mockup -->
+            <div class="z-panel-move-ghost" style="position:relative; width:280px; height:80px; display:flex; align-items:center; justify-content:center;">
+                <span style="opacity:1; color: var(--zk-color-on-surface-variant); font-size: var(--zk-typescale-body-small-size);">drag ghost (panel clone)</span>
+            </div>
+        </div>
+
+        <div class="state-label">drop placeholder<br>(.z-panel-move-block)</div>
+        <div class="state-cell">
+            <div style="width: 280px;">
+                <div class="z-panel">
+                    <div class="z-panel-head"><div class="z-panel-header">Panel A</div></div>
+                    <div class="z-panelchildren">above placeholder</div>
+                </div>
+                <!-- drop placeholder — shown in vertical orient (10px height strip) -->
+                <div class="z-panel-move-block"></div>
+                <div class="z-panel">
+                    <div class="z-panel-head"><div class="z-panel-header">Panel B</div></div>
+                    <div class="z-panelchildren">below placeholder</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">draggable header<br>(.z-panel-header-move)</div>
+        <div class="state-cell">
+            <div class="z-panel" style="width: 280px;">
+                <div class="z-panel-head">
+                    <!-- cursor:move applied to this element during drag -->
+                    <div class="z-panel-header z-panel-header-move">Draggable Panel Header</div>
+                </div>
+                <div class="z-panelchildren">hover the header — cursor should be <code>move</code></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

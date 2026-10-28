@@ -1,0 +1,130 @@
+/* MD3 Breadcrumb — horizontal navigation trail (ZK 10.4.0, CE)
+   DOM (see .claude/skills/zk-component-rules/components/breadcrumb.md):
+   nav.z-breadcrumb
+     └─ ol.z-breadcrumb-list
+        ├─ li.z-breadcrumbitem[.z-breadcrumbitem-disabled]
+        │    └─ a[href]                       (link)
+        │       -- or --
+        │       span[tabindex="-1"]           (current page / disabled)
+        ├─ li.z-breadcrumb-separator
+        │    └─ text node OR i.{iconSclass}   (icon separator — masked icon
+        │                                       system, see base/_icons.css)
+        └─ li.z-breadcrumb-ellipsis            (CLIENT-INJECTED ONLY, only
+             └─ button[type="button"]          present during a maxItems collapse)
+   Renders as plain inline text chrome — no card, no border, no radius (the same
+   borderless treatment as `a`/`caption`). Separators and resting links share the
+   muted --zk-breadcrumb-fg voice; hover/focus raise to --zk-breadcrumb-fg-hover
+   with an underline (link only); the terminal (current-page) span gets the
+   full-emphasis --zk-breadcrumb-current-fg. See doc/contracts/breadcrumb.md. */
+
+@layer zk-components {
+
+/* ─── Root: plain inline text chrome, no card ─────────────────────────── */
+.z-breadcrumb {
+    display: inline-block;
+    color: var(--zk-breadcrumb-fg);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: var(--zk-typescale-body-medium-line-height);
+}
+
+/* ─── List: flex row, wraps to another line when the trail overflows ──── */
+.z-breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Every <li> in the trail (item / separator / ellipsis) aligns on one row per
+   wrapped line, regardless of its inner content (a / span / text / icon / button). */
+.z-breadcrumbitem,
+.z-breadcrumb-separator,
+.z-breadcrumb-ellipsis {
+    display: flex;
+    align-items: center;
+    list-style: none;
+}
+
+/* ─── Separator: text node or icon form (icon inherits color via currentColor
+   from the masked-icon system in base/_icons.css — both forms styled here) ─ */
+.z-breadcrumb-separator {
+    color: var(--zk-breadcrumb-fg);
+    margin-left: var(--zk-spacing-2);
+    margin-right: var(--zk-spacing-2);
+    user-select: none;
+}
+
+/* ─── Ellipsis (client-injected only during a maxItems collapse) — tighter
+   margin than a full separator since the "…" glyph itself supplies weight ─ */
+.z-breadcrumb-ellipsis {
+    margin-left: var(--zk-spacing-1);
+    margin-right: var(--zk-spacing-1);
+}
+
+/* Native <button> chrome reset so it reads as plain text, not a control. */
+.z-breadcrumb-ellipsis > button {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    line-height: inherit;
+    color: var(--zk-breadcrumb-fg);
+    cursor: pointer;
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-breadcrumb-ellipsis > button:hover,
+.z-breadcrumb-ellipsis > button:focus-visible {
+    color: var(--zk-breadcrumb-fg-hover);
+}
+
+/* ─── Navigable item (<a>) — muted at rest, raised on hover/focus ──────── */
+.z-breadcrumbitem > a {
+    color: var(--zk-breadcrumb-fg);
+    text-decoration: none;
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-breadcrumbitem > a:hover,
+.z-breadcrumbitem > a:focus-visible {
+    color: var(--zk-breadcrumb-fg-hover);
+}
+
+.z-breadcrumbitem > a:hover {
+    text-decoration: underline;
+}
+
+/* ─── Current-page / disabled item (<span>) — full-emphasis "you are here" */
+.z-breadcrumbitem > span {
+    color: var(--zk-breadcrumb-current-fg);
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* ─── Disabled item — dims the whole <li>; pointer-events is a defense-in-
+   depth backstop to the widget's own click-suppression (doClick_ already
+   stops the event) ──────────────────────────────────────────────────── */
+.z-breadcrumbitem-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+}
+
+/* ─── Focus ring — every focusable content element (link, current span
+   reachable via arrow keys, ellipsis button), drawn outward: these are
+   borderless text elements with nothing for an inset ring to sit inside. ── */
+.z-breadcrumbitem > a:focus-visible,
+.z-breadcrumbitem > span[tabindex]:focus-visible,
+.z-breadcrumb-ellipsis > button:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* ─── Client-only maxItems collapse — a real layout removal, not a fade
+   (data-zk-bc-hidden is set/cleared by Breadcrumb.ts, never inline style) ─ */
+[data-zk-bc-hidden="true"] {
+    display: none;
+}
+}

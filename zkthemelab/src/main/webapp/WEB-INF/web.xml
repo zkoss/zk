@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- web.xml
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Dec 29 12:13:00     2004, Created by tomyeh
+
+Copyright (C) 2004 Potix Corporation. All Rights Reserved.
+-->
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+	<description><![CDATA[ZK Marble Preview]]></description>
+	<display-name>zkthemelab</display-name>
+
+	<!-- The preview pages live under /web; answer /<page>.zul at the context root too (D47) -->
+	<filter>
+		<filter-name>previewPath</filter-name>
+		<filter-class>org.zkoss.zkthemelab.http.PreviewPathFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>previewPath</filter-name>
+		<url-pattern>*.zul</url-pattern>
+	</filter-mapping>
+
+	<!-- //// -->
+	<!-- ZK -->
+	<listener>
+		<description>ZK listener for session cleanup</description>
+		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
+	</listener>
+
+	<!-- ZK -->
+	<servlet>
+		<description>ZK loader for ZUML pages</description>
+		<servlet-name>zkLoader</servlet-name>
+		<servlet-class>org.zkoss.zkthemelab.http.ZKPreviewServlet</servlet-class>
+		<init-param>
+			<param-name>update-uri</param-name>
+			<param-value>/zkau</param-value>
+		</init-param>
+		<init-param>
+			<param-name>resource-uri</param-name>
+			<param-value>/zkres</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup><!-- Must -->
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>*.zul</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>/zk/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>The asynchronous update engine for ZK</description>
+		<servlet-name>auEngine</servlet-name>
+		<servlet-class>org.zkoss.zk.au.http.DHtmlUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>auEngine</servlet-name>
+		<url-pattern>/zkau/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<description>The resource engine for ZK</description>
+		<servlet-name>resourceEngine</servlet-name>
+		<servlet-class>org.zkoss.zk.au.http.DHtmlResourceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>resourceEngine</servlet-name>
+		<url-pattern>/zkres/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Every Playwright test opens a session and ZK keeps one Timer thread per session (ZK-6213) -->
+	<session-config>
+		<session-timeout>5</session-timeout>
+	</session-config>
+
+	<welcome-file-list>
+		<!-- index.zul is the link index of every preview page; smoke.zul stays as the
+		     minimal "did the server and the theme come up" fallback. -->
+		<welcome-file>index.zul</welcome-file>
+		<welcome-file>smoke.zul</welcome-file>
+	</welcome-file-list>
+</web-app>

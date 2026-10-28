@@ -1,0 +1,668 @@
+<?page title="Listbox Header" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Listbox Header</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auxhead + Listhead Combinations</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <listbox width="400px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2" />
+                        <auxheader label="C" />
+                    </auxhead>
+                    <listhead>
+                        <listheader label="Align Left" align="left" />
+                        <listheader label="Align Center" align="center"/>
+                        <listheader label="Align Right" align="right" />
+                    </listhead>
+                    <auxhead>
+                        <auxheader label="C+D" colspan="2" />
+                        <auxheader label="E" />
+                    </auxhead>
+                    <listitem>
+                        <listcell label="AA01" />
+                        <listcell label="BB01" />
+                        <listcell label="CC01" />
+                    </listitem>
+                    <listfoot>
+                        <listfooter label="footer 1" />
+                        <listfooter label="image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png" hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                        <listfooter label="image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png" hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                    </listfoot>
+                </listbox>
+
+                <listbox width="400px">
+                    <listhead>
+                        <listheader label="Align Left" align="left" />
+                        <listheader label="Align Center" align="center"/>
+                        <listheader label="Align Right" align="right" />
+                    </listhead>
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2" />
+                        <auxheader label="C" />
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="C" />
+                        <auxheader label="D + E" colspan="2"/>
+                    </auxhead>
+                    <listitem>
+                        <listcell label="AA01" />
+                        <listcell label="BB01" />
+                        <listcell label="CC01" />
+                    </listitem>
+                    <listfoot>
+                        <listfooter label="footer 1" />
+                        <listfooter label="footer 2" />
+                        <listfooter label="footer 3" />
+                    </listfoot>
+                </listbox>
+
+                <listbox width="400px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2" />
+                        <auxheader label="C" />
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="C" />
+                        <auxheader label="D + E" colspan="2"/>
+                    </auxhead>
+                    <listhead>
+                        <listheader label="Align Left" align="left"/>
+                        <listheader label="Align Center" align="center"/>
+                        <listheader label="Align Right" align="right"/>
+                    </listhead>
+                    <listitem>
+                        <listcell label="AA01" />
+                        <listcell label="BB01" />
+                        <listcell label="CC01" />
+                    </listitem>
+                    <listfoot>
+                        <listfooter label="footer 1" />
+                        <listfooter label="footer 2" />
+                        <listfooter label="footer 3" />
+                    </listfoot>
+                </listbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Sorting and Resizable Headers</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <listbox width="400px">
+                    <listhead sizable="true">
+                        <listheader align="center" width="40px"
+                            image="~./img/Centigrade-Widget-Icons/ArrowsUpDown-16x16.png" />
+                        <listheader label="Subject" sort="auto" />
+                        <listheader label="Received" sort="auto" />
+                    </listhead>
+                    <listitem height="28px">
+                        <listcell image="~./img/Centigrade-Widget-Icons/ArrowUpOrange-16x16.png" />
+                        <listcell label="ZK Jet 0.8.0 is released" />
+                        <listcell label="2008/11/17 17:41:29" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell image="~./img/Centigrade-Widget-Icons/ArrowDown-16x16.png" />
+                        <listcell label="URLs for iPhone-Optimized Google Sites" />
+                        <listcell label="2008/11/17 15:56:37" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell label="&#160;" />
+                        <listcell label="Style Guide for ZK 3.5 released" />
+                        <listcell label="2008/11/14 13:23:07" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell image="~./img/Centigrade-Widget-Icons/ArrowUpOrange-16x16.png" />
+                        <listcell label="ZK Studio 0.9.0 released." />
+                        <listcell label="2008/11/16 10:26:37" />
+                    </listitem>
+                </listbox>
+
+                <listbox width="400px">
+                    <auxhead>
+                        <auxheader label="A+B (Align Center)" colspan="2" align="center"/>
+                        <auxheader label="C" />
+                    </auxhead>
+                    <listhead sizable="true">
+                        <listheader align="center" width="40px"
+                            image="~./img/Centigrade-Widget-Icons/ArrowsUpDown-16x16.png" />
+                        <listheader label="Subject" sort="auto" />
+                        <listheader label="Received" sort="auto" />
+                    </listhead>
+                    <listitem height="28px">
+                        <listcell image="~./img/Centigrade-Widget-Icons/ArrowUpOrange-16x16.png" />
+                        <listcell label="ZK Jet 0.8.0 is released" />
+                        <listcell label="2008/11/17 17:41:29" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell image="~./img/Centigrade-Widget-Icons/ArrowDown-16x16.png" />
+                        <listcell label="URLs for iPhone-Optimized Google Sites" />
+                        <listcell label="2008/11/17 15:56:37" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell label="&#160;" />
+                        <listcell label="Style Guide for ZK 3.5 released" />
+                        <listcell label="2008/11/14 13:23:07" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell image="~./img/Centigrade-Widget-Icons/ArrowUpOrange-16x16.png" />
+                        <listcell label="ZK Studio 0.9.0 released." />
+                        <listcell label="2008/11/16 10:26:37" />
+                    </listitem>
+                    <listfoot>
+                        <listfooter label="footer" />
+                    </listfoot>
+                </listbox>
+
+                <listbox width="400px" multiple="true" checkmark="true">
+                    <listhead sizable="true">
+                        <listheader align="center" width="40px"/>
+                        <listheader label="Subject" sort="auto" />
+                        <listheader label="Received" sort="auto" />
+                    </listhead>
+                    <auxhead>
+                        <auxheader label="A+B (Align Right)" colspan="2" align="right"/>
+                        <auxheader label="C" />
+                    </auxhead>
+                    <listitem height="28px">
+                        <listcell/>
+                        <listcell label="ZK Jet 0.8.0 is released" />
+                        <listcell label="2008/11/17 17:41:29" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell />
+                        <listcell label="URLs for iPhone-Optimized Google Sites" />
+                        <listcell label="2008/11/17 15:56:37" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell/>
+                        <listcell label="Style Guide for ZK 3.5 released" />
+                        <listcell label="2008/11/14 13:23:07" />
+                    </listitem>
+                    <listitem height="28px">
+                        <listcell/>
+                        <listcell label="ZK Studio 0.9.0 released." />
+                        <listcell label="2008/11/16 10:26:37" />
+                    </listitem>
+                    <listfoot>
+                        <listfooter label="" />
+                        <listfooter label="image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png" hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                        <listfooter label="image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png" hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                    </listfoot>
+                </listbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Static Sort Direction</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <listbox width="400px">
+                    <listhead>
+                        <listheader label="Subject (asc)" sort="auto" sortDirection="ascending" />
+                        <listheader label="Received" sort="auto" />
+                    </listhead>
+                    <listitem>
+                        <listcell label="Style Guide for ZK 3.5 released" />
+                        <listcell label="2008/11/14 13:23:07" />
+                    </listitem>
+                    <listitem>
+                        <listcell label="ZK Jet 0.8.0 is released" />
+                        <listcell label="2008/11/17 17:41:29" />
+                    </listitem>
+                </listbox>
+
+                <listbox width="400px">
+                    <listhead>
+                        <listheader label="Subject" sort="auto" />
+                        <listheader label="Received (desc)" sort="auto" sortDirection="descending" />
+                    </listhead>
+                    <listitem>
+                        <listcell label="ZK Jet 0.8.0 is released" />
+                        <listcell label="2008/11/17 17:41:29" />
+                    </listitem>
+                    <listitem>
+                        <listcell label="Style Guide for ZK 3.5 released" />
+                        <listcell label="2008/11/14 13:23:07" />
+                    </listitem>
+                </listbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Grouping</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <listbox>
+                    <listhead sizable="true">
+                        <listheader label="Brand" />
+                        <listheader label="Price" width="100px"/>
+                        <listheader label="Hard Drive Capacity" />
+                    </listhead>
+                    <listgroup label="Dell" open="false"/>
+                    <listitem>
+                        <listcell label="Dell E4500 2.2GHz"/>
+                        <listcell label="$261.00" />
+                        <listcell label="500GB"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="XP-Pro Slim Dell-Inspiron-530-s"/>
+                        <listcell label="$498.93" />
+                        <listcell label="500GB"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="Dell P4 3.2 GHz"/>
+                        <listcell label="$377.99" />
+                        <listcell label="500GB"/>
+                    </listitem>
+                    <listgroup label="Compaq"/>
+                    <listitem>
+                        <listcell label="Compaq SR5113WM"/>
+                        <listcell label="$279.00" />
+                        <listcell label="160GB"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="Compaq HP XW4200"/>
+                        <listcell label="$980"/>
+                        <listcell label="500GB"/>
+                    </listitem>
+                    <listgroupfoot>
+                        <listcell label="cell in groupfoot"/>
+                        <listcell label=""/>
+                        <listcell label=""/>
+                    </listgroupfoot>
+                    <listfoot>
+                        <listfooter label="" />
+                        <listfooter label="image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png" hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                    </listfoot>
+                </listbox>
+
+                <listbox height="200px">
+                    <listhead sizable="true">
+                        <listheader label="Brand" />
+                        <listheader label="Price" width="100px"/>
+                        <listheader label="Hard Drive Capacity" />
+                    </listhead>
+                    <listgroup label="Dell" />
+                    <listitem>
+                        <listcell label="Dell E4500 2.2GHz"/>
+                        <listcell label="$261.00" />
+                        <listcell label="500GB"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="XP-Pro Slim Dell-Inspiron-530-s"/>
+                        <listcell label="$498.93" />
+                        <listcell label="500GB"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="Dell P4 3.2 GHz"/>
+                        <listcell label="$377.99" />
+                        <listcell label="500GB"/>
+                    </listitem>
+                    <listgroup label="Compaq"/>
+                    <listitem>
+                        <listcell label="Compaq SR5113WM"/>
+                        <listcell label="$279.00" />
+                        <listcell label="160GB"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="Compaq HP XW4200"/>
+                        <listcell label="$980"/>
+                        <listcell label="500GB"/>
+                    </listitem>
+                    <listgroupfoot>
+                        <listcell label="cell in groupfoot"/>
+                        <listcell label=""/>
+                        <listcell label=""/>
+                    </listgroupfoot>
+                </listbox>
+
+                <vlayout>
+                    <radiogroup onCheck="listbox.pagingPosition = self.selectedItem.label">
+                        <radio label="top" />
+                        <radio label="bottom" checked="true" />
+                        <radio label="both" />
+                    </radiogroup>
+                    <button label="Change Paging Mold">
+                        <attribute name="onClick">
+                        listbox.pagingChild.mold = "os".equals(listbox.pagingChild.mold) ? "default" : "os";
+                        </attribute>
+                    </button>
+                    <listbox id="listbox" mold="paging" pageSize="3">
+                        <listhead sizable="true">
+                            <listheader label="Brand" />
+                            <listheader label="Price" width="100px"/>
+                            <listheader label="Hard Drive Capacity"/>
+                        </listhead>
+                        <listgroup label="Dell"/>
+                        <listitem>
+                            <listcell label="Dell E4500 2.2GHz"/>
+                            <listcell label="$261.00" />
+                            <listcell label="500GB"/>
+                        </listitem>
+                        <listitem>
+                            <listcell label="XP-Pro Slim Dell-Inspiron-530-s"/>
+                            <listcell label="$498.93" />
+                            <listcell label="500GB"/>
+                        </listitem>
+                        <listitem>
+                            <listcell label="Dell P4 3.2 GHz"/>
+                            <listcell label="$377.99" />
+                            <listcell label="500GB"/>
+                        </listitem>
+                        <listgroup label="Compaq"/>
+                        <listitem>
+                            <listcell label="Compaq SR5113WM"/>
+                            <listcell label="$279.00" />
+                            <listcell label="160GB"/>
+                        </listitem>
+                        <listitem>
+                            <listcell label="Compaq HP XW4200"/>
+                            <listcell label="$980"/>
+                            <listcell label="500GB"/>
+                        </listitem>
+                        <listgroupfoot>
+                            <listcell label="cell in groupfoot"/>
+                            <listcell label=""/>
+                            <listcell label=""/>
+                        </listgroupfoot>
+                    </listbox>
+                </vlayout>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Select Mold with Optgroup (listgroup)</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <listbox mold="select" rows="1">
+                    <listgroup label="Fruits"/>
+                    <listitem label="Apple"/>
+                    <listitem label="Banana"/>
+                    <listitem label="Mango"/>
+                    <listgroup label="Vegetables"/>
+                    <listitem label="Carrot"/>
+                    <listitem label="Broccoli"/>
+                    <listgroup label="Grains"/>
+                    <listitem label="Rice"/>
+                    <listitem label="Wheat"/>
+                </listbox>
+
+                <listbox mold="select" rows="4">
+                    <listgroup label="Frontend"/>
+                    <listitem label="React"/>
+                    <listitem label="Vue"/>
+                    <listitem label="ZK Framework"/>
+                    <listgroup label="Backend"/>
+                    <listitem label="Spring Boot"/>
+                    <listitem label="Django"/>
+                </listbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auxheader Rowspan</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <listbox width="400px">
+                    <auxhead>
+                        <auxheader label="Group A" colspan="2"/>
+                        <auxheader label="Detail" rowspan="2"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="Sub-A1"/>
+                        <auxheader label="Sub-A2"/>
+                    </auxhead>
+                    <listhead>
+                        <listheader label="Col 1"/>
+                        <listheader label="Col 2"/>
+                        <listheader label="Col 3"/>
+                    </listhead>
+                    <listitem>
+                        <listcell label="R1C1"/>
+                        <listcell label="R1C2"/>
+                        <listcell label="R1C3"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="R2C1"/>
+                        <listcell label="R2C2"/>
+                        <listcell label="R2C3"/>
+                    </listitem>
+                </listbox>
+
+                <listbox width="400px">
+                    <auxhead>
+                        <auxheader label="Span2Rows" rowspan="2"/>
+                        <auxheader label="B+C" colspan="2"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="B"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <listhead>
+                        <listheader label="Name"/>
+                        <listheader label="Value"/>
+                        <listheader label="Unit"/>
+                    </listhead>
+                    <listitem>
+                        <listcell label="Alpha"/>
+                        <listcell label="42"/>
+                        <listcell label="kg"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="Beta"/>
+                        <listcell label="18"/>
+                        <listcell label="m"/>
+                    </listitem>
+                </listbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">sizedByContent + Span Header</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <listbox sizedByContent="true">
+                    <listhead sizable="true">
+                        <listheader label="ID"/>
+                        <listheader label="Product Name"/>
+                        <listheader label="Price"/>
+                    </listhead>
+                    <listitem>
+                        <listcell label="001"/>
+                        <listcell label="Widget Pro X"/>
+                        <listcell label="$49.99"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="002"/>
+                        <listcell label="Super Long Product Name Here"/>
+                        <listcell label="$199.00"/>
+                    </listitem>
+                </listbox>
+
+                <listbox width="420px" span="true" sizedByContent="true">
+                    <listhead>
+                        <listheader label="Fixed" width="100px"/>
+                        <listheader label="Span (listbox span=true)"/>
+                        <listheader label="Fixed2" width="80px"/>
+                    </listhead>
+                    <listitem>
+                        <listcell label="A"/>
+                        <listcell label="This column stretches to fill remaining space"/>
+                        <listcell label="Z"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="B"/>
+                        <listcell label="Short"/>
+                        <listcell label="Y"/>
+                    </listitem>
+                </listbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Frozen Right (Start Columns Scroll)</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox width="500px">
+                <frozen columns="2" start="1"/>
+                <listhead>
+                    <listheader label="ID" width="70px"/>
+                    <listheader label="Product" width="160px"/>
+                    <listheader label="Category" width="140px"/>
+                    <listheader label="Stock" width="90px"/>
+                    <listheader label="Price" width="100px"/>
+                    <listheader label="Action" width="110px"/>
+                </listhead>
+                <listitem>
+                    <listcell label="001"/><listcell label="Widget Pro X"/><listcell label="Electronics"/>
+                    <listcell label="120"/><listcell label="$49.99"/><listcell label="Edit"/>
+                </listitem>
+                <listitem>
+                    <listcell label="002"/><listcell label="Gadget Mini"/><listcell label="Accessories"/>
+                    <listcell label="45"/><listcell label="$9.99"/><listcell label="Edit"/>
+                </listitem>
+                <listitem>
+                    <listcell label="003"/><listcell label="SuperLong Name"/><listcell label="Furniture"/>
+                    <listcell label="8"/><listcell label="$199.00"/><listcell label="Edit"/>
+                </listitem>
+                <listitem>
+                    <listcell label="004"/><listcell label="Basic Stand"/><listcell label="Office"/>
+                    <listcell label="200"/><listcell label="$24.50"/><listcell label="Edit"/>
+                </listitem>
+            </listbox>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Sticky Header (z-sticky-header)</h:span></h:div>
+        <h:div class="z-py-3">
+            <div style="height:200px; overflow-y:auto; border:1px solid var(--zk-color-outline);">
+                <listbox sclass="z-sticky-header" width="500px">
+                    <listhead>
+                        <listheader label="Row #" width="100px"/>
+                        <listheader label="Subject"/>
+                        <listheader label="Date" width="130px"/>
+                    </listhead>
+                    <listitem><listcell label="1"/><listcell label="Introduction to ZK Framework"/><listcell label="2024-01-01"/></listitem>
+                    <listitem><listcell label="2"/><listcell label="Building Reactive UIs"/><listcell label="2024-01-02"/></listitem>
+                    <listitem><listcell label="3"/><listcell label="Data Binding in MVVM"/><listcell label="2024-01-03"/></listitem>
+                    <listitem><listcell label="4"/><listcell label="Component Lifecycle"/><listcell label="2024-01-04"/></listitem>
+                    <listitem><listcell label="5"/><listcell label="Custom CSS Themes"/><listcell label="2024-01-05"/></listitem>
+                    <listitem><listcell label="6"/><listcell label="Grid and Listbox"/><listcell label="2024-01-06"/></listitem>
+                    <listitem><listcell label="7"/><listcell label="Tree Component"/><listcell label="2024-01-07"/></listitem>
+                    <listitem><listcell label="8"/><listcell label="Tabbox and Panels"/><listcell label="2024-01-08"/></listitem>
+                    <listitem><listcell label="9"/><listcell label="Event Handling"/><listcell label="2024-01-09"/></listitem>
+                    <listitem><listcell label="10"/><listcell label="Server Push"/><listcell label="2024-01-10"/></listitem>
+                    <listitem><listcell label="11"/><listcell label="Security Configuration"/><listcell label="2024-01-11"/></listitem>
+                    <listitem><listcell label="12"/><listcell label="Spring Integration"/><listcell label="2024-01-12"/></listitem>
+                    <listitem><listcell label="13"/><listcell label="Hibernate ORM"/><listcell label="2024-01-13"/></listitem>
+                    <listitem><listcell label="14"/><listcell label="Testing ZK Apps"/><listcell label="2024-01-14"/></listitem>
+                    <listitem><listcell label="15"/><listcell label="Deployment Guide"/><listcell label="2024-01-15"/></listitem>
+                    <listitem><listcell label="16"/><listcell label="Performance Tuning"/><listcell label="2024-01-16"/></listitem>
+                    <listitem><listcell label="17"/><listcell label="Accessibility Tips"/><listcell label="2024-01-17"/></listitem>
+                    <listitem><listcell label="18"/><listcell label="Internationalization"/><listcell label="2024-01-18"/></listitem>
+                    <listitem><listcell label="19"/><listcell label="Client-Side Widgets"/><listcell label="2024-01-19"/></listitem>
+                    <listitem><listcell label="20"/><listcell label="Release Notes 10.x"/><listcell label="2024-01-20"/></listitem>
+                </listbox>
+            </div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Complex Header with Embedded Components</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox>
+                <auxhead>
+                    <auxheader colspan="2">
+                        <textbox onChange='span.value = self.value' />
+                        <datebox />
+                    </auxheader>
+                </auxhead>
+                <listhead sizable="true">
+                    <listheader sort="auto">
+                        <toolbarbutton label="toobarbutton" onClick='alert(self.label)' />
+                        <menubar>
+                            <menu label="File">
+                                <menupopup>
+                                    <menuitem label="New" onClick="alert(self.label)" />
+                                    <menuitem label="Open" onClick="alert(self.label)" />
+                                    <menuitem label="Save" onClick="alert(self.label)" />
+                                    <menuseparator />
+                                    <menuitem label="Exit" onClick="alert(self.label)" />
+                                </menupopup>
+                            </menu>
+                            <menu label="Help">
+                                <menupopup>
+                                    <menuitem label="Index" onClick="alert(self.label)" />
+                                    <menu label="About">
+                                        <menupopup>
+                                            <menuitem label="About ZK" onClick="alert(self.label)" />
+                                            <menuitem label="About Potix" onClick="alert(self.label)" />
+                                        </menupopup>
+                                    </menu>
+                                </menupopup>
+                            </menu>
+                        </menubar>
+                        <button label="lable" onClick='alert("button")' />
+                        <datebox />
+                    </listheader>
+                    <listheader>
+                        <listbox rows="1" mold="select">
+                            <listitem label="option1" />
+                            <listitem label="option2" />
+                            <listitem label="option3" />
+                        </listbox>
+                    </listheader>
+                </listhead>
+                <listitem>
+                    <listcell label="Mary" />
+                    <listcell label="FEMALE" />
+                </listitem>
+                <listitem>
+                    <listcell label="John" />
+                    <listcell label="MALE" />
+                </listitem>
+                <listitem>
+                    <listcell label="Jane" />
+                    <listcell label="FEMALE" />
+                </listitem>
+                <listitem>
+                    <listcell label="Henry" />
+                    <listcell label="MALE" />
+                </listitem>
+            </listbox>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Hidden Listheader</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox width="360px">
+                <listhead>
+                    <listheader label="Visible A"/>
+                    <listheader label="Hidden B" visible="false"/>
+                    <listheader label="Visible C"/>
+                </listhead>
+                <listitem>
+                    <listcell label="A1"/>
+                    <listcell label="B1"/>
+                    <listcell label="C1"/>
+                </listitem>
+                <listitem>
+                    <listcell label="A2"/>
+                    <listcell label="B2"/>
+                    <listcell label="C2"/>
+                </listitem>
+            </listbox>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

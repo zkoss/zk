@@ -1,0 +1,59 @@
+<?page title="Coachmark" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Coachmark"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Basic Coachmark"/></div>
+        <div sclass="z-py-3">
+            <button id="infoButton" label="Information" />
+            <coachmark target="infoButton" onTargetClick="self.close()">
+                <label>Welcome! Click here for more information!</label>
+                <button style="display: block;margin: 10px auto 0" label="Got it!" onClick="self.parent.close()"/>
+            </coachmark>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Coachmark with Combobutton"/></div>
+        <div sclass="z-py-3">
+            <button id="cbTarget" label="Show coachmark with combobutton" onClick="cbMark.open()" />
+            <coachmark id="cbMark" target="cbTarget" visible="false">
+                <label>Pick an action to continue:</label>
+                <combobutton label="Actions" style="display: block;margin: 10px auto 0">
+                    <menupopup>
+                        <menuitem label="Edit"/>
+                        <menuitem label="Delete"/>
+                    </menupopup>
+                </combobutton>
+            </coachmark>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Multi-Step Tour (3 Steps)"/></div>
+        <div sclass="z-py-3 z-hstack z-gap-6">
+            <button id="tourStep1" label="Step 1" />
+            <button id="tourStep2" label="Step 2" />
+            <button id="tourStep3" label="Step 3" />
+        </div>
+        <div sclass="z-mt-4">
+            <button label="Start Tour" onClick="tourMark1.open()" />
+        </div>
+
+        <coachmark id="tourMark1" target="tourStep1" next="tourMark2" onTargetClick="self.next()" visible="false">
+            <label>Step 1 of 3 — Start here. This is the first stop on the tour.</label>
+            <button style="display: block;margin: 10px auto 0" label="Next" onClick="self.parent.next()"/>
+        </coachmark>
+        <coachmark id="tourMark2" target="tourStep2" next="tourMark3" onTargetClick="self.next()" visible="false">
+            <label>Step 2 of 3 — Now look over here. Keep going.</label>
+            <button style="display: block;margin: 10px auto 0" label="Next" onClick="self.parent.next()"/>
+        </coachmark>
+        <coachmark id="tourMark3" target="tourStep3" onTargetClick="self.close()" visible="false">
+            <label>Step 3 of 3 — All done! You've finished the tour.</label>
+            <button style="display: block;margin: 10px auto 0" label="Finish" onClick="self.parent.close()"/>
+        </coachmark>
+    </div>
+
+</div>
+</zk>

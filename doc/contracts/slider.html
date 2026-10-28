@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — slider</title>
+<!--
+  Self-contained marble design contract mockup for <slider>.
+  Tier: T1 (linear molds); T3 boundary for knob mold arc geometry.
+
+  Covers:
+    - Default mold, horizontal — default / hover / focus / disabled states
+    - Default mold, vertical
+    - Sphere mold
+    - Scale mold
+    - Popup tooltip (z-slider-popup, shown during drag)
+    - Knob mold (PE) — color-target only; arc geometry is JS-drawn
+
+  Contract rows: c1–c10 (linear), k1–k5 (knob)
+  Outcome assertions: M1–M5
+
+  Companion files:
+    Skill:      .claude/skills/zk-component-rules/components/slider.md
+    Contract:   doc/contracts/slider.md
+    Baseline:   doc/contracts/baselines/slider-iceblue.png (must be captured before ralph-loop)
+
+  IMPORTANT — knob section:
+    The arc <path> geometry (d attribute) and stroke-width are JS-controlled
+    at runtime via _calcPath() / _getStrokeWidth() — they are NOT CSS-themable.
+    The SVG below uses a simple hard-coded arc for static illustration purposes.
+    The mockup asserts only that .z-slider-knob-inner and .z-slider-knob-area
+    have distinguishable stroke colors per tokens k1 and k2. Do NOT read the
+    exact arc path or stroke-width from this file as the CSS spec.
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirrors src/main/resources/web/zul/css/tokens/*.css
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    /* Secondary */
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    /* Tertiary */
+    --zk-color-tertiary: #7e73d6;
+
+    /* Error */
+    --zk-color-error: #d32f2f;
+    --zk-color-on-error: #ffffff;
+
+    /* Surfaces */
+    --zk-color-background: #ffffff;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-low: #f7f9fc;
+    --zk-color-surface-container-high: #e8eef7;
+
+    /* Outline */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Inverse (tooltip) */
+    --zk-color-inverse-surface: #2d3748;
+    --zk-color-inverse-on-surface: #f0f4fa;
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+    --zk-state-disabled-opacity: 0.38;
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-extra-small: 4px;
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-body-medium-size: 14px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-1:
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12),
+        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
+    --zk-elevation-2:
+        0px 2px 6px 0px rgba(0, 0, 0, 0.12),
+        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
+
+    /* Motion */
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Page chrome (NOT part of component contract)
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-surface-container-low);
+}
+h1 {
+    font-size: 22px;
+    font-weight: var(--zk-font-weight-semibold);
+    margin: 0 0 var(--zk-spacing-2);
+}
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+
+.matrix-section {
+    margin-bottom: var(--zk-spacing-8);
+}
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: var(--zk-spacing-3);
+    line-height: 1.6;
+}
+.state-cell {
+    padding: var(--zk-spacing-4) var(--zk-spacing-6);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+    display: flex;
+    align-items: center;
+    gap: var(--zk-spacing-6);
+    min-height: 64px;
+}
+.note {
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface-variant);
+    margin-top: var(--zk-spacing-2);
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    background: var(--zk-color-surface-container);
+    border-left: 3px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-corner-extra-small);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Component styles — linear slider (default / sphere / scale molds)
+   Rows: c1–c8
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Root */
+.z-slider {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 12px 0;   /* vertical padding to accommodate thumb state-layer */
+}
+.z-slider-horizontal {
+    width: 220px;
+    height: 44px;
+}
+.z-slider-vertical {
+    flex-direction: column;
+    width: 44px;
+    height: 180px;
+    padding: 0 12px;
+}
+
+/* Track container — width/height set by JS _fixSize() inline.
+   CSS sets only the visual appearance of the track background. */
+.z-slider-center {
+    position: relative;
+    border-radius: var(--zk-shape-corner-full);
+    overflow: visible;
+    /* c1 — track background */
+    background-color: var(--zk-color-outline-variant);
+}
+.z-slider-horizontal .z-slider-center {
+    width: 100%;
+    height: 4px;
+}
+.z-slider-vertical .z-slider-center {
+    width: 4px;
+    height: 100%;
+}
+
+/* Filled portion — position/size set by JS inline style.
+   CSS must not override width (horizontal) or height (vertical)
+   with a competing declaration. */
+.z-slider-area {
+    position: absolute;
+    border-radius: var(--zk-shape-corner-full);
+    /* c2 — filled primary */
+    background-color: var(--zk-color-primary);
+}
+.z-slider-horizontal .z-slider-area {
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+.z-slider-vertical .z-slider-area {
+    /* Vertical: min=top, max=bottom — area anchors at top: 0 */
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+/* Thumb — c3, c4 */
+.z-slider-button {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    /* c3 — thumb primary fill */
+    background-color: var(--zk-color-primary);
+    /* c4 — circular */
+    border-radius: 50%;
+    border: none;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    cursor: grab;
+    transition:
+        box-shadow var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+    z-index: 1;
+}
+.z-slider-vertical .z-slider-button {
+    left: 50%;
+    top: auto;
+    transform: translate(-50%, -50%);
+}
+
+/* c5 — hover state-layer ring: 8px spread, 16% primary (MUI visual target) */
+.z-slider-button:hover,
+.z-slider-button-hover {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent);
+}
+
+/* c6 — focus-visible ring: same 8px/16% as hover (MUI uses same rule for both) */
+.z-slider-button:focus-visible,
+.z-slider-button-focus {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent);
+}
+
+/* c9 — active/drag ring: 14px spread at 16% (MUI .Mui-active, Slider.css line 193) */
+.z-slider-button:active,
+.z-slider-button-active {
+    box-shadow: 0 0 0 14px color-mix(in srgb, var(--zk-color-primary) 16%, transparent);
+}
+
+/* c7 — disabled: opacity on root; pointer-events none to show not-allowed cursor */
+.z-slider-disabled,
+.z-slider[disabled] {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* c8 + c8a + c8b + c8c — popup / drag tooltip */
+.z-slider-popup {
+    /* Appended to body during drag; positioned absolute/fixed by JS */
+    display: inline-block;
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    /* c8 — inverse-surface background */
+    background-color: var(--zk-color-inverse-surface);
+    /* c8a — on-inverse companion for readability */
+    color: var(--zk-color-inverse-on-surface);
+    font-size: var(--zk-typescale-body-small-size);
+    /* c8b — extra-small corner */
+    border-radius: var(--zk-shape-corner-extra-small);
+    /* c8c — elevation-1 shadow */
+    box-shadow: var(--zk-elevation-1);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* c10 — sphere mold: radial-gradient sphere on thumb.
+   .z-slider-sphere is confirmed as a root class from Slider.ts domClass_() lines 315-316.
+   c10a — sphere thumb inherits the 20px default thumb size (no size override). */
+.z-slider-sphere .z-slider-button {
+    background: radial-gradient(
+        circle at 35% 35%,
+        var(--zk-color-primary-container),
+        var(--zk-color-primary) 60%,
+        var(--zk-color-on-primary-container) 100%
+    );
+}
+
+/* Scale mold — tick-mark styling.
+   ZK uses a background-image per the CSS-DSP restriction.
+   This mockup renders a simplified tick band for visual reference only. */
+.z-slider-scale .z-slider-center::after {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background-image: repeating-linear-gradient(
+        to right,
+        var(--zk-color-outline-variant) 0px,
+        var(--zk-color-outline-variant) 1px,
+        transparent 1px,
+        transparent 10%
+    );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Knob mold (PE) — CSS-color contract only
+   Rows: k1–k5
+   Arc geometry (d attribute) and stroke-width are JS-controlled; NOT CSS.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* SVG container */
+.z-slider-knob-svg {
+    display: block;
+    /* JS sets width/height on root to DEFAULT_SIZE (200px) when no explicit width/height. */
+    cursor: pointer;
+    overflow: visible;
+}
+
+/* k1 — background arc — inert outline track */
+.z-slider-knob-inner {
+    fill: none;
+    /* CSS-themable: stroke color for the background ring */
+    stroke: var(--zk-color-outline-variant);
+    /* stroke-width is set inline by JS _getStrokeWidth(); CSS must not override */
+}
+
+/* k2 — progress arc — primary fill indicator */
+.z-slider-knob-area {
+    fill: none;
+    /* CSS-themable: stroke color for the progress arc */
+    stroke: var(--zk-color-primary);
+    /* stroke-width is set inline by JS _getStrokeWidth(); CSS must not override */
+    stroke-linecap: round;
+}
+
+/* k3, k4, k5 — numeric input overlay.
+   top/left/width/height/font-size are ALL JS-controlled inline;
+   CSS sets background, border, and text color only. */
+.z-slider-input {
+    position: absolute;
+    /* k3 — surface-container background */
+    background-color: var(--zk-color-surface-container);
+    /* k4 — standard input border */
+    border: 1px solid var(--zk-color-outline);
+    /* k5 — primary text color for the numeric value */
+    color: var(--zk-color-primary);
+    font-weight: var(--zk-font-weight-semibold);
+    text-align: center;
+    border-radius: var(--zk-shape-corner-extra-small);
+    /* Remove browser spinner on number input */
+    -moz-appearance: textfield;
+}
+.z-slider-input::-webkit-outer-spin-button,
+.z-slider-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+</style>
+</head>
+<body>
+
+<h1>slider — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T1 (linear molds) / T3 boundary (knob arc geometry)</span>
+    <span>closest-sibling: none</span>
+    <span>contract rows: c1–c10 (linear), k1–k5 (knob)</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 1 — Default mold, horizontal (c1–c4 default, c5 hover, c6 focus, c7 disabled)
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Default mold — horizontal</h2>
+    <div class="matrix-grid">
+
+        <!-- Default: thumb at ~40% position -->
+        <div class="state-label">
+            default<br>
+            <small>c1 track<br>c2 fill<br>c3 thumb bg<br>c4 thumb radius</small>
+        </div>
+        <div class="state-cell">
+            <!--
+              .z-slider-center:  background-color = var(--zk-color-outline-variant)   [c1]
+              .z-slider-area:    background-color = var(--zk-color-primary)             [c2]
+              .z-slider-button:  background-color = var(--zk-color-primary)             [c3]
+              .z-slider-button:  border-radius    = 50%                                 [c4]
+            -->
+            <div class="z-slider z-slider-horizontal" role="slider" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                <div class="z-slider-center" style="width:100%; height:4px;">
+                    <!-- .z-slider-area width set by JS; 40% here for mockup -->
+                    <div class="z-slider-area" style="width:40%; height:100%; top:0; left:0;"></div>
+                    <!-- .z-slider-button left set by JS; mirrors area width -->
+                    <div class="z-slider-button" style="left:40%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hover: thumb with state-layer ring (static approximation — no :hover in static HTML) -->
+        <div class="state-label">
+            thumb hover<br>
+            <small>c5 ring shadow<br>8px spread / 16%</small>
+        </div>
+        <div class="state-cell">
+            <!--
+              .z-slider-button:hover:
+                box-shadow = 0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)   [c5]
+              MUI visual target: rgba(25,118,210,0.16) at 8px spread (Slider.css line 184).
+              16% alpha — MUI diverges from MD3 8% because 8% is too faint at this ring size.
+            -->
+            <div class="z-slider z-slider-horizontal" role="slider">
+                <div class="z-slider-center" style="width:100%; height:4px;">
+                    <div class="z-slider-area" style="width:55%; height:100%; top:0; left:0;"></div>
+                    <div class="z-slider-button z-slider-button-hover" style="left:55%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Focus-visible: thumb with focus ring (same size/opacity as hover per MUI) -->
+        <div class="state-label">
+            thumb focus-visible<br>
+            <small>c6 focus ring<br>8px spread / 16%</small>
+        </div>
+        <div class="state-cell">
+            <!--
+              .z-slider-button:focus-visible:
+                box-shadow = 0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)   [c6]
+              MUI uses same selector+rule for hover and focus-visible (Slider.css line 183).
+            -->
+            <div class="z-slider z-slider-horizontal" role="slider">
+                <div class="z-slider-center" style="width:100%; height:4px;">
+                    <div class="z-slider-area" style="width:55%; height:100%; top:0; left:0;"></div>
+                    <div class="z-slider-button z-slider-button-focus" style="left:55%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active / dragging: expanded ring at 14px -->
+        <div class="state-label">
+            thumb active/drag<br>
+            <small>c9 ring shadow<br>14px spread / 16%</small>
+        </div>
+        <div class="state-cell">
+            <!--
+              .z-slider-button:active:
+                box-shadow = 0 0 0 14px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)   [c9]
+              MUI .Mui-active uses 14px spread (Slider.css line 193). ZK has no drag JS class;
+              :active pseudo-class is the selector fallback.
+            -->
+            <div class="z-slider z-slider-horizontal" role="slider">
+                <div class="z-slider-center" style="width:100%; height:4px;">
+                    <div class="z-slider-area" style="width:55%; height:100%; top:0; left:0;"></div>
+                    <div class="z-slider-button z-slider-button-active" style="left:55%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disabled: opacity on root -->
+        <div class="state-label">
+            disabled<br>
+            <small>c7 root opacity<br>= --zk-state-disabled-opacity</small>
+        </div>
+        <div class="state-cell">
+            <!--
+              .z-slider[disabled]:
+                opacity = var(--zk-state-disabled-opacity)   [c7]
+              Applied here via explicit class for static mockup.
+            -->
+            <div class="z-slider z-slider-horizontal z-slider-disabled" role="slider" aria-disabled="true">
+                <div class="z-slider-center" style="width:100%; height:4px;">
+                    <div class="z-slider-area" style="width:30%; height:100%; top:0; left:0;"></div>
+                    <div class="z-slider-button" style="left:30%;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p class="note">
+        Slider state-layer rings (c5/c6 hover+focus, c9 active): all use
+        <code>color-mix(in srgb, var(--zk-color-primary) 16%, transparent)</code> — the
+        MUI visual target is 16% alpha at 8px spread (Slider.css line 184). MD3 specifies 8%
+        hover / 12% focus; MUI diverges because 8% is too faint at 8px ring size against white.
+        The active/drag ring (c9) expands to 14px spread at the same 16% alpha (MUI .Mui-active,
+        Slider.css line 193). See <strong>Accepted MD3 deviations</strong> in the contract.
+    </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 2 — Default mold, vertical
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Default mold — vertical</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">
+            vertical default<br>
+            <small>orient="vertical"<br>min at top,<br>max at bottom</small>
+        </div>
+        <div class="state-cell" style="align-items:flex-start;">
+            <!--
+              ZK vertical convention: min=top, max=bottom.
+              .z-slider-area anchors at top:0 — fill grows downward with value.
+              thumb top = proportional to value.
+              Explicit height required on root for vertical slider.
+            -->
+            <div class="z-slider z-slider-vertical" role="slider" aria-valuenow="60" aria-orientation="vertical"
+                 style="display:inline-flex; flex-direction:column; align-items:center; height:180px; position:relative; padding: 0 12px;">
+                <div class="z-slider-center" style="width:4px; height:100%; position:relative; border-radius:9999px; background-color:var(--zk-color-outline-variant);">
+                    <!-- Fill grows from top: 60% from top means bottom 60% is filled — wait:
+                         ZK min=top so value 60 out of 100 means thumb is 60% of the way down
+                         area height = 60% of track, anchored top:0 -->
+                    <div class="z-slider-area" style="width:100%; height:60%; top:0; left:0; position:absolute; background-color:var(--zk-color-primary); border-radius:9999px;"></div>
+                    <!-- Thumb at 60% down the track -->
+                    <div class="z-slider-button" style="top:60%; left:50%; position:absolute; transform:translate(-50%,-50%);"></div>
+                </div>
+            </div>
+            <div class="note" style="margin:0; align-self:center;">
+                Vertical slider requires explicit <code>height</code> on the root.
+                ZK places min at top, max at bottom — <code>.z-slider-area</code>
+                must anchor at <code>top: 0</code> (not <code>bottom: 0</code>).
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 3 — Sphere mold
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Sphere mold (mold="sphere")</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">
+            sphere default<br>
+            <small>thumb: gradient sphere<br>same track colors c1–c2</small>
+        </div>
+        <div class="state-cell">
+            <!--
+              Sphere mold: same .z-slider-center / .z-slider-area / .z-slider-button DOM.
+              .z-slider-sphere IS added to the root by ZK — confirmed in Slider.ts domClass_()
+              lines 315-316: "if (this.inSphereMold()) sclsHTML += ' ' + this.$s('sphere')"
+              CSS selector: .z-slider-sphere .z-slider-button { background: radial-gradient(...) }  [c10]
+              Track tokens c1/c2 are unchanged.
+            -->
+            <div class="z-slider z-slider-horizontal z-slider-sphere" role="slider" aria-valuenow="65">
+                <div class="z-slider-center" style="width:100%; height:4px;">
+                    <div class="z-slider-area" style="width:65%; height:100%; top:0; left:0;"></div>
+                    <!-- Sphere thumb receives gradient via .z-slider-sphere .z-slider-button CSS rule -->
+                    <div class="z-slider-button" style="left:65%;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p class="note">
+        Sphere mold <strong>adds</strong> <code>.z-slider-sphere</code> to the root — confirmed
+        by <code>Slider.ts</code> <code>domClass_()</code> lines 315–316. The sphere gradient is
+        targeted via <code>.z-slider-sphere .z-slider-button { background: radial-gradient(...) }</code>
+        (contract row c10). Track contract rows c1 and c2 are identical to the default mold.
+    </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 4 — Scale mold (horizontal only)
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Scale mold (mold="scale", horizontal only)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">
+            scale default<br>
+            <small>+ tick marks below track<br>c1–c4 unchanged</small>
+        </div>
+        <div class="state-cell" style="padding-bottom:var(--zk-spacing-6);">
+            <!--
+              Scale mold: same DOM as default. Adds tick marks.
+              ZK uses a background-image for ticks (CSS-DSP restriction means
+              no external image references — the tick image must be a data: URI or
+              CSS-generated pattern). Track tokens c1/c2 are unchanged.
+              Vertical orientation NOT supported for scale mold.
+            -->
+            <div class="z-slider z-slider-horizontal z-slider-scale" role="slider" aria-valuenow="50"
+                 style="position:relative; padding-bottom: 18px;">
+                <div class="z-slider-center" style="width:100%; height:4px; position:relative;">
+                    <div class="z-slider-area" style="width:50%; height:100%; top:0; left:0;"></div>
+                    <div class="z-slider-button" style="left:50%;"></div>
+                </div>
+                <!-- Tick marks: CSS-generated below track. In production, ZK uses a background-image.
+                     This mockup uses repeating-linear-gradient for static visual approximation. -->
+                <div style="
+                    position:absolute;
+                    bottom: 2px;
+                    left: 0;
+                    right: 0;
+                    height: 8px;
+                    background-image: repeating-linear-gradient(
+                        to right,
+                        var(--zk-color-outline-variant) 0px,
+                        var(--zk-color-outline-variant) 1px,
+                        transparent 1px,
+                        transparent 10%
+                    );
+                "></div>
+            </div>
+        </div>
+
+    </div>
+    <p class="note">
+        Scale mold tick marks: ZK renders ticks via a CSS <code>background-image</code>
+        URL in the iceblue <code>slider.css.dsp</code>. The Marble theme must provide a
+        <code>data:</code> URI or a CSS-generated pattern (e.g.,
+        <code>repeating-linear-gradient</code>) instead of an external URL — the
+        CSS-DSP toolchain does not permit external image references.
+        Tick color should use <code>var(--zk-color-outline-variant)</code> for visual
+        consistency with the track.
+    </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 5 — Popup tooltip (c8, shown during drag)
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Value popup tooltip (drag state, c8)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">
+            popup visible<br>
+            <small>c8 inverse-surface bg<br>+ inverse-on-surface text</small>
+        </div>
+        <div class="state-cell" style="gap:var(--zk-spacing-3); flex-wrap:wrap; align-items:flex-start; padding-top:var(--zk-spacing-6);">
+            <!--
+              .z-slider-popup (appended to document.body during drag):
+                background-color = var(--zk-color-inverse-surface)    [c8]
+                color            = var(--zk-color-inverse-on-surface)
+                border-radius    = var(--zk-shape-corner-extra-small)
+                box-shadow       = var(--zk-elevation-1)
+              JS positions it above the thumb; removed on drag end.
+            -->
+            <div style="position:relative; display:flex; flex-direction:column; align-items:center; gap:var(--zk-spacing-1);">
+                <!-- Simulated popup above the thumb position -->
+                <div class="z-slider-popup">42</div>
+                <div style="width:0;height:0;
+                    border-left:5px solid transparent;
+                    border-right:5px solid transparent;
+                    border-top:5px solid var(--zk-color-inverse-surface);"></div>
+            </div>
+            <div style="flex:1;">
+                <div class="z-slider z-slider-horizontal" role="slider" aria-valuenow="42" style="position:relative;">
+                    <div class="z-slider-center" style="width:100%; height:4px;">
+                        <div class="z-slider-area" style="width:42%; height:100%; top:0; left:0;"></div>
+                        <div class="z-slider-button z-slider-button-hover" style="left:42%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p class="note">
+        The popup (<code>div#zul_slidetip.z-slider-popup</code>) is appended to
+        <code>document.body</code> at drag start and removed at drag end. It is
+        NOT a child of <code>.z-slider</code> — CSS must not rely on descendant
+        selectors from the slider root to reach it.
+    </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 6 — Knob mold (PE) — color-target contract only
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Knob mold (PE) — CSS color contract: k1–k5</h2>
+
+    <!--
+      IMPORTANT — STATIC MOCKUP LIMITATION:
+      The arc <path> d-attribute geometry and stroke-width below are hardcoded
+      for illustration purposes ONLY. In the live component:
+        - d=      is computed by _calcPath() from angleArc / curpos / minpos / maxpos
+        - stroke-width is set by _getStrokeWidth() → inline SVG attribute
+      NEITHER of these is CSS-themable. This mockup asserts ONLY:
+        .z-slider-knob-inner stroke = var(--zk-color-outline-variant)    [k1]
+        .z-slider-knob-area  stroke = var(--zk-color-primary)             [k2]
+        .z-slider-input background  = var(--zk-color-surface-container)   [k3]
+        .z-slider-input border      = 1px solid var(--zk-color-outline)   [k4]
+        .z-slider-input color       = var(--zk-color-primary)             [k5]
+      Do NOT derive arc path or stroke-width values from this mockup.
+    -->
+
+    <div class="matrix-grid">
+
+        <div class="state-label">
+            knob default<br>
+            <small>k1 inner arc<br>k2 progress arc<br>k3 input bg<br>k4 input border<br>k5 input text</small>
+        </div>
+        <div class="state-cell" style="align-items:flex-start; gap:var(--zk-spacing-8);">
+
+            <!-- Knob root: 200×200px by default (JS sets this inline via bind_()) -->
+            <div class="z-slider" style="position:relative; width:200px; height:200px; display:inline-block;">
+
+                <!--
+                  SVG dial — the arc geometry below is a STATIC APPROXIMATION.
+                  Live geometry is entirely JS-controlled (d attribute, stroke-width).
+                  This SVG exists only to demonstrate the two-color arc contrast.
+
+                  Arc description (static mockup only, not the CSS spec):
+                    - Inner circle: 270° arc starting at 135°, full background ring
+                    - Area arc: same start point, ~162° (60% of 270°) for a 60-value reading
+                  Both arcs use stroke for color; fill=none.
+                -->
+                <svg class="z-slider-knob-svg"
+                     width="200" height="200"
+                     viewBox="0 0 200 200"
+                     aria-hidden="true"
+                     style="position:absolute; top:0; left:0;">
+
+                    <!-- Background arc (.z-slider-knob-inner) — k1: stroke = outline-variant -->
+                    <!-- Static arc: cx=100, cy=100, r=70, 270° arc from 135° to 45° (clockwise) -->
+                    <path class="z-slider-knob-inner"
+                          d="M 50.5 150.5
+                             A 70 70 0 1 1 149.5 150.5"
+                          stroke="var(--zk-color-outline-variant)"
+                          stroke-width="14"
+                          fill="none"
+                          stroke-linecap="round"/>
+
+                    <!-- Progress arc (.z-slider-knob-area) — k2: stroke = primary (~60% fill) -->
+                    <!-- Static approximation of a 60% / 270° filled arc -->
+                    <path class="z-slider-knob-area"
+                          d="M 50.5 150.5
+                             A 70 70 0 0 1 171.3 113.0"
+                          stroke="var(--zk-color-primary)"
+                          stroke-width="14"
+                          fill="none"
+                          stroke-linecap="round"/>
+                </svg>
+
+                <!-- Numeric input overlay (.z-slider-input)
+                     In live component: top/left/width/height/font-size are ALL JS-controlled.
+                     Positioned here manually for visual illustration. -->
+                <input type="number"
+                       class="z-slider-input"
+                       value="60"
+                       min="0" max="100"
+                       style="position:absolute; top:78px; left:72px; width:56px; height:44px; font-size:18px; font-weight:600;"
+                       readonly
+                />
+
+            </div>
+
+            <!-- Token annotation table -->
+            <div style="font-size:var(--zk-typescale-body-small-size); color:var(--zk-color-on-surface-variant); line-height:1.8;">
+                <table style="border-collapse:collapse;">
+                    <tr>
+                        <td style="padding-right:var(--zk-spacing-3); color:var(--zk-color-on-surface);">k1</td>
+                        <td>
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:2px;
+                                         background:var(--zk-color-outline-variant); border:1px solid var(--zk-color-outline); vertical-align:middle;"></span>
+                            inner arc: <code>stroke: var(--zk-color-outline-variant)</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-right:var(--zk-spacing-3); color:var(--zk-color-on-surface);">k2</td>
+                        <td>
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:2px;
+                                         background:var(--zk-color-primary); vertical-align:middle;"></span>
+                            area arc: <code>stroke: var(--zk-color-primary)</code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-right:var(--zk-spacing-3); color:var(--zk-color-on-surface);">k3</td>
+                        <td>input bg: <code>background-color: var(--zk-color-surface-container)</code></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-right:var(--zk-spacing-3); color:var(--zk-color-on-surface);">k4</td>
+                        <td>input border: <code>1px solid var(--zk-color-outline)</code></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-right:var(--zk-spacing-3); color:var(--zk-color-on-surface);">k5</td>
+                        <td>
+                            <span style="display:inline-block; width:12px; height:12px; border-radius:2px;
+                                         background:var(--zk-color-primary); vertical-align:middle;"></span>
+                            input text: <code>color: var(--zk-color-primary)</code>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+    <p class="note">
+        <strong>T3 boundary for knob arc geometry.</strong>
+        The SVG arc path (<code>d</code> attribute) and <code>stroke-width</code> on both
+        <code>.z-slider-knob-inner</code> and <code>.z-slider-knob-area</code> are set as
+        <em>inline SVG attributes</em> by JS at runtime — they are <em>NOT CSS-themable</em>
+        and must not appear in <code>slider.css.dsp</code>. Only <code>stroke</code>
+        (color) on these two path elements is CSS-controlled.
+        The numeric input's <code>top</code>, <code>left</code>, <code>width</code>,
+        <code>height</code>, and <code>font-size</code> are also JS-controlled inline
+        styles — CSS must only supply <code>background-color</code>, <code>border</code>,
+        and <code>color</code>.
+    </p>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION 7 — State summary card
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Contract row reference</h2>
+    <div class="note" style="font-size:var(--zk-typescale-body-medium-size); line-height:2;">
+        <strong>Linear molds (default / sphere / scale):</strong><br>
+        c1 <code>.z-slider-center</code> background-color → <code>var(--zk-color-outline-variant)</code><br>
+        c2 <code>.z-slider-area</code> background-color → <code>var(--zk-color-primary)</code><br>
+        c3 <code>.z-slider-button</code> background-color → <code>var(--zk-color-primary)</code><br>
+        c4 <code>.z-slider-button</code> border-radius → <code>50%</code><br>
+        c5 <code>.z-slider-button:hover</code> box-shadow → <code>0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)</code><br>
+        c6 <code>.z-slider-button:focus-visible</code> box-shadow → <code>0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)</code><br>
+        c7 <code>.z-slider[disabled]</code> opacity → <code>var(--zk-state-disabled-opacity)</code><br>
+        c8 <code>.z-slider-popup</code> background-color → <code>var(--zk-color-inverse-surface)</code><br>
+        c8a <code>.z-slider-popup</code> color → <code>var(--zk-color-inverse-on-surface)</code><br>
+        c8b <code>.z-slider-popup</code> border-radius → <code>var(--zk-shape-corner-extra-small)</code><br>
+        c8c <code>.z-slider-popup</code> box-shadow → <code>var(--zk-elevation-1)</code><br>
+        c9 <code>.z-slider-button:active</code> box-shadow → <code>0 0 0 14px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)</code><br>
+        c10 <code>.z-slider-sphere .z-slider-button</code> background → radial-gradient sphere (primary tones)<br>
+        c10a <code>.z-slider-sphere .z-slider-button</code> width / height → <code>20px</code> (same as default thumb)<br>
+        <br>
+        <strong>Knob mold (PE — CSS-themable only):</strong><br>
+        k1 <code>.z-slider-knob-inner</code> stroke → <code>var(--zk-color-outline-variant)</code><br>
+        k2 <code>.z-slider-knob-area</code> stroke → <code>var(--zk-color-primary)</code><br>
+        k3 <code>.z-slider-input</code> background-color → <code>var(--zk-color-surface-container)</code><br>
+        k4 <code>.z-slider-input</code> border → <code>1px solid var(--zk-color-outline)</code><br>
+        k5 <code>.z-slider-input</code> color → <code>var(--zk-color-primary)</code>
+    </div>
+</section>
+
+</body>
+</html>

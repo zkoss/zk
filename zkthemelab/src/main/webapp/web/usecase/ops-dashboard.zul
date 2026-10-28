@@ -1,0 +1,159 @@
+<?page title="Operations Dashboard"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<vlayout hflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+    <label value="Operations Dashboard" sclass="z-h2"/>
+
+    <!-- KPI cards -->
+    <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4">
+        <div sclass="z-flex-1 z-min-w-0 z-paper">
+            <label value="Orders Today" sclass="z-text-secondary z-mb-2 z-text-sm"/>
+            <label value="312" sclass="z-h1"/>
+            <label value="↑ 8.4% vs yesterday" sclass="z-text-xs z-text-success"/>
+        </div>
+        <div sclass="z-flex-1 z-min-w-0 z-paper">
+            <label value="Fulfilled" sclass="z-text-secondary z-mb-2 z-text-sm"/>
+            <label value="287" sclass="z-h1"/>
+            <label value="↑ 5.1%" sclass="z-text-xs z-text-success"/>
+        </div>
+        <div sclass="z-flex-1 z-min-w-0 z-paper">
+            <label value="Low Stock SKUs" sclass="z-text-secondary z-mb-2 z-text-sm"/>
+            <label value="14" sclass="z-h1"/>
+            <label value="↓ 2 since last week" sclass="z-text-xs z-text-success"/>
+        </div>
+        <div sclass="z-flex-1 z-min-w-0 z-paper">
+            <label value="Open Tickets" sclass="z-text-secondary z-mb-2 z-text-sm"/>
+            <label value="9" sclass="z-h1"/>
+            <label value="↑ 3 today" sclass="z-text-xs z-text-error"/>
+        </div>
+    </div>
+
+    <!-- Orders needing attention (real data table — no chart dependency) -->
+    <div sclass="z-paper">
+        <label value="Orders Needing Attention" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <grid hflex="1" sclass="z-border-0">
+            <columns>
+                <column label="Order" width="110px"/>
+                <column label="Product"/>
+                <column label="Channel" width="120px"/>
+                <column label="Qty" width="80px" align="right"/>
+                <column label="Status" width="120px"/>
+                <column label="Fulfillment" width="180px"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="#4821"/>
+                    <label value="M6 Hex Bolt (100pk)"/>
+                    <label value="Web"/>
+                    <label value="120"/>
+                    <chip label="Delayed" severity="warning"/>
+                    <progressmeter value="45" hflex="1"/>
+                </row>
+                <row>
+                    <label value="#4822"/>
+                    <label value="Cordless Drill 18V"/>
+                    <label value="Retail"/>
+                    <label value="12"/>
+                    <chip label="Backorder" severity="error"/>
+                    <progressmeter value="10" hflex="1"/>
+                </row>
+                <row>
+                    <label value="#4823"/>
+                    <label value="Safety Goggles"/>
+                    <label value="Wholesale"/>
+                    <label value="300"/>
+                    <chip label="Picking" severity="info"/>
+                    <progressmeter value="70" hflex="1"/>
+                </row>
+                <row>
+                    <label value="#4824"/>
+                    <label value="Shipping Box (Large)"/>
+                    <label value="Web"/>
+                    <label value="50"/>
+                    <chip label="Packed" severity="success"/>
+                    <progressmeter value="90" hflex="1"/>
+                </row>
+            </rows>
+        </grid>
+    </div>
+
+    <!-- Three panels of varied element types -->
+    <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4">
+
+        <!-- Fulfillment by channel (progressmeters) -->
+        <div sclass="z-paper z-flex-1 z-min-w-0">
+            <label value="Fulfillment by Channel" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+            <div sclass="z-d-flex z-flex-col z-gap-3">
+                <div sclass="z-d-flex z-flex-row z-items-center z-gap-3">
+                    <label value="Web" width="80px"/>
+                    <progressmeter value="82" sclass="z-flex-1" hflex="1"/>
+                    <label value="82%" sclass="z-text-xs z-text-secondary"/>
+                </div>
+                <div sclass="z-d-flex z-flex-row z-items-center z-gap-3">
+                    <label value="Retail" width="80px"/>
+                    <progressmeter value="64" sclass="z-flex-1" hflex="1"/>
+                    <label value="64%" sclass="z-text-xs z-text-secondary"/>
+                </div>
+                <div sclass="z-d-flex z-flex-row z-items-center z-gap-3">
+                    <label value="Wholesale" width="80px"/>
+                    <progressmeter value="45" sclass="z-flex-1" hflex="1"/>
+                    <label value="45%" sclass="z-text-xs z-text-secondary"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending tasks (checklist) -->
+        <div sclass="z-paper z-flex-1 z-min-w-0">
+            <label value="Pending Tasks" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+            <div sclass="z-d-flex z-flex-col z-gap-3">
+                <checkbox label="Approve PO #221" checked="true"/>
+                <checkbox label="Restock SKU SAF-1190"/>
+                <checkbox label="Confirm Acme delivery window"/>
+                <checkbox label="Review 3 returns"/>
+            </div>
+        </div>
+
+        <!-- Recent activity (feed) -->
+        <div sclass="z-paper z-flex-1 z-min-w-0">
+            <label value="Recent Activity" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+            <listbox sclass="z-border-0">
+                <listitem>
+                    <listcell>
+                        <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
+                            <label value="Order #4821 shipped" sclass="z-fw-medium"/>
+                            <label value="2 min ago" sclass="z-text-xs z-text-secondary"/>
+                        </div>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell>
+                        <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
+                            <label value="SKU TLS-2207 marked low"/>
+                            <label value="18 min ago" sclass="z-text-xs z-text-secondary"/>
+                        </div>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell>
+                        <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
+                            <label value="Ticket #218 closed"/>
+                            <label value="1 hr ago" sclass="z-text-xs z-text-secondary"/>
+                        </div>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell>
+                        <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
+                            <label value="Supplier Acme updated"/>
+                            <label value="3 hr ago" sclass="z-text-xs z-text-secondary"/>
+                        </div>
+                    </listcell>
+                </listitem>
+            </listbox>
+        </div>
+
+    </div>
+
+</vlayout>
+</zk>

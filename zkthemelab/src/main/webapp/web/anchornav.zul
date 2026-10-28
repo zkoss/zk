@@ -1,0 +1,45 @@
+<?page title="Anchornav" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native" xmlns:ca="client/attribute">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Anchor Navigation"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Anchornav with Sections"/></div>
+        <div sclass="z-py-3">
+            <anchornav>
+                <div sclass="z-d-flex z-gap-4">
+                    <a ca:data-anchornav-target="$win1">First Window</a>
+                    <a ca:data-anchornav-target="$win2">Second Window</a>
+                    <a ca:data-anchornav-target="$win3">Third Window</a>
+                </div>
+            </anchornav>
+            <div id="win1" sclass="z-mt-6 z-p-4 z-border z-rounded" style="height:200px;background:skyblue">
+                <div sclass="z-mb-2"><label sclass="z-fw-medium" value="1. First Section"/></div>
+                Hello world.
+            </div>
+            <div id="win2" sclass="z-mt-6 z-p-4 z-border z-rounded" style="height:200px;background:coral">
+                <div sclass="z-mb-2"><label sclass="z-fw-medium" value="2. Second Section"/></div>
+                Welcome to ZK world.
+            </div>
+            <div id="win3" sclass="z-mt-6 z-p-4 z-border z-rounded" style="height:200px;background:bisque">
+                <div sclass="z-mb-2"><label sclass="z-fw-medium" value="3. Third Section"/></div>
+                Welcome to ZK world.
+            </div>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Anchornav with Button Links"/></div>
+        <div sclass="z-py-3">
+            <anchornav>
+                <div sclass="z-d-flex z-gap-4">
+                    <button label="First" ca:data-anchornav-target="$win1"/>
+                    <button label="Second" ca:data-anchornav-target="$win2"/>
+                    <button label="Third" ca:data-anchornav-target="$win3"/>
+                </div>
+            </anchornav>
+        </div>
+    </div>
+
+</div>
+</zk>

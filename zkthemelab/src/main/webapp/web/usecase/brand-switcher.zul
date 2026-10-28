@@ -1,0 +1,164 @@
+<?page title="Brand Presets"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<div hflex="1" sclass="z-d-flex z-flex-col z-p-4 z-bg-surface-container-low"
+     viewModel="@id('bvm') @init('zk.example.BrandSwitcherVM')">
+
+  <div sclass="z-w-75 z-mx-auto z-d-flex z-flex-col z-gap-4">
+
+    <!-- Intro -->
+    <div sclass="z-d-flex z-flex-col z-gap-1">
+        <label value="Brand Presets" sclass="z-h2"/>
+        <label sclass="z-text-sm z-text-secondary"
+               value="Marble ships three built-in brand colors: Blue (default), Slate and Copper. Pick one below and the whole UI recolors instantly — containers, fills, focus rings, selected rows, switches and progress bars all derive from a single primary seed."/>
+    </div>
+
+    <!-- Switcher -->
+    <div sclass="z-paper z-d-flex z-flex-col z-gap-3">
+        <label value="Choose a brand" sclass="z-text-lg z-fw-medium z-text-on-surface"/>
+        <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4">
+
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1" style="cursor:pointer"
+                 onClick="@command('switchBrand', brand='default')">
+                <div sclass="@load(bvm.currentBrand eq 'default' ? 'brand-swatch brand-swatch-active' : 'brand-swatch')"
+                     style="background-color:#376fd0"/>
+                <label value="Blue" sclass="z-text-xs z-fw-medium"/>
+                <label value="default" sclass="z-text-xs z-text-secondary"/>
+            </div>
+
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1" style="cursor:pointer"
+                 onClick="@command('switchBrand', brand='slate')">
+                <div sclass="@load(bvm.currentBrand eq 'slate' ? 'brand-swatch brand-swatch-active' : 'brand-swatch')"
+                     style="background-color:#506274"/>
+                <label value="Slate" sclass="z-text-xs z-fw-medium"/>
+                <label value="#506274" sclass="z-text-xs z-text-secondary"/>
+            </div>
+
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-1" style="cursor:pointer"
+                 onClick="@command('switchBrand', brand='copper')">
+                <div sclass="@load(bvm.currentBrand eq 'copper' ? 'brand-swatch brand-swatch-active' : 'brand-swatch')"
+                     style="background-color:#b45309"/>
+                <label value="Copper" sclass="z-text-xs z-fw-medium"/>
+                <label value="#b45309" sclass="z-text-xs z-text-secondary"/>
+            </div>
+
+        </div>
+        <label sclass="z-text-xs z-text-secondary"
+               value="Active brand applies to the whole app (this SPA) — try navigating to other pages after switching."/>
+    </div>
+
+    <!-- Custom brand color -->
+    <div sclass="z-paper z-d-flex z-flex-col z-gap-3">
+        <label value="…or define your own" sclass="z-text-lg z-fw-medium z-text-on-surface"/>
+        <label sclass="z-text-sm z-text-secondary"
+               value="You are not limited to the presets. Pick ANY color — it becomes the primary seed and the whole palette (container tints, fills, focus ring, selected states) re-derives from it through the same single-seed cascade."/>
+        <div sclass="z-d-flex z-flex-row z-items-center z-gap-3">
+            <colorbox value="#376fd0" onChange="@command('applyCustomBrand', color=self.value)"/>
+            <label value="Pick a color → the live preview below recolors instantly."
+                   sclass="z-text-sm z-text-on-surface"/>
+        </div>
+        <label sclass="z-text-xs z-text-secondary"
+               value="Heads-up: a very light color needs a dark --zk-color-on-primary so white button text stays legible (see the caveat below). Mid-to-dark colors work with no extra step."/>
+    </div>
+
+    <!-- Live preview -->
+    <div sclass="z-paper z-d-flex z-flex-col z-gap-4">
+        <label value="Live preview" sclass="z-text-lg z-fw-medium z-text-on-surface"/>
+
+        <!-- Buttons + links -->
+        <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-3 z-items-center">
+            <button label="Primary" sclass="z-button-primary"/>
+            <button label="Outlined" sclass="z-button-outlined"/>
+            <button label="Text" sclass="z-button-text"/>
+            <a label="A primary link" sclass="z-text-primary"/>
+        </div>
+
+        <!-- Form controls: focus ring, switch, slider -->
+        <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4 z-items-center">
+            <textbox value="Focus me" width="160px"/>
+            <checkbox mold="switch" checked="true" label="Switch"/>
+            <checkbox checked="true" label="Checkbox"/>
+            <slider curpos="60" width="180px"/>
+        </div>
+
+        <!-- Progress -->
+        <progressmeter value="65" width="260px"/>
+
+        <!-- Tabs -->
+        <tabbox width="360px">
+            <tabs>
+                <tab label="Overview" selected="true"/>
+                <tab label="Details"/>
+                <tab label="History"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel><label value="The selected tab indicator uses the brand color."/></tabpanel>
+                <tabpanel><label value="Second panel."/></tabpanel>
+                <tabpanel><label value="Third panel."/></tabpanel>
+            </tabpanels>
+        </tabbox>
+
+        <!-- Selected row -->
+        <listbox width="300px" rows="3">
+            <listhead>
+                <listheader label="Name"/>
+                <listheader label="Role"/>
+            </listhead>
+            <listitem selected="true">
+                <listcell label="Ada Lovelace"/>
+                <listcell label="Admin"/>
+            </listitem>
+            <listitem>
+                <listcell label="Grace Hopper"/>
+                <listcell label="Editor"/>
+            </listitem>
+            <listitem>
+                <listcell label="Alan Turing"/>
+                <listcell label="Viewer"/>
+            </listitem>
+        </listbox>
+    </div>
+
+    <!-- How to use -->
+    <div sclass="z-paper z-d-flex z-flex-col z-gap-4">
+        <label value="How to use it in your app" sclass="z-text-lg z-fw-medium z-text-on-surface"/>
+
+        <div sclass="z-d-flex z-flex-col z-gap-2">
+            <label value="1. Your own brand color — one line of CSS" sclass="z-fw-medium"/>
+            <label sclass="z-text-sm z-text-secondary"
+                   value="This is the permanent form of the color picker above. Load a rule after the Marble theme CSS; overriding the single primary seed re-derives the whole palette — no build step, no FOUC."/>
+            <div sclass="z-bg-surface-variant z-rounded z-p-3">
+                <label sclass="brand-code" pre="true" multiline="true"><attribute name="value">/* your-brand.css - loaded after the Marble theme */
+:root {
+    --zk-color-primary: #00796b;   /* the whole palette follows */
+}
+
+/* Light brand color? white text needs a dark partner: */
+/* --zk-color-on-primary: #22303f; */</attribute></label>
+            </div>
+        </div>
+
+        <div sclass="z-d-flex z-flex-col z-gap-2">
+            <label value="2. Switch a built-in preset at runtime" sclass="z-fw-medium"/>
+            <label sclass="z-text-sm z-text-secondary"
+                   value="Use the MarbleBrand helper (whole-app) from any event listener or MVVM command — this is exactly what the swatches above do."/>
+            <div sclass="z-bg-surface-variant z-rounded z-p-3">
+                <label sclass="brand-code" pre="true" multiline="true"><attribute name="value">// Java - flip a shipped preset at runtime
+import org.zkoss.theme.marble.MarbleBrand;
+
+MarbleBrand.apply(MarbleBrand.Brand.SLATE);
+MarbleBrand.apply(MarbleBrand.Brand.DEFAULT);  // back to blue
+
+// Presets: DEFAULT (blue), SLATE, COPPER
+// Sets data-brand on the document root; covers popups too.</attribute></label>
+            </div>
+        </div>
+
+        <label sclass="z-text-xs z-text-secondary"
+               value="Note: brand switching is whole-app by design. See doc/spec/brand-override.md for the full contract and the mid-to-dark seed caveat."/>
+    </div>
+
+  </div>
+
+</div>
+</zk>

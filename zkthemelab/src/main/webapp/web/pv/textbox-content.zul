@@ -1,0 +1,45 @@
+<zk>
+<apply templateURI="~./pv/matrix.zul" title="States"
+       cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
+       rowsTemplate="textbox-rows">
+    <template name="textbox-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Text"/></div>
+            <div><textbox value="Hello"/></div>
+            <div><textbox value="Hello" disabled="true"/></div>
+            <div><textbox value="Hello" readonly="true"/></div>
+            <div><textbox value="bad input" sclass="z-textbox-invalid"/></div>
+            <div><textbox value="Hello" inplace="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Password"/></div>
+            <div><textbox value="secret" type="password"/></div>
+            <div><textbox value="secret" type="password" disabled="true"/></div>
+            <div><textbox value="secret" type="password" readonly="true"/></div>
+            <div><textbox value="bad" type="password" sclass="z-textbox-invalid"/></div>
+            <div><textbox value="secret" type="password" inplace="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Placeholder"/></div>
+            <div><textbox placeholder="Enter text"/></div>
+            <div><textbox placeholder="Enter text" disabled="true"/></div>
+            <div><textbox placeholder="Enter text" readonly="true"/></div>
+            <div><textbox placeholder="type something" sclass="z-textbox-invalid"/></div>
+            <div><textbox placeholder="Enter text" inplace="true" value="Hello"/></div>
+        </div>
+    </template>
+</apply>
+
+<apply templateURI="~./pv/matrix.zul" title="Multiline"
+       cols="${['Default','Disabled','Readonly']}"
+       rowsTemplate="textbox-multiline-rows">
+    <template name="textbox-multiline-rows">
+        <div sclass="z-d-contents">
+            <div/>
+            <div><textbox rows="4" value="Line 1&#10;Line 2&#10;Line 3"/></div>
+            <div><textbox rows="4" value="Line 1&#10;Line 2" disabled="true"/></div>
+            <div><textbox rows="4" value="Line 1&#10;Line 2" readonly="true"/></div>
+        </div>
+    </template>
+</apply>
+</zk>

@@ -1,0 +1,230 @@
+/* MD3 Box — hbox and vbox layout containers
+   DOM: the default mold is nested TABLES (table.z-hbox/.z-vbox > tr > td-frame >
+   table#-real > tr/td chdex cells) — see skill components/box.md.
+   NEVER change display on .z-hbox/.z-vbox: the mold's inline width/height:100%
+   chain and Splitter's drag persistence (px written onto adjacent <td>s) both
+   require native table layout. Stock ZK (box.less) only resets table spacing —
+   we mirror that. */
+@layer zk-components {
+.z-hbox,
+.z-vbox {
+    border-spacing: 0;
+}
+
+.z-hbox th,
+.z-hbox td,
+.z-vbox th,
+.z-vbox td {
+    padding: 0;
+    background-clip: padding-box;
+}
+
+.z-hbox th,
+.z-vbox th {
+    text-align: inherit;
+}
+
+/* Separators — default gap when spacing="auto"; the spacing attribute
+   overrides via inline width/height */
+.z-hbox-separator,
+.z-vbox-separator {
+    margin: 0;
+    padding: 0;
+}
+
+.z-hbox-separator {
+    width: 0.3em;
+}
+
+.z-vbox-separator {
+    height: 0.3em;
+}
+
+.z-vbox-separator td {
+    line-height: 0; /* separator holds a spacer img — kill line-box height */
+}
+
+/* MD3 Splitter — resize/collapse handle between hbox/vbox panes
+   DOM (inside hbox/vbox table):
+     tr.z-splitter-outer > td.z-splitter-outer > .z-splitter.z-splitter-horizontal
+     .z-splitter > .z-splitter-button > <i.z-splitter-icon> x3 (grip / caret / grip)
+   Orientation:
+     z-splitter-horizontal = vertical drag handle (col-resize cursor) inside hbox
+     z-splitter-vertical   = horizontal drag handle (row-resize cursor) inside vbox
+   State: z-splitter-nosplitter added when collapsed (collapse="before/after")
+   Family: DESIGN.md §14 — unified splitter-family spec (bar + actuator pill) */
+
+/* ─── Table cell wrapper sizing ───────────────────────────────────────────── */
+/* ZK reads offsetWidth/offsetHeight for layout math — sizes must be explicit */
+tr.z-splitter-outer > td {
+    height: var(--zk-splitter-thickness);
+    max-height: var(--zk-splitter-thickness);
+}
+
+td.z-splitter-outer {
+    width: var(--zk-splitter-thickness);
+    max-width: var(--zk-splitter-thickness);
+    padding: 0;
+}
+
+/* ─── Splitter base ───────────────────────────────────────────────────────── */
+/* surface-container at rest — tonal strip that recedes until interacted with */
+.z-splitter {
+    background-color: var(--zk-splitter-bar-bg);
+    position: relative;
+    overflow: hidden;
+    transition: var(--zk-splitter-transition);
+}
+
+/* Bar hover — primary-tinted mix signals resize affordance across the full hit area */
+.z-splitter:hover {
+    background-color: var(--zk-splitter-bar-bg-hover);
+}
+
+/* Bar drag/active — deepens to pressed-opacity tint while user holds mousedown */
+.z-splitter:active {
+    background-color: var(--zk-splitter-bar-bg-active);
+}
+
+/* ─── Horizontal splitter (inside hbox — vertical bar, col-resize) ────────── */
+/* z-splitter-horizontal means it divides horizontally (left | right) */
+.z-splitter-horizontal {
+    width: var(--zk-splitter-thickness);
+    overflow: hidden;
+    cursor: col-resize;
+}
+
+/* ─── Vertical splitter (inside vbox — horizontal bar, row-resize) ────────── */
+/* z-splitter-vertical means it divides vertically (top / bottom) */
+.z-splitter-vertical {
+    height: var(--zk-splitter-thickness);
+    overflow: hidden;
+    cursor: row-resize;
+}
+
+/* ─── Actuator pill (collapse toggle button) ─────────────────────────────── *
+ * ZK mold renders three icons inside the button:
+ *   <span class="z-splitter-button">
+ *     <i class="z-splitter-icon z-icon-ellipsis-{v|h}"></i>  ← grip 1
+ *     <i class="z-splitter-icon z-icon-caret-{dir}"></i>      ← caret
+ *     <i class="z-splitter-icon z-icon-ellipsis-{v|h}"></i>  ← grip 2
+ *   </span>
+ *
+ * MD3 has no formal splitter; we compose the MD3 bottom-sheet drag handle
+ * (a slim inline pill) with a surface-tinted divider (see borderlayout.css
+ * lines ~150–170 for full rationale).
+ *
+ * CRITICAL — JS centering rule (applies to entire splitter family):
+ *   Splitter.ts `setBtnPos_` writes an inline margin on the bar's LONG axis
+ *   to centre the pill:
+ *     • z-splitter-horizontal (vertical bar) → inline `margin-left = (barH − btnH)/2`
+ *     • z-splitter-vertical   (horizontal bar) → inline `margin-top = (barW − btnW)/2`
+ *   Inline style always overrides stylesheet. If CSS ALSO sets `top/left: 50%`
+ *   or `transform: translate(-50%)` on the same axis, the two stack and push
+ *   the pill to the end of the bar (double-centering bug).
+ *   Solution: `position: absolute; top: 0; left: 0` — containment only.
+ *   No centering transforms, no top/left percentages on the JS-managed axis.
+ *   See .claude/skills/zk-component-rules/components/splitter.md ─────────── */
+.z-splitter-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--zk-splitter-pill-fill);
+    border: none;
+    border-radius: var(--zk-splitter-pill-radius);
+    box-shadow: none;
+    color: var(--zk-splitter-pill-icon);
+    cursor: pointer;
+    transition:
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* vertical bar (horizontal splitter): pill is 8px wide × 28px tall.
+   Cross-axis (width) = bar thickness; left: 0 is sufficient since both are 8px. */
+.z-splitter-horizontal > .z-splitter-button {
+    flex-direction: column;
+    width: var(--zk-splitter-thickness);
+    height: var(--zk-splitter-pill-length);
+}
+
+/* horizontal bar (vertical splitter): pill is 28px wide × 8px tall.
+   Cross-axis (height) = bar thickness; top: 0 is sufficient since both are 8px. */
+.z-splitter-vertical > .z-splitter-button {
+    flex-direction: row;
+    width: var(--zk-splitter-pill-length);
+    height: var(--zk-splitter-thickness);
+}
+
+/* Pill hover — fills primary, icons flip to on-primary */
+.z-splitter-button:hover,
+.z-splitter:hover .z-splitter-button {
+    background-color: var(--zk-splitter-pill-fill-hover);
+    color: var(--zk-splitter-pill-icon-hover);
+}
+
+/* Disabled button (collapse="none") — suppress pointer */
+.z-splitter-button-disabled {
+    cursor: default;
+}
+
+.z-splitter-vertical .z-splitter-button-disabled {
+    cursor: row-resize;
+}
+
+.z-splitter-horizontal .z-splitter-button-disabled {
+    cursor: col-resize;
+}
+
+/* ─── Splitter icons ─────────────────────────────────────────────────────── */
+/* Grip and caret glyphs share the same base — inline-flex at 8px, color inherited
+   from the pill so hover flip from on-surface-variant → on-primary is automatic. */
+.z-splitter-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--zk-splitter-icon-size);
+    line-height: 1;
+    color: inherit;
+}
+
+/* Grip dots (ellipsis-v / ellipsis-h) — always visible drag affordance */
+.z-splitter-icon.z-icon-ellipsis-v,
+.z-splitter-icon.z-icon-ellipsis-h {
+    opacity: 1;
+}
+
+/* Collapse caret — hidden at idle so the pill reads as a pure drag handle;
+   fades in on pill hover to communicate the collapse action without cluttering
+   the resting state. */
+.z-splitter-icon:not(.z-icon-ellipsis-v):not(.z-icon-ellipsis-h) {
+    opacity: 0;
+    transition: var(--zk-state-layer-transition);
+}
+
+.z-splitter-button:hover .z-splitter-icon:not(.z-icon-ellipsis-v):not(.z-icon-ellipsis-h),
+.z-splitter:hover .z-splitter-icon:not(.z-icon-ellipsis-v):not(.z-icon-ellipsis-h) {
+    opacity: 1;
+}
+
+/* ─── Collapsed (nosplitter) state ────────────────────────────────────────── */
+.z-splitter-nosplitter {
+    cursor: default;
+}
+
+/* Non-resizable — keep idle tint; no resize affordance (DESIGN.md §14) */
+.z-splitter-nosplitter:hover,
+.z-splitter-nosplitter:active {
+    background-color: var(--zk-splitter-bar-bg);
+}
+
+/* ─── Drag ghost ──────────────────────────────────────────────────────────── */
+.z-splitter-ghost {
+    background: var(--zk-color-primary) !important;
+    opacity: 0.3;
+}
+}

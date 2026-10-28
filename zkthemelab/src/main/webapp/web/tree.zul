@@ -1,0 +1,465 @@
+<?page title="Tree" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript><![CDATA[
+    import zk.example.*;
+    import java.util.*;
+    import org.zkoss.zul.DefaultTreeModel;
+    import org.zkoss.zul.DefaultTreeNode;
+    import org.zkoss.zul.ext.TristateModel;
+
+    BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new BigList(1000)));
+
+    // ── Tristate (indeterminate) checkmark demo ──────────────────────────────
+    // ZK only computes/renders the partial state when the model implements
+    // TristateModel (Tree.java casts (TristateModel) _model). ZK ships no
+    // concrete impl, so we declare one: getPartials() returns the nodes whose
+    // descendants are partially selected.
+    DefaultTreeNode makeParent(String label, DefaultTreeNode[] kids) {
+        ArrayList list = new ArrayList();
+        for (int i = 0; i < kids.length; i++) list.add(kids[i]);
+        return new DefaultTreeNode(label, list);
+    }
+
+    DefaultTreeNode childA1 = new DefaultTreeNode("Child A-1");
+    DefaultTreeNode childA2 = new DefaultTreeNode("Child A-2");
+    DefaultTreeNode childA3 = new DefaultTreeNode("Child A-3");
+    DefaultTreeNode parentA = makeParent("Parent A (partial)",
+        new DefaultTreeNode[]{childA1, childA2, childA3});
+
+    DefaultTreeNode childB1 = new DefaultTreeNode("Child B-1");
+    DefaultTreeNode childB2 = new DefaultTreeNode("Child B-2");
+    DefaultTreeNode parentB = makeParent("Parent B (all selected)",
+        new DefaultTreeNode[]{childB1, childB2});
+
+    DefaultTreeNode childC1 = new DefaultTreeNode("Child C-1");
+    DefaultTreeNode childC2 = new DefaultTreeNode("Child C-2");
+    DefaultTreeNode parentC = makeParent("Parent C (none selected)",
+        new DefaultTreeNode[]{childC1, childC2});
+
+]]></zscript>
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Tree"/></div>
+
+    <div sclass="z-mb-8">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Tree — State Gallery"/></div>
+
+        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
+                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Node States"/></div>
+                <tree width="280px">
+                    <treecols><treecol label="Name"/></treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow><treecell label="Leaf Node"/></treerow>
+                        </treeitem>
+                        <treeitem open="true">
+                            <treerow><treecell label="Expanded"/></treerow>
+                            <treechildren>
+                                <treeitem><treerow><treecell label="Child 1"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="Child 2"/></treerow></treeitem>
+                            </treechildren>
+                        </treeitem>
+                        <treeitem open="false">
+                            <treerow><treecell label="Collapsed"/></treerow>
+                            <treechildren>
+                                <treeitem><treerow><treecell label="Hidden Child"/></treerow></treeitem>
+                            </treechildren>
+                        </treeitem>
+                        <treeitem selected="true">
+                            <treerow><treecell label="Selected"/></treerow>
+                        </treeitem>
+                    </treechildren>
+                </tree>
+            </div>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Basic Tree"/></div>
+        <div sclass="z-py-3">
+            <tree id="tree" width="400px" rows="8">
+                <treecols sizable="true">
+                    <treecol label="Name"/>
+                    <treecol label="Description"/>
+                </treecols>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 1"/>
+                            <treecell label="Item 1 description"/>
+                        </treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 2"/>
+                            <treecell label="Item 2 description"/>
+                        </treerow>
+                        <treechildren>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.1"/>
+                                    <treecell/>
+                                </treerow>
+                                <treechildren>
+                                    <treeitem>
+                                        <treerow>
+                                            <treecell label="Item 2.1.1"/>
+                                            <treecell/>
+                                        </treerow>
+                                    </treeitem>
+                                    <treeitem>
+                                        <treerow>
+                                            <treecell label="Item 2.1.2"/>
+                                            <treecell/>
+                                        </treerow>
+                                    </treeitem>
+                                </treechildren>
+                            </treeitem>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.2"/>
+                                    <treecell/>
+                                </treerow>
+                                <treechildren>
+                                    <treeitem>
+                                        <treerow>
+                                            <treecell label="Item 2.2.1"/>
+                                            <treecell/>
+                                        </treerow>
+                                    </treeitem>
+                                </treechildren>
+                            </treeitem>
+                        </treechildren>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 3"/>
+                            <treecell/>
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </tree>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Tree Live Data"/></div>
+        <div sclass="z-py-3">
+            <tree id="tree2" model="&#36;{btm}"/>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Tree with Checkmark"/></div>
+        <div sclass="z-py-3">
+            <div sclass="z-hstack z-mb-3">
+                <button label="Toggle checkmark" onClick="tree3.checkmark = !tree3.checkmark;"/>
+                <button label="Toggle multiple" onClick="tree3.multiple = !tree3.multiple;"/>
+            </div>
+            <tree id="tree3" rows="5" multiple="true" checkmark="true">
+                <treecols>
+                    <treecol label="Name"/>
+                    <treecol label="Description"/>
+                </treecols>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 1"/>
+                            <treecell label="Item 1 description"/>
+                        </treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 2"/>
+                            <treecell label="Item 2 description"/>
+                        </treerow>
+                        <treechildren>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.1"/>
+                                    <treecell/>
+                                </treerow>
+                                <treechildren>
+                                    <treeitem>
+                                        <treerow>
+                                            <treecell label="Item 2.1.1"/>
+                                            <treecell/>
+                                        </treerow>
+                                    </treeitem>
+                                    <treeitem>
+                                        <treerow>
+                                            <treecell label="Item 2.1.2"/>
+                                            <treecell/>
+                                        </treerow>
+                                    </treeitem>
+                                </treechildren>
+                            </treeitem>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.2"/>
+                                    <treecell label="Item 2.2 is something who cares"/>
+                                </treerow>
+                            </treeitem>
+                        </treechildren>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 3"/>
+                            <treecell/>
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </tree>
+        </div>
+        <div sclass="z-py-3">
+            <div sclass="z-text-secondary z-mb-2"><label sclass="z-text-sm z-fw-medium" value="Single selection — renders a radio, not a checkbox"/></div>
+            <tree rows="4" checkmark="true">
+                <treecols>
+                    <treecol label="Name"/>
+                    <treecol label="Description"/>
+                </treecols>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 1"/>
+                            <treecell label="Item 1 description"/>
+                        </treerow>
+                    </treeitem>
+                    <treeitem open="true">
+                        <treerow>
+                            <treecell label="Item 2"/>
+                            <treecell label="Item 2 description"/>
+                        </treerow>
+                        <treechildren>
+                            <treeitem selected="true">
+                                <treerow>
+                                    <treecell label="Item 2.1 (selected)"/>
+                                    <treecell label="Active"/>
+                                </treerow>
+                            </treeitem>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Item 2.2"/>
+                                    <treecell/>
+                                </treerow>
+                            </treeitem>
+                        </treechildren>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="Item 3"/>
+                            <treecell/>
+                        </treerow>
+                    </treeitem>
+                </treechildren>
+            </tree>
+        </div>
+        <zscript><![CDATA[
+        DefaultTreeNode tristateRoot = makeParent("root",
+            new DefaultTreeNode[]{parentA, parentB, parentC});
+
+        // ZK's TristateModel is a PASSIVE data holder — Tree.java only READS
+        // getPartials() to render; it never computes parent state from children.
+        // The child<->parent cascade is the application's job, so the model owns it:
+        //   setSubtree() — down-propagate a parent click to its descendants
+        //   recompute()  — bottom-up: all kids selected→SELECTED, some/any-partial
+        //                  →PARTIAL (and removed from selection so the minus wins),
+        //                  none→UNSELECTED. Returns 0=unsel 1=sel 2=partial.
+        class MarbleTristateModel extends DefaultTreeModel implements TristateModel {
+            Set partials = new HashSet();
+            MarbleTristateModel(DefaultTreeNode root) { super(root, true); }
+            public Set getPartials() { return partials; }
+            public boolean isPartial(Object item) { return partials.contains(item); }
+
+            void setSubtree(DefaultTreeNode node, boolean sel) {
+                List kids = node.getChildren();
+                if (kids == null) return;
+                for (int i = 0; i < kids.size(); i++) {
+                    DefaultTreeNode c = (DefaultTreeNode) kids.get(i);
+                    if (sel) addToSelection(c); else removeFromSelection(c);
+                    setSubtree(c, sel);
+                }
+            }
+
+            int recompute(DefaultTreeNode node) {
+                if (node.isLeaf()) return isSelected(node) ? 1 : 0;
+                List kids = node.getChildren();
+                int sel = 0, total = 0; boolean anyPartial = false;
+                for (int i = 0; i < kids.size(); i++) {
+                    int cs = recompute((DefaultTreeNode) kids.get(i));
+                    total++;
+                    if (cs == 1) sel++; else if (cs == 2) anyPartial = true;
+                }
+                int s;
+                if (anyPartial || (sel > 0 && sel < total)) s = 2;
+                else if (sel == total && total > 0) s = 1;
+                else s = 0;
+                if (s == 1) { addToSelection(node); partials.remove(node); }
+                else if (s == 2) { removeFromSelection(node); partials.add(node); }
+                else { removeFromSelection(node); partials.remove(node); }
+                return s;
+            }
+        }
+
+        MarbleTristateModel tristateModel = new MarbleTristateModel(tristateRoot);
+        tristateModel.setMultiple(true);         // keep every selection (else single-select drops all but last)
+        tristateModel.addToSelection(childA1);   // 1 of 3 → parentA partial
+        tristateModel.addToSelection(childB1);   // 2 of 2 → parentB full check
+        tristateModel.addToSelection(childB2);
+        tristateModel.recompute(tristateRoot);   // derive parent states (parentC stays empty)
+        ]]></zscript>
+        <div sclass="z-py-3">
+            <div sclass="z-text-secondary z-mb-2"><label sclass="z-text-sm z-fw-medium" value="Tristate — toggle a child and its parent recomputes (all→checked, some→indeterminate, none→unchecked); toggle a parent and it cascades to its children"/></div>
+            <tree model="${tristateModel}" checkmark="true" multiple="true" width="320px">
+                <treecols>
+                    <treecol label="Node"/>
+                </treecols>
+                <attribute name="onSelect"><![CDATA[
+                    // Cascade. getReference() is the clicked Treeitem; if it's a parent,
+                    // down-propagate its new state first, then recompute the whole tree
+                    // and fire TRISTATE_CHANGED so ZK re-reads getPartials() and repaints.
+                    org.zkoss.zk.ui.event.SelectEvent se = (org.zkoss.zk.ui.event.SelectEvent) event;
+                    org.zkoss.zul.Treeitem ref = (org.zkoss.zul.Treeitem) se.getReference();
+                    if (ref != null) {
+                        DefaultTreeNode node = (DefaultTreeNode) ref.getValue();
+                        if (!node.isLeaf())
+                            tristateModel.setSubtree(node, tristateModel.isSelected(node));
+                    }
+                    tristateModel.recompute(tristateRoot);
+                    tristateModel.fireEvent(org.zkoss.zul.event.TreeDataEvent.TRISTATE_CHANGED, new int[]{0}, 0, 0);
+                ]]></attribute>
+            </tree>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Paging with Tree"/></div>
+        <div sclass="z-py-3">
+            <div sclass="z-hstack z-mb-3">
+                <radiogroup onCheck="tree4.pagingPosition = self.selectedItem.label;">
+                    <radio label="top"/>
+                    <radio label="bottom" checked="true"/>
+                    <radio label="both"/>
+                </radiogroup>
+                <button label="Change Paging Mold">
+                    <attribute name="onClick">
+                        tree4.pagingChild.mold = "os".equals(tree4.pagingChild.mold) ? "default" : "os";
+                    </attribute>
+                </button>
+            </div>
+            <tree id="tree4" mold="paging" pageSize="15" model="&#36;{btm}">
+                <attribute name="onCreate">
+                    tree4.renderItemByPath(new int[]{1,1,1,1,1,1,1,1,1,1,1,1});
+                    tree4.renderItemByPath(new int[]{0,0,0,0,0,0,0,0,0,0,0,0});
+                </attribute>
+            </tree>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Frozen Columns"/></div>
+        <div sclass="z-py-3">
+            <tree>
+                <frozen columns="2"/>
+                <treecols>
+                    <treecol label="aaa" width="300px"/>
+                    <treecol label="bbb" width="400px"/>
+                    <treecol label="ccc" width="500px"/>
+                    <treecol label="ddd" width="600px"/>
+                    <treecol label="eee" width="700px"/>
+                    <treecol label="fff" width="800px"/>
+                </treecols>
+                <treechildren>
+                    <treeitem>
+                        <treerow><treecell>111</treecell><treecell>222</treecell><treecell>333</treecell><treecell>444</treecell><treecell>555</treecell><treecell>666</treecell></treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow><treecell>111</treecell><treecell>222</treecell><treecell>333</treecell><treecell>444</treecell><treecell>555</treecell><treecell>666</treecell></treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow><treecell><textbox/></treecell><treecell><textbox/></treecell><treecell><textbox/></treecell><treecell><textbox/></treecell><treecell><textbox/></treecell><treecell><textbox/></treecell></treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow><treecell>111</treecell><treecell>222</treecell><treecell>333</treecell><treecell>444</treecell><treecell>555</treecell><treecell>666</treecell></treerow>
+                    </treeitem>
+                    <treeitem>
+                        <treerow><treecell>111</treecell><treecell>222</treecell><treecell>333</treecell><treecell>444</treecell><treecell>555</treecell><treecell>666</treecell></treerow>
+                    </treeitem>
+                </treechildren>
+                <treefoot>
+                    <treefooter label="Footer 1"/>
+                    <treefooter label="Footer 2"/>
+                    <treefooter label="Footer 3"/>
+                    <treefooter label="Footer 4"/>
+                    <treefooter label="Footer 5"/>
+                    <treefooter label="Footer 6"/>
+                </treefoot>
+            </tree>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Disabled State"/></div>
+        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Individual disabled treeitems"/></div>
+                <tree width="280px">
+                    <treecols><treecol label="Name"/></treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow><treecell label="Normal item"/></treerow>
+                        </treeitem>
+                        <treeitem disabled="true">
+                            <treerow><treecell label="Disabled leaf"/></treerow>
+                        </treeitem>
+                        <treeitem open="true">
+                            <treerow><treecell label="Normal parent"/></treerow>
+                            <treechildren>
+                                <treeitem><treerow><treecell label="Normal child"/></treerow></treeitem>
+                                <treeitem disabled="true"><treerow><treecell label="Disabled child"/></treerow></treeitem>
+                            </treechildren>
+                        </treeitem>
+                        <treeitem selected="true" disabled="true">
+                            <treerow><treecell label="Disabled + selected"/></treerow>
+                        </treeitem>
+                    </treechildren>
+                </tree>
+            </div>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="No-Border Variant (z-tree-noborder)"/></div>
+        <div sclass="z-py-3 z-mb-3"><label sclass="z-text-sm z-text-secondary" value="A tree is an outlined card by default. Add sclass=&quot;z-tree-noborder&quot; to strip its own frame when nesting it inside another bounded surface — here an elevated card — so it blends into the parent instead of double-framing."/></div>
+        <div sclass="z-bg-surface z-rounded-lg z-elevation-2 z-p-6">
+            <tree sclass="z-tree-noborder">
+                <treecols><treecol label="Name"/><treecol label="Value"/></treecols>
+                <treechildren>
+                    <treeitem>
+                        <treerow><treecell>Alpha</treecell><treecell>1</treecell></treerow>
+                        <treechildren>
+                            <treeitem><treerow><treecell>Alpha-1</treecell><treecell>1.1</treecell></treerow></treeitem>
+                        </treechildren>
+                    </treeitem>
+                    <treeitem><treerow><treecell>Beta</treecell><treecell>2</treecell></treerow></treeitem>
+                </treechildren>
+            </tree>
+        </div>
+    </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Paging Position Top"/></div>
+        <div sclass="z-py-3">
+            <tree mold="paging" pageSize="3" pagingPosition="top">
+                <treecols><treecol label="Name"/><treecol label="Value"/></treecols>
+                <treechildren>
+                    <treeitem><treerow><treecell>Alpha</treecell><treecell>1</treecell></treerow></treeitem>
+                    <treeitem><treerow><treecell>Beta</treecell><treecell>2</treecell></treerow></treeitem>
+                    <treeitem><treerow><treecell>Gamma</treecell><treecell>3</treecell></treerow></treeitem>
+                    <treeitem><treerow><treecell>Delta</treecell><treecell>4</treecell></treerow></treeitem>
+                    <treeitem><treerow><treecell>Epsilon</treecell><treecell>5</treecell></treerow></treeitem>
+                </treechildren>
+            </tree>
+        </div>
+    </div>
+</div>
+</zk>

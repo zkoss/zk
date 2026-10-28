@@ -1,0 +1,87 @@
+<?page title="Inputs" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript><![CDATA[
+java.util.Date sampleDate = new java.util.Date(125, 0, 15);
+java.util.Date sampleTime = new java.util.Date(0, 0, 1, 10, 30, 0);
+String[] selectNames = {"Alice", "Bob", "Charlie", "David", "Eve"};
+ListModelList selectModel = new ListModelList(selectNames);
+ListModel searchModel = new ListModelArray(new String[]{
+    "North America", "South America", "Europe", "Asia", "Africa", "Oceania", "Antarctica"
+});
+ListModelList chosenModel = new ListModelList(new String[]{
+    "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape"
+});
+chosenModel.setMultiple(true);
+chosenModel.addToSelection(chosenModel.get(0));
+chosenModel.addToSelection(chosenModel.get(1));
+DefaultTreeModel cascaderModel = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+    Arrays.asList(new DefaultTreeNode[]{
+        new DefaultTreeNode("USA", Arrays.asList(new TreeNode[]{
+            new DefaultTreeNode("New York"), new DefaultTreeNode("Los Angeles")})),
+        new DefaultTreeNode("Japan", Arrays.asList(new TreeNode[]{
+            new DefaultTreeNode("Tokyo"), new DefaultTreeNode("Kyoto")})),
+        new DefaultTreeNode("New Zealand", Arrays.asList(new TreeNode[]{
+            new DefaultTreeNode("Auckland"), new DefaultTreeNode("Queenstown")}))}
+    )));
+]]></zscript>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Inputs</h:span></h:div>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Textbox</h:span></h:div>
+    <apply templateURI="~./pv/textbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Intbox</h:span></h:div>
+    <apply templateURI="~./pv/intbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Longbox</h:span></h:div>
+    <apply templateURI="~./pv/longbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Decimalbox</h:span></h:div>
+    <apply templateURI="~./pv/decimalbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Doublebox</h:span></h:div>
+    <apply templateURI="~./pv/doublebox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Combobox</h:span></h:div>
+    <apply templateURI="~./pv/combobox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Datebox</h:span></h:div>
+    <apply templateURI="~./pv/datebox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Timebox</h:span></h:div>
+    <apply templateURI="~./pv/timebox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Timepicker</h:span></h:div>
+    <apply templateURI="~./pv/timepicker-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Bandbox</h:span></h:div>
+    <apply templateURI="~./pv/bandbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Spinner</h:span></h:div>
+    <apply templateURI="~./pv/spinner-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Selectbox</h:span></h:div>
+    <apply templateURI="~./pv/selectbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Searchbox</h:span></h:div>
+    <apply templateURI="~./pv/searchbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Chosenbox</h:span></h:div>
+    <apply templateURI="~./pv/chosenbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Cascader</h:span></h:div>
+    <apply templateURI="~./pv/cascader-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Colorbox</h:span></h:div>
+    <apply templateURI="~./pv/colorbox-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Slider</h:span></h:div>
+    <apply templateURI="~./pv/slider-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Rating</h:span></h:div>
+    <apply templateURI="~./pv/rating-content.zul"/>
+
+    <h:div class="z-mt-6 z-mb-2"><h:span class="z-text-lg z-fw-medium z-text-on-surface">Input Group</h:span></h:div>
+    <apply templateURI="~./pv/inputgroup-content.zul"/>
+</h:div>
+</zk>

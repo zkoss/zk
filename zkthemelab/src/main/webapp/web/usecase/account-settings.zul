@@ -1,0 +1,77 @@
+<?page title="Account Settings"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<div hflex="1" sclass="z-d-flex z-flex-col z-p-4 z-bg-surface-container-low">
+
+  <!-- Centered block with side gutters so it reads as a distinct page,
+       not an extension of the dark left sidebar. -->
+  <div sclass="z-w-75 z-mx-auto z-d-flex z-flex-col z-gap-4">
+
+    <label value="Settings" sclass="z-h2"/>
+
+    <!-- Flex row (not hlayout): lets the panel's z-flex-1 actually fill.
+         No ZK vflex on the children — that would flip ZK's flex engine to
+         column and override z-flex-row. CSS align-items:stretch gives the
+         nav card equal height to the panel. -->
+    <div sclass="z-d-flex z-flex-row z-gap-4">
+
+        <!-- Sub-nav -->
+        <navbar orient="vertical" sclass="z-paper z-flex-none" width="220px">
+            <navitem label="Profile"/>
+            <navitem label="Notifications" selected="true"/>
+            <navitem label="Security"/>
+            <navitem label="Appearance"/>
+        </navbar>
+
+        <!-- Preference panel -->
+        <div sclass="z-paper z-flex-1 z-min-w-0">
+            <label value="Notifications" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+
+            <div sclass="z-d-flex z-items-center z-gap-4 z-py-3 z-border-bottom">
+                <div sclass="z-d-flex z-flex-col z-flex-1 z-min-w-0">
+                    <label value="Email alerts" sclass="z-fw-medium"/>
+                    <label value="Receive an email when stock runs low" sclass="z-text-xs z-text-secondary"/>
+                </div>
+                <checkbox mold="switch" checked="true"/>
+            </div>
+
+            <div sclass="z-d-flex z-items-center z-gap-4 z-py-3 z-border-bottom">
+                <div sclass="z-d-flex z-flex-col z-flex-1 z-min-w-0">
+                    <label value="Push notifications" sclass="z-fw-medium"/>
+                    <label value="Browser push for new support tickets" sclass="z-text-xs z-text-secondary"/>
+                </div>
+                <checkbox mold="switch"/>
+            </div>
+
+            <div sclass="z-d-flex z-items-center z-gap-4 z-py-3 z-border-bottom">
+                <div sclass="z-d-flex z-flex-col z-flex-1 z-min-w-0">
+                    <label value="Digest frequency" sclass="z-fw-medium"/>
+                    <label value="How often to send the activity summary" sclass="z-text-xs z-text-secondary"/>
+                </div>
+                <combobox value="Daily" readonly="true" width="160px">
+                    <comboitem label="Realtime"/>
+                    <comboitem label="Daily"/>
+                    <comboitem label="Weekly"/>
+                </combobox>
+            </div>
+
+            <div sclass="z-d-flex z-items-center z-gap-4 z-py-3">
+                <div sclass="z-d-flex z-flex-col z-flex-1 z-min-w-0">
+                    <label value="Alert volume" sclass="z-fw-medium"/>
+                    <label value="Sound level for in-app alerts" sclass="z-text-xs z-text-secondary"/>
+                </div>
+                <slider curpos="60" width="180px"/>
+            </div>
+
+            <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4 z-items-center z-mt-4">
+                <button label="Cancel" sclass="z-button-outlined z-ms-auto"/>
+                <button label="Save Changes" sclass="z-button-primary"/>
+            </div>
+        </div>
+
+    </div>
+
+  </div>
+
+</div>
+</zk>

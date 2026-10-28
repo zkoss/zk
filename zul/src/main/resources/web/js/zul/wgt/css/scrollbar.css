@@ -1,0 +1,192 @@
+/* MD3 Scrollbar — custom (simulated) scrollbar, drawn by the zul.Scrollbar helper
+   when org.zkoss.zul.nativebar="false". Marble gives it a deliberate, themed look,
+   distinct from the browser-native bar (user ruling 2026-06-30):
+     • a faint visible TRACK channel (vs the track-less native overlay),
+     • a neutral pill THUMB (bolder than native, draggable affordance),
+     • slim caret STEP BUTTONS at the lane ends (shown — but flat/neutral, and the
+       whole bar only appears on hover, keeping it MD3-restrained).
+
+   EDGE-HUGGING / NO LATERAL JUMP (user ruling 2026-06-30, Option A): in embedded
+   mode the rest `*-embed` rail and the hover bar MUST sit on the same cross-axis
+   line so the bar does not "jump" on mouse-over (MD3 continuity-of-motion). ZK's
+   syncSize() sets only the ALONG-axis position inline; the cross-axis is entirely
+   ours. So we anchor the track/thumb/arrows AND the embed rail to the near edge
+   (vertical → right, horizontal → bottom) at the same centre (~4px from the edge):
+   the track sits flush, the thumb 1px inside it, and hover only fades in the track
+   channel + arrows — nothing moves laterally.
+   See doc/spec/DESIGN.md §15 and the scrollbar skill entry. */
+
+@layer zk-components {
+.z-scrollbar {
+    display: none;
+    position: absolute;
+    line-height: 1;
+    z-index: 100;
+}
+
+.z-scrollbar-wrapper {
+    position: absolute;
+}
+
+/* Track channel — faint surface tint so the scroll lane reads as a deliberate
+   control (the native overlay bar has no visible track). Anchored to the near
+   edge so it sits flush (no off-centre gutter inside the lane). */
+.z-scrollbar-rail {
+    position: absolute;
+    background: var(--zk-color-surface-container);
+    border-radius: var(--zk-shape-corner-full);
+}
+
+/* Thumb — neutral, slightly bolder than the native bar (it is draggable). */
+.z-scrollbar-indicator {
+    border-radius: var(--zk-shape-corner-full);
+    background-color: var(--zk-color-outline);
+    opacity: 0.6;
+    position: absolute;
+    cursor: pointer;
+    z-index: 100;
+    transition: opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
+                background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+.z-scrollbar-indicator:hover {
+    background-color: var(--zk-color-on-surface-variant);
+    opacity: 0.85;
+}
+
+/* Grip glyph inside the thumb — kept hidden (MD3 thumbs are plain). */
+.z-scrollbar-icon {
+    display: none;
+}
+
+/* Caret step buttons at the lane ends. Flat, neutral, with a faint MD3 state
+   layer on hover. The JS (Scrollbar.ts syncSize) reads their ALONG-axis offset
+   (up/down height, left/right width) to inset the wrapper, so that dimension is
+   kept at 12px; the CROSS-axis dimension is narrowed to 8px and anchored to the
+   near edge so the caret glyph centres on the same line as the track/thumb. */
+.z-scrollbar-up,
+.z-scrollbar-down,
+.z-scrollbar-left,
+.z-scrollbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    border-radius: var(--zk-shape-corner-full);
+    transition: background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
+                color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+.z-scrollbar-up i,
+.z-scrollbar-down i,
+.z-scrollbar-left i,
+.z-scrollbar-right i {
+    font-size: 11px;
+    line-height: 1;
+}
+
+.z-scrollbar-up:hover,
+.z-scrollbar-down:hover,
+.z-scrollbar-left:hover,
+.z-scrollbar-right:hover {
+    background-color: var(--zk-color-surface-container-high);
+    color: var(--zk-color-on-surface);
+}
+
+/* ─── Vertical (right edge) ──────────────────────────────────────────────────
+   Lane flush to the edge (no margin). Track flush, thumb 1px inside, arrows
+   narrowed to 8px wide and right-anchored → everything centres ~4px from the
+   edge. The rest embed rail (below) shares that centre, so there is no jump. */
+.z-scrollbar-vertical {
+    width: 12px;
+    height: 100%;
+    top: 0;
+    right: 0;
+}
+
+.z-scrollbar-vertical .z-scrollbar-up,
+.z-scrollbar-vertical .z-scrollbar-down {
+    width: 8px;
+    height: 12px;     /* along-axis — syncSize reads this to inset the wrapper */
+    right: 0;
+}
+.z-scrollbar-vertical .z-scrollbar-up   { top: 0; }
+.z-scrollbar-vertical .z-scrollbar-down { bottom: 0; }
+
+.z-scrollbar-vertical .z-scrollbar-wrapper {
+    width: 100%;
+    top: 12px;        /* clear the up arrow; JS sets height = lane − up − down */
+    left: 0;
+}
+
+.z-scrollbar-vertical .z-scrollbar-rail {
+    width: 8px;
+    height: 100%;
+    right: 0;         /* flush to the edge */
+}
+
+.z-scrollbar-vertical .z-scrollbar-indicator {
+    width: 6px;
+    right: 1px;       /* 1px inside the 8px track → centred on the track */
+}
+
+.z-scrollbar-vertical-embed {
+    border-radius: var(--zk-shape-corner-full);
+    background-color: var(--zk-color-outline-variant);
+    position: absolute;
+    width: 8px;       /* = hover track width; JS pins right:0 (flush), so this gives
+                         the rest rail the SAME flush footprint as the hover track →
+                         on hover it just refines into thumb-in-track, no movement */
+    top: 0;
+    right: 0;
+    height: 100%;     /* JS overrides height to the thumb footprint */
+}
+
+/* ─── Horizontal (bottom edge) ───────────────────────────────────────────────
+   Mirror of the vertical lane, anchored to the bottom edge. */
+.z-scrollbar-horizontal {
+    width: 100%;
+    height: 12px;
+    left: 0;
+    bottom: 0;
+}
+
+.z-scrollbar-horizontal .z-scrollbar-left,
+.z-scrollbar-horizontal .z-scrollbar-right {
+    width: 12px;      /* along-axis — syncSize reads this to inset the wrapper */
+    height: 8px;
+    bottom: 0;
+}
+.z-scrollbar-horizontal .z-scrollbar-left  { left: 0; }
+.z-scrollbar-horizontal .z-scrollbar-right { right: 0; }
+
+.z-scrollbar-horizontal .z-scrollbar-wrapper {
+    height: 100%;
+    bottom: 0;
+    left: 12px;       /* clear the left arrow; JS sets width = lane − left − right */
+}
+
+.z-scrollbar-horizontal .z-scrollbar-rail {
+    height: 8px;
+    width: 100%;
+    bottom: 0;        /* flush to the edge */
+}
+
+.z-scrollbar-horizontal .z-scrollbar-indicator {
+    height: 6px;
+    bottom: 1px;      /* 1px inside the 8px track → centred on the track */
+}
+
+.z-scrollbar-horizontal-embed {
+    border-radius: var(--zk-shape-corner-full);
+    background-color: var(--zk-color-outline-variant);
+    position: absolute;
+    height: 8px;      /* = hover track height; JS pins bottom:0 (flush) → same flush
+                         footprint as the hover track, refines in place on hover */
+    bottom: 0;
+    left: 0;
+    width: 100%;      /* JS overrides width to the thumb footprint */
+}
+}

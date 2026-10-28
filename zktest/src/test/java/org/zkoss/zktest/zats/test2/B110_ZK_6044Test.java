@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -29,6 +30,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
  * adjacent text without breathing room. The fix grows the icon/line box
  * and restores the 8px gap between icon and treecell text.
  */
+// IceBlue-only: it expects IceBlue's 22px toggle box; Marble's tree icon is a 20px box with a 4px gap before the text and does not overlap it.
+@Tag("IceBlueOnly")
 @ForkJVMTestOnly
 public class B110_ZK_6044Test extends WebDriverTestCase {
 	@RegisterExtension

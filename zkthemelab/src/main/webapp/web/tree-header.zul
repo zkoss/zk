@@ -1,0 +1,506 @@
+<?page title="Tree Header" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript><![CDATA[
+    import zk.example.*;
+    import java.util.*;
+
+    BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new BigList(1000)));
+]]></zscript>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Tree Header</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auxhead + Treecols Combinations</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <tree width="400px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <treecols>
+                        <treecol label="Align Left" align="left"/>
+                        <treecol label="Align Center" align="center"/>
+                        <treecol label="Align Right" align="right"/>
+                    </treecols>
+                    <auxhead>
+                        <auxheader label="C"/>
+                        <auxheader label="D + E" colspan="2"/>
+                    </auxhead>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="AA01"/>
+                                <treecell label="BB01"/>
+                                <treecell label="CC01"/>
+                            </treerow>
+                            <treechildren>
+                                <treeitem selected="true">
+                                    <treerow>
+                                        <treecell label="A-1"/>
+                                        <treecell label="B"/>
+                                        <treecell label="C"/>
+                                    </treerow>
+                                </treeitem>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="A-2"/>
+                                        <treecell label="B"/>
+                                        <treecell label="C"/>
+                                    </treerow>
+                                </treeitem>
+                            </treechildren>
+                        </treeitem>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="AA02"/>
+                                <treecell/>
+                                <treecell/>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                    <treefoot>
+                        <treefooter label="footer 1"/>
+                        <treefooter label="image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png"
+                                    hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                        <treefooter label="image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png"
+                                    hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                    </treefoot>
+                </tree>
+
+                <tree width="400px">
+                    <treecols>
+                        <treecol label="Align Left" align="left"/>
+                        <treecol label="Align Center" align="center"/>
+                        <treecol label="Align Right" align="right"/>
+                    </treecols>
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="C"/>
+                        <auxheader label="D + E" colspan="2"/>
+                    </auxhead>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="AA01"/>
+                                <treecell label="BB01"/>
+                                <treecell label="CC01"/>
+                            </treerow>
+                        </treeitem>
+                        <treeitem open="false">
+                            <treerow>
+                                <treecell label="AA02"/>
+                                <treecell/>
+                                <treecell/>
+                            </treerow>
+                            <treechildren>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="A-1"/>
+                                        <treecell label="B"/>
+                                        <treecell label="C"/>
+                                    </treerow>
+                                </treeitem>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="A-2"/>
+                                        <treecell label="B"/>
+                                        <treecell label="C"/>
+                                    </treerow>
+                                </treeitem>
+                            </treechildren>
+                        </treeitem>
+                    </treechildren>
+                    <treefoot>
+                        <treefooter label="footer 1"/>
+                        <treefooter label="footer 2"/>
+                        <treefooter label="footer 3"/>
+                    </treefoot>
+                </tree>
+
+                <tree width="400px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="C"/>
+                        <auxheader label="D + E" colspan="2"/>
+                    </auxhead>
+                    <treecols>
+                        <treecol label="Align Left" align="left"/>
+                        <treecol label="Align Center" align="center"/>
+                        <treecol label="Align Right" align="right"/>
+                    </treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="AA01"/>
+                                <treecell label="BB01"/>
+                                <treecell label="CC01"/>
+                            </treerow>
+                        </treeitem>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="AA02"/>
+                                <treecell/>
+                                <treecell/>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                    <treefoot>
+                        <treefooter label="footer 1"/>
+                        <treefooter label="footer 2"/>
+                        <treefooter label="footer 3"/>
+                    </treefoot>
+                </tree>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Treecols Only and Auxhead Only</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <tree width="400px">
+                    <treecols>
+                        <treecol label="Align Left" align="left"/>
+                        <treecol label="Align Center" align="center"/>
+                        <treecol label="Align Right" align="right"/>
+                    </treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="AA01"/>
+                                <treecell label="BB01"/>
+                                <treecell label="CC01"/>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                    <treefoot>
+                        <treefooter label="footer 1"/>
+                        <treefooter label="footer width Image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png"
+                                    hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                        <treefooter label="footer 3"/>
+                    </treefoot>
+                </tree>
+
+                <tree width="400px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="AA01"/>
+                                <treecell label="BB01"/>
+                                <treecell label="CC01"/>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                    <treefoot>
+                        <treefooter label="footer 1"/>
+                        <treefooter label="footer width Image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png"
+                                    hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                        <treefooter label="footer 3"/>
+                    </treefoot>
+                </tree>
+
+                <tree width="400px">
+                    <treecols sizable="true">
+                        <treecol label="Align Left" align="left"/>
+                        <treecol label="Align Center" align="center"/>
+                        <treecol label="Align Right" align="right"/>
+                    </treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="AA01"/>
+                                <treecell label="BB01"/>
+                                <treecell label="CC01"/>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                    <treefoot>
+                        <treefooter label="footer 1"/>
+                        <treefooter label="footer width Image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png"
+                                    hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                        <treefooter label="footer 3"/>
+                    </treefoot>
+                </tree>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Static Sort Direction</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <tree width="300px">
+                    <treecols>
+                        <treecol label="Name (asc)" sort="auto" sortDirection="ascending"/>
+                        <treecol label="Type" sort="auto"/>
+                    </treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="alpha"/>
+                                <treecell label="folder"/>
+                            </treerow>
+                        </treeitem>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="beta"/>
+                                <treecell label="file"/>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                </tree>
+
+                <tree width="300px">
+                    <treecols>
+                        <treecol label="Name" sort="auto"/>
+                        <treecol label="Type (desc)" sort="auto" sortDirection="descending"/>
+                    </treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="beta"/>
+                                <treecell label="folder"/>
+                            </treerow>
+                        </treeitem>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="alpha"/>
+                                <treecell label="file"/>
+                            </treerow>
+                        </treeitem>
+                    </treechildren>
+                </tree>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">sizedByContent + Span Treecol</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <tree sizedByContent="true">
+                    <treecols>
+                        <treecol label="Name"/>
+                        <treecol label="Type"/>
+                        <treecol label="Size"/>
+                    </treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="documents"/>
+                                <treecell label="folder"/>
+                                <treecell label="—"/>
+                            </treerow>
+                            <treechildren>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="report-2024.pdf"/>
+                                        <treecell label="PDF"/>
+                                        <treecell label="1.2 MB"/>
+                                    </treerow>
+                                </treeitem>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="super-long-document-name-here.docx"/>
+                                        <treecell label="Word"/>
+                                        <treecell label="340 KB"/>
+                                    </treerow>
+                                </treeitem>
+                            </treechildren>
+                        </treeitem>
+                    </treechildren>
+                </tree>
+
+                <tree width="420px" span="true" sizedByContent="true">
+                    <treecols>
+                        <treecol label="Fixed" width="100px"/>
+                        <treecol label="Span (tree span=true)"/>
+                        <treecol label="Size" width="80px"/>
+                    </treecols>
+                    <treechildren>
+                        <treeitem>
+                            <treerow>
+                                <treecell label="src"/>
+                                <treecell label="This column stretches to fill remaining space"/>
+                                <treecell label="—"/>
+                            </treerow>
+                            <treechildren>
+                                <treeitem>
+                                    <treerow>
+                                        <treecell label="main.java"/>
+                                        <treecell label="Entry point"/>
+                                        <treecell label="4 KB"/>
+                                    </treerow>
+                                </treeitem>
+                            </treechildren>
+                        </treeitem>
+                    </treechildren>
+                </tree>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Frozen Right (Start Columns Scroll)</h:span></h:div>
+        <h:div class="z-py-3">
+            <tree width="500px">
+                <frozen columns="2" start="1"/>
+                <treecols>
+                    <treecol label="Name" width="140px"/>
+                    <treecol label="Type" width="100px"/>
+                    <treecol label="Modified" width="130px"/>
+                    <treecol label="Size" width="100px"/>
+                    <treecol label="Action" width="100px"/>
+                </treecols>
+                <treechildren>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="src"/>
+                            <treecell label="folder"/>
+                            <treecell label="2024-05-01"/>
+                            <treecell label="—"/>
+                            <treecell label="Open"/>
+                        </treerow>
+                        <treechildren>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="main.java"/>
+                                    <treecell label="Java"/>
+                                    <treecell label="2024-04-30"/>
+                                    <treecell label="4 KB"/>
+                                    <treecell label="Edit"/>
+                                </treerow>
+                            </treeitem>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="Application.java"/>
+                                    <treecell label="Java"/>
+                                    <treecell label="2024-04-28"/>
+                                    <treecell label="2 KB"/>
+                                    <treecell label="Edit"/>
+                                </treerow>
+                            </treeitem>
+                        </treechildren>
+                    </treeitem>
+                    <treeitem>
+                        <treerow>
+                            <treecell label="resources"/>
+                            <treecell label="folder"/>
+                            <treecell label="2024-05-02"/>
+                            <treecell label="—"/>
+                            <treecell label="Open"/>
+                        </treerow>
+                        <treechildren>
+                            <treeitem>
+                                <treerow>
+                                    <treecell label="config.xml"/>
+                                    <treecell label="XML"/>
+                                    <treecell label="2024-04-25"/>
+                                    <treecell label="1 KB"/>
+                                    <treecell label="Edit"/>
+                                </treerow>
+                            </treeitem>
+                        </treechildren>
+                    </treeitem>
+                </treechildren>
+            </tree>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Sticky Header (z-sticky-header)</h:span></h:div>
+        <h:div class="z-py-3">
+            <div style="height:200px; overflow-y:auto; border:1px solid var(--zk-color-outline);">
+                <tree sclass="z-sticky-header" width="460px">
+                    <treecols>
+                        <treecol label="Node" width="220px"/>
+                        <treecol label="Type" width="120px"/>
+                        <treecol label="Size" width="100px"/>
+                    </treecols>
+                    <treechildren>
+                        <treeitem open="true">
+                            <treerow><treecell label="project-root"/><treecell label="folder"/><treecell label="—"/></treerow>
+                            <treechildren>
+                                <treeitem><treerow><treecell label="file-01.txt"/><treecell label="text"/><treecell label="1 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-02.txt"/><treecell label="text"/><treecell label="2 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-03.txt"/><treecell label="text"/><treecell label="3 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-04.txt"/><treecell label="text"/><treecell label="4 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-05.txt"/><treecell label="text"/><treecell label="5 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-06.txt"/><treecell label="text"/><treecell label="6 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-07.txt"/><treecell label="text"/><treecell label="7 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-08.txt"/><treecell label="text"/><treecell label="8 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-09.txt"/><treecell label="text"/><treecell label="9 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-10.txt"/><treecell label="text"/><treecell label="10 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-11.txt"/><treecell label="text"/><treecell label="11 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-12.txt"/><treecell label="text"/><treecell label="12 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-13.txt"/><treecell label="text"/><treecell label="13 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-14.txt"/><treecell label="text"/><treecell label="14 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-15.txt"/><treecell label="text"/><treecell label="15 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-16.txt"/><treecell label="text"/><treecell label="16 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-17.txt"/><treecell label="text"/><treecell label="17 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-18.txt"/><treecell label="text"/><treecell label="18 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-19.txt"/><treecell label="text"/><treecell label="19 KB"/></treerow></treeitem>
+                                <treeitem><treerow><treecell label="file-20.txt"/><treecell label="text"/><treecell label="20 KB"/></treerow></treeitem>
+                            </treechildren>
+                        </treeitem>
+                    </treechildren>
+                </tree>
+            </div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Live Data with Paging</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-hstack z-mb-3">
+                <radiogroup onCheck="tree.pagingPosition = self.selectedItem.label;">
+                    <radio label="top"/>
+                    <radio label="bottom" checked="true"/>
+                    <radio label="both"/>
+                </radiogroup>
+                <button label="Change Paging Mold">
+                    <attribute name="onClick">
+                        tree.pagingChild.mold = "os".equals(tree.pagingChild.mold) ? "default" : "os";
+                    </attribute>
+                </button>
+            </h:div>
+            <tree id="tree" model="&#36;{btm}" width="400px" mold="paging" pageSize="3">
+                <treecols>
+                    <treecol label="Align Left" align="left" />
+                </treecols>
+                <treefoot>
+                    <treefooter label="footer width Image" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png"
+                                hoverImage="~./img/Centigrade-Widget-Icons/BookGreen-16x16.png"/>
+                </treefoot>
+            </tree>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Control in Treecol</h:span></h:div>
+        <h:div class="z-py-3">
+            <tree width="400px">
+                <treecols>
+                    <treecol label="Name" width="200px"/>
+                    <treecol width="200px"><button label="Go"/></treecol>
+                </treecols>
+                <treechildren>
+                    <treeitem><treerow><treecell label="alpha"/><treecell label="folder"/></treerow></treeitem>
+                    <treeitem><treerow><treecell label="beta"/><treecell label="file"/></treerow></treeitem>
+                </treechildren>
+            </tree>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

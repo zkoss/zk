@@ -1,0 +1,23 @@
+<?component name="category" extends="label" style="font-weight:bold; font-size: 0.9 em;" ?>
+<?component name="item" inline="true" macroURI="~./_sidebar_item.zul" ?>
+<?import zk.example.* ?>
+<zk xmlns:h="native">
+    <script src="http://localhost:50000/zk-live-reload.js"/>
+    <nodom viewModel="@id('vm')@init('zk.example.ZulListVM')"  xmlns:n="native">
+        <forEach items="@init(vm.zulFiles)" var="one">
+            <h:h1>${one}</h:h1>
+            <choose>
+                <when test="@init(ZulListVM.isSeparatePage(one))">
+                    <a href="${one.substring(0, one.length()-4)}">view in the separate page</a>
+                </when>
+                <otherwise>
+                    <idspace>
+                    <apply templateURI='@init(("~./"+=one))'/>
+                    </idspace>
+                </otherwise>
+            </choose>
+            <n:div class="separator" style="height: 50px"/>
+        </forEach>
+    </nodom>
+    <h:div style="height:100px"/> <!-- add margin bottom-->
+</zk>

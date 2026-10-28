@@ -1,0 +1,17 @@
+{
+  "name": "zkthemelab",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Playwright harness for the Marble preview host (zkthemelab)",
+  "scripts": {
+    "test:focus-scan": "playwright test --config src/test/playwright/playwright.config.ts --project=focus-scan",
+    "test:hit-target": "playwright test --config src/test/playwright/playwright.config.ts --project=hit-target",
+    "test:forced-colors": "playwright test --config src/test/playwright/playwright.config.ts --project=forced-colors",
+    "capture:forced-colors": "playwright test --config src/test/playwright/playwright.config.ts --project=forced-colors-gallery",
+    "screenshot:test": "playwright test --config src/test/playwright/playwright.config.ts",
+    "screenshot:update": "playwright test --config src/test/playwright/playwright.config.ts --update-snapshots"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.59.1"
+  }
+}

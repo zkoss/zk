@@ -1,0 +1,103 @@
+<?page title="Paging" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Paging</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Paging Variants</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Default mold (detailed)</h:span></h:div>
+                <paging totalSize="300" pageSize="5" activePage="15" detailed="true"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">OS mold (detailed)</h:span></h:div>
+                <paging totalSize="300" pageSize="5" activePage="15" detailed="true" mold="os"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">OS mold (compact)</h:span></h:div>
+                <paging totalSize="50" pageSize="5" mold="os" />
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Default Mold — Jump-to-Page Input Field (.z-paging-input)</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Default mold (shows page input + total)</h:span></h:div>
+                <paging totalSize="200" pageSize="10" activePage="4"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Default mold — first page (prev/first disabled)</h:span></h:div>
+                <paging totalSize="200" pageSize="10" activePage="0"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Default mold — last page (next/last disabled)</h:span></h:div>
+                <paging totalSize="200" pageSize="10" activePage="19"/>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Disabled Paging (disabled=&quot;true&quot;)</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Default mold (buttons, input and total text disabled)</h:span></h:div>
+                <paging sclass="pv-paging-disabled-default" totalSize="200" pageSize="10" activePage="4" disabled="true"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">OS mold (buttons disabled)</h:span></h:div>
+                <paging sclass="pv-paging-disabled-os" totalSize="50" pageSize="5" activePage="4" mold="os" disabled="true"/>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Pagination with Data Grid</h:span></h:div>
+        <h:div class="z-py-3">
+            <grid mold="default">
+                <columns>
+                    <column label="#"/>
+                    <column label="First Name"/>
+                    <column label="Last Name"/>
+                    <column label="Username"/>
+                </columns>
+                <rows>
+                    <row>
+                        <label value="1"/>
+                        <label value="Mark"/>
+                        <label value="Otto"/>
+                        <label value="@mdo"/>
+                    </row>
+                    <row>
+                        <label value="2"/>
+                        <label value="Jacob"/>
+                        <label value="Thornton"/>
+                        <label value="@fat"/>
+                    </row>
+                    <row>
+                        <label value="3"/>
+                        <label value="Larry"/>
+                        <label value="the Bird"/>
+                        <label value="@twitter"/>
+                    </row>
+                    <row>
+                        <label value="4"/>
+                        <label value="John"/>
+                        <label value="Smith"/>
+                        <label value="@jsmith"/>
+                    </row>
+                    <row>
+                        <label value="5"/>
+                        <label value="Jane"/>
+                        <label value="Doe"/>
+                        <label value="@jdoe"/>
+                    </row>
+                </rows>
+            </grid>
+            <paging totalSize="50" pageSize="5" mold="os" />
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

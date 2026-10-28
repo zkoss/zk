@@ -1,0 +1,24 @@
+<zk>
+<apply templateURI="~./pv/matrix.zul" title="States"
+       cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
+       rowsTemplate="doublespinner-rows">
+    <template name="doublespinner-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="With buttons"/></div>
+            <div><doublespinner step="0.5"/></div>
+            <div><doublespinner step="0.5" disabled="true"/></div>
+            <div><doublespinner step="0.5" readonly="true"/></div>
+            <div><doublespinner step="0.5" sclass="z-doublespinner-invalid"/></div>
+            <div><doublespinner step="0.5" inplace="true" value="3.5"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="No button"/></div>
+            <div><doublespinner buttonVisible="false"/></div>
+            <div><doublespinner buttonVisible="false" disabled="true"/></div>
+            <div><doublespinner buttonVisible="false" readonly="true"/></div>
+            <div><doublespinner buttonVisible="false" sclass="z-doublespinner-invalid"/></div>
+            <div><doublespinner buttonVisible="false" inplace="true" value="3.5"/></div>
+        </div>
+    </template>
+</apply>
+</zk>

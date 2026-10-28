@@ -1,0 +1,12 @@
+<zk>
+	<config-name>marble-preview</config-name>
+	<client-config>
+		<debug-js>true</debug-js>
+	</client-config>
+	<!-- The preview pages refer to each other and to their assets as class web resources (~./...);
+	     this lets ZK find them in the webapp's /web directory as well as on the class path. -->
+	<library-property>
+		<name>org.zkoss.web.util.resource.dir</name>
+		<value>/web</value>
+	</library-property>
+</zk>

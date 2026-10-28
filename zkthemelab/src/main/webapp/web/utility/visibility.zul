@@ -1,0 +1,39 @@
+<?page title="Visibility Utilities" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<style src="~./usecase/usecase.css"/>
+<div sclass="z-p-8 z-d-flex z-flex-col z-gap-4">
+
+    <label value="Visibility Utilities" sclass="z-h2"/>
+    <label value=".z-invisible hides a widget but keeps its space; .z-d-none removes it from the layout." sclass="z-text-secondary z-text-sm"/>
+
+    <!-- Invisible vs display none -->
+    <div sclass="z-paper">
+        <label value=".z-invisible vs .z-d-none" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-flex-col z-gap-3">
+            <div sclass="z-d-flex z-gap-2 z-items-center pv-row-invisible">
+                <button label="First"/>
+                <button label="Hidden" sclass="z-invisible pv-invisible"/>
+                <button label="Third" sclass="pv-after-invisible"/>
+                <label value=".z-invisible — Third stays where it was" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-gap-2 z-items-center pv-row-dnone">
+                <button label="First"/>
+                <button label="Hidden" sclass="z-d-none"/>
+                <button label="Third" sclass="pv-after-dnone"/>
+                <label value=".z-d-none — Third moves left" sclass="z-text-secondary z-text-xs"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visible inside invisible -->
+    <div sclass="z-paper">
+        <label value=".z-visible inside an .z-invisible parent" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-invisible z-d-flex z-gap-2 z-p-3 z-border z-rounded pv-invisible-parent">
+            <textbox value="hidden with parent"/>
+            <button label="Still shown" sclass="z-visible pv-visible-child"/>
+        </div>
+        <label value="visibility is inherited, so a child can opt back in with .z-visible. A .z-d-none parent cannot be undone this way." sclass="z-text-secondary z-text-xs z-mt-2"/>
+    </div>
+
+</div>
+</zk>

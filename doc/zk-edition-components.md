@@ -1,0 +1,187 @@
+# ZK Edition Components
+
+> Classified by which jar **registers** each component (verified against the ZK
+> `10.4.0-jakarta.FL.20260713-Eval` `lang.xml` / `lang-addon.xml`). Each component
+> is listed once — under its lowest edition. EE additionally *overrides* a few CE
+> components (grid, listbox, slider, tab, tree) with extra molds; those stay under CE.
+
+## PE Components (`zkex.jar` — PE and EE)
+
+- Colorbox
+- Columnlayout
+- Columnchildren
+- Detail
+- Fisheye
+- Fisheyebar
+- Group
+- Groupfoot
+- JasperReport
+- Listgroup
+- Listgroupfoot
+- Pdfviewer
+- Rangeslider
+- Sliderbuttons
+
+## EE Components (`zkmax.jar` — EE only)
+
+- Anchornav
+- Barcode
+- Barcodescanner
+- Biglistbox
+- Camera
+- Cardlayout
+- Cascader
+- Chosenbox
+- Coachmark
+- Cropper
+- Daterangebox
+- Drawer
+- Dropupload
+- Fragment
+- Fusionchart
+- GoldenLayout
+- GoldenPanel
+- Lineitem
+- Linelayout
+- Multislider
+- Nav
+- Navbar
+- Navitem
+- Navseparator
+- Organigram
+- Orgchildren
+- Orgitem
+- Orgnode
+- Portalchildren
+- Portallayout
+- Rowchildren
+- Rowlayout
+- Scrollview
+- Searchbox
+- Signature
+- Splitlayout
+- Step
+- Stepbar
+- Tablechildren
+- Tablelayout
+- Tbeditor
+- Timepicker
+- Video
+
+## CE Components (`zul.jar` — all editions)
+
+- A
+- Absolutechildren
+- Absolutelayout
+- Anchorchildren
+- Anchorlayout
+- Area
+- Audio
+- Auxhead
+- Auxheader
+- Avatar
+- Avatargroup
+- Badge
+- Bandbox
+- Bandpopup
+- Borderlayout
+- Box
+- Breadcrumb
+- Breadcrumbitem
+- Button
+- Calendar
+- Captcha
+- Caption
+- Carousel
+- Carouselitem
+- Cell
+- Center
+- Chart
+- Checkbox
+- Chip
+- Column
+- Columns
+- Combobox
+- Combobutton
+- Comboitem
+- Confirmpopup
+- Datebox
+- Decimalbox
+- Div
+- Doublebox
+- Doublespinner
+- East
+- Fileupload
+- Foot
+- Footer
+- Frozen
+- Grid
+- Groupbox
+- Hbox (deprecated)
+- Hlayout
+- Html
+- Iframe
+- Image
+- Imagemap
+- Include
+- Inputgroup
+- Intbox
+- Label
+- Listbox
+- Listcell
+- Listfoot
+- Listfooter
+- Listhead
+- Listheader
+- Listitem
+- Longbox
+- Menu
+- Menubar
+- Menuitem
+- Menupopup
+- Menuseparator
+- North
+- Paging
+- Panel
+- Panelchildren
+- Popup
+- Progressmeter
+- Radio
+- Radiogroup
+- Rating
+- Row
+- Rows
+- Script
+- Selectbox
+- Separator
+- Slider
+- South
+- Space
+- Span
+- Spinner
+- Splitter (deprecated)
+- Style
+- Tab
+- Tabbox
+- Tabpanel
+- Tabpanels
+- Tabs
+- Textbox
+- Timebox
+- Timer
+- Toolbar
+- Toolbarbutton
+- Track
+- Tree
+- Treecell
+- Treechildren
+- Treecol
+- Treecols
+- Treefoot
+- Treefooter
+- Treeitem
+- Treerow
+- Vbox (deprecated)
+- Vlayout
+- West
+- Window

@@ -1,0 +1,228 @@
+<?page title="Responsive Utilities" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<style src="~./usecase/usecase.css"/>
+<div sclass="z-p-8">
+    <label value="Responsive Utilities" sclass="z-h2 z-mb-2"/>
+    <div sclass="z-text-sm z-text-secondary z-mb-4 z-border-bottom z-pb-4">
+        Two ways to adapt a layout by size: <h:b>by viewport</h:b> (window width) and <h:b>by container</h:b> (container width).
+        This page shows how to use them through real scenarios, each with its source code; the last section explains how to customize the breakpoints.
+    </div>
+
+    <!-- prefer-intrinsic callout -->
+    <div sclass="z-bg-secondary-container z-rounded z-p-3 z-text-sm z-mb-8">
+        <h:b>Try intrinsic first</h:b>: for independent card walls / dashboard tiles, prefer <h:code>z-grid-fill</h:code> (column count grows and shrinks with width, <h:b>zero breakpoints</h:b> — see the <h:code>Grid Layout</h:code> page under "Utility CSS").
+        Only reach for the breakpoint utilities below when you truly need to "hide a sidebar on narrow screens", "stack ↔ row", or "show an element on mobile only".
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 1 — viewport -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-text-xl z-fw-semibold z-text-primary" value="Part 1 · By viewport (window width)"/></div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        <h:code>z-d-{value}-{bp}</h:code> = "when viewport ≥ bp, set <h:code>display:{value}</h:code>". It is <h:b>mobile-first</h:b>:
+        the un-suffixed <h:code>z-d-*</h:code> covers the smallest xs (0), and <h:code>-{bp}</h:code> layers an override <h:b>at and above</h:b> that width.
+        <h:code>value</h:code> can be <h:code>none / block / flex / grid / inline-block</h:code>.
+    </div>
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto z-mb-8"><label multiline="true" pre="true"><![CDATA[<!-- set the base display for all sizes, then override from a breakpoint up -->
+<div class="z-d-none  z-d-md-block">...</div>   <!-- hidden < md, block >= md -->
+<div class="z-d-block z-d-md-flex">...</div>    <!-- block  < md, flex  >= md -->]]></label></div>
+
+    <!-- breakpoint scale table -->
+    <div sclass="z-d-grid z-grid-cols-auto z-gap-x-4 z-gap-y-2 z-mb-8 z-items-center" style="--zk-cols: 2; --zk-col-min: 120px">
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Abbrev."/></div>
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Min width"/></div>
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Example class"/></div>
+        <div><label sclass="z-text-sm z-fw-medium" value="xs"/></div><div><label sclass="z-text-sm z-text-secondary" value="0 (base)"/></div><div sclass="z-text-sm"><h:code>z-d-none</h:code> <h:code>z-d-flex</h:code></div>
+        <div><label sclass="z-text-sm z-fw-medium" value="sm"/></div><div><label sclass="z-text-sm z-text-secondary" value="576px"/></div><div sclass="z-text-sm"><h:code>z-d-sm-block</h:code></div>
+        <div><label sclass="z-text-sm z-fw-medium" value="md"/></div><div><label sclass="z-text-sm z-text-secondary" value="768px"/></div><div sclass="z-text-sm"><h:code>z-d-md-flex</h:code></div>
+        <div><label sclass="z-text-sm z-fw-medium" value="lg"/></div><div><label sclass="z-text-sm z-text-secondary" value="992px"/></div><div sclass="z-text-sm"><h:code>z-d-lg-none</h:code></div>
+        <div><label sclass="z-text-sm z-fw-medium" value="xl"/></div><div><label sclass="z-text-sm z-text-secondary" value="1200px"/></div><div sclass="z-text-sm"><h:code>z-d-xl-grid</h:code></div>
+    </div>
+
+    <!-- 1.1 hide sidebar on mobile -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Scenario 1.1 · Hide the sidebar on mobile, show it on desktop"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">
+            A sidebar wastes space on narrow screens and only earns its keep on desktop. Set the base to <h:code>z-d-none</h:code> (hidden on mobile), then use <h:code>z-d-md-block</h:code> to show it at ≥md.
+            <h:b>↔ Shrink the window below 768px and the sidebar disappears.</h:b>
+        </div>
+        <div sclass="z-d-flex z-gap-3 z-mb-3">
+            <div sclass="z-d-none z-d-md-block z-bg-primary-container z-rounded z-p-3" style="width:180px"><label sclass="z-text-sm" value="Sidebar · shown at ≥md"/></div>
+            <div sclass="z-flex-1 z-bg-surface-variant z-rounded z-p-3"><label sclass="z-text-sm" value="Main content · always shown"/></div>
+        </div>
+        <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[<div class="z-d-flex z-gap-3">
+    <aside class="z-d-none z-d-md-block">Sidebar</aside>   <!-- hidden on mobile, shown >= md -->
+    <main class="z-flex-1">Main content</main>
+</div>]]></label></div>
+    </div>
+
+    <!-- 1.2 hamburger vs nav links -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Scenario 1.2 · Show a hamburger on mobile, the full menu on desktop"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">
+            A mutually-exclusive pair: the hamburger button <h:code>z-d-block z-d-md-none</h:code> (shown only &lt;md) and the nav bar <h:code>z-d-none z-d-md-flex</h:code> (shown only ≥md).
+            <h:b>↔ Narrow the window and the nav bar becomes a hamburger button.</h:b>
+        </div>
+        <div sclass="z-d-flex z-items-center z-justify-between z-bg-surface-variant z-rounded z-p-3 z-mb-3">
+            <div><label sclass="z-fw-semibold z-text-sm" value="Logo"/></div>
+            <div sclass="z-d-block z-d-md-none z-bg-primary-container z-rounded z-py-1 z-px-3"><label sclass="z-text-sm z-fw-medium" value="☰ Menu"/></div>
+            <div sclass="z-d-none z-d-md-flex z-gap-4 z-text-sm">
+                <div>Home</div><div>Products</div><div>Pricing</div><div>About</div>
+            </div>
+        </div>
+        <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[<nav class="z-d-flex z-items-center z-justify-between">
+    <span>Logo</span>
+    <button class="z-d-block z-d-md-none">☰ Menu</button>   <!-- shown only < md -->
+    <div class="z-d-none z-d-md-flex z-gap-4">              <!-- shown only >= md -->
+        <a>Home</a><a>Products</a><a>Pricing</a><a>About</a>
+    </div>
+</nav>]]></label></div>
+    </div>
+
+    <!-- 1.3 stack to horizontal -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Scenario 1.3 · Stack on mobile, row on desktop (switch layout)"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">
+            A pure <h:code>display</h:code> switch: base <h:code>z-d-block</h:code> (blocks stack), then <h:code>z-d-md-flex</h:code> lays them in a row at ≥md.
+            <h:code>z-gap-3</h:code> only takes effect in flex mode. <h:b>↔ Widen to ≥768px and the three panels sit side by side.</h:b>
+        </div>
+        <div sclass="z-d-block z-d-md-flex z-gap-3 z-mb-3">
+            <div sclass="z-bg-primary-container z-rounded z-p-4 z-flex-1 z-mb-2"><label sclass="z-text-sm" value="Panel A"/></div>
+            <div sclass="z-bg-primary-container z-rounded z-p-4 z-flex-1 z-mb-2"><label sclass="z-text-sm" value="Panel B"/></div>
+            <div sclass="z-bg-primary-container z-rounded z-p-4 z-flex-1 z-mb-2"><label sclass="z-text-sm" value="Panel C"/></div>
+        </div>
+        <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[<div class="z-d-block z-d-md-flex z-gap-3">   <!-- block (stacked) < md, flex (row) >= md -->
+    <div class="z-flex-1">Panel A</div>
+    <div class="z-flex-1">Panel B</div>
+    <div class="z-flex-1">Panel C</div>
+</div>]]></label></div>
+    </div>
+
+    <!-- 1.4 breakpoint reference chips -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Scenario 1.4 · Breakpoint reference (resize the window to observe)"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">
+            Each chip is visible only in its matching range. <h:b>↔ Drag the window width and watch them appear / disappear one by one</h:b> — the fastest way to confirm the breakpoints.
+        </div>
+        <div sclass="z-d-flex z-gap-2 z-flex-wrap z-items-center z-mb-3">
+            <div sclass="z-bg-secondary-container z-rounded-xs z-py-2 z-px-3 z-d-block z-d-sm-none"><label sclass="z-text-sm z-fw-medium" value="Visible &lt; sm (&lt;576)"/></div>
+            <div sclass="z-bg-primary-container z-rounded-xs z-py-2 z-px-3 z-d-none z-d-sm-block"><label sclass="z-text-sm z-fw-medium" value="Visible ≥ sm (576)"/></div>
+            <div sclass="z-bg-primary-container z-rounded-xs z-py-2 z-px-3 z-d-none z-d-md-block"><label sclass="z-text-sm z-fw-medium" value="Visible ≥ md (768)"/></div>
+            <div sclass="z-bg-primary-container z-rounded-xs z-py-2 z-px-3 z-d-none z-d-lg-block"><label sclass="z-text-sm z-fw-medium" value="Visible ≥ lg (992)"/></div>
+            <div sclass="z-bg-primary-container z-rounded-xs z-py-2 z-px-3 z-d-none z-d-xl-block"><label sclass="z-text-sm z-fw-medium" value="Visible ≥ xl (1200)"/></div>
+        </div>
+        <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[<div class="z-d-block z-d-sm-none">Visible < sm</div>   <!-- shown only < 576 -->
+<div class="z-d-none z-d-md-block">Visible >= md</div>  <!-- shown only >= 768 -->]]></label></div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 2 — container queries -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-text-xl z-fw-semibold z-text-primary" value="Part 2 · By container (container width)"/></div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        Let a component adapt to <h:b>its own container's width</h:b> instead of the viewport — the same component adapts differently in a wide area versus a narrow sidebar, ideal for dashboard tiles and split panes.
+        Mark a query container with <h:code>z-container</h:code> (<h:code>container-type: inline-size</h:code>), then its descendants use <h:code>z-cq-{value}-{bp}</h:code> to react to <h:b>that container's</h:b> width. The breakpoint scale is the same as Part 1 (sm/md/lg/xl).
+    </div>
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto z-mb-8"><label multiline="true" pre="true"><![CDATA[<div class="z-container">                        <!-- mark the query container (required) -->
+    <div class="z-d-block z-cq-md-flex">...</div>  <!-- reacts to the container's width -->
+</div>]]></label></div>
+
+    <!-- 2.1 card adapts to its container -->
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Scenario 2.1 · One card, adapting to its container width"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">
+            The three blocks below are <h:b>identical markup</h:b>; only the container width differs (300 / 700 / 950px), so each renders a different layout — <h:b>no window resizing needed</h:b>.
+            The body uses <h:code>z-d-block z-cq-md-flex</h:code> (container &lt;md stacks, ≥md rows) and Details uses <h:code>z-cq-none z-cq-sm-block</h:code> (container &lt;sm hides).
+        </div>
+        <div sclass="z-vstack z-gap-4 z-mb-3">
+            <div>
+                <div sclass="z-mb-1"><label sclass="z-text-xs z-text-secondary" value="Container 300px (&lt; sm) → stacked, no Details"/></div>
+                <div sclass="z-overflow-x-auto">
+                    <div sclass="z-container z-bg-surface-container-low z-border z-rounded z-p-3" style="width:300px">
+                        <div sclass="z-d-block z-cq-md-flex z-gap-3 z-items-center">
+                            <div sclass="z-bg-primary-container z-rounded z-p-3 z-flex-1 z-mb-2"><label sclass="z-text-sm" value="Summary"/></div>
+                            <div sclass="z-bg-secondary-container z-rounded z-p-3 z-flex-1 z-mb-2 z-cq-none z-cq-sm-block"><label sclass="z-text-sm" value="Details · ≥sm container"/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div sclass="z-mb-1"><label sclass="z-text-xs z-text-secondary" value="Container 700px (≥ sm, &lt; md) → stacked, with Details"/></div>
+                <div sclass="z-overflow-x-auto">
+                    <div sclass="z-container z-bg-surface-container-low z-border z-rounded z-p-3" style="width:700px">
+                        <div sclass="z-d-block z-cq-md-flex z-gap-3 z-items-center">
+                            <div sclass="z-bg-primary-container z-rounded z-p-3 z-flex-1 z-mb-2"><label sclass="z-text-sm" value="Summary"/></div>
+                            <div sclass="z-bg-secondary-container z-rounded z-p-3 z-flex-1 z-mb-2 z-cq-none z-cq-sm-block"><label sclass="z-text-sm" value="Details · ≥sm container"/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div sclass="z-mb-1"><label sclass="z-text-xs z-text-secondary" value="Container 950px (≥ md) → row, with Details"/></div>
+                <div sclass="z-overflow-x-auto">
+                    <div sclass="z-container z-bg-surface-container-low z-border z-rounded z-p-3" style="width:950px">
+                        <div sclass="z-d-block z-cq-md-flex z-gap-3 z-items-center">
+                            <div sclass="z-bg-primary-container z-rounded z-p-3 z-flex-1 z-mb-2"><label sclass="z-text-sm" value="Summary"/></div>
+                            <div sclass="z-bg-secondary-container z-rounded z-p-3 z-flex-1 z-mb-2 z-cq-none z-cq-sm-block"><label sclass="z-text-sm" value="Details · ≥sm container"/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[<div class="z-container">                          <!-- mark the query container (required) -->
+    <div class="z-d-block z-cq-md-flex z-gap-3">  <!-- container >= md rows, else stacks -->
+        <div class="z-flex-1">Summary</div>
+        <div class="z-cq-none z-cq-sm-block">Details</div>  <!-- shown only when container >= sm -->
+    </div>
+</div>]]></label></div>
+        <div sclass="z-bg-secondary-container z-rounded z-p-3 z-text-sm z-mt-3">
+            <h:b>Key requirement</h:b>: <h:code>z-cq-*</h:code> must have a <h:code>z-container</h:code> ancestor to have a measurable container — <h:b>use them as a pair</h:b>.
+            The breakpoint measures the <h:b>container's</h:b> inline size, not the viewport.
+        </div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 3 — customization -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-text-xl z-fw-semibold z-text-primary" value="Part 3 · Customization"/></div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        <h:b>Breakpoint values are not runtime CSS variables.</h:b> CSS requires that <h:code>@media</h:code> / <h:code>@container</h:code> conditions <h:b>cannot</h:b> read <h:code>var()</h:code>,
+        so sm/md/lg/xl are <h:b>compile-time constants</h:b>. To change them, edit the 4 <h:code>@media</h:code> and 4 <h:code>@container</h:code> blocks in <h:code>_layout.css</h:code>, then rebuild — all in one place, easy to maintain.
+    </div>
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[/* src/main/resources/web/zul/css/utility/_layout.css */
+@media (min-width: 768px) {      /* md breakpoint: change this px */
+    .z-d-md-block { display: block; }
+    .z-d-md-flex  { display: flex; }
+    ...
+}
+@container (min-width: 768px) {  /* change the matching container breakpoint too */
+    .z-cq-md-block { display: block; }
+    ...
+}
+/* then: npm run build:css */]]></label></div>
+
+    <div sclass="z-text-sm z-text-secondary z-mt-4 z-mb-3">
+        The variables you <h:b>can override at runtime</h:b> are the intrinsic-grid knobs (not the breakpoints) — override them globally at <h:code>:root</h:code>, or inline on the spot:
+    </div>
+    <div sclass="z-d-grid z-grid-cols-auto z-gap-x-4 z-gap-y-2 z-mb-3 z-items-center" style="--zk-cols: 1; --zk-col-min: 200px">
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Variable"/></div>
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Purpose"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-grid-min</h:code></div><div sclass="z-text-sm z-text-secondary">Min column width for <h:code>z-grid-fill</h:code> (default 180px)</div>
+        <div sclass="z-text-sm"><h:code>--zk-grid-min-xs / -sm / -lg / -xl</h:code></div><div sclass="z-text-sm z-text-secondary">Named sizes for <h:code>z-grid-fill-xs…xl</h:code></div>
+        <div sclass="z-text-sm"><h:code>--zk-cols</h:code></div><div sclass="z-text-sm z-text-secondary">Data column count for <h:code>z-grid-cols-auto</h:code> (default 1)</div>
+        <div sclass="z-text-sm"><h:code>--zk-col-min</h:code></div><div sclass="z-text-sm z-text-secondary">Min column width for <h:code>z-grid-cols-auto</h:code> (default 0)</div>
+    </div>
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[/* global override: make the card wall at least 220px per column */
+:root { --zk-grid-min: 220px; }
+
+/* or override a single block inline */
+<div class="z-d-grid z-grid-fill z-gap-4" style="--zk-grid-min: 240px"> ... </div>]]></label></div>
+    <div sclass="z-text-sm z-text-secondary z-mt-3">
+        See the <h:code>Grid Layout</h:code> page and <h:code>doc/spec/responsive-design.md</h:code> for the full explanation of these grid knobs.
+    </div>
+
+</div>
+</zk>

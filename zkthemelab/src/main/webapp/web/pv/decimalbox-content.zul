@@ -1,0 +1,24 @@
+<zk>
+<apply templateURI="~./pv/matrix.zul" title="States"
+       cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
+       rowsTemplate="decimalbox-rows">
+    <template name="decimalbox-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Value"/></div>
+            <div><decimalbox value="3.14"/></div>
+            <div><decimalbox value="3.14" disabled="true"/></div>
+            <div><decimalbox value="3.14" readonly="true"/></div>
+            <div><decimalbox value="3.14" sclass="z-decimalbox-invalid"/></div>
+            <div><decimalbox value="3.14" inplace="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Placeholder"/></div>
+            <div><decimalbox placeholder="Enter decimal"/></div>
+            <div><decimalbox placeholder="Enter decimal" disabled="true"/></div>
+            <div><decimalbox placeholder="Enter decimal" readonly="true"/></div>
+            <div><decimalbox placeholder="Enter decimal" sclass="z-decimalbox-invalid"/></div>
+            <div><decimalbox placeholder="Enter decimal" inplace="true"/></div>
+        </div>
+    </template>
+</apply>
+</zk>

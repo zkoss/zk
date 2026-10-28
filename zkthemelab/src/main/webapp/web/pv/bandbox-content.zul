@@ -1,0 +1,46 @@
+<zk xmlns:h="native">
+<apply templateURI="~./pv/matrix.zul" title="States"
+       cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
+       rowsTemplate="bandbox-rows">
+    <template name="bandbox-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Default"/></div>
+            <div><bandbox><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox disabled="true"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox readonly="true"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox sclass="z-bandbox-invalid"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox inplace="true" value="Selected"><bandpopup>Content</bandpopup></bandbox></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="No button"/></div>
+            <div><bandbox buttonVisible="false"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox buttonVisible="false" disabled="true"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox buttonVisible="false" readonly="true"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox buttonVisible="false" sclass="z-bandbox-invalid"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox buttonVisible="false" inplace="true" value="Selected"><bandpopup>Content</bandpopup></bandbox></div>
+        </div>
+    </template>
+</apply>
+
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Bandpopup with Rich Content (Listbox)</h:span></h:div>
+    <h:div class="z-d-flex z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">Listbox in bandpopup</label>
+            <bandbox>
+                <bandpopup width="280px">
+                    <listbox height="180px">
+                        <listhead>
+                            <listheader label="Name"/>
+                            <listheader label="Role"/>
+                        </listhead>
+                        <listitem><listcell label="Alice"/><listcell label="Admin"/></listitem>
+                        <listitem><listcell label="Bob"/><listcell label="User"/></listitem>
+                        <listitem><listcell label="Carol"/><listcell label="User"/></listitem>
+                    </listbox>
+                </bandpopup>
+            </bandbox>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — organigram</title>
+<!--
+  Self-contained marble design contract mockup for <organigram>.
+
+  Renders the variants from src/test/resources/web/organigram.zul plus
+  the explicit states the contract calls for:
+    - Default tree (3 generations: Item1 → {Item2, Item5} → {Item3, Item4} / {Item6, Item7})
+    - Selected node (Item2 carries .z-orgitem-selected)
+    - Disabled node (Item3 carries .z-orgitem-disabled)
+    - Non-selectable node (Item4 carries .z-orgitem-non-selectable)
+    - Closed branch (Item5 carries .z-orgitem-close; subtree hidden, icon → z-icon-plus)
+    - Single-child generation (bus suppressed)
+
+  Companion files:
+    Skill:    .claude/skills/zk-component-rules/components/organigram.md
+    Contract:   doc/contracts/organigram.md
+    Baseline: doc/contracts/baselines/organigram-iceblue.png
+
+  Compare visually to the baseline; the structural DOM is identical.
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-tertiary: #7e73d6;
+    --zk-color-error: #d32f2f;
+    --zk-color-on-error: #ffffff;
+    --zk-color-warning: #ed6c02;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f7f9fc;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+    --zk-color-surface-container-low: #f7f9fc;
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+    --zk-shape-card: 6px;
+    --zk-shape-corner-extra-small: 4px;
+
+    /* Typography */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-medium-weight: 400;
+    --zk-typescale-body-medium-line-height: 20px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-label-large-weight: 500;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-0: none;
+    --zk-elevation-1: rgba(50,50,93,0.024) 0px 2px 5px -1px, rgba(0,0,0,0.05) 0px 1px 3px -1px;
+    --zk-elevation-2: 0 2px 6px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+
+    /* Motion */
+    --zk-motion-duration-short1: 100ms;
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-duration-short3: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+    --zk-motion-easing-legacy: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+    --zk-state-disabled-opacity: 0.38;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: center;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+    overflow-x: auto;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   organigram — design contract
+   Class names mirror the DOM tree declared in
+   .claude/skills/zk-component-rules/components/organigram.md.
+   ──────────────────────────────────────────────────────────────────────── */
+
+.z-organigram {
+    display: block;
+    overflow: auto;
+    padding: var(--zk-spacing-2);
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* Generation row — horizontal flex container */
+.z-orgchildren {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+/* Branch frame — column (node on top, nested generation below) */
+.z-orgitem {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    padding-top: var(--zk-spacing-3);
+}
+
+/* Horizontal bus along the top edge of every item in a multi-child generation. */
+.z-orgchildren:not(:only-child) > .z-orgitem::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+.z-orgchildren:not(:only-child) > .z-orgitem:first-child::before {
+    width: 50%;
+    left: 50%;
+}
+.z-orgchildren:not(:only-child) > .z-orgitem:last-child::before {
+    width: 50%;
+}
+
+/* Vertical drop from the bus into the child item's top. */
+.z-orgchildren:not(:only-child) > .z-orgitem::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: var(--zk-spacing-3);
+    border-left: 1px solid var(--zk-color-outline-variant);
+}
+
+/* Node card — the visible chrome */
+.z-orgnode {
+    align-self: center;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+    min-width: 64px;
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    margin: 0 var(--zk-spacing-2);
+    background-color: var(--zk-color-surface);
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-card);
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    cursor: pointer;
+    box-shadow: none;
+    transition:
+        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy),
+        border-color     var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy),
+        box-shadow       var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy);
+}
+
+/* Vertical drop from the bottom of the orgnode into its own nested generation. */
+.z-orgnode::after {
+    content: '';
+    position: absolute;
+    bottom: calc(-1 * var(--zk-spacing-3));
+    left: 50%;
+    height: var(--zk-spacing-3);
+    border-left: 1px solid var(--zk-color-outline-variant);
+}
+
+/* Hover — eligible items only (not disabled, not already selected). */
+.z-orgitem:not(.z-orgitem-disabled):not(.z-orgitem-selected) > .z-orgnode:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    border-color: var(--zk-color-on-surface);
+}
+
+/* Focus-visible — primary ring inside the card border. */
+.z-orgnode:focus-visible {
+    outline: 2px solid var(--zk-color-primary);
+    outline-offset: -2px;
+}
+
+/* Selected */
+.z-orgitem-selected > .z-orgnode {
+    background-color: var(--zk-color-primary-container);
+    border-color: var(--zk-color-primary);
+    color: var(--zk-color-on-primary-container);
+}
+
+/* Disabled — dim, default cursor, suppress hover layer. */
+.z-orgitem-disabled > .z-orgnode {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: default;
+    background-color: var(--zk-color-surface);
+}
+
+/* Non-selectable — only the cursor changes; chrome is otherwise normal. */
+.z-orgitem-non-selectable > .z-orgnode {
+    cursor: default;
+}
+
+/* Closed — collapse subtree and hide outgoing drop. */
+.z-orgitem-close > .z-orgchildren {
+    display: none;
+}
+.z-orgitem-close > .z-orgnode::after {
+    display: none;
+}
+
+/* Expand/collapse icon — corner-pinned in the orgnode. */
+.z-orgnode-icon {
+    position: absolute;
+    right: var(--zk-spacing-1);
+    bottom: var(--zk-spacing-1);
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    line-height: 1;
+}
+
+/* Leaf nodes — orgnode-icon element exists but has no glyph class; hide it. */
+.z-orgnode > i.z-orgnode-icon:not(.z-icon-plus):not(.z-icon-minus) {
+    display: none;
+}
+
+/* Selected items: icon picks up on-primary-container so it stays legible. */
+.z-orgitem-selected > .z-orgnode > .z-orgnode-icon {
+    color: var(--zk-color-on-primary-container);
+}
+
+/* The icon glyphs — drawn here as plain text characters since the mockup
+   has no icon font available. In real ZK output, .z-icon-plus / .z-icon-minus
+   pull a glyph from the global icon font. */
+.z-icon-plus::before  { content: '+'; font-weight: var(--zk-font-weight-medium); }
+.z-icon-minus::before { content: '−'; font-weight: var(--zk-font-weight-medium); }
+
+</style>
+</head>
+<body>
+
+<h1>organigram — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T2</span>
+    <span>closest-sibling: none (novel pattern)</span>
+</div>
+
+<section class="matrix-section">
+    <h2>Basic Organigram (mirrors organigram.zul — all open, no state)</h2>
+    <div class="matrix-grid">
+        <div class="state-label">Default tree</div>
+        <div class="state-cell">
+            <div class="z-organigram" role="tree" aria-orientation="horizontal">
+                <div class="z-orgchildren">
+                    <div class="z-orgitem" role="treeitem">
+                        <div class="z-orgnode">Item1<i class="z-orgnode-icon z-icon-minus"></i></div>
+                        <div class="z-orgchildren">
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item3<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item4<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">Item5<i class="z-orgnode-icon z-icon-minus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item6<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item7<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Node states</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Selected (Item2)</div>
+        <div class="state-cell">
+            <div class="z-organigram" role="tree" aria-orientation="horizontal">
+                <div class="z-orgchildren">
+                    <div class="z-orgitem" role="treeitem">
+                        <div class="z-orgnode">Item1<i class="z-orgnode-icon z-icon-minus"></i></div>
+                        <div class="z-orgchildren">
+                            <div class="z-orgitem z-orgitem-selected" role="treeitem">
+                                <div class="z-orgnode">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item3<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item4<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">Item5<i class="z-orgnode-icon z-icon-minus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item6<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item7<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Disabled (Item3) + Non-selectable (Item4)</div>
+        <div class="state-cell">
+            <div class="z-organigram" role="tree" aria-orientation="horizontal">
+                <div class="z-orgchildren">
+                    <div class="z-orgitem" role="treeitem">
+                        <div class="z-orgnode">Item1<i class="z-orgnode-icon z-icon-minus"></i></div>
+                        <div class="z-orgchildren">
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem z-orgitem-disabled" role="treeitem">
+                                        <div class="z-orgnode">Item3<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                    <div class="z-orgitem z-orgitem-non-selectable" role="treeitem">
+                                        <div class="z-orgnode">Item4<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">Item5<i class="z-orgnode-icon z-icon-minus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item6<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item7<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Closed branch (Item5 collapsed — icon → plus, subtree hidden)</div>
+        <div class="state-cell">
+            <div class="z-organigram" role="tree" aria-orientation="horizontal">
+                <div class="z-orgchildren">
+                    <div class="z-orgitem" role="treeitem">
+                        <div class="z-orgnode">Item1<i class="z-orgnode-icon z-icon-minus"></i></div>
+                        <div class="z-orgchildren">
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item3<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item4<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="z-orgitem z-orgitem-close" role="treeitem">
+                                <div class="z-orgnode">Item5<i class="z-orgnode-icon z-icon-plus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item6<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Item7<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Topology edge cases</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Single-child generation (bus suppressed by :not(:only-child))</div>
+        <div class="state-cell">
+            <div class="z-organigram" role="tree" aria-orientation="horizontal">
+                <div class="z-orgchildren">
+                    <div class="z-orgitem" role="treeitem">
+                        <div class="z-orgnode">CEO<i class="z-orgnode-icon z-icon-minus"></i></div>
+                        <div class="z-orgchildren">
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">COO<i class="z-orgnode-icon z-icon-minus"></i></div>
+                                <div class="z-orgchildren">
+                                    <div class="z-orgitem" role="treeitem">
+                                        <div class="z-orgnode">Ops Lead<i class="z-orgnode-icon"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Three-child generation (first / middle / last bus halves)</div>
+        <div class="state-cell">
+            <div class="z-organigram" role="tree" aria-orientation="horizontal">
+                <div class="z-orgchildren">
+                    <div class="z-orgitem" role="treeitem">
+                        <div class="z-orgnode">Director<i class="z-orgnode-icon z-icon-minus"></i></div>
+                        <div class="z-orgchildren">
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">Eng<i class="z-orgnode-icon"></i></div>
+                            </div>
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">Design<i class="z-orgnode-icon"></i></div>
+                            </div>
+                            <div class="z-orgitem" role="treeitem">
+                                <div class="z-orgnode">QA<i class="z-orgnode-icon"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Hover-simulated (border darkens, surface tint)</div>
+        <div class="state-cell">
+            <div class="z-organigram" role="tree" aria-orientation="horizontal">
+                <div class="z-orgchildren">
+                    <div class="z-orgitem" role="treeitem">
+                        <div class="z-orgnode" style="background-color: rgba(0,0,0,0.04); border-color: var(--zk-color-on-surface);">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Focus-visible (primary ring inside the card border)</div>
+        <div class="state-cell">
+            <div class="z-organigram" role="tree" aria-orientation="horizontal">
+                <div class="z-orgchildren">
+                    <div class="z-orgitem" role="treeitem">
+                        <div class="z-orgnode" style="outline: 2px solid var(--zk-color-primary); outline-offset: -2px;">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

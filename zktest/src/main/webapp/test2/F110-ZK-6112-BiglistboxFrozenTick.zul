@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6112-BiglistboxFrozenTick.zul
+
+	Purpose:
+		Marble: the Biglistbox frozen-column tick is a draggable handle.
+
+	Description:
+
+	History:
+		Mon Oct 26 2026, Created by hawk
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+1. the frozen-column divider has a small handle (the tick) in the horizontal scrollbar band, below the cells
+2. drag the tick one column to the right: a third column is frozen
+	</label>
+	<zscript><![CDATA[
+		import org.zkoss.zktest.test2.big.*;
+		FakerMatrixModel bigData = new FakerMatrixModel(100, 300);
+	]]></zscript>
+	<biglistbox id="big" frozenCols="2" colWidth="130px" width="800px" height="400px" model="${bigData}"/>
+</zk>

@@ -1,0 +1,22 @@
+/* MD3 Bandpopup — custom popup for bandbox */
+
+@layer zk-components {
+.z-bandpopup {
+    position: absolute;
+    z-index: 1600;
+    background-color: var(--zk-color-surface);
+    border-radius: var(--zk-shape-menu);
+    box-shadow: var(--zk-elevation-dropdown);
+    border: 1px solid var(--zk-color-outline-variant);
+    overflow: auto;
+    box-sizing: border-box;
+    font-family: var(--zk-typescale-font-family);
+    min-width: 280px;
+}
+
+.z-bandpopup-content {
+    padding: var(--zk-spacing-4);
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-medium-size);
+}
+}

@@ -1,0 +1,217 @@
+<?page title="Navbar" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Navbar"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical"/></div>
+        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Expanded"/></div>
+                <navbar orient="vertical">
+                    <navitem label="Home" iconSclass="z-icon-home"/>
+                    <nav label="Get Started" iconSclass="z-icon-layout-list" badgeText="3">
+                        <navitem label="Step One" />
+                        <navitem label="Step Two" />
+                        <navitem label="Step Three" />
+                    </nav>
+                    <navitem label="About" iconSclass="z-icon-flag"/>
+                    <navseparator/>
+                    <nav label="Contact" iconSclass="z-icon-mail" badgeText="5">
+                        <navitem label="Reply" iconSclass="z-icon-reply" />
+                        <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
+                        <navitem label="Inbox" iconSclass="z-icon-inbox"/>
+                        <navitem label="Edit" iconSclass="z-icon-edit"/>
+                        <navseparator/>
+                        <nav label="Settings" iconSclass="z-icon-cog" badgeText=">>">
+                            <navitem label="Edit profile" iconSclass="z-icon-user"/>
+                            <navitem label="Keyboard shortcuts" iconSclass="z-icon-keyboard"/>
+                            <navitem label="Change password" iconSclass="z-icon-key"/>
+                        </nav>
+                    </nav>
+                    <navitem label="Freeze" iconSclass="z-icon-asterisk" disabled="true"/>
+                    <navitem label="Logout" iconSclass="z-icon-power-off"/>
+                </navbar>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Collapsed with badge"/></div>
+                <div>
+                    <checkbox label="Toggle collapsed" checked="true">
+                        <attribute name="onCheck">vn1.collapsed = self.checked;</attribute>
+                    </checkbox>
+                </div>
+                <navbar id="vn1" orient="vertical" collapsed="true">
+                    <navitem label="Home" iconSclass="z-icon-home"/>
+                    <nav label="Get Started" iconSclass="z-icon-layout-list" badgeText="3">
+                        <navitem label="Step One" />
+                        <navitem label="Step Two" />
+                        <navitem label="Step Three" />
+                    </nav>
+                    <navitem label="About" iconSclass="z-icon-flag"/>
+                    <navseparator/>
+                    <nav label="Contact" iconSclass="z-icon-mail" badgeText="5">
+                        <navitem label="Reply" iconSclass="z-icon-reply" />
+                        <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
+                        <navitem label="Inbox" iconSclass="z-icon-inbox"/>
+                        <navitem label="Edit" iconSclass="z-icon-edit"/>
+                        <navseparator/>
+                        <nav label="Settings" iconSclass="z-icon-cog" badgeText=">>">
+                            <navitem label="Edit profile" iconSclass="z-icon-user"/>
+                            <navitem label="Keyboard shortcuts" iconSclass="z-icon-keyboard"/>
+                            <navitem label="Change password" iconSclass="z-icon-key"/>
+                        </nav>
+                    </nav>
+                    <navitem label="Freeze" iconSclass="z-icon-asterisk" disabled="true"/>
+                    <navitem label="Logout" iconSclass="z-icon-power-off"/>
+                </navbar>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Collapsed without badge"/></div>
+                <div>
+                    <checkbox label="Toggle collapsed" checked="true">
+                        <attribute name="onCheck">vn2.collapsed = self.checked;</attribute>
+                    </checkbox>
+                </div>
+                <navbar id="vn2" orient="vertical" collapsed="true" hflex="min">
+                    <navitem label="Home" iconSclass="z-icon-home"/>
+                    <nav label="Get Started" iconSclass="z-icon-layout-list">
+                        <navitem label="Step One" />
+                        <navitem label="Step Two" />
+                        <navitem label="Step Three" />
+                    </nav>
+                    <navitem label="About" iconSclass="z-icon-flag"/>
+                    <navseparator/>
+                    <nav label="Contact" iconSclass="z-icon-mail">
+                        <navitem label="Reply" iconSclass="z-icon-reply" />
+                        <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
+                        <navitem label="Inbox" iconSclass="z-icon-inbox"/>
+                        <navitem label="Edit" iconSclass="z-icon-edit"/>
+                        <navseparator/>
+                        <nav label="Settings" iconSclass="z-icon-cog">
+                            <navitem label="Edit profile" iconSclass="z-icon-user"/>
+                            <navitem label="Keyboard shortcuts" iconSclass="z-icon-keyboard"/>
+                            <navitem label="Change password" iconSclass="z-icon-key"/>
+                        </nav>
+                    </nav>
+                    <navitem label="Freeze" iconSclass="z-icon-asterisk" disabled="true"/>
+                    <navitem label="Logout" iconSclass="z-icon-power-off"/>
+                </navbar>
+            </div>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Horizontal"/></div>
+        <div sclass="z-d-flex z-flex-col z-gap-6 z-py-3">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Expanded"/></div>
+                <navbar orient="horizontal">
+                    <navitem label="Home" iconSclass="z-icon-home"/>
+                    <nav label="Get Started" iconSclass="z-icon-layout-list" badgeText="3">
+                        <navitem label="Step One"/>
+                        <navitem label="Step Two"/>
+                        <navitem label="Step Three"/>
+                    </nav>
+                    <navitem label="About" iconSclass="z-icon-flag"/>
+                    <navseparator/>
+                    <nav label="Contact" iconSclass="z-icon-mail" badgeText="5">
+                        <navitem label="Reply" iconSclass="z-icon-reply" />
+                        <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
+                        <navitem label="Inbox" iconSclass="z-icon-inbox"/>
+                        <navitem label="Edit" iconSclass="z-icon-edit"/>
+                        <navseparator/>
+                        <nav label="Settings" iconSclass="z-icon-cog" badgeText=">>">
+                            <navitem label="Edit profile" iconSclass="z-icon-user"/>
+                            <navitem label="Keyboard shortcuts" iconSclass="z-icon-keyboard"/>
+                            <navitem label="Change password" iconSclass="z-icon-key"/>
+                        </nav>
+                    </nav>
+                    <navitem label="Freeze" iconSclass="z-icon-asterisk" disabled="true"/>
+                    <navitem label="Logout" iconSclass="z-icon-power-off"/>
+                </navbar>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Collapsed with badge"/></div>
+                <div>
+                    <checkbox label="Toggle collapsed" checked="true">
+                        <attribute name="onCheck">hn1.collapsed = self.checked;</attribute>
+                    </checkbox>
+                </div>
+                <navbar id="hn1" collapsed="true">
+                    <navitem label="Home" iconSclass="z-icon-home" />
+                    <nav label="Get Started" iconSclass="z-icon-layout-list" badgeText="3">
+                        <navitem label="Step One"/>
+                        <navitem label="Step Two"/>
+                        <navitem label="Step Three"/>
+                    </nav>
+                    <navitem label="About" iconSclass="z-icon-flag"/>
+                    <navseparator/>
+                    <nav label="Contact" iconSclass="z-icon-mail" badgeText="5">
+                        <navitem label="Reply" iconSclass="z-icon-reply" />
+                        <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
+                        <navitem label="Inbox" iconSclass="z-icon-inbox"/>
+                        <navitem label="Edit" iconSclass="z-icon-edit"/>
+                        <navseparator/>
+                        <nav label="Settings" iconSclass="z-icon-cog" badgeText=">>">
+                            <navitem label="Edit profile" iconSclass="z-icon-user"/>
+                            <navitem label="Keyboard shortcuts" iconSclass="z-icon-keyboard"/>
+                            <navitem label="Change password" iconSclass="z-icon-key"/>
+                        </nav>
+                    </nav>
+                    <navitem label="Freeze" iconSclass="z-icon-asterisk" disabled="true"/>
+                    <navitem label="Logout" iconSclass="z-icon-power-off"/>
+                </navbar>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Simple nav items"/></div>
+                <navbar>
+                    <navitem label="Home" iconSclass="z-icon-home"/>
+                    <navitem label="Dashboard" iconSclass="z-icon-gauge"/>
+                    <navitem label="Products" iconSclass="z-icon-box"/>
+                    <navitem label="Orders" iconSclass="z-icon-shopping-cart"/>
+                    <navitem label="Reports" iconSclass="z-icon-bar-chart"/>
+                    <navitem label="Settings" iconSclass="z-icon-cog"/>
+                </navbar>
+            </div>
+        </div>
+    </div>
+
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Autoclose=false (Multiple Groups Open)"/></div>
+        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="autoclose=&quot;false&quot; — both nav groups expanded simultaneously"/></div>
+                <navbar orient="vertical" autoclose="false">
+                    <nav label="Documents" iconSclass="z-icon-folder-open" open="true">
+                        <navitem label="Reports"/>
+                        <navitem label="Invoices"/>
+                        <navitem label="Contracts"/>
+                    </nav>
+                    <nav label="Settings" iconSclass="z-icon-cog" open="true">
+                        <navitem label="Profile"/>
+                        <navitem label="Security"/>
+                        <navitem label="Notifications"/>
+                    </nav>
+                    <navitem label="Logout" iconSclass="z-icon-power-off"/>
+                </navbar>
+            </div>
+        </div>
+    </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Nav Image Placeholder, Navitem Info and Selected Navitem"/></div>
+        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="nav without icon, navitem badgeText, selected navitem"/></div>
+                <navbar orient="vertical">
+                    <nav label="No icon">
+                        <navitem label="Child"/>
+                    </nav>
+                    <navitem label="Inbox" badgeText="3"/>
+                    <navitem label="Selected" selected="true"/>
+                </navbar>
+            </div>
+        </div>
+    </div>
+</div>
+</zk>

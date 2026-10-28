@@ -1,0 +1,24 @@
+<zk>
+<apply templateURI="~./pv/matrix.zul" title="States"
+       cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
+       rowsTemplate="intbox-rows">
+    <template name="intbox-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Value"/></div>
+            <div><intbox value="42"/></div>
+            <div><intbox value="42" disabled="true"/></div>
+            <div><intbox value="42" readonly="true"/></div>
+            <div><intbox value="999" sclass="z-intbox-invalid"/></div>
+            <div><intbox value="42" inplace="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Placeholder"/></div>
+            <div><intbox placeholder="Enter number"/></div>
+            <div><intbox placeholder="Enter number" disabled="true"/></div>
+            <div><intbox placeholder="Enter number" readonly="true"/></div>
+            <div><intbox placeholder="Enter number" sclass="z-intbox-invalid"/></div>
+            <div><intbox placeholder="Enter number" inplace="true"/></div>
+        </div>
+    </template>
+</apply>
+</zk>

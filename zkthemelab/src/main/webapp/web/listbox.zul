@@ -1,0 +1,178 @@
+<?page title="Listbox" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Listbox"/></div>
+
+    <div sclass="z-mb-8">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Listbox — State Gallery"/></div>
+
+        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
+                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Row States"/></div>
+                <listbox width="280px">
+                    <listhead><listheader label="Name"/><listheader label="Role"/></listhead>
+                    <listitem>
+                        <listcell label="Default Row"/><listcell label="Normal"/>
+                    </listitem>
+                    <listitem selected="true">
+                        <listcell label="Selected Row"/><listcell label="Active"/>
+                    </listitem>
+                    <listitem disabled="true">
+                        <listcell label="Disabled Row"/><listcell label="N/A"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="Odd Stripe Row"/><listcell label="Normal"/>
+                    </listitem>
+                </listbox>
+            </div>
+        </div>
+
+        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
+                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Checkmark (multiple — checkbox)"/></div>
+                <listbox width="280px" multiple="true" checkmark="true">
+                    <listhead><listheader label="Name"/><listheader label="Role"/></listhead>
+                    <listitem>
+                        <listcell label="Default Row"/><listcell label="Normal"/>
+                    </listitem>
+                    <listitem selected="true">
+                        <listcell label="Selected Row"/><listcell label="Active"/>
+                    </listitem>
+                    <listitem disabled="true">
+                        <listcell label="Disabled Row"/><listcell label="N/A"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="Odd Stripe Row"/><listcell label="Normal"/>
+                    </listitem>
+                </listbox>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
+                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Checkmark (single — radio)"/></div>
+                <listbox width="280px" checkmark="true">
+                    <listhead><listheader label="Name"/><listheader label="Role"/></listhead>
+                    <listitem>
+                        <listcell label="Default Row"/><listcell label="Normal"/>
+                    </listitem>
+                    <listitem selected="true">
+                        <listcell label="Selected Row"/><listcell label="Active"/>
+                    </listitem>
+                    <listitem disabled="true">
+                        <listcell label="Disabled Row"/><listcell label="N/A"/>
+                    </listitem>
+                    <listitem>
+                        <listcell label="Odd Stripe Row"/><listcell label="Normal"/>
+                    </listitem>
+                </listbox>
+            </div>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Standard"/></div>
+        <div sclass="z-py-3">
+            <listbox>
+                <listhead sizable="true">
+                    <listheader label="Name" sort="auto"/>
+                    <listheader label="Gender" sort="client"/>
+                    <listheader label="Age" sort="auto"/>
+                    <listheader label="Description"/>
+                </listhead>
+                <listitem>
+                    <listcell label="Mary"/>
+                    <listcell label="Female"/>
+                    <listcell label="18"/>
+                    <listcell label="A young lady."/>
+                </listitem>
+                <listitem>
+                    <listcell label="John"/>
+                    <listcell label="Male"/>
+                    <listcell label="20"/>
+                    <listcell label="A college student."/>
+                </listitem>
+                <listitem disabled="true">
+                    <listcell label="Jane"/>
+                    <listcell label="Female"/>
+                    <listcell label="32"/>
+                    <listcell label="A remarkable artist."/>
+                </listitem>
+            </listbox>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Checkmarks"/></div>
+        <div sclass="z-py-3">
+            <listbox multiple="true" checkmark="true">
+                <listhead menupopup="auto">
+                    <listheader label="Name"/>
+                    <listheader label="Role"/>
+                </listhead>
+                <listitem>
+                    <listcell label="Alice"/>
+                    <listcell label="Admin"/>
+                </listitem>
+                <listitem>
+                    <listcell label="Bob"/>
+                    <listcell label="Editor"/>
+                </listitem>
+                <listitem>
+                    <listcell label="Charlie"/>
+                    <listcell label="Viewer"/>
+                </listitem>
+            </listbox>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Select Mold"/></div>
+        <div sclass="z-py-3">
+            <listbox rows="1" mold="select">
+                <listitem label="Inbox"/>
+                <listitem label="Received"/>
+                <listitem label="Draft"/>
+                <listitem label="Sent"/>
+            </listbox>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Frozen Columns"/></div>
+        <div sclass="z-py-3">
+            <listbox>
+                <frozen columns="2"/>
+                <listhead>
+                    <listheader label="Col A" width="200px"/>
+                    <listheader label="Col B" width="200px"/>
+                    <listheader label="Col C" width="500px"/>
+                    <listheader label="Col D" width="500px"/>
+                    <listheader label="Col E" width="500px"/>
+                </listhead>
+                <listitem><listcell>A1</listcell><listcell>B1</listcell><listcell>C1</listcell><listcell>D1</listcell><listcell>E1</listcell></listitem>
+                <listitem><listcell>A2</listcell><listcell>B2</listcell><listcell>C2</listcell><listcell>D2</listcell><listcell>E2</listcell></listitem>
+                <listitem><listcell>A3</listcell><listcell>B3</listcell><listcell>C3</listcell><listcell>D3</listcell><listcell>E3</listcell></listitem>
+            </listbox>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Empty State"/></div>
+        <div sclass="z-py-3">
+            <listbox emptyMessage="This listbox is empty.">
+                <listhead><listheader label="Name"/></listhead>
+            </listbox>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="No-Border Variant (z-listbox-noborder)"/></div>
+        <div sclass="z-py-3 z-mb-3"><label sclass="z-text-sm z-text-secondary" value="A listbox is an outlined card by default. Add sclass=&quot;z-listbox-noborder&quot; to strip its own frame when nesting it inside another bounded surface — here an elevated card — so it blends into the parent instead of double-framing."/></div>
+        <div sclass="z-bg-surface z-rounded-lg z-elevation-2 z-p-6">
+            <listbox sclass="z-listbox-noborder">
+                <listhead><listheader label="Name"/><listheader label="Value"/></listhead>
+                <listitem><listcell>Alpha</listcell><listcell>1</listcell></listitem>
+                <listitem><listcell>Beta</listcell><listcell>2</listcell></listitem>
+            </listbox>
+        </div>
+    </div>
+</div>
+</zk>

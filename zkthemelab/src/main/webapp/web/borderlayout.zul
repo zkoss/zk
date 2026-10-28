@@ -1,0 +1,106 @@
+<?page title="Borderlayout" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Borderlayout</h:span></h:div>
+
+    <!-- ZK layout primitives (borderlayout, vlayout, div, etc.) have NO default
+         padding by design — see doc/component-dom-structures.md. Use the
+         z-p-* utility classes from base/_utilities.css on the inner content
+         wrapper, NOT on the layout primitive itself. -->
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Basic — North / South / East / West / Center</h:span></h:div>
+        <h:div class="z-py-3">
+            <borderlayout height="400px">
+                <center>
+                    <div sclass="z-p-4">Center Content</div>
+                </center>
+                <west title="West" size="20%" splittable="true" collapsible="true">
+                    <div sclass="z-p-4">West Content</div>
+                </west>
+                <east title="East" size="20%" splittable="true" collapsible="true">
+                    <div sclass="z-p-4">East Content</div>
+                </east>
+                <north title="North" size="25%" splittable="true" collapsible="true"><div sclass="z-p-4">North Content</div></north>
+                <south title="South" size="25%" splittable="true" collapsible="true"><div sclass="z-p-4">South Content</div></south>
+            </borderlayout>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">With Region Titles</h:span></h:div>
+        <h:div class="z-py-3">
+            <borderlayout height="300px">
+                <center title="Center"><div sclass="z-p-4">Center Content</div></center>
+                <north size="32%" title="North"><div sclass="z-p-4">North Content</div></north>
+                <south size="32%" title="South"><div sclass="z-p-4">South Content</div></south>
+                <east size="20%" title="East"><div sclass="z-p-4">East Content</div></east>
+                <west size="20%" title="West"><div sclass="z-p-4">West Content</div></west>
+            </borderlayout>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">No Region Borders</h:span></h:div>
+        <h:div class="z-py-3">
+            <borderlayout height="300px">
+                <center border="none"><div sclass="z-p-4">Center Content</div></center>
+                <north size="20%" border="none"><div sclass="z-p-4">North Content</div></north>
+                <south size="20%" border="none"><div sclass="z-p-4">South Content</div></south>
+                <east size="20%" border="none"><div sclass="z-p-4">East Content</div></east>
+                <west size="20%" border="none"><div sclass="z-p-4">West Content</div></west>
+            </borderlayout>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auto Scroll and Margins</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">autoscroll=&quot;true&quot;</h:span></h:div>
+                <borderlayout xmlns:ca="client/attribute" height="300px">
+                    <center autoscroll="true" ca:data-embedscrollbar="true">
+                        <vlayout id="box">
+                            <label value="Center" />
+                            <label value="Content" />
+                            <label value="is" />
+                            <label value="very" />
+                            <label value="very" />
+                            <label value="very" />
+                            <label value="very" />
+                            <label value="very" />
+                            <label value="long" />
+                            <label value="long" />
+                            <label value="long" />
+                        </vlayout>
+                    </center>
+                    <north size="20%">North Content</north>
+                    <south size="20%">South Content</south>
+                    <east size="20%">East Content</east>
+                    <west size="20%">West Content</west>
+                </borderlayout>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">center margins=&quot;10,10,10,10&quot;</h:span></h:div>
+                <borderlayout height="300px">
+                    <center margins="10,10,10,10">Center Content</center>
+                    <north size="20%">North Content</north>
+                    <south size="20%">South Content</south>
+                    <east size="20%">East Content</east>
+                    <west size="20%">West Content</west>
+                </borderlayout>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">east/west cmargins=&quot;10,10,10,10&quot;</h:span></h:div>
+                <borderlayout height="300px">
+                    <center>Center Content</center>
+                    <north size="20%">North Content</north>
+                    <south size="20%">South Content</south>
+                    <east title="East" size="20%" collapsible="true" cmargins="10,10,10,10">East Content</east>
+                    <west title="West" size="20%" collapsible="true" cmargins="10,10,10,10">West Content</west>
+                </borderlayout>
+            </h:div>
+        </h:div>
+    </h:div>
+
+</h:div>
+</zk>

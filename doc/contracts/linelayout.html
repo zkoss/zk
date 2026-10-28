@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — linelayout</title>
+<!--
+  Self-contained marble design contract mockup.
+  Component: linelayout (ZK EE)
+  ZK Version: 10.2.1-jakarta
+  Rules: .claude/skills/zk-component-rules/components/linelayout.md
+
+  DOM class names match the mold output exactly:
+    .z-linelayout(.z-linelayout-vertical | .z-linelayout-horizontal)
+    .z-linelayout-first / .z-linelayout-cave / .z-linelayout-last
+    .z-linelayout-line
+    .z-lineitem
+    .z-lineitem-point (.z-lineitem-point-hidden)
+    .z-lineitem-point-inner
+
+  CRITICAL: In live ZK, the .z-lineitem first/last area <div>s are moved
+  OUT of the cave and INTO .z-linelayout-first / .z-linelayout-last by
+  _moveSubDOMOut(). This mockup simulates the POST-BIND DOM state.
+-->
+<style>
+/* ── Inlined tokens ─────────────────────────────────────────────── */
+:root {
+  --zk-color-primary: #376fd0;
+  --zk-color-on-primary: #ffffff;
+  --zk-color-primary-container: #d6e4ff;
+  --zk-color-on-primary-container: #001c3d;
+  --zk-color-secondary: #4db6ac;
+  --zk-color-on-secondary: #ffffff;
+  --zk-color-background: #f7f9fc;
+  --zk-color-on-background: rgba(0,0,0,0.87);
+  --zk-color-surface: #ffffff;
+  --zk-color-on-surface: rgba(0,0,0,0.87);
+  --zk-color-surface-variant: #f0f4fa;
+  --zk-color-on-surface-variant: rgba(0,0,0,0.6);
+  --zk-color-surface-container: #f0f4fa;
+  --zk-color-surface-container-high: #e8eef7;
+  --zk-color-outline: rgba(0,0,0,0.23);
+  --zk-color-outline-variant: rgba(0,0,0,0.12);
+  --zk-color-disabled: rgba(0,0,0,0.38);
+  --zk-spacing-1: 4px;
+  --zk-spacing-2: 8px;
+  --zk-spacing-3: 12px;
+  --zk-spacing-4: 16px;
+  --zk-spacing-5: 20px;
+  --zk-spacing-6: 24px;
+  --zk-spacing-8: 32px;
+  --zk-shape-corner-small: 8px;
+  --zk-shape-corner-medium: 12px;
+  --zk-shape-corner-large: 16px;
+  --zk-shape-corner-full: 9999px;
+  --zk-typescale-body-medium-size: 14px;
+  --zk-typescale-body-small-size: 12px;
+  --zk-typescale-label-medium-size: 12px;
+  --zk-typescale-title-medium-size: 16px;
+  --zk-font-weight-regular: 400;
+  --zk-font-weight-medium: 500;
+  --zk-font-weight-semibold: 600;
+  --zk-elevation-1: 0 1px 2px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  --zk-elevation-2: 0 2px 4px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* ── Page chrome ────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: var(--zk-spacing-8);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: var(--zk-typescale-body-medium-size);
+  color: var(--zk-color-on-background);
+  background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+  color: var(--zk-color-on-surface-variant);
+  font-size: var(--zk-typescale-body-small-size);
+  margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+  font-size: var(--zk-typescale-title-medium-size);
+  font-weight: var(--zk-font-weight-semibold);
+  text-transform: uppercase;
+  color: var(--zk-color-on-surface-variant);
+  border-bottom: 1px solid var(--zk-color-outline-variant);
+  padding-bottom: var(--zk-spacing-2);
+  margin: 0 0 var(--zk-spacing-4);
+}
+.variant-row {
+  display: flex;
+  gap: var(--zk-spacing-6);
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: var(--zk-spacing-6);
+}
+.variant-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zk-spacing-2);
+  min-width: 200px;
+}
+.state-label {
+  font-size: var(--zk-typescale-label-medium-size);
+  font-weight: var(--zk-font-weight-medium);
+  color: var(--zk-color-on-surface-variant);
+  text-transform: uppercase;
+}
+.demo-surface {
+  padding: var(--zk-spacing-4);
+  background: var(--zk-color-surface);
+  border-radius: var(--zk-shape-corner-small);
+  border: 1px solid var(--zk-color-outline-variant);
+}
+/* helper for mockup content placeholders */
+.demo-card {
+  background: var(--zk-color-surface-container);
+  border-radius: var(--zk-shape-corner-small);
+  padding: var(--zk-spacing-2) var(--zk-spacing-3);
+  font-size: var(--zk-typescale-body-small-size);
+  color: var(--zk-color-on-surface);
+  white-space: nowrap;
+}
+
+/* ── Component styles (Marble theme) ───────────────────────────── */
+
+/* Root container — layout only */
+.z-linelayout {
+  height: 100%;
+  width: 100%;
+  background: transparent;
+}
+
+/* Vertical orientation — three horizontal columns */
+.z-linelayout-vertical {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.z-linelayout-vertical .z-linelayout-first {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.z-linelayout-vertical .z-linelayout-cave {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+  position: relative;
+  padding: 0 var(--zk-spacing-3);
+}
+
+.z-linelayout-vertical .z-linelayout-last {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+/* Vertical: connector line runs down the cave center */
+.z-linelayout-vertical .z-linelayout-line {
+  position: absolute;
+  z-index: 99;
+  background: var(--zk-color-outline-variant);
+  width: 2px;
+  height: 100%;
+  left: calc(50% - 1px);
+  top: 0;
+}
+
+/* Horizontal orientation — three vertical rows */
+.z-linelayout-horizontal {
+  display: flex;
+  flex-direction: column;
+}
+
+.z-linelayout-horizontal .z-linelayout-first {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.z-linelayout-horizontal .z-linelayout-cave {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-end;
+  position: relative;
+  padding: var(--zk-spacing-3) 0;
+}
+
+.z-linelayout-horizontal .z-linelayout-last {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+/* Horizontal: connector line runs across the cave center */
+.z-linelayout-horizontal .z-linelayout-line {
+  position: absolute;
+  z-index: 99;
+  background: var(--zk-color-outline-variant);
+  height: 2px;
+  width: 100%;
+  top: calc(50% - 1px);
+  left: 0;
+}
+
+/* Lineitem — center block in the cave */
+.z-lineitem {
+  flex: 1 0 0;
+  display: flex;
+  overflow: hidden;
+}
+.z-linelayout-vertical .z-lineitem {
+  flex-direction: column;
+}
+.z-lineitem > * {
+  flex-shrink: 0;
+  margin: auto;
+}
+.z-lineitem-stretch {
+  width: 100%;
+  height: 100%;
+}
+
+/* Point circle */
+.z-lineitem-point {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--zk-shape-corner-full);
+  background: var(--zk-color-primary);
+  border: 2px solid var(--zk-color-primary);
+  color: var(--zk-color-on-primary);
+  overflow: hidden;
+  z-index: 100;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.z-lineitem-point-hidden {
+  visibility: hidden;
+}
+
+.z-lineitem-point-image {
+  vertical-align: baseline;
+  display: inline-flex;
+  height: inherit;
+  width: inherit;
+}
+
+.z-lineitem-point-icon {
+  height: inherit;
+  width: inherit;
+}
+
+.z-lineitem-point-inner {
+  width: 100%;            /* fill the 20px bordered interior exactly */
+  height: 100%;
+  display: flex;         /* center icon glyph + image content both axes */
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center; /* center the image, not anchored top-left */
+  font-size: 12px;
+}
+</style>
+</head>
+<body>
+<h1>linelayout — Marble Design Contract</h1>
+<p class="contract-meta">
+  <span>ZK: 10.2.1-jakarta</span>
+  <span>Edition: EE (zkmax)</span>
+  <span>Tier: T2</span>
+  <span>CSS target: src/main/resources/web/js/zkmax/layout/css/linelayout.css</span>
+</p>
+
+<!-- ── VERTICAL ORIENTATION ─────────────────────────────────────── -->
+<div class="matrix-section">
+  <h2>Vertical Orient (default) — 4 items, content in last area</h2>
+  <div class="variant-row">
+    <div class="variant-cell">
+      <div class="state-label">Default — all points visible</div>
+      <div class="demo-surface" style="height:240px;">
+        <!--
+          Post-bind DOM simulation:
+          .z-linelayout-first → lineitem first-areas (empty in this example)
+          .z-linelayout-cave  → lineitems + connector line
+          .z-linelayout-last  → lineitem last-areas (content here)
+        -->
+        <div class="z-linelayout z-linelayout-vertical" style="height:100%;">
+          <!-- First area column (empty — content only on last side) -->
+          <div class="z-linelayout-first">
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"></div>
+          </div>
+          <!-- Cave column: line + point circles -->
+          <div class="z-linelayout-cave">
+            <div class="z-linelayout-line"></div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+          </div>
+          <!-- Last area column: content -->
+          <div class="z-linelayout-last">
+            <div class="z-lineitem"><div class="demo-card">2019-Q1</div></div>
+            <div class="z-lineitem"><div class="demo-card">2019-Q2</div></div>
+            <div class="z-lineitem"><div class="demo-card">2019-Q3</div></div>
+            <div class="z-lineitem"><div class="demo-card">2019-Q4</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant-cell">
+      <div class="state-label">Point hidden (pointVisible=false on item 2)</div>
+      <div class="demo-surface" style="height:240px;">
+        <div class="z-linelayout z-linelayout-vertical" style="height:100%;">
+          <div class="z-linelayout-first">
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"></div>
+          </div>
+          <div class="z-linelayout-cave">
+            <div class="z-linelayout-line"></div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <!-- point-hidden: visibility:hidden preserves space, line continues -->
+              <div class="z-lineitem-point z-lineitem-point-hidden"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+          </div>
+          <div class="z-linelayout-last">
+            <div class="z-lineitem"><div class="demo-card">2019-Q1</div></div>
+            <div class="z-lineitem"><div class="demo-card">2019-Q2 (no dot)</div></div>
+            <div class="z-lineitem"><div class="demo-card">2019-Q3</div></div>
+            <div class="z-lineitem"><div class="demo-card">2019-Q4</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant-cell">
+      <div class="state-label">Opposite=true — content in first area</div>
+      <div class="demo-surface" style="height:240px;">
+        <div class="z-linelayout z-linelayout-vertical" style="height:100%;">
+          <!-- Content now in first area, last area empty -->
+          <div class="z-linelayout-first">
+            <div class="z-lineitem"><div class="demo-card">Event A</div></div>
+            <div class="z-lineitem"><div class="demo-card">Event B</div></div>
+            <div class="z-lineitem"><div class="demo-card">Event C</div></div>
+          </div>
+          <div class="z-linelayout-cave">
+            <div class="z-linelayout-line"></div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+          </div>
+          <div class="z-linelayout-last">
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant-cell">
+      <div class="state-label">Both sides (alternating opposite)</div>
+      <div class="demo-surface" style="height:240px;">
+        <div class="z-linelayout z-linelayout-vertical" style="height:100%;">
+          <div class="z-linelayout-first">
+            <div class="z-lineitem"><div class="demo-card">Left 1</div></div>
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"><div class="demo-card">Left 3</div></div>
+            <div class="z-lineitem"></div>
+          </div>
+          <div class="z-linelayout-cave">
+            <div class="z-linelayout-line"></div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+          </div>
+          <div class="z-linelayout-last">
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"><div class="demo-card">Right 2</div></div>
+            <div class="z-lineitem"></div>
+            <div class="z-lineitem"><div class="demo-card">Right 4</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── HORIZONTAL ORIENTATION ────────────────────────────────────── -->
+<div class="matrix-section">
+  <h2>Horizontal Orient</h2>
+  <div class="variant-row">
+    <div class="variant-cell" style="min-width:400px;">
+      <div class="state-label">orient="horizontal" — 3 items</div>
+      <div class="demo-surface" style="height:160px;">
+        <div class="z-linelayout z-linelayout-horizontal" style="height:100%;">
+          <!-- First area row (top) — content above line -->
+          <div class="z-linelayout-first">
+            <div class="z-lineitem"><div class="demo-card">Jan</div></div>
+            <div class="z-lineitem"><div class="demo-card">Feb</div></div>
+            <div class="z-lineitem"><div class="demo-card">Mar</div></div>
+          </div>
+          <!-- Cave row: line + point circles -->
+          <div class="z-linelayout-cave">
+            <div class="z-linelayout-line"></div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+            <div class="z-lineitem">
+              <div class="z-lineitem-point"><div class="z-lineitem-point-inner"></div></div>
+            </div>
+          </div>
+          <!-- Last area row (bottom) — content below line -->
+          <div class="z-linelayout-last">
+            <div class="z-lineitem"><div class="demo-card">Event 1</div></div>
+            <div class="z-lineitem"><div class="demo-card">Event 2</div></div>
+            <div class="z-lineitem"><div class="demo-card">Event 3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── POINT VARIANTS ────────────────────────────────────────────── -->
+<div class="matrix-section">
+  <h2>Point Variants</h2>
+  <div class="variant-row">
+    <div class="variant-cell">
+      <div class="state-label">Default (solid disc)</div>
+      <div class="demo-surface">
+        <div class="z-lineitem-point" style="margin:8px auto;">
+          <div class="z-lineitem-point-inner"></div>
+        </div>
+      </div>
+    </div>
+    <div class="variant-cell">
+      <div class="state-label">With icon (pointIconSclass)</div>
+      <div class="demo-surface">
+        <div class="z-lineitem-point" style="margin:8px auto;">
+          <div class="z-lineitem-point-inner z-lineitem-point-icon" style="color:var(--zk-color-on-primary);font-size:12px;display:flex;align-items:center;justify-content:center;">✓</div>
+        </div>
+      </div>
+    </div>
+    <div class="variant-cell">
+      <div class="state-label">Hidden (pointVisible=false)</div>
+      <div class="demo-surface">
+        <div class="z-lineitem-point z-lineitem-point-hidden" style="margin:8px auto;">
+          <div class="z-lineitem-point-inner"></div>
+        </div>
+        <p style="font-size:11px;color:var(--zk-color-on-surface-variant);margin:4px 0 0;">space preserved, not visible</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<?page title="Print Utilities" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<style src="~./usecase/usecase.css"/>
+<div sclass="z-p-8">
+    <label value="Print Utilities" sclass="z-h2 z-mb-2"/>
+    <div sclass="z-text-sm z-text-secondary z-mb-4 z-border-bottom z-pb-4">
+        Marble applies a <h:b>print stylesheet</h:b> so ERP/CRM reports, invoices and lists come out clean on paper.
+        There are two halves: <h:b>opt-in visibility utilities</h:b> (<h:code>z-d-print-*</h:code>) that you add per element, and an
+        <h:b>automatic reset</h:b> that fires for every page whenever it is printed.
+    </div>
+
+    <!-- how to observe callout -->
+    <div sclass="z-bg-secondary-container z-rounded z-p-3 z-text-sm z-mb-8">
+        <h:b>Everything below is only observable in Print Preview.</h:b> Press <h:code>Ctrl</h:code>+<h:code>P</h:code>
+        (<h:code>Cmd</h:code>+<h:code>P</h:code> on macOS) to open your browser's print dialog and watch the page change: chrome disappears, shadows flatten to hairline borders, and the <h:code>z-d-print-*</h:code> elements swap.
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 1 — visibility utilities -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-h4" value="Part 1 · Print visibility utilities"/></div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        <h:code>z-d-print-{value}</h:code> sets <h:code>display:{value}</h:code> only inside <h:code>@media print</h:code>, mirroring the viewport set on the <h:code>Responsive</h:code> page.
+        <h:code>value</h:code> can be <h:code>none / block / flex / grid / inline-block</h:code>. Combine with the base <h:code>z-d-none</h:code> to build "screen-only" and "print-only" elements.
+    </div>
+
+    <!-- live demo -->
+    <div sclass="z-d-flex z-gap-2 z-flex-wrap z-items-center z-mb-3">
+        <div sclass="z-bg-primary-container z-rounded-xs z-py-2 z-px-3 z-d-print-none"><label sclass="z-text-sm z-fw-medium" value="Screen only · hidden when printed"/></div>
+        <div sclass="z-bg-success-container z-rounded-xs z-py-2 z-px-3 z-d-none z-d-print-block"><label sclass="z-text-sm z-fw-medium" value="Print only · appears in Print Preview"/></div>
+    </div>
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto z-mb-8"><label multiline="true" pre="true"><![CDATA[<!-- screen only: visible normally, removed from the printout -->
+<div class="z-d-print-none">Toolbar, nav, "Print" button…</div>
+
+<!-- print only: hidden on screen, shown on paper -->
+<div class="z-d-none z-d-print-block">Confidential — printed copy</div>]]></label></div>
+
+    <!-- value reference -->
+    <div sclass="z-d-grid z-grid-cols-auto z-gap-x-4 z-gap-y-2 z-mb-8 z-items-center" style="--zk-cols: 2; --zk-col-min: 160px">
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Class"/></div>
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Effect in @media print"/></div>
+        <div sclass="z-text-sm"><h:code>z-d-print-none</h:code></div><div sclass="z-text-sm z-text-secondary"><h:code>display: none</h:code> — drop from the printout</div>
+        <div sclass="z-text-sm"><h:code>z-d-print-block</h:code></div><div sclass="z-text-sm z-text-secondary"><h:code>display: block</h:code></div>
+        <div sclass="z-text-sm"><h:code>z-d-print-flex</h:code></div><div sclass="z-text-sm z-text-secondary"><h:code>display: flex</h:code></div>
+        <div sclass="z-text-sm"><h:code>z-d-print-grid</h:code></div><div sclass="z-text-sm z-text-secondary"><h:code>display: grid</h:code></div>
+        <div sclass="z-text-sm"><h:code>z-d-print-inline-block</h:code></div><div sclass="z-text-sm z-text-secondary"><h:code>display: inline-block</h:code></div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 2 — automatic reset -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-h4" value="Part 2 · Automatic print reset"/></div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        No opt-in needed — these fire for every Marble page under <h:code>@media print</h:code>. Brand colors and backgrounds are <h:b>kept</h:b> (no ink-saving).
+    </div>
+    <div sclass="z-d-grid z-grid-cols-auto z-gap-x-4 z-gap-y-2 z-mb-8 z-items-center" style="--zk-cols: 2; --zk-col-min: 200px">
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="What"/></div>
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Why"/></div>
+        <div><label sclass="z-text-sm z-fw-medium" value="Hide fixed chrome"/></div><div><label sclass="z-text-sm z-text-secondary" value="Modal scrims, drag/resize fakers, toasts, the loading bar, drawers and the floating error panel never belong on paper."/></div>
+        <div><label sclass="z-text-sm z-fw-medium" value="Un-stick sticky headers"/></div><div sclass="z-text-sm z-text-secondary">A <h:code>z-sticky-header</h:code> grid/list/tree header becomes static so a long table paginates instead of pinning its header on every page.</div>
+        <div><label sclass="z-text-sm z-fw-medium" value="Expand scroll bodies"/></div><div sclass="z-text-sm z-text-secondary">Grid/list/tree bodies switch to <h:code>overflow: visible</h:code> so the full dataset prints, not just the on-screen viewport.</div>
+        <div><label sclass="z-text-sm z-fw-medium" value="Flatten elevation"/></div><div sclass="z-text-sm z-text-secondary">Shadows don't render on paper, so elevated surfaces drop the shadow and gain a hairline <h:code>outline-variant</h:code> border to keep their boundary.</div>
+    </div>
+
+    <!-- elevation flatten demo -->
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Elevation → border (open Print Preview to compare)"/></div>
+        <div sclass="z-d-flex z-gap-4 z-flex-wrap z-mb-3">
+            <div sclass="z-elevation-2 z-bg-surface z-rounded z-p-4 z-text-sm" style="width:220px">
+                <div sclass="z-mb-1"><label sclass="z-fw-semibold" value="Elevated card"/></div>
+                On screen: drop shadow (elevation&#160;2). In print: hairline border, no shadow.
+            </div>
+            <div sclass="z-paper" style="width:220px">
+                <div sclass="z-mb-1"><label sclass="z-fw-semibold" value="z-paper"/></div>
+                Same treatment — the card's resting shadow flattens to a border on paper.
+            </div>
+        </div>
+    </div>
+
+    <!-- report grid demo -->
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="A data grid prints as a clean table"/></div>
+        <div sclass="z-mb-3"><label sclass="z-text-sm z-text-secondary" value="The most common enterprise print job. In Print Preview the grid keeps its content, drops its shadow, and (for a scrolling grid) expands so every row prints."/></div>
+        <grid sclass="z-mb-3">
+            <columns>
+                <column label="Invoice"/>
+                <column label="Customer"/>
+                <column label="Amount"/>
+                <column label="Status"/>
+            </columns>
+            <rows>
+                <row><label value="INV-1001"/><label value="Acme Corp"/><label value="$1,240.00"/><label value="Paid"/></row>
+                <row><label value="INV-1002"/><label value="Globex"/><label value="$860.50"/><label value="Paid"/></row>
+                <row><label value="INV-1003"/><label value="Initech"/><label value="$3,120.00"/><label value="Pending"/></row>
+                <row><label value="INV-1004"/><label value="Umbrella"/><label value="$540.00"/><label value="Overdue"/></row>
+            </rows>
+        </grid>
+    </div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">The reset itself (excerpt from <h:code>utility/_print.css</h:code>):</div>
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto z-mb-8"><label multiline="true" pre="true"><![CDATA[@media print {
+    /* hide fixed overlay chrome */
+    .z-modal-mask, .z-mask, .z-toast-position-wrapper,
+    .z-loadingbar-position, .z-drawer, .z-error { display: none; }
+
+    /* un-stick headers so long tables paginate */
+    .z-grid.z-sticky-header .z-grid-header { position: static; }
+
+    /* expand scroll bodies so all rows print */
+    .z-grid-body, .z-listbox-body, .z-tree-body {
+        overflow: visible; height: auto; max-height: none;
+    }
+
+    /* flatten elevation to a hairline border */
+    [class*="z-elevation-"], .z-window, .z-panel, .z-paper, .z-groupbox {
+        box-shadow: none;
+        border: 1px solid var(--zk-color-outline-variant);
+    }
+}]]></label></div>
+
+    <!-- ============================================================= -->
+    <!-- PART 3 — limitations -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-h4" value="Part 3 · Limitations"/></div>
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        <h:b>Frozen columns</h:b> (<h:code>&lt;frozen&gt;</h:code>) are positioned by JavaScript (<h:code>translateX</h:code> on scroll), not CSS, so they cannot be fully expanded from the print stylesheet alone — a horizontally-scrolled grid may clip its right-hand frozen region on paper.
+        For wide reports, prefer a paginated / server-side export.
+    </div>
+    <div sclass="z-text-sm z-text-secondary">
+        See <h:code>doc/spec/print-styles.md</h:code> for the full specification.
+    </div>
+
+</div>
+</zk>

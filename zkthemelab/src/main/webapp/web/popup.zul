@@ -1,0 +1,60 @@
+<?page title="Popup" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Popup</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Popup (popup attribute)</h:span></h:div>
+        <h:div class="z-py-3">
+            <button label="Show Popup" popup="p1" />
+            <button label="Show Popup (fixed size)" popup="p2" />
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Tooltip (mouse over)</h:span></h:div>
+        <h:div class="z-py-3">
+            <div tooltip="p1" style="display:inline-block; border:1px solid var(--zk-color-outline); padding:8px 16px; border-radius:4px; cursor:default;">
+                <label value="Hover me — tooltip uses Popup" />
+            </div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Context Menu (right click)</h:span></h:div>
+        <h:div class="z-py-3">
+            <div context="p1" style="display:inline-block; border:1px solid var(--zk-color-outline); padding:8px 16px; border-radius:4px; cursor:default;">
+                <label value="Right-click me — context uses Popup" />
+            </div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Tooltiptext (native tooltip)</h:span></h:div>
+        <h:div class="z-py-3">
+            <div tooltiptext="Native browser tooltip message" style="display:inline-block; border:1px solid var(--zk-color-outline); padding:8px 16px; border-radius:4px; cursor:default;">
+                <label value="Hover me — tooltiptext (not a Popup)" />
+            </div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Dark tooltip (z-popup-tooltip)</h:span></h:div>
+        <h:div class="z-py-3">
+            <button label="Click" sclass="z-button-outlined" popup="tt" />
+        </h:div>
+    </h:div>
+
+    <popup id="tt" sclass="z-popup-tooltip">
+        <label value="Tooltip text" />
+    </popup>
+    <popup id="p1">
+        <div>Popup Content</div>
+        <div>Second Line</div>
+    </popup>
+    <popup id="p2" width="200px" height="200px">
+        <div>Popup Content (fixed size)</div>
+        <div>Second Line</div>
+    </popup>
+</h:div>
+</zk>

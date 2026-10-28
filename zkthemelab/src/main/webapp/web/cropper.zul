@@ -1,0 +1,24 @@
+<?page title="Cropper" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Cropper</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Image Cropper</h:span></h:div>
+        <!-- single child: no flex wrapper — column-flex stretch would blow the inline-block
+             root to full width (M7 dead space), same class of bug as an oversized width attr -->
+        <h:div class="z-py-3">
+            <!-- width MUST be set (onSize → resizeImage feeds the ROOT size back into the Jcrop
+                 holder — an unsized shrink-wrapped root collapses to 0) and MUST NOT exceed the
+                 image's natural width (300×400 — ZK never upscales, excess width = dead space, M7) -->
+            <cropper x="50" y="100" w="100" h="100" onCrop="img.setContent(event.getMedia())"
+                     width="300px" toolbarVisible="true" src="~./img/sun.jpg"/>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Cropped Result</h:span></h:div>
+        <h:div class="z-py-3">
+            <image id="img"/>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

@@ -1,0 +1,27 @@
+/* MD3 Utility Classes — Opacity, Visibility & Interactions
+   Bootstrap 5.3 vocabulary. Pointer-events is spelled `z-pointer-*`, not Bootstrap's `pe-*`,
+   because `z-pe-*` is already padding-end. See doc/utility-class-gap-analysis.md D2. */
+
+@layer zk-utilities {
+
+/* Opacity */
+.z-opacity-0   { opacity: 0; }
+.z-opacity-25  { opacity: .25; }
+.z-opacity-50  { opacity: .5; }
+.z-opacity-75  { opacity: .75; }
+.z-opacity-100 { opacity: 1; }
+
+/* Visibility — keeps the element's box, unlike .z-d-none */
+.z-visible   { visibility: visible; }
+.z-invisible { visibility: hidden; }
+
+/* Pointer events */
+.z-pointer-none { pointer-events: none; }
+.z-pointer-auto { pointer-events: auto; }
+
+/* User select */
+.z-user-select-all  { user-select: all; }
+.z-user-select-auto { user-select: auto; }
+.z-user-select-none { user-select: none; }
+
+} /* end @layer zk-utilities */

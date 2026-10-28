@@ -1,0 +1,45 @@
+/* Lucide icon base rules.
+
+   Individual `.z-icon-{name}` declarations are NOT in this file — they are emitted
+   by `scripts/build-css.js` from `node_modules/lucide-static/icons/*.svg` into
+   `norm.css.dsp` at build time, together with the FA→Lucide aliases declared in
+   the `FA_TO_LUCIDE` map of that script.
+
+   The canonical lookup of all valid `z-icon-*` names is `doc/spec/icon-index.md`
+   (auto-generated). See `doc/spec/icon-policy.md` for the policy.
+
+   ZK's font-awesome.css.dsp sets `font-family: ZK85Icons, FontAwesome` on
+   z-icon-* elements. We reset that here so no FA character bleeds through; the
+   icon is rendered entirely by the ::before mask-image, not by a font glyph. */
+
+@layer zk-base {
+[class^="z-icon-"],
+[class*=" z-icon-"] {
+    font-family: inherit;
+    font-style: normal;
+    font-weight: normal;
+    speak: never;
+}
+
+[class^="z-icon-"]::before,
+[class*=" z-icon-"]::before {
+    content: '';
+    font-family: inherit;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    -webkit-mask-image: var(--_icon);
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: var(--_icon);
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    vertical-align: -0.125em;
+}
+
+/* FA-style width modifier (no glyph) — applied alongside a glyph class for column alignment. */
+.z-icon-fw { width: 1.25em; text-align: center; }
+}

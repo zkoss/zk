@@ -1,0 +1,121 @@
+<?page title="Portallayout" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript>
+    import java.util.Date;
+    import java.util.Calendar;
+    // Fixed past date so the screenshot baseline is deterministic: ZK bakes the server's
+    // "now" into a &lt;calendar&gt;'s default value, so the today-highlight moved every day and
+    // portallayout-gallery.png drifted with it. A past month is unambiguously "past", so the
+    // highlight never shows. Same idiom as calendar.zul; see doc/playwright-visual-test-guide.md §5.
+    Calendar _c = Calendar.getInstance();
+    _c.set(2020, Calendar.MARCH, 15, 10, 30, 0);
+    Date fixedDate = _c.getTime();
+</zscript>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Portallayout</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Draggable Portal Panels</h:span></h:div>
+        <h:div class="z-py-3">
+            <portallayout height="500px">
+                <portalchildren width="50%">
+                    <panel height="200px" title="Calendar" border="normal">
+                        <panelchildren>
+                            <calendar value="${fixedDate}"/>
+                        </panelchildren>
+                    </panel>
+                    <panel height="200px" title="Colorbox" border="normal">
+                        <panelchildren>
+                            <colorbox/>
+                        </panelchildren>
+                    </panel>
+                </portalchildren>
+                <portalchildren width="50%">
+                    <panel height="200px" title="Editor" border="normal">
+                        <panelchildren>
+                            <tbeditor/>
+                        </panelchildren>
+                    </panel>
+                </portalchildren>
+            </portallayout>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Framed Column (title on portalchildren)</h:span></h:div>
+        <h:div class="z-py-3">
+            <portallayout height="340px">
+                <portalchildren width="50%" title="Project Widgets">
+                    <panel height="130px" title="Tasks" border="normal">
+                        <panelchildren>Pending tasks</panelchildren>
+                    </panel>
+                    <panel height="130px" title="Notes" border="normal">
+                        <panelchildren>Quick notes</panelchildren>
+                    </panel>
+                </portalchildren>
+                <portalchildren width="50%" title="Reports (3 panels)" counterVisible="true">
+                    <panel height="90px" title="Sales" border="normal">
+                        <panelchildren>Sales data</panelchildren>
+                    </panel>
+                    <panel height="90px" title="Revenue" border="normal">
+                        <panelchildren>Revenue data</panelchildren>
+                    </panel>
+                    <panel height="90px" title="Forecast" border="normal">
+                        <panelchildren>Forecast data</panelchildren>
+                    </panel>
+                </portalchildren>
+            </portallayout>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal Orientation</h:span></h:div>
+        <h:div class="z-py-3">
+            <portallayout orient="horizontal" height="500px">
+                <portalchildren height="50%">
+                    <panel width="calc(50% - 6px)" height="100%" title="Calendar" border="normal">
+                        <panelchildren>
+                            <calendar value="${fixedDate}"/>
+                        </panelchildren>
+                    </panel>
+                    <panel width="calc(50% - 6px)" height="100%" title="Colorbox" border="normal">
+                        <panelchildren>
+                            <colorbox/>
+                        </panelchildren>
+                    </panel>
+                </portalchildren>
+                <portalchildren height="50%">
+                    <panel width="100%" height="100%" title="Editor" border="normal">
+                        <panelchildren>
+                            <tbeditor/>
+                        </panelchildren>
+                    </panel>
+                </portalchildren>
+            </portallayout>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Move Popup (za11y)</h:span></h:div>
+        <h:div class="z-mb-2"><h:span class="z-text-sm z-text-secondary">Click a panel title bar (or its drag grip) to open a popup that moves the panel without dragging (WCAG 2.5.7). Styled by za11y's _layout-a11y.css.</h:span></h:div>
+        <h:div class="z-py-3">
+            <portallayout height="300px">
+                <portalchildren width="50%" title="Todo">
+                    <panel height="90px" title="Draft" border="normal">
+                        <panelchildren>Draft notes</panelchildren>
+                    </panel>
+                    <panel height="90px" title="Review" border="normal">
+                        <panelchildren>Review notes</panelchildren>
+                    </panel>
+                </portalchildren>
+                <portalchildren width="50%" title="Done">
+                    <panel height="90px" title="Publish" border="normal">
+                        <panelchildren>Publish notes</panelchildren>
+                    </panel>
+                </portalchildren>
+            </portallayout>
+        </h:div>
+    </h:div>
+
+</h:div>
+</zk>

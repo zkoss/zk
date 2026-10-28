@@ -1,0 +1,72 @@
+<?page title="Combobutton" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Combobutton</h:span></h:div>
+
+    <div sclass="z-mb-6 z-d-grid z-grid-cols-auto z-overflow-x-auto z-gap-x-6 z-gap-y-2 z-items-start" style="--zk-cols:2; --zk-col-min:min-content">
+        <div sclass="z-grid-col-full z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="States"/></div>
+        <div sclass="z-d-contents">
+            <div/>
+            <div><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Default"/></div>
+            <div><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Disabled"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Default"/></div>
+            <div>
+                <combobutton label="Options">
+                    <menupopup>
+                        <menuitem label="Edit"/>
+                        <menuitem label="Delete"/>
+                    </menupopup>
+                </combobutton>
+            </div>
+            <div>
+                <combobutton label="Options" disabled="true">
+                    <menupopup><menuitem label="Edit"/></menupopup>
+                </combobutton>
+            </div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Toolbar mold"/></div>
+            <div>
+                <combobutton label="Options" mold="toolbar">
+                    <menupopup>
+                        <menuitem label="Edit"/>
+                        <menuitem label="Delete"/>
+                    </menupopup>
+                </combobutton>
+            </div>
+            <div>
+                <combobutton label="Options" mold="toolbar" disabled="true">
+                    <menupopup><menuitem label="Edit"/></menupopup>
+                </combobutton>
+            </div>
+        </div>
+    </div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Popup Child + Image + Reverse</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Popup child + image</h:span></h:div>
+                <combobutton label="Actions" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png">
+                    <popup width="200px">
+                        <vbox>
+                            <label value="Custom popup body"/>
+                            <button label="Inner"/>
+                        </vbox>
+                    </popup>
+                </combobutton>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">dir=&quot;reverse&quot; (label first, image after)</h:span></h:div>
+                <combobutton label="Actions" image="~./img/Centigrade-Widget-Icons/BookBlue-16x16.png" dir="reverse">
+                    <menupopup>
+                        <menuitem label="One"/>
+                    </menupopup>
+                </combobutton>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

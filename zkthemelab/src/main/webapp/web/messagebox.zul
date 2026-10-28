@@ -1,0 +1,85 @@
+<?page title="Messagebox" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native" xmlns:w="client">
+<zscript><![CDATA[
+    String longmsg = "Stately, plump Buck Mulligan came from the stairhead," +
+        " bearing a bowl of lather on which a mirror and a razor lay crossed. " +
+        "A yellow dressinggown, ungirdled, was sustained gently behind him on " +
+        "the mild morning air.\n\n--_Introibo ad altare Dei_.\n\n" +
+        "Halted, he peered down the dark winding stairs and called out coarsely:\n\n" +
+        "--Come up, Kinch! Come up, you fearful jesuit!\n\n" +
+        "-by James Joyce, from Ulysses at Project Gutenberg";
+]]></zscript>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Messagebox</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Types</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+            <button label="Information">
+                <attribute name="onClick">
+                    Messagebox.show("Some information", "Information", Messagebox.OK, Messagebox.INFORMATION);
+                </attribute>
+            </button>
+            <button label="Warning">
+                <attribute name="onClick">
+                    Messagebox.show("Some warning messages", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
+                </attribute>
+            </button>
+            <button label="Error">
+                <attribute name="onClick">
+                    Messagebox.show("Some error message", "Error", Messagebox.OK, Messagebox.ERROR);
+                </attribute>
+            </button>
+            <button label="Question">
+                <attribute name="onClick">
+                    Messagebox.show("A question. Are you sure?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);
+                </attribute>
+            </button>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Multi-line Messages</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+            <button label="Multi-line Warning">
+                <attribute name="onClick">
+                    Messagebox.show("A warning message\nEven more warning message", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
+                </attribute>
+            </button>
+            <button label="Multi-line Question">
+                <attribute name="onClick">
+                    Messagebox.show("Is this a question?\nDoes it make sense?", "Question", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);
+                </attribute>
+            </button>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Long Message</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+            <button label="Long Text (Ulysses)">
+                <attribute name="onClick">
+                    Messagebox.show(longmsg, "Ulysses", Messagebox.OK, Messagebox.INFORMATION);
+                </attribute>
+            </button>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Extended Button Sets</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+            <button label="YES / NO">
+                <attribute name="onClick">
+                    Messagebox.show("Apply changes?", "Confirm", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION);
+                </attribute>
+            </button>
+            <button label="YES / NO / CANCEL">
+                <attribute name="onClick">
+                    Messagebox.show("Save before exit?", "Confirm", Messagebox.YES | Messagebox.NO | Messagebox.CANCEL, Messagebox.QUESTION);
+                </attribute>
+            </button>
+            <button label="Buttonless">
+                <attribute name="onClick">
+                    Messagebox.show("Working…", "Please wait", 0, Messagebox.INFORMATION);
+                </attribute>
+            </button>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

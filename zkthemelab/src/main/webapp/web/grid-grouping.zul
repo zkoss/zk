@@ -1,0 +1,65 @@
+<?page title="Grid Grouping" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Grid Grouping</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Desktop PCs by Manufacturer</h:span></h:div>
+        <h:div class="z-py-3">
+            <grid>
+                <columns sizable="true">
+                    <column label="Brand" />
+                    <column label="Processor Type" width="150px"/>
+                    <column label="Memory (RAM)" width="150px"/>
+                    <column label="Price" width="100px"/>
+                    <column label="Hard Drive Capacity" width="180px"/>
+                </columns>
+                <rows>
+                    <group label="Dell" open="true"/>
+                    <row>
+                        <label value="Dell E4500 2.2GHz"/>
+                        <label value="Intel Core 2 Duo"/>
+                        <label value="2GB RAM"/>
+                        <label value="$261.00" style="color:green"/>
+                        <label value="500GB"/>
+                    </row>
+                    <row>
+                        <label value="XP-Pro Slim Dell-Inspiron-530-s"/>
+                        <label value="Intel Core 2 Duo"/>
+                        <label value="2GB RAM"/>
+                        <label value="$498.93" style="color:green"/>
+                        <label value="500GB"/>
+                    </row>
+                    <row>
+                        <label value="Dell P4 3.2 GHz"/>
+                        <label value="Intel Pentium 4"/>
+                        <label value="4GB RAM"/>
+                        <label value="$377.99" style="color:green"/>
+                        <label value="500GB"/>
+                    </row>
+                    <group label="Compaq"/>
+                    <row>
+                        <label value="Compaq SR5113WM"/>
+                        <label value="Intel Core Duo"/>
+                        <label value="1GB RAM"/>
+                        <label value="$279.00" style="color:green"/>
+                        <label value="160GB"/>
+                    </row>
+                    <row>
+                        <label value="Compaq HP XW4200"/>
+                        <label value="Intel Pentium 4"/>
+                        <label value="4GB RAM"/>
+                        <label value="$980" style="color:green"/>
+                        <label value="500GB"/>
+                    </row>
+                    <groupfoot>
+                        <cell colspan="5">
+                            <label value="This a summary about Compaq Desktop PCs"/>
+                        </cell>
+                    </groupfoot>
+                </rows>
+            </grid>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

@@ -1,0 +1,21 @@
+<?page title="Html" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Html</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Inline HTML</h:span></h:div>
+        <h:div class="z-py-3">
+            <html><![CDATA[
+                <h4>Hi, this is inline HTML</h4>
+                <p>It is the content of the <strong>html</strong> component.</p>
+                <p>You can embed arbitrary HTML markup here.</p>
+                <ul>
+                    <li>List item one</li>
+                    <li>List item two</li>
+                    <li>List item three</li>
+                </ul>
+            ]]></html>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

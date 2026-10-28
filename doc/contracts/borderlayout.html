@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — borderlayout</title>
+<!--
+  Self-contained Marble design contract mockup for borderlayout.
+
+  RULES
+    - Only --zk-* tokens carry design values inside the body.
+    - :root token block mirrors src/main/resources/web/zul/css/tokens/*.css
+    - Class names match .claude/skills/zk-component-rules/components/borderlayout.md
+    - No JS, no external resources — opens in any browser.
+-->
+<style>
+/* ── Inlined tokens — mirror tokens/*.css ───────────────────────────────── */
+:root {
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container-lowest: #ffffff;
+    --zk-color-surface-container-low: #f7f9fc;
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+    --zk-color-surface-container-highest: #e0e8f4;
+
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    --zk-shape-corner-none: 0px;
+    --zk-shape-corner-extra-small: 4px;
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-label-medium-weight: 500;
+    --zk-typescale-title-small-size: 14px;
+    --zk-typescale-title-small-weight: 500;
+    --zk-typescale-title-medium-size: 16px;
+
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    --zk-elevation-1:
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12),
+        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
+    --zk-elevation-2:
+        0px 2px 6px 0px rgba(0, 0, 0, 0.12),
+        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
+
+    --zk-motion-duration-short3: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --zk-state-hover-opacity: 0.08;
+}
+
+/* ── Mockup chrome ───────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+    line-height: 1.5;
+}
+h1 {
+    font-size: 22px;
+    font-weight: var(--zk-font-weight-semibold);
+    margin: 0 0 var(--zk-spacing-2);
+    color: var(--zk-color-on-surface);
+}
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+
+.section {
+    margin-bottom: var(--zk-spacing-8);
+}
+.section-title {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    margin-bottom: var(--zk-spacing-2);
+}
+.demo-card {
+    background: var(--zk-color-surface);
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-small);
+    padding: var(--zk-spacing-4);
+    margin-bottom: var(--zk-spacing-6);
+}
+.note {
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface-variant);
+    margin-top: var(--zk-spacing-2);
+    font-style: italic;
+}
+
+/* ── Swatch row for splitter bar / button states ─────────────────────────── */
+.swatch-row {
+    display: flex;
+    gap: var(--zk-spacing-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--zk-spacing-4);
+}
+.swatch-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+}
+.swatch-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 24px;
+    border-radius: var(--zk-shape-corner-extra-small);
+    font-size: 10px;
+    color: var(--zk-color-on-surface-variant);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPONENT CONTRACT STYLES — use only --zk-* tokens for design values
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Container ────────────────────────────────────────────────────────────── */
+.z-borderlayout {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+}
+
+/* ── Regions (JS positions these; we add surfaces + dividers) ─────────────── */
+.z-north,
+.z-south,
+.z-west,
+.z-east,
+.z-center {
+    position: absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.z-north {
+    background-color: var(--zk-color-surface);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+.z-south {
+    background-color: var(--zk-color-surface);
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+.z-west {
+    background-color: var(--zk-color-surface-container-low);
+    border-right: 1px solid var(--zk-color-outline-variant);
+}
+.z-east {
+    background-color: var(--zk-color-surface-container-low);
+    border-left: 1px solid var(--zk-color-outline-variant);
+}
+.z-center {
+    background-color: var(--zk-color-background);
+}
+.z-north-noborder { border-bottom: none; }
+.z-south-noborder { border-top: none; }
+.z-west-noborder  { border-right: none; }
+.z-east-noborder  { border-left: none; }
+
+/* ── Region content label ─────────────────────────────────────────────────── */
+.z-north-body,
+.z-south-body,
+.z-west-body,
+.z-east-body,
+.z-center-body {
+    padding: var(--zk-spacing-3);
+    height: 100%;
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface-variant);
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+/* ── Region header (title attribute) ─────────────────────────────────────── */
+.z-north-header,
+.z-south-header,
+.z-west-header,
+.z-east-header,
+.z-center-header {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 var(--zk-spacing-3);
+    background-color: var(--zk-color-surface-container);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    font-size: var(--zk-typescale-title-small-size);
+    font-weight: var(--zk-typescale-title-small-weight);
+    color: var(--zk-color-on-surface-variant);
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* ── Splitter bars — DESIGN.md §14 family spec (revised 2026-06-04) ──────── */
+.z-west-splitter,
+.z-east-splitter {
+    position: absolute;
+    width: 8px;
+    cursor: ew-resize;
+    background-color: var(--zk-color-surface-container);
+    transition:
+        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    overflow: visible;
+}
+.z-north-splitter,
+.z-south-splitter {
+    position: absolute;
+    height: 8px;
+    cursor: ns-resize;
+    background-color: var(--zk-color-surface-container);
+    transition:
+        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    overflow: visible;
+}
+.z-west-splitter:hover,
+.z-east-splitter:hover,
+.z-north-splitter:hover,
+.z-south-splitter:hover {
+    background-color: color-mix(
+        in srgb,
+        var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%),
+        var(--zk-color-surface-container)
+    );
+}
+
+/* ── Splitter actuator pills — DESIGN.md §14 (8×28, outline-variant, no elevation) ── */
+/* Note: in real ZK, long-axis centering comes from setBtnPos_ inline margin (skill rule);
+   the static mockup simulates it with translate. */
+.z-west-splitter-button,
+.z-east-splitter-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: absolute;
+    background-color: var(--zk-color-outline-variant);
+    border: none;
+    border-radius: var(--zk-shape-corner-full);
+    box-shadow: none;
+    width: 8px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 8px;
+    color: var(--zk-color-on-surface-variant);
+    transition:
+        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+}
+.z-north-splitter-button,
+.z-south-splitter-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: absolute;
+    background-color: var(--zk-color-outline-variant);
+    border: none;
+    border-radius: var(--zk-shape-corner-full);
+    box-shadow: none;
+    width: 28px;
+    height: 8px;
+    cursor: pointer;
+    font-size: 8px;
+    color: var(--zk-color-on-surface-variant);
+    transition:
+        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+}
+.z-west-splitter-button:hover,
+.z-east-splitter-button:hover,
+.z-north-splitter-button:hover,
+.z-south-splitter-button:hover {
+    background-color: var(--zk-color-primary);
+    color: var(--zk-color-on-primary);
+}
+
+/* ── Splitter button hover (static preview class for mockup) ─────────────── */
+.is-hover-btn.z-west-splitter-button,
+.is-hover-btn.z-east-splitter-button,
+.is-hover-btn.z-north-splitter-button,
+.is-hover-btn.z-south-splitter-button {
+    background-color: var(--zk-color-primary);
+    color: var(--zk-color-on-primary);
+}
+
+/* ── Splitter bar hover (static preview) ─────────────────────────────────── */
+.is-hover-bar.z-west-splitter,
+.is-hover-bar.z-north-splitter {
+    background-color: color-mix(
+        in srgb,
+        var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%),
+        var(--zk-color-surface-container)
+    );
+}
+
+/* ── Icons inside splitter button ────────────────────────────────────────── */
+.z-west-icon,
+.z-east-icon,
+.z-north-icon,
+.z-south-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    line-height: 1;
+    color: inherit;
+}
+/* Grip ellipsis: full opacity — drag-handle affordance (c30, DESIGN.md §14) */
+.z-west-icon.z-icon-ellipsis-v,
+.z-east-icon.z-icon-ellipsis-v,
+.z-north-icon.z-icon-ellipsis-h,
+.z-south-icon.z-icon-ellipsis-h {
+    opacity: 1;
+}
+/* Collapse caret: hidden at idle, fades in on pill hover (c30c, DESIGN.md §14) */
+.z-west-icon[class*="z-icon-caret"],
+.z-east-icon[class*="z-icon-caret"],
+.z-north-icon[class*="z-icon-caret"],
+.z-south-icon[class*="z-icon-caret"] {
+    opacity: 0;
+    transition: opacity var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+}
+.z-west-splitter-button:hover .z-west-icon[class*="z-icon-caret"],
+.z-east-splitter-button:hover .z-east-icon[class*="z-icon-caret"],
+.z-north-splitter-button:hover .z-north-icon[class*="z-icon-caret"],
+.z-south-splitter-button:hover .z-south-icon[class*="z-icon-caret"],
+.is-hover-btn .z-west-icon[class*="z-icon-caret"],
+.is-hover-btn .z-north-icon[class*="z-icon-caret"] {
+    opacity: 1;
+}
+/* Disabled caret: hidden when closable=false */
+.z-west-splitter-button-disabled .z-icon-caret-left,
+.z-east-splitter-button-disabled .z-icon-caret-right,
+.z-north-splitter-button-disabled .z-icon-caret-up,
+.z-south-splitter-button-disabled .z-icon-caret-down {
+    display: none;
+}
+
+/* ── Collapsed placeholders ───────────────────────────────────────────────── */
+.z-north-collapsed,
+.z-south-collapsed,
+.z-west-collapsed,
+.z-east-collapsed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--zk-color-surface-container);
+    border: 1px solid var(--zk-color-outline-variant);
+    cursor: pointer;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.z-north-collapsed:hover,
+.z-south-collapsed:hover,
+.z-west-collapsed:hover,
+.z-east-collapsed:hover {
+    background-color: var(--zk-color-surface-container-high);
+}
+/* static hover preview */
+.is-hover-collapsed.z-west-collapsed {
+    background-color: var(--zk-color-surface-container-high);
+}
+.z-west-title,
+.z-east-title {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-typescale-label-medium-weight);
+    color: var(--zk-color-on-surface-variant);
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+.z-north-title,
+.z-south-title {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-typescale-label-medium-weight);
+    color: var(--zk-color-on-surface-variant);
+    white-space: nowrap;
+}
+
+/* ── Drag ghost ───────────────────────────────────────────────────────────── */
+.z-splitter-ghost {
+    background-color: var(--zk-color-primary);
+    opacity: 0.3;
+    position: absolute;
+}
+
+/* ── Mockup-specific layout helpers (not part of contract) ────────────────── */
+/* Used only to position regions visually in this static mockup */
+.mock-layout {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-small);
+    overflow: hidden;
+}
+.mock-layout .z-north {
+    top: 0; left: 0; right: 0;
+    height: 56px;
+}
+.mock-layout .z-south {
+    bottom: 0; left: 0; right: 0;
+    height: 56px;
+}
+.mock-layout .z-west {
+    top: 56px; left: 0;
+    width: 140px;
+    bottom: 56px;
+}
+.mock-layout .z-east {
+    top: 56px; right: 0;
+    width: 140px;
+    bottom: 56px;
+}
+.mock-layout .z-center {
+    top: 56px; left: 140px; right: 140px;
+    bottom: 56px;
+}
+/* splitter bars */
+.mock-layout .z-west-splitter {
+    top: 56px; left: 140px;
+    width: 8px;
+    bottom: 56px;
+}
+.mock-layout .z-north-splitter {
+    top: 56px; left: 0; right: 0;
+    height: 8px;
+}
+
+/* collapsed placeholder overlay (west region collapsed) */
+.mock-layout .z-west-collapsed {
+    position: absolute;
+    top: 56px; left: 0;
+    width: 28px;
+    bottom: 56px;
+}
+</style>
+</head>
+<body>
+
+<h1>borderlayout — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T1</span>
+    <span>closest-sibling: none (novel composite)</span>
+    <span>category: layout</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Section 1: Full 5-region layout — default state
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">1. Full 5-region layout — default state</div>
+    <p class="state-label">default — all regions open, west splitter visible</p>
+    <div class="demo-card" style="padding: 0; overflow: hidden; border-radius: var(--zk-shape-corner-small);">
+        <div class="z-borderlayout mock-layout">
+            <!-- North -->
+            <div class="z-north">
+                <div class="z-north-header">North</div>
+                <div class="z-north-body">North content</div>
+            </div>
+            <!-- South -->
+            <div class="z-south">
+                <div class="z-south-header">South</div>
+                <div class="z-south-body">South content</div>
+            </div>
+            <!-- West -->
+            <div class="z-west">
+                <div class="z-west-header">West</div>
+                <div class="z-west-body">Sidebar content</div>
+            </div>
+            <!-- East -->
+            <div class="z-east">
+                <div class="z-east-header">East</div>
+                <div class="z-east-body">Right panel</div>
+            </div>
+            <!-- Center -->
+            <div class="z-center">
+                <div class="z-center-body">
+                    <span style="color: var(--zk-color-on-surface-variant);">Center — main workspace</span>
+                </div>
+            </div>
+            <!-- West splitter bar (splittable=true) -->
+            <div class="z-west-splitter" style="height: auto; top: 56px; left: 140px; bottom: 56px; width: 8px;">
+                <span class="z-west-splitter-button">
+                    <!-- grip dot top (ellipsis-v) -->
+                    <i class="z-west-icon z-icon-ellipsis-v" title="grip">⋮</i>
+                    <!-- direction caret -->
+                    <i class="z-west-icon z-icon-caret-left" title="collapse">‹</i>
+                    <!-- grip dot bottom (ellipsis-v) -->
+                    <i class="z-west-icon z-icon-ellipsis-v" title="grip">⋮</i>
+                </span>
+            </div>
+            <!-- North splitter bar -->
+            <div class="z-north-splitter" style="top: 56px; left: 0; right: 0; height: 8px;">
+                <span class="z-north-splitter-button">
+                    <i class="z-north-icon z-icon-ellipsis-h" title="grip">···</i>
+                    <i class="z-north-icon z-icon-caret-up" title="collapse">^</i>
+                    <i class="z-north-icon z-icon-ellipsis-h" title="grip">···</i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <p class="note">North/South: --zk-color-surface + 1px outline-variant divider. West/East: --zk-color-surface-container-low. Center: --zk-color-background.</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Section 2: Splitter bar states
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">2. Splitter bar — default vs hover</div>
+
+    <div class="state-label">default (opacity 0.4, outline-variant fill)</div>
+    <div class="demo-card" style="padding: var(--zk-spacing-4);">
+        <div style="display: flex; gap: var(--zk-spacing-6); align-items: center;">
+            <!-- West/East splitter (vertical bar) -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: var(--zk-spacing-2);">
+                <div style="height: 120px; position: relative; width: 8px;">
+                    <div class="z-west-splitter" style="position: relative; width: 8px; height: 120px;"></div>
+                </div>
+                <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">west/east bar</span>
+            </div>
+            <!-- North/South splitter (horizontal bar) -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: var(--zk-spacing-2);">
+                <div style="width: 160px; position: relative; height: 8px;">
+                    <div class="z-north-splitter" style="position: relative; width: 160px; height: 8px;"></div>
+                </div>
+                <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">north/south bar</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="state-label">hover (opacity 1.0, primary fill)</div>
+    <div class="demo-card" style="padding: var(--zk-spacing-4);">
+        <div style="display: flex; gap: var(--zk-spacing-6); align-items: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: var(--zk-spacing-2);">
+                <div style="height: 120px; position: relative; width: 8px;">
+                    <div class="z-west-splitter is-hover-bar" style="position: relative; width: 8px; height: 120px;"></div>
+                </div>
+                <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">west/east hover</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: var(--zk-spacing-2);">
+                <div style="width: 160px; height: 8px;">
+                    <div class="z-north-splitter is-hover-bar" style="position: relative; width: 160px; height: 8px;"></div>
+                </div>
+                <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">north/south hover</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Section 3: Splitter pill button states
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">3. Splitter pill button — states</div>
+
+    <div class="swatch-row">
+        <!-- West button default -->
+        <div class="swatch-item">
+            <div style="position: relative; width: 32px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                <span class="z-west-splitter-button" style="position: relative; top: auto; transform: none; left: auto;">
+                    <i class="z-west-icon z-icon-ellipsis-v">⋮</i>
+                    <i class="z-west-icon z-icon-caret-left">‹</i>
+                    <i class="z-west-icon z-icon-ellipsis-v">⋮</i>
+                </span>
+            </div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">west default</span>
+        </div>
+        <!-- West button hover -->
+        <div class="swatch-item">
+            <div style="position: relative; width: 32px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                <span class="z-west-splitter-button is-hover-btn" style="position: relative; top: auto; transform: none; left: auto;">
+                    <i class="z-west-icon z-icon-ellipsis-v">⋮</i>
+                    <i class="z-west-icon z-icon-caret-left">‹</i>
+                    <i class="z-west-icon z-icon-ellipsis-v">⋮</i>
+                </span>
+            </div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">west hover</span>
+        </div>
+        <!-- West button disabled caret (closable=false) -->
+        <div class="swatch-item">
+            <div style="position: relative; width: 32px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                <span class="z-west-splitter-button z-west-splitter-button-disabled" style="position: relative; top: auto; transform: none; left: auto;">
+                    <i class="z-west-icon z-icon-ellipsis-v">⋮</i>
+                    <i class="z-west-icon z-icon-caret-left">‹</i>
+                    <i class="z-west-icon z-icon-ellipsis-v">⋮</i>
+                </span>
+            </div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">west disabled caret</span>
+        </div>
+        <!-- North button default -->
+        <div class="swatch-item">
+            <div style="position: relative; width: 80px; height: 32px; display: flex; align-items: center; justify-content: center; margin-top: var(--zk-spacing-6);">
+                <span class="z-north-splitter-button" style="position: relative; top: auto; transform: none; left: auto;">
+                    <i class="z-north-icon z-icon-ellipsis-h">···</i>
+                    <i class="z-north-icon z-icon-caret-up">^</i>
+                    <i class="z-north-icon z-icon-ellipsis-h">···</i>
+                </span>
+            </div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">north default</span>
+        </div>
+        <!-- North button hover -->
+        <div class="swatch-item">
+            <div style="position: relative; width: 80px; height: 32px; display: flex; align-items: center; justify-content: center; margin-top: var(--zk-spacing-6);">
+                <span class="z-north-splitter-button is-hover-btn" style="position: relative; top: auto; transform: none; left: auto;">
+                    <i class="z-north-icon z-icon-ellipsis-h">···</i>
+                    <i class="z-north-icon z-icon-caret-up">^</i>
+                    <i class="z-north-icon z-icon-ellipsis-h">···</i>
+                </span>
+            </div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">north hover</span>
+        </div>
+    </div>
+    <p class="note">
+        Pill button: 16x56px (west/east) or 56x16px (north/south). --zk-shape-corner-full radius. --zk-elevation-1 shadow.
+        Grip dots (ellipsis-v / ellipsis-h) at opacity 0.7. Disabled caret hidden via display:none.
+    </p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Section 4: Collapsed placeholder — default and hover
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">4. Collapsed placeholder (open=false)</div>
+
+    <div class="swatch-row">
+        <!-- West collapsed — default -->
+        <div class="swatch-item">
+            <div class="z-west-collapsed" style="width: 32px; height: 120px; border-radius: 0;">
+                <div class="z-west-title">West</div>
+            </div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-2);">default</span>
+        </div>
+        <!-- West collapsed — hover -->
+        <div class="swatch-item">
+            <div class="z-west-collapsed is-hover-collapsed" style="width: 32px; height: 120px; border-radius: 0;">
+                <div class="z-west-title">West</div>
+            </div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-2);">hover</span>
+        </div>
+        <!-- North collapsed — default -->
+        <div class="swatch-item">
+            <div class="z-north-collapsed" style="width: 240px; height: 32px; border-radius: 0; margin-top: var(--zk-spacing-8);">
+                <div class="z-north-title">North</div>
+            </div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-2);">north default</span>
+        </div>
+    </div>
+    <p class="note">
+        Placeholder: --zk-color-surface-container fill, 1px outline-variant border. Hover: --zk-color-surface-container-high.
+        Title text uses label-medium typography and is rotated 90° for west/east.
+    </p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Section 5: 5-region layout with collapsed west + hover preview
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">5. Full layout — west collapsed (open=false)</div>
+
+    <div class="demo-card" style="padding: 0; overflow: hidden; border-radius: var(--zk-shape-corner-small);">
+        <div class="z-borderlayout" style="position: relative; width: 100%; height: 320px; overflow: hidden;">
+            <!-- North -->
+            <div class="z-north" style="position: absolute; top:0; left:0; right:0; height: 48px;">
+                <div class="z-north-header">North</div>
+            </div>
+            <!-- South -->
+            <div class="z-south" style="position: absolute; bottom:0; left:0; right:0; height: 48px;">
+                <div class="z-south-header">South</div>
+            </div>
+            <!-- West collapsed placeholder -->
+            <div class="z-west-collapsed" style="position: absolute; top: 48px; left:0; width:28px; bottom:48px;">
+                <div class="z-west-title">West</div>
+            </div>
+            <!-- East -->
+            <div class="z-east" style="position: absolute; top:48px; right:0; width:120px; bottom:48px;">
+                <div class="z-east-header">East</div>
+                <div class="z-east-body">Right panel</div>
+            </div>
+            <!-- Center (expands into west's former space) -->
+            <div class="z-center" style="position: absolute; top:48px; left:28px; right:120px; bottom:48px;">
+                <div class="z-center-body">
+                    Center — west is collapsed, center fills its space.
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="note">When a region collapses, JS resizes the center to fill the space. The collapsed placeholder strip (28px here) is always visible as the re-open affordance.</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Section 6: Region surface color swatches
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">6. Region surface colors</div>
+
+    <div class="swatch-row">
+        <div class="swatch-item">
+            <div style="width: 80px; height: 56px; background-color: var(--zk-color-surface); border: 1px solid var(--zk-color-outline-variant); border-radius: var(--zk-shape-corner-extra-small);"></div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1);">north/south</span>
+            <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-color-surface</span>
+        </div>
+        <div class="swatch-item">
+            <div style="width: 80px; height: 56px; background-color: var(--zk-color-surface-container-low); border: 1px solid var(--zk-color-outline-variant); border-radius: var(--zk-shape-corner-extra-small);"></div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1);">west/east</span>
+            <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-color-surface-container-low</span>
+        </div>
+        <div class="swatch-item">
+            <div style="width: 80px; height: 56px; background-color: var(--zk-color-background); border: 1px solid var(--zk-color-outline-variant); border-radius: var(--zk-shape-corner-extra-small);"></div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1);">center</span>
+            <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-color-background</span>
+        </div>
+        <div class="swatch-item">
+            <div style="width: 80px; height: 56px; background-color: var(--zk-color-surface-container); border: 1px solid var(--zk-color-outline-variant); border-radius: var(--zk-shape-corner-extra-small);"></div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1);">header / collapsed</span>
+            <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-color-surface-container</span>
+        </div>
+        <div class="swatch-item">
+            <div style="width: 80px; height: 56px; background-color: var(--zk-color-surface-container-high); border: 1px solid var(--zk-color-outline-variant); border-radius: var(--zk-shape-corner-extra-small);"></div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1);">collapsed hover</span>
+            <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-color-surface-container-high</span>
+        </div>
+        <div class="swatch-item">
+            <div style="width: 80px; height: 56px; background-color: var(--zk-color-primary); border-radius: var(--zk-shape-corner-extra-small); opacity: 0.4;"></div>
+            <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1);">splitter hover</span>
+            <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-color-primary (opacity 1)</span>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Section 7: Drag ghost (rendered during resize drag)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+    <div class="section-title">7. Drag ghost (.z-splitter-ghost)</div>
+
+    <div class="demo-card" style="position: relative; height: 80px; overflow: hidden; padding: 0;">
+        <div class="z-splitter-ghost" style="left: 0; top: 0; width: 8px; height: 100%;"></div>
+        <span style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--zk-color-on-surface-variant);">
+            --zk-color-primary at opacity 0.3 — shown during drag resize
+        </span>
+    </div>
+</div>
+
+</body>
+</html>

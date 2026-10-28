@@ -1,0 +1,30 @@
+{
+  "ll6": "flex",
+  "ll7": "column",
+  "ll8b": "space-around",
+  "ll11b": "space-around",
+  "ll14b": "space-around",
+  "ll16a": "row",
+  "ll18": "12px 0px",
+  "ll25": "2px",
+  "ll26": "400px",
+  "ll27": "23px",
+  "pt9": "hidden",
+  "li7": "200px",
+  "li8": "100px",
+  "pt14": "inline-flex",
+  "pt15": "baseline",
+  "hMacro": {
+    "hLineBg": "rgba(0, 0, 0, 0.12)",
+    "hLineH": 2,
+    "hLineW": 400,
+    "hCaveW": 400,
+    "hCaveH": 48,
+    "hRatio": 1,
+    "lineCenteredH": {
+      "computedTop": 23,
+      "expectedTop": 23,
+      "diff": 0
+    }
+  }
+}

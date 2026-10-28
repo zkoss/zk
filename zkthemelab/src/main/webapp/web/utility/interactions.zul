@@ -1,0 +1,66 @@
+<?page title="Interaction Utilities" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<style src="~./usecase/usecase.css"/>
+<zscript><![CDATA[
+    import org.zkoss.zk.ui.util.Notification;
+]]></zscript>
+<div sclass="z-p-8 z-d-flex z-flex-col z-gap-4">
+
+    <label value="Interaction Utilities" sclass="z-h2"/>
+    <label value="Pointer events and text selection. Pointer events use .z-pointer-*, because .z-pe-* is already padding-end." sclass="z-text-secondary z-text-sm"/>
+
+    <!-- Pointer events -->
+    <div sclass="z-paper">
+        <label value="Pointer events  (.z-pointer-none / .z-pointer-auto)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-6 z-flex-wrap z-items-start">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-1">
+                <button label="Click me" sclass="pv-click-normal" onClick='Notification.show("Clicked: no class", "info", null, "middle_center", 2000, true)'/>
+                <label value="no class — click shows a notification" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-1">
+                <button label="Click me" sclass="z-pointer-none pv-click-none" onClick='Notification.show("Clicked: z-pointer-none", "error", null, "middle_center", 2000, true)'/>
+                <label value=".z-pointer-none — click passes through, no notification" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-1">
+                <div sclass="z-pointer-none z-d-flex z-gap-2 z-p-2 z-border z-rounded">
+                    <checkbox label="Locked" sclass="pv-check-none" onCheck='Notification.show("Checked: inside z-pointer-none", "error", null, "middle_center", 2000, true)'/>
+                    <button label="Opt back in" sclass="z-pointer-auto pv-click-auto" onClick='Notification.show("Clicked: z-pointer-auto", "info", null, "middle_center", 2000, true)'/>
+                </div>
+                <label value=".z-pointer-auto re-enables one child of a .z-pointer-none parent" sclass="z-text-secondary z-text-xs"/>
+            </div>
+        </div>
+        <label value="Mouse only: keyboard focus and Enter still reach the widget. Use disabled to block every input." sclass="z-text-secondary z-text-xs z-mt-3"/>
+    </div>
+
+    <!-- User select -->
+    <div sclass="z-paper">
+        <label value="User select  (.z-user-select-all / auto / none)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-6 z-flex-wrap z-items-start">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-1">
+                <label value="ORD-2026-000417" sclass="z-user-select-all z-font-monospace z-bg-surface-variant z-px-2 z-py-1 z-rounded pv-select-all"/>
+                <label value=".z-user-select-all — one click selects the whole id" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-1 pv-select-none-host">
+                <div>
+                    <label value="Step 3:" sclass="z-user-select-none z-fw-medium pv-select-none"/>
+                    <label value=" copy only this part" sclass="pv-select-rest"/>
+                </div>
+                <label value=".z-user-select-none — the prefix is left out of a copy" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-1">
+                <grid width="320px">
+                    <columns>
+                        <column label="Default header" sclass="pv-select-default"/>
+                        <column label="Copyable header" sclass="z-user-select-auto pv-select-auto"/>
+                    </columns>
+                    <rows>
+                        <row><label value="A-100"/><label value="Widget"/></row>
+                    </rows>
+                </grid>
+                <label value="Grid headers are not selectable by default; drag across the second one to copy it" sclass="z-text-secondary z-text-xs"/>
+            </div>
+        </div>
+    </div>
+
+</div>
+</zk>

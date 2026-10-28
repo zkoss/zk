@@ -1,0 +1,149 @@
+<?page title="Spacing Utilities"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<vlayout hflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+    <label value="Spacing Utilities" sclass="z-h2"/>
+
+    <!-- Scale reference -->
+    <div sclass="z-paper">
+        <label value="Spacing Scale" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-1"/>
+        <label value="Every spacing utility — padding, margin, gap — draws from this one shared set of steps, built on a 4 dp baseline grid. You append a step number to a utility (z-p-4, z-m-2, z-gap-3 …); the same number always means the same size. Each bar below is exactly as wide as its step."
+               sclass="z-d-block z-text-secondary z-text-sm z-mb-3"/>
+
+        <div style="display:grid;grid-template-columns:48px 1fr 56px;gap:8px 16px;align-items:center;max-width:460px">
+            <label value="Step" sclass="z-text-secondary z-text-xs z-fw-medium"/>
+            <span/>
+            <label value="Size" sclass="z-text-secondary z-text-xs z-fw-medium"/>
+
+            <label value="0" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+            <div class="z-bg-primary-container z-rounded-xs" style="width:var(--zk-spacing-0);height:14px"/>
+            <label value="0px" sclass="z-text-sm z-text-secondary"/>
+
+            <label value="1" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+            <div class="z-bg-primary-container z-rounded-xs" style="width:var(--zk-spacing-1);height:14px"/>
+            <label value="4px" sclass="z-text-sm z-text-secondary"/>
+
+            <label value="2" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+            <div class="z-bg-primary-container z-rounded-xs" style="width:var(--zk-spacing-2);height:14px"/>
+            <label value="8px" sclass="z-text-sm z-text-secondary"/>
+
+            <label value="3" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+            <div class="z-bg-primary-container z-rounded-xs" style="width:var(--zk-spacing-3);height:14px"/>
+            <label value="12px" sclass="z-text-sm z-text-secondary"/>
+
+            <label value="4" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+            <div class="z-bg-primary-container z-rounded-xs" style="width:var(--zk-spacing-4);height:14px"/>
+            <label value="16px" sclass="z-text-sm z-text-secondary"/>
+
+            <label value="5" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+            <div class="z-bg-primary-container z-rounded-xs" style="width:var(--zk-spacing-5);height:14px"/>
+            <label value="20px" sclass="z-text-sm z-text-secondary"/>
+
+            <label value="6" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+            <div class="z-bg-primary-container z-rounded-xs" style="width:var(--zk-spacing-6);height:14px"/>
+            <label value="24px" sclass="z-text-sm z-text-secondary"/>
+
+            <label value="8" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+            <div class="z-bg-primary-container z-rounded-xs" style="width:var(--zk-spacing-8);height:14px"/>
+            <label value="32px" sclass="z-text-sm z-text-secondary"/>
+        </div>
+        <label value="Larger steps follow the same grid: 7 = 28px · 10 = 40px · 12 = 48px · 16 = 64px."
+               sclass="z-d-block z-text-secondary z-text-xs z-mt-3"/>
+    </div>
+
+    <!-- Class naming legend -->
+    <div sclass="z-paper">
+        <label value="Class Naming" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-1"/>
+        <label value="A spacing class reads as property + side + step. The side letter chooses which edges the step applies to — the same letters work for both padding (z-p…) and margin (z-m…)."
+               sclass="z-d-block z-text-secondary z-text-sm z-mb-3"/>
+
+        <div sclass="z-d-flex z-gap-6 z-flex-wrap">
+            <!-- Property prefix -->
+            <div>
+                <label value="Property" sclass="z-d-block z-text-secondary z-text-xs z-fw-medium z-mb-2"/>
+                <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline">
+                    <label value="z-p-" sclass="z-text-sm z-fw-medium z-text-primary z-text-nowrap"/>
+                    <label value="padding" sclass="z-text-sm z-text-secondary"/>
+                    <label value="z-m-" sclass="z-text-sm z-fw-medium z-text-primary z-text-nowrap"/>
+                    <label value="margin" sclass="z-text-sm z-text-secondary"/>
+                </div>
+            </div>
+
+            <!-- Side letter -->
+            <div>
+                <label value="Side" sclass="z-d-block z-text-secondary z-text-xs z-fw-medium z-mb-2"/>
+                <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline">
+                    <label value="(none)" sclass="z-text-sm z-fw-medium z-text-on-surface z-text-nowrap"/>
+                    <label value="all four sides" sclass="z-text-sm z-text-secondary"/>
+                    <label value="x" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+                    <label value="horizontal — left + right" sclass="z-text-sm z-text-secondary"/>
+                    <label value="y" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+                    <label value="vertical — top + bottom" sclass="z-text-sm z-text-secondary"/>
+                    <label value="t" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+                    <label value="top" sclass="z-text-sm z-text-secondary"/>
+                    <label value="b" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+                    <label value="bottom" sclass="z-text-sm z-text-secondary"/>
+                    <label value="s" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+                    <label value="inline-start — left (right in RTL)" sclass="z-text-sm z-text-secondary"/>
+                    <label value="e" sclass="z-text-sm z-fw-medium z-text-on-surface"/>
+                    <label value="inline-end — right (left in RTL)" sclass="z-text-sm z-text-secondary"/>
+                </div>
+            </div>
+        </div>
+
+        <div sclass="z-mt-4 z-pt-3" style="border-top:1px solid var(--zk-color-outline-variant)">
+            <label value="Read an example:" sclass="z-d-block z-text-secondary z-text-xs z-fw-medium z-mb-2"/>
+            <div sclass="z-d-flex z-gap-6 z-flex-wrap">
+                <label value="z-px-4  →  padding · horizontal · step 4 = 16px" sclass="z-text-sm z-text-secondary"/>
+                <label value="z-mt-2  →  margin · top · step 2 = 8px" sclass="z-text-sm z-text-secondary"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- Padding -->
+    <div sclass="z-paper">
+        <label value="Padding" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-4 z-flex-wrap">
+            <div style="text-align:center">
+                <div class="z-bg-secondary-container z-rounded-xs z-d-inline-block"><div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-p-4"><label sclass="z-text-xs z-fw-medium" value="z-p-4"/></div></div>
+                <label value="all sides" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+            </div>
+            <div style="text-align:center">
+                <div class="z-bg-secondary-container z-rounded-xs z-d-inline-block"><div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-px-6 z-py-1"><label sclass="z-text-xs z-fw-medium" value="z-px-6 z-py-1"/></div></div>
+                <label value="horizontal / vertical" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+            </div>
+            <div style="text-align:center">
+                <div class="z-bg-secondary-container z-rounded-xs z-d-inline-block"><div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-pt-6 z-pb-1 z-px-3"><label sclass="z-text-xs z-fw-medium" value="z-pt-6 z-pb-1"/></div></div>
+                <label value="top / bottom" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+            </div>
+            <div style="text-align:center">
+                <div class="z-bg-secondary-container z-rounded-xs z-d-inline-block"><div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-ps-6 z-pe-2 z-py-2"><label sclass="z-text-xs z-fw-medium" value="z-ps-6 z-pe-2"/></div></div>
+                <label value="inline-start / end" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+            </div>
+        </div>
+        <label value="The outer tint shows the element's box; the inner block is its content. The gap between them is the padding."
+               sclass="z-d-block z-text-secondary z-text-xs z-mt-3"/>
+    </div>
+
+    <!-- Margin -->
+    <div sclass="z-paper">
+        <label value="Margin" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <label value="Each box has the utility class applied — the gap between boxes shows the margin." sclass="z-text-secondary z-text-sm z-mb-3"/>
+        <div sclass="z-bg-surface-variant z-p-2 z-rounded-md" style="display:inline-block">
+            <div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap" style="display:inline-block;padding:8px 12px"><label sclass="z-text-xs z-fw-medium" value="z-mt-0"/></div>
+            <div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-mt-4" style="display:inline-block;padding:8px 12px"><label sclass="z-text-xs z-fw-medium" value="z-mt-4"/></div>
+            <div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-mt-8" style="display:inline-block;padding:8px 12px"><label sclass="z-text-xs z-fw-medium" value="z-mt-8"/></div>
+        </div>
+        <div sclass="z-mt-4 z-bg-surface-variant z-p-2 z-rounded-md z-d-flex">
+            <div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-me-0" style="padding:8px 12px"><label sclass="z-text-xs z-fw-medium" value="z-me-0"/></div>
+            <div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-ms-4" style="padding:8px 12px"><label sclass="z-text-xs z-fw-medium" value="z-ms-4"/></div>
+            <div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-ms-8" style="padding:8px 12px"><label sclass="z-text-xs z-fw-medium" value="z-ms-8"/></div>
+        </div>
+        <div sclass="z-mt-4">
+            <div sclass="z-bg-primary-container z-rounded-xs z-text-nowrap z-mx-auto" style="padding:8px 12px;display:block;width:fit-content"><label sclass="z-text-xs z-fw-medium" value="z-mx-auto (centered)"/></div>
+        </div>
+    </div>
+
+</vlayout>
+</zk>

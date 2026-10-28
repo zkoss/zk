@@ -1,0 +1,69 @@
+/* MD3 Motion Tokens — --zk-motion-* */
+:root {
+    /* Duration — MD3 canonical ladder (monotonic, see md.sys.motion.duration) */
+    --zk-motion-duration-short1: 50ms;
+    --zk-motion-duration-short2: 100ms;
+    --zk-motion-duration-short3: 150ms;
+    --zk-motion-duration-short4: 200ms;
+    --zk-motion-duration-medium1: 250ms;
+    --zk-motion-duration-medium2: 300ms;
+    --zk-motion-duration-medium3: 350ms;
+    --zk-motion-duration-medium4: 400ms;
+    --zk-motion-duration-long1: 450ms;
+    --zk-motion-duration-long2: 500ms;
+    --zk-motion-duration-long3: 550ms;
+    --zk-motion-duration-long4: 600ms;
+
+    /* Standard transition duration — the theme's de-facto workhorse (state
+       layers, hovers, simple fades). Equals medium1 (250ms). Named separately
+       so the short1–4 ladder can stay true to MD3 instead of being bent to
+       250ms. Was previously the (non-monotonic) short3=250ms. */
+    --zk-motion-duration-standard: var(--zk-motion-duration-medium1);
+
+    /* Easing */
+    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --zk-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+    --zk-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+    --zk-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+    --zk-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+    --zk-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+    --zk-motion-easing-legacy: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Transition presets */
+    /* State-layer fade — the shared transition on every component's overlay
+       `::before` (hover/focus/pressed opacity). Composed from the primitives
+       above so the whole family fades in lockstep. Controls that need a faster
+       fade (checkbox/radio, short2) keep their own transition. */
+    --zk-state-layer-transition: opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* ---------------------------------------------------------------------------
+ * FEATURE: prefers-reduced-motion (a11y) — implemented 2026-06-29
+ *
+ * Honors the OS "reduce motion" setting (WCAG 2.1 SC 2.3.3, Animation from
+ * Interactions): when active, neutralize CSS transitions/animations theme-wide.
+ * Uses the canonical universal-reset shape (same as Bootstrap ships) rather than
+ * only zeroing the --zk-motion-duration-* tokens — the universal rule also
+ * catches hardcoded durations AND @keyframes animations (e.g. the tablet
+ * bottom-sheet slide-up), which token-zeroing alone would miss.
+ *
+ * Why 1ms / iteration-count:1 (not 0s / none): a near-zero (non-zero) duration
+ * still fires `transitionend`/`animationend`, so ZK widgets that await those
+ * events don't hang; capping iteration-count stops infinite loops (spinners,
+ * indeterminate progress). 1ms — not the more common 0.01ms — because CleanCSS
+ * rounds sub-millisecond values down to `0s` at build time, and a `0s`
+ * transition fires no end event (the very hang we're avoiding).
+ *
+ * Scope limit: CSS motion only. ZK's JS-driven slide/fade effects (some popup
+ * open/close) are not CSS animations and are unaffected here.
+ *
+ * Spec: doc/spec/DESIGN.md §9 (Motion → Reduced motion).
+ * ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}

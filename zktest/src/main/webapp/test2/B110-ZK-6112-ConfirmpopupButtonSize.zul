@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-ConfirmpopupButtonSize.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Tue Oct 13 2026, Created for ZK-6112 (ZK-6164).
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Open the confirmpopup: its OK and Cancel must be as tall as the plain button.
+	</label>
+	<hlayout spacing="24px" valign="middle">
+		<button id="plain" label="Plain button"/>
+		<button id="opener" label="Open confirmpopup" onClick="pc.open(self)"/>
+	</hlayout>
+	<confirmpopup id="pc" severity="info" title="Publish changes"
+				  message="Make these changes visible to everyone?"/>
+</zk>

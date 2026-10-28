@@ -1,0 +1,93 @@
+<?page title="Biglistbox" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8" style="height:100vh;display:flex;flex-direction:column;">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Biglistbox"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="oddRowSclass Striping"/></div>
+        <div sclass="z-py-3">
+            <div sclass="z-mb-2"><label sclass="z-text-xs z-text-secondary" value="oddRowSclass=&quot;z-biglistbox-odd&quot; (5 rows)"/></div>
+            <zscript>
+                import zk.example.FakerMatrixModel;
+                FakerMatrixModel stripedModel = new FakerMatrixModel(5, 5);
+            </zscript>
+            <biglistbox id="stripedBiglist" oddRowSclass="z-biglistbox-odd"
+                        model="${stripedModel}"
+                        hflex="1" height="200px" colWidth="130px">
+                <template name="heads">
+                    <html><![CDATA[<div>${each[matrixInfo[0]]}</div>]]></html>
+                </template>
+                <template name="rows">
+                    <html><![CDATA[<div>${each[matrixInfo[0]]}</div>]]></html>
+                </template>
+            </biglistbox>
+        </div>
+    </div>
+
+    <div sclass="z-mb-4">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Controls"/></div>
+        <vlayout apply="zk.example.BiglistboxComposer">
+            <vlayout>
+                <hlayout valign="bottom">
+                    Change Models:
+                    <selectbox id="modelBox">
+                        <template name="model">${each.x}</template>
+                    </selectbox>
+                    Change V/Hflex:
+                    <radiogroup onCheck="biglist.vflex = biglist.hflex= self.selectedItem.label; biglist.invalidate();">
+                        <radio label="1" checked="true"/>
+                        <radio label="min"/>
+                    </radiogroup>
+                </hlayout>
+                <hlayout valign="bottom">
+                    Change fixForzenCols:
+                    <radiogroup onCheck='biglist.fixFrozenCols = self.selectedItem.label.equals("Enable") '>
+                        <radio label="Disable" checked="true"/>
+                        <radio label="Enable"/>
+                    </radiogroup>
+                    Change frozenCols:
+                    <selectbox id="frozenColsBox"/>
+                    Change cols:
+                    <selectbox id="colsSizeBox" />
+                    Change rows:
+                    <selectbox id="rowsSizeBox"/>
+                </hlayout>
+                <hlayout valign="bottom">
+                    Invalidate should look the same as before: <button label="invalidate" onClick="biglist.invalidate()"/>
+                </hlayout>
+            </vlayout>
+            <biglistbox id="biglist" hflex="1" height="500px" colWidth="130px" sortAscending="${ascCmpr}" sortDescending="${dscCmpr}">
+                <template name="heads">
+                    <html><![CDATA[
+                        <div title="x=${matrixInfo[0]},y=${matrixInfo[1]}">${each[matrixInfo[0]]}</div>
+                    ]]></html>
+                </template>
+                <template name="rows">
+                    <html><![CDATA[
+                        <div title="x=${matrixInfo[0]},y=${matrixInfo[1]}">${each[matrixInfo[0]]}</div>
+                    ]]></html>
+                </template>
+            </biglistbox>
+        </vlayout>
+    </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="frozenCols (Frozen Columns)"/></div>
+        <div sclass="z-py-3">
+            <div sclass="z-mb-2"><label sclass="z-text-xs z-text-secondary" value="frozenCols=&quot;2&quot; (5 rows)"/></div>
+            <zscript>
+                FakerMatrixModel frozenModel = new FakerMatrixModel(5, 5);
+            </zscript>
+            <biglistbox id="frozenBiglist" frozenCols="2"
+                        model="${frozenModel}"
+                        hflex="1" height="200px" colWidth="130px">
+                <template name="heads">
+                    <html><![CDATA[<div>${each[matrixInfo[0]]}</div>]]></html>
+                </template>
+                <template name="rows">
+                    <html><![CDATA[<div>${each[matrixInfo[0]]}</div>]]></html>
+                </template>
+            </biglistbox>
+        </div>
+    </div>
+</div>
+</zk>

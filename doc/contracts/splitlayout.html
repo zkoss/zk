@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — splitlayout</title>
+<!--
+  Self-contained marble design contract mockup for: splitlayout
+  ZK version: 10.2.1-jakarta
+  tier: T1
+  closest-sibling: splitter (bar sub-element only)
+
+  Opens in any browser without a server. No external CSS. No JS.
+  All design values use --zk-* tokens only.
+  Class names match .claude/skills/zk-component-rules/components/splitlayout.md DOM tree.
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-tertiary: #7e73d6;
+    --zk-color-error: #d32f2f;
+    --zk-color-warning: #f57c00;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #e8eef7;
+    --zk-color-surface-container-high: #e0e8f4;
+
+    /* Outline / dividers */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-body-medium-size: 14px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-title-medium-size: 16px;
+
+    /* Elevation */
+    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+
+    /* Motion */
+    --zk-motion-duration-short1: 100ms;
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-duration-short3: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+    --zk-motion-easing-legacy: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout — NOT part of component contract)
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: center;
+}
+.state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: 500;
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+}
+.state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+.pane-label {
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface-variant);
+    padding: var(--zk-spacing-3);
+    background: var(--zk-color-surface-variant);
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   splitlayout component styles — marble contract
+   All design values use --zk-* tokens only.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Root container */
+.z-splitlayout {
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Cave elements — vertical orient (stacked) */
+.z-splitlayout-cave-top,
+.z-splitlayout-cave-bottom {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: block;
+}
+
+/* Cave elements — horizontal orient (side-by-side) */
+.z-splitlayout-cave-left,
+.z-splitlayout-cave-right {
+    height: 100%;
+    display: inline-block;
+    position: relative;
+    white-space: normal;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+/* Splitter bar — base */
+.z-splitlayout-splitter {
+    background-color: var(--zk-color-surface-container);
+    border: none;
+    cursor: default;
+    transition:
+        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy);
+}
+
+/* Splitter bar — hover state */
+.z-splitlayout-splitter:hover {
+    background-color: color-mix(
+        in srgb,
+        var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%),
+        var(--zk-color-surface-container)
+    );
+}
+
+/* Splitter bar — vertical orient (horizontal bar, full width) */
+.z-splitlayout-splitter-vertical {
+    width: 100%;
+    height: var(--zk-spacing-2);
+    max-height: var(--zk-spacing-2);
+    padding: 0;
+    border-width: 1px 0;
+    overflow: hidden;
+}
+
+/* Splitter bar — horizontal orient (vertical bar, full height) */
+.z-splitlayout-splitter-horizontal {
+    display: inline-block;
+    width: var(--zk-spacing-2);
+    height: 100%;
+    max-width: var(--zk-spacing-2);
+    padding: 0;
+    margin: 0;
+    border-width: 0 1px;
+    overflow: hidden;
+}
+
+/* Drag affordance cursors */
+.z-splitlayout-splitter-draggable.z-splitlayout-splitter-vertical {
+    cursor: row-resize;
+}
+.z-splitlayout-splitter-draggable.z-splitlayout-splitter-horizontal {
+    cursor: col-resize;
+}
+
+/* No-drag state */
+.z-splitlayout-splitter-nosplitter {
+    cursor: default;
+}
+
+/* Collapse button — DESIGN.md §14 actuator pill (revised 2026-06-04, family unification) */
+.z-splitlayout-splitter-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: relative;
+    vertical-align: top;
+    background-color: var(--zk-color-outline-variant);
+    border: none;
+    border-radius: var(--zk-shape-corner-full);
+    box-shadow: none;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    transition:
+        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy),
+        color var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy);
+}
+
+/* Pill hover: primary fill, on-primary icons (DESIGN.md §14) */
+.z-splitlayout-splitter-button:hover {
+    background-color: var(--zk-color-primary);
+    color: var(--zk-color-on-primary);
+}
+
+/* Collapse button — disabled (no collapse configured) */
+.z-splitlayout-splitter-button-disabled {
+    border: 0;
+}
+
+/* Pill inside vertical splitter (horizontal bar): 28×8, row layout */
+.z-splitlayout-splitter-vertical > .z-splitlayout-splitter-button {
+    flex-direction: row;
+    width: 28px;
+    height: 8px;
+}
+
+/* Pill inside horizontal splitter (vertical bar): 8×28, column layout */
+.z-splitlayout-splitter-horizontal > .z-splitlayout-splitter-button {
+    flex-direction: column;
+    width: 8px;
+    height: 28px;
+}
+
+/* Splitter icons — grips 8px always visible; caret hidden at idle (DESIGN.md §14) */
+.z-splitlayout-splitter-icon {
+    font-size: 8px;
+    line-height: 1;
+}
+.z-splitlayout-splitter-icon[class*="z-icon-caret"] {
+    opacity: 0;
+    transition: opacity var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy);
+}
+.z-splitlayout-splitter-button:hover .z-splitlayout-splitter-icon[class*="z-icon-caret"] {
+    opacity: 1;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup helper: simulate hover with a utility class for static preview
+   ──────────────────────────────────────────────────────────────────────── */
+.is-hover {
+    background-color: color-mix(
+        in srgb,
+        var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%),
+        var(--zk-color-surface-container)
+    ) !important;
+}
+/* Pill-hover demo helper (pill states are on the button itself, not the bar) */
+.is-hover-btn {
+    background-color: var(--zk-color-primary) !important;
+    color: var(--zk-color-on-primary) !important;
+}
+.is-hover-btn .z-splitlayout-splitter-icon[class*="z-icon-caret"] {
+    opacity: 1 !important;
+}
+
+/* Mockup layout helpers */
+.split-demo {
+    width: 100%;
+    height: 120px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.split-demo-h {
+    flex-direction: row;
+}
+.split-demo-cave {
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+</head>
+<body>
+
+<h1>splitlayout — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T1</span>
+    <span>closest-sibling: splitter (bar only)</span>
+    <span>edition: EE</span>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     VERTICAL ORIENT (top/bottom caves, horizontal bar)
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Vertical orient (orient="vertical")</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default<br>resizable, no-collapse</div>
+        <div class="state-cell">
+            <div class="split-demo">
+                <div class="z-splitlayout-cave-top split-demo-cave" style="height:50px">
+                    <div class="pane-label">Pane top</div>
+                </div>
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-vertical z-splitlayout-splitter-draggable">
+                    <span class="z-splitlayout-splitter-button z-splitlayout-splitter-button-disabled">
+                        <!-- no collapse icon when collapse=none -->
+                    </span>
+                </div>
+                <div class="z-splitlayout-cave-bottom split-demo-cave" style="height:50px">
+                    <div class="pane-label">Pane bottom</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">hover</div>
+        <div class="state-cell">
+            <div class="split-demo">
+                <div class="z-splitlayout-cave-top split-demo-cave" style="height:50px">
+                    <div class="pane-label">Pane top</div>
+                </div>
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-vertical z-splitlayout-splitter-draggable is-hover">
+                    <span class="z-splitlayout-splitter-button z-splitlayout-splitter-button-disabled">
+                        <!-- hover bg tint via is-hover helper -->
+                    </span>
+                </div>
+                <div class="z-splitlayout-cave-bottom split-demo-cave" style="height:50px">
+                    <div class="pane-label">Pane bottom</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">collapse="before"<br>(caret visible)</div>
+        <div class="state-cell">
+            <div class="split-demo">
+                <div class="z-splitlayout-cave-top split-demo-cave" style="height:50px">
+                    <div class="pane-label">Pane top</div>
+                </div>
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-vertical z-splitlayout-splitter-draggable">
+                    <span class="z-splitlayout-splitter-button">
+                        <i class="z-splitlayout-splitter-icon z-icon-ellipsis-h" aria-hidden="true">&#8942;</i>
+                        <i id="splitter-icon-demo" class="z-splitlayout-splitter-icon z-icon-caret-up" aria-hidden="true">&#9650;</i>
+                        <i class="z-splitlayout-splitter-icon z-icon-ellipsis-h" aria-hidden="true">&#8942;</i>
+                    </span>
+                </div>
+                <div class="z-splitlayout-cave-bottom split-demo-cave" style="height:50px">
+                    <div class="pane-label">Pane bottom</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">collapsed<br>(top pane hidden)</div>
+        <div class="state-cell">
+            <div class="split-demo">
+                <div class="z-splitlayout-cave-top split-demo-cave" style="display:none">
+                    <!-- hidden by JS inline style -->
+                </div>
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-vertical z-splitlayout-splitter-draggable">
+                    <span class="z-splitlayout-splitter-button">
+                        <i class="z-splitlayout-splitter-icon z-icon-ellipsis-h" aria-hidden="true">&#8942;</i>
+                        <i class="z-splitlayout-splitter-icon z-icon-caret-down" aria-hidden="true">&#9660;</i>
+                        <i class="z-splitlayout-splitter-icon z-icon-ellipsis-h" aria-hidden="true">&#8942;</i>
+                    </span>
+                </div>
+                <div class="z-splitlayout-cave-bottom split-demo-cave" style="height:100px">
+                    <div class="pane-label">Bottom expanded (top collapsed)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">resizable=false<br>(no-drag)</div>
+        <div class="state-cell">
+            <div class="split-demo">
+                <div class="z-splitlayout-cave-top split-demo-cave" style="height:50px">
+                    <div class="pane-label">Pane top</div>
+                </div>
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-vertical z-splitlayout-splitter-nosplitter">
+                    <span class="z-splitlayout-splitter-button z-splitlayout-splitter-button-disabled">
+                        <!-- no icons, no collapse -->
+                    </span>
+                </div>
+                <div class="z-splitlayout-cave-bottom split-demo-cave" style="height:50px">
+                    <div class="pane-label">Pane bottom</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     HORIZONTAL ORIENT (left/right caves, vertical bar)
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Horizontal orient (orient="horizontal")</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default<br>resizable, no-collapse</div>
+        <div class="state-cell">
+            <div class="split-demo split-demo-h" style="height:100px">
+                <div class="z-splitlayout-cave-left split-demo-cave" style="width:45%">
+                    <div class="pane-label">Pane left</div>
+                </div>
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-horizontal z-splitlayout-splitter-draggable" style="height:100%">
+                    <span class="z-splitlayout-splitter-button z-splitlayout-splitter-button-disabled">
+                    </span>
+                </div>
+                <div class="z-splitlayout-cave-right split-demo-cave" style="flex:1">
+                    <div class="pane-label">Pane right</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">hover</div>
+        <div class="state-cell">
+            <div class="split-demo split-demo-h" style="height:100px">
+                <div class="z-splitlayout-cave-left split-demo-cave" style="width:45%">
+                    <div class="pane-label">Pane left</div>
+                </div>
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-horizontal z-splitlayout-splitter-draggable is-hover" style="height:100%">
+                    <span class="z-splitlayout-splitter-button z-splitlayout-splitter-button-disabled">
+                    </span>
+                </div>
+                <div class="z-splitlayout-cave-right split-demo-cave" style="flex:1">
+                    <div class="pane-label">Pane right</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">collapse="after"<br>(right collapses)</div>
+        <div class="state-cell">
+            <div class="split-demo split-demo-h" style="height:100px">
+                <div class="z-splitlayout-cave-left split-demo-cave" style="flex:1">
+                    <div class="pane-label">Pane left (expanded)</div>
+                </div>
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-horizontal z-splitlayout-splitter-draggable" style="height:100%">
+                    <span class="z-splitlayout-splitter-button">
+                        <i class="z-splitlayout-splitter-icon z-icon-ellipsis-v" aria-hidden="true">&#8285;</i>
+                        <i class="z-splitlayout-splitter-icon z-icon-caret-right" aria-hidden="true">&#9654;</i>
+                        <i class="z-splitlayout-splitter-icon z-icon-ellipsis-v" aria-hidden="true">&#8285;</i>
+                    </span>
+                </div>
+                <div class="z-splitlayout-cave-right split-demo-cave" style="display:none">
+                    <!-- collapsed -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     NESTED (outer vertical → inner horizontal)
+     Mirrors the preview page splitlayout.zul structure
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Nested — outer vertical + inner horizontal (preview page pattern)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">3-pane nested</div>
+        <div class="state-cell">
+            <!-- Outer vertical splitlayout -->
+            <div class="z-splitlayout" style="height:200px;white-space:nowrap;overflow:hidden;display:block">
+                <!-- Cave top (Pane 1) -->
+                <div class="z-splitlayout-cave-top" style="height:80px;position:relative;width:100%;overflow:hidden;display:block">
+                    <div class="pane-label" style="height:100%;display:flex;align-items:center;justify-content:center">Pane 1 (top)</div>
+                </div>
+                <!-- Outer vertical splitter bar -->
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-vertical z-splitlayout-splitter-draggable">
+                    <span class="z-splitlayout-splitter-button">
+                        <i aria-hidden="true">&#8942;</i>
+                        <i aria-hidden="true">&#9660;</i>
+                        <i aria-hidden="true">&#8942;</i>
+                    </span>
+                </div>
+                <!-- Cave bottom (inner horizontal splitlayout) -->
+                <div class="z-splitlayout-cave-bottom" style="height:104px;position:relative;width:100%;overflow:hidden;display:block">
+                    <!-- Inner horizontal splitlayout -->
+                    <div class="z-splitlayout" style="height:100%;white-space:nowrap;overflow:hidden;display:block">
+                        <div class="z-splitlayout-cave-left" style="width:calc(50% - 4px);height:100%;display:inline-block;position:relative;white-space:normal;vertical-align:top;overflow:hidden">
+                            <div class="pane-label" style="height:100%;display:flex;align-items:center;justify-content:center">Pane 2 (left)</div>
+                        </div>
+                        <div class="z-splitlayout-splitter z-splitlayout-splitter-horizontal z-splitlayout-splitter-draggable" style="height:100%">
+                            <span class="z-splitlayout-splitter-button z-splitlayout-splitter-button-disabled"></span>
+                        </div>
+                        <div class="z-splitlayout-cave-right" style="width:calc(50% - 4px);height:100%;display:inline-block;position:relative;white-space:normal;vertical-align:top;overflow:hidden">
+                            <div class="pane-label" style="height:100%;display:flex;align-items:center;justify-content:center">Pane 3 (right)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     DRAG GHOST (shared .z-splitter-ghost — appended to body during drag)
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Drag ghost (appended to body during drag — .z-splitter-ghost)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">ghost (vertical)</div>
+        <div class="state-cell">
+            <div style="position:relative;height:60px;background:var(--zk-color-surface-variant);border-radius:4px;overflow:hidden">
+                <!-- Simulated ghost: full-width horizontal bar -->
+                <div class="z-splitter-ghost" style="
+                    position:absolute;
+                    top:28px;left:0;right:0;
+                    height:var(--zk-spacing-2);
+                    background:color-mix(in srgb, var(--zk-color-primary) 30%, transparent);
+                    border:1px dashed var(--zk-color-primary);
+                "></div>
+                <div style="padding:var(--zk-spacing-3);font-size:var(--zk-typescale-body-small-size);color:var(--zk-color-on-surface-variant)">ghost shows during drag — primary tint indicator</div>
+            </div>
+        </div>
+
+        <div class="state-label">ghost (horizontal)</div>
+        <div class="state-cell">
+            <div style="position:relative;height:60px;background:var(--zk-color-surface-variant);border-radius:4px;overflow:hidden">
+                <div class="z-splitter-ghost" style="
+                    position:absolute;
+                    left:48px;top:0;bottom:0;
+                    width:var(--zk-spacing-2);
+                    background:color-mix(in srgb, var(--zk-color-primary) 30%, transparent);
+                    border:1px dashed var(--zk-color-primary);
+                "></div>
+                <div style="padding:var(--zk-spacing-3);font-size:var(--zk-typescale-body-small-size);color:var(--zk-color-on-surface-variant)">ghost shows during drag</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

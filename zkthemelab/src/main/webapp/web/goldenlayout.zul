@@ -1,0 +1,35 @@
+<?page title="Goldenlayout" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Goldenlayout"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Area attribute"/></div>
+        <div sclass="z-py-3">
+            <goldenlayout hflex="1" height="420px" orient="vertical">
+                <attribute name="areas">
+                    A B C
+                    A B C
+                    D D D
+                </attribute>
+                <goldenpanel area="A" title="Project" closable="false">Project panel</goldenpanel>
+                <goldenpanel area="A" title="Files">Files panel</goldenpanel>
+                <goldenpanel area="B" title="Main" droppable="false">Main panel</goldenpanel>
+                <goldenpanel area="C" title="Side">Side panel</goldenpanel>
+                <goldenpanel area="D" title="Console" draggable="true">Console panel</goldenpanel>
+            </goldenlayout>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Closable Tabs (closable=&quot;true&quot; on all panels)"/></div>
+        <div sclass="z-py-3">
+            <goldenlayout hflex="1" height="300px" orient="horizontal">
+                <goldenpanel title="Alpha" closable="true">Alpha content</goldenpanel>
+                <goldenpanel title="Beta" closable="true">Beta content</goldenpanel>
+                <goldenpanel title="Gamma" closable="true">Gamma content</goldenpanel>
+            </goldenlayout>
+        </div>
+    </div>
+</div>
+</zk>

@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — breadcrumb</title>
+<!--
+  Self-contained marble design contract mockup for `breadcrumb` / `breadcrumbitem`.
+  No ZKDoc canonical image exists for this component (new in ZK 10.4.0), so this file
+  IS the visual ground truth per doc/contracts/breadcrumb.md's mockup-needed: Y decision.
+
+  Class names in the markup match the DOM tree in
+  .claude/skills/zk-component-rules/components/breadcrumb.md exactly.
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    --zk-state-disabled-opacity: 0.38;
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Typography */
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-medium-line-height: 20px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Motion */
+    --zk-motion-duration-standard: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Focus ring (global convention, not a breadcrumb knob) */
+    --zk-focus-ring: 2px solid var(--zk-color-primary);
+
+    /* ── Component Theme Variables — breadcrumb ── */
+    --zk-breadcrumb-fg: var(--zk-color-on-surface-variant);
+    --zk-breadcrumb-fg-hover: var(--zk-color-on-surface);
+    --zk-breadcrumb-current-fg: var(--zk-color-on-surface);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout, NOT part of the component contract).
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: 12px;
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: center;
+}
+.matrix-grid .state-label {
+    font-size: 12px;
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: 8px;
+    border: 1px solid var(--zk-color-outline-variant);
+    overflow: auto;
+}
+.hint { font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1); }
+
+/* ────────────────────────────────────────────────────────────────────────
+   Component styles — the actual contract, tokens only.
+   ──────────────────────────────────────────────────────────────────────── */
+.z-breadcrumb {
+    display: inline-block;
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    color: var(--zk-breadcrumb-fg);
+}
+.z-breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.z-breadcrumb-separator {
+    margin: 0 var(--zk-spacing-2);
+    color: var(--zk-breadcrumb-fg);
+    user-select: none;
+    display: flex;
+    align-items: center;
+}
+.z-breadcrumb-separator i {
+    width: 14px;
+    height: 14px;
+    background: currentColor;
+    /* mockup stand-in for the mask-image chevron icon */
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E");
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    display: inline-block;
+}
+
+.z-breadcrumbitem > a {
+    color: var(--zk-breadcrumb-fg);
+    text-decoration: none;
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+.z-breadcrumbitem > a:hover {
+    color: var(--zk-breadcrumb-fg-hover);
+    text-decoration: underline;
+}
+.z-breadcrumbitem > a:focus-visible,
+.z-breadcrumbitem > span[tabindex]:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+.z-breadcrumbitem > span {
+    color: var(--zk-breadcrumb-current-fg);
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+.z-breadcrumbitem-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+}
+
+.z-breadcrumb-ellipsis {
+    margin: 0 var(--zk-spacing-1);
+    color: var(--zk-breadcrumb-fg);
+    user-select: none;
+}
+.z-breadcrumb-ellipsis > button {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+.z-breadcrumb-ellipsis > button:hover,
+.z-breadcrumb-ellipsis > button:focus-visible {
+    color: var(--zk-breadcrumb-fg-hover);
+}
+.z-breadcrumb-ellipsis > button:focus-visible {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* [data-zk-bc-hidden] is a structural (skill-level) rule, included here only so the
+   "collapsed" matrix cell below renders correctly as a static mockup. */
+[data-zk-bc-hidden="true"] { display: none; }
+</style>
+</head>
+<body>
+
+<h1>breadcrumb — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.4.0-jakarta</span>
+    <span>tier: T1</span>
+    <span>closest-sibling: none (parts: a, paging)</span>
+</div>
+
+<section class="matrix-section">
+    <h2>Default trail (link items + terminal item)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><a href="#">Products</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><a href="#">Category</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page</span></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="state-label">link-hover</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><a href="#" class="mock-hover">Products</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page</span></li>
+                </ol>
+            </nav>
+            <div class="hint">"Products" simulated via .mock-hover below (real state is :hover)</div>
+        </div>
+
+        <div class="state-label">link-focus-visible</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><a href="#" class="mock-focus">Products</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page</span></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="state-label">current-item</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page (no href — always a span)</span></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="state-label">disabled-item</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem z-breadcrumbitem-disabled"><span tabindex="-1">Disabled Step</span></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page</span></li>
+                </ol>
+            </nav>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Icon separator variant (separator="icon:z-icon-chevron-right")</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator"><i aria-hidden="true"></i></li>
+                    <li class="z-breadcrumbitem"><a href="#">Products</a></li>
+                    <li class="z-breadcrumb-separator"><i aria-hidden="true"></i></li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page</span></li>
+                </ol>
+            </nav>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Collapsed (maxItems exceeded — client-injected ellipsis)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">collapsed</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator" data-zk-bc-injected="sep">/</li>
+                    <li class="z-breadcrumb-ellipsis" data-zk-bc-injected="ellipsis"><button type="button">…</button></li>
+                    <!-- the following two items + their leading separators are the
+                         client-hidden middle range; left in the DOM (not removed) so
+                         they can reappear on expand, per Breadcrumb.ts#_applyCollapse -->
+                    <li class="z-breadcrumb-separator" data-zk-bc-hidden="true">/</li>
+                    <li class="z-breadcrumbitem" data-zk-bc-hidden="true"><a href="#">Products</a></li>
+                    <li class="z-breadcrumb-separator" data-zk-bc-hidden="true">/</li>
+                    <li class="z-breadcrumbitem" data-zk-bc-hidden="true"><a href="#">Category</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page</span></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="state-label">ellipsis-hover</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator" data-zk-bc-injected="sep">/</li>
+                    <li class="z-breadcrumb-ellipsis" data-zk-bc-injected="ellipsis"><button type="button" class="mock-hover">…</button></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page</span></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="state-label">expanded</div>
+        <div class="state-cell">
+            <nav class="z-breadcrumb">
+                <ol class="z-breadcrumb-list">
+                    <li class="z-breadcrumbitem"><a href="#">Home</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><a href="#">Products</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><a href="#">Category</a></li>
+                    <li class="z-breadcrumb-separator">/</li>
+                    <li class="z-breadcrumbitem"><span tabindex="-1">Current Page</span></li>
+                </ol>
+            </nav>
+            <div class="hint">post ellipsis-click: injected nodes removed, no data-zk-bc-hidden remains</div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+/* Mockup-only static state simulation (NOT part of the component contract —
+   real states are :hover / :focus-visible, simulated here only because this is
+   a static file with no JS). */
+.mock-hover { color: var(--zk-breadcrumb-fg-hover) !important; text-decoration: underline !important; }
+.mock-focus { color: var(--zk-breadcrumb-fg-hover) !important; outline: var(--zk-focus-ring); outline-offset: 2px; border-radius: 2px; }
+</style>
+
+</body>
+</html>

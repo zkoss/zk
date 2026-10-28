@@ -1,0 +1,34 @@
+<zk xmlns:h="native">
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Seeded value</h:span></h:div>
+    <h:div class="z-d-flex z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">Seeded value (content-fit)</label>
+            <timebox value="${sampleTime}"/>
+        </h:div>
+    </h:div>
+</h:div>
+
+<apply templateURI="~./pv/matrix.zul" title="States"
+       cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
+       rowsTemplate="timebox-rows">
+    <template name="timebox-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="With button"/></div>
+            <div><timebox/></div>
+            <div><timebox disabled="true"/></div>
+            <div><timebox readonly="true"/></div>
+            <div><timebox sclass="z-timebox-invalid"/></div>
+            <div><timebox inplace="true" value="${sampleTime}"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="No button"/></div>
+            <div><timebox buttonVisible="false"/></div>
+            <div><timebox buttonVisible="false" disabled="true"/></div>
+            <div><timebox buttonVisible="false" readonly="true"/></div>
+            <div><timebox buttonVisible="false" sclass="z-timebox-invalid"/></div>
+            <div><timebox buttonVisible="false" inplace="true" value="${sampleTime}"/></div>
+        </div>
+    </template>
+</apply>
+</zk>

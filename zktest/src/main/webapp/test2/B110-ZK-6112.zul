@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Fri Sep 11 2026, Created for ZK-6112.
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6112 Marble is the default theme (ZK 11). Open this page and inspect the stylesheet links in
+		the head: the reset stylesheet (zul/css/reset.css) must be linked immediately before the widget
+		bundle (zul/css/zk.wcs). With the library property org.zkoss.zul.theme.browserDefault=true the
+		link is zul/css/reset-embed.css instead, and reset.css is not linked. The button below must render
+		in the Marble style (rounded corners, Marble palette).
+	</label>
+	<button label="Marble button"/>
+</zk>

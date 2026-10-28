@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — stepbar</title>
+<!--
+  Self-contained marble design contract mockup for <stepbar>.
+
+  Renders the variants from src/test/resources/web/stepbar.zul:
+    - activeIndex=0 (basic — first step active, two upcoming)
+    - activeIndex=1 (first complete, second active, third upcoming)
+    - activeIndex=2 (first + second complete, third active)
+  Plus an extra row demonstrating the error state on a middle step.
+
+  Companion files:
+    Skill:    .claude/skills/zk-component-rules/components/stepbar.md
+    Contract:   doc/contracts/stepbar.md
+    Baseline: doc/contracts/baselines/stepbar-iceblue.png
+
+  Compare visually to the baseline; the structural DOM is identical.
+-->
+<style>
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-tertiary: #7e73d6;
+    --zk-color-error: #d32f2f;
+    --zk-color-on-error: #ffffff;
+    --zk-color-warning: #f57c00;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-medium-weight: 400;
+    --zk-typescale-body-medium-line-height: 20px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-label-large-weight: 500;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+    --zk-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+    --zk-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* Motion */
+    --zk-motion-duration-short1: 100ms;
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-duration-medium1: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section {
+    margin-bottom: var(--zk-spacing-8);
+}
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: center;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4) var(--zk-spacing-6);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   stepbar / step — design contract
+   Class names mirror the DOM tree declared in
+   .claude/skills/zk-component-rules/components/stepbar.md.
+   ──────────────────────────────────────────────────────────────────────── */
+
+.z-stepbar {
+    display: flex;
+    align-items: center;
+    padding: var(--zk-spacing-2) 0;
+    background: transparent;
+    font-family: var(--zk-typescale-font-family);
+    width: 600px;
+    max-width: 100%;
+}
+
+.z-step {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1 1 auto;
+    text-align: left;
+}
+
+.z-step:first-child {
+    flex: 0 1 auto;
+}
+
+/* Content wrapper — always present per mold/step.js. Hosts icon + title. */
+.z-step-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+}
+
+/* Connector line — pseudo-element on each .z-step except the first. */
+.z-step::before {
+    content: '';
+    flex: 1;
+    height: 2px;
+    margin: 0 var(--zk-spacing-3) 0 calc(-1 * var(--zk-spacing-3));
+    background-color: var(--zk-color-outline-variant);
+    transition: background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+.z-step:first-child::before {
+    display: none;
+}
+
+/* When a step is active or complete in linear mode, the connector LEADING
+   to it lights up to primary. */
+.z-stepbar-linear .z-step-active::before,
+.z-stepbar-linear .z-step-complete::before {
+    background-color: var(--zk-color-primary);
+}
+
+/* Icon — the circular marker. */
+.z-step-content > .z-step-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    transition:
+        background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
+        border-color     var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
+        color            var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+/* Upcoming: ring only, primary-colored border, transparent fill, no glyph. */
+.z-step .z-step-content > .z-step-icon-empty {
+    background-color: transparent;
+    border: 2px solid var(--zk-color-primary);
+    color: transparent;
+}
+
+/* Active: filled primary, on-primary glyph. */
+.z-step-active .z-step-content > .z-step-icon {
+    background-color: var(--zk-color-primary);
+    border: 2px solid var(--zk-color-primary);
+    color: var(--zk-color-on-primary);
+}
+
+/* Complete: filled primary with check glyph in on-primary. */
+.z-step-complete .z-step-content > .z-step-icon {
+    background-color: var(--zk-color-primary);
+    border: 2px solid var(--zk-color-primary);
+    color: var(--zk-color-on-primary);
+}
+
+/* Error: filled error, on-error glyph. */
+.z-step-error .z-step-content > .z-step-icon {
+    background-color: var(--zk-color-error);
+    border: 2px solid var(--zk-color-error);
+    color: var(--zk-color-on-error);
+}
+
+/* Title typography. */
+.z-step-content > .z-step-title {
+    font-size: var(--zk-typescale-body-medium-size);
+    font-weight: var(--zk-typescale-body-medium-weight);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    color: var(--zk-color-on-surface-variant);
+    white-space: nowrap;
+}
+
+.z-step-active .z-step-content > .z-step-title {
+    color: var(--zk-color-on-surface);
+    font-weight: var(--zk-typescale-label-large-weight);
+}
+
+.z-step-complete .z-step-content > .z-step-title {
+    color: var(--zk-color-on-surface-variant);
+}
+
+.z-step-error .z-step-content > .z-step-title {
+    color: var(--zk-color-error);
+}
+
+/* Non-linear mode: steps become clickable, surface a pointer cursor. */
+.z-stepbar:not(.z-stepbar-linear) .z-step {
+    cursor: pointer;
+}
+
+/* Vertical orientation — mirrors js/zkmax/wgt/css/stepbar.css.
+   Each .z-step is a COLUMN so the connector ::before stacks ABOVE the
+   content as a vertical stripe centred under the icon (not beside it). */
+.z-stepbar-vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    width: auto;
+}
+.z-stepbar-vertical .z-step {
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 0 1 auto;
+}
+.z-stepbar-vertical .z-step::before {
+    width: 2px;
+    height: auto;
+    min-height: var(--zk-spacing-6);
+    flex: 0 0 auto;
+    /* centre the 2px stripe under the 24px icon: (24 − 2) / 2 = 11px */
+    margin: 0 0 0 calc((24px - 2px) / 2);
+    align-self: auto;
+}
+.z-stepbar-vertical .z-step:first-child::before {
+    display: none;
+}
+.z-stepbar-vertical.z-stepbar-linear .z-step-active::before,
+.z-stepbar-vertical.z-stepbar-linear .z-step-complete::before {
+    background-color: var(--zk-color-primary);
+}
+
+/* Wrapped-label — mirrors js/zkmax/wgt/css/stepbar.css.
+   .z-step-content becomes a column (icon above title); the connector moves
+   to .z-step-content::before (left half) / ::after (right half), centred at
+   the circle's vertical midpoint and meeting at the step boundary. */
+.z-stepbar-wrapped-label {
+    align-items: flex-start; /* multi-line title must not shift icons/connectors */
+}
+.z-stepbar-wrapped-label .z-step {
+    flex: 1 1 0;
+}
+.z-stepbar-wrapped-label .z-step::before {
+    display: none;
+}
+.z-stepbar-wrapped-label .z-step-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    position: relative;
+}
+.z-stepbar-wrapped-label .z-step-content::before,
+.z-stepbar-wrapped-label .z-step-content::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    top: calc((24px - 2px) / 2); /* circle mid-height */
+    background-color: var(--zk-color-outline-variant);
+}
+.z-stepbar-wrapped-label .z-step-content::before {
+    left: 0;
+    right: calc(50% + 12px); /* to circle's left edge */
+}
+.z-stepbar-wrapped-label .z-step-content::after {
+    left: calc(50% + 12px); /* from circle's right edge */
+    right: 0;
+}
+.z-stepbar-wrapped-label .z-step:first-child .z-step-content::before,
+.z-stepbar-wrapped-label .z-step:last-child .z-step-content::after {
+    display: none;
+}
+.z-stepbar-wrapped-label.z-stepbar-linear .z-step-complete .z-step-content::before,
+.z-stepbar-wrapped-label.z-stepbar-linear .z-step-complete .z-step-content::after,
+.z-stepbar-wrapped-label.z-stepbar-linear .z-step-active .z-step-content::before {
+    background-color: var(--zk-color-primary);
+}
+.z-stepbar-wrapped-label .z-step-content > .z-step-title {
+    white-space: normal;
+    margin-top: var(--zk-spacing-2);
+}
+
+/* Glyph rendering — the contract does not depend on an icon font being
+   available, so we draw the check and exclamation as simple inline SVG
+   children of the icon node. The DOM is per mold/step.js:
+        <span class="z-step-icon z-icon-check"><svg .../></span>
+   wrapped inside <div class="z-step-content">. The SVG here just stands
+   in for the font-face glyph in the mockup. */
+.z-step-content > .z-step-icon svg {
+    width: 14px;
+    height: 14px;
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+</style>
+</head>
+<body>
+
+<h1>stepbar — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T3</span>
+    <span>closest-sibling: none (novel pattern)</span>
+</div>
+
+<section class="matrix-section">
+    <h2>Basic Stepbar — activeIndex=0</h2>
+    <div class="matrix-grid">
+        <div class="state-label">Active: first step</div>
+        <div class="state-cell">
+            <div class="z-stepbar z-stepbar-linear">
+                <div class="z-step z-step-active">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">First Step</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Second Step</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Third Step</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Active Index Variants</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Active: second step</div>
+        <div class="state-cell">
+            <div class="z-stepbar z-stepbar-linear">
+                <div class="z-step z-step-complete">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-icon-check">
+                            <svg viewBox="0 0 24 24"><polyline points="5,12 10,17 19,7"/></svg>
+                        </span>
+                        <span class="z-step-title">First Step</span>
+                    </div>
+                </div>
+                <div class="z-step z-step-active">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Second Step</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Third Step</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Active: third step</div>
+        <div class="state-cell">
+            <div class="z-stepbar z-stepbar-linear">
+                <div class="z-step z-step-complete">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-icon-check">
+                            <svg viewBox="0 0 24 24"><polyline points="5,12 10,17 19,7"/></svg>
+                        </span>
+                        <span class="z-step-title">First Step</span>
+                    </div>
+                </div>
+                <div class="z-step z-step-complete">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-icon-check">
+                            <svg viewBox="0 0 24 24"><polyline points="5,12 10,17 19,7"/></svg>
+                        </span>
+                        <span class="z-step-title">Second Step</span>
+                    </div>
+                </div>
+                <div class="z-step z-step-active">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Third Step</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Error state (beyond stepbar.zul — covers the .z-step-error path)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Middle step in error</div>
+        <div class="state-cell">
+            <div class="z-stepbar z-stepbar-linear">
+                <div class="z-step z-step-complete">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-icon-check">
+                            <svg viewBox="0 0 24 24"><polyline points="5,12 10,17 19,7"/></svg>
+                        </span>
+                        <span class="z-step-title">First Step</span>
+                    </div>
+                </div>
+                <div class="z-step z-step-error">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-icon-exclamation">
+                            <svg viewBox="0 0 24 24">
+                                <line x1="12" y1="6"  x2="12"    y2="12"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </span>
+                        <span class="z-step-title">Second Step</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Third Step</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Non-linear mode (hover affordance)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">linear="false"</div>
+        <div class="state-cell">
+            <div class="z-stepbar">
+                <div class="z-step z-step-active">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">First Step</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Second Step</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Third Step</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Vertical orientation (orient="vertical" — covers vert-1…vert-10)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Vertical · active second</div>
+        <div class="state-cell">
+            <div class="z-stepbar z-stepbar-linear z-stepbar-vertical">
+                <div class="z-step z-step-complete">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-icon-check">
+                            <svg viewBox="0 0 24 24"><polyline points="5,12 10,17 19,7"/></svg>
+                        </span>
+                        <span class="z-step-title">First Step</span>
+                    </div>
+                </div>
+                <div class="z-step z-step-active">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Second Step</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Third Step</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Wrapped label (wrappedLabels="true" — covers wrap-1…wrap-18)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Wrapped · active second</div>
+        <div class="state-cell">
+            <div class="z-stepbar z-stepbar-linear z-stepbar-wrapped-label" style="width:600px">
+                <div class="z-step z-step-complete">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-icon-check">
+                            <svg viewBox="0 0 24 24"><polyline points="5,12 10,17 19,7"/></svg>
+                        </span>
+                        <span class="z-step-title">Submit Order Details</span>
+                    </div>
+                </div>
+                <div class="z-step z-step-active">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Review and Confirm Your Purchase</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Payment Processing</span>
+                    </div>
+                </div>
+                <div class="z-step">
+                    <div class="z-step-content">
+                        <span class="z-step-icon z-step-icon-empty"></span>
+                        <span class="z-step-title">Done</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

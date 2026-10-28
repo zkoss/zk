@@ -1,0 +1,66 @@
+<?page title="Listbox Grouping" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Listbox Grouping</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Desktop PCs by Manufacturer</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox>
+                <listhead menupopup="auto">
+                    <listheader label="Brand" sort="auto" />
+                    <listheader label="Processor Type" sort="auto" width="150px"/>
+                    <listheader label="Memory (RAM)" sort="auto" width="120px"/>
+                    <listheader label="Price" sort="auto" width="100px"/>
+                    <listheader label="Hard Drive Capacity" sort="auto" width="150px"/>
+                </listhead>
+                <listgroup label="Dell"/>
+                <listitem>
+                    <listcell label="Dell E4500 2.2GHz"/>
+                    <listcell label="Intel Core 2 Duo" />
+                    <listcell label="2GB RAM"/>
+                    <listcell label="$261.00"/>
+                    <listcell label="500GB"/>
+                </listitem>
+                <listitem>
+                    <listcell label="Dell P4 3.2 GHz" />
+                    <listcell label="Intel Pentium 4"/>
+                    <listcell label="4GB RAM"/>
+                    <listcell label="$377.99"/>
+                    <listcell label="500GB"/>
+                </listitem>
+                <listgroupfoot label="more about Dell"/>
+                <listgroup label="Compaq"/>
+                <listitem>
+                    <listcell label="Compaq SR5113WM"/>
+                    <listcell label="Intel Core Duo" />
+                    <listcell label="1GB RAM"/>
+                    <listcell label="$279.00" />
+                    <listcell label="160GB" />
+                </listitem>
+                <listfoot>
+                    <listfooter label="Summary"/>
+                </listfoot>
+            </listbox>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Selectable Groups (groupSelect)</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox width="360px" checkmark="true" multiple="true">
+                <custom-attributes org.zkoss.zul.listbox.groupSelect="true"/>
+                <listhead>
+                    <listheader label="Brand" width="180px"/>
+                    <listheader label="Price" width="180px"/>
+                </listhead>
+                <listgroup label="Dell"/>
+                <listitem><listcell label="Dell E4500"/><listcell label="$261.00"/></listitem>
+                <listitem><listcell label="Dell P4"/><listcell label="$377.99"/></listitem>
+                <listgroup label="Compaq"/>
+                <listitem><listcell label="Compaq SR5113WM"/><listcell label="$279.00"/></listitem>
+            </listbox>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

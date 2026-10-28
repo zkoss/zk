@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-ThemeProperties.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Oct 05 2026, Created for ZK-6112.
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		ZK-6112 Marble defaults from zk.xml. Use the buttons to set a library property and reload:
+		1. "compact": the html element gets data-density="compact" and the textbox is shorter.
+		2. "slate": the html element gets data-brand="slate" and the button turns slate grey.
+		3. "#0a7d5a": the button turns green with no flash of the default blue on reload.
+		4. Then click "apply copper": the button turns copper (runtime switch beats the zk.xml default).
+		5. "reset": back to the default blue, comfortable page.
+	</label>
+	<hlayout>
+		<button label="compact" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.marble.density", "compact");Executions.sendRedirect(null);'/>
+		<button label="slate" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.marble.brand", "slate");Executions.sendRedirect(null);'/>
+		<button label="#0a7d5a" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.marble.brand", "#0a7d5a");Executions.sendRedirect(null);'/>
+		<button label="reset" onClick='org.zkoss.lang.Library.setProperty("org.zkoss.theme.marble.density", null);org.zkoss.lang.Library.setProperty("org.zkoss.theme.marble.brand", null);Executions.sendRedirect(null);'/>
+	</hlayout>
+	<hlayout>
+		<textbox value="textbox"/>
+		<button id="copper" label="apply copper" onClick="org.zkoss.zul.theme.MarbleBrand.apply(org.zkoss.zul.theme.MarbleBrand.Brand.COPPER)"/>
+	</hlayout>
+</zk>

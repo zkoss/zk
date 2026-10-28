@@ -1,0 +1,248 @@
+<?page title="Grid Layout Utilities" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <label value="Grid Layout Utilities" sclass="z-h2 z-mb-2"/>
+    <div sclass="z-text-sm z-text-secondary z-mb-8">
+        Marble ships three layout utilities, all built on native CSS Grid, aligned with MD3/MUI, and most needing <h:b>no breakpoints</h:b>.
+        This page goes from simple to advanced: basic usage first, then real enterprise scenarios (not limited to this project). Resize the browser wider and narrower to watch each block respond.
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 1 — basics -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-h4" value="Part 1 · Basics"/></div>
+
+    <!-- 1.1 z-grid-fill   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="1.1 · z-grid-fill — cards auto-fill and wrap"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">
+            The column count <h:b>grows and shrinks with the container width</h:b>; each card is at least <h:code>--zk-grid-min</h:code> (default 180px) wide and wraps when it no longer fits.
+            Ideal for <h:b>independent</h:b> card walls, dashboard tiles, and product lists. <h:b>Zero breakpoints</h:b>.
+        </div>
+        <div sclass="z-d-grid z-grid-fill z-gap-4 z-mb-3">
+            <div sclass="z-paper z-text-center">Card 1</div>
+            <div sclass="z-paper z-text-center">Card 2</div>
+            <div sclass="z-paper z-text-center">Card 3</div>
+            <div sclass="z-paper z-text-center">Card 4</div>
+            <div sclass="z-paper z-text-center">Card 5</div>
+            <div sclass="z-paper z-text-center">Card 6</div>
+        </div>
+        <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[<div class="z-d-grid z-grid-fill z-gap-4">
+    <div class="z-paper">Card 1</div>
+    <div class="z-paper">Card 2</div>
+    ...
+</div>
+<!-- want wider cards: style="--zk-grid-min: 240px" -->]]></label></div>
+    </div>
+
+    <!-- 1.2 z-grid-cols-auto   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="1.2 · z-grid-cols-auto — a label column + N aligned columns"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">
+            The first column is <h:code>auto</h:code> (sized to its content, for labels) plus N equal-width columns that <h:b>fill</h:b> the rest, with <h:code>--zk-cols</h:code> controlling the count.
+            The point is <h:b>alignment across rows</h:b>: the same column lines up on every row. Ideal for comparison tables, spec sheets, and matrices.
+        </div>
+        <div sclass="z-d-grid z-grid-cols-auto z-gap-3 z-mb-3" style="--zk-cols: 3">
+            <div sclass="z-text-xs z-fw-semibold z-text-secondary"/>
+            <div><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Col A"/></div>
+            <div><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Col B"/></div>
+            <div><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Col C"/></div>
+            <div><label sclass="z-text-sm z-text-secondary" value="Row 1"/></div>
+            <div sclass="z-paper z-py-2 z-text-center">A1</div>
+            <div sclass="z-paper z-py-2 z-text-center">B1</div>
+            <div sclass="z-paper z-py-2 z-text-center">C1</div>
+            <div><label sclass="z-text-sm z-text-secondary" value="Row 2"/></div>
+            <div sclass="z-paper z-py-2 z-text-center">A2</div>
+            <div sclass="z-paper z-py-2 z-text-center">B2</div>
+            <div sclass="z-paper z-py-2 z-text-center">C2</div>
+        </div>
+        <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[<div class="z-d-grid z-grid-cols-auto z-gap-3" style="--zk-cols: 3">
+    <div></div>   <div>Col A</div> <div>Col B</div> <div>Col C</div>  <!-- header -->
+    <div>Row 1</div> <div>A1</div>  <div>B1</div>  <div>C1</div>      <!-- data row -->
+    <div>Row 2</div> <div>A2</div>  <div>B2</div>  <div>C2</div>
+</div>
+<!-- all cells are direct children of one grid; every (1+N) cells wrap to the next row -->]]></label></div>
+        <div sclass="z-bg-secondary-container z-rounded z-p-3 z-text-sm z-mt-3">
+            <h:b>Why it aligns</h:b>: every cell above lives in <h:b>one grid</h:b>, so the <h:code>auto</h:code> label column is measured once from the widest label across all rows and stays aligned.
+            If each row is wrapped in <h:b>its own separate wrapper</h:b> (e.g. a per-row template each in its own div), every row computes its own <h:code>auto</h:code> column width and <h:b>falls out of alignment</h:b>;
+            set the wrapper to <h:code>display: contents</h:code> to flatten it back into a single grid (or use <h:code>grid-template-columns: subgrid</h:code>) to realign. The preview's State Matrix does exactly this with <h:code>display: contents</h:code>.
+        </div>
+    </div>
+
+    <!-- 1.3 z-grid-cols-N   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="1.3 · z-grid-cols-N — a fixed N equal-width columns"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">
+            The simplest <h:b>fixed column count</h:b> (1–6): equal-width columns that fill the row and never wrap. Ideal for "I just want N columns" layouts like form-field alignment.
+        </div>
+        <div sclass="z-d-grid z-grid-cols-3 z-gap-3 z-mb-3">
+            <div sclass="z-paper z-text-center">1 / 3</div>
+            <div sclass="z-paper z-text-center">2 / 3</div>
+            <div sclass="z-paper z-text-center">3 / 3</div>
+        </div>
+        <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto"><label multiline="true" pre="true"><![CDATA[<div class="z-d-grid z-grid-cols-3 z-gap-3"> ... </div>]]></label></div>
+    </div>
+
+    <!-- 1.4 which to choose (laid out with z-grid-cols-auto itself — dogfood)   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="1.4 · Which one to choose?"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-3">(This comparison table is itself laid out with <h:code>z-grid-cols-auto</h:code> + <h:code>--zk-cols: 2</h:code>.)</div>
+        <div sclass="z-d-grid z-grid-cols-auto z-gap-3" style="--zk-cols: 2">
+            <div sclass="z-text-xs z-fw-semibold z-text-secondary"/>
+            <div><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Column behavior"/></div>
+            <div><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Best for"/></div>
+
+            <div><label sclass="z-text-sm z-fw-medium z-text-on-surface" value="z-grid-fill"/></div>
+            <div><label sclass="z-text-sm z-text-secondary" value="Grows / shrinks with width, wraps"/></div>
+            <div><label sclass="z-text-sm z-text-secondary" value="Independent card walls, dashboard tiles"/></div>
+
+            <div><label sclass="z-text-sm z-fw-medium z-text-on-surface" value="z-grid-cols-auto"/></div>
+            <div><label sclass="z-text-sm z-text-secondary" value="Fixed N cols + auto label col, aligned across rows"/></div>
+            <div><label sclass="z-text-sm z-text-secondary" value="Comparison tables, spec sheets, matrices"/></div>
+
+            <div><label sclass="z-text-sm z-fw-medium z-text-on-surface" value="z-grid-cols-N"/></div>
+            <div><label sclass="z-text-sm z-text-secondary" value="Fixed N cols, no label col"/></div>
+            <div><label sclass="z-text-sm z-text-secondary" value="Form-field alignment"/></div>
+        </div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 2 — enterprise use cases -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-h4" value="Part 2 · Enterprise scenarios"/></div>
+
+    <!-- 2.1 SaaS pricing plan comparison   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-1"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="2.1 · SaaS pricing plan comparison"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-4">Tool: <h:code>z-grid-cols-auto</h:code> + <h:code>--zk-cols: 3</h:code>. Each feature row keeps the plan columns aligned; the last row holds the CTA buttons.</div>
+        <div sclass="z-d-grid z-grid-cols-auto z-gap-3 z-items-center" style="--zk-cols: 3">
+            <div/>
+            <div sclass="z-paper z-text-center"><div><label sclass="z-fw-semibold z-text-on-surface" value="Free"/></div><div><label sclass="z-text-3xl z-fw-bold z-text-primary" value="$0"/></div><div><label sclass="z-text-xs z-text-secondary" value="/ mo"/></div></div>
+            <div sclass="z-paper z-text-center z-bg-primary-container"><div><label sclass="z-fw-semibold z-text-on-surface" value="Pro"/></div><div><label sclass="z-text-3xl z-fw-bold z-text-primary" value="$29"/></div><div><label sclass="z-text-xs z-text-secondary" value="/ mo"/></div></div>
+            <div sclass="z-paper z-text-center"><div><label sclass="z-fw-semibold z-text-on-surface" value="Enterprise"/></div><div><label sclass="z-text-3xl z-fw-bold z-text-primary" value="Contact us"/></div><div><label sclass="z-text-xs z-text-secondary" value="Custom"/></div></div>
+
+            <div sclass="z-pt-2"><label sclass="z-text-sm z-text-secondary" value="Users"/></div>
+            <div sclass="z-text-center z-pt-2"><label sclass="z-text-sm" value="3"/></div>
+            <div sclass="z-text-center z-pt-2"><label sclass="z-text-sm" value="25"/></div>
+            <div sclass="z-text-center z-pt-2"><label sclass="z-text-sm" value="Unlimited"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="Storage"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="5 GB"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="100 GB"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="1 TB"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="SSO / SAML"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm z-text-disabled" value="—"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm z-text-success" value="✓"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm z-text-success" value="✓"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="24/7 support"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm z-text-disabled" value="—"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm z-text-disabled" value="—"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm z-text-success" value="✓"/></div>
+
+            <div sclass="z-pt-3"/>
+            <div sclass="z-pt-3 z-text-center"><button label="Choose" sclass="z-button-outlined"/></div>
+            <div sclass="z-pt-3 z-text-center"><button label="Start trial"/></div>
+            <div sclass="z-pt-3 z-text-center"><button label="Contact sales" sclass="z-button-outlined"/></div>
+        </div>
+    </div>
+
+    <!-- 2.2 cloud instance spec comparison   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-1"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="2.2 · Cloud instance spec comparison"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-4">Tool: <h:code>z-grid-cols-auto</h:code> + <h:code>--zk-cols: 4</h:code>. A classic "spec rows × instance-type columns" two-dimensional comparison.</div>
+        <div sclass="z-d-grid z-grid-cols-auto z-gap-3" style="--zk-cols: 4">
+            <div/>
+            <div sclass="z-text-center"><label sclass="z-text-sm z-fw-semibold z-text-on-surface" value="t3.small"/></div>
+            <div sclass="z-text-center"><label sclass="z-text-sm z-fw-semibold z-text-on-surface" value="m5.large"/></div>
+            <div sclass="z-text-center"><label sclass="z-text-sm z-fw-semibold z-text-on-surface" value="c5.xlarge"/></div>
+            <div sclass="z-text-center"><label sclass="z-text-sm z-fw-semibold z-text-on-surface" value="r5.2xlarge"/></div>
+
+            <div><label sclass="z-text-sm z-text-secondary" value="vCPU"/></div>
+            <div sclass="z-text-center"><label sclass="z-text-sm" value="2"/></div><div sclass="z-text-center"><label sclass="z-text-sm" value="2"/></div><div sclass="z-text-center"><label sclass="z-text-sm" value="4"/></div><div sclass="z-text-center"><label sclass="z-text-sm" value="8"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="Memory"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="2 GB"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="8 GB"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="8 GB"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="64 GB"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="Network"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="Low"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="Medium"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="High"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="10 Gbps"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="Price / hour"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="$0.02"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="$0.10"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="$0.17"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-sm" value="$0.50"/></div>
+        </div>
+    </div>
+
+    <!-- 2.3 operations KPI dashboard   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-1"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="2.3 · Operations KPI dashboard"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-4">Tool: <h:code>z-grid-fill</h:code>. Tiles are independent — more columns on wide screens, fewer on narrow ones — with no media queries at all.</div>
+        <div sclass="z-d-grid z-grid-fill z-gap-4" style="--zk-grid-min: 200px">
+            <div sclass="z-paper"><div sclass="z-text-uppercase"><label sclass="z-text-xs z-text-secondary" value="Revenue (MTD)"/></div><div><label sclass="z-text-4xl z-fw-bold z-text-on-surface" value="$1.28M"/></div><div><label sclass="z-text-sm z-text-success" value="▲ 12.4%"/></div></div>
+            <div sclass="z-paper"><div sclass="z-text-uppercase"><label sclass="z-text-xs z-text-secondary" value="Orders"/></div><div><label sclass="z-text-4xl z-fw-bold z-text-on-surface" value="8,431"/></div><div><label sclass="z-text-sm z-text-success" value="▲ 3.1%"/></div></div>
+            <div sclass="z-paper"><div sclass="z-text-uppercase"><label sclass="z-text-xs z-text-secondary" value="New customers"/></div><div><label sclass="z-text-4xl z-fw-bold z-text-on-surface" value="512"/></div><div><label sclass="z-text-sm z-text-error" value="▼ 1.8%"/></div></div>
+            <div sclass="z-paper"><div sclass="z-text-uppercase"><label sclass="z-text-xs z-text-secondary" value="Conversion rate"/></div><div><label sclass="z-text-4xl z-fw-bold z-text-on-surface" value="4.7%"/></div><div><label sclass="z-text-sm z-text-success" value="▲ 0.5%"/></div></div>
+        </div>
+    </div>
+
+    <!-- 2.4 product catalog card wall   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-1"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="2.4 · Product catalog card wall"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-4">Tool: <h:code>z-grid-fill</h:code> with a larger <h:code>--zk-grid-min: 240px</h:code>. E-commerce listings, media libraries, and people directories all take this shape.</div>
+        <div sclass="z-d-grid z-grid-fill z-gap-4" style="--zk-grid-min: 240px">
+            <div sclass="z-paper"><div sclass="z-bg-surface-variant z-rounded z-mb-3" style="height:96px"/><div><label sclass="z-fw-medium z-text-on-surface" value="Wireless headphones"/></div><div><label sclass="z-text-sm z-text-secondary" value="Noise-cancelling · 30hr"/></div><div sclass="z-mt-2"><label sclass="z-text-xl z-fw-bold z-text-primary" value="$129"/></div></div>
+            <div sclass="z-paper"><div sclass="z-bg-surface-variant z-rounded z-mb-3" style="height:96px"/><div><label sclass="z-fw-medium z-text-on-surface" value="Mechanical keyboard"/></div><div><label sclass="z-text-sm z-text-secondary" value="Hot-swap · RGB"/></div><div sclass="z-mt-2"><label sclass="z-text-xl z-fw-bold z-text-primary" value="$89"/></div></div>
+            <div sclass="z-paper"><div sclass="z-bg-surface-variant z-rounded z-mb-3" style="height:96px"/><div><label sclass="z-fw-medium z-text-on-surface" value="4K monitor"/></div><div><label sclass="z-text-sm z-text-secondary" value="27&quot; · 144Hz"/></div><div sclass="z-mt-2"><label sclass="z-text-xl z-fw-bold z-text-primary" value="$349"/></div></div>
+            <div sclass="z-paper"><div sclass="z-bg-surface-variant z-rounded z-mb-3" style="height:96px"/><div><label sclass="z-fw-medium z-text-on-surface" value="Ergonomic chair"/></div><div><label sclass="z-text-sm z-text-secondary" value="Mesh · adjustable"/></div><div sclass="z-mt-2"><label sclass="z-text-xl z-fw-bold z-text-primary" value="$420"/></div></div>
+        </div>
+    </div>
+
+    <!-- 2.5 system settings form   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-1"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="2.5 · System settings form"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-4">Tool: <h:code>z-grid-cols-auto-1fr</h:code> (the N=1 special case of <h:code>z-grid-cols-auto</h:code>). The label column is auto-width and the field fills the rest, keeping labels and inputs neatly aligned.</div>
+        <div sclass="z-d-grid z-grid-cols-auto-1fr z-gap-3 z-items-center" style="max-width:560px">
+            <div><label sclass="z-text-sm z-text-secondary" value="Display name"/></div>
+            <textbox value="Acme Corp" hflex="1"/>
+            <div><label sclass="z-text-sm z-text-secondary" value="Contact email"/></div>
+            <textbox value="admin@acme.com" hflex="1"/>
+            <div><label sclass="z-text-sm z-text-secondary" value="Time zone"/></div>
+            <combobox value="UTC+08:00" hflex="1"/>
+            <div><label sclass="z-text-sm z-text-secondary" value="Notifications"/></div>
+            <checkbox label="Receive weekly digest" checked="true"/>
+        </div>
+    </div>
+
+    <!-- 2.6 role x permission matrix   -->
+    <div sclass="z-mb-10">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-1"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="2.6 · Role × permission matrix"/></div>
+        <div sclass="z-text-sm z-text-secondary z-mb-4">Tool: <h:code>z-grid-cols-auto</h:code> + <h:code>--zk-cols: 4</h:code>. Access control, feature entitlements, and compatibility charts are all this kind of check matrix.</div>
+        <div sclass="z-d-grid z-grid-cols-auto z-gap-3" style="--zk-cols: 4">
+            <div/>
+            <div sclass="z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Viewer"/></div>
+            <div sclass="z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Editor"/></div>
+            <div sclass="z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Manager"/></div>
+            <div sclass="z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Admin"/></div>
+
+            <div><label sclass="z-text-sm z-text-secondary" value="View content"/></div>
+            <div sclass="z-text-center"><label sclass="z-text-success" value="✓"/></div><div sclass="z-text-center"><label sclass="z-text-success" value="✓"/></div><div sclass="z-text-center"><label sclass="z-text-success" value="✓"/></div><div sclass="z-text-center"><label sclass="z-text-success" value="✓"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="Edit content"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-disabled" value="—"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-success" value="✓"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-success" value="✓"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-success" value="✓"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="Manage members"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-disabled" value="—"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-disabled" value="—"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-success" value="✓"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-success" value="✓"/></div>
+
+            <div sclass="z-pt-2 z-border-top"><label sclass="z-text-sm z-text-secondary" value="Billing / settings"/></div>
+            <div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-disabled" value="—"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-disabled" value="—"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-disabled" value="—"/></div><div sclass="z-text-center z-pt-2 z-border-top"><label sclass="z-text-success" value="✓"/></div>
+        </div>
+    </div>
+
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-3"><label sclass="z-h4" value="Summary"/></div>
+    <div sclass="z-text-sm z-text-secondary z-mb-2">• <h:b>Independent cards</h:b> (no cross-row alignment) → <h:code>z-grid-fill</h:code>; tune the min card width with <h:code>--zk-grid-min</h:code>.</div>
+    <div sclass="z-text-sm z-text-secondary z-mb-2">• <h:b>Label + N aligned columns</h:b> (comparison / spec / pricing / matrix) → <h:code>z-grid-cols-auto</h:code>; tune the column count with <h:code>--zk-cols</h:code>.</div>
+    <div sclass="z-text-sm z-text-secondary z-mb-2">• <h:b>Just a fixed N columns</h:b> (form alignment) → <h:code>z-grid-cols-N</h:code>.</div>
+    <div sclass="z-text-sm z-text-secondary z-mb-6">All three are built on native CSS Grid, and <h:code>minmax(0, …)</h:code> guarantees no horizontal overflow → no phantom scrollbars on mobile. See <h:code>doc/spec/responsive-design.md</h:code> for details.</div>
+</div>
+</zk>

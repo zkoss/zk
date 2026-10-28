@@ -1,0 +1,52 @@
+<?page title="Errorbox" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Errorbox"/></div>
+
+    <div sclass="z-mb-8">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Errorbox — State Gallery"/></div>
+
+        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <!-- A real errorbox always carries all three parts: the pointer
+                 beak, the warning icon, and the close button. There is no
+                 "no-arrow" or "no-close" variant, so the gallery shows the one
+                 canonical structure (mirrors zul.inp.Errorbox#redraw). -->
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
+                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Pointer + icon + close"/></div>
+                <h:div class="z-errorbox" style="position:relative;width:260px;">
+                    <h:div class="z-errorbox-pointer z-errorbox-down" style="bottom:-4px;left:120px;"/>
+                    <h:i class="z-errorbox-icon z-icon-triangle-alert"/>
+                    <!-- This mock is static HTML with no widget behind it, so it
+                         cannot be dragged. cursor:default overrides the theme's
+                         cursor:move, which real (draggable) errorboxes keep. -->
+                    <h:div class="z-errorbox-content" style="cursor:default;">Value is required</h:div>
+                    <h:div class="z-errorbox-close"><h:i class="z-errorbox-icon z-icon-x"/></h:div>
+                </h:div>
+            </div>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Live Constraint Validation"/></div>
+        <div sclass="z-mb-4"><label sclass="z-text-xs z-text-secondary" value="Leave the field empty and press Tab or click outside to trigger a real errorbox."/></div>
+        <div sclass="z-py-3 z-d-flex z-items-start z-flex-wrap z-gap-6">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="no empty"/></div>
+                <textbox placeholder="Required field" constraint="no empty" width="200px"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="regex pattern"/></div>
+                <textbox placeholder="Email" constraint="/.+@.+\..+/: Invalid email" width="200px"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="min max range"/></div>
+                <intbox placeholder="1–100" constraint="min 1 max 100" width="200px"/>
+            </div>
+        </div>
+        <div sclass="z-mt-4 z-mb-2"><label sclass="z-text-xs z-text-secondary" value="no empty (full width — errorbox flips to the left of the field)"/></div>
+        <hlayout hflex="1">
+            <textbox value="" hflex="1" constraint="no empty"/>
+        </hlayout>
+    </div>
+</div>
+</zk>

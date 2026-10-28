@@ -1,0 +1,119 @@
+<?page title="Organigram" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript><![CDATA[
+    DefaultTreeNode root = new DefaultTreeNode(null, new DefaultTreeNode[]{
+        new DefaultTreeNode("Item1", new DefaultTreeNode[]{
+            new DefaultTreeNode("Item2", new DefaultTreeNode[]{
+                new DefaultTreeNode("Item3"), new DefaultTreeNode("Item4")
+            }),
+            new DefaultTreeNode("Item5", new DefaultTreeNode[]{
+                new DefaultTreeNode("Item6"), new DefaultTreeNode("Item7")
+            })
+        })
+    });
+    DefaultTreeModel orgModel = new DefaultTreeModel(root);
+    orgModel.addOpenPaths(new int[][]{{0}, {0, 0}, {0, 1}});
+]]></zscript>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Organigram</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Basic Organigram</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:span>Selected item: </h:span>
+            <label id="label"/>
+            <organigram id="organigram">
+                <orgchildren>
+                    <orgitem label="Item1">
+                        <orgchildren>
+                            <orgitem id="item2" label="Item2">
+                                <orgchildren>
+                                    <orgitem id="item3" label="Item3"/>
+                                    <orgitem id="item4" label="Item4"/>
+                                </orgchildren>
+                            </orgitem>
+                            <orgitem label="Item5">
+                                <orgchildren>
+                                    <orgitem label="Item6"/>
+                                    <orgitem label="Item7"/>
+                                </orgchildren>
+                            </orgitem>
+                        </orgchildren>
+                    </orgitem>
+                </orgchildren>
+            </organigram>
+            <hlayout>
+                <button label="Item2 open" onClick="item2.open = !item2.open"/>
+                <button label="Item3 disabled" onClick="item3.disabled = !item3.disabled"/>
+                <button label="Item4 selectable" onClick="item4.selectable = !item4.selectable"/>
+                <button label="getSelectedItem">
+                    <attribute name="onClick">
+                        Orgitem orgitem = organigram.getSelectedItem();
+                        label.setValue(orgitem == null ? "null" : orgitem.getLabel());
+                    </attribute>
+                </button>
+            </hlayout>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Organigram with Model</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:span>Selected item: </h:span>
+            <label id="label2"/>
+            <organigram model="${orgModel}"/>
+            <hlayout>
+                <button label="Item2 open">
+                    <attribute name="onClick">
+                        int[] item2Path = new int[]{0, 0};
+                        boolean open = orgModel.isPathOpened(item2Path);
+                        if (open)
+                            orgModel.removeOpenPath(item2Path);
+                        else
+                            orgModel.addOpenPath(item2Path);
+                    </attribute>
+                </button>
+                <button label="getSelectedItem">
+                    <attribute name="onClick">
+                        Set selection = orgModel.getSelection();
+                        label2.setValue(selection.isEmpty() ? "null" : selection.toArray()[0].getData());
+                    </attribute>
+                </button>
+            </hlayout>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Node State Gallery</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-mb-3"><h:span class="z-text-xs z-text-secondary">Selected, disabled, non-selectable, and closed branch — static state samples</h:span></h:div>
+            <organigram id="stateOrg">
+                <orgchildren>
+                    <orgitem id="rootItem" label="Root">
+                        <orgchildren>
+                            <orgitem id="selectedItem" label="Selected" selected="true">
+                                <orgchildren>
+                                    <orgitem label="Child A"/>
+                                    <orgitem label="Child B"/>
+                                </orgchildren>
+                            </orgitem>
+                            <orgitem id="disabledItem" label="Disabled" disabled="true">
+                                <orgchildren>
+                                    <orgitem label="Hidden C"/>
+                                </orgchildren>
+                            </orgitem>
+                            <orgitem id="nonSelItem" label="Non-Selectable" selectable="false"/>
+                            <orgitem id="closedItem" label="Collapsed" open="false">
+                                <orgchildren>
+                                    <orgitem label="Hidden D"/>
+                                    <orgitem label="Hidden E"/>
+                                </orgchildren>
+                            </orgitem>
+                        </orgchildren>
+                    </orgitem>
+                </orgchildren>
+            </organigram>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

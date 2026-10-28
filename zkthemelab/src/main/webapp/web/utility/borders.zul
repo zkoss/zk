@@ -1,0 +1,142 @@
+<?page title="Border &amp; Shape Utilities"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<vlayout hflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+    <label value="Border &amp; Shape Utilities" sclass="z-h2"/>
+
+    <!-- Border Sides -->
+    <div sclass="z-paper">
+        <label value="Borders  (.z-border-*)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-4 z-flex-wrap">
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-md z-border"/>
+                <label value=".z-border" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="all sides" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-md z-border-top"/>
+                <label value=".z-border-top" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="top only" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-md z-border-bottom"/>
+                <label value=".z-border-bottom" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="bottom only" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-md z-border-start"/>
+                <label value=".z-border-start" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="inline-start" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-md z-border-end"/>
+                <label value=".z-border-end" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="inline-end" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-md z-border-0 z-bg-surface-container"/>
+                <label value=".z-border-0" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="no border" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+        </div>
+        <label value="Border color uses --zk-color-outline-variant  •  1px solid" sclass="z-text-secondary z-text-xs z-mt-3"/>
+    </div>
+
+    <!-- Border Radius Scale -->
+    <div sclass="z-paper">
+        <label value="Border Radius  (.z-rounded-*)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-5 z-flex-wrap">
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-none z-border"/>
+                <label value=".z-rounded-none" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="0px" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-xs z-border"/>
+                <label value=".z-rounded-xs" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="corner-extra-small" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded z-border"/>
+                <label value=".z-rounded" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="corner-small" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-md z-border"/>
+                <label value=".z-rounded-md" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="corner-medium" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-lg z-border"/>
+                <label value=".z-rounded-lg" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="corner-large" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-xl z-border"/>
+                <label value=".z-rounded-xl" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="corner-extra-large" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+            <div style="text-align:center">
+                <div width="80px" height="80px" sclass="z-bg-primary-container z-d-inline-flex z-items-center z-justify-center z-rounded-full z-border"/>
+                <label value=".z-rounded-full" sclass="z-text-secondary z-text-xs z-d-block z-mt-1"/>
+                <label value="9999px" sclass="z-text-secondary z-text-xs z-d-block"/>
+            </div>
+        </div>
+        <label value="Radius values come from --zk-shape-corner-* tokens" sclass="z-text-secondary z-text-xs z-mt-3"/>
+    </div>
+
+    <!-- Border colour, style, width -->
+    <div sclass="z-paper">
+        <label value="Border Colour, Style &amp; Width  (.z-border-{color} / .z-border-dashed / .z-border-dotted / .z-border-2)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-4 z-flex-wrap z-items-start">
+            <div sclass="z-d-flex z-flex-col z-gap-1">
+                <div sclass="z-border z-border-primary z-rounded-md z-p-3 pv-border-primary"><label value="primary"/></div>
+                <div sclass="z-border z-border-secondary z-rounded-md z-p-3"><label value="secondary"/></div>
+                <div sclass="z-border z-border-outline z-rounded-md z-p-3 pv-border-outline"><label value="outline"/></div>
+                <label value="Div .z-border + colour" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-gap-1">
+                <div sclass="z-border z-border-success z-rounded-md z-p-3"><label value="success"/></div>
+                <div sclass="z-border z-border-warning z-rounded-md z-p-3"><label value="warning"/></div>
+                <div sclass="z-border z-border-info z-rounded-md z-p-3"><label value="info"/></div>
+                <label value="status colours" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-gap-2">
+                <textbox value="Invalid value" sclass="z-border-error pv-border-textbox"/>
+                <label value="Textbox .z-border-error — recolours the widget's own border" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-gap-2">
+                <div sclass="z-border z-border-dashed z-border-2 z-border-primary z-rounded-md z-p-4 pv-border-dashed"><label value="Drop files here"/></div>
+                <div sclass="z-border z-border-dotted z-rounded-md z-p-3 pv-border-dotted"><label value="dotted"/></div>
+                <label value=".z-border-dashed .z-border-2 / .z-border-dotted" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div sclass="z-bg-surface-variant z-p-3 z-rounded-lg z-border-start z-border-2 z-border-primary pv-border-accent"><label value="Left-accent block"/></div>
+                <button label="Button" sclass="z-border z-border-2 z-border-error pv-border-button"/>
+                <label value=".z-border-start .z-border-2 .z-border-primary; Button .z-border .z-border-2 .z-border-error" sclass="z-text-secondary z-text-xs"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practical combinations -->
+    <div sclass="z-paper">
+        <label value="Common Combinations" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-4 z-flex-wrap z-items-center">
+            <div sclass="z-bg-primary-container z-p-4 z-rounded-md z-border">
+                <label value="Card surface" sclass="z-fw-medium z-text-on-surface z-d-block"/>
+                <label value=".z-bg-primary-container .z-p-4 .z-rounded-md .z-border" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-bg-surface z-p-3 z-rounded-full z-border z-d-inline-flex z-items-center z-gap-2">
+                <label value="Pill button" sclass="z-fw-medium"/>
+                <label value=".z-rounded-full" sclass="z-text-secondary z-text-xs"/>
+            </div>
+            <div sclass="z-bg-surface-variant z-p-3 z-rounded-lg z-border-start" style="border-left-color:var(--zk-color-primary)">
+                <label value="Left-accent block" sclass="z-fw-medium z-text-on-surface z-d-block"/>
+                <label value=".z-border-start with primary color override" sclass="z-text-secondary z-text-xs"/>
+            </div>
+        </div>
+    </div>
+
+</vlayout>
+</zk>

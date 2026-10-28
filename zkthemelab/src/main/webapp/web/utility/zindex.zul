@@ -1,0 +1,93 @@
+<?page title="Stacking (z-index) Utilities" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<style src="~./usecase/usecase.css"/>
+<div sclass="z-p-8">
+    <label value="Stacking (z-index) Utilities" sclass="z-h2 z-mb-2"/>
+    <div sclass="z-text-sm z-text-secondary z-mb-4 z-border-bottom z-pb-4">
+        A documented stacking scale: <h:code>--zk-index-*</h:code> tokens plus <h:code>.z-index-*</h:code> utilities.
+        But first the one fact that changes everything — <h:b>ZK sets floating-widget z-index at runtime</h:b>, so for ZK popups the CSS value is only a fallback.
+    </div>
+
+    <!-- the key-fact callout -->
+    <div sclass="z-bg-secondary-container z-rounded z-p-3 z-text-sm z-mb-8">
+        <h:b>Read this first.</h:b> ZK's JS client keeps a flat, global, ever-increasing counter (base <h:b>1800</h:b>) and stamps an <h:b>inline</h:b> <h:code>z-index</h:code> on every floating widget (Window, Popup, Combobox/Datebox dropdown, Menupopup, Drawer, Toast, Errorbox…) the moment it is shown. An inline style always beats a stylesheet, so
+        <h:b>changing the CSS z-index of a ZK popup does nothing</h:b> — whichever floats last wins. This scale therefore only tokenizes the values that are genuinely load-bearing (the elements ZK does not manage as floats).
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 1 — the scale -->
+    <!-- ============================================================= -->
+    <div sclass="z-h4 z-mt-4 z-mb-4">Part 1 · The scale (<h:code>--zk-index-*</h:code> tokens)</div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        Defined in <h:code>tokens/_zindex.css</h:code> (values equal the pre-existing hard-coded numbers — naming them is zero visual change). <h:b>Load-bearing</h:b> = CSS is the real stacking authority (the element is not a ZK float).
+    </div>
+    <div sclass="z-d-grid z-grid-cols-auto z-gap-x-4 z-gap-y-2 z-mb-8 z-items-center" style="--zk-cols: 3; --zk-col-min: 130px">
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Token"/></div>
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Value"/></div>
+        <div sclass="z-text-uppercase"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Role"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-nav</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="1000"/></div><div><label sclass="z-text-sm" value="navbar dropdown · load-bearing"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-loading</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="1450"/></div><div><label sclass="z-text-sm" value="global &quot;please wait&quot; · load-bearing (JS reads it)"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-float-fallback</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="1800"/></div><div><label sclass="z-text-sm" value="= ZK runtime base · reference point"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-loadingbar</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="2000"/></div><div><label sclass="z-text-sm" value="top progress bar · load-bearing"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-slider-tooltip</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="60000"/></div><div><label sclass="z-text-sm" value="slider drag tooltip · load-bearing"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-busy-mask</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="89000"/></div><div><label sclass="z-text-sm" value="per-widget busy scrim · must be &lt; busy-loading"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-busy-loading</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="89500"/></div><div><label sclass="z-text-sm" value="per-widget busy spinner · sits above its scrim"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-fullscreen</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="99999"/></div><div><label sclass="z-text-sm" value="tbeditor full-screen · load-bearing"/></div>
+        <div sclass="z-text-sm"><h:code>--zk-index-error</h:code></div><div><label sclass="z-text-sm z-text-secondary" value="9999999"/></div><div><label sclass="z-text-sm" value="fatal JS-error box · outranks everything"/></div>
+    </div>
+
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-mb-8">
+        <h:b>Three hard constraints</h:b> (never break when re-valuing): (1) <h:code>busy-mask &lt; busy-loading</h:code>; (2) <h:code>loading &gt; modal-mask (1400)</h:code>; (3) <h:code>error</h:code> beats everything, including the runtime 1800+N counter.
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PART 2 — why CSS is fallback for ZK floats -->
+    <!-- ============================================================= -->
+    <div sclass="z-mt-4 z-mb-4"><label sclass="z-h4" value="Part 2 · Why the 1000–2000 component values are cosmetic"/></div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        Marble's popups still carry CSS z-index in the 1000–2000 range (drawer 1200, mask 1400, popup 1500, dropdown 1600, datebox 1700, toast 1800). These are <h:b>fallback only</h:b>: ZK overwrites them inline at show time. We keep them (they cost nothing and match ZK's own themes) but never pretend they order the stack.
+    </div>
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto z-mb-8"><label multiline="true" pre="true"><![CDATA[// zk/widget.ts — every floating widget goes through this on show
+_topZIndex(wgt) {
+    var zi = 1800;                 // base — the whole scale starts here
+    // ...raise zi above every other visible floating widget...
+    return zi;                     // flat, global, monotonic counter
+}
+setVisible(true) {                 // showing a _floating widget:
+    this.setZIndex(this._topZIndex(this));   // -> node.style.zIndex = 1800+N  (INLINE, beats CSS)
+}]]></label></div>
+
+    <!-- ============================================================= -->
+    <!-- PART 3 — the utilities + enterprise guidance -->
+    <!-- ============================================================= -->
+    <div sclass="z-h4 z-mt-4 z-mb-4">Part 3 · The <h:code>.z-index-*</h:code> utilities</div>
+
+    <div sclass="z-text-sm z-text-secondary z-mb-3">
+        For <h:b>app-authored</h:b> positioned elements (sticky headers, custom overlays) — <h:b>not</h:b> ZK widgets. Compose with a <h:code>.z-position-*</h:code> class (z-index needs a positioned element). The chips below each carry one utility:
+    </div>
+    <div sclass="z-d-flex z-gap-2 z-flex-wrap z-items-center z-mb-3">
+        <div sclass="z-position-relative z-index-nav z-bg-primary-container z-rounded-xs z-py-2 z-px-3"><label sclass="z-text-sm z-fw-medium" value="z-index-nav (1000)"/></div>
+        <div sclass="z-position-relative z-index-float-fallback z-bg-primary-container z-rounded-xs z-py-2 z-px-3"><label sclass="z-text-sm z-fw-medium" value="z-index-float-fallback (1800)"/></div>
+        <div sclass="z-position-relative z-index-loading z-bg-primary-container z-rounded-xs z-py-2 z-px-3"><label sclass="z-text-sm z-fw-medium" value="z-index-loading (1450)"/></div>
+        <div sclass="z-position-relative z-index-loadingbar z-bg-primary-container z-rounded-xs z-py-2 z-px-3"><label sclass="z-text-sm z-fw-medium" value="z-index-loadingbar (2000)"/></div>
+        <div sclass="z-position-relative z-index-error z-bg-error-container z-rounded-xs z-py-2 z-px-3"><label sclass="z-text-sm z-fw-medium" value="z-index-error (9999999)"/></div>
+    </div>
+    <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto z-mb-8"><label multiline="true" pre="true"><![CDATA[<div class="z-position-fixed z-index-loadingbar">custom top bar</div>
+<div class="z-position-relative z-index-nav">app dropdown</div>]]></label></div>
+
+    <div sclass="z-bg-secondary-container z-rounded z-p-3 z-text-sm z-mb-4">
+        <h:b>Enterprise guidance — don't fight the counter.</h:b>
+        <h:ul>
+            <h:li>To sit <h:b>under</h:b> ZK popups: keep your z-index <h:b>below 1800</h:b> (<h:code>--zk-index-float-fallback</h:code>). This is what you want almost always.</h:li>
+            <h:li>To sit <h:b>over</h:b> ZK popups: do <h:b>not</h:b> out-bid with a bigger number — you'll lose to the next-opened widget's 1800+N. Use a real ZK widget, or call <h:code>setTopmost()</h:code> so it joins ZK's floating registry.</h:li>
+            <h:li>Only the "always on top" extremes (full-screen cover, fatal error) legitimately use the <h:code>--zk-index-error</h:code> tier.</h:li>
+        </h:ul>
+    </div>
+    <div sclass="z-text-sm z-text-secondary">
+        Full rationale, per-widget classification, and the runtime evidence: <h:code>doc/spec/zindex-scale.md</h:code> and the audit <h:code>doc/zindex-audit.md</h:code>.
+    </div>
+
+</div>
+</zk>

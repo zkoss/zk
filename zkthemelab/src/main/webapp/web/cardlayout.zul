@@ -1,0 +1,30 @@
+<?page title="Cardlayout" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Cardlayout"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Card Switching"/></div>
+        <!-- z-vstack: opt-in 12px gap between the cardlayout and the button row
+             (widgets carry no default margins — see doc/spec/spacing-policy.md). -->
+        <div sclass="z-py-3 z-vstack">
+            <cardlayout id="card" width="300px" height="200px" selectedIndex="1" sclass="z-border">
+                <div vflex="1" hflex="1" style="background-color:yellow;padding:20px">Card 1</div>
+                <div vflex="1" hflex="1" style="background-color:green;color:white;padding:20px">Card 2</div>
+                <div vflex="1" hflex="1" style="background-color:skyblue;padding:20px">Card 3</div>
+            </cardlayout>
+            <!-- Horizontal button row: wrap in z-hstack (flex + gap).
+                 Mirrors Bootstrap .hstack and SwiftUI HStack.
+                 See doc/spec/spacing-policy.md. -->
+            <div sclass="z-hstack">
+                <button onClick="card.previous()">Previous</button>
+                <button onClick="card.next()">Next</button>
+                <button onClick='card.setOrient("horizontal".equals(card.getOrient()) ? "vertical" : "horizontal")'>
+                    Toggle Orient
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+</zk>

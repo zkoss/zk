@@ -1,0 +1,49 @@
+<zk xmlns:h="native">
+<apply templateURI="~./pv/matrix.zul" title="Horizontal"
+       cols="${['Default']}"
+       rowsTemplate="slider-horizontal-rows">
+    <template name="slider-horizontal-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Default"/></div>
+            <div><slider width="180px"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Sphere"/></div>
+            <div><slider width="180px" mold="sphere"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Scale"/></div>
+            <div><slider width="180px" mold="scale"/></div>
+        </div>
+    </template>
+</apply>
+
+<apply templateURI="~./pv/matrix.zul" title="Vertical"
+       cols="${['Default']}"
+       rowsTemplate="slider-vertical-rows">
+    <template name="slider-vertical-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Default"/></div>
+            <div><slider orient="vertical" height="120px"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Sphere"/></div>
+            <div><slider orient="vertical" mold="sphere" height="120px"/></div>
+        </div>
+    </template>
+</apply>
+
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Knob Mold (PE)</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+            <slider mold="knob" curpos="40"/>
+            <h:div><h:span class="z-text-xs z-text-secondary">40%</h:span></h:div>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+            <slider mold="knob" curpos="75"/>
+            <h:div><h:span class="z-text-xs z-text-secondary">75%</h:span></h:div>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

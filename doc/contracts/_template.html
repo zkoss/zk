@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — &lt;component&gt;</title>
+<!--
+  Self-contained marble design contract mockup.
+
+  USAGE
+    1. Spec-author copies this file to doc/contracts/<comp>.html
+    2. Fills in the placeholders marked <!-- TODO ... -->
+    3. Opens in any browser (no server / no JS) to compare against
+       doc/contracts/baselines/<comp>-iceblue.png
+
+  RULES
+    - Only --zk-* tokens may carry design values inside the body.
+    - The :root token block below mirrors src/main/resources/web/zul/css/tokens/*.css —
+      keep both in sync. Update this block only when the project tokens change.
+    - Class names in the markup must match the DOM tree in
+      .claude/skills/zk-component-rules/components/<comp>.md exactly —
+      so the mockup is a literal styling target for the loop.
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
+   Keep keys here, not values, semantically aligned with the project.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-tertiary: #7e73d6;
+    --zk-color-error: #d32f2f;
+    --zk-color-warning: #f57c00;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-body-medium-size: 14px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+    --zk-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+    --zk-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* Motion */
+    --zk-motion-duration-short1: 100ms;
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-duration-medium1: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout, NOT part of the component contract).
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section {
+    margin-bottom: var(--zk-spacing-8);
+}
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: center;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Component-specific styles — TODO: replace this block with the rules
+   that define the mockup's appearance using --zk-* tokens only.
+   No hex literals here. No raw px values for design-bearing properties
+   (layout properties like display/flex/grid are fine).
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* TODO: .z-<comp> { … } */
+/* TODO: .z-<comp>:hover { … } */
+/* TODO: .z-<comp>-disabled { … } */
+/* TODO: variants / sub-elements */
+
+</style>
+</head>
+<body>
+
+<h1>&lt;component&gt; — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T?</span>
+    <span>closest-sibling: ?</span>
+</div>
+
+<!-- ────────────────────────────────────────────────────────────────────
+     For each State matrix row in doc/contracts/<comp>.md, render one
+     <div class="state-cell"> containing the component HTML.
+     ──────────────────────────────────────────────────────────────────── -->
+
+<section class="matrix-section">
+    <h2>Default variant</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default</div>
+        <div class="state-cell">
+            <!-- TODO: <div class="z-<comp>"> ... </div> -->
+        </div>
+
+        <div class="state-label">hover</div>
+        <div class="state-cell">
+            <!-- TODO: same markup with hover state simulated (e.g. extra .z-<comp>-hover class or static style) -->
+        </div>
+
+        <div class="state-label">focus-visible</div>
+        <div class="state-cell">
+            <!-- TODO -->
+        </div>
+
+        <div class="state-label">active</div>
+        <div class="state-cell">
+            <!-- TODO -->
+        </div>
+
+        <div class="state-label">disabled</div>
+        <div class="state-cell">
+            <!-- TODO: include .z-<comp>-disabled -->
+        </div>
+
+    </div>
+</section>
+
+<!-- TODO: add one <section class="matrix-section"> per variant -->
+
+</body>
+</html>

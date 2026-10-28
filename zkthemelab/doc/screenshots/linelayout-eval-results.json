@@ -1,0 +1,203 @@
+{
+  "pageInfo": {
+    "hasVertical": true,
+    "hasHorizontal": false,
+    "linelayoutCount": 1,
+    "linelayoutVerticalCount": 1,
+    "linelayoutHorizontalCount": 0,
+    "lineitemPointCount": 4,
+    "pointHiddenCount": 0,
+    "lineitemStretchCount": 0,
+    "lineitemPointImageCount": 0,
+    "galleryBlocks": [],
+    "tokens": {
+      "spacing3": "12px",
+      "colorPrimary": "#376fd0",
+      "colorOnPrimary": "#ffffff",
+      "colorOutlineVariant": "rgba(0, 0, 0, 0.12)",
+      "shapeCornerFull": "9999px"
+    }
+  },
+  "ll1": "200px",
+  "ll2": "410.484px",
+  "ll3": "rgba(0, 0, 0, 0)",
+  "ll4": "flex",
+  "ll5": "row",
+  "ll8": "1 0 0px",
+  "ll8a": "space-around",
+  "ll9": "flex",
+  "ll10": "hidden",
+  "ll11": "1 0 0px",
+  "ll11a": "space-around",
+  "ll12": "flex",
+  "ll13": "hidden",
+  "ll14": "flex",
+  "ll14a": "space-around",
+  "ll15": "relative",
+  "ll16": "column",
+  "ll17": "0px 12px",
+  "ll6": "NOT_FOUND",
+  "ll7": "NOT_FOUND",
+  "ll8b": "NOT_FOUND",
+  "ll11b": "NOT_FOUND",
+  "ll14b": "NOT_FOUND",
+  "ll16a": "NOT_FOUND",
+  "ll18": "NOT_FOUND",
+  "ll19": "absolute",
+  "ll20": "99",
+  "ll21": "rgba(0, 0, 0, 0.12)",
+  "ll22": "2px",
+  "ll23": "200px",
+  "ll24": "23px",
+  "ll25": "NOT_FOUND",
+  "ll26": "NOT_FOUND",
+  "ll27": "NOT_FOUND",
+  "li1": "1 0 0px",
+  "li2": "flex",
+  "li3": "hidden",
+  "li4": "column",
+  "li5": "0",
+  "li6": "auto",
+  "li7": "NOT_FOUND",
+  "li8": "NOT_FOUND",
+  "pt1": "24px",
+  "pt2": "24px",
+  "pt3": "9999px",
+  "pt4": "rgb(55, 111, 208)",
+  "pt5_border": "2px solid rgb(55, 111, 208)",
+  "pt5_borderWidth": "2px",
+  "pt5_borderStyle": "solid",
+  "pt5_borderColor": "rgb(55, 111, 208)",
+  "pt6": "hidden",
+  "pt6a": "relative",
+  "pt6b": "0",
+  "pt7": "100",
+  "pt8": "rgb(255, 255, 255)",
+  "pt9": "NOT_FOUND",
+  "pt10": "24px",
+  "pt11": "24px",
+  "pt12": "cover",
+  "pt13": "center",
+  "pt13a": "20px",
+  "pt13b": "12px",
+  "pt14": "NOT_FOUND",
+  "pt15": "NOT_FOUND",
+  "macro": {
+    "M1": {
+      "rootArea": 82096.875,
+      "rootRect": {
+        "x": 32,
+        "y": 182,
+        "width": 410.484375,
+        "height": 200,
+        "top": 182,
+        "right": 442.484375,
+        "bottom": 382,
+        "left": 32
+      },
+      "pointsWithBboxCount": 4
+    },
+    "M2": {
+      "vLineBg": "rgba(0, 0, 0, 0.12)",
+      "vLineW": 2,
+      "vLineH": 200,
+      "vCaveH": 200,
+      "vRatio": 1,
+      "hLineH": null,
+      "hLineW": null,
+      "hCaveW": null,
+      "hRatio": null
+    },
+    "M3": {
+      "pointRects": [
+        {
+          "w": 24,
+          "h": 24,
+          "br": "9999px",
+          "bg": "rgb(55, 111, 208)"
+        },
+        {
+          "w": 24,
+          "h": 24,
+          "br": "9999px",
+          "bg": "rgb(55, 111, 208)"
+        },
+        {
+          "w": 24,
+          "h": 24,
+          "br": "9999px",
+          "bg": "rgb(55, 111, 208)"
+        },
+        {
+          "w": 24,
+          "h": 24,
+          "br": "9999px",
+          "bg": "rgb(55, 111, 208)"
+        }
+      ]
+    },
+    "M4": {
+      "pointBgs": [
+        "rgb(55, 111, 208)",
+        "rgb(55, 111, 208)",
+        "rgb(55, 111, 208)",
+        "rgb(55, 111, 208)"
+      ]
+    },
+    "M5": {
+      "caveRect": {
+        "x": 213.234375,
+        "y": 182,
+        "width": 48,
+        "height": 200,
+        "top": 182,
+        "right": 261.234375,
+        "bottom": 382,
+        "left": 213.234375
+      },
+      "pointPositions": [
+        {
+          "top": 195,
+          "bottom": 219,
+          "inBoundsTop": true,
+          "inBoundsBottom": true
+        },
+        {
+          "top": 245,
+          "bottom": 269,
+          "inBoundsTop": true,
+          "inBoundsBottom": true
+        },
+        {
+          "top": 295,
+          "bottom": 319,
+          "inBoundsTop": true,
+          "inBoundsBottom": true
+        },
+        {
+          "top": 345,
+          "bottom": 369,
+          "inBoundsTop": true,
+          "inBoundsBottom": true
+        }
+      ]
+    },
+    "M6": {
+      "lineZIndex": 99,
+      "pointZIndices": [
+        100,
+        100,
+        100,
+        100
+      ]
+    },
+    "relational": {
+      "lineCenteredV": {
+        "computedLeft": 23,
+        "expectedLeft": 23,
+        "diff": 0
+      }
+    }
+  },
+  "layoutRegressions": []
+}

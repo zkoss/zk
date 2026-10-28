@@ -1,0 +1,57 @@
+<?page title="Label" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-4 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Label"/></div>
+    <div sclass="z-mb-6"><label sclass="z-text-sm z-text-secondary" value="Most ZK inputs (textbox, combobox, datebox, …) have no built-in label attribute, so a field row needs a separate &lt;label&gt; placed beside the input. In a plain block row the items align by text baseline: single-line inputs (textbox / combobox) end up vertically centred, but a radiogroup / checkbox shows its label ~4–5px low. A selection control's baseline is its own caption text (&quot;Yes&quot; / the checkbox label), which sits below the control's box centre, so the baseline-aligned label is pulled down with it. So only the selection controls need a fix: wrap their row in a centred flex container. Single-line inputs are already centred and need nothing — vertical alignment is a container concern, not a property of the label (applying the same wrapper to an input row is harmless, just unnecessary)."/></div>
+
+    <div sclass="z-mb-3"><label sclass="z-text-sm z-fw-medium z-text-on-surface" value="Default block row — baseline alignment (radio &amp; checkbox labels sit ~4–5px low)"/></div>
+    <div sclass="z-vstack z-mb-8">
+        <div>
+            <label value="Name"/>
+            <space spacing="12px"/>
+            <textbox value="Name"/>
+        </div>
+        <div>
+            <label value="Country"/>
+            <space spacing="12px"/>
+            <combobox>
+                <comboitem label="Taiwan"/>
+                <comboitem label="Japan"/>
+                <comboitem label="Germany"/>
+            </combobox>
+        </div>
+        <div>
+            <label value="Subscribe"/>
+            <space spacing="12px"/>
+            <radiogroup>
+                <radio label="Yes"/>
+                <radio label="No"/>
+            </radiogroup>
+            <space spacing="12px"/>
+            <label value="⚠ radiogroup: label sits ~5px below centre" sclass="z-text-sm z-text-warning"/>
+        </div>
+        <div>
+            <label value="Notify"/>
+            <space spacing="12px"/>
+            <checkbox label="By email"/>
+            <space spacing="12px"/>
+            <label value="⚠ checkbox: label sits ~4px below centre" sclass="z-text-sm z-text-warning"/>
+        </div>
+    </div>
+
+    <div sclass="z-mb-3"><label sclass="z-text-sm z-fw-medium z-text-on-surface" value="Fix — only the selection controls need it: z-d-flex z-items-center z-gap-3 centres the radio / checkbox label"/></div>
+    <div sclass="z-vstack">
+        <div sclass="z-d-flex z-items-center z-gap-3">
+            <label value="Subscribe"/>
+            <radiogroup>
+                <radio label="Yes"/>
+                <radio label="No"/>
+            </radiogroup>
+        </div>
+        <div sclass="z-d-flex z-items-center z-gap-3">
+            <label value="Notify"/>
+            <checkbox label="By email"/>
+        </div>
+    </div>
+</div>
+</zk>

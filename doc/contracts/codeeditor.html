@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — codeeditor</title>
+<!--
+  Self-contained marble design contract mockup for `codeeditor`.
+
+  No ZKDoc canonical image exists for this component (new in ZK 11.0.0, no MUI analog either —
+  see doc/contracts/codeeditor.md's mockup-needed: Y decision), so this file IS the visual ground
+  truth alongside the live Marble preview page (src/test/resources/web/codeeditor.zul).
+
+  Class names in the markup match the DOM tree in
+  .claude/skills/zk-component-rules/components/codeeditor.md exactly: `.z-codeeditor` root,
+  `.z-codeeditor-cave` mount point, and CodeMirror's own anchor classes below it
+  (`.cm-editor`/`.cm-scroller`/`.cm-gutters`/`.cm-content`) — this mockup hand-authors
+  a plausible static CodeMirror-shaped subtree so the chrome + gutter + dark-surface rules can be
+  seen without a live editor instance.
+
+  LIGHT-MODE SYNTAX COLOR NOTE: CodeMirror's light-mode `defaultHighlightStyle` is its own,
+  un-themed default — Marble exposes NO --zk-codeeditor-token-* knobs for light mode (only dark
+  mode is customized, per Codeeditor.ts `_themeExtension()`). So light-mode code samples below
+  render as plain monospace text in the field foreground, not fake syntax colors — coloring them
+  would imply a themed value that does not exist.
+
+  DARK-MODE SYNTAX COLOR NOTE: the ten --zk-codeeditor-token-* custom properties ARE the real,
+  documented styling surface for dark mode, each with ZK-core's own literal VS Code Dark+ fallback
+  baked into the widget JS (var(--zk-codeeditor-token-keyword, #569cd6), etc.) — the dark-mode
+  sample below reproduces that exact var()-with-fallback technique per token span, which is
+  genuinely how CodeMirror's HighlightStyle applies these colors (inline `style` per span), not a
+  simplification.
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container-low: #f7f9fc;
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    --zk-state-disabled-opacity: 0.38;
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-extra-small: 4px;
+    --zk-shape-input: var(--zk-shape-corner-extra-small);
+
+    /* Typography */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --zk-typescale-mono-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-medium-line-height: 20px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Motion */
+    --zk-motion-duration-standard: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ── Component Theme Variables — codeeditor ──
+       Ten Marble-authored (bg/fg/radius/border-color family + gutter triad + dark focus) +
+       three ZK-core-authored dark-surface names (fixed spelling, public API) —
+       see doc/contracts/codeeditor.md's Cross-cutting §Component Theme Variables. */
+    --zk-codeeditor-bg:                  var(--zk-color-surface);
+    --zk-codeeditor-fg:                  var(--zk-color-on-surface);
+    --zk-codeeditor-radius:              var(--zk-shape-input);
+    --zk-codeeditor-border-color:        var(--zk-color-outline);
+    --zk-codeeditor-border-color-hover:  var(--zk-color-on-surface);
+    --zk-codeeditor-border-color-focus:  var(--zk-color-primary);
+    --zk-codeeditor-gutter-bg:           var(--zk-color-surface-container-low);
+    --zk-codeeditor-gutter-fg:           var(--zk-color-on-surface-variant);
+    --zk-codeeditor-gutter-border-color: var(--zk-color-outline-variant);
+    /* dark surface — ZK-core-authored names, exact spelling required, deliberately literal
+       (not theme-derived) — see Design Contract's WCAG-against-fixed-syntax-palette reasoning */
+    --zk-codeeditor-dark-border-color:       rgba(255, 255, 255, 0.23);
+    --zk-codeeditor-dark-border-color-hover: rgba(255, 255, 255, 0.6);
+    --zk-codeeditor-dark-border-color-focus: oklch(from var(--zk-color-primary) 0.8 c h); /* ≈ #80bdff */
+    --zk-codeeditor-background:          #1e1e1e;
+    --zk-codeeditor-color:               #d4d4d4;
+    --zk-codeeditor-gutter-color:        #858585;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout, NOT part of the component contract).
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: 12px;
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.matrix-grid .state-label {
+    font-size: 12px;
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: var(--zk-spacing-2);
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: 8px;
+    border: 1px solid var(--zk-color-outline-variant);
+    overflow: auto;
+}
+.hint { font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1); max-width: 46em; }
+
+/* ────────────────────────────────────────────────────────────────────────
+   Component styles — the actual contract, tokens only (see c1–c27 in
+   doc/contracts/codeeditor.md's Expected values table for the id ↔ rule mapping).
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* c1–c6: root chrome */
+.z-codeeditor {
+    box-sizing: border-box;
+    overflow: hidden;                                  /* c5 */
+    display: inline-block;
+    width: 320px;
+    position: relative;                                            /* anchors the ::after ring overlay */
+    border: 1px solid var(--zk-codeeditor-border-color);           /* c1 */
+    border-radius: var(--zk-codeeditor-radius);                    /* c2 */
+    background-color: var(--zk-codeeditor-bg);                     /* c3 */
+    color: var(--zk-codeeditor-fg);                                /* c4 */
+    vertical-align: top;
+    transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);  /* c6 */
+}
+/* c7: hover */
+.z-codeeditor:hover,
+.z-codeeditor.mock-hover { border-color: var(--zk-codeeditor-border-color-hover); }
+/* c9b: the ring overlay is always present (transparent at rest) and paints ABOVE CodeMirror's
+   DOM. It cannot be an inset box-shadow on the root: that paints below the children, and the
+   payload is flush against the border and opaque (.cm-gutters always, .cm-editor on the dark
+   surface), so a root-drawn ring measured 1px on the gutter edge and vanished entirely in dark
+   mode. The overlay makes the ring uniform by construction — c32. */
+.z-codeeditor::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px transparent;
+    pointer-events: none;
+    transition: box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+/* c8–c10: focus-within — Mechanism A (overlay variant), border stays 1px */
+.z-codeeditor:focus-within,
+.z-codeeditor.mock-focus {
+    border-color: var(--zk-codeeditor-border-color-focus);         /* c8 */
+    border-width: 1px;                                             /* c10 — must NOT become 2px */
+}
+.z-codeeditor:focus-within::after,
+.z-codeeditor.mock-focus::after {
+    box-shadow: inset 0 0 0 1px var(--zk-codeeditor-border-color-focus); /* c9 */
+}
+/* c20–c21: disabled */
+.z-codeeditor-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;   /* c21 — on the ROOT, or the dead control still answers :hover */
+}
+
+/* c12: cave + .cm-editor fill the root */
+.z-codeeditor-cave, .cm-editor { height: 100%; }
+.z-codeeditor-cave {
+    display: block;
+}
+.cm-editor {
+    display: flex;
+    flex-direction: column;
+}
+/* c11: CodeMirror's own dotted focus outline is suppressed — the root's own ring (c9) is the
+   only focus signal, avoiding a double ring one pixel apart */
+.cm-editor.cm-focused { outline: none; }
+
+.cm-scroller {
+    overflow: auto;
+    display: flex;
+    flex: 1;
+    font-family: var(--zk-typescale-mono-family);                  /* c13 */
+    font-size: var(--zk-typescale-body-medium-size);                /* c14 */
+    line-height: var(--zk-typescale-body-medium-line-height);       /* c15 */
+}
+
+/* c16–c18: gutter (lineNumbers=true, the default) */
+.cm-gutters {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--zk-codeeditor-gutter-bg);              /* c16 */
+    color: var(--zk-codeeditor-gutter-fg);                          /* c17 */
+    border-right: 1px solid var(--zk-codeeditor-gutter-border-color); /* c18 */
+    padding: 0 var(--zk-spacing-2);
+    text-align: right;
+    user-select: none;
+}
+.cm-gutters .cm-lineNumber { padding: 0 2px; }
+
+.cm-content {
+    flex: 1;
+    padding: 0 var(--zk-spacing-2);
+    white-space: pre;
+    outline: none;
+}
+.cm-content .code-line { display: block; }
+
+/* Caret: mockup-only static glyph (a real caret blinks). NOT theme-controlled and no longer a
+   contract row — c19/c27 were retired 2026-09-08. `.cm-cursor` is created by CodeMirror's
+   `drawSelection` extension, which the CE build does not load, so what paints is the BROWSER's
+   native caret: `caret-color` falls back to the UA default, pure black on light and pure white
+   on dark, NOT the theme foregrounds. The colours below are hard-coded to match that reality —
+   do not retoken them to --zk-codeeditor-fg/-color, which is what the removed rules tried. */
+.mock-caret {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    vertical-align: text-bottom;
+    background-color: #000;                       /* UA default caret, not a theme token */
+    margin-left: -1px;
+}
+
+/* c22–c27: dark surface (theme="dark") — root repaints too, not just .cm-editor, since the
+   root owns the rounded corners (see Design Contract's "pale wedge" note) */
+.z-codeeditor-dark,
+.z-codeeditor-dark .cm-editor {
+    background-color: var(--zk-codeeditor-background);              /* c22 */
+}
+/* c28-c31: the dark surface carries its OWN light-alpha border pair. The shared black-alpha
+   pair composites onto the near-black fill (rest rgb(23,23,23), hover rgb(4,4,4) = 1.14:1),
+   so dark mode had no visible hover state; the light-alpha pair clears 3:1 (3.17:1). The
+   focus rule must come AFTER the hover rule so focus wins when both apply. */
+.z-codeeditor-dark { border-color: var(--zk-codeeditor-dark-border-color); }        /* c28 */
+.z-codeeditor-dark.mock-hover { border-color: var(--zk-codeeditor-dark-border-color-hover); } /* c29, c30 */
+.z-codeeditor-dark.mock-focus { border-color: var(--zk-codeeditor-dark-border-color-focus); } /* c31 */
+/* c31b/c33: the dark surface takes MD3's dark-scheme primary (tone 80). The light knob measured
+   only 3.45:1 on the #1e1e1e fill; this is 8.45:1. */
+.z-codeeditor-dark:focus-within::after,
+.z-codeeditor-dark.mock-focus::after { box-shadow: inset 0 0 0 1px var(--zk-codeeditor-dark-border-color-focus); }
+.z-codeeditor-dark .cm-editor { color: var(--zk-codeeditor-color); }/* c23 */
+.z-codeeditor-dark .cm-gutters {
+    background-color: var(--zk-codeeditor-background);              /* c24 — flush with surface, not a lighter slab */
+    color: var(--zk-codeeditor-gutter-color);                       /* c25 */
+    border-right-color: transparent;                                /* c26 */
+}
+.z-codeeditor-dark .mock-caret { background-color: #fff; } /* UA default caret, not a theme token */
+
+/* Mockup-only helpers (not part of the component contract) */
+.no-gutter-note { font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>codeeditor — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 11.0.0-jakarta.FL.20260904</span>
+    <span>tier: T3</span>
+    <span>closest-sibling: textbox (chrome only)</span>
+</div>
+
+<section class="matrix-section">
+    <h2>Root chrome — default / hover / focus / disabled</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default</div>
+        <div class="state-cell">
+            <div class="z-codeeditor" style="height:110px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div><div class="cm-lineNumber">3</div></div>
+                            <div class="cm-content"><span class="code-line">class Greeter {</span><span class="code-line">&#9;void hello() { print("Hi"); }</span><span class="code-line">}<span class="mock-caret"></span></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">hover</div>
+        <div class="state-cell">
+            <div class="z-codeeditor mock-hover" style="height:110px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div><div class="cm-lineNumber">3</div></div>
+                            <div class="cm-content"><span class="code-line">class Greeter {</span><span class="code-line">&#9;void hello() { print("Hi"); }</span><span class="code-line">}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">focus-within</div>
+        <div class="state-cell">
+            <div class="z-codeeditor mock-focus" style="height:110px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor cm-focused">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div><div class="cm-lineNumber">3</div></div>
+                            <div class="cm-content"><span class="code-line">class Greeter {</span><span class="code-line">&#9;void hello() { print("Hi"); }<span class="mock-caret"></span></span><span class="code-line">}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hint">c9/c10: border stays 1px, the second ring pixel is an INSET box-shadow — the box does not resize between rest and focus (Mechanism A)</div>
+        </div>
+
+        <div class="state-label">disabled</div>
+        <div class="state-cell">
+            <div class="z-codeeditor z-codeeditor-disabled" style="height:110px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div><div class="cm-lineNumber">3</div></div>
+                            <div class="cm-content"><span class="code-line">class Greeter {</span><span class="code-line">&#9;void hello() { print("Hi"); }</span><span class="code-line">}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hint">c20/c21: whole root dimmed to 0.38 opacity; pointer-events:none is scoped to .cm-editor only, so the frame itself keeps a normal cursor</div>
+        </div>
+
+        <div class="state-label">readonly</div>
+        <div class="state-cell">
+            <div class="z-codeeditor" style="height:110px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div><div class="cm-lineNumber">3</div></div>
+                            <div class="cm-content"><span class="code-line">class Greeter {</span><span class="code-line">&#9;void hello() { print("Hi"); }</span><span class="code-line">}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hint">renders byte-identical to "default" above — there is no `.z-codeeditor-readonly` class; only the editable compartment differs (not CSS-observable)</div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Gutter presence — lineNumbers default (true) vs false</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">lineNumbers=true (default)</div>
+        <div class="state-cell">
+            <div class="z-codeeditor" style="height:90px; width:280px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div></div>
+                            <div class="cm-content"><span class="code-line">SELECT * FROM orders</span><span class="code-line">WHERE status = 'SHIPPED'</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">lineNumbers=false</div>
+        <div class="state-cell">
+            <div class="z-codeeditor" style="height:90px; width:280px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <!-- no .cm-gutters element at all — structurally absent, not display:none -->
+                        <div class="cm-scroller">
+                            <div class="cm-content"><span class="code-line">SELECT * FROM orders</span><span class="code-line">WHERE status = 'SHIPPED'</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hint no-gutter-note">the `.cm-gutters` subtree is missing from the DOM, not hidden — content flows to the root's left edge</div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Dark surface (theme="dark") — resting / hover / focus-within</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">dark, resting</div>
+        <div class="state-cell">
+            <div class="z-codeeditor z-codeeditor-dark" style="height:130px; width:340px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div><div class="cm-lineNumber">3</div><div class="cm-lineNumber">4</div></div>
+                            <div class="cm-content"><span class="code-line"><span style="color: var(--zk-codeeditor-token-comment, #6a9955); font-style: italic;">// dark palette demo</span></span><span class="code-line"><span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">const</span> <span style="color: var(--zk-codeeditor-token-variable, #9cdcfe);">limit</span> = <span style="color: var(--zk-codeeditor-token-number, #b5cea8);">25</span>;</span><span class="code-line"><span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">function</span> <span style="color: var(--zk-codeeditor-token-function, #dcdcaa);">pick</span>(rows) {</span><span class="code-line">&#9;<span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">return</span> rows.filter(r =&gt; r.total &gt; limit);</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">dark, hover</div>
+        <div class="state-cell">
+            <div class="z-codeeditor z-codeeditor-dark mock-hover" style="height:130px; width:340px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div><div class="cm-lineNumber">3</div><div class="cm-lineNumber">4</div></div>
+                            <div class="cm-content"><span class="code-line"><span style="color: var(--zk-codeeditor-token-comment, #6a9955); font-style: italic;">// dark palette demo</span></span><span class="code-line"><span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">const</span> <span style="color: var(--zk-codeeditor-token-variable, #9cdcfe);">limit</span> = <span style="color: var(--zk-codeeditor-token-number, #b5cea8);">25</span>;</span><span class="code-line"><span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">function</span> <span style="color: var(--zk-codeeditor-token-function, #dcdcaa);">pick</span>(rows) {</span><span class="code-line">&#9;<span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">return</span> rows.filter(r =&gt; r.total &gt; limit);</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">dark, focus-within</div>
+        <div class="state-cell">
+            <div class="z-codeeditor z-codeeditor-dark mock-focus" style="height:130px; width:340px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor cm-focused">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div><div class="cm-lineNumber">3</div><div class="cm-lineNumber">4</div></div>
+                            <div class="cm-content"><span class="code-line"><span style="color: var(--zk-codeeditor-token-comment, #6a9955); font-style: italic;">// dark palette demo</span></span><span class="code-line"><span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">const</span> <span style="color: var(--zk-codeeditor-token-variable, #9cdcfe);">limit</span> = <span style="color: var(--zk-codeeditor-token-number, #b5cea8);">25</span>;</span><span class="code-line"><span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">function</span> <span style="color: var(--zk-codeeditor-token-function, #dcdcaa);">pick</span>(rows) {<span class="mock-caret"></span></span><span class="code-line">&#9;<span style="color: var(--zk-codeeditor-token-keyword, #569cd6);">return</span> rows.filter(r =&gt; r.total &gt; limit);</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="hint">
+        c22–c26: the root AND `.cm-editor` AND `.cm-gutters` all repaint to the same literal near-black
+        (`--zk-codeeditor-background`, `#1e1e1e`) — a partial repaint here (e.g. root forgotten) is the
+        "pale wedge around a dark editor" defect M5 in the theme contract exists to catch. Token-span
+        colors above use the real CodeMirror technique: `var(--zk-codeeditor-token-*, &lt;VS Code Dark+
+        literal fallback&gt;)` per span — these ten custom properties are consumed entirely inside widget
+        JS, never inside this component's own CSS file (see the skill's Notes + the theme contract's
+        Component Theme Variables section).
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Explicit height set — cave/editor fill it (M4)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">height: 200px</div>
+        <div class="state-cell">
+            <div class="z-codeeditor" style="height:200px; width:300px;">
+                <div class="z-codeeditor-cave">
+                    <div class="cm-editor">
+                        <div class="cm-scroller">
+                            <div class="cm-gutters"><div class="cm-lineNumber">1</div><div class="cm-lineNumber">2</div></div>
+                            <div class="cm-content"><span class="code-line">{ "ok": true }</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hint">the cave + `.cm-editor` both resolve to height:100% and stretch to fill the full 200px box — no collapse to content height, no overflow past the frame</div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

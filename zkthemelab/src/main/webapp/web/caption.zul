@@ -1,0 +1,113 @@
+<?page title="Caption" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript>
+    import org.zkoss.zk.ui.util.Notification;
+</zscript>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Caption</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Caption in Window and Panel</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Window with caption</h:span></h:div>
+                <window width="380px" height="200px" border="normal">
+                    <caption label="Title" image="~./img/volumn.gif">
+                        Caption Content
+                        <button label="Button" />
+                    </caption>
+                    Window Content
+                </window>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Panel with caption</h:span></h:div>
+                <panel width="380px" height="200px" border="normal">
+                    <caption label="Title" image="~./img/volumn.gif">
+                        Caption Content
+                        <button label="Button" />
+                    </caption>
+                    <panelchildren>
+                        Panel Content
+                    </panelchildren>
+                </panel>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Caption Variants</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Label only</h:span></h:div>
+                <window width="260px" height="120px" border="normal">
+                    <caption label="Label Only"/>
+                    Window Content
+                </window>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Image only</h:span></h:div>
+                <window width="260px" height="120px" border="normal">
+                    <caption image="~./img/volumn.gif"/>
+                    Window Content
+                </window>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Label + image (existing)</h:span></h:div>
+                <window width="260px" height="120px" border="normal">
+                    <caption label="Title" image="~./img/volumn.gif"/>
+                    Window Content
+                </window>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Caption in Groupbox</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Groupbox (default mold)</h:span></h:div>
+                <groupbox width="380px" height="200px">
+                    <caption label="Title" image="~./img/volumn.gif">
+                        Caption Content
+                        <button label="Button" />
+                    </caption>
+                    Groupbox Content
+                </groupbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Groupbox (3d mold)</h:span></h:div>
+                <groupbox width="380px" height="200px" mold="3d">
+                    <caption label="Title" image="~./img/volumn.gif">
+                        Caption Content
+                        <button label="Button" />
+                    </caption>
+                    Groupbox Content
+                </groupbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Caption in Non-Closable Groupbox</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Groupbox closable=&quot;false&quot;</h:span></h:div>
+                <groupbox width="380px" height="200px" closable="false">
+                    <caption label="Readonly caption"/>
+                    Groupbox Content
+                </groupbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Button inside the caption</h:span></h:div>
+                <groupbox width="380px" height="200px" closable="false">
+                    <caption label="Readonly caption">
+                        <button id="readonlyCaptionButton" label="Button"
+                            onClick='Notification.show("Caption button clicked", "info", null, "middle_center", 2000);'/>
+                    </caption>
+                    Groupbox Content
+                </groupbox>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

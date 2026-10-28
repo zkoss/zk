@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -33,7 +34,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 
 	// ----- a theme override reaches every consumer of every severity -----
 
+	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
+	@Tag("IceBlueOnly")
 	public void overriding_the_accent_token_restyles_badge_on_every_severity() {
 		connect();
 		waitResponse();
@@ -44,7 +47,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 		}));
 	}
 
+	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
+	@Tag("IceBlueOnly")
 	public void overriding_the_text_token_restyles_chip_on_every_severity() {
 		connect();
 		waitResponse();
@@ -55,7 +60,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 		}));
 	}
 
+	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
+	@Tag("IceBlueOnly")
 	public void overriding_the_accent_token_restyles_confirmpopup_on_every_severity() {
 		connect();
 		waitResponse();
@@ -81,7 +88,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 	// consumer and only a probe override catches it. A computed-colour comparison
 	// would not — it passes just as happily against the hardcoded literal.
 
+	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
+	@Tag("IceBlueOnly")
 	public void overriding_the_avatar_token_restyles_the_label() {
 		connect();
 		waitResponse();
@@ -109,7 +118,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 		}
 	}
 
+	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
+	@Tag("IceBlueOnly")
 	public void overriding_the_breadcrumb_tokens_restyles_separator_and_ellipsis() {
 		connect();
 		waitResponse();
@@ -125,7 +136,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 						"breadcrumb ellipsis ignored the :root override"));
 	}
 
+	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
+	@Tag("IceBlueOnly")
 	public void overriding_the_chip_close_token_restyles_its_opacity() {
 		connect();
 		waitResponse();
@@ -135,7 +148,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 				"chip close ignored the :root override, so a _wcag* palette cannot restyle it");
 	}
 
+	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
+	@Tag("IceBlueOnly")
 	public void overriding_the_box_shadow_tokens_restyles_badge_and_avatargroup() {
 		connect();
 		waitResponse();
@@ -154,7 +169,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 
 	// ----- the documented gap is still the gap -----
 
+	// IceBlue-only: depends on IceBlue's --zk-severity-* / WCAG-palette token names (and the Ant palette hex), which Marble does not define.
 	@Test
+	@Tag("IceBlueOnly")
 	public void ce_defaults_are_the_ant_palette_not_an_accessible_one() {
 		// Guards the decision in profiles/_default.less: darkening the CE defaults
 		// must be a deliberate revisit, not a silent change to every app's look.

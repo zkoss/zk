@@ -1,0 +1,118 @@
+<?page title="Elevation Utilities"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<vlayout hflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+    <label value="Elevation Utilities" sclass="z-h2"/>
+
+    <!-- Elevation Scale -->
+    <div sclass="z-paper">
+        <label value="Elevation Shadow Scale  (.z-elevation-0 — .z-elevation-3)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <label value="Higher elevation values render deeper shadows, conveying layers closer to the user." sclass="z-text-secondary z-text-sm z-mb-4"/>
+        <div sclass="z-d-flex z-gap-6 z-flex-wrap z-items-start">
+
+            <div style="text-align:center">
+                <div sclass="z-elevation-0 z-bg-surface z-rounded-md z-p-5" style="width:140px">
+                    <label value="Level 0" sclass="z-h5 z-d-block"/>
+                    <label value="No shadow" sclass="z-text-secondary z-text-sm z-mt-1"/>
+                </div>
+                <div sclass="z-mt-3">
+                    <label value=".z-elevation-0" sclass="z-fw-semibold z-text-lg z-text-primary z-d-block"/>
+                    <label value="Resting surface" sclass="z-text-secondary z-text-xs"/>
+                </div>
+            </div>
+
+            <div style="text-align:center">
+                <div sclass="z-elevation-1 z-bg-surface z-rounded-md z-p-5" style="width:140px">
+                    <label value="Level 1" sclass="z-h5 z-d-block"/>
+                    <label value="Subtle shadow" sclass="z-text-secondary z-text-sm z-mt-1"/>
+                </div>
+                <div sclass="z-mt-3">
+                    <label value=".z-elevation-1" sclass="z-fw-semibold z-text-lg z-text-primary z-d-block"/>
+                    <label value="Cards, menus" sclass="z-text-secondary z-text-xs"/>
+                </div>
+            </div>
+
+            <div style="text-align:center">
+                <div sclass="z-elevation-2 z-bg-surface z-rounded-md z-p-5" style="width:140px">
+                    <label value="Level 2" sclass="z-h5 z-d-block"/>
+                    <label value="Medium shadow" sclass="z-text-secondary z-text-sm z-mt-1"/>
+                </div>
+                <div sclass="z-mt-3">
+                    <label value=".z-elevation-2" sclass="z-fw-semibold z-text-lg z-text-primary z-d-block"/>
+                    <label value="Floating FAB, tooltips" sclass="z-text-secondary z-text-xs"/>
+                </div>
+            </div>
+
+            <div style="text-align:center">
+                <div sclass="z-elevation-3 z-bg-surface z-rounded-md z-p-5" style="width:140px">
+                    <label value="Level 3" sclass="z-h5 z-d-block"/>
+                    <label value="Deep shadow" sclass="z-text-secondary z-text-sm z-mt-1"/>
+                </div>
+                <div sclass="z-mt-3">
+                    <label value=".z-elevation-3" sclass="z-fw-semibold z-text-lg z-text-primary z-d-block"/>
+                    <label value="Dialogs, modals" sclass="z-text-secondary z-text-xs"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Levels 4 and 5 -->
+    <div sclass="z-paper">
+        <label value="Levels 4 and 5  (.z-elevation-4 / .z-elevation-5)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-6 z-flex-wrap z-items-start z-p-2">
+            <div sclass="z-elevation-4 z-bg-surface z-rounded-md z-p-5 pv-elevation-4" style="width:140px"><label value="Level 4" sclass="z-h5 z-d-block"/></div>
+            <div sclass="z-elevation-5 z-bg-surface z-rounded-md z-p-5 pv-elevation-5" style="width:140px"><label value="Level 5" sclass="z-h5 z-d-block"/></div>
+            <window title="Window .z-elevation-5" border="normal" width="220px" sclass="z-elevation-5 pv-elevation-window">
+                <label value="Overrides the window's own shadow"/>
+            </window>
+            <button label="Button .z-elevation-4" sclass="z-elevation-4 pv-elevation-button"/>
+        </div>
+    </div>
+
+    <!-- Elevation on dark background -->
+    <div sclass="z-paper">
+        <label value="Elevation on Tinted Background" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-bg-primary z-p-6 z-rounded-md z-d-flex z-gap-6 z-flex-wrap">
+            <div sclass="z-elevation-1 z-bg-surface z-rounded-md z-p-4" style="width:120px;text-align:center">
+                <label value="Level 1" sclass="z-h6 z-d-block z-text-on-surface"/>
+            </div>
+            <div sclass="z-elevation-2 z-bg-surface z-rounded-md z-p-4" style="width:120px;text-align:center">
+                <label value="Level 2" sclass="z-h6 z-d-block z-text-on-surface"/>
+            </div>
+            <div sclass="z-elevation-3 z-bg-surface z-rounded-md z-p-4" style="width:120px;text-align:center">
+                <label value="Level 3" sclass="z-h6 z-d-block z-text-on-surface"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practical use -->
+    <div sclass="z-paper">
+        <label value="Practical Usage" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <div sclass="z-d-flex z-gap-4 z-flex-wrap z-items-start">
+
+            <div sclass="z-elevation-1 z-bg-surface z-rounded-md z-p-4" style="width:220px">
+                <label value="Data Card" sclass="z-h5 z-d-block z-mb-2"/>
+                <label value="Use elevation-1 for cards that sit on the page surface. Helps separate content from background." sclass="z-text-secondary z-text-sm"/>
+            </div>
+
+            <div sclass="z-elevation-2 z-bg-surface z-rounded-lg z-p-4" style="width:220px">
+                <label value="Dropdown Menu" sclass="z-h5 z-d-block z-mb-2"/>
+                <label value="Use elevation-2 for overlays that float above the page, like dropdowns and popovers." sclass="z-text-secondary z-text-sm"/>
+                <div sclass="z-mt-3 z-d-flex z-gap-2">
+                    <button sclass="z-button z-button-primary">OK</button>
+                    <button sclass="z-button">Cancel</button>
+                </div>
+            </div>
+
+            <div sclass="z-elevation-3 z-bg-surface z-rounded-lg z-p-4" style="width:220px">
+                <label value="Modal Dialog" sclass="z-h5 z-d-block z-mb-2"/>
+                <label value="Use elevation-3 for dialogs, modals, and drawers that overlay the entire UI." sclass="z-text-secondary z-text-sm"/>
+            </div>
+
+        </div>
+    </div>
+
+</vlayout>
+</zk>

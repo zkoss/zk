@@ -150,6 +150,15 @@ public class F110_ZK_6084_SliderTooltipTest extends WebDriverTestCase {
 	}
 
 	@Test
+	public void aPinnedTooltipIsFullyOpaque() {
+		connectAndParkPointer();
+
+		// isVisible() ignores opacity, so a pinned tooltip left at opacity 0 would pass it
+		assertEquals("1", jq("$pinned" + TOOLTIP).first().css("opacity"),
+				"tooltipVisible pins the tooltip on screen, so it must not be faded out");
+	}
+
+	@Test
 	public void escapeLeavesAPinnedTooltipAlone() {
 		connectAndParkPointer();
 		assertTrue(jq("$pinned" + TOOLTIP).first().isVisible(), "precondition: tooltipVisible pins it");

@@ -1,0 +1,40 @@
+<zk xmlns:h="native">
+<apply templateURI="~./pv/matrix.zul" title="States"
+       cols="${['Default','Disabled']}"
+       rowsTemplate="colorbox-rows">
+    <template name="colorbox-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Default (palette)"/></div>
+            <div><colorbox/></div>
+            <div><colorbox disabled="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="With value"/></div>
+            <div><colorbox color="#184dc6"/></div>
+            <div><colorbox color="#184dc6" disabled="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Open swatch"/></div>
+            <div><colorbox color="#990000"/></div>
+            <div>—</div>
+        </div>
+    </template>
+</apply>
+
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Colorbox in Menu</h:span></h:div>
+    <h:div class="z-py-3">
+        <menubar>
+            <menu label="Format">
+                <menupopup>
+                    <menu label="Text Colour" content="#color=#184dc6"/>
+                    <menu label="Fill Colour" content="#color=#990000"/>
+                    <menuseparator/>
+                    <menuitem label="Clear Formatting"/>
+                </menupopup>
+            </menu>
+            <menu label="Quick Colour" content="#color=#2e7d32"/>
+        </menubar>
+    </h:div>
+</h:div>
+</zk>

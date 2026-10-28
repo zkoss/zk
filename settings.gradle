@@ -17,4 +17,5 @@ includeBuild new File(rootDir, "zksandbox")
 
 if (System.getProperty("user.name") != "zkoss") {
     includeBuild new File(rootDir, "zktest")
+    includeBuild new File(rootDir, "zkthemelab")
 }

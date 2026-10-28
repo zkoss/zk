@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — cropper</title>
+<!--
+  Self-contained marble design contract mockup.
+  Tier: T3 — .z-cropper and .z-cropper-toolbar (+ ul/li/a) are the free design surface.
+  Jcrop-injected DOM (.z-cropper-holder, .z-cropper-area, .jcrop-*) is structural-required:
+  Jcrop ships NO stylesheet — the theme must reproduce the upstream codegen geometry verbatim
+  (only decorative values are theme choices). Not depicted here; see contract boundary yaml.
+
+  Compare against: doc/contracts/baselines/cropper-iceblue.png
+  Rules file:      .claude/skills/zk-component-rules/components/cropper.md
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-tertiary: #7e73d6;
+    --zk-color-error: #d32f2f;
+    --zk-color-warning: #f57c00;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-extra-small: 4px;
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-body-medium-size: 14px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+    --zk-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+    --zk-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* Motion */
+    --zk-motion-duration-short1: 100ms;
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-duration-medium1: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout — NOT part of component contract)
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section {
+    margin-bottom: var(--zk-spacing-8);
+}
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: var(--zk-spacing-3);
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+.note {
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface-variant);
+    margin-top: var(--zk-spacing-2);
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    background: var(--zk-color-surface-container);
+    border-left: 3px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-corner-extra-small);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Component-specific styles — T3 contract design surface.
+   .z-cropper wrapper + .z-cropper-toolbar (ul/li/a) are themed here.
+   Jcrop internals (.z-cropper-holder, .z-cropper-area, .jcrop-*, etc.)
+   are structural-required (geometry from upstream codegen) — not depicted.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* c1, c2, c3, c6 — wrapper border, radius, overflow, shrink-wrap */
+.z-cropper {
+    display: inline-block;
+    position: relative;
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-extra-small);
+    overflow: hidden;
+}
+
+/* c4, c5, c7, c8 — MD3 floating toolbar: surface-container pill, elevation-2, 8px clearance */
+.z-cropper-toolbar {
+    position: absolute;
+    margin: var(--zk-spacing-2) var(--zk-spacing-1);
+    padding: var(--zk-spacing-1);
+    background-color: var(--zk-color-surface-container);
+    border-radius: var(--zk-shape-corner-full);
+    box-shadow: var(--zk-elevation-2);
+    user-select: none;
+}
+
+.z-cropper-toolbar > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--zk-spacing-1);
+}
+/* c9, c10, c12 — compact MD3 text buttons */
+.z-cropper-toolbar > ul > li > a {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 var(--zk-spacing-3);
+    border-radius: var(--zk-shape-corner-full);
+    text-decoration: none;
+    font-size: 14px;  /* label-large */
+    font-weight: var(--zk-font-weight-medium);
+    line-height: 20px;
+    text-transform: capitalize;
+}
+.z-cropper-crop > a   { color: var(--zk-color-primary); }
+.z-cropper-cancel > a { color: var(--zk-color-on-surface-variant); }
+/* c11 — standard ::before state layer */
+.z-cropper-toolbar > ul > li > a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--zk-motion-duration-short1) var(--zk-motion-easing-standard);
+}
+.z-cropper-toolbar > ul > li > a:hover::before  { opacity: var(--zk-state-hover-opacity); }
+.z-cropper-toolbar > ul > li > a:active::before { opacity: var(--zk-state-pressed-opacity); }
+/* mockup-only: forced hover for the static hover cell */
+.mock-force-hover::before { opacity: var(--zk-state-hover-opacity) !important; }
+
+/* ── Mockup-only: simulated image placeholder (stands in for the real <img>) ── */
+.mock-image-area {
+    display: block;
+    width: 400px;
+    height: 260px;
+    background: linear-gradient(
+        135deg,
+        var(--zk-color-surface-container) 0%,
+        var(--zk-color-surface-container-high) 50%,
+        var(--zk-color-surface-container) 100%
+    );
+    position: relative;
+}
+.mock-image-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--zk-color-disabled);
+    font-size: var(--zk-typescale-body-small-size);
+    text-align: center;
+    pointer-events: none;
+}
+/* Simulated Jcrop selection overlay — shown only in "toolbar visible" state cell */
+.mock-selection {
+    position: absolute;
+    top: 60px;
+    left: 80px;
+    width: 200px;
+    height: 120px;
+    outline: 1px dashed rgba(255,255,255,0.8);
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.4);
+    pointer-events: none;
+}
+/* Simulated toolbar positioned above/below selection */
+.mock-toolbar-positioned {
+    position: absolute;
+    top: 190px;      /* just below mock selection */
+    left: 80px;
+    z-index: 601;
+}
+</style>
+</head>
+<body>
+
+<h1>cropper — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T3 (wrapper-only)</span>
+    <span>closest-sibling: none (novel media wrapper)</span>
+</div>
+
+<p class="note">
+    T3 component: <code>.z-cropper</code> and <code>.z-cropper-toolbar</code> (+ ul/li/a) are the free design surface.
+    The Jcrop library injects <code>.z-cropper-holder</code>, <code>.z-cropper-area</code>,
+    <code>.z-cropper-handle</code>, <code>.jcrop-dragbar</code>, and related elements at runtime
+    but ships <strong>no stylesheet</strong> — the theme MUST reproduce the upstream codegen geometry
+    for them verbatim (structural-required; only decorative values are theme choices).
+    <code>.z-cropper-canvas</code> does NOT exist in the live DOM.
+</p>
+
+<!-- ──────────────────────────────────────────────────────────────────────
+     State: default (image loaded, no selection active)
+     Contract rows: c1, c2, c3
+     ──────────────────────────────────────────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Wrapper — default state (no active selection)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default<br><small>c1 border<br>c2 radius<br>c3 overflow</small></div>
+        <div class="state-cell">
+            <!--
+              .z-cropper root:
+                border: 1px solid var(--zk-color-outline-variant)   [c1]
+                border-radius: var(--zk-shape-corner-extra-small)    [c2]
+                overflow: hidden                                       [c3]
+            -->
+            <div class="z-cropper">
+                <!-- Jcrop-injected DOM lives inside the <img>; simulated as a placeholder here -->
+                <div class="mock-image-area">
+                    <div class="mock-image-label">
+                        [image area]<br>
+                        Jcrop internals injected here at runtime<br>
+                        (.z-cropper-holder, .z-cropper-area, etc.)
+                    </div>
+                </div>
+                <!-- Toolbar is display:none at rest — not rendered in this state -->
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ──────────────────────────────────────────────────────────────────────
+     State: toolbar visible (selection active)
+     Contract rows: c4, c5
+     ──────────────────────────────────────────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Toolbar — visible state (active crop selection)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">toolbar visible<br><small>c4 bg-color<br>c5 elevation<br>c7 radius<br>c8 margin</small></div>
+        <div class="state-cell">
+            <!--
+              .z-cropper-toolbar (when shown by JS _showToolbar()):
+                background-color: var(--zk-color-surface-container)   [c4]
+                box-shadow: var(--zk-elevation-2)                     [c5]
+                border-radius: var(--zk-shape-corner-full)            [c7]
+                margin: var(--zk-spacing-2) var(--zk-spacing-1)       [c8 — 8px selection clearance]
+                position: absolute; z-index: 601 (inline from mold)
+            -->
+            <div class="z-cropper" style="position:relative;">
+                <div class="mock-image-area">
+                    <div class="mock-image-label">
+                        [image + Jcrop selection overlay]
+                    </div>
+                    <!-- Simulated Jcrop selection rectangle -->
+                    <div class="mock-selection"></div>
+                    <!-- Toolbar positioned by JS near the selection -->
+                    <div class="z-cropper-toolbar mock-toolbar-positioned">
+                        <ul>
+                            <li class="z-cropper-crop"><a href="javascript:;">crop</a></li>
+                            <li class="z-cropper-cancel"><a href="javascript:;">cancel</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p class="note" style="margin-top:var(--zk-spacing-3)">
+                Toolbar is JS-positioned (<code>_positionToolbar</code>) relative to the active Jcrop selection.
+                Position varies depending on available space around the selection rectangle.
+                The <code>z-index: 601</code> is hard-coded in the mold to exceed Jcrop's internal z-index maximum.
+            </p>
+        </div>
+
+        <div class="state-label">toolbar items + hover<br><small>c9 crop=primary<br>c10 cancel=on-surface-variant<br>c11 state layer<br>c12 pill items</small></div>
+        <div class="state-cell">
+            <!-- crop hover simulated via .mock-force-hover (c11: ::before @ --zk-state-hover-opacity) -->
+            <div class="z-cropper-toolbar" style="position:static; display:inline-block; margin:0;">
+                <ul>
+                    <li class="z-cropper-crop"><a href="javascript:;" class="mock-force-hover">crop</a></li>
+                    <li class="z-cropper-cancel"><a href="javascript:;">cancel</a></li>
+                </ul>
+            </div>
+            <p class="note" style="margin-top:var(--zk-spacing-3)">
+                Crop item shown in forced hover: <code>::before</code> state layer at
+                <code>--zk-state-hover-opacity</code> (0.08), pressed at 0.12 — button.css convention (c11).
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- ──────────────────────────────────────────────────────────────────────
+     T3 boundary summary
+     ──────────────────────────────────────────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>T3 Boundary Reference</h2>
+    <div class="note">
+        <strong>Restyle freely (theme design surface):</strong><br>
+        <code>.z-cropper</code> — root wrapper<br>
+        <code>.z-cropper-toolbar</code> — floating action toolbar<br>
+        <code>.z-cropper-toolbar &gt; ul</code>, <code>li</code>, <code>a</code> — action items<br>
+        <br>
+        <strong>Structural-required (Jcrop-injected, but Jcrop ships NO stylesheet — theme MUST reproduce upstream codegen geometry; decorative values only may diverge):</strong><br>
+        <code>.z-cropper-holder</code> — Jcrop image container (never set width/height — JS owns)<br>
+        <code>.z-cropper-area</code> — selection overlay (outline 1px solid white, cursor move)<br>
+        <code>.z-cropper-vline</code>, <code>.z-cropper-hline</code> — 1px guide lines<br>
+        <code>.z-cropper-tracker</code> — full-size mouse-event capture overlay<br>
+        <code>.z-cropper-handle</code> — 6×6 handles + 8 per-ordinal transforms<br>
+        <code>.jcrop-dragbar</code> — 6px resize bars (retains jcrop- prefix despite baseClass override)<br>
+        <br>
+        <strong>Forbidden:</strong><br>
+        <code>.z-cropper-canvas</code> — DOES NOT EXIST (absent from live DOM — do not reference)
+    </div>
+</section>
+
+</body>
+</html>

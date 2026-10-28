@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Marble 測試網</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column; each layer of the test net owns one hue, reused in every diagram and table */
+:root {
+  color-scheme: light;
+  --bg: #f4f6f7;
+  --surface: #ffffff;
+  --fg: #1c2329;
+  --muted: #5a6672;
+  --line: #d3d9df;
+  --l0: #6d7782;  /* static checks */
+  --l1: #2a67a8;  /* Playwright */
+  --l2: #7a52b3;  /* agent harness */
+  --l3: #b06a12;  /* Jenkins */
+  --l4: #2f8460;  /* human review */
+  --l0-tint: #eceff2;
+  --l1-tint: #e6eef8;
+  --l2-tint: #efe9f8;
+  --l3-tint: #f8eee0;
+  --l4-tint: #e4f3ec;
+  --code-bg: #eaeef1;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12171b; --surface: #1a2127; --fg: #e4e9ed; --muted: #98a4af; --line: #2d363e;
+    --l0: #a3adb7; --l1: #6ea8e6; --l2: #b393e8; --l3: #e0a254; --l4: #62c495;
+    --l0-tint: #222a31; --l1-tint: #1a2a3b; --l2-tint: #2a2238; --l3-tint: #33281a; --l4-tint: #1a3128;
+    --code-bg: #232c33; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12171b; --surface: #1a2127; --fg: #e4e9ed; --muted: #98a4af; --line: #2d363e;
+  --l0: #a3adb7; --l1: #6ea8e6; --l2: #b393e8; --l3: #e0a254; --l4: #62c495;
+  --l0-tint: #222a31; --l1-tint: #1a2a3b; --l2-tint: #2a2238; --l3-tint: #33281a; --l4-tint: #1a3128;
+  --code-bg: #232c33; color-scheme: dark;
+}
+html { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.7; }
+img { max-width: 100%; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 40px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 48px; }
+h1 { font-size: 30px; line-height: 1.25; margin: 0; text-wrap: balance; letter-spacing: .01em; }
+h2 { font-size: 21px; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 68ch; }
+code { font-family: var(--font-mono); font-size: .86em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+header { display: flex; flex-direction: column; gap: 14px; }
+.lede { font-size: 17px; color: var(--muted); }
+.lede strong { color: var(--fg); }
+section { display: flex; flex-direction: column; gap: 18px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; }
+.chip::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.c0 { color: var(--l0); background: var(--l0-tint); }
+.c1 { color: var(--l1); background: var(--l1-tint); }
+.c2 { color: var(--l2); background: var(--l2-tint); }
+.c3 { color: var(--l3); background: var(--l3-tint); }
+.c4 { color: var(--l4); background: var(--l4-tint); }
+.figure { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; overflow-x: auto; }
+.figure svg { display: block; width: 100%; min-width: 760px; height: auto; }
+svg text { font-family: var(--font-body); }
+svg .t { fill: var(--fg); font-size: 15px; font-weight: 700; }
+svg .s { fill: var(--muted); font-size: 12.5px; }
+svg .m { fill: var(--muted); font-size: 12px; font-family: var(--font-mono); }
+svg .lbl { fill: var(--muted); font-size: 12.5px; font-weight: 500; }
+svg .box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+svg .b0 { fill: var(--l0-tint); stroke: var(--l0); stroke-width: 1.5; }
+svg .b1 { fill: var(--l1-tint); stroke: var(--l1); stroke-width: 1.5; }
+svg .b2 { fill: var(--l2-tint); stroke: var(--l2); stroke-width: 1.5; }
+svg .b3 { fill: var(--l3-tint); stroke: var(--l3); stroke-width: 1.5; }
+svg .b4 { fill: var(--l4-tint); stroke: var(--l4); stroke-width: 1.5; }
+svg .ar { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+svg .dash { stroke-dasharray: 5 4; }
+svg .ah { fill: var(--muted); }
+.caption { font-size: 13.5px; color: var(--muted); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.card h3 { margin: 0; font-size: 15.5px; }
+.card ul { margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+.card ul b { color: var(--fg); font-weight: 500; }
+.tol { font-family: var(--font-mono); font-size: 12px; color: var(--l1); }
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+thead th { font-size: 12.5px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+td.dot { text-align: center; width: 12%; white-space: nowrap; }
+.full, .part { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: -1px; }
+.full { background: var(--hue); }
+.part { border: 2px solid var(--hue); }
+.h1c { --hue: var(--l1); } .h2c { --hue: var(--l2); } .h3c { --hue: var(--l3); } .h4c { --hue: var(--l4); }
+td small { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.none { color: var(--line); }
+.keyrow { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--muted); }
+.keyrow span { display: inline-flex; align-items: center; gap: 6px; --hue: var(--muted); }
+.obs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.ob { border-left: 3px solid var(--l3); background: var(--surface); padding: 14px 16px; border-radius: 0 8px 8px 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ob.done { border-left-color: var(--l4); }
+.ob h3 { margin: 0; font-size: 15px; }
+.ob p { font-size: 13.5px; color: var(--muted); }
+footer { font-size: 12.5px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--line); padding-top: 18px; }
+footer code { font-size: 11.5px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">ZK 11 · Marble 主題 · 2026-10-20 現況</div>
+  <h1>一行 CSS 改壞了，誰會發現？</h1>
+  <p class="lede">Marble 的外觀由<strong>五層</strong>檢查把關。主力是 Playwright：每個預覽頁<strong>分區截圖</strong>、彈出層<strong>打開後截圖</strong>，並有<strong>選擇器</strong>依改動挑出該跑的測試。部分測試在本機跑；選擇器判定要全測時，由負責人決定何時跑。目前不接 CI 或 Jenkins。</p>
+  <div class="legend">
+    <span class="chip c0">靜態檢查</span>
+    <span class="chip c1">Playwright 回歸套件</span>
+    <span class="chip c2">Agent 驗證流程</span>
+    <span class="chip c3">Jenkins</span>
+    <span class="chip c4">人工審查</span>
+  </div>
+</header>
+
+<section>
+  <div class="eyebrow">一 · 架構</div>
+  <h2>CSS 從原始檔到被檢查的路徑</h2>
+  <p>CSS 建置進 jar 之後，被三個網站載入；每個網站上各有一層檢查。選擇器讀取 git 的改動與 class 索引，決定 Playwright 要跑哪些測試。</p>
+  <div class="figure">
+    <svg viewBox="0 0 1000 470" role="img" aria-label="Marble 測試架構圖">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10z"/></marker>
+      </defs>
+      <rect class="box" x="20" y="20" width="220" height="64" rx="8"/>
+      <text class="t" x="130" y="46" text-anchor="middle">修改 CSS</text>
+      <text class="m" x="130" y="68" text-anchor="middle">zul/…/css · zkcml</text>
+      <rect class="box" x="300" y="20" width="250" height="64" rx="8"/>
+      <text class="t" x="425" y="46" text-anchor="middle">建置</text>
+      <text class="m" x="425" y="68" text-anchor="middle">compileMarbleCss → .css.dsp</text>
+      <rect class="box" x="610" y="20" width="370" height="64" rx="8"/>
+      <text class="t" x="795" y="46" text-anchor="middle">打包進 jar</text>
+      <text class="m" x="795" y="68" text-anchor="middle">zul.jar · zkex.jar · zkmax.jar</text>
+      <path class="ar" d="M240 52 H296" marker-end="url(#arr)"/>
+      <path class="ar" d="M550 52 H606" marker-end="url(#arr)"/>
+      <rect class="b0" x="20" y="112" width="220" height="64" rx="8"/>
+      <text class="t" x="130" y="138" text-anchor="middle">靜態檢查</text>
+      <text class="s" x="130" y="160" text-anchor="middle">audit-css · lint:css，手動執行</text>
+      <path class="ar dash" d="M130 84 V108" marker-end="url(#arr)"/>
+      <path class="ar" d="M795 84 V200 M380 200 H865"/>
+      <path class="ar" d="M380 200 V236" marker-end="url(#arr)"/>
+      <path class="ar" d="M605 200 V236" marker-end="url(#arr)"/>
+      <path class="ar" d="M865 200 V236" marker-end="url(#arr)"/>
+      <rect class="box" x="270" y="240" width="220" height="64" rx="8"/>
+      <text class="t" x="380" y="266" text-anchor="middle">預覽站 zkthemelab</text>
+      <text class="s" x="380" y="288" text-anchor="middle">115 個預覽頁＋測試專用頁</text>
+      <rect class="box" x="510" y="240" width="190" height="64" rx="8"/>
+      <text class="t" x="605" y="266" text-anchor="middle">zktest 測試站</text>
+      <text class="s" x="605" y="288" text-anchor="middle">Jenkins · PR 分支</text>
+      <rect class="box" x="720" y="240" width="260" height="64" rx="8"/>
+      <text class="t" x="850" y="266" text-anchor="middle">示範站</text>
+      <text class="s" x="850" y="288" text-anchor="middle">zkdemo</text>
+      <path class="ar" d="M330 304 V340 H130 V356" marker-end="url(#arr)"/>
+      <path class="ar" d="M430 304 V340 H365 V356" marker-end="url(#arr)"/>
+      <path class="ar" d="M605 304 V356" marker-end="url(#arr)"/>
+      <path class="ar" d="M850 304 V356" marker-end="url(#arr)"/>
+      <rect class="b1" x="20" y="360" width="220" height="96" rx="8"/>
+      <text class="t" x="130" y="386" text-anchor="middle">Playwright 回歸套件</text>
+      <text class="s" x="130" y="408" text-anchor="middle">29 個 project · 31 個 spec</text>
+      <text class="s" x="130" y="426" text-anchor="middle">1,692 個測試 · 706 張基準 PNG</text>
+      <text class="s" x="130" y="444" text-anchor="middle">選擇器挑測試 · 本機手動</text>
+      <rect class="b2" x="255" y="360" width="220" height="96" rx="8"/>
+      <text class="t" x="365" y="386" text-anchor="middle">Agent 驗證流程</text>
+      <text class="s" x="365" y="408" text-anchor="middle">94 份元件 contract</text>
+      <text class="s" x="365" y="426" text-anchor="middle">Gate 1 量測 ＋ Gate 2 設計</text>
+      <text class="s" x="365" y="444" text-anchor="middle">撰寫或大改元件時</text>
+      <rect class="b3" x="495" y="360" width="220" height="96" rx="8"/>
+      <text class="t" x="605" y="386" text-anchor="middle">ZATS 功能測試</text>
+      <text class="s" x="605" y="408" text-anchor="middle">Selenium · 3,939 個 @Test</text>
+      <text class="s" x="605" y="426" text-anchor="middle">一次約 2.5 小時（未重驗）</text>
+      <text class="s" x="605" y="444" text-anchor="middle">Jenkins 平日輪詢＋手動</text>
+      <rect class="b4" x="740" y="360" width="240" height="96" rx="8"/>
+      <text class="t" x="860" y="386" text-anchor="middle">人工審查</text>
+      <text class="s" x="860" y="412" text-anchor="middle">zkdemo 回報：B6–B9</text>
+      <text class="s" x="860" y="432" text-anchor="middle">看真實畫面，不比對像素</text>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">二 · 主力</div>
+  <h2>Playwright 套件裡有五類檢查</h2>
+  <p>同一個預覽站，五種問法：畫面跟上次一樣嗎、換品牌色或密度還正常嗎、某個數值對嗎、頁面打得開嗎、有沒有違反無障礙或系統規則。</p>
+  <div class="cards">
+    <div class="card">
+      <h3>截圖比對</h3>
+      <ul>
+        <li><b>gallery</b>：每頁依分區標題<b>分區截圖</b>，依檔名計 395 張（97 頁），新頁自動納入 <span class="tol">每區 ≤ 20 px</span></li>
+        <li><b>狀態截圖</b>：23 個表單元件的 hover／focus／active <span class="tol">≤ 20 px</span></li>
+        <li><b>彈出層</b>：26 個預覽頁、56 個測試，用真實操作打開後截圖，含 toast、notification、messagebox、errorbox <span class="tol">10–20 px</span></li>
+        <li><b>tablet</b>：iPad UA 下 58 個測試、31 張 PNG</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>品牌色與緊湊密度</h3>
+      <ul>
+        <li><b>brand</b>：<code>data-brand="copper"</code> 下掃描全部頁面，找「沒跟著主色變」的像素；另有 15 頁分區截圖（128 個測試）</li>
+        <li><b>compact</b>：15 頁分區截圖，加全部頁面兩種密度的控制項高度檢查（129 個測試）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>數值守衛</h3>
+      <ul>
+        <li>讀 <code>getComputedStyle</code> 與元素位置，不看圖</li>
+        <li>每條守衛鎖住一個<b>過去出過的問題</b></li>
+        <li><b>component-theme-variables</b>：63 個測試確認 <code>--zk-&lt;元件&gt;-*</code> 覆寫在各元件頁生效</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>能不能渲染</h3>
+      <ul>
+        <li><b>smoke</b>：119 個測試，每個預覽頁（含 <code>inputs</code>、<code>overview</code> 這類彙整頁）打開後沒有 HTTP 500、沒有 ZK compose error</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>無障礙與系統規則</h3>
+      <ul>
+        <li><b>hit-target</b> 觸控尺寸、<b>focus-scan</b> focus ring 被裁</li>
+        <li><b>forced-colors</b> 高對比模式；另有 99 張截圖只供人工看</li>
+        <li><b>zindex</b>、reset、responsive、print、font-size</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">三 · 選擇器</div>
+  <h2>只改一個元件時，只跑相關的測試</h2>
+  <p><code>zkthemelab/scripts/select-tests.mjs</code> 讀 git 的改動，回答「全測」「部分測」或「不測」，並輸出一個可直接執行的指令。</p>
+  <div class="figure">
+    <svg viewBox="0 0 1000 220" role="img" aria-label="選擇器對應流程圖">
+      <defs>
+        <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10z"/></marker>
+      </defs>
+      <rect class="box" x="20" y="30" width="200" height="72" rx="8"/>
+      <text class="t" x="120" y="58" text-anchor="middle">改動的檔案</text>
+      <text class="s" x="120" y="82" text-anchor="middle">只看被改的那幾條規則</text>
+      <rect class="box" x="270" y="30" width="200" height="72" rx="8"/>
+      <text class="t" x="370" y="58" text-anchor="middle">受影響的 class</text>
+      <text class="s" x="370" y="82" text-anchor="middle">含所屬元件</text>
+      <rect class="box" x="520" y="30" width="200" height="72" rx="8"/>
+      <text class="t" x="620" y="58" text-anchor="middle">有這些 class 的頁</text>
+      <text class="s" x="620" y="82" text-anchor="middle">class 索引 · 143 頁</text>
+      <rect class="b1" x="770" y="30" width="210" height="72" rx="8"/>
+      <text class="t" x="875" y="58" text-anchor="middle">會開這些頁的測試</text>
+      <text class="s" x="875" y="82" text-anchor="middle">合成一個指令 · 可平行</text>
+      <path class="ar" d="M220 66 H266" marker-end="url(#arr3)"/>
+      <path class="ar" d="M470 66 H516" marker-end="url(#arr3)"/>
+      <path class="ar" d="M720 66 H766" marker-end="url(#arr3)"/>
+      <rect class="b0" x="20" y="140" width="460" height="56" rx="8"/>
+      <text class="t" x="250" y="164" text-anchor="middle">直接全測</text>
+      <text class="s" x="250" y="185" text-anchor="middle">token、base、utility、註冊檔、字型 · 對應不到 · 超過全部測試的 2/3</text>
+      <rect class="b4" x="520" y="140" width="460" height="56" rx="8"/>
+      <text class="t" x="750" y="164" text-anchor="middle">不測</text>
+      <text class="s" x="750" y="185" text-anchor="middle">只改文件 · 彙整頁只在自己被改時才測</text>
+    </svg>
+  </div>
+  <p class="caption">class 索引（<code>zkthemelab/doc/class-index.json</code>）由 <code>build-class-index.mjs</code> 產生，目前涵蓋 143 頁（115 頂層、16 個 <code>pv/</code>、12 個 <code>utility/</code>）；新增頁面後要重跑。實測（2026-10-20，共 1,692 個測試）：整檔解析 <code>combobox.css</code> 會選出 1,248 個，超過門檻 1,128，所以回答全測；改 token 檔也直接回答全測。只改單一規則時的選出數見 <code>tasks/marble-test-infra-conclusion.md</code>（1,345 個測試時：<code>button.css</code> 選出 646，combobox 128 個）。</p>
+</section>
+
+<section>
+  <div class="eyebrow">四 · 流程</div>
+  <h2>改一行 CSS 之後的標準流程</h2>
+  <div class="figure">
+    <svg viewBox="0 0 1000 400" role="img" aria-label="CSS 修改後的驗證流程圖">
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10z"/></marker>
+      </defs>
+      <rect class="box" x="20" y="30" width="170" height="64" rx="8"/>
+      <text class="t" x="105" y="57" text-anchor="middle">1 改 CSS</text>
+      <text class="s" x="105" y="79" text-anchor="middle">元件 .css 或 token</text>
+      <rect class="box" x="220" y="30" width="170" height="64" rx="8"/>
+      <text class="t" x="305" y="57" text-anchor="middle">2 建置、重啟</text>
+      <text class="s" x="305" y="79" text-anchor="middle">compileMarbleCss · appRun</text>
+      <rect class="box" x="420" y="30" width="170" height="64" rx="8"/>
+      <text class="t" x="505" y="57" text-anchor="middle">3 選擇器</text>
+      <text class="m" x="505" y="79" text-anchor="middle">select-tests.mjs</text>
+      <rect class="b1" x="620" y="30" width="200" height="64" rx="8"/>
+      <text class="t" x="720" y="57" text-anchor="middle">4 跑 Playwright</text>
+      <text class="s" x="720" y="79" text-anchor="middle">選擇器給的指令</text>
+      <path class="ar" d="M190 62 H216" marker-end="url(#arr2)"/>
+      <path class="ar" d="M390 62 H416" marker-end="url(#arr2)"/>
+      <path class="ar" d="M590 62 H616" marker-end="url(#arr2)"/>
+      <path class="ar" d="M720 94 V192" marker-end="url(#arr2)"/>
+      <path class="box" d="M720 196 L800 230 L720 264 L640 230 Z"/>
+      <text class="t" x="720" y="235" text-anchor="middle">有差異？</text>
+      <path class="ar" d="M800 230 H826" marker-end="url(#arr2)"/>
+      <text class="lbl" x="813" y="222" text-anchor="middle">否</text>
+      <rect class="box" x="830" y="198" width="150" height="64" rx="8"/>
+      <text class="t" x="905" y="225" text-anchor="middle">commit</text>
+      <text class="s" x="905" y="247" text-anchor="middle">推 PR</text>
+      <path class="ar" d="M905 262 V306" marker-end="url(#arr2)"/>
+      <rect class="b3" x="830" y="310" width="150" height="64" rx="8"/>
+      <text class="t" x="905" y="337" text-anchor="middle">Jenkins</text>
+      <text class="s" x="905" y="359" text-anchor="middle">ZATS 功能測試</text>
+      <path class="ar" d="M640 230 H559" marker-end="url(#arr2)"/>
+      <text class="lbl" x="600" y="222" text-anchor="middle">是</text>
+      <path class="box" d="M470 196 L555 230 L470 264 L385 230 Z"/>
+      <text class="t" x="470" y="235" text-anchor="middle">刻意改的？</text>
+      <path class="ar" d="M385 230 H194" marker-end="url(#arr2)"/>
+      <text class="lbl" x="290" y="222" text-anchor="middle">否：這是回歸</text>
+      <rect class="box" x="20" y="198" width="170" height="64" rx="8"/>
+      <text class="t" x="105" y="225" text-anchor="middle">修 CSS</text>
+      <text class="s" x="105" y="247" text-anchor="middle">回到步驟 1</text>
+      <path class="ar" d="M105 198 V98" marker-end="url(#arr2)"/>
+      <path class="ar" d="M470 264 V306" marker-end="url(#arr2)"/>
+      <text class="lbl" x="482" y="290">是</text>
+      <rect class="b1" x="300" y="310" width="310" height="64" rx="8"/>
+      <text class="t" x="455" y="337" text-anchor="middle">更新基準截圖</text>
+      <text class="m" x="455" y="359" text-anchor="middle">--update-snapshots=changed，逐張看</text>
+      <path class="ar" d="M610 342 H812 V246 H826" marker-end="url(#arr2)"/>
+    </svg>
+  </div>
+  <p class="caption">新元件或整個元件重做時，步驟 1 之前會先走 Agent 驗證流程：先寫 contract，Gate 1（<code>zk-theme-evaluator</code>）量測實作是否符合 contract，Gate 2（<code>md3-design-verifier</code>）判斷設計是否符合 Material Design。預覽站在 <code>web.xml</code> 設 5 分鐘 session 逾時，避免連跑時 ZK 每個 session 一條的 Timer 執行緒堆積（ZK-6213，見 <code>tasks/zkthemelab-thread-leak.md</code>）。</p>
+</section>
+
+<section>
+  <div class="eyebrow">五 · 覆蓋</div>
+  <h2>哪一種壞法，會被哪一層抓到</h2>
+  <div class="keyrow">
+    <span><i class="full"></i>主要負責</span>
+    <span><i class="part"></i>部分、或要剛好有跑到</span>
+    <span><span class="none">—</span>抓不到</span>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th>壞掉的樣子</th><th>Playwright</th><th>Agent 流程</th><th>Jenkins ZATS</th><th>人工審查</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>預覽頁打不開（500、compose error）<small>smoke</small></td>
+          <td class="dot h1c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h3c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td></tr>
+        <tr><td>靜態外觀變了：顏色、間距、邊框、圓角<small>分區截圖，每區超過 20 px 就失敗；整頁 0.2% 抓不到的小改動，分區後抓得到</small></td>
+          <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
+        <tr><td>hover、focus、active 狀態變了<small>23 個表單元件有狀態截圖；其他元件只有靜止畫面</small></td>
+          <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
+        <tr><td>只有彈出層打開時才看得到的樣式<small>26 個預覽頁、56 個測試；tablet 上的彈出層尚未量測（<code>tasks/marble-tablet-popup-coverage-measure.md</code>）</small></td>
+          <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
+        <tr><td>平板版跑掉<small>tablet project，iPad UA</small></td>
+          <td class="dot h1c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td></tr>
+        <tr><td>換品牌色或 compact 密度後，有元件沒跟著變或高度不對<small>brand、compact project；靜止畫面，色彩只比對主色家族</small></td>
+          <td class="dot h1c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td></tr>
+        <tr><td>觸控尺寸、focus ring 被裁、疊層順序、高對比模式</td>
+          <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td></tr>
+        <tr><td>客戶覆寫元件主題變數失效<small>component-theme-variables</small></td>
+          <td class="dot h1c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td></tr>
+        <tr><td>CSS 改變了尺寸或位置，元件功能測試失敗</td>
+          <td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td><td class="dot h3c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td></tr>
+        <tr><td>符合規格，但設計不好看或不像 Material Design</td>
+          <td class="dot"><span class="none">—</span></td><td class="dot h2c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
+        <tr><td>預覽頁沒有示範的用法或元件組合</td>
+          <td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td><td class="dot h3c"><i class="part"></i></td><td class="dot h4c"><i class="full"></i></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">六 · 觸發</div>
+  <h2>誰按下執行鍵</h2>
+  <div class="obs">
+    <div class="ob">
+      <h3>GitHub Actions 不跑外觀測試</h3>
+      <p><code>zk-build</code> 只跑 <code>./gradlew clean build</code>，並把 <code>includeBuild</code>（含 zkthemelab）註解掉；<code>sync-marble-theme</code> 只把 CSS 同步到 zkThemeTemplate。沒有任何 workflow 或 git hook 執行 Playwright。</p>
+    </div>
+    <div class="ob">
+      <h3>Playwright 仍靠人在本機跑</h3>
+      <p>選擇器讓本機只跑相關的測試；例如改 listbox、datebox、combobox 的一條規則，部分測 29–49 秒，約為不平行全測 380 秒的 8–13%（改 <code>button.css</code> 的規則則約 53%）。但沒有人跑就不會有紅燈。</p>
+    </div>
+    <div class="ob done">
+      <h3>規則：部分測本機跑，全測人工決定</h3>
+      <p>改動後先跑選擇器。回答「部分測」就在本機跑它給的指令；回答「全測」時不自動跑，回報原因，由負責人決定何時全測。使用者機器上的 Claude Code hook（<code>.claude/hooks/marble-select-tests.mjs</code>，不進 git）會在 session 改到 CSS、預覽頁或 spec 的那一輪結束時自動跑選擇器。Jenkins 接線計畫暫緩，結論見 <code>tasks/marble-test-infra-conclusion.md</code>。</p>
+    </div>
+    <div class="ob">
+      <h3>ZATS 由核心團隊觸發</h3>
+      <p>Jenkins <code>ZK-Gradle-ZATS-Test</code> 平日 8–19 點輪詢加手動，跑在 PR 分支上（參數 <code>pr/N</code>）。從 fork 開 draft PR 就能用同一個 job 跑，見 <code>tasks/jenkins-zats-fork-run.md</code>。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>來源（量測於 2026-10-20）：<code>zkthemelab/src/test/playwright/playwright.config.ts</code>（29 個 project）、<code>npx playwright test --list</code> 與 <code>select-tests.mjs --json</code>（1,692 個測試）、<code>zkthemelab/doc/screenshots/</code>（706 張非 forced-colors PNG、99 張 forced-colors 審查圖）、<code>zkthemelab/doc/class-index.json</code>（143 頁）、<code>doc/contracts/</code>（94 份 .md、19 份 .html 範本）、<code>zktest/src/test/java</code>（3,939 個 <code>@Test</code>）、<code>.github/workflows/</code>、<code>zkthemelab/src/main/webapp/WEB-INF/web.xml</code>。文字依據：<code>tasks/marble-test-gaps.md</code>、<code>tasks/marble-test-infra-conclusion.md</code>、<code>tasks/marble-popup-gallery-conclusion.md</code>、<code>tasks/zkthemelab-thread-leak.md</code>、<code>tasks/jenkins-zats-fork-run.md</code>。</div>
+  <div>怎麼跑、截圖規則、固定日期做法：見 <code>doc/playwright-visual-test-guide.md</code>。</div>
+  <div>未在本次重驗：Jenkins 一次約 2.5 小時；部分測的秒數與 380 秒全測基準（來自 marble-test-infra-conclusion.md 的 2026-10-16～18 量測，當時共 1,345 個測試）。</div>
+</footer>
+
+</div>
+
+</body>
+</html>

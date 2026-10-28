@@ -14,6 +14,7 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -37,7 +38,10 @@ public class B110_ZK_6164Test extends WebDriverTestCase {
 		eval("document.documentElement.style.setProperty('" + name + "', '" + value + "')");
 	}
 
+	// IceBlue-only: overrides IceBlue's --zk-button-padding / -border-radius / -background-color tokens, which Marble does not define;
+	// Marble sizes the popup buttons from --zk-button-padding-x/y and its own --zk-confirmpopup-* tokens.
 	@Test
+	@Tag("IceBlueOnly")
 	public void testButtonsFollowTheButtonTokens() {
 		connect();
 		waitResponse();
@@ -59,7 +63,9 @@ public class B110_ZK_6164Test extends WebDriverTestCase {
 	}
 
 	/** OK takes focus on every open; a focused .z-button reads --zk-button-focus-*. */
+	// IceBlue-only: overrides IceBlue's --zk-button-focus-* tokens, which Marble does not define (Marble focus is a ring, not a recoloured fill).
 	@Test
+	@Tag("IceBlueOnly")
 	public void testFocusedButtonFollowsTheFocusTokens() {
 		connect();
 		waitResponse();
@@ -100,7 +106,9 @@ public class B110_ZK_6164Test extends WebDriverTestCase {
 	}
 
 	/** The shadow is what makes it read as a button at a glance. */
+	// IceBlue-only: IceBlue gives the popup buttons the plain-button shadow; Marble deliberately keeps them flat (no shadow), D11.
 	@Test
+	@Tag("IceBlueOnly")
 	public void testButtonsCarryTheButtonShadow() {
 		connect();
 		waitResponse();
@@ -113,7 +121,9 @@ public class B110_ZK_6164Test extends WebDriverTestCase {
 	}
 
 	/** Hover and press are button states too; before the fix neither had a rule. */
+	// IceBlue-only: overrides IceBlue's --zk-button-hover/active-background-color tokens; Marble uses a state-layer overlay instead.
 	@Test
+	@Tag("IceBlueOnly")
 	public void testButtonsFollowTheHoverAndActiveTokens() {
 		connect();
 		waitResponse();

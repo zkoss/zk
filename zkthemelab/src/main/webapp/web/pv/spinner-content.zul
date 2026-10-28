@@ -1,0 +1,47 @@
+<zk>
+<apply templateURI="~./pv/matrix.zul" title="States — Spinner"
+       cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
+       rowsTemplate="spinner-rows">
+    <template name="spinner-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="With buttons"/></div>
+            <div><spinner/></div>
+            <div><spinner disabled="true"/></div>
+            <div><spinner readonly="true"/></div>
+            <div><spinner sclass="z-spinner-invalid"/></div>
+            <div><spinner inplace="true" value="5"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="No buttons"/></div>
+            <div><spinner buttonVisible="false"/></div>
+            <div><spinner buttonVisible="false" disabled="true"/></div>
+            <div><spinner buttonVisible="false" readonly="true"/></div>
+            <div><spinner buttonVisible="false" sclass="z-spinner-invalid"/></div>
+            <div><spinner buttonVisible="false" inplace="true" value="5"/></div>
+        </div>
+    </template>
+</apply>
+
+<apply templateURI="~./pv/matrix.zul" title="States — Doublespinner"
+       cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
+       rowsTemplate="doublespinner-spinner-rows">
+    <template name="doublespinner-spinner-rows">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="With buttons"/></div>
+            <div><doublespinner/></div>
+            <div><doublespinner disabled="true"/></div>
+            <div><doublespinner readonly="true"/></div>
+            <div><doublespinner sclass="z-doublespinner-invalid"/></div>
+            <div><doublespinner inplace="true" value="3.5"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="No buttons"/></div>
+            <div><doublespinner buttonVisible="false"/></div>
+            <div><doublespinner buttonVisible="false" disabled="true"/></div>
+            <div><doublespinner buttonVisible="false" readonly="true"/></div>
+            <div><doublespinner buttonVisible="false" sclass="z-doublespinner-invalid"/></div>
+            <div><doublespinner buttonVisible="false" inplace="true" value="3.5"/></div>
+        </div>
+    </template>
+</apply>
+</zk>

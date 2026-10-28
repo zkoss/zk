@@ -1,0 +1,85 @@
+<?page title="Multislider" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript><![CDATA[
+    java.util.LinkedHashMap marks = new java.util.LinkedHashMap();
+    marks.put(0, "Min");
+    marks.put(25, "Low");
+    marks.put(50, "Mid");
+    marks.put(75, "High");
+    marks.put(100, "Max");
+]]></zscript>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Multislider</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-4 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">3 ranges</h:span></h:div>
+                <multislider width="500px">
+                    <sliderbuttons startValue="10" endValue="70"/>
+                    <sliderbuttons startValue="20" endValue="50"/>
+                    <sliderbuttons startValue="30" endValue="40"/>
+                </multislider>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">2 ranges</h:span></h:div>
+                <multislider min="5" max="120" orient="vertical" height="500px">
+                    <sliderbuttons startValue="5" endValue="100"/>
+                    <sliderbuttons startValue="20" endValue="50"/>
+                </multislider>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Marks / Disabled / Tooltip Visible</h:span></h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-8 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Numeric tick labels every 10 (markScale)</h:span></h:div>
+                <multislider width="500px" markScale="10">
+                    <sliderbuttons startValue="20" endValue="60"/>
+                </multislider>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Custom text marks (Min/Low/Mid/High/Max)</h:span></h:div>
+                <multislider width="500px" marks="${marks}">
+                    <sliderbuttons startValue="25" endValue="75"/>
+                </multislider>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Disabled</h:span></h:div>
+                <multislider width="500px" disabled="true">
+                    <sliderbuttons startValue="20" endValue="60"/>
+                </multislider>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-8">
+                <h:div><h:span class="z-text-xs z-text-secondary">Always-visible tooltips</h:span></h:div>
+                <multislider width="500px" tooltipVisible="true">
+                    <sliderbuttons startValue="30" endValue="70"/>
+                </multislider>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical Tooltip at the Clip Edge</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">The knob sits at the right edge of a clipping container: the right-hand tooltip would be cut off, so it opens to the left</h:span></h:div>
+                <div sclass="z-d-flex z-justify-end z-overflow-hidden z-border" width="160px">
+                    <multislider orient="vertical" height="200px">
+                        <sliderbuttons startValue="30" endValue="70"/>
+                    </multislider>
+                </div>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

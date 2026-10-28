@@ -1,0 +1,41 @@
+<?page title="Surface Utilities"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<vlayout hflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+    <label value="Surface Utilities" sclass="z-h2"/>
+    <label value="Reusable surface primitives built from design tokens. (badge / chip / avatar are native ZK components — see their dedicated Badge / Chip / Avatar preview pages.)" sclass="z-text-secondary z-text-sm"/>
+
+    <!-- z-paper (utility) -->
+    <div sclass="z-paper">
+        <label value="Surface  (.z-paper)" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <label value="A surface container with background-color, border-radius (--zk-shape-card), and elevation shadow (--zk-elevation-card) from the design token system." sclass="z-text-secondary z-text-sm z-mb-3"/>
+        <div sclass="z-d-flex z-gap-4 z-flex-wrap z-items-start">
+
+            <div sclass="z-paper" style="width:240px">
+                <label value="Simple Card" sclass="z-h5 z-d-block z-mb-2"/>
+                <label value="Apply .z-paper to any ZK &lt;div&gt; to get a standard elevated surface." sclass="z-text-secondary z-text-sm"/>
+            </div>
+
+            <div sclass="z-paper" style="width:240px">
+                <label value="Hawk Chen" sclass="z-h5 z-d-block z-mb-2"/>
+                <label value="hawkchen@potix.com" sclass="z-text-secondary z-text-sm z-d-block z-mb-2"/>
+                <label value="Compose card content from any combination of ZK widgets and utility classes." sclass="z-text-secondary z-text-sm"/>
+            </div>
+
+            <div sclass="z-paper" style="width:240px">
+                <label value="Order #1042" sclass="z-h5 z-d-block z-mb-2"/>
+                <vlayout>
+                    <label value="3 items · $124.50" sclass="z-text-secondary z-text-sm"/>
+                    <label value="ETA: Jun 15, 2026" sclass="z-text-secondary z-text-sm"/>
+                </vlayout>
+            </div>
+
+        </div>
+        <div sclass="z-mt-3">
+            <label value="Usage: sclass=&quot;z-paper&quot;" sclass="z-text-secondary z-text-sm z-bg-surface-variant z-p-2 z-rounded"/>
+        </div>
+    </div>
+
+</vlayout>
+</zk>

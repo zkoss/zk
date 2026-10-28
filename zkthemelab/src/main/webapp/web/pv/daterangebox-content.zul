@@ -1,0 +1,84 @@
+<zk xmlns:h="native">
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Popup Variants</h:span></h:div>
+    <h:div class="z-d-flex z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">Seeded range</label>
+            <daterangebox beginValue="${sampleBegin}" endValue="${sampleEnd}"/>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">1 month panel</label>
+            <daterangebox numberOfMonths="1" beginValue="${sampleBegin}" endValue="${sampleEnd}"/>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">3 month panels</label>
+            <daterangebox numberOfMonths="3" beginValue="${sampleBegin}" endValue="${sampleEnd}"/>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">Time included</label>
+            <daterangebox showTime="true" beginValue="${sampleBegin}" endValue="${sampleEnd}"/>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">Today link</label>
+            <daterangebox showTodayLink="true" beginValue="${sampleBegin}" endValue="${sampleEnd}"/>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">Clear button (allowEmpty=both)</label>
+            <daterangebox allowEmpty="both" beginValue="${sampleBegin}" endValue="${sampleEnd}"/>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-gap-2">
+            <label sclass="z-text-xs z-text-secondary">No trigger button</label>
+            <daterangebox buttonVisible="false" beginValue="${sampleBegin}" endValue="${sampleEnd}"/>
+        </h:div>
+    </h:div>
+</h:div>
+
+<!-- The State Matrix is split into two 2-column matrices because a daterangebox is wide
+     (two inputs + separator + trigger) and four side-by-side columns overflow. -->
+<apply templateURI="~./pv/matrix.zul" title="States — Default / Disabled"
+       cols="${['Default','Disabled']}"
+       rowsTemplate="dr-rows-basic">
+    <template name="dr-rows-basic">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Basic"/></div>
+            <div><daterangebox/></div>
+            <div><daterangebox disabled="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Seeded range"/></div>
+            <div><daterangebox beginValue="${sampleBegin}" endValue="${sampleEnd}"/></div>
+            <div><daterangebox disabled="true" beginValue="${sampleBegin}" endValue="${sampleEnd}"/></div>
+        </div>
+    </template>
+</apply>
+
+<!-- Invalid cells force the REAL invalid state on load by firing the exact same AuInvoke the
+     framework itself sends on a validation failure — Daterangebox.java:
+       response("invalid", new AuInvoke(this, "_setInvalid", true))
+     This is a genuine `.z-daterangebox-invalid` render (the same client mechanism a real
+     unparseable-input / constraint error triggers), NOT a faked sclass. It sidesteps ZK-6133
+     (https://zkoss.atlassian.net/browse/ZK-6133 — daterangebox drops the user `sclass`), which
+     blocks the plain declarative `sclass="z-daterangebox-invalid"` path other components use.
+     daterangebox is a XulElement (not an InputElement), so timepicker's `self.setErrorMessage(...)`
+     onCreate trick is unavailable here — `_setInvalid` via AuInvoke is the equivalent hook. -->
+<apply templateURI="~./pv/matrix.zul" title="States — Readonly / Invalid"
+       cols="${['Readonly','Invalid']}"
+       rowsTemplate="dr-rows-ro-inv">
+    <template name="dr-rows-ro-inv">
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Basic"/></div>
+            <div><daterangebox readonly="true"/></div>
+            <div><daterangebox>
+                <attribute name="onCreate">Clients.response(new org.zkoss.zk.au.out.AuInvoke(self, "_setInvalid", true));</attribute>
+            </daterangebox></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Seeded range"/></div>
+            <div><daterangebox readonly="true" beginValue="${sampleBegin}" endValue="${sampleEnd}"/></div>
+            <div><daterangebox beginValue="${sampleBegin}" endValue="${sampleEnd}">
+                <attribute name="onCreate">Clients.response(new org.zkoss.zk.au.out.AuInvoke(self, "_setInvalid", true));</attribute>
+            </daterangebox></div>
+        </div>
+    </template>
+</apply>
+</zk>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="Splitlayout" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Splitlayout"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Horizontal Split"/></div>
+        <div sclass="z-py-3">
+            <splitlayout orient="horizontal" height="200px" hflex="1">
+                <window title="Left Pane" border="normal" hflex="1" vflex="1">
+                    Left content area
+                </window>
+                <window title="Right Pane" border="normal" hflex="1" vflex="1">
+                    Right content area
+                </window>
+            </splitlayout>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Vertical Split"/></div>
+        <div sclass="z-py-3">
+            <splitlayout orient="vertical" height="250px" hflex="1">
+                <window title="Top Pane" border="normal" hflex="1" vflex="1">
+                    Top content area
+                </window>
+                <window title="Bottom Pane" border="normal" hflex="1" vflex="1">
+                    Bottom content area
+                </window>
+            </splitlayout>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Nested Split Panes"/></div>
+        <div sclass="z-py-3">
+            <splitlayout height="400px" hflex="1" collapse="before">
+                <window title="Pane 1" border="normal" vflex="1">
+                    Drag the splitter — collapse="before"
+                </window>
+                <splitlayout orient="horizontal" vflex="2" collapse="after">
+                    <window title="Pane 2" border="normal" hflex="1" vflex="1">
+                        Top-right pane — collapse="after"
+                    </window>
+                    <splitlayout hflex="1" vflex="1">
+                        <window title="Pane 3" border="normal" hflex="1" vflex="1">
+                            Bottom-left
+                        </window>
+                        <window title="Pane 4" border="normal" hflex="1" vflex="1">
+                            Bottom-right
+                        </window>
+                    </splitlayout>
+                </splitlayout>
+            </splitlayout>
+        </div>
+    </div>
+
+</div>
+</zk>

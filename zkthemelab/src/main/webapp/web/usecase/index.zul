@@ -1,0 +1,192 @@
+<?page title="Marble Use Cases"?>
+<?link rel="stylesheet" type="text/css" href="~./usecase/usecase.css"?><zk>
+<script src="http://localhost:50000/zk-live-reload.js" defer="true"/>
+<!-- defines marbleReportIssue(), called by the sidebar's "Report this page" button -->
+<script src="~./usecase/report-issue.js"/>
+<borderlayout height="100vh" viewModel="@id('vm') @init('zk.example.UseCaseVM')"
+    onBookmarkChange="@command('handleBookmarkChange', bookmark=event.bookmark)">
+
+    <west size="258px" border="none" collapsible="false" autoscroll="true">
+        <div sclass="z-p-2">
+            <div sclass="sidebar-brand z-d-flex z-items-baseline z-gap-2">
+                <label value="Marble"/>
+                <!-- HEAD commit date + short hash, stamped in at build time so a design
+                     reviewer can pin a screenshot to a commit. See UseCaseVM.getCommitStamp(). -->
+                <label value="@load(vm.commitStamp)" sclass="z-text-xs z-fw-normal z-text-secondary"/>
+            </div>
+            <div sclass="z-d-flex z-items-center z-gap-2 z-px-2 z-py-2 z-mb-2 z-border-bottom">
+                <label value="Compact density" sclass="z-text-sm z-flex-1"/>
+                <checkbox mold="switch" checked="@load(vm.compactMode)"
+                          onCheck="@command('toggleCompactMode', on=self.checked)"/>
+            </div>
+            <button label="Report this page" iconSclass="z-icon-flag"
+                    sclass="z-button-outlined z-w-100 z-mb-2"
+                    xmlns:w="client" w:onClick="marbleReportIssue()"/>
+            <navbar orient="vertical">
+                <nav label="Use Cases" open="@load(vm.openNavLabel eq 'Use Cases')">
+                    <navitem label="Inventory List"       selected="@load(vm.currentPage eq '~./usecase/inventory-table.zul')" onClick="@command('navigate', page='~./usecase/inventory-table.zul')" />
+                    <navitem label="Item Detail"          selected="@load(vm.currentPage eq '~./usecase/item-editor.zul')" onClick="@command('navigate', page='~./usecase/item-editor.zul')" />
+                    <navitem label="Support Ticket Inbox" selected="@load(vm.currentPage eq '~./usecase/ticket-inbox.zul')" onClick="@command('navigate', page='~./usecase/ticket-inbox.zul')" />
+                    <navitem label="Operations Dashboard" selected="@load(vm.currentPage eq '~./usecase/ops-dashboard.zul')" onClick="@command('navigate', page='~./usecase/ops-dashboard.zul')" />
+                    <navitem label="Onboarding Wizard"    selected="@load(vm.currentPage eq '~./usecase/onboarding-wizard.zul')" onClick="@command('navigate', page='~./usecase/onboarding-wizard.zul')" />
+                    <navitem label="Account Settings"     selected="@load(vm.currentPage eq '~./usecase/account-settings.zul')" onClick="@command('navigate', page='~./usecase/account-settings.zul')" />
+                    <navitem label="Sign-In"              selected="@load(vm.currentPage eq '~./usecase/sign-in.zul')" onClick="@command('navigate', page='~./usecase/sign-in.zul')" />
+                    <navitem label="Brand Presets"        selected="@load(vm.currentPage eq '~./usecase/brand-switcher.zul')" onClick="@command('navigate', page='~./usecase/brand-switcher.zul')" />
+                </nav>
+                <nav label="Inputs" open="@load(vm.openNavLabel eq 'Inputs')">
+                    <navitem label="Bandbox"          selected="@load(vm.currentPage eq '~./bandbox.zul')" onClick="@command('navigate', page='~./bandbox.zul')" />
+                    <navitem label="Button"           selected="@load(vm.currentPage eq '~./button.zul')" onClick="@command('navigate', page='~./button.zul')" />
+                    <navitem label="Calendar"         selected="@load(vm.currentPage eq '~./calendar.zul')" onClick="@command('navigate', page='~./calendar.zul')" />
+                    <navitem label="Cascader"         selected="@load(vm.currentPage eq '~./cascader.zul')" onClick="@command('navigate', page='~./cascader.zul')" />
+                    <navitem label="Checkbox"         selected="@load(vm.currentPage eq '~./checkbox.zul')" onClick="@command('navigate', page='~./checkbox.zul')" />
+                    <navitem label="Chosenbox"        selected="@load(vm.currentPage eq '~./chosenbox.zul')" onClick="@command('navigate', page='~./chosenbox.zul')" />
+                    <navitem label="Codeeditor"       selected="@load(vm.currentPage eq '~./codeeditor.zul')" onClick="@command('navigate', page='~./codeeditor.zul')" />
+                    <navitem label="Colorbox"         selected="@load(vm.currentPage eq '~./colorbox.zul')" onClick="@command('navigate', page='~./colorbox.zul')" />
+                    <navitem label="Combobox"         selected="@load(vm.currentPage eq '~./combobox.zul')" onClick="@command('navigate', page='~./combobox.zul')" />
+                    <navitem label="Combobutton"      selected="@load(vm.currentPage eq '~./combobutton.zul')" onClick="@command('navigate', page='~./combobutton.zul')" />
+                    <navitem label="Datebox"          selected="@load(vm.currentPage eq '~./datebox.zul')" onClick="@command('navigate', page='~./datebox.zul')" />
+                    <navitem label="DateRangeBox"     selected="@load(vm.currentPage eq '~./daterangebox.zul')" onClick="@command('navigate', page='~./daterangebox.zul')" />
+                    <navitem label="Decimalbox"       selected="@load(vm.currentPage eq '~./decimalbox.zul')" onClick="@command('navigate', page='~./decimalbox.zul')" />
+                    <navitem label="Doublebox"        selected="@load(vm.currentPage eq '~./doublebox.zul')" onClick="@command('navigate', page='~./doublebox.zul')" />
+                    <navitem label="Doublespinner"    selected="@load(vm.currentPage eq '~./doublespinner.zul')" onClick="@command('navigate', page='~./doublespinner.zul')" />
+                    <navitem label="Inputgroup"       selected="@load(vm.currentPage eq '~./inputgroup.zul')" onClick="@command('navigate', page='~./inputgroup.zul')" />
+                    <navitem label="Inputs"           selected="@load(vm.currentPage eq '~./inputs.zul')" onClick="@command('navigate', page='~./inputs.zul')" />
+                    <navitem label="Intbox"           selected="@load(vm.currentPage eq '~./intbox.zul')" onClick="@command('navigate', page='~./intbox.zul')" />
+                    <navitem label="Longbox"          selected="@load(vm.currentPage eq '~./longbox.zul')" onClick="@command('navigate', page='~./longbox.zul')" />
+                    <navitem label="Multislider"      selected="@load(vm.currentPage eq '~./multislider.zul')" onClick="@command('navigate', page='~./multislider.zul')" />
+                    <navitem label="Radiogroup"       selected="@load(vm.currentPage eq '~./radiogroup.zul')" onClick="@command('navigate', page='~./radiogroup.zul')" />
+                    <navitem label="Rangeslider"      selected="@load(vm.currentPage eq '~./rangeslider.zul')" onClick="@command('navigate', page='~./rangeslider.zul')" />
+                    <navitem label="Rating"           selected="@load(vm.currentPage eq '~./rating.zul')" onClick="@command('navigate', page='~./rating.zul')" />
+                    <navitem label="Searchbox"        selected="@load(vm.currentPage eq '~./searchbox.zul')" onClick="@command('navigate', page='~./searchbox.zul')" />
+                    <navitem label="Selectbox"        selected="@load(vm.currentPage eq '~./selectbox.zul')" onClick="@command('navigate', page='~./selectbox.zul')" />
+                    <navitem label="Slider"           selected="@load(vm.currentPage eq '~./slider.zul')" onClick="@command('navigate', page='~./slider.zul')" />
+                    <navitem label="Spinner"          selected="@load(vm.currentPage eq '~./spinner.zul')" onClick="@command('navigate', page='~./spinner.zul')" />
+                    <navitem label="Textbox"          selected="@load(vm.currentPage eq '~./textbox.zul')" onClick="@command('navigate', page='~./textbox.zul')" />
+                    <navitem label="Timebox"          selected="@load(vm.currentPage eq '~./timebox.zul')" onClick="@command('navigate', page='~./timebox.zul')" />
+                    <navitem label="Timepicker"       selected="@load(vm.currentPage eq '~./timepicker.zul')" onClick="@command('navigate', page='~./timepicker.zul')" />
+                </nav>
+                <nav label="Data" open="@load(vm.openNavLabel eq 'Data')">
+                    <navitem label="Badge"                  selected="@load(vm.currentPage eq '~./badge.zul')" onClick="@command('navigate', page='~./badge.zul')" />
+                    <navitem label="Biglistbox"             selected="@load(vm.currentPage eq '~./biglistbox.zul')" onClick="@command('navigate', page='~./biglistbox.zul')" />
+                    <navitem label="Chip"                   selected="@load(vm.currentPage eq '~./chip.zul')" onClick="@command('navigate', page='~./chip.zul')" />
+                    <navitem label="Drag &amp; Drop"        selected="@load(vm.currentPage eq '~./dnd.zul')" onClick="@command('navigate', page='~./dnd.zul')" />
+                    <navitem label="Grid"                   selected="@load(vm.currentPage eq '~./grid.zul')" onClick="@command('navigate', page='~./grid.zul')" />
+                    <navitem label="Grid (Detail)"          selected="@load(vm.currentPage eq '~./grid-detail.zul')" onClick="@command('navigate', page='~./grid-detail.zul')" />
+                    <navitem label="Grid (Grouping)"        selected="@load(vm.currentPage eq '~./grid-grouping.zul')" onClick="@command('navigate', page='~./grid-grouping.zul')" />
+                    <navitem label="Grid (Header)"          selected="@load(vm.currentPage eq '~./grid-header.zul')" onClick="@command('navigate', page='~./grid-header.zul')" />
+                    <navitem label="Grid (Live Grouping)"   selected="@load(vm.currentPage eq '~./grid-livegrouping.zul')" onClick="@command('navigate', page='~./grid-livegrouping.zul')" />
+                    <navitem label="Grid (Paging)"          selected="@load(vm.currentPage eq '~./grid-paging.zul')" onClick="@command('navigate', page='~./grid-paging.zul')" />
+                    <navitem label="Grid (Responsive)"      selected="@load(vm.currentPage eq '~./responsive-grid.zul')" onClick="@command('navigate', page='~./responsive-grid.zul')" />
+                    <navitem label="Label"                  selected="@load(vm.currentPage eq '~./label.zul')" onClick="@command('navigate', page='~./label.zul')" />
+                    <navitem label="Listbox"                selected="@load(vm.currentPage eq '~./listbox.zul')" onClick="@command('navigate', page='~./listbox.zul')" />
+                    <navitem label="Listbox (Grouping)"     selected="@load(vm.currentPage eq '~./listbox-grouping.zul')" onClick="@command('navigate', page='~./listbox-grouping.zul')" />
+                    <navitem label="Listbox (Header)"       selected="@load(vm.currentPage eq '~./listbox-header.zul')" onClick="@command('navigate', page='~./listbox-header.zul')" />
+                    <navitem label="Organigram"             selected="@load(vm.currentPage eq '~./organigram.zul')" onClick="@command('navigate', page='~./organigram.zul')" />
+                    <navitem label="Paging"                 selected="@load(vm.currentPage eq '~./paging.zul')" onClick="@command('navigate', page='~./paging.zul')" />
+                    <navitem label="Skeleton"               selected="@load(vm.currentPage eq '~./skeleton.zul')" onClick="@command('navigate', page='~./skeleton.zul')" />
+                    <navitem label="Tree"                   selected="@load(vm.currentPage eq '~./tree.zul')" onClick="@command('navigate', page='~./tree.zul')" />
+                    <navitem label="Tree (Header)"          selected="@load(vm.currentPage eq '~./tree-header.zul')" onClick="@command('navigate', page='~./tree-header.zul')" />
+                </nav>
+                <nav label="Navigation" open="@load(vm.openNavLabel eq 'Navigation')">
+                    <navitem label="Anchornav"             selected="@load(vm.currentPage eq '~./anchornav.zul')" onClick="@command('navigate', page='~./anchornav.zul')" />
+                    <navitem label="Breadcrumb"            selected="@load(vm.currentPage eq '~./breadcrumb.zul')" onClick="@command('navigate', page='~./breadcrumb.zul')" />
+                    <navitem label="Coachmark"             selected="@load(vm.currentPage eq '~./coachmark.zul')" onClick="@command('navigate', page='~./coachmark.zul')" />
+                    <navitem label="Coachmark Positions"   selected="@load(vm.currentPage eq '~./coachmark-positions.zul')" onClick="@command('navigate', page='~./coachmark-positions.zul')" />
+                    <navitem label="Drawer"                selected="@load(vm.currentPage eq '~./drawer.zul')" onClick="@command('navigate', page='~./drawer.zul')" />
+                    <navitem label="Fisheyebar"            selected="@load(vm.currentPage eq '~./fisheyebar.zul')" onClick="@command('navigate', page='~./fisheyebar.zul')" />
+                    <navitem label="Link"                  selected="@load(vm.currentPage eq '~./a.zul')" onClick="@command('navigate', page='~./a.zul')" />
+                    <navitem label="Menubar"               selected="@load(vm.currentPage eq '~./menubar.zul')" onClick="@command('navigate', page='~./menubar.zul')" />
+                    <navitem label="Navbar"                selected="@load(vm.currentPage eq '~./navbar.zul')" onClick="@command('navigate', page='~./navbar.zul')" />
+                    <navitem label="Stepbar"               selected="@load(vm.currentPage eq '~./stepbar.zul')" onClick="@command('navigate', page='~./stepbar.zul')" />
+                    <navitem label="Tabbox"                selected="@load(vm.currentPage eq '~./tabbox.zul')" onClick="@command('navigate', page='~./tabbox.zul')" />
+                    <navitem label="Tabbox (Misc)"         selected="@load(vm.currentPage eq '~./tabbox-misc.zul')" onClick="@command('navigate', page='~./tabbox-misc.zul')" />
+                    <navitem label="Toolbar"               selected="@load(vm.currentPage eq '~./toolbar.zul')" onClick="@command('navigate', page='~./toolbar.zul')" />
+                </nav>
+                <nav label="Containers" open="@load(vm.openNavLabel eq 'Containers')">
+                    <navitem label="Caption"  selected="@load(vm.currentPage eq '~./caption.zul')" onClick="@command('navigate', page='~./caption.zul')" />
+                    <navitem label="Groupbox" selected="@load(vm.currentPage eq '~./groupbox.zul')" onClick="@command('navigate', page='~./groupbox.zul')" />
+                    <navitem label="Panel"    selected="@load(vm.currentPage eq '~./panel.zul')" onClick="@command('navigate', page='~./panel.zul')" />
+                    <navitem label="Popup"    selected="@load(vm.currentPage eq '~./popup.zul')" onClick="@command('navigate', page='~./popup.zul')" />
+                    <navitem label="Window"   selected="@load(vm.currentPage eq '~./window.zul')" onClick="@command('navigate', page='~./window.zul')" />
+                </nav>
+                <nav label="Layout" open="@load(vm.openNavLabel eq 'Layout')">
+                    <navitem label="Absolutelayout"      selected="@load(vm.currentPage eq '~./absolutelayout.zul')" onClick="@command('navigate', page='~./absolutelayout.zul')" />
+                    <navitem label="Anchorlayout"        selected="@load(vm.currentPage eq '~./anchorlayout.zul')" onClick="@command('navigate', page='~./anchorlayout.zul')" />
+                    <navitem label="Area"                selected="@load(vm.currentPage eq '~./area.zul')" onClick="@command('navigate', page='~./area.zul')" />
+                    <navitem label="Borderlayout"        selected="@load(vm.currentPage eq '~./borderlayout.zul')" onClick="@command('navigate', page='~./borderlayout.zul')" />
+                    <navitem label="Cardlayout"          selected="@load(vm.currentPage eq '~./cardlayout.zul')" onClick="@command('navigate', page='~./cardlayout.zul')" />
+                    <navitem label="Columnlayout"        selected="@load(vm.currentPage eq '~./columnlayout.zul')" onClick="@command('navigate', page='~./columnlayout.zul')" />
+                    <navitem label="Goldenlayout"        selected="@load(vm.currentPage eq '~./goldenlayout.zul')" onClick="@command('navigate', page='~./goldenlayout.zul')" />
+                    <navitem label="Hlayout"             selected="@load(vm.currentPage eq '~./hlayout.zul')" onClick="@command('navigate', page='~./hlayout.zul')" />
+                    <navitem label="Linelayout"          selected="@load(vm.currentPage eq '~./linelayout.zul')" onClick="@command('navigate', page='~./linelayout.zul')" />
+                    <navitem label="Portallayout"        selected="@load(vm.currentPage eq '~./portallayout.zul')" onClick="@command('navigate', page='~./portallayout.zul')" />
+                    <navitem label="Rowlayout"           selected="@load(vm.currentPage eq '~./rowlayout.zul')" onClick="@command('navigate', page='~./rowlayout.zul')" />
+                    <navitem label="Scrollview"          selected="@load(vm.currentPage eq '~./scrollview.zul')" onClick="@command('navigate', page='~./scrollview.zul')" />
+                    <navitem label="Space"               selected="@load(vm.currentPage eq '~./space.zul')" onClick="@command('navigate', page='~./space.zul')" />
+                    <navitem label="Splitlayout"         selected="@load(vm.currentPage eq '~./splitlayout.zul')" onClick="@command('navigate', page='~./splitlayout.zul')" />
+                    <navitem label="Splitter"            selected="@load(vm.currentPage eq '~./splitter.zul')" onClick="@command('navigate', page='~./splitter.zul')" />
+                    <navitem label="Tablelayout"         selected="@load(vm.currentPage eq '~./tablelayout.zul')" onClick="@command('navigate', page='~./tablelayout.zul')" />
+                    <navitem label="Vlayout"             selected="@load(vm.currentPage eq '~./vlayout.zul')" onClick="@command('navigate', page='~./vlayout.zul')" />
+                </nav>
+                <nav label="Feedback" open="@load(vm.openNavLabel eq 'Feedback')">
+                    <navitem label="Error"         selected="@load(vm.currentPage eq '~./runtime-error.zul')" onClick="@command('navigate', page='~./runtime-error.zul')" />
+                    <navitem label="Errorbox"      selected="@load(vm.currentPage eq '~./errorbox.zul')" onClick="@command('navigate', page='~./errorbox.zul')" />
+                    <navitem label="Loading"       selected="@load(vm.currentPage eq '~./loading.zul')" onClick="@command('navigate', page='~./loading.zul')" />
+                    <navitem label="Loadingbar"    selected="@load(vm.currentPage eq '~./loadingbar.zul')" onClick="@command('navigate', page='~./loadingbar.zul')" />
+                    <navitem label="Messagebox"    selected="@load(vm.currentPage eq '~./messagebox.zul')" onClick="@command('navigate', page='~./messagebox.zul')" />
+                    <navitem label="ConfirmPopup"  selected="@load(vm.currentPage eq '~./confirmpopup.zul')" onClick="@command('navigate', page='~./confirmpopup.zul')" />
+                    <navitem label="Notification"  selected="@load(vm.currentPage eq '~./notification.zul')" onClick="@command('navigate', page='~./notification.zul')" />
+                    <navitem label="Progressmeter" selected="@load(vm.currentPage eq '~./progressmeter.zul')" onClick="@command('navigate', page='~./progressmeter.zul')" />
+                    <navitem label="Scrollbar"     selected="@load(vm.currentPage eq '~./scrollbar.zul')" onClick="@command('navigate', page='~./scrollbar.zul')" />
+                    <navitem label="Separator"     selected="@load(vm.currentPage eq '~./separator.zul')" onClick="@command('navigate', page='~./separator.zul')" />
+                    <navitem label="Toast"         selected="@load(vm.currentPage eq '~./toast.zul')" onClick="@command('navigate', page='~./toast.zul')" />
+                </nav>
+                <nav label="Media &amp; Upload" open="@load(vm.openNavLabel eq 'Media &amp; Upload')">
+                    <navitem label="Audio"           selected="@load(vm.currentPage eq '~./audio.zul')" onClick="@command('navigate', page='~./audio.zul')" />
+                    <navitem label="Avatar"          selected="@load(vm.currentPage eq '~./avatar.zul')" onClick="@command('navigate', page='~./avatar.zul')" />
+                    <navitem label="Barcode"         selected="@load(vm.currentPage eq '~./barcode.zul')" onClick="@command('navigate', page='~./barcode.zul')" />
+                    <navitem label="Barcode Scanner" selected="@load(vm.currentPage eq '~./barcodescanner.zul')" onClick="@command('navigate', page='~./barcodescanner.zul')" />
+                    <navitem label="Camera"          selected="@load(vm.currentPage eq '~./camera.zul')" onClick="@command('navigate', page='~./camera.zul')" />
+                    <navitem label="Captcha"         selected="@load(vm.currentPage eq '~./captcha.zul')" onClick="@command('navigate', page='~./captcha.zul')" />
+                    <navitem label="Carousel"        selected="@load(vm.currentPage eq '~./carousel.zul')" onClick="@command('navigate', page='~./carousel.zul')" />
+                    <navitem label="Cropper"         selected="@load(vm.currentPage eq '~./cropper.zul')" onClick="@command('navigate', page='~./cropper.zul')" />
+                    <navitem label="Drop Upload"     selected="@load(vm.currentPage eq '~./dropupload.zul')" onClick="@command('navigate', page='~./dropupload.zul')" />
+                    <navitem label="File Upload"     selected="@load(vm.currentPage eq '~./fileupload.zul')" onClick="@command('navigate', page='~./fileupload.zul')" />
+                    <navitem label="HTML"            selected="@load(vm.currentPage eq '~./html.zul')" onClick="@command('navigate', page='~./html.zul')" />
+                    <navitem label="Iframe"          selected="@load(vm.currentPage eq '~./iframe.zul')" onClick="@command('navigate', page='~./iframe.zul')" />
+                    <navitem label="Imagemap"        selected="@load(vm.currentPage eq '~./imagemap.zul')" onClick="@command('navigate', page='~./imagemap.zul')" />
+                    <navitem label="PDF Viewer"      selected="@load(vm.currentPage eq '~./pdfviewer.zul')" onClick="@command('navigate', page='~./pdfviewer.zul')" />
+                    <navitem label="Signature"       selected="@load(vm.currentPage eq '~./signature.zul')" onClick="@command('navigate', page='~./signature.zul')" />
+                    <navitem label="TBEditor"        selected="@load(vm.currentPage eq '~./tbeditor.zul')" onClick="@command('navigate', page='~./tbeditor.zul')" />
+                    <navitem label="Video"           selected="@load(vm.currentPage eq '~./video.zul')" onClick="@command('navigate', page='~./video.zul')" />
+                </nav>
+                <nav label="Utility CSS" open="@load(vm.openNavLabel eq 'Utility CSS')">
+                    <navitem label="Colors"             selected="@load(vm.currentPage eq '~./utility/colors.zul')" onClick="@command('navigate', page='~./utility/colors.zul')" />
+                    <navitem label="Typography"         selected="@load(vm.currentPage eq '~./utility/typography.zul')" onClick="@command('navigate', page='~./utility/typography.zul')" />
+                    <navitem label="Icons"              selected="@load(vm.currentPage eq '~./utility/icons.zul')" onClick="@command('navigate', page='~./utility/icons.zul')" />
+                    <navitem label="Spacing"            selected="@load(vm.currentPage eq '~./utility/spacing.zul')" onClick="@command('navigate', page='~./utility/spacing.zul')" />
+                    <navitem label="Stack"              selected="@load(vm.currentPage eq '~./utility/stack.zul')" onClick="@command('navigate', page='~./utility/stack.zul')" />
+                    <navitem label="Layout"             selected="@load(vm.currentPage eq '~./utility/layout.zul')" onClick="@command('navigate', page='~./utility/layout.zul')" />
+                    <navitem label="Grid Layout"        selected="@load(vm.currentPage eq '~./utility/grid-layout.zul')" onClick="@command('navigate', page='~./utility/grid-layout.zul')" />
+                    <navitem label="Responsive"         selected="@load(vm.currentPage eq '~./utility/responsive.zul')" onClick="@command('navigate', page='~./utility/responsive.zul')" />
+                    <navitem label="Print"              selected="@load(vm.currentPage eq '~./utility/print.zul')" onClick="@command('navigate', page='~./utility/print.zul')" />
+                    <navitem label="Stacking (z-index)" selected="@load(vm.currentPage eq '~./utility/zindex.zul')" onClick="@command('navigate', page='~./utility/zindex.zul')" />
+                    <navitem label="Border &amp; Shape" selected="@load(vm.currentPage eq '~./utility/borders.zul')" onClick="@command('navigate', page='~./utility/borders.zul')" />
+                    <navitem label="Elevation"          selected="@load(vm.currentPage eq '~./utility/elevation.zul')" onClick="@command('navigate', page='~./utility/elevation.zul')" />
+                    <navitem label="Opacity"            selected="@load(vm.currentPage eq '~./utility/opacity.zul')" onClick="@command('navigate', page='~./utility/opacity.zul')" />
+                    <navitem label="Visibility"         selected="@load(vm.currentPage eq '~./utility/visibility.zul')" onClick="@command('navigate', page='~./utility/visibility.zul')" />
+                    <navitem label="Interactions"       selected="@load(vm.currentPage eq '~./utility/interactions.zul')" onClick="@command('navigate', page='~./utility/interactions.zul')" />
+                    <navitem label="Surface"            selected="@load(vm.currentPage eq '~./utility/surface.zul')" onClick="@command('navigate', page='~./utility/surface.zul')" />
+                </nav>                
+            </navbar>
+        </div>
+    </west>
+
+    <center border="none" autoscroll="true">
+        <div height="100%">
+            <apply templateURI="@load(vm.currentPage)"/>
+        </div>
+    </center>
+
+</borderlayout>
+</zk>

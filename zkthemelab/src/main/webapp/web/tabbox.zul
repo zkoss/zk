@@ -1,0 +1,478 @@
+<?page title="Tabbox" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Tabbox</h:span></h:div>
+
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-md z-fw-bold z-text-secondary">Tabbox — State Gallery</h:span></h:div>
+
+        <h:div class="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <h:div class="z-d-flex z-flex-col z-items-center z-gap-2 z-flex-1">
+                <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Tab States</h:span></h:div>
+                <tabbox width="100%">
+                    <tabs>
+                        <tab label="Default"/>
+                        <tab label="Selected" selected="true"/>
+                        <tab label="Disabled" disabled="true"/>
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Default tab content</tabpanel>
+                        <tabpanel>Selected tab content</tabpanel>
+                        <tabpanel>Disabled tab content</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal with Toolbar</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Closable tabs + toolbar</h:span></h:div>
+                <tabbox height="200px"  width="500px">
+                    <toolbar>
+                        <toolbarbutton label="Button 1" image="~./img/volumn.gif" />
+                        <toolbarbutton label="New" iconSclass="z-icon-file"/>
+                        <toolbarbutton label="Open" iconSclass="z-icon-folder-open"/>
+                        <toolbarbutton label="Save" iconSclass="z-icon-save"/>
+                    </toolbar>
+                    <tabs>
+                        <tab label="Tab1" closable="true" />
+                        <tab label="Tab2" closable="true" />
+                        <tab label="Tab3" closable="true" />
+                        <tab label="Tab4" closable="true" />
+                        <tab label="Tab5" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal with Tab Images</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Tabs with images</h:span></h:div>
+                <tabbox height="200px" width="100%">
+                    <tabs>
+                        <tab label="Tab1" closable="true" image="~./img/volumn.gif" />
+                        <tab label="Tab2" closable="true" image="~./img/volumn.gif" />
+                        <tab label="Tab3" closable="true" />
+                        <tab label="Tab4" closable="true" />
+                        <tab label="Tab5" image="~./img/volumn.gif" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical Left</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Vertical left (many tabs)</h:span></h:div>
+                <tabbox height="250px" width="100%" orient="vertical">
+                    <tabs width="80px">
+                        <tab label="Tab1" closable="true" />
+                        <tab label="Tab2" closable="true" />
+                        <tab label="Tab3" closable="true" />
+                        <tab label="Tab4" closable="true" />
+                        <tab label="Tab5" closable="true" />
+                        <tab label="Tab6" />
+                        <tab label="Tab7" />
+                        <tab label="Tab8" />
+                        <tab label="Tab9" />
+                        <tab label="Tab10" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                        <tabpanel>Tabpanel Content 6</tabpanel>
+                        <tabpanel>Tabpanel Content 7</tabpanel>
+                        <tabpanel>Tabpanel Content 8</tabpanel>
+                        <tabpanel>Tabpanel Content 9</tabpanel>
+                        <tabpanel>Tabpanel Content 10</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Vertical left with image</h:span></h:div>
+                <tabbox height="200px" width="100%" orient="vertical">
+                    <tabs width="80px">
+                        <tab label="Tab1 ZK" closable="true" />
+                        <tab label="Tab2" closable="true" />
+                        <tab label="Tab3" image="~./img/volumn.gif" />
+                        <tab label="Tab4" />
+                        <tab label="Tab5" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical Right</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Vertical right (many tabs)</h:span></h:div>
+                <tabbox height="250px" width="100%" orient="right">
+                    <tabs width="80px">
+                        <tab label="Tab1" closable="true" />
+                        <tab label="Tab2" closable="true" />
+                        <tab label="Tab3" closable="true" />
+                        <tab label="Tab4" closable="true" />
+                        <tab label="Tab5" closable="true" />
+                        <tab label="Tab6" />
+                        <tab label="Tab7" />
+                        <tab label="Tab8" />
+                        <tab label="Tab9" />
+                        <tab label="Tab10" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                        <tabpanel>Tabpanel Content 6</tabpanel>
+                        <tabpanel>Tabpanel Content 7</tabpanel>
+                        <tabpanel>Tabpanel Content 8</tabpanel>
+                        <tabpanel>Tabpanel Content 9</tabpanel>
+                        <tabpanel>Tabpanel Content 10</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Vertical right with image</h:span></h:div>
+                <tabbox height="200px" width="100%" orient="right">
+                    <tabs width="80px">
+                        <tab label="Tab1 ZK" closable="true" />
+                        <tab label="Tab2" closable="true" />
+                        <tab label="Tab3" image="~./img/volumn.gif" />
+                        <tab label="Tab4" />
+                        <tab label="Tab5" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Bottom with Toolbar</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Bottom tabs with toolbar</h:span></h:div>
+                <tabbox height="200px" width="100%" orient="bottom">
+                    <toolbar>
+                        <toolbarbutton label="Button 1" image="~./img/volumn.gif" />
+                    </toolbar>
+                    <tabs>
+                        <tab label="Tab1" closable="true" />
+                        <tab label="Tab2" closable="true" />
+                        <tab label="Tab3" closable="true" />
+                        <tab label="Tab4" closable="true" />
+                        <tab label="Tab5" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Bottom tabs fewer</h:span></h:div>
+                <tabbox height="200px" width="100%" orient="bottom">
+                    <toolbar>
+                        <toolbarbutton label="Button 1" image="~./img/volumn.gif" />
+                    </toolbar>
+                    <tabs>
+                        <tab label="Tab1" closable="true" />
+                        <tab label="Tab2" closable="true" />
+                        <tab label="Tab3" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal — Scroll (many tabs)</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Horizontal scroll arrows</h:span></h:div>
+                <tabbox height="200px" width="100%">
+                    <tabs>
+                        <tab label="Overview" />
+                        <tab label="Account" />
+                        <tab label="Security" />
+                        <tab label="Billing" />
+                        <tab label="Support" />
+                        <tab label="Privacy" />
+                        <tab label="Notifications" />
+                        <tab label="Appearance" />
+                        <tab label="Advanced" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Overview</tabpanel>
+                        <tabpanel>Account</tabpanel>
+                        <tabpanel>Security</tabpanel>
+                        <tabpanel>Billing</tabpanel>
+                        <tabpanel>Support</tabpanel>
+                        <tabpanel>Privacy</tabpanel>
+                        <tabpanel>Notifications</tabpanel>
+                        <tabpanel>Appearance</tabpanel>
+                        <tabpanel>Advanced</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Scroll arrows + toolbar + closable</h:span></h:div>
+                <tabbox height="200px" width="100%">
+                    <toolbar>
+                        <toolbarbutton label="Add" iconSclass="z-icon-plus"/>
+                    </toolbar>
+                    <tabs>
+                        <tab label="Overview" closable="true"/>
+                        <tab label="Account" closable="true"/>
+                        <tab label="Security" closable="true"/>
+                        <tab label="Billing" closable="true"/>
+                        <tab label="Support" closable="true"/>
+                        <tab label="Privacy" closable="true"/>
+                        <tab label="Notifications" closable="true"/>
+                        <tab label="Appearance" closable="true"/>
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Overview</tabpanel>
+                        <tabpanel>Account</tabpanel>
+                        <tabpanel>Security</tabpanel>
+                        <tabpanel>Billing</tabpanel>
+                        <tabpanel>Support</tabpanel>
+                        <tabpanel>Privacy</tabpanel>
+                        <tabpanel>Notifications</tabpanel>
+                        <tabpanel>Appearance</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Icon-only Tabs</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Icon-only (horizontal)</h:span></h:div>
+                <tabbox height="200px" width="100%">
+                    <tabs>
+                        <tab iconSclass="z-icon-home" />
+                        <tab iconSclass="z-icon-user" />
+                        <tab iconSclass="z-icon-settings" />
+                        <tab iconSclass="z-icon-bell" />
+                        <tab iconSclass="z-icon-file" disabled="true"/>
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Home</tabpanel>
+                        <tabpanel>User</tabpanel>
+                        <tabpanel>Settings</tabpanel>
+                        <tabpanel>Notifications</tabpanel>
+                        <tabpanel>Files</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Icon-only (vertical)</h:span></h:div>
+                <tabbox height="200px" width="100%" orient="vertical">
+                    <tabs width="48px">
+                        <tab iconSclass="z-icon-home" />
+                        <tab iconSclass="z-icon-user" />
+                        <tab iconSclass="z-icon-settings" />
+                        <tab iconSclass="z-icon-bell" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Home</tabpanel>
+                        <tabpanel>User</tabpanel>
+                        <tabpanel>Settings</tabpanel>
+                        <tabpanel>Notifications</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Bottom — plain</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Bottom, no toolbar</h:span></h:div>
+                <tabbox height="200px" width="100%" orient="bottom">
+                    <tabs>
+                        <tab label="Overview" />
+                        <tab label="Details" />
+                        <tab label="Activity" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Overview content</tabpanel>
+                        <tabpanel>Details content</tabpanel>
+                        <tabpanel>Activity content</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Bottom scroll arrows</h:span></h:div>
+                <tabbox height="200px" width="100%" orient="bottom">
+                    <tabs>
+                        <tab label="Overview" />
+                        <tab label="Account" />
+                        <tab label="Security" />
+                        <tab label="Billing" />
+                        <tab label="Support" />
+                        <tab label="Privacy" />
+                        <tab label="Notifications" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Overview</tabpanel>
+                        <tabpanel>Account</tabpanel>
+                        <tabpanel>Security</tabpanel>
+                        <tabpanel>Billing</tabpanel>
+                        <tabpanel>Support</tabpanel>
+                        <tabpanel>Privacy</tabpanel>
+                        <tabpanel>Notifications</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">tabscroll=false</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Horizontal, tabscroll=false (overflow clips)</h:span></h:div>
+                <tabbox tabscroll="false" height="200px" width="100%">
+                    <tabs>
+                        <tab label="Overview" />
+                        <tab label="Account" />
+                        <tab label="Security" />
+                        <tab label="Billing" />
+                        <tab label="Support" />
+                        <tab label="Privacy" />
+                        <tab label="Notifications" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Overview</tabpanel>
+                        <tabpanel>Account</tabpanel>
+                        <tabpanel>Security</tabpanel>
+                        <tabpanel>Billing</tabpanel>
+                        <tabpanel>Support</tabpanel>
+                        <tabpanel>Privacy</tabpanel>
+                        <tabpanel>Notifications</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Vertical, tabscroll=false (overflow clips)</h:span></h:div>
+                <tabbox tabscroll="false" orient="vertical" height="160px" width="100%">
+                    <tabs width="100px">
+                        <tab label="Overview" />
+                        <tab label="Account" />
+                        <tab label="Security" />
+                        <tab label="Billing" />
+                        <tab label="Support" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Overview</tabpanel>
+                        <tabpanel>Account</tabpanel>
+                        <tabpanel>Security</tabpanel>
+                        <tabpanel>Billing</tabpanel>
+                        <tabpanel>Support</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Accordion Mold</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">Text only (disabled + closable states)</h:span></h:div>
+                <tabbox height="300px" width="100%" mold="accordion">
+                    <tabs>
+                        <tab label="Tab1" closable="true" />
+                        <tab label="Tab2" closable="true" />
+                        <tab label="Tab3" />
+                        <tab label="Tab4" disabled="true" closable="true" />
+                        <tab label="Tab5" disabled="true" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2 z-flex-1">
+                <h:div><h:span class="z-text-xs z-text-secondary">With images (disabled + closable states)</h:span></h:div>
+                <tabbox height="300px" width="100%" mold="accordion">
+                    <tabs>
+                        <tab label="Tab1" image="~./img/volumn.gif" closable="true" />
+                        <tab label="Tab2" image="~./img/volumn.gif" closable="true" />
+                        <tab label="Tab3" image="~./img/volumn.gif" />
+                        <tab label="Tab4" image="~./img/volumn.gif" disabled="true" closable="true" />
+                        <tab label="Tab5" image="~./img/volumn.gif" disabled="true" />
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>Tabpanel Content 1</tabpanel>
+                        <tabpanel>Tabpanel Content 2</tabpanel>
+                        <tabpanel>Tabpanel Content 3</tabpanel>
+                        <tabpanel>Tabpanel Content 4</tabpanel>
+                        <tabpanel>Tabpanel Content 5</tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </h:div>
+        </h:div>
+    </h:div>
+
+</h:div>
+</zk>

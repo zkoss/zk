@@ -1,0 +1,45 @@
+<?page title="Anchorlayout" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Anchorlayout"/></div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Anchor-based Sizing"/></div>
+        <div sclass="z-py-3">
+            <anchorlayout id="al">
+                <anchorchildren height="200px" anchor="-100">
+                    <window title="win1" border="normal" height="100%">
+                        height="200px" anchor="-100" (width = parent - 100)
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="50% -200">
+                    <window title="win2" border="normal" height="100%">
+                        anchor="50% -200" (width=50%, height=parent-200)
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="25% 20%">
+                    <window title="win3" border="normal" height="100%">
+                        anchor="25% 20%"
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="25% 20%">
+                    <window title="win4" border="normal" height="100%">
+                        anchor="25% 20%"
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="25% 20%">
+                    <window title="win5" border="normal" height="100%">
+                        anchor="25% 20%"
+                    </window>
+                </anchorchildren>
+                <anchorchildren anchor="25% 20%">
+                    <window title="win6" border="normal" height="100%">
+                        anchor="25% 20%"
+                    </window>
+                </anchorchildren>
+            </anchorlayout>
+        </div>
+    </div>
+
+</div>
+</zk>

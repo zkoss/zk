@@ -1,0 +1,214 @@
+/* MD3 Code Editor — Codeeditor (CE, @since ZK 11.0.0) */
+
+/* DOM (js/zul/code/mold/codeeditor.js — ZK renders only the outer two nodes):
+     <div class="z-codeeditor [z-codeeditor-dark] [z-codeeditor-disabled]">
+       <div class="z-codeeditor-cave">          ← CodeMirror 6 mounts into this
+         <div class="cm-editor [cm-focused] [cm-light|cm-dark]">
+           <div class="cm-scroller">
+             <div class="cm-gutters">…</div>    ← lineNumbers="true" (default)
+             <div class="cm-content" contenteditable>…</div>
+
+   `z-codeeditor-dark` is toggled by the widget for theme="dark"; `-disabled` for
+   disabled="true". There is NO readonly class — readonly is a CodeMirror editable
+   toggle only, so it is not styleable from here (the field keeps its normal chrome,
+   which is the intent: a readonly editor stays focusable and copyable).
+
+   CASCADE NOTE — why some declarations carry `!important`:
+   CodeMirror injects its own base theme at runtime through a StyleModule <style> in
+   <head>. Those rules are UNLAYERED, and an unlayered author declaration outranks
+   EVERY layer — so nothing in `@layer zk-components` can beat them on specificity.
+   `!important` is the only lever, and it is used ONLY on the handful of properties
+   CodeMirror actually sets (verified against the shipped bundle, ZK 11.0.0.FL.20260904:
+   `&light .cm-gutters`, `&dark .cm-gutters`, `.cm-scroller` font, `&.cm-focused`
+   outline, `.cm-content` caret-color). Everything on `.z-codeeditor` itself is
+   uncontested and stays plain.
+
+   NOT STYLED ON PURPOSE:
+   · `.cm-activeLine` / `.cm-activeLineGutter` — the CE build's extension set
+     (`_baseExtensions`) does not include `highlightActiveLine`, so those classes are
+     never emitted and a rule for them would be dead CSS. ZK core still documents
+     `--zk-codeeditor-active-line` as a public hook, so the knob is NOT declared here
+     either (it would be an orphan token). Revisit if an EE build layers the
+     extension in via `_extraExtensions`.
+   · selection — Marble styles no `::selection` anywhere, so the editor keeps the
+     browser/CodeMirror default like every other input.
+   · the caret — `.cm-cursor` / `.cm-dropCursor` are created by CodeMirror's
+     `drawSelection` extension, and the CE build's `_baseExtensions()` does not
+     include it (verified in the shipped jar, and 0 such nodes in a live focused
+     editor, 2026-09-08). Rules for them were dead code and have been removed.
+     What actually paints is the BROWSER's native caret, governed by `caret-color`
+     on `.cm-content`; it resolves to the UA default (pure black on light, pure
+     white on dark) rather than the theme foregrounds, and that is an accepted
+     deviation, not an oversight — decided 2026-09-08 (D7 option B). If it is ever
+     revisited, the fix is `caret-color` on `.cm-content`, NOT a `.cm-cursor` rule.
+   · the dark syntax palette (`--zk-codeeditor-token-*`) — those ten colors live in
+     the widget JS with VS Code Dark+ literals as `var()` fallbacks, so re-declaring
+     them here would duplicate ZK core values with no consumer in CSS. See the
+     `--zk-codeeditor-background` note in tokens/_component-theme.css for why the
+     dark surface stays a neutral near-black rather than --zk-color-inverse-surface.
+*/
+
+@layer zk-components {
+
+/* ─── Root frame — the outlined text-field chrome, shared with .z-textbox ── */
+.z-codeeditor {
+    position: relative;              /* anchors the ::after focus-ring overlay below */
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 1px solid var(--zk-codeeditor-border-color);
+    border-radius: var(--zk-codeeditor-radius);
+    background-color: var(--zk-codeeditor-bg);
+    color: var(--zk-codeeditor-fg);
+    transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-codeeditor:hover {
+    border-color: var(--zk-codeeditor-border-color-hover);
+}
+
+/* Focus ring: border stays 1px in every state and the 2nd pixel is drawn as a ring
+   on this always-present overlay (Mechanism A, overlay variant — the timepicker
+   precedent, see reference/focus-affordance-no-layout-shift.md). Two reasons, and
+   the second is the one specific to this component:
+
+   1. No layout shift. The root has no padding to compensate with, so growing the
+      border 1px→2px would shove the whole CodeMirror viewport 1px on every focus.
+
+   2. The ring must not be painted UNDER the payload. An inset box-shadow on the root
+      paints on the root's own background layer, below every child — and CodeMirror's
+      DOM sits flush against the border (zero padding) with opaque backgrounds:
+      `.cm-gutters` always, and the entire `.cm-editor` on the dark surface. Measured
+      2026-09-08 with the ring on the root: the light editor rendered 2px on three
+      sides and 1px along the gutter, and the dark editor lost the ring on ALL four
+      sides, leaving only the bare border. The overlay is a single element above both
+      children, so the ring is uniform BY CONSTRUCTION rather than by luck.
+
+   Note this stayed invisible to computed-style checking: `getComputedStyle(root)`
+   reported `inset 0 0 0 1px primary` in exactly the broken state. The guards in
+   screenshot.spec.ts › codeeditor measure painted pixels for that reason.
+
+   `:focus-within` is enough here — this component has no detached popup that focus
+   can escape to. */
+.z-codeeditor::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px transparent;   /* present but invisible at rest */
+    pointer-events: none;                      /* never intercept clicks or selection */
+    transition: box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+.z-codeeditor:focus-within {
+    border-color: var(--zk-codeeditor-border-color-focus);
+}
+
+.z-codeeditor:focus-within::after {
+    box-shadow: inset 0 0 0 1px var(--zk-codeeditor-border-color-focus);
+}
+
+/* ─── Editor viewport ────────────────────────────────────────────────────── */
+/* Both must be height:100% or the editor collapses when the root is given a
+   height; with no height on the root this resolves to auto and the editor grows
+   with its content, which is the documented behaviour. */
+.z-codeeditor-cave,
+.z-codeeditor .cm-editor {
+    height: 100%;
+}
+
+.z-codeeditor .cm-scroller {
+    overflow: auto;
+    /* CodeMirror's base theme sets `font-family: monospace` and `line-height: 1.4`
+       on .cm-scroller (unlayered), so those two need !important to reach the theme's
+       mono stack and body typescale — measured 2026-09-08: without it the computed
+       values fall back to `monospace` / 18.2px. It sets NO font-size, so font-size
+       deliberately carries no !important. */
+    font-family: var(--zk-typescale-mono-family) !important;
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: var(--zk-typescale-body-medium-line-height) !important;
+}
+
+/* CodeMirror draws its own `outline: 1px dotted #212121` on the focused editor,
+   which would sit inside — and clash with — the ring the root already draws. */
+.z-codeeditor .cm-editor.cm-focused {
+    outline: none !important;
+}
+
+/* ─── Gutter (line numbers) ──────────────────────────────────────────────── */
+/* CodeMirror light default is #f5f5f5 / #6c6c6c / 1px #ddd — off-palette on every
+   count, and unlayered, hence !important. */
+.z-codeeditor .cm-gutters {
+    background-color: var(--zk-codeeditor-gutter-bg) !important;
+    color: var(--zk-codeeditor-gutter-fg) !important;
+    border-right-color: var(--zk-codeeditor-gutter-border-color) !important;
+}
+
+/* ─── Dark surface (theme="dark") ────────────────────────────────────────── */
+/* The root repaints too, not just .cm-editor: the root owns the rounded corners,
+   so leaving it on the light fill would show four pale wedges around the editor.
+   The frame needs its own light-alpha border pair as well. The shared rules above
+   are black-alpha (`--zk-color-outline` / `--zk-color-on-surface`); composited over
+   the opaque near-black fill they collapse onto the fill itself — measured
+   2026-09-08: rest lands on rgb(23,23,23) and hover on rgb(4,4,4), a 1.14:1 change
+   nobody can see, so dark mode had no working hover affordance at all. (The
+   component's OUTLINE was never at risk — the fill alone is 16.67:1 against the
+   page — it is the state CHANGE that was invisible.) Light alphas mirror the light
+   surface instead: rest is the same perceptual step off the fill that
+   `--zk-color-outline` is off white, and hover clears the 3:1 UI-state bar
+   (rgb(82,82,82) → rgb(165,165,165), 3.17:1) without turning into a white halo
+   around a black box. */
+.z-codeeditor-dark {
+    background-color: var(--zk-codeeditor-background);
+    border-color: var(--zk-codeeditor-dark-border-color);
+}
+
+.z-codeeditor-dark:hover {
+    border-color: var(--zk-codeeditor-dark-border-color-hover);
+}
+
+/* Re-assert focus for the dark surface. The shared `.z-codeeditor:focus-within`
+   rule sits EARLIER in this file and carries the same specificity as the dark
+   hover rule above, so without this a hovered-and-focused dark editor would keep
+   the hover border instead of the focus one.
+   The dark surface takes its OWN focus color: MD3 carries primary at tone 80 on a
+   dark scheme, and the light knob (#376fd0) measured only 3.45:1 against the
+   near-black fill — over the 3:1 floor but reported unreadable in design review.
+   The dark knob is the same hue at tone 80, 8.45:1. See tokens/_component-theme.css. */
+.z-codeeditor-dark:focus-within {
+    border-color: var(--zk-codeeditor-dark-border-color-focus);
+}
+
+.z-codeeditor-dark:focus-within::after {
+    box-shadow: inset 0 0 0 1px var(--zk-codeeditor-dark-border-color-focus);
+}
+
+.z-codeeditor-dark .cm-editor {
+    background-color: var(--zk-codeeditor-background);
+    color: var(--zk-codeeditor-color);
+}
+
+/* CodeMirror's dark default is #333338 / #ccc — a lighter slab than the surface,
+   which reads as a second panel. Marble keeps the gutter flush with the surface and
+   separates it by the number color alone. */
+.z-codeeditor-dark .cm-gutters {
+    background-color: var(--zk-codeeditor-background) !important;
+    color: var(--zk-codeeditor-gutter-color) !important;
+    border-right-color: transparent !important;
+}
+
+/* ─── Disabled ───────────────────────────────────────────────────────────── */
+/* The widget also drops contentDOM out of the tab order, so this is the visual and
+   pointer half. `pointer-events` is on the ROOT, not just the editor: with it on
+   the editor alone the frame still matched `:hover`, so a disabled editor answered
+   the pointer with a border-color change — a live affordance on a dead control.
+   Inerting the root suppresses that without a `:not(.z-codeeditor-disabled)` on
+   every hover rule, which would have raised their specificity above the focus rule.
+   This also blocks select-and-copy, which is correct for `disabled` and is exactly
+   what separates it from `readonly` (readonly keeps the normal chrome and stays
+   focusable and copyable — it has no modifier class and no rule here). */
+.z-codeeditor-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+}
+
+}

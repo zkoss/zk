@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — pdfviewer</title>
+<!--
+  Self-contained marble design contract mockup.
+
+  RULES
+    - Only --zk-* tokens may carry design values inside the body.
+    - Class names match the DOM tree in
+      .claude/skills/zk-component-rules/components/pdfviewer.md exactly.
+    - The PDF.js interior (canvas, page content) is represented by a placeholder.
+    - Do NOT mock PDF.js internals (.pdfViewer, .page, .textLayer, etc.)
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-tertiary: #7e73d6;
+    --zk-color-error: #d32f2f;
+    --zk-color-warning: #f57c00;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-body-medium-size: 14px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+    --zk-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+    --zk-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* Motion */
+    --zk-motion-duration-short1: 100ms;
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-duration-medium1: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout, NOT part of the component contract).
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section {
+    margin-bottom: var(--zk-spacing-8);
+}
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: var(--zk-spacing-2);
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Component contract styles — pdfviewer ZK chrome only.
+   PDF.js interior is represented by a placeholder div.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Root wrapper — thin chrome around opaque PDF.js viewport */
+.z-pdfviewer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-medium);
+    overflow: hidden;
+    background-color: var(--zk-color-surface);
+    width: 100%;
+    height: 360px; /* fixed height for mockup only — real value set by ZUL width/height attrs */
+}
+
+/* Scrollable viewport that holds the canvas */
+.z-pdfviewer-container {
+    overflow: auto;
+    flex: 1;
+    width: 100%;
+    background-color: var(--zk-color-surface-variant);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: var(--zk-spacing-4);
+}
+
+/* Page layer — sized by JS in real widget; fixed for mockup */
+.z-pdfviewer-page {
+    position: relative;
+    box-shadow: var(--zk-elevation-2);
+    /* width/height set by JS inline style in real widget */
+}
+
+/* PDF.js viewport placeholder — represents the opaque canvas; NOT a ZK class */
+.pdf-viewport-placeholder {
+    background: var(--zk-color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    border: 1px dashed var(--zk-color-outline-variant);
+    width: 240px;
+    height: 320px;
+}
+
+/* Floating toolbar — pill-shaped, bottom-centered, opacity-animated */
+.z-pdfviewer-toolbar {
+    position: absolute;
+    bottom: 1em;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background-color: var(--zk-color-surface-container-high);
+    border-radius: var(--zk-shape-corner-full);
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
+    box-shadow: var(--zk-elevation-3);
+    opacity: 0;
+    transition: opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+    white-space: nowrap;
+}
+
+/* Toolbar visibility states — hover / focus-within */
+.z-pdfviewer:hover .z-pdfviewer-toolbar {
+    opacity: 0.5;
+}
+.z-pdfviewer:hover .z-pdfviewer-toolbar:hover,
+.z-pdfviewer:focus-within .z-pdfviewer-toolbar {
+    opacity: 1;
+}
+
+/* Toolbar buttons — icon-button pattern */
+.z-pdfviewer-toolbar-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: var(--zk-shape-corner-small);
+    background-color: transparent;
+    color: var(--zk-color-on-surface);
+    cursor: pointer;
+    font-size: var(--zk-typescale-body-medium-size);
+    transition:
+        background-color var(--zk-motion-duration-short1) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-short1) var(--zk-motion-easing-standard);
+}
+.z-pdfviewer-toolbar-button:hover {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) calc(var(--zk-state-hover-opacity) * 100%), transparent);
+}
+.z-pdfviewer-toolbar-button:active {
+    background-color: color-mix(in srgb, var(--zk-color-on-surface) calc(var(--zk-state-pressed-opacity) * 100%), transparent);
+}
+.z-pdfviewer-toolbar-button[disabled] {
+    color: var(--zk-color-disabled);
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
+/* Toolbar separator */
+.z-pdfviewer-toolbar-separator {
+    display: inline-block;
+    height: 20px;
+    width: 1px;
+    border-left: 1px solid var(--zk-color-outline-variant);
+    margin: 0 var(--zk-spacing-2);
+    vertical-align: middle;
+}
+
+/* Page input and zoom select — narrow overrides */
+.z-pdfviewer-toolbar-page-active {
+    width: 48px;
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-small);
+    background: var(--zk-color-surface);
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-small-size);
+    text-align: center;
+    margin: 0 var(--zk-spacing-2);
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+}
+.z-pdfviewer-toolbar-page-active:invalid {
+    border-color: var(--zk-color-error);
+}
+
+.z-pdfviewer-toolbar-page {
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface-variant);
+    margin-right: var(--zk-spacing-2);
+}
+
+.z-pdfviewer-toolbar-zoom {
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-small);
+    background: var(--zk-color-surface);
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-left: var(--zk-spacing-2);
+}
+
+/* Fullscreen — radius collapses */
+.z-pdfviewer:fullscreen {
+    border-radius: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Mockup: force toolbar visible for static states that show it */
+.show-toolbar .z-pdfviewer-toolbar {
+    opacity: 1;
+}
+.show-toolbar-half .z-pdfviewer-toolbar {
+    opacity: 0.5;
+}
+
+/* Inline icon stand-in (no real FontAwesome in mockup) */
+.mock-icon {
+    font-size: 11px;
+    font-weight: var(--zk-font-weight-semibold);
+    color: inherit;
+    user-select: none;
+}
+</style>
+</head>
+<body>
+
+<h1>pdfviewer — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T3</span>
+    <span>closest-sibling: window</span>
+    <span>edition: PE / EE (zkex)</span>
+</div>
+
+<!-- T3 Boundary Note ──────────────────────────────────────────────────────
+     ZK-emitted chrome:  .z-pdfviewer, .z-pdfviewer-container,
+                         .z-pdfviewer-page, .z-pdfviewer-text-layer,
+                         .z-pdfviewer-annotation-layer,
+                         .z-pdfviewer-toolbar, .z-pdfviewer-toolbar-*
+     PDF.js interior:    <canvas>, .pdfViewer, .page, .textLayer,
+                         .annotationLayer, #viewer, #viewerContainer
+                         — DO NOT STYLE.
+     The placeholder div (.pdf-viewport-placeholder) in this mockup
+     represents the opaque PDF.js canvas region.
+     ──────────────────────────────────────────────────────────────────── -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 1 — Root wrapper chrome
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Root wrapper chrome</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default<br><small>(toolbar hidden)</small></div>
+        <div class="state-cell">
+            <div class="z-pdfviewer" style="height: 320px;">
+                <div class="z-pdfviewer-container">
+                    <div class="z-pdfviewer-page">
+                        <div class="pdf-viewport-placeholder">PDF.js viewport<br>(opaque — not styled)</div>
+                    </div>
+                </div>
+                <!-- toolbar is opacity:0 by default; shown in next rows -->
+                <div class="z-pdfviewer-toolbar">
+                    <button class="z-pdfviewer-toolbar-button" title="Rotate right"><span class="mock-icon">↻</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Rotate left"><span class="mock-icon">↺</span></button>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button" disabled title="First"><span class="mock-icon">«</span></button>
+                    <button class="z-pdfviewer-toolbar-button" disabled title="Prev"><span class="mock-icon">‹</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Next"><span class="mock-icon">›</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Last"><span class="mock-icon">»</span></button>
+                    <input class="z-pdfviewer-toolbar-page-active" type="number" min="1" value="1" required aria-label="Current page">
+                    <span class="z-pdfviewer-toolbar-page"> / <span>5</span></span>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button" title="Zoom out"><span class="mock-icon">−</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Zoom in"><span class="mock-icon">+</span></button>
+                    <select class="z-pdfviewer-toolbar-zoom" aria-label="Zoom level">
+                        <option value="fit-page-width">Fit width</option>
+                        <option value="1" selected>100%</option>
+                        <option value="1.5">150%</option>
+                        <option value="2">200%</option>
+                    </select>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button z-pdfviewer-toolbar-fullscreen" title="Fullscreen"><span class="mock-icon">⛶</span></button>
+                </div>
+            </div>
+            <p style="font-size:12px;color:var(--zk-color-on-surface-variant);margin-top:8px;">
+                Toolbar is opacity:0 at rest — hover over the widget or press Tab to reveal it.
+            </p>
+        </div>
+
+        <div class="state-label">widget hover<br><small>(toolbar at 50%)</small></div>
+        <div class="state-cell">
+            <div class="z-pdfviewer show-toolbar-half" style="height: 320px;">
+                <div class="z-pdfviewer-container">
+                    <div class="z-pdfviewer-page">
+                        <div class="pdf-viewport-placeholder">PDF.js viewport<br>(opaque — not styled)</div>
+                    </div>
+                </div>
+                <div class="z-pdfviewer-toolbar">
+                    <button class="z-pdfviewer-toolbar-button" title="Rotate right"><span class="mock-icon">↻</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Rotate left"><span class="mock-icon">↺</span></button>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button" disabled title="First"><span class="mock-icon">«</span></button>
+                    <button class="z-pdfviewer-toolbar-button" disabled title="Prev"><span class="mock-icon">‹</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Next"><span class="mock-icon">›</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Last"><span class="mock-icon">»</span></button>
+                    <input class="z-pdfviewer-toolbar-page-active" type="number" min="1" value="1" required aria-label="Current page">
+                    <span class="z-pdfviewer-toolbar-page"> / <span>5</span></span>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button" title="Zoom out"><span class="mock-icon">−</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Zoom in"><span class="mock-icon">+</span></button>
+                    <select class="z-pdfviewer-toolbar-zoom" aria-label="Zoom level">
+                        <option value="1" selected>100%</option>
+                    </select>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button z-pdfviewer-toolbar-fullscreen" title="Fullscreen"><span class="mock-icon">⛶</span></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">toolbar hover /<br>focus-within<br><small>(toolbar at 100%)</small></div>
+        <div class="state-cell">
+            <div class="z-pdfviewer show-toolbar" style="height: 320px;">
+                <div class="z-pdfviewer-container">
+                    <div class="z-pdfviewer-page">
+                        <div class="pdf-viewport-placeholder">PDF.js viewport<br>(opaque — not styled)</div>
+                    </div>
+                </div>
+                <div class="z-pdfviewer-toolbar">
+                    <button class="z-pdfviewer-toolbar-button" title="Rotate right"><span class="mock-icon">↻</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Rotate left"><span class="mock-icon">↺</span></button>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button" disabled title="First"><span class="mock-icon">«</span></button>
+                    <button class="z-pdfviewer-toolbar-button" disabled title="Prev"><span class="mock-icon">‹</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Next"><span class="mock-icon">›</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Last"><span class="mock-icon">»</span></button>
+                    <input class="z-pdfviewer-toolbar-page-active" type="number" min="1" value="1" required aria-label="Current page">
+                    <span class="z-pdfviewer-toolbar-page"> / <span>5</span></span>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button" title="Zoom out"><span class="mock-icon">−</span></button>
+                    <button class="z-pdfviewer-toolbar-button" title="Zoom in"><span class="mock-icon">+</span></button>
+                    <select class="z-pdfviewer-toolbar-zoom" aria-label="Zoom level">
+                        <option value="1" selected>100%</option>
+                    </select>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button z-pdfviewer-toolbar-fullscreen" title="Fullscreen"><span class="mock-icon">⛶</span></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 2 — Toolbar button states
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Toolbar button states</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">button default</div>
+        <div class="state-cell">
+            <div style="display:flex; gap:var(--zk-spacing-2); background:var(--zk-color-surface-container-high); padding:var(--zk-spacing-3); border-radius:var(--zk-shape-corner-full); width:fit-content;">
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">↻</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">‹</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">›</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">+</span></button>
+            </div>
+        </div>
+
+        <div class="state-label">button hover<br><small>(simulated)</small></div>
+        <div class="state-cell">
+            <div style="display:flex; gap:var(--zk-spacing-2); background:var(--zk-color-surface-container-high); padding:var(--zk-spacing-3); border-radius:var(--zk-shape-corner-full); width:fit-content;">
+                <!-- Simulate hover via inline background using the same formula -->
+                <button class="z-pdfviewer-toolbar-button" style="background-color:color-mix(in srgb, var(--zk-color-on-surface) calc(var(--zk-state-hover-opacity) * 100%), transparent);"><span class="mock-icon">↻</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">‹</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">›</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">+</span></button>
+            </div>
+        </div>
+
+        <div class="state-label">button active<br><small>(simulated)</small></div>
+        <div class="state-cell">
+            <div style="display:flex; gap:var(--zk-spacing-2); background:var(--zk-color-surface-container-high); padding:var(--zk-spacing-3); border-radius:var(--zk-shape-corner-full); width:fit-content;">
+                <button class="z-pdfviewer-toolbar-button" style="background-color:color-mix(in srgb, var(--zk-color-on-surface) calc(var(--zk-state-pressed-opacity) * 100%), transparent);"><span class="mock-icon">↻</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">‹</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">›</span></button>
+                <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">+</span></button>
+            </div>
+        </div>
+
+        <div class="state-label">button disabled<br><small>(page boundary)</small></div>
+        <div class="state-cell">
+            <div style="display:flex; gap:var(--zk-spacing-2); background:var(--zk-color-surface-container-high); padding:var(--zk-spacing-3); border-radius:var(--zk-shape-corner-full); width:fit-content;">
+                <button class="z-pdfviewer-toolbar-button" disabled title="First (disabled at page 1)"><span class="mock-icon">«</span></button>
+                <button class="z-pdfviewer-toolbar-button" disabled title="Prev (disabled at page 1)"><span class="mock-icon">‹</span></button>
+                <button class="z-pdfviewer-toolbar-button" title="Next"><span class="mock-icon">›</span></button>
+                <button class="z-pdfviewer-toolbar-button" title="Last"><span class="mock-icon">»</span></button>
+            </div>
+            <p style="font-size:12px;color:var(--zk-color-on-surface-variant);margin-top:8px;">
+                Uses [disabled] HTML attribute — no ZK state class.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 3 — Fullscreen variant
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Fullscreen variant</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">fullscreen<br><small>(border-radius: 0, fills viewport)</small></div>
+        <div class="state-cell">
+            <!-- Static mockup of fullscreen — cannot trigger real fullscreen without JS -->
+            <div class="z-pdfviewer show-toolbar" style="height:320px; border-radius:0; border-color:transparent;">
+                <div class="z-pdfviewer-container">
+                    <div class="z-pdfviewer-page">
+                        <div class="pdf-viewport-placeholder">PDF.js viewport<br>(opaque — not styled)<br>fills full screen at runtime</div>
+                    </div>
+                </div>
+                <div class="z-pdfviewer-toolbar">
+                    <button class="z-pdfviewer-toolbar-button" disabled><span class="mock-icon">«</span></button>
+                    <button class="z-pdfviewer-toolbar-button" disabled><span class="mock-icon">‹</span></button>
+                    <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">›</span></button>
+                    <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">»</span></button>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">−</span></button>
+                    <button class="z-pdfviewer-toolbar-button"><span class="mock-icon">+</span></button>
+                    <span class="z-pdfviewer-toolbar-separator" role="separator" aria-orientation="vertical"></span>
+                    <!-- compress icon in fullscreen mode (↙ simulates z-icon-compress) -->
+                    <button class="z-pdfviewer-toolbar-button z-pdfviewer-toolbar-fullscreen" title="Exit fullscreen"><span class="mock-icon">⊡</span></button>
+                </div>
+            </div>
+            <p style="font-size:12px;color:var(--zk-color-on-surface-variant);margin-top:8px;">
+                In real fullscreen: border-radius collapses to 0 via :fullscreen pseudo-class.
+                Toolbar fullscreen button icon swaps from expand to compress via CSS content rule.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 4 — Text layer and annotation layer (structural check only)
+     ══════════════════════════════════════════════════════════════════════ -->
+<section class="matrix-section">
+    <h2>Internal layers (structural only — verify opacity preserved)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">text-layer<br><small>(opacity: 0.2 structural)</small></div>
+        <div class="state-cell">
+            <div style="position:relative; width:240px; height:80px; background:var(--zk-color-surface); border:1px solid var(--zk-color-outline-variant);">
+                <!-- Simulated page layer -->
+                <div class="z-pdfviewer-text-layer" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0.2;background:repeating-linear-gradient(45deg,var(--zk-color-primary),var(--zk-color-primary) 2px,transparent 2px,transparent 10px);">
+                    <!-- Represents transparent text spans — do not remove opacity -->
+                </div>
+                <p style="position:absolute;bottom:4px;right:4px;font-size:11px;color:var(--zk-color-on-surface-variant);margin:0;">opacity:0.2 preserved</p>
+            </div>
+        </div>
+
+        <div class="state-label">annotation-layer<br><small>(link overlay)</small></div>
+        <div class="state-cell">
+            <div style="position:relative; width:240px; height:80px; background:var(--zk-color-surface); border:1px solid var(--zk-color-outline-variant);">
+                <div class="z-pdfviewer-annotation-layer" style="position:absolute;left:0;top:0;right:0;bottom:0;">
+                    <!-- .linkAnnotation > a elements at runtime -->
+                    <div style="position:absolute;left:20px;top:20px;width:80px;height:20px;background:rgba(0,100,255,0.15);border:1px dashed var(--zk-color-primary);font-size:10px;color:var(--zk-color-on-surface-variant);display:flex;align-items:center;justify-content:center;">link area</div>
+                </div>
+                <p style="position:absolute;bottom:4px;right:4px;font-size:11px;color:var(--zk-color-on-surface-variant);margin:0;">transparent overlay</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

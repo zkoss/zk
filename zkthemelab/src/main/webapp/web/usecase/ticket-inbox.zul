@@ -1,0 +1,104 @@
+<?page title="Support Ticket Inbox"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<div hflex="1" vflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+    <label value="Support Tickets" sclass="z-h2"/>
+
+    <!-- Flex row (not hlayout): hlayout children are inline-block, so z-flex-1
+         never fills. A CSS flex row lets the detail pane take the full right width. -->
+    <div sclass="z-d-flex z-flex-row z-gap-4 z-flex-1 z-min-h-0">
+
+        <!-- Master list -->
+        <div sclass="z-paper z-p-0 z-flex-none z-overflow-auto" width="340px">
+            <listbox vflex="1" sclass="z-border-0">
+                <listitem selected="true">
+                    <listcell>
+                        <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
+                            <div sclass="z-d-flex z-flex-row z-items-center z-gap-2">
+                                <chip label="High" severity="error"/>
+                                <label value="Login fails after password reset" sclass="z-fw-medium"/>
+                            </div>
+                            <div sclass="z-text-xs z-text-secondary">
+                                <label value="Dana Lee · 10:24"/>
+                                <chip label="Open" severity="info" sclass="z-ms-2"/>
+                            </div>
+                        </div>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell>
+                        <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
+                            <div sclass="z-d-flex z-flex-row z-items-center z-gap-2">
+                                <chip label="Med" severity="warning"/>
+                                <label value="Invoice PDF not downloading"/>
+                            </div>
+                            <div sclass="z-text-xs z-text-secondary">
+                                <label value="Marco P. · 09:51"/>
+                                <chip label="Pending" severity="warning" sclass="z-ms-2"/>
+                            </div>
+                        </div>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell>
+                        <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
+                            <div sclass="z-d-flex z-flex-row z-items-center z-gap-2">
+                                <chip label="Low" severity="neutral"/>
+                                <label value="Feature request: dark mode"/>
+                            </div>
+                            <div sclass="z-text-xs z-text-secondary">
+                                <label value="Sara K. · Yesterday"/>
+                                <chip label="Open" severity="info" sclass="z-ms-2"/>
+                            </div>
+                        </div>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell>
+                        <div sclass="z-d-flex z-flex-col z-gap-1 z-py-1">
+                            <div sclass="z-d-flex z-flex-row z-items-center z-gap-2">
+                                <chip label="Low" severity="neutral"/>
+                                <label value="Thanks for the quick fix!"/>
+                            </div>
+                            <div sclass="z-text-xs z-text-secondary">
+                                <label value="Owen T. · Mon"/>
+                                <chip label="Closed" severity="neutral" sclass="z-ms-2"/>
+                            </div>
+                        </div>
+                    </listcell>
+                </listitem>
+            </listbox>
+        </div>
+
+        <!-- Detail pane: z-flex-1 now fills the remaining width -->
+        <div sclass="z-paper z-flex-1 z-min-w-0 z-d-flex z-flex-col z-gap-3">
+            <div>
+                <label value="Login fails after password reset" sclass="z-h4 z-d-block"/>
+                <div sclass="z-text-xs z-text-secondary z-mt-1">
+                    <label value="Dana Lee · dana@example.com"/>
+                    <chip label="Open" severity="info" sclass="z-ms-2"/>
+                </div>
+            </div>
+
+            <div sclass="z-d-flex z-flex-col z-gap-3 z-flex-1 z-min-h-0 z-overflow-auto">
+                <div sclass="z-bg-surface-container-low z-rounded-md z-p-3">
+                    <label value="After resetting my password I get 'invalid credentials' even with the new one." sclass="z-d-block"/>
+                    <label value="Dana · 10:24" sclass="z-text-xs z-text-secondary"/>
+                </div>
+                <div sclass="z-bg-primary-container z-rounded-md z-p-3 z-ms-auto z-w-75">
+                    <label value="Thanks Dana — can you confirm whether you used the link from the latest email?" sclass="z-d-block"/>
+                    <label value="You · 10:31" sclass="z-text-xs"/>
+                </div>
+            </div>
+
+            <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4 z-items-center">
+                <textbox placeholder="Type a reply…" hflex="1" sclass="z-flex-1 z-min-w-0"/>
+                <button label="Send" sclass="z-button-primary"/>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</zk>

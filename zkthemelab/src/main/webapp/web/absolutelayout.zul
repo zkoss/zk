@@ -1,0 +1,31 @@
+<?page title="Absolutelayout" contentType="text/html;charset=UTF-8"?>
+<?component name="window" extends="window" border="normal" width="200px" height="120px"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Absolutelayout</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Absolute Positioning</h:span></h:div>
+        <h:div class="z-py-3">
+            <absolutelayout height="400px">
+                <absolutechildren id="w1" x="20" y="20">
+                    <window title="X=20, Y=20">
+                        Window 1
+                    </window>
+                </absolutechildren>
+                <absolutechildren id="w2" x="160" y="100">
+                    <window title="X=160, Y=100">
+                        Window 2
+                    </window>
+                </absolutechildren>
+                <absolutechildren id="w3" x="300" y="200">
+                    <window title="X=300, Y=200">
+                        Window 3
+                    </window>
+                </absolutechildren>
+            </absolutelayout>
+        </h:div>
+    </h:div>
+
+</h:div>
+</zk>

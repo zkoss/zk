@@ -1,0 +1,72 @@
+<?page title="Calendar" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript>
+    import java.util.Date;
+    import java.util.Calendar;
+    // Fixed past date so the screenshot baseline is deterministic: a past month is
+    // unambiguously "past" vs any real today, so the today-highlight never appears
+    // and the no-past/no-future greying is stable. Assign to every calendar via
+    // value="${fixedDate}". (See doc/playwright-visual-test-guide.md §5 calendar note.)
+    Calendar _c = Calendar.getInstance();
+    _c.set(2020, Calendar.MARCH, 15, 10, 30, 0);
+    Date fixedDate = _c.getTime();
+</zscript>
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Calendar</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Variants</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Default</h:span></h:div>
+                <calendar value="${fixedDate}"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Week of year</h:span></h:div>
+                <calendar weekOfYear="true" value="${fixedDate}"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Today link</h:span></h:div>
+                <calendar showTodayLink="true" value="${fixedDate}"/>
+            </h:div>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">With Datebox</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Calendar + datebox (GMT±8)</h:span></h:div>
+                <calendar value="${fixedDate}"/>
+                <datebox id="db" width="220px" format="yyyy/MM/dd a hh:mm:ss"
+                         displayedTimeZones="GMT+8,GMT-8"/>
+                <!-- Fixed instant (not new Date()) so the baseline is stable; the
+                     seconds in the format would otherwise drift every run. -->
+                <zscript>db.value = fixedDate;</zscript>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Week of year</h:span></h:div>
+                <calendar weekOfYear="true" value="${fixedDate}"/>
+                <datebox weekOfYear="true"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Today link</h:span></h:div>
+                <calendar showTodayLink="true" value="${fixedDate}"/>
+                <datebox showTodayLink="true" todayLinkLabel="Choose today"/>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Constrained (Disabled Dates)</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">constraint=&quot;no past&quot; (past days greyed)</h:span></h:div>
+                <calendar constraint="no past" value="${fixedDate}"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">constraint=&quot;no future&quot; (future days greyed)</h:span></h:div>
+                <calendar constraint="no future" value="${fixedDate}"/>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

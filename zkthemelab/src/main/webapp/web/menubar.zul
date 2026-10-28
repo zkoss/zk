@@ -1,0 +1,175 @@
+<?page title="Menubar" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Menubar</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal</h:span></h:div>
+        <h:div class="z-py-3">
+            <menubar id="menubar1" width="100%">
+                <menu label="Project" image="~./img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+                    <menupopup>
+                        <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New" onClick="alert(self.label)" />
+                        <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open" onClick="alert(self.label)" />
+                        <menuitem image="~./img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save" onClick="alert(self.label)" />
+                        <menuitem label="Save As..." iconSclass="z-icon-save" disabled="true" onClick="alert(self.label)" />
+                        <menuseparator />
+                        <menuitem label="Exit" image="~./img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
+                        <menuitem label="Restart" iconSclass="z-icon-rotate-ccw" onClick="alert(self.label)" />
+                    </menupopup>
+                </menu>
+                <menuseparator />
+                <menu label="Help" image="~./img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png" disabled="true">
+                    <menupopup>
+                        <menuitem label="Index" onClick="alert(self.label)" />
+                        <menu label="About">
+                            <menupopup>
+                                <menuitem label="About ZK" onClick="alert(self.label)" />
+                                <menuitem label="About Potix" onClick="alert(self.label)" />
+                            </menupopup>
+                        </menu>
+                        <menu label="Long text text">
+                            <menupopup>
+                                <menuitem label="About ZK" onClick="alert(self.label)" />
+                                <menuitem label="About Potix" onClick="alert(self.label)" />
+                            </menupopup>
+                        </menu>
+                    </menupopup>
+                </menu>
+                <menu image="~./img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+                    <menupopup>
+                        <menuitem label="Index" onClick="alert(self.label)" />
+                    </menupopup>
+                </menu>
+                <menuitem label="Menuitem" onClick="alert(self.label)" />
+                <menuitem image="~./img/Centigrade-Widget-Icons/Spyglass-16x16.png" disabled="true" label="Menuitem (disabled)" onClick="alert(self.label)" />
+            </menubar>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Horizontal with Icons</h:span></h:div>
+        <h:div class="z-py-3">
+            <menubar>
+                <menu label="File" iconSclass="z-icon-file">
+                    <menupopup>
+                        <menuitem label="New" iconSclass="z-icon-file"/>
+                        <menu label="Open" iconSclass="z-icon-folder-open">
+                            <menupopup>
+                                <menuitem label="Project..." iconSclass="z-icon-folder"/>
+                                <menuitem label="File..." iconSclass="z-icon-file"/>
+                            </menupopup>
+                        </menu>
+                        <menuitem label="Save" iconSclass="z-icon-save"/>
+                        <menuitem label="Exit" iconSclass="z-icon-x"/>
+                    </menupopup>
+                </menu>
+                <menu label="View">
+                    <menupopup>
+                        <menuitem label="Sort by Name" checkmark="true" autocheck="true" />
+                        <menuitem label="Sort by Date" checkmark="true" autocheck="true" />
+                    </menupopup>
+                </menu>
+                <menuseparator/>
+                <menuitem label="Help" iconSclass="z-icon-circle-help"/>
+            </menubar>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical</h:span></h:div>
+        <h:div class="z-py-3">
+            <menubar width="200px" orient="vertical">
+                <menu label="Project" image="~./img/Centigrade-Widget-Icons/Briefcase-16x16.png" disabled="true">
+                    <menupopup>
+                        <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New" onClick="alert(self.label)" />
+                        <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open" onClick="alert(self.label)" />
+                        <menuitem image="~./img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save" onClick="alert(self.label)" />
+                        <menuseparator />
+                        <menuitem autocheck="true" checked="true" label="Menuitem" onClick="alert(self.label)" />
+                        <menuitem label="Exit" image="~./img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
+                    </menupopup>
+                </menu>
+                <menu label="Help" image="~./img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+                    <menupopup>
+                        <menuitem label="Index" onClick="alert(self.label)" />
+                        <menu label="About">
+                            <menupopup>
+                                <menuitem label="About ZK" onClick="alert(self.label)" />
+                                <menuitem label="About Potix" onClick="alert(self.label)" />
+                            </menupopup>
+                        </menu>
+                    </menupopup>
+                </menu>
+                <menu image="~./img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+                    <menupopup>
+                        <menuitem label="Index" onClick="alert(self.label)" />
+                    </menupopup>
+                </menu>
+                <menuseparator />
+                <menuitem label="Menuitem" onClick="alert(self.label)" />
+                <menuitem disabled="true" label="Menuitem (disabled)" onClick="alert(self.label)" />
+            </menubar>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Menupopup (standalone)</h:span></h:div>
+        <h:div class="z-py-3">
+            <button label="Open menupopup" popup="menupopup1"/>
+            <menupopup id="menupopup1">
+                <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New" onClick="alert(self.label)" />
+                <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open" onClick="alert(self.label)" />
+                <menuitem image="~./img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save" onClick="alert(self.label)" />
+                <menuseparator />
+                <menuitem label="Exit" image="~./img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
+            </menupopup>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auto Drop</h:span></h:div>
+        <h:div class="z-py-3">
+            <menubar id="menubar2" width="100%">
+                <attribute name="onCreate">self.setAutodrop(true);</attribute>
+                <menu label="Project" image="~./img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+                    <menupopup>
+                        <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New" onClick="alert(self.label)" />
+                        <menuitem image="~./img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open" onClick="alert(self.label)" />
+                        <menuitem image="~./img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save" onClick="alert(self.label)" />
+                        <menuseparator />
+                        <menuitem label="Exit" image="~./img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
+                    </menupopup>
+                </menu>
+                <menu label="Help" image="~./img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+                    <menupopup>
+                        <menuitem label="Index" onClick="alert(self.label)" />
+                        <menu label="About">
+                            <menupopup>
+                                <menuitem label="About ZK" onClick="alert(self.label)" />
+                                <menuitem label="About Potix" onClick="alert(self.label)" />
+                            </menupopup>
+                        </menu>
+                    </menupopup>
+                </menu>
+                <menuitem label="Exit"/>
+            </menubar>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Scrollable Menubar</h:span></h:div>
+        <h:div class="z-py-3">
+            <menubar width="200px">
+                <attribute name="onCreate">self.setScrollable(true);</attribute>
+                <menuitem label="item 1" iconSclass="z-icon-circle"/>
+                <menuitem label="item 2" checkmark="true"/>
+                <menuitem label="item 3" iconSclass="z-icon-circle"/>
+                <menuitem label="item 4" iconSclass="z-icon-circle"/>
+                <menuitem label="item 5" iconSclass="z-icon-circle"/>
+            </menubar>
+        </h:div>
+    </h:div>
+
+</h:div>
+</zk>

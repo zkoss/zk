@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — signature</title>
+<!--
+  Self-contained marble design contract mockup for <signature>.
+
+  Renders the variants from src/test/resources/web/signature.zul plus
+  the additional states required by the State matrix:
+    - default (empty canvas, toolbar visible)
+    - focus-within (primary border, 2px)
+    - toolbar-hide (toolbar hidden during drawing)
+    - tool-button states (hover, focus-visible, active)
+    - disabled wrapper
+
+  Companion files:
+    Skill:    .claude/skills/zk-component-rules/components/signature.md
+    Contract:   doc/contracts/signature.md
+    Baseline: doc/contracts/baselines/signature-iceblue.png
+
+  Compare visually to the baseline; the structural DOM is identical.
+  Canvas elements are represented by styled placeholders (no drawing API).
+-->
+<style>
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-tertiary: #7e73d6;
+    --zk-color-error: #d32f2f;
+    --zk-color-on-error: #ffffff;
+    --zk-color-warning: #f57c00;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+    --zk-state-disabled-opacity: 0.38;
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-medium-weight: 400;
+    --zk-typescale-body-medium-line-height: 20px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-label-large-weight: 500;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+    --zk-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+    --zk-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* Motion */
+    --zk-motion-duration-short1: 100ms;
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-duration-medium1: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section {
+    margin-bottom: var(--zk-spacing-8);
+}
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: var(--zk-spacing-3);
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface-variant);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   signature — design contract
+   Class names mirror the DOM tree declared in
+   .claude/skills/zk-component-rules/components/signature.md.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Root wrapper — reads like an outlined input area */
+.z-signature {
+    position: relative;
+    border: 1px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-corner-medium);
+    background-color: var(--zk-color-surface);
+    overflow: hidden;
+    width: 400px;
+    height: 160px;
+}
+
+/* Focus-within — user is drawing (canvas has pointer focus) */
+.z-signature:focus-within {
+    border-color: var(--zk-color-primary);
+    border-width: 2px;
+}
+
+/* Disabled — full widget dims */
+.z-signature[disabled] {
+    opacity: var(--zk-state-disabled-opacity);
+    pointer-events: none;
+}
+
+/* Canvas placeholder (in production these are <canvas> elements managed by JS) */
+.z-signature-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--zk-shape-corner-medium);
+    /* In the mockup we render the background-canvas as the visible drawing area */
+}
+
+/* Toolbar strip — absolutely positioned bottom-right inside the root */
+.z-signature-toolbar {
+    position: absolute;
+    bottom: var(--zk-spacing-2);
+    right: var(--zk-spacing-2);
+    display: flex;
+    flex-direction: row;
+    gap: var(--zk-spacing-2);
+    z-index: 1;
+}
+
+/* Toolbar hidden — set by JS during pen drawing or toolbarVisible="false" */
+.z-signature-toolbar-hide {
+    display: none;
+}
+
+/* Tool buttons — native <button> elements styled as compact tonal outlined buttons */
+.z-signature-tool-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-1);
+    padding: var(--zk-spacing-1) var(--zk-spacing-3);
+    min-height: 32px;
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-small);
+    background-color: var(--zk-color-surface);
+    color: var(--zk-color-on-surface);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    box-shadow: var(--zk-elevation-1);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+        background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
+        border-color     var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
+        color            var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+.z-signature-tool-button:hover {
+    background-color: var(--zk-color-surface-container-high);
+    border-color: var(--zk-color-outline);
+}
+
+.z-signature-tool-button:focus-visible {
+    outline: 2px solid var(--zk-color-primary);
+    outline-offset: 2px;
+}
+
+.z-signature-tool-button:active {
+    background-color: var(--zk-color-surface-container);
+}
+
+/* Tool button icon */
+.z-signature-tool-button-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* Tool button label — conditional spacing when text is present */
+.z-signature-tool-button-label:not(:empty) {
+    margin-left: var(--zk-spacing-1);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup-only helpers: simulate canvas area + icon glyphs with inline SVG.
+   These do NOT appear in the production theme CSS.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Simulated canvas drawing area (replaces actual <canvas> in this mockup) */
+.canvas-mockup {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: var(--zk-color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    font-style: italic;
+    border-radius: var(--zk-shape-corner-medium);
+}
+
+/* Simulated focused canvas (focus-within state) */
+.canvas-mockup-active {
+    background: rgba(55, 111, 208, 0.04);
+}
+
+/* Icon SVG inside tool buttons */
+.btn-icon-svg {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Static hover simulation for tool-button states section */
+.z-signature-tool-button.state-hover {
+    background-color: var(--zk-color-surface-container-high);
+    border-color: var(--zk-color-outline);
+}
+.z-signature-tool-button.state-focus {
+    outline: 2px solid var(--zk-color-primary);
+    outline-offset: 2px;
+}
+.z-signature-tool-button.state-active {
+    background-color: var(--zk-color-surface-container);
+}
+</style>
+</head>
+<body>
+
+<h1>signature — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T3</span>
+    <span>closest-sibling: toolbar (button-strip chrome pattern)</span>
+    <span>edition: EE (zkmax)</span>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     Section 1: Root wrapper states
+     ──────────────────────────────────────────────────────────────────── -->
+
+<section class="matrix-section">
+    <h2>Root Wrapper — .z-signature</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Default<br>(empty, toolbar visible)</div>
+        <div class="state-cell">
+            <div class="z-signature">
+                <div class="canvas-mockup">drawing area (canvas)</div>
+                <div class="z-signature-toolbar">
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                        <label class="z-signature-tool-button-label">Undo</label>
+                    </button>
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                        <label class="z-signature-tool-button-label">Save</label>
+                    </button>
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        <label class="z-signature-tool-button-label">Clear</label>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Focus-within<br>(user drawing — primary 2px border)</div>
+        <div class="state-cell">
+            <!-- Simulated with inline style since :focus-within requires live focus -->
+            <div class="z-signature" style="border-color: var(--zk-color-primary); border-width: 2px;">
+                <div class="canvas-mockup canvas-mockup-active">drawing… (canvas has focus)</div>
+                <div class="z-signature-toolbar">
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                        <label class="z-signature-tool-button-label">Undo</label>
+                    </button>
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                        <label class="z-signature-tool-button-label">Save</label>
+                    </button>
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        <label class="z-signature-tool-button-label">Clear</label>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Toolbar hidden<br>(.z-signature-toolbar-hide — during drawing)</div>
+        <div class="state-cell">
+            <div class="z-signature">
+                <div class="canvas-mockup">pen active — toolbar hidden</div>
+                <div class="z-signature-toolbar z-signature-toolbar-hide">
+                    <!-- hidden by display:none -->
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">Disabled<br>([disabled] attribute)</div>
+        <div class="state-cell">
+            <div class="z-signature" disabled style="opacity: var(--zk-state-disabled-opacity); pointer-events: none;">
+                <div class="canvas-mockup">drawing area (disabled)</div>
+                <div class="z-signature-toolbar">
+                    <button class="z-signature-tool-button" disabled>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                        <label class="z-signature-tool-button-label">Undo</label>
+                    </button>
+                    <button class="z-signature-tool-button" disabled>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                        <label class="z-signature-tool-button-label">Save</label>
+                    </button>
+                    <button class="z-signature-tool-button" disabled>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        <label class="z-signature-tool-button-label">Clear</label>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     Section 2: Tool button states (isolated)
+     ──────────────────────────────────────────────────────────────────── -->
+
+<section class="matrix-section">
+    <h2>Tool Button States — .z-signature-tool-button</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Default</div>
+        <div class="state-cell">
+            <div style="display:flex;gap:var(--zk-spacing-2);">
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                    <label class="z-signature-tool-button-label">Undo</label>
+                </button>
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                    <label class="z-signature-tool-button-label">Save</label>
+                </button>
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <label class="z-signature-tool-button-label">Clear</label>
+                </button>
+            </div>
+        </div>
+
+        <div class="state-label">Hover</div>
+        <div class="state-cell">
+            <div style="display:flex;gap:var(--zk-spacing-2);">
+                <button class="z-signature-tool-button state-hover">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                    <label class="z-signature-tool-button-label">Undo</label>
+                </button>
+                <button class="z-signature-tool-button state-hover">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                    <label class="z-signature-tool-button-label">Save</label>
+                </button>
+                <button class="z-signature-tool-button state-hover">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <label class="z-signature-tool-button-label">Clear</label>
+                </button>
+            </div>
+        </div>
+
+        <div class="state-label">Focus-visible</div>
+        <div class="state-cell">
+            <div style="display:flex;gap:var(--zk-spacing-2);">
+                <button class="z-signature-tool-button state-focus">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                    <label class="z-signature-tool-button-label">Undo</label>
+                </button>
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                    <label class="z-signature-tool-button-label">Save</label>
+                </button>
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <label class="z-signature-tool-button-label">Clear</label>
+                </button>
+            </div>
+        </div>
+
+        <div class="state-label">Active (pressed)</div>
+        <div class="state-cell">
+            <div style="display:flex;gap:var(--zk-spacing-2);">
+                <button class="z-signature-tool-button state-active">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                    <label class="z-signature-tool-button-label">Undo</label>
+                </button>
+                <button class="z-signature-tool-button state-active">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                    <label class="z-signature-tool-button-label">Save</label>
+                </button>
+                <button class="z-signature-tool-button state-active">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <label class="z-signature-tool-button-label">Clear</label>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     Section 3: Label presence variants
+     ──────────────────────────────────────────────────────────────────── -->
+
+<section class="matrix-section">
+    <h2>Label Variants</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Labels present<br>(undoLabel / saveLabel / clearLabel set)</div>
+        <div class="state-cell">
+            <div style="display:flex;gap:var(--zk-spacing-2);">
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                    <label class="z-signature-tool-button-label">Undo</label>
+                </button>
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                    <label class="z-signature-tool-button-label">Save</label>
+                </button>
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <label class="z-signature-tool-button-label">Clear</label>
+                </button>
+            </div>
+        </div>
+
+        <div class="state-label">Icon-only<br>(no label text — :not(:empty) margin absent)</div>
+        <div class="state-cell">
+            <div style="display:flex;gap:var(--zk-spacing-2);">
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                    <label class="z-signature-tool-button-label"></label>
+                </button>
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                    <label class="z-signature-tool-button-label"></label>
+                </button>
+                <button class="z-signature-tool-button">
+                    <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <label class="z-signature-tool-button-label"></label>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     Section 4: Full widget as seen on signature.zul
+     ──────────────────────────────────────────────────────────────────── -->
+
+<section class="matrix-section">
+    <h2>Full Widget — as rendered by signature.zul</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">Default 600×200<br>(toolbar bottom-right)</div>
+        <div class="state-cell">
+            <div class="z-signature" style="width:100%;max-width:600px;height:200px;">
+                <div class="canvas-mockup">drawing area</div>
+                <div class="z-signature-toolbar">
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
+                        <label class="z-signature-tool-button-label">Undo</label>
+                    </button>
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                        <label class="z-signature-tool-button-label">Save</label>
+                    </button>
+                    <button class="z-signature-tool-button">
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        <label class="z-signature-tool-button-label">Clear</label>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

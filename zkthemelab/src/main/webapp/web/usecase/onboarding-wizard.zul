@@ -1,0 +1,67 @@
+<?page title="Onboarding Wizard"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<vlayout hflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+  <!-- Centered narrow column so form inputs don't stretch edge-to-edge -->
+  <div width="600px" sclass="z-mx-auto z-d-flex z-flex-col z-gap-4">
+
+    <label value="Account Setup" sclass="z-h2"/>
+
+    <div sclass="z-paper">
+        <!-- stepbar is an EE (zkmax) component -->
+        <stepbar activeIndex="1" hflex="1">
+            <step title="Account"/>
+            <step title="Profile"/>
+            <step title="Preferences"/>
+            <step title="Done"/>
+        </stepbar>
+    </div>
+
+    <!-- Only the current step's form is shown (progressive disclosure) -->
+    <div sclass="z-paper">
+        <label value="Step 2 · Profile" sclass="z-d-block z-text-lg z-fw-medium z-text-on-surface z-mb-3"/>
+        <grid hflex="1" sclass="z-border-0">
+            <columns>
+                <column width="160px"/>
+                <column/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="Full Name"/>
+                    <textbox value="Dana Lee" hflex="1"/>
+                </row>
+                <row>
+                    <label value="Job Title"/>
+                    <textbox value="Warehouse Manager" hflex="1"/>
+                </row>
+                <row>
+                    <label value="Department"/>
+                    <combobox value="Operations" readonly="true" hflex="1">
+                        <comboitem label="Operations"/>
+                        <comboitem label="Sales"/>
+                        <comboitem label="Support"/>
+                    </combobox>
+                </row>
+                <row>
+                    <label value="Time Zone"/>
+                    <combobox value="GMT+8 Taipei" readonly="true" hflex="1">
+                        <comboitem label="GMT+8 Taipei"/>
+                        <comboitem label="GMT+0 London"/>
+                        <comboitem label="GMT-5 New York"/>
+                    </combobox>
+                </row>
+            </rows>
+        </grid>
+    </div>
+
+    <!-- Wizard nav -->
+    <div sclass="z-paper z-d-flex z-flex-row z-flex-wrap z-gap-4 z-items-center">
+        <button label="Back" sclass="z-button-outlined"/>
+        <button label="Next" sclass="z-button-primary z-ms-auto"/>
+    </div>
+
+  </div>
+
+</vlayout>
+</zk>

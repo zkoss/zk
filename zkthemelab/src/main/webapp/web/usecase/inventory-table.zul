@@ -1,0 +1,102 @@
+<?page title="Inventory List"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<vlayout hflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+    <!-- Page header -->
+    <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4 z-items-center">
+        <label value="Inventory" sclass="z-h2"/>
+        <button label="Add Item" iconSclass="z-icon-plus" sclass="z-ms-auto"/>
+    </div>
+
+    <!-- Filter toolbar -->
+    <div sclass="z-paper">
+        <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4 z-items-center">
+            <textbox placeholder="Search SKU or product…" hflex="1" sclass="z-flex-1 z-min-w-0"/>
+            <combobox placeholder="Category" readonly="true">
+                <comboitem label="All Categories"/>
+                <comboitem label="Fasteners"/>
+                <comboitem label="Tools"/>
+                <comboitem label="Safety Gear"/>
+                <comboitem label="Packaging"/>
+            </combobox>
+            <combobox placeholder="Status" readonly="true">
+                <comboitem label="All"/>
+                <comboitem label="In Stock"/>
+                <comboitem label="Low"/>
+                <comboitem label="Out"/>
+            </combobox>
+        </div>
+    </div>
+
+    <!-- Stock grid -->
+    <div sclass="z-paper">
+        <grid hflex="1">
+            <columns>
+                <column label="SKU" width="110px"/>
+                <column label="Product"/>
+                <column label="Category" width="130px"/>
+                <column label="Qty" width="70px" align="right"/>
+                <column label="Location" width="110px"/>
+                <column label="Status" width="110px"/>
+                <column label="Stock Level" width="160px"/>
+                <column label="" width="56px"/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="FST-0481"/>
+                    <label value="M6 Hex Bolt (100pk)"/>
+                    <label value="Fasteners"/>
+                    <label value="1,240"/>
+                    <label value="A-12"/>
+                    <chip label="In Stock" severity="success" rounded="true"/>
+                    <progressmeter value="82" width="140px"/>
+                    <button iconSclass="z-icon-ellipsis-vertical" sclass="z-button-icon"/>
+                </row>
+                <row>
+                    <label value="TLS-2207"/>
+                    <label value="Cordless Drill 18V"/>
+                    <label value="Tools"/>
+                    <label value="38"/>
+                    <label value="C-04"/>
+                    <chip label="Low" severity="warning" rounded="true"/>
+                    <progressmeter value="24" width="140px"/>
+                    <button iconSclass="z-icon-ellipsis-vertical" sclass="z-button-icon"/>
+                </row>
+                <row>
+                    <label value="SAF-1190"/>
+                    <label value="Safety Goggles"/>
+                    <label value="Safety Gear"/>
+                    <label value="0"/>
+                    <label value="B-08"/>
+                    <chip label="Out" severity="error" rounded="true"/>
+                    <progressmeter value="0" width="140px"/>
+                    <button iconSclass="z-icon-ellipsis-vertical" sclass="z-button-icon"/>
+                </row>
+                <row>
+                    <label value="PKG-3320"/>
+                    <label value="Shipping Box (Large)"/>
+                    <label value="Packaging"/>
+                    <label value="640"/>
+                    <label value="D-21"/>
+                    <chip label="In Stock" severity="success" rounded="true"/>
+                    <progressmeter value="68" width="140px"/>
+                    <button iconSclass="z-icon-ellipsis-vertical" sclass="z-button-icon"/>
+                </row>
+                <row>
+                    <label value="FST-0512"/>
+                    <label value="Washer Assortment"/>
+                    <label value="Fasteners"/>
+                    <label value="95"/>
+                    <label value="A-15"/>
+                    <chip label="Low" severity="warning" rounded="true"/>
+                    <progressmeter value="31" width="140px"/>
+                    <button iconSclass="z-icon-ellipsis-vertical" sclass="z-button-icon"/>
+                </row>
+            </rows>
+        </grid>
+        <paging totalSize="128" pageSize="5" sclass="z-mt-3"/>
+    </div>
+
+</vlayout>
+</zk>

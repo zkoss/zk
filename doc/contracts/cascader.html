@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — cascader</title>
+<!--
+  Self-contained Marble design contract mockup for the cascader component.
+  Open in any browser — no server, no JS required.
+
+  Class names match .claude/skills/zk-component-rules/components/cascader.md exactly.
+  All design values reference --zk-* tokens only (no hex except inside :root definitions).
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Colors */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-input: 4px;
+    --zk-shape-menu: 4px;
+    --zk-shape-corner-small: 8px;
+
+    /* Typography */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    --zk-typescale-label-large-size: 14px;
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-title-medium-size: 16px;
+
+    /* Elevation */
+    --zk-elevation-dropdown:
+        0px 2px 6px 0px rgba(0, 0, 0, 0.12),
+        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
+
+    /* Motion */
+    --zk-motion-duration-short3: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* State layers */
+    --zk-state-disabled-opacity: 0.38;
+    --zk-state-hover-opacity: 0.08;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout only)
+   ──────────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: 500;
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: 10px;
+}
+.state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Cascader trigger styles
+   ──────────────────────────────────────────────────────────────────────── */
+.z-cascader {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    height: 40px;
+    width: 220px;
+    border: 1px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-input);
+    background-color: var(--zk-color-surface);
+    cursor: pointer;
+    outline: none;
+    transition:
+        border-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-label-large-size);
+}
+
+.z-cascader:hover:not(.z-cascader-disabled) {
+    border-color: var(--zk-color-on-surface);
+}
+
+.z-cascader-focus,
+.z-cascader-open {
+    border-color: var(--zk-color-primary);
+    box-shadow: 0 0 0 1px var(--zk-color-primary);
+}
+
+.z-cascader-label,
+.z-cascader-placeholder {
+    flex: 1;
+    min-width: 0;
+    padding: 0 36px 0 var(--zk-spacing-3);
+    line-height: 40px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    user-select: none;
+}
+
+.z-cascader-label {
+    color: var(--zk-color-on-surface);
+}
+
+.z-cascader-placeholder {
+    color: var(--zk-color-on-surface-variant);
+}
+
+/* Root trigger icon */
+.z-cascader-icon {
+    position: absolute;
+    right: var(--zk-spacing-2);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--zk-color-on-surface-variant);
+    line-height: 1;
+    user-select: none;
+    /* Simulated with Unicode glyphs in the mockup — real widget uses z-icon font */
+}
+
+/* Disabled trigger */
+.z-cascader-disabled {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Cascader popup (shown inline in this mockup; detached to body at runtime)
+   ──────────────────────────────────────────────────────────────────────── */
+.z-cascader-popup {
+    display: inline-flex;
+    background-color: var(--zk-color-surface);
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-menu);
+    box-shadow: var(--zk-elevation-dropdown);
+    white-space: nowrap;
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-surface);
+    margin-top: var(--zk-spacing-1);
+    overflow: hidden;
+}
+
+/* Cave — one column per tree level */
+.z-cascader-cave {
+    display: inline-block;
+    vertical-align: top;
+    list-style: none;
+    margin: 0;
+    padding: var(--zk-spacing-1) 0;
+    min-width: 160px;
+    max-height: 280px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-left: 1px solid var(--zk-color-outline-variant);
+    box-sizing: border-box;
+}
+
+.z-cascader-cave:first-child {
+    border-left: none;
+}
+
+/* Item row */
+.z-cascader-item {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    height: 36px;
+    padding: 0 var(--zk-spacing-3);
+    cursor: pointer;
+    user-select: none;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-surface);
+    box-sizing: border-box;
+    transition: background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    gap: var(--zk-spacing-2);
+}
+
+.z-cascader-item:hover,
+.z-cascader-item.z-cascader-active {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.z-cascader-item.z-cascader-selected {
+    color: var(--zk-color-primary);
+}
+
+/* Expand icon inside items (non-leaf) */
+.z-cascader-item .z-cascader-icon {
+    font-size: 14px;
+    color: var(--zk-color-on-surface-variant);
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup-only helpers (not real ZK classes)
+   ──────────────────────────────────────────────────────────────────────── */
+.mock-popup-wrapper {
+    display: block;
+    margin-top: var(--zk-spacing-2);
+}
+.mock-note {
+    font-size: var(--zk-typescale-body-small-size);
+    color: var(--zk-color-on-surface-variant);
+    font-style: italic;
+    margin-top: var(--zk-spacing-1);
+}
+</style>
+
+<!-- Font Awesome 6 Free (CDN) for icon glyphs — approximates ZK's z-icon set -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      crossorigin="anonymous">
+</head>
+<body>
+
+<h1>cascader — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T1</span>
+    <span>closest-sibling: searchbox</span>
+    <span>edition: EE</span>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TRIGGER STATES
+     ════════════════════════════════════════════════════════════════════ -->
+
+<section class="matrix-section">
+    <h2>Trigger — default states</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default<br>(no selection)</div>
+        <div class="state-cell">
+            <div class="z-cascader">
+                <div class="z-cascader-label" style="display:none"></div>
+                <div class="z-cascader-placeholder" style="display:inline-block">Select a category</div>
+                <i class="z-cascader-icon fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="mock-note">Rest state — outline border, placeholder text, caret-down icon</div>
+        </div>
+
+        <div class="state-label">has-selection</div>
+        <div class="state-cell">
+            <div class="z-cascader">
+                <div class="z-cascader-label" style="display:inline-block">USA / New York</div>
+                <div class="z-cascader-placeholder" style="display:none"></div>
+                <i class="z-cascader-icon fa-solid fa-xmark"></i>
+            </div>
+            <div class="mock-note">Selection set — label shows path, icon switches to ×-clear</div>
+        </div>
+
+        <div class="state-label">hover</div>
+        <div class="state-cell">
+            <!-- Simulate hover with static inline style -->
+            <div class="z-cascader" style="border-color: var(--zk-color-on-surface);">
+                <div class="z-cascader-label" style="display:none"></div>
+                <div class="z-cascader-placeholder" style="display:inline-block">Select a category</div>
+                <i class="z-cascader-icon fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="mock-note">Border darkens to on-surface on hover</div>
+        </div>
+
+        <div class="state-label">focus / open</div>
+        <div class="state-cell">
+            <div class="z-cascader z-cascader-focus">
+                <div class="z-cascader-label" style="display:none"></div>
+                <div class="z-cascader-placeholder" style="display:inline-block">Select a category</div>
+                <i class="z-cascader-icon fa-solid fa-chevron-right"></i>
+            </div>
+            <div class="mock-note">Primary ring (border + box-shadow 1px), icon → caret-right</div>
+        </div>
+
+        <div class="state-label">disabled</div>
+        <div class="state-cell">
+            <div class="z-cascader z-cascader-disabled">
+                <div class="z-cascader-label" style="display:none"></div>
+                <div class="z-cascader-placeholder" style="display:inline-block">Select a category</div>
+                <i class="z-cascader-icon fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="mock-note">opacity: 0.38 — entire trigger dims, pointer-events: none</div>
+        </div>
+
+        <div class="state-label">disabled<br>(with selection)</div>
+        <div class="state-cell">
+            <div class="z-cascader z-cascader-disabled">
+                <div class="z-cascader-label" style="display:inline-block">Japan / Kyoto</div>
+                <div class="z-cascader-placeholder" style="display:none"></div>
+                <i class="z-cascader-icon fa-solid fa-xmark"></i>
+            </div>
+            <div class="mock-note">Path label visible but entire trigger at 0.38 opacity</div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     POPUP — open state
+     ════════════════════════════════════════════════════════════════════ -->
+
+<section class="matrix-section">
+    <h2>Popup — open (USA selected, New York highlighted)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">open state<br>(level 1 visible)</div>
+        <div class="state-cell">
+            <!-- Trigger -->
+            <div class="z-cascader z-cascader-open">
+                <div class="z-cascader-label" style="display:none"></div>
+                <div class="z-cascader-placeholder" style="display:inline-block">Select a category</div>
+                <i class="z-cascader-icon fa-solid fa-chevron-right"></i>
+            </div>
+            <!-- Popup (inline in mockup; detached to body at runtime) -->
+            <div class="mock-popup-wrapper">
+                <div class="z-cascader-popup">
+                    <ul class="z-cascader-cave">
+                        <li class="z-cascader-item z-cascader-selected">USA
+                            <i class="z-cascader-icon fa-solid fa-chevron-right"></i>
+                        </li>
+                        <li class="z-cascader-item">Japan
+                            <i class="z-cascader-icon fa-solid fa-chevron-right"></i>
+                        </li>
+                        <li class="z-cascader-item">New Zealand
+                            <i class="z-cascader-icon fa-solid fa-chevron-right"></i>
+                        </li>
+                    </ul>
+                    <ul class="z-cascader-cave">
+                        <li class="z-cascader-item z-cascader-active">New York</li>
+                        <li class="z-cascader-item">Los Angeles</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mock-note">
+                Two caves side-by-side. First cave: no left border. Second cave: 1px outline-variant separator.
+                "USA" row: primary colour (selected path). "New York": hover/active tint.
+            </div>
+        </div>
+
+        <div class="state-label">deeper navigation<br>(leaf selected)</div>
+        <div class="state-cell">
+            <!-- Trigger showing final selection -->
+            <div class="z-cascader">
+                <div class="z-cascader-label" style="display:inline-block">USA / New York</div>
+                <div class="z-cascader-placeholder" style="display:none"></div>
+                <i class="z-cascader-icon fa-solid fa-xmark"></i>
+            </div>
+            <div class="mock-note">After leaf selection: popup closes, label shows "USA / New York", icon → ×</div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     ITEM STATES (isolated)
+     ════════════════════════════════════════════════════════════════════ -->
+
+<section class="matrix-section">
+    <h2>Item states (popup rows — isolated)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default item</div>
+        <div class="state-cell">
+            <div class="z-cascader-popup" style="display:inline-flex; box-shadow:none; border: 1px solid var(--zk-color-outline-variant);">
+                <ul class="z-cascader-cave">
+                    <li class="z-cascader-item">Japan
+                        <i class="z-cascader-icon fa-solid fa-chevron-right"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="state-label">hover / active</div>
+        <div class="state-cell">
+            <div class="z-cascader-popup" style="display:inline-flex; box-shadow:none; border: 1px solid var(--zk-color-outline-variant);">
+                <ul class="z-cascader-cave">
+                    <li class="z-cascader-item z-cascader-active">Japan
+                        <i class="z-cascader-icon fa-solid fa-chevron-right"></i>
+                    </li>
+                </ul>
+            </div>
+            <div class="mock-note">rgba(0,0,0,0.04) tint — MUI MenuItem hover</div>
+        </div>
+
+        <div class="state-label">selected (path)</div>
+        <div class="state-cell">
+            <div class="z-cascader-popup" style="display:inline-flex; box-shadow:none; border: 1px solid var(--zk-color-outline-variant);">
+                <ul class="z-cascader-cave">
+                    <li class="z-cascader-item z-cascader-selected">USA
+                        <i class="z-cascader-icon fa-solid fa-chevron-right"></i>
+                    </li>
+                </ul>
+            </div>
+            <div class="mock-note">color: primary — marks the current selection path ancestor</div>
+        </div>
+
+        <div class="state-label">leaf node<br>(no expand icon)</div>
+        <div class="state-cell">
+            <div class="z-cascader-popup" style="display:inline-flex; box-shadow:none; border: 1px solid var(--zk-color-outline-variant);">
+                <ul class="z-cascader-cave">
+                    <li class="z-cascader-item z-cascader-selected">New York</li>
+                </ul>
+            </div>
+            <div class="mock-note">Leaf: no caret icon rendered; selected colour still applies</div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

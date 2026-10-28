@@ -1,0 +1,23 @@
+<?page title="Invalid input size" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for forced-colors.spec.ts (follow-up 50): one valid instance of each input of the (1c) double-border list.
+     The spec adds the invalid class where ZK puts it and compares the border boxes. The combobox and the bandbox
+     are listed once with and once without the button. Lives under pv/ so gallery-scan and forced-colors-gallery
+     do not pick it up as a page. -->
+<zk>
+<vlayout spacing="12px">
+    <intbox sclass="isg-intbox"/>
+    <decimalbox sclass="isg-decimalbox"/>
+    <doublebox sclass="isg-doublebox"/>
+    <longbox sclass="isg-longbox"/>
+    <textbox sclass="isg-textbox"/>
+    <textbox sclass="isg-passwordbox" type="password"/>
+    <datebox sclass="isg-datebox"/>
+    <timebox sclass="isg-timebox"/>
+    <timepicker sclass="isg-timepicker"/>
+    <spinner sclass="isg-spinner"/>
+    <doublespinner sclass="isg-doublespinner"/>
+    <bandbox sclass="isg-bandbox"><bandpopup>Content</bandpopup></bandbox>
+    <daterangebox sclass="isg-daterangebox"/>
+    <combobox sclass="isg-combobox"><comboitem label="Item 1"/></combobox>
+</vlayout>
+</zk>

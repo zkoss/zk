@@ -1,0 +1,445 @@
+<?page title="Grid Header" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Grid Header</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auxhead + Column Combinations</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <grid width="300px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <columns id="cs">
+                        <column label="Align Left" align="left" width="100px"/>
+                        <column label="Align Center" align="center" width="100px"/>
+                        <column label="Align Right" align="right" width="100px"/>
+                    </columns>
+                    <auxhead>
+                        <auxheader label="C+D" colspan="2"/>
+                        <auxheader label="E"/>
+                    </auxhead>
+                    <rows>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                    </rows>
+                    <foot>
+                        <footer label="footer 1"/>
+                        <footer label="footer 2"/>
+                        <footer label="footer 3"/>
+                    </foot>
+                </grid>
+
+                <grid width="300px">
+                    <columns>
+                        <column label="Align Left" align="left" width="100px"/>
+                        <column label="Align Center" align="center" width="100px"/>
+                        <column label="Align Right" align="right" width="100px"/>
+                    </columns>
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="C+D" colspan="2"/>
+                        <auxheader label="E"/>
+                    </auxhead>
+                    <rows>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                    </rows>
+                    <foot>
+                        <footer label="footer 1"/>
+                        <footer label="footer 2"/>
+                        <footer label="footer 3"/>
+                    </foot>
+                </grid>
+
+                <grid width="300px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="C+D" colspan="2"/>
+                        <auxheader label="E"/>
+                    </auxhead>
+                    <columns>
+                        <column label="Align Left" align="left" width="100px"/>
+                        <column label="Align Center" align="center" width="100px"/>
+                        <column label="Align Right" align="right" width="100px"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                    </rows>
+                    <foot>
+                        <footer label="footer 1"/>
+                        <footer label="footer 2"/>
+                        <footer label="footer 3"/>
+                    </foot>
+                </grid>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Column / Auxhead Only</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <grid width="300px">
+                    <columns>
+                        <column label="Align Left" align="left" width="100px"/>
+                        <column label="Align Center" align="center" width="100px"/>
+                        <column label="Align Right" align="right" width="100px"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                    </rows>
+                    <foot>
+                        <footer label="footer 1"/>
+                        <footer label="footer 2"/>
+                    </foot>
+                </grid>
+
+                <grid width="300px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <rows>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                    </rows>
+                    <foot>
+                        <footer label="footer 1"/>
+                        <footer label="footer 2"/>
+                    </foot>
+                </grid>
+
+                <grid width="400px">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <rows>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                    </rows>
+                    <foot>
+                        <footer label="footer 1"/>
+                        <footer label="footer 2"/>
+                    </foot>
+                </grid>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Static Sort Direction</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <grid width="300px">
+                    <columns>
+                        <column label="Subject (asc)" sort="auto" sortDirection="ascending"/>
+                        <column label="Received" sort="auto"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="Style Guide for ZK 3.5 released"/>
+                            <label value="2008/11/14"/>
+                        </row>
+                        <row>
+                            <label value="ZK Jet 0.8.0 is released"/>
+                            <label value="2008/11/17"/>
+                        </row>
+                    </rows>
+                </grid>
+
+                <grid width="300px">
+                    <columns>
+                        <column label="Subject" sort="auto"/>
+                        <column label="Received (desc)" sort="auto" sortDirection="descending"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="ZK Jet 0.8.0 is released"/>
+                            <label value="2008/11/17"/>
+                        </row>
+                        <row>
+                            <label value="Style Guide for ZK 3.5 released"/>
+                            <label value="2008/11/14"/>
+                        </row>
+                    </rows>
+                </grid>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Auxheader Rowspan</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <grid width="360px">
+                    <auxhead>
+                        <auxheader label="Group A" colspan="2"/>
+                        <auxheader label="Detail" rowspan="2"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="Sub-A1"/>
+                        <auxheader label="Sub-A2"/>
+                    </auxhead>
+                    <columns>
+                        <column label="Col 1" width="100px"/>
+                        <column label="Col 2" width="100px"/>
+                        <column label="Col 3" width="100px"/>
+                    </columns>
+                    <rows>
+                        <row><label value="R1C1"/><label value="R1C2"/><label value="R1C3"/></row>
+                        <row><label value="R2C1"/><label value="R2C2"/><label value="R2C3"/></row>
+                    </rows>
+                </grid>
+
+                <grid width="360px">
+                    <auxhead>
+                        <auxheader label="Span2Rows" rowspan="2"/>
+                        <auxheader label="B+C" colspan="2"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader label="B"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <columns>
+                        <column label="Name" width="120px"/>
+                        <column label="Value" width="120px"/>
+                        <column label="Unit" width="80px"/>
+                    </columns>
+                    <rows>
+                        <row><label value="Alpha"/><label value="42"/><label value="kg"/></row>
+                        <row><label value="Beta"/><label value="18"/><label value="m"/></row>
+                    </rows>
+                </grid>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">sizedByContent + Span Column</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <grid sizedByContent="true">
+                    <columns sizable="true">
+                        <column label="ID"/>
+                        <column label="Product Name"/>
+                        <column label="Price"/>
+                    </columns>
+                    <rows>
+                        <row><label value="001"/><label value="Widget Pro X"/><label value="$49.99"/></row>
+                        <row><label value="002"/><label value="Gadget Mini"/><label value="$9.99"/></row>
+                        <row><label value="003"/><label value="Super Long Product Name Here"/><label value="$199.00"/></row>
+                    </rows>
+                </grid>
+
+                <grid width="400px" span="true" sizedByContent="true">
+                    <columns>
+                        <column label="Fixed" width="100px"/>
+                        <column label="Span (grid span=true)"/>
+                        <column label="Fixed2" width="80px"/>
+                    </columns>
+                    <rows>
+                        <row><label value="A"/><label value="This column stretches to fill remaining space"/><label value="Z"/></row>
+                        <row><label value="B"/><label value="Short"/><label value="Y"/></row>
+                    </rows>
+                </grid>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Frozen Right (Start Columns Scroll)</h:span></h:div>
+        <h:div class="z-py-3">
+            <grid width="500px">
+                <frozen columns="2" start="1"/>
+                <columns>
+                    <column label="ID" width="80px"/>
+                    <column label="Product" width="160px"/>
+                    <column label="Category" width="140px"/>
+                    <column label="Stock" width="100px"/>
+                    <column label="Price" width="100px"/>
+                    <column label="Action" width="120px"/>
+                </columns>
+                <rows>
+                    <row><label value="001"/><label value="Widget Pro X"/><label value="Electronics"/><label value="120"/><label value="$49.99"/><label value="Edit"/></row>
+                    <row><label value="002"/><label value="Gadget Mini"/><label value="Accessories"/><label value="45"/><label value="$9.99"/><label value="Edit"/></row>
+                    <row><label value="003"/><label value="SuperLong Name Product"/><label value="Furniture"/><label value="8"/><label value="$199.00"/><label value="Edit"/></row>
+                    <row><label value="004"/><label value="Basic Stand"/><label value="Office"/><label value="200"/><label value="$24.50"/><label value="Edit"/></row>
+                </rows>
+            </grid>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Sticky Header (z-sticky-header)</h:span></h:div>
+        <h:div class="z-py-3">
+            <div style="height:200px; overflow-y:auto; border:1px solid var(--zk-color-outline);">
+                <grid sclass="z-sticky-header" width="500px">
+                    <columns>
+                        <column label="Row #" width="80px"/>
+                        <column label="Subject"/>
+                        <column label="Date" width="130px"/>
+                    </columns>
+                    <rows>
+                        <row><label value="1"/><label value="Introduction to ZK Framework"/><label value="2024-01-01"/></row>
+                        <row><label value="2"/><label value="Building Reactive UIs"/><label value="2024-01-02"/></row>
+                        <row><label value="3"/><label value="Data Binding in MVVM"/><label value="2024-01-03"/></row>
+                        <row><label value="4"/><label value="Component Lifecycle"/><label value="2024-01-04"/></row>
+                        <row><label value="5"/><label value="Custom CSS Themes"/><label value="2024-01-05"/></row>
+                        <row><label value="6"/><label value="Grid and Listbox"/><label value="2024-01-06"/></row>
+                        <row><label value="7"/><label value="Tree Component"/><label value="2024-01-07"/></row>
+                        <row><label value="8"/><label value="Tabbox and Panels"/><label value="2024-01-08"/></row>
+                        <row><label value="9"/><label value="Event Handling"/><label value="2024-01-09"/></row>
+                        <row><label value="10"/><label value="Server Push"/><label value="2024-01-10"/></row>
+                        <row><label value="11"/><label value="Security Configuration"/><label value="2024-01-11"/></row>
+                        <row><label value="12"/><label value="Spring Integration"/><label value="2024-01-12"/></row>
+                        <row><label value="13"/><label value="Hibernate ORM"/><label value="2024-01-13"/></row>
+                        <row><label value="14"/><label value="Testing ZK Apps"/><label value="2024-01-14"/></row>
+                        <row><label value="15"/><label value="Deployment Guide"/><label value="2024-01-15"/></row>
+                        <row><label value="16"/><label value="Performance Tuning"/><label value="2024-01-16"/></row>
+                        <row><label value="17"/><label value="Accessibility Tips"/><label value="2024-01-17"/></row>
+                        <row><label value="18"/><label value="Internationalization"/><label value="2024-01-18"/></row>
+                        <row><label value="19"/><label value="Client-Side Widgets"/><label value="2024-01-19"/></row>
+                        <row><label value="20"/><label value="Release Notes 10.x"/><label value="2024-01-20"/></row>
+                    </rows>
+                </grid>
+            </div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Embedded Components in Header</h:span></h:div>
+        <h:div class="z-py-3">
+            <h:div class="z-d-flex z-flex-col z-gap-4 z-items-start">
+                <grid width="600px">
+                    <columns>
+                        <column label="Align Left" align="left" width="100px"/>
+                        <column label="Align Center" align="center" width="100px"/>
+                        <column label="Align Right" align="right" width="100px"/>
+                    </columns>
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <auxhead>
+                        <auxheader colspan="2">
+                            <label id="span">ss</label>
+                            <textbox onChange='span.value = self.value' />
+                            <datebox />
+                            ssss
+                        </auxheader>
+                    </auxhead>
+                    <rows>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                        <row>
+                            <label value="AA01"/>
+                            <label value="BB01"/>
+                            <label value="CC01"/>
+                        </row>
+                    </rows>
+                    <foot>
+                        <footer label="footer 1"/>
+                        <footer label="footer 2"/>
+                    </foot>
+                </grid>
+
+                <grid width="600px">
+                    <columns sizable="true">
+                        <column label="Type">
+                            <menubar>
+                                <menu label="File">
+                                    <menupopup>
+                                        <menuitem label="New" onClick="alert(self.label)" />
+                                        <menuitem label="Open" onClick="alert(self.label)" />
+                                        <menuitem label="Save" onClick="alert(self.label)" />
+                                        <menuseparator />
+                                        <menuitem label="Exit" onClick="alert(self.label)" />
+                                    </menupopup>
+                                </menu>
+                                <menu label="Help">
+                                    <menupopup>
+                                        <menuitem label="Index" onClick="alert(self.label)" />
+                                        <menu label="About">
+                                            <menupopup>
+                                                <menuitem label="About ZK" onClick="alert(self.label)" />
+                                                <menuitem label="About Potix" onClick="alert(self.label)" />
+                                            </menupopup>
+                                        </menu>
+                                    </menupopup>
+                                </menu>
+                            </menubar>
+                            <button label="lable" onClick='alert("button")' />
+                            <datebox />
+                        </column>
+                        <column label="Content">
+                            <listbox rows="1" mold="select">
+                                <listitem label="option1" />
+                                <listitem label="option2" />
+                                <listitem label="option3" />
+                            </listbox>
+                        </column>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="File:" />
+                            <textbox width="99%" />
+                        </row>
+                        <row>
+                            <label value="Type:" />
+                            <div>
+                                <listbox rows="1" mold="select">
+                                    <listitem label="Java Files,(*.java)" />
+                                    <listitem label="All Files,(*.*)" />
+                                </listbox>
+                                <button label="Browse..." />
+                            </div>
+                        </row>
+                        <row>
+                            <label value="Options:" />
+                            <textbox rows="3" width="99%" />
+                        </row>
+                    </rows>
+                </grid>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

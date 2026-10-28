@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — carousel</title>
+<!--
+  Self-contained marble design contract mockup for `carousel` / `carouselitem`.
+  No ZKDoc canonical image exists for this component (new in ZK 10.4.0, no MUI analog
+  either), so this file IS the visual ground truth per doc/contracts/carousel.md's
+  mockup-needed: Y decision.
+
+  Class names in the markup match the DOM tree in
+  .claude/skills/zk-component-rules/components/carousel.md exactly. "Photo" slide content
+  is a self-contained inline-SVG data URI (no network fetch) standing in for arbitrary
+  author imagery — the whole point of the arrow/indicator/label token choices below is
+  that they must stay legible against ANY such photo, not just this placeholder gradient.
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Scrim — the theme's existing translucent-black overlay token, reused
+       three ways below (arrow bg / indicator resting fill / label bg). */
+    --zk-color-scrim: rgba(0, 0, 0, 0.5);
+
+    /* Inverse-surface pair — brand-INDEPENDENT light-on-dark tokens (literal
+       hex, never re-derived from --zk-color-primary). Used as the "light
+       voice" below instead of --zk-color-on-primary, which brand-override.md
+       documents as a token integrators repoint to a DARK value for a
+       light-primary rebrand — see doc/contracts/carousel.md Design Contract,
+       Critical Finding #1. */
+    --zk-color-inverse-surface: #2d3748;
+    --zk-color-inverse-on-surface: #f0f4fa;
+
+    --zk-state-disabled-opacity: 0.38;
+    --zk-state-hover-opacity: 0.08;
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-card: 6px;
+    --zk-shape-corner-extra-small: 4px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Density ladder (relevant rung only) */
+    --zk-control-height-sm: 32px;
+
+    /* Typography */
+    --zk-typescale-body-medium-size: 13px;
+    --zk-typescale-body-medium-line-height: 20px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-body-small-weight: 400;
+    --zk-typescale-body-small-line-height: 16px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Motion */
+    --zk-motion-duration-standard: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Focus ring (global convention, not a carousel knob) */
+    --zk-focus-ring: 2px solid var(--zk-color-primary);
+
+    /* ── Component Theme Variables — carousel ── */
+    /* -radius is shared by the root frame AND the caption chip (c1/c27) —
+       both are "containers" under DESIGN.md §5's container/control rule. */
+    --zk-carousel-radius: var(--zk-shape-card);
+    --zk-carousel-arrow-size: var(--zk-control-height-sm);
+    --zk-carousel-arrow-bg: var(--zk-color-scrim);
+    --zk-carousel-arrow-bg-hover: rgba(0, 0, 0, 0.65);
+    --zk-carousel-arrow-fg: var(--zk-color-inverse-on-surface);
+    --zk-carousel-indicator-bg: var(--zk-color-scrim);
+    --zk-carousel-indicator-ring: var(--zk-color-inverse-on-surface);
+    --zk-carousel-indicator-active-bg: var(--zk-color-primary);
+    --zk-carousel-indicator-active-ring: var(--zk-color-on-primary);
+    --zk-carousel-label-bg: var(--zk-color-scrim);
+    --zk-carousel-label-fg: var(--zk-color-inverse-on-surface);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout, NOT part of the component contract).
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: 12px;
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: center;
+}
+.matrix-grid .state-label {
+    font-size: 12px;
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: 8px;
+    border: 1px solid var(--zk-color-outline-variant);
+    overflow: auto;
+}
+.hint { font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1); }
+
+/* ────────────────────────────────────────────────────────────────────────
+   Component styles — the actual contract, tokens only.
+   ──────────────────────────────────────────────────────────────────────── */
+.z-carousel {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 420px;
+    height: 220px;
+    border-radius: var(--zk-carousel-radius);
+    vertical-align: top;
+}
+.z-carousel-vertical { height: 300px; }
+
+.z-carousel-track {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+.z-carousel-vertical > .z-carousel-track { flex-direction: column; }
+.z-carousel-effect-none > .z-carousel-track { transition: none; }
+
+.z-carouselitem {
+    flex: 0 0 100%;
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+.z-carouselitem > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Fade-effect variant: items are absolutely stacked, cross-fading via opacity. */
+.z-carousel-effect-fade > .z-carousel-track {
+    position: relative;
+}
+.z-carousel-effect-fade > .z-carousel-track > .z-carouselitem {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+.z-carousel-effect-fade > .z-carousel-track > .z-carouselitem-active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.z-carouselitem-label {
+    position: absolute;
+    bottom: var(--zk-spacing-4);
+    left: var(--zk-spacing-4);
+    background: var(--zk-carousel-label-bg);
+    color: var(--zk-carousel-label-fg);
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    border-radius: var(--zk-carousel-radius);
+    font-size: var(--zk-typescale-body-small-size);
+    font-weight: var(--zk-typescale-body-small-weight);
+    line-height: var(--zk-typescale-body-small-line-height);
+    max-width: calc(100% - 2 * var(--zk-spacing-4));
+}
+
+.z-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--zk-carousel-arrow-size);
+    height: var(--zk-carousel-arrow-size);
+    border-radius: var(--zk-shape-corner-full);
+    background: var(--zk-carousel-arrow-bg);
+    color: var(--zk-carousel-arrow-fg);
+    border: 0;
+    font-size: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+.z-carousel-arrow::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    box-sizing: border-box;
+}
+.z-carousel-arrow-prev::before {
+    border-left: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    margin-left: 2px;
+}
+.z-carousel-arrow-next::before {
+    border-right: 2px solid currentColor;
+    border-top: 2px solid currentColor;
+    transform: rotate(45deg);
+    margin-right: 2px;
+}
+.z-carousel-arrow:hover,
+.z-carousel-arrow.mock-hover { background: var(--zk-carousel-arrow-bg-hover); }
+.z-carousel-arrow:focus-visible,
+.z-carousel-arrow.mock-focus {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+.z-carousel-arrow[disabled] {
+    opacity: var(--zk-state-disabled-opacity);
+    cursor: default;
+}
+.z-carousel-arrow-prev { left: var(--zk-spacing-2); }
+.z-carousel-arrow-next { right: var(--zk-spacing-2); }
+
+.z-carousel-indicators {
+    position: absolute;
+    bottom: var(--zk-spacing-2);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--zk-spacing-2);
+    z-index: 2;
+}
+.z-carousel-indicator {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.z-carousel-indicator::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--zk-carousel-indicator-bg);
+    border: 1px solid var(--zk-carousel-indicator-ring);
+    box-sizing: border-box;
+    transition: transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+                background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+                border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+.z-carousel-indicator-active::before {
+    width: 22px;
+    border-radius: var(--zk-shape-corner-full);
+    background-color: var(--zk-carousel-indicator-active-bg);
+    border-color: var(--zk-carousel-indicator-active-ring);
+}
+/* Hover cue is geometric (scale), not a color/fill change: the fill is already one of
+   two different colors depending on resting/active state, so a single "darker fill"
+   hover knob (the arrow's recipe) would be right for one state and wrong for the other.
+   A size bump reads identically regardless of which fill is currently applied. */
+.z-carousel-indicator:hover::before,
+.z-carousel-indicator.mock-hover::before {
+    transform: scale(1.25);
+}
+.z-carousel-indicator:focus-visible,
+.z-carousel-indicator.mock-focus {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
+}
+
+.z-carousel-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Mockup-only "photo" placeholder: a self-contained inline-SVG gradient standing in for
+   arbitrary author imagery — NOT part of the component contract. */
+.mock-photo-1, .mock-photo-2, .mock-photo-3 {
+    width: 100%; height: 100%; display: block; object-fit: cover;
+}
+
+/* Mockup-only static state simulation (real states are :hover / :focus-visible /
+   [disabled]; simulated here only because this is a static file with no JS). */
+.mock-hover, .mock-focus { }
+</style>
+</head>
+<body>
+
+<h1>carousel — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.4.0-jakarta</span>
+    <span>tier: T2</span>
+    <span>closest-sibling: none (parts: paging, rating)</span>
+</div>
+
+<section class="matrix-section">
+    <h2>Default (slide effect, image + label, arrows, indicators)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-slide" tabindex="0">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='220'%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23376fd0'/%3E%3Cstop offset='1' stop-color='%2300b8a9'/%3E%3C/linearGradient%3E%3Crect width='420' height='220' fill='url(%23g)'/%3E%3C/svg%3E">
+                        <div class="z-carouselitem-label">Slide 1 of 3 — mountains</div>
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev"><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next"><span>&#x203A;</span></button>
+                <div class="z-carousel-indicators">
+                    <button type="button" class="z-carousel-indicator z-carousel-indicator-active" data-index="0"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="1"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="2"></button>
+                </div>
+                <span class="z-carousel-status"></span>
+            </div>
+        </div>
+
+        <div class="state-label">no label</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-slide" tabindex="0">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-2" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='220'%3E%3ClinearGradient id='g2' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f2994a'/%3E%3Cstop offset='1' stop-color='%23eb5757'/%3E%3C/linearGradient%3E%3Crect width='420' height='220' fill='url(%23g2)'/%3E%3C/svg%3E">
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev"><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next"><span>&#x203A;</span></button>
+                <div class="z-carousel-indicators">
+                    <button type="button" class="z-carousel-indicator" data-index="0"></button>
+                    <button type="button" class="z-carousel-indicator z-carousel-indicator-active" data-index="1"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="2"></button>
+                </div>
+                <span class="z-carousel-status"></span>
+            </div>
+            <div class="hint">a slide with no label is just image + track — arrows/indicators unaffected</div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Arrow states</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">resting</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-slide" style="width:200px;height:140px;">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='140'%3E%3Crect width='200' height='140' fill='%23376fd0'/%3E%3C/svg%3E">
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev"><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next"><span>&#x203A;</span></button>
+            </div>
+        </div>
+
+        <div class="state-label">hover (next)</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-slide" style="width:200px;height:140px;">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='140'%3E%3Crect width='200' height='140' fill='%23376fd0'/%3E%3C/svg%3E">
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev"><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next mock-hover"><span>&#x203A;</span></button>
+            </div>
+        </div>
+
+        <div class="state-label">focus-visible (prev)</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-slide" style="width:200px;height:140px;">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='140'%3E%3Crect width='200' height='140' fill='%23376fd0'/%3E%3C/svg%3E">
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev mock-focus"><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next"><span>&#x203A;</span></button>
+            </div>
+        </div>
+
+        <div class="state-label">disabled (loop=false, at start)</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-slide" style="width:200px;height:140px;">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='140'%3E%3Crect width='200' height='140' fill='%23376fd0'/%3E%3C/svg%3E">
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev" disabled><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next"><span>&#x203A;</span></button>
+            </div>
+            <div class="hint">loop="false" at index 0 — prev carries the native [disabled] attribute, not a class</div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Indicator states</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">resting vs active</div>
+        <div class="state-cell">
+            <div style="position:relative;height:32px;background:var(--zk-color-scrim);border-radius:8px;display:inline-block;padding:0 8px;">
+                <div class="z-carousel-indicators" style="position:static;transform:none;">
+                    <button type="button" class="z-carousel-indicator" data-index="0"></button>
+                    <button type="button" class="z-carousel-indicator z-carousel-indicator-active" data-index="1"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="2"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="3"></button>
+                </div>
+            </div>
+            <div class="hint">shown on a scrim swatch here for visibility — in situ they sit directly on the slide photo</div>
+        </div>
+
+        <div class="state-label">hover (resting dot)</div>
+        <div class="state-cell">
+            <div style="position:relative;height:32px;background:var(--zk-color-scrim);border-radius:8px;display:inline-block;padding:0 8px;">
+                <div class="z-carousel-indicators" style="position:static;transform:none;">
+                    <button type="button" class="z-carousel-indicator mock-hover" data-index="0"></button>
+                    <button type="button" class="z-carousel-indicator z-carousel-indicator-active" data-index="1"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="2"></button>
+                </div>
+            </div>
+            <div class="hint">hover scales the dot (transform only) — reads the same regardless of which fill is applied</div>
+        </div>
+
+        <div class="state-label">hover (active dot)</div>
+        <div class="state-cell">
+            <div style="position:relative;height:32px;background:var(--zk-color-scrim);border-radius:8px;display:inline-block;padding:0 8px;">
+                <div class="z-carousel-indicators" style="position:static;transform:none;">
+                    <button type="button" class="z-carousel-indicator" data-index="0"></button>
+                    <button type="button" class="z-carousel-indicator z-carousel-indicator-active mock-hover" data-index="1"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="2"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">focus-visible</div>
+        <div class="state-cell">
+            <div style="position:relative;height:32px;background:var(--zk-color-scrim);border-radius:8px;display:inline-block;padding:0 8px;">
+                <div class="z-carousel-indicators" style="position:static;transform:none;">
+                    <button type="button" class="z-carousel-indicator" data-index="0"></button>
+                    <button type="button" class="z-carousel-indicator mock-focus" data-index="1"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="2"></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Fade effect (no track transform; items cross-fade via opacity)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">fade, slide 1 active</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-fade" style="width:260px;height:160px;">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='160'%3E%3Crect width='260' height='160' fill='%23376fd0'/%3E%3C/svg%3E">
+                        <div class="z-carouselitem-label">Fade transition</div>
+                    </div>
+                    <div class="z-carouselitem">
+                        <img class="mock-photo-2" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='160'%3E%3Crect width='260' height='160' fill='%23eb5757'/%3E%3C/svg%3E">
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev"><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next"><span>&#x203A;</span></button>
+                <div class="z-carousel-indicators">
+                    <button type="button" class="z-carousel-indicator z-carousel-indicator-active" data-index="0"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="1"></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Effect: none (instant jump — same track mechanism as slide, zero transition)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">none, slide 1 active</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-none" style="width:260px;height:160px;">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='160'%3E%3Crect width='260' height='160' fill='%2300b8a9'/%3E%3C/svg%3E">
+                    </div>
+                    <div class="z-carouselitem">
+                        <img class="mock-photo-2" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='160'%3E%3Crect width='260' height='160' fill='%23eb5757'/%3E%3C/svg%3E">
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev"><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next"><span>&#x203A;</span></button>
+            </div>
+            <div class="hint">c33: `.z-carousel-effect-none .z-carousel-track { transition: none; }` — same transform mechanism as slide, no animation</div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Vertical orientation</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">vertical, slide effect</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-vertical z-carousel-effect-slide" style="width:220px;">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='300'%3E%3Crect width='220' height='300' fill='%2300b8a9'/%3E%3C/svg%3E">
+                        <div class="z-carouselitem-label">Vertical slide 1</div>
+                    </div>
+                </div>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-prev"><span>&#x2039;</span></button>
+                <button type="button" class="z-carousel-arrow z-carousel-arrow-next"><span>&#x203A;</span></button>
+                <div class="z-carousel-indicators">
+                    <button type="button" class="z-carousel-indicator z-carousel-indicator-active" data-index="0"></button>
+                    <button type="button" class="z-carousel-indicator" data-index="1"></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Single-slide instance (arrows/indicators structurally absent)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">count = 1</div>
+        <div class="state-cell">
+            <div class="z-carousel z-carousel-horizontal z-carousel-effect-slide" style="width:260px;height:160px;">
+                <div class="z-carousel-track">
+                    <div class="z-carouselitem z-carouselitem-active">
+                        <img class="mock-photo-1" alt="" aria-hidden="true" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='160'%3E%3Crect width='260' height='160' fill='%23376fd0'/%3E%3C/svg%3E">
+                    </div>
+                </div>
+                <span class="z-carousel-status"></span>
+            </div>
+            <div class="hint">no arrow / indicator markup at all — the count&gt;1 gate applies even with showArrows/showIndicators="true"</div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<?page title="Loading" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native" xmlns:w="client">
+<div sclass="z-p-8" apply="zk.example.LoadingComposer">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Loading"/></div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Global Busy"/></div>
+        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+            <button id="showGlobalBusyBtn" label="Show Busy"/>
+            <timer id="clearGlobalTimer" delay="14000" repeats="false" running="false"/>
+        </div>
+    </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Component Busy"/></div>
+        <div sclass="z-py-3 z-d-flex z-gap-4 z-flex-wrap z-mb-4">
+            <button id="showBusyBtn" label="Show Busy"/>
+            <button id="clearBusyBtn" label="Clear Busy"/>
+        </div>
+        <div sclass="z-mb-4"><label sclass="z-text-sm z-text-secondary" value="After clicking Show Busy, scroll down the page to verify the busy mask stays anchored to the window."/></div>
+        <window id="demoWin" title="Demo Window" border="normal" width="400px">
+            <div sclass="z-p-4 z-d-flex z-flex-col z-gap-3">
+                <div><label sclass="z-text-sm z-text-secondary" value="This window demonstrates a component-level busy indicator."/></div>
+                <div sclass="z-d-flex z-items-center z-gap-2">
+                    <label value="Name:" sclass="z-fw-medium" width="60px"/>
+                    <textbox value="John Doe" readonly="true" hflex="1"/>
+                </div>
+                <div sclass="z-d-flex z-items-center z-gap-2">
+                    <label value="Email:" sclass="z-fw-medium" width="60px"/>
+                    <textbox value="john@example.com" readonly="true" hflex="1"/>
+                </div>
+                <div sclass="z-d-flex z-items-center z-gap-2">
+                    <label value="Role:" sclass="z-fw-medium" width="60px"/>
+                    <textbox value="Administrator" readonly="true" hflex="1"/>
+                </div>
+            </div>
+        </window>
+    </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Render Defer"/></div>
+        <div sclass="z-py-3 z-d-flex z-flex-col z-gap-4">
+            <div><label sclass="z-text-sm z-text-secondary" value="Content with renderdefer=&quot;2000&quot; — renders after a 2-second delay:"/></div>
+            <div sclass="z-d-flex z-items-center z-gap-2">
+                <span renderdefer="2000">Deferred content loaded</span>
+            </div>
+        </div>
+    </div>
+    <space height="200px"/> <!-- add vertical space for scrolling -->
+</div>
+</zk>

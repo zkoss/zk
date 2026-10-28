@@ -1,0 +1,60 @@
+<?page title="Avatar" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8 z-d-flex z-flex-col z-gap-6">
+    <h:div class="z-border-bottom z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Avatar</h:span></h:div>
+
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Sizes (initials)</h:span></h:div>
+        <h:div class="z-d-flex z-gap-6 z-items-end">
+            <avatar label="AB" size="small"/>
+            <avatar label="AB" size="medium"/>
+            <avatar label="AB" size="large"/>
+        </h:div>
+    </h:div>
+
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Shapes</h:span></h:div>
+        <h:div class="z-d-flex z-gap-6 z-items-center">
+            <avatar label="CD" size="medium" shape="circle"/>
+            <avatar label="CD" size="medium" shape="square"/>
+        </h:div>
+    </h:div>
+
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Colored initials</h:span></h:div>
+        <h:div class="z-d-flex z-gap-3 z-items-center">
+            <avatar label="HW" size="medium" style="background:var(--zk-color-primary);color:var(--zk-color-on-primary)"/>
+            <avatar label="JL" size="medium" style="background:var(--zk-color-secondary);color:var(--zk-color-on-secondary)"/>
+            <avatar label="SA" size="medium" style="background:var(--zk-color-status-success);color:var(--zk-color-on-status)"/>
+        </h:div>
+    </h:div>
+
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Image (with initials fallback on load error)</h:span></h:div>
+        <h:div class="z-d-flex z-gap-6 z-items-center">
+            <avatar image="~./img/item1.jpg" size="large"/>
+            <avatar image="~./img/does-not-exist.jpg" label="FB" size="large"/>
+        </h:div>
+    </h:div>
+
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Avatar Group</h:span></h:div>
+        <avatargroup size="medium">
+            <avatar label="HW" style="background:var(--zk-color-primary);color:var(--zk-color-on-primary)"/>
+            <avatar label="JL" style="background:var(--zk-color-secondary);color:var(--zk-color-on-secondary)"/>
+            <avatar label="MK"/>
+            <avatar image="~./img/item2.jpg"/>
+            <avatar label="+5"/>
+        </avatargroup>
+    </h:div>
+    <h:div>
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Avatar Group — maxItems</h:span></h:div>
+        <avatargroup size="medium" maxItems="2">
+            <avatar label="HW" style="background:var(--zk-color-primary);color:var(--zk-color-on-primary)"/>
+            <avatar label="JL" style="background:var(--zk-color-secondary);color:var(--zk-color-on-secondary)"/>
+            <avatar label="MK"/>
+            <avatar label="SA"/>
+        </avatargroup>
+    </h:div>
+</h:div>
+</zk>

@@ -1,0 +1,160 @@
+<?page title="Grid" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<zscript>
+import zk.example.Comparators;
+asc = Comparators.ascRowDetailComparator;
+dsc = Comparators.dscRowDetailComparator;
+</zscript>
+<div sclass="z-p-8">
+    <div sclass="z-border-bottom z-mb-8 z-pb-3"><label sclass="z-text-2xl z-fw-medium z-text-on-surface" value="Grid"/></div>
+
+    <div sclass="z-mb-8">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><label sclass="z-text-md z-fw-bold z-text-secondary" value="Grid — State Gallery"/></div>
+
+        <div sclass="z-d-flex z-flex-wrap z-gap-6 z-items-start z-py-4 z-mb-2">
+            <div sclass="z-d-flex z-flex-col z-items-center z-gap-2">
+                <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Row States"/></div>
+                <grid>
+                    <columns>
+                        <column label="Name" width="180px"/>
+                        <column label="Status" width="180px"/>
+                    </columns>
+                    <rows>
+                        <row><label value="Default Row"/><label value="Normal"/></row>
+                        <row sclass="z-row-selected"><label value="Selected Row"/><label value="Active"/></row>
+                        <row><label value="Odd Stripe Row"/><label value="Normal"/></row>
+                        <row><label value="Even Row"/><label value="Normal"/></row>
+                    </rows>
+                </grid>
+            </div>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Basic"/></div>
+        <div sclass="z-py-3">
+            <grid>
+                <columns menupopup="auto" sizable="true">
+                    <column label="Author" sortAscending="${asc}" sortDescending="${dsc}"/>
+                    <column label="Title" sort="auto"/>
+                    <column label="Publisher"/>
+                    <column label="Pages"/>
+                </columns>
+                <rows>
+                    <row><label value="Philip Hensher"/><label value="The Northern Clemency"/><label value="Knopf"/><label value="608"/></row>
+                    <row><label value="Michael Greenberg"/><label value="Hurry Down Sunshine"/><label value="Other Press"/><label value="240"/></row>
+                    <row><label value="Rick Perlstein"/><label value="Nixonland"/><label value="Scribner"/><label value="896"/></row>
+                </rows>
+            </grid>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Auxhead"/></div>
+        <div sclass="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Auxhead above columns"/></div>
+                <grid hflex="min">
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <columns>
+                        <column label="Left" align="left" width="100px"/>
+                        <column label="Center" align="center" width="100px"/>
+                        <column label="Right" align="right" width="100px"/>
+                    </columns>
+                    <rows>
+                        <row><label value="AA01"/><label value="BB01"/><label value="CC01"/></row>
+                        <row><label value="AA02"/><label value="BB02"/><label value="CC02"/></row>
+                    </rows>
+                    <foot>
+                        <footer label="Footer 1"/>
+                        <footer label="Footer 2"/>
+                        <footer label="Footer 3"/>
+                    </foot>
+                </grid>
+            </div>
+            <div sclass="z-d-flex z-flex-col z-items-start z-gap-2">
+                <div><label sclass="z-text-xs z-text-secondary" value="Auxhead below columns"/></div>
+                <grid hflex="min">
+                    <columns>
+                        <column label="Left" align="left" width="100px"/>
+                        <column label="Center" align="center" width="100px"/>
+                        <column label="Right" align="right" width="100px"/>
+                    </columns>
+                    <auxhead>
+                        <auxheader label="A+B" colspan="2"/>
+                        <auxheader label="C"/>
+                    </auxhead>
+                    <rows>
+                        <row><label value="AA01"/><label value="BB01"/><label value="CC01"/></row>
+                    </rows>
+                </grid>
+            </div>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Frozen Columns"/></div>
+        <div sclass="z-py-3">
+            <grid>
+                <frozen columns="2"/>
+                <columns>
+                    <column label="Col A" width="200px"/>
+                    <column label="Col B" width="200px"/>
+                    <column label="Col C" width="400px"/>
+                    <column label="Col D" width="400px"/>
+                    <column label="Col E" width="400px"/>
+                    <column label="Col F" width="400px"/>
+                </columns>
+                <rows>
+                    <row><cell>A1</cell><cell>B1</cell><cell>C1</cell><cell>D1</cell><cell>E1</cell><cell>E1</cell></row>
+                    <row><cell>A2</cell><cell>B2</cell><cell>C2</cell><cell>D2</cell><cell>E2</cell><cell>E1</cell></row>
+                    <row><cell>A3</cell><cell>B3</cell><cell>C3</cell><cell>D3</cell><cell>E3</cell><cell>E1</cell></row>
+                    <row><cell>A4</cell><cell>B4</cell><cell>C4</cell><cell>D4</cell><cell>E4</cell><cell>E1</cell></row>
+                </rows>
+            </grid>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Empty State"/></div>
+        <div sclass="z-py-3">
+            <grid emptyMessage="This grid is empty.">
+                <columns><column label="Name"/><column label="Value"/></columns>
+            </grid>
+        </div>
+    </div>
+
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="No-Border Variant (z-grid-noborder)"/></div>
+        <div sclass="z-py-3 z-mb-3"><label sclass="z-text-sm z-text-secondary" value="A grid is an outlined card by default. Add sclass=&quot;z-grid-noborder&quot; to strip its own frame when nesting it inside another bounded surface — here an elevated card — so it blends into the parent instead of double-framing."/></div>
+        <div sclass="z-bg-surface z-rounded-lg z-elevation-2 z-p-6">
+            <grid sclass="z-grid-noborder">
+                <columns><column label="Name"/><column label="Value"/></columns>
+                <rows>
+                    <row><cell>Alpha</cell><cell>1</cell></row>
+                    <row><cell>Beta</cell><cell>2</cell></row>
+                </rows>
+            </grid>
+        </div>
+    </div>
+    <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Hidden Column"/></div>
+        <div sclass="z-py-3">
+            <grid>
+                <columns>
+                    <column label="Visible A"/>
+                    <column label="Hidden B" visible="false"/>
+                    <column label="Visible C"/>
+                </columns>
+                <rows>
+                    <row><cell>A1</cell><cell>B1</cell><cell>C1</cell></row>
+                    <row><cell>A2</cell><cell>B2</cell><cell>C2</cell></row>
+                </rows>
+            </grid>
+        </div>
+    </div>
+</div>
+</zk>

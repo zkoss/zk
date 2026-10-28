@@ -1,0 +1,46 @@
+<?page title="Sign In"?>
+<zk>
+<style src="~./usecase/usecase.css"/>
+<div hflex="1" vflex="1" sclass="z-d-flex z-flex-col z-gap-4 z-p-4 z-bg-surface-container-low">
+
+    <!-- Plain <div> root (not <vlayout>): vlayout wraps each child in
+         .z-vlayout-inner, which breaks the z-flex-1 height chain so the card
+         can't vertically center. A div makes the wrapper the real flex item. -->
+    <!-- Centered using layout utilities (flex-1 + justify/align center) -->
+    <div sclass="z-d-flex z-flex-1 z-justify-center z-items-center">
+        <div sclass="z-paper" width="360px">
+            <vlayout hflex="1" spacing="16px">
+
+                <div sclass="z-text-center">
+                    <label value="Marble" sclass="z-h3 z-text-primary z-d-block"/>
+                    <label value="Sign in to your account" sclass="z-text-secondary z-text-sm"/>
+                </div>
+
+                <div>
+                    <label value="Email" sclass="z-d-block z-mb-1 z-text-secondary z-text-xs"/>
+                    <textbox placeholder="you@example.com" hflex="1"/>
+                </div>
+
+                <div>
+                    <label value="Password" sclass="z-d-block z-mb-1 z-text-secondary z-text-xs"/>
+                    <textbox type="password" placeholder="••••••••" hflex="1"/>
+                </div>
+
+                <div sclass="z-d-flex z-flex-row z-flex-wrap z-gap-4 z-items-center">
+                    <checkbox label="Remember me" checked="true"/>
+                    <a label="Forgot password?" sclass="z-ms-auto z-text-xs"/>
+                </div>
+
+                <button label="Sign In" sclass="z-button-primary" hflex="1"/>
+
+                <div sclass="z-text-center z-text-xs z-text-secondary">
+                    <label value="Don't have an account? "/>
+                    <a label="Sign up"/>
+                </div>
+
+            </vlayout>
+        </div>
+    </div>
+
+</div>
+</zk>

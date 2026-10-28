@@ -37,7 +37,7 @@ To update version:
 npm run build        # build all TS/JS (gulp)
 npm run dev          # watch mode
 npm run type-check   # type check only, no output
-npm run lint -- .    # ESLint on .js and .ts files (path argument required)
+npm run lint -- <module>/src/main/resources/web/js   # ESLint per module (what CI's jscheck runs); the repo-wide form cannot pass and rewrites files
 ```
 
 ### Java
@@ -51,9 +51,12 @@ npm run lint -- .    # ESLint on .js and .ts files (path argument required)
 ## Code Style
 
 ### TypeScript / JavaScript
-- ESLint config: `.eslintrc.js` (root)
+- ESLint config: `eslint.config.js` (root, flat config — ESLint 9). It loads the legacy
+  `.eslintrc.js` through `FlatCompat`, so rule changes usually belong in `.eslintrc.js`.
 - Custom rules: `eslint-plugin-zk/` — do not disable without review
-- Microsoft SDL plugin is enabled — security patterns are enforced
+- Microsoft SDL plugin is enabled for `**/*.ts` only, declared natively in `eslint.config.js`
+  (`FlatCompat` cannot load SDL v1.1.0, so the legacy config's SDL entries are filtered out) —
+  security patterns are enforced
 - **ESLint errors block CI** — fix all errors before committing
 
 ### Java
@@ -75,6 +78,9 @@ cd zktest && ./gradlew test --tests "org.zkoss.zktest.zats.test2.B104_ZK_6047Tes
 # If the test has @ForkJVMTestOnly or @Tag("ForkJVMTestOnly") annotation (requires Docker)
 cd zktest && ./gradlew testGroupForkJVMTestOnly --tests "org.zkoss.zktest.zats.test2.B101_ZK_5716Test" -PmaxParallelForks=1 --console=plain --no-daemon
 
+# IceBlue-only tests (@Tag("IceBlueOnly")) are skipped by test; run them on purpose with
+cd zktest && ./gradlew testIceBlueOnly -PmaxParallelForks=1 --console=plain --no-daemon
+
 # Full test suite (excludes WCAG and ForkJVMTestOnly)
 cd zktest && ./gradlew test
 
@@ -82,7 +88,7 @@ cd zktest && ./gradlew test
 cd zktest && ./gradlew testWCAGOnly
 ```
 
-**Important:** Check the test file for `@ForkJVMTestOnly` or `@Tag("ForkJVMTestOnly")` annotation to decide whether to use `test` or `testGroupForkJVMTestOnly`.
+**Important:** Check the test file for `@ForkJVMTestOnly` or `@Tag("ForkJVMTestOnly")` annotation to decide whether to use `test` or `testGroupForkJVMTestOnly`. Tests tagged `@Tag("IceBlueOnly")` assert IceBlue-specific behaviour and are skipped by `test` while the default theme is Marble — never delete or rewrite them (see `.claude/rules/iceblue-tests.md`).
 
 ### Location & Naming Convention
 - Path: `zktest/src/test/java/org/zkoss/zktest/zats/test2/`
@@ -137,6 +143,6 @@ public class B100_ZK_5529Test extends WebDriverTestCase {
 4. Register the ZUL page in `zktest/src/main/webapp/test2/config.properties`
 5. Implement the fix
 6. If ZUL component API changed (attribute/element added or removed), update `zul/src/main/resources/metainfo/xml/zul.xsd`
-7. Run `npm run lint -- . && ./gradlew checkstyleMain`
+7. Run `npm run lint -- <module>/src/main/resources/web/js && npm run type-check && ./gradlew checkstyleMain` (per module — the repo-wide lint cannot pass on any checkout and rewrites files through zk/preferNativeClass)
 8. Verify the test passes
 9. PR title must reference the issue ID

@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — tabbox</title>
+<!--
+  Self-contained marble design contract mockup for <tabbox>.
+
+  Renders the variants from src/test/resources/web/tabbox.zul:
+    - State gallery (default / selected / disabled)
+    - Horizontal (top) with text labels
+    - Bottom orient indicator
+    - Vertical left + vertical right orient indicators
+    - Accordion mold (collapsed + expanded)
+    - Horizontal scroll arrows visible (overflow)
+    - Vertical scroll arrows visible (overflow)
+    - Icon-only tabs (horizontal + vertical)
+
+  Companion files:
+    Skill:    .claude/skills/zk-component-rules/components/tabbox.md
+    Contract:   doc/contracts/tabbox.md
+    Baseline: doc/contracts/baselines/tabbox-iceblue.png
+
+  Compare visually to the baseline; the structural DOM is identical.
+  Lucide icon names used: chevron-left, chevron-right, chevron-up, chevron-down,
+  home, user, settings, bell.
+-->
+<style>
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+
+    /* Typography */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --zk-typescale-body-medium-size: 14px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-typescale-label-large-size: 14px;
+    --zk-typescale-title-medium-size: 16px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Motion */
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+}
+
+/* Page chrome */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: var(--zk-typescale-title-medium-size);
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: var(--zk-spacing-3);
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Component contract — tabbox
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Root */
+.z-tabbox {
+    position: relative;
+    display: block;
+    background: var(--zk-color-surface);
+    color: var(--zk-color-on-surface);
+    font-family: var(--zk-typescale-font-family);
+}
+
+/* Tab strip */
+.z-tabs {
+    position: relative;
+    overflow: hidden;
+}
+.z-tabs-content {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+/* Tab */
+.z-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    user-select: none;
+    transition: color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
+                background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+    border-bottom: 2px solid transparent;
+}
+.z-tab-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zk-spacing-2);
+    padding: var(--zk-spacing-3) var(--zk-spacing-4);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-font-weight-medium);
+    line-height: 1;
+}
+.z-tab:hover {
+    background-color: rgba(55, 111, 208, var(--zk-state-hover-opacity)); /* primary @ hover-opacity */
+}
+.z-tab.z-tab-selected {
+    color: var(--zk-color-primary);
+}
+.z-tab.z-tab-disabled {
+    color: var(--zk-color-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Tab icons + close button */
+.z-tab-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 1;
+}
+.z-tab-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-left: var(--zk-spacing-2);
+    border-radius: 50%;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+}
+.z-tab-button:hover {
+    background-color: rgba(55, 111, 208, var(--zk-state-hover-opacity));
+    color: var(--zk-color-primary);
+}
+
+/* Top orient indicator */
+.z-tabbox-top > .z-tabs {
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+}
+.z-tabbox-top .z-tab.z-tab-selected {
+    border-bottom: 2px solid var(--zk-color-primary);
+}
+
+/* Bottom orient indicator */
+.z-tabbox-bottom > .z-tabs {
+    border-top: 1px solid var(--zk-color-outline-variant);
+    margin-top: var(--zk-spacing-3);
+}
+.z-tabbox-bottom .z-tab {
+    border-bottom: 0;
+    border-top: 2px solid transparent;
+}
+.z-tabbox-bottom .z-tab.z-tab-selected {
+    border-top: 2px solid var(--zk-color-primary);
+}
+
+/* Vertical layouts */
+.z-tabbox-left,
+.z-tabbox-right {
+    display: flex;
+    align-items: stretch;
+}
+.z-tabbox-left > .z-tabs,
+.z-tabbox-right > .z-tabs {
+    flex: 0 0 auto;
+    width: 100px;
+    border-bottom: 0;
+    /* c21: no border-bottom; per-side rule below provides the divider on the inner edge */
+}
+.z-tabbox-left > .z-tabs { border-right: 1px solid var(--zk-color-outline-variant); }
+.z-tabbox-right > .z-tabs { border-left: 1px solid var(--zk-color-outline-variant); order: 2; }
+.z-tabbox-left .z-tabs-content,
+.z-tabbox-right .z-tabs-content {
+    flex-direction: column;
+}
+.z-tabbox-left .z-tab,
+.z-tabbox-right .z-tab {
+    display: flex;
+    border-bottom: 0;
+    border-right: 2px solid transparent;
+    border-left: 2px solid transparent;
+    justify-content: space-between;
+    width: 100%;
+}
+.z-tabbox-left .z-tab.z-tab-selected {
+    border-right: 2px solid var(--zk-color-primary);
+}
+.z-tabbox-right .z-tab.z-tab-selected {
+    border-left: 2px solid var(--zk-color-primary);
+}
+.z-tabbox-left > .z-tabpanels,
+.z-tabbox-right > .z-tabpanels {
+    flex: 1 1 auto;
+    padding: var(--zk-spacing-4);
+}
+
+/* Panels */
+.z-tabpanels {
+    padding: var(--zk-spacing-4) 0;
+}
+.z-tabpanel {
+    display: none;
+    color: var(--zk-color-on-surface);
+}
+.z-tabpanel.z-tabpanel-selected {
+    display: block;
+}
+
+/* Scroll buttons — visible only when root carries .z-tabbox-scroll */
+.z-tabbox-left-scroll,
+.z-tabbox-right-scroll,
+.z-tabbox-up-scroll,
+.z-tabbox-down-scroll {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--zk-color-on-surface-variant);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+.z-tabbox-left-scroll,
+.z-tabbox-right-scroll {
+    position: absolute;
+    top: 0;
+    width: 40px;
+    min-height: 48px;
+    flex-shrink: 0;
+}
+.z-tabbox-left-scroll { left: 0; }
+.z-tabbox-right-scroll { right: 0; }
+.z-tabbox-up-scroll,
+.z-tabbox-down-scroll {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 40px;
+}
+.z-tabbox-up-scroll { top: 0; }
+.z-tabbox-down-scroll { bottom: 0; }
+.z-tabbox-left-scroll > i,
+.z-tabbox-right-scroll > i,
+.z-tabbox-up-scroll > i,
+.z-tabbox-down-scroll > i {
+    font-size: var(--zk-typescale-body-medium-size);
+    font-style: normal;
+    line-height: 1;
+}
+.z-tabbox-scroll > .z-tabbox-left-scroll,
+.z-tabbox-scroll > .z-tabbox-right-scroll,
+.z-tabbox-scroll > .z-tabbox-up-scroll,
+.z-tabbox-scroll > .z-tabbox-down-scroll {
+    display: flex;
+}
+.z-tabbox-left-scroll:hover,
+.z-tabbox-right-scroll:hover,
+.z-tabbox-up-scroll:hover,
+.z-tabbox-down-scroll:hover {
+    background-color: rgba(55, 111, 208, var(--zk-state-hover-opacity));
+    color: var(--zk-color-primary);
+}
+
+/* Horizontal scroll strip gets side-padding so tabs don't sit under the arrows */
+.z-tabbox-scroll.z-tabbox-top > .z-tabs,
+.z-tabbox-scroll.z-tabbox-bottom > .z-tabs {
+    margin: 0 32px;
+}
+
+/* Vertical scroll strip gets vertical padding */
+.z-tabbox-scroll.z-tabbox-left > .z-tabs,
+.z-tabbox-scroll.z-tabbox-right > .z-tabs {
+    margin: 24px 0;
+}
+
+/* Accordion mold */
+.z-tabbox-accordion {
+    display: block;
+    border: 1px solid var(--zk-color-outline-variant);
+    border-radius: var(--zk-shape-corner-medium);
+    overflow: hidden;
+    background: var(--zk-color-surface);
+}
+.z-tabbox-accordion .z-tabpanels {
+    padding: 0;
+}
+.z-tabbox-accordion .z-tabpanel {
+    display: block; /* JS toggles inner panel-content visibility, not the wrapper */
+}
+.z-tabbox-accordion .z-tabpanel + .z-tabpanel {
+    border-top: 1px solid var(--zk-color-outline-variant);
+}
+.z-tabbox-accordion .z-tab {
+    display: flex;
+    width: 100%;
+    min-height: 52px;
+    background: var(--zk-color-surface);
+    color: var(--zk-color-on-surface);
+    border-bottom: 0;
+    align-items: center;
+    padding: 0 var(--zk-spacing-4);
+}
+.z-tabbox-accordion .z-tab .z-tab-content {
+    flex: 1;
+    justify-content: flex-start;
+    padding: var(--zk-spacing-3) 0;
+}
+.z-tabbox-accordion .z-tab.z-tab-selected {
+    background: var(--zk-color-primary-container);
+    color: var(--zk-color-on-primary-container);
+}
+/* Accordion mode NEVER shows the close button, regardless of closable
+   (user ruling 2026-06-07 — MD3 expansion panels have no inline dismiss
+   affordance). ZK still emits .z-tab-button in the DOM; theme hides it. */
+.z-tabbox-accordion .z-tab-button {
+    display: none;
+}
+.z-tabbox-accordion .z-tabpanel-content {
+    display: none;
+    padding: var(--zk-spacing-4);
+    color: var(--zk-color-on-surface);
+}
+.z-tabbox-accordion .z-tabpanel.z-tabpanel-expanded > .z-tabpanel-content {
+    display: block;
+}
+
+/* Inline SVG sizing for the chevron stand-ins */
+.glyph {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.tab-icon-svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.close-x {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+}
+
+/* Mockup-only helpers to hold demo cells next to one another */
+.row { display: flex; gap: var(--zk-spacing-6); flex-wrap: wrap; align-items: flex-start; }
+.tabbox-frame-h { width: 420px; }
+.tabbox-frame-h-scroll { width: 360px; }
+.tabbox-frame-v { width: 360px; height: 220px; }
+.tabbox-frame-v .z-tabs { height: 220px; }
+.tabbox-frame-v-scroll { width: 360px; height: 220px; }
+.tabbox-frame-v-scroll .z-tabs { height: 220px; }
+</style>
+</head>
+<body>
+
+<h1>tabbox — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T1</span>
+    <span>closest-sibling: none</span>
+    <span>baseline: doc/contracts/baselines/tabbox-iceblue.png</span>
+</div>
+
+<!-- ── 1. Strip-mode state gallery ──────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Strip mold — state gallery (top orient)</h2>
+    <div class="matrix-grid">
+        <div class="state-label">default / selected / disabled</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-top tabbox-frame-h">
+                <div class="z-tabs">
+                    <ul class="z-tabs-content">
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Default</span></div></li>
+                        <li class="z-tab z-tab-selected"><div class="z-tab-content"><span class="z-tab-text">Selected</span></div></li>
+                        <li class="z-tab z-tab-disabled"><div class="z-tab-content"><span class="z-tab-text">Disabled</span></div></li>
+                    </ul>
+                </div>
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel"></div>
+                    <div class="z-tabpanel z-tabpanel-selected">Selected tab content</div>
+                    <div class="z-tabpanel"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 2. Horizontal + closable + icons ─────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Horizontal (top) — closable tabs with icons</h2>
+    <div class="matrix-grid">
+        <div class="state-label">top, image + close</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-top tabbox-frame-h">
+                <div class="z-tabs">
+                    <ul class="z-tabs-content">
+                        <li class="z-tab z-tab-selected">
+                            <div class="z-tab-content">
+                                <i class="z-tab-icon"><svg class="tab-icon-svg" viewBox="0 0 24 24"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg></i>
+                                <span class="z-tab-text">Tab1</span>
+                                <div class="z-tab-button"><svg class="close-x" viewBox="0 0 24 24"><path d="M6 6l12 12M6 18 18 6"/></svg></div>
+                            </div>
+                        </li>
+                        <li class="z-tab">
+                            <div class="z-tab-content">
+                                <span class="z-tab-text">Tab2</span>
+                                <div class="z-tab-button"><svg class="close-x" viewBox="0 0 24 24"><path d="M6 6l12 12M6 18 18 6"/></svg></div>
+                            </div>
+                        </li>
+                        <li class="z-tab">
+                            <div class="z-tab-content">
+                                <span class="z-tab-text">Tab3</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel z-tabpanel-selected">Tabpanel Content 1</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 3. Bottom orient indicator ───────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Bottom orient indicator</h2>
+    <div class="matrix-grid">
+        <div class="state-label">bottom, selected on top edge</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-bottom tabbox-frame-h">
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel z-tabpanel-selected">Tabpanel Content 1</div>
+                </div>
+                <div class="z-tabs">
+                    <ul class="z-tabs-content">
+                        <li class="z-tab z-tab-selected"><div class="z-tab-content"><span class="z-tab-text">Overview</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Details</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Activity</span></div></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 4. Vertical left + right ─────────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Vertical orient indicators</h2>
+    <div class="matrix-grid">
+        <div class="state-label">left orient</div>
+        <div class="state-cell">
+            <div class="row">
+                <div class="z-tabbox z-tabbox-left tabbox-frame-v">
+                    <div class="z-tabs">
+                        <ul class="z-tabs-content">
+                            <li class="z-tab z-tab-selected"><div class="z-tab-content"><span class="z-tab-text">Tab1</span></div></li>
+                            <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab2</span></div></li>
+                            <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab3</span></div></li>
+                            <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab4</span></div></li>
+                        </ul>
+                    </div>
+                    <div class="z-tabpanels">
+                        <div class="z-tabpanel z-tabpanel-selected">Tabpanel Content 1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">right orient</div>
+        <div class="state-cell">
+            <div class="row">
+                <div class="z-tabbox z-tabbox-right tabbox-frame-v">
+                    <div class="z-tabs">
+                        <ul class="z-tabs-content">
+                            <li class="z-tab z-tab-selected"><div class="z-tab-content"><span class="z-tab-text">Tab1</span></div></li>
+                            <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab2</span></div></li>
+                            <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab3</span></div></li>
+                            <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab4</span></div></li>
+                        </ul>
+                    </div>
+                    <div class="z-tabpanels">
+                        <div class="z-tabpanel z-tabpanel-selected">Tabpanel Content 1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 5. Horizontal scroll arrows visible ──────────────────────────── -->
+<section class="matrix-section">
+    <h2>Horizontal scroll arrows — visible when overflow (root has .z-tabbox-scroll)</h2>
+    <div class="matrix-grid">
+        <div class="state-label">overflow, with scroll buttons</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-top z-tabbox-scroll tabbox-frame-h-scroll" style="position: relative;">
+                <div class="z-tabbox-left-scroll"><i><svg class="glyph" viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg></i></div>
+                <div class="z-tabs">
+                    <ul class="z-tabs-content">
+                        <li class="z-tab z-tab-selected"><div class="z-tab-content"><span class="z-tab-text">Overview</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Account</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Security</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Billing</span></div></li>
+                    </ul>
+                </div>
+                <div class="z-tabbox-right-scroll"><i><svg class="glyph" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></i></div>
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel z-tabpanel-selected">Overview</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">no overflow (scroll buttons hidden)</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-top tabbox-frame-h-scroll" style="position: relative;">
+                <div class="z-tabbox-left-scroll"><i><svg class="glyph" viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg></i></div>
+                <div class="z-tabs">
+                    <ul class="z-tabs-content">
+                        <li class="z-tab z-tab-selected"><div class="z-tab-content"><span class="z-tab-text">Overview</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Account</span></div></li>
+                    </ul>
+                </div>
+                <div class="z-tabbox-right-scroll"><i><svg class="glyph" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></i></div>
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel z-tabpanel-selected">Overview</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 6. Vertical scroll arrows visible ────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Vertical scroll arrows — visible when overflow</h2>
+    <div class="matrix-grid">
+        <div class="state-label">left orient, overflow</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-left z-tabbox-scroll tabbox-frame-v-scroll" style="position: relative;">
+                <div class="z-tabbox-up-scroll" style="width: 100px; border-right: 1px solid var(--zk-color-outline-variant); z-index: 1;"><i><svg class="glyph" viewBox="0 0 24 24"><polyline points="6 15 12 9 18 15"/></svg></i></div>
+                <div class="z-tabs" style="position: relative;">
+                    <ul class="z-tabs-content" style="margin-top: -48px;">
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab1</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab2</span></div></li>
+                        <li class="z-tab z-tab-selected"><div class="z-tab-content"><span class="z-tab-text">Tab3</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab4</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab5</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab6</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab7</span></div></li>
+                        <li class="z-tab"><div class="z-tab-content"><span class="z-tab-text">Tab8</span></div></li>
+                    </ul>
+                </div>
+                <div class="z-tabbox-down-scroll" style="width: 100px; border-right: 1px solid var(--zk-color-outline-variant); z-index: 1;"><i><svg class="glyph" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></i></div>
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel z-tabpanel-selected">Tabpanel Content 3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 7. Icon-only tabs ────────────────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Icon-only tabs</h2>
+    <div class="matrix-grid">
+        <div class="state-label">horizontal, icon-only</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-top tabbox-frame-h">
+                <div class="z-tabs">
+                    <ul class="z-tabs-content">
+                        <li class="z-tab z-tab-selected">
+                            <div class="z-tab-content">
+                                <i class="z-tab-icon"><svg class="tab-icon-svg" viewBox="0 0 24 24"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg></i>
+                            </div>
+                        </li>
+                        <li class="z-tab">
+                            <div class="z-tab-content">
+                                <i class="z-tab-icon"><svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 5-6 8-6s7 2 8 6"/></svg></i>
+                            </div>
+                        </li>
+                        <li class="z-tab">
+                            <div class="z-tab-content">
+                                <i class="z-tab-icon"><svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></i>
+                            </div>
+                        </li>
+                        <li class="z-tab z-tab-disabled">
+                            <div class="z-tab-content">
+                                <i class="z-tab-icon"><svg class="tab-icon-svg" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel z-tabpanel-selected">Home</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">vertical, icon-only</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-left tabbox-frame-v" style="height: 200px;">
+                <div class="z-tabs" style="width: 48px;">
+                    <ul class="z-tabs-content">
+                        <li class="z-tab z-tab-selected" style="justify-content: center;">
+                            <div class="z-tab-content" style="padding: var(--zk-spacing-3); justify-content: center;">
+                                <i class="z-tab-icon"><svg class="tab-icon-svg" viewBox="0 0 24 24"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg></i>
+                            </div>
+                        </li>
+                        <li class="z-tab" style="justify-content: center;">
+                            <div class="z-tab-content" style="padding: var(--zk-spacing-3); justify-content: center;">
+                                <i class="z-tab-icon"><svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 5-6 8-6s7 2 8 6"/></svg></i>
+                            </div>
+                        </li>
+                        <li class="z-tab" style="justify-content: center;">
+                            <div class="z-tab-content" style="padding: var(--zk-spacing-3); justify-content: center;">
+                                <i class="z-tab-icon"><svg class="tab-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel z-tabpanel-selected">Home</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 8. Accordion mold ────────────────────────────────────────────── -->
+<section class="matrix-section">
+    <h2>Accordion mold</h2>
+    <div class="matrix-grid">
+        <div class="state-label">text-only, mixed states</div>
+        <div class="state-cell">
+            <div class="z-tabbox z-tabbox-accordion" style="width: 360px;">
+                <div class="z-tabpanels">
+                    <div class="z-tabpanel z-tabpanel-expanded">
+                        <div class="z-tab z-tab-selected">
+                            <div class="z-tab-content">
+                                <span class="z-tab-text">Tab1 (closable — × suppressed)</span>
+                                <div class="z-tab-button"><svg class="close-x" viewBox="0 0 24 24"><path d="M6 6l12 12M6 18 18 6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="z-tabpanel-content">Tabpanel Content 1</div>
+                    </div>
+                    <div class="z-tabpanel">
+                        <div class="z-tab">
+                            <div class="z-tab-content">
+                                <span class="z-tab-text">Tab2</span>
+                                <div class="z-tab-button"><svg class="close-x" viewBox="0 0 24 24"><path d="M6 6l12 12M6 18 18 6"/></svg></div>
+                            </div>
+                        </div>
+                        <div class="z-tabpanel-content">Tabpanel Content 2</div>
+                    </div>
+                    <div class="z-tabpanel">
+                        <div class="z-tab">
+                            <div class="z-tab-content">
+                                <span class="z-tab-text">Tab3</span>
+                            </div>
+                        </div>
+                        <div class="z-tabpanel-content">Tabpanel Content 3</div>
+                    </div>
+                    <div class="z-tabpanel">
+                        <div class="z-tab z-tab-disabled">
+                            <div class="z-tab-content">
+                                <span class="z-tab-text">Tab4 (disabled)</span>
+                            </div>
+                        </div>
+                        <div class="z-tabpanel-content">Tabpanel Content 4</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

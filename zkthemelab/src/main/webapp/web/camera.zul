@@ -1,0 +1,33 @@
+<?page title="Camera" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Camera</h:span></h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Live Camera</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-flex-col z-gap-4">
+            <camera id="camera" width="480px" maxsize="-1"
+                    onCreate="self.requestCamera()"
+                    onSnapshotUpload="image.setContent(event.getMedia())">
+                <attribute name="onVideoUpload">
+                    Filedownload.save(event.getMedia());
+                </attribute>
+            </camera>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Controls</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+            <button label="Record" onClick="camera.start()"/>
+            <button label="Pause" onClick="camera.pause()"/>
+            <button label="Stop and Download" onClick="camera.stop()"/>
+            <button label="Snapshot" onClick="camera.snapshot()"/>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Snapshot Result</h:span></h:div>
+        <h:div class="z-py-3">
+            <image id="image"/>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

@@ -1,0 +1,303 @@
+[
+  {
+    "class": ".z-flex",
+    "source": "footer.less",
+    "jsSite": "zk/flex.ts:applyCSSFlex+clearCSSFlex",
+    "css": "display:flex",
+    "type": "contract"
+  },
+  {
+    "class": ".z-flex>:not(.z-flex-item)",
+    "source": "footer.less",
+    "jsSite": "zk/flex.ts:applyCSSFlex+clearCSSFlex",
+    "css": "flex-shrink:0",
+    "type": "contract"
+  },
+  {
+    "class": ".z-flex-row",
+    "source": "footer.less",
+    "jsSite": "zk/flex.ts:applyCSSFlex+clearCSSFlex",
+    "css": "flex-direction:row",
+    "type": "contract"
+  },
+  {
+    "class": ".z-flex-column",
+    "source": "footer.less",
+    "jsSite": "zk/flex.ts:applyCSSFlex+clearCSSFlex",
+    "css": "flex-direction:column",
+    "type": "contract"
+  },
+  {
+    "class": ".z-flex-item",
+    "source": "footer.less",
+    "jsSite": "zk/flex.ts:applyCSSFlex+clearCSSFlex",
+    "css": "flex:1 1 0;min-height:0;min-width:0",
+    "type": "contract"
+  },
+  {
+    "class": ".z-dragged",
+    "source": "norm.less (stock styles it; theme may diverge)",
+    "jsSite": "zk/widget.ts:cloneDrag_(line 4361)+uncloneDrag_(line 4371)",
+    "css": "opacity:0.4 — de-emphasise dragged source (stock used color+background)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-drag-over",
+    "source": "—(JS-emitted hook; no stock CSS)",
+    "jsSite": "zk/widget.ts:dropEffect_(4311) — addClass on drop-target $n()",
+    "css": "—(theme-defined; stock leaves unstyled)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-drag-ghost",
+    "source": "—(JS-emitted hook; no stock CSS)",
+    "jsSite": "zk/widget.ts:ghost(461) clone path — addClass on body-appended clone #zk_ddghost (non-TR drag)",
+    "css": "—(theme-defined; stock leaves unstyled)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-drop-ghost",
+    "source": "—(JS-emitted hook; no stock CSS)",
+    "jsSite": "zk/widget.ts:ghost(440) — message-ghost root div#zk_ddghost (TR/TD/TH drag path)",
+    "css": "—(theme-defined; stock leaves unstyled)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-drop-content",
+    "source": "—(JS-emitted hook; no stock CSS)",
+    "jsSite": "zk/widget.ts:ghost(441) — inner wrapper inside message ghost",
+    "css": "—(theme-defined; stock leaves unstyled)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-drop-icon",
+    "source": "—(JS-emitted hook; no stock CSS)",
+    "jsSite": "zk/widget.ts:ghost(441)+DD_dragging(507/511) — icon span #zk_ddghost-img; toggles z-icon-plus-circle/z-icon-ban",
+    "css": "—(theme-defined; stock leaves unstyled)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-drop-text",
+    "source": "—(JS-emitted hook; no stock CSS)",
+    "jsSite": "zk/widget.ts:ghost(438) — message text span inside message ghost",
+    "css": "—(theme-defined; stock leaves unstyled)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-drop-allow",
+    "source": "—(JS-emitted hook; no stock CSS)",
+    "jsSite": "zk/widget.ts:DD_dragging(505) — toggled on message ghost #zk_ddghost over a valid target",
+    "css": "—(theme-defined; stock leaves unstyled)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-drop-disallow",
+    "source": "—(JS-emitted hook; no stock CSS)",
+    "jsSite": "zk/widget.ts:ghost(440)+DD_dragging(509) — initial + invalid state on message ghost #zk_ddghost",
+    "css": "—(theme-defined; stock leaves unstyled)",
+    "type": "contract"
+  },
+  {
+    "class": ".z-word-nowrap",
+    "source": "norm.less",
+    "jsSite": "zul/mesh/Frozen.ts:bind_(line 191)+unbind_(line 216)",
+    "css": "white-space:nowrap",
+    "type": "contract"
+  },
+  {
+    "class": ".z-renderdefer",
+    "source": "norm.less",
+    "jsSite": "zk/widget.ts:redraw_(line 2940)",
+    "css": "width:<applyLoadingIconSize>;height:<applyLoadingIconSize>;background:transparent no-repeat center <spinner-gif>;background-size:contain",
+    "type": "contract"
+  },
+  {
+    "class": ".z-borderbox",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "box-sizing:border-box",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-inline-block",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "display:inline-block;vertical-align:top",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-word-wrap",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "word-wrap:break-word",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-overflow-hidden",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "overflow:hidden",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-dd-stackup",
+    "source": "norm.less",
+    "jsSite": "zk/drag.ts(line 607) — className= once at construction",
+    "css": "position:absolute;left:0;top:0;width:100%;height:100%;z-index:16800;background-image:1px transparent GIF",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-temp",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "position:fixed;top:0;left:0;width:100%;height:100%;background:<mask-bg>;opacity:0.6",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-initing",
+    "source": "norm.less",
+    "jsSite": "zk/zk.ts:_showprgb(line 255) — appended once, not toggled",
+    "css": "position:absolute;right:10px;bottom:10px;width:60px;height:60px;background:transparent no-repeat center <spinner>",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-loading",
+    "source": "norm.less",
+    "jsSite": "zk/utl.ts:progressbox(line 450) — created in innerHTML",
+    "css": "position:absolute;top:0;left:0;z-index:31000;background:<loading-bg>;border-radius:<base>;cursor:wait;white-space:nowrap",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-loading-indicator",
+    "source": "norm.less",
+    "jsSite": "zk/utl.ts:progressbox — created in innerHTML",
+    "css": "padding:<loading-indicator-padding>;text-align:center;color:<loading-text>;background:<loading-bg>;white-space:nowrap",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-loading-icon",
+    "source": "norm.less",
+    "jsSite": "zk/utl.ts:progressbox — created in innerHTML",
+    "css": "display:block;position:relative;left:50%;margin-left:calc(<size>/-2);width:<size>;height:<size>;background:transparent no-repeat center <spinner>;background-size:contain;vertical-align:top",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-apply-loading",
+    "source": "norm.less",
+    "jsSite": "zk/effect.ts:Mask._draw(line 294) — created in innerHTML",
+    "css": "position:absolute;z-index:89500;background:<loading-bg>;border-radius:<base>;cursor:wait;white-space:nowrap",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-apply-loading-indicator",
+    "source": "norm.less",
+    "jsSite": "zk/effect.ts:Mask._draw — created in innerHTML",
+    "css": "font:<base-title-font>;font-size:<medium>;font-weight:normal;padding:<apply-loading-indicator-padding>;position:relative;overflow:hidden;color:<loading-text>;background:<loading-bg>;white-space:nowrap",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-apply-loading-icon",
+    "source": "norm.less",
+    "jsSite": "zk/effect.ts:Mask._draw — created in innerHTML",
+    "css": "display:inline-block;position:absolute;left:<apply-loading-icon-left>;top:50%;margin-top:calc(<size>/-2);width:<size>;height:<size>;background:transparent no-repeat center <spinner>;background-size:contain;vertical-align:top",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-apply-mask",
+    "source": "norm.less",
+    "jsSite": "zk/effect.ts:Mask._draw(line 292) — created in innerHTML",
+    "css": "position:absolute;top:0;left:0;width:100%;height:100%;background:<mask-bg>;opacity:0.6;z-index:89000",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-modal-mask",
+    "source": "norm.less",
+    "jsSite": "zk/utl.ts:progressbox(line 449)+zk/effect.ts:Mask(line 170) — created in innerHTML; ALSO: zk/zk.ts references z-modal-mask z-index for drag Mask opts",
+    "css": "position:fixed;inset:0;top:0!important;left:0!important;width:100%;height:100%;background:<mask-bg>;opacity:0.6",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-error",
+    "source": "norm.less",
+    "jsSite": "zk/zk.ts:_Erbx constructor(line 2094) — created in innerHTML; display:none MANDATORY",
+    "css": "display:none;position:absolute;top:0;left:40%;z-index:9999999;width:450px;border:1px solid <error-border>;border-radius:<base>;padding:<error-padding>;background:<error-bg>;box-shadow:0 3px 6px …",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-log",
+    "source": "norm.less",
+    "jsSite": "zk/zk.ts:zk.log(line 304) — className= once at construction",
+    "css": "position:absolute;right:10px;bottom:5px;width:50%;text-align:right;z-index:99000",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-focus-a",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "font-size:0!important;width:1px!important;height:1px!important;border:0!important;margin:0!important;padding:0!important;line-height:0!important;background:transparent!important;position:absolute;top:0;left:0;overflow:hidden;outline:0 none",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-clear",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "font-size:0;width:0;height:0;line-height:0;overflow:hidden;clear:both",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-macro",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "display:inline-block;min-width:1px",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-scrollbar",
+    "source": "norm.less",
+    "jsSite": "zul/Scrollbar.ts(line 904) — rendered in innerHTML",
+    "css": "display:none;position:absolute;line-height:1",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-upload",
+    "source": "norm.less",
+    "jsSite": "zul/Upload.ts(line 183) — rendered in innerHTML",
+    "css": "font-size:0;display:inline-block;width:0;height:0;margin:0;padding:0;position:relative",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-upload-icon",
+    "source": "norm.less",
+    "jsSite": null,
+    "css": "background-image:<progress-meter-png>;overflow:hidden",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-fileupload-add",
+    "source": "norm.less",
+    "jsSite": "zul/Upload.ts — sclass set at widget creation",
+    "css": "color:#1096BC;width:16px;height:17px;cursor:pointer",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-fileupload-remove",
+    "source": "norm.less",
+    "jsSite": "zul/Upload.ts — sclass set at widget creation",
+    "css": "color:#1096BC;width:16px;height:17px;cursor:pointer",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-fileupload-progress",
+    "source": "norm.less",
+    "jsSite": "zul/Upload.ts — sclass set at widget creation",
+    "css": "width:300px",
+    "type": "decorative"
+  },
+  {
+    "class": ".z-fileupload-manager",
+    "source": "norm.less",
+    "jsSite": "zul/Upload.ts:setSclass (line 628) — set once, not toggled",
+    "css": "width:350px",
+    "type": "decorative"
+  }
+]

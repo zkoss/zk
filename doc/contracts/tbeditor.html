@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Mockup — tbeditor</title>
+<!--
+  Self-contained marble design contract mockup for <tbeditor>.
+
+  Renders the state matrix from doc/contracts/tbeditor.md:
+    - default (box + toolbar + editor canvas)
+    - toolbar button hover (primary tinted background)
+    - toolbar button active/toggled (primary-container fill)
+    - disabled (icon opacity 0.38, outline-variant border)
+    - HTML-source mode (editor hidden, textarea shown)
+    - fullscreen (elevation-3 shadow — simulated inline)
+    - dropdown open
+
+  Companion files:
+    Skill:    .claude/skills/zk-component-rules/components/tbeditor.md
+    Contract:   doc/contracts/tbeditor.md
+    Baseline: doc/contracts/baselines/tbeditor-iceblue.png
+
+  Compare visually to the baseline; class names match the post-bind_ DOM exactly.
+-->
+<style>
+/* ────────────────────────────────────────────────────────────────────────
+   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+    /* Colors — primary palette */
+    --zk-color-primary: #376fd0;
+    --zk-color-on-primary: #ffffff;
+    --zk-color-primary-container: #d6e4ff;
+    --zk-color-on-primary-container: #001c3d;
+
+    --zk-color-secondary: #4db6ac;
+    --zk-color-on-secondary: #ffffff;
+
+    --zk-color-tertiary: #7e73d6;
+    --zk-color-error: #d32f2f;
+    --zk-color-on-error: #ffffff;
+    --zk-color-warning: #f57c00;
+
+    /* Surfaces */
+    --zk-color-background: #f7f9fc;
+    --zk-color-on-background: rgba(0, 0, 0, 0.87);
+    --zk-color-surface: #ffffff;
+    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
+    --zk-color-surface-variant: #f0f4fa;
+    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
+    --zk-color-surface-container: #f0f4fa;
+    --zk-color-surface-container-high: #e8eef7;
+
+    /* Outline / focus */
+    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
+
+    /* Disabled */
+    --zk-color-disabled: rgba(0, 0, 0, 0.38);
+
+    /* Spacing (4dp baseline) */
+    --zk-spacing-1: 4px;
+    --zk-spacing-2: 8px;
+    --zk-spacing-3: 12px;
+    --zk-spacing-4: 16px;
+    --zk-spacing-5: 20px;
+    --zk-spacing-6: 24px;
+    --zk-spacing-8: 32px;
+
+    /* Shape */
+    --zk-shape-corner-small: 8px;
+    --zk-shape-corner-medium: 12px;
+    --zk-shape-corner-large: 16px;
+    --zk-shape-corner-full: 9999px;
+
+    /* Typography */
+    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --zk-typescale-body-medium-size: 14px;
+    --zk-typescale-body-medium-weight: 400;
+    --zk-typescale-body-medium-line-height: 20px;
+    --zk-typescale-body-small-size: 12px;
+    --zk-typescale-label-medium-size: 12px;
+    --zk-font-weight-regular: 400;
+    --zk-font-weight-medium: 500;
+    --zk-font-weight-semibold: 600;
+
+    /* Elevation */
+    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+    --zk-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+    --zk-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* Motion */
+    --zk-motion-duration-short1: 100ms;
+    --zk-motion-duration-short2: 200ms;
+    --zk-motion-duration-medium1: 250ms;
+    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
+    /* State-layer opacities */
+    --zk-state-hover-opacity: 0.08;
+    --zk-state-focus-opacity: 0.12;
+    --zk-state-pressed-opacity: 0.12;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mockup chrome (page layout, NOT part of the component contract).
+   ──────────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: var(--zk-spacing-8);
+    font-family: var(--zk-typescale-font-family);
+    font-size: var(--zk-typescale-body-medium-size);
+    color: var(--zk-color-on-background);
+    background: var(--zk-color-background);
+}
+h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+.contract-meta {
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    margin-bottom: var(--zk-spacing-8);
+}
+.contract-meta span { margin-right: var(--zk-spacing-4); }
+.matrix-section { margin-bottom: var(--zk-spacing-8); }
+.matrix-section h2 {
+    font-size: 14px;
+    font-weight: var(--zk-font-weight-semibold);
+    text-transform: uppercase;
+    color: var(--zk-color-on-surface-variant);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    padding-bottom: var(--zk-spacing-2);
+    margin: 0 0 var(--zk-spacing-4);
+    letter-spacing: 0.05em;
+}
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--zk-spacing-4);
+    align-items: start;
+}
+.matrix-grid .state-label {
+    font-size: var(--zk-typescale-label-medium-size);
+    font-weight: var(--zk-font-weight-medium);
+    color: var(--zk-color-on-surface-variant);
+    text-transform: uppercase;
+    padding-top: var(--zk-spacing-2);
+}
+.matrix-grid .state-cell {
+    padding: var(--zk-spacing-4);
+    background: var(--zk-color-surface-variant);
+    border-radius: var(--zk-shape-corner-small);
+    border: 1px solid var(--zk-color-outline-variant);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   tbeditor — design contract styles.
+   Class names match the post-bind_ Trumbowyg-injected DOM exactly.
+   All design-bearing values use --zk-* tokens only.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Outer box (Trumbowyg-injected, init'd on #uuid-cnt) */
+.z-tbeditor-box {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-height: 300px;
+    background-color: var(--zk-color-surface);
+    border: 1px solid var(--zk-color-outline);
+    border-radius: var(--zk-shape-corner-small);
+    box-shadow: var(--zk-elevation-1);
+    overflow: hidden;
+}
+
+/* Toolbar / button pane */
+.z-tbeditor-button-pane {
+    list-style: none;
+    margin: 0;
+    padding: 0 var(--zk-spacing-1);
+    min-height: 36px;
+    background-color: var(--zk-color-surface-container);
+    border-bottom: 1px solid var(--zk-color-outline-variant);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    position: relative;
+    z-index: 11;
+}
+
+/* Button group — inline group of related buttons */
+.z-tbeditor-button-group {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Group separator line */
+.z-tbeditor-button-group:not(:empty) + .z-tbeditor-button-group::before {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 20px;
+    background-color: var(--zk-color-outline-variant);
+    margin: 0 var(--zk-spacing-1);
+}
+
+/* Individual toolbar buttons */
+.z-tbeditor-button-pane button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    border: none;
+    border-radius: var(--zk-shape-corner-small);
+    background: transparent;
+    cursor: pointer;
+    transition: background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+    color: inherit;
+}
+
+/* SVG icons in buttons */
+.z-tbeditor-button-pane svg {
+    width: 17px;
+    height: 17px;
+    fill: var(--zk-color-on-surface-variant);
+    transition: fill var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+/* Button hover / focus state */
+.z-tbeditor-button-pane button:hover,
+.z-tbeditor-button-pane button:focus {
+    background-color: color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%), transparent);
+    outline: none;
+}
+
+.z-tbeditor-button-pane button:hover svg,
+.z-tbeditor-button-pane button:focus svg {
+    fill: var(--zk-color-primary);
+}
+
+/* Active / toggled button (e.g. Bold is ON) */
+.z-tbeditor-button-pane button.z-tbeditor-active {
+    background-color: var(--zk-color-primary-container);
+}
+
+.z-tbeditor-button-pane button.z-tbeditor-active svg {
+    fill: var(--zk-color-primary);
+}
+
+/* Contenteditable editor canvas */
+.z-tbeditor-editor {
+    display: block;
+    padding: var(--zk-spacing-4);
+    min-height: 264px; /* 300px box - 36px pane */
+    background-color: var(--zk-color-surface);
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-family: var(--zk-typescale-font-family);
+    line-height: var(--zk-typescale-body-medium-line-height);
+    outline: none;
+    overflow: auto;
+    position: relative;
+}
+
+/* Placeholder text */
+.z-tbeditor-editor[contenteditable=true]:empty:not(:focus)::before {
+    content: attr(placeholder);
+    color: var(--zk-color-disabled);
+    pointer-events: none;
+}
+
+/* Hidden textarea (source-view mode; also present but collapsed in editor-visible mode) */
+.z-tbeditor-textarea {
+    display: block;
+    width: 100%;
+    min-height: 264px;
+    padding: var(--zk-spacing-4);
+    border: none;
+    background-color: var(--zk-color-surface);
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-medium-size);
+    font-family: 'Inconsolata', 'Consolas', 'Courier New', monospace;
+    resize: none;
+    outline: none;
+    overflow: auto;
+}
+
+/* In editor-visible mode, textarea is hidden (collapsed to 1px/25%  by Trumbowyg) */
+.z-tbeditor-editor-visible .z-tbeditor-textarea {
+    height: 1px !important;
+    width: 25%;
+    min-height: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+}
+
+/* In editor-hidden mode, the editor itself is hidden */
+.z-tbeditor-editor-hidden .z-tbeditor-editor {
+    display: none;
+}
+
+.z-tbeditor-editor-hidden .z-tbeditor-textarea {
+    display: block;
+}
+
+/* Disabled state */
+.z-tbeditor-disabled .z-tbeditor-box {
+    border-color: var(--zk-color-outline-variant);
+}
+
+.z-tbeditor-disabled .z-tbeditor-button-pane button:not(.z-tbeditor-not-disable):not(.z-tbeditor-active) {
+    opacity: 0.38;
+    cursor: default;
+}
+
+.z-tbeditor-disabled .z-tbeditor-button-group::before {
+    background-color: var(--zk-color-outline-variant);
+}
+
+/* Fullscreen (geometry managed by Trumbowyg; only elevate shadow) */
+.z-tbeditor-fullscreen {
+    box-shadow: var(--zk-elevation-3);
+    border: none;
+}
+
+/* Dropdown menu */
+.z-tbeditor-dropdown {
+    background-color: var(--zk-color-surface);
+    border: 1px solid var(--zk-color-outline-variant);
+    border-top: none;
+    border-radius: 0 0 var(--zk-shape-corner-small) var(--zk-shape-corner-small);
+    box-shadow: var(--zk-elevation-2);
+    padding: var(--zk-spacing-1) 0;
+    min-width: 200px;
+    position: absolute;
+    z-index: 11;
+}
+
+.z-tbeditor-dropdown button {
+    display: block;
+    width: 100%;
+    height: 36px;
+    padding: 0 var(--zk-spacing-3);
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--zk-color-on-surface);
+    font-size: var(--zk-typescale-body-medium-size);
+    transition: background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
+}
+
+.z-tbeditor-dropdown button:hover,
+.z-tbeditor-dropdown button:focus {
+    background-color: var(--zk-color-surface-container);
+    outline: none;
+}
+
+/* SVG icon within dropdown items */
+.z-tbeditor-dropdown button svg {
+    fill: var(--zk-color-on-surface-variant);
+    width: 17px;
+    height: 17px;
+    float: left;
+    margin-right: var(--zk-spacing-3);
+    margin-top: 2px;
+}
+
+/* Overlay (shown in fullscreen and when resize-in-progress) */
+.z-tbeditor-overlay {
+    position: absolute;
+    background-color: color-mix(in srgb, var(--zk-color-surface) 50%, transparent);
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    display: none;
+    z-index: 10;
+}
+
+/* ── Mockup helper: simulated SVG icon (inline path stand-in) ───────────── */
+.icon-placeholder {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: 0.55;
+}
+.btn-label {
+    font-size: 10px;
+    font-weight: var(--zk-font-weight-semibold);
+    color: var(--zk-color-on-surface-variant);
+    line-height: 1;
+}
+
+</style>
+</head>
+<body>
+
+<h1>tbeditor — design contract</h1>
+<div class="contract-meta">
+    <span>theme: marble</span>
+    <span>zk-version: 10.2.1-jakarta</span>
+    <span>tier: T3</span>
+    <span>closest-sibling: window (chrome), toolbar (button pane)</span>
+    <span>edition: EE (zkmax)</span>
+</div>
+
+<!-- ────────────────────────────────────────────────────────────────────────
+     State matrix — one cell per state.
+     Each .z-tbeditor-box is the Trumbowyg-injected outer box;
+     class names match the post-bind_ DOM as declared in the skill entry.
+     ──────────────────────────────────────────────────────────────────────── -->
+
+<section class="matrix-section">
+    <h2>Default — editor visible</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">default</div>
+        <div class="state-cell">
+            <div class="z-tbeditor">
+                <div class="z-tbeditor-box z-tbeditor-editor-visible">
+
+                    <ul class="z-tbeditor-button-pane">
+                        <li class="z-tbeditor-button-group">
+                            <button type="button" title="Bold"><span class="btn-label">B</span></button>
+                            <button type="button" title="Italic"><span class="btn-label"><em>I</em></span></button>
+                            <button type="button" title="Underline"><span class="btn-label"><u>U</u></span></button>
+                        </li>
+                        <li class="z-tbeditor-button-group">
+                            <button type="button" title="Unordered list"><span class="btn-label">≡</span></button>
+                            <button type="button" title="Ordered list"><span class="btn-label">⋮</span></button>
+                        </li>
+                        <li class="z-tbeditor-button-group z-tbeditor-right">
+                            <button type="button" class="z-tbeditor-fullscreen-button" title="Fullscreen"><span class="btn-label">⤢</span></button>
+                        </li>
+                    </ul>
+
+                    <div class="z-tbeditor-editor" contenteditable="true" placeholder="Type here…">
+                        <p>Sample content. <strong>Bold</strong>, <em>italic</em>, normal.</p>
+                    </div>
+
+                    <textarea class="z-tbeditor-textarea" style="height:1px;width:25%;min-height:0;padding:0;opacity:0"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">button hover</div>
+        <div class="state-cell">
+            <div class="z-tbeditor">
+                <div class="z-tbeditor-box z-tbeditor-editor-visible">
+                    <ul class="z-tbeditor-button-pane">
+                        <li class="z-tbeditor-button-group">
+                            <!-- Simulate hover via inline style (pseudo-classes can't be static) -->
+                            <button type="button" style="background-color:color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%), transparent);" title="Bold (hover)"><span class="btn-label" style="color:var(--zk-color-primary)">B</span></button>
+                            <button type="button" title="Italic"><span class="btn-label"><em>I</em></span></button>
+                            <button type="button" title="Underline"><span class="btn-label"><u>U</u></span></button>
+                        </li>
+                    </ul>
+                    <div class="z-tbeditor-editor" contenteditable="true">
+                        <p>Hover Bold button above.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="state-label">button active (toggled)</div>
+        <div class="state-cell">
+            <div class="z-tbeditor">
+                <div class="z-tbeditor-box z-tbeditor-editor-visible">
+                    <ul class="z-tbeditor-button-pane">
+                        <li class="z-tbeditor-button-group">
+                            <button type="button" class="z-tbeditor-active" title="Bold (active)"><span class="btn-label" style="color:var(--zk-color-primary)">B</span></button>
+                            <button type="button" title="Italic"><span class="btn-label"><em>I</em></span></button>
+                        </li>
+                    </ul>
+                    <div class="z-tbeditor-editor" contenteditable="true">
+                        <p><strong>Bold is toggled ON</strong> — button uses primary-container fill.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Disabled state</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">disabled</div>
+        <div class="state-cell">
+            <!-- ZK adds z-tbeditor-disabled to the box; ZK root element carries no disabled class -->
+            <div class="z-tbeditor">
+                <div class="z-tbeditor-disabled">
+                    <div class="z-tbeditor-box z-tbeditor-editor-visible" style="border-color:var(--zk-color-outline-variant)">
+                        <ul class="z-tbeditor-button-pane">
+                            <li class="z-tbeditor-button-group">
+                                <button type="button" style="opacity:0.38;cursor:default" title="Bold"><span class="btn-label">B</span></button>
+                                <button type="button" style="opacity:0.38;cursor:default" title="Italic"><span class="btn-label"><em>I</em></span></button>
+                                <button type="button" class="z-tbeditor-not-disable" title="View HTML"><span class="btn-label">&lt;/&gt;</span></button>
+                            </li>
+                        </ul>
+                        <div class="z-tbeditor-editor" contenteditable="false" style="color:var(--zk-color-disabled)">
+                            <p>Editor is disabled — icon buttons at 0.38 opacity, border is outline-variant.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>HTML-source mode (editor-hidden)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">HTML source view</div>
+        <div class="state-cell">
+            <div class="z-tbeditor">
+                <div class="z-tbeditor-box z-tbeditor-editor-hidden">
+                    <ul class="z-tbeditor-button-pane">
+                        <li class="z-tbeditor-button-group">
+                            <button type="button" title="Bold"><span class="btn-label">B</span></button>
+                        </li>
+                        <li class="z-tbeditor-button-group z-tbeditor-right">
+                            <button type="button" class="z-tbeditor-active z-tbeditor-viewHTML-button" title="View HTML (active)"><span class="btn-label" style="color:var(--zk-color-primary)">&lt;/&gt;</span></button>
+                        </li>
+                    </ul>
+                    <!-- editor is display:none in editor-hidden mode -->
+                    <div class="z-tbeditor-editor" style="display:none"></div>
+                    <!-- textarea is shown in monospace -->
+                    <textarea class="z-tbeditor-textarea" rows="8" style="display:block;min-height:200px;padding:var(--zk-spacing-4);font-family:'Inconsolata','Consolas','Courier New',monospace;font-size:var(--zk-typescale-body-medium-size);background:var(--zk-color-surface);color:var(--zk-color-on-surface);border:none;width:100%;resize:none;outline:none">&lt;p&gt;Sample content. &lt;strong&gt;Bold&lt;/strong&gt;, &lt;em&gt;italic&lt;/em&gt;, normal.&lt;/p&gt;</textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Fullscreen (simulated — elevation-3 + no border)</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">fullscreen style</div>
+        <div class="state-cell">
+            <!-- In production this box becomes position:fixed 100vw×100vh managed by Trumbowyg.
+                 Here we simulate only the shadow + border-removal design decision. -->
+            <div class="z-tbeditor">
+                <div class="z-tbeditor-box z-tbeditor-editor-visible z-tbeditor-fullscreen" style="position:relative;width:100%;height:auto;border:none">
+                    <ul class="z-tbeditor-button-pane">
+                        <li class="z-tbeditor-button-group">
+                            <button type="button" title="Bold"><span class="btn-label">B</span></button>
+                            <button type="button" title="Italic"><span class="btn-label"><em>I</em></span></button>
+                        </li>
+                        <li class="z-tbeditor-button-group z-tbeditor-right">
+                            <button type="button" class="z-tbeditor-active z-tbeditor-fullscreen-button" title="Exit fullscreen"><span class="btn-label" style="color:var(--zk-color-primary)">⤡</span></button>
+                        </li>
+                    </ul>
+                    <div class="z-tbeditor-editor" style="min-height:120px">
+                        <p>Fullscreen — border removed, elevation-3 shadow applied.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="matrix-section">
+    <h2>Dropdown menu</h2>
+    <div class="matrix-grid">
+
+        <div class="state-label">dropdown open</div>
+        <div class="state-cell">
+            <div style="position:relative;display:inline-block">
+                <!-- Dropdown renders below the triggering button, z-index:11 -->
+                <div class="z-tbeditor-dropdown" style="position:relative;margin-top:0;display:block">
+                    <button type="button">Heading 1</button>
+                    <button type="button" style="background-color:var(--zk-color-surface-container)">Heading 2 (hover)</button>
+                    <button type="button">Heading 3</button>
+                    <button type="button">Paragraph</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

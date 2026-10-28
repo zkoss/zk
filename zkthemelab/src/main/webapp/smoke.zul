@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window title="Marble preview — smoke" border="normal" width="480px">
+	<label value="Marble preview smoke test"/>
+	<textbox placeholder="Type here"/>
+	<checkbox label="Enable option"/>
+	<hlayout>
+		<button label="Primary"/>
+		<button label="Default"/>
+	</hlayout>
+	<combobox>
+		<comboitem label="Option 1"/>
+		<comboitem label="Option 2"/>
+		<comboitem label="Option 3"/>
+	</combobox>
+	<listbox>
+		<listhead>
+			<listheader label="Name"/>
+			<listheader label="Value"/>
+		</listhead>
+		<listitem>
+			<listcell label="Row 1"/>
+			<listcell label="A"/>
+		</listitem>
+		<listitem>
+			<listcell label="Row 2"/>
+			<listcell label="B"/>
+		</listitem>
+		<listitem>
+			<listcell label="Row 3"/>
+			<listcell label="C"/>
+		</listitem>
+	</listbox>
+</window>

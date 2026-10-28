@@ -1,0 +1,68 @@
+<zk xmlns:h="native">
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Examples</h:span></h:div>
+    <h:div class="z-d-flex z-flex-col z-items-start z-gap-4 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Prefix text</h:span></h:div>
+            <inputgroup>@<textbox/></inputgroup>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Suffix text</h:span></h:div>
+            <inputgroup><textbox placeholder="Recipient's username"/>@example.com</inputgroup>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Both sides</h:span></h:div>
+            <inputgroup>$<textbox/>.00</inputgroup>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Number boxes with prefix and suffix</h:span></h:div>
+            <inputgroup>$<intbox value="72"/>.00</inputgroup>
+            <inputgroup><decimalbox value="72.5"/>kg</inputgroup>
+            <inputgroup><doublebox value="1.5"/>m</inputgroup>
+            <inputgroup>#<longbox value="1234567"/></inputgroup>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">With multiline</h:span></h:div>
+            <inputgroup>
+                With textarea
+                <textbox multiline="true" rows="3" cols="30"/>
+            </inputgroup>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Input + Button</h:span></h:div>
+            <inputgroup>
+                <textbox placeholder="Search"/>
+                <button label="Go" sclass="z-button-primary"/>
+            </inputgroup>
+        </h:div>
+    </h:div>
+</h:div>
+
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Disabled State</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Prefix + disabled textbox</h:span></h:div>
+            <inputgroup>@<textbox disabled="true" value="disabled@example.com"/></inputgroup>
+        </h:div>
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">Both sides + disabled textbox</h:span></h:div>
+            <inputgroup>$<textbox disabled="true" value="0"/>.00</inputgroup>
+        </h:div>
+    </h:div>
+</h:div>
+
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Vertical Orientation</h:span></h:div>
+    <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+        <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+            <h:div><h:span class="z-text-xs z-text-secondary">orient=&quot;vertical&quot; (rounded top/bottom corners)</h:span></h:div>
+            <inputgroup orient="vertical">
+                Username
+                <textbox placeholder="Enter username"/>
+                @example.com
+            </inputgroup>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>
