@@ -53,7 +53,8 @@ gains `describe.serial`, a `beforeAll` its tests rely on, or a module-level obje
 ## How a path is resolved
 
 0. A changed `.css` file whose content differs from its `--base` version only in `/* … */` comments or whitespace
-   is treated as "no tests needed" (reported as "comment/whitespace-only change, rendered CSS is unaffected"). This
+   (the amount of whitespace, or spaces around `{ } ; ,` and after `:`; adding or removing a space that separates
+   tokens, such as `.a .b` → `.a.b` or `0 8px` → `08px`, still counts as a change) is treated as "no tests needed" (reported as "comment/whitespace-only change, rendered CSS is unaffected"). This
    check runs before the full-run triggers in step 1, and applies to every `.css` file, including token/base/utility
    CSS and `_layer-order.css`. Without `--base` (bare paths) there is nothing to compare, so the usual path rules
    still apply. Non-CSS triggers (`.wcs`, `lang.xml`, gradle, fonts) are unchanged. Implementation:

@@ -608,7 +608,10 @@ function isCommentOnlyCssChange(change) {
   if (!fs.existsSync(file)) return false;
   let oldText;
   try { oldText = git(change.repo, ['show', `${change.base}:${change.rel}`]); } catch { return false; } // new file
-  const normalise = text => text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, '');
+  // Comments become one space and whitespace runs collapse to one space, since a space can separate tokens
+  // (`.a .b`, `0 8px`). Spaces go only around `{ } ; ,` and after `:`; a space before `:` stays (`.a :hover`).
+  const normalise = text => text.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\s+/g, ' ')
+    .replace(/ ?([{};,]) ?/g, '$1').replace(/: /g, ':').trim();
   return normalise(oldText) === normalise(fs.readFileSync(file, 'utf8'));
 }
 
