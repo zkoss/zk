@@ -36,6 +36,8 @@ preview: ${PREVIEW_URL}/navbar.zul
 | c9 | `.z-navitem-content:focus-visible` | outline-offset | `-2px` — **inset**, the theme's full-bleed-row focus mechanism (same as `.z-treerow`). A positive offset is a defect here, not a taste call: the ring is drawn outside a box that has no room, and is cut. See the skill's `reference/focus-ring-clipping.md`. |
 | c10 | `.z-nav-content:focus-visible` | outline + outline-offset | Identical to c8/c9. The group header is a focus target in its own right, so it must not fall back to the UA ring. |
 | c11 | `.z-navitem-selected > .z-navitem-content:focus-visible` @ `forced-colors: active` | outline-color | `HighlightText`. The selection fill and `--zk-focus-ring` both remap to `Highlight`, so the inherited ring would paint Highlight-on-Highlight and disappear. Guard lives in `tokens/_forced-colors.css` block (2a focus); see `doc/spec/forced-colors.md`. |
+| c12 | `.z-navbar-collapsed .z-nav-info`, `.z-navbar-collapsed .z-navitem-info` | position | MD3 badge on an icon-only destination: a small dot overlapping the icon's **top-right corner** (`position: absolute; top: 4px`; right edge 4px inside the icon column, so it stays on the icon whatever the navbar width; 16px tall, 9px text). It is **not** vertically centred on the icon; IceBlue's side-by-side centred badge is IceBlue-only (`B96_ZK_4915Test#collapsedBadgeCenteredOnIcon`). Expanded rows keep the badge centred on the text (c13). |
+| c13 | `.z-nav-info`, `.z-navitem-info` (not collapsed) | vertical position | centred on the row's text and icon (±2px), `B96_ZK_4915Test#test`. |
 
 ## States to evaluate
 - [ ] default, selected/active, hover, focus-visible (c8-c10), selected + focus-visible under forced-colors (c11)
