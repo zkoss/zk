@@ -348,7 +348,48 @@
                     <projectType>library</projectType>
                     <includeTestScope>false</includeTestScope>
                     <outputName>zk-sbom-cyclonedx</outputName>
+                    <excludeTestProject>true</excludeTestProject>
+                    <includeProvidedScope>false</includeProvidedScope>
                 </configuration>
+            </plugin>
+            <!-- run after makeAggregateBom: mvn -N -f zk-parent/pom.xml org.codehaus.gmavenplus:gmavenplus-plugin:4.1.1:execute@sbom -Dsbom.bundles=<dir of published bundles> -->
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>4.1.1</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>sbom</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>outputName</name>
+                                    <value>zk-sbom-cyclonedx</value>
+                                </property>
+                            </properties>
+                            <scripts>
+                                <script>file://${project.basedir}/sbom.groovy</script>
+                            </scripts>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy</artifactId>
+                        <version>3.0.25</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-json</artifactId>
+                        <version>3.0.25</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
