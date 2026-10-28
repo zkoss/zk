@@ -29,8 +29,12 @@ public class B102_ZK_5616Test extends WebDriverTestCase {
         long detailLeft = Math.round(Double.parseDouble(getEval("$('.z-row:first-child .z-detail-outer')[0].getBoundingClientRect().left")));
         long detailTop = Math.round(Double.parseDouble(getEval("$('.z-row:first-child .z-detail-outer')[0].getBoundingClientRect().top")));
 
-        String topClassName = getEval("document.elementFromPoint(" + detailLeft + ", " + detailTop + ").className");
-
-        Assertions.assertTrue(topClassName.contains("z-detail"));
+        // The detail cell may render its content in a child element, so check the hit lands inside the cell.
+        String hitInDetail = getEval("document.elementFromPoint(" + detailLeft + ", " + detailTop + ")"
+                + ".closest('.z-detail-outer') === $('.z-row:first-child .z-detail-outer')[0]");
+        Assertions.assertEquals("true", hitInDetail);
+        // A transparent detail cell still wins the hit test but lets the scrolled cells show through it.
+        String detailBackground = jq(".z-row:first-child .z-detail-outer").css("background-color");
+        Assertions.assertTrue(detailBackground.startsWith("rgb("), "detail cell must be opaque: " + detailBackground);
     }
 }
