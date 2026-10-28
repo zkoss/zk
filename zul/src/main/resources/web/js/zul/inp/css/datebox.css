@@ -22,6 +22,8 @@
     background-color: var(--zk-datebox-bg);
     min-height: var(--zk-control-height);
     box-sizing: border-box;
+    /* Reset the inherited line-height: a parent's tall line box would push the input down while the button stays put. */
+    line-height: var(--zk-typescale-body-medium-line-height);
     transition:
         border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
         box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);

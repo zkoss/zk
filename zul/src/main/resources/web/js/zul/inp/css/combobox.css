@@ -19,6 +19,8 @@
     min-height: var(--zk-control-height);
     overflow: visible;
     box-sizing: border-box;
+    /* Reset the inherited line-height: a parent's tall line box would push the input down while the button stays put. */
+    line-height: var(--zk-typescale-body-medium-line-height);
 }
 
 .z-combobox:hover .z-combobox-input,
