@@ -19,9 +19,9 @@
     border-radius: var(--zk-messagebox-radius);
     box-shadow: var(--zk-messagebox-elevation);
     border: none;
-    /* WCAG 1.4.10 Reflow: never wider than the viewport (min() keeps 560px as the cap above it). */
-    max-width: min(560px, 100%);
-    min-width: 280px;
+    /* WCAG 1.4.10 Reflow: never wider than the viewport. No other min/max-width: Messagebox.onBind sizes the
+       message column from the caller's width argument, so a clamped window would leave it at 0px (ZK-4760). */
+    max-width: 100%;
     width: 480px;
     font-family: var(--zk-typescale-font-family);
     overflow: hidden;
@@ -64,11 +64,20 @@
 /* ─── Message text container ──────────────────────────────────────────── */
 .z-messagebox {
     display: inline-block;
+    /* Fill the row beside the icon: Messagebox.onBind measures msgbox.offsetWidth to work out the icon/padding
+       overhead, so a shrink-wrapped column inflates it and the width argument yields a too-narrow column (ZK-4760). */
+    flex: 1 1 auto;
+    min-width: 0;
     white-space: normal;
     word-break: break-word;
     color: var(--zk-messagebox-fg);
     font-size: var(--zk-typescale-body-medium-size);
     line-height: var(--zk-typescale-body-medium-line-height);
+}
+
+/* jq.alert({icon: 'NONE'}) builds an empty spacer with class z-messagebox z-messagebox-none (zul/dom.ts); it must not grow. */
+.z-messagebox-viewport > .z-messagebox-none {
+    flex: none;
 }
 
 /* No pre-wrap: the label is multiline, so ZK already writes "<br/>\n" per line;

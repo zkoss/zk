@@ -12,6 +12,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -21,11 +22,6 @@ public class B95_ZK_4760Test extends WebDriverTestCase {
 	@Test
 	public void test() throws Exception {
 		connect();
-		click(jq("@button:eq(0)"));
-		waitResponse();
-		Assertions.assertTrue(Boolean.valueOf(zk(jq(".z-messagebox-viewport")).eval("hasHScroll()")));
-		click(jq("@button:eq(6)"));
-
 		click(jq("@button:eq(1)"));
 		waitResponse();
 		Assertions.assertFalse(Boolean.valueOf(zk(jq(".z-messagebox-viewport")).eval("hasHScroll()")));
@@ -36,14 +32,26 @@ public class B95_ZK_4760Test extends WebDriverTestCase {
 		Assertions.assertFalse(Boolean.valueOf(zk(jq(".z-messagebox-viewport")).eval("hasHScroll()")));
 		click(jq(".z-messagebox-button"));
 
-		click(jq("@button:eq(3)"));
-		waitResponse();
-		Assertions.assertTrue(Boolean.valueOf(zk(jq(".z-messagebox-viewport")).eval("hasHScroll()")));
-		click(jq(".z-messagebox-button"));
-
 		click(jq("@button:eq(4)"));
 		waitResponse();
 		Assertions.assertEquals(600, jq(".z-messagebox-window").outerWidth());
+		click(jq(".z-messagebox-button"));
+	}
+
+	// IceBlueOnly: IceBlue keeps a long unbroken message on one line and scrolls the viewport;
+	// Marble wraps it instead (see F110_ZK_6084_MessageboxReflowTest).
+	@Test
+	@Tag("IceBlueOnly")
+	public void testLongMessageScrolls() throws Exception {
+		connect();
+		click(jq("@button:eq(0)"));
+		waitResponse();
+		Assertions.assertTrue(Boolean.valueOf(zk(jq(".z-messagebox-viewport")).eval("hasHScroll()")));
+		click(jq("@button:eq(6)"));
+
+		click(jq("@button:eq(3)"));
+		waitResponse();
+		Assertions.assertTrue(Boolean.valueOf(zk(jq(".z-messagebox-viewport")).eval("hasHScroll()")));
 		click(jq(".z-messagebox-button"));
 
 		click(jq("@button:eq(5)"));
