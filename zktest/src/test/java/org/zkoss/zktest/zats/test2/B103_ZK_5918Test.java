@@ -18,7 +18,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
-import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class B103_ZK_5918Test extends WebDriverTestCase {
     @Test
@@ -29,9 +28,10 @@ public class B103_ZK_5918Test extends WebDriverTestCase {
         Long initialScrollY = (Long) js.executeScript("return window.pageYOffset;");
         Actions actions = getActions();
 
-        JQuery checkboxSwitch = jq(".z-checkbox-switch");
-        click(checkboxSwitch);
-        waitResponse();
+        String moldIsActive = "document.activeElement === jq('.z-checkbox-switch .z-checkbox-mold')[0]";
+        for (int i = 0; i < 6 && !"true".equals(getEval(moldIsActive)); i++)
+            actions.sendKeys(Keys.TAB).perform();
+        Assertions.assertEquals("true", getEval(moldIsActive));
         actions.sendKeys(Keys.SPACE).perform();
         waitResponse();
         Long currentScrollY = (Long) js.executeScript("return window.pageYOffset;");

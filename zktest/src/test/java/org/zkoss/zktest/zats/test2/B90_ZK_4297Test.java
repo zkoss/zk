@@ -12,6 +12,7 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -19,6 +20,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author rudyhuang
  */
+// IceBlue-only: it reads the row state from the listcell background, as IceBlue paints it; Marble paints it on the listitem and leaves the cells transparent.
+@Tag("IceBlueOnly")
 public class B90_ZK_4297Test extends WebDriverTestCase {
 	@Test
 	public void test() {

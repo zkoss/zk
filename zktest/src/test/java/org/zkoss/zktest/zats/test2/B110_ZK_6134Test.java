@@ -36,10 +36,12 @@ public class B110_ZK_6134Test extends WebDriverTestCase {
 				"document.querySelectorAll(\"" + selector + "\").length"));
 	}
 
-	private String backgroundOf(String selector) {
+	private String paintOf(String selector) {
 		return getEval("(function () {"
 				+ "var e = document.querySelector(\"" + selector + "\");"
-				+ "return e ? getComputedStyle(e).backgroundColor : 'no-such-cell';"
+				+ "if (!e) return 'no-such-cell';"
+				+ "var b = getComputedStyle(e, '::before');"
+				+ "return [getComputedStyle(e).backgroundColor, b.content, b.backgroundColor, b.opacity].join(' / ');"
 				+ "})()");
 	}
 
@@ -77,10 +79,11 @@ public class B110_ZK_6134Test extends WebDriverTestCase {
 	}
 
 	/** Real pointer move: a synthetic mouseover produces no CSS `:hover` state. */
-	private String backgroundOnHover(String selector) {
+	private String paintOnHover(String selector) {
 		WebElement el = driver.findElement(By.cssSelector(selector));
-		getActions().moveToElement(el).perform();
-		return backgroundOf(selector);
+		// ZK-6134: Marble fades the hover layer in over 0.25s
+		getActions().moveToElement(el).pause(500).perform();
+		return paintOf(selector);
 	}
 
 	/** Empty box: nothing in the popup may be announced as selected. */
@@ -148,12 +151,12 @@ public class B110_ZK_6134Test extends WebDriverTestCase {
 		waitResponse();
 
 		openPopup(1);
-		String plain = backgroundOf(POPUP
+		String plain = paintOf(POPUP
 				+ " .z-calendar-cell:not(.z-calendar-selected):not(.z-calendar-outside)"
 				+ ":not([class*=z-cell-range-])");
-		assertEquals(plain, backgroundOf(ANCHOR),
+		assertEquals(plain, paintOf(ANCHOR),
 				"the 1st of the month must not paint as selected");
-		assertNotEquals(plain, backgroundOf(POPUP + " .z-cell-range-begin"),
+		assertNotEquals(plain, paintOf(POPUP + " .z-cell-range-begin"),
 				"the range begin must still paint as highlighted");
 	}
 
@@ -171,8 +174,8 @@ public class B110_ZK_6134Test extends WebDriverTestCase {
 				+ " .z-calendar-cell.z-calendar-selected.z-cell-range-preview-mid";
 		assertEquals(1L, count(anchorInBand),
 				"precondition: the preview band must cover the next panel's 1st");
-		assertEquals(backgroundOf(POPUP + " .z-cell-range-preview-mid:not(.z-calendar-selected)"),
-				backgroundOf(anchorInBand),
+		assertEquals(paintOf(POPUP + " .z-cell-range-preview-mid:not(.z-calendar-selected)"),
+				paintOf(anchorInBand),
 				"the anchor must paint like the rest of the preview band");
 	}
 
@@ -183,10 +186,12 @@ public class B110_ZK_6134Test extends WebDriverTestCase {
 		waitResponse();
 
 		openPopup(0);
-		String hoveredAnchor = backgroundOnHover(ANCHOR);
-		String hoveredPlain = backgroundOnHover(POPUP
-				+ " .z-calendar-cell:not(.z-calendar-selected):not(.z-calendar-outside)");
-		assertNotEquals("rgba(0, 0, 0, 0)", hoveredPlain,
+		String plainCell = POPUP
+				+ " .z-calendar-cell:not(.z-calendar-selected):not(.z-calendar-outside)";
+		String idlePlain = paintOf(plainCell);
+		String hoveredAnchor = paintOnHover(ANCHOR);
+		String hoveredPlain = paintOnHover(plainCell);
+		assertNotEquals(idlePlain, hoveredPlain,
 				"control: a plain day cell must paint a hover background");
 		assertEquals(hoveredPlain, hoveredAnchor,
 				"the month anchor must hover like a plain day cell");

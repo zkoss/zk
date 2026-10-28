@@ -19,6 +19,7 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
 public class F96_ZK_4783Test extends WebDriverTestCase {
+	// IceBlue-only: it expects IceBlue's 480px messagebox width; Marble sizes the window from its own min-width and max-width (280px and 560px).
 	@Test
 	@Tag("IceBlueOnly")
 	public void testIceblue() {

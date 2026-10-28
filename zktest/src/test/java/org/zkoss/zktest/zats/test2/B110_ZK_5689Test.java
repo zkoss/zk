@@ -14,9 +14,12 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
+// IceBlue-only: it expects ZK icons to use IceBlue's FontAwesome font-family; Marble draws them as SVG masks on ::before.
+@Tag("IceBlueOnly")
 public class B110_ZK_5689Test extends WebDriverTestCase {
     @Test
     public void test() {

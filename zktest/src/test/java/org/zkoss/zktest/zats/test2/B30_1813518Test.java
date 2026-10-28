@@ -3,10 +3,13 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
+// IceBlue-only: it expects IceBlue's default row text colour rgba(0, 0, 0, 0.9); Marble's default text colour comes from its own token.
+@Tag("IceBlueOnly")
 public class B30_1813518Test extends WebDriverTestCase {
 	@Test
 	public void test() {
