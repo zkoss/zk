@@ -131,6 +131,8 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    /* jq.alert can carry seven buttons (532px) in the 480px window; wrap them instead of clipping at overflow:hidden. */
+    flex-wrap: wrap;
     gap: var(--zk-spacing-2);
     padding: var(--zk-spacing-2) var(--zk-spacing-6) var(--zk-spacing-4);
     border-top: 1px solid var(--zk-messagebox-border-color);
