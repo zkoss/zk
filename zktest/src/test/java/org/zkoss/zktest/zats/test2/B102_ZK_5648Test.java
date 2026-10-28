@@ -14,12 +14,15 @@ package org.zkoss.zktest.zats.test2;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
+// IceBlue-only: it reads the focus border from IceBlue's per-cell inset box-shadow; Marble draws keyboard focus as a 2px outline around the whole row.
+@Tag("IceBlueOnly")
 public class B102_ZK_5648Test extends WebDriverTestCase {
     
     private static String TOP = "0px 2px 0px 0px",

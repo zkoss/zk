@@ -12,6 +12,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -20,6 +21,8 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 /**
  * @author rudyhuang
  */
+// IceBlue-only: it reads the hover state from the element's background, as IceBlue paints it; Marble paints hover as a ::before state layer.
+@Tag("IceBlueOnly")
 public class B70_ZK_2357Test extends WebDriverTestCase {
 	@Test
 	public void test() {

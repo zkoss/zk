@@ -200,9 +200,12 @@ public class B110_ZK_6192Test extends WebDriverTestCase {
 		assertEquals("true", getEval("(function (t, p) {var r = t.getBoundingClientRect(),"
 				+ "b = p.getBoundingClientRect(), scale = p === document.documentElement ? 1 : b.width / p.offsetWidth,"
 				+ "left = p === document.documentElement ? 0 : b.left + p.clientLeft * scale,"
-				+ "right = left + p.clientWidth * scale;"
-				+ "return r.width > 0 && r.height > 0 && r.left >= left && r.right <= right"
-				+ " && document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2).indexOf(t) >= 0;"
+				+ "right = left + p.clientWidth * scale, pe = t.style.pointerEvents;"
+				// ZK-6192: a theme may give the tooltip pointer-events:none, which hides it from hit-testing
+				+ "t.style.pointerEvents = 'auto';"
+				+ "var painted = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2).indexOf(t) >= 0;"
+				+ "t.style.pointerEvents = pe;"
+				+ "return r.width > 0 && r.height > 0 && r.left >= left && r.right <= right && painted;"
 				+ "})(jq('$" + id + " .z-sliderbuttons-tooltip')[" + index + "], " + boundary + ")"),
 				id + " tooltip " + index + " should be painted inside its clipping boundary");
 	}

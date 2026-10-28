@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
+// IceBlue-only: it asserts IceBlue's slider sizes (200px default length, 32px thickness, the 37px and 305px offsets); Marble's horizontal slider fills its container.
 @Tag("IceBlueOnly")
 public class B86_ZK_4102Test extends WebDriverTestCase {
 	@Test

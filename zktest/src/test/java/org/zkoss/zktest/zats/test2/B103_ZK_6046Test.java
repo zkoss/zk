@@ -12,10 +12,13 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
+// IceBlue-only: it reads the pressed state from the button's own color and background, as IceBlue paints it; Marble paints it as a ::before state layer.
+@Tag("IceBlueOnly")
 public class B103_ZK_6046Test extends WebDriverTestCase {
     @Test
     public void test() {

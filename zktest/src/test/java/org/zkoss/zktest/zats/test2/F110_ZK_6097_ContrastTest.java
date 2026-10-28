@@ -99,7 +99,9 @@ public class F110_ZK_6097_ContrastTest extends WebDriverTestCase {
 				"avatar ignored the :root override, so a _wcag* palette cannot restyle it");
 	}
 
+	// IceBlue-only: it parses the computed colours as rgb(); Marble's avatar colours compute to oklch().
 	@Test
+	@Tag("IceBlueOnly")
 	public void default_avatar_foreground_has_sufficient_contrast() {
 		connect();
 		waitResponse();

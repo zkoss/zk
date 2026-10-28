@@ -12,12 +12,15 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
+// IceBlue-only: it expects IceBlue to recolour the toolbarbutton border on focus; Marble keeps the border and draws a 2px outline instead.
+@Tag("IceBlueOnly")
 public class B102_ZK_5901Test extends WebDriverTestCase {
     @Test
     public void test() {
