@@ -1,5 +1,6 @@
 ZK 9.6.7
 * Features
+  ZK-6120: Create SBOM for each new version
 
 * Bugs
   ZK-5161: page directive's attributes are not encoded before rendering into HTML
