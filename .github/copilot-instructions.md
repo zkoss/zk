@@ -40,6 +40,11 @@ npm run type-check   # type check only, no output
 npm run lint -- <module>/src/main/resources/web/js   # ESLint per module (what CI's jscheck runs); the repo-wide form cannot pass and rewrites files
 ```
 
+### CSS (Marble)
+```bash
+./gradlew checkMarbleCss   # build the Marble CSS; fails on an orphaned component CSS or a css-uri with no built .css.dsp
+```
+
 ### Java
 ```bash
 ./gradlew clean build         # full build
