@@ -1,0 +1,23 @@
+ZK zcommon
+Copyright (C) Potix Corporation. All Rights Reserved.
+
+This product includes third-party software, listed with its licenses in
+META-INF/LICENSE.
+
+Apache Tomcat
+Copyright 1999-2026 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (https://www.apache.org/).
+
+This product includes software developed by the
+JDOM Project (http://www.jdom.org/).
+
+Unbescape
+Copyright (c) 2014, The UNBESCAPE team (http://www.unbescape.org)
+
+XML Schema DTDs (metainfo/xml/XMLSchema.dtd, datatypes.dtd, xml.xsd)
+Copyright 2004 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (https://www.apache.org/).

@@ -13,7 +13,7 @@
     "dev": "gulp watch"
   },
   "author": "Potix",
-  "license": "LGPL-2.0-or-later",
+  "license": "LGPL-2.1-only",
   "private": true,
   "devDependencies": {
     "@babel/core": "^7.16.0",
