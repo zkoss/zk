@@ -50,6 +50,8 @@ public class F61_ZK_1175Test extends WebDriverTestCase {
 		click(widget("@datebox:eq(0)").$n("btn"));
 		waitResponse();
 		Assertions.assertEquals(7, jq(".z-datebox-popup.z-datebox-open @calendar:eq(0) th").length());
+		click(widget("@datebox:eq(0)").$n("btn"));
+		waitResponse();
 
 		click(widget("@datebox:eq(1)").$n("btn"));
 		waitResponse();

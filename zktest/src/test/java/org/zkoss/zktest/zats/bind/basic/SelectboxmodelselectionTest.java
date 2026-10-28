@@ -3,6 +3,7 @@ package org.zkoss.zktest.zats.bind.basic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.Widget;
@@ -24,12 +25,16 @@ public class SelectboxmodelselectionTest extends WebDriverTestCase {
 		click(jq(sb1));
 		click(jq(sb1).find("option").get(0));
 		waitResponse();
+		// a WebDriver option click leaves a base-select picker open; ESC closes it as a real click would
+		getActions().sendKeys(Keys.ESCAPE).perform();
 		click(jq(sb2));
 		click(jq(sb2).find("option").get(1));
 		waitResponse();
+		getActions().sendKeys(Keys.ESCAPE).perform();
 		click(jq(sb3));
 		click(jq(sb3).find("option").get(2));
 		waitResponse();
+		getActions().sendKeys(Keys.ESCAPE).perform();
 		assertEquals("0", sb1.get("selectedIndex"));
 		assertEquals("1", sb2.get("selectedIndex"));
 		assertEquals("2", sb3.get("selectedIndex"));

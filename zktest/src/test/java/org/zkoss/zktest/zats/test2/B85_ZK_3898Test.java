@@ -33,6 +33,9 @@ public class B85_ZK_3898Test extends WebDriverTestCase {
 		rightClick(jq("@button:eq(1)"));
 		waitResponse();
 
+		click(jq("@label"));
+		waitResponse();
+
 		click(jq("@button:eq(2)"));
 		waitResponse();
 
