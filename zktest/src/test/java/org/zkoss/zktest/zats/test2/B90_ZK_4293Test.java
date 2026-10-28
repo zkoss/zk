@@ -22,6 +22,8 @@ public class B90_ZK_4293Test extends WebDriverTestCase {
 		connect();
 		click(jq("@button").eq(0));
 		waitResponse();
+		click(jq("@label"));
+		waitResponse();
 		click(jq("@button").eq(1));
 		waitResponse(true);
 		click(jq("@textbox"));

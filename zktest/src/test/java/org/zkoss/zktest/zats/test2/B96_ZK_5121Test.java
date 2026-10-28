@@ -12,6 +12,7 @@ Copyright (C) 2022 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,8 @@ public class B96_ZK_5121Test extends WebDriverTestCase {
 
 		click(jq("@button"));
 		sleep(50);
-		click(jq(".z-cascader-icon.z-icon-caret-down"));
+		getActions().moveToElement(toElement(jq(".z-cascader-icon.z-icon-caret-down"))).click().perform();
+		assertTrue(jq(".z-cascader-popup").is(":visible"));
 		waitResponse(4000);
 		assertFalse(jq(".z-cascader-popup").is(":visible"));
 	}

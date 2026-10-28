@@ -53,6 +53,8 @@ public class B102_ZK_5681_2_Test extends WebDriverTestCase {
 		String label5 = jq(".z-checkbox-content").eq(4).text();
 		System.out.println(label5);
 		assertEquals("Bandbox defer child", label5);
+		click(jq("@label"));
+		waitResponse();
 		// Open Menu and click slow item
 		click(jq("@menu .z-menu-content"));
 		waitResponse();
