@@ -4,20 +4,6 @@
 		Accepted risks documented in ZK 11.0.0 Upgrade Notes.
 		Suppressions expire 2027-04-01 to be re-evaluated.
 	-->
-	<suppress until="2026-09-01Z">
-		<notes><![CDATA[
-			closure-compiler-unshaded: optional dependency of zk, see ZK 10.3.0 Upgrade Notes.
-		]]></notes>
-		<packageUrl regex="true">^pkg:maven/com\.google\.javascript/closure\-compiler\-unshaded@.*$</packageUrl>
-		<vulnerabilityName regex="true">.*</vulnerabilityName>
-	</suppress>
-	<suppress until="2026-09-01Z">
-		<notes><![CDATA[
-			protobuf-java: transitive dependency of closure-compiler-unshaded, covered by the same acceptance above.
-		]]></notes>
-		<packageUrl regex="true">^pkg:maven/com\.google\.protobuf/protobuf\-java@3\.21\..*$</packageUrl>
-		<vulnerabilityName regex="true">.*</vulnerabilityName>
-	</suppress>
 	<suppress until="2027-04-01Z">
 		<notes><![CDATA[
 			spring stack: spring-beans, spring-context and spring-web are optional dependencies of zkplus;
