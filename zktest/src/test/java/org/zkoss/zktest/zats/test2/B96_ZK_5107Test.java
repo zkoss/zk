@@ -25,14 +25,14 @@ public class B96_ZK_5107Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		String pencilClz = ".z-icon-pencil";
-		click(jq(pencilClz));
+		clickAt(jq(pencilClz), 0, 0);
 		waitResponse();
 		String first = ".z-treerow-checkable.z-treerow-checkbox:eq(0)";
 		click(jq(first));
 		waitResponse();
 		assertTrue(jq(jq(first).toWidget()).hasClass("z-treerow-selected"));
 
-		click(jq(pencilClz));
+		clickAt(jq(pencilClz), 0, 0);
 		waitResponse();
 		String second = ".z-treerow-checkable.z-treerow-checkbox:eq(1)";
 		click(jq(second));

@@ -24,8 +24,9 @@ public class B110_ZK_6185Test extends WebDriverTestCase {
 	private static final String TRISTATE = "z-checkbox-tristate-";
 	private static final String SWITCH = "z-checkbox-switch-";
 
-	private void clickReal(String id) {
-		click(widget("$" + id).$n("real"));
+	private void clickBox(String id) {
+		Widget wgt = widget("$" + id);
+		click(jq(wgt.$n("mold")).isVisible() ? wgt.$n("mold") : wgt.$n("real"));
 		waitResponse();
 	}
 
@@ -57,7 +58,7 @@ public class B110_ZK_6185Test extends WebDriverTestCase {
 		waitResponse();
 		assertLook("cb", DEFAULT, "indeterminate");
 
-		clickReal("cb");
+		clickBox("cb");
 		assertLook("cb", DEFAULT, "on");
 		assertServerState("CHECKED,UNCHECKED");
 	}
@@ -66,12 +67,12 @@ public class B110_ZK_6185Test extends WebDriverTestCase {
 	public void testServerSetIndeterminateShowsIndeterminateLook() {
 		connect();
 		waitResponse();
-		clickReal("cb");
-		clickReal("cb");
+		clickBox("cb");
+		clickBox("cb");
 		assertLook("cb", DEFAULT, "off");
 
 		// its onCheck calls cb.setChecked(false); cb.setIndeterminate(true)
-		clickReal("other");
+		clickBox("other");
 		assertLook("cb", DEFAULT, "indeterminate");
 		assertServerState("INDETERMINATE,UNCHECKED");
 	}
@@ -85,7 +86,7 @@ public class B110_ZK_6185Test extends WebDriverTestCase {
 
 		String[][] cycle = {{"indeterminate", "INDETERMINATE"}, {"on", "CHECKED"}, {"off", "UNCHECKED"}};
 		for (String[] step : cycle) {
-			clickReal("tri");
+			clickBox("tri");
 			assertLook("tri", TRISTATE, step[0]);
 			assertServerState("INDETERMINATE," + step[1]);
 		}
@@ -107,9 +108,9 @@ public class B110_ZK_6185Test extends WebDriverTestCase {
 	public void testServerClearsRuntimeIndeterminate() {
 		connect();
 		waitResponse();
-		clickReal("cb");
-		clickReal("cb");
-		clickReal("other");
+		clickBox("cb");
+		clickBox("cb");
+		clickBox("other");
 		assertLook("cb", DEFAULT, "indeterminate");
 
 		click(jq("$clear"));

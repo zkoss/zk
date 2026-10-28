@@ -26,6 +26,8 @@ public class F80_ZK_3300Test extends WebDriverTestCase {
 		//checkbox
 		JQuery jqChkLabel = jq("$chk_label");
 		JQuery jqChkBind = jq("$chk_bind input");
+		JQuery jqChkMold = jq("$chk_bind .z-checkbox-mold");
+		JQuery jqChkBox = jqChkMold.isVisible() ? jqChkMold : jqChkBind;
 		JQuery jqInpChkInit = jq("$inp_chk_init");
 		JQuery jqInpChkLoad = jq("$inp_chk_load");
 		JQuery jqInpChkBind = jq("$inp_chk_bind");
@@ -34,14 +36,14 @@ public class F80_ZK_3300Test extends WebDriverTestCase {
 		assertEquals(false, jqInpChkInit.is(":checked"));
 		assertEquals(false, jqInpChkLoad.is(":checked"));
 		assertEquals(false, jqInpChkBind.is(":checked"));
-		click(jqChkBind);
+		click(jqChkBox);
 		waitResponse();
 		assertEquals("true", jqChkLabel.text());
 		assertEquals(true, jqChkBind.is(":checked"));
 		assertEquals(false, jqInpChkInit.is(":checked"));
 		assertEquals(true, jqInpChkLoad.is(":checked"));
 		assertEquals(true, jqInpChkBind.is(":checked"));
-		click(jqChkBind);
+		click(jqChkBox);
 		waitResponse();
 		assertEquals("false", jqChkLabel.text());
 		assertEquals(false, jqChkBind.is(":checked"));

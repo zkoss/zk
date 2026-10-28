@@ -30,19 +30,21 @@ public class F90_ZK_4378Test extends WebDriverTestCase {
 		connect();
 		waitResponse();
 		Element checkboxInp = widget("@checkbox").$n("real");
+		Element checkboxMold = widget("@checkbox").$n("mold");
+		Element checkboxBox = jq(checkboxMold).isVisible() ? checkboxMold : checkboxInp;
 		JQuery stateCheckButton = jq("@button:contains(stateCheck)");
 		
 		clickButtonAndCheckLog(stateCheckButton, UNCHECKED);
 		
-		click(checkboxInp);
+		click(checkboxBox);
 		waitResponse();
 		clickButtonAndCheckLog(stateCheckButton, INDETERMINATE);
 		
-		click(checkboxInp);
+		click(checkboxBox);
 		waitResponse();
 		clickButtonAndCheckLog(stateCheckButton, CHECKED);
 		
-		click(checkboxInp);
+		click(checkboxBox);
 		waitResponse();
 		clickButtonAndCheckLog(stateCheckButton, UNCHECKED);
 		
@@ -60,7 +62,7 @@ public class F90_ZK_4378Test extends WebDriverTestCase {
 		
 		click(jq("@button:contains(setDisabled(true))"));
 		waitResponse();
-		click(checkboxInp);
+		click(checkboxBox);
 		waitResponse();
 		clickButtonAndCheckLog(stateCheckButton, UNCHECKED);
 	}

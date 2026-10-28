@@ -31,7 +31,7 @@ public class F102_ZK_5504_CascaderTest extends WebDriverTestCase {
 	public void testInsertBefore() {
 		connect();
 
-		click(jq(".z-cascader-icon.z-icon-caret-down"));
+		clickAt(jq(".z-cascader-icon.z-icon-caret-down"), 0, 0);
 		waitResponse(true);
 		String[] result = {"0 - aaa0", "1 - aaa1", "2 - aaa2"};
 		int index = 0;
@@ -42,7 +42,7 @@ public class F102_ZK_5504_CascaderTest extends WebDriverTestCase {
 		click(jq("button:contains(insert before)"));
 		waitResponse();
 
-		click(jq(".z-cascader-icon.z-icon-caret-down"));
+		clickAt(jq(".z-cascader-icon.z-icon-caret-down"), 0, 0);
 		waitResponse(true);
 
 		result = new String[]{"0 - ddd", "1 - aaa0", "2 - aaa1", "3 - aaa2"};
@@ -59,7 +59,7 @@ public class F102_ZK_5504_CascaderTest extends WebDriverTestCase {
 		click(jq("button:contains(remove)"));
 		waitResponse(true);
 
-		click(jq(".z-cascader-icon.z-icon-caret-down"));
+		clickAt(jq(".z-cascader-icon.z-icon-caret-down"), 0, 0);
 		waitResponse(true);
 		result = new String[]{"0 - aaa0", "1 - aaa1", "2 - aaa2"};
 		index = 0;

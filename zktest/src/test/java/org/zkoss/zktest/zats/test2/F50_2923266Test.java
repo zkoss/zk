@@ -31,7 +31,8 @@ public class F50_2923266Test extends WebDriverTestCase {
 		click(jq("@button"));
 		waitResponse();
 
-		click(jq("@colorbox"));
+		// 2923266: dispatched, because Marble makes a disabled colorbox pointer-events:none and a pointer would never reach it
+		eval("jq('@colorbox')[0].click()");
 		waitResponse();
 		Assertions.assertFalse(jq(".z-colorbox-popup").isVisible());
 	}

@@ -28,7 +28,7 @@ public class B30_2562880Test extends WebDriverTestCase {
 		waitResponse();
 		Assertions.assertTrue(jq("$popup").isVisible());
 
-		click(jq(".z-listheader-sorticon"));
+		clickAt(jq(".z-listheader-sorticon"), 0, 0);
 		waitResponse();
 		Assertions.assertFalse(jq("$popup").isVisible());
 	}

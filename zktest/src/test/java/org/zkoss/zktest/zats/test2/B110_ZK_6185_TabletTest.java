@@ -31,7 +31,7 @@ public class B110_ZK_6185_TabletTest extends TabletWebDriverTestCase {
 		Widget cb = widget("$cb");
 		assertTrue(cb.is("indeterminate"));
 
-		click(cb.$n("real"));
+		click(jq(cb.$n("mold")).isVisible() ? cb.$n("mold") : cb.$n("real"));
 		waitResponse();
 		assertTrue(jq(cb.$n("real")).hasClass("z-icon-check"), "the checkbox-touch setChecked must have run");
 		assertFalse(cb.is("indeterminate"), "widget isIndeterminate()");

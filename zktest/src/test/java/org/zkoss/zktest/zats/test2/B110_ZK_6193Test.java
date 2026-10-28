@@ -124,7 +124,7 @@ public class B110_ZK_6193Test extends WebDriverTestCase {
 	@Test
 	public void testArrowIconClickDiscardsTheExpandedParent() {
 		expandJapanFromEmpty();
-		click(fieldIcon());
+		clickAt(fieldIcon(), 0, 0);
 		waitResponse();
 		assertNothingCommitted();
 	}
