@@ -41,8 +41,8 @@ public class F102_ZK_5946Test extends WebDriverTestCase {
             "SystemV/HST10"
     };
     private static final String[] nonWholeHourGMTs = new String[] {
-            "GMT+00:15", "GMT+05:30", "GMT+6:45", "GMT+11:59",
-            "GMT-01:15", "GMT-08:30", "GMT-11:45", "GMT-13:59",
+            "GMT+00:15", "GMT+05:30", "GMT+6:45", "GMT+11:59", "GMT+12:45",
+            "GMT-01:15", "GMT-08:30", "GMT-11:45", "GMT-13:59", "GMT-14:30",
     };
 
     private final List<String> errorList = new ArrayList<>();

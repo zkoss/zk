@@ -234,9 +234,11 @@ export namespace dateImpl_global {
 		_offsetIfNonWholeHour(id: string, keepLocalTime: boolean): void {
 			if (gmtNonWholeHour.test(id)) {
 				const sign = id.charAt(3) === '+' ? '-' : '+',
-					offset = sign + id.substring(4);
+					offset = sign + id.substring(4),
+					minutes = parseInt(sign + id.substring(4, 6)) * 60 + parseInt(sign + id.substring(7));
 				if (this._moment.utcOffset() === 0) // offset only if the utcOffset() is NOT set
-					this._moment.utcOffset(offset, keepLocalTime);
+					// moment rejects an offset string beyond -12:00/+14:00 but reads a number under 16 as hours
+					this._moment.utcOffset(Math.abs(minutes) < 16 ? offset : minutes, keepLocalTime);
 			}
 		}
 	}

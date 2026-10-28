@@ -36,8 +36,8 @@ Copyright (C) 2025 Potix Corporation. All Rights Reserved.
         "SystemV/HST10"
         
         (c) None whole hour GMT offset
-        "GMT+00:15", "GMT+05:30", "GMT+6:45", "GMT+11:59"
-        "GMT-01:15", "GMT-08:30", "GMT-11:45", "GMT-13:59"
+        "GMT+00:15", "GMT+05:30", "GMT+6:45", "GMT+11:59", "GMT+12:45"
+        "GMT-01:15", "GMT-08:30", "GMT-11:45", "GMT-13:59", "GMT-14:30"
         
         Test all of (a) (b) (a) one by one, follow the Steps:
         1. input one of a timezone in (a) (b) (c) in the textbox and press `ENTER` to apply to java
