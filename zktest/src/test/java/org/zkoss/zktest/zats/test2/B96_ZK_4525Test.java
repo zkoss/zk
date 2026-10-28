@@ -25,7 +25,9 @@ public class B96_ZK_4525Test extends WebDriverTestCase {
 		connect();
 		getActions().moveToElement(toElement(jq("@textbox")))
 				.contextClick()
-				.moveByOffset(-20, 0)
+				.perform();
+		waitResponse();
+		getActions().moveByOffset(-20, 0)
 				.pause(2000)
 				.perform();
 		Assertions.assertTrue(jq("$tooltip").isVisible(), "Tooltip was hidden!");

@@ -26,16 +26,18 @@ public class F50_3306718Test extends WebDriverTestCase {
 		connect();
 
 		Actions actions = getActions();
-		actions.dragAndDrop(
-					toElement(jq("@treecell:contains(Item 2.1)")),
-					toElement(jq("@treecell:contains(Item 1)")))
+		actions.clickAndHold(toElement(jq("@treecell:contains(Item 2.1)")))
+				.moveByOffset(10, 0)
+				.moveToElement(toElement(jq("@treecell:contains(Item 1)")))
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertTrue(jq("@treerow:contains(Item 2.1):first").is("@treerow:first"));
 
-		actions.dragAndDrop(
-					toElement(jq("@treecell:contains(Item 3)")),
-					toElement(jq("@treecell:contains(Item 2.1.2)")))
+		actions.clickAndHold(toElement(jq("@treecell:contains(Item 3)")))
+				.moveByOffset(10, 0)
+				.moveToElement(toElement(jq("@treecell:contains(Item 2.1.2)")))
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertEquals(

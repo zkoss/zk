@@ -32,7 +32,8 @@ public class B36_3051305Test extends WebDriverTestCase {
 		Actions actions = getActions();
 		WebElement listitem = driver.findElement(jq("@listitem:contains(ZK JSP)"));
 		actions.clickAndHold(listitem)
-				.moveByOffset(0, 50)
+				.moveByOffset(0, 10)
+				.moveByOffset(0, 40)
 				.release()
 				.perform();
 
@@ -40,13 +41,19 @@ public class B36_3051305Test extends WebDriverTestCase {
 		Assertions.assertEquals(5, jq("@listitem").length());
 		assertThat(jq("@listitem:last").text(), endsWith("ZK Spring"));
 
-		actions.dragAndDropBy(driver.findElement(jq("@row:contains(ZK JSP)")), 0, 50)
+		actions.clickAndHold(driver.findElement(jq("@row:contains(ZK JSP)")))
+				.moveByOffset(0, 10)
+				.moveByOffset(0, 40)
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertEquals(5, jq("@row").length());
 		assertThat(jq("@row:last").text(), endsWith("ZK Spring"));
 
-		actions.dragAndDropBy(driver.findElement(jq("@treerow:contains(ZK JSP)")), 0, 50)
+		actions.clickAndHold(driver.findElement(jq("@treerow:contains(ZK JSP)")))
+				.moveByOffset(0, 10)
+				.moveByOffset(0, 40)
+				.release()
 				.perform();
 		waitResponse();
 		Assertions.assertEquals(5, jq("@treerow").length());

@@ -31,7 +31,10 @@ public class F61_ZK_969Test extends WebDriverTestCase {
 		Assertions.assertEquals("item 1", jq("@combobox input").val());
 
 		int westWidth = jq(".z-west-header").width();
-		getActions().dragAndDropBy(toElement(jq(".z-west-splitter:eq(0)")), -100, 0)
+		getActions().clickAndHold(toElement(jq(".z-west-splitter:eq(0)")))
+				.moveByOffset(-10, 0)
+				.moveByOffset(-90, 0)
+				.release()
 				.perform();
 		waitResponse();
 		assertThat(jq(".z-west-header").width(), lessThan(westWidth));
