@@ -81,6 +81,7 @@ ZK 11.0.0
   ZK-6199: fileupload: the Fileupload.get dialog hard-codes the picked-file row's colours and font as inline styles in JavaScript, so a theme cannot style it
   ZK-6192: rangeslider / multislider: the vertical tooltip is cut off when the slider sits at the right edge of the page or of an overflow:hidden container
   ZK-6218: errorbox: jumps above its field when the window holding the field is clicked
+  ZK-6236: Remove unused closure-compiler-unshaded dependency
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
@@ -119,6 +120,7 @@ ZK 11.0.0
   + Upgrade guava to 33.7.2-jre to fix vulnerabilities
   + Upgrade DOMPurify to 3.4.17 to fix vulnerabilities
   + Upgrade moment.js to 2.31.0 to fix vulnerabilities
+  + Remove closure-compiler-unshaded (an optional dependency in zk, unused since ZK 10.0.0) from the POM and the binary distribution's lib/ext; declare it yourself if your application uses it.
   + Upgrade groovy (optional, for Groovy zscript) to 5.0.8. With 5.0.0-alpha-1, a Groovy zscript that uses JDK classes fails on JDK 22 or later with "Unsupported class file major version".
   + The following optional dependencies have known vulnerabilities that ZK 11.0.0 does not fix; review them if your
     application uses them:
