@@ -25,7 +25,8 @@ public class B80_ZK_2999Test extends WebDriverTestCase {
         connect();
         JQuery icon1 = jq(".z-icon-caret-right");
         click(icon1);
-        check(jq(".z-checkbox").find("input"));
+        JQuery mold = jq(".z-checkbox-mold");
+        check(mold.isVisible() ? mold : jq(".z-checkbox").find("input"));
         waitResponse();
         JQuery trs = jq(".z-treerow-selected");
         assertTrue(trs.length() == 5);

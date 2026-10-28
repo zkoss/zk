@@ -87,14 +87,15 @@ public class B110_ZK_6131Test extends WebDriverTestCase {
 		installClickProbe();
 
 		// control: so a zero below is the guard working, not a probe that never fires
-		click(jq("$drbEdit .z-daterangebox-separator"));
+		// ZK-6131: dispatched, because Marble makes a disabled box pointer-events:none and a pointer would never reach its guard
+		eval("jq('$drbEdit .z-daterangebox-separator')[0].click()");
 		waitResponse();
 		assertEquals(1, clickRequests("drbEdit"),
 				"control: an editable box must send its onClick");
 		assertEquals("drbEdit", jq("$echoClick").text(),
 				"control: the editable box's onClick must reach the listener");
 
-		click(jq("$drbDisabled .z-daterangebox-separator"));
+		eval("jq('$drbDisabled .z-daterangebox-separator')[0].click()");
 		waitResponse();
 		assertEquals(0, clickRequests("drbDisabled"),
 				"a disabled box must not send an onClick the server only discards");
@@ -126,7 +127,7 @@ public class B110_ZK_6131Test extends WebDriverTestCase {
 		connect();
 		waitResponse();
 
-		click(jq("$drbRo .z-daterangebox-separator"));
+		clickAt(jq("$drbRo .z-daterangebox-separator"), 0, 0);
 		waitResponse();
 
 		assertTrue(popupVisible("drbRo"),
@@ -228,7 +229,9 @@ public class B110_ZK_6131Test extends WebDriverTestCase {
 		connect();
 		waitResponse();
 
-		openViaButton("drbDisabled");
+		// ZK-6131: dispatched, because Marble makes a disabled box pointer-events:none and a pointer would never reach its gate
+		eval("jq('$drbDisabled .z-daterangebox-button')[0].click()");
+		waitResponse();
 
 		assertFalse(popupVisible("drbDisabled"),
 				"a disabled box must still refuse to open its calendar");

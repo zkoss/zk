@@ -33,7 +33,7 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 		JQuery slide = jq("$east.z-east-slide .z-east");
 		JQuery btn = jq("$east .z-borderlayout-icon:visible");
 		JQuery slideToggle = jq("@button:contains(east toggle slide)");
-		JQuery slidableToggle = jq("@checkbox:contains(east slidable) > input");
+		JQuery slidableToggle = checkboxBox("east slidable");
 
 		clickAndWait(regionBar);
 		assertFalse(slide.isVisible(), "The slide should be hidden");
@@ -54,6 +54,12 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 		waitResponse();
 	}
 
+	private JQuery checkboxBox(String label) {
+		JQuery checkbox = jq("@checkbox:contains(" + label + ")");
+		JQuery mold = checkbox.find(".z-checkbox-mold");
+		return mold.isVisible() ? mold : checkbox.find("input");
+	}
+
 	@Test
 	public void testClosable() {
 		connect();
@@ -63,7 +69,7 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 		JQuery real = jq("$west .z-west");
 		JQuery btn = jq("$west .z-borderlayout-icon:visible");
 		JQuery openToggle = jq("@button:contains(west toggle open)");
-		JQuery closableToggle = jq("@checkbox:contains(west closable) > input");
+		JQuery closableToggle = checkboxBox("west closable");
 		JQuery splitterBtn = jq("$west .z-west-splitter-button");
 
 		assertFalse(btn.exists(), "The open button exists");
@@ -103,8 +109,8 @@ public class F85_ZK_3329Test extends WebDriverTestCase {
 		connect();
 
 		JQuery btn = jq("$west .z-borderlayout-icon:visible");
-		JQuery collapsible = jq("@checkbox:contains(west collapsible) > input");
-		JQuery closable = jq("@checkbox:contains(west closable) > input");
+		JQuery collapsible = checkboxBox("west collapsible");
+		JQuery closable = checkboxBox("west closable");
 		JQuery openToggle = jq("@button:contains(west toggle open)");
 
 		// Test collapsible = true, closable switch

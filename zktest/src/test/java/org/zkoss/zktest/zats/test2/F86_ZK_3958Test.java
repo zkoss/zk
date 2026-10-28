@@ -32,7 +32,8 @@ public class F86_ZK_3958Test extends WebDriverTestCase {
 		String on = "-on";
 		
 		verifyClassChange(findButtonContains("Switch"), jq(switchMold + off));
-		Assertions.assertFalse(jq(".z-checkbox > input").isVisible());
+		JQuery input = jq(".z-checkbox > input");
+		Assertions.assertTrue(!input.isVisible() || "0".equals(input.css("opacity")));
 		
 		verifyChecked("false");
 		
@@ -54,7 +55,7 @@ public class F86_ZK_3958Test extends WebDriverTestCase {
 	}
 	
 	private void verifyClassChange(JQuery location, JQuery target) {
-		click(location);
+		clickAt(location, 0, 0);
 		waitResponse();
 		Assertions.assertTrue(target.exists());
 	}

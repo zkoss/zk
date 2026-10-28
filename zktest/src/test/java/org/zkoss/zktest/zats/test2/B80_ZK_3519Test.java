@@ -30,25 +30,25 @@ public class B80_ZK_3519Test extends WebDriverTestCase{
     @Test
     public void test () {
         connect();
-        click(jq("@textbox:eq(0)"));
+        clickAt(jq("@textbox:eq(0)"), 0, 0);
         waitResponse();
 		assertEquals(false, isZKLogAvailable());
 		rightClick(jq("@textbox:eq(0)"));
 		waitResponse();
 		assertEquals(false, isZKLogAvailable());
-		click(jq("@decimalbox:eq(0)"));
+		clickAt(jq("@decimalbox:eq(0)"), 0, 0);
 		waitResponse();
 		assertEquals(false, isZKLogAvailable());
 		rightClick(jq("@decimalbox:eq(0)"));
 		waitResponse();
 		assertEquals(false, isZKLogAvailable());
-		click(jq("@checkbox:eq(0)"));
+		clickAt(jq("@checkbox:eq(0)"), 0, 0);
 		waitResponse();
 		assertEquals(false, isZKLogAvailable());
 		rightClick(jq("@checkbox:eq(0)"));
 		waitResponse();
 		assertEquals(false, isZKLogAvailable());
-		click(jq("@button:eq(0)"));
+		clickAt(jq("@button:eq(0)"), 0, 0);
 		waitResponse();
 		assertEquals(false, isZKLogAvailable());
 //		TODO: bug ZK-4979

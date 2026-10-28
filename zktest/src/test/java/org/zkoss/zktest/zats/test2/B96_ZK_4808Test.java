@@ -23,13 +23,13 @@ public class B96_ZK_4808Test extends WebDriverTestCase {
 		connect();
 		JQuery topMenu = jq(".z-menu:eq(0)");
 		JQuery nestedMenu = jq(".z-menu:eq(1)");
-		click(topMenu.find(".z-menu-icon"));
-		click(nestedMenu.find(".z-menu-text"));
+		clickAt(topMenu.find(".z-menu-icon"), 0, 0);
+		clickAt(nestedMenu.find(".z-menu-text"), 0, 0);
 		waitResponse();
 		Assertions.assertTrue(isZKLogAvailable());
 
 		closeZKLog();
-		click(nestedMenu.find(".z-menu-icon"));
+		clickAt(nestedMenu.find(".z-menu-icon"), 0, 0);
 		waitResponse();
 		Assertions.assertTrue(isZKLogAvailable());
 	}

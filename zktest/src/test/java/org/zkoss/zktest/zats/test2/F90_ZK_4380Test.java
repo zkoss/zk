@@ -152,7 +152,8 @@ public class F90_ZK_4380Test extends WebDriverTestCase {
 		click(jq("@button:contains(disabled)"));
 		waitResponse();
 
-		click(jq("@searchbox"));
+		// ZK-4380: dispatched, because Marble makes a disabled searchbox pointer-events:none and a pointer would never reach it
+		eval("jq('@searchbox')[0].click()");
 		waitResponse(true);
 		Assertions.assertFalse(jq(widget("@searchbox").$n("pp")).isVisible());
 

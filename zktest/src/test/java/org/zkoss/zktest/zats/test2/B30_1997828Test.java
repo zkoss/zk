@@ -25,7 +25,7 @@ public class B30_1997828Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		click(jq("img"));
+		click(jq("@toolbarbutton"));
 		waitResponse();
 
 		JQuery any = jq("$any");

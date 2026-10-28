@@ -40,7 +40,7 @@ public class B96_ZK_5040Test extends WebDriverTestCase {
 		}
 		assertEquals(5, count);
 
-		click(jq(".z-paging-icon.z-icon-angle-right"));
+		clickAt(jq(".z-paging-icon.z-icon-angle-right"), 0, 0);
 		waitResponse();
 
 		// second page
@@ -53,7 +53,7 @@ public class B96_ZK_5040Test extends WebDriverTestCase {
 		assertEquals(5, count);
 
 		// first page
-		click(jq(".z-paging-icon.z-icon-angle-left"));
+		clickAt(jq(".z-paging-icon.z-icon-angle-left"), 0, 0);
 		waitResponse();
 
 		iterator = jq(".z-treerow").iterator();

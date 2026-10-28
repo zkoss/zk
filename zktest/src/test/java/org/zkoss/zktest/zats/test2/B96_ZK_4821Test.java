@@ -58,10 +58,10 @@ public class B96_ZK_4821Test extends WebDriverTestCase {
 		Widget checkbox = checkboxPart.toWidget();
 		String state = checkbox.get("state");
 		boolean disabled = checkbox.is("disabled");
-		String mold = checkbox.get("mold");
-		if (!onContent && ("switch".equals(mold) || "toggle".equals(mold)))
-			checkboxPart = jq(checkbox.$n("mold")); // click on switch or toggle instead input
-		click(checkboxPart);
+		JQuery mold = jq(checkbox.$n("mold"));
+		if (!onContent && mold.isVisible())
+			checkboxPart = mold;
+		clickAt(checkboxPart, 0, 0);
 		waitResponse();
 		if (disabled)
 			Assertions.assertEquals(state, checkbox.get("state"), "state shall not change while click on disabled checkbox");
