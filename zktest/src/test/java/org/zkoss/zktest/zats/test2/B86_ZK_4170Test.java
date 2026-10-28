@@ -29,7 +29,7 @@ public class B86_ZK_4170Test extends WebDriverTestCase {
 		click(jq(".z-button"));
 		waitResponse();
 		for (int i = 0; i < knobs.length(); i++) {
-			Assertions.assertEquals(300, knobs.eq(i).height(), 2);
+			Assertions.assertEquals(300, knobs.eq(i).outerHeight(), 2);
 		}
 	}
 }

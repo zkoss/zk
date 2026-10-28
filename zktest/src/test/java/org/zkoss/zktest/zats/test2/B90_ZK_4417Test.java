@@ -12,11 +12,14 @@ Copyright (C) 2019 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
+// IceBlue-only: it expects the button to end at the root's outer right edge, as with IceBlue's borderless root; Marble puts a 1px border on the root and the button inside it.
+@Tag("IceBlueOnly")
 public class B90_ZK_4417Test extends WebDriverTestCase {
 	@Test
 	public void test() {

@@ -12,10 +12,13 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
+// IceBlue-only: it asserts IceBlue's line-height: normal on the caption; Marble sets a fixed line-height and the caption is not clipped.
+@Tag("IceBlueOnly")
 public class B96_ZK_4870Test extends WebDriverTestCase {
 	@Test
 	public void test() {

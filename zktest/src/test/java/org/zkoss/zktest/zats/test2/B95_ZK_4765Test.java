@@ -31,7 +31,7 @@ public class B95_ZK_4765Test extends WebDriverTestCase {
 		//test splitter
 		JQuery jqSplitter = jq("@splitter");
 		Element splitterBtn = jqSplitter.toWidget().$n("btn");
-		int btnPosLeft = jq(splitterBtn).positionLeft();
+		int btnPosLeft = jq(splitterBtn).offsetLeft();
 		click(splitterBtn);
 		waitResponse();
 		getActions().moveToElement(driver.findElement(jqSplitter))
@@ -40,12 +40,12 @@ public class B95_ZK_4765Test extends WebDriverTestCase {
 				.release()
 				.perform();
 		waitResponse();
-		assertThat(jq(splitterBtn).positionLeft(), greaterThan(btnPosLeft + 10)); //should move apparently
+		assertThat(jq(splitterBtn).offsetLeft(), greaterThan(btnPosLeft + 10)); //should move apparently
 
 		//test splitlayout
 		JQuery jqSplitlayout = jq("@splitlayout");
 		splitterBtn = jqSplitlayout.toWidget().$n("splitter-btn");
-		btnPosLeft = jq(splitterBtn).positionLeft();
+		btnPosLeft = jq(splitterBtn).offsetLeft();
 		click(splitterBtn);
 		waitResponse();
 		getActions().moveToElement(driver.findElement(jqSplitlayout.toWidget().$n("splitter")))
@@ -54,6 +54,6 @@ public class B95_ZK_4765Test extends WebDriverTestCase {
 				.release()
 				.perform();
 		waitResponse();
-		assertThat(jq(splitterBtn).positionLeft(), greaterThan(btnPosLeft + 10)); //should move apparently
+		assertThat(jq(splitterBtn).offsetLeft(), greaterThan(btnPosLeft + 10)); //should move apparently
 	}
 }

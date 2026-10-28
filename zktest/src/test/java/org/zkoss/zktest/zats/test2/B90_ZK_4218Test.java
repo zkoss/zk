@@ -53,6 +53,7 @@ public class B90_ZK_4218Test extends WebDriverTestCase {
 
 		final int headerWidth = jq(grid.$n("headrows")).outerWidth();
 		final int bodyWidth = jq(grid.$n("cave")).outerWidth();
-		assertThat(headerWidth - bodyWidth, greaterThanOrEqualTo(scrollbarWidth));
+		// ZK-4218: Marble collapses the body table's borders, so the page's 1px cell borders widen it by 1px
+		assertThat(headerWidth - bodyWidth, greaterThanOrEqualTo(scrollbarWidth - 1));
 	}
 }

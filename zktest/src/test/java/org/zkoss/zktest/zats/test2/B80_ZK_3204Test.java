@@ -11,7 +11,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
@@ -33,8 +33,9 @@ public class B80_ZK_3204Test extends WebDriverTestCase {
 		click(comboboxButton);
 		waitResponse();
 		JQuery comboboxPopup = jq(".z-combobox-popup.z-combobox-open");
+		// ZK-3204: the popup sits flush on the input; its top snaps to a whole pixel, the input's may not
 		MatcherAssert.assertThat("you should see popup was shown above of comboBox",
-			comboboxPopup.offsetTop() + comboboxPopup.height(), lessThan(bottomCombobox.offsetTop()));
+			rect(comboboxPopup, "bottom"), lessThanOrEqualTo(rect(bottomCombobox, "top") + 1));
 
 		act.sendKeys("a").perform();
 		waitResponse();
@@ -43,11 +44,15 @@ public class B80_ZK_3204Test extends WebDriverTestCase {
 			Assertions.assertTrue(comboitems.eq(i).text().startsWith("a"), "the popup should filter items that start with 'a'");
 		}
 		MatcherAssert.assertThat("you should see popup's bottom attach the comboBox's top",
-			comboboxPopup.offsetTop() + comboboxPopup.height(), lessThan(bottomCombobox.offsetTop()));
+			rect(comboboxPopup, "bottom"), lessThanOrEqualTo(rect(bottomCombobox, "top") + 1));
 
 		act.sendKeys(Keys.BACK_SPACE).perform();
 		waitResponse();
 		MatcherAssert.assertThat("popup should not cover comboBox",
-			comboboxPopup.offsetTop() + comboboxPopup.height(), lessThan(bottomCombobox.offsetTop()));
+			rect(comboboxPopup, "bottom"), lessThanOrEqualTo(rect(bottomCombobox, "top") + 1));
+	}
+
+	private double rect(JQuery element, String side) {
+		return Double.parseDouble(getEval(element + "[0].getBoundingClientRect()." + side));
 	}
 }

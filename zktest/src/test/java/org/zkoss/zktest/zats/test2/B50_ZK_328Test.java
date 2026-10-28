@@ -34,13 +34,13 @@ public class B50_ZK_328Test extends WebDriverTestCase {
 		
 		Assertions.assertEquals(maxHeight, panel0.outerHeight());
 		Assertions.assertEquals(maxWidth, panel0.outerWidth());
-		int panelChildrenHeight = panel0.innerHeight() - jq(".z-panel-header").eq(0).outerHeight();
+		int panelChildrenHeight = panel0.innerHeight() - jq(".z-panel-head").eq(0).outerHeight();
 		Assertions.assertEquals(panelChildrenHeight, pChildren0.outerHeight());
 		Assertions.assertEquals(panel0.innerWidth(), pChildren0.outerWidth());
 		
 		Assertions.assertEquals(maxHeight, panel1.outerHeight());
 		Assertions.assertEquals(maxWidth, panel1.outerWidth());
-		panelChildrenHeight = panel1.innerHeight() - jq(".z-panel-header").eq(1).outerHeight();
+		panelChildrenHeight = panel1.innerHeight() - jq(".z-panel-head").eq(1).outerHeight();
 		Assertions.assertEquals(panelChildrenHeight, pChildren1.outerHeight());
 		Assertions.assertEquals(panel1.innerWidth(), pChildren1.outerWidth());
 	}

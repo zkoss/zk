@@ -21,6 +21,8 @@ public class B96_ZK_4636Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
+		// ZK-4636: a default-width slider can span the whole viewport, leaving no room to drag past its right edge
+		eval("(function (w) {w.setWidth('200px'); zUtl.fireSized(w);})(" + widget("@slider") + ")");
 		JQuery btn = jq(".z-slider-button");
 		int sliderWidth = jq("@slider").width();
 		getActions().clickAndHold(toElement(btn)).moveByOffset(sliderWidth + 10, 0).perform();
