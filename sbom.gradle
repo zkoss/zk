@@ -1,0 +1,487 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+import java.security.MessageDigest
+import java.util.zip.ZipFile
+
+def potix = [name: 'Potix Corporation', url: ['https://www.zkoss.org']]
+def zkLicence = 'LGPL-2.1-only'
+def zkModuleLicences = [zel: 'Apache-2.0'] // a fork of Apache EL
+
+def sbomCreators = [
+	'org.zkoss'                  : potix,
+	'args4j'                     : [name: 'Kohsuke Kawaguchi', url: ['https://github.com/kohsuke/args4j']],
+	'com.google'                 : [name: 'Google LLC', url: ['https://opensource.google']],
+	'commons-io'                 : [name: 'The Apache Software Foundation', url: ['https://www.apache.org']],
+	'javax'                      : [name: 'Oracle Corporation', url: ['https://javaee.github.io']],
+	'javax.enterprise'           : [name: 'Red Hat, Inc.', url: ['https://www.cdi-spec.org']],
+	'javax.inject'               : [name: 'JSR-330 Expert Group', url: ['https://github.com/javax-inject/javax-inject']],
+	'org.apache'                 : [name: 'The Apache Software Foundation', url: ['https://www.apache.org']],
+	'org.apache-extras.beanshell': [name: 'BeanShell', url: ['https://github.com/beanshell/beanshell']],
+	'org.javassist'              : [name: 'Shigeru Chiba', url: ['https://www.javassist.org']],
+	'org.jspecify'               : [name: 'JSpecify', url: ['https://jspecify.dev']],
+	'org.mozilla'                : [name: 'The Mozilla Foundation', url: ['https://github.com/mozilla/rhino']],
+	'org.owasp.encoder'          : [name: 'OWASP Foundation', url: ['https://owasp.org/www-project-java-encoder/']],
+	'org.python'                 : [name: 'Jython Project', url: ['https://www.jython.org']],
+	'org.seasar'                 : [name: 'The Seasar Foundation', url: ['https://www.seasar.org']],
+	'org.slf4j'                  : [name: 'QOS.ch', url: ['https://www.slf4j.org']],
+	'org.springframework'        : [name: 'Spring IO', url: ['https://spring.io']],
+]
+
+def sbomLicences = [
+	'com.google.re2j:re2j'                   : 'BSD-3-Clause',
+	'javax.el:javax.el-api'                  : 'CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0',
+	'javax.interceptor:javax.interceptor-api': 'CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0',
+	'javax.transaction:jta'                  : 'CDDL-1.0',
+	'org.python:jython'                      : 'LicenseRef-scancode-jython',
+	'org.seasar.container:s2-framework'      : 'Apache-2.0',
+	'org.zkoss.zkforge.el:zcommons-el'       : 'Apache-1.1',
+]
+
+def sbomVendored = [
+	zk : [
+		[file: 'web/js/zk/ext/jquery.js', name: 'jquery', npm: 'jquery', stamp: /jQuery JavaScript Library v([\d.]+)/, licence: 'MIT'],
+		[file: 'web/js/zk/ext/jquery.json.js', name: 'json2.js', purl: 'pkg:github/douglascrockford/json-js', stamp: /json2\.js\s+([\d-]+)/, licence: 'LicenseRef-scancode-public-domain',
+		 dependsOn: ['jquery']], // ZK's copy extends jq
+		[file: 'web/js/zk/ext/jquery.mousewheel.js', name: 'jquery-mousewheel', npm: 'jquery-mousewheel', stamp: /jQuery Mousewheel ([\d.]+)/, licence: 'MIT', dependsOn: ['jquery']],
+		[file: 'web/js/zk/ext/jquery.transit.js', name: 'jquery.transit', npm: 'jquery.transit', stamp: /version: "([\d.]+)"/, licence: 'MIT', dependsOn: ['jquery']],
+		[file: 'web/js/zk/ext/moment.js', name: 'moment', npm: 'moment', stamp: /\/\/! version : ([\d.]+)/, licence: 'MIT'],
+		[file: 'web/js/zk/ext/moment-timezone-with-data.js', name: 'moment-timezone', npm: 'moment-timezone', stamp: /\/\/! version : ([\d.]+)/, licence: 'MIT', dependsOn: ['moment']],
+		[file: 'web/js/zk/ext/purify.js', name: 'dompurify', npm: 'dompurify', stamp: /DOMPurify ([\d.]+)/, licence: 'MPL-2.0 OR Apache-2.0'],
+		[file: 'web/js/zk/ext/fetch.js', name: 'whatwg-fetch', npm: 'whatwg-fetch', stamp: /github\/fetch v([\d.]+)/, licence: 'MIT'],
+		[file: 'web/js/zk/ext/focus-options-polyfill.js', name: 'focus-options-polyfill', npm: 'focus-options-polyfill', version: '1.6.0',
+		 sha256: '4df523d51145e241ab3d5e477c6177b6219644c4665701bca62b9d6e3bed7b36', licence: 'MIT'],
+		[file: 'web/js/zk/ext/inputdevicecapabilities-polyfill.js', name: 'inputdevicecapabilities-polyfill', purl: 'pkg:github/wicg/input-device-capabilities', version: '2024-02-21T10:23:32+08:00', upstream: null,
+		 sha256: '6474fa2b92c05f417038929927b5db56131dcad2fba774b7c83911de2c266dc9', licence: 'MIT'],
+		// copied into ZK's own sources, Java ones compiled into many classes: `from` is the module-relative source a stamp checks
+		[from: 'src/main/java/org/zkoss/zk/au/http/ServletRequestContext.java', name: 'commons-fileupload', purl: 'pkg:maven/commons-fileupload/commons-fileupload',
+		 version: '2025-06-23T12:47:52+08:00', upstream: null, stamp: /Licensed to the Apache Software Foundation/, licence: 'Apache-2.0',
+		 creator: [name: 'The Apache Software Foundation', url: ['https://commons.apache.org/proper/commons-fileupload/']], patched: true, multi: true],
+		[from: 'src/main/java/org/zkoss/zk/ui/sys/DigestUtilsHelper.java', name: 'commons-codec', purl: 'pkg:maven/commons-codec/commons-codec',
+		 version: '2024-09-09T15:36:50+08:00', upstream: '1.8', stamp: /commons-codec/, licence: 'Apache-2.0',
+		 creator: [name: 'The Apache Software Foundation', url: ['https://commons.apache.org/proper/commons-codec/']], patched: true, multi: true],
+		[file: 'web/js/zk/drag.ts', name: 'script.aculo.us', purl: 'pkg:github/madrobby/scriptaculous', version: '2025-05-13T16:24:00+08:00', upstream: '1.7.0',
+		 stamp: /script\.aculo\.us/, licence: 'MIT', creator: [name: 'Thomas Fuchs', url: ['http://script.aculo.us']], patched: true, multi: true],
+	],
+	zcommon: [
+		// outside web/, so the scan below misses them
+		[file: 'metainfo/xml/XMLSchema.dtd', also: ['metainfo/xml/datatypes.dtd', 'metainfo/xml/xml.xsd'], name: 'xml-schema-dtd', purl: 'pkg:generic/apache/xml-schema-dtd', version: '1.0',
+		 sha256: ['b08d561dd7be8843cc10e7d792345ff6d3d0d37bfd423d237496e699258e41c3', 'ec710bcaf10c273aa9a25bf1a315581f5d8c4ab4ae20b5b9a754e8b0accc3d4d',
+		          '916bf9bfdd32b5782b9a7154324ecf14d56ffdd5a6d41b255731132d84e3da7c'], licence: 'Apache-2.0',
+		 creator: [name: 'The Apache Software Foundation', url: ['https://www.apache.org']], executable: false],
+		[file: 'metainfo/xml/xhtml1-strict.dtd', also: ['metainfo/xml/xhtml1-transitional.dtd', 'metainfo/xml/xhtml1-frameset.dtd', 'metainfo/xml/xhtml-lat1.ent', 'metainfo/xml/xhtml-special.ent', 'metainfo/xml/xhtml-symbol.ent'],
+		 name: 'xhtml1-dtd', purl: 'pkg:generic/w3c/xhtml1-dtd', version: '1.0',
+		 sha256: ['56cd2441229d82e30fb936b98adae91dd5a72e96fa78e822aa7d7bc4f21da13c', 'c5c60018edeb3e007d86958bf03cef67b634c55c7986b0b5fe5946e489cd4058',
+		          'bd2a72b0060a0e4600d2c3b3c2a7d39e63981d46f9ac777715051777017c9aec', '3da1daad08f93b8aff7a32d5447f94853d517561d9c7d0c7bc3ee5c002d12a38',
+		          '7f9518026c59ccee47a02ed74e43f8946d92207d438a7f540a0f3c28f05fa27e', 'a6cd0f9c59e488b8c8e2de80c31c6811f316a3919cd9a0725b5390a8fc785d61'], licence: 'W3C',
+		 creator: [name: 'World Wide Web Consortium', url: ['https://www.w3.org']], executable: false],
+		[from: 'src/main/java/org/zkoss/lang/JavaScriptEscape.java', name: 'unbescape', purl: 'pkg:maven/org.unbescape/unbescape',
+		 version: '2021-10-12T11:41:34+08:00', upstream: null, stamp: /The UNBESCAPE team/, licence: 'Apache-2.0',
+		 creator: [name: 'The UNBESCAPE team', url: ['https://www.unbescape.org']], patched: true, multi: true],
+		[from: 'src/main/java/org/zkoss/idom/Verifier.java', name: 'jdom2', purl: 'pkg:maven/org.jdom/jdom2',
+		 version: '2021-10-12T11:41:34+08:00', upstream: null, stamp: /jdom2/, licence: 'LicenseRef-scancode-jdom',
+		 creator: [name: 'Jason Hunter & Brett McLaughlin', url: ['http://www.jdom.org']], patched: true, multi: true],
+		[from: 'src/main/java/org/zkoss/json/JSONObject.java', name: 'json-simple', purl: 'pkg:maven/com.googlecode.json-simple/json-simple',
+		 version: '2024-02-26T17:08:34+08:00', upstream: null, stamp: /FangYidong/, licence: 'Apache-2.0',
+		 creator: [name: 'Yidong Fang', url: ['https://code.google.com/archive/p/json-simple/']], patched: true, multi: true],
+		[from: 'src/main/java/org/zkoss/xel/zel/XelELResolver.java', name: 'apache-tomcat', purl: 'pkg:github/apache/tomcat',
+		 version: '2023-04-14T11:51:32+08:00', upstream: null, stamp: /StandardELContext/, licence: 'Apache-2.0',
+		 creator: [name: 'The Apache Software Foundation', url: ['https://tomcat.apache.org']], patched: true, multi: true],
+	],
+	zel    : [
+		[from: 'src/main/java/org/zkoss/zel/ELContext.java', name: 'apache-tomcat', purl: 'pkg:github/apache/tomcat',
+		 version: '2026-09-24T09:42:34+08:00', upstream: null, stamp: /Licensed to the Apache Software Foundation/, licence: 'Apache-2.0',
+		 creator: [name: 'The Apache Software Foundation', url: ['https://tomcat.apache.org']], patched: true, multi: true],
+	],
+	zkbind : [
+		[from: 'src/main/java/org/zkoss/bind/impl/KeyFactory.java', name: 'cojen', purl: 'pkg:maven/org.cojen/cojen',
+		 version: '2024-01-18T17:22:20+08:00', upstream: null, stamp: /Brian S O'Neill/, licence: 'Apache-2.0',
+		 creator: [name: "Brian S O'Neill", url: ['https://github.com/cojen/Cojen']], patched: true, multi: true],
+		[from: 'src/main/java/org/zkoss/bind/paranamer/Paranamer.java', name: 'paranamer', purl: 'pkg:maven/com.thoughtworks.paranamer/paranamer',
+		 version: '2026-09-24T09:42:34+08:00', upstream: null, stamp: /Paul Hammant/, licence: 'BSD-3-Clause',
+		 creator: [name: 'Paul Hammant', url: ['https://github.com/paul-hammant/paranamer']], patched: true, multi: true],
+		[from: 'src/main/java/org/zkoss/bind/paranamer/BytecodeReadingParanamer.java', name: 'asm', purl: 'pkg:maven/org.ow2.asm/asm',
+		 version: '2026-09-24T09:42:34+08:00', upstream: null, stamp: /INRIA, France Telecom/, licence: 'BSD-3-Clause',
+		 creator: [name: 'INRIA, France Telecom', url: ['https://asm.ow2.io']], patched: true, multi: true],
+	],
+]
+def marijn = [name: 'Marijn Haverbeke', url: ['https://codemirror.net']]
+def npmCreators = ['@codemirror': marijn, '@lezer': marijn, '@marijn': marijn, 'crelt': marijn, 'style-mod': marijn, 'w3c-keyname': marijn,
+                   'tslib': [name: 'Microsoft Corporation', url: ['https://github.com/microsoft/tslib']],
+                   '@fontsource-variable/inter': [name: 'The Inter Project Authors', url: ['https://github.com/rsms/inter']],
+                   'lucide-static': [name: 'Lucide Icons and Contributors', url: ['https://lucide.dev']]]
+def npmLicences = ['tslib': '0BSD', 'lucide-static': 'ISC AND MIT'] // the icons derived from Feather stay MIT
+// npm packages scripts/build-css.js copies into a module's jar, so no .src.js bundle names them
+def npmAssets = [zul: ['@fontsource-variable/inter', 'lucide-static']]
+def npmAssetNames = npmAssets.values().flatten() as Set
+
+// zkcml sets sbomExtra before applying this script; its own modules, the ones under sbomExtra.root, then carry sbomExtra.licence
+def extra = rootProject.findProperty('sbomExtra') ?: [:]
+sbomCreators += extra.creators ?: [:]
+sbomLicences += extra.licences ?: [:]
+sbomVendored += extra.vendored ?: [:]
+npmCreators += extra.npmCreators ?: [:]
+npmLicences += extra.npmLicences ?: [:]
+def zkRoot = buildscript.sourceFile.parentFile
+// a build outside zkcml's, e.g. zklinter's, finds the ZK modules it depends on in zkcml (sbomExtra.root) or in zk
+def moduleDir = { String name ->
+	if (name == rootProject.name) return rootProject.projectDir
+	rootProject.findProject(":$name")?.projectDir ?: [extra.root, zkRoot].findAll().collect { new File(it, name) }.find { new File(it, 'src').isDirectory() } ?: new File(zkRoot, name)
+}
+def jarOf = { String name, version -> new File(moduleDir(name), "build/libs/${name}-${version}.jar") }
+def importSpec = ~/(?:require\(\s*|import\s+(?!type\s)(?:[^'"]*?\s+from\s+)?|export\s+[^'"]*?\s+from\s+)['"]([^'"]+)['"]/
+def npmChain = ~/((?:node_modules\/(?:@[\w.-]+\/)?[\w.-]+\/)+)/ // a bundled module's path, nested installs included
+
+def resolveVendored = { Collection modules ->
+	def problems = [] as LinkedHashSet
+	def resolved = modules.collectEntries { module ->
+		def resources = new File(moduleDir(module), 'src/main/resources')
+		def files = sbomVendored[module] ?: []
+		def listed = (files*.file + files*.also.flatten().findAll()) as Set
+		def path = { File f -> resources.canonicalFile.toURI().relativize(f.canonicalFile.toURI()).path }
+		def js = rootProject.fileTree(new File(resources, 'web/js'))
+		js.matching { include '**/ext/**'; exclude '**/*.d.ts', '**/.*', '**/.*/**' }.each { f ->
+			if (!listed.contains(path(f))) problems << "${module}: ${path(f)} is not listed in sbomVendored".toString()
+		}
+		js.matching { include '**/*.ts'; exclude '**/*.d.ts' }.each { ts ->
+			(ts.text =~ importSpec).findAll { match, spec -> spec.startsWith('.') }.each { match, spec ->
+				def target = ['', '.js', '.mjs', '.ts', '/index.ts'].collect { new File(ts.parentFile, spec + it) }.find { it.isFile() }
+					?: new File(ts.parentFile, spec ==~ /.*\.m?js/ ? spec : "${spec}.js") // generated by the build
+				if (!target.name.endsWith('.ts') && !listed.contains(path(target)))
+					problems << "${module}: ${path(target)} is not listed in sbomVendored".toString()
+			}
+		}
+		[(module): files.collect { v ->
+			def src = v.from ? new File(moduleDir(module), v.from) : new File(resources, v.file)
+			def version = v.version
+			// the `also` files are checked with the entry's own: each must carry the stamp at the same version, or match its own sha256
+			def checked = [(v.from ?: v.file): src] + (v.also ?: []).collectEntries { [(it): new File(resources, it)] }
+			if (v.stamp) {
+				def m = src.getText('ISO-8859-1') =~ v.stamp
+				if (m.find()) version = m.groupCount() ? m.group(1) : version // a stamp without a group only checks the copy is still there
+				else problems << "${module}: ${v.from ?: v.file} no longer matches ${v.stamp}"
+				checked.drop(1).each { name, f ->
+					def other = f.getText('ISO-8859-1') =~ v.stamp
+					if (!other.find() || (other.groupCount() && other.group(1) != version)) problems << "${module}: ${name} no longer matches ${v.stamp} at ${version}"
+				}
+			} else {
+				def pins = v.sha256 instanceof List ? v.sha256 : [v.sha256]
+				if (pins.size() != checked.size()) problems << "${module}: ${v.from ?: v.file} pins ${pins.size()} sha256 for ${checked.size()} files"
+				else checked.eachWithIndex { name, f, i -> // autocrlf checkouts hash as LF
+					if (f.getText('ISO-8859-1').normalize().getBytes('ISO-8859-1').sha256() != pins[i]) problems << "${module}: ${name} changed; check its version, then update its sha256"
+				}
+			}
+			v + [version: version, purl: v.npm ? "pkg:npm/${v.npm.replace('@', '%40')}@${version}".toString() : v.purl]
+		}]
+	}
+	(new File(zkRoot, 'scripts/build-css.js').text =~ /node_modules\/((?:@[\w.-]+\/)?[\w.-]+)/).each { match, name ->
+		if (!(name in npmAssetNames)) problems << "scripts/build-css.js copies npm package ${name}; list it in npmAssets".toString()
+	}
+	if (problems)
+		throw new GradleException("SBOM: update sbom.gradle:\n  ${problems.join('\n  ')}")
+	resolved
+}
+
+tasks.register('verifySbomVendored') {
+	doLast { resolveVendored(rootProject.subprojects.findAll { it.file('src/main/resources/web/js').isDirectory() }*.name) }
+}
+
+// npm packages in a module: its npmAssets, then each node_modules path its .src.js bundles name, looked up in zk's lock first,
+// as webpack resolves zk's node_modules first
+def readLocks = { [zkRoot, extra.root ?: rootDir].unique().collect { [it, new JsonSlurper().parse(new File(it, 'package-lock.json')).packages] } }
+def npmPackages = { String module, Collection<String> bundleTexts, List locks ->
+	def keys = (npmAssets[module] ?: []).collect { "node_modules/${it}".toString() } as Set
+	bundleTexts.each { text -> (text =~ npmChain).each { match, chain -> keys << chain[0..-2] } }
+	keys.collect { key -> // entry is null for a package no lock lists, which the callers report rather than leave out
+		def hit = locks.findResult { root, packages -> packages[key] ? [new File(root, key), packages[key]] : null }
+		[key: key, name: key.substring(key.lastIndexOf('node_modules/') + 13), entry: hit?.getAt(1), dir: hit?.getAt(0)]
+	}
+}
+def npmLicence = { Map n -> npmLicences[n.name] ?: (n.entry.license instanceof String ? n.entry.license : null) }
+
+def noticeDirs = [rootDir, zkRoot].unique().collect { new File(it, 'licenses') }
+def apacheText = new File(zkRoot, 'licenses/Apache-2.0.txt')
+def apacheBlock = ~/(?s)\s*Apache License\s+Version 2\.0, January 2004.*?END OF TERMS AND CONDITIONS(\s*APPENDIX: How to apply the Apache License.*?limitations under the License\.)?/
+def readText = { File f -> f.getText('UTF-8').replace('\r', '').trim() }
+// The jar's own licence opens its META-INF/LICENSE; zkcml names its own with sbomExtra.licenceFile
+def ownLicence = { Project p ->
+	if (extra.licenceFile) return readText(new File(rootDir, extra.licenceFile)) + (extra.licenceNote ? "\n\n${extra.licenceNote}" : '')
+	readText(zkModuleLicences[p.name] == 'Apache-2.0' ? apacheText : new File(zkRoot, 'LICENSE'))
+}
+// META-INF/LICENSE and NOTICE in the Spring / Tomcat layout: the jar's own licence, then each third-party subcomponent's
+def writeLicence = { Project p, File out ->
+	def problems = []
+	def comps = []
+	def web = p.file('src/main/resources/web/js').isDirectory()
+	resolveVendored([p.name])[p.name].each { v -> comps << [name: v.name, version: v.version, licence: v.licence] }
+	def bundles = p.fileTree('codegen/resources').matching { include '**/*.src.js' }
+	if (web && bundles.isEmpty()) logger.warn("META-INF/LICENSE: ${p.name} has no .src.js bundles, its npm packages are not listed")
+	npmPackages(p.name, bundles.collect { it.getText('UTF-8') }, readLocks()).each { n ->
+		if (!n.entry) return problems << "${p.name} bundles ${n.key}, which no package-lock.json lists"
+		def licence = npmLicence(n)
+		if (!licence) problems << "no SPDX licence for npm package ${n.name}; add it to npmLicences in sbom.gradle"
+		comps << [name: n.name, version: n.entry.version, licence: licence, dir: n.dir]
+	}
+	def own = ownLicence(p)
+	def ownIsApache = own ==~ apacheBlock.pattern() + /\s*/
+	def usesApache = false
+	def find = { Map c, String name, String pattern -> // an npm package's own file, for its exact version, else licenses/<name>.<ext>
+		c.dir?.listFiles()?.find { it.name ==~ pattern } ?: noticeDirs.collect { new File(it, "${c.name.replace('/', '-')}${name}") }.find { it.isFile() }
+	}
+	def text = { Map c ->
+		def f = find(c, '.txt', /(?i)(licen[cs]e|copying)(\.(md|txt))?/)
+		if (!f) return problems << "no licence text for ${c.name}; add licenses/${c.name.replace('/', '-')}.txt"
+		readText(f).replaceAll(apacheBlock) {
+			usesApache = true
+			"\n\nLicensed under the Apache License, Version 2.0, whose text is ${ownIsApache ? 'included above' : 'at the end of this file'}."
+		}.trim()
+	}
+	comps = comps.unique { [it.name, it.version] }.sort { it.name }
+	def rule = '=' * 78
+	def subs = comps.collect { c -> ">>> ${c.name}${c.version ? " ${c.version}" : ''} (${c.licence}):\n\n${text(c)}\n" }
+	if (problems)
+		throw new GradleException("META-INF/LICENSE:\n  ${problems.join('\n  ')}")
+	['LICENSE', 'NOTICE'].each { new File(out, "META-INF/$it").delete() }
+	if (!comps) return
+	new File(out, 'META-INF').mkdirs()
+	new File(out, 'META-INF/LICENSE').text = "${own}\n\n${rule}\n\nZK ${p.name.toUpperCase()} SUBCOMPONENTS:\n\n" +
+		"This jar includes the following subcomponents,\neach with its own copyright notice and license terms. Your use of these\n" +
+		"subcomponents is subject to the terms and conditions of the following licenses.\n\n" +
+		subs.join('\n') + (usesApache && !ownIsApache ? "\n${rule}\n\nApache License, Version 2.0, as the subcomponents above refer to:\n\n${readText(apacheText)}\n" : '')
+	def notices = comps.collect { c -> find(c, '.NOTICE', /(?i)notice(\.(md|txt))?/) }.findAll().unique().collect { readText(it) }
+	new File(out, 'META-INF/NOTICE').text = "ZK ${p.name}\nCopyright (C) Potix Corporation. All Rights Reserved.\n\n" +
+		"This product includes third-party software, listed with its licenses in\nMETA-INF/LICENSE.\n" + notices.collect { "\n${it}\n" }.join('')
+}
+subprojects { p ->
+	def web = file('src/main/resources/web/js').isDirectory()
+	if (web || sbomVendored[p.name])
+		plugins.withId('java') {
+			def out = layout.buildDirectory.dir('generated/licence')
+			def licence = tasks.register('jarLicence') {
+				outputs.dir(out)
+				outputs.upToDateWhen { false } // reads the frontend bundles and package-lock.json
+				dependsOn tasks.matching { it.name == 'compileTypeScript' }
+				doLast { writeLicence(p, out.get().asFile) }
+			}
+			tasks.named('processResources') {
+				if (web) dependsOn ':verifySbomVendored'
+				from(licence) // through processResources, so jar, evalJar and zkbindIMPLJar all carry it
+			}
+			tasks.matching { it.name == 'sourcesJar' }.configureEach { from(licence) }
+		}
+}
+if (findProperty('gradleFrontendSkip') == 'false') // without the frontend build the jars have no bundles to read
+	tasks.named('check') { dependsOn tasks.matching { it.name in ['cyclonedxBom', 'cyclonedxBomPe'] } }
+
+def projectVersion = version // read now: Task.project at execution time is deprecated
+def runtimeClasspath = configurations.findByName('runtimeClasspath')
+// jars a module publishes besides its own, which no dependency graph lists; each pom's dependencies as zkbind/build.gradle writes them
+def extraJars = [zkbind: [[artifact: 'zkbind-api', task: 'zkbindAPIJar', drop: 'zul'], [artifact: 'zkbind-impl', task: 'zkbindIMPLJar']]]
+tasks.matching { it.name in ['cyclonedxBom', 'cyclonedxBomPe'] }.configureEach { task ->
+	task.outputs.upToDateWhen { false } // its inputs miss the vendored files and jars read below
+	rootProject.subprojects.each { p ->
+		p.plugins.withId('java') {
+			task.dependsOn(p.tasks.named('jar'))
+			task.dependsOn(p.tasks.matching { it.name in (extraJars[p.name] ?: [])*.task })
+			task.mustRunAfter(p.tasks.matching { it.name == 'evalJar' })
+		}
+	}
+	task.doLast {
+		def bomFile = new File(task.destination.get(), "${task.outputName.get()}.json")
+		def evalFile = new File(bomFile.parentFile, "${task.outputName.get()}-eval.json")
+		try {
+			def bom = new JsonSlurper().parse(bomFile)
+			def problems = []
+			def isZk = { Map c -> c.group in ['org.zkoss.zk', 'org.zkoss.common'] && c.version == projectVersion }
+			def isOwn = { Map c -> extra.licence && (c.name == rootProject.name || rootProject.findProject(":${c.name}") || (extra.root && new File(extra.root, "${c.name}/src").isDirectory())) }
+			// a ZK module a build resolves from a repository, e.g. zklinter's zkmax, is read from that jar, not from a local module build
+			def resolvedJars = (runtimeClasspath?.resolvedConfiguration?.resolvedArtifacts ?: [])
+				.collectEntries { a -> [("${a.moduleVersion.id.group}:${a.name}:${a.moduleVersion.id.version}".toString()): a.file] }
+			def jarFor = { Map c -> resolvedJars["${c.group}:${c.name}:${c.version}".toString()] ?: jarOf(c.name, c.version) }
+			def digest = { InputStream input ->
+				def mds = ['SHA-256', 'SHA-512'].collectEntries { [(it): MessageDigest.getInstance(it)] }
+				input.withCloseable { it.eachByte(65536) { byte[] buf, int n -> mds.values()*.update(buf, 0, n) } }
+				mds.collect { alg, md -> [alg: alg, content: md.digest().encodeHex().toString()] }
+			}
+			def fileProps = { String filename, boolean executable, boolean archive ->
+				(filename ? [[name: 'bsi:component:filename', value: filename]] : []) + [
+					[name: 'bsi:component:executable', value: executable ? 'executable' : 'non-executable'],
+					[name: 'bsi:component:archive', value: archive ? 'archive' : 'no archive'],
+					[name: 'bsi:component:structured', value: archive ? 'structured' : 'unstructured']]
+			}
+			// TR-03183-2 reads the deployable's hash from a distribution reference, not from `hashes`
+			def addHash = { Map c, String url, List hashes ->
+				if (!c.hashes) c.hashes = hashes
+				c.externalReferences = (c.externalReferences ?: []).findAll { it.type != 'distribution' } + [[type: 'distribution', url: url, hashes: hashes.findAll { it.alg == 'SHA-512' }]]
+			}
+			def licenceOf = { Map c ->
+				if (isZk(c) || c.is(bom.metadata.component)) return isOwn(c) ? extra.licence : (zkModuleLicences[c.name] ?: zkLicence)
+				def key = "${c.group}:${c.name}"
+				def listed = sbomLicences["$key:${c.version}"] ?: sbomLicences[key]
+				if (listed) return listed
+				def ids = c.licenses*.license*.id
+				if (ids && !ids.contains(null)) return ids.join(' OR ') // a POM listing several licences offers a choice
+				problems << "no SPDX licence for $key; add it to sbomLicences"
+				null
+			}
+			def enrich = { Map c ->
+				def creator = sbomCreators.findAll { k, v -> c.group == k || c.group.startsWith("${k}.") }.max { it.key.length() }?.value
+				if (creator) {
+					c.supplier = creator
+					c.manufacturer = creator
+				} else problems << "no creator for ${c.group}:${c.name}; add its group to sbomCreators"
+				def licence = licenceOf(c)
+				if (licence) c.licenses = [[expression: licence, acknowledgement: 'concluded']]
+				if (c.purl?.contains('type=jar')) {
+					def jar = isZk(c) ? jarFor(c) : null
+					def hashes = c.hashes ?: (jar?.exists() ? digest(jar.newInputStream()) : null)
+					if (hashes) addHash(c, c.purl, hashes)
+					else logger.warn("SBOM: no hash for ${c.purl}")
+					c['properties'] = (c['properties'] ?: []) + fileProps("${c.name}-${c.version}.jar", true, true)
+				}
+			}
+
+			enrich(bom.metadata.component)
+			bom.components.each(enrich)
+
+			// a single-jar build's own jar, e.g. zklinter's, can hold copied code too
+			def subject = bom.metadata.component
+			// sorted, since the plugin lists components in no fixed order and the first copy of an upstream takes its purl as ref
+			def owners = (bom.components.findAll(isZk) + (isZk(subject) && subject.purl?.contains('type=jar') ? [subject] : [])).sort { it.name }
+			def vendoredRefs = [] as Set
+			def usedRefs = [] as Set
+			def vendored = resolveVendored(owners*.name)
+			// dependsOn may name another module's copy, e.g. zkmax's jQuery plugins zk's jquery
+			def vendoredPurls = vendored.values().flatten().collectEntries { [(it.name): it.purl] }
+			vendored.each { module, resolved ->
+				def owner = owners.find { it.name == module }
+				// an `also` file belongs to the same library: same purl, but its own filename and hash
+				// the same upstream copied into two modules keeps one purl, so the second copy takes a ref of its own
+				def files = resolved.collectMany { v -> [v + [ref: usedRefs.add(v.purl) ? v.purl : "${owner.purl}#${v.name}".toString()]] +
+					(v.multi ? [] : (v.also ?: []).collect { f -> v + [file: f, ref: "${owner.purl}#${f}".toString(), dependsOn: null] }) }
+				def jar = jarFor(owner)
+				files.each { v ->
+					def patched = v.patched || !v.creator
+					def creator = patched ? potix : v.creator
+					def c = [type: 'library', 'bom-ref': v.ref, supplier: creator, manufacturer: creator, name: v.name, version: v.version, purl: v.purl]
+					c.licenses = [[expression: v.licence, acknowledgement: 'concluded']]
+					// an entry versioned by the date of Potix's last commit names the upstream release it came from in `upstream`, null when there is none
+					def upstream = v.containsKey('upstream') ? v.upstream : v.version
+					if (patched) c.pedigree = [
+						// a maven or npm purl takes the release version; a github one would need a tag, which the table does not record
+					ancestors: [[type: 'library', name: v.name] + (upstream ? [version: upstream] : [:])
+						+ [purl: upstream && v.purl ==~ /pkg:(maven|npm)\/[^@]+/ ? "${v.purl}@${upstream}".toString() : v.purl] + (v.creator ? [supplier: v.creator] : [:])],
+						patches  : [[type: 'unofficial']],
+						notes    : 'Copy bundled in ZK and patched for it, maintained by Potix' + (upstream == v.version ? '; keeps the upstream version so advisories still match' : '')]
+					// a component of several files, e.g. Java sources compiled into many classes, has no single filename or hash
+					c['properties'] = fileProps(v.multi ? null : new File(v.file).name, v.executable != false, false)
+					if (!v.multi) {
+						def hashes = jar.exists() ? new ZipFile(jar).withCloseable { z -> z.getEntry(v.file)?.with { e -> digest(z.getInputStream(e)) } } : null
+						if (hashes) addHash(c, "${owner.purl}#${v.file}".toString(), hashes)
+						else logger.warn("SBOM: no hash for ${v.file}, ${jar} is not built or lacks it")
+					}
+					bom.components << c
+					def deps = (v.dependsOn ?: []).collect { vendoredPurls[it] }
+					if (deps.contains(null)) problems << "${module}: ${v.name} depends on ${v.dependsOn}, not all of them vendored"
+					bom.dependencies << [ref: v.ref, dependsOn: deps.findAll()]
+				}
+				vendoredRefs.addAll(files*.purl)
+				if (files) bom.dependencies.find { it.ref == owner.'bom-ref' }.dependsOn += files*.ref
+			}
+
+			// npm packages webpack bundled, read from each module's built bundles
+			def locks = readLocks()
+			def npm = [:]
+			def bundlesRead = true // false once a module with web/js has no jar, e.g. an included build's that was not built
+			owners.each { owner ->
+				def jar = jarFor(owner)
+				if (!jar.exists()) {
+					logger.warn("SBOM: npm packages of ${owner.name} not listed, ${jar} is not built")
+					if (new File(moduleDir(owner.name), 'src/main/resources/web/js').isDirectory()) bundlesRead = false
+					return
+				}
+				def texts = new ZipFile(jar).withCloseable { z ->
+					def bundles = z.entries().findAll { it.name.endsWith('.src.js') }
+					if (!bundles && z.entries().find { it.name.startsWith('web/js/') && it.name.endsWith('.js') })
+						problems << "${jar.name} has no .src.js bundles to read its npm packages from"
+					bundles.collect { e -> z.getInputStream(e).getText('UTF-8') }
+				}
+				npmPackages(owner.name, texts, locks).each { n ->
+					if (!n.entry) return problems << "${owner.name} bundles ${n.key}, which no package-lock.json lists" // else `complete` below would not hold
+					def purl = "pkg:npm/${n.name.replace('@', '%40')}@${n.entry.version}".toString()
+					if (purl in vendoredRefs) return
+					npm.computeIfAbsent(purl) { [name: n.name, entry: n.entry, owners: [] as Set] }.owners << owner.'bom-ref'
+				}
+			}
+			npm.each { purl, n ->
+				def creator = npmCreators.find { k, v -> n.name == k || n.name.startsWith("${k}/") }?.value
+				def licence = npmLicence(n)
+				if (!creator) problems << "no creator for npm package ${n.name}; add it to npmCreators"
+				if (!licence) problems << "no SPDX licence for npm package ${n.name}; add it to npmLicences"
+				def c = [type: 'library', 'bom-ref': purl, supplier: creator, manufacturer: creator, name: n.name, version: n.entry.version, purl: purl,
+				         licenses: [[expression: licence, acknowledgement: 'concluded']], properties: fileProps(null, !(n.name in npmAssetNames), false)]
+				if (n.entry.integrity?.startsWith('sha512-'))
+					addHash(c, n.entry.resolved, [[alg: 'SHA-512', content: n.entry.integrity.substring(7).decodeBase64().encodeHex().toString()]])
+				bom.components << c
+				def deps = (n.entry.dependencies ?: [:]).keySet().collect { d -> npm.find { k, o -> o.name == d }?.key }.findAll()
+				bom.dependencies << [ref: purl, dependsOn: deps]
+			}
+			def depended = bom.dependencies.findAll { npm[it.ref] }*.dependsOn.flatten() as Set
+			owners.each { owner ->
+				def imported = rootProject.fileTree(new File(moduleDir(owner.name), 'src/main/resources/web/js')).matching { include '**/*.ts'; exclude '**/*.d.ts' }
+					.collectMany { ts -> (ts.text =~ importSpec).findAll { match, spec -> !spec.startsWith('.') }.collect { match, spec -> spec.split('/').take(spec.startsWith('@') ? 2 : 1).join('/') } } as Set
+				def direct = npm.findAll { purl, n -> owner.'bom-ref' in n.owners && (n.name in imported || !depended.contains(purl)) }.keySet()
+				if (direct) bom.dependencies.find { it.ref == owner.'bom-ref' }.dependsOn += direct
+			}
+
+			// a module's extra published jars, e.g. zkbind-api and zkbind-impl, only in the build that makes them
+			owners.each { owner ->
+				def p = rootProject.findProject(":${owner.name}")
+				if (!p) return
+				(extraJars[owner.name] ?: []).each { x ->
+					def file = p.tasks.findByName(x.task)?.archiveFile?.get()?.asFile
+					def purl = "pkg:maven/${owner.group}/${x.artifact}@${owner.version}?type=jar".toString()
+					def c = [type: 'library', 'bom-ref': purl, supplier: potix, manufacturer: potix, group: owner.group, name: x.artifact, version: owner.version,
+					         purl: purl, licenses: owner.licenses, properties: fileProps("${x.artifact}-${owner.version}.jar", true, true)]
+					if (file?.exists()) addHash(c, purl, digest(file.newInputStream()))
+					else logger.warn("SBOM: no hash for ${purl}, ${file} is not built")
+					bom.components << c
+					def deps = bom.dependencies.find { it.ref == owner.'bom-ref' }?.dependsOn ?: []
+					bom.dependencies << [ref: purl, dependsOn: x.drop ? deps.findAll { it.contains('?type=jar') && !it.contains("/${x.drop}@") } : deps]
+					bom.dependencies.find { it.ref == bom.metadata.component.'bom-ref' }?.dependsOn?.add(purl)
+				}
+			}
+
+			if (problems)
+				throw new GradleException("SBOM:\n  ${problems.join('\n  ')}")
+			bom.metadata.lifecycles = [[phase: 'build']]
+			bom.metadata.manufacturer = potix
+			bom.metadata.supplier = potix
+			bom.compositions = [[aggregate: bundlesRead ? 'complete' : 'incomplete', dependencies: bom.dependencies*.ref]]
+			bomFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(bom))
+
+			// deploy-script makes the Eval SBOM by renaming versions, but EE Eval jars differ from the official ones
+			def evalHashes = bom.components.findAll { isOwn(it) && rootProject.findProject(":${it.name}") && it.purl?.contains('type=jar') }.collectEntries { c ->
+				def jar = new File(moduleDir(c.name), "build/libs/eval/${c.name}-${c.version}.jar")
+				jar.exists() ? [(c.'bom-ref'): digest(jar.newInputStream())] : [:]
+			}
+			evalFile.delete()
+			if (evalHashes) {
+				def eval = new JsonSlurper().parseText(bomFile.text)
+				eval.serialNumber = "urn:uuid:${UUID.randomUUID()}".toString()
+				// the Eval distribution ships zkcml's cmldoc/LICENSE, a trial agreement, instead of the official licence
+				([eval.metadata.component] + eval.components).findAll(isOwn).each { it.licenses = [[expression: extra.evalLicence, acknowledgement: 'concluded']] }
+				eval.components.findAll { evalHashes[it.'bom-ref'] }.each { c ->
+					c.hashes = evalHashes[c.'bom-ref']
+					def dist = c.externalReferences?.find { it.type == 'distribution' }
+					if (dist) dist.hashes = c.hashes.findAll { it.alg == 'SHA-512' }
+					else addHash(c, c.purl, c.hashes) // the official jar was not built
+				}
+				evalFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(eval))
+			}
+		} catch (e) {
+			bomFile.delete() // never ship the plugin's raw output in place of the enriched one
+			evalFile.delete() // nor the previous run's Eval SBOM
+			throw e
+		}
+	}
+}
