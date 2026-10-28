@@ -492,6 +492,7 @@ task prepareBin() {
 			into "$buildDir/tmp/eebin/dist/lib/theme"
 			from("$rootDir/dist/lib") {
 				include "**/iceblue_c.jar"
+				include "**/iceblue.jar"
 				include "**/breeze.jar"
 				include "**/sapphire.jar"
 				include "**/silvertail.jar"
