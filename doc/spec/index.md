@@ -13,7 +13,7 @@ under [`../`](../).
 | Spec | What it governs |
 |------|-----------------|
 | [DESIGN.md](DESIGN.md) | Root design-language rulebook — surface palette, text colors, elevation hierarchy |
-| [design-decisions.md](design-decisions.md) | Scope & won't-do decisions — dark mode, dedicated high-contrast theme, RTL backlog, theme priority, absent font props, ZK version support |
+| [design-decisions.md](design-decisions.md) | Scope & won't-do decisions — dark mode, dedicated high-contrast theme, RTL backlog, theme priority, absent font props, ZK version support, mesh empty area (ZK-5921) |
 | [component-state-model.md](component-state-model.md) | Readonly vs disabled state model — popup controls render readonly as active, grey reserved for disabled |
 | [new-component-checklist.md](new-component-checklist.md) | **Cross-cutting Definition of Done** for new components — CTV / brand / forced-colors / density / tablet obligations per harness role; the mandatory contract `## Cross-cutting features` section + `x-*` check-id vocabulary |
 | [brand-override.md](brand-override.md) | Brand-color override: seed one token (`--zk-color-primary`) → containers/overlays derive via `oklch(from …)` absolute tone |

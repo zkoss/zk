@@ -48,3 +48,9 @@ The 10.2.1 → 10.3.0.1 upgrade introduces **no DOM or CSS-class breakage** for 
 - **ZK's new CSS-variable pipeline** — Marble already ships the custom-property architecture ZK is introducing.
 
 Triage each stock bug-fix delta individually rather than porting blindly; most are not-applicable for the above reasons.
+
+## 8. Mesh empty area (ZK-5921) — not adopted
+
+ZK-5921 gives IceBlue's Listbox, Grid and Tree containers (`.z-*-header`, the mesh itself, `.z-*-footer`) a colour different from their cells, and moves the footer's top border from the container to the footer cells, so the area to the right of the last column (when the columns are narrower than the mesh) reads as "empty".
+
+Marble deliberately **does not adopt** this: the header, body and footer style continues into that area, the way a filler column does in MUI DataGrid. Header containers and header cells are both transparent; the footer background (`--zk-color-surface-container-low` / `--zk-grid-foot-bg`) and its top border (`--zk-color-outline-variant`) sit on the footer container. `F102_ZK_5921Test` asserts the IceBlue model and is tagged `IceBlueOnly`.
