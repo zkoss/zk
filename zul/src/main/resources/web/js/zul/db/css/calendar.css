@@ -101,6 +101,30 @@
     cursor: default;
 }
 
+/* ─── Month-change animation ─────────────────────────────────────────────────
+   Calendar.ts wraps the old and new body tables in .z-calendar-anima > -inner and
+   slides -inner by `left`. -inner is twice as wide as the viewport and holds the two
+   tables side by side; without these rules they stack vertically and the content
+   height collapses during the transition (ZK-4239). Inside the wrapper the tables are no
+   longer flex items of the calendar, so they take the wrapper's height explicitly
+   (as IceBlue's `-body { height: 100% }`). */
+.z-calendar-anima {
+    overflow: hidden;
+    position: relative;
+}
+
+.z-calendar-anima-inner {
+    height: 100%;
+    width: 200%;
+    position: absolute;
+}
+
+.z-calendar-anima-inner table {
+    width: 50%;
+    height: 100%;
+    float: left;
+}
+
 /* ─── Calendar body TABLE ────────────────────────────────────────────────── */
 .z-calendar-body {
     border-collapse: collapse;
