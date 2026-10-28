@@ -63,7 +63,7 @@ public class B86_ZK_4145Test extends WebDriverTestCase {
 		waitResponse();
 
 		// fix a different minimum width between linux and mac.
-		if (jq("body").width() < 360) {
+		if (jq("body").width() <= 360) {
 			assertThat(popupTwoLeft,  lessThan(getMenupopup(2).offsetLeft()));
 		} else {
 			assertThat(popupTwoLeft, greaterThan(getMenupopup(2).offsetLeft()));

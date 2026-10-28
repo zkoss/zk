@@ -14,14 +14,14 @@ public class F80_ZK_2708Test extends WebDriverTestCase {
 		connect();
 		JQuery rowlayout = jq(".z-rowlayout").eq(0);
 		int totalWidth = rowlayout.outerWidth();
-		int childrenWidth = 0;
+		double childrenWidth = 0;
 		for (int i = 0; i < rowlayout.children().length(); i++) {
 			JQuery rowchildren = rowlayout.children().eq(i);
 			if (i > 0) {
 				JQuery rowchildrenpre = rowlayout.children().eq(i - 1);
 				assertTrue(Math.abs(rowchildren.width() - rowchildrenpre.width()) < 2);
 			}
-			childrenWidth += rowchildren.outerWidth(true);
+			childrenWidth += Double.parseDouble(rowchildren.eval("outerWidth(true)"));
 		}
 		assertTrue(Math.abs(totalWidth - childrenWidth) < 10);
 
@@ -36,7 +36,7 @@ public class F80_ZK_2708Test extends WebDriverTestCase {
 				//test offset
 				assertTrue(rowchildren.outerWidth(true) < rowchildrenpre.outerWidth(true));
 			}
-			childrenWidth += rowchildren.outerWidth(true);
+			childrenWidth += Double.parseDouble(rowchildren.eval("outerWidth(true)"));
 		}
 		assertTrue(Math.abs(totalWidth - childrenWidth) < 10);
 
@@ -49,7 +49,7 @@ public class F80_ZK_2708Test extends WebDriverTestCase {
 				JQuery rowchildrenpre = rowlayout.children().eq(i - 1);
 				assertTrue(Math.abs(rowchildren.width() - rowchildrenpre.width()) < 2);
 			}
-			childrenWidth += rowchildren.outerWidth(true);
+			childrenWidth += Double.parseDouble(rowchildren.eval("outerWidth(true)"));
 		}
 		assertTrue(Math.abs(totalWidth - childrenWidth) < 12); //due to 1px offset
 
@@ -65,7 +65,7 @@ public class F80_ZK_2708Test extends WebDriverTestCase {
 				JQuery rowchildrenpre = rowlayout.children().eq(i - 1);
 				assertTrue(Math.abs(rowchildren.width() - rowchildrenpre.width()) < 2);
 			}
-			childrenWidth += rowchildren.outerWidth(true);
+			childrenWidth += Double.parseDouble(rowchildren.eval("outerWidth(true)"));
 		}
 		assertTrue(Math.abs(totalWidth - childrenWidth) < 10);
 	}

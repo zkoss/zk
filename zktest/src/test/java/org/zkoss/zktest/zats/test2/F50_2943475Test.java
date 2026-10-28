@@ -36,15 +36,15 @@ public class F50_2943475Test extends WebDriverTestCase {
 			click(jq("@radio:eq(4)")); // center
 			waitForPageReloaded();
 			checkProgressbarPosition(processing,
-					() -> (jq("html").width() - processing.width()) / 2,
-					() -> (jq("html").height() - processing.height()) / 2);
+					() -> (jq("html").width() - processing.outerWidth()) / 2,
+					() -> (jq("html").height() - processing.outerHeight()) / 2);
 			waitResponse();
 
 			click(jq("@radio:eq(8)")); // right,bottom
 			waitForPageReloaded();
 			checkProgressbarPosition(processing,
-					() -> jq("html").width() - processing.width(),
-					() -> jq("html").height() - processing.height());
+					() -> jq("html").width() - processing.outerWidth(),
+					() -> jq("html").height() - processing.outerHeight());
 		} finally {
 			click(jq("@radio:eq(0)")); // restore to default
 			waitForPageReloaded();

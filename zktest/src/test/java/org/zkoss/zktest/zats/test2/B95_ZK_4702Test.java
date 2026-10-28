@@ -24,6 +24,7 @@ public class B95_ZK_4702Test extends WebDriverTestCase {
 	@Test
 	public void test() {
 		connect();
-		assertEquals(jq(".z-tree-body").height(), jq(".z-treerow").height() * 5, 5); //because times 5
+		double rowHeight = Double.parseDouble(jq(".z-treerow").eval("outerHeight()"));
+		assertEquals(jq(".z-tree-body").height(), rowHeight * 5, 5); //because times 5
 	}
 }

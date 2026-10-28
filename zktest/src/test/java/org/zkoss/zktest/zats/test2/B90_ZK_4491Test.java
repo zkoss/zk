@@ -29,11 +29,12 @@ public class B90_ZK_4491Test extends WebDriverTestCase {
 		click(jq("@button"));
 		waitResponse();
 		JQuery grid = jq("@grid");
-		int width = grid.width();
+		JQuery column = jq("@column");
+		int width = column.outerWidth();
 		click(grid);
 		JQuery body = grid.find(".z-grid-body");
 		body.scrollTop(body.scrollHeight());
 		waitResponse();
-		assertThat(grid.width(), greaterThan(width));
+		assertThat(column.outerWidth(), greaterThan(width));
 	}
 }

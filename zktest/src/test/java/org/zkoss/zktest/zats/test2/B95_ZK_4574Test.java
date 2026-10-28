@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
+import org.zkoss.test.webdriver.ztl.JQuery;
 
 /**
  * @author jameschu
@@ -26,7 +27,7 @@ public class B95_ZK_4574Test extends WebDriverTestCase {
 		connect();
 		click(jq("@button").eq(0));
 		waitResponse();
-		assertEquals(jq("$div1").height(), jq("$div1 @label").height(), 1);
+		assertEquals(jq("$div1").height(), labelLineHeight(), 1);
 		waitResponse();
 		click(jq("@button").eq(1));
 		waitResponse();
@@ -36,6 +37,11 @@ public class B95_ZK_4574Test extends WebDriverTestCase {
 		assertEquals(jq("$div1").height(), jq("$div2").height(), 1);
 		click(jq("@button").eq(3));
 		waitResponse();
-		assertEquals(jq("$div1").height(), jq("$div1 @label").height(), 1);
+		assertEquals(jq("$div1").height(), labelLineHeight(), 1);
+	}
+
+	private int labelLineHeight() {
+		JQuery label = jq("$div1 @label");
+		return Math.max(label.height(), parseInt(label.css("line-height")));
 	}
 }

@@ -11,7 +11,7 @@ Copyright (C) 2021 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zktest.zats.test2;
 
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
@@ -32,8 +32,9 @@ public class B65_ZK_2409Test extends WebDriverTestCase {
 		act.sendKeys(Keys.NUMPAD0).perform();
 		waitResponse();
 		JQuery comboboxPopup = jq(".z-combobox-popup.z-combobox-open");
+		// ZK-2409: the popup sits flush on the input; its top snaps to a whole pixel, the input's may not
 		MatcherAssert.assertThat("the popup should appear on top of the combobox",
-			comboboxPopup.offsetTop() + comboboxPopup.height(), lessThan(bottomCombobox.offsetTop()));
+			rect(comboboxPopup, "bottom"), lessThanOrEqualTo(rect(bottomCombobox, "top") + 1));
 
 		act.sendKeys(Keys.NUMPAD0).perform();
 		waitResponse();
@@ -49,6 +50,10 @@ public class B65_ZK_2409Test extends WebDriverTestCase {
 		act.sendKeys(Keys.BACK_SPACE).perform();
 		waitResponse();
 		MatcherAssert.assertThat("it is bug if popup do not appear on top of the combobox",
-			comboboxPopup.offsetTop() + comboboxPopup.height(), lessThan(bottomCombobox.offsetTop()));
+			rect(comboboxPopup, "bottom"), lessThanOrEqualTo(rect(bottomCombobox, "top") + 1));
+	}
+
+	private double rect(JQuery element, String side) {
+		return Double.parseDouble(getEval(element + "[0].getBoundingClientRect()." + side));
 	}
 }

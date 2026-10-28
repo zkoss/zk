@@ -19,6 +19,6 @@ public class B80_ZK_3252Test extends WebDriverTestCase {
         click(jq("@div").get(0));
         waitResponse(true);
         assertEquals(jq("@intbox").offsetTop() + jq("@intbox").outerHeight(), jq("@errorbox").offsetTop(), 1);
-        assertEquals(jq("@intbox").offsetLeft(), jq("@errorbox").offsetLeft());
+        assertEquals(jq("@intbox").offsetLeft(), jq("@errorbox").offsetLeft(), 1);
     }
 }

@@ -28,10 +28,10 @@ public class B70_ZK_2929Test extends WebDriverTestCase {
 		JQuery popup = jq(".z-combobox-popup.z-combobox-open");
 		click(widget("@combobox:eq(0)").$n("btn"));
 		waitResponse(true);
-		Assertions.assertEquals(popup.width(), popup.scrollWidth(), 1);
+		Assertions.assertEquals(parseInt(popup.get(0).get("clientWidth")), popup.scrollWidth(), 1);
 
 		click(widget("@combobox:eq(1)").$n("btn"));
 		waitResponse(true);
-		Assertions.assertEquals(popup.width(), popup.scrollWidth(), 1);
+		Assertions.assertEquals(parseInt(popup.get(0).get("clientWidth")), popup.scrollWidth(), 1);
 	}
 }

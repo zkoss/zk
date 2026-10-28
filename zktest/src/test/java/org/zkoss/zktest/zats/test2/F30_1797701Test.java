@@ -26,7 +26,9 @@ public class F30_1797701Test extends WebDriverTestCase {
 		Actions act = getActions();
 		waitResponse();
 		int sliderWidth = jq("@slider").width();
-		act.clickAndHold(toElement(jq(".z-slider-button"))).moveByOffset(sliderWidth, 0).perform();
+		// 1797701: drag to the end of the thumb's track; a full slider width can reach past the viewport
+		int track = sliderWidth - jq(".z-slider-button").outerWidth();
+		act.clickAndHold(toElement(jq(".z-slider-button"))).moveByOffset(track, 0).perform();
 		waitResponse();
 		Assertions.assertEquals("Here is a position : 100", jq(".z-slider-popup").text().trim());
 		act.release().perform();

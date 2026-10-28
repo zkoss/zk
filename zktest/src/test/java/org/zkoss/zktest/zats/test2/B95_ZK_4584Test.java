@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -26,6 +27,8 @@ import org.zkoss.test.webdriver.WebDriverTestCase;
 /**
  * @author jameschu
  */
+// IceBlue-only: it expects IceBlue's tablet spinner, whose button overlays the input's right edge; Marble's tablet button sits beside the input inside the widget.
+@Tag("IceBlueOnly")
 @ForkJVMTestOnly
 public class B95_ZK_4584Test extends WebDriverTestCase {
 	@RegisterExtension

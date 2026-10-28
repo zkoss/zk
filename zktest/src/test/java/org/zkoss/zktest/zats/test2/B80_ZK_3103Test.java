@@ -42,7 +42,8 @@ public class B80_ZK_3103Test extends WebDriverTestCase {
 			JQuery lbb = jq(".z-listbox-body:eq(" + i + ")");
 			JQuery li = jq(".z-listitem:contains(Item 21):eq(" + i + ")");
 			assertTrue(lbb.offsetTop() + lbb.height() >= li.offsetTop() + li.height());
-			assertTrue(lbb.offsetTop() <= li.offsetTop());
+			// ZK-3103: scrollTop is whole pixels, so an item at a fractional offset can sit up to 1px above the body
+			assertTrue(lbb.offsetTop() <= li.offsetTop() + 1);
 		}
 		click(clearBtn);
 		waitResponse(true);
@@ -63,7 +64,7 @@ public class B80_ZK_3103Test extends WebDriverTestCase {
 			waitResponse(true);
 		}
 		for (int i = 0; i <=2; i++) {
-			click(jq(".z-paging-next i:eq(" + i + ")"));
+			click(jq(".z-paging-next:eq(" + i + ")"));
 			waitResponse(true);
 		}
 		for (int i = 0; i <=3; i++) {
@@ -72,7 +73,7 @@ public class B80_ZK_3103Test extends WebDriverTestCase {
 			assertEquals(lbb.offsetTop(), li.offsetTop());
 		}
 		for (int i = 0; i <=2; i++) {
-			click(jq(".z-paging-previous i:eq(" + i + ")"));
+			click(jq(".z-paging-previous:eq(" + i + ")"));
 			waitResponse(true);
 		}
 		for (int i = 0; i <=3; i++) {

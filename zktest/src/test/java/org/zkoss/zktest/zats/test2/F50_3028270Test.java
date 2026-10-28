@@ -38,7 +38,11 @@ public class F50_3028270Test extends WebDriverTestCase {
 				.perform();
 		waitResponse(true);
 		JQuery btn = slider.find(".z-slider-button");
-		Assertions.assertEquals(slider.width() / 2 + 50, btn.positionLeft() + btn.width() / 2, 2);
+		double left = parseDouble(slider + ".offset().left");
+		double cursor = parseDouble("zk.currentPointer[0]") - left;
+		double unit = slider.width() / 100.0;
+		// 3028270: the thumb stops on the slider's 1/100 grid, so it may sit up to one step short of the cursor
+		Assertions.assertEquals(cursor - unit / 2, parseDouble(btn + ".offset().left") - left + btn.width() / 2.0, unit / 2 + 0.5);
 	}
 
 	private void testHorSlider(JQuery horSlider) {
@@ -48,6 +52,10 @@ public class F50_3028270Test extends WebDriverTestCase {
 				.perform();
 		waitResponse(true);
 		JQuery btn = horSlider.find(".z-slider-button");
-		Assertions.assertEquals(horSlider.height() / 2 - 50, btn.positionTop() + btn.height() / 2, 2);
+		Assertions.assertEquals(horSlider.height() / 2 - 50, btn.offsetTop() - horSlider.offsetTop() + btn.height() / 2, 2);
+	}
+
+	private double parseDouble(String script) {
+		return Double.parseDouble(getEval(script));
 	}
 }

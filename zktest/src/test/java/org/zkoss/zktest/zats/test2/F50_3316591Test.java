@@ -21,8 +21,6 @@ import org.zkoss.test.webdriver.ztl.JQuery;
  * @author rudyhuang
  */
 public class F50_3316591Test extends WebDriverTestCase {
-	private static final int ARROW_PADDING = 8;
-
 	@Test
 	public void test() {
 		connect();
@@ -86,13 +84,17 @@ public class F50_3316591Test extends WebDriverTestCase {
 
 		click(jq("@radio:contains(Overlap_before)"));
 		waitResponse();
-		Assertions.assertEquals(textbox.offsetTop() + textbox.innerHeight() + ARROW_PADDING, errorbox.offsetTop() + errorbox.innerHeight(), 1);
+		Assertions.assertEquals(textbox.offsetTop() + textbox.innerHeight() + arrowPadding(errorbox), errorbox.offsetTop() + errorbox.innerHeight(), 1);
 		Assertions.assertEquals(textbox.offsetLeft(), errorbox.offsetLeft(), 1);
 
 		click(jq("@radio:contains(Overlap_after)"));
 		waitResponse();
-		Assertions.assertEquals(textbox.offsetTop() + textbox.innerHeight() + ARROW_PADDING, errorbox.offsetTop() + errorbox.innerHeight(), 1);
+		Assertions.assertEquals(textbox.offsetTop() + textbox.innerHeight() + arrowPadding(errorbox), errorbox.offsetTop() + errorbox.innerHeight(), 1);
 		Assertions.assertEquals(textbox.offsetLeft() + textbox.innerWidth(), errorbox.offsetLeft() + errorbox.innerWidth(), 1);
+	}
+
+	private int arrowPadding(JQuery errorbox) {
+		return parseInt(errorbox.css("padding-top")) - parseInt(errorbox.css("padding-bottom"));
 	}
 
 	private void checkBefore_(JQuery textbox, JQuery errorbox) {

@@ -35,6 +35,11 @@ public class B70_ZK_2331Test extends WebDriverTestCase {
 		click(jq(".z-combobox-button"));
 		waitResponse();
 		JQuery popup = jq(".z-combobox-popup");
-		assertTrue(popup.offsetTop() + popup.height() < jq("@combobox").offsetTop(), "popup shouldn't overlap the input.");
+		// ZK-2331: the popup sits flush on the input; its top snaps to a whole pixel, the input's may not
+		assertTrue(rect(popup, "bottom") <= rect(jq("@combobox"), "top") + 1, "popup shouldn't overlap the input.");
+	}
+
+	private double rect(JQuery element, String side) {
+		return Double.parseDouble(getEval(element + "[0].getBoundingClientRect()." + side));
 	}
 }
