@@ -89,6 +89,13 @@
     padding: 0;
 }
 
+/* A non-scrollable horizontal menubar wraps its items onto further rows (like
+   IceBlue) instead of painting them past the bar's background. The scrollable
+   bar keeps one row: its UL sits in .z-menubar-content and is not matched. */
+.z-menubar-horizontal > ul {
+    flex-wrap: wrap;
+}
+
 /* Vertical menubar */
 .z-menubar-vertical {
     flex-direction: column;
