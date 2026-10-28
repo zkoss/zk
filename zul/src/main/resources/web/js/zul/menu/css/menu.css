@@ -285,7 +285,8 @@
 .z-menupopup {
     position: absolute;
     z-index: 1600;
-    margin: 2px 0 0;
+    /* flush with the anchor, as MD3 md-menu and Compose DropdownMenu default to a zero offset */
+    margin: 0;
     padding: var(--zk-spacing-1) 0;
     background-color: var(--zk-menupopup-bg);
     border-radius: var(--zk-menupopup-radius);
