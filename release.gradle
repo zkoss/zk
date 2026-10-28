@@ -509,6 +509,29 @@ task prepareBin() {
 				include "**/zuljsp.jar"
 			}
 		}
+		// each of them needs its entry in zkdoc/THIRD-PARTY-LICENSES, which every bin's doc/ ships; an ext entry's version is checked against
+		// the jar's pom.properties or else its manifest's Implementation-Version when the jar has either, a theme's against the jar its bundle holds
+		def headings = file("$rootDir/zkdoc/THIRD-PARTY-LICENSES").readLines().findAll { it.startsWith('>>> ') }
+		def stale = ['ext', 'theme', 'zkforge'].collectMany { dir ->
+			file("$buildDir/tmp/eebin/dist/lib/$dir").listFiles().findResults { jar ->
+				def heading = headings.find { it.startsWith(">>> ${jar.name} ") }
+				if (!heading) return "dist/lib/$dir/${jar.name} has no entry"
+				def gav = heading =~ /^>>> \S+\s+([\w.-]+):([\w.-]+) (\S+)/
+				def held = heading =~ /holding (\S+\.jar)/
+				new java.util.jar.JarFile(jar).withCloseable { z ->
+					if (held.find()) return z.getEntry(held.group(1)) ? null : "dist/lib/$dir/${jar.name} does not hold the ${held.group(1)} its entry names"
+					if (!gav.find()) return dir == 'ext' ? "dist/lib/ext/${jar.name}'s entry names no group:artifact version" : null // ZK's own themes and add-ons
+					def poms = z.entries().findAll { it.name ==~ /META-INF\/maven\/[^\/]+\/[^\/]+\/pom\.properties/ }
+						.collect { e -> z.getInputStream(e).withCloseable { input -> new Properties().tap { load(input) } } }
+					def pom = poms.find { it.groupId == gav.group(1) && it.artifactId == gav.group(2) }
+					if (poms && !pom) return "dist/lib/$dir/${jar.name} holds no ${gav.group(1)}:${gav.group(2)}, which its entry names"
+					def version = pom?.version ?: z.manifest?.mainAttributes?.getValue('Implementation-Version')?.tokenize()?.getAt(0)
+					version && version != gav.group(3) ? "dist/lib/$dir/${jar.name} is ${version}, its entry says ${gav.group(3)}" : null
+				}
+			}
+		}
+		if (stale)
+			throw new GradleException("zkdoc/THIRD-PARTY-LICENSES:\n  ${stale.join('\n  ')}")
 		zkprojects.each { prjName, dir ->
 			// subprojects jars
 			copy {
@@ -530,6 +553,7 @@ task prepareBin() {
 			into "$buildDir/tmp/eebin/doc"
 			from("$rootDir/zkdoc") {
 				include "**/release-note"
+				include "**/THIRD-PARTY-LICENSES"
 			}
 			from("$rootDir/../zkcml/cmldoc/CML_LICENSE") {
 				rename "CML_LICENSE", "LICENSE"
