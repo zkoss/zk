@@ -18,6 +18,7 @@ ZK 11.0.0
   ZK-6096: Component-level stubonly Policy (Conditional Inheritance)
   ZK-6085: WCAG 2.2 AA Feasibility Study
   ZK-6112: a theme of Material Design 3
+  ZK-6120: Create SBOM for each new version
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
