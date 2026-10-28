@@ -89,6 +89,7 @@ ext {
 apply {
 	from 'release.gradle'
 	from 'javadoc.gradle'
+	from 'sbom.gradle'
 }
 
 // add repositories here for checkstyle plugin
