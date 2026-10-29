@@ -35,6 +35,7 @@
     --zk-index-slider-tooltip: 60000; /* slider drag tooltip (static, no float) */
     --zk-index-busy-mask: 89000;   /* per-widget busy scrim — MUST stay < busy-loading */
     --zk-index-busy-loading: 89500;/* per-widget busy spinner (sits above its scrim) */
+    --zk-index-log: 99000;         /* zk.log debug box (zk.ts doLog sets no inline z-index) */
     --zk-index-fullscreen: 99999;  /* tbeditor full-screen cover */
     --zk-index-error: 9999999;     /* fatal JS-exception box — outranks everything */
 }
