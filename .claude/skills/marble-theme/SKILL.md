@@ -114,6 +114,10 @@ EE/PE has its own in `../zkcml`). There is no `npm run build:css`, `watch`, `aud
 called directly, and the audit and `!important` tooling is the four skill scripts above. Details
 and the Playwright projects: `reference/verification.md`.
 
+**Capture screenshot baselines before you edit CSS.** They are not in the repository (screenshots
+differ between machines): run `npm run baseline:capture -- <playwright args>` in `zkthemelab/`
+on the unedited CSS, edit, rebuild, then `npm run baseline:compare -- <same args>`.
+
 ## Reference
 
 | File | Read it when |

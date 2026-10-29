@@ -111,8 +111,8 @@ For each remove candidate:
    interaction then measures (see the colorbox example). Test the **mobile UA** too (ZK's
    touch code paths differ) via a `devices['iPad …']` context.
 
-> **Don't gate on screenshot baselines.** Committed `toHaveScreenshot` baselines drift and
-> are often stale. The trustworthy gate is computed-style / behavioral A/B on the live app.
+> **Don't gate on screenshot baselines alone.** A `toHaveScreenshot` baseline only shows that
+> pixels moved, not which declaration moved them. The trustworthy gate is computed-style / behavioral A/B on the live app.
 
 ### 5 — Guard every accepted removal
 
