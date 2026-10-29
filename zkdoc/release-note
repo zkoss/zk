@@ -6,7 +6,8 @@ ZK 9.6.7
   ZK-5707: avoid invoking a event listener after a session expired
 
 * Upgrade Notes
-  + upgrade dompurify to 3.4.15 to fix vulnerabilities
+  + upgrade dompurify to 3.4.17 to fix vulnerabilities
+  + upgrade moment to 2.31.0 to fix vulnerabilities
   + upgrade jython to 2.7.4 and rhino to 1.7.14.1 (both in zk) to fix vulnerabilities
   + upgrade tomcat-jasper-el to 9.0.121 and jackson-databind to 2.22.1 (both in zkmax) to fix vulnerabilities
   + the following dependencies have known vulnerabilities, users are recommended to review them if used:
