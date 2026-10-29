@@ -50,7 +50,9 @@ the property and prefixed `.z-page ` onto every selector. Marble does **not** us
 3. **Java picks the variant** — [`MarbleThemeProvider.getThemeURIs`](../../zul/src/main/java/org/zkoss/zul/theme/StandardThemeProvider.java)
    reads the property with `Boolean.parseBoolean(Library.getProperty(…))` and inserts the
    chosen file **immediately before the `~./zul/css/zk.wcs` widget bundle**, preserving the
-   reset's historical "loads first" cascade position.
+   reset's historical "loads first" cascade position. It does so only for the default theme
+   (`isDefaultTheme()`); a legacy theme jar such as iceblue ships no `reset.css` and keeps
+   resetting in its own `norm.css.dsp`, so no reset link is added for it.
 
 ### Build note — CleanCSS and `@scope`
 
