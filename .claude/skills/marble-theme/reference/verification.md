@@ -91,6 +91,7 @@ Config: `zkthemelab/src/test/playwright/playwright.config.ts`.
 | `framework` | framework-class compliance |
 | `component-theme-variables` | the per-component knob tests, one or more per component, each on that component's own preview page |
 | `reset` | reset scoping |
+| `iceblue` | IceBlue on ZK 11 through the `zktheme=iceblue` cookie (the iceblue jar is a `runtimeOnly` dependency): no 404 on the page, `z-icon-*` glyphs drawn |
 | `hit-target` | minimum touch-target sizes |
 | `responsive` | breakpoint behaviour |
 | `print` | print stylesheet |

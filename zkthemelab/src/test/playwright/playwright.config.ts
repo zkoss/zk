@@ -103,6 +103,13 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // IceBlue on ZK 11 (zktheme=iceblue cookie): no 404 from Marble's reset.css, z-icon-* glyphs drawn.
+      // See iceblue-theme.spec.ts.
+      name: 'iceblue',
+      testMatch: /iceblue-theme\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Interaction guard: an interactive knob must be reachable at its own
       // centre (elementFromPoint), not merely rendered. Catches a sibling
       // overlay swallowing the pointer — invisible to every style-based check.

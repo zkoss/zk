@@ -13,10 +13,19 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
-	mavenLocal()
+	mavenLocal() {
+		content {
+			excludeModule "org.zkoss.theme", "iceblue"
+		}
+	}
 
 	maven {
 		url = uri('https://mavensync.zkoss.org/maven2')
+	}
+
+	// the iceblue theme jar, as in zktest
+	maven {
+		url = uri('https://mavensync.zkoss.org/eval')
 	}
 
 	maven {
@@ -41,6 +50,8 @@ dependencies {
 	implementation "org.zkoss.zk:zkmax:${version}"
 	implementation "org.zkoss.zk:zuti:${version}"
 	implementation "org.zkoss.zk:za11y:${version}"
+	// served only with the zktheme=iceblue cookie (iceblue-theme.spec.ts); WEB-INF/zk.xml keeps Marble the default
+	runtimeOnly "org.zkoss.theme:iceblue:11.0.0+"
 	runtimeOnly 'org.apache-extras.beanshell:bsh:2.0b6'
 	providedCompile 'javax.servlet:servlet-api:2.4'
 }
