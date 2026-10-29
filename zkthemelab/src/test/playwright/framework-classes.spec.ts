@@ -97,3 +97,18 @@ test.describe('framework classes — drag/drop + frozen', () => {
     expect(a).not.toBe(d);
   });
 });
+
+// Macro component root (.z-macro, js/zul/wgt/css/_macro.css). It sits in zk-components, so a display
+// utility on the macro (zk-utilities) must still win; an unlayered rule would beat every utility.
+test.describe('framework classes — macro root', () => {
+  test('m1 .z-macro is inline-block, and display utilities override it', async ({ page }) => {
+    await page.goto(DND, { waitUntil: 'networkidle' });
+    const plain = await injected(page, '<div class="z-macro"></div>', '', ['display', 'minWidth']);
+    expect(plain.display).toBe('inline-block');
+    expect(plain.minWidth).toBe('1px');
+    const hidden = await injected(page, '<div class="z-macro z-d-none"></div>', '', ['display']);
+    expect(hidden.display).toBe('none');
+    const flex = await injected(page, '<div class="z-macro z-d-flex"></div>', '', ['display']);
+    expect(flex.display).toBe('flex');
+  });
+});
