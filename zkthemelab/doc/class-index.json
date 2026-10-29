@@ -10241,6 +10241,12 @@
    "z-notification-warning",
    "z-page"
   ],
+  "pv/zk-log-guard.zul": [
+   "z-button",
+   "z-div",
+   "z-log",
+   "z-page"
+  ],
   "radiogroup.zul": [
    "z-border-bottom",
    "z-d-contents",
