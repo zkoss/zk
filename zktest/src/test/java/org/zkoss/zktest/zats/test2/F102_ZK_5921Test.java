@@ -17,9 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
 
-// IceBlueOnly: ZK-5921 gives IceBlue's header, body and footer containers a colour different from
-// their cells and moves the footer's top border to the cells; Marble does not adopt it and keeps one
-// surface and the footer border on the container (doc/spec/design-decisions.md §8).
+// IceBlue-only: ZK-5921 colours the header/body/footer containers apart from their cells; Marble keeps one surface (design-decisions.md §8).
 @Tag("IceBlueOnly")
 public class F102_ZK_5921Test extends WebDriverTestCase {
     

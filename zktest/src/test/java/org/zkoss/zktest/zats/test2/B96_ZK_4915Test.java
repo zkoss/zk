@@ -28,7 +28,7 @@ public class B96_ZK_4915Test extends WebDriverTestCase {
 		}
 	}
 
-	// IceBlueOnly: a collapsed navbar centres the badge on the icon in IceBlue; Marble overlaps the icon's corner.
+	// IceBlue-only: a collapsed navbar centres the badge on the icon; Marble overlaps the icon's corner.
 	@Test
 	@Tag("IceBlueOnly")
 	public void collapsedBadgeCenteredOnIcon() {

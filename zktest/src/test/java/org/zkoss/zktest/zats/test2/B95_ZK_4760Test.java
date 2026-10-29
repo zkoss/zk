@@ -38,8 +38,7 @@ public class B95_ZK_4760Test extends WebDriverTestCase {
 		click(jq(".z-messagebox-button"));
 	}
 
-	// IceBlueOnly: IceBlue keeps a long unbroken message on one line and scrolls the viewport;
-	// Marble wraps it instead (see F110_ZK_6084_MessageboxReflowTest).
+	// IceBlue-only: IceBlue keeps a long unbroken message on one line and scrolls; Marble wraps it (F110_ZK_6084_MessageboxReflowTest).
 	@Test
 	@Tag("IceBlueOnly")
 	public void testLongMessageScrolls() throws Exception {
