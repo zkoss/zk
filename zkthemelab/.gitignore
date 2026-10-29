@@ -1,2 +1,4 @@
 test-results/
 playwright-report/
+# local screenshot baselines, captured per machine (scripts/visual-baseline.sh)
+doc/screenshots/
