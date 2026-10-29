@@ -82,6 +82,7 @@ ZK 11.0.0
   ZK-6192: rangeslider / multislider: the vertical tooltip is cut off when the slider sits at the right edge of the page or of an overflow:hidden container
   ZK-6218: errorbox: jumps above its field when the window holding the field is clicked
   ZK-6236: Remove unused closure-compiler-unshaded dependency
+  ZK-6237: Combobox with hflex="min" clips the value under the dropdown button
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on

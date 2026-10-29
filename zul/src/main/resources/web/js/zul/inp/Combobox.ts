@@ -697,9 +697,13 @@ export class Combobox extends zul.inp.ComboWidget {
 	override getChildMinSize_(attr: zk.FlexOrient, wgt: zul.LabelImageWidget): number {
 		const result = super.getChildMinSize_(attr, wgt);
 		if (attr == 'w' && result == 0) {
-			// use label instead
-			const zkn = zk(wgt.$n());
-			return zkn.textWidth(wgt.getLabel()) + zkn.padBorderWidth();
+			// use label instead, measured by the input as it looks while edited: its padding holds the button
+			const n = jq(this.$n()), inplace = this.getInplaceCSS(), hideInplace = n.hasClass(inplace),
+				zkn = zk(this.getInputNode());
+			if (hideInplace) n.removeClass(inplace);
+			const size = zkn.textWidth(wgt.getLabel()) + zkn.padBorderWidth();
+			if (hideInplace) n.addClass(inplace);
+			return size;
 		}
 		return result;
 	}
