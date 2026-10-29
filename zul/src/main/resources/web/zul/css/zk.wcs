@@ -21,5 +21,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	  the current servlet context will be passed.
 	<function class="foo.Foo" name="outFoo"/>
 	-->
+	<!-- For compatibility with the legacy theme jars (iceblue and the like), which ship their own Font Awesome;
+	     StandardThemeProvider skips it for the default theme -->
+	<stylesheet href="~./zul/font/font-awesome.css.dsp"/>
 	<stylesheet href="~./zul/css/norm.css.dsp"/>
 </css>

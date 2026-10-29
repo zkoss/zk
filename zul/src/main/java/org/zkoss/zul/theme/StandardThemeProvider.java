@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.zkoss.lang.Library;
-import org.zkoss.lang.Strings;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.theme.StandardTheme;
 import org.zkoss.zk.ui.Execution;
@@ -47,10 +46,20 @@ public class StandardThemeProvider implements ThemeProvider {
 	private static final String BROWSER_DEFAULT = "org.zkoss.zul.theme.browserDefault";
 	private static final String RESET_GLOBAL = "~./zul/css/reset.css";
 	private static final String RESET_EMBED = "~./zul/css/reset-embed.css";
+	private static final String FONT_FOLDER = "~./zul/font/";
 
 	protected static String getThemeFileSuffix() {
 		String suffix = Themes.getCurrentTheme();
 		return StandardTheme.DEFAULT_NAME.equals(suffix) ? null : suffix;
+	}
+
+	/**
+	 * Returns whether the current theme is the default theme (Marble), which ships
+	 * its own reset stylesheet and no Font Awesome.
+	 * @since 11.0.0
+	 */
+	protected static boolean isDefaultTheme() {
+		return getThemeFileSuffix() == null;
 	}
 
 	private void bypassURI(List<Object> uris, String suffix) {
@@ -84,8 +93,9 @@ public class StandardThemeProvider implements ThemeProvider {
 	/**
 	 * Marble ships a reset stylesheet that must be loaded immediately before ZK's
 	 * widget-CSS bundle ({@code zk.wcs}) so it keeps its "first" cascade position in
-	 * the page. This method inserts the reset URI right before the first entry that
-	 * starts with {@link #DEFAULT_WCS}, before the non-default-theme suffix bypass runs.
+	 * the page. For the default theme this method inserts the reset URI right before the
+	 * first entry that starts with {@link #DEFAULT_WCS}; for any other theme it only applies
+	 * the theme suffix to that entry, since a legacy theme resets in its own norm.css.dsp.
 	 *
 	 * <p>Which reset stylesheet is served is controlled by the library property
 	 * {@code org.zkoss.zul.theme.browserDefault} (boolean, default {@code false}):
@@ -97,16 +107,15 @@ public class StandardThemeProvider implements ThemeProvider {
 	 * is embedded inside another (non-ZK) page.</li>
 	 * </ul>
 	 *
-	 * <p>Since ZK 11.0.0 this method inserts the reset stylesheet; earlier versions only
-	 * applied the non-default-theme suffix to the widget-CSS bundle.
+	 * <p>Since ZK 11.0.0 this method inserts the reset stylesheet for the default theme;
+	 * earlier versions only applied the non-default-theme suffix to the widget-CSS bundle.
 	 */
 	public Collection<Object> getThemeURIs(Execution exec, List<Object> uris) {
-		insertResetURI(uris);
-
-		String suffix = getThemeFileSuffix();
-
-		if (!Strings.isEmpty(suffix))
-			bypassURI(uris, suffix);
+		// for compatibility with the legacy themes (iceblue and the like), which reset in their own norm.css.dsp
+		if (isDefaultTheme())
+			insertResetURI(uris);
+		else
+			bypassURI(uris, getThemeFileSuffix());
 
 		return uris;
 	}
@@ -120,7 +129,11 @@ public class StandardThemeProvider implements ThemeProvider {
 	}
 
 	public String beforeWidgetCSS(Execution exec, String uri) {
-		if (uri.startsWith("~./zul/css/") || uri.startsWith("~./js/zul/") || uri.startsWith("~./zul/font/")) {
+		// zk.wcs keeps font-awesome.css.dsp for compatibility with the legacy theme jars;
+		// the default theme ships no Font Awesome, so skip it
+		if (uri.startsWith(FONT_FOLDER) && isDefaultTheme())
+			return null;
+		if (uri.startsWith("~./zul/css/") || uri.startsWith("~./js/zul/") || uri.startsWith(FONT_FOLDER)) {
 			uri = ServletFns.resolveThemeURL(uri);
 		}
 
