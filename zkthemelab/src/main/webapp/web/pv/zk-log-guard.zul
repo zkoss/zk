@@ -1,0 +1,7 @@
+<?page title="zk.log box" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for zk-log.spec.ts: calls zk.log on load, so zk.ts doLog() adds the div.z-log box
+     (styled by zul/wgt/css/_log.css). Lives under pv/ so gallery-scan, forced-colors-gallery and
+     font-size-equivalence do not pick it up as a page. -->
+<zk xmlns:w="client">
+<div w:onBind="zk.log('zk.log box fixture')"/>
+</zk>

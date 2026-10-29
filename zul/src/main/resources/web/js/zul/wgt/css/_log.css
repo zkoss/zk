@@ -1,0 +1,28 @@
+/* zk.log box (IceBlue norm.less div.z-log), created by zk.ts doLog(); it has no widget and no
+   css-uri in lang.xml, so this file is bundled into footer.css.dsp. It is out of flow at the
+   bottom-right of the page; in flow it grows a 100%-height page, adds a scrollbar, and changes the
+   window width that onClientInfo reports.
+   Component layer: the close button carries .z-button, whose font-size lives in zk-components, so
+   in zk-base the button rule below would lose to it whatever its specificity (12px -> 14px). */
+
+@layer zk-components {
+div.z-log {
+    width: 50%;
+    text-align: right;
+    position: absolute;
+    right: var(--zk-spacing-2);
+    bottom: var(--zk-spacing-1);
+    z-index: var(--zk-index-log);
+}
+
+div.z-log textarea {
+    width: 100%;
+    border-color: var(--zk-color-primary);
+    outline: 0;
+    box-shadow: var(--zk-elevation-1);
+}
+
+div.z-log button {
+    font-size: var(--zk-typescale-body-small-size);
+}
+}

@@ -184,6 +184,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // zk.log box: z-index token and close-button font size (_log.css). See zk-log.spec.ts.
+      name: 'zk-log',
+      testMatch: /zk-log\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Icon avatar glyph is 60% of the avatar (avatar.css). See avatar-icon-size.spec.ts.
       name: 'avatar-icon',
       testMatch: /avatar-icon-size\.spec\.ts/,

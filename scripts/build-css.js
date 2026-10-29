@@ -289,8 +289,8 @@ const footerFiles = [
     // runtime by zk/widget.ts + zul/mesh/Frozen.ts. Stock ships no CSS for most, so the
     // theme must define them. See the file's header comment + doc/contracts/framework-classes.md.
     'zul/css/base/_dnd.css',
-    // Framework classes ported from IceBlue norm.less.
-    'zul/css/base/_norm.css',
+    // zk.log box created by zk/zk.ts doLog() (IceBlue norm.less div.z-log). See the file's header comment.
+    'js/zul/wgt/css/_log.css',
 ];
 
 // marble.css.dsp = za11y's accessibility rules, one sheet for Marble. za11y only.
