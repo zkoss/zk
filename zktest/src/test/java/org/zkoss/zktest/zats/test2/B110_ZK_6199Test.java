@@ -93,7 +93,7 @@ public class B110_ZK_6199Test extends WebDriverTestCase {
 		assertEquals("1:ZK-6199.txt", jq("$result").text(), "only the replacement file must reach the callback");
 	}
 
-	// IceBlueOnly: the expected values are the IceBlue defaults of the ZK-6199 variables; Marble keeps its own.
+	// IceBlue-only: expects the IceBlue defaults of the ZK-6199 variables; Marble keeps its own.
 	@Test
 	@Tag("IceBlueOnly")
 	public void styleUploadRowsWithIceBlueDefaults(@TempDir Path directory) throws IOException {

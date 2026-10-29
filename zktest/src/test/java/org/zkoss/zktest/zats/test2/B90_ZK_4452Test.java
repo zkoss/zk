@@ -18,9 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.zkoss.test.webdriver.WebDriverTestCase;
 import org.zkoss.test.webdriver.ztl.JQuery;
 
-// IceBlueOnly: IceBlue draws the error border on the input and repeats it on the button's left border.
-// Marble draws it on the outer container for Bandbox and Datebox (input and button borders are 0px)
-// and on three sides each of the input and the button for Combobox.
+// IceBlue-only: error border on the input and the button's left edge; Marble puts it on the outer box (Bandbox, Datebox) or three sides of input and button (Combobox).
 @Tag("IceBlueOnly")
 public class B90_ZK_4452Test extends WebDriverTestCase {
 	@Test
