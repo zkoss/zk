@@ -34,6 +34,7 @@
 | `--zk-index-slider-tooltip` | 60000 | slider 拖曳提示 | **load-bearing**(靜態,無 float) |
 | `--zk-index-busy-mask` | 89000 | 元件級 busy 遮罩 | **load-bearing**(須 < busy-loading) |
 | `--zk-index-busy-loading` | 89500 | 元件級 busy spinner | **load-bearing**(在自己遮罩之上) |
+| `--zk-index-log` | 99000 | `zk.log` 除錯框 `div.z-log` | **load-bearing**(`zk.ts` `doLog()` 不設 inline z-index) |
 | `--zk-index-fullscreen` | 99999 | tbeditor 全螢幕 | **load-bearing**(非 floating) |
 | `--zk-index-error` | 9999999 | 致命 JS 例外框 | **load-bearing**(壓過一切,含 runtime 1800+N) |
 
@@ -104,7 +105,7 @@
 
 - `_zindex.css` 是 unlayered `:root` token 檔(同其他 token 檔)。
 - 必須列於 `scripts/build-css.js` 的 `normFiles`(token 區塊、`_splitter.css` 之後)—— 此陣列**硬編碼**、非自動掃描,漏列會**靜默不打包**。
-- token 進 `norm.css.dsp`(最先載入);各元件 `.css.dsp` 以 `var(--zk-index-*)` **無 fallback** 消費(同 Component Theme Variables 慣例)。`loadingbar` 落在 `footer.css.dsp`、`misc`/`error`/`busy` 落在 `norm.css.dsp`。
+- token 進 `norm.css.dsp`(最先載入);各元件 `.css.dsp` 以 `var(--zk-index-*)` **無 fallback** 消費(同 Component Theme Variables 慣例)。`loadingbar`、`log` 落在 `footer.css.dsp`、`misc`/`error`/`busy` 落在 `norm.css.dsp`。
 
 ---
 
