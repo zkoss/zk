@@ -5,8 +5,9 @@ Marble actually renders. `settings.gradle` is a composite build that substitutes
 `org.zkoss.zk:zul` (and its siblings) with the `:zul` project in `../../zk`, so the pages show your
 working tree, not a published jar.
 
-Marble needs no registration here — it is `zul`'s core theme, and `WEB-INF/zk.xml` sets no theme
-property. To confirm which theme is being served, read the reset stylesheet href in the served
+Marble needs no registration here — it is `zul`'s core theme. The IceBlue theme jar is also on the
+class path (for the `iceblue` Playwright project), so `WEB-INF/zk.xml` sets
+`org.zkoss.theme.preferred=marble`; a `zktheme=iceblue` cookie serves IceBlue instead. To confirm which theme is being served, read the reset stylesheet href in the served
 HTML: Marble carries **no theme segment** (`/zkres/web/<v>/zul/css/reset.css`) and precedes
 `zk.wcs`.
 

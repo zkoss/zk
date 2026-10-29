@@ -9,4 +9,10 @@
 		<name>org.zkoss.web.util.resource.dir</name>
 		<value>/web</value>
 	</library-property>
+	<!-- The iceblue jar is on the class path for iceblue-theme.spec.ts. Without this property the
+	     highest-priority registered theme would be served; a zktheme=iceblue cookie still selects iceblue. -->
+	<library-property>
+		<name>org.zkoss.theme.preferred</name>
+		<value>marble</value>
+	</library-property>
 </zk>
