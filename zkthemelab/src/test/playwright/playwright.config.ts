@@ -191,6 +191,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // A month's 1st inside a daterangebox range band paints like the band (daterangebox.css). See daterangebox-anchor.spec.ts.
+      name: 'daterangebox-anchor',
+      testMatch: /daterangebox-anchor\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // zk.log box: z-index token and close-button font size (_log.css). See zk-log.spec.ts.
       name: 'zk-log',
       testMatch: /zk-log\.spec\.ts/,
