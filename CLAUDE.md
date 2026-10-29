@@ -106,6 +106,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 - 某主題 jar 缺某檔，先查同一 ZK 版本的同一主題 jar；版本落差要描述為版本不一致，不寫成主題本身的特性。
 - RD 文件只提支援的主題（ZK 10+：iceblue_c、Theme Pack）；breeze、sapphire、silvertail、atlantic 自 10.0.0 已棄用。
 - 舊主題缺的檔案若另一主題以不同名稱存在（`button.css` vs `button.css.dsp`），在該主題內 fallback；只屬 Marble 的檔案（`reset.css`、`fonts.css`）不 fallback。
+- 11.0 起 Font Awesome（樣式表與字型）只在獨立的舊主題 jar（iceblue、ruby 等），預設主題 Marble 不含。修舊主題的問題時，zul 要同時處理「預設主題」與「額外載入的舊主題 jar」兩種情形，不把舊主題資產還原進 zul。判斷預設主題用具名方法（如 `isDefaultTheme()`），不在呼叫處寫 `getThemeFileSuffix() == null`。
 - 留在 repo 的孤兒產物：先問哪個主題或功能仍請求它；若只有範圍外的消費者（IceBlue、退役流程）會請求，建議移除，並把範圍外的消費者記錄下來。
 
 ### 設計師審查（Jess）
