@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?script content="zk.tabletUIEnabled = true;"?>
+<!--
+B110-ZK-6237.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Oct 29 14:16:32 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Both comboboxes should show their whole value; the dropdown button must not cover the end of "juan" or "marcus".
+		2. Click the inplace combobox to edit it: the dropdown button appears and must not cover the end of "marcus".
+		3. Click "toggle button": the last combobox shows its dropdown button, which must not cover the end of "marcus"; click again and it shrinks back.
+	</label>
+	<div>
+		<combobox id="cb1" hflex="min" value="juan">
+			<comboitem label="juan"/>
+			<comboitem label="marcus"/>
+			<comboitem label="pedro"/>
+		</combobox>
+	</div>
+	<div>
+		<combobox id="cb2" hflex="min" value="marcus">
+			<comboitem label="juan"/>
+			<comboitem label="marcus"/>
+			<comboitem label="pedro"/>
+		</combobox>
+	</div>
+	<div>
+		<combobox id="cb3" hflex="min" value="marcus" inplace="true">
+			<comboitem label="juan"/>
+			<comboitem label="marcus"/>
+			<comboitem label="pedro"/>
+		</combobox>
+	</div>
+	<div>
+		<combobox id="cb4" hflex="min" value="marcus" buttonVisible="false">
+			<comboitem label="juan"/>
+			<comboitem label="marcus"/>
+			<comboitem label="pedro"/>
+		</combobox>
+	</div>
+	<button id="toggle" label="toggle button" onClick="cb4.setButtonVisible(!cb4.isButtonVisible())"/>
+</zk>

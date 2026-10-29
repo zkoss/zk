@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6237-2.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Mon Nov 02 11:14:58 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. On a tablet, tap the inplace timebox, then tap this text: the timebox must keep its width instead of shrinking to the input's own width.
+	</label>
+	<hbox width="400px">
+		<timebox id="tb" inplace="true" hflex="1"/>
+	</hbox>
+</zk>

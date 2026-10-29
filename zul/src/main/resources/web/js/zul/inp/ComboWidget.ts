@@ -70,6 +70,9 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 
 		if (o !== buttonVisible || opts?.force) {
 			zul.inp.RoundUtl.buttonVisible(this, buttonVisible);
+			// the button's room in the input's padding changed, so the width hflex="min" cached is stale
+			if (this._hflex == 'min')
+				zUtl.fireSized(this);
 		}
 
 		return this;
@@ -231,7 +234,9 @@ export class ComboWidget extends zul.inp.InputWidget<string> {
 				jq(this.getInputNode()).addClass(inplace);
 				jq(n).addClass(inplace);
 				this.onSize();
-				n.style.width = this.getWidth() ?? '';
+				// should not clear node width if hflex is true, as RoundUtl.doBlur_
+				if (!this.getHflex())
+					n.style.width = this.getWidth() ?? '';
 			}
 		}
 	}
