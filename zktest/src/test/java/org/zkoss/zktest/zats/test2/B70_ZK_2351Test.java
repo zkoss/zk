@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.Rectangle;
 
 import org.zkoss.test.webdriver.ExternalZkXml;
 import org.zkoss.test.webdriver.ForkJVMTestOnly;
@@ -34,23 +36,29 @@ public class B70_ZK_2351Test extends TouchWebDriverTestCase {
 		connect();
 
 		Element btnUp = widget("@doublespinner:eq(1)").$n("btn-up");
-		tap(toElement(btnUp));
+		tapCenter(btnUp);
 		waitResponse();
-		tap(toElement(btnUp));
+		tapCenter(btnUp);
 		waitResponse();
 		assertEquals("2", jq("@doublespinner:eq(0) input").val());
 
 		Element btnDown = widget("@doublespinner:eq(0)").$n("btn-down");
-		tap(toElement(btnDown));
+		tapCenter(btnDown);
 		waitResponse();
-		tap(toElement(btnDown));
+		tapCenter(btnDown);
 		waitResponse();
-		tap(toElement(btnDown));
+		tapCenter(btnDown);
 		waitResponse();
 		assertEquals("-1.0", jq("@doublespinner:eq(1) input").val());
 
 		click(jq("@button"));
 		waitResponse();
 		assertEquals("1.1", jq("@doublespinner:eq(1) input").val());
+	}
+
+	// tap(WebElement) hits the corner, which Chrome's touch adjustment can retarget to the adjacent input
+	private void tapCenter(Element element) {
+		Rectangle rect = toElement(element).getRect();
+		tap(new Point(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2));
 	}
 }
