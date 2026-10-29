@@ -23,5 +23,15 @@
             </div>
         </div>
     </div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Dialog</h:span></h:div>
+        <h:div class="z-py-3 z-d-flex z-gap-4 z-flex-wrap">
+            <button label="Fileupload.get">
+                <attribute name="onClick">
+                    Fileupload.get();
+                </attribute>
+            </button>
+        </h:div>
+    </h:div>
 </h:div>
 </zk>

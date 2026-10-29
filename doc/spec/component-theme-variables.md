@@ -1390,6 +1390,30 @@ normally.
 | `--zk-dropupload-border-color` | `var(--zk-color-outline)` | root resting border |
 | `--zk-dropupload-radius` | `var(--zk-shape-corner-extra-small)` | root corners |
 
+### Fileupload — shipped
+
+Picked-file rows of the `Fileupload.get` dialog (`zul/fud/css/fileupload.css`, bundled into
+`norm.css.dsp` because the dialog has no css-uri) — each `.z-fileupload-file` row written by
+`zul.fud.ModalFileViewer` plus its `.z-fileupload-cancel` link. Five knobs total. Two exceptions
+to the family conventions:
+
+- **Naming.** The names follow the IceBlue LESS variables that ZK-6199 introduced
+  (`-background-color`/`-color`, not Marble's `-bg`/`-fg`), so one override restyles the rows in
+  either theme. They are not renamed.
+- **Scoping.** `Fileupload.get` opens the dialog with `doModal()`, and Window's modal mode calls
+  `makeVParent()`, so the dialog is reparented to the page root — region scoping does not apply;
+  only `:root` overrides are guaranteed (same CTV-3 structural exception as messagebox).
+
+The dialog's window chrome and buttons are ordinary Window/Button and use those families' knobs.
+
+| Knob | Default | Scope |
+|------|---------|-------|
+| `--zk-fileupload-font-family` | `var(--zk-typescale-font-family)` | row text |
+| `--zk-fileupload-background-color` | `var(--zk-color-surface-container-low)` | row fill |
+| `--zk-fileupload-border-color` | `var(--zk-color-outline-variant)` | row border |
+| `--zk-fileupload-color` | `var(--zk-color-on-surface)` | row text (file name, size line) |
+| `--zk-fileupload-cancel-color` | `var(--zk-color-primary)` | per-row Cancel link text |
+
 ### Organigram — shipped
 
 Org-chart tree (EE, zkmax, `zkmax/layout/css/organigram.css`) — `.z-organigram` root plus
@@ -1707,7 +1731,9 @@ Validated by the button pilot; repeat per component (then update the
   exclusion), pdfviewer, tbeditor (see entry for the no-border-color-hover-knob exclusion),
   signature (see entry for the no-hover-knob and no-fg-knob exclusions), cropper (see entry for
   the no-bg-knob and no-border-color-hover-knob exclusions), dropupload (see entry for the
-  no-hover/-focus/-disabled-knob and no-fg-knob exclusions), organigram (see entry for the
+  no-hover/-focus/-disabled-knob and no-fg-knob exclusions), fileupload (see entry for the
+  ZK-6199 naming exception and the CTV-3 structural exception — the `Fileupload.get` dialog is
+  reparented by `doModal()`), organigram (see entry for the
   shared-border-color-across-card-and-connector-lines convention and the not-knob-driven disabled
   background and focus-ring exclusions), goldenlayout (see entry for the shared
   border-color/radius across the header strip and goldenpanel, and the drag-proxy/drop-target/

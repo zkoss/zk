@@ -869,6 +869,32 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     expect(await bgOf(c0)).toBe(SCOPED_PURPLE);
   });
 
+  test('fileupload — stock values, then :root override reaches the Fileupload.get dialog rows', async ({ page }) => {
+    // The preview page renders no picked-file row: open the dialog (reparented to the page
+    // root by doModal), then pick a file through the real Browse button.
+    await page.getByRole('button', { name: 'Fileupload.get', exact: true }).click();
+    const dlg = page.locator('.z-window-modal').first();
+    await expect(dlg).toBeVisible();
+    const chooser = page.waitForEvent('filechooser');
+    await dlg.locator('.z-button').first().click();
+    await (await chooser).setFiles({ name: 'knob.txt', mimeType: 'text/plain', buffer: Buffer.from('knob') });
+    const c0 = dlg.locator('.z-fileupload-file').first();
+    const c1 = c0.locator('.z-fileupload-cancel').first();
+    await c1.waitFor({ state: 'attached' });
+    const fontFamilyOf = (loc: Locator) => loc.evaluate((el) => getComputedStyle(el).fontFamily);
+    expect(await bgOf(c0)).toBe('rgb(247, 249, 252)'); // stock
+    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.12)'); // stock
+    expect(await colorOf(c0)).toBe('rgba(0, 0, 0, 0.87)'); // stock
+    expect(await fontFamilyOf(c0)).toMatch(/^Inter,/); // stock
+    expect(await colorOf(c1)).toBe('rgb(55, 111, 208)'); // stock
+    await page.addStyleTag({ content: ':root{--zk-fileupload-background-color:#6750a4;--zk-fileupload-border-color:#6750a4;--zk-fileupload-color:#ffffff;--zk-fileupload-font-family:monospace;--zk-fileupload-cancel-color:#6750a4}' });
+    expect(await bgOf(c0)).toBe(SCOPED_PURPLE);
+    expect(await borderColorOf(c0)).toBe(SCOPED_PURPLE);
+    expect(await colorOf(c0)).toBe('rgb(255, 255, 255)');
+    expect(await fontFamilyOf(c0)).toBe('monospace');
+    expect(await colorOf(c1)).toBe(SCOPED_PURPLE);
+  });
+
   test('organigram — stock values, then :root override reaches it', async ({ page }) => {
     const c0 = page.locator('.z-organigram').first().locator('.z-orgnode').first();
     const c1 = page.locator('.z-orgitem-selected > .z-orgnode').first();
