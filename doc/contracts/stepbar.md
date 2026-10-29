@@ -73,7 +73,7 @@ NOTE ON SELECTORS: `.z-step-content` is always present in the DOM between `.z-st
 | error-1 | `.z-step-error .z-step-content > .z-step-icon` | background-color | `var(--zk-color-error)` | DESIGN.md §3 |
 | error-2 | `.z-step-error .z-step-content > .z-step-icon` | border | `2px solid var(--zk-color-error)` | DESIGN.md §3 |
 | error-3 | `.z-step-error .z-step-content > .z-step-icon` | color | `var(--zk-color-on-error)` | DESIGN.md §3 |
-| error-4 | `.z-step-error .z-step-content > .z-step-icon` (carries bare `.z-icon-exclamation`) | mask-image (`::before`) | non-empty (≠ `none`) — the `--_icon` custom prop must resolve | structural (ZK emits bare `z-icon-exclamation`; the theme's icon build must generate it, else the glyph is invisible — see skill-gaps 2026-06-23) |
+| error-4 | `.z-step-error .z-step-content > .z-step-icon` (carries bare `.z-icon-exclamation`) | mask-image (`::before`) | non-empty (≠ `none`) — the `--_icon` custom prop must resolve | structural (ZK emits bare `z-icon-exclamation`; the theme's icon build must generate it, else the glyph is invisible) |
 | title-1 | `.z-step-content > .z-step-title` | font-size | `var(--zk-typescale-body-medium-size)` | DESIGN.md §4 |
 | title-2 | `.z-step-content > .z-step-title` | font-weight | `var(--zk-typescale-body-medium-weight)` | DESIGN.md §4 |
 | title-3 | `.z-step-content > .z-step-title` | line-height | `var(--zk-typescale-body-medium-line-height)` | DESIGN.md §4 |
@@ -96,7 +96,7 @@ NOTE ON SELECTORS: `.z-step-content` is always present in the DOM between `.z-st
 | vert-8 | `.z-stepbar-vertical .z-step-active::before` | background-color | `var(--zk-color-primary)` | DESIGN.md §3 (lit connector, same token as horizontal) |
 | vert-9 | `.z-stepbar-vertical .z-step-complete::before` | background-color | `var(--zk-color-primary)` | DESIGN.md §3 |
 | wrap-1 | `.z-stepbar-wrapped-label .z-step` | flex | `1 1 0%` | layout (equal-width steps so each `.z-step-content` fills its slot edge-to-edge and adjacent connector halves meet) |
-| wrap-1b | `.z-stepbar-wrapped-label` | align-items | `flex-start` | layout (top-align steps so a multi-line title does NOT push its icon/connector up relative to single-line steps; centring would break the connector line — see skill-gaps 2026-06-24) |
+| wrap-1b | `.z-stepbar-wrapped-label` | align-items | `flex-start` | layout (top-align steps so a multi-line title does NOT push its icon/connector up relative to single-line steps; centring would break the connector line) |
 | wrap-2 | `.z-stepbar-wrapped-label .z-step::before` | display | `none` | structural (the inline horizontal connector is suppressed; the visible connector moves to `.z-step-content::before`/`::after`) |
 | wrap-3 | `.z-stepbar-wrapped-label .z-step-content` | flex-direction | `column` | layout (icon stacked above title) |
 | wrap-4 | `.z-stepbar-wrapped-label .z-step-content` | align-items | `center` | layout (icon and title centred over the connector) |

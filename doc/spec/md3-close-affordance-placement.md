@@ -2,7 +2,7 @@
 
 Where Material Design places close / dismiss / clear icons across components, and the
 rules Marble derives from it. Raised 2026-06-05 while reviewing the goldenlayout
-per-tab close icon (see `doc/skill-gaps.md` row 2026-06-05 goldenlayout + contract M22).
+per-tab close icon (see goldenlayout contract M22).
 
 ## The two conventions
 

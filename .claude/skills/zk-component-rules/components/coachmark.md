@@ -100,7 +100,7 @@ on `.z-coachmark-close`.
   This is a *consequence of choosing a colored surface*, not a coachmark-specific quirk — it applies to any
   colored popup that hosts arbitrary action widgets. (Audit-and-extend: when a new filled control type is
   slotted into a colored coachmark, check its at-rest fill against the card and add an inverse rule.)
-  Marble takes the neutral-card default, so it ships none of these inversion rules (see doc/skill-gaps.md 2026-07-15).
+  Marble takes the neutral-card default, so it ships none of these inversion rules (2026-07-15).
 - The mask (`.z-coachmark-mask`) is a sibling of `.z-coachmark` in `<body>`, created by `zk.eff.FullMask`.
   Its z-index is set to `(coachmark z-index - 1)`. The theme may style it; the selector is `.z-coachmark-mask`.
 - Animation: `.z-coachmark-open` triggers the open entrance. The base `opacity: 0; visibility: hidden` on

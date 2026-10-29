@@ -177,7 +177,7 @@
 
 - `z-grid-fill` 與 `z-grid-cols-auto`（第 2、2.5 節）都**不用** breakpoint（intrinsic / 捲動容器處理 RWD）——
   能用 intrinsic 就優先用，這是本 theme 的取向。
-- 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組響應式 display utility。**breakpoint 尺度**採 Bootstrap：`sm` 576 / `md` 768 / `lg` 992 / `xl` 1200（`xs` 0 = base），與 EE 的 Grid／Listbox `responsive` 使用同一組值（決議記錄保存在本機 `tasks/` 下，不在 repository 內；規則已完整寫於本文件；`scripts/build-css.js --module zkmax` 會檢查兩邊一致）。
+- 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組響應式 display utility。**breakpoint 尺度**採 Bootstrap：`sm` 576 / `md` 768 / `lg` 992 / `xl` 1200（`xs` 0 = base），與 EE 的 Grid／Listbox `responsive` 使用同一組值（`scripts/build-css.js --module zkmax` 會檢查兩邊一致）。
   **不寫自訂寬度的 `@media` / `@container`**：寬度條件只能取上述尺度（`min-width` 為 576／768／992／1200，`max-width` 為其減 1），由 `scripts/check-breakpoints.js` 檢查（`scripts/build-css.js --module zkmax` 時執行）。
   **EE 的兩個常數必須一致**：zkmax 的 Grid 與 Listbox `responsive` 功能中的 `_DEFAULT_BREAKPOINTS` 常數必須彼此相等，不一致時建置失敗；此檢查只在 `--module zkmax` 時執行（CE-only 建置沒有可比對的對象）。
   **`xxl` 不屬於此尺度**：JS 端正逐步移除（Jira ZK-6197；`grid-responsive.ts` 仍有 `xxl: 1400`），`scripts/check-breakpoints.js` 忽略它；它既不是必要值，也不被接受為 CSS 值。

@@ -102,7 +102,7 @@ split the trigger width 50/50 — the selected label gets only half the row and 
 truncated with an ellipsis ("Apple, Banana" → "Apple, B…") even though the trigger
 is wide enough. ZK only writes the inline `display` in the no-selection state, so a
 missing base rule is invisible until something is actually selected. (Caught
-2026-06-11; see `doc/skill-gaps.md`.)
+2026-06-11.)
 
 This is the inverse of combobox/datebox, which use a real `<input>` with a native
 `placeholder` attribute — there is no swapped `<div>` and no base-display dependency.

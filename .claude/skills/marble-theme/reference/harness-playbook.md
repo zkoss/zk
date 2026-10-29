@@ -338,7 +338,7 @@ Once approved, the orchestrator re-enters the main loop normally; the evaluator'
 
 ### js-source-hash drift recovery
 
-If the evaluator returns status `BLOCKED: js-source drift — re-run zk-spec-author <component>` (and appends a `js-drift` entry to `doc/skill-gaps.md`), the underlying ZK JS source has changed since the contract was authored. The recovery flow:
+If the evaluator returns status `BLOCKED: js-source drift — re-run zk-spec-author <component>`, the underlying ZK JS source has changed since the contract was authored. The recovery flow:
 
 1. Re-run `zk-spec-author <component>`. The agent re-reads the JS source, re-derives the structural section, refreshes the contract's `js-source-hash:` field, and (if structural facts changed) flips `contract-approved:` back to `false`.
 2. If `contract-approved:` was flipped to `false`, repeat the approval gate above. If spec-author determined the structural facts were unchanged, it may keep `contract-approved: true` after refreshing only the hash — but the user should still spot-check.

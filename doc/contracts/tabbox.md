@@ -107,7 +107,7 @@ Endpoint-disabled note: ZK does not emit any "can't scroll further" class (see s
 
 ### Close button — c31–c35 (added 2026-06-05, failing-first)
 
-Executes the deferred tabbox side-flip pass (`doc/skill-gaps.md` 2026-06-05 goldenlayout+tabbox row). All rows are expected to FAIL until the same-day CSS iteration lands.
+Executes the deferred tabbox side-flip pass of 2026-06-05. All rows are expected to FAIL until the same-day CSS iteration lands.
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
@@ -125,7 +125,7 @@ Outcome-level predicates gating VERIFIED (first backfilled M-row for this pre-ou
 
 | id | predicate | rationale |
 |----|-----------|-----------|
-| M1 | for every visible closable tab (`.z-tab` containing a `.z-tab-button`): the button's bbox is **trailing** (`button.bbox.left ≥ text.bbox.right`) — AND in strip molds (`top`/`bottom`) the trailing inset `tab.bbox.right − button.bbox.right` is `8px ±2`; in `left`/`right`/`vertical` orients the same inset measured against the tab bar is `10px ±3` (8px padding + up to 2px indicator border); in accordion mold a closable header's button is visible, 32×32 (24×24 in compact), its centre 16px (±1) from the header's right edge, and the chevron of that header is not rendered; a non-closable header keeps the chevron (c11a, c35; owner ruling 2026-10-25, supersedes user ruling 2026-06-07). In every mold the close `<i>` (`$n('cls')`) is ≥ 24×24 and inside its tab (c36, WCAG 2.5.8). | Added 2026-06-05 — pre-fix the × rendered on the *leading* side (measured: `gap label→icon = −50px`, trailing inset 50px) while c11a (visibility-only) passed; the button's *side* was never asserted in any row. Encoded failing-first per `doc/skill-feedback-loop.md` Step 1. |
+| M1 | for every visible closable tab (`.z-tab` containing a `.z-tab-button`): the button's bbox is **trailing** (`button.bbox.left ≥ text.bbox.right`) — AND in strip molds (`top`/`bottom`) the trailing inset `tab.bbox.right − button.bbox.right` is `8px ±2`; in `left`/`right`/`vertical` orients the same inset measured against the tab bar is `10px ±3` (8px padding + up to 2px indicator border); in accordion mold a closable header's button is visible, 32×32 (24×24 in compact), its centre 16px (±1) from the header's right edge, and the chevron of that header is not rendered; a non-closable header keeps the chevron (c11a, c35; owner ruling 2026-10-25, supersedes user ruling 2026-06-07). In every mold the close `<i>` (`$n('cls')`) is ≥ 24×24 and inside its tab (c36, WCAG 2.5.8). | Added 2026-06-05 — pre-fix the × rendered on the *leading* side (measured: `gap label→icon = −50px`, trailing inset 50px) while c11a (visibility-only) passed; the button's *side* was never asserted in any row. Encoded failing-first. |
 
 ## State matrix
 

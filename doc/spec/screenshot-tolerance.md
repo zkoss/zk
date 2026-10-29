@@ -1,6 +1,6 @@
-# Screenshot tolerance (`toHaveScreenshot` 容忍值)
+# Screenshot tolerance (`toHaveScreenshot`)
 
-*整理自原 Q&A 式政策文件 · 規則寫在前，理由寫在後*
+*Compiled from the original Q&A-style policy document. Rules first, reasons after.*
 
 > **Single source of truth.** This spec defines how much pixel difference the Playwright
 > screenshot gate (`toHaveScreenshot`) accepts: which knob each spec uses, the numbers in force,
@@ -24,8 +24,7 @@ shot red from one run to the next. Without a floor, the gate fails on noise that
 
 Differences found by the equivalence run are not gate failures. Reading them as gate failures is a
 category error, because they are equivalence-check evidence. When the equivalence run is re-run,
-every differing pair still needs an explanation of why it differs. That explanation was kept in an
-untracked review pack, not in this spec.
+every differing pair still needs an explanation of why it differs.
 
 ## Tolerance knobs
 
@@ -84,7 +83,7 @@ Verification of this rule, recorded when it was made (not re-run since):
   pixels.
 - `tablet.spec.ts` has a zero default. Two cases opt into `maxDiffPixelRatio: 0.02`: `tabbox` and
   `window`.
-- The reason for the two `0.02` opt-ins is not stated in the source. 待確認.
+- The reason for the two `0.02` opt-ins is not stated in the source. To be confirmed.
 
 ### Colour threshold
 
@@ -104,7 +103,7 @@ Verification of this rule, recorded when it was made (not re-run since):
   every screenshot passed that mutation. At `0.02`, the tabbox, toolbar and paging shots failed in both
   projects.
 - The noise of the new baselines is 0 px on the machine where they were measured, so the tighter
-  threshold costs nothing there. Cross-machine anti-aliasing at `0.02` is not measured. 待確認.
+  threshold costs nothing there. Cross-machine anti-aliasing at `0.02` is not measured. To be confirmed.
 - The residual scan in `brand-override.spec.ts` does not use `toHaveScreenshot`, so the threshold does not
   apply to it.
 - The per-section `maxDiffPixels: 20` (inherited from `gallery-scan.spec.ts`) applies on top of the
@@ -114,10 +113,10 @@ Verification of this rule, recorded when it was made (not re-run since):
 
 - The zero-tolerance equivalence run stays at zero. That is its purpose. No option in this spec changes it.
 
-## 待確認
+## To be confirmed
 
 - **Gallery ratio.** One table in the source states the `gallery` project uses `maxDiffPixelRatio: 0.01`.
   The knob table in the same source, and `gallery-scan.spec.ts`, state `0.002`. This spec records `0.002`
-  only. 待確認 which value is in force for the `gallery` project.
+  only. To be confirmed: which value is in force for the `gallery` project.
 - **Tablet opt-in reason.** Not stated in the source (see [Gallery and tablet](#gallery-and-tablet)).
 - **Cross-machine anti-aliasing at `threshold: 0.02`.** Not measured (see [Colour threshold](#colour-threshold)).

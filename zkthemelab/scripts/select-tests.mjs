@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Decides which zkthemelab Playwright tests a set of changed files needs: a full run, a partial
-// run (with ready-to-run commands) or nothing. Rules: doc/marble-selective-test-rules.md §3-§4.
+// run (with ready-to-run commands) or nothing.
 // Usage and accepted path forms: scripts/README-select-tests.md.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -23,7 +23,7 @@ const RUN_PREFIX = `npx playwright test -c ${PLAYWRIGHT_CONFIG}`;
 const FULL_RUN_TEST_FRACTION = 2 / 3;
 
 // Spec files whose tests must not share a worker's test order or state: a partial run that includes one of
-// them gets no `--fully-parallel`. Audit result 2026-10-18 (README-select-tests.md, doc/marble-test-phase1-selector.md 11.2):
+// them gets no `--fully-parallel`. Audit result 2026-10-18 (README-select-tests.md):
 // none. font-size-equivalence.spec.ts and focus-ring-scan.spec.ts are serial / read-modify-write only while
 // UPDATE_FONT_BASELINE=1 / FOCUS_SCAN_UPDATE=1 is set, and the commands printed here never set them.
 const UNSAFE_PARALLEL_SPECS = new Map(); // spec file -> why it cannot run fully parallel

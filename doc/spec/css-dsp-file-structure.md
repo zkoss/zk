@@ -191,8 +191,6 @@ The path ZK *requests* a `.css.dsp` from is **not** decided by the theme's Java.
 
 ## 4. Authoring model: plain CSS (decided 2026-09-03)
 
-Source: the evaluation this section is taken from (Option 1, decisions D1–D6) is kept locally under `tasks/` as `tasks/zk11-less-dsp-deprecation-evaluation-已加進SPEC.md`. It is gitignored and is not part of the repository.
-
 - **Decision:** Marble's stylesheets are plain `.css`. No LESS and no DSP preprocessing is needed to build them.
 - **Evidence (zk):** zk tracks 0 `.less` files. `build.gradle` (line 192) states LESS was retired in ZK 11 (ZK-6112). `scripts/build-css.js` is the only CSS pipeline.
 - **Still in zkcml (not settled):** the zkcml repo still has 66 `.less` files, and `zkcml/zkthemebuilder/pom.xml` (line 187) still runs a `zklessc` step.
@@ -207,8 +205,6 @@ Source: the evaluation this section is taken from (Option 1, decisions D1–D6) 
 
 ### 5.1 Design tokens are declared on `:root`, not on every element or `*` (D1)
 
-Source: the conclusion this section is taken from (D1, Option A) is kept locally under `tasks/`. It is gitignored and is not part of the repository.
-
 - **Rule:** All Marble `--zk-*` tokens are declared on `:root` (including the `:root[data-brand="…"]` variants), not repeated on each element or on `*`.
 - **Implementation:** The token files under `zul/src/main/resources/web/zul/css/tokens/` declare their tokens on `:root`, for example `_colors.css:14` and `_zindex.css:24`.
 - **Measured basis (synthetic page, not a ZK page):** Marble has 592 unique `--zk-*` names (652 declarations). On a synthetic page with 10,000 `div` elements (Chrome 154.0.8037.92, median values), with 0 / 600 / 3,000 / 10,000 `:root` declarations, the time to recompute after changing a referenced variable was 55.4 / 55.0 / 55.4 / 58.0 ms. After changing an unreferenced variable it was 13.6 / 13.7 / 14.3 / 15.6 ms. The number of `:root` declarations had no measurable effect; the cost depends on the scope where the variable is used.
@@ -216,8 +212,6 @@ Source: the conclusion this section is taken from (D1, Option A) is kept locally
 - **Note:** Not measured on Firefox and Safari. The CSS byte size is the actual cost of the tokens.
 
 ### 5.2 Icons, component images and fonts are served by URL, not as data URIs (D5)
-
-Source: the conclusion this section is taken from (D5) is kept locally under `tasks/`. It is gitignored and is not part of the repository.
 
 - **Rule:** The icon set, component images and fonts are served by URL (`url(~./zul/img/...)`), not as data URIs, and no `<function>` extension is added to `zk.wcs`.
 - **Implementation:** `writeIconFile` in `scripts/build-css.js` writes each icon to `zul/img/icons/<name>.svg` and returns `url(~./zul/img/icons/<name>.svg)`. `zul/src/main/resources/web/zul/css/base/_icons.css` applies `mask-image` with `var(--_icon)`. Component images, for example in `base/_dnd.css`, use `url(~./zul/img/marble/<name>.svg)`. The `@font-face` convention for fonts and its mapping in doc/spec/DESIGN.md: TBD.

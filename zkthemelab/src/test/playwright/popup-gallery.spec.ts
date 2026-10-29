@@ -3,9 +3,7 @@ import { test, expect, Locator, Page } from '@playwright/test';
 // Pixel baselines of the pop-up layers and API-created elements that a goto-and-shoot gallery
 // never paints: they exist only after a user opens them. One describe per preview page, named
 // like the page so select-tests.mjs maps a CSS change on the component to these tests.
-// Rationale and measurements: doc/marble-popup-gallery-report.md; inventory: doc/marble-popup-inventory.md.
-//
-// Rules every test follows (doc/marble-popup-gallery-report.md, .claude/skills/marble-theme/reference/verification.md):
+// Rules every test follows (.claude/skills/marble-theme/reference/verification.md):
 //  - open the pop-up with the gesture a user makes; a widget API only where no gesture exists, with the reason in a comment;
 //  - exactly ONE visible match of the pop-up selector, never `.first()` (pages pre-render hidden panels);
 //  - the classes the shot is meant to paint are asserted present before shooting;
@@ -14,7 +12,7 @@ import { test, expect, Locator, Page } from '@playwright/test';
 const PAD = 12;
 
 // Absolute count of differing pixels tolerated per shot. Measured run-to-run noise: 0 differing pixels in every shot
-// over at least three runs in separate Playwright processes (doc/marble-popup-gallery-report.md), so the budget is a margin of
+// over at least three runs in separate Playwright processes, so the budget is a margin of
 // 10 px for a crop, 20 px for the two shots that cover a whole 1280x720 viewport. Not a ratio: a ratio of the
 // viewport shots would hide a mis-painted border (DR-3 in .claude/skills/marble-theme/reference/harness-decisions.md).
 // POPUP_MAX_DIFF overrides it for the measurement itself (`POPUP_MAX_DIFF=0` shows the raw noise).
@@ -286,7 +284,7 @@ test.describe('colorbox', () => {
     // The swatch under the cursor is the one that carries z-colorpalette-selected, so the cursor stays on it.
     await page.locator('.z-colorpalette-color:visible').nth(10).hover();
     // The hover moves focus to div.z-colorpalette, so the browser's default focus ring is in the baseline on purpose:
-    // it records the current rendering; whether Marble should style it is follow-up #62 in tasks/marble-theme-followups.md.
+    // it records the current rendering; whether Marble should style it is an open follow-up.
     await popupShot(page, '.z-colorbox-popup', ['z-colorpalette-popup', 'z-colorpalette-selected'], 'colorbox-popup-palette-selected.png');
   });
 

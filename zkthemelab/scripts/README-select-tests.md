@@ -1,7 +1,6 @@
 # select-tests: which Playwright tests do my changes need?
 
 `select-tests.mjs` takes changed files and answers `full`, `partial` (with exact commands) or `none`.
-The rules it implements are in `doc/marble-selective-test-rules.md` (section 3 and 4).
 Run everything from `zkthemelab/`. Node only, no extra npm dependencies, no preview server needed
 (the test inventory comes from `playwright test --list`).
 
@@ -43,7 +42,7 @@ alternation of anchored title paths (`^(?:<project> <file> <describe...> <title>
 exactly the intended tests. A full run is the bare `npx playwright test -c ...`.
 
 `--fully-parallel` is added when no selected spec file is in `UNSAFE_PARALLEL_SPECS` (top of `select-tests.mjs`);
-`reasons` says which case applied. The constant is empty: the audit (doc/marble-test-phase1-selector.md section 11.2)
+`reasons` says which case applied. The constant is empty: the audit
 found no spec that depends on test order or shared state in the way the printed command runs it. Two specs are
 order-dependent only in update mode, which the command never enables: `font-size-equivalence.spec.ts`
 (`UPDATE_FONT_BASELINE=1`, serial) and `focus-ring-scan.spec.ts` (`FOCUS_SCAN_UPDATE=1`, read-modify-write of one

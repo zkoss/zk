@@ -1,9 +1,6 @@
 # Utility Class Naming
 
-Normative rules for naming Marble's `z-*` utility classes. The review this page was derived from
-is kept locally under `tasks/` and is not in the repository; its durable content (the rules, the
-text-size scale, and the rename verification method) is carried in this page. The review's
-evidence and full comparison are kept locally under `tasks/`, not in the repository. The decisions
+Normative rules for naming Marble's `z-*` utility classes. The decisions
 are in this page, and the options that were rejected are summarized in the "Rejected alternatives"
 section. Follow this page when
 adding a class or a whole category.
@@ -136,7 +133,7 @@ comment of `zul/src/main/resources/web/zul/css/utility/_typography.css`:
 ## 3. Changing an existing name
 
 Renames are mechanical but the verification is not. The method below is the part that matters
-every time; the original review it came from is kept locally under `tasks/`, not in the repository.
+every time.
 
 - **Anchor the sweep** on `(?<![\w-])name(?![\w-])`. `sclass` is space-separated, and an
   unanchored match rewrites `z-text-xl` inside `z-text-2xl` — and `z-cardlayout` inside `z-card`.
@@ -226,8 +223,7 @@ The catalogue is generated at build time to
 
 ## Rejected alternatives
 
-The review this page was derived from is kept locally under `tasks/` and is not part of the
-repository. It compared the options below. For each decided question, this lists
+The review this page was derived from compared the options below. For each decided question, this lists
 the options it did not choose and the reason the review gives. The review does not state a
 separate verdict for these options; the reasons are its cost and risk statements.
 
@@ -255,9 +251,5 @@ separate verdict for these options; the reasons are its cost and risk statements
 
 ## 5. Related
 
-- The original review this page was derived from — kept locally under `tasks/`, not in the
-  repository. Its durable content is carried in this page; its evidence and full comparison are
-  kept locally under `tasks/`, not in the repository. The decisions are in this page, and the
-  options that were rejected are summarized in the "Rejected alternatives" section.
 - `doc/spec/spacing-policy.md` — the 4px scale the spacing classes expose
 - `doc/spec/responsive-design.md` — the Bootstrap breakpoint values used by R3

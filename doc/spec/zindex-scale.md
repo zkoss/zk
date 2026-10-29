@@ -5,7 +5,6 @@
 
 > 互動教學頁:<${PREVIEW_URL}/utility/zindex.zul>(原始檔 `zkthemelab/src/main/webapp/web/utility/zindex.zul`)。
 > 定義:`zul/src/main/resources/web/zul/css/tokens/_zindex.css`;utility:`utility/_layout.css`;回歸測試:`zkthemelab/src/test/playwright/zindex-scale.spec.ts`(`zindex` 專案)。
-> 稽核全紀錄(每個現有 z-index 的 selector 逐一歸類)保存於本機 `tasks/` 下,不在版本庫中;本文件保留其中的決議與理由。
 
 ---
 

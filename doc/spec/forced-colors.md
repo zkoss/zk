@@ -123,9 +123,10 @@ Because the guard is one central file keyed by ZK class, adding coverage for a n
 (or previously-missed) component is a small, repeatable edit — no new file, no build
 wiring. The process:
 
-1. **Detect** — 對照下方第 2 步的表，檢查新元件的 CSS 是否含有其中的 fragile pattern，以及該 class 是否已列在 guard 檔中。
-   原先的覆蓋檢查指令 `npm run check:forced-colors` 已不在 zk 中（`.claude/skills/marble-theme/SKILL.md` 第 102 行），
-   marble-theme SKILL.md 未指定替代指令；**待確認**。
+1. **Detect** whether the new component's CSS contains a fragile pattern from the table in step 2,
+   and whether its class is already listed in the guard file. The former coverage check,
+   `npm run check:forced-colors`, is no longer in zk (`.claude/skills/marble-theme/SKILL.md`
+   line 102), and the marble-theme SKILL.md names no replacement; **to be confirmed**.
 2. **Classify** the component's fragile pattern(s) and pick the matching remedy:
    | Pattern found | Remedy → which list in `_forced-colors.css` |
    |---|---|
@@ -184,8 +185,8 @@ see: it needs the *combination* driven in a browser (select the item, then focus
 and the ring's colour compared against the fill's, by RGB triplet — the two differed only in
 alpha (0.8 vs 0.78), so a string comparison passes on an invisible ring. Guarded by
 `forced-colors.spec.ts` › "focus ring on a SELECTED navbar item stays visible". The other five
-selected-tint families in block 2a have **not** been measured for this; see `doc/skill-gaps.md`
-2026-09-04.
+selected-tint families in block 2a have **not** been measured for this
+(as of 2026-09-04).
 
 ## Verify
 

@@ -9,8 +9,7 @@ This theme delivers all icons via the [Lucide](https://lucide.dev/) icon set, re
 
 ## Library decision: keep Lucide for ZK 11.0
 
-Lucide stays the icon library for ZK 11.0. The original evaluation is kept locally under `tasks/` (gitignored, not part of the
-repository); its §13, "Recommendation: keep Lucide for 11.0", is the record of this decision.
+Lucide stays the icon library for ZK 11.0.
 
 Reasons:
 
@@ -29,8 +28,7 @@ Reasons:
 
 ## Decisions behind this policy
 
-The IDs below (D13 etc.) are the decision ids used in the original evaluation kept locally under
-`tasks/` (gitignored, not part of the repository).
+The IDs below (D13 etc.) are the decision ids used in the original evaluation.
 
 ### D13: B — keep the full catalog; no subsetting
 

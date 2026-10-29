@@ -10,8 +10,7 @@ bookkeeping; no role certifies its own work).
 
 **Scope**: applies to every contract that carries a `## Cross-cutting features` section —
 mandatory for all contracts authored or re-authored after 2026-07-22. **Legacy contracts**
-(no section) are grandfathered: their rows flip to `VERIFIED` under the old rules, and
-their CTV state is governed by [`../../tasks/component-theme-variables-progress.md`](../../tasks/component-theme-variables-progress.md).
+(no section) are grandfathered: their rows flip to `VERIFIED` under the old rules.
 When a legacy contract is re-authored for any reason (js-source drift, Gate-2 revision),
 `zk-spec-author` adds the section then.
 
@@ -111,8 +110,6 @@ The orchestrator (sole writer of status/tracker docs) first confirms:
    (produced by `x-fc-capture`).
 
 ## Known limits / follow-ups (not yet implemented)
-
-Work steps for these items live in [`../../tasks/marble-theme-followups.md`](../../tasks/marble-theme-followups.md).
 
 - No automated **brand-flip** regression project (override `--zk-color-primary` at
   `:root`, assert key surfaces recolor) — `x-brand-decl` guards the declaration level only.

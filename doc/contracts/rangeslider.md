@@ -35,7 +35,7 @@ preview: ${PREVIEW_URL}/rangeslider.zul
 |----|-------------|-------|----------|
 | g1 | both | perpendicular gap from track near edge → `.z-rangeslider-mark-label` near edge | **18px ±1** in BOTH orientations (horizontal: `label.top − track.bottom`; vertical: `label.left − track.right`). Driven by `--zk-rangeslider-label-gap` (single source of truth shared with multislider); each orientation adds a `+4px` mark-anchor correction via `calc()`. Keeps the slider family's label spacing consistent. |
 
-> Selector note: the rows above (`.z-rangeslider-center/-area/-button`) are stale — live DOM uses `.z-rangeslider-track` (rail), `.z-sliderbuttons-area` (fill), `.z-sliderbuttons-button` (thumbs), same as multislider. Correct when next revising this contract (logged in `doc/skill-gaps.md`).
+> Selector note: the rows above (`.z-rangeslider-center/-area/-button`) are stale — live DOM uses `.z-rangeslider-track` (rail), `.z-sliderbuttons-area` (fill), `.z-sliderbuttons-button` (thumbs), same as multislider. Correct when next revising this contract.
 
 ## States to evaluate
 - [ ] horizontal default, horizontal with scale marks, vertical

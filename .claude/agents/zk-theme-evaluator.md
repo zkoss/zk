@@ -57,7 +57,7 @@ scripts/js-source-hash.sh <each js-source-files entry, in the contract's order>
 Act on the script's exit code:
 
 - **0 and the hash matches** → proceed.
-- **0 and the hash differs** → genuine drift. REFUSE: write status `BLOCKED` to `tasks/harness/eval-reports/<component>.md` with the message `BLOCKED: js-source drift — re-run zk-spec-author <component>`, and append a one-line entry tagged `js-drift` to `doc/skill-gaps.md` (format: `| <date> | <component> | js-source drift detected | hash mismatch — re-run spec-author | js-drift | doc/contracts/<component>.md |`). STOP.
+- **0 and the hash differs** → genuine drift. REFUSE: write status `BLOCKED` to `tasks/harness/eval-reports/<component>.md` with the message `BLOCKED: js-source drift — re-run zk-spec-author <component>`. STOP.
 - **2 (`../zkcml` is not checked out — a `zkmax/` or `zkex/` entry cannot be read)** → cannot verify on this machine; proceed without the drift check and say so in the report.
 - **1 (a declared file is in none of the jars)** → the contract's `js-source-files:` list is wrong, not the widget. BLOCK with that distinction stated explicitly, and route to `zk-spec-author` to fix the file list.
 
@@ -92,7 +92,7 @@ The skill tells you **what selector to query and how to trigger the state**. The
 4. **Attribute-state sweep (input components only).** Before finalising the failing-set, for any component whose contract lists an attribute-driven state (`inplace`, `buttonVisible-false`, etc.) you MUST measure that state's selector on the live page. A missing CSS rule produces no console error and no test failure — the only signal is `getComputedStyle` returning the wrong value. Do not infer pass from "the rule should exist if a sibling has it" — siblings in the same `.css.dsp` do NOT share source files (see `reference/css-file-bundling.md` → "Bundling ≠ source file sharing"). Measure each component's selector independently.
 
 ### 2. Verify preview app is reachable
-- `curl -sI ${PREVIEW_URL}/<component>.zul` (or the path given in the contract's `preview:` field, which carries no host — resolve `${PREVIEW_URL}` per CLAUDE.md).
+- `curl -sI ${PREVIEW_URL}/<component>.zul` (or the path given in the contract's `preview:` field, which carries no host — resolve `${PREVIEW_URL}` per `.claude/skills/marble-theme/reference/verification.md`).
 - If the server is not running, write status `EVALUATING_BLOCKED` to `tasks/harness/eval-reports/<component>.md` with the reason and STOP. The orchestrator must start the preview app before you can proceed.
 
 ### 2.5. T3-specific check restrictions (only for tier=T3)
@@ -138,7 +138,7 @@ Lookup priority for both scopes: `doc/spec/icon-index.md` is the canonical refer
 
 ### 3. Open Chrome and navigate
 
-Navigate to the preview URL (use `mcp__claude-in-chrome__navigate`; reuse tab when possible). **Resolve `${PREVIEW_URL}` exactly as CLAUDE.md defines it — an IP, never `localhost`** — Chrome resolves `localhost` to IPv6 `::1` while the preview app binds IPv4 only, yielding a false `ERR_CONNECTION_REFUSED`. That is why the definition uses an IP; do not "helpfully" substitute `localhost`. Wait for the page to settle (no pending network requests).
+Navigate to the preview URL (use `mcp__claude-in-chrome__navigate`; reuse tab when possible). **Resolve `${PREVIEW_URL}` exactly as `.claude/skills/marble-theme/reference/verification.md` defines it — an IP, never `localhost`** — Chrome resolves `localhost` to IPv6 `::1` while the preview app binds IPv4 only, yielding a false `ERR_CONNECTION_REFUSED`. That is why the definition uses an IP; do not "helpfully" substitute `localhost`. Wait for the page to settle (no pending network requests).
 
 **When measuring transition-carrying properties** (border-color, box-shadow on focus/hover), disable CSS transitions on the element first — `getComputedStyle` otherwise returns the transition's start frame (false "no focus ring"); see the Transition-freeze trap below.
 

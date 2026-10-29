@@ -38,7 +38,7 @@ ZK sets the popup's `left`/`top` (and often `width`) **inline** at open time —
 
 This is a ZK structural fact, not a theme choice: **any** theme that styles a detached popup and forgets `position` hits the identical bottom-left bug. Verify every `*-popup` **base** rule declares `position` — a modifier rule (`.z-x-open .z-x-popup`) inheriting from a positioned base is fine, but a base rule without `position` is the bug.
 
-> Caught 2026-06-08 on `.z-timepicker-popup` (its sole rule lacked `position`). A prior `width: max-content !important` workaround had masked it by capping the width, so the full-body-width `static` box wasn't obvious. Fix = `position: absolute; z-index: 1600` (and the width hack became unnecessary — under `position: absolute`, ZK's inline `width: auto` shrink-fits to content). See `doc/skill-gaps.md`.
+> Caught 2026-06-08 on `.z-timepicker-popup` (its sole rule lacked `position`). A prior `width: max-content !important` workaround had masked it by capping the width, so the full-body-width `static` box wasn't obvious. Fix = `position: absolute; z-index: 1600` (and the width hack became unnecessary — under `position: absolute`, ZK's inline `width: auto` shrink-fits to content).
 
 ## Implication: percentage-based widths reference `<body>`
 
@@ -142,8 +142,7 @@ moment `_repositionPopup()` measures its height — height reads `0`, which make
 `slideDown` anchor the reveal **bottom-up** and mis-position the popup well below
 the trigger. The broken floating lifecycle also lets outside-clicks fail to close
 it. (Caught 2026-06-11 on searchbox; both the upward-reveal and the
-won't-close-on-outside-click reports traced to this one rule. See
-`doc/skill-gaps.md`.)
+won't-close-on-outside-click reports traced to this one rule.)
 
 **Rule:** if the theme owns a detached popup's hidden state, scope the hide to
 `.z-{comp} .z-{comp}-popup` (attached), never the bare `.z-{comp}-popup`. Verify
@@ -202,4 +201,4 @@ can't beat:
 `display:none`) to hide a body-detached popup, add
 `.z-{comp} > .z-{comp}-popup { display: none !important }` for the closed/attached
 state — and verify the open popup is `<body>`-detached so the rule can't hide it.
-(Caught 2026-06-12 on colorbox, mobile only. See `doc/skill-gaps.md`.)
+(Caught 2026-06-12 on colorbox, mobile only.)

@@ -36,7 +36,7 @@ export default defineConfig({
   use: {
     // The ONE machine-side definition of the preview server address. Every doc,
     // contract and agent instruction refers to it by name as ${PREVIEW_URL}
-    // (defined in CLAUDE.md) rather than restating the address — a port move
+    // rather than restating the address — a port move
     // used to mean editing 118 files. Override for a non-default port with
     // `PREVIEW_URL=http://127.0.0.1:9090 npx playwright test`.
     // The port itself is bound in build.gradle (gretty httpPort).
@@ -67,8 +67,8 @@ export default defineConfig({
       // screenshots in copper. See brand-override.spec.ts.
       name: 'brand',
       testMatch: /brand-override\.spec\.ts/,
-      // A per-pixel colour distance of 0.02 (the 0.2 default let a container tone moved from 0.92 to 0.88 pass,
-      // doc/marble-compact-brand-batch3-report.md, evidence c-ii). The residual scan does not use toHaveScreenshot.
+      // A per-pixel colour distance of 0.02 (the 0.2 default let a container tone moved from 0.92 to 0.88 pass).
+      // The residual scan does not use toHaveScreenshot.
       expect: { toHaveScreenshot: { threshold: 0.02 } },
       use: { ...devices['Desktop Chrome'] },
     },
@@ -106,7 +106,7 @@ export default defineConfig({
       // Interaction guard: an interactive knob must be reachable at its own
       // centre (elementFromPoint), not merely rendered. Catches a sibling
       // overlay swallowing the pointer — invisible to every style-based check.
-      // See hit-target.spec.ts and tasks/multislider-knob-hit-target-analysis.md.
+      // See hit-target.spec.ts.
       name: 'hit-target',
       testMatch: /hit-target\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
@@ -136,7 +136,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // Utilities added from tasks/utility-class-gap-analysis.md, each checked on a ZK widget:
+      // Utilities added in the utility-class gap pass, each checked on a ZK widget:
       // computed value plus the intended effect. See utility-additions.spec.ts.
       name: 'utility-additions',
       testMatch: /utility-additions\.spec\.ts/,
@@ -218,8 +218,8 @@ export default defineConfig({
     {
       // Keyboard focus rings: scans every preview page, forces :focus-visible
       // through CDP and checks the ring's GEOMETRY against its clipping
-      // ancestors. Breadth guard for the navbar clip (doc/skill-gaps.md
-      // 2026-09-04, decision D13). See focus-ring-scan.spec.ts.
+      // ancestors. Breadth guard for the navbar clip (2026-09-04,
+      // decision D13). See focus-ring-scan.spec.ts.
       name: 'focus-scan',
       testMatch: /focus-ring-scan\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
@@ -261,7 +261,7 @@ export default defineConfig({
     },
     {
       // Pixel baselines of pop-up layers and API-created elements (dropdowns, menus, toast, messagebox, ...)
-      // that only exist after a user opens them. See popup-gallery.spec.ts and doc/marble-popup-gallery-report.md.
+      // that only exist after a user opens them. See popup-gallery.spec.ts.
       name: 'popup',
       testMatch: /popup-gallery\.spec\.ts/,
       expect: { toHaveScreenshot: { threshold: 0.05 } },

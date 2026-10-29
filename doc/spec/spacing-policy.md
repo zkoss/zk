@@ -99,8 +99,7 @@ padding 就改用 semantic container。
 ## Use-case / demo 頁面:優先組合 `z-*` utilities
 
 在 use-case / demo 頁面(`zkthemelab/src/main/webapp/web/**`)裡,優先用內建 `z-*`
-utility class 組合出版面,而不是自訂 page-local `sclass`。這與 CLAUDE.md 的
-「prefer built-in utility classes」規則一致 — demo 頁面的目的是證明既有內建
+utility class 組合出版面,而不是自訂 page-local `sclass`。demo 頁面的目的是證明既有內建
 CSS 就能完成多數視覺效果。
 
 自訂 page-local class **只有**在下列情況才成立:

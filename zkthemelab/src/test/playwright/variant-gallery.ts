@@ -3,9 +3,9 @@ import { expectSectionShots } from './section-shots';
 
 // Sectioned screenshots of the representative pages in a theme variant (compact density, brand colour).
 // Same shots as gallery-scan.spec.ts (section-shots.ts), with the variant name in the file name:
-// `<page>-<variant>-<NN>-<slug>.png`. See doc/marble-compact-brand-batch3-report.md.
+// `<page>-<variant>-<NN>-<slug>.png`.
 
-// The page list of tasks/marble-test-gaps-round2-plan.md section 10. `textbox` stands for the aggregate
+// The page list. `textbox` stands for the aggregate
 // `inputs.zul`, which a component CSS change never selects (D12).
 export const VARIANT_PAGES = [
   'textbox', 'button', 'grid', 'listbox', 'tree', 'tabbox', 'toolbar', 'menubar',
@@ -13,7 +13,7 @@ export const VARIANT_PAGES = [
 ];
 
 // Absolute per-section pixel budget, inherited from gallery-scan.spec.ts. The noise measured over three separate
-// processes was 0 px in every section (doc/marble-compact-brand-batch3-report.md, evidence a), so 20 is not derived
+// processes was 0 px in every section, so 20 is not derived
 // from it.
 export const VARIANT_SECTION_MAX_DIFF_PIXELS = 20;
 

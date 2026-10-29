@@ -133,7 +133,6 @@ and the Playwright projects: `reference/verification.md`.
 | `reference/harness-status.md` | The harness status vocabulary, tier legend and serialization rule; where the local state in `tasks/harness/` lives |
 | `reference/harness-decisions.md` | Why the harness is built the way it is (architecture decision records) |
 | `reference/batch-workflow.md` | Running a batch of Marble fixes (an NS batch) that edits a shared selector: impact list before editing, separate engineer and verifier, local commit |
-| `reference/jess-review.md` | Answering a screenshot from the designer (Jess), starting a verification batch for her issues, or touching a meeting record |
 
 ## ZK version coordinates
 

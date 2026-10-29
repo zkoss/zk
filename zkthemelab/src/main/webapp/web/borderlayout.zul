@@ -4,7 +4,7 @@
     <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Borderlayout</h:span></h:div>
 
     <!-- ZK layout primitives (borderlayout, vlayout, div, etc.) have NO default
-         padding by design — see doc/component-dom-structures.md. Use the
+         padding by design. Use the
          z-p-* utility classes from base/_utilities.css on the inner content
          wrapper, NOT on the layout primitive itself. -->
     <h:div class="z-mb-6">

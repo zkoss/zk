@@ -21,4 +21,3 @@ a.z-a                              (root <a> element)
 ## Note
 
 Stub entry — full documentation pending spec-author run (Phase 3/4).
-See `doc/spec-author-pipeline-plan.md (retired with the template)`.

@@ -21,8 +21,6 @@ import { test, expect, Page } from '@playwright/test';
 // Scanning every knob on the page is load-bearing, not thoroughness theatre: the
 // topmost range is always reachable, so any spot check that happens to pick it —
 // `.first()` included, depending on markup order — reports a false green.
-//
-// See tasks/multislider-knob-hit-target-analysis.md.
 
 interface Variant {
   name: string;

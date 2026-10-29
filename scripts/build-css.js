@@ -325,7 +325,7 @@ const mergedFiles = moduleName === 'zul'
     ? new Set([...normFiles.filter(f => f.startsWith('js/')), ...comboFiles, ...footerFiles, ...extraMergedFiles])
     : new Set(a11yFiles);
 
-// --- Orphan-CSS guard data (see assertNoOrphanComponentCss + doc/skill-gaps.md 2026-06-30) ---
+// --- Orphan-CSS guard data (see assertNoOrphanComponentCss) ---
 //
 // `.css.dsp` basenames that ZK requests via a `<css-uri>` in lang.xml / lang-addon.xml. ZK
 // auto-loads these when the widget is on the page, so a 1:1 auto-scanned dsp serves correctly.
@@ -656,7 +656,7 @@ function assertNoOrphanComponentCss() {
             '\nEach is emitted as a 1:1 *.css.dsp that ZK never requests, so the component renders ' +
             'unstyled (no error).\nFix: add it to `normFiles` in scripts/build-css.js. OR, if a runtime ' +
             'document.styleSheets probe\nconfirms zk.wcs already serves its own `.z-*` rule, add it to ' +
-            '`WCS_SERVED_ALLOWLIST`.\nSee doc/skill-gaps.md (2026-06-30) and ' +
+            '`WCS_SERVED_ALLOWLIST`.\nSee ' +
             '.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md.');
     }
 }

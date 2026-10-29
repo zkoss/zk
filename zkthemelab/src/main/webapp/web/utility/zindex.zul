@@ -86,7 +86,7 @@ setVisible(true) {                 // showing a _floating widget:
         </h:ul>
     </div>
     <div sclass="z-text-sm z-text-secondary">
-        Full rationale, per-widget classification, and the runtime evidence: <h:code>doc/spec/zindex-scale.md</h:code> and the audit <h:code>doc/zindex-audit.md</h:code>.
+        Full rationale, per-widget classification, and the runtime evidence: <h:code>doc/spec/zindex-scale.md</h:code>.
     </div>
 
 </div>

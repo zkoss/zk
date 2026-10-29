@@ -192,7 +192,7 @@ test.describe('tablet-matrix-label-readable', () => {
 // _wheel.css fix: the list stays bounded (3 visible rows) and the sheet lands on
 // screen. Also guards that the mobile-readonly trigger stays interactive (the
 // desktop readonly rule had pointer-events:none, making every mobile datebox
-// look disabled). See doc/skill-gaps.md 2026-06-15.
+// look disabled).
 // -------------------------------------------------------
 // A REAL tap on the trigger (the reported interaction) — also exercises the
 // pointer-events fix end-to-end. setOpen() via the widget API is avoided here: it
@@ -293,8 +293,7 @@ for (const { name, url, listSel, btnSel, inputSel } of wheelCases) {
     // the inline top by ~18px; the icon tap self-corrects via a second onSize sync
     // but the input tap (focus suppresses the resize) stayed at top+18 → the sheet
     // overshot below the fold, clipping the OK/Cancel row. The _wheel.css fix pins
-    // the sheet to bottom:0 so BOTH tap targets land identically. See
-    // doc/skill-gaps.md 2026-06-15 (follow-up).
+    // the sheet to bottom:0 so BOTH tap targets land identically.
     test('tapping the input lands the sheet flush (not below the fold)', async ({ page }) => {
       await page.goto(url);
       await page.waitForLoadState('networkidle');
@@ -547,7 +546,7 @@ test.describe('tablet-colorbox-dismiss', () => {
 // These guard doc/contracts/scrollview.md M1-M6. They exist because the contract
 // previously asserted only `overflow` and `background-color` — two values ZK's own
 // JS and the CSS defaults already produce — so scrollview was recorded VERIFIED
-// while its stylesheet was an empty placeholder file (tasks/harness/work-status.md).
+// while its stylesheet was an empty placeholder file.
 // Measured against that empty stylesheet (RED re-run 2026-09-12): M1, M3, M4, M5
 // and M8 fail; M2 and M6 pass on it by construction, because they assert an
 // ABSENCE (no surface, no layout space) that an empty file also satisfies —
@@ -703,11 +702,10 @@ test.describe('tablet-scrollview-affordance', () => {
 // make the pop-up a tablet one. Why these tests live here and not in a new spec file: a new file needs a
 // `testMatch` entry in playwright.config.ts, and a change there makes select-tests.mjs answer `full`. Each title
 // names the page it opens (`x.zul:`), which is what select-tests.mjs reads to map a CSS change to these tests.
-// Rationale and measurements: tasks/marble-tablet-popup-batch5-report.md.
 // -------------------------------------------------------
 const POPUP_PAD = 12;
 
-// Absolute count of differing pixels tolerated per pop-up shot; measured in tasks/marble-tablet-popup-batch5-report.md.
+// Absolute count of differing pixels tolerated per pop-up shot; measured.
 const POPUP_MAX_DIFF = process.env.POPUP_MAX_DIFF !== undefined ? Number(process.env.POPUP_MAX_DIFF) : 10;
 // Per-pixel colour distance, 0.02 as in the brand and compact projects: 0.05 let an 8% state layer on a 24px close button pass.
 // POPUP_THRESHOLD overrides it for the noise measurement.

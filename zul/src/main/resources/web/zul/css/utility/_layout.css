@@ -18,7 +18,6 @@
      "3-col grid"). Cost is one extra token; consistency (Tailwind model) outweighs it.
    - Bundling only `z-grid-cols-*` would be safe but makes it the lone 2-property
      exception and still wouldn't help the flex side — not worth fragmenting the model.
-   See doc/utility-display-bundling-decision.md.
    ============================================ */
 
 @layer zk-utilities {

@@ -2,7 +2,7 @@
 
 Marble is visually aligned with MUI (React Material UI). Some MUI appearances/behaviors **cannot be reproduced** in a ZK theme by CSS alone, because they stem from fundamental framework differences (DOM shape, React-only mechanics, or missing ZK components). These are expected limits — do **not** re-attempt them as theme bugs.
 
-> Salvaged from the retired Mira visual-parity effort (`doc/mira-reports/framework-gaps.md (retired)`). The Mira dashboard was Marble's original concrete reference; the design authority is now MD3 + the MUI v7 static-CSS reference (`…/material-ui-7.3.1/static-css-output/`). The structural facts below are reference-independent.
+> Salvaged from the retired Mira visual-parity effort. The Mira dashboard was Marble's original concrete reference; the design authority is now MD3 + the MUI v7 static-CSS reference (`…/material-ui-7.3.1/static-css-output/`). The structural facts below are reference-independent.
 
 ---
 

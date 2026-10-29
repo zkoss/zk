@@ -19,9 +19,6 @@ This is the same mechanism the theme already uses internally for control *sizes*
 Variables generalize it to the **appearance** dimension (color / border / radius / state) and
 document it as a public, supported surface.
 
-> **Progress tracking:** conformance of each component against the criteria below is tracked
-> separately in [`../../tasks/component-theme-variables-progress.md`](../../tasks/component-theme-variables-progress.md).
-
 ## How it works
 
 Knob defaults live in [`tokens/_component-theme.css`](../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css),
@@ -132,8 +129,7 @@ Since unlayered rules always beat layered ones, the mechanics are:
    global aliases; Chakra / Tailwind / Bootstrap use a shared scale). If a real need arises to
    restyle **one** component's type in isolation, expose a knob that *defaults to the typescale
    slot* — `--zk-window-title-size: var(--zk-typescale-title-medium-size)`, never a literal like
-   `16px` — and do not add it speculatively. Rationale + framework survey:
-   [component-theme-typography-scope.md](../component-theme-typography-scope.md).
+   `16px` — and do not add it speculatively.
 
 ### Relationship to brand override & density
 
@@ -148,15 +144,14 @@ Since unlayered rules always beat layered ones, the mechanics are:
 > was substituted at `:root` and inherited frozen. To recolor a region, override the component
 > **knob** directly; to recolor the whole app, override the seed at `:root`.
 
-## Conformance criteria (檢驗條件)
+## Conformance criteria
 
 The purpose in one line: *let an adopter restyle **one** component — whole-app or in one
 region — by overriding **only that component's** `--zk-<comp>-*` variables, **never** a shared
 global token, and with **zero regression** when they override nothing.*
 
-A component **conforms** when it satisfies every applicable criterion below. The
-[progress tracker](../../tasks/component-theme-variables-progress.md) records each component's status
-against these IDs. CTV-1…4 are the load-bearing *purpose* gates; CTV-5…9 are the
+A component **conforms** when it satisfies every applicable criterion below.
+CTV-1…4 are the load-bearing *purpose* gates; CTV-5…9 are the
 mechanics / hygiene / verification that keep them true.
 
 | ID | Criterion | How to check |
@@ -1696,8 +1691,7 @@ component with a per-widget dark-surface modifier inherits this trap.
 
 ## Recipe — adding a component
 
-Validated by the button pilot; repeat per component (then update the
-[progress tracker](../../tasks/component-theme-variables-progress.md)):
+Validated by the button pilot; repeat per component:
 
 1. **Audit** the component CSS: which properties are worth exposing, and how are states
    implemented (overlay vs border-color vs background swap)? The knob names follow that model.

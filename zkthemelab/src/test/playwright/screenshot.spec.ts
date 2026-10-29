@@ -142,7 +142,6 @@ test.describe('button', () => {
   // the graphic glues to the label. Base `.z-button{gap:var(--zk-spacing-2)}` restores
   // the MD3 8dp gap, order-independently (also for dir="reverse"). The label is a bare
   // text node (no wrapper), so a Range gives its true glyph box.
-  // See doc/skill-gaps.md 2026-07-02.
   test('graphic-and-label-have-md3-gap', async ({ page }) => {
     const gaps = await page.evaluate(() => {
       const out: { kind: string; gap: number }[] = [];
@@ -222,8 +221,7 @@ test.describe('checkbox', () => {
   // mold="tristate" checked vs indeterminate must be visually distinct: checked =
   // checkmark on a filled box, indeterminate = dash on a filled box. ZK emits
   // mold-PREFIXED state classes (.z-checkbox-tristate-on / -indeterminate) that the
-  // theme originally didn't style, so both rendered as an empty box. See
-  // doc/skill-gaps.md 2026-07-14.
+  // theme originally didn't style, so both rendered as an empty box.
   test('tristate checked shows checkmark, indeterminate shows dash', async ({ page }) => {
     const r = await page.evaluate(() => {
       const read = (wrapperSel: string) => {
@@ -252,7 +250,7 @@ test.describe('checkbox', () => {
 });
 
 // -------------------------------------------------------
-// Input focus — no layout shift (regression guard, doc/skill-gaps.md 2026-07-14)
+// Input focus — no layout shift (regression guard, 2026-07-14)
 // -------------------------------------------------------
 // Focusing an input must NOT move its text and must NOT transition `border-width`.
 // Transitioning border-width (1px→2px) without co-animating the compensating padding
@@ -341,7 +339,7 @@ test.describe('input focus (no layout shift)', () => {
   // the same affordance as :focus-within (1px border + inset ring) — NOT
   // border-width:2px. A 2px border on the min-height-pinned composite grows the whole
   // field (~1px/side, measured 40→42px) and reads thicker than the input-click focus,
-  // so the two focus styles diverge. See doc/skill-gaps.md 2026-07-14.
+  // so the two focus styles diverge.
   test('datebox open state (icon click): no border-width growth, no layout shift', async ({ page }) => {
     await page.goto('/datebox.zul');
     await page.waitForLoadState('networkidle');
@@ -432,7 +430,7 @@ test.describe('combobox', () => {
 
   // Comboitem with iconSclass: the leading icon must be separated from the
   // label, not glued to it. ZK renders `.z-comboitem-icon` + `.z-comboitem-text`
-  // as adjacent flex children with no built-in gap. See doc/skill-gaps.md 2026-06-15.
+  // as adjacent flex children with no built-in gap.
   test('comboitem icon is separated from its label', async ({ page }) => {
     const gap = await page.evaluate(() => {
       const cbs = [...document.querySelectorAll('.z-combobox')];
@@ -866,8 +864,7 @@ test.describe('panel', () => {
 // guards against either accent re-appearing. NB: the `.z-listitem` "blue left
 // line" is a *focus* indicator (`box-shadow: inset 3px 0 0`), a different
 // component/state — not this. Gallery breadth is owned by gallery-scan.spec.ts
-// (the static gallery has no selected item). See doc/skill-gaps.md 2026-07-07 and
-// doc/contracts/navbar.md c7.
+// (the static gallery has no selected item). See doc/contracts/navbar.md c7.
 test.describe('navbar', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/navbar.zul');
@@ -935,7 +932,7 @@ test.describe('navbar', () => {
   //      theme CSS can opt out of the clip. Hence `outline-offset <= 0`.
   // Repro is the designer's: expand "Get Started" → click "Step One" → press Space
   // (the mouse click focuses the <a>; the keypress promotes it to :focus-visible).
-  // See doc/skill-gaps.md 2026-09-04 and doc/contracts/navbar.md c8–c10.
+  // See doc/contracts/navbar.md c8–c10.
   test('submenu item keyboard focus ring is the theme inset ring and is not clipped', async ({ page }) => {
     const navbar = page.locator('.z-navbar-vertical').first();
     await navbar
@@ -1019,7 +1016,7 @@ test.describe('navbar', () => {
 });
 
 // -------------------------------------------------------
-// Coachmark — neutral surface (regression guard, doc/skill-gaps.md 2026-07-15)
+// Coachmark — neutral surface (regression guard, 2026-07-15)
 // -------------------------------------------------------
 // The coachmark pop-up is an MD3 rich tooltip: a neutral surface-container card
 // so nested action widgets render with their STANDARD filled style (no per-widget
@@ -1062,7 +1059,7 @@ test.describe('coachmark', () => {
     expect(r!.btnBg, 'nested button must keep the standard primary fill, not the white inverse').toBe(PRIMARY);
   });
 
-  // Designer review (doc/skill-gaps.md 2026-07-15): the top-right close must be a real
+  // Designer review (2026-07-15): the top-right close must be a real
   // icon-button affordance (circular hit target + hover state layer), pinned at a SYMMETRIC
   // corner inset. The old build shipped a bare 16px glyph at an asymmetric inset (4px top /
   // 8px right) because the pointer-side padding bump (+16px) was 4px short of the 20px ZK
@@ -1265,7 +1262,6 @@ test.describe('pv-cols-fill', () => {
 // window 56+32→88px, panel 48+32→80px, groupbox 48+24→73px. This guards both
 // the precise cause (box-sizing must be border-box) and the visible symptom
 // (header height must stay within the intended band, not the content-box blow-up).
-// See doc/skill-gaps.md.
 // -------------------------------------------------------
 test.describe('container-header-height', () => {
   const cases = [
@@ -1412,7 +1408,6 @@ test.describe('errorbox-position-invariance', () => {
 // radius, padding) lives only on `.z-notification-content`. A dead duplicate
 // rule in misc.css once painted the shell with inverse-surface, producing a
 // dark frame around the card and pushing the icon onto the accent stripe.
-// See doc/skill-gaps.md 2026-06-18.
 // -------------------------------------------------------
 test.describe('notification', () => {
   test.beforeEach(async ({ page }) => {
@@ -1474,7 +1469,7 @@ test.describe('notification', () => {
   // the text from the top, leaving the ~4.5px slack at the bottom, so a single
   // line reads as top-aligned rather than vertically centred against the icon
   // (which IS centred via top:50%). The text's optical centre must match the
-  // card's centre. See doc/skill-gaps.md 2026-06-18.
+  // card's centre.
   test('single-line-content-is-vertically-centered', async ({ page }) => {
     const m = await page.evaluate(() => {
       const content = document.querySelector('.z-notification-info .z-notification-content') as HTMLElement;
@@ -1569,7 +1564,7 @@ test.describe('tooltip', () => {
 // CONTENT columns carrying the per-orientation flex-direction (column in vertical)
 // and align-items (flex-start on last). The Marble rewrite set flex-direction only
 // on the cave, so the content column defaulted to `row` and all buttons collapsed
-// to one vertical position. See doc/skill-gaps.md 2026-06-22 and contract M7.
+// to one vertical position. See contract M7.
 test.describe('linelayout', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/linelayout.zul');
@@ -1614,7 +1609,7 @@ test.describe('linelayout', () => {
     });
 
     // (d) no button may be clipped by the column's overflow:hidden — the timeline
-    // must be wide enough that each button renders in full (see skill-gaps 2026-06-22).
+    // must be wide enough that each button renders in full.
     m.btns.forEach((b, i) => {
       const overflow = b.right - m.lastRight;
       expect(overflow, `button[${i}] is clipped: right edge overflows the last column by ${overflow.toFixed(0)}px`).toBeLessThanOrEqual(1);
@@ -1626,7 +1621,7 @@ test.describe('linelayout', () => {
   // gave .z-lineitem-point-inner `width/height:inherit` (→ a 24px box overflowing
   // the 20px bordered interior, offsetting content +2/+2px from the point centre)
   // and left `background-position` at the default `0% 0%` (image anchored
-  // top-left). See doc/skill-gaps.md 2026-06-22 and contract M8/pt10-pt13c.
+  // top-left). See contract M8/pt10-pt13c.
   test('point-content-centered', async ({ page }) => {
     const m = await page.evaluate(() => {
       const box = (el: Element) => {
@@ -1678,7 +1673,7 @@ test.describe('linelayout', () => {
 // divider — no member draws a border on the bar. splitlayout used to be the
 // lone outlier with a 1px outline-variant bar border (contract c2), which
 // stacked into a double-line between its already-bordered panes. This test
-// pins every family bar to border-width 0. See doc/skill-gaps.md 2026-06-23.
+// pins every family bar to border-width 0.
 test.describe('splitter-family', () => {
   test('bars-are-borderless-across-the-family', async ({ page }) => {
     const maxBorder = async (url: string, selector: string) => {
@@ -1714,7 +1709,7 @@ test.describe('splitter-family', () => {
   // member resizes its pill on hover. borderlayout used to grow its pill 28px→44px
   // (the lone outlier; the caret already has its space at idle via opacity:0, so
   // the growth was decorative). The pill long-axis must stay 28px on hover, like
-  // splitter/splitlayout. See doc/skill-gaps.md 2026-06-23.
+  // splitter/splitlayout.
   test('pill-does-not-resize-on-hover', async ({ page }) => {
     await page.goto('/borderlayout.zul');
     await page.waitForLoadState('networkidle');
@@ -1737,7 +1732,7 @@ test.describe('splitter-family', () => {
 });
 
 // -------------------------------------------------------
-// Stepbar (skill-gaps 2026-06-23/24: error glyph, vertical, wrapped-label)
+// Stepbar (error glyph, vertical, wrapped-label)
 // -------------------------------------------------------
 test.describe('stepbar', () => {
   test.beforeEach(async ({ page }) => {
@@ -2397,8 +2392,8 @@ for (const { comp, focus, shot } of FORM_CONTROL_STATES) {
 // Batch 2 changed the list-row selected colour; the popups were never captured open.
 // Searchbox: the second default searchbox has a pre-selected item, which carries
 // `.z-searchbox-selected` (secondary-container). Chosenbox dropdown: ArrowDown moves
-// `.z-chosenbox-option-hover`, whose fill is hardcoded (follow-up item 10 in
-// tasks/marble-theme-followups.md), so that shot does NOT cover batch 2's colour. The
+// `.z-chosenbox-option-hover`, whose fill is hardcoded (an open follow-up),
+// so that shot does NOT cover batch 2's colour. The
 // chosenbox chip shot below covers batch 2's `--zk-chosenbox-item-focus-bg`
 // (`.z-chosenbox-item-focus`).
 // -------------------------------------------------------
@@ -2446,7 +2441,7 @@ test.describe('chosenbox dropdown', () => {
 
 // -------------------------------------------------------
 // Scrollbar (custom / simulated overlay + embedded)
-// MD3 gap (doc/skill-gaps.md 2026-06-30): the simulated bar's thumb/rail/embed
+// MD3 gap (2026-06-30): the simulated bar's thumb/rail/embed
 // used a hardcoded `border-radius: 4px` and the `ease` timing keyword instead of
 // the theme's pill radius (--zk-shape-corner-full) + standard easing
 // (--zk-motion-easing-standard = cubic-bezier(0.4, 0, 0.2, 1)). Thumb COLOURS are
@@ -2474,7 +2469,7 @@ test.describe('scrollbar', () => {
     expect(probe.timing, `thumb transition easing should be the MD3 standard curve, got "${probe.timing}"`).toContain('cubic-bezier(0.4, 0, 0.2, 1)');
   });
 
-  // MD3 gap (doc/skill-gaps.md 2026-06-30): in EMBEDDED mode (data-embedscrollbar=true)
+  // MD3 gap (2026-06-30): in EMBEDDED mode (data-embedscrollbar=true)
   // the rest `*-embed` rail and the hover `.z-scrollbar` bar disagreed on their cross-axis
   // offset, so the bar jumped ~5px laterally on mouse-over (rest center 3px vs hover 8px
   // from the edge) and read as "two different scrollbars". MD3 continuity-of-motion: the
@@ -2634,7 +2629,7 @@ test.describe('not-closable-cursor', () => {
 // NS21 batch 2 (round 1): state classes that ZK adds only after a real interaction.
 // Each test (1) asserts the class is absent, (2) interacts with real mouse/keyboard input only,
 // (3) asserts the class on the one element that should carry it, (4) asserts a computed style the
-// class changes, (5) takes a state shot where the effect is visible. doc/marble-variant-gap-ns21-batch2-plan.md.
+// class changes, (5) takes a state shot where the effect is visible.
 // -------------------------------------------------------
 
 // 0.02 instead of the project's 0.05: the 0.05 threshold hides small background changes (plan D1); maxDiffPixels stays at padShot's 20.

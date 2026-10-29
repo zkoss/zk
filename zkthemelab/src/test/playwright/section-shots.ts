@@ -1,6 +1,6 @@
 import { expect, Page, test } from '@playwright/test';
 
-// Sectioned gallery screenshots (doc/marble-sectioned-gallery-brief.md, D7).
+// Sectioned gallery screenshots (D7).
 //
 // A whole-page gallery shot tolerates maxDiffPixelRatio * page-area pixels (tree 16,481 px), so
 // the budget grows with page height and a 1px border change on one control hides inside it. Here

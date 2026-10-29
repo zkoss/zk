@@ -4,7 +4,7 @@ import * as path from 'path';
 import { AGGREGATE_PAGES } from './aggregate-pages';
 import { expectVariantSectionShots, VARIANT_PAGES } from './variant-gallery';
 
-// Brand-colour override guard (tasks/marble-test-gaps-round2-plan.md section 6).
+// Brand-colour override guard.
 //
 // The promise (doc/spec/brand-override.md): overriding the one seed --zk-color-primary re-derives the
 // whole primary family. Two checks keep it:
@@ -43,7 +43,7 @@ const FAMILY_TOKENS = [
 
 // Per-channel distance within which a stock pixel counts as "this family colour".
 const CHANNEL_TOLERANCE = 2;
-// Residual pixels allowed per page. Measured first, see doc/marble-brand-batch1-report.md.
+// Residual pixels allowed per page. Measured first.
 const RESIDUAL_MAX_PIXELS = 0;
 // Extra viewport height over the document height so the clip never needs a scroll (as section-shots.ts).
 const VIEWPORT_SLACK = 1000;

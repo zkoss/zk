@@ -4,10 +4,7 @@ The project owner has ruled on well over a hundred Marble appearance questions. 
 are what those rulings have in common. Apply them yourself: a question they settle is **not**
 asked. Only the cases in §4 go to the owner.
 
-Where each principle came from (D-ids, issues, dates) stays in the documents that recorded the
-rulings — `tasks/jess-review/decisions.md`, `tasks/zkdemo-b6-marble-fixes.md`,
-`tasks/zkdemo-b8-triage.md`, `doc/marble-master-sync-strategy.md`, `doc/spec/`. The `tasks/`
-files are local-only (gitignored) and absent from a fresh clone. This file holds conclusions only.
+This file holds conclusions only. Where a ruling became normative, `doc/spec/` records it.
 
 ## How to decide
 
@@ -21,8 +18,8 @@ files are local-only (gitignored) and absent from a fresh clone. This file holds
 ## 1. Ownership
 
 - **O1 — Reproduce in IceBlue first.** Run the same page on master with IceBlue at the same ZK
-  version before deciding who fixes. Absent in IceBlue → Marble caused it → fix it in Marble CSS on
-  `marble` with a `ZK-6112: …` commit; no new Jira. The same applies when IceBlue does not
+  version before deciding who fixes. Absent in IceBlue → Marble caused it → fix it in Marble CSS;
+  no new Jira. The same applies when IceBlue does not
   support the feature or mode at all (forced-colors mode, for instance, has no IceBlue rules):
   check that IceBlue claims the capability before calling its behaviour a defect.
 - **O2 — Both themes, cause in shared code** (widget TS/JS, Java, ZUL, IceBlue LESS) → a ZK Jira
@@ -54,7 +51,7 @@ files are local-only (gitignored) and absent from a fresh clone. This file holds
   new attribute) → a New Feature Jira, not theme CSS.
 - **O9 — Accessibility fixes live in component CSS** or the central `_forced-colors.css`, never
   in an optional add-on sheet Marble does not load.
-- **O10 — Stay inside the reported issue.** Other findings go to `tasks/marble-theme-followups.md`;
+- **O10 — Stay inside the reported issue.** Record other findings as follow-ups;
   no drive-by fixes in adjacent code.
 
 ## 2. Precedence: which source wins
@@ -132,7 +129,7 @@ option — plus a recommended option, the principle that could not settle it, an
   agreed, the name follows `doc/spec/utility-naming.md`), or changing a global role token's value
   in `tokens/` (colour roles, type scale, shape). A component token's default is decided (§3).
 - **E5** The fix needs a new `!important`.
-- **E6** Filing a Jira or any other outward action (always confirmed; see CLAUDE.md).
+- **E6** Filing a Jira or any other outward action (always confirmed).
 - **E7** The request stays ambiguous after reproducing its narrowest reading.
 - **E8** A contrast floor (V10) cannot be met without E4.
 - **E9** The request touches a won't-do in `doc/spec/design-decisions.md` (dark mode, a separate

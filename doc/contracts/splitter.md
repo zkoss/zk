@@ -6,7 +6,7 @@ rules: see .claude/skills/zk-component-rules/components/splitter.md
 contract-approved: true
 zk-version: 10.2.1-jakarta
 
-> Revised 2026-06-04 per user splitter-family unification ruling (gap log `doc/skill-gaps.md`): the splitter now follows the canonical family spec in DESIGN.md §14 — shared with borderlayout region splitters, splitlayout, and goldenlayout (colors only).
+> Revised 2026-06-04 per user splitter-family unification ruling: the splitter now follows the canonical family spec in DESIGN.md §14 — shared with borderlayout region splitters, splitlayout, and goldenlayout (colors only).
 
 ## References
 - DESIGN.md sections: **§14 (splitter family — canonical spec)**, §8 (state layers), §9 (motion), §11 (border rules)

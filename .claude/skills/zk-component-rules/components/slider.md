@@ -130,7 +130,7 @@ No ZK-emitted state classes for interactive states. All interactive states (hove
 
 ## Class name caution
 
-Older theme docs (including `doc/component-dom-structures.md (retired with the template)`) may reference `.z-slider-center` (track) and `.z-slider-area` (fill) OR `.z-slider-rail` and `.z-slider-runner`. The mold JS (`mold/slider.js`) uses `this.$s('center')` / `this.$s('area')` / `this.$s('button')` which resolve to `.z-slider-center`, `.z-slider-area`, `.z-slider-button`. Use these names. Do not author rules for `.z-slider-rail` or `.z-slider-runner` unless you have confirmed live DOM output with those names.
+Older theme docs may reference `.z-slider-center` (track) and `.z-slider-area` (fill) OR `.z-slider-rail` and `.z-slider-runner`. The mold JS (`mold/slider.js`) uses `this.$s('center')` / `this.$s('area')` / `this.$s('button')` which resolve to `.z-slider-center`, `.z-slider-area`, `.z-slider-button`. Use these names. Do not author rules for `.z-slider-rail` or `.z-slider-runner` unless you have confirmed live DOM output with those names.
 
 `.z-slider-indeterminate` has been documented in some versions — verify against live ZK 10 output before using.
 

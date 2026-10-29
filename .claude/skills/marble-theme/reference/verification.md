@@ -10,8 +10,8 @@ The IceBlue baseline app exists only in the template until P4 — `zkthemelab` h
 counterpart yet.
 
 **Use `127.0.0.1`, not `localhost`.** Chrome resolves `localhost` to IPv6 `::1` while the preview
-app binds IPv4. CLAUDE.md documents the base as `${PREVIEW_URL}` = `http://127.0.0.1:8085` rather
-than hardcoding a port, so set `export PREVIEW_URL=http://127.0.0.1:8085` or paste the address.
+app binds IPv4. Docs, contracts and agents refer to the base as `${PREVIEW_URL}` =
+`http://127.0.0.1:8085` rather than hardcoding a port, so set `export PREVIEW_URL=http://127.0.0.1:8085` or paste the address.
 
 Override the port with `-PhttpPort=<n>` on the `appRun` command below; there is no
 `application.properties` to edit.
