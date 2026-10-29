@@ -20,7 +20,9 @@ Config: [zkthemelab/src/test/playwright/playwright.config.ts](../zkthemelab/src/
 The project list lives there; run `npx playwright test --list` for the current test inventory.
 
 - `baseURL` is `${PREVIEW_URL}` (default `http://localhost:8085`); the preview app must be running.
-- `snapshotDir` is `zkthemelab/doc/screenshots`, snapshot path `{snapshotDir}/{arg}{ext}`.
+- `snapshotDir` is `zkthemelab/doc/screenshots`, snapshot path `{snapshotDir}/{arg}{ext}`. The directory is
+  gitignored: baselines are captured on your own machine (see §3), because screenshots of the same CSS
+  differ between operating systems, fonts and GPUs.
 - **Flat layout:** one file per (page, scenario) named `<page>-<scenario>.png`, e.g. `button-gallery.png`,
   `button-default-hover.png`, `button-tablet.png`. Each spec passes its snapshot name as one hyphenated
   string. Desktop and tablet are told apart by the filename suffix.
@@ -34,7 +36,10 @@ Start the preview app first (it is the prerequisite of every project), see
 ```bash
 cd zkthemelab && ./start.sh                 # http://127.0.0.1:8085
 
-# From zkthemelab/:
+# From zkthemelab/, around a CSS change (same args both times):
+npm run baseline:capture -- --project=gallery -g "button"   # BEFORE editing; refuses if CSS is dirty
+npm run baseline:compare -- --project=gallery -g "button"   # after editing and rebuilding
+
 npm run screenshot:test                    # the whole suite
 npm run screenshot:update                  # playwright --update-snapshots
 npx playwright test -c src/test/playwright/playwright.config.ts --project=<project>

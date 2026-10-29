@@ -77,8 +77,8 @@ runs locally only; it is not wired to CI or Jenkins (Marble maintainer's ruling,
 
 ## Running Playwright — flags that bite
 
-- Compare against the baselines with the repo config: `npx playwright test -c src/test/playwright/playwright.config.ts ...`. A temporary config must copy `snapshotDir` and `snapshotPathTemplate`; otherwise the run writes new PNGs and passes falsely. After the run check `git status`: a new PNG means nothing was compared.
-- In Playwright 1.59 a bare `--update-snapshots` defaults to `changed`. Name the mode (`--update-snapshots=changed`) and, before committing, confirm the file count with `git status --porcelain <baseline directory>`.
+- Compare against the baselines with the repo config: `npx playwright test -c src/test/playwright/playwright.config.ts ...`. A temporary config must copy `snapshotDir` and `snapshotPathTemplate`; otherwise the run writes new PNGs and passes falsely. Playwright reports a missing snapshot as "writing actual"; that line means nothing was compared.
+- In Playwright 1.59 a bare `--update-snapshots` defaults to `changed`. Name the mode (`--update-snapshots=changed`).
 - `-g` matches the title path joined by spaces and starting with the Playwright project name (`project file describe title`, e.g. `chromium screenshot.spec.ts tabbox gallery`). Anchor the end with `describe title$`; anchoring the start with `^` requires the project name. Do not paste the `›` form that `--list` prints.
 - Rebuild the class index only with `node scripts/build-class-index.mjs`. The script starts and stops the server it needs by itself (client ROD off). On a default server the pop-up elements are not in the static DOM, so the whole index would miss the pop-up classes. Do not build it against a server you already have running.
 
@@ -117,13 +117,14 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
 
 ## Screenshot baselines — the parts that bite
 
-- **The baselines are in place: 188 compared PNGs plus 99 `*-forced-colors.png` review captures, in
-  `zkthemelab/doc/screenshots/`, beside `focus-ring-known-clips.json`.** Now that they are in place,
-  a run *compares* — the earlier "can only create, never compare" caveat is gone.
-  `playwright.config.ts:13`'s `snapshotDir: '../../../doc/screenshots'` resolves, from
-  `zkthemelab/src/test/playwright/`, to that directory. The forced-colors images are **human-review
-  artifacts that are always dirty** and never compared. (183 at the 2026-09-11 re-cut;
-  `scrollview-tablet.png` made 184.)
+- **The baselines are local, not in the repository.** `zkthemelab/doc/screenshots/` is gitignored:
+  the same CSS renders differently on another OS, font set or GPU, so a committed baseline fails on
+  every other machine. Capture before editing CSS with `zkthemelab/scripts/visual-baseline.sh
+  capture <args>` (refuses while any `.css`/`.css.dsp` has uncommitted changes; writes
+  `doc/screenshots/.baseline` with the commit and args), then run `compare <args>` with the same args.
+  `playwright.config.ts`'s `snapshotDir: '../../../doc/screenshots'` resolves, from
+  `zkthemelab/src/test/playwright/`, to that directory. The `*-forced-colors.png` images are
+  human-review artifacts and are never compared.
 - The harness resolves its `doc/` paths three levels up from `zkthemelab/src/test/playwright/` — the MODULE root (`zkthemelab/` in zk, the template's own root in the template), never the repository root; the baselines directory above and `focus-ring-known-clips.json` both live there.- **The zero-tolerance comparison is the equivalence check that was actually
   run**: the template's unchanged specs against `zkthemelab`, every PNG compared at `threshold: 0,
   maxDiffPixels: 0` with the tracked tools in the separate `zkThemeTemplate` repository (path inside that repo: `doc/migration/tools/zero-tolerance/`), not in zk
@@ -144,8 +145,6 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   restart ran the full `tablet` project the next day. After any change under
   `zkthemelab/src/main/webapp/web/*.zul`, run **both** `--project gallery` and `--project tablet`
   before committing, and re-cut with `--update-snapshots=changed` so only the mismatching files move.
-- **`git log -1 -- <png>` lies when a commit only renamed the file.** Do not date a baseline that
-  way.
 - **The UseCase SPA hangs on `networkidle`.** Use `domcontentloaded`, then wait on a text marker,
   then `fonts.ready`, with a tall viewport.
 - **The pop-up layer needs interaction** or roughly 180 selectors are never painted. Cursor
