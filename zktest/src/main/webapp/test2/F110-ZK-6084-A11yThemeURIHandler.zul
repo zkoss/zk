@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6084-A11yThemeURIHandler.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Oct 29 16:58:29 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click "iceblue" (its theme jar ships za11y's stylesheet); the page reloads.
+		2. In DevTools, the za11y stylesheet is loaded from .../iceblue/za11y/css/iceblue.css.dsp, the theme jar's copy.
+		3. Click "marble"; the page reloads.
+		4. The za11y stylesheet is loaded from .../za11y/css/marble.css.dsp, za11y's own copy.
+	</label>
+	<button label="iceblue" onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "iceblue");Executions.sendRedirect(null);'/>
+	<button label="marble" onClick='org.zkoss.zul.theme.Themes.setTheme(Executions.getCurrent(), "marble");Executions.sendRedirect(null);'/>
+</zk>
