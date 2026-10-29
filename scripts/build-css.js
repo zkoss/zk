@@ -237,6 +237,9 @@ const normFiles = [
     'js/zul/layout/css/html.css',
     'js/zul/wgt/css/image.css',
     'js/zul/wgt/css/imagemap.css',
+    // Root of a macro component. Its widget, zk.Macro, lives in the zk module and has no css-uri,
+    // so the underscore partial is bundled here like the widgets above.
+    'js/zul/wgt/css/_macro.css',
 ];
 
 // The utility subset of the bundle, reused by the manifest generator so the catalogue can never

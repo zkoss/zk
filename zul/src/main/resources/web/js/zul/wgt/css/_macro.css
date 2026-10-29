@@ -1,0 +1,13 @@
+/* Macro component root (IceBlue norm.less .z-macro). The widget is zk.Macro (zk/widget.ts,
+   widgetName 'macro'); it has no css-uri in lang.xml, so this file is bundled into norm.css.dsp.
+   A <div> macro root would otherwise fill the row, so clicking the middle of the row hits blank
+   space instead of the label it wraps.
+   Component layer, not unlayered: a display utility on the macro (sclass="z-d-none", z-d-flex,
+   z-d-sm-none) lives in zk-utilities and must still win. */
+
+@layer zk-components {
+.z-macro {
+    display: inline-block;
+    min-width: 1px;
+}
+}
