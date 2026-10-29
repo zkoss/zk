@@ -115,20 +115,12 @@ Changes that touch only blank lines or comments select nothing. Changed rules wi
 
 ## Keeping it current
 
-* **Build the index from a server with client ROD off**, and run the tests against a server with the default:
-  ```bash
-  cd zkthemelab
-  tail -f /dev/null | JAVA_TOOL_OPTIONS=-Dorg.zkoss.zul.client.rod=false withjdk.sh 17 bash ./gradlew appRun -PhttpPort=<port> --console=plain
-  node scripts/build-class-index.mjs --url http://127.0.0.1:<port>
-  ```
-  With `org.zkoss.zul.client.rod=false` the combobox, bandbox, datebox, menu and popup pop-ups are rendered at page
-  load, so more pop-up classes are present at rest and map straight to their pages (measured in
-  doc/client-rod-probe.md: no page loses a class). Never run the Playwright tests against that server: a Tree
-  renders without its ROD spacers and `tree-header` fails by about 16,000 pixels. Stop that server before the tests.
+* **Build the index with `node scripts/build-class-index.mjs [--port <port>]`.** The script starts its own preview
+  server with the JVM flags it needs, indexes, and stops that server. See its header comment for what each flag does
+  and why. Run the Playwright tests against a normal (default) server.
 * `zkthemelab/doc/class-index.json` is the page -> classes index, keyed by URL path (`a.zul`, `pv/input-invalid-guard.zul`,
   `utility/print.zul`). It covers every top-level page plus every `.zul` a spec names as a string literal URL
-  (`'/pv/...zul'`; paths in comments and titles do not count). Rebuild it after a full run, with the preview server up:
-  `node scripts/build-class-index.mjs --url http://127.0.0.1:8085`. It fails (and writes nothing) if any page errors.
+  (`'/pv/...zul'`; paths in comments and titles do not count). It fails (and writes nothing) if any page errors.
   Rebuild it whenever a spec starts navigating to a new fixture page.
 * `component-theme-variables.spec.ts` opens its page from the test title (`/${PAGES[comp] ?? comp}.zul`). `computedUrlPage`
   in `select-tests.mjs` parses its `PAGES*` maps and applies them to the title; it is the only place that knows this.

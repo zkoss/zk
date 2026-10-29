@@ -79,6 +79,7 @@ Read `.claude/skills/marble-theme/SKILL.md` before touching any theme CSS, token
 ### Playwright
 - 跑 Playwright、或改了 CSS／預覽頁／spec 之後，先讀 `.claude/skills/marble-theme/reference/verification.md` 的「Which tests to run after a change」與「Running Playwright」。
 - 比對基準只用 repo 內的 config，臨時 config 會假通過；`select-tests.mjs` 回 `full` 時不自行跑全測，回報原因由使用者決定。
+- 重建 `zkthemelab/doc/class-index.json` 只用 `node scripts/build-class-index.mjs`：它自己啟動並停止所需設定的伺服器（client ROD 關閉；預設伺服器的 pop-up 不在靜止 DOM，整份索引會少掉 pop-up class）。不要拿手上現成的伺服器去建。
 
 ### 測試與驗證
 - 除錯或調查 bug 時，先做一個最小可重現頁面（`zkthemelab/src/main/webapp/web/pv/<主題>-repro.zul`：只放觸發問題的元件與最少設定，不放頁面外框、標題、其他區段），在這個頁面上重現、量測、驗證修法，不在完整的 gallery 頁面上除錯：頁面上其他元件、樣式、載入順序都是無關的潛在影響因素。要比較修法就各做一個只差一處的變體頁。這些頁面是暫時性的，除錯完刪除（含 `build/inplaceWebapp` 的複本），不 commit；需要長期保留的回歸測試另外寫進正式的 spec。
