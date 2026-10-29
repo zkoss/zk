@@ -39,6 +39,25 @@ public class B96_ZK_4915Test extends WebDriverTestCase {
 		}
 	}
 
+	// A collapsed navbar overlaps the badge on its icon's top-right corner, also when the navbar has a width (300px).
+	@Test
+	public void collapsedBadgeAtIconCorner() {
+		connect();
+
+		for (int i = 2; i < 4; i++) {
+			// badge top - row top, and badge right - right edge of the icon column (icon + the row's right padding)
+			String[] gaps = getEval("(function () {"
+					+ " var row = jq('.z-nav-content')[" + i + "],"
+					+ " r = row.getBoundingClientRect(),"
+					+ " c = jq(row).children('i')[0].getBoundingClientRect(),"
+					+ " b = jq('.z-nav-info')[" + i + "].getBoundingClientRect();"
+					+ " return (b.top - r.top) + ',' + (b.right - c.right - parseFloat(getComputedStyle(row).paddingRight)); })()")
+					.split(",");
+			Assertions.assertEquals(4, Double.parseDouble(gaps[0]), 1, "badge " + i + " should sit 4px below the row's top");
+			Assertions.assertTrue(Double.parseDouble(gaps[1]) <= 0.5, "badge " + i + " should stay inside the icon column, but its right edge is " + gaps[1] + "px past it");
+		}
+	}
+
 	private void checkBadgeAligned(int index) {
 		JQuery text = jq(".z-nav-text").eq(index);
 		double textMiddle = text.offsetTop() + text.height() / 2;
