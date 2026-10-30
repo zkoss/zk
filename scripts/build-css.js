@@ -68,12 +68,6 @@ if (!moduleName || !MODULES[moduleName]) {
 const webDir = MODULES[moduleName].webDir;
 const themeDir = argFor('--out') || MODULES[moduleName].outDir;
 
-// True only for a relPath that belongs to the selected module, by the same path-prefix
-// convention the template used across modules (js/zul/, js/zkmax/, js/zkex/, zul/, zkmax/, zkex/).
-function belongsToModule(relPath, mod) {
-    return relPath.startsWith(`js/${mod}/`) || relPath.startsWith(`${mod}/`);
-}
-
 
 // Dev builds (--dev) stay unminified so hot-swapped CSS is readable in
 // DevTools; the packaged build (Gradle compileMarbleCss) is minified.
@@ -372,16 +366,6 @@ const WCS_SERVED_ALLOWLIST = new Set([
 // matched nothing, so they were DELETED rather than bundled. There is intentionally no
 // dead-CSS allowlist: a future no-css-uri file that matches nothing SHOULD trip the guard
 // below so someone decides delete-vs-fix.
-
-// Empty stubs for unimplemented zkex/zkmax components.
-// These prevent FileNotFoundException errors at runtime. Filtered to the selected module
-// by path prefix at the point of use (see build() stage 0a).
-const stubPaths = [
-    // The other zkex/zkmax components ship real CSS in zkcml (auto-scanned 1:1 below), so they need no stub.
-    // This one has no source file; the stub prevents a 404 from ZK's per-widget CSS lookup.
-    // sliderbuttons is nested in rangeslider/multislider; its styles live in rangeslider.css / multislider.css.
-    'js/zkex/slider/css/sliderbuttons.css.dsp',
-];
 
 function minifySvg(svg) {
     return svg
@@ -739,13 +723,6 @@ function build() {
 
     // 0b. Fail fast if the CSS breakpoints drifted from the zkmax Grid/Listbox ones.
     if (moduleName === 'zkmax') assertBreakpointsConsistent();
-
-    // 0a. Write empty stubs for unimplemented components belonging to this module.
-    const moduleStubs = stubPaths.filter(p => belongsToModule(p, moduleName));
-    for (const stubPath of moduleStubs) {
-        writeDsp(stubPath, '');
-    }
-    if (moduleStubs.length) console.log(`  ${moduleStubs.length} empty stubs (${moduleName})`);
 
     if (moduleName === 'zul') {
         // 1. Build norm.css.dsp (tokens + base + global + generated Lucide icons)
