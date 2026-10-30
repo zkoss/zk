@@ -10,7 +10,6 @@ preview: ${PREVIEW_URL}/inputgroup.zul
 ## References
 - DESIGN.md sections: §1, §5, §7, §11
 - Closest-sibling CSS to read first: `zul/src/main/resources/web/js/zul/inp/css/input.css`
-- MUI reference for adornments: `/Users/hawk/.../static-css-output/Inputs/InputAdornment.css`
 - Close to MUI InputAdornment pattern.
 
 ## DOM key selectors

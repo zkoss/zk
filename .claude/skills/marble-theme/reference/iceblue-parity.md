@@ -2,7 +2,7 @@
 
 **The fact that governs everything here:** IceBlue's `--zk-*` properties are **not internal
 implementation — they are a documented public API** since ZK 10.3.0. The official page
-`DOC/zkdoc/zk_style_customization_guide/css_variables.md` (tagged
+`https://github.com/zkoss/zkdoc/blob/master/zk_style_customization_guide/css_variables.md` (tagged
 `supported-since version="10.3.0"`) promises:
 
 > "ZK provides hundreds of CSS custom properties for easy theming and customization **without LESS
@@ -137,3 +137,10 @@ This is also the mechanism behind a live build hazard: `zkcml/.gitmodules` point
 lands on that repo's `master`, the next `./build.sh -u` feeds a pure-CSS tree into a Maven +
 zklessc pipeline and all 27 palettes break — later, and for someone else. The fix is to drop
 `--remote` and point the submodule at the `iceblue` branch.
+
+## Theme jars: missing files, fallback and Font Awesome
+
+- **Missing file in a theme jar:** first check the same theme jar of the same ZK version. Describe a gap between versions as a version mismatch, not as a property of the theme itself.
+- **RD documents** mention only supported themes (ZK 10+: iceblue_c and Theme Pack). breeze, sapphire, silvertail and atlantic have been deprecated since 10.0.0.
+- **Fallback:** if a legacy theme lacks a file that another theme has under a different name (`button.css` vs `button.css.dsp`), fall back within that legacy theme. Files that only Marble has (`reset.css`, `fonts.css`) do not fall back.
+- **Font Awesome** (the stylesheet and the font files) has been in the separate legacy theme jars only (iceblue, ruby and others) since 11.0. The default theme, Marble, does not include it. When you fix a problem in a legacy theme, zul must handle two cases: the default theme, and an extra legacy theme jar loaded alongside it. Do not restore legacy theme assets into zul. To detect the default theme, call a named method such as `isDefaultTheme()`; do not write `getThemeFileSuffix() == null` at the call site.

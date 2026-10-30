@@ -1,13 +1,11 @@
 # Decision principles: settle appearance questions without asking
 
-The project owner has ruled on well over a hundred Marble appearance questions. These principles
+The Marble maintainer has ruled on well over a hundred Marble appearance questions. These principles
 are what those rulings have in common. Apply them yourself: a question they settle is **not**
-asked. Only the cases in §4 go to the owner.
+asked. Only the cases in §4 go to the Marble maintainer.
 
-Where each principle came from (D-ids, issues, dates) stays in the documents that recorded the
-rulings — `tasks/jess-review/decisions.md`, `tasks/zkdemo-b6-marble-fixes.md`,
-`tasks/zkdemo-b8-triage.md`, `doc/marble-master-sync-strategy.md`, `doc/spec/`. The `tasks/`
-files are local-only (gitignored) and absent from a fresh clone. This file holds conclusions only.
+Where each principle came from (issues, dates) stays in the documents that recorded the
+rulings — `doc/spec/`. This file holds conclusions only.
 
 ## How to decide
 
@@ -16,7 +14,7 @@ files are local-only (gitignored) and absent from a fresh clone. This file holds
    `doc/contracts/<component>.md`.
 3. **No precedent:** apply the precedence order in §2.
 4. **Check §4.** If no item applies, decide, act, and cite the principle IDs in the report —
-   e.g. "decided by O1 + V6" — so the owner can audit the call.
+   e.g. "decided by O1 + V6" — so the Marble maintainer can audit the call.
 
 ## 1. Ownership
 
@@ -26,8 +24,8 @@ files are local-only (gitignored) and absent from a fresh clone. This file holds
   support the feature or mode at all (forced-colors mode, for instance, has no IceBlue rules):
   check that IceBlue claims the capability before calling its behaviour a defect.
 - **O2 — Both themes, cause in shared code** (widget TS/JS, Java, ZUL, IceBlue LESS) → a ZK Jira
-  (zk-bug-filing skill, Affects Version, screenshot). The core team fixes it; the Marble session
-  does not. Filing the Jira is decided here; only the filing itself is confirmed (E6). When the
+  (see `reference/bug-filing.md`, Affects Version, screenshot). The core team fixes it; the Marble
+  maintainers do not. Filing the Jira is decided here; only the filing itself is confirmed (E6). When the
   core fix will add the hook Marble needs (always so for O3), Marble styles it after the fix
   lands and does not target inline-style values or other markup the fix will change.
   A look each theme chose on its own, with no defect in shared code, is not O2 but E2.
@@ -54,19 +52,19 @@ files are local-only (gitignored) and absent from a fresh clone. This file holds
   new attribute) → a New Feature Jira, not theme CSS.
 - **O9 — Accessibility fixes live in component CSS** or the central `_forced-colors.css`, never
   in an optional add-on sheet Marble does not load.
-- **O10 — Stay inside the reported issue.** Other findings go to `tasks/marble-theme-followups.md`;
-  no drive-by fixes in adjacent code.
+- **O10 — Stay inside the reported issue.** Record other findings in the report or file a separate
+  Jira; no drive-by fixes in adjacent code.
 
 ## 2. Precedence: which source wins
 
 - **V1 — Normative documents.** `doc/spec/` and the component contract beat older notes. A
-  contract's `## Accepted MD3 deviations` section holds owner rulings; do not re-flag them.
+  contract's `## Accepted MD3 deviations` section holds Marble maintainer rulings; do not re-flag them.
 - **V2 — MD3 decides semantics:** colour roles and `on-*` pairing, state layers, the type scale,
   elevation as spatial role, shape, keylines. **When two options differ, pick the one that fits
-  MD3 better** (the owner's stated tie-breaker). MD3 has no italic and no opacity-grey hierarchy;
+  MD3 better** (the Marble maintainer's stated tie-breaker). MD3 has no italic and no opacity-grey hierarchy;
   hierarchy is tone and weight.
 - **V3 — MUI v7 decides values:** padding, font sizes, heights, transitions (see SKILL.md,
-  "External reference: MUI's CSS"). MD3 numbers apply only where MUI is silent. Marble is
+  "External reference: MUI"). MD3 numbers apply only where MUI is silent. Marble is
   deliberately denser than MD3 defaults.
 - **V4 — The ZK API contract beats MUI's look.** Honour what ZK attributes and ZK JS assume:
   `cols`/`size` set width, `align=` hints win over theme alignment, widgets have zero margin.
@@ -117,10 +115,10 @@ files are local-only (gitignored) and absent from a fresh clone. This file holds
 | Public `--zk-*` token | keep the knob and change only its default; never change a knob's meaning (add a new token); no token that cannot work (e.g. breakpoints, since `@media` cannot read `var()`) |
 | Utility class names | follow `doc/spec/utility-naming.md` (Bootstrap vocabulary first; an accurate name beats a short one; one rule, one name) |
 
-## 4. Ask the owner only here
+## 4. Ask the Marble maintainer only here
 
-Present each question as an Artifact with full-width screenshots — before, IceBlue, and each
-option — plus a recommended option, the principle that could not settle it, and the cost.
+Present each question with screenshots of the current state, of IceBlue, and of each option,
+plus a recommended option, the principle that could not settle it, and the cost.
 
 - **E1** MD3 and same-family consistency point different ways, or two requests contradict.
 - **E2** A taste call with no precedent and no MD3/MUI answer: a new visual idiom, or improving
@@ -132,14 +130,14 @@ option — plus a recommended option, the principle that could not settle it, an
   agreed, the name follows `doc/spec/utility-naming.md`), or changing a global role token's value
   in `tokens/` (colour roles, type scale, shape). A component token's default is decided (§3).
 - **E5** The fix needs a new `!important`.
-- **E6** Filing a Jira or any other outward action (always confirmed; see CLAUDE.md).
+- **E6** Filing a Jira, posting a comment, pushing, or any other outward action: always confirmed with the Marble maintainer before it happens.
 - **E7** The request stays ambiguous after reproducing its narrowest reading.
 - **E8** A contrast floor (V10) cannot be met without E4.
 - **E9** The request touches a won't-do in `doc/spec/design-decisions.md` (dark mode, a separate
   high-contrast theme, the deprecated font properties).
 - **E10** A fix still fails after three rounds, or a regression cannot be attributed.
 
-## 5. After the owner rules
+## 5. After the Marble maintainer rules
 
 Fold every ruling back in, in the same commit as the work it decided:
 
@@ -147,4 +145,4 @@ Fold every ruling back in, in the same commit as the work it decided:
 - It contradicts a principle → change the principle; do not add an exception beside it.
 - It is a one-off → change nothing here.
 
-Record where the ruling came from in the working document (D-id, date), not here.
+Record where a ruling came from (date, Jira key) in the commit message or the Jira, not here.

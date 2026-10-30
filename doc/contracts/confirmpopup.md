@@ -17,7 +17,6 @@ mockup-needed: Y — no ZKDoc canonical image found for ConfirmPopup (component 
 - MUI CSS: `Surfaces/Popover.css` (anchored floating panel — elevation/positioning analog; MUI's Popover
   has no directional arrow, so the arrow treatment has no direct MUI counterpart) + `Feedback/DialogActions.css`,
   `Feedback/DialogContent.css`, `Feedback/DialogTitle.css` (footer button row / body / header layout analogs)
-  at /Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/
 - DESIGN.md sections: §3 (Brand & Status Colors — severity → status-color mapping), §4 (Spacing Scale),
   §5 (Corner Radii), §6 (Elevation/Shadow), §7 (Typography), §8 (State-Layer Overlays)
 - Precedent: `doc/contracts/coachmark.md` — the closest existing Marble contract for an anchored,
@@ -26,7 +25,7 @@ mockup-needed: Y — no ZKDoc canonical image found for ConfirmPopup (component 
   per severity) — confirmpopup's icon color reuses the identical severity→token mapping so the same
   severity token always resolves to the same color across badge/chip/confirmpopup.
 - ZKDoc canonical: none found — ConfirmPopup is new in ZK 10.4.0 and has no entry yet under
-  `/Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/`.
+  https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/.
 - Iceblue baseline: doc/contracts/baselines/confirmpopup-iceblue.png (NOT captured this pass — out of scope).
 - HTML contract: doc/contracts/confirmpopup.html (NOT authored this pass — out of scope).
 

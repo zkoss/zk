@@ -51,3 +51,6 @@ graphify-out
 # macOS Finder metadata — ignored by the repository, not only via a machine-local core.excludesFile (D71-A, 2026-09-11)
 .DS_Store
 tasks/
+
+# personal Claude Code instructions (each checkout imports its own)
+CLAUDE.local.md

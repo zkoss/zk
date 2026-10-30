@@ -130,7 +130,7 @@ No ZK-emitted state classes for interactive states. All interactive states (hove
 
 ## Class name caution
 
-Older theme docs (including `doc/component-dom-structures.md (retired with the template)`) may reference `.z-slider-center` (track) and `.z-slider-area` (fill) OR `.z-slider-rail` and `.z-slider-runner`. The mold JS (`mold/slider.js`) uses `this.$s('center')` / `this.$s('area')` / `this.$s('button')` which resolve to `.z-slider-center`, `.z-slider-area`, `.z-slider-button`. Use these names. Do not author rules for `.z-slider-rail` or `.z-slider-runner` unless you have confirmed live DOM output with those names.
+Older theme docs may reference `.z-slider-center` (track) and `.z-slider-area` (fill) OR `.z-slider-rail` and `.z-slider-runner`. The mold JS (`mold/slider.js`) uses `this.$s('center')` / `this.$s('area')` / `this.$s('button')` which resolve to `.z-slider-center`, `.z-slider-area`, `.z-slider-button`. Use these names. Do not author rules for `.z-slider-rail` or `.z-slider-runner` unless you have confirmed live DOM output with those names.
 
 `.z-slider-indeterminate` has been documented in some versions — verify against live ZK 10 output before using.
 
@@ -191,4 +191,4 @@ Drop the negative margin on the JS-driven axis and every thumb lands half-a-thum
 - The knob mold extension is loaded as a ZK augment (`zk.augment`) from zkmax, not a separate widget class. The root class remains `.z-slider`.
 - `setMode()` is silently ignored for the knob mold (decimal mode not supported; use `setStep()` instead).
 - `setAngleArc()` / `setStrokeWidth()` / `setScaleInput()` are knob-only properties; they have no effect on the other molds.
-- Preview ZUL at `zkthemelab/src/main/webapp/web/pv/slider-content.zul` labels the knob section as "PE" — correct per ZKDoc (`zk_component_ref/slider.md` § Knob Mold, edition badge PE). An earlier version of this entry wrongly claimed EE by inferring edition from the zkmax source location.
+- Preview ZUL at `zkthemelab/src/main/webapp/web/pv/slider-content.zul` labels the knob section as "PE" — correct per ZKDoc (`https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/slider.md` § Knob Mold, edition badge PE). An earlier version of this entry wrongly claimed EE by inferring edition from the zkmax source location.

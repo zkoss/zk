@@ -201,7 +201,7 @@ G7 is the pass/fail floor; this category scores how well a set fits above that f
 ## Rule 1 — ZK widget icons (alias when needed)
 
 ZK 10 emits `z-icon-*` names (the set is found by the grep under **Maintenance** below) from compiled JS/TS sources under
-`/Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/`. We
+`zul/src/main/resources/web/js/`. We
 cannot modify these. The strategy is:
 
 1. If the name exists in `node_modules/lucide-static/icons/`, no action needed —

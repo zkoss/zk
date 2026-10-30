@@ -192,7 +192,7 @@ test.describe('tablet-matrix-label-readable', () => {
 // _wheel.css fix: the list stays bounded (3 visible rows) and the sheet lands on
 // screen. Also guards that the mobile-readonly trigger stays interactive (the
 // desktop readonly rule had pointer-events:none, making every mobile datebox
-// look disabled). See doc/skill-gaps.md 2026-06-15.
+// look disabled).
 // -------------------------------------------------------
 // A REAL tap on the trigger (the reported interaction) — also exercises the
 // pointer-events fix end-to-end. setOpen() via the widget API is avoided here: it
@@ -293,8 +293,7 @@ for (const { name, url, listSel, btnSel, inputSel } of wheelCases) {
     // the inline top by ~18px; the icon tap self-corrects via a second onSize sync
     // but the input tap (focus suppresses the resize) stayed at top+18 → the sheet
     // overshot below the fold, clipping the OK/Cancel row. The _wheel.css fix pins
-    // the sheet to bottom:0 so BOTH tap targets land identically. See
-    // doc/skill-gaps.md 2026-06-15 (follow-up).
+    // the sheet to bottom:0 so BOTH tap targets land identically.
     test('tapping the input lands the sheet flush (not below the fold)', async ({ page }) => {
       await page.goto(url);
       await page.waitForLoadState('networkidle');

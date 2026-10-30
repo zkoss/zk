@@ -2,8 +2,7 @@
 
 Why the verification harness is shaped the way it is. **Operational rules do NOT live here** — read:
 `.claude/skills/marble-theme/reference/harness-playbook.md`, `.claude/agents/zk-spec-author.md`, `.claude/agents/zk-theme-evaluator.md`,
-`.claude/agents/md3-design-verifier.md`, `.claude/skills/zk-component-rules/authoring/contract-tiers.md`,
-`scripts/eval-sanity-tier.js`.
+`.claude/agents/md3-design-verifier.md`, `.claude/skills/zk-component-rules/authoring/contract-tiers.md`.
 
 ---
 
@@ -31,7 +30,7 @@ derived downstream. Key mechanisms adopted:
   the planned SSIM render-diff** — no threshold tuning, cheaper, more flexible.
 - **Mockup decision rule** — when the Marble target ≈ ZKDoc default look, declare `mockup-needed: N`
   and use the ZKDoc image as ground truth (~50% mockup workload reduction across the catalog).
-- **Sanity tier** (`scripts/eval-sanity-tier.js`) — runs on all components every dispatch; catches
+- **Sanity tier** (planned; no script in this repo yet) — runs on all components every dispatch; catches
   sibling-generator collateral cheaply.
 - **Escalation channel** — non-CSS root causes (widget JS, library config) go to
   `ESCALATED_LIBRARY_CONFIG` + `tasks/harness/library-config-issues.md` instead of false-VERIFIED.
@@ -72,7 +71,7 @@ iceblue residue and internal prose↔table contradictions (header tonal step, ca
 | | Gate 1: zk-theme-evaluator | Gate 2: md3-design-verifier |
 |---|---|---|
 | Question | "Does the implementation match the contract?" | "Is the design itself good Material Design?" |
-| Ground truth | `doc/contracts/<comp>.md` (internal) | MD3 spec + MUI v7 static CSS (external) |
+| Ground truth | `doc/contracts/<comp>.md` (internal) | MD3 spec + MUI v7 CSS (external) |
 | Method | Browser measurement (objective) | CSS + screenshot review (expert judgment) |
 | Blind spot | Can never catch "contract is ugly" — the contract IS its answer key | Doesn't re-litigate measurements |
 

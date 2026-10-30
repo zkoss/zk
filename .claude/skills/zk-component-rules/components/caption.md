@@ -22,4 +22,3 @@ The title text renders as a plain text node (or inside `.z-caption-label`), NOT 
 ## Note
 
 Stub entry — full documentation pending spec-author run (Phase 3/4).
-See `doc/spec-author-pipeline-plan.md (retired with the template)`.

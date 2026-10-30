@@ -35,19 +35,20 @@
  * Usage:
  *   node check-default-display.js [options]
  *     --component-root <dir>  theme component CSS root  (default: <web>/js/zul)
- *     --zk-source <dir>       ZK js/zul source root     (default: the ZK10 path)
+ *     --zk-source <dir>       ZK js/zul source root     (default: $ZK_SOURCE/zul/src/main/resources/web/js/zul,
+ *                             where $ZK_SOURCE is the ZK CE checkout, else this repo)
  *     --out <file>            write report here          (default: stdout)
  */
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 const SCRIPT_DIR = __dirname;
-// .claude/skills/marble-theme/scripts -> project root is four levels up.
-const PROJECT_ROOT = path.resolve(SCRIPT_DIR, '../../../..');
+const PROJECT_ROOT = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: SCRIPT_DIR, encoding: 'utf8' }).trim();
 
 let COMPONENT_ROOT = path.join(PROJECT_ROOT, 'zul/src/main/resources/web/js/zul');
-let ZK_SOURCE = '/Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul';
+let ZK_SOURCE = path.join(process.env.ZK_SOURCE || PROJECT_ROOT, 'zul/src/main/resources/web/js/zul');
 let OUT = '';
 
 const argv = process.argv.slice(2);

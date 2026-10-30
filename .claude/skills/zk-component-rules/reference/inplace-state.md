@@ -90,7 +90,7 @@ Applies to: **textbox, intbox, decimalbox, doublebox, longbox, passwordbox**.
 5. Read the canonical patterns from ZK's iceBlue theme as the source of truth, not from another component theme:
    - `combo.css.dsp` (combobox, datebox, timebox, spinner, bandbox)
    - `input.css.dsp` (textbox, intbox, decimalbox, doublebox, longbox, passwordbox)
-   - Location: `/Users/hawk/Documents/workspace/ZK10/zk/zul/codegen/resources/web/js/zul/inp/css/`
+   - Location: `$ZK_SOURCE/zul/codegen/resources/web/js/zul/inp/css/` (`$ZK_SOURCE` is the root of the ZK CE checkout)
 
 ## Evaluator notes
 

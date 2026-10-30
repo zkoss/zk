@@ -42,7 +42,7 @@ unlayered — so a customer override wins without `!important`, which is the poi
 
 The same rule is a hazard in the other direction. **Any framework CSS that reaches the page
 unlayered beats the theme's layered components.** Marble is a *complete* CSS replacement: in zk there is no icon-font CSS to suppress — the
-IceBlue-only `font-awesome.css.dsp` stub the template ships for it was removed in P1 (D39) — and
+IceBlue-only `font-awesome.css.dsp` stub the template ships for it was removed — and
 Marble draws icons itself via `mask-image` and generated `.z-icon-* { --_icon }` rules from
 `lucide-static` in `base/_icons.css`. That "no coexisting unreachable framework CSS" property is
 what makes the layer scheme safe.

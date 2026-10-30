@@ -185,8 +185,7 @@ dev app.
 
 Send her `http://<host>:<port>/marble/` and nothing else — the sidebar reaches
 every page, and the **Report this page** button at the top of it files a
-pre-filled issue for whatever she is looking at. See
-[design-review-feedback.md](design-review-feedback.md).
+pre-filled issue for whatever she is looking at.
 
 ## Known limits
 
