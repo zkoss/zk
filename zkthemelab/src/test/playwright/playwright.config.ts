@@ -221,6 +221,16 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Camera hidden until preview, video sized, recording hint shown (zkmax camera.css). See camera.spec.ts.
+      name: 'camera',
+      testMatch: /camera\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        permissions: ['camera', 'microphone'],
+        launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] },
+      },
+    },
+    {
       // Warning container hue sits apart from error (tokens/_colors.css). See warning-container-hue.spec.ts.
       name: 'warning-container',
       testMatch: /warning-container-hue\.spec\.ts/,
