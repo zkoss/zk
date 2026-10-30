@@ -369,7 +369,9 @@ ancestor (the page, or any ancestor with `overflow:auto`) while rows scroll unde
 **It is a bare opt-in class — the `zul` module ships NO CSS for it.** The only
 stock implementation lives in the `zkmax` addon's IceBlue grid, listbox and tree styles,
 which a custom theme does not inherit. So
-**any theme must supply the rule itself**, or the class is inert. The canonical
+**any theme must supply the rule itself**, or the class is inert. Because ZK ships it only in
+zkmax (EE), a theme should likewise put the rule in its zkmax/EE stylesheet, so CE does not gain
+an EE feature. The canonical
 mechanism (per component, `<comp>` ∈ grid/listbox/tree):
 
 ```css

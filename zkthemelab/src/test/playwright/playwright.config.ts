@@ -313,6 +313,18 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // grid/listbox/tree z-sticky-header pins the header (zkmax, EE only). See sticky-header.spec.ts.
+      name: 'sticky-header',
+      testMatch: /sticky-header\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // goldenlayout's CSS loads from js/zkmax/goldenlayout/css with no failed request. See goldenlayout-css.spec.ts.
+      name: 'goldenlayout-css',
+      testMatch: /goldenlayout-css\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'tablet',
       testMatch: /tablet\.spec\.ts/,
       use: TABLET_USE,

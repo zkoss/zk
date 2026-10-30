@@ -41,19 +41,6 @@
     background-color: transparent;
 }
 
-/* Sticky header (z-sticky-header, ZK-4795) — opt-in class ZK ships with no CSS.
-   Un-clip the root so the header can escape, pin it to the scroll ancestor, and
-   give it an opaque bg so scrolling rows don't bleed through. */
-.z-tree.z-sticky-header {
-    overflow: visible;
-}
-.z-tree.z-sticky-header .z-tree-header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    background-color: var(--zk-tree-bg);
-}
-
 /* No `width` / `table-layout` on the mesh tables: ZK renders both inline and, with sizedByContent
    (MeshWidget), clears them to measure the content; see listbox.css (B86-ZK-4044). */
 /* Header table uses separate borders so box-shadow and border-inline-end

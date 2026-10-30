@@ -38,19 +38,6 @@
     background-color: transparent;
 }
 
-/* Sticky header (z-sticky-header, ZK-4795) — opt-in class ZK ships with no CSS.
-   Un-clip the root so the header can escape, pin it to the scroll ancestor, and
-   give it an opaque bg so scrolling rows don't bleed through. */
-.z-listbox.z-sticky-header {
-    overflow: visible;
-}
-.z-listbox.z-sticky-header .z-listbox-header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    background-color: var(--zk-listbox-bg);
-}
-
 /* Header cell — Mira / MD3 Data Table: no fill, hierarchy via weight + divider */
 .z-listheader {
     /* A hidden column's header is a zero-width TH whose content div keeps the cell padding: without a clip

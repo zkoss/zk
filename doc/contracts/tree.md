@@ -81,7 +81,7 @@ Wait 300 ms, then screenshot. FAIL if any text from a non-frozen column overlaps
 ZK-4795 (since 9.6.0): `sclass="z-sticky-header"` pins the column header to the top
 of the scroll ancestor (page or an `overflow:auto` wrapper) as rows scroll under it.
 This is a **bare opt-in class** — ZK's `zul/less` ships NO rule; the implementation
-lives in the `zkmax` addon, so the theme MUST supply it. See
+is EE only (zkmax): `zkcml/zkmax/src/main/resources/web/js/zkmax/sel/css/tree.css`, so the theme MUST supply it. See
 `data-components.md` → "Sticky header (`z-sticky-header`)".
 
 **Preview anchor:** the tree page's "Sticky Header (z-sticky-header)" section
