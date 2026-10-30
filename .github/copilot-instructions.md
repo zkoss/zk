@@ -139,6 +139,7 @@ public class B100_ZK_5529Test extends WebDriverTestCase {
 ## Critical Constraints
 - Do NOT change public Java APIs in `zk/`, `zul/`, or `zkbind/` without checking impact on `../zkcml/`
 - If any ZUL component attribute or element is added/removed/changed, update `zul/src/main/resources/metainfo/xml/zul.xsd` accordingly
+- When adding, upgrading or removing a third-party library (a vendored file, or a Maven/npm dependency), confirm its version and licence and update `sbom.gradle` to match; the build checks vendored JS and flags an unknown creator or licence, but a font, CSS or image outside `web/js/**/ext/` is checked only in review
 - Issue tracker: https://tracker.zkoss.org/projects/ZK
 
 ## Workflow for Each Issue
