@@ -62,19 +62,6 @@
     background-color: transparent;
 }
 
-/* Sticky header (z-sticky-header, ZK-4795) — opt-in class ZK ships with no CSS.
-   Un-clip the root so the header can escape, pin it to the scroll ancestor, and
-   give it an opaque bg so scrolling rows don't bleed through. */
-.z-grid.z-sticky-header {
-    overflow: visible;
-}
-.z-grid.z-sticky-header .z-grid-header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    background-color: var(--zk-grid-bg);
-}
-
 /* The header table is emitted unclassed as <table id="…-headtbl"> in ZK 10 (grid.js),
    NOT as .z-grid-header-inner — that class no longer exists, so a rule keyed on it is
    dead and the table fell back to the UA default border-spacing:2px, which leaked a

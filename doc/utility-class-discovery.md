@@ -205,7 +205,7 @@ in `_surface.css` and only *referenced* by the print reset.
 
 `z-sticky-header` is an opt-in class an author puts on a Grid, Listbox or Tree. It is **not** in
 the manifest, because it has no rule of its own in the utility files — it is defined in
-`grid.css`, `listbox.css` and `tree.css` as `.z-grid.z-sticky-header`, and the utility files only
+the EE (zkmax) files `zkcml/zkmax/src/main/resources/web/js/zkmax/grid/css/grid.css`, `.../zkmax/sel/css/listbox.css` and `.../zkmax/sel/css/tree.css` as `.z-grid.z-sticky-header` (CE Marble has no sticky-header CSS), and the utility files only
 mention it to un-stick it for print. The same applies to the `*-noborder` opt-in sclasses those
 files describe.
 
