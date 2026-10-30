@@ -24,24 +24,25 @@
 #     --tokens-dir <dir>   where token definitions live   (default: <web>/zul/css/tokens)
 #     --css-root <dir>     root scanned for var() refs     (default: <web>)
 #     --component-root <d> root scanned for hardcoded vals (default: <web>/js/zul)
-#     --zk-source <dir>    ZK js/zul source (root-tag resolution for check 5)
+#     --zk-source <dir>    ZK js/zul source (root-tag resolution for check 5;
+#                          default: $ZK_SOURCE/zul/src/main/resources/web/js/zul,
+#                          where $ZK_SOURCE is the ZK CE checkout, else this repo)
 #     --out <file>         write report here               (default: stdout)
 #
-# All defaults assume the standard zkThemeTemplate layout; override them when a
-# new theme moves directories or changes its token prefix.
+# All defaults assume the zk repo layout (web root: zul/src/main/resources/web);
+# override them when another theme moves directories or changes its token prefix.
 
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# .claude/skills/marble-theme/scripts -> project root is four levels up.
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+PROJECT_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)" || exit 2
 
 WEB="$PROJECT_ROOT/zul/src/main/resources/web"
 PREFIX="--zk-"
 TOKENS_DIR="$WEB/zul/css/tokens"
 CSS_ROOT="$WEB"
 COMPONENT_ROOT="$WEB/js/zul"
-ZK_SOURCE="/Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul"
+ZK_SOURCE="${ZK_SOURCE:-$PROJECT_ROOT}/zul/src/main/resources/web/js/zul"
 OUT=""
 
 while [ $# -gt 0 ]; do
@@ -52,7 +53,7 @@ while [ $# -gt 0 ]; do
         --component-root) COMPONENT_ROOT="$2"; shift 2 ;;
         --zk-source)      ZK_SOURCE="$2"; shift 2 ;;
         --out)            OUT="$2"; shift 2 ;;
-        -h|--help)        sed -n '2,30p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        -h|--help)        sed -n '2,32p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
         *) echo "Unknown option: $1" >&2; exit 2 ;;
     esac
 done

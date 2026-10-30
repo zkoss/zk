@@ -6,11 +6,11 @@
 |---|---|---|
 | **Marble preview** | **8085** | `zkthemelab/build.gradle` (`httpPort`) |
 
-The IceBlue baseline app exists only in the template until P4 — `zkthemelab` has no IceBlue
+The IceBlue baseline app exists only in the template; `zkthemelab` has no IceBlue
 counterpart yet.
 
 **Use `127.0.0.1`, not `localhost`.** Chrome resolves `localhost` to IPv6 `::1` while the preview
-app binds IPv4. CLAUDE.md documents the base as `${PREVIEW_URL}` = `http://127.0.0.1:8085` rather
+app binds IPv4. This skill refers to the base as `${PREVIEW_URL}` = `http://127.0.0.1:8085` rather
 than hardcoding a port, so set `export PREVIEW_URL=http://127.0.0.1:8085` or paste the address.
 
 Override the port with `-PhttpPort=<n>` on the `appRun` command below; there is no
@@ -49,6 +49,8 @@ the theme prefix from that `reset.css` link.
 rebuild (`./gradlew :zul:compileMarbleCss`, or the matching `zkcml` task for EE) and restart
 `appRun`; the two live-reload `<script>` tags some preview pages still carry are inert.
 
+Do not rebuild jars on a running preview server. The zul and zkmax jars are shared; rebuilding them under a running server causes HTTP 500 or `NoClassDefFoundError`.
+
 ## Preview pages
 
 `http://127.0.0.1:8085/<page>.zul` — the module answers at the context root; a filter forwards
@@ -70,16 +72,21 @@ reaches the server. Nothing in the harness uses a query string.
 Run `node zkthemelab/scripts/select-tests.mjs --base <base>` from the repository root (usage:
 `zkthemelab/scripts/README-select-tests.md`). When it answers `partial`, run the single command it
 prints against your local preview server. When it answers `full`, do not start a full run on your
-own: report the selector's reasons and let the owner decide when the full suite runs. The suite
-runs locally only; it is not wired to CI or Jenkins (owner's ruling, 2026-10-19).
+own: report the selector's reasons and let the Marble maintainer decide when the full suite runs. The suite
+runs locally only; it is not wired to CI or Jenkins (Marble maintainer's ruling, 2026-10-19).
 
 ## Running Playwright — flags that bite
 
-- Compare against the baselines with the repo config: `npx playwright test -c src/test/playwright/playwright.config.ts ...`. A temporary config must copy `snapshotDir` and `snapshotPathTemplate`; otherwise the run writes new PNGs and passes falsely. After the run check `git status`: a new PNG means nothing was compared.
-- In Playwright 1.59 a bare `--update-snapshots` defaults to `changed`. Name the mode (`--update-snapshots=changed`) and, before committing, confirm the file count with `git status --porcelain <baseline directory>`.
+- Compare against the baselines with the repo config: `npx playwright test -c src/test/playwright/playwright.config.ts ...`. A temporary config must copy `snapshotDir` and `snapshotPathTemplate`; otherwise the run writes new PNGs and passes falsely. Playwright reports a missing snapshot as "writing actual"; that line means nothing was compared.
+- In Playwright 1.59 a bare `--update-snapshots` defaults to `changed`. Name the mode (`--update-snapshots=changed`).
 - `-g` matches the title path joined by spaces and starting with the Playwright project name (`project file describe title`, e.g. `chromium screenshot.spec.ts tabbox gallery`). Anchor the end with `describe title$`; anchoring the start with `^` requires the project name. Do not paste the `›` form that `--list` prints.
+- Rebuild the class index only with `node scripts/build-class-index.mjs`. The script starts and stops the server it needs by itself (client ROD off). On a default server the pop-up elements are not in the static DOM, so the whole index would miss the pop-up classes. Do not build it against a server you already have running.
 
 ## Playwright projects
+
+Before a Playwright run, and after any change to CSS, a preview page or a spec, read the sections "Which tests to run after a change" and "Running Playwright — flags that bite" in this file.
+
+When you describe a page to the user, write "the `<name>.zul` page"; when you describe a test, write the spec filename. Use "project" only for a project in `playwright.config.ts`, and write it as "Playwright project". Do not use "project" for a page, even when a Playwright project has the same name as the page.
 
 Config: `zkthemelab/src/test/playwright/playwright.config.ts`.
 
@@ -110,24 +117,24 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
 
 ## Screenshot baselines — the parts that bite
 
-- **The baselines are in place: 188 compared PNGs plus 99 `*-forced-colors.png` review captures, in
-  `zkthemelab/doc/screenshots/`, beside `focus-ring-known-clips.json`.** They arrived with item 3.18b,
-  so a run now *compares* — the earlier "can only create, never compare" caveat is gone.
-  `playwright.config.ts:13`'s `snapshotDir: '../../../doc/screenshots'` resolves, from
-  `zkthemelab/src/test/playwright/`, to that directory. The forced-colors images are **human-review
-  artifacts that are always dirty** and never compared. (183 at the 2026-09-11 re-cut;
-  `scrollview-tablet.png` made 184.)
-- The harness resolves its `doc/` paths three levels up from `zkthemelab/src/test/playwright/` — the MODULE root (`zkthemelab/` in zk, the template's own root in the template), never the repository root; the baselines directory above and `focus-ring-known-clips.json` both live there. (Planner addendum after the 3.5 verdict, 2026-09-11 — see the migration's gates/3.5.md.)
-- **The zero-tolerance comparison (P2 items 2.6–2.8) is the equivalence check that was actually
+- **The baselines are local, not in the repository.** `zkthemelab/doc/screenshots/` is gitignored:
+  the same CSS renders differently on another OS, font set or GPU, so a committed baseline fails on
+  every other machine. Capture before editing CSS with `zkthemelab/scripts/visual-baseline.sh
+  capture <args>` (refuses while any `.css`/`.css.dsp` has uncommitted changes; writes
+  `doc/screenshots/.baseline` with the commit and args), then run `compare <args>` with the same args.
+  `playwright.config.ts`'s `snapshotDir: '../../../doc/screenshots'` resolves, from
+  `zkthemelab/src/test/playwright/`, to that directory. The `*-forced-colors.png` images are
+  human-review artifacts and are never compared.
+- The harness resolves its `doc/` paths three levels up from `zkthemelab/src/test/playwright/` — the MODULE root (`zkthemelab/` in zk, the template's own root in the template), never the repository root; the baselines directory above and `focus-ring-known-clips.json` both live there.- **The zero-tolerance comparison is the equivalence check that was actually
   run**: the template's unchanged specs against `zkthemelab`, every PNG compared at `threshold: 0,
-  maxDiffPixels: 0` with the tracked tools under `zkThemeTemplate/doc/migration/tools/zero-tolerance/`
+  maxDiffPixels: 0` with the tracked tools in the separate `zkThemeTemplate` repository (path inside that repo: `doc/migration/tools/zero-tolerance/`), not in zk
   — the gallery (98), state (55) and tablet (30) families came back byte-identical.
 - **Always `await document.fonts.ready`.** A uniform vertical drift across every page is the Inter
   font-load race, not a CSS change. Baselines are flat files in one directory, not nested.
 - **Tolerance is not one number.** `gallery-scan.spec.ts` allows `maxDiffPixelRatio: 0.002` (0.2%) —
   thousands of pixels on a full page — `tablet.spec.ts` opts into 2% for `tabbox` and `window`, and
   `screenshot.spec.ts`'s `padShot()` carries `maxDiffPixels: 20` for every hover/focus/active shot
-  (chat D80, 2026-09-14 — `doc/spec/screenshot-tolerance.md`). The state shots use an absolute
+  (2026-09-14 — `doc/spec/screenshot-tolerance.md`). The state shots use an absolute
   count, not a ratio: those crops run about 9 000 px, where 1% would be 92 px — enough to hide a
   whole mis-rendered focus ring. That is a *regression* gate. An equivalence check (did a refactor or a move change anything?) needs a one-off
   **zero-tolerance** run with every diff explained.
@@ -138,8 +145,6 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   restart ran the full `tablet` project the next day. After any change under
   `zkthemelab/src/main/webapp/web/*.zul`, run **both** `--project gallery` and `--project tablet`
   before committing, and re-cut with `--update-snapshots=changed` so only the mismatching files move.
-- **`git log -1 -- <png>` lies when a commit only renamed the file.** Do not date a baseline that
-  way.
 - **The UseCase SPA hangs on `networkidle`.** Use `domcontentloaded`, then wait on a text marker,
   then `fonts.ready`, with a tall viewport.
 - **The pop-up layer needs interaction** or roughly 180 selectors are never painted. Cursor
@@ -209,7 +214,7 @@ no change applied — check that before trusting the gate. Run ad-hoc probes wit
 
 ## Cross-theme A/B: the determinism floor
 
-The IceBlue baseline app is template-only until P4 — `zkthemelab` has no IceBlue counterpart to run
+The IceBlue baseline app is template-only; `zkthemelab` has no IceBlue counterpart to run
 this comparison against yet.
 
 Serving Marble's preview corpus under a different theme jar needs no edit here: ZK's
@@ -269,6 +274,16 @@ A goto-and-shoot capture never paints anything that only exists when a panel is 
 Never `git checkout` a spec file to remove a probe you appended. The spec usually already holds
 new, uncommitted real tests, and `checkout` reverts the whole file. Remove only the probe block,
 or put probes in a throwaway file from the start.
+
+## Writing checks that can fail
+
+- Interaction tests use real user input: `page.mouse` drags and real clicks. Do not bypass browser limits with Range or `element.click()`.
+- An interactive component needs at least one outcome row that performs the interaction and asserts that the state changed. For example, a scroll check measures the change in position, not only that the thumb exists.
+- Contrast calculations skip transparent backgrounds and use the first opaque ancestor.
+- Prove by mutation that an assertion can fail.
+- A verification command asserts only its own claim. Do not add extra output such as versions or counts. Do not delete anything or ask for permissions. Write only to temporary directories and build output.
+- A verification clause must be able to detect the failure it claims to catch: it must be true on the real state today and false when the failure is present. Where possible, dry-run it once against the closest existing state.
+- A dry-run that stops at its designed marker says nothing about the later stages. Run all stages on a copy.
 
 ## Theme-done criterion
 

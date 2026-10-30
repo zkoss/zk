@@ -4,194 +4,194 @@ This file is **required reading** for any agent or human about to write or modif
 - `.claude/skills/zk-component-rules/components/<comp>.md` (this skill — theme-portable)
 - `doc/contracts/<comp>.md` (Marble theme contract — theme-specific)
 
-The two files form a **two-tier contract**. This guide defines the boundary, the four predicate classes, the iceblue-CSS-mining workflow, and the refuse-to-emit rules that keep the boundary clean.
+The two files form a **two-tier contract**. This guide defines the boundary, the five predicate classes, the iceblue-CSS-mining workflow, and the refuse-to-emit rules that keep the boundary clean.
 
 ---
 
 ## TL;DR
 
-| 層 | 檔案 | 內容性質 | 跨主題會變嗎？ |
+| Layer | File | Nature of content | Changes across themes? |
 |---|---|---|---|
-| 結構不變式 (Structural Invariants) | `.claude/skills/zk-component-rules/components/<comp>.md` | DOM、state class、幾何/關係、「狀態必須有區別」之類的**通用述語** | **不會**。所有主題都該通過 |
-| 主題契約 (Theme Contract) | `doc/contracts/<comp>.md` (+ optional `.html` mockup) | 具體 token 綁定、明確設計取捨、預期解析值、`## Outcome assertions`（整頁尺度 M-rows） | **會**。每個主題一份 |
+| Structural Invariants | `.claude/skills/zk-component-rules/components/<comp>.md` | Universal predicates such as DOM, state classes, geometry/relations, and "states must be distinguishable" | **No.** Every theme should pass them |
+| Theme Contract | `doc/contracts/<comp>.md` (+ optional `.html` mockup) | Concrete token bindings, explicit design trade-offs, expected resolved values, `## Outcome assertions` (whole-page-scale M-rows) | **Yes.** One per theme |
 
-**Evaluator 的工作 = 兩層都通過 + M-rows 過 + AI visual review 不報嚴重 finding**。結構不變式像「物理定律」，主題契約像「這顆星球的重力」，M-rows 像「整體該看起來像個 X」。
-
----
-
-## 為何需要分層
-
-直接拿 iceblue baseline 當驗證標準會發生三件事：
-
-1. **顏色被鎖死**：iceblue 用 `#e6f2fa`，Marble 想用 primary-container，pixel diff 必然 fail。
-2. **數值被鎖死**：iceblue 的 node padding 是 4px×8px，Marble 想要 8px×12px 更舒展的卡片，數字一改就 fail。
-3. **錯誤的取捨被當教條**：iceblue 把 expand icon 縮成 12px、塞在右下角——這是 2010 代的密度取捨，不該變成 2026 主題的硬性規範。
-
-但是**有些事是 iceblue 對的**：org chart 必須是樹、父節點必須水平置中、selected 必須跟 unselected 看得出差別。這些是 organigram 之所以是 organigram 的**語意角色**，跟視覺風格無關。
-
-**做法：把「語意角色」沉澱成結構不變式（universal），把「視覺值」鎖在主題契約（per-theme）**。看 iceblue baseline 是為了**抽取語意角色**，不是為了**複製像素**。
+**The evaluator's job = both layers pass + M-rows pass + the AI visual review reports no serious finding.** Structural invariants are like "physical laws", the theme contract is like "this planet's gravity", and M-rows are like "the whole thing should look like an X".
 
 ---
 
-## 五類可驗證述語
+## Why the contract is split into layers
 
-A/B/C 屬於 skill（主題無關）；D 屬於 contract（主題特定 + 自底向上）；M 屬於 contract（主題特定 + 自頂向下整頁尺度，與 §3d AI visual review 形成閉環）。
+Using the iceblue baseline directly as the verification standard causes three problems:
 
-### A. 結構述語 (Structural) — 主題無關
+1. **Colors get locked in**: iceblue uses `#e6f2fa`, Marble wants primary-container, so the pixel diff necessarily fails.
+2. **Values get locked in**: iceblue's node padding is 4px×8px, while Marble wants the roomier 8px×12px card; change the numbers and it fails.
+3. **A poor trade-off gets treated as dogma**: iceblue shrinks the expand icon to 12px and tucks it into the bottom-right corner. That is a 2010-era density trade-off and should not become a hard rule for a 2026 theme.
 
-DOM 拓撲、class 出現條件、role/aria。完全由 ZK widget 行為決定，主題沒得選。
+But **some things iceblue gets right**: an org chart must be a tree, parent nodes must be horizontally centered, and selected must be visibly different from unselected. These are the **semantic roles** that make an organigram an organigram, and they are independent of visual style.
 
-**範例 (organigram)**：
-- 每個非根節點恰有一個父節點，整體形成樹
-- `.z-orgitem-selected` 在被選中時出現、被取消時消失
-- `.z-orgitem-close > .z-orgchildren` 必為 `display: none`
-- root 有 `role="tree"`、每個 item 有 `role="treeitem"`
-
-這層直接寫進 `.claude/skills/zk-component-rules/components/<comp>.md`，**所有主題共用**。
-
-### B. 關係/幾何述語 (Relational) — 主題無關，用 tolerance + 相對比較
-
-可量測但不指定絕對值。**不寫「padding = 8px」，寫「sibling 對齊在 ±2px 內」**。
-
-**範例 (organigram)**：
-- 同 generation 的 siblings：`|max(top) − min(top)| ≤ 2px`
-- 父節點水平置中：`|parent.centerX − midpoint(leftmost, rightmost child centerX)| ≤ 2px`
-- 連接線存在且可見：parent-bottom 到 child-top 之間有非 transparent、長度 > 0 的線段
-- 節點有可見邊界：`border-width ≥ 1px ∧ border-color ≠ transparent` **∨** `background ≠ container.background` **∨** `box-shadow ≠ none`
-- 文字無裁切：`text rendered width ≤ box content width`
-- 文字可讀：label 對 box 背景的 WCAG contrast ratio ≥ 4.5:1
-
-關鍵：**至少一項成立**（disjunction）而非「邊界必為 1px solid grey」。這讓不同主題可以用 border、background-tint、shadow 之中**任何一種**畫出「我是個 node」的訊息。
-
-### C. 狀態差異述語 (State-Differs) — 主題無關
-
-「selected 必須看得出來」是不變式；「selected 必須是藍色」不是。
-
-**範例 (organigram)**：
-- `selected` vs 未選：`{border-color, background-color, outline, box-shadow, color}` **至少一項**測得到差異
-- `disabled` vs `enabled`：`opacity < 1` **∨** text contrast 低於 enabled
-- `hover` vs resting (在 selectable 非 disabled 節點上)：`{background-color, border-color, box-shadow}` **至少一項**有變化
-- `focus-visible`：必須有 outline **∨** box-shadow ring **∨** border-color 變化 (任一可被鍵盤使用者察覺)
-- `open` vs `closed`：子節點 `display: none` (或不在 DOM 中) ↔ 子節點 visible
-
-這層也寫在結構規則檔，跟 A、B 並列。**這是讓「可驗證」與「主題自由」相容的關鍵設計**。
-
-### D. Token 綁定述語 (Token-Bound) — 主題特定
-
-具體值，但綁 token、配 DESIGN.md 章節，**不綁 baseline pixel**。寫進 `doc/contracts/<comp>.md`。
-
-**範例 (organigram, Marble)**：
-- `.z-orgnode { border-radius: var(--zk-shape-card); }` — 來源 DESIGN.md §5
-- `.z-orgitem-selected > .z-orgnode { background-color: var(--zk-color-primary-container); }` — 來源 DESIGN.md §3
-- 連接線 `border-color: var(--zk-color-outline-variant)` — 來源 DESIGN.md §11
-
-換主題 = 換 token 值或換這份契約；A/B/C 不動。
-
-### M. Outcome 述語 (Outcome-Level / 整頁尺度) — 主題特定，top-down
-
-A/B/C/D 都是「自底向上」的：對單一 selector 的單一屬性 assert。但一份契約**全 PASS** 仍可能視覺破損 — 因為沒人問「整體看起來像不像那個東西」。M-row 補這個洞。
-
-寫進 `doc/contracts/<comp>.md` 的 `## Outcome assertions` 表，與 `## Design Contract` prose 並列。
-
-**特徵**：
-- **整頁尺度 / 跨 selector**：「每個 `.lm_header` 內的 `.lm_controls` 跟 tabs 同一橫排」、「面板互相 dock 不重疊」、「outer wrapper 沒有 redundant 卡片」
-- **bbox geometry 為主**：用 `getBoundingClientRect()`，不是 `getComputedStyle()`
-- **disjunctive / tolerance-based**：「border ≥ 1px OR shadow ≠ none OR bg ≠ transparent」、「±2px」、「≥ 95%」
-- **outcome 不是 recipe**：assert「看起來是張卡片」，不 assert「`border: 1px solid #ccc`」
-- **Failure blocks VERIFIED**：任一 M-row FAIL 就擋住 verified，即使 D-tier 全過
-
-**範例 (goldenlayout)**：
-- M1: every `.z-goldenpanel` 有可見框 AND outer `.z-goldenlayout` 沒有 redundant outer card
-- M4: 同一 `.lm_header` 內所有 `.lm_tab` siblings 的 `bbox.top` range ≤ 2px
-- M9: `.lm_controls` cluster bbox.right 在 `.lm_header` 右緣 8px 內，且有 ≥ 2 個可見 icon
-- M13: `.lm_controls` 跟首個 `.lm_tab` **同一橫排**（vertical centers within 4px）
-
-**與 B-tier 的關係**：B-tier 是「主題無關 + 單 selector 範圍」的關係述語；M-row 是「主題特定 + 跨 selector / 整頁範圍」的結果述語。一條 B-tier 可被**升級**成 M-row 當它的視覺判定門檻在「整體看起來對不對」這個層級 — 但升級後就脫離 skill 進到 contract。
-
-**與 §3d AI visual review 的閉環**：Evaluator 跑 AI visual review 找到的 finding，如果在 M-rows 抓不到（geometry 通過但 AI 用眼睛看仍 FAIL），就**回頭加一條 M-row**到契約。M-row 集合會隨著每一次 finding 變嚴。goldenlayout 的 M13 就是這條路徑長出來的：M9 只查 X 軸 right-anchoring，AI vision 看出 icons 跑到第二行，M13 補了「同一橫排」的 Y 軸條件。
-
-換主題 = 重新寫一份 M-rows（因為它們對應的視覺意圖在 DESIGN.md），但**predicate 形式**（disjunction + tolerance）跨主題通用。
+**Approach: distill the "semantic roles" into structural invariants (universal), and lock the "visual values" into the theme contract (per-theme).** Look at the iceblue baseline in order to **extract semantic roles**, not to **copy pixels**.
 
 ---
 
-## 從 baseline 抽取語意角色的紀律
+## Five classes of verifiable predicates
 
-看 `doc/contracts/baselines/<comp>-iceblue.png` 時，**只能問三種問題**：
+A/B/C belong to the skill (theme-independent); D belongs to the contract (theme-specific, bottom-up); M belongs to the contract (theme-specific, top-down whole-page scale, forming a closed loop with §3d AI visual review).
 
-1. **這個元件有哪些可區分的狀態？** (selected、disabled、open/closed、hover、focus...) → 變成 C 類述語
-2. **這些狀態之間是用什麼維度區分的？** (顏色、邊框、填色、形狀、位置、文字粗細...) → 變成「至少一項差異」的 disjunction
-3. **元件的拓撲跟相對位置有哪些幾何約束？** (父在子的水平中點上方、siblings 同高、line 連到 box 邊緣...) → 變成 B 類述語
+### A. Structural predicates (Structural) — theme-independent
 
-**不能問的**：
-- ~~這個顏色叫什麼？要照抄嗎？~~
-- ~~這個 padding 是幾 px？~~
-- ~~這個 icon 是幾號 size？~~
+DOM topology, conditions under which classes appear, role/aria. Fully determined by ZK widget behavior; a theme has no say.
 
-把 baseline 當「**這個元件的視覺語法表**」(grammar)，不是「**這個元件該長什麼樣**」(specimen)。
+**Example (organigram)**:
+- Every non-root node has exactly one parent node, and the whole forms a tree
+- `.z-orgitem-selected` appears when selected and disappears when deselected
+- `.z-orgitem-close > .z-orgchildren` must be `display: none`
+- root has `role="tree"`, and each item has `role="treeitem"`
+
+This layer is written directly into `.claude/skills/zk-component-rules/components/<comp>.md`, and **all themes share it**.
+
+### B. Relational / geometry predicates (Relational) — theme-independent, use tolerance + relative comparison
+
+Measurable but no absolute value is specified. **Do not write "padding = 8px"; write "siblings align within ±2px"**.
+
+**Example (organigram)**:
+- Siblings in the same generation: `|max(top) − min(top)| ≤ 2px`
+- Parent node horizontally centered: `|parent.centerX − midpoint(leftmost, rightmost child centerX)| ≤ 2px`
+- Connector line exists and is visible: between parent-bottom and child-top there is a line segment that is not transparent and has length > 0
+- Node has a visible boundary: `border-width ≥ 1px ∧ border-color ≠ transparent` **∨** `background ≠ container.background` **∨** `box-shadow ≠ none`
+- Text is not clipped: `text rendered width ≤ box content width`
+- Text is readable: the WCAG contrast ratio of the label against the box background is ≥ 4.5:1
+
+Key point: **at least one must hold** (disjunction), rather than "the boundary must be a 1px solid grey". This lets different themes convey "I am a node" with **any one of** border, background tint, or shadow.
+
+### C. State-difference predicates (State-Differs) — theme-independent
+
+"Selected must be distinguishable" is an invariant; "selected must be blue" is not.
+
+**Example (organigram)**:
+- `selected` vs. unselected: at least one of `{border-color, background-color, outline, box-shadow, color}` measurably differs
+- `disabled` vs `enabled`: `opacity < 1` **∨** text contrast lower than enabled
+- `hover` vs resting (on a selectable, non-disabled node): at least one of `{background-color, border-color, box-shadow}` changes
+- `focus-visible`: must have an outline **∨** box-shadow ring **∨** border-color change (any one that a keyboard user can notice)
+- `open` vs `closed`: child nodes `display: none` (or absent from the DOM) ↔ child nodes visible
+
+This layer is also written in the structural rules file, alongside A and B. **This is the key design that makes "verifiable" and "theme freedom" compatible.**
+
+### D. Token-bound predicates (Token-Bound) — theme-specific
+
+Concrete values, bound to tokens and paired with DESIGN.md sections, **not bound to baseline pixels**. Written into `doc/contracts/<comp>.md`.
+
+**Example (organigram, Marble)**:
+- `.z-orgnode { border-radius: var(--zk-shape-card); }` — source: DESIGN.md §5
+- `.z-orgitem-selected > .z-orgnode { background-color: var(--zk-color-primary-container); }` — source: DESIGN.md §3
+- Connector line `border-color: var(--zk-color-outline-variant)` — source: DESIGN.md §11
+
+Changing themes = changing token values or replacing this contract; A/B/C stay unchanged.
+
+### M. Outcome predicates (Outcome-Level / whole-page scale) — theme-specific, top-down
+
+A/B/C/D are all "bottom-up": they assert a single property on a single selector. But a contract can **pass in full** and still be visually broken, because nobody asks "does the whole look like the thing it is supposed to be?" M-rows close that gap.
+
+Written into the `## Outcome assertions` table in `doc/contracts/<comp>.md`, alongside the `## Design Contract` prose.
+
+**Characteristics**:
+- **Whole-page scale / cross-selector**: "each `.lm_controls` inside a `.lm_header` sits on the same row as the tabs", "panels dock without overlapping each other", "the outer wrapper has no redundant card"
+- **Mainly bbox geometry**: uses `getBoundingClientRect()`, not `getComputedStyle()`
+- **Disjunctive / tolerance-based**: "border ≥ 1px OR shadow ≠ none OR bg ≠ transparent", "±2px", "≥ 95%"
+- **Outcome, not recipe**: assert "looks like a card", not "`border: 1px solid #ccc`"
+- **Failure blocks VERIFIED**: if any M-row FAILs, it blocks VERIFIED, even when all D-tier checks pass
+
+**Example (goldenlayout)**:
+- M1: every `.z-goldenpanel` has a visible frame AND the outer `.z-goldenlayout` has no redundant outer card
+- M4: the `bbox.top` range of all `.lm_tab` siblings inside the same `.lm_header` is ≤ 2px
+- M9: the `.lm_controls` cluster's bbox.right is within 8px of the `.lm_header` right edge, and has ≥ 2 visible icons
+- M13: `.lm_controls` and the first `.lm_tab` are **on the same row** (vertical centers within 4px)
+
+**Relation to the B tier**: a B-tier predicate is a theme-independent relational predicate scoped to a single selector; an M-row is a theme-specific outcome predicate scoped across selectors / the whole page. A B-tier predicate can be **promoted** to an M-row when its visual pass/fail threshold sits at the level of "does the whole look right"; but once promoted, it leaves the skill and moves into the contract.
+
+**Closed loop with §3d AI visual review**: when a finding from the evaluator's AI visual review is not caught by any M-row (geometry passes, but the AI still judges it FAIL by eye), **add an M-row back into the contract**. The M-row set gets stricter with each finding. goldenlayout's M13 grew out of this path: M9 only checked X-axis right-anchoring, the AI vision saw the icons wrap onto a second row, and M13 added the Y-axis "same row" condition.
+
+Changing themes = rewriting the M-rows (because their visual intent lives in DESIGN.md), but the **predicate form** (disjunction + tolerance) is common across themes.
 
 ---
 
-## 反面範例：警惕「mirrors iceblue」
+## Discipline for extracting semantic roles from a baseline
 
-現行 `doc/contracts/organigram.md` 有一條：
+When looking at `doc/contracts/baselines/<comp>-iceblue.png`, **you may only ask three kinds of questions**:
+
+1. What distinguishable states does this component have? (selected, disabled, open/closed, hover, focus...) → becomes C-class predicates
+2. Along which dimensions are these states told apart? (color, border, fill, shape, position, text weight...) → becomes an "at least one difference" disjunction
+3. What geometric constraints apply to the component's topology and relative positions? (parent above the horizontal midpoint of its children, siblings at the same height, lines connecting to box edges...) → becomes B-class predicates
+
+**Questions you must not ask**:
+- ~~What is this color called? Should I copy it?~~
+- ~~What is this padding in px?~~
+- ~~What size is this icon?~~
+
+Treat the baseline as "**the visual grammar of this component**" (grammar), not as "**what this component should look like**" (specimen).
+
+---
+
+## Counter-example: beware of "mirrors iceblue"
+
+The current `doc/contracts/organigram.md` contains this line:
 
 ```
 | node-6 | `.z-orgnode` | min-width | `64px` | DESIGN.md §10 (smallest legible org card; mirrors iceblue) |
 ```
 
-「mirrors iceblue」這個理由**踩到本紀律的紅線**。正確的寫法二選一：
+The justification "mirrors iceblue" **crosses the red line of this discipline**. Write it one of two correct ways:
 
-- **如果這值有設計原因**：寫出來。例：「64px 是顯示 4 字元中文標籤 + 12px icon + 內距的最小寬度」——這是可被質疑、可被替換的設計判斷。
-- **如果這值沒設計原因，只是「iceblue 也用 64」**：把它**降級到 B 類述語**（「`width ≥ text-width + 2 × horizontal-padding` 即可」）然後從主題契約刪掉。
+- **If the value has a design reason**: write the reason out. For example: "64px is the minimum width that fits a 4-character Chinese label + a 12px icon + inner padding" — this is a design judgment that can be questioned and replaced.
+- **If the value has no design reason and is only "iceblue also uses 64"**: **demote it to a B-class predicate** (the form "`width ≥ text-width + 2 × horizontal-padding` is enough"), then delete it from the theme contract.
 
-主題契約裡每一個絕對值，都必須能回答「**為什麼是這個值？來自 DESIGN.md 哪一節？**」。回答不出來的，搬到結構規則或刪掉。
-
----
-
-## 工作流：新主題從零寫一個 contract
-
-1. **打開舊主題 baseline PNG**（任何一個 — iceblue / breeze / 隨意）
-2. **列語意角色**：寫一份簡短的「這個元件有哪些狀態、哪些幾何關係、哪些必須區分的維度」清單。**不抄數值**。
-3. **寫結構規則檔** `.claude/skills/zk-component-rules/components/<comp>.md`：DOM、state class、composition invariants、A/B/C 三類述語。一旦寫好，原則上**所有未來主題共用**——只在發現 ZK 行為變動時才更新。
-4. **寫主題契約** `doc/contracts/<comp>.md`：依本主題 DESIGN.md 的色票、間距、形狀、動效規則，挑選 token、寫具體期望值。每一條都附 `source` 欄位指向 DESIGN.md 章節或設計判斷的理由。
-5. **跑 evaluator**：
-   - 結構規則檔的述語：每條都應 pass（如果不 pass，要嘛是 CSS 寫錯，要嘛是 ZK 行為改了——後者才能修規則檔）
-   - 主題契約的具體值：每條都用 computed style 比對
-6. **換主題時**：步驟 4 重做，步驟 3 維持不動
+Every absolute value in a theme contract must be able to answer "**why this value? Which DESIGN.md section does it come from?**" Any value that cannot be answered gets moved to the structural rules or deleted.
 
 ---
 
-## Evaluator 怎麼讀這兩層
+## Workflow: writing a contract for a new theme from scratch
+
+1. **Open an old-theme baseline PNG** (any one: iceblue / breeze / whichever)
+2. **List the semantic roles**: write a short list of "which states this component has, which geometric relations, and which dimensions must be distinguished". **Do not copy values.**
+3. **Write the structural rules file** `.claude/skills/zk-component-rules/components/<comp>.md`: DOM, state classes, composition invariants, and A/B/C predicates. Once written, in principle **all future themes share it**; update it only when a ZK behavior change is found.
+4. **Write the theme contract** `doc/contracts/<comp>.md`: following this theme's DESIGN.md color palette, spacing, shape, and motion rules, pick tokens and write concrete expected values. Every entry carries a `source` field pointing to a DESIGN.md section or to the reason for the design judgment.
+5. **Run the evaluator**:
+   - Predicates in the structural rules file: each one should pass (if one does not, either the CSS is wrong or ZK behavior has changed — only the latter justifies fixing the rules file)
+   - Concrete values in the theme contract: compare each one against computed style
+6. **When changing themes**: redo step 4; step 3 stays unchanged
+
+---
+
+## How the evaluator reads the two layers
 
 ```
 .claude/skills/zk-component-rules/components/<comp>.md
-  ├─ DOM 結構 → DOM 預期 (querySelector 應存在 / 不應存在)
-  ├─ State classes → 對應狀態切換時 class 應出現
-  ├─ Composition invariants → A 類: 直接驗 computed style 是否等於規定值 (如 position: relative)
-  └─ Relational invariants + State-differs invariants → B/C 類述語
+  ├─ DOM structure → DOM expectations (querySelector should exist / should not exist)
+  ├─ State classes → class should appear when the matching state toggles
+  ├─ Composition invariants → A class: directly verify computed style equals the specified value (e.g. position: relative)
+  └─ Relational invariants + State-differs invariants → B/C class predicates
 
 doc/contracts/<comp>.md
-  └─ Expected values 表格 → 每條 querySelector + property → 比對 computed value
+  └─ Expected values table → each querySelector + property → compare against the computed value
 ```
 
-如果一個元件結構檔目前沒有顯式列 B、C 類述語（只有 DOM/state class/composition），代表 evaluator 只能驗 A + D。**這是目前的缺口**——逐元件補上 `## Relational invariants` 與 `## State-differs invariants` 兩節。
+If a component's structural file does not currently list B- or C-class predicates explicitly (it only has DOM / state class / composition), the evaluator can only verify A + D. **This is a current gap** — add the `## Relational invariants` and `## State-differs invariants` sections component by component.
 
 ---
 
-## JS source reading — mold 不是 optional
+## JS source reading — mold is not optional
 
-ZK widget 的「JS source」其實**有兩種**，缺一不可：
+A ZK widget's "JS source" actually comes in **two kinds**, and both are required:
 
-| 檔案類型 | 角色 | spec-author 在意什麼 |
+| File type | Role | What the spec-author cares about |
 |---|---|---|
-| `<Widget>.ts` (或 `.js` 主檔) | 行為層：state toggle、setter、event 處理、生命週期 | state class 何時 add/remove；attribute getter/setter；server-side property mapping |
-| `mold/<comp>.js` (function `<comp>$mold$(out)`) | **DOM 渲染層 — 真正的 DOM ground truth** | 實際輸出的 HTML 樹、寫死的 class、寫死的 `role`/`aria-*` attribute、wrapper 是否無條件出現 |
+| `<Widget>.ts` (or the main `.js` file) | Behavior layer: state toggles, setters, event handling, lifecycle | When a state class is added/removed; attribute getter/setter; server-side property mapping |
+| `mold/<comp>.js` (function `<comp>$mold$(out)`) | **DOM rendering layer — the real DOM ground truth** | The HTML tree actually emitted, hard-coded classes, hard-coded `role`/`aria-*` attributes, whether a wrapper appears unconditionally |
 
-**只讀 `.ts` 不讀 mold 是常見錯誤**。`.ts` 裡的 `redraw_()`、`replaceHTML_()` 通常**呼叫 mold function**而不是自己組 HTML，所以光看 `.ts` 看不出真正的 DOM 形狀。
+**Reading only the `.ts` and not the mold is a common mistake.** `redraw_()` and `replaceHTML_()` in the `.ts` usually **call the mold function** instead of building the HTML themselves, so the real DOM shape cannot be seen from the `.ts` alone.
 
-### 實例（為何這條規則存在）
+### Example (why this rule exists)
 
-`stepbar` 一輪 spec-author 漏讀了 `mold/step.js`，結果 contract 假設 `.z-step-content` 只在 wrapped-label 模式才出現。但 mold 第 16-19 行寫得很清楚：
+In one round, the spec-author of `stepbar` missed reading `mold/step.js`, so the contract assumed `.z-step-content` only appears in wrapped-label mode. But lines 16-19 of the mold make it clear:
 
 ```js
 out.push('<div id="', uuid, '-content" class="', this.$s('content'), '" role="listitem" ...>');
@@ -200,153 +200,153 @@ out.push('<span ... class="', this.$s('title'), ...);
 out.push('</div></div>');
 ```
 
-`.z-step-content` **無條件包**`.z-step-icon + .z-step-title`。Contract 裡所有 `.z-step > .z-step-icon` 形式的 selector 全是錯的，evaluator 量了 28/28 fail，整個 generator pass 白做。
+`.z-step-content` **unconditionally wraps** `.z-step-icon + .z-step-title`. Every selector in the contract of the form `.z-step > .z-step-icon` was wrong; the evaluator measured 28/28 fail, and the whole generator pass was wasted.
 
-### 強制流程
+### Mandatory procedure
 
-1. **每個 component 在 contract 的 `js-source-files:` 必須同時列出**：
-   - `<Widget>.ts`（或主 widget JS）
-   - 對應的 `mold/<comp>.js`（若存在）
-2. **hash 範圍要涵蓋所有列出的檔案**——用 `shasum -a 256 <files...>` 一次算，不要只算 .ts。
-3. **spec-author 在重派或 drift recovery 時，必須讀完所有列出的檔案**，不能只挑 .ts 讀。如果 mold 缺漏，先把它加進 `js-source-files` 再讀。
-4. **如何快速找 mold**：
+1. **Every component's `js-source-files:` in the contract must list both**:
+   - `<Widget>.ts` (or the main widget JS)
+   - the matching `mold/<comp>.js` (if it exists)
+2. **The hash must cover all listed files** — compute it in one go with `shasum -a 256 <files...>`; do not hash only the .ts.
+3. **When re-dispatching or recovering from drift, the spec-author must read every listed file**; reading only the .ts is not allowed. If the mold is missing, add it to `js-source-files` first, then read it.
+4. **How to find the mold quickly** (here `$ZK_SOURCE` is the root of the ZK CE checkout, the `zk` repo, containing `zul/`, `zk/`, `zkbind/`; `$ZKCML_SOURCE` is the root of the ZK EE checkout, the `zkcml` repo, containing `zkex/`, `zkmax/`):
    ```bash
-   find /Users/hawk/Documents/workspace/ZK*/zkcml -path "*mold*" -name "<comp>.js" 2>/dev/null
-   find /Users/hawk/Documents/workspace/ZK*/zk*/src/main/resources -path "*mold*" -name "<comp>.js" 2>/dev/null
+   find "$ZK_SOURCE" "$ZKCML_SOURCE" -path "*mold*" -name "<comp>.js" 2>/dev/null
    ```
-   找不到 → widget 用 default mold 或自己組 HTML，這時退回 `.ts` 看 `redraw_()` / `replaceHTML_()` 找 `out.push`/`zk.WidgetRenderHelper`。
+   Not found → the widget uses the default mold or builds its HTML itself; in that case fall back to the `.ts` and look at `redraw_()` / `replaceHTML_()` for `out.push` / `zk.WidgetRenderHelper`.
 
-### 例外：哪些元件沒有 mold
+### Exceptions: which components have no mold
 
-- ZK core widget 有些用 default DOM rendering（不寫 mold function），這時 `.ts` 裡的 `redraw_()` 是 DOM ground truth。
-- 第三方包裝（T3 例如 pdfviewer, tbeditor）的內部 DOM 由 library 注入，`.ts` 只負責 mount/destroy；這時 ground truth 在 library 的執行結果，evaluator 用 live DOM 量是正確的——`js-source-files` 只列 ZK 自己的 `.ts` 即可。
+- Some ZK core widgets use default DOM rendering (they do not write a mold function); in that case `redraw_()` in the `.ts` is the DOM ground truth.
+- For third-party wrappers (T3, e.g. pdfviewer, tbeditor), the internal DOM is injected by the library and the `.ts` only handles mount/destroy; in that case the ground truth is the library's runtime result, and measuring the live DOM in the evaluator is correct — `js-source-files` only needs to list ZK's own `.ts`.
 
-### 規律
+### Rule of thumb
 
-> **判斷準則**：寫 contract 前，問「這個元件的 `<root>` outerHTML 是誰決定的？」
-> - 答案是 `mold/*.js` → mold 必讀，必入 `js-source-files`。
-> - 答案是 `redraw_()` in `.ts` → `.ts` 必讀（你已經會讀了）。
-> - 答案是 third-party library 注入 → live DOM measurement 為準，spec-author 只記 wrapper boundary。
+> **Decision criterion**: before writing a contract, ask "who decides the outerHTML of this component's `<root>`?"
+> - Answer is `mold/*.js` → the mold must be read and must be in `js-source-files`.
+> - Answer is `redraw_()` in `.ts` → the `.ts` must be read (you already know how).
+> - Answer is third-party library injection → live DOM measurement is authoritative; the spec-author records only the wrapper boundary.
 
 ---
 
-## 把 iceblue CSS 當作結構訊號的證據來源
+## Using iceblue CSS as evidence for structural signals
 
-iceblue 是 ZK 內建主題，已在生產被使用十幾年；它的 CSS 對「ZK 究竟會 emit 哪些 class、依賴哪些 pseudo-element、在哪些狀態組合下需要樣式」這件事是**現成的證據**。**只要紀律夠**，把它當作結構規則檔的訊號來源比讀 widget JS 還快——JS 告訴你**哪個 setter toggle 哪個 class**，CSS 告訴你**哪些 class 真的被當作樣式錨點**（有時 widget 會 emit 但從未被任何主題使用——那種 class 是雜訊，不一定要進規則檔）。
+iceblue is ZK's built-in theme and has been used in production for more than a decade. For the question of "which classes ZK actually emits, which pseudo-elements it depends on, and under which state combinations styling is needed", its CSS is **ready-made evidence**. **As long as the discipline holds**, using it as a signal source for the structural rules file is faster than reading the widget JS — the JS tells you **which setter toggles which class**, while the CSS tells you **which classes are actually used as style anchors** (sometimes a widget emits a class that no theme ever uses — such a class is noise and does not necessarily belong in the rules file).
 
-### 定位 iceblue CSS 來源（路徑可變，須有 fallback）
+### Locating the iceblue CSS source (the path varies; a fallback is required)
 
-iceblue CSS 的取得路徑不固定（取決於使用者本機展開了哪個版本到哪裡），**不要 hardcode 任何單一路徑**。依下列順序搜尋，找不到就停下來問使用者：
+The path where iceblue CSS is obtained is not fixed (it depends on which version the user unpacked where on their machine), so **do not hardcode any single path**. Search in the order below; if nothing is found, stop and ask the user:
 
-1. **專案內快照**（最常用）：`temp/iceblue_c-*/web/iceblue_c/js/**/<comp>.css.dsp`
+1. **Snapshot inside the project** (most common):
    ```bash
    find temp -path "*iceblue*" -name "<comp>.css.dsp" 2>/dev/null
    ```
-2. **ZK source tree**（如果使用者把 ZK source 放在工作站）：`/Users/hawk/Documents/workspace/ZK*/zk*/src/main/resources/web/js/**/<comp>.css*`
+2. **ZK source tree** (if `$ZK_SOURCE` / `$ZKCML_SOURCE` are set): `$ZK_SOURCE/zul/src/main/resources/web/js/**/<comp>.css*`, `$ZKCML_SOURCE/zkex/src/main/resources/web/js/**/<comp>.css*`, `$ZKCML_SOURCE/zkmax/src/main/resources/web/js/**/<comp>.css*`
    ```bash
-   find /Users/hawk/Documents/workspace -path "*zul/src/main/resources/web/js*" -name "<comp>.css*" 2>/dev/null
+   find "$ZK_SOURCE" "$ZKCML_SOURCE" -path "*/src/main/resources/web/js*" -name "<comp>.css*" 2>/dev/null
    ```
-3. **使用者目前未配置 iceblue CSS** → 在 conversation 印出：
+3. **The user has not configured an iceblue CSS source** → print the following in the conversation:
    ```
    iceblue CSS for <comp> not found. Searched:
      - temp/iceblue_c-*/web/iceblue_c/js/**/<comp>.css.dsp
-     - /Users/hawk/Documents/workspace/ZK*/...
+     - $ZK_SOURCE/...
+     - $ZKCML_SOURCE/...
    Please provide a path to the iceblue CSS source for <comp>,
    or confirm to proceed without iceblue mining (B-tier predicates
    from CSS mining will be skipped; produce A + C tiers only).
    ```
-   等使用者回覆再繼續。**不要**自己往奇怪的路徑亂找，**不要**假設沒有 iceblue source 就靜默跳過。
+   Wait for the user's reply before continuing. **Do not** search random paths on your own, and **do not** assume there is no iceblue source and skip silently.
 
-定位到檔案後，記下絕對路徑供本次任務使用；不要寫進規則檔（規則檔不留 iceblue 路徑——它跟使用者本機環境相關）。
+Once the file is located, note its absolute path for use in this task; do not write it into the rules file (the rules file must not keep iceblue paths, because they depend on the user's local environment).
 
-### 可以從 iceblue CSS 萃取的東西 (Structural Signals)
+### What can be extracted from iceblue CSS (Structural Signals)
 
-把 iceblue 的 `.css` / `.css.dsp` 檔讀過一遍，**只看選擇器與 declaration 的 property 名稱，不看 value**，可以挖出：
+Read through iceblue's `.css` / `.css.dsp` files, **looking only at selectors and declaration property names, not values**, and you can extract:
 
-1. **State class 全清單** — iceblue 用了 `.z-orgitem-selected`、`.z-orgitem-disabled`、`.z-orgitem-non-selectable`、`.z-orgitem-close`，這四個就是 organigram 真正會出現的狀態。如果結構規則檔少列了任何一個，這就是缺漏。
-2. **State 組合 (combined-state)** — 例如出現 `.z-orgitem-selected.z-orgitem-disabled > .z-orgnode { ... }` 表示這個組合**會發生且需要被處理**，應該加進「States to evaluate」。
-3. **Pseudo-element 參與 layout 還是 decoration** — `::before` / `::after` 上若有 `position: absolute` + `top/left/width/height`，就是 layout-critical（必須在結構規則檔說明「theme must keep these positioned」）；若只設 `background` 沒設 position，是純裝飾，主題可以丟掉。
-4. **互動契約** — `cursor: pointer` 標出點擊目標、`pointer-events: none` 標出 interaction-suppression、`display: none` 在某個 state class 下標出可見性契約（如 `.z-orgitem-close > .z-orgchildren { display: none }`）。這些 property **本身**是契約，property 的 value 也是契約（`none` vs `block`）——這是少數「value 也能直接抄進結構規則檔」的情形，因為它表達的是行為而非外觀。
-5. **過渡的 property 清單** — `transition: background-color, border-color, box-shadow` 告訴你「主題該讓這三個 property 平滑變化」。**duration 與 easing 是主題自由**，但**有沒有 transition、transition 哪些 property**，是 UX 契約。
-6. **選擇器特異性的層級關係** — iceblue 寫 `.z-orgitem-selected > .z-orgnode` 而不是 `.z-orgnode.z-orgitem-selected`，這證實「state class 在 `.z-orgitem` 上、視覺套用在 `.z-orgnode`」的 widget 約定。新主題若反向選擇必失敗。
-7. **DOM 假設** — iceblue 寫 `.z-grid > .z-grid-body > table > tbody > tr` 暗示這條路徑是穩定的；可以把它編成 DOM 假設加進結構規則檔，提醒未來主題不要假設別的 DOM 形狀。
+1. **Full list of state classes** — iceblue uses `.z-orgitem-selected`, `.z-orgitem-disabled`, `.z-orgitem-non-selectable`, and `.z-orgitem-close`; these four are the states that organigram actually produces. If the structural rules file omits any of them, that is a gap.
+2. **State combinations (combined-state)** — for example, if `.z-orgitem-selected.z-orgitem-disabled > .z-orgnode { ... }` appears, it means this combination **does occur and needs handling**, and it should be added to "States to evaluate".
+3. **Whether a pseudo-element takes part in layout or is decoration** — if `::before` / `::after` has `position: absolute` + `top/left/width/height`, it is layout-critical (the structural rules file must state "theme must keep these positioned"); if it only sets `background` and no position, it is pure decoration, and a theme may drop it.
+4. **Interaction contracts** — `cursor: pointer` marks click targets, `pointer-events: none` marks interaction suppression, and `display: none` under a state class marks a visibility contract (e.g. `.z-orgitem-close > .z-orgchildren { display: none }`). These properties **themselves** are the contract, and their values are contract too (`none` vs `block`) — this is one of the few cases where the value can be copied directly into the structural rules file, because it expresses behavior rather than appearance.
+5. **List of transitioning properties** — `transition: background-color, border-color, box-shadow` tells you "the theme should animate these three properties smoothly". **Duration and easing are theme-free**, but **whether there is a transition, and which properties it covers**, is a UX contract.
+6. **Selector specificity hierarchy** — iceblue writes `.z-orgitem-selected > .z-orgnode` rather than `.z-orgnode.z-orgitem-selected`, which confirms the widget convention that "the state class sits on `.z-orgitem`, and the visuals apply to `.z-orgnode`". A new theme that selects in the reverse direction will always fail.
+7. **DOM assumptions** — iceblue writes `.z-grid > .z-grid-body > table > tbody > tr`, which suggests this path is stable; it can be written as a DOM assumption in the structural rules file, reminding future themes not to assume a different DOM shape.
 
-### 一定要丟掉的東西 (Visual Values — DO NOT IMPORT)
+### Things to always discard (Visual Values — DO NOT IMPORT)
 
-| 項目 | 為何要丟 |
+| Item | Why it is discarded |
 |---|---|
-| 顏色（含 hex、rgba、currentColor 之外的具名色） | iceblue 的色票是它自己的設計，與 Marble DESIGN.md 無關 |
-| 具體尺寸 (px / em / rem 的絕對值) | padding、margin、font-size、border-radius 都是密度與形狀的設計取捨 |
-| `font-family`、`font-weight` 的具體值 | typography 主題自決 |
-| `box-shadow` 的具體 offset / blur / color | elevation 主題自決，但**「有 shadow」這件事**可能是 C 類差異述語 |
-| `transition-duration`、`transition-timing-function` 的值 | motion 主題自決，但**「有 transition」這件事**可以保留 |
-| `border-style` 之外的 border 細節（width、color） | 邊框存在性可以是 C 類差異；具體值丟 |
-| 任何 vendor hack、IE workaround、deprecated 寫法 | 純歷史包袱 |
+| Colors (hex, rgba, and named colors other than currentColor) | iceblue's palette is its own design and has nothing to do with Marble DESIGN.md |
+| Concrete sizes (absolute px / em / rem values) | padding, margin, font-size, and border-radius are design trade-offs of density and shape |
+| Concrete values of `font-family` and `font-weight` | Typography is decided by the theme |
+| Concrete offset / blur / color of `box-shadow` | Elevation is decided by the theme, but **"has a shadow"** may be a C-class difference predicate |
+| Values of `transition-duration` and `transition-timing-function` | Motion is decided by the theme, but **"has a transition"** can be kept |
+| Border details other than `border-style` (width, color) | Border presence can be a C-class difference; concrete values are discarded |
+| Any vendor hack, IE workaround, or deprecated syntax | Pure historical baggage |
 
-判斷準則：**「這條 declaration 若 value 完全改變、視覺隨之改變，元件還是 functional 嗎？」** 是 → 視覺值，丟。否（改了會壞掉、會少一個狀態、會看不出區別）→ 結構訊號，留。
+Decision criterion: **"If this declaration's value changed completely and the visuals changed with it, would the component still be functional?"** Yes → visual value, discard. No (changing it would break something, remove a state, or make a difference invisible) → structural signal, keep.
 
-### 工作流：從 iceblue CSS 反推一份結構規則檔的補強清單
+### Workflow: deriving a reinforcement list for a structural rules file from iceblue CSS
 
-針對某個元件 (e.g. organigram)：
+For a given component (e.g. organigram):
 
-1. **定位 iceblue 對應 CSS 檔**（依上文 fallback 順序）。
-2. **抽出所有獨特選擇器**：`grep -oE '\.z-[a-z-]+' <comp>.css.dsp | sort -u`（粗版；複合選擇器另處理）。
-3. **比對結構規則檔現有的 State classes 與 DOM 區塊**，找出 iceblue 提到但規則檔沒寫到的：
-   - 缺漏的 state class
-   - 缺漏的 combined-state（兩個 class 同時出現的選擇器）
-   - 缺漏的 pseudo-element 用法
-4. **針對每個缺漏項目，分類**：
-   - **A 類（結構）**：DOM/state 一定存在的事實 → 補進規則檔 DOM 或 State classes 區
-   - **B 類（關係）**：可量測的幾何/對齊 → 補進 Relational invariants 區
-   - **C 類（狀態差異）**：兩個狀態之間必有某維度不同 → 補進 State-differs invariants 區
-   - **D 類（視覺值）**：丟掉
-5. **交叉驗證 widget JS source**：iceblue CSS 提到但 JS 沒 toggle 的 class 可能是 dead code，要查證；JS toggle 但 iceblue CSS 沒用到的，可能是「ZK 提供但被 iceblue 忽略的 hook」——這種**仍要寫進規則檔**，因為新主題可能會用到。
-6. **不更新主題契約** — 這個流程的產物是更準確的**結構規則檔**，不是新的主題契約。Marble 的 `doc/contracts/<comp>.md` 不應因為 iceblue CSS 而改變。
+1. **Locate the matching iceblue CSS file** (in the fallback order above).
+2. **Extract all unique selectors**: `grep -oE '\.z-[a-z-]+' <comp>.css.dsp | sort -u` (rough version; compound selectors are handled separately).
+3. **Compare against the State classes and DOM sections already in the structural rules file**, and find what iceblue mentions but the rules file does not cover:
+   - Missing state class
+   - Missing combined-state (a selector where two classes appear together)
+   - Missing pseudo-element usage
+4. **Classify each missing item**:
+   - **A class (structural)**: a fact that the DOM/state always has → add to the DOM or State classes section of the rules file
+   - **B class (relational)**: measurable geometry/alignment → add to the Relational invariants section
+   - **C class (state difference)**: two states must differ along some dimension → add to the State-differs invariants section
+   - **D class (visual value)**: discard
+5. **Cross-check the widget JS source**: a class that iceblue CSS mentions but the JS never toggles may be dead code and must be verified; a class the JS toggles but iceblue CSS never uses may be "a hook ZK provides but iceblue ignores" — this kind **must still be written into the rules file**, because a new theme may use it.
+6. **Do not update the theme contract** — the output of this workflow is a more accurate **structural rules file**, not a new theme contract. Marble's `doc/contracts/<comp>.md` should not change because of iceblue CSS.
 
-### 兩種典型的「iceblue CSS 教會我們的事」
+### Two typical examples of "what iceblue CSS teaches us"
 
-**例 1：發現缺漏的 combined-state**
-iceblue `organigram.css.dsp` 假如有 `.z-orgitem-selected.z-orgitem-close > .z-orgnode { ... }`——這證明「selected 但 closed」是合法狀態組合，應加進規則檔的「States to evaluate」清單。
+**Example 1: finding a missing combined-state**
+If iceblue `organigram.css.dsp` contains `.z-orgitem-selected.z-orgitem-close > .z-orgnode { ... }`, this proves that "selected but closed" is a legal state combination and should be added to the "States to evaluate" list in the rules file.
 
-**例 2：發現缺漏的 layout-critical pseudo-element 規則**
-iceblue 寫 `.z-orgnode { position: relative; }` 加上 `.z-orgnode::after { position: absolute; left: 50%; ... }`——這證實「`.z-orgnode` 必須是 positioning context」。如果其他元件的規則檔還沒提這種約束，照本範例補上。
+**Example 2: finding a missing layout-critical pseudo-element rule**
+iceblue writes `.z-orgnode { position: relative; }` together with `.z-orgnode::after { position: absolute; left: 50%; ... }` — this confirms that "`.z-orgnode` must be a positioning context". If other components' rules files do not yet state this kind of constraint, add it following this example.
 
-### 紀律檢查（不要做的事）
+### Discipline checks (things not to do)
 
-- ❌ **不要**把 iceblue 的 CSS 整段貼進結構規則檔當「reference implementation」。規則檔只描述行為與不變式，不放 CSS code。
-- ❌ **不要**在規則檔寫「iceblue uses 8px padding here」這種句子——這是把視覺值偷渡進通用層。要寫，就寫「padding must be ≥ 4px to avoid clipping」這種述語。
-- ❌ **不要**把 iceblue 的 z-index、background-image (sprite) 之類純視覺實作放進規則檔。
-- ❌ **不要**在發現 iceblue 沒用到某個 state class 時就從規則檔刪掉它——可能 iceblue 只是當初沒設計到，不代表 widget 不會 emit。**以 ZK widget JS 為準**。
-
----
-
-## Refuse-to-emit rules（硬性）
-
-### 寫進 `.claude/skills/zk-component-rules/components/<comp>.md` 的內容絕不能含：
-
-- 任何 hex (`#xxx` / `#xxxxxx`)、`rgb()`、`rgba()`、`hsl()`
-- 任何 `var(--zk-*)`、`var(--md-*)` token 參照
-- 任何 px/em/rem 的**絕對視覺值**（padding、margin、font-size、border-radius、box-shadow 等）
-- 任何 MD3 / MUI / Mira / iceblue / Sapphire / DESIGN.md 名詞或章節參照
-
-**例外**（這些 value 允許進結構規則檔，因為表達行為而非外觀）：
-- `position: relative | absolute` 等 layout-critical positioning
-- `display: none | block` 等可見性契約（搭配 state class）
-- `cursor: pointer | default` 等 interaction 契約
-- `pointer-events: none` 等 interaction-suppression 契約
-- `transition` 的 **property name list**（不含 duration、easing 的值）
-
-### 寫進 `doc/contracts/<comp>.md` 的內容絕不能含：
-
-- 任何 DOM tree（ASCII 樹、class 階層）
-- 任何 state-class 行為說明（「ZK adds `.z-button-disabled` when…」這類）
-- 任何 framework-quirk 說明（DOM mutation、JS-injected attribute 等）
-- 任何 `source` 欄位寫成「mirrors iceblue」、「matches legacy」、「same as ZK iceblue」這類**無設計理由的偷渡**
-
-如果發現自己快寫出上述任一項，**停**——它屬於另一邊。
+- ❌ **Do not** paste a whole block of iceblue CSS into the structural rules file as a "reference implementation". The rules file only describes behavior and invariants; it contains no CSS code.
+- ❌ **Do not** write sentences like "iceblue uses 8px padding here" in the rules file — that smuggles a visual value into the universal layer. If you need to write it, write a predicate like "padding must be ≥ 4px to avoid clipping".
+- ❌ **Do not** put purely visual implementation details such as iceblue's z-index or background-image (sprite) into the rules file.
+- ❌ **Do not** delete a state class from the rules file just because you found iceblue does not use it — iceblue may simply never have designed for it, which does not mean the widget will not emit it. **The ZK widget JS is the authority.**
 
 ---
 
-## 一行版
+## Refuse-to-emit rules (hard)
 
-> **看 baseline 抽取語意角色 (states + relations + maintained distinctions)，把這些語意寫成主題無關的述語放結構規則檔；具體顏色/數字綁 token 放主題契約。Evaluator 兩層都驗，但兩層都不直接跟 baseline pixel 比對。**
+### Content written into `.claude/skills/zk-component-rules/components/<comp>.md` must never contain:
+
+- Any hex (`#xxx` / `#xxxxxx`), `rgb()`, `rgba()`, or `hsl()`
+- Any `var(--zk-*)` or `var(--md-*)` token reference
+- Any absolute px/em/rem **visual value** (padding, margin, font-size, border-radius, box-shadow, etc.)
+- Any reference to MD3 / MUI / Mira / iceblue / Sapphire / DESIGN.md terms or sections
+
+**Exceptions** (these values may enter the structural rules file, because they express behavior rather than appearance):
+- layout-critical positioning such as `position: relative | absolute`
+- visibility contracts such as `display: none | block` (paired with a state class)
+- interaction contracts such as `cursor: pointer | default`
+- interaction-suppression contracts such as `pointer-events: none`
+- the **property name list** of `transition` (excluding duration and easing values)
+
+### Content written into `doc/contracts/<comp>.md` must never contain:
+
+- Any DOM tree (ASCII tree, class hierarchy)
+- Any description of state-class behavior (such as "ZK adds `.z-button-disabled` when…")
+- Any framework-quirk description (DOM mutation, JS-injected attributes, etc.)
+- Any `source` field written as "mirrors iceblue", "matches legacy", "same as ZK iceblue", or similar **smuggling with no design reason**
+
+If you find yourself about to write any of the above, **stop** — it belongs on the other side.
+
+---
+
+## One-line version
+
+> **Look at the baseline to extract semantic roles (states + relations + maintained distinctions); write those semantics as theme-independent predicates in the structural rules file; bind concrete colors and numbers to tokens in the theme contract. The evaluator verifies both layers, but neither layer is compared directly against baseline pixels.**

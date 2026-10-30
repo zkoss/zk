@@ -7,7 +7,6 @@ contract-approved: false
 zk-version: 10.2.1-jakarta
 
 ## References
-- MUI CSS: /Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/Inputs/Select.css, /Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/Navigation/Menu.css
 - DESIGN.md sections: §1, §2, §5, §7, §9, §10, §11
 
 ## Expected values

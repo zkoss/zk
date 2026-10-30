@@ -20,7 +20,7 @@ Required files to read (in order):
 3. `.claude/skills/zk-component-rules/components/<component>.md` — **authoritative structural source**: DOM selectors, state-class enumeration, composition invariants. Read this FIRST for any selector or state-class lookup. The contract is consulted only for token assignments — selectors come from the skill.
 4. The CSS file named in `shared-css-file` — the file you will edit
 5. `doc/spec/DESIGN.md` — canonical expected values (for token names + values)
-6. For T1 components only: the MUI CSS reference file listed in the contract (for cross-checking idiomatic styles)
+6. For T1 components only: the MUI 7.3.1 values cited in the contract, if any (for cross-checking idiomatic styles; no MUI extract is in the repo)
 
 ### Skill-first structural lookups
 
@@ -130,7 +130,7 @@ Only proceed to edit AFTER printing the contract.
 
 ### 4. Build
 
-`<module>` is `zul` when `shared-css-file` is under `zul/`, `zkmax` or `zkex` when it is under `../zkcml/<module>/`; run from the zk root (`/Users/hawk/Documents/workspace/ZK10/zk`); the same build is `./gradlew :zul:compileMarbleCss` (or the zkcml task). Run:
+`<module>` is `zul` when `shared-css-file` is under `zul/`, `zkmax` or `zkex` when it is under `../zkcml/<module>/`; run from the zk repo root; the same build is `./gradlew :zul:compileMarbleCss` (or the zkcml task). Run:
 
 ```bash
 node scripts/build-css.js --module <module>

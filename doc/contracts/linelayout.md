@@ -17,10 +17,10 @@ mockup-needed: Y
 mockup-rationale: ZKDoc images exist but the Marble timeline point uses MD3 primary-color filled circle with outline-variant line — the iceblue default is close but the point size, gap, and line color diverge from our token values enough to warrant a mockup as the visual ground truth
 
 ## References
-- MUI CSS: no analog — no MUI Timeline CSS in `/Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/`; see DESIGN.md §3, §5, §6 for novel-component policy
+- MUI CSS: no analog — no MUI Timeline component; see DESIGN.md §3, §5, §6 for novel-component policy
 - DESIGN.md sections: §3 (color roles — primary for point fill), §5 (spacing — cave gap/padding), §6 (shape — point border-radius full circle), §7 (motion — none; no interactive states)
 - Iceblue baseline: doc/contracts/baselines/linelayout-iceblue.png
-- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/Linelayout-1.png
+- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Linelayout-1.png
 - HTML contract: doc/contracts/linelayout.html
 
 ## Design Contract

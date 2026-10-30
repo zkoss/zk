@@ -133,3 +133,9 @@ both overflows drop to zero. The viewport meta *is* present on mobile (ZK's `vie
 emits it for the mobile language; a desktop-UA `curl` misleadingly shows none), and `_reset.css`'s
 `html, body { height: 100% }` is correct — **do not switch it to `dvh`**; `100%` tracks a desktop
 horizontal scrollbar, `vh`/`dvh` overflow past it.
+
+## Renaming, deleting and probing preview pages
+
+- After you rename or delete a zkthemelab `.zul`, also delete the stale copy in `zkthemelab/build/inplaceWebapp` and confirm the old URL returns 404. Gretty's inplace copy only adds and updates files; it never deletes them.
+- Probe pages never go in `src/main/webapp`. Anything there is copied to `build/inplaceWebapp`, and deleting the source does not stop the copy from being served. Put probes directly in `build/inplaceWebapp`, and delete them after use.
+- Interactive demos on a preview page use server-side listeners (`onClick`, `onCheck`) that call `Notification.show(..., "middle_center", ...)` to show the result, so the reviewer can see it. Import `Notification` yourself in the zscript.

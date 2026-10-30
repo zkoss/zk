@@ -22,7 +22,7 @@ zk-version: 10.2.1-jakarta
 | c6 | `.z-panel-header` | font-weight | 500 |
 | c7 | `.z-panelchildren` | padding | 16px 16px 24px (DESIGN.md §10 card content padding) |
 | c8 | `.z-panel-drag-button` | display | `none` — must be invisible in all cases; the element is a JS drag-wire anchor only (DK parity; see skill `components/panel.md`) |
-| c9 | `.z-panel-header` | box-sizing | `border-box` — min-height must INCLUDE padding, not add to it (guards the dropped-reset regression; see doc/skill-gaps.md 2026-06-16) |
+| c9 | `.z-panel-header` | box-sizing | `border-box` — min-height must INCLUDE padding, not add to it (guards the dropped-reset regression) |
 | c10 | `.z-panel-header` | height | ≤ 68px — compact card header; a content-box blow-up reads ~80px. Bare title text must not wrap (`white-space: nowrap`), incl. narrow no-border panels |
 
 ## States to evaluate

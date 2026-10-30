@@ -18,7 +18,7 @@ mockup-rationale: ZKDoc canonical image exists; Marble applies only flex-wrap ov
 ## References
 - MUI CSS: Layout/Stack.css — flex-wrap row layout is the closest structural analog; no visual theming borrowed
 - Iceblue baseline: doc/contracts/baselines/anchorlayout-iceblue.png
-- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKComRef_Anchorlayout_Example.png
+- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKComRef_Anchorlayout_Example.png
 - Divergence from baseline: iceblue renders anchor-children **flush** (float model, no gutter); Marble also renders them flush (no `gap`): anchor widths are inline percentages, so any gap makes 50%+50% / 33%x3 overflow and wrap (zkdemo B6 Z1). Flex-wrap is kept only as a safety net for children whose percentages sum above 100%.
 
 ## Design Contract

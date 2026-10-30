@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { AGGREGATE_PAGES } from './aggregate-pages';
 
-// Scan-driven guard for keyboard focus rings (doc/skill-gaps.md 2026-09-04,
-// decision D13). The navbar defect that prompted this was reported by a human
+// Scan-driven guard for keyboard focus rings
+// (decision D13). The navbar defect that prompted this was reported by a human
 // looking at one page: the ring was drawn OUTSIDE the item's box, the item was
 // exactly as wide as the container holding it, and the container clipped its
 // overflow — so the ring was cut on every side. That shape is not unique to

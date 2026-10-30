@@ -10,7 +10,7 @@ js-source-files:
   - zkex/pdfviewer/Pdfviewer.ts
   - zkex/pdfviewer/mold/pdfviewer.js
 js-source-hash: d649527ad8874a916b02c116bb589684f247fe89cd93f52cc233622f7c613754
-js-source-hash-note: hash of Pdfviewer.ts only (mold/pdfviewer.js is a build artifact); recompute with `shasum -a 256 /Users/hawk/Documents/workspace/ZK10/zkcml/zkex/src/main/resources/web/js/zkex/pdfviewer/Pdfviewer.ts`
+js-source-hash-note: hash of Pdfviewer.ts only (mold/pdfviewer.js is a build artifact); recompute with `shasum -a 256 ../zkcml/zkex/src/main/resources/web/js/zkex/pdfviewer/Pdfviewer.ts`
 closest-sibling: window
 
 wrapper-selectors:

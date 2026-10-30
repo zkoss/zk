@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 //
-// Ported from zkThemeTemplate/scripts/check-css-dsp.js on 2026-09-10 (Marble -> zk migration, F26).
+// Ported from zkThemeTemplate/scripts/check-css-dsp.js on 2026-09-10 (Marble -> zk migration).
 // This file is now maintained in zk; the template original is no longer the source of truth
 // for it and is not edited to reflect changes made here.
 //
@@ -44,7 +44,7 @@
 //   za11y    | ZKCML_ROOT/za11y/src/main/resources/metainfo/org/zkoss/za11y/theme/themes.properties | ZKCML_ROOT/za11y/codegen/resources/web
 //
 // font-awesome.css.dsp is neither requested nor built: ZK 11 dropped its line from zul/css/zk.wcs
-// (Marble renders icons via Lucide masks) and build-css.js emits no stub for it (item 1.10).
+// (Marble renders icons via Lucide masks) and build-css.js emits no stub for it.
 //
 // Usage:
 //   node scripts/check-css-dsp.js --module zul|zkmax|zkex|za11y [--theme-dir <dir>] [--zk-home <dir>]
@@ -166,7 +166,7 @@ function extractRequired(xml, langFile) {
     }
     // Global <stylesheet href="~./…css.dsp"> declared at language level (outside any component):
     // ZK links it on every page, so it must exist too — zkex's skeleton.css.dsp dangled this way
-    // after the LESS retirement (ZK-6112, F62).
+    // after the LESS retirement (ZK-6112).
     const sheetRe = /<stylesheet\b[^>]*\bhref="([^"]+\.css\.dsp)"[^>]*\/?>/g;
     let sh;
     while ((sh = sheetRe.exec(remainder))) {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 //
-// Ported from zkThemeTemplate/scripts/build-css.js on 2026-09-10 (Marble -> zk migration, F26).
+// Ported from zkThemeTemplate/scripts/build-css.js on 2026-09-10 (Marble -> zk migration).
 // This file is now maintained in zk; the template original is no longer the source of truth
 // for it and is not edited to reflect changes made here.
 //
@@ -90,8 +90,7 @@ const emitDocs = process.argv.includes('--emit-docs');
 //   - `::picker(select)` / `appearance: base-select` rules are dropped with
 //     "Invalid property name … Ignoring." (3 live warnings before this swap).
 // Lightning CSS parses all of them correctly, which removes the two workarounds this
-// function used to carry. Bootstrap 6 replaced clean-css for the same reason — see
-// ../zkThemeTemplate-iceblue/doc/css-preprocessor-industry-direction.md §11 D1.
+// function used to carry. Bootstrap 6 replaced clean-css for the same reason.
 //
 // No `targets` is set on purpose: this theme is modern-browsers-only, so nothing should be
 // downlevelled. Adding targets would start rewriting output and is a separate decision.
@@ -325,7 +324,7 @@ const mergedFiles = moduleName === 'zul'
     ? new Set([...normFiles.filter(f => f.startsWith('js/')), ...comboFiles, ...footerFiles, ...extraMergedFiles])
     : new Set(a11yFiles);
 
-// --- Orphan-CSS guard data (see assertNoOrphanComponentCss + doc/skill-gaps.md 2026-06-30) ---
+// --- Orphan-CSS guard data (see assertNoOrphanComponentCss) ---
 //
 // `.css.dsp` basenames that ZK requests via a `<css-uri>` in lang.xml / lang-addon.xml. ZK
 // auto-loads these when the widget is on the page, so a 1:1 auto-scanned dsp serves correctly.
@@ -360,7 +359,7 @@ const CSS_URI_BACKED = new Set([
     'colorbox.css.dsp', 'columnlayout.css.dsp', 'fisheye.css.dsp', 'pdfviewer.css.dsp',
     'rangeslider.css.dsp', 'sliderbuttons.css.dsp',
     // skeleton.css.dsp is requested by a GLOBAL <stylesheet href> in zkex's lang-addon.xml (ZK-6099), not
-    // by a css-uri; the LESS retirement dropped its source unnoticed (ZK-6112, F62) — hence this entry.
+    // by a css-uri; the LESS retirement dropped its source unnoticed (ZK-6112) — hence this entry.
     'skeleton.css.dsp',
 ]);
 
@@ -656,7 +655,7 @@ function assertNoOrphanComponentCss() {
             '\nEach is emitted as a 1:1 *.css.dsp that ZK never requests, so the component renders ' +
             'unstyled (no error).\nFix: add it to `normFiles` in scripts/build-css.js. OR, if a runtime ' +
             'document.styleSheets probe\nconfirms zk.wcs already serves its own `.z-*` rule, add it to ' +
-            '`WCS_SERVED_ALLOWLIST`.\nSee doc/skill-gaps.md (2026-06-30) and ' +
+            '`WCS_SERVED_ALLOWLIST`.\nSee ' +
             '.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md.');
     }
 }

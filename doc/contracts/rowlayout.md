@@ -20,7 +20,7 @@ mockup-rationale: ZKDoc canonical image ZKComRef_Rowlayout.PNG exists and the Ma
 - MUI CSS: Layout/Grid.css — `.MuiGrid-root { min-width: 0; box-sizing: border-box; }` — confirms column cells need `box-sizing: border-box`; no additional MUI guidance (MUI Grid uses CSS Grid, not float columns)
 - DESIGN.md sections: §4 (spacing scale for gutter sizing)
 - Iceblue baseline: doc/contracts/baselines/rowlayout-iceblue.png
-- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKComRef_Rowlayout.PNG
+- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKComRef_Rowlayout.PNG
 - HTML contract: doc/contracts/rowlayout.html (not generated — mockup-needed: N)
 
 ## Design Contract

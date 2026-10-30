@@ -14,11 +14,10 @@ js-source-hash: 2a7e8560487b49f5e8d612acb24ddfada4d4489d2fd2399f79de1e9946e30f71
 closest-sibling: none — novel separator+collapse-to-ellipsis composition; decompose for parts only: `a` (link/current/disabled affordance on a single item) + `paging` (keep-ends/collapse-middle/ellipsis idiom precedent)
 shared-css-file: js/zul/wgt/css/breadcrumb.css
 siblings: [breadcrumbitem]
-mockup-needed: Y — no ZKDoc canonical image exists for breadcrumb (component is new in ZK 10.4.0; no `ZKCompRef_Breadcrumb*.png` under `/Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/`), so condition (1) of the mockup-decision rule fires automatically — the HTML mockup is the only visual ground truth.
+mockup-needed: Y — no ZKDoc canonical image exists for breadcrumb (component is new in ZK 10.4.0; no `ZKCompRef_Breadcrumb*.png` under `https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/`), so condition (1) of the mockup-decision rule fires automatically — the HTML mockup is the only visual ground truth.
 
 ## References
-- MUI CSS: `Navigation/Breadcrumbs.css` at
-  `/Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/` — exact
+- MUI CSS: `Navigation/Breadcrumbs.css` — exact
   match reused verbatim for the separator's 8px margin and the `<ol>` flex-wrap layout.
   `Navigation/Link.css` for the underline-on-hover convention consumed by
   `.z-breadcrumbitem > a`.
@@ -26,7 +25,7 @@ mockup-needed: Y — no ZKDoc canonical image exists for breadcrumb (component i
   Scale), §7 (Typography — body-medium), §8 (State-Layer Overlays — disabled-opacity),
   §9 (Motion — default transition token pair).
 - ZKDoc canonical: none found — breadcrumb is new in ZK 10.4.0 and has no entry yet under
-  `/Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/`.
+  https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/.
 - Iceblue baseline: doc/contracts/baselines/breadcrumb-iceblue.png — **NOT captured this
   pass**. The `preview-app-iceblue` profile was not running (confirmed: `curl` to
   `${PREVIEW_URL}/breadcrumb.zul` returned no response) and no `breadcrumb.zul` preview

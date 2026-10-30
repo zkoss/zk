@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 # Captures iceblue (default ZK theme) baseline screenshots for seed components.
 #
-# Prerequisites: the IceBlue preview host (port 8082) exists only in the theme
-# template until P4 — in zk nothing serves it yet. This script is ported so the
-# agents' instruction resolves and is ready for the P4 host.
+# Prerequisites: an IceBlue preview host. It exists only in the separate
+# zkThemeTemplate repository (port 8082); zk does not serve one. Start that host
+# and point $ICEBLUE_URL at it before running this script.
+#
+# SEED below is the first batch of components, whose baselines are already in
+# doc/contracts/baselines/. Name other components as arguments to capture them.
 #
 # Usage:
 #   ./scripts/render-iceblue-baseline.sh                        # all 5 seed components

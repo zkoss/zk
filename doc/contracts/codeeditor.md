@@ -33,11 +33,9 @@ mockup-needed: Y — no ZKDoc canonical image exists for codeeditor (confirmed: 
 mockup-rationale: see mockup-needed above — condition (1), no ZKDoc image, forces Y.
 
 ## References
-- MUI CSS: **partial analog only** —
-  `/Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/Inputs/OutlinedInput.css`
+- MUI CSS: **partial analog only** — `Inputs/OutlinedInput.css`
   for the outlined-field chrome (border/radius/color roles) — the same file textbox's own contract
-  cites. MUI ships no code-editor component of any kind (confirmed absent from
-  `static-css-output/INDEX.md` — no `code`/`monaco`/`editor` entry); the chrome is a *pattern* reuse,
+  cites. MUI ships no code-editor component of any kind; the chrome is a *pattern* reuse,
   not a component-for-component analog, which is part of why this is T3 rather than T1.
 - DESIGN.md sections: §1 (Surface Palette — root/light-gutter fills), §2 (Text Colors — foreground
   roles), §5 (Corner Radii — `--zk-shape-corner-extra-small`, the "input" row), §7 (Typography —

@@ -10,16 +10,13 @@ This rule was added 2026-05-29 after a cross-component audit found:
 - `searchbox` used `secondary-container` while `combobox`/`tree`/`menu` used
   `primary-container` for the same kind of "highlighted dropdown row"
 
-**Revised 2026-10-06 (Jess design review batch 2, ruling D10-A).** The list-row
+**Revised 2026-10-06 after a design review.** The list-row
 family moved from `primary-container` to `secondary-container`. The 2026-05-29
 decision followed MUI, not MD3; MD3's list-item token
 `md.comp.list.list-item.selected.container.color` is `secondary-container`
 (label `on-secondary-container`; material-web tokens v34, the menu tokens are
 the same). The "one family for every row" rule below is unchanged; only the
 colour role changed.
-
-See `doc/skill-gaps.md` (2026-05-29 row) for the gap log, the cross-component
-audit table and the rationale.
 
 ## The three families
 
@@ -82,7 +79,7 @@ but pure-MD3 styling is intentionally not used here for chips.
 > added one (a `border-left` that curled into an arc on the rounded box, then a
 > straight `::after` strip), but a bar stacked on the MD3 pill is redundant and
 > clashes at the corners, so it was dropped (design review 2026-07-07). Do not
-> re-introduce a left accent. See `doc/skill-gaps.md`.
+> re-introduce a left accent.
 
 > **Navigation-active ≠ list-row focus.** A common confusion: the `.z-listitem`
 > blue *left line* is not its selected state — the selected state is a

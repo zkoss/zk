@@ -17,7 +17,7 @@ zk-version: 10.2.1-jakarta
 - Border-radius: 6px (card-like).
 - Title font-size 14–16px, weight 500.
 - Content padding: 16px.
-- Header `box-sizing: border-box` and height ≤ 56px — min-height (48px) must INCLUDE its 12px vertical padding, not add to it. A content-box blow-up reads ~73px (guards the dropped-reset regression; see doc/skill-gaps.md 2026-06-16). The 3d-mold header uses `padding:0` so it is unaffected.
+- Header `box-sizing: border-box` and height ≤ 56px — min-height (48px) must INCLUDE its 12px vertical padding, not add to it. A content-box blow-up reads ~73px (guards the dropped-reset regression). The 3d-mold header uses `padding:0` so it is unaffected.
 - Collapsed state: only header visible, with chevron indicator rotated.
 
 ## States to evaluate

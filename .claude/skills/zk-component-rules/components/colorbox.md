@@ -86,7 +86,7 @@ The theme's freedom is limited to:
 - Input fields inside picker (`.z-colorpicker-input`) — can use theme typography + colors
 - Palette cell hover / selected outline
 
-Everything else (gradient size, hue bar size, RGB input layout) must be preserved at the original Sapphire/Breeze geometry. Reference: `/Users/hawk/Documents/workspace/ZK10/zkcml/zkex/src/main/resources/web/js/zkex/inp/less/colorbox.less`.
+Everything else (gradient size, hue bar size, RGB input layout) must be preserved at the original Sapphire/Breeze geometry. Reference: `$ZKCML_SOURCE/zkex/src/main/resources/web/js/zkex/inp/css/colorbox.css` (the Marble CSS that replaced the former `colorbox.less`; the original geometry is preserved there). `$ZKCML_SOURCE` is the root of the zkcml EE checkout, normally `../zkcml`.
 
 ## Tab icons sit on top of palette/picker — must be raised
 

@@ -14,7 +14,7 @@ description: >-
   duplicate shadows, or redundant `display` declarations — and removing, reducing or justifying
   an `!important`. Also use it to settle an appearance question — which style or token, whether
   sibling components should match, whether Marble, a ZK Jira or the preview page owns a defect —
-  and to decide whether the question needs the owner at all.
+  and to decide whether the question needs the Marble maintainer at all.
 ---
 
 # Maintaining Marble
@@ -44,10 +44,10 @@ vocabulary Marble does not share (see `reference/iceblue-parity.md`).
 
 ## Decide, don't ask
 
-Before putting an appearance question to the owner — which colour or token, whether siblings
+Before putting an appearance question to the Marble maintainer — which colour or token, whether siblings
 should match, who fixes a defect — read `reference/decision-principles.md`. Settle what it
 settles, cite the principle IDs in the report, and ask only for the cases in its §4. After the
-owner rules, fold the ruling back into that file (its §5).
+Marble maintainer rules, fold the ruling back into that file (its §5).
 
 ## Where things live
 
@@ -88,13 +88,15 @@ Marble rules that exist only for accessibility (WCAG) live in the `za11y` module
 
 ## Commands
 
+`$ZK_HOME` is the directory that holds the `zk` and `zkcml` checkouts as siblings. The coverage check below reads it from `--zk-home` or the `ZK_HOME` environment variable.
+
 ```bash
 node scripts/build-css.js --module zul                            # build CE theme CSS (--module required, exit 2 on misuse)
 node scripts/build-css.js --module zkmax                          # or zkex — EE/PE, run from ../zkcml
 ./gradlew :zul:compileMarbleCss                                    # the Gradle task the builder is wired into
                                                                     # (../zkcml: :zkmax:compileMarbleCss / :zkex:compileMarbleCss);
                                                                     # also runs inside every ./gradlew build
-node scripts/check-css-dsp.js --module zul --zk-home /Users/hawk/Documents/workspace/ZK10   # coverage check (also zkmax, zkex)
+node scripts/check-css-dsp.js --module zul --zk-home "$ZK_HOME"   # coverage check (also zkmax, zkex)
 npm run lint:css                                                  # stylelint hygiene pass (CE; EE/PE from ../zkcml)
 bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>                # hardcoded px / orphan tokens
 node .claude/skills/marble-theme/scripts/check-default-display.js --out <file>    # check 5 of the audit
@@ -112,6 +114,10 @@ EE/PE has its own in `../zkcml`). There is no `npm run build:css`, `watch`, `aud
 called directly, and the audit and `!important` tooling is the four skill scripts above. Details
 and the Playwright projects: `reference/verification.md`.
 
+**Capture screenshot baselines before you edit CSS.** They are not in the repository (screenshots
+differ between machines): run `npm run baseline:capture -- <playwright args>` in `zkthemelab/`
+on the unedited CSS, edit, rebuild, then `npm run baseline:compare -- <same args>`.
+
 ## Reference
 
 | File | Read it when |
@@ -123,24 +129,22 @@ and the Playwright projects: `reference/verification.md`.
 | `reference/density.md` | Compact / data-dense mode; anything about control heights |
 | `reference/css-dsp.md` | Adding or renaming a CSS file; a component renders unstyled; a stylesheet 404s |
 | `reference/verification.md` | Running the preview app, the Playwright suite, or screenshot baselines; the tablet gate; A/B against another theme |
-| `reference/decision-principles.md` | **Before asking the owner any appearance question.** Who fixes it, which source wins (MD3, MUI, ZK API, IceBlue), same-family baselines, and the only cases that still need the owner |
+| `reference/decision-principles.md` | **Before asking the Marble maintainer any appearance question.** Who fixes it, which source wins (MD3, MUI, ZK API, IceBlue), same-family baselines, and the only cases that still need the Marble maintainer |
 | `reference/pitfalls.md` | **Read this before any non-trivial change.** Mistakes already made once |
 | `reference/bug-filing.md` | The defect is ZK's, not the theme's, and needs a Jira ticket |
 | `reference/iceblue-parity.md` | Questions about IceBlue, the `--zk-*` public API break, or Theme Pack palettes |
 | `reference/css-audit.md` | Auditing CSS hygiene — orphan tokens, hardcoded colours, repeated shadows, `display` declarations that restate a default; what `scripts/audit-css.sh` reports and how to triage it |
 | `reference/important-reduction.md` | Removing, reducing or justifying an `!important`; the count and probe scripts; the render-neutral proof bar |
 | `reference/harness-playbook.md` | Driving the per-component verification loop (Evaluator, Generator, Design-Verifier) as the orchestrator |
-| `reference/harness-status.md` | The harness status vocabulary, tier legend and serialization rule; where the local state in `tasks/harness/` lives |
 | `reference/harness-decisions.md` | Why the harness is built the way it is (architecture decision records) |
-| `reference/batch-workflow.md` | Running a batch of Marble fixes (an NS batch) that edits a shared selector: impact list before editing, separate engineer and verifier, local commit |
-| `reference/jess-review.md` | Answering a screenshot from the designer (Jess), starting a verification batch for her issues, or touching a meeting record |
+| `reference/batch-workflow.md` | Running a batch of Marble fixes that edits a shared selector: impact list before editing, separate engineer and verifier |
 
 ## ZK version coordinates
 
 `zkthemelab` resolves **no published ZK artifact**. Its `settings.gradle` points every `org.zkoss.*`
 module at the working trees in `../../zk` and `../../zkcml` via `includeBuild` +
 `dependencySubstitution`, so what you preview is the source you just edited. There is no
-`zkthemelab/pom.xml` and no `<zk.version>` to bump — the version lives in `gradle.properties`.
+`zkthemelab/pom.xml` and no `<zk.version>` to bump — the version lives in `gradle.properties`. The two checkouts must be sibling directories named exactly `zk` and `zkcml`; otherwise the preview build cannot substitute them.
 
 Everything below applies only to a **separate** app that consumes published FL/Eval jars, not to
 anything in this repository.
@@ -158,14 +162,9 @@ it compiles against `javax.servlet:servlet-api:2.4` and runs on gretty/Jetty. Li
 check a resolved jar's flavour with
 `unzip -p <zk.jar> 'org/zkoss/zk/ui/http/*.class' | strings | grep -c javax/servlet`.
 
-## External reference: MUI's CSS
+## External reference: MUI
 
-Marble's visual values follow MUI. Before implementing or refining any component's CSS, read the
-matching MUI stylesheet for exact padding, font sizes, state-layer colours and transitions:
-`/Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/` — the `INDEX.md`
-there holds the ZK → MUI file lookup (Button → `Inputs/Button.css`, Grid/Listbox →
-`DataDisplay/Table.css`, Window dialog → `Feedback/Dialog.css`, Tabbox → `Navigation/Tabs.css`,
-and so on). This path is machine-local; after migration, re-home or re-fetch the extract.
+Marble's visual values were originally aligned with MUI 7.3.1's CSS. The component mapping used for that alignment (ZK → MUI): Button → MUI Button, Grid/Listbox → MUI Table, Window → MUI Dialog, Tabbox → MUI Tabs.
 
 ## Scripts
 

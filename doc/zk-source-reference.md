@@ -7,7 +7,7 @@ This document explains how to navigate the ZK source code to understand componen
 ## ZK Source Location
 
 ```
-/Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul/
+zul/src/main/resources/web/js/zul/
 ```
 
 ---
@@ -237,13 +237,13 @@ out.push('<div', this.domAttrs_(), '>');
 
 ```bash
 # Search for component file
-find /Users/hawk/Documents/workspace/ZK10/zk/zul -name "*Button*" -type f
+find zul -name "*Button*" -type f
 ```
 
 ### Step 2: Read the mold file
 
 ```bash
-cat /Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul/wgt/mold/button.js
+cat zul/src/main/resources/web/js/zul/wgt/mold/button.js
 ```
 
 ### Step 3: Read the component TS file
@@ -257,7 +257,7 @@ Look for:
 ### Step 4: Check existing LESS for class names
 
 ```bash
-cat /Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul/wgt/less/button.less
+cat zul/src/main/resources/web/js/zul/wgt/less/button.less
 ```
 
 ### Step 5: Document in `03-component-dom-structures.md`

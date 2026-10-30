@@ -18,7 +18,7 @@ mockup-rationale: ZKDoc image shows iceblue-style rounded-rectangle trigger with
 - DESIGN.md sections: §2 (input chrome), §3 (primary colour), §6 (elevation/dropdown shadow), §8 (state layers), §11 (outline/separator colours)
 - Iceblue baseline: doc/contracts/baselines/cascader-iceblue.png
 - HTML contract: doc/contracts/cascader.html
-- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/Cascader-basic.png
+- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Cascader-basic.png
 
 ## Design Contract
 
