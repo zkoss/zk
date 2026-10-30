@@ -20,7 +20,8 @@ import org.openqa.selenium.Dimension;
 public class B50_ZK_385Test extends WebDriverTestCase {
 	@Test
 	public void test() {
-		Actions act = new Actions(connect());
+		connect();
+		Actions act = getActions();
 		int[] startD = {driver.manage().window().getSize().width ,driver.manage().window().getSize().height};
 		int startPosLeft = jq(".z-window").positionLeft();
 		

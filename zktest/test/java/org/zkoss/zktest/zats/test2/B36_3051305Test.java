@@ -27,7 +27,7 @@ public class B36_3051305Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		actions.dragAndDropBy(driver.findElement(jq("@listitem:contains(ZK JSP)")), 0, 50)
 				.perform();
 		waitResponse();

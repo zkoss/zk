@@ -32,7 +32,7 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 		Assert.assertEquals(0, jq("@grid:eq(1) @column:last").width(), 1);
 		Assert.assertEquals(0, jq("@grid:eq(2) @column:last").width(), 1);
 
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		resizeColumn(actions, jq("@grid:eq(0) @column:eq(0)"), 100);
 		resizeColumn(actions, jq("@grid:eq(1) @column:eq(0)"), 100);
 		resizeColumn(actions, jq("@grid:eq(2) @column:eq(0)"), 100);
@@ -60,7 +60,7 @@ public class B70_ZK_2949Test extends WebDriverTestCase {
 
 		Assert.assertEquals(false, jq("@grid:last @column:last").isVisible());
 
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		resizeColumn(actions, jq("@grid:last @column:eq(0)"), 100);
 		waitResponse();
 
