@@ -184,8 +184,7 @@ see: it needs the *combination* driven in a browser (select the item, then focus
 and the ring's colour compared against the fill's, by RGB triplet — the two differed only in
 alpha (0.8 vs 0.78), so a string comparison passes on an invisible ring. Guarded by
 `forced-colors.spec.ts` › "focus ring on a SELECTED navbar item stays visible". The other five
-selected-tint families in block 2a have **not** been measured for this; see `doc/skill-gaps.md`
-2026-09-04.
+selected-tint families in block 2a have **not** been measured for this.
 
 ## Verify
 

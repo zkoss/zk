@@ -125,11 +125,11 @@ check before writing a new one.)
 
 ### 6 — Gates, record, commit
 
-- Gates: `npm run lint:css` (no *new* issues), `node scripts/check-css-dsp.js --module zul --zk-home /Users/hawk/Documents/workspace/ZK10`
-  (exit 0), `bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>` (advisory).
+- Gates: `npm run lint:css` (no *new* issues), `node scripts/check-css-dsp.js --module zul --zk-home "$ZK_HOME"`
+  (`$ZK_HOME` is the directory that holds the `zk` and `zkcml` checkouts as siblings; exit 0), `bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>` (advisory).
 - Record every verdict + evidence + guard-test name in `doc/spec/important-inventory.md`
-  (the durable anti-re-investigation record) and append a row to `doc/skill-gaps.md`.
-- Fix any stale version-pinned comment you touched; correct `CLAUDE.md`'s ZK version if drifted.
+  (the durable anti-re-investigation record).
+- Fix any stale version-pinned comment you touched; if it names the ZK version, check that version against `gradle.properties`.
 - Stage only the paths you changed (never `git add -A` here) and commit.
 
 ## Worked example — colorbox (why empirical beats source-reading)

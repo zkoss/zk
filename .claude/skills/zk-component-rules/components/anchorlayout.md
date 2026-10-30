@@ -70,9 +70,6 @@ those widgets is governed by their own skill entries.
 The canonical source file for Marble is:
 `zul/src/main/resources/web/js/zul/layout/css/anchorlayout.css`
 
-(Ignore the stray copy at `zul/src/main/resources/web/js/zul/layout/anchorlayout.css` — it is not
-read by the build pipeline.)
-
 ## Edition
 
 CE

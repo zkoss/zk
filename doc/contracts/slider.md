@@ -15,11 +15,10 @@ mockup-needed: Y
 mockup-rationale: ZKDoc has no canonical knob-mold image that shows Marble token mapping; knob arc colors diverge from ZKDoc iceblue-style defaults and need a visual target for the CSS generator.
 
 ## References
-- MUI CSS: /Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/Inputs/Slider.css
 - DESIGN.md sections: §2 (primary color), §3 (state layers), §9 (inputs), §11 (outlines)
-- ZKDoc canonical (default/sphere/scale molds): /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKComRef_Slider.png
-- ZKDoc canonical (knob 360°): /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/Knob360.png
-- ZKDoc canonical (knob 270°): /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/Knob270.png
+- ZKDoc canonical (default/sphere/scale molds): https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKComRef_Slider.png
+- ZKDoc canonical (knob 360°): https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Knob360.png
+- ZKDoc canonical (knob 270°): https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Knob270.png
 - Iceblue baseline: doc/contracts/baselines/slider-iceblue.png
 - HTML contract: doc/contracts/slider.html
 

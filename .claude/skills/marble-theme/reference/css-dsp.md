@@ -27,15 +27,17 @@ bundles come from ZK core convention, not from lang files.
 
 ## Two guards, in opposite directions — do not confuse them
 
+`$ZK_HOME` is the directory that holds the `zk` and `zkcml` checkouts as siblings.
+
 | Guard | Direction | Where |
 |---|---|---|
-| `node scripts/check-css-dsp.js --module zul --zk-home /Users/hawk/Documents/workspace/ZK10` | ZK registers it → the file **must exist** | `scripts/check-css-dsp.js` |
+| `node scripts/check-css-dsp.js --module zul --zk-home "$ZK_HOME"` | ZK registers it → the file **must exist** | `scripts/check-css-dsp.js` |
 | `assertNoOrphanComponentCss()` | No `css-uri` → must **not** be emitted as an orphan; **fails the build** | `build-css.js:596–620` |
 
 Together they make a silently-dead or silently-missing stylesheet impossible.
 
 `check-css-dsp.js` reads the **real ZK lang files** as its source of truth —
-`ZK_HOME` defaults to `/Users/hawk/Documents/workspace/ZK10`. So `MISSING: 0` means *verified
+`--zk-home` or `$ZK_HOME` names the workspace root for the zkcml sibling; with neither set, it uses `../zkcml` relative to the zk checkout it runs from. So `MISSING: 0` means *verified
 against ZK's actual registrations*, not merely internally consistent. `font-awesome.css.dsp` is
 deliberately out of scope: since 11.0 `zk.wcs` no longer lists it (Marble draws icons with Lucide
 masks); a legacy theme jar such as iceblue adds its own copy through its `<Theme>ThemeURIHandler`.

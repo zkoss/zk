@@ -42,6 +42,7 @@ time and write it inline. No CSS rule needed — same inline-block path.
 
 ## CSS file
 
-`zul/src/main/resources/web/js/zul/layout/css/layout.css` → bundled to
-`layout.css.dsp` (note: the EE `columnlayout.css.dsp` slot in iceblue exists
-for module-isolation, but in this theme the rules live in `zul/layout/css/layout.css`).
+`$ZKCML_SOURCE/zkex/src/main/resources/web/js/zkex/layout/css/columnlayout.css` (PE, zkex) → bundled to
+`columnlayout.css.dsp`.
+
+`$ZKCML_SOURCE` is the root of the zkcml checkout (normally `../zkcml`).

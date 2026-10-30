@@ -5,13 +5,13 @@ non-trivial change; most of these cost hours and none of them look like mistakes
 
 ## 1. Touch behaviour lives in the EE tree, not CE
 
-An Explore pass over `ZK10/zk` concluded combobox had "no bottom-sheet" and that `_fixedVParent`
+An Explore pass over the CE checkout (`$ZK_SOURCE`, the root of the ZK CE checkout) concluded combobox had "no bottom-sheet" and that `_fixedVParent`
 was an empty stub — i.e. no bug existed. Wrong: ZK's mobile molds (the `*-touch.ts` overrides that
 swap in wheel pickers and bottom-sheets) live in the **EE** tree at
-`ZK10/zkcml/zkmax/src/main/resources/web/js/zkmax/touch/`.
+`$ZKCML_SOURCE/zkmax/src/main/resources/web/js/zkmax/touch/` (`$ZKCML_SOURCE` is the root of the zkcml EE checkout, normally `../zkcml`).
 
-**Rule:** for any mobile/tablet/touch question, search **both** `ZK10/zk` (CE) and
-`ZK10/zkcml/zkmax` + `zkex` (EE/PE). An "empty stub / no special handling" finding from the CE
+**Rule:** for any mobile/tablet/touch question, search **both** `$ZK_SOURCE` (CE) and
+`$ZKCML_SOURCE/zkmax` + `zkex` (EE/PE). An "empty stub / no special handling" finding from the CE
 tree alone is **not proof of absence**.
 
 **Corollary:** before claiming a family of components shares a behaviour, confirm each one has its
@@ -43,11 +43,11 @@ mechanism Y" over "no longer ships" unless you confirmed the file is gone.
 ## 4. Contracts must cite the ZKDoc component reference
 
 The cropper contract passed spec-author, two audits, user approval and dual-gate VERIFIED without
-ever citing `DOC/zkdoc/zk_component_ref/cropper.md` or its `ZKCompRef_Cropper.png` — the one
+ever citing `https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/cropper.md` or its `ZKCompRef_Cropper.png` — the one
 canonical reference ZK itself provides.
 
-**Rule:** for any component, check `DOC/zkdoc/zk_component_ref/<component>.md` +
-`images/ZKCompRef_<Component>*.png` **first**. The ZKDoc image is the structural ground truth
+**Rule:** for any component, check `https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/<component>.md` +
+the images at `https://github.com/zkoss/zkdoc/tree/master/zk_component_ref/images` (`ZKCompRef_<Component>*.png`) **first**. The ZKDoc image is the structural ground truth
 (which elements exist, where, how many) that anchors the `mockup-needed` decision; its IceBlue
 styling is not a target (`decision-principles.md` V5).
 
@@ -178,3 +178,7 @@ values are *inputs* to JS. Only the second kind can turn a dropped declaration i
 least one outcome row must perform the interaction and assert that state changed. Playwright's
 touchscreen API has no drag — drive it through CDP `Input.dispatchTouchEvent` (see
 `zkthemelab/src/test/playwright/tablet.spec.ts`, "a touch drag moves the content").
+
+## Debugging on a minimal repro page
+
+When you debug or investigate a bug, first build a minimal repro page at `zkthemelab/src/main/webapp/web/pv/<topic>-repro.zul`. Put only the components that trigger the problem and the least configuration in it. Leave out the page frame, title and other sections. Reproduce, measure and verify the fix on this page, not on the full gallery page: other components, styles and load order on that page are unrelated possible influences. To compare fixes, make one variant page per fix, each differing in one place only. These pages are temporary. Delete them after debugging, including the copy under `build/inplaceWebapp`, and do not commit them. A regression test that must be kept long term goes into the proper spec instead.

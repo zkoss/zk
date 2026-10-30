@@ -1,7 +1,7 @@
 /*
  * "Report this page" -> a prefilled issue on the private design-review tracker.
  * Deep link only: no server round trip, no storage, nothing to keep in sync but
- * this one URL. See doc/design-review-feedback.md.
+ * this one URL.
  *
  * Loaded by usecase/index.zul, whose sidebar button calls marbleReportIssue()
  * through a client-side w:onClick handler - so this has to define a global.

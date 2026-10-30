@@ -27,13 +27,11 @@ mockup-needed: Y — no ZKDoc canonical image exists for carousel (`ZK_component
   therefore the only visual reference for this contract.
 
 ## References
-- MUI CSS: **no analog** — MUI ships no carousel component; confirmed absent from
-  `/Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/INDEX.md`
-  and no `*carousel*` file exists anywhere under that tree. This is why the component is
+- MUI CSS: **no analog** — MUI ships no carousel component. This is why the component is
   tier T2 (ZK-only; DESIGN.md tokens + sibling-token coherence), not T1.
 - ZK stock LESS (structural/behavioral reference, read carefully, not copied): `Carousel.ts`
   §"less/carousel.less" at
-  `/Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul/wgt/less/carousel.less`
+  `zul/src/main/resources/web/js/zul/wgt/less/carousel.less`
   — informs three theme decisions below (chevron technique, indicator touch target,
   reduced-motion handling); see "Design Contract" for what Marble keeps vs. changes.
 - DESIGN.md sections: §2 (Text Colors), §4 (Spacing Scale), §5 (Corner Radii —
@@ -52,7 +50,7 @@ mockup-needed: Y — no ZKDoc canonical image exists for carousel (`ZK_component
   below is `--zk-color-inverse-on-surface`, not `--zk-color-on-primary` — see Design
   Contract.
 - ZKDoc canonical: none found — carousel is new in ZK 10.4.0 and has no entry yet under
-  `/Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/`.
+  https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/.
 - zkbooks demo (usage patterns only, not visual ground truth):
   `DOC/zkbooks/componentreference/src/main/webapp/essential/carousel.zul`.
 - Iceblue baseline: doc/contracts/baselines/carousel-iceblue.png — **NOT captured this

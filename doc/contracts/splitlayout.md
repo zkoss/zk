@@ -12,14 +12,14 @@ js-source-hash: 91be9da33e6066ac2976cf134c507f8b4a49799a49ca3385eefe5ac15dce81da
 closest-sibling: splitter (for the splitter bar sub-element only)
 
 ## References
-- MUI CSS: no analog — MUI has no split-pane layout component (closest is a third-party resizable panel library; no file in static-css-output/)
+- MUI CSS: no analog — MUI has no split-pane layout component (closest is a third-party resizable panel library)
 - DESIGN.md sections: §1 (surfaces), §4 (spacing), §8 (state layers), §9 (motion), §11 (border rules), §14 (splitter family — canonical bar + actuator-pill spec)
 - Iceblue baseline: doc/contracts/baselines/splitlayout-iceblue.png
 - HTML contract: doc/contracts/splitlayout.html
 
 ## Design Contract
 
-> Revised 2026-06-04 per user splitter-family unification ruling (gap log `doc/skill-gaps.md`): the splitter now follows the canonical family spec in DESIGN.md §14 — including the actuator pill that borderlayout pioneered — and two new outcome rows (M8/M9) assert button centering, closing the double-centering bug (Marble CSS centered via `top/left:50% + transform` on top of ZK's `setBtnPos_` inline-margin centering, pushing the button to the end of the bar; see the skill file's "Splitter button positioning" section).
+> Revised 2026-06-04 per user splitter-family unification ruling: the splitter now follows the canonical family spec in DESIGN.md §14 — including the actuator pill that borderlayout pioneered — and two new outcome rows (M8/M9) assert button centering, closing the double-centering bug (Marble CSS centered via `top/left:50% + transform` on top of ZK's `setBtnPos_` inline-margin centering, pushing the button to the end of the bar; see the skill file's "Splitter button positioning" section).
 
 The splitlayout splitter follows the unified **splitter family** spec (DESIGN.md §14) so the app has a single resize affordance. The bar is 8px thick, `--zk-color-surface-container` at rest; on hover it tints with `--zk-color-primary` at hover opacity; while dragging (`:active`) it deepens to the pressed-opacity tint. The bar carries the family's **actuator pill** (`.z-splitlayout-splitter-button`): an 8×28px `--zk-shape-corner-full` pill filled `--zk-color-outline-variant` (no border, no elevation) holding the grip/caret/grip icons — grip dots at 8px always visible (`on-surface-variant`), the collapse caret hidden at rest and fading in on hover. Hovering the pill itself fills it `--zk-color-primary` with `on-primary` icons. **The pill is centered on the bar's long axis; M8/M9 assert the outcome.** Mechanism (errata 2026-06-04, outcomes unchanged): never half-mix CSS and JS centering on one axis — ZK's `setBtnPos_` inline-margin centering is only reliable when the bar's long-axis size is CSS-fixed at bind time; on the flex-resolved axis (`orient="vertical"` bar width) it runs while the offset is still 0 and writes margin 0, so theme CSS must take full ownership there (`margin-left/top: 0 !important` to neutralize the JS margin, plus `left/top: 50% + transform` — see the skill file's timing-trap notes). When `resizable="false"` (`.z-splitlayout-splitter-nosplitter`), the bar drops its hover state with `cursor: default`. Transitions on `background-color` and `color` run at `--zk-motion-duration-short3` (250ms) with standard easing. Cave areas have no decoration — they are transparent containers.
 

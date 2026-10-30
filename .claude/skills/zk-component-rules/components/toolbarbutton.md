@@ -21,4 +21,3 @@ Despite the component name, toolbarbutton styles are delivered by **`footer.css.
 ## Note
 
 Stub entry — full documentation pending spec-author run (Phase 3/4).
-See `doc/spec-author-pipeline-plan.md (retired with the template)`.

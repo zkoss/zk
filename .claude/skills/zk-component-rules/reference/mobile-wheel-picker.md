@@ -135,6 +135,6 @@ above the band and the band shows through behind the text.
 See: theme CSS `zkmax/css/tablet/_wheel.css`; mobile-readonly neutralization in
 `zkmax/css/tablet/_inputs.css`; tests `tablet.spec.ts` describe
 `tablet-datebox-wheel` / `tablet-timebox-wheel` (each asserts BOTH icon-tap and
-input-tap land flush); gap log `doc/skill-gaps.md` (2026-06-15 + same-day
-follow-up). Related unfixed: combobox/selectbox bottom-sheet share the same
+input-tap land flush).
+Related unfixed: combobox/selectbox bottom-sheet share the same
 makeVParent path and also overshoot — logged for a dedicated pass.

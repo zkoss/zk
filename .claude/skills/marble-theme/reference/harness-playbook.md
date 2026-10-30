@@ -1,14 +1,14 @@
 # Orchestrator Playbook
 
-How the main Claude session (any model — Opus, Sonnet, Haiku) drives the ZK-Material verification harness. This is the only file you need open to run the loop.
+How the main Claude session (any model) drives the ZK-Material verification harness. This is the only file you need open to run the loop.
 
-Companion docs: `.claude/skills/marble-theme/reference/harness-decisions.md` (architecture decision records), `tasks/harness/work-status.md` (state, local only; the canonical status vocabulary is `.claude/skills/marble-theme/reference/harness-status.md`), `doc/spec/new-component-checklist.md` (cross-cutting Definition of Done — CTV, brand, forced-colors, density, tablet; Step 4c).
+Companion docs: `.claude/skills/marble-theme/reference/harness-decisions.md` (architecture decision records), `tasks/harness/work-status.md` (state, local only; the canonical status vocabulary is "Status vocabulary" below), `doc/spec/new-component-checklist.md` (cross-cutting Definition of Done — CTV, brand, forced-colors, density, tablet; Step 4c).
 
 ---
 
 ## Contract selector convention
 
-Preview pages render many instances of each component in different states, laid out as one or more **state matrices** produced by `src/test/resources/web/pv/matrix.zul` (pure `z-*` utilities — the old `pv-*` classes were dissolved with `pv.css` and no longer exist in any preview page). Rendered structure per matrix:
+Preview pages render many instances of each component in different states, laid out as one or more **state matrices** produced by `zkthemelab/src/main/webapp/web/pv/matrix.zul` (pure `z-*` utilities — the old `pv-*` classes were dissolved with `pv.css` and no longer exist in any preview page). Rendered structure per matrix:
 
 ```
 div.z-d-grid.z-grid-cols-auto        ← matrix container (one per section)
@@ -59,9 +59,9 @@ Before the first dispatch in any session:
 
 **`VERIFIED` is dual-gate**: Gate 1 (`zk-theme-evaluator` — conformance to the contract) AND Gate 2 (`md3-design-verifier` — MD3/MUI design quality) must both pass. The evaluator never writes `VERIFIED`; its all-measurements-pass result is `GATE2_PENDING`, and only the orchestrator flips `GATE2_PENDING → VERIFIED` after a `GATE2: PASS`.
 
-**Manual-verification exception (audit-trail rule)**: the orchestrator may exceptionally perform Gate-1 measurement itself (e.g. the Evaluator agent is unavailable), but the artefact obligations do NOT lapse — it must still write `tasks/harness/eval-reports/<component>.md` and capture flat `doc/screenshots/<component>-*.png` before the row may leave a Gate-1 state. A row with no eval report and no screenshots cannot reach `GATE2_PENDING` (Gate 2 would be `BLOCKED` anyway — screenshots are its only visual input) and can never be flipped to `VERIFIED`.
+**Manual-verification exception (audit-trail rule)**: the orchestrator may exceptionally perform Gate-1 measurement itself (e.g. the Evaluator agent is unavailable), but the artefact obligations do NOT lapse — it must still write `tasks/harness/eval-reports/<component>.md` and capture flat `zkthemelab/doc/screenshots/<component>-*.png` before the row may leave a Gate-1 state. A row with no eval report and no screenshots cannot reach `GATE2_PENDING` (Gate 2 would be `BLOCKED` anyway — screenshots are its only visual input) and can never be flipped to `VERIFIED`.
 
-Repeat until every row is `VERIFIED`, `STALLED`, `OSCILLATING`, `CONSTRAINT`, `ESCALATED_TOKEN_FIX`, or `ESCALATED_LIBRARY_CONFIG` (the canonical status vocabulary lives in `.claude/skills/marble-theme/reference/harness-status.md`):
+Repeat until every row is `VERIFIED`, `STALLED`, `OSCILLATING`, `CONSTRAINT`, `ESCALATED_TOKEN_FIX`, or `ESCALATED_LIBRARY_CONFIG` (the canonical status vocabulary is "Status vocabulary" below):
 
 ### Step 1 — Pick the next work batch
 
@@ -142,7 +142,7 @@ For every component in `GATE2_PENDING`, dispatch the design reviewer (parallel-s
 Agent(
   description="Design-review textbox",
   subagent_type="md3-design-verifier",
-  prompt="Component: textbox\nMode: loop-gate\n\nFollow your agent definition. Screenshots are pre-captured as flat doc/screenshots/textbox-*.png."
+  prompt="Component: textbox\nMode: loop-gate\n\nFollow your agent definition. Screenshots are pre-captured as flat zkthemelab/doc/screenshots/textbox-*.png."
 )
 ```
 
@@ -165,10 +165,9 @@ Rules:
 `VERIFIED` certifies more than MD3 appearance. For any component whose contract carries a `## Cross-cutting features` section (mandatory for contracts authored/re-authored after 2026-07-22 — see `doc/spec/new-component-checklist.md`), confirm before flipping:
 
 1. **Gate 1 covered the `x-*` rows** — the eval report's `## Cross-cutting checks` table exists and every row is PASS or `SKIPPED (contract N/A)`. (`x-*` FAILs would have forced `NEEDS_FIX` already; this is a bookkeeping re-check, not a re-measurement.)
-2. **CTV tracker row** — `tasks/component-theme-variables-progress.md` has a row for the component (➖ with rationale when `ctv: N/A`). The orchestrator writes it — same single-writer rule as `work-status.md`.
-3. **CTV spec family table** — when `ctv: shipped`, port the contract's knob table into `doc/spec/component-theme-variables.md` (CTV-8) and add the component to its Shipped list (mechanical copy of user-approved content).
-4. **Render smoke** — `src/test/playwright/render-smoke.spec.ts` `PAGES` contains `/<component>.zul`; add the one-liner if missing.
-5. **Forced-colors snapshot** — `doc/screenshots/<component>-forced-colors.png` exists (produced by the evaluator's `x-fc-capture`).
+2. **CTV spec family table** — when `ctv: shipped`, port the contract's knob table into `doc/spec/component-theme-variables.md` (CTV-8) and add the component to its Shipped list (mechanical copy of user-approved content).
+3. **Render smoke** — `src/test/playwright/render-smoke.spec.ts` `PAGES` contains `/<component>.zul`; add the one-liner if missing.
+4. **Forced-colors snapshot** — `zkthemelab/doc/screenshots/<component>-forced-colors.png` exists (produced by the evaluator's `x-fc-capture`).
 
 **Legacy contracts** (no `## Cross-cutting features` section — everything authored before 2026-07-22) flip on `GATE2: PASS` as before; their `x-*` rows read `SKIPPED (legacy contract)` and their CTV state is governed by the progress tracker. When such a contract is re-authored for any reason (js-source drift, Gate-2 revision), spec-author adds the section and the component joins this gate.
 
@@ -338,7 +337,7 @@ Once approved, the orchestrator re-enters the main loop normally; the evaluator'
 
 ### js-source-hash drift recovery
 
-If the evaluator returns status `BLOCKED: js-source drift — re-run zk-spec-author <component>` (and appends a `js-drift` entry to `doc/skill-gaps.md`), the underlying ZK JS source has changed since the contract was authored. The recovery flow:
+If the evaluator returns status `BLOCKED: js-source drift — re-run zk-spec-author <component>`, the underlying ZK JS source has changed since the contract was authored. The recovery flow:
 
 1. Re-run `zk-spec-author <component>`. The agent re-reads the JS source, re-derives the structural section, refreshes the contract's `js-source-hash:` field, and (if structural facts changed) flips `contract-approved:` back to `false`.
 2. If `contract-approved:` was flipped to `false`, repeat the approval gate above. If spec-author determined the structural facts were unchanged, it may keep `contract-approved: true` after refreshing only the hash — but the user should still spot-check.
@@ -353,3 +352,39 @@ If the evaluator returns status `BLOCKED: js-source drift — re-run zk-spec-aut
 - Stalled or oscillating component (D3 terminal states).
 - Preview app stops responding.
 - More than 5 consecutive components verified — good time to checkpoint progress with the user.
+
+## Status vocabulary
+
+The state lives in `tasks/harness/work-status.md` (gitignored, local). A fresh clone has no such file: the first run creates it with the header row `| component | tier | shared-css-file | siblings | status | iter | failing-set |`, its separator row and no data rows, grouped under `## Group …` headings as components are added.
+
+**Owner of writes:** Orchestrator ONLY (single-writer; merges the status deltas that Evaluators return in their final output — see evaluator §7 and playbook Step 3).
+**Read access:** Evaluator reads for iteration history. Generator may read for context. Design-Verifier (Gate 2) never writes here.
+**Column rule:** `failing-set` holds check ids only (e.g. `c2, c8, M3`) — narrative history belongs in `tasks/harness/eval-reports/<component>.md`, never in this table.
+
+### Status legend
+- **PENDING** — never evaluated
+- **EVALUATING** — Evaluator running (transient)
+- **GATE2_PENDING** — Gate 1 (Evaluator) all checks pass; awaiting Gate 2 (md3-design-verifier) (transient)
+- **VERIFIED_WITH_VISUAL_NOTES** — Gate-1 measurement passed but the Evaluator's §3d AI visual review surfaced ≥ 1 finding; awaits orchestrator triage (promote to contract row → `RE_EVAL_NEEDED`, or accept as false positive → `GATE2_PENDING`) (transient)
+- **VERIFIED** — dual-gate: Gate 1 measurement pass AND Gate 2 `GATE2: PASS` (zero Critical design findings). Written by the Orchestrator only.
+- **NEEDS_FIX** — at least one check failing, or Gate 2 Critical findings routed through a contract revision
+- **FIXING** — Generator running (transient)
+- **VERIFYING** — Evaluator running post-fix (transient)
+- **RE_EVAL_NEEDED** — a sibling's Generator pass touched the shared CSS file
+- **STALLED** — `newly_passing == 0` for 2 consecutive iterations while `failing-set` is non-empty (D3 signal A; a clean double-pass never stalls) (terminal — user review)
+- **OSCILLATING** — `failures[n] == failures[n-2]` (D3 signal B) (terminal — user review)
+- **CONSTRAINT** — manual override (intentionally won't fix; e.g., ZK platform limit) (terminal)
+- **ESCALATED_TOKEN_FIX** — check fails because a `--zk-*` token diverges from DESIGN.md; logged in `tasks/harness/token-issues.md`; Generator NOT dispatched (terminal until the user fixes the token, then flip to `RE_EVAL_NEEDED`)
+- **ESCALATED_LIBRARY_CONFIG** — T3 only: fix requires widget `.ts`/`.java` or library JS config, not CSS; logged in `tasks/harness/library-config-issues.md` (terminal for this harness)
+- **BLOCKED: \<reason\>** — Evaluator pre-flight/artefact gate refused (`contract-approved=false`, `js-source drift`, `page-not-ready`, `missing-visual-artefact`); route per playbook Step 4 / Spec-Author phase (transient)
+- **EVALUATING_BLOCKED** — preview app died mid-eval; orchestrator stops the loop and alerts the user to restart it (transient)
+
+> **Dual-gate migration note (2026-06-04):** rows marked `VERIFIED` before this date passed Gate 1 only (the dual-gate `VERIFIED` definition did not exist yet). They are grandfathered — re-run Gate 2 on them opportunistically (flip to `GATE2_PENDING`) or when their component's design quality is questioned. Pilot component: goldenlayout.
+
+### Tier legend
+- **T1** — Mira-mapped; compare to Mira values
+- **T2** — ZK-only; DESIGN.md tokens only + sibling coherence
+- **T3** — Third-party wrapper; wrapper-only checks
+
+### Serialization rule
+Only one component per `shared-css-file` may be in `FIXING` at a time. The orchestrator enforces this when dispatching `/zk-theme-generator`.

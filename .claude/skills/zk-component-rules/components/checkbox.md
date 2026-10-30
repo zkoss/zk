@@ -50,7 +50,7 @@ Unlike the default mold (whose `indeterminate="true"` produces the *unprefixed*
 unprefixed default-mold classes will render **every** tristate state as a bare unchecked
 box — checked and indeterminate become indistinguishable. Style the tristate `-on`
 (checkmark) and `-indeterminate` (dash) classes explicitly, mirroring the default mold.
-(Caught 2026-07-14 — see `doc/skill-gaps.md`.)
+(Caught 2026-07-14.)
 
 ## Checked state for default mold
 
@@ -62,7 +62,7 @@ The default mold's checked state comes from `:checked` on the inner `<input type
 }
 ```
 
-(The exact selector depends on the DOM rendered by the version; check `doc/component-dom-structures.md (retired with the template)`.)
+(The exact selector depends on the DOM rendered by the version.)
 
 For switch and toggle, the on/off state IS class-based: `.z-checkbox-switch-on` / `.z-checkbox-switch-off` etc.
 

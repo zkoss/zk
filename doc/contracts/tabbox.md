@@ -16,7 +16,6 @@ js-source-hash: b8c3e13387160ac1e1200238b77c3576e1e6090d20554b24085f883b041fdef6
 closest-sibling: none — distinct chrome+payload composition; sibling reuse limited
 
 ## References
-- MUI CSS: `/Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/Tabs.css`
 - DESIGN.md sections: §1 (color), §5 (spacing), §7 (state layers), §11 (focus)
 - Iceblue baseline: `doc/contracts/baselines/tabbox-iceblue.png`
 - HTML contract: `doc/contracts/tabbox.html`
@@ -107,7 +106,7 @@ Endpoint-disabled note: ZK does not emit any "can't scroll further" class (see s
 
 ### Close button — c31–c35 (added 2026-06-05, failing-first)
 
-Executes the deferred tabbox side-flip pass (`doc/skill-gaps.md` 2026-06-05 goldenlayout+tabbox row). All rows are expected to FAIL until the same-day CSS iteration lands.
+Executes the deferred tabbox side-flip pass. All rows are expected to FAIL until the same-day CSS iteration lands.
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|

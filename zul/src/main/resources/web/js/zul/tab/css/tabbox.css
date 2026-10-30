@@ -578,8 +578,7 @@
     /* No `overflow: hidden` here — it interferes with `jq.slideDown` height
      * measurement on the inner `.z-tabpanel-content` when the tabbox carries an
      * explicit height (e.g. height="300px"). The animation gets stuck at
-     * height:0 and never restores natural height. See doc/skill-gaps.md
-     * 2026-05-21 entry. */
+     * height:0 and never restores natural height. */
     border: 1px solid var(--zk-tab-border-color);
     /* No border-radius — MD3 expansion-panel groups render flat at the edges.
      * Adding radius to the parent while children (.z-tab headers, panel-content)

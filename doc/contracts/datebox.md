@@ -7,7 +7,6 @@ contract-approved: false
 zk-version: 10.2.1-jakarta
 
 ## References
-- MUI CSS: /Users/hawk/.../static-css-output/Inputs/OutlinedInput.css
 - DESIGN.md sections: §1, §2, §5, §7, §9, §10, §11
 
 ## Expected values

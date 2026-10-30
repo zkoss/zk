@@ -19,8 +19,8 @@ forbidden-selectors:
 escalation-path: ESCALATED_LIBRARY_CONFIG  # changing the rendered image (font, colour, distortion) requires CaptchaEngine.java changes, not CSS
 
 ## References
-- ZK source: /Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/java/org/zkoss/zul/Captcha.java
-- ZK widget: /Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul/wgt/Captcha.ts
+- ZK source: zul/src/main/java/org/zkoss/zul/Captcha.java
+- ZK widget: zul/src/main/resources/web/js/zul/wgt/Captcha.ts
 - DESIGN.md sections: §5, §11
 
 ## DOM key selectors (wrapper-only)

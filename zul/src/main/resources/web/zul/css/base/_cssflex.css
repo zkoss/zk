@@ -7,8 +7,7 @@
  * breaks `hflex`/`vflex` sizing everywhere (the container stays display:block
  * and flexed children collapse to intrinsic size). Marble originally shipped
  * only renamed utility variants (`.z-d-flex`, `.z-flex-col`), leaving the
- * JS-added class names undefined — ZK's css-flex engine was inert theme-wide
- * (gap log doc/skill-gaps.md 2026-06-05).
+ * JS-added class names undefined — ZK's css-flex engine was inert theme-wide.
  *
  * MECHANISM — zk/flex.ts:
  *   applyCSSFlex()  adds `z-flex` + `z-flex-row` (or `z-flex-column`) to the
