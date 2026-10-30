@@ -49,6 +49,14 @@ should match, who fixes a defect — read `reference/decision-principles.md`. Se
 settles, cite the principle IDs in the report, and ask only for the cases in its §4. After the
 Marble maintainer rules, fold the ruling back into that file (its §5).
 
+## Every bug fix ships with a zkthemelab test
+
+A bug fix — from this skill, a fix batch or any other workflow — is not done until `zkthemelab`
+has a Playwright test for it: a fixture under `zkthemelab/src/main/webapp/web/pv/`, a spec under
+`zkthemelab/src/test/playwright/`, and a project for it in `playwright.config.ts`. The test must
+pass with the fix and be shown to fail by a mutation (`reference/verification.md`). The minimal
+repro page used while debugging is temporary and does not count as this test.
+
 ## Where things live
 
 CE (this checkout):
