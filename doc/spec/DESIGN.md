@@ -216,7 +216,7 @@ datebox and timebox always render a `size` on the `<input>` (`Datebox` defaults 
 
 datebox/timebox use `flex: 1 1 auto` (basis = `size`, and they still **fill** an `hflex`/width-forced root — forms are unaffected); daterangebox uses `flex: 0 1 auto` because its two side-by-side inputs must not grow.
 
-This is a deliberate divergence from MUI, whose single `OutlinedInput` fills its container (or the UA default) with left-aligned text and no content-hug. MUI has no opinion on a *standalone* date field's width; Marble sizes it to its content so a bare date/time field reads as one compact field rather than a fixed box with dead space, and long formats are never clipped. See contracts `datebox.md` / `timebox.md` / `daterangebox.md` and `doc/skill-gaps.md` (2026-07-20).
+This is a deliberate divergence from MUI, whose single `OutlinedInput` fills its container (or the UA default) with left-aligned text and no content-hug. MUI has no opinion on a *standalone* date field's width; Marble sizes it to its content so a bare date/time field reads as one compact field rather than a fixed box with dead space, and long formats are never clipped. See contracts `datebox.md` / `timebox.md` / `daterangebox.md`.
 
 ### Table-header background: no fill
 
@@ -546,7 +546,7 @@ straight inset `::after` strip. On design review (2026-07-07) the bar was droppe
 entirely: stacking a classic/enterprise-sidebar accent on the MD3 pill states
 "active" twice in two idioms and clashes where the square bar meets the container's
 rounded corners. Do not re-introduce any left accent (`border-left`, `::before`, or
-`::after` strip). See `doc/skill-gaps.md`.
+`::after` strip).
 
 **Navigation-active ≠ list-row focus.** The `.z-listitem` blue *left line* is
 NOT a selected-state accent — the selected state is a `secondary-container` fill

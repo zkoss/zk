@@ -17,7 +17,7 @@ mockup-rationale: ZKDoc canonical image ZKCompRef_Timepicker.png exists; Marble'
 - MUI CSS: Inputs/OutlinedInput.css (input chrome); Inputs/Select.css (popup list)
 - DESIGN.md sections: §7 (Input typography — 13px body-medium), §5 (Shape — 4px corner-extra-small for inputs), §11 (Borders — 1px outline), §9 (State layers — disabled opacity 0.38)
 - Iceblue baseline: doc/contracts/baselines/timepicker-iceblue.png (captured 2026-06-08)
-- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKCompRef_Timepicker.png
+- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKCompRef_Timepicker.png
 - HTML contract: doc/contracts/timepicker.html (mockup-needed: N — skip)
 
 ## Design Contract

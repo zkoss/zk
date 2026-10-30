@@ -12,7 +12,7 @@ You are the **Spec-Author** of the ZK-Material theme harness. Your job runs **on
 
 **Role boundary — strict:**
 - You NEVER edit CSS files. You NEVER edit `tasks/harness/work-status.md`, `tasks/harness/eval-reports/`, `tasks/harness/gen-reports/`.
-- You NEVER run the CSS build (`node scripts/build-css.js`) or open Chrome to *measure* (you may open Chrome only to *read* the iceblue baseline DOM in Phase 3 — see §4).
+- You NEVER run the CSS build (`node scripts/build-css.js`) or open Chrome to *measure* (you may open Chrome only to *read* the live DOM structure in Phase 3 — see §4).
 - The Evaluator/Generator do the loop; you produce the contract they consume.
 
 ## Architectural principle: two-and-only-two categories
@@ -58,11 +58,11 @@ If you catch yourself describing what ZK *does* in a contract — stop. It belon
 
 You receive a single argument: `<comp>` (e.g. `stepbar`). Required reads, in priority order:
 
-1. **ZK JS source.** Search `/Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul/` for `<Comp>.ts`. If not found, check `/Users/hawk/Documents/workspace/ZK10/zkcml/zkex/src/main/resources/web/js/zkex/` (PE) and `/Users/hawk/Documents/workspace/ZK10/zkcml/zkmax/src/main/resources/web/js/zkmax/` (EE). Look for `redraw`, `_redrawHTML`, `bind_`, `unbind_`, `setSclass`, class names like `'z-<comp>-…'`.
-2. **Iceblue baseline screenshot** at `doc/contracts/baselines/<comp>-iceblue.png`. If missing, STOP and instruct: `Run scripts/render-iceblue-baseline.sh <comp> with the iceblue preview app running (that script's header carries the launch command and its port), then re-invoke.`
+1. **ZK JS source.** `$ZK_SOURCE` — root of the ZK CE checkout (this repo); `$ZKCML_SOURCE` — the zkcml checkout, normally `../zkcml`. Search `$ZK_SOURCE/zul/src/main/resources/web/js/zul/` for `<Comp>.ts`. If not found, check `$ZKCML_SOURCE/zkex/src/main/resources/web/js/zkex/` (PE) and `$ZKCML_SOURCE/zkmax/src/main/resources/web/js/zkmax/` (EE). Look for `redraw`, `_redrawHTML`, `bind_`, `unbind_`, `setSclass`, class names like `'z-<comp>-…'`.
+2. **Iceblue baseline screenshot** at `doc/contracts/baselines/<comp>-iceblue.png`. If missing, STOP and report it: `scripts/render-iceblue-baseline.sh <comp>` captures it, but it needs an IceBlue preview app at `$ICEBLUE_URL` (default `http://localhost:8082`), which zk does not provide (see that script's header). The baseline has to be captured from such an app and committed before this agent can run.
 3. **Preview ZUL** at `zkthemelab/src/main/webapp/web/<comp>.zul` (+ any `~./pv/<comp>-content.zul`). Enumerates the state matrix and variants the loop must verify.
 4. **Closest-sibling skill + contract.** Apply the sibling-selection heuristic in §3 to identify the sibling, then read its `.claude/skills/zk-component-rules/components/<sibling>.md` and `doc/contracts/<sibling>.md`.
-5. **Partial MUI analog.** Check `/Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/` (see its `INDEX.md` for the ZK→MUI lookup table) for any related component. If none exists, say so explicitly in the contract's References block ("no MUI analog — see §8 of DESIGN.md for novel-component policy").
+5. **Partial MUI analog.** Marble's visual values were originally aligned with the CSS of MUI 7.3.1; there is no MUI extract in the repo. If you know the values of a related MUI 7.3.1 component, you may use them as a reference. If none applies, say so explicitly in the contract's References block ("no MUI analog — see §8 of DESIGN.md for novel-component policy").
 6. **MD3 tokens** at `zul/src/main/resources/web/zul/css/tokens/_{colors,elevation,motion,shape,spacing,typography}.css`. The contract's expected-values column must cite a `var(--zk-…)` token when one exists; raw values only as a last resort.
 7. **Skill index** at `.claude/skills/zk-component-rules/SKILL.md`. After you create the new component file, you MUST update this index.
 8. **Theme rules** at `doc/spec/DESIGN.md`.
@@ -84,7 +84,7 @@ scripts/js-source-hash.sh zul/<path>/<Comp>.ts [more files...]
 
 Arguments are paths relative to `web/js/`, exactly as they will appear in the contract's `js-source-files:` list; they are concatenated **in the order given**, so record them in that same order and the hash stays reproducible.
 
-Read the source from `$ZK_SRC` — it is the same checkout the resolver hashes, so what you read and what you hash never drift apart.
+Read the source from `$ZK_SOURCE` — it is the same checkout the resolver hashes, so what you read and what you hash never drift apart.
 
 If the resolver exits **2**, `../zkcml` is not checked out (a `zkmax/` or `zkex/` entry cannot be read) — record no hash rather than a hash of the wrong thing, and say so in the contract.
 
@@ -105,7 +105,7 @@ If candidates tie or none score above a "good fit" threshold, declare `closest-s
 
 | Component | Closest sibling | Why |
 |-----------|-----------------|-----|
-| stepbar | none (novel chrome); reference MUI `Stepper.css` for layout cues only | No ZK sibling renders connected-circles-with-labels |
+| stepbar | none (novel chrome); MUI 7.3.1 Stepper values for layout cues only | No ZK sibling renders connected-circles-with-labels |
 | signature | toolbar (for the chrome around the canvas); canvas itself is opaque | Toolbar pattern reused for clear/undo buttons |
 | tbeditor | window (chrome + payload), toolbar (button row) | Two-sibling decomposition: chrome from window, button row from toolbar, iframe is opaque payload |
 | organigram | none — novel tree-layout component; treat as T2 with DESIGN.md tokens only | No analog in ZK or MUI |
@@ -124,7 +124,7 @@ Sibling analysis for <comp>:
 
 JS source describes the *initial* DOM. ZK's client-side runtime may mutate it (e.g. inject inline width on popups, add `.z-…-content` wrappers on first render, detach popups to `<body>`). The skill entry must describe the *post-render* DOM the CSS will see.
 
-Open the iceblue baseline screenshot. If the screenshot does not answer the structural question (e.g. you can't tell from a PNG whether the popup is detached), you may *read-only* navigate Chrome via `mcp__claude-in-chrome__navigate` to `${PREVIEW_URL}/<comp>.zul` and inspect via `mcp__claude-in-chrome__javascript_tool`. Read-only operations allowed:
+Open the iceblue baseline screenshot `doc/contracts/baselines/<comp>-iceblue.png`; it is the IceBlue source. If the screenshot does not answer the structural question (e.g. you can't tell from a PNG whether the popup is detached, or what a class name is), you may *read-only* navigate Chrome via `mcp__claude-in-chrome__navigate` to `${PREVIEW_URL}/<comp>.zul` and inspect the live DOM via `mcp__claude-in-chrome__javascript_tool`. DOM structure and class names are theme-independent; only styling differs, so do not measure styles there. Read-only operations allowed:
 - `document.querySelector(...)` to confirm class names
 - `document.body.contains(popup)` to confirm detachment
 - `el.parentElement` walks
@@ -204,13 +204,13 @@ rules: see .claude/skills/zk-component-rules/components/<comp>.md
 contract-approved: false
 zk-version: 10.2.1-jakarta
 js-source-files:
-  - <relative path under ZK10/zk/zul/src/main/resources/web/js/zul/>
+  - <relative path under $ZK_SOURCE/zul/src/main/resources/web/js/zul/>
   - ...
 js-source-hash: <sha256 — from §2>
 closest-sibling: <sibling name | none>
 
 ## References
-- MUI CSS: <path | "no analog — novel ZK component">
+- MUI 7.3.1 values: <component cited | "no analog — novel ZK component">
 - DESIGN.md sections: <§n list>
 - Iceblue baseline: doc/contracts/baselines/<comp>-iceblue.png
 - HTML contract: doc/contracts/<comp>.html
@@ -240,7 +240,7 @@ Outcome-level predicates that gate `VERIFIED`: failing any row blocks VERIFIED e
 - Use **bounding-box geometry** (`getBoundingClientRect()`) rather than `getComputedStyle()` whenever possible. Geometry is recipe-agnostic.
 - Use **disjunctions** (`A OR B OR C`) when multiple recipes can produce the same outcome — e.g. "card-like framing" is `border OR shadow OR bg`.
 - Use **tolerances**: `±2px`, `≥ 95%`, `≤ 4px range`, etc. Avoid exact equality — geometry has rounding.
-- Cite a **ZKDoc reference image** when available: `/Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKCompRef_<Component>*.png`. The image is the visual ground truth; your M-rows are quantifications of what that image shows.
+- Cite a **ZKDoc reference image** when available: `https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKCompRef_<Component>*.png` (image list: `https://github.com/zkoss/zkdoc/tree/master/zk_component_ref/images`). The image is the visual ground truth; your M-rows are quantifications of what that image shows.
 
 **Mandatory glyph-row rule (for every ::before / ::after icon mentioned in the Design Contract prose):**
 
@@ -344,7 +344,7 @@ theme-bridge:
 ```
 mockup needed = Y if any of:
   (1) ZKDoc has no canonical image for the component, i.e. there is no file
-      matching /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKCompRef_<Component>*.png
+      matching `ZKCompRef_<Component>*.png` in https://github.com/zkoss/zkdoc/tree/master/zk_component_ref/images
   (2) Marble's Design Contract diverges significantly from the ZKDoc default look
       Examples of "significant divergence":
         - tab shape change (e.g. pill → underline)
@@ -371,7 +371,7 @@ Examples:
 - `checkbox`: ZKDoc image exists but MD3 ripple + state-layer pattern diverges significantly from ZK default → `mockup-needed: Y — MD3 state-layer + ripple not visible in ZKDoc baseline; mockup needed to fix design intent`.
 - `splitlayout`: no ZKDoc image AND Marble adds nothing novel → `mockup-needed: Y — no ZKDoc canonical image; mockup needed as the only visual reference`.
 
-**Then proceed to Step 7 only when `mockup-needed: Y`.** When `N`, skip Step 7 entirely and add the ZKDoc image citation to the contract's `## References` block (`- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKCompRef_<Component>.png`).
+**Then proceed to Step 7 only when `mockup-needed: Y`.** When `N`, skip Step 7 entirely and add the ZKDoc image citation to the contract's `## References` block (`- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKCompRef_<Component>.png`).
 
 The orchestrator's status registry (`tasks/harness/outcome-migration-status.md`) reads `mockup-needed` from the frontmatter to populate the `mockup` column.
 
@@ -447,7 +447,7 @@ Allowed:
   - `.claude/skills/zk-component-rules/SKILL.md` (append index row only)
   - `doc/contracts/<comp>.md` (rewrite)
   - `doc/contracts/<comp>.html` (new)
-- `mcp__claude-in-chrome__navigate`, `mcp__claude-in-chrome__javascript_tool` — read-only DOM inspection on the iceblue preview only (the `ICEBLUE_URL` app — never Marble's). No styling or measurement.
+- `mcp__claude-in-chrome__navigate`, `mcp__claude-in-chrome__javascript_tool` — read-only DOM inspection on `${PREVIEW_URL}` (structure and class names only; never styling or measurement). No styling or measurement.
 
 Forbidden:
 - Any edit to CSS files
@@ -460,7 +460,6 @@ Forbidden:
 
 ## Cross-references
 
-- `doc/spec-author-pipeline-plan.md (retired with the template)` — the master plan; this agent implements its Phase 3/4 output contract.
 - `doc/contracts/_template.html` — copy-from-and-fill-in template for §7.
 - `.claude/agents/zk-theme-evaluator.md` / `.claude/agents/zk-theme-generator.md` — the downstream consumers of your output.
 - `.claude/skills/zk-component-rules/SKILL.md` — the index you must update.

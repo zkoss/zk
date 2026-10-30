@@ -1,6 +1,6 @@
 # Class-name quirks (non-intuitive z-* class names)
 
-ZK's class naming is mostly predictable (`.z-{component}-{part}`) but several components break the pattern. Always verify the actual class via DevTools or `doc/component-dom-structures.md (retired with the template)` before writing a selector.
+ZK's class naming is mostly predictable (`.z-{component}-{part}`) but several components break the pattern. Always verify the actual class via DevTools before writing a selector.
 
 ## Confirmed non-intuitive class names
 
@@ -68,7 +68,6 @@ When in doubt:
 
 1. Open the preview page for the component in the browser.
 2. Inspect the DOM via DevTools.
-3. Cross-reference with `doc/component-dom-structures.md (retired with the template)`.
-4. Check ZK source at `/Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul/{module}/` — the widget's `.ts` file lists its `_class` and child class names.
+3. Check ZK source at `$ZK_SOURCE/zul/src/main/resources/web/js/zul/{module}/` (`$ZK_SOURCE` is the root of the ZK CE checkout) — the widget's `.ts` file lists its `_class` and child class names.
 
 Never trust the "obvious" guess. ZK has 15+ years of accumulated naming decisions and the patterns shifted across versions.

@@ -16,11 +16,11 @@ mockup-needed: N
 mockup-rationale: user explicitly opted out of the HTML mockup for this pass (scope override — see spec-author invocation 2026-07-17). No dedicated ZKCompRef_<Component>.png exists yet either (daterangebox is new in ZK 10.4.0; the only ZKDoc trace is an inline example image inside calendar.md). Until a mockup is authored, the Design Contract prose + Outcome assertions table below are the sole binding visual reference.
 
 ## References
-- MUI CSS: no direct analog — MUI's date-range picker (`DateRangePicker`) ships only in the separate, paid MUI X package and is not present in `static-css-output/`. Reuse `Inputs/OutlinedInput.css` for the root chrome (same reference already used by combobox/datebox/timepicker) and the existing in-theme dropdown-popup convention (`reference/popup-tokens.md`, `reference/floating-popup-in-body.md`) for the detached popup surface.
+- MUI CSS: no direct analog — MUI's date-range picker (`DateRangePicker`) ships only in the separate, paid MUI X package. Reuse `Inputs/OutlinedInput.css` for the root chrome (same reference already used by combobox/datebox/timepicker) and the existing in-theme dropdown-popup convention (`reference/popup-tokens.md`, `reference/floating-popup-in-body.md`) for the detached popup surface.
 - DESIGN.md sections: §1 (Surface Palette), §3 (Brand colors), §4 (Spacing scale), §5 (Corner radii), §6 (Elevation), §7 (Typography), §8 (State-layer overlays), §9 (Motion), §10 (Density), §11 (Border rules)
 - Sibling contracts: doc/contracts/combobox.md, doc/contracts/datebox.md, doc/contracts/timepicker.md, doc/contracts/calendar.md
 - Iceblue baseline: not captured (component is new in ZK 10.4.0; out of scope for this pass per explicit user instruction)
-- ZKDoc: no dedicated page; referenced only as an inline example image inside `/Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/calendar.md` (`dateRangeSelector.png`)
+- ZKDoc: no dedicated page; referenced only as an inline example image inside `https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/calendar.md` (`dateRangeSelector.png`)
 - HTML contract: none (mockup-needed: N)
 
 ## Design Contract

@@ -22,7 +22,7 @@ zk-version: 10.2.1-jakarta
 | c6 | `.z-window-header` | font-weight | 500 |
 | c7 | `.z-window-content` | padding | 16–24px |
 | c8 | `.z-window-icon` | width / height | 24–32px (icon button area) |
-| c9 | `.z-window-header` | box-sizing | `border-box` — min-height must INCLUDE padding, not add to it (guards the dropped-reset regression; see doc/skill-gaps.md 2026-06-16) |
+| c9 | `.z-window-header` | box-sizing | `border-box` — min-height must INCLUDE padding, not add to it (guards the dropped-reset regression) |
 | c10 | `.z-window-header` | height | ≤ 72px — compact title bar; a content-box blow-up reads ~88px. Bare title text must not wrap (`white-space: nowrap`) |
 
 ## States to evaluate

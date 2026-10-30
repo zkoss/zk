@@ -13,8 +13,8 @@ closest-sibling: none — T3 media wrapper; closest pattern is signature (toolba
 mockup-needed: Y  # Marble diverges from the ZKDoc baseline — ZKCompRef_Cropper.png shows a borderless, unrounded wrapper; Marble adds the Paper.outlined card treatment (c1/c2/c3)
 
 ## References
-- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/cropper.md (PE component, since 8.6.0; built-in toolbar = Crop + Cancel buttons via `toolbarVisible`)
-- ZKDoc image: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKCompRef_Cropper.png — confirms the floating Crop/Cancel toolbar near the selection; wrapper itself is borderless in stock ZK (Marble's border/radius is an intentional divergence, hence mockup-needed: Y)
+- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/cropper.md (PE component, since 8.6.0; built-in toolbar = Crop + Cancel buttons via `toolbarVisible`)
+- ZKDoc image: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKCompRef_Cropper.png — confirms the floating Crop/Cancel toolbar near the selection; wrapper itself is borderless in stock ZK (Marble's border/radius is an intentional divergence, hence mockup-needed: Y)
 - MUI CSS: no analog — no MUI image-cropper component. Reference `Paper.css` for the wrapper card convention (border, border-radius, overflow) and see DESIGN.md §8 for novel-component policy.
 - DESIGN.md sections: §3 (color roles — surface, outline-variant), §5 (spacing), §6 (shape — extra-small corner for wrapper)
 - Iceblue baseline: doc/contracts/baselines/cropper-iceblue.png
@@ -22,7 +22,7 @@ mockup-needed: Y  # Marble diverges from the ZKDoc baseline — ZKCompRef_Croppe
 
 ## T3 wrapper boundary
 
-cropper is T3: Jcrop library owns and writes all crop-selection DOM at runtime, **but ships no stylesheet** — theme CSS is the only source of structural rules for that subtree (boundary corrected 2026-06-05 after M3 found all 8 handles at 0×0; the earlier blanket "forbidden" list was over-broad). Geometry must match the upstream codegen `cropper.css.dsp` verbatim (`/Users/hawk/Documents/workspace/ZK10/zkcml/zkmax/codegen/resources/web/js/zkmax/cropper/css/cropper.css.dsp`); only decorative values (colors, opacity) are theme choices.
+cropper is T3: Jcrop library owns and writes all crop-selection DOM at runtime, **but ships no stylesheet** — theme CSS is the only source of structural rules for that subtree (boundary corrected 2026-06-05 after M3 found all 8 handles at 0×0; the earlier blanket "forbidden" list was over-broad). Geometry must match the upstream codegen `cropper.css.dsp` verbatim (`../zkcml/zkmax/codegen/resources/web/js/zkmax/cropper/css/cropper.css.dsp`); only decorative values (colors, opacity) are theme choices.
 
 ```yaml
 restyle-freely:                      # fully theme-owned design surface

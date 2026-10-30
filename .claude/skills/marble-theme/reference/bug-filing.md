@@ -4,8 +4,7 @@ For defects that belong to ZK itself, not to the theme. Derived from an analysis
 recently-closed ZK bugs, so the conventions below are the team's own current practice rather than
 an invention.
 
-A separate global skill (`~/.claude/skills/zk-bug-filing/`) handles the Jira mechanics. This file
-is the *writing* guide. First bug filed from this project: **ZK-6119**.
+This file is the *writing* guide; submit the ticket with whatever Jira tooling you use. First bug filed from this project: **ZK-6119**.
 
 ## The canonical template — use exactly this
 
@@ -98,9 +97,9 @@ unambiguous and reproducible. **Optional sections are pruned, not faked.**
 
 Confirm it is actually ZK's. Two checks that have caught misattribution before:
 
-- **Search both source trees** — CE (`ZK10/zk`) *and* EE/PE (`ZK10/zkcml/zkmax`, `zkex`). An
+- **Search both source trees** — CE (`$ZK_SOURCE`, the root of the ZK CE checkout) *and* EE/PE (`$ZKCML_SOURCE/zkmax`, `zkex`, where `$ZKCML_SOURCE` is the root of the zkcml EE checkout, normally `../zkcml`). An
   "empty stub" in CE is not proof of absence (`reference/pitfalls.md` §1).
-- **Check ZKDoc** — `DOC/zkdoc/zk_component_ref/<component>.md` — for the documented behaviour and
+- **Check ZKDoc** — `https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/<component>.md` — for the documented behaviour and
   the edition badge before asserting what ZK "should" do.
 
 Known ZK-side artifacts that are **not** theme bugs, so do not re-file them: the DateRangeBox

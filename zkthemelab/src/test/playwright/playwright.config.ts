@@ -231,8 +231,8 @@ export default defineConfig({
     {
       // Keyboard focus rings: scans every preview page, forces :focus-visible
       // through CDP and checks the ring's GEOMETRY against its clipping
-      // ancestors. Breadth guard for the navbar clip (doc/skill-gaps.md
-      // 2026-09-04, decision D13). See focus-ring-scan.spec.ts.
+      // ancestors. Breadth guard for the navbar clip
+      // (decision D13). See focus-ring-scan.spec.ts.
       name: 'focus-scan',
       testMatch: /focus-ring-scan\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },

@@ -3,8 +3,8 @@
 This page was merged from the former `css-theme-audit` skill on 2026-09-10 and is Step 4 of maintaining Marble hygiene.
 
 Use this page when the work is to review, audit, clean up, lint, or check the quality/hygiene of
-theme CSS, tokens, or utility classes; before tagging a release; or when adopting this template to
-build a new theme and asking "how do I run the same checks I did before".
+theme CSS, tokens, or utility classes; before tagging a release; or when reusing this procedure to
+build another theme and asking "how do I run the same checks I did before".
 
 A repeatable procedure for auditing a ZK theme's CSS the way `marble` was first
 audited on 2026-06-15. This page is self-contained: the **method** (how to
@@ -26,7 +26,7 @@ split.
 ## When to run
 
 - Before tagging a theme release, or after finishing a styling milestone.
-- When forking this template into a new theme and you want the same hygiene bar.
+- When forking this theme into another theme and you want the same hygiene bar.
 - Any time the user asks to review CSS quality, find unused tokens, or hunt down
   hardcoded values.
 
@@ -36,7 +36,7 @@ split.
 npm install   # brings in stylelint (the mechanical core)
 ```
 
-Everything else is standard `zkThemeTemplate` layout. The **one thing that varies
+Everything else follows the zk repo layout (the defaults below point at `zul/src/main/resources/web` of this repo). The **one thing that varies
 per theme** is the token prefix and where tokens/CSS live. Defaults assume:
 
 | Parameter | Default | Flag to override |
@@ -225,3 +225,7 @@ For each finding give: location, the value, whether an equivalent token exists,
 and a recommendation with severity. Separate "already safely fixed" (value-
 preserving) from "needs design decision / visual regression" — the latter should
 wait for explicit approval, exactly as the worked example does.
+
+## Orphan artifacts in the repo
+
+If a file or other artifact left in the repo is orphaned, first ask which theme or feature still requests it. If only out-of-scope consumers request it (IceBlue, or a retired process), recommend removing it, and record those out-of-scope consumers.

@@ -20,7 +20,7 @@ shared-css-file: ../zkcml/zkmax/src/main/resources/web/js/zkmax/layout/css/table
 - MUI CSS: Layout/Grid.css — structural analog only (MUI Grid is CSS Grid not HTML table; no visual theming borrowed)
 - DESIGN.md sections: §4 (Spacing Scale)
 - Iceblue baseline: doc/contracts/baselines/tablelayout-iceblue.png
-- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/ZKComRef_Tablelayout_Example.PNG
+- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKComRef_Tablelayout_Example.PNG
 - HTML contract: doc/contracts/tablelayout.html (not generated — mockup-needed: N)
 
 ## Design Contract

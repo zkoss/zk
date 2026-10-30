@@ -149,6 +149,6 @@ Without `setCustomThemeProvider(true)`, a later `WebAppInit` (e.g. from another 
 
 When investigating an "I see the scrim/overlay but nothing inside it" or "this className appears in the DOM but no CSS file styles it" report:
 
-1. `grep -rn "className\\|class=" /Users/hawk/Documents/workspace/ZK10/zk/zk/src/main/resources/web/js/zk/*.ts` — search ZK core (not `js/zul/`) for the class string.
+1. `grep -rn "className\\|class=" $ZK_SOURCE/zk/src/main/resources/web/js/zk/*.ts` (`$ZK_SOURCE` is the root of the ZK CE checkout) — search ZK core (not `js/zul/`) for the class string.
 2. If the class is written by `au.ts` / `utl.ts` / `widget.ts` / `mount.ts`, it is core-emitted. Add the rule to a file already in `normFiles`, or add a new file to `normFiles`.
 3. After the fix, verify with the curl command above that `zk.wcs` contains the selector.

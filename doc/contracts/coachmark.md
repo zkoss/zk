@@ -23,7 +23,7 @@ mockup-rationale: ZKDoc has Coachmark-4.png; Marble aligns the card to the MD3 r
   `inverse-surface` + one `inverse-primary` action); a coachmark hosts arbitrary widgets so it belongs
   in the neutral rich-tooltip family, not the snackbar family.
 - DESIGN.md sections: §3 (color roles), §5 (shape — card radius), §6 (elevation), §7 (spacing), §8 (motion)
-- ZKDoc canonical: /Users/hawk/Documents/workspace/DOC/zkdoc/zk_component_ref/images/Coachmark-4.png
+- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Coachmark-4.png
 - Iceblue baseline: doc/contracts/baselines/coachmark-iceblue.png
 - HTML contract: doc/contracts/coachmark.html
 

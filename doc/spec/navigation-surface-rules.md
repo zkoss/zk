@@ -69,5 +69,3 @@ scoping, so active-state coordination fails.
 ## Cross-reference
 - `doc/spec/window-design-rules.md` — `border` attribute MUST NOT drive shadow on
   Window; same principle (tonal, not shadow) for elevation distinctions.
-- `doc/skill-gaps.md` 2026-05-29 row "navbar / menubar (tonal-surface
-  rationale)" — gap log entry.

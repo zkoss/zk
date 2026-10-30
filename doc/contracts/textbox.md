@@ -6,7 +6,6 @@ siblings: [intbox, decimalbox, doublebox, longbox, textarea, passwordbox]
 preview: ${PREVIEW_URL}/textbox.zul
 
 ## References
-- MUI CSS: /Users/hawk/Documents/workspace/THEME/material-ui-7.3.1/static-css-output/Inputs/OutlinedInput.css
 - DESIGN.md sections: §1, §2, §5, §7, §9, §10, §11
 
 ## Preview anchors (use these — not bare `input.z-textbox`)

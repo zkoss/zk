@@ -55,7 +55,7 @@ For the popup/dropdown inputs — **combobox** and **bandbox** (`ComboWidget`), 
 
 Why readonly opens on *any* click: a readonly select can't be typed into, so ZK makes the whole field a click target for picking from the list. Documented intent — `Combobox.ts:24-27`: "the value of a read-only combobox can be changed by dropping down the list and selecting a combo item (though users cannot type anything in the input box)."
 
-Source (`/Users/hawk/Documents/workspace/ZK10/zk/zul/src/main/resources/web/js/zul/`):
+Source (`$ZK_SOURCE/zul/src/main/resources/web/js/zul/`, where `$ZK_SOURCE` is the root of the ZK CE checkout):
 - `inp/ComboWidget.ts:779-793` — `doClick_`: `else if (this._readonly && !this.isOpen() && this._buttonVisible) this.open(...)`. Input-click open requires **both** readonly **and** buttonVisible.
 - `inp/ComboWidget.ts:742-756` — `_doBtnClick`: `if (!this._buttonVisible) return`. The button handler no-ops when hidden.
 - `db/Datebox.ts:714-719` — `doClick_`: `if (this._readonly && this._buttonVisible && this._pop && !this._pop.isOpen()) this._pop.open()`. Identical gate.

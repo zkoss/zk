@@ -60,7 +60,9 @@ If your theme targets EE, the EE file is the one that ships last and wins. Edit 
 To check which edition a given component requires, search the ZK source:
 
 ```bash
-grep -r "<component-class>" /Users/hawk/Documents/workspace/ZK10/zk/{zul,zkex,zkmax}/src/main/resources/metainfo/zk/
+grep -r "<component-class>" $ZK_SOURCE/zul/src/main/resources/metainfo/zk/ $ZKCML_SOURCE/zkex/src/main/resources/metainfo/zk/ $ZKCML_SOURCE/zkmax/src/main/resources/metainfo/zk/
 ```
+
+(`$ZK_SOURCE` is the root of the ZK CE checkout; `$ZKCML_SOURCE` is the root of the zkcml EE checkout, normally `../zkcml`.)
 
 The JAR-relative path tells you the edition.

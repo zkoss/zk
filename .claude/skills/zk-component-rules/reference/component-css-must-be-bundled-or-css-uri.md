@@ -45,5 +45,3 @@ file). Absent while the widget renders ⇒ orphaned. (See `screenshot.spec.ts` �
 - **`assertNoOrphanComponentCss()`** (build-time, in `build-css.js`) fails the build if a
   non-empty auto-scanned component CSS is neither `css-uri`-backed nor in a bundle nor in
   the allowlist — so a new no-css-uri component can't silently orphan.
-
-Gap log: `doc/skill-gaps.md` rows `2026-06-30 scrollbar` and `2026-06-30 div…imagemap`.

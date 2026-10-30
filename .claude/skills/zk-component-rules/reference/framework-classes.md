@@ -1,8 +1,7 @@
 # ZK Framework Global CSS Classes — Canonical Registry
 
 **ZK version pinned: 10.2.1-jakarta**
-Regenerate this file when the target ZK version changes. Sources are under
-`/Users/hawk/Documents/workspace/ZK10/zk/` (tag 10.2.1-jakarta).
+Regenerate this file when the target ZK version changes. Sources are the ZK CE checkout at tag 10.2.1-jakarta.
 
 This file is the **spec layer** of the three-layer framework-class compliance check
 that ships with this skill. It generalises and supersedes
