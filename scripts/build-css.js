@@ -378,12 +378,11 @@ const WCS_SERVED_ALLOWLIST = new Set([
 // by path prefix at the point of use (see build() stage 0a).
 const stubPaths = [
     // The other zkex/zkmax components ship real CSS in zkcml (auto-scanned 1:1 below), so they need no stub.
-    // These four have no source file; the stub prevents a 404 from ZK's per-widget CSS lookup.
+    // These three have no source file; the stub prevents a 404 from ZK's per-widget CSS lookup.
     // sliderbuttons is nested in rangeslider/multislider; its styles live in rangeslider.css / multislider.css.
     'js/zkex/slider/css/sliderbuttons.css.dsp',
     // goldenlayout's real CSS lives at js/zkmax/goldenlayout/css/, not at this css-uri path.
     'js/zkmax/layout/css/goldenlayout.css.dsp',
-    'js/zkmax/med/css/video.css.dsp',
     'js/zkmax/sel/css/tree.css.dsp',
 ];
 
