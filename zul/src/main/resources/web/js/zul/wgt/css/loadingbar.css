@@ -1,18 +1,15 @@
 /* MD3 Loading Bar — thin linear progress indicator
-   DOM (determinate):
-     <div class="z-loadingbar">
-       <div class="z-loadingbar-colorbar" style="width:X%"/>
-     </div>
-
-   DOM (indeterminate):
-     <div class="z-loadingbar z-loadingbar-indeterminate">
-       <div class="z-loadingbar-image"/>
-       <div class="z-loadingbar-effectbar"/>
+   DOM (zkmax Loadingbar.redraw; the same markup in both modes):
+     <div class="z-loadingbar [z-loadingbar-indeterminate]">
+       <span class="z-loadingbar-image z-loadingbar-colorbar" style="width:X%"/>
+       <span class="z-loadingbar-effectbar z-loadingbar-colorbar"/>
      </div>
 
    DOM (positioned):
-     <div class="z-loadingbar-position z-loadingbar-position-top|-bottom">
-       <div class="z-loadingbar">…</div>
+     <div class="z-loadingbar-position-wrapper">
+       <div class="z-loadingbar-position z-loadingbar-position-top|-bottom">
+         <div class="z-loadingbar">…</div>
+       </div>
      </div>
 */
 
