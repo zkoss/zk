@@ -25,7 +25,7 @@ public class B70_ZK_2250Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		checkItem(actions, 0);
 		checkItem(actions, 1);
 		checkItem(actions, 2);

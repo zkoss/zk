@@ -30,7 +30,7 @@ public class B50_2917947Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 
-		Actions actions = new Actions(driver);
+		Actions actions = getActions();
 		JQuery columns = jq("@column");
 		resizeColumn(actions, columns.eq(3));
 		resizeColumn(actions, columns.eq(2));

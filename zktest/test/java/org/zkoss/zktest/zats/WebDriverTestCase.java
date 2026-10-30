@@ -26,6 +26,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -651,10 +652,29 @@ public abstract class WebDriverTestCase {
 	}
 
 	/**
-	 * Returns the browser actions.
+	 * Returns the browser actions, which pause for 100 milliseconds after {@link Actions#clickAndHold}.
 	 */
 	protected Actions getActions() {
-		return new Actions(getWebDriver());
+		return getActions(Duration.ofMillis(100));
+	}
+
+	/**
+	 * Returns the browser actions.
+	 *
+	 * @param pause the pause duration after {@link Actions#clickAndHold}
+	 */
+	protected Actions getActions(Duration pause) {
+		return new Actions(getWebDriver()) {
+			@Override
+			public Actions clickAndHold() {
+				return super.clickAndHold().pause(pause);
+			}
+
+			@Override
+			public Actions clickAndHold(WebElement target) {
+				return super.clickAndHold(target).pause(pause);
+			}
+		};
 	}
 
 	/**
