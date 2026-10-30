@@ -153,6 +153,10 @@ CSS must give `.z-rangeslider-track` **measurable** width/height (typically `ins
 
 The same convention applies to **multislider**.
 
+### Sliderbuttons has its own css-uri
+
+`<sliderbuttons>` is a separate widget (`zkex.slider.Sliderbuttons`, declared in zkex `lang-addon.xml`) with its own css-uri, `css/sliderbuttons.css.dsp`. That stylesheet loads for both rangeslider (zkex) and multislider (zkmax), because both render the same `.z-sliderbuttons-*` markup. A theme should therefore put the rules both sliders share (container, pressed thumb, and the tooltip hidden by default and revealed on hover) in the sliderbuttons stylesheet; IceBlue does this in `sliderbuttons.less`. Per-slider looks (thumb size and colour, area colour, tooltip position) belong in the rangeslider or multislider stylesheet, scoped under the slider root (for example `.z-rangeslider .z-sliderbuttons-button` or `.z-multislider .z-sliderbuttons-area`), because an unscoped rule in one slider's file restyles the other depending on load order. If a theme ships no file for that css-uri, there is nothing to serve, so the theme must provide the file.
+
 ### Thumb must be centered on its JS-set offset (negative margin = −½ thumb size)
 
 For slider/rangeslider/multislider, ZK JS writes the **value position** as an inline percentage on the thumb's main axis — `btn.style.left = X%` (horizontal) or `btn.style.top = X%` (vertical) — and on the filled area (`Sliderbuttons.syncArea()`, `Rangeslider.updatePosByValues_()`, `Sliderbuttons._dragging()`). That percentage marks where the thumb's **center** belongs, not its top/left edge.

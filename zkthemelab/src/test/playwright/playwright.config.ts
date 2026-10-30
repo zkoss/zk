@@ -325,6 +325,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // rangeslider and multislider share Sliderbuttons: shared base rules, own accents. See sliderbuttons.spec.ts.
+      name: 'sliderbuttons',
+      testMatch: /sliderbuttons\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'tablet',
       testMatch: /tablet\.spec\.ts/,
       use: TABLET_USE,
