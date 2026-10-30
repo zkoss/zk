@@ -1,6 +1,6 @@
 <?page title="Daterangebox anchor" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for daterangebox-anchor.spec.ts: an empty box (for the hover preview band) and a box whose
-     range crosses 1 February (for the committed band). Lives under pv/ so gallery-scan,
+<!-- Fixture for daterangebox-anchor.spec.ts: an empty box (for the hover preview band), a box whose
+     range crosses 1 February (for the committed band) and a box with one disabled day (17 January). Lives under pv/ so gallery-scan,
      forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
 <zk>
 <zscript><![CDATA[
@@ -10,5 +10,6 @@
 <vlayout spacing="16px">
 	<daterangebox id="empty" format="yyyy-MM-dd"/>
 	<daterangebox id="crossing" format="yyyy-MM-dd" beginValue="${b}" endValue="${e}"/>
+	<daterangebox id="constrained" format="yyyy-MM-dd" beginValue="${b}" endValue="${e}" constraint="not 20250117"/>
 </vlayout>
 </zk>

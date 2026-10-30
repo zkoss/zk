@@ -45,6 +45,15 @@ public class B110_ZK_6134Test extends WebDriverTestCase {
 				+ "})()");
 	}
 
+	private String textOf(String selector) {
+		return getEval("(function () {"
+				+ "var e = document.querySelector(\"" + selector + "\");"
+				+ "if (!e) return 'no-such-cell';"
+				+ "var s = getComputedStyle(e);"
+				+ "return [s.color, s.fontWeight].join(' / ');"
+				+ "})()");
+	}
+
 	private boolean za11yActive() {
 		return "true".equals(getEval("!!window.za11y"));
 	}
@@ -177,6 +186,43 @@ public class B110_ZK_6134Test extends WebDriverTestCase {
 		assertEquals(paintOf(POPUP + " .z-cell-range-preview-mid:not(.z-calendar-selected)"),
 				paintOf(anchorInBand),
 				"the anchor must paint like the rest of the preview band");
+	}
+
+	/** The anchor as the hover preview's end must carry a preview end's text, not
+	 *  the selected day's on-primary text over the faint preview fill. */
+	@Test
+	public void testAnchorAsPreviewEndHasPreviewEndText() {
+		connect("/test2/B110-ZK-6134.zul");
+		waitResponse();
+
+		openPopup(0);
+		onCellInPanel(0, 5, "click");    // begin only, so a hover previews the end
+		onCellInPanel(1, 1, "hover");    // the preview ends on the next panel's 1st
+		String anchorAsEnd = POPUP
+				+ " .z-calendar-cell.z-calendar-selected.z-cell-range-preview-end";
+		assertEquals(1L, count(anchorAsEnd),
+				"precondition: the preview must end on the next panel's 1st");
+		String anchorText = textOf(anchorAsEnd);
+		onCellInPanel(1, 10, "hover");
+		assertEquals(textOf(POPUP + " .z-cell-range-preview-end:not(.z-calendar-selected)"),
+				anchorText, "the anchor must carry a preview end's text");
+	}
+
+	/** A disabled day inside a hover preview band keeps the disabled text colour. */
+	@Test
+	public void testDisabledDayInPreviewBandKeepsDisabledText() {
+		connect("/test2/B110-ZK-6134.zul");
+		waitResponse();
+
+		openPopup(2);
+		String disabled = POPUP + " .z-calendar-cell.z-calendar-disabled:not(.z-calendar-outside)";
+		String idle = textOf(disabled);
+		onCellInPanel(0, 17, "click");
+		onCellInPanel(0, 25, "hover");   // the band crosses the disabled Jan 20
+		assertEquals(1L, count(disabled + ".z-cell-range-preview-mid"),
+				"precondition: the preview band must cover the disabled day");
+		assertEquals(idle, textOf(disabled),
+				"the disabled day must keep its disabled text inside the band");
 	}
 
 	/** The suppression rule outranks `:hover` too, so the anchor must still react. */
