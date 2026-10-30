@@ -23,6 +23,8 @@ whose selectors stay entirely inside one component's own classes can skip steps 
    (they also match `min-width` and `max-width`). If an attribute selector is unavoidable, match
    the whole declaration and say why a class cannot do it.
 4. **Implement.** A separate engineer agent makes the change. Start it as a new agent with its own context, not as a fork of the orchestrator's conversation.
+   Every fixed bug gets a zkthemelab Playwright test (fixture, spec, `playwright.config.ts`
+   project) in the same change — see SKILL.md, "Every bug fix ships with a zkthemelab test".
 5. **Verify.** A different agent from the engineer checks the pages the issue was reported on
    plus every page on the step 2 list. Follow `reference/verification.md`: at least one row per
    interactive component performs the interaction and asserts the state change, and every new
