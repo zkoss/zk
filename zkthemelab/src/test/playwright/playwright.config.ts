@@ -215,6 +215,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Signature tool buttons show undoLabel/saveLabel/clearLabel (zkmax signature.css). See signature-label.spec.ts.
+      name: 'signature-label',
+      testMatch: /signature-label\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Warning container hue sits apart from error (tokens/_colors.css). See warning-container-hue.spec.ts.
       name: 'warning-container',
       testMatch: /warning-container-hue\.spec\.ts/,
