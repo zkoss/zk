@@ -231,6 +231,16 @@ export default defineConfig({
       },
     },
     {
+      // Barcodescanner video fills the scanner under the canvas (zkmax barcodescanner.css). See barcodescanner.spec.ts.
+      name: 'barcodescanner',
+      testMatch: /barcodescanner\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        permissions: ['camera', 'microphone'],
+        launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] },
+      },
+    },
+    {
       // Warning container hue sits apart from error (tokens/_colors.css). See warning-container-hue.spec.ts.
       name: 'warning-container',
       testMatch: /warning-container-hue\.spec\.ts/,
