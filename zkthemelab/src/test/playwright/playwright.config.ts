@@ -209,6 +209,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Video fills its width/height, clipToFit and dimBackground work (zkmax video.css). See video.spec.ts.
+      name: 'video',
+      testMatch: /video\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Warning container hue sits apart from error (tokens/_colors.css). See warning-container-hue.spec.ts.
       name: 'warning-container',
       testMatch: /warning-container-hue\.spec\.ts/,
