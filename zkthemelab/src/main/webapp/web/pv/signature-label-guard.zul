@@ -1,0 +1,11 @@
+<?page title="Signature label guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for signature-label.spec.ts: tool buttons with and without undoLabel/saveLabel/clearLabel.
+     Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it
+     up as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8 z-d-flex z-flex-col z-gap-4">
+    <signature sclass="labelled" width="400px" height="160px"
+               undoLabel="Undo" saveLabel="Save" clearLabel="Clear"/>
+    <signature sclass="plain" width="400px" height="160px"/>
+</h:div>
+</zk>
