@@ -110,7 +110,8 @@ public class StandardThemeProvider implements ThemeProvider {
 	 * earlier versions only applied the non-default-theme suffix to the widget-CSS bundle.
 	 */
 	public Collection<Object> getThemeURIs(Execution exec, List<Object> uris) {
-		// for compatibility with the legacy themes (iceblue and the like), which reset in their own norm.css.dsp
+		// the default theme inserts its reset; a legacy theme (iceblue and the like) ships no reset.css
+		// and resets in its own norm.css.dsp, so it only gets its theme name injected into zk.wcs
 		if (isDefaultTheme())
 			insertResetURI(uris);
 		else
