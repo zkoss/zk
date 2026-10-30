@@ -365,11 +365,15 @@
     }
 
     /* (2e) Masked glyphs painted on the element itself or a non-z-icon class, so (2d)'s
-       ::before path misses them: combobox caret (icon element), signature toolbar glyph
-       (no z-icon class), stepbar complete-check (a .z-icon-check excluded by 2d). Same fix. */
+       ::before path misses them: combobox caret (icon element), signature toolbar glyph and
+       camera recording hint (no z-icon class), stepbar complete-check (a .z-icon-check excluded
+       by 2d). Same fix. */
     .z-combobox-icon,
     .z-combobox-button .z-icon-caret-down,
     .z-signature-tool-button-icon::before,
+    .z-camera-recording::before,
+    .z-camera-pause::before,
+    .z-camera-stop::before,
     .z-step-icon.z-icon-check::before {
         background-color: CanvasText;
     }
