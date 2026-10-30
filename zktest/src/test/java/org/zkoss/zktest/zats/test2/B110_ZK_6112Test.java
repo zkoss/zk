@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.lang.Library;
@@ -104,6 +105,34 @@ public class B110_ZK_6112Test extends WebDriverTestCase {
 			assertTrue("200".equals(status), "the image is served: " + m.group(1) + " -> " + status);
 		}
 		assertNoAnyError();
+	}
+
+	// IceBlue-only: iceblue ships no reset.css and its own Font Awesome; Marble links a reset and no Font Awesome
+	@Tag("IceBlueOnly")
+	@Test
+	public void testIceBlueLinksNoResetAndItsOwnFontAwesome() {
+		connect();
+		waitResponse();
+		List<String> hrefs = stylesheetHrefs();
+		int wcs = indexOf(hrefs, "/zul/css/zk.wcs");
+		int fontAwesome = indexOf(hrefs, "/iceblue/zul/font/font-awesome.css.dsp");
+		assertTrue(wcs >= 0, "zk.wcs is linked: " + hrefs);
+		assertFalse(indexOf(hrefs, "/zul/css/reset") >= 0, "no reset stylesheet is linked: " + hrefs);
+		assertTrue(fontAwesome >= 0, "iceblue's font-awesome.css.dsp is linked: " + hrefs);
+		assertTrue(fontAwesome < wcs, "font-awesome.css.dsp precedes zk.wcs: " + hrefs);
+		for (String href : hrefs)
+			assertTrue("200".equals(statusOf(href)), "the stylesheet is served: " + href);
+		String css = getEval("(function () { var x = new XMLHttpRequest(); x.open('GET', '" + hrefs.get(fontAwesome)
+				+ "', false); x.send(); return x.responseText; })()");
+		Matcher m = Pattern.compile("url\\(\"?([^\")]*/fa-solid-900\\.woff2)\"?\\)").matcher(css);
+		assertTrue(m.find(), "font-awesome.css.dsp declares the solid font");
+		assertTrue("200".equals(statusOf(m.group(1))), "the solid font is served: " + m.group(1));
+		assertNoAnyError();
+	}
+
+	private static String statusOf(String url) {
+		return getEval("(function () { var x = new XMLHttpRequest(); x.open('GET', '" + url
+				+ "', false); x.send(); return String(x.status); })()");
 	}
 
 	private static List<String> stylesheetHrefs() {

@@ -37,8 +37,8 @@ Together they make a silently-dead or silently-missing stylesheet impossible.
 `check-css-dsp.js` reads the **real ZK lang files** as its source of truth —
 `ZK_HOME` defaults to `/Users/hawk/Documents/workspace/ZK10`. So `MISSING: 0` means *verified
 against ZK's actual registrations*, not merely internally consistent. `font-awesome.css.dsp` is
-deliberately out of scope: `MarbleThemeProvider.beforeWidgetCSS()` returns null for it because
-Marble draws icons with Lucide masks, so ZK never requests it.
+deliberately out of scope: since 11.0 `zk.wcs` no longer lists it (Marble draws icons with Lucide
+masks); a legacy theme jar such as iceblue adds its own copy through its `<Theme>ThemeURIHandler`.
 
 ## A source-file count above the registration count is normal
 

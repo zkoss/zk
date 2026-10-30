@@ -46,7 +46,6 @@ public class StandardThemeProvider implements ThemeProvider {
 	private static final String BROWSER_DEFAULT = "org.zkoss.zul.theme.browserDefault";
 	private static final String RESET_GLOBAL = "~./zul/css/reset.css";
 	private static final String RESET_EMBED = "~./zul/css/reset-embed.css";
-	private static final String FONT_FOLDER = "~./zul/font/";
 
 	protected static String getThemeFileSuffix() {
 		String suffix = Themes.getCurrentTheme();
@@ -129,11 +128,7 @@ public class StandardThemeProvider implements ThemeProvider {
 	}
 
 	public String beforeWidgetCSS(Execution exec, String uri) {
-		// zk.wcs keeps font-awesome.css.dsp for compatibility with the legacy theme jars;
-		// the default theme ships no Font Awesome, so skip it
-		if (uri.startsWith(FONT_FOLDER) && isDefaultTheme())
-			return null;
-		if (uri.startsWith("~./zul/css/") || uri.startsWith("~./js/zul/") || uri.startsWith(FONT_FOLDER)) {
+		if (uri.startsWith("~./zul/css/") || uri.startsWith("~./js/zul/") || uri.startsWith("~./zul/font/")) {
 			uri = ServletFns.resolveThemeURL(uri);
 		}
 
