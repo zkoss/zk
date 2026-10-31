@@ -3113,26 +3113,26 @@ test.describe('state classes: listgroup, multislider tooltip and window classes'
   // The class is chosen by layout: a vertical tooltip opens on the right of its knob and flips to the left only when the
   // right side would leave the clip rect of an overflow:hidden ancestor (Sliderbuttons._placeTooltip, ZK-6192). The section
   // puts the knob at the right edge of such a container; the hover (mouseenter) places the tooltip.
-  test('z-sliderbuttons-tooltip-start is set when the right-hand tooltip would leave the clipping container', async ({ page }) => {
+  test('z-sliderbuttons-tooltip-left is set when the right-hand tooltip would leave the clipping container', async ({ page }) => {
     await openPreview(page, '/multislider.zul');
     const section = sectionOf(page, 'Vertical Tooltip at the Clip Edge');
     const container = section.locator('.z-overflow-hidden');
     const startKnob = container.locator('.z-sliderbuttons-button').nth(0);
     const startTooltip = startKnob.locator('.z-sliderbuttons-tooltip');
     await expect(startTooltip).toHaveCount(1);
-    await expect(startTooltip).not.toHaveClass(classPattern('z-sliderbuttons-tooltip-start'));
+    await expect(startTooltip).not.toHaveClass(classPattern('z-sliderbuttons-tooltip-left'));
     expect(await styleOf(startTooltip, 'right'), 'right-hand tooltip').toBe('auto');
 
     await startKnob.hover();
 
-    await expect(container.locator('.z-sliderbuttons-tooltip-start')).toHaveCount(1);
-    await expect(startTooltip).toHaveClass(classPattern('z-sliderbuttons-tooltip-start'));
+    await expect(container.locator('.z-sliderbuttons-tooltip-left')).toHaveCount(1);
+    await expect(startTooltip).toHaveClass(classPattern('z-sliderbuttons-tooltip-left'));
     expect(await styleOf(startTooltip, 'right'), 'mirrored to the left of the knob').toBe('26px');
     await expect(startTooltip).toBeVisible();
     const box = await startTooltip.boundingBox();
     const clip = await container.boundingBox();
     expect(box!.x, 'the flipped tooltip stays inside the container').toBeGreaterThanOrEqual(clip!.x);
-    await settledShot(page, container, 'multislider-tooltip-start.png');
+    await settledShot(page, container, 'multislider-tooltip-left.png');
 
     await page.mouse.move(0, 0);
     await expect(startTooltip).toBeHidden();
