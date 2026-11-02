@@ -30,6 +30,10 @@ Grid's actual cell-content wrapper is on the **row**, not the cell:
 
 The grid choice is a deliberate departure from the per-cell pattern. The cell elements (`.z-cell`) exist but the content wrapper sits at the row level for grid's flat-row rendering. Don't mistake `.z-cell-content` (does not exist) for the actual class.
 
+## Grid footer cell structure
+
+Grid footer cells use `TR.z-foot > TD.z-footer > DIV.z-footer-content`, not `.z-cell` or `.z-row-content`. Cell padding belongs on `.z-footer-content`. The grid CSS sets `.z-footer` to `padding: 0`. (Source: the "Actual DOM" comment in `zul/src/main/resources/web/js/zul/grid/css/grid.css`.)
+
 ## Selection support
 
 | Component | Row selection | Class emitted |
