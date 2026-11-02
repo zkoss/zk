@@ -10,7 +10,6 @@
     position: absolute;
     z-index: 1500;
     box-sizing: border-box;
-    min-width: 160px;
 }
 
 .z-popup-content {
@@ -31,7 +30,6 @@
 /* Tooltip-style popup: dark bg, small radius, small text */
 .z-popup-tooltip.z-popup {
     color: #fff;
-    min-width: 0;
     max-width: 300px;
     font-size: 0.6875rem;
     font-weight: 500;
