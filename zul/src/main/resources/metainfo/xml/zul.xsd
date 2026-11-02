@@ -1729,10 +1729,7 @@
 	<!-- columnchildren -->
 	<xs:element name="columnchildren" type="columnchildrenType" />
 	<xs:complexType name="columnchildrenType">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="baseGroup" />
-			<xs:element ref="panel" />
-		</xs:choice>
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
 	<!-- columnlayout -->
@@ -3447,10 +3444,7 @@
 	<!-- tablechildren -->
 	<xs:element name="tablechildren" type="tablechildrenType" />
 	<xs:complexType name="tablechildrenType">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="baseGroup" />
-			<xs:element ref="panel" />
-		</xs:choice>
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attribute name="colspan" type="intType" use="optional" />
 		<xs:attribute name="rowspan" type="intType" use="optional" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
