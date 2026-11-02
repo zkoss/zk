@@ -41,7 +41,6 @@ npm run baseline:capture -- --project=gallery -g "button"   # BEFORE editing; re
 npm run baseline:compare -- --project=gallery -g "button"   # after editing and rebuilding
 
 npm run screenshot:test                    # the whole suite
-npm run screenshot:update                  # playwright --update-snapshots
 npx playwright test -c src/test/playwright/playwright.config.ts --project=<project>
 npx playwright test -c src/test/playwright/playwright.config.ts -g "button"
 node scripts/select-tests.mjs --base HEAD  # which tests a change needs (scripts/README-select-tests.md)
