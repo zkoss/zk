@@ -142,7 +142,7 @@ Navigate to the preview URL (use `mcp__claude-in-chrome__navigate`; reuse tab wh
 
 **When measuring transition-carrying properties** (border-color, box-shadow on focus/hover), disable CSS transitions on the element first — `getComputedStyle` otherwise returns the transition's start frame (false "no focus ring"); see the Transition-freeze trap below.
 
-Screenshots use a **flat** layout — write each capture directly to `zkthemelab/doc/screenshots/<component>-<scenario>.png`, one file per (component, scenario), with **no per-component subdirectory**. This is the committed baseline convention (see `zkthemelab/src/test/playwright/playwright.config.ts` → `snapshotPathTemplate: '{snapshotDir}/{arg}{ext}'`). `zkthemelab/doc/screenshots/` already exists — do NOT create a `zkthemelab/doc/screenshots/<component>/` folder.
+Screenshots use a **flat** layout — write each capture directly to `zkthemelab/doc/screenshots/<component>-<scenario>.png`, one file per (component, scenario), with **no per-component subdirectory**. The directory is local and gitignored (not a committed baseline); create `zkthemelab/doc/screenshots/` if it is missing. The flat layout matches `snapshotPathTemplate: '{snapshotDir}/{arg}{ext}'` in `zkthemelab/src/test/playwright/playwright.config.ts`. Do NOT create a `zkthemelab/doc/screenshots/<component>/` folder.
 
 ---
 
@@ -420,7 +420,7 @@ Add a `## Layout regressions` subsection to the report listing each `lr-<n>` row
 
 Marble carries theme-wide features beyond MD3 appearance — Component Theme Variables, density/compact mode, forced-colors guards, brand-override token discipline. Their per-component obligations are declared in the contract's `## Cross-cutting features` section (fields `ctv:` / `density:` / `fc-risk:` / `brand-allowed-literals:` / `tablet:`); the obligations, roles, and this id vocabulary are defined in `doc/spec/new-component-checklist.md`.
 
-- **No section (legacy contract)**: emit every `x-*` row as `SKIPPED (legacy contract)` in the report's Cross-cutting subsection and continue — legacy components are grandfathered (their CTV state lives in `tasks/component-theme-variables-progress.md`).
+- **No section (legacy contract)**: emit every `x-*` row as `SKIPPED (legacy contract)` in the report's Cross-cutting subsection and continue — legacy components are grandfathered (their CTV state is whether `zul/src/main/resources/web/zul/css/tokens/_component-theme.css` has the component's block).
 - **Section present**: run the probes below. `x-*` ids count toward `failing-set` like any other row and are always **component-rooted** (never `TOKEN_FIX_REQUIRED`). A feature declared `N/A` / `none` → its rows are `SKIPPED (contract N/A)` — a recorded decision, not a gap.
 - **Cleanup rule (mandatory)**: every override you inject (`setProperty`, inline style) MUST be removed before §3d, and you MUST re-read one baseline property to confirm the default is restored — a leaked override poisons the visual review.
 

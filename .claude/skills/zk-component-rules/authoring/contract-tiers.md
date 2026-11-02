@@ -241,10 +241,12 @@ The path where iceblue CSS is obtained is not fixed (it depends on which version
    ```bash
    find temp -path "*iceblue*" -name "<comp>.css.dsp" 2>/dev/null
    ```
-2. **ZK source tree** (if `$ZK_SOURCE` / `$ZKCML_SOURCE` are set): `$ZK_SOURCE/zul/src/main/resources/web/js/**/<comp>.css*`, `$ZKCML_SOURCE/zkex/src/main/resources/web/js/**/<comp>.css*`, `$ZKCML_SOURCE/zkmax/src/main/resources/web/js/**/<comp>.css*`
+2. **Tracked IceBlue jar** (CE; `dist/lib/iceblue_c.jar` in the zk checkout, `$ZK_SOURCE`):
    ```bash
-   find "$ZK_SOURCE" "$ZKCML_SOURCE" -path "*/src/main/resources/web/js*" -name "<comp>.css*" 2>/dev/null
+   unzip -l "$ZK_SOURCE/dist/lib/iceblue_c.jar" | grep css.dsp
+   unzip -p "$ZK_SOURCE/dist/lib/iceblue_c.jar" web/iceblue_c/js/{zul|zkex|zkmax}/<pkg>/css/<comp>.css.dsp
    ```
+   The same jar holds the EE/PE sheets (zkex, zkmax). Do not search `src/main/resources/web/js/**` or `zul/codegen/` for IceBlue CSS: they now hold Marble source and Marble build output. Fall back to the preview-URL route in `../reference/theme-override-is-replace.md` only when `unzip -l` has no entry for the component.
 3. **The user has not configured an iceblue CSS source** → print the following in the conversation:
    ```
    iceblue CSS for <comp> not found. Searched:

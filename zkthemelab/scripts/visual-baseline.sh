@@ -10,9 +10,10 @@
 #   ... edit CSS, rebuild, reload the preview app ...
 #   bash zkthemelab/scripts/visual-baseline.sh compare [playwright args...]
 #
-# Pass the same Playwright args to both (e.g. --project=desktop -g "button"). The preview app
+# Pass the same Playwright args to both (e.g. --project=gallery -g "button"). The preview app
 # must be running and serving the CSS you want to capture (see verification.md).
-# capture refuses to run while CSS has uncommitted changes, so the baseline is the unedited CSS.
+# capture refuses to run while CSS in zk, or in ../zkcml when present, has uncommitted or untracked
+# changes, so the baseline is the unedited CSS. compare never writes a missing baseline: it fails.
 # Exit: 2 = usage error or a refused capture; otherwise Playwright's exit code.
 
 set -uo pipefail
@@ -28,16 +29,25 @@ mode="${1:-}"
 
 case "$mode" in
     capture)
-        if ! git -C "$ROOT" diff --quiet HEAD -- '*.css' '*.css.dsp'; then
+        dirty=""
+        for repo in "$ROOT" "$ROOT/../zkcml"; do
+            [ -d "$repo" ] || continue
+            dirty="$dirty$(git -C "$repo" status --porcelain --untracked-files=all -- '*.css' '*.css.dsp' | sed "s|^|  $repo: |")"
+        done
+        if [ -n "$dirty" ]; then
             echo "visual-baseline: CSS has uncommitted changes; capture the baseline before editing CSS" >&2
-            git -C "$ROOT" diff --name-only HEAD -- '*.css' '*.css.dsp' | sed 's/^/  /' >&2
+            echo "$dirty" >&2
             exit 2
         fi
         mkdir -p "$SNAP_DIR"
         (cd "$MODULE" && npx playwright test --config "$CONFIG" --update-snapshots=all "$@")
         rc=$?
-        printf 'commit %s\ncaptured %s\nargs %s\n' "$(git -C "$ROOT" rev-parse --short HEAD)" \
-            "$(date '+%Y-%m-%d %H:%M')" "$*" > "$STAMP"
+        if [ $rc -eq 0 ]; then
+            printf 'commit %s\ncaptured %s\nargs %s\n' "$(git -C "$ROOT" rev-parse --short HEAD)" \
+                "$(date '+%Y-%m-%d %H:%M')" "$*" > "$STAMP"
+        else
+            rm -f "$STAMP"
+        fi
         exit $rc
         ;;
     compare)
@@ -46,7 +56,10 @@ case "$mode" in
             exit 2
         fi
         sed 's/^/baseline: /' "$STAMP"
-        (cd "$MODULE" && npx playwright test --config "$CONFIG" "$@")
+        if [ "$(sed -n 's/^args //p' "$STAMP")" != "$*" ]; then
+            echo "visual-baseline: compare args differ from the captured ones; pages outside the capture fail as missing" >&2
+        fi
+        (cd "$MODULE" && npx playwright test --config "$CONFIG" --update-snapshots=none "$@")
         ;;
     *)
         echo "usage: $0 capture|compare [playwright args...]" >&2

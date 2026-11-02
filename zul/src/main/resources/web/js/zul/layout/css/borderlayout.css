@@ -225,7 +225,7 @@
  * MD3 signals hover via the state layer (colour), NOT geometry, so the pill
  * keeps its 28px long-axis — it does NOT grow (the caret already has its space
  * at idle via opacity:0; the former 28→44px growth was the family outlier,
- * retired 2026-06-23, gap log + DESIGN.md §14). Matches splitter/splitlayout.
+ * retired 2026-06-23, DESIGN.md §14). Matches splitter/splitlayout.
  *
  * Why `.z-{pos}-splitter:active .z-{pos}-splitter-button` for the dragging
  * case? `:active` on the parent strip persists for the duration of a

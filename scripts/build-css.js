@@ -191,7 +191,7 @@ const normFiles = [
     // Utility CSS — split by sidebar category (see usecase/index.zul "Utility CSS").
     // NOTE: no default-rhythm file — widgets carry zero default margins (ZK's
     // flex sizing subtracts child margins; spacing is opt-in via _stack.css /
-    // _spacing.css — see doc/spec/spacing-policy.md, gap log 2026-06-05).
+    // _spacing.css — see doc/spec/spacing-policy.md).
     'zul/css/utility/_colors.css',
     'zul/css/utility/_elevation.css',
     'zul/css/utility/_surface.css',
@@ -227,7 +227,7 @@ const normFiles = [
     // auto-scan would emit orphaned *.css.dsp files that ZK never requests and the widget
     // renders with browser/inherited defaults. Same loading trap as scrollbar/notification
     // above. Found by the 2026-06-30 orphan sweep via runtime document.styleSheets probe
-    // (gap log 2026-06-30). NOTE: select.css/cell.css/bandpopup.css are NOT here — they have
+    // (zk-component-rules reference/component-css-must-be-bundled-or-css-uri.md). NOTE: select.css/cell.css/bandpopup.css are NOT here — they have
     // no css-uri either but ZK's zk.wcs DOES serve them via package aggregation (probe-
     // verified), so they live in WCS_SERVED_ALLOWLIST below instead.
     'js/zul/wgt/css/label.css',
@@ -629,7 +629,8 @@ function scanCssFiles(dir, base) {
     return results;
 }
 
-// Build-time orphan guard (gap log 2026-06-30, sweep of the scrollbar bug class).
+// Build-time orphan guard for the scrollbar bug class (zk-component-rules
+// reference/component-css-must-be-bundled-or-css-uri.md).
 // Every non-empty component CSS left to the 1:1 auto-scan is emitted as a standalone
 // *.css.dsp. ZK only REQUESTS that dsp if the component has a `css-uri`; otherwise the file
 // is never loaded and the component renders unstyled — silently, with no error. This asserts

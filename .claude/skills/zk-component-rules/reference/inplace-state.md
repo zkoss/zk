@@ -90,7 +90,8 @@ Applies to: **textbox, intbox, decimalbox, doublebox, longbox, passwordbox**.
 5. Read the canonical patterns from ZK's iceBlue theme as the source of truth, not from another component theme:
    - `combo.css.dsp` (combobox, datebox, timebox, spinner, bandbox)
    - `input.css.dsp` (textbox, intbox, decimalbox, doublebox, longbox, passwordbox)
-   - Location: `$ZK_SOURCE/zul/codegen/resources/web/js/zul/inp/css/` (`$ZK_SOURCE` is the root of the ZK CE checkout)
+   - CE: `unzip -p dist/lib/iceblue_c.jar web/iceblue_c/js/zul/inp/css/combo.css.dsp` (and `input.css.dsp`), run from the zk checkout root. `dist/lib/iceblue_c.jar` is tracked. Do not use `zul/codegen/` (gitignored Marble build output) or `src/main/resources/web/js/**` (Marble source) for IceBlue.
+   - EE/PE (zkex, zkmax): the same jar holds their sheets under `web/iceblue_c/js/{zkex|zkmax}/<pkg>/css/<comp>.css.dsp` (for example `web/iceblue_c/js/zkmax/inp/css/searchbox.css.dsp`). List entries with `unzip -l dist/lib/iceblue_c.jar | grep css.dsp`; fall back to the preview-URL route in `theme-override-is-replace.md` only when no entry matches.
 
 ## Evaluator notes
 

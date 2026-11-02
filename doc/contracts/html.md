@@ -11,7 +11,7 @@ zk-version: 10.2.1-jakarta
 
 `Html` renders raw markup inside `<div class="z-html">`. It has **no `lang.xml` css-uri**, so
 its CSS (including the embedded-tag normalization) loads only via the global `norm.css.dsp`
-bundle (see gap log 2026-06-30 orphan sweep).
+bundle (see `.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md`).
 
 ## Expected values
 
