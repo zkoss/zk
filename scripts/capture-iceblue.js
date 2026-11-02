@@ -18,13 +18,22 @@ fs.mkdirSync(outputDir, { recursive: true });
 
 (async () => {
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  // zkthemelab serves IceBlue per request when the zktheme=iceblue cookie is set
+  // (ThemeFns.getCurrentTheme reads it before org.zkoss.theme.preferred).
+  await context.addCookies([{ name: 'zktheme', value: 'iceblue', url: baseUrl }]);
+  const page = await context.newPage();
 
   for (const comp of components) {
     const url = `${baseUrl}/${comp}.zul`;
     console.log(`Capturing ${comp} from ${url}...`);
     try {
       await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+      // StandardThemeProvider puts the theme into the zk.wcs URL (/_zkiju-iceblue/...). Without it the
+      // server rendered Marble, and saving that as the IceBlue baseline would be wrong.
+      const iceblue = await page.evaluate(() => [...document.styleSheets]
+        .some((s) => /\/_zkiju-iceblue\//.test(s.href ?? '')));
+      if (!iceblue) throw new Error('the page did not load the IceBlue theme (no /_zkiju-iceblue/ stylesheet)');
       const outPath = path.join(outputDir, `${comp}-iceblue.png`);
       await page.screenshot({ path: outPath, fullPage: true });
       console.log(`  saved: ${outPath}`);
