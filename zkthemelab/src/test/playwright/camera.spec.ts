@@ -52,3 +52,21 @@ for (const [action, state] of [['start', 'recording'], ['pause', 'pause']] as co
     expect(box.y).toBeGreaterThanOrEqual(cam.y);
   });
 }
+
+// _forced-colors.css (2e): forced colors map the mask's background-color fill to Canvas, which
+// hides the hint; the rule re-points it to CanvasText.
+test('the recording hint stays visible in forced colors', async ({ page }) => {
+  await startPreview(page);
+  await page.evaluate(() => zk.$('$cam').start());
+  await expect(page.locator('.z-camera-recording')).toBeVisible();
+  await page.emulateMedia({ forcedColors: 'active' });
+  const { canvasText, fill } = await page.evaluate(() => {
+    const probe = document.createElement('span');
+    probe.style.color = 'CanvasText';
+    document.body.append(probe);
+    const canvasText = getComputedStyle(probe).color;
+    probe.remove();
+    return { canvasText, fill: getComputedStyle(document.querySelector('.z-camera-recording')!, '::before').backgroundColor };
+  });
+  expect(fill).toBe(canvasText);
+});
