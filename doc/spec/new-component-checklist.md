@@ -62,9 +62,10 @@ tablet: central-touch-rules | needs-specific — <what> | N/A — <non-interacti
 ```
 
 Authoring rules:
-- **CTV vocabulary follows the shipped families** in `component-theme-variables.md`
-  (e.g. wrapper-border inputs use `bg/fg/radius/border-color/-hover/-focus` +
-  `popup-bg/-radius`). Don't invent new knob axes without checking the family tables.
+- **CTV vocabulary follows the existing knobs** in `component-theme-variables.md`: list the
+  existing knobs of the component family with the grep command in its "Listing a component's
+  variables" section, and take the vocabulary rules from its "State model sets the knob
+  vocabulary" section. Don't invent new knob axes without checking those existing knobs.
 - **`density: bound` obligates the Expected-values table**: every height/padding row for
   the control must cite the ladder/alias token from `tokens/_sizing.css` (e.g.
   `var(--zk-input-height)`), never a raw px literal. If no alias fits, the contract names

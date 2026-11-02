@@ -66,7 +66,7 @@ You receive a single argument: `<comp>` (e.g. `stepbar`). Required reads, in pri
 6. **MD3 tokens** at `zul/src/main/resources/web/zul/css/tokens/_{colors,elevation,motion,shape,spacing,typography}.css`. The contract's expected-values column must cite a `var(--zk-…)` token when one exists; raw values only as a last resort.
 7. **Skill index** at `.claude/skills/zk-component-rules/SKILL.md`. After you create the new component file, you MUST update this index.
 8. **Theme rules** at `doc/spec/DESIGN.md`.
-9. **Cross-cutting checklist** at `doc/spec/new-component-checklist.md` — defines the mandatory `## Cross-cutting features` contract section (§6 below) and the obligations behind each field. When filling it in, also consult the feature specs it links: `doc/spec/component-theme-variables.md` (knob vocabulary — follow the shipped family tables), `doc/spec/data-dense-mode.md` + `tokens/_sizing.css` (ladder/alias tokens), `doc/spec/forced-colors.md` (WHCM risk triage), `doc/spec/brand-override.md`.
+9. **Cross-cutting checklist** at `doc/spec/new-component-checklist.md` — defines the mandatory `## Cross-cutting features` contract section (§6 below) and the obligations behind each field. When filling it in, also consult the feature specs it links: `doc/spec/component-theme-variables.md` (knob vocabulary — list existing knobs with the grep command in "Listing a component's variables", and take the vocabulary rules from "State model sets the knob vocabulary"), `doc/spec/data-dense-mode.md` + `tokens/_sizing.css` (ladder/alias tokens), `doc/spec/forced-colors.md` (WHCM risk triage), `doc/spec/brand-override.md`.
 
 ## Workflow
 

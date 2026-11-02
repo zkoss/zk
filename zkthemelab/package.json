@@ -9,7 +9,6 @@
     "test:forced-colors": "playwright test --config src/test/playwright/playwright.config.ts --project=forced-colors",
     "capture:forced-colors": "playwright test --config src/test/playwright/playwright.config.ts --project=forced-colors-gallery",
     "screenshot:test": "playwright test --config src/test/playwright/playwright.config.ts",
-    "screenshot:update": "playwright test --config src/test/playwright/playwright.config.ts --update-snapshots",
     "baseline:capture": "bash scripts/visual-baseline.sh capture",
     "baseline:compare": "bash scripts/visual-baseline.sh compare"
   },

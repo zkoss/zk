@@ -76,9 +76,13 @@ own: report the selector's reasons and let the Marble maintainer decide when the
 runs locally only; it is not wired to CI or Jenkins (Marble maintainer's ruling, 2026-10-19).
 
 When the command you run includes screenshot specs (`toHaveScreenshot`), capture the baselines
-before you edit CSS: run `npm run baseline:capture -- <same args>` in `zkthemelab/` on the unedited
-CSS, edit and rebuild, then run `npm run baseline:compare -- <same args>`. See "Screenshot
-baselines" below.
+before you edit CSS. First run the selector with the CSS paths you are about to edit:
+`node scripts/select-tests.mjs <css paths>` from `zkthemelab/` (path forms are in
+`zkthemelab/scripts/README-select-tests.md`; it accepts explicit paths). Then, on the unedited CSS,
+run `npm run baseline:capture -- <Playwright args>` with the args of the command it prints (the
+`npx playwright test -c src/test/playwright/playwright.config.ts` prefix is left out, because the
+script adds `--config`). Edit and rebuild, then run `npm run baseline:compare -- <same args>`. See
+"Screenshot baselines" below.
 
 ## Running Playwright — flags that bite
 
@@ -137,10 +141,9 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   the `tablet` project. A sweep that re-verified only `gallery` left 29 stale tablet baselines
   behind, found only when an unrelated server restart ran the full `tablet` project the next day
   (2026-09-11 typography sweep). Before editing any `zkthemelab/src/main/webapp/web/*.zul`, capture
-  both projects: `npm run baseline:capture -- --project=gallery` and
-  `npm run baseline:capture -- --project=tablet`. After the edit and rebuild, compare both with the
-  same arguments: `npm run baseline:compare -- --project=gallery` and
-  `npm run baseline:compare -- --project=tablet`.
+  both projects in one run: `npm run baseline:capture -- --project=gallery --project=tablet`.
+  After the edit and rebuild, compare both with the same arguments:
+  `npm run baseline:compare -- --project=gallery --project=tablet`.
 - **The UseCase SPA hangs on `networkidle`.** Use `domcontentloaded`, then wait on a text marker,
   then `fonts.ready`, with a tall viewport.
 - **The pop-up layer needs interaction** or roughly 180 selectors are never painted. Cursor

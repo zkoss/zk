@@ -1,7 +1,7 @@
 import { test, expect, Locator } from '@playwright/test';
 
-// A tab label that does not fit a fixed narrow tab must be truncated with an ellipsis
-//. Without `min-width: 0` on .z-tab-content and
+// A tab label that does not fit a fixed narrow tab must be truncated with an ellipsis.
+// Without `min-width: 0` on .z-tab-content and
 // .z-tab-text the label keeps its full width and li.z-tab clips a middle slice.
 //
 // File name: it ends in `screenshot.spec.ts` on purpose so the `chromium` project

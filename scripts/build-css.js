@@ -75,8 +75,8 @@ function belongsToModule(relPath, mod) {
 }
 
 
-// Dev builds (watch / build:css:dev) stay unminified so hot-swapped CSS is
-// readable in DevTools; the packaged build (build:css) is minified.
+// Dev builds (--dev) stay unminified so hot-swapped CSS is readable in
+// DevTools; the packaged build (Gradle compileMarbleCss) is minified.
 const isDev = process.argv.includes('--dev');
 // Side outputs (icon-index.md, icons-lucide.zul) only run when explicitly requested — see
 // generateIconIndexMd / generateIconsZul and build() stage 1b/1c below.
