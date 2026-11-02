@@ -16,13 +16,13 @@ import { test, expect, chromium, Browser, BrowserContext, Locator, Page } from '
 //  - a Tree header holding only the select-all box in a 40px column shows the whole 16px box, at the x of the
 //    row checkbox, with no ellipsis painted, on desktop and on a tablet (D15);
 //  - Grid and Listbox headers with a column-menu button keep the label box clear of the button and of the sort
-//    arrow, and the sort arrow clear of the button, on desktop and on a tablet where the button is 44px (D11);
+//    arrow, and the sort arrow clear of the button, on desktop and on a tablet where the button is 44px;
 //  - a Listbox header with a select-all box is as tall as the Grid header with the same labels, its labels sit
 //    at the same top offset and the painted box is centred on the label, on desktop and on a tablet (D16);
 //  - every checkmark Listbox header keeps its select-all box unclipped (`.z-listheader-content` does not
 //    overflow vertically) on the font-size of the header, so zkmax cannot size the glyph box of the span;
 //  - a select-all header that also holds the sort arrow and/or the column-menu button keeps its label box
-//    clear of them (D11 follow-through);
+//    clear of them;
 //  - a Tree header is as tall as the Grid header with the same labels in default, compact and tablet density,
 //    and on a tablet the data rows are as tall as well (D17);
 //  - a checkmark Listbox row and a checkmark Tree row are as tall as the Grid row in default, compact and tablet
@@ -216,7 +216,7 @@ function registerSelectAllBoxIsNotClipped() {
 }
 
 // A select-all header holding the sort arrow and/or the column-menu button reserves the same room as the
-// plain header with the same controls (D11), and the label box ends before the controls.
+// plain header with the same controls, and the label box ends before the controls.
 function registerSelectAllHeaderClearsArrowAndButton() {
   const cases: Array<{ root: string; plain: string; controls: string[] }> = [
     { root: '.mhf-listbox-select-all-sort', plain: '.mhf-listbox th.z-listheader:nth-child(2)', controls: ['.z-listheader-sorticon'] },
