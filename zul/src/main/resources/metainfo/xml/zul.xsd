@@ -2843,7 +2843,10 @@
 	<!-- multislider -->
 	<xs:element name="multislider" type="multisliderType" />
 	<xs:complexType name="multisliderType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="sliderbuttons" />
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="endValue" type="intType" use="optional" />
