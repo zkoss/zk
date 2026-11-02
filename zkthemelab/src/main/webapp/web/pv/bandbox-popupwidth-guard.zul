@@ -1,0 +1,14 @@
+<?page title="Bandbox popupWidth guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for bandbox-popupwidth.spec.ts: bandboxes whose popupWidth is narrower than any theme
+     minimum, as a pixel value and as a percentage of the input. Lives under pv/ so gallery-scan,
+     forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8 z-d-flex z-gap-6">
+    <bandbox width="150px" popupWidth="200px">
+        <bandpopup><label value="200px"/></bandpopup>
+    </bandbox>
+    <bandbox width="150px" popupWidth="120%">
+        <bandpopup><label value="120%"/></bandpopup>
+    </bandbox>
+</h:div>
+</zk>
