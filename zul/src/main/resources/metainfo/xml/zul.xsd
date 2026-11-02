@@ -2521,7 +2521,10 @@
 	<!-- linelayout -->
 	<xs:element name="linelayout" type="linelayoutType" />
 	<xs:complexType name="linelayoutType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="lineitem" />
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="xs:string" use="optional" />
 		<xs:attribute name="lineStyle" type="xs:string" use="optional" />
@@ -2533,7 +2536,10 @@
 	<!-- lineitem -->
 	<xs:element name="lineitem" type="lineitemType" />
 	<xs:complexType name="lineitemType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="2" />
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="pointVisible" type="booleanType" use="optional" />
 		<xs:attribute name="pointStyle" type="xs:string" use="optional" />
@@ -3159,10 +3165,10 @@
 	<!-- rowchildren -->
 	<xs:element name="rowchildren" type="rowchildrenType" />
 	<xs:complexType name="rowchildrenType">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="baseGroup" />
-			<xs:element ref="panel" />
-		</xs:choice>
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="colspan" type="intType" use="optional" />
 		<xs:attribute name="offset" type="intType" use="optional" />
