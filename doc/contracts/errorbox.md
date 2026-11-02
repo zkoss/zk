@@ -1,7 +1,7 @@
 # Component: errorbox
 tier: T2
 category: feedback
-shared-css-file: zul/src/main/resources/web/js/zul/wgt/css/errorbox.css
+shared-css-file: zul/src/main/resources/web/js/zul/inp/css/input.css
 siblings: []
 closest-sibling: notification
 decomposition: tooltip surface (small floating callout with pointer caret) + error variant of notification (error-container bg + on-error-container text)

@@ -201,7 +201,7 @@ header (`doc/spec/md3-close-affordance-placement.md`, section 2).
 
 ## errorbox
 
-The errorbox styles ship from `inp/css/input.css`; `wgt/css/errorbox.css` is excluded from the build.
+The errorbox styles live in the errorbox block of `inp/css/input.css`.
 The beak padding must stay symmetric: `Errorbox._fixarrow()` writes padding on only the beak-facing
 side, which would shift the table-cell content while the absolutely positioned icon and close button
 stay put, so `.z-errorbox { --zk-errorbox-beak: 8px; padding: var(--zk-errorbox-beak) !important; }`

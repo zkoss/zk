@@ -312,16 +312,10 @@ function findA11yPartials() {
 
 const a11yFiles = moduleName === 'za11y' ? findA11yPartials() : [];
 
-// Files merged into another CSS file (excluded from 1:1 auto-scan). zul only.
-// errorbox.css is merged into input.css because lang.xml registers no css-uri for errorbox.
-const extraMergedFiles = [
-    'js/zul/wgt/css/errorbox.css',
-];
-
 // Files that are merged (excluded from 1:1 auto-scan) — non-empty only for zul; zkmax/zkex
 // have no merge lists above, so their auto-scan runs 1:1 with nothing excluded.
 const mergedFiles = moduleName === 'zul'
-    ? new Set([...normFiles.filter(f => f.startsWith('js/')), ...comboFiles, ...footerFiles, ...extraMergedFiles])
+    ? new Set([...normFiles.filter(f => f.startsWith('js/')), ...comboFiles, ...footerFiles])
     : new Set(a11yFiles);
 
 // --- Orphan-CSS guard data (see assertNoOrphanComponentCss) ---

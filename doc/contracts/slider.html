@@ -8,7 +8,7 @@
   Tier: T1 (linear molds); T3 boundary for knob mold arc geometry.
 
   Covers:
-    - Default mold, horizontal — default / hover / focus / disabled states
+    - Default mold, horizontal — default / hover / focus states
     - Default mold, vertical
     - Sphere mold
     - Scale mold
@@ -213,14 +213,6 @@ h1 {
     box-shadow: 0 0 0 14px color-mix(in srgb, var(--zk-color-primary) 16%, transparent);
 }
 
-/* c7 — disabled: opacity on root; pointer-events none to show not-allowed cursor */
-.z-slider-disabled,
-.z-slider[disabled] {
-    opacity: var(--zk-state-disabled-opacity);
-    pointer-events: none;
-    cursor: not-allowed;
-}
-
 /* c8 + c8a + c8b + c8c — popup / drag tooltip */
 .z-slider-popup {
     /* Appended to body during drag; positioned absolute/fixed by JS */
@@ -336,7 +328,7 @@ h1 {
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════
-     SECTION 1 — Default mold, horizontal (c1–c4 default, c5 hover, c6 focus, c7 disabled)
+     SECTION 1 — Default mold, horizontal (c1–c4 default, c5 hover, c6 focus)
      ══════════════════════════════════════════════════════════════════════ -->
 <section class="matrix-section">
     <h2>Default mold — horizontal</h2>
@@ -419,25 +411,6 @@ h1 {
                 <div class="z-slider-center" style="width:100%; height:4px;">
                     <div class="z-slider-area" style="width:55%; height:100%; top:0; left:0;"></div>
                     <div class="z-slider-button z-slider-button-active" style="left:55%;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Disabled: opacity on root -->
-        <div class="state-label">
-            disabled<br>
-            <small>c7 root opacity<br>= --zk-state-disabled-opacity</small>
-        </div>
-        <div class="state-cell">
-            <!--
-              .z-slider[disabled]:
-                opacity = var(--zk-state-disabled-opacity)   [c7]
-              Applied here via explicit class for static mockup.
-            -->
-            <div class="z-slider z-slider-horizontal z-slider-disabled" role="slider" aria-disabled="true">
-                <div class="z-slider-center" style="width:100%; height:4px;">
-                    <div class="z-slider-area" style="width:30%; height:100%; top:0; left:0;"></div>
-                    <div class="z-slider-button" style="left:30%;"></div>
                 </div>
             </div>
         </div>
@@ -780,7 +753,6 @@ h1 {
         c4 <code>.z-slider-button</code> border-radius → <code>50%</code><br>
         c5 <code>.z-slider-button:hover</code> box-shadow → <code>0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)</code><br>
         c6 <code>.z-slider-button:focus-visible</code> box-shadow → <code>0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)</code><br>
-        c7 <code>.z-slider[disabled]</code> opacity → <code>var(--zk-state-disabled-opacity)</code><br>
         c8 <code>.z-slider-popup</code> background-color → <code>var(--zk-color-inverse-surface)</code><br>
         c8a <code>.z-slider-popup</code> color → <code>var(--zk-color-inverse-on-surface)</code><br>
         c8b <code>.z-slider-popup</code> border-radius → <code>var(--zk-shape-corner-extra-small)</code><br>
