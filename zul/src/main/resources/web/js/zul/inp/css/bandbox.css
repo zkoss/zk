@@ -96,7 +96,6 @@
     border-radius: var(--zk-bandbox-popup-radius);
     box-shadow: var(--zk-elevation-dropdown);
     border: 1px solid var(--zk-color-outline-variant);
-    min-width: 300px;
     overflow: auto;
     box-sizing: border-box;
 }

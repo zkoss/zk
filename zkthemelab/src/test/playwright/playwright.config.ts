@@ -331,6 +331,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Bandbox popupWidth is not overridden by a theme min-width. See bandbox-popupwidth.spec.ts.
+      name: 'bandbox-popupwidth',
+      testMatch: /bandbox-popupwidth\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'tablet',
       testMatch: /tablet\.spec\.ts/,
       use: TABLET_USE,
