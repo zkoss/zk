@@ -131,7 +131,7 @@
     border: none;
 }
 
-/* A separator with bar="true" between the items of a toolbar is a divider (follow-up 45, D21 = B), in the
+/* A separator with bar="true" between the items of a toolbar is a divider, in the
    toolbar's own axis, whichever orient the separator has. It reads like .z-toolbarseparator: 1px x 24px.
    The box holds `&nbsp;`, so `font-size: 0` and `overflow: hidden` keep the 1px flex item from stretching to
    the width of that glyph. `flex-basis` and `min-width` set the size because the spacer rule above makes

@@ -32,7 +32,7 @@ async function padShot(page: Page, target: Locator, name: string | string[],
     animations: 'disabled',
     // Absolute floor for anti-aliasing flicker. These crops are small (a selectbox
     // focus shot is 144x64) and high-contrast at the ring's edge, so a 1-2px AA
-    // flicker that no eye can see turns the shot red run to run (chat D80; the
+    // flicker that no eye can see turns the shot red run to run (the
     // selectbox focus shot differed by 2px — doc/spec/screenshot-tolerance.md). An absolute
     // count, not maxDiffPixelRatio: 1% of ~9000px would be 92px — enough to hide a
     // whole mis-rendered ring segment. The gallery/tablet projects keep their own
@@ -415,7 +415,7 @@ test.describe('combobox', () => {
     });
   }
 
-  // Open dropdown with one keyboard-selected item. Batch 2 moved the selected item to
+  // Open dropdown with one keyboard-selected item. The selected item takes
   // --zk-color-secondary-container; the closed-state shots above never reach it.
   test('dropdown', async ({ page }) => {
     await page.locator('.z-combobox-button').first().click();
@@ -2261,10 +2261,10 @@ test.describe('important-removal-guards', () => {
   });
 });
 
-// Follow-up 45 F1 (D21 = B): a bar separator between toolbar items is a 1px x 24px divider in the toolbar's own axis,
+// A bar separator between toolbar items is a 1px x 24px divider in the toolbar's own axis,
 // whichever orient it has, and the items after it stay next to it; a separator without a bar stays a flex spacer.
 // Fixture: web/pv/separator-toolbar-guard.zul
-test.describe('separator in a toolbar (follow-up 45 F1)', () => {
+test.describe('separator in a toolbar', () => {
   const FIXTURE = '/pv/separator-toolbar-guard.zul';
   const DIVIDER_LONG_PX = 24;
   const TOOLBAR_GAP_PX = 4.5;
@@ -2390,12 +2390,11 @@ for (const { comp, focus, shot } of FORM_CONTROL_STATES) {
 
 // -------------------------------------------------------
 // Dropdown popups with a highlighted item (searchbox, chosenbox)
-// Batch 2 changed the list-row selected colour; the popups were never captured open.
+// The list-row selected colour changed; the popups were never captured open.
 // Searchbox: the second default searchbox has a pre-selected item, which carries
 // `.z-searchbox-selected` (secondary-container). Chosenbox dropdown: ArrowDown moves
-// `.z-chosenbox-option-hover`, whose fill is hardcoded (follow-up item 10 in
-// tasks/marble-theme-followups.md), so that shot does NOT cover batch 2's colour. The
-// chosenbox chip shot below covers batch 2's `--zk-chosenbox-item-focus-bg`
+// `.z-chosenbox-option-hover`, whose fill is hardcoded, so that shot does NOT cover the new colour. The
+// chosenbox chip shot below covers `--zk-chosenbox-item-focus-bg`
 // (`.z-chosenbox-item-focus`).
 // -------------------------------------------------------
 test.describe('searchbox dropdown', () => {
@@ -2426,8 +2425,7 @@ test.describe('chosenbox dropdown', () => {
     await padShot(page, popup, 'chosenbox-dropdown.png');
   });
 
-  // Clicking a selected chip gives it `.z-chosenbox-item-focus` (batch 2's
-  // `--zk-chosenbox-item-focus-bg`).
+  // Clicking a selected chip gives it `.z-chosenbox-item-focus` (`--zk-chosenbox-item-focus-bg`).
   test('chip focus', async ({ page }) => {
     await page.goto('/chosenbox.zul');
     await page.waitForLoadState('networkidle');
@@ -2628,14 +2626,14 @@ test.describe('not-closable-cursor', () => {
 });
 
 // -------------------------------------------------------
-// NS21 batch 2 (round 1): state classes that ZK adds only after a real interaction.
+// State classes that ZK adds only after a real interaction.
 // Each test (1) asserts the class is absent, (2) interacts with real mouse/keyboard input only,
 // (3) asserts the class on the one element that should carry it, (4) asserts a computed style the
-// class changes, (5) takes a state shot where the effect is visible. doc/marble-variant-gap-ns21-batch2-plan.md.
+// class changes, (5) takes a state shot where the effect is visible.
 // -------------------------------------------------------
 
-// 0.02 instead of the project's 0.05: the 0.05 threshold hides small background changes (plan D1); maxDiffPixels stays at padShot's 20.
-const NS21_STATE_SHOT = { threshold: 0.02 };
+// 0.02 instead of the project's 0.05: the 0.05 threshold hides small background changes; maxDiffPixels stays at padShot's 20.
+const STATE_SHOT = { threshold: 0.02 };
 const MAX_TAB_PRESSES = 60;
 
 async function openPreview(page: Page, path: string) {
@@ -2654,7 +2652,7 @@ async function settleTransitions(page: Page) {
 
 async function settledShot(page: Page, target: Locator, name: string) {
   await settleTransitions(page);
-  await padShot(page, target, name, NS21_STATE_SHOT);
+  await padShot(page, target, name, STATE_SHOT);
 }
 
 async function styleOf(target: Locator, property: string, pseudo?: string) {
@@ -2687,7 +2685,7 @@ function classPattern(cls: string) {
   return new RegExp(`(^|\\s)${cls}(\\s|$)`);
 }
 
-test.describe('ns21 batch 2: calendar view classes', () => {
+test.describe('state classes: calendar view classes', () => {
   // The title is two text spans; ZK picks the view from the span that is clicked (Calendar._changeView):
   // month label -> month view, year label -> year view, the "2019 - 2030" range label -> decade view.
   const views = [
@@ -2719,12 +2717,12 @@ test.describe('ns21 batch 2: calendar view classes', () => {
       await expect(body).toHaveClass(classPattern(cls));
       expect(await styleOf(body, 'padding-top'), 'the picker views pad the grid').not.toBe(before.paddingTop);
       expect(await styleOf(cell, 'padding-left'), 'picker cells are padded sideways').not.toBe(before.cellPadding);
-      await padShot(page, calendar, shot, NS21_STATE_SHOT);
+      await padShot(page, calendar, shot, STATE_SHOT);
     });
   }
 });
 
-test.describe('ns21 batch 2: focus classes of the EE input family', () => {
+test.describe('state classes: focus classes of the EE input family', () => {
   test('z-cascader-focus is set by tabbing into the cascader', async ({ page }) => {
     await openPreview(page, '/cascader.zul');
     const cascader = page.locator('.z-cascader:not(.z-cascader-disabled)').nth(0);
@@ -2812,7 +2810,7 @@ async function moveIntoSizerZone(page: Page, header: Locator) {
   await page.mouse.move(box.x + box.width - 4, box.y + box.height / 2);
 }
 
-test.describe('ns21 batch 2: header classes', () => {
+test.describe('state classes: header classes', () => {
   const SIZING_EDGE = 'rgb(55, 111, 208) -2px 0px 0px 0px inset';
 
   test('z-column-sizing is set while the pointer is in the right edge of a sizable column', async ({ page }) => {
@@ -2932,7 +2930,7 @@ test.describe('ns21 batch 2: header classes', () => {
   });
 });
 
-test.describe('ns21 batch 2: select-all header checkbox classes', () => {
+test.describe('state classes: select-all header checkbox classes', () => {
   const CHECKED_FILL = 'rgb(55, 111, 208)';
 
   test('z-listheader-checked is set by clicking the select-all checkbox', async ({ page }) => {
@@ -2977,7 +2975,7 @@ test.describe('ns21 batch 2: select-all header checkbox classes', () => {
   });
 });
 
-test.describe('ns21 batch 2: listbox row focus class', () => {
+test.describe('state classes: listbox row focus class', () => {
   // listbox.css draws the ring only while the hidden `.z-focus-a` trap is :focus-visible, i.e. after keyboard input.
   test('z-listitem-focus is set on the row the arrow key moved to', async ({ page }) => {
     await openPreview(page, '/listbox.zul');
@@ -2998,7 +2996,7 @@ test.describe('ns21 batch 2: listbox row focus class', () => {
   });
 });
 
-test.describe('ns21 batch 2: menu, nav and rating classes', () => {
+test.describe('state classes: menu, nav and rating classes', () => {
   // The state layer of a top-level menu is its `.z-menu-content::before`; hover and focus differ only in its opacity.
   const stateLayerOpacity = async (menu: Locator) =>
     parseFloat(await styleOf(menu.locator('.z-menu-content'), 'opacity', '::before'));
@@ -3084,10 +3082,10 @@ test.describe('ns21 batch 2: menu, nav and rating classes', () => {
 });
 
 // -------------------------------------------------------
-// NS21 batch 2 (round 2): classes that need a page section of their own, EE editors or a layout condition.
+// State classes: classes that need a page section of their own, EE editors or a layout condition.
 // -------------------------------------------------------
 
-test.describe('ns21 batch 2: listgroup, multislider tooltip and window classes', () => {
+test.describe('state classes: listgroup, multislider tooltip and window classes', () => {
   test('z-listgroup-selected is set by clicking the group row check box of a groupSelect listbox', async ({ page }) => {
     await openPreview(page, '/listbox-grouping.zul');
     const listbox = sectionOf(page, 'Selectable Groups (groupSelect)').locator('.z-listbox');
@@ -3169,7 +3167,7 @@ test.describe('ns21 batch 2: listgroup, multislider tooltip and window classes',
   });
 });
 
-test.describe('ns21 batch 2: tbeditor toolbar classes', () => {
+test.describe('state classes: tbeditor toolbar classes', () => {
   const ACTIVE_BUTTON_FILL = 'oklch(0.92 0.0403278 260.564)';
 
   async function openEditor(page: Page) {

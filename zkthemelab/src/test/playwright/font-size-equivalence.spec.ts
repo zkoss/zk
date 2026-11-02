@@ -6,7 +6,7 @@ import path from 'path';
 // (doc/spec/utility-naming.md §3.2, Gate 2).
 //
 // Why this exists: every other rename in that series REMOVES the old name, so a missed call
-// site becomes an orphan and the coverage guard fires. D3 is different — it is a SHIFT within a
+// site becomes an orphan and the coverage guard fires. The size renumber is different — it is a SHIFT within a
 // closed set. After it, `z-text-2xl` still exists; it just means 24px instead of 22px. A missed
 // call site therefore resolves to a valid-but-wrong class, silently, and no existing check can
 // see it. Screenshots cannot close the gap either: screenshot.spec.ts compares state crops at

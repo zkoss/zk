@@ -14,40 +14,39 @@ import { test, expect, chromium, Browser, BrowserContext, Locator, Page } from '
 //    height, or the inline-block select-all span picks it up): the label of a select-all header clears the box, the header is
 //    not taller than a plain Listbox header beyond the known offset, and a centred box lines up with the rows;
 //  - a Tree header holding only the select-all box in a 40px column shows the whole 16px box, at the x of the
-//    row checkbox, with no ellipsis painted, on desktop and on a tablet (D15);
+//    row checkbox, with no ellipsis painted, on desktop and on a tablet;
 //  - Grid and Listbox headers with a column-menu button keep the label box clear of the button and of the sort
 //    arrow, and the sort arrow clear of the button, on desktop and on a tablet where the button is 44px;
 //  - a Listbox header with a select-all box is as tall as the Grid header with the same labels, its labels sit
-//    at the same top offset and the painted box is centred on the label, on desktop and on a tablet (D16);
+//    at the same top offset and the painted box is centred on the label, on desktop and on a tablet;
 //  - every checkmark Listbox header keeps its select-all box unclipped (`.z-listheader-content` does not
 //    overflow vertically) on the font-size of the header, so zkmax cannot size the glyph box of the span;
 //  - a select-all header that also holds the sort arrow and/or the column-menu button keeps its label box
 //    clear of them;
 //  - a Tree header is as tall as the Grid header with the same labels in default, compact and tablet density,
-//    and on a tablet the data rows are as tall as well (D17);
+//    and on a tablet the data rows are as tall as well;
 //  - a checkmark Listbox row and a checkmark Tree row are as tall as the Grid row in default, compact and tablet
 //    density, the painted box is centred on the label and on a control in the first cell within 1px, under the default type scale,
-//    a 16px/24px one and Arial, and on a tablet the box keeps its 24px height (follow-up 28);
-//  - a Tree row holding text, a textbox or a button is as tall as the Grid row in default, compact and tablet density
-//    (follow-ups 34 and 38);
+//    a 16px/24px one and Arial, and on a tablet the box keeps its 24px height;
+//  - a Tree row holding text, a textbox or a button is as tall as the Grid row in default, compact and tablet density;
 //  - a Listbox group row is as tall as a Grid group row (within the 0.5px of the Grid group's border-top) and its toggle
-//    icon starts on the keyline of the data-row text, in default, compact and tablet density (follow-up 40);
+//    icon starts on the keyline of the data-row text, in default, compact and tablet density;
 //  - the checkbox of a selectable Listbox group (groupSelect) paints the box of the row checkbox, unchecked, hovered
 //    and checked, sits on the keyline of the row checkbox, is centred on the group label, and leaves the toggle arrow
-//    alone (follow-up 41);
+//    alone;
 //  - the first cell of a checkmark Listbox row keeps its text, or its image when it has one, on the keyline of the
 //    header label and 4px between the image and its label and between a label and a link, in the same three
-//    densities and type scales (follow-up 28, D18);
+//    densities and type scales;
 //  - in a centred and a right-aligned checkmark first column the box of a checkbox-only row is under the header box, and
 //    the box of a row with an image after it is where the first-cell compensation puts it, desktop and tablet (rule 4
-//    of listbox.css and its `:last-child` narrowing, NS14 round 2, D18);
+//    of listbox.css and its `:last-child` narrowing);
 //  - an image-only header column that carries the column-menu button, at the documented minimum width (56px on
 //    desktop, 76px on a tablet, contracts/listbox.md), shows the whole 16px image clear of the button, and a
 //    select-all-only header at its minimum width (68px / 88px) paints the whole box inside the content box and clear of the
-//    button (follow-up 30);
-//  - an image + sort + menu header keeps the label, arrow and button in that order on a tablet too (follow-up 30);
+//    button;
+//  - an image + sort + menu header keeps the label, arrow and button in that order on a tablet too;
 //  - a header that holds a native control cuts a long label before the sort arrow and the menu button, keeps the
-//    control visible and clickable at any overflow, and keeps the whole focus ring of the control (follow-up 35);
+//    control visible and clickable at any overflow, and keeps the whole focus ring of the control;
 //  - footer text starts where the body text of the same column starts (`border-spacing: 2px` of the UA
 //    table shifted Grid and Listbox footers right).
 // Fixture: web/pv/mesh-header-footer-guard.zul
@@ -308,7 +307,7 @@ function registerMenuHeaderClearsArrowAndButton() {
   }
 }
 
-// A select-all-only 40px Tree header (D15): the whole 16px box lies inside the content box, at the x of the
+// A select-all-only 40px Tree header: the whole 16px box lies inside the content box, at the x of the
 // row checkbox, and the header paints no ellipsis. The content box overflows by the trailing `&nbsp;` (scrollWidth
 // 29 against clientWidth 16 on a tablet), so overflow cannot stand for the ellipsis; the pixels do: the header
 // looks the same with `text-overflow: clip`.
@@ -343,7 +342,7 @@ function registerTreeSelectAllOnlyHeader() {
   });
 }
 
-// A header that holds a native control keeps the control usable and its focus ring whole (follow-up 35). The ring
+// A header that holds a native control keeps the control usable and its focus ring whole. The ring
 // (2px outline + 2px offset) lies 4px outside the control, so the header content clips with `overflow: clip` and a 4px
 // `overflow-clip-margin` where the browser has the property. Safari does not: there the content stays `overflow: visible`.
 // `text-overflow: clip` goes with it: an ellipsis hides a control that does not fit, so the label is cut at the first
@@ -598,7 +597,7 @@ const CONTROL_ROWS: ControlRows[] = [
 const GLYPH_PX = 16;
 
 // The type scales a checkmark row must stay centred under: the box is centred by the flex row of its cell, not by
-// margins tuned to one font and one line height (NS13 F1).
+// margins tuned to one font and one line height.
 const TYPE_SCALES: Record<string, string> = {
   default: '',
   '16px/24px': ':root{--zk-typescale-body-medium-size:16px;--zk-typescale-body-medium-line-height:24px}',
@@ -716,7 +715,7 @@ function expectGapBetween(gap: number, what: string) {
   expect(gap, `${what} gap ${gap}`).toBeLessThanOrEqual(FIRST_CELL_GAP_MAX_PX);
 }
 
-// Rows with an image or several inline items in the first cell (D18). Their items are flex items, which trim the
+// Rows with an image or several inline items in the first cell. Their items are flex items, which trim the
 // whitespace between them: the 4px gap stands in for it, and two compensations keep the text on the keyline.
 function registerCheckmarkFirstCell(prepare: (page: Page) => Promise<void>, inDensity: string) {
   const headerTextLeft = async (page: Page) =>
@@ -760,7 +759,7 @@ function registerCheckmarkFirstCell(prepare: (page: Page) => Promise<void>, inDe
 
 // In a centred or right-aligned first column, the checkmark of a row that holds only the box stays under the header
 // box (rule 4 of listbox.css), and the box of a row with an image after it stays where the compensation of the first
-// cell puts it, not 2px / 4px to the left (rule 4 is narrowed to `:last-child`, NS14 round 2). The expected x of the
+// cell puts it, not 2px / 4px to the left (rule 4 is narrowed to `:last-child`). The expected x of the
 // image row is the x of the same row with the compensated padding set inline from the tokens: it wins over rule 4
 // wherever rule 4 applies, so the two agree only while rule 4 leaves the row alone.
 function registerCheckmarkBoxInAlignedFirstColumn() {
@@ -794,7 +793,7 @@ function registerCheckmarkBoxInAlignedFirstColumn() {
 
 // A select-all-only column of 24 to 160px: in a centred column the header box and the row box share one centre
 // (cm5 of contracts/listbox.md), also where the 40px checkable span overflows the cell, where a centred row splits the
-// overflow both ways and the header must do the same (follow-up 52). A left-aligned column keeps its box on the keyline,
+// overflow both ways and the header must do the same. A left-aligned column keeps its box on the keyline,
 // 16px from the column edge in the header and in the row.
 function registerCheckmarkBoxColumns(density: 'default' | 'compact' | 'tablet') {
   const WIDTHS_PX = [24, 40, 48, 160];
@@ -836,7 +835,7 @@ function registerCheckmarkBoxColumns(density: 'default' | 'compact' | 'tablet') 
 }
 
 // A hand-written `style="text-align:center"` (no space after the colon) centres the box of a checkmark cell as the column
-// `align="center"` does: the flex alignment rules of tree.css take both spellings (follow-up 59, F1).
+// `align="center"` does: the flex alignment rules of tree.css take both spellings.
 function registerTreeCellStyleWithoutSpace() {
   test('.mhf-tree-style-no-space: the box of a cell with style="text-align:center" sits on the centre of the cell', async ({ page }) => {
     await open(page);
@@ -851,7 +850,7 @@ function registerTreeCellStyleWithoutSpace() {
 
 // The same for a checkmark Tree: the header box and the row box of a centred select-all-only column share one centre, the
 // column centre (cm6 of contracts/tree.md; the row box sat at the left edge, or 12px left of centre in a 160px column, and
-// the header box right of centre, follow-up 54), and in a left-aligned column both boxes stay on the keyline.
+// the header box right of centre), and in a left-aligned column both boxes stay on the keyline.
 function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'tablet') {
   const WIDTHS_PX = [24, 40, 48, 160];
   const boxRect = (page: Page, root: string, selector: string) => page.locator(`${root} ${selector}`).first()
@@ -896,7 +895,7 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
 
   // A centred first column that carries a label is not a box-only column: the rules above must leave its rows as they were
   // (16px / 12px / 24px of cell padding in front of the box, 24px of indent per nesting level), and its header must keep the
-  // select-all box inside the column, the 4px gap to the label and the ellipsis (follow-up 59). A flex header put the box of the
+  // select-all box inside the column, the 4px gap to the label and the ellipsis. A flex header put the box of the
   // 100px column 61px outside it and painted no ellipsis (an anonymous flex item cannot show one: the container is not `block`).
   const ROW_BOX_OFFSET_PX = { default: 16, compact: 12, tablet: 24 }[density];
   const LABEL_BOX_GAP_PX = 4;
@@ -942,7 +941,7 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
     test(`${root}: the rows of a centred ${width}px labelled Tree column keep their cell padding and their indent in ${density} density`,
       async ({ page }) => {
         const found = await labelled(page, root);
-        // The nested rows of the 100px column overflow it: their boxes are centred with the indent, as before follow-up 54.
+        // The nested rows of the 100px column overflow it: their boxes are centred with the indent.
         const keyline = width === 100 ? found.rows.slice(0, 1) : found.rows;
         for (const row of keyline) {
           expect(Math.abs(row.box.left - found.column.left - ROW_BOX_OFFSET_PX), `row box ${row.box.left}, column ${found.column.left}`)
@@ -961,7 +960,7 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
   }
 
   // Indentation carries the hierarchy, so the row rules centre a level-0 leaf cell only: a container row and a child row of a
-  // centred first column keep the indent they had before follow-up 54. A centred cell grows by one 24px indent per level and
+  // centred first column keep the indent they had before the box was centred. A centred cell grows by one 24px indent per level and
   // sits on the column centre, so its box moves by half of it, 12px, per level. Centring the box of every cell put the box of
   // a container row 12px left of the centre and the boxes of level 0 and 1 on one x.
   const nestedRows = (page: Page, root: string) => page.locator(root).evaluate((tree) =>
@@ -994,9 +993,9 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
       }
     });
 
-  // The centring rules apply to a tree without a container row only (follow-up 59, NS30): beside a container, whose box keeps its
+  // The centring rules apply to a tree without a container row only: beside a container, whose box keeps its
   // indent, a centred level-0 leaf sat 12px right of it, one nesting step the wrong way. In a tree with a container, open or
-  // closed, the leaf box is on the keyline of the container boxes and the header is as before follow-up 54, its box right of the
+  // closed, the leaf box is on the keyline of the container boxes and the header is as before the box was centred, its box right of the
   // column centre (the 16px / 4px padding and the 4px margin of the box).
   const MIXED = '.mhf-tree-mixed-box';
   const HEADER_BOX_RIGHT_OF_CENTRE_PX = { default: 4, compact: 2, tablet: 6 }[density];
@@ -1029,9 +1028,9 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
         .toBeCloseTo(HEADER_BOX_RIGHT_OF_CENTRE_PX, 0);
     });
 
-  // In a tree of leaves only, the labelled header unit (box, 4px gap, label) is centred on the column (follow-up 59, NS31): the
+  // In a tree of leaves only, the labelled header unit (box, 4px gap, label) is centred on the column: the
   // box is inside the column, the gap to the label is 4px, the long label is cut with the ellipsis. The nested
-  // `.mhf-tree-label-100` and `.mhf-tree-label-160` trees have a container row and therefore the pre-follow-up-54 header, so only these two guard it.
+  // `.mhf-tree-label-100` and `.mhf-tree-label-160` trees have a container row and therefore the header from before the box was centred, so only these two guard it.
   for (const width of [100, 160]) {
     const root = `.mhf-tree-label-flat-${width}`;
     test(`${root}: the header unit of a centred ${width}px labelled Tree column of leaves is centred on the column in ${density} density`,
@@ -1056,8 +1055,8 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
       });
   }
 
-  // A tree is judged on its own rows (follow-up 59, NS31): an outer tree of leaves whose cell holds a tree with a container row
-  // keeps its centring, and the inner tree, which has a container row, keeps its own pre-follow-up-54 keyline.
+  // A tree is judged on its own rows: an outer tree of leaves whose cell holds a tree with a container row
+  // keeps its centring, and the inner tree, which has a container row, keeps its own keyline from before the centring rules.
   const OUTER = '.mhf-tree-outer-box';
   const INNER = '.mhf-tree-inner-box';
   test(`${OUTER}: a flat centred box column whose cell holds a tree with a container row keeps both boxes on the column centre in ${density} density`,
@@ -1087,7 +1086,7 @@ function registerTreeCheckmarkBoxColumns(density: 'default' | 'compact' | 'table
 // A centred select-all-only column that carries the column-menu button keeps the box where the inline header span puts
 // it, in the cell the button leaves: 16px from the column edge at 68px, and at 88px 20px on desktop and 16px on a tablet
 // (the 44px button). Centring it on the whole cell, as a centred column without the button is, moved it 6px left
-// (follow-up 52; the 68px tablet box then left the column). Offsets measured before follow-up 52.
+// (the 68px tablet box then left the column).
 function registerCentredMenuHeaderBox(density: 'default' | 'compact' | 'tablet') {
   const BOX_OFFSET_PX: Record<number, number> = density === 'tablet' ? { 68: 16, 88: 16 } : { 68: 16, 88: 20 };
   for (const width of [68, 88]) {
@@ -1105,8 +1104,8 @@ function registerCentredMenuHeaderBox(density: 'default' | 'compact' | 'tablet')
 }
 
 // A checkmark row is as tall as the row without the box, and the painted box is centred on the label and on a control
-// in the first cell. Follow-up 28: `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox
-// line box; asymmetric margins that undid it only fitted Inter 13px/20px (NS13 F1).
+// in the first cell. `vertical-align: middle` (desktop) and the 24px touch box (tablet) grew the Listbox
+// line box; asymmetric margins that undid it only fitted Inter 13px/20px.
 function registerCheckmarkRowsMatchGrid(density: 'default' | 'compact' | 'tablet') {
   for (const [scaleName, scaleCss] of Object.entries(TYPE_SCALES)) {
     const inDensity = scaleName === 'default' ? `${density} density` : `${density} density with the ${scaleName} type scale`;
@@ -1176,7 +1175,7 @@ async function openInDensity(page: Page, density: Density) {
 }
 
 // A Tree row is as tall as the Grid row with the same content: the Tree pads its cell content as the Grid does and has no
-// row-height floor, so a textbox or a button in the first cell is not shorter than in the Grid (follow-ups 34 and 38).
+// row-height floor, so a textbox or a button in the first cell is not shorter than in the Grid.
 function registerTreeRowsMatchGrid(density: Density) {
   const cases = [
     { name: 'text', tree: '.mhf-tree-vs-grid tr.z-treerow', grid: '.mhf-grid-vs-tree tr.z-row' },
@@ -1197,7 +1196,7 @@ function registerTreeRowsMatchGrid(density: Density) {
 const GROUP_ROW_RESIDUAL_PX = 0.5;
 
 // A Listbox group row pads once, as the Grid group row does: it is as tall as the Grid group row and its toggle icon
-// starts where the Grid group's toggle starts, and in default density where the text of a data row starts (follow-up 40).
+// starts where the Grid group's toggle starts, and in default density where the text of a data row starts.
 function registerListboxGroupRows(density: Density) {
   test(`.mhf-listbox-group: the listbox group row is as tall as the grid group row in ${density} density`, async ({ page }) => {
     await openInDensity(page, density);
@@ -1222,7 +1221,7 @@ function registerListboxGroupRows(density: Density) {
     expect(Math.abs(arrow - box), `group arrow x ${arrow}, row box x ${box}`).toBeLessThanOrEqual(TOLERANCE_PX);
   });
 
-  // A group row pads like a data row in default and compact density (follow-up 46); a tablet keeps the fixed 16px
+  // A group row pads like a data row in default and compact density; a tablet keeps the fixed 16px
   // sideways against the 20px of its data cells, so the keyline is shared by the first two only.
   if (density === 'tablet') return;
   test(`.mhf-listbox-group: the group toggle icon starts on the keyline of the row text in ${density} density`, async ({ page }) => {
@@ -1233,7 +1232,7 @@ function registerListboxGroupRows(density: Density) {
     expect(Math.abs(icon - rowText), `group icon x ${icon}, row text x ${rowText}`).toBeLessThanOrEqual(TOLERANCE_PX);
   });
 
-  // Follow-up 46 F2: a checkmark Listbox nested in a later cell is no reason to keep the 16px of a checkmark group.
+  // A checkmark Listbox nested in a later cell is no reason to keep the 16px of a checkmark group.
   test(`.mhf-listbox-group-nested: the group toggle icon of a plain Listbox starts on the keyline of the row text in ${density} density`, async ({ page }) => {
     await openInDensity(page, density);
     const icon = await page.locator('.mhf-listbox-group-nested tr.z-listgroup span.z-listgroup-icon').first()
@@ -1250,7 +1249,7 @@ function registerListboxGroupRows(density: Density) {
     expect(Math.abs(icon - rowText), `group icon x ${icon}, row text x ${rowText}`).toBeLessThanOrEqual(TOLERANCE_PX);
   });
 
-  // Compact only: in default density a group row keeps its 8px 16px against the 16px of a data cell (follow-up 46).
+  // Compact only: in default density a group row keeps its 8px 16px against the 16px of a data cell.
   if (density !== 'compact') return;
   test('.mhf-group: the group row pads like a data row in Grid and Listbox in compact density', async ({ page }) => {
     await openInDensity(page, density);
@@ -1263,7 +1262,7 @@ function registerListboxGroupRows(density: Density) {
   });
 }
 
-// Follow-up 46 F1: a tablet keeps the group rows of a tablet in every density, as it does the data rows (zkmax
+// A tablet keeps the group rows of a tablet in every density, as it does the data rows (zkmax
 // `tablet/_mesh.css` sets the cell padding on `.z-grid` and `.z-listbox`, which shadows the compact tokens).
 function registerTabletGroupRowsIgnoreCompact() {
   const cases = [
@@ -1302,7 +1301,7 @@ function checkboxBox(page: Page, selector: string): Promise<Record<string, strin
 }
 
 // A selectable group (groupSelect) paints the checkbox of the row checkbox, in every state, and keeps the toggle arrow
-// as it was (follow-up 41). The icon of the group checkbox also carries `z-listgroup-icon`, as the arrow's span does.
+// as it was. The icon of the group checkbox also carries `z-listgroup-icon`, as the arrow's span does.
 function registerGroupCheckbox(density: Density) {
   test(`${GROUP_SELECT}: the unchecked group checkbox paints the box of the row checkbox in ${density} density`, async ({ page }) => {
     await openInDensity(page, density);

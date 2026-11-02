@@ -1,5 +1,5 @@
 <?page title="Toolbarbutton under a sticky header" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for the sticky-header case of focus-ring-scan.spec.ts (follow-up 36): a Listbox with the opt-in
+<!-- Fixture for the sticky-header case of focus-ring-scan.spec.ts: a Listbox with the opt-in
      `z-sticky-header` class in a scrolling container, whose rows hold a toolbarbutton. A focused toolbarbutton that has
      been scrolled under the header must stay under it. Lives under pv/ so gallery-scan, forced-colors-gallery and
      font-size-equivalence do not pick it up as a page. -->

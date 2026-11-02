@@ -122,7 +122,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   test('buttons are delineated by a border', async ({ page }) => {
     await page.goto('/button.zul', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('.z-button', { timeout: 10000 });
-    // A borderless button draws its border on an inset ::after (follow-up 31); an outlined one keeps its own.
+    // A borderless button draws its border on an inset ::after; an outlined one keeps its own.
     const styles = await page.locator('.z-button').first().evaluate(el =>
       [getComputedStyle(el).borderTopStyle, getComputedStyle(el, '::after').borderTopStyle]);
     expect(styles).toContain('solid');
@@ -222,7 +222,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     }
   });
 
-  // Follow-up 53: without the (2b) line for a selected group, the group checkbox is a white box with a white tick.
+  // Without the (2b) line for a selected group, the group checkbox is a white box with a white tick.
   test('a selected Listbox group checkbox keeps its baked box (forced-color-adjust: none)', async ({ page }) => {
     await page.goto('/pv/mesh-header-footer-guard.zul', { waitUntil: 'domcontentloaded' });
     const group = page.locator('.mhf-listbox-group-select tr.z-listgroup:not(.z-listgroup-disabled)').first();
@@ -364,7 +364,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     // separation must be byte-identical to normal mode (12px, matching the timebox).
     await expect(tz).toHaveCSS('margin-top', '12px');
   });
-  // Follow-up 31: the forced-colors button border must not change the button's box.
+  // The forced-colors button border must not change the button's box.
   const IPAD_USER_AGENT =
     'Mozilla/5.0 (iPad; CPU OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1';
 
@@ -432,7 +432,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect([...new Set(borders)]).toEqual([grayText]);
   });
 
-  // Follow-up 44a: listbox paging-bottom paints its glyph mask on the icon element itself.
+  // Listbox paging-bottom paints its glyph mask on the icon element itself.
   test('listbox paging-bottom icons are painted CanvasText (the mask sits on the element, not ::before)', async ({ page }) => {
     await page.goto('/listbox-header.zul', { waitUntil: 'domcontentloaded' });
     const icons = page.locator('.z-listbox-paging-bottom .z-paging-button:not([disabled]) .z-paging-icon');
@@ -443,7 +443,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(fills.every(fill => fill === canvasText), `icon fills ${JSON.stringify(fills)} must all be ${canvasText}`).toBe(true);
   });
 
-  // Follow-up 44b: a disabled paging button must not look like an enabled one.
+  // A disabled paging button must not look like an enabled one.
   // The glyph is the icon's ::before (default mold) or the icon element itself (listbox paging-bottom).
   // The OS mold draws its glyph on the button's ::after but never renders a disabled button.
   const pagingGlyphFills = (page: Page, selector: string) => page.locator(selector).evaluateAll(buttons =>
@@ -472,7 +472,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(listboxDisabled.every(c => c === grayText), `listbox disabled glyphs ${JSON.stringify(listboxDisabled)} must be ${grayText}`).toBe(true);
   });
 
-  // Follow-up 48: the text of a disabled paging resolved `--zk-color-disabled` to CanvasText, as an enabled one is. One test
+  // The text of a disabled paging resolved `--zk-color-disabled` to CanvasText, as an enabled one is. One test
   // per mold, so that a failure in the default mold does not stop the OS mold from being checked.
   test('disabled default-mold paging total is GrayText, enabled total CanvasText', async ({ page }) => {
     const grayText = await systemColor(page, 'GrayText');
@@ -491,7 +491,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   });
 
   // The OS mold disables its anchors: the page numbers read `color`, the « » chevrons are masked glyphs on the anchor's
-  // ::after and read `background-color` (follow-up 48 and its chevron addendum, NS28).
+  // ::after and read `background-color`.
   test('disabled OS-mold paging page numbers and chevrons are GrayText, enabled ones CanvasText', async ({ page }) => {
     const grayText = await systemColor(page, 'GrayText');
     const canvasText = await systemColor(page, 'CanvasText');
@@ -517,7 +517,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(found.enabledChevrons.every(c => c === canvasText), `enabled OS chevrons ${JSON.stringify(found.enabledChevrons)} must be ${canvasText}`).toBe(true);
   });
 
-  // Follow-up 44c: a caption inside the selected accordion tab sets its own text colour.
+  // A caption inside the selected accordion tab sets its own text colour.
   test('caption text in a selected accordion tab is HighlightText', async ({ page }) => {
     await page.goto('/tabbox-misc.zul', { waitUntil: 'domcontentloaded' });
     // Child chain: a descendant selector would also match a selected tab of a strip tabbox nested in a panel.
@@ -604,8 +604,8 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     }
   });
 
-  // Follow-up 44d: an invalid daterangebox shows the same double border as the other inputs. A wrapper draws it as an
-  // overlay on its 1px border, so the box keeps its size (follow-up 50).
+  // An invalid daterangebox shows the same double border as the other inputs. A wrapper draws it as an
+  // overlay on its 1px border, so the box keeps its size.
   test('invalid daterangebox shows the double border', async ({ page }) => {
     await page.goto('/pv/daterangebox-content.zul', { waitUntil: 'domcontentloaded' });
     const invalid = page.locator('.z-daterangebox.z-daterangebox-invalid');
@@ -617,7 +617,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(borders).toEqual(['double 3px', 'double 3px']);
   });
 
-  // Follow-up 44e: tbeditor SVG glyphs carry opacity 0.6 on a solid fill; the fill already maps to
+  // Tbeditor SVG glyphs carry opacity 0.6 on a solid fill; the fill already maps to
   // CanvasText, so the opacity alone turns the icons grey.
   test('tbeditor toolbar glyphs are fully opaque', async ({ page }) => {
     await page.goto('/tbeditor.zul', { waitUntil: 'domcontentloaded' });
@@ -628,7 +628,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect([...new Set(opacities)], 'every toolbar glyph must be fully opaque').toEqual(['1']);
   });
 
-  // Follow-up 44f: the combobox splits one outline between input and button; the double border
+  // The combobox splits one outline between input and button; the double border
   // must not close the seam, or the button draws as a second double-bordered box.
   test('invalid combobox is one double-bordered box (the input/button seam stays open)', async ({ page }) => {
     await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
@@ -649,7 +649,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     });
   });
 
-  // Follow-up 47: a real constraint failure puts z-combobox-invalid / z-bandbox-invalid on the <input>,
+  // A real constraint failure puts z-combobox-invalid / z-bandbox-invalid on the <input>,
   // not on the wrapper that the sclass-based preview pages style. Driven the way a user does it.
   test('a real invalid combobox and bandbox show the double border (one box, seam open)', async ({ page }) => {
     await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
@@ -674,7 +674,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(await border('.iig-single .z-combobox-button', 'Right'), 'combobox button right').toBe('double 3px');
   });
 
-  // Follow-up 55: the inputgroup border shorthand must not take the double border from an invalid input in the group.
+  // The inputgroup border shorthand must not take the double border from an invalid input in the group.
   test('a real invalid input in an inputgroup shows the double border', async ({ page }) => {
     await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
     for (const widget of ['textbox', 'intbox', 'longbox', 'doublebox', 'decimalbox', 'combobox']) {
@@ -692,7 +692,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     }
   });
 
-  // Follow-up 50: the double border of (1c) must not make an invalid input larger than the valid one. The class goes where
+  // The double border of (1c) must not make an invalid input larger than the valid one. The class goes where
   // ZK puts it: on the control, or on the <input> inside the wrapper; the daterangebox takes it on its root.
   // Each input is compared with its own valid state: the heights differ (spinner 43px, compact timebox 37px, against 40px or 32px).
   const INVALID_INPUTS = ['intbox', 'decimalbox', 'doublebox', 'longbox', 'textbox', 'passwordbox', 'datebox', 'timebox',
@@ -727,7 +727,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     }
   }
 
-  // Follow-up 45 F2: a no-spacing bar is a 1px box; the line must paint inside it, not in the row below.
+  // A no-spacing bar is a 1px box; the line must paint inside it, not in the row below.
   test('a no-spacing horizontal separator bar paints its line inside its own 1px box', async ({ page }) => {
     await page.goto('/separator.zul', { waitUntil: 'domcontentloaded' });
     const source = page.locator('.z-separator-horizontal-bar').first();
@@ -747,7 +747,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(inkRows, 'the 1px box must hold exactly one dark row').toBe(1);
   });
 
-  // Follow-up 45 F1 (D21 = B). Fixture: web/pv/separator-toolbar-guard.zul
+  // Fixture: web/pv/separator-toolbar-guard.zul
   const SEPARATOR_TOOLBAR_FIXTURE = '/pv/separator-toolbar-guard.zul';
   async function openSeparatorToolbarFixture(page: Page) {
     await page.goto(SEPARATOR_TOOLBAR_FIXTURE, { waitUntil: 'domcontentloaded' });
