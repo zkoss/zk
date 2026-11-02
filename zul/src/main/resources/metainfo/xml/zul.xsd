@@ -2800,6 +2800,7 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="menu" />
 			<xs:element ref="menuitem" />
+			<xs:element ref="menuseparator" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
@@ -2864,7 +2865,9 @@
 	<xs:complexType name="navType">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="baseGroup" />
+			<xs:element ref="nav" />
 			<xs:element ref="navitem" />
+			<xs:element ref="navseparator" />
 		</xs:choice>
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
@@ -2878,6 +2881,7 @@
 			<xs:group ref="baseGroup" />
 			<xs:element ref="nav" />
 			<xs:element ref="navitem" />
+			<xs:element ref="navseparator" />
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
