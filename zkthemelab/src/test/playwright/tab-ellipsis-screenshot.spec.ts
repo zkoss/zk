@@ -1,7 +1,7 @@
 import { test, expect, Locator } from '@playwright/test';
 
 // A tab label that does not fit a fixed narrow tab must be truncated with an ellipsis
-// (Jess review batch 15, follow-up 9). Without `min-width: 0` on .z-tab-content and
+//. Without `min-width: 0` on .z-tab-content and
 // .z-tab-text the label keeps its full width and li.z-tab clips a middle slice.
 //
 // File name: it ends in `screenshot.spec.ts` on purpose so the `chromium` project
@@ -37,7 +37,7 @@ test.describe('tab label truncation', () => {
   });
 });
 
-// A component inside a tab caption must receive the click (follow-up 49b). .z-tab-content and
+// A component inside a tab caption must receive the click. .z-tab-content and
 // .z-tab-text set `pointer-events: none` so a click on the label lands on the tab, and the
 // property is inherited: the combobox in the caption was never the hit-test target and its
 // input and button were dead. The click still reaches the Tab widget by event bubbling.

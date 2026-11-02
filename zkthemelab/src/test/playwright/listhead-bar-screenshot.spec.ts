@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 
-// Scrollbar-column header cell (`th.z-listhead-bar`, Jess review batch 14 S4).
+// Scrollbar-column header cell (`th.z-listhead-bar`).
 //
 // ZK adds one extra header cell above a listbox's vertical scrollbar. It must be
 // painted like every other header cell, not as a tinted bar. The cell has width 0

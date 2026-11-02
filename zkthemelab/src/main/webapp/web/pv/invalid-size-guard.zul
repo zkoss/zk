@@ -1,5 +1,5 @@
 <?page title="Invalid input size" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for forced-colors.spec.ts (follow-up 50): one valid instance of each input of the (1c) double-border list.
+<!-- Fixture for forced-colors.spec.ts: one valid instance of each input of the (1c) double-border list.
      The spec adds the invalid class where ZK puts it and compares the border boxes. The combobox and the bandbox
      are listed once with and once without the button. Lives under pv/ so gallery-scan and forced-colors-gallery
      do not pick it up as a page. -->

@@ -3,8 +3,8 @@ import { test, expect, Locator, Page } from '@playwright/test';
 // Guard for the invalid state of a real combobox and bandbox (combobox.css, bandbox.css). ZK puts
 // z-combobox-invalid / z-bandbox-invalid on the <input>, not on the wrapper that a preview page's
 // sclass reaches, so the constraint failure is driven the way a user does it: type, delete, blur.
-// The same inputs inside an inputgroup, whose `border` shorthand repainted the error border (follow-up 55), and as inplace
-// inputs, which are transparent at rest and on hover and show the error on focus (follow-up 56).
+// The same inputs inside an inputgroup, whose `border` shorthand repainted the error border, and as inplace
+// inputs, which are transparent at rest and on hover and show the error on focus.
 // Fixture: web/pv/input-invalid-guard.zul
 
 const FIXTURE = '/pv/input-invalid-guard.zul';
@@ -123,7 +123,7 @@ for (const widget of INPUTGROUP_WIDGETS) {
   });
 }
 
-// A focused combobox in an inputgroup drew its input border 1px and its button border 2px (follow-up 58): the
+// A focused combobox in an inputgroup drew its input border 1px and its button border 2px: the
 // group's :focus rule pinned the input while combobox.css grew the button. Both parts keep the width and the colour
 // a focused textbox in the group has, the group outline owning the focus; an invalid combobox keeps the error colour.
 const borderOf = (locator: Locator) =>
@@ -150,7 +150,7 @@ for (const state of ['valid', 'invalid']) {
 }
 
 // A combobox given the error variant by sclass (z-combobox-error) rather than by a failed constraint: the group's
-// focus rule for the button must not paint it grey while the input is red (follow-up 58).
+// focus rule for the button must not paint it grey while the input is red.
 test('a focused z-combobox-error combobox in an inputgroup draws the error border on its input and button', async ({ page }) => {
   const input = page.locator('.iig-group-combobox-error .z-combobox-input');
   const button = page.locator('.iig-group-combobox-error .z-combobox-button');

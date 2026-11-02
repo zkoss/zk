@@ -1,6 +1,6 @@
 <?page title="Separator bars in toolbars" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for the separator-in-toolbar guards of mesh-header-footer.spec.ts and forced-colors.spec.ts (follow-up 45 F1,
-     D21 = B): a bar separator between toolbar items is a 1px x 24px divider, a plain separator stays a flex spacer, and a
+<!-- Fixture for the separator-in-toolbar guards of mesh-header-footer.spec.ts and forced-colors.spec.ts:
+     a bar separator between toolbar items is a 1px x 24px divider, a plain separator stays a flex spacer, and a
      vertical bar outside a toolbar is a continuous line. Lives under pv/ so the galleries do not pick it up as a page. -->
 <zk xmlns:h="native">
 <h:div class="z-p-8">

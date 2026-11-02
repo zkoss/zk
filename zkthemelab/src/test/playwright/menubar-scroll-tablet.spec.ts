@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-// Scrollable menubar on a mobile UA (Jess review batch 16, follow-up 19). zkmax's
+// Scrollable menubar on a mobile UA. zkmax's
 // touch menubar makes setScrollable() a no-op ("use native scroll"), so a horizontal
 // bar narrower than its items must scroll natively. Without `overflow: auto` the items
 // paint outside the bar and nothing scrolls.

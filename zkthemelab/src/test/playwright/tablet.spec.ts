@@ -546,7 +546,7 @@ test.describe('tablet-colorbox-dismiss', () => {
 // These guard doc/contracts/scrollview.md M1-M6. They exist because the contract
 // previously asserted only `overflow` and `background-color` — two values ZK's own
 // JS and the CSS defaults already produce — so scrollview was recorded VERIFIED
-// while its stylesheet was an empty placeholder file (tasks/harness/work-status.md).
+// while its stylesheet was an empty placeholder file.
 // Measured against that empty stylesheet (RED re-run 2026-09-12): M1, M3, M4, M5
 // and M8 fail; M2 and M6 pass on it by construction, because they assert an
 // ABSENCE (no surface, no layout space) that an empty file also satisfies —
@@ -702,11 +702,10 @@ test.describe('tablet-scrollview-affordance', () => {
 // make the pop-up a tablet one. Why these tests live here and not in a new spec file: a new file needs a
 // `testMatch` entry in playwright.config.ts, and a change there makes select-tests.mjs answer `full`. Each title
 // names the page it opens (`x.zul:`), which is what select-tests.mjs reads to map a CSS change to these tests.
-// Rationale and measurements: tasks/marble-tablet-popup-batch5-report.md.
 // -------------------------------------------------------
 const POPUP_PAD = 12;
 
-// Absolute count of differing pixels tolerated per pop-up shot; measured in tasks/marble-tablet-popup-batch5-report.md.
+// Absolute count of differing pixels tolerated per pop-up shot.
 const POPUP_MAX_DIFF = process.env.POPUP_MAX_DIFF !== undefined ? Number(process.env.POPUP_MAX_DIFF) : 10;
 // Per-pixel colour distance, 0.02 as in the brand and compact projects: 0.05 let an 8% state layer on a 24px close button pass.
 // POPUP_THRESHOLD overrides it for the noise measurement.
@@ -900,7 +899,7 @@ test.describe('tablet-popup', () => {
 
   // ---- colorbox: palette and picker ----
   // The popup slides in with `transition: transform 300ms` from top = viewport height, so a read taken right after
-  // an openPopup() API call finds it below the viewport (y 1112): that is why the NS22 measurement saw no visible
+  // an openPopup() API call finds it below the viewport (y 1112): that is why an earlier measurement saw no visible
   // z-colorbox-popup. A tap and settledBox() find it at rest.
   test('colorbox.zul: tap to open the palette', async ({ page }) => {
     await openTabletPage(page, '/colorbox.zul');

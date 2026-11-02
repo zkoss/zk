@@ -52,7 +52,7 @@ test.describe('Component Theme Variables (borrowed preview pages)', () => {
   });
 });
 
-// ── Batch 1 (S2): one default instance per component, assertions on the element or a plain child.
+// ── Batch 1: one default instance per component, assertions on the element or a plain child.
 // Each test: read stock values, inject the region's knobs at :root after the theme bundle, read again.
 const SCOPED_PURPLE = PURPLE;
 const borderBottomColorOf = (loc: Locator) => loc.evaluate((el) => getComputedStyle(el).borderBottomColor);
@@ -425,7 +425,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
 
 });
 
-// ── Batch 2 (S2): floating widgets opened from their own preview page's buttons, and selectbox.
+// ── Batch 2: floating widgets opened from their own preview page's buttons, and selectbox.
 // Floating widgets are reparented to the page root, so :root is the only override path.
 test.describe('Component Theme Variables (borrowed preview pages, batch 2)', () => {
   const open = async (page: import('@playwright/test').Page, url: string, button: string) => {
@@ -582,7 +582,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 2)', () 
   });
 });
 
-// ── Batch 3 (S2): components with state or several parts. A state that the component's own preview
+// ── Batch 3: components with state or several parts. A state that the component's own preview
 // page does not render is created by a real interaction or the client widget API (see the comments).
 const STOCK_RADIUS = '4px';
 const STEPBAR_ACCENT_FG = 'rgb(26, 26, 26)'; // #1a1a1a override (default --zk-stepbar-accent-fg is white)

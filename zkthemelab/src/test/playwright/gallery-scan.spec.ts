@@ -42,7 +42,7 @@ const SKIP = new Set([
   'icons-lucide'
 ]);
 
-// Absolute per-section pixel budget, set from measured noise (tasks/marble-sectioned-gallery-pilot.md).
+// Absolute per-section pixel budget, set from measured noise.
 const SECTION_MAX_DIFF_PIXELS = 20;
 
 // Sections that cannot be shot statically. The page says so itself for the carousel autoplay demo
@@ -50,7 +50,7 @@ const SECTION_MAX_DIFF_PIXELS = 20;
 // The sizedByContent demos of the header pages end up in one of two states decided when the page
 // loads, whatever happens afterwards (listbox-header measured 2026-10-18: 3 of 12 loads render
 // "Super Long Product Name Here" cut by an ellipsis in a 225px cell, 9 of 12 render it whole in
-// 228px; grid-header and tree-header show the same split). See tasks/marble-sectioned-gallery-pilot.md.
+// 228px; grid-header and tree-header show the same split).
 const SIZED_BY_CONTENT = /sizedByContent/i;
 const UNSTABLE_SECTIONS: Record<string, RegExp | undefined> = {
   carousel: /^Autoplay/i,
@@ -78,7 +78,7 @@ test.describe('gallery', () => {
       // progressmeter.css), so the shot landed at a variable point and progressmeter-gallery
       // was non-reproducible run to run — three samples differed only along the 4px-tall
       // fill's antialiased leading edge. Zero duration completes any in-flight transition
-      // immediately (chat D68).
+      // immediately.
       await page.addStyleTag({ content: '*{transition-duration:0s !important}' });
       // progressmeter's widget JS also steps the fill's inline width up to the value
       // (84% mid-run, 100% about 1.5s later), which transition-duration cannot stop, so

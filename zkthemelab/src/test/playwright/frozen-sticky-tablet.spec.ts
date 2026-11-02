@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-// Mobile frozen columns (Jess review batch 15, follow-up 14). On a mobile UA ZK adds
+// Mobile frozen columns. On a mobile UA ZK adds
 // `.z-frozen-sticky` plus an inline `left` to frozen cells and relies on
 // `position: sticky`. Without that rule the cells keep `position: relative` and the
 // inline `left` shifts them (Col B's header landed 200px to the right of its column).

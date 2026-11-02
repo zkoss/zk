@@ -4,7 +4,7 @@ import * as path from 'path';
 import { AGGREGATE_PAGES } from './aggregate-pages';
 import { expectVariantSectionShots, VARIANT_PAGES } from './variant-gallery';
 
-// Compact density guard (tasks/marble-test-gaps-round2-plan.md section 10, doc/spec/data-dense-mode.md).
+// Compact density guard (doc/spec/data-dense-mode.md).
 //
 //   1. compact-gallery: sectioned screenshots of the representative pages with <html data-density="compact">.
 //   2. compact-height: on every non-aggregate page, each rendered control of a ladder tier has the height of
@@ -360,7 +360,7 @@ test.describe('compact-height-synthetic', () => {
 // `outerWidth(true)` (:255), which count the toolbar's content box and the children's margins but not the padding and
 // flex gap of `.z-toolbar-content`. In overflow mode the inset therefore sits on the toolbar and the gap is a margin on
 // each item (toolbar.css .z-toolbar-overflowpopup); before that fix the button landed at x 344-374 against a toolbar
-// right edge of 332 in compact (doc/marble-compact-brand-batch3-verification.md F2-a).
+// right edge of 332 in compact.
 test.describe('compact-geometry', () => {
   test('toolbar: overflow button stays inside the toolbar', async ({ page }) => {
     await page.goto('/toolbar.zul', { waitUntil: 'networkidle' });

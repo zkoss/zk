@@ -48,7 +48,7 @@ export default defineConfig({
       name: 'chromium',
       testMatch: /screenshot\.spec\.ts/,
       // Per-pixel YIQ colour distance for toHaveScreenshot, tightened from the 0.2 default.
-      // Jess review batch 2 moved the listbox selected row from rgb(213,230,255) to
+      // The listbox selected row moved from rgb(213,230,255) to
       // rgb(200,213,234): YIQ 0.0625, so 41,628 changed pixels were invisible at 0.2.
       // Colour changes below 0.05 still pass. See doc/spec/screenshot-tolerance.md.
       expect: { toHaveScreenshot: { threshold: 0.05 } },
@@ -67,8 +67,8 @@ export default defineConfig({
       // screenshots in copper. See brand-override.spec.ts.
       name: 'brand',
       testMatch: /brand-override\.spec\.ts/,
-      // A per-pixel colour distance of 0.02 (the 0.2 default let a container tone moved from 0.92 to 0.88 pass,
-      // doc/marble-compact-brand-batch3-report.md, evidence c-ii). The residual scan does not use toHaveScreenshot.
+      // A per-pixel colour distance of 0.02 (the 0.2 default let a container tone moved from 0.92 to 0.88 pass).
+      // The residual scan does not use toHaveScreenshot.
       expect: { toHaveScreenshot: { threshold: 0.02 } },
       use: { ...devices['Desktop Chrome'] },
     },
@@ -113,7 +113,7 @@ export default defineConfig({
       // Interaction guard: an interactive knob must be reachable at its own
       // centre (elementFromPoint), not merely rendered. Catches a sibling
       // overlay swallowing the pointer — invisible to every style-based check.
-      // See hit-target.spec.ts and tasks/multislider-knob-hit-target-analysis.md.
+      // See hit-target.spec.ts.
       name: 'hit-target',
       testMatch: /hit-target\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
@@ -143,7 +143,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // Utilities added from tasks/utility-class-gap-analysis.md, each checked on a ZK widget:
+      // Utilities added (the Bootstrap / Lumo subset), each checked on a ZK widget:
       // computed value plus the intended effect. See utility-additions.spec.ts.
       name: 'utility-additions',
       testMatch: /utility-additions\.spec\.ts/,
@@ -274,7 +274,7 @@ export default defineConfig({
     },
     {
       // Pixel baselines of pop-up layers and API-created elements (dropdowns, menus, toast, messagebox, ...)
-      // that only exist after a user opens them. See popup-gallery.spec.ts and doc/marble-popup-gallery-report.md.
+      // that only exist after a user opens them. See popup-gallery.spec.ts.
       name: 'popup',
       testMatch: /popup-gallery\.spec\.ts/,
       expect: { toHaveScreenshot: { threshold: 0.05 } },
