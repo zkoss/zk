@@ -586,7 +586,7 @@
        open() reparents the widget's DOM node to document.body (zk.makeVParent()),
        so a container override cannot reach it — only the whole-app :root
        override applies (same class of exception as messagebox, different
-       root cause; see the tracker). */
+       root cause). */
     --zk-popup-bg:           var(--zk-color-surface);
     --zk-popup-fg:           var(--zk-color-on-surface);
     --zk-popup-border-color: var(--zk-color-outline-variant);
@@ -723,7 +723,7 @@
        in the compiled zkmax widget bundle), reparenting the ENTIRE .z-drawer
        root to the floating root while visible, so a region override on an
        ancestor of the trigger button cannot reach an open drawer — only the
-       whole-app :root override path is exercised (see the tracker). */
+       whole-app :root override path is exercised. */
     --zk-drawer-bg:             var(--zk-color-surface);
     --zk-drawer-border-color:   var(--zk-color-outline-variant);
     --zk-drawer-elevation:      var(--zk-elevation-3);
@@ -820,7 +820,7 @@
        (content + pointer + close) to the floating root while visible, with
        undoVParent() restoring it on close — so there is no in-place remnant
        to test region scoping against; only the whole-app :root override path
-       is exercised (see the tracker). */
+       is exercised. */
     --zk-coachmark-bg:        var(--zk-color-surface-container-low);
     --zk-coachmark-fg:        var(--zk-color-on-surface);
     --zk-coachmark-radius:    var(--zk-shape-card);
@@ -1118,7 +1118,7 @@
        (see Confirmpopup.ts's override open(), which calls super.open()), the
        identical root cause as --zk-popup-*, its closest sibling — so, like
        messagebox/popup/coachmark, region scoping (CTV-3) is structurally N/A; only
-       the whole-app :root override applies (see the tracker).
+       the whole-app :root override applies.
        --zk-confirmpopup-bg covers BOTH the card's own fill AND the arrow's inner
        ::after layer (all four placements read the same surface token today), the
        same "one knob, several roles" precedent as tab/calendar/coachmark's shared

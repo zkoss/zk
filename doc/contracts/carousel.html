@@ -5,7 +5,7 @@
 <title>Contract Mockup — carousel</title>
 <!--
   Self-contained marble design contract mockup for `carousel` / `carouselitem`.
-  No ZKDoc canonical image exists for this component (new in ZK 10.4.0, no MUI analog
+  No ZKDoc canonical image exists for this component (new in ZK 11.0.0, no MUI analog
   either), so this file IS the visual ground truth per doc/contracts/carousel.md's
   mockup-needed: Y decision.
 
@@ -15,85 +15,19 @@
   author imagery — the whole point of the arrow/indicator/label token choices below is
   that they must stay legible against ANY such photo, not just this placeholder gradient.
 -->
+<!-- Token values come from the real token files under zul/src/main/resources/web/zul/css/tokens/.
+     The carousel knobs (--zk-carousel-*) live in _component-theme.css and _sizing.css.
+     The caption chip and the root frame share --zk-carousel-radius: both are containers under
+     doc/spec/DESIGN.md "Corner Radii" (container/control rule). -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_sizing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
-/* ────────────────────────────────────────────────────────────────────────
-   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
-   ──────────────────────────────────────────────────────────────────────── */
-:root {
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-
-    --zk-color-background: #f7f9fc;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    /* Scrim — the theme's existing translucent-black overlay token, reused
-       three ways below (arrow bg / indicator resting fill / label bg). */
-    --zk-color-scrim: rgba(0, 0, 0, 0.5);
-
-    /* Inverse-surface pair — brand-INDEPENDENT light-on-dark tokens (literal
-       hex, never re-derived from --zk-color-primary). Used as the "light
-       voice" below instead of --zk-color-on-primary, which brand-override.md
-       documents as a token integrators repoint to a DARK value for a
-       light-primary rebrand — see doc/contracts/carousel.md Design Contract,
-       Critical Finding #1. */
-    --zk-color-inverse-surface: #2d3748;
-    --zk-color-inverse-on-surface: #f0f4fa;
-
-    --zk-state-disabled-opacity: 0.38;
-    --zk-state-hover-opacity: 0.08;
-
-    /* Spacing (4dp baseline) */
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-6: 24px;
-    --zk-spacing-8: 32px;
-
-    /* Shape */
-    --zk-shape-card: 6px;
-    --zk-shape-corner-extra-small: 4px;
-    --zk-shape-corner-full: 9999px;
-
-    /* Density ladder (relevant rung only) */
-    --zk-control-height-sm: 32px;
-
-    /* Typography */
-    --zk-typescale-body-medium-size: 13px;
-    --zk-typescale-body-medium-line-height: 20px;
-    --zk-typescale-body-small-size: 12px;
-    --zk-typescale-body-small-weight: 400;
-    --zk-typescale-body-small-line-height: 16px;
-    --zk-typescale-title-medium-size: 16px;
-    --zk-font-weight-regular: 400;
-    --zk-font-weight-medium: 500;
-    --zk-font-weight-semibold: 600;
-
-    /* Motion */
-    --zk-motion-duration-standard: 250ms;
-    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* Focus ring (global convention, not a carousel knob) */
-    --zk-focus-ring: 2px solid var(--zk-color-primary);
-
-    /* ── Component Theme Variables — carousel ── */
-    /* -radius is shared by the root frame AND the caption chip (c1/c27) —
-       both are "containers" under DESIGN.md §5's container/control rule. */
-    --zk-carousel-radius: var(--zk-shape-card);
-    --zk-carousel-arrow-size: var(--zk-control-height-sm);
-    --zk-carousel-arrow-bg: var(--zk-color-scrim);
-    --zk-carousel-arrow-bg-hover: rgba(0, 0, 0, 0.65);
-    --zk-carousel-arrow-fg: var(--zk-color-inverse-on-surface);
-    --zk-carousel-indicator-bg: var(--zk-color-scrim);
-    --zk-carousel-indicator-ring: var(--zk-color-inverse-on-surface);
-    --zk-carousel-indicator-active-bg: var(--zk-color-primary);
-    --zk-carousel-indicator-active-ring: var(--zk-color-on-primary);
-    --zk-carousel-label-bg: var(--zk-color-scrim);
-    --zk-carousel-label-fg: var(--zk-color-inverse-on-surface);
-}
 
 /* ────────────────────────────────────────────────────────────────────────
    Mockup chrome (page layout, NOT part of the component contract).
@@ -107,7 +41,7 @@ body {
     color: var(--zk-color-on-background);
     background: var(--zk-color-background);
 }
-h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .contract-meta {
     color: var(--zk-color-on-surface-variant);
     font-size: 12px;
@@ -117,7 +51,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 .matrix-section { margin-bottom: var(--zk-spacing-8); }
 .matrix-section h2 {
     font-size: var(--zk-typescale-title-medium-size);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     text-transform: uppercase;
     color: var(--zk-color-on-surface-variant);
     border-bottom: 1px solid var(--zk-color-outline-variant);
@@ -132,7 +66,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 }
 .matrix-grid .state-label {
     font-size: 12px;
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface-variant);
     text-transform: uppercase;
 }

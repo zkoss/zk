@@ -7,7 +7,7 @@ contract-approved: false
 zk-version: 10.2.1-jakarta
 
 ## References
-- DESIGN.md sections: §1, §2, §5, §7, §9, §10, §11
+- doc/spec/DESIGN.md sections: "Surface Palette", "Text Colors", "Corner Radii", "Typography", "Motion", "Density", "Border Rules"
 
 ## Expected values
 
@@ -20,16 +20,16 @@ zk-version: 10.2.1-jakarta
 | c5 | `.z-combobox-input:hover` | border-color | rgba(0, 0, 0, 0.87) |
 | c6 | `.z-combobox-input:focus` | border-color | rgb(55, 111, 208) |
 | c7 | `.z-combobox-input:focus` | border-width | 2px |
-| c7a | `.z-combobox:focus-within .z-combobox-input` | content edge (`border-left + padding-left`) | **== rest (±0px)** — `padding-left` compensates the 2px left border (`border-right:none`); text must NOT shift right. Gap 2026-07-14 |
+| c7a | `.z-combobox:focus-within .z-combobox-input` | content edge (`border-left + padding-left`) | **== rest (±0px)** — `padding-left` compensates the 2px left border (`border-right:none`); text must NOT shift right. |
 | c7b | `.z-combobox-input` / `.z-combobox-button` | transition-property | must **NOT** include `border-width` — snaps in step with padding comp so nothing drifts |
 | c8 | `.z-combobox-button` | width | 24–32px (small icon area) |
-| c9 | `.z-combobox-popup` | box-shadow | dropdown shadow (DESIGN.md §6, level 2) |
+| c9 | `.z-combobox-popup` | box-shadow | dropdown shadow (doc/spec/DESIGN.md "Elevation / Shadow", level 2) |
 | c10 | `.z-combobox-popup` | border-radius | 4px |
 | c11 | `.z-comboitem` | padding | 8px ≤ px ≤ 12px vertically |
-| c12 | `.z-comboitem:hover` | background-color | tinted (rgba(0,0,0,~0.04)) |
-| c13 | `.z-comboitem-selected` | background-color | `rgb(201, 213, 234)` (≈ `--zk-color-secondary-container`) — LIST-ROW family, see `reference/selected-state-families.md` |
+| c12 | `.z-comboitem:hover` | background-color | tinted `rgba(0, 0, 0, 0.08)` (`--zk-combobox-item-hover-bg`) |
+| c13 | `.z-comboitem-selected` | background-color | `rgb(201, 213, 234)` (≈ `--zk-color-secondary-container`) — LIST-ROW family, see `marble-theme reference/selected-state-families.md` |
 | c14 | `.z-comboitem-selected` | color | `rgb(21, 30, 45)` (≈ `--zk-color-on-secondary-container`) |
-| c15 | `.z-comboitem-selected` | background-color | MUST NOT be `rgb(178, 223, 219)` (= `--zk-color-secondary-container`) — wrong family |
+| c15 | `.z-comboitem-selected` | background-color | MUST NOT be `--zk-color-primary-container` (≈ `#d6e4ff`) — wrong family; `--zk-combobox-selected-bg` = `--zk-color-secondary-container` |
 | c16 | `.z-comboitem-icon` (item with `iconSclass`) | margin-right | 12px (= `--zk-spacing-3`) — leading icon must be separated from the label; glyph-to-text gap ≥ 8px, NOT 0 |
 | c17 | `.z-comboitem-image:empty` (plain item's backward-compat span) | margin-right | 0px — the always-emitted empty image span must NOT phantom-indent the label (no container `gap`); see skill `components/combobox.md` |
 
@@ -42,7 +42,7 @@ zk-version: 10.2.1-jakarta
 - [ ] invalid
 - [ ] open (popup visible)
 - [ ] item-selected
-- [ ] inplace (border/background collapse when blurred — see `reference/inplace-state.md`)
-- [ ] buttonVisible-false — combobox uses split-border pattern (see `reference/buttonVisible-attribute.md`). Two sub-checks both required:
+- [ ] inplace (border/background collapse when blurred — see `zk-component-rules reference/inplace-state.md`)
+- [ ] buttonVisible-false — combobox uses split-border pattern (see `zk-component-rules reference/buttonVisible-attribute.md`). Two sub-checks both required:
   - (a) `.z-combobox-button.z-combobox-disabled` has `display: none`
   - (b) `.z-combobox-input.z-combobox-input-full` has 4-side border (`border-right` is NOT `none`) and uniform `border-radius` (no flat-right rectangle)

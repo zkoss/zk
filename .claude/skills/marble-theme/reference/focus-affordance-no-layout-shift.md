@@ -4,6 +4,12 @@ An outlined input's focus ring must be visible **without resizing the field**. I
 makes it grow (and blurring shrinks it back), the surrounding layout jitters — a quality bug users
 notice immediately. This page records the two correct mechanisms and the one trap.
 
+The theme-independent mechanism (border-width growth shrinks the content box; composite inputs grow
+through min-height-pinned children; inset box-shadow; `::after` overlay for opaque children; do not
+transition `border-width`) is in the `zk-component-rules` skill, `reference/focus-vs-focus-within.md`,
+section "A focus affordance that changes `border-width` resizes composite inputs". This page keeps
+the Marble parts: which components use which mechanism, the tokens, the measurements and the guard.
+
 ## The trap: increasing `border-width` on focus
 
 The obvious implementation is "1px border at rest, 2px primary border on focus":
@@ -220,3 +226,23 @@ reflow, re-measure. Any non-zero delta is the permanent layout-shift bug. (When 
 `box-shadow`/`border-color`, disable the element's `transition` first — otherwise you read
 mid-animation values, not the focus target.) The Playwright guard for both lives in
 `zkthemelab/src/test/playwright/screenshot.spec.ts › input focus (no layout shift)`.
+
+## Reading a token's real value before you compare it
+
+Two habits silently produce wrong contrast figures in a theme built on relative colours and alpha
+(measured in Chromium).
+
+**Contrast: sample a rendered pixel. Hue: read the `oklch()` serialization.** `getComputedStyle`
+resolves `oklch(from var(--x) …)` to absolute `oklch(L C H)`, not to `rgb()`, so a checker that
+regex-parses `.color` as RGB measures the oklch numbers as if they were channels; it does not throw,
+it reports nonsense. A painted pixel is right for contrast (8-bit sRGB is what the user sees). The
+sRGB round-trip perturbs hue, and the error grows as chroma falls: a mid-chroma blue (chroma 0.066)
+goes 260.56° to 260.25° (0.31° error); a near-neutral slate (chroma 0.015) goes 248.60° to 244.43°
+(4.17° error). Lightness survives (0.5389 / 0.5407 against a declared 0.54). Anything hue-based
+("did the derived container keep the seed's hue?") must read the serialization, or a desaturated
+brand preset raises a false alarm.
+
+**A colour with alpha must be composited over the element's own background, not over white.**
+Tokens like `--zk-color-on-surface: rgba(0, 0, 0, 0.87)` are translucent; compositing over an assumed
+white page understates contrast on a tinted surface. Read the actual backdrop (hit-test it if a
+child paints the fill) and composite over that.

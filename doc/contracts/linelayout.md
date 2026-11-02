@@ -17,8 +17,8 @@ mockup-needed: Y
 mockup-rationale: ZKDoc images exist but the Marble timeline point uses MD3 primary-color filled circle with outline-variant line — the iceblue default is close but the point size, gap, and line color diverge from our token values enough to warrant a mockup as the visual ground truth
 
 ## References
-- MUI CSS: no analog — no MUI Timeline component; see DESIGN.md §3, §5, §6 for novel-component policy
-- DESIGN.md sections: §3 (color roles — primary for point fill), §5 (spacing — cave gap/padding), §6 (shape — point border-radius full circle), §7 (motion — none; no interactive states)
+- MUI CSS: no analog — there is no MUI Timeline component; the token choices follow the `doc/spec/DESIGN.md` sections below
+- `doc/spec/DESIGN.md` sections: "Brand & Status Colors" (primary for point fill), "Spacing Scale (4dp baseline)" (cave gap/padding), "Corner Radii" (point border-radius full circle), "Motion" (none; no interactive states)
 - Iceblue baseline: doc/contracts/baselines/linelayout-iceblue.png
 - ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Linelayout-1.png
 - HTML contract: doc/contracts/linelayout.html
@@ -46,7 +46,7 @@ A vertical-by-default timeline layout presenting items as a column of points con
 |----|----------|----------|----------------------------|--------|
 | ll1 | `.z-linelayout` | height | `100%` | structural — ZK always sets 100% height on root; theme must preserve |
 | ll2 | `.z-linelayout` | width | `100%` | structural — ZK always sets 100% width on root |
-| ll3 | `.z-linelayout` | background | `transparent` | DESIGN.md §3 — layout container adds no surface |
+| ll3 | `.z-linelayout` | background | `transparent` | `doc/spec/DESIGN.md` "Brand & Status Colors" — layout container adds no surface |
 | ll4 | `.z-linelayout-vertical` | display | `flex` | structural |
 | ll5 | `.z-linelayout-vertical` | flex-direction | `row` | structural — three columns side by side |
 | ll6 | `.z-linelayout-horizontal` | display | `flex` | structural |
@@ -74,15 +74,15 @@ A vertical-by-default timeline layout presenting items as a column of points con
 | ll15 | `.z-linelayout-cave` | position | `relative` | structural — line is absolutely positioned inside cave |
 | ll16 | `.z-linelayout-vertical .z-linelayout-cave` | flex-direction | `column` | structural |
 | ll16a | `.z-linelayout-horizontal .z-linelayout-cave` | flex-direction | `row` | structural — point circles lay out side-by-side in horizontal orientation |
-| ll17 | `.z-linelayout-vertical .z-linelayout-cave` | padding | `0 var(--zk-spacing-3)` | DESIGN.md §5 — cave gutter between line and content edges; token: spacing-3 (12px) |
-| ll18 | `.z-linelayout-horizontal .z-linelayout-cave` | padding | `var(--zk-spacing-3) 0` | DESIGN.md §5 |
+| ll17 | `.z-linelayout-vertical .z-linelayout-cave` | padding | `0 var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" — cave gutter between line and content edges; token: spacing-3 (12px) |
+| ll18 | `.z-linelayout-horizontal .z-linelayout-cave` | padding | `var(--zk-spacing-3) 0` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" |
 | ll19 | `.z-linelayout-line` | position | `absolute` | structural — line must be absolutely positioned |
 | ll20 | `.z-linelayout-line` | z-index | `99` | structural — ZK sets this; must not be removed |
-| ll21 | `.z-linelayout-line` | background-color | `var(--zk-color-outline-variant)` | DESIGN.md §3 — subtle neutral stroke |
-| ll22 | `.z-linelayout-vertical .z-linelayout-line` | width | `2px` | DESIGN.md §6 — 2× MD3 divider weight (MD3 divider is 1dp); timeline connector needs more visual weight to read as a structural rail |
+| ll21 | `.z-linelayout-line` | background-color | `var(--zk-color-outline-variant)` | `doc/spec/DESIGN.md` "Brand & Status Colors" — subtle neutral stroke |
+| ll22 | `.z-linelayout-vertical .z-linelayout-line` | width | `2px` | 2× MD3 divider weight (MD3 divider is 1dp); timeline connector needs more visual weight to read as a structural rail |
 | ll23 | `.z-linelayout-vertical .z-linelayout-line` | height | `100%` | structural — spans full cave |
 | ll24 | `.z-linelayout-vertical .z-linelayout-line` | left | `calc(50% - 1px)` | structural — centered in cave |
-| ll25 | `.z-linelayout-horizontal .z-linelayout-line` | height | `2px` | DESIGN.md §6 — 2× MD3 divider weight; same rationale as ll22 (horizontal axis) |
+| ll25 | `.z-linelayout-horizontal .z-linelayout-line` | height | `2px` | 2× MD3 divider weight; same rationale as ll22 (horizontal axis) |
 | ll26 | `.z-linelayout-horizontal .z-linelayout-line` | width | `100%` | structural |
 | ll27 | `.z-linelayout-horizontal .z-linelayout-line` | top | `calc(50% - 1px)` | structural |
 | li1 | `.z-lineitem` | flex | `1 0 0` | structural |
@@ -93,16 +93,16 @@ A vertical-by-default timeline layout presenting items as a column of points con
 | li6 | `.z-lineitem > *` | margin | `auto` | structural — auto margin centers children in the slot |
 | li7 | `.z-lineitem-stretch` | width | `100%` | structural |
 | li8 | `.z-lineitem-stretch` | height | `100%` | structural |
-| pt1 | `.z-lineitem-point` | width | `24px` | DESIGN.md §6 — small-avatar size; matches MD3 icon button size |
-| pt2 | `.z-lineitem-point` | height | `24px` | DESIGN.md §6 |
-| pt3 | `.z-lineitem-point` | border-radius | `var(--zk-shape-corner-full)` | DESIGN.md §6 — full circle |
-| pt4 | `.z-lineitem-point` | background | `var(--zk-color-primary)` | DESIGN.md §3 — primary fill |
-| pt5 | `.z-lineitem-point` | border | `2px solid var(--zk-color-primary)` | DESIGN.md §3 — border matches fill for solid disc look |
+| pt1 | `.z-lineitem-point` | width | `24px` | small-avatar size; matches MD3 icon button size |
+| pt2 | `.z-lineitem-point` | height | `24px` | same as pt1 |
+| pt3 | `.z-lineitem-point` | border-radius | `var(--zk-shape-corner-full)` | `doc/spec/DESIGN.md` "Corner Radii" — full circle |
+| pt4 | `.z-lineitem-point` | background | `var(--zk-color-primary)` | `doc/spec/DESIGN.md` "Brand & Status Colors" — primary fill |
+| pt5 | `.z-lineitem-point` | border | `2px solid var(--zk-color-primary)` | `doc/spec/DESIGN.md` "Brand & Status Colors" — border matches fill for solid disc look |
 | pt6 | `.z-lineitem-point` | overflow | `hidden` | structural — image and icon must clip to circle boundary |
 | pt6a | `.z-lineitem-point` | position | `relative` | structural — required for z-index: 100 (pt7) to establish a stacking context above the line; z-index has no effect on non-positioned elements |
 | pt6b | `.z-lineitem-point` | flex-shrink | `0` | structural — prevents the 24×24px circle from compressing inside a narrow cave |
 | pt7 | `.z-lineitem-point` | z-index | `100` | structural — above the line |
-| pt8 | `.z-lineitem-point` | color | `var(--zk-color-on-primary)` | DESIGN.md §3 — icon color inside primary circle |
+| pt8 | `.z-lineitem-point` | color | `var(--zk-color-on-primary)` | `doc/spec/DESIGN.md` "Brand & Status Colors" — icon color inside primary circle |
 | pt9 | `.z-lineitem-point-hidden` | visibility | `hidden` | structural — point-invisible state preserves space |
 | pt10 | `.z-lineitem-point-inner` | height | `100%` | structural — inner fills the point's bordered interior exactly (24px − 2×2px border = 20px); `inherit` produced a 24px box that overflows the 20px interior and offsets content +2px/+2px from the point centre |
 | pt11 | `.z-lineitem-point-inner` | width | `100%` | structural — same as pt10 (horizontal axis) |
@@ -111,7 +111,7 @@ A vertical-by-default timeline layout presenting items as a column of points con
 | pt13 | `.z-lineitem-point-inner` | display | `flex` | structural — centre icon glyph (`::before`) and image content both axes; replaces text-align/line-height baseline centring which was off by the inherit overflow |
 | pt13a | `.z-lineitem-point-inner` | align-items | `center` | structural — vertical centring of the icon glyph / content |
 | pt13c | `.z-lineitem-point-inner` | justify-content | `center` | structural — horizontal centring of the icon glyph / content |
-| pt13b | `.z-lineitem-point-inner` | font-size | `12px` | DESIGN.md §6 — icon glyph fits within the 20px interior height without overflow |
+| pt13b | `.z-lineitem-point-inner` | font-size | `12px` | icon glyph fits within the 20px interior height without overflow |
 | pt14 | `.z-lineitem-point-image` | display | `inline-flex` | structural |
 | pt15 | `.z-lineitem-point-image` | vertical-align | `baseline` | structural |
 

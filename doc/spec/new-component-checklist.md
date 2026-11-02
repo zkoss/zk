@@ -31,7 +31,7 @@ reference this file and need no per-feature edits.
 | Forced colors (WHCM) | [`forced-colors.md`](forced-colors.md) | `fc-risk:` + `fc-guards:` | Generator (guards in central file) | Evaluator `x-fc-capture` + §3d fc review; `npm run test:forced-colors` when guards touched | — |
 | Tablet / touch | [`tablet-design-overview.md`](tablet-design-overview.md) | `tablet:` | Generator (only if `needs-specific`) | tablet Playwright project (manual run for now) | — |
 | Render smoke | — | — | — | `render-smoke` project | add `/<comp>.zul` to `render-smoke.spec.ts` `PAGES` |
-| css.dsp wiring | [`css-dsp-file-structure.md`](css-dsp-file-structure.md) | — | Generator/theme | `npm run check:css-dsp` (mechanical) | — |
+| css.dsp wiring | [`css-dsp-file-structure.md`](css-dsp-file-structure.md) | — | Generator/theme | `node scripts/check-css-dsp.js --module zul` (mechanical) | — |
 
 ## Contract section template (authored by zk-spec-author, approved by the user)
 
@@ -87,7 +87,7 @@ These ids count toward `failing-set` exactly like `c*`/`M*` rows; all are
 | `x-ctv-region` | Set the same knob inline on a container holding one instance → that instance changes, an instance outside does not; then clean up |
 | `x-ctv-suite` | `npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project=component-theme-variables -g "<component>"` is green; **0 matched tests = FAIL** (CTV-9 test missing; it runs on the component's own preview page) |
 | `x-density` | For each `density-tokens` entry: shrink it by 8px at `documentElement` → the control's rendered height shrinks accordingly (±2px); clean up |
-| `x-fc-capture` | `npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project=forced-colors-gallery -g "<component>"` produces `doc/screenshots/<comp>-forced-colors.png` (>0 bytes); the snapshot joins the §3d review inputs, reviewed against the `fc-risk` list |
+| `x-fc-capture` | `npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project=forced-colors-gallery -g "<component>"` produces `zkthemelab/doc/screenshots/<comp>-forced-colors.png` (>0 bytes); the snapshot joins the §3d review inputs, reviewed against the `fc-risk` list |
 | `x-brand-decl` | Grep `shared-css-file` for color literals (`#hex`, `rgb/rgba/hsl/oklch(` without `var(--zk-`): every hit must be whitelisted in `brand-allowed-literals`; plus every Expected-values row flagged `token-rooted? yes` must be *declared* via its token (computed-value equality is not enough) |
 
 When `ctv: N/A` / `density: N/A` / `fc-risk: none`, the matching probes are `SKIPPED
@@ -108,8 +108,6 @@ The orchestrator (sole writer of status/tracker docs) first confirms:
    locally (produced by `x-fc-capture`; the directory is gitignored, the image is not committed).
 
 ## Known limits / follow-ups (not yet implemented)
-
-Work steps for these items are kept locally under `tasks/` (gitignored, not part of the repository).
 
 - No automated **brand-flip** regression project (override `--zk-color-primary` at
   `:root`, assert key surfaces recolor) — `x-brand-decl` guards the declaration level only.

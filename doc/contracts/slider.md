@@ -15,7 +15,7 @@ mockup-needed: Y
 mockup-rationale: ZKDoc has no canonical knob-mold image that shows Marble token mapping; knob arc colors diverge from ZKDoc iceblue-style defaults and need a visual target for the CSS generator.
 
 ## References
-- DESIGN.md sections: §2 (primary color), §3 (state layers), §9 (inputs), §11 (outlines)
+- `doc/spec/DESIGN.md` sections: "Brand & Status Colors" (primary color), "State-Layer Overlays", "Surface Palette", "Border Rules" (outlines)
 - ZKDoc canonical (default/sphere/scale molds): https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKComRef_Slider.png
 - ZKDoc canonical (knob 360°): https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Knob360.png
 - ZKDoc canonical (knob 270°): https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Knob270.png
@@ -24,9 +24,9 @@ mockup-rationale: ZKDoc has no canonical knob-mold image that shows Marble token
 
 ## Design Contract
 
-Material-styled linear sliders use primary-colored fill (`.z-slider-area`) against an outline-variant track (`.z-slider-center`). The thumb (`.z-slider-button`) is a filled primary circle; on hover and focus-visible, a semi-transparent primary state-layer ring (8px spread, 16% alpha via `color-mix`) expands outward via `box-shadow`; on active/drag the ring expands to 14px spread at the same 16% alpha. Disabled state uses `opacity: var(--zk-state-disabled-opacity)` on the root. The sphere mold (root class `.z-slider-sphere`) applies a radial-gradient on `.z-slider-button` for a 3D sphere effect; ZK confirms `.z-slider-sphere` is added to the root by `domClass_()`. The scale mold (root class `.z-slider-scale`) inherits all the above and adds tick marks via background-image (CSS-DSP restriction means no external image refs; tick styling uses a repeating-linear-gradient data pattern or is deferred). The popup tooltip (`.z-slider-popup`) uses inverse-surface background with inverse-on-surface text, 4px corner, elevation-1 shadow.
+Material-styled linear sliders use primary-colored fill (`.z-slider-area`) against an outline-variant track (`.z-slider-center`). The thumb (`.z-slider-button`) is a filled primary circle; on hover and focus-visible, a semi-transparent primary state-layer ring (8px spread, 16% alpha via `color-mix`) expands outward via `box-shadow`; on active/drag the ring expands to 14px spread at the same 16% alpha. Disabled state uses `opacity: var(--zk-state-disabled-opacity)` on the root. The sphere mold (root class `.z-slider-sphere`) applies a radial-gradient on `.z-slider-button` for a 3D sphere effect; ZK confirms `.z-slider-sphere` is added to the root by `domClass_()`. The scale mold (root class `.z-slider-scale`) inherits all the above; scale-mold ticks are not styled yet in `slider.css` (deferred). The popup tooltip (`.z-slider-popup`) uses inverse-surface background with inverse-on-surface text, 4px corner, elevation-1 shadow.
 
-The knob mold (PE) renders a rotary SVG dial. The **background arc** (`.z-slider-knob-inner path`) uses `stroke: var(--zk-color-outline-variant)` — the inert ring. The **progress arc** (`.z-slider-knob-area path`) uses `stroke: var(--zk-color-primary)`. Both `stroke-width` and arc geometry are JS-controlled via inline SVG attributes and are NOT CSS-themable (T3 boundary for internal geometry). The numeric input overlay (`.z-slider-input`) uses surface-container background, outline border, extra-small corner radius, and primary-colored bold text — **centered**, with the native number-input spin buttons suppressed (`appearance: textfield` + `::-webkit-*-spin-button: none`, matching iceblue; MD3/MUI never show native spinner chrome). No hover state ring exists for the knob (SVG drag-based, not thumb-based).
+The knob mold (PE) renders a rotary SVG dial. The **background arc** (`.z-slider-knob-inner path`) uses `stroke: var(--zk-color-outline-variant)` — the inert ring. The **progress arc** (`.z-slider-knob-area path`) uses `stroke: var(--zk-color-primary)`. Both `stroke-width` and arc geometry are JS-controlled via inline SVG attributes and are NOT CSS-themable (T3 boundary for internal geometry). The numeric input overlay (`.z-slider-input`) looks inline at rest (transparent background and a transparent 1px border that shows only on focus), with extra-small corner radius and primary-colored bold text — **centered**, with the native number-input spin buttons suppressed (`appearance: textfield` + `::-webkit-*-spin-button: none`, matching iceblue; MD3/MUI never show native spinner chrome). No hover state ring exists for the knob (SVG drag-based, not thumb-based).
 
 ## Outcome assertions
 
@@ -46,17 +46,17 @@ visual-goal: simple input — M-rows for track+thumb geometry and knob SVG visib
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-slider-center` | background-color | `var(--zk-color-outline-variant)` | DESIGN.md §11 — track is inert outline |
-| c2 | `.z-slider-area` | background-color | `var(--zk-color-primary)` | DESIGN.md §2 — filled portion uses primary |
-| c3 | `.z-slider-button` | background-color | `var(--zk-color-primary)` | DESIGN.md §2 — thumb uses primary |
+| c1 | `.z-slider-center` | background-color | `var(--zk-color-outline-variant)` | `doc/spec/DESIGN.md` "Border Rules" — track is inert outline |
+| c2 | `.z-slider-area` | background-color | `var(--zk-color-primary)` | `doc/spec/DESIGN.md` "Brand & Status Colors" — filled portion uses primary |
+| c3 | `.z-slider-button` | background-color | `var(--zk-color-primary)` | `doc/spec/DESIGN.md` "Brand & Status Colors" — thumb uses primary |
 | c4 | `.z-slider-button` | border-radius | `50%` | MD3 slider spec — circular thumb |
 | c5 | `.z-slider-button:hover` | box-shadow | `0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)` | MUI Slider.css line 184 — 16% alpha (not MD3 8%) at 8px spread; see Accepted deviations |
 | c6 | `.z-slider-button:focus-visible` | box-shadow | `0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)` | MUI Slider.css line 184 — same ring for hover+focus per MUI; see Accepted deviations |
-| c7 | `.z-slider[disabled]` | opacity | `var(--zk-state-disabled-opacity)` | DESIGN.md §3 — disabled uses opacity |
-| c8 | `.z-slider-popup` | background-color | `var(--zk-color-inverse-surface)` | DESIGN.md §9 — tooltip uses inverse surface |
+| c7 | `.z-slider[disabled]` | opacity | `var(--zk-state-disabled-opacity)` | `doc/spec/DESIGN.md` "State-Layer Overlays" — disabled uses opacity |
+| c8 | `.z-slider-popup` | background-color | `var(--zk-color-inverse-surface)` | `doc/spec/DESIGN.md` "Surface Palette" — tooltip uses inverse surface |
 | c8a | `.z-slider-popup` | color | `var(--zk-color-inverse-on-surface)` | MUI pattern — on-inverse companion for readability |
-| c8b | `.z-slider-popup` | border-radius | `var(--zk-shape-corner-extra-small)` | DESIGN.md §6 — small floating chip uses extra-small corner |
-| c8c | `.z-slider-popup` | box-shadow | `var(--zk-elevation-1)` | DESIGN.md §9 — floating tooltip lifts with elevation-1 |
+| c8b | `.z-slider-popup` | border-radius | `var(--zk-shape-corner-extra-small)` | `doc/spec/DESIGN.md` "Corner Radii" — small floating chip uses extra-small corner |
+| c8c | `.z-slider-popup` | box-shadow | `var(--zk-elevation-1)` | `doc/spec/DESIGN.md` "Elevation / Shadow" — floating tooltip lifts with elevation-1 |
 | c9 | `.z-slider-button:active` | box-shadow | `0 0 0 14px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)` | MUI Slider.css line 193 — Mui-active uses 14px spread at 16%; ZK has no drag class so `:active` is the fallback |
 | c10 | `.z-slider-sphere .z-slider-button` | background | `radial-gradient(circle at 35% 35%, var(--zk-color-primary-container), var(--zk-color-primary) 60%, var(--zk-color-on-primary-container) 100%)` | sphere mold: `.z-slider-sphere` root class confirmed in Slider.ts `domClass_()` lines 315-316 |
 | c10a | `.z-slider-sphere .z-slider-button` | width / height | `20px` (same as default thumb) | iceblue baseline — sphere thumb matches default thumb size; no size override |
@@ -65,10 +65,10 @@ visual-goal: simple input — M-rows for track+thumb geometry and knob SVG visib
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| k1 | `.z-slider-knob-inner` | stroke | `var(--zk-color-outline-variant)` | DESIGN.md §11 — background arc is inert outline |
-| k2 | `.z-slider-knob-area` | stroke | `var(--zk-color-primary)` | DESIGN.md §2 — progress arc uses primary |
-| k3 | `.z-slider-input` | background-color | `var(--zk-color-surface-container)` | DESIGN.md §9 — input field on surface |
-| k4 | `.z-slider-input` | border | `1px solid var(--zk-color-outline)` | DESIGN.md §11 — standard input border |
+| k1 | `.z-slider-knob-inner` | stroke | `var(--zk-color-outline-variant)` | `doc/spec/DESIGN.md` "Border Rules" — background arc is inert outline |
+| k2 | `.z-slider-knob-area` | stroke | `var(--zk-color-primary)` | `doc/spec/DESIGN.md` "Brand & Status Colors" — progress arc uses primary |
+| k3 | `.z-slider-input` | background-color | `transparent` (rest state) | inline look, like the inplace textbox — `slider.css` |
+| k4 | `.z-slider-input` | border | `1px solid transparent` at rest; focus shows the 2px `--zk-input-border-color-focus` ring | the transparent border keeps box and text position identical on focus — `slider.css` |
 | k5 | `.z-slider-input` | color | `var(--zk-color-primary)` | design decision — numeric value echoes primary |
 | k6 | `.z-slider-input` | text-align | `center` | iceblue baseline + approved mockup — value centered in the JS-sized box |
 | k7 | `.z-slider-input` | appearance | `textfield`; AND `::-webkit-outer-spin-button` / `::-webkit-inner-spin-button` have `-webkit-appearance: none; margin: 0` | iceblue suppresses native spinners; MD3/MUI show no native spinner chrome — the JS box is sized from digit count, so reserved spinner space de-centers the value |

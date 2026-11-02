@@ -7,7 +7,7 @@ preview: ${PREVIEW_URL}/popup.zul
 
 ## References
 - MUI CSS: Popover.css
-- DESIGN.md sections: §2, §3, §6, §10
+- `doc/spec/DESIGN.md` sections: "Text Colors", "Brand & Status Colors", "Elevation / Shadow", "Density"
 
 ## DOM key selectors
 ```

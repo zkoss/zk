@@ -7,45 +7,25 @@ Use this as the rulebook when styling a component the MUI reference does not cov
 
 ## 1. Surface Palette
 
-| Role | Color | Token |
-|------|-------|-------|
-| Page background | `#f7f9fc` | `--zk-color-background` / `--zk-color-surface-container-low` |
-| Card / panel surface | `#ffffff` | `--zk-color-surface` |
-| Content area (inner) | `#f7f9fc` | `--zk-color-surface-variant` (same as page bg in practice) |
-| Surface container | `#e8eef7` | `--zk-color-surface-container-high` |
-| Sidebar background | `#233044` | (dark navy, nav item bg; drawer paper is white) |
-| Input background | `#ffffff` | `--zk-color-surface` |
+Color values: `zul/src/main/resources/web/zul/css/tokens/_colors.css`. The rules below give the reason for each choice.
+
+Page background is `--zk-color-background`; cards, panels and inputs sit on `--zk-color-surface`; tonal steps use `--zk-color-surface-container-*`. Navigation uses a tonal surface, not a dark sidebar (see [navigation-surface-rules.md](navigation-surface-rules.md) and §16).
 
 ---
 
 ## 2. Text Colors
 
-| Role | Color | Token |
-|------|-------|-------|
-| Primary text | `rgba(0,0,0,0.87)` | `--zk-color-on-surface` |
-| Secondary / muted | `rgba(0,0,0,0.6)` | `--zk-color-on-surface-variant` |
-| Disabled text | `rgba(0,0,0,0.38)` | `--zk-color-disabled` |
-| Link / branded | `#376fd0` | `--zk-color-primary` |
-| On-brand (text on blue) | `#ffffff` | `--zk-color-on-primary` |
-| On-error | `#ffffff` | `--zk-color-on-error` |
-| Placeholder | `rgba(0,0,0,0.6)` | `--zk-color-on-surface-variant` |
+Primary text is `--zk-color-on-surface`; secondary text and placeholder use `--zk-color-on-surface-variant`; disabled text uses `--zk-color-disabled`. Values: `tokens/_colors.css`.
 
 ---
 
 ## 3. Brand & Status Colors
 
-| Role | Color | Token |
-|------|-------|-------|
-| Brand blue | `#376fd0` | `--zk-color-primary` (seed) |
-| Brand container | `≈#d6e4ff` | `--zk-color-primary-container` (derived from the seed via `oklch(from …)`) |
-| Secondary | `≈#586f95` | `--zk-color-secondary` (derived from the primary seed — primary's hue at 41% chroma, `L 0.54`) |
-| Error | `#d32f2f` | `--zk-color-error` (full role quartet) |
-| Warning | `#bd3f00` | `--zk-color-warning` (full role quartet — one tone for text *and* fill; `#ed6c02` failed 4.5:1 as text) |
-| Success | `#2e7d32` | `--zk-color-success` (full role quartet — container ≈ `#c8e6c9`) |
-| Success (badge accent) | `#4caf50` | `--zk-color-status-success` |
-| Info | `#007fab` | `--zk-color-status-info` |
-| Neutral | `#9e9e9e` | `--zk-color-status-neutral` |
-| On-status (text on a capped status fill) | `#ffffff` | `--zk-color-on-status` — used by `.z-bg-info`; badges carry a dark label instead (`--zk-badge-fg`), because their fills are bright tones |
+Reasons (not in the token file):
+
+- **Warning** is one tone for text *and* fill, because the former `#ed6c02` failed 4.5:1 contrast as text.
+- **On-status** (`--zk-color-on-status`) is the text color on a capped status fill, used by `.z-bg-info`. Badges carry a dark label instead (`--zk-badge-fg`), because their fills are bright tones.
+- **Secondary** and every `*-container` are derived from the primary seed (`oklch(from …)`), not set by hand.
 
 The five semantic **roles** (primary / secondary / success / warning / error) each carry
 the full quartet (`<role>` / `on-<role>` / `<role>-container` / `on-<role>-container`) plus
@@ -54,7 +34,7 @@ color variants. The **status** palette (`status-success/warning/error/info/neutr
 independent, brighter accent set reserved for badges, chips, progressmeter, notification
 and toast. `info`/`neutral` have no brand role and live only in the status palette.
 
-Chips use tinted backgrounds (`rgba(color, 0.1)`). Badges use full-strength color on white.
+Chip and badge specs live in `js/zul/wgt/css/chip.css` and `native-modern-ui-components.md`.
 
 ### Brand-color override
 
@@ -66,7 +46,7 @@ at `:root` re-tints the whole palette: containers, overlays, focus ring,
 selected-row/alert/badge tints. See [brand-override.md](brand-override.md) for the full
 customer contract, the (now solid-fill-only) contrast caveat, and the per-role tones.
 
-**Coachmark is intentionally the lone brand-filled popup.** Its card uses `--zk-color-primary` fill + `on-primary` text, while every other popup-family component (notification, toast, tooltip/popup, bandpopup) is a neutral/tinted/dark surface. This is deliberate, not an inconsistency to "fix": consistency here is **by role, not by sameness**. A coachmark is *proactive guided discovery* — it dims the page with a scrim and must win attention against it (a CTA), so the brand fill is correct (and matches Material's original Feature-Discovery pattern; MD3/MUI dropped the dedicated component, so there is no canonical token answer). Consequence: because the surface is brand-filled, child filled controls (`.z-button`) inherit the global primary fill and vanish — the theme MUST invert them (`.z-coachmark-content .z-button`: white bg + primary text + flipped state-layer/focus-ring).
+**Coachmark card is a neutral surface.** `--zk-coachmark-bg` is `--zk-color-surface-container-low` and the text is `--zk-coachmark-fg` (`on-surface`), like the other popup-family components (`tokens/_component-theme.css:824`). The pointer triangle takes the same `--zk-coachmark-bg`, so card and pointer cannot differ. The page behind it is dimmed by `z-modal-mask`, coloured by `--zk-color-scrim` (`js/zul/wgt/css/misc.css:140-142`).
 
 ---
 
@@ -79,46 +59,30 @@ Tokens: `--zk-spacing-1` through `--zk-spacing-16`.
 
 ## 5. Corner Radii
 
-| Context | Radius | Token |
-|---------|--------|-------|
-| Button, input, menu | `4px` | `--zk-shape-corner-extra-small` |
-| Card, alert, badge, list | `6px` | `--zk-shape-card` (custom) |
-| Chip, search box | `6px` | `--zk-shape-card` (custom) |
-| Dialog | `4px` | `--zk-shape-corner-extra-small` |
-
-Rule: **default to 6px** for any container/card; **4px** for interactive controls (inputs, buttons, dropdowns).
+Rule: **default to 6px** (`--zk-shape-card`) for any container/card; **4px** (`--zk-shape-corner-extra-small`) for interactive controls (inputs, buttons, dropdowns, menus) and dialogs. Token values: `tokens/_shape.css`.
 
 ---
 
 ## 6. Elevation / Shadow
 
-| Level | Shadow | Semantic token |
-|-------|--------|---------------|
+| Level | Use | Semantic token |
+|-------|-----|---------------|
 | 0 | none | `--zk-elevation-0` |
-| 1 — card resting | `rgba(50,50,93,0.024) 0px 2px 5px -1px, rgba(0,0,0,0.05) 0px 1px 3px -1px` | `--zk-elevation-1` |
-| 2 — dropdown / hover | `0 2px 6px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14)` | `--zk-elevation-2` |
-| 3 — dialog / modal | `0 4px 12px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.14)` | `--zk-elevation-3` |
+| 1 — card resting | card | `--zk-elevation-1` |
+| 2 — dropdown / hover | dropdown | `--zk-elevation-dropdown` (= `--zk-elevation-2`) |
+| 3 — dialog / modal | dialog | `--zk-elevation-dialog` (= `--zk-elevation-3`) |
 
-Simplified card shadow alias: `rgba(50,50,93,0.024) 0px 2px 5px -1px, rgba(0,0,0,0.05) 0px 1px 3px -1px` (`--zk-elevation-card`).  
+Two further aliases have their own values: `--zk-elevation-card` (a single light shadow) and `--zk-elevation-resting` (a subtle two-layer shadow, "button + panel" in `_elevation.css:33`). They are not interchangeable with `--zk-elevation-1`.
+
+Shadow values: `tokens/_elevation.css`.  
 Cards have elevation only — no border. Use outlined variant (`1px solid outline-variant`) when resting on a white surface where shadow is invisible.
 
 ---
 
 ## 7. Typography
 
-| Role | Size | Weight | Notes |
-|------|------|--------|-------|
-| Section label (nav) | 11px | 500 | uppercase (`MuiTypography-subtitle2`) |
-| Badge / chip | 11px | 500–600 | |
-| Small helper / caption | 11px | 400 | (`MuiTypography-caption` ≈ 11.2px) |
-| Sub-nav item | 13px | 400 | inactive: `rgba(255,255,255,0.7)`; active: `#fff` |
-| Body / table cell | 13px | 400 | (denser than MD3 body-medium) |
-| Card title / label | 16px | 500 | (`MuiTypography-h6`) |
-| Input / placeholder | 13px | 400 | `--zk-typescale-body-medium-*` |
-| Tab label | 14px | 500 | |
-| Page subtitle | 15px | 400 | (`MuiTypography-subtitle1` ≈ 14.86px) |
-| Page title | 24px | 600 | (`MuiTypography-h3`) |
-| KPI value | 24px | 400 | (`MuiBox` with custom font-size) |
+The size, weight and line-height of each role are in `tokens/_typography.css` (`--zk-typescale-*`) and, for the utility classes, in `utility/_typography.css`. Body and table text is denser than MD3 body-medium (13px, aligned to MUI v7).
+
 
 Font family: **Inter**, then `Inter Fallback` (Arial scaled to Inter's metrics, used only until Inter has loaded; see §7), then the system sans-serif stack. Token: `--zk-typescale-font-family`.  
 Marble targets a denser scale than standard MD3 (aligned to MUI v7) — prefer 13–14px body rather than 16px.
@@ -140,7 +104,7 @@ Rationale:
 - **Metric-matched fallback (`Inter Fallback`)** — ZK measures a widget once at mount and never again when a web font arrives, so a `sizedByContent` column was cut by an ellipsis whenever Inter loaded after ZK's first measurement (a 150 ms font delay is enough). `_fonts.css` defines a fallback face from the installed Arial (`size-adjust` 107.4% and matching line metrics) that sits right after `Inter` in `--zk-typescale-font-family`, so the measured width stays close to the final one. Measured on a one-listbox page: with a 150–1000 ms font delay 8/8 loads were cut without it and 0/8 with it; on a stress set of seven strings, 5 of 7 columns were cut without it and 1 of 7 (narrow glyphs) with it. `<link rel=preload>` (the font was fetched twice: the preload URL carries `;jsessionid`) and an inline data-URI font did not help. Weights 500, 600 and 700 (headers, cells) were not cut either with a 300 ms font delay, so the face is declared for the regular weight only. Where neither Arial nor Liberation Sans is installed the face is skipped and the stack behaves as before; if Inter never loads, text stays in the scaled Arial instead of the native UI font. ZK-4243 records the core position that waiting for web fonts is not ZK's job.
 - **Inter over Roboto** (MD3's canonical face) — Marble's MUI-aligned reference uses Inter; Inter's tall x-height + open apertures also read better at the 13–14px dense-table sizes this theme targets. The fallback stack still degrades gracefully to each OS's native UI font if Inter never loads.
 
-**Deprecated font library-properties — intentionally absent (do not re-add).** ZK's `org.zkoss.zul.theme.fontFamily*` and `org.zkoss.zul.theme.fontSize*` library properties have been **deprecated since ZK 7.0.0** (superseded by LESS, and now by CSS custom properties). Marble sets **zero** library properties of any kind — all typography is driven by the `--zk-typescale-*` tokens in `zul/css/tokens/_typography.css`. Their absence is a deliberate modern-CSS design choice, **not** a gap: do not introduce these properties to "configure" fonts. To change a face or size, edit the token, not a `<library-property>`. (Gap-review finding lane D / P3-1, 2026-06-26.)
+**Deprecated font library-properties — intentionally absent (do not re-add).** ZK's `org.zkoss.zul.theme.fontFamily*` and `org.zkoss.zul.theme.fontSize*` library properties have been **deprecated since ZK 7.0.0** (superseded by LESS, and now by CSS custom properties). Marble sets **zero** library properties of any kind — all typography is driven by the `--zk-typescale-*` tokens in `zul/css/tokens/_typography.css`. Their absence is a deliberate modern-CSS design choice, **not** a gap: do not introduce these properties to "configure" fonts. To change a face or size, edit the token, not a `<library-property>`.
 
 ---
 
@@ -148,25 +112,17 @@ Rationale:
 
 Apply via a `::before` pseudo-element with `background: currentColor` and `opacity`:
 
-| State | Opacity | Token |
-|-------|---------|-------|
-| Hover | `0.08` | `--zk-state-hover-opacity` |
-| Focus | `0.12` | `--zk-state-focus-opacity` |
-| Pressed | `0.12` | `--zk-state-pressed-opacity` |
-| Dragged | `0.16` | `--zk-state-dragged-opacity` |
-| Disabled content | `0.38` | `--zk-state-disabled-opacity` |
-| Disabled container | `0.12` | `--zk-state-disabled-container-opacity` |
+Opacities are the `--zk-state-*-opacity` tokens (hover, focus, pressed, dragged, disabled, disabled-container); values: `tokens/_colors.css`.
 
-For surfaces (rows, list items) prefer a solid color: `background: #f5f5f5` or `rgba(0,0,0,0.04)` on hover.
+For surfaces (rows, list items) prefer a solid color on hover instead of the overlay.
 
 ---
 
 ## 9. Motion
 
-Default interactive transition: `250ms cubic-bezier(0.4, 0, 0.2, 1)` (MUI standard).  
-Tokens:
-- Duration: `--zk-motion-duration-short3` (250ms) for most controls (background-color, box-shadow, border-color).
-- Easing: `--zk-motion-easing-legacy` = `cubic-bezier(0.4, 0, 0.2, 1)`.
+Default interactive transition follows the MUI standard curve. Tokens (values: `tokens/_motion.css`):
+- Duration: `--zk-motion-duration-standard` for most controls (background-color, box-shadow, border-color).
+- Easing: `--zk-motion-easing-standard`; `--zk-motion-easing-legacy` is the same curve.
 
 ### Reduced motion (`prefers-reduced-motion`) — *implemented 2026-06-29*
 
@@ -189,19 +145,9 @@ The theme honors `@media (forced-colors: active)` (Windows High-Contrast Mode; a
 
 ## 10. Density
 
-| Element | Value |
-|---------|-------|
-| Button height | ~35px (6px top/bottom padding) |
-| Input / combobox height | ~39px inner; ~52px including floating label |
-| Table header padding | `16px` (all sides) |
-| Table cell padding | `16px` (all sides) |
-| Nav item padding | `8px 24px` |
-| Card content padding | `16px 16px 24px` |
-| Topbar height | 64px |
-| Page content padding | `48px` (all sides) |
-| Table row height | ~52px rendered |
+Control heights are tokens in `tokens/_sizing.css` (`--zk-button-height`, `--zk-control-height-*`); the compact variants are in [data-dense-mode.md](data-dense-mode.md).
 
-Rule: **table rows are ~52px** (16px padding all sides + 13px text + line-height). Inputs ~39px inner height. Buttons ~35px.
+Rule: **table rows are ~52px** (16px padding all sides + 13px text + line-height); header and cell padding are both 16px on all sides.
 
 ### Input width: datebox / timebox follow the `cols` API
 
@@ -260,15 +206,12 @@ If a future use-case needs auxhead to match the column-header transparency exact
 
 ## 11. Border Rules
 
-| Context | Border |
-|---------|--------|
-| Component default (outline) | `1px solid rgba(0,0,0,0.23)` = `--zk-color-outline` |
-| Dividers / row separators | `1px solid rgba(0,0,0,0.12)` = `--zk-color-outline-variant` ≈ `#e0e0e0` |
-| Very subtle row separator | `1px solid #f5f5f5` |
-| Input focus | `2px solid #376fd0` (`--zk-color-primary`) |
-| Input hover | `1px solid rgba(0,0,0,0.87)` (`--zk-color-on-surface`) |
-| Card border | none (elevation only) |
-| Outlined card | `1px solid outline-variant` + no shadow |
+All borders are 1px, except the input focus ring (2px, `--zk-color-primary`). Colors come from tokens (values: `tokens/_colors.css`):
+
+- Component default border: `--zk-color-outline`.
+- Dividers and row separators: `--zk-color-outline-variant`.
+- Input hover: `--zk-color-on-surface`.
+- Card: no border (elevation only); an outlined card uses `outline-variant` and no shadow.
 
 ### Data-table frame (grid / listbox / tree)
 
@@ -280,7 +223,7 @@ bounded parent, strip the frame: automatically inside panel/groupbox
 opt-in variant sclass **`z-{grid,listbox,tree}-noborder`** (ZK emits no border attribute for
 these, unlike `window`'s `z-window-noborder` — the variant name mirrors that ZK convention).
 Decision ratified 2026-06-11 (outlined chosen over Mira's elevated because the near-white
-`#f7f9fc` page makes the elevation shadow invisible; revisit if the surface palette darkens).
+page makes the elevation shadow invisible; revisit if the surface palette darkens).
 
 ---
 
@@ -289,7 +232,7 @@ Decision ratified 2026-06-11 (outlined chosen over Mira's elevated because the n
 | Context | Size | Color |
 |---------|------|-------|
 | Inline / table / form | 16–18px | `--zk-color-on-surface-variant` |
-| Nav item | 20px | `rgba(255,255,255,0.85)` (on blue) |
+| Nav item | 20px | the nav item text color (see §16) |
 | Display / hero | 24px | `--zk-color-primary` |
 
 Use Lucide icons via the `z-icon-*` CSS mask pattern already established in the theme.
@@ -299,11 +242,7 @@ Use Lucide icons via the `z-icon-*` CSS mask pattern already established in the 
 One family across every header strip that carries window-management controls (user ruling
 2026-06-05 — goldenlayout had invented its own 20px text-glyph controls):
 
-| Host | Button box | Icon size | Icons (Lucide) |
-|------|------------|-----------|----------------|
-| `window` (56px header) | 32×32 | 16px | `x` (close), `expand` (maximize), `compress` → `minimize-2` (restore), `minus` (minimize) |
-| `panel` (48px header) | 28×28 | 14px | same set |
-| `goldenlayout` `.lm_controls` (44px strip) | 28×28 (panel size — nearest header height) | 14px | `expand` (maximize), `x` (close) — the SAME icons panel's `z-icon-expand`/`z-icon-times` resolve to |
+Button box and icon sizes are in `js/zul/wnd/css/window.css` and `panel.css`. The `goldenlayout` `.lm_controls` strip uses the panel size (nearest header height) and the same icons panel's `z-icon-expand`/`z-icon-times` resolve to.
 
 Shared rules: `--zk-shape-corner-full` radius, `--zk-color-on-surface-variant` at rest,
 hover reveals a circular state layer. Hover fill is `--zk-color-surface-container` where the
@@ -412,26 +351,14 @@ borderlayout's former 28→44px hover growth was retired (2026-06-23) so all mem
 keep the 28px long-axis at every state (the caret already has its space at idle via
 `opacity: 0`).
 
-| Property | Canonical value |
-|----------|-----------------|
-| Bar thickness | **8px** (`--zk-spacing-2`) — both axes/orientations |
-| Bar idle background | `--zk-color-surface-container` |
-| Bar hover background | `color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%), var(--zk-color-surface-container))` |
-| Bar drag/active background | same mix with `--zk-state-pressed-opacity` (12%) |
-| Cursor | `col-resize` (vertical bar) / `row-resize` (horizontal bar) |
-| Transition | `background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard)` |
-| Non-resizable (`*-nosplitter`) | cursor `default` AND hover keeps the idle background — no primary tint on a bar that cannot resize (false affordance; Gate-2 finding 2026-06-04). borderlayout is exempt: ZK hides the strip entirely when `splittable="false"` |
+The canonical values (bar thickness, idle/hover/drag backgrounds, cursors, transition, pill size and colors) are in `tokens/_splitter.css`. The rules that go with them:
+
+- The bar is 8px on both axes, filled with `--zk-color-surface-container`; hover and drag tint it with primary through `--zk-state-hover-opacity` / `--zk-state-pressed-opacity`.
+- Cursor is `col-resize` on a vertical bar and `row-resize` on a horizontal bar.
+- Non-resizable (`*-nosplitter`): cursor `default` AND hover keeps the idle background. A primary tint on a bar that cannot resize is a false affordance (Gate-2 finding 2026-06-04). borderlayout is exempt: ZK hides the strip entirely when `splittable="false"`.
 
 **Actuator pill** (the three ZK-mold splitters — `splitter`, `borderlayout`, `splitlayout` —
-all render `<span>-button` + grip/caret/grip icons):
-
-| Property | Canonical value |
-|----------|-----------------|
-| Pill size | cross-axis = bar thickness (8px), long-axis 28px, `--zk-shape-corner-full` |
-| Pill idle | `--zk-color-outline-variant` fill, no border, no elevation |
-| Pill hover/active | `--zk-color-primary` fill, icons `--zk-color-on-primary` |
-| Grip icons | 8px, `--zk-color-on-surface-variant`, always visible (`opacity: 1`) |
-| Collapse caret | hidden at idle (`opacity: 0`), fades in on hover |
+all render `<span>-button` + grip/caret/grip icons): the pill is as thick as the bar and 28px long, fully rounded. Idle it is `--zk-color-outline-variant`, with no border and no elevation; hover/active turns it `--zk-color-primary` with `on-primary` icons. The grip icons are always visible; the collapse caret is hidden at idle and fades in on hover.
 
 Rationale: MD3 has no splitter; the spec composes the MD3 bottom-sheet drag handle
 (slim inline pill) with a surface-tinted divider (originally designed for borderlayout —
@@ -487,18 +414,12 @@ loading rule). CSS in `js/zul/wgt/css/scrollbar.css`, **bundled into `norm.css.d
 `data-embedscrollbar`: **overlay** (`false`, hover-only float, no reserved space) and
 **embedded** (`true`, always-visible rail in a reserved gutter).
 
-| Property | Value | Token |
-|----------|-------|-------|
-| Thumb / rail / embed corner radius | pill | `--zk-shape-corner-full` |
-| Thumb idle background | `outline` @ opacity .6 | `--zk-color-outline` |
-| Thumb hover background | `on-surface-variant` @ opacity .85 | `--zk-color-on-surface-variant` |
-| **Track (rail) background** | **faint surface tint — a visible channel** | `--zk-color-surface-container` |
-| Embed (idle) rail background | `rgba(0,0,0,0.12)` | `--zk-color-outline-variant` |
-| Lane / track / thumb thickness | 12px lane · 8px track · 6px thumb (1px inset in track) | literal |
-| Embed (idle) rail thickness | **8px = the hover *track* width** (not the 6px thumb) — same flush footprint as the track so rest→hover does not shift | literal |
-| Cross-axis anchoring | track/thumb/arrows **edge-anchored** (vertical → `right`, horizontal → `bottom`); lane carries **no margin** → everything centres ~4px from the edge | literal |
-| **Step buttons** (caret up/down/left/right) | **shown** — flat, neutral caret; faint state layer on hover. Along-axis 12px (read by `syncSize()`), cross-axis 8px and edge-anchored | `--zk-color-on-surface-variant` → `--zk-color-on-surface` / `--zk-color-surface-container-high` |
-| Transition | `opacity` + `background-color`, short2 + standard easing | `--zk-motion-duration-short2`, `--zk-motion-easing-standard` |
+The property values (colors, radii, lane/track/thumb thickness, transition) are in `js/zul/wgt/css/scrollbar.css`. The rules and reasons that matter:
+
+- The track (rail) is a faint surface tint, a visible channel.
+- The step buttons (carets) are shown: flat, neutral, with a faint state layer on hover. Along-axis they are 12px, because `syncSize()` reads their offset size; cross-axis they are 8px and edge-anchored.
+- The embed (idle) rail is as thick as the hover *track* (8px, not the 6px thumb), so rest to hover does not shift.
+- Track, thumb and arrows are edge-anchored (vertical to `right`, horizontal to `bottom`); the lane carries no margin.
 
 **Distinct-from-native, but MD3 (user ruling 2026-06-30):** a `nativebar="false"` bar that
 looks identical to native is pointless, so the simulated bar reads as a deliberate themed
@@ -528,7 +449,7 @@ edge; on hover it merely refines into thumb-in-track + arrows, with zero lateral
 
 Navigation selection is its own MD3 family (the item that marks the *current
 location*, not the arrow-key cursor) — see
-`.claude/skills/zk-component-rules/reference/selected-state-families.md`. Marble
+`.claude/skills/marble-theme/reference/selected-state-families.md`. Marble
 follows the MD3 canonical treatment: the active marker is a **rounded tonal
 container**, aligned with MD3 Navigation Drawer / MUI `ListItemButton`.
 

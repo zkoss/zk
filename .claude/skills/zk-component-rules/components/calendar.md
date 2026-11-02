@@ -2,44 +2,46 @@
 
 The date-grid widget — used standalone (`<calendar/>`) or as the popup inside `<datebox/>`.
 
-## `.z-calendar-today` is NOT on day cells
+## `.z-calendar-today` is the today-link row, not a day cell
 
-ZK only adds `.z-calendar-today` to the **header month/year button**, never to the day cells. CSS rules targeting day cells with that class never match anything:
+`.z-calendar-today` appears only when `showTodayLink=true`. It sits on the today-link row, the same `div` that carries `.z-calendar-header` (`mold/calendar.js`). It is never on a day cell, so a rule such as `.z-calendar-cell.z-calendar-today` matches nothing.
 
-```css
-/* This rule has NO EFFECT — the class is never on .z-calendar-cell */
-.z-calendar-cell.z-calendar-today { outline: 2px solid <primary>; }
-```
-
-To highlight "today" among day cells, you must use a different mechanism (typically a custom `sclass` injected by the developer, or no highlight at all). This is a framework-level limitation of the current ZK calendar renderer.
+To highlight "today" among day cells, use a different mechanism (typically a custom `sclass` injected by the developer, or no highlight at all).
 
 ## Cell width arithmetic
 
-The calendar's content area has a max-width of ~268px. With 7 columns (Sun–Sat), each cell should be **268 / 7 ≈ 38.28px** to fit without overflow. Choose 38px, or round to a divisor of 7 if you want pixel-perfect grids.
+The 7 columns (Sun–Sat) share the calendar's content width; size the cells by dividing that width by 7 so the grid fits without overflow. Pick a cell width that is a whole divisor if you want pixel-perfect grids.
 
-## DOM structure (simplified)
+## DOM structure (simplified; `mold/calendar.js`, `Calendar.ts`)
 
 ```
 .z-calendar
-├─ .z-calendar-header           (month/year nav)
-│   └─ button.z-calendar-today  (only place .z-calendar-today appears)
-├─ .z-calendar-weekdays         (Sun Mon ... Sat row)
-└─ .z-calendar-content
-    └─ .z-calendar-row * 6
-        └─ .z-calendar-cell * 7
+├─ .z-focus-a
+├─ .z-calendar-header                   (month/year nav)
+│   ├─ a.z-calendar-left
+│   ├─ a.z-calendar-title
+│   └─ a.z-calendar-right
+├─ table.z-calendar-body                (day view; month/year/decade views add a modifier on this table)
+│   ├─ thead > tr > th.z-calendar-weekday | .z-calendar-weekend   (Sun Mon ... Sat)
+│   └─ tbody > tr * 6                   (tr has no class)
+│       └─ td.z-calendar-cell * 7
+└─ .z-calendar-header.z-calendar-today  (only when showTodayLink=true; contains a.z-calendar-title)
 ```
 
 ## State and variant classes
 
-Cell state classes (on `.z-calendar-cell`):
+Cell state classes (on `td.z-calendar-cell`):
 - `.z-calendar-selected` — the selected date
 - `.z-calendar-weekend` — Saturday/Sunday columns
 - `.z-calendar-weekday` — Mon–Fri columns
-- `.z-calendar-outrange` — date outside the min/max range (disabled)
+- `.z-calendar-disabled` — date outside the min/max range or otherwise not selectable
 - `.z-calendar-outside` — date from the previous/next month (shown to fill row)
-- `.z-calendar-wk` — the week-of-year cell (when `weekOfYear="true"`)
+- `z-cell-range-begin|-end|-mid|-preview-mid|-preview-end` — range highlight classes that a caller such as Daterangebox adds to day cells (`RANGE_HIGHLIGHT_CLASSES` in `Calendar.ts`)
 
-View mode classes (on root, when clicking month/year to navigate):
+Root class:
+- `.z-calendar-wk` — on the **root** when `weekOfYear="true"` (`domClass_`)
+
+View mode classes (on `table.z-calendar-body`, not on the root):
 - `.z-calendar-decade` — decade picker view
 - `.z-calendar-month` — month picker view
 - `.z-calendar-year` — year picker view

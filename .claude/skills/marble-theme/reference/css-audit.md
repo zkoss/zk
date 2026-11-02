@@ -60,25 +60,17 @@ bash .claude/skills/marble-theme/scripts/audit-css.sh --out doc/css-audit-<theme
 bash .claude/skills/marble-theme/scripts/audit-css.sh
 ```
 
-It emits an A–F report skeleton with these checks filled in:
+It emits an A–F report skeleton with five checks filled in; the list is in the header of
+`scripts/audit-css.sh`. Judgement notes the header does not carry:
 
-1. **stylelint (§D)** — duplication / redundancy / dead CSS via the repo's focused
-   `.stylelintrc.json`. Target is **0 errors**; the 3 goldenlayout warnings are a
-   known, accepted intentional split.
-2. **Orphan tokens (§A3)** — every token defined in `--tokens-dir` with **zero**
-   `var()` references anywhere under `--css-root`.
-3. **Hardcoded color candidates (§B1)** — bare hex / `rgb()` / `rgba()` in
-   component CSS, *excluding* values inside a `var(--x, …)` fallback (those are
-   intentional defensive fallbacks, not violations). Comments are stripped first.
-4. **Duplicate literal box-shadow (§B4)** — the same literal shadow string
-   appearing in 2+ files (token references are ignored).
-5. **Default-value redundancy (§G)** — `display` declarations on a bare `.z-<name>`
-   root that merely restate the browser default of the element the widget renders
-   (`.z-span { display: inline }` on a `<span>`). Delegated to
-   `.claude/skills/marble-theme/scripts/check-default-display.js`, which resolves each root tag from the ZK
-   **mold files** (`--zk-source`) and buckets hits into safe no-ops (§G1),
-   verify-first candidates (§G2), skipped replaced/form elements (§G3), and
-   unresolved sub-elements (§G4).
+- Hardcoded colours (§B1) exclude values inside a `var(--x, …)` fallback: those are intentional
+  defensive fallbacks, not violations.
+- Default-value redundancy (§G) is delegated to
+  `.claude/skills/marble-theme/scripts/check-default-display.js`, which resolves each root tag from
+  the ZK **mold files** (`--zk-source`) and buckets hits into safe no-ops (§G1), verify-first
+  candidates (§G2), skipped replaced/form elements (§G3), and unresolved sub-elements (§G4).
+- The stylelint target is **0 errors**; the goldenlayout warnings are a known, accepted intentional
+  split.
 
 The script is **read-only and advisory** — it never edits CSS and always exits 0.
 It does NOT replace the build gate; `npm run lint:css` stays the thing that must

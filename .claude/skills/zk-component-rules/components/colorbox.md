@@ -2,9 +2,9 @@
 
 Color picker widget: shows the currently-selected color as a swatch and opens a popup with a gradient picker and/or palette grid.
 
-## Edition: EE only
+## Edition: PE (zkex.jar)
 
-Lives in `zkex.jar`. Not available in CE. See `reference/edition-availability.md`.
+Registered by `zkex/src/main/resources/metainfo/zk/lang-addon.xml`. Available in PE and EE; not in CE. See `reference/edition-availability.md`.
 
 ## DOM structure (from mold/colorbox.js)
 
@@ -43,21 +43,9 @@ The currently-selected color is **not** a class — it's set inline on the swatc
 
 If the swatch has zero width/height in CSS, the color is invisible. The theme **must** give `.z-colorbox-current` an explicit size (e.g. `flex: 1` if the root is flex, or `width: 100%; height: 100%` if the root is positioned).
 
-## `.z-icon-caret-down` has no global definition in this theme
+## Indicator icon class is fixed by the mold
 
-The mold hard-codes `class="z-colorbox-icon z-icon-caret-down"` on the indicator `<i>`. Our theme's `_icons.css` defines `z-icon-angle-down` (chevron) but does NOT register `z-icon-caret-down`. Consumers that want a visible chevron must locally set the `--_icon` mask, e.g.:
-
-```css
-.z-colorbox-icon {
-    --_icon: url("data:image/svg+xml,…chevron-down…");
-    background-color: currentColor;
-    -webkit-mask-image: var(--_icon);
-    mask-image: var(--_icon);
-    /* … other mask props inherited from [class*=' z-icon-']::before in _icons.css */
-}
-```
-
-Combobox does the same thing (see `js/zul/inp/css/combobox.css`'s "Dropdown arrow icon" block). If multiple components need it, a global alias in `_icons.css` would deduplicate — but the local pattern is also valid.
+The mold hard-codes `class="z-colorbox-icon z-icon-caret-down"` on the indicator `<i>`. A theme that wants a different glyph for the dropdown indicator must restyle `.z-colorbox-icon` itself, because the class list cannot be changed from ZUL.
 
 ## Popup detachment
 
@@ -66,19 +54,9 @@ Combobox does the same thing (see `js/zul/inp/css/combobox.css`'s "Dropdown arro
 - Do **not** put `width: 100%` / `min-width: 100%` / `max-width: 100%` on `.z-colorbox-popup` — those resolve against body.
 - For the colorbox specifically, the popup is wide (~280–320px for palette, ~480–540px for picker because of the 256×256 gradient + hue + RGB inputs). Don't try to constrain.
 
-### Closed popup must be force-hidden (mobile-only bug)
-
-ZK 10.2.1-jakarta's `Colorbox.closePopup()`/`onHide()` only call `undoVParent()` — they do **NOT** reset the inline `display:block` that `openPopup()` set. On desktop `undoVParent`'s style restore hides the re-attached popup; on the **mobile (iPad/Safari) UA it does not**, so after an outside-dismiss or a colour pick the popup stays visible and leaves a small `class="z-colorbox-popup z-palette-button"` artifact. The theme MUST force-hide the re-attached (closed) popup:
-
-```css
-.z-colorbox > .z-colorbox-popup { display: none !important; }
-```
-
-The OPEN popup is detached to `<body>`, so this selector only matches the closed popup; `!important` is required because ZK leaves the inline `display:block`. Do **NOT** extend it to `.z-menu-popup` (the menu mold is a `zul.menu.Menu` with its own working close path). See `reference/floating-popup-in-body.md` → "the close method leaves an inline `display:block`". Guard in the **tablet** Playwright project (mobile UA + touch) — a desktop test passes and misses it.
-
 ## Picker / palette sub-layout is geometry-locked
 
-The colorpicker uses fixed-size bitmap sprites (`colorpicker_gradient.png`, `colorpicker_hue.png`, `colorpicker_select.gif`, `colorpicker_arrows.gif`) at hard-coded pixel positions (top: 0, left: 0, etc. in `colorbox.less` lines 84–204). A theme **cannot** restyle these layouts without breaking the picker — the drag handles' positions are calculated in JavaScript against these exact coordinates.
+The colorpicker uses fixed-size bitmap sprites (`colorpicker_gradient.png`, `colorpicker_hue.png`, `colorpicker_select.gif`, `colorpicker_arrows.gif`) at hard-coded pixel positions (top: 0, left: 0, etc. in the stock IceBlue colorbox theme). A theme **cannot** restyle these layouts without breaking the picker — the drag handles' positions are calculated in JavaScript against these exact coordinates.
 
 The theme's freedom is limited to:
 - Outer popup chrome: border, border-radius, padding, shadow, background
@@ -86,7 +64,7 @@ The theme's freedom is limited to:
 - Input fields inside picker (`.z-colorpicker-input`) — can use theme typography + colors
 - Palette cell hover / selected outline
 
-Everything else (gradient size, hue bar size, RGB input layout) must be preserved at the original Sapphire/Breeze geometry. Reference: `$ZKCML_SOURCE/zkex/src/main/resources/web/js/zkex/inp/css/colorbox.css` (the Marble CSS that replaced the former `colorbox.less`; the original geometry is preserved there). `$ZKCML_SOURCE` is the root of the zkcml EE checkout, normally `../zkcml`.
+Everything else (gradient size, hue bar size, RGB input layout) must be preserved at the original Sapphire/Breeze geometry.
 
 ## Tab icons sit on top of palette/picker — must be raised
 

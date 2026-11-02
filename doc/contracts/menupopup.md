@@ -19,7 +19,7 @@ Same as menubar.
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-menupopup` | box-shadow | level-2 dropdown (DESIGN.md §6) |
+| c1 | `.z-menupopup` | box-shadow | level-2 dropdown (`doc/spec/DESIGN.md` "Elevation / Shadow") |
 | c2 | `.z-menupopup` | border-radius | 4px |
 | c3 | `.z-menupopup` | background-color | rgb(255, 255, 255) |
 | c4 | `.z-menupopup` | padding | 4–8px vertical |

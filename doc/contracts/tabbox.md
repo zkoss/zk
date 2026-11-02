@@ -16,8 +16,8 @@ js-source-hash: b8c3e13387160ac1e1200238b77c3576e1e6090d20554b24085f883b041fdef6
 closest-sibling: none — distinct chrome+payload composition; sibling reuse limited
 
 ## References
-- DESIGN.md sections: §1 (color), §5 (spacing), §7 (state layers), §11 (focus)
-- Iceblue baseline: `doc/contracts/baselines/tabbox-iceblue.png`
+- `doc/spec/DESIGN.md` sections (cited below as `DESIGN.md "<heading>"`): "Surface Palette" (color), "Spacing Scale", "State-Layer Overlays", "Border Rules" (focus)
+- Iceblue baseline: no baseline PNG is stored; switch to the IceBlue theme and take a live screenshot
 - HTML contract: `doc/contracts/tabbox.html`
 
 ## Design Contract
@@ -38,40 +38,40 @@ Icon-only tabs (`iconSclass` set, no `label`) render the icon centred in the tab
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-tab-content` | padding | `var(--zk-spacing-3) var(--zk-spacing-4)` (12px 16px) | DESIGN.md §5 |
-| c2 | `.z-tab-content` | font-size | `var(--zk-typescale-label-large-size)` (14px) | DESIGN.md §1 |
-| c3 | `.z-tab-content` | font-weight | `var(--zk-font-weight-medium)` (500) | DESIGN.md §1 |
-| c4 | `.z-tab` | min-height | 48px | MUI Tabs.css |
-| c5 | `.z-tab.z-tab-selected` | color | `var(--zk-color-primary)` | DESIGN.md §1 |
-| c6 | `.z-tab.z-tab-selected` | border-bottom (top orient) | `2px solid var(--zk-color-primary)` | DESIGN.md §1 |
-| c7 | `.z-tabbox-top > .z-tabs` | border-bottom | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §1 |
-| c8 | `.z-tab:hover` | background-color | `--zk-color-primary` @ `var(--zk-state-hover-opacity)` (state-layer tint) | DESIGN.md §7 |
+| c1 | `.z-tab-content` | padding | `var(--zk-spacing-3) var(--zk-spacing-4)` (12px 16px) | DESIGN.md "Spacing Scale" |
+| c2 | `.z-tab-content` | font-size | `var(--zk-typescale-label-large-size)` (14px) | DESIGN.md "Typography" |
+| c3 | `.z-tab-content` | font-weight | `var(--zk-typescale-label-large-weight)` (500) | DESIGN.md "Typography" |
+| c4 | `.z-tab` | min-height | `var(--zk-tab-height)` (48px; 40px in compact density) | MUI Tabs.css |
+| c5 | `.z-tab.z-tab-selected` | color | `var(--zk-color-primary)` | DESIGN.md "Surface Palette" |
+| c6 | `.z-tab.z-tab-selected` | border-bottom (top orient) | `2px solid var(--zk-color-primary)` | DESIGN.md "Surface Palette" |
+| c7 | `.z-tabbox-top > .z-tabs` | border-bottom | `1px solid var(--zk-color-outline-variant)` | DESIGN.md "Surface Palette" |
+| c8 | `.z-tab:hover` | background-color | `--zk-color-primary` @ `var(--zk-state-hover-opacity)` (state-layer tint) | DESIGN.md "State-Layer Overlays" |
 
 ### Accordion mold — c9–c17
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c9  | `.z-tabbox-accordion` | border | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §1 |
-| c10 | `.z-tabbox-accordion` | border-radius | `0` (see c22k — flat container; do NOT use `--zk-shape-corner-medium` here) | DESIGN.md §1 + skill — Layout invariants |
-| c11 | `.z-tabbox-accordion .z-tab` | min-height | 52px | DESIGN.md §5 |
+| c9  | `.z-tabbox-accordion` | border | `1px solid var(--zk-color-outline-variant)` | DESIGN.md "Surface Palette" |
+| c10 | `.z-tabbox-accordion` | border-radius | `0` (see c22k — flat container; do NOT use `--zk-shape-corner-medium` here) | DESIGN.md "Surface Palette" + skill — Layout invariants |
+| c11 | `.z-tabbox-accordion .z-tab` | min-height | `var(--zk-tab-height)` (48px; 40px in compact density) | `zul/src/main/resources/web/zul/css/tokens/_sizing.css` (`--zk-tab-height`) |
 | c11a | `.z-tabbox-accordion .z-tab-button` | width / height / order / margin-right | `max(24px, min(32px, --zk-tab-height − 16px))` (32px at 48px, 24px at compact 40px) / same / `2` / half the size, negative (−16px / −12px) — a closable accordion header shows the × (replaces the 2026-06-07 `display: none`, retired by owner ruling 2026-10-25). Centre on the chevron keyline (16px from the header edge); the circle stays inside the header so it is not clipped by `.z-tab { overflow: hidden }`, and the header keeps `--zk-tab-height` like a non-closable one. 40px would stick out 4px. Applies only to the accordion's own header (`.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content > .z-tab-button`, same chain for c35 and the selected colour); a tabbox nested in a panel keeps its own rules | owner ruling 2026-10-25, supersedes user ruling 2026-06-07 |
-| c12 | `.z-tabbox-accordion .z-tab` | background-color | `var(--zk-color-surface)` | DESIGN.md §1 |
-| c13 | `.z-tabbox-accordion .z-tab` | color | `var(--zk-color-on-surface)` | DESIGN.md §1 |
-| c14 | `.z-tabbox-accordion .z-tab.z-tab-selected` | background-color | `var(--zk-color-primary-container)` | DESIGN.md §1 |
-| c15 | `.z-tabbox-accordion .z-tab.z-tab-selected` | color | `var(--zk-color-on-primary-container)` | DESIGN.md §1 |
-| c16 | `.z-tabbox-accordion .z-tabpanel-content` | padding | `var(--zk-spacing-4)` (16px) | DESIGN.md §5 |
-| c17 | `.z-tabbox-accordion .z-tabpanel + .z-tabpanel` | border-top | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §1 |
+| c12 | `.z-tabbox-accordion .z-tab` | background-color | `var(--zk-color-surface)` | DESIGN.md "Surface Palette" |
+| c13 | `.z-tabbox-accordion .z-tab` | color | `var(--zk-color-on-surface)` | DESIGN.md "Surface Palette" |
+| c14 | `.z-tabbox-accordion .z-tab.z-tab-selected` | background-color | `var(--zk-color-primary-container)` | DESIGN.md "Surface Palette" |
+| c15 | `.z-tabbox-accordion .z-tab.z-tab-selected` | color | `var(--zk-color-on-primary-container)` | DESIGN.md "Surface Palette" |
+| c16 | `.z-tabbox-accordion .z-tabpanel-content` | padding | `var(--zk-spacing-4)` (16px) | DESIGN.md "Spacing Scale" |
+| c17 | `.z-tabbox-accordion .z-tabpanel + .z-tabpanel` | border-top | `1px solid var(--zk-color-outline-variant)` | DESIGN.md "Surface Palette" |
 
-**Nested isolation (owner ruling 2026-10-25, principle V6 same role same look).** The accordion selectors in c11–c17, c22h, c22i, c35 and c11a are shorthand: in `tabbox.css` each is a child-combinator chain from the accordion root (`.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content …`). A strip tabbox nested in an accordion panel therefore looks and measures exactly like the same tabbox outside it, and an accordion nested in anything equals an un-nested accordion. Do not write accordion rules as descendant selectors.
+**Nested isolation (owner ruling 2026-10-25: the same role looks and measures the same wherever it is nested).** The accordion selectors in c11–c17, c22h, c22i, c35 and c11a are shorthand: in `tabbox.css` each is a child-combinator chain from the accordion root (`.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content …`). A strip tabbox nested in an accordion panel therefore looks and measures exactly like the same tabbox outside it, and an accordion nested in anything equals an un-nested accordion. Do not write accordion rules as descendant selectors.
 
 ### Orientation indicators — c18–c21
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c18 | `.z-tabbox-bottom .z-tab.z-tab-selected` | border-top | `2px solid var(--zk-color-primary)` (indicator on top edge) | DESIGN.md §1 |
-| c19 | `.z-tabbox-left .z-tab.z-tab-selected` | border-right | `2px solid var(--zk-color-primary)` (indicator on right edge) | DESIGN.md §1 |
-| c20 | `.z-tabbox-right .z-tab.z-tab-selected` | border-left | `2px solid var(--zk-color-primary)` (indicator on left edge) | DESIGN.md §1 |
-| c21 | `.z-tabbox-left > .z-tabs`, `.z-tabbox-right > .z-tabs` | border-bottom | `none` (the strip divider is on the inner edge, supplied by c22-row vertical separators) | DESIGN.md §1 |
+| c18 | `.z-tabbox-bottom .z-tab.z-tab-selected` | border-top | `2px solid var(--zk-color-primary)` (indicator on top edge) | DESIGN.md "Surface Palette" |
+| c19 | `.z-tabbox-left .z-tab.z-tab-selected` | border-right | `2px solid var(--zk-color-primary)` (indicator on right edge) | DESIGN.md "Surface Palette" |
+| c20 | `.z-tabbox-right .z-tab.z-tab-selected` | border-left | `2px solid var(--zk-color-primary)` (indicator on left edge) | DESIGN.md "Surface Palette" |
+| c21 | `.z-tabbox-left > .z-tabs`, `.z-tabbox-right > .z-tabs` | border-bottom | `none` (the strip divider is on the inner edge, supplied by c22-row vertical separators) | DESIGN.md "Surface Palette" |
 
 ### Scroll buttons — c22–c30 (re-spec — replaces removed "hide all 4" rule)
 
@@ -93,20 +93,20 @@ The scroll buttons are visible whenever ZK adds `.z-tabbox-scroll` to the root. 
 | c22k | `.z-tabbox-accordion` | border-radius | none (must NOT be set — children are square-cornered and parent rounding leaves visible sharp corners; MD3 expansion-panel groups are flat at the edges; `overflow: hidden` workaround is forbidden because it breaks `jq.slideDown`) | skill — Layout invariants |
 | c23 | `.z-tabbox-scroll > .z-tabbox-up-scroll`, `.z-tabbox-scroll > .z-tabbox-down-scroll` | display | `flex` (centred glyph) | this contract |
 | c24 | `.z-tabbox-left-scroll`, `.z-tabbox-right-scroll` | width | 40px | MUI TabScrollButton.css |
-| c25 | `.z-tabbox-left-scroll`, `.z-tabbox-right-scroll` | min-height | 48px (matches `.z-tab` min-height — c4) | DESIGN.md §5 |
+| c25 | `.z-tabbox-left-scroll`, `.z-tabbox-right-scroll` | min-height | 48px (40px in compact density; matches `.z-tab` min-height — c4) | DESIGN.md "Spacing Scale" |
 | c26 | `.z-tabbox-up-scroll`, `.z-tabbox-down-scroll` | height | 40px | MUI TabScrollButton.css |
-| c27 | `.z-tabbox-left-scroll, .z-tabbox-right-scroll, .z-tabbox-up-scroll, .z-tabbox-down-scroll` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md §1 |
-| c28 | `.z-tabbox-left-scroll, .z-tabbox-right-scroll, .z-tabbox-up-scroll, .z-tabbox-down-scroll` | background | `transparent` | DESIGN.md §1 |
-| c29 | scroll buttons `> i` (chevron glyph) | font-size | `var(--zk-typescale-body-medium-size)` (13px per DESIGN.md §7) | this contract |
-| c30 | scroll buttons `:hover` | background-color | `--zk-color-primary` @ `var(--zk-state-hover-opacity)` (state-layer tint) | DESIGN.md §7 |
+| c27 | `.z-tabbox-left-scroll, .z-tabbox-right-scroll, .z-tabbox-up-scroll, .z-tabbox-down-scroll` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md "Surface Palette" |
+| c28 | `.z-tabbox-left-scroll, .z-tabbox-right-scroll, .z-tabbox-up-scroll, .z-tabbox-down-scroll` | background | `transparent` | DESIGN.md "Surface Palette" |
+| c29 | scroll buttons `> i` (chevron glyph) | font-size | `var(--zk-typescale-body-medium-size)` (13px per DESIGN.md "Typography") | this contract |
+| c30 | scroll buttons `:hover` | background-color | `--zk-color-primary` @ `var(--zk-state-hover-opacity)` (state-layer tint) | DESIGN.md "State-Layer Overlays" |
 
 Visibility rule: when root does NOT carry `.z-tabbox-scroll`, the four directional buttons must be `display: none` regardless of whether the DOM nodes exist.
 
-Endpoint-disabled note: ZK does not emit any "can't scroll further" class (see skill entry). The contract therefore does NOT spec a separate disabled appearance — buttons retain c27/c28 at endpoints. If the user later requests a dimmed-at-endpoint look, that requires either JS instrumentation or a CSS-only `:has()` heuristic; deferred (Q3).
+Endpoint-disabled note: ZK does not emit any "can't scroll further" class (see skill entry). The contract therefore does NOT spec a separate disabled appearance — buttons retain c27/c28 at endpoints. If the user later requests a dimmed-at-endpoint look, that requires either JS instrumentation or a CSS-only `:has()` heuristic; deferred.
 
-### Close button — c31–c35 (added 2026-06-05, failing-first)
+### Close button — c31–c35 (added 2026-06-05)
 
-Executes the deferred tabbox side-flip pass. All rows are expected to FAIL until the same-day CSS iteration lands.
+Executes the deferred tabbox side-flip pass.
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
@@ -149,7 +149,7 @@ Outcome-level predicates gating VERIFIED (first backfilled M-row for this pre-ou
 | left/right — tab strip border | `.z-tabbox-left > .z-tabs`, `.z-tabbox-right > .z-tabs` | c21 |
 | scroll — horizontal visible | `.z-tabbox-scroll.z-tabbox-top` | c22, c22a, c22b, c22c, c24, c25, c27, c28, c29 |
 | scroll — vertical visible | `.z-tabbox-scroll.z-tabbox-left`, `.z-tabbox-scroll.z-tabbox-right` | c23, c22a, c22b, c22d, c26, c27, c28, c29 |
-| scroll — layout regression | scroll-button `offsetTop` must equal 0 (horizontal) / scroll-button must NOT introduce extra flex rows pushing `.z-tabpanels` down | layout-regression sweep (evaluator §1.6) |
+| scroll — layout regression | scroll-button `offsetTop` must equal 0 (horizontal) / scroll-button must NOT introduce extra flex rows pushing `.z-tabpanels` down | layout-regression sweep |
 | scroll — hover | scroll-button `:hover` | c30 |
 | scroll — hidden (no overflow) | tabbox without `.z-tabbox-scroll` | scroll buttons `display: none` |
 

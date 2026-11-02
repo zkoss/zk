@@ -14,11 +14,11 @@ table.z-hbox|.z-vbox                  (outer table — gets the widget class + z
 ```
 
 - Between every pair of children sits a separator (`td`/`tr` `#<childUuid>-chdex2`, class `z-hbox-separator`/`z-vbox-separator`) — rendered even when `spacing="0"` (then `display:none`). Splitter JS navigates siblings with `.prev().prev()` relying on it.
-- A splitter child's chdex gets class `z-splitter-outer` (td in hbox, tr in vbox). **No other chdex class exists** — there is no `.z-hbox-cell` / `.z-vbox-cell` anywhere in ZK; any theme rule on such classes is dead code styling a hallucinated DOM (`_childOuterAttrs` emits only `z-splitter-outer` or `valign` attributes).
+- A splitter child's chdex gets class `z-splitter-outer` (td in hbox, tr in vbox). `z-splitter-outer` is the only chdex class; `_childOuterAttrs` emits only that class or a `valign` attribute, so a chdex cell has no per-child class to style.
 
 ## NEVER change `display` on `.z-hbox` / `.z-vbox`
 
-Stock ZK leaves the elements at native `display: table` (`box.less` only resets `border-spacing`/`td padding`/`background-clip`). Overriding to flex (or anything non-table):
+Stock ZK leaves the elements at native `display: table` (the stock IceBlue theme only resets `border-spacing`/`td padding`/`background-clip`). Overriding to flex (or anything non-table):
 
 1. The `tbody` (`display: table-row-group`) inside a non-table parent gets wrapped in an **anonymous table with auto width/height**, so the mold's inline `width/height: 100%` on td-frame and the `-real` table can no longer resolve → the content squashes to its natural size regardless of the zul `width`/`height` (measured 2026-06-06: `-real` table 68px tall inside a 300px vbox).
 2. Splitter drag dies: `Splitter._doDragEndResize` persists a drag by writing inline px `width`/`height` on the **adjacent `<td>`s**, and `_snap` clamps the drag delta to `run.prev/next.offsetHeight|Width` — squashed rows make the clamp ≈ 0 and leave the written px sizes nothing to redistribute.

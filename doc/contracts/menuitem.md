@@ -24,7 +24,7 @@ Same as menubar.
 |----|----------|----------|----------|
 | c1 | `.z-menuitem-content` | padding | 8px 16px |
 | c2 | `.z-menuitem-content` | font-size | 13–14px |
-| c3 | `.z-menuitem:hover .z-menuitem-content` | background-color | rgba(0, 0, 0, ~0.04) |
+| c3 | `.z-menuitem-content:hover::before` | opacity | `var(--zk-state-hover-opacity)` (0.08); the `::before` layer is on-surface and rests at opacity 0 |
 | c4 | `.z-menuitem-selected .z-menuitem-content` | background-color | secondary-container (list-row family) |
 | c5 | `.z-menuitem-checked .z-menuitem-icon` | visible | yes, primary colour |
 | c6 | `.z-menuitem[disabled]` | opacity | 0.38 |

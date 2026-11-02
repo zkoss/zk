@@ -47,7 +47,7 @@ the property and prefixed `.z-page ` onto every selector. Marble does **not** us
      in **`@scope (.z-page) { … }`**, so it can only match inside the ZK subtree. Neither
      variant declares the layer order; `norm.css.dsp` does (see
      [layer-architecture-review.md](layer-architecture-review.md)).
-3. **Java picks the variant** — [`MarbleThemeProvider.getThemeURIs`](../../zul/src/main/java/org/zkoss/zul/theme/StandardThemeProvider.java)
+3. **Java picks the variant** — [`StandardThemeProvider.getThemeURIs`](../../zul/src/main/java/org/zkoss/zul/theme/StandardThemeProvider.java)
    reads the property with `Boolean.parseBoolean(Library.getProperty(…))` and inserts the
    chosen file **immediately before the `~./zul/css/zk.wcs` widget bundle**, preserving the
    reset's historical "loads first" cascade position. It does so only for the default theme
@@ -87,4 +87,4 @@ behavior of ZK's legacy `.z-page `-prefix approach.
 - the extracted reset still takes effect (body `margin:0`, widgets `border-box`).
 
 Run: `npx playwright test --config zkthemelab/src/test/playwright/playwright.config.ts --project reset`
-(needs `withjdk.sh 17 mvn test exec:java@preview-app`).
+(needs the preview app: `cd zkthemelab && ./gradlew appRun -PhttpPort=8085`).

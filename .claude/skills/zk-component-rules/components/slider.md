@@ -1,30 +1,19 @@
 # slider
 
-A draggable handle on a track. Supports four molds: **default**, **sphere**, **scale** (all CE), and **knob** (PE — rotary SVG dial).
+A draggable handle on a track. Supports four molds: **default**, **sphere**, **scale** (all CE), and **knob** (EE — rotary SVG dial).
 
 ## State support: minimal
 
-Slider does **not** emit `.z-slider-disabled` or `.z-slider-invalid` classes the way input components do. State support:
-
-| State | Mechanism |
-|-------|-----------|
-| disabled | `[disabled]` attribute on root |
-| readonly | not supported |
-| invalid | not supported |
-| inplace | not supported |
-
-When styling disabled slider, the selector is `.z-slider[disabled]`, **not** `.z-slider-disabled`.
-
-In preview matrices, slider gets only a "Default" column. Do not author Disabled/Readonly/Invalid/Inplace columns for slider — they would render identically to Default or break.
+Slider has no `disabled`, `readonly`, `invalid` or `inplace` property (`Slider.java` and `Slider.ts` define none, and `XulElement` does not add one), so it emits no state class or attribute for them. Its only interactive states are the pseudo-classes in "State classes" below. Rangeslider and multislider differ; see "State classes".
 
 ## Molds
 
-Four molds exist. Three are CE; one is PE:
+Four molds exist. Three are CE; one is EE:
 
 - **default** — round flat knob on a linear track (CE)
 - **sphere** — gradient sphere on a linear track (CE, `mold="sphere"`)
 - **scale** — knob with a vertical scale indicator on a linear track (CE, `mold="scale"`, horizontal only)
-- **knob** — rotary SVG dial; completely different DOM (PE per ZKDoc, `mold="knob"`, code ships in zkmax sources)
+- **knob** — rotary SVG dial; completely different DOM (EE, `mold="knob"`, registered by zkmax `lang-addon.xml`)
 
 For the **default** mold: only the orientation class is added (no mold class).
 
@@ -32,7 +21,7 @@ For the **sphere** mold: `domClass_()` adds both the orientation class AND `.z-s
 
 For the **scale** mold (horizontal only): `domClass_()` adds both the orientation class AND `.z-slider-scale` to the root. (Scale is blocked for vertical by a ZK `WrongValueException`.)
 
-Source: `Slider.ts` `domClass_()` lines 314–318:
+Source: `Slider.domClass_` in `Slider.ts`:
 ```
 if (this.inSphereMold())
     sclsHTML += ' ' + this.$s('sphere');
@@ -61,7 +50,7 @@ Note: the DOM structure above comes from `mold/slider.js`. The element IDs use t
 
 The `.z-slider-center` inner element's width (horizontal) or height (vertical) is set by JS via `_fixSize()` inline style. CSS must not constrain this element's dimension in a way that overrides the inline style.
 
-## DOM structure — knob mold (PE)
+## DOM structure — knob mold (EE)
 
 ```
 .z-slider                                   (root <div>; NO orientation class)
@@ -93,7 +82,7 @@ The knob mold uses SVG `<path>` elements with `stroke` (not `fill`) for the arc 
 
 ### Native spin buttons on `.z-slider-input`
 
-The overlay is an `<input type="number">`, so browsers render their native up/down spin buttons inside it unless the theme suppresses them. Because `_getInputProperty()` sizes the input tightly from the root dimensions and digit count, the reserved spinner area pushes the numeric value visibly off-center (Chrome reserves the space even before hover). Stock iceblue suppresses the spinners (`-webkit-appearance`/`-moz-appearance: textfield`) and sets `text-align: center` (`zul/inp/less/slider.less`). Any theme must make this decision explicitly — leaving UA spin buttons inside the digit-count-sized box is almost certainly broken visuals. Robust modern suppression: `appearance: textfield` on the input plus `::-webkit-outer-spin-button, ::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }`.
+The overlay is an `<input type="number">`, so browsers render their native up/down spin buttons inside it unless the theme suppresses them. Because `_getInputProperty()` sizes the input tightly from the root dimensions and digit count, the reserved spinner area pushes the numeric value visibly off-center (Chrome reserves the space even before hover). The theme should suppress the spinners (`-webkit-appearance`/`-moz-appearance: textfield`) and set `text-align: center` (see `zul/src/main/resources/web/js/zul/inp/css/slider.css`). Any theme must make this decision explicitly — leaving UA spin buttons inside the digit-count-sized box is almost certainly broken visuals. Robust modern suppression: `appearance: textfield` on the input plus `::-webkit-outer-spin-button, ::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }`.
 
 ## Orientation
 
@@ -120,7 +109,9 @@ During drag on the default/sphere/scale molds, ZK appends `div#zul_slidetip.z-sl
 
 ## State classes
 
-No ZK-emitted state classes for interactive states. All interactive states (hover, focus, active/dragging) rely on CSS pseudo-classes applied to `.z-slider-button` or `.z-slider[disabled]`.
+Slider has no disabled state. Rangeslider and multislider do: ZK adds `.z-rangeslider-disabled` (`.z-multislider-disabled` for multislider, which extends Rangeslider) on the root through `setDisabled` / `domClass_` in `Rangeslider.ts`; it does not set a `[disabled]` attribute.
+
+No ZK-emitted state classes for interactive states. All interactive states (hover, focus, active/dragging) rely on CSS pseudo-classes applied to `.z-slider-button`.
 
 ## Composition invariants
 
@@ -179,7 +170,7 @@ Drop the negative margin on the JS-driven axis and every thumb lands half-a-thum
 
 ## Multislider: each range has its own `.z-sliderbuttons`
 
-Each range of a multislider renders its own sibling `.z-sliderbuttons` container. When a theme stretches each container across the full rail (Marble does), no z-index separates them, so DOM order decides which one is on top, so the last range's container covers the thumbs of every earlier range at their centres. For N ranges, 2(N−1) of the 2N thumbs cannot be reached by a pointer. A single-range multislider is not affected.
+Each range of a multislider renders its own sibling `.z-sliderbuttons` container. When a theme stretches each container across the full rail, no z-index separates them, so DOM order decides which one is on top, so the last range's container covers the thumbs of every earlier range at their centres. For N ranges, 2(N−1) of the 2N thumbs cannot be reached by a pointer. A single-range multislider is not affected.
 
 A theme that stretches each container over the rail must do one of the following:
 
@@ -193,11 +184,10 @@ A theme that stretches each container over the rail must do one of the following
 ## Edition
 
 - Molds default / sphere / scale: CE
-- Mold **knob**: PE (per ZKDoc `slider.md` edition badge, since 8.6.0; the code ships in zkmax sources `zkmax/slider.ts` — source jar location does NOT determine the licensed edition, the ZKDoc badge does)
+- Mold **knob**: EE — registered by `zkmax/src/main/resources/metainfo/zk/lang-addon.xml` (`<mold-name>knob</mold-name>`) and implemented in `zkmax/slider.ts`. The registering jar decides the edition (see `reference/edition-availability.md`).
 
 ## Notes
 
 - The knob mold extension is loaded as a ZK augment (`zk.augment`) from zkmax, not a separate widget class. The root class remains `.z-slider`.
 - `setMode()` is silently ignored for the knob mold (decimal mode not supported; use `setStep()` instead).
 - `setAngleArc()` / `setStrokeWidth()` / `setScaleInput()` are knob-only properties; they have no effect on the other molds.
-- Preview ZUL at `zkthemelab/src/main/webapp/web/pv/slider-content.zul` labels the knob section as "PE" — correct per ZKDoc (`https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/slider.md` § Knob Mold, edition badge PE). An earlier version of this entry wrongly claimed EE by inferring edition from the zkmax source location.

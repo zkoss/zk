@@ -11,15 +11,9 @@ ZK-EE only (ships in `zkmax.jar`).
 ├─ .z-signature-canvas               (<canvas>, background layer; position: absolute; top: 0; left: 0; width: 100%; height: 100%)
 ├─ .z-signature-canvas               (<canvas>, drawing layer; position: absolute; top: 0; left: 0; width: 100%; height: 100%)
 └─ .z-signature-toolbar              (<div>, action strip; position: absolute; bottom + right set by theme)
-   ├─ .z-signature-tool-button       (<button>, Undo; native HTML button — not a ZK toolbarbutton)
-   │  ├─ .z-signature-tool-button-undo .z-signature-tool-button-icon   (<i>, icon glyph)
-   │  └─ .z-signature-tool-button-label                                  (<label>, text label)
-   ├─ .z-signature-tool-button       (<button>, Save)
-   │  ├─ .z-signature-tool-button-save .z-signature-tool-button-icon   (<i>)
-   │  └─ .z-signature-tool-button-label                                  (<label>)
-   └─ .z-signature-tool-button       (<button>, Clear)
-      ├─ .z-signature-tool-button-clear .z-signature-tool-button-icon  (<i>)
-      └─ .z-signature-tool-button-label                                  (<label>)
+   └─ .z-signature-tool-button       (<button> × 3: undo, save, clear; native HTML button — not a ZK toolbarbutton)
+      ├─ .z-signature-tool-button-{undo|save|clear} .z-signature-tool-button-icon   (<i>, icon glyph)
+      └─ .z-signature-tool-button-label                                              (<label>, text label)
 ```
 
 Both `<canvas>` elements share the class `.z-signature-canvas`. The background canvas is drawn first (lower z-index); the drawing canvas sits on top. JS sizes both via `offsetWidth * devicePixelRatio` on every `onSize` event.
@@ -30,7 +24,7 @@ The toolbar visibility is toggled by adding/removing `.z-signature-toolbar-hide`
 
 - `.z-signature-toolbar-hide` — added to `.z-signature-toolbar` when the toolbar is hidden. Two triggers: (a) `toolbarVisible="false"` on the widget; (b) transiently during active pen drawing (`beginStroke` → hidden, `endStroke` → shown). Theme must set this to `display: none`.
 
-No disabled or readonly state class is emitted on the root. When the widget is disabled, the `[disabled]` attribute is present on the root element; themes target it via `.z-signature[disabled]`.
+The root carries no state class or attribute (neither `Signature.java` nor `Signature.ts` defines a `disabled` or `readonly` property).
 
 ## Attribute support
 
@@ -68,12 +62,11 @@ Theme-agnostic geometric/quantitative predicates. Verify by measurement with the
 
 Theme-agnostic predicates that two states must be visually distinguishable. Verify by rendering both states and comparing computed styles on the specified selector; assert that **at least one** of the listed properties differs. The disjunction gives themes design freedom while keeping the state machine readable.
 
-- **`tool-button :hover` vs resting.** On `.z-signature-tool-button:hover` compared to `.z-signature-tool-button` (resting), at least one of: `background-color`, `border-color` (any side), `color` — differs. (iceblue changes all three; Marble may use any subset. Either satisfies.)
+- **`tool-button :hover` vs resting.** On `.z-signature-tool-button:hover` compared to `.z-signature-tool-button` (resting), at least one of: `background-color`, `border-color` (any side), `color` — differs. (Any subset satisfies.)
 - **`tool-button :focus` vs resting.** On `.z-signature-tool-button:focus-visible` compared to `.z-signature-tool-button` (resting), at least one of: `outline` (with non-zero outline-width), `box-shadow`, `border-color`, `background-color` — differs in a way perceivable to a keyboard user (e.g. an outline ring ≥ 2px or an equivalent shadow). (iceblue targets `:focus` broadly; any theme should implement `:focus-visible` for keyboard-only affordance.)
 - **`tool-button :active` vs resting.** On `.z-signature-tool-button:active` compared to `.z-signature-tool-button` (resting), at least one of: `background-color`, `border-color`, `color` — differs. The pressed state must be visually distinct from both resting and hover. (iceblue changes all three on `:active`.)
 - **`toolbar-hide` vs toolbar visible.** When `.z-signature-toolbar-hide` is present on `.z-signature-toolbar`, the toolbar must not be visible or interact-able: computed `display` must equal `none` OR computed `visibility` must equal `hidden` OR computed `opacity` must equal `0` AND `pointer-events` must equal `none`. The simplest and iceblue-mandated form is `display:none`. Themes must not weaken this to a mere opacity reduction that leaves the toolbar in the event-hit path during drawing.
 - **`root :focus-within` vs root resting (active drawing signal).** On `.z-signature:focus-within` compared to `.z-signature` (resting), at least one of: `border-color`, `border-width`, `outline`, `box-shadow` — differs, signalling that the canvas is in active use. (iceblue does not define a `:focus-within` selector — this is a gap in the baseline. Any theme must supply this state to meet modern accessibility expectations; the specific property is theme choice.)
-- **Disabled vs enabled root.** On `.z-signature[disabled]` compared to `.z-signature` (not disabled), at least one of: `opacity` (< 1), `pointer-events` (`none`), `filter` — differs, signalling that the whole widget is inactive. Additionally, the tool buttons inside a disabled root must not respond to hover/focus/active state changes (suppressed via `pointer-events:none` on the root or equivalent). (iceblue does not define a `.z-signature[disabled]` selector — this is a gap in the baseline. Any theme must supply this to avoid misleading users that a disabled widget is interactive.)
 
 ## Sibling decomposition
 
@@ -95,4 +88,4 @@ EE (zkmax). Requires a valid ZK EE license. The widget class is `zkmax.signature
 - `penColor`, `backgroundColor`, and `penSize` are JS-constructor options passed to `SignaturePad`. They cannot be driven by CSS variables without modifying `Signature.ts`. Treat them as `ESCALATED_LIBRARY_CONFIG`.
 - The toolbar hides transiently during pen drawing. This is a JS behavior the theme cannot and should not override. The `.z-signature-toolbar-hide { display: none }` rule must be present so the transition works correctly.
 - `toolbarVisible` setter calls `_toggleToolbar()` which uses jQuery's `toggleClass`. There is no server-side sclass involved.
-- **The tool-button icon `<i>` carries NO glyph by itself.** Its classes are `z-signature-tool-button-{undo,save,clear}` (plus `z-signature-tool-button-icon`) — these are NOT `z-icon-*` classes, so a mask-based theme's generic `[class^="z-icon-"]::before` machinery does not apply and the icon renders blank until the theme supplies it. The default ZK theme draws them via FontAwesome glyphs (`\f112` undo, `\f0c7` save, `\f00d` clear) on `…-{undo,save,clear}:before`. A mask-based theme must instead set `--_icon` (a Lucide SVG data-URI) on each of the three classes and add a `.z-signature-tool-button-icon::before { mask: var(--_icon) … }` rule. Sensible Lucide equivalents: `undo-2`, `save`, `eraser`. For icon-only buttons, also hide `.z-signature-tool-button-label` (`display:none`).
+- **The tool-button icon `<i>` carries NO glyph by itself.** Its classes are `z-signature-tool-button-{undo,save,clear}` (plus `z-signature-tool-button-icon`) — these are NOT `z-icon-*` classes, so a mask-based theme's generic `[class^="z-icon-"]::before` machinery does not apply and the icon renders blank until the theme supplies it. The theme must supply a glyph for each of the three classes `…-{undo,save,clear}`. For icon-only buttons, also hide `.z-signature-tool-button-label` (`display:none`).

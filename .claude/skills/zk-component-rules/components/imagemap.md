@@ -6,14 +6,10 @@
 ## No css-uri → must be globally bundled
 
 `Imagemap` has **no `<css-uri>` in `lang.xml`** (stock ZK styles `.z-imagemap` in the global
-`norm.less`). Marble must load `js/zul/wgt/css/imagemap.css` via the global bundle
-(`normFiles` → `norm.css.dsp`); a 1:1 auto-scanned `imagemap.css.dsp` is **never requested
-by ZK**. See `reference/component-css-must-be-bundled-or-css-uri.md`. (Orphan sweep
-2026-06-30.)
+norm stylesheet). A theme must load `js/zul/wgt/css/imagemap.css` itself; a 1:1 auto-scanned
+`imagemap.css.dsp` is **never requested by ZK**. See
+`reference/component-css-must-be-bundled-or-css-uri.md`.
 
-## What its CSS provides
+## Why `position: relative` matters
 
-- `.z-imagemap` — `display: inline-block`, **`position: relative`** (the positioning context
-  the clickable area overlays depend on — the most important rule lost when orphaned),
-  `max-width: 100%`, `vertical-align: middle`.
-- `.z-imagemap img` — `display: block`, `max-width: 100%`, `height: auto`.
+`.z-imagemap` needs **`position: relative`**: it is the positioning context the clickable area overlays depend on, and the most important rule lost when the file is orphaned. The other rules are in `zul/src/main/resources/web/js/zul/wgt/css/imagemap.css`.

@@ -1,13 +1,13 @@
 # span
 
-`Span` (`<span>`, `zul.box.Span`) — an inline container rendered as `<span class="z-span">`.
+`Span` (`<span>`, `zul.wgt.Span`) — an inline container rendered as `<span class="z-span">`.
 
 ## No css-uri → must be globally bundled
 
-`Span` has **no `<css-uri>` in `lang.xml`** (stock ZK styles `.z-span` in the global
-`norm.less`). Marble must load `js/zul/box/css/span.css` via the global bundle (`normFiles`
-→ `norm.css.dsp`); a 1:1 auto-scanned `span.css.dsp` is **never requested by ZK**. See
-`reference/component-css-must-be-bundled-or-css-uri.md`. (Orphan sweep 2026-06-30.)
+`Span` has **no `<css-uri>` in `lang.xml`**, so a theme must put the span CSS
+(`js/zul/box/css/span.css`) into the global bundle (`norm.css.dsp`); a 1:1 auto-scanned
+`span.css.dsp` is **never requested by ZK**. See
+`reference/component-css-must-be-bundled-or-css-uri.md`.
 
 ## What its CSS provides
 

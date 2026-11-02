@@ -4,7 +4,7 @@ A lightweight inline confirmation popup, anchored to a trigger element with a di
 lighter-weight than a modal `Messagebox`. Extends `Popup` but overrides its own DOM, open/close, and
 class-composition logic almost entirely; it is a floating card with an optional header, an
 icon+message body, and a Cancel/OK footer. Fires `onOK` when confirmed, `onCancel` on any other
-dismissal path (Cancel click, Escape, click-outside, programmatic close). New in ZK 10.4.0.
+dismissal path (Cancel click, Escape, click-outside, programmatic close). New in ZK 11.0.0.
 
 ## DOM structure
 
@@ -12,7 +12,7 @@ dismissal path (Cancel click, Escape, click-outside, programmatic close). New in
 .z-confirmpopup                          (<div> root — extends Popup; absolute-positioned/anchored by the Popup base)
 ├─ .z-confirmpopup-arrow                 (<span> — arrow/pointer; drawn as two stacked CSS triangles via ::before/::after,
 │                                          content: ""; outer layer = border-like edge, inner layer = fill, to hide the seam)
-├─ .z-confirmpopup-header                (<div id="{uuid}-header"> — OPTIONAL: present only when `header` is set/non-empty)
+├─ .z-confirmpopup-header                (<div id="{uuid}-header"> — OPTIONAL: present only when `title` is set/non-empty)
 ├─ .z-confirmpopup-body                  (<div> — unconditional wrapper around icon + message)
 │   ├─ .z-confirmpopup-icon              (<i> — OPTIONAL: present only when `iconSclass` resolves to a non-empty string;
 │   │                                      carries a SECOND literal class equal to the raw `iconSclass` value, e.g.
@@ -27,7 +27,7 @@ Notes:
 - Unlike the generic `popup` (`.z-popup > .z-popup-content`, see `components/popup.md`), confirmpopup has
   **no separate content wrapper** — header/body/footer are direct children of the root. Do not assume the
   `.z-popup-content` pattern applies here.
-- `header`, `icon`, and `message` are each independently optional; a confirmpopup with no header, no icon
+- `title`, `iconSclass`, and `message` are each independently optional; a confirmpopup with no title, no icon
   (empty `iconSclass`) and no message renders only the arrow + empty body + footer. Theme selectors must not
   assume any of the three are always present.
 - Both `<button>` elements are plain native `<button type="button">`, not ZK `Button` widgets — no `.z-button`
@@ -52,11 +52,11 @@ more than one per set):
   while the popup is open, the whole class list on root is rewritten (see Composition invariants) and
   `.z-confirmpopup-open` is re-emitted so a live property change does not silently strip the open-state class.
 
-No disabled/readonly states exist for this component.
+The state classes are `-open` plus the `severity` and `placement` modifiers.
 
 ## Attribute support
 
-- `header` (optional string) → presence/absence of the `.z-confirmpopup-header` div. `null` or empty string
+- `title` (optional string; `getTitle`/`setTitle`) → presence/absence of the `.z-confirmpopup-header` div. `null` or empty string
   clears it (no title row rendered).
 - `message` (optional string) → presence/absence of the `.z-confirmpopup-message` div. `null` or empty string
   clears it.
@@ -88,7 +88,7 @@ No disabled/readonly states exist for this component.
   is elsewhere inside the popup (header or message text), Enter instead activates the `defaultFocus` button.
   This is a full keyboard modal-trap contract — the theme must not defeat it by making non-button descendants
   focusable.
-- `header` / `message` / `iconSclass` changes made while the popup is open are **deferred** — no live DOM patch
+- `title` / `message` / `iconSclass` changes made while the popup is open are **deferred** — no live DOM patch
   occurs; the new markup only appears on the next open (or an explicit rerender). `severity` / `placement`
   changes, by contrast, **do** apply live via an immediate full class-list rewrite on root. Theme CSS must not
   assume all seven settable properties repaint with the same timing.

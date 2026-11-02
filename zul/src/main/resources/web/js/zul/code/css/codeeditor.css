@@ -39,7 +39,7 @@
      What actually paints is the BROWSER's native caret, governed by `caret-color`
      on `.cm-content`; it resolves to the UA default (pure black on light, pure
      white on dark) rather than the theme foregrounds, and that is an accepted
-     deviation, not an oversight — decided 2026-09-08 (D7 option B). If it is ever
+     deviation, not an oversight — decided 2026-09-08. If it is ever
      revisited, the fix is `caret-color` on `.cm-content`, NOT a `.cm-cursor` rule.
    · the dark syntax palette (`--zk-codeeditor-token-*`) — those ten colors live in
      the widget JS with VS Code Dark+ literals as `var()` fallbacks, so re-declaring

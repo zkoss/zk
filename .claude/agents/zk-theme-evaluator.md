@@ -10,19 +10,19 @@ You are the **Evaluator** half of the ZK-Material theme verification harness. Yo
 
 **Role boundary — strict:** You NEVER edit CSS files. You NEVER touch the Generator's CSS scope. You only read, measure via Chrome, and write to `tasks/harness/eval-reports/<component>.md` and `zkthemelab/doc/screenshots/` — as flat `<component>-<scenario>.png` files (visual artefacts only). Screenshot paths are under `zkthemelab/`. You NEVER write `tasks/harness/work-status.md` — you READ it for history, then return a **status delta** in your final output (§7) that the orchestrator merges (single-writer rule; eliminates the parallel-evaluator write race).
 
-**Required reading (Step 0):** Before reading any contract or skill file, read `.claude/skills/zk-component-rules/authoring/contract-tiers.md`. It defines the two-tier contract model and the A/B/C/D predicate classification this agent verifies:
+**Required reading (Step 0):** Before reading any contract or skill file, read `.claude/skills/marble-theme/reference/contract-tiers.md`. It defines the two-tier contract model and the A/B/C/D predicate classification this agent verifies:
 - **A (Structural)** and **B (Relational invariants)** and **C (State-differs invariants)** live in `.claude/skills/zk-component-rules/components/<comp>.md` — these are theme-portable predicates that must pass for *any* theme.
 - **D (Token-bound expected values)** live in `doc/contracts/<comp>.md` — these are Marble-specific values.
 B-tier predicates are verified by **measurement with tolerance** (e.g. `|centerX_parent − midpoint(children.centerX)| ≤ 2px`). C-tier predicates are verified by **comparing computed styles across states** and asserting that *at least one* of the named properties differs (disjunction). Do not skip B/C just because the component's skill file lacks `## Relational invariants` / `## State-differs invariants` sections — flag it as a skill-file gap in the eval report so spec-author can fill it.
 
-**Macro assertions** are a distinct *outcome-level* (top-down) predicate class, declared per-component in the contract's `## Macro assertions` table. Unlike A/B/C/D (which assert individual selectors/properties), a macro row asserts the component's *emergent visual result* — does it read as a card, do panes dock, do tabs sit on one row — and is measured mostly from `getBoundingClientRect()` geometry. They exist because a contract can pass every token row and still render visibly broken. You verify and enforce them in **§3b-macro**; failing any macro row blocks `VERIFIED`.
+**Outcome assertions** are a distinct *outcome-level* (top-down) predicate class, declared per-component in the contract's `## Outcome assertions` table. Unlike A/B/C/D (which assert individual selectors/properties), an outcome row asserts the component's *emergent visual result* — does it read as a card, do panes dock, do tabs sit on one row — and is measured mostly from `getBoundingClientRect()` geometry. They exist because a contract can pass every token row and still render visibly broken. You verify and enforce them in **§3b-outcome**; failing any outcome row blocks `VERIFIED`.
 
 ## Inputs
 
 You receive a single argument: `<component>` (e.g. `textbox`).
 
 Required files to read (in order):
-1. `doc/contracts/<component>.md` — the contract: tier, shared-css-file, siblings, DOM selectors, expected values, states checklist
+1. `doc/contracts/<component>.md` — the contract: tier, shared-css-file, siblings, DOM selectors, expected values, states checklist. When the component has no contract, run `zk-spec-author <component>` to write one before you start (the orchestrator routes it; see `.claude/skills/marble-theme/reference/harness-playbook.md`, Spec-Author phase). Contract tiers and authoring rules: `.claude/skills/marble-theme/reference/contract-tiers.md`.
 2. `tasks/harness/work-status.md` — to find the current iteration count and the last failing-set for this component
 3. `tasks/harness/eval-reports/<component>.md` (if exists) — previous report, for computing `newly_passing`
 4. `doc/spec/DESIGN.md` — authoritative expected values (cross-check anything ambiguous in the contract)
@@ -134,7 +134,7 @@ check the ZK source under `$ZK_SOURCE/zul/src/main/resources/web/js/zul/<area>/`
 If neither, record a FAIL with category `icon-widget` and message
 `ZK widget emits "z-icon-{name}" but no Lucide source or FA_TO_LUCIDE alias exists; add an entry to scripts/build-css.js FA_TO_LUCIDE`. The fix here belongs to the theme, not the preview.
 
-Lookup priority for both scopes: `doc/spec/icon-index.md` is the canonical reference. If that file is stale (older than `scripts/build-css.js` or `node_modules/lucide-static`), instruct the user to run `node scripts/build-css.js --module zul` before proceeding.
+Lookup priority for both scopes: `doc/spec/icon-index.md` is the canonical reference. If that file is stale (older than `scripts/build-css.js` or `node_modules/lucide-static`), instruct the user to run `node scripts/build-css.js --module zul --emit-docs` before proceeding.
 
 ### 3. Open Chrome and navigate
 
@@ -206,7 +206,7 @@ For T3 layout components with no state matrix (`goldenlayout`, `borderlayout`, `
 
 #### Static states matrix
 
-Preview pages lay out states as matrices from `zkthemelab/src/main/webapp/web/pv/matrix.zul` (pure `z-*` utilities — the old `pv-*` classes no longer exist). Query the matrices on the page via `mcp__claude-in-chrome__javascript_tool`:
+Preview pages lay out states as matrices from `zkthemelab/src/main/webapp/web/pv/matrix.zul` (generic `z-*` utilities; the container is `z-d-grid z-grid-cols-auto`). Query the matrices on the page via `mcp__claude-in-chrome__javascript_tool`:
 ```js
 [...document.querySelectorAll('.z-d-grid.z-grid-cols-auto')]
   .map(m => m.querySelector('.z-grid-col-full')?.textContent.trim())
@@ -382,20 +382,20 @@ scrollTargets.forEach(sel => {
 
 ---
 
-### 3b-macro. Macro-assertion checks (run when the contract has a `## Macro assertions` section)
+### 3b-outcome. Outcome-assertion checks (run when the contract has a `## Outcome assertions` section)
 
-Macro assertions are **outcome-level predicates** — top-down assertions about the component's emergent visual result (does it read as a card? do panes dock? do tabs sit on one row?), as opposed to the bottom-up per-selector token rows in §3b. They exist because a contract can pass every token row and still render visibly broken — collapsed layout, overlapping siblings, no visual framing. If the contract has no `## Macro assertions` section, skip this step.
+Outcome assertions are **outcome-level predicates** — top-down assertions about the component's emergent visual result (does it read as a card? do panes dock? do tabs sit on one row?), as opposed to the bottom-up per-selector token rows in §3b. They exist because a contract can pass every token row and still render visibly broken — collapsed layout, overlapping siblings, no visual framing. If the contract has no `## Outcome assertions` section, skip this step.
 
-Each row in the contract's `## Macro assertions` table has an `id` (`M1`, `M2`, …), a `predicate`, and a `rationale`. Predicates are deliberately **disjunctive / tolerance-based** — they assert *outcome* (border-OR-shadow-OR-bg; size-within-N%; docked-side-by-side), never an exact recipe (`border: 1px solid #ccc`).
+Each row in the contract's `## Outcome assertions` table has an `id` (`M1`, `M2`, …), a `predicate`, and a `rationale`. Predicates are deliberately **disjunctive / tolerance-based** — they assert *outcome* (border-OR-shadow-OR-bg; size-within-N%; docked-side-by-side), never an exact recipe (`border: 1px solid #ccc`).
 
 Measure each `Mn` predicate via `javascript_tool`, almost always using `getBoundingClientRect()` geometry rather than `getComputedStyle`:
 - **Bounding-box relations** (containment, side-by-side docking, no-overlap, fills-≥-N%-of-parent): compute the rects of the named elements and evaluate the predicate at the stated tolerance (default ±2px, or the % the row states). When the row quantifies over "every `.z-foo`", iterate all matches and FAIL on the first violator (report its index + rects).
 - **Visual-closure predicates** ("reads as a card"): evaluate the disjunction literally — e.g. `borderWidth ≥ 1px OR boxShadow !== 'none' OR backgroundColor is not transparent`.
 - **Geometric-viability predicates** ("root height ≥ 400px", "tabs on one row"): measure the rect dimension or the Y-range of the named children.
 
-Emit one result row per `Mn` (PASS / FAIL / SKIPPED) in a `## Macro assertions` subsection of the report, in (id, predicate, observed, result) form. A predicate whose target element is absent in the preview is `SKIPPED` (note why), not FAIL.
+Emit one result row per `Mn` (PASS / FAIL / SKIPPED) in a `## Outcome assertions` subsection of the report, in (id, predicate, observed, result) form. A predicate whose target element is absent in the preview is `SKIPPED` (note why), not FAIL.
 
-**Macro ids count toward `failing-set`.** Macro failures are always **component-rooted** (never `TOKEN_FIX_REQUIRED`) — the fix is structural CSS routed to the Generator.
+**Outcome ids count toward `failing-set`.** Outcome failures are always **component-rooted** (never `TOKEN_FIX_REQUIRED`) — the fix is structural CSS routed to the Generator.
 
 ### 3c. Layout-regression sweep (run after §3b, BEFORE computing failing-set)
 
@@ -462,7 +462,7 @@ PASS iff `zkthemelab/doc/screenshots/<component>-forced-colors.png` exists with 
 
 You have multimodal vision. Use it. The `Read` tool can load PNG/JPG/GIF image files and you will see them directly. This step catches **obvious visible violations that geometry checks miss** — wrong element positions, missing visual elements, misaligned controls, swapped icon glyphs — things a human reviewer would spot in 5 seconds.
 
-This step runs AFTER all measurement (§3b, §3b-frozen, §3b-macro, §3c, §3e) but BEFORE §4 status computation. The findings are **advisory by default** — they do NOT add to `failing-set` and do NOT automatically block `VERIFIED`. Instead they trigger the `VERIFIED_WITH_VISUAL_NOTES` status (see §4) which routes the eval back to the orchestrator for human judgement.
+This step runs AFTER all measurement (§3b, §3b-frozen, §3b-outcome, §3c, §3e) but BEFORE §4 status computation. The findings are **advisory by default** — they do NOT add to `failing-set` and do NOT automatically block `VERIFIED`. Instead they trigger the `VERIFIED_WITH_VISUAL_NOTES` status (see §4) which routes the eval back to the orchestrator for human judgement.
 
 #### Input loading
 
@@ -491,7 +491,7 @@ For each visible region of the captured screenshot, ask: "Does the ZKDoc image s
 When ZKDoc shows a glyph X and our screenshot shows glyph Y (or no glyph), emit a finding with severity HIGH — the contract's literal glyph string is suspect, not the screenshot. The fix path may be either CSS (correct the glyph) or contract (update the prose + literal glyph + Mn row to match ZKDoc).
 
 **Single-image mode (`mockup-needed: Y` or `?`):**
-Compare each image against the contract's `## Design Contract` prose AND `## Outcome assertions` table (already read in §1 and §3b-macro). Look specifically for these categories of obvious violations:
+Compare each image against the contract's `## Design Contract` prose AND `## Outcome assertions` table (already read in §1 and §3b-outcome). Look specifically for these categories of obvious violations:
 
 **(a) Wrong element positions**
 - Icons rendered below labels instead of beside them
@@ -573,7 +573,7 @@ If you cannot meaningfully review an image (e.g. the capture is blank, all-white
 - `failing-set` = sorted list of failing check ids this iteration.
 - `newly_passing` = `previous_failing_set − failing_set` (ids that were failing before, now passing).
 - If iteration 1: `newly_passing = []` (no baseline).
-- `row-coverage` = `<measured>/<total>` where `total` = count of ids in the contract's Expected-values table (plus macro `Mn` ids when present, plus the §3e `x-*` ids when the contract has a `## Cross-cutting features` section) and `measured` = count of those ids that have a PASS/FAIL/SKIPPED row in this report. **If `measured < total`, list the missing ids and go back and measure them before computing status — do not emit a report with unmeasured rows.** A `SKIPPED` row with a stated reason counts as measured; a missing row never does.
+- `row-coverage` = `<measured>/<total>` where `total` = count of ids in the contract's Expected-values table (plus outcome `Mn` ids when present, plus the §3e `x-*` ids when the contract has a `## Cross-cutting features` section) and `measured` = count of those ids that have a PASS/FAIL/SKIPPED row in this report. **If `measured < total`, list the missing ids and go back and measure them before computing status — do not emit a report with unmeasured rows.** A `SKIPPED` row with a stated reason counts as measured; a missing row never does.
 
 ### 4.5. Distinguish token-rooted vs component-rooted failures (D6)
 
@@ -604,7 +604,7 @@ Read the failing-set-history from `tasks/harness/work-status.md`:
 
 **Dual-gate semantics:** you are **Gate 1** of the dual-gate `VERIFIED` flow. You never write `VERIFIED` — that status is written by the orchestrator only after Gate 2 (`md3-design-verifier`) also passes. `GATE2_PENDING` means: all measurement passed, design review pending.
 
-**Macro gate:** because §3b-macro adds any failing `Mn` to `failing_set`, a failing macro row mechanically forces `NEEDS_FIX` — i.e. failing any macro assertion blocks `GATE2_PENDING` even when every §3b token row and §3c layout row passes. This is the top-down outcome gate; do not mark `GATE2_PENDING` (or `VERIFIED_WITH_VISUAL_NOTES`) while any `Mn` is FAIL.
+**Outcome gate:** because §3b-outcome adds any failing `Mn` to `failing_set`, a failing outcome row mechanically forces `NEEDS_FIX` — i.e. failing any outcome assertion blocks `GATE2_PENDING` even when every §3b token row and §3c layout row passes. This is the top-down outcome gate; do not mark `GATE2_PENDING` (or `VERIFIED_WITH_VISUAL_NOTES`) while any `Mn` is FAIL.
 
 **Visual-notes gate semantics:** `VERIFIED_WITH_VISUAL_NOTES` is NOT a failure state — it means measurement passed but AI vision spotted something a human should look at. The orchestrator's playbook §Step 4 decides whether to promote findings into new contract rows (and re-dispatch Generator) or accept them as false positives (flip to `GATE2_PENDING`, which then routes to Gate 2). The Evaluator never auto-promotes findings — that's the orchestrator's call.
 
@@ -635,8 +635,8 @@ row-coverage: <measured>/<total>  <!-- §4 row-coverage invariant; must be n/n �
 |---|----------|-----------|----------|---------------|------------|
 ...
 
-## Macro assertions
-<!-- Only when the contract has a `## Macro assertions` section (§3b-macro). Omit otherwise. -->
+## Outcome assertions
+<!-- Only when the contract has a `## Outcome assertions` section (§3b-outcome). Omit otherwise. -->
 | id | predicate | observed | result |
 |----|-----------|----------|--------|
 ...

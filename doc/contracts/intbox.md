@@ -8,7 +8,7 @@ preview: ${PREVIEW_URL}/intbox.zul
 ## References
 - See textbox contract for full check list; intbox shares all base rules
 - MUI CSS: Inputs/OutlinedInput.css
-- DESIGN.md sections: §1, §2, §5, §7, §9, §10, §11
+- `doc/spec/DESIGN.md` sections: "Surface Palette", "Text Colors", "Corner Radii", "Typography", "Motion", "Density", "Border Rules"
 
 ## DOM key selectors
 ```

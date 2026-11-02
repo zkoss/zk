@@ -6,7 +6,7 @@ siblings: [intbox, decimalbox, doublebox, longbox, textarea, passwordbox]
 preview: ${PREVIEW_URL}/textbox.zul
 
 ## References
-- DESIGN.md sections: §1, §2, §5, §7, §9, §10, §11
+- `doc/spec/DESIGN.md` sections: "Surface Palette", "Text Colors", "Corner Radii", "Typography", "Motion", "Density", "Border Rules"
 
 ## Preview anchors (use these — not bare `input.z-textbox`)
 
@@ -53,34 +53,34 @@ textarea.z-textbox                           ← multi-line variant
 `.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox, .z-passwordbox { ... }`.
 **Generator: if a fix changes a grouped selector, decide consciously whether it should apply to all siblings (preferred) or be split into a textbox-only rule.**
 
-## Expected values (DESIGN.md ground truth)
+## Expected values (`doc/spec/DESIGN.md` ground truth)
 
 State selectors below reference the **anchor selectors** above. The check applies to that exact anchor element.
 
 | id | state anchor | property | expected | source | token-rooted? |
 |----|-------------|----------|----------|--------|--------------|
-| c1 | default | min-height | 39–40px | DESIGN.md §10 | no |
-| c2 | default | font-size | 13px | DESIGN.md §7 | **yes** (`--zk-typescale-body-medium-size`) |
-| c3 | default | font-family | starts-with "Inter" | DESIGN.md §7 | yes (`--zk-typescale-font-family`) |
-| c4 | default | background-color | rgb(255, 255, 255) | DESIGN.md §1 | no |
-| c5 | default | color | rgba(0, 0, 0, 0.87) | DESIGN.md §2 | no |
-| c6 | default | border | 1px solid rgba(0, 0, 0, 0.23) | DESIGN.md §11 | no |
-| c7 | default | border-radius | 4px | DESIGN.md §5 | yes (`--zk-shape-input`) |
-| c8 | default | transition-duration | 250ms | DESIGN.md §9 | **yes** (`--zk-motion-duration-short3`) |
-| c9 | default | ::placeholder color | rgba(0, 0, 0, 0.6) | DESIGN.md §2 | no (**hard to measure — see harness gap**) |
-| c10 | default + force :hover via CDP | border-color | rgba(0, 0, 0, 0.87) | DESIGN.md §11 | no |
-| c11 | default + Tab focus | border-color | rgb(55, 111, 208) | DESIGN.md §11 | no |
-| c12 | default + Tab focus | border-width | 2px | DESIGN.md §11 | no |
-| c13 | disabled | opacity | 0.38 | DESIGN.md §8 | no |
-| c14 | readonly | background-color | ≠ rgb(255, 255, 255) (tinted) | DESIGN.md §1 | no |
-| c15 | invalid | border-color | rgb(211, 47, 47) | DESIGN.md §3 | no |
+| c1 | default | min-height | 39–40px | `DESIGN.md` "Density" | no |
+| c2 | default | font-size | 13px | `DESIGN.md` "Typography" | **yes** (`--zk-typescale-body-medium-size`) |
+| c3 | default | font-family | starts-with "Inter" | `DESIGN.md` "Typography" | yes (`--zk-typescale-font-family`) |
+| c4 | default | background-color | rgb(255, 255, 255) | `DESIGN.md` "Surface Palette" | no |
+| c5 | default | color | rgba(0, 0, 0, 0.87) | `DESIGN.md` "Text Colors" | no |
+| c6 | default | border | 1px solid rgba(0, 0, 0, 0.23) | `DESIGN.md` "Border Rules" | no |
+| c7 | default | border-radius | 4px | `DESIGN.md` "Corner Radii" | yes (`--zk-shape-input`) |
+| c8 | default | transition-duration | 250ms | `DESIGN.md` "Motion" | **yes** (`--zk-motion-duration-short3`) |
+| c9 | default | ::placeholder color | rgba(0, 0, 0, 0.6) | `DESIGN.md` "Text Colors" | no (**hard to measure**) |
+| c10 | default + force :hover via CDP | border-color | rgba(0, 0, 0, 0.87) | `DESIGN.md` "Border Rules" | no |
+| c11 | default + Tab focus | border-color | rgb(55, 111, 208) | `DESIGN.md` "Border Rules" | no |
+| c12 | default + Tab focus | border-width | 2px | `DESIGN.md` "Border Rules" | no |
+| c13 | disabled | opacity | 0.38 | `DESIGN.md` "State-Layer Overlays" | no |
+| c14 | readonly | background-color | ≠ rgb(255, 255, 255) (tinted) | `DESIGN.md` "Surface Palette" | no |
+| c15 | invalid | border-color | rgb(211, 47, 47) | `DESIGN.md` "Brand & Status Colors" | no |
 | c16 | textarea | min-height | ≥ 64px | inferred | no |
-| c17 | default + Tab focus | content edge (`border-left + padding-left`) | **== rest (±0px)** — padding compensates the 2px border | reference/focus-affordance-no-layout-shift.md | no |
-| c18 | default | transition-property | must **NOT** include `border-width` (would jitter text mid-animation) | reference/focus-affordance-no-layout-shift.md | no |
+| c17 | default + Tab focus | content edge (`border-left + padding-left`) | **== rest (±0px)** — padding compensates the 2px border | marble-theme reference/focus-affordance-no-layout-shift.md | no |
+| c18 | default | transition-property | must **NOT** include `border-width` (would jitter text mid-animation) | marble-theme reference/focus-affordance-no-layout-shift.md | no |
 
-`token-rooted?` column is hint for the Evaluator to apply D6 logic: read the token's resolved value before deciding whether the failure is token- or component-rooted.
+`token-rooted?` column is a hint for the Evaluator: read the token's resolved value before deciding whether the failure is token- or component-rooted.
 
-**Focus must not shift text** (gap 2026-07-14, second occurrence). c12's 2px border is absorbed by
+**Focus must not shift text** (this regression occurred twice; the second time on 2026-07-14). c12's 2px border is absorbed by
 mechanism-B padding compensation (c17) AND `border-width` must not be transitioned (c18) — animating
 it without co-animating padding drifts the content edge mid-transition. Guarded by
 `screenshot.spec.ts › input focus (no layout shift) › textbox family`.

@@ -11,20 +11,19 @@ Four molds rendered by the same component: default checkbox, switch, toggle, tri
 | toggle | `<checkbox mold="toggle" label="..."/>` | Binary toggle button (looks like a pressed/unpressed button) |
 | tristate | `<checkbox mold="tristate" label="..."/>` | Square box with three states: unchecked / checkmark (checked) / dash (indeterminate) |
 
-The mold adds `.z-checkbox-{mold}` to the root. Default mold gets no mold modifier.
+`Checkbox.ts` `domClass_` always adds `.z-checkbox-{mold}` to the root, so the default mold carries `.z-checkbox-default`.
 
 ## The mold element is always EMPTY
 
 All three molds share one renderer (`zul/wgt/mold/checkbox.js`): it emits
-`<label class="z-checkbox-mold"></label>` with **no content**, and the text label is always a
+`<span id="-mold" class="z-checkbox-mold"></span>` with **no content**, and the text label is always a
 sibling `<label class="z-checkbox-content">` *outside* the mold. Consequences for any theme:
 
-- A "toggle button" visual can never carry its label inside the button (unlike MUI ToggleButton
-  / MD3 toggle button) — the label always sits beside it.
+- A "toggle button" visual can never carry its label inside the button — the label always sits beside it.
 - Any glyph the mold shows (checkmark, switch thumb, toggle icon) must be injected via
   `::before` / `::after` pseudo-elements on `.z-checkbox-mold`.
-- Closest Material analog for `mold="toggle"` is therefore a *toggle icon button* whose icon
-  the theme supplies, not a labeled toggle button.
+- `mold="toggle"` is therefore a *toggle icon button* whose icon the theme supplies, not a
+  labeled toggle button.
 
 ## State classes are **mold-prefixed**
 
@@ -38,7 +37,7 @@ otherwise (`getClassNameByState_()`):
 - `.z-checkbox-toggle-off` ✓ (toggle when unchecked)
 - `.z-checkbox-toggle-on` ✓
 - `.z-checkbox-tristate-off` / `.z-checkbox-tristate-on` / `.z-checkbox-tristate-indeterminate` ✓ (tristate)
-- `.z-checkbox-on` ✗ (does not exist — checked state for default mold lives on the inner `<input>`'s `checked` attribute)
+- `.z-checkbox-on` / `.z-checkbox-off` ✓ (default mold: the prefix is empty, so the state class is `$s('on')` / `$s('off')`)
 
 When writing CSS for switch / toggle / **tristate**, **always include the mold in the state class**.
 
@@ -52,27 +51,17 @@ box — checked and indeterminate become indistinguishable. Style the tristate `
 (checkmark) and `-indeterminate` (dash) classes explicitly, mirroring the default mold.
 (Caught 2026-07-14.)
 
-## Checked state for default mold
+## Checked state is class-based in every mold
 
-The default mold's checked state comes from `:checked` on the inner `<input type="checkbox">`, not from a class:
-
-```css
-.z-checkbox input:checked + .z-checkbox-content::before {
-    /* checkmark styles */
-}
-```
-
-(The exact selector depends on the DOM rendered by the version.)
-
-For switch and toggle, the on/off state IS class-based: `.z-checkbox-switch-on` / `.z-checkbox-switch-off` etc.
+The default mold also carries `.z-checkbox-on` / `.z-checkbox-off` on the root; the mold-prefix rule above is the same for all molds (`.z-checkbox-switch-on`, `.z-checkbox-toggle-off`, and so on).
 
 ## DOM structure (default mold)
 
 ```
-.z-checkbox
-├─ input.z-checkbox-input[type="checkbox"]   (hidden native input)
-├─ .z-checkbox-mold                          (the visual indicator box)
-└─ .z-checkbox-content                       (the label text)
+span.z-checkbox
+├─ input#<uuid>-real[type="checkbox"]        (hidden native input; no class)
+├─ span.z-checkbox-mold                      (the visual indicator box)
+└─ label.z-checkbox-content                  (the label text)
 ```
 
 ## Radio is similar but uses on/off classes
@@ -81,4 +70,6 @@ For switch and toggle, the on/off state IS class-based: `.z-checkbox-switch-on` 
 
 ## Bundle
 
-`checkbox.css.dsp` for checkbox; `radio.css.dsp` for radio.
+`checkbox.css.dsp` (source `checkbox.css`) carries both checkbox and radio rules.
+
+`<radio>` and `<radiogroup>` use the same source stylesheet as checkbox (`zul/src/main/resources/web/js/zul/wgt/css/checkbox.css`; there is no `radio.css`). When you change a rule there, keep radio-only selectors separate from checkbox ones. The radio visual is the `input[type="radio"]` element itself; there is no `-mold` element (see the comment at `checkbox.css:220`).

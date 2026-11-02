@@ -1,7 +1,7 @@
 # select-tests: which Playwright tests do my changes need?
 
 `select-tests.mjs` takes changed files and answers `full`, `partial` (with exact commands) or `none`.
-The rules it implements are in `doc/marble-selective-test-rules.md` (section 3 and 4).
+The rules it implements are described below ("How a path is resolved").
 Run everything from `zkthemelab/`. Node only, no extra npm dependencies, no preview server needed
 (the test inventory comes from `playwright test --list`).
 
@@ -43,8 +43,7 @@ alternation of anchored title paths (`^(?:<project> <file> <describe...> <title>
 exactly the intended tests. A full run is the bare `npx playwright test -c ...`.
 
 `--fully-parallel` is added when no selected spec file is in `UNSAFE_PARALLEL_SPECS` (top of `select-tests.mjs`);
-`reasons` says which case applied. The constant is empty: the audit (doc/marble-test-phase1-selector.md section 11.2)
-found no spec that depends on test order or shared state in the way the printed command runs it. Two specs are
+`reasons` says which case applied. The constant is empty: an audit found no spec that depends on test order or shared state in the way the printed command runs it. Two specs are
 order-dependent only in update mode, which the command never enables: `font-size-equivalence.spec.ts`
 (`UPDATE_FONT_BASELINE=1`, serial) and `focus-ring-scan.spec.ts` (`FOCUS_SCAN_UPDATE=1`, read-modify-write of one
 JSON). Never add either variable to a command that carries `--fully-parallel`. Add a spec to the constant when it
@@ -82,7 +81,7 @@ gains `describe.serial`, a `beforeAll` its tests rely on, or a module-level obje
 6. Widget source (`<Name>.ts`) -> pages containing `z-<name>`.
 7. Anything else -> `full`.
 
-More than 2/3 of all tests selected (rounded up: 897 of 1,345) also gives `full`. The total is the
+More than 2/3 of all tests selected (rounded up) also gives `full`. The total is the
 `playwright test --list` inventory.
 
 ## Aggregate pages
@@ -92,8 +91,8 @@ each component also has its own page). Their tests are selected only when that p
 file changes: its `.zul` or its baseline PNG. A CSS rule, a class, a widget, or a `pv/*-content.zul` template change
 never selects them (`reasons` lists the aggregate pages left out). They are left out of the class -> pages map, so a
 class that appears only on an aggregate page falls through to the name-prefix and own-component steps. A full run is
-unchanged. `gallery-scan.spec.ts` keeps its own `SKIP` list; it is not wired to this file yet (to do after the
-sectioned-gallery branch merges).
+unchanged. `gallery-scan.spec.ts` and `select-tests.mjs` both read the aggregate pages from
+`aggregate-pages.json` (through `aggregate-pages.ts`).
 
 ## Which rules are read
 

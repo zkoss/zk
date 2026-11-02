@@ -4,6 +4,8 @@ This file is **required reading** for any agent or human about to write or modif
 - `.claude/skills/zk-component-rules/components/<comp>.md` (this skill — theme-portable)
 - `doc/contracts/<comp>.md` (Marble theme contract — theme-specific)
 
+Not every component has a theme contract. When a component has none, zk-spec-author writes one first.
+
 The two files form a **two-tier contract**. This guide defines the boundary, the five predicate classes, the iceblue-CSS-mining workflow, and the refuse-to-emit rules that keep the boundary clean.
 
 ---
@@ -235,24 +237,18 @@ iceblue is ZK's built-in theme and has been used in production for more than a d
 
 ### Locating the iceblue CSS source (the path varies; a fallback is required)
 
-The path where iceblue CSS is obtained is not fixed (it depends on which version the user unpacked where on their machine), so **do not hardcode any single path**. Search in the order below; if nothing is found, stop and ask the user:
+Read the IceBlue CSS from the tracked jar. If the jar has no entry for the component, stop and ask the user:
 
-1. **Snapshot inside the project** (most common):
-   ```bash
-   find temp -path "*iceblue*" -name "<comp>.css.dsp" 2>/dev/null
-   ```
-2. **Tracked IceBlue jar** (CE; `dist/lib/iceblue_c.jar` in the zk checkout, `$ZK_SOURCE`):
+1. **Tracked IceBlue jar** (CE; `dist/lib/iceblue_c.jar` in the zk checkout, `$ZK_SOURCE`):
    ```bash
    unzip -l "$ZK_SOURCE/dist/lib/iceblue_c.jar" | grep css.dsp
    unzip -p "$ZK_SOURCE/dist/lib/iceblue_c.jar" web/iceblue_c/js/{zul|zkex|zkmax}/<pkg>/css/<comp>.css.dsp
    ```
    The same jar holds the EE/PE sheets (zkex, zkmax). Do not search `src/main/resources/web/js/**` or `zul/codegen/` for IceBlue CSS: they now hold Marble source and Marble build output. Fall back to the preview-URL route in `../reference/theme-override-is-replace.md` only when `unzip -l` has no entry for the component.
-3. **The user has not configured an iceblue CSS source** → print the following in the conversation:
+2. **The jar has no entry for the component** → print the following in the conversation:
    ```
    iceblue CSS for <comp> not found. Searched:
-     - temp/iceblue_c-*/web/iceblue_c/js/**/<comp>.css.dsp
-     - $ZK_SOURCE/...
-     - $ZKCML_SOURCE/...
+     - $ZK_SOURCE/dist/lib/iceblue_c.jar (web/iceblue_c/js/{zul|zkex|zkmax}/<pkg>/css/<comp>.css.dsp)
    Please provide a path to the iceblue CSS source for <comp>,
    or confirm to proceed without iceblue mining (B-tier predicates
    from CSS mining will be skipped; produce A + C tiers only).

@@ -3,14 +3,14 @@ import { test, expect } from '@playwright/test';
 // Verifies the `org.zkoss.zul.theme.browserDefault` reset-scoping mechanism — the DSP-free
 // replacement for ZK's legacy norm.css.dsp `<c:if>` (see doc/spec/reset-scoping.md).
 //
-// The theme serves its reset as its OWN stylesheet, swapped in Java by MarbleThemeProvider:
+// The theme serves its reset as its OWN stylesheet, swapped in Java by StandardThemeProvider (insertResetURI):
 //   browserDefault=false (default) → reset.css       : global reset, <html>/<body> frame
 //                                                       intact, NOT scoped
 //   browserDefault=true            → reset-embed.css  : same widget reset confined to
 //                                                       @scope(.z-page), <html>/<body> frame
 //                                                       dropped (so a JS-Embed host page is
 //                                                       never restyled)
-// MarbleThemeProvider inserts the chosen file immediately BEFORE the ~./zul/css/zk.wcs widget
+// StandardThemeProvider inserts the chosen file immediately BEFORE the ~./zul/css/zk.wcs widget
 // bundle so the reset keeps its historical "loads first" cascade position.
 //
 // The preview app runs in the DEFAULT (false) mode, so we verify:

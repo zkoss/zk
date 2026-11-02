@@ -45,7 +45,7 @@ If you style `.z-searchbox` as `display: flex; <input>: flex: 1`, the selected l
 | selected | `.z-searchbox-selected` — toggled in `_doSelectItem` |
 | keyboard-active (highlighted by arrow keys) | `.z-searchbox-active` — moved by `_shiftSelection` |
 
-There is no `readonly` / `invalid` / `inplace` for searchbox.
+Supported states are the ones in the two tables above (`disabled`, `open`, `focus` on the root; `selected`, `active` on an item).
 
 ## Popup detachment
 
@@ -91,8 +91,8 @@ theme's **base CSS rules**:
 | no selection (`placeholderVisible`) | `display:none` | `display:inline-block` |
 | has selection | *empty* (`style=""`) → base CSS | *empty* (`style=""`) → base CSS |
 
-The theme therefore MUST supply the base values, mirroring stock ZK less
-(`zkmax/inp/less/searchbox.less`):
+The theme therefore MUST supply the base values (see
+`../zkcml/zkmax/src/main/resources/web/js/zkmax/inp/css/searchbox.css`):
 
 ```css
 .z-searchbox-label       { display: inline-block; }  /* visible by default */

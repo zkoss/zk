@@ -27,11 +27,9 @@ float: left; box-sizing: border-box` on each column child.
 
 ## State classes
 
-No ZK-added state classes exist on `.z-rowlayout` or `.z-rowchildren`. The component is a
-purely structural layout container. There is no `disabled`, `readonly`, `selected`, or similar
-concept at the container level.
-
-States rely entirely on the content widgets placed inside each `<rowchildren>`.
+The container is purely structural: `.z-rowlayout` and `.z-rowchildren` carry only the
+`colspanN` / `offsetN` classes below. State belongs to the content widgets placed inside each
+`<rowchildren>`.
 
 The `colspan` and `offset` class names (`colspan4`, `offset2`) are dynamic — they are updated
 by `setColspan()` / `setOffset()` via `className` string replacement at runtime. The CSS selector
@@ -48,30 +46,13 @@ by `setColspan()` / `setOffset()` via `className` string replacement at runtime.
 - `offset="N"` on `<rowchildren>` — columns to skip before this child (default 0). JS writes
   inline `style.margin-left` as a percentage.
 
-No `disabled`, `readonly`, or `inplace` attributes exist on these components.
-
 ## Column arithmetic
 
-`Rowlayout._syncSizingParam()` computes:
-
-```
-rowWidth = ncols + (ncols - 1) * spacing
-pColWidth = 1 / rowWidth
-pSpacing  = spacing / rowWidth
-```
-
-For each child, `_fixChild()` then writes:
-
-```
-width       = percent( (pColWidth + pSpacing) * colspan - pSpacing )
-margin-left = percent( pSpacing )               for non-first siblings (default gutter)
-            = percent( (pColWidth+pSpacing)*offset + pSpacing - pSpacing )
-                                                 for a child with offset > 0
-            = percent( 0 )                       for the first child with no offset
-```
-
-All values are written as inline `style` by jQuery `.css()` — not as CSS classes. The CSS
-file has no `width` declarations; inline styles are the sole sizing mechanism.
+Width and `margin-left` of each child are written by JS as inline percentages; see
+`Rowlayout._syncSizingParam` and `Rowlayout._fixChild` in
+`../zkcml/zkmax/src/main/resources/web/js/zkmax/layout/Rowlayout.ts`. They are inline `style`
+values, not CSS classes. The CSS file has no `width` declarations; inline styles are the sole
+sizing mechanism, which is why a theme must not override them (see Composition invariants).
 
 ## Composition invariants
 
@@ -113,11 +94,9 @@ resides in `zkmax`; treat as EE.
 - `domClass_()` on `Rowchildren` appends ` colspan{N}` unconditionally and ` offset{N}` only
   when `offset > 0`. At runtime, `setColspan()` uses a regex replace (`/colspan\d+/`) and
   `setOffset()` uses `/offset\d+/` on `className` directly — no class-list API.
-- The canonical CSS selector `.z-rowchildren[class*="colspan"]` targets only cells that carry
-  a colspan class (which is always the case for valid children). A bare `.z-rowchildren`
-  without `[class*="colspan"]` would not match at render time because the class is injected
-  by `domClass_()` before the mold renders — the attribute selector form is the established
-  pattern in the ZK stock theme and is safer than the class-only form.
+- `z-rowchildren` is the root class of every cell, so a bare `.z-rowchildren` selector always
+  matches. `[class*="colspan"]` is only needed to select cells by their `colspanN` class, where
+  N changes at runtime.
 - No popup detachment, no ARIA roles, no inline event handlers are emitted by the mold.
 - There is no responsive breakpoint in the JS — the `max-width: 767px` stacking is purely
   CSS-driven (stock theme only; theme may keep, remove, or replace this breakpoint).

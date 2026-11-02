@@ -38,7 +38,7 @@ the radio/checkbox case — the inputs were already centred.
 
 > **Measurement caveat:** measure at a real window width. A collapsed 0×0 MCP viewport stacks
 > the inline content and reports a bogus uniform ~−30px for the `<div>` (and wraps radios to a
-> fake 80px). See memory `reference_screenshot_capture_hang`.
+> fake 80px).
 
 Source: `Hlayout.java:29` / `Hlayout.ts:23` default `valign="top"`; `Hlayout.ts:73`
 emits `.z-valign-middle`; the input's `vertical-align:middle` is the theme's

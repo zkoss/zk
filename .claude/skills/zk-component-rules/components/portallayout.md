@@ -14,7 +14,8 @@ A multi-column dashboard shell that lays out one or more `Portalchildren` column
 │       ├─ .z-panel …                                                   (Panel child 1; see components/panel.md for full sub-tree)
 │       ├─ .z-panel …                                                   (Panel child 2)
 │       └─ <div style="height:1px;position:relative;width:1px;"></div>  (structural spacer — always present; do not style)
-└─ <div class="z-clear"></div>                                          (float-clear sentinel after all columns)
+
+<div class="z-clear"></div>                                             (float-clear sentinel — a SIBLING emitted after the root's closing </div>, not a child)
 ```
 
 Notes:
@@ -30,7 +31,7 @@ Notes:
 During a drag, ZK manipulates the DOM as follows (CSS themes must not interfere with these classes):
 
 - `.z-panel-move-ghost` — a full-size ghost `<div id="zk_ddghost">` prepended to `<body>` while dragging. Contains a cloned panel header plus a `.z-panel-move-block` content area.
-- `.z-panel-move-block` — a placeholder `<div>` inserted into the target column's `.z-portalchildren-content` to show drop position. In vertical orient: `height: 10px; width: auto`. In horizontal orient: `height: 100%; width: 10px`.
+- `.z-panel-move-block` — a placeholder `<div>` inserted into the target column's `.z-portalchildren-content` to show drop position. It is a horizontal bar in vertical orient and a vertical bar in horizontal orient; its size comes from CSS.
 - `.z-panel-header-move` — added to `.z-panel-header` on the draggable panel's cap element to signal that the cursor should be `move`.
 - The dragged panel itself is hidden via `jq(cmp).hide()` during the drag and restored on drop.
 
@@ -46,7 +47,7 @@ During a drag, ZK manipulates the DOM as follows (CSS themes must not interfere 
 ### On `.z-portalchildren-counter` (badge)
 - `.z-portalchildren-counter-on` — added when `counterVisible="true"` (the default); removed when `counterVisible="false"`. Default state is `display: none`; with `-on` it becomes `display: inline`.
 
-States rely exclusively on the classes above — no pseudo-class-only state changes exist on the layout shell itself. Panel child states (hover, focus, collapsed, maximized, disabled, etc.) are governed by `components/panel.md`.
+The layout shell's states are the classes above; the content widgets own their own states. Panel child states (hover, focus, collapsed, maximized, disabled, etc.) are governed by `components/panel.md`.
 
 ## Attribute support
 
@@ -66,9 +67,9 @@ States rely exclusively on the classes above — no pseudo-class-only state chan
 - **No built-in inter-column gutter.** ZK renders adjacent `.z-portalchildren` columns flush against each other — the columns are bare floats and the layout provides no horizontal spacing between them. Any theme that wants a gutter must add it itself, and the only safe vehicle is an adjacent-sibling `padding-left` on the column (`.z-portalchildren + .z-portalchildren`) combined with `box-sizing: border-box`: padding lives inside the JS-set inline width, so the columns stay side-by-side, the row never overflows, and the layout's outer edges stay flush. `margin-left`/`margin-right` and negative-margin gutter tricks are **unusable** — the inline percentage widths sum to 100% and the root's mandatory `overflow: hidden` would overflow the row (positive margin) or clip the compensating negative margin.
 - **No built-in gutter in horizontal orient either**, and the spacing mechanism is *not symmetric* with vertical. Two facts drive this:
   1. **Row stacking (vertical axis):** rows are transparent `.z-portalchildren` wrappers, so an adjacent-sibling `padding-top` (with `box-sizing: border-box`) sits inside the JS-set inline row `height` — the exact vertical-axis mirror of the inter-column `padding-left`. This is the safe vehicle for the inter-row gutter.
-  2. **Side-by-side panels (horizontal axis):** the floated units here are the `.z-panel` cards *themselves*, with no transparent per-panel wrapper. The card chrome (border + background) is on `.z-panel`, so `padding` would open space *inside* the card, not between cards — the side gutter **must be `margin-left`** on `.z-panel + .z-panel`. Crucially, **ZK does not compute panel widths to pixels in horizontal orient** (it manages `style.height`, leaving `style.width` at the authored value — verified: a `width="50%"` panel keeps the literal `width: 50%` inline). So unlike vertical — where JS-computed pixel column widths already leave room for the gutter — horizontal side-by-side panels whose authored widths sum to 100% plus a margin will **overflow and wrap** (clipped by the row's `overflow: hidden`). The width budget for the gutter is therefore the **page author's responsibility** (e.g. `width="calc(50% - 6px)"` per panel for a two-up row with one `--zk-spacing-3` margin between them). A theme cannot reclaim this room via CSS because the author's inline width wins.
+  2. **Side-by-side panels (horizontal axis):** the floated units here are the `.z-panel` cards *themselves*, with no transparent per-panel wrapper. The card chrome (border + background) is on `.z-panel`, so `padding` would open space *inside* the card, not between cards — the side gutter **must be `margin-left`** on `.z-panel + .z-panel`. Crucially, **ZK does not compute panel widths to pixels in horizontal orient** (it manages `style.height`, leaving `style.width` at the authored value — verified: a `width="50%"` panel keeps the literal `width: 50%` inline). So unlike vertical — where JS-computed pixel column widths already leave room for the gutter — horizontal side-by-side panels whose authored widths sum to 100% plus a margin will **overflow and wrap** (clipped by the row's `overflow: hidden`). The width budget for the gutter is therefore the **page author's responsibility** (e.g. in a two-up row, each panel's `width="calc(50% - <half the gutter>)"`). A theme cannot reclaim this room via CSS because the author's inline width wins.
 - The structural 1px spacer `<div>` at the end of `.z-portalchildren-content` ensures float-based clearance inside columns; `overflow: hidden` on the container is the float-containment strategy — do not add `clear: both` rules inside `.z-portalchildren-content`.
-- `.z-panel-move-block` must render in the same flow as panels in the cave (for vertical: `width: auto; height: 10px`; for horizontal: `width: 10px; height: 100%`). The ghost node is position-absolute on `<body>`.
+- `.z-panel-move-block` must render in the same flow as panels in the cave (a horizontal bar in vertical orient, a vertical bar in horizontal orient). The ghost node is position-absolute on `<body>`.
 - Position sizing: portallayout root `overflow: hidden` is a hard requirement implied by the float strategy. Removing it causes float overflow.
 
 ## Sibling decomposition

@@ -8,7 +8,7 @@ zk-version: 10.2.1-jakarta
 
 ## References
 - MUI CSS: Inputs/OutlinedInput.css
-- DESIGN.md sections: §1, §2, §5, §7, §9, §10, §11
+- `doc/spec/DESIGN.md` sections: "Surface Palette", "Text Colors", "Corner Radii", "Typography", "Motion", "Density", "Border Rules"
 
 ## Expected values
 Same input metrics as combobox c1–c7 (selectors → `.z-timebox-*`).
@@ -16,7 +16,7 @@ Same input metrics as combobox c1–c7 (selectors → `.z-timebox-*`).
 ### Input width follows `cols` (ZK-6112)
 The time `<input>` always renders a `size` (`Timebox.renderProperties` derives the default `cols` from the
 formatted value length, 5 when empty). Marble does **not** use `field-sizing: content` on it, because that
-makes the browser ignore `size` and an explicit `cols` would have no effect (see `DESIGN.md §10`).
+makes the browser ignore `size` and an explicit `cols` would have no effect (see "Input width: datebox / timebox follow the `cols` API" in `doc/spec/DESIGN.md`).
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
@@ -29,13 +29,13 @@ makes the browser ignore `size` and an explicit `cols` would have no effect (see
 
 ## States to evaluate
 - [ ] default, hover, focus, disabled, readonly, invalid
-- [ ] inplace (see `reference/inplace-state.md`)
-- [ ] buttonVisible-false (clock icon hidden — see `reference/buttonVisible-attribute.md`; verify `.z-timebox-button.z-timebox-disabled` has `display: none`)
+- [ ] inplace (see `zk-component-rules reference/inplace-state.md`)
+- [ ] buttonVisible-false (clock icon hidden — see `zk-component-rules reference/buttonVisible-attribute.md`; verify `.z-timebox-button.z-timebox-disabled` has `display: none`)
 
 ## Tablet / mobile wheel picker (touch UA only)
 On a mobile UA ZK swaps the desktop stepper for a scrolling **wheel picker** and
 forces the input `readonly`. Open the popup on tablet to verify (see
-`reference/mobile-wheel-picker.md`). Guarded by `tablet.spec.ts`
+`zk-component-rules reference/mobile-wheel-picker.md`). Guarded by `tablet.spec.ts`
 → `tablet-timebox-wheel`.
 - [ ] `.z-timebox-wheel-list` height ≈ 120px (3 rows; NEVER the full unbounded list) and `li` height = list height ÷ 3 (the `offsetHeight/3` centering invariant)
 - [ ] opened popup lands on-screen (bottom sheet, not pushed off-screen by an over-tall wheel)

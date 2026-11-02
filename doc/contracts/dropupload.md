@@ -6,18 +6,17 @@ siblings: []
 preview: ${PREVIEW_URL}/dropupload.zul
 
 ## References
-- DESIGN.md sections: §2, §3, §11
+- `doc/spec/DESIGN.md` sections: "Text Colors", "Brand & Status Colors", "Border Rules"
 
 ## DOM key selectors
 ```
 .z-dropupload           ← root drop zone (only theme-stylable surface)
 ```
 
-> ZK `Dropupload` emits **no** drag-over or disabled state class (verified in
-> `Dropupload.ts`/`.java`). Drag feedback is the native cursor
-> `dataTransfer.dropEffect='copy'`; the `detection` mode (`none`/`browser`/`self`/`<id>`)
-> toggles content/component **visibility**, not container styling — the box looks
-> identical in every mode. There is no `setDisabled`. See
+> The `.z-dropupload` root is the only stylable element (`Dropupload.ts`/`.java`). Drag
+> feedback is the native cursor `dataTransfer.dropEffect='copy'`; the `detection` mode
+> (`none`/`browser`/`self`/`<id>`) toggles content/component **visibility**, not
+> container styling — the box looks identical in every mode. See
 > `.claude/skills/zk-component-rules/components/dropupload.md`.
 
 ## Expected values

@@ -7,15 +7,15 @@ contract-approved: false
 zk-version: 10.2.1-jakarta
 
 ## References
-- DESIGN.md sections: §1, §2, §5, §7, §9, §10, §11
+- doc/spec/DESIGN.md sections: "Surface Palette", "Text Colors", "Corner Radii", "Typography", "Motion", "Density", "Border Rules"
 
 ## Expected values
-Same input metrics as combobox c1–c8 (just selectors → `.z-datebox-*`). Calendar popup styled separately; cross-reference `calendar` contract.
+The input values (height, font-size, radius) are the same as combobox c1–c4 (selectors → `.z-datebox-*`). The frame sits on the `.z-datebox` wrapper, not on the input, and focus is a 1px border plus an inset ring (see op1/op2). Calendar popup is styled separately in `zul/src/main/resources/web/js/zul/db/css/calendar.css`.
 
 ### Input width follows `cols` (ZK-6112)
 The date `<input>` always renders a `size` (`Datebox` constructor `setCols(11)`; `textAttrs_()` writes
 `size="N"` when `cols > 0`). `field-sizing: content` makes the browser ignore `size`, so an explicit
-`cols` had no effect; Marble therefore does **not** use it on datebox (see `DESIGN.md §10`). A format
+`cols` had no effect; Marble therefore does **not** use it on datebox (see doc/spec/DESIGN.md "Input width: datebox / timebox follow the `cols` API"). A format
 longer than ~11 characters is clipped by the default `cols` unless the app raises it (core defect: ZK-6178).
 
 | id | selector | property | expected |
@@ -27,10 +27,10 @@ longer than ~11 characters is clipped by the default `cols` unless the app raise
 `screenshot.spec.ts › datebox › input width follows cols (no field-sizing: content)` and
 `B110_ZK_6112_DateTimeboxColsTest`.
 
-### Timezone `<select>` focus — Mechanism A (gap 2026-07-14)
+### Timezone `<select>` focus — Mechanism A
 The in-popup timezone `<select>` (`.z-datebox-timezone > select`) is a native, intrinsically-sized
 control → it MUST use Mechanism A, not a 2px focus border (which would grow the box on both axes and
-shift its text). See `reference/focus-affordance-no-layout-shift.md` (§ `<select>`).
+shift its text). See `marble-theme reference/focus-affordance-no-layout-shift.md` (§ `<select>`).
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
@@ -40,12 +40,12 @@ shift its text). See `reference/focus-affordance-no-layout-shift.md` (§ `<selec
 
 Guarded by `screenshot.spec.ts › input focus (no layout shift) › datebox timezone <select>`.
 
-### Open-state (icon-click) affordance — Mechanism A (gap 2026-07-14)
+### Open-state (icon-click) affordance — Mechanism A
 ZK adds `z-datebox-open` to the wrapper `<span>` when the calendar icon is clicked. The open-state
 affordance MUST be **identical** to the input-click `:focus-within` affordance (1px border + inset
 primary ring) — NOT a `border-width: 2px` bump, which grows the border-box on a min-height-pinned
 composite input and reads as a thicker ring / layout shift. See
-`reference/focus-affordance-no-layout-shift.md` ("The trap").
+`marble-theme reference/focus-affordance-no-layout-shift.md` ("The trap").
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
@@ -56,13 +56,13 @@ Guarded by `screenshot.spec.ts › input focus (no layout shift) › datebox ope
 
 ## States to evaluate
 - [ ] default, hover, focus, disabled, readonly, invalid, open
-- [ ] inplace (see `reference/inplace-state.md`)
-- [ ] buttonVisible-false (calendar icon hidden — see `reference/buttonVisible-attribute.md`; verify `.z-datebox-button.z-datebox-disabled` has `display: none`)
+- [ ] inplace (see `zk-component-rules reference/inplace-state.md`)
+- [ ] buttonVisible-false (calendar icon hidden — see `zk-component-rules reference/buttonVisible-attribute.md`; verify `.z-datebox-button.z-datebox-disabled` has `display: none`)
 
 ## Tablet / mobile wheel picker (touch UA only)
 On a mobile UA ZK swaps the grid calendar for a scrolling **wheel picker** and
 forces the input `readonly`. Open the popup on tablet to verify (see
-`reference/mobile-wheel-picker.md`). Guarded by `tablet.spec.ts`
+`zk-component-rules reference/mobile-wheel-picker.md`). Guarded by `tablet.spec.ts`
 → `tablet-datebox-wheel`.
 - [ ] `.z-calendar-wheel-list` height ≈ 120px (3 rows; NEVER the full unbounded list) and `li` height = list height ÷ 3 (the `offsetHeight/3` centering invariant)
 - [ ] opened popup lands on-screen (bottom sheet, not pushed off-screen by an over-tall wheel)

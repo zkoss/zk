@@ -6,7 +6,7 @@ siblings: []
 preview: ${PREVIEW_URL}/imagemap.zul
 
 ## References
-- DESIGN.md sections: §2
+- `doc/spec/DESIGN.md` sections: "Text Colors"
 - Skill: `.claude/skills/zk-component-rules/components/imagemap.md` (no css-uri → must bundle)
 - Rule: `.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md`
 
@@ -22,7 +22,7 @@ preview: ${PREVIEW_URL}/imagemap.zul
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c0 | `.z-imagemap` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `imagemap.css` is bundled into `norm.css.dsp` (regression guard for the 2026-06-30 orphan gap) |
+| c0 | `.z-imagemap` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `imagemap.css` is bundled into `norm.css.dsp` (regression guard against an orphaned standalone `.dsp`) |
 | c1 | `.z-imagemap` | display | inline-block or block |
 | c2 | `.z-imagemap` | border | none (no extra border) |
 | c3 | `.z-imagemap` | position | relative (positioning context the clickable area overlays require) |

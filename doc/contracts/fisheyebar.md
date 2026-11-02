@@ -6,13 +6,13 @@ siblings: []
 preview: ${PREVIEW_URL}/fisheyebar.zul
 
 ## References
-- DESIGN.md sections: §2, §3, §9
+- `doc/spec/DESIGN.md` sections: "Text Colors", "Brand & Status Colors", "Motion"
 
 ## DOM key selectors
 ```
 .z-fisheyebar           ← root container
 .z-fisheye              ← individual item
-.z-fisheye-img          ← item icon/image
+.z-fisheye-image        ← item icon/image
 .z-fisheye-text         ← item label
 ```
 

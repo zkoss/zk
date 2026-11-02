@@ -8,7 +8,7 @@ decomposition: LinearProgress (indeterminate variant) — a 2–4px sliding/grad
 preview: trigger long-running request from any page (e.g., paging change)
 
 ## References
-- DESIGN.md sections: §3, §9
+- `doc/spec/DESIGN.md` sections: "Brand & Status Colors", "Motion"
 - Closest-sibling CSS to read first: `zul/src/main/resources/web/js/zul/wgt/css/progressmeter.css` — reuse track + filled-portion colours, then add the indeterminate animation
 - MD3 spec for indeterminate linear progress: https://m3.material.io/components/progress-indicators/specs (only consult if other items don't answer the animation curve)
 - Closest MUI: LinearProgress with `variant="indeterminate"`.

@@ -20,7 +20,7 @@ The density system has three layers, all defined in
    toolbar 48 > input 40) live here, defined once — so they survive any tier change.
 3. **Data-cell padding** — `--zk-grid-cell-padding`, `--zk-listbox-cell-padding`,
    `--zk-tree-cell-padding` (the biggest lever for table density), and `--zk-group-padding-y/x`
-   for the group rows of Grid and Listbox (default and tablet keep 8px 16px; a tablet keeps them in compact too, because zkmax `tablet/_mesh.css` sets the two tokens beside the cell padding it already shadows, follow-up 46 F1).
+   for the group rows of Grid and Listbox (default and tablet keep 8px 16px; a tablet keeps them in compact too, because zkmax `tablet/_mesh.css` sets the two tokens beside the cell padding it already shadows).
 
 Every component's CSS binds to a rung or an alias — never a raw px. Marble ships a
 `[data-density="compact"]` rule (in _sizing.css) that re-points all of them to their
@@ -83,30 +83,17 @@ flash. See the FOUC note in MarbleDensity's Javadoc.
 
 **Tuning the values** — the shipped compact values (below) are a balanced starting point.
 To change them, write your own `html[data-density="compact"]` rule — one notch more specific
-than the shipped rule, so it wins regardless of load order — and set any token from the table below.
+than the shipped rule, so it wins regardless of load order — and set any token from `_sizing.css`.
 
 ## The full knob set
 
-| Token | Default | Compact | Drives |
-|---|---|---|---|
-| `--zk-control-height-xs` | 28px | 24px | sm/icon-sm buttons, close buttons, editor-toolbar btn |
-| `--zk-control-height-sm` | 32px | 28px | paging controls, window-close |
-| `--zk-control-height-md` | 40px | 32px | **inputs**, icon-button, list rows, vertical menu items, `--zk-control-height` |
-| `--zk-control-height-lg` | 48px | 40px | toolbar, menubar, tabs, panel/groupbox header, notification, vertical-button |
-| `--zk-control-height-xl` | 56px | 48px | window header, FAB |
-| `--zk-button-height` | 36px | 30px | filled/outlined/text button, combobutton, overflow button |
-| `--zk-button-height-lg` | 44px | 38px | `.z-button-lg` |
-| `--zk-menuitem-height` | 36px | 30px | popup menu rows |
-| `--zk-data-row-min-height` | 52px | 36px | listbox paging bar (`mold="paging"`; only `listbox.css` reads it) |
-| `--zk-grid-cell-padding` | 16px | 6px 12px | grid cells |
-| `--zk-grid-detail-padding` | 12px | 6px | grid detail content (top/right/bottom) |
-| `--zk-listbox-cell-padding` | 16px | 6px 12px | listbox cells |
-| `--zk-tree-cell-padding` | 16px | 6px 12px | tree cells (same as grid and listbox, so a tree row is as tall as a grid row) |
-| `--zk-tree-header-padding` | 16px | 6px 12px | tree header cells (same header height as grid/listbox) |
-| `--zk-group-padding-y` | 8px | 6px | Grid `<group>` and Listbox `<listgroup>` rows, top/bottom (the same as a compact data cell) |
-| `--zk-group-padding-x` | 16px | 12px | the same rows, left/right; a group of a checkmark Listbox keeps 16px so its checkbox and arrow stay under the row checkboxes |
+The default and compact value of every knob (the `--zk-control-height-*` ladder, `--zk-button-height*`, `--zk-menuitem-height`, `--zk-data-row-min-height`, and the grid / listbox / tree cell, header and group padding) is in [_sizing.css](../../zul/src/main/resources/web/zul/css/tokens/_sizing.css). Reasons (not in that file):
 
-On a tablet the two group tokens stay 8px 16px in compact as well (zkmax `tablet/_mesh.css`, follow-up 46 F1): group rows are 41px (Grid) / 40.5px (Listbox) in tablet default and tablet compact.
+- `--zk-tree-cell-padding` and `--zk-tree-header-padding` equal the grid and listbox values, so a tree row and header are as tall as a grid row and header.
+- `--zk-group-padding-y` equals a compact data cell. `--zk-group-padding-x` for a group of a checkmark Listbox stays at the comfortable value, so its checkbox and arrow stay under the row checkboxes.
+- `--zk-data-row-min-height` is read only by `listbox.css` (the `mold="paging"` bar).
+
+On a tablet the two group tokens keep their default values in compact as well (zkmax `tablet/_mesh.css`). Measured group row height at tablet default and at compact: 41px (Grid), 40.5px (Listbox).
 
 ### Finer control
 
@@ -212,17 +199,10 @@ knob** (the `data-density` attribute); *how* it gets set is the application's ca
 
 That keeps the contract framework-agnostic and genuinely reusable.
 
-### The 5 places that read a rung directly
+### Components that read a rung directly
 
-Five component files read a **leaf rung** directly rather than through a semantic alias:
-
-| File | Use | Rung read |
-|------|-----|-----------|
-| `js/zul/wgt/css/button.css` | icon-button / FAB size variants, header min-height | `xs` / `lg` |
-| `js/zul/layout/css/borderlayout.css` | header min-height | `lg` |
-| `js/zul/wnd/css/window.css` | close-button square size | `sm` |
-| `js/zul/wnd/css/panel.css` | close-button square size | `xs` |
-| `js/zul/wgt/css/groupbox.css` | 3D-mold header min-height (40 → 32, keeps comfortable at today's 40px) | `md` |
+A few component files read a **leaf rung** directly rather than through a semantic alias. List them with
+`grep -l "var(--zk-control-height-" zul/src/main/resources/web/js`.
 
 The concern was that if `[data-density="compact"]` overrode only the semantic aliases,
 these would not shrink under a region scope. The fix: the `[data-density="compact"]`

@@ -159,7 +159,7 @@ footer code { font-size: 11.5px; }
       <path class="ar" d="M865 200 V236" marker-end="url(#arr)"/>
       <rect class="box" x="270" y="240" width="220" height="64" rx="8"/>
       <text class="t" x="380" y="266" text-anchor="middle">預覽站 zkthemelab</text>
-      <text class="s" x="380" y="288" text-anchor="middle">115 個預覽頁＋測試專用頁</text>
+      <text class="s" x="380" y="288" text-anchor="middle">預覽頁＋測試專用頁</text>
       <rect class="box" x="510" y="240" width="190" height="64" rx="8"/>
       <text class="t" x="605" y="266" text-anchor="middle">zktest 測試站</text>
       <text class="s" x="605" y="288" text-anchor="middle">Jenkins · PR 分支</text>
@@ -172,17 +172,17 @@ footer code { font-size: 11.5px; }
       <path class="ar" d="M850 304 V356" marker-end="url(#arr)"/>
       <rect class="b1" x="20" y="360" width="220" height="96" rx="8"/>
       <text class="t" x="130" y="386" text-anchor="middle">Playwright 回歸套件</text>
-      <text class="s" x="130" y="408" text-anchor="middle">29 個 project · 31 個 spec</text>
-      <text class="s" x="130" y="426" text-anchor="middle">1,692 個測試 · 706 張基準 PNG</text>
+      <text class="s" x="130" y="408" text-anchor="middle">多個 project · 多個 spec</text>
+      <text class="s" x="130" y="426" text-anchor="middle">截圖與數值測試 · 基準 PNG 存本機</text>
       <text class="s" x="130" y="444" text-anchor="middle">選擇器挑測試 · 本機手動</text>
       <rect class="b2" x="255" y="360" width="220" height="96" rx="8"/>
       <text class="t" x="365" y="386" text-anchor="middle">Agent 驗證流程</text>
-      <text class="s" x="365" y="408" text-anchor="middle">94 份元件 contract</text>
+      <text class="s" x="365" y="408" text-anchor="middle">每個元件一份 contract</text>
       <text class="s" x="365" y="426" text-anchor="middle">Gate 1 量測 ＋ Gate 2 設計</text>
       <text class="s" x="365" y="444" text-anchor="middle">撰寫或大改元件時</text>
       <rect class="b3" x="495" y="360" width="220" height="96" rx="8"/>
       <text class="t" x="605" y="386" text-anchor="middle">ZATS 功能測試</text>
-      <text class="s" x="605" y="408" text-anchor="middle">Selenium · 3,939 個 @Test</text>
+      <text class="s" x="605" y="408" text-anchor="middle">Selenium · zktest</text>
       <text class="s" x="605" y="426" text-anchor="middle">一次約 2.5 小時（未重驗）</text>
       <text class="s" x="605" y="444" text-anchor="middle">Jenkins 平日輪詢＋手動</text>
       <rect class="b4" x="740" y="360" width="240" height="96" rx="8"/>
@@ -201,17 +201,17 @@ footer code { font-size: 11.5px; }
     <div class="card">
       <h3>截圖比對</h3>
       <ul>
-        <li><b>gallery</b>：每頁依分區標題<b>分區截圖</b>，依檔名計 395 張（97 頁），新頁自動納入 <span class="tol">每區 ≤ 20 px</span></li>
-        <li><b>狀態截圖</b>：23 個表單元件的 hover／focus／active <span class="tol">≤ 20 px</span></li>
-        <li><b>彈出層</b>：26 個預覽頁、56 個測試，用真實操作打開後截圖，含 toast、notification、messagebox、errorbox <span class="tol">10–20 px</span></li>
-        <li><b>tablet</b>：iPad UA 下 58 個測試、31 張 PNG</li>
+        <li><b>gallery</b>：每頁依分區標題<b>分區截圖</b>，新頁自動納入 <span class="tol">每區 ≤ 20 px</span></li>
+        <li><b>狀態截圖</b>：表單元件的 hover／focus／active <span class="tol">≤ 20 px</span></li>
+        <li><b>彈出層</b>：用真實操作打開後截圖，含 toast、notification、messagebox、errorbox <span class="tol">10–20 px</span></li>
+        <li><b>tablet</b>：iPad UA 下的截圖</li>
       </ul>
     </div>
     <div class="card">
       <h3>品牌色與緊湊密度</h3>
       <ul>
-        <li><b>brand</b>：<code>data-brand="copper"</code> 下掃描全部頁面，找「沒跟著主色變」的像素；另有 15 頁分區截圖（128 個測試）</li>
-        <li><b>compact</b>：15 頁分區截圖，加全部頁面兩種密度的控制項高度檢查（129 個測試）</li>
+        <li><b>brand</b>：<code>data-brand="copper"</code> 下掃描全部頁面，找「沒跟著主色變」的像素；另有部分頁的分區截圖</li>
+        <li><b>compact</b>：部分頁的分區截圖，加全部頁面兩種密度的控制項高度檢查</li>
       </ul>
     </div>
     <div class="card">
@@ -219,20 +219,20 @@ footer code { font-size: 11.5px; }
       <ul>
         <li>讀 <code>getComputedStyle</code> 與元素位置，不看圖</li>
         <li>每條守衛鎖住一個<b>過去出過的問題</b></li>
-        <li><b>component-theme-variables</b>：63 個測試確認 <code>--zk-&lt;元件&gt;-*</code> 覆寫在各元件頁生效</li>
+        <li><b>component-theme-variables</b>：確認 <code>--zk-&lt;元件&gt;-*</code> 覆寫在各元件頁生效</li>
       </ul>
     </div>
     <div class="card">
       <h3>能不能渲染</h3>
       <ul>
-        <li><b>smoke</b>：119 個測試，每個預覽頁（含 <code>inputs</code>、<code>overview</code> 這類彙整頁）打開後沒有 HTTP 500、沒有 ZK compose error</li>
+        <li><b>smoke</b>：每個預覽頁（含 <code>inputs</code>、<code>overview</code> 這類彙整頁）打開後沒有 HTTP 500、沒有 ZK compose error</li>
       </ul>
     </div>
     <div class="card">
       <h3>無障礙與系統規則</h3>
       <ul>
         <li><b>hit-target</b> 觸控尺寸、<b>focus-scan</b> focus ring 被裁</li>
-        <li><b>forced-colors</b> 高對比模式；另有 99 張截圖只供人工看</li>
+        <li><b>forced-colors</b> 高對比模式；另有截圖只供人工看</li>
         <li><b>zindex</b>、reset、responsive、print、font-size</li>
       </ul>
     </div>
@@ -256,7 +256,7 @@ footer code { font-size: 11.5px; }
       <text class="s" x="370" y="82" text-anchor="middle">含所屬元件</text>
       <rect class="box" x="520" y="30" width="200" height="72" rx="8"/>
       <text class="t" x="620" y="58" text-anchor="middle">有這些 class 的頁</text>
-      <text class="s" x="620" y="82" text-anchor="middle">class 索引 · 143 頁</text>
+      <text class="s" x="620" y="82" text-anchor="middle">class 索引</text>
       <rect class="b1" x="770" y="30" width="210" height="72" rx="8"/>
       <text class="t" x="875" y="58" text-anchor="middle">會開這些頁的測試</text>
       <text class="s" x="875" y="82" text-anchor="middle">合成一個指令 · 可平行</text>
@@ -271,7 +271,7 @@ footer code { font-size: 11.5px; }
       <text class="s" x="750" y="185" text-anchor="middle">只改文件 · 彙整頁只在自己被改時才測</text>
     </svg>
   </div>
-  <p class="caption">class 索引（<code>zkthemelab/doc/class-index.json</code>）由 <code>build-class-index.mjs</code> 產生，目前涵蓋 143 頁（115 頂層、16 個 <code>pv/</code>、12 個 <code>utility/</code>）；新增頁面後要重跑。實測（2026-10-20，共 1,692 個測試）：整檔解析 <code>combobox.css</code> 會選出 1,248 個，超過門檻 1,128，所以回答全測；改 token 檔也直接回答全測。只改單一規則時的選出數見 <code>tasks/marble-test-infra-conclusion.md</code>（1,345 個測試時：<code>button.css</code> 選出 646，combobox 128 個）。</p>
+  <p class="caption">class 索引（<code>zkthemelab/doc/class-index.json</code>）由 <code>build-class-index.mjs</code> 產生，涵蓋頂層頁、<code>pv/</code> 與 <code>utility/</code> 的頁；新增頁面後要重跑。整檔解析 <code>combobox.css</code> 會選出超過門檻（全部測試的 2/3）的測試，所以回答全測；改 token 檔也直接回答全測。只改單一規則時，選出的測試只有整檔解析的一小部分。</p>
 </section>
 
 <section>
@@ -327,7 +327,7 @@ footer code { font-size: 11.5px; }
       <path class="ar" d="M610 342 H812 V246 H826" marker-end="url(#arr2)"/>
     </svg>
   </div>
-  <p class="caption">新元件或整個元件重做時，步驟 1 之前會先走 Agent 驗證流程：先寫 contract，Gate 1（<code>zk-theme-evaluator</code>）量測實作是否符合 contract，Gate 2（<code>md3-design-verifier</code>）判斷設計是否符合 Material Design。預覽站在 <code>web.xml</code> 設 5 分鐘 session 逾時，避免連跑時 ZK 每個 session 一條的 Timer 執行緒堆積（ZK-6213，見 <code>tasks/zkthemelab-thread-leak.md</code>）。</p>
+  <p class="caption">新元件或整個元件重做時，步驟 1 之前會先走 Agent 驗證流程：先寫 contract，Gate 1（<code>zk-theme-evaluator</code>）量測實作是否符合 contract，Gate 2（<code>md3-design-verifier</code>）判斷設計是否符合 Material Design。預覽站在 <code>web.xml</code> 設 5 分鐘 session 逾時，避免連跑時 ZK 每個 session 一條的 Timer 執行緒堆積（ZK-6213）。</p>
 </section>
 
 <section>
@@ -348,9 +348,9 @@ footer code { font-size: 11.5px; }
           <td class="dot h1c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h3c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td></tr>
         <tr><td>靜態外觀變了：顏色、間距、邊框、圓角<small>分區截圖，每區超過 20 px 就失敗；整頁 0.2% 抓不到的小改動，分區後抓得到</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
-        <tr><td>hover、focus、active 狀態變了<small>23 個表單元件有狀態截圖；其他元件只有靜止畫面</small></td>
+        <tr><td>hover、focus、active 狀態變了<small>表單元件有狀態截圖；其他元件只有靜止畫面</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
-        <tr><td>只有彈出層打開時才看得到的樣式<small>26 個預覽頁、56 個測試；tablet 上的彈出層尚未量測（<code>tasks/marble-tablet-popup-coverage-measure.md</code>）</small></td>
+        <tr><td>只有彈出層打開時才看得到的樣式<small>popup project；tablet 上的彈出層尚未量測</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
         <tr><td>平板版跑掉<small>tablet project，iPad UA</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td><td class="dot"><span class="none">—</span></td></tr>
@@ -377,27 +377,27 @@ footer code { font-size: 11.5px; }
   <div class="obs">
     <div class="ob">
       <h3>GitHub Actions 不跑外觀測試</h3>
-      <p><code>zk-build</code> 只跑 <code>./gradlew clean build</code>，並把 <code>includeBuild</code>（含 zkthemelab）註解掉；<code>sync-marble-theme</code> 只把 CSS 同步到 zkThemeTemplate。沒有任何 workflow 或 git hook 執行 Playwright。</p>
+      <p><code>zk-build</code> 只跑 <code>./gradlew clean build</code>，並把 <code>includeBuild</code>（含 zkthemelab）註解掉。沒有任何 workflow 或 git hook 執行 Playwright。</p>
     </div>
     <div class="ob">
       <h3>Playwright 仍靠人在本機跑</h3>
-      <p>選擇器讓本機只跑相關的測試；例如改 listbox、datebox、combobox 的一條規則，部分測 29–49 秒，約為不平行全測 380 秒的 8–13%（改 <code>button.css</code> 的規則則約 53%）。但沒有人跑就不會有紅燈。</p>
+      <p>選擇器讓本機只跑相關的測試；改單一元件的一條規則時，部分測所需時間遠短於全測。但沒有人跑就不會有紅燈。</p>
     </div>
     <div class="ob done">
       <h3>規則：部分測本機跑，全測人工決定</h3>
-      <p>改動後先跑選擇器。回答「部分測」就在本機跑它給的指令；回答「全測」時不自動跑，回報原因，由負責人決定何時全測。使用者機器上的 Claude Code hook（<code>.claude/hooks/marble-select-tests.mjs</code>，不進 git）會在 session 改到 CSS、預覽頁或 spec 的那一輪結束時自動跑選擇器。Jenkins 接線計畫暫緩，結論見 <code>tasks/marble-test-infra-conclusion.md</code>。</p>
+      <p>改動後先跑選擇器。回答「部分測」就在本機跑它給的指令；回答「全測」時不自動跑，回報原因，由負責人決定何時全測。Jenkins 接線計畫暫緩。</p>
     </div>
     <div class="ob">
       <h3>ZATS 由核心團隊觸發</h3>
-      <p>Jenkins <code>ZK-Gradle-ZATS-Test</code> 平日 8–19 點輪詢加手動，跑在 PR 分支上（參數 <code>pr/N</code>）。從 fork 開 draft PR 就能用同一個 job 跑，見 <code>tasks/jenkins-zats-fork-run.md</code>。</p>
+      <p>Jenkins <code>ZK-Gradle-ZATS-Test</code> 平日 8–19 點輪詢加手動，跑在 PR 分支上（參數 <code>pr/N</code>）。從 fork 開 draft PR 就能用同一個 job 跑。</p>
     </div>
   </div>
 </section>
 
 <footer>
-  <div>來源（量測於 2026-10-20）：<code>zkthemelab/src/test/playwright/playwright.config.ts</code>（29 個 project）、<code>npx playwright test --list</code> 與 <code>select-tests.mjs --json</code>（1,692 個測試）、<code>zkthemelab/doc/screenshots/</code>（706 張非 forced-colors PNG、99 張 forced-colors 審查圖）、<code>zkthemelab/doc/class-index.json</code>（143 頁）、<code>doc/contracts/</code>（94 份 .md、19 份 .html 範本）、<code>zktest/src/test/java</code>（3,939 個 <code>@Test</code>）、<code>.github/workflows/</code>、<code>zkthemelab/src/main/webapp/WEB-INF/web.xml</code>。文字依據：<code>tasks/marble-test-gaps.md</code>、<code>tasks/marble-test-infra-conclusion.md</code>、<code>tasks/marble-popup-gallery-conclusion.md</code>、<code>tasks/zkthemelab-thread-leak.md</code>、<code>tasks/jenkins-zats-fork-run.md</code>。</div>
+  <div>來源：<code>zkthemelab/src/test/playwright/playwright.config.ts</code>（project 清單）、<code>npx playwright test --list</code> 與 <code>select-tests.mjs --json</code>（測試清單）、<code>zkthemelab/doc/screenshots/</code>、<code>zkthemelab/doc/class-index.json</code>、<code>doc/contracts/</code>、<code>zktest/src/test/java</code>、<code>.github/workflows/</code>、<code>zkthemelab/src/main/webapp/WEB-INF/web.xml</code>。需要數量時，用這些指令或目錄重新計算。</div>
   <div>怎麼跑、截圖規則、固定日期做法：見 <code>doc/playwright-visual-test-guide.md</code>。</div>
-  <div>未在本次重驗：Jenkins 一次約 2.5 小時；部分測的秒數與 380 秒全測基準（來自 marble-test-infra-conclusion.md 的 2026-10-16～18 量測，當時共 1,345 個測試）。</div>
+  <div>未在本次重驗：Jenkins 一次約 2.5 小時。</div>
 </footer>
 
 </div>

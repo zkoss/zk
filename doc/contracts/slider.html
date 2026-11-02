@@ -21,7 +21,7 @@
   Companion files:
     Skill:      .claude/skills/zk-component-rules/components/slider.md
     Contract:   doc/contracts/slider.md
-    Baseline:   doc/contracts/baselines/slider-iceblue.png (must be captured before ralph-loop)
+    Baseline:   doc/contracts/baselines/slider-iceblue.png (must be captured before the generator/evaluator run)
 
   IMPORTANT — knob section:
     The arc <path> geometry (d attribute) and stroke-width are JS-controlled
@@ -31,94 +31,14 @@
     have distinguishable stroke colors per tokens k1 and k2. Do NOT read the
     exact arc path or stroke-width from this file as the CSS spec.
 -->
+<!-- Real Marble tokens (relative to doc/contracts/) -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
 <style>
-/* ────────────────────────────────────────────────────────────────────────
-   Inlined tokens — mirrors src/main/resources/web/zul/css/tokens/*.css
-   ──────────────────────────────────────────────────────────────────────── */
-:root {
-    /* Primary palette */
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-    --zk-color-primary-container: #d6e4ff;
-    --zk-color-on-primary-container: #001c3d;
-
-    /* Secondary */
-    --zk-color-secondary: #4db6ac;
-    --zk-color-on-secondary: #ffffff;
-
-    /* Tertiary */
-    --zk-color-tertiary: #7e73d6;
-
-    /* Error */
-    --zk-color-error: #d32f2f;
-    --zk-color-on-error: #ffffff;
-
-    /* Surfaces */
-    --zk-color-background: #ffffff;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-surface-variant: #f0f4fa;
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-    --zk-color-surface-container: #f0f4fa;
-    --zk-color-surface-container-low: #f7f9fc;
-    --zk-color-surface-container-high: #e8eef7;
-
-    /* Outline */
-    --zk-color-outline: rgba(0, 0, 0, 0.23);
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    /* Inverse (tooltip) */
-    --zk-color-inverse-surface: #2d3748;
-    --zk-color-inverse-on-surface: #f0f4fa;
-
-    /* Disabled */
-    --zk-color-disabled: rgba(0, 0, 0, 0.38);
-
-    /* State-layer opacities */
-    --zk-state-hover-opacity: 0.08;
-    --zk-state-focus-opacity: 0.12;
-    --zk-state-pressed-opacity: 0.12;
-    --zk-state-disabled-opacity: 0.38;
-
-    /* Spacing (4dp baseline) */
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-3: 12px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-5: 20px;
-    --zk-spacing-6: 24px;
-    --zk-spacing-8: 32px;
-
-    /* Shape */
-    --zk-shape-corner-extra-small: 4px;
-    --zk-shape-corner-small: 8px;
-    --zk-shape-corner-medium: 12px;
-    --zk-shape-corner-large: 16px;
-    --zk-shape-corner-full: 9999px;
-
-    /* Typography */
-    --zk-typescale-body-medium-size: 14px;
-    --zk-typescale-body-small-size: 12px;
-    --zk-typescale-label-medium-size: 12px;
-    --zk-typescale-title-medium-size: 16px;
-    --zk-font-weight-regular: 400;
-    --zk-font-weight-medium: 500;
-    --zk-font-weight-semibold: 600;
-
-    /* Elevation */
-    --zk-elevation-1:
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12),
-        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
-    --zk-elevation-2:
-        0px 2px 6px 0px rgba(0, 0, 0, 0.12),
-        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
-
-    /* Motion */
-    --zk-motion-duration-short2: 200ms;
-    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-}
-
 /* ────────────────────────────────────────────────────────────────────────
    Page chrome (NOT part of component contract)
    ──────────────────────────────────────────────────────────────────────── */
@@ -133,7 +53,7 @@ body {
 }
 h1 {
     font-size: 22px;
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     margin: 0 0 var(--zk-spacing-2);
 }
 .contract-meta {
@@ -148,7 +68,7 @@ h1 {
 }
 .matrix-section h2 {
     font-size: var(--zk-typescale-title-medium-size);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     text-transform: uppercase;
     color: var(--zk-color-on-surface-variant);
     border-bottom: 1px solid var(--zk-color-outline-variant);
@@ -163,7 +83,7 @@ h1 {
 }
 .state-label {
     font-size: var(--zk-typescale-label-medium-size);
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface-variant);
     text-transform: uppercase;
     padding-top: var(--zk-spacing-3);
@@ -332,7 +252,6 @@ h1 {
 }
 
 /* Scale mold — tick-mark styling.
-   ZK uses a background-image per the CSS-DSP restriction.
    This mockup renders a simplified tick band for visual reference only. */
 .z-slider-scale .z-slider-center::after {
     content: '';
@@ -392,7 +311,7 @@ h1 {
     border: 1px solid var(--zk-color-outline);
     /* k5 — primary text color for the numeric value */
     color: var(--zk-color-primary);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600; /* slider.css .z-slider-input */
     text-align: center;
     border-radius: var(--zk-shape-corner-extra-small);
     /* Remove browser spinner on number input */
@@ -624,9 +543,8 @@ h1 {
         <div class="state-cell" style="padding-bottom:var(--zk-spacing-6);">
             <!--
               Scale mold: same DOM as default. Adds tick marks.
-              ZK uses a background-image for ticks (CSS-DSP restriction means
-              no external image references — the tick image must be a data: URI or
-              CSS-generated pattern). Track tokens c1/c2 are unchanged.
+              Scale-mold ticks are not styled in `slider.css` yet (deferred); the pattern below is a
+              mockup approximation. Track tokens c1/c2 are unchanged.
               Vertical orientation NOT supported for scale mold.
             -->
             <div class="z-slider z-slider-horizontal z-slider-scale" role="slider" aria-valuenow="50"
@@ -635,7 +553,7 @@ h1 {
                     <div class="z-slider-area" style="width:50%; height:100%; top:0; left:0;"></div>
                     <div class="z-slider-button" style="left:50%;"></div>
                 </div>
-                <!-- Tick marks: CSS-generated below track. In production, ZK uses a background-image.
+                <!-- Tick marks: CSS-generated below track. Scale-mold ticks are not styled in slider.css yet (deferred).
                      This mockup uses repeating-linear-gradient for static visual approximation. -->
                 <div style="
                     position:absolute;
@@ -656,11 +574,8 @@ h1 {
 
     </div>
     <p class="note">
-        Scale mold tick marks: ZK renders ticks via a CSS <code>background-image</code>
-        URL in the iceblue <code>slider.css.dsp</code>. The Marble theme must provide a
-        <code>data:</code> URI or a CSS-generated pattern (e.g.,
-        <code>repeating-linear-gradient</code>) instead of an external URL — the
-        CSS-DSP toolchain does not permit external image references.
+        Scale mold tick marks are not styled yet (deferred). If added, use a CSS-generated pattern
+        (e.g., <code>repeating-linear-gradient</code>).
         Tick color should use <code>var(--zk-color-outline-variant)</code> for visual
         consistency with the track.
     </p>
@@ -842,7 +757,7 @@ h1 {
         The SVG arc path (<code>d</code> attribute) and <code>stroke-width</code> on both
         <code>.z-slider-knob-inner</code> and <code>.z-slider-knob-area</code> are set as
         <em>inline SVG attributes</em> by JS at runtime — they are <em>NOT CSS-themable</em>
-        and must not appear in <code>slider.css.dsp</code>. Only <code>stroke</code>
+        and must not appear in <code>slider.css</code>. Only <code>stroke</code>
         (color) on these two path elements is CSS-controlled.
         The numeric input's <code>top</code>, <code>left</code>, <code>width</code>,
         <code>height</code>, and <code>font-size</code> are also JS-controlled inline

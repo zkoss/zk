@@ -4,7 +4,7 @@ A standard `<button>` element wrapped by ZK's `.z-button` class. Also rendered b
 
 ## `orient="vertical"` DOM quirk
 
-When `orient="vertical"` is set, ZK does **not** add a class. Instead, it inserts a `<br/>` element between the icon and the label inside the button:
+When `orient="vertical"` is set, ZK inserts a `<br/>` element between the icon and the label inside the button; the `<br/>` is the only marker:
 
 ```html
 <button class="z-button">
@@ -14,24 +14,11 @@ When `orient="vertical"` is set, ZK does **not** add a class. Instead, it insert
 </button>
 ```
 
-To style vertical buttons, use the `:has()` selector:
-
-```css
-.z-button:has(br) {
-    flex-direction: column;
-    gap: 2px;
-    /* hide the <br/> itself */
-}
-.z-button:has(br) br {
-    display: none;
-}
-```
-
-No `.z-button-vertical` class exists. The `:has()` selector is the only reliable way.
+To style vertical buttons, select the button with `:has(br)` (the only reliable hook) and stack its children in a column.
 
 ## State classes
 
-- `.z-button-disabled` on root for `disabled="true"`
+- `disabled="true"` sets the native `[disabled]` attribute on the `<button>` (`Button.ts`, `mold/button.js`); ZK adds no `.z-button-disabled` class.
 - Hover / focus / active rely on pseudo-classes (`:hover`, `:focus-visible`, `:active`) on the rendered `<button>` element. The root IS the button, so `:focus` (not `:focus-within`) works.
 
 ## Icon support
@@ -52,7 +39,7 @@ That lone space **collapses** in an `align-items:center` flex container, so the 
 
 - `gap` is **order-independent**, so the one rule also spaces `dir="reverse"` — which reorders the DOM to `Save <img>` (a markup reorder, not CSS). A per-element `margin-right` would land on the wrong side under reverse and need `dir`-aware handling.
 - Text-only (single text node) and icon-only (single graphic) buttons are unaffected — `gap` needs ≥2 flex items.
-- Vertical (`orient="vertical"`) replaces the space with `<br>`; the `:has(br)` rule sets its own (smaller) stacked gap and wins on specificity.
+- Vertical (`orient="vertical"`) replaces the space with `<br>`; a `:has(br)` rule that sets its own stacked gap wins on specificity.
 
 Same mechanism on **combobutton** (`.z-combobutton-content`: image + label). **toolbarbutton** wraps its icon+label in `.z-toolbarbutton-content`, which carries its own content `gap`.
 
@@ -62,5 +49,5 @@ Same mechanism on **combobutton** (`.z-combobutton-content`: image + label). **t
 
 ## Related buttons
 
-- **toolbarbutton** — lives in `footer.css.dsp` (despite the file name). Inherits much from button but adds `.z-toolbarbutton-*` classes.
+- **toolbarbutton** — `lang.xml` declares `toolbar.css.dsp`; the rules themselves come from `toolbarbutton.css`, which the build concatenates into `footer.css.dsp`. Inherits much from button but adds `.z-toolbarbutton-*` classes.
 - **combobutton** — has its own quirk; see `components/combobutton.md`.

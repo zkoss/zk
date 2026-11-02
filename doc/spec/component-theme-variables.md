@@ -205,7 +205,7 @@ ring. Combobox uses a split border: the input and the button each carry half of 
 focus grows the border from 1px to 2px.
 
 **Reason.** This follows the DOM structure; the knobs are the same and only the plumbing differs.
-The inset-ring focus is described in `reference/focus-affordance-no-layout-shift.md`.
+The inset-ring focus is described in `.claude/skills/marble-theme/reference/focus-affordance-no-layout-shift.md`.
 
 The codeeditor is the exception to the ring. Its focus is an overlay ring, not an inset box-shadow,
 because the root has no padding to absorb a 1px→2px border change, and CodeMirror's DOM is flush
@@ -577,6 +577,15 @@ load-bearing *purpose* gates; CTV-5…9 are the mechanics / hygiene / verificati
 | **CTV-7** | **State integrity.** Disabled / readonly / selected / error treatments stay correct under an override (they don't accidentally inherit a fill/border variable and lose their state distinction) — unless a state is itself an intentional, documented variable. | Override the region; assert the disabled (etc.) instance keeps its treatment. |
 | **CTV-8** | **Documented.** Every knob family has a comment in `zul/src/main/resources/web/zul/css/tokens/_component-theme.css` (or the EE/PE equivalent) stating its scope and exceptions. | The comment exists for the component's knob block. |
 | **CTV-9** | **Regression-tested.** A test in `component-theme-variables.spec.ts`, run on the component's own preview page, reads the stock value, injects a `:root` override after the theme bundle and reads again. That proves CTV-1/2/4/5: a hardcoded value or a default declared on the component element would shadow the inherited `:root` value and fail the second read. | Test exists and is green. |
+
+> **What to assert in a CTV-9 test.** A sibling `not.toBe(override)` assertion is not worth writing:
+> the override is set on a container and the sibling is not its descendant, so CSS inheritance makes
+> the assertion true under any implementation. The checks that catch real mistakes are: (1) the
+> scoped element reads the knob (`toBe(override value)`), which catches a hardcoded colour or a
+> default declared on the component element; (2) the sibling still has the stock value
+> (`toBe(stock value)`), which is the CTV-1 check. Floating components (Messagebox is attached at the
+> page root, Popup is moved to `body` by `zk.makeVParent()`) cannot be reached by a regional
+> override, so `:root` is the only way to test their knobs.
 
 > CTV-6 and CTV-7 are judgment calls (what counts as "enough" coverage / a preserved state).
 > The rationale for each component's coverage and preserved states is recorded in the comment on

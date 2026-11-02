@@ -11,8 +11,7 @@ and the component renders with browser/inherited defaults, **with no error**.
    widget is on the page. A build that emits one `.css.dsp` per source CSS (1:1 auto-scan)
    serves these correctly. ✅
 2. **Global bundle** — the CSS is concatenated into a file that `zk.wcs` always serves
-   (in Marble: `norm.css.dsp`, built from `normFiles` in `scripts/build-css.js`; also
-   `combo`/`footer`). Required for any component with **no `css-uri`**: helpers, mold-only
+   (for example `norm.css.dsp`, `combo.css.dsp`, `footer.css.dsp`). Required for any component with **no `css-uri`**: helpers, mold-only
    widgets, core-JS-drawn DOM, and real widgets that stock ZK styles only in `norm.less`.
 
 ## The trap
@@ -28,20 +27,14 @@ Static "has no css-uri ⇒ orphaned" **over-predicts** — ZK's `zk.wcs` serves 
 no-css-uri files via package aggregation. The only reliable check is a runtime probe:
 load a page that renders the widget and scan `document.styleSheets` for the widget's own
 **root** rule (a selector matching `^\.z-<comp>(?![\w-])`, not a compound ref from another
-file). Absent while the widget renders ⇒ orphaned. (See `screenshot.spec.ts` ›
-`orphaned-helper-css`.) Watch for two false classes:
+file). Absent while the widget renders ⇒ orphaned. Watch for two false classes:
 
 - **Served-anyway**: `select` (`.z-select`), `cell` (`.z-cell`), `bandpopup`
   (`.z-bandpopup`) — no css-uri, but `zk.wcs` serves their own rules. Not orphans.
-- **Dead CSS**: `space.css` (`.z-space`) and `toolbarpanel.css` (`.z-toolbarpanel`) target
-  selectors that never render — `<space>` renders `.z-separator`, Toolbar `panel` mold
-  renders `.z-toolbar-panel`/`.z-toolbar-content`. Bundling them would load no-op rules.
+- **Dead CSS**: a CSS file whose root selector never renders (for example a rule for
+  `.z-space` when `<space>` renders `.z-separator`) is not an orphan; bundling it would only load
+  no-op rules.
 
-## Marble enforcement
+## Fixing an orphan
 
-- **Fix** an orphan by adding its source path to `normFiles` (`scripts/build-css.js`).
-- **`WCS_SERVED_ALLOWLIST`** in `build-css.js` lists the probe-verified served-anyway files
-  (select/cell/bandpopup) so the guard doesn't false-positive on them.
-- **`assertNoOrphanComponentCss()`** (build-time, in `build-css.js`) fails the build if a
-  non-empty auto-scanned component CSS is neither `css-uri`-backed nor in a bundle nor in
-  the allowlist — so a new no-css-uri component can't silently orphan.
+Add the component CSS to a global bundle, or give the component a `css-uri`. The build step that guards against orphans is a theme build concern; see the theme's build documentation.

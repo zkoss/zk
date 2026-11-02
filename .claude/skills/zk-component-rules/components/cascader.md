@@ -6,9 +6,9 @@ A hierarchical dropdown picker that presents a TreeModel as a sequence of side-b
 
 Lives in `org.zkoss.zkmax.zul.Cascader`. Not available in CE or PE. See `reference/edition-availability.md`.
 
-## NOT a text input
+## Trigger is a read-only display area
 
-The visible widget body is a **read-only display area**, not an `<input>`. Users cannot type into it. There is no `<input>` element in the trigger. The text shown is `.z-cascader-label` (selected path) or `.z-cascader-placeholder` (empty state), both `<div>` elements. Do not write CSS assuming an `<input>` child exists.
+The visible widget body is a **read-only `<div>` display area**; users cannot type into it. The text shown is `.z-cascader-label` (selected path) or `.z-cascader-placeholder` (empty state), both `<div>` elements. Write the trigger CSS for `<div>` children only. The widget states are disabled, open and focus.
 
 ## DOM structure (from mold/cascader.js + Cascader.ts `_redrawpp`)
 
@@ -38,11 +38,10 @@ The visible widget body is a **read-only display area**, not an `<input>`. Users
 
 **Initial-render display gap (pre-selected model)**: `mold/cascader.js` keys both inline styles off `this._placeholderVisible`, but `Cascader.java` **never renders `placeholderVisible`** (its sibling `Searchbox.java` does — line ~612), so the flag is always `undefined` at redraw and BOTH divs are emitted with empty `style` — both visible. `bind_()` then patches only the **empty-selection** branch (`_selectedUuids.length == 0` → hide label, show placeholder); when a selection is **pre-set on the model**, the empty placeholder div stays visible alongside the label until the first interactive `setSelectedUuids`/`setLabel` writes inline styles. Consequences for theme CSS:
 
-- Any rule granting the placeholder horizontal space (`flex: 1`, a width, large padding) makes the invisible-but-rendered placeholder squeeze the label at initial load — the classic symptom is a pre-selected path showing `text-overflow: ellipsis` that "fixes itself" after one interactive selection. Stock iceblue dodges it only because its label/placeholder are content-sized `inline-block`s (an empty placeholder takes ~0px).
+- Any rule granting the placeholder horizontal space (`flex: 1`, a width, large padding) makes the invisible-but-rendered placeholder squeeze the label at initial load — the classic symptom is a pre-selected path showing `text-overflow: ellipsis` that "fixes itself" after one interactive selection. A content-sized `inline-block` label/placeholder avoids it, because an empty placeholder takes ~0px.
 - A stylesheet-level guard is safe and sufficient: `.z-cascader:has(.z-cascader-label:not(:empty)) .z-cascader-placeholder { display: none }`. It only acts when no inline `display` exists (= initial render); all interactive flows write inline styles, which win the cascade.
 - The same gap means `placeholder="…"` text + pre-selected model shows **both texts side by side** at initial load in any theme that doesn't guard — this is the upstream rendering gap, not a theme bug.
-- **Sibling — searchbox:** `searchbox` has the identical label/placeholder-`<div>` swap. The difference: `Searchbox.java` **does** render `placeholderVisible`, so its mold emits the inline hint in the no-selection state and leaves both empty-inline only when selected — meaning a plain base `.z-searchbox-placeholder { display:none }` (mirroring stock ZK less) is sufficient there, no `:has()` needed. Cascader needs the `:has()` form precisely because `Cascader.java` never emits the hint. See `components/searchbox.md` ("Label vs placeholder visibility is JS-toggled…"). (searchbox shipped without even the base rule until 2026-06-11.)
-
+- **Sibling — searchbox:** `searchbox` has the identical label/placeholder-`<div>` swap. The difference: `Searchbox.java` **does** render `placeholderVisible`, so its mold emits the inline hint in the no-selection state and leaves both empty-inline only when selected — meaning a plain base `.z-searchbox-placeholder { display:none }` (mirroring stock ZK less) is sufficient there, no `:has()` needed. Cascader needs the `:has()` form precisely because `Cascader.java` never emits the hint. See `components/searchbox.md` ("Label vs placeholder visibility is JS-toggled…").
 ### Popup detachment
 
 `.z-cascader-popup` follows the standard ZK floating-popup rule. When `open()` is called, `zkpp.makeVParent()` re-parents the popup to `<body>`, and `pp.style.minWidth` is set to `node.offsetWidth` (trigger width) inline. See `reference/floating-popup-in-body.md`:
@@ -67,7 +66,7 @@ Popup item `.z-cascader-item`:
 | selected (part of current selection path) | `.z-cascader-selected` — set during `_doSelectItem` / `_renderItems0` |
 | keyboard-highlighted | `.z-cascader-active` — moved by `_shiftSelection`; removed on `close()` |
 
-There is no `readonly` / `invalid` / `inplace` for cascader.
+The trigger states are only disabled, open and focus.
 
 ## Icon class swaps
 
@@ -106,16 +105,7 @@ The popup-item expand icon also uses `.z-cascader-icon` but is scoped as `.z-cas
 
 ## Keyboard model
 
-| Key | Action |
-|-----|--------|
-| Escape | close popup |
-| Tab | close popup |
-| Enter | select currently-active item |
-| Arrow Up/Down | open popup if closed; else move `.z-cascader-active` in current column |
-| Arrow Left | close the rightmost cave (navigate up a level) |
-| Arrow Right | open children of active item (navigate down a level) |
-| PageUp/PageDown | ±30 items |
-| Home/End | first/last visible item in current column |
+The keydown handler is in `Cascader.ts`. What matters for a theme: Arrow Up/Down move `.z-cascader-active` inside the current column, Arrow Left closes the rightmost cave and Arrow Right opens the children of the active item.
 
 ## State-differs invariants
 
@@ -128,12 +118,6 @@ The popup-item expand icon also uses `.z-cascader-icon` but is scoped as `.z-cas
 
 ## Relational invariants
 
-- Trigger bbox height ≥ 32px (minimum usable click target).
 - When popup is open: popup bbox.top is either immediately below or immediately above the trigger (no gap > 4px, no overlap > 4px with trigger body).
 - Caves inside popup are horizontally adjacent: `|cave[n].bbox.right − cave[n+1].bbox.left| ≤ 2px`.
 - Popup min-width ≥ trigger width: `popup.getBoundingClientRect().width ≥ trigger.getBoundingClientRect().width − 2`.
-
-## Notes
-
-- The ZKDoc edition badge says PE in the cascader.md frontmatter but the Java source `Cascader.ts` header says "Available in ZK EE" and the package is `zkmax` — treat as **EE** (zkmax.jar). The ZKDoc note `{% include edition-availability.html edition="pe" %}` appears to be a documentation error.
-- Combined JS-source hash (Cascader.ts + mold/cascader.js, sorted): `86b0418368142f5b5c5f813350a618ce3936743be96ee22db9ac4a0cf08f9e0f`

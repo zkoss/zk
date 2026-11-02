@@ -6,19 +6,14 @@ A title bar child component, typically placed inside `window`, `panel`, or `grou
 
 ```
 .z-caption
-└─ .z-caption-content              (content wrapper — plain text node inside, no .z-caption-text child)
-   ├─ .z-caption-label             (label text element)
-   └─ .z-caption-image             (image element, if image= attribute set)
+└─ .z-caption-content              (div#-cave — content wrapper)
+   ├─ img.z-caption-image          (only when image= is set)
+   ├─ <i> icon                     (only when iconSclass is set)
+   └─ title text                   (see below)
 ```
 
-## Critical: no `.z-caption-text` element
-
-The title text renders as a plain text node (or inside `.z-caption-label`), NOT inside a `.z-caption-text` wrapper. This follows the same pattern as `.z-window-header`.
+`Caption.ts` `domContent_()` builds the content. With no image and no icon, the title is a plain text node inside `.z-caption-content`. With an image or icon, the title is wrapped in `span.z-caption-label`. There is no `.z-caption-text` element. This follows the same pattern as `.z-window-header`. When the parent is not a default-mold groupbox, `mold/caption.js` also emits the parent's `-icons` container (collapse / minimize / maximize / close buttons) after `.z-caption-content`.
 
 ## CSS file
 
 `caption.css.dsp`
-
-## Note
-
-Stub entry — full documentation pending spec-author run (Phase 3/4).

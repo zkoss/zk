@@ -1,7 +1,7 @@
 # Auto-contrast text color
 
 **Question this answers:** When a dark background is set (e.g.
-`<label value="Admin" sclass="z-chip z-chip-primary"/>`), the text can end up dark → insufficient
+`<label value="Admin" sclass="z-chip" style="--zk-chip-bg: var(--zk-color-primary)"/>`), the text can end up dark → insufficient
 contrast (fails WCAG). Is there a CSS mechanism that makes the text automatically pick light-vs-dark
 based on the background, instead of hand-editing the text color? And does Marble already have it?
 
@@ -72,19 +72,13 @@ a consciously deferred gap. What it has instead:
    `#ffffff`; only the `*-on-*-container` variants are `oklch(from …)`-derived tone pairs. None is
    contrast-computed.
 
-4. **Chips already pair bg + fg** — `base/_chips.css`:
-   `.z-chip.z-chip-primary { background:#4782da; color:#fff; }` (and the success/warning/error/
-   neutral/info variants each pair a tinted bg with a dark same-hue text). Two-class selectors beat
-   `.z-label` specificity so the chip color wins when applied to a `<label>`.
-   → On a current build, `<label sclass="z-chip z-chip-primary"/>` renders **white on blue, not
-   black**. If black text appears, that contradicts the shipped CSS → suspect a stale build, an
-   older version, or a custom background override, not the theme default.
+4. **Chips already pair bg + fg** — `js/zul/wgt/css/chip.css` pairs `--zk-chip-bg` with
+   `--zk-chip-color` for each severity (`info`, `success`, `warning`, `error`, `neutral`).
 
-### Documented as a gap
-Both `doc/spec/brand-override.md` (the `-fill` cap section) and an inline comment in
-`tokens/_colors.css` state: *"Full automatic foreground selection (MUI/Ant style) needs
-`contrast-color()`, not yet baseline — see GAP 2"* (see [`design-decisions.md`](design-decisions.md)). Marble
-deferred true auto-contrast until `contrast-color()` ships broadly.
+### Deferred
+Full automatic foreground selection (MUI/Ant style) needs `contrast-color()`, which is not yet
+baseline. Marble defers true auto-contrast until `contrast-color()` ships broadly; the `-fill` cap
+section of [brand-override.md](brand-override.md) states the same.
 
 ---
 
@@ -93,5 +87,4 @@ deferred true auto-contrast until `contrast-color()` ships broadly.
 For the built-in variants you don't need anything — they already pair text with background. For
 **arbitrary custom backgrounds**, add a `z-auto-contrast-text` utility using technique #2 (drives
 `color` from a `--bg` variable). It fits the existing `oklch(from …)` usage and Marble's browser
-baseline. Not added yet — see [brand-override.md](brand-override.md) and GAP 2 in
-[design-decisions.md](design-decisions.md).
+baseline. Not added yet — see [brand-override.md](brand-override.md).

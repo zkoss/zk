@@ -1,7 +1,6 @@
 # ZK Framework Global CSS Classes — Canonical Registry
 
-**ZK version pinned: 10.2.1-jakarta**
-Regenerate this file when the target ZK version changes. Sources are the ZK CE checkout at tag 10.2.1-jakarta.
+The registry follows the ZK version in `gradle.properties`. Regenerate this file when the target ZK version changes, by re-enumerating ZK's stock global CSS and re-grepping the client JS for `addClass` / `removeClass` / `className =` calls.
 
 This file is the **spec layer** of the three-layer framework-class compliance check
 that ships with this skill. It generalises and supersedes
@@ -16,7 +15,7 @@ ZK's client-side JS/TS engine toggles certain CSS classes at runtime (adding and
 them on live DOM nodes). A theme that omits, renames, or hard-codes around such a class
 silently breaks ZK behaviour — **no error, just wrong layout**.
 
-The proven failure: Marble renamed `.z-flex` → `.z-d-flex` in a utility-class pass.
+The proven failure: a theme renamed `.z-flex` → `.z-d-flex` in a utility-class pass.
 ZK's css-flex engine added `.z-flex` to containers at runtime, but the CSS rule no longer
 matched, so every `hflex`/`vflex` container stayed `display: block`. Drag-persistence in
 `Splitlayout` was a secondary casualty (see `css-flex-classes.md` hard rule 2).
@@ -28,48 +27,44 @@ matched, so every `hflex`/`vflex` container stayed `display: block`. Drag-persis
 A class is marked **contract** only when the research found actual `addClass` / `removeClass`
 / `className =` calls that add and remove it at runtime. The theme **must** define these
 selectors with values that are functionally equivalent to stock — and must never hard-code
-their effect onto a component root that ZK JS manages.
+their effect onto a component root that ZK JS manages. The machine-readable list is
+`framework-classes.json`.
 
-| Class | Stock source | JS/TS toggling site | Required CSS declaration | Notes |
-|-------|-------------|---------------------|--------------------------|-------|
-| `.z-flex` | `footer.less` | `zk/flex.ts:applyCSSFlex` / `clearCSSFlex` | `display: flex` | Container of hflex/vflex children |
-| `.z-flex > :not(.z-flex-item)` | `footer.less` | same (selector implied by `.z-flex`) | `flex-shrink: 0` | Non-flex siblings inside a flex container must not shrink |
-| `.z-flex-row` | `footer.less` | `zk/flex.ts:applyCSSFlex` / `clearCSSFlex` | `flex-direction: row` | Added alongside `.z-flex` |
-| `.z-flex-column` | `footer.less` | `zk/flex.ts:applyCSSFlex` / `clearCSSFlex` | `flex-direction: column` | Added alongside `.z-flex` |
-| `.z-flex-item` | `footer.less` | `zk/flex.ts:applyCSSFlex` / `clearCSSFlex` | `flex: 1 1 0; min-height: 0; min-width: 0` | Added to each flexed child; removed before ZK writes inline px sizes |
-| `.z-dragged` | `norm.less` (stock styles it) | `zk/widget.ts:cloneDrag_` / `uncloneDrag_` (4361/4371) | de-emphasise source — Marble: `opacity: .4` (stock used color+background) | Applied to the drag-source node while drag is in flight |
-| `.z-drag-over` | — (JS hook; **no stock CSS**) | `zk/widget.ts:dropEffect_` (4311) | theme-defined drop-target highlight | Added to the drop-target root when a draggable is over it |
-| `.z-drag-ghost` | — (JS hook; **no stock CSS**) | `zk/widget.ts:ghost` clone path (461) | theme-defined floating clone | The body-appended clone `#zk_ddghost` for **non-TR** drags |
-| `.z-drop-ghost` | — (JS hook; **no stock CSS**) | `zk/widget.ts:ghost` (440) | theme-defined message chip | Root of the message ghost `#zk_ddghost` for **TR** (listitem/row) drags |
-| `.z-drop-content` | — (JS hook; **no stock CSS**) | `zk/widget.ts:ghost` (441) | theme-defined inner wrapper | Inner wrapper inside the message ghost |
-| `.z-drop-icon` | — (JS hook; **no stock CSS**) | `zk/widget.ts:ghost` (441) + `DD_dragging` (507/511) | theme-defined mask glyph | Icon span `#zk_ddghost-img`; toggles `z-icon-plus-circle`/`z-icon-ban` |
-| `.z-drop-text` | — (JS hook; **no stock CSS**) | `zk/widget.ts:ghost` (438) | theme-defined message text | Message text span inside the ghost |
-| `.z-drop-allow` | — (JS hook; **no stock CSS**) | `zk/widget.ts:DD_dragging` (505) | theme-defined valid-drop state | Toggled on the message ghost over a valid target |
-| `.z-drop-disallow` | — (JS hook; **no stock CSS**) | `zk/widget.ts:ghost` (440) + `DD_dragging` (509) | theme-defined invalid-drop state | Initial + invalid state on the message ghost |
-| `.z-word-nowrap` | `norm.less` | `zul/mesh/Frozen.ts:bind_` / `unbind_` (lines 191/216) | `white-space: nowrap` | Added to grid/listbox body + foot when `<frozen>` is bound |
-| `.z-renderdefer` | `norm.less` | `zk/widget.ts:redraw_` (line 2940) | sizing + spinner background | Placeholder emitted while `_renderdefer` timer has not yet fired |
+| Class | JS/TS toggling site | Required CSS declaration | Notes |
+|-------|---------------------|--------------------------|-------|
+| `.z-flex` | `zk/flex.ts:applyCSSFlex` / `clearCSSFlex` | `display: flex` | Container of hflex/vflex children |
+| `.z-flex > :not(.z-flex-item)` | same (selector implied by `.z-flex`) | `flex-shrink: 0` | Non-flex siblings inside a flex container must not shrink |
+| `.z-flex-row` | `zk/flex.ts:applyCSSFlex` / `clearCSSFlex` | `flex-direction: row` | Added alongside `.z-flex` |
+| `.z-flex-column` | `zk/flex.ts:applyCSSFlex` / `clearCSSFlex` | `flex-direction: column` | Added alongside `.z-flex` |
+| `.z-flex-item` | `zk/flex.ts:applyCSSFlex` / `clearCSSFlex` | `flex: 1 1 0; min-height: 0; min-width: 0` | Added to each flexed child; removed before ZK writes inline px sizes |
+| `.z-dragged` | `zk/widget.ts:cloneDrag_` / `uncloneDrag_` | theme-defined de-emphasis of the drag source | Applied to the drag-source node while drag is in flight |
+| `.z-drag-over` | `zk/widget.ts:dropEffect_` (JS hook; **no stock CSS**) | theme-defined drop-target highlight | Added to the drop-target root when a draggable is over it |
+| `.z-drag-ghost` | `zk/widget.ts` ghost clone path (JS hook; **no stock CSS**) | theme-defined floating clone | The body-appended clone `#zk_ddghost` for **non-TR** drags |
+| `.z-drop-ghost` | `zk/widget.ts:ghost` (JS hook; **no stock CSS**) | theme-defined message chip | Root of the message ghost `#zk_ddghost` for **TR** (listitem/row) drags |
+| `.z-drop-content` | `zk/widget.ts:ghost` (JS hook; **no stock CSS**) | theme-defined inner wrapper | Inner wrapper inside the message ghost |
+| `.z-drop-icon` | `zk/widget.ts:ghost` + `DD_dragging` (JS hook; **no stock CSS**) | theme-defined mask glyph | Icon span `#zk_ddghost-img`; toggles `z-icon-plus-circle`/`z-icon-ban` |
+| `.z-drop-text` | `zk/widget.ts:ghost` (JS hook; **no stock CSS**) | theme-defined message text | Message text span inside the ghost |
+| `.z-drop-allow` | `zk/widget.ts:DD_dragging` (JS hook; **no stock CSS**) | theme-defined valid-drop state | Toggled on the message ghost over a valid target |
+| `.z-drop-disallow` | `zk/widget.ts:ghost` + `DD_dragging` (JS hook; **no stock CSS**) | theme-defined invalid-drop state | Initial + invalid state on the message ghost |
+| `.z-word-nowrap` | `zul/mesh/Frozen.ts:bind_` / `unbind_` | `white-space: nowrap` | Added to grid/listbox body + foot when `<frozen>` is bound |
+| `.z-renderdefer` | `zk/widget.ts:redraw_` | sizing + spinner background | Placeholder emitted while `_renderdefer` timer has not yet fired |
 
 ### Detailed required CSS for contract classes
 
 ```css
-/* footer.less — must load LAST (after component CSS) */
+/* must load LAST (after component CSS) */
 .z-flex { display: flex; }
 .z-flex > :not(.z-flex-item) { flex-shrink: 0; }
 .z-flex-row { flex-direction: row; }
 .z-flex-column { flex-direction: column; }
 .z-flex-item { flex: 1 1 0; min-height: 0; min-width: 0; }
 
-/* norm.less */
-.z-dragged { color: <drag-color>; background: none no-repeat scroll 0 0 <drag-bg>; }
-.z-drag-over { background: <drag-hover-bg> !important; }
-/* .z-drag-ghost, .z-drop-allow, .z-drop-disallow — see decorative section for full block */
 .z-word-nowrap { white-space: nowrap; }
-/* .z-renderdefer — see decorative section (spinner background-image) */
+/* .z-dragged, .z-drag-over, .z-drag-ghost, .z-drop-allow, .z-drop-disallow: theme-defined look */
+/* .z-renderdefer: sizing + spinner background (see the decorative section) */
 ```
 
-Marble location for the flex block: `zul/src/main/resources/web/zul/css/base/_cssflex.css`
-(bundled into `footer.css.dsp` via `footerFiles` in `scripts/build-css.js`).
-This is byte-equivalent to stock — **do not modify**.
+The flex block must be byte-equivalent to stock — **do not modify**.
 
 ### Hard rules for contract classes
 
@@ -92,60 +87,61 @@ These classes appear in ZK's stock global CSS but are **not** runtime-toggled by
 - Set once at render time (static class in mold JS / server-rendered HTML), or
 - Used purely as a CSS selector target that ZK JS reads but never writes.
 
-A theme that omits them loses visual polish but does not break functionality.
+A theme that omits them loses visual polish but does not break functionality. Stock values
+are in ZK's stock global CSS; the table gives only what each class is for and how ZK uses it.
 
-| Class | Stock source | JS/TS reference | Required CSS (stock values) | Notes |
-|-------|-------------|-----------------|----------------------------|-------|
-| `.z-borderbox` | `norm.less` (line 19) | none — pure CSS attribution pattern | `box-sizing: border-box` | Applies to `[class^="z-"]` globally; `.z-borderbox` is the opt-in for non-ZK elements |
-| `.z-inline-block` | `norm.less` (line 399) | set via `setSclass("z-inline-block")` in ZUL — not toggled by framework | `display: inline-block; vertical-align: top` | Helper for ensuring dimension on inline elements |
-| `.z-word-wrap` | `norm.less` | not toggled at runtime by framework JS | `word-wrap: break-word` | Declarative utility |
-| `.z-overflow-hidden` | `norm.less` | not toggled at runtime by framework JS | `overflow: hidden` | Declarative utility |
-| `.z-dd-stackup` | `norm.less` | `zk/drag.ts` sets `stackup.className = 'z-dd-stackup'` at construction (line 607) — created once, not toggled | `position: absolute; left:0; top:0; width:100%; height:100%; z-index: 16800; background-image: 1px transparent GIF` | Invisible overlay during drag to capture mouse events in iframes |
-| `.z-temp` | `norm.less` | `HtmlPageRenders.java` renders it server-side; `crashmsg.ts` only reads `querySelectorAll('.z-temp')`, never toggles | `position: fixed; top:0; left:0; width:100%; height:100%; background:…; opacity:0.6` | Initial loading scrim; server-emitted on page load, replaced by `z-loading` block after ZK mounts |
-| `.z-initing` | `norm.less` | `zk/zk.ts` `_showprgb` appends a `<div class="z-initing">` as a child of the `z-temp`/`z-loading` block when `_zk.pi` flag is set — emitted once, not subsequently toggled | `position: absolute; right:10px; bottom:10px; width:60px; height:60px; background:… no-repeat center` | Page-initialisation indicator spinner |
-| `.z-loading` | `norm.less` | `zk/utl.ts:progressbox` creates it in innerHTML — not a runtime toggle on existing nodes | `position: absolute; top:0; left:0; z-index:31000; background:…; border-radius:…; cursor:wait` | showBusy message box (global). **Bundling note**: must be in `normFiles` — see `zk-core-emitted-selectors.md` |
-| `.z-loading-indicator` | `norm.less` | created by `progressbox` | `padding:…; text-align:center; color:…; background:…` | Inner content of showBusy box |
-| `.z-loading-icon` | `norm.less` | created by `progressbox` | `display:block; position:relative; left:50%; width:…; height:…; background: spinner-gif` | Spinner element. Theme must supply a spinner image or CSS animation |
-| `.z-apply-loading` | `norm.less` | `zk/effect.ts:Mask._draw` creates it in innerHTML | `position:absolute; z-index:89500; background:…; border-radius:…; cursor:wait` | Per-component showBusy overlay. **Bundling note**: must be in `normFiles` |
-| `.z-apply-loading-indicator` | `norm.less` | created by `Mask._draw` | `font:…; padding:…; position:relative; overflow:hidden` | |
-| `.z-apply-loading-icon` | `norm.less` | created by `Mask._draw` | `display:inline-block; position:absolute; width:…; height:…; background: spinner-gif` | |
-| `.z-apply-mask` | `norm.less` | created by `Mask._draw` (line 292) | `position:absolute; top:0; left:0; width:100%; height:100%; background:…; opacity:0.6; z-index:89000` | Scrim for per-component busy overlay |
-| `.z-modal-mask` | `norm.less` | `zk/utl.ts:progressbox` and `zk/drag.ts` create it in innerHTML | `position:fixed; inset:0; top:0!important; left:0!important; width:100%; height:100%; background:…; opacity:0.6` | Full-page modal scrim. See `zk-core-emitted-selectors.md` for the inline `top/left` quirk requiring `!important` |
-| `.z-error` | `norm.less` | `zk/zk.ts:_Erbx` creates via innerHTML; `display:none` is MANDATORY (slideDown needs hidden start) | `display:none; position:absolute; top:0; left:40%; z-index:9999999; width:450px; …` | JS debug error panel. See `zk-core-emitted-selectors.md` for full DOM structure |
-| `.z-log` | `norm.less` | `zk/zk.ts` sets `logBox.className = 'z-log'` (line 304) — created once for `zk.log()` debug output | `position:absolute; right:10px; bottom:5px; width:50%; z-index:99000; text-align:right` | `zk.log()` debug output box |
-| `.noscript` | `norm.less` | static HTML `<noscript>` tag — no JS | `position:absolute; top:0; left:0; width:100%; height:100%; background:#E0E1E3; opacity:0.6; z-index:32000; text-align:center` | No-JS fallback overlay |
-| `.z-focus-a` | `norm.less` | rendered in mold JS (listbox, tree, window, calendar, menupopup) as a static class — never toggled | `font-size:0!important; width:1px; height:1px; …; position:absolute; overflow:hidden` | Invisible focus anchor for keyboard navigation; must exist but must be visually hidden |
-| `.z-clear` | `norm.less` | rendered in mold JS (toolbar, toolbarpanel, frozen, tabbox) as a static class — never toggled | `font-size:0; width:0; height:0; line-height:0; overflow:hidden; clear:both` | Float-clearfix helper |
-| `.z-macro` | `norm.less` | emitted by `MacroWidget` as root class — static render | `display:inline-block; min-width:1px` | Root container for macro components |
-| `.z-scrollbar` | `norm.less` | `zul/Scrollbar.ts` renders it in innerHTML — static class | `display:none; position:absolute; line-height:1` (plus `-vertical`, `-horizontal`, `-indicator`, etc. sub-classes) | Custom scrollbar widget; styles must cover all `.z-scrollbar-*` sub-classes |
-| `.z-upload` | `norm.less` | `zul/Upload.ts:_createUploadHTML` renders `<span class="z-upload">` | `font-size:0; display:inline-block; width:0; height:0; margin:0; padding:0; position:relative` | Invisible file-input wrapper for upload buttons |
-| `.z-upload-icon` | `norm.less` | static in upload widget | `background-image: progress-meter gif; overflow:hidden` | Upload progress indicator |
-| `.z-fileupload-add` / `.z-fileupload-remove` | `norm.less` | `zul/Upload.ts` sets `sclass='z-fileupload-remove …'` and `sclass='z-fileupload-progress'` — set at widget creation time | `color:#1096BC; width:16px; height:17px; cursor:pointer` / `width:300px` | File-upload dialog buttons |
-| `.z-fileupload-progress` | `norm.less` | same | `width:300px` | |
-| `.z-fileupload-manager` | `norm.less` | `zul/Upload.ts:setSclass('z-fileupload-manager')` — set once, not toggled | `width:350px` | |
-| `.z-drop-content` / `.z-drop-icon` / `.z-drop-text` | `norm.less` | rendered once in drag ghost DOM (widget.ts line 441) | padding, sizing, font styles | Children of the `.z-drop-ghost` element |
-| `.z-drop-ghost` | `norm.less` | created once per drag operation in `createDragGhost_` (widget.ts line 440) | `list-style:none` via `.z-drag > &-ghost` | The floating ghost panel shown during drag |
+| Class | JS/TS reference | Notes |
+|-------|-----------------|-------|
+| `.z-borderbox` | none — pure CSS attribution pattern | `box-sizing: border-box`; applies to `[class^="z-"]` globally; `.z-borderbox` is the opt-in for non-ZK elements |
+| `.z-inline-block` | set via `setSclass("z-inline-block")` in ZUL — not toggled by framework | Helper for ensuring dimension on inline elements |
+| `.z-word-wrap` | not toggled at runtime by framework JS | Declarative utility |
+| `.z-overflow-hidden` | not toggled at runtime by framework JS | Declarative utility |
+| `.z-dd-stackup` | `zk/drag.ts` sets `stackup.className = 'z-dd-stackup'` at construction — created once, not toggled | Invisible overlay during drag to capture mouse events in iframes |
+| `.z-temp` | `HtmlPageRenders.java` renders it server-side; `crashmsg.ts` only reads `querySelectorAll('.z-temp')`, never toggles | Initial loading scrim; server-emitted on page load, replaced by `z-loading` block after ZK mounts |
+| `.z-initing` | `zk/zk.ts` `_showprgb` appends a `<div class="z-initing">` as a child of the `z-temp`/`z-loading` block when `_zk.pi` flag is set — emitted once, not subsequently toggled | Page-initialisation indicator spinner |
+| `.z-loading` | `zk/utl.ts:progressbox` creates it in innerHTML — not a runtime toggle on existing nodes | showBusy message box (global). **Bundling note**: must be in the global bundle served by `zk.wcs` — see `zk-core-emitted-selectors.md` |
+| `.z-loading-indicator` | created by `progressbox` | Inner content of showBusy box |
+| `.z-loading-icon` | created by `progressbox` | Spinner element. Theme must supply a spinner image or CSS animation |
+| `.z-apply-loading` | `zk/effect.ts:Mask._draw` creates it in innerHTML | Per-component showBusy overlay. **Bundling note**: must be in the global bundle served by `zk.wcs` |
+| `.z-apply-loading-indicator` | created by `Mask._draw` | |
+| `.z-apply-loading-icon` | created by `Mask._draw` | |
+| `.z-apply-mask` | created by `Mask._draw` | Scrim for per-component busy overlay |
+| `.z-modal-mask` | `zk/utl.ts:progressbox` and `zk/drag.ts` create it in innerHTML | Full-page modal scrim. See `zk-core-emitted-selectors.md` for the inline `top/left` quirk requiring `!important` |
+| `.z-error` | `zk/zk.ts:_Erbx` creates via innerHTML; `display:none` is MANDATORY (slideDown needs hidden start) | JS debug error panel. See `zk-core-emitted-selectors.md` for full DOM structure |
+| `.z-log` | `zk/zk.ts` sets `logBox.className = 'z-log'` — created once for `zk.log()` debug output | `zk.log()` debug output box |
+| `.noscript` | static HTML `<noscript>` tag — no JS | No-JS fallback overlay |
+| `.z-focus-a` | rendered in mold JS (listbox, tree, window, calendar, menupopup) as a static class — never toggled | Invisible focus anchor for keyboard navigation; must exist but must be visually hidden |
+| `.z-clear` | rendered in mold JS (toolbar, toolbarpanel, frozen, tabbox) as a static class — never toggled | Float-clearfix helper |
+| `.z-macro` | emitted by `MacroWidget` as root class — static render | Root container for macro components |
+| `.z-scrollbar` | `zul/Scrollbar.ts` renders it in innerHTML — static class | Custom scrollbar widget; styles must cover all `.z-scrollbar-*` sub-classes (`-vertical`, `-horizontal`, `-indicator`, …) |
+| `.z-upload` | `zul/Upload.ts:_createUploadHTML` renders `<span class="z-upload">` | Invisible file-input wrapper for upload buttons |
+| `.z-upload-icon` | static in upload widget | Upload progress indicator |
+| `.z-fileupload-add` / `.z-fileupload-remove` | `zul/Upload.ts` sets `sclass='z-fileupload-remove …'` and `sclass='z-fileupload-progress'` — set at widget creation time | File-upload dialog buttons |
+| `.z-fileupload-progress` | same | |
+| `.z-fileupload-manager` | `zul/Upload.ts:setSclass('z-fileupload-manager')` — set once, not toggled | |
+| `.z-drop-content` / `.z-drop-icon` / `.z-drop-text` | rendered once in drag ghost DOM (`widget.ts`) | Children of the `.z-drop-ghost` element |
+| `.z-drop-ghost` | created once per drag operation in `createDragGhost_` (`widget.ts`) | The floating ghost panel shown during drag |
 
 ### Bundling note for decorative core-emitted classes
 
 Several decorative classes are emitted by ZK core (not by any widget), so no per-widget
-CSS file auto-load will include them. They **must** live in a file registered in `normFiles`
-(Marble: `scripts/build-css.js`). Affected families: `.z-loading*`, `.z-apply-loading*`,
+CSS file auto-load will include them. They **must** live in a file that is part of the global bundle
+served by `zk.wcs`. Affected families: `.z-loading*`, `.z-apply-loading*`,
 `.z-apply-mask`, `.z-modal-mask`, `.z-error`, `.z-renderdefer`, `.z-initing`, `.z-temp`,
 `.z-log`. Full analysis in `zk-core-emitted-selectors.md`.
 
 ---
 
-## Classes present in norm.less but not z-prefixed
+## Classes in ZK's stock global CSS that are not z-prefixed
 
-These are in stock ZK global CSS but don't follow the `z-` convention; a theme should
-include them for completeness but they are never JS-toggled as ZK framework mechanics:
+These don't follow the `z-` convention; a theme should include them for completeness but
+they are never JS-toggled as ZK framework mechanics:
 
-| Class | Source | Purpose |
-|-------|--------|---------|
-| `.noscript` | `norm.less` | No-JS overlay |
-| `.gecko .z-draggable-over > *` | `norm.less` | Firefox drag selection fix |
-| `.mobile *` | `norm.less` | Remove tap highlight colour on mobile |
+| Class | Purpose |
+|-------|---------|
+| `.noscript` | No-JS overlay |
+| `.gecko .z-draggable-over > *` | Firefox drag selection fix |
+| `.mobile *` | Remove tap highlight colour on mobile |
 
 ---
 
@@ -154,8 +150,8 @@ include them for completeness but they are never JS-toggled as ZK framework mech
 | Candidate | Classification | Reason |
 |-----------|---------------|--------|
 | `.z-inline-block` | decorative | Only set via `setSclass()` by application code or mold templates, never via framework `addClass`/`removeClass` at runtime |
-| `.z-word-wrap` | decorative | Appears in norm.less as a utility; no JS source found toggling it at framework level |
-| `.z-overflow-hidden` | decorative | Utility class in norm.less; no framework JS toggles it |
+| `.z-word-wrap` | decorative | Utility class in stock global CSS; no JS source found toggling it at framework level |
+| `.z-overflow-hidden` | decorative | Utility class in stock global CSS; no framework JS toggles it |
 | `.z-temp` | decorative | Server-rendered by `HtmlPageRenders.java`; `crashmsg.ts` only reads it, never writes |
 | `.z-initing` | decorative | Appended once by `zk.ts _showprgb` during page init; never added/removed in response to runtime state changes |
 | `.z-modal-mask` | decorative | Written into innerHTML by `progressbox` / `Mask._draw`; never toggled on an existing node |
@@ -183,7 +179,7 @@ include them for completeness but they are never JS-toggled as ZK framework mech
   component-scoped and per-widget; they are not global framework classes and are not in this
   registry.
 - **`class-name-quirks.md`**: no overlap — that file covers non-intuitive component class
-  names; this registry covers only globally-defined classes from norm.less / footer.less.
+  names; this registry covers only globally-defined classes from ZK's stock global CSS.
 
 ---
 
@@ -199,8 +195,10 @@ The spec + checker describe ZK, not any one theme — they are reusable across e
 
 ```bash
 node .claude/skills/zk-component-rules/tools/check-framework-classes.mjs \
-  --theme-css-dir <theme>/target/classes/web/<themename>
+  --theme-css-dir zul/codegen/resources/web
 ```
+
+For the EE sheets, point `--theme-css-dir` at `../zkcml/zkmax/codegen/resources/web`.
 
 - `MISS` → the contract class is undefined in the served CSS (the splitlayout-bug failure mode).
   Exit code 1. Any similarly-named classes are listed as possible renames.
@@ -232,8 +230,8 @@ borderlayout region content; grid/listbox frozen meshes; drag sources and drop t
 
 The spec + checker are theme-independent. To onboard a new ZK theme:
 1. Keep this skill (`zk-component-rules`) in the new theme's repo.
-2. Confirm the registry's pinned ZK version matches the theme's target ZK; if not, regenerate
-   (re-enumerate norm.less / footer.less / _reset.less + re-grep the client JS for that version).
+2. Confirm the registry matches the theme's target ZK version (`gradle.properties`); if not, regenerate
+   (re-enumerate ZK's stock global CSS + re-grep the client JS for that version).
 3. Build the theme, run Tier 1 against its compiled CSS dir.
 4. Run the Tier 2 review on any MISS/WARN.
 5. Report the PASS/FAIL result (the checker output is the record — it is reproducible by

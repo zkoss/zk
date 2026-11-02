@@ -1,6 +1,6 @@
 # tbeditor
 
-A WYSIWYG rich-text editor built on the Trumbowyg jQuery plugin. ZK wraps Trumbowyg in a two-element shell (`z-tbeditor` > `z-tbeditor-cnt`); the rest of the DOM — the toolbar button pane, the `contenteditable` editor area, and the hidden `<textarea>` — is injected by Trumbowyg on `bind_`. All Trumbowyg CSS class names are prefixed with `z-tbeditor-` because `_preprocessConfig()` forces `config.prefix = 'z-tbeditor-'`.
+A WYSIWYG rich-text editor built on the Trumbowyg jQuery plugin. ZK wraps Trumbowyg in a two-element shell (`z-tbeditor` > `z-tbeditor-cnt`); the rest of the DOM — the toolbar button pane, the `contenteditable` editor area, and the hidden `<textarea>` — is injected by Trumbowyg on `bind_`. All Trumbowyg CSS class names are prefixed with `z-tbeditor-` because `_preprocessConfig()` defaults `config.prefix` to `'z-tbeditor-'`.
 
 ZK-EE only (ships in `zkmax.jar`). Requires the Trumbowyg plugin and DOMPurify to be loaded.
 
@@ -45,9 +45,9 @@ States rely on Trumbowyg plugin JS toggling these classes; ZK's server side does
 - `height="…"` — computes `contentHeight` by subtracting the button-pane height and box margins; applied as `min-height` to `#uuid-cnt`, the sibling `<textarea>`, and the box parent via `_assignMinHeight`.
 - `hflex` / `vflex` — handled by `setFlexSize_`. Height-flex computes content height the same way as `height` attribute.
 - `value="…"` — HTML string; loaded into Trumbowyg on bind_ via `trumbowyg('html', value)` or `trumbowyg('empty')`.
-- `config` — Trumbowyg options object set server-side only. The `prefix` key is always overridden to `'z-tbeditor-'` by `_preprocessConfig()`.
+- `config` — Trumbowyg options object set server-side only. The `prefix` key defaults to `'z-tbeditor-'` in `_preprocessConfig()` (`prefix = prefix || 'z-tbeditor-'`).
 
-`disabled`, `readonly`, `inplace`, `buttonVisible` are **not** supported — there is no ZK attribute that maps to these. The disabled state on the editor can be achieved by passing Trumbowyg config options; it does not add a class to the ZK root element, only to `.z-tbeditor-box`.
+No ZK attribute maps to `disabled`, `readonly`, `inplace` or `buttonVisible`. A disabled editor is achieved by passing Trumbowyg config options; it adds a class to `.z-tbeditor-box` only, not to the ZK root element.
 
 ## Composition invariants
 
@@ -104,7 +104,7 @@ tbeditor is a two-sibling pattern:
 
 ## Bundle
 
-`tbeditor.css.dsp` — declared in zkmax's `lang-addon.xml` as the `css-uri` for the `tbeditor` widget's default mold. The legacy Less source is `less/tbeditor.less`; the theme replaces it entirely.
+`tbeditor.css.dsp` — declared in zkmax's `lang-addon.xml` as the `css-uri` for the `tbeditor` widget's default mold. The source file is `../zkcml/zkmax/src/main/resources/web/js/zkmax/tbeditor/css/tbeditor.css`.
 
 ## Edition
 
@@ -112,7 +112,7 @@ EE (zkmax). Requires a valid ZK EE license. The widget is registered under the `
 
 ## Notes
 
-- All Trumbowyg internal class names are namespaced to `z-tbeditor-` via `config.prefix`. The prefix substitution means the LESS source's `@{zprefix}-*` patterns all resolve to `z-tbeditor-*`. Do not confuse Trumbowyg's upstream class names (e.g. `trumbowyg-box`) with the actual rendered names (`z-tbeditor-box`).
+- All Trumbowyg internal class names are namespaced to `z-tbeditor-` via `config.prefix`. Do not confuse Trumbowyg's upstream class names (e.g. `trumbowyg-box`) with the actual rendered names (`z-tbeditor-box`).
 - The `#uuid-cnt` element (`$n_('cnt')`) has an element-id suffix of `-cnt`. Its jQuery reference is stored as `_jqCnt` and is the target of `min-height` writes. Do not apply `overflow: hidden` to this element — it clips the dropdown and modal.
 - ZK fires the `onChange` event on blur (mapping to Trumbowyg's `tbwblur`) and `onChanging` on each `tbwchange` (roughly every keystroke). There is no `:invalid` or error state injected by ZK.
 - The dark variant (`.z-tbeditor-dark`) is Trumbowyg-native. It is not controlled by a ZK attribute and is not part of the standard theme surface; theme CSS should not conflict with it unless explicitly extending dark-mode support.

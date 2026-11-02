@@ -30,16 +30,15 @@ below the content is `clientY > body.clientHeight` → the auto-close is skipped
 above the popup, not below it" symptom. This is theme-wide: it hits every ZK
 floating popup, not one component.
 
-## Why `body` must fill the viewport — the cosmetic reason (no scrollbar footgun)
+## Why not `100vh`
 
-`body` also paints the page background. To fill the viewport without a spurious
-vertical scrollbar, use `min-height: 100%`, **never `100vh`**. `100vh` is the
-*full* viewport height and is **blind to scrollbars**: the moment any wide
-content triggers a horizontal scrollbar, the visible area shrinks by the
+`body` also paints the page background. **Never use `100vh`** to fill the viewport.
+`100vh` is the *full* viewport height and is **blind to scrollbars**: the moment any
+wide content triggers a horizontal scrollbar, the visible area shrinks by the
 scrollbar thickness but `100vh` stays pinned, so body now exceeds the visible
 area and a **spurious vertical scrollbar** appears on a page whose content fits.
 (`100dvh` has the same flaw — it accounts for browser UI chrome, not scrollbars.)
-`min-height: 100%` resolves against the containing block, which **does** shrink
+A percentage height resolves against the containing block, which **does** shrink
 with the scrollbar.
 
 ## Why `height`, not `min-height` — the root page
@@ -48,21 +47,20 @@ ZK's root `zk.Page` div renders inline `height:100%`. A percentage height resolv
 **definite** parent height: `body { min-height: 100% }` is not definite, so `.z-page` collapsed to
 content height, a press on the empty page area hit BODY (no widget) and ZK fired `onFloatUp`
 without `{triggerByClick}` (non-closable Toast never dismissed, ZK-6084). IceBlue's
-`html, body { height: 100% }` makes `.z-page` viewport-tall; Marble matches it with `body { height: 100% }`.
+`html, body { height: 100% }` makes `.z-page` viewport-tall, and the base reset matches it with
+`body { height: 100% }`.
 
-## The trap: `min-height: 100%` needs a definite containing-block height
+## `html` needs a definite height
 
-A percentage `min-height` resolves to **0** when its containing block's height is
-*indefinite*. `body`'s containing block is `<html>`. So `html { min-height: 100% }`
-is **not enough** — `min-height` leaves html's height indefinite, body's
-`min-height: 100%` computes to 0, and body collapses to content height (causing
-the ZK dismiss bug above). `html` MUST declare a **definite** `height: 100%`
-(which resolves against the viewport, the initial containing block). Only then
-does `body { min-height: 100% }` resolve to the viewport height.
+`body`'s containing block is `<html>`. A percentage height of `body` resolves to `auto`
+(content height) when html's height is *indefinite*, and a percentage `min-height`
+resolves to **0**. `html` MUST therefore declare a **definite** `height: 100%`
+(which resolves against the viewport, the initial containing block); `html { min-height: 100% }`
+is not enough. Without it body collapses to content height (causing the ZK dismiss bug above).
 
 `html { height: 100% }` is itself scrollbar-aware (it resolves against the
 content area, not the scrollbar-blind `vh` viewport), so it does not reintroduce
-the footgun.
+the `100vh` problem.
 
 Background still covers the whole viewport via **CSS background propagation**:
 with no background on `html`, `body`'s `background-color` is propagated to the
@@ -72,8 +70,7 @@ canvas.
 
 Any theme's base reset (`base/_reset.css`). Theme-agnostic: a Sapphire or
 corporate-dark reset hits the identical bugs. First seen on the colorbox preview
-page — the fixed-width preview matrix (`pv/matrix.zul`,
-`grid-template-columns: 120px repeat(N,160px)`) overflows narrow viewports
+page — a fixed-width preview matrix overflowed narrow viewports
 horizontally (surfacing the `100vh` scrollbar footgun), and a later
 `body { min-height: 100% }` *without* `html { height: 100% }` collapsed body to
 content height (surfacing the ZK dismiss-below-content bug).

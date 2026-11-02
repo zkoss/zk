@@ -41,18 +41,15 @@ Tokens, the tablet stylesheet, `_cssflex` / `_dnd`, and the customer's own CSS a
 unlayered — so a customer override wins without `!important`, which is the point of the design.
 
 The same rule is a hazard in the other direction. **Any framework CSS that reaches the page
-unlayered beats the theme's layered components.** Marble is a *complete* CSS replacement: in zk there is no icon-font CSS to suppress — the
-IceBlue-only `font-awesome.css.dsp` stub the template ships for it was removed — and
-Marble draws icons itself via `mask-image` and generated `.z-icon-* { --_icon }` rules from
-`lucide-static` in `base/_icons.css`. That "no coexisting unreachable framework CSS" property is
-what makes the layer scheme safe.
+unlayered beats the theme's layered components.** Marble is a *complete* CSS replacement: it draws icons itself via `mask-image` and generated
+`.z-icon-* { --_icon }` rules from `lucide-static` in `base/_icons.css`, and `zk.wcs` lists
+only Marble's own sheets. That "no coexisting unreachable framework CSS" property is what makes
+the layer scheme safe.
 
-**On the next ZK upgrade** — the version that deprecates Font Awesome for native Lucide — re-check
-whether ZK now emits a Lucide stylesheet the theme does not stub. If it does, it loads unlayered,
-beats `zk-components`, and forces `!important` back. Either stub it or give it a layer; then
-update the stale "ZK85Icons, FontAwesome" comment and `font-family` reset in `_icons.css`, decide
-whether the empty stub is still needed, and re-run the icon screenshots (checkbox, radio, listbox,
-tree). Separate task; do not fold it into layer work.
+If ZK ever emits a new icon stylesheet, it loads unlayered, beats `zk-components`, and forces
+`!important` back; give it a layer. Also re-check whether the "ZK85Icons, FontAwesome" comment and
+the `font-family` reset in `_icons.css` can be deleted, and re-run the icon screenshots (checkbox,
+radio, listbox, tree). Separate task; do not fold it into layer work.
 
 ## The minifier and `@layer` — a silent trap
 
@@ -72,7 +69,7 @@ output at exit 0.
 
 When the `!important` count was reduced, the only removable ones were the 63 checkbox / radio icon
 overrides in listbox and tree — they had beaten `_icons.css` purely because `zk-components` is
-above `zk-base`, so the layer order made them redundant. The remaining ~33 are irreducible: they
+above `zk-base`, so the layer order made them redundant. The remaining ones (run `scripts/count-important.js` for the current count) are irreducible: they
 beat **inline styles ZK's JS sets at runtime**, same-layer author conflicts, `prefers-reduced-
 motion`, and add-on internals. A layer never outranks an inline style. Re-verify each survivor
 empirically on any ZK upgrade; never trust a version-pinned comment (`reference/pitfalls.md` §11).
@@ -85,7 +82,7 @@ customers who embed ZUL into their own styled page via the JS Embed API and do n
 touching host elements. IceBlue implemented it with a server-side DSP `<c:if>` that put a tag in
 *selector position* — structurally impossible in plain CSS. Marble's build instead emits **two
 files from one source**: `reset.css` (global) and `reset-embed.css` (wrapped in
-`@scope (.z-page)`), and `MarbleThemeProvider` picks one. Spec: `doc/spec/reset-scoping.md`.
+`@scope (.z-page)`), and `StandardThemeProvider.insertResetURI` picks one (it reads `org.zkoss.zul.theme.browserDefault`). Spec: `doc/spec/reset-scoping.md`.
 
 Two DOM facts bound what scoping can do. `.z-page` is the real rendered page root (emitted
 client-side by the Page widget; ZK's own tests wait on it). And **every floating widget** —

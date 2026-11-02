@@ -9,14 +9,14 @@ zk-version: 10.2.1-jakarta
 
 ## References
 - MUI CSS: List.css / Table.css
-- DESIGN.md sections: §1, §2, §7, §10, §11
+- `doc/spec/DESIGN.md` sections: "Surface Palette", "Text Colors", "Typography", "Density", "Border Rules"
 
 ## Expected values
-Mirror grid expected values c1–c12 with selectors → `.z-listitem`, `.z-listcell`, `.z-listheader`.
+Mirror grid expected values c1–c10 and c12 with selectors → `.z-listitem`, `.z-listcell`, `.z-listheader`.
 
 ### Selection (list-row family)
 Listbox row is the LIST-ROW selection family per
-`reference/selected-state-families.md`. MUST use `secondary-container` background
+`marble-theme reference/selected-state-families.md`. MUST use `secondary-container` background
 and `on-secondary-container` text (MD3 `md.comp.list.list-item.selected.container.color`;
 revised 2026-10-06, was `primary-container`) — never a hardcoded rgba, never
 `primary-container`. (Pre-2026-05-29 the CSS shipped a hardcoded
@@ -53,7 +53,7 @@ single-selection checkmark case.
 "Sorting and Resizable Headers" section of `listbox-header.zul` (narrow `width="40px"`
 checkbox column with empty `<listcell/>` first cells).
 
-**The first cell is a flex row (NS14, D18, 2026-10-15).** `.z-listcell:has(.z-listitem-checkable) > .z-listcell-content`
+**The first cell is a flex row.** `.z-listcell:has(.z-listitem-checkable) > .z-listcell-content`
 is a flex row with `align-items: center`, so the row box shares its centre line with the label or the control in every
 font. Each child of the cell is a flex item and drops the whitespace around its text, so:
 
@@ -65,21 +65,21 @@ font. Each child of the cell is a flex item and drops the whitespace around its 
   the text right; and `.z-listitem-checkable + img` has a `-4px` start margin, because ZK emits
   `<span class="z-listitem-checkable">…</span>&nbsp;<img …> label` and the `&nbsp;` is a flex item of its own, so the gap is
   added twice before the image.
-- Rule 4, centred and end-aligned columns (NS14 round 2, b535d283aa): in a centred or right-aligned first column, a span
+- Rule 4, centred and end-aligned columns (commit b535d283aa): in a centred or right-aligned first column, a span
   that is the last child of the cell content (`.z-listitem-checkable:last-child`) gets its symmetric 12px padding back, so
   the box of a checkbox-only row stays at the x of the header box (without it +2px centred, +4px right-aligned).
   `:last-child` ignores text nodes, so an image or a component after the span keeps the compensation and stays within
-  0.5px of where it was before NS13 in the DOM (13px type: -0.17px centred, -0.35px right-aligned; 16px/24px type:
+  0.5px of where it was before the earlier first-cell DOM change (13px type: -0.17px centred, -0.35px right-aligned; 16px/24px type:
   +0.25px centred, +0.50px right-aligned), up to 1px in the PNG where the shift crosses a pixel boundary. CSS cannot tell a checkbox-only cell from a
   `label=` cell (they differ only by a text node), so a `label=` row takes rule 4 too. Cost, accepted to keep the common
   narrow checkbox-only column aligned with its header: in a centred first column the box of a `label=` row sits 2px left of
-  where it was before NS13 (its text 2px right), and in a right-aligned first column 4px left.
-- Accepted side effects (owner ruling D18): two adjacent items that were laid out without a space
+  where it was before that DOM change (its text 2px right), and in a right-aligned first column 4px left.
+- Accepted side effects (owner ruling): two adjacent items that were laid out without a space
   (`<label value="$"/><label value="100"/>`) are now 4px apart; an item that ends in `&#160;` followed by another is
   3.66 + 4 = 7.66px apart.
 - Not supported: stacked block content in that cell (two `<div>`s, a `vlayout`) becomes a row of items. It is not
   engineered for and has no guard.
-- Measured (`measure` run of NS14, Chromium / Firefox / WebKit, desktop, compact and tablet, 13px/20px and 16px/24px):
+- Measured (Chromium / Firefox / WebKit, desktop, compact and tablet, 13px/20px and 16px/24px):
   rows equal the Grid row, the box is 0 off the text, a textbox and a button (WebKit up to 0.02), the image and the
   text start -0.08 to 0.78px from the header glyphs (WebKit 0 to 1.5px, its `&nbsp;` is 0.5px wider), the image-to-label
   and label-to-link gaps are 4px.
@@ -98,11 +98,10 @@ Guard: `mesh-header-footer.spec.ts`, `registerCheckmarkFirstCell`; fixture `pv/m
 `.mhf-listbox-align-right`), on desktop and on a tablet. cm12 compares with the inline padding computed from the tokens
 because the box x of a centred or right-aligned image row depends on the width of its content, so no fixed offset from the
 header box is stable.
-Mutations (NS14 round 2, Chromium; failures per project, `mesh-header-footer` / `mesh-header-footer-tablet`):
-removing the gap fails cm7, cm8 and cm9 (18 / 9: the three checks in each of the six density and type-scale runs on desktop,
-in the three on a tablet); removing rule 4 fails cm11 (2 / 2) and, on a tablet, `.mhf-listbox-select-all-centre` (0 / 1);
-dropping `:last-child` from rule 4 fails cm12 (2 / 2). Round 1 (not re-run in round 2): removing the
-padding compensation fails cm7 and cm8, removing the image margin fails cm8.
+Mutations (Chromium, `mesh-header-footer` / `mesh-header-footer-tablet`): removing the gap fails cm7, cm8 and cm9;
+removing rule 4 fails cm11 and, on a tablet, `.mhf-listbox-select-all-centre`; dropping `:last-child` from rule 4 fails
+cm12; removing the padding compensation fails cm7 and cm8; removing the image margin fails cm8. Recompute the failure
+counts with the Playwright specs.
 
 ## Sizable header resize affordance (`<listhead sizable="true">`)
 
@@ -190,7 +189,7 @@ Wait 300 ms, then screenshot. FAIL if any text from a non-frozen column overlaps
 
 ZK-4795 (since 9.6.0): `sclass="z-sticky-header"` pins the column header to the top
 of the scroll ancestor (page or an `overflow:auto` wrapper) as rows scroll under it.
-This is a **bare opt-in class** — ZK's `zul/less` ships NO rule; the implementation
+This is a **bare opt-in class** — ZK ships no rule for this sclass; the implementation
 lives in the `zkmax` addon, so the theme MUST supply it. See
 `data-components.md` → "Sticky header (`z-sticky-header`)".
 
@@ -246,7 +245,7 @@ See `components/selectbox.md` → "Sized / multiple select is an in-page list bo
 Default = standalone **outlined** card: border, NO shadow (never both). No-border variant
 (`z-listbox-noborder`) and panel/groupbox ancestry strip the border. ZK emits no border
 attribute for listbox (unlike window's `z-window-noborder`) → the variant is a theme sclass
-mirroring that naming. See `doc/spec/DESIGN.md §11`.
+mirroring that naming. See `doc/spec/DESIGN.md` "Border Rules".
 
 | id | check | selector | property | expected | method |
 |----|-------|----------|----------|----------|--------|

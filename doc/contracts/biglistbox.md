@@ -8,7 +8,7 @@ preview: ${PREVIEW_URL}/biglistbox.zul
 ## References
 - MUI CSS: DataDisplay/Table.css (closest analog)
 - Skill: `.claude/skills/zk-component-rules/components/biglistbox.md` (DOM, WScroll, traps)
-- DESIGN.md sections: §2, §3, §4, §9
+- doc/spec/DESIGN.md sections: "Text Colors", "Brand & Status Colors", "Spacing Scale (4dp baseline)", "Motion"
 
 ## DOM key selectors
 ```
@@ -37,8 +37,8 @@ preview: ${PREVIEW_URL}/biglistbox.zul
 | bs1 | `.z-biglistbox table` | border-spacing | 0px (head & body — UA default is 2px; gap above row 1) |
 | h1 | `.z-biglistbox-header-content` | display | flex (caret laid out inline; header stays single-line when sorted) |
 | h2 | `.z-biglistbox-header` | offsetHeight | unchanged after sorting (≈37px before AND after — caret must not add a row) |
-| sc1 | `.z-biglistbox-wscroll-vertical` (overflowing model) | visibility / width | `visibility:hidden` (track draws no pixels, hit-test passes through); width stays 14px (D39-A: the vertical track does not cover the header; an axis that fits draws nothing, ZK hides its bar) |
-| sc2 | `.z-biglistbox-wscroll-drag` (overflowing model) | visibility / background-color / size | `visible`; `var(--zk-color-outline-variant)` (hover `--zk-color-on-surface-variant`, same as the frozen-column and `zul.Scrollbar` thumbs), 8px pill, fixed length > 0, no groove (D40-A: same resting look as the document scrollbar); vertical `left:6px`, horizontal `top:4px` |
+| sc1 | `.z-biglistbox-wscroll-vertical` (overflowing model) | visibility / width | `visibility:hidden` (track draws no pixels, hit-test passes through); width stays 14px (the vertical track does not cover the header; an axis that fits draws nothing, ZK hides its bar) |
+| sc2 | `.z-biglistbox-wscroll-drag` (overflowing model) | visibility / background-color / size | `visible`; `var(--zk-color-outline-variant)` (hover `--zk-color-on-surface-variant`, same as the frozen-column and `zul.Scrollbar` thumbs), 8px pill, fixed length > 0, no groove (same resting look as the document scrollbar); vertical `left:6px`, horizontal `top:4px` |
 | sc3 | `.z-biglistbox` / `.z-biglistbox-outer` | position | relative (else the absolute scrollbar anchors to the viewport, off-component → looks missing) |
 | sc4 | `.z-biglistbox-wscroll-endbar` | position | absolute (NOT display:none) — else wheel/drag clamp the thumb to a negative top |
 | sc6 | `.z-biglistbox-wscroll-vertical::before` / `-horizontal::before` | content | `none` — no track groove (the former always-visible slot is retired) |

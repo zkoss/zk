@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Contract Mockup — linelayout</title>
 <!--
-  Self-contained marble design contract mockup.
+  Marble design contract mockup. Token values come from the real token CSS linked below.
   Component: linelayout (ZK EE)
   ZK Version: 10.2.1-jakarta
   Rules: .claude/skills/zk-component-rules/components/linelayout.md
@@ -21,47 +21,14 @@
   OUT of the cave and INTO .z-linelayout-first / .z-linelayout-last by
   _moveSubDOMOut(). This mockup simulates the POST-BIND DOM state.
 -->
+<!-- Real token CSS (paths relative to doc/contracts/) -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
 <style>
-/* ── Inlined tokens ─────────────────────────────────────────────── */
-:root {
-  --zk-color-primary: #376fd0;
-  --zk-color-on-primary: #ffffff;
-  --zk-color-primary-container: #d6e4ff;
-  --zk-color-on-primary-container: #001c3d;
-  --zk-color-secondary: #4db6ac;
-  --zk-color-on-secondary: #ffffff;
-  --zk-color-background: #f7f9fc;
-  --zk-color-on-background: rgba(0,0,0,0.87);
-  --zk-color-surface: #ffffff;
-  --zk-color-on-surface: rgba(0,0,0,0.87);
-  --zk-color-surface-variant: #f0f4fa;
-  --zk-color-on-surface-variant: rgba(0,0,0,0.6);
-  --zk-color-surface-container: #f0f4fa;
-  --zk-color-surface-container-high: #e8eef7;
-  --zk-color-outline: rgba(0,0,0,0.23);
-  --zk-color-outline-variant: rgba(0,0,0,0.12);
-  --zk-color-disabled: rgba(0,0,0,0.38);
-  --zk-spacing-1: 4px;
-  --zk-spacing-2: 8px;
-  --zk-spacing-3: 12px;
-  --zk-spacing-4: 16px;
-  --zk-spacing-5: 20px;
-  --zk-spacing-6: 24px;
-  --zk-spacing-8: 32px;
-  --zk-shape-corner-small: 8px;
-  --zk-shape-corner-medium: 12px;
-  --zk-shape-corner-large: 16px;
-  --zk-shape-corner-full: 9999px;
-  --zk-typescale-body-medium-size: 14px;
-  --zk-typescale-body-small-size: 12px;
-  --zk-typescale-label-medium-size: 12px;
-  --zk-typescale-title-medium-size: 16px;
-  --zk-font-weight-regular: 400;
-  --zk-font-weight-medium: 500;
-  --zk-font-weight-semibold: 600;
-  --zk-elevation-1: 0 1px 2px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
-  --zk-elevation-2: 0 2px 4px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
-}
 
 /* ── Page chrome ────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
@@ -73,7 +40,7 @@ body {
   color: var(--zk-color-on-background);
   background: var(--zk-color-background);
 }
-h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .contract-meta {
   color: var(--zk-color-on-surface-variant);
   font-size: var(--zk-typescale-body-small-size);
@@ -83,7 +50,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 .matrix-section { margin-bottom: var(--zk-spacing-8); }
 .matrix-section h2 {
   font-size: var(--zk-typescale-title-medium-size);
-  font-weight: var(--zk-font-weight-semibold);
+  font-weight: 600;
   text-transform: uppercase;
   color: var(--zk-color-on-surface-variant);
   border-bottom: 1px solid var(--zk-color-outline-variant);
@@ -105,7 +72,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 }
 .state-label {
   font-size: var(--zk-typescale-label-medium-size);
-  font-weight: var(--zk-font-weight-medium);
+  font-weight: 500;
   color: var(--zk-color-on-surface-variant);
   text-transform: uppercase;
 }

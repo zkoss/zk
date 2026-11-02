@@ -9,7 +9,7 @@ A theme that omits or renames these classes **silently breaks `hflex`/`vflex` ev
 
 ## Required CSS (define verbatim)
 
-Every ZK theme MUST ship this block exactly, loaded late in the cascade. Stock source of truth: `zk/zul/src/main/resources/web/zul/less/footer.less`. Marble location: `zul/src/main/resources/web/zul/css/base/_cssflex.css` (bundled into `footer.css.dsp` via `footerFiles` in `scripts/build-css.js`).
+Every ZK theme MUST ship this block exactly, loaded late in the cascade (after component CSS). The block above is the reference; the stock IceBlue copy is in the tracked jar (`unzip -l dist/lib/iceblue_c.jar | grep footer`, then `unzip -p` the entry).
 
 ```css
 .z-flex { display: flex; }
@@ -21,20 +21,20 @@ Every ZK theme MUST ship this block exactly, loaded late in the cascade. Stock s
 
 ## Hard rules
 
-1. **Never rename these selectors.** Theme utility classes may use any naming (`.z-d-flex`, `.z-flex-col`, …) but they are *additional*, not replacements — the JS-toggled names above must exist with exactly these values. (Marble once renamed `.z-flex` → `.z-d-flex` and `.z-flex-column` → `.z-flex-col` in the utility pass; the css-flex engine was inert theme-wide until the framework block was restored. Gap log 2026-06-05.)
+1. **Never rename these selectors.** Theme utility classes may use any naming (`.z-d-flex`, `.z-flex-col`, …) but they are *additional*, not replacements — the JS-toggled names above must exist with exactly these values. (A theme that renamed `.z-flex` → `.z-d-flex` and `.z-flex-column` → `.z-flex-col` in a utility pass left the css-flex engine inert theme-wide until the framework block was restored.)
 2. **Never hard-code the framework classes' effect onto a JS-managed component root.** E.g. `.z-splitlayout { display: flex }` looks equivalent to ZK adding `z-flex` — but ZK *removes* `z-flex` at drag-end so inline px sizes take over. A hard-coded `display: flex` (or a `:not(.z-flex-column)` direction fallback) survives the class removal and defeats the mechanism. The proven failure: splitlayout drag persistence (contract rows M10/M11).
 3. **Never give a JS-sized child `flex-basis: 0` in component CSS.** `flex: 1 1 0` on an element whose inline `width`/`height` ZK writes makes the browser ignore the inline size on the main axis. `z-flex-item` is the only legitimate carrier of `flex: 1 1 0`, because ZK removes it before writing inline sizes.
 
 ## Margin subtraction — never give flex-capable widgets default margins
 
-`applyCSSFlex` (zk/flex.ts ~600–624) sizes a widget whose flex wrapper is a **separate element** (`fcc != c` — e.g. splitlayout caves wrap the child widget) with an inline `calc()` that subtracts the widget's own CSS margins:
+`applyCSSFlex` (`zk/flex.ts`) sizes a widget whose flex wrapper is a **separate element** (`fcc != c` — e.g. splitlayout caves wrap the child widget) with an inline `calc()` that subtracts the widget's own CSS margins:
 
 - **row** container → subtracts `zk(c).marginHeight()` (top+bottom margins) — from **both** `width` and `height`;
 - **column** container → subtracts `zk(c).marginWidth()` (left+right margins) — from both.
 
 So a theme-default `margin-bottom: 12px` on `.z-window` turns into `width/height: calc(100% - 12px)` inside any **row**-oriented flex parent: a 12px hole on the trailing edge of both axes (proven: splitlayout horizontal panes, contract row M12). Column orientation masks the same margin (`marginWidth()` = 0), so the bug surfaces asymmetrically — one orientation fine, the other broken.
 
-**Rule: stock ZK widgets carry ZERO default margin, and ZK's JS sizing paths (css-flex `calc`, `setFlexSize_`, layout-region sizing) are written on that assumption. A theme must never add default margins to widgets that can be `hflex`/`vflex` children** (in practice: any container widget — window, panel, grid, listbox, tree, tabbox, …). Inter-widget spacing must be opt-in: a stack utility on the parent (Marble: `.z-vstack`), explicit margin utilities (`.z-mb-*`), or ZK's own `<vlayout spacing>`. Marble shipped a Bootstrap-style default-rhythm rule and removed it for exactly this reason (user ruling 2026-06-05; see `doc/spec/spacing-policy.md`).
+**Rule: stock ZK widgets carry ZERO default margin, and ZK's JS sizing paths (css-flex `calc`, `setFlexSize_`, layout-region sizing) are written on that assumption. A theme must never add default margins to widgets that can be `hflex`/`vflex` children** (in practice: any container widget — window, panel, grid, listbox, tree, tabbox, …). Inter-widget spacing must be opt-in: a stack utility on the parent, explicit margin utilities, or ZK's own `<vlayout spacing>`. A default-rhythm margin rule on widgets breaks this sizing path, so a theme must not ship one.
 
 ## Affected widgets
 

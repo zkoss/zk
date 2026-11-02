@@ -19,14 +19,16 @@ authoritative answer: **no, it's intentional**.
 
 ## Surface-tier mapping (this theme)
 
-| MD3 tier | Token | Used by | File reference |
-|----------|-------|---------|----------------|
-| Page background | `--zk-color-background` | `body`, page root | `tokens/_colors.css`, `marble.css` |
-| Content surface | `--zk-color-surface` | `z-window`, `z-panel`, `z-grid`, `z-listbox` background, `z-north`, `z-south` (BorderLayout) | many — content widgets |
-| Chrome tier 1 | `--zk-color-surface-container-low` | `.z-navbar` (Navigation Drawer / Rail), `.z-west`, `.z-east` (BorderLayout sidebars) | `js/zkmax/nav/css/nav.css:44`, `js/zul/layout/css/borderlayout.css:65,82` |
-| Chrome tier 2 | `--zk-color-surface-container` | `.z-menubar` (Top App Bar), `.z-*-header` (BorderLayout region headers), `.z-*-collapsed` (BorderLayout collapse strips) | `js/zul/menu/css/menu.css:60`, `js/zul/layout/css/borderlayout.css:259,283` |
-| Chrome tier 3 | `--zk-color-surface-container-high` | Hovered chrome (e.g. collapsed strip on hover) | `js/zul/layout/css/borderlayout.css:270` |
-| Chrome tier 4 (max) | `--zk-color-surface-container-highest` | Filled-tonal icon buttons (splitter button), elevated chips | `js/zul/layout/css/borderlayout.css:166,188` |
+| MD3 tier | Token | Used by |
+|----------|-------|---------|
+| Page background | `--zk-color-background` | `body`, page root |
+| Content surface | `--zk-color-surface` | `z-window`, `z-panel`, `z-grid`, `z-listbox` background, `z-north`, `z-south` (BorderLayout) |
+| Chrome tier 1 | `--zk-color-surface-container-low` | `.z-navbar` (Navigation Drawer / Rail), `.z-west`, `.z-east` (BorderLayout sidebars) |
+| Chrome tier 2 | `--zk-color-surface-container` | `.z-menubar` (Top App Bar), `.z-*-header` (BorderLayout region headers), `.z-*-collapsed` (BorderLayout collapse strips) |
+| Chrome tier 3 | `--zk-color-surface-container-high` | Hovered chrome (e.g. collapsed strip on hover) |
+| Chrome tier 4 (max) | `--zk-color-surface-container-highest` | Filled-tonal icon buttons (splitter button), elevated chips |
+
+Find the rule that applies a tier with `grep -rn "surface-container" zul/src/main/resources/web/js/`.
 
 ## Rules
 1. **Content widgets MUST use `surface`** (or `background` for the page itself).
@@ -60,7 +62,7 @@ perceptually distinct on white. The widget CSS should not be touched.
 ## Shared sidebar / nav inclusion — use `<apply>`, not `<include>`
 
 The shared sidebar / navigation surface MUST be injected via
-`<apply templateURI="_sidebar.zul"/>`, **not** `<include src="_sidebar.zul"/>`.
+`<apply templateURI="…"/>`, **not** `<include src="…"/>`.
 `<apply>` evaluates the template in the current page's component scope, which is
 required for the active-state sclass and any per-page bindings on the nav to
 resolve. `<include>` creates a separate IdSpace that breaks that ID / binding

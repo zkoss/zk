@@ -28,13 +28,13 @@ vocabulary Marble does not share (see `reference/iceblue-parity.md`).
 ## The five rules that are never negotiable
 
 1. **Every custom property is `--zk-*`.** `--md-sys-*` is banned, even though the token *values*
-   follow MD3. Never invent a token family that does not already exist — in particular there are
-   no `--zk-font-weight-*` tokens.
+   follow MD3. Never invent a token family that does not already exist. Font weight comes from the
+   typescale weight tokens (`tokens/_typography.css`) or the `.z-fw-*` utilities.
 2. **No hardcoded colour.** Every colour comes through `var(--zk-color-*)`. A literal hex in
    component CSS is a defect.
-3. **Cascade layers are assigned at build time**, in the order
+3. **Cascade layers are declared in each source file**, in the order
    `zk-base < zk-components < zk-utilities`. Reset rules **must** land in `zk-base`.
-   `build-css.js`'s `assertLayer()` enforces this and fails the build.
+   `assertLayer()` in `build-css.js` fails the build if a file's layer wrapper is missing.
 4. **Source is `.css`; the shipped artifact is `.css.dsp`.** ZK does not discover component CSS
    by convention — every file is named individually by a `<css-uri>` entry in `lang.xml`. See
    `reference/css-dsp.md` before adding, renaming or removing any file.
@@ -56,11 +56,10 @@ CE (this checkout):
 ```
 zul/src/main/resources/web/zul/css/
 ├── _layer-order.css   the one @layer order statement (first entry of norm.css.dsp)
-├── tokens/  _colors _typography _spacing _sizing _shape _elevation
-│            _motion _zindex _fonts _splitter _component-theme _forced-colors
-├── base/    _reset _icons _cssflex _dnd
-└── utility/ _colors _spacing _layout _typography _borders _elevation
-             _surface _stack _print
+├── tokens/  design tokens (colour, type, spacing, sizing, shape, elevation, motion, z-index, …)
+├── base/    reset, icons, framework flex and drag classes
+└── utility/ the `z-*` utility classes
+         (file lists: `ls zul/src/main/resources/web/zul/css/{tokens,base,utility}`)
 
 zul/src/main/resources/web/js/zul/<pkg>/css/   → per-component CSS, 1:1 with a .css.dsp output
 ```
@@ -81,7 +80,7 @@ bundled by `build-css.js`, never shipped individually.
 
 Marble rules that exist only for accessibility (WCAG) live in the `za11y` module, not in the component CSS:
 
-- Partials: `../zkcml/za11y/src/main/resources/web/js/za11y/{zul,zkmax,zkex}/css/_*-a11y.css`. Running `node scripts/build-css.js --module za11y` (from the zk repo root) merges them into `za11y/css/marble.css.dsp`. The `.less` files beside them are the IceBlue version and are not part of Marble.
+- Partials: `../zkcml/za11y/src/main/resources/web/js/za11y/{zul,zkmax,zkex}/css/_*-a11y.css`. Running `node scripts/build-css.js --module za11y` (from the zk repo root) merges them into `za11y/css/marble.css.dsp`.
 - `A11yThemeURIHandler` inserts that sheet after the framework sheets (`afterFrameworkSheets`). It shares the layer `zk-components`, so at equal specificity the za11y rule wins. It is loaded only when za11y is active.
 - Only WCAG rules go in these partials. Every other fix, including the accordion close button and the biglistbox frozen-column tick, goes in the component CSS.
 - Without za11y the WCAG-only rules are absent: anchornav links stay 17px, the chosenbox remove button is 20×20, and the strip close icon is 18×20. Check the sheet with `node scripts/check-css-dsp.js --module za11y`.
@@ -92,7 +91,7 @@ Marble rules that exist only for accessibility (WCAG) live in the `za11y` module
 
 ```bash
 node scripts/build-css.js --module zul                            # build CE theme CSS (--module required, exit 2 on misuse)
-node scripts/build-css.js --module zkmax                          # or zkex — EE/PE, run from ../zkcml
+node scripts/build-css.js --module zkmax                          # or zkex — EE/PE; run from the zk repo root, the script finds ../zkcml itself
 ./gradlew :zul:compileMarbleCss                                    # the Gradle task the builder is wired into
                                                                     # (../zkcml: :zkmax:compileMarbleCss / :zkex:compileMarbleCss);
                                                                     # also runs inside every ./gradlew build
@@ -122,7 +121,7 @@ on the unedited CSS, edit, rebuild, then `npm run baseline:compare -- <same args
 | File | Read it when |
 |---|---|
 | `reference/tokens.md` | Adding, renaming or auditing a token; component-level theming variables; the z-index scale; what counts as a consumer |
-| `reference/layers.md` | Anything touching `@layer`, the reset, the icon stub, or a surviving `!important` |
+| `reference/layers.md` | Anything touching `@layer`, the reset, the icon rules, or a surviving `!important` |
 | `reference/zul-authoring.md` | Writing or fixing a preview page; a page that 404s or 500s; text that will not take a font; a flex row that stacks |
 | `reference/brand-override.md` | A customer wants to rebrand by overriding one seed colour |
 | `reference/density.md` | Compact / data-dense mode; anything about control heights |
@@ -135,18 +134,24 @@ on the unedited CSS, edit, rebuild, then `npm run baseline:compare -- <same args
 | `reference/css-audit.md` | Auditing CSS hygiene — orphan tokens, hardcoded colours, repeated shadows, `display` declarations that restate a default; what `scripts/audit-css.sh` reports and how to triage it |
 | `reference/important-reduction.md` | Removing, reducing or justifying an `!important`; the count and probe scripts; the render-neutral proof bar |
 | `reference/harness-playbook.md` | Driving the per-component verification loop (Evaluator, Generator, Design-Verifier) as the orchestrator |
+| `reference/contract-tiers.md` | Writing or checking a theme contract: tiers, what a contract may hold, how to read the IceBlue sheet |
 | `reference/harness-decisions.md` | Why the harness is built the way it is (architecture decision records) |
 | `reference/batch-workflow.md` | Running a batch of Marble fixes that edits a shared selector: impact list before editing, separate engineer and verifier |
+| `reference/component-design-notes.md` | Marble-specific design reasons and values for one component (biglistbox, button, coachmark, tabbox, toast, …), moved out of the theme-independent component rules |
+| `reference/selected-state-families.md` | Choosing the selected-state colour for a list row, chip, picker or navigation item |
+| `reference/popup-tokens.md` | Choosing the surface of a floating popup (`--zk-{comp}-popup-bg`) |
+| `reference/color-variant-disabled-pattern.md` | Disabled styling of a colour variant (contained, outlined, text) and the specificity trap |
+| `reference/focus-affordance-no-layout-shift.md` | A focus ring that changes border width and resizes the control; reading a token's real value before comparing |
 
 ## ZK version coordinates
 
-`zkthemelab` resolves **no published ZK artifact**. Its `settings.gradle` points every `org.zkoss.*`
-module at the working trees in `../../zk` and `../../zkcml` via `includeBuild` +
-`dependencySubstitution`, so what you preview is the source you just edited. There is no
-`zkthemelab/pom.xml` and no `<zk.version>` to bump — the version lives in `gradle.properties`. The two checkouts must be sibling directories named exactly `zk` and `zkcml`; otherwise the preview build cannot substitute them.
+`zkthemelab` builds against the `zk` and `zkcml` working trees through `includeBuild` +
+`dependencySubstitution` (`zkthemelab/settings.gradle`), which points every `org.zkoss.*` module at
+`../../zk` and `../../zkcml`, so what you preview is the source you just edited. The version comes
+from `gradle.properties`. The two checkouts must be sibling directories named exactly `zk` and `zkcml`; otherwise the preview build cannot substitute them.
 
-Everything below applies only to a **separate** app that consumes published FL/Eval jars, not to
-anything in this repository.
+The rest of this section applies only to a **separate** app that consumes published FL/Eval jars, not
+to anything in this repository.
 
 ZK's FL/Eval builds publish **two servlet flavours under distinct version strings** in the eval
 repository, and `dependency:resolve` succeeding does **not** tell you which one you got:
@@ -165,13 +170,4 @@ check a resolved jar's flavour with
 
 Marble's visual values were originally aligned with MUI 7.3.1's CSS. The component mapping used for that alignment (ZK → MUI): Button → MUI Button, Grid/Listbox → MUI Table, Window → MUI Dialog, Tabbox → MUI Tabs.
 
-## Scripts
-
-This skill's tooling lives in `scripts/`.
-
-- `.claude/skills/marble-theme/scripts/audit-css.sh` — mechanical hygiene pass; run the script directly.
-- `.claude/skills/marble-theme/scripts/check-default-display.js` — check 5 of the audit; resolves root tags from ZK molds.
-- `.claude/skills/marble-theme/scripts/count-important.js` — comment-aware `!important` inventory.
-- `.claude/skills/marble-theme/scripts/probe.js` — computed-style A/B probe against the running preview app.
-
-`doc/spec/index.md` remains the normative index for the specifications this skill summarises.
+This skill's scripts live in `scripts/` and are listed under Commands. `doc/spec/index.md` remains the normative index for the specifications this skill summarises.

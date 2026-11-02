@@ -4,26 +4,16 @@ Durable record of every `!important` in the theme CSS source: what it does, whet
 removed or kept, and the **evidence** for that verdict. Purpose: stop re-investigation — a
 survivor here has already been empirically tested against the current ZK runtime.
 
-**Method** (Planner → Generator → Evaluator):
+**Method:**
 each candidate's `!important` was deleted, the CSS rebuilt (`node scripts/build-css.js`), and the computed
 value / behavior re-measured on the running **ZK 10.3.0.1-jakarta** preview app. Removed only when
 proven **byte-identical** (empirical-proof bar); otherwise kept, with the failing evidence recorded.
 No cascade beats an inline style, so an `!important` that overrides a ZK-JS-set inline `style` is
 structurally irreducible.
 
-Count: **37 → 33** (comment-stripped; source of truth `scratchpad/count-important.js`). Date: 2026-07.
+The current count is computed, not recorded here: run `.claude/skills/marble-theme/scripts/count-important.js` (comment-stripped).
 
-**Recount 2026-09-08: 45.** The 2026-07 sweep left 33; since then `grid.css`, `avatargroup.css`
-and `carousel.css` each grew one that was never added here (36), and the ZK 11 `codeeditor`
-component adds 9 (below). All three of the previously-undocumented ones have now been through the
-removal bar too — see "Backfill" below. Nothing was removable; the count stands at 45.
-
-**Recount 2026-09-30: 49 — 45 documented, 4 not yet tested.** The four are
-`zkex/wgt/css/skeleton.css`, restored as a Marble CSS source after the 2026-09-08 sweep
-(`ZK-6112: restore the skeleton stylesheet as a Marble CSS source in zkex`): `.z-skeleton-active *`
-and `.z-skeleton-masked` (`visibility: hidden`), and the `::after` / `::before` `content` pair that
-builds the overlay. They have **not** been through the removal bar, so they are listed here as
-outstanding rather than as survivors. Everything below still stands.
+**Outstanding (not yet tested):** four `!important` in `zkex/wgt/css/skeleton.css`, restored as a Marble CSS source after the 2026-09-08 sweep (`ZK-6112: restore the skeleton stylesheet as a Marble CSS source in zkex`): `.z-skeleton-active *` and `.z-skeleton-masked` (`visibility: hidden`), and the `::after` / `::before` `content` pair that builds the overlay. They have **not** been through the removal bar, so they are listed here as outstanding rather than as survivors. Every entry below has been through the removal bar, including the three that post-dated the 2026-07 sweep (`grid.css`, `avatargroup.css`, `carousel.css`; see "Backfill").
 
 ## Removed (5) — proven render-neutral, guarded by tests
 

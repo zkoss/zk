@@ -9,7 +9,7 @@ keys, swipe/drag, indicator click, or an optional autoplay timer; can wrap conti
 ## Edition
 
 CE — ships in `zul.jar` (`org.zkoss.zul.Carousel` / `org.zkoss.zul.Carouselitem`,
-package `zul.wgt`). New in ZK 10.4.0 (`@since 10.4.0`). No PE/EE counterpart component,
+package `zul.wgt`). New in ZK 11.0.0 (`@since 11.0.0`). No PE/EE counterpart component,
 but the **ARIA/accessibility layer is EE-gated**: see "Accessibility posture" below.
 
 ## DOM structure (from mold/carousel.js + mold/carouselitem.js, reconciled against Carousel.ts runtime mutations)
@@ -104,7 +104,7 @@ carouselitem; it cannot, regardless of attribute values.
   clone subtree from sequential focus navigation and the accessibility tree so a keyboard
   user cannot tab into a duplicate button/link/input that happens to live inside a cloned
   slide.
-- There is no `.z-carousel-open`/`-collapsed`/`-dragging` class exposed anywhere; drag
+- The state classes on carousel are `-active`, `-indicator-active` and `-clone`. Drag
   state is tracked only in JS internals and via a transient inline `transform`/`transition`
   on the track, never as a class.
 
@@ -137,7 +137,9 @@ carouselitem; it cannot, regardless of attribute values.
 - `effect` (Carousel) → `"slide"` (default), `"fade"`, or `"none"`; drives the
   `.z-carousel-effect-*` class. This is not purely cosmetic — see "Effect gates structural
   behavior" below.
-- `disabled`/`readonly`/`invalid`/`inplace` — **none of these exist** for either widget.
+- The widgets have no `disabled`/`readonly`/`invalid`/`inplace` properties; the only
+  disabled-like signal is the native `[disabled]` attribute on the arrows (see "State
+  classes").
 
 ## Composition invariants
 

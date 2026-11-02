@@ -7,7 +7,7 @@ preview: ${PREVIEW_URL}/multislider.zul
 
 ## References
 - MUI CSS: Slider.css
-- DESIGN.md sections: §2, §3, §9, §11
+- `doc/spec/DESIGN.md` sections: "Text Colors", "Brand & Status Colors", "Motion", "Border Rules"
 
 ## DOM key selectors
 ```
@@ -17,8 +17,7 @@ preview: ${PREVIEW_URL}/multislider.zul
 .z-sliderbuttons-button      ← thumb handle (JS sets top:X% / left:X% = value position)
 .z-multislider-horizontal / -vertical
 ```
-Note: there is no `.z-multislider-center` / `-area` / `-button`. The thumb/area
-classes are the shared `.z-sliderbuttons-*` family (same as rangeslider) — see
+Note: the thumb and area classes are the shared `.z-sliderbuttons-*` family (same as rangeslider) — see
 `components/slider.md` "Related: multislider, rangeslider".
 
 ## Expected values

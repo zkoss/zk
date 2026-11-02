@@ -3,8 +3,7 @@
 `<biglistbox>` is a **zkmax (EE) virtual/lazy mesh** for unbounded data (millions of
 rows/cols). It is NOT a Listbox variant — different widget, different DOM, its own
 scrollbar. It renders only the visible `rows`×`cols` window and re-fetches from a
-`MatrixModel` as you scroll. These are ZK-portable facts (true for any theme); theme
-values (colors, thumb size, radius) live in `doc/spec/DESIGN.md` / `doc/contracts/biglistbox.md`.
+`MatrixModel` as you scroll. These are ZK-portable facts (true for any theme).
 
 ## DOM structure
 
@@ -12,27 +11,31 @@ values (colors, thumb size, radius) live in `doc/spec/DESIGN.md` / `doc/contract
 .z-biglistbox                              ← root (overflow:hidden, the card frame)
   .z-biglistbox-outer                      ← relative-positioned wrapper
     .z-biglistbox-head-outer               ← header viewport (overflow:hidden)
-      table > thead.z-biglistbox-faker     ← zero-height row that reserves column widths
-            > thead > tr > th.z-biglistbox-header[.z-biglistbox-sort][.z-biglistbox-header-leftmost]
-                 > div.z-biglistbox-header-content
-                     > div.z-biglistbox-sorticon > i[.z-icon-caret-up|.z-icon-caret-down]
-                     > div[title]   ← the column label (sibling AFTER the sorticon)
+      div#-head-cnt.z-biglistbox-head      ← header content wrapper
+        table > thead.z-biglistbox-faker   ← zero-height row that reserves column widths
+              > thead > tr > th.z-biglistbox-header[.z-biglistbox-sort][.z-biglistbox-header-leftmost]
+                   > div.z-biglistbox-header-content
+                       > div.z-biglistbox-sorticon > i[.z-icon-caret-up|.z-icon-caret-down]
+                       > div[title]   ← the column label (sibling AFTER the sorticon)
     .z-biglistbox-body-outer               ← body viewport (overflow:hidden)
-      table > thead.z-biglistbox-faker
-            > tbody > tr.z-biglistbox-row[.z-biglistbox-odd][.z-biglistbox-selected]
-                 > td[data-axis="c,r"]
+      div#-body-cnt.z-biglistbox-body      ← body content wrapper
+        table > thead.z-biglistbox-faker
+              > tbody > tr.z-biglistbox-row[.z-biglistbox-odd][.z-biglistbox-selected]
+                   > td[data-axis="c,r"]
     .z-focus-a                             ← focus trap (see data-components.md)
     .z-biglistbox-wscroll-vertical         ← custom scrollbar (see below)
     .z-biglistbox-wscroll-horizontal
     .z-biglistbox-verticalbar-*            ← frozen-column resize bar (only with frozenCols)
 ```
 
+With `frozenCols`, the mold also emits `-head-frozen`, `-head-shim`, `-body-frozen`,
+`-body-shim`, `-verticalbar-frozen` and `-verticalbar-tick` (see
+`zkmax/src/main/resources/web/js/zkmax/big/mold/biglistbox.js` in `../zkcml/`).
+
 Key class facts:
 - Alternating rows: `.z-biglistbox-odd` (explicit class, not `:nth-child`).
 - Selected row: `.z-biglistbox-selected` on the TR.
-- **There is no `.z-biglistbox-cell` class** — body cells are bare `<td data-axis="c,r">`.
-  Style cells via `.z-biglistbox-row td`. (An old contract asserted `.z-biglistbox-cell`;
-  it matches nothing.)
+- Body cells are bare `<td data-axis="c,r">`; style them via `.z-biglistbox-row td`.
 - Sort active adds `.z-biglistbox-sort` (cursor:pointer) to the TH; the caret `<i>` only
   gets a `z-icon-caret-up|down` class **when that column is the sorted one** — unsorted
   headers carry an empty `<i class="">`.
@@ -50,8 +53,7 @@ look taller than the rest** even though all rows are uniform height.
 .z-biglistbox table { border-collapse: separate; border-spacing: 0; }
 ```
 
-ZK's own default theme does this via a `.resetTable()` mixin (`biglistbox.less` ~line 3).
-This is the 4th ZK data table (after grid/listbox/tree) that needs the same reset —
+ZK's stock theme (IceBlue) does this with a `.resetTable()` mixin. This is the 4th ZK data table (after grid/listbox/tree) that needs the same reset —
 always sweep all four when touching table border-spacing.
 
 ## Sort caret must be laid out inline — it must never add a header row
@@ -60,7 +62,7 @@ always sweep all four when touching table border-spacing.
 is a full-width block sitting **before** the label. So when the caret glyph appears the
 icon row + label row stack into **two lines**, ~doubling the header height. ZK's default
 theme avoids this with `position:absolute` on the sorticon; a flex layout is cleaner and
-matches MUI DataGrid (caret trails the label):
+keeps the caret trailing the label:
 
 ```css
 .z-biglistbox-header-content { display: flex; align-items: center; gap: <token>; }
@@ -74,9 +76,9 @@ that injects the glyph, so a static screenshot won't catch a regression here).
 
 This is the biggest theme trap. The root and viewports are `overflow:hidden`; scrolling
 is driven by a custom widget. **A theme that styles nothing here ships an invisible,
-zero-size scrollbar — overflowed rows/cols become unreachable.** ZK's default theme sizes
-it (`@biglistboxSize:18px`, `@biglistboxWscrollDragSize:116px`) and paints arrow-button
-glyphs from the `ZK85Icons` font (which custom themes do not inherit).
+zero-size scrollbar — overflowed rows/cols become unreachable.** ZK's stock theme sizes
+the bar (18px, drag thumb 116px) and paints arrow-button glyphs from the `ZK85Icons` font
+(which custom themes do not inherit).
 
 **Two positioning requirements ZK's less provides but a custom theme must re-supply — get
 either wrong and the bar looks missing or the thumb jumps off-track:**
@@ -84,8 +86,7 @@ either wrong and the bar looks missing or the thumb jumps off-track:**
 1. **`.z-biglistbox` AND `.z-biglistbox-outer` must be `position:relative`.** The wscroll
    bars are `position:absolute` children of `-outer`. With no positioned ancestor they
    anchor to the **viewport** — the bar renders at the top-right corner of the *page*,
-   500+px away from the grid, and looks entirely missing on the component. (Marble shipped
-   neither rule and the scrollbar was off-component.)
+   500+px away from the grid, and looks entirely missing on the component.
 2. **Every wscroll part you keep must declare its own `position:absolute`.** ZK sets each
    part's `top`/`left` via *inline style* and expects the theme's less to have made it
    absolute. The killer case is the **end-stop `-endbar` (eend)**: WScroll clamps the thumb
@@ -112,11 +113,12 @@ WScroll element roles (`zul/WScroll.ts`), per bar (`-vertical` / `-horizontal`):
 horizontal). The effective thumb size used by every scroll calc is
 `edrag.offsetHeight − _gap`. Two consequences:
 
-1. If `epos` has **zero** box at construction, `_gap = edrag.offsetHeight`, so the
+1. If `epos` has a **zero-size** box at construction, `_gap = edrag.offsetHeight`, so the
    effective thumb size becomes 0 and the thumb mispositions (slides off the track).
-   **Therefore `epos` must NOT be `display:none`** — give it a real box and hide it with
-   `visibility:hidden` / `opacity:0` instead (these preserve `offsetHeight`). Override
-   ZK's inline `display:none` with `display:block !important`.
+   `_initDragdrop` sets `epos.style.display = 'block'` while it measures `_gap` and then
+   restores the old value, so a stylesheet `display:none` on `epos` does not zero the
+   measurement. What matters is that `-pos` has a real width/height from CSS (the same size
+   as `-drag`, see point 2). After construction ZK hides `epos` itself (`jq(epos).hide()`).
 2. Make `-drag` and `-pos` the **same fixed size** ⇒ `_gap = 0` ⇒ the thumb is a clean
    fixed pill that positions correctly.
 
@@ -132,16 +134,8 @@ same compression, just less obvious with a bigger thumb. Don't chase it; verify 
 travel (HugeRow/HugeColumn) instead. A true small-data proportional thumb needs a JS shim
 over WScroll (rejected — keeps the theme CSS-only; the user accepted the default behavior).
 
-A minimal MD3 thin-overlay implementation: `position:relative` root + outer; the track
-divs (`-vertical`/`-horizontal`) are `visibility:hidden` (geometry stays CSS-only and JS
-never touches it; hit-testing passes through, no pixels drawn) while the `-drag` thumb is
-`visibility:visible` — a rounded 8px pill in `--zk-color-outline-variant` with **no
-groove** (`::before { content:none }`), matching the document scrollbar's resting look;
-do not shift the track down to clear the header, because WScroll positions the thumb
-relative to the track top (it would double-offset); arrow buttons `display:none`;
-`-endbar` `position:absolute; visibility:hidden` (kept boxed for the clamp math); `-pos`
-boxed-but-invisible and the same size as `-drag`. See `doc/contracts/biglistbox.md` for
-the theme-specific values.
+Do not shift the track down to clear the header: WScroll positions the thumb relative to
+the track top, so shifting it double-offsets the thumb.
 
 **Verification gotcha — the horizontal bar hides below the page fold.** The vertical bar
 runs the right edge *from the top*, so it shows as soon as the component's top is on screen.
@@ -156,15 +150,10 @@ is tall (~500px), so an identical step-count travel parks the horizontal thumb i
 far-left ~5% corner where it looks static — still ZK-inherent (axis-agnostic `WScroll.js`),
 not tunable from CSS.
 
-## Demo / preview note (not a ZK fact, but a recurring trap)
-
-Wiring a biglistbox control's `onSelect`/property change in an **inline `zscript`** that
-reflectively walks a collection (`event.selectedObjects.iterator().next()`) throws under
-JDK 17: *"module java.base does not opens java.util to unnamed module"* (BeanShell runs in
-the unnamed module). Put such handlers in a **compiled composer** (`@Listen`) instead —
-compiled bytecode has no reflective-access restriction. (This is a page-authoring rule, not
-a theme/skill gap; recorded here so the next biglistbox demo doesn't repeat it.)
-
 ## Bundle
 
 `biglistbox.css.dsp` (standalone 1:1, `js/zkmax/big/css/`). zkmax/EE only.
+
+## Demo pages: use a compiled composer, not inline zscript
+
+An inline `<zscript>` that walks a collection by reflection throws a module-access error on JDK 17. A page that feeds a biglistbox model should use a compiled composer (or ViewModel) instead.

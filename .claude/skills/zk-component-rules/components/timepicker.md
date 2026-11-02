@@ -1,6 +1,6 @@
 # timepicker
 
-A PE composite input component that renders a text field plus a clock-icon button. Clicking the **button** drops down a scrollable list of time options at fixed intervals — a click on the field/input does **not** open it (see "Popup open is decided in JS" in Notes). The widget class extends `zul.inp.FormatWidget` (→ `InputWidget` → `zul.Widget`) — **not** `ComboWidget`. It only borrows ComboWidget's DOM through its mold (`mold/timepicker.js` is literally `zul.inp.ComboWidget.$redraw`), so the DOM is structurally identical to combobox/timebox/datebox while the click/keyboard *behavior* is NOT inherited from ComboWidget. The popup is populated at runtime by `_renderOptions()` and contains plain `<li>` items, not ZK child widgets.
+An EE composite input component that renders a text field plus a clock-icon button. Clicking the **button** drops down a scrollable list of time options at fixed intervals — a click on the field/input does **not** open it (see "Popup open is decided in JS" in Notes). The widget class extends `zul.inp.FormatWidget` (→ `InputWidget` → `zul.Widget`) — **not** `ComboWidget`. It only borrows ComboWidget's DOM through its mold (`mold/timepicker.js` is literally `zul.inp.ComboWidget.$redraw`), so the DOM is structurally identical to combobox/timebox/datebox while the click/keyboard *behavior* is NOT inherited from ComboWidget. The popup is populated at runtime by `_renderOptions()` and contains plain `<li>` items, not ZK child widgets.
 
 ## DOM structure
 
@@ -47,13 +47,13 @@ States rely on `:hover` and `:focus` / `:focus-within` pseudo-classes for hover 
 ## Composition invariants
 
 - Popup detachment: `div#-pp` is detached to `<body>` via `makeVParent()` on open. Trigger and popup are siblings under `document.body` while open. Any CSS using descendant selectors from `.z-timepicker` will NOT reach the popup — use `.z-timepicker-popup` as an independent root selector. Because ZK sets the popup's `left`/`top` inline but NOT `position`, `.z-timepicker-popup` MUST declare `position: absolute` + a z-index, or the inline offsets are inert and the popup renders at the page bottom-left — see `reference/floating-popup-in-body.md`.
-- Root clips to its border-radius (`overflow: hidden`) to trim the focus-ring overlay (and any child background) to the rounded corners. Historically the readonly input carried an opaque `--zk-color-surface-container` background whose square corners bled past the left radius, which is why clipping was added; the theme now renders readonly as an **active, transparent-input** field (see `doc/contracts/timepicker.md` + `doc/spec/component-state-model.md`), so the input is transparent in every state and `overflow: hidden` remains only to clip the `::after` focus ring.
-- Focus affordance must NOT grow the box. The root is `box-sizing: border-box` with `min-height: 36px` and min-height-pinned children; a `border-width: 1px→2px` increase on focus shrinks the content box 2px and the children force the root 2px taller. Keep the border 1px and render the focus ring as an inset box-shadow. This trap is family-wide (datebox/timebox/bandbox/spinner) — see `reference/focus-affordance-no-layout-shift.md`.
-- Timepicker draws the focus ring on an always-present `::after` **overlay** (transparent at rest, `pointer-events:none`, clipped to the rounded shape by `overflow:hidden`), painted above both children so the ring reads uniformly with the border staying 1px — no layout shift. See `reference/focus-affordance-no-layout-shift.md`.
+- Root clips to its border-radius (`overflow: hidden`) so the focus-ring overlay (and any child background) is trimmed to the rounded corners.
+- Focus affordance must NOT grow the box. The root is `box-sizing: border-box` with a `min-height` and min-height-pinned children; a larger `border-width` on focus shrinks the content box and the children force the root taller. Keep the border width constant and render the focus ring as an inset box-shadow. This trap is family-wide (datebox/timebox/bandbox/spinner) — see `reference/focus-vs-focus-within.md`.
+- Timepicker can draw the focus ring on an always-present `::after` **overlay** (transparent at rest, `pointer-events:none`, clipped to the rounded shape by `overflow:hidden`), painted above both children so the ring reads uniformly with no layout shift. See `reference/focus-vs-focus-within.md`.
 - Popup minimum width: JS sets `pp.style.width` to at least `tpn.offsetWidth` (the trigger width). The popup is never narrower than the trigger.
 - The clock icon glyph is `z-icon-clock-o` (font icon). The `getIconSclass()` method always returns this — it is not user-configurable.
 - The root is `display: inline-block` (structural constraint; ZK's size-management assumes inline-block on the trigger).
-- The popup max-height is capped at `350px` by `_fixsz()` (JS-enforced; overflow should be `auto`).
+- The popup's height cap comes from theme CSS (`max-height` on the popup), not from JS; the option list needs `overflow: auto`.
 - The input covers the full root width minus the button width. (The button is always present — `buttonVisible="false"` is not settable on Timepicker, so the full-width input variant never occurs.)
 - Focus target: the actual focus is on the inner `<input>` element. Use `:focus-within` on the root to style the focused-composite state.
 
@@ -61,7 +61,7 @@ States rely on `:hover` and `:focus` / `:focus-within` pseudo-classes for hover 
 
 - The Java `Timepicker` constructor calls `setCols(5)`, so the input renders `size="5"`, which fits `HH:mm` only.
 - Under `flex: 1; min-width: 0` alone, a longer format such as `HH:mm:ss` is clipped when the root has no explicit width.
-- A theme that wants the width to follow the content can use `field-sizing: content` with `flex: 1 1 auto` and a `min-width` floor, so an empty field stays clickable. The shipped timepicker stylesheet does this.
+- A theme that wants the width to follow the content can use `field-sizing: content` with `flex: 1 1 auto` and a `min-width` floor, so an empty field stays clickable.
 - Do not copy this to timebox or datebox. The timebox stylesheet deliberately omits `field-sizing`, because `field-sizing: content` makes the browser ignore `size` and so disables the `cols` API. See `combo-trio.md`.
 
 ## Sibling decomposition
@@ -73,7 +73,7 @@ timepicker's DOM is structurally identical to timebox and the combo-trio pattern
 
 The only structural differences from `timebox`:
 1. The popup is a scrollable list of pre-computed time options (`<li>` items) rather than child ZK widgets.
-2. The component lives in `zkmax.jar` (PE), not in the CE `combo.css.dsp` bundle.
+2. The component lives in `zkmax.jar` (EE), not in the CE `combo.css.dsp` bundle.
 3. The CSS file is `zkmax/inp/css/timepicker.css` (separate file, not merged into `combo.css.dsp`).
 
 ## Contract
@@ -84,7 +84,7 @@ This is a standalone file (not bundled into `combo.css.dsp`). It must be registe
 
 ## Edition
 
-PE (ZK Max — `zkmax.jar`). The ZKDoc edition badge says "ee" but the Java class is in `org.zkoss.zkmax.zul.Timepicker` which ships in PE+. Treat as PE.
+EE. It is registered by `zkmax/src/main/resources/metainfo/zk/lang-addon.xml` and the Java class is `org.zkoss.zkmax.zul.Timepicker` (`zkmax.jar`, which ships in EE only).
 
 ## Notes
 
@@ -93,4 +93,4 @@ PE (ZK Max — `zkmax.jar`). The ZKDoc edition badge says "ee" but the Java clas
 - **Hover class injection**: ZK's `InputWidget` injects `.z-timepicker-hover` on the input element during hover (via `_hoverIn`/`_hoverOut`). This JS-injected class is available as a styling hook when cross-element hover coordination is needed (e.g. synchronizing input border color change with button border color change on hover). Themes may use either this class or the CSS `:hover` pseudo-class on the root.
 - **Open class propagation**: On open, `pp.className = tpn.className + ' ' + pp.className` copies the root's classes onto the popup element. This means `.z-timepicker-open` appears on both root and popup, and user-set sclasses propagate to the popup automatically.
 - **inplace + readonly combination**: Both states can coexist. The `_inplace` flag causes a mousedown listener on the button — `_doBtnMouseDown` sets `_inplaceIgnore` so a button click can still open the popup even in inplace mode.
-- **Popup open is decided in JS, not CSS — and only the button opens it**: the **only** click-to-open handler is `_doBtnClick`, a DOM listener `bind_` attaches exclusively to the clock-button node (`Timepicker.ts:326`, gated only on `!_disabled`). There is **no** field/input open-on-click path: `Timepicker.doClick_:365` handles only the option-click case, then calls `super.doClick_` — and because Timepicker extends `FormatWidget` → `InputWidget` → `zul.Widget` (**not** `ComboWidget`), `super` resolves to the base `zul.Widget.doClick_` (widget.ts:5039), which just fires `onClick` to the server and propagates to the parent — no popup. So a click on the input only focuses/fires `onClick`; only the icon opens the popup. This is a class-hierarchy fact: Timepicker never inherits ComboWidget's readonly whole-control open (`ComboWidget.doClick_:786`, which combobox/datebox use), even though its mold borrows `ComboWidget.$redraw` for DOM. `_buttonVisible` exists as a field (Timepicker.ts:29) but is never consulted for click-open. CSS is never in the open path (the theme sets `pointer-events:none` only on `.z-timepicker-disabled`).
+- **Popup open is decided in JS, not CSS — and only the button opens it**: the **only** click-to-open handler is `_doBtnClick`, a DOM listener `bind_` attaches exclusively to the clock-button node (`Timepicker.bind_`, gated only on `!_disabled`). There is **no** field/input open-on-click path: `Timepicker.doClick_` handles only the option-click case, then calls `super.doClick_` — and because Timepicker extends `FormatWidget` → `InputWidget` → `zul.Widget` (**not** `ComboWidget`), `super` resolves to the base `zul.Widget.doClick_` (`widget.ts`), which just fires `onClick` to the server and propagates to the parent — no popup. So a click on the input only focuses/fires `onClick`; only the icon opens the popup. This is a class-hierarchy fact: Timepicker never inherits ComboWidget's readonly whole-control open (`ComboWidget.doClick_`, which combobox/datebox use), even though its mold borrows `ComboWidget.$redraw` for DOM. `_buttonVisible` exists as a field in `Timepicker.ts` but is never consulted for click-open. CSS is never in the open path.

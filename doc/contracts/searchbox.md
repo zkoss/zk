@@ -6,22 +6,18 @@ rules: see .claude/skills/zk-component-rules/components/searchbox.md
 contract-approved: false
 zk-version: 10.2.1-jakarta
 
-## Notes
-searchbox has no dedicated CSS.dsp in ZK source — may share cascader.css or need its own file.
-Evaluator should check if a dedicated `.z-searchbox` CSS file is served; if not, flag as T2 (needs own file).
-
 ## Expected values
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | c1 | `.z-searchbox` | border | 1px solid rgba(0, 0, 0, 0.23) |
 | c2 | `.z-searchbox` | border-radius | 4px |
-| c3 | `.z-searchbox-input` | font-size | 14px |
-| c4 | `.z-searchbox[disabled]` | opacity | 0.38 |
+| c3 | `.z-searchbox-search` | font-size | `var(--zk-typescale-body-medium-size)` (13px, inherited from `.z-searchbox-popup`) |
+| c4 | `.z-searchbox.z-searchbox-disabled` | opacity | 0.38 |
 
 ### Selection (list-row family)
 The searchbox dropdown is a keyboard-navigable list of options — semantically
-a LIST-ROW selection, NOT a chip. Per `reference/selected-state-families.md`
+a LIST-ROW selection, NOT a chip. Per `marble-theme reference/selected-state-families.md`
 it MUST use `secondary-container` (MD3 `list-item.selected`; revised 2026-10-06 from
 `primary-container`, which followed MUI). Do not use `primary-container` here.
 
@@ -29,7 +25,7 @@ it MUST use `secondary-container` (MD3 `list-item.selected`; revised 2026-10-06 
 |----|----------|----------|----------|
 | s1 | `.z-searchbox-selected` | background-color | `rgb(201, 213, 234)` (≈ `--zk-color-secondary-container`) |
 | s2 | `.z-searchbox-selected` | color | `rgb(21, 30, 45)` (≈ `--zk-color-on-secondary-container`) |
-| s3 | `.z-searchbox-selected` | background-color | MUST NOT be `rgb(178, 223, 219)` (= `--zk-color-secondary-container`) — wrong family (the pre-fix bug) |
+| s3 | `.z-searchbox-selected` | background-color | MUST NOT be `--zk-color-primary-container` (≈ `#d6e4ff`) — wrong family; list rows use `--zk-color-secondary-container` (the pre-fix bug) |
 
 ### Popup open behaviour (detached-popup display scoping)
 The mold renders `.z-searchbox-popup` with NO inline display, so the theme owns
@@ -38,7 +34,7 @@ the hidden state. It MUST be scoped to the attached popup
 `.z-searchbox-popup { display:none }` paired with a `.z-searchbox-open`-scoped
 show rule — the latter leaves the detached popup `display:none` at measure time,
 so it reveals bottom-up + mis-positions and may not close on outside-click. See
-`reference/floating-popup-in-body.md` (§ "Hiding a detached popup").
+`zk-component-rules reference/floating-popup-in-body.md` (§ "Hiding a detached popup").
 
 Evaluate with the popup OPEN (after a real click — the popup is then a child of
 `<body>`):

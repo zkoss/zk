@@ -24,21 +24,22 @@ For chosenbox (also applies to combobox, datebox, etc.):
 
 `parentElement.tagName === 'BODY'` for the popup element after first open. The trigger and popup are **siblings**, not parent-child.
 
-## Implication: the popup CSS MUST declare `position: absolute` (+ a z-index)
+## Implication: the popup CSS MUST declare `position: absolute`
 
 ZK sets the popup's `left`/`top` (and often `width`) **inline** at open time — but it does **not** set `position`. Positioning offsets only take effect on a positioned box, so the theme CSS is responsible for supplying `position: absolute` (or `fixed`). If the popup rule omits it, the element computes `position: static`, the inline `left`/`top` are inert, and the popup drops into normal `<body>` flow — rendering at the **bottom-left of the page**, after all body content.
 
 ```css
 .z-{component}-popup {
     position: absolute;   /* REQUIRED — ZK's inline left/top are dead without it */
-    z-index: 1600;        /* dropdown stacking; calendar/datebox use 1700 */
     /* … surface, shape, elevation … */
 }
 ```
 
+`z-index` is different: ZK writes an inline `z-index` (from `_topZIndex()`) on every floating widget when it shows, so the CSS value is only a fallback for the first paint. See `doc/spec/zindex-scale.md`.
+
 This is a ZK structural fact, not a theme choice: **any** theme that styles a detached popup and forgets `position` hits the identical bottom-left bug. Verify every `*-popup` **base** rule declares `position` — a modifier rule (`.z-x-open .z-x-popup`) inheriting from a positioned base is fine, but a base rule without `position` is the bug.
 
-> Caught 2026-06-08 on `.z-timepicker-popup` (its sole rule lacked `position`). A prior `width: max-content !important` workaround had masked it by capping the width, so the full-body-width `static` box wasn't obvious. Fix = `position: absolute; z-index: 1600` (and the width hack became unnecessary — under `position: absolute`, ZK's inline `width: auto` shrink-fits to content).
+A `width: max-content !important` workaround can mask a missing `position` by capping the width. Under `position: absolute`, ZK's inline `width: auto` shrink-fits to content, so the workaround is not needed.
 
 ## Implication: percentage-based widths reference `<body>`
 
@@ -150,55 +151,8 @@ that `getComputedStyle(popup).display !== 'none'` while open and that the open
 popup's `top >= trigger.bottom` when there is room below.
 
 
-## Variant: the close method leaves an inline `display:block` (needs `!important`)
+## When a widget's close path does not hide the popup
 
-The searchbox case above assumes the popup carries **no inline `display`** and
-the theme owns the hidden state with a plain (non-`!important`) attached-scope
-rule. Some ZK widgets are worse: their **close method sets an inline
-`display:block` on open and never clears it on close**, relying on
-`undoVParent()`'s style-restore to re-hide the re-attached popup.
+A popup that ZK re-attaches with `undoVParent()` but never hides itself needs the theme to hide it while it is attached inside the widget. Before adding such a rule, read the widget's current close method (`closePopup` / `onHide`) and confirm that it does not write `display:none`. `zkex` `Colorbox.ts` writes `pp.style.display = 'none'` on close (lines 220, 236, 269, 299), so a closed colorbox popup does not keep an inline `display:block`. The older workaround for it (`.z-colorbox > .z-colorbox-popup { display: none !important }`, written when `closePopup` / `onHide` left an inline `display:block` on a mobile UA) is no longer needed; re-verify on a touch UA before removing it.
 
-`zkex.inp.Colorbox` (ZK 10.2.1-jakarta) is the known case. The *running build's*
-methods are NOT what the ZK source shows — read what actually runs
-(`('' + wgt.openPopup)` in the browser), not the source tree:
-
-```js
-openPopup()  { this._open = true;  var pp = this.$n_('pp');
-               pp.style.display = 'block'; pp.style.position = 'absolute';
-               pp.style.zIndex = '88000'; this.openPalette(); }   // sets inline block
-closePopup() { this._open = false; var pp = this.$n('pp'); jq(pp).zk.undoVParent(); } // NO display:none
-onHide()     { this._open = false; var pp = this.$n('pp'); jq(pp).zk.undoVParent(); } // NO display:none
-```
-
-`closePopup`/`onHide` never reset the inline `display:block`. On a **desktop** UA
-`undoVParent()`'s restore happens to leave the re-attached popup hidden; on a
-**mobile (iPad/Safari) UA it does not**, so after a dismiss or a colour pick the
-popup stays `display:block` and a small `.z-palette-button` artifact remains
-visible. (`openPalette()` also `addClass('z-palette-button')` onto the popup, so
-the leftover element is `class="z-colorbox-popup z-palette-button"`.)
-
-**Fix:** force-hide the popup while it is **re-attached inside the widget**.
-Because the OPEN popup is detached to `<body>`, the attached-scope selector only
-ever matches the closed popup — but `!important` IS required here (unlike the
-searchbox case) because ZK leaves an inline `display:block` that a plain rule
-can't beat:
-
-```css
-.z-colorbox > .z-colorbox-popup { display: none !important; }
-```
-
-**Cautions:**
-- **Verify the open popup actually detaches to `<body>`** before using this. If a
-  widget shows its popup *in place* (still a child of the widget), this rule
-  hides it permanently. The menu-content colour mold (`.z-menu-popup`, a
-  `zul.menu.Menu`) is a different widget with its own working close path — do NOT
-  apply the rule to it.
-- This bug is **UA-dependent** (desktop passes, mobile fails). A desktop-only
-  screenshot/dismiss test will not catch it — write the guard in the **tablet**
-  Playwright project (mobile UA + `hasTouch`), driving a real `touchscreen.tap`.
-
-**Rule:** when a ZK widget's close method relies on `undoVParent()` alone (no
-`display:none`) to hide a body-detached popup, add
-`.z-{comp} > .z-{comp}-popup { display: none !important }` for the closed/attached
-state — and verify the open popup is `<body>`-detached so the rule can't hide it.
-(Caught 2026-06-12 on colorbox, mobile only.)
+If such a rule is still needed: it must be scoped to the attached state (`.z-{comp} > .z-{comp}-popup`), because the open popup is detached to `<body>` and the attached-scope selector then never matches it. `!important` is required only when ZK leaves an inline `display:block` that a plain rule cannot beat. Do not use it on a widget that shows its popup in place; the rule would hide it permanently. A desktop-only dismiss test does not catch a mobile-only failure; write the guard in a touch-UA project and tap for real.

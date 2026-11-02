@@ -6,7 +6,7 @@ A generic floating container that opens positioned relative to a trigger element
 
 ```
 .z-popup                   (root — position: absolute)
-└─ .z-popup-content        (content wrapper — carries box-shadow)
+└─ .z-popup-content        (content wrapper)
 ```
 
 ## Popup positioning
@@ -18,7 +18,3 @@ See `reference/floating-popup-in-body.md` for the detach-to-`<body>` pattern.
 ## CSS file
 
 `popup.css.dsp`
-
-## Note
-
-Stub entry — full documentation pending spec-author run (Phase 3/4).

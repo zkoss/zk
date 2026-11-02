@@ -16,7 +16,7 @@ its CSS loads only via the global `norm.css.dsp` bundle (see `.claude/skills/zk-
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| i0 | `.z-image` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `image.css` is bundled into `norm.css.dsp` (regression guard for the 2026-06-30 orphan gap) |
+| i0 | `.z-image` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `image.css` is bundled into `norm.css.dsp` (regression guard against an orphaned standalone `.dsp`) |
 | i1 | `.z-image` | border-radius | `var(--zk-shape-corner-extra-small)` |
 | i2 | `.z-image` | display / max-width / vertical-align | `inline-block` / `100%` / `middle` |
 | i3 | `.z-image img` | display / max-width / height | `block` / `100%` / `auto` (responsive) |

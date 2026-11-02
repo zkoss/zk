@@ -22,7 +22,7 @@ mockup-rationale: ZKDoc has Coachmark-4.png; Marble aligns the card to the MD3 r
   reserves saturated brand fills for single-purpose, non-composable attention surfaces (Snackbar →
   `inverse-surface` + one `inverse-primary` action); a coachmark hosts arbitrary widgets so it belongs
   in the neutral rich-tooltip family, not the snackbar family.
-- DESIGN.md sections: §3 (color roles), §5 (shape — card radius), §6 (elevation), §7 (spacing), §8 (motion)
+- doc/spec/DESIGN.md sections: "Surface Palette" and "Text Colors" (colors), "Corner Radii" (card radius), "Elevation / Shadow", "Spacing Scale (4dp baseline)", "Motion"
 - ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/Coachmark-4.png
 - Iceblue baseline: doc/contracts/baselines/coachmark-iceblue.png
 - HTML contract: doc/contracts/coachmark.html
@@ -48,12 +48,14 @@ content's top-right corner in every pointer direction: the close is absolutely p
 the `.z-coachmark` root, and ZK injects 20px of padding on the pointer side of the root
 (`Coachmark.ts _fixPadding`: `10 + borderWidth/2`, pointer border hardcoded 10px), so the
 pointer-side offset adds exactly that 20px (`--zk-spacing-5`) to keep the inset even — a plain
-`+16px` bump lands 4px short and reads as crowded. The full-page mask uses a semi-transparent dark
-overlay to dim the content beneath, guiding attention to the target.
-Entrance animation: Marble does not override the ZK default `expand` keyframe animation
-(scale 0 → 1 + opacity 0 → 1). The duration, delay, and easing are inherited from ZK's
-built-in coachmark JS — they are not Marble-themed values and no `--zk-motion-*` token is
-bound to them. The Marble CSS (`coachmark.css`) contains no animation rule.
+`+16px` bump lands 4px short and reads as crowded. The full-page mask dims the content beneath,
+guiding attention to the target. It is a `zk.eff.FullMask` node (`z-modal-mask z-coachmark-mask`; `Coachmark.ts` adds the second
+class). Marble paints it with `--zk-color-scrim` through the shared `.z-modal-mask` rule in
+`misc.css`. The mask must use the system scrim token for theme-wide consistency.
+Entrance animation: the card uses the ZK default `expand` keyframe animation
+(scale 0 → 1 + opacity 0 → 1). The duration, delay, and easing come from ZK's
+built-in coachmark JS, not from `--zk-motion-*` tokens. Reduced motion is handled by the
+global rule in `tokens/_motion.css`.
 
 ## Outcome assertions
 
@@ -73,11 +75,11 @@ bound to them. The Marble CSS (`coachmark.css`) contains no animation rule.
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-coachmark-content` | background-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | DESIGN.md §3 — neutral rich-tooltip surface; prominence from elevation on the scrim, not a brand fill |
-| c2 | `.z-coachmark-content` | color | `var(--zk-color-on-surface)` → `rgba(0, 0, 0, 0.87)` | DESIGN.md §3 — on-surface text on the neutral card |
-| c3 | `.z-coachmark-content` | border-radius | `var(--zk-shape-card)` → `6px` | DESIGN.md §5 — card radius for container surfaces |
-| c4 | `.z-coachmark-content` | box-shadow | `var(--zk-elevation-2)` → `0px 2px 6px 0px rgba(0,0,0,0.12), 0px 1px 2px 0px rgba(0,0,0,0.14)` | DESIGN.md §6 — dropdown/hover elevation for floating card |
-| c5 | `.z-coachmark-content` | padding | `16px 44px 16px 16px` (right = `calc(var(--zk-spacing-2) + var(--zk-control-height-xs) + var(--zk-spacing-2))` = 8+28+8) | DESIGN.md §7 — comfortable body padding; right padding reserves 8px inset + the 28px close circle + an 8px gap before the text (mirrors ZK default's asymmetric `@coachmarkPaddingRight`) |
+| c1 | `.z-coachmark-content` | background-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | doc/spec/DESIGN.md "Surface Palette" — neutral rich-tooltip surface; prominence from elevation on the scrim, not a brand fill |
+| c2 | `.z-coachmark-content` | color | `var(--zk-color-on-surface)` → `rgba(0, 0, 0, 0.87)` | doc/spec/DESIGN.md "Text Colors" — on-surface text on the neutral card |
+| c3 | `.z-coachmark-content` | border-radius | `var(--zk-shape-card)` → `6px` | doc/spec/DESIGN.md "Corner Radii" — card radius for container surfaces |
+| c4 | `.z-coachmark-content` | box-shadow | `var(--zk-elevation-2)` → `0px 2px 6px 0px rgba(0,0,0,0.12), 0px 1px 2px 0px rgba(0,0,0,0.14)` | doc/spec/DESIGN.md "Elevation / Shadow" — dropdown/hover elevation for floating card |
+| c5 | `.z-coachmark-content` | padding | `16px 44px 16px 16px` (right = `calc(var(--zk-spacing-2) + var(--zk-control-height-xs) + var(--zk-spacing-2))` = 8+28+8) | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — comfortable body padding; right padding reserves 8px inset + the 28px close circle + an 8px gap before the text (mirrors ZK default's asymmetric `@coachmarkPaddingRight`) |
 | c6 | `.z-coachmark-pointer.z-coachmark-up` | border-bottom-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | pointer triangle must match card background |
 | c7 | `.z-coachmark-pointer.z-coachmark-down` | border-top-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | pointer triangle must match card background |
 | c8 | `.z-coachmark-pointer.z-coachmark-left` | border-right-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | pointer triangle must match card background |
@@ -88,7 +90,7 @@ bound to them. The Marble CSS (`coachmark.css`) contains no animation rule.
 | c20 | `.z-coachmark-close` | border-radius | `var(--zk-shape-corner-full)` → `9999px` (renders as a full circle) | circular MD3 icon-button affordance |
 | c21 | `.z-coachmark-close::before` | background-color, opacity | `var(--zk-color-on-surface)` at `opacity: 0` (rest) → `var(--zk-state-hover-opacity)` (0.08) on `:hover`, `var(--zk-state-focus-opacity)` on `:focus-visible` | MD3 state layer — an on-surface overlay that reads on the neutral card (an opaque container swap would not, the card is already a surface-container tone) |
 | c22 | `.z-coachmark-close:focus-visible` | outline | `var(--zk-focus-ring)` → `2px solid var(--zk-color-primary)`, `outline-offset: -2px` | keyboard focus indicator — the close is `tabindex=0` and had none before |
-| c12 | `.z-coachmark-mask` | background | `var(--zk-color-scrim)` → `rgba(0,0,0,0.5)` | mask must use the system scrim token for theme-wide consistency |
+| c12 | `.z-coachmark-mask` | background-color | `var(--zk-color-scrim)` → `rgba(0, 0, 0, 0.5)` | shared `.z-modal-mask` rule, `misc.css` — the mask must use the system scrim token for theme-wide consistency |
 | c13 | `.z-coachmark` | position | `absolute` | structural — JS-positioned wrapper |
 | c14 | `.z-coachmark` | opacity | `0` (when NOT `.z-coachmark-open`) | closed state must be invisible |
 | c15 | `.z-coachmark-pointer` | position | `absolute` | REQUIRED so the mold JS's inline `top`/`left` apply — otherwise the triangle does not align to the target |
@@ -120,6 +122,6 @@ bound to them. The Marble CSS (`coachmark.css`) contains no animation rule.
 - [ ] pointer-down
 - [ ] pointer-left
 - [ ] pointer-right
-- [ ] mask-visible
+- [ ] mask visible (`z-modal-mask` dim overlay, `--zk-color-scrim`)
 - [ ] close-hover (state layer `::before` fades in)
 - [ ] close-focus (focus-visible ring)

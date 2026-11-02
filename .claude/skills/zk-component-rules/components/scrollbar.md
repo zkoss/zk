@@ -47,7 +47,7 @@ namespace: `xmlns:ca="client/attribute"` then `ca:data-embedscrollbar="true|fals
   min length 15px. The inner `.z-scrollbar-icon` is present but kept `display:none`.
 - **Track** = `.z-scrollbar-rail`.
 - **Step buttons** `-up/-down/-left/-right` (each wraps a caret/chevron `<i>`) are emitted on
-  every bar. Showing vs hiding them is a **theme choice** (many MD3/modern themes hide them).
+  every bar. Showing vs hiding them is a **theme choice** (many modern themes hide them).
   **Critical:** `syncSize()` reads each button's `offsetWidth`/`offsetHeight` to inset the
   wrapper (`vhgh = laneH − up.offsetHeight − down.offsetHeight`, horizontal analogous). So if
   you show them, give them an explicit size AND offset the wrapper by that size in CSS
@@ -88,16 +88,15 @@ So the jump is never an anchor problem; it's a **thickness/inset** problem. If t
 wider than the track and the track sits inset within it (centred), the hover track/thumb
 appear inset from the shared anchor while the thin flush embed sits *at* it → lateral jump on
 mouse-over. Fix: **edge-anchor the track/thumb/arrows inside the lane** (vertical → `right:0`,
-horizontal → `bottom:0`; thumb 1px in) **and size the `*-embed` rail to the hover *track's*
+horizontal → `bottom:0`; thumb slightly in) **and size the `*-embed` rail to the hover *track's*
 thickness** (not the thumb's). Then the flush rest footprint equals the flush hover-track
-footprint and the bar only "refines" into thumb-in-track in place. (
-this is ZK behaviour, not a Marble choice, so it lives here.)
+footprint and the bar only "refines" into thumb-in-track in place.
 
 ## CSS LOADING TRAP (theme-portable — applies to every ZK theme)
 
 Because the scrollbar is a **helper, not a widget**, it has **no `lang.xml` css-uri and no
-WPD entry** — nothing ever requests a per-component `scrollbar.css.dsp`. Stock ZK styles it
-inside the global `zul/less/norm.less` bundle for exactly this reason.
+WPD entry** — nothing ever requests a per-component `scrollbar.css.dsp`. The CSS has to ride
+in the global bundle served by `zk.wcs` for exactly this reason.
 
 **A theme MUST load its scrollbar CSS through the global bundle** (the file served by
 `zk.wcs`, e.g. `norm.css.dsp`), not as a 1:1 per-component `.dsp`. If a theme's build
@@ -110,6 +109,4 @@ non-widget, mold-only emitters that must be bundled globally: `notification`, `t
 ## Related native-bar surfaces (separate from the simulated bar)
 
 The browser-native scrollbar (`nativebar="true"`, the default) is styled per-platform via
-`::-webkit-scrollbar*` pseudo-elements — in Marble: globally in `base/_reset.css` and, for
-frozen grid/listbox columns, `.z-frozen-inner::-webkit-scrollbar*` in `mesh/css/frozen.css`.
-These are unrelated DOM (no `.z-scrollbar*` classes) and load through their normal paths.
+`::-webkit-scrollbar*` pseudo-elements. These are unrelated DOM (no `.z-scrollbar*` classes) and load through their normal paths.

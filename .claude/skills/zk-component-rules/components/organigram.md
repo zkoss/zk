@@ -41,7 +41,7 @@ Icon glyph classes on `.z-orgnode-icon` (mutually exclusive, toggled by `Orgnode
 - `.z-icon-minus` — when the item has children and is open.
 - (neither) — when the item is a leaf (no `<orgchildren>` sibling alongside the orgnode).
 
-States rely on the JS-added classes above; ZK does **not** add a `.z-orgitem-hover` class. Hover/focus styling must come from `:hover` / `:focus-visible` pseudo-classes on `.z-orgnode`.
+States rely on the JS-added classes above. Hover/focus styling uses the `:hover` / `:focus-visible` pseudo-classes on `.z-orgnode`.
 
 ## Attribute support
 
@@ -56,18 +56,17 @@ States rely on the JS-added classes above; ZK does **not** add a `.z-orgitem-hov
 | `label`, `image`, `iconSclass` | orgnode | Inherited from `LabelImageWidget` — render text / image / icon prefix inside the node body. They do not add state classes; they only add content. |
 | `width`, `hflex` | orgitem | `Orgitem._adjustSize()` writes inline `flex` (and clears `width`) on the rendered `<div>`; affects how horizontal space is shared inside an `<orgchildren>` generation row. |
 
-There is no `readonly`, no `inplace`, no `buttonVisible`. No mold variants — `default` mold only.
+Organigram has only the `default` mold; the supported state attributes are the ones in the table above.
 
 ## Composition invariants
 
 - **Generation rows are horizontal flex containers.** Each `.z-orgchildren` lays its `.z-orgitem` children out horizontally; the `Orgitem` `_adjustSize()` writes inline `flex` so siblings share the row width unless `width` or `hflex` is set.
 - **Node cards self-centre inside their branch.** Each `.z-orgitem` is itself a vertical flex column (orgnode on top, optional nested orgchildren below); the orgnode uses `align-self: center` so its visual centre aligns with the connector drops above and below.
-- **Connectors are absolutely-positioned pseudo-elements, not real elements.** Three different pseudo-elements compose the 90-degree branching:
-  - `.z-orgitem::before` draws the horizontal bus segment along the top edge of the branch (full width by default; half-width on `:first-child` aligned to the right half, half-width on `:last-child` aligned to the left half — so an only-child has no bus, a two-child generation has two half-segments meeting in the middle).
-  - `.z-orgchildren:not(:only-child) > .z-orgitem::after` draws the vertical drop from the parent orgnode's bottom edge down to the child's top edge (the bus on the child's top).
-  - `.z-orgnode:not(:only-child)::after` draws the short vertical drop-out from the bottom of a **parent** orgnode down to the horizontal bus of its nested generation. A parent orgnode always has an `.z-orgchildren` sibling inside its orgitem, so `:not(:only-child)` selects exactly the nodes that have children; a leaf orgnode is its orgitem's only child, so it correctly draws nothing. The drop-out needs somewhere to live: the theme must open a vertical gap between the parent node's bottom and the bus (e.g. `margin-top` on `.z-orgchildren`, mirroring the ZK default theme's `margin` on `.z-orgnode`), then position the drop-out (`top: 100%; height: <gap>`) to span it. **Do not** suppress this drop-out for multi-child generations — the bus is offset below the node by that gap, not flush against it, so without the drop-out a parent node hangs disconnected above its bus.
-  These pseudo-elements rely on `.z-orgitem` and `.z-orgnode` being `position: relative`. Their `top`/`bottom`/`left: 50%` offsets MUST be preserved by any theme; a theme that removes `position: relative` from `.z-orgitem` or `.z-orgnode` will break the entire connector layout.
-- **`:first-child` and `:last-child` of a multi-child `<orgchildren>` get half-width buses.** The default `width: 100%` bus is overridden by `&:first-child::before { width: 50%; left: 50%; }` and `&:last-child::before { width: 50%; }`. If exactly one item exists in the generation, the `:not(:only-child)` guard suppresses the bus entirely (a single drop from the parent meets a single child, no horizontal bus needed).
+- **Connectors are absolutely-positioned pseudo-elements, not real elements.** Three pseudo-elements compose the 90-degree branching: a horizontal bus along the top of each branch (`.z-orgitem::before`), a vertical drop into each child (`.z-orgchildren:not(:only-child) > .z-orgitem::after`), and a short drop-out below a **parent** orgnode (`.z-orgnode:not(:only-child)::after`). The exact rules live in `../zkcml/zkmax/src/main/resources/web/js/zkmax/layout/css/organigram.css`. What a theme must keep:
+  - Everything hangs off `position: relative` on `.z-orgitem` and `.z-orgnode` and `left: 50%` anchors; a theme that removes `position: relative` breaks the whole connector layout.
+  - A parent orgnode always has an `.z-orgchildren` sibling inside its orgitem, so `:not(:only-child)` selects exactly the nodes that have children; a leaf orgnode is its orgitem's only child and draws nothing.
+  - The drop-out needs a vertical gap between the parent node's bottom and the bus (for example `margin-top` on `.z-orgchildren`). **Do not** suppress the drop-out for multi-child generations: the bus is offset below the node by that gap, so without the drop-out a parent node hangs disconnected above its bus.
+- **`:first-child` and `:last-child` of a multi-child `<orgchildren>` get half-width buses** (right half for the first, left half for the last), so the buses meet in the middle. An only child has no bus: a single drop from the parent meets a single child.
 - **Closed branches hide their child generation AND their own outgoing drop.** `.z-orgitem-close > .z-orgchildren { display: none; }` collapses the subtree; `.z-orgitem-close > .z-orgnode::after { display: none; }` hides the drop emerging from the now-closed node, so the closed node doesn't appear to dangle a line into empty space.
 - **Click target distinguishes icon-vs-body.** `Orgnode.doSelect_` checks `event.domTarget == this.$n('icon')`: a click on `.z-orgnode-icon` toggles open/close; a click anywhere else on the orgnode selects the parent orgitem. Both targets live inside the same `.z-orgnode`; CSS hover state should therefore apply to the whole `.z-orgnode`, not just its text region.
 - **Selection is suppressed on disabled / non-selectable / already-selected items.** `Orgnode._canSelect()` returns false for any of these. The CSS may show a hover affordance on `.z-orgitem-disabled .z-orgnode`, but doing so would mislead users; suppress it.
@@ -113,7 +112,7 @@ Theme-agnostic predicates that two states must be visually distinguishable. Veri
 
 organigram has no ZK component sibling with a comparable layout primitive (centred branching tree with pseudo-element connectors). It does share two narrow conventions with other components:
 
-- **State-class-on-root, descendant-selects-content** — same pattern as `rating`, `stepbar`, `checkbox`. The state class lives on `.z-orgitem` (or on `.z-orgnode-icon` for the glyph); the visible chrome (`.z-orgnode`) is styled via descendant selectors like `.z-orgitem-selected > .z-orgnode`. Theme authors must NOT try to push state classes down onto `.z-orgnode` itself.
+- **State class on the branch, descendant selects the content.** The state class lives on `.z-orgitem` (or on `.z-orgnode-icon` for the glyph); the visible chrome (`.z-orgnode`) is styled via descendant selectors like `.z-orgitem-selected > .z-orgnode`. Theme authors must NOT try to push state classes down onto `.z-orgnode` itself. (`rating` does not follow this pattern: its state classes are on each icon `<i>`.)
 - **Open/close marker uses the shared `z-icon-plus` / `z-icon-minus` glyphs** — same convention as `tree`'s open/close affordance and `groupbox`'s collapse trigger. The glyphs come from the global icon font; the orgnode's icon node is just an `<i>` with the right class toggled by JS.
 
 No bundling overlap with another component — organigram is the sole occupant of its `.css.dsp` (see Bundle below).
@@ -137,21 +136,3 @@ EE (zkmax). Loading the widget requires a valid ZK EE license; absent that, the 
 - `_adjustSize()` clears any inline `width` and re-writes inline `flex` whenever `width` or `hflex` changes — themes that set `width` via CSS rules on `.z-orgitem` will be ignored by the JS-driven sibling distribution unless the CSS rule wins specificity over the inline style (it normally won't).
 - The root `<organigram>`'s scrollability is controlled by the theme; ZK does not set `overflow` on it. A theme that displays an organigram larger than its container must add `overflow: auto` on `.z-organigram` itself.
 - Touching the icon to toggle `open` fires `onOpen` to the server (`toServer: true`) before the local `setOpen` runs — in model mode, the server may reload children before the icon class swaps. The CSS must therefore not assume the `.z-icon-plus` / `.z-icon-minus` swap is synchronous with the click.
-
-## Change log
-
-### 2026-05-26 — js-source-hash drift recovery
-
-**Hash before:** `6604d5a4bb62757bb1a786388da924ed80f3f8c874c7d631b3493fc59dd6b15c` (4 `.ts` files only)
-**Hash after:** `be8916eebd1c58fae43660c7791b47c27f27127a97eac9fc5bb75d2fe055a05f` (4 `.ts` files, same set)
-
-The TS source hash changed due to internal refactoring in ZK (TypeScript type annotation changes, `override` modifier additions, `/** @internal */` tag normalisation). No behavioral state-class logic changed.
-
-**Structural facts added on re-read of mold `.js` files** (which were not included in the original hash but are the authoritative DOM-rendering source):
-
-1. **`aria-hidden="true"` on icon `<i>`**: The `orgnode.js` mold hardcodes `aria-hidden="true"` on the `.z-orgnode-icon` element. Added to DOM structure and Notes.
-2. **Orgnode custom children**: The orgnode mold renders `for (w = firstChild…) w.redraw(out)` after the icon — meaning custom widget children of an `<orgnode>` appear after the icon in DOM order. Added to DOM structure note.
-
-**What did NOT change:** All four state classes (`.z-orgitem-selected`, `.z-orgitem-disabled`, `.z-orgitem-non-selectable`, `.z-orgitem-close`), icon glyph class toggling logic, `_adjustSize()` behavior, `isTopmost()` logic, `_canSelect()` guard, `doSelect_` icon-vs-body dispatch — all identical to previous TS read.
-
-**Recommendation for future hash computation:** Include the four mold `.js` files in the hash alongside the `.ts` files, so structural changes to the DOM rendering are detected. Updated `js-source-files` in the contract accordingly.

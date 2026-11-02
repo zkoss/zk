@@ -2,25 +2,24 @@
 
 A horizontal or vertical menu container holding `<menu>` and `<menuitem>` children.
 
-## DOM structure — intermediate `<ul><li>` wrapper
+## DOM structure — intermediate `<ul>` wrapper
 
 ```
 .z-menubar
 └─ ul
-    └─ li
-        └─ .z-menu | .z-menuitem
+    └─ li.z-menu | li.z-menuitem
 ```
 
-ZK wraps each menu item in `<ul><li>` for semantic HTML and accessibility. The `<li>` is the structural child of `.z-menubar`, not the menu element itself.
+ZK wraps the items in a `<ul>` for semantic HTML and accessibility. `.z-menu` and `.z-menuitem` are themselves the `<li>` elements (mold `zul/menu/mold/menu.js` pushes `<li` with the widget's `domAttrs_()`), so there is no `<li>` between the `<ul>` and the `.z-menu`.
 
-Selectors that assume direct child:
+A selector that skips the `<ul>` never matches:
 
 ```css
-/* WRONG — fails because of intermediate ul/li */
+/* fails: the <ul> sits between .z-menubar and .z-menu */
 .z-menubar > .z-menu { ... }
 
-/* CORRECT */
-.z-menubar > ul > li > .z-menu { ... }
+/* matches */
+.z-menubar > ul > .z-menu { ... }
 ```
 
 ## Orientation
@@ -32,21 +31,22 @@ The orientation class is on `.z-menubar`: `.z-menubar-horizontal` / `.z-menubar-
 
 ## Menu item DOM structure
 
-Each `.z-menu` child has this internal structure:
+Each `.z-menu` (an `<li>`) has this internal structure (source: `Menu.domContent_` in `zul/menu/Menu.ts`):
 
 ```
-.z-menu
-└─ .z-menu-content
-   ├─ .z-menu-icon   (optional — icon <i> element)
-   ├─ .z-menu-text   (label text)
-   └─ .z-menu-icon   (trailing arrow icon, for submenus)
+li.z-menu
+└─ a.z-menu-content
+   ├─ img.z-menu-image | i (iconSclass)   (leading image or icon)
+   ├─ span.z-menu-text                    (label text)
+   ├─ div.z-menu-separator
+   └─ i.z-menu-icon.z-icon-caret-*        (trailing caret only)
 ```
 
 State class: `.z-menu-selected` — added by ZK when the item is active/open.
 
 ## Submenu / popup
 
-Hovering or clicking a `.z-menu` opens its popup (`.z-menupopup`) containing nested menu items. The popup is rendered outside the menubar in the DOM tree (positioned absolutely).
+Hovering or clicking a `.z-menu` opens its popup (`.z-menupopup`) containing nested menu items. The mold renders the popup inside the `<li>`; on open ZK moves it out with `makeVParent()` (`Menu.ts`), so it is positioned absolutely outside the menubar.
 
 ## Scrollable menubar
 
@@ -70,4 +70,4 @@ Theme-independent facts every theme must honor:
 
 ## Bundle
 
-`menubar.css.dsp` covers menubar, menu, menuitem, menupopup, menuseparator.
+`menu.css.dsp` (source `js/zul/menu/css/menu.css`) covers menubar, menu, menuitem, menupopup, menuseparator.

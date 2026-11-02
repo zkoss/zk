@@ -2,7 +2,7 @@
 
 Marble is visually aligned with MUI (React Material UI). Some MUI appearances/behaviors **cannot be reproduced** in a ZK theme by CSS alone, because they stem from fundamental framework differences (DOM shape, React-only mechanics, or missing ZK components). These are expected limits — do **not** re-attempt them as theme bugs.
 
-> Salvaged from the retired Mira visual-parity effort (`doc/mira-reports/framework-gaps.md (retired)`). The Mira dashboard was Marble's original concrete reference; the design authority is now MD3 + the MUI v7 static-CSS reference (`…/material-ui-7.3.1/static-css-output/`). The structural facts below are reference-independent.
+> Salvaged from the retired Mira visual-parity effort. The Mira dashboard was Marble's original concrete reference; the design authority is now MD3 + the MUI v7 static-CSS reference (`…/material-ui-7.3.1/static-css-output/`). The structural facts below are reference-independent.
 
 ---
 
@@ -23,8 +23,8 @@ Marble is visually aligned with MUI (React Material UI). Some MUI appearances/be
 
 ### calendar — today vs selected indicator
 - **Gap**: MUI's date calendar marks *today* with an independent class (`MuiPickersDay-today`), so today can show an outline ring while the selected date shows a filled circle. ZK's `<calendar>` only has `z-calendar-selected` (used for both "today is the default" and "user selected this date"); it never emits a separate today-marker class or `data-*` attribute.
-- **Root cause**: `Calendar.ts` only calls `$cell.addClass('z-calendar-selected')`; there is no today class.
-- **Workaround**: A `.z-calendar-cell.z-today` rule is kept as a forward-looking stub but currently has no effect. Full support needs a JS patch injecting `z-today` on the matching `aria-label` cell — beyond pure CSS.
+- **Root cause**: `Calendar.ts` only calls `$cell.addClass('z-calendar-selected')`; it adds no today class.
+- **Workaround**: `calendar.css` styles a today ring on `.z-calendar-cell.z-calendar-today::after` (hidden when the cell is also selected), which takes effect only when something adds `z-calendar-today` to the cell; ZK does not (see the NOTE in `js/zul/db/css/calendar.css`). Full support needs a JS patch injecting that class on the matching `aria-label` cell — beyond pure CSS.
 
 ### calendar — header arrow layout
 - **Gap**: MUI renders `"May 2026 ▾"` (dropdown trigger) left-aligned with `< >` nav arrows right-aligned. ZK `<calendar>` always renders `< title >` with arrows flanking the title (`z-calendar-left | z-calendar-title | z-calendar-right`).

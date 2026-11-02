@@ -4,69 +4,21 @@
 <meta charset="utf-8">
 <title>Contract Mockup — cascader</title>
 <!--
-  Self-contained Marble design contract mockup for the cascader component.
+  Marble design contract mockup for the cascader component.
   Open in any browser — no server, no JS required.
 
   Class names match .claude/skills/zk-component-rules/components/cascader.md exactly.
-  All design values reference --zk-* tokens only (no hex except inside :root definitions).
+  All design values reference --zk-* tokens only. Token values come from the real token
+  files under zul/src/main/resources/web/zul/css/tokens/ (the <link> tags below).
 -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
-/* ────────────────────────────────────────────────────────────────────────
-   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css
-   ──────────────────────────────────────────────────────────────────────── */
-:root {
-    /* Colors */
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-    --zk-color-primary-container: #d6e4ff;
-    --zk-color-on-primary-container: #001c3d;
-
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-surface-variant: #f0f4fa;
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-    --zk-color-background: #f7f9fc;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-
-    --zk-color-outline: rgba(0, 0, 0, 0.23);
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    --zk-color-disabled: rgba(0, 0, 0, 0.38);
-
-    /* Spacing */
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-3: 12px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-6: 24px;
-    --zk-spacing-8: 32px;
-
-    /* Shape */
-    --zk-shape-input: 4px;
-    --zk-shape-menu: 4px;
-    --zk-shape-corner-small: 8px;
-
-    /* Typography */
-    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    --zk-typescale-label-large-size: 14px;
-    --zk-typescale-body-medium-size: 13px;
-    --zk-typescale-body-small-size: 12px;
-    --zk-typescale-label-medium-size: 12px;
-    --zk-typescale-title-medium-size: 16px;
-
-    /* Elevation */
-    --zk-elevation-dropdown:
-        0px 2px 6px 0px rgba(0, 0, 0, 0.12),
-        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
-
-    /* Motion */
-    --zk-motion-duration-short3: 250ms;
-    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* State layers */
-    --zk-state-disabled-opacity: 0.38;
-    --zk-state-hover-opacity: 0.08;
-}
 
 /* ────────────────────────────────────────────────────────────────────────
    Mockup chrome (page layout only)

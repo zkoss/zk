@@ -15,7 +15,7 @@ closest-sibling: none — novel dashboard shell; panel sibling governs visual su
 
 ## References
 - MUI CSS: no analog — Material-UI 7 ships no portal/dashboard-column layout; closest conceptual match is MUI `Paper` for framed columns
-- DESIGN.md sections: §1 (surfaces — transparent layout shell, surface for framed columns), §4 (spacing — column gap and inner padding), §5 (corner radii — framed column uses card radius), §6 (elevation — framed column uses elevation-1 or outlined variant), §8 (state layers — drag ghost), §9 (motion — drag ghost transition)
+- `doc/spec/DESIGN.md` sections: "Surface Palette" (transparent layout shell, surface for framed columns), "Spacing Scale (4dp baseline)" (column gap and inner padding), "Corner Radii" (framed column uses card radius), "Elevation / Shadow" (framed column uses elevation-1 or outlined variant), "State-Layer Overlays" (drag ghost), "Motion" (drag ghost transition)
 - Iceblue baseline: doc/contracts/baselines/portallayout-iceblue.png
 - HTML contract: doc/contracts/portallayout.html
 
@@ -40,42 +40,42 @@ The **inter-panel gutter must be consistent across orients** — both axes use t
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
 | root-1 | `.z-portallayout` | overflow | `hidden` | structural (float containment) |
-| root-2 | `.z-portallayout` | background | `transparent` | DESIGN.md §1 (shell has no surface) |
+| root-2 | `.z-portallayout` | background | `transparent` | `doc/spec/DESIGN.md` "Surface Palette" (shell has no surface) |
 | col-1 | `.z-portallayout-vertical > .z-portalchildren` | height | `100%` | structural |
 | col-2 | `.z-portallayout-vertical > .z-portalchildren` | float | `left` | structural |
 | col-3 | `.z-portalchildren` | overflow | `hidden` | structural |
 | col-4 | `.z-portalchildren-content` | overflow | `hidden` | structural |
 | col-5 | `.z-portalchildren-content` | width | `100%` | structural |
 | col-6 | `.z-portalchildren-content` | height | `100%` | structural |
-| col-7 | `.z-portallayout-vertical > .z-portalchildren + .z-portalchildren` | padding-left | `var(--zk-spacing-3)` | DESIGN.md §4 (inter-column gutter) |
+| col-7 | `.z-portallayout-vertical > .z-portalchildren + .z-portalchildren` | padding-left | `var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" (inter-column gutter) |
 | col-h1 | `.z-portallayout-horizontal > .z-portalchildren` | height | `100%` | structural (row fills shell height) |
 | col-h2 | `.z-portallayout-horizontal .z-portalchildren-content > .z-panel` | float | `left` | structural (row-based orient — panels sit side-by-side) |
-| col-h3 | `.z-portallayout-horizontal > .z-portalchildren + .z-portalchildren` | padding-top | `var(--zk-spacing-3)` | DESIGN.md §4 (inter-row gutter — consistency with vertical inter-column gutter) |
-| col-h4 | `.z-portallayout-horizontal .z-portalchildren-content > .z-panel + .z-panel` | margin-left | `var(--zk-spacing-3)` | DESIGN.md §4 (side-by-side panel gutter — consistency with vertical) |
+| col-h3 | `.z-portallayout-horizontal > .z-portalchildren + .z-portalchildren` | padding-top | `var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" (inter-row gutter — consistency with vertical inter-column gutter) |
+| col-h4 | `.z-portallayout-horizontal .z-portalchildren-content > .z-panel + .z-panel` | margin-left | `var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" (side-by-side panel gutter — consistency with vertical) |
 | title-1 | `.z-portalchildren-title` | display | `none` | structural (hidden until frame variant) |
 | title-2 | `.z-portalchildren-frame > .z-portalchildren-title` | display | `block` | structural |
-| title-3 | `.z-portalchildren-frame > .z-portalchildren-title` | font-size | `var(--zk-typescale-body-medium-size)` | DESIGN.md §7 |
-| title-4 | `.z-portalchildren-frame > .z-portalchildren-title` | font-weight | `500` (theme medium weight, per `.z-fw-medium`) | DESIGN.md §7 |
-| title-5 | `.z-portalchildren-frame > .z-portalchildren-title` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md §2 |
-| title-6 | `.z-portalchildren-frame > .z-portalchildren-title` | padding-bottom | `var(--zk-spacing-3)` | DESIGN.md §4 |
-| frame-1 | `.z-portalchildren-frame` | border | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §11 (outlined card) |
-| frame-2 | `.z-portalchildren-frame` | border-radius | `var(--zk-shape-card)` | DESIGN.md §5 |
-| frame-3 | `.z-portalchildren-frame` | background | `var(--zk-color-surface)` | DESIGN.md §1 |
-| frame-4 | `.z-portalchildren-frame` | padding | `var(--zk-spacing-3)` | DESIGN.md §4 |
+| title-3 | `.z-portalchildren-frame > .z-portalchildren-title` | font-size | `var(--zk-typescale-body-medium-size)` | `doc/spec/DESIGN.md` "Typography" |
+| title-4 | `.z-portalchildren-frame > .z-portalchildren-title` | font-weight | `500` (theme medium weight, per `.z-fw-medium`) | `doc/spec/DESIGN.md` "Typography" |
+| title-5 | `.z-portalchildren-frame > .z-portalchildren-title` | color | `var(--zk-color-on-surface-variant)` | `doc/spec/DESIGN.md` "Text Colors" |
+| title-6 | `.z-portalchildren-frame > .z-portalchildren-title` | padding-bottom | `var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" |
+| frame-1 | `.z-portalchildren-frame` | border | `1px solid var(--zk-color-outline-variant)` | `doc/spec/DESIGN.md` "Border Rules" (outlined card) |
+| frame-2 | `.z-portalchildren-frame` | border-radius | `var(--zk-shape-card)` | `doc/spec/DESIGN.md` "Corner Radii" |
+| frame-3 | `.z-portalchildren-frame` | background | `var(--zk-color-surface)` | `doc/spec/DESIGN.md` "Surface Palette" |
+| frame-4 | `.z-portalchildren-frame` | padding | `var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" |
 | frame-5 | `.z-portalchildren-frame` | padding-bottom | `0` | structural (last-panel spacing provided by panel margin) |
 | counter-1 | `.z-portalchildren-counter` | display | `none` | structural (default hidden) |
 | counter-2 | `.z-portalchildren-counter-on` | display | `inline` | structural |
-| counter-3 | `.z-portalchildren-counter-on` | background | `var(--zk-color-primary-container)` | DESIGN.md §3 |
-| counter-4 | `.z-portalchildren-counter-on` | color | `var(--zk-color-primary)` | DESIGN.md §3 |
-| counter-5 | `.z-portalchildren-counter-on` | border-radius | `var(--zk-shape-corner-full)` | DESIGN.md §5 (pill badge) |
-| counter-6 | `.z-portalchildren-counter-on` | font-size | `var(--zk-typescale-body-small-size)` | DESIGN.md §7 |
-| counter-7 | `.z-portalchildren-counter-on` | font-weight | `600` (theme semibold weight, per `.z-fw-semibold`) | DESIGN.md §7 (badge weight) |
-| ghost-1 | `.z-panel-move-ghost` | background | `var(--zk-color-surface)` | DESIGN.md §1 |
-| ghost-2 | `.z-panel-move-ghost` | opacity | `var(--zk-state-dragged-opacity)` | DESIGN.md §8 (dragged state layer) |
-| ghost-3 | `.z-panel-move-ghost` | border | `1px solid var(--zk-color-outline)` | DESIGN.md §11 |
-| ghost-4 | `.z-panel-move-ghost` | border-radius | `var(--zk-shape-card)` | DESIGN.md §5 |
-| block-1 | `.z-panel-move-block` | background | `var(--zk-color-primary-container)` | DESIGN.md §3 (active drop zone signal) |
-| block-2 | `.z-panel-move-block` | border-radius | `var(--zk-shape-corner-extra-small)` | DESIGN.md §5 |
+| counter-3 | `.z-portalchildren-counter-on` | background | `var(--zk-color-primary-container)` | `doc/spec/DESIGN.md` "Brand & Status Colors" |
+| counter-4 | `.z-portalchildren-counter-on` | color | `var(--zk-color-primary)` | `doc/spec/DESIGN.md` "Brand & Status Colors" |
+| counter-5 | `.z-portalchildren-counter-on` | border-radius | `var(--zk-shape-corner-full)` | `doc/spec/DESIGN.md` "Corner Radii" (pill badge) |
+| counter-6 | `.z-portalchildren-counter-on` | font-size | `var(--zk-typescale-body-small-size)` | `doc/spec/DESIGN.md` "Typography" |
+| counter-7 | `.z-portalchildren-counter-on` | font-weight | `600` (theme semibold weight, per `.z-fw-semibold`) | `doc/spec/DESIGN.md` "Typography" (badge weight) |
+| ghost-1 | `.z-panel-move-ghost` | background | `var(--zk-color-surface)` | `doc/spec/DESIGN.md` "Surface Palette" |
+| ghost-2 | `.z-panel-move-ghost` | opacity | `var(--zk-state-dragged-opacity)` | `doc/spec/DESIGN.md` "State-Layer Overlays" (dragged state layer) |
+| ghost-3 | `.z-panel-move-ghost` | border | `1px solid var(--zk-color-outline)` | `doc/spec/DESIGN.md` "Border Rules" |
+| ghost-4 | `.z-panel-move-ghost` | border-radius | `var(--zk-shape-card)` | `doc/spec/DESIGN.md` "Corner Radii" |
+| block-1 | `.z-panel-move-block` | background | `var(--zk-color-primary-container)` | `doc/spec/DESIGN.md` "Brand & Status Colors" (active drop zone signal) |
+| block-2 | `.z-panel-move-block` | border-radius | `var(--zk-shape-corner-extra-small)` | `doc/spec/DESIGN.md` "Corner Radii" |
 | drag-1 | `.z-panel-header-move` | cursor | `move` | interaction contract |
 
 ## State matrix

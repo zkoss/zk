@@ -40,12 +40,11 @@ that callback runs.
   `disabled="true"`. This call also sets CodeMirror's `contentDOM.tabIndex = -1`, dropping the
   editor out of the Tab order — the class alone does not communicate the keyboard-reachability
   half of "disabled"; both must be checked to confirm the full disabled behavior.
-- **No readonly class exists.** `readonly="true"` only reconfigures CodeMirror's
+- **`readonly="true"` leaves no DOM marker.** It only reconfigures CodeMirror's
   editable/read-only compartment (`_editableExtension()`, which also folds in `disabled` — the
-  editor is locked when `readonly || disabled`); it leaves no DOM marker. A readonly instance
+  editor is locked when `readonly || disabled`). A readonly instance
   keeps every class an enabled instance has and stays focusable, selectable, and copyable — only
-  keystroke edits are blocked. Do not invent or look for `.z-codeeditor-readonly`; it never
-  appears in this DOM.
+  keystroke edits are blocked.
 - `.cm-focused` — added and removed by CodeMirror itself (not by ZK) on `.cm-editor` as the
   `contenteditable` region gains/loses DOM focus. This is the only focus signal in the tree; ZK
   adds no `-focus`/`-focused` class anywhere on this widget.
@@ -75,8 +74,8 @@ that callback runs.
   document model; the widget re-baselines its committed value from the actual CodeMirror doc
   after mount, not from the raw server string, specifically so a CRLF-supplied value does not
   look "changed" on first blur.
-- There is no `invalid`/constraint-violation attribute on this widget — no
-  `.z-codeeditor-invalid`/`-error` class exists to design a state for.
+- The widget has no constraint-violation (`invalid`) state; its states are `dark`, `disabled` and the
+  CodeMirror-owned `.cm-focused`.
 
 ## Composition invariants
 
@@ -84,14 +83,13 @@ that callback runs.
   CodeMirror injects below it — fills the root's content box edge-to-edge. Growing the root's
   border-width on any state (e.g. a naive focus treatment) shifts the entire CodeMirror viewport
   by that many pixels with nothing to absorb it, unlike a padded single-line input. Never use a
-  border-width increase for an emphasis state — see `reference/focus-affordance-no-layout-shift.md`.
+  border-width increase for an emphasis state — see `../reference/focus-vs-focus-within.md`.
 - **An emphasis ring MUST be drawn on an `::after` overlay, not as an inset box-shadow on the
   root.** This is the same zero-padding fact as above, seen from the paint side, and it is the
   trap this component walks into: an inset box-shadow paints below the element's children, and
   CodeMirror's DOM is both flush against the border and opaque. `.cm-gutters` carries an opaque
   fill in every theme, so a root-drawn ring is eaten on the gutter edge; if the theme also paints
-  `.cm-editor` opaque for a dark surface, the ring disappears on **all four** sides. Measured
-  2026-09-08 (designer report): light 1px/2px/2px/2px (left/top/right/bottom), dark 1px all round.
+  `.cm-editor` opaque for a dark surface, the ring disappears on **all four** sides.
   Use the overlay recipe — root `position: relative` + `overflow: hidden`, ring on
   `.z-codeeditor::after` with `pointer-events: none` — so the ring paints above the payload and is
   uniform by construction. Generalises to any widget whose payload is a third-party editor mounted
@@ -128,14 +126,11 @@ that callback runs.
 - **`.cm-cursor` / `.cm-dropCursor` are NOT rendered by the CE build, so a theme cannot colour the
   caret through them.** They are created by CodeMirror's `drawSelection` extension, and
   `_baseExtensions()` does not include it — same fixed-extension-set fact as `.cm-activeLine`
-  above. Verified 2026-09-08 against the shipped jar and against a live focused editor (0 such
-  nodes). A rule for them is dead CSS; Marble shipped exactly that for a while and it was removed
-  once the first real Gate-1 pass measured it. What paints instead is the **browser's native
+  above. A rule for them is dead CSS. What paints instead is the **browser's native
   caret**, governed by `caret-color` on `.cm-content` — and `caret-color` does NOT inherit from
   `color`, so it falls back to the UA default (measured: pure `rgb(0,0,0)` on a light surface,
   pure `rgb(255,255,255)` on dark) regardless of what the surrounding text colour is. Any theme
-  that wants a palette-matched caret must set `caret-color` explicitly; Marble knowingly does not
-  (2026-09-08 decision). If `drawSelection` ever enters the extension set the nodes reappear and
+  that wants a palette-matched caret must set `caret-color` explicitly. If `drawSelection` ever enters the extension set the nodes reappear and
   are coloured via `border-left-color`, not `background-color`/`color`.
 - An author-supplied `aria-label`/`aria-labelledby` on the ZK root is read once at mount time and
   **additionally** applied onto CodeMirror's own `contentDOM` via `EditorView.contentAttributes` —
@@ -176,14 +171,15 @@ that callback runs.
 ## Sibling decomposition
 
 - **Outlined-field chrome** (border / radius / background / foreground / hover / focus color
-  roles) mirrors the `textbox` single-line input pattern — see `components/textbox.md` (or the
-  input family reference if consolidated): the same five-role recipe
+  roles) mirrors the single-line input pattern — see `components/combo-trio.md` and
+  `reference/inplace-state.md`: the same five-role recipe
   (`bg`/`fg`/`radius`/`border-color[-hover|-focus]`) and the same shape role a theme uses for its
-  other outlined fields. **The focus mechanism differs from textbox's for a structural reason**:
-  textbox can grow its border 1px→2px and absorb the shift with padding compensation (Mechanism
-  B) because the border and the text share one element; codeeditor has no padding to compensate
-  with (see the zero-padding composition invariant above), so it needs Mechanism A (inset
-  box-shadow ring) instead — the same mechanism used by the wrapper-border combo-trio family
+  other outlined fields. **The focus mechanism differs from a textbox's for a structural reason**:
+  a textbox can grow its border 1px→2px and absorb the shift with padding compensation (see
+  `../reference/focus-vs-focus-within.md`) because the border and the
+  text share one element; codeeditor has no padding to compensate
+  with (see the zero-padding composition invariant above), so it needs a ring that adds no
+  layout, drawn on the `::after` overlay described above, instead — the same mechanism used by the wrapper-border combo-trio family
   (datebox/timebox/spinner/bandbox/timepicker), but for an unrelated reason: their constraint is
   min-height-pinned children, codeeditor's is zero root padding.
 - **The editor viewport / gutter / caret subtree is CodeMirror's own semi-opaque payload**: a

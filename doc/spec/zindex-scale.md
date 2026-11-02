@@ -5,8 +5,6 @@
 
 > 互動教學頁:<${PREVIEW_URL}/utility/zindex.zul>(原始檔 `zkthemelab/src/main/webapp/web/utility/zindex.zul`)。
 > 定義:`zul/src/main/resources/web/zul/css/tokens/_zindex.css`;utility:`utility/_layout.css`;回歸測試:`zkthemelab/src/test/playwright/zindex-scale.spec.ts`(`zindex` 專案)。
-> 稽核全紀錄(每個現有 z-index 的 selector 逐一歸類)保存於本機 `tasks/` 下,不在版本庫中;本文件保留其中的決議與理由。
-
 ---
 
 ## 0. TL;DR — 先懂這件事
@@ -97,7 +95,7 @@
 稽核揪出兩個**根本不生效**的舊值,本次順手誠實化:
 
 - **searchbox `.z-searchbox-popup` 88000 → `var(--zk-index-float-fallback)`(1800)**:Searchbox 是 floating widget(ZK 開啟即 inline ≥1800),舊的 88000 從不套用,且與 ZK 官方主題(用 1000)不符——是誤抄的孤兒值。改成 float-fallback 語意誠實。
-- **drag-ghost `.z-drag-ghost` / `.z-drop-ghost` 90000(保留 + 註解)**:真正拖曳一開始,`zk/drag.ts` 就把 ghost 的 inline z-index 蓋成 **88800**,故 CSS 的 90000 僅存在於 pre-drag 一瞬。保留數值但加註說明,避免誤導。
+- **drag-ghost `.z-drag-ghost` / `.z-drop-ghost` 90000(保留 + 註解)**:真正拖曳一開始,`zk/widget.ts` 就把 ghost 的 inline z-index 蓋成 **88800**(`_dragoptions.zIndex`),故 CSS 的 90000 僅存在於 pre-drag 一瞬。保留數值但加註說明,避免誤導。
 
 ---
 

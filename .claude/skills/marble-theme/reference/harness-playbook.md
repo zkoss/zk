@@ -8,7 +8,7 @@ Companion docs: `.claude/skills/marble-theme/reference/harness-decisions.md` (ar
 
 ## Contract selector convention
 
-Preview pages render many instances of each component in different states, laid out as one or more **state matrices** produced by `zkthemelab/src/main/webapp/web/pv/matrix.zul` (pure `z-*` utilities — the old `pv-*` classes were dissolved with `pv.css` and no longer exist in any preview page). Rendered structure per matrix:
+Preview pages render many instances of each component in different states, laid out as one or more **state matrices** produced by `zkthemelab/src/main/webapp/web/pv/matrix.zul` (pure `z-*` utilities, no page-local classes). Rendered structure per matrix:
 
 ```
 div.z-d-grid.z-grid-cols-auto        ← matrix container (one per section)
@@ -46,8 +46,9 @@ Before the first dispatch in any session:
    ```
    Expect `HTTP/1.1 200`. If not, ask the user to start it:
    ```bash
-   withjdk.sh 17 mvn test exec:java@preview-app
+   cd zkthemelab && ./start.sh
    ```
+   (interactive terminal; see `reference/verification.md` for the port and the `appRun` details)
 
 2. Verify the three agents are registered in the running session. The Agent tool's available-agent list (shown at session start) must include `zk-theme-evaluator`, `zk-theme-generator`, and `md3-design-verifier`. If not, the user must restart Claude Code — agents in `.claude/agents/` are loaded only at session boot.
 
@@ -296,12 +297,13 @@ After the user fixes the token, they rebuild the CSS (`node scripts/build-css.js
 
 ## Spec-Author phase (pre-loop)
 
-Before the ralph-loop can run on a component, that component must have a user-approved theme contract. The spec-author phase produces it.
+Before the ralph-loop can run on a component, that component must have a user-approved theme contract. The spec-author phase produces it. The contract tiers and authoring rules are in `.claude/skills/marble-theme/reference/contract-tiers.md`.
 
 ### When to run `zk-spec-author <component>`
 
-Trigger spec-author when either condition holds for the component's contract:
+Not every component has a `doc/contracts/<component>.md`. When a component has no contract, run `zk-spec-author <component>` to write one before the evaluator runs. Trigger spec-author when any of these holds:
 
+- `doc/contracts/<component>.md` does not exist.
 - The contract's frontmatter is missing a `rules:` line (no link to a skill component file).
 - The contract's frontmatter has `contract-approved: false` (or the line is missing entirely).
 
@@ -386,4 +388,4 @@ The state lives in `tasks/harness/work-status.md` (gitignored, local). A fresh c
 - **T3** — Third-party wrapper; wrapper-only checks
 
 ### Serialization rule
-Only one component per `shared-css-file` may be in `FIXING` at a time. The orchestrator enforces this when dispatching `/zk-theme-generator`.
+Only one component per `shared-css-file` may be in `FIXING` at a time. The orchestrator enforces this when dispatching the `zk-theme-generator` agent.
