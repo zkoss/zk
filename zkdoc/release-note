@@ -2,6 +2,7 @@ ZK 11.1.0
 * Features
 
 * Bugs
+  ZK-6221: multislider: zul.xsd rejects the sliderbuttons child element
   ZK-6210: zul.xsd: columnchildren accepts only panel, so <columnchildren><label/></columnchildren> fails validation
   ZK-6184: zul.xsd: combobutton accepts only popup, so <combobutton><menupopup/></combobutton> fails validation
   ZK-6179: zul.xsd: inputgroup accepts no child elements, so <inputgroup><label/><textbox/></inputgroup> fails validation
