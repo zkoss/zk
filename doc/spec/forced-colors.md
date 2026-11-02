@@ -140,7 +140,7 @@ wiring. The process:
    | whole shape painted with `background-color` | add it to the **(4) shape-fill** list (`GrayText` track / `Highlight` value) |
    | draggable thumb with a `background-color` fill | add it to the **(4a) thumb** list (solid `CanvasText` disc) |
    | element whose `background-color` *is* the information (colour swatch) | add it to the **(5) `forced-color-adjust: none`** colour-content list |
-3. **Rebuild & verify** — `npm run build:css`, then `npm run test:forced-colors` (add a
+3. **Rebuild & verify** — `node scripts/build-css.js --module zul`, then `npm run test:forced-colors` from `zkthemelab/` (add a
    case to `forced-colors.spec.ts` if the component introduces a new failure mode).
 
 ### Coverage status (as of 2026-07-16)
@@ -190,11 +190,11 @@ selected-tint families in block 2a have **not** been measured for this.
 
 There is **no real forced-colors on macOS** — "Increase contrast" maps to `prefers-contrast: more`, not `forced-colors`. On this dev machine you must emulate.
 
-1. Build: `npm run build:css`, then confirm the rules survive minification:
+1. Build: `node scripts/build-css.js --module zul`, then confirm the rules survive minification:
    ```bash
    grep -o "@media (forced-colors:active)" zul/codegen/resources/web/zul/css/norm.css.dsp
    ```
-2. Run the preview app: `withjdk.sh 17 mvn test exec:java@preview-app`.
+2. Run the preview app: `cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain` (see `.claude/skills/marble-theme/SKILL.md`).
 3. **Manual:** Chrome/Edge DevTools → Rendering → *Emulate CSS media feature* `forced-colors: active`. Check `checkbox.zul` (three states distinguishable), `datebox.zul` (focus outline appears), `listbox.zul` (selection uses system Highlight), `window.zul` (visible border).
 4. **Automated:** Playwright context option `{ forcedColors: 'active' }` (`page.emulateMedia({ forcedColors: 'active' })`), mirroring the existing tablet-UA project pattern. Under emulation `Highlight` ≈ `rgba(5,0,73,.8)` and `HighlightText` = white, so a selected row measures dark-blue bg + white text — verifiable via computed style.
 5. **Regression:** turn emulation off → theme appearance is byte-for-byte unchanged (every rule is inside the media block).
