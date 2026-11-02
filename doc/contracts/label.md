@@ -10,7 +10,7 @@ zk-version: 10.2.1-jakarta
 - MUI / Mira: MUI `Typography` (body text) — family/size/weight follow the `body-medium` typescale.
 
 `Label` renders `<span class="z-label">`. It has **no `lang.xml` css-uri**, so its CSS is
-loaded only via the global `norm.css.dsp` bundle (see gap log 2026-06-30 orphan sweep).
+loaded only via the global `norm.css.dsp` bundle (see `.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md`).
 
 ## Expected values
 

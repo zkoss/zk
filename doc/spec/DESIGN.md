@@ -401,14 +401,14 @@ One resize affordance across the app. Four implementations share this spec:
 **Implementation source (2026-06-06):** the canonical values below are defined ONCE as
 `--zk-splitter-*` tokens in `zul/css/tokens/_splitter.css` (globally loaded via
 `norm.css.dsp`). Component CSS must consume the tokens — never restate these values as
-literals (gap log 2026-06-04 family fragmentation; 2026-06-06 cursor drift). The only
+literals (family fragmentation, 2026-06-04; cursor drift, 2026-06-06). The only
 documented per-component exception is the GL transparent gutter; it stays local in that
 component file with a comment citing this section. The **bar is borderless across the
 whole family** — the `surface-container` fill is itself the divider; the former splitlayout
-1px `outline-variant` bar border was retired as the lone outlier (gap log 2026-06-23, it
+1px `outline-variant` bar border was retired as the lone outlier (2026-06-23, it
 stacked into a double-line between splitlayout's bordered panes). **The pill does not resize
 on hover** anywhere — MD3 communicates hover through the state-layer colour, not geometry;
-borderlayout's former 28→44px hover growth was retired (gap log 2026-06-23) so all members
+borderlayout's former 28→44px hover growth was retired (2026-06-23) so all members
 keep the 28px long-axis at every state (the caret already has its space at idle via
 `opacity: 0`).
 
@@ -483,7 +483,7 @@ Passive, OS-drawn, always occupies layout space.
 `.claude/skills/zk-component-rules/components/scrollbar.md` for DOM + the must-bundle
 loading rule). CSS in `js/zul/wgt/css/scrollbar.css`, **bundled into `norm.css.dsp` via
 `scripts/build-css.js` `normFiles`** — it has no widget css-uri, so a standalone
-`.dsp` would never load (gap log 2026-06-30). Two render modes selected by
+`.dsp` would never load (see `.claude/skills/zk-component-rules/components/scrollbar.md`). Two render modes selected by
 `data-embedscrollbar`: **overlay** (`false`, hover-only float, no reserved space) and
 **embedded** (`true`, always-visible rail in a reserved gutter).
 
@@ -512,7 +512,7 @@ the buttons' offset size to inset the wrapper, so the buttons must carry an expl
 width/height (12px). The `*-embed` rail carries **no** `:hover` rule — it is `display:none`
 whenever the pointer is over the body (the full bar replaces it).
 
-**Edge-hugging, no lateral jump (user ruling 2026-06-30, Option A; gap log 2026-06-30):** in
+**Edge-hugging, no lateral jump (user ruling 2026-06-30, Option A):** in
 embedded mode the rest `*-embed` rail and the hover bar must sit on the *same* cross-axis line
 — otherwise the bar visibly jumps on mouse-over (MD3 continuity-of-motion; the original
 design jumped ~5px). ZK's scroll-sync pins **both** the bar and the `*-embed` rail to the same

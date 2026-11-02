@@ -32,7 +32,7 @@ Every ZK theme MUST ship this block exactly, loaded late in the cascade. Stock s
 - **row** container → subtracts `zk(c).marginHeight()` (top+bottom margins) — from **both** `width` and `height`;
 - **column** container → subtracts `zk(c).marginWidth()` (left+right margins) — from both.
 
-So a theme-default `margin-bottom: 12px` on `.z-window` turns into `width/height: calc(100% - 12px)` inside any **row**-oriented flex parent: a 12px hole on the trailing edge of both axes (proven: splitlayout horizontal panes, contract row M12, gap log 2026-06-05). Column orientation masks the same margin (`marginWidth()` = 0), so the bug surfaces asymmetrically — one orientation fine, the other broken.
+So a theme-default `margin-bottom: 12px` on `.z-window` turns into `width/height: calc(100% - 12px)` inside any **row**-oriented flex parent: a 12px hole on the trailing edge of both axes (proven: splitlayout horizontal panes, contract row M12). Column orientation masks the same margin (`marginWidth()` = 0), so the bug surfaces asymmetrically — one orientation fine, the other broken.
 
 **Rule: stock ZK widgets carry ZERO default margin, and ZK's JS sizing paths (css-flex `calc`, `setFlexSize_`, layout-region sizing) are written on that assumption. A theme must never add default margins to widgets that can be `hflex`/`vflex` children** (in practice: any container widget — window, panel, grid, listbox, tree, tabbox, …). Inter-widget spacing must be opt-in: a stack utility on the parent (Marble: `.z-vstack`), explicit margin utilities (`.z-mb-*`), or ZK's own `<vlayout spacing>`. Marble shipped a Bootstrap-style default-rhythm rule and removed it for exactly this reason (user ruling 2026-06-05; see `doc/spec/spacing-policy.md`).
 

@@ -1,6 +1,6 @@
 import { test, expect, chromium, Browser, BrowserContext, Locator, Page } from '@playwright/test';
 
-// Guard for the Grid, Listbox and Tree header and footer CSS (ZK-6112, D11-D13):
+// Guard for the Grid, Listbox and Tree header and footer CSS (ZK-6112):
 //  - the sort arrow is 12x12 in all three (grid.css gave Grid 14px through `.z-column [class*="z-icon-"]`);
 //  - the label box of a narrow sorted column stops short of the arrow, with and without a column-menu
 //    button and with an image in the header (Grid and Listbox clip with an ellipsis; a Tree header with an

@@ -11,7 +11,7 @@ preview: ${PREVIEW_URL}/imagemap.zul
 - Rule: `.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md`
 
 `Imagemap` has **no `lang.xml` css-uri**, so `imagemap.css` loads only via the global
-`norm.css.dsp` bundle (gap log 2026-06-30 orphan sweep — it was previously orphaned).
+`norm.css.dsp` bundle (it was previously orphaned; see `.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md`).
 
 ## DOM key selectors
 ```

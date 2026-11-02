@@ -47,9 +47,10 @@ npx playwright test -c src/test/playwright/playwright.config.ts -g "button"
 node scripts/select-tests.mjs --base HEAD  # which tests a change needs (scripts/README-select-tests.md)
 ```
 
-Use `screenshot:update` only for an intentional visual change. For a change you expect to be
-pixel-equivalent (a token extraction, an equal-value swap) a diff is a bug in the change, not a stale
-baseline: investigate it, never accept it. Prefer `--update-snapshots=changed` and look at every image.
+For a change you expect to be pixel-equivalent (a token extraction, an equal-value swap) a diff is a
+bug in the change, not a stale baseline: investigate it, never accept it. For an intentional visual
+change, review the compare diff, commit the CSS, then run `baseline:capture` again so the new render
+becomes your local baseline for the next edit. Baselines are local and are never committed.
 Before running, read "Which tests to run after a change" in `verification.md`.
 
 CSS-quality gates (not Playwright):
@@ -105,14 +106,13 @@ same idea elsewhere (stub media for `video` and `audio`, etc.). Canvas, embedded
 pages (`signature`, `cropper`, `pdfviewer`, `biglistbox`, `barcode`) carry higher cross-machine flake risk:
 if a run flags one, add it to `SKIP` or raise its tolerance.
 
-## 6. `doc/screenshots` is shared with evaluator evidence
+## 6. `doc/screenshots` is local
 
-A Playwright baseline and a manual evaluator artifact can sit in the same directory. The Playwright
-baselines are the `.png` files the specs write. The files written by the `zk-theme-evaluator` agent are
-referenced evidence, **not** test baselines, and must not be pruned: `cascader-page.gif`,
-`cascader-popup-open.gif`, `coachmark-gallery.gif`, `goldenlayout-page.gif`, `portallayout-gallery.gif`,
-`slider-page.gif`, `splitter-page.gif`, `linelayout-eval-results.json`, `linelayout-eval-results-h.json`
-(measured 2026-10-20; list the non-`.png` files to see the current set).
+`zkthemelab/doc/screenshots/` is a local directory and is gitignored; nothing in it is committed.
+The `.png` baselines in it are written by `npm run baseline:capture` (see §3). The gif and json
+evidence that the `zk-theme-evaluator` agent writes there is local only and is not a test baseline.
+The `*-forced-colors.png` images are human-review artifacts and are never compared. To see the
+current set of files, list the directory.
 
 ## 7. Related docs
 

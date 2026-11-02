@@ -22,7 +22,7 @@
 1. **Stock ZK 的 widget 全部零 margin,ZK 的 JS sizing 是在這個前提下寫的。**
    `zk/flex.ts applyCSSFlex` 會量測子元件的 margin 並寫
    `calc(100% - marginHeight)`(row 模式,**兩個軸都扣**)— theme 預設的
-   12px margin 直接變成 splitlayout 窗格旁的 12px 破洞(gap log 2026-06-05,
+   12px margin 直接變成 splitlayout 窗格旁的 12px 破洞(參見 `.claude/skills/zk-component-rules/reference/css-flex-classes.md` 的「Margin subtraction」，
    contract `splitlayout.md` M12)。同類的 margin 量測散佈在多個 JS code path
    (`setFlexSize_`、layout region sizing…),例外清單列不完。
 2. **Bootstrap / MUI 實務也是零 widget margin**:Bootstrap reboot 只對

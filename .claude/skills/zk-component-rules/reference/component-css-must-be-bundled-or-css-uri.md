@@ -19,7 +19,7 @@ and the component renders with browser/inherited defaults, **with no error**.
 
 If a **no-`css-uri`** component's CSS is left to the 1:1 auto-scan, the build emits an
 orphaned `<comp>.css.dsp` that **ZK never requests**. The rule is in no served stylesheet;
-the widget is unstyled; nothing errors. This bit `scrollbar` (gap log 2026-06-30) and then
+the widget is unstyled; nothing errors. This bit `scrollbar` and then
 6 more (`div`, `label`, `span`, `html`, `image`, `imagemap`) in the follow-up sweep.
 
 ## Authoritative detection (runtime probe)

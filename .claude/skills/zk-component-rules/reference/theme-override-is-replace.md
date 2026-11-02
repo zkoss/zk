@@ -41,7 +41,7 @@ Fix was to re-author the theme CSS with the FULL structural ruleset, using `--zk
 
 When you create or modify a theme CSS at `js/{zul|zkex|zkmax}/.../css/{component}.css`:
 
-1. **Read the stock CSS** at `$ZK_SOURCE/.../css/{component}.css.dsp` for CE, or `$ZKCML_SOURCE/{zkex|zkmax}/.../css/{component}.css.dsp` for PE/EE (`$ZK_SOURCE` is the root of the ZK CE checkout; `$ZKCML_SOURCE` is the root of the zkcml EE checkout, normally `../zkcml`) (or fetch `${PREVIEW_URL}/zkau/web/{version}/js/{path}/css/{name}.css.dsp` after the page renders without theme override).
+1. **Read the stock CSS.** For any edition, extract the IceBlue file from the tracked jar in the zk checkout: `unzip -p dist/lib/iceblue_c.jar web/iceblue_c/js/{zul|zkex|zkmax}/<pkg>/css/{component}.css.dsp` (list entries with `unzip -l dist/lib/iceblue_c.jar | grep css.dsp`). The `js/**/css` source trees (`$ZK_SOURCE`, `$ZKCML_SOURCE`) now hold Marble source, not IceBlue. Fall back to fetching `${PREVIEW_URL}/zkau/web/{version}/js/{path}/css/{name}.css.dsp` after the page renders without theme override only when `unzip -l` has no entry for the component.
 2. **List every selector** the stock CSS defines.
 3. **Re-implement each selector** in the theme version, replacing hex / pixel literals with `--zk-*` tokens. Structural rules (`position`, `display`, `width: 100%`, orientation-specific overrides) MUST be preserved verbatim — those are part of the widget's contract with its JavaScript, not stylistic choices.
 4. Only after the structural copy is in place, layer MD3-specific changes (color tokens, elevation, motion).

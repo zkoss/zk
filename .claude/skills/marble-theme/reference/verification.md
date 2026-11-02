@@ -75,6 +75,11 @@ prints against your local preview server. When it answers `full`, do not start a
 own: report the selector's reasons and let the Marble maintainer decide when the full suite runs. The suite
 runs locally only; it is not wired to CI or Jenkins (Marble maintainer's ruling, 2026-10-19).
 
+When the command you run includes screenshot specs (`toHaveScreenshot`), capture the baselines
+before you edit CSS: run `npm run baseline:capture -- <same args>` in `zkthemelab/` on the unedited
+CSS, edit and rebuild, then run `npm run baseline:compare -- <same args>`. See "Screenshot
+baselines" below.
+
 ## Running Playwright — flags that bite
 
 - Compare against the baselines with the repo config: `npx playwright test -c src/test/playwright/playwright.config.ts ...`. A temporary config must copy `snapshotDir` and `snapshotPathTemplate`; otherwise the run writes new PNGs and passes falsely. Playwright reports a missing snapshot as "writing actual"; that line means nothing was compared.
@@ -85,8 +90,6 @@ runs locally only; it is not wired to CI or Jenkins (Marble maintainer's ruling,
 ## Playwright projects
 
 Before a Playwright run, and after any change to CSS, a preview page or a spec, read the sections "Which tests to run after a change" and "Running Playwright — flags that bite" in this file.
-
-When you describe a page to the user, write "the `<name>.zul` page"; when you describe a test, write the spec filename. Use "project" only for a project in `playwright.config.ts`, and write it as "Playwright project". Do not use "project" for a page, even when a Playwright project has the same name as the page.
 
 Config: `zkthemelab/src/test/playwright/playwright.config.ts`.
 
@@ -99,7 +102,7 @@ Config: `zkthemelab/src/test/playwright/playwright.config.ts`.
 | `component-theme-variables` | the per-component knob tests, one or more per component, each on that component's own preview page |
 | `reset` | reset scoping |
 | `iceblue` | IceBlue on ZK 11 through the `zktheme=iceblue` cookie (the iceblue jar is a `runtimeOnly` dependency): no 404 on the page, `z-icon-*` glyphs drawn |
-| `hit-target` | minimum touch-target sizes |
+| `hit-target` | every knob owns its own centre point: `elementFromPoint` at the knob centre returns the knob (multislider, rangeslider, slider) |
 | `responsive` | breakpoint behaviour |
 | `print` | print stylesheet |
 | `zindex` | the three z-index constraints |
@@ -125,7 +128,8 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   `playwright.config.ts`'s `snapshotDir: '../../../doc/screenshots'` resolves, from
   `zkthemelab/src/test/playwright/`, to that directory. The `*-forced-colors.png` images are
   human-review artifacts and are never compared.
-- The harness resolves its `doc/` paths three levels up from `zkthemelab/src/test/playwright/` — the MODULE root (`zkthemelab/` in zk, the template's own root in the template), never the repository root; the baselines directory above and `focus-ring-known-clips.json` both live there.- **The zero-tolerance comparison is the equivalence check that was actually
+- The harness resolves its `doc/` paths three levels up from `zkthemelab/src/test/playwright/` — the MODULE root (`zkthemelab/` in zk, the template's own root in the template), never the repository root; the baselines directory above and `focus-ring-known-clips.json` both live there.
+- **The zero-tolerance comparison is the equivalence check that was actually
   run**: the template's unchanged specs against `zkthemelab`, every PNG compared at `threshold: 0,
   maxDiffPixels: 0` with the tracked tools in the separate `zkThemeTemplate` repository (path inside that repo: `doc/migration/tools/zero-tolerance/`), not in zk
   — the gallery (98), state (55) and tablet (30) families came back byte-identical.
@@ -140,11 +144,13 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   **zero-tolerance** run with every diff explained.
 - **A preview `.zul` edit dirties two baseline families, not one.** Every page is shot by the
   `gallery` project (desktop) *and*, for the pages listed in `tablet.spec.ts`'s `visualCases`, by
-  the `tablet` project. The 2026-09-11 typography sweep re-cut its 4 desktop diffs and re-verified
-  `gallery` green — and left 29 stale tablet baselines behind, found only when an unrelated server
-  restart ran the full `tablet` project the next day. After any change under
-  `zkthemelab/src/main/webapp/web/*.zul`, run **both** `--project gallery` and `--project tablet`
-  before committing, and re-cut with `--update-snapshots=changed` so only the mismatching files move.
+  the `tablet` project. A sweep that re-verified only `gallery` left 29 stale tablet baselines
+  behind, found only when an unrelated server restart ran the full `tablet` project the next day
+  (2026-09-11 typography sweep). Before editing any `zkthemelab/src/main/webapp/web/*.zul`, capture
+  both projects: `npm run baseline:capture -- --project=gallery` and
+  `npm run baseline:capture -- --project=tablet`. After the edit and rebuild, compare both with the
+  same arguments: `npm run baseline:compare -- --project=gallery` and
+  `npm run baseline:compare -- --project=tablet`.
 - **The UseCase SPA hangs on `networkidle`.** Use `domcontentloaded`, then wait on a text marker,
   then `fonts.ready`, with a tall viewport.
 - **The pop-up layer needs interaction** or roughly 180 selectors are never painted. Cursor
@@ -281,7 +287,7 @@ or put probes in a throwaway file from the start.
 - An interactive component needs at least one outcome row that performs the interaction and asserts that the state changed. For example, a scroll check measures the change in position, not only that the thumb exists.
 - Contrast calculations skip transparent backgrounds and use the first opaque ancestor.
 - Prove by mutation that an assertion can fail.
-- A verification command asserts only its own claim. Do not add extra output such as versions or counts. Do not delete anything or ask for permissions. Write only to temporary directories and build output.
+- A verification command asserts only its own claim. Do not add extra output such as versions or counts. Write only to temporary directories and build output.
 - A verification clause must be able to detect the failure it claims to catch: it must be true on the real state today and false when the failure is present. Where possible, dry-run it once against the closest existing state.
 - A dry-run that stops at its designed marker says nothing about the later stages. Run all stages on a copy.
 

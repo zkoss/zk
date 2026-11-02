@@ -36,7 +36,7 @@ export default defineConfig({
   use: {
     // The ONE machine-side definition of the preview server address. Every doc,
     // contract and agent instruction refers to it by name as ${PREVIEW_URL}
-    // (defined in CLAUDE.md) rather than restating the address — a port move
+    // (defined in the Ports section of .claude/skills/marble-theme/reference/verification.md) rather than restating the address — a port move
     // used to mean editing 118 files. Override for a non-default port with
     // `PREVIEW_URL=http://127.0.0.1:9090 npx playwright test`.
     // The port itself is bound in build.gradle (gretty httpPort).
@@ -231,8 +231,8 @@ export default defineConfig({
     {
       // Keyboard focus rings: scans every preview page, forces :focus-visible
       // through CDP and checks the ring's GEOMETRY against its clipping
-      // ancestors. Breadth guard for the navbar clip
-      // (decision D13). See focus-ring-scan.spec.ts.
+      // ancestors. Breadth guard for the navbar clip.
+      // See focus-ring-scan.spec.ts.
       name: 'focus-scan',
       testMatch: /focus-ring-scan\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },

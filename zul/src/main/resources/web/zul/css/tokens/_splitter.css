@@ -7,8 +7,8 @@
  *   - goldenlayout        js/zkmax/goldenlayout/css/goldenlayout.css (.lm_splitter)
  *
  * Change the family spec HERE (and in DESIGN.md §14) — never restate these
- * values as literals in component CSS (gap log 2026-06-04 family fragmentation;
- * 2026-06-06 cursor drift). The bar is borderless family-wide — the
+ * values as literals in component CSS (that caused the 2026-06-04 family
+ * fragmentation and the 2026-06-06 cursor drift). The bar is borderless family-wide — the
  * surface-container fill is the divider. The pill never resizes on hover (MD3 hover =
  * colour, not geometry) — all members keep the 28px long-axis at every state.
  * The only documented per-component exception stays local:

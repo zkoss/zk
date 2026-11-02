@@ -90,7 +90,7 @@ appear inset from the shared anchor while the thin flush embed sits *at* it → 
 mouse-over. Fix: **edge-anchor the track/thumb/arrows inside the lane** (vertical → `right:0`,
 horizontal → `bottom:0`; thumb 1px in) **and size the `*-embed` rail to the hover *track's*
 thickness** (not the thumb's). Then the flush rest footprint equals the flush hover-track
-footprint and the bar only "refines" into thumb-in-track in place. (Marble gap log 2026-06-30;
+footprint and the bar only "refines" into thumb-in-track in place. (
 this is ZK behaviour, not a Marble choice, so it lives here.)
 
 ## CSS LOADING TRAP (theme-portable — applies to every ZK theme)
@@ -105,7 +105,7 @@ auto-scans component CSS into standalone `*.css.dsp` files, the scrollbar file w
 emitted but **never loaded** — the simulated bar renders completely unstyled (radius 0,
 transparent thumb, no transition) and no error is raised. Same category as the other
 non-widget, mold-only emitters that must be bundled globally: `notification`, `toast`,
-`captcha`, `misc`. (Marble gap log 2026-06-30.)
+`captcha`, `misc`.
 
 ## Related native-bar surfaces (separate from the simulated bar)
 

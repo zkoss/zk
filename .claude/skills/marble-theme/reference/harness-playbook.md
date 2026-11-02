@@ -165,11 +165,10 @@ Rules:
 `VERIFIED` certifies more than MD3 appearance. For any component whose contract carries a `## Cross-cutting features` section (mandatory for contracts authored/re-authored after 2026-07-22 — see `doc/spec/new-component-checklist.md`), confirm before flipping:
 
 1. **Gate 1 covered the `x-*` rows** — the eval report's `## Cross-cutting checks` table exists and every row is PASS or `SKIPPED (contract N/A)`. (`x-*` FAILs would have forced `NEEDS_FIX` already; this is a bookkeeping re-check, not a re-measurement.)
-2. **CTV spec family table** — when `ctv: shipped`, port the contract's knob table into `doc/spec/component-theme-variables.md` (CTV-8) and add the component to its Shipped list (mechanical copy of user-approved content).
-3. **Render smoke** — `src/test/playwright/render-smoke.spec.ts` `PAGES` contains `/<component>.zul`; add the one-liner if missing.
-4. **Forced-colors snapshot** — `zkthemelab/doc/screenshots/<component>-forced-colors.png` exists (produced by the evaluator's `x-fc-capture`).
+2. **Render smoke** — `src/test/playwright/render-smoke.spec.ts` `PAGES` contains `/<component>.zul`; add the one-liner if missing.
+3. **Forced-colors snapshot** — `zkthemelab/doc/screenshots/<component>-forced-colors.png` exists locally, produced by the evaluator's `x-fc-capture` run. The directory is local and gitignored; the snapshot is not committed.
 
-**Legacy contracts** (no `## Cross-cutting features` section — everything authored before 2026-07-22) flip on `GATE2: PASS` as before; their `x-*` rows read `SKIPPED (legacy contract)` and their CTV state is governed by the progress tracker. When such a contract is re-authored for any reason (js-source drift, Gate-2 revision), spec-author adds the section and the component joins this gate.
+**Legacy contracts** (no `## Cross-cutting features` section — everything authored before 2026-07-22) flip on `GATE2: PASS` as before; their `x-*` rows read `SKIPPED (legacy contract)` and their CTV state is whether `zul/src/main/resources/web/zul/css/tokens/_component-theme.css` has the component's block. When such a contract is re-authored for any reason (js-source drift, Gate-2 revision), spec-author adds the section and the component joins this gate.
 
 ### Step 5 — Dispatch one Generator (serial)
 

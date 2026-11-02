@@ -2535,7 +2535,8 @@ test.describe('scrollbar', () => {
 // Orphaned helper/mold-only component CSS — these widgets have NO lang.xml css-uri,
 // so ZK never requests their per-component .css.dsp; their CSS must be in the global
 // norm.css.dsp bundle or it is silently dropped and the widget renders unstyled (same
-// bug class as the 2026-06-30 scrollbar orphan; sweep gap log 2026-06-30). Each guard
+// bug class as the 2026-06-30 scrollbar orphan; see zk-component-rules
+// reference/component-css-must-be-bundled-or-css-uri.md). Each guard
 // loads a page that renders the widget and asserts the widget's own `.z-<comp>` root
 // rule is present in a *served* stylesheet — fails red when the file is orphaned,
 // passes once it is bundled. Page-agnostic after the fix (norm loads on every page),

@@ -11,7 +11,7 @@ bookkeeping; no role certifies its own work).
 **Scope**: applies to every contract that carries a `## Cross-cutting features` section —
 mandatory for all contracts authored or re-authored after 2026-07-22. **Legacy contracts**
 (no section) are grandfathered: their rows flip to `VERIFIED` under the old rules, and
-their CTV state is governed by [`../../tasks/component-theme-variables-progress.md`](../../tasks/component-theme-variables-progress.md).
+their CTV state is whether `zul/src/main/resources/web/zul/css/tokens/_component-theme.css` has a block for the component.
 When a legacy contract is re-authored for any reason (js-source drift, Gate-2 revision),
 `zk-spec-author` adds the section then.
 
@@ -26,7 +26,7 @@ reference this file and need no per-feature edits.
 |---------|------|------------------------|----------------|-------------|-----------------------------|
 | MD3 appearance | `DESIGN.md` | spec-author (D/M rows) | Generator | Evaluator §3b + Gate 2 | status flip |
 | Brand override | [`brand-override.md`](brand-override.md) | `brand-allowed-literals:` | Generator (token-rooted declarations only) | Evaluator `x-brand-decl` | — |
-| Component Theme Variables | [`component-theme-variables.md`](component-theme-variables.md) | `ctv:` + knob table | Generator (knob hoist, consumption, demo, spec test) | Evaluator `x-ctv-root`, `x-ctv-region`, `x-ctv-suite` | tracker row + spec family table port |
+| Component Theme Variables | [`component-theme-variables.md`](component-theme-variables.md) | `ctv:` + knob table | Generator (knob hoist, consumption, demo, spec test) | Evaluator `x-ctv-root`, `x-ctv-region`, `x-ctv-suite` | knob block commented in `_component-theme.css` (CTV-8) |
 | Density / compact | [`data-dense-mode.md`](data-dense-mode.md) | `density:` + `density-tokens:` | Generator (bind to ladder/alias) | Evaluator `x-density` | — |
 | Forced colors (WHCM) | [`forced-colors.md`](forced-colors.md) | `fc-risk:` + `fc-guards:` | Generator (guards in central file) | Evaluator `x-fc-capture` + §3d fc review; `npm run test:forced-colors` when guards touched | — |
 | Tablet / touch | [`tablet-design-overview.md`](tablet-design-overview.md) | `tablet:` | Generator (only if `needs-specific`) | tablet Playwright project (manual run for now) | — |
@@ -100,19 +100,16 @@ contract)` and the eval report notes it.
 For a contract carrying the section, `GATE2: PASS` alone no longer flips `VERIFIED`.
 The orchestrator (sole writer of status/tracker docs) first confirms:
 
-1. **CTV tracker row** exists in `tasks/component-theme-variables-progress.md`
-   (a `ctv: N/A` decision is recorded as ➖ with the rationale — the tracker's
-   completeness audit must not go stale).
-2. **CTV spec family table** — when `ctv: shipped`, the contract's knob table is ported
-   into `component-theme-variables.md` (CTV-8) and the Shipped list updated.
-3. **Render smoke** — `zkthemelab/src/test/playwright/render-smoke.spec.ts` `PAGES` contains
+1. **CTV knob comment** — when `ctv: shipped`, the component's knob block in
+   `tokens/_component-theme.css` carries a comment stating its scope and exceptions (CTV-8).
+2. **Render smoke** — `zkthemelab/src/test/playwright/render-smoke.spec.ts` `PAGES` contains
    `/<comp>.zul` (mechanical one-liner; the orchestrator adds it if missing).
-4. **Forced-colors snapshot** — `doc/screenshots/<comp>-forced-colors.png` exists
-   (produced by `x-fc-capture`).
+3. **Forced-colors snapshot** — `zkthemelab/doc/screenshots/<comp>-forced-colors.png` exists
+   locally (produced by `x-fc-capture`; the directory is gitignored, the image is not committed).
 
 ## Known limits / follow-ups (not yet implemented)
 
-Work steps for these items live in [`../../tasks/marble-theme-followups.md`](../../tasks/marble-theme-followups.md).
+Work steps for these items are kept locally under `tasks/` (gitignored, not part of the repository).
 
 - No automated **brand-flip** regression project (override `--zk-color-primary` at
   `:root`, assert key surfaces recolor) — `x-brand-decl` guards the declaration level only.
