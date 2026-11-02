@@ -34,7 +34,7 @@ The current count is computed, not recorded here: run `.claude/skills/marble-the
 - `zul/layout/css/borderlayout.css` (`width:auto`) — JS sets inline width on the rotated E/W title.
 - `zul/wnd/css/panel.css`, `zul/wgt/css/groupbox.css` (`height:auto`) — collapse beats inline `height="Xpx"` from the ZUL attr.
 - `zul/wgt/css/misc.css` ×2 (`top/left:0`) — `zk/utl.ts progressbox()` writes inline `top:Ypx` on `.z-modal-mask`.
-- `zul/wgt/css/separator.css` (`width:1px`), `zul/inp/css/input.css` + `zul/wgt/css/errorbox.css` (`padding`) — override ZK inline `width`/one-sided `padding`.
+- `zul/wgt/css/separator.css` (`width:1px`), `zul/inp/css/input.css` (errorbox `padding`) — override ZK inline `width`/one-sided `padding`.
 - `zkmax/css/tablet/_wheel.css` ×4, `_inputs.css` ×4 — pin the mobile picker over ZK JS inline `top` (`_fixedVParent`); tablet layer is unlayered by design.
 - `zkmax/cropper/css/cropper.css` ×2, `zkmax/big/css/biglistbox.css` — cropper crosshair / hidden measurement span (inline-driven); not reproducible in a headless preview → kept under the conservative bar.
 

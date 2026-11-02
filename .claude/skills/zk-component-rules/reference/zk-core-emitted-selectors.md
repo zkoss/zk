@@ -22,7 +22,7 @@ If a selector is emitted by ZK core (not a widget), nothing on the page triggers
 | `.z-renderdefer` | `zk/widget.ts` `redraw_()` (placeholder while `_renderdefer` timer pending) | element with `renderdefer="N"` attribute |
 | `.z-apply-mask` `.z-apply-loading` `.z-apply-loading-indicator` `.z-apply-loading-icon` | `zk/effect.ts` `Mask._draw()` | `Clients.showBusy(component, msg)` / `wgt.showBusy(msg)` |
 | `.z-error` `.z-error #zk_err-p` `.z-error .errornumbers` `.z-error .button` `.z-error .messagecontent` `.z-error .messages` `.z-error .messages .message` `.z-error .newmessage` | `zk/zk.ts` `_Erbx` class (constructor + `push()`) | `zk.error(msg)` / `Clients.evalJavaScript("zk.error('…')")` / uncaught client errors via `_zk.sendClientErrors` |
-| `.z-error-box` | inline error layer | `Errorbox.ts` (component CSS) — a widget, but `lang.xml` registers no `css-uri` for it, so its rules are served from `zul/src/main/resources/web/js/zul/inp/css/input.css` (`wgt/css/errorbox.css` is excluded from the build and not served) |
+| `.z-error-box` | inline error layer | `Errorbox.ts` (component CSS) — a widget, but `lang.xml` registers no `css-uri` for it, so its rules are served from `zul/src/main/resources/web/js/zul/inp/css/input.css` |
 
 The non-widget rows are NOT widget-scoped. The last row (`errorbox`) is included for contrast: `errorbox` IS a widget, but because it has no `css-uri` its rules must ride in another served bundle (`input.css.dsp`).
 

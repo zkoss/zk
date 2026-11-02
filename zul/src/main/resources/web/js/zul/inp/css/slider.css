@@ -176,19 +176,6 @@
     margin: 0;
 }
 
-/* ── Disabled ─────────────────────────────────────────── */
-.z-slider[disabled],
-.z-slider.z-slider-disabled {
-    opacity: var(--zk-state-disabled-opacity);
-    pointer-events: none;
-    cursor: not-allowed;
-}
-
-.z-slider[disabled] .z-slider-button,
-.z-slider.z-slider-disabled .z-slider-button {
-    cursor: not-allowed;
-}
-
 /* ── Tooltip (slidetip) ───────────────────────────────── */
 /* ZK renders: <div id="zul_slidetip" class="z-slider-popup"> */
 .z-slider-popup {

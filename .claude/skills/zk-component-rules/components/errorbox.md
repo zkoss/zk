@@ -4,7 +4,7 @@
 
 ## Served CSS lives in the inp bundle
 
-`Errorbox` is a `zul.inp.*` widget and `lang.xml` registers no `css-uri` for it, so its styling is served from the **inp** bundle, `input.css.dsp`. The served errorbox rules are the errorbox block in `zul/src/main/resources/web/js/zul/inp/css/input.css`. `wgt/css/errorbox.css` is excluded from the build (`extraMergedFiles` in `scripts/build-css.js` only removes it from the 1:1 scan) and is not served; no `errorbox.css.dsp` exists.
+`Errorbox` is a `zul.inp.*` widget and `lang.xml` registers no `css-uri` for it, so its styling is served from the **inp** bundle, `input.css.dsp`. The served errorbox rules are the errorbox block in `zul/src/main/resources/web/js/zul/inp/css/input.css`. No `errorbox.css.dsp` exists, so edit the errorbox block in `input.css`.
 
 ## The pointer arrow must NOT be hidden with stylesheet `display:none`
 

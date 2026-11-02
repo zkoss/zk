@@ -24,7 +24,7 @@ mockup-rationale: ZKDoc has no canonical knob-mold image that shows Marble token
 
 ## Design Contract
 
-Material-styled linear sliders use primary-colored fill (`.z-slider-area`) against an outline-variant track (`.z-slider-center`). The thumb (`.z-slider-button`) is a filled primary circle; on hover and focus-visible, a semi-transparent primary state-layer ring (8px spread, 16% alpha via `color-mix`) expands outward via `box-shadow`; on active/drag the ring expands to 14px spread at the same 16% alpha. Disabled state uses `opacity: var(--zk-state-disabled-opacity)` on the root. The sphere mold (root class `.z-slider-sphere`) applies a radial-gradient on `.z-slider-button` for a 3D sphere effect; ZK confirms `.z-slider-sphere` is added to the root by `domClass_()`. The scale mold (root class `.z-slider-scale`) inherits all the above; scale-mold ticks are not styled yet in `slider.css` (deferred). The popup tooltip (`.z-slider-popup`) uses inverse-surface background with inverse-on-surface text, 4px corner, elevation-1 shadow.
+Material-styled linear sliders use primary-colored fill (`.z-slider-area`) against an outline-variant track (`.z-slider-center`). The thumb (`.z-slider-button`) is a filled primary circle; on hover and focus-visible, a semi-transparent primary state-layer ring (8px spread, 16% alpha via `color-mix`) expands outward via `box-shadow`; on active/drag the ring expands to 14px spread at the same 16% alpha. The sphere mold (root class `.z-slider-sphere`) applies a radial-gradient on `.z-slider-button` for a 3D sphere effect; ZK confirms `.z-slider-sphere` is added to the root by `domClass_()`. The scale mold (root class `.z-slider-scale`) inherits all the above; scale-mold ticks are not styled yet in `slider.css` (deferred). The popup tooltip (`.z-slider-popup`) uses inverse-surface background with inverse-on-surface text, 4px corner, elevation-1 shadow.
 
 The knob mold (PE) renders a rotary SVG dial. The **background arc** (`.z-slider-knob-inner path`) uses `stroke: var(--zk-color-outline-variant)` — the inert ring. The **progress arc** (`.z-slider-knob-area path`) uses `stroke: var(--zk-color-primary)`. Both `stroke-width` and arc geometry are JS-controlled via inline SVG attributes and are NOT CSS-themable (T3 boundary for internal geometry). The numeric input overlay (`.z-slider-input`) looks inline at rest (transparent background and a transparent 1px border that shows only on focus), with extra-small corner radius and primary-colored bold text — **centered**, with the native number-input spin buttons suppressed (`appearance: textfield` + `::-webkit-*-spin-button: none`, matching iceblue; MD3/MUI never show native spinner chrome). No hover state ring exists for the knob (SVG drag-based, not thumb-based).
 
@@ -52,7 +52,6 @@ visual-goal: simple input — M-rows for track+thumb geometry and knob SVG visib
 | c4 | `.z-slider-button` | border-radius | `50%` | MD3 slider spec — circular thumb |
 | c5 | `.z-slider-button:hover` | box-shadow | `0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)` | MUI Slider.css line 184 — 16% alpha (not MD3 8%) at 8px spread; see Accepted deviations |
 | c6 | `.z-slider-button:focus-visible` | box-shadow | `0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent)` | MUI Slider.css line 184 — same ring for hover+focus per MUI; see Accepted deviations |
-| c7 | `.z-slider[disabled]` | opacity | `var(--zk-state-disabled-opacity)` | `doc/spec/DESIGN.md` "State-Layer Overlays" — disabled uses opacity |
 | c8 | `.z-slider-popup` | background-color | `var(--zk-color-inverse-surface)` | `doc/spec/DESIGN.md` "Surface Palette" — tooltip uses inverse surface |
 | c8a | `.z-slider-popup` | color | `var(--zk-color-inverse-on-surface)` | MUI pattern — on-inverse companion for readability |
 | c8b | `.z-slider-popup` | border-radius | `var(--zk-shape-corner-extra-small)` | `doc/spec/DESIGN.md` "Corner Radii" — small floating chip uses extra-small corner |
@@ -95,7 +94,6 @@ These properties are controlled by JS inline styles/SVG attributes and cannot be
 | thumb hover | `.z-slider-button:hover` | c5 |
 | thumb focus | `.z-slider-button:focus-visible` | c6 |
 | thumb active/drag | `.z-slider-button:active` | c9 |
-| disabled | `.z-slider[disabled]` | c7 |
 | popup/dragging | `.z-slider-popup` | c8, c8a, c8b, c8c |
 | sphere mold | `.z-slider-sphere .z-slider-button` | c10, c10a |
 
@@ -113,7 +111,6 @@ These properties are controlled by JS inline styles/SVG attributes and cannot be
 - [ ] hover (thumb) — c5 ring at 8px/16%
 - [ ] focus-visible (thumb) — c6 ring at 8px/16%
 - [ ] active/drag (thumb) — c9 ring at 14px/16%
-- [ ] disabled
 - [ ] dragging (popup visible) — c8 + c8a + c8b + c8c
 - [ ] knob mold default (PE — skip if not PE+ build)
 
