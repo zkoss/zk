@@ -270,6 +270,6 @@ which also hosts the FA-compat alias demo). Both are skipped by `check-icon-cove
 
 ## Canonical reference
 
-`doc/spec/icon-index.md` — auto-generated, regenerate with `npm run build:css`.
+`doc/spec/icon-index.md` — auto-generated, regenerate with `node scripts/build-css.js --module zul --emit-docs`.
 Lists every valid Lucide name plus the active FA→Lucide alias table. This is
 the file generator and evaluator should consult when in doubt.

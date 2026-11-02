@@ -15,7 +15,7 @@ import { test, expect, devices, type Locator, type Page } from '@playwright/test
 //
 // If any of these fail after a change, the central guard in
 // tokens/_forced-colors.css (bundled into norm.css.dsp) has regressed — rebuild
-// with `npm run build:css` and re-check that file.
+// with `node scripts/build-css.js --module zul` and re-check that file.
 //
 // Requires the preview app on ${PREVIEW_URL}
 //   withjdk.sh 17 mvn test exec:java@preview-app

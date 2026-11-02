@@ -109,10 +109,9 @@ cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain   # preview ap
 waits for a key on stdin and treats EOF as that key, so keep stdin open (interactive terminal, or a
 FIFO held open in scripts); **never `appStart`** — under gretty 3.1.1 on Gradle 8.10 its client
 never returns. `npm run lint:css` runs stylelint over the CE theme CSS (`.stylelintrc.json`;
-EE/PE has its own in `../zkcml`). There is no `npm run build:css`, `watch`, `audit:css`,
-`check:forced-colors` or `check:doc-links` script in zk — the builder takes `--module`, so it is
-called directly, and the audit and `!important` tooling is the four skill scripts above. Details
-and the Playwright projects: `reference/verification.md`.
+EE/PE has its own in `../zkcml`). Build the CSS with `node scripts/build-css.js --module <module>`;
+audit it and inventory `!important` with the four skill scripts above. Details and the Playwright
+projects: `reference/verification.md`.
 
 **Capture screenshot baselines before you edit CSS.** They are not in the repository (screenshots
 differ between machines): run `npm run baseline:capture -- <playwright args>` in `zkthemelab/`

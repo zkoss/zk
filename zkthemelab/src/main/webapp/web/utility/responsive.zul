@@ -202,7 +202,7 @@
     .z-cq-md-block { display: block; }
     ...
 }
-/* then: npm run build:css */]]></label></div>
+/* then: node scripts/build-css.js --module zul */]]></label></div>
 
     <div sclass="z-text-sm z-text-secondary z-mt-4 z-mb-3">
         The variables you <h:b>can override at runtime</h:b> are the intrinsic-grid knobs (not the breakpoints) — override them globally at <h:code>:root</h:code>, or inline on the spot:
