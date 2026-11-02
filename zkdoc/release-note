@@ -2,6 +2,7 @@ ZK 11.1.0
 * Features
 
 * Bugs
+  ZK-6232: zul.xsd: linelayout rejects lineitem, lineitem accepts no child components, and rowchildren accepts only panel
   ZK-6222: navbar / nav: zul.xsd rejects the navseparator child element
   ZK-6221: multislider: zul.xsd rejects the sliderbuttons child element
   ZK-6210: zul.xsd: columnchildren accepts only panel, so <columnchildren><label/></columnchildren> fails validation
