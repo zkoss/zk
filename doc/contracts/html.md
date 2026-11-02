@@ -17,7 +17,7 @@ bundle (see `.claude/skills/zk-component-rules/reference/component-css-must-be-b
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| h0 | `.z-html` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `html.css` is bundled into `norm.css.dsp` (regression guard for the 2026-06-30 orphan gap) |
+| h0 | `.z-html` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `html.css` is bundled into `norm.css.dsp` (regression guard against an orphaned standalone `.dsp`) |
 | h1 | `.z-html` | display / color | `block` / `var(--zk-color-on-surface)` |
 | h2 | `.z-html h1` | font-size | `var(--zk-typescale-headline-large-size)` (heading hierarchy normalized) |
 | h3 | `.z-html a` | color | `var(--zk-color-primary)` (underline on hover) |

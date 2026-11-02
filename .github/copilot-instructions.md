@@ -78,7 +78,7 @@ npm run lint -- <module>/src/main/resources/web/js   # ESLint per module (what C
 
 ```bash
 # Run a single test class (from project root)
-cd zktest && ./gradlew test --tests "org.zkoss.zktest.zats.test2.B104_ZK_6047Test" -PmaxParallelForks=1 --console=plain --no-daemon
+cd zktest && ./gradlew test --tests "org.zkoss.zktest.zats.test2.B110_ZK_6047Test" -PmaxParallelForks=1 --console=plain --no-daemon
 
 # If the test has @ForkJVMTestOnly or @Tag("ForkJVMTestOnly") annotation (requires Docker)
 cd zktest && ./gradlew testGroupForkJVMTestOnly --tests "org.zkoss.zktest.zats.test2.B101_ZK_5716Test" -PmaxParallelForks=1 --console=plain --no-daemon

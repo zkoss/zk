@@ -25,14 +25,11 @@ The track itself is `.z-progressmeter` (which contains the fill); no separate `-
 
 ## Indeterminate state
 
-If `value=""` or no value, ZK animates the fill with a striped pattern. The class `.z-progressmeter-indeterminate` is added to the root.
+With `indeterminate="true"`, ZK adds `.z-progressmeter-indeterminate` to the root (`Progressmeter.ts`, `domClass_` and `setIndeterminate`).
 
 ## Loading bar variant
 
-`<loadingbar>` is a separate thin-bar component (PE). Its classes:
-- `.z-loadingbar` — root (usually fixed, full-width top bar)
-- `.z-loadingbar-colorbar` — the animated fill
-- `.z-loadingbar-indeterminate` — indeterminate animation state
+Loadingbar (EE, zkmax) is a client widget started through `org.zkoss.zkmax.ui.util.Loadingbar`, not a ZUL tag. It extends `zul.wgt.Progressmeter` (`zkmax/wgt/Loadingbar.ts`). DOM: `.z-loadingbar > span.z-loadingbar-image.z-loadingbar-colorbar + span.z-loadingbar-effectbar.z-loadingbar-colorbar`; `-indeterminate` comes from Progressmeter. Progressmeter itself is CE (`lang.xml`).
 
 ## Bundle
 

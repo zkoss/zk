@@ -21,4 +21,4 @@ The bare `.z-separator` is only spacing; don't add color to it directly.
 
 ## Bundle
 
-Bundled with box/layout output, often in `box.css.dsp`.
+`separator.css.dsp` (source `js/zul/wgt/css/separator.css`), shared by `<separator>` and `<space>`.

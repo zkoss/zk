@@ -49,28 +49,9 @@ All four corners must look semantically correct:
 - `overlapped + border=none` → MD3 **Elevated card** style (no frame, with elevation-2)
 - Same pattern repeats for `popup`, `highlighted`, `modal`
 
-## CSS structure (target)
+## CSS structure
 
-```css
-/* Base — no shadow, no border by default (mode/border classes add them) */
-.z-window {
-    background-color: var(--zk-color-surface);
-    border-radius: var(--zk-shape-corner-extra-small);
-    border: 1px solid var(--zk-color-outline-variant);
-    /* no box-shadow here */
-}
-
-/* Mode-driven elevation */
-.z-window-embedded   { box-shadow: none; }
-.z-window-overlapped,
-.z-window-popup      { box-shadow: var(--zk-elevation-2); }
-.z-window-highlighted,
-.z-window-modal      { box-shadow: var(--zk-elevation-3); }
-
-/* Border-driven frame only — never touches box-shadow */
-.z-window-noborder              { border: none; }
-.z-window-noborder .z-window-header { border-bottom: none; }
-```
+The base `.z-window` rule carries no `box-shadow`; the mode classes (`.z-window-embedded`, `-overlapped`, `-popup`, `-highlighted`, `-modal`) add the elevation from the mapping above, and `.z-window-noborder` only removes the frame. The rules are in `zul/src/main/resources/web/js/zul/wnd/css/window.css`.
 
 ## Chrome-less window content padding
 

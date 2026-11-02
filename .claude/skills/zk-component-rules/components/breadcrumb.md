@@ -8,7 +8,7 @@ count exceeds `maxItems`, replacing them with an expandable ellipsis button.
 ## Edition
 
 CE — ships in `zul.jar` (`org.zkoss.zul.Breadcrumb` / `org.zkoss.zul.Breadcrumbitem`,
-package `zul.wgt`). New in ZK 10.4.0 (`@since 10.4.0`). No PE/EE counterpart.
+package `zul.wgt`). New in ZK 11.0.0 (`@since 11.0.0`). No PE/EE counterpart.
 
 ## DOM structure (from mold/breadcrumb.js + mold/breadcrumbitem.js)
 
@@ -59,10 +59,10 @@ will never match — style the label via the `<a>`/`<span>` element itself.
   `disabled` also forces the mold to render a `<span>` instead of `<a>` regardless of
   whether `href` is set (`this._href && !this._disabled` gates the `<a>` branch) — so a
   disabled item is never a real link even if it has an `href`.
-- There is no `.z-breadcrumb-open`/`-collapsed` class on the root when maxItems collapses
-  the middle; the only observable signal is the presence/absence of `.z-breadcrumb-ellipsis`
-  and the `data-zk-bc-hidden`/`data-zk-bc-injected` attributes below.
-- No `readonly` / `invalid` / `inplace` states exist for either widget.
+- When maxItems collapses the middle, the root carries no state class; the observable signal
+  is the presence/absence of `.z-breadcrumb-ellipsis` and the
+  `data-zk-bc-hidden`/`data-zk-bc-injected` attributes below.
+- The only widget states are the `disabled` state of an item and focus/hover.
 
 ## Attribute support
 

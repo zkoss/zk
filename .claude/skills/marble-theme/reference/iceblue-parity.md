@@ -14,15 +14,11 @@ exceeds the technical breakage.
 
 ## The measured break
 
-| Metric | Value |
-|---|---|
-| IceBlue `--zk-*` total | **842** |
-| Names Marble also has | **12** |
-| **Retention** | **1.4%** |
-| Gone — old overrides silently stop working | **830** |
-| New in Marble | 606 |
+Almost every IceBlue `--zk-*` name is gone from Marble, so old overrides silently stop working.
+Recompute the overlap by listing the distinct names of each theme with
+`grep -ohE -- '--zk-[a-z0-9-]+'` and comparing the two lists.
 
-The 12 survivors are mostly coincidence rather than design: `--zk-color-primary`,
+The few survivors are mostly coincidence rather than design: `--zk-color-primary`,
 `--zk-input-height`, `--zk-input-border-color`, `--zk-popup-border-color`,
 `--zk-cascader-border-color`, `--zk-searchbox-border-color`, `--zk-signature-border-color`,
 `--zk-messagebox-icon-size`, and four `--zk-rangeslider-*`.
@@ -41,7 +37,7 @@ alignment work that was never done.
 ## Why "just use MD names everywhere" is wrong
 
 1. **What breaks is a promise, not an implementation.** A major version may break things, but the
-   legitimacy comes from *a better replacement* plus *a migration path*. Right now: 830 names gone,
+   legitimacy comes from *a better replacement* plus *a migration path*. Right now: most names gone,
    no mapping table, no aliases, and silent failure. All three missing.
 2. **It welds a design language into a framework contract.**
    `--zk-color-surface-container-highest` presupposes MD3's tonal-elevation model. Build a Fluent-
@@ -98,7 +94,7 @@ Cheap, and it buys "an existing customer's override still works".
 **Marble and IceBlue are two *parallel* theme choices, not a migration path.** ZK 11.0 makes
 Marble the default and splits IceBlue out as a separately selectable theme so legacy apps upgrade
 unchanged. Under that ruling **Marble owes IceBlue's vocabulary no compatibility** — which
-dismissed three earlier decision items premised on it owing some. The 830 "dead" names are a
+dismissed three earlier decision items premised on it owing some. The "dead" IceBlue names are a
 *different vocabulary*, not a broken API, and FA-dependent apps stay on IceBlue.
 
 Read the analysis above as the case for *voluntary* alignment where it is cheap (Tier 2 especially),
@@ -109,8 +105,8 @@ not as an obligation.
 Assessed 2026-07-28: technically feasible, but **not "copy 9 CSS files"**. Two blocking
 prerequisites, both of which are really naming/foundation work rather than build work:
 
-1. **The utility layer references 89 tokens; IceBlue has 1 of them** (`--zk-color-primary`). The
-   whole spacing / shape / typescale / elevation / z-index / semantic-colour foundation has to go
+1. **The utility layer references many tokens that IceBlue does not have** (only
+   `--zk-color-primary` exists in both). The whole spacing / shape / typescale / elevation / z-index / semantic-colour foundation has to go
    first.
 2. **IceBlue has no `@layer` at all** (measured: 0 occurrences). Marble's utilities rely on
    `@layer zk-utilities` sorting last to beat component styles. Dropped into IceBlue without a
@@ -126,8 +122,8 @@ while the build still exits 0.
 
 ## Theme Pack palettes
 
-The 27 Theme Pack palettes are already pure `:root{--zk-*}` CSS (722 lines total). They reference
-**110 IceBlue token names of which exactly 1 exists in Marble**. CSS ignores unknown custom
+The Theme Pack palettes are already pure `:root{--zk-*}` CSS. They reference
+IceBlue token names, of which only `--zk-color-primary` exists in Marble. CSS ignores unknown custom
 properties, so they compile, deploy, and **no-op**. They travel with IceBlue, because they are
 written in its vocabulary.
 
@@ -135,7 +131,7 @@ This is also the mechanism behind a live build hazard: `zkcml/.gitmodules` point
 `zkthemebuilder/template` at the `zkThemeTemplate` repo and `zkthemebuilder/build.sh:59` runs
 `git submodule update --init --remote`, which tracks the **default branch**. The moment Marble
 lands on that repo's `master`, the next `./build.sh -u` feeds a pure-CSS tree into a Maven +
-zklessc pipeline and all 27 palettes break — later, and for someone else. The fix is to drop
+zklessc pipeline and all the palettes break — later, and for someone else. The fix is to drop
 `--remote` and point the submodule at the `iceblue` branch.
 
 ## Theme jars: missing files, fallback and Font Awesome

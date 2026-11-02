@@ -12,25 +12,21 @@ js-source-files:
   - zul/src/main/resources/web/js/zul/wgt/mold/breadcrumbitem.js
 js-source-hash: 2a7e8560487b49f5e8d612acb24ddfada4d4489d2fd2399f79de1e9946e30f71
 closest-sibling: none — novel separator+collapse-to-ellipsis composition; decompose for parts only: `a` (link/current/disabled affordance on a single item) + `paging` (keep-ends/collapse-middle/ellipsis idiom precedent)
-shared-css-file: js/zul/wgt/css/breadcrumb.css
+shared-css-file: zul/src/main/resources/web/js/zul/wgt/css/breadcrumb.css
 siblings: [breadcrumbitem]
-mockup-needed: Y — no ZKDoc canonical image exists for breadcrumb (component is new in ZK 10.4.0; no `ZKCompRef_Breadcrumb*.png` under `https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/`), so condition (1) of the mockup-decision rule fires automatically — the HTML mockup is the only visual ground truth.
+mockup-needed: Y — no ZKDoc canonical image exists for breadcrumb (component is new in ZK 11.0.0; no `ZKCompRef_Breadcrumb*.png` under `https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/`), so condition (1) of the mockup-decision rule fires automatically — the HTML mockup is the only visual ground truth.
 
 ## References
 - MUI CSS: `Navigation/Breadcrumbs.css` — exact
   match reused verbatim for the separator's 8px margin and the `<ol>` flex-wrap layout.
   `Navigation/Link.css` for the underline-on-hover convention consumed by
   `.z-breadcrumbitem > a`.
-- DESIGN.md sections: §2 (Text Colors — on-surface / on-surface-variant), §4 (Spacing
-  Scale), §7 (Typography — body-medium), §8 (State-Layer Overlays — disabled-opacity),
-  §9 (Motion — default transition token pair).
-- ZKDoc canonical: none found — breadcrumb is new in ZK 10.4.0 and has no entry yet under
+- doc/spec/DESIGN.md sections: "Text Colors" (on-surface / on-surface-variant), "Spacing Scale (4dp baseline)",
+  "Typography" (body-medium), "State-Layer Overlays" (disabled-opacity, focus ring),
+  "Motion" (default transition token pair).
+- ZKDoc canonical: none found — breadcrumb is new in ZK 11.0.0 and has no entry yet under
   https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/.
-- Iceblue baseline: doc/contracts/baselines/breadcrumb-iceblue.png — **NOT captured this
-  pass**. The `preview-app-iceblue` profile was not running (confirmed: `curl` to
-  `${PREVIEW_URL}/breadcrumb.zul` returned no response) and no `breadcrumb.zul` preview
-  page exists yet in either app to render. See "Structural surprises" in the authoring
-  summary for the follow-up needed before this file can be produced.
+- Iceblue baseline: run `scripts/render-iceblue-baseline.sh breadcrumb` to create `doc/contracts/baselines/breadcrumb-iceblue.png` before the evaluator compares against IceBlue.
 - HTML contract: doc/contracts/breadcrumb.html.
 
 ## Design Contract
@@ -102,24 +98,24 @@ failure modes instead.
 | id | selector | property | expected (token preferred) | token-rooted? | source |
 |----|----------|----------|----------------------------|---------------|--------|
 | c1 | `.z-breadcrumb` | display | `inline-block` | no | layout keyword, not a design token |
-| c2 | `.z-breadcrumb` | font-size / line-height | `var(--zk-typescale-body-medium-size)` / `var(--zk-typescale-body-medium-line-height)` | yes | DESIGN.md §7 |
-| c3 | `.z-breadcrumb`, `.z-breadcrumb-separator` | color | `var(--zk-breadcrumb-fg)` → `var(--zk-color-on-surface-variant)` | yes | DESIGN.md §2 — muted default voice |
-| c4 | `.z-breadcrumb-separator` | margin-left / margin-right | `var(--zk-spacing-2)` (8px) | yes | DESIGN.md §4 — exact match to MUI `Breadcrumbs-separator` |
-| c5 | `.z-breadcrumb-ellipsis` | margin-left / margin-right | `var(--zk-spacing-1)` (4px) | yes | DESIGN.md §4 — tighter than a full separator; the glyph itself supplies visual weight |
+| c2 | `.z-breadcrumb` | font-size / line-height | `var(--zk-typescale-body-medium-size)` / `var(--zk-typescale-body-medium-line-height)` | yes | doc/spec/DESIGN.md "Typography" |
+| c3 | `.z-breadcrumb`, `.z-breadcrumb-separator` | color | `var(--zk-breadcrumb-fg)` → `var(--zk-color-on-surface-variant)` | yes | doc/spec/DESIGN.md "Text Colors" — muted default voice |
+| c4 | `.z-breadcrumb-separator` | margin-left / margin-right | `var(--zk-spacing-2)` (8px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — exact match to MUI `Breadcrumbs-separator` |
+| c5 | `.z-breadcrumb-ellipsis` | margin-left / margin-right | `var(--zk-spacing-1)` (4px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — tighter than a full separator; the glyph itself supplies visual weight |
 | c6 | `.z-breadcrumb-ellipsis > button` | background, border, padding | `none`, `0`, `0` | no | native-button-chrome reset so it reads as plain text, not a token value |
 | c7 | `.z-breadcrumb-ellipsis > button` | color | `var(--zk-breadcrumb-fg)` | yes | matches c3 — reads as one voice with the separators it stands in for |
-| c8 | `.z-breadcrumb-ellipsis > button:hover`, `:focus-visible` | color | `var(--zk-breadcrumb-fg-hover)` → `var(--zk-color-on-surface)` | yes | DESIGN.md §2 |
-| c9 | `.z-breadcrumb-ellipsis > button:focus-visible` | outline | `var(--zk-focus-ring)` | yes | DESIGN.md §8 — global focus convention, not knob-driven |
-| c10 | `.z-breadcrumbitem > a` | color | `var(--zk-breadcrumb-fg)` → `var(--zk-color-on-surface-variant)` | yes | DESIGN.md §2 — muted at rest; a Marble/MD3 text-hierarchy curation choice, not a MUI static-CSS rule (`Navigation/Breadcrumbs.css` has no color declarations) |
+| c8 | `.z-breadcrumb-ellipsis > button:hover`, `:focus-visible` | color | `var(--zk-breadcrumb-fg-hover)` → `var(--zk-color-on-surface)` | yes | doc/spec/DESIGN.md "Text Colors" |
+| c9 | `.z-breadcrumb-ellipsis > button:focus-visible` | outline | `var(--zk-focus-ring)` | yes | doc/spec/DESIGN.md "State-Layer Overlays" — global focus convention, not knob-driven |
+| c10 | `.z-breadcrumbitem > a` | color | `var(--zk-breadcrumb-fg)` → `var(--zk-color-on-surface-variant)` | yes | doc/spec/DESIGN.md "Text Colors" — muted at rest; a Marble/MD3 text-hierarchy curation choice, not a MUI static-CSS rule (`Navigation/Breadcrumbs.css` has no color declarations) |
 | c11 | `.z-breadcrumbitem > a` | text-decoration | `none` | no | resting state; underline reserved for hover (MUI `underlineHover`) |
-| c12 | `.z-breadcrumbitem > a:hover`, `:focus-visible` | color | `var(--zk-breadcrumb-fg-hover)` → `var(--zk-color-on-surface)` | yes | DESIGN.md §2 |
+| c12 | `.z-breadcrumbitem > a:hover`, `:focus-visible` | color | `var(--zk-breadcrumb-fg-hover)` → `var(--zk-color-on-surface)` | yes | doc/spec/DESIGN.md "Text Colors" |
 | c13 | `.z-breadcrumbitem > a:hover` | text-decoration | `underline` | no | MUI Link `underlineHover` idiom |
-| c14 | `.z-breadcrumbitem > a:focus-visible`, `span[tabindex]:focus-visible` | outline | `var(--zk-focus-ring)` | yes | DESIGN.md §8 |
-| c15 | `.z-breadcrumbitem > span` | color | `var(--zk-breadcrumb-current-fg)` → `var(--zk-color-on-surface)` | yes | DESIGN.md §2 — full emphasis "you are here" |
-| c16 | `.z-breadcrumbitem-disabled` | opacity | `var(--zk-state-disabled-opacity)` (0.38) | yes | DESIGN.md §8 |
+| c14 | `.z-breadcrumbitem > a:focus-visible`, `span[tabindex]:focus-visible` | outline | `var(--zk-focus-ring)` | yes | doc/spec/DESIGN.md "State-Layer Overlays" |
+| c15 | `.z-breadcrumbitem > span` | color | `var(--zk-breadcrumb-current-fg)` → `var(--zk-color-on-surface)` | yes | doc/spec/DESIGN.md "Text Colors" — full emphasis "you are here" |
+| c16 | `.z-breadcrumbitem-disabled` | opacity | `var(--zk-state-disabled-opacity)` (0.38) | yes | doc/spec/DESIGN.md "State-Layer Overlays" |
 | c17 | `.z-breadcrumbitem-disabled` | pointer-events | `none` | no | defense-in-depth; widget JS already stops the click |
-| c18 | `.z-breadcrumbitem > a`, `> span`, `.z-breadcrumb-ellipsis > button` | transition | `color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` (250ms) | yes | DESIGN.md §9 |
-| c19 | `.z-breadcrumbitem > a:focus-visible`, `> span[tabindex]:focus-visible`, `.z-breadcrumb-ellipsis > button:focus-visible` | outline-offset | `2px` | no | DESIGN.md §9 — ring drawn outward since these are borderless text elements with nothing to sit inside; same outward convention as `signature`'s tool-button ring (`btn-focus2`), unlike `organigram`/`coachmark`'s inset ring on an already-bordered card |
+| c18 | `.z-breadcrumbitem > a`, `> span`, `.z-breadcrumb-ellipsis > button` | transition | `color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` (250ms) | yes | doc/spec/DESIGN.md "Motion" |
+| c19 | `.z-breadcrumbitem > a:focus-visible`, `> span[tabindex]:focus-visible`, `.z-breadcrumb-ellipsis > button:focus-visible` | outline-offset | `2px` | no | doc/spec/DESIGN.md "State-Layer Overlays" — ring drawn outward since these are borderless text elements with nothing to sit inside; same outward convention as `signature`'s tool-button ring (`btn-focus2`), unlike `organigram`/`coachmark`'s inset ring on an already-bordered card |
 | c20 | same selectors as c19 | border-radius | `2px` | no | Marble curation — softens the ring's corners around a single line of inline text; no existing shape token is this small, so it stays a literal alongside c19 |
 
 > `[data-zk-bc-hidden="true"] { display: none; }` is a **structural** rule (makes the
@@ -143,19 +139,13 @@ failure modes instead.
 
 ## Preview anchors
 
-**No preview ZUL exists yet.** `zkthemelab/src/main/webapp/web/breadcrumb.zul` is absent — this is
-a brand-new component with no existing preview page in either the Marble or iceblue apps.
-Before the Evaluator can run against this contract, a preview page must be authored that
-exercises every row in "States to evaluate" below, including:
-- at least one item with `href` (link), one terminal item with no `href` (current), and
-  one `disabled="true"` item;
-- a `separator="icon:z-icon-chevron-right"` variant alongside the plain-text default;
-- a `maxItems`-bound instance with enough items to force a collapse (`maxItems ≥ 2` and
-  item count `> maxItems`), so `.z-breadcrumb-ellipsis` actually mounts.
+Preview page: `zkthemelab/src/main/webapp/web/breadcrumb.zul`. It exercises the rows in
+"States to evaluate" below: a link item (`href`), a terminal item with no `href` (current),
+a `disabled="true"` item, a `separator="icon:z-icon-chevron-right"` variant, and a
+`maxItems`-bound instance with more items than `maxItems` so `.z-breadcrumb-ellipsis` mounts.
 
-Suggested anchor strategy once authored (matching the project's post-`pv.css` convention
-of plain state-matrix markup, no page-local classes — see `reference_pv_css_dissolved`):
-give each demo instance a stable `id` (e.g. `#pv-breadcrumb-default`,
+Anchor strategy: preview pages use plain state-matrix markup with no page-local classes.
+Give each demo instance a stable `id` (e.g. `#pv-breadcrumb-default`,
 `#pv-breadcrumb-icon-separator`, `#pv-breadcrumb-collapsed`) rather than relying on
 positional `:nth-of-type` selectors, since the collapsed variant's DOM shape mutates
 client-side after mount.
@@ -184,9 +174,9 @@ ctv: shipped
 ctv-knobs: --zk-breadcrumb-fg, --zk-breadcrumb-fg-hover, --zk-breadcrumb-current-fg
 ctv-probe: { knob: --zk-breadcrumb-fg, property: color, value: rgb(255, 0, 0) }
 
-No `-bg` / `-border-color` / `-radius` knobs: breadcrumb has no card surface (per the
+Knobs cover the foreground only (`-fg`, `-fg-hover`, `-current-fg`): breadcrumb has no card surface (per the
 Design Contract, it deliberately renders as borderless inline text, the same curation
-choice as `a`/`caption`) so there is nothing for those axes to theme. `--zk-breadcrumb-fg`
+choice as `a`/`caption`), so there is no background, border or radius to theme. `--zk-breadcrumb-fg`
 covers three roles at once — the separator, the ellipsis button (resting), and a link
 item (resting) — the same "one knob, several roles" precedent as `tab`'s `--zk-tab-fg` /
 calendar's `--zk-calendar-accent`, since all three share the identical muted tone by
@@ -224,17 +214,15 @@ above is either a `var(--zk-*)` token or an explicitly-literal non-color/non-spa
 keyword (`display`, `text-decoration`, `pointer-events`, the button-chrome reset).
 
 ### Tablet
-tablet: needs-specific — the ellipsis `<button>` is a genuinely small discrete tap target
+tablet: shipped — the ellipsis `<button>` is a genuinely small discrete tap target
 (sized to the "…" glyph plus 4px margins, well under 44px) and, unlike the `<a>`/`<span>`
 items (which are inline text — the same touch-ergonomics exemption every other inline nav
 link in this theme gets; no tablet rule anywhere enlarges `.z-a`), it is the *only* way to
 reach the collapsed items, so a missed tap has no fallback. The tablet bundle
-(`zkmax/css/tablet/_buttons.css` precedent — icon-only buttons grow to a 44×44 hit area via
-padding, not by resizing the glyph) should extend
-`.z-breadcrumb-ellipsis > button` to at least `--zk-touch-target-min` (44px) in both
-dimensions on a touch UA, via padding around the unchanged "…" glyph, matching how every
-other small icon-only control in the tablet bundle grows its hit area without growing its
-visible mark.
+(`../zkcml/zkmax/src/main/resources/web/zkmax/css/tablet/_buttons.css`) extends
+`.z-breadcrumb-ellipsis > button` to the 44px hit area on a touch UA, via padding around
+the unchanged "…" glyph, the same way every other small icon-only control in the tablet
+bundle grows its hit area without growing its visible mark.
 
 ## States to evaluate
 - [ ] default (link items + plain-text separator)

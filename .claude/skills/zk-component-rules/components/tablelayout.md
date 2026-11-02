@@ -35,11 +35,8 @@ during deferred rendering — this class is transient and must not be styled per
 
 ## State classes
 
-Tablelayout and Tablechildren carry no ZK-added state classes. The component is purely structural:
-no `disabled`, `readonly`, `selected`, or `open/closed` concept applies to the layout container
-or its cells.
-
-States rely entirely on the content widgets placed inside each `<tablechildren>` cell.
+The component is purely structural: `.z-tablelayout` and `.z-tablechildren` carry no state
+class. State belongs to the content widgets placed inside each `<tablechildren>` cell.
 
 ## Attribute support
 
@@ -77,8 +74,6 @@ widget — their styling is governed by their own skill entries.
 `../zkcml/zkmax/src/main/resources/web/js/zkmax/layout/css/tablelayout.css` (new file; standalone, not merged
 into another `.css.dsp`).
 
-The ZK default theme CSS for this component contains exactly one rule: `vertical-align: top` on `.z-tablechildren`.
-
 ## Edition
 
 EE (requires `zkmax.jar`; class is `zkmax.layout.Tablelayout` / `zkmax.layout.Tablechildren`)
@@ -94,5 +89,3 @@ EE (requires `zkmax.jar`; class is `zkmax.layout.Tablelayout` / `zkmax.layout.Ta
   table rows must use the native `<tr>` element selector within the `.z-tablelayout` scope.
 - Since `getFlexContainer_()` returns `undefined`, setting `hflex="1"` or `vflex="1"` on
   `<tablechildren>` children will NOT work — do not use ZK flex attributes inside tablelayout cells.
-- The ZK stock default CSS applies only `vertical-align: top` to `.z-tablechildren`. There is no
-  border, padding, or background on either the table root or the cells in the stock ZK theme.

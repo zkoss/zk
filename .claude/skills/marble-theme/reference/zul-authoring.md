@@ -1,6 +1,6 @@
 # Authoring ZUL pages for the preview app
 
-The preview corpus — `zkthemelab/src/main/webapp/web/*.zul`, 162 pages — is the theme's completion
+The preview corpus — `zkthemelab/src/main/webapp/web/*.zul` — is the theme's completion
 criterion, not the component list. Two reasons: some components never get a page of their own
 because they are sub-components (listitem), and some styled features map to no single component
 (notification). **The theme is done only when every preview page is verified.** These are the
@@ -20,10 +20,10 @@ for the list — `_print.css` also names component classes that are not utilitie
 | background | `z-bg-*` (`z-bg-surface-variant`, `z-bg-primary-container`, …) |
 | spacing | `z-p-*` / `z-m-*` / `z-gap-*`, and `z-vstack` / `z-hstack` for rhythm |
 | radius | `z-rounded*` |
-| typography | `z-fs-*` / `z-fw-*` / `z-text-*` |
-| layout | `z-d-flex` + `z-flex-*` / `z-justify-*` / `z-align-*`; `z-d-grid` + `z-grid-cols-auto` |
+| typography | `z-text-*` (size, `xs` … `8xl`) / `z-fw-*` (weight) |
+| layout | `z-d-flex` + `z-flex-*` / `z-justify-*` / `z-items-*`; `z-d-grid` + `z-grid-cols-auto` |
 
-Approximate is fine — 13px becomes `z-fs-body-sm`, a 6px radius becomes `z-rounded`. The rule
+Approximate is fine — 13px becomes `z-text-md`, a 6px radius becomes `z-rounded`. The rule
 exists because `stack.zul` once grew three `u-*` classes that duplicated utilities already
 shipped; each ad-hoc class drifts from the tokens and hides what should have been a question.
 
@@ -103,9 +103,9 @@ not patched. Spacing is opt-in: `z-vstack` / `z-hstack` / `z-mb-*`, or `<vlayout
 Never add a margin to a bare widget selector. The full lesson is `reference/pitfalls.md` §7;
 the policy is `doc/spec/spacing-policy.md`.
 
-## The State Matrix is generic utilities — `pv.css` is gone
+## The State Matrix is generic utilities
 
-`pv.css` and every `pv-*` class were deleted. Do not look for them or recreate them. The
+The State Matrix uses generic `z-*` utilities, not page-local classes. The
 label-column + N-value-column matrix used by the `pv/*-content.zul` templates is:
 
 - container: `z-d-grid z-grid-cols-auto z-overflow-x-auto z-gap-x-6 z-gap-y-2 z-items-start`

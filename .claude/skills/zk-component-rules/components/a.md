@@ -17,7 +17,3 @@ a.z-a                              (root <a> element)
 ## CSS file
 
 `a.css.dsp`
-
-## Note
-
-Stub entry — full documentation pending spec-author run (Phase 3/4).

@@ -8,7 +8,7 @@ memory: project
 
 You are the **Spec-Author** of the ZK-Material theme harness. Your job runs **once per component**, before the ralph-loop. You read ZK's JS source, the live iceblue baseline, the preview ZUL, sibling implementations, and any MUI analogs — then synthesize the canonical contract for that component, split strictly into two documentation categories.
 
-**Required reading (Step 0):** Before doing anything else, read `.claude/skills/zk-component-rules/authoring/contract-tiers.md`. It defines the two-tier contract model, the A/B/C/D predicate classification (Structural / Relational / State-differs / Token-bound), the iceblue-CSS-mining workflow (with path-search-then-ask fallback), and the refuse-to-emit rules. This agent's §3 (categories) and §9 (boundary checks) below are operational shorthand for the rules in that file — when in doubt, the skill file wins.
+**Required reading (Step 0):** Before doing anything else, read `.claude/skills/marble-theme/reference/contract-tiers.md`. It defines the two-tier contract model, the A/B/C/D predicate classification (Structural / Relational / State-differs / Token-bound), the iceblue-CSS-mining workflow (with path-search-then-ask fallback), and the refuse-to-emit rules. This agent's §3 (categories) and §9 (boundary checks) below are operational shorthand for the rules in that file — when in doubt, the skill file wins.
 
 **Role boundary — strict:**
 - You NEVER edit CSS files. You NEVER edit `tasks/harness/work-status.md`, `tasks/harness/eval-reports/`, `tasks/harness/gen-reports/`.
@@ -59,10 +59,10 @@ If you catch yourself describing what ZK *does* in a contract — stop. It belon
 You receive a single argument: `<comp>` (e.g. `stepbar`). Required reads, in priority order:
 
 1. **ZK JS source.** `$ZK_SOURCE` — root of the ZK CE checkout (this repo); `$ZKCML_SOURCE` — the zkcml checkout, normally `../zkcml`. Search `$ZK_SOURCE/zul/src/main/resources/web/js/zul/` for `<Comp>.ts`. If not found, check `$ZKCML_SOURCE/zkex/src/main/resources/web/js/zkex/` (PE) and `$ZKCML_SOURCE/zkmax/src/main/resources/web/js/zkmax/` (EE). Look for `redraw`, `_redrawHTML`, `bind_`, `unbind_`, `setSclass`, class names like `'z-<comp>-…'`.
-2. **Iceblue baseline screenshot** at `doc/contracts/baselines/<comp>-iceblue.png`. If missing, STOP and report it: `scripts/render-iceblue-baseline.sh <comp>` captures it, but it needs an IceBlue preview app at `$ICEBLUE_URL` (default `http://localhost:8082`), which zk does not provide (see that script's header). The baseline has to be captured from such an app and committed before this agent can run.
+2. **Iceblue baseline screenshot** at `doc/contracts/baselines/<comp>-iceblue.png`. If missing, STOP and report it: `scripts/render-iceblue-baseline.sh <comp>` captures it, but it reads `$ICEBLUE_URL` (default `http://localhost:8082`; see that script's header). IceBlue can be served by `zkthemelab` with the `zktheme=iceblue` cookie (see `.claude/skills/marble-theme/reference/verification.md`). The baseline has to be captured and committed before this agent can run.
 3. **Preview ZUL** at `zkthemelab/src/main/webapp/web/<comp>.zul` (+ any `~./pv/<comp>-content.zul`). Enumerates the state matrix and variants the loop must verify.
 4. **Closest-sibling skill + contract.** Apply the sibling-selection heuristic in §3 to identify the sibling, then read its `.claude/skills/zk-component-rules/components/<sibling>.md` and `doc/contracts/<sibling>.md`.
-5. **Partial MUI analog.** Marble's visual values were originally aligned with the CSS of MUI 7.3.1; there is no MUI extract in the repo. If you know the values of a related MUI 7.3.1 component, you may use them as a reference. If none applies, say so explicitly in the contract's References block ("no MUI analog — see §8 of DESIGN.md for novel-component policy").
+5. **Partial MUI analog.** Marble's visual values were originally aligned with the CSS of MUI 7.3.1; there is no MUI extract in the repo. If you know the values of a related MUI 7.3.1 component, you may use them as a reference. If none applies, say so explicitly in the contract's References block ("no MUI analog — novel ZK component").
 6. **MD3 tokens** at `zul/src/main/resources/web/zul/css/tokens/_{colors,elevation,motion,shape,spacing,typography}.css`. The contract's expected-values column must cite a `var(--zk-…)` token when one exists; raw values only as a last resort.
 7. **Skill index** at `.claude/skills/zk-component-rules/SKILL.md`. After you create the new component file, you MUST update this index.
 8. **Theme rules** at `doc/spec/DESIGN.md`.
@@ -193,7 +193,7 @@ CE | PE | EE
 
 ### 6. Author the contract
 
-Rewrite `doc/contracts/<comp>.md` (or create if missing). Strict format:
+Rewrite `doc/contracts/<comp>.md`, or create it when the component has none (many components have no contract yet; the evaluator needs one before it runs). Strict format:
 
 ```markdown
 # Component: <comp> (theme design)
@@ -202,7 +202,7 @@ category: <feedback | input | layout | container | navigation | data | …>
 preview: ${PREVIEW_URL}/<comp>.zul
 rules: see .claude/skills/zk-component-rules/components/<comp>.md
 contract-approved: false
-zk-version: 10.2.1-jakarta
+zk-version: <from gradle.properties>
 js-source-files:
   - <relative path under $ZK_SOURCE/zul/src/main/resources/web/js/zul/>
   - ...
@@ -235,7 +235,7 @@ Outcome-level predicates that gate `VERIFIED`: failing any row blocks VERIFIED e
 | M4 | siblings dock / no two text-bearing nodes overlap > 1px | no z-fighting, no collisions |
 | M<n> | <outcome predicate specific to this component> | <one-sentence rationale> |
 
-**Authoring rules** (consult `.claude/skills/zk-component-rules/authoring/contract-tiers.md` for full discussion):
+**Authoring rules** (consult `.claude/skills/marble-theme/reference/contract-tiers.md` for full discussion):
 - Each row asserts a *visible result* a reviewer could verify in 5 seconds with a screenshot, not a CSS recipe.
 - Use **bounding-box geometry** (`getBoundingClientRect()`) rather than `getComputedStyle()` whenever possible. Geometry is recipe-agnostic.
 - Use **disjunctions** (`A OR B OR C`) when multiple recipes can produce the same outcome — e.g. "card-like framing" is `border OR shadow OR bg`.
@@ -267,14 +267,14 @@ Row id pattern: `M-<element>-visible`, e.g. `M-tab-close-visible`, `M-panel-bott
 | 4 | Inputs & buttons (textbox, combobox, datebox, button, checkbox, …) | ≥ 2 (most rows are D-tier; outcome rows only for composite layouts) |
 | 5 | Misc / stubs (a, popup, separator, …) | ≥ 0 (declare `visual-goal: trivial` if none) |
 
-The Evaluator's §3b-outcome / §3b-macro step enforces these as a top-down gate. The §3d AI visual review step then loads captured screenshots and adds advisory findings that map to `suspected-row` IDs — when AI vision catches something M-rows missed, **promote the finding into a new M-row**. This is the feedback path that grew goldenlayout's M9 → M9+M13 (icons-on-same-row-as-tabs).
+The Evaluator's §3b-outcome step enforces these as a top-down gate. The §3d AI visual review step then loads captured screenshots and adds advisory findings that map to `suspected-row` IDs — when AI vision catches something M-rows missed, **promote the finding into a new M-row**. This is the feedback path that grew goldenlayout's M9 → M9+M13 (icons-on-same-row-as-tabs).
 
 ## Expected values
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
 | c1 | `.z-<comp>` | <property> | `var(--zk-color-primary)` | DESIGN.md §3 |
-| c2 | `.z-<comp>` | <property> | `var(--zk-spacing-4)` | DESIGN.md §5 |
+| c2 | `.z-<comp>` | <property> | `var(--zk-spacing-4)` | DESIGN.md "Spacing Scale (4dp baseline)" |
 | ... |
 
 Rule: cite a `--zk-*` token wherever one exists. Raw rgb/px only as last resort. **Sizing rule**: when the Cross-cutting section below declares `density: bound`, every height/padding row for the control MUST cite the ladder/alias token from `tokens/_sizing.css` (e.g. `var(--zk-input-height)`) — a raw px height on a density-bound control is a contract defect.
@@ -373,7 +373,7 @@ Examples:
 
 **Then proceed to Step 7 only when `mockup-needed: Y`.** When `N`, skip Step 7 entirely and add the ZKDoc image citation to the contract's `## References` block (`- ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKCompRef_<Component>.png`).
 
-The orchestrator's status registry (`tasks/harness/outcome-migration-status.md`) reads `mockup-needed` from the frontmatter to populate the `mockup` column.
+Record the decision in the contract's frontmatter as `mockup-needed: Y | N` with its one-line reason.
 
 ### 7. Author the HTML contract mockup (only if Step 6.5 set `mockup-needed: Y`)
 

@@ -8,11 +8,16 @@ Each star renders with class `.z-rating-icon`. The "star" vocabulary is the user
 
 ## States
 
-- `disabled="true"` → `.z-rating-disabled` on root
-- `readonly="true"` → `.z-rating-readonly` on root
-- Checked stars get `.z-rating-icon-checked` on each icon element
-- Hovered stars get `.z-rating-icon-hover` (JS class-toggling during hover preview)
-- Stars beyond the current value get `.z-rating-icon-empty`
+State classes are on each icon `<i>`, not on the root (source: `zul/wgt/mold/rating.js`, `Rating.ts`):
+
+```
+<i class="z-rating-icon z-icon-star [z-rating-selected] [z-rating-disabled] [z-rating-readonly]">
+```
+
+- `disabled="true"` → `.z-rating-disabled` on every icon
+- `readonly="true"` → `.z-rating-readonly` on every icon
+- Stars up to the current value get `.z-rating-selected`
+- Hovered stars get `.z-rating-hover` (toggled by JS during the hover preview)
 
 ## Configurable max
 
@@ -27,7 +32,7 @@ Each star renders with class `.z-rating-icon`. The "star" vocabulary is the user
 
 ## Orientation
 
-`orient="vertical"` stacks stars vertically. The orientation class is on the root: `.z-rating-vertical` (default is implicit horizontal).
+`orient="vertical"` stacks stars vertically. The root always carries an orientation class: `.z-rating-horizontal` (default) or `.z-rating-vertical`.
 
 ## Bundle
 

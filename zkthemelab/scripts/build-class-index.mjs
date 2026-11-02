@@ -8,7 +8,7 @@
 //
 // Starts its own preview server on --port, indexes, and stops it. The server runs with
 //   -Dorg.zkoss.zul.client.rod=false  so combobox/bandbox/datebox/menu/popup pop-ups are rendered at page load and
-//                                     their classes are present at rest (doc/client-rod-probe.md). Never run the
+//                                     their classes are present at rest. Never run the
 //                                     Playwright tests against such a server: a Tree loses its ROD spacers.
 //   -Djava.awt.headless=true          captcha.zul draws with AWT; without it the server JVM aborts (exit 134).
 // Refuses a busy port, and stops only the server it started. Exits 1 (and writes nothing) if any page fails to load.

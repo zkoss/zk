@@ -6,7 +6,6 @@ rules: see .claude/skills/zk-component-rules/components/pdfviewer.md
 contract-approved: true
 zk-version: 10.2.1-jakarta
 js-source-files:
-  - zkmax/wgt/Pdfviewer.ts is not the source — see zkex path below
   - zkex/pdfviewer/Pdfviewer.ts
   - zkex/pdfviewer/mold/pdfviewer.js
 js-source-hash: d649527ad8874a916b02c116bb589684f247fe89cd93f52cc233622f7c613754
@@ -41,7 +40,7 @@ theme-bridge:
 
 ## References
 - MUI CSS: no analog — novel ZK component (PDF viewer widget has no MUI equivalent)
-- DESIGN.md sections: §1 (surface tokens), §5 (shape/radius), §6 (elevation), §11 (outline/border)
+- `doc/spec/DESIGN.md` sections: "Surface Palette" (surface tokens), "Corner Radii" (shape/radius), "Elevation / Shadow", "Border Rules" (outline/border)
 - Iceblue baseline: doc/contracts/baselines/pdfviewer-iceblue.png
 - HTML contract: doc/contracts/pdfviewer.html
 
@@ -53,27 +52,27 @@ The pdfviewer widget receives a thin Material Design 3 chrome: a 1px `outline-va
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-pdfviewer` | border | 1px solid `var(--zk-color-outline-variant)` | DESIGN.md §11 |
-| c2 | `.z-pdfviewer` | border-radius | `var(--zk-shape-corner-medium)` | DESIGN.md §5 |
+| c1 | `.z-pdfviewer` | border | 1px solid `var(--zk-color-outline-variant)` | `doc/spec/DESIGN.md` "Border Rules" |
+| c2 | `.z-pdfviewer` | border-radius | `var(--zk-shape-corner-medium)` | `doc/spec/DESIGN.md` "Corner Radii" |
 | c3 | `.z-pdfviewer` | overflow | hidden | composition invariant |
-| c4 | `.z-pdfviewer` | background-color | `var(--zk-color-surface)` | DESIGN.md §1 |
-| c5 | `.z-pdfviewer-container` | background-color | `var(--zk-color-surface-variant)` | DESIGN.md §1 (surface-variant distinguishes the scrollable page canvas from the viewer chrome) |
-| c6 | `.z-pdfviewer-page` | box-shadow | `var(--zk-elevation-2)` | DESIGN.md §6 (page drop shadow) |
-| c7 | `.z-pdfviewer-toolbar` | background-color | `var(--zk-color-surface-container-high)` | DESIGN.md §1 |
+| c4 | `.z-pdfviewer` | background-color | `var(--zk-color-surface)` | `doc/spec/DESIGN.md` "Surface Palette" |
+| c5 | `.z-pdfviewer-container` | background-color | `var(--zk-color-surface-variant)` | `doc/spec/DESIGN.md` "Surface Palette" (surface-variant distinguishes the scrollable page canvas from the viewer chrome) |
+| c6 | `.z-pdfviewer-page` | box-shadow | `var(--zk-elevation-2)` | `doc/spec/DESIGN.md` "Elevation / Shadow" (page drop shadow) |
+| c7 | `.z-pdfviewer-toolbar` | background-color | `var(--zk-color-surface-container-high)` | `doc/spec/DESIGN.md` "Surface Palette" |
 | c8 | `.z-pdfviewer-toolbar` | border-radius | `var(--zk-shape-corner-full)` | pill shape per MD3 nav-bar pattern |
 | c9 | `.z-pdfviewer-toolbar` | opacity (default) | 0 | composition invariant — toolbar hidden until interaction (see skill §State classes) |
 | c10 | `.z-pdfviewer:hover .z-pdfviewer-toolbar` | opacity | 0.5 | progressive reveal — partial opacity signals interactive zone without committing to full focus |
 | c11 | `.z-pdfviewer:hover .z-pdfviewer-toolbar:hover` | opacity | 1 | semantic maximum — fully visible on direct toolbar interaction |
 | c12 | `.z-pdfviewer:focus-within .z-pdfviewer-toolbar` | opacity | 1 | accessibility — fully visible to keyboard users entering the toolbar |
-| c13 | `.z-pdfviewer-toolbar` | padding | `var(--zk-spacing-2)` `var(--zk-spacing-3)` | DESIGN.md §5 |
-| c14 | `.z-pdfviewer-toolbar` | box-shadow | `var(--zk-elevation-3)` | DESIGN.md §6 (floating toolbar) |
-| c15 | `.z-pdfviewer-toolbar-button` | border-radius | `var(--zk-shape-corner-small)` | DESIGN.md §5 |
-| c16 | `.z-pdfviewer-toolbar-button` | color | `var(--zk-color-on-surface)` | DESIGN.md §2 |
+| c13 | `.z-pdfviewer-toolbar` | padding | `var(--zk-spacing-2)` `var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" |
+| c14 | `.z-pdfviewer-toolbar` | box-shadow | `var(--zk-elevation-3)` | `doc/spec/DESIGN.md` "Elevation / Shadow" (floating toolbar) |
+| c15 | `.z-pdfviewer-toolbar-button` | border-radius | `var(--zk-shape-corner-small)` | `doc/spec/DESIGN.md` "Corner Radii" |
+| c16 | `.z-pdfviewer-toolbar-button` | color | `var(--zk-color-on-surface)` | `doc/spec/DESIGN.md` "Text Colors" |
 | c17 | `.z-pdfviewer-toolbar-button` | background-color | transparent | icon-button at rest |
 | c18 | `.z-pdfviewer-toolbar-button:hover` | background-color | `color-mix(in srgb, var(--zk-color-on-surface) calc(var(--zk-state-hover-opacity) * 100%), transparent)` | MD3 state layer |
 | c19 | `.z-pdfviewer-toolbar-button:active` | background-color | `color-mix(in srgb, var(--zk-color-on-surface) calc(var(--zk-state-pressed-opacity) * 100%), transparent)` | MD3 state layer |
-| c20 | `.z-pdfviewer-toolbar-button[disabled]` | color | `var(--zk-color-disabled)` | DESIGN.md §8 |
-| c21 | `.z-pdfviewer-toolbar-separator` | border-left | 1px solid `var(--zk-color-outline-variant)` | DESIGN.md §11 |
+| c20 | `.z-pdfviewer-toolbar-button[disabled]` | color | `var(--zk-color-disabled)` | `doc/spec/DESIGN.md` "State-Layer Overlays" |
+| c21 | `.z-pdfviewer-toolbar-separator` | border-left | 1px solid `var(--zk-color-outline-variant)` | `doc/spec/DESIGN.md` "Border Rules" |
 | c22 | `.z-pdfviewer:fullscreen` | border-radius | 0 | fullscreen removes radius |
 | c23 | `.z-pdfviewer-text-layer` | opacity | 0.2 | structural — must be preserved |
 

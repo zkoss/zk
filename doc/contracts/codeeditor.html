@@ -8,7 +8,7 @@
 
   No ZKDoc canonical image exists for this component (new in ZK 11.0.0, no MUI analog either —
   see doc/contracts/codeeditor.md's mockup-needed: Y decision), so this file IS the visual ground
-  truth alongside the live Marble preview page (src/test/resources/web/codeeditor.zul).
+  truth alongside the live Marble preview page (zkthemelab/src/main/webapp/web/codeeditor.zul).
 
   Class names in the markup match the DOM tree in
   .claude/skills/zk-component-rules/components/codeeditor.md exactly: `.z-codeeditor` root,
@@ -30,72 +30,16 @@
   genuinely how CodeMirror's HighlightStyle applies these colors (inline `style` per span), not a
   simplification.
 -->
+<!-- Token values come from the real token files under zul/src/main/resources/web/zul/css/tokens/.
+     The --zk-codeeditor-* knobs live in _component-theme.css (see doc/contracts/codeeditor.md,
+     Cross-cutting "Component Theme Variables"). -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
-/* ────────────────────────────────────────────────────────────────────────
-   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
-   ──────────────────────────────────────────────────────────────────────── */
-:root {
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-
-    --zk-color-background: #f7f9fc;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-    --zk-color-surface-container-low: #f7f9fc;
-    --zk-color-outline: rgba(0, 0, 0, 0.23);
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    --zk-state-disabled-opacity: 0.38;
-
-    /* Spacing (4dp baseline) */
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-8: 32px;
-
-    /* Shape */
-    --zk-shape-corner-extra-small: 4px;
-    --zk-shape-input: var(--zk-shape-corner-extra-small);
-
-    /* Typography */
-    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --zk-typescale-mono-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-    --zk-typescale-body-medium-size: 13px;
-    --zk-typescale-body-medium-line-height: 20px;
-    --zk-typescale-body-small-size: 12px;
-    --zk-typescale-title-medium-size: 16px;
-    --zk-font-weight-regular: 400;
-    --zk-font-weight-medium: 500;
-    --zk-font-weight-semibold: 600;
-
-    /* Motion */
-    --zk-motion-duration-standard: 250ms;
-    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* ── Component Theme Variables — codeeditor ──
-       Ten Marble-authored (bg/fg/radius/border-color family + gutter triad + dark focus) +
-       three ZK-core-authored dark-surface names (fixed spelling, public API) —
-       see doc/contracts/codeeditor.md's Cross-cutting §Component Theme Variables. */
-    --zk-codeeditor-bg:                  var(--zk-color-surface);
-    --zk-codeeditor-fg:                  var(--zk-color-on-surface);
-    --zk-codeeditor-radius:              var(--zk-shape-input);
-    --zk-codeeditor-border-color:        var(--zk-color-outline);
-    --zk-codeeditor-border-color-hover:  var(--zk-color-on-surface);
-    --zk-codeeditor-border-color-focus:  var(--zk-color-primary);
-    --zk-codeeditor-gutter-bg:           var(--zk-color-surface-container-low);
-    --zk-codeeditor-gutter-fg:           var(--zk-color-on-surface-variant);
-    --zk-codeeditor-gutter-border-color: var(--zk-color-outline-variant);
-    /* dark surface — ZK-core-authored names, exact spelling required, deliberately literal
-       (not theme-derived) — see Design Contract's WCAG-against-fixed-syntax-palette reasoning */
-    --zk-codeeditor-dark-border-color:       rgba(255, 255, 255, 0.23);
-    --zk-codeeditor-dark-border-color-hover: rgba(255, 255, 255, 0.6);
-    --zk-codeeditor-dark-border-color-focus: oklch(from var(--zk-color-primary) 0.8 c h); /* ≈ #80bdff */
-    --zk-codeeditor-background:          #1e1e1e;
-    --zk-codeeditor-color:               #d4d4d4;
-    --zk-codeeditor-gutter-color:        #858585;
-}
 
 /* ────────────────────────────────────────────────────────────────────────
    Mockup chrome (page layout, NOT part of the component contract).
@@ -109,7 +53,7 @@ body {
     color: var(--zk-color-on-background);
     background: var(--zk-color-background);
 }
-h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .contract-meta {
     color: var(--zk-color-on-surface-variant);
     font-size: 12px;
@@ -119,7 +63,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 .matrix-section { margin-bottom: var(--zk-spacing-8); }
 .matrix-section h2 {
     font-size: var(--zk-typescale-title-medium-size);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     text-transform: uppercase;
     color: var(--zk-color-on-surface-variant);
     border-bottom: 1px solid var(--zk-color-outline-variant);
@@ -134,7 +78,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 }
 .matrix-grid .state-label {
     font-size: 12px;
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface-variant);
     text-transform: uppercase;
     padding-top: var(--zk-spacing-2);

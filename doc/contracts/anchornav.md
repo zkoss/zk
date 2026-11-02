@@ -6,7 +6,7 @@ siblings: [navbar]
 preview: ${PREVIEW_URL}/anchornav.zul
 
 ## References
-- DESIGN.md sections: §2, §3, §7, §9
+- doc/spec/DESIGN.md sections: "Text Colors", "Brand & Status Colors", "Typography", "Motion"
 
 ## DOM key selectors
 ```

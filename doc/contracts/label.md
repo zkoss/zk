@@ -16,11 +16,10 @@ loaded only via the global `norm.css.dsp` bundle (see `.claude/skills/zk-compone
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| l0 | `.z-label` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `label.css` is bundled into `norm.css.dsp` (regression guard for the 2026-06-30 orphan gap) |
+| l0 | `.z-label` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `label.css` is bundled into `norm.css.dsp` (regression guard against an orphaned standalone `.dsp`) |
 | l1 | `.z-label` | color | `var(--zk-color-on-surface)` |
 | l2 | `.z-label` | font-family | `var(--zk-typescale-font-family)` |
 | l3 | `.z-label` | font-size / line-height | `body-medium` typescale tokens |
-| l4 | `.z-label` | word-break | `break-word` |
 | l5 | `.z-label` | (no `.z-label-pre` rule) | Label never adds that class; `pre="true"` is handled in the content by `zUtl.encodeXML` (`&nbsp;` / `<br>`), so it preserves whitespace only — it does not select a monospace font |
 | l6 | `.z-label` | (no `.z-label-multiline` rule) | Label never adds that class; `multiline="true"` is handled in the content by `zUtl.encodeXML` (`<br>`), no class involved |
 

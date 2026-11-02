@@ -9,7 +9,7 @@
 
 | 層次 | 是什麼 | 用在哪 | 現況 |
 |------|--------|--------|------|
-| **通用 utility** | `.z-grid-fill`（auto-fit grid，無 breakpoint） | App／預覽頁中**彼此獨立**的卡片牆、儀表板磚、產品列表 | 已定義於 `_layout.css`、編譯進 `norm.css.dsp`；**尚未**用在任何 ZUL（預留給開發者） |
+| **通用 utility** | `.z-grid-fill`（auto-fit grid，無 breakpoint） | App／預覽頁中**彼此獨立**的卡片牆、儀表板磚、產品列表 | 已定義於 `_layout.css`、編譯進 `norm.css.dsp` |
 | **通用 utility** | `.z-grid-cols-auto`（auto 標籤欄 + N 個撐滿欄，`--zk-cols` 控制欄數、`--zk-col-min` 控制最小欄寬） | 「標籤 + N 個需跨列對齊的值」版面：狀態／變體矩陣、比較表、規格／定價表 | 已定義於 `_layout.css`、編譯進 `norm.css.dsp`；**預覽頁的 State Matrix 已遷移為直接使用它** |
 
 兩個通用工具各司其職：`z-grid-fill` 用在**彼此獨立**的卡片（欄數隨寬度自動增減）；`z-grid-cols-auto` 用在**需跨列對齊**的「標籤 + N 欄」表格（欄數固定、欄位對齊）。預覽頁的 State Matrix 不再有任何客製的 grid／手機重排 CSS——它就是 `z-grid-cols-auto` + `z-overflow-x-auto`（見第 3 節）。
@@ -177,7 +177,7 @@
 
 - `z-grid-fill` 與 `z-grid-cols-auto`（第 2、2.5 節）都**不用** breakpoint（intrinsic / 捲動容器處理 RWD）——
   能用 intrinsic 就優先用，這是本 theme 的取向。
-- 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組響應式 display utility。**breakpoint 尺度**採 Bootstrap：`sm` 576 / `md` 768 / `lg` 992 / `xl` 1200（`xs` 0 = base），與 EE 的 Grid／Listbox `responsive` 使用同一組值（決議記錄保存在本機 `tasks/` 下，不在 repository 內；規則已完整寫於本文件；`scripts/build-css.js --module zkmax` 會檢查兩邊一致）。
+- 當真的需要「依裝置切換版面」（隱藏側欄、堆疊↔並排、只在手機顯示漢堡鈕）時，提供一組響應式 display utility。**breakpoint 尺度**採 Bootstrap：`sm` 576 / `md` 768 / `lg` 992 / `xl` 1200（`xs` 0 = base），與 EE 的 Grid／Listbox `responsive` 使用同一組值（`scripts/build-css.js --module zkmax` 會檢查兩邊一致）。
   **不寫自訂寬度的 `@media` / `@container`**：寬度條件只能取上述尺度（`min-width` 為 576／768／992／1200，`max-width` 為其減 1），由 `scripts/check-breakpoints.js` 檢查（`scripts/build-css.js --module zkmax` 時執行）。
   **EE 的兩個常數必須一致**：zkmax 的 Grid 與 Listbox `responsive` 功能中的 `_DEFAULT_BREAKPOINTS` 常數必須彼此相等，不一致時建置失敗；此檢查只在 `--module zkmax` 時執行（CE-only 建置沒有可比對的對象）。
   **`xxl` 不屬於此尺度**：JS 端正逐步移除（Jira ZK-6197；`grid-responsive.ts` 仍有 `xxl: 1400`），`scripts/check-breakpoints.js` 忽略它；它既不是必要值，也不被接受為 CSS 值。
@@ -226,11 +226,11 @@
 
 ## 6. 測試守則
 
-響應式版面的回歸測試放在 `zkthemelab/src/test/playwright/tablet.spec.ts`（mobile UA 專案）：
+響應式版面的回歸測試放在 `zkthemelab/src/test/playwright/`：
 
-- `tablet-no-horizontal-overflow`：頁面在平板寬度下 `scrollWidth <= clientWidth`（防止橫向溢出→幻影垂直捲軸）。
-- `tablet-matrix-scroll-usable`：在 390px 確認 matrix 容器**內部可水平捲動**（`scrollWidth > clientWidth`）且輸入元件守住 ≥130px（防止「擠壓而非捲動」）。
-- `pv-cols-fill`（desktop）：桌機最右欄貼齊容器右緣（確認欄位撐滿）。
+- `tablet.spec.ts`（mobile UA 專案）`tablet-no-horizontal-overflow`：頁面在平板寬度下 `scrollWidth <= clientWidth`（防止橫向溢出→幻影垂直捲軸）。
+- `tablet.spec.ts` `tablet-matrix-scroll-usable`：在 390px 確認 matrix 容器**內部可水平捲動**（`scrollWidth > clientWidth`）且輸入元件守住 ≥130px（防止「擠壓而非捲動」）。
+- `screenshot.spec.ts` `pv-cols-fill`（desktop）：桌機最右欄貼齊容器右緣（確認欄位撐滿）。
 
 新增任何響應式版面時，沿用「失敗先行」：先寫一條會 fail 的幾何斷言，再寫 CSS 讓它 pass。
 

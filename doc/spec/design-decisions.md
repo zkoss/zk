@@ -28,14 +28,14 @@ Marble registers at priority **500**. Lower value = higher priority. Marble ship
 
 At **equal** priority the tie is resolved by non-deterministic `HashMap` order (a theme replaces the current only on *strictly* lower value). An adopter who needs their own theme auto-selected **without** setting `preferred` must register it at a priority `< 500`.
 
-## 5. Deprecated font library-properties — intentionally absent
+## 5. Fonts are set by `--zk-typescale-*` tokens
 
-`org.zkoss.zul.theme.fontFamily*` and `org.zkoss.zul.theme.fontSize*` (deprecated since the ZK 7.0.0 LESS era) are **deliberately not supported**. Their only consumer was the LESS-era `ext.css.dsp`, which ZK 10 no longer requests, so setting them has no effect. Marble replaces them with `--zk-typescale-*` tokens consumed at `body`/`.z-page`. **Do not re-add them.**
+The `--zk-typescale-*` tokens, consumed at `body`/`.z-page`, replace the `org.zkoss.zul.theme.fontFamily*` and `org.zkoss.zul.theme.fontSize*` library properties (deprecated since the ZK 7.0.0 LESS era). Their only consumer was the LESS-era `ext.css.dsp`, which ZK 10 no longer requests, so setting them has no effect. To change a face or size, edit the token.
 
 ## 6. Minor open items
 
-- **No `tertiary` color role.** MD3 defines it; Marble has primary + secondary only. Cosmetic unless a component needs a third accent.
-- **No full multi-token live theme playground.** A single-seed live color picker exists (brand showcase); a multi-token playground (edit spacing/shape/typography, export a token set) is not offered.
+- **Color roles are primary + secondary.** MD3 also defines `tertiary`; omitting it is cosmetic unless a component needs a third accent.
+- **Live theme editing is a single-seed color picker** (brand showcase). A multi-token playground (edit spacing/shape/typography, export a token set) is not offered.
 
 ## 7. ZK version support — selector-safe on 10.3.0.1
 

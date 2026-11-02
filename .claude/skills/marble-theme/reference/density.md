@@ -16,41 +16,19 @@ current px. Only the customer's compact override changes anything.
 ## Three layers, all in `tokens/_sizing.css`
 
 **Layer 1 — the control-height ladder (the seed; this is what a customer flips):**
-
-```css
---zk-control-height-xs: 28px;   /* small buttons, close buttons, separators */
---zk-control-height-sm: 32px;   /* paging controls, window-close */
---zk-control-height-md: 40px;   /* DEFAULT: inputs, icon-button, menu items, list rows */
---zk-control-height-lg: 48px;   /* chrome bars: toolbar, menubar, tabs, panel/groupbox header */
---zk-control-height-xl: 56px;   /* prominent: window header, FAB */
---zk-control-height: var(--zk-control-height-md);   /* kept — 24 existing consumers */
-```
+`--zk-control-height-xs` (28px), `-sm` (32px), `-md` (40px, the default), `-lg` (48px) and `-xl`
+(56px). The declarations are in `tokens/_sizing.css`; `--zk-control-height` is kept as an alias of
+`-md` for existing consumers.
 
 **Layer 2 — the semantic alias layer.** Every component binds to a rung **by meaning**, never to
-a raw px. This is the discipline that prevents drift: the intentional input-40 / button-36 /
-toolbar-48 *relationships* survive a tier change because the relationship is defined once, here.
+a raw px (`--zk-input-height`, `--zk-toolbar-height`, `--zk-window-header-height`, …; the full list
+is in `tokens/_sizing.css`). This is the discipline that prevents drift: the intentional
+input-40 / button-36 / toolbar-48 *relationships* survive a tier change because the relationship is
+defined once, here. A few aliases are deliberately off-ladder: `--zk-button-height` (36px, the MD
+base), `--zk-button-height-lg` (44px) and `--zk-data-row-min-height` (52px).
 
-```css
---zk-input-height:           var(--zk-control-height-md);   /* 40 */
---zk-button-height:          36px;                          /* off-ladder, intentional (MD base) */
---zk-button-height-sm:       var(--zk-control-height-xs);   /* 28 */
---zk-button-height-lg:       44px;                          /* off-ladder */
---zk-icon-button-size:       var(--zk-control-height-md);
---zk-fab-size:               var(--zk-control-height-xl);
---zk-toolbar-height:         var(--zk-control-height-lg);
---zk-menubar-height:         var(--zk-control-height-lg);
---zk-tab-height:             var(--zk-control-height-lg);
---zk-window-header-height:   var(--zk-control-height-xl);
---zk-panel-header-height:    var(--zk-control-height-lg);
---zk-groupbox-header-height: var(--zk-control-height-lg);   /* default mold; the 3D mold reads --zk-control-height-md (40/32) */
---zk-notification-height:    var(--zk-control-height-lg);
---zk-paging-control-size:    var(--zk-control-height-sm);
---zk-data-row-min-height:    52px;                          /* off-ladder */
---zk-header-padding-y:       …                              /* see "padding-driven headers" */
-```
-
-A normal customer flips only the 5 rungs plus 3 off-ladder seeds (button 36/44, paging bar 52); every
-alias follows automatically.
+A normal customer flips only the 5 rungs plus the off-ladder seeds (button 36/44, paging bar 52);
+every alias follows automatically.
 
 **Layer 3 — data-cell padding:** `--zk-grid-cell-padding`, `--zk-grid-detail-padding`, `--zk-listbox-cell-padding`,
 `--zk-tree-cell-padding`, `--zk-tree-header-padding`, and the group-row pair `--zk-group-padding-y`/`--zk-group-padding-x`.

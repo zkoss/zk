@@ -6,8 +6,10 @@ ZK does **not** use a single convention for state. Each component family chooses
 
 The HTML attribute is the selector target. Use `[disabled]` or `[readonly]` directly.
 
-- **slider** (and `multislider`): No `.z-slider-disabled` class is emitted. Style via `.z-slider[disabled]`.
-- **rangeslider**: same.
+- **selectbox**: only the native `disabled` attribute on the `<select>` (`Selectbox.ts`).
+- **searchbox**, **cascader**: ZK sets a `disabled` attribute and also adds a `-disabled` class on the root.
+- **button**: the native `disabled` attribute only (`mold/button.js:17`); there is no `.z-button-disabled` class.
+- **slider** has no `disabled` property, so ZK emits no disabled state for it. **rangeslider** / **multislider** add a root class `.z-rangeslider-disabled` / `.z-multislider-disabled` (`Rangeslider.ts` `setDisabled`, `domClass_`) and set no `[disabled]` attribute.
 - Native `<input>` elements also expose the attribute, but ZK usually emits a class too — see #2.
 
 ## 2. Class-based with `.z-{component}-{state}` suffix
@@ -16,7 +18,6 @@ Most components fall here. ZK adds a state class on the root element.
 
 - `.z-checkbox-disabled` — on the root span of checkbox
 - `.z-radio-on` / `.z-radio-off` — for radio's checked/unchecked
-- `.z-button-disabled` — on button root
 
 **Do not** assume the HTML `disabled` attribute is also present at the selector level you care about — the attribute may be on the inner `<input>`, not on the root the class is on. Always prefer the class selector.
 
@@ -54,15 +55,18 @@ Most inputs (textbox, intbox, datebox, timebox, spinner, combobox, bandbox) emit
 | bandbox | ✓ class | ✓ attr | ✓ ZK-added |
 | datebox / timebox | ✓ class | ✓ attr | ✓ ZK-added |
 | spinner / doublespinner | ✓ class | ✓ attr | ✓ ZK-added |
-| selectbox | ✓ attr  | — | — |
-| searchbox | ✓ attr | — | — |
-| chosenbox | ✓ attr  | — | — |
-| cascader | ✓ attr  | — | — |
-| colorbox | ✓ attr  | — | — |
-| slider | ✓ attr | — | — |
+| selectbox | ✓ attr (native `disabled` only) | — | — |
+| searchbox | ✓ class (plus `[disabled]` attr) | — | — |
+| chosenbox | ✓ class | — | — |
+| cascader | ✓ class (plus `[disabled]` attr) | — | — |
+| colorbox | ✓ class | — | — |
+| slider | — | — | — |
+| rangeslider / multislider | ✓ class | — | — |
 | rating | ✓ class | ✓ class | — |
 | checkbox (any mold) | ✓ class | — | — |
 | radio | ✓ class | — | — |
-| button | ✓ class | — | — |
+| button | ✓ attr (native `disabled`) | — | — |
 
-If a state is `—`, the component does **not** support it. Do not add a preview cell or CSS rule for an unsupported combination.
+Write a preview cell and a CSS rule only for the combinations marked ✓. A `—` means the component does not support that state. Each widget's `domClass_` / mold is the source for its row.
+
+For how a theme's colour-variant sclass interacts with a disabled rule, see the `marble-theme` skill (`reference/color-variant-disabled-pattern.md`).

@@ -9,81 +9,18 @@
   tier: T1
   closest-sibling: splitter (bar sub-element only)
 
-  Opens in any browser without a server. No external CSS. No JS.
+  Opens in any browser without a server. Loads only the real token CSS through relative links. No JS.
   All design values use --zk-* tokens only.
   Class names match .claude/skills/zk-component-rules/components/splitlayout.md DOM tree.
 -->
+<!-- Real Marble tokens (relative to doc/contracts/) -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
 <style>
-/* ────────────────────────────────────────────────────────────────────────
-   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css
-   ──────────────────────────────────────────────────────────────────────── */
-:root {
-    /* Colors — primary palette */
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-    --zk-color-primary-container: #d6e4ff;
-    --zk-color-on-primary-container: #001c3d;
-
-    --zk-color-secondary: #4db6ac;
-    --zk-color-on-secondary: #ffffff;
-
-    --zk-color-tertiary: #7e73d6;
-    --zk-color-error: #d32f2f;
-    --zk-color-warning: #f57c00;
-
-    /* Surfaces */
-    --zk-color-background: #f7f9fc;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-surface-variant: #f0f4fa;
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-    --zk-color-surface-container: #e8eef7;
-    --zk-color-surface-container-high: #e0e8f4;
-
-    /* Outline / dividers */
-    --zk-color-outline: rgba(0, 0, 0, 0.23);
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    /* Disabled */
-    --zk-color-disabled: rgba(0, 0, 0, 0.38);
-
-    /* Spacing (4dp baseline) */
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-3: 12px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-5: 20px;
-    --zk-spacing-6: 24px;
-    --zk-spacing-8: 32px;
-
-    /* Shape */
-    --zk-shape-corner-small: 8px;
-    --zk-shape-corner-medium: 12px;
-    --zk-shape-corner-large: 16px;
-    --zk-shape-corner-full: 9999px;
-
-    /* Typography */
-    --zk-typescale-body-medium-size: 14px;
-    --zk-typescale-body-small-size: 12px;
-    --zk-typescale-label-medium-size: 12px;
-    --zk-typescale-title-medium-size: 16px;
-
-    /* Elevation */
-    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
-
-    /* Motion */
-    --zk-motion-duration-short1: 100ms;
-    --zk-motion-duration-short2: 200ms;
-    --zk-motion-duration-short3: 250ms;
-    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-    --zk-motion-easing-legacy: cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* State-layer opacities */
-    --zk-state-hover-opacity: 0.08;
-    --zk-state-focus-opacity: 0.12;
-    --zk-state-pressed-opacity: 0.12;
-}
 
 /* ────────────────────────────────────────────────────────────────────────
    Mockup chrome (page layout — NOT part of component contract)
@@ -228,7 +165,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     cursor: default;
 }
 
-/* Collapse button — DESIGN.md §14 actuator pill (revised 2026-06-04, family unification) */
+/* Collapse button — doc/spec/DESIGN.md "Splitter Family" actuator pill (revised 2026-06-04, family unification) */
 .z-splitlayout-splitter-button {
     display: inline-flex;
     align-items: center;
@@ -247,7 +184,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
         color var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy);
 }
 
-/* Pill hover: primary fill, on-primary icons (DESIGN.md §14) */
+/* Pill hover: primary fill, on-primary icons (doc/spec/DESIGN.md "Splitter Family") */
 .z-splitlayout-splitter-button:hover {
     background-color: var(--zk-color-primary);
     color: var(--zk-color-on-primary);
@@ -272,7 +209,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     height: 28px;
 }
 
-/* Splitter icons — grips 8px always visible; caret hidden at idle (DESIGN.md §14) */
+/* Splitter icons — grips 8px always visible; caret hidden at idle (doc/spec/DESIGN.md "Splitter Family") */
 .z-splitlayout-splitter-icon {
     font-size: 8px;
     line-height: 1;

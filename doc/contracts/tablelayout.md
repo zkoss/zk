@@ -18,10 +18,9 @@ shared-css-file: ../zkcml/zkmax/src/main/resources/web/js/zkmax/layout/css/table
 
 ## References
 - MUI CSS: Layout/Grid.css — structural analog only (MUI Grid is CSS Grid not HTML table; no visual theming borrowed)
-- DESIGN.md sections: §4 (Spacing Scale)
+- `doc/spec/DESIGN.md` section: "Spacing Scale"
 - Iceblue baseline: doc/contracts/baselines/tablelayout-iceblue.png
 - ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKComRef_Tablelayout_Example.PNG
-- HTML contract: doc/contracts/tablelayout.html (not generated — mockup-needed: N)
 
 ## Design Contract
 
@@ -53,7 +52,7 @@ explicit `width=`/`height=` attributes on the child ZK panels — the theme does
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
 | c1 | `.z-tablelayout` | border-collapse | `separate` | required for border-spacing to have effect |
-| c2 | `.z-tablelayout` | border-spacing | `var(--zk-spacing-2)` | DESIGN.md §4 — 8px grid gutter (compact step) |
+| c2 | `.z-tablelayout` | border-spacing | `var(--zk-spacing-2)` | `doc/spec/DESIGN.md` "Spacing Scale" — 8px grid gutter (compact step) |
 | c3 | `.z-tablelayout` | background-color | `transparent` | layout shell must be invisible |
 | c4 | `.z-tablelayout` | border-width | `0px` | layout shell must have no border of its own |
 | c5 | `.z-tablechildren` | vertical-align | `top` | top-align cell content (ZK stock default; matches card-grid convention) |

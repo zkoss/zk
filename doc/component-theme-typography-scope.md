@@ -1,8 +1,8 @@
 # CTV 設計筆記：為什麼「字型（typography）」不做成元件級變數
 
-> 補充說明 [component-theme-variables.md](spec/component-theme-variables.md) 的 **Authoring rule 4** 與 **CTV-6**。
-> 起因：`window.css` 的標題文字讀的是全域 `--zk-typescale-title-medium-*`，而不是 `--zk-window-title-*`，
-> 有人問這樣對不對、其他 framework 怎麼設計。
+> 補充說明 [component-theme-variables.md](spec/component-theme-variables.md) 的 **Authoring rule 5**。
+> 設計理由：`window.css` 的標題文字讀的是全域 `--zk-typescale-title-medium-*`，而不是 `--zk-window-title-*`。
+> 本文記錄這個做法的理由，以及其他 framework 怎麼設計。
 
 ## 一句話結論
 
@@ -34,25 +34,4 @@ CTV 的目的是「讓使用者換**一個元件的皮膚**」，不是「讓使
 
 ## 對 Marble CTV 的意義
 
-- **維持現狀**：`window.css` 標題讀 `--zk-typescale-title-medium-*` 是正確的，**不要**把它包成 `--zk-window-title-size`。
-  這與 MUI（DialogTitle → `h6`）、Ant（Modal 標題 → 全域 heading token）一致。
-- 這其實已寫在規格裡，只是隱含：Authoring rule 4 / CTV-6 的可暴露軸是
-  **fill / text（顏色）/ border / radius / 狀態 / 尺寸**——**typography 不在清單內**，代表刻意排除。
-- **逃生門（若日後真的需要）**：當出現「只想放大**這個**元件的字、又不想動全站同級文字」的真實需求時，
-  採 **Ant 模式**——加一個元件旋鈕，但**預設回落到全域 typescale slot**，而**不是**寫死字面值：
-
-  ```css
-  /* ✅ 需要時這樣做：預設 = 全域 slot，零回歸、預設仍一致，只是給了覆寫點 */
-  :root { --zk-window-title-size: var(--zk-typescale-title-medium-size); }
-
-  /* ❌ 不要這樣：字面值會脫離 type scale，破壞一致性、也難維護 */
-  :root { --zk-window-title-size: 16px; }
-  ```
-
-  在沒有這個需求前，**不預先加**（符合「Simplicity First / 不做投機性設計」與 rule 4「keep the set small」）。
-
-## 建議
-
-保持現狀。若要讓這條規則從「隱含」變「明說」，我可以在
-[component-theme-variables.md](spec/component-theme-variables.md) 的 **Authoring rules** 加一條
-「typography 屬全域 typescale，非元件旋鈕；有需求時以回落到 typescale slot 的方式暴露」——需要的話再說。
+結論已明列於 [component-theme-variables.md](spec/component-theme-variables.md) 的 **Authoring rule 5**（typography 屬全域 typescale；`window.css` 標題讀 `--zk-typescale-title-medium-*` 是正確的；有真實需求時，元件旋鈕要預設回落到 typescale slot，不寫字面值）。

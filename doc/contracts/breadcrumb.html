@@ -5,57 +5,21 @@
 <title>Contract Mockup — breadcrumb</title>
 <!--
   Self-contained marble design contract mockup for `breadcrumb` / `breadcrumbitem`.
-  No ZKDoc canonical image exists for this component (new in ZK 10.4.0), so this file
+  No ZKDoc canonical image exists for this component (new in ZK 11.0.0), so this file
   IS the visual ground truth per doc/contracts/breadcrumb.md's mockup-needed: Y decision.
 
   Class names in the markup match the DOM tree in
   .claude/skills/zk-component-rules/components/breadcrumb.md exactly.
 -->
+<!-- Token values come from the real token files under zul/src/main/resources/web/zul/css/tokens/. -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
-/* ────────────────────────────────────────────────────────────────────────
-   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
-   ──────────────────────────────────────────────────────────────────────── */
-:root {
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-
-    --zk-color-background: #f7f9fc;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    --zk-state-disabled-opacity: 0.38;
-
-    /* Spacing (4dp baseline) */
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-6: 24px;
-    --zk-spacing-8: 32px;
-
-    /* Typography */
-    --zk-typescale-body-medium-size: 13px;
-    --zk-typescale-body-medium-line-height: 20px;
-    --zk-typescale-title-medium-size: 16px;
-    --zk-font-weight-regular: 400;
-    --zk-font-weight-medium: 500;
-    --zk-font-weight-semibold: 600;
-
-    /* Motion */
-    --zk-motion-duration-standard: 250ms;
-    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* Focus ring (global convention, not a breadcrumb knob) */
-    --zk-focus-ring: 2px solid var(--zk-color-primary);
-
-    /* ── Component Theme Variables — breadcrumb ── */
-    --zk-breadcrumb-fg: var(--zk-color-on-surface-variant);
-    --zk-breadcrumb-fg-hover: var(--zk-color-on-surface);
-    --zk-breadcrumb-current-fg: var(--zk-color-on-surface);
-}
 
 /* ────────────────────────────────────────────────────────────────────────
    Mockup chrome (page layout, NOT part of the component contract).
@@ -69,7 +33,7 @@ body {
     color: var(--zk-color-on-background);
     background: var(--zk-color-background);
 }
-h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .contract-meta {
     color: var(--zk-color-on-surface-variant);
     font-size: 12px;
@@ -79,7 +43,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 .matrix-section { margin-bottom: var(--zk-spacing-8); }
 .matrix-section h2 {
     font-size: var(--zk-typescale-title-medium-size);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     text-transform: uppercase;
     color: var(--zk-color-on-surface-variant);
     border-bottom: 1px solid var(--zk-color-outline-variant);
@@ -94,7 +58,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 }
 .matrix-grid .state-label {
     font-size: 12px;
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface-variant);
     text-transform: uppercase;
 }

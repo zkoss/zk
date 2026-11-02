@@ -6,12 +6,12 @@ This file lists the known ZK-core-emitted selectors and the bundling rule themes
 
 ## The pipeline trap
 
-In this theme, `scripts/build-css.js` does two things for component CSS:
+A component CSS reaches the page by one of two routes:
 
-1. **Per-widget 1:1 auto-scan**: every `zul/src/main/resources/web/js/zul/**/css/<name>.css` is copied to `zul/codegen/resources/web/<name>.css.dsp`. ZK loads each file only when a widget on the page is bound to it (`lang.xml` `css-uri` registration or convention).
-2. **Global bundle (`norm.css.dsp`)**: an explicit list of files (`normFiles` in `build-css.js`) concatenated into `zul/css/norm.css.dsp`. This bundle is part of `zk.wcs` and is loaded on *every* page.
+1. **Per-widget load**: ZK loads a widget's `.css.dsp` only when a widget on the page is bound to it (`lang.xml` `css-uri` registration or convention).
+2. **Global bundle**: a bundle that is part of `zk.wcs` is loaded on *every* page.
 
-If a selector is emitted by ZK core (not a widget), nothing on the page triggers the per-widget load — so the per-widget `.css.dsp` is dead weight. The rules MUST live in a file that is in `normFiles`, otherwise `zk.wcs` will not contain them.
+If a selector is emitted by ZK core (not a widget), nothing on the page triggers the per-widget load — so the per-widget `.css.dsp` is dead weight. The rules MUST live in a file that is in the global bundle, otherwise `zk.wcs` will not contain them.
 
 ## ZK-core-emitted classes (must be globally bundled)
 
@@ -22,18 +22,17 @@ If a selector is emitted by ZK core (not a widget), nothing on the page triggers
 | `.z-renderdefer` | `zk/widget.ts` `redraw_()` (placeholder while `_renderdefer` timer pending) | element with `renderdefer="N"` attribute |
 | `.z-apply-mask` `.z-apply-loading` `.z-apply-loading-indicator` `.z-apply-loading-icon` | `zk/effect.ts` `Mask._draw()` | `Clients.showBusy(component, msg)` / `wgt.showBusy(msg)` |
 | `.z-error` `.z-error #zk_err-p` `.z-error .errornumbers` `.z-error .button` `.z-error .messagecontent` `.z-error .messages` `.z-error .messages .message` `.z-error .newmessage` | `zk/zk.ts` `_Erbx` class (constructor + `push()`) | `zk.error(msg)` / `Clients.evalJavaScript("zk.error('…')")` / uncaught client errors via `_zk.sendClientErrors` |
-| `.z-tooltip` | helper layer | tooltip popup helper |
-| `.z-error-box` | inline error layer | `Errorbox.ts` (component CSS) — registered as widget |
+| `.z-error-box` | inline error layer | `Errorbox.ts` (component CSS) — a widget, but `lang.xml` registers no `css-uri` for it, so its rules are served from `zul/src/main/resources/web/js/zul/inp/css/input.css` (`wgt/css/errorbox.css` is excluded from the build and not served) |
 
-The non-widget rows are NOT widget-scoped. The last row (`errorbox`) is included for contrast: `errorbox` IS a widget and its CSS is loaded the normal per-widget way.
+The non-widget rows are NOT widget-scoped. The last row (`errorbox`) is included for contrast: `errorbox` IS a widget, but because it has no `css-uri` its rules must ride in another served bundle (`input.css.dsp`).
 
 ## Rule
 
-If a selector listed in this file (or any future ZK-core-emitted selector) needs styling, the source file holding the rule MUST appear in `normFiles` in `scripts/build-css.js`. Putting the rule in `js/zul/wgt/css/misc.css` is correct, but **the file must also be registered in `normFiles`**, otherwise the bundle won't contain it.
+If a selector listed in this file (or any future ZK-core-emitted selector) needs styling, the source file holding the rule MUST be part of the global bundle served by `zk.wcs`. Putting the rule in `js/zul/wgt/css/misc.css` is correct, but **the file must also be in that bundle**, otherwise `zk.wcs` won't contain it.
 
 ## How to verify
 
-`curl -s ${PREVIEW_URL}/zkau/web/<ver>/_zkiju-<theme>/zul/css/zk.wcs | grep '\\.z-loading\\b'` — if zero hits, the bundle is missing the rule even when the `.css.dsp` file exists on disk.
+`curl -s ${PREVIEW_URL}/zkau/web/<ver>/_zkiju-<theme>/zul/css/zk.wcs | grep '\\.z-loading\\b'` (`<theme>` is the theme's name) — if zero hits, the bundle is missing the rule even when the `.css.dsp` file exists on disk.
 
 ## Showbusy DOM the rules must support
 
@@ -49,7 +48,7 @@ If a selector listed in this file (or any future ZK-core-emitted selector) needs
 ```
 
 - `.z-loading` is positioned by **JS-set inline `left/top`** (computed as `(innerWidth - txt.offsetWidth)/2`), so the CSS MUST set `position: absolute` (or `fixed`) for the inline values to take effect. Without that, the busy box stays at static flow position behind the mask.
-- `.z-loading` MUST have a `z-index` above `.z-modal-mask` (the mask is `1400` in this theme; the busy box uses `1450`). Otherwise the message is hidden beneath the scrim.
+- `.z-loading` MUST have a `z-index` above `.z-modal-mask`. Otherwise the message is hidden beneath the scrim.
 - `.z-loading-icon` is rendered as a `<span>` with no built-in graphic — the theme has to supply the spinner (CSS-only border-spinner or SVG mask).
 
 ## Mask quirk — the vestigial inline `left/top`
@@ -122,33 +121,18 @@ CSS requirements:
 
 ## ThemeProvider wiring (ZK-1671)
 
-`<theme-provider-class>` in `metainfo/zk/zk.xml` is loaded from a jar and can be **silently overridden** by `StandardThemeProvider` depending on jar load order (see `Configuration.java` lines 175–178). When that override hits, `WcsExtendlet.beforeWidgetCSS` is called against `StandardThemeProvider` (or null), not your provider — so any redirect / skip logic you wrote NEVER RUNS.
+A `ThemeProvider` registered by a theme jar can be **silently replaced** by `StandardThemeProvider`, the default declared in `zul/src/main/resources/metainfo/zk/zk.xml`, depending on jar load order. When that happens, `WcsExtendlet.beforeWidgetCSS` is called on `StandardThemeProvider` (or null), not on the theme's provider, so any redirect or skip logic in the theme's provider never runs.
 
 Symptoms:
-- `zk.wcs` still contains stylesheets you tried to redirect (e.g. `~./zul/font/font-awesome.css.dsp`)
-- A `System.err.println` inside `beforeWidgetCSS` produces zero output even after restart
+- `zk.wcs` still contains stylesheets the provider was meant to redirect
+- A print inside `beforeWidgetCSS` produces no output even after restart
 
-Fix (apply once per theme):
-
-```java
-public class MarbleThemeWebAppInit implements WebAppInit {
-    public void init(WebApp webapp) throws Exception {
-        Themes.register("marble", "Marble", 700);
-        Configuration config = webapp.getConfiguration();
-        config.setThemeProvider(new MarbleThemeProvider());
-        config.setCustomThemeProvider(true);  // locks it — no later init can replace it
-    }
-}
-```
-
-Without `setCustomThemeProvider(true)`, a later `WebAppInit` (e.g. from another addon jar) can still call `setThemeProvider(null)` and your provider vanishes.
-
-**Do NOT rely on a 0-byte stub at `~./marble/zul/font/font-awesome.css.dsp`** as a workaround — the stub only helps if your provider's redirect runs, which it won't under the override race. Returning `null` from `beforeWidgetCSS` is the correct answer (`WcsExtendlet` honours `null` as "skip this `<stylesheet>` entry entirely").
+A theme jar that supplies its own provider calls `Configuration.setThemeProvider(...)` and then `Configuration.setCustomThemeProvider(true)` in a `WebAppInit`. Without the second call, a later `WebAppInit` (for example from another addon jar) can still replace the provider. Returning `null` from `beforeWidgetCSS` makes `WcsExtendlet` skip that `<stylesheet>` entry entirely.
 
 ## Discovery checklist for future ZK-core-emitted classes
 
 When investigating an "I see the scrim/overlay but nothing inside it" or "this className appears in the DOM but no CSS file styles it" report:
 
 1. `grep -rn "className\\|class=" $ZK_SOURCE/zk/src/main/resources/web/js/zk/*.ts` (`$ZK_SOURCE` is the root of the ZK CE checkout) — search ZK core (not `js/zul/`) for the class string.
-2. If the class is written by `au.ts` / `utl.ts` / `widget.ts` / `mount.ts`, it is core-emitted. Add the rule to a file already in `normFiles`, or add a new file to `normFiles`.
+2. If the class is written by `au.ts` / `utl.ts` / `widget.ts` / `mount.ts`, it is core-emitted. Add the rule to a file already in the global bundle, or add a new file to the bundle.
 3. After the fix, verify with the curl command above that `zk.wcs` contains the selector.

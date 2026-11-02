@@ -6,7 +6,7 @@ siblings: []
 preview: ${PREVIEW_URL}/scrollview.zul
 
 ## References
-- DESIGN.md sections: §2 (text colors), §5 (shape), §6 (elevation), §9 (motion)
+- `doc/spec/DESIGN.md` sections: "Text Colors", "Corner Radii", "Elevation / Shadow", "Motion"
 - MUI CSS: no analog — MUI has no scroll-viewport component
 - JS source (the structural authority for this component):
   `../zkcml/zkmax/src/main/resources/web/js/zkmax/layout/Scrollview.ts`,
@@ -65,7 +65,7 @@ rather than failing.
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
 | c1 | `.z-scrollview` | overflow | `auto` or `hidden` | structural — `hidden` from this stylesheet; `bind_()` overrides it inline with `auto` on desktop |
-| c2 | `.z-scrollview` | background-color | `transparent` | DESIGN.md §1 — viewport adds no surface |
+| c2 | `.z-scrollview` | background-color | `transparent` | `doc/spec/DESIGN.md` "Surface Palette" — viewport adds no surface |
 | c3 | `.z-scrollview` | position | `relative` | structural — containing block for the absolutely-positioned bar and load hint |
 | c4 | `.z-scrollview-content` | transform-origin | `0 0` | structural — `_move()` writes px `translate3d()`; a centred origin would halve every scroll offset |
 | c5 | `.z-scrollview-inner` | position | `relative` | structural — children position within their own slot |
@@ -74,19 +74,19 @@ rather than failing.
 | c8 | `.z-scrollview-horizontal .z-scrollview-inner` | white-space | `normal` | structural — undoes c6 for the child's own content |
 | c9 | `.z-scrollview-scrollbar` | pointer-events | `none` | structural — see M5 |
 | c10 | `.z-scrollview-scrollbar` | z-index | `100` | structural — local to the root's stacking context; under the load hint (999). Scrollview is not a ZK floating widget, so no `--zk-index-*` role applies |
-| c11 | `.z-scrollview-vertical .z-scrollview-scrollbar` | width | `6px` | DESIGN.md §6 — Material overlay-thumb weight |
-| c12 | `.z-scrollview-scrollbar` | transition | `opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard)` | DESIGN.md §9 — `_barPos()`/`_resetPos()` toggle inline opacity; fade rather than snap |
-| c13 | `.z-scrollview-scrollbar-indicator` | background | `var(--zk-color-scrim)` | DESIGN.md §3 |
-| c14 | `.z-scrollview-scrollbar-indicator` | border | `1px solid var(--zk-color-surface)` | DESIGN.md §1 — halo keeping the pill legible over dark content |
-| c15 | `.z-scrollview-scrollbar-indicator` | border-radius | `var(--zk-shape-corner-full)` | DESIGN.md §5 — pill |
+| c11 | `.z-scrollview-vertical .z-scrollview-scrollbar` | width | `6px` | `doc/spec/DESIGN.md` "Scrollbar" — 6px thumb, Material overlay-thumb weight |
+| c12 | `.z-scrollview-scrollbar` | transition | `opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard)` | `doc/spec/DESIGN.md` "Motion" — `_barPos()`/`_resetPos()` toggle inline opacity; fade rather than snap |
+| c13 | `.z-scrollview-scrollbar-indicator` | background | `var(--zk-color-scrim)` | `doc/spec/DESIGN.md` "Brand & Status Colors" |
+| c14 | `.z-scrollview-scrollbar-indicator` | border | `1px solid var(--zk-color-surface)` | `doc/spec/DESIGN.md` "Surface Palette" — halo keeping the pill legible over dark content |
+| c15 | `.z-scrollview-scrollbar-indicator` | border-radius | `var(--zk-shape-corner-full)` | `doc/spec/DESIGN.md` "Corner Radii" — pill |
 | c16 | `.z-scrollview-scrollbar-indicator` | background-clip | `padding-box` | structural — keeps the halo a separate ring instead of tinting the scrim |
 | c17 | `.z-scrollview-load` | display | `none` | structural — see M6 |
 | c18 | `.z-scrollview-load` | z-index | `999` | structural — above the overlay bar (c10) |
-| c19 | `.z-scrollview-load-{dir}` | background | `var(--zk-color-surface)` | DESIGN.md §1 — pull-to-refresh puck |
-| c20 | `.z-scrollview-load-{dir}` | box-shadow | `var(--zk-elevation-2)` | DESIGN.md §6 |
-| c21 | `.z-scrollview-load-{dir}` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md §2 — chevron ink |
+| c19 | `.z-scrollview-load-{dir}` | background | `var(--zk-color-surface)` | `doc/spec/DESIGN.md` "Surface Palette" — pull-to-refresh puck |
+| c20 | `.z-scrollview-load-{dir}` | box-shadow | `var(--zk-elevation-2)` | `doc/spec/DESIGN.md` "Elevation / Shadow" |
+| c21 | `.z-scrollview-load-{dir}` | color | `var(--zk-color-on-surface-variant)` | `doc/spec/DESIGN.md` "Text Colors" — chevron ink |
 | c22 | `.z-scrollview-load-{dir}` | width / height | `32px` | structural — `_loadBoundary()` centres the hint by reading `offsetWidth`/`offsetHeight`, so the explicit size is load-bearing |
-| c23 | `.z-scrollview-content` | transform | `translate3d(0, 0, 0)` (computed `matrix(1, 0, 0, 1, 0, 0)`) | structural — **load-bearing, not a no-op**: `doTouchStart_` (Scrollview.ts:598) reads the computed matrix to seed `_pos`; `none` parses to `NaN` and disables touch scrolling entirely. See M8 |
+| c23 | `.z-scrollview-content` | transform | `translate3d(0, 0, 0)` (computed `matrix(1, 0, 0, 1, 0, 0)`) | structural — **load-bearing, not a no-op**: `doTouchStart_` (`Scrollview.ts`) reads the computed matrix to seed `_pos`; `none` parses to `NaN` and disables touch scrolling entirely. See M8 |
 
 ## State matrix
 

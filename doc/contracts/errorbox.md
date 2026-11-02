@@ -4,12 +4,12 @@ category: feedback
 shared-css-file: zul/src/main/resources/web/js/zul/wgt/css/errorbox.css
 siblings: []
 closest-sibling: notification
-decomposition: tooltip surface (small floating callout with pointer caret) + error variant of notification (red bg + white text)
+decomposition: tooltip surface (small floating callout with pointer caret) + error variant of notification (error-container bg + on-error-container text)
 preview: trigger validation in any input preview that uses Constraint (e.g., ${PREVIEW_URL}/textbox.zul)
 
 ## References
-- DESIGN.md sections: §3, §6, §7
-- Closest-sibling CSS to read first: `zul/src/main/resources/web/js/zul/wgt/css/notification.css` (specifically the `-error` variant) — reuse colour + radius + shadow
+- `doc/spec/DESIGN.md` sections: "Brand & Status Colors", "Elevation / Shadow", "Typography"
+- Closest-sibling CSS to read first: `zul/src/main/resources/web/js/zul/wgt/css/notification.css` (specifically the `-error` variant) — reuse the error-container colour + radius + shadow
 - For the pointer/caret triangle: use a `::before` or `::after` pseudo-element with `border` trick; no MD3 spec for this — keep minimal.
 - Closest MUI: FormHelperText (semantics) + Tooltip arrow (caret).
 
@@ -22,12 +22,12 @@ preview: trigger validation in any input preview that uses Constraint (e.g., ${P
 ```
 
 ## Expected values (T2)
-- Background: rgb(211, 47, 47) (error) OR rgba(211,47,47,0.9).
-- Color: rgb(255, 255, 255).
-- Padding: 8px 12px.
-- Border-radius: 4px.
-- Font-size: 12–13px.
-- Box-shadow: level-2.
+- `.z-errorbox-content` background: `var(--zk-color-error-container)`.
+- Color: `var(--zk-color-on-error-container)`.
+- Padding: `8px 28px 8px 34px` — left room for the icon, right room for the close button.
+- Border-radius: `var(--zk-shape-corner-extra-small)`.
+- Font-size: body-small (`var(--zk-typescale-body-small-size)`).
+- Box-shadow: level-2 (`var(--zk-elevation-2)`).
 
 ## States to evaluate
 - [ ] visible on validation failure, with pointer caret, dismissible

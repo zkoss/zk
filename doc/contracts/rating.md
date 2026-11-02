@@ -8,16 +8,16 @@ zk-version: 10.2.1-jakarta
 
 ## References
 - MUI CSS: Rating.css
-- DESIGN.md sections: §3, §12
+- `doc/spec/DESIGN.md` sections: "Brand & Status Colors", "Iconography (Lucide SVG)"
 
 ## Expected values
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-rating-icon` | width / height | 20–24px |
-| c2 | `.z-rating-icon` | color | rgba(0, 0, 0, 0.38) (empty) |
-| c3 | `.z-rating-icon-checked` | color | rgb(237, 108, 2) (warning amber) or primary, per DESIGN.md §3 |
-| c4 | `.z-rating-icon:hover` | color | hover tint of c3 |
+| c1 | `.z-rating-icon` | width / height | 32px box; glyph 24px (mask or font-size) |
+| c2 | `.z-rating-icon` | color | `var(--zk-rating-fg)` = `--zk-color-outline` → rgba(0, 0, 0, 0.23) (empty) |
+| c3 | `.z-rating-icon.z-rating-selected` | color | `--zk-rating-accent` (selected state; hover uses `.z-rating-hover`) |
+| c4 | `.z-rating-icon.z-rating-hover` (class added by `Rating.ts`, not a `:hover` rule) | color, transform | `--zk-rating-accent` (same colour as c3) and `scale(1.1)` |
 | c5 | `.z-rating` | gap | ≥ 2px between stars |
 
 ## States to evaluate

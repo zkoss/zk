@@ -45,8 +45,7 @@ zero-reference but correct ladder member, kept under the scale-completeness rule
 ## Component theming variables (the per-component knobs)
 
 Marble exposes `--zk-<component>-*` properties so an adopter can restyle one component without
-overriding a global token that would ripple everywhere. 18 component families declare them;
-the normative spec is `doc/spec/component-theme-variables.md` and `component-theme-variables.spec.ts` covers
+overriding a global token that would ripple everywhere. The normative spec is `doc/spec/component-theme-variables.md` and `component-theme-variables.spec.ts` covers
 it with per-component tests that run on each component's own preview page.
 
 **Call them "Component Theming Variables", and use "knob" as the informal shorthand.** They were
@@ -101,6 +100,7 @@ genuinely decides, at their existing values (zero regression):
 | `--zk-index-slider-tooltip` | 60000 | CSS |
 | `--zk-index-busy-mask` | 89000 | CSS |
 | `--zk-index-busy-loading` | 89500 | CSS |
+| `--zk-index-log` | 99000 | CSS (the `zk.log` debug box sets no inline z-index) |
 | `--zk-index-fullscreen` | 99999 | CSS |
 | `--zk-index-error` | 9999999 | CSS |
 | `--zk-index-float-fallback` | 1800 | = ZK runtime base; an honest fallback for widgets ZK overrides inline |
@@ -123,16 +123,16 @@ ZK's `zk/drag.ts:654` overrides it to 88800 during the drag.
 
 - `reference/brand-override.md` — how one seed cascades into a palette
 - `reference/density.md` — the control-height ladder and the semantic alias layer
-- `reference/iceblue-parity.md` — why IceBlue's 842 `--zk-*` names are a different vocabulary
+- `reference/iceblue-parity.md` — why IceBlue's `--zk-*` names are a different vocabulary
 
-## There are no `--zk-font-weight-*` tokens
+## Font weight
 
-Font weight is expressed two ways, and only two: typescale-bundled weights in
+Font weight is expressed two ways: typescale-bundled weights in
 `tokens/_typography.css` (`--zk-typescale-title-medium-weight: 500`; the maximum defined is 500),
-and literal values through the `.z-fw-*` utilities (`light` 300, `regular` 400, `medium` 500,
+and literal values through the `.z-fw-*` utilities (`light` 300, `normal` 400, `medium` 500,
 `semibold` 600, `bold` 700). Write `font-weight: 500` or the typescale weight token. A contract
 once cited `--zk-font-weight-medium` and the evaluator flagged the theme for a missing token; it
-was a contract authoring error, not a gap. Do not create the family to make such a contract pass.
+was a contract authoring error, not a gap. Do not create a `--zk-font-weight-*` family to make such a contract pass.
 
 ## What counts as a token consumer
 
@@ -144,6 +144,13 @@ built-in utility, then delete the token. Self-contained `:root` snapshots inside
 (elevation 0–5, shape corners, spacing, typescale, motion) are kept complete regardless of
 reference count — see "scale completeness" above.
 
+## Same value in several places is not duplication when the roles differ
+
+State each occurrence's role before proposing to dedupe: declarations that look like copies can each
+have their own job, and collapsing them would delete independent declarations, not redundancy. When the
+occurrences are not interchangeable, the right shape is *one writer plus one guard* — a single command
+that sets all of them and a check that they agree — not *one source of truth*.
+
 ## The `z-` prefix is for framework component variants only
 
 `z-` on a class name signals a **framework-shipped component variant or state** applied via
@@ -151,12 +158,3 @@ reference count — see "scale completeness" above.
 take it, whichever file they happen to live in. When auditing for naming violations, flag only
 classes that act as a variant, skin or state of a ZK component; leave page-level utilities alone.
 
-## Same value in several places is not duplication when the roles differ
-
-The theme version lives in `pom.xml`, `config.xml`, `package.json` and `Version.java`. They are
-not four copies: each declaration has its own job (artifact naming, ZK's startup comparison, the
-value both XMLs are compared against), and collapsing them would delete independent declarations,
-not redundancy. **State each occurrence's role before proposing to dedupe.** When the occurrences
-are not interchangeable, the right shape is *one writer plus one guard* — a single command that
-sets all of them and a check that they agree — not *one source of truth*. That guard does not
-exist yet (`reference/css-dsp.md`, last section).

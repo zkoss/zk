@@ -26,7 +26,7 @@ Standard pattern: `.z-{c}-disabled` class is added to the button element (`.z-{c
 
 **`field-sizing: content` makes the browser ignore `size`**, so a theme that applies it to datebox/timebox silently disables the `cols` API (ZK-6112). The default datebox `size=11` clips formats longer than ~11 characters (ZK-6178).
 
-Consequence for a theme: a `flex: 1; min-width: 0` on the input (a common pattern) collapses it to a **fixed** width inside the shrink-wrapped root that ignores content — a short value, an empty field, and a long-format value all render the same width, and a value longer than that fixed width is **clipped** (measured: datebox `yyyy/MM/dd HH:mm` needs 132px in a 108px input → truncated). Any theme must therefore pick an explicit input-width policy: either let the input follow its `size` (datebox/timebox — never `field-sizing: content`, which overrides `cols`), **hug its content** where no `size` is rendered (`field-sizing: content` + a `min-width` floor; `flex: 1 1 auto` so it still fills when `hflex`/width-forced), or accept/bound a fixed width. This is structural (true for every theme); *which* components hug is a theme decision — see this theme's `DESIGN.md §10`.
+Consequence for a theme: a `flex: 1; min-width: 0` on the input (a common pattern) collapses it to a **fixed** width inside the shrink-wrapped root that ignores content — a short value, an empty field, and a long-format value all render the same width, and a value longer than that fixed width is **clipped** (measured: datebox `yyyy/MM/dd HH:mm` needs 132px in a 108px input → truncated). Any theme must therefore pick an explicit input-width policy: either let the input follow its `size` (datebox/timebox — never `field-sizing: content`, which overrides `cols`), **hug its content** where no `size` is rendered (`field-sizing: content` + a `min-width` floor; `flex: 1 1 auto` so it still fills when `hflex`/width-forced), or accept/bound a fixed width. This is structural (true for every theme); *which* components hug is a theme decision.
 
 ## Focus
 
@@ -42,7 +42,7 @@ Spinner buttons are rendered to the right of the input. When `buttonVisible="fal
 
 ## Bundle
 
-All four (`datebox`, `timebox`, `spinner`, `doublespinner`) live in `combo.css.dsp` alongside combobox and bandbox. A single CSS edit affects all six components. See `reference/css-file-bundling.md`.
+Stock `lang.xml` registers `combo.css.dsp` for `spinner` and `doublespinner` (alongside combobox and bandbox), `calendar.css.dsp` for `datebox` (commented "not combo.css.dsp"), and no `css-uri` for `timebox`. See `reference/css-file-bundling.md`.
 
 ## Data model (for preview pages)
 
@@ -70,7 +70,7 @@ When `<datebox>` has `displayedTimeZones`, its popup gets a wrapper under the ca
 On a touch UA, ZK replaces the desktop calendar/stepper with an iOS-style
 scrolling **wheel picker** (`.z-calendar-wheel-*` / `.z-timebox-wheel-*`) and
 forces the input `readonly`. Different DOM, its own geometry invariants (3-row
-scroll columns, JS-driven bottom-sheet positioning), no MD3/Mira analog — any ZK
+scroll columns, JS-driven bottom-sheet positioning) — any ZK
 theme must style it separately in the tablet bundle. See
 `reference/mobile-wheel-picker.md`. (spinner keeps its desktop stepper on touch —
 only datebox and timebox use the wheel.)

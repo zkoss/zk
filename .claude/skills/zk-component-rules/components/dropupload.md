@@ -12,14 +12,14 @@ An HTML5 drag-and-drop file-upload zone. A single widget (`<dropupload>`) that r
 
 The `content` attribute is arbitrary author HTML (e.g. `<b>Drop Here</b><br/>size &lt; 5MB`). It is appended as children of the root and toggled visible/hidden — it is not wrapped in a themed element.
 
-## State classes — there are NONE
+## Styling surface
 
-CRITICAL: ZK `Dropupload` toggles **no** state class on itself. Verified against `Dropupload.ts` and `Dropupload.java` (zkmax): the strings `dropupload-active` and `dropupload-disabled` appear **nowhere** in the ZK source tree.
+`.z-dropupload` is the only themable surface; ZK toggles no state class on it (`Dropupload.ts` and `Dropupload.java` in zkmax contain no `dropupload-active` or `dropupload-disabled`).
 
-- **No drag-over / active class.** When a file is dragged over the zone, the only feedback is the native browser cursor: the widget sets `dataTransfer.dropEffect = 'copy'` (`_copyEffect` / `_stopAndCopyEffect` in `Dropupload.ts`). The component's own CSS does **not** change — there is no highlight, border swap, or background tint. Do **not** style `.z-dropupload-active`; ZK never adds it, so any such rule is dead CSS.
-- **No disabled state.** `Dropupload.java` has no `setDisabled` (its setters are `maxsize`, `detection`, `viewerClass`, `content`, `native`, `anchor`, `maxFileCount`, `suppressedErrors`, `accept`). `disabled="true"` is unsupported and would error at parse time. Do **not** style `.z-dropupload-disabled`.
+- **Drag feedback is the browser's native cursor.** When a file is dragged over the zone, the widget sets `dataTransfer.dropEffect = 'copy'` (`_copyEffect` / `_stopAndCopyEffect` in `Dropupload.ts`). The component's own CSS does not change: there is no highlight, border swap, or background tint.
+- **No disabled state.** `Dropupload.java` has no `setDisabled` (its setters are `maxsize`, `detection`, `viewerClass`, `content`, `native`, `anchor`, `maxFileCount`, `suppressedErrors`, `accept`).
 
-The theme's only stylable surface is the resting `.z-dropupload` box (border, radius, background).
+Style the resting `.z-dropupload` box (border, radius, background).
 
 ## `detection` controls visibility, not appearance
 
@@ -31,7 +31,3 @@ The theme's only stylable surface is the resting `.z-dropupload` box (border, ra
 - `<componentId>` — like `self`, but the trigger area is the referenced component (used with `anchor` to overlay another panel, Gmail-style).
 
 A theme therefore never needs a per-`detection` style variant.
-
-## Why this matters for theming
-
-A drop zone *looks* like it should have an MD3 drag-over highlight, so a theme author (or an MD3-driven harness) will be tempted to invent `.z-dropupload-active` / `.z-dropupload-disabled`. Resist it — ZK provides none of these hooks. Drag affordance is delegated entirely to the browser's native drag cursor. Style the resting box only.

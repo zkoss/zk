@@ -7,7 +7,7 @@ contract-approved: false
 zk-version: 10.2.1-jakarta
 
 ## References
-- DESIGN.md sections: §1, §5, §7, §11
+- `doc/spec/DESIGN.md` sections: "Surface Palette", "Corner Radii", "Typography", "Border Rules"
 - Closest-sibling CSS to read first: `zul/src/main/resources/web/js/zul/wnd/css/panel.css` (reuse padding, radius, shadow, header treatment)
 - Closest MUI: Card with CardHeader + Collapse.
 - Visual goal: panel-lite (smaller emphasis than panel; subtle outline instead of full card shadow when nested).

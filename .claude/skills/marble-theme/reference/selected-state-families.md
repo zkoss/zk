@@ -18,7 +18,7 @@ decision followed MUI, not MD3; MD3's list-item token
 the same). The "one family for every row" rule below is unchanged; only the
 colour role changed.
 
-## The three families
+## The four families (five rows: the chip family has a resting and a keyboard-focused state)
 
 | Family | Semantic | Background token | Text/icon token | Extra |
 |--------|----------|------------------|-----------------|-------|
@@ -28,7 +28,7 @@ colour role changed.
 | **Single-point picker** ("the one chosen value") | The unique chosen value in a picker (e.g. the day the user picked in a calendar). Strong visual emphasis because the answer is singular. | `--zk-color-primary` (FILLED shape — solid disc/circle/square) | `--zk-color-on-primary` | typically a fully-rounded fill, not a rectangular row tint |
 | **Navigation** ("the destination I'm on") | The persistently-active item in a navigation rail / drawer / sidebar. One item stays highlighted to show the *current location*, independent of keyboard focus — unlike a list-row it is not the arrow-key cursor, it is where you are. | MD3 canonical = a rounded **active-indicator container** (pure MD3 nav drawer fills it with `secondary-container`). **This theme** uses a 12%-tint container: `color-mix(--zk-color-primary 12%, transparent)`. | `--zk-color-primary` | + `font-weight: 600`. **No left-edge accent bar** — the rounded tonal container is the whole marker (MD3 / MUI ListItemButton). |
 
-> **Why three families?** A row in a 200-row listbox should not scream — a
+> **Why four families?** A row in a 200-row listbox should not scream — a
 > light container tint is enough. A filter chip needs to differentiate itself
 > from "list-row currently focused" so users can see at a glance "this is a
 > tag I picked, not the cursor". A single-point pick (calendar day, rating
@@ -56,16 +56,15 @@ but pure-MD3 styling is intentionally not used here for chips.
 | Component | Selector | Resting bg | Focused bg | CSS file |
 |-----------|----------|------------|------------|----------|
 | Chosenbox already-picked chip | `.z-chosenbox-item` | `surface-container-high` | `.z-chosenbox-item-focus` → `secondary-container` | `js/zkmax/inp/css/chosenbox.css` |
-| Any future multi-select chip | (TBD) | (TBD) | (TBD) | (TBD) |
 
 ### Single-point picker family — filled `primary`
 | Component | Selector | CSS file |
 |-----------|----------|----------|
 | Calendar selected day | `.z-calendar-cell.z-calendar-selected` | `js/zul/db/css/calendar.css` |
-| Rating selected star | `.z-rating-button-selected` (TBD) | `js/zul/wgt/css/rating.css` |
-| Radio | `.z-radio:checked` | `js/zul/wgt/css/radio.css` |
+| Rating selected star | `.z-rating-icon.z-rating-selected` | `js/zul/wgt/css/rating.css` |
+| Radio | `.z-radio-on > input[type="radio"]` | `js/zul/wgt/css/checkbox.css` (radio shares the checkbox stylesheet) |
 
-### Navigation family — tint container + accent bar
+### Navigation family — tint container (no accent bar)
 | Component | Selector | CSS file |
 |-----------|----------|----------|
 | Navbar item (active) | `.z-navitem-selected > .z-navitem-content` | `js/zkmax/nav/css/nav.css` |

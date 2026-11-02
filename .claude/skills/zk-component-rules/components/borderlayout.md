@@ -51,33 +51,17 @@ The splitter and collapsed-placeholder sub-elements are rendered **inside the sa
         └─ .z-west-title                    (<div> — rotated title text inside placeholder)
 ```
 
-Note: `.z-center` has **no** splitter, collapsed placeholder, or header collapse button — center is never collapsible.
+Note: splitter, collapsed placeholder and header collapse button exist only for north, south, west and east — center is never collapsible.
 
-## Exact icon classes per region
+## Icon classes per region
 
-The mold (`layoutregion.js`) selects icons by position:
+The icon depends on the region position: `mold/layoutregion.js` (splitter-button icons) and `LayoutRegion.ts` `getIconClass_` (collapsed-placeholder expand icon). Look there for the exact classes (`grep -n "z-icon-" zul/src/main/resources/web/js/zul/layout/mold/layoutregion.js zul/src/main/resources/web/js/zul/layout/LayoutRegion.ts`).
 
-| Region | Ellipsis class (grip) | Caret class (direction) |
-|--------|----------------------|------------------------|
-| west   | `z-icon-ellipsis-v`  | `z-icon-caret-left`    |
-| east   | `z-icon-ellipsis-v`  | `z-icon-caret-right`   |
-| north  | `z-icon-ellipsis-h`  | `z-icon-caret-up`      |
-| south  | `z-icon-ellipsis-h`  | `z-icon-caret-down`    |
-
-The splitter button always renders three icons in order: ellipsis (grip) → caret → ellipsis (grip).
-
-For the collapsed placeholder's expand icon (`getIconClass_(true)` — "collapsed=true" argument):
-
-| Region | Icon when collapsed (click to expand) |
-|--------|--------------------------------------|
-| north  | `z-icon-angle-double-down`            |
-| south  | `z-icon-angle-double-up`              |
-| west   | `z-icon-angle-double-right`           |
-| east   | `z-icon-angle-double-left`            |
+The splitter button always renders three icons in order: ellipsis (grip) → caret → ellipsis (grip). The ellipsis orientation follows the splitter axis; the caret points in the collapse direction.
 
 ## Class naming — region prefix replaces "borderlayout"
 
-Each region uses its own name as the zclass prefix. There is no `.z-borderlayout-north` class. The region roots are:
+Each region uses its own name as the zclass prefix. The region roots are:
 
 - `.z-north` (not `.z-borderlayout-north`)
 - `.z-south`
@@ -94,7 +78,7 @@ The only `.z-borderlayout-*` classes are:
 ### Region open/closed
 - `_open = true` (default) — the `-real` element is shown; the `-split` bar is visible; the `-colled` element is `display:none`.
 - `_open = false` — the `-real` element is hidden; `-split` has `display:none`; the `-colled` placeholder element is shown.
-  - There is no ZK-added state class for collapsed vs. open — visibility is toggled via JS `display` style manipulation on the sub-elements.
+  - Collapsed vs. open is expressed by JS `display` style changes on the sub-elements, not by a state class.
 
 ### Region collapsible / closable
 - When `collapsible="true"` and `closable="true"` (defaults): the splitter button is rendered without the `-disabled` modifier class.
@@ -141,18 +125,7 @@ This is a **family-wide ZK pattern**: the identical `setBtnPos_` inline-margin c
 
 ## Z-index map
 
-ZK's JS engine assigns z-indices:
-
-| Region  | z-index |
-|---------|---------|
-| north   | 16      |
-| south   | 14      |
-| west    | 12      |
-| east    | 10      |
-| center  | 8       |
-| splitter (theme) | 20 (must be > region z-index) |
-
-Do not override these values — the JS engine relies on them for hit-testing.
+Region z-indices come from the stylesheet (`zul/src/main/resources/web/js/zul/layout/css/borderlayout.css`), not from JS. `LayoutRegion.ts` only writes `z-index` temporarily during slide animations and resets it afterwards. Keep the splitter's z-index above every region's so the splitter bar and its button stay clickable; `grep -n "z-index" borderlayout.css` for the current values.
 
 ## Title rotation rule (west/east collapsed placeholder)
 
@@ -163,7 +136,7 @@ When a west or east region is collapsed, the region's title appears inside the `
 - Splitter bar thickness (west/east: `width`; north/south: `height`) MUST be declared in CSS. The JS engine reads `offsetWidth`/`offsetHeight` of the split element to subtract from the available region space. If zero, neighboring regions bleed into each other.
 - Splitter button's `position: absolute` must be preserved — JS injects `margin-left` or `margin-top` to center it on the bar.
 - The `.z-splitter-ghost` element created during drag (`_ghosting` static method) is prepended to `document.body` with a hard-coded inline background color set by ZK's JS. Theme CSS on `.z-splitter-ghost` can override `background-color` and `opacity` since CSS specificity beats inline styles only when `!important` is used — or the theme can rely on the fact that the ghost is short-lived and the JS-set color is acceptable. Best practice: declare `.z-splitter-ghost { background-color: … !important; opacity: … !important; }` if the theme wants full control.
-- Center region: never renders `-split`, `-colled`, or a collapse icon. Applying splitter CSS to `.z-center-splitter` is harmless (that element does not exist) but wastes specificity.
+- Center region: renders no `-split`, `-colled` or collapse icon, so splitter CSS applies to north/south/west/east only.
 
 ## Sibling decomposition
 
@@ -173,7 +146,7 @@ This component is a novel composite — no single ZK sibling replicates the 5-re
 
 ## Contract
 
-`layout.css.dsp` (covers borderlayout + hlayout/vlayout + anchorlayout).
+`borderlayout.css.dsp` (`lang.xml` `css-uri`; source `zul/src/main/resources/web/js/zul/layout/css/borderlayout.css`).
 
 ## Edition
 

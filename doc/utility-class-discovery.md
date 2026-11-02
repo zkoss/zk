@@ -7,15 +7,15 @@
 on D4. Phase 3 not started.
 
 **Decisions so far:** D1 — build-time generation, not runtime CSS parsing. D2 — withdrawn, see
-§4. D3, D4 open; D5 raised below.
+§4. D3 — decided: no `description` field. D4 — recommendation to withdraw, see §4. D5 open. D6 —
+decided: Option A, scheduled as Phase 4.
 
 ---
 
 ## 1. Summary
 
-Marble ships **492 authorable utility classes** across ten CSS files (2026-10-02; the 425 / nine
-files cited in the verification records below were correct when measured, before commit
-`03a5c2ad62` added the P1 utilities and `_surface.css` was split out). Until now the only
+Marble ships its authorable utility classes across the `_*.css` files under
+`zul/src/main/resources/web/zul/css/utility/`. Until now the only
 complete record was the CSS source itself. Prose documentation is not consulted, and a
 hand-maintained list inside the ZK plugin would go stale at every release — the objection that
 started this discussion.
@@ -68,7 +68,7 @@ Each entry carries three fields — `name`, `category`, and the rule's declarati
 string. Four more appear only where they say something a consumer could not work out for itself:
 `media` for a class that exists only under a breakpoint or in print, `selector` where the class
 is not the whole selector, `inputs` for the custom properties the page author must supply, and
-`description` once someone writes one. 57 of the 425 entries carry any of them. §5.7 records
+`description` once someone writes one. §5.7 records
 what an earlier draft carried and why it was dropped.
 
 Two independent extractors run over the same input and must agree, or the build fails: a
@@ -76,8 +76,8 @@ brace-matching text scan that yields declarations and at-rule preludes verbatim,
 Lightning CSS AST walk used purely to cross-check the set of class names. §5.1 explains why
 that guard is not ceremonial.
 
-**Verified:** 425 classes, 39 KB; every one of them resolves to a rule in the built
-`norm.css.dsp`; byte-identical across consecutive runs; `check-css-dsp.js` still reports full
+**Verified:** every class in the manifest resolves to a rule in the built
+`norm.css.dsp`; the output is byte-identical across consecutive runs; `check-css-dsp.js` still reports full
 coverage; both scripts lint clean.
 
 ### Phase 2 — Ship it — **done; the CLI is now proposed for removal (D4)**
@@ -85,24 +85,23 @@ coverage; both scripts lint clean.
 The manifest is written to `zul/codegen/resources/web/zul/css/utility-classes.json`, the same
 generated-resources tree `norm.css.dsp` goes to, which Gradle's `processResources` copies
 wholesale into the jar. **Verified:** `zul-11.0.0-SNAPSHOT.jar` contains
-`web/zul/css/utility-classes.json`, and it parses to 425 classes when read straight out of the
+`web/zul/css/utility-classes.json`, and it parses when read straight out of the
 jar with no Java involved.
 
 Living under `web/` rather than `META-INF/` was a deliberate choice: it needs no Gradle change,
 it sits beside the CSS it describes, and ZK already serves that tree, so a running app exposes
 the catalogue at `/zkau/web/zul/css/utility-classes.json` for free. §5.5 records the trade-off.
 
-The CLI originally planned for this phase has not been written, and §5.9 argues it should not
-be: every access pattern it was meant to serve is already one shell command or one HTTP GET
-against the file that now ships. What replaces it is a documented one-liner, which costs no Java
-and cannot go stale.
+The CLI originally planned for this phase is proposed to be replaced by a one-line `unzip -p … | jq` (D4, §5.9):
+every access pattern the CLI was meant to serve is already one shell command or one HTTP GET
+against the file that now ships. The one-liner costs no Java and cannot go stale.
 
 ### Phase 3 — Wire up the consumers — not started
 
 - **ZK plugin:** completion for `sclass` reads the manifest from the project's `zul.jar`, with
   the declarations as hover text (D3 settled that there is no `description` field). Falls back to
   a bundled copy when no ZK jar resolves.
-- **Docs (planned; `doc/spec/utility-index.md` does not exist yet):** generate it from the manifest, as `icon-index.md` is
+- **Docs (planned):** generate `doc/spec/utility-index.md` from the manifest, as `icon-index.md` is
   generated today, and point the `marble-theme` skill's `zul-authoring.md` at it instead of at
   the raw CSS directory.
 - **CI guard:** assert that every class in the manifest resolves in the built bundle. Note that
@@ -141,14 +140,15 @@ is finished.
 ## 4. Open decisions
 
 - **D2** — *withdrawn.* The proposal was a non-normative `xs:documentation` note on `sclass`
-  pointing at the manifest. On inspection `zul.xsd` contains no `xs:annotation` or
-  `xs:documentation` element at all, and neither does `zk.xsd`; the note would be the first in
-  the file, would change no validation, and is rendered inconsistently across IDEs. It buys
-  nothing that the manifest does not already provide.
+  pointing at the manifest. Withdrawn because the manifest already provides the data, and
+  `zul.xsd` is a component-level schema that is independent of the theme (§5.3). Neither
+  `zul.xsd` nor `zk.xsd` contains any `xs:annotation` or `xs:documentation` (0 matches in
+  `zul.xsd`), so the note would be the first in the file. It would also change no validation
+  and is rendered inconsistently across IDEs.
 - **D3** — *(decided: **(a) no description field**.)* The manifest carries `name`, `category` and
   `css` only. `padding: var(--zk-spacing-4)` explains `z-p-4` to a human and to an agent alike,
   and the handful of classes whose names are terms of art are cheaper to explain once in the
-  generated index page than to carry as a field on 425 entries. **Consequence to absorb
+  generated index page than to carry as a field on every entry. **Consequence to absorb
   elsewhere:** the breakpoint suffixes were a known trap (§5.11), now resolved by aligning the scale
   with Bootstrap. With no `description`, the scale is stated in the `_layout.css` comments and in
   `doc/spec/responsive-design.md`, not in the manifest.
@@ -170,27 +170,27 @@ is finished.
 
 ### 5.1 Extraction must be at-rule-aware, and must exclude component classes
 
-Three counts, all over the same nine files:
+Three ways to count, all over the same `utility/_*.css` files, give different results:
 
-| Method | Count | Wrong how |
-|---|---|---|
-| `grep -E '^\.z-'` | 380 | misses every rule nested in an at-rule |
-| indentation-tolerant grep | 437 | picks up `z-grid`, `z-listbox`, `z-tree` from compound selectors; still misses classes whose only rule carries a combinator |
-| generated manifest | **425** | — |
+| Method | Wrong how |
+|---|---|
+| `grep -E '^\.z-'` | misses every rule nested in an at-rule |
+| indentation-tolerant grep | picks up `z-grid`, `z-listbox`, `z-tree` from compound selectors; still misses classes whose only rule carries a combinator |
+| generated manifest | — |
 
-**47 classes carry a condition** — the responsive variants (`z-d-sm-none`, `z-d-md-flex`,
+**Some classes carry a condition** — the responsive variants (`z-d-sm-none`, `z-d-md-flex`,
 `z-d-lg-block`, `z-d-xl-grid` and the `@container` equivalents) and the print family. They live
 inside `@media` / `@container` blocks and are therefore indented, which is what the first method
 misses. These are precisely the classes an author is least likely to remember, so a naive
 extractor omits exactly the entries that justify the feature.
 
-Six more classes have **no rule whose selector is the bare class**: `z-clearfix` is defined only
-through `.z-clearfix::after`, and the five `z-vstack*` variants only through
+Some more classes have **no rule whose selector is the bare class**: `z-clearfix` is defined only
+through `.z-clearfix::after`, and the `z-vstack*` variants only through
 `.z-vstack > * + *`. A "first compound is exactly one class" rule catches these while still
 rejecting `.z-grid.z-sticky-header .z-grid-header`, where the class is a component modifier.
 
 Finally, `_print.css` is not purely authorable — it also resets component chrome under
-`@media print`. Fourteen component class names reach the utility files that way: `z-window`,
+`@media print`. Component class names reach the utility files that way, for example: `z-window`,
 `z-panel`, `z-panel-move-block`, `z-panel-resize-faker`, `z-window-resize-faker`, `z-groupbox`,
 `z-mask`, `z-modal-mask`, `z-error`, `z-grid-body`, `z-listbox-body`, `z-tree-body`,
 `z-loadingbar-position`, `z-toast-position-wrapper`. Those rules apply on their own and are not
@@ -238,10 +238,9 @@ manifest — is a complement to the manifest, not an alternative to it.
 
 ### 5.4 Size, and why consumers need tiers
 
-| Form | Size | Rough tokens |
-|---|---|---|
-| full manifest, compact JSON | 39 KB | ~11k |
-| class names only | 4.5 KB | ~1.5k |
+The class-names-only list is about 4.5 KB (about 1.5k tokens); the full manifest is about 39 KB
+(about 11k tokens) as compact JSON, which carries every declaration. (Figures from the earlier
+version of this doc.)
 
 An AI agent can afford the name list in context on every task; it cannot afford the full
 manifest. So whatever reads the manifest should default to names and reach for detail per class
@@ -262,19 +261,13 @@ up from `themeDir`, and the Gradle copy already covers the path.
 
 ### 5.6 Where things are
 
-| Thing | Path |
-|---|---|
-| Utility CSS sources (9 files) | `zul/src/main/resources/web/zul/css/utility/_*.css` |
-| Manifest generator | `scripts/utility-manifest.js` |
-| Build integration | `scripts/build-css.js`, stage 1d, using the `utilityFiles` subset of `normFiles` |
-| Generated manifest | `zul/codegen/resources/web/zul/css/utility-classes.json` (gitignored; rebuilt every build) |
-| Jar entry | `web/zul/css/utility-classes.json` |
-| Built bundle the browser loads | `zul/codegen/resources/web/zul/css/norm.css.dsp` |
-| Theme provider (candidate home for the CLI) | `zul/src/main/java/org/zkoss/zul/theme/StandardThemeProvider.java` |
-| `sclass` declaration | `zul/src/main/resources/metainfo/xml/zul.xsd`, `htmlBasedComponentAttrGroup` |
-| Generated-catalogue precedent | `doc/spec/icon-index.md` |
+The utility CSS sources are `zul/src/main/resources/web/zul/css/utility/_*.css`. The generator is
+`scripts/utility-manifest.js`, called from `scripts/build-css.js`. The manifest is generated into
+`zul/codegen/resources/web/zul/css/utility-classes.json` (gitignored, rebuilt every build) and ships
+in the jar at `web/zul/css/utility-classes.json`. The generated-catalogue precedent is
+`doc/spec/icon-index.md`.
 
-All 425 classes are CE-only; `../zkcml/` contributes no utility CSS today. The manifest carries
+All utility CSS lives in CE `zul`. The manifest carries
 a `module` field so zkmax or zkex can ship their own file later and a consumer can merge them,
 as Spring Boot's IDE support merges per-jar metadata.
 
@@ -336,13 +329,13 @@ declarations do *not* convey the intent. That is a minority of the catalogue:
 | `z-grid-cols-auto` | a `grid-template-columns` expression | that the author is expected to set `--zk-cols` |
 | `z-visually-hidden` | six clipping declarations | that it hides content visually but keeps it for screen readers |
 
-So the useful answer to "how many descriptions" is not 425. It is the handful of classes whose
+So the useful answer to "how many descriptions" is not every class. It is the handful of classes whose
 name is a term of art.
 
 **Where it would live: the CSS, not a side file.** The utility sources already carry group
 comments — `/* Padding — all 4 sides */`, and a 15-line block explaining `.z-vstack`. Attributing
-each comment block to the rules that follow it until the next block covers **425 of 425**
-classes. Measured spot checks:
+each comment block to the rules that follow it until the next block covers **every**
+class. Measured spot checks:
 
 | Class | Harvested from the CSS comment |
 |---|---|
@@ -354,7 +347,7 @@ classes. Measured spot checks:
 Two consequences. First, an overrides file would be the wrong home: it puts the prose somewhere
 a person editing the CSS will not see, which is exactly how the current prose documentation rotted.
 Keeping the description adjacent to the rule is what makes it survive a refactor. Second, the work
-is not authoring 425 strings; it is improving roughly 39 comment blocks in files a theme developer
+is not authoring a string per class; it is improving the comment blocks in files a theme developer
 already edits, and teaching the generator to take the first sentence rather than the whole block.
 
 Note that harvesting requires a change to `scripts/utility-manifest.js`, which currently calls
@@ -395,10 +388,8 @@ sources and a `pom.xml`. It does not unzip dependencies on speculation, and it c
 path `web/zul/css/utility-classes.json`. Without a pointer the manifest is never read, and the
 original problem — "nobody consults the documentation" — survives intact in a new file format.
 
-**Today the situation is worse than neutral.** `.claude/skills/marble-theme/reference/zul-authoring.md`
-line 11 tells the agent to build `sclass` from
-`zul/src/main/resources/web/zul/css/utility/*.css`. That path exists only inside this repository.
-An agent in a customer project follows the instruction, finds nothing, and invents class names —
+A path into this repository (`zul/src/main/resources/web/zul/css/utility/*.css`) means nothing in a
+customer project: an agent that is told to read it finds nothing, and invents class names —
 which is exactly the failure the utility set was meant to prevent.
 
 So the pointer has to travel with something the customer's project already has. Four candidates:
@@ -410,7 +401,7 @@ So the pointer has to travel with something the customer's project already has. 
 | The `zk-doc` MCP server | yes, when the agent thinks to search | yes | complements a skill; does not replace it, because it depends on the agent already suspecting utilities exist |
 | The IDE plugin's `sclass` completion | **no** | yes | serves humans only — an agent writing a file never triggers completion |
 
-**The precedent, and its flaw.** The `zul-writer` skill in this repo is already built for
+**The precedent, and its flaw.** The published `zul-writer` skill (not in this repo) is already built for
 distribution (MIT, "Designed for Claude Code, Gemini CLI, and GitHub Copilot/Cursor") and already
 bundles a ZK metadata file: `assets/zul.xsd`, with a `--xsd` override and an
 `http://www.zkoss.org/2005/zul/zul.xsd` fallback. That is a **snapshot**, and it carries exactly
@@ -437,15 +428,14 @@ used only when no jar resolves.
 
 - **Why it wins:** it is the only option that fires automatically, at the right moment, without
   the customer or the agent having to suspect utility classes exist.
-- **Precedent:** `zul-writer` in this repo is already built for distribution (MIT, "Designed for
+- **Precedent:** the published `zul-writer` skill (not in this repo) is already built for distribution (MIT, "Designed for
   Claude Code, Gemini CLI, and GitHub Copilot/Cursor") and already bundles `assets/zul.xsd` — but
   as a *snapshot*, which carries the staleness problem this document exists to remove. Reading the
   jar instead is the improvement the manifest makes possible.
 - **Cost:** packaging and a distribution channel, plus keeping the skill's fallback copy fresh.
 - **Limit:** skills are a convention of Claude Code / Cursor and similar tools, not a standard.
   The customer still has to install it.
-- **Reading order (decided 2026-10-02, D1-A in
-  utility-discovery-without-manifest.md, kept locally under `tasks/`, not in the repository):** the manifest
+- **Reading order (decided 2026-10-02):** the manifest
   is the list and the source CSS is the detail. The alternative — consumers parse the shipped CSS
   themselves, no manifest — was evaluated and rejected because every consumer would re-implement
   the extraction rules of §5.1/§5.12 and the CSS file layout would become public API. The skill
@@ -457,7 +447,7 @@ used only when no jar resolves.
      print-only non-`z-d-print-*` classes, only when the jar predates the manifest.
 
   This makes shipping the commented source partials in `zul.jar` a commitment: a change that
-  strips them from the jar breaks step 2 and must revisit D1 there first.
+  strips them from the jar breaks step 2 and must revisit this reading order first.
 
 #### Option B — a documented snippet for the customer's own `CLAUDE.md` / `AGENTS.md`
 
@@ -495,12 +485,9 @@ Accept that the manifest serves the IDE plugin's completion (humans) and that ag
 - **What it forfeits:** the AI half of the original motivation. Worth naming as the baseline so the
   other options are costed against something.
 
-**Independent of the decision:** `zul-authoring.md` line 11 points at a path that exists only in
-this repository. That is wrong for every reader outside it and should be fixed whichever option wins.
-*Resolved 2026-10-02:* `marble-theme` is an in-repo maintenance skill, so the in-repo path is right
-for its readers; what was wrong is that it sent them to grep the raw CSS for the list. It now names
-the generated manifest as the list and the sources as detail. The customer-facing equivalent
-belongs to the Phase 4 skill.
+**Independent of the decision:** `marble-theme` is an in-repo maintenance skill, so the in-repo
+path is right for its readers. `reference/zul-authoring.md` names the generated manifest as the list
+and the sources as detail. The customer-facing equivalent belongs to the Phase 4 skill.
 
 ### 5.11 The breakpoint suffixes use the Bootstrap scale
 
@@ -523,8 +510,8 @@ and the rest.
 
 `collectComponentClasses()` suppresses that whole family by asking the component CSS which names it
 owns — but it only scans `zul`'s own `web/js/zul`. EE components live in a different repository, which
-a CE build cannot read, so `z-drawer` was not caught. The catalogue advertised 426 classes when only
-425 were authorable.
+a CE build cannot read, so `z-drawer` was not caught, and the catalogue advertised a class that is not
+authorable.
 
 The fix could not be "scan zkcml too": CE must build without EE present. The rule applied instead is
 that **a class whose every rule sits inside `@media print` is a utility only when it is named as one**
@@ -537,6 +524,6 @@ This is a naming-convention dependency rather than something derived from the CS
 cost of the fix: a future print-only utility that does not carry the `z-d-print-` prefix would be
 dropped silently. The build log names every exclusion, so it would be visible.
 
-**Verified after the fix:** 425 classes, 15 component classes excluded; `z-drawer` gone; `z-paper`
+**Verified after the fix:** the component classes are excluded; `z-drawer` gone; `z-paper`
 retained with its `_components.css` declarations; all five `z-d-print-*` utilities retained; every
 class still resolves in the built `norm.css.dsp`; output byte-identical across consecutive builds.

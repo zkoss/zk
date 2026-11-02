@@ -5,7 +5,7 @@ preview: ${PREVIEW_URL}/scrollbar.zul
 zk-version: 10.2.1-jakarta
 
 ## References
-- DESIGN.md sections: §5 (Corner Radii), §9 (Motion), §15 (Scrollbar)
+- `doc/spec/DESIGN.md` sections: "Corner Radii", "Motion", "Scrollbar"
 - Skill: `.claude/skills/zk-component-rules/components/scrollbar.md` (DOM tree, gating, must-bundle loading rule)
 - MUI / Mira: **none** — both ship native browser scrollbars only; the native `::-webkit-scrollbar` bar in `base/_reset.css` is the de-facto MD3 baseline.
 
@@ -17,7 +17,7 @@ reset/frozen CSS, not here.
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| s0 | `.z-scrollbar-indicator` | (rule present in a LOADED stylesheet) | **border-radius ≠ 0px** — proves `scrollbar.css` is bundled into `norm.css.dsp` and served (regression guard for the 2026-06-30 orphan gap) |
+| s0 | `.z-scrollbar-indicator` | (rule present in a LOADED stylesheet) | **border-radius ≠ 0px** — proves `scrollbar.css` is covered by `scripts/build-css.js` (`./gradlew checkMarbleCss`) and appears in a served stylesheet (guard against an orphaned component CSS) |
 | s1 | `.z-scrollbar-indicator` | border-radius | pill — `var(--zk-shape-corner-full)` = 9999px (NOT 4px) |
 | s2 | `.z-scrollbar-indicator` | background-color | `--zk-color-outline` @ idle opacity 0.6 (bolder draggable thumb) |
 | s3 | `.z-scrollbar-indicator` | opacity | 0.6 |
@@ -41,4 +41,4 @@ reset/frozen CSS, not here.
 - [ ] thumb states: idle, hover (darkens to on-surface-variant), drag/active
 - [ ] step buttons shown in every mode/orientation; caret icon renders; hover state layer
 - [ ] visible track channel present behind the thumb (distinct from native)
-- [ ] **loading**: the `.z-scrollbar-indicator` rule must come from a served stylesheet (bundled, not an orphaned standalone `.dsp`)
+- [ ] **loading**: the `.z-scrollbar-indicator` rule must come from a served stylesheet (`scrollbar.css` covered by `scripts/build-css.js`, not an orphaned component CSS)

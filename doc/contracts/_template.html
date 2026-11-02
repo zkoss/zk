@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Contract Mockup — &lt;component&gt;</title>
 <!--
-  Self-contained marble design contract mockup.
+  Marble design contract mockup.
 
   USAGE
     1. Spec-author copies this file to doc/contracts/<comp>.html
@@ -14,89 +14,21 @@
 
   RULES
     - Only --zk-* tokens may carry design values inside the body.
-    - The :root token block below mirrors src/main/resources/web/zul/css/tokens/*.css —
-      keep both in sync. Update this block only when the project tokens change.
+    - Token values come from the real token files under
+      zul/src/main/resources/web/zul/css/tokens/ through the <link> tags
+      below. Do not copy token values into this file. If the mockup needs
+      another token file (for example _sizing.css), add a <link> for it.
     - Class names in the markup must match the DOM tree in
       .claude/skills/zk-component-rules/components/<comp>.md exactly —
       so the mockup is a literal styling target for the loop.
 -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
 <style>
-/* ────────────────────────────────────────────────────────────────────────
-   Inlined tokens — mirror src/main/resources/web/zul/css/tokens/*.css.
-   Keep keys here, not values, semantically aligned with the project.
-   ──────────────────────────────────────────────────────────────────────── */
-:root {
-    /* Colors — primary palette */
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-    --zk-color-primary-container: #d6e4ff;
-    --zk-color-on-primary-container: #001c3d;
-
-    --zk-color-secondary: #4db6ac;
-    --zk-color-on-secondary: #ffffff;
-
-    --zk-color-tertiary: #7e73d6;
-    --zk-color-error: #d32f2f;
-    --zk-color-warning: #f57c00;
-
-    /* Surfaces */
-    --zk-color-background: #f7f9fc;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-surface-variant: #f0f4fa;
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-    --zk-color-surface-container: #f0f4fa;
-    --zk-color-surface-container-high: #e8eef7;
-
-    /* Outline / focus */
-    --zk-color-outline: rgba(0, 0, 0, 0.23);
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    /* Disabled */
-    --zk-color-disabled: rgba(0, 0, 0, 0.38);
-
-    /* Spacing (4dp baseline) */
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-3: 12px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-5: 20px;
-    --zk-spacing-6: 24px;
-    --zk-spacing-8: 32px;
-
-    /* Shape */
-    --zk-shape-corner-small: 8px;
-    --zk-shape-corner-medium: 12px;
-    --zk-shape-corner-large: 16px;
-    --zk-shape-corner-full: 9999px;
-
-    /* Typography */
-    --zk-typescale-body-medium-size: 14px;
-    --zk-typescale-body-small-size: 12px;
-    --zk-typescale-label-medium-size: 12px;
-    --zk-typescale-title-medium-size: 16px;
-    --zk-font-weight-regular: 400;
-    --zk-font-weight-medium: 500;
-    --zk-font-weight-semibold: 600;
-
-    /* Elevation */
-    --zk-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
-    --zk-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
-    --zk-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
-
-    /* Motion */
-    --zk-motion-duration-short1: 100ms;
-    --zk-motion-duration-short2: 200ms;
-    --zk-motion-duration-medium1: 250ms;
-    --zk-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-
-    /* State-layer opacities */
-    --zk-state-hover-opacity: 0.08;
-    --zk-state-focus-opacity: 0.12;
-    --zk-state-pressed-opacity: 0.12;
-}
-
 /* ────────────────────────────────────────────────────────────────────────
    Mockup chrome (page layout, NOT part of the component contract).
    ──────────────────────────────────────────────────────────────────────── */
@@ -109,7 +41,7 @@ body {
     color: var(--zk-color-on-background);
     background: var(--zk-color-background);
 }
-h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .contract-meta {
     color: var(--zk-color-on-surface-variant);
     font-size: var(--zk-typescale-body-small-size);
@@ -121,7 +53,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 }
 .matrix-section h2 {
     font-size: var(--zk-typescale-title-medium-size);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     text-transform: uppercase;
     color: var(--zk-color-on-surface-variant);
     border-bottom: 1px solid var(--zk-color-outline-variant);
@@ -136,7 +68,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 }
 .matrix-grid .state-label {
     font-size: var(--zk-typescale-label-medium-size);
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface-variant);
     text-transform: uppercase;
 }

@@ -42,20 +42,15 @@ with `:not(:empty)` so the always-present empty span stays flush:
 
 The icon span is only rendered when `iconSclass` is set, so it always has
 content (no `:not(:empty)` guard needed). This whole structure holds for any
-theme; only `<gap>` is a theme choice (DESIGN.md).
+theme; only `<gap>` is a theme choice.
 
 ## Border location: child input, not root
 
 Combobox is the **Type B** inplace pattern: the border lives on `.z-combobox-input`, not on the root. The root may still carry `background-color`. When clearing styles for inplace, clear both root background AND child border/background. See `reference/inplace-state.md`.
 
-## Split-border with the button
+## Input and button are two elements
 
-Visually the input and button look like one rectangle. CSS implements this by giving:
-
-- `.z-combobox-input`: left + top + bottom borders (and left half of radius)
-- `.z-combobox-button`: right border (and right half of radius)
-
-This avoids the double-border that would result from bordering each child fully. When the focus state changes the border, both elements must be updated together.
+The input and the button are separate elements, so a theme that wants them to read as one rectangle must split the border between them so the seam is not doubled. Whatever state changes the border (focus, invalid) must update both elements together.
 
 ## `buttonVisible="false"`
 

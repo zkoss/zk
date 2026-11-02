@@ -8,9 +8,9 @@ zk-version: 10.2.1-jakarta
 
 ## References
 - Skill: `components/colorbox.md` (DOM structure, sprite-locked picker geometry)
-- Skill: `reference/floating-popup-in-body.md` (popup detached to `<body>`)
-- ZK source (LESS) for original geometry: `../zkcml/zkex/src/main/resources/web/js/zkex/inp/less/colorbox.less`
-- DESIGN.md sections: §2, §3, §11
+- Skill: `zk-component-rules reference/floating-popup-in-body.md` (popup detached to `<body>`)
+- Component CSS (geometry notes in its comments): `../zkcml/zkex/src/main/resources/web/js/zkex/inp/css/colorbox.css`
+- doc/spec/DESIGN.md sections: "Text Colors", "Brand & Status Colors", "Border Rules"
 
 ## Expected values — closed state
 

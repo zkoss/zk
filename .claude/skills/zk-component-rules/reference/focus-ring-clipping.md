@@ -48,8 +48,9 @@ cell's own box.
 .z-thing:focus-visible .z-thing-cell:first-child { box-shadow: inset <edge marker>; }
 ```
 
-Both mechanisms also avoid the layout-shift trap — see `focus-affordance-no-layout-shift.md`, which
-covers the related case of a focus affordance that changes the element's size.
+Both mechanisms also avoid the layout-shift trap — see `focus-vs-focus-within.md` (section "A focus
+affordance that changes `border-width` resizes composite inputs"), which covers the related case of a
+focus affordance that changes the element's size.
 
 ## How to catch it
 
@@ -102,32 +103,3 @@ element's fill (or a child's, since a selected table row fills its cells and not
 an outset ring covers whatever is outside the element. Hit-testing the middle of the ring band with
 `document.elementFromPoint` answers this without having to reason about it; the outline itself is
 not hit-tested, so the call returns exactly what the ring is drawn on top of.
-
-## Reading a token's real value before you compare it
-
-Two habits that silently produce wrong contrast figures in a theme built on
-relative colours and alpha. Both measured in Chromium.
-
-**Contrast → sample a rendered pixel. Hue → read the `oklch()` serialization.**
-`getComputedStyle` resolves `oklch(from var(--x) …)` to *absolute*
-`oklch(L C H)`, **not** to `rgb()`. So a checker that regex-parses `.color` as
-RGB measures the oklch numbers as if they were channels — it does not throw, it
-just reports nonsense. Sampling the painted pixel avoids that and is the right
-reading for contrast, because 8-bit sRGB is what the user actually sees. But the
-sRGB round-trip perturbs *hue*, and the error scales inversely with chroma:
-
-| Colour | Chroma | Hue from `oklch()` | Hue after sRGB round-trip | Error |
-|---|---|---|---|---|
-| a mid-chroma blue | 0.066 | 260.56° | 260.25° | **0.31°** |
-| a near-neutral slate | 0.015 | 248.60° | 244.43° | **4.17°** |
-
-Lightness survives either way (0.5389 / 0.5407 against a declared 0.54), so
-contrast is safe from a pixel. Anything hue-based — "did the derived container
-keep the seed's hue?" — must read the serialization, or a desaturated brand
-preset raises a false alarm.
-
-**A colour with alpha must be composited over the element's own background, not
-over white.** Tokens like `--zk-color-on-surface: rgba(0, 0, 0, 0.87)` are
-translucent; compositing over an assumed white page understates contrast on any
-tinted surface. Read the actual backdrop (hit-test it if a child paints the
-fill) and composite over that.

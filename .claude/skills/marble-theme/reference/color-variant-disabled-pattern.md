@@ -30,49 +30,7 @@ A base disabled rule like `.z-button-outlined.z-button[disabled]` does **not** m
 This means each sub-family (`outlined-{color}`, `text-{color}`, etc.) needs its own
 disabled override block, even if a "base" override already exists for the parent family.
 
-## Patterns by Variant Family
-
-### Contained (background-color changes)
-```css
-/* ── Contained color variants (spec 0,2,0) ── */
-.z-button-success.z-button { background-color: var(--zk-color-success); color: #fff; }
-
-/* ── Disabled overrides — must reset to disabled token (spec 0,3,0) ── */
-.z-button-success.z-button[disabled] {
-    background-color: var(--zk-color-disabled-container);
-    color: var(--zk-color-disabled);
-    border-color: transparent;
-    box-shadow: none;
-}
-```
-
-### Outlined (border-color and color change)
-```css
-/* ── Outlined color variants (spec 0,2,0) ── */
-.z-button-outlined-error.z-button { color: var(--zk-color-error); border: 1px solid var(--zk-color-error); }
-
-/* ── Disabled overrides (spec 0,3,0) ── */
-.z-button-outlined-error.z-button[disabled] {
-    background-color: transparent;
-    border-color: var(--zk-color-disabled-container);
-    color: var(--zk-color-disabled);
-    box-shadow: none;
-}
-```
-
-### Text (only color changes)
-```css
-/* ── Text color variants (spec 0,2,0) ── */
-.z-button-text-error.z-button { color: var(--zk-color-error); border: none; }
-
-/* ── Disabled overrides (spec 0,3,0) ── */
-.z-button-text-error.z-button[disabled] {
-    background-color: transparent;
-    border: none;
-    color: var(--zk-color-disabled);
-    box-shadow: none;
-}
-```
+The button variants (contained, outlined, text) and their disabled overrides are in `zul/src/main/resources/web/js/zul/wgt/css/button.css`.
 
 ## Specificity Breakdown
 
@@ -89,10 +47,6 @@ Any component CSS that:
 1. Defines color variants via two-class compound selectors (`.z-{variant}.z-{component}`)
 2. AND defines a base disabled rule without the variant class
 
-Currently implemented in Marble: **button** — contained variants (`secondary`, `success`,
-`warning`, `error`, `info`, `light`, `dark`), outlined variants (`outlined-{color}`), and
-text variants (`text-{color}`).
-
 When adding color variants to other components, apply the same pattern immediately.
 
 ## Checklist
@@ -106,5 +60,5 @@ When adding a new sclass color variant to any component:
 
 ## Related
 
-- `components/button.md` — button color variants + disabled selectors
-- `reference/state-classes.md` — how ZK emits disabled classes vs attributes
+- `zk-component-rules` skill, `components/button.md` — button color variants + disabled selectors
+- `zk-component-rules` skill, `reference/state-classes.md` — how ZK emits disabled classes vs attributes, and the same-specificity tie and sub-family facts above

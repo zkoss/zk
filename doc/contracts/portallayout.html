@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Contract Mockup — portallayout</title>
 <!--
-  Self-contained marble design contract mockup.
+  Marble design contract mockup. Token values come from the real token CSS linked below.
   Open in any browser (no server, no JS) to compare against
   doc/contracts/baselines/portallayout-iceblue.png
 
@@ -13,82 +13,14 @@
 
   Only --zk-* tokens carry design values.
 -->
+<!-- Real token CSS (paths relative to doc/contracts/) -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
 <style>
-/* ── Inlined tokens ──────────────────────────────────────────────────── */
-:root {
-    /* Colors — primary palette */
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-    --zk-color-primary-container: #d6e4ff;
-    --zk-color-on-primary-container: #001c3d;
-
-    --zk-color-secondary: #4db6ac;
-    --zk-color-on-secondary: #ffffff;
-
-    --zk-color-error: #d32f2f;
-    --zk-color-warning: #f57c00;
-
-    /* Surfaces */
-    --zk-color-background: #f7f9fc;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-surface-variant: #f0f4fa;
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-    --zk-color-surface-container: #f0f4fa;
-    --zk-color-surface-container-high: #e8eef7;
-
-    /* Outline / focus */
-    --zk-color-outline: rgba(0, 0, 0, 0.23);
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    /* Disabled */
-    --zk-color-disabled: rgba(0, 0, 0, 0.38);
-
-    /* Spacing (4dp baseline) */
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-3: 12px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-5: 20px;
-    --zk-spacing-6: 24px;
-    --zk-spacing-8: 32px;
-
-    /* Shape */
-    --zk-shape-corner-extra-small: 4px;
-    --zk-shape-card: 6px;
-    --zk-shape-corner-small: 8px;
-    --zk-shape-corner-medium: 12px;
-    --zk-shape-corner-large: 16px;
-    --zk-shape-corner-full: 9999px;
-
-    /* Typography */
-    --zk-typescale-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --zk-typescale-body-medium-size: 14px;
-    --zk-typescale-body-small-size: 12px;
-    --zk-typescale-label-medium-size: 12px;
-    --zk-typescale-title-medium-size: 16px;
-    --zk-font-weight-regular: 400;
-    --zk-font-weight-medium: 500;
-    --zk-font-weight-semibold: 600;
-
-    /* Elevation */
-    --zk-elevation-1: rgba(50,50,93,0.024) 0px 2px 5px -1px, rgba(0,0,0,0.05) 0px 1px 3px -1px;
-    --zk-elevation-2: 0 2px 6px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
-    --zk-elevation-3: 0 4px 12px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.14);
-
-    /* Motion */
-    --zk-motion-duration-short3: 250ms;
-    --zk-motion-easing-legacy: cubic-bezier(0.4, 0, 0.2, 1);
-    --zk-motion-transition-standard: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* State-layer opacities */
-    --zk-state-hover-opacity: 0.08;
-    --zk-state-focus-opacity: 0.12;
-    --zk-state-pressed-opacity: 0.12;
-    --zk-state-dragged-opacity: 0.16;
-    --zk-state-disabled-opacity: 0.38;
-}
 
 /* ── Mockup chrome ───────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
@@ -100,7 +32,7 @@ body {
     color: var(--zk-color-on-background);
     background: var(--zk-color-background);
 }
-h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 var(--zk-spacing-2); }
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .contract-meta {
     color: var(--zk-color-on-surface-variant);
     font-size: var(--zk-typescale-body-small-size);
@@ -110,7 +42,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 .matrix-section { margin-bottom: var(--zk-spacing-8); }
 .matrix-section h2 {
     font-size: var(--zk-typescale-title-medium-size);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     text-transform: uppercase;
     color: var(--zk-color-on-surface-variant);
     border-bottom: 1px solid var(--zk-color-outline-variant);
@@ -125,7 +57,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 }
 .matrix-grid .state-label {
     font-size: var(--zk-typescale-label-medium-size);
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface-variant);
     text-transform: uppercase;
     padding-top: var(--zk-spacing-2);
@@ -156,7 +88,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 .z-panel-header {
     flex: 1;
     font-size: var(--zk-typescale-body-medium-size);
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface);
 }
 .z-panelchildren {
@@ -198,7 +130,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
 .z-portalchildren-title {
     display: none;
     font-size: var(--zk-typescale-body-medium-size);
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface-variant);
     padding-bottom: var(--zk-spacing-3);
     overflow: hidden;
@@ -211,7 +143,7 @@ h1 { font-size: 22px; font-weight: var(--zk-font-weight-semibold); margin: 0 0 v
     color: var(--zk-color-primary);
     border-radius: var(--zk-shape-corner-full);
     font-size: var(--zk-typescale-body-small-size);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     padding: 0 var(--zk-spacing-1);
     margin-right: var(--zk-spacing-1);
     vertical-align: middle;

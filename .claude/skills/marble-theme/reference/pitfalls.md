@@ -1,6 +1,6 @@
 # Pitfalls
 
-Eleven mistakes already made once, each with the rule it produced. Read this before any
+Mistakes already made once, each with the rule it produced. Read this before any
 non-trivial change; most of these cost hours and none of them look like mistakes up front.
 
 ## 1. Touch behaviour lives in the EE tree, not CE
@@ -19,12 +19,11 @@ own override. Siblings under a shared base class do **not** inherit a sibling's 
 combobox has `combo-touch.ts`; selectbox is a native `<select>` (unfixable via CSS, no ZK popup)
 and bandbox has no touch mold at all, so pinning it `position:fixed` would *break* it.
 
-## 2. DSP EL without its taglib silently drops the rule
+## 2. A relative `url()` in a bundled stylesheet resolves against the WCS URL
 
-See `reference/css-dsp.md` for the mechanism. **Rule:** when emitting ZK DSP EL into a generated
-`.css.dsp`, ensure the matching `<%@ taglib %>` leads the file (injected *after* minification),
-verify by fetching the **WCS aggregate** rather than the `.dsp` directly, and prefer
-`c:encodeURL("~./…")` over a relative `url()`.
+See `reference/css-dsp.md` for the mechanism. **Rule:** write asset URLs as `url("~./…")` (as
+`tokens/_fonts.css` does); `WcsExtendlet` rewrites them in the `zk.wcs` response. Verify by
+fetching the **WCS aggregate** rather than the `.dsp` directly.
 
 ## 3. A deprecated upstream property's absence is a decision, not a gap
 
@@ -67,12 +66,12 @@ the omission read as planned deferral.
 today**. Wave schedules sequence proactive migration; they never exempt a contract already in
 front of the gate.
 
-## 6. Upstream codegen CSS is the structural ground truth for library wrappers
+## 6. The library's own stylesheet is the structural ground truth for library wrappers
 
 Cropper shipped with all 8 Jcrop resize handles invisible; goldenlayout with maximize broken and a
 permanently visible drop-target indicator. Same root cause, detailed in `reference/css-dsp.md`.
 
-**Rule:** diff against ZK's codegen `.css.dsp` and classify every upstream rule as
+**Rule:** diff against the stylesheet the library ships and classify every library rule as
 structural-required (reproduce verbatim) or decorative (theme's choice).
 
 **Corollary:** declared-property contract rows cannot catch these. Interaction-level assertions
@@ -152,7 +151,7 @@ change to the minifier, the minifier version, or a CSS feature that is new to th
 `oklch(from …)` relative colour syntax was verified empirically for exactly this reason.
 
 **Rule:** never trust a version-pinned comment claiming a workaround is still needed. Re-verify
-empirically. The `!important` reduction pass took the count from 37 to 33 by doing this.
+empirically. The `!important` reduction pass removed declarations by doing this.
 
 ## 12. A "no-op" legacy declaration can be load-bearing for JS that parses computed style
 

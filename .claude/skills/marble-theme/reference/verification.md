@@ -6,15 +6,15 @@
 |---|---|---|
 | **Marble preview** | **8085** | `zkthemelab/build.gradle` (`httpPort`) |
 
-The IceBlue baseline app exists only in the template; `zkthemelab` has no IceBlue
-counterpart yet.
+`zkthemelab` serves IceBlue per request with the `zktheme=iceblue` cookie (the iceblue jar is a
+`runtimeOnly` dependency in `zkthemelab/build.gradle`); IceBlue runs inside `zkthemelab`, selected per
+request by the cookie.
 
 **Use `127.0.0.1`, not `localhost`.** Chrome resolves `localhost` to IPv6 `::1` while the preview
 app binds IPv4. This skill refers to the base as `${PREVIEW_URL}` = `http://127.0.0.1:8085` rather
 than hardcoding a port, so set `export PREVIEW_URL=http://127.0.0.1:8085` or paste the address.
 
-Override the port with `-PhttpPort=<n>` on the `appRun` command below; there is no
-`application.properties` to edit.
+Set the port with `-PhttpPort=<n>` on the `appRun` command below.
 
 ## Launching
 
@@ -45,9 +45,8 @@ HTML. Marble is zk's core theme, so the reset link carries **no theme segment** 
 `org.zkoss.zul.theme.browserDefault=true`) — and it precedes `zk.wcs`. `screenshot.spec.ts` derives
 the theme prefix from that `reset.css` link.
 
-**No live-reload.** `zkthemelab` has no watcher and no live-reload client. After a CSS change,
-rebuild (`./gradlew :zul:compileMarbleCss`, or the matching `zkcml` task for EE) and restart
-`appRun`; the two live-reload `<script>` tags some preview pages still carry are inert.
+**After a CSS change,** rebuild (`./gradlew :zul:compileMarbleCss`, or the matching `zkcml` task for
+EE) and restart `appRun`. The two live-reload `<script>` tags some preview pages still carry are inert.
 
 Do not rebuild jars on a running preview server. The zul and zkmax jars are shared; rebuilding them under a running server causes HTTP 500 or `NoClassDefFoundError`.
 
@@ -55,7 +54,8 @@ Do not rebuild jars on a running preview server. The zul and zkmax jars are shar
 
 `http://127.0.0.1:8085/<page>.zul` — the module answers at the context root; a filter forwards
 `/<page>.zul` to `/web/<page>.zul` when the page exists, and `~./` class-web resources resolve
-unchanged. Sources live in `zkthemelab/src/main/webapp/web/*.zul` (159 pages). Smoke page:
+unchanged. Sources live in `zkthemelab/src/main/webapp/web/*.zul`
+(`find zkthemelab/src/main/webapp/web -name '*.zul'` lists them). Smoke page:
 `/smoke.zul`.
 
 The **UseCase SPA** supports hash deep-links: `usecase/index.zul#<bookmark>`, where the bookmark is
@@ -93,22 +93,12 @@ Before a Playwright run, and after any change to CSS, a preview page or a spec, 
 
 Config: `zkthemelab/src/test/playwright/playwright.config.ts`.
 
-| Project | Covers |
-|---|---|
-| `chromium` | general specs |
-| `gallery` | full-page component galleries — the bulk of the baselines |
-| `smoke` | every preview ZUL renders (xmllint passing is **not** proof it renders) |
-| `framework` | framework-class compliance |
-| `component-theme-variables` | the per-component knob tests, one or more per component, each on that component's own preview page |
-| `reset` | reset scoping |
-| `iceblue` | IceBlue on ZK 11 through the `zktheme=iceblue` cookie (the iceblue jar is a `runtimeOnly` dependency): no 404 on the page, `z-icon-*` glyphs drawn |
-| `hit-target` | every knob owns its own centre point: `elementFromPoint` at the knob centre returns the knob (multislider, rangeslider, slider) |
-| `responsive` | breakpoint behaviour |
-| `print` | print stylesheet |
-| `zindex` | the three z-index constraints |
-| `focus-scan` | focus-ring visibility and clipping |
-| `forced-colors`, `forced-colors-gallery` | Windows High-Contrast guards |
-| `tablet` | needs a mobile UA to trigger `tablet.css.dsp` injection |
+The project list is in the config: `grep "name:" zkthemelab/src/test/playwright/playwright.config.ts`. Notes that the names do not carry:
+
+- `smoke` renders every preview ZUL (xmllint passing is **not** proof a page renders).
+- `iceblue` runs IceBlue on ZK 11 through the `zktheme=iceblue` cookie.
+- `tablet` needs a mobile UA, because the client enables `tablet.css.dsp` only when `zk.mobile`.
+- `forced-colors-gallery` writes review artifacts, not compared baselines.
 
 ```bash
 cd zkthemelab && npx playwright test --config src/test/playwright/playwright.config.ts --project=<project>
@@ -192,8 +182,7 @@ Consequences: a desktop UA leaves the link disabled — it is not even in `docum
 so **tablet CSS can never leak to desktop by construction**. `zk.wcs` (~1.6 MB, the whole theme)
 sits at position 0 and `tablet.css.dsp` at position 1, so tablet rules win by source order with
 no `!important`; size variants such as `.z-button-sm.z-button` keep their size by specificity.
-Marble is already wired: `MarbleThemeWebAppInit` registers `tablet:marble` (EE only) and the build
-emits the file. Detect in-page with
+Detect in-page with
 `[...document.styleSheets].some(s => s.href?.includes('zkmax/css/tablet.css'))`.
 
 ## Playwright, not Selenium or ZK WebDriver
@@ -220,15 +209,9 @@ no change applied — check that before trusting the gate. Run ad-hoc probes wit
 
 ## Cross-theme A/B: the determinism floor
 
-The IceBlue baseline app is template-only; `zkthemelab` has no IceBlue counterpart to run
-this comparison against yet.
-
-Serving Marble's preview corpus under a different theme jar needs no edit here: ZK's
-`Library.getProperty` falls back to `System.getProperty`, and the IceBlue baseline app leaves the
-preferred theme unset, so `-Dorg.zkoss.theme.preferred=<theme>` on the command line selects it.
-**Exclude `MARBLE/target/classes` from that classpath** — `MarbleThemeWebAppInit` locks its own
-provider with `setCustomThemeProvider(true)`, and that provider returns null for
-`font-awesome.css.dsp`, so the other theme's icons silently never load.
+To compare Marble with IceBlue, load the same preview page in `zkthemelab` twice: once as served
+(its `WEB-INF/zk.xml` sets `org.zkoss.theme.preferred=marble`) and once with the `zktheme=iceblue`
+cookie.
 
 **Always guard-probe before trusting a run:** assert the theme segment is in the CSS URL, the
 *other* theme's name appears zero times, **and the page parsed >0 CSS rules and >0 `--zk-*`

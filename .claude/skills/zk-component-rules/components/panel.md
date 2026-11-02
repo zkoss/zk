@@ -5,13 +5,13 @@ A card-style container with an optional title bar and a content area.
 ## DOM structure
 
 ```
-.z-panel[.z-panel-noheader][.z-panel-collapsed][.z-panel-noborder][.z-panel-noframe][.z-panel-shadow]
+.z-panel[.z-panel-noheader][.z-panel-collapsed][.z-panel-noborder][.z-panel-noframe]
 ├─ [HAS title or caption]
 │   └─ .z-panel-head
 │       └─ .z-panel-header[.z-panel-header-move]
 │           ├─ .z-caption          (if <caption> child widget set)
-│           │   └─ ... caption content + .z-panel-icons
-│           └─ [plain text node + .z-panel-icons]  (if title= attribute set, no caption child)
+│           │   └─ ... caption content + .z-panel-icons  (emitted by mold/caption.js)
+│           └─ [plain text node + .z-panel-icons]  (if title= attribute set, no caption child; emitted by wnd/mold/panel.js:29)
 │               └─ .z-panel-icons
 │                   ├─ .z-panel-icon.z-panel-expand     (if collapsible="true")
 │                   ├─ .z-panel-icon.z-panel-minimize   (if minimizable="true")
@@ -32,10 +32,10 @@ ZK uses `.z-panelchildren` for the inner content wrapper, **not** `.z-panel-cont
 
 ```css
 /* WRONG — no effect */
-.z-panel-content { padding: 16px; }
+.z-panel-content { padding: <value>; }
 
 /* CORRECT */
-.z-panelchildren { padding: 16px; }
+.z-panelchildren { padding: <value>; }
 ```
 
 ## `z-panel-drag-button` — the no-title drag handle
@@ -55,9 +55,12 @@ When `.z-panel-drag-button` is in the DOM, ZK also adds `.z-panel-noheader` to t
 
 - `.z-panel-noheader` — added when panel has no `title=` and no `<caption>` child; `.z-panel-drag-button` is in the DOM instead of `.z-panel-head`
 - `.z-panel-collapsed` — body hidden, head (or drag-button) still visible
-- `.z-panel-shadow` — drop shadow variant
-- `.z-panel-noborder` — border and shadow removed
-- `.z-panel-noframe` — no border-radius (`border="normal"` in ZUL)
+- `.z-panel-noborder` — added when `border` is `none` or `rounded`
+- `.z-panel-noframe` — added when `border` does not start with `rounded`
+
+`border` defaults to `none`, so a default panel root carries both `.z-panel-noborder` and `.z-panel-noframe` (source: `Panel.domClass_` in `zul/wnd/Panel.ts`).
+
+A panel shadow, when one is shown, is the `zk.eff.Shadow` effect (floating panels only), not a `.z-panel-*` class.
 
 ## Drag / resize interaction classes
 

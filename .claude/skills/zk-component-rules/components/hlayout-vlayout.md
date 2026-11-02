@@ -14,23 +14,12 @@ Simple horizontal and vertical layout containers. CE-baseline components.
 
 ## hbox / vbox (related but separate)
 
-`hbox`/`vbox` are the older layout components with a slightly different DOM:
-
-```
-.z-hbox
-├─ .z-hbox-separator               (separator between children)
-└─ (child components directly, no -inner wrapper)
-
-.z-vbox
-└─ .z-vbox-separator
-```
-
-Do not confuse `.z-hlayout-inner` (hlayout) with the hbox structure (no `-inner`).
+`hbox`/`vbox` are the older layout components and are table-based, with a different DOM from hlayout/vlayout (no `-inner` wrapper). See `components/box.md` for their structure. Do not confuse `.z-hlayout-inner` (hlayout) with the hbox structure.
 
 ## Alignment classes
 
-- `.z-valign-top` / `.z-valign-middle` / `.z-valign-bottom` — vertical alignment on children
-- `.z-flex` — enables flex expansion on a child
+- `.z-valign-top` / `.z-valign-middle` / `.z-valign-bottom` — vertical alignment modifier on the hlayout/vlayout **root**
+- `.z-flex` — added dynamically by the flex engine (`zk/flex.ts`) to a container that uses css-flex
 
 Default `valign` is `top` (`Hlayout.java:29` / `Hlayout.ts:23`); ZK adds `.z-valign-middle` /
 `.z-valign-bottom` to the **root** when set. For aligning a `<label>` beside a taller field,
@@ -87,19 +76,19 @@ This breaks elements that *intentionally* spill past their host's edge:
 and many container chromes elsewhere do — so the trap is not unique to hlayout.
 
 **Rule:** put an overlay-decorated widget in a **non-clipping flex row**, not an
-`<hlayout>`. Use the `z-hstack*` utility (or `z-d-flex` + `z-gap-*`) — flexbox with
-visible overflow, and it also spaces atomic widgets the canonical way:
+`<hlayout>` — a container with `display: flex` and visible overflow, which also
+spaces atomic widgets the canonical way:
 
 ```xml
 <!-- ❌ clips the badge's overhanging corner -->
 <hlayout><badge count="7" severity="error"><label sclass="z-icon-bell"/></badge></hlayout>
 
-<!-- ✅ overflow visible -->
-<div sclass="z-hstack-lg"><badge count="7" severity="error"><label sclass="z-icon-bell"/></badge></div>
+<!-- ✅ overflow visible (a flex row from the theme's utility classes) -->
+<div sclass="<flex-row sclass>"><badge count="7" severity="error"><label sclass="z-icon-bell"/></badge></div>
 ```
 
 This is theme-independent: any ZK theme that styles overlay badges hits the same
-clipping, because the `overflow:hidden`-can't-be-escaped behaviour is CSS, not MD3.
+clipping, because the `overflow:hidden`-can't-be-escaped behaviour is CSS.
 (A theme *could* set `.z-hlayout { overflow: visible }`, but that risks the nowrap
 row spilling its parent — the safer contract is "don't host overlays in hlayout".)
 

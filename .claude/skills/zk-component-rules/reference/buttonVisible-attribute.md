@@ -32,8 +32,6 @@ Therefore the selector is:
 .z-bandbox-button.z-bandbox-disabled { display: none; }
 ```
 
-**Not**: `.z-bandbox.z-bandbox-no-button` or `.z-bandbox[buttonVisible]` — those do not exist.
-
 ## Combining with other states
 
 `buttonVisible="false"` composes with all other states. The button stays hidden regardless of `disabled`, `readonly`, `invalid`, `inplace`. In preview matrices, the "No button" row + any state column is a valid combination — show a real component, never `—`.
@@ -63,7 +61,7 @@ Source (`$ZK_SOURCE/zul/src/main/resources/web/js/zul/`, where `$ZK_SOURCE` is t
 
 **Key consequence for `buttonVisible="false"`:** hiding the button removes the *only* icon trigger AND disables the readonly whole-control click (the `&& this._buttonVisible` guard). A no-button combobox/datebox/bandbox therefore has **no click gesture that opens the popup** — this is ZK's own behavior, correct and expected, **not a theme/CSS bug**. So "clicking the input opens the popup" only ever happens for **readonly + button visible**, and it is intentional ZK design.
 
-**Theme note (cursor honesty, minor):** the theme sets `cursor:pointer` on a readonly input to signal "click opens a menu." In the readonly + `buttonVisible="false"` corner case that cursor is slightly misleading (nothing opens). Scope it with `:has(.z-{c}-button:not(.z-{c}-disabled))` if strict honesty is wanted; currently accepted as a rare edge.
+**Cursor note (minor):** a `cursor:pointer` on a readonly input signals "click opens a menu." In the readonly + `buttonVisible="false"` corner case nothing opens, so that cursor is slightly misleading. Scope it with `:has(.z-{c}-button:not(.z-{c}-disabled))` if strict honesty is wanted.
 
 ## `buttonVisible` is cosmetic — interactivity is governed by `readonly`/`disabled`
 
@@ -82,31 +80,20 @@ Do not confuse `buttonVisible` (the auxiliary button) with controls like the spi
 
 ## Required CSS rule — per component, per file
 
-Even though combo-family components bundle into a single `combo.css.dsp`, **each component has its own source CSS file** and a rule in `combobox.css` does NOT cascade to `datebox.css` or `timebox.css`. The hide-button rule must be added explicitly to every component's file:
+Even though combo-family components bundle into a single `combo.css.dsp`, **each component has its own source CSS file** and a rule in `combobox.css` does NOT cascade to `datebox.css` or `timebox.css`. Write the hide-button rule `.z-{c}-button.z-{c}-disabled { display: none; }` once in each component's own file (combobox, bandbox, datebox, timebox, spinner; `doublespinner` shares `spinner.css`). To list the files that already have it: `grep -n "button.z-.*-disabled" zul/src/main/resources/web/js/zul/inp/css/*.css`.
 
-| Component | File | Required rule |
-|-----------|------|---------------|
-| combobox | `js/zul/inp/css/combobox.css` | `.z-combobox-button.z-combobox-disabled { display: none; }` |
-| bandbox | `js/zul/inp/css/bandbox.css` | `.z-bandbox-button.z-bandbox-disabled { display: none; }` |
-| datebox | `js/zul/inp/css/datebox.css` | `.z-datebox-button.z-datebox-disabled { display: none; }` |
-| timebox | `js/zul/inp/css/timebox.css` | `.z-timebox-button.z-timebox-disabled { display: none; }` |
-| spinner | `js/zul/inp/css/spinner.css` | `.z-spinner-button.z-spinner-disabled { display: none; }` |
-| doublespinner | `js/zul/inp/css/spinner.css` (shared with spinner) | `.z-doublespinner-button.z-doublespinner-disabled { display: none; }` |
+This rule has no counterpart in a design-system reference, because those have no `buttonVisible` concept. It follows from this skill alone.
 
-This rule cannot be derived from MD3 / MUI / Mira reference — those design systems have no `buttonVisible` concept. It must be added based on this skill alone.
+## Where the class comes from
 
-## Verification (live DOM, confirmed 2026-05-14)
-
-For all six components above, ZK at runtime DOES add `.z-{c}-disabled` to the button element when `buttonVisible="false"` is set (verified via `getComputedStyle` on each preview page). The class is emitted by:
+ZK adds `.z-{c}-disabled` to the button element when `buttonVisible="false"` is set; the class is ZK-emitted, so no JavaScript-side fix is needed. If the CSS rule is missing, the button just stays visible.
 
 - mold render path: `redraw_` in `ComboWidget.ts` and `mold/spinner.js` push `$s('disabled')` into the button's class list when `!isButtonVisible`.
 - runtime toggle: `RoundUtl.buttonVisible(wgt, v)` in `InputWidget.ts` adds/removes the class on `wgt.$n('btn')` when `setButtonVisible` is called after init.
 
-So the rule above is enough — no JavaScript-side fix needed. If the rule is missing, the button just stays visible.
-
 ## Border architecture: split-border vs root-border
 
-Themes choose one of two ways to render the visible border around a composite input + button widget. The choice changes what `buttonVisible="false"` does to the visual border.
+A theme renders the visible border around a composite input + button widget in one of two ways. The choice changes what `buttonVisible="false"` does to the visual border.
 
 ### Pattern S — split-border (border lives on input + button)
 
@@ -124,8 +111,8 @@ ZK provides the hook: the input gets the extra class `.z-{c}-input-full` when `b
 
 ```css
 .z-{c}-input.z-{c}-input-full {
-    border-right: 1px solid var(--zk-color-outline);    /* or whichever base colour */
-    border-radius: var(--zk-shape-input);                /* uniform on all 4 corners */
+    border-right: <full border, same as the other three sides>;
+    border-radius: <uniform radius on all 4 corners>;
 }
 ```
 
@@ -143,14 +130,7 @@ If this rule is missing, the input renders with three borders and a square right
 
 The visible border is one continuous rectangle on the root. Hiding the button leaves the root border untouched, so no restoration rule is needed.
 
-### Which components use which pattern (current theme)
-
-| Pattern | Components |
-|---------|------------|
-| S (split) | combobox |
-| R (root) | bandbox, datebox, timebox, spinner, doublespinner |
-
-This split is a *theme implementation choice*, not a ZK fact — a different theme could put all six on Pattern S, or all six on Pattern R. The skill records the two patterns and the hook; the theme records which it uses.
+Which components use Pattern S and which use Pattern R is a *theme implementation choice*, not a ZK fact. A theme can put all six on Pattern S, or all six on Pattern R. This skill records the two patterns and the hook; the theme records which it uses.
 
 **Implication for `buttonVisible="false"` verification:** for Pattern S components, the No-button check must verify BOTH (1) the button is hidden AND (2) the input still has a 4-side border + uniform corner radius via `.z-{c}-input-full`. For Pattern R components, only check (1).
 

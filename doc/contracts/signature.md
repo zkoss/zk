@@ -13,7 +13,7 @@ closest-sibling: toolbar (for the tool-button strip chrome pattern; canvas wrapp
 
 ## References
 - MUI CSS: no analog — no MUI component renders a canvas-based signature capture widget
-- DESIGN.md sections: §3 (color roles), §5 (spacing), §6 (shape), §7 (motion), §8 (disabled opacity), §9 (focus ring)
+- `doc/spec/DESIGN.md` sections (cited below as `DESIGN.md "<heading>"`): "Surface Palette", "Text Colors", "Spacing Scale", "Corner Radii", "Elevation / Shadow", "Typography", "State-Layer Overlays", "Motion", "Border Rules"
 - Iceblue baseline: doc/contracts/baselines/signature-iceblue.png
 - HTML contract: doc/contracts/signature.html
 
@@ -26,45 +26,45 @@ The `.z-signature` root is a bordered container (1px solid `outline`, medium cor
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
 | r1 | `.z-signature` | position | `relative` | structural (canvas layers use absolute positioning inside) |
-| r2 | `.z-signature` | border | `1px solid var(--zk-color-outline)` | DESIGN.md §9 (matches outlined input field style) |
-| r3 | `.z-signature` | border-radius | `var(--zk-shape-corner-medium)` | DESIGN.md §6 |
-| r4 | `.z-signature` | background-color | `var(--zk-color-surface)` | DESIGN.md §3 |
+| r2 | `.z-signature` | border | `1px solid var(--zk-color-outline)` | DESIGN.md "Border Rules" (matches outlined input field style) |
+| r3 | `.z-signature` | border-radius | `var(--zk-shape-corner-medium)` | DESIGN.md "Corner Radii" |
+| r4 | `.z-signature` | background-color | `var(--zk-color-surface)` | DESIGN.md "Surface Palette" |
 | r5 | `.z-signature` | overflow | `hidden` | structural (clip canvas border-radius) |
-| r6 | `.z-signature:focus-within` | border-color | `var(--zk-color-primary)` | DESIGN.md §9 (active drawing = focus-within) |
-| r7 | `.z-signature:focus-within` | border-width | `2px` | DESIGN.md §9 |
+| r6 | `.z-signature:focus-within` | border-color | `var(--zk-color-primary)` | DESIGN.md "Border Rules" (active drawing = focus-within) |
+| r7 | `.z-signature:focus-within` | border-width | `2px` | DESIGN.md "Border Rules" |
 | tb1 | `.z-signature-toolbar` | position | `absolute` | structural |
-| tb2 | `.z-signature-toolbar` | bottom | `var(--zk-spacing-2)` | DESIGN.md §5 |
-| tb3 | `.z-signature-toolbar` | right | `var(--zk-spacing-2)` | DESIGN.md §5 |
+| tb2 | `.z-signature-toolbar` | bottom | `var(--zk-spacing-2)` | DESIGN.md "Spacing Scale" |
+| tb3 | `.z-signature-toolbar` | right | `var(--zk-spacing-2)` | DESIGN.md "Spacing Scale" |
 | tb4 | `.z-signature-toolbar` | display | `flex` | layout |
 | tb5 | `.z-signature-toolbar` | flex-direction | `row` | layout |
-| tb6 | `.z-signature-toolbar` | gap | `var(--zk-spacing-2)` | DESIGN.md §5 (spacing between buttons) |
+| tb6 | `.z-signature-toolbar` | gap | `var(--zk-spacing-2)` | DESIGN.md "Spacing Scale" (spacing between buttons) |
 | tb7 | `.z-signature-toolbar` | z-index | `1` | structural (above canvas layers) |
 | tb-hide | `.z-signature-toolbar-hide` | display | `none` | structural (JS toggles during drawing) |
 | btn1 | `.z-signature-tool-button` | display | `inline-flex` | layout |
 | btn2 | `.z-signature-tool-button` | align-items | `center` | layout |
-| btn3 | `.z-signature-tool-button` | gap | `var(--zk-spacing-1)` | DESIGN.md §5 (icon ↔ label spacing) |
-| btn4 | `.z-signature-tool-button` | padding | `var(--zk-spacing-1) var(--zk-spacing-3)` | DESIGN.md §5 (compact button: 4px 12px) |
-| btn5 | `.z-signature-tool-button` | min-height | `32px` | DESIGN.md §5 (compact action button height) |
-| btn6 | `.z-signature-tool-button` | border | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §3 (tonal outlined) |
-| btn7 | `.z-signature-tool-button` | border-radius | `var(--zk-shape-corner-small)` | DESIGN.md §6 |
-| btn8 | `.z-signature-tool-button` | background-color | `var(--zk-color-surface)` | DESIGN.md §3 |
-| btn9 | `.z-signature-tool-button` | color | `var(--zk-color-on-surface)` | DESIGN.md §3 |
-| btn10 | `.z-signature-tool-button` | font-size | `var(--zk-typescale-label-medium-size)` | DESIGN.md §4 |
-| btn11 | `.z-signature-tool-button` | font-weight | `var(--zk-typescale-label-medium-weight)` | DESIGN.md §4 (pairs with btn10 label-medium typescale; resolves to 500) |
-| btn12 | `.z-signature-tool-button` | box-shadow | `var(--zk-elevation-1)` | DESIGN.md §7 (lifts above canvas) |
+| btn3 | `.z-signature-tool-button` | gap | `var(--zk-spacing-1)` | DESIGN.md "Spacing Scale" (icon ↔ label spacing) |
+| btn4 | `.z-signature-tool-button` | padding | `var(--zk-spacing-1) var(--zk-spacing-3)` | DESIGN.md "Spacing Scale" (compact button: 4px 12px) |
+| btn5 | `.z-signature-tool-button` | min-height | `32px` | DESIGN.md "Spacing Scale" (compact action button height) |
+| btn6 | `.z-signature-tool-button` | border | `1px solid var(--zk-color-outline-variant)` | DESIGN.md "Surface Palette" (tonal outlined) |
+| btn7 | `.z-signature-tool-button` | border-radius | `var(--zk-shape-corner-small)` | DESIGN.md "Corner Radii" |
+| btn8 | `.z-signature-tool-button` | background-color | `var(--zk-color-surface)` | DESIGN.md "Surface Palette" |
+| btn9 | `.z-signature-tool-button` | color | `var(--zk-color-on-surface)` | DESIGN.md "Text Colors" |
+| btn10 | `.z-signature-tool-button` | font-size | `var(--zk-typescale-label-medium-size)` | DESIGN.md "Typography" |
+| btn11 | `.z-signature-tool-button` | font-weight | `var(--zk-typescale-label-medium-weight)` | DESIGN.md "Typography" (pairs with btn10 label-medium typescale; resolves to 500) |
+| btn12 | `.z-signature-tool-button` | box-shadow | `var(--zk-elevation-1)` | DESIGN.md "Elevation / Shadow" (lifts above canvas) |
 | btn13 | `.z-signature-tool-button` | cursor | `pointer` | UX |
 | btn14 | `.z-signature-tool-button` | white-space | `nowrap` | layout |
-| btn15 | `.z-signature-tool-button` | transition | `background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard), border-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard), color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard)` | DESIGN.md §7 |
-| btn-hover1 | `.z-signature-tool-button:hover` | background-color | `var(--zk-color-surface-container-high)` | DESIGN.md §3 (hover state layer) |
-| btn-hover2 | `.z-signature-tool-button:hover` | border-color | `var(--zk-color-outline)` | DESIGN.md §3 |
-| btn-focus1 | `.z-signature-tool-button:focus-visible` | outline | `2px solid var(--zk-color-primary)` | DESIGN.md §9 |
-| btn-focus2 | `.z-signature-tool-button:focus-visible` | outline-offset | `2px` | DESIGN.md §9 |
-| btn-active1 | `.z-signature-tool-button:active` | background-color | `var(--zk-color-surface-container)` | DESIGN.md §3 (pressed) |
-| icon1 | `.z-signature-tool-button-icon` | font-size | `16px` | DESIGN.md §4 (icon inside compact button) |
+| btn15 | `.z-signature-tool-button` | transition | `background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard), border-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard), color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard)` | DESIGN.md "Motion" |
+| btn-hover1 | `.z-signature-tool-button:hover` | background-color | `var(--zk-color-surface-container-high)` | DESIGN.md "Surface Palette" (hover state layer) |
+| btn-hover2 | `.z-signature-tool-button:hover` | border-color | `var(--zk-color-outline)` | DESIGN.md "Border Rules" |
+| btn-focus1 | `.z-signature-tool-button:focus-visible` | outline | `2px solid var(--zk-color-primary)` | DESIGN.md "Border Rules" |
+| btn-focus2 | `.z-signature-tool-button:focus-visible` | outline-offset | `2px` | DESIGN.md "Border Rules" |
+| btn-active1 | `.z-signature-tool-button:active` | background-color | `var(--zk-color-surface-container)` | DESIGN.md "Surface Palette" (pressed) |
+| icon1 | `.z-signature-tool-button-icon` | font-size | `16px` | DESIGN.md "Typography" (icon inside compact button) |
 | icon2 | `.z-signature-tool-button-icon` | line-height | `1` | layout |
-| lbl1 | `.z-signature-tool-button-label:not(:empty)` | margin-left | `var(--zk-spacing-1)` | DESIGN.md §5 (conditional: label present) |
-| dis1 | `.z-signature[disabled]` | opacity | `var(--zk-state-disabled-opacity)` | DESIGN.md §8 |
-| dis2 | `.z-signature[disabled]` | pointer-events | `none` | DESIGN.md §8 |
+| lbl1 | `.z-signature-tool-button-label:not(:empty)` | margin-left | `var(--zk-spacing-1)` | DESIGN.md "Spacing Scale" (conditional: label present) |
+| dis1 | `.z-signature[disabled]` | opacity | `var(--zk-state-disabled-opacity)` | DESIGN.md "State-Layer Overlays" |
+| dis2 | `.z-signature[disabled]` | pointer-events | `none` | DESIGN.md "State-Layer Overlays" |
 
 ## State matrix
 

@@ -12,7 +12,7 @@ A resizable two-pane container that divides its content area into two caves sepa
 │  .z-splitlayout-splitter-vertical          (modifier class when orient=vertical — splitter is horizontal bar)
 │  .z-splitlayout-splitter-horizontal        (modifier class when orient=horizontal — splitter is vertical bar)
 │  .z-splitlayout-splitter-draggable         (added when resizable=true)
-│  .z-splitlayout-splitter-nosplitter        (added when resizable=false — cursor: default)
+│  (resizable=false removes .z-splitlayout-splitter-draggable)
 │  └─ .z-splitlayout-splitter-button         (collapse toggle <span>; cursor: pointer)
 │     .z-splitlayout-splitter-button-disabled (added when collapse="none" — no collapse button)
 │     ├─ <i class="z-splitlayout-splitter-icon z-icon-ellipsis-{h|v}">  (drag handle icon, aria-hidden)
@@ -22,14 +22,14 @@ A resizable two-pane container that divides its content area into two caves sepa
   OR .z-splitlayout-cave-right  [horizontal] (second pane <div>; same rules as cave-left)
 ```
 
-The mold always emits all four cave elements and the splitter unconditionally. Cave visibility is controlled by JS `.show()` / `.hide()` after children are added. Sizes (width/height) on cave elements are set inline by JS at runtime; no CSS rule should assume any fixed dimension on caves.
+The mold emits two caves (top/bottom in vertical orient, left/right in horizontal orient) and the splitter unconditionally. Cave visibility is controlled by JS `.show()` / `.hide()` after children are added. Sizes (width/height) on cave elements are set inline by JS at runtime; no CSS rule should assume any fixed dimension on caves.
 
 The splitter bar always contains exactly three `<i>` elements: the first and third are the drag-handle icon (`.z-icon-ellipsis-h` for vertical orientation, `.z-icon-ellipsis-v` for horizontal), the middle is the collapse arrow icon whose class is toggled by JS between `z-icon-caret-up`, `z-icon-caret-down`, `z-icon-caret-left`, `z-icon-caret-right` depending on orientation and open/closed state.
 
 ## State classes
 
 - `.z-splitlayout-splitter-draggable` — added to splitter when `resizable="true"` (default); enables `cursor: col-resize` (horizontal orient) or `cursor: row-resize` (vertical orient)
-- `.z-splitlayout-splitter-nosplitter` — added to splitter when `resizable="false"`; must produce `cursor: default`
+- `resizable="false"` — `_fixResizeIcon` (`Splitlayout.ts`) removes `.z-splitlayout-splitter-draggable` and hides the grip icons. The splitter then has no drag cursor; `.z-splitlayout-splitter-nosplitter` appears only in `splitlayout.css`, no code adds it.
 - `.z-splitlayout-splitter-button-disabled` — added to the collapse button when `collapse="none"` (default); collapse icon is hidden; button has no active click behavior
 - Open/collapsed state: no class on the root. JS calls `.show()` / `.hide()` on the affected cave element directly. The collapsed cave becomes `display: none` via inline style; the other cave expands to fill.
 
@@ -39,7 +39,7 @@ States rely on structural modifiers above. There is no `.z-splitlayout-open` or 
 
 - `orient="vertical"` (default) / `orient="horizontal"` — determines which cave pair and splitter modifier class is active; written into the DOM via modifier classes at render time, not as an HTML attribute
 - `collapse="none"` (default) / `collapse="before"` / `collapse="after"` — drives splitter-button-disabled state and the collapse arrow direction
-- `resizable="true"` (default) / `resizable="false"` — toggles splitter-draggable vs splitter-nosplitter; also toggles drag-handle icon visibility via `$zicon.show()` / `$zicon.hide()`
+- `resizable="true"` (default) / `resizable="false"` — adds/removes splitter-draggable; also toggles drag-handle icon visibility via `$zicon.show()` / `$zicon.hide()`
 - `widths` / `heights` — initial cave sizes; applied inline by JS, not via CSS
 - `minWidths` / `minHeights` — drag constraints; enforced by JS snap logic
 
@@ -67,33 +67,33 @@ ZK centers the splitter button on the bar's long axis by JS, not CSS (`zkmax/lay
 
 CSS may always center freely on the *cross* axis (the bar's thickness — JS never touches it). The same `setBtnPos_` pattern exists in `zul.box.Splitter` (`Splitter.ts`) and borderlayout's `LayoutRegion` — see `components/splitter.md` and `components/borderlayout.md`.
 
-## Drag persistence — inline px sizes + css-flex class removal (added 2026-06-05)
+## Drag persistence — inline px sizes + css-flex class removal
 
-How ZK persists a splitter drag (`Splitlayout.ts` `_endDrag` → `_doDragEndResize`, lines ~995–1039):
+How ZK persists a splitter drag (`Splitlayout._endDrag` → `_doDragEndResize` in `Splitlayout.ts`):
 
 1. For each child widget using flex, it calls `setHflex(false)` / `setVflex(false)` — `zk/flex.ts clearCSSFlex` then **removes** the runtime `z-flex` / `z-flex-row|column` / `z-flex-item` classes (see `reference/css-flex-classes.md`) and the child gets `width/height: 100%` inline.
 2. It writes the new pane sizes as **inline px `width` (horizontal orient) / `height` (vertical orient) on the two cave divs** (`runPrev.style[dimStr] = jq.px0(newPsd)`).
 
 Consequences for theme CSS:
 
-- **Cave main-axis size must derive from inline `width`/`height`** — the block / inline-block model above does exactly that. `flex: 1 1 0` (any `flex-basis: 0`) on caves is **forbidden**: it makes the browser ignore the inline main-axis size, so panes recompute 50/50 and the drag "snaps back" (contract M10 failure, measured 2026-06-05).
-- **Never hard-code `display: flex` / `flex-direction` on the root.** ZK adds `z-flex` + direction class when children flex and removes them at drag-end; a hard-coded `display: flex` survives the removal, and a fallback like `.z-splitlayout:not(.z-flex-column) { flex-direction: row }` flips a vertical splitlayout to a ROW after drag — cave-top/cave-bottom land side-by-side (contract M11 failure, measured 2026-06-05).
+- **Cave main-axis size must derive from inline `width`/`height`** — the block / inline-block model above does exactly that. `flex: 1 1 0` (any `flex-basis: 0`) on caves is **forbidden**: it makes the browser ignore the inline main-axis size, so panes recompute 50/50 and the drag "snaps back" (contract M10 failure).
+- **Never hard-code `display: flex` / `flex-direction` on the root.** ZK adds `z-flex` + direction class when children flex and removes them at drag-end; a hard-coded `display: flex` survives the removal, and a fallback like `.z-splitlayout:not(.z-flex-column) { flex-direction: row }` flips a vertical splitlayout to a ROW after drag — cave-top/cave-bottom land side-by-side (contract M11 failure).
 - The root's `white-space: nowrap` + caves' `display: inline-block` (horizontal) / `display: block` (vertical) is the layout model that works in **both** runtime states: before drag (ZK's `z-flex*` classes provide the flex layout) and after drag (inline px sizes on block/inline-block caves).
 - Contract rows M10/M11 in `doc/contracts/splitlayout.md` assert this outcome (drag delta sticks ≥ 300ms AND caves stay docked in orientation order).
 
-## Pane fill — child margins become trailing holes (added 2026-06-05)
+## Pane fill — child margins become trailing holes
 
 Caves are **wrapper flex children** (`fcc != c` in `zk/flex.ts applyCSSFlex`): the cave div gets `z-flex-item`, and ZK sizes the widget *inside* it with `calc(100% - <child margins>)` — in **row** orientation it subtracts the child's `marginHeight()` (top+bottom) from **both** width and height. Any default margin on the pane widget (window, grid, panel, …) therefore renders as a same-sized hole between the pane and the splitter/cave edge, in horizontal orientation only (column mode subtracts `marginWidth()`, usually 0 — the asymmetry is the debugging signature). See `reference/css-flex-classes.md` "Margin subtraction". Contract row M12 asserts the outcome: flexed child bbox == cave bbox ±1px, both axes, both orientations.
 
 ## Sibling decomposition
 
-- Splitter bar visual (background, border, hover highlight, drag cursor): aligns with `splitter` — see `components/splitter.md`. The `--zk-splitter-*` legacy vars used in the default CSS must be mapped to the same marble token choices used for `.z-splitter`.
+- Splitter bar visual (background, border, hover highlight, drag cursor): aligns with `splitter` — see `components/splitter.md`.
 - Cave containment (position, overflow): no sibling — standard block/inline-block layout geometry.
 - Drag ghost: same `.z-splitter-ghost` class used by `borderlayout` splitter.
 
 ## Contract
 
-`splitlayout.css.dsp` — served from `js/zkmax/layout/css/splitlayout.css`. Marble theme file must live at `../zkcml/zkmax/src/main/resources/web/js/zkmax/layout/css/splitlayout.css`.
+`splitlayout.css.dsp` — served from `../zkcml/zkmax/src/main/resources/web/js/zkmax/layout/css/splitlayout.css`.
 
 ## Edition
 
@@ -101,7 +101,6 @@ EE (zkmax.jar — package `org.zkoss.zkmax.zul.Splitlayout`)
 
 ## Notes
 
-- The default ZK-shipped CSS for splitlayout uses legacy CSS variable names of the form `--zk-splitter-*` (e.g. a variable for splitter size, one for background color, one for hover background color, one for button text color and size). These variables are populated by ZK's own bundled theme. A custom theme that overrides this component must either define those legacy variables OR rewrite the rules entirely without referencing them. The variable names (not their values) are: `--zk-splitter-size`, `--zk-splitter-border-color`, `--zk-splitter-background-color`, `--zk-splitter-hover-background-color`, `--zk-splitter-button-text-color`, `--zk-splitter-button-text-size`, `--zk-splitter-button-text-hover-color`.
 - JS inlines `width` / `height` on cave elements at runtime; CSS must never assume a fixed size on `.z-splitlayout-cave-*` elements.
 - The three `<i>` icons inside the splitter button are all given the class `z-splitlayout-splitter-icon`. The middle `<i>` has an `id` (`uuid + "-splitter-icon"`) so JS can target it for the collapse arrow toggle. The outer two are decorative drag-handle dots; their visibility is toggled by JS (`.show()` / `.hide()`) when `resizable` changes.
 - Drag-and-drop uses `zk.Draggable` with `constraint` matching the orient string; the drag is constrained to one axis. The ghost is positioned absolutely over the page body and must not inherit any splitlayout styles.

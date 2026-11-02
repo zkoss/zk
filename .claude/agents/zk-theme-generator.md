@@ -16,7 +16,7 @@ You receive a single argument: `<component>` (e.g. `textbox`).
 
 Required files to read (in order):
 1. `tasks/harness/eval-reports/<component>.md` — the failing checks you must address
-2. `doc/contracts/<component>.md` — tier, shared-css-file, siblings, token assignments, expected values
+2. `doc/contracts/<component>.md` — tier, shared-css-file, siblings, token assignments, expected values (when it does not exist, `zk-spec-author <component>` writes it first; see the harness playbook)
 3. `.claude/skills/zk-component-rules/components/<component>.md` — **authoritative structural source**: DOM selectors, state-class enumeration, composition invariants. Read this FIRST for any selector or state-class lookup. The contract is consulted only for token assignments — selectors come from the skill.
 4. The CSS file named in `shared-css-file` — the file you will edit
 5. `doc/spec/DESIGN.md` — canonical expected values (for token names + values)
@@ -172,7 +172,7 @@ Print to the conversation:
 - The contract you executed
 - Build PASS/FAIL
 - Path to the gen report
-- Reminder to the orchestrator: "Re-run `/zk-theme-evaluator <component>` to verify. If shared-css-file has siblings, also re-run the Evaluator on each sibling."
+- Reminder to the orchestrator: "Dispatch the `zk-theme-evaluator` agent on <component> to verify. If shared-css-file has siblings, also re-run the Evaluator on each sibling."
 
 Stop.
 

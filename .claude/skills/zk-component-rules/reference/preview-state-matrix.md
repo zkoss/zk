@@ -31,7 +31,7 @@ But **first** verify the combination really is unsupported. Most "—" cells in 
 - timebox + buttonVisible="false" + inplace="true" → **valid**
 - spinner + buttonVisible="false" + inplace="true" → **valid**
 - colorbox + inplace → genuinely unsupported (no `inplace` attribute)
-- slider + disabled → genuinely unsupported (use `[disabled]` style, no sclass)
+- slider + disabled → genuinely unsupported (Slider has no `disabled` property)
 
 Default to showing a real component; reserve `—` for known-unsupported combinations.
 
@@ -49,14 +49,7 @@ Default to showing a real component; reserve `—` for known-unsupported combina
 
 ## Grid column widths
 
-The shared `pv/matrix.zul` template chooses widths based on the number of columns:
-
-- `pv-cols-1`: 120px label + 200px cell
-- `pv-cols-2`: 120px label + 2× 160px cells
-- `pv-cols-2-wide`: 150px label + 2× 220px cells (use via `colsSuffix="-wide"`)
-- `pv-cols-3`, `pv-cols-4`, `pv-cols-5`: same pattern, 160px (default) or 220px (`-wide`) per cell
-
-If components overflow their cell, pass `colsSuffix="-wide"` to the `<apply>` call. If they still overflow (because they are inline-flex), see `inline-flex-overflow.md`.
+The shared `pv/matrix.zul` template takes the number of columns from `arg.cols.size()`. When the data columns need a wider minimum, pass `colMin` to the `<apply>` call (see `matrix.zul`). If components still overflow their cell because they are inline-level, see `inline-flex-overflow.md`.
 
 ## Section structure
 

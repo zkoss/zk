@@ -178,7 +178,7 @@
 }
 
 /* Hover/selected disc — fixed 32×32 circle centred on the cell, behind the text.
- * Sized 4px smaller than the 38px-wide TD so the leftmost/rightmost selected
+ * Sized 6px smaller than the 38px-wide TD so the leftmost/rightmost selected
  * day's disc has ~3px breathing room from the calendar's outer border instead
  * of nearly touching it. Stays fixed-size (does NOT scale with cell width)
  * so the same disc renders identically in the default 7-col view and the

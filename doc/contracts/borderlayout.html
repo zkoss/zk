@@ -4,79 +4,22 @@
 <meta charset="utf-8">
 <title>Contract Mockup — borderlayout</title>
 <!--
-  Self-contained Marble design contract mockup for borderlayout.
+  Marble design contract mockup for borderlayout.
 
   RULES
     - Only --zk-* tokens carry design values inside the body.
-    - :root token block mirrors src/main/resources/web/zul/css/tokens/*.css
+    - Token values come from the real token files under
+      zul/src/main/resources/web/zul/css/tokens/ (the <link> tags below).
     - Class names match .claude/skills/zk-component-rules/components/borderlayout.md
-    - No JS, no external resources — opens in any browser.
+    - No JS — opens in any browser.
 -->
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_colors.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_spacing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
 <style>
-/* ── Inlined tokens — mirror tokens/*.css ───────────────────────────────── */
-:root {
-    --zk-color-primary: #376fd0;
-    --zk-color-on-primary: #ffffff;
-    --zk-color-primary-container: #d6e4ff;
-    --zk-color-on-primary-container: #001c3d;
-
-    --zk-color-background: #f7f9fc;
-    --zk-color-on-background: rgba(0, 0, 0, 0.87);
-    --zk-color-surface: #ffffff;
-    --zk-color-on-surface: rgba(0, 0, 0, 0.87);
-    --zk-color-surface-variant: #f0f4fa;
-    --zk-color-on-surface-variant: rgba(0, 0, 0, 0.6);
-    --zk-color-surface-container-lowest: #ffffff;
-    --zk-color-surface-container-low: #f7f9fc;
-    --zk-color-surface-container: #f0f4fa;
-    --zk-color-surface-container-high: #e8eef7;
-    --zk-color-surface-container-highest: #e0e8f4;
-
-    --zk-color-outline: rgba(0, 0, 0, 0.23);
-    --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
-
-    --zk-color-disabled: rgba(0, 0, 0, 0.38);
-
-    --zk-spacing-1: 4px;
-    --zk-spacing-2: 8px;
-    --zk-spacing-3: 12px;
-    --zk-spacing-4: 16px;
-    --zk-spacing-5: 20px;
-    --zk-spacing-6: 24px;
-    --zk-spacing-8: 32px;
-
-    --zk-shape-corner-none: 0px;
-    --zk-shape-corner-extra-small: 4px;
-    --zk-shape-corner-small: 8px;
-    --zk-shape-corner-medium: 12px;
-    --zk-shape-corner-large: 16px;
-    --zk-shape-corner-full: 9999px;
-
-    --zk-typescale-body-medium-size: 13px;
-    --zk-typescale-body-small-size: 12px;
-    --zk-typescale-label-medium-size: 12px;
-    --zk-typescale-label-medium-weight: 500;
-    --zk-typescale-title-small-size: 14px;
-    --zk-typescale-title-small-weight: 500;
-    --zk-typescale-title-medium-size: 16px;
-
-    --zk-font-weight-regular: 400;
-    --zk-font-weight-medium: 500;
-    --zk-font-weight-semibold: 600;
-
-    --zk-elevation-1:
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12),
-        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
-    --zk-elevation-2:
-        0px 2px 6px 0px rgba(0, 0, 0, 0.12),
-        0px 1px 2px 0px rgba(0, 0, 0, 0.14);
-
-    --zk-motion-duration-short3: 250ms;
-    --zk-motion-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
-
-    --zk-state-hover-opacity: 0.08;
-}
-
 /* ── Mockup chrome ───────────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
 body {
@@ -90,7 +33,7 @@ body {
 }
 h1 {
     font-size: 22px;
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     margin: 0 0 var(--zk-spacing-2);
     color: var(--zk-color-on-surface);
 }
@@ -106,7 +49,7 @@ h1 {
 }
 .section-title {
     font-size: var(--zk-typescale-title-medium-size);
-    font-weight: var(--zk-font-weight-semibold);
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--zk-color-on-surface-variant);
@@ -116,7 +59,7 @@ h1 {
 }
 .state-label {
     font-size: var(--zk-typescale-label-medium-size);
-    font-weight: var(--zk-font-weight-medium);
+    font-weight: 500;
     color: var(--zk-color-on-surface-variant);
     text-transform: uppercase;
     margin-bottom: var(--zk-spacing-2);
@@ -240,7 +183,7 @@ h1 {
     flex-shrink: 0;
 }
 
-/* ── Splitter bars — DESIGN.md §14 family spec (revised 2026-06-04) ──────── */
+/* ── Splitter bars — doc/spec/DESIGN.md "Splitter Family" ──────── */
 .z-west-splitter,
 .z-east-splitter {
     position: absolute;
@@ -272,7 +215,7 @@ h1 {
     );
 }
 
-/* ── Splitter actuator pills — DESIGN.md §14 (8×28, outline-variant, no elevation) ── */
+/* ── Splitter actuator pills — doc/spec/DESIGN.md "Splitter Family" (8×28, outline-variant, no elevation) ── */
 /* Note: in real ZK, long-axis centering comes from setBtnPos_ inline margin (skill rule);
    the static mockup simulates it with translate. */
 .z-west-splitter-button,
@@ -362,14 +305,14 @@ h1 {
     line-height: 1;
     color: inherit;
 }
-/* Grip ellipsis: full opacity — drag-handle affordance (c30, DESIGN.md §14) */
+/* Grip ellipsis: full opacity — drag-handle affordance (c30, doc/spec/DESIGN.md "Splitter Family") */
 .z-west-icon.z-icon-ellipsis-v,
 .z-east-icon.z-icon-ellipsis-v,
 .z-north-icon.z-icon-ellipsis-h,
 .z-south-icon.z-icon-ellipsis-h {
     opacity: 1;
 }
-/* Collapse caret: hidden at idle, fades in on pill hover (c30c, DESIGN.md §14) */
+/* Collapse caret: hidden at idle, fades in on pill hover (c30c, doc/spec/DESIGN.md "Splitter Family") */
 .z-west-icon[class*="z-icon-caret"],
 .z-east-icon[class*="z-icon-caret"],
 .z-north-icon[class*="z-icon-caret"],

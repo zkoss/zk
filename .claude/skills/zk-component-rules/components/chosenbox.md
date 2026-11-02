@@ -8,19 +8,27 @@ Lives in `zkmax.jar`. Not available in CE or PE builds. CSS generated for chosen
 
 ## DOM structure
 
+From `mold/chosenbox.js` and `Chosenbox.ts`; the root element is an `<i>`.
+
 ```
 .z-chosenbox
-├─ .z-chosenbox-content          (chip container + input)
-│   ├─ .z-chosenbox-item         (a selected item chip)  *  N
-│   └─ .z-chosenbox-inp          (the search input)
-└─ .z-chosenbox-button           (dropdown arrow, optional)
+├─ .z-chosenbox-item * N              (chips; created by JS, inserted before the input)
+│   ├─ .z-chosenbox-item-content
+│   └─ .z-chosenbox-button.z-chosenbox-delete   (the chip's close button)
+│       └─ i.z-chosenbox-icon.z-icon-times
+├─ input#-inp.z-chosenbox-input       (the search input; the id suffix is -inp, the class is -input)
+├─ .z-chosenbox-textcontent           (hidden field used to size the input width)
+├─ .z-chosenbox-popup.z-chosenbox-shadow[.z-chosenbox-popup-hidden]   (div#-pp)
+│   ├─ .z-chosenbox-empty
+│   └─ .z-chosenbox-select
+└─ span.z-chosenbox-inplace.z-chosenbox-hide
 ```
 
 ## Chip class quirk
 
 Selected items render as chips with class **`.z-chosenbox-item`**, not `.z-chosenbox-tag` or `.z-chosenbox-chip`. Easy to guess wrong.
 
-Each chip has `.z-chosenbox-item-content` inside and an embedded close button. The focused chip gets `.z-chosenbox-item-focus`.
+`.z-chosenbox-button` is the chip's close button, not a dropdown arrow. The focused chip gets `.z-chosenbox-item-focus`.
 
 ## Dropdown structure
 

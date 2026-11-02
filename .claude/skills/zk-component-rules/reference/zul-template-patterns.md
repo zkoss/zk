@@ -57,16 +57,16 @@ Attributes set on the calling `<apply>` are available as `arg.<name>` inside the
 
 - `cols="${[...]}"` → `${arg.cols}`
 - `rowsTemplate="x"` → `${arg.rowsTemplate}`
-- `colsSuffix="-wide"` → `${arg.colsSuffix}` (empty string when not provided, NOT `null` — but interpolation works either way)
+- `colMin="max-content"` → `${arg.colMin}` (optional; `matrix.zul` tests it with `empty`)
 
 ## Sibling matrix template (`pv/matrix.zul`)
 
-A shared template used by all preview pages. It renders:
+A shared template used by all preview pages (`zkthemelab/src/main/webapp/web/pv/matrix.zul`). It renders:
 - A section title
 - A column-header row
 - Rows via the caller-supplied `rowsTemplate`
 
-Calling pages opt into wider columns by passing `colsSuffix="-wide"` (which appends to the CSS class `pv-cols-{N}{-wide}`).
+The column count comes from `arg.cols.size()`. A page whose controls have a percentage-width input passes `colMin` (see the comment at the top of `matrix.zul`).
 
 ## Preview page best practices
 

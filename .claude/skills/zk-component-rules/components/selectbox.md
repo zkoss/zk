@@ -13,7 +13,7 @@
 
 The dropdown list that appears when the user clicks the control is the **browser's native `<option>` chooser**. It is controlled by the user agent (OS + browser combo) and is not styleable with CSS:
 
-- No `.z-selectbox-popup` element exists.
+- The popup is drawn by the browser, so no `.z-selectbox-popup` element is in the DOM.
 - `option:hover`, `option:checked`, `option { padding: ... }` only work in a small subset of browsers (mostly Firefox on Linux), and even there the visual result varies. **Treat the popup as unstylable.**
 - You can style the **closed** control (the `<select>` itself): border, padding, custom chevron via `background-image`, etc.
 
@@ -39,7 +39,7 @@ Answer (legacy): **No — selectbox is a native `<select>`. To get a fully style
 .z-selectbox::picker(select):not(:open) { opacity: 0; }
 
 /* ✅ Right — chain :open on the select side. */
-.z-selectbox::picker(select) { opacity: 0; transform: translateY(-4px); }
+.z-selectbox::picker(select) { opacity: 0; transform: translateY(<offset>); }
 .z-selectbox:open::picker(select) { opacity: 1; transform: translateY(0); }
 ```
 
@@ -48,15 +48,15 @@ Animate the top-layer pop-in with `transition-behavior: allow-discrete` + `@star
 ```css
 .z-selectbox::picker(select) {
     transition:
-        opacity 200ms, transform 200ms,
-        display 200ms allow-discrete, overlay 200ms allow-discrete;
+        opacity <duration>, transform <duration>,
+        display <duration> allow-discrete, overlay <duration> allow-discrete;
 }
 @starting-style {
-    .z-selectbox:open::picker(select) { opacity: 0; transform: translateY(-4px); }
+    .z-selectbox:open::picker(select) { opacity: 0; transform: translateY(<offset>); }
 }
 ```
 
-**Debugging trap — DevTools falsely reports `:root` vars as "not defined" inside the picker.** When you inspect an `<option>` (or any node) rendered inside `::picker(select)`, the Chrome DevTools *Styles* pane strikes through every `var(--zk-*)` with a "not defined" hint, even though the page defines them on `:root` and renders correctly. The picker is hoisted into the **top layer**, and DevTools' Styles-pane variable resolver fails to walk the flat-tree ancestry back to `:root` for top-layer-hosted content. It is purely a display artifact of the inspector — the rendering engine resolves the tokens fine. Confirm with `getComputedStyle(option).getPropertyValue('--zk-spacing-2')` (returns the real value) before "fixing" anything. **Never hardcode values or re-declare tokens on the option to silence this** — the CSS is already correct.
+**Debugging trap — DevTools falsely reports `:root` vars as "not defined" inside the picker.** When you inspect an `<option>` (or any node) rendered inside `::picker(select)`, the Chrome DevTools *Styles* pane strikes through every `var(--…)` with a "not defined" hint, even though the page defines them on `:root` and renders correctly. The picker is hoisted into the **top layer**, and DevTools' Styles-pane variable resolver fails to walk the flat-tree ancestry back to `:root` for top-layer-hosted content. It is purely a display artifact of the inspector — the rendering engine resolves the tokens fine. Confirm with `getComputedStyle(option).getPropertyValue('<the custom property>')` (returns the real value) before "fixing" anything. **Never hardcode values or re-declare custom properties on the option to silence this** — the CSS is already correct.
 
 **Always gate with `@supports (appearance: base-select)`** so non-supporting browsers keep the native fallback. Browsers that don't support it ignore the entire block and fall back to the regular `<select>` styling above.
 
@@ -82,10 +82,9 @@ This is a deliberate trade-off in `zul.wgt.Selectbox` — it sacrifices visual c
 
 Theming implication: the two controls should look identical, but their CSS bundles are separate (`selectbox.css.dsp` vs `listbox.css.dsp`) and each only loads when its own widget is on the page. So the shared `<select>` styling must be **duplicated** into both `selectbox.css` (targeting `.z-selectbox`) and `listbox.css` (targeting `.z-select`) — you cannot style `.z-select` from `selectbox.css` and expect it to load on a listbox-only page.
 
-**Duplication-drift trap — keep the two copies token-identical.** Because the rules are duplicated, a fix applied to one copy silently leaves the other behind. Two invariants that MUST hold for **both** `.z-selectbox` and `.z-select` (caught 2026-06-11 when only `.z-selectbox` had been updated):
+**Duplication-drift trap — keep the two copies identical.** Because the rules are duplicated, a fix applied to one copy silently leaves the other behind. Two things MUST be kept in step for **both** `.z-selectbox` and `.z-select`:
 
-1. **Selected option = list-row family.** `.z-selectbox option:checked` and `.z-select option:checked` MUST both use `--zk-color-primary-container` / `--zk-color-on-primary-container` (a `<select>` popup/list option is "the row I'm on" — list-row family, blue), **never** `secondary-container` (that is the chip family — green). See `reference/selected-state-families.md` (row "Selectbox option"). Note `getComputedStyle` on a real `<option>` returns transparent (the engine paints the highlight), so verify via the CSS rule, not the live element.
-2. **Focus ring is a 1px border + inset box-shadow, never a 2px border.** A `<select>` is intrinsically sized (a sized `rows>1` list sizes to its rows; the `rows=1` trigger to its min-width), so switching `border-width: 1px → 2px` on focus **grows the box** — no fixed outer dimension holds the extra pixel inward. Use mechanism A from `reference/focus-affordance-no-layout-shift.md`: keep `border: 1px` in every state and draw the 2nd ring pixel as `box-shadow: inset 0 0 0 1px var(--zk-color-primary)`.
+1. **Selected option.** `.z-selectbox option:checked` and `.z-select option:checked` must use the same colours. Note `getComputedStyle` on a real `<option>` returns transparent (the engine paints the highlight), so verify via the CSS rule, not the live element.2. **Focus ring.** A `<select>` is intrinsically sized (a sized `rows>1` list sizes to its rows; the `rows=1` trigger to its min-width), so a larger `border-width` on focus **grows the box** — no fixed outer dimension holds the extra pixel inward. Keep the border width constant in every state and draw the ring with an inset box-shadow; see `../reference/focus-vs-focus-within.md`.
 
 ## Sized / multiple `<select>` is an in-page list box — exclude it from `base-select`
 

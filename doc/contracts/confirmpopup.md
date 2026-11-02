@@ -6,28 +6,28 @@ rules: see .claude/skills/zk-component-rules/components/confirmpopup.md
 contract-approved: true
 zk-version: 10.4.0-jakarta
 js-source-files:
-  - zul/src/main/resources/web/js/zul/wgt/Confirmpopup.ts
-  - zul/src/main/resources/web/js/zul/wgt/mold/confirmpopup.js
+  - zul/wgt/Confirmpopup.ts
+  - zul/wgt/mold/confirmpopup.js
 js-source-hash: 94c95bafa04e432f2b2afba0dad516cc2efbfb65b30473f3c50e6e5ee7804085
 closest-sibling: popup (positioning/chrome base only — see skill Sibling decomposition); severity enum shared with native badge/chip
-shared-css-file: zul/wgt/css/confirmpopup.css
-mockup-needed: Y — no ZKDoc canonical image found for ConfirmPopup (component new in ZK 10.4.0, not yet documented in zkdoc/zk_component_ref); HTML mockup and iceblue baseline PNG were explicitly OUT OF SCOPE for this authoring pass per user instruction — produce doc/contracts/confirmpopup.html and doc/contracts/baselines/confirmpopup-iceblue.png in a follow-up pass before flipping contract-approved.
+shared-css-file: zul/src/main/resources/web/js/zul/wgt/css/confirmpopup.css
+mockup-needed: Y — no ZKDoc canonical image found for ConfirmPopup (component new in ZK 11.0.0, not yet documented in zkdoc/zk_component_ref)
 
 ## References
 - MUI CSS: `Surfaces/Popover.css` (anchored floating panel — elevation/positioning analog; MUI's Popover
   has no directional arrow, so the arrow treatment has no direct MUI counterpart) + `Feedback/DialogActions.css`,
   `Feedback/DialogContent.css`, `Feedback/DialogTitle.css` (footer button row / body / header layout analogs)
-- DESIGN.md sections: §3 (Brand & Status Colors — severity → status-color mapping), §4 (Spacing Scale),
-  §5 (Corner Radii), §6 (Elevation/Shadow), §7 (Typography), §8 (State-Layer Overlays)
+- doc/spec/DESIGN.md sections: "Brand & Status Colors" (severity → status-color mapping), "Spacing Scale (4dp baseline)",
+  "Corner Radii", "Elevation / Shadow", "Typography", "State-Layer Overlays"
 - Precedent: `doc/contracts/coachmark.md` — the closest existing Marble contract for an anchored,
   arrow-pointing floating card (neutral surface + elevation-2 + shape-card), reused here for consistency.
 - Native severity mapping precedent: `zul/src/main/resources/web/js/zul/wgt/css/chip.css` (`--zk-chip-color`
   per severity) — confirmpopup's icon color reuses the identical severity→token mapping so the same
   severity token always resolves to the same color across badge/chip/confirmpopup.
-- ZKDoc canonical: none found — ConfirmPopup is new in ZK 10.4.0 and has no entry yet under
+- ZKDoc canonical: none found — ConfirmPopup is new in ZK 11.0.0 and has no entry yet under
   https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/.
-- Iceblue baseline: doc/contracts/baselines/confirmpopup-iceblue.png (NOT captured this pass — out of scope).
-- HTML contract: doc/contracts/confirmpopup.html (NOT authored this pass — out of scope).
+- Iceblue baseline: run `scripts/render-iceblue-baseline.sh confirmpopup` to create `doc/contracts/baselines/confirmpopup-iceblue.png` before the evaluator compares against IceBlue.
+- HTML mockup: `doc/contracts/confirmpopup.html` is not written yet; zk-spec-author writes it (mockup-needed: Y).
 
 ## Design Contract
 
@@ -44,7 +44,7 @@ card rather than a separate shape. The optional header row is set in `--zk-types
 same divider token closes the footer row from the body above it. Severity recolors **only the icon**
 (matching the ZK reference behavior recorded in the skill file) via the identical severity→token mapping
 `chip.css` already established: `info → --zk-color-status-info`, `success → --zk-color-success`,
-`warning → --zk-color-warning`, `danger → --zk-color-error`, `secondary → --zk-color-on-surface-variant` —
+`warning → --zk-color-warning`, `error → --zk-color-error`, `neutral → --zk-color-on-surface-variant` —
 this keeps a given severity token resolving to the same color everywhere in the theme. The footer's two
 buttons are deliberately unequal emphasis, mirroring the standard MD3 confirm/cancel action hierarchy: OK is
 a filled, high-emphasis action (`--zk-color-primary` background, `--zk-color-on-primary` text,
@@ -73,28 +73,28 @@ own focus trap (see skill) can land keyboard focus on either button.
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-confirmpopup` | background-color | `var(--zk-color-surface-container-low)` | DESIGN.md §3 — neutral popover card, consistent with coachmark precedent |
-| c2 | `.z-confirmpopup` | color | `var(--zk-color-on-surface)` | DESIGN.md §3 |
-| c3 | `.z-confirmpopup` | border-radius | `var(--zk-shape-card)` | DESIGN.md §5 — card radius for container surfaces |
-| c4 | `.z-confirmpopup` | box-shadow | `var(--zk-elevation-2)` (aka `var(--zk-elevation-dropdown)`) | DESIGN.md §6 — dropdown/popover elevation |
+| c1 | `.z-confirmpopup` | background-color | `var(--zk-color-surface-container-low)` | doc/spec/DESIGN.md "Brand & Status Colors" — neutral popover card, consistent with coachmark precedent |
+| c2 | `.z-confirmpopup` | color | `var(--zk-color-on-surface)` | doc/spec/DESIGN.md "Brand & Status Colors" |
+| c3 | `.z-confirmpopup` | border-radius | `var(--zk-shape-card)` | doc/spec/DESIGN.md "Corner Radii" — card radius for container surfaces |
+| c4 | `.z-confirmpopup` | box-shadow | `var(--zk-elevation-2)` (aka `var(--zk-elevation-dropdown)`) | doc/spec/DESIGN.md "Elevation / Shadow" — dropdown/popover elevation |
 | c5 | `.z-confirmpopup` | border | `none` | shadow alone supplies separation (MUI Popover pattern); satisfies M1 via box-shadow |
-| c6 | `.z-confirmpopup-header` | border-bottom | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §3/§11 — divider token between header and body |
-| c7 | `.z-confirmpopup-header` | font-size, font-weight | `var(--zk-typescale-title-small-size)`, `var(--zk-typescale-title-small-weight)` (500) | DESIGN.md §7 |
-| c8 | `.z-confirmpopup-header` | color | `var(--zk-color-on-surface)` | DESIGN.md §3 |
-| c9 | `.z-confirmpopup-footer` | border-top | `1px solid var(--zk-color-outline-variant)` | DESIGN.md §3/§11 — divider between body and footer |
-| c10 | `.z-confirmpopup-info .z-confirmpopup-icon` | color | `var(--zk-color-status-info)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-info` |
-| c11 | `.z-confirmpopup-success .z-confirmpopup-icon` | color | `var(--zk-color-success)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-success` |
-| c12 | `.z-confirmpopup-warning .z-confirmpopup-icon` | color | `var(--zk-color-warning)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-warning` |
-| c13 | `.z-confirmpopup-error .z-confirmpopup-icon` | color | `var(--zk-color-error)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-error` |
-| c14 | `.z-confirmpopup-neutral .z-confirmpopup-icon` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md §3 — same mapping as `chip.css` `.z-chip-neutral` |
-| c15 | `.z-confirmpopup-ok` | background-color | `var(--zk-color-primary)` | DESIGN.md §3 — high-emphasis committing action |
-| c16 | `.z-confirmpopup-ok` | color | `var(--zk-color-on-primary)` | DESIGN.md §3 |
-| c17 | `.z-confirmpopup-ok`, `.z-confirmpopup-cancel` | border-radius | `var(--zk-shape-button)` | DESIGN.md §5 |
-| c18 | `.z-confirmpopup-cancel` | background-color | `transparent` | DESIGN.md §3 — low-emphasis dismiss action |
-| c19 | `.z-confirmpopup-cancel` | border | `1px solid var(--zk-color-outline)` | DESIGN.md §3 |
-| c20 | `.z-confirmpopup-cancel` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md §3 |
-| c21 | `.z-confirmpopup-ok:focus-visible`, `.z-confirmpopup-cancel:focus-visible` | outline | `var(--zk-focus-ring)` | DESIGN.md §8 — keyboard focus indicator, required by the popup's own Tab-trap |
-| c22 | `.z-confirmpopup-arrow::before` (outer layer) | border-color | `var(--zk-color-outline-variant)` (on the placement-facing side; transparent on the other three) | DESIGN.md §11 — thin edge so the arrow doesn't disappear against a similarly-toned page background |
+| c6 | `.z-confirmpopup-header` | border-bottom | `1px solid var(--zk-color-outline-variant)` | doc/spec/DESIGN.md "Brand & Status Colors" / "Border Rules" — divider token between header and body |
+| c7 | `.z-confirmpopup-header` | font-size, font-weight | `var(--zk-typescale-title-small-size)`, `var(--zk-typescale-title-small-weight)` (500) | doc/spec/DESIGN.md "Typography" |
+| c8 | `.z-confirmpopup-header` | color | `var(--zk-color-on-surface)` | doc/spec/DESIGN.md "Brand & Status Colors" |
+| c9 | `.z-confirmpopup-footer` | border-top | `1px solid var(--zk-color-outline-variant)` | doc/spec/DESIGN.md "Brand & Status Colors" / "Border Rules" — divider between body and footer |
+| c10 | `.z-confirmpopup-info .z-confirmpopup-icon` | color | `var(--zk-color-status-info)` | doc/spec/DESIGN.md "Brand & Status Colors" — same mapping as `chip.css` `.z-chip-info` |
+| c11 | `.z-confirmpopup-success .z-confirmpopup-icon` | color | `var(--zk-color-success)` | doc/spec/DESIGN.md "Brand & Status Colors" — same mapping as `chip.css` `.z-chip-success` |
+| c12 | `.z-confirmpopup-warning .z-confirmpopup-icon` | color | `var(--zk-color-warning)` | doc/spec/DESIGN.md "Brand & Status Colors" — same mapping as `chip.css` `.z-chip-warning` |
+| c13 | `.z-confirmpopup-error .z-confirmpopup-icon` | color | `var(--zk-color-error)` | doc/spec/DESIGN.md "Brand & Status Colors" — same mapping as `chip.css` `.z-chip-error` |
+| c14 | `.z-confirmpopup-neutral .z-confirmpopup-icon` | color | `var(--zk-color-on-surface-variant)` | doc/spec/DESIGN.md "Brand & Status Colors" — same mapping as `chip.css` `.z-chip-neutral` |
+| c15 | `.z-confirmpopup-ok` | background-color | `var(--zk-color-primary)` | doc/spec/DESIGN.md "Brand & Status Colors" — high-emphasis committing action |
+| c16 | `.z-confirmpopup-ok` | color | `var(--zk-color-on-primary)` | doc/spec/DESIGN.md "Brand & Status Colors" |
+| c17 | `.z-confirmpopup-ok`, `.z-confirmpopup-cancel` | border-radius | `var(--zk-shape-button)` | doc/spec/DESIGN.md "Corner Radii" |
+| c18 | `.z-confirmpopup-cancel` | background-color | `transparent` | doc/spec/DESIGN.md "Brand & Status Colors" — low-emphasis dismiss action |
+| c19 | `.z-confirmpopup-cancel` | border | `1px solid var(--zk-color-outline)` | doc/spec/DESIGN.md "Brand & Status Colors" |
+| c20 | `.z-confirmpopup-cancel` | color | `var(--zk-color-on-surface-variant)` | doc/spec/DESIGN.md "Brand & Status Colors" |
+| c21 | `.z-confirmpopup-ok:focus-visible`, `.z-confirmpopup-cancel:focus-visible` | outline | `var(--zk-focus-ring)` | doc/spec/DESIGN.md "State-Layer Overlays" — keyboard focus indicator, required by the popup's own Tab-trap |
+| c22 | `.z-confirmpopup-arrow::before` (outer layer) | border-color | `var(--zk-color-outline-variant)` (on the placement-facing side; transparent on the other three) | doc/spec/DESIGN.md "Border Rules" — thin edge so the arrow doesn't disappear against a similarly-toned page background |
 | c23 | `.z-confirmpopup-arrow::after` (inner layer) | border-color | `var(--zk-color-surface-container-low)` (on the placement-facing side; transparent on the other three) | matches c1 — arrow reads as a seamless extension of the card fill |
 
 ## State matrix

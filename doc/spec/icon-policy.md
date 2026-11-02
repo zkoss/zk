@@ -9,8 +9,7 @@ This theme delivers all icons via the [Lucide](https://lucide.dev/) icon set, re
 
 ## Library decision: keep Lucide for ZK 11.0
 
-Lucide stays the icon library for ZK 11.0. The original evaluation is kept locally under `tasks/` (gitignored, not part of the
-repository); its §13, "Recommendation: keep Lucide for 11.0", is the record of this decision.
+Lucide stays the icon library for ZK 11.0.
 
 Reasons:
 
@@ -29,10 +28,7 @@ Reasons:
 
 ## Decisions behind this policy
 
-The IDs below (D13 etc.) are the decision ids used in the original evaluation kept locally under
-`tasks/` (gitignored, not part of the repository).
-
-### D13: B — keep the full catalog; no subsetting
+### Keep the full catalog; no subsetting
 
 - Emitting the full catalog makes compression behaviour the dominant cost factor, so the
   payload must be measured over the wire (gzipped), not in raw bytes.
@@ -41,16 +37,16 @@ The IDs below (D13 etc.) are the decision ids used in the original evaluation ke
 - Subsetting is retained as a criterion (see [Runtime cost](#runtime-cost)) for future
   re-evaluation.
 
-### D14: customers who need Font Awesome (including brand logos) stay on `iceblue11` in ZK 11
+### Customers who need Font Awesome (including brand logos) stay on `iceblue11` in ZK 11
 
 - Font Awesome is retired per theme, not from the framework: Marble drops it, `iceblue11`
-  keeps it. Font Awesome is not part of Marble; per the evaluation, it is provided by the iceblue
+  keeps it. Font Awesome is not part of Marble; it is provided by the iceblue
   theme, and the contents of the iceblue theme jar are outside this repository. ZK's own font-awesome.css.dsp sets `font-family: ZK85Icons, FontAwesome` on `z-icon-*` elements, and Marble resets that font-family in `_icons.css` so that no Font Awesome glyph bleeds through; the icon is rendered entirely by the `::before` mask-image, not by a font glyph.
 - Brand logos are not a Marble gate. Marble documentation should describe an alternative
-  (the evaluation record gives Simple Icons as an example).
+  (Simple Icons is one example).
 - The Font Awesome name gap is a theme-choice migration note, not a hard break.
 
-### D15: closed — premise invalid
+### Closed: G7 does not retroactively disqualify Lucide (premise invalid)
 
 - Question: does G7 apply retroactively to disqualify Lucide?
 - Answer: no. Lucide passes G7, so there is no retroactive change, and Lucide is kept for 11.0.
@@ -67,7 +63,7 @@ Any FAIL eliminates a candidate; a failed candidate is not scored.
 | G4 | Works with CSS only, no mandatory JS runtime | ZK applies icons server-side via `iconSclass` and re-patches the DOM on every AU response; a JS rewrite of `<i>` into `<svg>` fights that and breaks on partial updates | Render an icon with only a stylesheet and a class name |
 | G5 | Covers the T1 required inventory with no gap that leaves a widget visually broken | A missing sort arrow or tree caret is a broken component, not a cosmetic issue | Diff the name list against T1; every gap needs an acceptable substitute or a hand-authored glyph |
 | G6 | Package is versioned and immutable (npm / Maven, pinnable) | Reproducible builds; a moving target cannot ship in an LTS | Pin an exact version, rebuild twice, diff the output |
-| G7 | Icon style conforms to the consuming theme's design language | A theme's credibility is its coherence. An icon set drawn in a competing design language's voice contradicts the theme on every screen | Three-level verdict (below). Evaluated per shipped theme: with D14, `iceblue11` keeps Font Awesome, so only Marble / Material is in scope |
+| G7 | Icon style conforms to the consuming theme's design language | A theme's credibility is its coherence. An icon set drawn in a competing design language's voice contradicts the theme on every screen | Three-level verdict (below). Evaluated per shipped theme: `iceblue11` keeps Font Awesome, so only Marble / Material is in scope |
 
 ### G7 verdict levels
 
@@ -138,7 +134,7 @@ Score each of these separately:
   Multi-colour or duotone icons cannot be themed and cannot survive forced-colors.
 - Sizing: scales with `font-size` (`1em`) rather than fixed `width` / `height`; baseline alignment
   with adjacent text.
-- Subsetting / tree-shaking: superseded by D13. Kept for future re-evaluation.
+- Subsetting / tree-shaking: superseded by the full-catalog decision above. Kept for future re-evaluation.
 - Build-pipeline fit: works with Maven and npm without a new toolchain (font compilers, native
   binaries) or build-time network access.
 - Machine-readable metadata (names, tags, aliases, codepoints). Required to generate CSS, the
@@ -153,7 +149,7 @@ text and gzips well, while a woff2 font is already compressed.
 
 Also consider: request count; cacheability (a separate font file caches independently, while data
 URIs inside a large CSS invalidate the whole file when any icon changes); first-paint impact (web
-fonts add a FOIT / FOUT race); the catalog-size multiplier (under D13 the cost scales with catalog
+fonts add a FOIT / FOUT race); the catalog-size multiplier (with the full catalog the cost scales with catalog
 size for SVG delivery; a set with six weights emits six times the rules); and jar size.
 
 ### Visual and design fit
@@ -264,7 +260,7 @@ which also hosts the FA-compat alias demo). Both are skipped by `check-icon-cove
 
 | Tool | Scope | When |
 |------|-------|------|
-| `scripts/check-icon-coverage.sh` | Rule 2 — all preview ZULs | Run locally; will be wired into pre-commit / CI |
+| `scripts/check-icon-coverage.sh` | Rule 2 — all preview ZULs | Run manually; not wired into pre-commit or CI |
 | `.claude/agents/zk-theme-evaluator.md` | Rule 1 + Rule 2 (manual check during component evaluation) | When evaluator inspects a component |
 | `scripts/build-css.js` (FA_TO_LUCIDE) | Rule 1 — declarative alias source | Build time |
 

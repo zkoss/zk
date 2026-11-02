@@ -3,9 +3,8 @@
 On a **mobile/tablet User-Agent**, ZK does not render the desktop date/time UI for
 datebox and timebox. It swaps in a completely different **iOS-style scrolling
 wheel picker**, rendered by `zkmax/touch/datebox-touch.ts` /
-`zkmax/touch/timebox-touch.ts`. This is **ZK-specific** — MD3 / MUI / Mira have no
-wheel-picker analog, so a theme driven only off those references will never style
-it and the picker ships broken. Any theme that targets ZK on touch devices must
+`zkmax/touch/timebox-touch.ts`. This is **ZK-specific**: a theme that only styles the desktop
+DOM never styles it and the picker ships broken. Any theme that targets ZK on touch devices must
 handle it.
 
 This is an **EE / zkmax** feature (the touch behaviors live in zkmax) and only
@@ -96,18 +95,9 @@ whether the second sync happens**:
 (The inflation magnitude varies with the popup's content height — datebox ≈ 18px,
 timebox can be 130px+.) Because this is a ZK-JS coordinate quirk a CSS theme
 cannot reach, **do not trust ZK's inline `top`**. Pin the sheet to the viewport
-bottom yourself:
-
-```css
-.z-datebox-popup:has(.z-calendar-wheel-cave),
-.z-timebox-popup:has(.z-timebox-wheel-cave) {
-    position: fixed !important;   /* beat ZK's inline position:absolute */
-    left: 10px !important; right: 10px !important;   /* centre (datebox-touch never sets left) */
-    top: auto !important; bottom: 0 !important;       /* immune to makeVParent inflation + scrollY */
-    width: auto !important; transform: none !important;
-    animation: <slide-up-keyframe>;  /* replace ZK's now-overridden translateY transition */
-}
-```
+bottom in CSS: `position: fixed; bottom: 0; top: auto`, with `left`/`right` set to centre it
+(datebox-touch never sets `left`), `transform: none`, and `!important` on each to beat ZK's
+inline values. The rule is in `zkmax/css/tablet/_wheel.css`.
 
 `position:fixed; bottom:0` is robust against BOTH the makeVParent inflation and a
 scrolled page (`scrollY`), and it centres the sheet. A CSS keyframe restores the
@@ -123,7 +113,7 @@ and it reads as an empty slot. Give the **list** a `z-index` above the line
 above the band and the band shows through behind the text.
 
 ## Why the harness missed this historically
-- No MD3/Mira analog → the evaluator/generator never looked for `.z-*-wheel-*`.
+- The evaluator/generator never looked for `.z-*-wheel-*`, because the desktop DOM has no such classes.
 - The tablet datebox test only measured input height + page overflow; it **never
   opened the popup**, so the unstyled multi-thousand-px wheel was never exercised.
   Tablet tests must *open* datebox/timebox popups, not just measure the field.
@@ -133,8 +123,7 @@ above the band and the band shows through behind the text.
   paths and only one reveals the mis-anchor.
 
 See: theme CSS `zkmax/css/tablet/_wheel.css`; mobile-readonly neutralization in
-`zkmax/css/tablet/_inputs.css`; tests `tablet.spec.ts` describe
-`tablet-datebox-wheel` / `tablet-timebox-wheel` (each asserts BOTH icon-tap and
-input-tap land flush).
+`zkmax/css/tablet/_inputs.css`; tests `tablet.spec.ts` (`wheelCases`; each case asserts BOTH
+icon-tap and input-tap land flush).
 Related unfixed: combobox/selectbox bottom-sheet share the same
 makeVParent path and also overshoot — logged for a dedicated pass.

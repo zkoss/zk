@@ -122,8 +122,7 @@ is unreachable by any fill-only rule. And the base `.z-button` default fill uses
 `--zk-color-primary` (fine at Marble's blue); for a **light** primary rebrand, either
 paint buttons with `.z-bg-primary` or override `--zk-color-on-primary` to a dark value.
 Full automatic foreground selection (MUI/Ant style) needs `contrast-color()`, not yet
-baseline — see GAP 2 in
-[design-decisions.md](design-decisions.md).
+baseline; see [auto-contrast-text.md](auto-contrast-text.md).
 
 ## What is NOT re-tinted (by design)
 
@@ -151,18 +150,11 @@ quite right for your brand, **pin it directly** — no special variable is requi
 
 ## Derivation reference
 
-| Derived token | Seed | `oklch(from seed L c h)` | Legacy hand-picked value |
-|---|---|---|---|
-| `--zk-color-primary-container` | primary | `L 0.92`, `c × 0.25` | `#d6e4ff` |
-| `--zk-color-on-primary-container` | primary | `L 0.23`, `c × 0.45` | `#001c3d` |
-| `--zk-color-secondary` | **primary** | `L 0.54`, `c × 0.41` | `#4db6ac` (was a literal teal seed) |
-| `--zk-color-secondary-container` | secondary | `L 0.87`, `c × 0.48` | `#b2dfdb` (now ≈ `#c8d5ea`) |
-| `--zk-color-on-secondary-container` | secondary | `L 0.235`, `c × 0.48` | `#00251a` (now ≈ `#151e2d`) |
-| `--zk-color-error-container` | error | `L 0.89`, `c × 0.28` | `#ffcdd2` |
-| `--zk-color-on-error-container` | error | `L 0.375`, `c × 0.77` | `#7f0000` |
-| `--zk-color-warning-container` | warning | `L 0.92`, `c × 0.38`, `h + 35` | `#ffe0b2` (now ≈ `#ffdfb5`) |
-| `--zk-color-on-warning-container` | warning | `L 0.42`, `c × 0.59` | `#7a3900` (now ≈ `#7a361e`) |
-| `--zk-color-inverse-primary` | primary | `L 0.81`, `c × 0.58` | `#9ec3ff` |
+Each derived token is `oklch(from <seed> L c h)` with a pinned `L` and a chroma scale `c`. The
+seed, `L` and `c` of every derived token are in
+[_colors.css](../../zul/src/main/resources/web/zul/css/tokens/_colors.css).
+`secondary` derives from the **primary** seed; each `*-container` / `on-*-container` derives from
+its own role's seed.
 
 `L` was set to each legacy hex's measured OKLab lightness and the chroma scale `k` to
 its measured chroma level, so the **default** palette reproduces the previous look

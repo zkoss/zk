@@ -12,13 +12,14 @@ Three different components for tabular data, sharing structural conventions.
 
 ## Alternating row classes — use these, not `:nth-child`
 
-ZK emits explicit `-odd` classes:
+Grid and listbox emit explicit `-odd` classes (`Grid.ts` and `Listbox.ts`, `getOddRowSclass`):
 
 - `.z-grid-odd` (applied to alternating `.z-row`)
 - `.z-listbox-odd` (applied to alternating `.z-listitem`)
-- `.z-tree-odd` (applied to alternating `.z-treerow`)
 
-**Always prefer the explicit class** over `:nth-child(odd)`. With virtual scrolling and dynamic row insertion/removal, `:nth-child` selectors break (the DOM position changes but the row's logical position doesn't). The framework-emitted class survives re-renders.
+**Prefer the explicit class** over `:nth-child(odd)` for grid and listbox. With virtual scrolling and dynamic row insertion/removal, `:nth-child` selectors break (the DOM position changes but the row's logical position doesn't). The framework-emitted class survives re-renders.
+
+Tree rows are styled for alternation with `:nth-child` (Tree has no `getOddRowSclass`); check the result under virtual scrolling.
 
 ## Cell content wrapper naming
 
@@ -28,7 +29,7 @@ Grid's actual cell-content wrapper is on the **row**, not the cell:
 - `.z-listcell-content` ← listbox (per-cell)
 - `.z-treecell-content` ← tree (per-cell)
 
-The grid choice is a deliberate departure from the per-cell pattern. The cell elements (`.z-cell`) exist but the content wrapper sits at the row level for grid's flat-row rendering. Don't mistake `.z-cell-content` (does not exist) for the actual class.
+The grid choice is a deliberate departure from the per-cell pattern. The cell elements (`.z-cell`) exist but the content wrapper sits at the row level for grid's flat-row rendering. The grid class is `.z-row-content`, not `.z-cell-content`.
 
 ## Grid footer cell structure
 
@@ -38,23 +39,15 @@ Grid footer cells use `TR.z-foot > TD.z-footer > DIV.z-footer-content`, not `.z-
 
 | Component | Row selection | Class emitted |
 |-----------|---------------|---------------|
-| grid      | **No**        | — (never emits `.z-row-selected`) |
+| grid      | Not supported | — |
 | listbox   | Yes           | `.z-listitem-selected` |
 | tree      | Yes           | `.z-treerow-selected` |
 
-Grid is for **read-only tabular display** — Grid widget never emits selection-related classes on rows. Writing `.z-row.z-row-selected` rules in `grid.css` is dead code; do not author them. If a use-case needs row selection on a grid-like surface, switch to listbox.
-
-`grep -r "selected" /…/web/js/zul/grid/` returns zero matches against the ZK 10 source — authoritative confirmation.
+Grid is for **read-only tabular display**, so the grid widget emits no selection-related classes on rows (`grep -r "selected" zul/src/main/resources/web/js/zul/grid/` returns no match). If a use-case needs row selection on a grid-like surface, use listbox.
 
 ## Sort state classes
 
-Header cells add sort modifiers when `sort="auto"` or `sort="ascending"/"descending"` is set:
-
-| Widget  | Sort active class   | Sort icon class         |
-|---------|---------------------|-------------------------|
-| grid    | `.z-column-sort`    | `.z-column-sorticon`    |
-| listbox | `.z-listheader-sort`| `.z-listheader-sorticon`|
-| tree    | `.z-treecol-sort`   | `.z-treecol-sorticon`   |
+Header cells add sort modifiers when `sort="auto"` or `sort="ascending"/"descending"` is set. The classes follow the header's zclass: `.z-column-sort` / `.z-column-sorticon` (grid), `.z-listheader-sort` / `.z-listheader-sorticon` (listbox), `.z-treecol-sort` / `.z-treecol-sorticon` (tree). Source: `HeaderWidget.ts` and `SortWidget.ts`.
 
 ## Sizable header → resize affordance (hover-only `.z-{c}-sizing` class)
 
@@ -73,49 +66,47 @@ rendered handle element:
   sizable head at rest. So a theme **cannot** draw a resting per-column divider scoped
   to sizable heads; the only CSS hook is the transient `.z-{c}-sizing` state.
 
-**Required theme rule** — the affordance is a *hover-time* one (matches MUI DataGrid,
-which shows the column separator only on hover):
+**Required theme rule** — the affordance is a *hover-time* one:
 
 ```css
 .z-column-sizing, .z-listheader-sizing, .z-treecol-sizing {
     cursor: col-resize;                                   /* the real affordance */
-    box-shadow: inset -2px 0 0 var(--zk-color-primary);   /* accent the dragged edge */
+    /* optionally accent the dragged edge, e.g. with an inset box-shadow */
 }
 ```
 
-**Trap — `.z-{c}-sizing` is the TH, not a 4px handle.** It is tempting (and Marble's
-grid.css did this) to write `.z-column-sizing { position:absolute; right:0; width:4px }`
-as if it were a separator child. It is the header cell itself — positioning/sizing it
+**Trap — `.z-{c}-sizing` is the TH, not a handle.** It is tempting to write
+`.z-column-sizing { position:absolute; right:0; width:4px }` as if it were a separator
+child. It is the header cell itself — positioning/sizing it
 collapses the whole column the instant the pointer enters the 8px zone. Style it as a
-state on the TH only (`cursor`, `box-shadow`, `background`). Likewise `.z-{c}-sizer` is a
-**dead selector** — ZK renders no such element (`HeaderWidget.redraw` emits only
-content/sorticon/[button]).
+state on the TH only (`cursor`, `box-shadow`, `background`). `HeaderWidget.redraw` emits only
+content/sorticon/[button], so there is no `.z-{c}-sizer` element to select.
 
 ## Narrow icon / checkbox / image column → collapse padding (and kill ellipsis)
 
 A header/cell column with a small fixed width (typically `width="40px"`) holding only an
 icon — a checkmark, a sort glyph, or an `image="…16x16.png"` — collides with the theme's
-default 16px (`spacing-4`) side padding: `40px − 16 − 16 = 8px` of content width left.
+side padding: the fixed narrow width minus both side paddings leaves very little content width.
 Three symptoms, one root cause:
 
-1. **Checkbox/check icon clipped** — the 16×16 control overflows the 8px content area and
+1. **Checkbox/check icon clipped** — the 16×16 control overflows the narrow content area and
    the cell's `overflow:hidden` clips its right edge.
 2. **Header row inflated by a wrapping icon column** — `.z-{c}` header cells are
    `white-space: normal` (so long *text* labels wrap onto a 2nd line). But a narrow icon
    column's content is *wider* than its content box, so `normal` wraps it too, doubling the
-   content height and inflating the whole header **row** (measured: 53px → 73–74px). Two
+   content height and inflating the whole header **row**. Two
    triggers, same mechanism:
    - a header **image** (bare `<img>`, no class) hits the global `img{max-width:100%}`,
-     shrinks to the 8px content width AND the squeezed content wraps;
+     shrinks to the narrow content width AND the squeezed content wraps;
    - a **select-all checkbox** header (`width="40px"`) — the `.z-{c}-checkable` span is
-     ~40px wide (16px icon + its inline padding) inside the ~32px content box, so it wraps
+     wider than the narrow content box (16px icon + its inline padding), so it wraps
      below the (zero-width) sorticon.
 
    This is why "a small image / a checkbox makes the header taller than default" — it is not
    the icon's height, it is the narrow column forcing a wrap.
 3. **Stray ellipsis "…" beside a checkbox** — the checkable body cell's `.z-listcell-content`
    is `white-space:nowrap; overflow:hidden; text-overflow:ellipsis`. The checkable span
-   (16px icon + its own inline padding) is ~8px wider than the content box, so the browser
+   (16px icon + its own inline padding) is wider than the content box, so the browser
    paints a leftover ellipsis to the right of the box. (The header select-all box shows no
    ellipsis because `.z-listheader` is `white-space:normal`; a labelled checkmark cell in an
    auto-width column shows none because it doesn't overflow.)
@@ -130,14 +121,14 @@ Three symptoms, one root cause:
    is wider than the content box even at 4px padding). */
 .z-listheader:has(.z-listheader-checkable),
 .z-listheader:has(img) {
-    padding-left: var(--zk-spacing-1);
-    padding-right: var(--zk-spacing-1);
+    padding-left: <small padding>;
+    padding-right: <small padding>;
     white-space: nowrap;
 }
 /* Cell side — mirror header padding; padding lives on .z-listcell-content, NOT the td. */
 .z-listcell:has(.z-listitem-checkable) > .z-listcell-content {
-    padding-left: var(--zk-spacing-1);
-    padding-right: var(--zk-spacing-1);
+    padding-left: <small padding>;
+    padding-right: <small padding>;
     text-overflow: clip;   /* holds a control, not clipping text → no stray "…" */
 }
 ```
@@ -155,17 +146,11 @@ listbox-specific; symptoms (1) and (2) apply to all three.
 | listbox | `.z-listitem-focus` | `.z-listitem-disabled` |
 | tree | `.z-treerow-focus` | `.z-treerow-disabled` |
 
-Grid rows do not have explicit focus/disabled classes (grid is read-only display — see Selection support section).
+Grid rows have no explicit focus/disabled classes (grid is read-only display — see Selection support section).
 
 ## Header action button (`menupopup` trigger)
 
-All three data widgets render a small caret-down button at the right edge of each header cell when `menupopup` is set. **Same pattern, three class names:**
-
-| Widget  | Header cell    | Action button class    | Hover class            |
-|---------|----------------|------------------------|------------------------|
-| grid    | `.z-column`    | `.z-column-button`     | `.z-column-hover`      |
-| listbox | `.z-listheader`| `.z-listheader-button` | `.z-listheader-hover`  |
-| tree    | `.z-treecol`   | `.z-treecol-button`    | `.z-treecol-hover`     |
+All three data widgets render a small caret-down button at the right edge of each header cell when `menupopup` is set. **Same pattern, three class names** (header zclass + `-button` / `-hover`): `.z-column-button` / `.z-column-hover` (grid), `.z-listheader-button` / `.z-listheader-hover` (listbox), `.z-treecol-button` / `.z-treecol-hover` (tree). Source: `HeaderWidget.ts`.
 
 DOM (grid example — the other two are structurally identical):
 
@@ -188,33 +173,12 @@ When a header has an action button slot (`menupopup` set), wrapping long labels 
 ```css
 .z-listheader { white-space: normal; overflow-wrap: anywhere; }
 .z-listheader:has(.z-listheader-button) {
-    /* spacing-1 (right edge gap) + 24px (button) + spacing-2 (text gap) */
-    padding-right: calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2));
+    /* right-edge gap + button width + text gap */
+    padding-right: calc(<edge gap> + <button width> + <text gap>);
 }
 ```
 
 Same pattern applies to `.z-column` (grid) and `.z-treecol` (tree).
-
-## Narrow checkable column → mirror header AND cell padding
-
-When a `<listheader>` (or `<column>`) is a checkbox-only cell (typically `width="40px"`), the default 16px-each-side padding leaves only 8px of content area — not enough for the 16×16 check icon, which overflows and gets clipped by the cell's `overflow: hidden`.
-
-**Both** the header cell padding **and** the cell-content padding must be collapsed to keep header/cell icons visually aligned and inside the column:
-
-```css
-/* Header side */
-.z-listheader:has(.z-listheader-checkable) {
-    padding-left: var(--zk-spacing-1);
-    padding-right: var(--zk-spacing-1);
-}
-/* Cell side — mirror header. Padding lives on .z-listcell-content, NOT on td. */
-.z-listcell:has(.z-listitem-checkable) > .z-listcell-content {
-    padding-left: var(--zk-spacing-1);
-    padding-right: var(--zk-spacing-1);
-}
-```
-
-**Trap:** fixing only one side (typical first-pass mistake) leaves the icons offset between header and rows. Always verify with `header.icon.right === cell.icon.right`.
 
 ## Checkmark column renders a checkbox (multiple) OR a radio (single)
 
@@ -236,26 +200,16 @@ flat mask glyph). **Always style both `z-icon-check` and `z-icon-radio`.**
 
 The checkmark span wraps an `<i>` icon. Class prefixes differ per widget — and tree's
 prefix is `z-treerow`, **not** `z-treeitem` (Treeitem's zclass resolves to the
-treerow's, since the treeitem element is never rendered):
-
-| Part | listbox | tree |
-|------|---------|------|
-| span (always) | `z-listitem-checkable` | `z-treerow-checkable` |
-| span +multi | `z-listitem-checkbox` | `z-treerow-checkbox` |
-| span +single | `z-listitem-radio` | `z-treerow-radio` |
-| span +disabled/unselectable | `z-listitem-disabled` | `z-treerow-disabled` |
-| icon `<i>` | `z-listitem-icon z-icon-check\|z-icon-radio` | `z-treerow-icon z-icon-check\|z-icon-radio` |
-| header select-all span | `z-listheader-checkable` (+`z-listheader-checked`) | `z-treecol-checkable` (+`z-treecol-checked`) |
-| header icon | `z-listheader-icon z-icon-check` | `z-treecol-icon z-icon-check` |
+treerow's, since the treeitem element is never rendered). The span carries `-checkable` plus `-checkbox` (multiple) or `-radio` (single), and `-disabled` when unselectable; the icon is `-icon` plus `z-icon-check` / `z-icon-radio`; the header select-all span is `z-listheader-checkable` / `z-treecol-checkable` (+`-checked`) with `-icon z-icon-check`. For the exact classes read `Listcell.ts` (`_colHtmlPre`), `Treecell.ts` and `Treecol.ts`.
 
 The header "select all" control **only exists in `multiple` mode** (`_hasCheckbox`
 requires `_multiple`) and is **always a checkbox** (`z-icon-check`) — never a radio.
 
 **Override the generic mask glyph.** `z-icon-check`/`z-icon-radio` arrive pre-wired
 to the theme's generic icon system (`mask-image` + `background-color`). To draw a real
-Material box/circle, kill the mask on `::before` and rebuild:
+CSS-drawn box/circle, kill the mask on `::before` and rebuild:
 `-webkit-mask-image: none !important; mask-image: none !important;` then add
-`border` + `border-radius` (`2px` checkbox / `50%` radio).
+`border` + `border-radius` (small radius for the checkbox box, `50%` for the radio circle).
 
 **Trap — dead `.z-{row}.z-{row}-checkable` selector.** `z-treerow-checkable` /
 `z-listitem-checkable` live on the **inner span**, never on the TR. A compound
@@ -264,22 +218,13 @@ selector like `.z-treerow.z-treerow-checkable` (both classes on one element) mat
 `.z-treerow:has(.z-treerow-checkable) .z-treecell:first-child …`, or target the span
 directly.
 
-**Trap — header checkbox 4px-misaligned with row checkboxes.** The header content
+**Trap — header checkbox misaligned with row checkboxes.** The header content
 wrapper always contains an (often zero-width) `.z-{c}-sorticon` element *before* the
-checkable span, so the header control sits 4px right of the body-row controls (the
-column's vertical line breaks). **The 4px has two different sources — fix each at the
-right mechanism, confirmed by measurement:**
+checkable span, so a theme that lays the sorticon out in flow can push the header control
+off the body-row controls (the column's vertical line breaks). Check how the theme
+positions the sorticon (in flow, flex item or absolute) before assuming the offset's source.
 
-- **listbox** — `.z-listheader-content` lays the sorticon out inline; the offset is the
-  sorticon's own `margin-left: 4px`. Zero it:
-  `.z-listheader:has(.z-listheader-checkable) .z-listheader-sorticon { margin-left: 0 }`.
-- **tree** — `.z-treecol-content` is `display: flex; gap: 4px`. The sorticon's margin is
-  already 0, but it is still a **flex item**, so the 4px flex *gap* (not a margin) pushes
-  the checkable span right. `margin-left: 0` does nothing here; remove the sorticon from
-  flex flow instead: `.z-treecol:has(.z-treecol-checkable) .z-treecol-sorticon { display: none }`.
-
-Verify alignment with `header.icon.centerX === row.icon.centerX` — do not assume the
-listbox fix transfers to tree.
+Verify alignment with `header.icon.centerX === row.icon.centerX`.
 
 **Tristate / indeterminate (partial) checkmark — tree only.** A parent whose children
 are *partly* selected renders an indeterminate (minus) box. This is **gated on the model
@@ -289,9 +234,9 @@ runs and **no** partial DOM is emitted. ZK ships **no concrete `TristateModel`**
 must declare one (e.g. `class X extends DefaultTreeModel implements TristateModel { Set getPartials() … }`).
 When active, ZK adds `z-treerow-partial` to the row's **TR** and switches the icon class
 to **`z-icon-minus`**; the header select-all icon also becomes `z-icon-minus` when only
-some rows are selected (keyed by the icon class, **not** a `z-treecol-partial` class).
+some rows are selected (the zkmax `tristate-tree.ts` `setHeadercmIcon` adds `z-treecol-partial` to the header `-cm` span and swaps the icon class to `z-icon-minus`). The tristate tree is a zkmax (EE) feature.
 `z-icon-minus` arrives as the same flat mask glyph as check/radio — override and rebuild
-as a filled-primary box with a white minus. Scope through the icon, not the dead compound
+as a box with a minus glyph. Scope through the icon, not the dead compound
 `.z-treerow.z-treerow-partial`:
 `.z-treerow-partial .z-treerow-icon.z-icon-minus::before, .z-treecol-icon.z-icon-minus::before { … }`.
 Two gotchas when building the demo model: (1) call `model.setMultiple(true)` or every
@@ -321,7 +266,7 @@ a state interaction can actually reproduce. See `tree.zul` tristate block for th
 
 ## Focus-trap div (`.z-focus-a`)
 
-SelectWidget (Listbox, Grid via mesh, Tree) renders a hidden focus-trap div at the end of the body:
+SelectWidget (Listbox, Tree) renders a hidden focus-trap div at the end of the body (Grid is not a SelectWidget and emits none; biglistbox, calendar and menupopup also emit a `.z-focus-a`):
 
 ```html
 <div ...-a class="z-focus-a" style="top:0px;left:0px" tabindex="0"></div>
@@ -329,15 +274,14 @@ SelectWidget (Listbox, Grid via mesh, Tree) renders a hidden focus-trap div at t
 
 ZK calls `focusEl.focus()` after row clicks to keep keyboard navigation working. The inline `top`/`left` are JS-driven (`SelectWidget._focusAnchor`) and ONLY work if `.z-focus-a` finds a positioned ancestor — otherwise `position: absolute` resolves against `<body>` and `focus()` scrolls the entire page to (0, 0).
 
-**Required theme rules** (apply to all three widgets):
+**Required theme rules** (apply to listbox and tree):
 
 ```css
-.z-listbox-body, .z-tree-body, .z-grid-body {
+.z-listbox-body, .z-tree-body {
     position: relative;     /* anchor .z-focus-a inside the body */
 }
 .z-listbox .z-focus-a,
-.z-tree    .z-focus-a,
-.z-grid    .z-focus-a {
+.z-tree    .z-focus-a {
     position: absolute;
     width: 0;
     height: 0;
@@ -368,7 +312,7 @@ Key facts:
 - **The trailing `.z-auxhead-bar` filler is the row's real `:last-child` — never the visible-last `.z-auxheader`.** ZK appends a zero-width `TH.z-auxhead-bar` (scrollbar/sizing spacer) to **every** auxhead row, even when nothing is being resized. So an edge-stripping rule keyed on `.z-auxheader:last-child` silently misses the rightmost visible header. If auxheaders carry a `border-inline-end` (a vertical divider between groups), that border stays on the visible-last cell and **doubles with the container's own frame border** — two parallel 1px lines on the right edge only (the left edge is clean because auxheaders have no border-left). In `border-collapse: separate` header tables (listbox/tree, and grid's `*-headtbl`) the two lines don't merge, so the doubling is visible. Strip the edge border with `.z-auxheader:has(+ .z-auxhead-bar)` (the cell immediately before the filler) **in addition to** `:last-child`:
 
   ```css
-  .z-auxheader { border-inline-end: 1px solid var(--zk-color-outline-variant); }
+  .z-auxheader { border-inline-end: 1px solid <divider color>; }
   .z-auxheader:last-child,
   .z-auxheader:has(+ .z-auxhead-bar) { border-inline-end: none; }  /* don't double the frame */
   ```
@@ -377,10 +321,13 @@ Key facts:
 
 ## Frozen columns
 
-ZK `<frozen columns="N">` mechanism (important — it is **not** CSS `position: sticky`):
+ZK `<frozen columns="N">` mechanism (`zul/src/main/resources/web/js/zul/mesh/Frozen.ts`; ZK-6065 added smooth frozen scrolling and `rightColumns`). Which way the first N columns stay in place depends on the client:
 
-- First N column cells and the matching header cells receive class `.z-frozen-col`.
-- The grid root receives `.z-grid-frozen`.
+- **Desktop:** `_syncFrozenCellsPosition` sets an inline `transform: translate3d(<scrollLeft>, 0, 0)` and `z-index: 1` on the frozen cells so they follow the horizontal scroll.
+- **Mobile (`zk.mobile`):** the frozen cells get `.z-frozen-sticky` and an inline `left` (`_adjustStickyFrozenCols`), i.e. CSS `position: sticky`; a theme rule on `.z-frozen-sticky` is live there.
+- **Smooth mode (the default):** `_syncColumnBorders` adds `.z-frozen-col` to the frozen header cells so the theme can draw the pane boundary.
+- **`rightColumns`:** the last N columns get `.z-frozen-right-col` and an inline `right` (native scrollbar only).
+- The mold writes a `div#-frozen` with the widget's `frozen` zclass (`z-grid-frozen`, `z-listbox-frozen`, `z-tree-frozen`) around the tray below.
 - A separate **scroll tray** DOM block is rendered (below the body):
 
   ```
@@ -391,15 +338,14 @@ ZK `<frozen columns="N">` mechanism (important — it is **not** CSS `position: 
     > .z-clear
   ```
 
-- ZK JS listens to `scrollLeft` on `.z-frozen-inner` and `translateX`-shifts the non-frozen columns to simulate horizontal scrolling. The body itself stays `overflow-x: hidden`.
-- **No `.z-frozen-sticky` class** — older docs may mention it; verify against actual ZK 10 output, which uses only the classes above.
+- On desktop ZK JS listens to `scrollLeft` on `.z-frozen-inner` and moves the frozen cells as described above. The body itself stays `overflow-x: hidden`.
 
 Theme implications:
 
 - Style `.z-frozen` / `.z-frozen-inner` to expose a thin scrollbar (default WebKit scrollbar otherwise dominates).
-- Mark the pane boundary with `border-inline-end` and a small box-shadow on `.z-frozen-col:last-of-type` so the divider is visible during horizontal scroll. Don't try to apply `position: sticky` — it will conflict with ZK's translateX driver.
+- Mark the pane boundary with `border-inline-end` and a small box-shadow on `.z-frozen-col:last-of-type` so the divider is visible during horizontal scroll. Do not add `position: sticky` to the frozen cells on desktop — it conflicts with the `translate3d` driver; the sticky path is ZK's own and runs on mobile only.
 
-**Side-by-side layout — float, not flex.** ZK's authoritative CSS (`zul/mesh/less/frozen.less`) requires:
+**Side-by-side layout — float, not flex.** The stock theme's frozen layout requires:
 
 ```css
 .z-frozen-body  { float: left;  overflow: hidden }
@@ -408,11 +354,11 @@ Theme implications:
 .z-clear        { clear: both }    /* the trailing .z-clear div ends the float row */
 ```
 
-Without `float: left` on `.z-frozen-body`, `.z-frozen-inner` stacks **below** body instead of next to it — and the horizontal scrollbar can no longer be seen above the data rows. The theme must match this layout exactly; you can't substitute flex/grid because ZK's JS reads the resulting offsets to position the translateX. The `.z-clear` div terminates the float row — keep its rule (`clear: both`).
+Without `float: left` on `.z-frozen-body`, `.z-frozen-inner` stacks **below** body instead of next to it — and the horizontal scrollbar can no longer be seen above the data rows. The theme must match this layout exactly; you can't substitute flex/grid because ZK's JS reads the resulting offsets to position the frozen cells. The `.z-clear` div terminates the float row — keep its rule (`clear: both`).
 
 **Tray height pitfall — macOS overlay scrollbars collapse to ~6px.** ZK calls `jq.scrollbarWidth()` to size the tray; on Macs with overlay scrollbars active it reads ≈6 (vs 15 on Windows / older browsers). Inline `height: 6px` on `.z-frozen`, `.z-frozen-body`, `.z-frozen-inner` is too thin to render a visible WebKit scrollbar. Force a `min-height: 12px` on all three — CSS `min-height` always wins against inline `height`, so the value is forced regardless of what JS measured.
 
-**Visual indicator on `.z-frozen-body`.** That spacer aligns under the frozen columns; users need a visual cue that the columns above are frozen. Apply a faint `surface-container-low` background plus the same `border-inline-end + box-shadow` boundary you used on `.z-frozen-col`. That makes the frozen pane edge continue past the data rows.
+**Visual indicator on `.z-frozen-body`.** That spacer aligns under the frozen columns; users need a visual cue that the columns above are frozen. Apply a faint background plus the same `border-inline-end + box-shadow` boundary you used on `.z-frozen-col`. That makes the frozen pane edge continue past the data rows.
 
 ## Sticky header (`z-sticky-header`)
 
@@ -420,9 +366,9 @@ ZK-4795 (since 9.6.0) gives **grid, listbox, and tree** an opt-in sticky column
 header: add `sclass="z-sticky-header"` and the header pins to the top of its scroll
 ancestor (the page, or any ancestor with `overflow:auto`) while rows scroll under it.
 
-**It is a bare opt-in class — ZK's `zul/less` ships NO CSS for it.** The only
-implementation lives in the `zkmax` addon (`zkmax/grid/less/grid.less`,
-`zkmax/sel/less/{listbox,tree}.less`), which a custom theme does not inherit. So
+**It is a bare opt-in class — the `zul` module ships NO CSS for it.** The only
+stock implementation lives in the `zkmax` addon's IceBlue grid, listbox and tree styles,
+which a custom theme does not inherit. So
 **any theme must supply the rule itself**, or the class is inert. The canonical
 mechanism (per component, `<comp>` ∈ grid/listbox/tree):
 
@@ -442,11 +388,10 @@ Two things to get right that ZK's own LESS does NOT handle:
   `overflow:hidden` ancestor, so the sticky never engages. Overriding to `visible` is
   required and means the card's rounded corners no longer clip — an accepted trade-off
   for sticky mode (ZK does the same).
-- **The header must get an OPAQUE background.** Marble's default header is
-  `background-color: transparent`. A transparent sticky header lets the scrolling rows
-  show THROUGH it — give it `var(--zk-color-surface)`. ZK's zkmax LESS omits this and
-  inherits whatever the theme set; on a fill-less Material header that bug is visible, so
-  the opaque bg is theme-mandatory, not optional. (The existing header cell
+- **The header must get an OPAQUE background.** A transparent sticky header lets the
+  scrolling rows show THROUGH it, so a theme whose header has no fill must give it the
+  surface color. The stock zkmax styles omit this and inherit whatever the theme set, so
+  the opaque background is theme-mandatory, not optional. (The existing header cell
   `border-bottom` already provides the divider against the scrolling content.)
 
 Sticky engages relative to the **nearest scrolling ancestor**: if the component has no
@@ -463,17 +408,12 @@ Verify: scroll the container, then `getComputedStyle(header).position === 'stick
 - **Expand icon**: `.z-tree-icon`. Toggles rotation (0deg → 90deg) on open/close via CSS transform.
 - **Connector lines**: `.z-tree-line` between rows (optional, off by default).
 
-## Row height consistency
-
-Grid, listbox, and tree share a row-height baseline (around 52px for spacious tables, 32–40px for dense). Choose one row-height in the theme's DESIGN.md and apply it across all three to keep tables consistent.
-
 ## Tree expand-icon rotation
 
-The `[open]` state is controlled by ZK; the icon rotates via CSS transition:
+ZK sets no `[open]` attribute. `Treeitem.ts` and `Treecell.ts` swap the `<i>`'s classes between `z-icon-caret-right` / `z-icon-caret-down` and `z-tree-close` / `z-tree-open` on open/close. `.z-tree-icon` is the outer `<span id="-open">`, and `.z-tree-spacer` is `span.z-tree-line.z-tree-spacer`. A rotation animation must therefore use these classes as its hook, for example:
 
 ```css
 .z-tree-icon { transition: transform <duration> <easing>; }
-.z-treerow[open] .z-tree-icon { transform: rotate(90deg); }
 ```
 
 (Exact transition value is a theme decision; the mechanism is ZK's.)
@@ -494,7 +434,7 @@ td.z-listgroup-inner { display: table-cell; }
 .z-listgroup-inner > .z-listcell-content {
     display: flex;
     align-items: center;
-    gap: var(--zk-spacing-2);
+    gap: <gap>;
 }
 ```
 
@@ -511,8 +451,8 @@ TR.z-listgroup > TD.z-listcell > DIV.z-listcell-cnt > DIV.z-listcell-content
 If you write `.z-listgroup .z-listcell-content { border-top; border-bottom }`, the border lands on the innermost DIV — every cell shows its own top+bottom lines, giving you 3 stacked lines across the row (since td/cnt/content all rendered separately). The intent is **one** divider per row, so put the border on the TR itself:
 
 ```css
-.z-listgroup    { border-bottom: 1px outline-variant }   /* divider after group header */
-.z-listgroupfoot { border-top:    1px outline-variant }  /* divider before subtotals */
+.z-listgroup    { border-bottom: 1px <divider color> }   /* divider after group header */
+.z-listgroupfoot { border-top:    1px <divider color> }  /* divider before subtotals */
 ```
 
 Cell-level rules can still set `background-color: transparent` so the row band shows through. Tree's `.z-treegroup` follows the same pattern.
@@ -533,10 +473,10 @@ So any divider that needs to appear **between header rows** — most importantly
 
 ```css
 /* WRONG — TR border is silently dropped in the separate-collapse header table */
-.z-auxhead { border-bottom: 1px solid var(--zk-color-outline-variant); }
+.z-auxhead { border-bottom: 1px solid <divider color>; }
 
 /* RIGHT — TH border paints in both collapse AND separate */
-.z-auxheader { border-bottom: 1px solid var(--zk-color-outline-variant); }
+.z-auxheader { border-bottom: 1px solid <divider color>; }
 ```
 
 Symptom when you get it wrong: a single `<auxhead>` still looks bordered (the adjacent
@@ -560,7 +500,7 @@ back to the **UA default `border-spacing: 2px`**. In `separate` mode (which the 
 is — see above) that 2px gap shows the table's background **between every cell and every row**
 — e.g. a white line between two stacked `<auxhead>` rows, or between auxheader cells.
 
-Reset it the way ZK's own default theme does — target the descendant `table`, never a class:
+Reset it the way ZK's stock theme does — target the descendant `table`, never a class:
 
 ```css
 .z-<comp>-header table {        /* grid / listbox / tree — matches the unclassed -headtbl */
@@ -570,8 +510,8 @@ Reset it the way ZK's own default theme does — target the descendant `table`, 
 }
 ```
 
-ZK's default less does the same via a `table { border-spacing: 0; th,td { padding: 0 } }`
-reset mixin (`grid.less`, `tree.less`, `listbox.less` all line ~6). Mirror that. The trap is
+The stock IceBlue theme does the same with a `table { border-spacing: 0; th,td { padding: 0 } }`
+reset mixin for grid, tree and listbox. Mirror that. The trap is
 keying the reset on a class the runtime doesn't emit — then it silently no-ops and the UA
 default leaks through only in the `separate` header table (the collapsed body table hides it,
 because `collapse` ignores `border-spacing`).
@@ -581,12 +521,11 @@ trap on **both** its head and body tables (`.z-biglistbox table { border-spacing
 its body shows the leak too (it is `separate`, unlike the collapsed grid/listbox/tree body).
 When you touch border-spacing on any data table, sweep all four. See `components/biglistbox.md`.
 
-## No `border` attribute — the outer frame is theme-driven, not ZK-driven
+## The outer frame is theme-driven, not ZK-driven
 
 Unlike `window` (which has `setBorder`/`getBorder` → `border="none"` → `.z-window-noborder`),
-**grid, listbox, and tree expose NO border attribute** (verified in ZK source: no
-`setBorder`/`getBorder`/`noborder` on `Grid`/`Listbox`/`Tree.java`). ZK therefore emits **no
-class that signals "standalone vs embedded"** for these components. Consequences for any theme:
+`Grid`, `Listbox` and `Tree` have no `setBorder`/`getBorder`/`noborder` in their Java source, so
+ZK emits **no class that signals "standalone vs embedded"** for these components. Consequences for any theme:
 
 - Whether the component shows an outer frame is a **pure theme decision on the root class**
   (`.z-grid` / `.z-listbox` / `.z-tree`) — there is no ZK toggle to hook.
@@ -594,12 +533,8 @@ class that signals "standalone vs embedded"** for these components. Consequences
   applies (e.g. `z-grid-noborder` — mirror ZK's own `z-window-noborder` / `z-panel-noborder`
   naming for discoverability), and/or an **ancestor-context selector** (`.z-panel-body .z-grid`,
   `.z-groupbox .z-grid`) — ZK won't do it automatically.
-- Do not invent a class and assume ZK applies it: a rule like `.z-grid-standalone` only does
-  anything if a ZUL actually writes `sclass="z-grid-standalone"`. An unused such rule is dead
-  (this bit Marble twice — see `.z-grid-header-inner` and the deleted `.z-grid-standalone`).
-
-(Marble's resulting frame policy — outlined-by-default, `z-*-noborder` to strip — is
-theme-specific and lives in `doc/spec/DESIGN.md` §11, not here.)
+- A theme-defined class such as `.z-grid-standalone` only does anything if a ZUL actually
+  writes `sclass="z-grid-standalone"`; ZK never applies it.
 
 ## Bundles
 

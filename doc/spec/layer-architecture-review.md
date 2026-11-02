@@ -26,9 +26,9 @@ loads it (a custom `ThemeProvider`, a failed request) still keeps utilities abov
 
 | Layer | Holds | Assigned |
 |---|---|---|
-| `zk-base` | reset/normalize rules + base icon/badge/chip/avatar styles + generated `.z-icon-*{--_icon}` | in source (Lucide block emitted by build) |
+| `zk-base` | reset/normalize rules + generated `.z-icon-*{--_icon}` | in source (Lucide block emitted by build) |
 | `zk-components` | every `js/**` component CSS, combo/footer component bundles, moldOnly (notification/toast/captcha/misc) | in source (each file self-declares) |
-| `zk-utilities` | the 8 `zul/css/utility/_*.css` files | in source |
+| `zk-utilities` | the `zul/css/utility/_*.css` files | in source |
 | *(unlayered)* | design tokens (`:root` vars), tablet overrides, `_cssflex`/`_dnd` runtime classes, and **all downstream USER CSS** | — |
 
 Priority (low → high): `zk-base` < `zk-components` < `zk-utilities` < **unlayered** < inline.
@@ -64,19 +64,18 @@ inject layers; it concatenates the source and **verifies** the wrapper is presen
 
 1. **Is every override-layer correctly defined?** Yes now. `zk-base`, `zk-components`, `zk-utilities` are all
    populated and ordered; the previously-empty `zk-components` holds all component CSS.
-2. **Does `!important` cause override difficulty?** There are 0 `!important` inside layers (clean). The original 109
-   in component CSS are being reduced now that the layer order does the work: **Phase 2a removed the 63
-   checkbox/radio mask-icon overrides** in `listbox.css`/`tree.css` — they win over `_icons.css` purely because
-   `zk-components` outranks `zk-base`, so `!important` was redundant (verified rendering-neutral by computed-style
-   probe + HEAD A/B). The ~46 that remain are predominantly **irreducible**: they neutralize ZK-JS-set **inline**
+2. **Does `!important` cause override difficulty?** The layer order does the work where it can: the
+   checkbox/radio mask-icon overrides in `listbox.css`/`tree.css` win over `_icons.css` purely because
+   `zk-components` outranks `zk-base`, so their `!important` was redundant and was removed (verified
+   rendering-neutral by computed-style probe + HEAD A/B). The remaining ones are predominantly **irreducible**: they neutralize ZK-JS-set **inline**
    styles (splitlayout buttons, tablet popups, modal `.z-mask`, rotated borderlayout titles, collapsed
    panel/groupbox heights) — no cascade layer can beat an inline style — plus `prefers-reduced-motion` resets and
    add-on internals. The small tail (menu separator, messagebox) is **also irreducible** — those are same-layer
    (`zk-components`) author-vs-author conflicts where the layer order gives no help; they correctly keep `!important`.
-   Net: the icon overrides were the only cluster the layer order made redundant.
+   Net: the icon overrides were the only cluster the layer order made redundant. Every remaining one and its evidence: [important-inventory.md](important-inventory.md); recount with `.claude/skills/marble-theme/scripts/count-important.js`.
 3. **Can users customize without `!important`?** Yes, two clean paths: (a) override `--zk-*` tokens at `:root`
    (tokens are unlayered, so a later `:root` wins by source order); (b) write any unlayered CSS — it beats every
-   theme layer regardless of specificity, no `!important` needed. The only exceptions are the remaining 109
+   theme layer regardless of specificity, no `!important` needed. The only exceptions are the remaining
    `!important` rules.
 
 ## Customization guidance (downstream)
@@ -90,14 +89,3 @@ inject layers; it concatenates the source and **verifies** the wrapper is presen
 
 - Phase 1 (this layering) was verified **rendering-neutral**: a HEAD-vs-change A/B run produces the identical set
   of screenshot results (same diffs), and the cascade behavior was confirmed by direct computed-style probes.
-- **Caveat — stale screenshot baselines:** the committed baselines under `doc/screenshots/` no longer match even
-  HEAD's CSS (e.g. textbox gallery differs by 1390px on *both* HEAD and this change). The screenshot suite is
-  therefore not currently a valid pass/fail gate; regenerate baselines (`npm run screenshot:update`) before relying
-  on it. This is pre-existing maintenance debt, unrelated to the layer work.
-
-## Forward note — ZK Font Awesome → Lucide
-
-The next ZK version this theme targets deprecates Font Awesome for native Lucide. The layer topology is unaffected,
-but the "no coexisting unreachable framework CSS" property depends on the theme stubbing whatever icon CSS ZK ships
-(today: an empty `font-awesome.css.dsp` stub). On that upgrade, re-check ZK's Lucide stylesheet, refresh the
-`_icons.css` FA references, and re-run icon screenshots.

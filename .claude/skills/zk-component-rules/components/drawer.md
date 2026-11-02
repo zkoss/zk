@@ -14,7 +14,7 @@ jq(n).toggleClass(this.$s('open'), false);
 
 So the close sequence is: remove `.z-drawer-open` → **a CSS transition on `.z-drawer-real` must fire and complete** → `transitionend` → panel gets `display:none`.
 
-If the theme defines **no transition / no transform change** between open and closed on `.z-drawer-real`, `transitionend` never fires and the drawer **never closes** (it stays `display:block`; mask-click, close button, and `close()` all appear dead). The mask *does* have an `onClick`→`close` handler wired in `bind_` — the bug is never in the handler, it's the missing animation.
+Exception: when the animation speed is 0 (`animationSpeed == 0` in `Drawer.setVisible`), ZK does not wait for `transitionend` and hides the panel directly. Otherwise, if the theme defines **no transition / no transform change** between open and closed on `.z-drawer-real`, `transitionend` never fires and the drawer **never closes** (it stays `display:block`; mask-click, close button, and `close()` all appear dead). The mask *does* have an `onClick`→`close` handler wired in `bind_` — the bug is never in the handler, it's the missing animation.
 
 Minimum required CSS:
 
@@ -77,7 +77,7 @@ The mold emits the close as a **sibling of `.z-drawer-header`** (both children o
 <div class="z-drawer-close" role="button" tabindex="0" aria-label="…"><i class="z-icon-times"></i></div>
 ```
 
-It is `display:none` inline until `closable=true` (`setClosable` toggles it). A drawer is an MD3 **side sheet** → the close icon button belongs at the **top-trailing corner of the header** (`doc/spec/md3-close-affordance-placement.md` §2). Since `.z-drawer-real` is a positioned ancestor, `position:absolute; top; right` on `.z-drawer-close` anchors the corner placement independently of whether the header is visible (header is `display:none` when title is empty). The glyph is the ZK icon-font `<i class="z-icon-times">` (sized by the container's `font-size`).
+It is `display:none` inline until `closable=true` (`setClosable` toggles it). Since `.z-drawer-real` is a positioned ancestor, `position:absolute; top; right` on `.z-drawer-close` anchors a corner placement independently of whether the header is visible (header is `display:none` when title is empty). The glyph is the ZK icon-font `<i class="z-icon-times">` (sized by the container's `font-size`).
 
 ## Bundle
 

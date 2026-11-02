@@ -9,23 +9,22 @@ zk-version: 10.2.1-jakarta
 
 ## References
 - MUI CSS: DataDisplay/Table.css
-- DESIGN.md sections: §1, §2, §7, §10, §11
+- `doc/spec/DESIGN.md` sections: "Surface Palette", "Text Colors", "Typography", "Density", "Border Rules"
 
 ## Expected values
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | c1 | `.z-row` | height (rendered) | ~52px |
-| c2 | `.z-cell` | padding | 16px (all sides per DESIGN.md §10) |
+| c2 | `.z-cell` | padding | 16px (all sides per `doc/spec/DESIGN.md` "Density") |
 | c3 | `.z-cell` | font-size | 13px |
-| c4 | `.z-column` | padding | 16px |
+| c4 | `.z-column-content` | padding | 16px (`.z-column` itself has `padding: 0`) |
 | c5 | `.z-column` | background-color | transparent OR very subtle tint |
 | c6 | `.z-column` | font-weight | 500 |
 | c7 | `.z-column` | border-bottom | 1px solid rgba(0, 0, 0, 0.12) |
 | c8 | `.z-row` | border-bottom | 1px solid rgba(0, 0, 0, 0.12) |
 | c9 | `.z-row-hover` or `.z-row:hover` | background-color | rgba(0, 0, 0, ~0.04) |
 | c10 | `.z-grid-odd` | background-color | tinted alternate (or not used) |
-| c11 | `.z-grid` | box-shadow | level-1 card shadow (if standalone) |
 | c12 | `.z-grid` | border-radius | 6px (card-like) |
 
 ## States to evaluate
@@ -57,7 +56,7 @@ Wait 300 ms, then screenshot. FAIL if any text from a non-frozen column overlaps
 
 ZK-4795 (since 9.6.0): `sclass="z-sticky-header"` pins the column header to the top
 of the scroll ancestor (page or an `overflow:auto` wrapper) as rows scroll under it.
-This is a **bare opt-in class** — ZK's `zul/less` ships NO rule; the implementation
+This is a **bare opt-in class** — ZK ships no rule for this sclass; the implementation
 lives in the `zkmax` addon, so the theme MUST supply it. See
 `data-components.md` → "Sticky header (`z-sticky-header`)".
 
@@ -73,11 +72,10 @@ overflow-y:auto` scroller.
 
 ## Header table spacing (border-spacing)
 
-The header table is emitted UNCLASSED as `<table id="…-headtbl">` (ZK 10) — there is **no
-`.z-grid-header-inner` class**. A reset keyed on that stale class is a dead selector, and the
-real table falls back to the UA default `border-spacing: 2px`, which in `separate` mode leaks
-a white gap between auxhead cells/rows. Reset on the descendant `table` instead, mirroring
-tree/listbox and the ZK default less. See `data-components.md` → "The header table is emitted
+The header table is emitted UNCLASSED as `<table id="…-headtbl">` (ZK 10). Without a reset
+the table falls back to the UA default `border-spacing: 2px`, which in `separate` mode leaks
+a white gap between auxhead cells/rows. Reset on the descendant `.z-grid-header table`,
+mirroring tree/listbox. See `data-components.md` → "The header table is emitted
 UNCLASSED".
 
 | id | check | selector | property | expected | method |
@@ -97,7 +95,7 @@ Guard: `mesh-header-footer.spec.ts`, `.mhf-grid-icon-menu`.
 Default = standalone **outlined** card: border, NO shadow (never both). No-border variant
 (`z-grid-noborder`) and panel/groupbox ancestry strip the border. ZK emits no border attribute
 for grid (unlike window's `z-window-noborder`) → the variant is a theme sclass mirroring that
-naming. See `doc/spec/DESIGN.md §11`.
+naming. See `doc/spec/DESIGN.md` "Border Rules".
 
 | id | check | selector | property | expected | method |
 |----|-------|----------|----------|----------|--------|

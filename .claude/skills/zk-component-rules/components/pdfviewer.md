@@ -65,7 +65,7 @@ Button order in the toolbar (left-to-right as emitted): rotate-right, rotate-lef
 
 - Fullscreen state: when the widget enters fullscreen, the `:fullscreen` (and vendor-prefixed) pseudo-class fires on `.z-pdfviewer`. The fullscreen button's `<i>` content changes from `z-icon-expand` to `z-icon-compress` via the CSS rule `&:fullscreen .z-pdfviewer-toolbar-fullscreen > i::before`. No extra class is added.
 
-- ZK adds no `.z-pdfviewer-disabled` or `.z-pdfviewer-readonly` class — those attributes are not supported by this widget.
+- Supported states are the ones listed above; the widget has no `disabled` or `readonly` attribute.
 
 ## Attribute support
 
@@ -132,6 +132,6 @@ PE / EE (zkex). Requires a valid ZK PE or EE license.
 ## Notes
 
 - The `FOCUS_WITHIN_SUPPORT` flag determines whether ZK uses CSS `:focus-within` or JS event listeners to show the toolbar. Modern browsers all support `:focus-within`; the JS fallback path (inline `opacity` style) will override the CSS rule on those browsers that don't. Theme CSS should always include the `:focus-within` rule as the primary mechanism.
-- The fullscreen `::before` content swap (expand → compress icon) is implemented as a CSS rule in the LESS source (`.z-pdfviewer:fullscreen .z-pdfviewer-toolbar-fullscreen > i::before { content: '\f066' }`). The theme must replicate this rule to keep the icon correct in fullscreen mode.
+- The fullscreen `::before` content swap (expand → compress icon) is implemented as a CSS rule in `../zkcml/zkex/src/main/resources/web/js/zkex/pdfviewer/css/pdfviewer.css` (`.z-pdfviewer:fullscreen .z-pdfviewer-toolbar-fullscreen > i::before { content: '\f066' }`). The theme must replicate this rule to keep the icon correct in fullscreen mode.
 - The mold file (`pdfviewer.js`) emits the toolbar buttons in a fixed order; the separator `<span>` elements use `role="separator"` and `aria-orientation="vertical"`. Do not hide or remove them — they are part of the accessibility tree.
 - The page-active `<input>` has `type="number"` with `min="1"` and `required`. It will fire the browser's native `:invalid` pseudo-class if the user types an out-of-range value. The theme should style this state.

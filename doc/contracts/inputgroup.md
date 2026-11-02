@@ -8,7 +8,7 @@ decomposition: textbox (centre input) + prefix/suffix adornments (text or icon)
 preview: ${PREVIEW_URL}/inputgroup.zul
 
 ## References
-- DESIGN.md sections: §1, §5, §7, §11
+- `doc/spec/DESIGN.md` sections: "Surface Palette", "Corner Radii", "Typography", "Border Rules"
 - Closest-sibling CSS to read first: `zul/src/main/resources/web/js/zul/inp/css/input.css`
 - Close to MUI InputAdornment pattern.
 
@@ -19,7 +19,7 @@ preview: ${PREVIEW_URL}/inputgroup.zul
 .z-inputgroup-prefix / -suffix     ← adornments (icons/text)
 ```
 
-## Expected values (T2 — DESIGN.md tokens only)
+## Expected values (T2 — `doc/spec/DESIGN.md` tokens only)
 - Border / radius / focus state should match other inputs (combobox/textbox).
 - Adornment text uses on-surface-variant colour.
 
@@ -35,7 +35,7 @@ preview: ${PREVIEW_URL}/inputgroup.zul
       growth to offset it and the shrink-to-fit group jumps. Inside a group,
       children must keep constant 1px border AND constant rest padding; the
       group's `:focus-within` outline owns the affordance (see skill
-      `reference/focus-affordance-no-layout-shift.md`).
+      `marble-theme reference/focus-affordance-no-layout-shift.md`).
 - [ ] **vertical-border**: in `orient="vertical"`, the centre `.z-textbox` must
       keep BOTH left and right borders (1px outline colour); only its
       `border-top` is collapsed against the preceding addon. A textbox with

@@ -11,7 +11,7 @@
 | **垂直** | ❌ 零 margin | 父層 `.z-vstack[-sm/-md/-lg]`、單顆 `.z-mb-*`、或 ZK 原生 `<vlayout spacing>` |
 | **水平** | ❌ 零 margin | 父層 `.z-hstack[-sm/-md/-lg]`、`.z-d-flex` + `.z-gap-*`、或 `<hlayout spacing>` |
 
-**核心規則:任何 widget 都不帶 theme 預設 margin。** 間距永遠由「容器」或「明確的 utility class」宣告。
+**核心規則:間距永遠由「容器」或「明確的 utility class」宣告;widget 本身的 theme 預設 margin 為 0。**
 
 ## 為什麼不做預設 rhythm(2026-06-05 反轉的原因)
 
@@ -75,7 +75,7 @@ portallayout 自己的 JS 管 sizing,不經過 css-flex,所以安全)。
 **不是 bug**:它對齊 web 平台的 Grid/Flexbox/Box 語意。若每層 `<vlayout>` 都帶
 16px padding,巢狀 layout 會累積出無法解釋的死白(三層 = 48px)。
 
-規則:**primitive 保持零 padding,作者在需要處明確 opt-in。**
+規則:**padding 由內層 wrapper 的 `z-p-*` 或 semantic container 提供;primitive 本身保持零 padding,作者在需要處明確 opt-in。**
 
 ```xml
 <!-- ❌ primitive 不吃 padding -->
@@ -99,9 +99,8 @@ padding 就改用 semantic container。
 ## Use-case / demo 頁面:優先組合 `z-*` utilities
 
 在 use-case / demo 頁面(`zkthemelab/src/main/webapp/web/**`)裡,優先用內建 `z-*`
-utility class 組合出版面,而不是自訂 page-local `sclass`。這與 CLAUDE.md 的
-「prefer built-in utility classes」規則一致 — demo 頁面的目的是證明既有內建
-CSS 就能完成多數視覺效果。
+utility class 組合出版面,而不是自訂 page-local `sclass`。demo 頁面的目的是
+證明既有內建 CSS 就能完成多數視覺效果。
 
 自訂 page-local class **只有**在下列情況才成立:
 - **(a)** 需要 pseudo-class 規則(如 `:last-child` 移除最後一條分隔線)—

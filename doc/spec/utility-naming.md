@@ -1,11 +1,7 @@
 # Utility Class Naming
 
-Normative rules for naming Marble's `z-*` utility classes. The review this page was derived from
-is kept locally under `tasks/` and is not in the repository; its durable content (the rules, the
-text-size scale, and the rename verification method) is carried in this page. The review's
-evidence and full comparison are kept locally under `tasks/`, not in the repository. The decisions
-are in this page, and the options that were rejected are summarized in the "Rejected alternatives"
-section. Follow this page when
+Normative rules for naming Marble's `z-*` utility classes: the rules, the rename verification
+method, and the options that were rejected (see "Rejected alternatives"). Follow this page when
 adding a class or a whole category.
 
 Marble ships **authorable utility classes**; the full list is the generated catalogue described in §4. They are Marble's public vocabulary from ZK
@@ -78,7 +74,7 @@ available. With breakpoints in the infix slot, the suffix is free and unambiguou
 ### R4 — Logical properties, never physical
 
 `start`/`end`, never `left`/`right`: `z-ms-2`, `z-border-start`, `z-float-end`, `z-text-start`.
-Marble is RTL-capable and the physical names silently break it.
+Logical names keep the utility vocabulary ready for RTL, and the physical names would silently break it.
 
 ### R5 — A utility never takes a bare noun that could name a ZK component
 
@@ -113,30 +109,16 @@ is.
 `xs sm md lg xl 2xl 3xl …`, each step guessable from its neighbours. The font-size scale
 previously carried both `md` (13px) and `base` (14px); `base` means "the default size" in
 Tailwind while Marble's default body was the 13px step, so the obvious reach gave the wrong
-size silently. The scale now has no `base` step. Its current px values, as listed in the header
-comment of `zul/src/main/resources/web/zul/css/utility/_typography.css`:
-
-| class | px | MD3 typescale role(s) |
-|---|---|---|
-| `z-text-xs` | 11 | label-small |
-| `z-text-sm` | 12 | body-small, label-medium |
-| `z-text-md` | 13 | body-medium (default body) |
-| `z-text-lg` | 14 | title-small, label-large |
-| `z-text-xl` | 16 | title-medium, body-large |
-| `z-text-2xl` | 22 | title-large |
-| `z-text-3xl` | 24 | headline-small |
-| `z-text-4xl` | 28 | headline-medium |
-| `z-text-5xl` | 32 | headline-large |
-| `z-text-6xl` | 36 | display-small |
-| `z-text-7xl` | 45 | display-medium |
-| `z-text-8xl` | 57 | display-large |
+size silently. The scale now has no `base` step. The px value and MD3 typescale role of each
+step (`z-text-xs` … `z-text-8xl`) are in the header comment of
+`zul/src/main/resources/web/zul/css/utility/_typography.css`.
 
 ---
 
 ## 3. Changing an existing name
 
 Renames are mechanical but the verification is not. The method below is the part that matters
-every time; the original review it came from is kept locally under `tasks/`, not in the repository.
+every time.
 
 - **Anchor the sweep** on `(?<![\w-])name(?![\w-])`. `sclass` is space-separated, and an
   unanchored match rewrites `z-text-xl` inside `z-text-2xl` — and `z-cardlayout` inside `z-card`.
@@ -206,17 +188,9 @@ before and after the change.
 
 ## 4. Where the classes live
 
-| File | Category |
-|---|---|
-| `zul/src/main/resources/web/zul/css/utility/_spacing.css` | margin / padding, 4px scale |
-| `…/_layout.css` | display, responsive, container queries, flex, grid, gap, sizing, overflow, position |
-| `…/_typography.css` | font size, weight, style, line height, alignment, transform |
-| `…/_colors.css` | text and background colour roles |
-| `…/_borders.css` | border and corner radius |
-| `…/_elevation.css` | elevation levels |
-| `…/_stack.css` | `z-hstack` / `z-vstack` |
-| `…/_surface.css` | `z-paper` |
-| `…/_print.css` | `z-d-print-*` and the print reset |
+The source files are `zul/src/main/resources/web/zul/css/utility/_*.css` (one file per category:
+spacing, layout, typography, colors, borders, elevation, stack, surface, interactions, print); list them with
+`ls zul/src/main/resources/web/zul/css/utility/`.
 
 The catalogue is generated at build time to
 `zul/codegen/resources/web/zul/css/utility-classes.json` and ships inside `zul.jar`. See
@@ -226,26 +200,24 @@ The catalogue is generated at build time to
 
 ## Rejected alternatives
 
-The review this page was derived from is kept locally under `tasks/` and is not part of the
-repository. It compared the options below. For each decided question, this lists
-the options it did not choose and the reason the review gives. The review does not state a
-separate verdict for these options; the reasons are its cost and risk statements.
+For each decided question, this lists the options that were not chosen and the reason. The
+reasons are cost and risk statements; no separate verdict was recorded for these options.
 
-- **D1, breakpoint slot.** Option B (move print to the suffix slot) does not resolve the
+- **Breakpoint slot.** Option B (move print to the suffix slot) does not resolve the
   size-versus-breakpoint collision and gives up the Bootstrap-verbatim `z-d-print-none`. Option C
   (leave it and document it) makes the collision permanent at 11.0.
-- **D2, `z-visually-hidden` and `z-sr-only`.** Option B (keep `z-sr-only`) keeps a name that
+- **`z-visually-hidden` and `z-sr-only`.** Option B (keep `z-sr-only`) keeps a name that
   Bootstrap 5 renamed, because the content is not screen-reader only. Option C (`z-hidden`) is
   unsafe: it collides with `display:none` (`z-d-none`), contradicts the HTML `hidden` attribute, and
   does not say who can reach the content, so it claims a removal that did not happen.
-- **D3, `z-text-base`.** Option B (swap the 13px and 14px names) changes the meaning of two
-  existing class names, which the review calls the worst kind of silent breakage. Option C (drop
+- **`z-text-base`.** Option B (swap the 13px and 14px names) changes the meaning of two
+  existing class names, the worst kind of silent breakage. Option C (drop
   `z-text-base` and leave 14px without a size utility) loses a step that MD3 uses for `title-small`
   and `label-large`.
-- **D4, utility sub-prefix.** Option B (`zu-` prefix) renames every utility class, touches every
+- **Utility sub-prefix.** Option B (`zu-` prefix) renames every utility class, touches every
   zkthemelab page, the manifest, the skill docs and the slide deck, and loses the Bootstrap/Tailwind
   recognition (`zu-m-1` no longer reads as Bootstrap's `m-1`).
-- **D5, `z-card`.** Option B (`z-surface`) sits awkwardly beside `z-bg-surface` and
+- **`z-card`.** Option B (`z-surface`) sits awkwardly beside `z-bg-surface` and
   `z-bg-surface-variant`, so the names do not show that `z-surface` is the full treatment while
   `z-bg-surface` is only the colour. Option C (keep `z-card` and record a reservation) means a future
   Card component either takes a worse class name or forces a breaking change, and the person who
@@ -255,9 +227,5 @@ separate verdict for these options; the reasons are its cost and risk statements
 
 ## 5. Related
 
-- The original review this page was derived from — kept locally under `tasks/`, not in the
-  repository. Its durable content is carried in this page; its evidence and full comparison are
-  kept locally under `tasks/`, not in the repository. The decisions are in this page, and the
-  options that were rejected are summarized in the "Rejected alternatives" section.
 - `doc/spec/spacing-policy.md` — the 4px scale the spacing classes expose
 - `doc/spec/responsive-design.md` — the Bootstrap breakpoint values used by R3

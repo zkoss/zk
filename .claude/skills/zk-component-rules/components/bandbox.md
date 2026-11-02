@@ -40,4 +40,4 @@ Use `:focus-within` on the root — focus lands on the inner input, not the root
 
 ## Bundle
 
-Lives in `combo.css.dsp` alongside combobox, datebox, timebox, spinner. Edits to bandbox styles cascade to the others. See `reference/css-file-bundling.md`.
+`lang.xml` registers `combo.css.dsp` for bandbox, combobox, spinner and doublespinner. Edits to bandbox styles cascade to the others. See `reference/css-file-bundling.md`.

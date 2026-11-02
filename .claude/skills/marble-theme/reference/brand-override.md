@@ -10,15 +10,21 @@ the way it is, so nobody re-opens the decision.
 
 ## The mechanism: `oklch()` relative colour, absolute tone
 
-Nine derived tokens — the `container` / `on-container` pairs for primary, secondary, error and
-warning, plus `inverse-primary` — are derived from their role seed using relative colour syntax:
+The derived tokens — the `container` / `on-container` pairs for the roles, plus `inverse-primary`
+and the `*-fill` tokens — are derived from their role seed using relative colour syntax, for
+example (`tokens/_colors.css`):
 
 ```css
-oklch(from var(--zk-color-primary) 0.92 c h)
+oklch(from var(--zk-color-primary) 0.92 calc(c * 0.25) h)
 ```
 
-This pins **lightness to an absolute tone** while inheriting the seed's chroma and hue. Seeds,
-the `on-<role>` whites, neutral surfaces and the `status-*` badge colours stay literal.
+The `container`, `on-container` and `inverse-primary` tokens pin **lightness to an absolute tone**
+while keeping the seed's hue and scaling its chroma by a per-token factor `calc(c * k)`;
+`--zk-color-warning-container` also rotates the hue (`calc(h + 35)`). The `*-fill` tokens differ:
+`oklch(from <seed> min(l, 0.54) c h)` caps lightness at 0.54 and keeps the seed's chroma and hue
+(a seed that is already darker keeps its own lightness). The seeds are primary, error, warning and success (secondary is
+itself derived from primary); the `on-<role>` whites, neutral surfaces and the `status-*` badge
+colours stay literal. See `doc/spec/brand-override.md` for the customer-facing list.
 
 ## Why not `color-mix()` — this was a real fork in the road
 
@@ -51,8 +57,9 @@ mid-to-dark-seed caveat below.
 - **Solid-fill-only contrast.** The derivation guarantees contrast for solid fills. Light seeds
   may still require the adopter to override `--zk-color-on-primary` by hand — the caveat is
   stated in the customer spec.
-- **Warning containers lean slightly orange** because the seed hue is preserved rather than
-  corrected.
+- **Warning container hue.** `--zk-color-warning-container` is rotated by +35 degrees of hue from
+  the warning seed, while `--zk-color-on-warning-container` keeps the seed hue
+  (`tokens/_colors.css:103-104`).
 - **Verified once, empirically, and worth re-verifying after any minifier change:** the relative
   colour syntax survives minification, cross-hue containers land at a consistent L ≈ 0.92, and
   every `on-`/container pair clears WCAG AA. Minifiers corrupt this class of syntax silently —

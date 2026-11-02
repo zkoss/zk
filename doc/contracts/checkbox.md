@@ -8,7 +8,7 @@ zk-version: 10.2.1-jakarta
 
 ## References
 - MUI CSS: Checkbox.css; Inputs/Switch.css (switch mold — visual benchmark is the MD3 switch, see Switch section)
-- DESIGN.md sections: §2, §3, §7, §8, §11
+- doc/spec/DESIGN.md sections: "Text Colors", "Brand & Status Colors", "Typography", "State-Layer Overlays", "Border Rules"
 
 ## Expected values
 
@@ -17,18 +17,18 @@ zk-version: 10.2.1-jakarta
 | c1 | `.z-checkbox-mold` | width / height | 18–20px |
 | c2 | `.z-checkbox-mold` | border | 2px solid rgba(0, 0, 0, 0.6) (unchecked) |
 | c3 | `.z-checkbox-mold` | border-radius | 2px (checkbox) or 50% (radio) |
-| c4 | `.z-checkbox-input:checked + .z-checkbox-mold` | background-color | rgb(55, 111, 208) |
-| c5 | `.z-checkbox-input:checked + .z-checkbox-mold` | content/check-mark | white check icon |
-| c6 | `.z-checkbox:hover .z-checkbox-mold` | background-color | state-layer overlay |
-| c7 | `.z-checkbox-input:focus-visible + .z-checkbox-mold` | outline / shadow | focus ring |
-| c8 | `.z-checkbox[disabled]` | opacity | 0.38 |
+| c4 | `.z-checkbox-on > .z-checkbox-mold` | background-color | rgb(55, 111, 208) |
+| c5 | `.z-checkbox-on > .z-checkbox-mold` | content/check-mark | white check icon |
+| c6 | `.z-checkbox-off:hover > .z-checkbox-mold::before` | opacity | `var(--zk-state-hover-opacity)` (state layer) |
+| c7 | `.z-checkbox:has(input[type="checkbox"]:focus-visible) > .z-checkbox-mold` | outline / shadow | focus ring |
+| c8 | `.z-checkbox-disabled > .z-checkbox-mold` | opacity | 0.38 |
 | c9 | `.z-checkbox-content` | font-size | 13–14px |
 
 ### Switch mold (`mold="switch"`) — MD3 values, token-adapted
 
 MD3 switch: 52×32 track (outer border box, 2px border, radius 16) with a thumb whose
 centre is 16px from the track's outer edge (off: left, on: right); thumb 16px off / 24px on.
-Retired by D62-A (2026-10-09, #10): Switch now follows MD3. Deviation: off-state thumb uses
+Switch follows MD3. Deviation: off-state thumb uses
 --zk-color-on-surface-variant (not outline) so the thumb keeps >= 3:1 against the track with
 Marble's light outline token.
 
@@ -68,8 +68,7 @@ glyph), NO inset shadow. Sizing stays MUI-compact (32×32, r4).
 ZK emits mold-**prefixed** state classes for this mold (`.z-checkbox-tristate-off` / `-on` /
 `-indeterminate`), NOT the unprefixed default-mold classes — see the checkbox skill entry. The box
 reuses the default-mold visual (18px square, `::after` glyph). Each state must be distinguishable:
-checked = checkmark on a primary fill, indeterminate = dash on a primary fill. (Gap 2026-07-14.)
-
+checked = checkmark on a primary fill, indeterminate = dash on a primary fill.
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | tr1 | `.z-checkbox-tristate-off > .z-checkbox-mold` | background / `::after` | transparent box, outline border; `::after` display none (no glyph) |

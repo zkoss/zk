@@ -8,16 +8,16 @@ zk-version: 10.2.1-jakarta
 
 ## References
 - MUI CSS: Snackbar.css / Alert.css
-- DESIGN.md sections: §3, §6, §11
+- `doc/spec/DESIGN.md` sections: "Brand & Status Colors", "Elevation / Shadow", "Border Rules"
 
 ## Expected values
 
 > `.z-notification` is a bare layout shell — NO background, padding, shadow or
 > radius (see skill `toast-notification.md`). All visual card styling lives on
 > `.z-notification-content`. Putting padding on the shell shifts the absolute
-> `.z-notification-icon` onto the accent stripe; putting a background on it
-> double-paints behind the card. (Gap 2026-06-18: a duplicate `.z-notification`
-> rule in misc.css regressed exactly this.)
+> `.z-notification-icon` away from its left offset; putting a background on it
+> double-paints behind the card. (A duplicate `.z-notification` rule in misc.css
+> once regressed exactly this.)
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
@@ -27,10 +27,10 @@ zk-version: 10.2.1-jakarta
 | c3 | `.z-notification-content` | border-radius | 4px |
 | c4 | `.z-notification-content` | box-shadow | level-2 |
 | c5 | `.z-notification-content` | font-size | 13–14px |
-| c6 | `.z-notification-info .z-notification-content` | background | **opaque** info tint, `color-mix(#007fab 12%, surface)` — alpha must be 1 (floating overlay must not let content bleed through) |
-| c8 | `.z-notification-warning .z-notification-content` | background | **opaque** warning tint, `color-mix(#bd3f00 12%, surface)` — alpha must be 1 |
-| c9 | `.z-notification-error .z-notification-content` | background | **opaque** error tint, `color-mix(#d32f2f 12%, surface)` — alpha must be 1 |
-| c10 | `.z-notification-icon` | size | 20–24px, matching status colour; left edge clears the 4px stripe |
+| c6 | `.z-notification-info .z-notification-content` | background | **opaque** `var(--zk-notification-bg)` (surface-container-highest) — alpha must be 1 (floating overlay must not let content bleed through) |
+| c8 | `.z-notification-warning .z-notification-content` | background | **opaque** `var(--zk-color-warning-container)` — alpha must be 1 |
+| c9 | `.z-notification-error .z-notification-content` | background | **opaque** `var(--zk-color-error-container)` — alpha must be 1 |
+| c10 | `.z-notification-icon` | size | 20–24px, matching status colour; there is no accent stripe (severity is carried by the icon colour and the container fill) |
 | c11 | `.z-notification-content` | single-line vertical alignment | message text optically centred within the `min-height:48px` card (`display:flex; align-items:center`) — block layout top-aligns the line and misaligns it with the centered icon; text centre must be within ±1px of the card centre |
 
 ## States to evaluate

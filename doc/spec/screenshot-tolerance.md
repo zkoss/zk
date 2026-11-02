@@ -14,10 +14,10 @@ shot red from one run to the next. Without a floor, the gate fails on noise that
 
 ## Scope: two different checks
 
-- **Zero-tolerance equivalence run.** Threshold `0`, `maxDiffPixels: 0`. The tools are under
-  `zkThemeTemplate/doc/migration/tools/zero-tolerance/`. Its purpose is to answer "did a move,
-  refactor or version bump change a single pixel?", so it ignores nothing. No setting in
-  `playwright.config.ts` affects it. Its re-shoot rule ("re-shoot up to 3×") belongs to this tool,
+- **Zero-tolerance equivalence run.** Threshold `0`, `maxDiffPixels: 0`. It was used for the theme
+  migration, which is complete; the tool is no longer maintained. Its purpose was to answer "did a move,
+  refactor or version bump change a single pixel?", so it ignored nothing. No setting in
+  `playwright.config.ts` affects it. Its re-shoot rule ("re-shoot up to 3×") belonged to that tool,
   not to the Playwright suite.
 - **Everyday regression gate.** The Playwright suite in `zkthemelab/src/test/playwright/`. It carries
   the tolerances described below.
@@ -84,7 +84,7 @@ Verification of this rule, recorded when it was made (not re-run since):
   pixels.
 - `tablet.spec.ts` has a zero default. Two cases opt into `maxDiffPixelRatio: 0.02`: `tabbox` and
   `window`.
-- The reason for the two `0.02` opt-ins is not stated in the source. 待確認.
+- Reason for the two `0.02` opt-ins (`tablet.spec.ts`): these pages have a known sub-1% render flake (font-load and CSS-transition settle timing). The `tabbox` selection-indicator transition produces about 176 px (0.01 ratio) of transient diff; a `0.02` ceiling absorbs it while a real regression (far larger) still fails.
 
 ### Colour threshold
 
@@ -104,7 +104,7 @@ Verification of this rule, recorded when it was made (not re-run since):
   every screenshot passed that mutation. At `0.02`, the tabbox, toolbar and paging shots failed in both
   projects.
 - The noise of the new baselines is 0 px on the machine where they were measured, so the tighter
-  threshold costs nothing there. Cross-machine anti-aliasing at `0.02` is not measured. 待確認.
+  threshold costs nothing there. Cross-machine anti-aliasing at `0.02` is not measured.
 - The residual scan in `brand-override.spec.ts` does not use `toHaveScreenshot`, so the threshold does not
   apply to it.
 - The per-section `maxDiffPixels: 20` (inherited from `gallery-scan.spec.ts`) applies on top of the
@@ -114,10 +114,6 @@ Verification of this rule, recorded when it was made (not re-run since):
 
 - The zero-tolerance equivalence run stays at zero. That is its purpose. No option in this spec changes it.
 
-## 待確認
+## Limit
 
-- **Gallery ratio.** One table in the source states the `gallery` project uses `maxDiffPixelRatio: 0.01`.
-  The knob table in the same source, and `gallery-scan.spec.ts`, state `0.002`. This spec records `0.002`
-  only. 待確認 which value is in force for the `gallery` project.
-- **Tablet opt-in reason.** Not stated in the source (see [Gallery and tablet](#gallery-and-tablet)).
-- **Cross-machine anti-aliasing at `threshold: 0.02`.** Not measured (see [Colour threshold](#colour-threshold)).
+- **Cross-machine anti-aliasing at `threshold: 0.02`** is not measured (see [Colour threshold](#colour-threshold)).

@@ -35,7 +35,7 @@ State classes are JS-toggled on the **`.z-step`** root by `Stepbar.setActiveInde
 - `.z-step-complete` — added to every step before the active one when `linear="true"` (the default). Server-side `updateCompleteStatus()` calls `step.setComplete(i < activeIndex)` for each child. In `linear="false"` mode, `complete` is author-controlled per step.
 - `.z-step-error` — added when `step.error="true"`.
 
-There is **no** `.z-step-completed` and **no** `.z-step-inactive`. Upcoming (not-yet-reached) steps carry no state class — style them via the bare `.z-step` selector.
+The completed state is `.z-step-complete`. Upcoming (not-yet-reached) steps carry no state class — style them via the bare `.z-step` selector.
 
 The icon element gets one of these content classes (mutually exclusive, set by `_adjustIconContent()`):
 
@@ -44,7 +44,7 @@ The icon element gets one of these content classes (mutually exclusive, set by `
 - `.z-icon-exclamation` — when the step is in error (and no custom `iconSclass`).
 - whatever was passed in `iconSclass="…"` — replaces all of the above.
 
-These content classes are added in addition to (not replacing) the base `.z-step-icon` class on the same `<i>`. To target the "blank circle" upcoming state in CSS use `.z-step-icon.z-step-icon-empty` or simply `.z-step:not(.z-step-active):not(.z-step-complete):not(.z-step-error) .z-step-icon`.
+These content classes are added in addition to (not replacing) the base `.z-step-icon` class on the same `<span>`. To target the "blank circle" upcoming state in CSS use `.z-step-icon.z-step-icon-empty` or simply `.z-step:not(.z-step-active):not(.z-step-complete):not(.z-step-error) .z-step-icon`.
 
 ## Stepbar-level modifier classes
 
@@ -65,16 +65,16 @@ Toggled on `.z-stepbar` root via `domClass_()` / runtime setters:
 | `title` (Step) | Text node inside `.z-step-title`. |
 | `complete` (Step) | Toggles `.z-step-complete` on the step root and swaps the icon's content class to/from `.z-icon-check`. In linear mode, server-side recomputes this from `activeIndex`; do not set it manually. |
 | `error` (Step) | Toggles `.z-step-error` on the step root and swaps the icon's content class to/from `.z-icon-exclamation`. |
-| `iconSclass` (Step) | Replaces the default content class on the icon `<i>` with the supplied class name. Overrides the check/exclamation icon. |
+| `iconSclass` (Step) | Replaces the default content class on the icon `<span>` with the supplied class name. Overrides the check/exclamation icon. |
 
-`disabled` is not supported.
+Supported states are the ones listed above (`active`, `complete`, `error`).
 
 ## Composition invariants
 
 - **One active at a time.** When `activeIndex` changes, JS removes `.z-step-active` from every other step before adding it to the new one. CSS that styles `.z-step-active` may safely assume uniqueness.
 - **Complete-before-active is computed, not authored** (in `linear="true"` mode). Server iterates children on every active-index change and sets `complete` to `i < activeIndex`. CSS must therefore treat `.z-step-complete` as the "behind the cursor" marker, not as "user manually marked done".
 - **Connector is rendered by the step that follows it** — `::before` on `.z-step` (or `.z-step-content::before` when wrapped) draws the line on the step's leading edge. The very first step's `::before` and the very last step's `::after` MUST be hidden, otherwise stray line segments appear at the ends.
-- **Flex children share width equally.** Each `.z-step` is `flex: 1`. The step's `<i>` and `<span>` are intrinsic-width; the connector pseudo-element consumes the remaining row space via `flex: 1`. Theming that overrides `flex` on `.z-step` breaks the connector layout.
+- **Flex children share width equally.** Each `.z-step` is `flex: 1`. The step's icon `<span>` and title `<span>` are intrinsic-width; the connector pseudo-element consumes the remaining row space via `flex: 1`. Theming that overrides `flex` on `.z-step` breaks the connector layout.
 - **Click activation is gated by linear-mode.** Every step binds an `onClick` listener, but `Step._activate()` early-returns when `stepbar.isLinear()` is true. CSS hover/active affordances should therefore be applied only inside `.z-stepbar:not(.z-stepbar-linear)`.
 - **Icon's base class is reset on every state change.** `_adjustIconContent()` does `nIcon.className = this.$s('icon')` first, then adds the appropriate content class. Any extra classes a theme injects onto the icon `<span>` element via JS will be wiped — style only through CSS rules, not by DOM-poking the icon node.
 - **`.z-step` must establish a local stacking context.** Iceblue achieves this via `z-index: 0` on `.z-step`; modern themes may equivalently use `isolation: isolate` or any other stacking-context trigger. Without one, the absolutely-positioned connector pseudo-elements from one step can paint across adjacent step content in browsers that promote `position: absolute` descendants to the root stacking context. The mechanism is theme choice; the **existence** of a local stacking context on `.z-step` is structural.
@@ -117,8 +117,8 @@ Theme-agnostic predicates that two states must be visually distinguishable. Rend
 stepbar has no ZK component sibling that shares its layout primitive (connected horizontal markers). It borrows:
 
 - **Circular marker rendering** — same `border-radius: 50%`, font-icon-inside-a-box pattern used by `rating` (`.z-rating-icon`) and the `<i>` markers in `checkbox`/`radio` molds. See `components/rating.md`.
-- **State-class-on-root, descendant-selects-icon** — same pattern as `rating` (`.z-rating-disabled` on root, `.z-rating-icon` styled via `.z-rating-disabled .z-rating-icon`). The theme should *not* try to put state classes on the icon itself.
-- **Vertical-orientation modifier on root** — same convention as `rating` (`.z-rating-vertical`), `tabbox` (`.z-tabbox-vertical`), `slider` (`.z-slider-vertical`).
+- **State class on the step, descendant selects the icon.** State classes sit on `.z-step`; the icon is styled via `.z-step-complete .z-step-icon` and the like. The theme should *not* try to put state classes on the icon itself. (`rating` is different: its state classes are on each icon `<i>`.)
+- **Vertical-orientation modifier on root** — same convention as `rating` (`.z-rating-vertical`) and `slider` (`.z-slider-vertical`).
 
 There is no ZK component sibling with shared bundling. External design-system analogs (where the theme should look for visual cues) belong in the bundle's References block, not here.
 
@@ -134,7 +134,7 @@ EE (zkmax). Loading this widget requires a valid ZK EE license; absent that, ZK 
 
 - **`.z-step-content` is always in the DOM.** It is emitted unconditionally by `mold/step.js`. Any CSS selector targeting `.z-step-icon` or `.z-step-title` that omits `.z-step-content` in the path will fail specificity or structural tests. Correct forms: `.z-step-content > .z-step-icon` or `.z-step .z-step-content > .z-step-icon`.
 - **`.z-step-icon` is a `<span>`, not `<i>`.** The mold emits `<span id="...-icon" class="...icon ...icon-empty" ...>`. External write-ups that use `<i>` are inaccurate. Font-icon classes (`.z-icon-check`, `.z-icon-exclamation`, etc.) are added to this `<span>` at runtime by `_adjustIconContent()`.
-- Legacy bundles and external write-ups sometimes refer to `.z-step-completed` and `.z-step-number`. Neither exists. The actual classes are `.z-step-complete` (no trailing "d") and `.z-step-icon`.
+- The classes are `.z-step-complete` (no trailing "d") and `.z-step-icon`; legacy write-ups that say `.z-step-completed` or `.z-step-number` are wrong.
 - `_adjustIconContent()` runs on `bind_` and on every state setter, so the icon's class always reflects the current state — there is no transient "wrong icon" window the theme needs to mask.
 - `Step.title` setter only mutates the text node of `.z-step-title`; the wrapper element is never destroyed. Theme `:empty` selectors that rely on the title element disappearing will not fire.
 - The component name is **stepbar** (singular root, plural steps) — the file `stepbar.css.dsp` covers both `<stepbar>` and `<step>` markup.
