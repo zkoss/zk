@@ -177,6 +177,15 @@ Drop the negative margin on the JS-driven axis and every thumb lands half-a-thum
 
 `Rangeslider.redrawMarks_()` appends BOTH a `.z-{c}-mark-dot` and a `.z-{c}-mark-label` to each `.z-{c}-mark`. `Multislider.redrawMarks_()` (override) appends ONLY the label — no dot. So a multislider mark has no on-track dot anchor; its label is positioned relative to a bare (2px) mark element on the track. Theme consequence: the per-orientation offset that places the mark label a consistent perpendicular distance from the track differs between the two components (the dot shifts rangeslider's anchor), even when the intended visual gap is identical — express the intended gap as one shared value and add a small per-case `calc()` correction rather than hand-tuning four independent offsets.
 
+## Multislider: each range has its own `.z-sliderbuttons`
+
+Each range of a multislider renders its own sibling `.z-sliderbuttons` container. When a theme stretches each container across the full rail (Marble does), no z-index separates them, so DOM order decides which one is on top, so the last range's container covers the thumbs of every earlier range at their centres. For N ranges, 2(N−1) of the 2N thumbs cannot be reached by a pointer. A single-range multislider is not affected.
+
+A theme that stretches each container over the rail must do one of the following:
+
+- make the container `pointer-events: none` and the thumbs `pointer-events: auto`; or
+- otherwise guarantee that `elementFromPoint` at each thumb's centre returns that thumb.
+
 ## Bundle
 
 `slider.css.dsp` — one-to-one mapping. No sibling impact.

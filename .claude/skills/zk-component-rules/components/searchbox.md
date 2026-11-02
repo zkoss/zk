@@ -54,6 +54,10 @@ There is no `readonly` / `invalid` / `inplace` for searchbox.
 - Do **not** put `width: 100%` / `max-width: 100%` / `min-width: 100%` on `.z-searchbox-popup` — those resolve against `<body>`.
 - The trigger's width is propagated as `style="min-width: Npx"` on the popup root; you can give the popup a larger `width` or let `min-width` win.
 
+### The popup can open upward
+
+`Searchbox._repositionPopup()` places the popup below the trigger (`after`) by default. When there is not enough viewport room below and enough room above, it places the popup above the trigger (`before`). An upward popup is therefore expected behaviour, and CSS cannot prevent it. The combobox uses the same before/after flip (`zul/src/main/resources/web/js/zul/inp/ComboWidget.ts`). Do not treat an upward popup as a theme defect.
+
 ### Hiding the popup: the mold sets NO inline display, so the theme owns it — scope the hide to the attached state
 
 Unlike combobox/bandbox/datebox (where ZK writes inline `style="display:none"`), the searchbox **mold renders `.z-searchbox-popup` with no inline display style**. The theme must therefore supply the hidden state — and it MUST be scoped to the popup *while attached inside the trigger*:

@@ -134,6 +134,8 @@ Load only the file for the component you are working on.
 | `components/rowlayout.md` | rowlayout + rowchildren (EE) — 12-column proportional-grid layout; `.z-rowlayout` float-clearfix container; `.z-rowchildren.colspanN[.offsetN]` float children; JS writes all inline widths — do NOT override with CSS `!important`; own file `zkmax/layout/css/rowlayout.css.dsp` |
 | `components/confirmpopup.md` | confirmpopup (CE, new in ZK 10.4.0) — T2 anchored popover card (extends but mostly overrides `Popup`); no `.z-popup-content` wrapper, header/body/footer are direct root children; optional header/icon/message; two-layer CSS-triangle arrow re-anchored via JS on placement change; severity enum (`info/success/warning/danger/secondary`) shared with native badge/chip, recolors only the icon; fixed cancel-then-ok DOM order independent of `defaultFocus`; CE mold emits no ARIA (za11y EE add-on layers `role="alertdialog"`); own file `confirmpopup.css.dsp` |
 | `components/linelayout.md` | linelayout + lineitem (EE) — T2 vertical/horizontal timeline; tripartite column structure (first/cave/last); `.z-linelayout-vertical` / `.z-linelayout-horizontal` orientation classes; `.z-lineitem-point` circle with hidden state; first/last area `<div>`s are moved OUT of cave at bind_() via virtual-parent architecture; new CSS at `zkmax/layout/css/linelayout.css` |
+| `components/cardlayout.md` | cardlayout (EE) — one `.z-cardlayout-inner` per child, JS-positioned with inline `left`/`top`; inner must be absolute inside a relative, overflow-hidden root |
+| `components/fileupload.md` | fileupload (CE) — Button subclass with no `multiple` property; multi-file upload is set through the `upload` attribute string |
 
 ## What this skill deliberately does NOT contain
 

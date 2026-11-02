@@ -13,3 +13,7 @@ own rule served by no stylesheet across 26 rendered elements.)
 ## What its CSS provides
 
 - `.z-div` — `box-sizing: border-box` (so authored width/padding behave predictably).
+
+## Layout primitives add no padding to the container
+
+`.z-div`, `.z-hlayout` and `.z-vlayout` set no padding on the container itself. The only padding ZK writes on these layouts is the inline spacing between children: `hlayout` writes `padding-right` and `vlayout` writes `padding-bottom` on each non-last inner element (default `spacing` 5px). Content therefore sits at the container edge. Authors who need an inset wrap the content in a padded element.

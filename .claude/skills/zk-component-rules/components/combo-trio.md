@@ -61,6 +61,10 @@ java.util.Date sampleTime = new java.util.Date(0, 0, 1, 10, 30, 0);
 
 Without a value, inplace inputs render blank — not useful for visual verification.
 
+## Datebox timezone selector (`displayedTimeZones`)
+
+When `<datebox>` has `displayedTimeZones`, its popup gets a wrapper under the calendar: `<div class="z-datebox-timezone">` containing the timezone label text and a native `<select>` with one `<option>` per timezone (`zul/src/main/resources/web/js/zul/db/Datebox.ts`, `_redrawTimezone`; `Datebox.java` `setDisplayedTimeZones`). The `<select>` is a native control (see `selectbox.md`), so the closed control and the opened option list are styled separately (`::picker(select)`). ZK writes no inline margin on the wrapper and no inline sizing on the `<select>`. A theme that needs spacing, or styling that matches `.z-selectbox`, must supply it. (IceBlue's `calendar.css.dsp` does give `.z-datebox-timezone` a margin.)
+
 ## Mobile/tablet: datebox & timebox swap to a wheel picker
 
 On a touch UA, ZK replaces the desktop calendar/stepper with an iOS-style

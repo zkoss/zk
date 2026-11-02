@@ -117,3 +117,13 @@ by the theme's own `.lm_item.lm_stack{position:relative}`.
 zk has no theme-jar version coordination to drift — Marble ships inside `zul` and `zkmax`/`zkex`,
 not as a separately versioned theme jar. The template's four-location (`pom.xml` / `config.xml` /
 `package.json` / `Version.java`) drift check does not apply here.
+
+## Minifier: Lightning CSS (background for anyone reintroducing CleanCSS)
+
+`scripts/build-css.js` minifies with Lightning CSS. The comment above its minify step (about lines 84–93) gives the reason CleanCSS was replaced. CleanCSS 5.3.3 does not understand the modern syntax this theme uses and fails silently: it reports the damage in `output.warnings`, never in `output.errors`, so an errors-only check ships broken CSS at exit 0. The comment records these measurements from 2026-09-03:
+
+- a bare `@layer a, b;` order statement empties the whole output;
+- `@scope (...) { … }` loses the rules inside it;
+- `::picker(select)` and `appearance: base-select` rules are dropped with "Invalid property name … Ignoring." warnings.
+
+Lightning CSS parses all three correctly, so the two workarounds the old minify step carried were removed with the swap. If CleanCSS is ever reintroduced, re-test these three cases and read the warnings output, not only the errors.

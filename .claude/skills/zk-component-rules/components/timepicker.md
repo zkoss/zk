@@ -57,6 +57,13 @@ States rely on `:hover` and `:focus` / `:focus-within` pseudo-classes for hover 
 - The input covers the full root width minus the button width. (The button is always present — `buttonVisible="false"` is not settable on Timepicker, so the full-width input variant never occurs.)
 - Focus target: the actual focus is on the inner `<input>` element. Use `:focus-within` on the root to style the focused-composite state.
 
+## Input width
+
+- The Java `Timepicker` constructor calls `setCols(5)`, so the input renders `size="5"`, which fits `HH:mm` only.
+- Under `flex: 1; min-width: 0` alone, a longer format such as `HH:mm:ss` is clipped when the root has no explicit width.
+- A theme that wants the width to follow the content can use `field-sizing: content` with `flex: 1 1 auto` and a `min-width` floor, so an empty field stays clickable. The shipped timepicker stylesheet does this.
+- Do not copy this to timebox or datebox. The timebox stylesheet deliberately omits `field-sizing`, because `field-sizing: content` makes the browser ignore `size` and so disables the `cols` API. See `combo-trio.md`.
+
 ## Sibling decomposition
 
 timepicker's DOM is structurally identical to timebox and the combo-trio pattern:

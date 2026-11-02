@@ -62,6 +62,10 @@ Nine position classes on toast root:
 
 `.z-notification-info`, `.z-notification-warning`, `.z-notification-error` — applied to the notification root for semantic styling.
 
+## Widgets rendered as `<a>`: do not underline them on hover
+
+Several widgets render an `<a>` element. The toolbarbutton, menuitem, breadcrumbitem and `a` molds all emit one, and so do the `.z-menuitem-content` element and the `.z-toolbarbutton` and `.z-a` widgets. A global `a:hover { text-decoration: underline }` rule therefore underlines widget hover states. Scope any element-level anchor rule to `a[href]:not([class*="z-"])`, which matches only content links that have an explicit `href` and no `z-*` class.
+
 ## How to discover the actual class
 
 When in doubt:
