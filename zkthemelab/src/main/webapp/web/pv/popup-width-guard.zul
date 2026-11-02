@@ -1,0 +1,12 @@
+<?page title="Popup width guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for popup-width.spec.ts: a popup and a menupopup whose width attribute is narrower than
+     any theme minimum. Lives under pv/ so gallery-scan, forced-colors-gallery and
+     font-size-equivalence do not pick it up as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8 z-d-flex z-gap-6">
+    <button id="popupOpener" label="Open popup" popup="pop, position=after_start"/>
+    <popup id="pop" width="100px"><label value="popup"/></popup>
+    <label id="menuOpener" value="Right-click for menu" context="mp"/>
+    <menupopup id="mp" width="100px"><menuitem label="menu"/></menupopup>
+</h:div>
+</zk>

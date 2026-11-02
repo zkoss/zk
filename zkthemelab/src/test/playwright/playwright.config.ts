@@ -337,6 +337,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // The width attribute on popup and menupopup is not overridden by a theme min-width. See popup-width.spec.ts.
+      name: 'popup-width',
+      testMatch: /popup-width\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'tablet',
       testMatch: /tablet\.spec\.ts/,
       use: TABLET_USE,
