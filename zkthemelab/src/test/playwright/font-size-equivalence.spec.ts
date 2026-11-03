@@ -99,7 +99,11 @@ test.describe('font-size equivalence', () => {
 
       const hist: Histogram = await page.evaluate(() => {
         const h: Record<string, number> = {};
-        for (const el of Array.from(document.querySelectorAll('*'))) {
+        // Rendered page content only: <head> and the za11y live-region announcer (#za11y-announcer,
+        // present or not depending on the za11y build on the classpath) are not page markup, and
+        // counting them made every page drift between servers.
+        for (const el of Array.from(document.body.querySelectorAll('*'))) {
+          if (el.closest('#za11y-announcer')) continue;
           const fs = getComputedStyle(el).fontSize;
           h[fs] = (h[fs] ?? 0) + 1;
         }
