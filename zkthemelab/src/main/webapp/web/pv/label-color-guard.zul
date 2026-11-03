@@ -1,0 +1,11 @@
+<?page title="Label colour guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for label-color.spec.ts: text inside a coloured container, as plain text (ZK wraps it
+     in a label) and as a label, plus a container without a colour. Lives under pv/ so gallery-scan,
+     forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <div style="color:#c00">Plain text in a red div</div>
+    <div style="color:#c00"><label value="Label in a red div"/></div>
+    <div><label value="Label in a default div"/></div>
+</h:div>
+</zk>

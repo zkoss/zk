@@ -337,6 +337,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // A label inherits its container's colour instead of setting its own. See label-color.spec.ts.
+      name: 'label-color',
+      testMatch: /label-color\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // The width attribute on popup and menupopup is not overridden by a theme min-width. See popup-width.spec.ts.
       name: 'popup-width',
       testMatch: /popup-width\.spec\.ts/,
