@@ -12,6 +12,7 @@ ZK 11.1.0
   ZK-6172: zul.xsd: listbox with listitems but no listhead/listfoot fails validation
   ZK-6251: NPE in TrackerImpl when posting a notify-change with a null bean and property "*"
   ZK-6254: Datebox with a Thai locale throws a JS error when the input is an invalid date or Feb 29
+  ZK-6215: slider: decimal mode snaps one step low when the position lands exactly on a step
 
 * Upgrade Notes
 
