@@ -110,12 +110,6 @@ The orchestrator (sole writer of status/tracker docs) first confirms:
 
 ## Known limits / follow-ups (not yet implemented)
 
-- The `brand` project (`brand-override.spec.ts`) flips only the copper preset
-  (`data-brand="copper"`). A seed set at `:root` by a customer, and the slate preset, are not
-  run by a flip test; `x-brand-decl` guards the declaration level only.
-- The `compact` project (`compact-density.spec.ts`) covers the representative pages and the
-  ladder-tier control heights. The `x-density` probe checks only each contract's
-  `density-tokens` entries, one component at a time.
 - `render-smoke.spec.ts` `PAGES` is still a hardcoded list (gallery-scan auto-discovers);
   converting it to auto-discovery would delete bookkeeping item 3.
 - Forced-colors judgment beyond the mechanical suite is §3d AI review (advisory) — a HIGH
