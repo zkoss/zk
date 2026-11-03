@@ -207,7 +207,7 @@ Go to Step 1.
 |-------|-------------|--------|
 | Evaluator | up to 4 parallel | Each uses its own Chrome tab; eval reports are one-file-per-component (no write conflict). Evaluators return status deltas; only the orchestrator writes `work-status.md` (no status-file race). |
 | Design reviewer (Gate 2) | freely parallel | Read-only: CSS + pre-captured screenshots, no Chrome. Design reports are one-file-per-component. Only constraint: not while a Generator targets the same `shared-css-file` (avoids reviewing mid-edit CSS). |
-| Generator | strictly 1 at a time | `node scripts/build-css.js` writes `codegen/` non-atomically; concurrent builds race. |
+| Generator | strictly 1 at a time | `node scripts/build-css.js --module <module>` writes `<module>/codegen/resources/web/` non-atomically; concurrent builds race. |
 | Mixed Eval+Gen | OK in same outer iteration | Evaluator reads CSS files (no edits); Generator edits and rebuilds. They don't conflict if they target different components — but for clarity, run Eval batch, then Gen, then re-Eval. |
 
 **File-lock invariant.** The orchestrator enforces the lock by **not dispatching** a second Generator while the first is still running, and by **not dispatching** an Evaluator on a component whose `shared-css-file` matches a currently-running Generator's target (avoids reading mid-edit CSS).

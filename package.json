@@ -17,7 +17,8 @@
     "prepublish:dts": "gulp build:dts",
     "publish:dts": "gulp publish:dts",
     "postpublish:dts": "cp jsdoc/README.md build/dts && cd build/dts && npm publish",
-    "lint:css": "stylelint \"zul/src/main/resources/web/**/*.css\""
+    "lint:css": "stylelint \"zul/src/main/resources/web/**/*.css\"",
+    "build:icon-catalog": "node scripts/build-css.js --module zul --icon-catalog"
   },
   "author": "Potix",
   "license": "LGPL-2.0-or-later",

@@ -100,6 +100,7 @@ Marble rules that exist only for accessibility (WCAG) live in the `za11y` module
 ```bash
 node scripts/build-css.js --module zul                            # build CE theme CSS (--module required, exit 2 on misuse)
 node scripts/build-css.js --module zkmax                          # or zkex — EE/PE; run from the zk repo root, the script finds ../zkcml itself
+npm run build:icon-catalog                                        # regenerates the two committed icon catalogs; not run by the normal build
 ./gradlew :zul:compileMarbleCss                                    # the Gradle task the builder is wired into
                                                                     # (../zkcml: :zkmax:compileMarbleCss / :zkex:compileMarbleCss);
                                                                     # also runs inside every ./gradlew build
@@ -116,7 +117,8 @@ cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain   # preview ap
 waits for a key on stdin and treats EOF as that key, so keep stdin open (interactive terminal, or a
 FIFO held open in scripts); **never `appStart`** — under gretty 3.1.1 on Gradle 8.10 its client
 never returns. `npm run lint:css` runs stylelint over the CE theme CSS (`.stylelintrc.json`;
-EE/PE has its own in `../zkcml`). Build the CSS with `node scripts/build-css.js --module <module>`;
+EE/PE has its own in `../zkcml`). Build the CSS with `node scripts/build-css.js --module <module>`, and regenerate the two committed
+icon catalogs with `npm run build:icon-catalog` (on demand only; the normal build does not write them);
 audit it and inventory `!important` with the four skill scripts above. Details and the Playwright
 projects: `reference/verification.md`.
 

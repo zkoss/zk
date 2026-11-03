@@ -25,7 +25,7 @@ under [`../`](../).
 | [navigation-surface-rules.md](navigation-surface-rules.md) | Navigation chrome uses MD3 tonal elevation (surface-container tiers), not box-shadows |
 | [md3-close-affordance-placement.md](md3-close-affordance-placement.md) | Where close/dismiss icons sit (inline trailing vs surface top-corner) |
 | [icon-policy.md](icon-policy.md) | FontAwesome → Lucide icon name mapping policy |
-| [icon-index.md](icon-index.md) | Auto-generated canonical lookup of valid `z-icon-*` names + FA aliases (the reference data `icon-policy.md` governs; regenerate via `node scripts/build-css.js --module zul --emit-docs`) |
+| [icon-index.md](icon-index.md) | Auto-generated canonical lookup of valid `z-icon-*` names + FA aliases (the reference data `icon-policy.md` governs; regenerate via `npm run build:icon-catalog`) |
 | [css-dsp-file-structure.md](css-dsp-file-structure.md) | The required `*.css.dsp` output files the theme must produce |
 | [reset-scoping.md](reset-scoping.md) | `org.zkoss.zul.theme.browserDefault` reset-CSS scoping for JS-Embed host pages |
 | [data-dense-mode.md](data-dense-mode.md) | Compact density via `data-density="compact"`; control-height ladder + alias layer |

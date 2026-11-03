@@ -248,7 +248,7 @@ node_modules/lucide-static/icons/{name}.svg  EXISTS   (a Lucide name)
 
 **Excluded catalogs** (performance — these are whole-page icon listings, not ordinary
 content): `zkthemelab/src/main/webapp/web/icons-lucide.zul` (regenerated from
-`lucide-static` on every build) and `utility/icons.zul` (the "All Lucide Icons" page,
+`lucide-static` with `npm run build:icon-catalog`, not on every build) and `utility/icons.zul` (the "All Lucide Icons" page,
 which also hosts the FA-compat alias demo). Both are skipped by `check-icon-coverage.sh`.
 
 > Historical note: an earlier `<!-- icon-lint:disable -->` / `<!-- icon-lint:enable -->`
@@ -266,6 +266,6 @@ which also hosts the FA-compat alias demo). Both are skipped by `check-icon-cove
 
 ## Canonical reference
 
-`doc/spec/icon-index.md` — auto-generated, regenerate with `node scripts/build-css.js --module zul --emit-docs`.
+`doc/spec/icon-index.md` — auto-generated, regenerate with `npm run build:icon-catalog`.
 Lists every valid Lucide name plus the active FA→Lucide alias table. This is
 the file generator and evaluator should consult when in doubt.
