@@ -123,7 +123,7 @@
 
     /* (1b-cont) Round slider thumb: a floating control, not a bordered box, so
        the outline sits outside it rather than inset. */
-    .z-slider-button:focus-visible {
+    .z-slider:focus-visible .z-slider-button {
         outline: 2px solid Highlight;
         outline-offset: 2px;
     }

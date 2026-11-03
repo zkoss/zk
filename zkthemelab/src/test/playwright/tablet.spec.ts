@@ -395,8 +395,7 @@ type VisualCase = { name: string; url: string; maxDiffPixelRatio?: number };
 //                    timebox, spinner, doublespinner
 //   _selection.css → checkbox, radiogroup
 //   _slider.css    → slider (touch-enlarged knob)
-//   _buttons.css   → button, combobutton, toolbar(.z-toolbarbutton),
-//                    fileupload(.z-uploadbutton — SKIPped: non-deterministic)
+//   _buttons.css   → button, combobutton, toolbar(.z-toolbarbutton)
 //   _mesh.css      → listbox, grid, tree(.z-treecell/.z-treecol), paging
 //                    (+ checkable cells, tree/group/detail toggle icons)
 //   _scrollbar.css → biglistbox

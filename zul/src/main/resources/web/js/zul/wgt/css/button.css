@@ -103,27 +103,6 @@
     color: var(--zk-color-disabled);
 }
 
-/* ─── Upload button variant ──────────────────────────────────────────── */
-.z-uploadbutton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    min-height: var(--zk-button-height);
-    padding: 0 var(--zk-spacing-4);
-    border: none;
-    border-radius: var(--zk-button-radius);
-    background-color: var(--zk-button-bg);
-    color: var(--zk-button-fg);
-    font-family: var(--zk-typescale-font-family);
-    font-size: var(--zk-typescale-label-large-size);
-    font-weight: var(--zk-typescale-label-large-weight);
-    line-height: var(--zk-typescale-label-large-line-height);
-    cursor: pointer;
-    white-space: nowrap;
-}
-
 /* ═══════════════════════════════════════════════════════════════════════
    Utility Class System
    All button variants are additive classes on top of .z-button.
