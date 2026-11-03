@@ -297,7 +297,7 @@ After the user fixes the token, they rebuild the CSS (`node scripts/build-css.js
 
 ## Spec-Author phase (pre-loop)
 
-Before the verification loop can run on a component, that component must have a user-approved theme contract. The spec-author phase produces it. The contract tiers and authoring rules are in `.claude/skills/marble-theme/reference/contract-tiers.md`.
+Before the verification loop can run on a component, that component must have a maintainer-approved theme contract. The spec-author phase produces it. The contract tiers and authoring rules are in `.claude/skills/marble-theme/reference/contract-tiers.md`.
 
 ### When to run `zk-spec-author <component>`
 
@@ -383,7 +383,7 @@ The state lives in `tasks/harness/work-status.md` (gitignored, local). A fresh c
 > **Dual-gate migration note (2026-06-04):** rows marked `VERIFIED` before this date passed Gate 1 only (the dual-gate `VERIFIED` definition did not exist yet). They are grandfathered — re-run Gate 2 on them opportunistically (flip to `GATE2_PENDING`) or when their component's design quality is questioned. Pilot component: goldenlayout.
 
 ### Tier legend
-- **T1** — Mira-mapped; compare to Mira values
+- **T1** — MUI 7.3.1-mapped; compare to MUI 7.3.1 values
 - **T2** — ZK-only; DESIGN.md tokens only + sibling coherence
 - **T3** — Third-party wrapper; wrapper-only checks
 

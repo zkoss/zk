@@ -15,7 +15,7 @@ the Marble parts: which components use which mechanism, the tokens, the measurem
 The obvious implementation is "1px border at rest, 2px primary border on focus":
 
 ```css
-.z-thing { border: 1px solid var(--zk-color-outline); box-sizing: border-box; min-height: 40px; }
+.z-thing { border: 1px solid var(--zk-color-outline); box-sizing: border-box; min-height: var(--zk-input-height); }
 .z-thing:focus-within { border-color: var(--zk-color-primary); border-width: 2px; }  /* ← BUG */
 ```
 

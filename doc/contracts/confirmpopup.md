@@ -40,7 +40,7 @@ Popover pattern. The directional arrow's two-layer CSS triangle (outer + inner, 
 description) uses `--zk-color-outline-variant` for the thin outer edge and the card's own
 `--zk-color-surface-container-low` for the inner fill, so the arrow reads as a seamless extension of the
 card rather than a separate shape. The optional header row is set in `--zk-typescale-title-small` weight
-(500) on `--zk-color-on-surface`, separated from the body by a `--zk-color-outline-variant` divider — the
+on `--zk-color-on-surface`, separated from the body by a `--zk-color-outline-variant` divider — the
 same divider token closes the footer row from the body above it. Severity recolors **only the icon**
 (matching the ZK reference behavior recorded in the skill file) via the identical severity→token mapping
 `chip.css` already established: `info → --zk-color-status-info`, `success → --zk-color-success`,
@@ -79,7 +79,7 @@ own focus trap (see skill) can land keyboard focus on either button.
 | c4 | `.z-confirmpopup` | box-shadow | `var(--zk-elevation-2)` (aka `var(--zk-elevation-dropdown)`) | doc/spec/DESIGN.md "Elevation / Shadow" — dropdown/popover elevation |
 | c5 | `.z-confirmpopup` | border | `none` | shadow alone supplies separation (MUI Popover pattern); satisfies M1 via box-shadow |
 | c6 | `.z-confirmpopup-header` | border-bottom | `1px solid var(--zk-color-outline-variant)` | doc/spec/DESIGN.md "Brand & Status Colors" / "Border Rules" — divider token between header and body |
-| c7 | `.z-confirmpopup-header` | font-size, font-weight | `var(--zk-typescale-title-small-size)`, `var(--zk-typescale-title-small-weight)` (500) | doc/spec/DESIGN.md "Typography" |
+| c7 | `.z-confirmpopup-header` | font-size, font-weight | `var(--zk-typescale-title-small-size)`, `var(--zk-typescale-title-small-weight)` | doc/spec/DESIGN.md "Typography" |
 | c8 | `.z-confirmpopup-header` | color | `var(--zk-color-on-surface)` | doc/spec/DESIGN.md "Brand & Status Colors" |
 | c9 | `.z-confirmpopup-footer` | border-top | `1px solid var(--zk-color-outline-variant)` | doc/spec/DESIGN.md "Brand & Status Colors" / "Border Rules" — divider between body and footer |
 | c10 | `.z-confirmpopup-info .z-confirmpopup-icon` | color | `var(--zk-color-status-info)` | doc/spec/DESIGN.md "Brand & Status Colors" — same mapping as `chip.css` `.z-chip-info` |

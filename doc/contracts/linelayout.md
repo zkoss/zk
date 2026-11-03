@@ -74,7 +74,7 @@ A vertical-by-default timeline layout presenting items as a column of points con
 | ll15 | `.z-linelayout-cave` | position | `relative` | structural — line is absolutely positioned inside cave |
 | ll16 | `.z-linelayout-vertical .z-linelayout-cave` | flex-direction | `column` | structural |
 | ll16a | `.z-linelayout-horizontal .z-linelayout-cave` | flex-direction | `row` | structural — point circles lay out side-by-side in horizontal orientation |
-| ll17 | `.z-linelayout-vertical .z-linelayout-cave` | padding | `0 var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" — cave gutter between line and content edges; token: spacing-3 (12px) |
+| ll17 | `.z-linelayout-vertical .z-linelayout-cave` | padding | `0 var(--zk-spacing-3)` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" — cave gutter between line and content edges; token: spacing-3 |
 | ll18 | `.z-linelayout-horizontal .z-linelayout-cave` | padding | `var(--zk-spacing-3) 0` | `doc/spec/DESIGN.md` "Spacing Scale (4dp baseline)" |
 | ll19 | `.z-linelayout-line` | position | `absolute` | structural — line must be absolutely positioned |
 | ll20 | `.z-linelayout-line` | z-index | `99` | structural — ZK sets this; must not be removed |

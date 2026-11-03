@@ -1,6 +1,6 @@
 # Preview page state-matrix convention
 
-Preview pages serve as the visual ground-truth for state coverage. The harness Evaluator drives Chrome against these pages, so consistent layout makes verification scriptable.
+Preview pages serve as the visual ground-truth for state coverage. A theme's verification drives a browser against these pages, so consistent layout makes the checks scriptable.
 
 ## Layout: states are columns, variants are rows
 

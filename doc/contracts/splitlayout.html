@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_splitter.css">
 <style>
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -114,11 +115,10 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 
 /* Splitter bar — base */
 .z-splitlayout-splitter {
-    background-color: var(--zk-color-surface-container);
+    background-color: var(--zk-splitter-bar-bg);
     border: none;
     cursor: default;
-    transition:
-        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy);
+    transition: var(--zk-splitter-transition);
 }
 
 /* Splitter bar — hover state */
@@ -136,7 +136,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     height: var(--zk-spacing-2);
     max-height: var(--zk-spacing-2);
     padding: 0;
-    border-width: 1px 0;
+    border: none;
     overflow: hidden;
 }
 
@@ -148,7 +148,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     max-width: var(--zk-spacing-2);
     padding: 0;
     margin: 0;
-    border-width: 0 1px;
+    border: none;
     overflow: hidden;
 }
 
@@ -165,7 +165,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     cursor: default;
 }
 
-/* Collapse button — doc/spec/DESIGN.md "Splitter Family" actuator pill (revised 2026-06-04, family unification) */
+/* Collapse button — doc/spec/DESIGN.md "Splitter Family" actuator pill */
 .z-splitlayout-splitter-button {
     display: inline-flex;
     align-items: center;
@@ -180,8 +180,8 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     color: var(--zk-color-on-surface-variant);
     cursor: pointer;
     transition:
-        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy),
-        color var(--zk-motion-duration-short3) var(--zk-motion-easing-legacy);
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
 /* Pill hover: primary fill, on-primary icons (doc/spec/DESIGN.md "Splitter Family") */
@@ -195,23 +195,23 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     border: 0;
 }
 
-/* Pill inside vertical splitter (horizontal bar): 28×8, row layout */
+/* Pill inside vertical splitter (horizontal bar): pill length by thickness, row layout */
 .z-splitlayout-splitter-vertical > .z-splitlayout-splitter-button {
     flex-direction: row;
-    width: 28px;
-    height: 8px;
+    width: var(--zk-splitter-pill-length);
+    height: var(--zk-splitter-thickness);
 }
 
-/* Pill inside horizontal splitter (vertical bar): 8×28, column layout */
+/* Pill inside horizontal splitter (vertical bar): thickness by pill length, column layout */
 .z-splitlayout-splitter-horizontal > .z-splitlayout-splitter-button {
     flex-direction: column;
-    width: 8px;
-    height: 28px;
+    width: var(--zk-splitter-thickness);
+    height: var(--zk-splitter-pill-length);
 }
 
-/* Splitter icons — grips 8px always visible; caret hidden at idle (doc/spec/DESIGN.md "Splitter Family") */
+/* Splitter icons — grips always visible; caret hidden at idle (doc/spec/DESIGN.md "Splitter Family") */
 .z-splitlayout-splitter-icon {
-    font-size: 8px;
+    font-size: var(--zk-splitter-icon-size);
     line-height: 1;
 }
 .z-splitlayout-splitter-icon[class*="z-icon-caret"] {

@@ -10,22 +10,21 @@ zk-version: 10.2.1-jakarta
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-searchbox` | border | 1px solid rgba(0, 0, 0, 0.23) |
-| c2 | `.z-searchbox` | border-radius | 4px |
-| c3 | `.z-searchbox-search` | font-size | `var(--zk-typescale-body-medium-size)` (13px, inherited from `.z-searchbox-popup`) |
-| c4 | `.z-searchbox.z-searchbox-disabled` | opacity | 0.38 |
+| c1 | `.z-searchbox` | border | `1px solid var(--zk-searchbox-border-color)` |
+| c2 | `.z-searchbox` | border-radius | `var(--zk-searchbox-radius)` |
+| c3 | `.z-searchbox-search` | font-size | `var(--zk-typescale-body-medium-size)` (inherited from `.z-searchbox-popup`) |
+| c4 | `.z-searchbox.z-searchbox-disabled` | opacity | `var(--zk-state-disabled-opacity)` |
 
 ### Selection (list-row family)
 The searchbox dropdown is a keyboard-navigable list of options — semantically
 a LIST-ROW selection, NOT a chip. Per `marble-theme reference/selected-state-families.md`
-it MUST use `secondary-container` (MD3 `list-item.selected`; revised 2026-10-06 from
-`primary-container`, which followed MUI). Do not use `primary-container` here.
+it MUST use `secondary-container` (MD3 `list-item.selected`). Do not use `primary-container` here.
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| s1 | `.z-searchbox-selected` | background-color | `rgb(201, 213, 234)` (≈ `--zk-color-secondary-container`) |
-| s2 | `.z-searchbox-selected` | color | `rgb(21, 30, 45)` (≈ `--zk-color-on-secondary-container`) |
-| s3 | `.z-searchbox-selected` | background-color | MUST NOT be `--zk-color-primary-container` (≈ `#d6e4ff`) — wrong family; list rows use `--zk-color-secondary-container` (the pre-fix bug) |
+| s1 | `.z-searchbox-selected` | background-color | `var(--zk-searchbox-selected-bg)` |
+| s2 | `.z-searchbox-selected` | color | `var(--zk-searchbox-selected-fg)` |
+| s3 | `.z-searchbox-selected` | background-color | MUST NOT be `--zk-color-primary-container` — wrong family; list rows use `--zk-color-secondary-container` |
 
 ### Popup open behaviour (detached-popup display scoping)
 The mold renders `.z-searchbox-popup` with NO inline display, so the theme owns

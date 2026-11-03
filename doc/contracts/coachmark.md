@@ -30,20 +30,20 @@ mockup-rationale: ZKDoc has Coachmark-4.png; Marble aligns the card to the MD3 r
 ## Design Contract
 
 Coachmark is an MD3 **rich-tooltip** guided-tour card on a **neutral surface**. The visual card
-element (`.z-coachmark-content`) uses `--zk-color-surface-container-low` (#f7f9fc) as its background
-and `--zk-color-on-surface` as its text color. Prominence above the mask comes from **elevation +
+element (`.z-coachmark-content`) uses `--zk-coachmark-bg` (→ `--zk-color-surface-container-low`) as its background
+and `--zk-coachmark-fg` (→ `--zk-color-on-surface`) as its text color. Prominence above the mask comes from **elevation +
 shadow on the dark scrim** — the same mechanism every MD3 dialog relies on — not from a brand fill.
 The decisive benefit of the neutral surface: **nested action widgets render with their STANDARD
 theme styling** (a `.z-button` keeps its `--zk-color-primary` fill, a `.z-combobutton` keeps both
 halves), so the theme needs **no per-widget colour inversion** and any future slotted control works
-without a bespoke rule. Corner radius is `--zk-shape-card` (6px), consistent with all card/alert
+without a bespoke rule. Corner radius is `--zk-coachmark-radius` (→ `--zk-shape-card`), consistent with all card/alert
 surfaces in Marble. Elevation is `--zk-elevation-2` (dropdown level) since the card floats above the
-page but is not a modal dialog. Padding is `--zk-spacing-4` (16px) for comfortable reading. The
+page but is not a modal dialog. Padding is `--zk-spacing-4` for comfortable reading. The
 pointer arrow triangle inherits the same neutral background color via `border-color` so it reads as
 an extension of the card. The close button (`×`) is a **circular MD3 icon-button affordance**
-(`--zk-control-height-xs` = 28px, `--zk-shape-corner-full`), `--zk-color-on-surface-variant` glyph,
+(`--zk-control-height-xs`, `--zk-shape-corner-full`), `--zk-color-on-surface-variant` glyph,
 with an on-surface `::before` **state layer** on hover and a `--zk-focus-ring` on `:focus-visible`
-(it is keyboard-focusable via `tabindex=0`). It is pinned at a **symmetric 8px inset** inside the
+(it is keyboard-focusable via `tabindex=0`). It is pinned at a **symmetric `--zk-spacing-2` inset** inside the
 content's top-right corner in every pointer direction: the close is absolutely positioned against
 the `.z-coachmark` root, and ZK injects 20px of padding on the pointer side of the root
 (`Coachmark.ts _fixPadding`: `10 + borderWidth/2`, pointer border hardcoded 10px), so the
@@ -75,28 +75,28 @@ global rule in `tokens/_motion.css`.
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-coachmark-content` | background-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | doc/spec/DESIGN.md "Surface Palette" — neutral rich-tooltip surface; prominence from elevation on the scrim, not a brand fill |
-| c2 | `.z-coachmark-content` | color | `var(--zk-color-on-surface)` → `rgba(0, 0, 0, 0.87)` | doc/spec/DESIGN.md "Text Colors" — on-surface text on the neutral card |
-| c3 | `.z-coachmark-content` | border-radius | `var(--zk-shape-card)` → `6px` | doc/spec/DESIGN.md "Corner Radii" — card radius for container surfaces |
-| c4 | `.z-coachmark-content` | box-shadow | `var(--zk-elevation-2)` → `0px 2px 6px 0px rgba(0,0,0,0.12), 0px 1px 2px 0px rgba(0,0,0,0.14)` | doc/spec/DESIGN.md "Elevation / Shadow" — dropdown/hover elevation for floating card |
-| c5 | `.z-coachmark-content` | padding | `16px 44px 16px 16px` (right = `calc(var(--zk-spacing-2) + var(--zk-control-height-xs) + var(--zk-spacing-2))` = 8+28+8) | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — comfortable body padding; right padding reserves 8px inset + the 28px close circle + an 8px gap before the text (mirrors ZK default's asymmetric `@coachmarkPaddingRight`) |
-| c6 | `.z-coachmark-pointer.z-coachmark-up` | border-bottom-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | pointer triangle must match card background |
-| c7 | `.z-coachmark-pointer.z-coachmark-down` | border-top-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | pointer triangle must match card background |
-| c8 | `.z-coachmark-pointer.z-coachmark-left` | border-right-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | pointer triangle must match card background |
-| c9 | `.z-coachmark-pointer.z-coachmark-right` | border-left-color | `var(--zk-color-surface-container-low)` → `rgb(247, 249, 252)` | pointer triangle must match card background |
-| c10 | `.z-coachmark-close` | color | `var(--zk-color-on-surface-variant)` → `rgba(0, 0, 0, 0.6)` | close icon must be legible on the neutral surface |
+| c1 | `.z-coachmark-content` | background-color | `var(--zk-coachmark-bg)` (→ `--zk-color-surface-container-low`) | doc/spec/DESIGN.md "Surface Palette" — neutral rich-tooltip surface; prominence from elevation on the scrim, not a brand fill |
+| c2 | `.z-coachmark-content` | color | `var(--zk-coachmark-fg)` (→ `--zk-color-on-surface`) | doc/spec/DESIGN.md "Text Colors" — on-surface text on the neutral card |
+| c3 | `.z-coachmark-content` | border-radius | `var(--zk-coachmark-radius)` (→ `--zk-shape-card`) | doc/spec/DESIGN.md "Corner Radii" — card radius for container surfaces |
+| c4 | `.z-coachmark-content` | box-shadow | `var(--zk-coachmark-elevation)` (→ `--zk-elevation-2`) | doc/spec/DESIGN.md "Elevation / Shadow" — dropdown/hover elevation for floating card |
+| c5 | `.z-coachmark-content` | padding | `var(--zk-spacing-4) calc(var(--zk-spacing-2) + var(--zk-control-height-xs) + var(--zk-spacing-2)) var(--zk-spacing-4) var(--zk-spacing-4)` (right padding is the `calc(...)` term) | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — comfortable body padding; right padding reserves the inset + the close circle + a gap before the text (mirrors ZK default's asymmetric `@coachmarkPaddingRight`) |
+| c6 | `.z-coachmark-pointer.z-coachmark-up` | border-bottom-color | `var(--zk-coachmark-bg)` | pointer triangle must match card background |
+| c7 | `.z-coachmark-pointer.z-coachmark-down` | border-top-color | `var(--zk-coachmark-bg)` | pointer triangle must match card background |
+| c8 | `.z-coachmark-pointer.z-coachmark-left` | border-right-color | `var(--zk-coachmark-bg)` | pointer triangle must match card background |
+| c9 | `.z-coachmark-pointer.z-coachmark-right` | border-left-color | `var(--zk-coachmark-bg)` | pointer triangle must match card background |
+| c10 | `.z-coachmark-close` | color | `var(--zk-color-on-surface-variant)` | close icon must be legible on the neutral surface |
 | c11 | `.z-coachmark-close` | cursor | `pointer` | interaction contract — close is clickable |
-| c19 | `.z-coachmark-close` | width, height | `var(--zk-control-height-xs)` → `28px` | a real icon-button hit target, not a bare glyph (the token doc's documented "close button" size) |
-| c20 | `.z-coachmark-close` | border-radius | `var(--zk-shape-corner-full)` → `9999px` (renders as a full circle) | circular MD3 icon-button affordance |
-| c21 | `.z-coachmark-close::before` | background-color, opacity | `var(--zk-color-on-surface)` at `opacity: 0` (rest) → `var(--zk-state-hover-opacity)` (0.08) on `:hover`, `var(--zk-state-focus-opacity)` on `:focus-visible` | MD3 state layer — an on-surface overlay that reads on the neutral card (an opaque container swap would not, the card is already a surface-container tone) |
-| c22 | `.z-coachmark-close:focus-visible` | outline | `var(--zk-focus-ring)` → `2px solid var(--zk-color-primary)`, `outline-offset: -2px` | keyboard focus indicator — the close is `tabindex=0` and had none before |
-| c12 | `.z-coachmark-mask` | background-color | `var(--zk-color-scrim)` → `rgba(0, 0, 0, 0.5)` | shared `.z-modal-mask` rule, `misc.css` — the mask must use the system scrim token for theme-wide consistency |
+| c19 | `.z-coachmark-close` | width, height | `var(--zk-control-height-xs)` | a real icon-button hit target, not a bare glyph (the token doc's documented "close button" size) |
+| c20 | `.z-coachmark-close` | border-radius | `var(--zk-shape-corner-full)` (renders as a full circle) | circular MD3 icon-button affordance |
+| c21 | `.z-coachmark-close::before` | background-color, opacity | `var(--zk-color-on-surface)` at `opacity: 0` (rest) → `var(--zk-state-hover-opacity)` on `:hover`, `var(--zk-state-focus-opacity)` on `:focus-visible` | MD3 state layer — an on-surface overlay that reads on the neutral card (an opaque container swap would not, the card is already a surface-container tone) |
+| c22 | `.z-coachmark-close:focus-visible` | outline | `var(--zk-focus-ring)`, `outline-offset: -2px` | keyboard focus indicator — the close is `tabindex=0` and had none before |
+| c12 | `.z-coachmark-mask` | background-color | `var(--zk-color-scrim)` | shared `.z-modal-mask` rule, `misc.css` — the mask must use the system scrim token for theme-wide consistency |
 | c13 | `.z-coachmark` | position | `absolute` | structural — JS-positioned wrapper |
 | c14 | `.z-coachmark` | opacity | `0` (when NOT `.z-coachmark-open`) | closed state must be invisible |
 | c15 | `.z-coachmark-pointer` | position | `absolute` | REQUIRED so the mold JS's inline `top`/`left` apply — otherwise the triangle does not align to the target |
 | c16 | `.z-coachmark-close` | position | `absolute` | close is pinned to the card's top-right corner relative to the `.z-coachmark` root; static positioning flows it to the card bottom |
-| c17 | `.z-coachmark-content .z-button` | background-color | `var(--zk-color-primary)` → `rgb(55, 111, 208)` | nested button uses the STANDARD filled style — NO inversion; the neutral card makes the primary fill contrast naturally (see M8) |
-| c18 | `.z-coachmark-content .z-combobutton-content`, `.z-coachmark-content .z-combobutton-button` | background-color | `var(--zk-color-primary)` → `rgb(55, 111, 208)` | nested combobutton uses the STANDARD filled style on both halves — NO inversion (see M8) |
+| c17 | `.z-coachmark-content .z-button` | background-color | `var(--zk-color-primary)` | nested button uses the STANDARD filled style — NO inversion; the neutral card makes the primary fill contrast naturally (see M8) |
+| c18 | `.z-coachmark-content .z-combobutton-content`, `.z-coachmark-content .z-combobutton-button` | background-color | `var(--zk-color-primary)` | nested combobutton uses the STANDARD filled style on both halves — NO inversion (see M8) |
 
 ## State matrix
 

@@ -104,9 +104,7 @@ have no nav entry:
 
 ```bash
 cd src/main/webapp/web
-ls *.zul | sed 's/\.zul$//' | sort > /tmp/all.txt
-grep -o "page='~\./[a-z0-9-]*\.zul" usecase/index.zul | sed "s|page='~\./||;s|\.zul||" | sort -u > /tmp/innav.txt
-comm -23 /tmp/all.txt /tmp/innav.txt      # pages with no nav entry
+comm -23 <(ls *.zul | sed 's/\.zul$//' | sort) <(grep -o "page='~\./[a-z0-9-]*\.zul" usecase/index.zul | sed "s|page='~\./||;s|\.zul||" | sort -u)   # pages with no nav entry
 ```
 
 ## Not covered here

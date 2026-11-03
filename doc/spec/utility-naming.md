@@ -64,8 +64,8 @@ things and nothing in the name said which:
 
 ```
 z-d-block-md     display:block at >= 768px     (a breakpoint)
-z-hstack-md      gap: 16px, at every width     (a size)
-z-grid-fill-md   min column width 200px        (a size)
+z-hstack-md      gap: --zk-spacing-4, at every width     (a size)
+z-grid-fill-lg   min column width --zk-grid-min-lg        (a size)
 ```
 
 It also deadlocked the vocabulary: `z-hstack-md` was taken, so "hstack at md and up" had no name

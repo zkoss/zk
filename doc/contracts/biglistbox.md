@@ -29,11 +29,11 @@ preview: ${PREVIEW_URL}/biglistbox.zul
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-biglistbox` | border | 1px solid rgba(0, 0, 0, 0.12) |
+| c1 | `.z-biglistbox` | border | 1px solid `var(--zk-biglistbox-border-color)` |
 | c2 | `.z-biglistbox-header` | background-color | transparent or surface |
-| c3 | `.z-biglistbox-header` | border-bottom | 1px solid rgba(0, 0, 0, 0.12) |
-| c4 | `.z-biglistbox-row td` | padding | 8px 16px |
-| c5 | `.z-biglistbox-row:hover` | background-color | rgba(0, 0, 0, 0.04) |
+| c3 | `.z-biglistbox-header` | border-bottom | 1px solid `var(--zk-biglistbox-border-color)` |
+| c4 | `.z-biglistbox-row td` | padding | `var(--zk-spacing-2) var(--zk-spacing-4)` |
+| c5 | `.z-biglistbox-row:hover` | background-color | `var(--zk-biglistbox-row-hover-bg)` |
 | bs1 | `.z-biglistbox table` | border-spacing | 0px (head & body — UA default is 2px; gap above row 1) |
 | h1 | `.z-biglistbox-header-content` | display | flex (caret laid out inline; header stays single-line when sorted) |
 | h2 | `.z-biglistbox-header` | offsetHeight | unchanged after sorting (≈37px before AND after — caret must not add a row) |

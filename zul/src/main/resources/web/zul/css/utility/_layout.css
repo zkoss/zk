@@ -44,7 +44,7 @@
    the INFIX slot, matching Bootstrap's `d-md-none` and matching where print
    already sits (`.z-d-print-none`). That leaves a trailing `-sm/-md/-lg/-xl`
    meaning "size" everywhere else in Marble with no exceptions — `z-hstack-md`
-   and `z-grid-fill-md` are gaps and widths, not breakpoints.
+   and `z-grid-fill-lg` are gaps and widths, not breakpoints.
    (Tailwind puts the breakpoint first too, as a prefix: `md:hidden`.)
    Compose a base display with one breakpoint override to hide/show:
 

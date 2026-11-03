@@ -19,11 +19,11 @@ preview: ${PREVIEW_URL}/anchornav.zul
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-anchornav a.z-a` | font-size | 14px |
-| c2 | `.z-anchornav a.z-a` | color | rgba(0, 0, 0, 0.6) |
-| c3 | `.z-anchornav a.z-anchornav-link-active` | color | rgb(55, 111, 208) |
+| c1 | `.z-anchornav a.z-a` | font-size | `var(--zk-typescale-label-large-size)` |
+| c2 | `.z-anchornav a.z-a` | color | `var(--zk-anchornav-fg)` |
+| c3 | `.z-anchornav a.z-anchornav-link-active` | color | `var(--zk-anchornav-accent)` |
 | c4 | `.z-anchornav a.z-anchornav-link-active` | font-weight | 600 |
-| c5 | `.z-anchornav button.z-anchornav-link-active` | outline | 2px solid rgb(55, 111, 208), unless keyboard-focused |
+| c5 | `.z-anchornav button.z-anchornav-link-active` | outline | 2px solid `var(--zk-anchornav-accent)`, unless keyboard-focused |
 
 WCAG 2.5.8 target: the `:where(a[data-anchornav-target])` rule (inline-flex, min 24×24) lives in za11y `zkmax/css/_nav-a11y.css` (zkcml repo) and is loaded only when za11y is active; without za11y the links are not enlarged.
 

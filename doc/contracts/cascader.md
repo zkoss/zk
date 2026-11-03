@@ -22,7 +22,7 @@ mockup-rationale: ZKDoc image shows iceblue-style rounded-rectangle trigger with
 
 ## Design Contract
 
-The cascader trigger renders as an MD3 outlined input field — 40px tall, `--zk-color-outline` border at rest, border thickens to a 2px primary-colour ring on focus/open (via `border-color: primary + box-shadow: 0 0 0 1px primary`). The trigger body shows a slash-joined path label in `--zk-color-on-surface`, or a muted placeholder in `--zk-color-on-surface-variant` when no item is selected. The trailing icon is a caret-down (dropdown closed, no selection), caret-right (dropdown open, no selection), or times (clear, when selection present); all icon states use `--zk-color-on-surface-variant`. On hover the border becomes `--zk-color-on-surface`. Disabled state applies `--zk-state-disabled-opacity` (0.38) to the entire trigger. The dropdown popup surfaces with `--zk-elevation-dropdown` shadow and a `--zk-color-outline-variant` border; cave columns are separated by `1px solid --zk-color-outline-variant` dividers except the first. Each item row is 36px tall; hover and keyboard-active rows get a neutral state-layer tint (`rgba(0,0,0,0.04)` — matches MUI MenuItem hover). Selected items (path ancestors + current leaf) render their text in `--zk-color-primary`. Non-leaf rows show a caret-right expand icon **anchored at the row's trailing edge** (MD3 trailing-icon slot — fixed position regardless of label length, like MUI nested-menu arrows), never inline after the text. Transitions on `border-color` and `background-color` use `--zk-motion-duration-short3` / `--zk-motion-easing-standard`.
+The cascader trigger renders as an MD3 outlined input field — 40px tall, `--zk-cascader-border-color` border (1px) at rest. On focus/open the border colour becomes `--zk-cascader-border-color-focus` and a `box-shadow: 0 0 0 1px` ring in the same colour sits outside the border (an outset spread, not an inset ring); the 1px border plus the ring reads as 2px. The trigger body shows a slash-joined path label in `--zk-cascader-fg`, or a muted placeholder in `--zk-color-on-surface-variant` when no item is selected. The trailing icon is a caret-down (dropdown closed, no selection), caret-right (dropdown open, no selection), or times (clear, when selection present); all icon states use `--zk-color-on-surface-variant`. On hover the border colour becomes `--zk-cascader-border-color-hover`. Disabled state applies `--zk-state-disabled-opacity` to the entire trigger. The dropdown popup surfaces with `--zk-elevation-dropdown` shadow and a `--zk-color-outline-variant` border; cave columns are separated by `1px solid --zk-color-outline-variant` dividers except the first. Each item row is 36px tall; hover and keyboard-active rows get a neutral state-layer tint (`rgba(0,0,0,0.04)` — matches MUI MenuItem hover). Selected items (path ancestors + current leaf) render their text in `--zk-cascader-accent`. Non-leaf rows show a caret-right expand icon **anchored at the row's trailing edge** (MD3 trailing-icon slot — fixed position regardless of label length, like MUI nested-menu arrows), never inline after the text. The trigger's `border-color` and the item's `background-color` transition at `--zk-motion-duration-standard` / `--zk-motion-easing-standard`; focus/open sets `transition: none` on the trigger.
 
 ## Outcome assertions
 
@@ -41,31 +41,31 @@ The cascader trigger renders as an MD3 outlined input field — 40px tall, `--zk
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-cascader` | border-color | `var(--zk-color-outline)` | doc/spec/DESIGN.md "Border Rules" — MD3 outlined input at rest |
-| c2 | `.z-cascader` | border-radius | `var(--zk-shape-input)` (= 4px) | doc/spec/DESIGN.md "Corner Radii" — extra-small shape for inputs |
+| c1 | `.z-cascader` | border-color | `var(--zk-cascader-border-color)` | doc/spec/DESIGN.md "Border Rules" — MD3 outlined input at rest |
+| c2 | `.z-cascader` | border-radius | `var(--zk-cascader-radius)` (→ `--zk-shape-input`) | doc/spec/DESIGN.md "Corner Radii" — extra-small shape for inputs |
 | c3 | `.z-cascader` | height | `40px` | doc/spec/DESIGN.md "Density" — MD3 comfortable density for input fields |
-| c4 | `.z-cascader` | background-color | `var(--zk-color-surface)` | doc/spec/DESIGN.md "Surface Palette" |
-| c5 | `.z-cascader:hover` | border-color | `var(--zk-color-on-surface)` | doc/spec/DESIGN.md "Border Rules" — hover intensifies outline |
-| c6 | `.z-cascader-focus` | border-color | `var(--zk-color-primary)` | doc/spec/DESIGN.md "Border Rules" — primary on focus |
-| c7 | `.z-cascader-focus` | box-shadow | `0 0 0 1px var(--zk-color-primary)` | doc/spec/DESIGN.md "Border Rules" — 2px visual ring effect |
-| c8 | `.z-cascader-open` | border-color | `var(--zk-color-primary)` | same as focus — open ≡ focused |
-| c8b | `.z-cascader-open` | box-shadow | `0 0 0 1px var(--zk-color-primary)` | same as focus (c7) — open ≡ focused, ring included |
-| c9 | `.z-cascader-label` | color | `var(--zk-color-on-surface)` | doc/spec/DESIGN.md "Text Colors" |
-| c10 | `.z-cascader-label` | font-size | `var(--zk-typescale-label-large-size)` (= 14px) | doc/spec/DESIGN.md "Typography" — label-large for input value text |
+| c4 | `.z-cascader` | background-color | `var(--zk-cascader-bg)` | doc/spec/DESIGN.md "Surface Palette" |
+| c5 | `.z-cascader:hover` | border-color | `var(--zk-cascader-border-color-hover)` | doc/spec/DESIGN.md "Border Rules" — hover intensifies outline |
+| c6 | `.z-cascader-focus` | border-color | `var(--zk-cascader-border-color-focus)` | doc/spec/DESIGN.md "Border Rules" — primary on focus |
+| c7 | `.z-cascader-focus` | box-shadow | `0 0 0 1px var(--zk-cascader-border-color-focus)` | doc/spec/DESIGN.md "Border Rules" — 2px visual ring effect |
+| c8 | `.z-cascader-open` | border-color | `var(--zk-cascader-border-color-focus)` | same as focus — open ≡ focused |
+| c8b | `.z-cascader-open` | box-shadow | `0 0 0 1px var(--zk-cascader-border-color-focus)` | same as focus (c7) — open ≡ focused, ring included |
+| c9 | `.z-cascader-label` | color | `var(--zk-cascader-fg)` | doc/spec/DESIGN.md "Text Colors" |
+| c10 | `.z-cascader-label` | font-size | `var(--zk-typescale-label-large-size)` | doc/spec/DESIGN.md "Typography" — label-large for input value text |
 | c11 | `.z-cascader-placeholder` | color | `var(--zk-color-on-surface-variant)` | doc/spec/DESIGN.md "Text Colors" — muted placeholder |
 | c12 | `.z-cascader-icon` (root trigger icon) | color | `var(--zk-color-on-surface-variant)` | doc/spec/DESIGN.md "Text Colors" — secondary icon colour |
-| c13 | `.z-cascader-disabled` | opacity | `var(--zk-state-disabled-opacity)` (= 0.38) | doc/spec/DESIGN.md "State-Layer Overlays" — MD3 disabled state |
+| c13 | `.z-cascader-disabled` | opacity | `var(--zk-state-disabled-opacity)` | doc/spec/DESIGN.md "State-Layer Overlays" — MD3 disabled state |
 | c14 | `.z-cascader-popup` | box-shadow | `var(--zk-elevation-dropdown)` | doc/spec/DESIGN.md "Elevation / Shadow" — elevation-2 for dropdowns. The shadow rule is on `.z-cascader-shadow`, which sits on the same node as `.z-cascader-popup` (`Cascader.ts:646`) |
 | c15 | `.z-cascader-popup` | border | `1px solid var(--zk-color-outline-variant)` | doc/spec/DESIGN.md "Border Rules" |
-| c16 | `.z-cascader-popup` | border-radius | `var(--zk-shape-menu)` (= 4px) | doc/spec/DESIGN.md "Corner Radii" — extra-small menu radius |
+| c16 | `.z-cascader-popup` | border-radius | `var(--zk-cascader-popup-radius)` (→ `--zk-shape-menu`) | doc/spec/DESIGN.md "Corner Radii" — extra-small menu radius |
 | c17 | `.z-cascader-cave` | border-left | `1px solid var(--zk-color-outline-variant)` | doc/spec/DESIGN.md "Border Rules" — column separator |
 | c18 | `.z-cascader-cave:first-child` | border-left | `none` | structural rule — no left border on first column |
 | c19 | `.z-cascader-item` | height | `36px` | doc/spec/DESIGN.md "Density" — MD3 menu item comfortable density |
-| c20 | `.z-cascader-item` | font-size | `var(--zk-typescale-body-medium-size)` (= 13px) | doc/spec/DESIGN.md "Typography" |
-| c21 | `.z-cascader-item` | color | `var(--zk-color-on-surface)` | doc/spec/DESIGN.md "Text Colors" |
+| c20 | `.z-cascader-item` | font-size | `var(--zk-typescale-body-medium-size)` | doc/spec/DESIGN.md "Typography" |
+| c21 | `.z-cascader-item` | color | `var(--zk-cascader-fg)` | doc/spec/DESIGN.md "Text Colors" |
 | c22 | `.z-cascader-item:hover` | background-color | `rgba(0, 0, 0, 0.04)` | doc/spec/DESIGN.md "State-Layer Overlays" — solid-colour row hover tint (matches MUI MenuItem) |
 | c23 | `.z-cascader-item.z-cascader-active` | background-color | `rgba(0, 0, 0, 0.04)` | same tint as hover — keyboard active = hover visual |
-| c24 | `.z-cascader-item.z-cascader-selected` | color | `var(--zk-color-primary)` | doc/spec/DESIGN.md "Brand & Status Colors" — selected path shown in primary |
+| c24 | `.z-cascader-item.z-cascader-selected` | color | `var(--zk-cascader-accent)` | doc/spec/DESIGN.md "Brand & Status Colors" — selected path shown in primary |
 | c25 | `.z-cascader-item .z-cascader-icon` (expand icon) | color | `var(--zk-color-on-surface-variant)` | doc/spec/DESIGN.md "Text Colors" |
 | c26 | `.z-cascader-item .z-cascader-icon` (expand icon) | margin-left | `auto` (declared; computed resolves to used px on flex items — verify via stylesheet rule or M7) | mockup cascader.html item-icon block — trailing-anchor in the item's flex row (item text is a bare text node; the icon must carry the push, see skill) |
 | c27 | `.z-cascader:has(.z-cascader-label:not(:empty)) .z-cascader-placeholder` | display | `none` — suppress the stale placeholder div ZK leaves visible at initial render when a selection is pre-set (skill — initial-render display gap). Stylesheet-level only by design: interactive flows write inline `display` styles, which win the cascade and keep full control | guards M8 |

@@ -24,8 +24,9 @@ Consequences:
 - The bundle is **geometry only** — it enlarges hit areas, glyphs and row heights.
   Palette, shape and typography tokens keep coming from the base `--zk-color-*` /
   `--zk-shape-*` tokens. No hardcoded hex anywhere.
-- The design target is MD3 touch ergonomics: **44px minimum** hit area, **48px
-  comfortable** hit area, **24px** control glyphs.
+- The design target is MD3 touch ergonomics: the minimum hit area
+  (`--zk-touch-target-min`), the comfortable hit area (`--zk-touch-target-comfortable`)
+  and the control glyph size (`--zk-touch-icon-size`).
 
 ## Touch tokens and per-component sizes
 
@@ -35,7 +36,7 @@ regular `--zk-*` tokens, and drive every other partial. The per-component deskto
 listbox/grid/tree and paging, biglistbox scrollbar) are in the matching `_*.css` partial.
 Notes (not in the partials):
 
-- **Selection controls** (checkbox / radio / switch): the **glyph keeps its MD3 size**; what grows is the clickable row and the ripple state-layer, so the finger target fills 48px.
+- **Selection controls** (checkbox / radio / switch): the **glyph keeps its MD3 size**; what grows is the clickable row and the ripple state-layer, so the finger target fills `--zk-touch-target-comfortable`.
 - **Window / panel**: close-affordance **placement is unchanged** (see `doc/spec/md3-close-affordance-placement.md`); only sizes grow.
 - **Scrollbars**: Marble only themes one scrollbar on tablet, the biglistbox custom `WScroll` widget. Native scrollbars are left to the platform (touch overlay scrollbars), matching stock ZK.
 
@@ -50,16 +51,16 @@ How Marble matches the ZK default theme's mobile design — the *intent*, not th
   (`--zk-touch-target-min` 44px, `--zk-touch-target-comfortable` 48px,
   `--zk-touch-icon-size` 24px, `--zk-touch-row-min-height` 48px,
   `--zk-touch-scrollbar-size` 16px, `--zk-touch-slider-knob` 28px). MD3's minimum
-  touch target (48dp / 44px) is **stricter** than the default theme's 38px, so
+  touch target (48dp / the `--zk-touch-target-min` value) is **stricter** than the default theme's 38px, so
   Marble is not a copy — it applies the MD3 value through its token layer.
 - **(b) Never copy the default theme's mobile font-size bumps.** The default theme
-  scales its ~13px desktop type up to 15/17px for phone legibility. Marble's MD3
-  `body-medium` (14px) is already mobile-comfortable, so these bumps are
-  **not** ported — copying them would fight Marble's tuned type scale. Only bump a
+  scales its ~13px desktop type up to 15/17px for phone legibility. Marble's body text
+  comes from `--zk-typescale-body-medium-size`, part of its tuned type scale, so these
+  bumps are **not** ported — copying them would fight that scale. Only bump a
   font where Marble's mobile text is genuinely too small (none found).
 - **(c) The borderlayout splitter-pill cross-axis size is an invariant.** The pill's
-  cross-axis is locked to the 8px bar thickness (`8px == bar height`). Do **not**
-  force it to 44px — that breaks the JS margin-based centering. The whole splitter
+  cross-axis is locked to the bar thickness (`--zk-splitter-thickness`, the bar height).
+  Do **not** force it to `--zk-touch-target-min` — that breaks the JS margin-based centering. The whole splitter
   strip is already the generous hover/activation zone.
 
 ## What is deliberately NOT changed

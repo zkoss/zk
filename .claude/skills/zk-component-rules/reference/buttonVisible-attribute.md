@@ -116,7 +116,7 @@ ZK provides the hook: the input gets the extra class `.z-{c}-input-full` when `b
 }
 ```
 
-If this rule is missing, the input renders with three borders and a square right side — the bug the harness must catch.
+If this rule is missing, the input renders with three borders and a square right side — the bug a theme's verification must catch.
 
 ### Pattern R — root-border (border lives on the root)
 

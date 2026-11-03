@@ -13,11 +13,11 @@ zk-version: 10.2.1-jakarta
 - Visual goal: panel-lite (smaller emphasis than panel; subtle outline instead of full card shadow when nested).
 
 ## Expected values (T2)
-- Border: 1px solid outline-variant (rgba(0,0,0,0.12)).
-- Border-radius: 6px (card-like).
-- Title font-size 14–16px, weight 500.
-- Content padding: 16px.
-- Header `box-sizing: border-box` and height ≤ 56px — min-height (48px) must INCLUDE its 12px vertical padding, not add to it. A content-box blow-up reads ~73px (guards the dropped-reset regression). The 3d-mold header uses `padding:0` so it is unaffected.
+- Border: 1px solid `var(--zk-groupbox-border-color)`.
+- Border-radius: `var(--zk-groupbox-radius)` (card-like).
+- Title font-size `var(--zk-typescale-title-medium-size)`, weight `var(--zk-typescale-title-medium-weight)`.
+- Content padding: `var(--zk-spacing-4)`.
+- Root `.z-groupbox` sets `box-sizing: border-box` in groupbox.css; the header's border-box comes from the global `*` reset in `zul/src/main/resources/web/zul/css/base/_reset.css`, not from groupbox.css. Header height ≤ 56px — min-height (`calc(var(--zk-groupbox-header-height) + 1px)`) must INCLUDE its vertical padding (the `min()` on `.z-groupbox-header`), not add to it. A content-box blow-up reads ~73px. The 3d-mold header uses `padding: 0 var(--zk-spacing-3)` (no vertical padding), so it is unaffected.
 - Collapsed state: only header visible, with chevron indicator rotated.
 
 ## States to evaluate

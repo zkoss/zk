@@ -19,7 +19,7 @@ closest-sibling: toolbar (for the tool-button strip chrome pattern; canvas wrapp
 
 ## Design Contract
 
-The `.z-signature` root is a bordered container (1px solid `outline`, medium corner radius) with `position: relative` and a white (`surface`) background — it reads as a writing area akin to an outlined input field. The canvas layers inside are fully opaque to CSS. The toolbar strip is positioned absolute in the bottom-right corner of the root, with a comfortable inset (`spacing-2` / 8px). Each tool button is styled as a secondary tonal button: outlined border (`outline-variant`), `surface` fill at rest, with standard hover (`surface-container-high`), focus (`primary` 2px border), and active state layers. Tool buttons carry a subtle elevation (`elevation-1`) to lift them above the canvas and aid legibility. The toolbar disappears (`display: none` via `.z-signature-toolbar-hide`) transiently during pen drawing — no transition on this hide (instant is correct). When the signature widget is disabled, the root wrapper dims to `state-disabled-opacity` (0.38). Tool button labels render in label-medium typography next to a font-icon glyph.
+The `.z-signature` root is a bordered container (1px solid `outline`, medium corner radius) with `position: relative` and a white (`surface`) background — it reads as a writing area akin to an outlined input field. The canvas layers inside are fully opaque to CSS. The toolbar strip is positioned absolute in the bottom-right corner of the root, with a comfortable inset (`spacing-2`). Each tool button is styled as a secondary tonal button: outlined border (`outline-variant`), `surface` fill at rest, with standard hover (`surface-container-high`), focus (`--zk-focus-ring` outline), and active state layers. Tool buttons carry a subtle elevation (`elevation-1`) to lift them above the canvas and aid legibility. The toolbar disappears (`display: none` via `.z-signature-toolbar-hide`) transiently during pen drawing — no transition on this hide (instant is correct). When the signature widget is disabled, the root wrapper dims to opacity 0.38 (hard-coded in `signature.css`; no token). Tool button labels render in label-medium typography next to a font-icon glyph.
 
 ## Expected values
 
@@ -43,27 +43,27 @@ The `.z-signature` root is a bordered container (1px solid `outline`, medium cor
 | btn1 | `.z-signature-tool-button` | display | `inline-flex` | layout |
 | btn2 | `.z-signature-tool-button` | align-items | `center` | layout |
 | btn3 | `.z-signature-tool-button` | gap | `var(--zk-spacing-1)` | DESIGN.md "Spacing Scale" (icon ↔ label spacing) |
-| btn4 | `.z-signature-tool-button` | padding | `var(--zk-spacing-1) var(--zk-spacing-3)` | DESIGN.md "Spacing Scale" (compact button: 4px 12px) |
+| btn4 | `.z-signature-tool-button` | padding | `var(--zk-spacing-1)` | DESIGN.md "Spacing Scale" (compact button) |
 | btn5 | `.z-signature-tool-button` | min-height | `32px` | DESIGN.md "Spacing Scale" (compact action button height) |
 | btn6 | `.z-signature-tool-button` | border | `1px solid var(--zk-color-outline-variant)` | DESIGN.md "Surface Palette" (tonal outlined) |
 | btn7 | `.z-signature-tool-button` | border-radius | `var(--zk-shape-corner-small)` | DESIGN.md "Corner Radii" |
 | btn8 | `.z-signature-tool-button` | background-color | `var(--zk-color-surface)` | DESIGN.md "Surface Palette" |
 | btn9 | `.z-signature-tool-button` | color | `var(--zk-color-on-surface)` | DESIGN.md "Text Colors" |
 | btn10 | `.z-signature-tool-button` | font-size | `var(--zk-typescale-label-medium-size)` | DESIGN.md "Typography" |
-| btn11 | `.z-signature-tool-button` | font-weight | `var(--zk-typescale-label-medium-weight)` | DESIGN.md "Typography" (pairs with btn10 label-medium typescale; resolves to 500) |
+| btn11 | `.z-signature-tool-button` | font-weight | `var(--zk-typescale-label-medium-weight)` | DESIGN.md "Typography" (pairs with btn10 label-medium typescale) |
 | btn12 | `.z-signature-tool-button` | box-shadow | `var(--zk-elevation-1)` | DESIGN.md "Elevation / Shadow" (lifts above canvas) |
 | btn13 | `.z-signature-tool-button` | cursor | `pointer` | UX |
 | btn14 | `.z-signature-tool-button` | white-space | `nowrap` | layout |
 | btn15 | `.z-signature-tool-button` | transition | `background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard), border-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard), color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard)` | DESIGN.md "Motion" |
 | btn-hover1 | `.z-signature-tool-button:hover` | background-color | `var(--zk-color-surface-container-high)` | DESIGN.md "Surface Palette" (hover state layer) |
 | btn-hover2 | `.z-signature-tool-button:hover` | border-color | `var(--zk-color-outline)` | DESIGN.md "Border Rules" |
-| btn-focus1 | `.z-signature-tool-button:focus-visible` | outline | `2px solid var(--zk-color-primary)` | DESIGN.md "Border Rules" |
+| btn-focus1 | `.z-signature-tool-button:focus-visible` | outline | `var(--zk-focus-ring)` | DESIGN.md "Border Rules" |
 | btn-focus2 | `.z-signature-tool-button:focus-visible` | outline-offset | `2px` | DESIGN.md "Border Rules" |
 | btn-active1 | `.z-signature-tool-button:active` | background-color | `var(--zk-color-surface-container)` | DESIGN.md "Surface Palette" (pressed) |
-| icon1 | `.z-signature-tool-button-icon` | font-size | `16px` | DESIGN.md "Typography" (icon inside compact button) |
+| icon1 | `.z-signature-tool-button-icon` | font-size | `18px` | DESIGN.md "Typography" (icon inside compact button) |
 | icon2 | `.z-signature-tool-button-icon` | line-height | `1` | layout |
 | lbl1 | `.z-signature-tool-button-label:not(:empty)` | margin-left | `var(--zk-spacing-1)` | DESIGN.md "Spacing Scale" (conditional: label present) |
-| dis1 | `.z-signature[disabled]` | opacity | `var(--zk-state-disabled-opacity)` | DESIGN.md "State-Layer Overlays" |
+| dis1 | `.z-signature[disabled]` | opacity | `0.38` | signature.css (hard-coded; no token) |
 | dis2 | `.z-signature[disabled]` | pointer-events | `none` | DESIGN.md "State-Layer Overlays" |
 
 ## State matrix

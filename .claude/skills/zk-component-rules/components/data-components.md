@@ -404,7 +404,7 @@ Verify: scroll the container, then `getComputedStyle(header).position === 'stick
 
 ## Tree-specific
 
-- **Indent per level**: `.z-tree-spacer` width controls indentation (typically 20px per level).
+- **Indent per level**: `.z-tree-spacer` width controls indentation (the indent per level is theme-defined).
 - **Expand icon**: `.z-tree-icon`. Toggles rotation (0deg → 90deg) on open/close via CSS transform.
 - **Connector lines**: `.z-tree-line` between rows (optional, off by default).
 

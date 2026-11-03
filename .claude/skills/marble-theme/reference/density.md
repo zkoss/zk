@@ -24,11 +24,11 @@ current px. Only the customer's compact override changes anything.
 a raw px (`--zk-input-height`, `--zk-toolbar-height`, `--zk-window-header-height`, …; the full list
 is in `tokens/_sizing.css`). This is the discipline that prevents drift: the intentional
 input-40 / button-36 / toolbar-48 *relationships* survive a tier change because the relationship is
-defined once, here. A few aliases are deliberately off-ladder: `--zk-button-height` (36px, the MD
-base), `--zk-button-height-lg` (44px) and `--zk-data-row-min-height` (52px).
+defined once, here. A few aliases are deliberately off-ladder: `--zk-button-height` (the MD
+base), `--zk-button-height-lg` and `--zk-data-row-min-height`.
 
-A normal customer flips only the 5 rungs plus the off-ladder seeds (button 36/44, paging bar 52);
-every alias follows automatically.
+A normal customer flips only the 5 rungs plus the off-ladder seeds (`--zk-button-height`,
+`--zk-button-height-lg`, `--zk-data-row-min-height`); every alias follows automatically.
 
 **Layer 3 — data-cell padding:** `--zk-grid-cell-padding`, `--zk-grid-detail-padding`, `--zk-listbox-cell-padding`,
 `--zk-tree-cell-padding`, `--zk-tree-header-padding`, and the group-row pair `--zk-group-padding-y`/`--zk-group-padding-x`.
@@ -47,8 +47,8 @@ IBM Carbon and Bootstrap. **Salesforce Lightning** supplied the delivery model (
 flip re-points token values; components consume tokens and reflow). **Ant Design and Carbon**
 supplied the discipline (a small height ladder plus a semantic alias layer). MUI and Bootstrap
 are the cautionary tale: with no seed, "global density" degenerates into hand-listing every
-component — which is the state Marble was in before this work, with only 3 of ~24 chrome sites
-using a height token and the rest hardcoding 28/32/36/40/44/48/56.
+component — which is the state Marble was in before this work, with only a few chrome sites
+using a height token and most hardcoding 28/32/36/40/44/48/56.
 
 ## Two issues found during verification, both now designed for
 
@@ -57,12 +57,12 @@ using a height token and the rest hardcoding 28/32/36/40/44/48/56.
   this; without it the header stays at 57px while everything around it shrinks.
 - **Cascade shadowing.** The three cell-padding tokens were declared on the component and
   shadowed the `:root` override. Hoisted. Any new overridable token needs the same check.
-- **Button padding in compact.** A 20px label line plus the default 6px `--zk-button-padding-y` is
-  32px, taller than the 30px compact `--zk-button-height`, and an outlined button adds its 1px
-  borders on top (34px). Compact sets `--zk-button-padding-y: 4px` (in `_component-theme.css`,
+- **Button padding in compact.** A label line (`--zk-typescale-label-large-line-height`) plus the
+  default `--zk-button-padding-y` is 32px, taller than the compact `--zk-button-height`, and an
+  outlined button adds its 1px borders on top (34px). Compact sets `--zk-button-padding-y: 4px` (in `_component-theme.css`,
   after `:root`, because `html[data-density=compact]` is `:root` itself), so filled, text,
   icon+label, outlined, confirmpopup and messagebox buttons are all exactly 30px; icon-only stays
-  at `--zk-icon-button-size` (32px). Default (36px) is unchanged.
+  at `--zk-icon-button-size`. Default is unchanged.
 
 ## Verifying a density change
 

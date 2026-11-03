@@ -277,7 +277,7 @@ The Evaluator's §3b-outcome step enforces these as a top-down gate. The §3d AI
 | c2 | `.z-<comp>` | <property> | `var(--zk-spacing-4)` | DESIGN.md "Spacing Scale (4dp baseline)" |
 | ... |
 
-Rule: cite a `--zk-*` token wherever one exists. Raw rgb/px only as last resort. **Sizing rule**: when the Cross-cutting section below declares `density: bound`, every height/padding row for the control MUST cite the ladder/alias token from `tokens/_sizing.css` (e.g. `var(--zk-input-height)`) — a raw px height on a density-bound control is a contract defect.
+Rule: each row gives the `--zk-*` variable (not the resolved value next to it, which drifts from the CSS). A raw rgb/px literal only when no variable covers the value. **Sizing rule**: when the Cross-cutting section below declares `density: bound`, every height/padding row for the control MUST cite the ladder/alias token from `tokens/_sizing.css` (e.g. `var(--zk-input-height)`) — a raw px height on a density-bound control is a contract defect.
 
 ## State matrix
 

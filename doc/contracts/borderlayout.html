@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_splitter.css">
 <style>
 /* ── Mockup chrome ───────────────────────────────────────────────────────── */
 * { box-sizing: border-box; }
@@ -187,35 +188,29 @@ h1 {
 .z-west-splitter,
 .z-east-splitter {
     position: absolute;
-    width: 8px;
-    cursor: ew-resize;
-    background-color: var(--zk-color-surface-container);
-    transition:
-        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    width: var(--zk-splitter-thickness);
+    cursor: col-resize;
+    background-color: var(--zk-splitter-bar-bg);
+    transition: var(--zk-splitter-transition);
     overflow: visible;
 }
 .z-north-splitter,
 .z-south-splitter {
     position: absolute;
-    height: 8px;
-    cursor: ns-resize;
-    background-color: var(--zk-color-surface-container);
-    transition:
-        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    height: var(--zk-splitter-thickness);
+    cursor: row-resize;
+    background-color: var(--zk-splitter-bar-bg);
+    transition: var(--zk-splitter-transition);
     overflow: visible;
 }
 .z-west-splitter:hover,
 .z-east-splitter:hover,
 .z-north-splitter:hover,
 .z-south-splitter:hover {
-    background-color: color-mix(
-        in srgb,
-        var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%),
-        var(--zk-color-surface-container)
-    );
+    background-color: var(--zk-splitter-bar-bg-hover);
 }
 
-/* ── Splitter actuator pills — doc/spec/DESIGN.md "Splitter Family" (8×28, outline-variant, no elevation) ── */
+/* ── Splitter actuator pills — doc/spec/DESIGN.md "Splitter Family" (`--zk-splitter-thickness` × `--zk-splitter-pill-length`, outline-variant, no elevation) ── */
 /* Note: in real ZK, long-axis centering comes from setBtnPos_ inline margin (skill rule);
    the static mockup simulates it with translate. */
 .z-west-splitter-button,
@@ -226,18 +221,18 @@ h1 {
     justify-content: center;
     gap: 2px;
     position: absolute;
-    background-color: var(--zk-color-outline-variant);
+    background-color: var(--zk-splitter-pill-fill);
     border: none;
-    border-radius: var(--zk-shape-corner-full);
+    border-radius: var(--zk-splitter-pill-radius);
     box-shadow: none;
-    width: 8px;
-    height: 28px;
+    width: var(--zk-splitter-thickness);
+    height: var(--zk-splitter-pill-length);
     cursor: pointer;
-    font-size: 8px;
-    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-splitter-icon-size);
+    color: var(--zk-splitter-pill-icon);
     transition:
-        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard),
-        color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
     top: 50%;
     transform: translateY(-50%);
     left: 0;
@@ -250,18 +245,18 @@ h1 {
     justify-content: center;
     gap: 2px;
     position: absolute;
-    background-color: var(--zk-color-outline-variant);
+    background-color: var(--zk-splitter-pill-fill);
     border: none;
-    border-radius: var(--zk-shape-corner-full);
+    border-radius: var(--zk-splitter-pill-radius);
     box-shadow: none;
-    width: 28px;
-    height: 8px;
+    width: var(--zk-splitter-pill-length);
+    height: var(--zk-splitter-thickness);
     cursor: pointer;
-    font-size: 8px;
-    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-splitter-icon-size);
+    color: var(--zk-splitter-pill-icon);
     transition:
-        background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard),
-        color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+        background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
     left: 50%;
     transform: translateX(-50%);
     top: 0;
@@ -270,8 +265,8 @@ h1 {
 .z-east-splitter-button:hover,
 .z-north-splitter-button:hover,
 .z-south-splitter-button:hover {
-    background-color: var(--zk-color-primary);
-    color: var(--zk-color-on-primary);
+    background-color: var(--zk-splitter-pill-fill-hover);
+    color: var(--zk-splitter-pill-icon-hover);
 }
 
 /* ── Splitter button hover (static preview class for mockup) ─────────────── */
@@ -279,18 +274,14 @@ h1 {
 .is-hover-btn.z-east-splitter-button,
 .is-hover-btn.z-north-splitter-button,
 .is-hover-btn.z-south-splitter-button {
-    background-color: var(--zk-color-primary);
-    color: var(--zk-color-on-primary);
+    background-color: var(--zk-splitter-pill-fill-hover);
+    color: var(--zk-splitter-pill-icon-hover);
 }
 
 /* ── Splitter bar hover (static preview) ─────────────────────────────────── */
 .is-hover-bar.z-west-splitter,
 .is-hover-bar.z-north-splitter {
-    background-color: color-mix(
-        in srgb,
-        var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%),
-        var(--zk-color-surface-container)
-    );
+    background-color: var(--zk-splitter-bar-bg-hover);
 }
 
 /* ── Icons inside splitter button ────────────────────────────────────────── */
@@ -301,7 +292,7 @@ h1 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 8px;
+    font-size: var(--zk-splitter-icon-size);
     line-height: 1;
     color: inherit;
 }
@@ -318,7 +309,7 @@ h1 {
 .z-north-icon[class*="z-icon-caret"],
 .z-south-icon[class*="z-icon-caret"] {
     opacity: 0;
-    transition: opacity var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    transition: var(--zk-state-layer-transition);
 }
 .z-west-splitter-button:hover .z-west-icon[class*="z-icon-caret"],
 .z-east-splitter-button:hover .z-east-icon[class*="z-icon-caret"],
@@ -419,12 +410,12 @@ h1 {
 /* splitter bars */
 .mock-layout .z-west-splitter {
     top: 56px; left: 140px;
-    width: 8px;
+    width: var(--zk-splitter-thickness);
     bottom: 56px;
 }
 .mock-layout .z-north-splitter {
     top: 56px; left: 0; right: 0;
-    height: 8px;
+    height: var(--zk-splitter-thickness);
 }
 
 /* collapsed placeholder overlay (west region collapsed) */
@@ -482,7 +473,7 @@ h1 {
                 </div>
             </div>
             <!-- West splitter bar (splittable=true) -->
-            <div class="z-west-splitter" style="height: auto; top: 56px; left: 140px; bottom: 56px; width: 8px;">
+            <div class="z-west-splitter" style="height: auto; top: 56px; left: 140px; bottom: 56px; width: var(--zk-splitter-thickness);">
                 <span class="z-west-splitter-button">
                     <!-- grip dot top (ellipsis-v) -->
                     <i class="z-west-icon z-icon-ellipsis-v" title="grip">⋮</i>
@@ -493,7 +484,7 @@ h1 {
                 </span>
             </div>
             <!-- North splitter bar -->
-            <div class="z-north-splitter" style="top: 56px; left: 0; right: 0; height: 8px;">
+            <div class="z-north-splitter" style="top: 56px; left: 0; right: 0; height: var(--zk-splitter-thickness);">
                 <span class="z-north-splitter-button">
                     <i class="z-north-icon z-icon-ellipsis-h" title="grip">···</i>
                     <i class="z-north-icon z-icon-caret-up" title="collapse">^</i>
@@ -511,38 +502,38 @@ h1 {
 <div class="section">
     <div class="section-title">2. Splitter bar — default vs hover</div>
 
-    <div class="state-label">default (opacity 0.4, outline-variant fill)</div>
+    <div class="state-label">default (surface-container strip)</div>
     <div class="demo-card" style="padding: var(--zk-spacing-4);">
         <div style="display: flex; gap: var(--zk-spacing-6); align-items: center;">
             <!-- West/East splitter (vertical bar) -->
             <div style="display: flex; flex-direction: column; align-items: center; gap: var(--zk-spacing-2);">
-                <div style="height: 120px; position: relative; width: 8px;">
-                    <div class="z-west-splitter" style="position: relative; width: 8px; height: 120px;"></div>
+                <div style="height: 120px; position: relative; width: var(--zk-splitter-thickness);">
+                    <div class="z-west-splitter" style="position: relative; width: var(--zk-splitter-thickness); height: 120px;"></div>
                 </div>
                 <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">west/east bar</span>
             </div>
             <!-- North/South splitter (horizontal bar) -->
             <div style="display: flex; flex-direction: column; align-items: center; gap: var(--zk-spacing-2);">
-                <div style="width: 160px; position: relative; height: 8px;">
-                    <div class="z-north-splitter" style="position: relative; width: 160px; height: 8px;"></div>
+                <div style="width: 160px; position: relative; height: var(--zk-splitter-thickness);">
+                    <div class="z-north-splitter" style="position: relative; width: 160px; height: var(--zk-splitter-thickness);"></div>
                 </div>
                 <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">north/south bar</span>
             </div>
         </div>
     </div>
 
-    <div class="state-label">hover (opacity 1.0, primary fill)</div>
+    <div class="state-label">hover (primary tint)</div>
     <div class="demo-card" style="padding: var(--zk-spacing-4);">
         <div style="display: flex; gap: var(--zk-spacing-6); align-items: center;">
             <div style="display: flex; flex-direction: column; align-items: center; gap: var(--zk-spacing-2);">
-                <div style="height: 120px; position: relative; width: 8px;">
-                    <div class="z-west-splitter is-hover-bar" style="position: relative; width: 8px; height: 120px;"></div>
+                <div style="height: 120px; position: relative; width: var(--zk-splitter-thickness);">
+                    <div class="z-west-splitter is-hover-bar" style="position: relative; width: var(--zk-splitter-thickness); height: 120px;"></div>
                 </div>
                 <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">west/east hover</span>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center; gap: var(--zk-spacing-2);">
-                <div style="width: 160px; height: 8px;">
-                    <div class="z-north-splitter is-hover-bar" style="position: relative; width: 160px; height: 8px;"></div>
+                <div style="width: 160px; height: var(--zk-splitter-thickness);">
+                    <div class="z-north-splitter is-hover-bar" style="position: relative; width: 160px; height: var(--zk-splitter-thickness);"></div>
                 </div>
                 <span style="font-size: 11px; color: var(--zk-color-on-surface-variant);">north/south hover</span>
             </div>
@@ -614,8 +605,8 @@ h1 {
         </div>
     </div>
     <p class="note">
-        Pill button: 16x56px (west/east) or 56x16px (north/south). --zk-shape-corner-full radius. --zk-elevation-1 shadow.
-        Grip dots (ellipsis-v / ellipsis-h) at opacity 0.7. Disabled caret hidden via display:none.
+        Pill button: <code>--zk-splitter-thickness</code> × <code>--zk-splitter-pill-length</code> (west/east), the reverse for north/south. --zk-shape-corner-full radius. No shadow.
+        Grip dots (ellipsis-v / ellipsis-h) at full opacity. Disabled caret hidden via display:none.
     </p>
 </div>
 
@@ -723,9 +714,9 @@ h1 {
             <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-color-surface-container-high</span>
         </div>
         <div class="swatch-item">
-            <div style="width: 80px; height: 56px; background-color: var(--zk-color-primary); border-radius: var(--zk-shape-corner-extra-small); opacity: 0.4;"></div>
+            <div style="width: 80px; height: 56px; background-color: var(--zk-splitter-bar-bg-hover); border-radius: var(--zk-shape-corner-extra-small);"></div>
             <span style="font-size: 11px; color: var(--zk-color-on-surface-variant); margin-top: var(--zk-spacing-1);">splitter hover</span>
-            <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-color-primary (opacity 1)</span>
+            <span style="font-size: 10px; color: var(--zk-color-on-surface-variant);">--zk-splitter-bar-bg-hover</span>
         </div>
     </div>
 </div>
@@ -737,7 +728,7 @@ h1 {
     <div class="section-title">7. Drag ghost (.z-splitter-ghost)</div>
 
     <div class="demo-card" style="position: relative; height: 80px; overflow: hidden; padding: 0;">
-        <div class="z-splitter-ghost" style="left: 0; top: 0; width: 8px; height: 100%;"></div>
+        <div class="z-splitter-ghost" style="left: 0; top: 0; width: var(--zk-splitter-thickness); height: 100%;"></div>
         <span style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--zk-color-on-surface-variant);">
             --zk-color-primary at opacity 0.3 — shown during drag resize
         </span>

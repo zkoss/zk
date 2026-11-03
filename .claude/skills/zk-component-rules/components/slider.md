@@ -75,7 +75,7 @@ The knob mold uses SVG `<path>` elements with `stroke` (not `fill`) for the arc 
 - The input element's `top`, `left`, `width`, `height`, `font-size` — all computed by `_getInputProperty()` and written as inline styles
 - Root element width/height — set to `200px × 200px` by default if no explicit width/height is given (written by `bind_()` via `node.width(DEFAULT_SIZE)`)
 
-**Knob mold is analogous to a T3 component for its internal geometry.** The CSS author can only set:
+**Knob mold is analogous to a third-party library wrapper for its internal geometry.** The CSS author can only set:
 - Stroke colors for the two arcs
 - Background/border of the numeric input field
 - Root-level box model (width, height trigger JS resize via `setWidth`/`setHeight`)

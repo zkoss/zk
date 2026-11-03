@@ -17,7 +17,7 @@ If you write `.z-datebox:focus`, the rule never fires (focus is on the inner inp
 - **textbox, intbox, decimalbox, doublebox, longbox, passwordbox**: the root IS the input, so `.z-textbox:focus { ... }` works.
 - Same for `<button>` ZK button (focus lands on the rendered `<button>` element).
 
-## Evaluator measurement caveat
+## Measurement caveat
 
 Chrome DevTools Protocol cannot reliably trigger `:focus-within` via synthetic events on the root. To verify the rule:
 

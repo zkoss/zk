@@ -28,9 +28,9 @@ Tablelayout is a transparent layout shell whose sole role is to position child p
 in a table grid. The `.z-tablelayout` `<table>` element paints no surface, no border, and no
 background — it is invisible in the final render. The only theme-relevant decision is the gutter
 between cells: Marble uses `border-collapse: separate` and `border-spacing: var(--zk-spacing-2)`
-(8px on both axes) to provide a consistent MD3-grid gutter between all adjacent cells in the
+(on both axes) to provide a consistent MD3-grid gutter between all adjacent cells in the
 table. This replaces iceblue's zero-spacing (flush cells) with a compact but readable gap that
-matches the 8px system step. Cells (`<td>.z-tablechildren`) are top-aligned by default
+matches the `--zk-spacing-2` system step. Cells (`<td>.z-tablechildren`) are top-aligned by default
 (`vertical-align: top`) to mirror the ZK stock default and match standard card-grid patterns
 where cells contain panels of varying heights. No padding is added to the cell itself — content
 widgets placed inside the cell carry their own padding. The `box-sizing` on the table is
@@ -52,7 +52,7 @@ explicit `width=`/`height=` attributes on the child ZK panels — the theme does
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
 | c1 | `.z-tablelayout` | border-collapse | `separate` | required for border-spacing to have effect |
-| c2 | `.z-tablelayout` | border-spacing | `var(--zk-spacing-2)` | `doc/spec/DESIGN.md` "Spacing Scale" — 8px grid gutter (compact step) |
+| c2 | `.z-tablelayout` | border-spacing | `var(--zk-spacing-2)` | `doc/spec/DESIGN.md` "Spacing Scale" — grid gutter (compact step) |
 | c3 | `.z-tablelayout` | background-color | `transparent` | layout shell must be invisible |
 | c4 | `.z-tablelayout` | border-width | `0px` | layout shell must have no border of its own |
 | c5 | `.z-tablechildren` | vertical-align | `top` | top-align cell content (ZK stock default; matches card-grid convention) |

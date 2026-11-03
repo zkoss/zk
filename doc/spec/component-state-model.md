@@ -6,7 +6,7 @@ Normative rules for how Marble distinguishes `readonly`, `disabled`, and status/
 
 A dropdown/popup control — **combobox, datebox, bandbox** — MUST render `readonly` as an *active outlined field*, never greyed or disabled-looking. In ZK there is no dedicated "select-only" mode; `readonly="true"` is the *normal, active* state for a select-style dropdown, and the popup is still openable (mouse via the button, keyboard via `Alt+↓`). Styling it as de-emphasis misuses the disabled language and misleads the user.
 
-**Applied rule:** the `.z-*-readonly` block collapses to a single `cursor: pointer` rule and otherwise falls through to the active-field styling (white surface, visible `1px solid` outline, full-opacity text, working button). Genuinely `disabled` controls keep opacity **0.38**.
+**Applied rule:** the `.z-*-readonly` block collapses to a single `cursor: pointer` rule and otherwise falls through to the active-field styling (white surface, visible `1px solid` outline, full-opacity text, working button). Genuinely `disabled` controls keep the opacity of `--zk-state-disabled-opacity`.
 
 A readonly popup control MUST render identical to its editable counterpart. Never set `pointer-events: none` or reduced opacity on the button of a readonly popup control — that leaves the primary open affordance dead.
 
@@ -18,7 +18,7 @@ Applies to **combobox, datebox, bandbox**.
 
 ## 3. Grey is reserved for disabled
 
-Grey / 38% opacity is the reserved language of `disabled` — it communicates "not interactive." NEVER apply it to a control the user can still operate. Appearance must honestly reflect interactivity.
+Grey / `--zk-state-disabled-opacity` opacity is the reserved language of `disabled` — it communicates "not interactive." NEVER apply it to a control the user can still operate. Appearance must honestly reflect interactivity.
 
 ## 4. Step / status dots
 

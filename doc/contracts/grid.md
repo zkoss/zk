@@ -16,16 +16,16 @@ zk-version: 10.2.1-jakarta
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | c1 | `.z-row` | height (rendered) | ~52px |
-| c2 | `.z-cell` | padding | 16px (all sides per `doc/spec/DESIGN.md` "Density") |
-| c3 | `.z-cell` | font-size | 13px |
-| c4 | `.z-column-content` | padding | 16px (`.z-column` itself has `padding: 0`) |
+| c2 | `.z-cell` | padding | `var(--zk-grid-cell-padding)` (all sides per `doc/spec/DESIGN.md` "Density") |
+| c3 | `.z-cell` | font-size | `var(--zk-typescale-body-medium-size)` |
+| c4 | `.z-column-content` | padding | `var(--zk-grid-cell-padding)` (`.z-column` itself has `padding: 0`) |
 | c5 | `.z-column` | background-color | transparent OR very subtle tint |
-| c6 | `.z-column` | font-weight | 500 |
-| c7 | `.z-column` | border-bottom | 1px solid rgba(0, 0, 0, 0.12) |
-| c8 | `.z-row` | border-bottom | 1px solid rgba(0, 0, 0, 0.12) |
-| c9 | `.z-row:hover` | background-color | rgba(0, 0, 0, ~0.04) |
+| c6 | `.z-column` | font-weight | `var(--zk-typescale-label-large-weight)` |
+| c7 | `.z-column` | border-bottom | 1px solid `var(--zk-grid-border-color)` |
+| c8 | `.z-row` | border-bottom | 1px solid `var(--zk-grid-border-color)` |
+| c9 | `.z-row:hover` | background-color | `var(--zk-grid-row-hover-bg)` |
 | c10 | `.z-grid-odd` | background-color | tinted alternate (or not used) |
-| c12 | `.z-grid` | border-radius | 6px (card-like) |
+| c12 | `.z-grid` | border-radius | `var(--zk-grid-radius)` (card-like) |
 
 ## States to evaluate
 - [ ] default rows, header, hover, selected, striped (odd), sortable, card variant, frozen columns

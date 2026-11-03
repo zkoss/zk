@@ -25,11 +25,11 @@ preview: ${PREVIEW_URL}/drawer.zul
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-drawer-real` | background-color | rgb(255, 255, 255) |
-| c2 | `.z-drawer-real` | box-shadow | elevation-3+ shadow |
+| c1 | `.z-drawer-real` | background-color | `var(--zk-drawer-bg)` |
+| c2 | `.z-drawer-real` | box-shadow | `var(--zk-drawer-elevation)` |
 | c3 | `.z-drawer-open .z-drawer-mask.z-drawer-mask-enabled` | background-color | rgba(0, 0, 0, 0.32) (scrim) |
 | c4 | `.z-drawer-header` | padding | 16–24px |
-| c5 | `.z-drawer-header` | font-size | 16px or title-medium |
+| c5 | `.z-drawer-header` | font-size | `var(--zk-typescale-title-medium-size)` |
 | c6 | `.z-drawer-open .z-drawer-mask:not(.z-drawer-mask-enabled)` | opacity | 0 (no scrim when mask=false) |
 | c7 | `.z-drawer-close` | position / dimensions | absolute, 32×32, border-radius corner-full |
 | c8 | `.z-drawer-close` | color | on-surface-variant |

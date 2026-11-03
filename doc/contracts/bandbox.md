@@ -24,7 +24,7 @@ ring reads as a different halo and is clipped by ancestor `overflow: hidden`). S
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| op1 | `.z-bandbox.z-bandbox-open` | box-shadow | `inset 0 0 0 1px var(--zk-color-primary)` (inset — same ring as `:focus-within`, NOT outset) |
+| op1 | `.z-bandbox.z-bandbox-open` | box-shadow | `inset 0 0 0 1px var(--zk-bandbox-border-color-focus)` (inset — same ring as `:focus-within`, NOT outset) |
 
 ## States to evaluate
 - [ ] default, hover, focus, disabled, readonly, invalid, open

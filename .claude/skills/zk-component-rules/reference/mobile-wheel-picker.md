@@ -112,15 +112,10 @@ and it reads as an empty slot. Give the **list** a `z-index` above the line
 (`.z-{c}-wheel-list { z-index: 2 }`) so the transparent list (and its text) sits
 above the band and the band shows through behind the text.
 
-## Why the harness missed this historically
-- The evaluator/generator never looked for `.z-*-wheel-*`, because the desktop DOM has no such classes.
-- The tablet datebox test only measured input height + page overflow; it **never
-  opened the popup**, so the unstyled multi-thousand-px wheel was never exercised.
-  Tablet tests must *open* datebox/timebox popups, not just measure the field.
-- When the popup *was* finally opened, the test tapped the **icon** — the one tap
-  target that self-corrects via the second sync — so the input-tap overshoot
-  survived. **Test BOTH tap targets** (input and icon); they take different code
-  paths and only one reveals the mis-anchor.
+## Testing advice
+- A theme's verification must cover the wheel DOM (`.z-*-wheel-*`). The desktop DOM has no such classes, so checks written against desktop markup never reach the wheel.
+- A tablet test that only measures input height and page overflow never opens the popup, so an unstyled multi-thousand-px wheel is never exercised. Tablet tests must *open* datebox/timebox popups, not just measure the field.
+- A test that taps only the **icon** can pass while the input-tap overshoot survives, because the icon tap self-corrects via the second sync. **Test BOTH tap targets** (input and icon); they take different code paths and only one reveals the mis-anchor.
 
 See: the theme's touch wheel stylesheet and its mobile-readonly neutralization rules, and the
 tablet test cases (each case asserts BOTH icon-tap and input-tap land flush).

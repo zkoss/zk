@@ -24,13 +24,13 @@ preview: trigger validation in any input preview that uses Constraint (e.g., ${P
 ## Expected values (T2)
 - `.z-errorbox-content` background: `var(--zk-color-error-container)`.
 - Color: `var(--zk-color-on-error-container)`.
-- Padding: `8px 28px 8px 34px` — left room for the icon, right room for the close button.
+- Padding: `var(--zk-spacing-2) 28px var(--zk-spacing-2) 34px` — left room for the icon, right room for the close button.
 - Border-radius: `var(--zk-shape-corner-extra-small)`.
-- Font-size: body-small (`var(--zk-typescale-body-small-size)`).
+- Font-size: body-medium (`var(--zk-typescale-body-medium-size)`).
 - Box-shadow: level-2 (`var(--zk-elevation-2)`).
 
 ## States to evaluate
 - [ ] visible on validation failure, with pointer caret, dismissible
-- [ ] **position-invariant layout**: the icon→text gap (~12px) and close→content-edge gap (~4px) are identical whether the box lands to the right of, left of, above, or below the field — only the pointer direction differs. ZK's `Errorbox._fixarrow` writes a per-direction inline padding onto the outer `.z-errorbox`; the theme MUST override it with **symmetric** padding (`.z-errorbox { --zk-errorbox-beak: 8px; padding: var(--zk-errorbox-beak) !important }`) and re-add the beak to the icon/close offsets, or the absolutely-positioned icon/close drift 8px between positions. Do **not** zero the padding — it is load-bearing for the beak. Guard: `screenshot.spec.ts › errorbox-position-invariance`.
+- [ ] **position-invariant layout**: the icon→text gap (`--zk-spacing-3`) and close→content-edge gap (`--zk-spacing-1`) are identical whether the box lands to the right of, left of, above, or below the field — only the pointer direction differs. ZK's `Errorbox._fixarrow` writes a per-direction inline padding onto the outer `.z-errorbox`; the theme MUST override it with **symmetric** padding (`.z-errorbox { --zk-errorbox-beak: 8px; padding: var(--zk-errorbox-beak) !important }`) and re-add the beak to the icon/close offsets, or the absolutely-positioned icon/close drift 8px between positions. Do **not** zero the padding — it is load-bearing for the beak. Guard: `screenshot.spec.ts › errorbox-position-invariance`.
 - [ ] **beak sits flush OUTSIDE the content**: the pointer triangle's base is flush against the content edge it points at, with the triangle entirely outside the content (beak intrusion ≤ 1px). Zeroing `.z-errorbox` padding pulls the beak ~8px INSIDE the content (arrow appears inside the box) — wrong. Guard: same test (`beakIntrusion ≤ 1`).
 - [ ] **complete structure**: every errorbox carries the pointer beak, the warning icon, AND the close button — there is no no-arrow or no-close variant (the State Gallery shows the single canonical structure).

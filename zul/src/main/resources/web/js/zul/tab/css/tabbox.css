@@ -693,8 +693,8 @@
     flex: 1;
 }
 
-/* A closable accordion header shows a close button INSTEAD of the chevron (owner ruling
-   2026-10-25, supersedes c11a / 2026-06-07; doc/spec/md3-close-affordance-placement.md).
+/* A closable accordion header shows a close button INSTEAD of the chevron
+   (doc/spec/md3-close-affordance-placement.md).
    The button's centre sits on the chevron keyline, 16px from the header edge: margin-right of
    half its width moves its right edge to (16px - half width) from the header edge, so the hover
    circle is not clipped by .z-tab { overflow: hidden }. The size is the largest circle that

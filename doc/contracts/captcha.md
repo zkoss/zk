@@ -33,8 +33,8 @@ The captcha may be surrounded by an inputgroup (label + textbox for the answer +
 
 | id | selector | property | expected | source |
 |----|----------|----------|----------|--------|
-| c1 | `img.z-captcha` | border | none (0px): the frame is the `frame` attribute, drawn inside the image by the CaptchaEngine | owner ruling 2026-10-16 |
-| c2 | `img.z-captcha` | border-radius | 0px (a radius clips the corners of the engine-drawn frame) | owner ruling 2026-10-16 |
+| c1 | `img.z-captcha` | border | none (0px): the frame is the `frame` attribute, drawn inside the image by the CaptchaEngine | structural: the CaptchaEngine draws the frame |
+| c2 | `img.z-captcha` | border-radius | 0px (a radius clips the corners of the engine-drawn frame) | structural: the CaptchaEngine draws the frame |
 | c3 | `img.z-captcha` | display | block | `captcha.css` (`.z-captcha { display: block; }`) |
 
 ## States to evaluate

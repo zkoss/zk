@@ -1,6 +1,6 @@
 # Forced colors / Windows High-Contrast Mode (`forced-colors`)
 
-*Implemented 2026-07-14 · ambiguous-case pass 2026-07-16 · WCAG 2.1 SC 1.4.1 / 1.4.11 (non-text contrast)*
+*Implemented 2026-07-14 · WCAG 2.1 SC 1.4.1 / 1.4.11 (non-text contrast)*
 
 > **Single source of truth.** This spec records the complete `forced-colors: active`
 > behaviour of the theme — the guard's mechanism, every restored block, the resolutions
@@ -52,7 +52,7 @@ Blocks are labelled with the same codes used in the comments of `tokens/_forced-
 - **(4) Background-color shape fills** → whole shapes painted with `background-color` (not a masked `::before` glyph) force-map to Canvas and vanish. Re-pointed to `GrayText` for inert track/rail, `Highlight` for the active/value fill: progressmeter (track + image), separator/space bars (a vertical bar also opts out of the colour adjustment, `forced-color-adjust: none`, so the text backplate of its `&nbsp;` does not break the line into ticks; a horizontal bar is redrawn as a centred 1px `::before` of `CanvasText`; a bar between the items of a toolbar is a 1px x 24px `CanvasText` divider with no `::before`; a bar in a panel-mold toolbar stays transparent as in normal mode), slider/rangeslider/multislider rail + area, checkbox switch mold + toggle mold, stepbar step connectors.
 - **(4a) Slider thumbs** → solid `background-color: CanvasText` disc (+ the 1a 1px border), with the `::before` state-layer halo set transparent, so slider/rangeslider/multislider thumbs render as one identical disc instead of mixed hollow rings and stray dots.
 - **(5) Colour-content** → `forced-color-adjust: none` on `.z-colorbox-current` (the closed swatch — covers standalone colorbox, the portallayout embed, and signature's pen/bg colorboxes) and the palette/picker colour surfaces. The inline `background-color` ZK sets here *is* the information; the forced-colors spec names colour pickers as the canonical opt-out. Surrounding chrome (frame, caret, hex inputs, OK button) still follows the system palette.
-- **(focus token) `--zk-focus-ring`** retargeted to `2px solid Highlight` (explicit; `outline-color` is force-mapped anyway, but this makes intent clear for its consumers).
+- **(focus token) `--zk-focus-ring`** retargeted to a `Highlight` outline (explicit; `outline-color` is force-mapped anyway, but this makes intent clear for its consumers).
 
 ## Intentionally NOT handled
 

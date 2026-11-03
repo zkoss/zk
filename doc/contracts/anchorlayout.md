@@ -19,7 +19,7 @@ mockup-rationale: ZKDoc canonical image exists; Marble applies only flex-wrap ov
 - MUI CSS: Layout/Stack.css — flex-wrap row layout is the closest structural analog; no visual theming borrowed
 - Iceblue baseline: doc/contracts/baselines/anchorlayout-iceblue.png
 - ZKDoc canonical: https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/images/ZKComRef_Anchorlayout_Example.png
-- Divergence from baseline: iceblue renders anchor-children **flush** (float model, no gutter); Marble also renders them flush (no `gap`): anchor widths are inline percentages, so any gap makes 50%+50% / 33%x3 overflow and wrap (zkdemo B6 Z1). Flex-wrap is kept only as a safety net for children whose percentages sum above 100%.
+- Divergence from baseline: iceblue renders anchor-children **flush** (float model, no gutter); Marble also renders them flush (no `gap`): anchor widths are inline percentages, so any gap makes 50%+50% / 33%x3 overflow and wrap. Flex-wrap is kept only as a safety net for children whose percentages sum above 100%.
 
 ## Design Contract
 
@@ -27,7 +27,7 @@ Anchorlayout is a transparent layout shell — it paints no surface, no border, 
 Children carry inline percentage widths set by the JS engine, so they sit flush side by side
 exactly as in iceblue: 50%+50% share one row and 33%x3 share one row. Marble overrides iceblue's
 float-based model with `display: flex; flex-wrap: wrap` and deliberately sets **no `gap`** —
-a gap would push percentage-sized siblings past 100% and wrap them (zkdemo B6 Z1). The root
+a gap would push percentage-sized siblings past 100% and wrap them. The root
 carries `width: 100%` and `box-sizing: border-box` so that percentage-anchored children resolve
 correctly against the parent container width. Children carry `flex-shrink: 0` to prevent the flex
 algorithm from compressing below the JS-set inline widths, `min-width: 0` to prevent flex blowout

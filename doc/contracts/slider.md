@@ -3,7 +3,7 @@ tier: T1
 category: input
 preview: ${PREVIEW_URL}/slider.zul
 rules: see .claude/skills/zk-component-rules/components/slider.md
-contract-approved: true  # user-approved 2026-06-04 (D1–D5 deviations accepted; c8b/c8c/c10a applied)
+contract-approved: true
 zk-version: 10.2.1-jakarta
 js-source-files:
   - zk/zul/src/main/resources/web/js/zul/inp/Slider.ts
@@ -24,7 +24,7 @@ mockup-rationale: ZKDoc has no canonical knob-mold image that shows Marble token
 
 ## Design Contract
 
-Material-styled linear sliders use primary-colored fill (`.z-slider-area`) against an outline-variant track (`.z-slider-center`). The thumb (`.z-slider-button`) is a filled primary circle; on hover and focus-visible, a semi-transparent primary state-layer ring (8px spread, 16% alpha via `color-mix`) expands outward via `box-shadow`; on active/drag the ring expands to 14px spread at the same 16% alpha. The sphere mold (root class `.z-slider-sphere`) applies a radial-gradient on `.z-slider-button` for a 3D sphere effect; ZK confirms `.z-slider-sphere` is added to the root by `domClass_()`. The scale mold (root class `.z-slider-scale`) inherits all the above; scale-mold ticks are not styled yet in `slider.css` (deferred). The popup tooltip (`.z-slider-popup`) uses inverse-surface background with inverse-on-surface text, 4px corner, elevation-1 shadow.
+Material-styled linear sliders use primary-colored fill (`.z-slider-area`) against an outline-variant track (`.z-slider-center`). The thumb (`.z-slider-button`) is a filled primary circle; on hover and focus-visible, a semi-transparent primary state-layer ring (8px spread, 16% alpha via `color-mix`) expands outward via `box-shadow`; on active/drag the ring expands to 14px spread at the same 16% alpha. The sphere mold (root class `.z-slider-sphere`) applies a radial-gradient on `.z-slider-button` for a 3D sphere effect; ZK confirms `.z-slider-sphere` is added to the root by `domClass_()`. The scale mold (root class `.z-slider-scale`) inherits all the above; scale-mold ticks are not styled yet in `slider.css` (deferred). The popup tooltip (`.z-slider-popup`) uses inverse-surface background with inverse-on-surface text, `--zk-shape-corner-extra-small` corner, elevation-1 shadow.
 
 The knob mold (PE) renders a rotary SVG dial. The **background arc** (`.z-slider-knob-inner path`) uses `stroke: var(--zk-color-outline-variant)` — the inert ring. The **progress arc** (`.z-slider-knob-area path`) uses `stroke: var(--zk-color-primary)`. Both `stroke-width` and arc geometry are JS-controlled via inline SVG attributes and are NOT CSS-themable (T3 boundary for internal geometry). The numeric input overlay (`.z-slider-input`) looks inline at rest (transparent background and a transparent 1px border that shows only on focus), with extra-small corner radius and primary-colored bold text — **centered**, with the native number-input spin buttons suppressed (`appearance: textfield` + `::-webkit-*-spin-button: none`, matching iceblue; MD3/MUI never show native spinner chrome). No hover state ring exists for the knob (SVG drag-based, not thumb-based).
 
@@ -116,12 +116,12 @@ These properties are controlled by JS inline styles/SVG attributes and cannot be
 
 ## Accepted MD3 deviations
 
-The following are intentional divergences from raw MD3 spec. They are documented here so Gate 2 evaluators do not flag them on every iteration. **Approved by the user at the contract-approval gate, 2026-06-04.**
+The following are intentional divergences from raw MD3 spec. They are documented here so Gate 2 evaluators do not flag them on every iteration.
 
 | # | topic | MD3 spec | MUI visual target | Marble choice | rationale |
 |---|-------|----------|-------------------|---------------|-----------|
-| D1 | Thumb ring opacity (hover) | 8% (`--zk-state-hover-opacity`) | 16% (MUI Slider.css line 184: `rgba(25,118,210,0.16)`) | **16%** via `color-mix` | MUI diverges from MD3 here specifically because 8% is too faint at the 8px spread radius against a white background. Marble follows MUI visual target per project policy. |
-| D2 | Thumb ring opacity (focus-visible) | 12% (`--zk-state-focus-opacity`) | 16% same selector as hover (MUI Slider.css line 184) | **16%** via `color-mix` | MUI uses same 16% for focus as hover — simpler ring UX. Marble follows MUI. |
-| D3 | Track (rail) background mechanism | M3: use `--zk-color-outline-variant` directly | MUI uses `.MuiSlider-rail { opacity: 0.38 }` over the primary container (Slider.css line 98) | **`var(--zk-color-outline-variant)`** directly (rgba 0.12 tone) | `outline-variant` is semantically correct for an inert track; avoids a relative opacity + extra element dependency. Visual result is similar lightness. |
-| D4 | Popup (valueLabel) background color | M3: inverse-surface | MUI uses `#757575` (grey, Slider.css lines 365–382) | **`var(--zk-color-inverse-surface)`** (#2d3748, dark blue-grey) | Inverse-surface provides better on-brand contrast; the MUI grey is a Material v1/v2 legacy holdover not used in MD3. |
-| D5 | Root padding | — | MUI root padding 13px | **12px** (`--zk-spacing-3`) | 1px sub-pixel UX difference; 12px stays on the 4dp spacing grid. Accepted at the 2026-06-04 approval gate — not contracted, do not re-flag. |
+| D1 | Thumb ring opacity (hover) | `var(--zk-state-hover-opacity)` | 16% (MUI Slider.css line 184: `rgba(25,118,210,0.16)`) | **16%** via `color-mix` | MUI diverges from MD3 here specifically because 8% is too faint at the 8px spread radius against a white background. Marble follows MUI visual target per project policy. |
+| D2 | Thumb ring opacity (focus-visible) | `var(--zk-state-focus-opacity)` | 16% same selector as hover (MUI Slider.css line 184) | **16%** via `color-mix` | MUI uses same 16% for focus as hover — simpler ring UX. Marble follows MUI. |
+| D3 | Track (rail) background mechanism | M3: use `--zk-color-outline-variant` directly | MUI uses `.MuiSlider-rail { opacity: 0.38 }` over the primary container (Slider.css line 98) | **`var(--zk-color-outline-variant)`** directly | `outline-variant` is semantically correct for an inert track; avoids a relative opacity + extra element dependency. Visual result is similar lightness. |
+| D4 | Popup (valueLabel) background color | M3: inverse-surface | MUI uses `#757575` (grey, Slider.css lines 365–382) | **`var(--zk-color-inverse-surface)`** | Inverse-surface provides better on-brand contrast; the MUI grey is a Material v1/v2 legacy holdover not used in MD3. |
+| D5 | Root padding | — | MUI root padding 13px | **`var(--zk-spacing-3)`** | 1px sub-pixel UX difference; 12px stays on the 4dp spacing grid. Accepted at the 2026-06-04 approval gate — not contracted, do not re-flag. |

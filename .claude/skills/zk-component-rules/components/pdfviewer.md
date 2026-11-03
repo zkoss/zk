@@ -4,7 +4,7 @@ A PDF rendering widget that wraps Mozilla PDF.js. ZK emits a root container with
 
 ZK PE and EE only (ships in `zkex.jar`).
 
-## Wrapper boundary — T3 discipline
+## Wrapper boundary
 
 **Themable (ZK-emitted DOM):**
 - `.z-pdfviewer` — root `<div>`; everything below is part of ZK's chrome

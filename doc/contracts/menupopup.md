@@ -19,12 +19,12 @@ Same as menubar.
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-menupopup` | box-shadow | level-2 dropdown (`doc/spec/DESIGN.md` "Elevation / Shadow") |
-| c2 | `.z-menupopup` | border-radius | 4px |
-| c3 | `.z-menupopup` | background-color | rgb(255, 255, 255) |
+| c1 | `.z-menupopup` | box-shadow | `var(--zk-elevation-dropdown)` (`doc/spec/DESIGN.md` "Elevation / Shadow") |
+| c2 | `.z-menupopup` | border-radius | `var(--zk-menupopup-radius)` |
+| c3 | `.z-menupopup` | background-color | `var(--zk-menupopup-bg)` |
 | c4 | `.z-menupopup` | padding | 4–8px vertical |
-| c5 | `.z-menuseparator` | border-top | 1px solid rgba(0, 0, 0, 0.12) |
-| c6 | `.z-menuseparator` | margin | 4px 0 |
+| c5 | `.z-menuseparator` | border-top | 1px solid `var(--zk-color-outline-variant)` |
+| c6 | `.z-menuseparator` | margin | `var(--zk-spacing-1) 0` |
 
 ## States to evaluate
 - [ ] closed, open, with items, with separators

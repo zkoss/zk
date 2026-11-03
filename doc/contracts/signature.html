@@ -139,7 +139,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     display: inline-flex;
     align-items: center;
     gap: var(--zk-spacing-1);
-    padding: var(--zk-spacing-1) var(--zk-spacing-3);
+    padding: var(--zk-spacing-1);
     min-height: 32px;
     border: 1px solid var(--zk-color-outline-variant);
     border-radius: var(--zk-shape-corner-small);
@@ -163,7 +163,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 }
 
 .z-signature-tool-button:focus-visible {
-    outline: 2px solid var(--zk-color-primary);
+    outline: var(--zk-focus-ring);
     outline-offset: 2px;
 }
 
@@ -173,7 +173,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 
 /* Tool button icon */
 .z-signature-tool-button-icon {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1;
 }
 
@@ -204,7 +204,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 
 /* Simulated focused canvas (focus-within state) */
 .canvas-mockup-active {
-    background: rgba(55, 111, 208, 0.04);
+    background: color-mix(in srgb, var(--zk-color-primary) 4%, transparent);
 }
 
 /* Icon SVG inside tool buttons */
@@ -226,7 +226,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     border-color: var(--zk-color-outline);
 }
 .z-signature-tool-button.state-focus {
-    outline: 2px solid var(--zk-color-primary);
+    outline: var(--zk-focus-ring);
     outline-offset: 2px;
 }
 .z-signature-tool-button.state-active {

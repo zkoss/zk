@@ -29,7 +29,7 @@ in an interactive terminal, or hold a FIFO open from a script. The first start b
 build (minutes); a warm start serves in about 10 s.
 
 Every Playwright test opens a new HTTP session, and ZK keeps one `Timer` thread per session until
-the session expires, so a full suite leaves about 1,300 threads behind. The preview app therefore
+the session expires, so a full suite leaves a large number of threads behind. The preview app therefore
 sets a 5-minute session timeout in its `web.xml`. If you still run several full suites back to back,
 restart the server between them. Filed as ZK-6213.
 
@@ -73,7 +73,7 @@ Run `node zkthemelab/scripts/select-tests.mjs --base <base>` from the repository
 `zkthemelab/scripts/README-select-tests.md`). When it answers `partial`, run the single command it
 prints against your local preview server. When it answers `full`, do not start a full run on your
 own: report the selector's reasons and let the Marble maintainer decide when the full suite runs. The suite
-runs locally only; it is not wired to CI or Jenkins (Marble maintainer's ruling, 2026-10-19).
+runs locally only; it is not wired to CI or Jenkins.
 
 When the command you run includes screenshot specs (`toHaveScreenshot`), capture the baselines
 before you edit CSS. First run the selector with the CSS paths you are about to edit:
@@ -126,7 +126,7 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
 - **The zero-tolerance comparison is the equivalence check that was actually
   run**: the template's unchanged specs against `zkthemelab`, every PNG compared at `threshold: 0,
   maxDiffPixels: 0` with the tracked tools in the separate `zkThemeTemplate` repository (path inside that repo: `doc/migration/tools/zero-tolerance/`), not in zk
-  — the gallery (98), state (55) and tablet (30) families came back byte-identical.
+  — the gallery, state and tablet families came back byte-identical.
 - **Always `await document.fonts.ready`.** A uniform vertical drift across every page is the Inter
   font-load race, not a CSS change. Baselines are flat files in one directory, not nested.
 - **Tolerance is not one number.** `gallery-scan.spec.ts` allows `maxDiffPixelRatio: 0.002` (0.2%) —
@@ -138,7 +138,7 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   **zero-tolerance** run with every diff explained.
 - **A preview `.zul` edit dirties two baseline families, not one.** Every page is shot by the
   `gallery` project (desktop) *and*, for the pages listed in `tablet.spec.ts`'s `visualCases`, by
-  the `tablet` project. A sweep that re-verified only `gallery` left 29 stale tablet baselines
+  the `tablet` project. A sweep that re-verified only `gallery` left stale tablet baselines
   behind, found only when an unrelated server restart ran the full `tablet` project the next day
   (2026-09-11 typography sweep). Before editing any `zkthemelab/src/main/webapp/web/*.zul`, capture
   both projects in one run: `npm run baseline:capture -- --project=gallery --project=tablet`.
@@ -146,7 +146,7 @@ called here` / `Total: 0 tests` — which looks exactly like a broken spec.
   `npm run baseline:compare -- --project=gallery --project=tablet`.
 - **The UseCase SPA hangs on `networkidle`.** Use `domcontentloaded`, then wait on a text marker,
   then `fonts.ready`, with a tall viewport.
-- **The pop-up layer needs interaction** or roughly 180 selectors are never painted. Cursor
+- **The pop-up layer needs interaction** or many of its selectors are never painted. Cursor
   position is the dominant noise source in pop-up A/B captures.
 - **A placeholder PNG means the browser session desynced** — reset it rather than re-running.
 
@@ -166,7 +166,7 @@ are trying to catch.
 Also: disable transitions before measuring focus rings, and never open `/preview` in the
 Chrome automation session.
 
-**Geometry claims are read off the captured PNG, never the live DOM (F57).**
+**Geometry claims are read off the captured PNG, never the live DOM.**
 `getBoundingClientRect` at `networkidle` runs before the gallery spec's font-settle wait and read
 1 px wide on the splitter page while every shot showed the settled width.
 
@@ -223,19 +223,19 @@ comes from the registered Java class, not from any CSS existing. A harness whose
 loaded reports a perfect zero diff. `zk.wcs` is **empty on a second request**, and `body`'s font
 is `Times` even on a healthy page — neither is a usable signal; read `document.styleSheets` in-page.
 
-Measured over 116 pages, repeatedly: **byte-identical PNGs across browser processes are not
+Measured over the full page set, repeatedly: **byte-identical PNGs across browser processes are not
 achievable.** A few pages differ by 2–42 px on border-radius arcs, by up to ±7 per channel, scaling
 with the contrast of the blended colours. No Chromium flag removes it, and `--deterministic-mode`
 is actively harmful. Within one process it is stable, so shoot-until-two-stable-frames converges.
 The comparator's floor is therefore **`maxDelta ≤ 8` and `diffPixels ≤ 64`, not a ratio** — a 1px
 border on a 200px widget is ~0.017% of a 1280×900 shot, so any ratio loose enough to absorb the
-noise also absorbs a real border change. IceBlue ships 5 animated GIFs that no
+noise also absorbs a real border change. IceBlue ships animated GIFs that no
 `animations: 'disabled'` freezes; `page.route(...).abort()` them.
 
 ## Pop-up layer captures — the lessons that generalise
 
-A goto-and-shoot capture never paints anything that only exists when a panel is *open* — roughly
-180 selectors in the theme. Opening them by widget API taught these:
+A goto-and-shoot capture never paints anything that only exists when a panel is *open* — many
+selectors in the theme. Opening them by widget API taught these:
 
 - **The cursor is the dominant noise source, and there is no general rule.** Three failures were
   all cursor position, in opposite directions: an overflow panel opening *under* the parked
@@ -243,7 +243,7 @@ A goto-and-shoot capture never paints anything that only exists when a panel is 
   reads the pointer late, so parking raced its positioning. Default: park after the trigger;
   `holdCursor` per measured exception.
 - **`locator(sel).first()` resolves to a hidden pre-rendered panel** — pages render one per widget
-  (timepicker has 15). Require **exactly one visible match**, and make that function both the
+  (timepicker has many). Require **exactly one visible match**, and make that function both the
   wait condition and the clip.
 - **Picking a widget by DOM index is wrong** once disabled instances are filtered out; pick by a
   predicate over the widget.

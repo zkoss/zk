@@ -79,26 +79,26 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     position: relative;
     height: 40px;
     width: 220px;
-    border: 1px solid var(--zk-color-outline);
-    border-radius: var(--zk-shape-input);
-    background-color: var(--zk-color-surface);
+    border: 1px solid var(--zk-cascader-border-color);
+    border-radius: var(--zk-cascader-radius);
+    background-color: var(--zk-cascader-bg);
     cursor: pointer;
     outline: none;
     transition:
-        border-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard),
-        box-shadow var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-label-large-size);
 }
 
 .z-cascader:hover:not(.z-cascader-disabled) {
-    border-color: var(--zk-color-on-surface);
+    border-color: var(--zk-cascader-border-color-hover);
 }
 
 .z-cascader-focus,
 .z-cascader-open {
-    border-color: var(--zk-color-primary);
-    box-shadow: 0 0 0 1px var(--zk-color-primary);
+    border-color: var(--zk-cascader-border-color-focus);
+    box-shadow: 0 0 0 1px var(--zk-cascader-border-color-focus);
 }
 
 .z-cascader-label,
@@ -114,7 +114,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 }
 
 .z-cascader-label {
-    color: var(--zk-color-on-surface);
+    color: var(--zk-cascader-fg);
 }
 
 .z-cascader-placeholder {
@@ -127,7 +127,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     right: var(--zk-spacing-2);
     top: 50%;
     transform: translateY(-50%);
-    font-size: 18px;
+    font-size: 20px;
     color: var(--zk-color-on-surface-variant);
     line-height: 1;
     user-select: none;
@@ -146,9 +146,9 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
    ──────────────────────────────────────────────────────────────────────── */
 .z-cascader-popup {
     display: inline-flex;
-    background-color: var(--zk-color-surface);
+    background-color: var(--zk-cascader-popup-bg);
     border: 1px solid var(--zk-color-outline-variant);
-    border-radius: var(--zk-shape-menu);
+    border-radius: var(--zk-cascader-popup-radius);
     box-shadow: var(--zk-elevation-dropdown);
     white-space: nowrap;
     font-family: var(--zk-typescale-font-family);
@@ -187,9 +187,9 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     cursor: pointer;
     user-select: none;
     font-size: var(--zk-typescale-body-medium-size);
-    color: var(--zk-color-on-surface);
+    color: var(--zk-cascader-fg);
     box-sizing: border-box;
-    transition: background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard);
+    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
     gap: var(--zk-spacing-2);
 }
 
@@ -199,12 +199,12 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 }
 
 .z-cascader-item.z-cascader-selected {
-    color: var(--zk-color-primary);
+    color: var(--zk-cascader-accent);
 }
 
 /* Expand icon inside items (non-leaf) */
 .z-cascader-item .z-cascader-icon {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--zk-color-on-surface-variant);
     margin-left: auto;
     flex-shrink: 0;
@@ -272,7 +272,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
         <div class="state-label">hover</div>
         <div class="state-cell">
             <!-- Simulate hover with static inline style -->
-            <div class="z-cascader" style="border-color: var(--zk-color-on-surface);">
+            <div class="z-cascader" style="border-color: var(--zk-cascader-border-color-hover);">
                 <div class="z-cascader-label" style="display:none"></div>
                 <div class="z-cascader-placeholder" style="display:inline-block">Select a category</div>
                 <i class="z-cascader-icon fa-solid fa-chevron-down"></i>
@@ -297,7 +297,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                 <div class="z-cascader-placeholder" style="display:inline-block">Select a category</div>
                 <i class="z-cascader-icon fa-solid fa-chevron-down"></i>
             </div>
-            <div class="mock-note">opacity: 0.38 — entire trigger dims, pointer-events: none</div>
+            <div class="mock-note">opacity: <code>--zk-state-disabled-opacity</code> — entire trigger dims, pointer-events: none</div>
         </div>
 
         <div class="state-label">disabled<br>(with selection)</div>
@@ -307,7 +307,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                 <div class="z-cascader-placeholder" style="display:none"></div>
                 <i class="z-cascader-icon fa-solid fa-xmark"></i>
             </div>
-            <div class="mock-note">Path label visible but entire trigger at 0.38 opacity</div>
+            <div class="mock-note">Path label visible but entire trigger at the disabled opacity</div>
         </div>
 
     </div>

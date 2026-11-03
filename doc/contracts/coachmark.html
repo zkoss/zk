@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_sizing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -87,12 +88,12 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 /* Visual card — overflow must NOT be hidden; pointer and close live in the ROOT */
 .z-coachmark-content {
     /* MD3 rich-tooltip: neutral surface so nested widgets render with standard styling */
-    background-color: var(--zk-color-surface-container-low);
-    color: var(--zk-color-on-surface);
-    border-radius: var(--zk-shape-card);
-    box-shadow: var(--zk-elevation-2);
-    /* right padding reserves the 8px inset + 28px close circle + 8px gap = 44px */
-    padding: var(--zk-spacing-4) 44px var(--zk-spacing-4) var(--zk-spacing-4);
+    background-color: var(--zk-coachmark-bg);
+    color: var(--zk-coachmark-fg);
+    border-radius: var(--zk-coachmark-radius);
+    box-shadow: var(--zk-coachmark-elevation);
+    /* right padding reserves the inset + close circle + gap (same calc as coachmark.css) */
+    padding: var(--zk-spacing-4) calc(var(--zk-spacing-2) + var(--zk-control-height-xs) + var(--zk-spacing-2)) var(--zk-spacing-4) var(--zk-spacing-4);
     position: relative;
     max-width: 280px;
     min-width: 160px;
@@ -116,7 +117,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     border-radius: var(--zk-shape-corner-full);
     overflow: hidden;
     font-size: 14px;
-    transition: color 250ms var(--zk-motion-easing-standard);
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 .z-coachmark-close::before {
     content: '';
@@ -126,7 +127,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     background-color: var(--zk-color-on-surface);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 250ms var(--zk-motion-easing-standard);
+    transition: var(--zk-state-layer-transition);
 }
 .z-coachmark-close:hover { color: var(--zk-color-on-surface); }
 .z-coachmark-close:hover::before { opacity: var(--zk-state-hover-opacity); }
@@ -148,25 +149,25 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 
 /* Pointer directions */
 .z-coachmark-pointer.z-coachmark-up {
-    border-bottom-color: var(--zk-color-surface-container-low);
+    border-bottom-color: var(--zk-coachmark-bg);
     top: -20px;
     left: 50%;
     transform: translateX(-50%);
 }
 .z-coachmark-pointer.z-coachmark-down {
-    border-top-color: var(--zk-color-surface-container-low);
+    border-top-color: var(--zk-coachmark-bg);
     bottom: -20px;
     left: 50%;
     transform: translateX(-50%);
 }
 .z-coachmark-pointer.z-coachmark-left {
-    border-right-color: var(--zk-color-surface-container-low);
+    border-right-color: var(--zk-coachmark-bg);
     left: -20px;
     top: 50%;
     transform: translateY(-50%);
 }
 .z-coachmark-pointer.z-coachmark-right {
-    border-left-color: var(--zk-color-surface-container-low);
+    border-left-color: var(--zk-coachmark-bg);
     right: -20px;
     top: 50%;
     transform: translateY(-50%);
@@ -315,7 +316,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                 <div class="z-coachmark-content" style="min-width: 200px;">
                     <div style="padding-right: 24px;">Close button is visible at top-right.</div>
                 </div>
-                <div class="z-coachmark-close" style="position: absolute; top: 8px; right: 8px;">&#x2715;</div>
+                <div class="z-coachmark-close" style="position: absolute; top: var(--zk-spacing-2); right: var(--zk-spacing-2);">&#x2715;</div>
             </div>
         </div>
 
@@ -326,7 +327,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                 <div class="z-coachmark-content" style="min-width: 200px;">
                     <div style="padding-right: 24px;">Close button hovered.</div>
                 </div>
-                <div class="z-coachmark-close" style="position: absolute; top: 8px; right: 8px; opacity: 1; background-color: rgba(0,0,0,0.08);">&#x2715;</div>
+                <div class="z-coachmark-close" style="position: absolute; top: var(--zk-spacing-2); right: var(--zk-spacing-2); opacity: 1; background-color: color-mix(in srgb, var(--zk-color-on-surface) calc(var(--zk-state-hover-opacity) * 100%), transparent);">&#x2715;</div>
             </div>
         </div>
 

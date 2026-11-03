@@ -87,5 +87,5 @@ inject layers; it concatenates the source and **verifies** the wrapper is presen
 
 ## Verification notes
 
-- Phase 1 (this layering) was verified **rendering-neutral**: a HEAD-vs-change A/B run produces the identical set
+- The layering was verified **rendering-neutral**: a HEAD-vs-change A/B run produces the identical set
   of screenshot results (same diffs), and the cascade behavior was confirmed by direct computed-style probes.

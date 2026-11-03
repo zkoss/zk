@@ -58,8 +58,7 @@ Where Marble's bundling differs from stock `lang.xml`: Marble merges datebox and
 `combo.css.dsp` and toolbarbutton into `footer.css.dsp`; stock `lang.xml` uses `calendar.css.dsp`
 for datebox, no `css-uri` for timebox, and `toolbar.css.dsp` for toolbarbutton. Stock ZK has no
 `css-uri` for div, html, image, imagemap, label and span, so without the `norm` bundle they were
-served by no stylesheet (an orphan sweep on 2026-06-30 found `.z-div` unstyled across 26 elements
-and labels across 611 elements).
+served by no stylesheet (an orphan sweep on 2026-06-30 found `.z-div` elements and labels unstyled).
 
 `base/_reset.css` is intentionally **not** in the `norm` bundle — it ships as its own stylesheet
 (`reset.css` / `reset-embed.css`) and is loaded ahead of the bundle. See

@@ -51,10 +51,10 @@ mockup-needed: Y — no ZKDoc canonical image exists for carousel (`ZK_component
 ## Design Contract
 
 Carousel is a full-bleed media frame: the root clips to a `--zk-carousel-radius`
-(`--zk-shape-card`, 6px) rounded rectangle so it reads as one coherent hero unit regardless
+(`--zk-shape-card`) rounded rectangle so it reads as one coherent hero unit regardless
 of what photographic content the author drops inside, matching the theme's general
-"default to 6px (`--zk-shape-card`) for any container/card" rule (doc/spec/DESIGN.md "Corner Radii") rather than the tighter 4px
-interactive-control radius — a carousel is a content frame, not a control. Because the
+"default to `--zk-shape-card` for any container/card" rule (doc/spec/DESIGN.md "Corner Radii") rather than the tighter
+interactive-control radius (`--zk-shape-corner-extra-small`) — a carousel is a content frame, not a control. Because the
 slides underneath are arbitrary, unpredictable imagery, none of the overlay chrome (arrows,
 indicators, caption label) can safely key off surface/on-surface tokens the way an
 ordinary control does — a `--zk-color-primary` arrow would vanish against a blue photo. All
@@ -62,11 +62,11 @@ three overlay pieces instead speak exactly two voices, both already established
 theme-wide: `--zk-color-scrim` (the theme's existing translucent-black overlay token) for
 every dark overlay fill — arrow resting background, inactive indicator dot, caption
 backdrop — and `--zk-color-inverse-on-surface` (the theme's existing brand-**independent**
-light-on-dark foreground token, `#f0f4fa`) for every light foreground — arrow chevron
+light-on-dark foreground token) for every light foreground — arrow chevron
 color, resting indicator ring, caption text. The active indicator is the one exception: a `--zk-color-primary`
 pill ringed with `--zk-color-on-primary` (see "Indicators"). The light
 voice is not `--zk-color-on-primary`, which reads identically against the default
-Marble palette (`#ffffff` vs. `#f0f4fa` is not a visible difference) but is the *wrong*
+Marble palette (`--zk-color-on-primary` and `--zk-color-inverse-on-surface` are not a visible difference there) but is the *wrong*
 role — `doc/spec/brand-override.md` documents `--zk-color-on-primary` as a token
 integrators are expected to repoint to a **dark** value for a light-primary rebrand
 ("a light preset would also need `--zk-color-on-primary`"). Under that supported
@@ -145,29 +145,28 @@ clipped (accepted).
 
 **Caption label** (`.z-carouselitem-label`) is a small opaque-scrim **chip** anchored to
 the bottom-left of the slide (`--zk-spacing-4`, exactly matching ZK stock's 16px — no
-departure needed here), padded `--zk-spacing-1 --zk-spacing-2` (4px/8px — a minor
+departure needed here), padded `--zk-spacing-1 --zk-spacing-2` (a minor
 departure from ZK stock's 4px/10px, rounded to the theme's spacing scale rather than kept
-as an odd 10px), and corner-rounded at `--zk-shape-card` (6px). The radius follows
-doc/spec/DESIGN.md "Corner Radii" ("default to 6px (`--zk-shape-card`) for any container/card;
-4px (`--zk-shape-corner-extra-small`) for interactive controls" — the same rule applied to the root
+as an odd 10px), and corner-rounded at `--zk-shape-card`. The radius follows
+doc/spec/DESIGN.md "Corner Radii" ("default to `--zk-shape-card` for any container/card;
+`--zk-shape-corner-extra-small` for interactive controls" — the same rule applied to the root
 in c1). A caption chip is a small container, not an interactive control, so it takes the
 container radius, not the control radius; "mirrors ZK stock's 4px" is not a valid `source`
 under this theme's authoring discipline (see the Spacing paragraph below, which avoids that
-for offsets). The label's text uses `--zk-typescale-body-small` (12px/400/16px,
-c32) — doc/spec/DESIGN.md "Typography" (§7) states no caption size, and no
+for offsets). The label's text uses `--zk-typescale-body-small` (c32) — doc/spec/DESIGN.md "Typography" (§7) states no caption size, and no
 shipped token is literally named or sized for that role; `body-small` is the nearest actual
 `--zk-typescale-*` token embodying the same "small, regular-weight, non-emphasized" role
-(as opposed to `label-small`, which is also 11px but carries a 500 emphasis weight suited
-to nav/list labels, not a photo caption).
+(as opposed to `label-small`, which carries an emphasis weight
+(`--zk-typescale-label-small-weight`) suited to nav/list labels, not a photo caption).
 
 **Spacing departures from ZK stock, and why:** arrow edge-offset and indicator row
-bottom-offset both move from ZK's 10px to `--zk-spacing-2` (8px) — a deliberate landing on
+bottom-offset both move from ZK's 10px to `--zk-spacing-2` — a deliberate landing on
 the theme's 4dp spacing scale (doc/spec/DESIGN.md "Spacing Scale (4dp baseline)") rather than "mirrors ZK stock," which is not a
 valid `source` per this theme's authoring discipline. The indicator gap between dots
-likewise moves from ZK's 6px to `--zk-spacing-2` (8px) for the same reason.
+likewise moves from ZK's 6px to `--zk-spacing-2` for the same reason.
 
 **Motion:** the track's slide transform and the fade effect's opacity both transition on
-`--zk-motion-duration-standard` (250ms) / `--zk-motion-easing-standard`, the theme's
+`--zk-motion-duration-standard` / `--zk-motion-easing-standard`, the theme's
 default interactive pair (doc/spec/DESIGN.md "Motion") — no new duration/easing tokens are needed. ZK
 stock's own per-component `@media (prefers-reduced-motion: reduce)` block (which zeroes
 the track/fade transitions) is **redundant with, and superseded by,** Marble's existing
@@ -209,21 +208,21 @@ rather than a `visual-goal: trivial` declaration.
 
 | id | selector | property | expected (token preferred) | token-rooted? | source |
 |----|----------|----------|----------------------------|---------------|--------|
-| c1 | `.z-carousel` | border-radius | `var(--zk-carousel-radius)` → `var(--zk-shape-card)` (6px) | yes | doc/spec/DESIGN.md "Corner Radii" |
+| c1 | `.z-carousel` | border-radius | `var(--zk-carousel-radius)` → `var(--zk-shape-card)` | yes | doc/spec/DESIGN.md "Corner Radii" |
 | c2 | `.z-carousel` | overflow | `hidden` | no | structural clip, not a design token |
 | c3 | `.z-carousel-track` | transition | `transform var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` | yes | doc/spec/DESIGN.md "Motion" |
 | c4 | `.z-carousel-effect-fade .z-carouselitem` | transition | `opacity var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` | yes | doc/spec/DESIGN.md "Motion" |
-| c5 | `.z-carousel-arrow` | width / height | `var(--zk-carousel-arrow-size)` → `var(--zk-control-height-sm)` (32px) | yes | doc/spec/DESIGN.md "Density" — density-bound, see Cross-cutting §Density. Uses `--zk-control-height-sm` to align with the cited `paging` sibling's own alias (`--zk-paging-control-size: var(--zk-control-height-sm)`) |
+| c5 | `.z-carousel-arrow` | width / height | `var(--zk-carousel-arrow-size)` → `var(--zk-control-height-sm)` | yes | doc/spec/DESIGN.md "Density" — density-bound, see Cross-cutting §Density. Uses `--zk-control-height-sm` to align with the cited `paging` sibling's own alias (`--zk-paging-control-size: var(--zk-control-height-sm)`) |
 | c6 | `.z-carousel-arrow` | border-radius | `var(--zk-shape-corner-full)` | yes | doc/spec/DESIGN.md "Corner Radii" — circular control |
 | c7 | `.z-carousel-arrow` | background-color | `var(--zk-carousel-arrow-bg)` → `var(--zk-color-scrim)` | yes | `tokens/_colors.css` (scrim is not listed in the DESIGN.md "Surface Palette" section — see References) |
 | c8 | `.z-carousel-arrow` | color | `var(--zk-carousel-arrow-fg)` → `var(--zk-color-inverse-on-surface)` | yes | `tokens/_colors.css`; brand-independent by design — see Design Contract / `brand-override.md` |
-| c9 | `.z-carousel-arrow:hover` | background-color | `var(--zk-carousel-arrow-bg-hover)` (`rgba(0, 0, 0, 0.65)`, literal) | no — see Design Contract's "one non-token-rooted value" note | curated; no darker-scrim token exists today |
+| c9 | `.z-carousel-arrow:hover` | background-color | `var(--zk-carousel-arrow-bg-hover)` (literal knob default) | no — see Design Contract's "one non-token-rooted value" note | curated; no darker-scrim token exists today |
 | c10 | `.z-carousel-arrow:focus-visible` | outline | `var(--zk-focus-ring)` | yes | doc/spec/DESIGN.md "State-Layer Overlays" — global focus convention, not knob-driven |
 | c11 | `.z-carousel-arrow::before` | border-left / border-bottom (prev) or border-right / border-top (next) | `2px solid currentColor` | no | geometry, not a color/spacing token — color rides on c8 via `currentColor` |
-| c12 | `.z-carousel-arrow[disabled]` | opacity | `var(--zk-state-disabled-opacity)` (0.38) | yes | doc/spec/DESIGN.md "State-Layer Overlays" — reuses the global disabled convention, not knob-driven |
-| c13 | `.z-carousel-arrow-prev`, `.z-carousel-arrow-next` | left / right (offset from edge) | `var(--zk-spacing-2)` (8px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — departs from ZK stock's 10px to land on the spacing scale |
-| c14 | `.z-carousel-indicators` | bottom (offset from edge) | `var(--zk-spacing-2)` (8px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — same departure as c13 |
-| c15 | `.z-carousel-indicators` | gap | `var(--zk-spacing-2)` (8px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — departs from ZK stock's 6px |
+| c12 | `.z-carousel-arrow[disabled]` | opacity | `var(--zk-state-disabled-opacity)` | yes | doc/spec/DESIGN.md "State-Layer Overlays" — reuses the global disabled convention, not knob-driven |
+| c13 | `.z-carousel-arrow-prev`, `.z-carousel-arrow-next` | left / right (offset from edge) | `var(--zk-spacing-2)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — departs from ZK stock's 10px to land on the spacing scale |
+| c14 | `.z-carousel-indicators` | bottom (offset from edge) | `var(--zk-spacing-2)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — same departure as c13 |
+| c15 | `.z-carousel-indicators` | gap | `var(--zk-spacing-2)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — departs from ZK stock's 6px |
 | c16 | `.z-carousel-indicator` | width / height (hit area) | `24px` (literal) | no | WCAG 2.1 SC 2.5.8 accessibility floor — see Cross-cutting §Density; not density-bound |
 | c17 | `.z-carousel-indicator::before` | width / height (visible dot) | `8px` (literal) | no | decorative sub-hit-area mark, not a themed role |
 | c18 | `.z-carousel-indicator::before` | background-color | `var(--zk-carousel-indicator-bg)` → `var(--zk-color-scrim)` | yes | `tokens/_colors.css` (see c7) |
@@ -234,14 +233,14 @@ rather than a `visual-goal: trivial` declaration.
 | c22 | `.z-carousel-indicator:focus-visible` | outline | `var(--zk-focus-ring)` | yes | doc/spec/DESIGN.md "State-Layer Overlays" — global focus convention |
 | c23 | `.z-carouselitem-label` | background-color | `var(--zk-carousel-label-bg)` → `var(--zk-color-scrim)` | yes | `tokens/_colors.css` (see c7) |
 | c24 | `.z-carouselitem-label` | color | `var(--zk-carousel-label-fg)` → `var(--zk-color-inverse-on-surface)` | yes | `tokens/_colors.css`; brand-independent — see Design Contract |
-| c25 | `.z-carouselitem-label` | bottom / left | `var(--zk-spacing-4)` (16px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — exact match to ZK stock |
-| c26 | `.z-carouselitem-label` | padding | `var(--zk-spacing-1) var(--zk-spacing-2)` (4px/8px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — departs from ZK stock's 4px/10px |
-| c27 | `.z-carouselitem-label` | border-radius | `var(--zk-carousel-radius)` → `var(--zk-shape-card)` (6px) | yes | doc/spec/DESIGN.md "Corner Radii" — "default to 6px (`--zk-shape-card`) for any container/card"; the container/chip radius, not the interactive-control radius (same rule as c1) |
+| c25 | `.z-carouselitem-label` | bottom / left | `var(--zk-spacing-4)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — exact match to ZK stock |
+| c26 | `.z-carouselitem-label` | padding | `var(--zk-spacing-1) var(--zk-spacing-2)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — departs from ZK stock's 4px/10px |
+| c27 | `.z-carouselitem-label` | border-radius | `var(--zk-carousel-radius)` → `var(--zk-shape-card)` | yes | doc/spec/DESIGN.md "Corner Radii" — "default to `--zk-shape-card` for any container/card"; the container/chip radius, not the interactive-control radius (same rule as c1) |
 | c28 | `.z-carousel > img`, `.z-carouselitem > img` | width / height / object-fit | `100%` / `100%` / `cover` | no | layout keywords, not design tokens |
 | c29 | `.z-carousel-indicator::before` | transition | `transform, background-color, border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` | yes | doc/spec/DESIGN.md "Motion" — enables the c30 hover cue and the resting/active fill swap (c18–c21) to animate smoothly |
 | c30 | `.z-carousel-indicator:hover::before` | transform | `scale(1.25)` | no | geometric hover cue, fill-color-agnostic by construction — see Design Contract "Indicator hover" |
 | c31 | `.z-carousel-arrow` | transition | `background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` | yes | doc/spec/DESIGN.md "Motion" — the c9 hover-darken transition |
-| c32 | `.z-carouselitem-label` | font-size / font-weight / line-height | `var(--zk-typescale-body-small-size)` / `-weight` / `-line-height` (12px / 400 / 16px) | yes | doc/spec/DESIGN.md "Typography" (§7 states no caption size), `tokens/_typography.css` — `body-small` is the nearest shipped token to that role; see Design Contract |
+| c32 | `.z-carouselitem-label` | font-size / font-weight / line-height | `var(--zk-typescale-body-small-size)` / `-weight` / `-line-height` | yes | doc/spec/DESIGN.md "Typography" (§7 states no caption size), `tokens/_typography.css` — `body-small` is the nearest shipped token to that role; see Design Contract |
 | c33 | `.z-carousel-effect-none .z-carousel-track` | transition | `none` | no | structural effect-variant override, not a design token — see skill's "Effect gates structural behavior" |
 
 ## State matrix
@@ -341,7 +340,7 @@ Design Contract "Indicator hover").
 ### Density
 density: bound (arrows only) — indicators are an accessibility-floor exception, see below.
 density-tokens: --zk-carousel-arrow-size (alias in `tokens/_sizing.css`,
-  `--zk-carousel-arrow-size: var(--zk-control-height-sm);` — 32px at the default tier, with
+  `--zk-carousel-arrow-size: var(--zk-control-height-sm);` — the default value is that alias, with
   explicit values in the compact and comfortable density blocks; same "component-type → ladder
   rung" pattern as `--zk-fab-size` → `--zk-control-height-xl`)
 
@@ -349,13 +348,13 @@ The arrow button has a genuine intrinsic control height (a fixed circular hit ta
 sized by its text content, the same distinguishing test the Density spec uses elsewhere) —
 so per the checklist's own rule it does not qualify for the "no intrinsic control-height"
 N/A carve-out that, e.g., breadcrumb's link/ellipsis or `a` use. `--zk-control-height-sm`
-(32px) is the alias to use, not `-xs` (28px): the contract's own `closest-sibling` citation
+is the alias to use, not `-xs`: the contract's own `closest-sibling` citation
 names `paging` as the precedent for the arrow pair, and paging's own established alias in
 this exact token system is `--zk-paging-control-size: var(--zk-control-height-sm)`
 (`_sizing.css`'s comment for `-sm` is literally "paging controls, window-close" — `-xs` is
 commented "sm buttons, close buttons, separators," not navigation arrows). Sibling-token
-coherence outranks raw-pixel proximity to ZK stock's fixed 36px, and 32px is in any case
-closer to 36px than 28px is. Landing on the ladder (rather than an off-ladder 36px literal) means a whole-app compact
+coherence outranks raw-pixel proximity to ZK stock's fixed 36px, and the `-sm` rung is in any
+case closer to 36px than the `-xs` rung is. Landing on the ladder (rather than an off-ladder 36px literal) means a whole-app compact
 override reaches the carousel arrows too, the same way it already reaches every other
 icon-only control.
 
@@ -430,8 +429,8 @@ tablet: shipped — both the arrows and the indicators are genuinely small discr
 tap targets that sit directly atop swipeable, single-purpose media content (unlike, e.g.,
 `breadcrumb`'s inline text items, which have Tab-order fallbacks). The tablet bundle
 (`../zkcml/zkmax/src/main/resources/web/zkmax/css/tablet/_buttons.css` — icon-only controls
-grow to `--zk-touch-target-min`, 44px, via padding around an unchanged visible glyph, not by
-resizing the glyph itself) extends both `.z-carousel-arrow` (`--zk-carousel-arrow-size`, 32px
+grow to `--zk-touch-target-min`, via padding around an unchanged visible glyph, not by
+resizing the glyph itself) extends both `.z-carousel-arrow` (`--zk-carousel-arrow-size`
 at rest) and `.z-carousel-indicator` (a fixed 24px, already at the WCAG *minimum* but
 below MD3's *comfortable* touch tier) to `--zk-touch-target-min` on a touch UA, in both
 cases via padding/box size around the unchanged visible chevron/dot mark — the
