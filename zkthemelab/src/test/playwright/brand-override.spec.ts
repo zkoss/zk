@@ -26,6 +26,7 @@ const pages = fs.readdirSync(WEB_DIR)
 
 const BRAND = 'copper';
 const COPPER_SEED_RGB = [180, 83, 9]; // _colors.css :root[data-brand="copper"] #b45309
+const SLATE_SEED_RGB = 'rgb(80, 98, 116)'; // _colors.css :root[data-brand="slate"] #506274
 
 // The stock primary-family tokens; every one of them is derived from --zk-color-primary.
 const FAMILY_TOKENS = [
@@ -409,5 +410,29 @@ test.describe('brand-derived-tokens', () => {
       }
     }
     expect(failures, failures.join('\n')).toEqual([]);
+  });
+});
+
+test.describe('brand-slate', () => {
+  test('button — data-brand="slate" sets the primary seed and the filled button paints with it', async ({ page }) => {
+    await page.goto('/button.zul', { waitUntil: 'networkidle' });
+    const readPrimary = () => page.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = 'var(--zk-color-primary)';
+      document.body.appendChild(probe);
+      const seed = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      const button = document.querySelector('.z-button:not(.z-button-disabled)') as HTMLElement;
+      return { seed, button: getComputedStyle(button).backgroundColor };
+    });
+    await settle(page);
+    const stock = await readPrimary();
+    expect(stock.seed, 'the stock seed is not the slate seed').not.toBe(SLATE_SEED_RGB);
+
+    await page.evaluate(() => { document.documentElement.dataset.brand = 'slate'; });
+    await nextFrames(page);
+    const slate = await readPrimary();
+    expect(slate.seed, '--zk-color-primary under data-brand="slate"').toBe(SLATE_SEED_RGB);
+    expect(slate.button, 'the filled button follows the slate seed').toBe(SLATE_SEED_RGB);
   });
 });

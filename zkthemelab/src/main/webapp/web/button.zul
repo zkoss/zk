@@ -163,6 +163,10 @@
                 <h:div><h:span class="z-text-xs z-text-secondary">Large</h:span></h:div>
                 <button label="Button" sclass="z-button-lg"/>
             </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Icon button</h:span></h:div>
+                <button iconSclass="z-icon-settings" sclass="z-button-icon"/>
+            </h:div>
         </h:div>
     </h:div>
 </h:div>

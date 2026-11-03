@@ -4,6 +4,8 @@ import { test, expect } from '@playwright/test';
 // These classes are JS-toggled hooks ZK's client engine emits and expects the theme to style;
 // most appear only during an active drag, so we assert the CSS CONTRACT by injecting the exact
 // runtime markup (from zk/widget.ts) and reading computed styles — deterministic, no flaky drag.
+// The drag overlay (.z-dd-stackup) is the exception: it is created only by a real drag, so its
+// test drags a splitter with the mouse.
 //
 // Requires the preview app on ${PREVIEW_URL} (withjdk.sh 17 mvn test exec:java@preview-app).
 
@@ -110,5 +112,38 @@ test.describe('framework classes — macro root', () => {
     expect(hidden.display).toBe('none');
     const flex = await injected(page, '<div class="z-macro z-d-flex"></div>', '', ['display']);
     expect(flex.display).toBe('flex');
+  });
+});
+
+// drag.ts appends .z-dd-stackup to <body> for the length of a drag that asks for an overlay (Splitter, Window, ZK-817), so
+// an iframe under the pointer cannot swallow the drag. Needs a real drag: the overlay exists only while the button is down.
+test.describe('framework classes — drag overlay', () => {
+  test('splitter — a drag shows .z-dd-stackup out of flow above the floating widgets and removes it on release', async ({ page }) => {
+    await page.goto('/splitter.zul', { waitUntil: 'networkidle' });
+    const splitter = page.locator('.z-splitter-horizontal').first();
+    await splitter.waitFor({ state: 'visible' });
+    const box = (await splitter.boundingBox())!;
+    const documentSize = () => page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.scrollHeight]);
+    const before = await documentSize();
+    await expect(page.locator('.z-dd-stackup'), 'no overlay before the drag').toHaveCount(0);
+
+    // Away from the collapse button in the middle of the bar.
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height * 0.8;
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x + 30, y, { steps: 5 });
+
+    const stackup = page.locator('.z-dd-stackup');
+    await expect(stackup, 'one overlay while the button is down').toHaveCount(1);
+    await expect(stackup).toHaveCSS('position', 'absolute');
+    await expect(stackup).toHaveCSS('z-index', '16800');
+    await expect(stackup).toHaveCSS('left', '0px');
+    await expect(stackup).toHaveCSS('top', '0px');
+    expect(await stackup.evaluate(el => el.parentElement!.tagName), 'appended to <body>').toBe('BODY');
+    expect(await documentSize(), 'the overlay adds no scrollbar').toEqual(before);
+
+    await page.mouse.up();
+    await expect(stackup, 'overlay removed on release').toHaveCount(0);
   });
 });

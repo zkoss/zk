@@ -571,6 +571,31 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect(unselected.contrast, `unselected header × ${unselected.glyphColor}`).toBeGreaterThanOrEqual(3);
   });
 
+  // (2a close) On hover the close button of the selected accordion header inverts: a HighlightText circle with a
+  // Highlight ×, because the authored 12% tint would be nearly invisible on the Highlight fill.
+  test('tabbox — the close button of the selected accordion header inverts on hover', async ({ page }) => {
+    await page.goto('/tabbox.zul', { waitUntil: 'domcontentloaded' });
+    const button = page.locator('.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected'
+      + ' > .z-tab-content > .z-tab-button').first();
+    await button.waitFor({ state: 'visible', timeout: 10000 });
+    await button.scrollIntoViewIfNeeded();
+    const [highlight, highlightText] = [await systemColor(page, 'Highlight'), await systemColor(page, 'HighlightText')];
+    const paint = () => button.evaluate(el => ({
+      buttonBackground: getComputedStyle(el).backgroundColor,
+      glyphBackground: getComputedStyle(el.querySelector('.z-tab-icon')!, '::before').backgroundColor,
+    }));
+
+    await page.mouse.move(1, 1);
+    const resting = await paint();
+    expect(resting.glyphBackground, 'resting ×').toBe(highlightText);
+    expect(resting.buttonBackground, 'resting button fill is not the hover circle').not.toBe(highlightText);
+
+    const box = (await button.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(button, 'hovered button fill').toHaveCSS('background-color', highlightText);
+    expect((await paint()).glyphBackground, 'hovered ×').toBe(highlight);
+  });
+
   // A disabled tab does not close, so its close icon must not look or feel clickable: no hover colour,
   // no hover circle, no pointer cursor (pointer-events: none on the wrapper, inherited by the icon).
   test('the close icon of a disabled tab ignores the pointer, an enabled one does not (strip and accordion)', async ({ page }) => {
