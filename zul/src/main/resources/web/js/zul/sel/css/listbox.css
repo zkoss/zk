@@ -980,10 +980,9 @@ td.z-listgroup-inner {
    bundle only loads when a Selectbox widget is on the page.)
 
    This is the effective ruleset for `.z-select` — `css-uri` for Listbox (every
-   mold, incl. "select") resolves to this file's `.css.dsp`, not select.css.dsp
-   (confirmed via check:css-dsp: select.css.dsp is unreferenced/"extra"). Reads
-   the `--zk-selectbox-*` knobs (declared once in _component-theme.css, shared
-   with select.css) so region/whole-app overrides reach the rendered element. */
+   mold, incl. "select") resolves to this file's `.css.dsp`. Reads the
+   `--zk-selectbox-*` knobs (declared once in _component-theme.css) so
+   region/whole-app overrides reach the rendered element. */
 .z-select {
     display: inline-block;
     min-height: var(--zk-control-height);

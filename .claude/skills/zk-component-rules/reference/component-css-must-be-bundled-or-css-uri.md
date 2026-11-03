@@ -22,14 +22,21 @@ the widget is unstyled; nothing errors. This bit `scrollbar`, `div`, `label`, `s
 
 ## Authoritative detection (runtime probe)
 
-Static "has no css-uri ⇒ orphaned" **over-predicts** — ZK's `zk.wcs` serves *some*
-no-css-uri files via package aggregation. The only reliable check is a runtime probe:
-load a page that renders the widget and scan `document.styleSheets` for the widget's own
-**root** rule (a selector matching `^\.z-<comp>(?![\w-])`, not a compound ref from another
-file). Absent while the widget renders ⇒ orphaned. Watch for two false classes:
+Static check: a no-css-uri file is orphaned unless it is bundled into a served file. The
+runtime probe confirms it: load a page that renders the widget and scan
+`document.styleSheets` for the widget's own **root** rule (a selector matching
+`^\.z-<comp>(?![\w-])`, not a compound ref from another file). Absent while the widget
+renders ⇒ orphaned.
 
-- **Served-anyway**: `select` (`.z-select`), `cell` (`.z-cell`), `bandpopup`
-  (`.z-bandpopup`) — no css-uri, but `zk.wcs` serves their own rules. Not orphans.
+A selector-only match is **not** proof that a file is served: the matching rule may come
+from another file. Compare the file's own rule text against the served stylesheet before
+you call it served. `select` (`.z-select`), `cell` (`.z-cell`) and `bandpopup`
+(`.z-bandpopup`) were once called "served" on a selector-only probe; their matches came
+from `listbox.css`, `grid.css` / `frozen.css` and `bandbox.css`, their own files were never
+served, and the files have been deleted.
+
+Watch for this false class:
+
 - **Dead CSS**: a CSS file whose root selector never renders (for example a rule for
   `.z-space` when `<space>` renders `.z-separator`) is not an orphan; bundling it would only load
   no-op rules.

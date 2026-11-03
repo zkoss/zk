@@ -67,10 +67,9 @@ served by no stylesheet (an orphan sweep on 2026-06-30 found `.z-div` elements a
 ## Fixing an orphaned component CSS
 
 Add its source path to `normFiles` in `scripts/build-css.js` (Marble's global bundle `norm.css.dsp`;
-`combo` and `footer` are the other bundles). `WCS_SERVED_ALLOWLIST` in `build-css.js` lists the
-probe-verified served-anyway files (select, cell, bandpopup) so the guard does not flag them.
-`assertNoOrphanComponentCss()` (build time) fails the build when a non-empty auto-scanned component
-CSS is neither `css-uri`-backed, nor in a bundle, nor in the allowlist. The runtime probe is the
+`combo` and `footer` are the other bundles), give the component a `css-uri`, or delete the file if
+it is dead. `assertNoOrphanComponentCss()` (build time) fails the build when a non-empty auto-scanned
+component CSS is neither `css-uri`-backed nor in a bundle. The runtime probe is the
 `orphaned-helper-css` test in `zkthemelab/src/test/playwright/screenshot.spec.ts`.
 
 ## Tokens and re-implemented stock selectors

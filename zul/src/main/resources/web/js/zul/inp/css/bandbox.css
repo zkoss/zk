@@ -169,7 +169,7 @@
 }
 
 /* ─── Bandpopup ───────────────────────────────────────────────────────── */
-/* bandpopup.css is never served (no <css> in lang.xml); rules must live here */
+/* Bandpopup has no css-uri in lang.xml, so its rules must live here */
 /* .z-bandbox-popup already provides border/shadow/radius — no second border here */
 .z-bandpopup {
     background-color: var(--zk-bandbox-popup-bg);
