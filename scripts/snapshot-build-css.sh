@@ -10,7 +10,7 @@
 # What one snapshot holds:
 #   - out/<module>-min, out/<module>-dev: the four modules (zul, zkmax, zkex, za11y), each built
 #     minified and with --dev, written through --out so the codegen dirs are not touched;
-#   - out/zul-emit + emit/: zul built with --emit-docs, and the two side files it writes into the
+#   - out/zul-icon-catalog + icon-catalog/: zul built with --icon-catalog, and the two side files it writes into the
 #     repo (each repo file is put back as it was, or removed if the run created it);
 #   - log-*.txt: stdout/stderr and exit code of every run, plus the two usage errors (exit 2);
 #   - manifest.txt: a sha256 of every output file.
@@ -42,16 +42,16 @@ for mod in zul zkmax zkex za11y; do
     run "$mod-dev" --module "$mod" --out "$SNAP/out/$mod-dev" --dev
 done
 
-# --emit-docs writes these two files into the repo: save them, run, copy the result out, restore.
-DOCS="doc/spec/icon-index.md zkthemelab/src/main/webapp/icons-lucide.zul"
-mkdir -p "$SNAP/saved" "$SNAP/emit"
+# --icon-catalog writes these two files into the repo: save them, run, copy the result out, restore.
+DOCS="doc/spec/icon-index.md zkthemelab/src/main/webapp/web/icons-lucide.zul"
+mkdir -p "$SNAP/saved" "$SNAP/icon-catalog"
 for f in $DOCS; do
     if [ -e "$f" ]; then cp "$f" "$SNAP/saved/$(basename "$f")"; fi
 done
-run zul-emit --module zul --out "$SNAP/out/zul-emit" --emit-docs
+run zul-icon-catalog --module zul --out "$SNAP/out/zul-icon-catalog" --icon-catalog
 for f in $DOCS; do
     b=$(basename "$f")
-    if [ -e "$f" ]; then cp "$f" "$SNAP/emit/$b"; fi
+    if [ -e "$f" ]; then cp "$f" "$SNAP/icon-catalog/$b"; fi
     if [ -e "$SNAP/saved/$b" ]; then cp "$SNAP/saved/$b" "$f"; else rm -f "$f"; fi
 done
 rm -r "$SNAP/saved"

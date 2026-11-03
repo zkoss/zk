@@ -18,7 +18,7 @@ import { test, expect, devices, type Locator, type Page } from '@playwright/test
 // with `node scripts/build-css.js --module zul` and re-check that file.
 //
 // Requires the preview app on ${PREVIEW_URL}
-//   withjdk.sh 17 mvn test exec:java@preview-app
+//   cd zkthemelab && ./gradlew appRun -PhttpPort=8085
 // Run: npm run test:forced-colors   (or: playwright test --project=forced-colors)
 
 // Resolves a CSS system colour keyword to the computed rgb() string under the emulated palette.

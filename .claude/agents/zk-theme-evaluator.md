@@ -134,7 +134,7 @@ check the ZK source under `$ZK_SOURCE/zul/src/main/resources/web/js/zul/<area>/`
 If neither, record a FAIL with category `icon-widget` and message
 `ZK widget emits "z-icon-{name}" but no Lucide source or FA_TO_LUCIDE alias exists; add an entry to scripts/build-css.js FA_TO_LUCIDE`. The fix here belongs to the theme, not the preview.
 
-Lookup priority for both scopes: `doc/spec/icon-index.md` is the canonical reference. If that file is stale (older than `scripts/build-css.js` or `node_modules/lucide-static`), instruct the user to run `node scripts/build-css.js --module zul --emit-docs` before proceeding.
+Lookup priority for both scopes: `doc/spec/icon-index.md` is the canonical reference. If that file is stale (older than `scripts/build-css.js` or `node_modules/lucide-static`), instruct the user to run `npm run build:icon-catalog` before proceeding.
 
 ### 3. Open Chrome and navigate
 
