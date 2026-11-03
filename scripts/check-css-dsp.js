@@ -22,7 +22,9 @@
 // every <css-uri> to its full path, adds the module's global bundles (if any), and asserts each
 // file exists under the built output dir. It is the runtime-faithful complement to
 // build-css.js's assertNoOrphanComponentCss() (which guards the INVERSE: a no-css-uri file must
-// not be emitted as an orphan ZK never requests).
+// not be emitted as an orphan ZK never requests). This script enforces the inverse too, on the
+// build output: a built .css.dsp that nothing requests fails the check unless it is listed in
+// EXPECTED_EXTRAS.
 //
 // One repository root per module — see build-css.js's header comment for the full table:
 //
@@ -48,7 +50,8 @@
 //
 // Usage:
 //   node scripts/check-css-dsp.js --module zul|zkmax|zkex|za11y [--theme-dir <dir>] [--zk-home <dir>]
-// Exit: 0 = all present · 1 = missing file(s) · 2 = cannot run (bad --module, or lang file not found)
+// Exit: 0 = all present, no unexpected extras · 1 = missing file(s) or unexpected extra(s) ·
+//       2 = cannot run (bad --module, or lang file not found)
 
 const fs = require('fs');
 const path = require('path');
@@ -118,6 +121,13 @@ const THEMED_PREFIXES = [`js/${moduleName}/`, `${moduleName}/`];
 // the theme moves to that ZK version — so the check skips them rather than failing. They are
 // still LISTED in the report (never silently dropped). Re-evaluate on upgrade.
 const FORWARD_VERSION_SKIP = new Map([]);
+
+// Built .css.dsp files that no css-uri / global bundle requests but that are legitimate. Any other
+// unrequested dsp is dead CSS (ZK never loads it) and fails the check.
+const EXPECTED_EXTRAS = new Map([
+    // TabletThemeURIHandler (zkmax) adds this as its own stylesheet via ThemeURIModifier, not via a css-uri.
+    ['zkmax/css/tablet.css.dsp', 'added by TabletThemeURIHandler, not requested by a css-uri'],
+]);
 
 function pkgToPath(pkg) {
     return 'js/' + pkg.replace(/\./g, '/');
@@ -258,9 +268,10 @@ function main() {
         }
     }
 
-    // 4. (info) build dsp not requested by any css-uri/bundle — not a failure (see parity doc §2).
+    // 4. Built dsp that no css-uri/bundle requests: dead CSS unless it is a listed expected extra.
     const built = listDsp(THEME_DIR);
     const extra = built.filter(p => !required.has(p));
+    const unexpectedExtra = extra.filter(p => !EXPECTED_EXTRAS.has(p));
 
     // ---- report ----
     console.log(`\nCSS.DSP coverage check  (--module ${moduleName}, ZK_ROOT=${ZK_ROOT})`);
@@ -268,7 +279,7 @@ function main() {
     console.log(`  present (real) : ${present.length}`);
     console.log(`  present (stub) : ${emptyStub.length}`);
     console.log(`  MISSING        : ${missing.length}`);
-    console.log(`  extra in build : ${extra.length}  (built but no css-uri requests them — informational)`);
+    console.log(`  extra in build : ${extra.length}  (built but no css-uri requests them; ${unexpectedExtra.length} unexpected)`);
     if (forward.size) console.log(`  forward-skip   : ${forward.size}  (newer-ZK-version components, out of scope for current target)`);
     if (unresolved.length) console.log(`  unresolved     : ${unresolved.length}  (relative css-uri, no derivable package)`);
 
@@ -277,10 +288,8 @@ function main() {
         emptyStub.forEach(p => console.log('    · ' + p));
     }
     if (extra.length) {
-        console.log('\n  extra (informational — built but no css-uri requests them; expected cases:');
-        console.log('    zk.wcs-aggregated select/cell/bandpopup · TabletThemeURIHandler-injected tablet.css.dsp ·');
-        console.log('    dual package paths · empty placeholders. A truly unexpected entry here may be dead CSS):');
-        extra.forEach(p => console.log('    + ' + p));
+        console.log('\n  extra (built but no css-uri requests them; expected ones are listed in EXPECTED_EXTRAS):');
+        extra.forEach(p => console.log('    + ' + p + (EXPECTED_EXTRAS.has(p) ? '   (expected: ' + EXPECTED_EXTRAS.get(p) + ')' : '')));
     }
     if (forward.size) {
         console.log('\n  ↪ skipped — components from a newer ZK version than the current target (handle on upgrade):');
@@ -297,7 +306,14 @@ function main() {
         console.log('  or bundle it in scripts/build-css.js, then re-run `node scripts/build-css.js --module ' + moduleName + '`.');
         process.exit(1);
     }
-    console.log('\n✓ All css-uri ZK requests are present in the build.\n');
+    if (unexpectedExtra.length) {
+        console.log('\n✖ UNEXPECTED EXTRA — built but ZK never requests these (dead CSS, the component is not styled by them):');
+        unexpectedExtra.forEach(p => console.log('    + ' + p));
+        console.log('\n  Fix: register a css-uri for it, bundle it in scripts/build-css.js, or delete the source CSS');
+        console.log('  (and the stale build output). If ZK requests it by other means, add it to EXPECTED_EXTRAS with the reason.');
+        process.exit(1);
+    }
+    console.log('\n✓ All css-uri ZK requests are present in the build, and every built file is requested.\n');
 }
 
 function listDsp(dir) {

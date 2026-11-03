@@ -9,7 +9,7 @@ zk-version: 10.2.1-jakarta
 ## References
 - doc/spec/DESIGN.md sections: "Surface Palette", "Text Colors", "Corner Radii", "Typography", "Motion", "Density", "Border Rules"
 - Closest-sibling CSS to read first: `zul/src/main/resources/web/js/zul/inp/css/combobox.css`
-- Popup container CSS: `zul/src/main/resources/web/js/zul/wnd/css/bandpopup.css`
+- Popup container CSS: `zul/src/main/resources/web/js/zul/inp/css/bandbox.css`
 - No direct MUI mapping — the Evaluator compares input metrics against combobox.
 
 ## Expected values (T2 — DESIGN.md tokens only)
