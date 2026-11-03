@@ -525,10 +525,8 @@ differ", and that the overlay color is separate from the fill only for button an
   renders `z-separator-horizontal-bar` / `-vertical-bar` instead. The toolbar border knob's reach to
   separators is therefore CSS-only. This is pre-existing dead code, unrelated to the knob, with zero
   regression either way.
-- **`js/zul/sel/css/select.css`:** declares a `.z-select` block that reads the same knobs as listbox's.
-  Its `.dsp` file is never requested by listbox's `css-uri`; `node scripts/check-css-dsp.js --module zul`
-  reports it as an unreferenced extra. It is dormant. The effective ruleset is the one in `listbox.css`.
-  Both files read the same knobs, so they stay in step whichever one loads.
+- **`js/zul/sel/css/select.css`:** was a second `.z-select` block, reading the same knobs as listbox's,
+  that no `css-uri` requested. It has been deleted; `listbox.css` is the only `.z-select` source.
 
 ### Geometry and fixed shapes are not knobs
 

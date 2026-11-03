@@ -221,9 +221,7 @@ const normFiles = [
     // auto-scan would emit orphaned *.css.dsp files that ZK never requests and the widget
     // renders with browser/inherited defaults. Same loading trap as scrollbar/notification
     // above. Found by the 2026-06-30 orphan sweep via runtime document.styleSheets probe
-    // (zk-component-rules reference/component-css-must-be-bundled-or-css-uri.md). NOTE: select.css/cell.css/bandpopup.css are NOT here — they have
-    // no css-uri either but ZK's zk.wcs DOES serve them via package aggregation (probe-
-    // verified), so they live in WCS_SERVED_ALLOWLIST below instead.
+    // (zk-component-rules reference/component-css-must-be-bundled-or-css-uri.md).
     'js/zul/wgt/css/label.css',
     'js/zul/box/css/div.css',
     'js/zul/box/css/span.css',
@@ -314,52 +312,101 @@ const mergedFiles = moduleName === 'zul'
 
 // --- Orphan-CSS guard data (see assertNoOrphanComponentCss) ---
 //
-// `.css.dsp` basenames that ZK requests via a `<css-uri>` in lang.xml / lang-addon.xml. ZK
-// auto-loads these when the widget is on the page, so a 1:1 auto-scanned dsp serves correctly.
-// One combined set across zul/zkmax/zkex — the orphan guard only ever inspects the selected
-// module's own scanned files (see assertNoOrphanComponentCss), so entries for other modules
-// are simply never matched against.
-// REGENERATE on a ZK upgrade with (zul + zkmax + zkex lang files):
-//   grep -rhoE "css-uri>[^<]+" <ZK>/zk/zul/.../lang.xml <ZK>/zkcml/zk{max,ex}/.../lang-addon.xml \
-//     | sed -E 's#.*/##' | sort -u
+// `.css.dsp` paths (relative to the web root, as ZK resolves them) that ZK requests via a
+// `<css-uri>` in lang.xml / lang-addon.xml. ZK auto-loads these when the widget is on the page, so
+// a 1:1 auto-scanned dsp serves correctly. Full paths, not basenames, so a same-named file in
+// another package is not exempted by accident. One combined set across zul/zkmax/zkex — the orphan
+// guard only ever inspects the selected module's own scanned files (see assertNoOrphanComponentCss),
+// so entries for other modules are simply never matched against.
+// REGENERATE on a ZK upgrade from the css-uris in each module's lang file, resolved the way
+// extractRequired() in scripts/check-css-dsp.js resolves them.
 const CSS_URI_BACKED = new Set([
     // zul (CE)
-    'a.css.dsp', 'absolutelayout.css.dsp', 'anchorlayout.css.dsp', 'auxhead.css.dsp',
-    'avatar.css.dsp', 'avatargroup.css.dsp', 'badge.css.dsp',
-    'borderlayout.css.dsp', 'box.css.dsp', 'breadcrumb.css.dsp', 'button.css.dsp', 'calendar.css.dsp',
-    'caption.css.dsp', 'carousel.css.dsp', 'checkbox.css.dsp', 'chip.css.dsp',
-    'codeeditor.css.dsp', 'combo.css.dsp', 'combobutton.css.dsp',
-    'confirmpopup.css.dsp',
-    'frozen.css.dsp', 'grid.css.dsp', 'groupbox.css.dsp', 'input.css.dsp', 'inputgroup.css.dsp',
-    'layout.css.dsp', 'listbox.css.dsp', 'menu.css.dsp', 'paging.css.dsp', 'panel.css.dsp',
-    'popup.css.dsp', 'progressmeter.css.dsp', 'rating.css.dsp', 'selectbox.css.dsp',
-    'separator.css.dsp', 'slider.css.dsp', 'tabbox.css.dsp', 'toolbar.css.dsp', 'tree.css.dsp',
-    'window.css.dsp',
+    'js/zul/box/css/box.css.dsp',
+    'js/zul/box/css/layout.css.dsp',
+    'js/zul/code/css/codeeditor.css.dsp',
+    'js/zul/db/css/calendar.css.dsp',
+    'js/zul/grid/css/grid.css.dsp',
+    'js/zul/inp/css/combo.css.dsp',
+    'js/zul/inp/css/input.css.dsp',
+    'js/zul/inp/css/slider.css.dsp',
+    'js/zul/layout/css/absolutelayout.css.dsp',
+    'js/zul/layout/css/anchorlayout.css.dsp',
+    'js/zul/layout/css/borderlayout.css.dsp',
+    'js/zul/menu/css/menu.css.dsp',
+    'js/zul/mesh/css/auxhead.css.dsp',
+    'js/zul/mesh/css/frozen.css.dsp',
+    'js/zul/mesh/css/paging.css.dsp',
+    'js/zul/sel/css/listbox.css.dsp',
+    'js/zul/sel/css/tree.css.dsp',
+    'js/zul/tab/css/tabbox.css.dsp',
+    'js/zul/wgt/css/a.css.dsp',
+    'js/zul/wgt/css/avatar.css.dsp',
+    'js/zul/wgt/css/avatargroup.css.dsp',
+    'js/zul/wgt/css/badge.css.dsp',
+    'js/zul/wgt/css/breadcrumb.css.dsp',
+    'js/zul/wgt/css/button.css.dsp',
+    'js/zul/wgt/css/caption.css.dsp',
+    'js/zul/wgt/css/carousel.css.dsp',
+    'js/zul/wgt/css/checkbox.css.dsp',
+    'js/zul/wgt/css/chip.css.dsp',
+    'js/zul/wgt/css/combobutton.css.dsp',
+    'js/zul/wgt/css/confirmpopup.css.dsp',
+    'js/zul/wgt/css/groupbox.css.dsp',
+    'js/zul/wgt/css/inputgroup.css.dsp',
+    'js/zul/wgt/css/popup.css.dsp',
+    'js/zul/wgt/css/progressmeter.css.dsp',
+    'js/zul/wgt/css/rating.css.dsp',
+    'js/zul/wgt/css/selectbox.css.dsp',
+    'js/zul/wgt/css/separator.css.dsp',
+    'js/zul/wgt/css/toolbar.css.dsp',
+    'js/zul/wnd/css/panel.css.dsp',
+    'js/zul/wnd/css/window.css.dsp',
     // zkmax (PE/EE)
-    'daterangebox.css.dsp', 'anchornav.css.dsp', 'barcodescanner.css.dsp', 'biglistbox.css.dsp',
-    'camera.css.dsp', 'cardlayout.css.dsp', 'cascader.css.dsp', 'chosenbox.css.dsp',
-    'coachmark.css.dsp', 'cropper.css.dsp', 'drawer.css.dsp', 'dropupload.css.dsp',
-    'goldenlayout.css.dsp', 'linelayout.css.dsp', 'multislider.css.dsp', 'nav.css.dsp',
-    'organigram.css.dsp', 'portallayout.css.dsp', 'rowlayout.css.dsp', 'scrollview.css.dsp',
-    'searchbox.css.dsp', 'signature.css.dsp', 'splitlayout.css.dsp', 'stepbar.css.dsp',
-    'tablelayout.css.dsp', 'tbeditor.css.dsp', 'timepicker.css.dsp', 'video.css.dsp',
+    'js/zkmax/barscanner/css/barcodescanner.css.dsp',
+    'js/zkmax/big/css/biglistbox.css.dsp',
+    'js/zkmax/cropper/css/cropper.css.dsp',
+    'js/zkmax/db/css/daterangebox.css.dsp',
+    'js/zkmax/goldenlayout/css/goldenlayout.css.dsp',
+    'js/zkmax/grid/css/grid.css.dsp',
+    'js/zkmax/inp/css/cascader.css.dsp',
+    'js/zkmax/inp/css/chosenbox.css.dsp',
+    'js/zkmax/inp/css/searchbox.css.dsp',
+    'js/zkmax/inp/css/timepicker.css.dsp',
+    'js/zkmax/layout/css/cardlayout.css.dsp',
+    'js/zkmax/layout/css/linelayout.css.dsp',
+    'js/zkmax/layout/css/organigram.css.dsp',
+    'js/zkmax/layout/css/portallayout.css.dsp',
+    'js/zkmax/layout/css/rowlayout.css.dsp',
+    'js/zkmax/layout/css/scrollview.css.dsp',
+    'js/zkmax/layout/css/splitlayout.css.dsp',
+    'js/zkmax/layout/css/tablelayout.css.dsp',
+    'js/zkmax/med/css/camera.css.dsp',
+    'js/zkmax/med/css/video.css.dsp',
+    'js/zkmax/nav/css/anchornav.css.dsp',
+    'js/zkmax/nav/css/coachmark.css.dsp',
+    'js/zkmax/nav/css/nav.css.dsp',
+    'js/zkmax/sel/css/listbox.css.dsp',
+    'js/zkmax/sel/css/tree.css.dsp',
+    'js/zkmax/signature/css/signature.css.dsp',
+    'js/zkmax/slider/css/multislider.css.dsp',
+    'js/zkmax/tbeditor/css/tbeditor.css.dsp',
+    'js/zkmax/wgt/css/drawer.css.dsp',
+    'js/zkmax/wgt/css/dropupload.css.dsp',
+    'js/zkmax/wgt/css/stepbar.css.dsp',
     // zkex (EE)
-    'colorbox.css.dsp', 'columnlayout.css.dsp', 'fisheye.css.dsp', 'pdfviewer.css.dsp',
-    'rangeslider.css.dsp', 'sliderbuttons.css.dsp',
+    'js/zkex/grid/css/grid.css.dsp',
+    'js/zkex/inp/css/colorbox.css.dsp',
+    'js/zkex/layout/css/columnlayout.css.dsp',
+    'js/zkex/menu/css/fisheye.css.dsp',
+    'js/zkex/pdfviewer/css/pdfviewer.css.dsp',
+    'js/zkex/slider/css/rangeslider.css.dsp',
+    'js/zkex/slider/css/sliderbuttons.css.dsp',
     // skeleton.css.dsp is requested by a GLOBAL <stylesheet href> in zkex's lang-addon.xml (ZK-6099), not
     // by a css-uri; the LESS retirement dropped its source unnoticed (ZK-6112) — hence this entry.
-    'skeleton.css.dsp',
+    'js/zkex/wgt/css/skeleton.css.dsp',
 ]);
 
-// No `css-uri`, NOT in any bundle list — but a runtime `document.styleSheets` probe (2026-06-30)
-// confirmed ZK's zk.wcs DOES serve their own `.z-*` rule (package aggregation). NOT orphans, so
-// the guard must not flag them. Re-verify with a probe before adding here. All zul paths — like
-// CSS_URI_BACKED, kept as one set; harmless for zkmax/zkex since their scanned relPaths never match.
-const WCS_SERVED_ALLOWLIST = new Set([
-    'js/zul/sel/css/select.css',     // .z-select — 24 own rules served (probe 2026-06-30)
-    'js/zul/wgt/css/cell.css',       // .z-cell
-    'js/zul/wnd/css/bandpopup.css',  // .z-bandpopup
-]);
 // NOTE: the orphan sweep (2026-06-30) also found two DEAD-CSS files — `box/css/space.css`
 // (`.z-space`; `<space>` actually renders `.z-separator`) and `menu/css/toolbarpanel.css`
 // (`.z-toolbarpanel`; Toolbar's `panel` mold renders `.z-toolbar-panel`). Their selectors
@@ -611,9 +658,10 @@ function scanCssFiles(dir, base) {
 // Every non-empty component CSS left to the 1:1 auto-scan is emitted as a standalone
 // *.css.dsp. ZK only REQUESTS that dsp if the component has a `css-uri`; otherwise the file
 // is never loaded and the component renders unstyled — silently, with no error. This asserts
-// that every auto-scanned, non-empty component CSS is either css-uri-backed, in a bundle
-// (excluded from the scan already), probe-verified served via zk.wcs, or known dead CSS.
-// A new no-css-uri component thus can't silently orphan: the build fails until it is bundled.
+// that every auto-scanned, non-empty component CSS is either css-uri-backed or in a bundle
+// (excluded from the scan already). zk.wcs serves only the <stylesheet>, css-uri and footer entries, so
+// nothing else is loaded. A new no-css-uri component thus can't silently orphan: the build fails
+// until it is bundled, given a css-uri, or deleted if dead.
 // Only inspects the selected module's own component files (js/<module>/**).
 function assertNoOrphanComponentCss() {
     const scanned = [];
@@ -622,18 +670,17 @@ function assertNoOrphanComponentCss() {
     const orphans = scanned.filter(relPath => {
         const content = readFile(relPath);
         if (!content || !content.trim()) return false;          // empty → not emitted
-        if (CSS_URI_BACKED.has(path.basename(relPath) + '.dsp')) return false; // ZK requests it
-        if (WCS_SERVED_ALLOWLIST.has(relPath)) return false;    // served via zk.wcs (probe-verified)
+        if (CSS_URI_BACKED.has(relPath + '.dsp')) return false; // ZK requests it
         return true;
     });
     if (orphans.length) {
         throw new Error(
-            'Orphaned component CSS — no css-uri, not bundled, not WCS-served:\n' +
+            'Orphaned component CSS — no css-uri and not bundled:\n' +
             orphans.map(f => '  - ' + f).join('\n') +
             '\nEach is emitted as a 1:1 *.css.dsp that ZK never requests, so the component renders ' +
-            'unstyled (no error).\nFix: add it to `normFiles` in scripts/build-css.js. OR, if a runtime ' +
-            'document.styleSheets probe\nconfirms zk.wcs already serves its own `.z-*` rule, add it to ' +
-            '`WCS_SERVED_ALLOWLIST`.\nSee ' +
+            'unstyled (no error).\nFix: register a css-uri for it in lang.xml / lang-addon.xml, or ' +
+            'bundle it in `normFiles` in scripts/build-css.js,\nor delete the file if it is dead.\n' +
+            'See ' +
             '.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md.');
     }
 }
