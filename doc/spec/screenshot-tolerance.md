@@ -109,6 +109,27 @@ Verification of this rule, recorded when it was made (not re-run since):
 - The per-section `maxDiffPixels: 20` (inherited from `gallery-scan.spec.ts`) applies on top of the
   threshold in the `compact` and `brand` projects.
 
+### Triage by severity
+
+A failing gate is handled by what the difference is, not only by the fact that it failed. The
+thresholds above stay as they are. Detection precision (how small a difference the gate catches) and
+handling (what is done with a caught difference) are separate decisions.
+
+| Difference | Handling |
+|---|---|
+| Size, position, alignment (even 1px) | investigate and fix — causes misalignment, scrollbars, overlap |
+| Colour change on large areas (surface, container, brand) of about ΔE76 ≥ 3 | investigate |
+| Text or icon colour whose contrast drops below the contrast floors (4.5:1 text, 3:1 graphics) | fix |
+| Colour change on thin lines/edges below about ΔE76 3, no geometry change, traced to a known intentional commit | not a defect: re-cut the baseline and say so in one line of the commit message; no explainer page, no owner question |
+
+Measurement: compare the old and new pixels in ΔE76 (CIE Lab) on the changed pixels, and check that
+size and geometry are unchanged (same image size, changed pixels confined to lines or edges).
+
+Calibration: after the groupbox frame moved from the root to the header and content, the 3D-mold
+header's 1px frame line rendered 217,218,221 instead of 224,224,224 (semi-transparent outline-variant
+over the header's surface-container-low fill). ΔE76 ≈ 2.7, not visible, so the baselines were re-cut
+instead of changing CSS. For scale, label text .87 → .6 black is ΔE ≈ 30.
+
 ### Zero tolerance stays zero
 
 - The zero-tolerance equivalence run stays at zero. That is its purpose. No option in this spec changes it.
