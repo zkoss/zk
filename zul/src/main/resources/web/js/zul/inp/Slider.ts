@@ -365,7 +365,7 @@ export class Slider extends zul.Widget {
 		if (!moveToCursor) {
 			if (pageIncrement > 0) {
 				var curpos = this._curpos + (offset > 0 ? pageIncrement : -pageIncrement);
-				this._curpos = Slider._roundDecimal(this._constraintPos(curpos), Slider._digitsAfterDecimal(pageIncrement));
+				this._curpos = this._constraintPos(curpos);
 			} else {
 				var total = isVertical ? height : width,
 					to = (offset / total) * (this._maxpos - this._minpos);
@@ -510,7 +510,13 @@ export class Slider extends zul.Widget {
 		if (!this.isDecimal())
 			pos = Math.round(pos);
 		if (step > 0) {
-			return this._curpos = pos > 0 ? Slider._roundDecimal(pos + minpos, Slider._digitsAfterDecimal(step)) : minpos;
+			// snap to the nearest step or maxpos: revisedOffset ceils both edges, so pos can read up to 1px off
+			var range = maxpos - minpos,
+				stepped = Math.round(pos / step) * step;
+			if (range - pos < Math.abs(stepped - pos))
+				stepped = range;
+			return this._curpos = pos > 0 ? Slider._roundDecimal(minpos + stepped,
+				Math.max(Slider._digitsAfterDecimal(step), Slider._digitsAfterDecimal(minpos))) : minpos;
 		} else
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	}
@@ -518,10 +524,13 @@ export class Slider extends zul.Widget {
 	/** @internal */
 	_constraintPos(pos: number): number {
 		var step = Slider._getStep(this),
+			minpos = this._minpos,
 			max = this._maxpos;
 
 		if (pos < max) {
-			pos -= (pos - this._minpos) % step;
+			// count steps with a 1e-9 tolerance: the floating-point remainder of an on-step pos can be almost a whole step
+			pos = Slider._roundDecimal(minpos + Math.trunc(Slider._roundDecimal((pos - minpos) / step, 9)) * step,
+				Math.max(Slider._digitsAfterDecimal(step), Slider._digitsAfterDecimal(minpos)));
 		} else {
 			pos = max;
 		}
