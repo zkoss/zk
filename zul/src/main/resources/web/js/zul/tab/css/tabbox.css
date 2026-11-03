@@ -769,10 +769,10 @@
     color: var(--zk-color-on-primary-container);
 }
 
-/* Expandable content area (div#uuid-cave inside .z-tabpanel) */
+/* Expandable content area (div#uuid-cave inside .z-tabpanel); body text like the other tabpanel molds */
 .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > [id$="-cave"] {
     padding: var(--zk-spacing-4);
-    color: var(--zk-color-on-surface-variant);
+    color: var(--zk-color-on-surface);
     font-size: var(--zk-typescale-body-medium-size);
     line-height: 1.6;
     background: var(--zk-color-surface);

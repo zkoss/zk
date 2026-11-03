@@ -17,7 +17,7 @@ loaded only via the global `norm.css.dsp` bundle (see `.claude/skills/zk-compone
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | l0 | `.z-label` | (rule present in a LOADED stylesheet) | **own root rule served** — proves `label.css` is bundled into `norm.css.dsp` (regression guard against an orphaned standalone `.dsp`) |
-| l1 | `.z-label` | color | `var(--zk-color-on-surface)` |
+| l1 | `.z-label` | color | (not set) — inherits its container's colour, as in IceBlue |
 | l2 | `.z-label` | font-family | `var(--zk-typescale-font-family)` |
 | l3 | `.z-label` | font-size / line-height | `body-medium` typescale tokens |
 | l5 | `.z-label` | (no `.z-label-pre` rule) | Label never adds that class; `pre="true"` is handled in the content by `zUtl.encodeXML` (`&nbsp;` / `<br>`), so it preserves whitespace only — it does not select a monospace font |
@@ -25,6 +25,6 @@ loaded only via the global `norm.css.dsp` bundle (see `.claude/skills/zk-compone
 
 ## States to evaluate
 - [ ] **loading**: `.z-label` own rule comes from a served stylesheet (bundled, not an orphaned standalone `.dsp`)
-- [ ] default inline label inherits surface text color on light surfaces
+- [ ] label inherits its container's text color (default: on-background from body / `.z-page`)
 - [ ] `pre="true"` → whitespace preserved (NOT monospace — same as IceBlue)
 - [ ] `multiline="true"` → line breaks preserved (mold-generated `<br>`)

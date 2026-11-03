@@ -123,7 +123,7 @@
             <div sclass="z-bg-success-container z-p-3 z-rounded-md"><label value="On success container" sclass="z-text-on-success-container z-fw-medium pv-on-success-container"/></div>
             <div sclass="z-bg-warning-container z-p-3 z-rounded-md"><label value="On warning container" sclass="z-text-on-warning-container z-fw-medium pv-on-warning-container"/></div>
         </div>
-        <label value="A Label sets its own colour, so the container's text colour never reaches it. Put .z-text-on-*-container on the Label." sclass="z-text-secondary z-text-xs z-mt-3"/>
+        <label value="A Label inherits the container's text colour. Put .z-text-on-*-container on the Label to set it explicitly." sclass="z-text-secondary z-text-xs z-mt-3"/>
     </div>
 
     <!-- Inverse text on dark background -->
@@ -135,7 +135,7 @@
         <div sclass="z-bg-primary z-p-4 z-rounded-md z-d-inline-block z-ms-3">
             <label value=".z-text-on-primary on .z-bg-primary" sclass="z-text-on-primary z-fw-medium"/>
         </div>
-        <label value="Each text class pairs with its own background. A Label sets its own colour, so put the text class on the Label." sclass="z-d-block z-text-secondary z-text-xs z-mt-3"/>
+        <label value="Each text class pairs with its own background." sclass="z-d-block z-text-secondary z-text-xs z-mt-3"/>
     </div>
 
 </vlayout>
