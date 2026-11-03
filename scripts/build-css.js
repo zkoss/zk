@@ -428,14 +428,6 @@ function minifySvg(svg) {
         .trim();
 }
 
-function encodeSvgForCss(svg) {
-    return svg
-        .replace(/%/g, '%25')
-        .replace(/</g, '%3C')
-        .replace(/>/g, '%3E')
-        .replace(/"/g, '%22');
-}
-
 function getLucideIcons() {
     const iconsDir = path.join(ZK_ROOT, 'node_modules/lucide-static/icons');
     if (!fs.existsSync(iconsDir)) return [];
