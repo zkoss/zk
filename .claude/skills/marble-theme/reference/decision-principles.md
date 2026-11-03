@@ -114,6 +114,7 @@ rulings — `doc/spec/`. This file holds conclusions only.
 | Layout the spec does not support (e.g. colspan under frozen columns) | document it, guard against layout shift, do not engineer support |
 | Public `--zk-*` token | keep the knob and change only its default; never change a knob's meaning (add a new token); no token that cannot work (e.g. breakpoints, since `@media` cannot read `var()`) |
 | Utility class names | follow `doc/spec/utility-naming.md` (Bootstrap vocabulary first; an accurate name beats a short one; one rule, one name) |
+| Screenshot diff that is only a colour change on thin lines or edges, below about ΔE76 3, with no geometry change, traced to a known intentional commit | Not a defect: re-cut the baseline, note it in one line of the commit message, do not ask the owner. Text or icon contrast below V10 is still fixed. Other diffs follow the severity table in `doc/spec/screenshot-tolerance.md` |
 
 ## 4. Ask the Marble maintainer only here
 
