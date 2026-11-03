@@ -30,7 +30,7 @@ not exist in Marble** — `--zk-base-border-radius`, `--zk-color-primary-dark`,
 error, nothing applies. That is the worst failure mode there is.
 
 **At the component layer it is worse than a naming-style difference.** `--zk-button-*`: IceBlue
-19, Marble 14, **overlap 0**. Both describe the same thing — a button's colours, borders, radius —
+and Marble each define a set of names, and **no name overlaps**. Both describe the same thing — a button's colours, borders, radius —
 and not one name matches. That is not an inevitable consequence of MD naming; it is simply
 alignment work that was never done.
 
@@ -77,16 +77,16 @@ precision without diluting it for the sake of neutrality.
 | `--zk-color-{outline,outline-variant}` | 0 | Keep; alias `--zk-base-border-color` |
 | IceBlue's `accent*`, `background1/3`, `grey-*` | 0 | **Must be kept as aliases** |
 | `--zk-spacing-N` | 0 | Keep (4px grid is industry convention, not MD-specific; IceBlue has none → zero breakage) |
-| `--zk-shape-corner-*` | 0 (MD-ish name) | Keep the name **and** alias IceBlue's 3 radius names — renaming costs more than it returns |
+| `--zk-shape-corner-*` | 0 (MD-ish name) | Keep the name **and** alias IceBlue's radius names — renaming costs more than it returns |
 | `--zk-shape-{button,input,card,dialog,menu}` | 2 | Keep — this is the good pattern |
 | `--zk-typescale-*` | **1** | Keep MD naming, **but** retain `--zk-base-font-size` + `--zk-font-size-{x-small…x-large}` as neutral Tier-0 entry points |
-| `--zk-elevation-{0..5}` | 0 | Keep (IceBlue scatters 19 per-component shadows → consolidate the other way) |
+| `--zk-elevation-{0..5}` | 0 | Keep (IceBlue scatters many per-component shadows → consolidate the other way) |
 | `--zk-state-*-opacity` | **1** | Keep, **but** retain IceBlue's `--zk-{hover,focus,active,disabled,selected,checked}-*` as Tier-0 entry points |
 | `--zk-motion-*` | **1** | Keep (IceBlue has no equivalent → zero breakage) |
 | `--zk-index-*` | 0 | Keep; alias `--zk-base-popup-z-index` |
-| `--zk-<comp>-*` (~400) | 2 | ⚠️ **The work that matters**: compare family by family against IceBlue's names and reuse wherever possible |
+| `--zk-<comp>-*` (most names) | 2 | ⚠️ **The work that matters**: compare family by family against IceBlue's names and reuse wherever possible |
 
-The proposed compatibility layer is **one file** of aliases for the ~78 highest-traffic globals.
+The proposed compatibility layer is **one file** of aliases for the most-used globals.
 Cheap, and it buys "an existing customer's override still works".
 
 ## Important context that changes the framing
@@ -94,7 +94,7 @@ Cheap, and it buys "an existing customer's override still works".
 **Marble and IceBlue are two *parallel* theme choices, not a migration path.** ZK 11.0 makes
 Marble the default and splits IceBlue out as a separately selectable theme so legacy apps upgrade
 unchanged. Under that ruling **Marble owes IceBlue's vocabulary no compatibility** — which
-dismissed three earlier decision items premised on it owing some. The "dead" IceBlue names are a
+dismisses the decision items premised on it owing some. The "dead" IceBlue names are a
 *different vocabulary*, not a broken API, and FA-dependent apps stay on IceBlue.
 
 Read the analysis above as the case for *voluntary* alignment where it is cheap (Tier 2 especially),

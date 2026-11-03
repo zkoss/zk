@@ -18,10 +18,10 @@ reset/frozen CSS, not here.
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | s0 | `.z-scrollbar-indicator` | (rule present in a LOADED stylesheet) | **border-radius ≠ 0px** — proves `scrollbar.css` is covered by `scripts/build-css.js` (`./gradlew checkMarbleCss`) and appears in a served stylesheet (guard against an orphaned component CSS) |
-| s1 | `.z-scrollbar-indicator` | border-radius | pill — `var(--zk-shape-corner-full)` = 9999px (NOT 4px) |
+| s1 | `.z-scrollbar-indicator` | border-radius | pill — `var(--zk-shape-corner-full)` (NOT 4px) |
 | s2 | `.z-scrollbar-indicator` | background-color | `--zk-color-outline` @ idle opacity 0.6 (bolder draggable thumb) |
 | s3 | `.z-scrollbar-indicator` | opacity | 0.6 |
-| s4 | `.z-scrollbar-indicator` | transition-timing-function | `cubic-bezier(0.4, 0, 0.2, 1)` (`--zk-motion-easing-standard`, NOT `ease`) |
+| s4 | `.z-scrollbar-indicator` | transition-timing-function | `var(--zk-motion-easing-standard)` (NOT `ease`) |
 | s5 | `.z-scrollbar-indicator:hover` | background-color | `--zk-color-on-surface-variant` |
 | s6 | `.z-scrollbar-indicator:hover` | opacity | 0.85 |
 | s7 | `.z-scrollbar-rail` | background | `--zk-color-surface-container` (a **visible** faint track channel — NOT transparent; distinguishes the simulated bar from the track-less native overlay) |

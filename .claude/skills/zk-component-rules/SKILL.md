@@ -26,7 +26,7 @@ If the question is "where does ZK put the class / what selector applies / what s
 Every component-knowledge doc is **exactly one** of two categories, and should declare which up front:
 
 - **Category 1 — ZK Component Rules (theme-PORTABLE):** structural/behavioral facts true of any theme (DOM, selectors, state-class enumeration, attribute support, CSS bundling, framework quirks). These live in **this skill**.
-- **Category 2 — Theme Design (theme-SPECIFIC):** the values and rules for one theme (colors, spacing, tokens, MUI/Mira refs, visual mockups). These live in `doc/contracts/<comp>.md` + `doc/spec/DESIGN.md`.
+- **Category 2 — Theme Design (theme-SPECIFIC):** the values and rules for one theme (colors, spacing, tokens, design-system references, visual mockups). These live in `doc/contracts/<comp>.md` + `doc/spec/DESIGN.md`.
 
 Keeping the boundary strict is what makes the portable ZK facts reusable across themes and keeps theme-specific values out of the skill.
 
@@ -38,14 +38,9 @@ Keeping the boundary strict is what makes the portable ZK facts reusable across 
 
 ## Authoring discipline
 
-Before writing or modifying any `components/<comp>.md` (or its companion `doc/contracts/<comp>.md`; when the component has no contract, zk-spec-author writes one first), read **`../marble-theme/reference/contract-tiers.md`** (the Marble contract process). It defines:
+A component-rules file records theme-independent facts only: DOM structure, selectors, state classes, attribute support, CSS bundling and framework behaviour. It contains no colour values, token names, design references, or comparisons with a named theme. A theme's own contract (values and visual rules) lives in that theme's documentation. Stock IceBlue CSS may be cited as the source of a structural rule; its visual values may not.
 
-- The two-tier contract model (this skill = theme-portable; `doc/contracts/` = theme-specific)
-- A/B/C/D predicate classification (Structural / Relational / State-differs / Token-bound)
-- What MUST refuse to enter a component-rules file (hex, tokens, design refs, "mirrors iceblue")
-- How to mine iceblue CSS as a structural-signal source without importing visual values (with path-search-then-ask fallback — iceblue CSS path is environment-dependent and must not be hardcoded)
-
-Both `zk-spec-author` (when authoring) and `zk-theme-evaluator` (when verifying) must follow this discipline.
+For the Marble theme's contract process, see `../marble-theme/reference/contract-tiers.md` (optional reading).
 
 ## Index
 
@@ -86,14 +81,14 @@ Files with no summary row below: `components/biglistbox.md`, `columnlayout.md`, 
 | `components/bandbox.md` | bandbox (popup vs bandpopup, button class location) |
 | `components/borderlayout.md` | borderlayout (JS absolute-positioning engine, 5 regions, splitter bar + pill button DOM, collapsed placeholder, z-index map, do-not-flex rule) |
 | `components/box.md` | hbox + vbox (default mold is nested TABLES — never change `display`; `-chdex`/`-chdex2` anatomy; no `-cell` classes exist; splitter drag depends on the table chain) |
-| `components/breadcrumb.md` | breadcrumb + breadcrumbitem (CE, new in ZK 11.0.0) — T1 nav trail, client-only `maxItems` collapse-to-ellipsis (`.z-breadcrumb-ellipsis` never appears in the mold, only injected post-mount), `data-zk-bc-hidden`/`data-zk-bc-injected` attribute-driven hide (not inline style), item content has no label-wrapping element, disabled forces `<span>` even when `href` is set |
+| `components/breadcrumb.md` | breadcrumb + breadcrumbitem (CE, new in ZK 11.0.0) — navigation trail, client-only `maxItems` collapse-to-ellipsis (`.z-breadcrumb-ellipsis` never appears in the mold, only injected post-mount), `data-zk-bc-hidden`/`data-zk-bc-injected` attribute-driven hide (not inline style), item content has no label-wrapping element, disabled forces `<span>` even when `href` is set |
 | `components/button.md` | button (vertical orient via `<br/>`, `:has(br)` selector) |
 | `components/calendar.md` | calendar (z-calendar-today not on cells, cell-width arithmetic) |
-| `components/carousel.md` | carousel + carouselitem (CE, new in ZK 11.0.0) — T2 slideshow; flex track + peek-past-the-end loop clones (`.z-carousel-clone` drops `.z-carouselitem`, inserted client-side only); arrows/indicators structurally absent below 2 slides regardless of `showArrows`/`showIndicators`; `[disabled]` on arrows is a native attribute (loop="false" boundary only), not a class; `.z-carouselitem-active`/`.z-carousel-indicator-active` are client-added on every bind, never in server HTML; `domIcon_()` is dead code for carouselitem; ARIA/live-status entirely EE `za11y`-gated in CE |
+| `components/carousel.md` | carousel + carouselitem (CE, new in ZK 11.0.0) — slideshow; flex track + peek-past-the-end loop clones (`.z-carousel-clone` drops `.z-carouselitem`, inserted client-side only); arrows/indicators structurally absent below 2 slides regardless of `showArrows`/`showIndicators`; `[disabled]` on arrows is a native attribute (loop="false" boundary only), not a class; `.z-carouselitem-active`/`.z-carousel-indicator-active` are client-added on every bind, never in server HTML; `domIcon_()` is dead code for carouselitem; ARIA/live-status entirely EE `za11y`-gated in CE |
 | `components/checkbox.md` | checkbox + 3 molds (checkbox, switch, toggle) — mold-prefixed state classes |
 | `components/cascader.md` | cascader (EE) — hierarchical tree-picker, read-only trigger + side-by-side cave columns, `.z-cascader-label` / `.z-cascader-placeholder` (not `-input`), `.z-cascader-disabled` class, popup detached to body |
 | `components/chosenbox.md` | chosenbox (chip class = `.z-chosenbox-item`, EE-only) |
-| `components/codeeditor.md` | codeeditor (CE, new in ZK 11.0.0) — T3 CodeMirror 6 wrapper; ZK's own mold renders only the root + an empty `.z-codeeditor-cave` mount point, everything below (`.cm-editor`/`.cm-scroller`/`.cm-gutters`/`.cm-content`) is CodeMirror's own DOM injected async inside `zk.afterMount`; no readonly class exists (editable compartment only); `lineNumbers=false` removes the gutter subtree outright, not display:none; CodeMirror's own base theme is injected UNLAYERED at runtime so a handful of named anchor classes need `!important` to restyle, while per-token syntax spans and `.ͼ*` hash classes are off-limits (inline-styled/generated, not a stable selector) |
+| `components/codeeditor.md` | codeeditor (CE, new in ZK 11.0.0) — third-party library wrapper around CodeMirror 6; ZK's own mold renders only the root + an empty `.z-codeeditor-cave` mount point, everything below (`.cm-editor`/`.cm-scroller`/`.cm-gutters`/`.cm-content`) is CodeMirror's own DOM injected async inside `zk.afterMount`; no readonly class exists (editable compartment only); `lineNumbers=false` removes the gutter subtree outright, not display:none; CodeMirror's own base theme is injected UNLAYERED at runtime so a handful of named anchor classes need `!important` to restyle, while per-token syntax spans and `.ͼ*` hash classes are off-limits (inline-styled/generated, not a stable selector) |
 | `components/colorbox.md` | colorbox (current swatch + button + popup w/ picker+palette, geometry-locked sprites, PE) |
 | `components/combobox.md` | combobox (split-border, comboitem variants) |
 | `components/combobutton.md` | combobutton (pointer-events: auto required for popup click) |
@@ -103,25 +98,25 @@ Files with no summary row below: `components/biglistbox.md`, `columnlayout.md`, 
 | `components/groupbox.md` | groupbox (content area is `.z-groupbox-content`) |
 | `components/menubar.md` | menubar (`<ul><li>` wrapper structure) |
 | `components/navbar.md` | navbar + nav + navitem + navseparator (EE) — unclassed submenu cave (`.z-nav > ul` only), content is the `<a role=menuitem>` not the `<li>`, TWO content classes (`.z-nav-content` + `.z-navitem-content`) that always need the same rules, `[disabled]` attribute with no `-disabled` class, `za11y` roving tabindex (one Tab stop, arrow keys inside) so Tab-walking never reaches a group header, cave visibility driven by jQuery INLINE display |
-| `components/organigram.md` | organigram (EE) — recursive `.z-orgchildren > .z-orgitem > .z-orgnode`, pseudo-element connector bus, `-close` not `-open`, `-non-selectable`, novel T2 |
+| `components/organigram.md` | organigram (EE) — recursive `.z-orgchildren > .z-orgitem > .z-orgnode`, pseudo-element connector bus, `-close` not `-open`, `-non-selectable` |
 | `components/portallayout.md` | portallayout + portalchildren (EE) — transparent multi-column drag-drop shell, `.z-portalchildren-frame` titled column, counter badge, ghost/placeholder drag classes |
 | `components/panel.md` | panel (content wrapper is `.z-panelchildren`) |
-| `components/pdfviewer.md` | pdfviewer (PE) — T3 thin chrome over opaque PDF.js viewport, opacity-driven toolbar reveal, fullscreen pseudo-class |
+| `components/pdfviewer.md` | pdfviewer (PE) — third-party library wrapper: thin chrome over opaque PDF.js viewport, opacity-driven toolbar reveal, fullscreen pseudo-class |
 | `components/progressmeter.md` | progressmeter (CE; fill is `.z-progressmeter-image`) + loadingbar (EE client widget started by `Loadingbar.java`, not a ZUL tag) |
 | `components/rating.md` | rating (`.z-rating-icon` not `-star`, orient="vertical") |
 | `components/searchbox.md` | searchbox (multi-select trigger + detached popup with search input + checkbox list, EE-only) |
 | `components/selectbox.md` | selectbox (native `<select>` element — popup options NOT styleable) |
 | `components/separator.md` | separator (transparent base, horizontal-bar variant) |
-| `components/signature.md` | signature (EE) — T3 two-canvas wrapper + absolute toolbar strip, native `<button>` tools (no ZK state classes), `.z-signature-toolbar-hide` toggle |
+| `components/signature.md` | signature (EE) — two-canvas wrapper + absolute toolbar strip, native `<button>` tools (no ZK state classes), `.z-signature-toolbar-hide` toggle |
 | `components/slider.md` | slider (no disabled/invalid sclass; 4 molds: default/sphere/scale CE + knob EE; knob = SVG rotary dial, CSS-themable boundary documented; rangeslider / multislider disabled = root `-disabled` class) |
 | `components/splitter.md` | splitter (cursor mode, ghost element, delivery merged into box.css, drag persists via px on parent-box `<td>`s — table chain required) |
 | `components/stepbar.md` | stepbar + step (EE) — circle-marker + pseudo-element connector pattern, `.z-step-complete` not `-completed`, `.z-step-icon` not `-number` |
 | `components/tabbox.md` | tabbox (5 orientation classes including accordion) |
-| `components/tbeditor.md` | tbeditor (EE) — T3 chrome around Trumbowyg-injected DOM, prefix-namespaced classes (`z-tbeditor-*`), fullscreen body-attach |
+| `components/tbeditor.md` | tbeditor (EE) — third-party library wrapper: chrome around Trumbowyg-injected DOM, prefix-namespaced classes (`z-tbeditor-*`), fullscreen body-attach |
 | `components/toast-notification.md` | toast / notification (9 position classes, severity classes) |
 | `components/toolbar.md` | toolbar (padding lives on `.z-toolbar-content`, not root) |
 | `components/window.md` | window (no `.z-window-title` element — plain text in header) |
-| `components/goldenlayout.md` | goldenlayout + goldenpanel (EE) — T3 dockable multi-pane layout, `.lm_*` selectors ARE styleable under `.z-goldenlayout` scope; NO forbidden-selectors on lm_* |
+| `components/goldenlayout.md` | goldenlayout + goldenpanel (EE) — third-party library wrapper: dockable multi-pane layout, `.lm_*` selectors ARE styleable under `.z-goldenlayout` scope; NO forbidden-selectors on lm_* |
 | `components/a.md` | a / link (`.z-a`, `[disabled]` via CSS pointer-events) — stub |
 | `components/absolutelayout.md` | absolutelayout (JS positions children with `position: absolute`) — stub |
 | `components/anchorlayout.md` | anchorlayout + anchorchildren — flat DOM (no body wrapper), `anchor=` JS inline-width sizing (% and delta); stock ZK uses `float: left` |
@@ -131,14 +126,14 @@ Files with no summary row below: `components/biglistbox.md`, `columnlayout.md`, 
 | `components/paging.md` | paging (`.z-paging-previous` NOT `-prev` — naming trap) — stub |
 | `components/popup.md` | popup (generic floating container, JS-positioned) — stub |
 | `components/toolbarbutton.md` | toolbarbutton (`.z-toolbarbutton-checked`, CSS in `footer.css.dsp`) — stub |
-| `components/splitlayout.md` | splitlayout (EE) — T1 two-pane resizable container, cave-top/bottom/left/right, splitter bar with collapse button and three icon idiom |
-| `components/cropper.md` | cropper (EE) — T3 Jcrop-backed image cropper; only `.z-cropper` wrapper and `.z-cropper-toolbar` are theme-owned; `.z-cropper-canvas` does NOT exist (actual Jcrop holder is `.z-cropper-holder`); toolbar is JS-positioned and hidden at rest |
-| `components/timepicker.md` | timepicker (EE) — T1 combo-pattern input + clock-button + detached time-option-list popup; `.z-timepicker-disabled` appears on root (component disabled) AND on `<a>` button (buttonVisible=false — different semantics); popup is raw `<li>` items not ZK widgets; separate CSS file `zkmax/inp/css/timepicker.css` not merged into combo.css.dsp |
-| `components/coachmark.md` | coachmark (EE) — T2 guided-tour card; `.z-coachmark` is transparent positional wrapper; `.z-coachmark-content` is the visual card; `.z-coachmark-open` drives animation; pointer arrow on `.z-coachmark-pointer.z-coachmark-{up\|down\|left\|right}`; mask is a `zk.eff.FullMask` sibling in `<body>`; CSS in `zkmax/nav/css/coachmark.css` |
+| `components/splitlayout.md` | splitlayout (EE) — two-pane resizable container, cave-top/bottom/left/right, splitter bar with collapse button and three icon idiom |
+| `components/cropper.md` | cropper (EE) — third-party library wrapper: Jcrop-backed image cropper; only `.z-cropper` wrapper and `.z-cropper-toolbar` are theme-owned; `.z-cropper-canvas` does NOT exist (actual Jcrop holder is `.z-cropper-holder`); toolbar is JS-positioned and hidden at rest |
+| `components/timepicker.md` | timepicker (EE) — combo-pattern input + clock-button + detached time-option-list popup; `.z-timepicker-disabled` appears on root (component disabled) AND on `<a>` button (buttonVisible=false — different semantics); popup is raw `<li>` items not ZK widgets; separate CSS file `zkmax/inp/css/timepicker.css` not merged into combo.css.dsp |
+| `components/coachmark.md` | coachmark (EE) — guided-tour card; `.z-coachmark` is transparent positional wrapper; `.z-coachmark-content` is the visual card; `.z-coachmark-open` drives animation; pointer arrow on `.z-coachmark-pointer.z-coachmark-{up\|down\|left\|right}`; mask is a `zk.eff.FullMask` sibling in `<body>`; CSS in `zkmax/nav/css/coachmark.css` |
 | `components/tablelayout.md` | tablelayout + tablechildren (EE) — HTML `<table>`-based grid layout; root is `<table>` (never override display); cells are `<td>.z-tablechildren`; `<tr>` rows carry no ZK class; colspan/rowspan are native HTML attrs; gutter via `border-spacing`; no state classes |
 | `components/rowlayout.md` | rowlayout + rowchildren (EE) — 12-column proportional-grid layout; `.z-rowlayout` float-clearfix container; `.z-rowchildren.colspanN[.offsetN]` float children; JS writes all inline widths — do NOT override with CSS `!important`; own file `zkmax/layout/css/rowlayout.css.dsp` |
-| `components/confirmpopup.md` | confirmpopup (CE, new in ZK 11.0.0) — T2 anchored popover card (extends but mostly overrides `Popup`); no `.z-popup-content` wrapper, header/body/footer are direct root children; optional header/icon/message; two-layer CSS-triangle arrow re-anchored via JS on placement change; severity enum (`info/success/warning/error/neutral`, default `warning`) shared with native badge/chip, recolors only the icon; fixed cancel-then-ok DOM order independent of `defaultFocus`; CE mold emits no ARIA (za11y EE add-on layers `role="alertdialog"`); own file `confirmpopup.css.dsp` |
-| `components/linelayout.md` | linelayout + lineitem (EE) — T2 vertical/horizontal timeline; tripartite column structure (first/cave/last); `.z-linelayout-vertical` / `.z-linelayout-horizontal` orientation classes; `.z-lineitem-point` circle with hidden state; first/last area `<div>`s are moved OUT of cave at bind_() via virtual-parent architecture; new CSS at `zkmax/layout/css/linelayout.css` |
+| `components/confirmpopup.md` | confirmpopup (CE, new in ZK 11.0.0) — anchored popover card (extends but mostly overrides `Popup`); no `.z-popup-content` wrapper, header/body/footer are direct root children; optional header/icon/message; two-layer CSS-triangle arrow re-anchored via JS on placement change; severity enum (`info/success/warning/error/neutral`, default `warning`) shared with native badge/chip, recolors only the icon; fixed cancel-then-ok DOM order independent of `defaultFocus`; CE mold emits no ARIA (za11y EE add-on layers `role="alertdialog"`); own file `confirmpopup.css.dsp` |
+| `components/linelayout.md` | linelayout + lineitem (EE) — vertical/horizontal timeline; tripartite column structure (first/cave/last); `.z-linelayout-vertical` / `.z-linelayout-horizontal` orientation classes; `.z-lineitem-point` circle with hidden state; first/last area `<div>`s are moved OUT of cave at bind_() via virtual-parent architecture; new CSS at `zkmax/layout/css/linelayout.css` |
 | `components/cardlayout.md` | cardlayout (EE) — one `.z-cardlayout-inner` per child, JS-positioned with inline `left`/`top`; inner must be absolute inside a relative, overflow-hidden root |
 | `components/fileupload.md` | fileupload (CE) — Button subclass with no `multiple` property; multi-file upload is set through the `upload` attribute string |
 

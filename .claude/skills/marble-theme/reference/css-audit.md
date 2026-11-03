@@ -192,7 +192,7 @@ The mechanical core is meant to stay on as a standing gate:
 
 - Keep `.stylelintrc.json` as-is. It is a **focused** rule set (duplication /
   redundancy / dead CSS), deliberately NOT `stylelint-config-standard` — the full
-  standard set buries the real signal under ~989 stylistic complaints (it flags
+  standard set buries the real signal under a large number of stylistic complaints (it flags
   every `.z-*` class, every required `-webkit-` prefix, intentional cascade).
 - `npm run lint:css` reports only. **Do not** blindly `stylelint --fix` this repo:
   `--fix` escapes `<!--` to `\3c !--` inside `/* */` comments that document DOM

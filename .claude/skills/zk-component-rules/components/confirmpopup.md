@@ -128,5 +128,5 @@ mold already emits) are layered on by the za11y add-on (EE) — the CE mold itse
 - Button text is the locale-resolved `msgzul.OK` / `msgzul.CANCEL` string, not a per-instance label property —
   there is no way to relabel the buttons from the ZUL/Java API.
 - Rerender-on-change is deferred while the popup is open specifically to avoid destroying focus and timer state
-  mid-display (see Composition invariants) — this is a deliberate quirk, not a bug, and a theme/test harness
+  mid-display (see Composition invariants) — this is a deliberate quirk, not a bug, and a theme's test page
   probing a live "set message while open" scenario should expect the OLD message to remain visible until close.

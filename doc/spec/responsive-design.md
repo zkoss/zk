@@ -39,7 +39,7 @@
 ```
 
 - `auto-fit`：能塞幾欄就塞幾欄，塞不下自動換行。
-- `minmax(..., 1fr)`：每欄最少 `--zk-grid-min`（預設 **180px**），有多餘空間就平均撐滿。
+- `minmax(..., 1fr)`：每欄最少 `--zk-grid-min`（預設值見 `--zk-grid-min` 的宣告），有多餘空間就平均撐滿。
 - `min(var(--zk-grid-min,180px), 100%)`：當容器比一張卡片還窄時，卡片縮到容器寬（**永不橫向溢出**）。
 - **無 `@media`**：欄數隨容器寬度自動變化 —— 寬螢幕多欄、手機一欄。
 
@@ -48,7 +48,7 @@
 `z-grid-fill` 只設定 `grid-template-columns`，所以要搭配 `z-d-grid`（`display:grid`）和一個間距（`z-gap-*`）：
 
 ```xml
-<!-- 基本：卡片牆，每張至少 180px，自動換行 -->
+<!-- 基本：卡片牆，每張至少為 `--zk-grid-min`，自動換行 -->
 <div sclass="z-d-grid z-grid-fill z-gap-4">
     <div sclass="z-paper">卡片 1</div>
     <div sclass="z-paper">卡片 2</div>

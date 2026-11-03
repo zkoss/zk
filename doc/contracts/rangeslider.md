@@ -12,7 +12,7 @@ preview: ${PREVIEW_URL}/rangeslider.zul
 ## DOM key selectors
 ```
 .z-rangeslider          ← root
-.z-rangeslider-track        ← track rail (4px, sized by .z-rangeslider-inner)
+.z-rangeslider-track        ← track rail (`--zk-rangeslider-inner-size` thick, sized by .z-rangeslider-inner)
 .z-sliderbuttons-area       ← filled range between start/end thumbs
 .z-sliderbuttons-button     ← start/end thumb
 .z-rangeslider-mark-label   ← scale mark label
@@ -22,11 +22,11 @@ preview: ${PREVIEW_URL}/rangeslider.zul
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-rangeslider-track` | height | ~4px (horizontal track) |
-| c2 | `.z-rangeslider-track` | background-color | rgba(0, 0, 0, 0.12) |
-| c3 | `.z-sliderbuttons-area` | background-color | rgb(55, 111, 208) |
-| c4 | `.z-sliderbuttons-button` | width / height | 16–20px |
-| c5 | `.z-sliderbuttons-button` | background-color | rgb(55, 111, 208) |
+| c1 | `.z-rangeslider-track` | height | `var(--zk-rangeslider-inner-size)` (horizontal track) |
+| c2 | `.z-rangeslider-track` | background-color | `var(--zk-rangeslider-track-bg)` |
+| c3 | `.z-sliderbuttons-area` | background-color | `var(--zk-rangeslider-accent)` |
+| c4 | `.z-sliderbuttons-button` | width / height | `var(--zk-rangeslider-button-size)` |
+| c5 | `.z-sliderbuttons-button` | background-color | `var(--zk-rangeslider-accent)` |
 | c6 | `.z-sliderbuttons-button` | border-radius | 50% |
 
 ## Geometry assertions

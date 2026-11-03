@@ -15,14 +15,14 @@ zk-version: 10.2.1-jakarta
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | c1 | `.z-checkbox-mold` | width / height | 18–20px |
-| c2 | `.z-checkbox-mold` | border | 2px solid rgba(0, 0, 0, 0.6) (unchecked) |
-| c3 | `.z-checkbox-mold` | border-radius | 2px (checkbox) or 50% (radio) |
-| c4 | `.z-checkbox-on > .z-checkbox-mold` | background-color | rgb(55, 111, 208) |
+| c2 | `.z-checkbox-mold` | border | 2px solid `var(--zk-checkbox-border-color)` (unchecked) |
+| c3 | `.z-checkbox-mold` | border-radius | `var(--zk-checkbox-radius)` (checkbox) or 50% (radio) |
+| c4 | `.z-checkbox-on > .z-checkbox-mold` | background-color | `var(--zk-checkbox-accent)` |
 | c5 | `.z-checkbox-on > .z-checkbox-mold` | content/check-mark | white check icon |
 | c6 | `.z-checkbox-off:hover > .z-checkbox-mold::before` | opacity | `var(--zk-state-hover-opacity)` (state layer) |
 | c7 | `.z-checkbox:has(input[type="checkbox"]:focus-visible) > .z-checkbox-mold` | outline / shadow | focus ring |
-| c8 | `.z-checkbox-disabled > .z-checkbox-mold` | opacity | 0.38 |
-| c9 | `.z-checkbox-content` | font-size | 13–14px |
+| c8 | `.z-checkbox-disabled > .z-checkbox-mold` | opacity | `var(--zk-state-disabled-opacity)` |
+| c9 | `.z-checkbox-content` | font-size | `var(--zk-typescale-body-medium-size)` |
 
 ### Switch mold (`mold="switch"`) — MD3 values, token-adapted
 
@@ -42,26 +42,27 @@ Marble's light outline token.
 | sw6 | thumb (off) | background | `var(--zk-color-on-surface-variant)` (deviation from MD3 outline, see note) |
 | sw7 | thumb (on) | background / position | `var(--zk-color-on-primary)`; off `left: 6px`, on `left: calc(100% - 26px)` (padding box 48 wide ⇒ centre 16px from outer left / right edge) |
 | sw8 | hover (non-disabled) | state layer (`::before`) | 40px circle centred on the thumb (off `left: -6px`, on `left: calc(100% - 34px)`); opacity `--zk-state-hover-opacity`; on-surface (off) / primary (on) |
-| sw9 | `.z-checkbox-switch-disabled` | opacity | 0.38 |
+| sw9 | `.z-checkbox-switch-disabled` | opacity | `var(--zk-state-disabled-opacity)` |
 
 ### Toggle mold (`mold="toggle"`) — MD3 filled-toggle reading, compact
 
 ZK renders the mold element **empty** (label is always a sibling — see skill "The mold element
-is always EMPTY"), so the fill is the only on/off signal. Per user decision (2026-06-04): a
-check icon reads as *selection confirmation*, which diverges from a toggle's press semantics —
-so ON = **solid primary fill** (MD3 toggle button "selected = filled container" reading; no
-glyph), NO inset shadow. Sizing stays MUI-compact (32×32, r4).
+is always EMPTY"), so the fill is the only on/off signal. Rule: ON = **solid primary fill** (MD3 toggle
+button "selected = filled container" reading; no glyph), NO inset shadow. A check icon is not used,
+because it reads as *selection confirmation*, which diverges from a toggle's press semantics. The
+toggle state classes follow the mold-prefixed pattern in `doc/spec/DESIGN.md` "Checkbox — mold state
+class naming" (`z-checkbox-toggle-on`). Sizing stays MUI-compact (32×32, r4).
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | tg1 | `.z-checkbox-toggle > .z-checkbox-mold` | width × height | 32 × 32px |
-| tg2 | mold (off) | border / border-radius | 1px solid `--zk-color-outline-variant` rgba(0, 0, 0, 0.12) / 4px |
+| tg2 | mold (off) | border / border-radius | 1px solid `var(--zk-color-outline-variant)` / 4px |
 | tg3 | mold (off) | background | transparent; hover (non-disabled) = on-surface 8% state layer |
-| tg4 | `.z-checkbox-toggle-on > .z-checkbox-mold` | background / border / shadow / content | solid `var(--zk-color-primary)` rgb(55, 111, 208); border-color primary; box-shadow none (no inset); NO injected glyph (`::after` display none) |
+| tg4 | `.z-checkbox-toggle-on > .z-checkbox-mold` | background / border / shadow / content | solid `var(--zk-color-primary)`; border-color primary; box-shadow none (no inset); NO injected glyph (`::after` display none) |
 | tg6 | on hover (non-disabled) | background | on-primary 8% state layer over primary (`color-mix(… var(--zk-color-on-primary) 8%, var(--zk-color-primary))` — filled-button convention) |
-| tg7 | `.z-checkbox-toggle-disabled` | opacity | 0.38 |
+| tg7 | `.z-checkbox-toggle-disabled` | opacity | `var(--zk-state-disabled-opacity)` |
 
-(tg5 retired 2026-06-04 — check icon removed by user decision; id not reused.)
+(tg5 is not used: the toggle has no check icon; id not reused.)
 
 ### Tristate mold (`mold="tristate"`) — three visually distinct states
 
@@ -75,7 +76,7 @@ checked = checkmark on a primary fill, indeterminate = dash on a primary fill.
 | tr2 | `.z-checkbox-tristate-on > .z-checkbox-mold` | background / `::after` | `var(--zk-color-primary)` fill; `::after` display block = **checkmark** SVG |
 | tr3 | `.z-checkbox-tristate-indeterminate > .z-checkbox-mold` | background / `::after` | `var(--zk-color-primary)` fill; `::after` display block = **dash** SVG |
 | tr4 | tr2 vs tr3 | `::after` background-image | must **differ** (checkmark ≠ dash) — the two states are not interchangeable |
-| tr5 | `.z-checkbox-disabled.z-checkbox-tristate-{on,indeterminate}` | opacity | 0.38 |
+| tr5 | `.z-checkbox-disabled.z-checkbox-tristate-{on,indeterminate}` | opacity | `var(--zk-state-disabled-opacity)` |
 
 ## States to evaluate
 - [ ] unchecked, checked, indeterminate (if supported), hover, focus-visible, disabled

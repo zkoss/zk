@@ -510,8 +510,8 @@ differ", and that the overlay color is separate from the fill only for button an
 
 ### Stated without a reason in the source
 
-- **drawer:** the backdrop mask uses a literal alpha of 0.32, distinct from the shared scrim token's
-  0.5. No reason is recorded.
+- **drawer:** the backdrop mask uses a literal alpha of 0.32, distinct from the shared scrim token
+  `--zk-color-scrim`. No reason is recorded.
 - **tbeditor:** fullscreen mode resets the wrapper border, radius and box-shadow to `none`, and these
   are not knob-driven. No reason is recorded.
 - **avatar and fileupload:** the avatar font-size knob and the fileupload font-family knob both

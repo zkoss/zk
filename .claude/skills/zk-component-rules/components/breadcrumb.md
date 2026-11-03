@@ -137,7 +137,7 @@ order. This means:
   order** (`tabindex="-1"`) but **is** a valid arrow-key/`.focus()` target, so `:focus-visible`
   styling must work on `span[tabindex="-1"]:focus-visible`, not only on `a:focus-visible`.
 
-## Relational invariants (B-tier)
+## Relational invariants
 
 - All visible (non-`data-zk-bc-hidden`) `.z-breadcrumbitem` and `.z-breadcrumb-separator` /
   `.z-breadcrumb-ellipsis` siblings that occupy the same wrapped line must read as one
@@ -149,7 +149,7 @@ order. This means:
 - A `data-zk-bc-hidden="true"` element must occupy zero layout space (not merely
   `visibility:hidden` or `opacity:0`) — collapse is a **layout** operation, not a fade.
 
-## State-differs invariants (C-tier)
+## State-differs invariants
 
 - A navigable item (`<a href>`) must be visually distinguishable from the terminal/disabled
   item (`<span>`) by at least one dimension (color, text-decoration, weight, …) — the whole

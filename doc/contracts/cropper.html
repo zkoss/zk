@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -93,18 +94,18 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .z-cropper {
     display: inline-block;
     position: relative;
-    border: 1px solid var(--zk-color-outline-variant);
-    border-radius: var(--zk-shape-corner-extra-small);
+    border: 1px solid var(--zk-cropper-border-color);
+    border-radius: var(--zk-cropper-radius);
     overflow: hidden;
 }
 
-/* c4, c5, c7, c8 — MD3 floating toolbar: surface-container pill, elevation-2, 8px clearance */
+/* c4, c5, c7, c8 — MD3 floating toolbar: surface-container pill, elevation-2, selection clearance */
 .z-cropper-toolbar {
     position: absolute;
     margin: var(--zk-spacing-2) var(--zk-spacing-1);
     padding: var(--zk-spacing-1);
-    background-color: var(--zk-color-surface-container);
-    border-radius: var(--zk-shape-corner-full);
+    background-color: var(--zk-cropper-toolbar-bg);
+    border-radius: var(--zk-cropper-toolbar-radius);
     box-shadow: var(--zk-elevation-2);
     user-select: none;
 }
@@ -126,13 +127,13 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     padding: 0 var(--zk-spacing-3);
     border-radius: var(--zk-shape-corner-full);
     text-decoration: none;
-    font-size: 14px;  /* label-large */
-    font-weight: var(--zk-typescale-label-medium-weight);
-    line-height: 20px;
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    line-height: var(--zk-typescale-label-large-line-height);
     text-transform: capitalize;
 }
-.z-cropper-crop > a   { color: var(--zk-color-primary); }
-.z-cropper-cancel > a { color: var(--zk-color-on-surface-variant); }
+.z-cropper-crop > a   { color: var(--zk-cropper-accent); }
+.z-cropper-cancel > a { color: var(--zk-cropper-fg); }
 /* c11 — standard ::before state layer */
 .z-cropper-toolbar > ul > li > a::before {
     content: '';
@@ -142,7 +143,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     background-color: currentColor;
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--zk-motion-duration-short1) var(--zk-motion-easing-standard);
+    transition: var(--zk-state-layer-transition);
 }
 .z-cropper-toolbar > ul > li > a:hover::before  { opacity: var(--zk-state-hover-opacity); }
 .z-cropper-toolbar > ul > li > a:active::before { opacity: var(--zk-state-pressed-opacity); }
@@ -223,8 +224,8 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
         <div class="state-cell">
             <!--
               .z-cropper root:
-                border: 1px solid var(--zk-color-outline-variant)   [c1]
-                border-radius: var(--zk-shape-corner-extra-small)    [c2]
+                border: 1px solid var(--zk-cropper-border-color)   [c1]
+                border-radius: var(--zk-cropper-radius)    [c2]
                 overflow: hidden                                       [c3]
             -->
             <div class="z-cropper">
@@ -255,10 +256,10 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
         <div class="state-cell">
             <!--
               .z-cropper-toolbar (when shown by JS _showToolbar()):
-                background-color: var(--zk-color-surface-container)   [c4]
+                background-color: var(--zk-cropper-toolbar-bg)   [c4]
                 box-shadow: var(--zk-elevation-2)                     [c5]
-                border-radius: var(--zk-shape-corner-full)            [c7]
-                margin: var(--zk-spacing-2) var(--zk-spacing-1)       [c8 — 8px selection clearance]
+                border-radius: var(--zk-cropper-toolbar-radius)            [c7]
+                margin: var(--zk-spacing-2) var(--zk-spacing-1)       [c8 — selection clearance]
                 position: absolute; z-index: 601 (inline from mold)
             -->
             <div class="z-cropper" style="position:relative;">
@@ -295,7 +296,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
             </div>
             <p class="note" style="margin-top:var(--zk-spacing-3)">
                 Crop item shown in forced hover: <code>::before</code> state layer at
-                <code>--zk-state-hover-opacity</code> (0.08), pressed at 0.12 — button.css convention (c11).
+                <code>--zk-state-hover-opacity</code>, pressed at <code>--zk-state-pressed-opacity</code> — button.css convention (c11).
             </p>
         </div>
 

@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
 * { box-sizing: border-box; }
 body {
@@ -147,10 +148,10 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
         color            var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
 }
 
-/* Upcoming: ring only, primary-colored border, transparent fill, no glyph. */
+/* Upcoming: ring only, muted outline border, transparent fill, no glyph. */
 .z-step .z-step-content > .z-step-icon-empty {
     background-color: transparent;
-    border: 2px solid var(--zk-color-primary);
+    border: 2px solid var(--zk-stepbar-icon-border-color);
     color: transparent;
 }
 

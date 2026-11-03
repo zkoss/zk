@@ -16,23 +16,23 @@ zk-version: 10.2.1-jakarta
 
 | id  | selector | property | expected |
 |-----|----------|----------|----------|
-| c1  | `.z-chosenbox` | border | 1px solid rgba(0, 0, 0, 0.23) (outline) |
-| c2  | `.z-chosenbox` | border-radius | 4px (`--zk-shape-input`) |
-| c3  | `.z-chosenbox` | min-height | 36–40px |
-| c4  | `.z-chosenbox-item` | background-color | `--zk-color-surface-container-high` (neutral grey, ~rgb(232,238,247)) — NOT primary; matches MUI default `MuiChip-filled` `rgba(0,0,0,0.08)` |
-| c5  | `.z-chosenbox-item` | border-radius | 4px (extra-small chip) |
+| c1  | `.z-chosenbox` | border | 1px solid `var(--zk-chosenbox-border-color)` (→ `--zk-color-outline`) |
+| c2  | `.z-chosenbox` | border-radius | `var(--zk-chosenbox-radius)` (→ `--zk-shape-input`) |
+| c3  | `.z-chosenbox` | min-height | `var(--zk-control-height)` |
+| c4  | `.z-chosenbox-item` | background-color | `var(--zk-chosenbox-item-bg)` (→ `--zk-color-surface-container-high`, neutral grey) — NOT primary; matches MUI default `MuiChip-filled` `rgba(0,0,0,0.08)` |
+| c5  | `.z-chosenbox-item` | border-radius | `var(--zk-shape-corner-extra-small)` (extra-small chip) |
 | c6  | `.z-chosenbox-item` | height | 28px |
-| c7  | `.z-chosenbox-item-focus` | background-color | `rgb(201, 213, 234)` (≈ `--zk-color-secondary-container`, LIST-ROW family per `marble-theme reference/selected-state-families.md`) — only on keyboard focus, not default |
-| c7a | `.z-chosenbox-item-focus` | background-color | MUST NOT be `--zk-color-primary-container` (≈ `#d6e4ff`) — wrong family; the focused chip uses `--zk-chosenbox-item-focus-bg` = `--zk-color-secondary-container` |
-| c8  | `.z-chosenbox-input` | font-size | 13px |
+| c7  | `.z-chosenbox-item-focus` | background-color | `var(--zk-chosenbox-item-focus-bg)` (→ `--zk-color-secondary-container`, LIST-ROW family per `marble-theme reference/selected-state-families.md`) — only on keyboard focus, not default |
+| c7a | `.z-chosenbox-item-focus` | background-color | MUST NOT be `--zk-color-primary-container` — wrong family; the focused chip uses `--zk-chosenbox-item-focus-bg` = `--zk-color-secondary-container` |
+| c8  | `.z-chosenbox-input` | font-size | `var(--zk-typescale-body-medium-size)` |
 | c9  | `.z-chosenbox-focus` | border-color | `--zk-color-primary` |
 | c10 | `.z-chosenbox-popup` | **rendered width** | **must equal trigger width** (ZK sets inline width = chosenbox width). CSS must NOT set `width: 100%` / `min-width: 100%` — popup parent is `<body>`. See `zk-component-rules reference/floating-popup-in-body.md`. |
-| c11 | `.z-chosenbox-popup` | border-radius | 4px |
+| c11 | `.z-chosenbox-popup` | border-radius | `var(--zk-chosenbox-popup-radius)` |
 | c12 | `.z-chosenbox-popup` | box-shadow | dropdown elevation (doc/spec/DESIGN.md "Elevation / Shadow", level 2) |
-| c13 | `.z-chosenbox-option` | padding | **6px 16px** (NOT `0 12px`) — MUI MenuItem pattern |
+| c13 | `.z-chosenbox-option` | padding | **6px `var(--zk-spacing-4)`** (NOT `0 12px`) — MUI MenuItem pattern |
 | c14 | `.z-chosenbox-option` | min-height | 36px (allow content to grow, do not lock `height`) |
 | c15 | `.z-chosenbox-option:hover` | background-color | tinted overlay (~rgba(0,0,0,0.04)) |
-| c16 | `.z-chosenbox-disabled` | opacity | 0.38 |
+| c16 | `.z-chosenbox-disabled` | opacity | `var(--zk-state-disabled-opacity)` |
 
 ## States to evaluate
 - [ ] default (with selected chips)

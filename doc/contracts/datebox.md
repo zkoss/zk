@@ -50,7 +50,7 @@ composite input and reads as a thicker ring / layout shift. See
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | op1 | `.z-datebox.z-datebox-open` | border-width | **1px** (unchanged from rest — NOT 2px) |
-| op2 | `.z-datebox.z-datebox-open` | box-shadow | `inset 0 0 0 1px var(--zk-color-primary)` (same ring as `:focus-within`) |
+| op2 | `.z-datebox.z-datebox-open` | box-shadow | `inset 0 0 0 1px var(--zk-datebox-border-color-focus)` (same ring as `:focus-within`) |
 
 Guarded by `screenshot.spec.ts › input focus (no layout shift) › datebox open state (icon click)`.
 

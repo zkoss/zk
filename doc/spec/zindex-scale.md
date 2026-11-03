@@ -11,8 +11,8 @@
 
 **ZK 的 JS client 在浮層一顯示時,就以 inline style 覆寫它的 `z-index`。** 這是理解整套尺度的前提:
 
-- `zk/widget.ts` 的 `_topZIndex()`(base **1800**)維護一把**扁平、全域、單調遞增**的計數器。
-- 任何 floating widget(Window、Popup、Menupopup、Combobox/Bandbox/Datebox 下拉、Panel、Drawer、Toast、Errorbox、Searchbox…)一 `setVisible(true)` 就被寫上 `node.style.zIndex = _topZIndex(...)`(≥1800)。
+- `zk/widget.ts` 的 `_topZIndex()`(base 1800，與 `--zk-index-float-fallback` 的值相同)維護一把**扁平、全域、單調遞增**的計數器。
+- 任何 floating widget(Window、Popup、Menupopup、Combobox/Bandbox/Datebox 下拉、Panel、Drawer、Toast、Errorbox、Searchbox…)一 `setVisible(true)` 就被寫上 `node.style.zIndex = _topZIndex(...)`(≥ 1800)。
 - **inline style 永遠贏過 stylesheet**(不論 specificity / `!important`)。誰最後開/被 bring-to-front 誰就在最上面。
 
 **推論:對「ZK 會開的浮層」而言,元件 CSS 的 z-index 只是 pre-paint fallback,不決定最終堆疊。** 因此本尺度**只把真正 load-bearing 的值(ZK 不當它是 floating widget 的那些)token 化**;其餘維持 cosmetic fallback 並在此註明。
@@ -34,13 +34,13 @@
 | `--zk-index-busy-loading` | 89500 | 元件級 busy spinner | **load-bearing**(在自己遮罩之上) |
 | `--zk-index-log` | 99000 | `zk.log` 除錯框 `div.z-log` | **load-bearing**(`zk.ts` `doLog()` 不設 inline z-index) |
 | `--zk-index-fullscreen` | 99999 | tbeditor 全螢幕 | **load-bearing**(非 floating) |
-| `--zk-index-error` | 9999999 | 致命 JS 例外框 | **load-bearing**(壓過一切,含 runtime 1800+N) |
+| `--zk-index-error` | 9999999 | 致命 JS 例外框 | **load-bearing**(壓過一切,含 runtime 的 1800+N 計數器) |
 
 ### 三條硬約束(改值前必讀)
 
-1. `busy-mask (89000) < busy-loading (89500)` —— busy 遮罩恆在自己的 spinner 之下,提示不被自己的底遮住。
-2. `loading (1450) > .z-modal-mask (1400)` —— 全域 loading 的配對遮罩由 JS 算成 `loading − 1`(`zk/utl.ts`),故 loading 必須高於 modal-mask 基線。
-3. `error (9999999)` 必須壓過所有東西,包含 runtime 的 1800+N 計數器。
+1. `--zk-index-busy-mask` < `--zk-index-busy-loading` —— busy 遮罩恆在自己的 spinner 之下,提示不被自己的底遮住。
+2. `--zk-index-loading` > `.z-modal-mask` (1400) —— 全域 loading 的配對遮罩由 JS 算成 `loading − 1`(`zk/utl.ts`),故 loading 必須高於 modal-mask 基線。
+3. `--zk-index-error` 必須壓過所有東西,包含 runtime 的 1800+N 計數器。
 
 ---
 
@@ -61,7 +61,7 @@
 
 ### 企業 App 指南:別和 runtime 計數器硬幹
 
-- 想讓自訂 chrome(sticky header、custom overlay)**壓在 ZK 浮層之下** → z-index 保持 **< 1800**(`--zk-index-float-fallback`)。這是絕大多數情況該做的。
+- 想讓自訂 chrome(sticky header、custom overlay)**壓在 ZK 浮層之下** → z-index 保持 **低於 `--zk-index-float-fallback`**。這是絕大多數情況該做的。
 - 想**壓在 ZK 浮層之上** → **不要**用更大的 z-index 去出價(你會和 1800+N 的計數器打不完的仗)。改用真正的 ZK widget,或對你的 widget 呼叫 `setTopmost()`,讓它進入 ZK 的浮層登記表。
 - 只有「必須永遠在最上層」的極端情況(全螢幕遮罩、致命錯誤)才用 `--zk-index-error` 等級。
 
@@ -71,16 +71,16 @@
 
 `.z-loading`(全域 loading)是**唯一被 JS 回讀**的靜態值:`zk/utl.ts` 讀它算配對遮罩 = `z − 1`。改它時記得遮罩會自動跟著低 1。
 
-下列元件的 CSS z-index 是 **cosmetic fallback**(ZK 一顯示就 inline ≥1800 蓋掉),**刻意維持原值不動**(改了只影響 pre-paint 一瞬,且 ZK 官方主題亦如此):
+下列元件的 CSS z-index 是 **cosmetic fallback**(ZK 一顯示就 inline ≥ 1800 蓋掉),**刻意維持原值不動**(改了只影響 pre-paint 一瞬,且 ZK 官方主題亦如此):
 
 | 元件（selector） | cosmetic 現值 | runtime 實際 |
 |------------------|--------------|-------------|
-| Drawer `.z-drawer` | 1200 | inline ≥1800 |
+| Drawer `.z-drawer` | 1200 | inline ≥ 1800 |
 | Window mask `.z-modal-mask` / `.z-mask` | 1400 | JS `new zk.eff.FullMask({zIndex})` 設定 |
-| Popup / ConfirmPopup / Panel faker / Window faker | 1500 | inline ≥1800 |
-| Combobox / Menupopup / Bandbox / Errorbox / Toolbar / Colorbox / Chosenbox / Timepicker / Bandpopup | 1600 | inline ≥1800 |
-| Datebox / DaterangeBox 下拉 | 1700 | inline ≥1800 |
-| Toast | 1800 | inline ≥1800 |
+| Popup / ConfirmPopup / Panel faker / Window faker | 1500 | inline ≥ 1800 |
+| Combobox / Menupopup / Bandbox / Errorbox / Toolbar / Colorbox / Chosenbox / Timepicker / Bandpopup | 1600 | inline ≥ 1800 |
+| Datebox / DaterangeBox 下拉 | 1700 | inline ≥ 1800 |
+| Toast | 1800 | inline ≥ 1800 |
 
 ### 不收編的值（z 1–40 與 99／100 帶）
 
@@ -92,9 +92,9 @@
 
 ## 4. 清掉的兩個「死值」
 
-稽核揪出兩個**根本不生效**的舊值,本次順手誠實化:
+以下兩處的 CSS 值實際上**不生效**，這裡記錄其處理方式:
 
-- **searchbox `.z-searchbox-popup` 88000 → `var(--zk-index-float-fallback)`(1800)**:Searchbox 是 floating widget(ZK 開啟即 inline ≥1800),舊的 88000 從不套用,且與 ZK 官方主題(用 1000)不符——是誤抄的孤兒值。改成 float-fallback 語意誠實。
+- **searchbox `.z-searchbox-popup` 88000 → `var(--zk-index-float-fallback)`**:Searchbox 是 floating widget(ZK 開啟即 inline ≥1800),舊的 88000 從不套用,且與 ZK 官方主題(用 1000)不符——是誤抄的孤兒值。改成 float-fallback 語意誠實。
 - **drag-ghost `.z-drag-ghost` / `.z-drop-ghost` 90000(保留 + 註解)**:真正拖曳一開始,`zk/widget.ts` 就把 ghost 的 inline z-index 蓋成 **88800**(`_dragoptions.zIndex`),故 CSS 的 90000 僅存在於 pre-drag 一瞬。保留數值但加註說明,避免誤導。
 
 ---
@@ -111,9 +111,10 @@
 
 `zindex` Playwright 專案(`zindex-scale.spec.ts`)以 computed-style 驗證 **load-bearing 值命名前後不變**、以及三條硬約束:
 
-- `.z-index-loadingbar` 解析為 `2000`、`.z-index-error` 為 `9999999`、`.z-index-nav` 為 `1000`;
-- `busy-mask (89000) < busy-loading (89500)`;
-- `.z-index-loading (1450) > 1400`。
+- `.z-index-float-fallback` 解析為 1800、`.z-index-nav` 為 1000、`.z-index-loading` 為 1450、`.z-index-loadingbar` 為 2000、`.z-index-error` 為 9999999（token 名稱依序為 `--zk-index-float-fallback`、`--zk-index-nav`、`--zk-index-loading`、`--zk-index-loadingbar`、`--zk-index-error`）;
+- `--zk-index-busy-mask`（89000）< `--zk-index-busy-loading`（89500）;
+- `.z-index-loading`（1450）> 1400（`.z-modal-mask` 的基準）;
+- `--zk-index-error` > max(`--zk-index-busy-loading`, `--zk-index-loadingbar`)。
 
 ```bash
 npx playwright test -c zkthemelab/src/test/playwright/playwright.config.ts --project=zindex
@@ -123,6 +124,6 @@ npx playwright test -c zkthemelab/src/test/playwright/playwright.config.ts --pro
 
 ## 7. 注意事項 / 限制
 
-- **不替 ZK 浮層造假 ladder**:本尺度刻意**不**把 cosmetic 浮層(1200–1800)重編成整齊階梯——那對 runtime 無效、只是自欺。真正的順序由 ZK 的 1800+N 計數器決定。
-- **不改 ZK runtime 行為**:計數器 base 1800、bring-to-front 遞增都是框架行為,主題不介入。
+- **不替 ZK 浮層造假 ladder**:本尺度刻意**不**把 cosmetic 浮層（§3 表列的值）重編成整齊階梯——那對 runtime 無效、只是自欺。真正的順序由 ZK 的 1800+N 計數器決定。
+- **不改 ZK runtime 行為**:計數器 base（1800）、bring-to-front 遞增都是框架行為,主題不介入。
 - **App 出價戰**:企業 App 若用超大 z-index 硬壓 ZK 浮層,會與 runtime 計數器衝突;正解是用 ZK widget / `setTopmost()`(見 §2 指南)。

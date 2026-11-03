@@ -1,12 +1,12 @@
 # CSS file bundling
 
-ZK serves component styles as `.css.dsp` files. Several `.css.dsp` files bundle **multiple components together**. Editing a bundle affects every component in it; the verification harness must re-evaluate every sibling after a change.
+ZK serves component styles as `.css.dsp` files. Several `.css.dsp` files bundle **multiple components together**. Editing a bundle affects every component in it; a theme's verification must re-check every sibling after a change.
 
 ## Shared `.css.dsp` files
 
 Which source files go into which bundle is defined by the theme's build script and by the `css-uri` entries in `lang.xml` / `lang-addon.xml`. A global bundle is served on every page by `zk.wcs`; a footer bundle loads last, so its rules win ties against component CSS. Read the build script's file lists to see which components share an output file (for Marble, see `marble-theme` `reference/css-dsp.md`).
 
-A change to a shared bundle reaches every component in it. The harness's Generator must flag `RE_EVAL_NEEDED` for every sibling, and the Evaluator must re-check each one even if only one was originally failing.
+A change to a shared bundle reaches every component in it. Every sibling must be re-checked after such a change, even if only one of them was originally failing.
 
 ### Bundling ≠ source file sharing
 
@@ -14,7 +14,7 @@ A common mistake: assuming components that share a `.css.dsp` output also share 
 
 A rule written in `combobox.css` is delivered in the same `.css.dsp` as `datebox.css`, but it does NOT apply to datebox because the selectors are `.z-combobox-*`. A behavior all the combo-family components need (e.g. `buttonVisible="false"` hide rule) **must be added to each source file independently** — there is no shared file for "all combo-family inputs" to live in.
 
-The Generator's "shared-selector check" (apply-to-all vs split) only applies to selectors *already grouped* in one file. It does NOT mean a change in one file automatically reaches sibling files.
+The shared-selector check (apply-to-all vs split, see below) only applies to selectors *already grouped* in one file. It does NOT mean a change in one file automatically reaches sibling files.
 
 ## One-to-one mapping (the simple case)
 

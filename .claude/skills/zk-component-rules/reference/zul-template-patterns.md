@@ -1,6 +1,6 @@
 # ZUL template patterns
 
-`<apply templateURI="...">` is ZK 10's shadow element for including a template into a page. Used heavily in preview pages and theme harnesses.
+`<apply templateURI="...">` is ZK 10's shadow element for including a template into a page. Used heavily in preview pages and theme test pages.
 
 ## How `<apply templateURI>` works
 

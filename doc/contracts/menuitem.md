@@ -22,12 +22,12 @@ Same as menubar.
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-menuitem-content` | padding | 8px 16px |
-| c2 | `.z-menuitem-content` | font-size | 13–14px |
-| c3 | `.z-menuitem-content:hover::before` | opacity | `var(--zk-state-hover-opacity)` (0.08); the `::before` layer is on-surface and rests at opacity 0 |
+| c1 | `.z-menuitem-content` | padding | `var(--zk-spacing-2) var(--zk-spacing-4)` |
+| c2 | `.z-menuitem-content` | font-size | `var(--zk-typescale-body-medium-size)` |
+| c3 | `.z-menuitem-content:hover::before` | opacity | `var(--zk-state-hover-opacity)`; the `::before` layer is on-surface and rests at opacity 0 |
 | c4 | `.z-menuitem-selected .z-menuitem-content` | background-color | secondary-container (list-row family) |
 | c5 | `.z-menuitem-checked .z-menuitem-icon` | visible | yes, primary colour |
-| c6 | `.z-menuitem[disabled]` | opacity | 0.38 |
+| c6 | `.z-menuitem[disabled]` | opacity | `var(--zk-state-disabled-opacity)` |
 
 ## States to evaluate
 - [ ] default, hover, selected, checked, disabled

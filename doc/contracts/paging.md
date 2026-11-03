@@ -22,13 +22,13 @@ preview: ${PREVIEW_URL}/paging.zul   (paging widget is also embedded in grid/lis
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-paging-button` | min-width / height | ~32px |
-| c2 | `.z-paging-button` | border-radius | 50% (circular pill per MUI Pagination) |
+| c1 | `.z-paging-button` | min-width / height | `var(--zk-paging-control-size)` |
+| c2 | `.z-paging-button` | border-radius | `var(--zk-paging-radius)` (circular pill per MUI Pagination) |
 | c3 | `.z-paging-button:hover` | background-color | state-layer tint |
 | c4 | `.z-paging-selected` | background-color | primary-container tint |
-| c5 | `.z-paging-selected` | color | rgb(55, 111, 208) |
-| c6 | `.z-paging-button[disabled]` | color | `var(--zk-color-disabled)` (rgba 0.38) |
-| c7 | `.z-paging-info` | font-size | 13px |
+| c5 | `.z-paging-selected` | color | `var(--zk-paging-selected-fg)` |
+| c6 | `.z-paging-button[disabled]` | color | `var(--zk-color-disabled)` |
+| c7 | `.z-paging-info` | font-size | `var(--zk-typescale-body-medium-size)` |
 
 ## States to evaluate
 - [ ] default, hover, current page, disabled (first/last edges), input variant

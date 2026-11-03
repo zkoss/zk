@@ -28,7 +28,7 @@ When you need a selector, a state-class name, or a composition rule, the canonic
 
 ### Contract supersedes inference
 
-If the contract declares a `## Design Contract` section (or equivalent prose authored by `zk-spec-author`), every rule in that contract is **user-approved ground truth**. You must honor those decisions verbatim. You may NOT "improve" a contracted color, spacing, radius, or motion value via MUI/DESIGN.md inference — those references are sources of *unspecified* defaults only. When the contract and inference disagree, the contract wins; flag the conflict in your gen report under `Contract conflict:` and proceed with the contract.
+If the contract declares a `## Design Contract` section (or equivalent prose authored by `zk-spec-author`), every rule in that contract is **maintainer-approved ground truth**. You must honor those decisions verbatim. You may NOT "improve" a contracted color, spacing, radius, or motion value via MUI/DESIGN.md inference — those references are sources of *unspecified* defaults only. When the contract and inference disagree, the contract wins; flag the conflict in your gen report under `Contract conflict:` and proceed with the contract.
 
 ## Workflow
 
@@ -96,7 +96,7 @@ When the eval report's failing-set contains cross-cutting ids (`x-ctv-*`, `x-den
 - `x-fc-*` (contract lists `fc-guards`): add exactly the contract-named guards to `zul/css/tokens/_forced-colors.css` (central, unlayered — match the file's existing patterns).
 - `x-brand-decl`: replace un-whitelisted color literals in the component CSS with `var(--zk-*)` tokens (or `oklch(from var(--zk-…))` derivations per `doc/spec/brand-override.md`).
 
-`## Cross-cutting features` decisions are user-approved contract ground truth like everything else — a declared `N/A` is not yours to overturn, and an undeclared knob axis is not yours to invent.
+`## Cross-cutting features` decisions are maintainer-approved contract ground truth like everything else — a declared `N/A` is not yours to overturn, and an undeclared knob axis is not yours to invent.
 
 ### 2. Plan the change (contract step, before any edit)
 

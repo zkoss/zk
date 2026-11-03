@@ -16,11 +16,11 @@ The density system has three layers, all defined in
    (28 / 32 / 40 / 48 / 56 px by default). This is what you flip.
 2. **Semantic alias layer** — `--zk-input-height`, `--zk-button-height`,
    `--zk-toolbar-height`, `--zk-window-header-height`, … Each maps a component type to
-   a rung *by meaning*. The intentional size *relationships* (input 40 > button 36,
-   toolbar 48 > input 40) live here, defined once — so they survive any tier change.
+   a rung *by meaning*. The intentional size *relationships* (`--zk-input-height` > `--zk-button-height`,
+   `--zk-toolbar-height` > `--zk-input-height`) live here, defined once — so they survive any tier change.
 3. **Data-cell padding** — `--zk-grid-cell-padding`, `--zk-listbox-cell-padding`,
    `--zk-tree-cell-padding` (the biggest lever for table density), and `--zk-group-padding-y/x`
-   for the group rows of Grid and Listbox (default and tablet keep 8px 16px; a tablet keeps them in compact too, because zkmax `tablet/_mesh.css` sets the two tokens beside the cell padding it already shadows).
+   for the group rows of Grid and Listbox (default and tablet keep the comfortable values; a tablet keeps them in compact too, because zkmax `tablet/_mesh.css` sets the two tokens beside the cell padding it already shadows).
 
 Every component's CSS binds to a rung or an alias — never a raw px. Marble ships a
 `[data-density="compact"]` rule (in _sizing.css) that re-points all of them to their
@@ -81,7 +81,7 @@ For a fixed whole-app *default*, prefer the library property (or the attribute i
 page template) over the Java call — the latter runs after first paint and can briefly
 flash. See the FOUC note in MarbleDensity's Javadoc.
 
-**Tuning the values** — the shipped compact values (below) are a balanced starting point.
+**Tuning the values** — the shipped compact values (in `_sizing.css`) are a balanced starting point.
 To change them, write your own `html[data-density="compact"]` rule — one notch more specific
 than the shipped rule, so it wins regardless of load order — and set any token from `_sizing.css`.
 
@@ -109,10 +109,11 @@ ladder would distort glyphs. Adjust them individually if a specific case needs i
 
 ## Notes
 
-- **Touch targets**: compact heights drop below the MD3 44/48px touch minimum. That's
+- **Touch targets**: compact heights drop below the MD3 touch minimum (`--zk-touch-target-min`,
+  `--zk-touch-target-comfortable`). That's
   correct for dense *desktop* ERP use. On mobile UAs the tablet layer
   (`zkmax/css/tablet/_tokens.css`) still scales controls up via its own touch tokens.
-- **Picking your own tier**: the compact values above are a balanced starting point.
+- **Picking your own tier**: the compact values in `_sizing.css` are a balanced starting point.
   For an even denser tier, keep stepping the ladder down (e.g. md 28, lg 36) — the
   alias layer keeps everything proportional.
 
@@ -140,8 +141,8 @@ Look at the two declarations on `:root`:
 }
 ```
 
-`--zk-input-height` is substituted to the concrete value `40px` **on `:root`**. From
-there it inherits `40px` — the fixed value, **not** the `var(--zk-control-height-md)`
+`--zk-input-height` is substituted to a concrete value **on `:root`**. From
+there it inherits the fixed value (`40px` in the example above), **not** the `var(--zk-control-height-md)`
 formula.
 
 ### How the freeze happens
@@ -159,10 +160,10 @@ Intuitively you'd expect inputs to follow to 32px. **They don't.** Because:
 - This only changes `--zk-control-height-md` on `body`.
 - `--zk-input-height` is **declared only on `:root`**; `body` never re-declares it.
 - With no re-declaration on `body`, its `var()` formula is not re-substituted there.
-  `--zk-input-height` is still the **frozen 40px** it resolved to on `:root` and
+  `--zk-input-height` is still the **frozen** value it resolved to on `:root` and
   inherited down.
 
-So components read `--zk-input-height` = **40px** and the input never shrinks.
+So components read the frozen `--zk-input-height` and the input never shrinks.
 
 > **That is the freeze:** a semantic alias resolved to a concrete value on `:root` is
 > "frozen". Overriding only the rung on a descendant does not re-compute the alias —

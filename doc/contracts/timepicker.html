@@ -6,7 +6,7 @@
 <!--
   Self-contained Marble design contract mockup for timepicker.
   mockup-needed: N (ZKDoc ZKCompRef_Timepicker.png is canonical ground truth).
-  This file is produced at user request as a supplementary visual reference only.
+  This file is a supplementary visual reference only.
 
   RULES
     - Only --zk-* tokens carry design values in the body.
@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
 /* ─── Page chrome (NOT part of the component contract) ─── */
 * { box-sizing: border-box; }
@@ -180,9 +181,9 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     position: relative;
     display: block;
     background: var(--zk-color-surface);
-    border: 1px solid var(--zk-color-outline-variant);
-    border-radius: var(--zk-shape-menu);
-    box-shadow: var(--zk-elevation-2);
+    border: none;
+    border-radius: var(--zk-timepicker-popup-radius);
+    box-shadow: var(--zk-elevation-dropdown);
     max-height: 200px;
     overflow-y: auto;
     padding: var(--zk-spacing-1) 0;
@@ -284,7 +285,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                 </a>
             </span>
             <div style="font-size:var(--zk-typescale-body-small-size); color:var(--zk-color-on-surface-variant); margin-top:4px;">
-                opacity: 0.38 on root (.z-timepicker-disabled class — NOT [disabled] attribute)
+                opacity: --zk-state-disabled-opacity on root (.z-timepicker-disabled class — NOT [disabled] attribute)
             </div>
         </div>
 
@@ -375,7 +376,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                 </ul>
             </div>
             <div style="font-size:var(--zk-typescale-body-small-size); color:var(--zk-color-on-surface-variant); margin-top:4px;">
-                Popup: surface bg, elevation-2 shadow, 4px radius, outline-variant border.<br>
+                Popup: surface bg, elevation-dropdown shadow, menu radius (--zk-shape-menu), no border.<br>
                 Selected option: primary color. Popup detached to &lt;body&gt; at runtime.
             </div>
         </div>

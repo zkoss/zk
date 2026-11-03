@@ -59,7 +59,7 @@ Tokens: `--zk-spacing-1` through `--zk-spacing-16`.
 
 ## 5. Corner Radii
 
-Rule: **default to 6px** (`--zk-shape-card`) for any container/card; **4px** (`--zk-shape-corner-extra-small`) for interactive controls (inputs, buttons, dropdowns, menus) and dialogs. Token values: `tokens/_shape.css`.
+Rule: **default to `--zk-shape-card`** for any container/card; **`--zk-shape-corner-extra-small`** for interactive controls (inputs, buttons, dropdowns, menus) and dialogs. Token values: `tokens/_shape.css`.
 
 ---
 
@@ -72,7 +72,7 @@ Rule: **default to 6px** (`--zk-shape-card`) for any container/card; **4px** (`-
 | 2 — dropdown / hover | dropdown | `--zk-elevation-dropdown` (= `--zk-elevation-2`) |
 | 3 — dialog / modal | dialog | `--zk-elevation-dialog` (= `--zk-elevation-3`) |
 
-Two further aliases have their own values: `--zk-elevation-card` (a single light shadow) and `--zk-elevation-resting` (a subtle two-layer shadow, "button + panel" in `_elevation.css:33`). They are not interchangeable with `--zk-elevation-1`.
+Two further aliases have their own values: `--zk-elevation-card` (a single light shadow) and `--zk-elevation-resting` (a subtle two-layer shadow, "button + panel" in `_elevation.css`). They are not interchangeable with `--zk-elevation-1`.
 
 Shadow values: `tokens/_elevation.css`.  
 Cards have elevation only — no border. Use outlined variant (`1px solid outline-variant`) when resting on a white surface where shadow is invisible.
@@ -81,7 +81,7 @@ Cards have elevation only — no border. Use outlined variant (`1px solid outlin
 
 ## 7. Typography
 
-The size, weight and line-height of each role are in `tokens/_typography.css` (`--zk-typescale-*`) and, for the utility classes, in `utility/_typography.css`. Body and table text is denser than MD3 body-medium (13px, aligned to MUI v7).
+The size, weight and line-height of each role are in `tokens/_typography.css` (`--zk-typescale-*`) and, for the utility classes, in `utility/_typography.css`. Body and table text (`--zk-typescale-body-medium-size`, aligned to MUI v7) is denser than MD3 body-medium.
 
 
 Font family: **Inter**, then `Inter Fallback` (Arial scaled to Inter's metrics, used only until Inter has loaded; see §7), then the system sans-serif stack. Token: `--zk-typescale-font-family`.  
@@ -147,7 +147,7 @@ The theme honors `@media (forced-colors: active)` (Windows High-Contrast Mode; a
 
 Control heights are tokens in `tokens/_sizing.css` (`--zk-button-height`, `--zk-control-height-*`); the compact variants are in [data-dense-mode.md](data-dense-mode.md).
 
-Rule: **table rows are ~52px** (16px padding all sides + 13px text + line-height); header and cell padding are both 16px on all sides.
+Rule: **table rows are ~52px at the default density** (measured: the top and bottom `--zk-grid-cell-padding` plus one line of `--zk-typescale-body-medium-size` text at `--zk-typescale-body-medium-line-height`); header and cell padding are both `--zk-grid-cell-padding` on all sides.
 
 ### Input width: datebox / timebox follow the `cols` API
 
@@ -170,7 +170,7 @@ Grid, Listbox, and Tree headers share **one rule**: **no background color**. Hea
 
 | Signal | Value |
 |--------|-------|
-| Font weight | 500 (label-large, `--zk-typescale-label-large-weight`) |
+| Font weight | `--zk-typescale-label-large-weight` (label-large) |
 | Text color  | `--zk-color-on-surface-variant` (slightly muted vs row body) |
 | Divider     | `1px solid --zk-color-outline-variant` border-bottom under the header row |
 
@@ -206,7 +206,7 @@ If a future use-case needs auxhead to match the column-header transparency exact
 
 ## 11. Border Rules
 
-All borders are 1px, except the input focus ring (2px, `--zk-color-primary`). Colors come from tokens (values: `tokens/_colors.css`):
+All borders are 1px, except the text-input focus ring (2px, `--zk-input-border-color-focus`). Colors come from tokens (values: `tokens/_colors.css`):
 
 - Component default border: `--zk-color-outline`.
 - Dividers and row separators: `--zk-color-outline-variant`.
@@ -239,8 +239,7 @@ Use Lucide icons via the `z-icon-*` CSS mask pattern already established in the 
 
 ### Header control icon buttons (close / maximize / minimize / collapse)
 
-One family across every header strip that carries window-management controls (maintainer decision
-2026-06-05 — goldenlayout had invented its own 20px text-glyph controls):
+One family across every header strip that carries window-management controls (goldenlayout had invented its own 20px text-glyph controls):
 
 Button box and icon sizes are in `js/zul/wnd/css/window.css` and `panel.css`. The `goldenlayout` `.lm_controls` strip uses the panel size (nearest header height) and the same icons panel's `z-icon-expand`/`z-icon-times` resolve to.
 
@@ -267,13 +266,13 @@ ZK renders `orient="vertical"` as `icon + <br/> + label` inside the `<button>` e
 
 **Selector:** `.z-button:has(br)`
 
-**Required CSS:**
+**Required CSS** (the same rule is in `zul/src/main/resources/web/js/zul/wgt/css/button.css`):
 ```css
 .z-button:has(br) {
     flex-direction: column;
     gap: 2px;
     padding: 8px 16px;
-    min-height: 48px;
+    min-height: var(--zk-control-height-lg);
     line-height: 1;
 }
 .z-button:has(br) br { display: none; }
@@ -331,7 +330,7 @@ Theme stance:
 
 ---
 
-## 14. Splitter Family (unified spec — maintainer decision 2026-06-04)
+## 14. Splitter Family (unified spec)
 
 One resize affordance across the app. Four implementations share this spec:
 `splitter` (zul.box), `borderlayout` region splitters, `splitlayout` (zkmax), and
@@ -348,34 +347,33 @@ whole family** — the `surface-container` fill is itself the divider; the forme
 stacked into a double-line between splitlayout's bordered panes). **The pill does not resize
 on hover** anywhere — MD3 communicates hover through the state-layer colour, not geometry;
 borderlayout's former 28→44px hover growth was retired (2026-06-23) so all members
-keep the 28px long-axis at every state (the caret already has its space at idle via
+keep `--zk-splitter-pill-length` on the long axis at every state (the caret already has its space at idle via
 `opacity: 0`).
 
 The canonical values (bar thickness, idle/hover/drag backgrounds, cursors, transition, pill size and colors) are in `tokens/_splitter.css`. The rules that go with them:
 
-- The bar is 8px on both axes, filled with `--zk-color-surface-container`; hover and drag tint it with primary through `--zk-state-hover-opacity` / `--zk-state-pressed-opacity`.
+- The bar is `--zk-splitter-thickness` on both axes, filled with `--zk-color-surface-container`; hover and drag tint it with primary through `--zk-state-hover-opacity` / `--zk-state-pressed-opacity`.
 - Cursor is `col-resize` on a vertical bar and `row-resize` on a horizontal bar.
-- Non-resizable (`*-nosplitter`): cursor `default` AND hover keeps the idle background. A primary tint on a bar that cannot resize is a false affordance (Gate-2 finding 2026-06-04). borderlayout is exempt: ZK hides the strip entirely when `splittable="false"`.
+- Non-resizable (`*-nosplitter`): cursor `default` AND hover keeps the idle background. A primary tint on a bar that cannot resize is a false affordance. borderlayout is exempt: ZK hides the strip entirely when `splittable="false"`.
 
 **Actuator pill** (the three ZK-mold splitters — `splitter`, `borderlayout`, `splitlayout` —
-all render `<span>-button` + grip/caret/grip icons): the pill is as thick as the bar and 28px long, fully rounded. Idle it is `--zk-color-outline-variant`, with no border and no elevation; hover/active turns it `--zk-color-primary` with `on-primary` icons. The grip icons are always visible; the collapse caret is hidden at idle and fades in on hover.
+all render `<span>-button` + grip/caret/grip icons): the pill is as thick as the bar and `--zk-splitter-pill-length` long, fully rounded. Idle it is `--zk-color-outline-variant`, with no border and no elevation; hover/active turns it `--zk-color-primary` with `on-primary` icons. The grip icons are always visible; the collapse caret is hidden at idle and fades in on hover.
 
 Rationale: MD3 has no splitter; the spec composes the MD3 bottom-sheet drag handle
 (slim inline pill) with a surface-tinted divider (originally designed for borderlayout —
 that CSS's comment block is the source of record for the pill reasoning).
 
-**GoldenLayout (revised 2026-06-05 — full family alignment; idle fill re-ruled
+**GoldenLayout (revised 2026-06-05 — full family alignment; idle fill revised
 2026-06-06):** `.lm_splitter` is GoldenLayout-library-injected — no button element — but
 that does NOT exempt it from the pill: GL has no `setBtnPos_` JS centering, so the actuator
-pill is drawn entirely in CSS via `::before` (pill: bar-thickness × 28px, `outline-variant`,
-`corner-full`) with grip dots via `::after` (8px Lucide `ellipsis-vertical`/`ellipsis` mask,
-`on-surface-variant`, `opacity: 1`; hover → pill `primary`, dots `on-primary`). The earlier
-"no pill, opacity-.5 dot marker" exception shipped an imperceptible affordance (maintainer review
-2026-06-05) and is retired. GL's bundled CSS is never loaded in ZK, so the theme must also
+pill is drawn entirely in CSS via `::before` (pill: bar-thickness × `--zk-splitter-pill-length`, `outline-variant`,
+`corner-full`) with grip dots via `::after` (`--zk-splitter-icon-size` Lucide `ellipsis-vertical`/`ellipsis` mask,
+`on-surface-variant`, `opacity: 1`; hover → pill `primary`, dots `on-primary`). The
+"no pill, opacity-.5 dot marker" exception was rejected because it shipped an imperceptible affordance. GL's bundled CSS is never loaded in ZK, so the theme must also
 set the family cursors (`col-resize` on `.lm_horizontal`, `row-resize` on `.lm_vertical`).
 Remaining structural exception: no collapse caret (GoldenLayout has no collapse feature).
 
-**GL idle-fill exception (user re-ruling 2026-06-06):** the family's `surface-container`
+**GL idle-fill exception:** the family's `surface-container`
 idle fill is REPLACED by `transparent` for GL only. The family fill exists to make the bar
 visible *between surface panes*; GL bars abut `surface-container` `.lm_header` strips, so
 the identical fill erased the very boundary it marks — bar + header read as one region
@@ -384,7 +382,7 @@ splitter region reads as a card *gutter*, with the pill + grips carrying the aff
 Hover/drag tints become translucent: `color-mix(in srgb, var(--zk-color-primary)
 <hover|pressed opacity>%, transparent)`. General principle for future splitter contexts:
 **the bar idle fill must contrast with every surface it abuts** — when neighbors are
-`surface-container`, the family fill is disqualified (contract outcome row M21 encodes
+`surface-container`, the family fill is disqualified (`doc/contracts/goldenlayout.md` outcome row M21 encodes
 this as an adjacent-surface comparison).
 
 **JS centering rule (refined 2026-06-04):** all three ZK-mold splitters center the pill on
@@ -421,19 +419,19 @@ The property values (colors, radii, lane/track/thumb thickness, transition) are 
 - The embed (idle) rail is as thick as the hover *track* (8px, not the 6px thumb), so rest to hover does not shift.
 - Track, thumb and arrows are edge-anchored (vertical to `right`, horizontal to `bottom`); the lane carries no margin.
 
-**Distinct-from-native, but MD3 (maintainer decision 2026-06-30):** a `nativebar="false"` bar that
+**Distinct-from-native, but MD3:** a `nativebar="false"` bar that
 looks identical to native is pointless, so the simulated bar reads as a deliberate themed
 control via (a) a **visible faint track channel** (the native overlay has none) and (b) a
 **neutral, slightly bolder pill thumb** (idle `outline` → hover `on-surface-variant`, vs the
 native bar's `outline-variant` → `outline`). The **caret step buttons are shown** (against
-the MD3 default of hiding scrollbar arrows) per maintainer decision — kept MD3-restrained:
+the MD3 default of hiding scrollbar arrows) — kept MD3-restrained:
 flat, neutral, with a faint hover state layer, and they appear **only on hover** with the
 rest of the bar (the whole `.z-scrollbar` is `display:none` at rest). ZK's `syncSize()` reads
 the buttons' offset size to inset the wrapper, so the buttons must carry an explicit
 width/height (12px). The `*-embed` rail carries **no** `:hover` rule — it is `display:none`
 whenever the pointer is over the body (the full bar replaces it).
 
-**Edge-hugging, no lateral jump (maintainer decision 2026-06-30, Option A):** in
+**Edge-hugging, no lateral jump (Option A):** in
 embedded mode the rest `*-embed` rail and the hover bar must sit on the *same* cross-axis line
 — otherwise the bar visibly jumps on mouse-over (MD3 continuity-of-motion; the original
 design jumped ~5px). ZK's scroll-sync pins **both** the bar and the `*-embed` rail to the same
@@ -455,10 +453,10 @@ container**, aligned with MD3 Navigation Drawer / MUI `ListItemButton`.
 
 | Property | Value | Token |
 |----------|-------|-------|
-| Selected item background | 12% primary tint container | `color-mix(in srgb, var(--zk-color-primary) 12%, transparent)` |
-| Selected item text | primary | `--zk-color-primary` |
+| Selected item background | primary tint container | `--zk-navitem-selected-bg` |
+| Selected item text | primary | `--zk-navitem-selected-fg` |
 | Selected item weight | 600 | literal |
-| Content-link corner radius | 8px (the tint container is rounded) | `--zk-shape-corner-small` |
+| Content-link corner radius | rounded (the tint container is rounded) | `--zk-navitem-radius` |
 
 **No left-edge accent bar.** The rounded tonal container is the *whole* active
 marker. An earlier iteration added a left bar — first as a `border-left` (which

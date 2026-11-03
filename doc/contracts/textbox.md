@@ -59,21 +59,21 @@ State selectors below reference the **anchor selectors** above. The check applie
 
 | id | state anchor | property | expected | source | token-rooted? |
 |----|-------------|----------|----------|--------|--------------|
-| c1 | default | min-height | 39–40px | `DESIGN.md` "Density" | no |
-| c2 | default | font-size | 13px | `DESIGN.md` "Typography" | **yes** (`--zk-typescale-body-medium-size`) |
-| c3 | default | font-family | starts-with "Inter" | `DESIGN.md` "Typography" | yes (`--zk-typescale-font-family`) |
-| c4 | default | background-color | rgb(255, 255, 255) | `DESIGN.md` "Surface Palette" | no |
-| c5 | default | color | rgba(0, 0, 0, 0.87) | `DESIGN.md` "Text Colors" | no |
-| c6 | default | border | 1px solid rgba(0, 0, 0, 0.23) | `DESIGN.md` "Border Rules" | no |
-| c7 | default | border-radius | 4px | `DESIGN.md` "Corner Radii" | yes (`--zk-shape-input`) |
-| c8 | default | transition-duration | 250ms | `DESIGN.md` "Motion" | **yes** (`--zk-motion-duration-short3`) |
-| c9 | default | ::placeholder color | rgba(0, 0, 0, 0.6) | `DESIGN.md` "Text Colors" | no (**hard to measure**) |
-| c10 | default + force :hover via CDP | border-color | rgba(0, 0, 0, 0.87) | `DESIGN.md` "Border Rules" | no |
-| c11 | default + Tab focus | border-color | rgb(55, 111, 208) | `DESIGN.md` "Border Rules" | no |
+| c1 | default | min-height | `var(--zk-control-height)` | `DESIGN.md` "Density" | **yes** (`--zk-control-height`) |
+| c2 | default | font-size | `var(--zk-typescale-body-medium-size)` | `DESIGN.md` "Typography" | **yes** (`--zk-typescale-body-medium-size`) |
+| c3 | default | font-family | `var(--zk-typescale-font-family)` | `DESIGN.md` "Typography" | yes (`--zk-typescale-font-family`) |
+| c4 | default | background-color | `var(--zk-input-bg)` | `DESIGN.md` "Surface Palette" | yes (`--zk-input-bg`) |
+| c5 | default | color | `var(--zk-input-fg)` | `DESIGN.md` "Text Colors" | yes (`--zk-input-fg`) |
+| c6 | default | border | `1px solid var(--zk-input-border-color)` | `DESIGN.md` "Border Rules" | yes (`--zk-input-border-color`) |
+| c7 | default | border-radius | `var(--zk-input-radius)` | `DESIGN.md` "Corner Radii" | **yes** (`--zk-input-radius`, `--zk-shape-input`) |
+| c8 | default | transition-duration | `var(--zk-motion-duration-standard)` | `DESIGN.md` "Motion" | **yes** (`--zk-motion-duration-standard`) |
+| c9 | default | ::placeholder color | `var(--zk-color-on-surface-variant)` | `DESIGN.md` "Text Colors" | yes (`--zk-color-on-surface-variant`) (**hard to measure**) |
+| c10 | default + force :hover via CDP | border-color | `var(--zk-input-border-color-hover)` | `DESIGN.md` "Border Rules" | yes (`--zk-input-border-color-hover`) |
+| c11 | default + Tab focus | border-color | `var(--zk-input-border-color-focus)` | `DESIGN.md` "Border Rules" | yes (`--zk-input-border-color-focus`) |
 | c12 | default + Tab focus | border-width | 2px | `DESIGN.md` "Border Rules" | no |
-| c13 | disabled | opacity | 0.38 | `DESIGN.md` "State-Layer Overlays" | no |
-| c14 | readonly | background-color | ≠ rgb(255, 255, 255) (tinted) | `DESIGN.md` "Surface Palette" | no |
-| c15 | invalid | border-color | rgb(211, 47, 47) | `DESIGN.md` "Brand & Status Colors" | no |
+| c13 | disabled | opacity | `var(--zk-state-disabled-opacity)` | `DESIGN.md` "State-Layer Overlays" | yes (`--zk-state-disabled-opacity`) |
+| c14 | readonly | background-color | `var(--zk-color-surface-container-low)` (≠ `var(--zk-input-bg)`) | `DESIGN.md` "Surface Palette" | yes (`--zk-color-surface-container-low`) |
+| c15 | invalid | border-color | `var(--zk-input-border-color-error)` | `DESIGN.md` "Brand & Status Colors" | yes (`--zk-input-border-color-error`) |
 | c16 | textarea | min-height | ≥ 64px | inferred | no |
 | c17 | default + Tab focus | content edge (`border-left + padding-left`) | **== rest (±0px)** — padding compensates the 2px border | marble-theme reference/focus-affordance-no-layout-shift.md | no |
 | c18 | default | transition-property | must **NOT** include `border-width` (would jitter text mid-animation) | marble-theme reference/focus-affordance-no-layout-shift.md | no |

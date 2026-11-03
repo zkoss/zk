@@ -58,7 +58,7 @@ rulings — `doc/spec/`. This file holds conclusions only.
 ## 2. Precedence: which source wins
 
 - **V1 — Normative documents.** `doc/spec/` and the component contract beat older notes. A
-  contract's `## Accepted MD3 deviations` section holds Marble maintainer rulings; do not re-flag them.
+  contract's `## Accepted MD3 deviations` section lists the accepted deviations; do not re-flag them.
 - **V2 — MD3 decides semantics:** colour roles and `on-*` pairing, state layers, the type scale,
   elevation as spatial role, shape, keylines. **When two options differ, pick the one that fits
   MD3 better** (the Marble maintainer's stated tie-breaker). MD3 has no italic and no opacity-grey hierarchy;

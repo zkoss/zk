@@ -50,12 +50,12 @@ rendered as a plain `<span>` because it carries no `href`, gets the same full-em
 of text in the trail that should read as "you are here," the same emphasis hierarchy
 behind MUI's own demo convention of wrapping the last crumb in `color="text.primary"` (a
 demo pattern, not a `Breadcrumbs.css` rule). A disabled item dims to
-`--zk-state-disabled-opacity` (0.38) with `pointer-events:
+`--zk-state-disabled-opacity` with `pointer-events:
 none` as a defense-in-depth backstop to the widget's own click-suppression. Separators use
-an 8px (`--zk-spacing-2`) margin on both sides — the exact value MUI's static Breadcrumbs
+a `--zk-spacing-2` margin on both sides — the exact value MUI's static Breadcrumbs
 CSS ships (`.MuiBreadcrumbs-separator { margin-left/right: 8px }`) — while the
 JS-synthesized ellipsis (which visually replaces a run of separators, not one) uses a
-tighter 4px (`--zk-spacing-1`), since the "…" glyph itself supplies enough visual weight
+tighter `--zk-spacing-1`, since the "…" glyph itself supplies enough visual weight
 that it does not need a full separator's breathing room. The ellipsis is a real `<button>`
 (required for keyboard reachability — see the skill's keyboard model) but is stripped of
 all native button chrome (no background, no border, no padding) so it reads as plain
@@ -71,7 +71,7 @@ its borderless tool buttons, unlike `organigram`/`coachmark`'s inset ring on an
 already-bordered card); a small `border-radius: 2px` on the ring keeps its corners soft
 rather than a hard rectangle wrapped around a single line of inline text. Link/ellipsis
 color transitions use the theme's default interactive pair, `--zk-motion-duration-standard`
-(250ms) with `--zk-motion-easing-standard`, transitioning `color` only.
+with `--zk-motion-easing-standard`, transitioning `color` only.
 
 ## Outcome assertions
 
@@ -100,8 +100,8 @@ failure modes instead.
 | c1 | `.z-breadcrumb` | display | `inline-block` | no | layout keyword, not a design token |
 | c2 | `.z-breadcrumb` | font-size / line-height | `var(--zk-typescale-body-medium-size)` / `var(--zk-typescale-body-medium-line-height)` | yes | doc/spec/DESIGN.md "Typography" |
 | c3 | `.z-breadcrumb`, `.z-breadcrumb-separator` | color | `var(--zk-breadcrumb-fg)` → `var(--zk-color-on-surface-variant)` | yes | doc/spec/DESIGN.md "Text Colors" — muted default voice |
-| c4 | `.z-breadcrumb-separator` | margin-left / margin-right | `var(--zk-spacing-2)` (8px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — exact match to MUI `Breadcrumbs-separator` |
-| c5 | `.z-breadcrumb-ellipsis` | margin-left / margin-right | `var(--zk-spacing-1)` (4px) | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — tighter than a full separator; the glyph itself supplies visual weight |
+| c4 | `.z-breadcrumb-separator` | margin-left / margin-right | `var(--zk-spacing-2)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — exact match to MUI `Breadcrumbs-separator` |
+| c5 | `.z-breadcrumb-ellipsis` | margin-left / margin-right | `var(--zk-spacing-1)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — tighter than a full separator; the glyph itself supplies visual weight |
 | c6 | `.z-breadcrumb-ellipsis > button` | background, border, padding | `none`, `0`, `0` | no | native-button-chrome reset so it reads as plain text, not a token value |
 | c7 | `.z-breadcrumb-ellipsis > button` | color | `var(--zk-breadcrumb-fg)` | yes | matches c3 — reads as one voice with the separators it stands in for |
 | c8 | `.z-breadcrumb-ellipsis > button:hover`, `:focus-visible` | color | `var(--zk-breadcrumb-fg-hover)` → `var(--zk-color-on-surface)` | yes | doc/spec/DESIGN.md "Text Colors" |
@@ -112,9 +112,9 @@ failure modes instead.
 | c13 | `.z-breadcrumbitem > a:hover` | text-decoration | `underline` | no | MUI Link `underlineHover` idiom |
 | c14 | `.z-breadcrumbitem > a:focus-visible`, `span[tabindex]:focus-visible` | outline | `var(--zk-focus-ring)` | yes | doc/spec/DESIGN.md "State-Layer Overlays" |
 | c15 | `.z-breadcrumbitem > span` | color | `var(--zk-breadcrumb-current-fg)` → `var(--zk-color-on-surface)` | yes | doc/spec/DESIGN.md "Text Colors" — full emphasis "you are here" |
-| c16 | `.z-breadcrumbitem-disabled` | opacity | `var(--zk-state-disabled-opacity)` (0.38) | yes | doc/spec/DESIGN.md "State-Layer Overlays" |
+| c16 | `.z-breadcrumbitem-disabled` | opacity | `var(--zk-state-disabled-opacity)` | yes | doc/spec/DESIGN.md "State-Layer Overlays" |
 | c17 | `.z-breadcrumbitem-disabled` | pointer-events | `none` | no | defense-in-depth; widget JS already stops the click |
-| c18 | `.z-breadcrumbitem > a`, `> span`, `.z-breadcrumb-ellipsis > button` | transition | `color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` (250ms) | yes | doc/spec/DESIGN.md "Motion" |
+| c18 | `.z-breadcrumbitem > a`, `> span`, `.z-breadcrumb-ellipsis > button` | transition | `color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` | yes | doc/spec/DESIGN.md "Motion" |
 | c19 | `.z-breadcrumbitem > a:focus-visible`, `> span[tabindex]:focus-visible`, `.z-breadcrumb-ellipsis > button:focus-visible` | outline-offset | `2px` | no | doc/spec/DESIGN.md "State-Layer Overlays" — ring drawn outward since these are borderless text elements with nothing to sit inside; same outward convention as `signature`'s tool-button ring (`btn-focus2`), unlike `organigram`/`coachmark`'s inset ring on an already-bordered card |
 | c20 | same selectors as c19 | border-radius | `2px` | no | Marble curation — softens the ring's corners around a single line of inline text; no existing shape token is this small, so it stays a literal alongside c19 |
 
@@ -215,12 +215,12 @@ keyword (`display`, `text-decoration`, `pointer-events`, the button-chrome reset
 
 ### Tablet
 tablet: shipped — the ellipsis `<button>` is a genuinely small discrete tap target
-(sized to the "…" glyph plus 4px margins, well under 44px) and, unlike the `<a>`/`<span>`
+(sized to the "…" glyph plus `--zk-spacing-1` margins, well under `--zk-touch-target-min`) and, unlike the `<a>`/`<span>`
 items (which are inline text — the same touch-ergonomics exemption every other inline nav
 link in this theme gets; no tablet rule anywhere enlarges `.z-a`), it is the *only* way to
 reach the collapsed items, so a missed tap has no fallback. The tablet bundle
 (`../zkcml/zkmax/src/main/resources/web/zkmax/css/tablet/_buttons.css`) extends
-`.z-breadcrumb-ellipsis > button` to the 44px hit area on a touch UA, via padding around
+`.z-breadcrumb-ellipsis > button` to the `--zk-touch-target-min` hit area on a touch UA, via padding around
 the unchanged "…" glyph, the same way every other small icon-only control in the tablet
 bundle grows its hit area without growing its visible mark.
 

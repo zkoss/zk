@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_elevation.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
 
 * { box-sizing: border-box; }
@@ -173,13 +174,13 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 
 /* Hover — eligible items only (not disabled, not already selected). */
 .z-orgitem:not(.z-orgitem-disabled):not(.z-orgitem-selected) > .z-orgnode:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: var(--zk-organigram-hover-bg);
     border-color: var(--zk-color-on-surface);
 }
 
 /* Focus-visible — primary ring inside the card border. */
 .z-orgnode:focus-visible {
-    outline: 2px solid var(--zk-color-primary);
+    outline: var(--zk-focus-ring);
     outline-offset: -2px;
 }
 
@@ -459,7 +460,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
             <div class="z-organigram" role="tree" aria-orientation="horizontal">
                 <div class="z-orgchildren">
                     <div class="z-orgitem" role="treeitem">
-                        <div class="z-orgnode" style="background-color: rgba(0,0,0,0.04); border-color: var(--zk-color-on-surface);">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
+                        <div class="z-orgnode" style="background-color: var(--zk-organigram-hover-bg); border-color: var(--zk-color-on-surface);">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
                     </div>
                 </div>
             </div>
@@ -470,7 +471,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
             <div class="z-organigram" role="tree" aria-orientation="horizontal">
                 <div class="z-orgchildren">
                     <div class="z-orgitem" role="treeitem">
-                        <div class="z-orgnode" style="outline: 2px solid var(--zk-color-primary); outline-offset: -2px;">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
+                        <div class="z-orgnode" style="outline: var(--zk-focus-ring); outline-offset: -2px;">Item2<i class="z-orgnode-icon z-icon-minus"></i></div>
                     </div>
                 </div>
             </div>

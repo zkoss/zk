@@ -24,11 +24,11 @@ Note: the thumb and area classes are the shared `.z-sliderbuttons-*` family (sam
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-multislider-track` | height | ~4px (horizontal track) |
-| c2 | `.z-multislider-track` | background-color | rgba(0, 0, 0, 0.12) |
-| c3 | `.z-sliderbuttons-area` | background-color | rgb(55, 111, 208) |
+| c1 | `.z-multislider-track` | height | `var(--zk-rangeslider-inner-size)` (horizontal track) |
+| c2 | `.z-multislider-track` | background-color | `var(--zk-multislider-track-bg)` |
+| c3 | `.z-sliderbuttons-area` | background-color | `var(--zk-multislider-accent)` |
 | c4 | `.z-sliderbuttons-button` | width / height | 16–20px |
-| c5 | `.z-sliderbuttons-button` | background-color | rgb(55, 111, 208) |
+| c5 | `.z-sliderbuttons-button` | background-color | `var(--zk-multislider-accent)` |
 | c6 | `.z-sliderbuttons-button` | border-radius | 50% |
 
 ## Geometry assertions

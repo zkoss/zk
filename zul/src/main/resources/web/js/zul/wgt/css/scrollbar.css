@@ -1,12 +1,12 @@
 /* MD3 Scrollbar — custom (simulated) scrollbar, drawn by the zul.Scrollbar helper
    when org.zkoss.zul.nativebar="false". Marble gives it a deliberate, themed look,
-   distinct from the browser-native bar (user ruling 2026-06-30):
+   distinct from the browser-native bar:
      • a faint visible TRACK channel (vs the track-less native overlay),
      • a neutral pill THUMB (bolder than native, draggable affordance),
      • slim caret STEP BUTTONS at the lane ends (shown — but flat/neutral, and the
        whole bar only appears on hover, keeping it MD3-restrained).
 
-   EDGE-HUGGING / NO LATERAL JUMP (user ruling 2026-06-30, Option A): in embedded
+   EDGE-HUGGING / NO LATERAL JUMP: in embedded
    mode the rest `*-embed` rail and the hover bar MUST sit on the same cross-axis
    line so the bar does not "jump" on mouse-over (MD3 continuity-of-motion). ZK's
    syncSize() sets only the ALONG-axis position inline; the cross-axis is entirely

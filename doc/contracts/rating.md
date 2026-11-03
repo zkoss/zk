@@ -15,7 +15,7 @@ zk-version: 10.2.1-jakarta
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | c1 | `.z-rating-icon` | width / height | 32px box; glyph 24px (mask or font-size) |
-| c2 | `.z-rating-icon` | color | `var(--zk-rating-fg)` = `--zk-color-outline` → rgba(0, 0, 0, 0.23) (empty) |
+| c2 | `.z-rating-icon` | color | `var(--zk-rating-fg)` → `var(--zk-color-outline)` (empty) |
 | c3 | `.z-rating-icon.z-rating-selected` | color | `--zk-rating-accent` (selected state; hover uses `.z-rating-hover`) |
 | c4 | `.z-rating-icon.z-rating-hover` (class added by `Rating.ts`, not a `:hover` rule) | color, transform | `--zk-rating-accent` (same colour as c3) and `scale(1.1)` |
 | c5 | `.z-rating` | gap | ≥ 2px between stars |

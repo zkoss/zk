@@ -31,6 +31,8 @@
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_shape.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_typography.css">
 <link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_motion.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_sizing.css">
+<link rel="stylesheet" href="../../zul/src/main/resources/web/zul/css/tokens/_component-theme.css">
 <style>
 /* Page chrome */
 * { box-sizing: border-box; }
@@ -110,13 +112,14 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     position: relative;
     display: inline-flex;
     align-items: center;
-    min-height: 48px;
+    min-height: var(--zk-tab-height);
     color: var(--zk-color-on-surface-variant);
     cursor: pointer;
     user-select: none;
     transition: color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
                 background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
-    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+    margin-bottom: -1px;
 }
 .z-tab-content {
     display: inline-flex;
@@ -128,7 +131,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     line-height: 1;
 }
 .z-tab:hover {
-    background-color: rgba(55, 111, 208, var(--zk-state-hover-opacity)); /* primary @ hover-opacity */
+    background-color: color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%), transparent); /* primary @ hover-opacity */
 }
 .z-tab.z-tab-selected {
     color: var(--zk-color-primary);
@@ -150,15 +153,15 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
-    height: 18px;
-    margin-left: var(--zk-spacing-2);
-    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    margin-left: 0;
+    border-radius: var(--zk-shape-corner-full);
     color: var(--zk-color-on-surface-variant);
     cursor: pointer;
 }
 .z-tab-button:hover {
-    background-color: rgba(55, 111, 208, var(--zk-state-hover-opacity));
+    background-color: color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%), transparent);
     color: var(--zk-color-primary);
 }
 
@@ -166,8 +169,16 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .z-tabbox-top > .z-tabs {
     border-bottom: 1px solid var(--zk-color-outline-variant);
 }
-.z-tabbox-top .z-tab.z-tab-selected {
-    border-bottom: 2px solid var(--zk-color-primary);
+.z-tabbox-top .z-tab.z-tab-selected::after {
+    content: '';
+    position: absolute;
+    left: var(--zk-spacing-4);
+    right: var(--zk-spacing-4);
+    bottom: -1px;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background-color: var(--zk-tab-accent);
+    pointer-events: none;
 }
 
 /* Bottom orient indicator */
@@ -177,10 +188,22 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 }
 .z-tabbox-bottom .z-tab {
     border-bottom: 0;
-    border-top: 2px solid transparent;
+    padding-top: 2px;
+    padding-bottom: 0;
+    margin-top: -1px;
+    margin-bottom: 0;
 }
-.z-tabbox-bottom .z-tab.z-tab-selected {
-    border-top: 2px solid var(--zk-color-primary);
+.z-tabbox-bottom .z-tab.z-tab-selected::after {
+    top: -1px;
+    bottom: auto;
+    left: var(--zk-spacing-4);
+    right: var(--zk-spacing-4);
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background-color: var(--zk-tab-accent);
+    position: absolute;
+    content: '';
+    pointer-events: none;
 }
 
 /* Vertical layouts */
@@ -206,16 +229,37 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .z-tabbox-right .z-tab {
     display: flex;
     border-bottom: 0;
-    border-right: 2px solid transparent;
-    border-left: 2px solid transparent;
+    padding-bottom: 0;
+    margin-bottom: 0;
     justify-content: space-between;
     width: 100%;
 }
-.z-tabbox-left .z-tab.z-tab-selected {
-    border-right: 2px solid var(--zk-color-primary);
+.z-tabbox-left .z-tab {
+    padding-right: 2px;
+    margin-right: -1px;
 }
-.z-tabbox-right .z-tab.z-tab-selected {
-    border-left: 2px solid var(--zk-color-primary);
+.z-tabbox-right .z-tab {
+    padding-left: 2px;
+    margin-left: -1px;
+}
+.z-tabbox-left .z-tab.z-tab-selected::after,
+.z-tabbox-right .z-tab.z-tab-selected::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 3px;
+    height: max(24px, var(--zk-typescale-label-large-line-height));
+    transform: translateY(-50%);
+    background-color: var(--zk-tab-accent);
+    pointer-events: none;
+}
+.z-tabbox-left .z-tab.z-tab-selected::after {
+    right: 1px;
+    border-radius: 3px 0 0 3px;
+}
+.z-tabbox-right .z-tab.z-tab-selected::after {
+    left: 1px;
+    border-radius: 0 3px 3px 0;
 }
 .z-tabbox-left > .z-tabpanels,
 .z-tabbox-right > .z-tabpanels {
@@ -243,7 +287,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     display: none;
     align-items: center;
     justify-content: center;
-    background: transparent;
+    background: var(--zk-color-surface);
     color: var(--zk-color-on-surface-variant);
     cursor: pointer;
     user-select: none;
@@ -254,7 +298,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     position: absolute;
     top: 0;
     width: 40px;
-    min-height: 48px;
+    min-height: var(--zk-tab-height);
     flex-shrink: 0;
 }
 .z-tabbox-left-scroll { left: 0; }
@@ -286,28 +330,26 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .z-tabbox-right-scroll:hover,
 .z-tabbox-up-scroll:hover,
 .z-tabbox-down-scroll:hover {
-    background-color: rgba(55, 111, 208, var(--zk-state-hover-opacity));
+    background-color: color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%), transparent);
     color: var(--zk-color-primary);
 }
 
 /* Horizontal scroll strip gets side-padding so tabs don't sit under the arrows */
 .z-tabbox-scroll.z-tabbox-top > .z-tabs,
 .z-tabbox-scroll.z-tabbox-bottom > .z-tabs {
-    margin: 0 32px;
+    margin: 0 40px;
 }
 
 /* Vertical scroll strip gets vertical padding */
 .z-tabbox-scroll.z-tabbox-left > .z-tabs,
 .z-tabbox-scroll.z-tabbox-right > .z-tabs {
-    margin: 24px 0;
+    margin: 40px 0;
 }
 
 /* Accordion mold */
 .z-tabbox-accordion {
     display: block;
     border: 1px solid var(--zk-color-outline-variant);
-    border-radius: var(--zk-shape-corner-medium);
-    overflow: hidden;
     background: var(--zk-color-surface);
 }
 .z-tabbox-accordion .z-tabpanels {
@@ -322,27 +364,34 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .z-tabbox-accordion .z-tab {
     display: flex;
     width: 100%;
-    min-height: 52px;
+    min-height: var(--zk-tab-height);
     background: var(--zk-color-surface);
     color: var(--zk-color-on-surface);
     border-bottom: 0;
     align-items: center;
-    padding: 0 var(--zk-spacing-4);
+    padding: var(--zk-spacing-2) var(--zk-spacing-4);
 }
 .z-tabbox-accordion .z-tab .z-tab-content {
     flex: 1;
     justify-content: flex-start;
-    padding: var(--zk-spacing-3) 0;
+    padding: 0;
 }
 .z-tabbox-accordion .z-tab.z-tab-selected {
     background: var(--zk-color-primary-container);
     color: var(--zk-color-on-primary-container);
 }
-/* Accordion mode NEVER shows the close button, regardless of closable
-   (user ruling 2026-06-07 — MD3 expansion panels have no inline dismiss
-   affordance). ZK still emits .z-tab-button in the DOM; theme hides it. */
-.z-tabbox-accordion .z-tab-button {
-    display: none;
+/* Accordion header of a closable tab: the close button replaces the chevron (tabbox.css).
+   Size is max(24px, min(32px, --zk-tab-height - 2 x --zk-spacing-2)), centred on the chevron
+   keyline (16px from the header edge) by a margin-right of half its size. This mockup draws no
+   chevron, so the chevron-hiding rule of tabbox.css has nothing to hide here. */
+.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content > .z-tab-button {
+    --zk-tab-close-size: max(24px, min(32px, calc(var(--zk-tab-height) - 2 * var(--zk-spacing-2))));
+    order: 2;
+    width: var(--zk-tab-close-size);
+    height: var(--zk-tab-close-size);
+    margin-left: 0;
+    margin-right: calc(var(--zk-tab-close-size) / -2);
+    flex-shrink: 0;
 }
 .z-tabbox-accordion .z-tabpanel-content {
     display: none;
@@ -678,7 +727,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                     <div class="z-tabpanel mock-tabpanel-expanded">
                         <div class="z-tab z-tab-selected">
                             <div class="z-tab-content">
-                                <span class="z-tab-text">Tab1 (closable — × suppressed)</span>
+                                <span class="z-tab-text">Tab1 (closable — × replaces chevron)</span>
                                 <div class="z-tab-button"><svg class="close-x" viewBox="0 0 24 24"><path d="M6 6l12 12M6 18 18 6"/></svg></div>
                             </div>
                         </div>

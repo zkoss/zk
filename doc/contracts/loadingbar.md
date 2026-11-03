@@ -31,9 +31,9 @@ Note: `.z-loadingbar-position-top|bottom` is on the parent `.z-loadingbar-positi
 
 ## Expected values (T2)
 - Position fixed/absolute, top of viewport.
-- Height 2–4px, full-width.
-- Animated gradient or sliding fill in primary colour.
-- Animation duration: 1–2s loop.
+- Height 3px, full-width.
+- Determinate fill: `var(--zk-color-primary)` on a `var(--zk-color-primary-container)` track.
+- Indeterminate: two sliding parts, both `var(--zk-color-primary)`. `.z-loadingbar-image` runs `z-loadingbar-ani1` and `.z-loadingbar-effectbar` runs `z-loadingbar-ani2`; each is `3s` and `infinite` (`ease-in` and `ease` timing).
 
 ## States to evaluate
 - [ ] visible loading, hidden when complete

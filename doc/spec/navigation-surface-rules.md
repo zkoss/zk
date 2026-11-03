@@ -6,7 +6,7 @@ steps, not box-shadows. Components that carry application data sit on
 deeper tonal steps (`surface-container-low`, `surface-container`, …).
 
 The visual outcome is subtle on a white background (all surface-container*
-tokens are in the 98–94% lightness band), which is correct per the spec but
+tokens sit in a narrow band of near-white lightness, see `tokens/_colors.css`), which is correct per the spec but
 sometimes prompts the question "is this a bug?". This file is the
 authoritative answer: **no, it's intentional**.
 

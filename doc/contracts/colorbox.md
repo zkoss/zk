@@ -19,17 +19,17 @@ zk-version: 10.2.1-jakarta
 | c1  | `.z-colorbox` | display | inline-flex |
 | c2  | `.z-colorbox` | width | 32–40px (square-ish frame) |
 | c3  | `.z-colorbox` | height | 32–36px |
-| c4  | `.z-colorbox` | border | 1px solid `--zk-color-outline` |
-| c5  | `.z-colorbox` | border-radius | `--zk-shape-input` (4px) |
+| c4  | `.z-colorbox` | border | 1px solid `var(--zk-colorbox-border-color)` |
+| c5  | `.z-colorbox` | border-radius | `var(--zk-colorbox-radius)` (→ `--zk-shape-input`) |
 | c6  | `.z-colorbox` | padding | 2–4px (inset around swatch + button) |
-| c7  | `.z-colorbox:hover` | border-color | `--zk-color-on-surface` |
+| c7  | `.z-colorbox:hover` | border-color | `var(--zk-colorbox-border-color-hover)` |
 | c8  | `.z-colorbox-current` | flex / size | must fill remaining width — `flex: 1` (or `width: 100%; height: 100%` with absolute positioning). MUST NOT be inline-block with no size or it collapses |
 | c9  | `.z-colorbox-current` | background-color | matches inline `style="background-color"` set by ZK (verify by reading inline style and comparing) |
 | c10 | `.z-colorbox-current` | border-radius | 2px (subtle inset to differentiate from outer frame) |
 | c11 | `.z-colorbox-button` | width | 14–18px |
 | c12 | `.z-colorbox-button` | display | flex (center the icon) |
 | c13 | `.z-colorbox-icon` | width / height | rendered chevron — must have computed `mask-image: url(...)` (NOT `none`). MUI / our theme uses chevron-down shape, NOT a filled caret triangle |
-| c14 | `.z-colorbox-disabled` | opacity | 0.38 |
+| c14 | `.z-colorbox-disabled` | opacity | `var(--zk-state-disabled-opacity)` |
 
 ## Expected values — popup chrome (open state)
 
@@ -37,9 +37,9 @@ zk-version: 10.2.1-jakarta
 |-----|----------|----------|----------|
 | p1  | `.z-colorbox-popup` | **rendered width** | **matches ZK's inline width** (do NOT set `width`/`min-width: 100%`) |
 | p2  | `.z-colorbox-popup` | border | 1px solid `--zk-color-outline-variant` |
-| p3  | `.z-colorbox-popup` | border-radius | `--zk-shape-menu` |
+| p3  | `.z-colorbox-popup` | border-radius | `var(--zk-colorbox-popup-radius)` |
 | p4  | `.z-colorbox-popup` | box-shadow | `--zk-elevation-dropdown` |
-| p5  | `.z-colorbox-popup` | background-color | `--zk-color-surface` |
+| p5  | `.z-colorbox-popup` | background-color | `var(--zk-colorbox-popup-bg)` |
 | p6  | `.z-colorbox-paletteicon` | hover bg | tinted overlay |
 | p7  | `.z-colorbox-pickericon` | hover bg | tinted overlay |
 | p8  | `.z-colorpalette-color` | size | 12–16px (must remain compatible with original layout) |
@@ -52,7 +52,7 @@ ZK can embed a colorbox in a `<menu>` (see `components/colorbox.md` → "Menu-co
 
 | id  | selector | property | expected |
 |-----|----------|----------|----------|
-| m1  | `.z-menu-popup` | border / border-radius / box-shadow / background / padding | identical to `.z-colorbox-popup` (1px `--zk-color-outline-variant`, `--zk-shape-menu`, `--zk-elevation-dropdown`, `--zk-color-surface`, 8px) — must NOT be the browser-default frameless block |
+| m1  | `.z-menu-popup` | border / border-radius / box-shadow / background / padding | identical to `.z-colorbox-popup` (1px `--zk-color-outline-variant`, `--zk-colorbox-popup-radius`, `--zk-elevation-dropdown`, `--zk-colorbox-popup-bg`, 8px) — must NOT be the browser-default frameless block |
 | m2  | `.z-menu-paletteicon`, `.z-menu-pickericon` | size / radius / color / hover | identical to `.z-colorbox-paletteicon`/`-pickericon` (28×28, small-corner radius, on-surface-variant, 8% hover overlay) |
 | m3  | `.z-menu-paletteicon::before`, `.z-menu-pickericon::before` | mask-image | grid / palette lucide glyph present (NOT `none`) — same as colorbox tab icons |
 | m4  | `.z-colorpalette-popup .z-menu-paletteicon`, `.z-colorpicker-popup .z-menu-pickericon` | selected fill | `--zk-color-primary-container` bg + `--zk-color-on-primary-container` color |

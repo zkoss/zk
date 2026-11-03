@@ -6,7 +6,7 @@ rules: see .claude/skills/zk-component-rules/components/splitter.md
 contract-approved: true
 zk-version: 10.2.1-jakarta
 
-> Revised 2026-06-04 per user splitter-family unification ruling: the splitter now follows the canonical family spec in the "Splitter Family" section of `doc/spec/DESIGN.md` — shared with borderlayout region splitters, splitlayout, and goldenlayout (colors only).
+> Revised 2026-06-04: the splitter now follows the canonical family spec in the "Splitter Family" section of `doc/spec/DESIGN.md` — shared with borderlayout region splitters, splitlayout, and goldenlayout (colors only).
 
 ## References
 - `doc/spec/DESIGN.md` sections: **"Splitter Family" (canonical spec)**, "State-Layer Overlays", "Motion", "Border Rules"
@@ -29,16 +29,16 @@ Outcome-level predicates that gate `VERIFIED`: failing any row blocks VERIFIED e
 | M4 | **cross-axis stretch propagation**: after M3's drag, the inner `.z-splitter-vertical` bar's bbox width equals its vbox root bbox width ± 2px (i.e. the bar lengthened with the widened pane) | added 2026-06-06 — user report: widening the left pane never lengthens the inner bar. The bar's `width:100%`/`_fixsz` resize chain must reach the resized td |
 
 ## Expected values (T2) — `doc/spec/DESIGN.md` "Splitter Family"
-- Bar: 8px thick (`--zk-spacing-2`), background `--zk-color-surface-container` at rest.
-- Bar hover: `color-mix(in srgb, var(--zk-color-primary) calc(var(--zk-state-hover-opacity) * 100%), var(--zk-color-surface-container))`.
-- Bar drag (`:active`): same mix with `--zk-state-pressed-opacity`.
-- Actuator pill (`.z-splitter-button`): 8px cross-axis × 28px long-axis, `--zk-shape-corner-full`, `--zk-color-outline-variant` fill, no border, no elevation.
-- Pill hover: `--zk-color-primary` fill, icons `--zk-color-on-primary`.
-- Grip icons (`.z-splitter-icon.z-icon-ellipsis-*`): 8px, `--zk-color-on-surface-variant`, always visible (`opacity: 1`).
+- Bar: `var(--zk-splitter-thickness)` thick, background `var(--zk-splitter-bar-bg)` at rest.
+- Bar hover: `var(--zk-splitter-bar-bg-hover)`.
+- Bar drag (`:active`): `var(--zk-splitter-bar-bg-active)`.
+- Actuator pill (`.z-splitter-button`): `var(--zk-splitter-thickness)` cross-axis × `var(--zk-splitter-pill-length)` long-axis, `--zk-splitter-pill-radius`, `--zk-splitter-pill-fill` fill, no border, no elevation.
+- Pill hover: `--zk-splitter-pill-fill-hover` fill, icons `--zk-splitter-pill-icon-hover`.
+- Grip icons (`.z-splitter-icon.z-icon-ellipsis-*`): `var(--zk-splitter-icon-size)`, `--zk-splitter-pill-icon`, always visible (`opacity: 1`).
 - Collapse caret (middle `.z-splitter-icon`): hidden at idle (`opacity: 0`), fades in on pill hover.
 - Cursor: `col-resize` (`.z-splitter-horizontal`) / `row-resize` (`.z-splitter-vertical`).
-- Non-resizable (`.z-splitter-nosplitter`): cursor `default`; `:hover` keeps the idle `--zk-color-surface-container` background — no primary tint on a bar that cannot resize (`doc/spec/DESIGN.md` "Splitter Family", non-resizable row; a hover tint there is a false resize affordance, 2026-06-04).
-- Transition: `background-color var(--zk-motion-duration-short3) var(--zk-motion-easing-standard)`.
+- Non-resizable (`.z-splitter-nosplitter`): cursor `default`; `:hover` keeps the idle `--zk-splitter-bar-bg` background — no primary tint on a bar that cannot resize (`doc/spec/DESIGN.md` "Splitter Family", non-resizable row; a hover tint there is a false resize affordance, 2026-06-04).
+- Transition: `var(--zk-splitter-transition)`.
 - Centering: pill midpoint within ±2px of bar midpoint on the long axis. Mechanism (errata 2026-06-04, outcome unchanged): never half-mix CSS and JS centering — either the axis is fully JS-owned (`setBtnPos_` inline margin; only safe when the bar's long-axis size is CSS-fixed at bind time) or fully CSS-owned (`margin-left/top: 0 !important` to neutralize the JS inline margin + `left/top: 50% + transform`). CSS ownership is required on a flex-resolved axis — `setBtnPos_` can run while the bar offset is still 0 (see skill file timing-trap notes; both half-mixing and JS-only-on-flex-axis shipped as real splitlayout bugs).
 - Ghost (`.z-splitter-ghost`): `--zk-color-primary` at 0.3 opacity (matches borderlayout c41/c42).
 

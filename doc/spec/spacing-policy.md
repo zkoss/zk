@@ -1,8 +1,7 @@
 # Marble Spacing Policy (opt-in, zero default margins)
 
-> Revised 2026-06-05 (maintainer decision): the previous
-> "default vertical rhythm" rule (`_rhythm.css`, auto `margin-block-end` on container
-> widgets) has been **removed**. This page records the current policy and why.
+> Revised 2026-06-05: the "default vertical rhythm" rule (`_rhythm.css`, auto `margin-block-end` on container
+> widgets) is not part of this policy. This page records the current policy and why.
 
 ## TL;DR
 
@@ -39,7 +38,7 @@ ZK 事實(margin subtraction)記錄在 skill:
 ## 使用指南(寫 ZUL 頁面時)
 
 ```xml
-<!-- 垂直堆疊區塊:父層一個 class,所有直接子元件之間 12px -->
+<!-- 垂直堆疊區塊:父層一個 class,所有直接子元件之間 `--zk-spacing-3` -->
 <div sclass="z-vstack">
     <window title="A" border="normal">…</window>
     <grid>…</grid>
@@ -56,8 +55,8 @@ ZK 事實(margin subtraction)記錄在 skill:
 <window sclass="z-mb-6" …/>
 ```
 
-尺寸變體:`z-vstack-sm` (8px) / 預設 (12px) / `z-vstack-md` (16px) /
-`z-vstack-lg` (24px);`z-hstack` 同系列。見 `zul/css/utility/_stack.css`。
+尺寸變體:`z-vstack-sm` (`--zk-spacing-2`) / 預設 (`--zk-spacing-3`) / `z-vstack-md` (`--zk-spacing-4`) /
+`z-vstack-lg` (`--zk-spacing-6`);`z-hstack` 同系列。見 `zul/css/utility/_stack.css`。
 
 ## 元件內部的間距
 

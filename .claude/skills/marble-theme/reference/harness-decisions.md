@@ -35,11 +35,11 @@ derived downstream. Key mechanisms adopted:
 - **Wave-driven outcome-row minimums** — Wave 1 ≥ 6 … Wave 5 ≥ 0 with `visual-goal: trivial`
   (see `zk-spec-author.md` Step 6).
 
-### Pilot validation (goldenlayout, iter-1 → iter-12)
-- Iter-9: 5 outcome rows FAIL while every D-tier row would have passed individually — the
+### Pilot validation (goldenlayout)
+- One round: 5 outcome rows FAIL while every D-tier row would have passed individually — the
   "0/54 failing" trap is real and the M-row gate closes it.
-- Iter-11: §3d found `.lm_controls` wrapping onto a second row; geometry M9 had passed (X-axis only).
-  Finding promoted to new M-row (M13: same-Y-axis); iter-12 both pass, 0 findings.
+- A later round: §3d found `.lm_controls` wrapping onto a second row; geometry M9 had passed (X-axis only).
+  Finding promoted to new M-row (M13: same-Y-axis); the next round both pass, 0 findings.
 - Final state: `VERIFIED_WITH_ESCALATION` (12/13 M-rows pass; M11 = ZK widget JS issue, escalated).
 
 Supersedes: `iceblue-selector-coverage-proposal.md` (deleted — bottom-up coverage was the wrong frame).
@@ -63,7 +63,7 @@ iceblue residue and internal prose↔table contradictions (header tonal step, ca
 3. Contracts can self-contradict: the Generator implements the **Expected-values table**, so stale
    table rows silently win over revised prose.
 
-### Decision (user, 2026-06-04)
+### Decision
 `VERIFIED` = **Gate 1 AND Gate 2**, co-equal — no post-VERIFIED stage, no `DESIGN_REVIEW_NEEDED`.
 
 | | Gate 1: zk-theme-evaluator | Gate 2: md3-design-verifier |
@@ -94,7 +94,7 @@ Key mechanisms adopted:
   on the same shared CSS file.
 
 ### Migration
-Rows marked `VERIFIED` before 2026-06-04 passed Gate 1 only (76 rows). They are **grandfathered**;
+Rows marked `VERIFIED` before 2026-06-04 passed Gate 1 only. They are **grandfathered**;
 Gate 2 backfill happens opportunistically. Pilot component: goldenlayout.
 
 ---
@@ -127,7 +127,7 @@ and the question was whether the project can ignore differences of that size.
 `playwright.config.ts` has no global `expect` block and no `retries`, so each spec's own options are
 the whole policy — which is why the answer differed per gate in the first place.
 
-### Decision (user, 2026-09-14)
+### Decision
 `padShot()` passes `maxDiffPixels: 20`; nothing else changes.
 
 - **Absolute count, not a ratio.** These crops run about 9 000 px, where `maxDiffPixelRatio: 0.01`

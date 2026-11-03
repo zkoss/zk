@@ -12,7 +12,7 @@ zk-version: 10.2.1-jakarta
 - `doc/spec/DESIGN.md` sections: "Surface Palette", "Text Colors", "Typography", "Density", "Border Rules"
 
 ## Expected values
-Mirror grid expected values c1–c10 and c12 with selectors → `.z-listitem`, `.z-listcell`, `.z-listheader`.
+Mirror grid expected values c1–c8, c10 and c12 with selectors → `.z-listitem`, `.z-listcell`, `.z-listheader`. Grid c9 (row hover) is not mirrored: the listbox row hover on `.z-listitem:hover` is `var(--zk-listbox-row-hover-bg)`.
 
 ### Selection (list-row family)
 Listbox row is the LIST-ROW selection family per
@@ -24,8 +24,8 @@ revised 2026-10-06, was `primary-container`) — never a hardcoded rgba, never
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| s1 | `.z-listitem.z-listitem-selected` | background-color | `rgb(201, 213, 234)` (≈ `--zk-color-secondary-container`) |
-| s2 | `.z-listitem.z-listitem-selected .z-listcell-content` | color | `rgb(21, 30, 45)` (≈ `--zk-color-on-secondary-container`) |
+| s1 | `.z-listitem.z-listitem-selected` | background-color | `var(--zk-listbox-selected-bg)` |
+| s2 | `.z-listitem.z-listitem-selected .z-listcell-content` | color | `var(--zk-listbox-selected-fg)` |
 | s3 | `.z-listitem.z-listitem-selected` | background-color | MUST NOT be `rgba(55, 111, 208, 0.12)` (the pre-fix hardcoded literal) |
 | s4 | `.z-listitem.z-listitem-selected` | background-color | MUST NOT be `rgb(214, 228, 255)` (= `--zk-color-primary-container`) — the pre-2026-10-06 value |
 
@@ -42,8 +42,8 @@ single-selection checkmark case.
 
 | id | check | selector | property | expected | method |
 |----|-------|----------|----------|----------|--------|
-| cm1 | multi → real checkbox box | `.z-listitem-checkbox .z-listitem-icon.z-icon-check::before` | border-width / border-radius | border ≈ `1.5px` solid `outline`; `border-radius: 2px`; `mask-image: none` | computedStyle |
-| cm2 | multi selected → filled box | `.z-listitem-selected .z-listitem-icon.z-icon-check::before` | background-color | `rgb(55, 111, 208)` (= `--zk-color-primary`) with a checkmark `background-image` | computedStyle |
+| cm1 | multi → real checkbox box | `.z-listitem-checkbox .z-listitem-icon.z-icon-check::before` | border-width / border-radius | border ≈ `1.5px` solid `var(--zk-color-outline)`; `border-radius: 2px`; `mask-image: none` | computedStyle |
+| cm2 | multi selected → filled box | `.z-listitem-selected .z-listitem-icon.z-icon-check::before` | background-color | `var(--zk-color-primary)` with a checkmark `background-image` | computedStyle |
 | cm3 | single → real radio circle | `.z-listitem-radio .z-listitem-icon.z-icon-radio::before` | border-radius | `50%` (circle), `mask-image: none`, NOT `rgba(0,0,0,.87)` flat glyph | computedStyle |
 | cm4 | single selected → filled dot | `.z-listitem-radio.z-listitem-selected .z-listitem-icon.z-icon-radio::before` (or `::after`) | — | border-color/inner-dot = `--zk-color-primary` | computedStyle |
 | cm5 | header checkbox aligned with row | `.z-listheader-icon.z-icon-check` vs `.z-listitem-icon.z-icon-check` | center X | `Math.round(headerIcon.centerX) === Math.round(rowIcon.centerX)` (±1px) | getBoundingClientRect |
@@ -57,16 +57,16 @@ checkbox column with empty `<listcell/>` first cells).
 is a flex row with `align-items: center`, so the row box shares its centre line with the label or the control in every
 font. Each child of the cell is a flex item and drops the whitespace around its text, so:
 
-- `gap: var(--zk-spacing-1)` (4px, as the Tree cell content) stands in for the space between an image and its label
+- `gap: var(--zk-spacing-1)` (as the Tree cell content) stands in for the space between an image and its label
   (`<listcell image="…" label="…"/>`) and between inline components (`<label value="Alice "/><a label="link"/>`).
   Text inside one label keeps its spaces (3.64px at 13px).
 - Two compensations keep the text on the keyline of the header label (the glyphs, not the `&nbsp;` before them):
-  `.z-listitem-checkable` ends its padding 4px early (`--zk-spacing-3` minus `--zk-spacing-1`), so the gap does not push
-  the text right; and `.z-listitem-checkable + img` has a `-4px` start margin, because ZK emits
+  `.z-listitem-checkable` ends its padding early (`--zk-spacing-3` minus `--zk-spacing-1`), so the gap does not push
+  the text right; and `.z-listitem-checkable + img` has a `calc(-1 * var(--zk-spacing-1))` start margin, because ZK emits
   `<span class="z-listitem-checkable">…</span>&nbsp;<img …> label` and the `&nbsp;` is a flex item of its own, so the gap is
   added twice before the image.
 - Rule 4, centred and end-aligned columns (commit b535d283aa): in a centred or right-aligned first column, a span
-  that is the last child of the cell content (`.z-listitem-checkable:last-child`) gets its symmetric 12px padding back, so
+  that is the last child of the cell content (`.z-listitem-checkable:last-child`) gets its symmetric `var(--zk-spacing-3)` padding back, so
   the box of a checkbox-only row stays at the x of the header box (without it +2px centred, +4px right-aligned).
   `:last-child` ignores text nodes, so an image or a component after the span keeps the compensation and stays within
   0.5px of where it was before the earlier first-cell DOM change (13px type: -0.17px centred, -0.35px right-aligned; 16px/24px type:
@@ -74,7 +74,7 @@ font. Each child of the cell is a flex item and drops the whitespace around its 
   `label=` cell (they differ only by a text node), so a `label=` row takes rule 4 too. Cost, accepted to keep the common
   narrow checkbox-only column aligned with its header: in a centred first column the box of a `label=` row sits 2px left of
   where it was before that DOM change (its text 2px right), and in a right-aligned first column 4px left.
-- Accepted side effects (owner ruling): two adjacent items that were laid out without a space
+- Accepted side effects: two adjacent items that were laid out without a space
   (`<label value="$"/><label value="100"/>`) are now 4px apart; an item that ends in `&#160;` followed by another is
   3.66 + 4 = 7.66px apart.
 - Not supported: stacked block content in that cell (two `<div>`s, a `vlayout`) becomes a row of items. It is not
@@ -121,8 +121,8 @@ column divider to scope. See `data-components.md` → "Sizable header → resize
 ## Narrow icon / image header column (no squeeze, no row inflation)
 
 A fixed-width icon column (`width="40px"`) holding a header `image="…16x16.png"` must not
-shrink the image below its intrinsic size nor inflate the header row. The default 16px side
-padding leaves only 8px content → image squished to 8px + content wraps → row 53→73px. Fix
+shrink the image below its intrinsic size nor inflate the header row. The default side
+padding (`--zk-listbox-cell-padding`) leaves only 8px content → image squished to 8px + content wraps → row 53→73px. Fix
 = collapse side padding for image columns. See `data-components.md` → "Narrow icon /
 checkbox / image column".
 
@@ -131,7 +131,7 @@ Resizable Headers" section (first `<listheader width="40px" image="…ArrowsUpDo
 
 | id | check | selector | property | expected | method |
 |----|-------|----------|----------|----------|--------|
-| ni1 | image header column padding collapsed | `.z-listheader:has(img)` | padding-left / padding-right | `4px` (= `--zk-spacing-1`), NOT `16px` | computedStyle |
+| ni1 | image header column padding collapsed | `.z-listheader:has(img) .z-listheader-content` | padding-left / padding-right | `var(--zk-spacing-1)`, NOT `16px` | computedStyle |
 | ni2 | header image renders at intrinsic size | `.z-listheader img` (16×16 source) | width / height | `16px` × `16px` (not shrunk to ~8px) | getBoundingClientRect |
 | ni3 | image header row not inflated | image-header `.z-listhead` row height vs a no-image `.z-listhead` row | height | equal (≈53px) — the image must not make the header taller | getBoundingClientRect |
 | ni4 | checkbox/icon header stays single-line | `.z-listheader:has(.z-listheader-checkable)`, `.z-listheader:has(img)` | white-space | `nowrap` (default `normal` wraps the over-wide icon span → row inflates) | computedStyle |
@@ -151,8 +151,8 @@ of the button, no overlap of the button over the image); give the column the min
 off the head. This applies to Listbox and Grid alike; Tree has no column-menu button.
 
 The same applies to a header that holds only the select-all box (`checkmark="true" multiple="true"`, no label, no
-image) and carries the menu button (ni7): the box starts 16px into the cell (the 12px padding of its own span plus
-the 4px header padding), so the content box has to reach 32px, and the reservation for the button comes on top:
+image) and carries the menu button (ni7): the box starts 16px into the cell (measured: the span padding plus the header padding,
+i.e. `--zk-spacing-3` plus `--zk-spacing-1`), so the content box has to reach 32px, and the reservation for the button comes on top:
 a column of at least **68px on desktop (32px + 36px) and 88px on a tablet (32px + 56px)**. Measured on freshly
 rendered columns, with the width of the painted box read off the screenshot as well: the box is whole from 68px
 (88px), 2px narrower it paints 14px, and at the earlier 60px (80px) only its first 8px, because the content box's

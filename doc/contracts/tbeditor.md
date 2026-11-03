@@ -18,7 +18,7 @@ closest-sibling: window (outer chrome), toolbar (button pane)
 
 ## Design Contract
 
-The tbeditor renders as a single bordered box with a light surface-variant toolbar strip across the top and a white editing canvas below. The outer `.z-tbeditor-box` gets a 1px `outline`-colored border, `corner-small` radius (8px), and `elevation-1` shadow to differentiate it from the surrounding page surface — matching the weight of an outlined `<textbox>`. The button pane (`.z-tbeditor-button-pane`) uses `surface-container` as its background (one tone darker than the editor canvas) with a 1px `outline-variant` bottom separator, giving a clear chrome-vs-content division without heavy contrast. Individual toolbar `<button>` elements are 35×35px touch targets with no default background; on hover they receive a `state-hover-opacity` overlay against `primary` to match the toolbarbutton hover convention. The content area (`.z-tbeditor-editor`) is `surface` white with `on-surface` text color and `body-medium` typography. When the editor is in the disabled state (`.z-tbeditor-disabled`), the button pane icons drop to `disabled` opacity (0.38) and the border shifts to `outline-variant`. Fullscreen mode expands the box to cover the viewport with `elevation-3`; the theme does not need to manage the `position:fixed` rule — Trumbowyg's own CSS handles geometry. Transitions on button hover use `short2` duration with `standard` easing.
+The tbeditor renders as a single bordered box with a light surface-variant toolbar strip across the top and a white editing canvas below. The outer `.z-tbeditor-box` gets a 1px `outline`-colored border, `corner-small` radius, and `elevation-1` shadow to differentiate it from the surrounding page surface — matching the weight of an outlined `<textbox>`. The button pane (`.z-tbeditor-button-pane`) uses `surface-container` as its background (one tone darker than the editor canvas) with a 1px `outline-variant` bottom separator, giving a clear chrome-vs-content division without heavy contrast. Individual toolbar `<button>` elements are 35×35px touch targets with no default background; on hover they receive a `state-hover-opacity` overlay against `primary` to match the toolbarbutton hover convention. The content area (`.z-tbeditor-editor`) is `surface` white with `on-surface` text color and `body-medium` typography. When the editor is in the disabled state (`.z-tbeditor-disabled`), the button pane icons drop to `disabled` opacity and the border shifts to `outline-variant`. Fullscreen mode expands the box to cover the viewport with `elevation-3`; the theme does not need to manage the `position:fixed` rule — Trumbowyg's own CSS handles geometry. Transitions on button hover use `short2` duration with `standard` easing.
 
 ## Expected values
 
@@ -32,7 +32,7 @@ The tbeditor renders as a single bordered box with a light surface-variant toolb
 | box-6 | `.z-tbeditor-box` | min-height | `300px` | Trumbowyg default — maintain to avoid collapsing when no value is set |
 | pane-1 | `.z-tbeditor-button-pane` | background-color | `var(--zk-color-surface-container)` | DESIGN.md "Surface Palette" |
 | pane-2 | `.z-tbeditor-button-pane` | border-bottom | `1px solid var(--zk-color-outline-variant)` | DESIGN.md "Surface Palette" |
-| pane-3 | `.z-tbeditor-button-pane` | padding | `0 var(--zk-spacing-1)` | DESIGN.md "Spacing Scale" (preserve 5px horizontal padding — toolbar buttons must not clip) |
+| pane-3 | `.z-tbeditor-button-pane` | padding | `0 var(--zk-spacing-1)` | DESIGN.md "Spacing Scale" (preserve the horizontal padding — toolbar buttons must not clip) |
 | pane-4 | `.z-tbeditor-button-pane` | min-height | `36px` | structural — JS measures this height in _calcEditorHeight |
 | pane-5 | `.z-tbeditor-button-pane` | list-style | `none` | structural (it is a `<ul>`) |
 | pane-6 | `.z-tbeditor-button-pane` | margin | `0` | structural |
@@ -53,7 +53,7 @@ The tbeditor renders as a single bordered box with a light surface-variant toolb
 | editor-3 | `.z-tbeditor-editor` | font-size | `var(--zk-typescale-body-medium-size)` | DESIGN.md "Typography" |
 | editor-4 | `.z-tbeditor-editor` | padding | `var(--zk-spacing-4)` | DESIGN.md "Spacing Scale" |
 | editor-5 | `.z-tbeditor-editor[contenteditable=true]:empty:not(:focus)::before` | color | `var(--zk-color-disabled)` | DESIGN.md "Surface Palette" (placeholder text) |
-| dis-1 | `.z-tbeditor-disabled .z-tbeditor-button-pane button:not(.z-tbeditor-not-disable)` | opacity | `0.38` | DESIGN.md "Surface Palette" (`--zk-color-disabled` uses 0.38 alpha; match for icons) |
+| dis-1 | `.z-tbeditor-disabled .z-tbeditor-button-pane button:not(.z-tbeditor-not-disable)` | opacity | `0.38` | tbeditor.css (hard-coded); icons use the same 0.38 as the alpha in `--zk-color-disabled` |
 | dis-2 | `.z-tbeditor-disabled .z-tbeditor-button-pane button:not(.z-tbeditor-not-disable)` | cursor | `default` | usability |
 | dis-3 | `.z-tbeditor-disabled .z-tbeditor-box` | border-color | `var(--zk-color-outline-variant)` | DESIGN.md "Surface Palette" |
 | full-1 | `.z-tbeditor-fullscreen` | box-shadow | `var(--zk-elevation-3)` | DESIGN.md "Elevation / Shadow" |

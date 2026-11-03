@@ -3,7 +3,7 @@ tier: T3
 category: media
 preview: ${PREVIEW_URL}/cropper.zul
 rules: see .claude/skills/zk-component-rules/components/cropper.md
-contract-approved: true  # user-approved 2026-06-04
+contract-approved: true
 zk-version: 10.2.1-jakarta
 js-source-files:
   - zkmax/cropper/Cropper.ts
@@ -42,9 +42,9 @@ structural-required:                 # Jcrop-injected, unstyled by Jcrop — the
 
 ## Design Contract
 
-The cropper renders as a **bordered image area** with an optional floating action toolbar. The wrapper `.z-cropper` is a contained card: thin `outline-variant` border on all four sides with `extra-small` corner radius (4px), and `overflow: hidden` to clip the Jcrop-injected content within the rounded boundary. No shadow or fill — the image itself is the content.
+The cropper renders as a **bordered image area** with an optional floating action toolbar. The wrapper `.z-cropper` is a contained card: thin `outline-variant` border on all four sides with `extra-small` corner radius, and `overflow: hidden` to clip the Jcrop-injected content within the rounded boundary. No shadow or fill — the image itself is the content.
 
-The floating toolbar (`.z-cropper-toolbar`) appears only when a crop selection is active; it is JS-positioned near the selection rectangle. It follows the **MD3 floating-toolbar** pattern (the contextual-actions-over-content idiom — MD3 has no cropper component): a `surface-container` pill (`corner-full`) lifted with `elevation-2`, `spacing-1` inner padding, and `spacing-2`/`spacing-1` margin so it clears the selection edge by 8px (the JS measures `outerWidth(true)`, so margin is the sanctioned gap mechanism — upstream parity). The action items ("crop", "cancel") are compact MD3 **text buttons**: 32px min-height, `0 spacing-3` padding, `corner-full`, label-large typescale, capitalized labels. Crop is the confirming action and reads in `primary`; cancel is dismissive and reads in `on-surface-variant`. Both carry the theme's standard hover/pressed state layer (`::before` overlay at `--zk-state-hover-opacity` / `--zk-state-pressed-opacity`, per button.css convention).
+The floating toolbar (`.z-cropper-toolbar`) appears only when a crop selection is active; it is JS-positioned near the selection rectangle. It follows the **MD3 floating-toolbar** pattern (the contextual-actions-over-content idiom — MD3 has no cropper component): a `surface-container` pill (`corner-full`) lifted with `elevation-2`, `spacing-1` inner padding, and `spacing-2`/`spacing-1` margin so it clears the selection edge by `--zk-spacing-2` (the JS measures `outerWidth(true)`, so margin is the sanctioned gap mechanism — upstream parity). The action items ("crop", "cancel") are compact MD3 **text buttons**: 32px min-height, `0 spacing-3` padding, `corner-full`, label-large typescale, capitalized labels. Crop is the confirming action and reads in `primary`; cancel is dismissive and reads in `on-surface-variant`. Both carry the theme's standard hover/pressed state layer (`::before` overlay at `--zk-state-hover-opacity` / `--zk-state-pressed-opacity`, per button.css convention).
 
 The transition on toolbar show/hide is JS-controlled (`display: none ↔ block`) with no CSS animation in the current implementation.
 
@@ -75,17 +75,17 @@ What a user must see, independent of theme styling (ground truth: the ZKDoc imag
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-cropper` | border | `1px solid var(--zk-color-outline-variant)` | doc/spec/DESIGN.md "Border Rules" (outline-variant = rgba(0,0,0,0.12) — thin wrapper edge) |
-| c2 | `.z-cropper` | border-radius | `var(--zk-shape-corner-extra-small)` | doc/spec/DESIGN.md "Corner Radii" (extra-small = 4px; small visual card, not a large panel) |
+| c1 | `.z-cropper` | border | `1px solid var(--zk-cropper-border-color)` | doc/spec/DESIGN.md "Border Rules" (outline-variant — thin wrapper edge) |
+| c2 | `.z-cropper` | border-radius | `var(--zk-cropper-radius)` (→ `--zk-shape-corner-extra-small`) | doc/spec/DESIGN.md "Corner Radii" (extra-small; small visual card, not a large panel) |
 | c3 | `.z-cropper` | overflow | `hidden` | structural — required for border-radius to clip Jcrop-injected content |
 | c6 | `.z-cropper` | display | `inline-block` | structural — stock IceBlue; shrink-wraps the border to the image (a block root renders a 600px border around a 300px image) |
-| c4 | `.z-cropper-toolbar` | background-color | `var(--zk-color-surface-container)` | MD3 floating-toolbar container color |
+| c4 | `.z-cropper-toolbar` | background-color | `var(--zk-cropper-toolbar-bg)` (→ `--zk-color-surface-container`) | MD3 floating-toolbar container color |
 | c5 | `.z-cropper-toolbar` | box-shadow | `var(--zk-elevation-2)` | MD3 floating toolbar lifts with elevation (a `border-top` is a docked-strip separator, the wrong idiom for a floating pill) |
-| c7 | `.z-cropper-toolbar` | border-radius | `var(--zk-shape-corner-full)` | MD3 floating toolbar = pill |
-| c8 | `.z-cropper-toolbar` | margin | `var(--zk-spacing-2) var(--zk-spacing-1)` | 8px clearance from the selection edge — `_positionToolbar` measures `outerWidth(true)`, so margin is the sanctioned gap mechanism (upstream parity) |
-| c9 | `.z-cropper-crop > a` | color | `var(--zk-color-primary)` | confirming action = primary text button (doc/spec/DESIGN.md "Brand & Status Colors") |
-| c10 | `.z-cropper-cancel > a` | color | `var(--zk-color-on-surface-variant)` | dismissive action = low-emphasis text button |
-| c11 | `.z-cropper-toolbar > ul > li > a:hover::before` | opacity | `var(--zk-state-hover-opacity)` (0.08; `:active` → `var(--zk-state-pressed-opacity)` 0.12) | standard theme state-layer pattern (button.css `::before` convention) |
+| c7 | `.z-cropper-toolbar` | border-radius | `var(--zk-cropper-toolbar-radius)` (→ `--zk-shape-corner-full`) | MD3 floating toolbar = pill |
+| c8 | `.z-cropper-toolbar` | margin | `var(--zk-spacing-2) var(--zk-spacing-1)` | `--zk-spacing-2` clearance from the selection edge — `_positionToolbar` measures `outerWidth(true)`, so margin is the sanctioned gap mechanism (upstream parity) |
+| c9 | `.z-cropper-crop > a` | color | `var(--zk-cropper-accent)` (→ `--zk-color-primary`) | confirming action = primary text button (doc/spec/DESIGN.md "Brand & Status Colors") |
+| c10 | `.z-cropper-cancel > a` | color | `var(--zk-cropper-fg)` (→ `--zk-color-on-surface-variant`) | dismissive action = low-emphasis text button |
+| c11 | `.z-cropper-toolbar > ul > li > a:hover::before` | opacity | `var(--zk-state-hover-opacity)` (`:active` → `var(--zk-state-pressed-opacity)`) | standard theme state-layer pattern (button.css `::before` convention) |
 | c12 | `.z-cropper-toolbar > ul > li > a` | border-radius | `var(--zk-shape-corner-full)` | MD3 text button in a floating toolbar — pill items, 32px min-height, label-large |
 
 ## State matrix

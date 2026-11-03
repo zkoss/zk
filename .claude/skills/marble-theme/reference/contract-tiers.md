@@ -15,7 +15,7 @@ The two files form a **two-tier contract**. This guide defines the boundary, the
 | Layer | File | Nature of content | Changes across themes? |
 |---|---|---|---|
 | Structural Invariants | `.claude/skills/zk-component-rules/components/<comp>.md` | Universal predicates such as DOM, state classes, geometry/relations, and "states must be distinguishable" | **No.** Every theme should pass them |
-| Theme Contract | `doc/contracts/<comp>.md` (+ optional `.html` mockup) | Concrete token bindings, explicit design trade-offs, expected resolved values, `## Outcome assertions` (whole-page-scale M-rows) | **Yes.** One per theme |
+| Theme Contract | `doc/contracts/<comp>.md` (+ optional `.html` mockup) | Concrete token bindings, explicit design trade-offs, expected values given as `--zk-*` variables, `## Outcome assertions` (whole-page-scale M-rows) | **Yes.** One per theme |
 
 **The evaluator's job = both layers pass + M-rows pass + the AI visual review reports no serious finding.** Structural invariants are like "physical laws", the theme contract is like "this planet's gravity", and M-rows are like "the whole thing should look like an X".
 
@@ -244,7 +244,7 @@ Read the IceBlue CSS from the tracked jar. If the jar has no entry for the compo
    unzip -l "$ZK_SOURCE/dist/lib/iceblue_c.jar" | grep css.dsp
    unzip -p "$ZK_SOURCE/dist/lib/iceblue_c.jar" web/iceblue_c/js/{zul|zkex|zkmax}/<pkg>/css/<comp>.css.dsp
    ```
-   The same jar holds the EE/PE sheets (zkex, zkmax). Do not search `src/main/resources/web/js/**` or `zul/codegen/` for IceBlue CSS: they now hold Marble source and Marble build output. Fall back to the preview-URL route in `../reference/theme-override-is-replace.md` only when `unzip -l` has no entry for the component.
+   The same jar holds the EE/PE sheets (zkex, zkmax). Do not search `src/main/resources/web/js/**` or `zul/codegen/` for IceBlue CSS: they now hold Marble source and Marble build output. Fall back to the preview-URL route in `../../zk-component-rules/reference/theme-override-is-replace.md` only when `unzip -l` has no entry for the component.
 2. **The jar has no entry for the component** → print the following in the conversation:
    ```
    iceblue CSS for <comp> not found. Searched:

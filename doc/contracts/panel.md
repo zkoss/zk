@@ -14,13 +14,13 @@ zk-version: 10.2.1-jakarta
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-panel` | background-color | rgb(255, 255, 255) |
-| c2 | `.z-panel` | border-radius | 6px (card corner per `doc/spec/DESIGN.md` "Corner Radii") |
+| c1 | `.z-panel` | background-color | `var(--zk-panel-bg)` |
+| c2 | `.z-panel` | border-radius | `var(--zk-panel-radius)` (card corner per `doc/spec/DESIGN.md` "Corner Radii") |
 | c3 | `.z-panel` | box-shadow | level-1 card shadow (`doc/spec/DESIGN.md` "Elevation / Shadow") |
-| c4 | `.z-panel-header` | padding | 16px |
-| c5 | `.z-panel-header` | font-size | 16px |
-| c6 | `.z-panel-header` | font-weight | 500 |
-| c7 | `.z-panelchildren` | padding | 16px 16px 24px (`doc/spec/DESIGN.md` "Density", card content padding) |
+| c4 | `.z-panel-header` | padding | `var(--zk-header-padding-y) var(--zk-spacing-4)` |
+| c5 | `.z-panel-header` | font-size | `var(--zk-typescale-title-medium-size)` |
+| c6 | `.z-panel-header` | font-weight | `var(--zk-typescale-title-medium-weight)` |
+| c7 | `.z-panelchildren` | padding | `var(--zk-spacing-4) var(--zk-spacing-4) var(--zk-spacing-6)` (`doc/spec/DESIGN.md` "Density", card content padding) |
 | c8 | `.z-panel-drag-button` | display | `none` — must be invisible in all cases; the element is a JS drag-wire anchor only (DK parity; see skill `components/panel.md`) |
 | c9 | `.z-panel-header` | box-sizing | `border-box` — min-height must INCLUDE padding, not add to it (guards the dropped-reset regression) |
 | c10 | `.z-panel-header` | height | ≤ 68px — compact card header; a content-box blow-up reads ~80px. Bare title text must not wrap (`white-space: nowrap`), incl. narrow no-border panels |

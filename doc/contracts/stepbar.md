@@ -21,7 +21,7 @@ closest-sibling: none — novel pattern (no ZK component renders connected-circl
 
 ## Design Contract
 
-A horizontal row of equally-spaced circular step markers connected by 2px lines. Upcoming steps render as an outlined circle (transparent fill, primary-color border, primary-color empty interior — ring-only treatment keeps upcoming visually distinct from the filled active/complete states without resorting to a neutral grey that would conflict with the connector color). The active step is a filled primary circle holding a centered icon in `on-primary`. Completed steps are filled primary circles holding a check glyph in `on-primary`. Connector lines are `outline-variant` for upcoming segments and `primary` for completed segments (the segment leading to a `.z-step-active` or `.z-step-complete` is "lit"). Step titles sit in body-small typography, color shifts from `on-surface-variant` (upcoming) to `on-surface` with medium weight (active) to `on-surface-variant` (completed). State transitions animate at short2/250ms.
+A horizontal row of equally-spaced circular step markers connected by 2px lines. Upcoming steps render as an outlined circle (transparent fill, `--zk-stepbar-icon-border-color` border, empty interior — ring-only treatment keeps upcoming visually distinct from the filled active/complete states). The active step is a filled circle in `--zk-stepbar-accent` holding a centered icon in `--zk-stepbar-accent-fg`. Completed steps are filled circles in `--zk-stepbar-accent` holding a check glyph in `--zk-stepbar-accent-fg`. Connector lines are `--zk-stepbar-connector-color` for upcoming segments and `--zk-stepbar-accent` for completed segments (the segment leading to a `.z-step-active` or `.z-step-complete` is "lit"). Step titles use body-medium typography. Color is `--zk-stepbar-fg` for upcoming and completed steps, and `--zk-stepbar-fg-active` with label-large weight for the active step. State transitions animate at `--zk-motion-duration-short2`.
 
 ## Expected values
 
@@ -46,11 +46,11 @@ NOTE ON SELECTORS: `.z-step-content` is always present in the DOM between `.z-st
 | conn-1 | `.z-step::before` | content | `''` | structural |
 | conn-2 | `.z-step::before` | flex | `1` | layout (consume row gap between steps) |
 | conn-3 | `.z-step::before` | height | `2px` | layout (connector stroke) |
-| conn-4 | `.z-step::before` | margin | `0 var(--zk-spacing-3)` | layout (a 12px gap on each side of the connector) |
-| conn-5 | `.z-step::before` | background-color | `var(--zk-color-outline-variant)` | DESIGN.md "Brand & Status Colors" (upcoming connector) |
+| conn-4 | `.z-step::before` | margin | `0 var(--zk-spacing-3)` | layout (a `--zk-spacing-3` gap on each side of the connector) |
+| conn-5 | `.z-step::before` | background-color | `var(--zk-stepbar-connector-color)` | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" (upcoming connector) |
 | conn-6 | `.z-step:first-child::before` | display | `none` | structural (no leading line) |
-| conn-7 | `.z-stepbar-linear .z-step-active::before` | background-color | `var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" (active connector lit) |
-| conn-8 | `.z-stepbar-linear .z-step-complete::before` | background-color | `var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" (complete connector lit) |
+| conn-7 | `.z-stepbar-linear .z-step-active::before` | background-color | `var(--zk-stepbar-accent)` | DESIGN.md "Brand & Status Colors" (active connector lit) |
+| conn-8 | `.z-stepbar-linear .z-step-complete::before` | background-color | `var(--zk-stepbar-accent)` | DESIGN.md "Brand & Status Colors" (complete connector lit) |
 | conn-9 | `.z-step::before` | transition | `background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard)` | DESIGN.md "Motion" |
 | icon-1 | `.z-step-content > .z-step-icon` | width | `24px` | layout (marker geometry; MUI Stepper uses 24px) |
 | icon-2 | `.z-step-content > .z-step-icon` | height | `24px` | layout (marker geometry; MUI Stepper uses 24px) |
@@ -62,14 +62,14 @@ NOTE ON SELECTORS: `.z-step-content` is always present in the DOM between `.z-st
 | icon-8 | `.z-step-content > .z-step-icon` | box-sizing | `border-box` | structural |
 | icon-9 | `.z-step-content > .z-step-icon` | transition | `background-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard), border-color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard), color var(--zk-motion-duration-short2) var(--zk-motion-easing-standard)` | DESIGN.md "Motion" |
 | upcoming-1 | `.z-step-content > .z-step-icon-empty` | background-color | `transparent` | DESIGN.md "Brand & Status Colors" (upcoming = ring only) |
-| upcoming-2 | `.z-step-content > .z-step-icon-empty` | border | `2px solid var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" (ring-only treatment distinguishes upcoming from filled active/complete states without resorting to a neutral grey that would conflict with the connector color) |
+| upcoming-2 | `.z-step-content > .z-step-icon-empty` | border | `2px solid var(--zk-stepbar-icon-border-color)` (defaults to `--zk-color-outline`; a muted outline, not primary, so an upcoming step reads as inactive) | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" (ring-only treatment distinguishes upcoming from filled active/complete states) |
 | upcoming-3 | `.z-step-content > .z-step-icon-empty` | color | `transparent` | DESIGN.md "Brand & Status Colors" (no glyph) |
-| active-1 | `.z-step-active .z-step-content > .z-step-icon` | background-color | `var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" |
-| active-2 | `.z-step-active .z-step-content > .z-step-icon` | border | `2px solid var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" |
-| active-3 | `.z-step-active .z-step-content > .z-step-icon` | color | `var(--zk-color-on-primary)` | DESIGN.md "Brand & Status Colors" |
-| complete-1 | `.z-step-complete .z-step-content > .z-step-icon` | background-color | `var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" |
-| complete-2 | `.z-step-complete .z-step-content > .z-step-icon` | border | `2px solid var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" |
-| complete-3 | `.z-step-complete .z-step-content > .z-step-icon` | color | `var(--zk-color-on-primary)` | DESIGN.md "Brand & Status Colors" |
+| active-1 | `.z-step-active .z-step-content > .z-step-icon` | background-color | `var(--zk-stepbar-accent)` | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" |
+| active-2 | `.z-step-active .z-step-content > .z-step-icon` | border | `2px solid var(--zk-stepbar-accent)` | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" |
+| active-3 | `.z-step-active .z-step-content > .z-step-icon` | color | `var(--zk-stepbar-accent-fg)` | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" |
+| complete-1 | `.z-step-complete .z-step-content > .z-step-icon` | background-color | `var(--zk-stepbar-accent)` | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" |
+| complete-2 | `.z-step-complete .z-step-content > .z-step-icon` | border | `2px solid var(--zk-stepbar-accent)` | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" |
+| complete-3 | `.z-step-complete .z-step-content > .z-step-icon` | color | `var(--zk-stepbar-accent-fg)` | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" |
 | error-1 | `.z-step-error .z-step-content > .z-step-icon` | background-color | `var(--zk-color-error)` | DESIGN.md "Brand & Status Colors" |
 | error-2 | `.z-step-error .z-step-content > .z-step-icon` | border | `2px solid var(--zk-color-error)` | DESIGN.md "Brand & Status Colors" |
 | error-3 | `.z-step-error .z-step-content > .z-step-icon` | color | `var(--zk-color-on-error)` | DESIGN.md "Brand & Status Colors" |
@@ -77,10 +77,10 @@ NOTE ON SELECTORS: `.z-step-content` is always present in the DOM between `.z-st
 | title-1 | `.z-step-content > .z-step-title` | font-size | `var(--zk-typescale-body-medium-size)` | DESIGN.md "Typography" |
 | title-2 | `.z-step-content > .z-step-title` | font-weight | `var(--zk-typescale-body-medium-weight)` | DESIGN.md "Typography" |
 | title-3 | `.z-step-content > .z-step-title` | line-height | `var(--zk-typescale-body-medium-line-height)` | DESIGN.md "Typography" |
-| title-4 | `.z-step-content > .z-step-title` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md "Brand & Status Colors" (upcoming title) |
-| title-5 | `.z-step-active .z-step-content > .z-step-title` | color | `var(--zk-color-on-surface)` | DESIGN.md "Brand & Status Colors" |
+| title-4 | `.z-step-content > .z-step-title` | color | `var(--zk-stepbar-fg)` | DESIGN.md "Brand & Status Colors" (upcoming title) |
+| title-5 | `.z-step-active .z-step-content > .z-step-title` | color | `var(--zk-stepbar-fg-active)` | DESIGN.md "Brand & Status Colors" |
 | title-6 | `.z-step-active .z-step-content > .z-step-title` | font-weight | `var(--zk-typescale-label-large-weight)` | DESIGN.md "Typography" (medium-weight emphasis on active) |
-| title-7 | `.z-step-complete .z-step-content > .z-step-title` | color | `var(--zk-color-on-surface-variant)` | DESIGN.md "Brand & Status Colors" |
+| title-7 | `.z-step-complete .z-step-content > .z-step-title` | color | `var(--zk-stepbar-fg)` | DESIGN.md "Brand & Status Colors" |
 | title-8 | `.z-step-error .z-step-content > .z-step-title` | color | `var(--zk-color-error)` | DESIGN.md "Brand & Status Colors" |
 | click-1 | `.z-stepbar:not(.z-stepbar-linear) .z-step` | cursor | `pointer` | DESIGN.md "Motion" (only non-linear steps are clickable per JS gate) |
 | vert-1 | `.z-stepbar-vertical` | flex-direction | `column` | structural (vertical orient stacks steps top-to-bottom) |
@@ -89,12 +89,12 @@ NOTE ON SELECTORS: `.z-step-content` is always present in the DOM between `.z-st
 | vert-2b | `.z-stepbar-vertical .z-step` | align-items | `flex-start` | layout (connector + content left-align so the connector can be centred under the left-most icon) |
 | vert-3 | `.z-stepbar-vertical .z-step` | flex | `0 1 auto` | layout (vertical steps do NOT stretch to equal height; each step is intrinsic-height) |
 | vert-4 | `.z-stepbar-vertical .z-step::before` | width | `2px` | layout (connector stroke; width/height roles swap from horizontal) |
-| vert-5 | `.z-stepbar-vertical .z-step::before` | min-height | `var(--zk-spacing-6)` (`24px`) | layout (connector spans the vertical gap between adjacent icons) |
+| vert-5 | `.z-stepbar-vertical .z-step::before` | min-height | `var(--zk-spacing-6)` | layout (connector spans the vertical gap between adjacent icons) |
 | vert-6 | `.z-stepbar-vertical .z-step::before` | flex | `0 0 auto` | layout (vertical connector is a fixed-length stripe, not a grow item) |
-| vert-10 | `.z-stepbar-vertical .z-step::before` | margin-left | `calc((24px - 2px) / 2)` (`11px`) | layout (centres the 2px stripe under the 24px icon: connector center-x == icon center-x ±2px) |
+| vert-10 | `.z-stepbar-vertical .z-step::before` | margin-left | `calc((24px - 2px) / 2)` | layout (centres the 2px stripe under the 24px icon: connector center-x == icon center-x ±2px) |
 | vert-7 | `.z-stepbar-vertical .z-step:first-child::before` | display | `none` | structural (no leading connector on first step, vertical as horizontal) |
-| vert-8 | `.z-stepbar-vertical .z-step-active::before` | background-color | `var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" (lit connector, same token as horizontal) |
-| vert-9 | `.z-stepbar-vertical .z-step-complete::before` | background-color | `var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" |
+| vert-8 | `.z-stepbar-vertical .z-step-active::before` | background-color | `var(--zk-stepbar-accent)` | DESIGN.md "Brand & Status Colors" (lit connector, same token as horizontal) |
+| vert-9 | `.z-stepbar-vertical .z-step-complete::before` | background-color | `var(--zk-stepbar-accent)` | DESIGN.md "Brand & Status Colors" |
 | wrap-1 | `.z-stepbar-wrapped-label .z-step` | flex | `1 1 0%` | layout (equal-width steps so each `.z-step-content` fills its slot edge-to-edge and adjacent connector halves meet) |
 | wrap-1b | `.z-stepbar-wrapped-label` | align-items | `flex-start` | layout (top-align steps so a multi-line title does NOT push its icon/connector up relative to single-line steps; centring would break the connector line) |
 | wrap-2 | `.z-stepbar-wrapped-label .z-step::before` | display | `none` | structural (the inline horizontal connector is suppressed; the visible connector moves to `.z-step-content::before`/`::after`) |
@@ -105,13 +105,13 @@ NOTE ON SELECTORS: `.z-step-content` is always present in the DOM between `.z-st
 | wrap-7 | `.z-stepbar-wrapped-label .z-step-content::before` | content | `''` | structural (left connector segment) |
 | wrap-8 | `.z-stepbar-wrapped-label .z-step-content::before` | position | `absolute` | layout |
 | wrap-9 | `.z-stepbar-wrapped-label .z-step-content::before` | height | `2px` | layout (connector stroke) |
-| wrap-10 | `.z-stepbar-wrapped-label .z-step-content::before` | top | `calc((24px - 2px) / 2)` (`11px`) | layout (centred at circle mid-height: `(circle.height − connector.height)/2`) |
+| wrap-10 | `.z-stepbar-wrapped-label .z-step-content::before` | top | `calc((24px - 2px) / 2)` | layout (centred at circle mid-height: `(circle.height − connector.height)/2`) |
 | wrap-11 | `.z-stepbar-wrapped-label .z-step-content::before` | left / right | `left: 0; right: calc(50% + 12px)` | layout (spans from step edge to the circle's left edge: right end at `50% − circle.width/2`) |
-| wrap-12 | `.z-stepbar-wrapped-label .z-step-content::before` | background-color | `var(--zk-color-outline-variant)` | DESIGN.md "Brand & Status Colors" (upcoming connector) |
+| wrap-12 | `.z-stepbar-wrapped-label .z-step-content::before` | background-color | `var(--zk-stepbar-connector-color)` | DESIGN.md "Brand & Status Colors" (upcoming connector) |
 | wrap-13 | `.z-stepbar-wrapped-label .z-step-content::after` | left / right | `left: calc(50% + 12px); right: 0` | layout (spans from the circle's right edge to the step edge: left end at `50% + circle.width/2`) |
 | wrap-14 | `.z-stepbar-wrapped-label .z-step:first-child .z-step-content::before` | display | `none` | structural (no leading connector on the first step) |
 | wrap-15 | `.z-stepbar-wrapped-label .z-step:last-child .z-step-content::after` | display | `none` | structural (no trailing connector on the last step) |
-| wrap-16 | `.z-stepbar-wrapped-label.z-stepbar-linear .z-step-complete .z-step-content::before`, `… .z-step-complete .z-step-content::after`, `… .z-step-active .z-step-content::before` | background-color | `var(--zk-color-primary)` | DESIGN.md "Brand & Status Colors" (complete = both halves lit; active = leading half lit only) |
+| wrap-16 | `.z-stepbar-wrapped-label.z-stepbar-linear .z-step-complete .z-step-content::before`, `… .z-step-complete .z-step-content::after`, `… .z-step-active .z-step-content::before` | background-color | `var(--zk-stepbar-accent)` | zkmax stepbar.css; DESIGN.md "Brand & Status Colors" (complete = both halves lit; active = leading half lit only) |
 | wrap-17 | `.z-stepbar-wrapped-label .z-step-content > .z-step-title` | white-space | `normal` | layout (long labels wrap below the icon instead of forcing nowrap) |
 | wrap-18 | `.z-stepbar-wrapped-label .z-step-content > .z-step-title` | margin-top | `var(--zk-spacing-2)` | DESIGN.md "Spacing Scale" (icon ↔ stacked title spacing) |
 

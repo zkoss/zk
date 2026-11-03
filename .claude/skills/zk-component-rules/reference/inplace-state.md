@@ -49,7 +49,7 @@ Clear `border-color`, `background-color` and `box-shadow` on `.z-{c}.z-{c}-inpla
 4. Place the **Inplace section** in the CSS file **after** Disabled/Readonly and **before** Open-state rules. Order matters for cascade.
 5. Read the canonical patterns from ZK's iceBlue theme as the source of truth, not from another component theme. Extract the IceBlue sheet from the tracked jar as described in `../../marble-theme/reference/contract-tiers.md` (section "Locating the iceblue CSS source"). The sheets here are `combo.css.dsp` (combobox, datebox, timebox, spinner, bandbox) and `input.css.dsp` (textbox, intbox, decimalbox, doublebox, longbox, passwordbox).
 
-## Evaluator notes
+## Verification notes
 
 - **Measure in blurred state.** Don't focus the element before reading computed styles — focus removes the inplace class. Navigate, wait for settle, then `getComputedStyle()`.
 - **Selector to query**: `.z-{component}.z-{component}-inplace` (root with the inplace class). For Type B, also query the child input.

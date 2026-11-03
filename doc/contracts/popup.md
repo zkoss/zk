@@ -11,17 +11,18 @@ preview: ${PREVIEW_URL}/popup.zul
 
 ## DOM key selectors
 ```
-.z-popup                ← root (positioned overlay)
+.z-popup                ← root (positioned overlay; plain square box)
+.z-popup-content        ← visible surface (border, radius, background, shadow)
 ```
 
 ## Expected values
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-popup` | background-color | rgb(255, 255, 255) (surface) |
-| c2 | `.z-popup` | border-radius | 4px or var(--zk-shape-corner-small) |
-| c3 | `.z-popup` | box-shadow | elevation-2 shadow |
-| c4 | `.z-popup` | border | none or 1px solid rgba(0,0,0,0.08) |
+| c1 | `.z-popup-content` | background-color | `var(--zk-popup-bg)` |
+| c2 | `.z-popup-content` | border-radius | `var(--zk-popup-radius)` |
+| c3 | `.z-popup-content` | box-shadow | `var(--zk-popup-elevation)` |
+| c4 | `.z-popup-content` | border | `1px solid var(--zk-popup-border-color)` |
 
 ## States to evaluate
 - [ ] visible popup

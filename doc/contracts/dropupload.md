@@ -23,9 +23,9 @@ preview: ${PREVIEW_URL}/dropupload.zul
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c1 | `.z-dropupload` | border | 2px dashed rgba(0, 0, 0, 0.23) |
-| c2 | `.z-dropupload` | border-radius | 4–8px |
-| c3 | `.z-dropupload` | background-color | transparent or rgba(55,111,208,0.04) |
+| c1 | `.z-dropupload` | border | 2px dashed `var(--zk-dropupload-border-color)` |
+| c2 | `.z-dropupload` | border-radius | `var(--zk-dropupload-radius)` |
+| c3 | `.z-dropupload` | background-color | `var(--zk-dropupload-bg)` |
 
 ## States to evaluate
 - [ ] default drop zone

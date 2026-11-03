@@ -446,11 +446,11 @@ h1 {
             -->
             <div class="z-slider z-slider-vertical" role="slider" aria-valuenow="60" aria-orientation="vertical"
                  style="display:inline-flex; flex-direction:column; align-items:center; height:180px; position:relative; padding: 0 12px;">
-                <div class="z-slider-center" style="width:4px; height:100%; position:relative; border-radius:9999px; background-color:var(--zk-color-outline-variant);">
+                <div class="z-slider-center" style="width:4px; height:100%; position:relative; border-radius:var(--zk-shape-corner-full); background-color:var(--zk-color-outline-variant);">
                     <!-- Fill grows from top: 60% from top means bottom 60% is filled — wait:
                          ZK min=top so value 60 out of 100 means thumb is 60% of the way down
                          area height = 60% of track, anchored top:0 -->
-                    <div class="z-slider-area" style="width:100%; height:60%; top:0; left:0; position:absolute; background-color:var(--zk-color-primary); border-radius:9999px;"></div>
+                    <div class="z-slider-area" style="width:100%; height:60%; top:0; left:0; position:absolute; background-color:var(--zk-color-primary); border-radius:var(--zk-shape-corner-full);"></div>
                     <!-- Thumb at 60% down the track -->
                     <div class="z-slider-button" style="top:60%; left:50%; position:absolute; transform:translate(-50%,-50%);"></div>
                 </div>

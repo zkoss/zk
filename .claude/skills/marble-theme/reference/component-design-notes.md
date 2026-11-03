@@ -45,8 +45,8 @@ Three parts must keep a real box, because WScroll reads their size or `offsetTop
   The base `.z-button` has `gap: var(--zk-spacing-2)` for the MD3 icon/image-to-label gap (the graphic
   and the label are separated only by a whitespace text node, which collapses in the flex box); the
   `:has(br)` rule sets its own smaller stacked gap that wins on specificity.
-- A filled `.z-button` hover raises the state layer to opacity 0.12 (the global
-  `--zk-state-hover-opacity` is 0.08) and lifts to `--zk-elevation-2`. Flat variants (outlined, text,
+- A filled `.z-button` hover raises the state layer to opacity 0.12 (hard-coded in `button.css`, above the global
+  `--zk-state-hover-opacity`) and lifts to `--zk-elevation-2`. Flat variants (outlined, text,
   icon) and FAB are excluded and do not change elevation. (`zul/.../wgt/css/button.css`)
 
 ## calendar
@@ -175,8 +175,8 @@ foreground colour (`--zk-cropper-fg`). JS positions the toolbar (`position: abso
 - Header cell padding sits on `.z-column-content`, not on the TH: widget JS reads the TH as a border
   box (`MeshWidget._getMinWd`, Frozen's hidden-column check, `HeaderWidget._insizer`), and a padded TH
   makes a `hflex="min"` or hidden column 32px too wide.
-- Narrow icon column: a fixed-width icon column minus the default side padding (`--zk-grid-cell-padding`,
-  16px) squeezes the header image below its intrinsic size and inflates the row, so
+- Narrow icon column: a fixed-width icon column minus the default side padding (`--zk-grid-cell-padding`)
+  squeezes the header image below its intrinsic size and inflates the row, so
   `.z-column:has(img) .z-column-content` collapses the side padding to `var(--zk-spacing-1)`.
 - Header button slot padding: `calc(var(--zk-spacing-1) + 24px + var(--zk-spacing-2))`, the room for the
   24px column-menu button.
@@ -185,7 +185,7 @@ foreground colour (`--zk-cropper-fg`). JS positions the toolbar (`position: abso
 - The frozen body spacer (`.z-frozen-body`) has a faint `surface-container-low` background to mark the
   frozen pane.
 - Row height follows the data-cell padding tokens in `tokens/_sizing.css` (`--zk-grid-cell-padding`,
-  `--zk-listbox-cell-padding`, `--zk-tree-cell-padding`: 16px at the default density, a smaller value in
+  `--zk-listbox-cell-padding`, `--zk-tree-cell-padding`: `--zk-spacing-4` at the default density, a smaller value in
   the compact tier); grid, listbox and tree use the same value so their rows match.
 - Frame policy: outlined (1px border, no shadow) by default, `z-*-noborder` to strip it
   (`doc/spec/DESIGN.md`). A border and a shadow are never combined (MD3 outlined is not elevated).
@@ -206,8 +206,8 @@ The beak padding must stay symmetric: `Errorbox._fixarrow()` writes padding on o
 side, which would shift the table-cell content while the absolutely positioned icon and close button
 stay put, so `.z-errorbox { --zk-errorbox-beak: 8px; padding: var(--zk-errorbox-beak) !important; }`
 (ZK's own beak size: 2 + the 6px pointer border). The icon and close add the same beak back:
-`.z-errorbox-icon { left: calc(var(--zk-spacing-3) + var(--zk-errorbox-beak)); }` (12px from content),
-`.z-errorbox-close { right: calc(var(--zk-spacing-1) + var(--zk-errorbox-beak)); }` (4px from content).
+`.z-errorbox-icon { left: calc(var(--zk-spacing-3) + var(--zk-errorbox-beak)); }` (gap from content),
+`.z-errorbox-close { right: calc(var(--zk-spacing-1) + var(--zk-errorbox-beak)); }` (gap from content).
 The beak is coloured with the error border colour, not the faint `error-container`, which is too faint
 on a light page.
 
@@ -245,7 +245,7 @@ The `.z-popup-content` wrapper carries the box-shadow. For the popup surface tok
 ## portallayout
 
 Portallayout is an EE component (`zkmax`). ZK gives columns no spacing, so the theme supplies every
-gutter, all `--zk-spacing-3` (12px):
+gutter, all `--zk-spacing-3`:
 
 - Vertical orient: `padding-left` on each column after the first. Padding, not margin, because the
   JS-set inline percentage widths plus the root's `overflow:hidden` would overflow or clip with a
@@ -341,7 +341,7 @@ transform on that axis, otherwise the two stack and push the pill to the end of 
   (`color-mix(…, var(--zk-color-surface))`), not over `transparent`.
 - Accordion: the base `.z-tabpanel { min-height: 80px }` must be reset to 0, otherwise
   `Tabpanel._fixPanelHgh` subtracts inflated sibling heights from the tabbox height and clamps the
-  selected cave's height to 0; the strip-mode `.z-tab-content { padding: 12px 16px }` must be reset to
+  selected cave's height to 0; the strip-mode `.z-tab-content` padding (`--zk-spacing-3` vertically, capped by `--zk-tab-height`; `--zk-spacing-4` horizontally) must be reset to
   0 in accordion because `.z-tab` already supplies vertical padding (double padding bloats the header to
   about 60px). MD3 expansion-panel groups are flat at the outer edges, so `.z-tabbox-accordion` has no
   `border-radius`. A closable accordion header shows the close button in place of the chevron; see
@@ -375,7 +375,7 @@ fills a width-forced field. The input is readonly, so there is no per-keystroke 
 - Card geometry (`.z-notification-content`): the icon is `position:absolute; left:16px` (measured from
   `.z-notification`, so `.z-notification` carries no padding) and 20px wide, and the content's left
   padding is 52px (16 + 20 + 16). Toast uses `padding: 12px 48px`.
-- `min-height` is `--zk-notification-height` (48px, MD3 touch target), taller than one line, so the
+- `min-height` is `--zk-notification-height` (MD3 touch target), taller than one line, so the
   message is centred with `display: block; align-content: center`. It is not a flex container: flex
   wraps each contiguous inline run of an HTML message in an anonymous block item, which strips the
   spaces around inline markup ("do <span>HTML</span>." becomes "doHTML.").

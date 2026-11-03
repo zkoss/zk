@@ -19,17 +19,17 @@ three schemes, and each one faithfully mirrors MD3's own naming for that categor
 MD3 deliberately uses different conventions because the scales have different *shapes*: elevation
 and motion are dense ordinal ladders (numbers); shape and typescale are semantic tiers (words).
 
-**Do not homogenize them.** Forcing everything numeric would diverge from MD3, touch ~1,100
+**Do not homogenize them.** Forcing everything numeric would diverge from MD3, touch many
 reference sites, and buy nothing. This was evaluated and rejected.
 
 ### The one real inconsistency, and how it was fixed
 
-`motion-duration` was non-monotonic: `short3` had been pulled to 250ms to serve as the de-facto
-standard transition (156 references), which made `short3 > short4` and duplicated `medium1`.
+`motion-duration` was non-monotonic: `short3` had been pulled up to serve as the de-facto
+standard transition, which made `short3 > short4` and duplicated `medium1`.
 
-Resolved value-preservingly (commit `b5cf6e5`): a semantic alias
-`--zk-motion-duration-standard: var(--zk-motion-duration-medium1)` (= 250ms) was added, all 156
-references moved to it, and `short3` was restored to MD3's correct **150ms** — leaving a
+Resolved value-preservingly: a semantic alias
+`--zk-motion-duration-standard: var(--zk-motion-duration-medium1)` was added, all references
+moved to it, and `--zk-motion-duration-short3` was restored to MD3's value — leaving a
 zero-reference but correct ladder member, kept under the scale-completeness rule.
 
 **Two rules that fall out of this:**
@@ -37,7 +37,7 @@ zero-reference but correct ladder member, kept under the scale-completeness rule
   stays. `long3`/`long4` were added for symmetry for the same reason; `extra-long` was *not*,
   because the theme has no full-screen transition use case and it would be pure dead code.
 - **When a token's value is wrong but its references want the old value, add a semantic alias**
-  rather than changing the value under 156 call sites.
+  rather than changing the value under all of its call sites.
 
 `spacing`'s numbers are non-contiguous (`0..8` then `10 12 16`). That is fine — the number is the
 ×4px multiplier, the upper range is just sparser. Industry convention. Do not "fix" it.

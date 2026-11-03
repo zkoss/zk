@@ -22,7 +22,7 @@ Same as textbox c1–c14 with `.z-textbox` → `.z-intbox`. Plus:
 
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| c15 | `.z-intbox.z-intbox-invalid` | border-color | rgb(211, 47, 47) |
+| c15 | `.z-intbox.z-intbox-invalid` | border-color | `var(--zk-input-border-color-error)` |
 | c16 | `.z-intbox.z-intbox-invalid:focus` | border-width | 2px |
 
 ## States to evaluate

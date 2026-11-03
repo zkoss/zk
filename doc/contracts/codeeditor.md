@@ -35,7 +35,7 @@ mockup-rationale: see mockup-needed above — condition (1), no ZKDoc image, for
   cites. MUI ships no code-editor component of any kind; the chrome is a *pattern* reuse,
   not a component-for-component analog, which is part of why this is T3 rather than T1.
 - doc/spec/DESIGN.md sections: "Surface Palette" (root/light-gutter fills), "Text Colors" (foreground
-  roles), "Corner Radii" (`--zk-shape-corner-extra-small`, the 4px rule for interactive controls), "Typography" (body-medium
+  roles), "Corner Radii" (`--zk-shape-corner-extra-small`, the rule for interactive controls), "Typography" (body-medium
   size/line-height; DESIGN.md §7 has no monospace entry, see the typography token file citation
   below), "State-Layer Overlays" (disabled-content opacity), "Motion" (standard duration/easing
   pair), "Density" (the auxhead "faint tonal band" precedent the gutter
@@ -46,7 +46,7 @@ mockup-rationale: see mockup-needed above — condition (1), no ZKDoc image, for
   "Typography" section (§7 has no monospace entry; monospace code text is a novel
   role this component introduces).
 - `marble-theme reference/focus-affordance-no-layout-shift.md` — Mechanism A (inset box-shadow ring, border
-  stays 1px) is why the focus row departs from DESIGN.md "Border Rules" literal "input focus ring (2px, `--zk-color-primary`)" prescription;
+  stays 1px) is why the focus row departs from DESIGN.md "Border Rules" literal "text-input focus ring (2px, `--zk-input-border-color-focus`)" prescription;
   same precedent as daterangebox/timepicker/selectbox/the wrapper-border combo-trio family, for a
   different structural reason (zero root padding, not min-height-pinned children — see Design
   Contract).
@@ -68,7 +68,7 @@ mockup-rationale: see mockup-needed above — condition (1), no ZKDoc image, for
 
 Codeeditor reads as one outlined text field — the same chrome recipe as textbox, just holding a
 CodeMirror viewport instead of an `<input>`: `1px solid outline` border, the input-family corner
-radius (`--zk-shape-corner-extra-small`, 4px), `--zk-color-surface` background, `--zk-color-on-surface`
+radius (`--zk-shape-corner-extra-small`), `--zk-color-surface` background, `--zk-color-on-surface`
 foreground — so a codeeditor sitting next to a textbox in a form (see the preview's "Focus order"
 section) reads as a sibling control, not an imported widget. All five of these roles are exposed as
 codeeditor's own knobs (`--zk-codeeditor-bg/-fg/-radius/-border-color[-hover|-focus]`) rather than
@@ -76,7 +76,7 @@ reusing textbox's `--zk-input-*` names directly, because the two widgets are ind
 overridable — a page repainting one input family should not have to also repaint the code editor.
 
 **Focus departs from the literal mechanism in DESIGN.md "Border Rules", and that departure is itself the design
-decision, not an oversight.** "Border Rules" prescribes "input focus ring (2px, `--zk-color-primary`)" — the literal
+decision, not an oversight.** "Border Rules" prescribes "text-input focus ring (2px, `--zk-input-border-color-focus`)" — the literal
 mechanism textbox uses (border-width bump, absorbed by padding compensation). Codeeditor's root has
 **zero padding** between its border and the CodeMirror viewport (the cave fills the content box
 edge-to-edge, since giving CodeMirror its own internal gutter/scroller chrome makes a second layer
@@ -108,7 +108,7 @@ reported `inset 0 0 0 1px primary` in both broken states — which is why c32 is
 pixels.
 
 **The dark surface takes its own focus colour (c31/c33).** It previously reused the light knob on the
-argument that primary `#376fd0` already clears `3.45:1` against the `#1e1e1e` fill. That is true
+argument that light-scheme primary already clears `3.45:1` against the dark fill (`--zk-codeeditor-background`). That is true
 against WCAG 1.4.11's 3:1 UI-component floor and it was still reported unreadable in design review —
 MD3 does not put the light-scheme primary on a dark surface at all; the dark scheme carries primary
 at **tone 80**. `--zk-codeeditor-dark-border-color-focus` derives that tone by absolute OKLCH
@@ -121,7 +121,7 @@ lightness off the same seed the palette's containers use, so a brand override
 already establishes for "one distinguishing signal" on a structurally-adjacent-but-different region
 (there, a multi-level header row; here, the line-number rail beside the content pane). The gutter
 foreground (`--zk-color-on-surface-variant`) and its divider (`--zk-color-outline-variant`, a plain
-DESIGN.md "Border Rules" "dividers and row separators" rule) complete a self-consistent "this is a secondary rail, not the
+DESIGN.md "Border Rules" "Dividers and row separators" rule) complete a self-consistent "this is a secondary rail, not the
 text you're editing" read, at the same "muted, not competing" strength every other secondary-region
 convention in this theme uses.
 
@@ -132,8 +132,8 @@ the widget JS, not derived from Marble's palette — the surface has to stay leg
 specific fixed colors*, not against whatever Marble's inverse-surface token happens to resolve to
 under a future palette revision or a brand override. Measured 2026-09-08 (recorded in full in
 `component-theme-variables.md`'s "Codeeditor dark surface" section): all twelve dark-mode foregrounds (ten tokens +
-gutter + primary text) clear WCAG AA (4.5:1) against the shipped `#1e1e1e`, worst case 4.52:1 — five
-of the same twelve fail against `--zk-color-inverse-surface`'s `#2d3748` (keyword/tag 4.07, comment
+gutter + primary text) clear WCAG AA (4.5:1) against the shipped `--zk-codeeditor-background` fill, worst case 4.52:1 — five
+of the same twelve fail against `--zk-color-inverse-surface` (keyword/tag 4.07, comment
 3.60, meta 3.39, gutter 3.25). This is the identical "contrast can't key off theme tokens here"
 carve-out carousel's overlay chrome already documents, applied to a second, unrelated component for
 the same underlying reason: a fixed foreground palette this component's own CSS does not control.
@@ -146,7 +146,7 @@ dark mode had a hover rule but no hover affordance. The component's outline was 
 fill alone reads ~16.6:1 against the page); it was the state *change* that was invisible, which is
 why an assertion that merely compares two states for inequality cannot catch it. Hover is
 deliberately **not** a full mirror of the light pair, which would land near `rgb(252)` and read as
-a white halo around a black box; `rgba(255,255,255,0.6)` clears the 3:1 UI-state bar at 3.17:1
+a white halo around a black box; `--zk-codeeditor-dark-border-color-hover` clears the 3:1 UI-state bar at 3.17:1
 without that. Focus needs no dark variant (primary blue is already 3.45:1 on the fill) but must be
 **re-asserted** after the dark hover rule (c31), since the shared `:focus-within` rule sits earlier
 in the file at equal specificity. The dark gutter is kept **flush** with the surface (`background-color` identical to the
@@ -156,7 +156,7 @@ the light mode's tonal-band + divider pairing, matching how a dark IDE theme con
 (gutter and body as one continuous dark canvas, numbers the only differentiator).
 
 **Disabled** applies the theme's ordinary content-opacity convention
-(`--zk-state-disabled-opacity`, 0.38) to the whole root — the same button/input convention, not a
+(`--zk-state-disabled-opacity`) to the whole root — the same button/input convention, not a
 codeeditor-specific knob — plus `pointer-events: none` on the **root**. It began scoped to
 `.cm-editor` only, so the dimmed frame still matched `:hover` and answered the pointer with a
 border-color change: a live affordance on a dead control. Inerting the
@@ -171,7 +171,7 @@ the timepicker/daterangebox precedent) — deliberately, not by omission.
 
 **Typography** consumes `--zk-typescale-mono-family` (a font stack DESIGN.md "Typography" (§7) does not cover
 — code text is a role this component introduces) at the editor's default size,
-`--zk-typescale-body-medium-size` (13px, the body size DESIGN.md "Typography" (§7) sets, which every other field's text also uses) — deliberately reusing the UI body size rather than inventing a
+`--zk-typescale-body-medium-size` (the body size DESIGN.md "Typography" (§7) sets, which every other field's text also uses) — deliberately reusing the UI body size rather than inventing a
 code-specific scale, so a codeeditor's text sits at the same visual weight as the label above it.
 
 ## Outcome assertions
@@ -205,40 +205,40 @@ glyph-row rule does not apply to this component — this is a deliberate absence
 
 | id | selector | property | expected (token preferred) | source |
 |----|----------|----------|----------------------------|--------|
-| c1 | `.z-codeeditor` | border | `1px solid var(--zk-codeeditor-border-color)` → `var(--zk-color-outline)` — measured `rgba(0, 0, 0, 0.23)` | doc/spec/DESIGN.md "Border Rules" ("Component default border") |
-| c2 | `.z-codeeditor` | border-radius | `var(--zk-codeeditor-radius)` → `var(--zk-shape-input)` → `var(--zk-shape-corner-extra-small)` (4px) | doc/spec/DESIGN.md "Corner Radii" ("4px (`--zk-shape-corner-extra-small`) for interactive controls (inputs, buttons, dropdowns, menus)") — identical role to textbox's own radius row |
-| c3 | `.z-codeeditor` | background-color | `var(--zk-codeeditor-bg)` → `var(--zk-color-surface)` — measured `rgb(255, 255, 255)` | doc/spec/DESIGN.md "Surface Palette" |
-| c4 | `.z-codeeditor` | color | `var(--zk-codeeditor-fg)` → `var(--zk-color-on-surface)` — measured `rgba(0, 0, 0, 0.87)` | doc/spec/DESIGN.md "Text Colors" |
+| c1 | `.z-codeeditor` | border | `1px solid var(--zk-codeeditor-border-color)` → `var(--zk-color-outline)` | doc/spec/DESIGN.md "Border Rules" ("Component default border") |
+| c2 | `.z-codeeditor` | border-radius | `var(--zk-codeeditor-radius)` → `var(--zk-shape-input)` → `var(--zk-shape-corner-extra-small)` | doc/spec/DESIGN.md "Corner Radii" ("`--zk-shape-corner-extra-small` for interactive controls (inputs, buttons, dropdowns, menus)") — identical role to textbox's own radius row |
+| c3 | `.z-codeeditor` | background-color | `var(--zk-codeeditor-bg)` → `var(--zk-color-surface)` | doc/spec/DESIGN.md "Surface Palette" |
+| c4 | `.z-codeeditor` | color | `var(--zk-codeeditor-fg)` → `var(--zk-color-on-surface)` | doc/spec/DESIGN.md "Text Colors" |
 | c5 | `.z-codeeditor` | overflow | `hidden` | structural — clips CodeMirror's square corners to the root's rounding; not a design token |
 | c6 | `.z-codeeditor` | transition | `border-color` on `var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` | doc/spec/DESIGN.md "Motion" |
 | c6b | `.z-codeeditor::after` | transition | `box-shadow` on `var(--zk-motion-duration-standard) var(--zk-motion-easing-standard)` (the ring lives on the overlay, see c9) | doc/spec/DESIGN.md "Motion" |
 | c7 | `.z-codeeditor:hover` | border-color | `var(--zk-codeeditor-border-color-hover)` → `var(--zk-color-on-surface)` | doc/spec/DESIGN.md "Border Rules" ("Input hover") |
-| c8 | `.z-codeeditor:focus-within` | border-color | `var(--zk-codeeditor-border-color-focus)` → `var(--zk-color-primary)` — measured `rgb(55, 111, 208)` | doc/spec/DESIGN.md "Border Rules" ("input focus ring (2px, `--zk-color-primary`)" — color only; see c10 for the width departure) |
+| c8 | `.z-codeeditor:focus-within` | border-color | `var(--zk-codeeditor-border-color-focus)` → `var(--zk-color-primary)` | doc/spec/DESIGN.md "Border Rules" ("text-input focus ring (2px, `--zk-input-border-color-focus`)" — color only; see c10 for the width departure) |
 | c9 | `.z-codeeditor:focus-within::after` | box-shadow | `inset 0 0 0 1px var(--zk-codeeditor-border-color-focus)` — and the ROOT's own `box-shadow` must stay `none` | `marble-theme reference/focus-affordance-no-layout-shift.md` — Mechanism A, **overlay variant**. A ring on the root paints below CodeMirror's opaque children and is eaten (see c32); the overlay paints above them |
 | c9b | `.z-codeeditor::after` | position / inset / pointer-events | `absolute` / `0px` on all four / `none` — present at rest with a `transparent` ring so the ring can transition | overlay must never intercept clicks or text selection in the editor |
 | c10 | `.z-codeeditor:focus-within` | border-width | `1px` (must **NOT** become `2px`) | `marble-theme reference/focus-affordance-no-layout-shift.md` — the deliberate departure from the literal mechanism in DESIGN.md "Border Rules" |
 | c11 | `.z-codeeditor .cm-editor.cm-focused` | outline | `none` (`!important`) | overrides CodeMirror's own unlayered `outline: 1px dotted` default — one of the nine irreducible `!important`s, `important-inventory.md` |
 | c12 | `.z-codeeditor-cave`, `.z-codeeditor .cm-editor` | height | `100%` | structural (composition invariant) — not a design token |
 | c13 | `.z-codeeditor .cm-scroller` | font-family | `var(--zk-typescale-mono-family)` (`!important`) | `tokens/_typography.css` — not a DESIGN.md "Typography" entry; overrides CodeMirror's own unlayered `monospace` default, `important-inventory.md` |
-| c14 | `.z-codeeditor .cm-scroller` | font-size | `var(--zk-typescale-body-medium-size)` (13px, **no** `!important`) | doc/spec/DESIGN.md §7 "Typography" (body text 13px) and `tokens/_typography.css` — CodeMirror's own base theme sets no competing `font-size`; the `!important` here was tested and proven removable, `important-inventory.md`'s "Removed" table |
-| c15 | `.z-codeeditor .cm-scroller` | line-height | `var(--zk-typescale-body-medium-line-height)` (20px, `!important`) | doc/spec/DESIGN.md §7 "Typography" (same source as c14) — overrides CodeMirror's unlayered `1.4` default, `important-inventory.md` |
-| c16 | `.z-codeeditor .cm-gutters` | background-color | `var(--zk-codeeditor-gutter-bg)` → `var(--zk-color-surface-container-low)` — measured `rgb(247, 249, 252)` (`!important`) | doc/spec/DESIGN.md "Density" (auxhead "faint tonal band" precedent — see Design Contract); overrides CodeMirror's unlayered default, `important-inventory.md` |
-| c17 | `.z-codeeditor .cm-gutters` | color | `var(--zk-codeeditor-gutter-fg)` → `var(--zk-color-on-surface-variant)` — measured `rgba(0, 0, 0, 0.6)` (`!important`) | doc/spec/DESIGN.md "Text Colors" |
-| c18 | `.z-codeeditor .cm-gutters` | border-right-color | `var(--zk-codeeditor-gutter-border-color)` → `var(--zk-color-outline-variant)` — measured `rgba(0, 0, 0, 0.12)` (`!important`) | doc/spec/DESIGN.md "Border Rules" ("Dividers and row separators") |
-| c20 | `.z-codeeditor-disabled` | opacity | `var(--zk-state-disabled-opacity)` (0.38) | doc/spec/DESIGN.md "State-Layer Overlays" |
+| c14 | `.z-codeeditor .cm-scroller` | font-size | `var(--zk-typescale-body-medium-size)` (**no** `!important`) | doc/spec/DESIGN.md §7 "Typography" (body text size) and `tokens/_typography.css` — CodeMirror's own base theme sets no competing `font-size`; the `!important` here was tested and proven removable, `important-inventory.md`'s "Removed" table |
+| c15 | `.z-codeeditor .cm-scroller` | line-height | `var(--zk-typescale-body-medium-line-height)` (`!important`) | doc/spec/DESIGN.md §7 "Typography" (same source as c14) — overrides CodeMirror's unlayered `1.4` default, `important-inventory.md` |
+| c16 | `.z-codeeditor .cm-gutters` | background-color | `var(--zk-codeeditor-gutter-bg)` → `var(--zk-color-surface-container-low)` (`!important`) | doc/spec/DESIGN.md "Density" (auxhead "faint tonal band" precedent — see Design Contract); overrides CodeMirror's unlayered default, `important-inventory.md` |
+| c17 | `.z-codeeditor .cm-gutters` | color | `var(--zk-codeeditor-gutter-fg)` → `var(--zk-color-on-surface-variant)` (`!important`) | doc/spec/DESIGN.md "Text Colors" |
+| c18 | `.z-codeeditor .cm-gutters` | border-right-color | `var(--zk-codeeditor-gutter-border-color)` → `var(--zk-color-outline-variant)` (`!important`) | doc/spec/DESIGN.md "Border Rules" ("Dividers and row separators") |
+| c20 | `.z-codeeditor-disabled` | opacity | `var(--zk-state-disabled-opacity)` | doc/spec/DESIGN.md "State-Layer Overlays" |
 | c21 | `.z-codeeditor-disabled` | pointer-events | `none` (on the **root**, not just `.cm-editor`) | structural/behavioral — inerts the frame so a disabled editor stops answering `:hover` with a border change ; also blocks select-and-copy, which is exactly what separates `disabled` from `readonly` |
-| c22 | `.z-codeeditor-dark`, `.z-codeeditor-dark .cm-editor` | background-color | `var(--zk-codeeditor-background)` — literal `#1e1e1e`, measured `rgb(30, 30, 30)` | deliberate literal, NOT theme-derived — see Design Contract; recorded in `component-theme-variables.md`'s "Codeeditor dark surface" section |
-| c23 | `.z-codeeditor-dark .cm-editor` | color | `var(--zk-codeeditor-color)` — literal `#d4d4d4`, measured `rgb(212, 212, 212)` | same rationale as c22 |
+| c22 | `.z-codeeditor-dark`, `.z-codeeditor-dark .cm-editor` | background-color | `var(--zk-codeeditor-background)` (literal knob default) | deliberate literal, NOT theme-derived — see Design Contract; recorded in `component-theme-variables.md`'s "Codeeditor dark surface" section |
+| c23 | `.z-codeeditor-dark .cm-editor` | color | `var(--zk-codeeditor-color)` (literal knob default) | same rationale as c22 |
 | c24 | `.z-codeeditor-dark .cm-gutters` | background-color | `var(--zk-codeeditor-background)` (same literal as c22, `!important`) | Design Contract — gutter kept flush with the dark surface, not CodeMirror's lighter-slab default; `important-inventory.md` |
-| c25 | `.z-codeeditor-dark .cm-gutters` | color | `var(--zk-codeeditor-gutter-color)` — literal `#858585`, measured `rgb(133, 133, 133)` (`!important`) | same rationale as c22; `important-inventory.md` |
+| c25 | `.z-codeeditor-dark .cm-gutters` | color | `var(--zk-codeeditor-gutter-color)` (literal knob default; `!important`) | same rationale as c22; `important-inventory.md` |
 | c26 | `.z-codeeditor-dark .cm-gutters` | border-right-color | `transparent` (`!important`) | Design Contract — dark gutter separates by number color alone, not a divider line; `important-inventory.md` |
-| c28 | `.z-codeeditor-dark` | border-color | `var(--zk-codeeditor-dark-border-color)` → `rgba(255, 255, 255, 0.23)`, composited `rgb(82, 82, 82)` | dark surface needs a LIGHT-alpha frame: the shared black-alpha c2 collapses onto the `#1e1e1e` fill (`rgb(23,23,23)`) — see c30 |
-| c29 | `.z-codeeditor-dark:hover` | border-color | `var(--zk-codeeditor-dark-border-color-hover)` → `rgba(255, 255, 255, 0.6)`, composited `rgb(165, 165, 165)` | doc/spec/DESIGN.md "Border Rules" ("Input hover"), dark surface |
+| c28 | `.z-codeeditor-dark` | border-color | `var(--zk-codeeditor-dark-border-color)` | dark surface needs a LIGHT-alpha frame: the shared black-alpha c2 collapses onto the dark fill (`--zk-codeeditor-background`); measured composite border `rgb(82, 82, 82)` — see c30 |
+| c29 | `.z-codeeditor-dark:hover` | border-color | `var(--zk-codeeditor-dark-border-color-hover)` | doc/spec/DESIGN.md "Border Rules" ("Input hover"), dark surface; measured composite border `rgb(165, 165, 165)` |
 | c30 | `.z-codeeditor-dark:hover` vs `.z-codeeditor-dark` | border-color contrast | **≥ 3:1** — measured `3.17:1` (was `1.14:1` before the fix) | WCAG 2.1 SC 1.4.11 (UI state change). The component OUTLINE was never at risk (the dark fill alone is 16.67:1 against the page); it was the state CHANGE that was invisible |
-| c31 | `.z-codeeditor-dark:focus-within` | border-color | `var(--zk-codeeditor-dark-border-color-focus)` → `oklch(from var(--zk-color-primary) 0.8 c h)`, measured `#80bdff` | must be RE-ASSERTED in the dark block: the shared `:focus-within` rule sits earlier in the file at equal specificity, so without it a hovered-and-focused dark editor would keep the hover border. The dark surface takes MD3's dark-scheme primary **tone 80**, not the light-scheme primary — see c33 |
+| c31 | `.z-codeeditor-dark:focus-within` | border-color | `var(--zk-codeeditor-dark-border-color-focus)` → `oklch(from var(--zk-color-primary) 0.8 c h)` | must be RE-ASSERTED in the dark block: the shared `:focus-within` rule sits earlier in the file at equal specificity, so without it a hovered-and-focused dark editor would keep the hover border. The dark surface takes MD3's dark-scheme primary **tone 80**, not the light-scheme primary — see c33 |
 | c31b | `.z-codeeditor-dark:focus-within::after` | box-shadow | `inset 0 0 0 1px var(--zk-codeeditor-dark-border-color-focus)` | the overlay ring must switch to the dark knob too, or the 2nd pixel stays light-scheme primary |
 | c32 | `.z-codeeditor:focus-within`, `.z-codeeditor-dark:focus-within` | **painted** ring thickness | `2px` on all four edges, measured in pixels at each edge midpoint — the four values must be equal | Before the overlay fix: light `1/2/2/2` (the opaque `.cm-gutters` ate the left inset pixel), dark `1/1/1/1` (the opaque `.cm-editor` ate all four). **A computed-style check cannot see this** — the root reported `inset 0 0 0 1px primary` in both broken states, so this row must be verified from pixels |
-| c33 | `.z-codeeditor-dark:focus-within` painted ring vs the dark fill | contrast | **≥ 4.5:1** — measured `8.45:1` (`#80bdff` on `#1e1e1e`); was `3.45:1` | MD3 puts primary at tone 80 on a dark scheme. The bar is deliberately set above WCAG 1.4.11's 3:1 UI floor: the old value cleared 3:1 arithmetically and was still reported unreadable in design review |
+| c33 | `.z-codeeditor-dark:focus-within` painted ring vs the dark fill | contrast | **≥ 4.5:1** — measured `8.45:1` (`#80bdff` on `#1e1e1e`, measured on the default knob values); was `3.45:1` | MD3 puts primary at tone 80 on a dark scheme. The bar is deliberately set above WCAG 1.4.11's 3:1 UI floor: the old value cleared 3:1 arithmetically and was still reported unreadable in design review |
 
 ## State matrix
 

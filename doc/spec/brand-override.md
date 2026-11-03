@@ -42,7 +42,7 @@ authored against `--zk-color-primary` from the start:
 
 - **State-layer overlays** (hover / focus / pressed) — built from `currentColor`
   or `color-mix()` of the seed plus the `--zk-state-*-opacity` tokens.
-- **The keyboard focus ring** — `--zk-focus-ring: 2px solid var(--zk-color-primary)`.
+- **The keyboard focus ring** — `--zk-focus-ring`, which is built from `--zk-color-primary`.
 
 So overriding the seed is genuinely a one-line change for the common case.
 
@@ -161,14 +161,13 @@ its measured chroma level, so the **default** palette reproduces the previous lo
 within a small, verified ΔE. The `warning-container` is the one derivation that also
 turns the hue: `h + 35` rotates the seed's hue toward yellow. With the seed's own hue
 (39.6° after the darkening below) it sat 13° from `error-container` and the two read as
-the same peach side by side (zkdemo B7 Z6); the +35° step lands on the legacy amber and,
+the same peach side by side; the +35° step lands on the legacy amber and,
 being relative, still follows an overridden warning seed.
 
-Two seeds have since moved away from their legacy hex on purpose (marble-issue#2 and its
-follow-up), so the "reproduces the previous look" claim no longer covers them:
-`secondary` is now derived from primary rather than being a teal literal, and `warning`
-was darkened from `#ed6c02` to `#bd3f00` because the seed is used as text and `#ed6c02`
-measured 3.11:1 on white. Their containers still derive by the same tone-pinned recipe.
+Two seeds are intentionally not at their legacy hex, so the "reproduces the previous look"
+claim does not cover them: `secondary` is derived from primary rather than set as a teal
+literal, and `--zk-color-warning` is a darker seed than the legacy `#ed6c02`, because the
+seed is used as text and `#ed6c02` measured 3.11:1 on white. Their containers still derive by the same tone-pinned recipe.
 
 **Browser support:** relative-color `oklch(from …)` is available in Chrome 119+,
 Safari 16.4+, and Firefox 128+ — within Marble's modern-browser support window.
