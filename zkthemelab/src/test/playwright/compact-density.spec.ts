@@ -1,4 +1,4 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Locator, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 import { AGGREGATE_PAGES } from './aggregate-pages';
@@ -339,24 +339,22 @@ test.describe('compact-height', () => {
   }
 });
 
-// No preview page renders an icon button or a FAB (`sclass="z-button-icon"` / `z-button-fab` appear in no .zul), so
-// these two tiers get their controls from the test: plain buttons with the theme's classes, in the button page.
+// button.zul renders one icon button (`sclass="z-button-icon"`, Sizes section). No preview page renders a FAB (`z-button-fab` appears in no .zul), so that tier
+// gets its control from the test: a plain button with the theme's class, in the button page.
 test.describe('compact-height-synthetic', () => {
-  test('button: icon button and FAB without a preview instance', async ({ page }) => {
+  test('button: the page icon button and an injected FAB are on their aliases', async ({ page }) => {
     await page.goto('/button.zul', { waitUntil: 'networkidle' });
     await page.evaluate(() => {
-      for (const classes of ['z-button z-button-icon', 'z-button z-button-fab']) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = classes;
-        button.innerHTML = '<i class="z-icon-settings" aria-hidden="true"></i>';
-        document.querySelector('.z-p-8')!.appendChild(button);
-      }
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'z-button z-button-fab';
+      button.innerHTML = '<i class="z-icon-settings" aria-hidden="true"></i>';
+      document.querySelector('.z-p-8')!.appendChild(button);
     });
     const results = await measureBothDensities(page);
     for (const density of DENSITIES) {
       const { deviations, measured } = results[density];
-      expect(measured['icon-button'], `${density}: the injected icon button was measured`).toBe(1);
+      expect(measured['icon-button'], `${density}: the icon button of the page was measured`).toBe(1);
       expect(measured['fab'], `${density}: the injected FAB was measured`).toBe(1);
       const own = deviations.filter(d => d.tier === 'icon-button' || d.tier === 'fab');
       expect(own.map(d => `${density} ${d.tier} ${d.element}: ${d.height}px, alias ${d.expected}px`)).toEqual([]);
@@ -381,5 +379,41 @@ test.describe('compact-geometry', () => {
     });
     expect(button.right, 'overflow button right edge against the toolbar right edge').toBeLessThanOrEqual(toolbar.right + 0.5);
     expect(button.left).toBeGreaterThanOrEqual(toolbar.left);
+  });
+});
+
+// A region marked data-density="comfortable" inside a compact page takes the default sizes back (tokens/_sizing.css and
+// tokens/_component-theme.css `[data-density="comfortable"]`). The preview pages carry no such region, so the test marks
+// one on an existing container: the "Default" column of the Sizes section of button.zul, a plain button in a column of
+// its own. The comfortable values are read from the page before it turns compact.
+test.describe('compact-comfortable-region', () => {
+  test('button — a data-density="comfortable" region inside a compact page keeps the comfortable sizes', async ({ page }) => {
+    await page.goto('/button.zul', { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready.then(() => true));
+    const small = page.locator('.z-button-sm.z-button').first();
+    const region = small.locator('xpath=../following-sibling::div[1]');
+    const inside = region.locator('.z-button');
+    const outside = page.locator('.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon)').first();
+
+    const readButton = (button: Locator) => button.evaluate(el => {
+      const style = getComputedStyle(el);
+      return {
+        height: el.getBoundingClientRect().height,
+        tokenHeight: style.getPropertyValue('--zk-button-height').trim(),
+        paddingY: style.getPropertyValue('--zk-button-padding-y').trim(),
+      };
+    });
+    const comfortable = await readButton(inside);
+    await region.evaluate(el => { el.setAttribute('data-density', 'comfortable'); });
+
+    await waitForCompactLayout(page);
+    const compactOutside = await readButton(outside);
+    const compactInside = await readButton(inside);
+    expect(compactOutside.tokenHeight, 'a button outside the region is compact').not.toBe(comfortable.tokenHeight);
+    expect(compactOutside.paddingY, 'padding-y outside the region is compact').not.toBe(comfortable.paddingY);
+    expect(compactOutside.height, 'height outside the region is compact').toBeLessThan(comfortable.height);
+    expect(compactInside.tokenHeight, '--zk-button-height inside the region').toBe(comfortable.tokenHeight);
+    expect(compactInside.paddingY, '--zk-button-padding-y inside the region').toBe(comfortable.paddingY);
+    expect(compactInside.height, 'button height inside the region').toBe(comfortable.height);
   });
 });
