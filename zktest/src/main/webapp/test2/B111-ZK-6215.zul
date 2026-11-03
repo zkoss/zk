@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-6215.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Nov 03 10:50:40 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label value="Drag the knob 4 steps to the right: both values below should read 10.2, not 10.15."/>
+	<slider minpos="10" maxpos="12" step="0.05" mode="decimal"
+		onScrolling='scrollingPos.setValue("" + event.getPosInDouble())'
+		onScroll='scrollPos.setValue("" + event.getPosInDouble())'/>
+	<label id="scrollingPos"/>
+	<label id="scrollPos"/>
+	<label value="Click the tray to the right of the knob: the value below should read 11.25, not 11."/>
+	<slider id="pageSlider" minpos="10" maxpos="12" step="0.05" mode="decimal" curpos="10.25" pageIncrement="1"
+		onScroll='clickPos.setValue("" + event.getPosInDouble())'/>
+	<label id="clickPos"/>
+	<label value="Drag the knob 2 steps to the right: the value below should read 0.21, not 0.11."/>
+	<slider id="minposSlider" minpos="0.01" maxpos="1.01" step="0.1" mode="decimal"
+		onScroll='minposPos.setValue("" + event.getPosInDouble())'/>
+	<label id="minposPos"/>
+	<label value="Focus the slider below and press the right arrow twice: its aria-valuenow should read 2.25, not 1."/>
+	<slider id="keySlider" minpos="0.25" maxpos="10.25" step="1" mode="decimal"/>
+	<label value="The slider below sits at a fractional x. Drag its knob 1 step to the right: the value below should read 0.1, not 0."/>
+	<div style="padding-left: 0.3px">
+		<slider id="fracSlider" maxpos="1.05" step="0.1" mode="decimal" width="120px"
+			onScroll='fracPos.setValue("" + event.getPosInDouble())'/>
+	</div>
+	<label id="fracPos"/>
+</zk>
