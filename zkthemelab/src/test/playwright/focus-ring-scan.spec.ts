@@ -35,6 +35,10 @@ import { AGGREGATE_PAGES } from './aggregate-pages';
 //      `overflow` per axis, `contain: paint` (also via `strict` and `content`) and
 //      `clip-path`; it clips at its padding box (`clip-path`: border box).
 //
+// `:focus-visible` is forced on the FOCUS HOST of each rule, not on the ring's subject: for
+// `.z-slider:focus-visible .z-slider-button` the host is the slider root and the subject its thumb. Forcing it on the
+// subject would match nothing of ours and measure Chrome's own `outline: auto` ring instead.
+//
 // A second pass repeats step 2 under forced-colors emulation for items that are
 // SELECTED as well as focused: the selection fill and `--zk-focus-ring` both
 // remap to the system `Highlight` colour there, so a ring that is perfectly
@@ -97,9 +101,10 @@ const baseline: Baseline = fs.existsSync(BASELINE_FILE)
 type OutlineSelector = {
   page: string;        // representative page that proves the selector
   component: string;   // ZK widget name of the first visible match (`navitem`, `toolbarbutton`)
+  raw: string;         // the rule's selector as written, `:focus-visible` included — it says where the focus goes
 };
 type OutlineSelectors = {
-  selectors: Record<string, OutlineSelector>;   // selector (`:focus-visible` stripped) → page and component
+  selectors: Record<string, OutlineSelector>;   // selector (`:focus-visible` stripped) → page, component and raw selector
   pages: string[];                     // pages with at least one visible outline-focus element
   unrendered: string[];                // outline selectors that match nothing visible on any page
 };
@@ -135,13 +140,16 @@ type Finding = {
   short: number;
 };
 
-/**
- * Collect the base selectors (with `:focus-visible` stripped) of every loaded
- * rule that draws an outline on focus.
- */
-async function focusSelectors(page: Page): Promise<string[]> {
+/** A loaded rule that draws an outline on focus: the selector as written and its subject selector. */
+type FocusRule = {
+  raw: string;        // `.z-slider:focus-visible .z-slider-button`
+  selector: string;   // `:focus-visible` stripped, matches the element that wears the ring
+};
+
+/** Collect every loaded rule that draws an outline on focus. */
+async function focusRules(page: Page): Promise<FocusRule[]> {
   return page.evaluate(() => {
-    const out = new Set<string>();
+    const out = new Map<string, string>();
     type AnyRule = CSSStyleRule & { cssRules?: CSSRuleList; styleSheet?: CSSStyleSheet };
     const walk = (list: CSSRuleList) => {
       for (const r of Array.from(list) as AnyRule[]) {
@@ -166,7 +174,7 @@ async function focusSelectors(page: Page): Promise<string[]> {
               const sel = raw.trim();
               if (!sel.includes(':focus-visible')) continue;
               if (sel.includes('::')) continue;             // targets a pseudo-element
-              out.add(sel.replace(/:focus-visible/g, '').trim());
+              out.set(sel, sel.replace(/:focus-visible/g, '').trim());
             }
           }
         }
@@ -176,34 +184,150 @@ async function focusSelectors(page: Page): Promise<string[]> {
     for (const sheet of Array.from(document.styleSheets)) {
       try { walk(sheet.cssRules); } catch { /* cross-origin sheet */ }
     }
-    return [...out].filter(Boolean);
+    return [...out].map(([raw, selector]) => ({ raw, selector })).filter(rule => rule.selector);
   });
 }
 
 /**
- * Tag every element matching one of `selectors` with `data-fs-idx`, so the same
- * element can be addressed from both CDP and the page. Returns one entry per
- * tagged element.
+ * Tag every element matching the subject selector of one of `rules` with `data-fs-idx`, so the same
+ * element can be addressed from both CDP and the page. Returns one entry per tagged element.
  */
-async function tagCandidates(page: Page, selectors: string[]) {
-  return page.evaluate((sels) => {
-    const seen = new Map<Element, string>();
-    const rows: { idx: number; selector: string }[] = [];
-    for (const sel of sels) {
+async function tagCandidates(page: Page, rules: FocusRule[]) {
+  return page.evaluate((all) => {
+    const seen = new Set<Element>();
+    const rows: { idx: number; selector: string; raw: string }[] = [];
+    for (const { selector, raw } of all) {
       let matches: Element[];
-      try { matches = Array.from(document.querySelectorAll(sel)); } catch { continue; }
+      try { matches = Array.from(document.querySelectorAll(selector)); } catch { continue; }
       for (const el of matches) {
         if (seen.has(el)) continue;
         const r = el.getBoundingClientRect();
         if (r.width < 1 || r.height < 1) continue;       // hidden / zero-area variant
         const idx = rows.length;
         el.setAttribute('data-fs-idx', String(idx));
-        seen.set(el, sel);
-        rows.push({ idx, selector: sel });
+        seen.add(el);
+        rows.push({ idx, selector, raw });
       }
     }
     return rows;
-  }, selectors);
+  }, rules);
+}
+
+type Candidate = { idx: number; selector: string; raw: string };
+
+/**
+ * Tag with `data-fs-force` the element that must hold `:focus-visible` for each candidate's rule to match
+ * it: the candidate itself, the ancestor that matches an earlier compound of the selector
+ * (`.z-slider:focus-visible .z-slider-button`), or the element inside the `:has()` owner that matches the
+ * `:has()` argument (`.z-checkbox:has(input:focus-visible) > .z-checkbox-mold`). Returns the number of
+ * distinct hosts and the candidates whose host could not be found.
+ */
+async function tagFocusHosts(page: Page, candidates: Candidate[]) {
+  return page.evaluate((rows) => {
+    const stripFocus = (s: string) => s.replace(/:focus-visible/g, '').trim();
+    // Split at the top-level combinators only: not inside (), [] or a quoted string.
+    const splitCompounds = (selector: string) => {
+      const compounds: string[] = [];
+      const combinators: string[] = [];
+      let current = '';
+      let pending = '';
+      let depth = 0;
+      let quote = '';
+      for (const ch of selector.trim()) {
+        if (quote) {
+          current += ch;
+          if (ch === quote) quote = '';
+          continue;
+        }
+        if (ch === '"' || ch === "'") quote = ch;
+        else if (ch === '(' || ch === '[') depth++;
+        else if (ch === ')' || ch === ']') depth--;
+        const isCombinator = depth === 0 && !quote && (/\s/.test(ch) || '>+~'.includes(ch));
+        if (isCombinator) {
+          if (current) { compounds.push(current); current = ''; pending = ''; }
+          if (compounds.length) pending = '>+~'.includes(ch) ? ch : (pending || ' ');
+          continue;
+        }
+        if (pending) { combinators.push(pending); pending = ''; }
+        current += ch;
+      }
+      if (current) compounds.push(current);
+      return { compounds, combinators };
+    };
+    // The `:has()` argument that contains `:focus-visible`, or null when the compound holds it itself.
+    const hasArgumentWithFocus = (compound: string) => {
+      const start = compound.indexOf(':has(');
+      if (start < 0) return null;
+      let depth = 0;
+      for (let i = start + ':has'.length; i < compound.length; i++) {
+        if (compound[i] === '(') depth++;
+        if (compound[i] === ')' && --depth === 0) {
+          const arg = compound.slice(start + ':has('.length, i);
+          return arg.includes(':focus-visible') ? arg : null;
+        }
+      }
+      return null;
+    };
+    const findHost = (subject: Element, raw: string): Element | string => {
+      const { compounds, combinators } = splitCompounds(raw);
+      const focusAt = compounds.findIndex(c => c.includes(':focus-visible'));
+      if (focusAt < 0) return 'no :focus-visible in the selector';
+      let owner: Element | null = subject;
+      for (let i = compounds.length - 1; i > focusAt && owner; i--) {
+        if (combinators[i - 1] !== ' ' && combinators[i - 1] !== '>') return `unsupported combinator "${combinators[i - 1]}"`;
+        owner = owner.parentElement?.closest(stripFocus(compounds[i - 1])) ?? null;
+      }
+      if (!owner) return 'no ancestor matches the compound that holds :focus-visible';
+      const arg = hasArgumentWithFocus(compounds[focusAt]);
+      if (arg === null) return owner;
+      const inside = stripFocus(arg);
+      return owner.querySelector(/^[>+~]/.test(inside) ? `:scope ${inside}` : inside)
+        ?? 'nothing inside the owner matches the :has() argument';
+    };
+    const hosts = new Map<Element, number>();
+    const unresolved: string[] = [];
+    for (const { idx, raw } of rows) {
+      const subject = document.querySelector(`[data-fs-idx="${idx}"]`)!;
+      const host = findHost(subject, raw);
+      if (typeof host === 'string') {
+        unresolved.push(`${raw} — ${host}`);
+        continue;
+      }
+      if (!hosts.has(host)) {
+        hosts.set(host, hosts.size);
+        host.setAttribute('data-fs-force', String(hosts.get(host)));
+      }
+    }
+    return { hosts: hosts.size, unresolved: [...new Set(unresolved)] };
+  }, candidates);
+}
+
+/**
+ * The candidates whose computed outline is the browser's own `auto` ring: Chrome gives every element with a
+ * forced `:focus-visible` one, and the theme never draws `outline: auto`, so the theme rule did not apply.
+ */
+async function browserDefaultRings(page: Page, candidates: Candidate[]): Promise<Candidate[]> {
+  const idxs = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('[data-fs-idx]'))
+      .filter(el => getComputedStyle(el).outlineStyle === 'auto')
+      .map(el => Number(el.getAttribute('data-fs-idx'))));
+  return candidates.filter(c => idxs.includes(c.idx));
+}
+
+/** Fail with the rules whose focus host is unknown: forcing the wrong element would measure the browser's ring. */
+function assertHostsFound(unresolved: string[]) {
+  if (unresolved.length === 0) return;
+  throw new Error(
+    'cannot tell which element must hold :focus-visible for these selector(s) — extend tagFocusHosts:\n' +
+      unresolved.map(u => `  ${u}`).join('\n'));
+}
+
+function assertNoBrowserDefaultRing(defaults: Candidate[], where: string) {
+  if (defaults.length === 0) return;
+  throw new Error(
+    `${where}: computed outline is the browser default ring (auto), so the theme rule did not apply with ` +
+      `:focus-visible forced on the host — wrong host or a rule that no longer matches:\n` +
+      defaults.map(c => `  ${c.raw}`).join('\n'));
 }
 
 /** The subset of `selectors` that match at least one visible element on the page. */
@@ -406,17 +530,18 @@ function representativePage(component: string, matchedOn: string[]): string {
 }
 
 function writeOutlineSelectors(
-  loaded: Set<string>, matchedOn: Map<string, string[]>, components: Map<string, string>, listedPages: string[],
+  loaded: Set<string>, matchedOn: Map<string, string[]>, components: Map<string, string>,
+  raws: Map<string, string>, listedPages: string[],
 ) {
   const selectors = Object.fromEntries([...matchedOn.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([selector, onPages]) => {
       const component = components.get(selector)!;
-      return [selector, { page: representativePage(component, onPages), component }];
+      return [selector, { page: representativePage(component, onPages), component, raw: raws.get(selector)! }];
     }));
   writeJson(OUTLINE_FILE, {
     note: 'Outline focus selectors the theme declares (`:focus-visible` stripped), each with the page that ' +
-      'proves it, and the pages that have at least one such element. Generated by ' +
+      'proves it and the selector as written (`raw`), and the pages that have at least one such element. Generated by ' +
       'src/test/playwright/focus-ring-scan.spec.ts (FOCUS_SCAN_UPDATE=1). `unrendered` selectors match no ' +
       'visible element on any preview page (a preview gap) and are not tested.',
     generated: new Date().toISOString().slice(0, 10),
@@ -433,16 +558,19 @@ async function openPage(page: Page, name: string) {
 }
 
 /** Measure the clipped rings on the page that is open: one entry per distinct (element, clipper) pair. */
-async function scanClips(page: Page, context: BrowserContext, comp: string, selectors: string[]) {
-  const candidates = await tagCandidates(page, selectors);
+async function scanClips(page: Page, context: BrowserContext, comp: string, rules: FocusRule[]) {
+  const candidates = await tagCandidates(page, rules);
   if (candidates.length === 0) return { candidates, detail: new Map<string, string>() };
 
+  const { hosts, unresolved } = await tagFocusHosts(page, candidates);
+  assertHostsFound(unresolved);
   const cdp = await context.newCDPSession(page);
   await cdp.send('DOM.enable');
   await cdp.send('CSS.enable');
-  await forceFocus(cdp, candidates.length, true);
+  await forceFocus(cdp, hosts, true, 'data-fs-force');
+  assertNoBrowserDefaultRing(await browserDefaultRings(page, candidates), `${comp}.zul`);
   const raw = await measureClipping(page);
-  await forceFocus(cdp, candidates.length, false);
+  await forceFocus(cdp, hosts, false, 'data-fs-force');
   await cdp.detach();
 
   const byIdx = new Map(candidates.map(c => [c.idx, c.selector]));
@@ -461,13 +589,13 @@ async function scanClips(page: Page, context: BrowserContext, comp: string, sele
   return { candidates, detail };
 }
 
-async function loadedOutlineSelectors(page: Page) {
-  const selectors = await focusSelectors(page);
+async function loadedFocusRules(page: Page) {
+  const rules = await focusRules(page);
   expect(
-    selectors.length,
+    rules.length,
     'no :focus-visible outline rules found in the loaded stylesheets — the theme CSS did not load',
   ).toBeGreaterThan(0);
-  return selectors;
+  return rules;
 }
 
 if (UPDATING) {
@@ -477,12 +605,20 @@ if (UPDATING) {
     const loaded = new Set<string>();
     const matchedOn = new Map<string, string[]>();
     const components = new Map<string, string>();
+    const raws = new Map<string, string>();
     const listedPages: string[] = [];
     const clips: Baseline = {};
     for (const comp of pages) {
       await openPage(page, comp);
-      const selectors = await loadedOutlineSelectors(page);
-      selectors.forEach(sel => loaded.add(sel));
+      const rules = await loadedFocusRules(page);
+      const selectors = rules.map(rule => rule.selector);
+      for (const { raw, selector } of rules) {
+        if (raws.has(selector) && raws.get(selector) !== raw) {
+          throw new Error(`two rules share the subject selector ${selector}: ${raws.get(selector)} and ${raw}`);
+        }
+        raws.set(selector, raw);
+        loaded.add(selector);
+      }
       const matching = await matchingSelectors(page, selectors);
       if (matching.length === 0) continue;
       listedPages.push(comp);
@@ -491,17 +627,17 @@ if (UPDATING) {
         matchedOn.set(sel, [...(matchedOn.get(sel) ?? []), comp]);
         if (!components.has(sel)) components.set(sel, names.get(sel) ?? componentOf(sel));
       }
-      const { detail } = await scanClips(page, context, comp, selectors);
+      const { detail } = await scanClips(page, context, comp, rules);
       if (detail.size) clips[comp] = [...detail.keys()].sort();
     }
     writeKnownClips(clips);
-    writeOutlineSelectors(loaded, matchedOn, components, listedPages);
+    writeOutlineSelectors(loaded, matchedOn, components, raws, listedPages);
   });
 }
 
 // Part A. One test per outline selector, on the page that proves it.
 test.describe('focus-ring outline', () => {
-  for (const [selector, { page: comp, component }] of Object.entries(outlineSelectors.selectors)) {
+  for (const [selector, { page: comp, component, raw }] of Object.entries(outlineSelectors.selectors)) {
     test(`${component} — ${selector} draws a focus outline`, async ({ page, context }) => {
       await openPage(page, comp);
       const target = await page.evaluate((sel) => {
@@ -514,25 +650,29 @@ test.describe('focus-ring outline', () => {
       }, selector);
       expect(target, `${selector} matches no visible element on ${comp}.zul — the element or the page changed`).toBe(true);
 
+      const { hosts, unresolved } = await tagFocusHosts(page, [{ idx: 0, selector, raw }]);
+      assertHostsFound(unresolved);
       const cdp = await context.newCDPSession(page);
       await cdp.send('DOM.enable');
       await cdp.send('CSS.enable');
-      await forceFocus(cdp, 1, true);
+      await forceFocus(cdp, hosts, true, 'data-fs-force');
       const ring = await page.evaluate(() => {
         const cs = getComputedStyle(document.querySelector('[data-fs-idx="0"]')!);
         return { style: cs.outlineStyle, width: parseFloat(cs.outlineWidth) || 0 };
       });
-      await forceFocus(cdp, 1, false);
+      await forceFocus(cdp, hosts, false, 'data-fs-force');
       await cdp.detach();
 
       // The rule itself must still be loaded: without it the browser's own focus ring can
-      // still paint an outline, and the computed check alone would pass.
-      const ruleLoaded = (await focusSelectors(page)).includes(selector);
+      // still paint an outline, and the computed check alone would pass. `auto` is that ring.
+      const ruleLoaded = (await focusRules(page)).some(rule => rule.raw === raw);
       expect(
-        ruleLoaded && ring.style !== 'none' && ring.width > 0,
+        ruleLoaded && ring.style !== 'none' && ring.style !== 'auto' && ring.width > 0,
         `${selector} on ${comp}.zul: computed outline-style ${ring.style}, outline-width ${ring.width}px with ` +
-          `:focus-visible forced; ` +
-          (ruleLoaded
+          `:focus-visible forced on the host of ${raw}; ` +
+          (ring.style === 'auto'
+            ? 'outline-style auto is the browser default ring — the Marble rule did not apply.'
+            : ruleLoaded
             ? 'its :focus-visible outline rule is loaded but another rule overrides it.'
             : 'no loaded :focus-visible rule declares an outline for it any more (rule deleted or turned into ' +
               'outline: none). If that is intended, regenerate with FOCUS_SCAN_UPDATE=1.'),
@@ -548,9 +688,9 @@ test.describe('focus-ring scan', () => {
   for (const comp of outlineSelectors.pages) {
     test(`${comp} — focus ring not clipped`, async ({ page, context }) => {
       await openPage(page, comp);
-      const selectors = await loadedOutlineSelectors(page);
+      const rules = await loadedFocusRules(page);
 
-      const unknown = (await matchingSelectors(page, selectors))
+      const unknown = (await matchingSelectors(page, rules.map(rule => rule.selector)))
         .filter(sel => !(sel in outlineSelectors.selectors));
       expect(
         unknown,
@@ -558,7 +698,7 @@ test.describe('focus-ring scan', () => {
           unknown.map(sel => `  ${sel}`).join('\n'),
       ).toEqual([]);
 
-      const { candidates, detail } = await scanClips(page, context, comp, selectors);
+      const { candidates, detail } = await scanClips(page, context, comp, rules);
       expect(
         candidates.length,
         `${comp}.zul is listed as having outline focus elements but has none — the page lost them; ` +
