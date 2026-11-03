@@ -147,3 +147,19 @@ test.describe('framework classes — drag overlay', () => {
     await expect(stackup, 'overlay removed on release').toHaveCount(0);
   });
 });
+
+test.describe('framework classes — content-sized flex container', () => {
+  // `.z-flex-content.z-flex-row>.z-flex-item { min-width: auto }` has no test: it is not reproducible in
+  // Chromium (the row container's intrinsic width already includes the items, so ZK never keeps z-flex-content).
+  test('groupbox — a vflex container that grows keeps z-flex-content and its items get min-height: auto', { tag: '@ZK-6076' }, async ({ page }) => {
+    await page.goto('/groupbox.zul', { waitUntil: 'networkidle' });
+    const container = page.locator('.z-flex-column.z-flex-content');
+    await expect(container, 'the overflowing vflex container is marked content-sized').toHaveCount(1);
+    const items = container.locator('> .z-flex-item');
+    await expect(items).toHaveCount(2);
+    for (const item of await items.all()) {
+      await expect(item).toHaveCSS('min-height', 'auto');
+      await expect(item).toHaveCSS('min-width', '0px');
+    }
+  });
+});
