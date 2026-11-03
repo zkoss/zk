@@ -1112,7 +1112,7 @@
 	</xs:complexType>
 	<!-- absolutechildren -->
 	<xs:element name="absolutechildren" type="absolutechildrenType" />
-	<xs:complexType name="absolutechildrenType">
+	<xs:complexType name="absolutechildrenType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="x" type="intType" use="optional" />
@@ -1129,7 +1129,7 @@
 	</xs:complexType>
 	<!-- anchorchildren -->
 	<xs:element name="anchorchildren" type="anchorchildrenType" />
-	<xs:complexType name="anchorchildrenType">
+	<xs:complexType name="anchorchildrenType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="anchor" type="xs:string" use="optional" />
@@ -1145,7 +1145,7 @@
 	</xs:complexType>
 	<!-- anchornav -->
 	<xs:element name="anchornav" type="anchornavType" />
-	<xs:complexType name="anchornavType">
+	<xs:complexType name="anchornavType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="positionFixed" type="booleanType" use="optional" />
@@ -1282,7 +1282,7 @@
 	</xs:complexType>
 	<!-- auxheader -->
 	<xs:element name="auxheader" type="auxheaderType" />
-	<xs:complexType name="auxheaderType">
+	<xs:complexType name="auxheaderType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="colspan" type="intType" use="optional" />
@@ -1403,7 +1403,7 @@
 	</xs:complexType>
 	<!-- button -->
 	<xs:element name="button" type="buttonType" />
-	<xs:complexType name="buttonType">
+	<xs:complexType name="buttonType" mixed="true">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
@@ -1486,7 +1486,7 @@
 
 	<!-- cardlayout -->
 	<xs:element name="cardlayout" type="cardlayoutType" />
-	<xs:complexType name="cardlayoutType">
+	<xs:complexType name="cardlayoutType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -1522,7 +1522,7 @@
 	</xs:complexType>
 	<!-- center -->
 	<xs:element name="center" type="centerType" />
-	<xs:complexType name="centerType">
+	<xs:complexType name="centerType" mixed="true">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
@@ -1713,7 +1713,7 @@
 	</xs:complexType>
 	<!-- column -->
 	<xs:element name="column" type="columnType" />
-	<xs:complexType name="columnType">
+	<xs:complexType name="columnType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="sort" type="sortAttrType" use="optional" />
@@ -1728,7 +1728,7 @@
 	</xs:complexType>
 	<!-- columnchildren -->
 	<xs:element name="columnchildren" type="columnchildrenType" />
-	<xs:complexType name="columnchildrenType">
+	<xs:complexType name="columnchildrenType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
@@ -1933,7 +1933,7 @@
 
 	<!-- detail -->
 	<xs:element name="detail" type="detailType" />
-	<xs:complexType name="detailType">
+	<xs:complexType name="detailType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="contentStyle" type="xs:string" use="optional" />
@@ -2015,7 +2015,7 @@
 	</xs:complexType>
 	<!-- east -->
 	<xs:element name="east" type="layoutRegionType" />
-	<xs:complexType name="layoutRegionType">
+	<xs:complexType name="layoutRegionType" mixed="true">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element ref="caption" minOccurs="0" maxOccurs="1" />
@@ -2041,7 +2041,7 @@
 	</xs:complexType>
 	<!-- fileupload -->
 	<xs:element name="fileupload" type="fileuploadType" />
-	<xs:complexType name="fileuploadType">
+	<xs:complexType name="fileuploadType" mixed="true">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
@@ -2130,7 +2130,7 @@
 
 	<!-- goldenpanel -->
 	<xs:element name="goldenpanel" type="goldenpanelType"/>
-	<xs:complexType name="goldenpanelType">
+	<xs:complexType name="goldenpanelType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="area" type="xs:string" use="optional" />
@@ -2510,7 +2510,7 @@
 	</xs:complexType>
 	<!-- label -->
 	<xs:element name="label" type="labelType" />
-	<xs:complexType name="labelType">
+	<xs:complexType name="labelType" mixed="true">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
@@ -2535,7 +2535,7 @@
 	</xs:complexType>
 	<!-- lineitem -->
 	<xs:element name="lineitem" type="lineitemType" />
-	<xs:complexType name="lineitemType">
+	<xs:complexType name="lineitemType" mixed="true">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="2" />
@@ -2757,7 +2757,7 @@
 	</xs:complexType>
 	<!-- listheader -->
 	<xs:element name="listheader" type="listheaderType" />
-	<xs:complexType name="listheaderType">
+	<xs:complexType name="listheaderType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="sort" type="sortAttrType" use="optional" />
@@ -2956,7 +2956,7 @@
 	</xs:simpleType>
 	<!-- panelchildren -->
 	<xs:element name="panelchildren" type="panelchildrenType" />
-	<xs:complexType name="panelchildrenType">
+	<xs:complexType name="panelchildrenType" mixed="true">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
@@ -3025,7 +3025,7 @@
 	</xs:complexType>
 	<!-- popup -->
 	<xs:element name="popup" type="popupType" />
-	<xs:complexType name="popupType">
+	<xs:complexType name="popupType" mixed="true">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="anyGroup" />
 			<xs:element ref="menu" />
@@ -3082,7 +3082,7 @@
 	</xs:complexType>
 	<!-- radiogroup -->
 	<xs:element name="radiogroup" type="radiogroupType" />
-	<xs:complexType name="radiogroupType">
+	<xs:complexType name="radiogroupType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
@@ -3114,7 +3114,7 @@
 	</xs:complexType>
 	<!-- rating -->
 	<xs:element name="rating" type="ratingType"/>
-	<xs:complexType name="ratingType">
+	<xs:complexType name="ratingType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="max" type="intType" use="optional" />
@@ -3164,7 +3164,7 @@
 	</xs:complexType>
 	<!-- rowchildren -->
 	<xs:element name="rowchildren" type="rowchildrenType" />
-	<xs:complexType name="rowchildrenType">
+	<xs:complexType name="rowchildrenType" mixed="true">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="1" />
@@ -3378,7 +3378,7 @@
 	</xs:complexType>
 	<!-- tab -->
 	<xs:element name="tab" type="tabType" />
-	<xs:complexType name="tabType">
+	<xs:complexType name="tabType" mixed="true">
 		<xs:sequence>
 			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 			<xs:sequence minOccurs="0" maxOccurs="1">
@@ -3456,7 +3456,7 @@
 	</xs:complexType>
 	<!-- tablechildren -->
 	<xs:element name="tablechildren" type="tablechildrenType" />
-	<xs:complexType name="tablechildrenType">
+	<xs:complexType name="tablechildrenType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attribute name="colspan" type="intType" use="optional" />
 		<xs:attribute name="rowspan" type="intType" use="optional" />
@@ -3488,7 +3488,7 @@
 	</xs:complexType>
 	<!-- template -->
 	<xs:element name="template" type="templateType" />
-	<xs:complexType name="templateType">
+	<xs:complexType name="templateType" mixed="true">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:group ref="anyGroup"/>
 			<xs:element ref="area"/>
@@ -3604,7 +3604,7 @@
 	</xs:complexType>
 	<!-- toolbar -->
 	<xs:element name="toolbar" type="toolbarType" />
-	<xs:complexType name="toolbarType">
+	<xs:complexType name="toolbarType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
@@ -3839,7 +3839,7 @@
 	</xs:complexType>
 	<!-- treecol -->
 	<xs:element name="treecol" type="treecolType" />
-	<xs:complexType name="treecolType">
+	<xs:complexType name="treecolType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="headerElementAttrGroup" />
 		<xs:attribute name="sort" type="sortAttrType" use="optional" />
@@ -4417,7 +4417,7 @@
 	</xs:simpleType>
 	<!-- shadow element: apply -->
 	<xs:element name="apply" type="applyType" />
-	<xs:complexType name="applyType">
+	<xs:complexType name="applyType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attribute name="template" type="xs:string" use="optional" />
 		<xs:attribute name="templateURI" type="xs:string" use="optional" />
@@ -4425,8 +4425,8 @@
 	</xs:complexType>
 	<!-- shadow element: forEach -->
 	<xs:element name="forEach" type="forEachType" />
-	<xs:complexType name="forEachType">
-		<xs:group ref="anyGroup" minOccurs="1" maxOccurs="unbounded" />
+	<xs:complexType name="forEachType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attribute name="items" type="xs:string" use="required" />
 		<xs:attribute name="begin" type="intType" use="optional" />
 		<xs:attribute name="end" type="intType" use="optional" />
@@ -4449,20 +4449,23 @@
 	<xs:element name="when" type="ifType" />
 	<!-- shadow element: otherwise -->
 	<xs:element name="otherwise" type="otherwiseType" />
-	<xs:complexType name="otherwiseType">
-		<xs:group ref="anyGroup" minOccurs="1" maxOccurs="unbounded" />
+	<xs:complexType name="otherwiseType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<!--no attrs-->
 	</xs:complexType>
 	<!-- shadow element: if -->
 	<xs:element name="if" type="ifType" />
-	<xs:complexType name="ifType">
-		<xs:group ref="anyGroup" minOccurs="1" maxOccurs="unbounded" />
+	<xs:complexType name="ifType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attribute name="test" type="booleanType" use="required" />
 	</xs:complexType>
 	<!-- splitlayout -->
 	<xs:element name="splitlayout" type="splitlayoutType"/>
-	<xs:complexType name="splitlayoutType">
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+	<xs:complexType name="splitlayoutType" mixed="true">
+		<xs:sequence>
+			<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+			<xs:group ref="anyGroupSingle" minOccurs="0" maxOccurs="2" />
+		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="collapse" type="collapseAttrType" use="optional" />
 		<xs:attribute name="heights" type="xs:string" use="optional" />
@@ -4560,7 +4563,7 @@
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<xs:element name="carouselitem" type="carouselitemType" />
-	<xs:complexType name="carouselitemType">
+	<xs:complexType name="carouselitemType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
 		<xs:attributeGroup ref="rootAttrGroup" />
@@ -4601,7 +4604,7 @@
 	</xs:complexType>
 	<!-- badge -->
 	<xs:element name="badge" type="badgeType" />
-	<xs:complexType name="badgeType">
+	<xs:complexType name="badgeType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
