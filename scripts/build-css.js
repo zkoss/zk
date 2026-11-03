@@ -24,6 +24,12 @@
 // Usage:
 //   node scripts/build-css.js --module zul|zkmax|zkex|za11y [--out <dir>] [--dev] [--emit-docs]
 // Exit: 2 = missing/unknown --module (usage error)
+//
+// Verification: scripts/snapshot-build-css.sh captures every output of this script (all modules,
+// minified and --dev, --emit-docs, usage errors).
+//   - Refactoring: take a snapshot before and after; `diff -r` of the two must be empty.
+//   - Any other change: the same diff must show only the outputs you meant to change.
+//   - A new flag, module, output or side file here needs the matching change in that script.
 
 const fs = require('fs');
 const path = require('path');
@@ -420,14 +426,6 @@ function minifySvg(svg) {
         .replace(/\s+/g, ' ')             // collapse whitespace
         .replace(/ class="[^"]*"/g, '')   // strip lucide class attr (not needed for mask)
         .trim();
-}
-
-function encodeSvgForCss(svg) {
-    return svg
-        .replace(/%/g, '%25')
-        .replace(/</g, '%3C')
-        .replace(/>/g, '%3E')
-        .replace(/"/g, '%22');
 }
 
 function getLucideIcons() {
