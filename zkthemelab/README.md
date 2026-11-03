@@ -118,4 +118,4 @@ This file is the page inventory only. For everything else, read the `marble-them
 | Tokens, `@layer`, `.css.dsp` wiring, brand overrides | the other files under `.claude/skills/marble-theme/reference/` |
 
 Playwright specs live in `src/test/playwright/` and drive this app over the **direct**
-URL form; `doc/focus-ring-known-clips.json` is their tracked allow-list.
+URL form; `doc/focus-ring-known-clips.json` is their tracked allow-list and `doc/focus-ring-outline-selectors.json` the focus-ring scan's selector list.
