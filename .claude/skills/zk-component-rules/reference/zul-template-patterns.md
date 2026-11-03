@@ -43,7 +43,7 @@ Both the standalone page and the overview page apply this partial:
 
 1. **Root element**: wrap in `<zk>` for XML validity. ZK's `<zk>` renders as nothing (transparent container).
 2. **No `<?page?>` directive**: partials are not pages.
-3. **No `<h:link>` or `<div sclass="z-p-8">` wrapper**: those belong to the wrapping page.
+3. **No `<h:link>` or padding wrapper** (for example a `div` with inline `padding`): those belong to the wrapping page.
 4. **No `<zscript>` for data**: keep `<zscript>` in the wrapping page. Shadow elements have their own composition scope — `<zscript>` inside an `<apply>` template behaves unpredictably across ZK versions. Define `${sampleDate}` etc. once at the top of each page that consumes the partial.
 5. **Template names**: scoped to their `<apply>` block. Name collisions across partials are safe.
 
@@ -72,5 +72,5 @@ The column count comes from `arg.cols.size()`. A page whose controls have a perc
 
 - One section per matrix (States, Multiline, Variants, etc.).
 - Use the matrix template for grid-shaped state tables.
-- Use freeform `<div sclass="z-mb-6">` blocks for variants that don't fit a grid (e.g. comboitem variants, button colors).
+- Use freeform `div` blocks, spaced with an inline style, for variants that don't fit a grid (e.g. comboitem variants, button colors).
 - Centralise data setup (sample dates, models) in the wrapping page's `<zscript>`, not in partials.

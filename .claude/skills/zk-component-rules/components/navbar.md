@@ -56,7 +56,7 @@ With the **EE `za11y`** addon on the classpath, the navbar follows the ARIA menu
 *roving tabindex*:
 
 - Exactly one `[role=menuitem]` in the navbar has `tabindex="0"`; every other `<a>` is set to
-  `tabindex="-1"` (`Navbar`/`Nav`/`Navitem` are patched in `web/js/za11y/zkmax/nav-a11y.js`).
+  `tabindex="-1"` (`Navbar`/`Nav`/`Navitem` are patched in `web/js/za11y/zkmax/nav-a11y.ts`).
 - So **Tab enters and leaves the whole navbar in a single stop** — tabbing does not walk the items.
   Arrow keys move focus within, and *that* is how a group header ever becomes focused.
 - Opening a group moves focus to its first visible child on its own.

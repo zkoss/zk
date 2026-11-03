@@ -455,7 +455,7 @@ If you write `.z-listgroup .z-listcell-content { border-top; border-bottom }`, t
 .z-listgroupfoot { border-top:    1px <divider color> }  /* divider before subtotals */
 ```
 
-Cell-level rules can still set `background-color: transparent` so the row band shows through. Tree's `.z-treegroup` follows the same pattern.
+Cell-level rules can still set `background-color: transparent` so the row band shows through.
 
 ## Header-row dividers go on the TH — the header table is `border-collapse: separate`
 

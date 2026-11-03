@@ -323,7 +323,7 @@ For each state in the contract's checklist:
     - Box-shadow: substring match (focus on the colour + offset tokens, not exact float precision).
     - `transition`: substring match on duration + easing function.
 
-**Row-coverage invariant (non-skippable).** Every id in the contract's Expected-values table MUST appear exactly once in the report's Per-component results with a result of `PASS`, `FAIL`, or `SKIPPED (<reason>)`. An id with no row is NOT an implicit pass — it is a measurement gap. Silent gaps are how a real mismatch hides behind a clean failing-set (pilot example: goldenlayout `wrap-5` — CSS had `overflow: hidden` against a contract value of `visible`, yet iter-13 reported `failing-set: []` because the row was never measured; the mismatch was only caught by Gate 2 reading the CSS). §4 makes this accountable via the `row-coverage` report field.
+**Row-coverage invariant (non-skippable).** Every id in the contract's Expected-values table MUST appear exactly once in the report's Per-component results with a result of `PASS`, `FAIL`, or `SKIPPED (<reason>)`. An id with no row is NOT an implicit pass — it is a measurement gap. Silent gaps are how a real mismatch hides behind a clean failing-set (pilot example: goldenlayout `wrap-5` — CSS had `overflow: hidden` against a contract value of `visible`, yet one iteration reported `failing-set: []` because the row was never measured; the mismatch was only caught by Gate 2 reading the CSS). §4 makes this accountable via the `row-coverage` report field.
 
 ### 3b-frozen. Frozen-column scroll-trigger checks
 
@@ -575,7 +575,7 @@ If you cannot meaningfully review an image (e.g. the capture is blank, all-white
 - If iteration 1: `newly_passing = []` (no baseline).
 - `row-coverage` = `<measured>/<total>` where `total` = count of ids in the contract's Expected-values table (plus outcome `Mn` ids when present, plus the §3e `x-*` ids when the contract has a `## Cross-cutting features` section) and `measured` = count of those ids that have a PASS/FAIL/SKIPPED row in this report. **If `measured < total`, list the missing ids and go back and measure them before computing status — do not emit a report with unmeasured rows.** A `SKIPPED` row with a stated reason counts as measured; a missing row never does.
 
-### 4.5. Distinguish token-rooted vs component-rooted failures (D6)
+### 4.5. Distinguish token-rooted vs component-rooted failures
 
 For each FAIL row in the measurement table:
 
@@ -589,11 +589,11 @@ For each FAIL row in the measurement table:
 
 In the eval report's Action-required section, prefix token-rooted entries with `TOKEN_FIX_REQUIRED: <token-name>`. The orchestrator uses this prefix to skip the Generator for that check.
 
-### 5. Apply D3 detectors
+### 5. Apply stall/oscillation detectors
 
 Read the failing-set-history from `tasks/harness/work-status.md`:
 
-**Guard: the D3 detectors apply ONLY when `failing_set != []`.** A clean pass can never be STALLED or OSCILLATING — two consecutive all-pass evals (e.g. sibling-triggered `RE_EVAL_NEEDED` re-runs) both compute `newly_passing == []` and would otherwise falsely stall. When `failing_set == []`, skip straight to the status derivation below.
+**Guard: the stall/oscillation detectors apply ONLY when `failing_set != []`.** A clean pass can never be STALLED or OSCILLATING — two consecutive all-pass evals (e.g. sibling-triggered `RE_EVAL_NEEDED` re-runs) both compute `newly_passing == []` and would otherwise falsely stall. When `failing_set == []`, skip straight to the status derivation below.
 
 - **STALLED:** if `newly_passing == []` AND the previous iteration also had `newly_passing == []`, set status to `STALLED`.
 - **OSCILLATING:** if iteration ≥ 3 AND `failing_set != previous_failing_set` AND `failing_set == failing_set[n-2]`, set status to `OSCILLATING`.

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # audit-css.sh — mechanical pass of the marble-theme skill's CSS audit (reference/css-audit.md).
 #
-# Runs the checks a script CAN decide for itself and emits an A–F report
-# skeleton (the A–F structure is defined in the skill's SKILL.md). The
+# Runs the checks a script CAN decide for itself and emits an A–G report
+# skeleton (the A–G structure is defined in reference/css-audit.md). The
 # human-judgment sections
 # (which orphans are safe to drop, which bare colors map to a token) are left
-# stubbed `TODO` — see the skill's SKILL.md for how to triage them.
+# stubbed `TODO` — see reference/css-audit.md for how to triage them.
 #
 # This is ADVISORY and READ-ONLY: it never edits CSS/config, and always exits 0.
 # The standing build gate is `npm run lint:css`, not this script.
@@ -212,7 +212,7 @@ if command -v node >/dev/null 2>&1; then
     node "$SCRIPT_DIR/check-default-display.js" \
         --component-root "$COMPONENT_ROOT" \
         --zk-source "$ZK_SOURCE" 2>/dev/null \
-    || emit "_check-default-display.js failed to run — see the skill's SKILL.md §G._"
+    || emit "_check-default-display.js failed to run — see reference/css-audit.md §G._"
 else
     emit "## G. Default-value redundancy"
     emit ""
@@ -231,6 +231,6 @@ emit "- **C. Cross-file duplicated CSS blocks** (state-layer / focus-visible) �
 emit "- **E. Utility-layer overlap** — TODO: confirm intentional aliases."
 emit "- **F. Dead code** — TODO: needs rendered-DOM evidence; do not PurgeCSS blindly."
 emit ""
-emit "Write findings up using the A–F structure in reference/css-audit.md so themes stay comparable."
+emit "Write findings up using the A–G structure in reference/css-audit.md so themes stay comparable."
 
 exit 0

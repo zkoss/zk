@@ -197,19 +197,19 @@ h1 {
 
 /* c5 — hover state-layer ring: 8px spread, 16% primary (MUI visual target) */
 .z-slider-button:hover,
-.z-slider-button-hover {
+.z-slider-button.mock-force-hover {
     box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent);
 }
 
 /* c6 — focus-visible ring: same 8px/16% as hover (MUI uses same rule for both) */
 .z-slider-button:focus-visible,
-.z-slider-button-focus {
+.z-slider-button.mock-force-focus {
     box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-color-primary) 16%, transparent);
 }
 
 /* c9 — active/drag ring: 14px spread at 16% (MUI .Mui-active, Slider.css line 193) */
 .z-slider-button:active,
-.z-slider-button-active {
+.z-slider-button.mock-force-active {
     box-shadow: 0 0 0 14px color-mix(in srgb, var(--zk-color-primary) 16%, transparent);
 }
 
@@ -371,7 +371,7 @@ h1 {
             <div class="z-slider z-slider-horizontal" role="slider">
                 <div class="z-slider-center" style="width:100%; height:4px;">
                     <div class="z-slider-area" style="width:55%; height:100%; top:0; left:0;"></div>
-                    <div class="z-slider-button z-slider-button-hover" style="left:55%;"></div>
+                    <div class="z-slider-button mock-force-hover" style="left:55%;"></div>
                 </div>
             </div>
         </div>
@@ -390,7 +390,7 @@ h1 {
             <div class="z-slider z-slider-horizontal" role="slider">
                 <div class="z-slider-center" style="width:100%; height:4px;">
                     <div class="z-slider-area" style="width:55%; height:100%; top:0; left:0;"></div>
-                    <div class="z-slider-button z-slider-button-focus" style="left:55%;"></div>
+                    <div class="z-slider-button mock-force-focus" style="left:55%;"></div>
                 </div>
             </div>
         </div>
@@ -410,7 +410,7 @@ h1 {
             <div class="z-slider z-slider-horizontal" role="slider">
                 <div class="z-slider-center" style="width:100%; height:4px;">
                     <div class="z-slider-area" style="width:55%; height:100%; top:0; left:0;"></div>
-                    <div class="z-slider-button z-slider-button-active" style="left:55%;"></div>
+                    <div class="z-slider-button mock-force-active" style="left:55%;"></div>
                 </div>
             </div>
         </div>
@@ -586,7 +586,7 @@ h1 {
                 <div class="z-slider z-slider-horizontal" role="slider" aria-valuenow="42" style="position:relative;">
                     <div class="z-slider-center" style="width:100%; height:4px;">
                         <div class="z-slider-area" style="width:42%; height:100%; top:0; left:0;"></div>
-                        <div class="z-slider-button z-slider-button-hover" style="left:42%;"></div>
+                        <div class="z-slider-button mock-force-hover" style="left:42%;"></div>
                     </div>
                 </div>
             </div>

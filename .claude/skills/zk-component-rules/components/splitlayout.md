@@ -76,14 +76,14 @@ How ZK persists a splitter drag (`Splitlayout._endDrag` → `_doDragEndResize` i
 
 Consequences for theme CSS:
 
-- **Cave main-axis size must derive from inline `width`/`height`** — the block / inline-block model above does exactly that. `flex: 1 1 0` (any `flex-basis: 0`) on caves is **forbidden**: it makes the browser ignore the inline main-axis size, so panes recompute 50/50 and the drag "snaps back" (contract M10 failure).
-- **Never hard-code `display: flex` / `flex-direction` on the root.** ZK adds `z-flex` + direction class when children flex and removes them at drag-end; a hard-coded `display: flex` survives the removal, and a fallback like `.z-splitlayout:not(.z-flex-column) { flex-direction: row }` flips a vertical splitlayout to a ROW after drag — cave-top/cave-bottom land side-by-side (contract M11 failure).
+- **Cave main-axis size must derive from inline `width`/`height`** — the block / inline-block model above does exactly that. `flex: 1 1 0` (any `flex-basis: 0`) on caves is **forbidden**: it makes the browser ignore the inline main-axis size, so panes recompute 50/50 and the drag "snaps back".
+- **Never hard-code `display: flex` / `flex-direction` on the root.** ZK adds `z-flex` + direction class when children flex and removes them at drag-end; a hard-coded `display: flex` survives the removal, and a fallback like `.z-splitlayout:not(.z-flex-column) { flex-direction: row }` flips a vertical splitlayout to a ROW after drag — cave-top/cave-bottom land side-by-side.
 - The root's `white-space: nowrap` + caves' `display: inline-block` (horizontal) / `display: block` (vertical) is the layout model that works in **both** runtime states: before drag (ZK's `z-flex*` classes provide the flex layout) and after drag (inline px sizes on block/inline-block caves).
-- Contract rows M10/M11 in `doc/contracts/splitlayout.md` assert this outcome (drag delta sticks ≥ 300ms AND caves stay docked in orientation order).
+- A theme's regression check should assert this outcome (drag delta sticks ≥ 300ms AND caves stay docked in orientation order).
 
 ## Pane fill — child margins become trailing holes
 
-Caves are **wrapper flex children** (`fcc != c` in `zk/flex.ts applyCSSFlex`): the cave div gets `z-flex-item`, and ZK sizes the widget *inside* it with `calc(100% - <child margins>)` — in **row** orientation it subtracts the child's `marginHeight()` (top+bottom) from **both** width and height. Any default margin on the pane widget (window, grid, panel, …) therefore renders as a same-sized hole between the pane and the splitter/cave edge, in horizontal orientation only (column mode subtracts `marginWidth()`, usually 0 — the asymmetry is the debugging signature). See `reference/css-flex-classes.md` "Margin subtraction". Contract row M12 asserts the outcome: flexed child bbox == cave bbox ±1px, both axes, both orientations.
+Caves are **wrapper flex children** (`fcc != c` in `zk/flex.ts applyCSSFlex`): the cave div gets `z-flex-item`, and ZK sizes the widget *inside* it with `calc(100% - <child margins>)` — in **row** orientation it subtracts the child's `marginHeight()` (top+bottom) from **both** width and height. Any default margin on the pane widget (window, grid, panel, …) therefore renders as a same-sized hole between the pane and the splitter/cave edge, in horizontal orientation only (column mode subtracts `marginWidth()`, usually 0 — the asymmetry is the debugging signature). See `reference/css-flex-classes.md` "Margin subtraction". A theme's regression check should assert the outcome: flexed child bbox == cave bbox ±1px, both axes, both orientations.
 
 ## Sibling decomposition
 

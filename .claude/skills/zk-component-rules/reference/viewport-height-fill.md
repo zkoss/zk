@@ -68,7 +68,7 @@ canvas.
 
 ## Applies to
 
-Any theme's base reset (`base/_reset.css`). Theme-agnostic: a Sapphire or
+Any theme's base reset stylesheet. Theme-agnostic: a Sapphire or
 corporate-dark reset hits the identical bugs. First seen on the colorbox preview
 page — a fixed-width preview matrix overflowed narrow viewports
 horizontally (surfacing the `100vh` scrollbar footgun), and a later

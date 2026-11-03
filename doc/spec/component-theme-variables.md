@@ -51,7 +51,7 @@ adopter opts in.
 
 All knob defaults are declared in the single central file `tokens/_component-theme.css`,
 never inside a component's own CSS. This follows the established project convention: the
-stock ZK theme (this repo's LESS-based `master` branch) declares **all** of its
+stock ZK theme (the pre-11.0 IceBlue LESS sources, ZK 10.x; removed in ZK 11) declares **all** of its
 `--zk-*` custom properties — global *and* component-specific alike — in one central `:root`
 profile (`zul/less/profiles/_default.less`, with `_compact.less` for density) and **zero**
 inside any component `.less`. Marble keeps that discipline, only splitting the central defs

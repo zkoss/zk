@@ -18,7 +18,7 @@ const AGGREGATE_PAGES_FILE = path.join(path.dirname(fileURLToPath(import.meta.ur
 const PLAYWRIGHT_CONFIG = 'src/test/playwright/playwright.config.ts';
 const RUN_PREFIX = `npx playwright test -c ${PLAYWRIGHT_CONFIG}`;
 
-// Rules §3 (D10): selecting more than this share of all tests means a partial run no longer saves enough time.
+// README-select-tests.md ("How a path is resolved"): selecting more than this share of all tests means a partial run no longer saves enough time.
 const FULL_RUN_TEST_FRACTION = 2 / 3;
 
 // Spec files whose tests must not share a worker's test order or state: a partial run that includes one of
@@ -28,14 +28,14 @@ const FULL_RUN_TEST_FRACTION = 2 / 3;
 const UNSAFE_PARALLEL_SPECS = new Map(); // spec file -> why it cannot run fully parallel
 
 // ---------------------------------------------------------------------------------------------
-// Path classification (rules §3). Each rule maps a repo-relative path to a handling kind.
+// Path classification (README-select-tests.md, "How a path is resolved"). Each rule maps a repo-relative path to a handling kind.
 // First match wins; a path that matches nothing is "unknown" and forces a full run.
 // ---------------------------------------------------------------------------------------------
 
 const COMPONENT_CSS = /^(?:zul|zkmax|zkex)\/src\/main\/resources\/web\/js\/(?:zul|zkmax|zkex)\/[^/]+\/css\/([^/]+)\.css$/;
 const TABLET_CSS = /^zkmax\/src\/main\/resources\/web\/zkmax\/css\/tablet\/([^/]+)\.css$/;
 const WIDGET_SOURCE = /^(?:zul|zkmax|zkex)\/src\/main\/resources\/web\/js\/(?:zul|zkmax|zkex)\/[^/]+\/([A-Za-z0-9_]+)\.(?:ts|js)$/;
-const SHARED_CSS_FILES = new Set(['misc']); // rules §4: shared by many components, treated like base
+const SHARED_CSS_FILES = new Set(['misc']); // README-select-tests.md, "How a path is resolved": shared by many components, treated like base
 const PREVIEW_ZUL = /^zkthemelab\/src\/main\/webapp\/(.+)\.zul$/;
 const SPEC_FILE = /^zkthemelab\/src\/test\/playwright\/([^/]+\.spec\.ts)$/;
 const BASELINE_PNG = /^zkthemelab\/doc\/screenshots\/(.+)\.png$/;
@@ -153,7 +153,7 @@ function loadClassIndex(aggregatePages = new Set()) {
   return { pageKeys: new Set(Object.keys(pages).map(f => f.replace(/\.zul$/, ''))), pagesByClass };
 }
 
-/** Pages that combine many components (aggregate-pages.json, D12): only their own .zul selects their tests. */
+/** Pages that combine many components (aggregate-pages.json; README-select-tests.md, "Aggregate pages"): only their own .zul selects their tests. */
 function loadAggregatePages() {
   return new Set(Object.keys(JSON.parse(fs.readFileSync(AGGREGATE_PAGES_FILE, 'utf8'))));
 }
@@ -176,7 +176,7 @@ function parseCssClasses(cssText) {
   return { classes, attributePatterns };
 }
 
-// Changed-rule scanning (rules §3, D10). A changed line is attributed to the rule that contains it;
+// Changed-rule scanning (README-select-tests.md, "Which rules are read"). A changed line is attributed to the rule that contains it;
 // an at-rule header or a body that is not a list of rules cannot be attributed, so the caller falls back.
 class CannotAttribute extends Error {}
 
@@ -271,7 +271,7 @@ function readCssClasses(change) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Class -> pages (rules §4 resolution order)
+// Class -> pages (README-select-tests.md, "How a path is resolved")
 // ---------------------------------------------------------------------------------------------
 
 function classResolver({ pageKeys, pagesByClass }) {
@@ -805,7 +805,7 @@ function assertPatternIsExact(pattern, projects, intended, tests) {
 // Result and output
 // ---------------------------------------------------------------------------------------------
 
-// A partial run is worth it up to this many tests; rounded up so that 2/3 of 1,345 is 897 (rules §3).
+// A partial run is worth it up to this many tests; rounded up so that 2/3 of 1,345 is 897 (README-select-tests.md, "How a path is resolved").
 const maxPartialTests = (total, fraction) => Math.ceil(total * fraction);
 
 function decide(sel, tests, threshold) {

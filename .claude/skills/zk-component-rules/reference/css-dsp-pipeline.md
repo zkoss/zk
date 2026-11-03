@@ -1,8 +1,8 @@
-# Our `.css.dsp` files are NOT DSP-processed
+# Theme `.css.dsp` files are NOT DSP-processed
 
 ## The fact
 
-This theme's build pipeline reads `.css` sources and writes them out with an added `.dsp` extension — **nothing else**. No EL evaluation, no taglib injection, no JSP-style processing. The `.dsp` extension is kept only because ZK's lang-addon `<css-uri>` registrations expect `.css.dsp` paths.
+A theme whose build only renames `.css` to `.css.dsp` reads `.css` sources and writes them out with an added `.dsp` extension — **nothing else**. No EL evaluation, no taglib injection, no JSP-style processing. The `.dsp` extension is kept only because ZK's lang-addon `<css-uri>` registrations expect `.css.dsp` paths.
 
 At runtime ZK serves these files as static text. The WCS bundler (`zk.wcs`) reads each `.css.dsp` and concatenates it verbatim into the per-page CSS bundle.
 
@@ -29,13 +29,13 @@ A clear symptom: a component that used to be styled by the theme suddenly render
 
 ### Rules
 
-1. **Never** write `${…}` or `<%@ %>` syntax in `.css` source files in this theme.
+1. **Never** write `${…}` or `<%@ %>` syntax in `.css` source files of such a theme.
 2. For URLs referring to ZK widget images (sprite PNGs, GIFs), use the **absolute path with the `/zkau/web/` prefix**:
    ```css
    background-image: url(/zkau/web/zkex/img/colorbox/colorpicker_gradient.png);
    ```
    ZK serves these via its update handler regardless of version prefix — `/zkau/web/{anything}/zkex/img/...` and `/zkau/web/zkex/img/...` both return 200.
-3. For self-hosted theme assets (icon SVGs), prefer **inline data URIs** (`url("data:image/svg+xml,…")`) — the same approach the rest of `_icons.css` uses.
+3. For self-hosted theme assets (icon SVGs), prefer **inline data URIs** (`url("data:image/svg+xml,…")`).
 
 ### Detecting the problem fast
 

@@ -27,7 +27,7 @@ The orientation class is added by `Tabbox.domClass_()`: accordion when `inAccord
 │                   ├─ img.z-tab-image           (only when `image` set — INSIDE the text span; class z-tab-image, not z-tab-icon)
 │                   ├─ i.z-tab-icon              (only when `iconSclass` set — also INSIDE the text span; class is iconSclass)
 │                   └─ label text
-├─ div.z-tabbox-left-scroll                      (scroll buttons — see Scroll buttons section)
+├─ div.z-tabbox-left-scroll                      (scroll buttons — see Layout invariants)
 ├─ div.z-tabbox-right-scroll
 ├─ .z-toolbar                                    (only when `<toolbar>` child exists)
 └─ .z-tabpanels                                  (the panel container)

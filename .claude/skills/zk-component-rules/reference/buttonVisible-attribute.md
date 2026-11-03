@@ -42,7 +42,7 @@ Exception: bandbox + `buttonVisible="false"` + `inplace="true"` is valid and ZK 
 
 For the popup/dropdown inputs — **combobox** and **bandbox** (`ComboWidget`), and **datebox** (`Datebox`) — ZK decides *where* a click opens the popup in **JavaScript**, not CSS. A theme cannot change this and must not try to (it would require overriding ZK JS). The whole-control click-to-open is gated on `buttonVisible`, which is why hiding the button also removes the readonly click gesture.
 
-**Rule (verified against ZK 10.3 source + live interaction probe, 2026-07-03):**
+**Rule (from `ComboWidget.ts` / `Datebox.ts`):**
 
 | State | click the INPUT text area | click the ICON/button |
 |-------|---------------------------|-----------------------|

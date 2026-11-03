@@ -5,7 +5,7 @@ shared-css-file: zul/src/main/resources/web/js/zul/wgt/css/loadingbar.css
 siblings: []
 closest-sibling: progressmeter
 decomposition: LinearProgress (indeterminate variant) — a 2–4px sliding/gradient bar pinned to top of viewport
-preview: trigger long-running request from any page (e.g., paging change)
+preview: ${PREVIEW_URL}/loadingbar.zul   (trigger long-running request from any page, e.g., paging change)
 
 ## References
 - `doc/spec/DESIGN.md` sections: "Brand & Status Colors", "Motion"
@@ -15,10 +15,19 @@ preview: trigger long-running request from any page (e.g., paging change)
 
 ## DOM key selectors
 ```
-.z-loading                            ← absolute-positioned overlay bar
-.z-loading-icon                       ← spinner glyph
-.z-loading-message                    ← text label (optional)
+div.z-loadingbar                                  ← bar root (Loadingbar.ts redraw); + .z-loadingbar-indeterminate when indeterminate
+├─ span#<uuid>-img.z-loadingbar-image.z-loadingbar-colorbar
+│                                                 ← determinate fill: inline width in % (set by _fixImgWidth);
+│                                                   sliding part when indeterminate
+└─ span.z-loadingbar-effectbar.z-loadingbar-colorbar
+                                                  ← animated part for the indeterminate animation
+
+Position wrapper (created by Loadingbar.getPositionWrapper_, not by redraw):
+div#_z_loadingbarpositionwrapper.z-loadingbar-position-wrapper   ← appended to document.body
+└─ div.z-loadingbar-position.z-loadingbar-position-<top|bottom>   ← one per pos; the .z-loadingbar root sits inside
+   └─ div.z-loadingbar                                            ← (the tree above)
 ```
+Note: `.z-loadingbar-position-top|bottom` is on the parent `.z-loadingbar-position` div, not on the `.z-loadingbar` root.
 
 ## Expected values (T2)
 - Position fixed/absolute, top of viewport.

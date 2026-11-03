@@ -158,7 +158,7 @@ The reviewer reads the contract, component CSS, and the evaluator's screenshots;
 Rules:
 - **Skip rule**: never dispatch Gate 2 for a component whose Gate 1 failed this round (the CSS is about to change anyway).
 - **Convergence**: Gate 2 blocks only on Critical findings; Suggested findings never block. Deviations listed in the contract's `## Accepted MD3 deviations` are skipped by the reviewer — this is what guarantees the loop converges despite intentional MD3 deviations (Marble policy: MD3 token naming, MUI v7 visual values).
-- **Gate-2 iteration cap**: track a per-component `gate2-iter` count (increment on every `GATE2: FAIL`). After **2 consecutive** Gate-2 FAILs for the same component, do NOT start another revision round — stop and escalate to the user (the D3 detectors watch only Gate-1 `failing_set`, which is empty in this loop, so nothing else trips). The usual resolution is a user-added `## Accepted MD3 deviations` entry or a user-directed contract redesign.
+- **Gate-2 iteration cap**: track a per-component `gate2-iter` count (increment on every `GATE2: FAIL`). After **2 consecutive** Gate-2 FAILs for the same component, do NOT start another revision round — stop and escalate to the user (the stall/oscillation detectors watch only Gate-1 `failing_set`, which is empty in this loop, so nothing else trips). The usual resolution is a user-added `## Accepted MD3 deviations` entry or a user-directed contract redesign.
 - The reviewer is read-only: it never edits CSS, contracts, or `work-status.md`. All flips and revisions are orchestrator/user actions.
 
 ### Step 4c — Cross-cutting Definition of Done (before the `VERIFIED` flip)
@@ -248,7 +248,7 @@ awk -F'|' '$6 ~ /GATE2_PENDING/ {print $2}' tasks/harness/work-status.md
 
 ---
 
-## Token escalation (D6)
+## Token escalation
 
 When the Evaluator detects a check failing because a `--zk-*` token value diverges from DESIGN.md (e.g. `--zk-typescale-body-medium-size` is 14px but DESIGN.md §7 says 13px), the Evaluator marks the check `FAIL` and adds `TOKEN_FIX_REQUIRED: <token-name>` to the Action-required section.
 
@@ -297,7 +297,7 @@ After the user fixes the token, they rebuild the CSS (`node scripts/build-css.js
 
 ## Spec-Author phase (pre-loop)
 
-Before the ralph-loop can run on a component, that component must have a user-approved theme contract. The spec-author phase produces it. The contract tiers and authoring rules are in `.claude/skills/marble-theme/reference/contract-tiers.md`.
+Before the verification loop can run on a component, that component must have a user-approved theme contract. The spec-author phase produces it. The contract tiers and authoring rules are in `.claude/skills/marble-theme/reference/contract-tiers.md`.
 
 ### When to run `zk-spec-author <component>`
 
@@ -350,7 +350,7 @@ If the evaluator returns status `BLOCKED: js-source drift — re-run zk-spec-aut
 
 - Token escalation accumulates ≥ 3 components blocked on the same token (probably a real spec issue).
 - A component hits the Gate-2 iteration cap (2 consecutive `GATE2: FAIL` rounds — see Step 4b Rules).
-- Stalled or oscillating component (D3 terminal states).
+- Stalled or oscillating component (stall/oscillation terminal states).
 - Preview app stops responding.
 - More than 5 consecutive components verified — good time to checkpoint progress with the user.
 
@@ -372,8 +372,8 @@ The state lives in `tasks/harness/work-status.md` (gitignored, local). A fresh c
 - **FIXING** — Generator running (transient)
 - **VERIFYING** — Evaluator running post-fix (transient)
 - **RE_EVAL_NEEDED** — a sibling's Generator pass touched the shared CSS file
-- **STALLED** — `newly_passing == 0` for 2 consecutive iterations while `failing-set` is non-empty (D3 signal A; a clean double-pass never stalls) (terminal — user review)
-- **OSCILLATING** — `failures[n] == failures[n-2]` (D3 signal B) (terminal — user review)
+- **STALLED** — `newly_passing == 0` for 2 consecutive iterations while `failing-set` is non-empty (a clean double-pass never stalls) (terminal — user review)
+- **OSCILLATING** — `failures[n] == failures[n-2]` (terminal — user review)
 - **CONSTRAINT** — manual override (intentionally won't fix; e.g., ZK platform limit) (terminal)
 - **ESCALATED_TOKEN_FIX** — check fails because a `--zk-*` token diverges from DESIGN.md; logged in `tasks/harness/token-issues.md`; Generator NOT dispatched (terminal until the user fixes the token, then flip to `RE_EVAL_NEEDED`)
 - **ESCALATED_LIBRARY_CONFIG** — T3 only: fix requires widget `.ts`/`.java` or library JS config, not CSS; logged in `tasks/harness/library-config-issues.md` (terminal for this harness)

@@ -147,7 +147,7 @@ verified working (horizontal shift-wheel scrolls `_currentX` 0→86/100 with the
 `offsetLeft` tracking 0→max, in-bounds and monotonic). Note the `scale=1` compression reads
 **worse horizontally**: the horizontal track is far wider (~1832px) than the vertical track
 is tall (~500px), so an identical step-count travel parks the horizontal thumb in the
-far-left ~5% corner where it looks static — still ZK-inherent (axis-agnostic `WScroll.js`),
+far-left ~5% corner where it looks static — still ZK-inherent (axis-agnostic `WScroll.ts`),
 not tunable from CSS.
 
 ## Bundle

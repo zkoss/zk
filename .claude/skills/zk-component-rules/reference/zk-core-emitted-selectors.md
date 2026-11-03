@@ -1,6 +1,6 @@
 # ZK-core-emitted selectors (not owned by any widget)
 
-Some ZK CSS class names are produced directly by `zk/au.ts` and `zk/utl.ts` — they are **not** emitted by any registered widget, so no widget triggers the loading of the file that styles them. A theme that relies on the per-widget 1:1 auto-scan will silently ship without these styles even though the CSS file exists.
+Some ZK CSS class names are produced directly by ZK core (`zk/utl.ts`, `zk/effect.ts`, `zk/zk.ts`, `zk/widget.ts`) — they are **not** emitted by any registered widget, so no widget triggers the loading of the file that styles them. A theme that relies on the per-widget 1:1 auto-scan will silently ship without these styles even though the CSS file exists.
 
 This file lists the known ZK-core-emitted selectors and the bundling rule themes must follow.
 
@@ -134,5 +134,5 @@ A theme jar that supplies its own provider calls `Configuration.setThemeProvider
 When investigating an "I see the scrim/overlay but nothing inside it" or "this className appears in the DOM but no CSS file styles it" report:
 
 1. `grep -rn "className\\|class=" $ZK_SOURCE/zk/src/main/resources/web/js/zk/*.ts` (`$ZK_SOURCE` is the root of the ZK CE checkout) — search ZK core (not `js/zul/`) for the class string.
-2. If the class is written by `au.ts` / `utl.ts` / `widget.ts` / `mount.ts`, it is core-emitted. Add the rule to a file already in the global bundle, or add a new file to the bundle.
+2. If the class is written by `utl.ts` / `effect.ts` / `zk.ts` / `widget.ts` / `mount.ts`, it is core-emitted. Add the rule to a file already in the global bundle, or add a new file to the bundle.
 3. After the fix, verify with the curl command above that `zk.wcs` contains the selector.

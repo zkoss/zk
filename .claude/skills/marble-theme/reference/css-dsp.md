@@ -45,7 +45,7 @@ declared in `build-css.js`:
 
 - `combo.css.dsp` ← the `js/zul/inp/css` files (combobox, datebox, timebox, spinner, bandbox…)
 - `footer.css.dsp` ← toolbarbutton, plus the classes `zk/flex.ts` toggles at runtime (stock ZK
-  defines them in `footer.less`, so they live in the footer bundle here too). It is loaded last, so
+  defines them in `footer.css.dsp`, so they live in the footer bundle here too). It is loaded last, so
   its rules win ties against component CSS.
 - `norm.css.dsp` ← tokens + base + the components that have **no** `css-uri` at all
   (notification, toast, captcha — captcha is mold-only, so it must be bundled or it never loads;

@@ -57,7 +57,7 @@ Each preview page may have multiple sections. Recommended order:
 
 1. **States** — the main matrix.
 2. **Variants** — orient/mold/buttonVisible alternates that aren't on the state axis.
-3. **Freeform** — comboitem variants, error-box examples, etc. (no matrix; use `z-d-flex` wrappers).
+3. **Freeform** — comboitem variants, error-box examples, etc. (no matrix; use flex wrappers).
 
 ## Overview pages
 

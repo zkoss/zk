@@ -24,7 +24,7 @@ matched, so every `hflex`/`vflex` container stayed `display: block`. Drag-persis
 
 ## JS-toggled CONTRACT classes (theme MUST define verbatim)
 
-A class is marked **contract** only when the research found actual `addClass` / `removeClass`
+A class is marked **contract** only when the source has actual `addClass` / `removeClass`
 / `className =` calls that add and remove it at runtime. The theme **must** define these
 selectors with values that are functionally equivalent to stock — and must never hard-code
 their effect onto a component root that ZK JS manages. The machine-readable list is
@@ -106,7 +106,7 @@ are in ZK's stock global CSS; the table gives only what each class is for and ho
 | `.z-apply-loading-indicator` | created by `Mask._draw` | |
 | `.z-apply-loading-icon` | created by `Mask._draw` | |
 | `.z-apply-mask` | created by `Mask._draw` | Scrim for per-component busy overlay |
-| `.z-modal-mask` | `zk/utl.ts:progressbox` and `zk/drag.ts` create it in innerHTML | Full-page modal scrim. See `zk-core-emitted-selectors.md` for the inline `top/left` quirk requiring `!important` |
+| `.z-modal-mask` | `zk/utl.ts:progressbox` and `zk/effect.ts` FullMask create it in innerHTML | Full-page modal scrim. See `zk-core-emitted-selectors.md` for the inline `top/left` quirk requiring `!important` |
 | `.z-error` | `zk/zk.ts:_Erbx` creates via innerHTML; `display:none` is MANDATORY (slideDown needs hidden start) | JS debug error panel. See `zk-core-emitted-selectors.md` for full DOM structure |
 | `.z-log` | `zk/zk.ts` sets `logBox.className = 'z-log'` — created once for `zk.log()` debug output | `zk.log()` debug output box |
 | `.noscript` | static HTML `<noscript>` tag — no JS | No-JS fallback overlay |
@@ -114,13 +114,13 @@ are in ZK's stock global CSS; the table gives only what each class is for and ho
 | `.z-clear` | rendered in mold JS (toolbar, toolbarpanel, frozen, tabbox) as a static class — never toggled | Float-clearfix helper |
 | `.z-macro` | emitted by `MacroWidget` as root class — static render | Root container for macro components |
 | `.z-scrollbar` | `zul/Scrollbar.ts` renders it in innerHTML — static class | Custom scrollbar widget; styles must cover all `.z-scrollbar-*` sub-classes (`-vertical`, `-horizontal`, `-indicator`, …) |
-| `.z-upload` | `zul/Upload.ts:_createUploadHTML` renders `<span class="z-upload">` | Invisible file-input wrapper for upload buttons |
+| `.z-upload` | `zul/Upload.ts` `initContent()` renders `<span class="z-upload">` | Invisible file-input wrapper for upload buttons |
 | `.z-upload-icon` | static in upload widget | Upload progress indicator |
 | `.z-fileupload-add` / `.z-fileupload-remove` | `zul/Upload.ts` sets `sclass='z-fileupload-remove …'` and `sclass='z-fileupload-progress'` — set at widget creation time | File-upload dialog buttons |
 | `.z-fileupload-progress` | same | |
 | `.z-fileupload-manager` | `zul/Upload.ts:setSclass('z-fileupload-manager')` — set once, not toggled | |
 | `.z-drop-content` / `.z-drop-icon` / `.z-drop-text` | rendered once in drag ghost DOM (`widget.ts`) | Children of the `.z-drop-ghost` element |
-| `.z-drop-ghost` | created once per drag operation in `createDragGhost_` (`widget.ts`) | The floating ghost panel shown during drag |
+| `.z-drop-ghost` | created once per drag operation in `zk.DnD.ghost` (`widget.ts`) | The floating ghost panel shown during drag |
 
 ### Bundling note for decorative core-emitted classes
 
@@ -145,7 +145,7 @@ they are never JS-toggled as ZK framework mechanics:
 
 ---
 
-## Candidates from the brief that were reclassified
+## Classes reclassified as decorative
 
 | Candidate | Classification | Reason |
 |-----------|---------------|--------|
@@ -154,7 +154,7 @@ they are never JS-toggled as ZK framework mechanics:
 | `.z-overflow-hidden` | decorative | Utility class in stock global CSS; no framework JS toggles it |
 | `.z-temp` | decorative | Server-rendered by `HtmlPageRenders.java`; `crashmsg.ts` only reads it, never writes |
 | `.z-initing` | decorative | Appended once by `zk.ts _showprgb` during page init; never added/removed in response to runtime state changes |
-| `.z-modal-mask` | decorative | Written into innerHTML by `progressbox` / `Mask._draw`; never toggled on an existing node |
+| `.z-modal-mask` | decorative | Written into innerHTML by `progressbox` / `FullMask`; never toggled on an existing node |
 | `.z-loading*` / `.z-apply-*` | decorative | Same — created in innerHTML, never runtime-toggled |
 | `.z-error` | decorative | Created once by `_Erbx`; `display:none` initial state is mandatory (slideDown mechanism), but the class itself is never added/removed |
 | `.z-dd-stackup` | decorative | `drag.ts` sets `className` once at construction, not toggled |
@@ -163,7 +163,7 @@ they are never JS-toggled as ZK framework mechanics:
 | `.z-clear` | decorative | Written into mold HTML at render time |
 | `.z-macro` | decorative | Root class of MacroWidget — static render |
 | `.z-scrollbar` | decorative | Written into Scrollbar innerHTML once on render |
-| `.z-drag-ghost` | contract* | `widget.ts:createDragGhost_` calls `jq(dgelm).addClass('z-drag-ghost')` — technically added at start of drag but not subsequently toggled; borderline; classified contract because it's a framework `addClass` call |
+| `.z-drag-ghost` | contract* | `zk.DnD.ghost` (`widget.ts`) calls `jq(dgelm).addClass('z-drag-ghost')` — technically added at start of drag but not subsequently toggled; borderline; classified contract because it's a framework `addClass` call |
 
 ---
 

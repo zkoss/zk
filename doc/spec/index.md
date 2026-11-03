@@ -36,6 +36,9 @@ under [`../`](../).
 | [zk-mui-structural-gaps.md](zk-mui-structural-gaps.md) | ZK↔MUI differences unresolvable by CSS alone (floating label, multi-select, calendar today-marker, ripple) — expected limits, not bugs |
 | [native-modern-ui-components.md](native-modern-ui-components.md) | Native `badge`/`chip`/`avatar`/`avatargroup` (ZK 10.4+) — class/attribute contract; old-utility → native-severity mapping; replaces the former `.z-badge`/`.z-chip`/`.z-avatar` utility CSS |
 | [screenshot-tolerance.md](screenshot-tolerance.md) | Playwright screenshot gate tolerance — `maxDiffPixels` floor for state shots, per-project `threshold`, `maxDiffPixelRatio` opt-ins; the zero-tolerance equivalence run stays at zero |
+| [forced-colors.md](forced-colors.md) | Windows High-Contrast Mode (`forced-colors: active`) behaviour — the guard mechanism, restored blocks, resolutions of ambiguous cases, audit method and how to verify |
+| [important-inventory.md](important-inventory.md) | Durable record of every `!important` in the theme CSS — what it does, whether it was removed or kept, and the evidence for that verdict |
+| [layer-architecture-review.md](layer-architecture-review.md) | CSS `@layer` architecture — why the cascade-layer design exists, how it is built, and how downstream users customize it |
 
 ## Related
 
