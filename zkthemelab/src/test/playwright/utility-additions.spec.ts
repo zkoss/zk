@@ -299,9 +299,9 @@ test.describe('colors', () => {
       expect(await css(page.locator(`.z-label.pv-on-${role}-container`), 'color'))
         .toBe(await fg(`--zk-color-on-${role}-container`));
     }
-    // Why the class exists: the container's colour does not reach a Label.
+    // A Label inherits its container's colour, as in IceBlue (ZK-6112).
     expect(await css(page.locator('.z-label.pv-container-plain'), 'color'))
-      .not.toBe(await fg('--zk-color-on-primary-container'));
+      .toBe(await fg('--zk-color-on-primary-container'));
   });
 
   test('inverse surface pairs with inverse text', async ({ page }) => {

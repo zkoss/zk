@@ -74,6 +74,7 @@ a consciously deferred gap. What it has instead:
 
 4. **Chips already pair bg + fg** — `js/zul/wgt/css/chip.css` pairs `--zk-chip-bg` with
    `--zk-chip-color` for each severity (`info`, `success`, `warning`, `error`, `neutral`).
+   `.z-label` sets no colour, so the chip color applies when the chip classes sit on a `<label>`.
 
 ### Deferred
 Full automatic foreground selection (MUI/Ant style) needs `contrast-color()`, which is not yet
