@@ -52,6 +52,11 @@ const sizeCases: SizeCase[] = [
   { name: 'textbox',  url: '/textbox.zul',  selector: '.z-textbox' },
   { name: 'combobox', url: '/combobox.zul', selector: '.z-combobox-input' },
   { name: 'datebox',  url: '/datebox.zul',  selector: '.z-datebox-input' },
+  // user-applied sclass="z-button-icon" (tablet/_buttons.css); the page carries one in its Sizes section
+  { name: 'button — icon button', url: '/button.zul', selector: '.z-button-icon.z-button' },
+  { name: 'breadcrumb — ellipsis button', url: '/breadcrumb.zul', selector: '.z-breadcrumb-ellipsis > button' },
+  { name: 'carousel — arrow', url: '/carousel.zul', selector: '.z-carousel-arrow' },
+  { name: 'carousel — indicator', url: '/carousel.zul', selector: '.z-carousel-indicator' },
 ];
 
 test.describe('tablet-touch-size', () => {
@@ -827,6 +832,31 @@ async function expectTouchTargets(targets: Locator, min: number, what: string, a
   }
 }
 
+/**
+ * Presses `button` with the mouse and holds it: its background is the :active mix of `activeMix` (a CSS colour
+ * expression, resolved to a computed colour by a probe element); after the release it is back at the resting colour.
+ * The pointer leaves the button before the release, so the press does not fire the button's action.
+ */
+async function expectPressedBackground(page: Page, button: Locator, activeMix: string): Promise<void> {
+  const expected = await page.evaluate(mix => {
+    const probe = document.createElement('div');
+    probe.style.backgroundColor = mix;
+    document.body.appendChild(probe);
+    const color = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    return color;
+  }, activeMix);
+  const resting = await button.evaluate(el => getComputedStyle(el).backgroundColor);
+  expect(resting, 'the resting colour is not the pressed one').not.toBe(expected);
+  const box = (await button.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await expect(button, 'background while pressed').toHaveCSS('background-color', expected);
+  await page.mouse.move(1, 1);
+  await page.mouse.up();
+  await expect(button, 'background after the release').toHaveCSS('background-color', resting);
+}
+
 test.describe('tablet-popup', () => {
   // ---- combobox: bottom sheet (tablet/_inputs.css) ----
   // 8 items on pv/popup-tablet-fixtures.zul: the sheet shows 5 rows (5 x 60px), so the list scrolls and a row meets the bottom edge.
@@ -862,6 +892,11 @@ test.describe('tablet-popup', () => {
     await expect(popup.locator('.z-calendar-wheel-cave')).toHaveCount(1);
     await expect(popup.locator('td')).toHaveCount(0);
     await expectTouchTargets(popup.locator('.z-calendar-wheel-button'), 44, 'wheel button');
+    // tablet/_wheel.css :active — a 12% state layer of the label colour on the button fill
+    await expectPressedBackground(page, popup.locator('.z-calendar-wheel-left'),
+      'color-mix(in srgb, var(--zk-color-on-primary) 12%, var(--zk-color-primary))');
+    await expectPressedBackground(page, popup.locator('.z-calendar-wheel-right'),
+      'color-mix(in srgb, var(--zk-color-primary) 12%, var(--zk-color-surface-container-high))');
   });
 
   test('datebox.zul: the date wheel with the time in the popup', async ({ page }) => {
@@ -894,6 +929,10 @@ test.describe('tablet-popup', () => {
       'timebox-tablet-popup-wheel.png');
     await expectBottomSheet(page, popup);
     await expectTouchTargets(popup.locator('.z-timebox-wheel-button'), 44, 'wheel button');
+    await expectPressedBackground(page, popup.locator('.z-timebox-wheel-left'),
+      'color-mix(in srgb, var(--zk-color-on-primary) 12%, var(--zk-color-primary))');
+    await expectPressedBackground(page, popup.locator('.z-timebox-wheel-right'),
+      'color-mix(in srgb, var(--zk-color-primary) 12%, var(--zk-color-surface-container-high))');
   });
 
   // ---- colorbox: palette and picker ----
