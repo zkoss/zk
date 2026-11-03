@@ -63,8 +63,15 @@
     box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-slider-accent) 16%, transparent);
 }
 
-.z-slider-button:focus-visible {
-    box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-slider-accent) 16%, transparent);
+/* The .z-slider root takes keyboard focus (tabindex/role=slider), not the thumb, so the
+   ring is drawn on the thumb from the root's :focus-visible and the root's own outline is dropped. */
+.z-slider:focus-visible {
+    outline: none;
+}
+
+.z-slider:focus-visible .z-slider-button {
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
 }
 
 .z-slider-button:active {
