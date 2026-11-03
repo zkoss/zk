@@ -9,7 +9,7 @@ build another theme and asking "how do I run the same checks I did before".
 A repeatable procedure for auditing a ZK theme's CSS the way `marble` was first
 audited on 2026-06-15. This page is self-contained: the **method** (how to
 produce an audit for any theme) plus an inline **worked example** (what good
-output looks like — the A–F structure in Step 4, with the concrete `marble`
+output looks like — the A–G structure in Step 4, with the concrete `marble`
 findings cited throughout: the goldenlayout 3-warning split, the
 `--zk-elevation-resting` shadow extraction, the orphan-token buckets).
 
@@ -60,7 +60,7 @@ bash .claude/skills/marble-theme/scripts/audit-css.sh --out doc/css-audit-<theme
 bash .claude/skills/marble-theme/scripts/audit-css.sh
 ```
 
-It emits an A–F report skeleton with five checks filled in; the list is in the header of
+It emits an A–G report skeleton with five checks filled in; the list is in the header of
 `scripts/audit-css.sh`. Judgement notes the header does not carry:
 
 - Hardcoded colours (§B1) exclude values inside a `var(--x, …)` fallback: those are intentional
@@ -200,7 +200,7 @@ The mechanical core is meant to stay on as a standing gate:
 
 ## Step 4 — Write it up
 
-Produce the report using the **A–F structure** below so audits of different
+Produce the report using the **A–G structure** below so audits of different
 themes stay comparable:
 
 ```

@@ -23,7 +23,7 @@ zk-version: 10.2.1-jakarta
 | c6 | `.z-column` | font-weight | 500 |
 | c7 | `.z-column` | border-bottom | 1px solid rgba(0, 0, 0, 0.12) |
 | c8 | `.z-row` | border-bottom | 1px solid rgba(0, 0, 0, 0.12) |
-| c9 | `.z-row-hover` or `.z-row:hover` | background-color | rgba(0, 0, 0, ~0.04) |
+| c9 | `.z-row:hover` | background-color | rgba(0, 0, 0, ~0.04) |
 | c10 | `.z-grid-odd` | background-color | tinted alternate (or not used) |
 | c12 | `.z-grid` | border-radius | 6px (card-like) |
 

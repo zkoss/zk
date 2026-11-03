@@ -30,7 +30,7 @@ reference this file and need no per-feature edits.
 | Density / compact | [`data-dense-mode.md`](data-dense-mode.md) | `density:` + `density-tokens:` | Generator (bind to ladder/alias) | Evaluator `x-density` | — |
 | Forced colors (WHCM) | [`forced-colors.md`](forced-colors.md) | `fc-risk:` + `fc-guards:` | Generator (guards in central file) | Evaluator `x-fc-capture` + §3d fc review; `npm run test:forced-colors` when guards touched | — |
 | Tablet / touch | [`tablet-design-overview.md`](tablet-design-overview.md) | `tablet:` | Generator (only if `needs-specific`) | tablet Playwright project (manual run for now) | — |
-| Render smoke | — | — | — | `render-smoke` project | add `/<comp>.zul` to `render-smoke.spec.ts` `PAGES` |
+| Render smoke | — | — | — | `smoke` project (`render-smoke.spec.ts`) | add `/<comp>.zul` to `render-smoke.spec.ts` `PAGES` |
 | css.dsp wiring | [`css-dsp-file-structure.md`](css-dsp-file-structure.md) | — | Generator/theme | `node scripts/check-css-dsp.js --module zul` (mechanical) | — |
 
 ## Contract section template (authored by zk-spec-author, approved by the user)

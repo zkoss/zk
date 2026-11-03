@@ -89,7 +89,7 @@ Marble targets a denser scale than standard MD3 (aligned to MUI v7) — prefer 1
 
 **CSS class-naming convention — `z-` vs `m-` prefix.** The `z-` prefix is for
 framework / component CSS (component variants, styled in `zul/src/main/resources/`
-component + utility CSS — e.g. `z-paging-outlined`, `z-badge-success`). The `m-`
+component + utility CSS — e.g. `z-button-outlined`, `z-badge-success`). The `m-`
 prefix is for **page-level** classes that live in page-local CSS (used only by a
 specific demo / use-case page — e.g. `m-card`, `m-badge`, `m-active`), never in
 component CSS.
@@ -239,7 +239,7 @@ Use Lucide icons via the `z-icon-*` CSS mask pattern already established in the 
 
 ### Header control icon buttons (close / maximize / minimize / collapse)
 
-One family across every header strip that carries window-management controls (user ruling
+One family across every header strip that carries window-management controls (maintainer decision
 2026-06-05 — goldenlayout had invented its own 20px text-glyph controls):
 
 Button box and icon sizes are in `js/zul/wnd/css/window.css` and `panel.css`. The `goldenlayout` `.lm_controls` strip uses the panel size (nearest header height) and the same icons panel's `z-icon-expand`/`z-icon-times` resolve to.
@@ -324,14 +324,14 @@ A standalone `<label>` placed on the same line as a taller field has **no MD3 sp
 Why a separate `<label>` is needed at all: most ZK inputs (textbox, combobox, datebox, …) have **no `label` attribute**, so a field caption must be an adjacent `<label>` component. Only selection controls (radio, checkbox) carry their own `label` — and those captions are part of the control, centred by the component itself.
 
 Theme stance:
-- The theme does **not** auto-centre a bare `<label>` — alignment is a container concern, never a `.z-label` property (a label must still baseline-align in running text and wrap as a caption). See skill `reference/inline-label-alignment.md`.
+- The theme does **not** auto-centre a bare `<label>` — alignment is a container concern, never a `.z-label` property (a label must still baseline-align in running text and wrap as a caption). See the zk-component-rules skill, `.claude/skills/zk-component-rules/reference/inline-label-alignment.md`.
 - The flex centre is **required only for selection controls** (radio / checkbox): a label beside a `textbox`/`combobox` already centres in a plain block row, so leave those alone. For a radio/checkbox row, wrap it: `<div sclass="z-d-flex z-items-center z-gap-3">` (verified 0px; `z-gap-*` sets the label↔field gap since flex collapses inter-element whitespace). `<hlayout valign="middle">` / `<hbox valign="middle">` are equivalent ZK-attribute alternatives. Applying the wrapper to an input row is harmless but unnecessary; for a column of mixed rows you may apply it uniformly for visual consistency.
 - A bare `<div>` row is a **baseline context**: it coincidentally centres single-line inputs (textbox via `vertical-align:middle`, combobox via baseline-at-centre) but drops radio/checkbox labels ~4–5px (their baseline is the caption text, below the box centre). The default `<hlayout>` (`valign="top"`) puts every label ~10px high. Neither is a reliable form-row container — the divergence is correct CSS for the mode, not a theme defect.
 - Live demo of both states: `zkthemelab/src/main/webapp/web/label.zul` (a "Default block row" group showing the radio/checkbox drop, and a "Correct" flex-centred group).
 
 ---
 
-## 14. Splitter Family (unified spec — user ruling 2026-06-04)
+## 14. Splitter Family (unified spec — maintainer decision 2026-06-04)
 
 One resize affordance across the app. Four implementations share this spec:
 `splitter` (zul.box), `borderlayout` region splitters, `splitlayout` (zkmax), and
@@ -370,7 +370,7 @@ that does NOT exempt it from the pill: GL has no `setBtnPos_` JS centering, so t
 pill is drawn entirely in CSS via `::before` (pill: bar-thickness × 28px, `outline-variant`,
 `corner-full`) with grip dots via `::after` (8px Lucide `ellipsis-vertical`/`ellipsis` mask,
 `on-surface-variant`, `opacity: 1`; hover → pill `primary`, dots `on-primary`). The earlier
-"no pill, opacity-.5 dot marker" exception shipped an imperceptible affordance (user finding
+"no pill, opacity-.5 dot marker" exception shipped an imperceptible affordance (maintainer review
 2026-06-05) and is retired. GL's bundled CSS is never loaded in ZK, so the theme must also
 set the family cursors (`col-resize` on `.lm_horizontal`, `row-resize` on `.lm_vertical`).
 Remaining structural exception: no collapse caret (GoldenLayout has no collapse feature).
@@ -421,19 +421,19 @@ The property values (colors, radii, lane/track/thumb thickness, transition) are 
 - The embed (idle) rail is as thick as the hover *track* (8px, not the 6px thumb), so rest to hover does not shift.
 - Track, thumb and arrows are edge-anchored (vertical to `right`, horizontal to `bottom`); the lane carries no margin.
 
-**Distinct-from-native, but MD3 (user ruling 2026-06-30):** a `nativebar="false"` bar that
+**Distinct-from-native, but MD3 (maintainer decision 2026-06-30):** a `nativebar="false"` bar that
 looks identical to native is pointless, so the simulated bar reads as a deliberate themed
 control via (a) a **visible faint track channel** (the native overlay has none) and (b) a
 **neutral, slightly bolder pill thumb** (idle `outline` → hover `on-surface-variant`, vs the
 native bar's `outline-variant` → `outline`). The **caret step buttons are shown** (against
-the MD3 default of hiding scrollbar arrows) per explicit user ruling — kept MD3-restrained:
+the MD3 default of hiding scrollbar arrows) per maintainer decision — kept MD3-restrained:
 flat, neutral, with a faint hover state layer, and they appear **only on hover** with the
 rest of the bar (the whole `.z-scrollbar` is `display:none` at rest). ZK's `syncSize()` reads
 the buttons' offset size to inset the wrapper, so the buttons must carry an explicit
 width/height (12px). The `*-embed` rail carries **no** `:hover` rule — it is `display:none`
 whenever the pointer is over the body (the full bar replaces it).
 
-**Edge-hugging, no lateral jump (user ruling 2026-06-30, Option A):** in
+**Edge-hugging, no lateral jump (maintainer decision 2026-06-30, Option A):** in
 embedded mode the rest `*-embed` rail and the hover bar must sit on the *same* cross-axis line
 — otherwise the bar visibly jumps on mouse-over (MD3 continuity-of-motion; the original
 design jumped ~5px). ZK's scroll-sync pins **both** the bar and the `*-embed` rail to the same

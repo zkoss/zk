@@ -12,14 +12,13 @@ and the component renders with browser/inherited defaults, **with no error**.
    serves these correctly. ✅
 2. **Global bundle** — the CSS is concatenated into a file that `zk.wcs` always serves
    (for example `norm.css.dsp`, `combo.css.dsp`, `footer.css.dsp`). Required for any component with **no `css-uri`**: helpers, mold-only
-   widgets, core-JS-drawn DOM, and real widgets that stock ZK styles only in `norm.less`.
+   widgets, core-JS-drawn DOM, and real widgets that stock ZK styles only in `norm.css.dsp`.
 
 ## The trap
 
 If a **no-`css-uri`** component's CSS is left to the 1:1 auto-scan, the build emits an
 orphaned `<comp>.css.dsp` that **ZK never requests**. The rule is in no served stylesheet;
-the widget is unstyled; nothing errors. This bit `scrollbar` and then
-6 more (`div`, `label`, `span`, `html`, `image`, `imagemap`) in the follow-up sweep.
+the widget is unstyled; nothing errors. This bit `scrollbar`, `div`, `label`, `span`, `html`, `image` and `imagemap`.
 
 ## Authoritative detection (runtime probe)
 

@@ -27,7 +27,7 @@ mockup-needed: Y — no ZKDoc canonical image found for ConfirmPopup (component 
 - ZKDoc canonical: none found — ConfirmPopup is new in ZK 11.0.0 and has no entry yet under
   https://github.com/zkoss/zkdoc/blob/master/zk_component_ref/.
 - Iceblue baseline: run `scripts/render-iceblue-baseline.sh confirmpopup` to create `doc/contracts/baselines/confirmpopup-iceblue.png` before the evaluator compares against IceBlue.
-- HTML mockup: `doc/contracts/confirmpopup.html` is not written yet; zk-spec-author writes it (mockup-needed: Y).
+- HTML mockup: not written yet; zk-spec-author writes it (mockup-needed: Y).
 
 ## Design Contract
 

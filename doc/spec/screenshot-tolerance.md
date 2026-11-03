@@ -24,8 +24,7 @@ shot red from one run to the next. Without a floor, the gate fails on noise that
 
 Differences found by the equivalence run are not gate failures. Reading them as gate failures is a
 category error, because they are equivalence-check evidence. When the equivalence run is re-run,
-every differing pair still needs an explanation of why it differs. That explanation was kept in an
-untracked review pack, not in this spec.
+every differing pair still needs an explanation of why it differs.
 
 ## Tolerance knobs
 

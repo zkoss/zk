@@ -2,7 +2,7 @@
 
 Outcome contract for the JS-toggled global classes the Marble theme must style. These have **no
 MD3/Mira analog** and **no stock ZK CSS** (except `.z-word-nowrap`/`.z-dragged`, which stock
-defines in `norm.less`) — they are runtime hooks ZK's client engine emits and expects the theme to
+defines in `norm.css.dsp`) — they are runtime hooks ZK's client engine emits and expects the theme to
 style. Spec layer: `.claude/skills/zk-component-rules/reference/framework-classes.md`. Preview:
 `dnd.zul`. Tests: `src/test/playwright/framework-classes.spec.ts`.
 

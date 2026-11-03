@@ -8,7 +8,7 @@
  *
  * This is check 5 (§G) of the marble-theme skill's CSS audit (reference/css-audit.md). It is ADVISORY and
  * READ-ONLY: it never edits CSS and always exits 0. It lists CANDIDATES; a human
- * (Step 2 of the skill) decides what is safe to delete.
+ * (Step 2 of reference/css-audit.md) decides what is safe to delete.
  *
  * How it decides "what element does `.z-<name>` render":
  *   ZK widget mold files are the source of truth — `function <comp>$mold$(out)`

@@ -4,7 +4,7 @@
 
 ## Button subclass
 
-The component registry (`zul/src/main/resources/metainfo/zk/lang.xml`) declares `<fileupload>` with `<extends>button</extends>` and no `<css-uri>`. The component keeps the `z-button` zclass, so the trigger is styled by the button CSS (`css/button.css.dsp`). The `fud/fileupload.css` file, bundled by `scripts/build-css.js`, styles the file rows of the upload dialog, not the button.
+The component registry (`zul/src/main/resources/metainfo/zk/lang.xml`) declares `<fileupload>` with `<extends>button</extends>` and no `<css-uri>`. The component keeps the `z-button` zclass, so the trigger is styled by the button CSS (`css/button.css.dsp`). The `fud/css/fileupload.css` file, bundled by `scripts/build-css.js`, styles the file rows of the upload dialog, not the button.
 
 ## No `multiple` property
 

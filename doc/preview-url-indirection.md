@@ -58,7 +58,7 @@ Why this spelling:
 - **One name serves both readers.** `PREVIEW_URL` works as a shell environment variable for scripts
   *and* as a prose placeholder for agents. There is no second vocabulary to learn or keep in sync.
 - **It matches existing precedent.** `scripts/render-iceblue-baseline.sh` already does
-  `BASE_URL="${ICEBLUE_URL:-http://localhost:8082}"`.
+  `BASE_URL="${PREVIEW_URL:-http://127.0.0.1:8085}"`.
 - **It is self-announcing.** An agent reading `${PREVIEW_URL}/cropper.zul` knows a substitution is
   required and goes looking. A bare relative path (`/cropper.zul`) would be ambiguous against the
   repo-relative paths that fill these same documents.
@@ -79,19 +79,15 @@ all: the server takes `./gradlew appRun -PhttpPort=<n>` and the browser side tak
 `PREVIEW_URL` environment variable. Edit the files above only when the new port is meant to be
 permanent.
 
-## Scope: two servers, two names
+## Scope: one server, two themes
 
-`${PREVIEW_URL}` covers the **Marble preview app only**. The **IceBlue** comparison app keeps its
-own separate name, `ICEBLUE_URL` (see `scripts/render-iceblue-baseline.sh`, which already defaults
-it).
+`${PREVIEW_URL}` covers the **zkthemelab preview server**, and that one server serves both themes.
+Marble is the default. IceBlue is chosen per request with the `zktheme=iceblue` cookie, which
+ZK reads before zkthemelab's `org.zkoss.theme.preferred=marble`. `scripts/capture-iceblue.js` sets the cookie.
+There is no separate IceBlue server and no `ICEBLUE_URL` name.
 
-They are two different servers, not one server at two addresses, so one shared name would be wrong
-regardless of how many files it saved. A document that says "the preview server" means Marble, and
-a baseline capture that says `ICEBLUE_URL` means the other app. Collapsing them would make every
-such reference ambiguous.
+So one name is enough. A document that says "the preview server" means the same address for both
+themes, because a theme is a cookie, not an address.
 
-The churn argument does not apply here either: IceBlue's address appears in only a few places, and
-one of them is already an overridable shell default.
-
-**Rule for a third server**: give it its own `<NAME>_URL`, define it where its readers will look,
+**Rule for a second server**: give it its own `<NAME>_URL`, define it where its readers will look,
 and do not fold it into `${PREVIEW_URL}`.

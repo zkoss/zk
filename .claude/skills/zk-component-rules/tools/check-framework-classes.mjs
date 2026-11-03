@@ -4,7 +4,7 @@
  *
  * Verifies that a ZK theme defines every JS-toggled CONTRACT class (from the
  * framework-classes registry) under its exact stock-ZK name. Catches the failure
- * mode behind the Marble splitlayout drag bug: a class ZK's client engine toggles
+ * mode behind a theme's splitlayout drag bug: a class ZK's client engine toggles
  * at runtime (e.g. `.z-flex`) was renamed / omitted, so the theme silently breaks
  * hflex/vflex, drag, frozen columns, render-defer, etc.
  *

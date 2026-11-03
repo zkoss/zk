@@ -33,7 +33,7 @@ The path ZK *requests* a `.css.dsp` from is **not** decided by the theme's Java.
 - **Decision:** Marble's stylesheets are plain `.css`. No LESS and no DSP preprocessing is needed to build them.
 - **Evidence (zk):** zk tracks 0 `.less` files. `build.gradle` (line 192) states LESS was retired in ZK 11 (ZK-6112). `scripts/build-css.js` is the only CSS pipeline.
 - **Still in zkcml (not settled):** the zkcml repo still has `.less` files, and `zkcml/zkthemebuilder/pom.xml` (line 187) still runs a `zklessc` step.
-- **Open:** whether IceBlue ships pure CSS in 11.0 or stays on LESS, and whether the 11.0 scope fits the end-of-October date. Both are **open**; this spec does not decide them.
+- **Open:** whether IceBlue ships pure CSS in 11.0 or stays on LESS. This is **open**; this spec does not decide it.
 
 ## 5. Asset URLs in plain CSS
 

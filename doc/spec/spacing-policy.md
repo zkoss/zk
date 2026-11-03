@@ -1,6 +1,6 @@
 # Marble Spacing Policy (opt-in, zero default margins)
 
-> Revised 2026-06-05 (user ruling): the previous
+> Revised 2026-06-05 (maintainer decision): the previous
 > "default vertical rhythm" rule (`_rhythm.css`, auto `margin-block-end` on container
 > widgets) has been **removed**. This page records the current policy and why.
 

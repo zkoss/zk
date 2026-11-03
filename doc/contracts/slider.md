@@ -3,7 +3,7 @@ tier: T1
 category: input
 preview: ${PREVIEW_URL}/slider.zul
 rules: see .claude/skills/zk-component-rules/components/slider.md
-contract-approved: true  # user-approved 2026-06-04 (D1–D5 deviations accepted; N1/N2 audit suggestions applied as c8b/c8c/c10a)
+contract-approved: true  # user-approved 2026-06-04 (D1–D5 deviations accepted; c8b/c8c/c10a applied)
 zk-version: 10.2.1-jakarta
 js-source-files:
   - zk/zul/src/main/resources/web/js/zul/inp/Slider.ts
@@ -124,4 +124,4 @@ The following are intentional divergences from raw MD3 spec. They are documented
 | D2 | Thumb ring opacity (focus-visible) | 12% (`--zk-state-focus-opacity`) | 16% same selector as hover (MUI Slider.css line 184) | **16%** via `color-mix` | MUI uses same 16% for focus as hover — simpler ring UX. Marble follows MUI. |
 | D3 | Track (rail) background mechanism | M3: use `--zk-color-outline-variant` directly | MUI uses `.MuiSlider-rail { opacity: 0.38 }` over the primary container (Slider.css line 98) | **`var(--zk-color-outline-variant)`** directly (rgba 0.12 tone) | `outline-variant` is semantically correct for an inert track; avoids a relative opacity + extra element dependency. Visual result is similar lightness. |
 | D4 | Popup (valueLabel) background color | M3: inverse-surface | MUI uses `#757575` (grey, Slider.css lines 365–382) | **`var(--zk-color-inverse-surface)`** (#2d3748, dark blue-grey) | Inverse-surface provides better on-brand contrast; the MUI grey is a Material v1/v2 legacy holdover not used in MD3. |
-| D5 | Root padding | — | MUI root padding 13px | **12px** (`--zk-spacing-3`) | 1px sub-pixel UX difference; 12px stays on the 4dp spacing grid. Accepted at the 2026-06-04 approval gate (audit finding F9) — not contracted, do not re-flag. |
+| D5 | Root padding | — | MUI root padding 13px | **12px** (`--zk-spacing-3`) | 1px sub-pixel UX difference; 12px stays on the 4dp spacing grid. Accepted at the 2026-06-04 approval gate — not contracted, do not re-flag. |

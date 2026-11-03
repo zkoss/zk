@@ -69,8 +69,8 @@ beside a `textbox`/`combobox` already centres in a plain block `<div>` — leave
 For a radio/checkbox row, wrap it in a container that **declares centre
 cross-alignment** (verified 0px):
 
-- a flex row — `<div sclass="z-d-flex z-items-center z-gap-3">` (add `z-gap-*`: flex
-  collapses inter-element whitespace, so without it the label and field touch), or
+- a flex row — `<div style="display: flex; align-items: center;">` with a `gap` value set
+  (flex collapses inter-element whitespace, so without a gap the label and field touch), or
 - `<hlayout valign="middle">` / `<hbox valign="middle">` (equivalent ZK-attribute form).
 
 Applying the wrapper to an input row is harmless but unnecessary (you may do it

@@ -47,7 +47,7 @@ Each adds `.z-window-{mode}` to the root: `.z-window-embedded`, `.z-window-overl
 - `border="normal"` (default) — outlined frame; root has no extra class
 - `border="none"` — no outline; adds `.z-window-noborder` to the root
 
-`border` is a **visual frame** attribute only. It does NOT determine whether the window floats — that is the role of `mode`. A theme MUST NOT make border control elevation/shadow (see `doc/spec/window-design-rules.md`).
+`border` is a **visual frame** attribute only. It does NOT determine whether the window floats — that is the role of `mode`. A theme MUST NOT make border control elevation/shadow.
 
 ## Shadow rendering
 

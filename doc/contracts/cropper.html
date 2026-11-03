@@ -6,8 +6,8 @@
 <!--
   Self-contained marble design contract mockup.
   Tier: T3 — .z-cropper and .z-cropper-toolbar (+ ul/li/a) are the free design surface.
-  Jcrop-injected DOM (.z-cropper-holder, .z-cropper-area, .jcrop-*) is structural-required:
-  Jcrop ships NO stylesheet — the theme must reproduce the upstream codegen geometry verbatim
+  Jcrop-injected DOM (.z-cropper-holder, .z-cropper-tracker, .jcrop-*) is structural-required:
+  Jcrop ships NO stylesheet — the theme must reproduce the stock IceBlue geometry verbatim
   (only decorative values are theme choices). Not depicted here; see contract boundary yaml.
 
   Compare against: doc/contracts/baselines/cropper-iceblue.png
@@ -85,8 +85,8 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 /* ────────────────────────────────────────────────────────────────────────
    Component-specific styles — T3 contract design surface.
    .z-cropper wrapper + .z-cropper-toolbar (ul/li/a) are themed here.
-   Jcrop internals (.z-cropper-holder, .z-cropper-area, .jcrop-*, etc.)
-   are structural-required (geometry from upstream codegen) — not depicted.
+   Jcrop internals (.z-cropper-holder, .z-cropper-tracker, .jcrop-*, etc.)
+   are structural-required (geometry from stock IceBlue) — not depicted.
    ──────────────────────────────────────────────────────────────────────── */
 
 /* c1, c2, c3, c6 — wrapper border, radius, overflow, shrink-wrap */
@@ -204,9 +204,9 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 
 <p class="note">
     T3 component: <code>.z-cropper</code> and <code>.z-cropper-toolbar</code> (+ ul/li/a) are the free design surface.
-    The Jcrop library injects <code>.z-cropper-holder</code>, <code>.z-cropper-area</code>,
+    The Jcrop library injects <code>.z-cropper-holder</code>, <code>.z-cropper-tracker</code>,
     <code>.z-cropper-handle</code>, <code>.jcrop-dragbar</code>, and related elements at runtime
-    but ships <strong>no stylesheet</strong> — the theme MUST reproduce the upstream codegen geometry
+    but ships <strong>no stylesheet</strong> — the theme MUST reproduce the stock IceBlue geometry
     for them verbatim (structural-required; only decorative values are theme choices).
     <code>.z-cropper-canvas</code> does NOT exist in the live DOM.
 </p>
@@ -233,7 +233,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                     <div class="mock-image-label">
                         [image area]<br>
                         Jcrop internals injected here at runtime<br>
-                        (.z-cropper-holder, .z-cropper-area, etc.)
+                        (.z-cropper-holder, .z-cropper-tracker, etc.)
                     </div>
                 </div>
                 <!-- Toolbar is display:none at rest — not rendered in this state -->
@@ -313,9 +313,8 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
         <code>.z-cropper-toolbar</code> — floating action toolbar<br>
         <code>.z-cropper-toolbar &gt; ul</code>, <code>li</code>, <code>a</code> — action items<br>
         <br>
-        <strong>Structural-required (Jcrop-injected, but Jcrop ships NO stylesheet — theme MUST reproduce upstream codegen geometry; decorative values only may diverge):</strong><br>
+        <strong>Structural-required (Jcrop-injected, but Jcrop ships NO stylesheet — theme MUST reproduce stock IceBlue geometry; decorative values only may diverge):</strong><br>
         <code>.z-cropper-holder</code> — Jcrop image container (never set width/height — JS owns)<br>
-        <code>.z-cropper-area</code> — selection overlay (outline 1px solid white, cursor move)<br>
         <code>.z-cropper-vline</code>, <code>.z-cropper-hline</code> — 1px guide lines<br>
         <code>.z-cropper-tracker</code> — full-size mouse-event capture overlay<br>
         <code>.z-cropper-handle</code> — 6×6 handles + 8 per-ordinal transforms<br>

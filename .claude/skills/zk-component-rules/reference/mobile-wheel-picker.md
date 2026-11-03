@@ -97,7 +97,7 @@ timebox can be 130px+.) Because this is a ZK-JS coordinate quirk a CSS theme
 cannot reach, **do not trust ZK's inline `top`**. Pin the sheet to the viewport
 bottom in CSS: `position: fixed; bottom: 0; top: auto`, with `left`/`right` set to centre it
 (datebox-touch never sets `left`), `transform: none`, and `!important` on each to beat ZK's
-inline values. The rule is in `zkmax/css/tablet/_wheel.css`.
+inline values. The rule belongs in the theme's touch wheel stylesheet.
 
 `position:fixed; bottom:0` is robust against BOTH the makeVParent inflation and a
 scrolled page (`scrollY`), and it centres the sheet. A CSS keyframe restores the
@@ -122,8 +122,7 @@ above the band and the band shows through behind the text.
   survived. **Test BOTH tap targets** (input and icon); they take different code
   paths and only one reveals the mis-anchor.
 
-See: theme CSS `zkmax/css/tablet/_wheel.css`; mobile-readonly neutralization in
-`zkmax/css/tablet/_inputs.css`; tests `tablet.spec.ts` (`wheelCases`; each case asserts BOTH
-icon-tap and input-tap land flush).
-Related unfixed: combobox/selectbox bottom-sheet share the same
-makeVParent path and also overshoot — logged for a dedicated pass.
+See: the theme's touch wheel stylesheet and its mobile-readonly neutralization rules, and the
+tablet test cases (each case asserts BOTH icon-tap and input-tap land flush).
+The combobox and selectbox bottom sheets go through the same makeVParent path and overshoot the
+same way.

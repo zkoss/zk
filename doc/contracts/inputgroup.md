@@ -15,8 +15,8 @@ preview: ${PREVIEW_URL}/inputgroup.zul
 ## DOM key selectors
 ```
 .z-inputgroup                      ← wrapper
-.z-inputgroup-content
-.z-inputgroup-prefix / -suffix     ← adornments (icons/text)
+.z-inputgroup-text                 ← adornments (icons/text)
+.z-inputgroup-vertical             ← vertical variant of the wrapper
 ```
 
 ## Expected values (T2 — `doc/spec/DESIGN.md` tokens only)
@@ -40,7 +40,7 @@ preview: ${PREVIEW_URL}/inputgroup.zul
       keep BOTH left and right borders (1px outline colour); only its
       `border-top` is collapsed against the preceding addon. A textbox with
       `border-left-width: 0` in vertical mode is a fail (horizontal collapse
-      rule leaking — see skill "Border-collapse is axis-aware").
+      rule leaking — see `.claude/skills/marble-theme/reference/component-design-notes.md`, "inputgroup" section).
 
 - [ ] **addon-edge (ZK-6112)**: an addon and its neighbouring input share ONE 1px edge on either side
       (leading *or* trailing addon): `right border of the first + left border of the second == 1px` in

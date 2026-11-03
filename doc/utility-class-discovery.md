@@ -197,7 +197,7 @@ Finally, `_print.css` is not purely authorable — it also resets component chro
 something an author writes in `sclass`. The generator resolves this by asking the component
 stylesheets which names they own and subtracting them, which needs no hand-maintained list and
 reports what it excluded in the build log. `z-paper` survives the filter correctly: it is defined
-in `_components.css` and only *referenced* by the print reset.
+in `_surface.css` and only *referenced* by the print reset.
 
 `lightningcss@1.33.0` was already in `package.json`, so the cross-check added no dependency.
 
@@ -517,7 +517,7 @@ The fix could not be "scan zkcml too": CE must build without EE present. The rul
 that **a class whose every rule sits inside `@media print` is a utility only when it is named as one**
 (`z-d-print-*`); anything else appearing only there is component chrome being reset. It runs as a
 second pass in `buildUtilityManifest`, after accumulation, because a class such as `z-paper` is
-defined unconditionally in `_components.css` *and* overridden under print — only the completed entry
+defined unconditionally in `_surface.css` *and* overridden under print — only the completed entry
 shows that it has a non-print rule.
 
 This is a naming-convention dependency rather than something derived from the CSS, which is the one
@@ -525,5 +525,5 @@ cost of the fix: a future print-only utility that does not carry the `z-d-print-
 dropped silently. The build log names every exclusion, so it would be visible.
 
 **Verified after the fix:** the component classes are excluded; `z-drawer` gone; `z-paper`
-retained with its `_components.css` declarations; all five `z-d-print-*` utilities retained; every
+retained with its `_surface.css` declarations; all five `z-d-print-*` utilities retained; every
 class still resolves in the built `norm.css.dsp`; output byte-identical across consecutive builds.

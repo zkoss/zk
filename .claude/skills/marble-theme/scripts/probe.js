@@ -7,9 +7,9 @@
  * removing an `!important`. Identical output => the keyword was redundant =>
  * safe to remove. A changed value => load-bearing => keep.
  *
- * Requires @playwright/test to resolve. Run from the repo root, or export
- *   NODE_PATH=<repo>/node_modules
- * if invoking the script from elsewhere (e.g. a scratchpad copy).
+ * Requires @playwright/test, resolved from <repo>/zkthemelab/node_modules. The
+ * repo root is found with git from the script's own folder, so run the script
+ * in place; a copy outside the checkout cannot find it.
  *
  * Usage:
  *   node probe.js <url> '<selector>' 'prop1,prop2,...' [waitSelector]
@@ -20,7 +20,7 @@
  * For BEHAVIORAL cases (open→dismiss a popup, collapse a panel, toggle a view,
  * mobile UA), this static probe is not enough — write a small bespoke Playwright
  * script that drives the interaction then measures. See the colorbox worked
- * example in SKILL.md for the pattern (chromium + devices['iPad …'] contexts).
+ * example in reference/important-reduction.md for the pattern (chromium + devices['iPad …'] contexts).
  */
 // zk: @playwright/test is installed under zkthemelab/ only; let Node resolve it from there.
 module.paths.push(require('path').join(require('child_process').execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: __dirname, encoding: 'utf8' }).trim(), 'zkthemelab/node_modules'));

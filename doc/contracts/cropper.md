@@ -22,7 +22,7 @@ mockup-needed: Y  # Marble diverges from the ZKDoc baseline — ZKCompRef_Croppe
 
 ## T3 wrapper boundary
 
-cropper is T3: Jcrop library owns and writes all crop-selection DOM at runtime, **but ships no stylesheet** — theme CSS is the only source of structural rules for that subtree. Geometry must match the upstream codegen `cropper.css.dsp` verbatim (`../zkcml/zkmax/codegen/resources/web/js/zkmax/cropper/css/cropper.css.dsp`); only decorative values (colors, opacity) are theme choices.
+cropper is T3: Jcrop library owns and writes all crop-selection DOM at runtime, **but ships no stylesheet** — theme CSS is the only source of structural rules for that subtree. Geometry is structural and required, and must match the stock IceBlue `cropper.css.dsp` (inside `dist/lib/iceblue_c.jar`, path `web/iceblue_c/js/zkmax/cropper/css/cropper.css.dsp`) verbatim. Marble's copy is `zkmax/src/main/resources/web/js/zkmax/cropper/css/cropper.css`. Only decorative values (colors, opacity) are theme choices.
 
 ```yaml
 restyle-freely:                      # fully theme-owned design surface
@@ -34,7 +34,6 @@ restyle-freely:                      # fully theme-owned design surface
 structural-required:                 # Jcrop-injected, unstyled by Jcrop — theme MUST ship upstream geometry; decorative values only may diverge
   - .z-cropper-handle      # 6×6 blocks + 8 per-ordinal position/transform rules
   - .jcrop-dragbar         # 6px bars stretched per axis + per-ordinal transforms
-  - .z-cropper-area        # outline 1px solid white; cursor: move
   - .z-cropper-vline       # 1px vertical guide line
   - .z-cropper-hline       # 1px horizontal guide line
   - .z-cropper-tracker     # 100%×100% event overlay
@@ -79,7 +78,7 @@ What a user must see, independent of theme styling (ground truth: the ZKDoc imag
 | c1 | `.z-cropper` | border | `1px solid var(--zk-color-outline-variant)` | doc/spec/DESIGN.md "Border Rules" (outline-variant = rgba(0,0,0,0.12) — thin wrapper edge) |
 | c2 | `.z-cropper` | border-radius | `var(--zk-shape-corner-extra-small)` | doc/spec/DESIGN.md "Corner Radii" (extra-small = 4px; small visual card, not a large panel) |
 | c3 | `.z-cropper` | overflow | `hidden` | structural — required for border-radius to clip Jcrop-injected content |
-| c6 | `.z-cropper` | display | `inline-block` | structural — upstream codegen; shrink-wraps the border to the image (a block root renders a 600px border around a 300px image) |
+| c6 | `.z-cropper` | display | `inline-block` | structural — stock IceBlue; shrink-wraps the border to the image (a block root renders a 600px border around a 300px image) |
 | c4 | `.z-cropper-toolbar` | background-color | `var(--zk-color-surface-container)` | MD3 floating-toolbar container color |
 | c5 | `.z-cropper-toolbar` | box-shadow | `var(--zk-elevation-2)` | MD3 floating toolbar lifts with elevation (a `border-top` is a docked-strip separator, the wrong idiom for a floating pill) |
 | c7 | `.z-cropper-toolbar` | border-radius | `var(--zk-shape-corner-full)` | MD3 floating toolbar = pill |

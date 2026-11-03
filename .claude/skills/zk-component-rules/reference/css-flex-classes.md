@@ -22,7 +22,7 @@ Every ZK theme MUST ship this block exactly, loaded late in the cascade (after c
 ## Hard rules
 
 1. **Never rename these selectors.** Theme utility classes may use any naming (`.z-d-flex`, `.z-flex-col`, …) but they are *additional*, not replacements — the JS-toggled names above must exist with exactly these values. (A theme that renamed `.z-flex` → `.z-d-flex` and `.z-flex-column` → `.z-flex-col` in a utility pass left the css-flex engine inert theme-wide until the framework block was restored.)
-2. **Never hard-code the framework classes' effect onto a JS-managed component root.** E.g. `.z-splitlayout { display: flex }` looks equivalent to ZK adding `z-flex` — but ZK *removes* `z-flex` at drag-end so inline px sizes take over. A hard-coded `display: flex` (or a `:not(.z-flex-column)` direction fallback) survives the class removal and defeats the mechanism. The proven failure: splitlayout drag persistence (contract rows M10/M11).
+2. **Never hard-code the framework classes' effect onto a JS-managed component root.** E.g. `.z-splitlayout { display: flex }` looks equivalent to ZK adding `z-flex` — but ZK *removes* `z-flex` at drag-end so inline px sizes take over. A hard-coded `display: flex` (or a `:not(.z-flex-column)` direction fallback) survives the class removal and defeats the mechanism. The proven failure: splitlayout drag persistence.
 3. **Never give a JS-sized child `flex-basis: 0` in component CSS.** `flex: 1 1 0` on an element whose inline `width`/`height` ZK writes makes the browser ignore the inline size on the main axis. `z-flex-item` is the only legitimate carrier of `flex: 1 1 0`, because ZK removes it before writing inline sizes.
 
 ## Margin subtraction — never give flex-capable widgets default margins
@@ -32,7 +32,7 @@ Every ZK theme MUST ship this block exactly, loaded late in the cascade (after c
 - **row** container → subtracts `zk(c).marginHeight()` (top+bottom margins) — from **both** `width` and `height`;
 - **column** container → subtracts `zk(c).marginWidth()` (left+right margins) — from both.
 
-So a theme-default `margin-bottom: 12px` on `.z-window` turns into `width/height: calc(100% - 12px)` inside any **row**-oriented flex parent: a 12px hole on the trailing edge of both axes (proven: splitlayout horizontal panes, contract row M12). Column orientation masks the same margin (`marginWidth()` = 0), so the bug surfaces asymmetrically — one orientation fine, the other broken.
+So a theme-default `margin-bottom: 12px` on `.z-window` turns into `width/height: calc(100% - 12px)` inside any **row**-oriented flex parent: a 12px hole on the trailing edge of both axes (proven: splitlayout horizontal panes). Column orientation masks the same margin (`marginWidth()` = 0), so the bug surfaces asymmetrically — one orientation fine, the other broken.
 
 **Rule: stock ZK widgets carry ZERO default margin, and ZK's JS sizing paths (css-flex `calc`, `setFlexSize_`, layout-region sizing) are written on that assumption. A theme must never add default margins to widgets that can be `hflex`/`vflex` children** (in practice: any container widget — window, panel, grid, listbox, tree, tabbox, …). Inter-widget spacing must be opt-in: a stack utility on the parent, explicit margin utilities, or ZK's own `<vlayout spacing>`. A default-rhythm margin rule on widgets breaks this sizing path, so a theme must not ship one.
 

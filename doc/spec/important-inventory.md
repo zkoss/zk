@@ -40,7 +40,7 @@ The current count is computed, not recorded here: run `.claude/skills/marble-the
 
 **Backfill 2026-09-08 — the three that post-dated the 2026-07 sweep, now tested:**
 - `zkmax/grid/css/grid.css` (`.z-grid--stacking > .z-grid-body/-footer > table { width: 100% }`) —
-  **irreducible, inline-override class.** `zul/mesh/MeshWidget.ts:789` writes
+  **irreducible, inline-override class.** `zul/mesh/MeshWidget.ts:799` writes
   `this.ebodytbl.style.width = innerWidth` — a real inline width on the body table — so no cascade
   can reach it. Not separately A/B-tested: `sizedByContent` appears on no preview page, so the
   failing case is not reproducible here; the source citation is the evidence. Re-check if ZK ever
