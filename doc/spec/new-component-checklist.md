@@ -107,6 +107,10 @@ The orchestrator (sole writer of status/tracker docs) first confirms:
    `/<comp>.zul` (mechanical one-liner; the orchestrator adds it if missing).
 3. **Forced-colors snapshot** — `zkthemelab/doc/screenshots/<comp>-forced-colors.png` exists
    locally (produced by `x-fc-capture`; the directory is gitignored, the image is not committed).
+4. **Focus-ring baselines** — when the component's CSS adds or removes a `:focus-visible` rule that
+   draws an `outline`, run `FOCUS_SCAN_UPDATE=1 npx playwright test -c src/test/playwright/playwright.config.ts --project=focus-scan`
+   from `zkthemelab/` and commit the changed `doc/focus-ring-outline-selectors.json` (and
+   `focus-ring-known-clips.json` if it moved).
 
 ## Known limits / follow-ups (not yet implemented)
 
