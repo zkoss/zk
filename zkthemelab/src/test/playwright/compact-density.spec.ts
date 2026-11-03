@@ -77,9 +77,11 @@ const BOX_TIERS: Tier[] = [
   { name: 'menubar', alias: '--zk-menubar-height', selector: '.z-menubar-horizontal' },
   { name: 'tab', alias: '--zk-tab-height', overlapsDivider: true,
     selector: '.z-tabbox-top > .z-tabs .z-tab, .z-tabbox-bottom > .z-tabs .z-tab' },
-  { name: 'groupbox-header', alias: '--zk-groupbox-header-height', selector: '.z-groupbox:not(.z-groupbox-3d) .z-groupbox-header' },
+  // The groupbox header carries the frame's top line (groupbox.css draws the frame on the header and the content,
+  // not on the root, B95-ZK-4505), so its box is the alias plus that 1px; the same holds for the 3D mold.
+  { name: 'groupbox-header', alias: '--zk-groupbox-header-height', extraHeight: 1, selector: '.z-groupbox:not(.z-groupbox-3d) .z-groupbox-header' },
   // The 3D mold header is panel-like but denser: it binds the md rung (groupbox.css .z-groupbox-3d .z-groupbox-header), 40 / 32.
-  { name: 'groupbox-3d-header', alias: '--zk-control-height-md', selector: '.z-groupbox-3d .z-groupbox-header' },
+  { name: 'groupbox-3d-header', alias: '--zk-control-height-md', extraHeight: 1, selector: '.z-groupbox-3d .z-groupbox-header' },
   { name: 'paging-button', alias: '--zk-paging-control-size', selector: '.z-paging-button' },
 ];
 
@@ -225,8 +227,15 @@ const EXCEPTIONS: Listed[] = [
   {
     reason: 'the caption holds a 30px image next to the text (content-driven): the groupbox header is the image plus its padding',
     keys: [
-      'comfortable|caption|groupbox-header|Caption in Groupbox|60',
-      'compact|caption|groupbox-header|Caption in Groupbox|46',
+      'comfortable|caption|groupbox-header|Caption in Groupbox|61',
+      'compact|caption|groupbox-header|Caption in Groupbox|47',
+    ],
+  },
+  {
+    reason: 'a collapsed groupbox: the header is the whole frame, so it also draws the bottom frame line under its own (groupbox.css .z-groupbox-collapsed, border-bottom-width: 2px)',
+    keys: [
+      'comfortable|groupbox|groupbox-header|Default Mold|50',
+      'compact|groupbox|groupbox-header|Default Mold|42',
     ],
   },
   {
