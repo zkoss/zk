@@ -91,6 +91,26 @@ script adds `--config`). Edit and rebuild, then run `npm run baseline:compare --
 - `-g` matches the title path joined by spaces and starting with the Playwright project name (`project file describe title`, e.g. `chromium screenshot.spec.ts tabbox gallery`). Anchor the end with `describe title$`; anchoring the start with `^` requires the project name. Do not paste the `›` form that `--list` prints.
 - Rebuild the class index only with `node scripts/build-class-index.mjs`. The script starts and stops the server it needs by itself (client ROD off). On a default server the pop-up elements are not in the static DOM, so the whole index would miss the pop-up classes. Do not build it against a server you already have running.
 
+## Spec files and test titles
+
+The suite is organised with **files = features and component = data**.
+
+- A spec file covers one feature (screenshot, density, forced-colors, focus ring, …), never one
+  component. A component-specific regression test goes into the feature file it exercises.
+- Every test title starts with the ZK widget name, then ` — `, then what is checked:
+  `test('navitem — focus outline is drawn', …)`. Use the name `zk.Widget.$(el).widgetName` reports
+  (`textbox`, `navitem`, `toolbarbutton`), not a CSS class fragment such as `navitem-content`.
+- Select by component with `-g " <comp> — "` (leading space). `-g` matches the whole title path, so
+  the component is preceded by a space whether or not a `describe` sits in front of it, and the
+  trailing ` — ` keeps `navitem` from matching `navitem-content`. Check a pattern with
+  `npx playwright test -c src/test/playwright/playwright.config.ts --list --project=<project> -g "<pattern>"`
+  from `zkthemelab/` (`--list` needs no server; the Playwright project is required because each
+  one only matches its own spec file).
+- Put the issue number in a tag, not the title:
+  `test('textbox — …', { tag: '@ZK-6131' }, async ({ page }) => { … })`, then `--grep @ZK-6131`
+  (Playwright 1.59 accepts a tag string or an array).
+- Do not rename existing tests only to follow this rule; bring a file in line when you touch it.
+
 ## Playwright projects
 
 Before a Playwright run, and after any change to CSS, a preview page or a spec, read the sections "Which tests to run after a change" and "Running Playwright — flags that bite" in this file.
