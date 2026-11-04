@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-6251.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Wed Nov 04 09:16:59 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Click "notify": no error should appear, and the empty label below should show "foo 1".
+	</label>
+	<div viewModel="@id('vm') @init('org.zkoss.zktest.test2.B111_ZK_6251VM')">
+		<label id="lb" value="@load(foo)"/>
+		<button id="notify" label="notify" onClick="@command('notifyNullBean')"/>
+	</div>
+</zk>
