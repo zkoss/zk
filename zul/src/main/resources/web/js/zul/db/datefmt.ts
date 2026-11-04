@@ -746,19 +746,7 @@ export class Calendar extends zk.Object {
 	}
 
 	formatDate(val: DateImpl, fmt?: string, localizedSymbols?: zk.LocalizedSymbols): string {
-		var d: LeapDay | undefined;
-		if (localizedSymbols) {
-			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, { year: 'numeric' });
-			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(val._toLocalDate(), localeDateTimeFormat);
-		}
-
-		if (this._offset) {
-			if (val.getMonth() == 1 && val.getDate() == 29) {
-				d = new LeapDay(val); // a proxy of Date
-				d.setOffset(this._offset);
-			}
-		}
-		return zk.fmt.Date.formatDate((d ?? val) as DateImpl, fmt, localizedSymbols);
+		return zk.fmt.Date.formatDate(val, fmt, localizedSymbols);
 	}
 
 	toUTCDate(): DateImpl | undefined {
@@ -782,7 +770,7 @@ export class Calendar extends zk.Object {
 		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols, tz, strictDate);
 		if (localizedSymbols) {
 			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, { year: 'numeric' });
-			this._offset = localizedSymbols.YDELTA || d ? zk.fmt.Date.getYDelta(d!._toLocalDate(), localeDateTimeFormat) : 0;
+			this._offset = localizedSymbols.YDELTA || (d ? zk.fmt.Date.getYDelta(d._toLocalDate(), localeDateTimeFormat) : 0);
 		}
 
 		if (this._offset && fmt) {
