@@ -1,7 +1,7 @@
 # Tablet Design Overview (Marble theme)
 
 Source: `../zkcml/zkmax/src/main/resources/web/zkmax/css/tablet/_*.css`
-Build: concatenated into `zkmax/css/tablet.css.dsp` (see `scripts/build-css.js`, stage 5).
+Build: concatenated into `zkmax/css/tablet.css.dsp` (see `scripts/build-css.js`, `buildTabletSheet()`).
 
 ## How it loads — the core mechanism
 
