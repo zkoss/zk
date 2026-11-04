@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 //
-// Ported from zkThemeTemplate/scripts/check-css-dsp.js on 2026-09-10 (Marble -> zk migration).
-// This file is now maintained in zk; the template original is no longer the source of truth
-// for it and is not edited to reflect changes made here.
-//
 // check-css-dsp.js — verify every .css.dsp ZK will actually REQUEST exists in the build output.
 //
 // WHY: a ZK component renders unstyled — silently, no error — if the .css.dsp ZK requests for it
@@ -55,6 +51,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { extractRequired } = require('./css-uri');
 
 function argFor(flag) {
     const i = process.argv.indexOf(flag);
@@ -128,62 +125,6 @@ const EXPECTED_EXTRAS = new Map([
     // TabletThemeURIHandler (zkmax) adds this as its own stylesheet via ThemeURIModifier, not via a css-uri.
     ['zkmax/css/tablet.css.dsp', 'added by TabletThemeURIHandler, not requested by a css-uri'],
 ]);
-
-function pkgToPath(pkg) {
-    return 'js/' + pkg.replace(/\./g, '/');
-}
-
-// widget-class "zul.wgt.Button" → package "zul.wgt"
-function derivePkgFromClass(widgetClass) {
-    if (!widgetClass) return undefined;
-    const dot = widgetClass.lastIndexOf('.');
-    return dot > 0 ? widgetClass.slice(0, dot) : undefined;
-}
-
-function resolveCssUri(cssuri, pkg) {
-    const u = cssuri.trim();
-    if (u.startsWith('~./')) return u.slice(3); // absolute (theme-relative root)
-    if (u.startsWith('/')) return u.slice(1);
-    if (!pkg) return undefined;                      // relative but no package → unresolvable
-    return pkgToPath(pkg) + '/' + u;
-}
-
-// Pull every required css-uri out of one lang file, resolved to a full theme-relative path.
-function extractRequired(xml, langFile) {
-    const out = [];
-    const compRe = /<component\b[\s\S]*?<\/component>/g;
-    const tag = (block, name) => {
-        const m = block.match(new RegExp(`<${name}>\\s*([^<\\s][^<]*?)\\s*</${name}>`));
-        return m ? m[1].trim() : undefined;
-    };
-    let m;
-    while ((m = compRe.exec(xml))) {
-        const block = m[0];
-        const pkg = tag(block, 'widget-package') || derivePkgFromClass(tag(block, 'widget-class'));
-        const comp = tag(block, 'component-name') || '?';
-        const uriRe = /<css-uri>\s*([^<]+?)\s*<\/css-uri>/g;
-        let u;
-        while ((u = uriRe.exec(block))) {
-            out.push({ cssuri: u[1].trim(), pkg, comp, langFile, resolved: resolveCssUri(u[1], pkg) });
-        }
-    }
-    // css-uri declared at language level (outside any component) — usually absolute.
-    const remainder = xml.replace(compRe, '');
-    const langUriRe = /<css-uri>\s*([^<]+?)\s*<\/css-uri>/g;
-    let lu;
-    while ((lu = langUriRe.exec(remainder))) {
-        out.push({ cssuri: lu[1].trim(), pkg: undefined, comp: '(language-level)', langFile, resolved: resolveCssUri(lu[1], undefined) });
-    }
-    // Global <stylesheet href="~./…css.dsp"> declared at language level (outside any component):
-    // ZK links it on every page, so it must exist too — zkex's skeleton.css.dsp dangled this way
-    // after the LESS retirement (ZK-6112).
-    const sheetRe = /<stylesheet\b[^>]*\bhref="([^"]+\.css\.dsp)"[^>]*\/?>/g;
-    let sh;
-    while ((sh = sheetRe.exec(remainder))) {
-        out.push({ cssuri: sh[1].trim(), pkg: undefined, comp: '(global <stylesheet>)', langFile, resolved: resolveCssUri(sh[1], undefined) });
-    }
-    return out;
-}
 
 function isThemed(p) {
     return THEMED_PREFIXES.some(pre => p.startsWith(pre));
