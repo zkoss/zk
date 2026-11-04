@@ -1217,7 +1217,7 @@
     --zk-carousel-indicator-ring:      var(--zk-color-inverse-on-surface);
     --zk-carousel-indicator-active-bg: var(--zk-color-primary);
     --zk-carousel-indicator-active-ring: var(--zk-color-on-primary);
-    --zk-carousel-label-bg:            var(--zk-color-scrim);
+    --zk-carousel-label-bg:            rgb(from var(--zk-color-scrim) r g b / 0.75); /* 0.5 is 3.6:1 over a white slide (WCAG 1.4.3) */
     --zk-carousel-label-fg:            var(--zk-color-inverse-on-surface);
 
     /* ── Codeeditor — CodeMirror 6 source editor (CE, @since ZK 11.0.0) ───
