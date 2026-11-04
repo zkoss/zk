@@ -10,14 +10,14 @@
                 <div><label sclass="z-text-xs z-text-secondary" value="Expanded"/></div>
                 <navbar orient="vertical">
                     <navitem label="Home" iconSclass="z-icon-home"/>
-                    <nav label="Get Started" iconSclass="z-icon-layout-list" badgeText="3">
+                    <nav label="Get Started" iconSclass="z-icon-list" badgeText="3">
                         <navitem label="Step One" />
                         <navitem label="Step Two" />
                         <navitem label="Step Three" />
                     </nav>
                     <navitem label="About" iconSclass="z-icon-flag"/>
                     <navseparator/>
-                    <nav label="Contact" iconSclass="z-icon-mail" badgeText="5">
+                    <nav label="Contact" iconSclass="z-icon-inbox" badgeText="5">
                         <navitem label="Reply" iconSclass="z-icon-reply" />
                         <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
                         <navitem label="Inbox" iconSclass="z-icon-inbox"/>
@@ -42,14 +42,14 @@
                 </div>
                 <navbar id="vn1" orient="vertical" collapsed="true">
                     <navitem label="Home" iconSclass="z-icon-home"/>
-                    <nav label="Get Started" iconSclass="z-icon-layout-list" badgeText="3">
+                    <nav label="Get Started" iconSclass="z-icon-list" badgeText="3">
                         <navitem label="Step One" />
                         <navitem label="Step Two" />
                         <navitem label="Step Three" />
                     </nav>
                     <navitem label="About" iconSclass="z-icon-flag"/>
                     <navseparator/>
-                    <nav label="Contact" iconSclass="z-icon-mail" badgeText="5">
+                    <nav label="Contact" iconSclass="z-icon-inbox" badgeText="5">
                         <navitem label="Reply" iconSclass="z-icon-reply" />
                         <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
                         <navitem label="Inbox" iconSclass="z-icon-inbox"/>
@@ -74,14 +74,14 @@
                 </div>
                 <navbar id="vn2" orient="vertical" collapsed="true" hflex="min">
                     <navitem label="Home" iconSclass="z-icon-home"/>
-                    <nav label="Get Started" iconSclass="z-icon-layout-list">
+                    <nav label="Get Started" iconSclass="z-icon-list">
                         <navitem label="Step One" />
                         <navitem label="Step Two" />
                         <navitem label="Step Three" />
                     </nav>
                     <navitem label="About" iconSclass="z-icon-flag"/>
                     <navseparator/>
-                    <nav label="Contact" iconSclass="z-icon-mail">
+                    <nav label="Contact" iconSclass="z-icon-inbox">
                         <navitem label="Reply" iconSclass="z-icon-reply" />
                         <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
                         <navitem label="Inbox" iconSclass="z-icon-inbox"/>
@@ -107,14 +107,14 @@
                 <div><label sclass="z-text-xs z-text-secondary" value="Expanded"/></div>
                 <navbar orient="horizontal">
                     <navitem label="Home" iconSclass="z-icon-home"/>
-                    <nav label="Get Started" iconSclass="z-icon-layout-list" badgeText="3">
+                    <nav label="Get Started" iconSclass="z-icon-list" badgeText="3">
                         <navitem label="Step One"/>
                         <navitem label="Step Two"/>
                         <navitem label="Step Three"/>
                     </nav>
                     <navitem label="About" iconSclass="z-icon-flag"/>
                     <navseparator/>
-                    <nav label="Contact" iconSclass="z-icon-mail" badgeText="5">
+                    <nav label="Contact" iconSclass="z-icon-inbox" badgeText="5">
                         <navitem label="Reply" iconSclass="z-icon-reply" />
                         <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
                         <navitem label="Inbox" iconSclass="z-icon-inbox"/>
@@ -139,14 +139,14 @@
                 </div>
                 <navbar id="hn1" collapsed="true">
                     <navitem label="Home" iconSclass="z-icon-home" />
-                    <nav label="Get Started" iconSclass="z-icon-layout-list" badgeText="3">
+                    <nav label="Get Started" iconSclass="z-icon-list" badgeText="3">
                         <navitem label="Step One"/>
                         <navitem label="Step Two"/>
                         <navitem label="Step Three"/>
                     </nav>
                     <navitem label="About" iconSclass="z-icon-flag"/>
                     <navseparator/>
-                    <nav label="Contact" iconSclass="z-icon-mail" badgeText="5">
+                    <nav label="Contact" iconSclass="z-icon-inbox" badgeText="5">
                         <navitem label="Reply" iconSclass="z-icon-reply" />
                         <navitem label="Reply all" iconSclass="z-icon-reply-all"/>
                         <navitem label="Inbox" iconSclass="z-icon-inbox"/>

@@ -116,15 +116,13 @@ component is renderable. Two scopes per `doc/spec/icon-policy.md`:
 
 **Scope A — preview content (Rule 2)**: Extract every `z-icon-{name}` literal
 from the component's preview ZULs (e.g. `zkthemelab/src/main/webapp/web/<component>.zul`
-and any included partials). Each `{name}` MUST satisfy:
+and any included partials). Each `{name}` MUST satisfy both (a) and (b) in `doc/spec/icon-policy.md` Rule 2:
 
-```bash
-test -f node_modules/lucide-static/icons/{name}.svg
-```
+- (a) Marble serves it: `test -f node_modules/lucide-static/icons/{name}.svg`, or `{name}` is a key of `FA_TO_LUCIDE` or `CUSTOM_ICONS` in `scripts/build-css.js`, or `{name}` is `fw`.
+- (b) IceBlue draws it: `{name}` is listed in `scripts/iceblue-icon-names.txt` (`fw` is exempt).
 
-The single exception is `z-icon-fw` (no-glyph width modifier). For any other
-miss, record a FAIL with category `icon-preview` and message
-`preview ZUL uses non-Lucide icon name "z-icon-{name}"; rename to the Lucide equivalent (see doc/spec/icon-index.md)`. **Do not propose a CSS fix** — the action is to edit the preview ZUL.
+For any miss, record a FAIL with category `icon-preview` and message
+`preview ZUL uses "z-icon-{name}", which does not render in both Marble and IceBlue; use a name that meets both conditions in doc/spec/icon-policy.md Rule 2`. **Do not propose a CSS fix** — the action is to edit the preview ZUL.
 
 **Scope B — ZK widget-emitted (Rule 1)**: For the component being evaluated,
 check the ZK source under `$ZK_SOURCE/zul/src/main/resources/web/js/zul/<area>/` (`$ZK_SOURCE` — root of the ZK CE checkout, this repo) for any `z-icon-{name}` literal that the widget injects. Each must be present in EITHER:

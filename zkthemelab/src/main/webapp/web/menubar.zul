@@ -15,7 +15,7 @@
                         <menuitem label="Save As..." iconSclass="z-icon-save" disabled="true" onClick="alert(self.label)" />
                         <menuseparator />
                         <menuitem label="Exit" image="~./img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
-                        <menuitem label="Restart" iconSclass="z-icon-rotate-ccw" onClick="alert(self.label)" />
+                        <menuitem label="Restart" iconSclass="z-icon-rotate-left" onClick="alert(self.label)" />
                     </menupopup>
                 </menu>
                 <menuseparator />
@@ -71,7 +71,7 @@
                     </menupopup>
                 </menu>
                 <menuseparator/>
-                <menuitem label="Help" iconSclass="z-icon-circle-help"/>
+                <menuitem label="Help" iconSclass="z-icon-info"/>
             </menubar>
         </h:div>
     </h:div>

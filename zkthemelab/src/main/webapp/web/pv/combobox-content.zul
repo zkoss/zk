@@ -44,7 +44,7 @@
             <h:div><h:span class="z-text-xs z-text-secondary">With icon</h:span></h:div>
             <combobox>
                 <comboitem label="Item 1" iconSclass="z-icon-apple"/>
-                <comboitem label="Item 2" iconSclass="z-icon-smartphone"/>
+                <comboitem label="Item 2" iconSclass="z-icon-phone"/>
             </combobox>
         </h:div>
     </h:div>
