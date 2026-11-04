@@ -96,8 +96,12 @@
     flex-wrap: wrap;
 }
 
-/* Vertical menubar */
+/* Vertical menubar — inline-flex, as IceBlue's inline-table: with no width it is as wide as its
+   widest item. hflex="min" sets width:auto and measures the children, so a block-level box would
+   stretch them across the row and the menubar would take the whole row. A set width still
+   stretches the items to it. */
 .z-menubar-vertical {
+    display: inline-flex;
     flex-direction: column;
     align-items: stretch;
     padding: var(--zk-spacing-2) 0;
