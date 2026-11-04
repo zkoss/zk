@@ -336,7 +336,7 @@
     --zk-paging-fg:                  var(--zk-color-on-surface-variant);
     --zk-paging-radius:              var(--zk-shape-corner-full);
     --zk-paging-selected-bg:         var(--zk-color-primary-container);
-    --zk-paging-selected-fg:         var(--zk-color-primary);
+    --zk-paging-selected-fg:         var(--zk-color-on-primary-container); /* primary on its container is 3.8:1 (WCAG 1.4.3) */
     --zk-paging-input-bg:            var(--zk-color-surface);
     --zk-paging-input-fg:            var(--zk-color-on-surface);
     --zk-paging-input-border-color:  var(--zk-color-outline);
@@ -756,7 +756,7 @@
     --zk-navitem-fg:          var(--zk-color-on-surface-variant);
     --zk-navitem-radius:      var(--zk-shape-corner-small);
     --zk-navitem-selected-bg: color-mix(in srgb, var(--zk-color-primary) 12%, transparent);
-    --zk-navitem-selected-fg: var(--zk-color-primary);
+    --zk-navitem-selected-fg: var(--zk-color-on-primary-container); /* primary on its tint is 3.9:1 (WCAG 1.4.3) */
 
     /* ── Anchornav (EE, zkmax) — anchor-link navigation (zkmax/nav/css/anchornav.css):
        .z-anchornav wraps a / button links that jump to page sections.
@@ -1109,7 +1109,7 @@
     --zk-portallayout-radius:         var(--zk-shape-card);
     --zk-portallayout-fg:             var(--zk-color-on-surface-variant);
     --zk-portallayout-counter-bg:     var(--zk-color-primary-container);
-    --zk-portallayout-counter-fg:     var(--zk-color-primary);
+    --zk-portallayout-counter-fg:     var(--zk-color-on-primary-container); /* primary on its container is 3.8:1 (WCAG 1.4.3) */
     --zk-portallayout-counter-radius: var(--zk-shape-corner-full);
 
     /* ── Confirmpopup (native, CE, zul/wgt/css/confirmpopup.css) — lightweight

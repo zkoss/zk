@@ -454,7 +454,7 @@ container**, aligned with MD3 Navigation Drawer / MUI `ListItemButton`.
 | Property | Value | Token |
 |----------|-------|-------|
 | Selected item background | primary tint container | `--zk-navitem-selected-bg` |
-| Selected item text | primary | `--zk-navitem-selected-fg` |
+| Selected item text | on-primary-container (primary on the tint is 3.9:1, below WCAG 1.4.3) | `--zk-navitem-selected-fg` |
 | Selected item weight | 600 | literal |
 | Content-link corner radius | rounded (the tint container is rounded) | `--zk-navitem-radius` |
 
