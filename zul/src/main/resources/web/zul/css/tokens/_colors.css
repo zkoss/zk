@@ -133,8 +133,10 @@
     --zk-color-surface-container-high: #e8eef7;
     --zk-color-surface-container-highest: #e0e8f4;
 
-    /* Outline */
-    --zk-color-outline: rgba(0, 0, 0, 0.23);
+    /* Outline — 0.45 keeps the borders that identify a field, a list checkmark or an
+       unselected rating icon at >= 3:1 (WCAG 1.4.11): #8c8c8c, 3.35:1 on white and
+       3.0:1 on surface-container-low. Not a text colour: text needs 4.5:1. */
+    --zk-color-outline: rgba(0, 0, 0, 0.45);
     --zk-color-outline-variant: rgba(0, 0, 0, 0.12);
 
     /* Inverse */
