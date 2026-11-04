@@ -860,7 +860,7 @@
 .z-listbox-paging-bottom .z-paging-input {
     width: 32px;
     height: 28px;
-    border: 1px solid var(--zk-color-outline-variant);
+    border: 1px solid var(--zk-color-outline); /* an editable field: its border identifies it (WCAG 1.4.11) */
     border-radius: var(--zk-shape-corner-extra-small);
     text-align: center;
     font-family: var(--zk-typescale-font-family);

@@ -79,7 +79,7 @@
 .z-longbox[readonly],
 .z-passwordbox[readonly] {
     background-color: var(--zk-color-surface-container-low);
-    border-color: var(--zk-color-outline-variant);
+    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
     color: var(--zk-color-on-surface-variant);
 }
 
@@ -125,7 +125,7 @@
 .z-doublebox[readonly]:hover,
 .z-longbox[readonly]:hover,
 .z-passwordbox[readonly]:hover {
-    border-color: var(--zk-color-outline-variant);
+    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
     cursor: default;
 }
 

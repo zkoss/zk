@@ -152,7 +152,7 @@
 /* ─── Readonly ─────────────────────────────────────────────────────────────── */
 .z-timebox.z-timebox-readonly {
     background-color: var(--zk-color-surface-container-low);
-    border-color: var(--zk-color-outline-variant);
+    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
 }
 
 .z-timebox.z-timebox-readonly .z-timebox-input {
@@ -160,7 +160,7 @@
 }
 
 .z-timebox.z-timebox-readonly:hover {
-    border-color: var(--zk-color-outline-variant);
+    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
 }
 
 .z-timebox.z-timebox-readonly .z-timebox-button {
