@@ -35,26 +35,28 @@
 }
 
 /* Severity variants — soft tint background + readable text, one shared formula.
-   Tint uses the lighter status-* accent; text uses the darker role/status color. */
+   Tint uses the lighter status-* accent; text uses the role's on-container color, because the
+   role color itself is below 4.5:1 on its own tint (WCAG 1.4.3). Info has no container pair, so its
+   text is derived the way the other on-containers are (_colors.css). */
 .z-chip-info {
     --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-info) 14%, var(--zk-color-surface));
     --zk-chip-border: color-mix(in oklch, var(--zk-color-status-info) 32%, var(--zk-color-surface));
-    --zk-chip-color: var(--zk-color-status-info);
+    --zk-chip-color: oklch(from var(--zk-color-status-info) 0.38 calc(c * 0.78) h);
 }
 .z-chip-success {
     --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-success) 15%, var(--zk-color-surface));
     --zk-chip-border: color-mix(in oklch, var(--zk-color-status-success) 34%, var(--zk-color-surface));
-    --zk-chip-color: var(--zk-color-success);
+    --zk-chip-color: var(--zk-color-on-success-container);
 }
 .z-chip-warning {
     --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-warning) 16%, var(--zk-color-surface));
     --zk-chip-border: color-mix(in oklch, var(--zk-color-status-warning) 36%, var(--zk-color-surface));
-    --zk-chip-color: var(--zk-color-warning);
+    --zk-chip-color: var(--zk-color-on-warning-container);
 }
 .z-chip-error {
     --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-error) 14%, var(--zk-color-surface));
     --zk-chip-border: color-mix(in oklch, var(--zk-color-status-error) 32%, var(--zk-color-surface));
-    --zk-chip-color: var(--zk-color-error);
+    --zk-chip-color: var(--zk-color-on-error-container);
 }
 .z-chip-neutral {
     --zk-chip-bg: color-mix(in oklch, var(--zk-color-status-neutral) 18%, var(--zk-color-surface));
