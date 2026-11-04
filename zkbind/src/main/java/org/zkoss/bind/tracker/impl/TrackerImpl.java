@@ -288,8 +288,10 @@ public class TrackerImpl implements Tracker, Serializable {
 			}
 		} else { //base == null)
 			if ("*".equals(prop)) {
-				for (Set<TrackerNode> basenodes : _nullMap.values()) {
-					getNodesLoadBindings(basenodes, kidBindings, kidBindings, kidbases, visited);
+				if (kidBindings != null) {
+					for (Set<TrackerNode> basenodes : _nullMap.values()) {
+						getNodesLoadBindings(basenodes, kidBindings, kidBindings, kidbases, visited);
+					}
 				}
 			} else {
 				final Set<TrackerNode> basenodes = _nullMap.get(prop);
