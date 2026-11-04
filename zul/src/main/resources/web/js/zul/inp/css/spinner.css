@@ -179,7 +179,7 @@
 .z-spinner.z-spinner-readonly,
 .z-doublespinner.z-doublespinner-readonly {
     background-color: var(--zk-color-surface-container-low);
-    border-color: var(--zk-color-outline-variant);
+    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
 }
 
 .z-spinner.z-spinner-readonly .z-spinner-input,
@@ -189,7 +189,7 @@
 
 .z-spinner.z-spinner-readonly:hover,
 .z-doublespinner.z-doublespinner-readonly:hover {
-    border-color: var(--zk-color-outline-variant);
+    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
 }
 
 .z-spinner.z-spinner-readonly .z-spinner-button,
