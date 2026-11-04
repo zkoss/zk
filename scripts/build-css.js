@@ -109,32 +109,39 @@ const { moduleName, webDir, themeDir, isDev, iconCatalog } = parseArgs();
 // ===== Build =====
 
 /**
- * zul's global sheets come before the 1:1 component sheets and its merged sheets after them;
- * this is the order the build has always logged in.
+ * What each module's run does, in order, after the checks every module runs. zul's global sheets
+ * come before the 1:1 component sheets and its merged sheets after them; this is the order the
+ * build has always logged in.
  */
+const MODULE_STEPS = {
+    zul: [
+        buildNormSheet,
+        buildResetVariants,
+        copyFonts,
+        writeUtilityManifest,
+        writeIconCatalog,
+        buildComponentSheets,
+        buildComboSheet,
+        buildFooterSheet,
+    ],
+    zkex: [
+        buildComponentSheets,
+    ],
+    zkmax: [
+        assertBreakpointsConsistent,
+        buildComponentSheets,
+        buildTabletSheet,
+    ],
+    za11y: [
+        buildComponentSheets,
+        buildA11ySheet,
+    ],
+};
+
 function build() {
     assertNoOrphanComponentCss();
     assertNoUnlistedThemeCss();
-    if (moduleName === 'zkmax') assertBreakpointsConsistent();
-
-    if (moduleName === 'zul') {
-        const lucideIcons = getLucideIcons();
-        buildNormSheet(lucideIcons);
-        buildResetVariants();
-        copyFonts();
-        writeUtilityManifest();
-        if (iconCatalog) writeIconCatalog(lucideIcons);
-    }
-
-    buildComponentSheets();
-
-    if (moduleName === 'zul') {
-        buildComboSheet();
-        buildFooterSheet();
-    }
-    if (moduleName === 'zkmax') buildTabletSheet();
-    if (moduleName === 'za11y') buildA11ySheet();
-
+    for (const step of MODULE_STEPS[moduleName]) step();
     console.log(`\nCSS build complete for --module ${moduleName} (${isDev ? 'dev — unminified' : 'minified'}).`);
 }
 
@@ -328,7 +335,8 @@ function normLayerFor(file) {
     return null;
 }
 
-function buildNormSheet(lucideIcons) {
+function buildNormSheet() {
+    const lucideIcons = getLucideIcons();
     const sourcesCSS = concatSources(normFiles, normLayerFor);
     const iconUrls = writeIconFiles(lucideIcons);
     // Lucide icon CSS is generated, so the generator emits its own @layer zk-base block.
@@ -580,10 +588,12 @@ function writeUtilityManifest() {
 // ===== zul, --icon-catalog only: icons-lucide.zul + doc/spec/icon-index.md =====
 
 /**
- * Side outputs, written into the repo (not the output root) and committed. A default run never
- * touches zkthemelab/ or doc/.
+ * Side outputs, written into the repo (not the output root) and committed. Only with
+ * --icon-catalog: a default run never touches zkthemelab/ or doc/.
  */
-function writeIconCatalog(lucideIcons) {
+function writeIconCatalog() {
+    if (!iconCatalog) return;
+    const lucideIcons = getLucideIcons();
     writeRepoFile('zkthemelab/src/main/webapp/web/icons-lucide.zul', renderIconsZul(lucideIcons));
     console.log(`  zkthemelab/src/main/webapp/web/icons-lucide.zul (${lucideIcons.length} icons)`);
     writeRepoFile('doc/spec/icon-index.md', renderIconIndexMd(lucideIcons));
