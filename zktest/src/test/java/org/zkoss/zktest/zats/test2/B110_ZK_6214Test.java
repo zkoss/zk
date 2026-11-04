@@ -14,8 +14,12 @@ package org.zkoss.zktest.zats.test2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.WheelInput;
 
@@ -26,6 +30,17 @@ public class B110_ZK_6214Test extends WebDriverTestCase {
 	@Override
 	protected ChromeOptions getWebDriverOptions() {
 		return super.getWebDriverOptions().addArguments("--accept-lang=en-US");
+	}
+
+	// A browser west of the boxes' Asia/Taipei puts each panel's 1st 00:00 on the previous day.
+	@Override
+	protected WebDriver getWebDriver() {
+		if (driver == null) {
+			super.getWebDriver();
+			((ChromeDriver) driver).executeCdpCommand("Emulation.setTimezoneOverride",
+					Map.of("timezoneId", "America/Los_Angeles"));
+		}
+		return driver;
 	}
 
 	private String panel(int index) {
@@ -169,5 +184,13 @@ public class B110_ZK_6214Test extends WebDriverTestCase {
 
 		assertMonths("Dec 2026", "Jan 2027", "Feb 2027");
 		assertRangeUnchanged("threeMonths");
+	}
+
+	@Test
+	public void eraFollowsBoxTimeZone() {
+		connect();
+		click(jq("$setEra"));
+		waitResponse();
+		assertEquals("令和01/05/01", jq("$era .z-datebox-input").val());
 	}
 }
