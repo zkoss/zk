@@ -5,7 +5,7 @@ This theme delivers all icons via the [Lucide](https://lucide.dev/) icon set, re
 | Source | Examples | Naming rule |
 |--------|----------|-------------|
 | ZK widget JS (compiled, immutable) | `<i class="z-icon-caret-down">` injected by `Scrollbar.ts`; `domIconHTML('left')` in `tab/mold/tabbox.js` emitting `z-icon-chevron-left` | Cannot rename. FA-style names that are not in Lucide MUST be aliased in `FA_TO_LUCIDE` (see `scripts/build-css.js`). |
-| Preview / example ZULs (`zkthemelab/src/main/webapp/web/**/*.zul`) | `iconSclass="z-icon-settings"`, `sclass="z-icon-trash-2"` | MUST resolve to a **served** class: a real Lucide name **or** a ZK built-in FA/custom alias (`FA_TO_LUCIDE` / `CUSTOM_ICONS`). Invented / misspelled names are FORBIDDEN. Lucide names are preferred for new content. |
+| Preview / example ZULs (`zkthemelab/src/main/webapp/web/**/*.zul`) | `iconSclass="z-icon-cog"`, `sclass="z-icon-trash"` | MUST be **served** by Marble (a Lucide name, a `FA_TO_LUCIDE` / `CUSTOM_ICONS` key, or `fw`) **and** listed in `scripts/iceblue-icon-names.txt`, so the icon renders in both Marble and IceBlue (see Rule 2). Invented / misspelled names are FORBIDDEN. |
 
 ## Library decision: keep Lucide for ZK 11.0
 
@@ -222,10 +222,11 @@ grep -rhoE 'z-icon-[a-z0-9-]+' /path/to/ZK10/zk/zul/src/main/resources/web/js/ \
 and diff against `doc/spec/icon-index.md`'s Lucide list ∪ FA alias table. Any newly
 appearing name must be either present in Lucide or added to `FA_TO_LUCIDE`.
 
-## Rule 2 — Preview / example content (must resolve to a served class)
+## Rule 2 — Preview / example content (must render in Marble and IceBlue)
 
-Every `z-icon-{name}` literal in `zkthemelab/src/main/webapp/web/**/*.zul` MUST resolve to a
-class that `scripts/build-css.js` actually serves — i.e. `{name}` is one of:
+Every `z-icon-{name}` literal in `zkthemelab/src/main/webapp/web/**/*.zul` (except the excluded catalogs below) MUST render in **both** Marble and IceBlue. A name passes only when it meets both conditions, (a) and (b).
+
+**(a) Marble serves it.** `{name}` is a class that `scripts/build-css.js` actually serves, i.e. `{name}` is one of:
 
 ```
 node_modules/lucide-static/icons/{name}.svg  EXISTS   (a Lucide name)
@@ -234,27 +235,24 @@ node_modules/lucide-static/icons/{name}.svg  EXISTS   (a Lucide name)
 {name} == fw                                           (the no-glyph width modifier)
 ```
 
-- **Both kinds are allowed**: a Lucide name *or* a ZK built-in FA/custom class name.
-  ZK widget JS emits the FA-style names (`caret-down`, `angle-up`, `cogs`, …) and the
-  build serves a real `.z-icon-{fa}` rule for each, so they render — and a static
-  mockup of a widget's DOM (e.g. `scrollbar.zul`'s State Gallery, which mirrors
-  `zul.Scrollbar`) SHOULD use the exact emitted name so it matches the live widget.
-- **Forbidden**: invented / misspelled names (`my-custom-icon`) — anything with no
-  served `.z-icon-*` rule.
-- **Preferred for new content**: when you have a free choice, use the Lucide name
-  directly (it is self-documenting); reach for an FA alias only when reproducing what
-  ZK emits. The theme does not extend Lucide — if a glyph you want isn't in Lucide and
-  isn't a ZK-emitted alias, pick a different Lucide icon.
+**(b) IceBlue draws it.** `{name}` is listed in `scripts/iceblue-icon-names.txt`, the glyph-bearing IceBlue classes (Font Awesome Free 6.4.2 keys plus ZK's FA4 shim rules, extracted from commit `2100200284^`). `fw` is exempt: it has no glyph in either theme.
+
+Why both: a name that only one theme draws shows a blank icon in the other theme, which is easy to misread as a theme defect. The same name is enough; the glyphs may look different between the two themes.
+
+- **Both kinds are allowed, provided (b) also holds**: a Lucide name *or* a ZK built-in FA/custom class name. ZK widget JS emits FA-style names (`caret-down`, `angle-up`, `times`, …) and the build serves a real `.z-icon-{fa}` rule for each. A Lucide-only name that IceBlue does not draw is not allowed on preview pages; `settings` and `trash-2` are examples (neither is listed in `scripts/iceblue-icon-names.txt`).
+- **Static mockups**: a static mockup of a widget's DOM SHOULD use the exact name the widget emits, so it matches the live widget (e.g. `scrollbar.zul`'s State Gallery, which mirrors `zul.Scrollbar`; `toast.zul` and `notification.zul` use `exclamation-circle` and `times-circle`; `errorbox.zul` uses `exclamation-triangle`).
+- **Forbidden**: invented / misspelled names (`my-custom-icon`), and any name that fails (a) or (b).
+- **Preferred for new content**: when you have a free choice, use a name that meets both conditions. Prefer the Lucide name directly when IceBlue also draws it (it is self-documenting); reach for an FA alias only when reproducing what ZK emits. The theme does not extend Lucide — if a glyph you want isn't in Lucide and isn't a ZK-emitted alias, pick a different Lucide icon.
 
 **Excluded catalogs** (performance — these are whole-page icon listings, not ordinary
 content): `zkthemelab/src/main/webapp/web/icons-lucide.zul` (regenerated from
 `lucide-static` with `npm run build:icon-catalog`, not on every build) and `utility/icons.zul` (the "All Lucide Icons" page,
-which also hosts the FA-compat alias demo). Both are skipped by `check-icon-coverage.sh`.
+whose FA-compat alias demo lists only the widget aliases, i.e. the names ZK widget JS emits). Both are skipped by `check-icon-coverage.sh`.
 
 > Historical note: an earlier `<!-- icon-lint:disable -->` / `<!-- icon-lint:enable -->`
-> region opt-out existed to exempt FA-style names in authored ZULs. It was removed once
-> Rule 2 was widened to accept ZK FA/custom aliases everywhere (both kinds now resolve to
-> a served class, so no region exemption is needed).
+> region opt-out existed to exempt FA-style names in authored ZULs. It was removed when
+> Rule 2 was widened to accept ZK FA/custom aliases on preview pages. The current rule has
+> no region exemption either: (a) and (b) apply to every preview ZUL that the script scans.
 
 ## Enforcement
 

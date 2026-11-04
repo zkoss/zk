@@ -15,7 +15,7 @@
                 <div sclass="z-text-uppercase z-text-center"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Pointer + icon + close"/></div>
                 <h:div class="z-errorbox" style="position:relative;width:260px;">
                     <h:div class="z-errorbox-pointer z-errorbox-down" style="bottom:-4px;left:120px;"/>
-                    <h:i class="z-errorbox-icon z-icon-triangle-alert"/>
+                    <h:i class="z-errorbox-icon z-icon-exclamation-triangle"/>
                     <!-- This mock is static HTML with no widget behind it, so it
                          cannot be dragged. cursor:default overrides the theme's
                          cursor:move, which real (draggable) errorboxes keep. -->

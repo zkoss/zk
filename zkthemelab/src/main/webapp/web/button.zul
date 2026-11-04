@@ -17,18 +17,18 @@
         </div>
         <div sclass="z-d-contents">
             <div><label sclass="z-text-sm z-text-secondary" value="With icon"/></div>
-            <div><button label="Button" iconSclass="z-icon-volume-2"/></div>
-            <div><button label="Button" iconSclass="z-icon-volume-2" disabled="true"/></div>
+            <div><button label="Button" iconSclass="z-icon-headphones"/></div>
+            <div><button label="Button" iconSclass="z-icon-headphones" disabled="true"/></div>
         </div>
         <div sclass="z-d-contents">
             <div><label sclass="z-text-sm z-text-secondary" value="Icon only"/></div>
-            <div><button iconSclass="z-icon-settings"/></div>
-            <div><button iconSclass="z-icon-settings" disabled="true"/></div>
+            <div><button iconSclass="z-icon-cog"/></div>
+            <div><button iconSclass="z-icon-cog" disabled="true"/></div>
         </div>
         <div sclass="z-d-contents">
             <div><label sclass="z-text-sm z-text-secondary" value="Vertical"/></div>
-            <div><button label="Button" orient="vertical" iconSclass="z-icon-settings"/></div>
-            <div><button label="Button" orient="vertical" iconSclass="z-icon-settings" disabled="true"/></div>
+            <div><button label="Button" orient="vertical" iconSclass="z-icon-cog"/></div>
+            <div><button label="Button" orient="vertical" iconSclass="z-icon-cog" disabled="true"/></div>
         </div>
         <div sclass="z-d-contents">
             <div><label sclass="z-text-sm z-text-secondary" value="Long label"/></div>
@@ -165,7 +165,7 @@
             </h:div>
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Icon button</h:span></h:div>
-                <button iconSclass="z-icon-settings" sclass="z-button-icon"/>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon"/>
             </h:div>
         </h:div>
     </h:div>

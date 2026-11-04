@@ -6,9 +6,9 @@
     <h:div>
         <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Count + dot on icons</h:span></h:div>
         <div sclass="z-d-flex z-gap-8 z-items-center" style="padding:8px 4px;">
-            <badge count="4"><label sclass="z-icon-mail" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
-            <badge count="7" severity="error"><label sclass="z-icon-bell" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
-            <badge dot="true" severity="error"><label sclass="z-icon-message-square" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
+            <badge count="4"><span sclass="z-icon-inbox" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
+            <badge count="7" severity="error"><span sclass="z-icon-bell" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
+            <badge dot="true" severity="error"><span sclass="z-icon-bell" style="font-size:26px;color:var(--zk-color-on-surface-variant);"/></badge>
         </div>
     </h:div>
 
@@ -35,10 +35,10 @@
     <h:div>
         <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-3"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Placement</h:span></h:div>
         <div sclass="z-d-flex z-gap-8 z-items-center" style="padding:12px 8px;">
-            <badge count="3" placement="top_right"><label sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
-            <badge count="3" placement="top_left"><label sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
-            <badge count="3" placement="bottom_right"><label sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
-            <badge count="3" placement="bottom_left"><label sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
+            <badge count="3" placement="top_right"><span sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
+            <badge count="3" placement="top_left"><span sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
+            <badge count="3" placement="bottom_right"><span sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
+            <badge count="3" placement="bottom_left"><span sclass="z-icon-square" style="font-size:32px;color:var(--zk-color-outline);"/></badge>
         </div>
     </h:div>
 

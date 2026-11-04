@@ -2,18 +2,20 @@
 # check-icon-coverage.sh — enforces the icon-naming policy in `doc/spec/icon-policy.md`.
 #
 # Rule 2 (preview/example content): every `z-icon-{name}` referenced in
-#   zkthemelab/src/main/webapp/web/**/*.zul MUST resolve to a real served icon class —
-#   i.e. one that build-css.js actually emits. That is the union of:
+#   zkthemelab/src/main/webapp/web/**/*.zul MUST render in both Marble and IceBlue:
+#   (a) it is a served Marble icon class — one that build-css.js actually emits, i.e.
+#   the union of:
 #     - a Lucide name (`node_modules/lucide-static/icons/{name}.svg` exists),
 #     - a `FA_TO_LUCIDE` alias key (the FA-style names ZK widget JS emits, e.g.
 #       `caret-down`, `angle-up`, `cogs`, `times` — build emits a `.z-icon-{fa}` rule),
 #     - a `CUSTOM_ICONS` key (bare glyphs ZK emits with no Lucide equivalent, e.g.
 #       `exclamation`),
 #     - `fw` (the no-glyph width modifier).
-#   Both kinds — Lucide names AND ZK's built-in FA/custom class names — are allowed,
-#   because both render. Only invented / misspelled names (no served rule) fail.
 #   The FA + custom keys are read straight from `scripts/build-css.js` so the valid
-#   set stays in lock-step with what the build serves (single source of truth).
+#   set stays in lock-step with what the build serves (single source of truth); and
+#   (b) IceBlue renders it with a glyph: it is listed in `scripts/iceblue-icon-names.txt`
+#   (`fw` is exempt). A name that only one theme draws shows a blank icon in the other,
+#   which is easy to misread as a theme defect.
 #
 # Rule 1 (ZK widget-emitted names) is NOT enforced here — it lives in the
 # zk-theme-evaluator agent prompt and is checked manually when bumping ZK.
@@ -25,8 +27,8 @@
 #     FA-compat alias demo). Excluded wholesale because the entire file is a catalog.
 #
 # Exit codes:
-#   0 — clean (every preview icon resolves to a served icon class)
-#   1 — at least one preview ZUL uses an unknown icon name; details on stderr
+#   0 — clean (every preview icon renders in both themes)
+#   1 — at least one preview ZUL uses a name one of the themes does not render; details on stderr
 #
 # Usage:
 #   ./scripts/check-icon-coverage.sh
@@ -36,6 +38,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 LUCIDE_DIR="$PROJECT_ROOT/node_modules/lucide-static/icons"
+ICEBLUE_FILE="$SCRIPT_DIR/iceblue-icon-names.txt"
 ZUL_DIR="$PROJECT_ROOT/zkthemelab/src/main/webapp/web"
 
 if [ ! -d "$LUCIDE_DIR" ]; then
@@ -62,6 +65,11 @@ sed -n -e "/const FA_TO_LUCIDE = {/,/^};/p" -e "/const CUSTOM_ICONS = {/,/^};/p"
 
 sort -u -o "$VALID_FILE" "$VALID_FILE"
 
+# Keep only the names IceBlue also renders (fw has no glyph in either theme).
+BOTH_FILE=$(mktemp)
+trap 'rm -f "$VALID_FILE" "$BOTH_FILE"' EXIT
+{ /usr/bin/grep -v '^#' "$ICEBLUE_FILE"; echo "fw"; } | sort -u | comm -12 "$VALID_FILE" - > "$BOTH_FILE"
+
 # Scan every preview ZUL except the icon catalogs. Stream the list NUL-delimited
 # into a SINGLE awk process (first arg = valid-names file, rest = ZULs): a
 # per-line shell loop spawning grep/sed was ~30k subprocess spawns (~2 min);
@@ -82,17 +90,17 @@ find "$ZUL_DIR" -name '*.zul' ! -name 'icons-lucide.zul' ! -name 'icons.zul' -pr
                 if (!(name in valid)) {
                     bad++
                     rel = FILENAME; sub(root, "", rel)
-                    printf "FAIL: %s:%d — z-icon-%s does not resolve to a served icon class (no Lucide name or ZK FA/custom alias)\n", rel, FNR, name > "/dev/stderr"
+                    printf "FAIL: %s:%d — z-icon-%s does not render in both Marble and IceBlue\n", rel, FNR, name > "/dev/stderr"
                 }
             }
         }
         END {
             if (bad) {
                 print "" > "/dev/stderr"
-                printf "FAILED — %d of %d icon references use unknown icon names.\n", bad, total > "/dev/stderr"
-                print "Fix by using a real Lucide name or a known ZK FA/custom alias (see doc/spec/icon-index.md)." > "/dev/stderr"
+                printf "FAILED — %d of %d icon references use a name one of the themes does not render.\n", bad, total > "/dev/stderr"
+                print "Fix by using a name that is both served by Marble (doc/spec/icon-index.md) and listed in scripts/iceblue-icon-names.txt." > "/dev/stderr"
                 exit 1
             }
-            printf "OK — %d icon references checked, all resolve to served icon classes.\n", total
+            printf "OK — %d icon references checked, all render in both Marble and IceBlue.\n", total
         }
-    ' "$VALID_FILE"
+    ' "$BOTH_FILE"

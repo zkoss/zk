@@ -9,7 +9,7 @@
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Mixed (icon + image + link)</h:span></h:div>
                 <toolbar>
-                    <toolbarbutton label="Button 1" iconSclass="z-icon-volume-2"/>
+                    <toolbarbutton label="Button 1" iconSclass="z-icon-headphones"/>
                     <toolbarbutton label="Button 2" mode="toggle" checked="true" image="~./img/network.gif"/>
                     <a href="http://www.zkoss.org">ZK</a>
                 </toolbar>
@@ -48,7 +48,7 @@
                     <toolbarbutton iconSclass="z-icon-search" tooltiptext="Search"/>
                     <toolbarbutton iconSclass="z-icon-edit" tooltiptext="Edit"/>
                     <toolbarbutton iconSclass="z-icon-star" mode="toggle" checked="true" tooltiptext="Starred"/>
-                    <toolbarbutton iconSclass="z-icon-trash-2" disabled="true" tooltiptext="Delete (disabled)"/>
+                    <toolbarbutton iconSclass="z-icon-trash" disabled="true" tooltiptext="Delete (disabled)"/>
                 </toolbar>
             </h:div>
         </h:div>
@@ -67,7 +67,7 @@
                     <toolbarbutton label="Copy" iconSclass="z-icon-copy"/>
                     <toolbarbutton label="Paste" iconSclass="z-icon-clipboard"/>
                     <separator/>
-                    <toolbarbutton label="Help" iconSclass="z-icon-help-circle"/>
+                    <toolbarbutton label="Help" iconSclass="z-icon-info"/>
                 </toolbar>
             </h:div>
         </h:div>
@@ -99,7 +99,7 @@
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">With icon / image</h:span></h:div>
                 <toolbar orient="vertical">
-                    <toolbarbutton label="Button 1" iconSclass="z-icon-volume-2"/>
+                    <toolbarbutton label="Button 1" iconSclass="z-icon-headphones"/>
                     <toolbarbutton label="Button 2" mode="toggle" checked="true" image="~./img/network.gif"/>
                 </toolbar>
             </h:div>
@@ -117,7 +117,7 @@
                     <toolbarbutton iconSclass="z-icon-search" tooltiptext="Search"/>
                     <toolbarbutton iconSclass="z-icon-edit" tooltiptext="Edit"/>
                     <toolbarbutton iconSclass="z-icon-star" mode="toggle" checked="true" tooltiptext="Starred"/>
-                    <toolbarbutton iconSclass="z-icon-trash-2" disabled="true" tooltiptext="Delete (disabled)"/>
+                    <toolbarbutton iconSclass="z-icon-trash" disabled="true" tooltiptext="Delete (disabled)"/>
                 </toolbar>
             </h:div>
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
