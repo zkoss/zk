@@ -24,6 +24,7 @@ ZK 11.1.0
   ZK-6264: Timebox spin buttons insert digits at the wrong position after a partially typed value is blurred
   ZK-5655: ZK Color Picker doesn't get updated on some iOS devices
   ZK-5641: a tooltip on the toolbar covers a dropdown menu
+  ZK-6255: zk.fmt.Date.parseDate returns an obsolete LeapDay proxy for Feb 29, so the input throws a JS error (ROC) or is rejected (non-lenient Thai)
 
 * Upgrade Notes
   + jfreechart is now an optional dependency of zkex, so Maven and Gradle builds no longer pull it

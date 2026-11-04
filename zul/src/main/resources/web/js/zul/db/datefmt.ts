@@ -177,90 +177,6 @@ function dayOfWeekInMonth(d: DateImpl): string {
 	return _digitFixed(1 + Math.floor(_dayInYear(d, ref) / 7));
 }
 
-// a proxy of Date object for leap day on Thai locale - B60-ZK-1010
-@zk.WrapClass('zul.fmt.LeapDay')
-class LeapDay extends zk.Object {
-	/** @internal */
-	_date: DateImpl;
-	/** @internal */
-	_offset?: number;
-
-	constructor(date: DateImpl)
-	constructor(y: number, m: number, d: number, hr: number, min: number, sec: number, msec: number, tz?: string)
-	constructor(y: DateImpl | number, m?, d?, hr?, min?, sec?, msec?, tz?: string) {
-		super();
-		if (arguments.length > 1) {
-			this._date = Dates.newInstance([y as number, m, d, hr, min, sec, msec], tz);
-		} else
-			this._date = y as DateImpl;
-	}
-	// eslint-disable-next-line zk/javaStyleSetterSignature
-	setOffset(offset: number): void {
-		this._offset = offset;
-	}
-	// eslint-disable-next-line zk/javaStyleSetterSignature
-	setFullYear(fullYear: number): void {
-		// no need to subtract the._offset, the caller will handle
-		this._date.setFullYear(fullYear);
-	}
-	getFullYear(): number {
-		return this._date.getFullYear() + (this._offset || 0);
-	}
-	getDate(): number {
-		return this._date.getDate();
-	}
-	// eslint-disable-next-line zk/javaStyleSetterSignature
-	setDate(date: number): void {
-		this._date.setDate(date);
-	}
-	getDay(): number {
-		return this._date.getDay();
-	}
-	getMonth(): number {
-		return this._date.getMonth();
-	}
-	// eslint-disable-next-line zk/javaStyleSetterSignature
-	setMonth(month: number): void {
-		this._date.setMonth(month);
-	}
-	getHours(): number {
-		return this._date.getHours();
-	}
-	// eslint-disable-next-line zk/javaStyleSetterSignature
-	setHours(hours: number): void {
-		this._date.setHours(hours);
-	}
-	getMinutes(): number {
-		return this._date.getMinutes();
-	}
-	// eslint-disable-next-line zk/javaStyleSetterSignature
-	setMinutes(minutes: number): void {
-		this._date.setMinutes(minutes);
-	}
-	getSeconds(): number {
-		return this._date.getSeconds();
-	}
-	// eslint-disable-next-line zk/javaStyleSetterSignature
-	setSeconds(seconds: number): void {
-		this._date.setSeconds(seconds);
-	}
-	getMilliseconds(): number {
-		return this._date.getMilliseconds();
-	}
-	// eslint-disable-next-line zk/javaStyleSetterSignature
-	setMilliseconds(milliseconds: number): void {
-		this._date.setMilliseconds(milliseconds);
-	}
-	getTimezoneOffset(): number {
-		return this._date.getTimezoneOffset();
-	}
-	getRealDate(): DateImpl {
-		return this._date;
-	}
-	getTimeZone(): string {
-		return this._date.getTimeZone();
-	}
-}
 var DateFmt = {
 	_isoDateTimeFormat: new Intl.DateTimeFormat('en-US', { year: 'numeric' }),
 	// strictDate: No invalid date allowed (e.g., Jan 0 or Nov 31)
@@ -543,13 +459,7 @@ var DateFmt = {
 
 		if (hasHour1 && isAM === false)
 			hr += 12;
-		var dt: DateImpl | LeapDay; // TODO: enforce common interface?
-		if (m == 1 && d == 29 && ydelta) {
-			dt = new LeapDay(y, m, d, hr, min, sec, msec, tz);
-			dt.setOffset(ydelta);
-		} else {
-			dt = Dates.newInstance([y, m, d, hr, min, sec, msec], tz);
-		}
+		var dt = Dates.newInstance([y, m, d, hr, min, sec, msec], tz);
 		if (!dFound && dt.getMonth() != m)
 			dt = Dates.newInstance([y, m + 1, 0, hr, min, sec, msec], tz); //last date of m
 		if (nonLenient || strictDate)
@@ -564,7 +474,7 @@ var DateFmt = {
 					return; //failed
 			}
 		}
-		return +dt == +refval ? refval : dt as DateImpl;
+		return +dt == +refval ? refval : dt;
 		//we have to use getTime() since dt == refVal always false
 	},
 	formatDate(val: DateImpl, fmt?: string, localizedSymbols?: zk.LocalizedSymbols): string {
@@ -750,8 +660,6 @@ export class Calendar extends zk.Object {
 	}
 
 	toUTCDate(): DateImpl | undefined {
-		if (this._date instanceof LeapDay)
-			return this._date.getRealDate();
 		var d: DateImpl | undefined;
 		if ((d = this._date) && this._offset)
 			d = Dates.newInstance(d);
@@ -771,12 +679,6 @@ export class Calendar extends zk.Object {
 		if (localizedSymbols) {
 			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, { year: 'numeric' });
 			this._offset = localizedSymbols.YDELTA || (d ? zk.fmt.Date.getYDelta(d._toLocalDate(), localeDateTimeFormat) : 0);
-		}
-
-		if (this._offset && fmt) {
-			if (d instanceof LeapDay) {
-				return d.getRealDate();
-			}
 		}
 		return d;
 	}
