@@ -121,9 +121,10 @@
         outline-offset: -1px;
     }
 
-    /* (1b-cont) Round slider thumb: a floating control, not a bordered box, so
-       the outline sits outside it rather than inset. */
-    .z-slider:focus-visible .z-slider-button {
+    /* (1b-cont) Round slider thumb and knob circle: floating controls, not bordered boxes, so
+       the outline sits outside them rather than inset. */
+    .z-slider:focus-visible .z-slider-button,
+    .z-slider:focus-visible > .z-slider-knob-svg {
         outline: 2px solid Highlight;
         outline-offset: 2px;
     }

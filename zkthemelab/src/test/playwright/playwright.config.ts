@@ -343,6 +343,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // The knob slider's circular focus ring is concentric with its arc. See slider-knob-focus.spec.ts.
+      name: 'slider-knob-focus',
+      testMatch: /slider-knob-focus\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // The width attribute on popup and menupopup is not overridden by a theme min-width. See popup-width.spec.ts.
       name: 'popup-width',
       testMatch: /popup-width\.spec\.ts/,
