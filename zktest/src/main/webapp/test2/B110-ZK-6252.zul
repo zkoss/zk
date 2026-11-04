@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6252.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Nov 04 11:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click "Publish changes" (and "Info icon").
+		2. The icon should be vertically centred on the single line of the message.
+		Bug: the icon sits about 4.5px lower than the text.
+	</label>
+	<hlayout spacing="24px">
+		<button id="btn" label="Publish changes" onClick="cp.open(self)"/>
+		<button id="btn2" label="Info icon" onClick="cp2.open(self)"/>
+	</hlayout>
+	<confirmpopup id="cp" title="Publish changes"
+				  message="Make these changes visible to everyone?"/>
+	<confirmpopup id="cp2" title="Publish changes" iconSclass="z-icon-info-circle"
+				  message="Make these changes visible to everyone?"/>
+</zk>
