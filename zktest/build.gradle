@@ -73,7 +73,16 @@ dependencies {
 	implementation "org.zkoss.theme:silvertail:10.0.1.1-Eval"
 	implementation "org.zkoss.theme:sapphire:10.0.1.1-Eval"
 	implementation "org.zkoss.theme:atlantic:10.0.1.1-Eval"
-	implementation "org.zkoss.theme:iceblue:11.0.0+"
+	// -PiceblueJar=<jar built from zkThemeTemplate> replaces the published one, so a template change is testable before it ships
+	if (project.hasProperty('iceblueJar')) {
+		def iceblueJar = file(project.iceblueJar)
+		// files() accepts a missing path silently, which would run every test with no IceBlue at all
+		if (!iceblueJar.isFile())
+			throw new GradleException("-PiceblueJar must name an existing jar, but ${iceblueJar} is not a file")
+		implementation files(iceblueJar)
+	} else {
+		implementation "org.zkoss.theme:iceblue:11.0.0+"
+	}
 	implementation 'commons-logging:commons-logging:1.1.1'
 	implementation 'org.apache.commons:commons-fileupload2-javax:2.0.0-M4'
 	implementation 'commons-io:commons-io:2.17.0'
