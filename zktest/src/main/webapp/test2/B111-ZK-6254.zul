@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-6254.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Nov 04 15:06:25 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Type 2567/02/30 into the first datebox and blur: an error box should show, with no JS error.
+		2. Type 2567/02/29 into the second datebox and blur: it should read 2567/02/29 and the label 2024-02-29, with no JS error.
+		3. The third datebox should read 民國113/02/29, with no JS error.
+	</label>
+	<datebox id="strict" locale="th_TH" lenient="false" format="yyyy/MM/dd"/>
+	<datebox id="leap" locale="th_TH" format="yyyy/MM/dd" onChange='lb.value = "" + self.valueInLocalDate'/>
+	<label id="lb"/>
+	<datebox id="roc" locale="zh-TW-u-ca-roc" format="Gyyy/MM/dd" onCreate='self.valueInLocalDate = java.time.LocalDate.parse("2024-02-29")'/>
+</zk>
