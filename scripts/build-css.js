@@ -442,6 +442,8 @@ function getLucideIcons() {
 // Font Awesome name → Lucide name aliases.
 // ZK widget JS emits FA class names (e.g. z-icon-caret-down); these redirect them to
 // the correct Lucide SVG that is already generated above.
+// Only names that ZK widget JS emits belong here. Preview pages do not get aliases: they use
+// names both Marble and IceBlue render (scripts/check-icon-coverage.sh enforces this).
 const FA_TO_LUCIDE = {
     // ZK built-in widget icons
     'caret-down': 'chevron-down',
@@ -465,36 +467,11 @@ const FA_TO_LUCIDE = {
     'reorder': 'grip-vertical',
     'stack': 'layers',
     'times-circle': 'circle-x',
-    // Common FA icons used in preview pages
-    'gear': 'settings',
-    'volume-up': 'volume-2',
+    'times': 'x',
     'clock-o': 'clock',
-    'edit': 'pencil',
-    'envelope': 'mail',
-    'file-o': 'file',
-    'file-text-o': 'file-text',
-    'file-pdf-o': 'file-type',
-    'folder-open-o': 'folder-open',
-    'help-circle': 'circle-help',
-    'keyboard-o': 'keyboard',
-    'power-off': 'power',
-    'print': 'printer',
-    'question': 'circle-help',
-    'question-circle': 'circle-help',
     'refresh': 'refresh-cw',
     'rotate-left': 'rotate-ccw',
     'rotate-right': 'rotate-cw',
-    'share': 'share-2',
-    'sign-out': 'log-out',
-    'tachometer': 'gauge',
-    'th': 'layout-grid',
-    'th-list': 'layout-list',
-    'cube': 'box',
-    'bar-chart': 'bar-chart-2',
-    'android': 'smartphone',
-    'dashboard': 'layout-dashboard',
-    'times': 'x',
-    'cogs': 'settings',
 };
 
 // Glyphs that ZK widget JS emits by a bare FA class name for which Lucide has no
@@ -566,13 +543,13 @@ Regenerate with \`npm run build:icon-catalog\` after upgrading \`lucide-static\`
 This is the canonical lookup for valid \`z-icon-*\` class names in this theme.
 - **Theme generator** consults this file before writing any \`z-icon-*\` selector.
 - **Theme evaluator** validates that every \`z-icon-*\` reference resolves here.
-- **Preview ZULs** (\`zkthemelab/src/main/webapp/web/**/*.zul\`) MUST use a name that resolves to a served class — a Lucide name OR a ZK FA/custom alias listed below; invented/misspelled names are rejected. Lucide names are preferred for new content. Enforced by \`scripts/check-icon-coverage.sh\`.
+- **Preview ZULs** (\`zkthemelab/src/main/webapp/web/**/*.zul\`) MUST use a name that both Marble serves (a Lucide name or a ZK FA/custom alias listed below) and IceBlue renders (\`scripts/iceblue-icon-names.txt\`), so neither theme shows a blank icon. Enforced by \`scripts/check-icon-coverage.sh\`.
 
 See \`doc/spec/icon-policy.md\` for the full policy.
 
 ## FA → Lucide aliases (${Object.keys(FA_TO_LUCIDE).length} entries, from \`scripts/build-css.js\` \`FA_TO_LUCIDE\`)
 
-These absorb FontAwesome-style class names that ZK widget JS emits at runtime (e.g. \`z-icon-caret-down\`). They are valid in authored ZULs too (they resolve to a served class) — but for *new* content prefer the Lucide name directly; reach for an FA alias when faithfully reproducing what ZK emits (e.g. a widget-DOM mockup).
+These absorb FontAwesome-style class names that ZK widget JS emits at runtime (e.g. \`z-icon-caret-down\`). A widget-DOM mockup on a preview page uses the exact name the widget emits.
 
 | FA name | Lucide target |
 |---------|---------------|

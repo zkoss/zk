@@ -305,7 +305,7 @@
                     <tabs>
                         <tab iconSclass="z-icon-home" />
                         <tab iconSclass="z-icon-user" />
-                        <tab iconSclass="z-icon-settings" />
+                        <tab iconSclass="z-icon-cog" />
                         <tab iconSclass="z-icon-bell" />
                         <tab iconSclass="z-icon-file" disabled="true"/>
                     </tabs>
@@ -324,7 +324,7 @@
                     <tabs width="48px">
                         <tab iconSclass="z-icon-home" />
                         <tab iconSclass="z-icon-user" />
-                        <tab iconSclass="z-icon-settings" />
+                        <tab iconSclass="z-icon-cog" />
                         <tab iconSclass="z-icon-bell" />
                     </tabs>
                     <tabpanels>

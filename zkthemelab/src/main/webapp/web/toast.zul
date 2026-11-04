@@ -23,7 +23,7 @@
             <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
                 <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Warning</h:span></h:div>
                 <h:div class="z-toast z-toast-warning">
-                    <h:i class="z-toast-icon z-icon-circle-alert"></h:i>
+                    <h:i class="z-toast-icon z-icon-exclamation-circle"></h:i>
                     <h:div class="z-toast-content">Warning message</h:div>
                     <h:div class="z-toast-close"><h:i class="z-toast-icon z-icon-x"></h:i></h:div>
                 </h:div>
@@ -31,7 +31,7 @@
             <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
                 <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Error</h:span></h:div>
                 <h:div class="z-toast z-toast-error">
-                    <h:i class="z-toast-icon z-icon-circle-x"></h:i>
+                    <h:i class="z-toast-icon z-icon-times-circle"></h:i>
                     <h:div class="z-toast-content">Error message</h:div>
                     <h:div class="z-toast-close"><h:i class="z-toast-icon z-icon-x"></h:i></h:div>
                 </h:div>

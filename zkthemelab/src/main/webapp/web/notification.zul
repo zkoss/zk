@@ -21,14 +21,14 @@
             <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
                 <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Warning</h:span></h:div>
                 <h:div class="z-notification z-notification-warning" style="position:relative;">
-                    <h:i class="z-notification-icon z-icon-circle-alert"/>
+                    <h:i class="z-notification-icon z-icon-exclamation-circle"/>
                     <h:div class="z-notification-content">Warning notification message</h:div>
                 </h:div>
             </h:div>
             <h:div class="z-d-flex z-flex-col z-items-center z-gap-2">
                 <h:div class="z-text-uppercase z-text-center"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Error</h:span></h:div>
                 <h:div class="z-notification z-notification-error" style="position:relative;">
-                    <h:i class="z-notification-icon z-icon-circle-x"/>
+                    <h:i class="z-notification-icon z-icon-times-circle"/>
                     <h:div class="z-notification-content">Error notification message</h:div>
                 </h:div>
             </h:div>

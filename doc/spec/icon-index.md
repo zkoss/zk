@@ -6,13 +6,13 @@ Regenerate with `npm run build:icon-catalog` after upgrading `lucide-static` or 
 This is the canonical lookup for valid `z-icon-*` class names in this theme.
 - **Theme generator** consults this file before writing any `z-icon-*` selector.
 - **Theme evaluator** validates that every `z-icon-*` reference resolves here.
-- **Preview ZULs** (`zkthemelab/src/main/webapp/web/**/*.zul`) MUST use a name that resolves to a served class — a Lucide name OR a ZK FA/custom alias listed below; invented/misspelled names are rejected. Lucide names are preferred for new content. Enforced by `scripts/check-icon-coverage.sh`.
+- **Preview ZULs** (`zkthemelab/src/main/webapp/web/**/*.zul`) MUST use a name that both Marble serves (a Lucide name or a ZK FA/custom alias listed below) and IceBlue renders (`scripts/iceblue-icon-names.txt`), so neither theme shows a blank icon. Enforced by `scripts/check-icon-coverage.sh`.
 
 See `doc/spec/icon-policy.md` for the full policy.
 
-## FA → Lucide aliases (50 entries, from `scripts/build-css.js` `FA_TO_LUCIDE`)
+## FA → Lucide aliases (26 entries, from `scripts/build-css.js` `FA_TO_LUCIDE`)
 
-These absorb FontAwesome-style class names that ZK widget JS emits at runtime (e.g. `z-icon-caret-down`). They are valid in authored ZULs too (they resolve to a served class) — but for *new* content prefer the Lucide name directly; reach for an FA alias when faithfully reproducing what ZK emits (e.g. a widget-DOM mockup).
+These absorb FontAwesome-style class names that ZK widget JS emits at runtime (e.g. `z-icon-caret-down`). A widget-DOM mockup on a preview page uses the exact name the widget emits.
 
 | FA name | Lucide target |
 |---------|---------------|
@@ -37,35 +37,11 @@ These absorb FontAwesome-style class names that ZK widget JS emits at runtime (e
 | `z-icon-reorder` | `grip-vertical` |
 | `z-icon-stack` | `layers` |
 | `z-icon-times-circle` | `circle-x` |
-| `z-icon-gear` | `settings` |
-| `z-icon-volume-up` | `volume-2` |
+| `z-icon-times` | `x` |
 | `z-icon-clock-o` | `clock` |
-| `z-icon-edit` | `pencil` |
-| `z-icon-envelope` | `mail` |
-| `z-icon-file-o` | `file` |
-| `z-icon-file-text-o` | `file-text` |
-| `z-icon-file-pdf-o` | `file-type` |
-| `z-icon-folder-open-o` | `folder-open` |
-| `z-icon-help-circle` | `circle-help` |
-| `z-icon-keyboard-o` | `keyboard` |
-| `z-icon-power-off` | `power` |
-| `z-icon-print` | `printer` |
-| `z-icon-question` | `circle-help` |
-| `z-icon-question-circle` | `circle-help` |
 | `z-icon-refresh` | `refresh-cw` |
 | `z-icon-rotate-left` | `rotate-ccw` |
 | `z-icon-rotate-right` | `rotate-cw` |
-| `z-icon-share` | `share-2` |
-| `z-icon-sign-out` | `log-out` |
-| `z-icon-tachometer` | `gauge` |
-| `z-icon-th` | `layout-grid` |
-| `z-icon-th-list` | `layout-list` |
-| `z-icon-cube` | `box` |
-| `z-icon-bar-chart` | `bar-chart-2` |
-| `z-icon-android` | `smartphone` |
-| `z-icon-dashboard` | `layout-dashboard` |
-| `z-icon-times` | `x` |
-| `z-icon-cogs` | `settings` |
 
 ## Custom glyphs (1 entries, from `scripts/build-css.js` `CUSTOM_ICONS`)
 
