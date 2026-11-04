@@ -63,9 +63,11 @@
     box-shadow: 0 0 0 8px color-mix(in srgb, var(--zk-slider-accent) 16%, transparent);
 }
 
-/* The .z-slider root takes keyboard focus (tabindex/role=slider), not the thumb, so the
-   ring is drawn on the thumb from the root's :focus-visible and the root's own outline is dropped. */
-.z-slider:focus-visible {
+/* Keyboard focus lands on the root, but a ring around the root would frame the whole track box
+   instead of the part the user moves, so the ring goes on the thumb, or on the knob's arc. */
+.z-slider-horizontal:focus-visible,
+.z-slider-vertical:focus-visible,
+.z-slider:has(> .z-slider-knob-svg):focus-visible {
     outline: none;
 }
 
@@ -135,9 +137,23 @@
 /* ── Knob mold (PE) ───────────────────────────────────── */
 /* SVG arc strokes — stroke-width and arc geometry are JS-controlled (NOT CSS-themable) */
 .z-slider-knob-svg {
-    width: 100%;
-    height: 100%;
+    /* The focus ring is drawn on this box, so it must match the arc's circle. The JS draws the arc
+       from the top-left corner with a radius of half the root's shorter side; a full-width SVG
+       would put the ring off-centre whenever the root is wider than it is tall. */
+    width: 100cqmin;
+    height: 100cqmin;
     cursor: pointer;
+}
+
+/* Lets the SVG read the root's shorter side without JS. */
+.z-slider:has(> .z-slider-knob-svg) {
+    container-type: size;
+}
+
+.z-slider:focus-visible > .z-slider-knob-svg {
+    border-radius: 50%;
+    outline: var(--zk-focus-ring);
+    outline-offset: 2px;
 }
 
 .z-slider-knob-inner {
