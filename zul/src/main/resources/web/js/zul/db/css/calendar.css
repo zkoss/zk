@@ -214,8 +214,13 @@
 }
 
 /* ─── Outside-month days ─────────────────────────────────────────────────── */
-/* Cells from previous/next month that fill out the grid rows */
-.z-calendar-cell.z-calendar-outside {
+/* Cells from previous/next month that fill out the grid rows. They stay clickable (a click
+   selects the day and moves to its month), so they are lighter than the shown month's
+   on-surface days but keep 4.5:1 (WCAG 1.4.3); only a disabled one is also faded. */
+.z-calendar-cell.z-calendar-outside:not(.z-calendar-disabled) {
+    color: var(--zk-color-on-surface-variant);
+}
+.z-calendar-cell.z-calendar-outside.z-calendar-disabled {
     opacity: 0.38;
 }
 
@@ -290,7 +295,7 @@
 .z-calendar-weekofyear {
     padding: var(--zk-spacing-1) var(--zk-spacing-2);
     font-size: var(--zk-typescale-body-small-size);
-    color: var(--zk-color-outline);
+    color: var(--zk-color-on-surface-variant); /* text, so not --zk-color-outline (3.35:1) */
     text-align: center;
     vertical-align: middle;
     font-style: italic;
