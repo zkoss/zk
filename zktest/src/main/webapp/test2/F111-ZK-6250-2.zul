@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F111-ZK-6250-2.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Nov 04 17:10:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click inside the first cropper but outside its selection, without dragging, then "coords": 0,0,0,0.
+		2. Click "nudge", then "coords": 50,19,100,61.
+		3. Click "cancel", then "place", then "coords": 41,20,80,61.
+		4. Click "minWidth". The second cropper still has no selection, and nothing is logged.
+		5. Click "credentials". The third cropper's image gets crossorigin="use-credentials"; "anonymous" sets it back.
+		6. Click "crop broken", then "cancel broken". The fourth cropper, whose image never loads, shows no error.
+		7. Click "detach". The fourth cropper is removed without an error.
+		8. Drag the first cropper's selection 20px right and back before releasing, then "coords": 40,19,80,61.
+		9. Click "minWidth", "place empty", then "empty coords": 41,20,120,61, and nothing is logged.
+		10. Click "clear". The first cropper's selection and toolbar disappear.
+	</label>
+	<hlayout>
+		<cropper id="plain" width="240px" style="border: 0" x="40" y="19" w="80" h="61"
+			src="/test2/img/F86-ZK-3962.jpg"
+			onChanging='changingLog.setValue(self.getX() + "," + self.getY() + "," + self.getW() + "," + self.getH())'/>
+		<cropper id="empty" width="240px" style="border: 0" src="/test2/img/F86-ZK-3962.jpg"
+			onChange='emptyLog.setValue(self.getX() + "," + self.getY() + "," + self.getW() + "," + self.getH())'/>
+		<cropper id="cors" width="240px" crossOrigin="anonymous" src="/test2/img/F86-ZK-3962.jpg"/>
+		<cropper id="broken" width="240px" x="10" y="10" w="50" h="50" src="data:image/png;base64,AAAA"/>
+	</hlayout>
+	<label id="coordLog"/>
+	<label id="changingLog"/>
+	<label id="emptyLog"/>
+	<button id="coords" label="coords"
+		onClick='coordLog.setValue(plain.getX() + "," + plain.getY() + "," + plain.getW() + "," + plain.getH())'/>
+	<button id="nudge" label="nudge" onClick="plain.move(10, 0); plain.resize(20, 0)"/>
+	<button id="cancel" label="cancel" onClick="plain.cancel()"/>
+	<button id="place" label="place" onClick="plain.moveTo(41, 20); plain.resizeTo(80, 61)"/>
+	<button id="clear" label="clear" onClick="plain.resizeTo(0, 0)"/>
+	<button id="minWidth" label="minWidth" onClick="empty.setMinWidth(100)"/>
+	<button id="placeEmpty" label="place empty" onClick="empty.moveTo(41, 20); empty.resizeTo(120, 61)"/>
+	<button id="emptyCoords" label="empty coords"
+		onClick='coordLog.setValue(empty.getX() + "," + empty.getY() + "," + empty.getW() + "," + empty.getH())'/>
+	<button id="credentials" label="credentials" onClick='cors.setCrossOrigin("use-credentials")'/>
+	<button id="anonymous" label="anonymous" onClick='cors.setCrossOrigin("anonymous")'/>
+	<button id="cropBroken" label="crop broken" onClick="broken.crop()"/>
+	<button id="cancelBroken" label="cancel broken" onClick="broken.cancel()"/>
+	<button id="detach" label="detach" onClick="broken.detach()"/>
+</zk>

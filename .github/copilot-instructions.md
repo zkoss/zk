@@ -138,7 +138,7 @@ public class B100_ZK_5529Test extends WebDriverTestCase {
 
 ## Critical Constraints
 - Do NOT change public Java APIs in `zk/`, `zul/`, or `zkbind/` without checking impact on `../zkcml/`
-- If any ZUL component attribute or element is added/removed/changed, update `zul/src/main/resources/metainfo/xml/zul.xsd` accordingly
+- If any ZUL component attribute or element (CE or EE) is added/removed/changed, update `zul/src/main/resources/metainfo/xml/zul.xsd` accordingly in the same commit, but leave its root `version` stamp unchanged. The stamp is bumped after the PR merges by the Dev Note SOP "Steps to update zk.xsd or zul.xsd"
 - Issue tracker: https://tracker.zkoss.org/projects/ZK
 
 ## Workflow for Each Issue
@@ -147,7 +147,7 @@ public class B100_ZK_5529Test extends WebDriverTestCase {
 3. Add the corresponding ZUL test page in `zktest/src/main/webapp/test2/`
 4. Register the ZUL page in `zktest/src/main/webapp/test2/config.properties`
 5. Implement the fix
-6. If ZUL component API changed (attribute/element added or removed), update `zul/src/main/resources/metainfo/xml/zul.xsd`
+6. If ZUL component API changed (attribute/element added or removed), update `zul/src/main/resources/metainfo/xml/zul.xsd` without touching its root `version` stamp (see Critical Constraints)
 7. Run `npm run lint -- <module>/src/main/resources/web/js && npm run type-check && ./gradlew checkstyleMain` (per module — the repo-wide lint cannot pass on any checkout and rewrites files through zk/preferNativeClass)
 8. Verify the test passes
 9. PR title must reference the issue ID

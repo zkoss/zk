@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F111-ZK-6250.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Wed Nov 04 15:52:56 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		The image is 600x450. The top croppers have no border and show it at 240x180, so one screen pixel is 2.5 image pixels.
+		1. Both top croppers select the same area on the screen, and nothing is logged below.
+		2. Click "crop". The left cropper (naturalSize) logs 200x152, and the right one logs 80x61.
+		3. Drag a new area in the left cropper. The logged x, y, w and h are 2.5 times the screen pixels.
+		4. Click "maxWidth" or "maxHeight". The left selection shrinks to 100 image pixels, i.e. 40 on the screen.
+		5. Click "shrink", then drag a new area in the left cropper. The logged values are 5 times the screen pixels.
+		6. Click "naturalSize". The right selection shrinks to 40% on the screen.
+		7. Click "move", then "coords": 101,49,200,151, and no change is logged. "cancel", "place", "coords": 101,49,200,152.
+		8. The bottom croppers show a 200x200 image at its own size with aspectRatio 1.3. The same drag logs the same values.
+		9. Drag the left selection 20px right and back before releasing. The left cropper logs 100,48,200,152.
+		10. Click "overflow", then "coords": 400,48,200,152. Reload, click "maxWidth", "wider", then "coords": 100,48,100,152.
+	</label>
+	<hlayout>
+		<cropper id="natural" naturalSize="true" width="240px" style="border: 0" x="100" y="48" w="200" h="152"
+			src="/test2/img/F86-ZK-3962.jpg"
+			onChange='naturalLog.setValue(self.getX() + "," + self.getY() + "," + self.getW() + "," + self.getH())'
+			onChanging='changingLog.setValue(self.getX() + "," + self.getY() + "," + self.getW() + "," + self.getH())'
+			onCrop='naturalLog.setValue(self.getCroppedImage().getWidth() + "x" + self.getCroppedImage().getHeight())'/>
+		<cropper id="display" width="240px" style="border: 0" x="40" y="19" w="80" h="61"
+			src="/test2/img/F86-ZK-3962.jpg"
+			onChange='displayLog.setValue(self.getX() + "," + self.getY() + "," + self.getW() + "," + self.getH())'
+			onCrop='displayLog.setValue(self.getCroppedImage().getWidth() + "x" + self.getCroppedImage().getHeight())'/>
+	</hlayout>
+	<hlayout>
+		<cropper id="naturalAspect" naturalSize="true" aspectRatio="1.3" style="border: 0" src="/test2/img/icon_calendar.png"
+			onChange='naturalAspectLog.setValue(self.getX() + "," + self.getY() + "," + self.getW() + "," + self.getH())'/>
+		<cropper id="displayAspect" aspectRatio="1.3" style="border: 0" src="/test2/img/icon_calendar.png"
+			onChange='displayAspectLog.setValue(self.getX() + "," + self.getY() + "," + self.getW() + "," + self.getH())'/>
+	</hlayout>
+	<label id="naturalLog"/>
+	<label id="changingLog"/>
+	<label id="coordLog"/>
+	<label id="displayLog"/>
+	<label id="naturalAspectLog"/>
+	<label id="displayAspectLog"/>
+	<button id="crop" label="crop" onClick="natural.crop(); display.crop()"/>
+	<button id="maxWidth" label="maxWidth" onClick="natural.setMaxWidth(100)"/>
+	<button id="maxHeight" label="maxHeight" onClick="natural.setMaxHeight(100)"/>
+	<button id="shrink" label="shrink" onClick='natural.setWidth("120px")'/>
+	<button id="toggle" label="naturalSize" onClick="display.setNaturalSize(true)"/>
+	<button id="move" label="move" onClick="natural.moveTo(101, 49); natural.setH(151)"/>
+	<button id="cancel" label="cancel" onClick="natural.cancel()"/>
+	<button id="place" label="place" onClick="natural.moveTo(101, 49); natural.resizeTo(200, 152)"/>
+	<button id="overflow" label="overflow" onClick="natural.moveTo(400, 48); natural.resizeTo(201, 152)"/>
+	<button id="wider" label="wider" onClick="natural.setW(101)"/>
+	<button id="coords" label="coords"
+		onClick='coordLog.setValue(natural.getX() + "," + natural.getY() + "," + natural.getW() + "," + natural.getH())'/>
+</zk>
