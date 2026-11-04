@@ -13,7 +13,7 @@ utility classes.
 
 - Theme CSS lives at `zul/src/main/resources/web/js/zul/wgt/css/{badge,chip,avatar,avatargroup}.css`
   (package `zul.wgt`; auto-scanned 1:1 → `<name>.css.dsp`). Each is self-contained, token-only,
-  wrapped in `@layer zk-components`. Registered as `CSS_URI_BACKED` in `scripts/build-css.js`.
+  wrapped in `@layer zk-components`. Their `<css-uri>` in `lang.xml` is what lets `scripts/build-css.js`'s orphan guard accept the 1:1 `.css.dsp`.
 - No `lang-addon.xml` edits: ZK core owns the component→css-uri wiring; `StandardThemeProvider.beforeWidgetCSS`
   rewrites `~./js/zul/wgt/css/<c>.css.dsp` → `~./marble/…`.
 
