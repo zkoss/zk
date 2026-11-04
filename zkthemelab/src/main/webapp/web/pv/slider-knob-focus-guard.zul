@@ -1,0 +1,11 @@
+<?page title="Slider knob focus guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for slider-knob-focus.spec.ts: a keyboard-focusable knob slider (za11y sets the same
+     tabindex on the root), plus horizontal and vertical sliders for the focus-ring comparison.
+     Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up. -->
+<zk>
+<div style="padding:40px">
+    <slider id="knob" mold="knob" tabindex="0" curpos="40" width="120px" height="120px"/>
+    <slider id="horizontal" tabindex="0" curpos="40" width="200px"/>
+    <slider id="vertical" orient="vertical" tabindex="0" curpos="40" height="150px"/>
+</div>
+</zk>
