@@ -1320,12 +1320,13 @@
 	<xs:element name="barcode" type="barcodeType"/>
 	<xs:complexType name="barcodeType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
-		<xs:attribute name="height" type="xs:string" use="optional"/>
 		<xs:attribute name="displayValue" type="booleanType" use="optional"/>
 		<xs:attribute name="fontSize" type="intType" use="optional"/>
 		<xs:attribute name="barWidth" type="intType" use="optional"/>
+		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
 	<!-- barcodescanner -->
 	<xs:element name="barcodescanner" type="barcodescannerType" />
