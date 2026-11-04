@@ -319,7 +319,7 @@ var DateFmt = {
 
 		fmt = fmt.replace(/'.*?'/g, ' '); //ZK-5475 remove any string enclosed by single quotes
 
-		var refDate = refval._moment.toDate(),
+		var refDate = refval._toLocalDate(),
 			localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, { year: 'numeric' }),
 			eraName = localizedSymbols.ERA || (eraKey ? eraKey : this.getEraName(refDate, localizedSymbols, localeDateTimeFormat)),
 			ydelta = localizedSymbols.YDELTA || (era ? (0 - era.firstYear + era.direction * 1) : this.getYDelta(refDate, localeDateTimeFormat));
@@ -605,7 +605,7 @@ var DateFmt = {
 					case 'y':
 					case 'u':
 						var ydelta = 0;
-						if (cc == 'y') ydelta = localizedSymbols.YDELTA || this.getYDelta(val._moment.toDate(), localeDateTimeFormat);
+						if (cc == 'y') ydelta = localizedSymbols.YDELTA || this.getYDelta(val._toLocalDate(), localeDateTimeFormat);
 						var y = val.getFullYear() + ydelta;
 						// ZK-4851: the year is truncated to 2 digits only if the number of pattern letters is 2
 						if (len == 2) txt += _digitFixed(y % Math.pow(10, len), len);
@@ -633,7 +633,7 @@ var DateFmt = {
 						txt += weekInMonth(val, localizedSymbols.DOW_1ST!);
 						break;
 					case 'G':
-						txt += localizedSymbols.ERA || this.getEraName(val._moment.toDate(), localizedSymbols, localeDateTimeFormat);
+						txt += localizedSymbols.ERA || this.getEraName(val._toLocalDate(), localizedSymbols, localeDateTimeFormat);
 						break;
 					case 'F':
 						txt += dayOfWeekInMonth(val);
@@ -723,7 +723,7 @@ export class Calendar extends zk.Object {
 		this._date = date;
 		if (localizedSymbols) {
 			const localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, {year: 'numeric'});
-			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(date ? date._moment.toDate() : undefined, localeDateTimeFormat);
+			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(date ? date._toLocalDate() : undefined, localeDateTimeFormat);
 		}
 	}
 
@@ -749,7 +749,7 @@ export class Calendar extends zk.Object {
 		var d: LeapDay | undefined;
 		if (localizedSymbols) {
 			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, { year: 'numeric' });
-			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(val._moment.toDate(), localeDateTimeFormat);
+			this._offset = localizedSymbols.YDELTA || zk.fmt.Date.getYDelta(val._toLocalDate(), localeDateTimeFormat);
 		}
 
 		if (this._offset) {
@@ -782,7 +782,7 @@ export class Calendar extends zk.Object {
 		var d = zk.fmt.Date.parseDate(txt, fmt, strict, refval, localizedSymbols, tz, strictDate);
 		if (localizedSymbols) {
 			var localeDateTimeFormat = new Intl.DateTimeFormat(localizedSymbols.LAN_TAG, { year: 'numeric' });
-			this._offset = localizedSymbols.YDELTA || d ? zk.fmt.Date.getYDelta(d!._moment.toDate(), localeDateTimeFormat) : 0;
+			this._offset = localizedSymbols.YDELTA || d ? zk.fmt.Date.getYDelta(d!._toLocalDate(), localeDateTimeFormat) : 0;
 		}
 
 		if (this._offset && fmt) {

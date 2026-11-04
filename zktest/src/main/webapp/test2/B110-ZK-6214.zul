@@ -17,6 +17,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		format.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Taipei"));
 		java.util.Date begin = format.parse("2026-10-10");
 		java.util.Date end = format.parse("2026-10-20");
+		format.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Tokyo"));
+		java.util.Date reiwa = format.parse("2019-05-01");
 	]]></zscript>
 	<vlayout>
 		<daterangebox id="twoMonths" format="yyyy-MM-dd" timeZone="Asia/Taipei"
@@ -30,7 +32,10 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			constraint="between 20261005 and 20261125"
 			onChange='changes.setValue(String.valueOf(Integer.parseInt(changes.getValue()) + 1))'/>
 		<label id="changes" value="0"/>
+		<datebox id="era" locale="ja-JP-u-ca-japanese" format="Gyy/MM/dd" timeZone="Asia/Tokyo"/>
+		<button id="setEra" label="set 2019-05-01" onClick="era.setValue(reiwa)"/>
 		<label multiline="true">
+			Run the browser in a time zone west of Asia/Taipei, such as America/Los_Angeles.
 			1. Open the first box, click the left calendar's month title, and choose December.
 			   Expected: December 2026 / January 2027.
 			2. Reopen it, click the right calendar's month title, and choose January.
@@ -41,6 +46,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			   Expected: November 2026 / December 2026. Click the left calendar's left arrow twice.
 			   Expected: October 2026 / November 2026, then September 2026 / October 2026.
 			The selected range must stay October 10–20, 2026, and the counter must stay 0.
+			5. Click "set 2019-05-01". The datebox must show 令和01/05/01, not 平成31/05/01.
 		</label>
 	</vlayout>
 </zk>

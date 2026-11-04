@@ -63,6 +63,11 @@ export namespace dateImpl_global {
 		_getUTCMoment(): Moment {
 			return this._moment.tz('UTC');
 		}
+		/** @internal */
+		_toLocalDate(): Date {
+			// ZK-6214: avoid moment's toDate(); it reads the date in the browser's time zone, not this one
+			return new Date(new Date(0).setFullYear(this.getFullYear(), this.getMonth(), this.getDate()));
+		}
 		getTimeZone(): string {
 			return this._timezone;
 		}
