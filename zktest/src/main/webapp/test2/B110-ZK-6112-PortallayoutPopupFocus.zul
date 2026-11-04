@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-PortallayoutPopupFocus.zul
+
+	Purpose:
+		Marble with za11y: the keyboard-focused item of the Portallayout move popup has a focus ring.
+
+	Description:
+
+	History:
+		Wed Nov 04 2026, Created by hawk
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+1. press Tab until "Translate" is focused, then press Space: the move popup opens
+2. press ArrowDown: "Doing" is focused and has a focus ring, not only a grey fill
+	</label>
+	<portallayout>
+		<portalchildren title="Todo" width="30%">
+			<panel title="Calendar"/>
+			<panel id="translate" title="Translate"/>
+		</portalchildren>
+		<portalchildren title="Doing" width="30%">
+			<panel title="Mail"/>
+		</portalchildren>
+	</portallayout>
+</zk>
