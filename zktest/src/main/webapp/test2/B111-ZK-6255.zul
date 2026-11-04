@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-6255.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Nov 04 17:52:12 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Type 2567/02/29 into the first datebox and blur: no error box should show, with no JS error.
+		2. Type 民國109/02/29 into the second datebox and blur: the label below it should read 2020-02-29, with no JS error.
+	</label>
+	<datebox id="strict" locale="th_TH" lenient="false" format="yyyy/MM/dd"/>
+	<datebox id="roc" locale="zh-TW-u-ca-roc" format="Gyyy/MM/dd" onChange='lb.value = "" + self.valueInLocalDate'/>
+	<label id="lb"/>
+</zk>
