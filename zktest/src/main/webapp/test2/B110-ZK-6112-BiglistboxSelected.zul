@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-BiglistboxSelected.zul
+
+	Purpose:
+		Marble: a selected Biglistbox row is visibly marked, and shows a focus ring while moving with the arrow keys.
+
+	Description:
+
+	History:
+		Wed Nov 04 2026, Created by hawk
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+1. click a cell of the fifth row and move the pointer away: the row keeps a tinted fill
+2. reload, press Tab to move into the biglistbox, then press ArrowDown three times: each press moves the tinted row, which also has a focus ring
+	</label>
+	<zscript><![CDATA[
+		import org.zkoss.zktest.test2.big.*;
+		FakerMatrixModel bigData = new FakerMatrixModel(100, 30);
+	]]></zscript>
+	<biglistbox id="big" width="800px" height="400px" model="${bigData}"/>
+</zk>
