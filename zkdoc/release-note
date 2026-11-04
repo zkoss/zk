@@ -11,6 +11,7 @@ ZK 11.1.0
   ZK-6177: zul.xsd: spinner value is typed xs:dateTime (and step xs:integer), so <spinner value="5"/> fails validation
   ZK-6172: zul.xsd: listbox with listitems but no listhead/listfoot fails validation
   ZK-6251: NPE in TrackerImpl when posting a notify-change with a null bean and property "*"
+  ZK-6254: Datebox with a Thai locale throws a JS error when the input is an invalid date or Feb 29
 
 * Upgrade Notes
 
