@@ -114,6 +114,7 @@ const { moduleName, webDir, themeDir, isDev, iconCatalog } = parseArgs();
  */
 function build() {
     assertNoOrphanComponentCss();
+    assertNoUnlistedThemeCss();
     if (moduleName === 'zkmax') assertBreakpointsConsistent();
 
     if (moduleName === 'zul') {
@@ -189,6 +190,26 @@ function assertNoOrphanComponentCss() {
             'bundle it in `normFiles` in scripts/build-css.js,\nor delete the file if it is dead.\n' +
             'See ' +
             '.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md.');
+    }
+}
+
+// ===== Guard: theme CSS missing from every source list =====
+
+/**
+ * CSS outside js/ is never auto-scanned: it ships only through a source list (normFiles,
+ * footerFiles, tabletFiles) or as RESET_SOURCE. A file added there but left out of every list
+ * would build without error and never ship, so the build fails until it is listed or deleted.
+ * js/ is covered by assertNoOrphanComponentCss.
+ */
+function assertNoUnlistedThemeCss() {
+    const listed = new Set([...normFiles, ...footerFiles, ...tabletFiles, RESET_SOURCE]);
+    const unlisted = listCssFiles(webDir).filter(f => !f.startsWith('js/') && !listed.has(f));
+    if (unlisted.length) {
+        throw new Error(
+            'Theme CSS not in any source list:\n' +
+            unlisted.map(f => '  - ' + f).join('\n') +
+            '\nEach is never built, so its rules never ship (no error).\nFix: add it to `normFiles` or ' +
+            '`footerFiles` (zul) or `tabletFiles` (zkmax) in scripts/build-css.js, or delete the file if it is dead.');
     }
 }
 
@@ -454,10 +475,15 @@ function minifySvg(svg) {
 const PAGE_FRAME_RE = /\/\* page-frame:start[\s\S]*?page-frame:end \*\//;
 
 /**
+ * The one source both reset variants are derived from.
+ */
+const RESET_SOURCE = 'zul/css/base/_reset.css';
+
+/**
  * Served separately, ahead of norm.css.dsp — see StandardThemeProvider.getThemeURIs.
  */
 function buildResetVariants() {
-    const resetSrc = readFile('zul/css/base/_reset.css');
+    const resetSrc = readFile(RESET_SOURCE);
     // Global variant — frame intact, unscoped; reset rules already wrap themselves in @layer zk-base.
     writeDsp('zul/css/reset.css', resetSrc);
     // Embed variant — host-safe, scoped, no frame. Served when browserDefault=true.
