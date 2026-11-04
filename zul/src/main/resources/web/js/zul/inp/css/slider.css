@@ -145,9 +145,12 @@
     cursor: pointer;
 }
 
-/* Lets the SVG read the root's shorter side without JS. */
+/* Lets the SVG read the root's shorter side without JS. The knob JS places the input and maps a
+   drag around a centre measured from the root's top edge, so the root has no padding to push the
+   arc below that point. */
 .z-slider:has(> .z-slider-knob-svg) {
     container-type: size;
+    padding: 0;
 }
 
 .z-slider:focus-visible > .z-slider-knob-svg {

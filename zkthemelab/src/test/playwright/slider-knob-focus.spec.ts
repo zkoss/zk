@@ -61,6 +61,26 @@ test('slider knob — keyboard focus draws a ring concentric with the arc', asyn
   expect(Math.abs(ringBox.width - ringBox.height)).toBeLessThanOrEqual(MAX_CENTRE_OFFSET_PX);
 });
 
+// The knob JS places the input and maps a click around a centre measured from the root's top edge,
+// so any top padding on the root put both above the arc (PR zkoss/zk#3687 review).
+test('slider knob — the input and the click centre sit on the arc centre', async ({ page }) => {
+  const uuid = await rootOf(page, KNOB);
+  const root = page.locator(`[id="${uuid}"]`);
+  const arcBox = (await root.locator('path.z-slider-knob-inner').boundingBox())!;
+  const inputBox = (await root.locator('.z-slider-input').boundingBox())!;
+  const arc = centreOf(arcBox), input = centreOf(inputBox);
+  expect(Math.abs(arc.x - input.x)).toBeLessThanOrEqual(MAX_CENTRE_OFFSET_PX);
+  expect(Math.abs(arc.y - input.y)).toBeLessThanOrEqual(MAX_CENTRE_OFFSET_PX);
+
+  // The arc is a full circle from 0 at six o'clock, so its three o'clock point is 75. Playwright's
+  // box pads the path by its stroke; getBoundingClientRect() gives the bare circle, whose right edge
+  // is the middle of the stroke.
+  const rightEdge = await root.locator('path.z-slider-knob-inner').evaluate(el => el.getBoundingClientRect().right);
+  await page.mouse.click(rightEdge, arc.y);
+  await expect.poll(() => page.evaluate(id => zk.Widget.$('$' + id.slice(1)).getCurpos(), KNOB))
+    .toBeCloseTo(75, 0);
+});
+
 test('slider knob — the root draws no rectangular outline of its own', async ({ page }) => {
   const root = await focusByKeyboard(page, KNOB);
   expect(await root.evaluate(el => getComputedStyle(el).outlineStyle)).toBe('none');

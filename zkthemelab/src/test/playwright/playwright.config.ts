@@ -343,7 +343,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // The knob slider's circular focus ring is concentric with its arc. See slider-knob-focus.spec.ts.
+      // The knob slider's focus ring, input and click centre sit on its arc centre. See slider-knob-focus.spec.ts.
       name: 'slider-knob-focus',
       testMatch: /slider-knob-focus\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
