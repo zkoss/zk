@@ -46,6 +46,7 @@ public class B86_ZK_4252Test extends WebDriverTestCase {
 		click(real);
 		selectAll();
 		paste();
+		sleep(100); // Timebox marks a paste as a change in a 0ms timer; a blur before it clears an empty timebox
 		blur(real);
 		waitResponse();
 	}
