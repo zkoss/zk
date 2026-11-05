@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-TonalTextContrast.zul
+
+	Purpose:
+		Marble: small text that ZK-6112 drew on a tonal container or faded with opacity reaches 4.5:1 (WCAG 1.4.3).
+
+	History:
+		Thu Nov 05 2026, Created by hawk
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Under Marble, every text below must reach 4.5:1 (an axe color-contrast scan of this page passes).
+		axe skips one-character text, so the counter, the selected page and the other-month days have two digits.
+		1. the Portallayout column counter "10"
+		2. the Calendar's days from November (29, 30) and January, and its week numbers
+		3. the selected Paging button "10" and the selected Navbar item
+		4. the five Chip severities
+	</label>
+	<portallayout id="portal">
+		<portalchildren id="todo" title="Todo" width="30%"/>
+	</portallayout>
+	<calendar id="cal" weekOfYear="true"/>
+	<zscript><![CDATA[
+		for (int i = 1; i <= 10; i++) {
+			org.zkoss.zul.Panel panel = new org.zkoss.zul.Panel();
+			panel.setTitle("Task " + i);
+			todo.appendChild(panel);
+		}
+		cal.setValue(new java.text.SimpleDateFormat("yyyy-MM-dd").parse("2026-12-15"));
+	]]></zscript>
+	<paging id="paging" mold="os" totalSize="200" pageSize="10" activePage="9"/>
+	<navbar id="navbar">
+		<navitem label="Home" selected="true"/>
+		<navitem label="Reports"/>
+	</navbar>
+	<div id="chips">
+		<chip label="Info" severity="info"/>
+		<chip label="Success" severity="success"/>
+		<chip label="Warning" severity="warning"/>
+		<chip label="Error" severity="error"/>
+		<chip label="Neutral" severity="neutral"/>
+	</div>
+</zk>
