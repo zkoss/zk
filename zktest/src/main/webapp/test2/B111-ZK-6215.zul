@@ -22,16 +22,25 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	<slider id="pageSlider" minpos="10" maxpos="12" step="0.05" mode="decimal" curpos="10.25" pageIncrement="1"
 		onScroll='clickPos.setValue("" + event.getPosInDouble())'/>
 	<label id="clickPos"/>
-	<label value="Drag the knob 2 steps to the right: the value below should read 0.21, not 0.11."/>
+	<label value="Drag the knob 2 steps to the right: its tooltip and the value below should read 0.21, not 0.11 or 0.2. Then click the tray to the right of the knob: its tooltip should match the value below."/>
 	<slider id="minposSlider" minpos="0.01" maxpos="1.01" step="0.1" mode="decimal"
 		onScroll='minposPos.setValue("" + event.getPosInDouble())'/>
 	<label id="minposPos"/>
-	<label value="Focus the slider below and press the right arrow twice: its aria-valuenow should read 2.25, not 1."/>
+	<label value="Focus the slider below and press the right arrow twice: its aria-valuenow and tooltip should read 2.25, not 1 or 2."/>
 	<slider id="keySlider" minpos="0.25" maxpos="10.25" step="1" mode="decimal"/>
+	<label value="Drag the knob to the right end: its tooltip, its title and the value below should read 1.05, not 1.1. Then focus it and press End: its aria-valuenow and title should read 1.05, not 1.1."/>
+	<slider id="maxposSlider" maxpos="1.05" step="0.1" mode="decimal"
+		onScroll='maxposPos.setValue("" + event.getPosInDouble())'/>
+	<label id="maxposPos"/>
+	<label value="Focus the slider below and press the right arrow: its aria-valuenow and tooltip should read 1.3, not 1."/>
+	<slider id="defaultStepSlider" maxpos="10" mode="decimal" curpos="0.3"/>
 	<label value="The slider below sits at a fractional x. Drag its knob 1 step to the right: the value below should read 0.1, not 0."/>
 	<div style="padding-left: 0.3px">
 		<slider id="fracSlider" maxpos="1.05" step="0.1" mode="decimal" width="120px"
 			onScroll='fracPos.setValue("" + event.getPosInDouble())'/>
 	</div>
 	<label id="fracPos"/>
+	<label value="The knobs below should read 1.05 and 0.01, not 1.1 and 0.0."/>
+	<slider id="knobMaxSlider" mold="knob" maxpos="1.05" step="0.1" mode="decimal" curpos="1.05"/>
+	<slider id="knobMinSlider" mold="knob" minpos="0.01" maxpos="1.01" step="0.1" mode="decimal" curpos="0.01"/>
 </zk>

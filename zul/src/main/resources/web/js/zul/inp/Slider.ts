@@ -205,7 +205,7 @@ export class Slider extends zul.Widget {
 	/**
 	 * Sets the step of slider
 	 * @defaultValue `-1` (means it will scroll to the position the user clicks).
-	 * <strong>Note:</strong> In "decimal" mode, the fraction part only contains one digit if step is -1.
+	 * <strong>Note:</strong> In "decimal" mode, the fraction part has as many digits as the most precise of step, minpos and maxpos; a step of -1 counts as one digit.
 	 * @since 7.0.1
 	 */
 	setStep(step: number, opts?: Record<string, boolean>): this {
@@ -397,7 +397,7 @@ export class Slider extends zul.Widget {
 
 			var btn = wgt.$n_('btn');
 			btn.title = wgt.isDecimal()
-				? pos.toFixed(Slider._digitsAfterDecimal(Slider._getStep(wgt)))
+				? pos.toFixed(Slider._getPosDigits(wgt))
 				: pos.toString();
 
 			wgt.fire('onScroll', wgt.isDecimal() ? {decimal: pos} : pos);
@@ -445,13 +445,14 @@ export class Slider extends zul.Widget {
 		var widget = dg.control as Slider,
 			sclassHTML = widget.getSclass();
 		widget.$n_('btn').title = ''; //to avoid annoying effect
-		widget.slidepos = widget._curpos;
+		var pos = widget.slidepos = widget._curpos,
+			text = widget.isDecimal() ? pos.toFixed(Slider._getPosDigits(widget)) : pos;
 
 		jq(document.body)
 			.append(/*safe*/ '<div id="zul_slidetip" class="'
 			+ widget.$s('popup')
 			+ (sclassHTML ? ' ' + sclassHTML + '">' : '">')
-			+ DOMPurify.sanitize(widget._slidingtext.replace(/\{0\}/g, widget.slidepos as unknown as string))
+			+ DOMPurify.sanitize(widget._slidingtext.replace(/\{0\}/g, text as string))
 			+ '</div>');
 
 		widget.slidetip = jq('#zul_slidetip')[0];
@@ -471,7 +472,7 @@ export class Slider extends zul.Widget {
 			pos = widget._realpos();
 		if (pos != widget.slidepos) {
 			widget.slidepos = widget._curpos = pos = widget._constraintPos(pos);
-			var text = isDecimal ? pos.toFixed(Slider._digitsAfterDecimal(Slider._getStep(widget))) : pos;
+			var text = isDecimal ? pos.toFixed(Slider._getPosDigits(widget)) : pos;
 			if (widget.slidetip) // B70-ZK-2081: Replace "{0}" with the position.
 				// eslint-disable-next-line @microsoft/sdl/no-inner-html
 				widget.slidetip.innerHTML = DOMPurify.sanitize(widget._slidingtext.replace(/\{0\}/g, text as string));
@@ -515,8 +516,7 @@ export class Slider extends zul.Widget {
 				stepped = Math.round(pos / step) * step;
 			if (range - pos < Math.abs(stepped - pos))
 				stepped = range;
-			return this._curpos = pos > 0 ? Slider._roundDecimal(minpos + stepped,
-				Math.max(Slider._digitsAfterDecimal(step), Slider._digitsAfterDecimal(minpos))) : minpos;
+			return this._curpos = pos > 0 ? Slider._roundDecimal(minpos + stepped, Slider._getPosDigits(this)) : minpos;
 		} else
 			return this._curpos = (pos > 0 ? pos : 0) + minpos;
 	}
@@ -530,7 +530,7 @@ export class Slider extends zul.Widget {
 		if (pos < max) {
 			// count steps with a 1e-9 tolerance: the floating-point remainder of an on-step pos can be almost a whole step
 			pos = Slider._roundDecimal(minpos + Math.trunc(Slider._roundDecimal((pos - minpos) / step, 9)) * step,
-				Math.max(Slider._digitsAfterDecimal(step), Slider._digitsAfterDecimal(minpos)));
+				Slider._getPosDigits(this));
 		} else {
 			pos = max;
 		}
@@ -730,7 +730,7 @@ export class Slider extends zul.Widget {
 			curpos = wgt._curpos,
 			isDecimal = wgt.isDecimal();
 	
-		btn.title = isDecimal ? curpos.toFixed(Slider._digitsAfterDecimal(Slider._getStep(wgt))) : curpos as unknown as string;
+		btn.title = isDecimal ? curpos.toFixed(Slider._getPosDigits(wgt)) : curpos as unknown as string;
 		wgt.updateFormData(curpos);
 	
 		var isVertical = wgt.isVertical(),
@@ -764,5 +764,13 @@ export class Slider extends zul.Widget {
 	static _getStep(wgt: Slider): number {
 		var step = wgt._step;
 		return (!wgt.isDecimal() || step != -1) ? step : 0.1;
+	}
+
+	/** @internal */
+	static _getPosDigits(wgt: Slider): number {
+		// round off float noise first: a step or bound computed as 0.1 * 3 reads 0.30000000000000004
+		return Math.max(Slider._digitsAfterDecimal(Slider._roundDecimal(Slider._getStep(wgt), 10)),
+			Slider._digitsAfterDecimal(Slider._roundDecimal(wgt._minpos, 10)),
+			Slider._digitsAfterDecimal(Slider._roundDecimal(wgt._maxpos, 10)));
 	}
 }
