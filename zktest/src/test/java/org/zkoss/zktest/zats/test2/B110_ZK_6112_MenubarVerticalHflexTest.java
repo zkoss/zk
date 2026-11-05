@@ -15,6 +15,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.zkoss.test.webdriver.WebDriverTestCase;
@@ -23,6 +25,12 @@ public class B110_ZK_6112_MenubarVerticalHflexTest extends WebDriverTestCase {
 	/** Sub-pixel layout can round a width by a pixel. */
 	private static final int EPSILON = 1;
 	private static final int FIXED_WIDTH = 300;
+
+	@BeforeEach
+	public void marbleOnly() {
+		Assumptions.assumeFalse("iceblue".equals(System.getProperty("zktest.theme")),
+				"asserts Marble's flex layout; IceBlue's inline-table items keep their own width and padding");
+	}
 
 	@Test
 	public void hflexMinFitsTheWidestItem() {

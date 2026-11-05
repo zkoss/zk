@@ -15,6 +15,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
@@ -25,6 +27,12 @@ import org.zkoss.test.webdriver.ztl.JQuery;
 @Tag("WcagTestOnly")
 public class B110_ZK_6112_PortallayoutPopupFocusTest extends WebDriverTestCase {
 	private static final String POPUP = ".z-portallayout-popup-open";
+
+	@BeforeEach
+	public void marbleOnly() {
+		Assumptions.assumeFalse("iceblue".equals(System.getProperty("zktest.theme")),
+				"asserts Marble's focus ring; plain IceBlue draws none (its WCAG themes do)");
+	}
 
 	@Test
 	public void focusedItemHasAFocusRing() {

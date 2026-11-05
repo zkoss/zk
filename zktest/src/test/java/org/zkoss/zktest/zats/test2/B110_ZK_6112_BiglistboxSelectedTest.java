@@ -16,6 +16,8 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 package org.zkoss.zktest.zats.test2;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -26,6 +28,12 @@ public class B110_ZK_6112_BiglistboxSelectedTest extends WebDriverTestCase {
 	private static final String SELECTED_ROW = ".z-biglistbox-row.z-biglistbox-selected";
 	private static final String TRANSPARENT = "rgba(0, 0, 0, 0)";
 	private static final int ARROW_DOWN_PRESSES = 3;
+
+	@BeforeEach
+	public void marbleOnly() {
+		Assumptions.assumeFalse("iceblue".equals(System.getProperty("zktest.theme")),
+				"asserts Marble's row fill and focus ring; IceBlue paints the cells and draws no ring");
+	}
 
 	@Test
 	public void clickPaintsTheSelectedRow() {
