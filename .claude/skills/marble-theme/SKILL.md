@@ -88,27 +88,26 @@ bundled by `build-css.js`, never shipped individually.
 
 Marble rules that exist only for accessibility (WCAG) live in the `za11y` module, not in the component CSS:
 
-- Partials: `../zkcml/za11y/src/main/resources/web/js/za11y/{zul,zkmax,zkex}/css/_*-a11y.css`. Running `node scripts/build-css.js --module za11y` (from the zk repo root) merges them into `za11y/css/marble.css.dsp`.
+- Partials: `../zkcml/za11y/src/main/resources/web/js/za11y/{zul,zkmax,zkex}/css/_*-a11y.css`. Building the za11y module with `scripts/build-css.js` merges them into `za11y/css/marble.css.dsp`.
 - `A11yThemeURIHandler` inserts that sheet after the framework sheets (`afterFrameworkSheets`). It shares the layer `zk-components`, so at equal specificity the za11y rule wins. It is loaded only when za11y is active.
 - Only WCAG rules go in these partials. Every other fix, including the accordion close button and the biglistbox frozen-column tick, goes in the component CSS.
-- Without za11y the WCAG-only rules are absent: anchornav links stay 17px, the chosenbox remove button is 20×20, and the strip close icon is 18×20. Check the sheet with `node scripts/check-css-dsp.js --module za11y`.
+- Without za11y the WCAG-only rules are absent: anchornav links stay 17px, the chosenbox remove button is 20×20, and the strip close icon is 18×20. Check that the sheet was built with `scripts/check-css-dsp.js`, run for za11y.
 
 ## Commands
 
-`$ZK_HOME` is the directory that holds the `zk` and `zkcml` checkouts as siblings. The coverage check below reads it from `--zk-home` or the `ZK_HOME` environment variable.
+Each script's arguments are in its header comment; `…` below stands for them.
 
 ```bash
-node scripts/build-css.js --module zul                            # build CE theme CSS (--module required, exit 2 on misuse)
-node scripts/build-css.js --module zkmax                          # or zkex — EE/PE; run from the zk repo root, the script finds ../zkcml itself
+node scripts/build-css.js …                                       # build one module's theme CSS: zul (CE), zkmax or zkex (EE/PE), za11y; run from the zk repo root
 npm run build:icon-catalog                                        # regenerates the two committed icon catalogs; not run by the normal build
 ./gradlew :zul:compileMarbleCss                                    # the Gradle task the builder is wired into
                                                                     # (../zkcml: :zkmax:compileMarbleCss / :zkex:compileMarbleCss);
                                                                     # also runs inside every ./gradlew build
-node scripts/check-css-dsp.js --module zul --zk-home "$ZK_HOME"   # coverage check (also zkmax, zkex)
+node scripts/check-css-dsp.js …                                   # coverage check, one module per run
 npm run lint:css                                                  # stylelint hygiene pass (CE; EE/PE from ../zkcml)
-bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>                # hardcoded px / orphan tokens
-node .claude/skills/marble-theme/scripts/check-default-display.js --out <file>    # check 5 of the audit
-node .claude/skills/marble-theme/scripts/count-important.js [<css root>]          # !important inventory
+bash .claude/skills/marble-theme/scripts/audit-css.sh …                           # hardcoded px / orphan tokens
+node .claude/skills/marble-theme/scripts/check-default-display.js …               # check 5 of the audit
+node .claude/skills/marble-theme/scripts/count-important.js …                     # !important inventory
 node .claude/skills/marble-theme/scripts/probe.js …                              # needs the preview module up
 cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain   # preview app — keep stdin open, see below
 ```
@@ -117,7 +116,7 @@ cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain   # preview ap
 waits for a key on stdin and treats EOF as that key, so keep stdin open (interactive terminal, or a
 FIFO held open in scripts); **never `appStart`** — under gretty 3.1.1 on Gradle 8.10 its client
 never returns. `npm run lint:css` runs stylelint over the CE theme CSS (`.stylelintrc.json`;
-EE/PE has its own in `../zkcml`). Build the CSS with `node scripts/build-css.js --module <module>`, and regenerate the two committed
+EE/PE has its own in `../zkcml`). Build each module's CSS with `scripts/build-css.js`, and regenerate the two committed
 icon catalogs with `npm run build:icon-catalog` (on demand only; the normal build does not write them);
 audit it and inventory `!important` with the four skill scripts above. Details and the Playwright
 projects: `reference/verification.md`.

@@ -136,7 +136,7 @@ wiring. The process:
    | whole shape painted with `background-color` | add it to the **(4) shape-fill** list (`GrayText` track / `Highlight` value) |
    | draggable thumb with a `background-color` fill | add it to the **(4a) thumb** list (solid `CanvasText` disc) |
    | element whose `background-color` *is* the information (colour swatch) | add it to the **(5) `forced-color-adjust: none`** colour-content list |
-3. **Rebuild & verify** — `node scripts/build-css.js --module zul`, then `npm run test:forced-colors` from `zkthemelab/` (add a
+3. **Rebuild & verify** — rebuild the zul CSS with `scripts/build-css.js`, then `npm run test:forced-colors` from `zkthemelab/` (add a
    case to `forced-colors.spec.ts` if the component introduces a new failure mode).
 
 ### Coverage status (as of 2026-07-16)
@@ -179,7 +179,7 @@ selected-tint families in block 2a have **not** been measured for this.
 
 There is **no real forced-colors on macOS** — "Increase contrast" maps to `prefers-contrast: more`, not `forced-colors`. On this dev machine you must emulate.
 
-1. Build: `node scripts/build-css.js --module zul`, then confirm the rules survive minification:
+1. Build the zul CSS with `scripts/build-css.js`, then confirm the rules survive minification:
    ```bash
    grep -o "@media (forced-colors:active)" zul/codegen/resources/web/zul/css/norm.css.dsp
    ```

@@ -66,7 +66,7 @@ using a height token and most hardcoding 28/32/36/40/44/48/56.
 
 ## Verifying a density change
 
-1. `node scripts/build-css.js --module zul`
+1. Build the zul CSS with `scripts/build-css.js`.
 2. **Default unchanged is the critical gate.** Screenshot button, toolbar, menu, tabbox, window,
    panel, grid, listbox, tree, datebox, checkbox plus the employee-grid and order-entry use-cases,
    and pixel-compare against a pre-change baseline. It must be *identical* — that is what proves
@@ -75,7 +75,7 @@ using a height token and most hardcoding 28/32/36/40/44/48/56.
    shrinks coherently. Watch specifically for clipping in the nested date/time/spinner/bandbox
    inputs and for checkbox/radio centring — the latter needs auto/flex centring, not the old
    fixed `margin: 11px`, or the 18/20px mold decentres at other control heights.
-4. `bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>` — no new hardcoded-px regressions; new tokens show as referenced.
+4. Run `.claude/skills/marble-theme/scripts/audit-css.sh` — no new hardcoded-px regressions; new tokens show as referenced.
 
 The last verified probe run was 8/8: button 36→30 (every variant, outlined included), tabs 49→46, window header 57→48, tree row
 52→32, datebox 40→32 (inner 38→30), textbox 40→32, checkbox row 40→32, grid cell padding

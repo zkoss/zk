@@ -104,7 +104,7 @@ For each remove candidate:
      ${PREVIEW_URL}/<page>.zul '<selector>' 'display,width,…'
    ```
    Note the inline `style` in the output — if ZK set the property inline, it's category B → keep.
-2. **Generator**: delete just the `!important` (keep the declaration), `node scripts/build-css.js --module zul`.
+2. **Generator**: delete just the `!important` (keep the declaration), then rebuild the zul CSS with `scripts/build-css.js`.
 3. **Re-measure.** Identical computed values → removable. Any change → load-bearing → revert.
 4. For **behavioral** cases (popup open/dismiss, collapse, view toggle, mobile UA), the
    static probe isn't enough — write a small bespoke Playwright script that drives the
@@ -125,8 +125,8 @@ check before writing a new one.)
 
 ### 6 — Gates, record, commit
 
-- Gates: `npm run lint:css` (no *new* issues), `node scripts/check-css-dsp.js --module zul --zk-home "$ZK_HOME"`
-  (`$ZK_HOME` is the directory that holds the `zk` and `zkcml` checkouts as siblings; exit 0), `bash .claude/skills/marble-theme/scripts/audit-css.sh --out <file>` (advisory).
+- Gates: `npm run lint:css` (no *new* issues), `scripts/check-css-dsp.js` for each module you changed (exit 0),
+  `.claude/skills/marble-theme/scripts/audit-css.sh` (advisory).
 - Record every verdict + evidence + guard-test name in `doc/spec/important-inventory.md`
   (the durable anti-re-investigation record).
 - Fix any stale version-pinned comment you touched; if it names the ZK version, check that version against `gradle.properties`.

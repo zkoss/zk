@@ -5,7 +5,7 @@ removed or kept, and the **evidence** for that verdict. Purpose: stop re-investi
 survivor here has already been empirically tested against the current ZK runtime.
 
 **Method:**
-each candidate's `!important` was deleted, the CSS rebuilt (`node scripts/build-css.js --module zul`), and the computed
+each candidate's `!important` was deleted, the zul CSS rebuilt with `scripts/build-css.js`, and the computed
 value / behavior re-measured on the running **ZK 10.3.0.1-jakarta** preview app. Removed only when
 proven **byte-identical** (empirical-proof bar); otherwise kept, with the failing evidence recorded.
 No cascade beats an inline style, so an `!important` that overrides a ZK-JS-set inline `style` is

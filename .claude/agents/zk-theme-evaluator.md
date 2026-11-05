@@ -708,4 +708,4 @@ Forbidden:
 - Any write outside `tasks/harness/eval-reports/` and `zkthemelab/doc/screenshots/`
 - Writing `tasks/harness/work-status.md` (return the §7 status delta instead — the orchestrator is the sole writer)
 - Any edit to CSS files
-- Running the CSS build (`node scripts/build-css.js --module <module>` — that's the Generator's responsibility)
+- Running the CSS build (`scripts/build-css.js` — that's the Generator's responsibility)

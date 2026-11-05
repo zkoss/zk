@@ -31,7 +31,7 @@ reference this file and need no per-feature edits.
 | Forced colors (WHCM) | [`forced-colors.md`](forced-colors.md) | `fc-risk:` + `fc-guards:` | Generator (guards in central file) | Evaluator `x-fc-capture` + §3d fc review; `npm run test:forced-colors` when guards touched | — |
 | Tablet / touch | [`tablet-design-overview.md`](tablet-design-overview.md) | `tablet:` | Generator (only if `needs-specific`) | tablet Playwright project (manual run for now) | — |
 | Render smoke | — | — | — | `smoke` project (`render-smoke.spec.ts`) | add `/<comp>.zul` to `render-smoke.spec.ts` `PAGES` |
-| css.dsp wiring | [`css-dsp-file-structure.md`](css-dsp-file-structure.md) | — | Generator/theme | `node scripts/check-css-dsp.js --module <module>` for zul, zkmax, zkex or za11y (mechanical) | — |
+| css.dsp wiring | [`css-dsp-file-structure.md`](css-dsp-file-structure.md) | — | Generator/theme | `scripts/check-css-dsp.js`, run for each module you changed: zul, zkmax, zkex or za11y (mechanical) | — |
 
 ## Contract section template (authored by zk-spec-author, approved by the user)
 

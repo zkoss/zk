@@ -77,7 +77,7 @@ Compute two batches from `tasks/harness/work-status.md`:
 **Generator batch (serial, 1 at a time):**
 - All rows in `NEEDS_FIX` status WITH an Action-required section that is not flagged `TOKEN_FIX_REQUIRED`
 - Pick exactly 1 per outer loop iteration
-- Build serialization: `node scripts/build-css.js --module <module>` writes to `<module>/codegen/resources/web/` non-atomically; concurrent builds race. Even though different Generators edit different CSS source files, their builds would clobber each other.
+- Build serialization: `scripts/build-css.js` writes a module's `<module>/codegen/resources/web/` non-atomically; concurrent builds race. Even though different Generators edit different CSS source files, their builds would clobber each other.
 
 **Design-review batch (parallel, read-only):**
 - All rows in `GATE2_PENDING` status → dispatch `md3-design-verifier` per component (Step 4b)
@@ -179,7 +179,7 @@ Pick the highest-priority `NEEDS_FIX` component (per group order). Verify no oth
 Agent(
   description="Generate fix for textbox",
   subagent_type="zk-theme-generator",
-  prompt="Component: textbox\n\nFollow your agent definition: read eval report, print contract, edit input.css, run node scripts/build-css.js --module zul, write gen report."
+  prompt="Component: textbox\n\nFollow your agent definition: read eval report, print contract, edit input.css, run scripts/build-css.js for zul (arguments in its header), write gen report."
 )
 ```
 
@@ -207,7 +207,7 @@ Go to Step 1.
 |-------|-------------|--------|
 | Evaluator | up to 4 parallel | Each uses its own Chrome tab; eval reports are one-file-per-component (no write conflict). Evaluators return status deltas; only the orchestrator writes `work-status.md` (no status-file race). |
 | Design reviewer (Gate 2) | freely parallel | Read-only: CSS + pre-captured screenshots, no Chrome. Design reports are one-file-per-component. Only constraint: not while a Generator targets the same `shared-css-file` (avoids reviewing mid-edit CSS). |
-| Generator | strictly 1 at a time | `node scripts/build-css.js --module <module>` writes `<module>/codegen/resources/web/` non-atomically; concurrent builds race. |
+| Generator | strictly 1 at a time | `scripts/build-css.js` writes a module's `<module>/codegen/resources/web/` non-atomically; concurrent builds race. |
 | Mixed Eval+Gen | OK in same outer iteration | Evaluator reads CSS files (no edits); Generator edits and rebuilds. They don't conflict if they target different components — but for clarity, run Eval batch, then Gen, then re-Eval. |
 
 **File-lock invariant.** The orchestrator enforces the lock by **not dispatching** a second Generator while the first is still running, and by **not dispatching** an Evaluator on a component whose `shared-css-file` matches a currently-running Generator's target (avoids reading mid-edit CSS).
@@ -263,7 +263,7 @@ The orchestrator:
 3. Sets the component status to `ESCALATED_TOKEN_FIX`.
 4. Reports the token issue to the user; token fixes are a separate manual review (token changes affect the whole theme).
 
-After the user fixes the token, they rebuild the CSS (`node scripts/build-css.js --module <module>`) and re-dispatch the Evaluator on all `ESCALATED_TOKEN_FIX` components (flip their status to `RE_EVAL_NEEDED` first).
+After the user fixes the token, they rebuild the module's CSS with `scripts/build-css.js` and re-dispatch the Evaluator on all `ESCALATED_TOKEN_FIX` components (flip their status to `RE_EVAL_NEEDED` first).
 
 ---
 

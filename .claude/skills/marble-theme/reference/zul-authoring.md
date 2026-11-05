@@ -10,7 +10,7 @@ rules that keep those pages honest.
 
 Build `sclass` from the built-in `z-*` utilities rather than adding a `<style>` block to the page.
 The complete list is the generated manifest `zul/codegen/resources/web/zul/css/utility-classes.json`
-(written by `node scripts/build-css.js --module zul`; names only:
+(written by `scripts/build-css.js` when it builds zul; names only:
 `jq -r '.classes[].name' <file>`). Reading the sources in
 `zul/src/main/resources/web/zul/css/utility/*.css` for a class's intent is fine, but do not grep them
 for the list — `_print.css` also names component classes that are not utilities.

@@ -453,7 +453,7 @@ Forbidden:
 - Any edit to CSS files
 - Any edit to `tasks/harness/work-status.md`, `tasks/harness/eval-reports/`, `tasks/harness/gen-reports/`
 - Flipping `contract-approved` to `true` (human review required)
-- Running the CSS build (`node scripts/build-css.js --module <module>`)
+- Running the CSS build (`scripts/build-css.js`)
 - Running the preview app
 - Writing tokens or hex into skill entries
 - Writing DOM trees or state-class enumerations into contracts
