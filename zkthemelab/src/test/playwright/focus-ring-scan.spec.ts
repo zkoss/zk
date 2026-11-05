@@ -1078,3 +1078,58 @@ test.describe('focus-ring scan — selected + focused under forced-colors', () =
     });
   }
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Keyboard focus row of a listbox / tree, driven with the real mouse and keyboard.
+//
+// `.z-listbox:has(.z-focus-a:focus-visible) .z-listitem.z-listitem-focus` (and the tree's
+// `.z-treerow-focus` twin) match only after the widget has put its `-focus` class on a row, which a
+// forced `:focus-visible` cannot do, so the outline scan above lists them as unrendered. Here a click
+// makes a row the widget's focus row (keyboard focus moves to the hidden `.z-focus-a`, but a mouse
+// focus is not `:focus-visible`, so no ring), and ArrowDown then turns it into a keyboard focus.
+// A click, not Tab: when the selected item is the last one (as in the first tree of tree.zul), Tab
+// onto the widget and ArrowDown focuses no row, in listbox and tree alike.
+const KEYBOARD_ROWS = [
+  { component: 'listbox', host: '.z-listbox', row: '.z-listitem', focusCls: 'z-listitem-focus' },
+  { component: 'tree', host: '.z-tree', row: '.z-treerow', focusCls: 'z-treerow-focus' },
+] as const;
+
+test.describe('focus-ring — keyboard focus row', () => {
+  for (const k of KEYBOARD_ROWS) {
+    test(`${k.component} — keyboard focus row draws a focus outline, a clicked row does not`, async ({ page }) => {
+      await openPage(page, k.component);
+      const widget = page.locator(k.host).first();
+      await widget.locator(k.row).first().click();
+      await page.mouse.move(0, 0);
+
+      // The ring the theme draws for focus, read from the token so the test holds no literal.
+      const measure = () => page.evaluate(({ host, focusCls }) => {
+        const probe = document.createElement('div');
+        probe.style.outline = 'var(--zk-focus-ring)';
+        document.body.append(probe);
+        const p = getComputedStyle(probe);
+        const ring = `${p.outlineStyle} ${p.outlineWidth} ${p.outlineColor}`;
+        probe.remove();
+        const rows = document.querySelector(host)!.querySelectorAll(`.${focusCls}`);
+        const cs = rows[0] && getComputedStyle(rows[0]);
+        return {
+          ring,
+          focusRows: rows.length,
+          outline: cs ? `${cs.outlineStyle} ${cs.outlineWidth} ${cs.outlineColor}` : '(no focus row)',
+          keyboard: !!document.activeElement?.matches(`${host} .z-focus-a:focus-visible`),
+        };
+      }, { host: k.host, focusCls: k.focusCls });
+
+      const clicked = await measure();
+      expect(clicked.focusRows, `a click makes one ${k.row} the widget's focus row`).toBe(1);
+      expect(clicked.keyboard, 'a mouse focus is not :focus-visible').toBe(false);
+      expect(clicked.outline, 'a clicked row wears no focus ring').toMatch(/^none /);
+
+      await page.keyboard.press('ArrowDown');
+      await expect.poll(async () => (await measure()).keyboard, 'ArrowDown makes the focus a keyboard focus').toBe(true);
+      const keyed = await measure();
+      expect(keyed.focusRows).toBe(1);
+      expect(keyed.outline, `the keyboard focus row wears --zk-focus-ring (${keyed.ring})`).toBe(keyed.ring);
+    });
+  }
+});
