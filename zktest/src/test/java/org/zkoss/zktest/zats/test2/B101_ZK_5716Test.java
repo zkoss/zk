@@ -40,6 +40,7 @@ public class B101_ZK_5716Test extends WebDriverTestCase {
 		click(jq(".z-error .button:eq(1)"));
 		assertNoJSError();
 		wait.until(d -> jq(".z-error").isVisible());
+		waitResponse(true); // the redrawn error box slides down for 1s; its buttons cannot be clicked before it stops
 
 		click(jq(".z-error .button:eq(0)"));
 		waitResponse();

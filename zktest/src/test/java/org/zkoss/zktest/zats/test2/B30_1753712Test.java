@@ -22,8 +22,11 @@ public class B30_1753712Test extends WebDriverTestCase {
 	public void test() {
 		connect();
 		assertEquals("n/a", jq("$la").text());
-		driver.navigate().refresh(); // trigger rmDesktop
+		String url = driver.getCurrentUrl();
+		// a refresh's own GET can reach the server before the rmDesktop beacon; leave the page first, then reload
+		driver.get("about:blank");
 		sleep(1500);
+		driver.get(url);
 		waitResponse();
 		assertNotEquals("n/a", jq("$la").text());
 	}
