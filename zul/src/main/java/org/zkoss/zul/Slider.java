@@ -313,7 +313,7 @@ public class Slider extends XulElement {
 	 * Returns the step of slider
 	 * 
 	 * <p>Default: -1 (means it will scroll to the position the user clicks).
-	 * <strong>Note:</strong> In "decimal" mode, the fraction part only contains one digit if step is -1.
+	 * <strong>Note:</strong> In "decimal" mode, the fraction part has as many digits as the most precise of step, minpos and maxpos; a step of -1 counts as one digit.
 	 * @since 7.0.1
 	 */
 	public int getStep() {
@@ -324,7 +324,7 @@ public class Slider extends XulElement {
 	 * Returns the step of slider
 	 * 
 	 * <p>Default: -1 (means it will scroll to the position the user clicks).
-	 * <strong>Note:</strong> In "decimal" mode, the fraction part only contains one digit if step is -1.
+	 * <strong>Note:</strong> In "decimal" mode, the fraction part has as many digits as the most precise of step, minpos and maxpos; a step of -1 counts as one digit.
 	 * @since 7.0.1
 	 */
 	public double getStepInDouble() {
