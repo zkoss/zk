@@ -82,6 +82,11 @@
       "component": "east",
       "raw": ".z-east-splitter-button:focus-visible"
     },
+    ".z-listbox": {
+      "page": "listbox",
+      "component": "listbox",
+      "raw": ".z-listbox:focus-visible"
+    },
     ".z-listheader .z-listheader-button": {
       "page": "listbox",
       "component": "listheader",
@@ -152,6 +157,11 @@
       "component": "toolbarbutton",
       "raw": ".z-toolbarbutton-checked:focus-visible"
     },
+    ".z-tree": {
+      "page": "tree",
+      "component": "tree",
+      "raw": ".z-tree:focus-visible"
+    },
     ".z-west-splitter-button": {
       "page": "borderlayout",
       "component": "west",
@@ -175,6 +185,7 @@
     "coachmark-positions",
     "codeeditor",
     "confirmpopup",
+    "dnd",
     "drawer",
     "fisheyebar",
     "grid",
