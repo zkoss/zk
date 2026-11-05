@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-6258.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu Nov 05 12:05:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		The image is 600x450, shown at 240x180.
+		1. Click "place". The selection covers 0,0,200,100, and "log" shows 0,0,200,100.
+		2. Click "shift". The selection covers 100,0,100,100, and "log" shows 100,0,100,100.
+		3. Reload, then click "mount", which also attaches a Grid. The selection covers 0,0,200,100, and "log" shows 0,0,200,100.
+	</label>
+	<cropper id="cr" width="240px" style="border: 0" src="/test2/img/F86-ZK-3962.jpg" x="150" y="0" w="50" h="100"/>
+	<button id="place" label="place" onClick="cr.resizeTo(200, 100); cr.moveTo(0, 0);"/>
+	<button id="shift" label="shift" onClick="cr.moveTo(100, 0); cr.resizeTo(100, 100);"/>
+	<button id="mount" label="mount" onClick="new Grid().setParent(holder); cr.resizeTo(200, 100); cr.moveTo(0, 0);"/>
+	<button id="log" label="log"
+		onClick='coordLog.setValue(cr.getX() + "," + cr.getY() + "," + cr.getW() + "," + cr.getH())'/>
+	<label id="coordLog"/>
+	<div id="holder"/>
+</zk>
