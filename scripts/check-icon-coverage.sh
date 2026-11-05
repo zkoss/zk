@@ -7,7 +7,7 @@
 #   the union of:
 #     - a Lucide name (`node_modules/lucide-static/icons/{name}.svg` exists),
 #     - a `FA_TO_LUCIDE` alias key (the FA-style names ZK widget JS emits, e.g.
-#       `caret-down`, `angle-up`, `cogs`, `times` — build emits a `.z-icon-{fa}` rule),
+#       `caret-down`, `angle-up`, `refresh`, `times` — build emits a `.z-icon-{fa}` rule),
 #     - a `CUSTOM_ICONS` key (bare glyphs ZK emits with no Lucide equivalent, e.g.
 #       `exclamation`),
 #     - `fw` (the no-glyph width modifier).

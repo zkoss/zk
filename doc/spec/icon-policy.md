@@ -202,7 +202,7 @@ cannot modify these. The strategy is:
 
 1. If the name exists in `node_modules/lucide-static/icons/`, no action needed —
    `scripts/build-css.js` emits it as a regular Lucide rule.
-2. If the name is FA-only (`caret-down`, `cogs`, `compress`, `info-circle`, …),
+2. If the name is FA-only (`caret-down`, `refresh`, `compress`, `info-circle`, …),
    add an entry to the `FA_TO_LUCIDE` map in `scripts/build-css.js`. The build
    step emits a second `.z-icon-{fa-name}{...}` rule reusing the matching
    Lucide SVG.
