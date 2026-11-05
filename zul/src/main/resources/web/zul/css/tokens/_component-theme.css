@@ -867,6 +867,8 @@
     --zk-biglistbox-radius:       var(--zk-shape-card);
     --zk-biglistbox-header-fg:    var(--zk-color-on-surface-variant);
     --zk-biglistbox-row-hover-bg: rgba(0, 0, 0, 0.04);
+    --zk-biglistbox-row-selected-bg: var(--zk-color-secondary-container);    /* list-row selection family, as listbox */
+    --zk-biglistbox-row-selected-fg: var(--zk-color-on-secondary-container);
 
     /* ── Fisheye / Fisheyebar (PE, zkex) — magnetic dock icon bar
        (zkex/menu/css/fisheye.css): .z-fisheyebar container + .z-fisheye item
