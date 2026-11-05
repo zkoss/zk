@@ -103,7 +103,8 @@ public class DaterangeboxTest extends WcagTestCase {
 	public void testDisabled() {
 		connect();
 
-		click(jq(".z-daterangebox:eq(4) .z-daterangebox-button"));
+		// ZK-6131: dispatched, because Marble makes a disabled box pointer-events:none and a pointer would never reach it
+		eval("jq('.z-daterangebox:eq(4) .z-daterangebox-button')[0].click()");
 		waitResponse();
 		verifyA11y();
 	}
