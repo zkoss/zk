@@ -198,7 +198,9 @@ public class F100_ZK_5213Test extends WebDriverTestCase {
 
         slt = ".z-menubar.z-menubar-vertical .z-menu-icon.z-icon-caret-right";
         test_(slt, MZa11y.MENU_CARET_RIGHT);
-        click_(slt);
+        // Marble makes the caret pointer-events:none, so click at its position and let the menu take it
+        clickAt(jq(slt), 0, 0);
+        waitResponse(true);
 
         slt = ".z-menupopup.z-menupopup-shadow.z-menupopup-open .z-menu-content .z-menu-icon.z-icon-caret-right";
         test_(slt, MZa11y.MENU_CARET_RIGHT);
@@ -299,14 +301,15 @@ public class F100_ZK_5213Test extends WebDriverTestCase {
         connect();
         String slt = ".z-hbox .z-splitter-icon.z-icon-caret-left";
         test_(slt, MZa11y.SPLITTER_CARET_LEFT);
-        click_(slt);
+        // Marble fades the collapse caret in only while the splitter is hovered, so move onto it and click there
+        hoverClick_(slt);
 
         slt = ".z-hbox .z-splitter-icon.z-icon-caret-right";
         test_(slt, MZa11y.SPLITTER_CARET_RIGHT);
 
         slt = ".z-vbox .z-splitter-icon.z-icon-caret-up";
         test_(slt, MZa11y.SPLITTER_CARET_UP);
-        click_(slt);
+        hoverClick_(slt);
 
         slt = ".z-vbox .z-splitter-icon.z-icon-caret-down";
         test_(slt, MZa11y.SPLITTER_CARET_DOWN);
@@ -394,6 +397,12 @@ public class F100_ZK_5213Test extends WebDriverTestCase {
     }
     public void click_(String selector){
         click(jq(selector));
+        waitResponse(true);
+    }
+    public void hoverClick_(String selector){
+        // the pointer action does not scroll far enough for an element at the very bottom of this long page
+        eval("jq('" + selector + "')[0].scrollIntoView({block: 'center'})");
+        getActions().moveToElement(toElement(jq(selector))).click().perform();
         waitResponse(true);
     }
 }
