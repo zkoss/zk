@@ -130,11 +130,7 @@ Only proceed to edit AFTER printing the contract.
 
 ### 4. Build
 
-`<module>` is `zul` when `shared-css-file` is under `zul/`, `zkmax` or `zkex` when it is under `../zkcml/<module>/`; run from the zk repo root; the same build is `./gradlew :zul:compileMarbleCss` (or the zkcml task). Run:
-
-```bash
-node scripts/build-css.js --module <module>
-```
+`<module>` is `zul` when `shared-css-file` is under `zul/`, `zkmax` or `zkex` when it is under `../zkcml/<module>/`; run from the zk repo root; the same build is `./gradlew :zul:compileMarbleCss` (or the zkcml task). Run `scripts/build-css.js` for that module; its header comment lists the arguments. If it exits 2, it prints the usage: fix the call and run it again.
 
 Capture the exit code and the tail of the output. If the build fails, abort the gen report and report the build error directly — do not write a fake "success" report.
 
@@ -182,7 +178,7 @@ Allowed:
 - `Read` for files
 - `Edit` / `Write` for the ONE CSS file in `shared-css-file` and for `tasks/harness/gen-reports/<component>.md` only
 - When the failing-set contains `x-*` ids (§1.6 only): additionally `zul/css/tokens/_component-theme.css`, `zul/css/tokens/_forced-colors.css`, `zul/css/tokens/_sizing.css` (alias layer only), `zkthemelab/src/test/playwright/component-theme-variables.spec.ts`
-- `Bash` for `node scripts/build-css.js --module <module>`
+- `Bash` for `scripts/build-css.js`
 
 Forbidden:
 - Any browser / Chrome tool

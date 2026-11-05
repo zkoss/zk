@@ -2,7 +2,7 @@
 
 This document explains how the **marble** theme's `*.css.dsp` files are named and found, based on the Ice Blue Compact theme (`iceblue_c-10.3.0.1`) as the reference product.
 
-> **Note (file list):** the list of `.css.dsp` files is in the sources, because a copy in this doc drifts from what ZK actually requests at runtime. The authoritative, runtime-faithful coverage check is `scripts/check-css-dsp.js` (`node scripts/check-css-dsp.js --module zul`) — see the Path-resolution model below. The files themselves are listed by `lang.xml` and `lang-addon.xml` (`<css-uri>`), and built by `scripts/build-css.js`.
+> **Note (file list):** the list of `.css.dsp` files is in the sources, because a copy in this doc drifts from what ZK actually requests at runtime. The authoritative, runtime-faithful coverage check is `scripts/check-css-dsp.js` — see the Path-resolution model below. The files themselves are listed by `lang.xml` and `lang-addon.xml` (`<css-uri>`), and built by `scripts/build-css.js`.
 
 All files reside under:
 ```
@@ -23,7 +23,7 @@ The path ZK *requests* a `.css.dsp` from is **not** decided by the theme's Java.
 - **(c) tbeditor / cropper / signature** live paths follow `<widget-package>`:
   `zkmax/{tbeditor,cropper,signature}/`. IceBlue's `inp/med/wgt` copies are stale legacy paths from older ZK versions — Marble ships only the live path (cleaner, not a gap).
 - **(d) `daterangebox`** (zkmax) registers an absolute css-uri (`~./js/zkmax/db/css/daterangebox.css.dsp`). As of the **ZK 10.4.0** upgrade it ships live, so Marble now themes it (`../zkcml/zkmax/src/main/resources/web/js/zkmax/db/css/daterangebox.css`, auto-scanned 1:1) and it is **enforced** by `check-css-dsp.js` — the former `FORWARD_VERSION_SKIP` entry was removed. `confirmpopup` (CE, `js/zul/wgt/css/confirmpopup.css.dsp`) likewise graduated from an empty `build-css.js` stub to real theme CSS in the same upgrade.
-- **(e) `scripts/check-css-dsp.js`** (`node scripts/check-css-dsp.js --module zul`) is the runtime-faithful coverage checker: it reads the ZK lang files for every `<css-uri>`, resolves each to a full path, and asserts it exists under `zul/codegen/resources/web/`. It is the **inverse** of build-css.js's `assertNoOrphanComponentCss()` — that guards *no-css-uri files emitted as orphans*; this guards *css-uri files ZK requests but the theme doesn't ship*.
+- **(e) `scripts/check-css-dsp.js`** is the runtime-faithful coverage checker: it reads the ZK lang files for every `<css-uri>`, resolves each to a full path, and asserts it exists under `zul/codegen/resources/web/`. It is the **inverse** of build-css.js's `assertNoOrphanComponentCss()` — that guards *no-css-uri files emitted as orphans*; this guards *css-uri files ZK requests but the theme doesn't ship*.
 - **(f) Tablet bundle** `zkmax/css/tablet.css.dsp` is a **built bundle**: touch-optimized overrides injected by ZK's `TabletThemeURIHandler` at cascade position 1, **only on a mobile User-Agent** (EE). `scripts/build-css.js` (`buildTabletSheet()`, `tabletFiles`) concatenates it from per-component partials under `../zkcml/zkmax/src/main/resources/web/zkmax/css/tablet/`, kept split during development; `_tokens.css` (the tablet-scoped `--zk-touch-*` tokens) MUST be first. Regression-guarded by the Playwright `tablet` project (`zkthemelab/src/test/playwright/tablet.spec.ts`).
 
 ---

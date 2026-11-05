@@ -601,8 +601,8 @@ Validated by the button pilot; repeat per component:
    `_component-theme.css`, stating its scope and exceptions (CTV-8).
 3. **Refactor** the component CSS to consume `var(--zk-<comp>-knob)` in place of the direct
    token/literal — surgically, only the exposed properties, no behavior change.
-4. **Build** with `node scripts/build-css.js --module zul` and confirm the knob appears in `norm.css.dsp`
-   and is consumed in the component's `.css.dsp`. `node scripts/check-css-dsp.js --module zul` must
+4. **Build** the zul CSS with `scripts/build-css.js` and confirm the knob appears in `norm.css.dsp`
+   and is consumed in the component's `.css.dsp`. `scripts/check-css-dsp.js`, run for zul, must
    exit 0.
 5. **Test**: add the component to `component-theme-variables.spec.ts`, on the component's own preview page,
    and assert the knob contract (stock values unchanged, then a `:root` override wins). If the page

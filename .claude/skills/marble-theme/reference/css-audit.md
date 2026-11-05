@@ -55,9 +55,8 @@ matching `../zkcml/zkmax/...` or `../zkcml/zkex/...` paths to audit EE/PE CSS in
 ## Step 1 — Mechanical pass (automated)
 
 ```bash
-bash .claude/skills/marble-theme/scripts/audit-css.sh --out doc/css-audit-<theme>.md
-# or just print to the terminal:
 bash .claude/skills/marble-theme/scripts/audit-css.sh
+# prints the report; to keep it, write it to doc/css-audit-<theme>.md (the output option is in the script's header)
 ```
 
 It emits an A–G report skeleton with five checks filled in; the list is in the header of
