@@ -51,7 +51,7 @@ be offered completions for classes that do not exist. Details in §5.3.
 | **Custom Elements Manifest** | npm packages ship `custom-elements.json`; editor plugins and doc sites consume it | One generated descriptor, many consumers — exactly the split used here. |
 | **VS Code Custom Data** (`html.customData`) | JSON contributing tags, attributes and **attribute value sets** to the built-in language service | If the plugin is ever VS Code-based, the manifest can be transformed into this format rather than hand-written. |
 | **Bootstrap IDE extensions** | version-pinned static class lists (separate "Bootstrap 4" / "Bootstrap 5" extensions) | The failure mode being avoided: the list forks per version and rots. |
-| **This repo: `doc/spec/icon-index.md`** | `scripts/build-css.js --icon-catalog` generates the canonical `z-icon-*` lookup; agents consult it, `check-icon-coverage.sh` enforces it | The pattern already existed here for icons. This generalises it to utilities and additionally ships the data in the jar. |
+| **This repo: `doc/spec/icon-index.md`** | `npm run build:icon-catalog` generates the canonical `z-icon-*` lookup; agents consult it, `check-icon-coverage.sh` enforces it | The pattern already existed here for icons. This generalises it to utilities and additionally ships the data in the jar. |
 
 ---
 
