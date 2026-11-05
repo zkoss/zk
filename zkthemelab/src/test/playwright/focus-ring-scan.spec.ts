@@ -150,6 +150,23 @@ type FocusRule = {
 async function focusRules(page: Page): Promise<FocusRule[]> {
   return page.evaluate(() => {
     const out = new Map<string, string>();
+    // The selector without its `:not(…)` groups. A `:focus-visible` inside one negates focus
+    // (`.z-anchornav button.z-anchornav-link-active:not(:focus-visible)` marks the link while it is
+    // NOT focused), so that rule draws no focus ring.
+    const withoutNot = (sel: string) => {
+      let rest = '';
+      for (let i = 0; i < sel.length;) {
+        if (!sel.startsWith(':not(', i)) { rest += sel[i++]; continue; }
+        let depth = 0;
+        let j = i + ':not'.length;
+        for (; j < sel.length; j++) {
+          if (sel[j] === '(') depth++;
+          else if (sel[j] === ')' && --depth === 0) break;
+        }
+        i = j + 1;
+      }
+      return rest;
+    };
     type AnyRule = CSSStyleRule & { cssRules?: CSSRuleList; styleSheet?: CSSStyleSheet };
     const walk = (list: CSSRuleList) => {
       for (const r of Array.from(list) as AnyRule[]) {
@@ -172,7 +189,7 @@ async function focusRules(page: Page): Promise<FocusRule[]> {
           if (/\boutline\b/.test(css) && !/outline(-style)?\s*:\s*(none|0)\b/.test(css)) {
             for (const raw of r.selectorText.split(',')) {
               const sel = raw.trim();
-              if (!sel.includes(':focus-visible')) continue;
+              if (!withoutNot(sel).includes(':focus-visible')) continue;
               if (sel.includes('::')) continue;             // targets a pseudo-element
               out.set(sel, sel.replace(/:focus-visible/g, '').trim());
             }

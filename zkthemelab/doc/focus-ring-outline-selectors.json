@@ -208,7 +208,6 @@
     "window"
   ],
   "unrendered": [
-    ".z-anchornav button.z-anchornav-link-active:not()",
     ".z-daterangebox-popup-cancel",
     ".z-daterangebox-popup-clear",
     ".z-daterangebox-popup-today",
