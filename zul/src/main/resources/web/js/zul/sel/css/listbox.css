@@ -354,6 +354,16 @@
     text-overflow: ellipsis;
 }
 
+/* ZK-6112: controls in a cell wrap instead of being replaced by the ellipsis as a whole (a button is an
+   inline-block box, so `text-overflow` hides it entirely and nothing is left to see, click or tap).
+   Covers the button family only: those are the controls with no text to truncate. Input fields are sized
+   by their own width and are not wrapped (a wrapped textbox changes the tree row's height).
+   Text cells keep nowrap + ellipsis. */
+.z-listcell-cnt:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)),
+.z-listcell-content:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)) {
+    white-space: normal;
+}
+
 /* Cell text in selected row uses on-secondary-container (the paired text token
  * for secondary-container background). MD3 colour-role pairing rule. */
 .z-listitem.z-listitem-selected .z-listcell-cnt,
