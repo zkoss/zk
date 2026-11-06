@@ -154,7 +154,8 @@
 .z-tree .z-focus-a {
     position: absolute;
     width: 0;
-    height: 0;
+    /* B35-2149511: a 0px-high anchor makes Firefox scroll the body to the top when ZK focuses it (IceBlue's is 1x1). */
+    height: 1px;
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
