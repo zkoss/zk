@@ -231,6 +231,13 @@
     opacity: var(--zk-state-disabled-opacity, 0.38);
 }
 
+/* Clicking a disabled row's checkbox or radio does nothing, so it is dimmed too, as a disabled listgroup's
+   checkbox is: the text colour does not reach its ::before border. Treecell puts z-treerow-disabled on the
+   checkable span, also for an item that is not selectable. */
+.z-treerow-checkable.z-treerow-disabled {
+    opacity: var(--zk-state-disabled-opacity, 0.38);
+}
+
 /* Focus — keyboard navigation only: gate on the hidden .z-focus-a trap's
  * :focus-visible (see listbox.css) so a mouse click shows no ring. */
 .z-tree:has(.z-focus-a:focus-visible) .z-treerow.z-treerow-focus {
@@ -421,7 +428,7 @@
     vertical-align: -3px;
 }
 
-.z-treerow:hover .z-treerow-icon.z-icon-check::before {
+.z-treerow:not(.z-treerow-disabled):hover .z-treerow-icon.z-icon-check::before {
     border-color: var(--zk-color-primary, #376fd0);
 }
 
@@ -450,7 +457,7 @@
     box-sizing: border-box;
 }
 
-.z-treerow:hover .z-treerow-icon.z-icon-radio::before {
+.z-treerow:not(.z-treerow-disabled):hover .z-treerow-icon.z-icon-radio::before {
     border-color: var(--zk-color-primary, #376fd0);
 }
 
