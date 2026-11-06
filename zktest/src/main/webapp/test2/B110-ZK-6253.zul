@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6253.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Thu Nov 05 17:10:00 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		1. Click "IceBlue Compact", then open the daterangebox popup.
+		2. In the timebox and in each time input under the calendars, the up and down arrows should fit inside the spin button with space around them.
+		Bug: the arrows fill the button, and the up arrow is cut off at the top (compact only).
+		3. Click a time input, zoom the browser to 400% and look at the outer edge of the spin button's right corners. It should stay grey.
+		Bug: the edge of both corners turns faintly blue while the input has focus (also under "IceBlue"). It is hard to see without zooming.
+	</label>
+	<hlayout>
+		<a id="iceblue" href="?zktheme=iceblue" label="IceBlue"/>
+		<a id="iceblue_c" href="?zktheme=iceblue_c" label="IceBlue Compact"/>
+		<a id="default" href="?zktheme=default" label="Default"/>
+	</hlayout>
+	<timebox/>
+	<daterangebox showTime="true"/>
+</zk>

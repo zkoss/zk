@@ -84,6 +84,7 @@ ZK 11.0.0
   ZK-6236: Remove unused closure-compiler-unshaded dependency
   ZK-6237: Combobox with hflex="min" clips the value under the dropdown button
   ZK-6238: Stateless Grid/Listbox: autopaging ignores the page size the client requests, so the last row overflows the body
+  ZK-6253: remove the input/button corner seam and refit the spin arrows without --zk-spinner-button-icon-transform
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
@@ -226,6 +227,9 @@ ZK 11.0.0
   + --zk-searchbox-popup-background-color now defaults to --zk-popup-background-color instead of the
     inverse text color, so a dark palette paints the Searchbox popup like every other popup instead
     of white.
+  + --zk-spinner-button-icon-transform and its LESS alias @spinnerButtonIconTransform
+    in the ZK theme template are removed: the arrows of Spinner, Doublespinner and Timebox are now
+    centred in their halves, so a theme no longer offsets them.
   + ZK-5997: with <csp-enabled> and <csp-strict-dynamic-enabled> both true, every inline
     <script> ZK emits now carries the per-request nonce -- including .zhtml pages, pages
     declared complete, and native (<n:script>) content, which previously received no
