@@ -145,6 +145,7 @@
     .z-textbox-invalid,
     .z-textbox.z-textbox-invalid,
     .z-passwordbox.z-passwordbox-invalid,
+    .z-inputmask.z-inputmask-invalid,
     .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input,
     .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-button {
         border-style: double;
@@ -159,7 +160,8 @@
     .z-longbox.z-longbox-invalid,
     .z-textbox-invalid,
     .z-textbox.z-textbox-invalid,
-    .z-passwordbox.z-passwordbox-invalid {
+    .z-passwordbox.z-passwordbox-invalid,
+    .z-inputmask.z-inputmask-invalid {
         padding-inline: calc(var(--zk-spacing-3) - 2px);
     }
     .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input {

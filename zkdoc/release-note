@@ -1,5 +1,6 @@
 ZK 11.1.0
 * Features
+  ZK-6106: Add Inputmask to PE
 
 * Bugs
   ZK-6232: zul.xsd: linelayout rejects lineitem, lineitem accepts no child components, and rowchildren accepts only panel
