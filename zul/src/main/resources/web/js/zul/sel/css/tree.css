@@ -211,12 +211,23 @@
     background-color: color-mix(in srgb, var(--zk-tree-selected-fg) 8%, var(--zk-tree-selected-bg));
 }
 
-/* Disabled row — z-treerow-disabled set by Treerow.domClass_ */
+/* Disabled row — z-treerow-disabled set by Treerow.domClass_.
+   ZK's own JS already ignores selection, checkmark and keyboard on a disabled treeitem, and everything else
+   keeps working (ZK-332 open icon, double-click and right-click events, a cell's onClick, popup, tooltip,
+   dragging, components in the cells), so the row takes pointer events and only its text is dimmed.
+   Dimming the text colour, not the row's opacity, keeps the open icon and the components in the cells
+   (an element cannot undo its ancestor's opacity) looking as operable as they are. */
 .z-treerow.z-treerow-disabled,
 .z-treerow[disabled] {
-    opacity: var(--zk-state-disabled-opacity, 0.38);
-    pointer-events: none;
     cursor: not-allowed;
+}
+
+:is(.z-treerow.z-treerow-disabled, .z-treerow[disabled]) :is(.z-treecell-content, .z-treecell-text) {
+    color: var(--zk-color-disabled);
+}
+
+:is(.z-treerow.z-treerow-disabled, .z-treerow[disabled]) .z-treecell-text img {
+    opacity: var(--zk-state-disabled-opacity, 0.38);
 }
 
 /* Focus — keyboard navigation only: gate on the hidden .z-focus-a trap's
