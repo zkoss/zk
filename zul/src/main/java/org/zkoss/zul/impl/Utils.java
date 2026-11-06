@@ -345,6 +345,21 @@ public class Utils {
 		// Daterangebox now mirrors that via its own todayLinkLabel property —
 		// so a per-page global constant would be a redundant second owner.
 
+		addLocaleJS(sb, "MDEDITOR_BOLD", MZul.MDEDITOR_BOLD);
+		addLocaleJS(sb, "MDEDITOR_ITALIC", MZul.MDEDITOR_ITALIC);
+		addLocaleJS(sb, "MDEDITOR_INLINE_CODE", MZul.MDEDITOR_INLINE_CODE);
+		addLocaleJS(sb, "MDEDITOR_HEADING", MZul.MDEDITOR_HEADING);
+		addLocaleJS(sb, "MDEDITOR_LINK", MZul.MDEDITOR_LINK);
+		addLocaleJS(sb, "MDEDITOR_BULLETED_LIST", MZul.MDEDITOR_BULLETED_LIST);
+		addLocaleJS(sb, "MDEDITOR_NUMBERED_LIST", MZul.MDEDITOR_NUMBERED_LIST);
+		addLocaleJS(sb, "MDEDITOR_STRIKETHROUGH", MZul.MDEDITOR_STRIKETHROUGH);
+		addLocaleJS(sb, "MDEDITOR_IMAGE", MZul.MDEDITOR_IMAGE);
+		addLocaleJS(sb, "MDEDITOR_TASK_LIST", MZul.MDEDITOR_TASK_LIST);
+		addLocaleJS(sb, "MDEDITOR_BLOCKQUOTE", MZul.MDEDITOR_BLOCKQUOTE);
+		addLocaleJS(sb, "MDEDITOR_CODE_BLOCK", MZul.MDEDITOR_CODE_BLOCK);
+		addLocaleJS(sb, "MDEDITOR_TABLE", MZul.MDEDITOR_TABLE);
+		addLocaleJS(sb, "MDEDITOR_HORIZONTAL_RULE", MZul.MDEDITOR_HORIZONTAL_RULE);
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',')
 			sb.setLength(j);

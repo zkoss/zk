@@ -113,6 +113,7 @@
        outline is suppressed by the component CSS — so without this the editor
        would have no focus affordance at all in High Contrast. */
     .z-codeeditor:focus-within,
+    .z-mdeditor:focus-within,
     .z-timepicker:focus-within,
     .z-searchbox-search:focus,
     .z-selectbox:focus,

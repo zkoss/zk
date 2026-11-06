@@ -1,5 +1,6 @@
 ZK 11.1.0
 * Features
+  ZK-4927: markdown editor component
 
 * Bugs
   ZK-6232: zul.xsd: linelayout rejects lineitem, lineitem accepts no child components, and rowchildren accepts only panel

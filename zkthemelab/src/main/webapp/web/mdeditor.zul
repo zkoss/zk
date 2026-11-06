@@ -1,0 +1,67 @@
+<?page title="Mdeditor" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Mdeditor</h:span></h:div>
+
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Modes</h:span></h:div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6">
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">mode=&quot;source&quot; (default)</h:span></h:div>
+                <mdeditor width="360px" height="180px">
+                    <attribute name="value"><![CDATA[# Release notes
+
+Some **bold**, *italic* and `code`.
+
+- [x] done task
+- [ ] open task]]></attribute>
+                </mdeditor>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">mode=&quot;split&quot;</h:span></h:div>
+                <mdeditor mode="split" width="560px" height="180px">
+                    <attribute name="value"><![CDATA[# Release notes
+
+Some **bold**, *italic* and a [link](https://www.zkoss.org).
+
+> a blockquote]]></attribute>
+                </mdeditor>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">mode=&quot;preview&quot; readonly=&quot;true&quot;</h:span></h:div>
+                <mdeditor mode="preview" readonly="true" width="360px" height="180px">
+                    <attribute name="value"><![CDATA[# Release notes
+
+| Component | Module |
+| --- | --- |
+| mdeditor | zkex |]]></attribute>
+                </mdeditor>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">States</h:span></h:div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6">
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">Readonly</h:span></h:div>
+                <mdeditor readonly="true" value="# Read only" width="360px" height="120px"/>
+            </h:div>
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">Disabled</h:span></h:div>
+                <mdeditor disabled="true" mode="split" value="# Disabled&#10;&#10;A [link](https://www.zkoss.org)." width="560px" height="120px"/>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Surface</h:span></h:div>
+        <h:div class="z-d-flex z-flex-wrap z-gap-6">
+            <h:div class="z-vstack z-gap-2">
+                <h:div><h:span class="z-text-sm z-text-secondary">colorScheme=&quot;dark&quot;</h:span></h:div>
+                <mdeditor colorScheme="dark" mode="split" value="# Dark&#10;&#10;A [link](https://www.zkoss.org) and `code`." width="560px" height="150px"/>
+            </h:div>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

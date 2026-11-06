@@ -391,6 +391,11 @@ const FA_TO_LUCIDE = {
     'refresh': 'refresh-cw',
     'rotate-left': 'rotate-ccw',
     'rotate-right': 'rotate-cw',
+    // mdeditor toolbar (zkex)
+    'header': 'heading',
+    'list-ul': 'list',
+    'list-ol': 'list-ordered',
+    'quote-left': 'quote',
 };
 
 /**

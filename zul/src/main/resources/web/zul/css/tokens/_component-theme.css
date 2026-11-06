@@ -1235,6 +1235,9 @@
        -active-line is NOT declared: the CE extension set never emits .cm-activeLine,
        so a default here would be an orphan token (see css/codeeditor.css).
 
+       PE mdeditor (zkex/md/css/mdeditor.css) reads these knobs too, so retuning one
+       restyles both editors.
+
        WHY THE DARK SURFACE IS A LITERAL NEAR-BLACK, NOT --zk-color-inverse-surface:
        the ten syntax colors (--zk-codeeditor-token-*) live in the widget JS as VS
        Code Dark+ literals and are NOT theme-derived, so the surface has to keep them

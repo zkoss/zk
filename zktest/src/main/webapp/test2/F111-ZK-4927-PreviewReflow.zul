@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F111-ZK-4927-PreviewReflow.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Sat Oct 24 10:00:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<mdeditor id="md" mode="preview" readonly="true" hflex="1" height="240px"
+			  value="![A castle, 433px wide](/img/castle.png)&#10;&#10;Supercalifragilisticexpialidociouspneumonoultramicroscopicsilicovolcanoconiosis"/>
+</zk>
