@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F111-ZK-5992.zul
+
+        Purpose:
+
+        Description:
+
+        History:
+                Mon May 04 16:53:15 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<vlayout>
+		<label value="ZK-5992 — tbeditor plugin loading (scope resolution)"/>
+		<label multiline="true">
+            1. tbColors: per-component plugins="colors,fontsize" → loads colors.js + fontsize.js.
+            2. tbInherited (no plugins=): inherits "emoji" from the window custom-attribute → loads emoji.js.
+            3. tbOverride (plugins="colors"): OVERRIDES the inherited emoji → loads colors only, NOT emoji.
+            4. tbClear (plugins=""): explicitly clears → loads no plugin at all.
+            5. tbUnknown (plugins="z_does_not_exist"): the missing plugin asset fails to load
+                gracefully — its request 503s during the page-load burst (404 on an isolated
+                fetch) — but the editor and page still work.
+                ONE console error for z_does_not_exist is EXPECTED here (unknown-plugin tolerance).
+            6. tbList: inherits "history" from a custom-attribute holding a List, not a String.
+            7. Click "add late editors": tbLateColors (plugins="colors") and tbLateNone (plugins="")
+                are built after every plugin above is loaded. Each must start only its own plugins:
+                no emoji or fontsize toolbar button on either, and no colors button on tbLateNone.
+		</label>
+
+		<tbeditor id="tbColors" plugins="colors,fontsize" width="500px"/>
+
+		<window id="winInherit" border="normal">
+			<custom-attributes org.zkoss.zkmax.zul.tbeditor.plugins="emoji"/>
+
+			<tbeditor id="tbInherited" width="500px"/>
+
+			<tbeditor id="tbOverride" plugins="colors" width="500px"/>
+
+			<tbeditor id="tbClear" plugins="" width="500px"/>
+		</window>
+
+		<tbeditor id="tbUnknown" plugins="z_does_not_exist" width="500px"/>
+
+		<window id="winList" border="normal"
+			onCreate='self.setAttribute("org.zkoss.zkmax.zul.tbeditor.plugins", java.util.Arrays.asList(new String[] {"history"}))'>
+			<tbeditor id="tbList" width="500px"/>
+		</window>
+
+		<button id="addLate" label="add late editors">
+			<attribute name="onClick"><![CDATA[
+				org.zkoss.zkmax.zul.Tbeditor colors = new org.zkoss.zkmax.zul.Tbeditor();
+				colors.setId("tbLateColors");
+				colors.setPlugins("colors");
+				colors.setWidth("500px");
+				colors.setParent(lateBox);
+				org.zkoss.zkmax.zul.Tbeditor none = new org.zkoss.zkmax.zul.Tbeditor();
+				none.setId("tbLateNone");
+				none.setPlugins("");
+				none.setWidth("500px");
+				none.setParent(lateBox);
+			]]></attribute>
+		</button>
+		<div id="lateBox"/>
+	</vlayout>
+</zk>
