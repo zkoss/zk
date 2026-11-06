@@ -877,4 +877,4 @@ function main() {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
 
-export { buildTestsForPage, listAllTests, loadClassIndex, allZulKeys, classResolver, parseCssClasses };
+export { buildTestsForPage, pagesOfTestFactory, listAllTests, loadClassIndex, loadAggregatePages, allZulKeys, classResolver, parseCssClasses };

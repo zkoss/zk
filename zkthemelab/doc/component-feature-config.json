@@ -1,0 +1,165 @@
+{
+  "note": "Input of scripts/component-feature-matrix.mjs. breadthFeatures: features expected to cover every component, each made of one or more Playwright projects; pageScan = whole-page checks, which cover every component the opened page renders; an empty breadth cell is a gap unless notApplicable gives the reason. ambiguousNames: component names that are also ordinary words in titles; they count only at the start of a title segment before a separator. titleAliases: title text -> component, for titles that name a component another way. notApplicable: [{components, features, reason}]. clientWidgets: themed widgets with no component tag, added as rows. projectComponents: project -> components every one of its tests exercises (a single-component project whose fixture URL the page finder cannot attribute).",
+  "breadthFeatures": [
+    {
+      "name": "gallery",
+      "projects": [
+        "gallery",
+        "chromium"
+      ],
+      "pageScan": true
+    },
+    {
+      "name": "forced-colors-gallery",
+      "projects": [
+        "forced-colors-gallery"
+      ],
+      "pageScan": true
+    },
+    {
+      "name": "tablet",
+      "projects": [
+        "tablet"
+      ],
+      "pageScan": true
+    },
+    {
+      "name": "font-size",
+      "projects": [
+        "font-size"
+      ],
+      "pageScan": true
+    },
+    {
+      "name": "smoke",
+      "projects": [
+        "smoke"
+      ],
+      "pageScan": true
+    }
+  ],
+  "clientWidgets": [
+    "messagebox",
+    "notification",
+    "toast",
+    "errorbox",
+    "loading",
+    "loadingbar",
+    "scrollbar"
+  ],
+  "ambiguousNames": [
+    "a",
+    "area",
+    "cell",
+    "column",
+    "columns",
+    "row",
+    "rows",
+    "group",
+    "tab",
+    "tabs",
+    "image",
+    "label",
+    "span",
+    "div",
+    "html",
+    "style",
+    "script",
+    "include",
+    "caption",
+    "separator",
+    "space",
+    "foot",
+    "head",
+    "button",
+    "window",
+    "frozen",
+    "footer",
+    "track",
+    "paging",
+    "item"
+  ],
+  "titleAliases": {
+    ".mhf-grid": "grid",
+    ".mhf-listbox": "listbox",
+    ".mhf-tree": "tree",
+    ".fz-grid": "grid",
+    ".fz-listbox": "listbox",
+    ".fz-tree": "tree",
+    "passwordbox": "textbox"
+  },
+  "projectComponents": {
+    "daterangebox-anchor": [
+      "daterangebox"
+    ],
+    "messagebox-multiline": [
+      "messagebox"
+    ],
+    "signature-label": [
+      "signature"
+    ]
+  },
+  "notApplicable": [
+    {
+      "components": [
+        "macro",
+        "otherwise",
+        "when",
+        "style"
+      ],
+      "features": [
+        "gallery",
+        "forced-colors-gallery",
+        "tablet",
+        "font-size",
+        "smoke"
+      ],
+      "reason": "Renders no box of its own: a macro wrapper, a zuti condition or a <style> element."
+    },
+    {
+      "components": [
+        "box"
+      ],
+      "features": [
+        "gallery",
+        "forced-colors-gallery",
+        "tablet",
+        "font-size",
+        "smoke"
+      ],
+      "reason": "No preview page: the hbox/vbox base, replaced by hlayout/vlayout."
+    },
+    {
+      "components": [
+        "area",
+        "html",
+        "iframe",
+        "imagemap",
+        "scrollbar"
+      ],
+      "features": [
+        "gallery",
+        "forced-colors-gallery"
+      ],
+      "reason": "Structural or non-visual page, skipped by the gallery scans (SKIP in gallery-scan.spec.ts and forced-colors-gallery.spec.ts)."
+    },
+    {
+      "components": [
+        "audio",
+        "video",
+        "camera",
+        "barcodescanner",
+        "captcha",
+        "fileupload",
+        "loading",
+        "loadingbar"
+      ],
+      "features": [
+        "gallery",
+        "forced-colors-gallery",
+        "font-size"
+      ],
+      "reason": "Non-deterministic content (a device, an external resource or an animation), skipped by the page scans; render-smoke and media.spec.ts cover the pages that have one."
+    }
+  ]
+}
