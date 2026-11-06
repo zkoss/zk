@@ -183,6 +183,8 @@
     display: flex;
     align-items: center;
     padding: var(--zk-spacing-2) var(--zk-spacing-4);
+    /* ZK-2783: an empty item keeps the height of an item with text (padding + one text line). */
+    min-height: calc(2 * var(--zk-spacing-2) + var(--zk-typescale-body-medium-line-height));
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-body-medium-size);
     color: var(--zk-color-on-surface);
