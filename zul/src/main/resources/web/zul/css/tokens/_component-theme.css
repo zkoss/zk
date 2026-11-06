@@ -58,7 +58,7 @@
        not a knob. The header shares the window surface fill. */
     --zk-window-bg:             var(--zk-color-surface);
     --zk-window-border-color:   var(--zk-color-outline-variant);
-    --zk-window-radius:         var(--zk-shape-corner-extra-small);
+    --zk-window-radius:         var(--zk-shape-dialog);
     --zk-window-header-fg:      var(--zk-color-on-surface);
     --zk-window-icon-hover-bg:  var(--zk-color-surface-container);
     --zk-window-close-hover-bg: var(--zk-window-icon-hover-bg);

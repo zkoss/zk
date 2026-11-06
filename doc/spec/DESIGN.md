@@ -59,7 +59,7 @@ Tokens: `--zk-spacing-1` through `--zk-spacing-16`.
 
 ## 5. Corner Radii
 
-Rule: **default to `--zk-shape-card`** for any container/card; **`--zk-shape-corner-extra-small`** for interactive controls (inputs, buttons, dropdowns, menus) and dialogs. Token values: `tokens/_shape.css`.
+Rule: **default to `--zk-shape-card`** for any container/card and for dialogs (`--zk-shape-dialog` aliases it, so an embedded Window matches a Panel and a dialog is never less rounded than a card, as MD3 orders them); **`--zk-shape-corner-extra-small`** for interactive controls (inputs, buttons, dropdowns, menus). Token values: `tokens/_shape.css`.
 
 ---
 

@@ -4,7 +4,7 @@
     --zk-shape-corner-none: 0px;
     --zk-shape-corner-extra-small: 4px;   /* inputs, chips */
     --zk-shape-corner-small: 8px;          /* buttons, text fields */
-    --zk-shape-corner-medium: 12px;        /* cards, panels */
+    --zk-shape-corner-medium: 12px;        /* date/search popups (Marble cards use --zk-shape-card) */
     --zk-shape-corner-large: 16px;         /* drawers */
     --zk-shape-corner-extra-large: 28px;   /* bottom sheets */
     --zk-shape-corner-full: 9999px;        /* pills, FAB */
@@ -13,6 +13,6 @@
     --zk-shape-button: var(--zk-shape-corner-extra-small);
     --zk-shape-input: var(--zk-shape-corner-extra-small);
     --zk-shape-card: 6px;
-    --zk-shape-dialog: var(--zk-shape-corner-extra-small);
+    --zk-shape-dialog: var(--zk-shape-card);
     --zk-shape-menu: var(--zk-shape-corner-extra-small);
 }

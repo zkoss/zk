@@ -42,7 +42,7 @@ test.describe('Component Theme Variables (borrowed preview pages)', () => {
     await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
     const icon = dlg.locator('.z-messagebox-information').first();
 
-    expect(await radiusOf(dlg)).toBe('4px'); // stock --zk-shape-dialog
+    expect(await radiusOf(dlg)).toBe('6px'); // stock --zk-shape-dialog
     expect(await bgOf(dlg)).toBe('rgb(255, 255, 255)'); // stock --zk-color-surface
     const iconColor = await colorOf(icon);
 
@@ -85,7 +85,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const root = page.locator('.z-window').first();
     const c0 = root;
     const c1 = root;
-    expect(await radiusOf(c0)).toBe('4px'); // stock
+    expect(await radiusOf(c0)).toBe('6px'); // stock --zk-shape-dialog
     expect(await bgOf(c1)).toBe('rgb(255, 255, 255)'); // stock
     await page.addStyleTag({ content: ':root{--zk-window-radius:16px;--zk-window-bg:#eef2ff;--zk-window-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('16px');
