@@ -75,7 +75,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-input-radius:12px;--zk-input-border-color:#6750a4;--zk-input-border-color-hover:#6750a4}' });
     expect(await radiusOf(c0)).toBe('12px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -160,7 +160,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-combobox-radius:0px;--zk-combobox-border-color:#6750a4;--zk-combobox-selected-bg:#6750a4;--zk-combobox-selected-fg:#ffffff}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -171,7 +171,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-datebox-radius:0px;--zk-datebox-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -182,7 +182,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-timebox-radius:0px;--zk-timebox-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -193,7 +193,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-spinner-radius:0px;--zk-spinner-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -204,7 +204,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-bandbox-radius:0px;--zk-bandbox-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -215,7 +215,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-daterangebox-radius:0px;--zk-daterangebox-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -328,7 +328,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-timepicker-radius:0px;--zk-timepicker-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -340,7 +340,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c1 = root;
     const c2 = root.locator('.z-cascader-label').first();
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     expect(await colorOf(c2)).toBe('rgba(0, 0, 0, 0.87)'); // stock
     await page.addStyleTag({ content: ':root{--zk-cascader-radius:0px;--zk-cascader-border-color:#6750a4;--zk-cascader-fg:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
@@ -354,7 +354,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c1 = root;
     const c2 = root.locator('.z-searchbox-label').first();
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     expect(await colorOf(c2)).toBe('rgba(0, 0, 0, 0.87)'); // stock
     await page.addStyleTag({ content: ':root{--zk-searchbox-radius:0px;--zk-searchbox-border-color:#6750a4;--zk-searchbox-fg:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
@@ -367,7 +367,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-colorbox-radius:0px;--zk-colorbox-border-color:#6750a4;--zk-colorbox-border-color-hover:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
@@ -415,7 +415,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const c1 = root;
     const c2 = root.locator('.cm-gutters').first();
     expect(await bgOf(c0)).toBe('rgb(255, 255, 255)'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     expect(await bgOf(c2)).toBe('rgb(247, 249, 252)'); // stock
     await page.addStyleTag({ content: ':root{--zk-codeeditor-bg:#6750a4;--zk-codeeditor-border-color:#6750a4;--zk-codeeditor-gutter-bg:#6750a4}' });
     expect(await bgOf(c0)).toBe(SCOPED_PURPLE);
@@ -495,7 +495,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 2)', () 
     expect(await colorOf(pop)).toBe('rgba(0, 0, 0, 0.87)'); // stock --zk-color-on-surface
     expect(await bgOf(ok)).toBe('rgb(55, 111, 208)'); // stock --zk-color-primary
     expect(await colorOf(ok)).toBe('rgb(255, 255, 255)'); // stock --zk-color-on-primary
-    expect(await borderColorOf(cancel)).toBe('rgba(0, 0, 0, 0.23)'); // stock --zk-color-outline
+    expect(await borderColorOf(cancel)).toBe('rgba(0, 0, 0, 0.45)'); // stock --zk-color-outline
     expect(await colorOf(cancel)).toBe('rgba(0, 0, 0, 0.6)'); // stock --zk-color-on-surface-variant
     const iconColor = await colorOf(icon);
 
@@ -574,7 +574,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 2)', () 
     const sel = page.locator('.z-select').first();
 
     expect(await radiusOf(sel)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(sel)).toBe('rgba(0, 0, 0, 0.23)'); // stock --zk-color-outline
+    expect(await borderColorOf(sel)).toBe('rgba(0, 0, 0, 0.45)'); // stock --zk-color-outline
 
     await page.addStyleTag({ content: ':root{--zk-selectbox-radius:0px;--zk-selectbox-border-color:#6750a4}' });
     expect(await radiusOf(sel)).toBe('0px');
@@ -613,7 +613,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     await c0.waitFor({ state: 'attached' });
     expect(await radiusOf(c0)).toBe('9999px'); // stock
     expect(await bgOf(c0)).toBe('oklch(0.92 0.0403278 260.564)'); // stock
-    expect(await colorOf(c0)).toBe('rgb(55, 111, 208)'); // stock
+    expect(await colorOf(c0)).toBe('oklch(0.23 0.0725901 260.564)'); // stock
     await page.addStyleTag({ content: ':root{--zk-paging-radius:4px;--zk-paging-selected-bg:#6750a4;--zk-paging-selected-fg:#ffffff}' });
     expect(await radiusOf(c0)).toBe('4px');
     expect(await bgOf(c0)).toBe(SCOPED_PURPLE);
@@ -636,7 +636,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     const c0 = page.locator('.z-inputgroup').first().locator('.z-inputgroup-text').first();
     await c0.waitFor({ state: 'attached' });
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     expect(await bgOf(c0)).toBe('rgb(247, 249, 252)'); // stock
     expect(await colorOf(c0)).toBe('rgba(0, 0, 0, 0.6)'); // stock
     await page.addStyleTag({ content: ':root{--zk-inputgroup-radius:0px;--zk-inputgroup-border-color:#6750a4;--zk-inputgroup-text-bg:#efe6ff;--zk-inputgroup-text-fg:#6750a4}' });
@@ -712,7 +712,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     expect(await bgOf(c0)).toBe('rgb(247, 249, 252)'); // stock
     expect(await radiusOf(c1)).toBe('8px'); // stock
     expect(await bgOf(c2)).toBe('color(srgb 0.215686 0.435294 0.815686 / 0.12)'); // stock
-    expect(await colorOf(c2)).toBe('rgb(55, 111, 208)'); // stock
+    expect(await colorOf(c2)).toBe('oklch(0.23 0.0725901 260.564)'); // stock
     await page.addStyleTag({ content: ':root{--zk-navbar-bg:#efe6ff;--zk-navitem-radius:0px;--zk-navitem-selected-bg:#6750a4;--zk-navitem-selected-fg:#ffffff}' });
     expect(await bgOf(c0)).toBe('rgb(239, 230, 255)');
     expect(await radiusOf(c1)).toBe('0px');
@@ -769,7 +769,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     await c4.waitFor({ state: 'attached' });
     await c5.waitFor({ state: 'attached' });
     expect(await pseudoBgOf(c0, '::before')).toBe('rgba(0, 0, 0, 0.12)'); // stock
-    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c1)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     expect(await bgOf(c2)).toBe('rgb(55, 111, 208)'); // stock
     expect(await colorOf(c2)).toBe('rgb(255, 255, 255)'); // stock
     expect(await pseudoBgOf(c3, '::before')).toBe('rgb(55, 111, 208)'); // stock
@@ -817,7 +817,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     await c0.waitFor({ state: 'attached' });
     await c1.waitFor({ state: 'attached' });
     expect(await radiusOf(c0)).toBe('8px'); // stock
-    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     expect(await bgOf(c1)).toBe('rgb(240, 244, 250)'); // stock
     await page.addStyleTag({ content: ':root{--zk-tbeditor-radius:0px;--zk-tbeditor-border-color:#6750a4;--zk-tbeditor-toolbar-bg:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
@@ -829,7 +829,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     const c0 = page.locator('.z-signature').first();
     await c0.waitFor({ state: 'attached' });
     expect(await radiusOf(c0)).toBe('12px'); // stock
-    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     await page.addStyleTag({ content: ':root{--zk-signature-radius:0px;--zk-signature-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c0)).toBe(SCOPED_PURPLE);
@@ -861,7 +861,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     const c0 = page.locator('.z-dropupload').first();
     await c0.waitFor({ state: 'attached' });
     expect(await radiusOf(c0)).toBe('4px'); // stock
-    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.23)'); // stock
+    expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.45)'); // stock
     expect(await bgOf(c0)).toBe('rgba(0, 0, 0, 0)'); // stock
     await page.addStyleTag({ content: ':root{--zk-dropupload-radius:0px;--zk-dropupload-border-color:#6750a4;--zk-dropupload-bg:#6750a4}' });
     expect(await radiusOf(c0)).toBe('0px');
@@ -937,7 +937,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     expect(await radiusOf(c0)).toBe('6px'); // stock
     expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.12)'); // stock
     expect(await bgOf(c1)).toBe('oklch(0.92 0.0403278 260.564)'); // stock
-    expect(await colorOf(c1)).toBe('rgb(55, 111, 208)'); // stock
+    expect(await colorOf(c1)).toBe('oklch(0.23 0.0725901 260.564)'); // stock
     await page.addStyleTag({ content: ':root{--zk-portallayout-radius:0px;--zk-portallayout-border-color:#6750a4;--zk-portallayout-counter-bg:#6750a4;--zk-portallayout-counter-fg:#ffffff}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c0)).toBe(SCOPED_PURPLE);
@@ -951,7 +951,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     await chip.waitFor({ state: 'attached' });
 
     expect(await radiusOf(box)).toBe('4px'); // stock --zk-shape-input
-    expect(await borderColorOf(box)).toBe('rgba(0, 0, 0, 0.23)'); // stock --zk-color-outline
+    expect(await borderColorOf(box)).toBe('rgba(0, 0, 0, 0.45)'); // stock --zk-color-outline
     expect(await bgOf(chip)).toBe('rgb(232, 238, 247)'); // stock resting chip fill
 
     await page.addStyleTag({ content: ':root{--zk-chosenbox-radius:0px;--zk-chosenbox-border-color:#6750a4;--zk-chosenbox-item-bg:#efe6ff;--zk-chosenbox-item-focus-bg:#6750a4}' });
