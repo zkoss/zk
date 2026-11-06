@@ -341,6 +341,22 @@
     transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
+/* ZK-1959: in scroll mode the strip's own divider stops at the scroll buttons, so the buttons draw it too and
+   the line is continuous. Tabs.ts sizes the buttons to the strip's offsetHeight, which includes that 1px
+   border; giving the buttons the same height keeps it from changing when a tab is added. */
+.z-tabbox-scroll.z-tabbox-top > :is(.z-tabbox-left-scroll, .z-tabbox-right-scroll) {
+    min-height: calc(var(--zk-tab-height) + 1px);
+    border-bottom: 1px solid var(--zk-tab-border-color);
+}
+
+.z-tabbox-scroll.z-tabbox-bottom > :is(.z-tabbox-left-scroll, .z-tabbox-right-scroll) {
+    /* The strip is below the panels, so the buttons sit at the bottom edge, not at the default `top: 0`. */
+    top: auto;
+    bottom: 0;
+    min-height: calc(var(--zk-tab-height) + 1px);
+    border-top: 1px solid var(--zk-tab-border-color);
+}
+
 /* Directional edge anchors — buttons overlay the strip ends (c22b).
  * Up/down scroll buttons MUST follow the tabs' side: left for orient=left,
  * right for orient=right. Default `left: 0` covers .z-tabbox-left and
