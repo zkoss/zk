@@ -31,7 +31,8 @@
 //
 // where ZK_ROOT = path.resolve(__dirname, '..') (this repo) and
 // ZKCML_ROOT = path.resolve(ZK_ROOT, '../zkcml') (the enterprise sibling repo), unless
-// overridden by --zk-home <workspace-root-containing-both-zk-and-zkcml>.
+// overridden by --zk-home <workspace-root-containing-both-zk-and-zkcml> or, without --zk-home,
+// by the ZK_HOME environment variable (same meaning).
 //
 // --module za11y is different: za11y has no lang file. A11yThemeURIHandler requests
 // ~./za11y/css/<sheet>.css.dsp for the sheet that themes.properties maps the current theme to, and
@@ -46,6 +47,7 @@
 //
 // Usage:
 //   node scripts/check-css-dsp.js --module zul|zkmax|zkex|za11y [--theme-dir <dir>] [--zk-home <dir>]
+// Environment: ZK_HOME = workspace root holding zk/ and zkcml/, used when --zk-home is not given.
 // Exit: 0 = all present, no unexpected extras · 1 = missing file(s) or unexpected extra(s) ·
 //       2 = cannot run (bad --module, or lang file not found)
 
