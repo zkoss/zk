@@ -245,7 +245,8 @@
 .z-listbox .z-focus-a {
     position: absolute;
     width: 0;
-    height: 0;
+    /* B35-2149511: a 0px-high anchor makes Firefox scroll the body to the top when ZK focuses it (IceBlue's is 1x1). */
+    height: 1px;
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
@@ -351,6 +352,16 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* ZK-6112: controls in a cell wrap instead of being replaced by the ellipsis as a whole (a button is an
+   inline-block box, so `text-overflow` hides it entirely and nothing is left to see, click or tap).
+   Covers the button family only: those are the controls with no text to truncate. Input fields are sized
+   by their own width and are not wrapped (a wrapped textbox changes the tree row's height).
+   Text cells keep nowrap + ellipsis. */
+.z-listcell-cnt:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)),
+.z-listcell-content:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)) {
+    white-space: normal;
 }
 
 /* Cell text in selected row uses on-secondary-container (the paired text token
@@ -886,9 +897,10 @@
 }
 
 /* ─── Empty body ─────────────────────────────────────────────────────────── */
+/* ZK-3914: stays a table row group, so the message cell's colspan spans the widget even when the first
+   column is hidden (a block tbody is wrapped in an anonymous cell of that column). */
 .z-listbox-emptybody {
-    display: block;
-    width: 100%;
+    display: table-row-group;
 }
 
 .z-listbox-emptybody-content {

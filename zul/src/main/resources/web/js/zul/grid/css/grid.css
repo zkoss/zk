@@ -29,8 +29,12 @@
 
 /* Auto-noborder inside the known form containers — a grid used as a form layout inside a
    panel/groupbox should blend into its parent without needing the explicit class. */
+/* ZK-2784: the same inside a layout region's body. LayoutRegion.refreshBar_ sizes a child without a fixed
+   height to its scrollHeight, which leaves out the border; the border-box grid then ends up 2px shorter
+   than its content and grows a scrollbar of its own beside the region's. */
 .z-panel-body .z-grid,
-.z-groupbox .z-grid {
+.z-groupbox .z-grid,
+:is(.z-north-body, .z-south-body, .z-east-body, .z-west-body, .z-center-body) > .z-grid {
     border: none;
 }
 
@@ -343,6 +347,16 @@
     box-sizing: border-box;
 }
 
+/* ZK-6112: controls in a cell wrap instead of being replaced by the ellipsis as a whole (a button is an
+   inline-block box, so `text-overflow` hides it entirely and nothing is left to see, click or tap).
+   Covers the button family only: those are the controls with no text to truncate. Input fields are sized
+   by their own width and are not wrapped (a wrapped textbox changes the tree row's height).
+   Text cells keep nowrap + ellipsis. */
+.z-row-content:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)),
+.z-grid .z-cell:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)) {
+    white-space: normal;
+}
+
 /* Legacy: even/odd striping via grid sclass (fallback, prefer z-row-odd) */
 .z-grid-striped .z-row:nth-child(even) {
     background-color: var(--zk-color-surface-container-lowest);
@@ -472,9 +486,10 @@
 }
 
 /* ─── Empty body ─────────────────────────────────────────────────────────── */
+/* ZK-3914: stays a table row group, so the message cell's colspan spans the widget even when the first
+   column is hidden (a block tbody is wrapped in an anonymous cell of that column). */
 .z-grid-emptybody {
-    display: block;
-    width: 100%;
+    display: table-row-group;
 }
 
 .z-grid-emptybody-content {

@@ -33,6 +33,8 @@
        The .z-combobutton-button arrow is position:absolute (out of flow), so this
        gap spaces the image from the label without shifting the arrow. */
     gap: var(--zk-spacing-2);
+    /* ZK-3579: the content fills the combobutton's width, so the arrow sits at the root's right edge. */
+    flex: 1 1 auto;
     overflow: hidden;
     min-height: var(--zk-button-height);
     padding: 0 var(--zk-spacing-4);

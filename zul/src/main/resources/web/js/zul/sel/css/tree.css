@@ -154,7 +154,8 @@
 .z-tree .z-focus-a {
     position: absolute;
     width: 0;
-    height: 0;
+    /* B35-2149511: a 0px-high anchor makes Firefox scroll the body to the top when ZK focuses it (IceBlue's is 1x1). */
+    height: 1px;
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
@@ -211,12 +212,30 @@
     background-color: color-mix(in srgb, var(--zk-tree-selected-fg) 8%, var(--zk-tree-selected-bg));
 }
 
-/* Disabled row — z-treerow-disabled set by Treerow.domClass_ */
+/* Disabled row — z-treerow-disabled set by Treerow.domClass_.
+   ZK's own JS already ignores selection, checkmark and keyboard on a disabled treeitem, and everything else
+   keeps working (ZK-332 open icon, double-click and right-click events, a cell's onClick, popup, tooltip,
+   dragging, components in the cells), so the row takes pointer events and only its text is dimmed.
+   Dimming the text colour, not the row's opacity, keeps the open icon and the components in the cells
+   (an element cannot undo its ancestor's opacity) looking as operable as they are. */
 .z-treerow.z-treerow-disabled,
 .z-treerow[disabled] {
-    opacity: var(--zk-state-disabled-opacity, 0.38);
-    pointer-events: none;
     cursor: not-allowed;
+}
+
+:is(.z-treerow.z-treerow-disabled, .z-treerow[disabled]) :is(.z-treecell-content, .z-treecell-text) {
+    color: var(--zk-color-disabled);
+}
+
+:is(.z-treerow.z-treerow-disabled, .z-treerow[disabled]) .z-treecell-text img {
+    opacity: var(--zk-state-disabled-opacity, 0.38);
+}
+
+/* Clicking a disabled row's checkbox or radio does nothing, so it is dimmed too, as a disabled listgroup's
+   checkbox is: the text colour does not reach its ::before border. Treecell puts z-treerow-disabled on the
+   checkable span, also for an item that is not selectable. */
+.z-treerow-checkable.z-treerow-disabled {
+    opacity: var(--zk-state-disabled-opacity, 0.38);
 }
 
 /* Focus — keyboard navigation only: gate on the hidden .z-focus-a trap's
@@ -253,6 +272,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
     box-sizing: border-box;
+}
+
+/* ZK-6112: controls in a cell wrap instead of being replaced by the ellipsis as a whole (a button is an
+   inline-block box, so `text-overflow` hides it entirely and nothing is left to see, click or tap).
+   Covers the button family only: those are the controls with no text to truncate. Input fields are sized
+   by their own width and are not wrapped (a wrapped textbox changes the tree row's height).
+   Text cells keep nowrap + ellipsis. The tree's content is a flex row, so its items wrap as well. */
+.z-treecell-content:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)) {
+    flex-wrap: wrap;
+    white-space: normal;
 }
 
 /* align on treecol is rendered as inline text-align on the TD; the flex content
@@ -399,7 +428,7 @@
     vertical-align: -3px;
 }
 
-.z-treerow:hover .z-treerow-icon.z-icon-check::before {
+.z-treerow:not(.z-treerow-disabled):hover .z-treerow-icon.z-icon-check::before {
     border-color: var(--zk-color-primary, #376fd0);
 }
 
@@ -428,7 +457,7 @@
     box-sizing: border-box;
 }
 
-.z-treerow:hover .z-treerow-icon.z-icon-radio::before {
+.z-treerow:not(.z-treerow-disabled):hover .z-treerow-icon.z-icon-radio::before {
     border-color: var(--zk-color-primary, #376fd0);
 }
 
