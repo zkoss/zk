@@ -13,13 +13,13 @@
 }
 
 /* Gap between the font icon and the label (matches Button's icon/label gap).
-   dir="reverse" renders the label first, so the gap moves to the icon's start. */
-.z-a > [class*="z-icon-"] {
-    margin-inline-end: var(--zk-spacing-2);
-}
-
-.z-a-reverse > [class*="z-icon-"] {
-    margin-inline: var(--zk-spacing-2) 0;
+   The label is a bare text node that no selector can see, so a margin on the icon
+   would also stay when there is no label. A flex gap only appears between two items:
+   none for an icon-only link, and order-independent for dir="reverse". */
+.z-a:has(> [class*="z-icon-"]) {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--zk-spacing-2);
 }
 
 .z-a:hover {
