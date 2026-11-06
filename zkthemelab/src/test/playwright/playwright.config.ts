@@ -150,12 +150,6 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // `.z-html th` alignment guard (html.css). See html-table-alignment.spec.ts.
-      name: 'html-table',
-      testMatch: /html-table-alignment\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
       // Skeleton placeholder (ZK-6099, PE): shapes, masking, replaced-root overlay, reduced
       // motion, --zk-skeleton-* overrides and the runtime toggle. See skeleton.spec.ts.
       name: 'skeleton',
@@ -179,12 +173,6 @@ export default defineConfig({
       use: TABLET_USE,
     },
     {
-      // Grid groupfoot follows the column align (grid.css). See grid-groupfoot-alignment.spec.ts.
-      name: 'grid-groupfoot',
-      testMatch: /grid-groupfoot-alignment\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
       // Multiline messagebox keeps single line breaks (messagebox.css). See messagebox-multiline.spec.ts.
       name: 'messagebox-multiline',
       testMatch: /messagebox-multiline\.spec\.ts/,
@@ -203,41 +191,9 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // Video fills its width/height, clipToFit and dimBackground work (zkmax video.css). See video.spec.ts.
-      name: 'video',
-      testMatch: /video\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
       // Signature tool buttons show undoLabel/saveLabel/clearLabel (zkmax signature.css). See signature-label.spec.ts.
       name: 'signature-label',
       testMatch: /signature-label\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      // Camera hidden until preview, video sized, recording hint shown (zkmax camera.css). See camera.spec.ts.
-      name: 'camera',
-      testMatch: /camera\.spec\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        permissions: ['camera', 'microphone'],
-        launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] },
-      },
-    },
-    {
-      // Barcodescanner video fills the scanner under the canvas (zkmax barcodescanner.css). See barcodescanner.spec.ts.
-      name: 'barcodescanner',
-      testMatch: /barcodescanner\.spec\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        permissions: ['camera', 'microphone'],
-        launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] },
-      },
-    },
-    {
-      // Warning container hue sits apart from error (tokens/_colors.css). See warning-container-hue.spec.ts.
-      name: 'warning-container',
-      testMatch: /warning-container-hue\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
     {
@@ -313,16 +269,35 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // A label inherits its container's colour instead of setting its own. See label-color.spec.ts.
-      name: 'label-color',
-      testMatch: /label-color\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
       // The width attribute on popup and menupopup, and Bandbox popupWidth, are not overridden by a theme min-width. See popup-width.spec.ts.
       name: 'popup-width',
       testMatch: /popup-width\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Text in footer and header cells lines up with its column's data cells (grid groupfoot,
+      // html table). See alignment.spec.ts.
+      name: 'alignment',
+      testMatch: /[\\/]alignment\.spec\.ts$/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // A label takes its container's colour; the warning and error notification containers keep
+      // distinct hues. See color.spec.ts.
+      name: 'color',
+      testMatch: /[\\/]color\.spec\.ts$/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Video, camera and barcodescanner size their media to the component box. Chrome's fake
+      // camera and microphone stand in for real devices. See media.spec.ts.
+      name: 'media',
+      testMatch: /[\\/]media\.spec\.ts$/,
+      use: {
+        ...devices['Desktop Chrome'],
+        permissions: ['camera', 'microphone'],
+        launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] },
+      },
     },
     {
       name: 'tablet',

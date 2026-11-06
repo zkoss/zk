@@ -1,5 +1,5 @@
 <?page title="Slider knob focus guard" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for slider-knob-focus.spec.ts: a keyboard-focusable knob slider (za11y sets the same
+<!-- Fixture for focus-ring-scan.spec.ts (slider focus ring): a keyboard-focusable knob slider (za11y sets the same
      tabindex on the root), plus horizontal and vertical sliders for the focus-ring comparison.
      Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up. -->
 <zk>

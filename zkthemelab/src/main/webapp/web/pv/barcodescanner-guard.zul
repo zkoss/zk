@@ -1,5 +1,5 @@
 <?page title="Barcodescanner guard" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for barcodescanner.spec.ts: a 320x240 scanner fed by Chrome's fake 640x480 device.
+<!-- Fixture for media.spec.ts (barcodescanner): a 320x240 scanner fed by Chrome's fake 640x480 device.
      Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick
      it up as a page. -->
 <zk xmlns:h="native">

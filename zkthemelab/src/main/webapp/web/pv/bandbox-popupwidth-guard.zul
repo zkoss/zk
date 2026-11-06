@@ -1,5 +1,5 @@
 <?page title="Bandbox popupWidth guard" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for bandbox-popupwidth.spec.ts: bandboxes whose popupWidth is narrower than any theme
+<!-- Fixture for popup-width.spec.ts (bandbox popupWidth): bandboxes whose popupWidth is narrower than any theme
      minimum, as a pixel value and as a percentage of the input. Lives under pv/ so gallery-scan,
      forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
 <zk xmlns:h="native">
