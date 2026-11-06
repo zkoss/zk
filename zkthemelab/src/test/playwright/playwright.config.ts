@@ -307,12 +307,6 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // grid/listbox/tree z-sticky-header pins the header (zkmax, EE only). See sticky-header.spec.ts.
-      name: 'sticky-header',
-      testMatch: /sticky-header\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
       // rangeslider and multislider share Sliderbuttons: shared base rules, own accents. See sliderbuttons.spec.ts.
       name: 'sliderbuttons',
       testMatch: /sliderbuttons\.spec\.ts/,
@@ -322,12 +316,6 @@ export default defineConfig({
       // A label inherits its container's colour instead of setting its own. See label-color.spec.ts.
       name: 'label-color',
       testMatch: /label-color\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      // The knob slider's focus ring, input and click centre sit on its arc centre. See slider-knob-focus.spec.ts.
-      name: 'slider-knob-focus',
-      testMatch: /slider-knob-focus\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
     {
