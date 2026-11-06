@@ -1,4 +1,7 @@
 import { test, expect, Locator, Page } from '@playwright/test';
+import * as fs from 'fs';
+import * as path from 'path';
+import { AGGREGATE_PAGES } from './aggregate-pages';
 
 // Runs under the `tablet` Playwright project (iPad viewport + mobile UA). ZK
 // delivers zkmax/css/tablet.css.dsp as a DISABLED <link> and sets zk.mobile
@@ -475,6 +478,64 @@ for (const { name, url, maxDiffPixelRatio } of visualCases) {
       await page.evaluate(() => document.fonts.ready.then(() => true));
       await expect(page.locator('.z-p-8').first())
         .toHaveScreenshot(`${comp}-tablet.png`, maxDiffPixelRatio ? { maxDiffPixelRatio } : {});
+    });
+  });
+}
+
+// Width-834 guards for every other preview page: the tablet stylesheet does not restyle these
+// components, but the iPad viewport and the mobile UA still reach them (a narrower layout, touch
+// code paths), so each page keeps a tablet baseline too. Pages are scanned like
+// gallery-scan.spec.ts, so a new page is covered as soon as it is added; TABLET_SKIP leaves out
+// the pages its SKIP leaves out, for the same reasons, plus scrollview (shot in the
+// tablet-scrollview-affordance block below).
+const WEB_DIR = path.resolve(__dirname, '../../main/webapp/web');
+const TABLET_SKIP = new Set([
+  ...AGGREGATE_PAGES,
+  'area', 'html', 'iframe', 'imagemap', 'scrollbar',
+  'camera', 'barcodescanner', 'captcha', 'video', 'audio', 'fileupload', 'loading', 'loadingbar',
+  'icons-lucide',
+  'scrollview',
+]);
+const tabletCssPages = new Set(visualCases.map(c => c.url.replace(/^\/|\.zul$/g, '')));
+const widthGuardPages = fs.readdirSync(WEB_DIR)
+  .filter(f => f.endsWith('.zul'))
+  .map(f => f.replace(/\.zul$/, ''))
+  .filter(name => !TABLET_SKIP.has(name) && !tabletCssPages.has(name))
+  .sort();
+
+// Sections that cannot be shot statically, masked in the shot; the same sections gallery-scan.spec.ts
+// skips (UNSTABLE_SECTIONS there): the carousel autoplay demo, and the sizedByContent demos of the
+// header pages, which settle in one of two column widths decided when the page loads.
+const SIZED_BY_CONTENT = /sizedByContent/i;
+const UNSTABLE_TABLET_SECTIONS: Record<string, RegExp | undefined> = {
+  carousel: /^Autoplay/i,
+  'grid-header': SIZED_BY_CONTENT,
+  'listbox-header': SIZED_BY_CONTENT,
+  'tree-header': SIZED_BY_CONTENT,
+};
+
+for (const comp of widthGuardPages) {
+  test.describe(`tablet-${comp}`, () => {
+    test('gallery', async ({ page }) => {
+      await page.goto(`/${comp}.zul`, { waitUntil: 'networkidle' });
+      await page.evaluate(() => document.fonts.ready.then(() => true));
+      // End every CSS transition, as gallery-scan.spec.ts does, then wait until the progressmeter
+      // fills, which the widget steps up to their value, keep their width. An indeterminate fill
+      // animates for ever; `animations: 'disabled'` stops it for the shot.
+      await page.addStyleTag({ content: '*{transition-duration:0s !important}' });
+      const fillWidths = () => page.evaluate(() => Array.from(document.querySelectorAll(
+        '.z-progressmeter:not(.z-progressmeter-indeterminate) > .z-progressmeter-image'))
+        .map(el => (el as HTMLElement).getBoundingClientRect().width).join());
+      await expect.poll(async () => {
+        const before = await fillWidths();
+        await page.waitForTimeout(200);
+        return before === await fillWidths();
+      }, { message: `${comp}.zul: a progressmeter fill kept moving` }).toBe(true);
+      const unstable = UNSTABLE_TABLET_SECTIONS[comp];
+      const mask = unstable
+        ? [page.locator('.z-p-8 > *').filter({ has: page.locator('.z-text-uppercase.z-border-bottom', { hasText: unstable }) })]
+        : [];
+      await expect(page.locator('.z-p-8').first()).toHaveScreenshot(`${comp}-tablet.png`, { animations: 'disabled', mask });
     });
   });
 }

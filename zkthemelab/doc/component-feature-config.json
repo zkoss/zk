@@ -139,9 +139,10 @@
       ],
       "features": [
         "gallery",
-        "forced-colors-gallery"
+        "forced-colors-gallery",
+        "tablet"
       ],
-      "reason": "Structural or non-visual page, skipped by the gallery scans (SKIP in gallery-scan.spec.ts and forced-colors-gallery.spec.ts)."
+      "reason": "Structural or non-visual page, skipped by the gallery scans (SKIP in gallery-scan.spec.ts, forced-colors-gallery.spec.ts and TABLET_SKIP in tablet.spec.ts)."
     },
     {
       "components": [
@@ -157,7 +158,8 @@
       "features": [
         "gallery",
         "forced-colors-gallery",
-        "font-size"
+        "font-size",
+        "tablet"
       ],
       "reason": "Non-deterministic content (a device, an external resource or an animation), skipped by the page scans; render-smoke and media.spec.ts cover the pages that have one."
     }

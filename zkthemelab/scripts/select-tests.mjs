@@ -424,6 +424,7 @@ function titleNamesPage(test, pageKey) {
   return mentioned.includes(pageKey)
     || test.title === pageKey || test.title === name                                // gallery / focus-scan titles
     || test.describes[0] === name                                                  // screenshot.spec.ts `describe('button')`
+    || test.describes[0] === `tablet-${name}`                                      // tablet.spec.ts width-834 guards
     || test.title.startsWith(`${name}: `);                                          // hit-target.spec.ts
 }
 
