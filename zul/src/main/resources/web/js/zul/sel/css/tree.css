@@ -267,6 +267,16 @@
     box-sizing: border-box;
 }
 
+/* ZK-6112: controls in a cell wrap instead of being replaced by the ellipsis as a whole (a button is an
+   inline-block box, so `text-overflow` hides it entirely and nothing is left to see, click or tap).
+   Covers the button family only: those are the controls with no text to truncate. Input fields are sized
+   by their own width and are not wrapped (a wrapped textbox changes the tree row's height).
+   Text cells keep nowrap + ellipsis. The tree's content is a flex row, so its items wrap as well. */
+.z-treecell-content:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)) {
+    flex-wrap: wrap;
+    white-space: normal;
+}
+
 /* align on treecol is rendered as inline text-align on the TD; the flex content
    box ignores it, so map it to justify-content. A hand-written style has no space after the colon. */
 .z-treecell:is([style*="text-align: right"], [style*="text-align:right"]) > .z-treecell-content,
