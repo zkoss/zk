@@ -15,8 +15,12 @@ ZK 11.1.0
   ZK-6251: NPE in TrackerImpl when posting a notify-change with a null bean and property "*"
   ZK-6254: Datebox with a Thai locale throws a JS error when the input is an invalid date or Feb 29
   ZK-6215: slider: decimal mode snaps one step low when the position lands exactly on a step
+  ZK-5643: zkex jakarta build refers to JFreeChart, a javax dependency
 
 * Upgrade Notes
+  + jfreechart is now an optional dependency of zkex, so Maven and Gradle builds no longer pull it
+    in transitively; an application that uses <chart> must declare org.jfree:jfreechart:1.0.19
+    itself, or the chart fails with NoClassDefFoundError.
 
    --------
 ZK 11.0.0
