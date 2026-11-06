@@ -16,6 +16,7 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 <?component name="timebox" extends="timebox" width="140px"?>
 <?component name="datebox" extends="datebox"  width="100px"?>
 <zk>
+	<zscript>Date now = new Date();</zscript>
 	1. Please check each input value and the datebox's calendar is the same as the language to the Locale
 	<separator/>
 	2. Please click the button "Change all locales to Taiwan", and then you should see
@@ -31,31 +32,31 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 		<rows id="rows">
 			<row>
 				TW (Taiwan):
-				<datebox format="medium" locale="zh_TW" onCreate="self.value = new Date()"/>
-				<datebox format="long" locale="zh_TW" onCreate="self.value = new Date()"/>
-				<timebox format="medium" locale="zh_TW"  onCreate="self.value = new Date()"/>
-				<timebox format="long" locale="zh_TW"  onCreate="self.value = new Date()"/>
+				<datebox format="medium" locale="zh_TW" onCreate="self.value = now"/>
+				<datebox format="long" locale="zh_TW" onCreate="self.value = now"/>
+				<timebox format="medium" locale="zh_TW"  onCreate="self.value = now"/>
+				<timebox format="long" locale="zh_TW"  onCreate="self.value = now"/>
 			</row>
 			<row>
 				FR (French):
-				<datebox format="medium" locale="fr_FR"  onCreate="self.value = new Date()"/>
-				<datebox format="long" locale="fr_FR"  onCreate="self.value = new Date()"/>
-				<timebox format="medium" locale="fr_FR"  onCreate="self.value = new Date()"/>
-				<timebox format="long" locale="fr_FR"  onCreate="self.value = new Date()"/>
+				<datebox format="medium" locale="fr_FR"  onCreate="self.value = now"/>
+				<datebox format="long" locale="fr_FR"  onCreate="self.value = now"/>
+				<timebox format="medium" locale="fr_FR"  onCreate="self.value = now"/>
+				<timebox format="long" locale="fr_FR"  onCreate="self.value = now"/>
 			</row>
 			<row>
 				IT (Italian):
-				<datebox format="medium" locale="it"  onCreate="self.value = new Date()"/>
-				<datebox format="long" locale="it"  onCreate="self.value = new Date()"/>
-				<timebox format="medium" locale="it_IT"  onCreate="self.value = new Date()"/>
-				<timebox format="long" locale="it_IT"  onCreate="self.value = new Date()"/>
+				<datebox format="medium" locale="it"  onCreate="self.value = now"/>
+				<datebox format="long" locale="it"  onCreate="self.value = now"/>
+				<timebox format="medium" locale="it_IT"  onCreate="self.value = now"/>
+				<timebox format="long" locale="it_IT"  onCreate="self.value = now"/>
 			</row>
 			<row>
 				TH (Thai):
-				<datebox format="medium" locale="th_TH"  onCreate="self.value = new Date()"/>
-				<datebox format="long" locale="th_TH"  onCreate="self.value = new Date()"/>
-				<timebox format="medium" locale="th"  onCreate="self.value = new Date()"/>
-				<timebox format="long" locale="th"  onCreate="self.value = new Date()"/>
+				<datebox format="medium" locale="th_TH"  onCreate="self.value = now"/>
+				<datebox format="long" locale="th_TH"  onCreate="self.value = now"/>
+				<timebox format="medium" locale="th"  onCreate="self.value = now"/>
+				<timebox format="long" locale="th"  onCreate="self.value = now"/>
 			</row>
 		</rows>
 	</grid><button label="Change all locales to Taiwan">

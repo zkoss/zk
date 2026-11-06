@@ -143,11 +143,13 @@ and a size cue is the one mechanism that is fill-color-agnostic by construction.
 its 24px button; the button and `.z-carousel-indicators` are `overflow: visible`, so it is not
 clipped (accepted).
 
-**Caption label** (`.z-carouselitem-label`) is a small opaque-scrim **chip** anchored to
+**Caption label** (`.z-carouselitem-label`) is a small scrim **chip** anchored to
 the bottom-left of the slide (`--zk-spacing-4`, exactly matching ZK stock's 16px — no
 departure needed here), padded `--zk-spacing-1 --zk-spacing-2` (a minor
 departure from ZK stock's 4px/10px, rounded to the theme's spacing scale rather than kept
-as an odd 10px), and corner-rounded at `--zk-shape-card`. The radius follows
+as an odd 10px), and corner-rounded at `--zk-shape-card`. Its fill is the scrim raised to
+0.75 alpha (c23): the scrim's own alpha lets a white slide show through and leaves the
+caption text at 3.6:1, below the 4.5:1 that WCAG 1.4.3 requires for text. The radius follows
 doc/spec/DESIGN.md "Corner Radii" ("default to `--zk-shape-card` for any container/card;
 `--zk-shape-corner-extra-small` for interactive controls" — the same rule applied to the root
 in c1). A caption chip is a small container, not an interactive control, so it takes the
@@ -231,7 +233,7 @@ rather than a `visual-goal: trivial` declaration.
 | c21 | `.z-carousel-indicator-active::before` | border-color | `var(--zk-carousel-indicator-active-ring)` → `var(--zk-color-on-primary)` | yes | ring contrasts with the primary fill, mirrors c18/c19 |
 | c21a | `.z-carousel-indicator-active::before` | width / border-radius | `22px` (literal) / `var(--zk-shape-corner-full)` | no | pill shape marks the active state without colour alone; stays inside the 24px hit area |
 | c22 | `.z-carousel-indicator:focus-visible` | outline | `var(--zk-focus-ring)` | yes | doc/spec/DESIGN.md "State-Layer Overlays" — global focus convention |
-| c23 | `.z-carouselitem-label` | background-color | `var(--zk-carousel-label-bg)` → `var(--zk-color-scrim)` | yes | `tokens/_colors.css` (see c7) |
+| c23 | `.z-carouselitem-label` | background-color | `var(--zk-carousel-label-bg)` → `rgb(from var(--zk-color-scrim) r g b / 0.75)` | yes | `tokens/_colors.css` (see c7); the scrim at 0.75 alpha keeps the caption text at 4.5:1 over a light slide (WCAG 1.4.3) — the scrim's own alpha gives only 3.6:1 |
 | c24 | `.z-carouselitem-label` | color | `var(--zk-carousel-label-fg)` → `var(--zk-color-inverse-on-surface)` | yes | `tokens/_colors.css`; brand-independent — see Design Contract |
 | c25 | `.z-carouselitem-label` | bottom / left | `var(--zk-spacing-4)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — exact match to ZK stock |
 | c26 | `.z-carouselitem-label` | padding | `var(--zk-spacing-1) var(--zk-spacing-2)` | yes | doc/spec/DESIGN.md "Spacing Scale (4dp baseline)" — departs from ZK stock's 4px/10px |

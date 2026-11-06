@@ -46,6 +46,15 @@ unlayered beats the theme's layered components.** Marble is a *complete* CSS rep
 only Marble's own sheets. That "no coexisting unreachable framework CSS" property is what makes
 the layer scheme safe.
 
+A customer's own third-party CSS hits the same hazard, and ZK cannot prevent it. Bootstrap 3's
+unlayered `button, input, optgroup, select, textarea { color: inherit; font: inherit }` beats
+Marble's layered `.z-button { color }`, so button text turns dark on the primary fill (zktest's
+`wcag/rating.zul` loads Bootstrap 3 for a glyphicon and shows it). IceBlue never had this problem
+because, with no layers, `.z-button` simply out-specifies `button`. The fix is on the customer's
+side: `@import url("…/bootstrap.min.css") layer(zk-base);` puts the framework under every Marble
+layer. The ZK 11 release note's upgrade notes say so; point customers there rather than adding
+`!important` to Marble.
+
 If ZK ever emits a new icon stylesheet, it loads unlayered, beats `zk-components`, and forces
 `!important` back; give it a layer. Also re-check whether the "ZK85Icons, FontAwesome" comment and
 the `font-family` reset in `_icons.css` can be deleted, and re-run the icon screenshots (checkbox,

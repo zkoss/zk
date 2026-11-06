@@ -86,7 +86,10 @@ rulings — `doc/spec/`. This file holds conclusions only.
   visual intent and state the difference in the reply.
 - **V10 — Contrast floors:** text ≥ 4.5:1, graphical objects ≥ 3:1, measured on the real
   background. When the MD3 token fails in Marble's palette, use the nearest token that passes and
-  record when to revisit.
+  record when to revisit. The 3:1 applies only to what WCAG 1.4.11 calls *required*: the cues
+  needed to identify a component and its state. A part that another cue already identifies (a
+  slider's unfilled track beside its thumb and filled track) does not need it; a field whose only
+  cue is its border (a readonly input) does.
 
 ## 3. Baselines: apply directly
 

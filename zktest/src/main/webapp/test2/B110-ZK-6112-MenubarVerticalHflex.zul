@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-MenubarVerticalHflex.zul
+
+	Purpose:
+		Marble: a vertical Menubar with hflex="min" is as wide as its widest item.
+
+	Description:
+
+	History:
+		Wed Nov 04 2026, Created by hawk
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+1. the first menubar (hflex="min") is as wide as "Menu Fooooooooooooo", not the whole row
+2. the second menubar (width="300px") is 300px wide, and its items fill it
+	</label>
+	<menubar id="min" orient="vertical" hflex="min">
+		<menuitem label="Menu A"/>
+		<menu label="Menu B">
+			<menupopup>
+				<menuitem label="Menu BA"/>
+			</menupopup>
+		</menu>
+		<menuitem id="widest" label="Menu Fooooooooooooo"/>
+	</menubar>
+	<separator/>
+	<menubar id="fixed" orient="vertical" width="300px">
+		<menuitem id="fixedItem" label="Menu A"/>
+	</menubar>
+</zk>

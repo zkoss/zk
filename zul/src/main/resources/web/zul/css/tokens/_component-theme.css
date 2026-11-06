@@ -336,7 +336,7 @@
     --zk-paging-fg:                  var(--zk-color-on-surface-variant);
     --zk-paging-radius:              var(--zk-shape-corner-full);
     --zk-paging-selected-bg:         var(--zk-color-primary-container);
-    --zk-paging-selected-fg:         var(--zk-color-primary);
+    --zk-paging-selected-fg:         var(--zk-color-on-primary-container); /* primary on its container is 3.8:1 (WCAG 1.4.3) */
     --zk-paging-input-bg:            var(--zk-color-surface);
     --zk-paging-input-fg:            var(--zk-color-on-surface);
     --zk-paging-input-border-color:  var(--zk-color-outline);
@@ -756,7 +756,7 @@
     --zk-navitem-fg:          var(--zk-color-on-surface-variant);
     --zk-navitem-radius:      var(--zk-shape-corner-small);
     --zk-navitem-selected-bg: color-mix(in srgb, var(--zk-color-primary) 12%, transparent);
-    --zk-navitem-selected-fg: var(--zk-color-primary);
+    --zk-navitem-selected-fg: var(--zk-color-on-primary-container); /* primary on its tint is 3.9:1 (WCAG 1.4.3) */
 
     /* ── Anchornav (EE, zkmax) — anchor-link navigation (zkmax/nav/css/anchornav.css):
        .z-anchornav wraps a / button links that jump to page sections.
@@ -867,6 +867,8 @@
     --zk-biglistbox-radius:       var(--zk-shape-card);
     --zk-biglistbox-header-fg:    var(--zk-color-on-surface-variant);
     --zk-biglistbox-row-hover-bg: rgba(0, 0, 0, 0.04);
+    --zk-biglistbox-row-selected-bg: var(--zk-color-secondary-container);    /* list-row selection family, as listbox */
+    --zk-biglistbox-row-selected-fg: var(--zk-color-on-secondary-container);
 
     /* ── Fisheye / Fisheyebar (PE, zkex) — magnetic dock icon bar
        (zkex/menu/css/fisheye.css): .z-fisheyebar container + .z-fisheye item
@@ -1109,7 +1111,7 @@
     --zk-portallayout-radius:         var(--zk-shape-card);
     --zk-portallayout-fg:             var(--zk-color-on-surface-variant);
     --zk-portallayout-counter-bg:     var(--zk-color-primary-container);
-    --zk-portallayout-counter-fg:     var(--zk-color-primary);
+    --zk-portallayout-counter-fg:     var(--zk-color-on-primary-container); /* primary on its container is 3.8:1 (WCAG 1.4.3) */
     --zk-portallayout-counter-radius: var(--zk-shape-corner-full);
 
     /* ── Confirmpopup (native, CE, zul/wgt/css/confirmpopup.css) — lightweight
@@ -1217,7 +1219,7 @@
     --zk-carousel-indicator-ring:      var(--zk-color-inverse-on-surface);
     --zk-carousel-indicator-active-bg: var(--zk-color-primary);
     --zk-carousel-indicator-active-ring: var(--zk-color-on-primary);
-    --zk-carousel-label-bg:            var(--zk-color-scrim);
+    --zk-carousel-label-bg:            rgb(from var(--zk-color-scrim) r g b / 0.75); /* 0.5 is 3.6:1 over a white slide (WCAG 1.4.3) */
     --zk-carousel-label-fg:            var(--zk-color-inverse-on-surface);
 
     /* ── Codeeditor — CodeMirror 6 source editor (CE, @since ZK 11.0.0) ───

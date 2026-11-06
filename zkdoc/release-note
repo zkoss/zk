@@ -244,6 +244,12 @@ ZK 11.0.0
     names, so most overrides written for IceBlue (e.g. --zk-button-background-color) no longer take
     effect. To keep the IceBlue look, add the org.zkoss.theme:iceblue jar (iceblue_c for the compact
     variant) and set the library property org.zkoss.theme.preferred to iceblue.
+  + Marble puts its component rules in CSS cascade layers (@layer zk-base, zk-components, zk-utilities),
+    and CSS outside any layer always wins over layered rules, whatever its selector. A third-party
+    stylesheet loaded as is, such as Bootstrap 3's button, input, select, textarea { color: inherit;
+    font: inherit } or a normalize/reset sheet, therefore overrides Marble's button and input text
+    colour and font. Load such a stylesheet into Marble's lowest layer instead, e.g.
+    <style>@import url("bootstrap.min.css") layer(zk-base);</style>
   + zul no longer ships LESS sources (~./zul/less/*). A custom theme that imports them must be built
     from the ZK theme template (https://github.com/zkoss/zkThemeTemplate) instead.
 

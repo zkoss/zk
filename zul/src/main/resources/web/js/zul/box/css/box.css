@@ -90,6 +90,10 @@ td.z-splitter-outer {
 /* z-splitter-horizontal means it divides horizontally (left | right) */
 .z-splitter-horizontal {
     width: var(--zk-splitter-thickness);
+    /* The pill is absolutely positioned and adds no size, so a box with nothing
+       taller (or nothing else) would collapse the bar to 0 and clip the pill away.
+       IceBlue's in-flow button gave the same floor. */
+    min-height: var(--zk-splitter-pill-length);
     overflow: hidden;
     cursor: col-resize;
 }
@@ -98,6 +102,8 @@ td.z-splitter-outer {
 /* z-splitter-vertical means it divides vertically (top / bottom) */
 .z-splitter-vertical {
     height: var(--zk-splitter-thickness);
+    /* same floor as .z-splitter-horizontal, on the other axis */
+    min-width: var(--zk-splitter-pill-length);
     overflow: hidden;
     cursor: row-resize;
 }

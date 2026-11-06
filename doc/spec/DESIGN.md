@@ -208,7 +208,7 @@ If a future use-case needs auxhead to match the column-header transparency exact
 
 All borders are 1px, except the text-input focus ring (2px, `--zk-input-border-color-focus`). Colors come from tokens (values: `tokens/_colors.css`):
 
-- Component default border: `--zk-color-outline`.
+- Component default border: `--zk-color-outline`. It is the border that identifies a field, a list checkmark or an unselected rating icon, so it stays at 3:1 or more against `--zk-color-surface-container-low` (WCAG 1.4.11). It is not a text colour.
 - Dividers and row separators: `--zk-color-outline-variant`.
 - Input hover: `--zk-color-on-surface`.
 - Card: no border (elevation only); an outlined card uses `outline-variant` and no shadow.
@@ -454,7 +454,7 @@ container**, aligned with MD3 Navigation Drawer / MUI `ListItemButton`.
 | Property | Value | Token |
 |----------|-------|-------|
 | Selected item background | primary tint container | `--zk-navitem-selected-bg` |
-| Selected item text | primary | `--zk-navitem-selected-fg` |
+| Selected item text | on-primary-container (primary on the tint is 3.9:1, below WCAG 1.4.3) | `--zk-navitem-selected-fg` |
 | Selected item weight | 600 | literal |
 | Content-link corner radius | rounded (the tint container is rounded) | `--zk-navitem-radius` |
 
