@@ -96,7 +96,8 @@
         "projects": [
           "gallery",
           "tablet",
-          "component-theme-variables"
+          "component-theme-variables",
+          "color"
         ],
         "grep": "errorbox"
       }

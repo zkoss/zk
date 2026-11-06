@@ -80,3 +80,24 @@ test.describe('notification', () => {
       .toBeLessThanOrEqual(TOLERANCE_DEG);
   });
 });
+
+// errorbox.css: the constraint error bubble writes its message in --zk-color-on-error-container on the
+// error container. A screenshot does not catch the text colour falling back to the ordinary text
+// colour (both are near-black), so the computed colour is compared with the token.
+test.describe('errorbox', () => {
+  test('errorbox text is drawn in --zk-color-on-error-container', async ({ page }) => {
+    const resp = await page.goto('/errorbox.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    const box = page.locator('.z-errorbox').first();
+    await expect(box).toBeVisible();
+    const { text, token } = await box.evaluate((el) => {
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--zk-color-on-error-container)';
+      document.body.appendChild(probe);
+      const resolved = getComputedStyle(probe).color;
+      probe.remove();
+      return { text: getComputedStyle(el).color, token: resolved };
+    });
+    expect(text).toBe(token);
+  });
+});

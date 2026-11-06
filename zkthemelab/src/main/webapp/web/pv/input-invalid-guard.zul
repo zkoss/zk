@@ -1,6 +1,6 @@
 <?page title="Real invalid combobox and bandbox" contentType="text/html;charset=UTF-8"?>
 <!-- Fixture for input-invalid.spec.ts and forced-colors.spec.ts: a combobox and a bandbox with a
-     real constraint, the same inputs inside an inputgroup and as inplace inputs. The spec types, deletes and blurs, so ZK itself puts z-*-invalid on the
+     real constraint, the same inputs inside an inputgroup and as inplace inputs, and a plain textbox. The spec types, deletes and blurs, so ZK itself puts z-*-invalid on the
      <input>, which the sclass-based preview pages cannot reproduce. Lives under pv/ so
      gallery-scan and forced-colors-gallery do not pick it up as a page. -->
 <zk>
@@ -20,6 +20,9 @@
         <textbox sclass="iig-inplace-textbox" inplace="true" constraint="no empty"/>
         <combobox sclass="iig-inplace-combobox" inplace="true" constraint="no empty"><comboitem label="Item 1"/></combobox>
         <bandbox sclass="iig-inplace-bandbox" inplace="true" constraint="no empty"><bandpopup>Content</bandpopup></bandbox>
+    </div>
+    <div sclass="iig-plain">
+        <textbox constraint="no empty"/>
     </div>
 </vlayout>
 </zk>

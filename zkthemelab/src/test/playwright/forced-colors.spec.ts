@@ -821,4 +821,29 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     const inkRows = await darkInkRows(page, await bar.screenshot());
     expect(inkRows, `the ${height}px bar must paint ink on every row`).toBe(height);
   });
+  // listbox.css: forced colours drop the group row's inset-shadow accent, so a real 3px Highlight
+  // border stands in for it.
+  test('listbox — a listgroup keeps its accent as a 3px Highlight border', async ({ page }) => {
+    await page.goto('/listbox-grouping.zul', { waitUntil: 'networkidle' });
+    const cell = page.locator('.z-listgroup > td:first-child').first();
+    await cell.waitFor({ state: 'visible' });
+    const highlight = await systemColor(page, 'Highlight');
+    const border = await cell.evaluate(el => {
+      const cs = getComputedStyle(el);
+      return { style: cs.borderLeftStyle, width: cs.borderLeftWidth, color: cs.borderLeftColor };
+    });
+    expect(border).toEqual({ style: 'solid', width: '3px', color: highlight });
+  });
+
+  // tabbox.css: the accordion chevron is a mask painted with background-color, which forced colours
+  // would turn into Canvas; it is CanvasText on a header and HighlightText on the selected one.
+  test('tabbox — the accordion chevron stays visible: CanvasText, HighlightText when selected', async ({ page }) => {
+    await page.goto('/tabbox.zul', { waitUntil: 'networkidle' });
+    const header = '.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab';
+    const chevron = (sel: string) => page.locator(`${sel} > .z-tab-content`).first()
+      .evaluate(el => getComputedStyle(el, '::after').backgroundColor);
+    const [canvasText, highlightText] = [await systemColor(page, 'CanvasText'), await systemColor(page, 'HighlightText')];
+    expect(await chevron(`${header}:not(.z-tab-selected)`), 'a header that is not selected').toBe(canvasText);
+    expect(await chevron(`${header}.z-tab-selected`), 'the selected header').toBe(highlightText);
+  });
 });

@@ -69,6 +69,24 @@ test('an invalid bandbox draws the error border on its wrapper at rest, hover an
   await expectBorder('focus');
 });
 
+test('an invalid textbox draws the error border at rest, hover and focus', async ({ page }) => {
+  const input = page.locator('.iig-plain .z-textbox');
+  await input.click();
+  await page.keyboard.type('a');
+  await page.keyboard.press('Backspace');
+  await page.locator('body').click({ position: { x: 600, y: 400 } });
+  await expect(input).toHaveClass(/z-textbox-invalid/);
+  const error = await errorColor(page);
+  const expectBorder = (state: string) => expect.poll(() => topBorderColor(page, '.iig-plain .z-textbox'), `textbox at ${state}`).toBe(error);
+
+  await page.mouse.move(0, 0);
+  await expectBorder('rest');
+  await input.hover();
+  await expectBorder('hover');
+  await input.focus();
+  await expectBorder('focus');
+});
+
 test('a combobox and bandbox that have not failed their constraint keep the neutral border', async ({ page }) => {
   const error = await errorColor(page);
   expect(await topBorderColor(page, '.iig-single .z-combobox-input')).not.toBe(error);
