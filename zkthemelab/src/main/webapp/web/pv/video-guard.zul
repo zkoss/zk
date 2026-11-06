@@ -1,5 +1,5 @@
 <?page title="Video guard" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for video.spec.ts: width/height, clipToFit and dimBackground. No src, so each <video>
+<!-- Fixture for media.spec.ts (video): width/height, clipToFit and dimBackground. No src, so each <video>
      keeps the browser's 300x150 default size. Lives under pv/ so gallery-scan,
      forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
 <zk xmlns:h="native">

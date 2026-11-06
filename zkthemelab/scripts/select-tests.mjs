@@ -424,6 +424,7 @@ function titleNamesPage(test, pageKey) {
   return mentioned.includes(pageKey)
     || test.title === pageKey || test.title === name                                // gallery / focus-scan titles
     || test.describes[0] === name                                                  // screenshot.spec.ts `describe('button')`
+    || test.describes[0] === `tablet-${name}`                                      // tablet.spec.ts width-834 guards
     || test.title.startsWith(`${name}: `);                                          // hit-target.spec.ts
 }
 
@@ -877,4 +878,4 @@ function main() {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
 
-export { buildTestsForPage, listAllTests, loadClassIndex, allZulKeys, classResolver, parseCssClasses };
+export { buildTestsForPage, pagesOfTestFactory, listAllTests, loadClassIndex, loadAggregatePages, allZulKeys, classResolver, parseCssClasses };

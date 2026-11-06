@@ -1,0 +1,176 @@
+{
+  "note": "Input of scripts/css-mutation.mjs. find/replace act on the CSS the preview server sends, which is minified; source names the file the declaration comes from. run: the Playwright projects (and optional -g) expected to catch the mutation.",
+  "mutations": [
+    {
+      "id": "F1",
+      "area": "focus-ring",
+      "description": "button: `.z-button:focus-visible` outline → none",
+      "source": "zul/src/main/resources/web/js/zul/wgt/css/button.css",
+      "find": ".z-button:focus-visible{outline:var(--zk-focus-ring);outline-offset:2px}",
+      "replace": ".z-button:focus-visible{outline:none;outline-offset:2px}",
+      "run": {
+        "projects": [
+          "focus-scan"
+        ],
+        "grep": "button"
+      }
+    },
+    {
+      "id": "F2",
+      "area": "focus-ring",
+      "description": "`--zk-focus-ring` width 2px → 0px",
+      "source": "zul/src/main/resources/web/zul/css/tokens/_colors.css",
+      "find": "--zk-focus-ring:2px solid var(--zk-color-primary)",
+      "replace": "--zk-focus-ring:0px solid var(--zk-color-primary)",
+      "run": {
+        "projects": [
+          "focus-scan"
+        ],
+        "grep": "keyboard focus row|button|slider focus ring"
+      }
+    },
+    {
+      "id": "F3",
+      "area": "focus-ring",
+      "description": "listbox: keyboard focus row outline → none",
+      "source": "zul/src/main/resources/web/js/zul/sel/css/listbox.css",
+      "find": ".z-listbox:has(.z-focus-a:focus-visible) .z-listitem.z-listitem-focus{outline:var(--zk-focus-ring);outline-offset:-2px}",
+      "replace": ".z-listbox:has(.z-focus-a:focus-visible) .z-listitem.z-listitem-focus{outline:none;outline-offset:-2px}",
+      "run": {
+        "projects": [
+          "focus-scan"
+        ],
+        "grep": "keyboard focus row"
+      }
+    },
+    {
+      "id": "F4",
+      "area": "focus-ring",
+      "description": "textbox family: focused border colour → the resting colour",
+      "source": "zul/src/main/resources/web/js/zul/inp/css/input.css",
+      "find": ".z-passwordbox:focus-visible{border-color:var(--zk-input-border-color-focus);",
+      "replace": ".z-passwordbox:focus-visible{border-color:var(--zk-input-border-color);",
+      "run": {
+        "projects": [
+          "chromium"
+        ],
+        "grep": "textbox"
+      }
+    },
+    {
+      "id": "E1",
+      "area": "error state",
+      "description": "textbox: invalid border colour → the resting colour",
+      "source": "zul/src/main/resources/web/js/zul/inp/css/input.css",
+      "find": ".z-textbox-invalid,.z-textbox.z-textbox-invalid{border-color:var(--zk-input-border-color-error)}",
+      "replace": ".z-textbox-invalid,.z-textbox.z-textbox-invalid{border-color:var(--zk-input-border-color)}",
+      "run": {
+        "projects": [
+          "input-invalid",
+          "chromium"
+        ],
+        "grep": "textbox|invalid"
+      }
+    },
+    {
+      "id": "E2",
+      "area": "error state",
+      "description": "`--zk-input-border-color-error` → the outline colour",
+      "source": "zul/src/main/resources/web/zul/css/tokens/_component-theme.css",
+      "find": "--zk-input-border-color-error:var(--zk-color-error)",
+      "replace": "--zk-input-border-color-error:var(--zk-color-outline)",
+      "run": {
+        "projects": [
+          "input-invalid"
+        ]
+      }
+    },
+    {
+      "id": "E3",
+      "area": "error state",
+      "description": "errorbox: text colour → on-surface",
+      "source": "zul/src/main/resources/web/js/zul/inp/css/input.css",
+      "find": ".z-errorbox{color:var(--zk-color-on-error-container)",
+      "replace": ".z-errorbox{color:var(--zk-color-on-surface)",
+      "run": {
+        "projects": [
+          "gallery",
+          "tablet",
+          "component-theme-variables",
+          "color"
+        ],
+        "grep": "errorbox"
+      }
+    },
+    {
+      "id": "E4",
+      "area": "error state",
+      "description": "`--zk-color-error` → a green",
+      "source": "zul/src/main/resources/web/zul/css/tokens/_colors.css",
+      "find": "--zk-color-error:#d32f2f",
+      "replace": "--zk-color-error:#2e7d32",
+      "run": {
+        "projects": [
+          "input-invalid",
+          "gallery"
+        ],
+        "grep": "invalid|errorbox|notification"
+      }
+    },
+    {
+      "id": "C1",
+      "area": "forced-colors",
+      "description": "forced colours: `--zk-focus-ring` Highlight → Canvas",
+      "source": "zul/src/main/resources/web/zul/css/tokens/_forced-colors.css",
+      "find": "@media (forced-colors:active){:root{--zk-focus-ring:2px solid Highlight}",
+      "replace": "@media (forced-colors:active){:root{--zk-focus-ring:2px solid Canvas}",
+      "run": {
+        "projects": [
+          "forced-colors",
+          "focus-scan"
+        ],
+        "grep": "focus|forced-colors"
+      }
+    },
+    {
+      "id": "C2",
+      "area": "forced-colors",
+      "description": "forced colours: listgroup accent border highlight → transparent",
+      "source": "zul/src/main/resources/web/js/zul/sel/css/listbox.css",
+      "find": "border-left:3px solid highlight}",
+      "replace": "border-left:3px solid transparent}",
+      "run": {
+        "projects": [
+          "forced-colors"
+        ]
+      }
+    },
+    {
+      "id": "C3",
+      "area": "forced-colors",
+      "description": "forced colours: focus ring on a selected item HighlightText → Highlight",
+      "source": "zul/src/main/resources/web/zul/css/tokens/_forced-colors.css",
+      "find": ".z-orgitem-selected>.z-orgnode:focus-visible{outline-color:highlighttext}",
+      "replace": ".z-orgitem-selected>.z-orgnode:focus-visible{outline-color:highlight}",
+      "run": {
+        "projects": [
+          "focus-scan"
+        ],
+        "grep": "forced-colors"
+      }
+    },
+    {
+      "id": "C4",
+      "area": "forced-colors",
+      "description": "forced colours: accordion tab rule CanvasText → Canvas",
+      "source": "zul/src/main/resources/web/js/zul/tab/css/tabbox.css",
+      "find": ".z-tabbox-accordion>.z-tabpanels>.z-tabpanel>.z-tab>.z-tab-content:after{background-color:canvastext}",
+      "replace": ".z-tabbox-accordion>.z-tabpanels>.z-tabpanel>.z-tab>.z-tab-content:after{background-color:canvas}",
+      "run": {
+        "projects": [
+          "forced-colors"
+        ]
+      }
+    }
+  ]
+}

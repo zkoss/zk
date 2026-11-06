@@ -1,5 +1,5 @@
 <?page title="Sticky header guard" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for sticky-header.spec.ts: a grid, a listbox and a tree with sclass="z-sticky-header",
+<!-- Fixture for mesh-header-footer.spec.ts (sticky header): a grid, a listbox and a tree with sclass="z-sticky-header",
      each in its own 200px scroll container with more rows than fit. Lives under pv/ so
      gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
 <zk xmlns:h="native">

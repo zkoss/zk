@@ -1809,3 +1809,85 @@ test.describe('frozen columns', () => {
     expect(Math.abs(header - body), `header x ${header}, body x ${body}`).toBeLessThanOrEqual(FROZEN_ALIGN_PX);
   });
 });
+
+// Guard for the z-sticky-header rules (ZK-4795, EE). Like IceBlue, Marble ships them only in zkmax:
+// grid/css/grid.css, sel/css/listbox.css and sel/css/tree.css (ZK-6112). The preview app runs with
+// zkmax, so the header must stay pinned to the top of its scroll container while the rows scroll.
+// Fixture: web/pv/sticky-header-guard.zul
+test.describe('sticky header', () => {
+  const FIXTURE = '/pv/sticky-header-guard.zul';
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto(FIXTURE, { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+  });
+
+  for (const comp of ['grid', 'listbox', 'tree']) {
+    test(`${comp} header stays pinned while the rows scroll`, async ({ page }) => {
+      const box = page.locator(`.z-div:has(> .z-${comp})`);
+      const header = page.locator(`.z-${comp}.z-sticky-header .z-${comp}-header`);
+      const boxTop = (await box.boundingBox())!.y;
+
+      await box.hover();
+      await page.mouse.wheel(0, 300);
+      await expect.poll(() => box.evaluate((el) => el.scrollTop)).toBeGreaterThan(100);
+
+      expect((await header.boundingBox())!.y).toBeCloseTo(boxTop, 0);
+      // Opaque, so the scrolled rows do not show through the pinned header.
+      const bg = await header.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(bg).not.toBe('rgba(0, 0, 0, 0)');
+    });
+  }
+});
+
+// Mobile frozen columns. On a mobile UA ZK adds
+// `.z-frozen-sticky` plus an inline `left` to frozen cells and relies on
+// `position: sticky`. Without that rule the cells keep `position: relative` and the
+// inline `left` shifts them (Col B's header landed 200px to the right of its column).
+// Tagged @tablet: the `mesh-header-footer` project skips it, `mesh-header-footer-tablet` runs it.
+test.describe('frozen columns on a mobile UA', { tag: '@tablet' }, () => {
+  test('frozen header cells are sticky and sit on their column', async ({ page }) => {
+    await page.goto('/grid.zul');
+    await page.waitForLoadState('networkidle');
+    const m = await page.evaluate(() => {
+      const g = [...document.querySelectorAll('.z-grid')].find((x) => x.querySelector('.z-frozen')) as HTMLElement;
+      const ths = [...g.querySelectorAll('th.z-column')] as HTMLElement[];
+      const tds = [...g.querySelectorAll('.z-grid-body tr:first-child td')] as HTMLElement[];
+      const sticky = ths.filter((t) => t.classList.contains('z-frozen-sticky'));
+      return {
+        stickyCount: sticky.length,
+        positions: sticky.map((t) => getComputedStyle(t).position),
+        headerLeft: ths.slice(0, 3).map((t) => Math.round(t.getBoundingClientRect().left)),
+        bodyLeft: tds.slice(0, 3).map((t) => Math.round(t.getBoundingClientRect().left)),
+      };
+    });
+    expect(m.stickyCount, 'ZK must mark frozen header cells sticky on a mobile UA, else the test is vacuous').toBeGreaterThan(0);
+    for (const p of m.positions) expect(p).toBe('sticky');
+    expect(m.headerLeft, 'header cells must line up with the body cells').toEqual(m.bodyLeft);
+  });
+
+  test('frozen footer cells are sticky and stay under their column after a scroll', async ({ page }) => {
+    await page.goto('/tree.zul');
+    await page.waitForLoadState('networkidle');
+    const m = await page.evaluate(() => {
+      const t = [...document.querySelectorAll('.z-tree')].find((x) => x.querySelector('.z-frozen') && x.querySelector('.z-treefooter')) as HTMLElement;
+      const inner = t.querySelector('.z-frozen-inner') as HTMLElement;
+      inner.scrollLeft = 200;
+      inner.dispatchEvent(new Event('scroll'));
+      return new Promise<{ sticky: number; positions: string[]; headerLeft: number[]; footerLeft: number[] }>((resolve) => setTimeout(() => {
+        const foot = [...t.querySelectorAll('.z-treefooter')] as HTMLElement[];
+        const ths = [...t.querySelectorAll('th.z-treecol')] as HTMLElement[];
+        const sticky = foot.filter((f) => f.classList.contains('z-frozen-sticky'));
+        resolve({
+          sticky: sticky.length,
+          positions: sticky.map((f) => getComputedStyle(f).position),
+          headerLeft: ths.slice(0, 2).map((x) => Math.round(x.getBoundingClientRect().left)),
+          footerLeft: foot.slice(0, 2).map((x) => Math.round(x.getBoundingClientRect().left)),
+        });
+      }, 500));
+    });
+    expect(m.sticky, 'ZK must mark frozen footer cells sticky, else the test is vacuous').toBeGreaterThan(0);
+    for (const p of m.positions) expect(p).toBe('sticky');
+    expect(m.footerLeft, 'frozen footer cells must stay under the frozen header cells after a scroll').toEqual(m.headerLeft);
+  });
+});
