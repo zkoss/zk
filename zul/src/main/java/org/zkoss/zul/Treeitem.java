@@ -128,6 +128,53 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 
 	/**
 	 * Sets whether it is disabled.
+	 * A disabled item is drawn dimmed and the user cannot select or deselect it.
+	 * It does not make the item read-only for your application, and it does not
+	 * disable the item's children, see below.
+	 *
+	 * <p>What the user cannot do with a disabled item:
+	 * <ul>
+	 * <li>Select it by clicking its row, or its checkmark in the checkmark mode,
+	 * or by Shift+click or Ctrl+click. Such a click sends neither onSelect nor
+	 * onClick (to the {@link Treerow}).</li>
+	 * <li>Reach it with the keyboard. Up, Down, Home and End skip it, and
+	 * Shift+Up or Shift+Down does not select it.</li>
+	 * <li>Select it as part of a range or of "select all". A Shift+click range
+	 * and the select-all checkbox in the header of {@link Treecols} leave it
+	 * out, while the enabled items around it are selected.</li>
+	 * <li>Drop a dragged item on it, in ZK EE. ZK CE delivers onDrop to a
+	 * disabled item that is {@link #setDroppable droppable}. ZK EE enables the
+	 * Inaccessible Widget Block Service by default, and it ignores every event
+	 * the browser sends to a disabled item except onOpen. You can turn it off
+	 * with the library property <code>org.zkoss.zkmax.au.IWBS.disable</code>,
+	 * or limit it to some events with <code>org.zkoss.zkmax.au.IWBS.events</code>.</li>
+	 * </ul>
+	 *
+	 * <p>What still works:
+	 * <ul>
+	 * <li>The open icon. The user can still open and close the item, and onOpen
+	 * is sent. When the disabled item is the selected one, the Left and Right
+	 * keys open and close it too.</li>
+	 * <li>The other mouse events. Double-click and right-click are still sent
+	 * (to the {@link Treerow}, or to a {@link Treecell} that listens to them),
+	 * and a context popup, a tooltip and a Treecell's onClick still work.</li>
+	 * <li>The components inside the cells, such as a {@link Textbox} or a
+	 * {@link Button}.</li>
+	 * <li>Dragging it. A disabled item that is
+	 * {@link #setDraggable draggable} can still be dragged to an enabled target.</li>
+	 * <li>Selecting it from your code. {@link Tree#setSelectedItem},
+	 * {@link #setSelected} and {@link Tree#selectAll} do not check this
+	 * property, so they select a disabled item on the server. Note that the
+	 * browser does not show the item as selected after
+	 * {@link Tree#selectAll}, so the browser and the server then disagree about
+	 * it. Once selected, the user cannot deselect it by clicking it, but
+	 * in a single-selection tree, selecting another item deselects it as usual.</li>
+	 * </ul>
+	 *
+	 * <p>The children of a disabled item are not disabled. The user can select
+	 * them, unless they are disabled themselves.
+	 *
+	 * <p>Default: false.
 	 * @since 3.0.1
 	 */
 	public void setDisabled(boolean disabled) {
@@ -138,6 +185,8 @@ public class Treeitem extends XulElement implements org.zkoss.zk.ui.ext.Disable 
 	}
 
 	/** Returns whether it is disabled.
+	 * See {@link #setDisabled} for what the user can and cannot do with a
+	 * disabled item.
 	 * <p>Default: false.
 	 * @since 3.0.1
 	 */
