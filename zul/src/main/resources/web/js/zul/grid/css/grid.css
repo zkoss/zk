@@ -29,8 +29,12 @@
 
 /* Auto-noborder inside the known form containers — a grid used as a form layout inside a
    panel/groupbox should blend into its parent without needing the explicit class. */
+/* ZK-2784: the same inside a layout region's body. LayoutRegion.refreshBar_ sizes a child without a fixed
+   height to its scrollHeight, which leaves out the border; the border-box grid then ends up 2px shorter
+   than its content and grows a scrollbar of its own beside the region's. */
 .z-panel-body .z-grid,
-.z-groupbox .z-grid {
+.z-groupbox .z-grid,
+:is(.z-north-body, .z-south-body, .z-east-body, .z-west-body, .z-center-body) > .z-grid {
     border: none;
 }
 
