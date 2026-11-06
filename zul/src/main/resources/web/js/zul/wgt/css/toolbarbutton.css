@@ -11,10 +11,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    /* ZK-2802: grows with a large image instead of cropping it. `overflow: hidden` would clip the image's
+       corners to the pill radius, and the block padding keeps the button taller than its image. */
+    overflow: visible;
     min-width: 36px;
-    height: 36px;
-    padding: 0 var(--zk-spacing-2);
+    height: auto;
+    min-height: 36px;
+    padding: var(--zk-spacing-1) var(--zk-spacing-2);
     border: none;
     border-radius: var(--zk-toolbarbutton-radius);
     background-color: transparent;
@@ -70,6 +73,10 @@
     position: relative;
     z-index: 1;
     pointer-events: none;
+    /* The root is overflow: visible (ZK-2802), so a fixed width clips the label here. `min-width: 0` lets
+       the content shrink to the root's width; a large image still makes the content, and the button, taller. */
+    min-width: 0;
+    overflow: hidden;
 }
 
 /* Checked (toggle) state — primary container background, aligned with other
