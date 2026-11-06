@@ -897,9 +897,10 @@
 }
 
 /* ─── Empty body ─────────────────────────────────────────────────────────── */
+/* ZK-3914: stays a table row group, so the message cell's colspan spans the widget even when the first
+   column is hidden (a block tbody is wrapped in an anonymous cell of that column). */
 .z-listbox-emptybody {
-    display: block;
-    width: 100%;
+    display: table-row-group;
 }
 
 .z-listbox-emptybody-content {
