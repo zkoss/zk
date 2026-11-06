@@ -5,10 +5,13 @@
 /* ─── Shared base container ─────────────────────────────────────────────── */
 @layer zk-components {
 .z-paging {
+    /* ZK-3784: the detail is positioned over the controls' row (see .z-paging-info), so Paging.onSize can
+       hide it with its overlap check when the paging is too narrow; the controls start at the left. */
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: var(--zk-spacing-2) var(--zk-spacing-4);
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-body-medium-size);
@@ -162,6 +165,10 @@
 
 /* ─── Detail info ("[ 1 / 200 ]") ─────────────────────────────────────── */
 .z-paging-info {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: var(--zk-spacing-4);
     display: inline-flex;
     align-items: center;
     padding: 0 var(--zk-spacing-2);
