@@ -197,12 +197,6 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // zk.log box: z-index token and close-button font size (_log.css). See zk-log.spec.ts.
-      name: 'zk-log',
-      testMatch: /zk-log\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
       // Icon avatar glyph is 60% of the avatar (avatar.css). See avatar-icon-size.spec.ts.
       name: 'avatar-icon',
       testMatch: /avatar-icon-size\.spec\.ts/,
@@ -255,7 +249,7 @@ export default defineConfig({
     {
       // Stacking scale: --zk-index-* tokens + .z-index-* utilities resolve to
       // their values, and the token ladder's three hard constraints hold. See
-      // zindex-scale.spec.ts and doc/spec/zindex-scale.md.
+      // zindex-scale.spec.ts and doc/spec/zindex-scale.md. Also the zk.log box (_log.css).
       name: 'zindex',
       testMatch: /zindex-scale\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
@@ -319,21 +313,9 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // goldenlayout's CSS loads from js/zkmax/goldenlayout/css with no failed request. See goldenlayout-css.spec.ts.
-      name: 'goldenlayout-css',
-      testMatch: /goldenlayout-css\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
       // rangeslider and multislider share Sliderbuttons: shared base rules, own accents. See sliderbuttons.spec.ts.
       name: 'sliderbuttons',
       testMatch: /sliderbuttons\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      // Bandbox popupWidth is not overridden by a theme min-width. See bandbox-popupwidth.spec.ts.
-      name: 'bandbox-popupwidth',
-      testMatch: /bandbox-popupwidth\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
     {
@@ -349,7 +331,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // The width attribute on popup and menupopup is not overridden by a theme min-width. See popup-width.spec.ts.
+      // The width attribute on popup and menupopup, and Bandbox popupWidth, are not overridden by a theme min-width. See popup-width.spec.ts.
       name: 'popup-width',
       testMatch: /popup-width\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
