@@ -199,6 +199,30 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // An icon-only A has no trailing gap; a labelled one keeps it (a.css). See a-icon-only.spec.ts.
+      name: 'a-icon-only',
+      testMatch: /a-icon-only\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Every Panel border value uses --zk-panel-radius (panel.css). See panel-radius.spec.ts.
+      name: 'panel-radius',
+      testMatch: /panel-radius\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // An idle inplace Chosenbox shows no field outline (zkmax chosenbox.css). See chosenbox-inplace.spec.ts.
+      name: 'chosenbox-inplace',
+      testMatch: /chosenbox-inplace\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // The popup title of a collapsed Navbar joins the list as one surface (zkmax nav.css). See navbar-popup-title.spec.ts.
+      name: 'navbar-popup-title',
+      testMatch: /navbar-popup-title\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // A real constraint failure styles the combobox and bandbox (combobox.css, bandbox.css). See input-invalid.spec.ts.
       name: 'input-invalid',
       testMatch: /input-invalid\.spec\.ts/,

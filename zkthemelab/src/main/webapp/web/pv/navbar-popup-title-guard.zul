@@ -1,0 +1,15 @@
+<?page title="Navbar popup title guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for navbar-popup-title.spec.ts: a collapsed navbar whose nav opens a popup with a
+     title. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not
+     pick it up as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <navbar orient="vertical" collapsed="true">
+        <navitem label="Dashboard" iconSclass="z-icon-house"/>
+        <nav label="Sales" iconSclass="z-icon-shopping-cart">
+            <navitem label="Sales orders"/>
+            <navitem label="Invoices"/>
+        </nav>
+    </navbar>
+</h:div>
+</zk>

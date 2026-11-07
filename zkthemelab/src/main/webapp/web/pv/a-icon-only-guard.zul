@@ -1,0 +1,12 @@
+<?page title="A icon-only guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for a-icon-only.spec.ts: an A with an icon and no label, beside one with a label and
+     one with dir="reverse". Each sits in its own block so the link keeps its inline box. Lives
+     under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up
+     as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:p><a sclass="icon-only" iconSclass="z-icon-house" href="#"/></h:p>
+    <h:p><a sclass="labelled" iconSclass="z-icon-house" label="Home" href="#"/></h:p>
+    <h:p><a sclass="reversed" iconSclass="z-icon-house" label="Home" dir="reverse" href="#"/></h:p>
+</h:div>
+</zk>
