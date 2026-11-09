@@ -241,3 +241,67 @@ test.describe('checkbox ring in compact density', () => {
     });
   }
 });
+
+// A combobox, bandbox, datebox, timebox or spinner narrower than its input plus its button keeps
+// the given width, and the input gives way instead of the button: the button stays whole inside
+// the box and owns its centre. The datebox and timebox inputs used to keep an em floor, so at
+// 70–100px the button ran past the box and the next field took the click (B50-3101558).
+// Fixture: web/pv/input-narrow-guard.zul
+test('datebox — a narrow combobox, bandbox, datebox, timebox and spinner keep their button inside the box', async ({ page }) => {
+  const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready);
+
+  const problems = await page.evaluate(() => {
+    const out: string[] = [];
+    const boxes = document.querySelectorAll<HTMLElement>('.ing-fit > :is(.z-combobox, .z-bandbox, .z-datebox, .z-timebox, .z-spinner)');
+    if (boxes.length !== 10) out.push(`found ${boxes.length} fields, not 10`);
+    boxes.forEach((box, i) => {
+      const name = box.className.split(' ')[0].slice(2);
+      const button = box.querySelector(`.z-${name}-button`)!;
+      const b = box.getBoundingClientRect();
+      const r = button.getBoundingClientRect();
+      if (Math.round(b.width) !== parseInt(box.style.width)) out.push(`${name}[${i}] is ${b.width}px, not ${box.style.width}`);
+      if (r.left < b.left - 0.5 || r.right > b.right + 0.5) out.push(`${name}[${i}] button ${r.left}–${r.right} runs past the box ${b.left}–${b.right}`);
+      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      if (!hit || !button.contains(hit)) out.push(`${name}[${i}] button centre hits ${hit ? hit.className : 'nothing'}`);
+    });
+    return out;
+  });
+  expect(problems).toEqual([]);
+});
+
+// B50-3101558: five fields at 35px, narrower than their input's padding plus their button. The box keeps the
+// given width and clips its parts, so the part of the button that shows belongs to the button (the datebox's and
+// timebox's inputs used to fill the box and push the button out) and the left edge of the next field belongs to
+// that field (the spinner's arrows used to sit on it). Parts that run under the next field are not detectable here.
+// The textbox at the end only gives the spinner a next field.
+// Fixture: web/pv/input-narrow-guard.zul
+test('datebox — a 35px combobox, bandbox, datebox, timebox and spinner show their button and leave the next field alone', async ({ page }) => {
+  const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready);
+
+  const problems = await page.evaluate(() => {
+    const out: string[] = [];
+    const fields = [...document.querySelectorAll<HTMLElement>('.ing-35 > [class^="z-"]')];
+    if (fields.length !== 6) out.push(`found ${fields.length} fields, not 6`);
+    fields.slice(0, -1).forEach((box, i) => {
+      const name = box.className.split(' ')[0].slice(2);
+      const next = fields[i + 1];
+      const b = box.getBoundingClientRect();
+      const n = next.getBoundingClientRect();
+      const y = b.top + b.height / 2;
+      if (Math.round(b.width) !== 35) out.push(`${name} is ${b.width}px, not 35px`);
+      const atNext = document.elementFromPoint(n.left + 2, y);
+      if (!atNext || !next.contains(atNext)) out.push(`${name} covers the left edge of the next field: ${atNext ? atNext.className : 'nothing'}`);
+      const button = box.querySelector(`.z-${name}-button`)!;
+      const r = button.getBoundingClientRect();
+      const x = Math.min(r.right, b.right) - 2;
+      const atButton = document.elementFromPoint(x, y);
+      if (x <= r.left || !atButton || !button.contains(atButton)) out.push(`${name} shows no button at its right edge: ${atButton ? atButton.className : 'nothing'}`);
+    });
+    return out;
+  });
+  expect(problems).toEqual([]);
+});

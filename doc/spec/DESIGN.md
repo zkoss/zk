@@ -155,7 +155,7 @@ datebox and timebox always render a `size` on the `<input>` (`Datebox` defaults 
 
 | Field | Width behaviour |
 |-------|-----------------|
-| **datebox, timebox** | **follow `cols`** (rendered as `size`) + a `min-width` floor (`~6.5em` date, `~5em` time). |
+| **datebox, timebox** | **follow `cols`** (rendered as `size`), no `min-width` floor: a width narrower than the input and button shrinks the input, keeps the button whole at the right edge and clips the rest. |
 | **daterangebox, timepicker** | **hug content** — `field-sizing: content` + a `min-width` floor, because ZK renders no (or a hardcoded) `size` for them. |
 | **combobox, bandbox** (free-text) | keep the default / container-fill width. Content-hug would resize the box on every keystroke while typing — jarring. |
 | **spinner, doublespinner** (numeric) | keep the default / container-fill width (numeric length is unbounded and typed). |

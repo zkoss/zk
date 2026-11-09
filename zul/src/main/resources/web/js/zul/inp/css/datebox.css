@@ -26,6 +26,9 @@
     background-color: var(--zk-datebox-bg);
     min-height: var(--zk-control-height);
     box-sizing: border-box;
+    /* A width narrower than the input and the button keeps the box: the input shrinks to its
+       padding and the overflow is clipped, so nothing runs into the next widget. */
+    overflow: clip;
     /* Reset the inherited line-height: a parent's tall line box would push the input down while the button stays put. */
     line-height: var(--zk-typescale-body-medium-line-height);
     transition:
@@ -49,10 +52,11 @@
    `field-sizing: content` is deliberately NOT used: it makes the browser ignore `size`, so
    cols had no effect. A format longer than the default (e.g. "yyyy/MM/dd HH:mm") is clipped
    unless the app raises cols. `flex: 1 1 auto` still lets an hflex / width-forced field fill
-   its container; the `min-width` floor keeps a small cols a usable click target. */
+   its container. `min-width: 0` lets the input, not the button, give way when the box is narrower
+   than both (an em floor here pushed the button out of the box). */
 .z-datebox-input {
     flex: 1 1 auto;
-    min-width: 6.5em;
+    min-width: 0;
     border: none;
     background: transparent;
     padding: 0 var(--zk-spacing-3);
@@ -107,7 +111,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
+    width: var(--zk-input-button-width);
     min-height: calc(var(--zk-input-height) - 2px);
     border: none;
     background: transparent;
