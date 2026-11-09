@@ -1,0 +1,114 @@
+<?page title="Responsive Listbox" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div>
+        <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Responsive Listbox (stacking)</h:span></h:div>
+
+        <h:div class="z-py-3 z-mb-6"><h:span class="z-text-sm z-text-secondary">A listbox with responsive=&quot;stacking&quot; reflows its table into a card-per-item layout when the listbox's own width drops below a breakpoint (default 768px). Each listitem becomes a card; each listcell becomes a labelled value. With checkmark, the selection checkbox leads the card. (Stacking transformation ships in ZK EE / zkmax; ZK-6110.)</h:span></h:div>
+    </h:div>
+
+    <!-- 1. Basic stacking: a narrow listbox always renders as cards -->
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Basic stacking (narrow container)</h:span></h:div>
+        <h:div class="z-py-3 z-mb-3"><h:span class="z-text-sm z-text-secondary">Fixed at 460px — below the 768px default breakpoint, so it stacks to one card per item.</h:span></h:div>
+        <listbox responsive="stacking" width="460px">
+            <listhead>
+                <listheader label="Name"/>
+                <listheader label="Email"/>
+                <listheader label="Department"/>
+            </listhead>
+            <listitem><listcell label="Alice Chen"/><listcell label="alice@example.com"/><listcell label="Engineering"/></listitem>
+            <listitem><listcell label="Bob Diaz"/><listcell label="bob@example.com"/><listcell label="Design"/></listitem>
+            <listitem><listcell label="Carol Wu"/><listcell label="carol@example.com"/><listcell label="Marketing"/></listitem>
+        </listbox>
+    </h:div>
+
+    <!-- 2. Checkmark: the checkbox leads the first visible cell of each card -->
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Checkmark (multiple selection)</h:span></h:div>
+        <h:div class="z-py-3 z-mb-3"><h:span class="z-text-sm z-text-secondary">checkmark=&quot;true&quot; multiple=&quot;true&quot;: the checkbox sits at the start of each card, beside the first labelled value. The second item is selected.</h:span></h:div>
+        <listbox responsive="stacking" checkmark="true" multiple="true" width="460px">
+            <listhead>
+                <listheader label="Name"/>
+                <listheader label="Email"/>
+                <listheader label="Department"/>
+            </listhead>
+            <listitem><listcell label="Alice Chen"/><listcell label="alice@example.com"/><listcell label="Engineering"/></listitem>
+            <listitem selected="true"><listcell label="Bob Diaz"/><listcell label="bob@example.com"/><listcell label="Design"/></listitem>
+            <listitem><listcell label="Carol Wu"/><listcell label="carol@example.com"/><listcell label="Marketing"/></listitem>
+        </listbox>
+    </h:div>
+
+    <!-- 3. Checkmark with the first column hidden from cards: the checkbox keeps its own gutter -->
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Checkmark + hidden first column</h:span></h:div>
+        <h:div class="z-py-3 z-mb-3"><h:span class="z-text-sm z-text-secondary">The first column has responsiveVisible=&quot;false&quot;. Its cell stays only to host the checkbox, which takes a gutter beside the remaining values.</h:span></h:div>
+        <listbox responsive="stacking" checkmark="true" multiple="true" width="460px">
+            <listhead>
+                <listheader label="ID" responsiveVisible="false"/>
+                <listheader label="Name"/>
+                <listheader label="Email"/>
+            </listhead>
+            <listitem><listcell label="EMP-000241"/><listcell label="Alice Chen"/><listcell label="alice@example.com"/></listitem>
+            <listitem><listcell label="EMP-000318"/><listcell label="Bob Diaz"/><listcell label="bob@example.com"/></listitem>
+        </listbox>
+    </h:div>
+
+    <!-- 4. Live breakpoint: full-width listbox switches when the window crosses 768px -->
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Live breakpoint (resize the window)</h:span></h:div>
+        <h:div class="z-py-3 z-mb-3"><h:span class="z-text-sm z-text-secondary">Full width — renders as a normal table at ≥768px. Narrow the browser below 768px to watch it stack, and widen it again to restore the table.</h:span></h:div>
+        <listbox responsive="stacking" width="100%">
+            <listhead>
+                <listheader label="Author"/>
+                <listheader label="Title"/>
+                <listheader label="Publisher"/>
+                <listheader label="Pages"/>
+            </listhead>
+            <listitem><listcell label="Philip Hensher"/><listcell label="The Northern Clemency"/><listcell label="Knopf"/><listcell label="608"/></listitem>
+            <listitem><listcell label="Michael Greenberg"/><listcell label="Hurry Down Sunshine"/><listcell label="Other Press"/><listcell label="240"/></listitem>
+            <listitem><listcell label="Rick Perlstein"/><listcell label="Nixonland"/><listcell label="Scribner"/><listcell label="896"/></listitem>
+        </listbox>
+    </h:div>
+
+    <!-- 5. responsiveColumns: multiple cards per row -->
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">responsiveColumns=&quot;sm-1 md-2 lg-none&quot;</h:span></h:div>
+        <h:div class="z-py-3 z-mb-3"><h:span class="z-text-sm z-text-secondary">Bootstrap-style cascade: 1 card/row below 768px, 2 cards/row from 768–991px, normal table at ≥992px. Fixed at 820px here → 2 cards per row.</h:span></h:div>
+        <listbox responsive="stacking" responsiveColumns="sm-1 md-2 lg-none" width="820px">
+            <listhead>
+                <listheader label="Product"/>
+                <listheader label="SKU"/>
+                <listheader label="Price"/>
+            </listhead>
+            <listitem><listcell label="Wireless Mouse"/><listcell label="WM-100"/><listcell label="$24.99"/></listitem>
+            <listitem><listcell label="Mechanical Keyboard"/><listcell label="MK-220"/><listcell label="$89.00"/></listitem>
+            <listitem><listcell label="USB-C Hub"/><listcell label="UH-7"/><listcell label="$39.50"/></listitem>
+            <listitem><listcell label="Laptop Stand"/><listcell label="LS-3"/><listcell label="$32.00"/></listitem>
+        </listbox>
+    </h:div>
+
+    <!-- 6. Paging + footer compatibility -->
+    <h:div class="z-mb-8">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Paging + footer</h:span></h:div>
+        <h:div class="z-py-3 z-mb-3"><h:span class="z-text-sm z-text-secondary">mold=&quot;paging&quot; and the &lt;listfoot&gt; both work in stacking mode: the footer renders as a full-width card below the item cards.</h:span></h:div>
+        <listbox responsive="stacking" mold="paging" pageSize="3" width="460px">
+            <listhead>
+                <listheader label="Order"/>
+                <listheader label="Customer"/>
+                <listheader label="Amount"/>
+            </listhead>
+            <listitem><listcell label="#1001"/><listcell label="Alice Chen"/><listcell label="$120.00"/></listitem>
+            <listitem><listcell label="#1002"/><listcell label="Bob Diaz"/><listcell label="$54.00"/></listitem>
+            <listitem><listcell label="#1003"/><listcell label="Carol Wu"/><listcell label="$233.50"/></listitem>
+            <listitem><listcell label="#1004"/><listcell label="Dan Park"/><listcell label="$18.75"/></listitem>
+            <listitem><listcell label="#1005"/><listcell label="Eve Lin"/><listcell label="$402.10"/></listitem>
+            <listfoot>
+                <listfooter label="Total"/>
+                <listfooter label=""/>
+                <listfooter label="$828.35"/>
+            </listfoot>
+        </listbox>
+    </h:div>
+</h:div>
+</zk>
