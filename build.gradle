@@ -186,7 +186,10 @@ subprojects {
 	}
 
 	check {
-		dependsOn(jscheck)
+		// the TS sources refer to EE types, so lint needs the zkcml sources
+		if (file(zkcmlDir).isDirectory()) {
+			dependsOn(jscheck)
+		}
 	}
 
 	// Marble CSS build (ZK 11 default theme) — the only CSS pipeline; LESS was retired in ZK 11 (ZK-6112).
@@ -476,7 +479,8 @@ if (!project.hasProperty("cleanZKOnly") && gradle.includedBuilds.find {it.name =
 	tscheck.dependsOn(gradle.includedBuild('zkcml').task(':tscheck'))
 	tscheck.dependsOn(zkcmlBuildTask)
 	tscheck.mustRunAfter(zkcmlBuildTask)
-} else {
+} else if (file(zkcmlDir).isDirectory()) {
+	// cleanZKOnly or CI without the zkcml build; the type check reads the zkcml sources
 	check.dependsOn(tscheck)
 }
 

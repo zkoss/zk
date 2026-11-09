@@ -12,7 +12,13 @@ include(':zcommon')
 include(':zkwebfragment')
 include(':zul')
 
-includeBuild new File(rootDir, "../zkcml")
+// zkcml (EE) is optional: without the sibling checkout only the CE jars are built
+def zkcmlDir = new File(rootDir, "../zkcml")
+if (zkcmlDir.isDirectory()) {
+    includeBuild zkcmlDir
+} else {
+    logger.lifecycle("[zk] ${zkcmlDir.canonicalPath} not found, building the CE jars only")
+}
 includeBuild new File(rootDir, "zksandbox")
 
 if (System.getProperty("user.name") != "zkoss") {
