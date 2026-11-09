@@ -300,6 +300,20 @@ export default defineConfig({
       },
     },
     {
+      // A disabled part that does nothing when clicked looks disabled, with no hover highlight (treeitem
+      // checkmark). See disabled-state.spec.ts.
+      name: 'disabled-state',
+      testMatch: /[\\/]disabled-state\.spec\.ts$/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // A size the page sets (an attribute, vflex) wins over the theme's default size (toolbarbutton).
+      // See explicit-size.spec.ts.
+      name: 'explicit-size',
+      testMatch: /[\\/]explicit-size\.spec\.ts$/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'tablet',
       testMatch: /tablet\.spec\.ts/,
       use: TABLET_USE,
