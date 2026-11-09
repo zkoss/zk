@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-// Explicit size: a size the page sets on a component (an attribute, vflex) wins over the theme's default
-// size or spacing. Each component keeps its own fixture and helpers inside its describe.
+// Explicit size: a size the page sets on a component (an attribute, vflex, an anchor) wins over the theme's
+// default size or spacing. Each component keeps its own fixture and helpers inside its describe.
 
 declare const zk: any;
 
@@ -91,3 +91,52 @@ test.describe('portallayout', () => {
   });
 });
 
+// Guard for anchorlayout.css (ZK-6112): the children float, as under IceBlue, so a child that fits beside a taller
+// sibling goes there. In a wrapping flex row each line is as tall as its tallest item, so "b" would start a new
+// line under "tall", outside the layout.
+// Fixture: web/pv/anchorlayout-float-guard.zul
+test.describe('anchorlayout', () => {
+  const FIXTURE = '/pv/anchorlayout-float-guard.zul';
+
+  const rect = (page: import('@playwright/test').Page, id: string) =>
+    page.evaluate((id) => {
+      const { left, top, right, bottom } = zk.Widget.$('$' + id).$n().getBoundingClientRect();
+      return { left, top, right, bottom };
+    }, id);
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto(FIXTURE, { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+  });
+
+  test('anchorlayout — a child that fits beside a taller sibling sits beside it', { tag: '@ZK-6112' }, async ({ page }) => {
+    const [layout, a, b] = await Promise.all(['layout', 'a', 'b'].map((id) => rect(page, id)));
+    const layoutWidth = layout.right - layout.left;
+    expect(b.left - layout.left).toBeCloseTo(layoutWidth / 2, -1);
+    expect(b.top).toBeCloseTo(a.bottom, 0);
+  });
+
+  test('anchorlayout — the children stay inside the layout box', { tag: '@ZK-6112' }, async ({ page }) => {
+    const layout = await page.evaluate(() => {
+      const n = zk.Widget.$('$layout').$n();
+      return { scrollHeight: n.scrollHeight, clientHeight: n.clientHeight };
+    });
+    expect(layout.scrollHeight).toBeLessThanOrEqual(layout.clientHeight);
+  });
+
+  // A layout with overflow:hidden would clip the ring of a child at its edge. The ring is compared on a strip
+  // above the focused button: it differs from the unfocused strip only if the ring is drawn there.
+  test("anchorlayout — a focused child's focus ring is not clipped by the layout", { tag: '@ZK-6112' }, async ({ page }) => {
+    const button = await page.evaluate(() => {
+      const { x, y, width } = zk.Widget.$('$focusable').$n().getBoundingClientRect();
+      return { x, y, width };
+    });
+    const strip = { x: button.x - 4, y: button.y - 4, width: button.width + 8, height: 3 };
+    const unfocused = await page.screenshot({ clip: strip });
+    await page.keyboard.press('Tab');
+    await expect(page.locator('.z-button:focus-visible')).toHaveCount(1);
+    const focused = await page.screenshot({ clip: strip });
+    expect(focused.equals(unfocused)).toBe(false);
+  });
+});

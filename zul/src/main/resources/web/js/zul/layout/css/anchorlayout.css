@@ -1,19 +1,20 @@
 /* MD3 Anchor Layout — anchor-based responsive layout */
-/* ZK renders anchorchildren with inline width% styles; use flexbox for side-by-side columns.
+/* ZK renders anchorchildren with inline width% and height% styles. The children float, as under IceBlue: a float
+   goes to the highest place it fits, so a child that fits beside a taller sibling sits there. A wrapping flex row
+   would start a new line under the tallest item instead and push the child out of the layout (ZK-6112).
    No gap: the widths are inline percentages, so any gap would overflow the row and wrap 50%+50% / 33%x3. */
 
 @layer zk-components {
 .z-anchorlayout {
-    display: flex;
-    flex-wrap: wrap;
+    /* contains the floated children without clipping them: overflow:hidden would cut the focus ring and shadow
+       of a child at the layout's edge. A page that wants clipping sets overflow on the component itself. */
+    display: flow-root;
     width: 100%;
     box-sizing: border-box;
-    align-items: flex-start;
 }
 
 .z-anchorchildren {
-    flex-shrink: 0;
+    float: left;
     box-sizing: border-box;
-    min-width: 0; /* prevent flex blowout */
 }
 }

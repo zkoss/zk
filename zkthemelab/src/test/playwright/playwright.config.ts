@@ -307,8 +307,8 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // A size the page sets (an attribute, vflex) wins over the theme's default size or spacing
-      // (toolbarbutton, portallayout).
+      // A size the page sets (an attribute, vflex, an anchor) wins over the theme's default size or spacing
+      // (toolbarbutton, portallayout, anchorlayout).
       // See explicit-size.spec.ts.
       name: 'explicit-size',
       testMatch: /[\\/]explicit-size\.spec\.ts$/,

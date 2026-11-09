@@ -1,0 +1,18 @@
+<?page title="Anchorlayout float guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for explicit-size.spec.ts (anchorlayout float arrangement): a tall child (holding a button at the layout's
+     top-left corner) with two half-height children beside it. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up. -->
+<zk>
+<div style="padding:16px">
+    <anchorlayout id="layout" width="600px" height="300px" style="border: 1px solid red">
+        <anchorchildren id="tall" anchor="50% 100%">
+            <div height="100%" style="background: #c8e6c9"><button id="focusable" label="tall"/></div>
+        </anchorchildren>
+        <anchorchildren id="a" anchor="50% 50%">
+            <div height="100%" style="background: #bbdefb">a</div>
+        </anchorchildren>
+        <anchorchildren id="b" anchor="50% 50%">
+            <div height="100%" style="background: #ffe0b2">b</div>
+        </anchorchildren>
+    </anchorlayout>
+</div>
+</zk>
