@@ -192,12 +192,6 @@
     border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
 }
 
-.z-spinner.z-spinner-readonly .z-spinner-button,
-.z-doublespinner.z-doublespinner-readonly .z-doublespinner-button {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
 /* ─── Inplace ──────────────────────────────────────────────────────────────── */
 .z-spinner.z-spinner-inplace,
 .z-doublespinner.z-doublespinner-inplace {

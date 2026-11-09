@@ -113,6 +113,7 @@ export default defineConfig({
       // Interaction guard: an interactive knob must be reachable at its own
       // centre (elementFromPoint), not merely rendered. Catches a sibling
       // overlay swallowing the pointer — invisible to every style-based check.
+      // Also: the buttons of a read-only timebox, spinner and doublespinner take a real click.
       // See hit-target.spec.ts.
       name: 'hit-target',
       testMatch: /hit-target\.spec\.ts/,

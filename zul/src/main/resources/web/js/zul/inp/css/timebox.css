@@ -163,11 +163,6 @@
     border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
 }
 
-.z-timebox.z-timebox-readonly .z-timebox-button {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
 /* ─── Button hidden (buttonVisible="false") ──────────────────────────── */
 /* ZK adds z-timebox-disabled to the <a> button element when buttonVisible=false */
 .z-timebox-button.z-timebox-disabled {

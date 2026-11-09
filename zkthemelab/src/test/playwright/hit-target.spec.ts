@@ -1,6 +1,9 @@
 import { test, expect, Page } from '@playwright/test';
 
-// Interaction guard: an interactive knob must be reachable AT ITS OWN CENTRE.
+// Interaction guard: an interactive part must be reachable where the user aims at it. The first guard is for
+// knobs, the second for the buttons of read-only fields.
+//
+// A knob must be reachable AT ITS OWN CENTRE.
 //
 // Why this assertion and not `.hover()`: a knob covered by a sibling overlay
 // still *renders* correctly and still reacts near its edges, so every visual and
@@ -69,5 +72,42 @@ for (const v of VARIANTS) {
     await page.evaluate(() => document.fonts.ready);
 
     expect(await unreachableKnobs(page, v)).toEqual([]);
+  });
+}
+
+// Guard for timebox.css and spinner.css (ZK-6112): the up and down buttons of a read-only Timebox, Spinner and
+// Doublespinner change the value in ZK, only typing is blocked (Timebox javadoc: "the value of a read-only time
+// box can be changed by clicking the up or down button"), so the buttons must take the pointer and not look
+// disabled. A real click is used because pointer-events: none only shows up there.
+// Fixture: web/pv/readonly-spin-buttons-guard.zul
+declare const zk: any;
+
+for (const name of ['timebox', 'spinner', 'doublespinner']) {
+  test.describe(`${name} read-only buttons`, () => {
+    test.beforeEach(async ({ page }) => {
+      const resp = await page.goto('/pv/readonly-spin-buttons-guard.zul', { waitUntil: 'networkidle' });
+      expect(resp?.status()).toBe(200);
+      await page.evaluate(() => document.fonts.ready);
+    });
+
+    test(`${name} — a click on the up button of a read-only field changes the value`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const value = () => page.evaluate((id) => zk.Widget.$('$' + id).getInputNode().value, name);
+      const before = await value();
+      const box = await page.evaluate((id) => {
+        const { x, y, width, height } = zk.Widget.$('$' + id).$n().querySelector('.z-' + id + '-button').getBoundingClientRect();
+        return { x, y, width, height };
+      }, name);
+      // the upper half of the button is the up button
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 4);
+      await expect.poll(value).not.toBe(before);
+    });
+
+    test(`${name} — the buttons of a read-only field are not dimmed`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const opacity = await page.evaluate((id) => {
+        const button = zk.Widget.$('$' + id).$n().querySelector('.z-' + id + '-button');
+        return getComputedStyle(button).opacity;
+      }, name);
+      expect(opacity).toBe('1');
+    });
   });
 }
