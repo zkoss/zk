@@ -93,7 +93,9 @@ script adds `--config`). Edit and rebuild, then run `npm run baseline:compare --
 
 ## Spec files and test titles
 
-The suite is organised with **files = features and component = data**.
+The suite is organised with **files = features and component = data**. `zkthemelab/doc/test-matrix.html`
+shows this architecture with diagrams (how a feature picks its components, the four layers, and how
+`select-tests.mjs` maps a change to tests); update it when that structure changes.
 
 - A spec file covers one feature (screenshot, density, forced-colors, focus ring, …), never one
   component. A component-specific regression test goes into the feature file it exercises.

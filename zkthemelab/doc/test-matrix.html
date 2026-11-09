@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Architecture of the zkthemelab Playwright suite (features x components).
+     Keep it to structure and rules: no test, page or file counts (they drift); get those from
+     `npx playwright test -c src/test/playwright/playwright.config.ts --list`.
+     Open it straight from disk; the diagrams are Mermaid, loaded from jsDelivr. -->
+<title>zkthemelab Test Matrix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: one reading column; the matrix and diagrams break out wider in their own scroll boxes. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --fg: #1c232e;
+  --muted: #5b6676;
+  --line: #d9dee6;
+  --accent: #1f6f8b;        /* scan-driven */
+  --accent-soft: #dcecf2;
+  --list: #a2620c;          /* curated list */
+  --list-soft: #f6e9d4;
+  --fixture: #6b4fa3;       /* guard fixture */
+  --fixture-soft: #ebe4f6;
+  --code-bg: #eef1f5;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161c; --surface: #1a2029; --fg: #e3e8ef; --muted: #98a3b3; --line: #2d3542;
+    --accent: #5fb3cf; --accent-soft: #17323d; --list: #e0a54a; --list-soft: #3a2c15;
+    --fixture: #b49ae6; --fixture-soft: #2c2440; --code-bg: #222a35; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161c; --surface: #1a2029; --fg: #e3e8ef; --muted: #98a3b3; --line: #2d3542;
+  --accent: #5fb3cf; --accent-soft: #17323d; --list: #e0a54a; --list-soft: #3a2c15;
+  --fixture: #b49ae6; --fixture-soft: #2c2440; --code-bg: #222a35; color-scheme: dark;
+}
+body {
+  margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+}
+.wrap { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+.prose { max-width: 68ch; }
+header { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 600; }
+h2 { font-size: 26px; font-weight: 600; }
+h3 { font-size: 18px; font-weight: 600; }
+p { margin: 0; }
+.lede { font-size: 17px; color: var(--muted); max-width: 64ch; }
+section { display: flex; flex-direction: column; gap: 18px; }
+code { font: 13px/1.4 var(--mono); background: var(--code-bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+.muted { color: var(--muted); }
+
+/* The thesis strip */
+.rule { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.rule > div { background: var(--surface); padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.rule b { font-family: var(--display); font-size: 20px; font-weight: 600; }
+
+/* Matrix */
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table.matrix { border-collapse: collapse; width: 100%; min-width: 820px; font-size: 13px; }
+.matrix th, .matrix td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: center; vertical-align: middle; }
+.matrix thead th { font: 500 12px/1.3 var(--body); color: var(--muted); vertical-align: bottom; }
+.matrix thead tr.group th { font: 600 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding-top: 12px; }
+.matrix th.rowh { text-align: left; font: 500 13px/1.3 var(--mono); color: var(--fg); white-space: nowrap; }
+.matrix tr.new th.rowh::after { content: "new page"; margin-left: 8px; font: 500 10px/1 var(--body); text-transform: uppercase; letter-spacing: .06em; color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 2px 4px; }
+.matrix tr.new td, .matrix tr.new th { background: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+.matrix tbody tr:last-child th, .matrix tbody tr:last-child td { border-bottom: 0; }
+.g-scan { color: var(--accent); } .g-list { color: var(--list); } .g-fix { color: var(--fixture); }
+.c { display: inline-block; width: 16px; height: 16px; border-radius: 4px; vertical-align: middle; }
+.c.scan { background: var(--accent); }
+.c.list { background: var(--list); }
+.c.fix  { background: var(--fixture); border-radius: 50%; }
+.c.none { border: 1px dashed var(--line); }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Selection modes */
+.modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.mode { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--k); border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.mode h3 { color: var(--k); }
+.mode ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.mode .who { font-size: 13px; color: var(--muted); }
+.mode.scan { --k: var(--accent); } .mode.list { --k: var(--list); } .mode.fix { --k: var(--fixture); }
+
+/* Layers */
+.layers { display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.layer { background: var(--surface); display: grid; grid-template-columns: 180px 1fr; gap: 20px; padding: 16px 20px; }
+.layer > div { min-width: 0; }
+.layer .name { font: 600 16px/1.3 var(--display); }
+.layer .q { font-size: 13px; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip { font: 12px/1 var(--mono); padding: 5px 8px; border-radius: 4px; background: var(--code-bg); }
+@media (max-width: 620px) { .layer { grid-template-columns: 1fr; gap: 6px; } }
+
+/* Diagrams */
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; overflow-x: auto; }
+pre.mermaid { margin: 0; background: transparent; text-align: center; font-family: var(--body); }
+
+/* Checklist */
+ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 12px; }
+ol.steps li { counter-increment: s; display: grid; grid-template-columns: 32px 1fr; gap: 12px; }
+ol.steps li::before { content: counter(s); font: 600 14px/28px var(--mono); text-align: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); color: var(--muted); }
+ol.steps li > div { min-width: 0; }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Marble theme · zkthemelab · Playwright</div>
+  <h1>The zkthemelab test matrix</h1>
+  <p class="lede">The Marble visual suite is a grid. Each spec file is one <em>feature</em> to check, and each ZK component is a row of <em>data</em> that the feature runs over. This page explains how the grid is built, how each feature decides which components it covers, and how a code change is mapped back to the cells that need to run.</p>
+</header>
+
+<section>
+  <div class="rule">
+    <div><span class="eyebrow">Columns</span><b>File = feature</b><span class="muted">A spec checks one concern (pixels, density, forced colours, focus ring…) across many components. A spec never belongs to one component.</span></div>
+    <div><span class="eyebrow">Rows</span><b>Component = data</b><span class="muted">A component enters the grid through its preview page <code>&lt;comp&gt;.zul</code>, a curated list, or a guard fixture under <code>pv/</code>.</span></div>
+    <div><span class="eyebrow">Cells</span><b>Test = one intersection</b><span class="muted">Titles start with the widget name: <code>navitem — focus outline is drawn</code>, so <code>-g " navitem — "</code> slices one row.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>The grid, schematically</h2>
+  <p class="prose">The columns below are real features; the rows are placeholders, because the point is the <em>shape</em> of coverage, not an inventory that would drift. Notice the last row: a page added today is picked up at once by every scan-driven column and by none of the others until someone lists it.</p>
+  <div class="legend">
+    <span><i class="c scan"></i>Scan-driven: every preview page, found at run time</span>
+    <span><i class="c list"></i>Curated: pages named in a list in the spec</span>
+    <span><i class="c fix"></i>Guard: one fixture page for one regression</span>
+    <span><i class="c none"></i>Not covered by that feature</span>
+  </div>
+  <div class="scroll">
+    <table class="matrix">
+      <thead>
+        <tr class="group">
+          <th></th>
+          <th colspan="5" class="g-scan">Scan-driven features</th>
+          <th colspan="5" class="g-list">Curated features</th>
+          <th colspan="2" class="g-fix">Guards</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>Gallery sections</th><th>Brand residue</th><th>Compact heights</th><th>Font-size</th><th>Focus ring</th>
+          <th>States (hover/focus)</th><th>Tablet</th><th>Pop-up layer</th><th>Variant gallery</th><th>Theme variables</th>
+          <th>Fix A</th><th>Fix B</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th class="rowh">button.zul</th>
+          <td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td>
+          <td><i class="c list"></i></td><td><i class="c list"></i></td><td><i class="c none"></i></td><td><i class="c list"></i></td><td><i class="c list"></i></td>
+          <td><i class="c none"></i></td><td><i class="c none"></i></td></tr>
+        <tr><th class="rowh">combobox.zul</th>
+          <td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td>
+          <td><i class="c list"></i></td><td><i class="c list"></i></td><td><i class="c list"></i></td><td><i class="c list"></i></td><td><i class="c list"></i></td>
+          <td><i class="c none"></i></td><td><i class="c none"></i></td></tr>
+        <tr><th class="rowh">navbar.zul</th>
+          <td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td>
+          <td><i class="c none"></i></td><td><i class="c none"></i></td><td><i class="c list"></i></td><td><i class="c list"></i></td><td><i class="c list"></i></td>
+          <td><i class="c fix"></i></td><td><i class="c none"></i></td></tr>
+        <tr><th class="rowh">chosenbox.zul</th>
+          <td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td>
+          <td><i class="c none"></i></td><td><i class="c none"></i></td><td><i class="c list"></i></td><td><i class="c none"></i></td><td><i class="c list"></i></td>
+          <td><i class="c none"></i></td><td><i class="c fix"></i></td></tr>
+        <tr class="new"><th class="rowh">newwidget.zul</th>
+          <td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td><td><i class="c scan"></i></td>
+          <td><i class="c none"></i></td><td><i class="c none"></i></td><td><i class="c none"></i></td><td><i class="c none"></i></td><td><i class="c none"></i></td>
+          <td><i class="c none"></i></td><td><i class="c none"></i></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:13px">Cells are illustrative. The source of truth for any real cell is <code>npx playwright test --list</code> with <code>-g " &lt;comp&gt; — "</code>.</p>
+</section>
+
+<section>
+  <h2>Three ways a feature picks its rows</h2>
+  <div class="modes">
+    <div class="mode scan">
+      <h3>Scan-driven</h3>
+      <p>The spec reads the preview folder (<code>webapp/web/*.zul</code>) when Playwright collects tests, and makes one test per page.</p>
+      <ul>
+        <li>A new component page is covered with no spec edit.</li>
+        <li>Aggregate pages (<code>scripts/aggregate-pages.json</code>) are skipped; they combine many components.</li>
+        <li>Pages a richer spec already owns are skipped to avoid duplicate baselines.</li>
+      </ul>
+      <p class="who">gallery-scan, brand residual scan, compact heights, font-size equivalence, focus-ring scan</p>
+    </div>
+    <div class="mode list">
+      <h3>Curated list</h3>
+      <p>The spec names its pages: a constant, a list of cases, or one <code>describe</code> per component.</p>
+      <ul>
+        <li>Used where each row needs its own script: opening a pop-up, driving a hover, setting a tablet UA.</li>
+        <li>Shared lists live in helpers, such as <code>VARIANT_PAGES</code> in <code>variant-gallery.ts</code>.</li>
+        <li>A new component is not covered until it is added.</li>
+      </ul>
+      <p class="who">screenshot (depth states), tablet, popup-gallery, compact/brand variant gallery, component-theme-variables, forced-colors, hit-target</p>
+    </div>
+    <div class="mode fix">
+      <h3>Guard fixture</h3>
+      <p>One regression, one minimal page under <code>pv/*-guard.zul</code>, one spec and its own Playwright project.</p>
+      <ul>
+        <li>The fixture holds only what the fix needs, so the assertion cannot be satisfied by unrelated markup.</li>
+        <li>Each guard must fail with the pre-fix CSS before it is trusted.</li>
+        <li>The issue goes in a tag (<code>@ZK-6131</code>), not in the title.</li>
+      </ul>
+      <p class="who">panel-radius, navbar-popup-title, chosenbox-inplace, a-icon-only, signature-label, input-invalid, …</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>The columns, grouped by what they ask</h2>
+  <p class="prose">Features fall into four layers. A pixel test and a computed-style test catch different failures, so most components sit in more than one layer.</p>
+  <div class="layers">
+    <div class="layer">
+      <div><div class="name">Breadth</div><div class="q">Did any page change?</div></div>
+      <div>Every preview page is shot section by section. A section is a block under a standard heading row, so a 1px border change on one control is not lost in a full-page budget.
+        <div class="chips"><span class="chip">gallery-scan</span><span class="chip">render-smoke</span><span class="chip">section-shots.ts</span></div></div>
+    </div>
+    <div class="layer">
+      <div><div class="name">Depth</div><div class="q">Does each state look right?</div></div>
+      <div>Hover, focus, active, disabled, colour variants and opened pop-ups, reached with the gesture a user makes. These are the cells a goto-and-shoot gallery never paints.
+        <div class="chips"><span class="chip">screenshot</span><span class="chip">popup-gallery</span><span class="chip">hit-target</span></div></div>
+    </div>
+    <div class="layer">
+      <div><div class="name">Contract</div><div class="q">Do the rules hold, not just the look?</div></div>
+      <div>Computed-style assertions: a <code>--zk-&lt;comp&gt;-*</code> override actually reaches the element, the z-index ladder keeps its order, framework classes are styled, the reset is scoped, the focus ring is not clipped.
+        <div class="chips"><span class="chip">component-theme-variables</span><span class="chip">zindex</span><span class="chip">framework</span><span class="chip">reset</span><span class="chip">focus-scan</span><span class="chip">font-size</span></div></div>
+    </div>
+    <div class="layer">
+      <div><div class="name">Environment</div><div class="q">Does it survive a different context?</div></div>
+      <div>The same pages under another device, mode or theme. Each environment is a Playwright project with its own <code>use</code> settings, so it multiplies a column instead of adding a row.
+        <div class="chips"><span class="chip">tablet (mobile UA + touch)</span><span class="chip">forced-colors (emulated)</span><span class="chip">print media</span><span class="chip">compact density</span><span class="chip">brand seed</span><span class="chip">iceblue cookie</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>From preview page to verdict</h2>
+  <p class="prose">Every cell runs against the same preview server. The page is the fixture; the spec settles it (fonts loaded, transitions off), then either reads computed styles or compares a screenshot with a local baseline.</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TD
+  subgraph Pages["Preview pages · webapp/web"]
+    P3["pv/ templates<br/>matrix, *-content"]
+    P1["&lt;comp&gt;.zul<br/>per component"]
+    P2["pv/*-guard.zul<br/>fixtures"]
+    P4["utility/<br/>usecase/"]
+  end
+  P3 -. applied by .-> P1
+  Pages --> Server["Preview server<br/>PREVIEW_URL, default :8085"]
+  Server --> Proj["Playwright project<br/>device · media · cookie · theme"]
+  Proj --> Spec["Spec = feature"]
+  Spec --> A{"Assertion kind"}
+  A -->|computed style| Pass["pass / fail"]
+  A -->|screenshot| Base["Local baseline<br/>doc/screenshots"]
+  Base --> Pass
+</pre>
+  </div>
+  <p class="prose muted">Baselines are machine-local because the same CSS renders differently on another OS, font set or GPU. The workflow is capture on unedited CSS, edit and rebuild, then compare with the same arguments.</p>
+</section>
+
+<section>
+  <h2>Which cells does my change need?</h2>
+  <p class="prose"><code>scripts/select-tests.mjs</code> walks the grid backwards: from changed files to classes, from classes to the pages that render them, from pages to the tests that open those pages. It answers <em>none</em>, <em>partial</em> (one exact command) or <em>full</em>.</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TD
+  C["Changed files<br/>(--base diff, zk and zkcml)"] --> K{"What kind of file?"}
+  K -->|"docs, comments-only CSS"| N["none"]
+  K -->|"tokens, base, utility CSS,<br/>lang.xml, .wcs, build, config"| F["full run<br/>(maintainer decides when)"]
+  K -->|"component CSS / widget .ts"| R["Changed rules → .z-* classes"]
+  K -->|"preview .zul or pv template"| PG["Pages that use it"]
+  K -->|"spec or baseline PNG"| T["That spec / that page's gallery"]
+  R --> I["class-index.json<br/>page → classes at rest"]
+  I --> PG
+  PG --> B["Tests that open those pages<br/>(by URL or by title)"]
+  T --> B
+  B --> S{"Most of the suite?"}
+  S -->|yes| F
+  S -->|no| PR["partial: one command,<br/>--project … -g anchored regex"]
+</pre>
+  </div>
+  <p class="prose">Two rows sit outside this mapping on purpose. Aggregate pages are selected only when their own file changes, and a class that is not on any page at rest falls back to its name prefix, then to the CSS file's own component, and otherwise forces a full run.</p>
+</section>
+
+<section>
+  <h2>Adding a cell</h2>
+  <ol class="steps prose">
+    <li><div><b>Find the column.</b> Put the test in the spec of the feature it exercises. Open a new spec only for a new feature or a guard.</div></li>
+    <li><div><b>Find the row.</b> Use the component's own preview page when it already shows the state. Otherwise write a minimal <code>pv/*-guard.zul</code>.</div></li>
+    <li><div><b>Name it for the slice.</b> <code>&lt;widgetName&gt; — &lt;what is checked&gt;</code>, with the issue as a tag.</div></li>
+    <li><div><b>Register a project</b> in <code>playwright.config.ts</code> with a <code>testMatch</code>, since each project runs only its own file.</div></li>
+    <li><div><b>Prove it is red, then green.</b> Run it against the pre-fix CSS and see it fail before trusting the pass.</div></li>
+    <li><div><b>Refresh the index</b> with <code>scripts/build-class-index.mjs</code> when a spec opens a new fixture URL, so the selector can map changes to it.</div></li>
+  </ol>
+</section>
+
+<footer>Sources: <code>zkthemelab/src/test/playwright/</code>, <code>zkthemelab/scripts/README-select-tests.md</code>, and the marble-theme skill's <code>reference/verification.md</code>. Counts are left out on purpose; get them from <code>playwright test --list</code>.</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default',
+  });
+</script>
+</body>
+</html>
