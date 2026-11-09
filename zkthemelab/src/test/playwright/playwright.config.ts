@@ -223,6 +223,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // A stacking listbox card keeps the table-row checkbox geometry (zkmax sel/css/listbox.css). See listbox-stacking-checkmark.spec.ts.
+      name: 'listbox-stacking-checkmark',
+      testMatch: /listbox-stacking-checkmark\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // A real constraint failure styles the combobox and bandbox (combobox.css, bandbox.css). See input-invalid.spec.ts.
       name: 'input-invalid',
       testMatch: /input-invalid\.spec\.ts/,
