@@ -1,0 +1,20 @@
+<?page title="Tree disabled checkmark" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for disabled-state.spec.ts (treeitem). Lives under pv/ so gallery-scan, forced-colors-gallery and
+     font-size-equivalence do not pick it up as a page. -->
+<zk>
+	<hlayout>
+		<tree id="multi" width="240px" checkmark="true" multiple="true">
+			<treechildren>
+				<treeitem id="multiOn" label="Enabled"/>
+				<treeitem id="multiOff" label="Disabled" disabled="true"/>
+				<treeitem id="multiOffSelected" label="Disabled selected" disabled="true" selected="true"/>
+			</treechildren>
+		</tree>
+		<tree id="single" width="240px" checkmark="true">
+			<treechildren>
+				<treeitem id="singleOn" label="Enabled"/>
+				<treeitem id="singleOff" label="Disabled" disabled="true"/>
+			</treechildren>
+		</tree>
+	</hlayout>
+</zk>
