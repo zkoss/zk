@@ -1111,3 +1111,15 @@ if (gradle.includedBuilds.find {it.name == 'zkcml'} != null) {
 		dependsOn gradle.includedBuild('zkcml').task(':publishToMavenLocal')
 	}
 }
+
+// EE/PE packages need the zkcml jars; without the sibling checkout they would be built empty
+gradle.taskGraph.whenReady { graph ->
+	if (gradle.includedBuilds.find {it.name == 'zkcml'} == null) {
+		def eeTaskNames = ['zkeeBinTar', 'zkeeBinZip', 'zkeeSrcZip', 'zkpeBinTar', 'zkpeBinZip', 'zkpeSrcZip',
+			'zkeeBinEvalZip', 'zkpeBinEvalZip', 'eeBundles', 'peBundles', 'eeEvalBundles', 'peEvalBundles',
+			'zksandboxZip', 'release']
+		if (graph.allTasks.any { it.project == project && it.name in eeTaskNames }) {
+			throw new GradleException("EE/PE packaging needs the zkcml checkout at ${file("$rootDir/../zkcml").canonicalPath}")
+		}
+	}
+}

@@ -28,6 +28,16 @@ ZK is a highly productive Java framework for building amazing enterprise web and
 
 * [Download](https://www.zkoss.org/download/zk/ce)
 
+### Building the CE jars only
+
+Clone this repository and run:
+
+```bash
+./gradlew build
+```
+
+This needs JDK 17 and Node.js with npm on the `PATH`. When the build finds no `zkcml` checkout next to this one, it says so and builds only the CE jars, which end up in `<module>/build/libs/`. Add `sourcesJar` to the command to build the sources jars too.
+
 ### License
 
  * [LGPL](https://www.gnu.org/licenses/lgpl-2.1.html)
