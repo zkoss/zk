@@ -492,6 +492,12 @@
     display: table-row-group;
 }
 
+/* B36-2805177: the empty cell drops the browser's default td padding (1px top and bottom), so an empty body shows no
+   height of its own and, with an emptyMessage, is exactly as tall as the message box (as under IceBlue's resetTable). */
+.z-grid-emptybody td {
+    padding: 0;
+}
+
 .z-grid-emptybody-content {
     padding: var(--zk-spacing-8) var(--zk-spacing-4);
     text-align: center;

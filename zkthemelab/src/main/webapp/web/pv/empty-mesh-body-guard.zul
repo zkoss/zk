@@ -1,0 +1,36 @@
+<?page title="Empty mesh body guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for explicit-size.spec.ts (empty Grid and Listbox body): the widgets without rows, with and without an
+     emptyMessage. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up. -->
+<zk>
+<div style="padding:16px">
+    <listbox id="listbox">
+        <listhead>
+            <listheader label="column 1"/>
+            <listheader label="column 2"/>
+        </listhead>
+    </listbox>
+    <separator/>
+    <grid id="grid">
+        <columns>
+            <column label="column 1"/>
+            <column label="column 2"/>
+        </columns>
+        <rows/>
+    </grid>
+    <separator/>
+    <listbox id="listboxMessage" emptyMessage="No data">
+        <listhead>
+            <listheader label="column 1"/>
+            <listheader label="column 2"/>
+        </listhead>
+    </listbox>
+    <separator/>
+    <grid id="gridMessage" emptyMessage="No data">
+        <columns>
+            <column label="column 1"/>
+            <column label="column 2"/>
+        </columns>
+        <rows/>
+    </grid>
+</div>
+</zk>

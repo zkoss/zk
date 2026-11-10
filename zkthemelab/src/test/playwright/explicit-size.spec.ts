@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // Explicit size: a size the page sets on a component (an attribute, vflex, an anchor) wins over the theme's
-// default size or spacing. Each component keeps its own fixture and helpers inside its describe.
+// default size or spacing, and an empty grid or listbox body gets no height from the theme. Each component keeps its own fixture and helpers inside its describe.
 
 declare const zk: any;
 
@@ -139,4 +139,36 @@ test.describe('anchorlayout', () => {
     const focused = await page.screenshot({ clip: strip });
     expect(focused.equals(unfocused)).toBe(false);
   });
+});
+
+// Guard for grid.css and listbox.css (ZK-6112, B36-2805177): a Grid or Listbox without rows shows no height of its own,
+// as under IceBlue (at most the 1px its empty cell gets there), and with an emptyMessage the body is as tall as the
+// message box. The empty cell must not keep the browser's default td padding, which added 2px both times.
+// A Tree has no empty cell (Tree.ts renders none), so it is not covered.
+// Fixture: web/pv/empty-mesh-body-guard.zul
+test.describe('empty mesh body', () => {
+  const MAX_EMPTY_BODY_HEIGHT_PX = 1;
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/pv/empty-mesh-body-guard.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+  });
+
+  const bodyHeight = (page: import('@playwright/test').Page, id: string) =>
+    page.evaluate((id) => zk.Widget.$('$' + id).$n('body').getBoundingClientRect().height, id);
+  const messageBoxHeight = (page: import('@playwright/test').Page, id: string, name: string) =>
+    page.evaluate(({ id, name }) => zk.Widget.$('$' + id).$n().querySelector('.z-' + name + '-emptybody-content').getBoundingClientRect().height, { id, name });
+
+  for (const name of ['listbox', 'grid']) {
+    test(`${name} — an empty body shows no height of its own`, { tag: '@ZK-6112' }, async ({ page }) => {
+      expect(await bodyHeight(page, name)).toBeLessThanOrEqual(MAX_EMPTY_BODY_HEIGHT_PX);
+    });
+
+    test(`${name} — with an emptyMessage the body is as tall as the message box`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const id = name + 'Message';
+      expect(await messageBoxHeight(page, id, name)).toBeGreaterThan(0);
+      expect(await bodyHeight(page, id)).toBeCloseTo(await messageBoxHeight(page, id, name), 0);
+    });
+  }
 });

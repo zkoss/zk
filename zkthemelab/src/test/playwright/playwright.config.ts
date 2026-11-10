@@ -309,7 +309,7 @@ export default defineConfig({
     },
     {
       // A size the page sets (an attribute, vflex, an anchor) wins over the theme's default size or spacing
-      // (toolbarbutton, portallayout, anchorlayout).
+      // (toolbarbutton, portallayout, anchorlayout), and the theme adds no height to an empty grid or listbox body.
       // See explicit-size.spec.ts.
       name: 'explicit-size',
       testMatch: /[\\/]explicit-size\.spec\.ts$/,
