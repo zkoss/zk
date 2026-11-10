@@ -309,6 +309,8 @@ export interface ClientActivity {
 	_onSyncScroll: {_onSyncScroll} | [unknown, CallableFunction];
 	/** @internal */
 	_beforeSizeForRead: {_beforeSizeForRead} | [unknown, CallableFunction];
+	/** @internal */
+	_onFontsLoaded: {_onFontsLoaded} | [unknown, CallableFunction];
 	beforeSize: {beforeSize} | [unknown, CallableFunction];
 	afterSize: {afterSize} | [unknown, CallableFunction];
 	onBindLevelChange: {onBindLevelChange} | [unknown, CallableFunction];
@@ -336,7 +338,7 @@ export interface FireOptions {
 }
 
 type WatchInfo = [zk.Widget, (zk.Widget | [zk.Widget, CallableFunction])[]];
-let _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true, afterSize: true},
+let _visiEvts = {onFitSize: true, onSize: true, onShow: true, onHide: true, beforeSize: true, afterSize: true, _onFontsLoaded: true},
 	_watches: Record<string, WatchInfo[]> = {}, //Map(watch-name, [object, [watches..]]) [0]: obj, [1]: [inf]
 	_dirty: boolean;
 

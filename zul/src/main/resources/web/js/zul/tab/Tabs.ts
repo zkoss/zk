@@ -31,6 +31,10 @@ export class Tabs extends zul.Widget {
 	_shallCheck?: boolean;
 	/** @internal */
 	_doingScroll?: Record<string, number>;
+	/** @internal */
+	_pendingScrollcheck?: string;
+	/** @internal */
+	_checkedTabsSize?: number;
 
 	/**
 	 * @returns the tabbox owns this component.
@@ -49,15 +53,46 @@ export class Tabs extends zul.Widget {
 	}
 
 	override onSize(): void {
+		this._fixSize();
+
+		// Bug Z35-tabbox-004.zul, we need to check again.
+		this._scrollcheck('init');
+	}
+
+	/** @internal */
+	_onFontsLoaded(): void {
+		const vertical = this.getTabbox()!.isVertical();
+		// ZK-6216: a font that does not resize the tabs must not move a strip the user has scrolled
+		if (this._tabsSize(vertical) == this._checkedTabsSize)
+			return;
+		this._fixSize();
+
+		// 'sel', not 'init', also scrolls when the strip starts to overflow;
+		// _doScroll drops a scroll while another one is running
+		const way = vertical ? 'vsel' : 'sel';
+		if (this._doingScroll && Object.keys(this._doingScroll).length)
+			this._pendingScrollcheck = way;
+		else
+			this._scrollcheck(way);
+	}
+
+	/** @internal */
+	_fixSize(): void {
 		this._fixWidth(true); //ZK-2810: set height to tabbox when onSize (maybe setHeight or setWidth)
 
 		// ZK-5429, ZK-5433: reset the cache when onSize
 		let tabs = this.$n_();
 		this._tabsScrollLeft = tabs.scrollLeft;
 		this._tabsScrollTop = tabs.scrollTop;
+	}
 
-		// Bug Z35-tabbox-004.zul, we need to check again.
-		this._scrollcheck('init');
+	/** @internal */
+	_tabsSize(vertical: boolean): number {
+		let size = 0;
+		jq(this.$n('cave')).children().each(function () {
+			size += vertical ? this.offsetHeight : this.offsetWidth;
+		});
+		return size;
 	}
 
 	beforeSize(): void {
@@ -110,12 +145,13 @@ export class Tabs extends zul.Widget {
 	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
-		zWatch.listen({onSize: this, onResponse: this, beforeSize: this});
+		zWatch.listen({onSize: this, onResponse: this, beforeSize: this, _onFontsLoaded: this});
 	}
 
 	/** @internal */
 	override unbind_(skipper?: zk.Skipper, after?: CallableFunction[], keepRod?: boolean): void {
-		zWatch.unlisten({onSize: this, onResponse: this, beforeSize: this});
+		zWatch.unlisten({onSize: this, onResponse: this, beforeSize: this, _onFontsLoaded: this});
+		this._pendingScrollcheck = undefined;
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -136,11 +172,8 @@ export class Tabs extends zul.Widget {
 		if (tabbox.isVertical()) { //vertical
 			var tabsOffsetHeight = tabs.offsetHeight,
 				tabsScrollTop = tabs.scrollTop,
-				childHeight = 0;
-
-			jq(this.$n_('cave')).children().each(function () {
-				childHeight += this.offsetHeight;
-			});
+				childHeight = this._tabsSize(true);
+			this._checkedTabsSize = childHeight;
 
 			if (tabbox._scrolling) { //already in scrolling status
 				var btnsize = this._getArrowSize();
@@ -188,20 +221,16 @@ export class Tabs extends zul.Widget {
 				}
 			}
 		} else if (!tabbox.inAccordionMold()) {
-			var cave = this.$n_('cave'),
-				sel = tabbox.getSelectedTab(),
+			var sel = tabbox.getSelectedTab(),
 				node = tb ? tb.$n() : (sel ? sel.$n() : undefined),
 				nodeOffsetLeft = node ? node.offsetLeft : 0,
 				nodeOffsetWidth = node ? node.offsetWidth : 0,
 				tabsOffsetWidth = tabs.offsetWidth,
 				tabsScrollLeft = this._tabsScrollLeft,
-				childWidth = 0,
+				childWidth = this._tabsSize(false),
 				toolbar = tabbox.toolbar,
 				toolbarWidth = 0;
-
-			jq(cave).children().each(function () {
-				childWidth += this.offsetWidth;
-			});
+			this._checkedTabsSize = childWidth;
 
 			if (toolbar && toolbar.desktop)
 				toolbarWidth = toolbar.$n_().offsetWidth;
@@ -242,6 +271,7 @@ export class Tabs extends zul.Widget {
 						temp = tbx.offsetWidth - toolbarWidth - btnsize;//coz show button then getsize again
 					tabs.style.width = temp > 0 ? temp + 'px' : '';
 					tabbox.$n_('right').style.right = toolbarWidth + 'px';
+					tabsOffsetWidth = tabs.offsetWidth;
 
 					if (way == 'sel') {
 						if (nodeOffsetLeft < tabsScrollLeft) {
@@ -294,6 +324,11 @@ export class Tabs extends zul.Widget {
 			if (!move || !self.desktop) {
 				delete self._doingScroll![to];
 				clearInterval(run);
+				const way = self._pendingScrollcheck;
+				if (way && self.desktop && !Object.keys(self._doingScroll!).length) {
+					self._pendingScrollcheck = undefined;
+					self._scrollcheck(way);
+				}
 				return;
 			} else {
 				//high speed scroll, need break

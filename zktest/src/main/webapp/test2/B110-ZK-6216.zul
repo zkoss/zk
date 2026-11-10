@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6216.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Nov 10 11:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		The tab labels use a web font that this page loads right after the tabboxes have mounted, and the
+		font is wider than the one shown before it. The first tab strip overflows from the start; the
+		second fits until the font loads.
+		After the font has loaded, "Tab Last" must still be selected and fully visible in both: each tab
+		strip is scrolled to its right end, next to the right arrow.
+		Then click the left arrow of the first tabbox, and click "load another font", which loads a font no
+		tab uses: the first tab strip must stay where the arrow left it.
+	</label>
+	<style>
+		.z-tabbox .z-tab-text { font-family: 'ZK6216Font', sans-serif; }
+	</style>
+	<script>
+	zk.afterMount(function () {
+		setTimeout(function () {
+			window.zk6216Before = jq('@tabs').toArray().map(function (n) {
+				return [n.scrollWidth, n.clientWidth];
+			});
+			var face = new FontFace('ZK6216Font',
+				'url(' + zk.ajaxURI('/web/zul/font/inter-latin-variable.woff2', {resource: true}) + ')',
+				{sizeAdjust: '150%'});
+			document.fonts.add(face);
+			face.load().then(function () {
+				window.zk6216Loaded = true;
+			});
+		});
+	});
+	window.zk6216LoadOther = function () {
+		var face = new FontFace('ZK6216Other',
+			'url(' + zk.ajaxURI('/web/zul/font/inter-latin-variable.woff2', {resource: true}) + ')');
+		document.fonts.add(face);
+		face.load().then(function () {
+			window.zk6216OtherLoaded = true;
+		});
+	};
+	</script>
+	<button label="load another font" xmlns:w="client" w:onClick="zk6216LoadOther()"/>
+	<tabbox width="800px">
+		<tabs>
+			<tab label="Tab 1 22222222222222222222"/><tab label="Tab 2 22222222222222222222"/>
+			<tab label="Tab 3 22222222222222222222"/><tab label="Tab 4 22222222222222222222"/>
+			<tab label="Tab 5 22222222222222222222"/><tab label="Tab 6 22222222222222222222"/>
+			<tab label="Tab 7 22222222222222222222"/><tab label="Tab 8 22222222222222222222"/>
+			<tab label="Tab 9 22222222222222222222"/><tab label="Tab 10 2222222222222222222"/>
+			<tab label="Tab 11 2222222222222222222"/><tab label="Tab 12 2222222222222222222"/>
+			<tab label="Tab 13 2222222222222222222"/><tab label="Tab 14 2222222222222222222"/>
+			<tab label="Tab 15 2222222222222222222"/><tab label="Tab 16 2222222222222222222"/>
+			<tab label="Tab 17 2222222222222222222"/><tab label="Tab 18 2222222222222222222"/>
+			<tab label="Tab 19 2222222222222222222"/><tab label="Tab 20 2222222222222222222"/>
+			<tab label="Tab Last" selected="true"/>
+		</tabs>
+	</tabbox>
+	<tabbox width="800px">
+		<tabs>
+			<tab label="Tab 1 2222222"/><tab label="Tab 2 2222222"/><tab label="Tab 3 2222222"/>
+			<tab label="Tab 4 2222222"/><tab label="Tab 5 2222222"/>
+			<tab label="Tab Last" selected="true"/>
+		</tabs>
+	</tabbox>
+</zk>
