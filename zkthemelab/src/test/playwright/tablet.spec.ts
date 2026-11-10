@@ -1263,3 +1263,23 @@ test.describe('tablet-switch-ring', () => {
     expect(await checked('switch2')).toBe(false);
   });
 });
+
+// Guard for zkmax tablet/_selection.css (ZK-6112, B50-2976934): the unlayered 15px checkbox margin must not reach the
+// toggle either. Its 32px box has margin 0 and sits flush with the column edge; the margin made its row 62px, taller
+// than the comfortable row, and indented the box 15px from the controls beside it.
+// Fixture: web/pv/compact-ring-guard.zul (its toggles)
+test.describe('tablet-toggle-row', () => {
+  test('toggle — the box keeps margin 0 and its row the comfortable height', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/pv/compact-ring-guard.zul', { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
+    const m = await page.evaluate(() => {
+      const wrapper = zk.Widget.$('$toggle1').$n();
+      const box = wrapper.querySelector('.z-checkbox-mold');
+      const w = wrapper.getBoundingClientRect(), b = box.getBoundingClientRect();
+      return { rowHeight: w.height, indent: b.x - w.x, margin: getComputedStyle(box).marginTop };
+    });
+    expect(m.margin).toBe('0px');
+    expect(m.indent).toBeCloseTo(0, 0);
+    expect(m.rowHeight).toBeCloseTo(48, 0);
+  });
+});

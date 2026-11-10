@@ -1,6 +1,6 @@
 <?page title="Compact ring guard" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for hit-target.spec.ts (state-layer ring in compact density) and tablet.spec.ts (switch ring): two checkboxes, two radios and two
-     switches, each pair stacked with no spacing. Lives under pv/ so gallery-scan, forced-colors-gallery and
+<!-- Fixture for hit-target.spec.ts (state-layer ring in compact density) and tablet.spec.ts (switch ring, toggle row): two checkboxes, two radios,
+     two switches and two toggles, each pair stacked with no spacing. Lives under pv/ so gallery-scan, forced-colors-gallery and
      font-size-equivalence do not pick it up. -->
 <zk>
 <hlayout style="padding:16px" spacing="48px">
@@ -17,6 +17,10 @@
     <vlayout spacing="0">
         <checkbox id="switch1" mold="switch" label="Switch"/>
         <checkbox id="switch2" mold="switch" label="Switch"/>
+    </vlayout>
+    <vlayout spacing="0">
+        <checkbox id="toggle1" mold="toggle" label="Toggle"/>
+        <checkbox id="toggle2" mold="toggle" label="Toggle"/>
     </vlayout>
 </hlayout>
 </zk>

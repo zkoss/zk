@@ -24,7 +24,7 @@ zk-version: 10.2.1-jakarta
 | c8 | `.z-checkbox-disabled > .z-checkbox-mold` | opacity | `var(--zk-state-disabled-opacity)` |
 | c9 | `.z-checkbox-content` | font-size | `var(--zk-typescale-body-medium-size)` |
 | c10 | `.z-checkbox-mold::before`, `.z-radio input[type="radio"]::before` (state-layer ring) | pointer-events | **not** `none` (inherited): the ring is the touch target and shows the pointer, so a click on it toggles the control (B50-2976934). A disabled wrapper has `pointer-events: none`, so a disabled ring stays dead; do not set `auto`, which would revive it |
-| c11 | `.z-checkbox-mold::before`, `.z-radio input[type="radio"]::before` (state-layer ring) | size | 36×36px; in compact density `min(36px, var(--zk-control-height))` = 32px, so the ring stays inside its wrapper and two stacked controls never overlap (a click at the bottom edge of the upper one toggles the upper one). Tablet `_selection.css` widens the margin and inset to a 44px ring in a 48px row, still inside the row. The tablet rules apply to the checkbox and radio only, not the switch |
+| c11 | `.z-checkbox-mold::before`, `.z-radio input[type="radio"]::before` (state-layer ring) | size | 36×36px; in compact density `min(36px, var(--zk-control-height))` = 32px, so the ring stays inside its wrapper and two stacked controls never overlap (a click at the bottom edge of the upper one toggles the upper one). Tablet `_selection.css` widens the margin and inset to a 44px ring in a 48px row, still inside the row. The tablet rules apply to the checkbox and radio only, not the switch or the toggle |
 
 ### Switch mold (`mold="switch"`) — MD3 values, token-adapted
 
