@@ -62,8 +62,10 @@ ZK 事實(margin subtraction)記錄在 skill:
 
 元件**內部**(panel header 與 body 之間、portallayout 欄與欄之間…)的間距是
 component CSS 的責任,scoped 在該元件的 selector 下 — 例如 portallayout 的
-stacked-panel gutter(`.z-portalchildren-content > .z-panel { margin-bottom }`,
-portallayout 自己的 JS 管 sizing,不經過 css-flex,所以安全)。
+stacked-panel gutter(`.z-portalchildren-content > .z-panel { margin-bottom }`)。
+`vflex` 的 panel 是 CSS flex item,flex 會替每個 item 的 margin 保留空間,所以無標題欄位
+最後一個 panel 的 margin-bottom 要歸零(`.z-panel:last-child`),否則欄位底部會多出一條
+空白;有標題的欄位(frame)則保留它,當作 frame 的底部內距。
 **絕不**用全域 widget selector(裸 `.z-panel`、`.z-window`)加 margin。
 
 ## Layout primitive 沒有預設 padding(wrap, don't pad)

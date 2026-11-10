@@ -113,6 +113,8 @@ export default defineConfig({
       // Interaction guard: an interactive knob must be reachable at its own
       // centre (elementFromPoint), not merely rendered. Catches a sibling
       // overlay swallowing the pointer — invisible to every style-based check.
+      // Also: the buttons of a read-only timebox, spinner and doublespinner, the popup of an empty combobox and the
+      // state-layer ring of a checkbox, radio and switch take a real click.
       // See hit-target.spec.ts.
       name: 'hit-target',
       testMatch: /hit-target\.spec\.ts/,
@@ -276,7 +278,7 @@ export default defineConfig({
     },
     {
       // Text in footer and header cells lines up with its column's data cells (grid groupfoot,
-      // html table). See alignment.spec.ts.
+      // html table); an empty inline-flex field lines up with the text and button beside it. See alignment.spec.ts.
       name: 'alignment',
       testMatch: /[\\/]alignment\.spec\.ts$/,
       use: { ...devices['Desktop Chrome'] },
@@ -307,7 +309,8 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // A size the page sets (an attribute, vflex) wins over the theme's default size (toolbarbutton).
+      // A size the page sets (an attribute, vflex, an anchor) wins over the theme's default size or spacing
+      // (toolbarbutton, portallayout, anchorlayout), and the theme adds no height to an empty grid or listbox body.
       // See explicit-size.spec.ts.
       name: 'explicit-size',
       testMatch: /[\\/]explicit-size\.spec\.ts$/,

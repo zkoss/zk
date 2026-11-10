@@ -14,7 +14,7 @@ A readonly popup control MUST render identical to its editable counterpart. Neve
 
 Applies to **combobox, datebox, bandbox**.
 
-**Excluded: timebox, spinner, doublespinner.** They have no popup to open when readonly, so a de-emphasized readonly look is acceptable — they follow the normal readonly treatment.
+**Timebox, spinner, doublespinner** have no popup, but their up/down buttons stay operable when readonly: ZK ignores the buttons only when the field is disabled, and the Timebox Javadoc says the value of a read-only timebox can be changed by clicking the up or down button. Only typing is blocked. Their buttons keep `pointer-events` and full opacity, as in §1; the field itself follows the normal readonly treatment (outline border, `--zk-color-on-surface-variant` text).
 
 ## 3. Grey is reserved for disabled
 

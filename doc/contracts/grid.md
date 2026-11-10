@@ -26,6 +26,7 @@ zk-version: 10.2.1-jakarta
 | c9 | `.z-row:hover` | background-color | `var(--zk-grid-row-hover-bg)` |
 | c10 | `.z-grid-odd` | background-color | tinted alternate (or not used) |
 | c12 | `.z-grid` | border-radius | `var(--zk-grid-radius)` (card-like) |
+| c13 | `.z-grid-emptybody td` (the empty cell) | padding | `0` — a grid without rows shows no body height of its own (≤ 1px, as IceBlue), and with an `emptyMessage` the body is as tall as the message box; the browser's default `td` padding would add 2px both ways (B36-2805177) |
 
 ## States to evaluate
 - [ ] default rows, header, hover, selected, striped (odd), sortable, card variant, frozen columns

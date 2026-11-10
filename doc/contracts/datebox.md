@@ -22,6 +22,7 @@ longer than ~11 characters is clipped by the default `cols` unless the app raise
 |----|----------|----------|----------|
 | dw1 | `.z-datebox-input` | field-sizing | **not** `content` (default `fixed`) so `size` drives the width |
 | dw2 | `.z-datebox-input` | flex + min-width | `flex: 1 1 auto` (still **grows to fill** an `hflex`/width-forced root) AND a `min-width` date floor (`~6.5em`) keeping a small `cols` a usable target |
+| va1 | `.z-datebox` (root) | vertical-align | `middle` — Safari 18 gives an inline-flex box whose first item is an empty input the input's bottom edge as its baseline, so an empty field sat about 14px off the text line and jumped when typed into; centring the box avoids it (WebKit bug 294558, fixed in Safari 26; B50-3032885, B50-ZK-577). Side effect: text beside the field sits about 1px above the field centre |
 
 **Outcome (M1):** `cols=30` renders **wider** than `cols=8`. Guarded by
 `screenshot.spec.ts › datebox › input width follows cols (no field-sizing: content)` and

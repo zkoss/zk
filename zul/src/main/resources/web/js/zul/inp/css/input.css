@@ -79,7 +79,10 @@
 .z-longbox[readonly],
 .z-passwordbox[readonly] {
     background-color: var(--zk-color-surface-container-low);
-    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
+    /* Hold the border at the 3:1 outline on hover through the token, not a border-color rule: this rule comes after
+       the focus rule and the read-only :hover rule outranks the invalid rules, so a border-color in them drew a
+       focused read-only field with a 2px grey border and turned a hovered invalid one grey. */
+    --zk-input-border-color-hover: var(--zk-color-outline);
     color: var(--zk-color-on-surface-variant);
 }
 
@@ -125,7 +128,6 @@
 .z-doublebox[readonly]:hover,
 .z-longbox[readonly]:hover,
 .z-passwordbox[readonly]:hover {
-    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
     cursor: default;
 }
 

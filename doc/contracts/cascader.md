@@ -69,6 +69,7 @@ The cascader trigger renders as an MD3 outlined input field — 40px tall, `--zk
 | c25 | `.z-cascader-item .z-cascader-icon` (expand icon) | color | `var(--zk-color-on-surface-variant)` | doc/spec/DESIGN.md "Text Colors" |
 | c26 | `.z-cascader-item .z-cascader-icon` (expand icon) | margin-left | `auto` (declared; computed resolves to used px on flex items — verify via stylesheet rule or M7) | mockup cascader.html item-icon block — trailing-anchor in the item's flex row (item text is a bare text node; the icon must carry the push, see skill) |
 | c27 | `.z-cascader:has(.z-cascader-label:not(:empty)) .z-cascader-placeholder` | display | `none` — suppress the stale placeholder div ZK leaves visible at initial render when a selection is pre-set (skill — initial-render display gap). Stylesheet-level only by design: interactive flows write inline `display` styles, which win the cascade and keep full control | guards M8 |
+| va1 | `.z-cascader` (root) | vertical-align | `middle` — with no value and no placeholder text the first flex item is an empty placeholder, which has no baseline, so every browser aligned the box by that item's bottom edge and the empty field sat off the text line; centring the box avoids it (B50-3032885, B50-ZK-577). Side effect: text beside the field sits about 1px above the field centre | `doc/spec/DESIGN.md` form-row alignment |
 
 ## State matrix
 

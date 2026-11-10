@@ -1,0 +1,12 @@
+<?page title="Read-only spin buttons guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for hit-target.spec.ts (read-only up/down buttons): ZK lets the buttons of a read-only timebox, spinner
+     and doublespinner change the value; only typing is blocked. Lives under pv/ so gallery-scan,
+     forced-colors-gallery and font-size-equivalence do not pick it up. -->
+<zk>
+<zscript><![CDATA[java.util.Date noon = new java.util.Date(0, 0, 1, 12, 0, 0);]]></zscript>
+<vlayout style="padding:16px">
+    <timebox id="timebox" readonly="true" format="HH:mm:ss" locale="en_US" value="${noon}"/>
+    <spinner id="spinner" readonly="true" value="1"/>
+    <doublespinner id="doublespinner" readonly="true" value="1.0" step="0.5"/>
+</vlayout>
+</zk>

@@ -173,6 +173,9 @@
     border-radius: var(--zk-combobox-popup-radius);
     box-shadow: var(--zk-elevation-dropdown);
     border: none;
+    /* B30-1879511: a popup with no items has no height of its own, so it would be invisible and a click on its blank
+       could not close the list; the minimum keeps a surface to click. Popups with items are taller anyway. */
+    min-height: var(--zk-spacing-4);
     max-height: 280px;
     overflow: hidden auto;
     box-sizing: border-box;

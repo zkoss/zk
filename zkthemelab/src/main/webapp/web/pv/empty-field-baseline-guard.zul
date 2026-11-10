@@ -1,0 +1,40 @@
+<?page title="Empty field baseline guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for alignment.spec.ts (empty inline-flex fields): each widget empty and filled, in a line with label text and a
+     button. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up. -->
+<zk>
+<zscript><![CDATA[
+    import org.zkoss.zul.*;
+    Date d = new java.text.SimpleDateFormat("yyyy/MM/dd").parse("2026/11/06");
+    Date t = new java.text.SimpleDateFormat("HH:mm").parse("12:30");
+    ListModelList cbEmpty = new ListModelList(new String[]{"Apple", "Banana", "Cherry"}); cbEmpty.setMultiple(true);
+    ListModelList cbFilled = new ListModelList(new String[]{"Apple", "Banana", "Cherry"}); cbFilled.setMultiple(true); cbFilled.addToSelection(cbFilled.get(0));
+    ListModelList sbEmpty = new ListModelList(new String[]{"Apple", "Banana", "Cherry"}); sbEmpty.setMultiple(false);
+    ListModelList sbFilled = new ListModelList(new String[]{"Apple", "Banana", "Cherry"}); sbFilled.setMultiple(false); sbFilled.addToSelection(sbFilled.get(0));
+    DefaultTreeNode leaf = new DefaultTreeNode("Kyoto");
+    DefaultTreeModel casEmpty = new DefaultTreeModel(new DefaultTreeNode("ROOT", java.util.Arrays.asList(new DefaultTreeNode[]{new DefaultTreeNode("Japan", java.util.Arrays.asList(new TreeNode[]{new DefaultTreeNode("Tokyo")}))})));
+    DefaultTreeModel casFilled = new DefaultTreeModel(new DefaultTreeNode("ROOT", java.util.Arrays.asList(new DefaultTreeNode[]{new DefaultTreeNode("Japan", java.util.Arrays.asList(new TreeNode[]{leaf}))})));
+    casFilled.addToSelection(leaf);
+]]></zscript>
+<div style="padding:16px">
+<div sclass="p" id="dateboxEmpty">Empty <datebox format="yyyy/MM/dd"/> <button label="OK"/></div>
+<div sclass="p" id="dateboxFilled">Filled <datebox format="yyyy/MM/dd" value="${d}"/> <button label="OK"/></div>
+<div sclass="p" id="timeboxEmpty">Empty <timebox/> <button label="OK"/></div>
+<div sclass="p" id="timeboxFilled">Filled <timebox value="${t}"/> <button label="OK"/></div>
+<div sclass="p" id="spinnerEmpty">Empty <spinner/> <button label="OK"/></div>
+<div sclass="p" id="spinnerFilled">Filled <spinner value="3"/> <button label="OK"/></div>
+<div sclass="p" id="doublespinnerEmpty">Empty <doublespinner/> <button label="OK"/></div>
+<div sclass="p" id="doublespinnerFilled">Filled <doublespinner value="3.5"/> <button label="OK"/></div>
+<div sclass="p" id="bandboxEmpty">Empty <bandbox/> <button label="OK"/></div>
+<div sclass="p" id="bandboxFilled">Filled <bandbox value="abc"/> <button label="OK"/></div>
+<div sclass="p" id="timepickerEmpty">Empty <timepicker/> <button label="OK"/></div>
+<div sclass="p" id="timepickerFilled">Filled <timepicker value="${t}"/> <button label="OK"/></div>
+<div sclass="p" id="chosenboxEmpty">Empty <chosenbox model="${cbEmpty}"/> <button label="OK"/></div>
+<div sclass="p" id="chosenboxFilled">Filled <chosenbox model="${cbFilled}"/> <button label="OK"/></div>
+<div sclass="p" id="cascaderEmpty">Empty <cascader model="${casEmpty}" width="200px"/> <button label="OK"/></div>
+<div sclass="p" id="cascaderFilled">Filled <cascader model="${casFilled}" width="200px"/> <button label="OK"/></div>
+<div sclass="p" id="inputgroupEmpty">Empty <inputgroup><textbox/></inputgroup> <button label="OK"/></div>
+<div sclass="p" id="inputgroupFilled">Filled <inputgroup><textbox value="abc"/></inputgroup> <button label="OK"/></div>
+<div sclass="p" id="searchboxEmpty">Empty <searchbox model="${sbEmpty}"/> <button label="OK"/></div>
+<div sclass="p" id="searchboxFilled">Filled <searchbox model="${sbFilled}"/> <button label="OK"/></div>
+</div>
+</zk>

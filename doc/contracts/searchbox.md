@@ -14,6 +14,7 @@ zk-version: 10.2.1-jakarta
 | c2 | `.z-searchbox` | border-radius | `var(--zk-searchbox-radius)` |
 | c3 | `.z-searchbox-search` | font-size | `var(--zk-typescale-body-medium-size)` (inherited from `.z-searchbox-popup`) |
 | c4 | `.z-searchbox.z-searchbox-disabled` | opacity | `var(--zk-state-disabled-opacity)` |
+| va1 | `.z-searchbox` (root) | vertical-align | `middle` — with no value and no placeholder text the first flex item is an empty placeholder, which has no baseline, so every browser aligned the box by that item's bottom edge and the empty field sat off the text line; centring the box avoids it (B50-3032885, B50-ZK-577). Side effect: text beside the field sits about 1px above the field centre |
 
 ### Selection (list-row family)
 The searchbox dropdown is a keyboard-navigable list of options — semantically

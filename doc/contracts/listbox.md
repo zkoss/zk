@@ -12,7 +12,7 @@ zk-version: 10.2.1-jakarta
 - `doc/spec/DESIGN.md` sections: "Surface Palette", "Text Colors", "Typography", "Density", "Border Rules"
 
 ## Expected values
-Mirror grid expected values c1–c8, c10 and c12 with selectors → `.z-listitem`, `.z-listcell`, `.z-listheader`. Grid c9 (row hover) is not mirrored: the listbox row hover on `.z-listitem:hover` is `var(--zk-listbox-row-hover-bg)`.
+Mirror grid expected values c1–c8, c10, c12 and c13 with selectors → `.z-listitem`, `.z-listcell`, `.z-listheader`, `.z-listbox-emptybody td`. Grid c9 (row hover) is not mirrored: the listbox row hover on `.z-listitem:hover` is `var(--zk-listbox-row-hover-bg)`.
 
 ### Selection (list-row family)
 Listbox row is the LIST-ROW selection family per

@@ -16,6 +16,10 @@
 .z-inputgroup {
     display: inline-flex;
     align-items: stretch;
+    /* Safari 18 gives an inline-flex box whose first item is an empty input the input's bottom edge as its baseline, so
+       an empty field sat about 14px off the text line and jumped when typed into. Centring the box avoids it; Safari 26
+       fixed the bug: https://bugs.webkit.org/show_bug.cgi?id=294558 */
+    vertical-align: middle;
 }
 
 /* Remove border-radius from all direct children — override per first/last below */

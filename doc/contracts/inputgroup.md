@@ -22,6 +22,7 @@ preview: ${PREVIEW_URL}/inputgroup.zul
 ## Expected values (T2 — `doc/spec/DESIGN.md` tokens only)
 - Border / radius / focus state should match other inputs (combobox/textbox).
 - Adornment text uses on-surface-variant colour.
+- `.z-inputgroup` (root) `vertical-align`: `middle`. Safari 18 gives an inline-flex box whose first item is an empty input the input's bottom edge as its baseline, so an empty group sat about 14px off the text line and jumped when typed into; centring the box avoids it (WebKit bug 294558, fixed in Safari 26; B50-3032885, B50-ZK-577). Side effect: text beside the group sits about 1px above the group centre.
 
 ## States to evaluate
 - [ ] default, hover, focus, disabled, sibling-coherence (compare to textbox)

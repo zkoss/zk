@@ -75,11 +75,14 @@
 .z-checkbox-mold::before {
     content: '';
     position: absolute;
-    inset: -11px;   /* expands to 40×40 touch area */
+    /* 36×36 ring around the 14px padding box; in compact density it shrinks to the control height so it stays inside
+       the wrapper and never overlaps the control above or below (MD3: the state layer follows density). */
+    inset: calc((14px - min(36px, var(--zk-control-height))) / 2);
     border-radius: 50%;
     background-color: var(--zk-color-on-surface);
     opacity: 0;
-    pointer-events: none;
+    /* B50-2976934: no pointer-events override. The ring is the touch target, so it takes the click like the box does
+       (Checkbox.ts passes a click on the mold on to the input), and it inherits `none` from a disabled wrapper. */
     transition: opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
 }
 
@@ -278,11 +281,12 @@
 .z-radio input[type="radio"]::before {
     content: '';
     position: absolute;
-    inset: -10px;   /* expands 20px element to 40px state-layer */
+    /* 36×36 ring around the 16px padding box; shrinks with the control height as the checkbox ring does. */
+    inset: calc((16px - min(36px, var(--zk-control-height))) / 2);
     border-radius: 50%;
     background-color: var(--zk-color-on-surface);
     opacity: 0;
-    pointer-events: none;
+    /* B50-2976934: no pointer-events override, as for the checkbox ring above. */
     transition: opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard);
 }
 
@@ -439,19 +443,20 @@
         border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
-/* State layer: 40px circle centred on the thumb (padding-box x = 14 off), follows its travel */
+/* State layer: a circle centred on the thumb (padding-box x = 14 off), follows its travel. 40px, or the control height
+   in compact density so it stays inside the wrapper. */
 .z-checkbox-switch > .z-checkbox-mold::before {
     content: '';
     position: absolute;
     top: 50%;
-    left: -6px;
+    left: calc(14px - min(40px, var(--zk-control-height)) / 2);
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: min(40px, var(--zk-control-height));
+    height: min(40px, var(--zk-control-height));
     border-radius: 50%;
     background-color: var(--zk-color-on-surface);
     opacity: 0;
-    pointer-events: none;
+    /* B50-2976934: no pointer-events override, as for the checkbox ring above. */
     transition:
         opacity var(--zk-motion-duration-short2) var(--zk-motion-easing-standard),
         left var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
@@ -490,7 +495,7 @@
 }
 
 .z-checkbox-switch-on > .z-checkbox-mold::before {
-    left: calc(100% - 34px);
+    left: calc(100% - 14px - min(40px, var(--zk-control-height)) / 2);
     background-color: var(--zk-color-primary);
 }
 

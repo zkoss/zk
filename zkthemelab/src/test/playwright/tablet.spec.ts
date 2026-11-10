@@ -1213,3 +1213,120 @@ test.describe('menubar on a mobile UA', () => {
     expect(m.scrollLeft, 'scrollLeft must stick, i.e. the bar scrolls').toBeGreaterThan(0);
   });
 });
+
+// Guard for zkmax tablet/_selection.css (ZK-6112, B50-2976934): the checkbox rules of the tablet sheet (15px margin,
+// inset -15px) are unlayered and must not reach the switch, whose mold is the 52x32 track. Reaching it made the row
+// 62px tall and moved the state-layer ring off the thumb and out of the row, where, now that the ring takes the click,
+// it toggled the switch above or below.
+// Fixture: web/pv/compact-ring-guard.zul (its switches; two stacked with no spacing)
+declare const zk: any;
+
+test.describe('tablet-switch-ring', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/pv/compact-ring-guard.zul', { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
+  });
+
+  // Geometry of the switch's ring (a 40px circle on the thumb; an off thumb's centre is 14px into the padding box).
+  const ringBox = (page: Page, id: string) => page.evaluate((id) => {
+    const wrapper = zk.Widget.$('$' + id).$n();
+    const track = wrapper.querySelector('.z-checkbox-mold');
+    const ring = getComputedStyle(track, '::before');
+    const trackRect = track.getBoundingClientRect();
+    const border = parseFloat(getComputedStyle(track).borderLeftWidth);
+    const size = parseFloat(ring.width);
+    return {
+      wrapper: wrapper.getBoundingClientRect().toJSON(),
+      centreX: trackRect.x + border + parseFloat(ring.left) + size / 2,
+      top: trackRect.y + border + parseFloat(ring.top) - size / 2,
+      size,
+      thumbCentreX: trackRect.x + border + 14,
+    };
+  }, id);
+
+  test('switch — the ring is centred on the thumb and stays inside its row', { tag: '@ZK-6112' }, async ({ page }) => {
+    const ring = await ringBox(page, 'switch1');
+    expect(ring.centreX).toBeCloseTo(ring.thumbCentreX, 0);
+    expect(ring.top).toBeGreaterThanOrEqual(ring.wrapper.y);
+    expect(ring.top + ring.size).toBeLessThanOrEqual(ring.wrapper.y + ring.wrapper.height);
+  });
+
+  test('switch — a click at the bottom edge of the upper row does not toggle the lower switch', { tag: '@ZK-6112' }, async ({ page }) => {
+    const ring = await ringBox(page, 'switch1');
+    const checked = (id: string) => page.evaluate((id) => zk.Widget.$('$' + id).isChecked(), id);
+    await page.mouse.click(ring.centreX, ring.wrapper.y + ring.wrapper.height - 1);
+    await page.waitForTimeout(300);
+    expect(await checked('switch2')).toBe(false);
+    // the bottom edge of the ring itself still toggles the upper switch
+    await page.mouse.click(ring.centreX, ring.top + ring.size - 1);
+    await expect.poll(() => checked('switch1')).toBe(true);
+    expect(await checked('switch2')).toBe(false);
+  });
+});
+
+// Guard for zkmax tablet/_selection.css (ZK-6112, B50-2976934): the unlayered 15px checkbox margin must not reach the
+// toggle either. Its 32px box has margin 0 and sits flush with the column edge; the margin made its row 62px, taller
+// than the comfortable row, and indented the box 15px from the controls beside it.
+// Fixture: web/pv/compact-ring-guard.zul (its toggles)
+test.describe('tablet-toggle-row', () => {
+  test('toggle — the box keeps margin 0 and its row the comfortable height', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/pv/compact-ring-guard.zul', { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
+    const m = await page.evaluate(() => {
+      const wrapper = zk.Widget.$('$toggle1').$n();
+      const box = wrapper.querySelector('.z-checkbox-mold');
+      const w = wrapper.getBoundingClientRect(), b = box.getBoundingClientRect();
+      return { rowHeight: w.height, indent: b.x - w.x, margin: getComputedStyle(box).marginTop };
+    });
+    expect(m.margin).toBe('0px');
+    expect(m.indent).toBeCloseTo(0, 0);
+    expect(m.rowHeight).toBeCloseTo(48, 0);
+  });
+});
+
+// Guard for zkmax tablet/_inputs.css (ZK-6112): every Timebox is read-only on a tablet, and the unlayered read-only
+// restore must not set a border colour, which would beat the focus and error borders of every Timebox there.
+// Fixture: web/pv/input-invalid-guard.zul (its read-only timebox)
+test.describe('tablet-readonly-timebox', () => {
+  test('timebox — the read-only field draws the primary border on focus and the error border when invalid', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important}' });
+    const m = await page.evaluate(() => {
+      const probe = (token: string) => {
+        const s = document.createElement('span');
+        s.style.color = `var(${token})`;
+        document.body.appendChild(s);
+        const c = getComputedStyle(s).color;
+        s.remove();
+        return c;
+      };
+      const wgt = zk.Widget.$('$roTime');
+      const box = wgt.$n();
+      const input = box.querySelector('input');
+      input.focus();
+      const focus = getComputedStyle(box).borderTopColor;
+      input.blur();
+      wgt.setErrorMessage('Wrong');
+      return { focus, invalid: getComputedStyle(box).borderTopColor, primary: probe('--zk-color-primary'), error: probe('--zk-color-error') };
+    });
+    expect(m.focus).toBe(m.primary);
+    expect(m.invalid).toBe(m.error);
+  });
+
+  // The tablet restores the active surface on every read-only Timebox, but a disabled or inplace one is read-only
+  // on a tablet too, and must keep its desktop background rather than turn white.
+  test('timebox — the disabled and inplace fields keep their desktop background', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
+    const m = await page.evaluate(() => {
+      const probe = document.createElement('span');
+      probe.style.backgroundColor = 'var(--zk-color-surface-container-low)';
+      document.body.appendChild(probe);
+      const containerLow = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      const bg = (id: string) => getComputedStyle(zk.Widget.$(`$${id}`).$n()).backgroundColor;
+      return { disabled: bg('disTime'), inplace: bg('inpTime'), containerLow };
+    });
+    expect(m.disabled).toBe(m.containerLow);
+    expect(m.inplace).toBe('rgba(0, 0, 0, 0)');
+  });
+});

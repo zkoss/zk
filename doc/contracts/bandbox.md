@@ -25,6 +25,7 @@ ring reads as a different halo and is clipped by ancestor `overflow: hidden`). S
 | id | selector | property | expected |
 |----|----------|----------|----------|
 | op1 | `.z-bandbox.z-bandbox-open` | box-shadow | `inset 0 0 0 1px var(--zk-bandbox-border-color-focus)` (inset — same ring as `:focus-within`, NOT outset) |
+| va1 | `.z-bandbox` (root) | vertical-align | `middle` — Safari 18 gives an inline-flex box whose first item is an empty input the input's bottom edge as its baseline, so an empty field sat about 14px off the text line and jumped when typed into; centring the box avoids it (WebKit bug 294558, fixed in Safari 26; B50-3032885, B50-ZK-577). Side effect: text beside the field sits about 1px above the field centre |
 
 ## States to evaluate
 - [ ] default, hover, focus, disabled, readonly, invalid, open
