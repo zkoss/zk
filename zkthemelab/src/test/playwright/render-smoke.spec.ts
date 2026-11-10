@@ -176,3 +176,21 @@ test('goldenlayout loads its CSS without a failed request', async ({ page }) => 
     .evaluate((el) => getComputedStyle(el).getPropertyValue('--_gl-icon-x').trim());
   expect(icon).not.toBe('');
 });
+
+// Guard for za11y's Marble sheet (ZK-6112). A11yThemeURIHandler adds za11y/css/marble.css.dsp as its
+// own <link>, outside zk.wcs, so WcsExtendlet never encodes a url(~./...) in it and the browser
+// requests .../za11y/css/~./... (404). The Biglistbox scroll button icons there use relative URLs.
+
+test('biglistbox loads the za11y scroll button icons without a failed request', async ({ page }) => {
+  const failed: string[] = [];
+  page.on('response', (r) => { if (r.status() >= 400) failed.push(`${r.status()} ${r.url()}`); });
+  const resp = await page.goto('/biglistbox.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  const masks = await page.locator('.z-biglistbox-wscroll-vertical').first().evaluate((bar) =>
+    ['home', 'up', 'down', 'end'].map((b) =>
+      getComputedStyle(bar.querySelector(`.z-biglistbox-wscroll-${b}`)!, '::before').maskImage));
+  for (const mask of masks)
+    expect(mask).toMatch(/\/zul\/img\/marble\/[\w-]+\.svg/);
+  expect(masks.join(' ')).not.toContain('~./');
+  expect(failed).toEqual([]);
+});
