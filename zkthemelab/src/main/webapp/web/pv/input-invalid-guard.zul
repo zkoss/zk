@@ -1,8 +1,8 @@
 <?page title="Real invalid combobox and bandbox" contentType="text/html;charset=UTF-8"?>
 <!-- Fixture for input-invalid.spec.ts and forced-colors.spec.ts: a combobox and a bandbox with a
      real constraint, the same inputs inside an inputgroup and as inplace inputs, a plain textbox,
-     a read-only timebox, spinner, doublespinner, textbox and intbox.
-     The spec types, deletes and blurs, so ZK itself puts z-*-invalid on the <input>, which the
+     a read-only timebox, spinner, doublespinner, textbox and intbox, and a disabled and an inplace
+     timebox. The spec types, deletes and blurs, so ZK itself puts z-*-invalid on the <input>, which the
      sclass-based preview pages cannot reproduce. Lives under pv/ so gallery-scan and
      forced-colors-gallery do not pick it up as a page. -->
 <zk>
@@ -32,6 +32,10 @@
         <doublespinner id="roDoublespinner" readonly="true" value="1.5"/>
         <textbox id="roText" readonly="true" value="abc"/>
         <intbox id="roInt" readonly="true" value="1"/>
+    </div>
+    <div sclass="iig-timebox-states">
+        <timebox id="disTime" disabled="true"/>
+        <timebox id="inpTime" inplace="true"/>
     </div>
 </vlayout>
 </zk>

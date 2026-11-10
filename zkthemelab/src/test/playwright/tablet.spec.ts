@@ -1312,4 +1312,21 @@ test.describe('tablet-readonly-timebox', () => {
     expect(m.focus).toBe(m.primary);
     expect(m.invalid).toBe(m.error);
   });
+
+  // The tablet restores the active surface on every read-only Timebox, but a disabled or inplace one is read-only
+  // on a tablet too, and must keep its desktop background rather than turn white.
+  test('timebox — the disabled and inplace fields keep their desktop background', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
+    const m = await page.evaluate(() => {
+      const probe = document.createElement('span');
+      probe.style.backgroundColor = 'var(--zk-color-surface-container-low)';
+      document.body.appendChild(probe);
+      const containerLow = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      const bg = (id: string) => getComputedStyle(zk.Widget.$(`$${id}`).$n()).backgroundColor;
+      return { disabled: bg('disTime'), inplace: bg('inpTime'), containerLow };
+    });
+    expect(m.disabled).toBe(m.containerLow);
+    expect(m.inplace).toBe('rgba(0, 0, 0, 0)');
+  });
 });
