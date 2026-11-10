@@ -229,6 +229,20 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // The default-mold pagings on paging.zul show First / Last and the detailed one its detail. See paging-preview.spec.ts.
+      name: 'paging-preview',
+      testMatch: /paging-preview\.spec\.ts/,
+      grepInvert: /@tablet/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // The @tablet test of paging-preview.spec.ts: the tablet paging buttons are larger.
+      name: 'paging-preview-tablet',
+      testMatch: /paging-preview\.spec\.ts/,
+      grep: /@tablet/,
+      use: TABLET_USE,
+    },
+    {
       // A real constraint failure styles the combobox and bandbox (combobox.css, bandbox.css). See input-invalid.spec.ts.
       name: 'input-invalid',
       testMatch: /input-invalid\.spec\.ts/,

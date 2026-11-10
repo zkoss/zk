@@ -9,7 +9,7 @@
         <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Default mold (detailed)</h:span></h:div>
-                <paging width="400px" totalSize="300" pageSize="5" activePage="15" detailed="true"/>
+                <paging width="480px" totalSize="300" pageSize="5" activePage="15" detailed="true"/>
             </h:div>
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">OS mold (detailed)</h:span></h:div>
