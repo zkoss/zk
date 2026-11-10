@@ -86,6 +86,7 @@ ZK 11.0.0
   ZK-6238: Stateless Grid/Listbox: autopaging ignores the page size the client requests, so the last row overflows the body
   ZK-6253: remove the input/button corner seam and refit the spin arrows without --zk-spinner-button-icon-transform
   ZK-6158: Patching is needed to build OSGi jar iDempiere
+  ZK-6216: tabbox: selected tab is left partly scrolled out of view when a web font finishes loading after mount
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on

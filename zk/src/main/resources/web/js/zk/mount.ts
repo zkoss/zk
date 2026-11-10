@@ -940,6 +940,22 @@ jq(function () {
 		jq(window).resize(_sizeHandler);
 	}
 
+	var _fontTimer: ReturnType<typeof setTimeout> | undefined;
+	/** @internal */
+	function _fontsLoaded(): void {
+		if (zk.mounting || zk.loading || zk.animating()) {
+			_fontTimer = setTimeout(_fontsLoaded, 10);
+			return;
+		}
+		_fontTimer = undefined;
+		if (zk.Desktop._dt)
+			zWatch.fire('_onFontsLoaded', zk.Desktop._dt);
+	}
+	document.fonts?.addEventListener('loadingdone', function () {
+		clearTimeout(_fontTimer);
+		_fontTimer = setTimeout(_fontsLoaded, 50);
+	});
+
 	jq(window).scroll(function () {
 		zWatch.fire('onScroll', zk.Desktop._dt!); //notify all
 	}).on('unload', function () {

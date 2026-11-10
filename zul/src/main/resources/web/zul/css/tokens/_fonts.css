@@ -26,7 +26,7 @@
 }
 
 /* Metric-matched fallback for Inter. ZK measures a widget once when it mounts (a sizedByContent
-   column, the Tabs scroll width) and does not measure again when a web font arrives, so text
+   column) and does not measure again when a web font arrives, so text
    laid out in the fallback face and then redrawn in Inter would overflow what was measured: a
    sizedByContent cell is cut by an ellipsis whenever Inter takes longer than ZK's first
    measurement (a 150 ms font delay is enough; reproduced with a one-listbox page). This face
