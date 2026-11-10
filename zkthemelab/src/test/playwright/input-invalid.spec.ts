@@ -213,35 +213,46 @@ for (const widget of Object.keys(INPLACE_BORDERS)) {
   });
 }
 
-// A read-only timebox keeps the 3:1 outline at rest and on hover, but its read-only rule must not hide the focus or
-// error border: it comes after those rules with the same specificity, so a border-color in it kept the field grey.
+// A read-only field keeps the 3:1 outline at rest and on hover, but its read-only rules must not hide the focus or
+// error border: they win over those rules on order or specificity, so a border-color in them kept the field grey.
 // Read-only blocks typing, so the error is set the way Clients.wrongValue does it, through setErrorMessage.
-test('a read-only timebox draws the primary border on focus and the error border when invalid', { tag: '@ZK-6112' }, async ({ page }) => {
-  const box = '.iig-readonly-timebox .z-timebox';
-  const input = page.locator(`${box} .z-timebox-input`);
-  const resolve = (token: string) => page.evaluate(token => {
-    const probe = document.createElement('span');
-    probe.style.color = `var(${token})`;
-    document.body.appendChild(probe);
-    const resolved = getComputedStyle(probe).color;
-    probe.remove();
-    return resolved;
-  }, token);
-  const outline = await resolve('--zk-color-outline');
+// The composite fields draw the border on the wrapper; the text fields are the <input> itself.
+const READONLY_FIELDS = [
+  { widget: 'timebox', id: 'roTime', composite: true },
+  { widget: 'spinner', id: 'roSpinner', composite: true },
+  { widget: 'doublespinner', id: 'roDoublespinner', composite: true },
+  { widget: 'textbox', id: 'roText', composite: false },
+  { widget: 'intbox', id: 'roInt', composite: false },
+];
 
-  await page.mouse.move(0, 0);
-  expect(await topBorderColor(page, box), 'rest').toBe(outline);
-  await page.locator(box).hover();
-  expect(await topBorderColor(page, box), 'hover').toBe(outline);
-  await input.focus();
-  expect(await topBorderColor(page, box), 'focus').toBe(await resolve('--zk-color-primary'));
-  await input.blur();
+for (const { widget, id, composite } of READONLY_FIELDS) {
+  test(`a read-only ${widget} draws the primary border on focus and the error border when invalid`, { tag: '@ZK-6112' }, async ({ page }) => {
+    const box = `.iig-readonly .z-${widget}`;
+    const input = page.locator(composite ? `${box} .z-${widget}-input` : box);
+    const resolve = (token: string) => page.evaluate(token => {
+      const probe = document.createElement('span');
+      probe.style.color = `var(${token})`;
+      document.body.appendChild(probe);
+      const resolved = getComputedStyle(probe).color;
+      probe.remove();
+      return resolved;
+    }, token);
+    const outline = await resolve('--zk-color-outline');
 
-  await page.evaluate(() => zk.Widget.$('$roTime').setErrorMessage('Wrong'));
-  await expect(input).toHaveClass(/z-timebox-invalid/);
-  await page.mouse.move(0, 0);
-  const error = await errorColor(page);
-  expect(await topBorderColor(page, box), 'invalid at rest').toBe(error);
-  await page.locator(box).hover();
-  expect(await topBorderColor(page, box), 'invalid on hover').toBe(error);
-});
+    await page.mouse.move(0, 0);
+    expect(await topBorderColor(page, box), 'rest').toBe(outline);
+    await page.locator(box).hover();
+    expect(await topBorderColor(page, box), 'hover').toBe(outline);
+    await input.focus();
+    expect(await topBorderColor(page, box), 'focus').toBe(await resolve('--zk-color-primary'));
+    await input.blur();
+
+    await page.evaluate(id => zk.Widget.$(`$${id}`).setErrorMessage('Wrong'), id);
+    await expect(input).toHaveClass(new RegExp(`z-${widget}-invalid`));
+    await page.mouse.move(0, 0);
+    const error = await errorColor(page);
+    expect(await topBorderColor(page, box), 'invalid at rest').toBe(error);
+    await page.locator(box).hover();
+    expect(await topBorderColor(page, box), 'invalid on hover').toBe(error);
+  });
+}
