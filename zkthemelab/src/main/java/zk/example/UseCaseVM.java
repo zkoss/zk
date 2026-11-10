@@ -35,7 +35,7 @@ public class UseCaseVM {
             PAGE_TO_NAV.put(p, "Inputs");
         }
         for (String p : new String[]{"grid", "grid-header", "grid-grouping", "grid-livegrouping",
-                "grid-detail", "grid-paging", "listbox", "listbox-header", "listbox-grouping",
+                "grid-detail", "grid-paging", "listbox", "listbox-header", "listbox-grouping", "listbox-paging",
                 "tree", "tree-header", "paging", "biglistbox", "organigram", "badge", "chip"}) {
             PAGE_TO_NAV.put(p, "Data");
         }

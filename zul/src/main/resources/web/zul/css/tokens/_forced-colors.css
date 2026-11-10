@@ -387,17 +387,10 @@
         background-color: CanvasText;
     }
 
-    /* (2e-cont) Listbox paging-bottom paints the glyph mask on the icon element itself, so
-       (2d)'s ::before path leaves its background at the translucent theme value. */
-    .z-listbox-paging-bottom .z-paging-icon {
-        background-color: CanvasText;
-    }
-
     /* (2e-disabled) A disabled paging button keeps its CanvasText glyph from (2d)/(2e), so it
        reads as enabled. GrayText matches the label colour the component CSS already gives it.
        Listed after (2d)/(2e) at equal or higher specificity so it wins. */
     .z-paging-button[disabled] [class*="z-icon-"]::before,
-    .z-listbox-paging-bottom .z-paging-button[disabled] .z-paging-icon,
     .z-paging-os ul > li.z-paging-navigate .z-paging-noborder[disabled]::after {
         background-color: GrayText;
     }

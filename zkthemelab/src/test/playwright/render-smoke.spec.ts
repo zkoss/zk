@@ -82,6 +82,7 @@ const PAGES = [
   '/linelayout.zul',
   '/listbox-grouping.zul',
   '/listbox-header.zul',
+  '/listbox-paging.zul',
   '/listbox.zul',
   '/loading.zul',
   '/loadingbar.zul',

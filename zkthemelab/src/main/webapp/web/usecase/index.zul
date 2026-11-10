@@ -81,6 +81,7 @@
                     <navitem label="Listbox"                selected="@load(vm.currentPage eq '~./listbox.zul')" onClick="@command('navigate', page='~./listbox.zul')" />
                     <navitem label="Listbox (Grouping)"     selected="@load(vm.currentPage eq '~./listbox-grouping.zul')" onClick="@command('navigate', page='~./listbox-grouping.zul')" />
                     <navitem label="Listbox (Header)"       selected="@load(vm.currentPage eq '~./listbox-header.zul')" onClick="@command('navigate', page='~./listbox-header.zul')" />
+                    <navitem label="Listbox (Paging)"       selected="@load(vm.currentPage eq '~./listbox-paging.zul')" onClick="@command('navigate', page='~./listbox-paging.zul')" />
                     <navitem label="Organigram"             selected="@load(vm.currentPage eq '~./organigram.zul')" onClick="@command('navigate', page='~./organigram.zul')" />
                     <navitem label="Paging"                 selected="@load(vm.currentPage eq '~./paging.zul')" onClick="@command('navigate', page='~./paging.zul')" />
                     <navitem label="Skeleton"               selected="@load(vm.currentPage eq '~./skeleton.zul')" onClick="@command('navigate', page='~./skeleton.zul')" />

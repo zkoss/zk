@@ -774,120 +774,15 @@
 
 
 /* ─── Built-in paging (listbox mold="paging") ──────────────────────────── */
-.z-listbox-paging-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 var(--zk-spacing-4);
-    min-height: var(--zk-data-row-min-height);
-    border-top: 1px solid var(--zk-color-outline-variant);
-    font-family: var(--zk-typescale-font-family);
-    font-size: var(--zk-typescale-body-small-size);
-    color: var(--zk-color-on-surface-variant);
+/* The divider is drawn on the bar, as grid.css and tree.css do, so a hidden bar (a single page) leaves
+   no band. The wrappers stay plain blocks: Paging.onSize measures the bar's own width to decide whether
+   to show First/Last and the detail (ZK-3784), so the bar must fill the Listbox's width. */
+.z-listbox-paging-top .z-paging {
+    border-bottom: 1px solid var(--zk-color-outline-variant);
 }
 
 .z-listbox-paging-bottom .z-paging {
-    display: flex;
-    align-items: center;
-}
-
-.z-listbox-paging-bottom .z-paging ul {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: var(--zk-spacing-1);
-}
-
-.z-listbox-paging-bottom .z-paging ul li {
-    display: flex;
-    align-items: center;
-}
-
-/* Prev / Next icon buttons */
-.z-listbox-paging-bottom .z-paging-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--zk-paging-control-size);
-    height: var(--zk-paging-control-size);
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    border-radius: var(--zk-shape-corner-full);
-    color: var(--zk-color-on-surface-variant);
-    transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
-}
-
-.z-listbox-paging-bottom .z-paging-button:not(:disabled):hover {
-    background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, transparent);
-}
-
-.z-listbox-paging-bottom .z-paging-button:disabled,
-.z-listbox-paging-bottom .z-paging-button[disabled] {
-    opacity: 0.38;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-/* Paging navigation icon glyphs */
-.z-listbox-paging-bottom .z-paging-icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-color: currentColor;
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    vertical-align: middle;
-}
-
-.z-listbox-paging-bottom .z-icon-angle-left {
-    -webkit-mask-image: url(~./zul/img/marble/listbox-prev.svg);
-    mask-image: url(~./zul/img/marble/listbox-prev.svg);
-}
-
-.z-listbox-paging-bottom .z-icon-angle-right {
-    -webkit-mask-image: url(~./zul/img/marble/listbox-next.svg);
-    mask-image: url(~./zul/img/marble/listbox-next.svg);
-}
-
-.z-listbox-paging-bottom .z-icon-angle-double-left {
-    -webkit-mask-image: url(~./zul/img/marble/listbox-first.svg);
-    mask-image: url(~./zul/img/marble/listbox-first.svg);
-}
-
-.z-listbox-paging-bottom .z-icon-angle-double-right {
-    -webkit-mask-image: url(~./zul/img/marble/listbox-last.svg);
-    mask-image: url(~./zul/img/marble/listbox-last.svg);
-}
-
-/* "1 / 2" page info */
-.z-listbox-paging-bottom .z-paging-input {
-    width: 32px;
-    height: 28px;
-    border: 1px solid var(--zk-color-outline); /* an editable field: its border identifies it (WCAG 1.4.11) */
-    border-radius: var(--zk-shape-corner-extra-small);
-    text-align: center;
-    font-family: var(--zk-typescale-font-family);
-    font-size: var(--zk-typescale-body-small-size);
-    color: var(--zk-color-on-surface);
-    background: var(--zk-color-surface);
-    padding: 0 var(--zk-spacing-1);
-    box-sizing: border-box;
-    outline: none;
-}
-
-.z-listbox-paging-bottom .z-paging-text {
-    color: var(--zk-color-on-surface-variant);
-    font-size: var(--zk-typescale-body-small-size);
-    white-space: nowrap;
-    padding: 0 var(--zk-spacing-1);
+    border-top: 1px solid var(--zk-color-outline-variant);
 }
 
 /* ─── Odd row stripe via parent sclass (legacy fallback) ─────────────────── */

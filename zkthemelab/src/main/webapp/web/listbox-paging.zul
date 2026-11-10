@@ -1,0 +1,188 @@
+<?page title="Listbox Paging" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Listbox Paging</h:span></h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Paging Position and Mold</h:span></h:div>
+        <h:div class="z-py-3">
+            <div sclass="z-hstack z-mb-3">
+                Paging position:
+                <radiogroup onCheck="listbox.pagingPosition = self.selectedItem.label;">
+                    <radio label="top" />
+                    <radio label="bottom" checked="true" />
+                    <radio label="both" />
+                </radiogroup>
+                <button label="Change Paging Mold">
+                    <attribute name="onClick">
+                    listbox.pagingChild.mold = "os".equals(listbox.pagingChild.mold) ? "default" : "os";
+                    </attribute>
+                </button>
+                <button label="Change Paging Disabled">
+                    <attribute name="onClick">
+                    listbox.pagingDisabled = !listbox.pagingDisabled;
+                    </attribute>
+                </button>
+            </div>
+            <listbox id="listbox" mold="paging" pageSize="3">
+                <listhead>
+                    <listheader label="Index"/>
+                    <listheader label="Head 1"/>
+                    <listheader label="Head 2" align="center"/>
+                    <listheader label="Head 3" align="right"/>
+                </listhead>
+                <listitem>
+                    <listcell label="1"/>
+                    <listcell><intbox/></listcell>
+                    <listcell><datebox/></listcell>
+                    <listcell><textbox rows="3"/></listcell>
+                </listitem>
+                <listitem>
+                    <listcell label="2"/>
+                    <listcell label="A11"/>
+                    <listcell label="A12"/>
+                    <listcell label="A13"/>
+                </listitem>
+                <listitem>
+                    <listcell label="3"/>
+                    <listcell><checkbox checked="true" label="Option 1"/></listcell>
+                    <listcell><checkbox label="Option 2"/></listcell>
+                    <listcell>
+                        <radiogroup>
+                            <radio label="Apple"/>
+                            <radio label="Orange" checked="true"/>
+                            <radio label="Lemon"/>
+                        </radiogroup>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell label="4"/>
+                    <listcell><checkbox checked="true" label="Option 1"/></listcell>
+                    <listcell><checkbox label="Option 2"/></listcell>
+                    <listcell>
+                        <radiogroup orient="vertical">
+                            <radio label="Apple"/>
+                            <radio label="Orange" checked="true"/>
+                            <radio label="Lemon"/>
+                        </radiogroup>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell label="5"/>
+                    <listcell>
+                        <listbox mold="select">
+                            <listitem label="AB"/>
+                            <listitem label="CD"/>
+                        </listbox>
+                    </listcell>
+                    <listcell><datebox/></listcell>
+                    <listcell><textbox rows="3"/></listcell>
+                </listitem>
+                <listitem>
+                    <listcell label="6"/>
+                    <listcell label="A11"/>
+                    <listcell label="A12"/>
+                    <listcell label="A13"/>
+                </listitem>
+                <listitem>
+                    <listcell label="7"/>
+                    <listcell><checkbox checked="true" label="Option 1"/></listcell>
+                    <listcell><checkbox label="Option 2"/></listcell>
+                    <listcell>
+                        <radiogroup>
+                            <radio label="Apple"/>
+                            <radio label="Orange" checked="true"/>
+                            <radio label="Lemon"/>
+                        </radiogroup>
+                    </listcell>
+                </listitem>
+                <listitem>
+                    <listcell label="8"/>
+                    <listcell><checkbox checked="true" label="Option 1"/></listcell>
+                    <listcell><checkbox label="Option 2"/></listcell>
+                    <listcell>
+                        <radiogroup orient="vertical">
+                            <radio label="Apple"/>
+                            <radio label="Orange" checked="true"/>
+                            <radio label="Lemon"/>
+                        </radiogroup>
+                    </listcell>
+                </listitem>
+            </listbox>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">OS Mold Multi-Page</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox mold="paging" pageSize="5">
+                <attribute name="onCreate">
+                    self.getPagingChild().setMold("os");
+                </attribute>
+                <listhead menupopup="auto">
+                    <listheader label="Author"/>
+                    <listheader label="Title"/>
+                    <listheader label="Publisher"/>
+                    <listheader label="Hardcover"/>
+                </listhead>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Northern Clemency"/><listcell label="Knopf (October 30, 2008)"/><listcell label="608 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Fit"/><listcell label="HarperPerennial (April 4, 2005)"/><listcell label="240 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="Kitchen Venom"/><listcell label="Flamingo (May 19, 2003)"/><listcell label="336 pages"/></listitem>
+                <listitem><listcell label="Michael Greenberg"/><listcell label="Hurry Down Sunshine"/><listcell label="Other Press (September 9, 2008)"/><listcell label="240 pages"/></listitem>
+                <listitem><listcell label="Michael Greenberg"/><listcell label="Painless Vocabulary (Painless)"/><listcell label="Barron's Educational Series (September 1, 2001)"/><listcell label="292 pages"/></listitem>
+                <listitem><listcell label="Rick Perlstein"/><listcell label="Nixonland: The Rise of a President and the Fracturing of America"/><listcell label="Scribner; 1st Scribner Hardcover Ed edition (May 13, 2008)"/><listcell label="896 pages"/></listitem>
+                <listitem><listcell label="Rick Perlstein"/><listcell label="Nixonland"/><listcell label="Simon &amp; Schuster (May 13, 2008)"/><listcell label="0 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Northern Clemency"/><listcell label="Knopf (October 30, 2008)"/><listcell label="608 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Fit"/><listcell label="HarperPerennial (April 4, 2005)"/><listcell label="240 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="Kitchen Venom"/><listcell label="Flamingo (May 19, 2003)"/><listcell label="336 pages"/></listitem>
+                <listitem><listcell label="Michael Greenberg"/><listcell label="Hurry Down Sunshine"/><listcell label="Other Press (September 9, 2008)"/><listcell label="240 pages"/></listitem>
+                <listitem><listcell label="Michael Greenberg"/><listcell label="Painless Vocabulary (Painless)"/><listcell label="Barron's Educational Series (September 1, 2001)"/><listcell label="292 pages"/></listitem>
+                <listitem><listcell label="Rick Perlstein"/><listcell label="Nixonland: The Rise of a President and the Fracturing of America"/><listcell label="Scribner; 1st Scribner Hardcover Ed edition (May 13, 2008)"/><listcell label="896 pages"/></listitem>
+                <listitem><listcell label="Rick Perlstein"/><listcell label="Nixonland"/><listcell label="Simon &amp; Schuster (May 13, 2008)"/><listcell label="0 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Northern Clemency"/><listcell label="Knopf (October 30, 2008)"/><listcell label="608 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Fit"/><listcell label="HarperPerennial (April 4, 2005)"/><listcell label="240 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="Kitchen Venom"/><listcell label="Flamingo (May 19, 2003)"/><listcell label="336 pages"/></listitem>
+                <listitem><listcell label="Michael Greenberg"/><listcell label="Hurry Down Sunshine"/><listcell label="Other Press (September 9, 2008)"/><listcell label="240 pages"/></listitem>
+                <listitem><listcell label="Michael Greenberg"/><listcell label="Painless Vocabulary (Painless)"/><listcell label="Barron's Educational Series (September 1, 2001)"/><listcell label="292 pages"/></listitem>
+                <listitem><listcell label="Rick Perlstein"/><listcell label="Nixonland: The Rise of a President and the Fracturing of America"/><listcell label="Scribner; 1st Scribner Hardcover Ed edition (May 13, 2008)"/><listcell label="896 pages"/></listitem>
+                <listitem><listcell label="Rick Perlstein"/><listcell label="Nixonland"/><listcell label="Simon &amp; Schuster (May 13, 2008)"/><listcell label="0 pages"/></listitem>
+            </listbox>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Single Page (OS Mold)</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox mold="paging" pageSize="5">
+                <attribute name="onCreate">
+                    self.getPagingChild().setMold("os");
+                </attribute>
+                <listhead menupopup="auto">
+                    <listheader label="Author"/>
+                    <listheader label="Title"/>
+                    <listheader label="Publisher"/>
+                    <listheader label="Hardcover"/>
+                </listhead>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Northern Clemency"/><listcell label="Knopf (October 30, 2008)"/><listcell label="608 pages"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Fit"/><listcell label="HarperPerennial (April 4, 2005)"/><listcell label="240 pages"/></listitem>
+            </listbox>
+        </h:div>
+    </h:div>
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Paging Position Top</h:span></h:div>
+        <h:div class="z-py-3">
+            <listbox mold="paging" pageSize="3" pagingPosition="top">
+                <listhead>
+                    <listheader label="Author"/>
+                    <listheader label="Title"/>
+                </listhead>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Northern Clemency"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="The Fit"/></listitem>
+                <listitem><listcell label="Philip Hensher"/><listcell label="Kitchen Venom"/></listitem>
+                <listitem><listcell label="Michael Greenberg"/><listcell label="Hurry Down Sunshine"/></listitem>
+                <listitem><listcell label="Rick Perlstein"/><listcell label="Nixonland"/></listitem>
+            </listbox>
+        </h:div>
+    </h:div>
+</h:div>
+</zk>

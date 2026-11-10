@@ -1,0 +1,33 @@
+<?page title="Listbox paging" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for listbox-paging.spec.ts: paging Listbox and Grid pairs, each pair the same width:
+     400px (the ztl tests B35-2096807 and B35-2100338 click Last in such a Listbox), 160px (too narrow for
+     First/Last, ZK-3784), a single page (ZK hides the bar) and the bar on top. Lives under pv/ so
+     gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk>
+	<zscript><![CDATA[
+	ListModelList model = new ListModelList();
+	for (int i = 1; i <= 100; i++)
+		model.add("item " + i);
+	ListModelList single = new ListModelList();
+	for (int i = 1; i <= 2; i++)
+		single.add("item " + i);
+	]]></zscript>
+	<div sclass="z-p-8">
+		<hlayout>
+			<listbox sclass="lpg-wide" mold="paging" pageSize="5" model="${model}" width="400px"/>
+			<grid sclass="lpg-wide" mold="paging" pageSize="5" model="${model}" width="400px"/>
+		</hlayout>
+		<hlayout>
+			<listbox sclass="lpg-narrow" mold="paging" pageSize="5" model="${model}" width="160px"/>
+			<grid sclass="lpg-narrow" mold="paging" pageSize="5" model="${model}" width="160px"/>
+		</hlayout>
+		<hlayout>
+			<listbox sclass="lpg-single" mold="paging" pageSize="5" model="${single}" width="400px"/>
+			<grid sclass="lpg-single" mold="paging" pageSize="5" model="${single}" width="400px"/>
+		</hlayout>
+		<hlayout>
+			<listbox sclass="lpg-top" mold="paging" pageSize="5" pagingPosition="top" model="${model}" width="400px"/>
+			<grid sclass="lpg-top" mold="paging" pageSize="5" pagingPosition="top" model="${model}" width="400px"/>
+		</hlayout>
+	</div>
+</zk>

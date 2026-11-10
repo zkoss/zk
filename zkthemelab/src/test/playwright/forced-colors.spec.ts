@@ -432,25 +432,22 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect([...new Set(borders)]).toEqual([grayText]);
   });
 
-  // Listbox paging-bottom paints its glyph mask on the icon element itself.
-  test('listbox paging-bottom icons are painted CanvasText (the mask sits on the element, not ::before)', async ({ page }) => {
+  // Listbox paging-bottom uses the shared paging glyph (the icon's ::before), as the Grid does.
+  test('listbox paging-bottom icons are painted CanvasText on ::before, as the Grid\'s are', async ({ page }) => {
     await page.goto('/listbox-header.zul', { waitUntil: 'domcontentloaded' });
     const icons = page.locator('.z-listbox-paging-bottom .z-paging-button:not([disabled]) .z-paging-icon');
     await icons.first().waitFor({ state: 'attached', timeout: 10000 });
     const canvasText = await systemColor(page, 'CanvasText');
-    const fills = await icons.evaluateAll(els => els.map(el => getComputedStyle(el).backgroundColor));
+    const fills = await icons.evaluateAll(els => els.map(el => getComputedStyle(el, '::before').backgroundColor));
     expect(fills.length, 'the listbox shows enabled paging icons').toBeGreaterThanOrEqual(1);
     expect(fills.every(fill => fill === canvasText), `icon fills ${JSON.stringify(fills)} must all be ${canvasText}`).toBe(true);
   });
 
   // A disabled paging button must not look like an enabled one.
-  // The glyph is the icon's ::before (default mold) or the icon element itself (listbox paging-bottom).
+  // The glyph is the icon's ::before (default mold, the Listbox's included).
   // The OS mold draws its glyph on the button's ::after but never renders a disabled button.
   const pagingGlyphFills = (page: Page, selector: string) => page.locator(selector).evaluateAll(buttons =>
-    buttons.map(button => {
-      const icon = button.querySelector('[class*="z-icon-"]')!;
-      return getComputedStyle(icon, button.closest('.z-listbox-paging-bottom') ? null : '::before').backgroundColor;
-    }));
+    buttons.map(button => getComputedStyle(button.querySelector('[class*="z-icon-"]')!, '::before').backgroundColor));
 
   test('disabled paging glyphs are GrayText, enabled ones CanvasText (default mold, listbox)', async ({ page }) => {
     const grayText = await systemColor(page, 'GrayText');
