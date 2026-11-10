@@ -233,9 +233,12 @@ content and the points. (`../zkcml/zkmax/.../layout/css/linelayout.css`)
 The divider between the paging bar and the rows is drawn on the host component, not in `paging.css`,
 with the outline-variant colour. The last row strips its own `border-bottom` (`.z-row:last-child`,
 `.z-treerow:last-child`, `.z-listitem:last-child`), so without a host border the bar floats against
-the rows. Grid and tree draw it on `.z-<comp>-paging-top .z-paging` (`border-bottom`) and
-`.z-<comp>-paging-bottom .z-paging` (`border-top`); listbox draws `border-top` on its own
-`.z-listbox-paging-bottom` wrapper. Keep the divider on all three.
+the rows. Grid, listbox and tree draw it on `.z-<comp>-paging-top .z-paging` (`border-bottom`) and
+`.z-<comp>-paging-bottom .z-paging` (`border-top`). Keep the divider on all three, and keep it on
+the bar, not on the `-paging-top` / `-paging-bottom` wrapper: ZK hides the bar of a single page, and
+a wrapper with its own border, padding or min-height leaves an empty band. The wrapper also stays a
+plain block, because `Paging.onSize` shows First/Last and the detail only when the bar itself is wide
+enough (ZK-3784); a flex wrapper shrinks the bar to its content and hides them at any width.
 
 ## popup
 

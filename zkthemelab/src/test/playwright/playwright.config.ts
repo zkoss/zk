@@ -265,6 +265,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // A paging Listbox's bar fills its footer so First, Last and the detail show (listbox.css). See listbox-paging.spec.ts.
+      name: 'listbox-paging',
+      testMatch: /listbox-paging\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // rangeslider and multislider share Sliderbuttons: shared base rules, own accents. See sliderbuttons.spec.ts.
       name: 'sliderbuttons',
       testMatch: /sliderbuttons\.spec\.ts/,
