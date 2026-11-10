@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-6268.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Nov 10 18:23:31 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk xmlns:w="client">
+	<label multiline="true">
+		1. Click "scroll": the tree scrolls to 210000, and while those rows are still loading, it scrolls on to 220000 and handles a response before the browser dispatches that scroll event.
+		2. When the tree stops loading, it should show rows (from node-4129), not a blank view.
+	</label>
+	<script><![CDATA[
+		function scrollWithPendingEvent() {
+			var tree = zk.$('$tree');
+			tree.simulatedLatency = 1000;
+			tree.ebody.scrollTop = 210000;
+			setTimeout(function () {
+				tree.ebody.scrollTop = 220000;
+				zWatch.fire('onResponse', undefined, {rtags: {}});
+			}, 200);
+		}
+	]]></script>
+	<button label="scroll" w:onClick="scrollWithPendingEvent()"/>
+	<tree id="tree" height="600px"
+		w:onScrollPos="this.fire('onDelay', this.simulatedLatency || 0, {toServer: true, duplicateIgnore: {onDelay: true}})"
+		onDelay="Thread.sleep(event.getData());"/>
+	<zscript><![CDATA[
+		List nodes = new ArrayList();
+		for (int i = 0; i < 8000; i++)
+			nodes.add(new DefaultTreeNode("node-" + i));
+		tree.setModel(new DefaultTreeModel(new DefaultTreeNode("root", nodes)));
+	]]></zscript>
+</zk>
