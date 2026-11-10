@@ -278,7 +278,7 @@ export default defineConfig({
     },
     {
       // Text in footer and header cells lines up with its column's data cells (grid groupfoot,
-      // html table). See alignment.spec.ts.
+      // html table); an empty inline-flex field lines up with the text and button beside it. See alignment.spec.ts.
       name: 'alignment',
       testMatch: /[\\/]alignment\.spec\.ts$/,
       use: { ...devices['Desktop Chrome'] },

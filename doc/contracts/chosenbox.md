@@ -33,6 +33,7 @@ zk-version: 10.2.1-jakarta
 | c14 | `.z-chosenbox-option` | min-height | 36px (allow content to grow, do not lock `height`) |
 | c15 | `.z-chosenbox-option:hover` | background-color | tinted overlay (~rgba(0,0,0,0.04)) |
 | c16 | `.z-chosenbox-disabled` | opacity | `var(--zk-state-disabled-opacity)` |
+| va1 | `.z-chosenbox` (root) | vertical-align | `middle` — Safari 18 gives an inline-flex box whose first item is an empty input the input's bottom edge as its baseline, so an empty field sat about 14px off the text line and jumped when typed into; centring the box avoids it (WebKit bug 294558, fixed in Safari 26; B50-3032885, B50-ZK-577). Side effect: text beside the field sits about 1px above the field centre |
 
 ## States to evaluate
 - [ ] default (with selected chips)

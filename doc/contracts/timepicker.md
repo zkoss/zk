@@ -61,6 +61,7 @@ The timepicker input chrome follows the Marble outlined-input pattern: `1px soli
 | c15 | `.z-timepicker-readonly .z-timepicker-input` | cursor | `pointer` | readonly is interactive (the popup opens) → active affordance, not disabled; only `cursor:pointer` signals the popup. See doc/spec/component-state-model.md + ZK-6122. |
 | c15b | `.z-timepicker-readonly .z-timepicker-input` | background-color | `transparent` (rgba(0,0,0,0)) — MUST NOT be `surface-container` | readonly reads as an ACTIVE outlined field like the editable timepicker and readonly combobox/datebox/bandbox; the grey/dimmed treatment is reserved for `disabled`. Input is made non-typeable by ZK's `readonly` attribute, not by styling. |
 | c18 | `.z-timepicker` | overflow | `hidden` | components/timepicker.md — clips the `::after` focus-ring overlay (and any child background) to the root's `border-radius` so the rounded corners read correctly. |
+| va1 | `.z-timepicker` (root) | vertical-align | `middle` — Safari 18 gives an inline-flex box whose first item is an empty input the input's bottom edge as its baseline, so an empty field sat about 14px off the text line and jumped when typed into; centring the box avoids it (WebKit bug 294558, fixed in Safari 26; B50-3032885, B50-ZK-577). Side effect: text beside the field sits about 1px above the field centre | `doc/spec/DESIGN.md` form-row alignment |
 
 ## State matrix
 

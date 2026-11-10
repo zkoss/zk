@@ -1,6 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 
-// Alignment: text in footer and header cells lines up with the data cells of its column.
+// Alignment: text in footer and header cells lines up with the data cells of its column, and an empty field lines up
+// with the text and button beside it as a filled one does.
 // Each component keeps its own fixture and helpers inside its describe.
 
 // Guard for grid.css `.z-groupfoot-content` (ZK-6112, zkdemo B6 Z6): ZK writes text-align on
@@ -111,4 +112,60 @@ test.describe('html table', () => {
       expect(RIGHT_ALIGNED).toContain(await textAlign(page, '#tr-align th'));
     });
   });
+});
+
+// Guard for the inline-flex field widgets (ZK-6112, B50-3032885, B50-ZK-577). Two causes, both fixed by centring the
+// root (vertical-align: middle):
+//  - datebox, timebox, spinner, doublespinner, bandbox, inputgroup, timepicker, chosenbox: Safari 18 gives an inline-flex
+//    box whose first item is an empty input the input's bottom edge as its baseline, so an empty field sat about 14px
+//    off the text line and jumped when typed into (WebKit bug 294558, fixed in Safari 26). Playwright's WebKit already
+//    has the fix, so their layout test cannot fail there or in Chromium; the computed vertical-align pins the
+//    declaration, and the real Safari 18 numbers were measured by hand.
+//  - cascader, searchbox: no input; with no value the first flex item is an empty placeholder, which has no baseline,
+//    so EVERY browser aligned the box by its bottom edge. Their layout test is a real guard in Chromium.
+// Fixture: web/pv/empty-field-baseline-guard.zul
+declare const zk: any;
+
+test.describe('empty field baseline', () => {
+  const WIDGETS = [
+    'datebox', 'timebox', 'spinner', 'doublespinner', 'bandbox', 'inputgroup', 'timepicker', 'chosenbox', 'cascader',
+    'searchbox',
+  ];
+  const TOLERANCE_PX = 0.5;
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/pv/empty-field-baseline-guard.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+  });
+
+  // The row's height, and the vertical offset of its label text and of its button from the field's centre.
+  const lineGeometry = (page: Page, id: string) => page.evaluate((id) => {
+    const row = zk.Widget.$('$' + id).$n();
+    const [label, field] = Array.from(row.children) as HTMLElement[];
+    const centre = (el: Element) => { const r = el.getBoundingClientRect(); return (r.top + r.bottom) / 2; };
+    return {
+      rowHeight: row.getBoundingClientRect().height,
+      labelOffset: centre(label) - centre(field),
+      buttonOffset: centre(row.querySelector('.z-button')) - centre(field),
+    };
+  }, id);
+
+  for (const widget of WIDGETS) {
+    test(`${widget} — the root is centred on the line, not aligned by its baseline`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const verticalAlign = await page.evaluate((widget) => {
+        const root = document.querySelector('.z-' + widget) as HTMLElement;
+        return getComputedStyle(root).verticalAlign;
+      }, widget);
+      expect(verticalAlign).toBe('middle');
+    });
+
+    test(`${widget} — an empty field lines up with the text and the button as a filled one does`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const empty = await lineGeometry(page, widget + 'Empty');
+      const filled = await lineGeometry(page, widget + 'Filled');
+      expect(empty.rowHeight).toBeCloseTo(filled.rowHeight, 0);
+      expect(Math.abs(empty.labelOffset - filled.labelOffset)).toBeLessThanOrEqual(TOLERANCE_PX);
+      expect(Math.abs(empty.buttonOffset - filled.buttonOffset)).toBeLessThanOrEqual(TOLERANCE_PX);
+    });
+  }
 });
