@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6267.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Tue Nov 10 15:48:25 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Click "any event". No combobox is open, so `fixCount` in the browser console must stay 0.
+		2. Type "a" in the first combobox. Its popup opens and `fixCount` becomes greater than 0.
+	</label>
+	<script><![CDATA[
+		zk.afterLoad('zul.inp', function () {
+			var p = zul.inp.Combobox.prototype, fix = p.fixPopupDimension_;
+			window.fixCount = 0;
+			p.fixPopupDimension_ = function () {
+				window.fixCount++;
+				return fix.apply(this, arguments);
+			};
+		});
+	]]></script>
+	<button label="any event" onClick=""/>
+	<combobox autodrop="true" onChanging="" forEach="1,2,3">
+		<comboitem label="apple"/>
+		<comboitem label="avocado"/>
+	</combobox>
+</zk>
