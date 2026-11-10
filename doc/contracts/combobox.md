@@ -32,6 +32,7 @@ zk-version: 10.2.1-jakarta
 | c15 | `.z-comboitem-selected` | background-color | MUST NOT be `--zk-color-primary-container` — wrong family; `--zk-combobox-selected-bg` = `--zk-color-secondary-container` |
 | c16 | `.z-comboitem-icon` (item with `iconSclass`) | margin-right | `var(--zk-spacing-3)` — leading icon must be separated from the label; glyph-to-text gap ≥ 8px, NOT 0 |
 | c17 | `.z-comboitem-image:empty` (plain item's backward-compat span) | margin-right | 0px — the always-emitted empty image span must NOT phantom-indent the label (no container `gap`); see skill `components/combobox.md` |
+| c18 | `.z-combobox-popup` (no items) | min-height | `var(--zk-spacing-4)` — an open popup without items stays a visible, clickable surface (a click on it closes the list, `ComboWidget.doClick_`); a popup with items is taller, so unchanged (B30-1879511) |
 
 ## States to evaluate
 - [ ] default

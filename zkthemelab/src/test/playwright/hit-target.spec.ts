@@ -1,7 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 
 // Interaction guard: an interactive part must be reachable where the user aims at it. The first guard is for
-// knobs, the second for the buttons of read-only fields.
+// knobs, the others for the buttons of read-only fields and the popup of an empty combobox.
 //
 // A knob must be reachable AT ITS OWN CENTRE.
 //
@@ -81,6 +81,7 @@ for (const v of VARIANTS) {
 // disabled. A real click is used because pointer-events: none only shows up there.
 // Fixture: web/pv/readonly-spin-buttons-guard.zul
 declare const zk: any;
+declare const jq: any;
 
 for (const name of ['timebox', 'spinner', 'doublespinner']) {
   test.describe(`${name} read-only buttons`, () => {
@@ -111,3 +112,43 @@ for (const name of ['timebox', 'spinner', 'doublespinner']) {
     });
   });
 }
+
+// Guard for combobox.css (ZK-6112, B30-1879511): an open Combobox without items shows its popup as a surface under
+// the field, and a click on it closes the list and keeps the focus in the field (ComboWidget.doClick_). Without a
+// minimum height the popup is 0px tall and the click lands on the page, which blurs the field.
+// Fixture: web/pv/empty-combobox-popup-guard.zul
+test.describe('combobox', () => {
+  const MIN_POPUP_HEIGHT_PX = 16; // --zk-spacing-4
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/pv/empty-combobox-popup-guard.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+    const button = await page.evaluate(() => {
+      const { x, y, width, height } = zk.Widget.$('$combobox').$n().querySelector('.z-combobox-button').getBoundingClientRect();
+      return { x, y, width, height };
+    });
+    await page.mouse.click(button.x + button.width / 2, button.y + button.height / 2);
+    await page.waitForFunction(() => {
+      const combobox = zk.Widget.$('$combobox');
+      return combobox.isOpen() && !jq(combobox.getPopupNode_()).is(':animated');
+    });
+  });
+
+  const popupBox = (page: Page) => page.evaluate(() => {
+    const { x, y, width, height } = zk.Widget.$('$combobox').getPopupNode_().getBoundingClientRect();
+    return { x, y, width, height };
+  });
+
+  test('combobox — an open popup without items is a visible surface', { tag: '@ZK-6112' }, async ({ page }) => {
+    expect((await popupBox(page)).height).toBeGreaterThanOrEqual(MIN_POPUP_HEIGHT_PX);
+  });
+
+  test('combobox — a click on the popup without items closes the list and keeps the focus in the field', { tag: '@ZK-6112' }, async ({ page }) => {
+    const box = await popupBox(page);
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await expect.poll(() => page.evaluate(() => zk.Widget.$('$combobox').isOpen())).toBe(false);
+    expect(await page.evaluate(() => document.activeElement === zk.Widget.$('$combobox').getInputNode())).toBe(true);
+  });
+});
+
