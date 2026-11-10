@@ -1213,3 +1213,53 @@ test.describe('menubar on a mobile UA', () => {
     expect(m.scrollLeft, 'scrollLeft must stick, i.e. the bar scrolls').toBeGreaterThan(0);
   });
 });
+
+// Guard for zkmax tablet/_selection.css (ZK-6112, B50-2976934): the checkbox rules of the tablet sheet (15px margin,
+// inset -15px) are unlayered and must not reach the switch, whose mold is the 52x32 track. Reaching it made the row
+// 62px tall and moved the state-layer ring off the thumb and out of the row, where, now that the ring takes the click,
+// it toggled the switch above or below.
+// Fixture: web/pv/compact-ring-guard.zul (its switches; two stacked with no spacing)
+declare const zk: any;
+
+test.describe('tablet-switch-ring', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/pv/compact-ring-guard.zul', { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
+  });
+
+  // Geometry of the switch's ring (a 40px circle on the thumb; an off thumb's centre is 14px into the padding box).
+  const ringBox = (page: Page, id: string) => page.evaluate((id) => {
+    const wrapper = zk.Widget.$('$' + id).$n();
+    const track = wrapper.querySelector('.z-checkbox-mold');
+    const ring = getComputedStyle(track, '::before');
+    const trackRect = track.getBoundingClientRect();
+    const border = parseFloat(getComputedStyle(track).borderLeftWidth);
+    const size = parseFloat(ring.width);
+    return {
+      wrapper: wrapper.getBoundingClientRect().toJSON(),
+      centreX: trackRect.x + border + parseFloat(ring.left) + size / 2,
+      top: trackRect.y + border + parseFloat(ring.top) - size / 2,
+      size,
+      thumbCentreX: trackRect.x + border + 14,
+    };
+  }, id);
+
+  test('switch — the ring is centred on the thumb and stays inside its row', { tag: '@ZK-6112' }, async ({ page }) => {
+    const ring = await ringBox(page, 'switch1');
+    expect(ring.centreX).toBeCloseTo(ring.thumbCentreX, 0);
+    expect(ring.top).toBeGreaterThanOrEqual(ring.wrapper.y);
+    expect(ring.top + ring.size).toBeLessThanOrEqual(ring.wrapper.y + ring.wrapper.height);
+  });
+
+  test('switch — a click at the bottom edge of the upper row does not toggle the lower switch', { tag: '@ZK-6112' }, async ({ page }) => {
+    const ring = await ringBox(page, 'switch1');
+    const checked = (id: string) => page.evaluate((id) => zk.Widget.$('$' + id).isChecked(), id);
+    await page.mouse.click(ring.centreX, ring.wrapper.y + ring.wrapper.height - 1);
+    await page.waitForTimeout(300);
+    expect(await checked('switch2')).toBe(false);
+    // the bottom edge of the ring itself still toggles the upper switch
+    await page.mouse.click(ring.centreX, ring.top + ring.size - 1);
+    await expect.poll(() => checked('switch1')).toBe(true);
+    expect(await checked('switch2')).toBe(false);
+  });
+});

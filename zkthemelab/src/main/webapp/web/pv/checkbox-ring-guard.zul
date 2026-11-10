@@ -1,0 +1,15 @@
+<?page title="Checkbox ring guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for hit-target.spec.ts (state-layer ring of the checkbox, radio and switch): each control enabled and
+     disabled. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up. -->
+<zk>
+<vlayout style="padding:16px">
+    <checkbox id="checkbox" label="Checkbox"/>
+    <checkbox id="checkboxDisabled" label="Checkbox" disabled="true"/>
+    <radiogroup>
+        <radio id="radio" label="Radio"/>
+        <radio id="radioDisabled" label="Radio" disabled="true"/>
+    </radiogroup>
+    <checkbox id="switch" mold="switch" label="Switch"/>
+    <checkbox id="switchDisabled" mold="switch" label="Switch" disabled="true"/>
+</vlayout>
+</zk>

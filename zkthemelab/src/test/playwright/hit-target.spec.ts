@@ -1,7 +1,8 @@
 import { test, expect, Page } from '@playwright/test';
 
 // Interaction guard: an interactive part must be reachable where the user aims at it. The first guard is for
-// knobs, the others for the buttons of read-only fields and the popup of an empty combobox.
+// knobs, the others for the buttons of read-only fields, the popup of an empty combobox and the state-layer ring
+// of a checkbox, radio and switch.
 //
 // A knob must be reachable AT ITS OWN CENTRE.
 //
@@ -152,3 +153,91 @@ test.describe('combobox', () => {
   });
 });
 
+// Guard for checkbox.css (ZK-6112, B50-2976934): the state-layer ring around the box of a Checkbox, the circle
+// of a Radio and the thumb of a switch is the touch target, and it shows the pointer, so a click on it toggles the
+// control; a disabled control still takes no click, because the ring inherits `pointer-events: none` from its wrapper.
+// The click is made just outside the box, where only the ring is.
+// Fixture: web/pv/checkbox-ring-guard.zul
+test.describe('checkbox ring', () => {
+  const OUTSIDE_BOX_PX = 2;
+  // [widget id, widget name, what the box is]
+  const CONTROLS = [
+    ['checkbox', 'checkbox', '.z-checkbox-mold'],
+    ['radio', 'radio', 'input'],
+    ['switch', 'switch', '.z-checkbox-mold'],
+  ] as const;
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/pv/checkbox-ring-guard.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+  });
+
+  const pointBesideBox = async (page: Page, id: string, boxSelector: string) => {
+    const box = await page.evaluate(({ id, boxSelector }) => {
+      const { x, y, height } = zk.Widget.$('$' + id).$n().querySelector(boxSelector).getBoundingClientRect();
+      return { x, y, height };
+    }, { id, boxSelector });
+    return { x: box.x - OUTSIDE_BOX_PX, y: box.y + box.height / 2 };
+  };
+  const clickBesideBox = async (page: Page, id: string, boxSelector: string) => {
+    const { x, y } = await pointBesideBox(page, id, boxSelector);
+    await page.mouse.click(x, y);
+  };
+  const isChecked = (page: Page, id: string) => page.evaluate((id) => zk.Widget.$('$' + id).isChecked(), id);
+
+  for (const [id, name, boxSelector] of CONTROLS) {
+    test(`${name} — a click on the ring beside the box toggles the control`, { tag: '@ZK-6112' }, async ({ page }) => {
+      await clickBesideBox(page, id, boxSelector);
+      await expect.poll(() => isChecked(page, id)).toBe(true);
+    });
+
+    // ZK ignores a click on a disabled control anyway, so the hit test is what tells a dead ring from a live one.
+    test(`${name} — the ring of a disabled control takes no pointer event and a click on it does nothing`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const { x, y } = await pointBesideBox(page, id + 'Disabled', boxSelector);
+      const hitsControl = await page.evaluate(({ id, x, y }) => {
+        const hit = document.elementFromPoint(x, y);
+        return !!hit && zk.Widget.$('$' + id).$n().contains(hit);
+      }, { id: id + 'Disabled', x, y });
+      expect(hitsControl).toBe(false);
+      await page.mouse.click(x, y);
+      await page.waitForTimeout(300);
+      expect(await isChecked(page, id + 'Disabled')).toBe(false);
+    });
+  }
+});
+
+// Guard for checkbox.css in compact density (ZK-6112, B50-2976934): the ring is as tall as the control height, so it
+// stays inside its wrapper. A default-size ring in a 32px wrapper would overlap the control above or below, and a
+// click at the bottom edge of the upper control would toggle the lower one.
+// Fixture: web/pv/compact-ring-guard.zul
+test.describe('checkbox ring in compact density', () => {
+  const ABOVE_BOTTOM_PX = 1;
+  // [widget name, upper id, lower id, what the box is]
+  const PAIRS = [
+    ['checkbox', 'checkbox1', 'checkbox2', '.z-checkbox-mold'],
+    ['radio', 'radio1', 'radio2', 'input'],
+    ['switch', 'switch1', 'switch2', '.z-checkbox-mold'],
+  ] as const;
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/pv/compact-ring-guard.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+    await page.evaluate(() => { document.documentElement.dataset.density = 'compact'; });
+  });
+
+  for (const [name, upper, lower, boxSelector] of PAIRS) {
+    test(`${name} — a click at the bottom edge of the upper control toggles only the upper one`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const point = await page.evaluate(({ upper, boxSelector }) => {
+        const wrapper = zk.Widget.$('$' + upper).$n();
+        const box = wrapper.querySelector(boxSelector).getBoundingClientRect();
+        return { x: box.x + box.width / 2, y: wrapper.getBoundingClientRect().bottom };
+      }, { upper, boxSelector });
+      await page.mouse.click(point.x, point.y - ABOVE_BOTTOM_PX);
+      const checked = (id: string) => page.evaluate((id) => zk.Widget.$('$' + id).isChecked(), id);
+      await expect.poll(() => checked(upper)).toBe(true);
+      expect(await checked(lower)).toBe(false);
+    });
+  }
+});
