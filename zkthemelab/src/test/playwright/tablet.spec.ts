@@ -1283,3 +1283,33 @@ test.describe('tablet-toggle-row', () => {
     expect(m.rowHeight).toBeCloseTo(48, 0);
   });
 });
+
+// Guard for zkmax tablet/_inputs.css (ZK-6112): every Timebox is read-only on a tablet, and the unlayered read-only
+// restore must not set a border colour, which would beat the focus and error borders of every Timebox there.
+// Fixture: web/pv/input-invalid-guard.zul (its read-only timebox)
+test.describe('tablet-readonly-timebox', () => {
+  test('timebox — the read-only field draws the primary border on focus and the error border when invalid', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important}' });
+    const m = await page.evaluate(() => {
+      const probe = (token: string) => {
+        const s = document.createElement('span');
+        s.style.color = `var(${token})`;
+        document.body.appendChild(s);
+        const c = getComputedStyle(s).color;
+        s.remove();
+        return c;
+      };
+      const wgt = zk.Widget.$('$roTime');
+      const box = wgt.$n();
+      const input = box.querySelector('input');
+      input.focus();
+      const focus = getComputedStyle(box).borderTopColor;
+      input.blur();
+      wgt.setErrorMessage('Wrong');
+      return { focus, invalid: getComputedStyle(box).borderTopColor, primary: probe('--zk-color-primary'), error: probe('--zk-color-error') };
+    });
+    expect(m.focus).toBe(m.primary);
+    expect(m.invalid).toBe(m.error);
+  });
+});

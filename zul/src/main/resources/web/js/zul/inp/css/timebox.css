@@ -156,15 +156,14 @@
 /* ─── Readonly ─────────────────────────────────────────────────────────────── */
 .z-timebox.z-timebox-readonly {
     background-color: var(--zk-color-surface-container-low);
-    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
+    /* Hold the border at the 3:1 outline on hover through the token, not a border-color rule: this rule comes after the
+       focus and invalid rules with the same specificity, so a border-color here kept a focused or invalid read-only
+       Timebox grey. */
+    --zk-timebox-border-color-hover: var(--zk-color-outline);
 }
 
 .z-timebox.z-timebox-readonly .z-timebox-input {
     color: var(--zk-color-on-surface-variant);
-}
-
-.z-timebox.z-timebox-readonly:hover {
-    border-color: var(--zk-color-outline); /* readonly is focusable: its border identifies the field (WCAG 1.4.11) */
 }
 
 /* ─── Button hidden (buttonVisible="false") ──────────────────────────── */

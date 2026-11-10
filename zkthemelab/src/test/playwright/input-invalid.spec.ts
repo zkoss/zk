@@ -7,6 +7,8 @@ import { test, expect, Locator, Page } from '@playwright/test';
 // inputs, which are transparent at rest and on hover and show the error on focus.
 // Fixture: web/pv/input-invalid-guard.zul
 
+declare const zk: any;
+
 const FIXTURE = '/pv/input-invalid-guard.zul';
 const TRANSPARENT = 'rgba(0, 0, 0, 0)';
 
@@ -210,3 +212,36 @@ for (const widget of Object.keys(INPLACE_BORDERS)) {
     await expectBorder('focus', error);
   });
 }
+
+// A read-only timebox keeps the 3:1 outline at rest and on hover, but its read-only rule must not hide the focus or
+// error border: it comes after those rules with the same specificity, so a border-color in it kept the field grey.
+// Read-only blocks typing, so the error is set the way Clients.wrongValue does it, through setErrorMessage.
+test('a read-only timebox draws the primary border on focus and the error border when invalid', { tag: '@ZK-6112' }, async ({ page }) => {
+  const box = '.iig-readonly-timebox .z-timebox';
+  const input = page.locator(`${box} .z-timebox-input`);
+  const resolve = (token: string) => page.evaluate(token => {
+    const probe = document.createElement('span');
+    probe.style.color = `var(${token})`;
+    document.body.appendChild(probe);
+    const resolved = getComputedStyle(probe).color;
+    probe.remove();
+    return resolved;
+  }, token);
+  const outline = await resolve('--zk-color-outline');
+
+  await page.mouse.move(0, 0);
+  expect(await topBorderColor(page, box), 'rest').toBe(outline);
+  await page.locator(box).hover();
+  expect(await topBorderColor(page, box), 'hover').toBe(outline);
+  await input.focus();
+  expect(await topBorderColor(page, box), 'focus').toBe(await resolve('--zk-color-primary'));
+  await input.blur();
+
+  await page.evaluate(() => zk.Widget.$('$roTime').setErrorMessage('Wrong'));
+  await expect(input).toHaveClass(/z-timebox-invalid/);
+  await page.mouse.move(0, 0);
+  const error = await errorColor(page);
+  expect(await topBorderColor(page, box), 'invalid at rest').toBe(error);
+  await page.locator(box).hover();
+  expect(await topBorderColor(page, box), 'invalid on hover').toBe(error);
+});
