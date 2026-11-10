@@ -153,7 +153,10 @@ export class Combobox extends zul.inp.ComboWidget {
 			return;
 		}
 		super.onResponse(ctl, opts);
-		if (opts && opts.rtags && opts.rtags.onChanging && this.isOpen()) {
+		// ZK-6267: a closed popup is sized and positioned again in open()
+		if (!this.isOpen())
+			return;
+		if (opts && opts.rtags && opts.rtags.onChanging) {
 			this._isOnChanging = true;
 		}
 		this.fixPopupDimension_();
