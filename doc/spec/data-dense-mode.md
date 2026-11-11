@@ -87,11 +87,10 @@ than the shipped rule, so it wins regardless of load order — and set any token
 
 ## The full knob set
 
-The default and compact value of every knob (the `--zk-control-height-*` ladder, `--zk-button-height*`, `--zk-menuitem-height`, `--zk-data-row-min-height`, and the grid / listbox / tree cell, header and group padding) is in [_sizing.css](../../zul/src/main/resources/web/zul/css/tokens/_sizing.css). Reasons (not in that file):
+The default and compact value of every knob (the `--zk-control-height-*` ladder, `--zk-button-height*`, `--zk-menuitem-height`, and the grid / listbox / tree cell, header and group padding) is in [_sizing.css](../../zul/src/main/resources/web/zul/css/tokens/_sizing.css). Reasons (not in that file):
 
 - `--zk-tree-cell-padding` and `--zk-tree-header-padding` equal the grid and listbox values, so a tree row and header are as tall as a grid row and header.
 - `--zk-group-padding-y` equals a compact data cell. `--zk-group-padding-x` for a group of a checkmark Listbox stays at the comfortable value, so its checkbox and arrow stay under the row checkboxes.
-- `--zk-data-row-min-height` is read only by `listbox.css` (the `mold="paging"` bar).
 
 On a tablet the two group tokens keep their default values in compact as well (zkmax `tablet/_mesh.css`). Measured group row height at tablet default and at compact: 41px (Grid), 40.5px (Listbox).
 
