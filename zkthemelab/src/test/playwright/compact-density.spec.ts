@@ -466,3 +466,39 @@ test.describe('compact-comfortable-region', () => {
     expect(compactInside.height, 'button height inside the region').toBe(comfortable.height);
   });
 });
+
+// The off-ladder aliases are written relative to the rungs (tokens/_sizing.css), so a customer who changes only
+// --zk-control-height-md at :root moves the button and the popup menu rows with it. The aliases are calc()
+// expressions, so the heights are read from the rendered boxes, not from the custom property string.
+test.describe('density-rung-override', () => {
+  const OVERRIDDEN_MD = 48;
+  const OFF_LADDER_STEP = 4;
+  const OVERRIDE_STYLE = `:root { --zk-control-height-md: ${OVERRIDDEN_MD}px; }`;
+
+  const renderedHeight = (locator: Locator) => locator.evaluate(el => el.getBoundingClientRect().height);
+
+  async function measureButtonAndMenuitem(page: Page, overrideMd: boolean) {
+    const measure = async (url: string, selector: string, open?: (page: Page) => Promise<void>) => {
+      await page.goto(url, { waitUntil: 'networkidle' });
+      await page.evaluate(() => document.fonts.ready.then(() => true));
+      if (overrideMd) await page.addStyleTag({ content: OVERRIDE_STYLE });
+      if (open) await open(page);
+      return renderedHeight(page.locator(selector).first());
+    };
+    const button = await measure('/button.zul', '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon):not(.z-button-fab)');
+    const menuitem = await measure('/menubar.zul', '.z-menupopup-open .z-menuitem', async p => {
+      await p.locator('.z-menubar .z-menu-content').first().click();
+      await p.locator('.z-menupopup-open .z-menuitem').first().waitFor();
+    });
+    return { button, menuitem };
+  }
+
+  test('button — overriding only --zk-control-height-md at :root moves the button and menuitem heights', async ({ page }) => {
+    const byDefault = await measureButtonAndMenuitem(page, false);
+    const overridden = await measureButtonAndMenuitem(page, true);
+    const expected = OVERRIDDEN_MD - OFF_LADDER_STEP;
+    expect(overridden.button, 'button height follows --zk-control-height-md').toBe(expected);
+    expect(overridden.menuitem, 'menuitem height follows --zk-control-height-md').toBe(expected);
+    expect(overridden.button - byDefault.button, 'button moved by the rung delta').toBe(overridden.menuitem - byDefault.menuitem);
+  });
+});
