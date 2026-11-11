@@ -57,6 +57,14 @@ has a Playwright test for it: a fixture under `zkthemelab/src/main/webapp/web/pv
 pass with the fix and be shown to fail by a mutation (`reference/verification.md`). The minimal
 repro page used while debugging is temporary and does not count as this test.
 
+## A token change updates its docs
+
+When you remove or rename a token, or change what it is for, search `doc/`, `.claude/` and the
+comments in `tokens/*.css` for its full `--zk-*` name and fix every mention, then run
+`scripts/check-doc-tokens.sh`. A doc names tokens by full name and describes a set of tokens by
+its rule, not by a list (`.claude/rules/doc-conventions.md`); that is what makes the search and
+the script find every mention.
+
 ## Where things live
 
 CE (this checkout):
@@ -108,6 +116,7 @@ npm run lint:css                                                  # stylelint hy
 bash .claude/skills/marble-theme/scripts/audit-css.sh …                           # hardcoded px / orphan tokens
 node .claude/skills/marble-theme/scripts/check-default-display.js …               # check 5 of the audit
 node .claude/skills/marble-theme/scripts/count-important.js …                     # !important inventory
+bash .claude/skills/marble-theme/scripts/check-doc-tokens.sh …                  # every --zk-* a doc names still exists
 node .claude/skills/marble-theme/scripts/probe.js …                              # needs the preview module up
 cd zkthemelab && ./gradlew appRun -PhttpPort=8085 --console=plain   # preview app — keep stdin open, see below
 ```

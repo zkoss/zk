@@ -1,0 +1,28 @@
+# Names check-doc-tokens.sh accepts although no Marble CSS defines them.
+# One name per line; the rest of the line says why. Remove an entry once no doc needs it.
+
+# IceBlue variable names, cited when comparing the two themes (iceblue-parity.md, component-design-notes.md)
+--zk-base-border-color
+--zk-base-border-radius
+--zk-base-font-size
+--zk-base-popup-z-index
+--zk-base-title-font-family
+--zk-border-radius-large
+--zk-border-radius-small
+--zk-color-primary-dark
+--zk-messagebox-icon-size
+--zk-tabbox-icon-size
+
+# Placeholders and examples that name no real token
+--zk-color-x            placeholder (css-audit.md)
+--zk-spacing-N          placeholder for a spacing step
+--zk-token              placeholder (tokens.md)
+--zk-font-weight-medium a token an agent once invented; tokens.md cites it as the warning
+--zk-window-title-size  illustrative slot (component-theme-variables.md)
+--zk-grid-header-fill   a token proposed for a future variant (DESIGN.md)
+--zk-grid-fg            named in _component-theme.css to say it does not exist
+--zk-button             shorthand for the --zk-button-* family in a comment
+--zk-codeeditor-active-line  a ZK-documented hook Marble deliberately leaves undeclared (codeeditor.md)
+
+# Not a token
+--zk-source             a command-line flag of audit-css.sh

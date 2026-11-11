@@ -39,7 +39,7 @@ border is drawn on the card itself; the shadow alone supplies visual separation,
 Popover pattern. The directional arrow's two-layer CSS triangle (outer + inner, per the skill's structural
 description) uses `--zk-color-outline-variant` for the thin outer edge and the card's own
 `--zk-color-surface-container-low` for the inner fill, so the arrow reads as a seamless extension of the
-card rather than a separate shape. The optional header row is set in `--zk-typescale-title-small` weight
+card rather than a separate shape. The optional header row is set in the `--zk-typescale-title-small-*` tokens
 on `--zk-color-on-surface`, separated from the body by a `--zk-color-outline-variant` divider — the
 same divider token closes the footer row from the body above it. Severity recolors **only the icon**
 (matching the ZK reference behavior recorded in the skill file) via the identical severity→token mapping
