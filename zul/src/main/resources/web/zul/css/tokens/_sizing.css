@@ -15,8 +15,8 @@
  *                               defined once so they survive a tier change.
  *   3. data-cell padding       — grid/listbox/tree cell padding knobs.
  *
- * To go compact: override the 5 rungs + the 3 off-ladder seeds (button 36/44,
- * data-row 52) and the cell-padding knobs at :root. See doc/spec/data-dense-mode.md
+ * To go compact: override the 5 rungs + the off-ladder seeds (the Layer 2 aliases
+ * marked "off-ladder") and the cell-padding knobs at :root. See doc/spec/data-dense-mode.md
  * for the ready-made compact preset. Default values below reproduce the
  * comfortable desktop rendering exactly — change nothing here for that.
  *
@@ -37,8 +37,9 @@
     --zk-control-height: var(--zk-control-height-md);
 
     /* ── Layer 2: semantic alias layer (component-type → rung, by meaning) ─
-       Off-ladder values (button 36/44, data-row 52) are intentional MD figures
-       kept as their own seeds so they remain single-knob under a compact tier. */
+       An alias marked "off-ladder" holds a literal px instead of a rung: an
+       intentional MD figure kept as its own seed so it stays single-knob under a
+       compact tier. */
     --zk-input-height:           var(--zk-control-height-md);  /* 40 */
     --zk-button-height:          36px;                         /* off-ladder (MD button base) */
     --zk-button-height-sm:       var(--zk-control-height-xs);  /* 28 */
