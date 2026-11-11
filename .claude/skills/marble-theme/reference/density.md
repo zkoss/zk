@@ -24,11 +24,13 @@ current px. Only the customer's compact override changes anything.
 a raw px (`--zk-input-height`, `--zk-toolbar-height`, `--zk-window-header-height`, …; the full list
 is in `tokens/_sizing.css`). This is the discipline that prevents drift: the intentional
 input-40 / button-36 / toolbar-48 *relationships* survive a tier change because the relationship is
-defined once, here. Two aliases are deliberately off-ladder: `--zk-button-height` (the MD
-base) and `--zk-button-height-lg`.
+defined once, here. A few aliases are deliberately off-ladder: their default is a literal px
+(an MD figure such as the button base, or a popup menu row denser than its bar), not a rung.
+Each one is marked `off-ladder` in its comment in `tokens/_sizing.css`; that marker, not a
+list here, is the record of which aliases they are.
 
-A normal customer flips only the 5 rungs plus the off-ladder seeds (`--zk-button-height`,
-`--zk-button-height-lg`); every alias follows automatically.
+A normal customer flips only the 5 rungs plus the off-ladder seeds; every alias follows
+automatically.
 
 **Layer 3 — data-cell padding:** `--zk-grid-cell-padding`, `--zk-grid-detail-padding`, `--zk-listbox-cell-padding`,
 `--zk-tree-cell-padding`, `--zk-tree-header-padding`, and the group-row pair `--zk-group-padding-y`/`--zk-group-padding-x`.
