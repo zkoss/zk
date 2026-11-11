@@ -43,8 +43,8 @@
         box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
-/* The 120px floor sizes a selectbox the page leaves to its content; a set width (width, hflex) wins. */
-.z-selectbox:not([style*="width"]) {
+/* The 120px floor sizes a selectbox the page leaves to its content; a set width (width, or hflex through z-flex-item) wins. */
+.z-selectbox:not([style*="width"], .z-flex-item) {
     min-width: 120px;
 }
 

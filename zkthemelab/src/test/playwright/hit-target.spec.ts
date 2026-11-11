@@ -272,13 +272,15 @@ test('datebox — a narrow combobox, bandbox, datebox, timebox, spinner, dateran
   expect(problems).toEqual([]);
 });
 
-// B50-3101558: five fields at 35px, narrower than their input's padding plus their button. The box keeps the
+// B50-3101558: eight fields at 35px, narrower than their input's padding plus their button. The box keeps the
 // given width and clips its parts, so the part of the button that shows belongs to the button (the datebox's and
 // timebox's inputs used to fill the box and push the button out) and the left edge of the next field belongs to
-// that field (the spinner's arrows used to sit on it). Parts that run under the next field are not detectable here.
-// The textbox at the end only gives the spinner a next field.
+// that field (the spinner's arrows used to sit on it, the daterangebox's second input and the chosenbox's
+// 60px-floored input ran over it). Parts that run under the next field are not detectable here. The daterangebox's
+// two input paddings alone pass 35px, so the box clips its button whole, and the chosenbox has no trigger button:
+// only the next field is checked for them. The textbox at the end only gives the chosenbox a next field.
 // Fixture: web/pv/input-narrow-guard.zul
-test('datebox — a 35px combobox, bandbox, datebox, timebox and spinner show their button and leave the next field alone', async ({ page }) => {
+test('datebox — 35px input fields show their button and leave the next field alone', async ({ page }) => {
   const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
   expect(resp?.status()).toBe(200);
   await page.evaluate(() => document.fonts.ready);
@@ -286,7 +288,7 @@ test('datebox — a 35px combobox, bandbox, datebox, timebox and spinner show th
   const problems = await page.evaluate(() => {
     const out: string[] = [];
     const fields = [...document.querySelectorAll<HTMLElement>('.ing-35 > [class^="z-"]')];
-    if (fields.length !== 6) out.push(`found ${fields.length} fields, not 6`);
+    if (fields.length !== 9) out.push(`found ${fields.length} fields, not 9`);
     fields.slice(0, -1).forEach((box, i) => {
       const name = box.className.split(' ')[0].slice(2);
       const next = fields[i + 1];
@@ -296,6 +298,7 @@ test('datebox — a 35px combobox, bandbox, datebox, timebox and spinner show th
       if (Math.round(b.width) !== 35) out.push(`${name} is ${b.width}px, not 35px`);
       const atNext = document.elementFromPoint(n.left + 2, y);
       if (!atNext || !next.contains(atNext)) out.push(`${name} covers the left edge of the next field: ${atNext ? atNext.className : 'nothing'}`);
+      if (name === 'daterangebox' || name === 'chosenbox') return;
       const button = box.querySelector(`.z-${name}-button`)!;
       const r = button.getBoundingClientRect();
       const x = Math.min(r.right, b.right) - 2;
@@ -327,4 +330,22 @@ test('datebox — a set width wins over a field\'s min-width floor, which still 
     return `${el.className.split(' ')[0]} ${input ? `${ems}em` : getComputedStyle(el).minWidth}`;
   }));
   expect(floors).toEqual(['z-daterangebox 6.5em', 'z-timepicker 5em', 'z-selectbox 120px', 'z-slider 120px', 'z-multislider 120px']);
+});
+
+// hflex writes the width inline as well, so a field it sizes below its floor fills its parent and keeps any
+// button inside the box. Fixture: web/pv/input-narrow-guard.zul
+test('datebox — an hflex daterangebox, timepicker and selectbox narrower than their floor fill their parent', async ({ page }) => {
+  const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready);
+
+  const fields = await page.locator('.ing-hflex > div > *').evaluateAll(els => els.map(el => {
+    const name = el.className.split(' ')[0];
+    const b = el.getBoundingClientRect();
+    const button = el.querySelector(`.${name}-button`);
+    const r = button?.getBoundingClientRect();
+    const inside = !r || (r.left >= b.left - 0.5 && r.right <= b.right + 0.5);
+    return `${name} ${Math.round(b.width)} of ${Math.round(el.parentElement!.getBoundingClientRect().width)}${inside ? '' : ', button past the box'}`;
+  }));
+  expect(fields).toEqual(['z-daterangebox 120 of 120', 'z-timepicker 80 of 80', 'z-selectbox 80 of 80']);
 });

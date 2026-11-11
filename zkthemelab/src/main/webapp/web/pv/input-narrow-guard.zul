@@ -2,9 +2,11 @@
 <!-- Fixture for hit-target.spec.ts. The .ing-fit rows give each field a width that is common in a table cell but
      narrower than its input's old em floor plus its button: the button has to stay whole inside the box and own its
      centre. The second .ing-fit row repeats them in compact density. The .ing-35 row is B50-3101558: 35px is narrower
-     than the input's padding plus the button, so only the box is guaranteed: nothing runs into the next field.
+     than the input's padding plus the button, so only the box is guaranteed: nothing runs into the next field;
+     the chosenbox there has no trigger button, and its input used to keep a 60px floor past the box.
      The .ing-width row gives a selectbox, slider and multislider a width below their 120px floor; the .ing-floor row
-     leaves every floored field without a width, where the floor still applies.
+     leaves every floored field without a width, where the floor still applies. The .ing-hflex row sizes them by
+     hflex instead of width.
      Lives under pv/ so gallery-scan does not pick it up. -->
 <zk xmlns:ca="client/attribute">
 <vlayout spacing="12px">
@@ -32,6 +34,9 @@
         <datebox width="35px"/>
         <timebox width="35px"/>
         <spinner width="35px"/>
+        <daterangebox width="35px"/>
+        <timepicker width="35px"/>
+        <chosenbox width="35px"/>
         <textbox width="35px"/>
     </div>
     <div sclass="ing-width">
@@ -45,6 +50,11 @@
         <selectbox/>
         <slider/>
         <multislider><sliderbuttons startValue="20" endValue="60"/></multislider>
+    </div>
+    <div sclass="ing-hflex">
+        <div width="120px"><daterangebox hflex="1"/></div>
+        <div width="80px"><timepicker hflex="1"/></div>
+        <div width="80px"><selectbox hflex="1"/></div>
     </div>
 </vlayout>
 </zk>

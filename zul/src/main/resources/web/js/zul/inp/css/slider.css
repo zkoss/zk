@@ -82,8 +82,8 @@
 }
 
 /* ── Horizontal slider ────────────────────────────────── */
-/* The 120px floor sizes a slider the page leaves to its content; a set width (width, hflex) wins. */
-.z-slider-horizontal:not([style*="width"]) {
+/* The 120px floor sizes a slider the page leaves to its content; a set width (width, or hflex through z-flex-item) wins. */
+.z-slider-horizontal:not([style*="width"], .z-flex-item) {
     min-width: 120px;
 }
 
