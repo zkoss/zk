@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-6264.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Nov 10 14:11:20 CST 2026, Created by peggypeng
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<label multiline="true">
+		For each timebox:
+		1. Click the timebox, select all of its text and type 0, then click outside the timebox. The text should be 00:00, AM 12:00, 12:00:00 AM and 0000. The last timebox shows an error and keeps 0 :.
+		2. Click the up button twice (once for the last timebox). The field at the cursor should step: 00:01 then 00:02, AM 12:01 then AM 12:02, 12:00:00 PM then 12:00:00 AM, 0001 then 0002, and 01: for the last timebox.
+		Bug: the digits go in at the wrong position (0001:00, 00100, 01 :), or the AM/PM part is lost (12:00:01).
+		3. For the first timebox, click outside again. The date in the zk log should be the same as after step 1.
+		4. Click the first timebox, put the cursor after the hour, press Backspace, then click outside. The text should be 00:02.
+		Bug: the minutes are lost (00:00).
+		5. For the first timebox, select all and type 1, click outside, then click the up button. The text should be 01:00, then 01:01.
+		Bug: 0101:00.
+		6. For the first timebox, select all and type 0, click outside, then click the down button twice. The text should be 00:00, 00:59, then 00:58.
+		Bug: 0059:00, then 005959:00.
+	</label>
+	<timebox format="HH:mm" onChange='Clients.log(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(self.value))'/>
+	<timebox format="a hh:mm" locale="en_US"/>
+	<timebox format="h:mm:ss a" locale="en_US"/>
+	<timebox format="HHmm"/>
+	<timebox format="HH:mm" constraint="after 090000"/>
+</zk>

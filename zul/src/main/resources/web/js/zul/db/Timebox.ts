@@ -295,15 +295,14 @@ export class Timebox extends zul.inp.FormatWidget<DateImpl> {
 	/** @internal */
 	override coerceToString_(date?: DateImpl): string {
 		if (!this._changed && !date && arguments.length) return '';
-		var out = '', th: TimeHandler, text: string, offset: number | boolean;
+		var out = '', th: TimeHandler, text: string, offset: number;
 		for (var i = 0, f = this._fmthdler, l = f.length; i < l; i++) {
 			th = f[i];
 			text = th.format(date);
 			out += text;
-			//sync handler index
-			if (th.type && (offset = th.isSingleLength()) !== false
-				&& ((offset as number) += text.length - 1))
-				th._doShift(this, offset as number);
+			// ZK-6264: sync every number field, not only single-digit ones, since parse() measures them when the text doesn't fit
+			if (th.type && th.type != AM_PM_FIELD && (offset = text.length - (th.index[1] - th.index[0] + 1)))
+				th._doShift(this, offset);
 		}
 		return out;
 	}
@@ -1124,6 +1123,10 @@ export class TimeHandler extends zk.Object {
 	}
 
 	parse(val: string, opt: {obeyCount?: boolean}): number {
+		// ZK-6264: typed text always matches the field positions, e.g. typing 0 in HH:mm gives "0 :  " with the
+		// hour still at [0,1], so read each field where it is.
+		if (TimeHandler._fitsLayout(this.wgt, val))
+			return zk.parseInt(this.getText(val));
 		var text = this.getText(val, opt.obeyCount),
 			parsed = /^\s*\d*/.exec(text)!,
 			offset = parsed.length ? parsed[0].length - (this.index[1] - this.index[0] + 1) : 0;
@@ -1148,6 +1151,21 @@ export class TimeHandler extends zk.Object {
 			if (th.type) lastTh = th;
 		}
 		return (lastTh!.digits == 1) ? ++len : len;
+	}
+
+	/** @internal */
+	static _fitsLayout(wgt: Timebox, val: string): boolean {
+		var pos = 0;
+		for (var i = 0, f = wgt._fmthdler, l = f.length; i < l; i++) {
+			var th = f[i],
+				text = th.type ? th.getText(val) : th.format(),
+				fits = th.type == AM_PM_FIELD ? !/\d/.test(text)
+					: th.type ? /^[\d ]+$/.test(text) : val.startsWith(text, pos);
+			if (th.index[0] != pos || !fits)
+				return false;
+			pos += th.type ? th.index[1] - th.index[0] + 1 : text.length;
+		}
+		return pos == val.length;
 	}
 
 	/** @internal */
