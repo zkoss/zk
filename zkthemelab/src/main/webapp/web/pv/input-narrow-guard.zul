@@ -3,6 +3,8 @@
      narrower than its input's old em floor plus its button: the button has to stay whole inside the box and own its
      centre. The second .ing-fit row repeats them in compact density. The .ing-35 row is B50-3101558: 35px is narrower
      than the input's padding plus the button, so only the box is guaranteed: nothing runs into the next field.
+     The .ing-width row gives a selectbox, slider and multislider a width below their 120px floor; the .ing-floor row
+     leaves every floored field without a width, where the floor still applies.
      Lives under pv/ so gallery-scan does not pick it up. -->
 <zk xmlns:ca="client/attribute">
 <vlayout spacing="12px">
@@ -12,6 +14,8 @@
         <datebox width="80px"/>
         <timebox width="70px"/>
         <spinner width="60px"/>
+        <daterangebox width="150px"/>
+        <timepicker width="80px"/>
     </div>
     <div sclass="ing-fit" ca:data-density="compact">
         <combobox width="60px"><comboitem label="Item 1"/></combobox>
@@ -19,6 +23,8 @@
         <datebox width="80px"/>
         <timebox width="70px"/>
         <spinner width="60px"/>
+        <daterangebox width="150px"/>
+        <timepicker width="80px"/>
     </div>
     <div sclass="ing-35">
         <combobox width="35px"/>
@@ -27,6 +33,18 @@
         <timebox width="35px"/>
         <spinner width="35px"/>
         <textbox width="35px"/>
+    </div>
+    <div sclass="ing-width">
+        <selectbox width="80px"/>
+        <slider width="80px"/>
+        <multislider width="80px"><sliderbuttons startValue="20" endValue="60"/></multislider>
+    </div>
+    <div sclass="ing-floor">
+        <daterangebox/>
+        <timepicker/>
+        <selectbox/>
+        <slider/>
+        <multislider><sliderbuttons startValue="20" endValue="60"/></multislider>
     </div>
 </vlayout>
 </zk>

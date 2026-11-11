@@ -82,8 +82,8 @@
 }
 
 /* ── Horizontal slider ────────────────────────────────── */
-.z-slider-horizontal {
-    /* default width comes from ZK attribute width="" or style; override min */
+/* The 120px floor sizes a slider the page leaves to its content; a set width (width, hflex) wins. */
+.z-slider-horizontal:not([style*="width"]) {
     min-width: 120px;
 }
 

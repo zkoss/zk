@@ -242,20 +242,21 @@ test.describe('checkbox ring in compact density', () => {
   }
 });
 
-// A combobox, bandbox, datebox, timebox or spinner narrower than its input plus its button keeps
-// the given width, and the input gives way instead of the button: the button stays whole inside
+// A combobox, bandbox, datebox, timebox, spinner, daterangebox or timepicker narrower than its input plus its
+// button keeps the given width, and the input gives way instead of the button: the button stays whole inside
 // the box and owns its centre. The datebox and timebox inputs used to keep an em floor, so at
-// 70–100px the button ran past the box and the next field took the click (B50-3101558).
+// 70–100px the button ran past the box and the next field took the click (B50-3101558); the daterangebox's
+// button did the same below about 220px, and the timepicker clipped its button below about 100px.
 // Fixture: web/pv/input-narrow-guard.zul
-test('datebox — a narrow combobox, bandbox, datebox, timebox and spinner keep their button inside the box', async ({ page }) => {
+test('datebox — a narrow combobox, bandbox, datebox, timebox, spinner, daterangebox and timepicker keep their button inside the box', async ({ page }) => {
   const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
   expect(resp?.status()).toBe(200);
   await page.evaluate(() => document.fonts.ready);
 
   const problems = await page.evaluate(() => {
     const out: string[] = [];
-    const boxes = document.querySelectorAll<HTMLElement>('.ing-fit > :is(.z-combobox, .z-bandbox, .z-datebox, .z-timebox, .z-spinner)');
-    if (boxes.length !== 10) out.push(`found ${boxes.length} fields, not 10`);
+    const boxes = document.querySelectorAll<HTMLElement>('.ing-fit > :is(.z-combobox, .z-bandbox, .z-datebox, .z-timebox, .z-spinner, .z-daterangebox, .z-timepicker)');
+    if (boxes.length !== 14) out.push(`found ${boxes.length} fields, not 14`);
     boxes.forEach((box, i) => {
       const name = box.className.split(' ')[0].slice(2);
       const button = box.querySelector(`.z-${name}-button`)!;
@@ -304,4 +305,26 @@ test('datebox — a 35px combobox, bandbox, datebox, timebox and spinner show th
     return out;
   });
   expect(problems).toEqual([]);
+});
+
+// A field's min-width floor sizes it only while the page leaves its width open: a selectbox, slider or
+// multislider given 80px is 80px wide, not its 120px floor, and the floored fields without a width keep it.
+// Fixture: web/pv/input-narrow-guard.zul
+test('datebox — a set width wins over a field\'s min-width floor, which still sizes a field without one', async ({ page }) => {
+  const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready);
+
+  const sized = await page.locator('.ing-width > *').evaluateAll(els =>
+    els.map(el => `${el.className.split(' ')[0]} ${Math.round(el.getBoundingClientRect().width)}`));
+  expect(sized).toEqual(['z-selectbox 80', 'z-slider 80', 'z-multislider 80']);
+
+  // The daterangebox and timepicker floors sit on their inputs (6.5em and 5em); the others on the root (120px).
+  const floors = await page.locator('.ing-floor > *').evaluateAll(els => els.map(el => {
+    const input = el.querySelector<HTMLElement>('.z-daterangebox-input, .z-timepicker-input');
+    const floored = input ?? el;
+    const ems = parseFloat(getComputedStyle(floored).minWidth) / parseFloat(getComputedStyle(floored).fontSize);
+    return `${el.className.split(' ')[0]} ${input ? `${ems}em` : getComputedStyle(el).minWidth}`;
+  }));
+  expect(floors).toEqual(['z-daterangebox 6.5em', 'z-timepicker 5em', 'z-selectbox 120px', 'z-slider 120px', 'z-multislider 120px']);
 });
