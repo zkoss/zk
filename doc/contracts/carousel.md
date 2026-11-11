@@ -155,7 +155,7 @@ doc/spec/DESIGN.md "Corner Radii" ("default to `--zk-shape-card` for any contain
 in c1). A caption chip is a small container, not an interactive control, so it takes the
 container radius, not the control radius; "mirrors ZK stock's 4px" is not a valid `source`
 under this theme's authoring discipline (see the Spacing paragraph below, which avoids that
-for offsets). The label's text uses `--zk-typescale-body-small` (c32) — doc/spec/DESIGN.md "Typography" (§7) states no caption size, and no
+for offsets). The label's text uses the `--zk-typescale-body-small-*` tokens (c32) — doc/spec/DESIGN.md "Typography" (§7) states no caption size, and no
 shipped token is literally named or sized for that role; `body-small` is the nearest actual
 `--zk-typescale-*` token embodying the same "small, regular-weight, non-emphasized" role
 (as opposed to `label-small`, which carries an emphasis weight
@@ -365,7 +365,7 @@ density/comfort choice to begin with — it is WCAG 2.1 SC 2.5.8's *minimum* tar
 accessibility floor. Binding it to the compact-mode ladder would let a customer's
 `data-density="compact"` override shrink it below that floor, which the theme must never
 allow for any control (the same reasoning `--zk-touch-target-min` in the tablet layer is
-never subject to a compact override, just the opposite direction). `--zk-carousel-indicator`
+never subject to a compact override, just the opposite direction). The indicator's
 sizing therefore stays a fixed literal (c16/c17 in Expected values), not a ladder-bound
 alias, and is exempt from density scaling in both directions.
 
