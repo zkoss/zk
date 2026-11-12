@@ -2,38 +2,93 @@
    ZK-6199 replaced the inline colours and font with these classes; the five
    --zk-fileupload-* variables it defines are declared in tokens/_component-theme.css.
    DOM: <div class="z-fileupload-file">
-          <img class="z-fileupload-icon"/>              (16px progress gif, floated left)
-          <div><a class="z-fileupload-cancel"/> name</div>
-          <div class="z-fileupload-size">…</div>       (indented under the name)
+          <img class="z-fileupload-icon"/>              (progress2.gif, attachment.gif once uploaded)
+          <div><a class="z-fileupload-cancel"/>&nbsp;&nbsp;&nbsp;name</div>
+          <div class="z-fileupload-size">…</div>       (removed once uploaded)
         </div>
    The dialog has no css-uri in lang.xml, so this file is bundled into norm.css.dsp. */
 
 @layer zk-components {
+/* Icon column + text column; ::before is the icon, spanning the name and size lines */
 .z-fileupload-file {
-    box-sizing: content-box;
-    min-height: 16px;
-    padding: var(--zk-spacing-1) var(--zk-spacing-2);
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    column-gap: var(--zk-spacing-2);
+    align-items: center;
+    padding: var(--zk-spacing-2) var(--zk-spacing-3);
     border: 1px solid var(--zk-fileupload-border-color);
+    border-radius: var(--zk-shape-corner-small);
     background: var(--zk-fileupload-background-color);
     color: var(--zk-fileupload-color);
     font-family: var(--zk-fileupload-font-family);
-    font-size: var(--zk-typescale-body-small-size);
+    font-size: var(--zk-typescale-body-medium-size);
+    line-height: var(--zk-typescale-body-medium-line-height);
 }
 
+/* Rows stand apart instead of stacking two borders; the last one keeps clear of the buttons */
+.z-fileupload-file + .z-fileupload-file {
+    margin-top: var(--zk-spacing-2);
+}
+
+.z-fileupload-file:last-child {
+    margin-bottom: var(--zk-spacing-2);
+}
+
+/* The raster gifs give way to a Lucide mask (uploaded) or the framework spinner (uploading) */
 .z-fileupload-icon {
-    float: left;
+    display: none;
+}
+
+.z-fileupload-file::before {
+    content: '';
+    grid-row: span 2;
+    width: 20px;
+    height: 20px;
+    background-color: var(--zk-color-on-surface-variant);
+    -webkit-mask: url(~./zul/img/icons/file.svg) center / contain no-repeat;
+    mask: url(~./zul/img/icons/file.svg) center / contain no-repeat;
+}
+
+/* Same spinner as .z-loading-icon (wgt/css/misc.css), sized to the 20px icon box */
+.z-fileupload-file:has(.z-fileupload-size)::before {
+    box-sizing: border-box;
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+    border: 2px solid var(--zk-color-primary-container);
+    border-top-color: var(--zk-color-primary);
+    border-radius: 50%;
+    background: none;
+    -webkit-mask: none;
+    mask: none;
+    animation: z-loading-spin 0.8s linear infinite;
+}
+
+/* Name line: the name is an anonymous flex item, the cancel link moves to the trailing end.
+   The widget writes three &nbsp; before the name; the negative indent takes them back
+   (three Inter spaces are 0.84em), so the name lines up with the size line and its own wrap. */
+.z-fileupload-file > div:not(.z-fileupload-size) {
+    display: flex;
+    align-items: baseline;
+    overflow-wrap: anywhere;
+    text-indent: -0.84em;
 }
 
 .z-fileupload-cancel {
-    float: left;
-    padding-left: var(--zk-spacing-1);
+    order: 1;
+    margin-left: auto;
+    padding-left: var(--zk-spacing-3);
     color: var(--zk-fileupload-cancel-color);
-    font-weight: var(--zk-typescale-label-medium-weight);
+    font-size: var(--zk-typescale-label-large-size);
+    font-weight: var(--zk-typescale-label-large-weight);
+    text-indent: 0;
+    white-space: nowrap;
     cursor: pointer;
 }
 
-/* 16px icon + one spacing-2 gap, so the size line starts under the file name */
 .z-fileupload-size {
-    padding-left: var(--zk-spacing-6);
+    color: var(--zk-color-on-surface-variant);
+    font-size: var(--zk-typescale-body-small-size);
+    line-height: var(--zk-typescale-body-small-line-height);
 }
 }

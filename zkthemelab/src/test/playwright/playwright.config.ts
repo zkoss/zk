@@ -211,6 +211,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // The picked-file rows of the Fileupload.get dialog follow MD3 (fud/css/fileupload.css). See fileupload-dialog.spec.ts.
+      name: 'fileupload-dialog',
+      testMatch: /fileupload-dialog\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // An idle inplace Chosenbox shows no field outline (zkmax chosenbox.css). See chosenbox-inplace.spec.ts.
       name: 'chosenbox-inplace',
       testMatch: /chosenbox-inplace\.spec\.ts/,

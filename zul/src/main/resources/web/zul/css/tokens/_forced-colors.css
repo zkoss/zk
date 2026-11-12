@@ -350,6 +350,7 @@
     .z-menu-paletteicon::before,
     .z-menu-pickericon::before,
     .z-messagebox-icon::before,
+    .z-fileupload-file:not(:has(.z-fileupload-size))::before,
     .z-paging-os ul > li.z-paging-navigate .z-paging-noborder::after {
         background-color: CanvasText;
     }

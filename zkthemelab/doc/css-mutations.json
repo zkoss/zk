@@ -171,6 +171,45 @@
           "forced-colors"
         ]
       }
+    },
+    {
+      "id": "U1",
+      "area": "fileupload-dialog",
+      "description": "fileupload: picked-file rows lose the gap between them (borders stack)",
+      "source": "zul/src/main/resources/web/js/zul/fud/css/fileupload.css",
+      "find": ".z-fileupload-file+.z-fileupload-file{margin-top:var(--zk-spacing-2)}",
+      "replace": ".z-fileupload-file+.z-fileupload-file{margin-top:0}",
+      "run": {
+        "projects": [
+          "fileupload-dialog"
+        ]
+      }
+    },
+    {
+      "id": "U2",
+      "area": "fileupload-dialog",
+      "description": "fileupload: the raster progress / attachment gif shows again",
+      "source": "zul/src/main/resources/web/js/zul/fud/css/fileupload.css",
+      "find": ".z-fileupload-icon{display:none}",
+      "replace": ".z-fileupload-icon{display:inline}",
+      "run": {
+        "projects": [
+          "fileupload-dialog"
+        ]
+      }
+    },
+    {
+      "id": "U3",
+      "area": "fileupload-dialog",
+      "description": "fileupload: the cancel link moves back before the file name",
+      "source": "zul/src/main/resources/web/js/zul/fud/css/fileupload.css",
+      "find": "cursor:pointer;order:1;margin-left:auto}",
+      "replace": "cursor:pointer;order:0;margin-left:auto}",
+      "run": {
+        "projects": [
+          "fileupload-dialog"
+        ]
+      }
     }
   ]
 }
