@@ -68,8 +68,10 @@ gains `describe.serial`, a `beforeAll` its tests rely on, or a module-level obje
    present on a page at rest -> those pages; else the longest present name prefix (`z-datebox-popup` -> `z-datebox`);
    else the pages of the file's own component (`combobox.css` -> `z-combobox`); else it is reported in `uncovered`
    and the result is `full`. `misc.css` is shared and always `full`. Two rules apply on top of that, for every class:
-   * **Own page.** `<name>.css` always selects the top-level page `<name>.zul` when it exists, and with it every
-     test that opens it (including the `popup` project). The same holds for the widget `<Name>.ts`.
+   * **Own page.** `<name>.css` always selects the top-level page `<name>.zul` when it exists, and every
+     `pv/<name>-*.zul` fixture, and with them every test that opens one (including the `popup` project). A fixture
+     whose classes appear only after a click (a popup, the fileupload dialog rows) is absent from the class index,
+     so its name is what ties it to the CSS. The same holds for the widget `<Name>.ts`.
    * **Owner pages.** The owner of a class (its longest present name prefix, else the CSS file's component) always
      contributes the pages where the owner's root class is present, even when the class itself is also on a page
      at rest.
