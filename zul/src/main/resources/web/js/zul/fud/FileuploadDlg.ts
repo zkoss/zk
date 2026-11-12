@@ -63,7 +63,7 @@ export class ModalFileViewer extends zk.Object {
 			html = '<div id="' + /*safe*/ id + '" class="z-fileupload-file">'
 			+ '<img class="z-fileupload-icon" src="' + /*safe*/ uri + '"/>'
 			+ '<div id="' + /*safe*/ id + '-cnt"><a id="' + /*safe*/ id + '-cancel" class="z-fileupload-cancel">'
-			+ /*safe*/ msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + /*safe*/ filenm
+			+ /*safe*/ msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + zUtl.encodeXML(filenm)
 			+ '</div><div class="z-fileupload-size">'
 			+ /*safe*/ msgzk.FILE_SIZE + '&nbsp;&nbsp;<span id="' + /*safe*/ id + '-sent">0</span> of '
 			+ '<span id="' + /*safe*/ id + '-total">0</span></div></div>';

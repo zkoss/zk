@@ -89,6 +89,7 @@ ZK 11.0.0
   ZK-6158: Patching is needed to build OSGi jar iDempiere
   ZK-6216: tabbox: selected tab is left partly scrolled out of view when a web font finishes loading after mount
   ZK-6267: Combobox re-measures the popup of every closed combobox on each AU response
+  ZK-6217: fileupload: the Fileupload.get dialog inserts the picked file's name into the page as HTML, so a name containing markup is rendered or runs script
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
