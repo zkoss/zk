@@ -798,10 +798,11 @@
     display: table-row-group;
 }
 
-/* B36-2805177: the empty cell drops the browser's default td padding (1px top and bottom), so an empty body shows no
-   height of its own and, with an emptyMessage, is exactly as tall as the message box (as under IceBlue's resetTable). */
+/* B36-2805177: the empty cell drops the browser's default td padding (1px top and bottom) but keeps 1px at the bottom,
+   as under IceBlue: a 0px-tall table leaves the body nothing to scroll, so the columns past the right edge of an empty
+   Listbox can't be reached (B70-ZK-2290). */
 .z-listbox-emptybody td {
-    padding: 0;
+    padding: 0 0 1px;
 }
 
 .z-listbox-emptybody-content {

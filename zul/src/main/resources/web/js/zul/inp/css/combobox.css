@@ -13,6 +13,10 @@
 .z-combobox {
     --zk-combobox-button-width: var(--zk-input-button-width);
     display: inline-block;
+    /* Safari 18 takes the bottom edge of an inline-block with overflow: clip as its baseline, so the field rose above
+       its neighbours and zk(n).offsetHeight() measured 5px more, opening the popup 5px low. Centre it, as the Bandbox
+       and the Datebox do. */
+    vertical-align: middle;
     position: relative;
     white-space: nowrap;
     background-color: var(--zk-combobox-bg);
