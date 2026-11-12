@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B111-ZK-5655.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu Nov 12 14:20:00 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Open this page in Safari on iOS.
+		1. Tap "Color": the palette opens.
+		2. Tap the picker icon, then the palette icon: each tap switches the pane.
+		3. Tap a color: the label below shows that color.
+	</label>
+	<menubar>
+		<menu id="menu" label="Color" content="#color=#184dc6" onChange="lb.value = event.value"/>
+	</menubar>
+	<label id="lb"/>
+</zk>
