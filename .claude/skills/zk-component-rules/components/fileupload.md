@@ -16,4 +16,4 @@ Multi-file upload is set through the `upload` option string on the button, for e
 
 ## DOM
 
-The rendered DOM and state classes are not described in this file.
+The rows of the `Fileupload.get` dialog are an HTML string built in `ModalFileViewer` (`zul/src/main/resources/web/js/zul/fud/FileuploadDlg.ts`); read the DOM and the uploading / uploaded states there.
