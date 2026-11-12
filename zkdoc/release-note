@@ -90,6 +90,7 @@ ZK 11.0.0
   ZK-6216: tabbox: selected tab is left partly scrolled out of view when a web font finishes loading after mount
   ZK-6267: Combobox re-measures the popup of every closed combobox on each AU response
   ZK-6217: fileupload: the Fileupload.get dialog inserts the picked file's name into the page as HTML, so a name containing markup is rendered or runs script
+  ZK-6182: Stateless — a richlet action request runs any public method declared on the richlet class, named by the client, including methods the page never rendered and methods without @Action
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
@@ -122,6 +123,10 @@ ZK 11.0.0
     ZUL page nested deeper than 100 levels fails to load; raise -Djdk.xml.maxElementDepth or split it.
   + URLs.sanitizeURL now returns non-http/https URLs unchanged. Applications that call this public API directly should not rely on it to validate or reject container-owned resource URL formats such as jar/wsjar URLs without an entry separator.
   + Borderlayout is extended from XulElement since ZK 11.0.0, so it also accepts the context, popup and tooltip attributes.
+  + Stateless richlets run an action only if it was rendered in the same HTTP session, so the client
+    must send the session cookie back; otherwise each action request reloads the page. Give the
+    session cookie SameSite=None; Secure for a page in a cross-site iframe, and use sticky sessions
+    or session replication in a cluster.
   + Upgrade httpcore5 to 5.4.3 to fix vulnerabilities
   + Upgrade jackson-databind to 2.22.1 to fix vulnerabilities
   + Upgrade tomcat-jasper-el to 9.0.120 to fix vulnerabilities
