@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6217.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Thu Nov 12 14:20:05 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Create a file whose name contains HTML, e.g. &lt;img src=x onerror=alert(1)&gt;.txt
+		2. Click "Open upload dialog", click Browse... and pick that file.
+		Expected: the dialog shows the file name as plain text, exactly as it is on disk; no image is added and no alert pops up.
+	</label>
+	<button id="open" label="Open upload dialog"
+		onClick='Fileupload.get(1, new org.zkoss.zk.ui.event.EventListener() { public void onEvent(org.zkoss.zk.ui.event.Event e) {} });'/>
+</zk>
