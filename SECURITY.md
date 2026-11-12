@@ -16,16 +16,6 @@ Please include:
 
 ## What happens next
 
-1. We acknowledge your report within 2 business days.
-2. We assess it and tell you whether we accept it as a vulnerability, then keep you updated at least every 14 days until
-   it is resolved.
-3. We fix it in the ZK release lines we still maintain and publish the fix in a release whose release notes describe the
-   vulnerability, with its CVE identifier when one is assigned. We credit you there unless you ask us not to.
+We acknowledge receipt within 2 business days and work with you on coordinated disclosure.
 
-If you report a vulnerability in a release line we no longer maintain, we tell you which maintained release fixes it.
-
-## Coordinated disclosure
-
-Please keep the details confidential until the fix is released, or for 90 days after your report if that comes first.
-When a fix needs longer, we agree a later date with you. When a vulnerability is being actively exploited, we may
-release the fix and its details sooner.
+Potix does not operate a bug bounty program or offer monetary rewards for vulnerability reports.
