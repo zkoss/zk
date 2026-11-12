@@ -169,3 +169,45 @@ test.describe('empty field baseline', () => {
     });
   }
 });
+
+// Guard for `.z-combobox { vertical-align: middle; }` (combobox.css, ZK-6112; ztl B30-1799602, B70-ZK-2742,
+// B80-ZK-3051-1). The root is an inline-block with overflow: clip. Safari 18 takes such a box's bottom edge as its
+// baseline, so a baseline-aligned Combobox rose 16px above the Datebox and the Bandbox beside it, and
+// zk(n).offsetHeight() (which measures a copy of the field in a line of text) gave 45px for a 40px field, opening the
+// list 5px low. Chromium keeps the text baseline but still put the Combobox 1.45px high, so the layout test is a real
+// guard here; the Safari numbers were measured by hand.
+// Fixture: web/combobox.zul, section "In a Line of Text".
+test.describe('field in a line of text', () => {
+  const TOLERANCE_PX = 0.5;
+  // The section ends a page that does not scroll; at the default 720px the list lacks 1px below the field and opens above it.
+  test.use({ viewport: { width: 1280, height: 1000 } });
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/combobox.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+  });
+
+  test('combobox — the root is centred on the line, not aligned by its baseline', { tag: '@ZK-6112' }, async ({ page }) => {
+    const verticalAlign = await page.locator('#pv-combobox-inline .z-combobox').evaluate((el) => getComputedStyle(el).verticalAlign);
+    expect(verticalAlign).toBe('middle');
+  });
+
+  test('combobox — shares its top edge with the datebox and the bandbox', { tag: '@ZK-6112' }, async ({ page }) => {
+    const tops = await page.locator('#pv-combobox-inline').evaluate((line) =>
+      ['.z-combobox', '.z-datebox', '.z-bandbox'].map((s) => line.querySelector(s)!.getBoundingClientRect().top));
+    expect(Math.abs(tops[0] - tops[1]), `combobox top ${tops[0]}, datebox top ${tops[1]}`).toBeLessThanOrEqual(TOLERANCE_PX);
+    expect(Math.abs(tops[2] - tops[1]), `bandbox top ${tops[2]}, datebox top ${tops[1]}`).toBeLessThanOrEqual(TOLERANCE_PX);
+  });
+
+  test('combobox — the list opens at the field\'s bottom edge', { tag: '@ZK-6112' }, async ({ page }) => {
+    const combobox = page.locator('#pv-combobox-inline .z-combobox');
+    expect(await combobox.evaluate((el) => zk(el).offsetHeight())).toBe(await combobox.evaluate((el) => el.offsetHeight));
+    await combobox.locator('.z-combobox-button').click();
+    // The list slides down with an inline margin of 0, 4px above where it ends, so poll until the slide has finished.
+    await expect.poll(() => combobox.evaluate((el) => {
+      const popup = zk.Widget.$(el).$n('pp') as HTMLElement;
+      return popup.getBoundingClientRect().top - el.getBoundingClientRect().bottom;
+    }), { timeout: 2000 }).toBeCloseTo(0, 0);
+  });
+});

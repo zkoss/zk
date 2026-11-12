@@ -49,4 +49,13 @@
         </h:div>
     </h:div>
 </h:div>
+
+<h:div class="z-mb-6">
+    <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">In a Line of Text</h:span></h:div>
+    <h:div class="z-py-3 z-mb-3"><h:span class="z-text-sm z-text-secondary">A Combobox beside a Datebox and a Bandbox in running text: the three fields share one top edge, and the list opens at the Combobox's bottom edge.</h:span></h:div>
+    <h:div id="pv-combobox-inline" class="z-py-3">
+        Text <combobox width="150px"><comboitem label="one"/><comboitem label="two"/><comboitem label="three"/></combobox>
+        <datebox width="150px"/> <bandbox width="150px"/>
+    </h:div>
+</h:div>
 </zk>
