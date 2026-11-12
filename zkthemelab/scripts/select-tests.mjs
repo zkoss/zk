@@ -649,11 +649,15 @@ function resolveChange(change, ctx, sel) {
   sel.fullReasons.push(`${where}: unrecognised path type, cannot decide what it affects`);
 }
 
-/** A component's own preview page (`combobox.zul` for combobox.css or Combobox.ts) is always selected, whatever the rule. */
+/**
+ * A component's own pages are always selected, whatever the rule: its preview page (`combobox.zul` for combobox.css
+ * or Combobox.ts) and its `pv/<component>-*.zul` fixtures, whose classes may appear only after a click and so are
+ * missing from the class index. Returns the page files selected this way, for the reason line.
+ */
 function addOwnPage(pages, component, ctx) {
-  const hasOwnPage = ctx.zuls.some(z => z.key === component);
-  if (hasOwnPage) pages.add(component);
-  return hasOwnPage ? component : null;
+  const own = ctx.zuls.map(z => z.key).filter(k => k === component || k.startsWith(`pv/${component}-`));
+  own.forEach(k => pages.add(k));
+  return own.length ? own.map(k => `${k}.zul`).join(', ') : null;
 }
 
 function resolveComponentCss(change, where, component, ctx, sel) {
@@ -672,9 +676,9 @@ function resolveComponentCss(change, where, component, ctx, sel) {
     return;
   }
   const { pages, unresolved, byPrefix, byComponent } = ctx.classes.resolve(parsed.classes, parsed.attributePatterns, component);
-  const ownPage = addOwnPage(pages, component, ctx);
+  const ownPages = addOwnPage(pages, component, ctx);
   const notes = [`parsed ${parsed.parseMode}`, `${parsed.classes.size} classes -> ${pages.size} pages`];
-  if (ownPage) notes.push(`own page ${ownPage}.zul always selected`);
+  if (ownPages) notes.push(`own pages ${ownPages} always selected`);
   if (byPrefix.length) notes.push(`${byPrefix.length} resolved by name prefix (${byPrefix.slice(0, 3).join(', ')}${byPrefix.length > 3 ? ', ...' : ''})`);
   if (byComponent.length) notes.push(`${byComponent.length} resolved by the file's own component z-${component}`);
   sel.reasons.push(`${where}: ${notes.join('; ')}`);
@@ -685,8 +689,8 @@ function resolveComponentCss(change, where, component, ctx, sel) {
 function resolveWidget(where, name, ctx, sel) {
   const rootClass = `z-${name.toLowerCase()}`;
   const { pages, unresolved } = ctx.classes.resolve([rootClass], [], null);
-  const ownPage = addOwnPage(pages, name.toLowerCase(), ctx);
-  sel.reasons.push(`${where}: widget root class .${rootClass} -> ${pages.size} pages${ownPage ? `, own page ${ownPage}.zul always selected` : ''}`);
+  const ownPages = addOwnPage(pages, name.toLowerCase(), ctx);
+  sel.reasons.push(`${where}: widget root class .${rootClass} -> ${pages.size} pages${ownPages ? `, own pages ${ownPages} always selected` : ''}`);
   unresolved.forEach(c => sel.uncovered.push(`widget ${where}: root class .${c} is on no preview page`));
   addPagesAndTests(sel, pages, ctx.testsForPage);
 }
