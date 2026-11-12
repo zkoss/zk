@@ -33,6 +33,9 @@
     background-color: var(--zk-timebox-bg);
     min-height: var(--zk-control-height);
     box-sizing: border-box;
+    /* A width narrower than the input and the button keeps the box: the input shrinks to its
+       padding and the overflow is clipped, so nothing runs into the next widget. */
+    overflow: clip;
     transition:
         border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
         box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
@@ -53,11 +56,12 @@
 /* Width follows the cols API (rendered as the input's `size`; Timebox derives the default
    from the value's formatted length), like IceBlue. `field-sizing: content` is deliberately
    NOT used: it makes the browser ignore `size`, so an explicit cols had no effect.
-   `flex: 1 1 auto` still lets an hflex / width-forced field fill its container; the
-   `min-width` floor keeps a small cols a usable click target. */
+   `flex: 1 1 auto` still lets an hflex / width-forced field fill its container. `min-width: 0`
+   lets the input, not the button, give way when the box is narrower than both (an em floor
+   here pushed the button out of the box). */
 .z-timebox-input {
     flex: 1 1 auto;
-    min-width: 5em;
+    min-width: 0;
     border: none;
     background: transparent;
     padding: 0 var(--zk-spacing-3);
@@ -114,7 +118,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 32px;
+    width: var(--zk-input-button-width);
     min-height: calc(var(--zk-input-height) - 2px);
     border: none;
     border-left: 1px solid var(--zk-color-outline);

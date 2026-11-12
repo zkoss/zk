@@ -199,6 +199,50 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // An icon-only A has no trailing gap; a labelled one keeps it (a.css). See a-icon-only.spec.ts.
+      name: 'a-icon-only',
+      testMatch: /a-icon-only\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Every Panel border value uses --zk-panel-radius (panel.css). See panel-radius.spec.ts.
+      name: 'panel-radius',
+      testMatch: /panel-radius\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // An idle inplace Chosenbox shows no field outline (zkmax chosenbox.css). See chosenbox-inplace.spec.ts.
+      name: 'chosenbox-inplace',
+      testMatch: /chosenbox-inplace\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // The popup title of a collapsed Navbar joins the list as one surface (zkmax nav.css). See navbar-popup-title.spec.ts.
+      name: 'navbar-popup-title',
+      testMatch: /navbar-popup-title\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // A stacking listbox card keeps the table-row checkbox geometry (zkmax sel/css/listbox.css). See listbox-stacking-checkmark.spec.ts.
+      name: 'listbox-stacking-checkmark',
+      testMatch: /listbox-stacking-checkmark\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // The default-mold pagings on paging.zul show First / Last and the detailed one its detail. See paging-preview.spec.ts.
+      name: 'paging-preview',
+      testMatch: /paging-preview\.spec\.ts/,
+      grepInvert: /@tablet/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // The @tablet test of paging-preview.spec.ts: the tablet paging buttons are larger.
+      name: 'paging-preview-tablet',
+      testMatch: /paging-preview\.spec\.ts/,
+      grep: /@tablet/,
+      use: TABLET_USE,
+    },
+    {
       // A real constraint failure styles the combobox and bandbox (combobox.css, bandbox.css). See input-invalid.spec.ts.
       name: 'input-invalid',
       testMatch: /input-invalid\.spec\.ts/,

@@ -176,11 +176,6 @@
     box-shadow: var(--zk-elevation-dialog);
 }
 
-/* Noframe: non-rounded border (border="normal" in ZK, not "rounded") */
-.z-panel-noframe {
-    border-radius: 0;
-}
-
 /* ─── Drag / resize utilities ────────────────────────────────────────────── */
 .z-panel-move-ghost {
     opacity: 0.5;

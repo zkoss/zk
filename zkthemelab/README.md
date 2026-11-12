@@ -62,7 +62,7 @@ Each page shows one component across its states and variants, named after the co
 Media & Upload; list the pages with `ls src/main/webapp/web/*.zul`.
 
 Nav labels mostly match the filename; the ones that do not: Link → `a.zul`,
-Drag & Drop → `dnd.zul`, Error → `runtime-error.zul`, Grid (Responsive) → `responsive-grid.zul`.
+Drag & Drop → `dnd.zul`, and Error → `runtime-error.zul`.
 
 ### Utility CSS — the token and utility-class catalogues
 

@@ -42,7 +42,7 @@ test.describe('Component Theme Variables (borrowed preview pages)', () => {
     await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
     const icon = dlg.locator('.z-messagebox-information').first();
 
-    expect(await radiusOf(dlg)).toBe('4px'); // stock --zk-shape-dialog
+    expect(await radiusOf(dlg)).toBe('6px'); // stock --zk-shape-dialog
     expect(await bgOf(dlg)).toBe('rgb(255, 255, 255)'); // stock --zk-color-surface
     const iconColor = await colorOf(icon);
 
@@ -85,7 +85,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     const root = page.locator('.z-window').first();
     const c0 = root;
     const c1 = root;
-    expect(await radiusOf(c0)).toBe('4px'); // stock
+    expect(await radiusOf(c0)).toBe('6px'); // stock --zk-shape-dialog
     expect(await bgOf(c1)).toBe('rgb(255, 255, 255)'); // stock
     await page.addStyleTag({ content: ':root{--zk-window-radius:16px;--zk-window-bg:#eef2ff;--zk-window-border-color:#6750a4}' });
     expect(await radiusOf(c0)).toBe('16px');
@@ -613,7 +613,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     await c0.waitFor({ state: 'attached' });
     expect(await radiusOf(c0)).toBe('9999px'); // stock
     expect(await bgOf(c0)).toBe('oklch(0.92 0.0403278 260.564)'); // stock
-    expect(await colorOf(c0)).toBe('oklch(0.23 0.0725901 260.564)'); // stock
+    expect(await colorOf(c0)).toBe('oklch(0.23 0.0725901 260.564)'); // stock --zk-color-on-primary-container
     await page.addStyleTag({ content: ':root{--zk-paging-radius:4px;--zk-paging-selected-bg:#6750a4;--zk-paging-selected-fg:#ffffff}' });
     expect(await radiusOf(c0)).toBe('4px');
     expect(await bgOf(c0)).toBe(SCOPED_PURPLE);
@@ -712,7 +712,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     expect(await bgOf(c0)).toBe('rgb(247, 249, 252)'); // stock
     expect(await radiusOf(c1)).toBe('8px'); // stock
     expect(await bgOf(c2)).toBe('color(srgb 0.215686 0.435294 0.815686 / 0.12)'); // stock
-    expect(await colorOf(c2)).toBe('oklch(0.23 0.0725901 260.564)'); // stock
+    expect(await colorOf(c2)).toBe('oklch(0.23 0.0725901 260.564)'); // stock --zk-color-on-primary-container
     await page.addStyleTag({ content: ':root{--zk-navbar-bg:#efe6ff;--zk-navitem-radius:0px;--zk-navitem-selected-bg:#6750a4;--zk-navitem-selected-fg:#ffffff}' });
     expect(await bgOf(c0)).toBe('rgb(239, 230, 255)');
     expect(await radiusOf(c1)).toBe('0px');
@@ -937,7 +937,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     expect(await radiusOf(c0)).toBe('6px'); // stock
     expect(await borderColorOf(c0)).toBe('rgba(0, 0, 0, 0.12)'); // stock
     expect(await bgOf(c1)).toBe('oklch(0.92 0.0403278 260.564)'); // stock
-    expect(await colorOf(c1)).toBe('oklch(0.23 0.0725901 260.564)'); // stock
+    expect(await colorOf(c1)).toBe('oklch(0.23 0.0725901 260.564)'); // stock --zk-color-on-primary-container
     await page.addStyleTag({ content: ':root{--zk-portallayout-radius:0px;--zk-portallayout-border-color:#6750a4;--zk-portallayout-counter-bg:#6750a4;--zk-portallayout-counter-fg:#ffffff}' });
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c0)).toBe(SCOPED_PURPLE);

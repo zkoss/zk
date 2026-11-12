@@ -1,0 +1,25 @@
+<?page title="Listbox stacking checkmark guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for listbox-stacking-checkmark.spec.ts: two narrow stacking listboxes with a checkmark,
+     one whose first column shows in the card (the checkbox rides in that cell) and one whose first
+     column is hidden from the card (the cell stays only for the checkbox). Lives under pv/ so
+     gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <listbox sclass="cm-lead" responsive="stacking" checkmark="true" multiple="true" width="460px">
+        <listhead>
+            <listheader label="Name"/>
+            <listheader label="Email"/>
+        </listhead>
+        <listitem><listcell label="Alice Chen"/><listcell label="alice@example.com"/></listitem>
+    </listbox>
+    <h:div class="z-mt-6"/>
+    <listbox sclass="cm-only" responsive="stacking" checkmark="true" multiple="true" width="460px">
+        <listhead>
+            <listheader label="ID" responsiveVisible="false"/>
+            <listheader label="Name"/>
+            <listheader label="Email"/>
+        </listhead>
+        <listitem><listcell label="EMP-000241"/><listcell label="Alice Chen"/><listcell label="alice@example.com"/></listitem>
+    </listbox>
+</h:div>
+</zk>

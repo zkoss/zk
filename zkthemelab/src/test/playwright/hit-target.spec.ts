@@ -241,3 +241,111 @@ test.describe('checkbox ring in compact density', () => {
     });
   }
 });
+
+// A combobox, bandbox, datebox, timebox, spinner, daterangebox or timepicker narrower than its input plus its
+// button keeps the given width, and the input gives way instead of the button: the button stays whole inside
+// the box and owns its centre. The datebox and timebox inputs used to keep an em floor, so at
+// 70–100px the button ran past the box and the next field took the click (B50-3101558); the daterangebox's
+// button did the same below about 220px, and the timepicker clipped its button below about 100px.
+// Fixture: web/pv/input-narrow-guard.zul
+test('datebox — a narrow combobox, bandbox, datebox, timebox, spinner, daterangebox and timepicker keep their button inside the box', async ({ page }) => {
+  const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready);
+
+  const problems = await page.evaluate(() => {
+    const out: string[] = [];
+    const boxes = document.querySelectorAll<HTMLElement>('.ing-fit > :is(.z-combobox, .z-bandbox, .z-datebox, .z-timebox, .z-spinner, .z-daterangebox, .z-timepicker)');
+    if (boxes.length !== 14) out.push(`found ${boxes.length} fields, not 14`);
+    boxes.forEach((box, i) => {
+      const name = box.className.split(' ')[0].slice(2);
+      const button = box.querySelector(`.z-${name}-button`)!;
+      const b = box.getBoundingClientRect();
+      const r = button.getBoundingClientRect();
+      if (Math.round(b.width) !== parseInt(box.style.width)) out.push(`${name}[${i}] is ${b.width}px, not ${box.style.width}`);
+      if (r.left < b.left - 0.5 || r.right > b.right + 0.5) out.push(`${name}[${i}] button ${r.left}–${r.right} runs past the box ${b.left}–${b.right}`);
+      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      if (!hit || !button.contains(hit)) out.push(`${name}[${i}] button centre hits ${hit ? hit.className : 'nothing'}`);
+    });
+    return out;
+  });
+  expect(problems).toEqual([]);
+});
+
+// B50-3101558: eight fields at 35px, narrower than their input's padding plus their button. The box keeps the
+// given width and clips its parts, so the part of the button that shows belongs to the button (the datebox's and
+// timebox's inputs used to fill the box and push the button out) and the left edge of the next field belongs to
+// that field (the spinner's arrows used to sit on it, the daterangebox's second input and the chosenbox's
+// 60px-floored input ran over it). Parts that run under the next field are not detectable here. The daterangebox's
+// two input paddings alone pass 35px, so the box clips its button whole, and the chosenbox has no trigger button:
+// only the next field is checked for them. The textbox at the end only gives the chosenbox a next field.
+// Fixture: web/pv/input-narrow-guard.zul
+test('datebox — 35px input fields show their button and leave the next field alone', async ({ page }) => {
+  const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready);
+
+  const problems = await page.evaluate(() => {
+    const out: string[] = [];
+    const fields = [...document.querySelectorAll<HTMLElement>('.ing-35 > [class^="z-"]')];
+    if (fields.length !== 9) out.push(`found ${fields.length} fields, not 9`);
+    fields.slice(0, -1).forEach((box, i) => {
+      const name = box.className.split(' ')[0].slice(2);
+      const next = fields[i + 1];
+      const b = box.getBoundingClientRect();
+      const n = next.getBoundingClientRect();
+      const y = b.top + b.height / 2;
+      if (Math.round(b.width) !== 35) out.push(`${name} is ${b.width}px, not 35px`);
+      const atNext = document.elementFromPoint(n.left + 2, y);
+      if (!atNext || !next.contains(atNext)) out.push(`${name} covers the left edge of the next field: ${atNext ? atNext.className : 'nothing'}`);
+      if (name === 'daterangebox' || name === 'chosenbox') return;
+      const button = box.querySelector(`.z-${name}-button`)!;
+      const r = button.getBoundingClientRect();
+      const x = Math.min(r.right, b.right) - 2;
+      const atButton = document.elementFromPoint(x, y);
+      if (x <= r.left || !atButton || !button.contains(atButton)) out.push(`${name} shows no button at its right edge: ${atButton ? atButton.className : 'nothing'}`);
+    });
+    return out;
+  });
+  expect(problems).toEqual([]);
+});
+
+// A field's min-width floor sizes it only while the page leaves its width open: a selectbox, slider or
+// multislider given 80px is 80px wide, not its 120px floor, and the floored fields without a width keep it.
+// Fixture: web/pv/input-narrow-guard.zul
+test('datebox — a set width wins over a field\'s min-width floor, which still sizes a field without one', async ({ page }) => {
+  const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready);
+
+  const sized = await page.locator('.ing-width > *').evaluateAll(els =>
+    els.map(el => `${el.className.split(' ')[0]} ${Math.round(el.getBoundingClientRect().width)}`));
+  expect(sized).toEqual(['z-selectbox 80', 'z-slider 80', 'z-multislider 80']);
+
+  // The daterangebox and timepicker floors sit on their inputs (6.5em and 5em); the others on the root (120px).
+  const floors = await page.locator('.ing-floor > *').evaluateAll(els => els.map(el => {
+    const input = el.querySelector<HTMLElement>('.z-daterangebox-input, .z-timepicker-input');
+    const floored = input ?? el;
+    const ems = parseFloat(getComputedStyle(floored).minWidth) / parseFloat(getComputedStyle(floored).fontSize);
+    return `${el.className.split(' ')[0]} ${input ? `${ems}em` : getComputedStyle(el).minWidth}`;
+  }));
+  expect(floors).toEqual(['z-daterangebox 6.5em', 'z-timepicker 5em', 'z-selectbox 120px', 'z-slider 120px', 'z-multislider 120px']);
+});
+
+// hflex writes the width inline as well, so a field it sizes below its floor fills its parent and keeps any
+// button inside the box. Fixture: web/pv/input-narrow-guard.zul
+test('datebox — an hflex daterangebox, timepicker and selectbox narrower than their floor fill their parent', async ({ page }) => {
+  const resp = await page.goto('/pv/input-narrow-guard.zul', { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.evaluate(() => document.fonts.ready);
+
+  const fields = await page.locator('.ing-hflex > div > *').evaluateAll(els => els.map(el => {
+    const name = el.className.split(' ')[0];
+    const b = el.getBoundingClientRect();
+    const button = el.querySelector(`.${name}-button`);
+    const r = button?.getBoundingClientRect();
+    const inside = !r || (r.left >= b.left - 0.5 && r.right <= b.right + 0.5);
+    return `${name} ${Math.round(b.width)} of ${Math.round(el.parentElement!.getBoundingClientRect().width)}${inside ? '' : ', button past the box'}`;
+  }));
+  expect(fields).toEqual(['z-daterangebox 120 of 120', 'z-timepicker 80 of 80', 'z-selectbox 80 of 80']);
+});

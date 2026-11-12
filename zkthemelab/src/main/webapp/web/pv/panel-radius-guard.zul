@@ -1,0 +1,17 @@
+<?page title="Panel radius guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for panel-radius.spec.ts: a Panel for each border value. ZK adds .z-panel-noframe for
+     border="none" (the default) and border="normal". Lives under pv/ so gallery-scan,
+     forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8 z-d-flex z-flex-col z-gap-4">
+    <panel sclass="border-default" title="Default" width="320px">
+        <panelchildren>Body</panelchildren>
+    </panel>
+    <panel sclass="border-normal" title="Normal" border="normal" width="320px">
+        <panelchildren>Body</panelchildren>
+    </panel>
+    <panel sclass="border-rounded" title="Rounded" border="rounded" width="320px">
+        <panelchildren>Body</panelchildren>
+    </panel>
+</h:div>
+</zk>

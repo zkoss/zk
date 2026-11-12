@@ -41,6 +41,8 @@
        intentional MD figure kept as its own seed so it stays single-knob under a
        compact tier. */
     --zk-input-height:           var(--zk-control-height-md);  /* 40 */
+    --zk-input-button-width:     32px;                         /* trailing button of combobox, bandbox, datebox, timebox; width, so not density-scaled */
+    --zk-spinner-button-width:   28px;                         /* spinner / doublespinner arrow column */
     --zk-button-height:          36px;                         /* off-ladder (MD button base) */
     --zk-button-height-sm:       var(--zk-control-height-xs);  /* 28 */
     --zk-button-height-lg:       44px;                         /* off-ladder */

@@ -26,6 +26,9 @@
     background-color: var(--zk-spinner-bg);
     min-height: var(--zk-control-height);
     box-sizing: border-box;
+    /* A width narrower than the input and the button keeps the box: the input shrinks to its
+       padding and the overflow is clipped, so nothing runs into the next widget. */
+    overflow: clip;
     transition:
         border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
         box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
@@ -115,7 +118,7 @@
     flex-direction: column;
     align-items: stretch;
     flex-shrink: 0;
-    width: 28px;
+    width: var(--zk-spinner-button-width);
     align-self: stretch;
     border-left: 1px solid var(--zk-color-outline-variant);
     border-radius: 0 var(--zk-spinner-radius) var(--zk-spinner-radius) 0;

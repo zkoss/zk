@@ -1,0 +1,15 @@
+<?page title="Chosenbox inplace guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for chosenbox-inplace.spec.ts: an inplace Chosenbox with a selection. Lives under pv/
+     so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk xmlns:h="native">
+<zscript><![CDATA[
+    import org.zkoss.zul.ListModelList;
+    ListModelList days = new ListModelList(new String[]{"Monday", "Tuesday", "Wednesday"});
+    days.setMultiple(true);
+    days.addToSelection("Monday");
+    days.addToSelection("Wednesday");
+]]></zscript>
+<h:div class="z-p-8">
+    <chosenbox sclass="inplace" inplace="true" model="${days}" width="320px"/>
+</h:div>
+</zk>

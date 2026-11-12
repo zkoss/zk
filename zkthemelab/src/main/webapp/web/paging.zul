@@ -1,6 +1,7 @@
 <?page title="Paging" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:h="native">
 <h:div class="z-p-8">
+    <!-- Default-mold pagings set a width: Paging.onSize hides First / Last and the detail on a paging only as wide as its content. -->
     <h:div class="z-border-bottom z-mb-8 z-pb-3"><h:span class="z-text-2xl z-fw-medium z-text-on-surface">Paging</h:span></h:div>
 
     <h:div class="z-mb-6">
@@ -8,7 +9,7 @@
         <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Default mold (detailed)</h:span></h:div>
-                <paging totalSize="300" pageSize="5" activePage="15" detailed="true"/>
+                <paging width="480px" totalSize="300" pageSize="5" activePage="15" detailed="true"/>
             </h:div>
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">OS mold (detailed)</h:span></h:div>
@@ -26,15 +27,15 @@
         <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Default mold (shows page input + total)</h:span></h:div>
-                <paging totalSize="200" pageSize="10" activePage="4"/>
+                <paging width="400px" totalSize="200" pageSize="10" activePage="4"/>
             </h:div>
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Default mold — first page (prev/first disabled)</h:span></h:div>
-                <paging totalSize="200" pageSize="10" activePage="0"/>
+                <paging width="400px" totalSize="200" pageSize="10" activePage="0"/>
             </h:div>
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Default mold — last page (next/last disabled)</h:span></h:div>
-                <paging totalSize="200" pageSize="10" activePage="19"/>
+                <paging width="400px" totalSize="200" pageSize="10" activePage="19"/>
             </h:div>
         </h:div>
     </h:div>
@@ -44,7 +45,7 @@
         <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Default mold (buttons, input and total text disabled)</h:span></h:div>
-                <paging sclass="pv-paging-disabled-default" totalSize="200" pageSize="10" activePage="4" disabled="true"/>
+                <paging sclass="pv-paging-disabled-default" width="400px" totalSize="200" pageSize="10" activePage="4" disabled="true"/>
             </h:div>
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">OS mold (buttons disabled)</h:span></h:div>

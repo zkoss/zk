@@ -11,13 +11,15 @@
    padding: the hflex="min" math (getContentEdgeWidth_) adds the root's padding to the width, so
    the room for the button is the input's right padding instead. */
 .z-combobox {
-    --zk-combobox-button-width: 32px;
+    --zk-combobox-button-width: var(--zk-input-button-width);
     display: inline-block;
     position: relative;
     white-space: nowrap;
     background-color: var(--zk-combobox-bg);
     min-height: var(--zk-control-height);
-    overflow: visible;
+    /* A width narrower than the input's padding keeps the box and clips the input; the
+       absolutely positioned button stays at the right edge. */
+    overflow: clip;
     box-sizing: border-box;
     /* Reset the inherited line-height: a parent's tall line box would push the input down while the button stays put. */
     line-height: var(--zk-typescale-body-medium-line-height);

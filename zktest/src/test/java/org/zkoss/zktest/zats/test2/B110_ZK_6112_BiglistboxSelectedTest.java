@@ -57,7 +57,9 @@ public class B110_ZK_6112_BiglistboxSelectedTest extends WebDriverTestCase {
 		connect();
 		waitResponse();
 
-		getActions().sendKeys(Keys.TAB).perform();
+		// Without za11y the Biglistbox has no Tab stop (its focus anchor is tabindex="-1"),
+		// so focus it directly; the NO_A11Y suite variant would otherwise send the keys to body.
+		eval("zk.$('$big').focus()");
 		waitResponse();
 		for (int i = 0; i < ARROW_DOWN_PRESSES; i++) {
 			getActions().sendKeys(Keys.ARROW_DOWN).perform();

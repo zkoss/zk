@@ -9,7 +9,6 @@
     /* Layout */
     display: inline-block;
     min-height: var(--zk-control-height);
-    min-width: 120px;
     box-sizing: border-box;
     padding: 0 36px 0 var(--zk-spacing-3);
     vertical-align: middle;
@@ -42,6 +41,11 @@
     transition:
         border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
         box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+}
+
+/* The 120px floor sizes a selectbox the page leaves to its content; a set width (width, or hflex through z-flex-item) wins. */
+.z-selectbox:not([style*="width"], .z-flex-item) {
+    min-width: 120px;
 }
 
 /* Remove IE dropdown arrow */

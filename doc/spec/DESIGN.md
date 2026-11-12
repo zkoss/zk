@@ -59,7 +59,7 @@ Tokens: `--zk-spacing-1` through `--zk-spacing-16`.
 
 ## 5. Corner Radii
 
-Rule: **default to `--zk-shape-card`** for any container/card; **`--zk-shape-corner-extra-small`** for interactive controls (inputs, buttons, dropdowns, menus) and dialogs. Token values: `tokens/_shape.css`.
+Rule: **default to `--zk-shape-card`** for any container/card and for dialogs (`--zk-shape-dialog` aliases it, so an embedded Window matches a Panel and a dialog is never less rounded than a card, as MD3 orders them); **`--zk-shape-corner-extra-small`** for interactive controls (inputs, buttons, dropdowns, menus). Token values: `tokens/_shape.css`.
 
 ---
 
@@ -155,8 +155,8 @@ datebox and timebox always render a `size` on the `<input>` (`Datebox` defaults 
 
 | Field | Width behaviour |
 |-------|-----------------|
-| **datebox, timebox** | **follow `cols`** (rendered as `size`) + a `min-width` floor (`~6.5em` date, `~5em` time). |
-| **daterangebox, timepicker** | **hug content** — `field-sizing: content` + a `min-width` floor, because ZK renders no (or a hardcoded) `size` for them. |
+| **datebox, timebox** | **follow `cols`** (rendered as `size`), no `min-width` floor: a width narrower than the input and button shrinks the input, down to its padding, and keeps the button whole at the right edge; below that (about 56px) the box clips the button itself. |
+| **daterangebox, timepicker** | **hug content** — `field-sizing: content` + a `min-width` floor, because ZK renders no (or a hardcoded) `size` for them. A set width (`width`, `hflex`) drops the floor, so the inputs give way to the button as in datebox; a daterangebox's two inputs shrink only to their padding, so below about 100px the box clips its button. |
 | **combobox, bandbox** (free-text) | keep the default / container-fill width. Content-hug would resize the box on every keystroke while typing — jarring. |
 | **spinner, doublespinner** (numeric) | keep the default / container-fill width (numeric length is unbounded and typed). |
 
