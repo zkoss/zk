@@ -321,6 +321,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Overflowing content can be scrolled into view, e.g. an empty Listbox or Grid whose columns are wider than it. See scroll.spec.ts.
+      name: 'scroll',
+      testMatch: /[\\/]scroll\.spec\.ts$/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // rangeslider and multislider share Sliderbuttons: shared base rules, own accents. See sliderbuttons.spec.ts.
       name: 'sliderbuttons',
       testMatch: /sliderbuttons\.spec\.ts/,

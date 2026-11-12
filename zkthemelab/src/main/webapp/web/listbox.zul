@@ -164,6 +164,19 @@
     </div>
 
     <div sclass="z-mb-6">
+        <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="Empty, Columns Wider Than the Listbox"/></div>
+        <div sclass="z-py-3 z-mb-3"><label sclass="z-text-sm z-text-secondary" value="Three 300px columns in a 400px listbox with no items, without and with a height: both scroll sideways, so every column header can be reached."/></div>
+        <hlayout spacing="24px">
+            <listbox sclass="pv-listbox-empty-wide" width="400px">
+                <listhead><listheader label="column 1" width="300px"/><listheader label="column 2" width="300px"/><listheader label="column 3" width="300px"/></listhead>
+            </listbox>
+            <listbox sclass="pv-listbox-empty-wide-height" width="400px" height="150px">
+                <listhead><listheader label="column 1" width="300px"/><listheader label="column 2" width="300px"/><listheader label="column 3" width="300px"/></listhead>
+            </listbox>
+        </hlayout>
+    </div>
+
+    <div sclass="z-mb-6">
         <div sclass="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><label sclass="z-text-xs z-fw-semibold z-text-secondary" value="No-Border Variant (z-listbox-noborder)"/></div>
         <div sclass="z-py-3 z-mb-3"><label sclass="z-text-sm z-text-secondary" value="A listbox is an outlined card by default. Add sclass=&quot;z-listbox-noborder&quot; to strip its own frame when nesting it inside another bounded surface — here an elevated card — so it blends into the parent instead of double-framing."/></div>
         <div sclass="z-bg-surface z-rounded-lg z-elevation-2 z-p-6">
