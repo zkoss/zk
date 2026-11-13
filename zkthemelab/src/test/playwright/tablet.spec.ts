@@ -399,8 +399,8 @@ type VisualCase = { name: string; url: string; maxDiffPixelRatio?: number };
 // class targeted by a partial there maps to a page below. When a partial starts
 // (or stops) styling a component, add (or remove) its page here.
 //   _inputs.css    → textbox, intbox, longbox, doublebox, decimalbox,
-//                    passwordbox(=textbox page), combobox, bandbox, datebox,
-//                    timebox, spinner, doublespinner
+//                    combobox, bandbox, datebox, timebox, spinner, doublespinner,
+//                    timepicker, daterangebox (trigger button)
 //   _selection.css → checkbox, radiogroup
 //   _slider.css    → slider (touch-enlarged knob)
 //   _buttons.css   → button, combobutton, toolbar(.z-toolbarbutton)
@@ -430,6 +430,8 @@ const visualCases: VisualCase[] = [
   { name: 'tablet-timebox',       url: '/timebox.zul' },
   { name: 'tablet-spinner',       url: '/spinner.zul' },
   { name: 'tablet-doublespinner', url: '/doublespinner.zul' },
+  { name: 'tablet-timepicker',    url: '/timepicker.zul' },
+  { name: 'tablet-daterangebox',  url: '/daterangebox.zul' },
   { name: 'tablet-calendar',      url: '/calendar.zul' },
   // selection controls (_selection.css)
   { name: 'tablet-checkbox',      url: '/checkbox.zul' },
@@ -1329,4 +1331,18 @@ test.describe('tablet-readonly-timebox', () => {
     expect(m.disabled).toBe(m.containerLow);
     expect(m.inplace).toBe('rgba(0, 0, 0, 0)');
   });
+});
+
+// Guard for zkmax tablet/_inputs.css (ZK-6112, B103_ZK_5838): on a tablet every dropdown field's trailing button
+// widens to the touch minimum, so a datebox and a timepicker or daterangebox of one width keep matching buttons.
+// Fixture: web/pv/empty-field-baseline-guard.zul
+test.describe('tablet-trailing-button-width', () => {
+  for (const widget of ['datebox', 'timebox', 'bandbox', 'combobox', 'timepicker', 'daterangebox']) {
+    test(`${widget} — the trailing button is at least the touch minimum wide`, { tag: ['@ZK-6112', '@ZK-5838'] }, async ({ page }) => {
+      await page.goto('/pv/empty-field-baseline-guard.zul', { waitUntil: 'networkidle' });
+      expect(await tabletCssLoaded(page)).toBe(true);
+      const width = await page.locator(`.z-${widget}-button`).first().evaluate(n => n.getBoundingClientRect().width);
+      expect(width).toBeGreaterThanOrEqual(MD3_MIN_TOUCH);
+    });
+  }
 });
