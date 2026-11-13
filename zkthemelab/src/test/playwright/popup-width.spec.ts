@@ -49,3 +49,34 @@ CASES.forEach(([popupWidth, expected], i) => {
     await expect.poll(async () => Math.round((await popup.boundingBox())!.width)).toBe(expected);
   });
 });
+
+// Guard for the datebox popup: Datebox.ts widens the popup to the input when the input is wider,
+// so the calendar inside must fill it instead of stopping at calendar.css's max-width, which
+// would leave a blank strip on the right. IceBlue's calendar fills it too (ZK-6112). A default
+// datebox keeps the popup at the calendar's natural width.
+// Fixture: web/pv/datebox-popup-fill-guard.zul.
+
+const DATEBOX_FIXTURE = '/pv/datebox-popup-fill-guard.zul';
+
+async function openDatebox(page: import('@playwright/test').Page, i: number) {
+  const resp = await page.goto(DATEBOX_FIXTURE, { waitUntil: 'networkidle' });
+  expect(resp?.status()).toBe(200);
+  await page.locator('.z-datebox').nth(i).locator('.z-datebox-button').click();
+  const popup = page.locator('.z-datebox-popup:visible');
+  await expect(popup).toHaveCount(1);
+  return popup;
+}
+
+test('datebox — the calendar fills a popup widened to the input', { tag: '@ZK-6112' }, async ({ page }) => {
+  const popup = await openDatebox(page, 0);
+  const inputWidth = Math.round((await page.locator('.z-datebox').nth(0).boundingBox())!.width);
+  await expect.poll(async () => Math.round((await popup.boundingBox())!.width)).toBe(inputWidth);
+  const calendarWidth = Math.round((await popup.locator('.z-calendar').boundingBox())!.width);
+  expect(calendarWidth).toBe(inputWidth);
+});
+
+test('datebox — a default datebox keeps the popup at the calendar width', { tag: '@ZK-6112' }, async ({ page }) => {
+  const popup = await openDatebox(page, 1);
+  const calendarMax = await popup.locator('.z-calendar').evaluate(el => getComputedStyle(el).maxWidth);
+  await expect.poll(async () => `${Math.round((await popup.boundingBox())!.width)}px`).toBe(calendarMax);
+});

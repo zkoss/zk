@@ -57,6 +57,16 @@ with a 1px border, which leaves 266px, so a cell is 266 / 7 = 38px. The cap does
 cells then follow the given width. The hover/selected disc stays a fixed 32px circle (6px smaller
 than the 38px cell) so it does not scale with the cell width. (`zul/.../db/css/calendar.css`)
 
+Inside a datebox popup the calendar also fills the popup. `Datebox.ts` (`CalendarPop.open`) widens the
+popup to the input's width when the input is wider than the popup's natural width, and
+`.z-datebox-popup .z-calendar { min-width: 100% }` in `zul/.../inp/css/datebox.css` overrides the 268px
+cap, so no blank strip is left on the right (IceBlue's calendar fills it too). While the popup is measured
+at `width: auto` the percentage does not apply, so a default datebox's popup keeps the calendar's natural
+268px. The tablet wheel picker keeps its own 420px cap: `.z-datebox-popup .z-calendar:has(.z-calendar-wheel-cave)`
+(`zkmax` `tablet/_wheel.css`) sets `min-width: 0` next to its `max-width: 420px`, so the wheel stays
+centred in the full-width sheet.
+Guarded by `zkthemelab/src/test/playwright/popup-width.spec.ts` (fixture `pv/datebox-popup-fill-guard.zul`).
+
 ## cascader
 
 - `.z-cascader-popup` is detached to `<body>` on open (`makeVParent()`), so its structural rules are

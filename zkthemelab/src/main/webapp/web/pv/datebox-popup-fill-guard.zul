@@ -1,0 +1,11 @@
+<?page title="Datebox popup fill guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for popup-width.spec.ts (datebox popup): a datebox wider than the calendar, whose popup
+     Datebox.ts widens to the input, and a default datebox, whose popup keeps the calendar's natural
+     width. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not
+     pick it up as a page. -->
+<zk xmlns:h="native">
+<h:div class="z-p-8">
+    <h:div><datebox id="wide" cols="40"/></h:div>
+    <h:div class="z-mt-6"><datebox id="plain"/></h:div>
+</h:div>
+</zk>
