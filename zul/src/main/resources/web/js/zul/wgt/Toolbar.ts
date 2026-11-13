@@ -25,6 +25,16 @@ export interface ToolbarChild extends zul.Widget {
 	/** @internal */
 	_disabled?: boolean;
 }
+
+// The framework breakpoint scale (doc/spec/responsive-design.md §5); the zkmax build fails when it
+// differs from the CSS width conditions or from zkmax Grid/Listbox's constant of the same name.
+const _DEFAULT_BREAKPOINTS: Record<string, number> = {
+	sm: 576,
+	md: 768,
+	lg: 992,
+	xl: 1200
+};
+
 /**
  * A toolbar.
  *
@@ -50,6 +60,12 @@ export class Toolbar extends zul.Widget {
 	_overflowPopup?: boolean;
 	/** @internal */
 	_open?: boolean;
+	/** @internal */
+	_responsive?: string;
+	/** @internal */
+	_resizeObserver?: ResizeObserver;
+	/** @internal */
+	_iconOnly?: boolean;
 
 	/**
 	 * @returns the alignment of any children added to this toolbar. Valid values
@@ -158,12 +174,48 @@ export class Toolbar extends zul.Widget {
 		return this;
 	}
 
+	/**
+	 * @returns the responsive policy: `"iconOnly"`, `"none"`, or `undefined` if neither
+	 * this toolbar nor the `org.zkoss.zul.toolbar.responsive` library property sets one.
+	 * @since 11.1.0
+	 */
+	getResponsive(): string | undefined {
+		return this._responsive;
+	}
+
+	/**
+	 * Sets the responsive policy. With `"iconOnly"`, while the toolbar is narrower than the
+	 * framework's `md` breakpoint (768px), the toolbarbuttons and buttons in it that have an
+	 * icon or image show only it; their labels are visually hidden but still name the buttons.
+	 * `"none"` disables it.
+	 * The width compared with `md` is the toolbar's own: a toolbar sized by its content, such as
+	 * one in an `<hlayout>` or `<hbox>`, stays icon-only once its labels are hidden; give it a
+	 * `width` or `hflex`.
+	 * @since 11.1.0
+	 */
+	setResponsive(responsive: string | undefined, opts?: Record<string, boolean>): this {
+		const o = this._responsive;
+		this._responsive = responsive;
+
+		if (o !== responsive || opts?.force) {
+			// the children render their labels differently under iconOnly
+			this.rerender();
+		}
+
+		return this;
+	}
+
 	/** @internal */
 	override bind_(desktop?: zk.Desktop, skipper?: zk.Skipper, after?: CallableFunction[]): void {
 		super.bind_(desktop, skipper, after);
 		if (this.isOverflowPopup()) {
 			zWatch.listen({ onFloatUp: this, onCommandReady: this, onSize: this });
 			this.domListen_(this.$n_('overflowpopup-button'), 'onClick', '_openPopup');
+		}
+		if (this._responsive == 'iconOnly') {
+			// catches every width change, a server setWidth included
+			this._resizeObserver = new ResizeObserver(this.proxy(this._syncIconOnly));
+			this._resizeObserver.observe(this.$n_());
 		}
 	}
 
@@ -174,6 +226,9 @@ export class Toolbar extends zul.Widget {
 			this.domUnlisten_(this.$n_('overflowpopup-button'), 'onClick', '_openPopup');
 			zWatch.unlisten({ onFloatUp: this, onCommandReady: this, onSize: this });
 		}
+		this._resizeObserver?.disconnect();
+		this._resizeObserver = undefined;
+		this._iconOnly = undefined;
 		super.unbind_(skipper, after, keepRod);
 	}
 
@@ -252,7 +307,14 @@ export class Toolbar extends zul.Widget {
 
 		// Calculate width to decide how many children should be displayed on popup.
 		for (let i = 0; i < childrenAmount; i++) {
-			tempChildrenWidth += jq(children[i]).outerWidth(true)!;
+			const child = children[i];
+			tempChildrenWidth += jq(child).outerWidth(true)!;
+			// a popup child shows its label, which icon-only hides once it is back in the toolbar
+			if (this._iconOnly && i >= oldToolbarChildren.length) {
+				const wgt = zk.Widget.$(child);
+				if (wgt)
+					tempChildrenWidth -= jq(child).find('.' + wgt.$s('label')).outerWidth() ?? 0;
+			}
 			if (tempChildrenWidth >= contentWidth) {
 				newPopupChildrenAmount = childrenAmount - i;
 				break;
@@ -284,6 +346,22 @@ export class Toolbar extends zul.Widget {
 		}
 	}
 
+	/** @internal */
+	_syncIconOnly(): void {
+		const n = this.$n_(),
+			width = n.offsetWidth;
+		// hidden (display:none, collapsed tab): defer
+		if (width <= 0)
+			return;
+		const iconOnly = width < _DEFAULT_BREAKPOINTS.md;
+		if (!!this._iconOnly == iconOnly)
+			return;
+		this._iconOnly = iconOnly;
+		jq(n).toggleClass(this.$s('icon-only'), iconOnly);
+		if (this.isOverflowPopup())
+			this._adjustContent();
+	}
+
 	// super
 	/** @internal */
 	override domClass_(no?: zk.DomClassOptions): string {
@@ -299,6 +377,9 @@ export class Toolbar extends zul.Widget {
 				sc += ' ' + this.$s('vertical');
 			if (this.isOverflowPopup())
 				sc += ' ' + this.$s('overflowpopup') + ' ' + this.$s('overflowpopup-off');
+			// rendered here too, or updateDomClass_ (e.g. setSclass) drops it while the size stays put
+			if (this._iconOnly)
+				sc += ' ' + this.$s('icon-only');
 		}
 		return sc;
 	}

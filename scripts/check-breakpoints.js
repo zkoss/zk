@@ -5,8 +5,8 @@
 // The framework has one breakpoint scale (doc/spec/responsive-design.md). Its values
 // exist in two places that cannot read each other: the width conditions of `@media` / `@container`
 // in CSS (a condition cannot use var()), and the `_DEFAULT_BREAKPOINTS` constant of the zkmax
-// Grid and Listbox `responsive` feature. This check fails the build when they drift apart:
-//   1. the Grid and Listbox constants must be equal;
+// Grid and Listbox `responsive` feature and of the zul Toolbar. This check fails the build when they drift apart:
+//   1. the Grid, Listbox and Toolbar constants must be equal;
 //   2. every width condition in the scanned CSS must be one of those values
 //      (`min-width: N`, `width >= N`), or the exact complement of one (`max-width: N-1`,
 //      `width < N`).
@@ -62,7 +62,7 @@ function widthConditions(css) {
     return found;
 }
 
-// jsFiles: the zkmax files that define _DEFAULT_BREAKPOINTS. cssRoots: directories scanned for CSS.
+// jsFiles: the files that define _DEFAULT_BREAKPOINTS. cssRoots: directories scanned for CSS.
 // Returns an array of error strings (empty = consistent).
 function checkBreakpoints({ jsFiles, cssRoots }) {
     const errors = [];

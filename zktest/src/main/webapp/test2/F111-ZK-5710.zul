@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F111-ZK-5710.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed May 13 23:54:47 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Steps to verify:
+		1. Toolbar 1 (responsive="iconOnly") is 800px wide: every button shows its icon and label.
+		2. Click "Shrink": toolbar 1 becomes 767px wide, below the md breakpoint (768px). Its "Save" toolbarbutton
+		   and "Delete" button show only their icons; "Text only" has no icon and keeps its label.
+		   Toolbar 2 (responsive="iconOnly") becomes exactly 768px wide and keeps its label.
+		   Click "tb1 sclass": toolbar 1 changes its sclass and still shows only the icons.
+		3. Click "Expand": every label is shown again.
+		4. Toolbar 3 inherits responsive="iconOnly" from its parent's org.zkoss.zul.toolbar.responsive attribute and is
+		   400px wide: it shows only its icon. Toolbar 4 sets responsive="none" in the same parent and keeps its label.
+		   Click "tb3 none": toolbar 3 shows its label. Click "tb3 clear": it inherits responsive="iconOnly" again and
+		   shows only its icon.
+		5. Toolbar 5 combines responsive="iconOnly" with overflowPopup="true"; the page loads without a JavaScript error.
+		6. Toolbar 6 has no responsive policy and keeps its label at 400px.
+		7. Toolbar 7 (responsive="iconOnly", mold="panel") is 400px wide: its "Save" toolbarbutton and "Delete" button
+		   show only their icons.
+		8. Toolbar 8 (responsive="iconOnly", overflowPopup="true") is 300px wide: its three buttons fit as icons, so
+		   none of them is in the overflow popup.
+		9. Toolbar 9 (responsive="iconOnly") is 800px wide. Click "tb9 toggle" to hide it and again to show it: it shows
+		   its label both times.
+	</label>
+	<hbox>
+		<button id="shrink" label="Shrink" onClick='tb1.setWidth("767px"); tb2.setWidth("768px");'/>
+		<button id="expand" label="Expand" onClick='tb1.setWidth("800px"); tb2.setWidth("800px");'/>
+		<button id="tb3None" label="tb3 none" onClick='tb3.setResponsive("none")'/>
+		<button id="tb3Clear" label="tb3 clear" onClick="tb3.setResponsive(null)"/>
+		<button id="tb1Sclass" label="tb1 sclass" onClick='tb1.setSclass("tb1-sclass")'/>
+		<button id="tb9Toggle" label="tb9 toggle" onClick="tb9Box.setVisible(!tb9Box.isVisible())"/>
+	</hbox>
+	<toolbar id="tb1" responsive="iconOnly" width="800px">
+		<toolbarbutton id="tb1Save" label="Save" iconSclass="z-icon-save"/>
+		<button id="tb1Delete" label="Delete" iconSclass="z-icon-trash"/>
+		<toolbarbutton id="tb1Text" label="Text only"/>
+	</toolbar>
+	<toolbar id="tb2" responsive="iconOnly" width="800px">
+		<toolbarbutton id="tb2Save" label="Save" iconSclass="z-icon-save"/>
+	</toolbar>
+	<div>
+		<custom-attributes org.zkoss.zul.toolbar.responsive="iconOnly"/>
+		<toolbar id="tb3" width="400px">
+			<toolbarbutton id="tb3Save" label="Save" iconSclass="z-icon-save"/>
+		</toolbar>
+		<toolbar id="tb4" responsive="none" width="400px">
+			<toolbarbutton label="Save" iconSclass="z-icon-save"/>
+		</toolbar>
+	</div>
+	<toolbar id="tb5" responsive="iconOnly" overflowPopup="true" width="200px">
+		<toolbarbutton label="Save" iconSclass="z-icon-save"/>
+		<toolbarbutton label="Delete" iconSclass="z-icon-trash"/>
+		<toolbarbutton label="Edit" iconSclass="z-icon-edit"/>
+		<toolbarbutton label="Print" iconSclass="z-icon-print"/>
+	</toolbar>
+	<toolbar id="tb6" width="400px">
+		<toolbarbutton id="tb6Save" label="Save" iconSclass="z-icon-save"/>
+	</toolbar>
+	<toolbar id="tb7" responsive="iconOnly" mold="panel" width="400px">
+		<toolbarbutton id="tb7Save" label="Save" iconSclass="z-icon-save"/>
+		<button id="tb7Delete" label="Delete" iconSclass="z-icon-trash"/>
+	</toolbar>
+	<toolbar id="tb8" responsive="iconOnly" overflowPopup="true" width="300px">
+		<toolbarbutton label="Save the document" iconSclass="z-icon-save"/>
+		<toolbarbutton label="Delete the document" iconSclass="z-icon-trash"/>
+		<toolbarbutton label="Print the document" iconSclass="z-icon-print"/>
+	</toolbar>
+	<div id="tb9Box">
+		<toolbar id="tb9" responsive="iconOnly" width="800px">
+			<toolbarbutton label="Save" iconSclass="z-icon-save"/>
+		</toolbar>
+	</div>
+</zk>

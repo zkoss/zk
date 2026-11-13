@@ -4,6 +4,7 @@ ZK 11.1.0
   ZK-4927: markdown editor component
   ZK-6106: Add Inputmask to PE
   ZK-5992: tbeditor provides a compile-time setting to include its plugin
+  ZK-5710: Responsive toolbar button display based on screen width
 
 * Bugs
   ZK-5623: NPE occurred in Stateless Tree with TreeModel when multiple-select mode is enabled
