@@ -7,8 +7,7 @@
 .z-intbox,
 .z-decimalbox,
 .z-doublebox,
-.z-longbox,
-.z-passwordbox {
+.z-longbox {
     display: inline-block;
     min-height: var(--zk-control-height);
     padding: 0 var(--zk-spacing-3);
@@ -22,9 +21,9 @@
     line-height: var(--zk-typescale-body-medium-line-height);
     outline: none;
     box-sizing: border-box;
-    /* Same baseline alignment as the inline-flex composites (datebox, chosenbox) so a row of
-       sibling inputs shares one bottom edge (B86_ZK_4048). */
-    vertical-align: baseline;
+    /* Centred like the composite fields (datebox, chosenbox, combobox), so a row of sibling
+       inputs shares one bottom edge (B86_ZK_4048). */
+    vertical-align: middle;
     /* Only transition border-COLOR. On focus, border-width snaps 1px→2px and the
        compensating padding (0 spacing-3 → 0 calc(spacing-3 - 1px)) snaps with it, so
        the content edge stays put. Animating border-width WITHOUT co-animating padding
@@ -37,8 +36,7 @@
 .z-intbox::placeholder,
 .z-decimalbox::placeholder,
 .z-doublebox::placeholder,
-.z-longbox::placeholder,
-.z-passwordbox::placeholder {
+.z-longbox::placeholder {
     color: var(--zk-color-on-surface-variant);
     opacity: 1;
 }
@@ -48,8 +46,7 @@
 .z-intbox:hover,
 .z-decimalbox:hover,
 .z-doublebox:hover,
-.z-longbox:hover,
-.z-passwordbox:hover {
+.z-longbox:hover {
     border-color: var(--zk-input-border-color-hover);
 }
 
@@ -63,9 +60,7 @@
 .z-doublebox:focus,
 .z-doublebox:focus-visible,
 .z-longbox:focus,
-.z-longbox:focus-visible,
-.z-passwordbox:focus,
-.z-passwordbox:focus-visible {
+.z-longbox:focus-visible {
     border-color: var(--zk-input-border-color-focus);
     border-width: 2px;
     padding: 0 calc(var(--zk-spacing-3) - 1px);
@@ -76,8 +71,7 @@
 .z-intbox[readonly],
 .z-decimalbox[readonly],
 .z-doublebox[readonly],
-.z-longbox[readonly],
-.z-passwordbox[readonly] {
+.z-longbox[readonly] {
     background-color: var(--zk-color-surface-container-low);
     /* Hold the border at the 3:1 outline on hover through the token, not a border-color rule: this rule comes after
        the focus rule and the read-only :hover rule outranks the invalid rules, so a border-color in them drew a
@@ -92,13 +86,11 @@
 .z-decimalbox[disabled],
 .z-doublebox[disabled],
 .z-longbox[disabled],
-.z-passwordbox[disabled],
 .z-textbox.z-textbox-disabled,
 .z-intbox.z-intbox-disabled,
 .z-decimalbox.z-decimalbox-disabled,
 .z-doublebox.z-doublebox-disabled,
-.z-longbox.z-longbox-disabled,
-.z-passwordbox.z-passwordbox-disabled {
+.z-longbox.z-longbox-disabled {
     opacity: var(--zk-state-disabled-opacity);
     background-color: var(--zk-color-surface-container-low);
     border-color: var(--zk-color-outline-variant);
@@ -112,13 +104,11 @@
 .z-decimalbox[disabled]:hover,
 .z-doublebox[disabled]:hover,
 .z-longbox[disabled]:hover,
-.z-passwordbox[disabled]:hover,
 .z-textbox.z-textbox-disabled:hover,
 .z-intbox.z-intbox-disabled:hover,
 .z-decimalbox.z-decimalbox-disabled:hover,
 .z-doublebox.z-doublebox-disabled:hover,
-.z-longbox.z-longbox-disabled:hover,
-.z-passwordbox.z-passwordbox-disabled:hover {
+.z-longbox.z-longbox-disabled:hover {
     border-color: var(--zk-color-outline-variant);
 }
 
@@ -126,8 +116,7 @@
 .z-intbox[readonly]:hover,
 .z-decimalbox[readonly]:hover,
 .z-doublebox[readonly]:hover,
-.z-longbox[readonly]:hover,
-.z-passwordbox[readonly]:hover {
+.z-longbox[readonly]:hover {
     cursor: default;
 }
 
@@ -201,25 +190,13 @@ textarea.z-textbox.z-error:focus {
     padding: calc(var(--zk-spacing-2) - 1px) calc(var(--zk-spacing-3) - 1px);
 }
 
-/* Passwordbox invalid (same ZK pattern as intbox) */
-.z-passwordbox.z-passwordbox-invalid {
-    border-color: var(--zk-input-border-color-error);
-}
-
-.z-passwordbox.z-passwordbox-invalid:focus {
-    border-color: var(--zk-input-border-color-error);
-    border-width: 2px;
-    padding: 0 calc(var(--zk-spacing-3) - 1px);
-}
-
 /* ─── Inplace ────────────────────────────────────────────────────────────── */
 /* ZK adds z-{comp}-inplace on blur, removes on focus — class never coexists with :focus */
 .z-textbox.z-textbox-inplace,
 .z-intbox.z-intbox-inplace,
 .z-decimalbox.z-decimalbox-inplace,
 .z-doublebox.z-doublebox-inplace,
-.z-longbox.z-longbox-inplace,
-.z-passwordbox.z-passwordbox-inplace {
+.z-longbox.z-longbox-inplace {
     border-color: transparent;
     background-color: transparent;
     box-shadow: none;
@@ -229,8 +206,7 @@ textarea.z-textbox.z-error:focus {
 .z-intbox.z-intbox-inplace:hover,
 .z-decimalbox.z-decimalbox-inplace:hover,
 .z-doublebox.z-doublebox-inplace:hover,
-.z-longbox.z-longbox-inplace:hover,
-.z-passwordbox.z-passwordbox-inplace:hover {
+.z-longbox.z-longbox-inplace:hover {
     border-color: transparent;
 }
 
