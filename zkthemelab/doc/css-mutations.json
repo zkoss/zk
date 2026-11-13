@@ -210,6 +210,32 @@
           "fileupload-dialog"
         ]
       }
+    },
+    {
+      "id": "U4",
+      "area": "fileupload-dialog",
+      "description": "fileupload: the size line goes back to a fixed on-surface-variant colour",
+      "source": "zul/src/main/resources/web/js/zul/fud/css/fileupload.css",
+      "find": ".z-fileupload-size{font-size:",
+      "replace": ".z-fileupload-size{color:var(--zk-color-on-surface-variant);font-size:",
+      "run": {
+        "projects": [
+          "fileupload-dialog"
+        ]
+      }
+    },
+    {
+      "id": "U5",
+      "area": "fileupload-dialog",
+      "description": "fileupload: the uploaded-file icon goes back to a fixed on-surface-variant colour",
+      "source": "zul/src/main/resources/web/js/zul/fud/css/fileupload.css",
+      "find": ".z-fileupload-file:before{content:\"\";background-color:currentColor;",
+      "replace": ".z-fileupload-file:before{content:\"\";background-color:var(--zk-color-on-surface-variant);",
+      "run": {
+        "projects": [
+          "fileupload-dialog"
+        ]
+      }
     }
   ]
 }

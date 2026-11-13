@@ -44,7 +44,7 @@
     grid-row: span 2;
     width: 20px;
     height: 20px;
-    background-color: var(--zk-color-on-surface-variant);
+    background-color: currentColor;
     -webkit-mask: url(~./zul/img/icons/file.svg) center / contain no-repeat;
     mask: url(~./zul/img/icons/file.svg) center / contain no-repeat;
 }
@@ -86,8 +86,8 @@
     cursor: pointer;
 }
 
+/* The size line and the icon keep the row's --zk-fileupload-color, as in IceBlue */
 .z-fileupload-size {
-    color: var(--zk-color-on-surface-variant);
     font-size: var(--zk-typescale-body-small-size);
     line-height: var(--zk-typescale-body-small-line-height);
 }

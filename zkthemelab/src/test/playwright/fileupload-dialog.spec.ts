@@ -110,22 +110,29 @@ for (const state of ['uploading', 'done'] as const) {
   });
 }
 
-test('fileupload — the uploading size line uses the supporting text style', async ({ page }) => {
+test('fileupload — the uploading size line uses the supporting text size', async ({ page }) => {
   const release = await pickAndHold(page, 'first.txt');
-  const { size, sizeColor, variant } = await page.locator('.z-fileupload-size').evaluate((el) => {
-    const cs = getComputedStyle(el);
-    const probe = document.createElement('span');
-    probe.style.color = 'var(--zk-color-on-surface-variant)';
-    el.appendChild(probe);
-    const variant = getComputedStyle(probe).color;
-    probe.remove();
-    return { size: cs.fontSize, sizeColor: cs.color, variant };
-  });
+  const size = await page.locator('.z-fileupload-size').evaluate((el) => getComputedStyle(el).fontSize);
   const small = await page.locator('.z-window').evaluate((el) =>
     getComputedStyle(el).getPropertyValue('--zk-typescale-body-small-size').trim());
   release();
   expect(size).toBe(small);
-  expect(sizeColor).toBe(variant);
+});
+
+// ZK-6199's --zk-fileupload-color restyles the whole row: the size line and the uploaded-file icon
+// follow it, so a dark row with light text keeps every part readable.
+test('fileupload — the size line and the icon follow --zk-fileupload-color', async ({ page }) => {
+  await page.locator('.z-window').evaluate((el) => {
+    el.style.setProperty('--zk-fileupload-background-color', 'rgb(38, 40, 46)');
+    el.style.setProperty('--zk-fileupload-color', 'rgb(236, 238, 242)');
+  });
+  await pickDone(page, ['first.txt']);
+  const icon = await page.locator('.z-fileupload-file').evaluate((row) => getComputedStyle(row, '::before').backgroundColor);
+  const release = await pickAndHold(page, 'second.txt');
+  const size = await page.locator('.z-fileupload-size').evaluate((el) => getComputedStyle(el).color);
+  release();
+  expect(icon, 'uploaded-file icon').toBe('rgb(236, 238, 242)');
+  expect(size, 'size line').toBe('rgb(236, 238, 242)');
 });
 
 test('fileupload — the file list keeps a gap before the action buttons', async ({ page }) => {
