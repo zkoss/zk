@@ -22,9 +22,9 @@
     line-height: var(--zk-typescale-body-medium-line-height);
     outline: none;
     box-sizing: border-box;
-    /* Same baseline alignment as the inline-flex composites (datebox, chosenbox) so a row of
-       sibling inputs shares one bottom edge (B86_ZK_4048). */
-    vertical-align: baseline;
+    /* Centred like the composite fields (datebox, chosenbox, combobox), so a row of sibling
+       inputs shares one bottom edge (B86_ZK_4048). */
+    vertical-align: middle;
     /* Only transition border-COLOR. On focus, border-width snaps 1px→2px and the
        compensating padding (0 spacing-3 → 0 calc(spacing-3 - 1px)) snaps with it, so
        the content edge stays put. Animating border-width WITHOUT co-animating padding
