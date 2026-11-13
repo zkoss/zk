@@ -235,3 +235,31 @@ test.describe('input row bottom edge', () => {
     }
   });
 });
+
+// Guard for the trailing button of the dropdown fields (ZK-6112, B103_ZK_5838): every one is --zk-input-button-width
+// wide, so two fields of the same width give their inputs the same room and line up when stacked. timepicker and
+// daterangebox had their own 36px.
+// Fixture: web/pv/empty-field-baseline-guard.zul
+test.describe('trailing button width', () => {
+  const WIDGETS = ['datebox', 'timebox', 'bandbox', 'combobox', 'timepicker', 'daterangebox'];
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/pv/empty-field-baseline-guard.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+  });
+
+  for (const widget of WIDGETS) {
+    test(`${widget} — the trailing button is --zk-input-button-width wide`, { tag: ['@ZK-6112', '@ZK-5838'] }, async ({ page }) => {
+      const { button, token } = await page.evaluate((widget) => {
+        const btn = document.querySelector(`.z-${widget}-button`) as HTMLElement;
+        const probe = document.createElement('div');
+        probe.style.width = 'var(--zk-input-button-width)';
+        document.body.appendChild(probe);
+        const token = probe.getBoundingClientRect().width;
+        probe.remove();
+        return { button: btn.getBoundingClientRect().width, token };
+      }, widget);
+      expect(button).toBe(token);
+    });
+  }
+});
