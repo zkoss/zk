@@ -5,8 +5,8 @@ Like bandbox, but the dropdown contains structured `<comboitem>` children rather
 ## DOM structure
 
 ```
-.z-combobox                       (root span — Type B: border lives on the child input)
-├─ input.z-combobox-input         (the text field with border)
+.z-combobox                       (root span — Marble draws the whole outline here)
+├─ input.z-combobox-input         (the text field, no border)
 └─ a.z-combobox-button            (the dropdown arrow)
 ```
 
@@ -44,13 +44,13 @@ The icon span is only rendered when `iconSclass` is set, so it always has
 content (no `:not(:empty)` guard needed). This whole structure holds for any
 theme; only `<gap>` is a theme choice.
 
-## Border location: child input, not root
+## Border location: root, not child input
 
-Combobox is the **Type B** inplace pattern: the border lives on `.z-combobox-input`, not on the root. The root may still carry `background-color`. When clearing styles for inplace, clear both root background AND child border/background. See `reference/inplace-state.md`.
+Marble draws the combobox outline on the root: the root carries the 1px border and its radius, and focus, open and invalid are an inset `box-shadow` on the same root. The input and the button draw no border. A split border (the input and the button each carry half) would need a `clip-path` on the input, which Chrome applies at a sub-pixel position and so cuts a border row. For the inplace styles of this root, see `reference/inplace-state.md`.
 
 ## Input and button are two elements
 
-The input and the button are separate elements, so a theme that wants them to read as one rectangle must split the border between them so the seam is not doubled. Whatever state changes the border (focus, invalid) must update both elements together.
+The input and the button are separate elements, but the outline belongs to the root. A state that changes the outline (focus, open, invalid) changes the root only; the input and the button need no matching rule.
 
 ## `buttonVisible="false"`
 

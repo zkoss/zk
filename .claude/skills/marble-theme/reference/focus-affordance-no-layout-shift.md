@@ -125,16 +125,13 @@ list's vertical growth, so use mechanism A here: keep `border: 1px` and draw the
 the plain root inset ring (not the `::after` overlay) is sufficient. Apply to **both** copies —
 `.z-select` in `listbox.css` and `.z-selectbox` in `selectbox.css` (caught 2026-06-11).
 
-**Combobox — the "no growth" exception is about HEIGHT ONLY.** Combobox puts the border on its
-**input/button children** (each `min-height: 40px`) and leaves the root borderless. A child border
-growing to 2px (border-box) shrinks the child's content but the child stays 40px and the borderless
-root stays 40px → the control does **not** grow. That is all the exception guarantees. It does
-**not** mean the child text is fine: the input's left border grows 1px→2px with `border-right:none`,
-so with `box-sizing:border-box` the input's content box shrinks on the left and the text shifts ~1px
-right (mechanism B applies inside the child — compensate `padding-left` on `:focus-within`, don't
-change the height). Caught 2026-07-14: combobox default+error had border-width:2px on focus with **no**
-padding compensation → permanent text shift. Fix = `padding-left: calc(spacing-3 - 1px)` on
-`.z-combobox:focus-within .z-combobox-input` (+ never transition `border-width`, see below).
+**Combobox — root border, mechanism A.** Combobox draws its border on the root (`.z-combobox`), so
+its focus is mechanism A, as for datebox: `border` stays 1px and the ring is
+`box-shadow: inset 0 0 0 1px` on `:focus-within` (the open and invalid states follow the same
+pattern; see `zul/src/main/resources/web/js/zul/inp/css/combobox.css`). The input and the button draw
+no border, so no child border grows and the input needs no `padding-left` compensation. Caught
+2026-07-14: combobox default+error had border-width:2px on focus with **no** padding compensation on
+the input, and the text shifted permanently.
 
 **Applies to inputgroup — a *group of independently-styled* inputs (caught 2026-06-25).**
 `inputgroup` is a flex container whose children (`.z-textbox`, addons, buttons) each carry their own
@@ -209,8 +206,7 @@ Caught 2026-07-14: **datebox** had migrated `:focus-within` to Mechanism A but l
 `.z-datebox-open` on `border-width:2px` → icon-open grew the field and drew a thicker ring than
 input-focus; **bandbox** used an `inset` focus ring but an **outset** open ring → a different halo.
 Both fixed to `box-shadow: inset 0 0 0 1px var(--zk-color-primary)`, identical to `:focus-within`.
-(Combobox is exempt for the same reason its focus is — border on the children, not the root, with
-`padding-left` compensation; its open and focus rules already match each other.)
+(Combobox's open and focus rules already match each other: both are the root's inset ring.)
 
 ## How the harness should catch a regression
 

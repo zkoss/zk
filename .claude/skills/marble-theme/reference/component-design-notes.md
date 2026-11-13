@@ -138,18 +138,23 @@ Colorbox is a PE component (`zkex`). `.z-colorbox-icon` sets its own SVG mask
   when its display is `block`; otherwise it measures a detached clone that collapses to 0, and the popup
   opened over the input. The root keeps no padding because the `hflex="min"` math adds root padding to
   the width; the room for the button is the input's right padding instead.
-- **Split border (combobox).** Input and button are two elements: `.z-combobox-input` has the left,
-  top and bottom borders (and the left half of the radius), `.z-combobox-button` has the right
-  border (and the right half), so the seam is not doubled; focus must update both. The input spans the
-  whole root and is clipped with `clip-path` so its top and bottom border do not run under the button.
+- **Outline (combobox).** The `.z-combobox` root draws the whole outline: a 1px border in
+  `--zk-combobox-border-color` with the radius `--zk-combobox-radius`, as datebox, timebox and spinner
+  do. The input and the absolutely positioned button draw no border, and the input has no `clip-path`.
+  Why the root: a split outline (the input drew the left, top and bottom borders and the button the
+  right) needed `clip-path: inset(0 <button width> 0 0)` on the input, so that its top and bottom border
+  did not run under the button. Chrome snaps a border to whole pixels but applies a clip-path at the
+  unsnapped fractional position, so at a sub-pixel y the clip cut part of the top or bottom border row,
+  which drew a lighter, thinner edge. Guarded by `zkthemelab/src/test/playwright/field-border-subpixel.spec.ts`.
+  Focus, open and invalid focus keep the border at 1px and add an inset `box-shadow` of 1px in the state
+  colour (`--zk-combobox-border-color-focus` for focus, `--zk-color-primary` for open, `--zk-color-error`
+  for invalid focus), so the second pixel does not shift the content.
   Which combo components hug their content (`field-sizing: content`) is a Marble decision, see
   `doc/spec/DESIGN.md`.
-- **`buttonVisible="false"`.** Marble draws the border of combobox on the input and button
-  (Pattern S, split border) and the border of bandbox, datebox, timebox, spinner and doublespinner on
-  the root (Pattern R). With Pattern S, hiding the button removes the right edge, so Marble restores
-  it on the input through ZK's `.z-{c}-input-full` hook:
-  `.z-combobox-input.z-combobox-input-full { border-right: 1px solid var(--zk-color-outline); border-radius: var(--zk-combobox-radius); }`
-  (also `padding-right` and `clip-path: none`).
+- **`buttonVisible="false"`.** Marble draws the border of combobox, bandbox, datebox, timebox, spinner and
+  doublespinner on the root (Pattern R). Hiding the button leaves the root border whole. The only rule
+  ZK's `.z-combobox-input-full` hook needs for combobox is the input's `padding-right` reset, which gives
+  back the room the button took: `.z-combobox-input.z-combobox-input-full { padding-right: var(--zk-spacing-3); }`.
   For Pattern S components the No-button check must verify both that the button is hidden and that
   the input still has a four-side border with a uniform corner radius. For Pattern R components only
   the first check applies. Marble also sets `cursor:pointer` on a readonly combo input to signal that

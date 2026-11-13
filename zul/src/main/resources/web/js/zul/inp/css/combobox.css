@@ -9,7 +9,9 @@
    `block`; otherwise it measures a detached clone, which collapses to 0 for an absolutely
    positioned root, so the popup opened over the input instead of below it. The root keeps no
    padding: the hflex="min" math (getContentEdgeWidth_) adds the root's padding to the width, so
-   the room for the button is the input's right padding instead. */
+   the room for the button is the input's right padding instead. The root draws the outline, as in
+   datebox: a border split between the input and the button needed a clip-path on the input, which
+   Chrome applies at the unsnapped sub-pixel position and so cut part of the top or bottom border row. */
 .z-combobox {
     --zk-combobox-button-width: var(--zk-input-button-width);
     display: inline-block;
@@ -19,6 +21,8 @@
     vertical-align: middle;
     position: relative;
     white-space: nowrap;
+    border: 1px solid var(--zk-combobox-border-color);
+    border-radius: var(--zk-combobox-radius);
     background-color: var(--zk-combobox-bg);
     min-height: var(--zk-control-height);
     /* A width narrower than the input's padding keeps the box and clips the input; the
@@ -27,26 +31,20 @@
     box-sizing: border-box;
     /* Reset the inherited line-height: a parent's tall line box would push the input down while the button stays put. */
     line-height: var(--zk-typescale-body-medium-line-height);
+    transition:
+        border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
+        box-shadow var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
-.z-combobox:hover .z-combobox-input,
-.z-combobox:hover .z-combobox-button {
+.z-combobox:hover {
     border-color: var(--zk-combobox-border-color-hover);
 }
 
-.z-combobox:focus-within .z-combobox-input,
-.z-combobox:focus-within .z-combobox-button {
+/* The focus ring is an inset box-shadow on a 1px border, not a wider border: nothing changes size,
+   so the text never moves. See reference/focus-affordance-no-layout-shift.md. */
+.z-combobox:focus-within {
     border-color: var(--zk-combobox-border-color-focus);
-    border-width: 2px;
-}
-
-/* The input's left border grows 1px→2px on focus (border-right is none), which
-   with box-sizing:border-box shrinks its content box on the left → the text would
-   shift ~1px right. Absorb it by trimming padding-left by 1px. border-width is NOT
-   transitioned (see the inputs no-shift regression test), so this snaps in step with
-   the border and the text never moves. */
-.z-combobox:focus-within .z-combobox-input {
-    padding-left: calc(var(--zk-spacing-3) - 1px);
+    box-shadow: inset 0 0 0 1px var(--zk-combobox-border-color-focus);
 }
 
 /* ─── Input field ─────────────────────────────────────────────────────── */
@@ -57,25 +55,17 @@
     width: 100%;
     min-width: 0;
     margin: 0;
-    border: 1px solid var(--zk-combobox-border-color);
-    border-right: none;
-    border-radius: var(--zk-combobox-radius) 0 0 var(--zk-combobox-radius);
+    border: none;
     background: transparent;
     padding: 0 calc(var(--zk-combobox-button-width) + var(--zk-spacing-3)) 0 var(--zk-spacing-3);
     height: 100%;
-    min-height: var(--zk-control-height);
+    min-height: calc(var(--zk-control-height) - 2px);
     font-family: var(--zk-typescale-font-family);
     font-size: var(--zk-typescale-body-medium-size);
     font-weight: var(--zk-typescale-body-medium-weight);
     color: var(--zk-combobox-fg);
     outline: none;
     box-sizing: border-box;
-    /* Only border-COLOR animates; border-width snaps with its padding compensator on
-       focus so the text never drifts. See reference/focus-affordance-no-layout-shift.md. */
-    transition: border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
-    /* The input spans the whole root, so its top and bottom border would run under the button and
-       double the semi-transparent border colour there; paint only the part left of the button. */
-    clip-path: inset(0 var(--zk-combobox-button-width) 0 0);
 }
 
 .z-combobox-input::placeholder {
@@ -134,17 +124,13 @@
        positioned one included, so the button would widen the measured width by its own width. The
        negative margin cancels it; an absolutely positioned box ignores its own left margin. */
     margin-left: calc(-1 * var(--zk-combobox-button-width));
-    min-height: var(--zk-control-height);
-    border: 1px solid var(--zk-combobox-border-color);
-    border-left: none;
+    min-height: calc(var(--zk-control-height) - 2px);
+    border: none;
     background: transparent;
     color: var(--zk-color-on-surface-variant);
     cursor: pointer;
     border-radius: 0 var(--zk-combobox-radius) var(--zk-combobox-radius) 0;
-    /* border-width is intentionally NOT transitioned — it snaps 1px→2px on focus in
-       step with the input's padding compensation so nothing drifts. */
-    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard),
-                border-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
+    transition: color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
     overflow: hidden;
 }
 
@@ -247,10 +233,8 @@
     cursor: not-allowed;
 }
 
-.z-combobox[disabled]:hover .z-combobox-input,
-.z-combobox[disabled]:hover .z-combobox-button,
-.z-combobox.z-combobox-disabled:hover .z-combobox-input,
-.z-combobox.z-combobox-disabled:hover .z-combobox-button {
+.z-combobox[disabled]:hover,
+.z-combobox.z-combobox-disabled:hover {
     border-color: var(--zk-color-outline);
 }
 
@@ -260,19 +244,17 @@
 }
 
 /* ─── Error variant ───────────────────────────────────────────────────────── */
-.z-combobox.z-combobox-error .z-combobox-input,
-.z-combobox.z-combobox-error .z-combobox-button {
+.z-combobox.z-combobox-error {
     border-color: var(--zk-color-error);
 }
 
-.z-combobox.z-combobox-error:hover .z-combobox-input,
-.z-combobox.z-combobox-error:hover .z-combobox-button {
+.z-combobox.z-combobox-error:hover {
     border-color: var(--zk-color-error);
 }
 
-.z-combobox.z-combobox-error:focus-within .z-combobox-input,
-.z-combobox.z-combobox-error:focus-within .z-combobox-button {
+.z-combobox.z-combobox-error:focus-within {
     border-color: var(--zk-color-error);
+    box-shadow: inset 0 0 0 1px var(--zk-color-error);
 }
 
 .z-combobox.z-combobox-error .z-combobox-input {
@@ -280,7 +262,8 @@
 }
 
 /* ─── Standard (underline-only) variant ──────────────────────────────────── */
-/* Standard variant: bottom border only, no box */
+/* Standard variant: bottom border only, no box. Its root outline is removed after the state rules (see
+   "Standard: no outline" below). */
 .z-combobox.z-combobox-standard {
     background-color: transparent;
     min-height: 32px;
@@ -316,19 +299,6 @@
     transform: scaleX(1);
 }
 
-.z-combobox.z-combobox-standard:hover .z-combobox-input,
-.z-combobox.z-combobox-standard:hover .z-combobox-button,
-.z-combobox.z-combobox-standard:focus-within .z-combobox-input,
-.z-combobox.z-combobox-standard:focus-within .z-combobox-button {
-    border: none;
-}
-
-.z-combobox.z-combobox-standard .z-combobox-input,
-.z-combobox.z-combobox-standard .z-combobox-button {
-    border: none;
-    border-radius: 0;
-}
-
 .z-combobox.z-combobox-standard:hover::before {
     border-bottom-width: 2px;
     border-bottom-color: var(--zk-color-on-surface);
@@ -346,20 +316,17 @@
 
 /* ─── Invalid variant ─────────────────────────────────────────────────────── */
 /* ZK adds z-combobox-invalid to the <input> after a failed constraint; an sclass puts it on the wrapper. */
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input,
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-button {
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) {
     border-color: var(--zk-color-error);
 }
 
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):hover .z-combobox-input,
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):hover .z-combobox-button {
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):hover {
     border-color: var(--zk-color-error);
 }
 
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):focus-within .z-combobox-input,
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):focus-within .z-combobox-button {
+.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):focus-within {
     border-color: var(--zk-color-error);
-    border-width: 2px;
+    box-shadow: inset 0 0 0 1px var(--zk-color-error);
 }
 
 /* ─── Readonly variant ────────────────────────────────────────────────────── */
@@ -387,10 +354,10 @@
 }
 
 /* ─── Open state ──────────────────────────────────────────────────────────── */
-.z-combobox.z-combobox-open .z-combobox-input,
-.z-combobox.z-combobox-open .z-combobox-button {
+/* Same affordance as :focus-within above, so opening from the button looks like focusing the input. */
+.z-combobox.z-combobox-open {
     border-color: var(--zk-color-primary);
-    border-width: 2px;
+    box-shadow: inset 0 0 0 1px var(--zk-color-primary);
 }
 
 .z-combobox.z-combobox-open .z-combobox-button [class*="z-icon-"] {
@@ -409,37 +376,41 @@
     display: none;
 }
 
+/* ─── Standard: no outline ────────────────────────────────────────────────── */
+/* Placed after every state rule that colours the root outline (hover, focus, open, error, invalid) so
+   none of them brings the box back: the standard variant draws only its ::before/::after lines. */
+.z-combobox.z-combobox-standard,
+.z-combobox.z-combobox-standard:is(:hover, :focus-within) {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
 /* ─── Button hidden (buttonVisible="false") ──────────────────────────── */
 /* ZK adds z-combobox-disabled to the <a> button element when buttonVisible=false,
-   and z-combobox-input-full to the input. Combobox uses split-border pattern
-   (input + button each carry half the border), so hiding the button leaves the
-   input's right edge open — restore the right border + full corner radius. */
+   and z-combobox-input-full to the input. The input then needs no room for the button. */
 .z-combobox-button.z-combobox-disabled {
     display: none;
 }
 
 .z-combobox-input.z-combobox-input-full {
     padding-right: var(--zk-spacing-3);
-    clip-path: none;
-    border-right: 1px solid var(--zk-color-outline);
-    border-radius: var(--zk-combobox-radius);
 }
 
 /* ─── Inplace ─────────────────────────────────────────────────────────── */
 .z-combobox.z-combobox-inplace {
-    background-color: transparent;
-}
-
-.z-combobox.z-combobox-inplace .z-combobox-input {
-    padding-right: var(--zk-spacing-3);
-    clip-path: none;
     border-color: transparent;
     background-color: transparent;
     box-shadow: none;
 }
 
-.z-combobox.z-combobox-inplace:hover .z-combobox-input {
+.z-combobox.z-combobox-inplace:hover {
     border-color: transparent;
+}
+
+.z-combobox.z-combobox-inplace .z-combobox-input {
+    padding-right: var(--zk-spacing-3);
+    background-color: transparent;
 }
 
 .z-combobox.z-combobox-inplace .z-combobox-button {

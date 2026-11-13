@@ -156,7 +156,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
   });
 
   test('combobox — stock values, then :root override reaches it', async ({ page }) => {
-    const root = page.locator('.z-combobox-input').first();
+    const root = page.locator('.z-combobox').first();
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock

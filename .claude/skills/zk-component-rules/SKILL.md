@@ -90,7 +90,7 @@ Files with no summary row below: `components/biglistbox.md`, `columnlayout.md`, 
 | `components/chosenbox.md` | chosenbox (chip class = `.z-chosenbox-item`, EE-only) |
 | `components/codeeditor.md` | codeeditor (CE, new in ZK 11.0.0) — third-party library wrapper around CodeMirror 6; ZK's own mold renders only the root + an empty `.z-codeeditor-cave` mount point, everything below (`.cm-editor`/`.cm-scroller`/`.cm-gutters`/`.cm-content`) is CodeMirror's own DOM injected async inside `zk.afterMount`; no readonly class exists (editable compartment only); `lineNumbers=false` removes the gutter subtree outright, not display:none; CodeMirror's own base theme is injected UNLAYERED at runtime so a handful of named anchor classes need `!important` to restyle, while per-token syntax spans and `.ͼ*` hash classes are off-limits (inline-styled/generated, not a stable selector) |
 | `components/colorbox.md` | colorbox (current swatch + button + popup w/ picker+palette, geometry-locked sprites, PE) |
-| `components/combobox.md` | combobox (split-border, comboitem variants) |
+| `components/combobox.md` | combobox (root border, comboitem variants) |
 | `components/combobutton.md` | combobutton (pointer-events: auto required for popup click) |
 | `components/combo-trio.md` | datebox + timebox + spinner (shared `.z-{c}-input` / `.z-{c}-button` pattern) |
 | `components/daterangebox.md` | daterangebox (EE) — two-input root (begin/end) + detached multi-panel calendar popup, `--panels` CSS var drives grid column count, no root `-open` class, `buttonVisible=false` toggles inline style not a class, range-highlight reuses `.z-cell-range-*` from calendar.md |

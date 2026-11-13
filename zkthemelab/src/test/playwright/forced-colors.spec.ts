@@ -650,25 +650,36 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect([...new Set(opacities)], 'every toolbar glyph must be fully opaque').toEqual(['1']);
   });
 
-  // The combobox splits one outline between input and button; the double border
-  // must not close the seam, or the button draws as a second double-bordered box.
-  test('invalid combobox is one double-bordered box (the input/button seam stays open)', async ({ page }) => {
+  // The combobox draws one outline on its root; the double border is that root's overlay, and neither the
+  // input nor the button may draw a second box of their own.
+  test('invalid combobox is one double-bordered box (the root draws it, input and button have none)', async ({ page }) => {
     await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
     const combo = page.locator('.z-combobox.z-combobox-invalid:has(.z-combobox-input:not(.z-combobox-input-full)) ').first();
     await combo.waitFor({ state: 'visible', timeout: 10000 });
-    const seam = await combo.evaluate(el => {
+    const boxes = await combo.evaluate(el => {
       const input = getComputedStyle(el.querySelector('.z-combobox-input')!);
       const button = getComputedStyle(el.querySelector('.z-combobox-button')!);
+      const overlay = getComputedStyle(el, '::before');
       return {
-        inputLeft: input.borderLeftStyle, inputRight: input.borderRightStyle,
-        buttonLeft: button.borderLeftStyle, buttonRight: button.borderRightStyle,
+        overlayTop: `${overlay.borderTopStyle} ${overlay.borderTopWidth}`,
         inputTop: input.borderTopStyle, buttonTop: button.borderTopStyle,
       };
     });
-    expect(seam).toEqual({
-      inputLeft: 'double', inputRight: 'none', buttonLeft: 'none', buttonRight: 'double',
-      inputTop: 'double', buttonTop: 'double',
+    expect(boxes).toEqual({ overlayTop: 'double 3px', inputTop: 'none', buttonTop: 'none' });
+  });
+
+  // The standard variant draws its underline with the root's ::before; the double-border overlay of an invalid
+  // combobox must not take that pseudo-element over and turn the underline into a box.
+  test('an invalid standard combobox keeps its underline in forced colors', async ({ page }) => {
+    await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
+    const combo = page.locator('.z-combobox').first();
+    await combo.waitFor({ state: 'visible', timeout: 10000 });
+    const line = await combo.evaluate(el => {
+      el.classList.add('z-combobox-standard', 'z-combobox-invalid');
+      const cs = getComputedStyle(el, '::before');
+      return { top: cs.borderTopStyle, bottom: `${cs.borderBottomStyle} ${cs.borderBottomWidth}`, offset: cs.bottom };
     });
+    expect(line).toEqual({ top: 'none', bottom: 'solid 1px', offset: '0px' });
   });
 
   // A real constraint failure puts z-combobox-invalid / z-bandbox-invalid on the <input>,
@@ -689,11 +700,9 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     }, [side, pseudo] as const);
 
     expect(await border('.iig-single .z-bandbox', 'Top', '::before'), 'bandbox box (overlay)').toBe('double 3px');
-    expect(await border('.iig-single .z-combobox-input', 'Top'), 'combobox input top').toBe('double 3px');
-    expect(await border('.iig-single .z-combobox-button', 'Top'), 'combobox button top').toBe('double 3px');
-    expect(await border('.iig-single .z-combobox-input', 'Right'), 'seam, input side').toMatch(/^none /);
-    expect(await border('.iig-single .z-combobox-button', 'Left'), 'seam, button side').toMatch(/^none /);
-    expect(await border('.iig-single .z-combobox-button', 'Right'), 'combobox button right').toBe('double 3px');
+    expect(await border('.iig-single .z-combobox', 'Top', '::before'), 'combobox box (overlay)').toBe('double 3px');
+    expect(await border('.iig-single .z-combobox-input', 'Top'), 'combobox input top').toMatch(/^none /);
+    expect(await border('.iig-single .z-combobox-button', 'Top'), 'combobox button top').toMatch(/^none /);
   });
 
   // The inputgroup border shorthand must not take the double border from an invalid input in the group.
@@ -706,10 +715,11 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
       await page.keyboard.press('Backspace');
       await page.locator('body').click({ position: { x: 600, y: 700 } });
       await expect(input).toHaveClass(/z-\w+-invalid/);
-      const border = await input.evaluate(el => {
-        const cs = getComputedStyle(el);
+      // The combobox draws its double border as an overlay on its root, the other widgets on the input itself.
+      const border = await input.evaluate((el, isCombobox) => {
+        const cs = isCombobox ? getComputedStyle(el.closest('.z-combobox')!, '::before') : getComputedStyle(el);
         return `${cs.borderTopStyle} ${cs.borderTopWidth}`;
-      });
+      }, widget === 'combobox');
       expect(border, `${widget} in an inputgroup`).toBe('double 3px');
     }
   });
@@ -739,9 +749,8 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
           host.classList.add(cls);
         }, invalidClass);
         const doubled = await page.locator(`.isg-${name}`).first().evaluate(root => {
-          const bordered = root.querySelector('.z-combobox-input') ?? root;
-          const own = getComputedStyle(bordered);
-          return own.borderTopStyle === 'double' ? 'double' : getComputedStyle(bordered, '::before').borderTopStyle;
+          const own = getComputedStyle(root);
+          return own.borderTopStyle === 'double' ? 'double' : getComputedStyle(root, '::before').borderTopStyle;
         });
         expect(doubled, `the invalid ${name} shows the double border, so the size check is not vacuous`).toBe('double');
         expect(await sizeOf(page, name)).toEqual(valid);

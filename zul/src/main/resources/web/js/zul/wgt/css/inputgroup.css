@@ -71,7 +71,6 @@
 .z-inputgroup:not(.z-inputgroup-vertical) .z-inputgroup-text + .z-doublebox,
 .z-inputgroup:not(.z-inputgroup-vertical) .z-inputgroup-text + .z-decimalbox,
 .z-inputgroup:not(.z-inputgroup-vertical) .z-inputgroup-text + .z-combobox,
-.z-inputgroup:not(.z-inputgroup-vertical) .z-inputgroup-text + .z-combobox .z-combobox-input,
 /* Trailing addon: the input's right border is the shared edge, so the addon drops its left. */
 .z-inputgroup:not(.z-inputgroup-vertical) .z-textbox + .z-inputgroup-text,
 .z-inputgroup:not(.z-inputgroup-vertical) .z-intbox + .z-inputgroup-text,
@@ -87,8 +86,7 @@
 .z-inputgroup .z-intbox,
 .z-inputgroup .z-longbox,
 .z-inputgroup .z-doublebox,
-.z-inputgroup .z-decimalbox,
-.z-inputgroup .z-combobox .z-combobox-input {
+.z-inputgroup .z-decimalbox {
     border: 1px solid var(--zk-inputgroup-border-color);
     border-radius: 0;
     flex: 1;
@@ -101,8 +99,7 @@
 /* The shorthand above is as specific as the invalid rules of input.css and combobox.css and loads after them, so it
  * repainted the error border of a failed constraint in the group colour. An invalid input keeps the error
  * colour at rest, hover and focus, as outside the group; the width stays 1px, the group outline owns the focus. */
-.z-inputgroup :is(.z-textbox-invalid, .z-intbox-invalid, .z-longbox-invalid, .z-doublebox-invalid, .z-decimalbox-invalid),
-.z-inputgroup .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input {
+.z-inputgroup :is(.z-textbox-invalid, .z-intbox-invalid, .z-longbox-invalid, .z-doublebox-invalid, .z-decimalbox-invalid) {
     border-color: var(--zk-input-border-color-error);
 }
 
@@ -140,29 +137,24 @@
 .z-inputgroup .z-intbox:focus-visible,
 .z-inputgroup .z-longbox:focus-visible,
 .z-inputgroup .z-doublebox:focus-visible,
-.z-inputgroup .z-decimalbox:focus-visible,
-.z-inputgroup .z-combobox .z-combobox-input:focus,
-.z-inputgroup .z-combobox .z-combobox-input:focus-visible {
+.z-inputgroup .z-decimalbox:focus-visible {
     border-width: 1px;
     padding: 0 var(--zk-spacing-3);
 }
 
-/* The combobox button grows to 2px and turns primary on focus (combobox.css) while the input above stays 1px; the group
- * outline owns the focus, so the button keeps the 1px border and the colour of the input, error colour once invalid
- * (follow-up 58). */
-.z-inputgroup .z-combobox:focus-within .z-combobox-button {
-    border-width: 1px;
+/* The combobox draws its outline on its root, so inside the group the root takes the group colour at rest, hover and
+ * focus; the group outline owns the focus, so the inset ring of combobox.css is off. A failed constraint or an error
+ * keeps the error colour in every state, as outside the group. */
+.z-inputgroup .z-combobox,
+.z-inputgroup .z-combobox:hover,
+.z-inputgroup .z-combobox:focus-within {
     border-color: var(--zk-inputgroup-border-color);
+    box-shadow: none;
 }
 
-.z-inputgroup .z-combobox:is(.z-combobox-invalid, .z-combobox-error, :has(> .z-combobox-invalid)):focus-within .z-combobox-button {
+.z-inputgroup .z-combobox:is(.z-combobox-invalid, .z-combobox-error, :has(> .z-combobox-invalid)),
+.z-inputgroup .z-combobox:is(.z-combobox-invalid, .z-combobox-error, :has(> .z-combobox-invalid)):is(:hover, :focus-within) {
     border-color: var(--zk-input-border-color-error);
-}
-
-/* The combobox input keeps the right padding that reserves the room for its button. */
-.z-inputgroup .z-combobox .z-combobox-input:focus,
-.z-inputgroup .z-combobox .z-combobox-input:focus-visible {
-    padding-right: calc(var(--zk-combobox-button-width) + var(--zk-spacing-3));
 }
 
 /* Multiline keeps its own (taller) rest padding — the single-line rule above
@@ -208,8 +200,7 @@
 .z-inputgroup-vertical .z-doublebox + .z-inputgroup-text,
 .z-inputgroup-vertical .z-decimalbox + .z-inputgroup-text,
 .z-inputgroup-vertical .z-inputgroup-text + .z-combobox,
-.z-inputgroup-vertical .z-combobox + .z-inputgroup-text,
-.z-inputgroup-vertical .z-inputgroup-text + .z-combobox .z-combobox-input {
+.z-inputgroup-vertical .z-combobox + .z-inputgroup-text {
     border-top: none;
 }
 }

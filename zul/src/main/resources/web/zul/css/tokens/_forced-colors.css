@@ -143,28 +143,11 @@
     .z-doublebox.z-doublebox-invalid,
     .z-longbox.z-longbox-invalid,
     .z-textbox-invalid,
-    .z-textbox.z-textbox-invalid,
-    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input,
-    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-button {
+    .z-textbox.z-textbox-invalid {
         border-style: double;
         border-width: 3px;
-    }
-
-    /* (1c-size) The text of a control keeps its x: the border grew by 2px a side. The combobox input
-       only borders its left (and its right when the button is hidden); its button has a fixed size. */
-    .z-intbox.z-intbox-invalid,
-    .z-decimalbox.z-decimalbox-invalid,
-    .z-doublebox.z-doublebox-invalid,
-    .z-longbox.z-longbox-invalid,
-    .z-textbox-invalid,
-    .z-textbox.z-textbox-invalid {
+        /* (1c-size) The text of a control keeps its x: the border grew by 2px a side. */
         padding-inline: calc(var(--zk-spacing-3) - 2px);
-    }
-    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input {
-        padding-left: calc(var(--zk-spacing-3) - 2px);
-    }
-    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input-full {
-        padding-right: calc(var(--zk-spacing-3) - 2px);
     }
 
     /* (1c-wrapper) The double border of a bordered wrapper is drawn by an out-of-flow overlay on the
@@ -181,6 +164,8 @@
     .z-doublespinner:has(.z-doublespinner-invalid)::before,
     .z-doublespinner.z-doublespinner-invalid::before,
     .z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid))::before,
+    /* The standard combobox has no box: its root ::before is the underline, which the overlay would replace. */
+    .z-combobox:not(.z-combobox-standard):is(.z-combobox-invalid, :has(> .z-combobox-invalid))::before,
     .z-daterangebox.z-daterangebox-invalid::before {
         content: '';
         position: absolute;
@@ -188,17 +173,6 @@
         border: 3px double;
         border-radius: inherit;
         pointer-events: none;
-    }
-
-    /* (1c-combobox) The combobox splits one outline between the input and the button
-       (input has no right border, button no left border). The double border above must keep
-       that seam open, or the button draws as a second double-bordered box beside the input.
-       A hidden button leaves the input full width with its own right border, so it is excluded. */
-    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-input:not(.z-combobox-input-full) {
-        border-right-style: none;
-    }
-    .z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) .z-combobox-button {
-        border-left-style: none;
     }
 
     /* (2a) Selected rows lose their primary-container tint → map to the system
