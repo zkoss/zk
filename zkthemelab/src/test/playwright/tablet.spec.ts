@@ -73,6 +73,23 @@ test.describe('tablet-touch-size', () => {
   }
 });
 
+// A field's root draws the 1px border, so its input and button must be 2px shorter than the touch
+// height or the root grows past the 48px of a textbox and a field row stops lining up.
+// Fixture: web/pv/tablet-field-height-guard.zul
+test.describe('tablet-field-height', () => {
+  const FIXTURE = '/pv/tablet-field-height-guard.zul';
+  const FIELDS = ['combobox', 'bandbox', 'datebox', 'timebox', 'spinner', 'doublespinner'];
+
+  for (const field of FIELDS) {
+    test(`${field} — root is as high as a textbox`, async ({ page }) => {
+      await page.goto(FIXTURE, { waitUntil: 'networkidle' });
+      expect(await tabletCssLoaded(page)).toBe(true);
+      const textboxHeight = await heightOf(page, '.z-textbox');
+      expect(await heightOf(page, `.z-${field}`)).toBe(textboxHeight);
+    });
+  }
+});
+
 // -------------------------------------------------------
 // No horizontal overflow — the fixed-width `pv-cols-*` state-gallery grids
 // (matrix.zul) were ~1072px wide, exceeding a phone/tablet viewport. When

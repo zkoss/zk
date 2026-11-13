@@ -1,0 +1,14 @@
+<?page title="Tablet field heights" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for tablet.spec.ts: one of each single-line field, so the spec can compare the root
+     heights. Lives under pv/ so gallery-scan does not pick it up as a page. -->
+<zk>
+<vlayout spacing="16px">
+    <textbox/>
+    <combobox><comboitem label="Item 1"/></combobox>
+    <bandbox><bandpopup>Content</bandpopup></bandbox>
+    <datebox/>
+    <timebox/>
+    <spinner/>
+    <doublespinner/>
+</vlayout>
+</zk>
