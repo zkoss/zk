@@ -134,6 +134,8 @@
 .z-bandbox.z-bandbox-disabled {
     opacity: var(--zk-state-disabled-opacity);
     pointer-events: none;
+    background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
 }
 
 /* ─── Invalid variant ─────────────────────────────────────────────────── */

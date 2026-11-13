@@ -61,3 +61,50 @@ test.describe('treeitem', () => {
     });
   }
 });
+
+// Guard for the disabled field family: a disabled field swaps its outline for outline-variant and its
+// fill for surface-container-low, so one disabled field does not read as an enabled one beside the
+// textbox. The opacity is left alone; every field dims by the same token.
+// Fixture: web/pv/disabled-fields-guard.zul
+test.describe('disabled fields', () => {
+  const FIXTURE = '/pv/disabled-fields-guard.zul';
+  const FIELDS = ['intbox', 'combobox', 'bandbox', 'datebox', 'timebox', 'spinner', 'doublespinner', 'timepicker',
+    'daterangebox', 'chosenbox', 'searchbox', 'selectbox', 'cascader', 'colorbox'];
+
+  type Surface = { border: string; background: string };
+
+  // The root's own border and fill, by the field's ZUL id (a textbox or intbox is its own root).
+  const surfaceOf = (page: Page, id: string): Promise<Surface> =>
+    page.evaluate((id) => {
+      const style = getComputedStyle(zk.Widget.$('$' + id).$n());
+      return { border: style.borderTopColor, background: style.backgroundColor };
+    }, id);
+
+  // A token's computed colour, resolved through a probe element.
+  const tokenColor = (page: Page, token: string): Promise<string> =>
+    page.evaluate((token) => {
+      const probe = document.body.appendChild(document.createElement('span'));
+      probe.style.color = `var(${token})`;
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }, token);
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto(FIXTURE, { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+  });
+
+  test('textbox — a disabled root uses outline-variant and surface-container-low', async ({ page }) => {
+    expect(await surfaceOf(page, 'textbox')).toEqual({
+      border: await tokenColor(page, '--zk-color-outline-variant'),
+      background: await tokenColor(page, '--zk-color-surface-container-low'),
+    });
+  });
+
+  for (const field of FIELDS) {
+    test(`${field} — a disabled root draws the same border and fill as a disabled textbox`, async ({ page }) => {
+      expect(await surfaceOf(page, field)).toEqual(await surfaceOf(page, 'textbox'));
+    });
+  }
+});

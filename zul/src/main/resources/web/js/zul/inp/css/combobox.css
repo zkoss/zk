@@ -231,11 +231,13 @@
     opacity: var(--zk-state-disabled-opacity);
     pointer-events: none;
     cursor: not-allowed;
+    background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
 }
 
 .z-combobox[disabled]:hover,
 .z-combobox.z-combobox-disabled:hover {
-    border-color: var(--zk-color-outline);
+    border-color: var(--zk-color-outline-variant);
 }
 
 .z-combobox[disabled] .z-combobox-input,

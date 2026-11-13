@@ -20,6 +20,8 @@ Applies to **combobox, datebox, bandbox**.
 
 Grey / `--zk-state-disabled-opacity` opacity is the reserved language of `disabled` — it communicates "not interactive." NEVER apply it to a control the user can still operate. Appearance must honestly reflect interactivity.
 
+Every disabled single-line field (textbox and the numeric boxes, combobox, bandbox, datebox, timebox, spinner, doublespinner, timepicker, daterangebox, chosenbox, searchbox, selectbox, cascader, colorbox) draws the same disabled surface: `--zk-color-surface-container-low` fill, `--zk-color-outline-variant` border at rest and on hover, dimmed by `--zk-state-disabled-opacity`. One disabled field beside a textbox then reads as disabled instead of as an enabled one that is merely faded.
+
 ## 4. Step / status dots
 
 "Todo" / "upcoming" step indicators (e.g. stepbar `.z-step-icon-empty`) MUST use `--zk-color-outline` (grey), not `--zk-color-primary`. This makes done vs. todo read at a glance and matches the un-lit connector; solid-primary is reserved for complete/active steps.

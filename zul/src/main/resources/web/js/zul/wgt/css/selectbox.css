@@ -74,6 +74,7 @@
     pointer-events: none;
     cursor: not-allowed;
     background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
 }
 
 /* ───────────────────────────────────────────────────────────────────────

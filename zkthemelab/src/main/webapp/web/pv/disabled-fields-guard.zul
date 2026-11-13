@@ -1,0 +1,35 @@
+<?page title="Disabled fields" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for disabled-state.spec.ts: every single-line field disabled, so the spec can compare each
+     root's border and background with the disabled textbox. Lives under pv/ so gallery-scan does not
+     pick it up as a page. -->
+<zk>
+<zscript><![CDATA[
+    import org.zkoss.zul.DefaultTreeModel;
+    import org.zkoss.zul.DefaultTreeNode;
+    import org.zkoss.zul.TreeNode;
+    import org.zkoss.zul.ListModelList;
+    import java.util.Arrays;
+
+    ListModelList listModel = new ListModelList(new String[]{"Apple", "Banana", "Cherry"});
+    DefaultTreeModel treeModel = new DefaultTreeModel(new DefaultTreeNode("ROOT",
+        Arrays.asList(new DefaultTreeNode[]{
+            new DefaultTreeNode("USA", Arrays.asList(new TreeNode[]{new DefaultTreeNode("New York")}))})));
+]]></zscript>
+<vlayout spacing="16px">
+    <textbox id="textbox" disabled="true"/>
+    <intbox id="intbox" disabled="true"/>
+    <combobox id="combobox" disabled="true"><comboitem label="Item 1"/></combobox>
+    <bandbox id="bandbox" disabled="true"><bandpopup>Content</bandpopup></bandbox>
+    <datebox id="datebox" disabled="true"/>
+    <timebox id="timebox" disabled="true"/>
+    <spinner id="spinner" disabled="true"/>
+    <doublespinner id="doublespinner" disabled="true"/>
+    <timepicker id="timepicker" disabled="true"/>
+    <daterangebox id="daterangebox" disabled="true"/>
+    <chosenbox id="chosenbox" model="${listModel}" disabled="true" width="200px"/>
+    <searchbox id="searchbox" model="${listModel}" disabled="true"/>
+    <selectbox id="selectbox" model="${listModel}" disabled="true"/>
+    <cascader id="cascader" model="${treeModel}" disabled="true" width="200px"/>
+    <colorbox id="colorbox" disabled="true"/>
+</vlayout>
+</zk>
