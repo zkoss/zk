@@ -50,7 +50,7 @@ textarea.z-textbox                           ← multi-line variant
 
 ## Shared-selector warning
 `input.css` defines many properties via grouped selectors:
-`.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox, .z-passwordbox { ... }`.
+`.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox { ... }` (a password field is a `.z-textbox`).
 **Generator: if a fix changes a grouped selector, decide consciously whether it should apply to all siblings (preferred) or be split into a textbox-only rule.**
 
 ## Expected values (`doc/spec/DESIGN.md` ground truth)
