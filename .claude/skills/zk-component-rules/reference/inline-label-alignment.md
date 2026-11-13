@@ -14,42 +14,43 @@ multi-line caption, and inside grid/mesh cells. Its default is
 flex-centring on `.z-label` globally would corrupt all of those other uses. The
 alignment decision belongs to whatever wraps the pair.
 
-## The container matrix (measured at a real viewport, `label-center − field-center`)
+## The container matrix
 
-| Container | mechanism | textbox | combobox | radiogroup |
-|-----------|-----------|:-------:|:--------:|:----------:|
-| bare `<div>` (block) | one inline line box; each field placed by its own `vertical-align`/baseline | −1.5 (centred) | 0 (centred) | **+5 (low)** |
-| `<hlayout>` (default `valign="top"`) | `.z-hlayout-inner` cells both `vertical-align:top` | −10 | −10 | −10 |
-| `<hlayout valign="middle">` | ZK adds `.z-valign-middle`; core CSS → `.z-hlayout-inner { vertical-align:middle }` | 0 | 0 | 0 |
+| Container | mechanism | outcome |
+|-----------|-----------|---------|
+| bare `<div>` (block) | one inline line box; each field placed by its own `vertical-align`/baseline | each field by its own `vertical-align` / baseline: depends on the field and the theme |
+| `<hlayout>` (default `valign="top"`) | `.z-hlayout-inner` cells both `vertical-align:top` | every label sits at the top of its cell, above the field centre |
+| `<hlayout valign="middle">` | ZK adds `.z-valign-middle`; core CSS → `.z-hlayout-inner { vertical-align:middle }` | label and field centred, for every field type and theme |
 
 The field type **does** matter in a bare `<div>` (a baseline context), and this is the
 subtle part:
 
-- A **single-line input** centres in a bare `<div>`: `textbox` because the theme sets
-  `.z-textbox { vertical-align:middle }`; `combobox` because its `inline-flex` baseline
-  (from the inner `<input>` text) coincides with its box centre.
+- A **single-line input** centres in a bare `<div>` when the theme gives the field root
+  `vertical-align:middle`. Which roots carry it is theme design: see `doc/spec/DESIGN.md`
+  (the label-alignment bullets). A field root left on its baseline is aligned by its first line of text
+  (the input text) if it is inline-flex, but by its bottom edge if it is an inline-block whose
+  `overflow` is not `visible` — Safari 18 does this for `overflow: clip` too — so such a field rises
+  above the text line.
 - A **caption-bearing control** (`radiogroup`, `checkbox`) does **not**: its baseline is the
-  caption text baseline ("Yes"/"No"), which sits ~6px **below** the box centre, so a
-  baseline-aligned label drops ~5px low.
+  caption text baseline ("Yes"/"No"), which sits below the box centre, so a
+  baseline-aligned label drops low.
 
-`<hlayout valign="middle">` ignores baselines (box-middle alignment) → uniform 0 for every
-field type. So switching a row from a bare `<div>` to `valign="middle"` visibly moves **only**
-the radio/checkbox case — the inputs were already centred.
+`<hlayout valign="middle">` ignores baselines and aligns each box at its middle, so
+every field type centres the same way.
 
-> **Measurement caveat:** measure at a real window width. A collapsed 0×0 MCP viewport stacks
-> the inline content and reports a bogus uniform ~−30px for the `<div>` (and wraps radios to a
-> fake 80px).
+> **Measurement caveat:** measure at a real window width. A collapsed zero-size
+> viewport stacks the inline content, which gives bogus offsets for the bare `<div>`
+> case and wraps radio buttons into artificial rows.
 
 Source: `Hlayout.java:29` / `Hlayout.ts:23` default `valign="top"`; `Hlayout.ts:73`
-emits `.z-valign-middle`; the input's `vertical-align:middle` is the theme's
-`input.css`. `hbox`/`vbox` expose the same `valign` attribute (`Box.ts`).
+emits `.z-valign-middle`. `hbox`/`vbox` expose the same `valign` attribute (`Box.ts`).
 
 ## Radio/checkbox really do align differently in a baseline context
 
 Unlike a single-line input, a radio/checkbox's baseline is its **caption text**
-baseline, which sits ~6px below the box centre. So in any baseline-driven container
+baseline, which sits below the box centre. So in any baseline-driven container
 (a bare `<div>`, or default `valign="top"`) the companion label lands lower than it
-would beside a textbox/combobox — a real geometric difference (~+5px), not just a
+would beside a textbox/combobox — a real geometric difference, not just a
 perceptual one. The glyph being centred in a tall box amplifies how "off" it looks.
 Don't chase a radio-specific alignment fix; declare the container's valign (middle)
 so box-middle alignment replaces the baseline.
@@ -64,16 +65,17 @@ control and centred by the component itself.
 
 ## The rule
 
-The fix is **only required for selection controls** (radio / checkbox). A label
-beside a `textbox`/`combobox` already centres in a plain block `<div>` — leave it.
-For a radio/checkbox row, wrap it in a container that **declares centre
-cross-alignment** (verified 0px):
+To centre a label against any field, wrap the label and the field in a container
+that **declares centre cross-alignment**. This works for every field type in every
+theme:
 
 - a flex row — `<div style="display: flex; align-items: center;">` with a `gap` value set
   (flex collapses inter-element whitespace, so without a gap the label and field touch), or
 - `<hlayout valign="middle">` / `<hbox valign="middle">` (equivalent ZK-attribute form).
 
-Applying the wrapper to an input row is harmless but unnecessary (you may do it
-uniformly across a mixed column for consistency). Never rely on the default
-`hlayout` top for any label:field pair. See `components/hlayout-vlayout.md` for the
+Whether a theme lets some rows skip the wrapper, because its field roots
+centre in a bare `<div>`, is theme design. For Marble see `doc/spec/DESIGN.md`
+(the label-alignment bullets). Wrapping a row that a bare `<div>` centres anyway
+is harmless, so a column may use one wrapper for every row. Never rely on the
+default `hlayout` top for any label:field pair. See `components/hlayout-vlayout.md` for the
 `.z-hlayout-inner` spacing/valign contract.
