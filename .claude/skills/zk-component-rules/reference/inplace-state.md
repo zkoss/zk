@@ -37,7 +37,7 @@ Clear `background-color` on the root, clear `border-color`, `background-color` a
 
 The element IS an `<input>` — no inner wrapper. No auxiliary button to hide.
 
-Applies to: **textbox, intbox, decimalbox, doublebox, longbox, passwordbox**.
+Applies to: **textbox, intbox, decimalbox, doublebox, longbox** (a password field is a textbox).
 
 Clear `border-color`, `background-color` and `box-shadow` on `.z-{c}.z-{c}-inplace`.
 
@@ -47,7 +47,7 @@ Clear `border-color`, `background-color` and `box-shadow` on `.z-{c}.z-{c}-inpla
 2. `:hover` override that re-applies `border-color: transparent` — without this, mousing over flashes a border.
 3. `display: none` on the auxiliary button (Types A and B).
 4. Place the **Inplace section** in the CSS file **after** Disabled/Readonly and **before** Open-state rules. Order matters for cascade.
-5. Read the canonical patterns from ZK's iceBlue theme as the source of truth, not from another component theme. Extract the IceBlue sheet from the tracked jar as described in `../../marble-theme/reference/contract-tiers.md` (section "Locating the iceblue CSS source"). The sheets here are `combo.css.dsp` (combobox, datebox, timebox, spinner, bandbox) and `input.css.dsp` (textbox, intbox, decimalbox, doublebox, longbox, passwordbox).
+5. Read the canonical patterns from ZK's iceBlue theme as the source of truth, not from another component theme. Extract the IceBlue sheet from the tracked jar as described in `../../marble-theme/reference/contract-tiers.md` (section "Locating the iceblue CSS source"). The sheets here are `combo.css.dsp` (combobox, datebox, timebox, spinner, bandbox) and `input.css.dsp` (textbox, intbox, decimalbox, doublebox, longbox).
 
 ## Verification notes
 

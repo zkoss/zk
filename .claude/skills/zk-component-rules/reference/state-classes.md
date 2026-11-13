@@ -25,7 +25,7 @@ Most components fall here. ZK adds a state class on the root element.
 
 A constraint failure is automatic: `InputWidget._markError` adds `z-{component}-invalid` to the **input node** (`getInputNode()`), and removes it when the value is valid again. Which element that is depends on the widget:
 
-- **Single-input widgets** (textbox, intbox, longbox, decimalbox, doublebox, passwordbox): the `<input>` is the root, so the class sits next to the base class: `.z-intbox.z-intbox-invalid`.
+- **Single-input widgets** (textbox, intbox, longbox, decimalbox, doublebox; a password field is a textbox): the `<input>` is the root, so the class sits next to the base class: `.z-intbox.z-intbox-invalid`.
 - **Composite widgets** (combobox, bandbox, datebox, timebox, timepicker, spinner, doublespinner): the class lands on the inner `<input>`, `span.z-combobox > input.z-combobox-input.z-combobox-invalid`. A border drawn on the wrapper needs `:has()`: `.z-datebox:has(.z-datebox-invalid)`.
 - **daterangebox**: its `domClass_` puts the class on the root `<div>`.
 
@@ -50,7 +50,7 @@ Most inputs (textbox, intbox, datebox, timebox, spinner, combobox, bandbox) emit
 
 | Component | disabled | readonly | invalid |
 |-----------|----------|----------|---------|
-| textbox / intbox / longbox / decimalbox / doublebox / passwordbox | ✓ class | ✓ attr | ✓ ZK-added |
+| textbox / intbox / longbox / decimalbox / doublebox | ✓ class | ✓ attr | ✓ ZK-added |
 | combobox | ✓ class | ✓ attr | ✓ ZK-added |
 | bandbox | ✓ class | ✓ attr | ✓ ZK-added |
 | datebox / timebox | ✓ class | ✓ attr | ✓ ZK-added |

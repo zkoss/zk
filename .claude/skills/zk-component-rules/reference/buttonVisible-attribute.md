@@ -12,7 +12,7 @@ Only input components that ship with a built-in auxiliary button:
 - **timebox** — hides the clock icon
 - **spinner / doublespinner** — hides the up/down arrows
 
-**Not supported on**: textbox, intbox, longbox, decimalbox, doublebox, passwordbox, selectbox, searchbox, chosenbox, cascader, colorbox, slider, rating.
+**Not supported on**: textbox, intbox, longbox, decimalbox, doublebox, selectbox, searchbox, chosenbox, cascader, colorbox, slider, rating.
 
 ## Where ZK puts the resulting class
 

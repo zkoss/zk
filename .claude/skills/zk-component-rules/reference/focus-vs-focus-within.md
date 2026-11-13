@@ -14,7 +14,7 @@ If you write `.z-datebox:focus`, the rule never fires (focus is on the inner inp
 
 ## Direct-input components use `:focus`
 
-- **textbox, intbox, decimalbox, doublebox, longbox, passwordbox**: the root IS the input, so `.z-textbox:focus { ... }` works.
+- **textbox, intbox, decimalbox, doublebox, longbox** (a password field is a textbox): the root IS the input, so `.z-textbox:focus { ... }` works.
 - Same for `<button>` ZK button (focus lands on the rendered `<button>` element).
 
 ## Measurement caveat

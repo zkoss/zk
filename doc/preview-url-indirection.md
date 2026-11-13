@@ -32,7 +32,7 @@ other than `<name>.zul`, and they carry navigation instructions a filename canno
 
 ```
 preview: ${PREVIEW_URL}/bandbox.zul   (open bandbox popup)
-preview: ${PREVIEW_URL}/textbox.zul   (passwordbox section on textbox preview)
+preview: ${PREVIEW_URL}/paging.zul   (paging widget is also embedded in grid/listbox/tree previews)
 preview: trigger validation in any input preview that uses Constraint (e.g., …/textbox.zul)
 ```
 
