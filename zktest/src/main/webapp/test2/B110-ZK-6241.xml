@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6241.xml
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri Nov 13 16:05:33 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<system-config>
+		<csp-enabled>true</csp-enabled>
+		<csp-strict-dynamic-enabled>true</csp-strict-dynamic-enabled>
+	</system-config>
+</zk>
