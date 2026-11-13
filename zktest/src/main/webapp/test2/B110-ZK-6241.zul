@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6241.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri Nov 13 16:05:33 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		Run with the strict-dynamic CSP of B110-ZK-6241.xml (csp-enabled + csp-strict-dynamic-enabled).
+		1. Open this page in a desktop browser and open the console.
+		2. No "Executing inline event handler violates the following Content Security Policy directive" error should be logged when the cropper loads.
+		3. The cropper shows its selection rectangle.
+	</label>
+	<cropper src="/test2/img/sun.jpg" x="0" y="0" w="100" h="100"/>
+</zk>
