@@ -120,18 +120,10 @@
     cursor: default;
 }
 
-/* Error state (sclass="z-error" applied by developer) */
-.z-textbox.z-error,
-.z-intbox.z-error,
+/* Error state (sclass="z-textbox-error" applied by developer). ZK's own `.z-error` is the error message box
+   (zk.ts creates <div class="z-error">), never a field sclass, so no field rule uses it. */
 .z-textbox-error {
     border-color: var(--zk-input-border-color-error);
-}
-
-.z-textbox.z-error:focus,
-.z-intbox.z-error:focus {
-    border-color: var(--zk-input-border-color-error);
-    border-width: 2px;
-    padding: 0 calc(var(--zk-spacing-3) - 1px);
 }
 
 /* Textarea */
@@ -180,13 +172,12 @@ textarea.z-textbox:focus-visible {
     padding: 0 calc(var(--zk-spacing-3) - 1px);
 }
 
-/* The focused invalid/error rules above reset padding to `0 …` with a higher specificity than
+/* The focused invalid rules above reset padding to `0 …` with a higher specificity than
    the textarea focus rule, so a focused invalid textarea lost its vertical padding and the
    box shrank by 16px on focus; the layout shift under the pointer swallows the next click
    (F50_3316591). Re-assert the textarea padding at the higher specificity. */
 textarea.z-textbox.z-textbox-invalid:focus,
-textarea.z-textbox.z-textbox-invalid:focus-visible,
-textarea.z-textbox.z-error:focus {
+textarea.z-textbox.z-textbox-invalid:focus-visible {
     padding: calc(var(--zk-spacing-2) - 1px) calc(var(--zk-spacing-3) - 1px);
 }
 

@@ -97,9 +97,10 @@
 }
 
 /* The shorthand above is as specific as the invalid rules of input.css and combobox.css and loads after them, so it
- * repainted the error border of a failed constraint in the group colour. An invalid input keeps the error
- * colour at rest, hover and focus, as outside the group; the width stays 1px, the group outline owns the focus. */
-.z-inputgroup :is(.z-textbox-invalid, .z-intbox-invalid, .z-longbox-invalid, .z-doublebox-invalid, .z-decimalbox-invalid) {
+ * repainted the error border of a failed constraint in the group colour. An invalid input, or one with the
+ * z-textbox-error sclass, keeps the error colour at rest, hover and focus, as outside the group; the width stays 1px,
+ * the group outline owns the focus. */
+.z-inputgroup :is(.z-textbox-error, .z-textbox-invalid, .z-intbox-invalid, .z-longbox-invalid, .z-doublebox-invalid, .z-decimalbox-invalid) {
     border-color: var(--zk-input-border-color-error);
 }
 

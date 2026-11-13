@@ -257,3 +257,47 @@ for (const { widget, id, composite } of READONLY_FIELDS) {
     expect(await topBorderColor(page, box), 'invalid on hover').toBe(error);
   });
 }
+
+// The standard (underline-only) combobox draws no root outline, so its error colour belongs on the ::before rest and
+// hover line and on the ::after focus line; a failed constraint must not leave them neutral.
+test('combobox — an invalid standard combobox draws its underline in the error colour at rest, hover and focus', { tag: '@ZK-6112' }, async ({ page }) => {
+  const root = page.locator('.iig-standard .z-combobox');
+  const input = page.locator('.iig-standard .z-combobox-input');
+  const underline = (pseudo: '::before' | '::after') =>
+    root.evaluate((el, p) => getComputedStyle(el, p).borderBottomColor, pseudo);
+
+  // Never filled: the constraint fails only after a value was typed, cleared and left.
+  await input.click();
+  await page.keyboard.type('x');
+  await page.locator('body').click({ position: { x: 600, y: 700 } });
+  await input.click();
+  await page.keyboard.press('Backspace');
+  await page.locator('body').click({ position: { x: 600, y: 700 } });
+  await expect(input).toHaveClass(/z-combobox-invalid/);
+  const error = await errorColor(page);
+
+  await page.mouse.move(0, 0);
+  await expect.poll(() => underline('::before'), 'rest line').toBe(error);
+  await root.hover();
+  await expect.poll(() => underline('::before'), 'hover line').toBe(error);
+  await page.mouse.move(0, 0);
+  await input.focus();
+  await expect.poll(() => underline('::after'), 'focus line').toBe(error);
+});
+
+// ZK's `.z-error` is the error message box, never a field sclass; the developer's field sclass is z-textbox-error.
+// Inside an inputgroup the group's border rule must not repaint it in the group colour.
+test('textbox — a z-textbox-error textbox in an inputgroup draws the error border at rest, hover and focus', { tag: '@ZK-6112' }, async ({ page }) => {
+  const input = page.locator('.iig-group-textbox-error input.z-textbox');
+  const error = await errorColor(page);
+  const expectBorder = (state: string) =>
+    expect.poll(() => input.evaluate(el => getComputedStyle(el).borderTopColor), `textbox at ${state}`).toBe(error);
+
+  await page.mouse.move(0, 0);
+  await expectBorder('rest');
+  await input.hover();
+  expect(await input.evaluate(el => el.matches(':hover')), 'the pointer is over the input').toBe(true);
+  await expectBorder('hover');
+  await input.focus();
+  await expectBorder('focus');
+});

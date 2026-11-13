@@ -233,6 +233,10 @@ Adjacent bordered children double the seam, and the axis decides which border to
 horizontal-only collapse rule must be scoped with `.z-inputgroup:not(.z-inputgroup-vertical)`,
 otherwise the vertical textbox loses its left border. The group's `:focus-within` outline owns the
 focus affordance, so grouped children keep a constant 1px border and rest padding in every state.
+A grouped field that carries the error colour (failed constraint, `z-textbox-error`, `z-combobox-error`) keeps
+it at rest, hover and focus: the group's border shorthand has the specificity of the field's own error rule
+and loads after it, so each error selector is repeated inside the group. `.z-error` is ZK's error message
+box, never a field sclass, so no field rule uses it.
 (`zul/.../wgt/css/inputgroup.css`)
 
 ## linelayout

@@ -331,6 +331,14 @@
     box-shadow: inset 0 0 0 1px var(--zk-color-error);
 }
 
+/* The standard variant draws no root outline (see "Standard: no outline"), so the error colour goes on its
+   ::before rest and hover line and on the ::after focus line instead. */
+.z-combobox.z-combobox-standard:is(.z-combobox-error, .z-combobox-invalid, :has(> .z-combobox-invalid))::before,
+.z-combobox.z-combobox-standard:is(.z-combobox-error, .z-combobox-invalid, :has(> .z-combobox-invalid)):hover::before,
+.z-combobox.z-combobox-standard:is(.z-combobox-error, .z-combobox-invalid, :has(> .z-combobox-invalid))::after {
+    border-bottom-color: var(--zk-color-error);
+}
+
 /* ─── Readonly variant ────────────────────────────────────────────────────── */
 /* In ZK, `readonly="true"` is the normal "select-only" state for a combobox, so it
    must read as an ACTIVE outlined field — identical to the editable combobox and the
