@@ -91,6 +91,7 @@ ZK 11.0.0
   ZK-6267: Combobox re-measures the popup of every closed combobox on each AU response
   ZK-6217: fileupload: the Fileupload.get dialog inserts the picked file's name into the page as HTML, so a name containing markup is rendered or runs script
   ZK-6182: Stateless — a richlet action request runs any public method declared on the richlet class, named by the client, including methods the page never rendered and methods without @Action
+  ZK-6273: commons-io pinned to 2.17.0, below the 2.19.0 that commons-fileupload2 2.0.0-M4 depends on
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
