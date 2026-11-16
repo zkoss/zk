@@ -422,6 +422,10 @@ subprojects {
 
 // bin part
 
+// zkdoc/THIRD-PARTY-LICENSES heads each dist/lib jar's entry `>>> <jar>  <group>:<artifact> <version>  ...`; ZK's own themes give no version
+def thirdPartyHeadings = { file("$rootDir/zkdoc/THIRD-PARTY-LICENSES").readLines().findAll { it.startsWith('>>> ') } }
+def headingGav = { String heading -> heading =~ /^>>> \S+\s+([\w.-]+):([\w.-]+) (\S+)/ }
+
 task prepareBin() {
 	subprojects.each {
 		dependsOn ":$it.name:jar"
@@ -505,12 +509,12 @@ task prepareBin() {
 		}
 		// each of them needs its entry in zkdoc/THIRD-PARTY-LICENSES, which every bin's doc/ ships; an ext entry's version is checked against
 		// the jar's pom.properties or else its manifest's Implementation-Version when the jar has either, a theme's against the jar its bundle holds
-		def headings = file("$rootDir/zkdoc/THIRD-PARTY-LICENSES").readLines().findAll { it.startsWith('>>> ') }
+		def headings = thirdPartyHeadings()
 		def stale = ['ext', 'theme', 'zkforge'].collectMany { dir ->
 			file("$buildDir/tmp/eebin/dist/lib/$dir").listFiles().findResults { jar ->
 				def heading = headings.find { it.startsWith(">>> ${jar.name} ") }
 				if (!heading) return "dist/lib/$dir/${jar.name} has no entry"
-				def gav = heading =~ /^>>> \S+\s+([\w.-]+):([\w.-]+) (\S+)/
+				def gav = headingGav(heading)
 				def held = heading =~ /holding (\S+\.jar)/
 				new java.util.jar.JarFile(jar).withCloseable { z ->
 					if (held.find()) return z.getEntry(held.group(1)) ? null : "dist/lib/$dir/${jar.name} does not hold the ${held.group(1)} its entry names"
@@ -859,6 +863,147 @@ task zkeeBinEvalZip(type: Zip) {
 }
 
 
+
+// each bin archive ships doc/sbom.cdx.json: its edition's SBOM cut down to what the archive holds, with the archive as
+// its subject, CE's SBOM merged in for zkplus and zweb-dsp, which no EE module depends on, and each jar of the archive
+// matched by its SHA-512 or, when no build graph holds that file (an ext jar pinned apart from what Gradle resolves, a
+// theme, a ZK Forge add-on), added from its zkdoc/THIRD-PARTY-LICENSES entry with the third-party code sbom.gradle's sbomBundled
+// lists in it
+def digest = { String alg, File f -> java.security.MessageDigest.getInstance(alg).digest(f.bytes).encodeHex().toString() }
+def addonVersion = { File f ->
+	new java.util.jar.JarFile(f).withCloseable { z ->
+		z.getEntry('metainfo/zk/lang-addon.xml')?.with { e -> z.getInputStream(e).getText('UTF-8').find(/<version-uid>\s*([^<\s]+)/) { all, v -> v } }
+	}
+}
+def binSbom = { String name, List<File> boms, List deps, List<AbstractArchiveTask> archives ->
+	def out = file("$buildDir/tmp/sbom/$name")
+	def sbomTask = tasks.register("${name.replaceAll(/-(\w)/) { it[1].toUpperCase() }}Sbom") {
+		dependsOn deps
+		doLast {
+			def slurper = new groovy.json.JsonSlurper()
+			def bom = slurper.parse(boms[0])
+			def subject = bom.metadata.component
+			def refs = bom.components*.'bom-ref' as Set
+			boms.drop(1).each { File f ->
+				def ce = slurper.parse(f)
+				def ceRoot = ce.metadata.component.'bom-ref'
+				def depRefs = bom.dependencies*.ref as Set
+				bom.components += ce.components.findAll { refs.add(it.'bom-ref') }
+				def merged = ce.dependencies.findAll { it.ref != ceRoot && depRefs.add(it.ref) }
+				bom.dependencies += merged
+				// EE's composition already speaks for the CE modules it depends on; a ref in two compositions could get two aggregates
+				bom.compositions += ce.compositions.collect { comp -> comp + [dependencies: comp.dependencies.intersect(merged*.ref)] }
+			}
+			def byHash = [:]
+			bom.components.each { c -> c.hashes?.findAll { it.alg == 'SHA-512' }.each { byHash[it.content] = c } }
+			def headings = thirdPartyHeadings()
+			def located = [], added = [], problems = []
+			archives[0].source.asFileTree.matching { include 'dist/lib/**/*.jar' }.visit { FileVisitDetails d ->
+				if (d.directory) return
+				def path = d.relativePath.pathString
+				def c = byHash[digest('SHA-512', d.file)]
+				def heading = headings.find { it.startsWith(">>> ${d.name} ") }
+				if (!c && (!heading || path ==~ /dist\/lib\/[^\/]+/)) { // a ZK module jar must be the one its SBOM hashed
+					problems << "no SBOM entry matches $path".toString()
+					return
+				}
+				if (!c) {
+					def gav = headingGav(heading)
+					def licence = heading.find(/\(([^)]+)\)\s+in\s/) { all, l -> l }
+					if (gav.find()) {
+						def purl = "pkg:maven/${gav.group(1)}/${gav.group(2)}@${gav.group(3)}?type=jar".toString()
+						def creator = rootProject.sbomCreatorOf(gav.group(1))
+						if (!creator) problems << "no creator for ${gav.group(1)}:${gav.group(2)}; add its group to sbomCreators in sbom.gradle".toString()
+						if (!licence) problems << "$path: its zkdoc/THIRD-PARTY-LICENSES entry names no licence".toString()
+						c = [type: 'library', 'bom-ref': purl in refs ? "$name/$path".toString() : purl, supplier: creator, manufacturer: creator,
+							group: gav.group(1), name: gav.group(2), version: gav.group(3), purl: purl]
+					} else { // ZK's own themes and add-ons
+						c = [type: 'library', 'bom-ref': "$name/$path".toString(), supplier: bom.metadata.supplier, manufacturer: bom.metadata.manufacturer,
+							name: d.name - '.jar', version: addonVersion(d.file)]
+						if (!c.version) problems << "$path: its metainfo/zk/lang-addon.xml names no version".toString()
+						def ga = heading =~ /^>>> \S+\s+([\w.-]+):([\w.-]+)\s/ // a group:artifact without a version, which lang-addon.xml gives
+						if (ga.find()) c += [group: ga.group(1), purl: "pkg:maven/${ga.group(1)}/${ga.group(2)}@${c.version}?type=jar".toString()]
+					}
+					if (licence) c.licenses = [[expression: licence, acknowledgement: 'concluded']]
+					c.hashes = ['SHA-256', 'SHA-512'].collect { [alg: it, content: digest(it, d.file)] }
+					// as sbom.gradle's addHash and fileProps give a jar of the build graph
+					c.externalReferences = [[type: 'distribution', url: c.purl ?: path, hashes: c.hashes.findAll { it.alg == 'SHA-512' }]]
+					c.properties = ['executable', 'archive', 'structured'].collect { [name: "bsi:component:$it".toString(), value: it] }
+					bom.components << c
+					added << c.'bom-ref'
+					// the third-party code compiled into it, as sbom.gradle lists a ZK module jar's
+					def bundled = (rootProject.sbomBundled[c.name] ?: []).collect { v ->
+						def creator = v.adapted ? bom.metadata.supplier : v.creator
+						[type: 'library', 'bom-ref': "${c.'bom-ref'}#${v.purl}".toString(), supplier: creator, manufacturer: creator, name: v.name, version: v.version,
+						 purl: v.purl, licenses: [[expression: v.licence, acknowledgement: 'concluded']],
+						 properties: [[name: 'bsi:component:executable', value: v.executable == false ? 'non-executable' : 'executable'],
+						              [name: 'bsi:component:archive', value: 'no archive'], [name: 'bsi:component:structured', value: 'unstructured']]] +
+						(v.adapted ? [pedigree: [ancestors: [[type: 'library', name: v.name] + (v.upstream ? [version: v.upstream] : [:]) + [purl: v.purl, supplier: v.creator]],
+						                         patches: [[type: 'unofficial']], notes: 'Copy compiled into the theme and adapted for it, maintained by Potix' +
+						                         (v.upstream ? '; keeps the upstream version so advisories still match' : '')]] : [:])
+					}
+					if (bundled) {
+						bom.components.addAll(bundled)
+						bom.dependencies << [ref: c.'bom-ref', dependsOn: bundled*.'bom-ref']
+						bom.dependencies.addAll(bundled.collect { [ref: it.'bom-ref', dependsOn: []] })
+					}
+				}
+				c.evidence = (c.evidence ?: [:]) + [occurrences: (c.evidence?.occurrences ?: []) + [[location: path]]]
+				c.properties = (c.properties ?: []).findAll { it.name != 'bsi:component:filename' } + [[name: 'bsi:component:filename', value: d.name]]
+				located << c.'bom-ref'
+			}
+			if (problems)
+				throw new GradleException("$name:\n  ${problems.join('\n  ')}")
+			// keep the jars found above and what is built into them (vendored code, npm packages, which have no jar of their own);
+			// an edge to a jar the archive lacks moves to the one of the same group:name it holds, else it is cut
+			def comps = bom.components.collectEntries { [(it.'bom-ref'): it] }
+			def ga = { String ref -> "${comps[ref].group}:${comps[ref].name}".toString() }
+			def held = located.findAll { comps[it].group }.collectEntries { [(ga(it)): it] }
+			def edges = bom.dependencies.collectEntries { [(it.ref): it] }
+			def kept = located as LinkedHashSet, cut = [] as LinkedHashSet, todo = kept as List
+			while (todo) {
+				def d = edges[todo.pop()]
+				if (!d) continue
+				def to = (d.dependsOn ?: []).collect { r -> r in kept || !comps[r]?.purl?.contains('type=jar') ? r : held[ga(r)] }
+				if (to.contains(null)) cut << d.ref
+				d.dependsOn = (to.findAll() - d.ref).unique()
+				d.dependsOn.each { if (kept.add(it)) todo << it }
+			}
+			bom.components = bom.components.findAll { it.'bom-ref' in kept }
+			bom.dependencies = bom.dependencies.findAll { it.ref == subject.'bom-ref' || it.ref in kept }
+			bom.serialNumber = "urn:uuid:${UUID.randomUUID()}".toString()
+			bom.metadata.timestamp = java.time.Instant.now().truncatedTo(java.time.temporal.ChronoUnit.SECONDS).toString()
+			bom.metadata.component = [type: subject.type, 'bom-ref': name, name: name, version: project.version.toString(),
+				supplier: subject.supplier, manufacturer: subject.manufacturer, licenses: subject.licenses].findAll { it.value }
+			def root = bom.dependencies.find { it.ref == subject.'bom-ref' }
+			root.ref = name
+			root.dependsOn = located.unique()
+			bom.compositions = bom.compositions.collect { comp -> comp + [dependencies: comp.dependencies.collect { it == subject.'bom-ref' ? name : it }
+				.findAll { it == name || it in kept && !(it in cut) }] }
+			if (cut) // they need jars the archive does not hold
+				bom.compositions << [aggregate: 'incomplete', dependencies: cut as List]
+			if (added) // the ZK build graph holds no dependencies for them
+				bom.compositions << [aggregate: 'unknown', dependencies: added]
+			new File(out, 'doc').mkdirs()
+			new File(out, 'doc/sbom.cdx.json').text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(bom))
+		}
+	}
+	archives.each {
+		it.dependsOn sbomTask
+		it.from out
+	}
+}
+def ceBom = file("$rootDir/build/reports/bom.json")
+binSbom('zk-bin', [ceBom], ['cyclonedxBom', prepareBin], [zkBinZip, zkBinTar])
+def zkcml = gradle.includedBuilds.find { it.name == 'zkcml' }
+if (zkcml != null) {
+	def cmlBom = { String file -> new File(zkcml.projectDir, "build/reports/$file") }
+	def cmlTask = { String task -> zkcml.task(task) }
+	binSbom('zkee-bin', [cmlBom('bom.json'), ceBom], [cmlTask(':cyclonedxBom'), 'cyclonedxBom', prepareCmlBin], [zkeeBinZip, zkeeBinTar])
+	binSbom('zkpe-bin', [cmlBom('bom-pe.json'), ceBom], [cmlTask(':cyclonedxBomPe'), 'cyclonedxBom', prepareCmlBin], [zkpeBinZip, zkpeBinTar])
+	binSbom('zkee-bin-eval', [cmlBom('bom-eval.json'), ceBom], [cmlTask(':cyclonedxBom'), 'cyclonedxBom', prepareCmlBin], [zkeeBinEvalZip])
+	binSbom('zkpe-bin-eval', [cmlBom('bom-pe-eval.json'), ceBom], [cmlTask(':cyclonedxBomPe'), 'cyclonedxBom', prepareCmlBin], [zkpeBinEvalZip])
+}
 
 task zksandboxZip(type: Zip) {
 	dependsOn(prepareCmlBin)

@@ -11,17 +11,21 @@ def sbomCreators = [
 	'org.zkoss'                  : potix,
 	'args4j'                     : [name: 'Kohsuke Kawaguchi', url: ['https://github.com/kohsuke/args4j']],
 	'com.google'                 : [name: 'Google LLC', url: ['https://opensource.google']],
+	'com.fasterxml'              : [name: 'FasterXML, LLC', url: ['https://github.com/FasterXML']],
 	'commons-io'                 : [name: 'The Apache Software Foundation', url: ['https://www.apache.org']],
+	'commons-logging'            : [name: 'The Apache Software Foundation', url: ['https://www.apache.org']],
 	'javax'                      : [name: 'Oracle Corporation', url: ['https://javaee.github.io']],
 	'javax.enterprise'           : [name: 'Red Hat, Inc.', url: ['https://www.cdi-spec.org']],
 	'javax.inject'               : [name: 'JSR-330 Expert Group', url: ['https://github.com/javax-inject/javax-inject']],
 	'org.apache'                 : [name: 'The Apache Software Foundation', url: ['https://www.apache.org']],
 	'org.apache-extras.beanshell': [name: 'BeanShell', url: ['https://github.com/beanshell/beanshell']],
 	'org.javassist'              : [name: 'Shigeru Chiba', url: ['https://www.javassist.org']],
+	'org.jfree'                  : [name: 'Object Refinery Limited', url: ['https://www.jfree.org']],
 	'org.jspecify'               : [name: 'JSpecify', url: ['https://jspecify.dev']],
 	'org.mozilla'                : [name: 'The Mozilla Foundation', url: ['https://github.com/mozilla/rhino']],
 	'org.owasp.encoder'          : [name: 'OWASP Foundation', url: ['https://owasp.org/www-project-java-encoder/']],
 	'org.python'                 : [name: 'Jython Project', url: ['https://www.jython.org']],
+	'org.reflections'            : [name: 'Reflections', url: ['https://github.com/ronmamo/reflections']],
 	'org.seasar'                 : [name: 'The Seasar Foundation', url: ['https://www.seasar.org']],
 	'org.slf4j'                  : [name: 'QOS.ch', url: ['https://www.slf4j.org']],
 	'org.springframework'        : [name: 'Spring IO', url: ['https://spring.io']],
@@ -113,6 +117,20 @@ def npmLicences = ['tslib': '0BSD', 'lucide-static': 'ISC AND MIT'] // the icons
 // npm packages scripts/build-css.js copies into a module's jar, so no .src.js bundle names them
 def npmAssets = [zul: ['@fontsource-variable/inter', 'lucide-static']]
 def npmAssetNames = npmAssets.values().flatten() as Set
+// third-party code in the dist/lib jars no build graph holds, which release.gradle lists under each such jar in a bin's SBOM;
+// a theme holds what zkcml's zkthemebuilder/sbom-theme.js lists for the themes it builds, so keep the two alike
+def themeCopies = [
+	[name: '@fortawesome/fontawesome-free', upstream: '6.4.2', licence: 'CC-BY-4.0 AND OFL-1.1 AND MIT', creator: [name: 'Fonticons, Inc.', url: ['https://fontawesome.com']]],
+	[name: 'golden-layout', upstream: '1.5.8', licence: 'MIT', creator: [name: 'deepstream.io', url: ['https://golden-layout.com']]],
+	[name: 'html5-boilerplate', upstream: null, version: '2025-07-25T22:45:00+08:00', licence: 'MIT', // zkThemeTemplate's last commit to _reset.less
+	 creator: [name: 'HTML5 Boilerplate', url: ['https://html5boilerplate.com']]],
+	[name: 'normalize.css', upstream: '8.0.1', licence: 'MIT', creator: [name: 'Nicolas Gallagher and Jonathan Neal', url: ['https://github.com/necolas/normalize.css']]],
+	[name: 'trumbowyg', upstream: '2.31.0', licence: 'MIT', creator: [name: 'Alexandre Demode', url: ['https://alex-d.github.io/Trumbowyg/']]],
+	[name: 'trumbowyg', upstream: '2.7.2', licence: 'MIT', creator: [name: 'Alexandre Demode', url: ['https://alex-d.github.io/Trumbowyg/']]],
+].collect { v -> v + [version: v.version ?: v.upstream, purl: "pkg:npm/${v.name.replace('@', '%40')}${v.upstream ? "@${v.upstream}" : ''}".toString(), adapted: true, executable: false] }
+ext.sbomBundled = [iceblue: themeCopies, iceblue_c: themeCopies,
+                   gmapsz: [[name: 'markermanager', version: '1.1', purl: 'pkg:github/googlemaps/v3-utility-library', licence: 'Apache-2.0',
+                             creator: [name: 'Google Inc.', url: ['https://github.com/googlemaps/v3-utility-library']]]]]
 
 // zkcml sets sbomExtra before applying this script; its own modules, the ones under sbomExtra.root, then carry sbomExtra.licence
 def extra = rootProject.findProperty('sbomExtra') ?: [:]
@@ -121,6 +139,8 @@ sbomLicences += extra.licences ?: [:]
 sbomVendored += extra.vendored ?: [:]
 npmCreators += extra.npmCreators ?: [:]
 npmLicences += extra.npmLicences ?: [:]
+def creatorOf = { String group -> sbomCreators.findAll { k, v -> group == k || group.startsWith("${k}.") }.max { it.key.length() }?.value }
+ext.sbomCreatorOf = creatorOf // release.gradle names the creator of a dist/lib/ext jar no build graph resolves
 def zkRoot = buildscript.sourceFile.parentFile
 // a build outside zkcml's, e.g. zklinter's, finds the ZK modules it depends on in zkcml (sbomExtra.root) or in zk
 def moduleDir = { String name ->
@@ -328,7 +348,7 @@ tasks.matching { it.name in ['cyclonedxBom', 'cyclonedxBomPe'] }.configureEach {
 				null
 			}
 			def enrich = { Map c ->
-				def creator = sbomCreators.findAll { k, v -> c.group == k || c.group.startsWith("${k}.") }.max { it.key.length() }?.value
+				def creator = creatorOf(c.group)
 				if (creator) {
 					c.supplier = creator
 					c.manufacturer = creator
