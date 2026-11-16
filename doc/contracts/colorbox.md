@@ -21,12 +21,12 @@ zk-version: 10.2.1-jakarta
 | c3  | `.z-colorbox` | height | `var(--zk-input-height)` (40px comfortable, 32px compact, 48px on tablet through `min-height: var(--zk-touch-input-height)`), as every single-line field |
 | c4  | `.z-colorbox` | border | 1px solid `var(--zk-colorbox-border-color)` |
 | c5  | `.z-colorbox` | border-radius | `var(--zk-colorbox-radius)` (→ `--zk-shape-input`) |
-| c6  | `.z-colorbox` | padding | 2–4px (inset around swatch + button) |
+| c6  | `.z-colorbox` | padding | `var(--zk-colorbox-padding)`: 3px, 2px in compact (inset around swatch + button) |
 | c7  | `.z-colorbox:hover` | border-color | `var(--zk-colorbox-border-color-hover)` |
 | c8  | `.z-colorbox-current` | flex / size | must fill remaining width — `flex: 1` (or `width: 100%; height: 100%` with absolute positioning). MUST NOT be inline-block with no size or it collapses |
 | c9  | `.z-colorbox-current` | background-color | matches inline `style="background-color"` set by ZK (verify by reading inline style and comparing) |
 | c10 | `.z-colorbox-current` | border-radius | 2px (subtle inset to differentiate from outer frame) |
-| c11 | `.z-colorbox-button` | width | 14–18px |
+| c11 | `.z-colorbox-button` | width | `var(--zk-colorbox-button-width)`: 14px, 12px in compact. The swatch stays at least 12px wide at every density (16px comfortable, 12px compact) |
 | c12 | `.z-colorbox-button` | display | flex (center the icon) |
 | c13 | `.z-colorbox-icon` | width / height | rendered chevron — must have computed `mask-image: url(...)` (NOT `none`). MUI / our theme uses chevron-down shape, NOT a filled caret triangle |
 | c14 | `.z-colorbox-disabled` | opacity | `var(--zk-state-disabled-opacity)` |

@@ -65,6 +65,10 @@ using a height token and most hardcoding 28/32/36/40/44/48/56.
   after `:root`, because `html[data-density=compact]` is `:root` itself), so filled, text,
   icon+label, outlined, confirmpopup and messagebox buttons are all exactly 30px; icon-only stays
   at `--zk-icon-button-size`. Default is unchanged.
+- **Colorbox swatch in compact.** The colorbox is square, so at the compact 32px its padding,
+  gap and 14px chevron button left an 8px swatch. Compact sets `--zk-colorbox-padding: 2px` and
+  `--zk-colorbox-button-width: 12px` (same block as the button padding), which gives a 12px swatch;
+  a `data-density="comfortable"` region takes the defaults back.
 
 ## Verifying a density change
 

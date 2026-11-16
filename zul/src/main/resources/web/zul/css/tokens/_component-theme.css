@@ -844,6 +844,8 @@
        border stays the resting outline literal, same convention as
        datebox/timebox/timepicker's disabled treatment. */
     --zk-colorbox-bg:                 var(--zk-color-surface);
+    --zk-colorbox-padding:            3px;
+    --zk-colorbox-button-width:       14px;
     --zk-colorbox-radius:             var(--zk-shape-input);
     --zk-colorbox-border-color:       var(--zk-color-outline);
     --zk-colorbox-border-color-hover: var(--zk-color-on-surface);
@@ -1287,8 +1289,14 @@
    html[data-density="compact"] is :root itself and an earlier rule would lose to the default. */
 [data-density="compact"] {
     --zk-button-padding-y: 4px;
+    /* The 32px colorbox minus border, padding, gap and a 14px button leaves an 8px swatch; the
+       narrower padding and button give the swatch 12px. */
+    --zk-colorbox-padding: 2px;
+    --zk-colorbox-button-width: 12px;
 }
 /* A comfortable region inside a compact scope takes the default back. */
 [data-density="comfortable"] {
     --zk-button-padding-y: 6px;
+    --zk-colorbox-padding: 3px;
+    --zk-colorbox-button-width: 14px;
 }

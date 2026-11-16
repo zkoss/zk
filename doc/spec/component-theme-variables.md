@@ -77,8 +77,9 @@ grep -o -- '--zk-<comp>-[a-z0-9-]*[a-z0-9]' zul/src/main/resources/web/zul/css/t
 ```
 
 Replace `<comp>` with the component name (for example `button`). The output is the appearance
-knobs declared in the central file. Size knobs are declared in `zul/src/main/resources/web/zul/css/tokens/_sizing.css`
-and are not listed by this command. EE (`zkmax`, `zkex`) knob defaults are declared in the same
+knobs declared in the central file, together with the component-specific size knobs a density
+block in that file overrides (for example `--zk-button-padding-y`). Shared size tokens are declared in
+`zul/src/main/resources/web/zul/css/tokens/_sizing.css` and are not listed by this command. EE (`zkmax`, `zkex`) knob defaults are declared in the same
 central file, not in a separate EE file; the EE component CSS files that mention the central file
 (`zkex` rangeslider, `zkmax` multislider, under `../zkcml`) say so in their comments.
 

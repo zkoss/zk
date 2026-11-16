@@ -133,8 +133,11 @@ Colorbox is a PE component (`zkex`). `.z-colorbox-icon` sets its own SVG mask
 The root counts as a single-line field: its height is `--zk-input-height` (40px, 32px compact) and, on
 tablet, `min-height: var(--zk-touch-input-height)` from zkmax `tablet/_inputs.css` lifts it to 48px.
 Its width is `--zk-input-height` too (and `min-width: var(--zk-touch-input-height)` on tablet), so the box is a
-square at every density (40, 32, 48px); the swatch is what is left after the 14px chevron button, 3px padding
-and 2px gap, 16px wide at 40px and 8px at 32px.
+square at every density (40, 32, 48px); the swatch is what is left after the chevron button, the padding and
+the 2px gap. The padding and the button width are `--zk-colorbox-padding` and `--zk-colorbox-button-width`
+(3px and 14px by default, 2px and 12px under `[data-density="compact"]`, restored under
+`[data-density="comfortable"]` like `--zk-button-padding-y`), so the swatch is 16px wide at 40px and 12px at
+32px; at 8px it was too narrow to show a colour.
 
 ## combobox, bandbox, datebox, timebox, spinner (combo family)
 
