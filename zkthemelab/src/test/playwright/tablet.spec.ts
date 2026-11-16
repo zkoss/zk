@@ -89,6 +89,13 @@ test.describe('tablet-field-height', () => {
       expect(await heightOf(page, `.z-${field}`)).toBe(textboxHeight);
     });
   }
+
+  test('colorbox — root is as wide as it is high', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto(FIXTURE, { waitUntil: 'networkidle' });
+    expect(await tabletCssLoaded(page)).toBe(true);
+    const box = await page.locator('.z-colorbox').first().evaluate(el => el.getBoundingClientRect());
+    expect(box.width).toBe(box.height);
+  });
 });
 
 // -------------------------------------------------------

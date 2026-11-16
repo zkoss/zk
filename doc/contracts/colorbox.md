@@ -17,7 +17,7 @@ zk-version: 10.2.1-jakarta
 | id  | selector | property | expected |
 |-----|----------|----------|----------|
 | c1  | `.z-colorbox` | display | inline-flex |
-| c2  | `.z-colorbox` | width | 32–40px (square-ish frame) |
+| c2  | `.z-colorbox` | width | `var(--zk-input-height)`, equal to the height: a square frame (40px comfortable, 32px compact, 48px on tablet through `min-width: var(--zk-touch-input-height)`) |
 | c3  | `.z-colorbox` | height | `var(--zk-input-height)` (40px comfortable, 32px compact, 48px on tablet through `min-height: var(--zk-touch-input-height)`), as every single-line field |
 | c4  | `.z-colorbox` | border | 1px solid `var(--zk-colorbox-border-color)` |
 | c5  | `.z-colorbox` | border-radius | `var(--zk-colorbox-radius)` (→ `--zk-shape-input`) |

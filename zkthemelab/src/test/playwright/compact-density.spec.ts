@@ -395,6 +395,22 @@ test.describe('compact-geometry', () => {
   });
 });
 
+// The colorbox is a square swatch with a chevron: its width follows its height at every density, so a compact box
+// (32px) does not keep the 40px width of the comfortable one.
+test.describe('compact-colorbox-square', () => {
+  test('colorbox — the box is as wide as it is high in the default and the compact density', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/colorbox.zul', { waitUntil: 'networkidle' });
+    const measure = () => page.locator('.z-colorbox:not(.z-colorbox-disabled)').first()
+      .evaluate(el => ({ width: el.getBoundingClientRect().width, height: el.getBoundingClientRect().height }));
+    const comfortable = await measure();
+    await waitForCompactLayout(page);
+    const compact = await measure();
+    expect(comfortable.width, 'default density: width equals height').toBe(comfortable.height);
+    expect(compact.width, 'compact density: width equals height').toBe(compact.height);
+    expect(compact.height, 'compact density is the 32px rung').toBeLessThan(comfortable.height);
+  });
+});
+
 // A region marked data-density="comfortable" inside a compact page takes the default sizes back (tokens/_sizing.css and
 // tokens/_component-theme.css `[data-density="comfortable"]`). The preview pages carry no such region, so the test marks
 // one on an existing container: the "Default" column of the Sizes section of button.zul, a plain button in a column of
