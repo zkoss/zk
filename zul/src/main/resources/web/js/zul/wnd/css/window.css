@@ -193,10 +193,6 @@
     border-bottom: none;
 }
 
-.z-window-noheader .z-window-header {
-    display: none;
-}
-
 /* ZK 10.3.0.1 parity: a chrome-less window (no border + no header) renders its
    content flush — the developer owns any inner spacing. */
 .z-window-noborder.z-window-noheader .z-window-content {

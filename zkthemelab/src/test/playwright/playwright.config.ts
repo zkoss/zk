@@ -205,6 +205,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // A header-less window or title-less groupbox does not hide the header of a container nested in it (window.css, groupbox.css). See nested-header.spec.ts.
+      name: 'nested-header',
+      testMatch: /nested-header\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Every Panel border value uses --zk-panel-radius (panel.css). See panel-radius.spec.ts.
       name: 'panel-radius',
       testMatch: /panel-radius\.spec\.ts/,

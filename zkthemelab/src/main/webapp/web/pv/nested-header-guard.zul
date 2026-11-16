@@ -1,0 +1,12 @@
+<?page title="Nested header guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for nested-header.spec.ts: a header-less window holding a titled window, and a
+     title-less groupbox holding a captioned groupbox. Lives under pv/ so gallery-scan,
+     forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk>
+<window id="outerWin" width="400px" border="normal">
+    <window id="innerWin" title="Inner title" width="300px" border="normal">inner</window>
+</window>
+<groupbox id="outerGb" width="400px">
+    <groupbox id="innerGb" width="300px"><caption label="Inner caption"/>inner</groupbox>
+</groupbox>
+</zk>

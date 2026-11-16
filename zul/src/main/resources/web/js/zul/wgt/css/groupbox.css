@@ -83,11 +83,6 @@
     white-space: nowrap;
 }
 
-.z-groupbox-title-readonly {
-    pointer-events: none;
-    color: var(--zk-color-on-surface-variant);
-}
-
 /* Icons inside header (collapse/expand icon rendered by ZK in .z-icon-*) */
 .z-groupbox-header .z-groupbox-icon,
 .z-groupbox-header [class*="z-icon-"] {
@@ -137,11 +132,7 @@
 }
 
 /* ─── No-title variant ───────────────────────────────────────────────────── */
-.z-groupbox-notitle .z-groupbox-header {
-    display: none;
-}
-
-.z-groupbox-notitle .z-groupbox-content {
+.z-groupbox-notitle > .z-groupbox-content {
     border-top: 1px solid var(--zk-groupbox-border-color);
     border-radius: var(--zk-groupbox-radius);
 }

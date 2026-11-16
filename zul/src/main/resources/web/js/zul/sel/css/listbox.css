@@ -290,12 +290,12 @@
     background-color: var(--zk-listbox-row-hover-bg);
 }
 
-/* Odd striping: ZK applies z-listitem-odd class directly on TR */
-.z-listitem-odd {
+/* Odd striping: ZK applies z-listbox-odd class directly on TR */
+.z-listitem.z-listbox-odd {
     background-color: var(--zk-listbox-stripe-bg);
 }
 
-.z-listitem-odd:hover {
+.z-listitem.z-listbox-odd:hover {
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-listbox-stripe-bg));
 }
 
@@ -786,7 +786,7 @@
 }
 
 /* ─── Odd row stripe via parent sclass (legacy fallback) ─────────────────── */
-/* ZK normally applies z-listitem-odd directly on the TR; this covers the legacy parent-sclass approach */
+/* ZK normally applies z-listbox-odd directly on the TR; this covers the legacy parent-sclass approach */
 .z-listbox-odd .z-listitem:nth-child(odd) {
     background-color: var(--zk-color-surface-container-lowest);
 }
