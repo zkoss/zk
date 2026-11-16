@@ -241,8 +241,12 @@ def writeLicence = { Project p, File out ->
 	if (problems)
 		throw new GradleException("META-INF/LICENSE:\n  ${problems.join('\n  ')}")
 	['LICENSE', 'NOTICE'].each { new File(out, "META-INF/$it").delete() }
-	if (!comps) return
+	if (!comps && !extra.licenceFile) return
 	new File(out, 'META-INF').mkdirs()
+	if (!comps) { // a commercial jar carries its licence statement even without third-party code
+		new File(out, 'META-INF/LICENSE').text = "${own}\n"
+		return
+	}
 	new File(out, 'META-INF/LICENSE').text = "${own}\n\n${rule}\n\nZK ${p.name.toUpperCase()} SUBCOMPONENTS:\n\n" +
 		"This jar includes the following subcomponents,\neach with its own copyright notice and license terms. Your use of these\n" +
 		"subcomponents is subject to the terms and conditions of the following licenses.\n\n" +
@@ -253,7 +257,7 @@ def writeLicence = { Project p, File out ->
 }
 subprojects { p ->
 	def web = file('src/main/resources/web/js').isDirectory()
-	if (web || sbomVendored[p.name])
+	if (web || sbomVendored[p.name] || extra.licenceFile)
 		plugins.withId('java') {
 			def out = layout.buildDirectory.dir('generated/licence')
 			def licence = tasks.register('jarLicence') {
