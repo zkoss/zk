@@ -299,6 +299,25 @@ or put probes in a throwaway file from the start.
 - A verification clause must be able to detect the failure it claims to catch: it must be true on the real state today and false when the failure is present. Where possible, dry-run it once against the closest existing state.
 - A dry-run that stops at its designed marker says nothing about the later stages. Run all stages on a copy.
 
+## CSS rule coverage — which rules no test ever applies
+
+CSS has no line coverage, so the suite is measured by rule: `zkthemelab/scripts/css-coverage.mjs` lists every served
+Marble style rule that never matched an element in any Playwright test. Its header documents how to collect and merge,
+how the numbers are made and their limits. Run it after adding a component's CSS or its tests, and before deleting
+rules as dead.
+
+- It is off by default and changes no spec: a coverage run swaps `@playwright/test` for the wrapper in
+  `src/test/playwright/css-coverage/` through a separate tsconfig.
+- Always collect with `--ignore-snapshots` and a separate `--output`, as the header shows; see
+  "Screenshot baselines" above for why.
+- A never-applied rule is one of three things, and the list cannot tell which:
+  a state or variant no test reaches, a class ZK no longer emits, or a selector that does not agree with the class ZK
+  emits. Settle it from the widget source and the live DOM before acting — a rule on a class only an application's
+  `sclass` sets (the wrapper-level `-invalid` rules of the input components, for example) is live.
+- "Applied" means only that the rule matched an element during some test. It does not mean a test asserts its result;
+  check that by removing the rule in the page and watching the test fail (see "Writing checks that can fail").
+- Chromium only. Expect a difference of one or two rules between runs, from states that depend on timing.
+
 ## Theme-done criterion
 
 The theme is complete only when **every preview page** under `zkthemelab/src/main/webapp/web/*.zul` is
