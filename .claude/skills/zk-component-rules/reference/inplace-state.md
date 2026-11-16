@@ -37,7 +37,7 @@ Clear `background-color` on the root, clear `border-color`, `background-color` a
 
 The element IS an `<input>` — no inner wrapper. No auxiliary button to hide.
 
-Applies to: **textbox, intbox, decimalbox, doublebox, longbox** (a password field is a textbox).
+Applies to: **textbox, intbox, decimalbox, doublebox, longbox**.
 
 Clear `border-color`, `background-color` and `box-shadow` on `.z-{c}.z-{c}-inplace`.
 

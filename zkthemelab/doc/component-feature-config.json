@@ -86,7 +86,7 @@
     ".fz-grid": "grid",
     ".fz-listbox": "listbox",
     ".fz-tree": "tree",
-    "passwordbox": "textbox"
+    "textbox-password": "textbox"
   },
   "projectComponents": {
     "daterangebox-anchor": [

@@ -39,8 +39,6 @@ Within `combo.css.dsp` and `input.css.dsp`, many rules use **grouped selectors**
 }
 ```
 
-There is no `.z-passwordbox`: a password field is `<textbox type="password">` and renders as `.z-textbox`.
-
 When fixing a single component's check:
 
 - **Apply to all** when the fix benefits every sibling (the expected value is identical across siblings).

@@ -717,7 +717,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   // The double border of (1c) must not make an invalid input larger than the valid one. The class goes where
   // ZK puts it: on the control, or on the <input> inside the wrapper; the daterangebox takes it on its root.
   // Each input is compared with its own valid state: the heights differ (spinner 43px, compact timebox 37px, against 40px or 32px).
-  const INVALID_INPUTS = ['intbox', 'decimalbox', 'doublebox', 'longbox', 'textbox', 'passwordbox', 'datebox', 'timebox',
+  const INVALID_INPUTS = ['intbox', 'decimalbox', 'doublebox', 'longbox', 'textbox', 'textbox-password', 'datebox', 'timebox',
     'timepicker', 'spinner', 'doublespinner', 'bandbox', 'daterangebox', 'combobox'];
   const sizeOf = (page: Page, name: string) => page.locator(`.isg-${name}`).first().evaluate(root => {
     const boxes = { root, input: root.querySelector('.z-combobox-input'), button: root.querySelector('.z-combobox-button') };
@@ -733,7 +733,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
         await page.evaluate(() => document.fonts.ready.then(() => true));
         if (density === 'compact') await page.evaluate(() => document.documentElement.setAttribute('data-density', 'compact'));
         const valid = await sizeOf(page, name);
-        const invalidClass = `z-${name === 'passwordbox' ? 'textbox' : name}-invalid`;
+        const invalidClass = `z-${name === 'textbox-password' ? 'textbox' : name}-invalid`;
         await page.locator(`.isg-${name}`).first().evaluate((root, cls) => {
           const host = root.matches('input') || root.matches('.z-daterangebox') ? root : root.querySelector('input')!;
           host.classList.add(cls);
