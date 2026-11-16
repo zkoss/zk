@@ -1,0 +1,11 @@
+<?page title="Input placeholders" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for interaction-states.spec.ts: an empty datebox, timebox, bandbox and timepicker, each with a
+     placeholder text. Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it up as a page. -->
+<zk>
+<vlayout spacing="16px">
+    <datebox sclass="ph-datebox" placeholder="Pick a date"/>
+    <timebox sclass="ph-timebox" placeholder="Pick a time"/>
+    <bandbox sclass="ph-bandbox" placeholder="Pick a value"><bandpopup>Content</bandpopup></bandbox>
+    <timepicker sclass="ph-timepicker" format="HH:mm" readonly="false" placeholder="Pick a time"/>
+</vlayout>
+</zk>

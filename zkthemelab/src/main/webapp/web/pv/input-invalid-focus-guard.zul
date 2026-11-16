@@ -1,0 +1,19 @@
+<?page title="Real invalid input fields, focused and hovered" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for input-invalid.spec.ts (invalid together with focus or hover): one field of each composite input
+     widget (datebox, timebox, spinner, doublespinner, timepicker, daterangebox) and a textarea, each with a
+     constraint the spec fails the way a user does (type, delete, blur), so ZK itself marks the field invalid. A
+     timebox cannot be typed empty or wrong, so its button fails it through Clients.wrongValue, the server call that
+     marks any field invalid.
+     Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it up as a page. -->
+<zk>
+<vlayout spacing="16px">
+    <datebox sclass="iif-datebox" format="yyyy-MM-dd" constraint="no empty"/>
+    <timebox id="timebox" sclass="iif-timebox"/>
+    <button sclass="iif-fail-timebox" label="Fail the timebox" onClick='Clients.wrongValue(timebox, "Wrong time")'/>
+    <spinner sclass="iif-spinner" constraint="no empty"/>
+    <doublespinner sclass="iif-doublespinner" constraint="no empty"/>
+    <timepicker sclass="iif-timepicker" format="HH:mm" readonly="false" constraint="no empty"/>
+    <daterangebox sclass="iif-daterangebox" format="yyyy-MM-dd"/>
+    <textbox sclass="iif-textarea" rows="3" constraint="no empty"/>
+</vlayout>
+</zk>

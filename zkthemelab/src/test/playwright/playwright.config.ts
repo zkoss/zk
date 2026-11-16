@@ -267,6 +267,13 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Hover, keyboard focus, open pickers, highlighted items and collapsed containers that no other spec drives
+      // through real input. See interaction-states.spec.ts.
+      name: 'interaction-states',
+      testMatch: /interaction-states\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Stacking scale: --zk-index-* tokens + .z-index-* utilities resolve to
       // their values, and the token ladder's three hard constraints hold. See
       // zindex-scale.spec.ts and doc/spec/zindex-scale.md. Also the zk.log box (_log.css).

@@ -319,3 +319,73 @@ for (const widget of ['textbox', 'intbox']) {
     await expectBorder('focus');
   });
 }
+
+// A field that failed its constraint keeps the error border when the pointer is over it and when it has focus; the
+// focused field also draws the second ring pixel as an inset shadow in the error colour. The composite widgets carry
+// the border on the wrapper while ZK puts the invalid class on the <input> inside, so the wrapper's `:has()` rules
+// must reach it. The fields fail the way a user fails them; a timebox cannot be typed empty or wrong, so its button
+// fails it through Clients.wrongValue. A daterangebox takes the invalid class on its root.
+// Fixture: web/pv/input-invalid-focus-guard.zul
+test.describe('invalid together with focus or hover', () => {
+  const FOCUS_FIXTURE = '/pv/input-invalid-focus-guard.zul';
+  const COMPOSITE_WIDGETS = ['datebox', 'timebox', 'spinner', 'doublespinner', 'timepicker', 'daterangebox'];
+
+  async function failField(page: Page, widget: string): Promise<void> {
+    const input = page.locator(`.iif-${widget} input`).first();
+    if (widget === 'timebox') {
+      await page.locator('.iif-fail-timebox').click();
+    } else {
+      await input.click();
+      await page.keyboard.type(widget === 'daterangebox' ? 'abc' : '1');
+      if (widget !== 'daterangebox') await page.keyboard.press('Backspace');
+      await page.locator('body').click({ position: { x: 900, y: 700 } });
+    }
+    const invalidRoot = widget === 'daterangebox' ? page.locator(`.z-${widget}.iif-${widget}`) : input;
+    await expect(invalidRoot).toHaveClass(new RegExp(`z-${widget}-invalid`));
+  }
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(FOCUS_FIXTURE, { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important}' });
+  });
+
+  for (const widget of COMPOSITE_WIDGETS) {
+    test(`${widget} — a field that failed its constraint draws the error border on hover and focus`, async ({ page }) => {
+      await failField(page, widget);
+      const root = page.locator(`.z-${widget}.iif-${widget}`);
+      const error = await errorColor(page);
+      const inset = (el: Element, pseudo: string | null) => getComputedStyle(el, pseudo).boxShadow;
+      // The timepicker draws its second ring pixel on ::after, the other composites on the wrapper.
+      const ringPseudo = widget === 'timepicker' ? '::after' : null;
+
+      await page.mouse.move(0, 0);
+      await root.hover();
+      expect(await root.evaluate(el => el.matches(':hover')), 'the pointer is over the field').toBe(true);
+      await expect.poll(() => topBorderColor(page, `.z-${widget}.iif-${widget}`), `${widget} on hover`).toBe(error);
+
+      await page.mouse.move(0, 0);
+      await page.locator(`.iif-${widget} input`).first().focus();
+      expect(await root.evaluate(el => el.matches(':focus-within')), 'the focus is inside the field').toBe(true);
+      await expect.poll(() => topBorderColor(page, `.z-${widget}.iif-${widget}`), `${widget} on focus`).toBe(error);
+      await expect.poll(() => root.evaluate(inset, ringPseudo), `${widget} focus ring`).toContain(error);
+    });
+  }
+
+  test('textbox — a textarea that failed its constraint draws the error border on focus and keeps its vertical padding', async ({ page }) => {
+    const textarea = page.locator('textarea.iif-textarea');
+    await failConstraintOf(page, textarea);
+    const error = await errorColor(page);
+    const verticalPadding = await page.evaluate(() => {
+      const probe = document.createElement('span');
+      probe.style.paddingTop = 'calc(var(--zk-spacing-2) - 1px)';
+      document.body.appendChild(probe);
+      const resolved = getComputedStyle(probe).paddingTop;
+      probe.remove();
+      return resolved;
+    });
+
+    await textarea.focus();
+    await expect.poll(() => topBorderColor(page, 'textarea.iif-textarea'), 'textarea on focus').toBe(error);
+    expect(await textarea.evaluate(el => getComputedStyle(el).paddingTop), 'the focused textarea keeps its padding').toBe(verticalPadding);
+  });
+});
