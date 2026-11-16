@@ -887,6 +887,15 @@ async function expectBottomSheet(page: Page, popup: Locator): Promise<void> {
   expect(box.width, 'sheet spans the viewport minus both insets').toBeCloseTo(viewport.width - 20, 0);
 }
 
+/** The sheet spans the screen minus a 10px gutter on each side and its bottom edge rests on the viewport bottom, wherever the position comes from. */
+async function expectSheetRestsOnBottomEdge(page: Page, popup: Locator): Promise<void> {
+  const viewport = page.viewportSize()!;
+  const box = await settledBox(page, popup);
+  expect(box.width, 'sheet spans the viewport minus both gutters').toBeCloseTo(viewport.width - 20, 0);
+  expect(box.x, 'sheet starts after the left gutter').toBeCloseTo(10, 0);
+  expect(Math.abs(box.y + box.height - viewport.height), 'sheet bottom edge sits on the viewport bottom').toBeLessThanOrEqual(2);
+}
+
 /** The sheet is as tall as the JS asked for (inline height): a max-height inherited from the desktop rule would hide the last rows. */
 async function expectSheetKeepsJsHeight(popup: Locator): Promise<void> {
   const { rendered, requested } = await popup.evaluate(el => ({ rendered: el.getBoundingClientRect().height, requested: parseFloat(el.style.height) }));
@@ -1021,6 +1030,24 @@ test.describe('tablet-popup', () => {
       'color-mix(in srgb, var(--zk-color-on-primary) 12%, var(--zk-color-primary))');
     await expectPressedBackground(page, popup.locator('.z-timebox-wheel-right'),
       'color-mix(in srgb, var(--zk-color-primary) 12%, var(--zk-color-surface-container-high))');
+  });
+
+  // ---- timepicker: the touch mold's own bottom sheet (tablet/_inputs.css) ----
+  // ZK positions it with an inline `position:absolute; top` and a JS slide-up, so it is not position:fixed: only its
+  // geometry is asserted here, not expectBottomSheet().
+  test('timepicker — tap the button to open the time sheet: it spans the screen minus the gutters and rests on the bottom edge (timepicker.zul)', async ({ page }) => {
+    await openTabletPage(page, '/timepicker.zul');
+    await tapCentre(page, page.locator('.z-timepicker-button').first());
+    const popup = page.locator('.z-timepicker-popup:visible');
+    await expect(popup, 'exactly one visible timepicker popup').toHaveCount(1);
+    await expectSheetKeepsJsHeight(popup);
+    await expectSheetRestsOnBottomEdge(page, popup);
+
+    const input = page.locator('.z-timepicker-input').first();
+    const before = await input.inputValue();
+    await tapCentre(page, popup.locator('.z-timepicker-option').nth(2));
+    await expect(input, 'the tapped option is written to the input').not.toHaveValue(before);
+    await expect(page.locator('.z-timepicker-popup:visible'), 'the sheet closes after a selection').toHaveCount(0);
   });
 
   // ---- colorbox: palette and picker ----
@@ -1192,9 +1219,10 @@ test.describe('tablet-popup-page-wider-than-screen', () => {
     { name: 'colorbox', trigger: '.z-colorbox', popup: '.z-colorbox-popup' },
     { name: 'combobox', trigger: '.z-combobox-button', popup: '.z-combobox-popup' },
     { name: 'datebox wheel', trigger: '.z-datebox-button', popup: '.z-datebox-popup' },
+    { name: 'timepicker', trigger: '.z-timepicker-button', popup: '.z-timepicker-popup' },
   ];
 
-  test('the colorbox, combobox and datebox sheets stay inside the visible area (pv/popup-tablet-overflow-fixtures.zul)', async ({ page }) => {
+  test('the colorbox, combobox, datebox and timepicker sheets stay inside the visible area (pv/popup-tablet-overflow-fixtures.zul)', async ({ page }) => {
     for (const { name, trigger, popup } of sheets) {
       await openTabletPage(page, '/pv/popup-tablet-overflow-fixtures.zul');
       const layoutWidth = await page.evaluate(() => document.documentElement.scrollWidth);

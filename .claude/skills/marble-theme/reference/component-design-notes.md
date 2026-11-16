@@ -398,6 +398,12 @@ fills a width-forced field. The input is readonly, so there is no per-keystroke 
 The divider left of the clock button is `--zk-color-outline-variant`, like the timebox and spinner
 dividers; `--zk-timepicker-border-color` colours the outer border only. On tablet the root, input and
 button reach the touch field height (zkmax `tablet/_inputs.css`).
+On tablet the popup is the touch mold's bottom sheet. Marble only resets the desktop dropdown's
+`margin` and `max-width` there, without the `!important` position override the combobox, datebox and
+timebox sheets carry: the sheet then rests on the bottom edge on an unscrolled, scrolled or
+wider-than-screen page, but scrolls with the page if the page scrolls while it is open. That is the
+widget's own placement (ZK-6276); once the widget pins the sheet to the visible area, the other three
+sheets can drop their `!important` too.
 (`../zkcml/zkmax/.../inp/css/timepicker.css`)
 
 ## toast, notification

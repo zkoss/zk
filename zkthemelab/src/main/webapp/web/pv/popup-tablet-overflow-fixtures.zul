@@ -3,7 +3,7 @@
      viewport that a position:fixed bottom sheet is measured against. The 900px child is what makes the page wider.
      Kept apart from popup-tablet-fixtures.zul, whose geometry other baselines depend on. Lives under pv/ so gallery-scan
      and forced-colors-gallery do not pick it up as a page. The triggers sit 200px down so they are in the first screen.
-     Combobox: 8 items, more than the 5 rows of the sheet. Datebox: the date wheel. -->
+     Combobox: 8 items, more than the 5 rows of the sheet. Datebox: the date wheel. Timepicker: the touch mold's own sheet. -->
 <zk>
 <div style="margin-top: 200px">
     <div width="900px" height="20px"/>
@@ -13,6 +13,7 @@
         <comboitem label="Item 5"/><comboitem label="Item 6"/><comboitem label="Item 7"/><comboitem label="Item 8"/>
     </combobox>
     <datebox id="datebox"/>
+    <timepicker id="timepicker" readonly="false"/>
     <div style="height: 1500px"/>
 </div>
 </zk>
