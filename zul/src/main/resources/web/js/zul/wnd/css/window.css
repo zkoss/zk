@@ -84,7 +84,6 @@
 
 /* Caption text — works for both .z-caption-content (text node container) and .z-label children */
 .z-window-header .z-caption-content,
-.z-window-header .z-caption-text,
 .z-window-header .z-label {
     font-size: var(--zk-typescale-title-medium-size);
     font-weight: var(--zk-typescale-title-medium-weight);
@@ -151,17 +150,6 @@
     font-size: var(--zk-typescale-body-medium-size);
 }
 
-/* ─── Resize handle ──────────────────────────────────────────────────────── */
-.z-window-se {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 16px;
-    height: 16px;
-    cursor: se-resize;
-    opacity: 0.3;
-}
-
 /* ─── Modal overlay mask (created by ZK as z-modal-mask or via FullMask) ─── */
 .z-modal-mask {
     position: fixed;
@@ -177,7 +165,6 @@
 }
 
 .z-window-highlighted .z-window-header .z-caption-content,
-.z-window-highlighted .z-window-header .z-caption-text,
 .z-window-highlighted .z-window-header .z-label {
     color: var(--zk-color-on-primary-container);
 }

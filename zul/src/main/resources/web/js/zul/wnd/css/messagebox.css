@@ -37,12 +37,6 @@
     align-items: center;
 }
 
-.z-messagebox-window .z-caption-text {
-    font-size: var(--zk-typescale-title-medium-size);
-    font-weight: var(--zk-typescale-title-medium-weight);
-    color: var(--zk-messagebox-header-fg);
-}
-
 /* ─── Content area ────────────────────────────────────────────────────── */
 .z-messagebox-window .z-window-content {
     background-color: var(--zk-messagebox-bg);

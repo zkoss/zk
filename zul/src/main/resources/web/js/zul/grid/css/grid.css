@@ -286,30 +286,8 @@
     background-color: var(--zk-grid-row-hover-bg);
 }
 
-/* Odd striping: ZK applies z-row-odd class directly on TR */
-.z-row-odd {
-    background-color: var(--zk-grid-stripe-bg);
-}
-
-.z-row-odd:hover {
-    background-color: var(--zk-grid-row-hover-bg);
-}
-
 /* Grid does NOT support row selection — listbox/tree do, but Grid widget
    never emits .z-row-selected. Do not add selection rules here. */
-
-/* Disabled row */
-.z-row.z-row-disabled,
-.z-row[disabled] {
-    opacity: var(--zk-state-disabled-opacity, 0.38);
-    pointer-events: none;
-}
-
-/* Focus: ZK uses z-row-focus class added by ItemWidget */
-.z-row.z-row-focus {
-    outline: var(--zk-focus-ring);
-    outline-offset: -2px;
-}
 
 /* Cell — TD.z-row-inner contains DIV.z-row-content */
 .z-row-inner {
@@ -357,17 +335,7 @@
     white-space: normal;
 }
 
-/* Legacy: even/odd striping via grid sclass (fallback, prefer z-row-odd) */
-.z-grid-striped .z-row:nth-child(even) {
-    background-color: var(--zk-color-surface-container-lowest);
-}
-
 /* ─── Foot area ─────────────────────────────────────────────────────────── */
-.z-grid-foot {
-    background-color: var(--zk-grid-foot-bg);
-    border-top: 2px solid var(--zk-color-outline-variant);
-}
-
 .z-foot td,
 .z-foot .z-row-inner {
     font-weight: var(--zk-typescale-label-large-weight);
@@ -453,15 +421,6 @@
     font-weight: inherit;
 }
 
-/* Empty message */
-.z-grid-emph {
-    padding: var(--zk-spacing-8) var(--zk-spacing-4);
-    text-align: center;
-    color: var(--zk-color-on-surface-variant);
-    font-style: italic;
-    font-size: var(--zk-typescale-body-medium-size);
-}
-
 /* ─── Row striping: ZK applies .z-grid-odd directly on even TR elements ──── */
 /* ZK's Row widget adds .z-grid-odd to every other <row> in the body.
    Specificity 0,2,0 overrides the bare .z-grid-odd rule (0,1,0) below,
@@ -529,16 +488,6 @@
     border-spacing: 0;
 }
 
-.z-grid-footer .z-cell,
-.z-footer .z-cell,
-.z-grid-footer .z-row-content,
-.z-footer .z-row-content {
-    padding: var(--zk-grid-cell-padding);
-    font-size: var(--zk-typescale-body-small-size);
-    font-weight: var(--zk-typescale-label-large-weight);
-    color: var(--zk-color-on-surface-variant);
-}
-
 .z-group.z-group-open {
     background-color: var(--zk-color-surface-container);
 }
@@ -597,10 +546,6 @@
     padding: 0;
     background-color: var(--zk-color-surface-container);
     border-bottom: 1px solid var(--zk-color-outline-variant);
-}
-
-.z-columns-border {
-    border-right: 1px solid var(--zk-color-outline-variant);
 }
 
 .z-groupfoot-inner {

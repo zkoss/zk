@@ -123,7 +123,6 @@
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 4%, var(--zk-color-surface));
 }
 
-.z-grid:has(.z-grid-frozen) .z-row-odd:hover,
 .z-grid:has(.z-grid-frozen) .z-row.z-grid-odd:hover {
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 4%, var(--zk-color-surface));
 }

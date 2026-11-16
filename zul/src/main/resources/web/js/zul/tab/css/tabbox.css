@@ -75,11 +75,6 @@
     min-height: var(--zk-tab-height);
 }
 
-/* Spacer element ZK inserts */
-.z-tabs-space {
-    flex: 1;
-}
-
 /* ─── Individual tab ────────────────────────────────────────────────────── */
 .z-tab {
     position: relative;

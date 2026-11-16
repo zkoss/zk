@@ -47,22 +47,4 @@
     font-size: 0.6875rem;
     font-weight: 500;
 }
-
-/* ─── Popup animation utilities ───────────────────────────────────────────── */
-.z-popup-anim-fade { animation: z-popup-fade 0.15s ease; }
-.z-popup-anim-zoom { animation: z-popup-zoom 0.15s ease; }
-.z-popup-anim-grow { animation: z-popup-grow 0.15s ease; transform-origin: top center; }
-
-@keyframes z-popup-fade {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-@keyframes z-popup-zoom {
-    from { opacity: 0; transform: scale(0.75); }
-    to   { opacity: 1; transform: scale(1); }
-}
-@keyframes z-popup-grow {
-    from { opacity: 0; transform: scaleY(0.5); }
-    to   { opacity: 1; transform: scaleY(1); }
-}
 }

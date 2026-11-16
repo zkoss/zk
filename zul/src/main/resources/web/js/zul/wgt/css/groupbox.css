@@ -52,9 +52,8 @@
     min-width: 0;
 }
 
-/* Caption text — ZK renders it in .z-caption-content (text node), also .z-caption-text if present */
-.z-groupbox-header .z-caption-content,
-.z-groupbox-header .z-caption-text {
+/* Caption text — ZK renders it in .z-caption-content (text node) */
+.z-groupbox-header .z-caption-content {
     font-size: var(--zk-typescale-title-medium-size);
     font-weight: var(--zk-typescale-title-medium-weight);
     line-height: var(--zk-typescale-title-medium-line-height);

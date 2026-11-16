@@ -153,21 +153,6 @@
     outline-offset: 2px;
 }
 
-/* ZK shadow host */
-.z-shadow {
-    box-shadow: var(--zk-elevation-2);
-}
-
-/* Error message style */
-.z-error-box {
-    background-color: var(--zk-color-error-container);
-    color: var(--zk-color-on-error-container);
-    border-radius: var(--zk-shape-corner-extra-small);
-    padding: var(--zk-spacing-2) var(--zk-spacing-3);
-    font-family: var(--zk-typescale-font-family);
-    font-size: var(--zk-typescale-body-small-size);
-}
-
 /* Floating error panel (emitted by zk/zk.ts `_Erbx` class for zk.error()).
    DOM:
      <div class="z-error" id="zk_err">

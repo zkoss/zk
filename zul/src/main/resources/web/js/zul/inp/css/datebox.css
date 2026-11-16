@@ -454,12 +454,5 @@
     .z-datebox-timezone > select option:checked::checkmark {
         opacity: 1;
     }
-
-    .z-datebox-timezone > select selectedcontent {
-        font-family: var(--zk-typescale-font-family);
-        font-size: var(--zk-typescale-body-medium-size);
-        color: var(--zk-color-on-surface);
-        flex: 1;
-    }
 }
 }

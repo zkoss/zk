@@ -12,7 +12,6 @@
     - focus-within (primary border, 2px)
     - toolbar-hide (toolbar hidden during drawing)
     - tool-button states (hover, focus-visible, active)
-    - disabled wrapper
 
   Companion files:
     Skill:    .claude/skills/zk-component-rules/components/signature.md
@@ -99,12 +98,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
 .z-signature:focus-within {
     border-color: var(--zk-color-primary);
     border-width: 2px;
-}
-
-/* Disabled — full widget dims */
-.z-signature[disabled] {
-    opacity: var(--zk-state-disabled-opacity);
-    pointer-events: none;
 }
 
 /* Canvas placeholder (in production these are <canvas> elements managed by JS) */
@@ -302,27 +295,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                 <div class="canvas-mockup">pen active — toolbar hidden</div>
                 <div class="z-signature-toolbar z-signature-toolbar-hide">
                     <!-- hidden by display:none -->
-                </div>
-            </div>
-        </div>
-
-        <div class="state-label">Disabled<br>([disabled] attribute)</div>
-        <div class="state-cell">
-            <div class="z-signature" disabled style="opacity: var(--zk-state-disabled-opacity); pointer-events: none;">
-                <div class="canvas-mockup">drawing area (disabled)</div>
-                <div class="z-signature-toolbar">
-                    <button class="z-signature-tool-button" disabled>
-                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><polyline points="9,14 4,9 9,4"/><path d="M20,20v-7a4,4,0,0,0-4-4H4"/></svg>
-                        <label class="z-signature-tool-button-label">Undo</label>
-                    </button>
-                    <button class="z-signature-tool-button" disabled>
-                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M19,21H5a2,2,0,0,1-2-2V5a2,2,0,0,1,2-2h11l5,5V19A2,2,0,0,1,19,21z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
-                        <label class="z-signature-tool-button-label">Save</label>
-                    </button>
-                    <button class="z-signature-tool-button" disabled>
-                        <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                        <label class="z-signature-tool-button-label">Clear</label>
-                    </button>
                 </div>
             </div>
         </div>

@@ -488,34 +488,9 @@
     padding: var(--zk-spacing-3) var(--zk-spacing-4);
 }
 
-/* Empty */
-.z-listbox-emph {
-    padding: var(--zk-spacing-8) var(--zk-spacing-4);
-    text-align: center;
-    color: var(--zk-color-on-surface-variant);
-    font-style: italic;
-    font-size: var(--zk-typescale-body-medium-size);
-}
-
 /* Checkbox cell in listbox */
 .z-listcell .z-checkbox {
     margin: 0;
-}
-
-/* ─── Plain / simple-list variant (.z-listbox-plain) ──────────────────── */
-/* Compact list appearance: no header, lighter separators, smaller cell padding */
-.z-listbox-plain .z-listcell-cnt,
-.z-listbox-plain .z-listcell-content {
-    font-size: var(--zk-typescale-body-medium-size);
-    padding: var(--zk-spacing-2) var(--zk-spacing-2);
-}
-
-.z-listbox-plain .z-listitem {
-    border-bottom: 1px solid var(--zk-color-surface-container-high);
-}
-
-.z-listbox-plain .z-listitem:hover {
-    background-color: var(--zk-color-surface-container-low);
 }
 
 /* ─── Checkmark column (listbox checkmark="true") ──────────────────────── */
@@ -844,12 +819,6 @@
     color: var(--zk-color-on-secondary-container);
 }
 
-.z-listgroup-content {
-    display: flex;
-    align-items: center;
-    gap: var(--zk-spacing-2);
-}
-
 /* The group row's <td> carries colspan="N" — must stay `display: table-cell`,
    otherwise the cell collapses to a single column width (display:flex/grid
    on a <td> disables its table-cell rendering and breaks colspan). Put the
@@ -880,10 +849,6 @@ td.z-listgroup-inner {
        .z-listheader (transparent over the listbox surface), not a tinted bar. */
     background-color: transparent;
     border-bottom: 1px solid var(--zk-color-outline-variant);
-}
-
-.z-listhead-border {
-    border-right: 1px solid var(--zk-color-outline-variant);
 }
 
 /* ─── Select mold ──────────────────────────────────────────────────────────
@@ -1076,13 +1041,6 @@ td.z-listgroup-inner {
 
     .z-select option:checked::checkmark {
         opacity: 1;
-    }
-
-    .z-select selectedcontent {
-        font-family: var(--zk-typescale-font-family);
-        font-size: var(--zk-typescale-body-medium-size);
-        color: var(--zk-color-on-surface);
-        flex: 1;
     }
 }
 }

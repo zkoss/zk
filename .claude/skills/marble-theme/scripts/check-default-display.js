@@ -28,7 +28,7 @@
  *   - tag not resolvable                          -> UNKNOWN (manual)
  *
  * Only BARE single-class selectors (`.z-<name>`, incl. members of a comma group)
- * are examined; descendant/compound/pseudo selectors (e.g. `.z-image img`,
+ * are examined; descendant/compound/pseudo selectors (e.g. `.z-comp img`,
  * `.z-a:hover`) are ignored — the root's default is the only thing we can reason
  * about mechanically.
  *

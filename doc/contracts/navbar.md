@@ -14,7 +14,6 @@ preview: ${PREVIEW_URL}/navbar.zul
 .z-navbar               ← root
 .z-navbar-vertical      ← vertical orientation variant
 .z-nav                  ← nav group
-.z-nav-header           ← group header/label
 .z-navitem              ← individual item
 .z-navitem-selected     ← active/selected item
 .z-navseparator         ← divider
@@ -30,7 +29,6 @@ preview: ${PREVIEW_URL}/navbar.zul
 | c3 | `.z-navitem-selected > .z-navitem-content` | background-color | `var(--zk-navitem-selected-bg)` |
 | c4 | `.z-navitem-selected > .z-navitem-content` | color | `var(--zk-navitem-selected-fg)` |
 | c5 | `.z-navitem-content:hover` | background-color | rgba(0, 0, 0, 0.08) (literal in nav.css) |
-| c6 | `.z-nav-header` | font-size | 12px |
 | c7 | `.z-navbar-vertical .z-navitem-selected` | active marker | The rounded tonal **container alone** (c3 tint fill + c4 primary text + weight 600), MD3 Navigation Drawer / MUI ListItemButton. **No left-edge accent** — neither a `border-left` nor an `::after`/`::before` bar strip. (Stacking a classic-sidebar bar on the rounded MD3 pill is redundant + clashes at the corners; design review 2026-07-07.) |
 | c8 | `.z-navitem-content:focus-visible` | outline | `var(--zk-focus-ring)`. The theme ring, not the browser's `outline-style: auto` default — a navbar with no `:focus-visible` rule silently ships the UA ring (1px, off-palette). |
 | c9 | `.z-navitem-content:focus-visible` | outline-offset | `-2px` — **inset**, the theme's full-bleed-row focus mechanism (same as `.z-treerow`). A positive offset is a defect here, not a taste call: the ring is drawn outside a box that has no room, and is cut. See `zk-component-rules reference/focus-ring-clipping.md`. |

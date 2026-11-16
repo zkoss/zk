@@ -413,13 +413,11 @@
 
     /* ── Toolbar — chrome bar (bg + divider line) ─────────────────────────
        A plain surface bar, no radius (full-width chrome, like menubar). One
-       shared border-color knob drives every divider in the family: the bar's
-       own edge (border-bottom horizontal / border-right vertical) AND the
-       .z-toolbarseparator item divider (both orientations) — same precedent
-       as tab's --zk-tab-border-color driving every tab-family border. The
-       app-bar context variant (.z-north .z-toolbar, incl. its toolbarseparator
-       color-mix tint) is a distinct color VARIANT (like combobutton's toolbar
-       mold) and keeps its own colors, not knob-driven; likewise the tabs-host
+       shared border-color knob drives the bar's own edge (border-bottom
+       horizontal / border-right vertical) — same precedent as tab's
+       --zk-tab-border-color driving every tab-family border. The
+       app-bar context variant (.z-north .z-toolbar) is a distinct color
+       VARIANT (like combobutton's toolbar mold) and keeps its own colors, not knob-driven; likewise the tabs-host
        variant (.z-toolbar-tabs, transparent/no-border) and the overflow popup
        (.z-toolbar-popup, a minor sub-feature) stay on base tokens. */
     --zk-toolbar-bg:           var(--zk-color-surface);
@@ -749,8 +747,7 @@
        listbox/tree's selected-bg/-fg. The group header's own open/selected
        color swap (.z-nav-open/.z-nav-selected > .z-nav-content), the hover
        state layer (::before overlay + navitem's rgba hover fill), the
-       group-label text (.z-nav-header), the horizontal mode's submenu/
-       overflow popup surface (.z-nav-popup, .z-navbar-horizontal .z-nav >
+       horizontal mode's submenu/overflow popup surface (.z-nav-popup, .z-navbar-horizontal .z-nav >
        ul), and the badge (.z-nav-info/-navitem-info) stay on base tokens —
        secondary sub-features kept out of the curated surface (same
        convention as calendar/toolbar's minor sub-features). Disabled dims

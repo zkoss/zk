@@ -440,7 +440,7 @@ td.z-listgroup-inner { display: table-cell; }
 }
 ```
 
-The same trap applies to any `<td>` that uses `colspan` (e.g. `.z-grid-foot` / `.z-foot` footer cells, frozen-row spanning, multi-level header cells emitted by auxhead).
+The same trap applies to any `<td>` that uses `colspan` (e.g. `.z-foot` footer cells, frozen-row spanning, multi-level header cells emitted by auxhead).
 
 ## Listgroup / Listgroupfoot — borders on the ROW, not the cell
 

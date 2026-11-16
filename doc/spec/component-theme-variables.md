@@ -530,10 +530,6 @@ differ", and that the overlay color is separate from the fill only for button an
 
 ### Dormant and dead selectors (caveats, not knob rules)
 
-- **`.z-toolbarseparator`:** no matching class exists in current ZK 10 core. `<separator bar="true">`
-  renders `z-separator-horizontal-bar` / `-vertical-bar` instead. The toolbar border knob's reach to
-  separators is therefore CSS-only. This is pre-existing dead code, unrelated to the knob, with zero
-  regression either way.
 - **`js/zul/sel/css/select.css`:** was a second `.z-select` block, reading the same knobs as listbox's,
   that no `css-uri` requested. It has been deleted; `listbox.css` is the only `.z-select` source.
 

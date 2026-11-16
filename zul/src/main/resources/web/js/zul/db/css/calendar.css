@@ -283,14 +283,6 @@
     background-color: transparent;
 }
 
-/* ─── Out-of-range cells (yearView/decadeView disabled cells) ─────────────── */
-.z-calendar-cell.z-calendar-outrange {
-    color: var(--zk-color-outline);
-    opacity: 0.5;
-    cursor: default;
-    pointer-events: none;
-}
-
 /* ─── Week-of-year column ────────────────────────────────────────────────── */
 .z-calendar-weekofyear {
     padding: var(--zk-spacing-1) var(--zk-spacing-2);

@@ -625,19 +625,6 @@
     background-position: center;
 }
 
-.z-tree-emptybody {
-    display: block;
-    width: 100%;
-}
-
-.z-tree-emptybody-content {
-    padding: var(--zk-spacing-8) var(--zk-spacing-4);
-    text-align: center;
-    color: var(--zk-color-on-surface-variant);
-    font-size: var(--zk-typescale-body-medium-size);
-    font-style: italic;
-}
-
 /* Loading tint. ZK's ROD toggles this class on the scrolling body (-body) itself, not on a separate overlay
    element, so it must not change the body's position or display: a flex, absolutely positioned body re-lays
    out its pads and rows and shrinks scrollHeight mid-scroll (B96-ZK-4834). */

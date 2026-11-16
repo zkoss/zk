@@ -50,10 +50,4 @@
 .z-vlayout-inner {
     box-sizing: border-box;
 }
-
-.z-vlayout-cell {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-}
 }
