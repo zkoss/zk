@@ -59,7 +59,7 @@ const BOX_TIERS: Tier[] = [
   { name: 'input', alias: '--zk-input-height',
     selector: 'input.z-textbox, input.z-intbox, input.z-longbox, input.z-doublebox, input.z-decimalbox, '
       + '.z-combobox, .z-bandbox, .z-datebox, .z-timebox, .z-spinner, .z-doublespinner, .z-selectbox, '
-      + '.z-searchbox, .z-chosenbox, .z-daterangebox' },
+      + '.z-searchbox, .z-chosenbox, .z-daterangebox, .z-cascader, .z-colorbox' },
   { name: 'button', alias: '--zk-button-height',
     selector: '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon):not(.z-button-fab):not(.z-button-xs)' },
   { name: 'button-sm', alias: '--zk-button-height-sm',
@@ -392,6 +392,42 @@ test.describe('compact-geometry', () => {
     });
     expect(button.right, 'overflow button right edge against the toolbar right edge').toBeLessThanOrEqual(toolbar.right + 0.5);
     expect(button.left).toBeGreaterThanOrEqual(toolbar.left);
+  });
+});
+
+// The colorbox is a square swatch with a chevron: its width follows its height at every density, so a compact box
+// (32px) does not keep the 40px width of the comfortable one.
+test.describe('compact-colorbox-square', () => {
+  test('colorbox — the box is as wide as it is high in the default and the compact density', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/colorbox.zul', { waitUntil: 'networkidle' });
+    const measure = () => page.locator('.z-colorbox:not(.z-colorbox-disabled)').first()
+      .evaluate(el => ({ width: el.getBoundingClientRect().width, height: el.getBoundingClientRect().height }));
+    const comfortable = await measure();
+    await waitForCompactLayout(page);
+    const compact = await measure();
+    expect(comfortable.width, 'default density: width equals height').toBe(comfortable.height);
+    expect(compact.width, 'compact density: width equals height').toBe(compact.height);
+    expect(compact.height, 'compact density is the 32px rung').toBeLessThan(comfortable.height);
+  });
+
+  // A 32px box minus its border, padding, gap and chevron button left the swatch 8px wide, too narrow to show a colour.
+  test('colorbox — the compact swatch stays at least 12px wide and the chevron stays inside its button', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.goto('/colorbox.zul', { waitUntil: 'networkidle' });
+    const measure = () => page.locator('.z-colorbox:not(.z-colorbox-disabled)').first().evaluate(el => {
+      const box = el.getBoundingClientRect();
+      const swatch = el.querySelector('.z-colorbox-current')!.getBoundingClientRect();
+      const button = el.querySelector('.z-colorbox-button')!.getBoundingClientRect();
+      const icon = el.querySelector('.z-colorbox-icon')!.getBoundingClientRect();
+      return { box: { width: box.width, height: box.height }, swatchWidth: swatch.width,
+        iconInsideButton: icon.left >= button.left && icon.right <= button.right && icon.top >= button.top && icon.bottom <= button.bottom };
+    });
+    const comfortable = await measure();
+    expect(comfortable.swatchWidth, 'default density: the swatch keeps 16px').toBe(16);
+    await waitForCompactLayout(page);
+    const compact = await measure();
+    expect(compact.box, 'compact density: the box stays 32x32').toEqual({ width: 32, height: 32 });
+    expect(compact.swatchWidth, 'compact density: swatch width').toBeGreaterThanOrEqual(12);
+    expect(compact.iconInsideButton, 'compact density: the chevron is inside its button').toBe(true);
   });
 });
 

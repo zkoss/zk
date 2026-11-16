@@ -42,13 +42,11 @@ test.beforeEach(async ({ page }) => {
   await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important}' });
 });
 
-test('an invalid combobox draws the error border on its input and button at rest, hover and focus', async ({ page }) => {
+test('an invalid combobox draws the error border on its root at rest, hover and focus', async ({ page }) => {
   await failConstraint(page, 'combobox');
   const error = await errorColor(page);
-  const expectBorders = async (state: string) => {
-    await expect.poll(() => topBorderColor(page, '.iig-single .z-combobox-input'), `input at ${state}`).toBe(error);
-    await expect.poll(() => topBorderColor(page, '.iig-single .z-combobox-button'), `button at ${state}`).toBe(error);
-  };
+  const expectBorders = (state: string) =>
+    expect.poll(() => topBorderColor(page, '.iig-single .z-combobox'), `root at ${state}`).toBe(error);
 
   await page.mouse.move(0, 0);
   await expectBorders('rest');
@@ -91,7 +89,7 @@ test('an invalid textbox draws the error border at rest, hover and focus', async
 
 test('a combobox and bandbox that have not failed their constraint keep the neutral border', async ({ page }) => {
   const error = await errorColor(page);
-  expect(await topBorderColor(page, '.iig-single .z-combobox-input')).not.toBe(error);
+  expect(await topBorderColor(page, '.iig-single .z-combobox')).not.toBe(error);
   expect(await topBorderColor(page, '.iig-single .z-bandbox')).not.toBe(error);
 });
 
@@ -118,14 +116,18 @@ async function resolvedColor(page: Page, value: string): Promise<string> {
 const INPUTGROUP_WIDGETS = ['textbox', 'intbox', 'longbox', 'doublebox', 'decimalbox', 'combobox'];
 const groupInput = (page: Page, widget: string) =>
   page.locator(widget === 'combobox' ? '.iig-group-combobox .z-combobox-input' : `.iig-group-${widget} input.z-${widget}`);
+// The combobox draws its border on its root, the other widgets on the input itself.
+const groupBorderBox = (page: Page, widget: string) =>
+  widget === 'combobox' ? page.locator('.iig-group-combobox .z-combobox') : groupInput(page, widget);
 
 for (const widget of INPUTGROUP_WIDGETS) {
   test(`an invalid ${widget} in an inputgroup draws the error border at rest, hover and focus`, async ({ page }) => {
     const input = groupInput(page, widget);
+    const borderBox = groupBorderBox(page, widget);
     await failConstraintOf(page, input);
     const error = await errorColor(page);
     const expectBorder = async (state: string) =>
-      expect.poll(() => input.evaluate(el => getComputedStyle(el).borderTopColor), `${widget} at ${state}`).toBe(error);
+      expect.poll(() => borderBox.evaluate(el => getComputedStyle(el).borderTopColor), `${widget} at ${state}`).toBe(error);
 
     await page.mouse.move(0, 0);
     await expectBorder('rest');
@@ -139,13 +141,13 @@ for (const widget of INPUTGROUP_WIDGETS) {
   test(`a ${widget} in an inputgroup that has not failed its constraint keeps the group border`, async ({ page }) => {
     const groupBorder = await resolvedColor(page, 'var(--zk-inputgroup-border-color)');
     await page.mouse.move(0, 0);
-    expect(await groupInput(page, widget).evaluate(el => getComputedStyle(el).borderTopColor)).toBe(groupBorder);
+    expect(await groupBorderBox(page, widget).evaluate(el => getComputedStyle(el).borderTopColor)).toBe(groupBorder);
   });
 }
 
-// A focused combobox in an inputgroup drew its input border 1px and its button border 2px: the
-// group's :focus rule pinned the input while combobox.css grew the button. Both parts keep the width and the colour
-// a focused textbox in the group has, the group outline owning the focus; an invalid combobox keeps the error colour.
+// A focused combobox in an inputgroup keeps the border width and colour a focused textbox in the group has, the group
+// outline owning the focus; an invalid combobox keeps the error colour. Its border is on the root, and neither the input
+// nor the button has one.
 const borderOf = (locator: Locator) =>
   locator.evaluate(el => {
     const style = getComputedStyle(el);
@@ -153,9 +155,9 @@ const borderOf = (locator: Locator) =>
   });
 
 for (const state of ['valid', 'invalid']) {
-  test(`a focused ${state} combobox in an inputgroup draws the border of its input and button as a focused textbox does`, async ({ page }) => {
+  test(`a focused ${state} combobox in an inputgroup draws the border of its root as a focused textbox does`, async ({ page }) => {
     const input = groupInput(page, 'combobox');
-    const button = page.locator('.iig-group-combobox .z-combobox-button');
+    const root = groupBorderBox(page, 'combobox');
     if (state === 'invalid') await failConstraintOf(page, input);
     await page.mouse.move(0, 0);
     await groupInput(page, 'textbox').focus();
@@ -164,28 +166,27 @@ for (const state of ['valid', 'invalid']) {
     const expectedColor = state === 'invalid' ? await errorColor(page) : reference.color;
 
     expect(reference.width, 'the textbox in the group keeps its 1px border on focus').toBe('1px');
-    await expect.poll(() => borderOf(input), 'input border').toEqual({ width: reference.width, color: expectedColor });
-    await expect.poll(() => borderOf(button), 'button border').toEqual({ width: reference.width, color: expectedColor });
+    await expect.poll(() => borderOf(root), 'root border').toEqual({ width: reference.width, color: expectedColor });
+    expect(await page.locator('.iig-group-combobox .z-combobox').evaluate(el => getComputedStyle(el).boxShadow), 'no inset ring: the group outline owns the focus').toBe('none');
   });
 }
 
 // A combobox given the error variant by sclass (z-combobox-error) rather than by a failed constraint: the group's
-// focus rule for the button must not paint it grey while the input is red.
-test('a focused z-combobox-error combobox in an inputgroup draws the error border on its input and button', async ({ page }) => {
+// focus rule must not paint its root grey.
+test('a focused z-combobox-error combobox in an inputgroup draws the error border on its root', async ({ page }) => {
   const input = page.locator('.iig-group-combobox-error .z-combobox-input');
-  const button = page.locator('.iig-group-combobox-error .z-combobox-button');
+  const root = page.locator('.iig-group-combobox-error .z-combobox');
   const error = await errorColor(page);
 
   await page.mouse.move(0, 0);
   await input.focus();
-  await expect.poll(() => borderOf(input), 'input border').toEqual({ width: '1px', color: error });
-  await expect.poll(() => borderOf(button), 'button border').toEqual({ width: '1px', color: error });
+  await expect.poll(() => borderOf(root), 'root border').toEqual({ width: '1px', color: error });
 });
 
-// The border sits on the wrapper of a bandbox and on the input of a textbox and a combobox.
+// The border sits on the wrapper of a bandbox and a combobox and on the input of a textbox.
 const INPLACE_BORDERS: Record<string, string> = {
   textbox: '.iig-inplace-textbox',
-  combobox: '.iig-inplace-combobox .z-combobox-input',
+  combobox: '.iig-inplace-combobox',
   bandbox: '.iig-inplace-bandbox',
 };
 const INPLACE_INPUTS: Record<string, string> = {
@@ -254,5 +255,67 @@ for (const { widget, id, composite } of READONLY_FIELDS) {
     expect(await topBorderColor(page, box), 'invalid at rest').toBe(error);
     await page.locator(box).hover();
     expect(await topBorderColor(page, box), 'invalid on hover').toBe(error);
+  });
+}
+
+// The standard (underline-only) combobox draws no root outline, so its error colour belongs on the ::before rest and
+// hover line and on the ::after focus line; a failed constraint must not leave them neutral.
+test('combobox — an invalid standard combobox draws its underline in the error colour at rest, hover and focus', { tag: '@ZK-6112' }, async ({ page }) => {
+  const root = page.locator('.iig-standard .z-combobox');
+  const input = page.locator('.iig-standard .z-combobox-input');
+  const underline = (pseudo: '::before' | '::after') =>
+    root.evaluate((el, p) => getComputedStyle(el, p).borderBottomColor, pseudo);
+
+  // Never filled: the constraint fails only after a value was typed, cleared and left.
+  await input.click();
+  await page.keyboard.type('x');
+  await page.locator('body').click({ position: { x: 600, y: 700 } });
+  await input.click();
+  await page.keyboard.press('Backspace');
+  await page.locator('body').click({ position: { x: 600, y: 700 } });
+  await expect(input).toHaveClass(/z-combobox-invalid/);
+  const error = await errorColor(page);
+
+  await page.mouse.move(0, 0);
+  await expect.poll(() => underline('::before'), 'rest line').toBe(error);
+  await root.hover();
+  await expect.poll(() => underline('::before'), 'hover line').toBe(error);
+  await page.mouse.move(0, 0);
+  await input.focus();
+  await expect.poll(() => underline('::after'), 'focus line').toBe(error);
+});
+
+// ZK's `.z-error` is the error message box, never a field sclass; the developer's field sclass is z-textbox-error.
+// Inside an inputgroup the group's border rule must not repaint it in the group colour.
+test('textbox — a z-textbox-error textbox in an inputgroup draws the error border at rest, hover and focus', { tag: '@ZK-6112' }, async ({ page }) => {
+  const input = page.locator('.iig-group-textbox-error input.z-textbox');
+  const error = await errorColor(page);
+  const expectBorder = (state: string) =>
+    expect.poll(() => input.evaluate(el => getComputedStyle(el).borderTopColor), `textbox at ${state}`).toBe(error);
+
+  await page.mouse.move(0, 0);
+  await expectBorder('rest');
+  await input.hover();
+  expect(await input.evaluate(el => el.matches(':hover')), 'the pointer is over the input').toBe(true);
+  await expectBorder('hover');
+  await input.focus();
+  await expectBorder('focus');
+});
+
+// Outside a group the hover and focus rules of input.css (`.z-textbox:hover`, `.z-textbox:focus`) out-rank the sclass.
+for (const widget of ['textbox', 'intbox']) {
+  test(`${widget} — a z-textbox-error ${widget} outside an inputgroup draws the error border at rest, hover and focus`, { tag: '@ZK-6112' }, async ({ page }) => {
+    const input = page.locator(`.iig-textbox-error input.z-${widget}`);
+    const error = await errorColor(page);
+    const expectBorder = (state: string) =>
+      expect.poll(() => input.evaluate(el => getComputedStyle(el).borderTopColor), `${widget} at ${state}`).toBe(error);
+
+    await page.mouse.move(0, 0);
+    await expectBorder('rest');
+    await input.hover();
+    expect(await input.evaluate(el => el.matches(':hover')), 'the pointer is over the input').toBe(true);
+    await expectBorder('hover');
+    await input.focus();
+    await expectBorder('focus');
   });
 }

@@ -49,13 +49,32 @@ should match, who fixes a defect — read `reference/decision-principles.md`. Se
 settles, cite the principle IDs in the report, and ask only for the cases in its §4. After the
 Marble maintainer rules, fold the ruling back into that file (its §5).
 
-## Every bug fix ships with a zkthemelab test
+## Fixing a theme bug
 
 A bug fix — from this skill, a fix batch or any other workflow — is not done until `zkthemelab`
 has a Playwright test for it: a fixture under `zkthemelab/src/main/webapp/web/pv/`, a spec under
-`zkthemelab/src/test/playwright/`, and a project for it in `playwright.config.ts`. The test must
-pass with the fix and be shown to fail by a mutation (`reference/verification.md`). The minimal
-repro page used while debugging is temporary and does not count as this test.
+`zkthemelab/src/test/playwright/`, and a project in `playwright.config.ts` only when a new spec file
+is added (a test added to an existing spec runs in that spec's project). The test must pass with the
+fix and be shown to fail under a mutation. The minimal repro page used while debugging is temporary
+and does not count as this test.
+
+0. **Show a visual bug as an Artifact.** When the bug is something seen on screen, publish an
+   Artifact before editing anything: the problem (a screenshot of the current Marble rendering, plus
+   IceBlue when it helps as a reference), the proposed fix, and the expected result (a screenshot or
+   mock-up after the fix; one per option when there are several). Wait for the go-ahead before
+   step 1. A bug with nothing to see — a build, registration or token-naming error — skips this step.
+1. **Test first.** Add the case to the existing spec for the feature the bug breaks (files = features;
+   title starts with the widget name and ` — `; issue in a tag), reusing an existing `pv/` fixture when
+   one fits. Add a new fixture, spec or project only when none fits. Show that it fails before the fix.
+   See `reference/verification.md`, "Spec files and test titles".
+2. **Fix, then mutate.** Fix until the test passes, then show it fails again under a mutation (the fix
+   reverted or overridden).
+3. **Run the affected tests.** Run what `select-tests.mjs` picks (`reference/verification.md`, "Which
+   tests to run after a change"). Capture screenshot baselines before editing CSS. A failure caused by
+   another change in the working tree is reported, not fixed.
+4. **Update stale docs.** Check the comment next to the edited rule, `reference/component-design-notes.md`,
+   `.claude/skills/zk-component-rules/components/<comp>.md`, and, for a token change, the section
+   "A token change updates its docs" below.
 
 ## A token change updates its docs
 

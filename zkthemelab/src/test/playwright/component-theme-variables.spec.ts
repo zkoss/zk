@@ -1,4 +1,4 @@
-import { test, expect, type Locator } from '@playwright/test';
+import { test, expect, type Locator, type Page } from '@playwright/test';
 
 // Component Theme Variables: the --zk-<comp>-* knob contract, asserted on each
 // component's own preview page (there is no dedicated fixture page).
@@ -156,7 +156,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
   });
 
   test('combobox — stock values, then :root override reaches it', async ({ page }) => {
-    const root = page.locator('.z-combobox-input').first();
+    const root = page.locator('.z-combobox').first();
     const c0 = root;
     const c1 = root;
     expect(await radiusOf(c0)).toBe('4px'); // stock
@@ -432,7 +432,7 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 2)', () 
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: button, exact: true }).first().click();
   };
-  const settle = (page: import('@playwright/test').Page) =>
+  const settle = (page: Page) =>
     page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
 
   test('popup — stock values, then :root override reaches it', async ({ page }) => {
@@ -976,5 +976,55 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 3)', () 
     await page.addStyleTag({ content: ':root{--zk-badge-bg:#6750a4}' });
     expect(await bgOf(info)).toBe(SCOPED_PURPLE);
     expect(await bgOf(success)).toBe(successBg); // CTV-7: a non-default severity keeps its semantic color
+  });
+});
+
+// The divider between a field's input and its button is the neutral hairline of every field, so the four fields that
+// have one must not drift apart; a field's own border knob colours the outer border only.
+// Fixture: web/pv/field-divider-guard.zul
+test.describe('field divider', () => {
+  const FIXTURE = '/pv/field-divider-guard.zul';
+  const FIELDS = ['timebox', 'timepicker', 'spinner', 'doublespinner'];
+  const dividerColorOf = (loc: Locator) => loc.evaluate((el) => getComputedStyle(el).borderLeftColor);
+  const outlineVariant = (page: Page) => page.evaluate(() => {
+    const probe = document.createElement('div');
+    probe.style.color = 'var(--zk-color-outline-variant)';
+    document.body.appendChild(probe);
+    const color = getComputedStyle(probe).color;
+    probe.remove();
+    return color;
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(FIXTURE, { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+    await page.mouse.move(0, 0);
+  });
+
+  for (const field of FIELDS) {
+    test(`${field} — divider is outline-variant at rest, on hover, focused and disabled`, async ({ page }) => {
+      const expected = await outlineVariant(page);
+      const enabled = page.locator(`.z-${field}:not(.z-${field}-disabled)`).first();
+      const disabled = page.locator(`.z-${field}.z-${field}-disabled`).first();
+      const divider = (root: Locator) => root.locator(`.z-${field}-button`).first();
+
+      expect(await dividerColorOf(divider(enabled)), 'rest').toBe(expected);
+      await enabled.hover();
+      expect(await dividerColorOf(divider(enabled)), 'hover').toBe(expected);
+      await page.mouse.move(0, 0);
+      await enabled.locator(`.z-${field}-input`).focus();
+      expect(await dividerColorOf(divider(enabled)), 'focus').toBe(expected);
+      expect(await dividerColorOf(divider(disabled)), 'disabled').toBe(expected);
+    });
+  }
+
+  test('timepicker — its border variable colours the outer border, not the divider', async ({ page }) => {
+    const root = page.locator('.z-timepicker:not(.z-timepicker-disabled)').first();
+    const divider = root.locator('.z-timepicker-button').first();
+    const stockDivider = await dividerColorOf(divider);
+
+    await page.addStyleTag({ content: ':root{--zk-timepicker-border-color:#6750a4}' });
+    expect(await borderColorOf(root)).toBe(SCOPED_PURPLE);
+    expect(await dividerColorOf(divider)).toBe(stockDivider);
   });
 });

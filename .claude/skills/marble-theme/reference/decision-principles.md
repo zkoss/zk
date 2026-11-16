@@ -101,7 +101,7 @@ rulings — `doc/spec/`. This file holds conclusions only.
 | Cursor | `pointer` only on what is clickable; default elsewhere, never `move` on non-draggable parts |
 | Scrollbar | as `zul.Scrollbar` at rest: `outline-variant`, 8px, rounded, no track groove; hover one tone darker (`outline`); the scrollbar column in a header has the header's colour |
 | Dropdown arrow (selectbox, combobox, bandbox, accordion) | one chevron-down mask, ink about 8×5, right inset measured (about 12px); `CanvasText` under forced colours |
-| Readonly field | looks like the editable field; no selection highlight that suggests editing; grey or 38% opacity means disabled only |
+| Readonly field | looks like the editable field; no selection highlight or text caret that suggests editing; grey or 38% opacity means disabled only |
 | Toast and notification | no left colour stripe; icon `on-*-container`; both use the same `*-container` tokens |
 | Grid, Listbox, Tree headers | no fill, weight 500, same height, one line with ellipsis; sort icon out of the text flow at the trailing end, same size in all three; space reserved for any icon laid over the text |
 | Grid, Listbox, Tree text edges | header, body, group and footer text start on one edge; one padding layer, never td + content; nested content (e.g. `detail`) aligns to the parent row's text keyline; drop a divider that doubles an existing border |

@@ -15,13 +15,13 @@ zk-version: 10.2.1-jakarta
 |----|----------|----------|----------|
 | c1 | `.z-combobox-input` | height | `var(--zk-control-height)` (min-height) |
 | c2 | `.z-combobox-input` | font-size | `var(--zk-typescale-body-medium-size)` |
-| c3 | `.z-combobox-input` | border | 1px solid `var(--zk-combobox-border-color)` |
-| c4 | `.z-combobox-input` | border-radius | `var(--zk-combobox-radius)` |
-| c5 | `.z-combobox-input:hover` | border-color | `var(--zk-combobox-border-color-hover)` |
-| c6 | `.z-combobox-input:focus` | border-color | `var(--zk-combobox-border-color-focus)` |
-| c7 | `.z-combobox-input:focus` | border-width | 2px |
-| c7a | `.z-combobox:focus-within .z-combobox-input` | content edge (`border-left + padding-left`) | **== rest (±0px)** — `padding-left` compensates the 2px left border (`border-right:none`); text must NOT shift right. |
-| c7b | `.z-combobox-input` / `.z-combobox-button` | transition-property | must **NOT** include `border-width` — snaps in step with padding comp so nothing drifts |
+| c3 | `.z-combobox` | border | 1px solid `var(--zk-combobox-border-color)` (the root draws the whole outline; the input and the button draw no border) |
+| c4 | `.z-combobox` | border-radius | `var(--zk-combobox-radius)` |
+| c5 | `.z-combobox:hover` | border-color | `var(--zk-combobox-border-color-hover)` |
+| c6 | `.z-combobox:focus-within` | border-color | `var(--zk-combobox-border-color-focus)` |
+| c7 | `.z-combobox:focus-within` | border-width | 1px (unchanged); the focus ring is an inset `box-shadow` in `var(--zk-combobox-border-color-focus)` |
+| c7a | `.z-combobox:focus-within .z-combobox-input` | border-left-width | **== rest (±0px)** — the input has no border, so focus changes no edge; text must NOT shift. |
+| c7b | `.z-combobox` | transition-property | must **NOT** include `border-width` — the root transitions `border-color` and `box-shadow` only |
 | c8 | `.z-combobox-button` | width | `var(--zk-combobox-button-width)` (small icon area) |
 | c9 | `.z-combobox-popup` | box-shadow | dropdown shadow (doc/spec/DESIGN.md "Elevation / Shadow", level 2) |
 | c10 | `.z-combobox-popup` | border-radius | `var(--zk-combobox-popup-radius)` |
@@ -44,6 +44,6 @@ zk-version: 10.2.1-jakarta
 - [ ] open (popup visible)
 - [ ] item-selected
 - [ ] inplace (border/background collapse when blurred — see `zk-component-rules reference/inplace-state.md`)
-- [ ] buttonVisible-false — combobox uses split-border pattern (see `zk-component-rules reference/buttonVisible-attribute.md`). Two sub-checks both required:
+- [ ] buttonVisible-false — the combobox root draws the border (Pattern R, see `zk-component-rules reference/buttonVisible-attribute.md`), so hiding the button leaves the root border whole. Two sub-checks both required:
   - (a) `.z-combobox-button.z-combobox-disabled` has `display: none`
-  - (b) `.z-combobox-input.z-combobox-input-full` has 4-side border (`border-right` is NOT `none`) and uniform `border-radius` (no flat-right rectangle)
+  - (b) `.z-combobox` keeps its 1px border on all four sides and a uniform `border-radius` (no flat-right rectangle)

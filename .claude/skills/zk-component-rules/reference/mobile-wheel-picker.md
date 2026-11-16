@@ -101,7 +101,9 @@ inline values. The rule belongs in the theme's touch wheel stylesheet.
 
 `position:fixed; bottom:0` is robust against BOTH the makeVParent inflation and a
 scrolled page (`scrollY`), and it centres the sheet. A CSS keyframe restores the
-slide-up (overriding `transform` with `!important` disables ZK's translateY).
+slide-up (overriding `transform` with `!important` disables ZK's translateY). The keyframe
+animates the individual `translate` property, not `transform`: an `!important` declaration
+beats an animation on the same property, so a `transform` keyframe never runs.
 This is theme-agnostic: any ZK touch theme needs it.
 
 ## Stacking-context trap (selection band hides the centred row)

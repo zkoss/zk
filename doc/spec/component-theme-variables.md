@@ -77,8 +77,9 @@ grep -o -- '--zk-<comp>-[a-z0-9-]*[a-z0-9]' zul/src/main/resources/web/zul/css/t
 ```
 
 Replace `<comp>` with the component name (for example `button`). The output is the appearance
-knobs declared in the central file. Size knobs are declared in `zul/src/main/resources/web/zul/css/tokens/_sizing.css`
-and are not listed by this command. EE (`zkmax`, `zkex`) knob defaults are declared in the same
+knobs declared in the central file, together with the component-specific size knobs a density
+block in that file overrides (for example `--zk-button-padding-y`). Shared size tokens are declared in
+`zul/src/main/resources/web/zul/css/tokens/_sizing.css` and are not listed by this command. EE (`zkmax`, `zkex`) knob defaults are declared in the same
 central file, not in a separate EE file; the EE component CSS files that mention the central file
 (`zkex` rangeslider, `zkmax` multislider, under `../zkcml`) say so in their comments.
 
@@ -198,14 +199,22 @@ knobs".
 colorbox. Timebox and spinner have no popup. A calendar inside a datebox popup is flattened back to
 flat content by a `:not()` guard in `calendar.css`, so the calendar knobs do not reach it.
 
-### Field border model: wrapper or split
+### Field border model: root wrapper
 
-**Rule.** Most dropdown-input fields put the border on the root wrapper, and focus is an inset
-ring. Combobox uses a split border: the input and the button each carry half of the border, and
-focus grows the border from 1px to 2px.
+**Rule.** Most dropdown-input fields put the border on the root wrapper, combobox included, and focus
+is an inset ring. The combobox root carries the whole outline, as datebox does; its focus, open and
+invalid states keep the border at 1px and add the ring as an inset `box-shadow`.
 
-**Reason.** This follows the DOM structure; the knobs are the same and only the plumbing differs.
-The inset-ring focus is described in `.claude/skills/marble-theme/reference/focus-affordance-no-layout-shift.md`.
+**Reason.** This follows the DOM structure; the knobs are the same and only the plumbing differs. A
+split border (the input and the button each carry half of the border) needed a `clip-path` on the
+input, which Chrome applied at a sub-pixel position and so cut part of the top or bottom border row
+(guarded by `zkthemelab/src/test/playwright/field-border-subpixel.spec.ts`). The inset-ring focus is
+described in `.claude/skills/marble-theme/reference/focus-affordance-no-layout-shift.md`.
+
+The divider between the input and the button of a timebox, timepicker, spinner and doublespinner is
+`--zk-color-outline-variant` in every state, so the four fields draw the same hairline. No field knob
+colours it: the border knob (for example `--zk-timepicker-border-color`) colours the outer border only
+(guarded by `zkthemelab/src/test/playwright/component-theme-variables.spec.ts`, "field divider").
 
 The codeeditor is the exception to the ring. Its focus is an overlay ring, not an inset box-shadow,
 because the root has no padding to absorb a 1px→2px border change, and CodeMirror's DOM is flush

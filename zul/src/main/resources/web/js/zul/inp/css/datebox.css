@@ -148,6 +148,13 @@
     cursor: pointer;
 }
 
+/* The readonly input still paints the browser's text caret on click, which wrongly
+   suggests it can be typed into. */
+.z-datebox.z-datebox-readonly .z-datebox-input,
+.z-datebox-input[readonly] {
+    caret-color: transparent;
+}
+
 /* ─── Disabled ─────────────────────────────────────────────────────────────── */
 .z-datebox.z-datebox-disabled {
     opacity: var(--zk-state-disabled-opacity);
@@ -218,18 +225,24 @@
     /* Let the popup auto-fit the calendar (which has its own max-width: 268px
        in calendar.css). Forcing min-width here leaves a horizontal strip of
        blank popup background to the right of the calendar — looks like a
-       phantom border. */
+       phantom border. Datebox.ts widens the popup itself when the input is
+       wider; the calendar's min-width below fills that case. */
 }
 
 /* Calendar-in-popup: flat content. Overrides calendar.css's standalone styling
  * (which gives .z-calendar its own card border + elevation-2 shadow for use
  * outside the datebox). No border, no shadow, no radius, transparent bg —
- * the popup itself is the surface. */
+ * the popup itself is the surface.
+ * min-width: 100% beats the 268px max-width once Datebox.ts writes the input's
+ * width on the popup, so the calendar fills it as in IceBlue. While the popup
+ * is measured at width: auto, the percentage does not apply and the popup
+ * keeps the calendar's natural width. */
 .z-datebox-popup .z-calendar {
     background: transparent;
     border: none;
     border-radius: 0;
     box-shadow: none;
+    min-width: 100%;
 }
 
 /* Time section inside datebox popup */

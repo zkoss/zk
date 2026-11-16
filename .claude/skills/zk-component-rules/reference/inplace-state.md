@@ -21,7 +21,7 @@ The CSS for each type is in the component's own file under `zul/src/main/resourc
 
 Border is on the root `<span>`. The component has an auxiliary button (calendar, dropdown, spinner arrows) that must be hidden in inplace mode.
 
-Applies to: **datebox, timebox, spinner, doublespinner, bandbox**.
+Applies to: **datebox, timebox, spinner, doublespinner, bandbox, combobox**.
 
 Clear `border-color`, `background-color` and `box-shadow` on `.z-{c}.z-{c}-inplace`, and hide `.z-{c}-button`.
 
@@ -29,7 +29,7 @@ Clear `border-color`, `background-color` and `box-shadow` on `.z-{c}.z-{c}-inpla
 
 The border lives on the inner `.z-{c}-input` element, but the root may also carry `background-color`. Both must be cleared.
 
-Applies to: **combobox**.
+Applies to: a composite whose border sits on its inner input. Marble's combobox is Type A, because its border is on the root.
 
 Clear `background-color` on the root, clear `border-color`, `background-color` and `box-shadow` on `.z-{c}-input`, and hide `.z-{c}-button`.
 

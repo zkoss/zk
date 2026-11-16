@@ -134,6 +134,8 @@
 .z-bandbox.z-bandbox-disabled {
     opacity: var(--zk-state-disabled-opacity);
     pointer-events: none;
+    background-color: var(--zk-color-surface-container-low);
+    border-color: var(--zk-color-outline-variant);
 }
 
 /* ─── Invalid variant ─────────────────────────────────────────────────── */
@@ -164,6 +166,14 @@
 .z-bandbox[readonly] .z-bandbox-button,
 .z-bandbox.z-bandbox-readonly .z-bandbox-button {
     cursor: pointer;
+}
+
+/* The readonly input still paints the browser's text caret on click, which wrongly
+   suggests it can be typed into. */
+.z-bandbox[readonly] .z-bandbox-input,
+.z-bandbox.z-bandbox-readonly .z-bandbox-input,
+.z-bandbox-input[readonly] {
+    caret-color: transparent;
 }
 
 /* ─── Open state ──────────────────────────────────────────────────────── */

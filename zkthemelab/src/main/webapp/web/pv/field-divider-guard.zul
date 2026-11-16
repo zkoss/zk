@@ -1,0 +1,16 @@
+<?page title="Field divider" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for component-theme-variables.spec.ts: the fields that draw a 1px divider between the input and
+     their button, each enabled and disabled, so the spec can compare the divider colours.
+     Lives under pv/ so gallery-scan does not pick it up as a page. -->
+<zk>
+<vlayout spacing="16px">
+    <timebox/>
+    <timepicker/>
+    <spinner/>
+    <doublespinner/>
+    <timebox disabled="true"/>
+    <timepicker disabled="true"/>
+    <spinner disabled="true"/>
+    <doublespinner disabled="true"/>
+</vlayout>
+</zk>

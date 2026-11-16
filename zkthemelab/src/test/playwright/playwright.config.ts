@@ -217,6 +217,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // Fields draw their top and bottom border alike at a sub-pixel offset. See field-border-subpixel.spec.ts.
+      name: 'field-border-subpixel',
+      testMatch: /field-border-subpixel\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // An idle inplace Chosenbox shows no field outline (zkmax chosenbox.css). See chosenbox-inplace.spec.ts.
       name: 'chosenbox-inplace',
       testMatch: /chosenbox-inplace\.spec\.ts/,

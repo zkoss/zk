@@ -57,6 +57,16 @@ with a 1px border, which leaves 266px, so a cell is 266 / 7 = 38px. The cap does
 cells then follow the given width. The hover/selected disc stays a fixed 32px circle (6px smaller
 than the 38px cell) so it does not scale with the cell width. (`zul/.../db/css/calendar.css`)
 
+Inside a datebox popup the calendar also fills the popup. `Datebox.ts` (`CalendarPop.open`) widens the
+popup to the input's width when the input is wider than the popup's natural width, and
+`.z-datebox-popup .z-calendar { min-width: 100% }` in `zul/.../inp/css/datebox.css` overrides the 268px
+cap, so no blank strip is left on the right (IceBlue's calendar fills it too). While the popup is measured
+at `width: auto` the percentage does not apply, so a default datebox's popup keeps the calendar's natural
+268px. The tablet wheel picker keeps its own 420px cap: `.z-datebox-popup .z-calendar:has(.z-calendar-wheel-cave)`
+(`zkmax` `tablet/_wheel.css`) sets `min-width: 0` next to its `max-width: 420px`, so the wheel stays
+centred in the full-width sheet.
+Guarded by `zkthemelab/src/test/playwright/popup-width.spec.ts` (fixture `pv/datebox-popup-fill-guard.zul`).
+
 ## cascader
 
 - `.z-cascader-popup` is detached to `<body>` on open (`makeVParent()`), so its structural rules are
@@ -120,6 +130,15 @@ Colorbox is a PE component (`zkex`). `.z-colorbox-icon` sets its own SVG mask
 `::before`; it does not use a `z-icon-*` alias. The geometry for the picker/palette is in
 `../zkcml/zkex/src/main/resources/web/js/zkex/inp/css/colorbox.css`.
 
+The root counts as a single-line field: its height is `--zk-input-height` (40px, 32px compact) and, on
+tablet, `min-height: var(--zk-touch-input-height)` from zkmax `tablet/_inputs.css` lifts it to 48px.
+Its width is `--zk-input-height` too (and `min-width: var(--zk-touch-input-height)` on tablet), so the box is a
+square at every density (40, 32, 48px); the swatch is what is left after the chevron button, the padding and
+the 2px gap. The padding and the button width are `--zk-colorbox-padding` and `--zk-colorbox-button-width`
+(3px and 14px by default, 2px and 12px under `[data-density="compact"]`, restored under
+`[data-density="comfortable"]` like `--zk-button-padding-y`), so the swatch is 16px wide at 40px and 12px at
+32px; at 8px it was too narrow to show a colour.
+
 ## combobox, bandbox, datebox, timebox, spinner (combo family)
 
 - **Combobox root.** `.z-combobox` is `display: inline-block` with the button absolutely positioned at
@@ -128,18 +147,23 @@ Colorbox is a PE component (`zkex`). `.z-colorbox-icon` sets its own SVG mask
   when its display is `block`; otherwise it measures a detached clone that collapses to 0, and the popup
   opened over the input. The root keeps no padding because the `hflex="min"` math adds root padding to
   the width; the room for the button is the input's right padding instead.
-- **Split border (combobox).** Input and button are two elements: `.z-combobox-input` has the left,
-  top and bottom borders (and the left half of the radius), `.z-combobox-button` has the right
-  border (and the right half), so the seam is not doubled; focus must update both. The input spans the
-  whole root and is clipped with `clip-path` so its top and bottom border do not run under the button.
+- **Outline (combobox).** The `.z-combobox` root draws the whole outline: a 1px border in
+  `--zk-combobox-border-color` with the radius `--zk-combobox-radius`, as datebox, timebox and spinner
+  do. The input and the absolutely positioned button draw no border, and the input has no `clip-path`.
+  Why the root: a split outline (the input drew the left, top and bottom borders and the button the
+  right) needed `clip-path: inset(0 <button width> 0 0)` on the input, so that its top and bottom border
+  did not run under the button. Chrome snaps a border to whole pixels but applies a clip-path at the
+  unsnapped fractional position, so at a sub-pixel y the clip cut part of the top or bottom border row,
+  which drew a lighter, thinner edge. Guarded by `zkthemelab/src/test/playwright/field-border-subpixel.spec.ts`.
+  Focus, open and invalid focus keep the border at 1px and add an inset `box-shadow` of 1px in the state
+  colour (`--zk-combobox-border-color-focus` for focus, `--zk-color-primary` for open, `--zk-color-error`
+  for invalid focus), so the second pixel does not shift the content.
   Which combo components hug their content (`field-sizing: content`) is a Marble decision, see
   `doc/spec/DESIGN.md`.
-- **`buttonVisible="false"`.** Marble draws the border of combobox on the input and button
-  (Pattern S, split border) and the border of bandbox, datebox, timebox, spinner and doublespinner on
-  the root (Pattern R). With Pattern S, hiding the button removes the right edge, so Marble restores
-  it on the input through ZK's `.z-{c}-input-full` hook:
-  `.z-combobox-input.z-combobox-input-full { border-right: 1px solid var(--zk-color-outline); border-radius: var(--zk-combobox-radius); }`
-  (also `padding-right` and `clip-path: none`).
+- **`buttonVisible="false"`.** Marble draws the border of combobox, bandbox, datebox, timebox, spinner and
+  doublespinner on the root (Pattern R). Hiding the button leaves the root border whole. The only rule
+  ZK's `.z-combobox-input-full` hook needs for combobox is the input's `padding-right` reset, which gives
+  back the room the button took: `.z-combobox-input.z-combobox-input-full { padding-right: var(--zk-spacing-3); }`.
   For Pattern S components the No-button check must verify both that the button is hidden and that
   the input still has a four-side border with a uniform corner radius. For Pattern R components only
   the first check applies. Marble also sets `cursor:pointer` on a readonly combo input to signal that
@@ -218,6 +242,10 @@ Adjacent bordered children double the seam, and the axis decides which border to
 horizontal-only collapse rule must be scoped with `.z-inputgroup:not(.z-inputgroup-vertical)`,
 otherwise the vertical textbox loses its left border. The group's `:focus-within` outline owns the
 focus affordance, so grouped children keep a constant 1px border and rest padding in every state.
+A grouped field that carries the error colour (failed constraint, `z-textbox-error`, `z-combobox-error`) keeps
+it at rest, hover and focus: the group's border shorthand has the specificity of the field's own error rule
+and loads after it, so each error selector is repeated inside the group. `.z-error` is ZK's error message
+box, never a field sclass, so no field rule uses it.
 (`zul/.../wgt/css/inputgroup.css`)
 
 ## linelayout
@@ -367,6 +395,15 @@ input at `size="5"`, which fits `HH:mm` only; `field-sizing: content` with `flex
 `min-width: 5em` floor lets the input hug a longer value such as `HH:mm:ss` without clipping and still
 fills a width-forced field. The input is readonly, so there is no per-keystroke width jitter; where
 `field-sizing` is unsupported it falls back to the earlier look.
+The divider left of the clock button is `--zk-color-outline-variant`, like the timebox and spinner
+dividers; `--zk-timepicker-border-color` colours the outer border only. On tablet the root, input and
+button reach the touch field height (zkmax `tablet/_inputs.css`).
+On tablet the popup is the touch mold's bottom sheet. Marble only resets the desktop dropdown's
+`margin` and `max-width` there, without the `!important` position override the combobox, datebox and
+timebox sheets carry: the sheet then rests on the bottom edge on an unscrolled, scrolled or
+wider-than-screen page, but scrolls with the page if the page scrolls while it is open. That is the
+widget's own placement (ZK-6276); once the widget pins the sheet to the visible area, the other three
+sheets can drop their `!important` too.
 (`../zkcml/zkmax/.../inp/css/timepicker.css`)
 
 ## toast, notification

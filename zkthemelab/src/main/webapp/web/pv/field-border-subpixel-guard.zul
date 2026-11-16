@@ -1,0 +1,52 @@
+<?page title="Field border at a sub-pixel offset" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for field-border-subpixel.spec.ts. A field below a fractional-height box often starts between two
+     pixels. Its border is snapped to whole pixels, but a clip-path is not, so a clip on the field could cut off
+     part of the top or the bottom border row: that edge then looks lighter and thinner than the others. The
+     spacers put each section at a different fraction so both edges are exercised; the sections stay out of any
+     positioned container because one would snap the offset away.
+     Lives under pv/ so gallery-scan does not pick it up. -->
+<zk>
+<style>
+    .fbs-section { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+</style>
+<div style="height: 0.4px"/>
+<div sclass="fbs-section">
+    <textbox sclass="fbs-field" value="Text"/>
+    <intbox sclass="fbs-field" value="1"/>
+    <decimalbox sclass="fbs-field" value="1.5"/>
+    <combobox sclass="fbs-field" value="Item"><comboitem label="Item"/></combobox>
+    <bandbox sclass="fbs-field" value="Item"><bandpopup>Content</bandpopup></bandbox>
+    <datebox sclass="fbs-field"/>
+    <timebox sclass="fbs-field"/>
+    <spinner sclass="fbs-field" value="1"/>
+    <doublespinner sclass="fbs-field" value="1.5"/>
+    <combobutton sclass="fbs-field" label="Combo"/>
+    <chosenbox sclass="fbs-field" width="160px"/>
+    <searchbox sclass="fbs-field" width="160px"/>
+    <selectbox sclass="fbs-field" width="160px"/>
+    <cascader sclass="fbs-field" width="160px"/>
+    <timepicker sclass="fbs-field"/>
+    <daterangebox sclass="fbs-field"/>
+    <colorbox sclass="fbs-field"/>
+</div>
+<div style="height: 8.25px"/>
+<div sclass="fbs-section">
+    <textbox sclass="fbs-field" value="Text"/>
+    <intbox sclass="fbs-field" value="1"/>
+    <decimalbox sclass="fbs-field" value="1.5"/>
+    <combobox sclass="fbs-field" value="Item"><comboitem label="Item"/></combobox>
+    <bandbox sclass="fbs-field" value="Item"><bandpopup>Content</bandpopup></bandbox>
+    <datebox sclass="fbs-field"/>
+    <timebox sclass="fbs-field"/>
+    <spinner sclass="fbs-field" value="1"/>
+    <doublespinner sclass="fbs-field" value="1.5"/>
+    <combobutton sclass="fbs-field" label="Combo"/>
+    <chosenbox sclass="fbs-field" width="160px"/>
+    <searchbox sclass="fbs-field" width="160px"/>
+    <selectbox sclass="fbs-field" width="160px"/>
+    <cascader sclass="fbs-field" width="160px"/>
+    <timepicker sclass="fbs-field"/>
+    <daterangebox sclass="fbs-field"/>
+    <colorbox sclass="fbs-field"/>
+</div>
+</zk>
