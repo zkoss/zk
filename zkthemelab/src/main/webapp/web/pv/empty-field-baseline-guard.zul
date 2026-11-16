@@ -1,6 +1,7 @@
 <?page title="Empty field baseline guard" contentType="text/html;charset=UTF-8"?>
 <!-- Fixture for alignment.spec.ts (empty inline-flex fields): each widget empty and filled, in a line with label text and a
-     button. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up. -->
+     button; mixedRow puts the text fields and the composite fields in one line (input row bottom edge). Lives under pv/
+     so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up. -->
 <zk>
 <zscript><![CDATA[
     import org.zkoss.zul.*;
@@ -36,5 +37,10 @@
 <div sclass="p" id="inputgroupFilled">Filled <inputgroup><textbox value="abc"/></inputgroup> <button label="OK"/></div>
 <div sclass="p" id="searchboxEmpty">Empty <searchbox model="${sbEmpty}"/> <button label="OK"/></div>
 <div sclass="p" id="searchboxFilled">Filled <searchbox model="${sbFilled}"/> <button label="OK"/></div>
+<div sclass="p" id="daterangeboxEmpty">Empty <daterangebox/> <button label="OK"/></div>
+<div sclass="p" id="daterangeboxFilled">Filled <daterangebox beginValue="${d}" endValue="${d}"/> <button label="OK"/></div>
+<div sclass="p" id="comboboxEmpty">Empty <combobox/> <button label="OK"/></div>
+<div sclass="p" id="comboboxFilled">Filled <combobox value="abc"/> <button label="OK"/></div>
+<div id="mixedRow" style="white-space:nowrap"><textbox width="64px"/> <intbox width="64px"/> <decimalbox width="64px"/> <doublebox width="64px"/> <longbox width="64px"/> <textbox type="password" width="64px"/> <combobox width="96px"/> <bandbox width="96px"/> <datebox width="96px"/> <timebox width="96px"/> <spinner width="96px"/> <chosenbox model="${cbEmpty}" width="96px"/> <timepicker width="96px"/> <daterangebox width="200px"/></div>
 </div>
 </zk>

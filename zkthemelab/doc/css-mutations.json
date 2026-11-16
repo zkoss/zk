@@ -48,8 +48,8 @@
       "area": "focus-ring",
       "description": "textbox family: focused border colour → the resting colour",
       "source": "zul/src/main/resources/web/js/zul/inp/css/input.css",
-      "find": ".z-passwordbox:focus-visible{border-color:var(--zk-input-border-color-focus);",
-      "replace": ".z-passwordbox:focus-visible{border-color:var(--zk-input-border-color);",
+      "find": ".z-longbox:focus-visible{border-color:var(--zk-input-border-color-focus);",
+      "replace": ".z-longbox:focus-visible{border-color:var(--zk-input-border-color);",
       "run": {
         "projects": [
           "chromium"

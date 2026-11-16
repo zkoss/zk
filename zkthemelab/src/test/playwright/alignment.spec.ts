@@ -116,20 +116,21 @@ test.describe('html table', () => {
 
 // Guard for the inline-flex field widgets (ZK-6112, B50-3032885, B50-ZK-577). Two causes, both fixed by centring the
 // root (vertical-align: middle):
-//  - datebox, timebox, spinner, doublespinner, bandbox, inputgroup, timepicker, chosenbox: Safari 18 gives an inline-flex
+//  - datebox, timebox, spinner, doublespinner, bandbox, inputgroup, timepicker, chosenbox, daterangebox: Safari 18 gives an inline-flex
 //    box whose first item is an empty input the input's bottom edge as its baseline, so an empty field sat about 14px
 //    off the text line and jumped when typed into (WebKit bug 294558, fixed in Safari 26). Playwright's WebKit already
 //    has the fix, so their layout test cannot fail there or in Chromium; the computed vertical-align pins the
 //    declaration, and the real Safari 18 numbers were measured by hand.
 //  - cascader, searchbox: no input; with no value the first flex item is an empty placeholder, which has no baseline,
 //    so EVERY browser aligned the box by its bottom edge. Their layout test is a real guard in Chromium.
+// combobox is an inline-block, not inline-flex; why it is centred is under 'field in a line of text' below.
 // Fixture: web/pv/empty-field-baseline-guard.zul
 declare const zk: any;
 
 test.describe('empty field baseline', () => {
   const WIDGETS = [
     'datebox', 'timebox', 'spinner', 'doublespinner', 'bandbox', 'inputgroup', 'timepicker', 'chosenbox', 'cascader',
-    'searchbox',
+    'searchbox', 'daterangebox', 'combobox',
   ];
   const TOLERANCE_PX = 0.5;
 
@@ -210,4 +211,55 @@ test.describe('field in a line of text', () => {
       return popup.getBoundingClientRect().top - el.getBoundingClientRect().bottom;
     }), { timeout: 2000 }).toBeCloseTo(0, 0);
   });
+});
+
+// Guard for input.css (ZK-6112, B86_ZK_4048): every field in a row shares one bottom edge. The
+// composite fields above are centred on the line; a plain textbox left on its baseline sat 1.45px higher than a
+// datebox or chosenbox beside it.
+// Fixture: web/pv/empty-field-baseline-guard.zul
+test.describe('input row bottom edge', () => {
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/pv/empty-field-baseline-guard.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+  });
+
+  test('textbox — a row of text fields and composite fields shares one bottom edge', { tag: ['@ZK-6112', '@ZK-4048'] }, async ({ page }) => {
+    const bottoms = await page.evaluate(() => {
+      const row = zk.Widget.$('$mixedRow').$n() as HTMLElement;
+      return Array.from(row.children).map((el) => [el.className.split(' ')[0], el.getBoundingClientRect().bottom] as const);
+    });
+    const [, textboxBottom] = bottoms[0];
+    for (const [cls, bottom] of bottoms) {
+      expect(Math.abs(bottom - textboxBottom), `${cls} bottom ${bottom}, textbox bottom ${textboxBottom}`).toBeLessThanOrEqual(0.5);
+    }
+  });
+});
+
+// Guard for the trailing button of the dropdown fields (ZK-6112, B103_ZK_5838): every one is --zk-input-button-width
+// wide, so two fields of the same width give their inputs the same room and line up when stacked. timepicker and
+// daterangebox had their own 36px.
+// Fixture: web/pv/empty-field-baseline-guard.zul
+test.describe('trailing button width', () => {
+  const WIDGETS = ['datebox', 'timebox', 'bandbox', 'combobox', 'timepicker', 'daterangebox'];
+
+  test.beforeEach(async ({ page }) => {
+    const resp = await page.goto('/pv/empty-field-baseline-guard.zul', { waitUntil: 'networkidle' });
+    expect(resp?.status()).toBe(200);
+  });
+
+  for (const widget of WIDGETS) {
+    test(`${widget} — the trailing button is --zk-input-button-width wide`, { tag: ['@ZK-6112', '@ZK-5838'] }, async ({ page }) => {
+      const { button, token } = await page.evaluate((widget) => {
+        const btn = document.querySelector(`.z-${widget}-button`) as HTMLElement;
+        const probe = document.createElement('div');
+        probe.style.width = 'var(--zk-input-button-width)';
+        document.body.appendChild(probe);
+        const token = probe.getBoundingClientRect().width;
+        probe.remove();
+        return { button: btn.getBoundingClientRect().width, token };
+      }, widget);
+      expect(button).toBe(token);
+    });
+  }
 });

@@ -41,8 +41,8 @@
     /* height → --zk-button-height (tokens/_sizing.css, semantic alias layer). */
 
     /* ── Input — outlined text field ─────────────────────────────────────
-       Shared by textbox / intbox / decimalbox / doublebox / longbox /
-       passwordbox. State is a per-state border-COLOR change (no overlay), so
+       Shared by textbox / intbox / decimalbox / doublebox / longbox.
+       State is a per-state border-COLOR change (no overlay), so
        the knobs are per-state border colors + the surface/text fill. */
     --zk-input-bg:                 var(--zk-color-surface);
     --zk-input-fg:                 var(--zk-color-on-surface);

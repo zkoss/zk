@@ -10,7 +10,7 @@
     <doublebox sclass="isg-doublebox"/>
     <longbox sclass="isg-longbox"/>
     <textbox sclass="isg-textbox"/>
-    <textbox sclass="isg-passwordbox" type="password"/>
+    <textbox sclass="isg-textbox-password" type="password"/>
     <datebox sclass="isg-datebox"/>
     <timebox sclass="isg-timebox"/>
     <timepicker sclass="isg-timepicker"/>

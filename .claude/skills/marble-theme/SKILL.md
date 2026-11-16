@@ -65,6 +65,23 @@ comments in `tokens/*.css` for its full `--zk-*` name and fix every mention, the
 its rule, not by a list (`.claude/rules/doc-conventions.md`); that is what makes the search and
 the script find every mention.
 
+## A removed class updates every mention
+
+When you remove or rename a class, a selector or a widget name, including a cleanup that is not
+a bug fix, search every tracked file of both repositories with `git grep -i`, once for the class
+(`z-<name>`) and once for the bare name (`<name>`). Files outside the component's own
+docs also name classes, and the class search misses the bare name:
+
+- `zk-component-rules/reference/*.md` and `doc/spec/**`, which list widget names
+- the `siblings:` line of `doc/contracts/*.md`
+- comments in other CSS files, such as `tokens/_component-theme.css`
+- `zkthemelab/doc/css-mutations.json`, whose `find` strings quote served selectors; a `find` that
+  no longer matches makes the mutation `invalid`, so rerun it with `scripts/css-mutation.mjs`
+
+Fix every hit in the same change. A hit you leave must have a stated reason that you checked,
+for example an element id, or an alias that maps the name to a real class. Never leave a hit
+because of a reason you did not check.
+
 ## Where things live
 
 CE (this checkout):

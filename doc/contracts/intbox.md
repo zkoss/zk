@@ -2,7 +2,7 @@
 tier: T1
 category: input
 shared-css-file: zul/src/main/resources/web/js/zul/inp/css/input.css
-siblings: [textbox, decimalbox, doublebox, longbox, textarea, passwordbox]
+siblings: [textbox, decimalbox, doublebox, longbox, textarea]
 preview: ${PREVIEW_URL}/intbox.zul
 
 ## References

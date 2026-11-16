@@ -34,7 +34,7 @@ If you write CSS for a component that does not visually change, check whether th
 Within `combo.css.dsp` and `input.css.dsp`, many rules use **grouped selectors** covering all sibling components:
 
 ```css
-.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox, .z-passwordbox {
+.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox {
     /* base input styles */
 }
 ```
