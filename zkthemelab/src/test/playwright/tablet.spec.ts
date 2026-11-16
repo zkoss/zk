@@ -1050,6 +1050,38 @@ test.describe('tablet-popup', () => {
     await expect(page.locator('.z-timepicker-popup:visible'), 'the sheet closes after a selection').toHaveCount(0);
   });
 
+  // ---- bottom sheets slide up ----
+  // The sheets set `transform: none !important`, which beats an animation on `transform`: the keyframe has to move
+  // another property, or the sheet appears without sliding.
+  const slidingSheets = [
+    { name: 'combobox', url: '/pv/popup-tablet-fixtures.zul', trigger: '.z-combobox-button', popup: '.z-combobox-popup' },
+    { name: 'datebox', url: '/datebox.zul', trigger: '.z-datebox-button', popup: '.z-datebox-popup' },
+    { name: 'timebox', url: '/timebox.zul', trigger: '.z-timebox-button', popup: '.z-timebox-popup' },
+  ];
+  for (const { name, url, trigger, popup } of slidingSheets) {
+    test(`${name} — the bottom sheet slides up when it opens (${url})`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+      await openTabletPage(page, url);
+      await page.evaluate(sel => {
+        const tops: number[] = [];
+        (window as any).__sheetTops = tops;
+        const sample = () => {
+          const sheet = Array.from(document.querySelectorAll(sel)).find(el => el.getBoundingClientRect().height > 0);
+          if (sheet) tops.push(sheet.getBoundingClientRect().top);
+          if (tops.length < 40) requestAnimationFrame(sample);
+        };
+        requestAnimationFrame(sample);
+      }, popup);
+      await tapCentre(page, page.locator(trigger).first());
+      await settledBox(page, page.locator(`${popup}:visible`));
+      const tops: number[] = await page.evaluate(() => (window as any).__sheetTops);
+      const SLIDE_MIN = 20;
+      expect(tops.length, 'frames sampled while the sheet was visible').toBeGreaterThan(2);
+      expect(tops[0] - tops[tops.length - 1], 'the first visible frame is below the resting position').toBeGreaterThan(SLIDE_MIN);
+      expect(new Set(tops.map(Math.round)).size, 'the sheet passes through intermediate positions').toBeGreaterThan(2);
+    });
+  }
+
   // ---- colorbox: palette and picker ----
   // The popup slides in with `transition: transform 300ms` from top = viewport height, so a read taken right after
   // an openPopup() API call finds it below the viewport (y 1112): that is why an earlier measurement saw no visible
