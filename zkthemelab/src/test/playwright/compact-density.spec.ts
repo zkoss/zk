@@ -59,7 +59,7 @@ const BOX_TIERS: Tier[] = [
   { name: 'input', alias: '--zk-input-height',
     selector: 'input.z-textbox, input.z-intbox, input.z-longbox, input.z-doublebox, input.z-decimalbox, '
       + '.z-combobox, .z-bandbox, .z-datebox, .z-timebox, .z-spinner, .z-doublespinner, .z-selectbox, '
-      + '.z-searchbox, .z-chosenbox, .z-daterangebox' },
+      + '.z-searchbox, .z-chosenbox, .z-daterangebox, .z-cascader, .z-colorbox' },
   { name: 'button', alias: '--zk-button-height',
     selector: '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon):not(.z-button-fab):not(.z-button-xs)' },
   { name: 'button-sm', alias: '--zk-button-height-sm',

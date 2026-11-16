@@ -10,5 +10,12 @@
     <timebox/>
     <spinner/>
     <doublespinner/>
+    <timepicker/>
+    <daterangebox/>
+    <chosenbox width="200px"/>
+    <searchbox width="200px"/>
+    <selectbox width="200px"/>
+    <cascader width="200px"/>
+    <colorbox/>
 </vlayout>
 </zk>

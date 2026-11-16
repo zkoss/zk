@@ -78,7 +78,8 @@ test.describe('tablet-touch-size', () => {
 // Fixture: web/pv/tablet-field-height-guard.zul
 test.describe('tablet-field-height', () => {
   const FIXTURE = '/pv/tablet-field-height-guard.zul';
-  const FIELDS = ['combobox', 'bandbox', 'datebox', 'timebox', 'spinner', 'doublespinner'];
+  const FIELDS = ['combobox', 'bandbox', 'datebox', 'timebox', 'spinner', 'doublespinner',
+    'timepicker', 'daterangebox', 'chosenbox', 'searchbox', 'selectbox', 'cascader', 'colorbox'];
 
   for (const field of FIELDS) {
     test(`${field} — root is as high as a textbox`, async ({ page }) => {

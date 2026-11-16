@@ -130,6 +130,9 @@ Colorbox is a PE component (`zkex`). `.z-colorbox-icon` sets its own SVG mask
 `::before`; it does not use a `z-icon-*` alias. The geometry for the picker/palette is in
 `../zkcml/zkex/src/main/resources/web/js/zkex/inp/css/colorbox.css`.
 
+The root counts as a single-line field: its height is `--zk-input-height` (40px, 32px compact) and, on
+tablet, `min-height: var(--zk-touch-input-height)` from zkmax `tablet/_inputs.css` lifts it to 48px.
+
 ## combobox, bandbox, datebox, timebox, spinner (combo family)
 
 - **Combobox root.** `.z-combobox` is `display: inline-block` with the button absolutely positioned at
