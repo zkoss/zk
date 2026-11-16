@@ -6,13 +6,13 @@ Normative rules for how Marble distinguishes `readonly`, `disabled`, and status/
 
 A dropdown/popup control — **combobox, datebox, bandbox** — MUST render `readonly` as an *active outlined field*, never greyed or disabled-looking. In ZK there is no dedicated "select-only" mode; `readonly="true"` is the *normal, active* state for a select-style dropdown, and the popup is still openable (mouse via the button, keyboard via `Alt+↓`). Styling it as de-emphasis misuses the disabled language and misleads the user.
 
-**Applied rule:** the `.z-*-readonly` block collapses to a single `cursor: pointer` rule and otherwise falls through to the active-field styling (white surface, visible `1px solid` outline, full-opacity text, working button). Genuinely `disabled` controls keep the opacity of `--zk-state-disabled-opacity`.
+**Applied rule:** the `.z-*-readonly` block is a `cursor: pointer` rule plus `caret-color: transparent` on the input, because a readonly input must not show a blinking text caret (that suggests it can be typed into). For combobox the selection highlight is hidden too (its `::selection` rule). Timepicker's input is readonly by default and is styled by `.z-timepicker-input[readonly]`; `readonly="false"` keeps it typeable with its caret. Otherwise it falls through to the active-field styling (white surface, visible `1px solid` outline, full-opacity text, working button). Genuinely `disabled` controls keep the opacity of `--zk-state-disabled-opacity`.
 
-A readonly popup control MUST render identical to its editable counterpart. Never set `pointer-events: none` or reduced opacity on the button of a readonly popup control — that leaves the primary open affordance dead.
+A readonly popup control MUST render identical to its editable counterpart, except that its input shows no text caret and no selection highlight. Never set `pointer-events: none` or reduced opacity on the button of a readonly popup control — that leaves the primary open affordance dead.
 
 ## 2. Scope
 
-Applies to **combobox, datebox, bandbox**.
+Applies to **combobox, datebox, bandbox, timepicker, daterangebox**.
 
 **Timebox, spinner, doublespinner** have no popup, but their up/down buttons stay operable when readonly: ZK ignores the buttons only when the field is disabled, and the Timebox Javadoc says the value of a read-only timebox can be changed by clicking the up or down button. Only typing is blocked. Their buttons keep `pointer-events` and full opacity, as in §1; the field itself follows the normal readonly treatment (outline border, `--zk-color-on-surface-variant` text).
 
