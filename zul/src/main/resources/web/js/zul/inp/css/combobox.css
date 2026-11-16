@@ -354,6 +354,14 @@
     cursor: pointer;
 }
 
+/* The readonly input still paints the browser's text caret on click, which wrongly
+   suggests it can be typed into. */
+.z-combobox[readonly] .z-combobox-input,
+.z-combobox.z-combobox-readonly .z-combobox-input,
+.z-combobox-input[readonly] {
+    caret-color: transparent;
+}
+
 /* Hide the selection highlight on the readonly input (user-select:none is ignored
    by Chromium for readonly inputs); the text keeps its colour. */
 .z-combobox[readonly] .z-combobox-input::selection,
