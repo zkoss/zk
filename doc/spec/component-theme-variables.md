@@ -210,6 +210,11 @@ input, which Chrome applied at a sub-pixel position and so cut part of the top o
 (guarded by `zkthemelab/src/test/playwright/field-border-subpixel.spec.ts`). The inset-ring focus is
 described in `.claude/skills/marble-theme/reference/focus-affordance-no-layout-shift.md`.
 
+The divider between the input and the button of a timebox, timepicker, spinner and doublespinner is
+`--zk-color-outline-variant` in every state, so the four fields draw the same hairline. No field knob
+colours it: the border knob (for example `--zk-timepicker-border-color`) colours the outer border only
+(guarded by `zkthemelab/src/test/playwright/component-theme-variables.spec.ts`, "field divider").
+
 The codeeditor is the exception to the ring. Its focus is an overlay ring, not an inset box-shadow,
 because the root has no padding to absorb a 1px→2px border change, and CodeMirror's DOM is flush
 against the border and paints opaque.

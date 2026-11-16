@@ -121,7 +121,7 @@
     width: var(--zk-input-button-width);
     min-height: calc(var(--zk-input-height) - 2px);
     border: none;
-    border-left: 1px solid var(--zk-color-outline);
+    border-left: 1px solid var(--zk-color-outline-variant);
     background: transparent;
     color: var(--zk-color-on-surface-variant);
     flex-shrink: 0;

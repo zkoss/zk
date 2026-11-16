@@ -386,6 +386,9 @@ input at `size="5"`, which fits `HH:mm` only; `field-sizing: content` with `flex
 `min-width: 5em` floor lets the input hug a longer value such as `HH:mm:ss` without clipping and still
 fills a width-forced field. The input is readonly, so there is no per-keystroke width jitter; where
 `field-sizing` is unsupported it falls back to the earlier look.
+The divider left of the clock button is `--zk-color-outline-variant`, like the timebox and spinner
+dividers; `--zk-timepicker-border-color` colours the outer border only. On tablet the root, input and
+button reach the touch field height (zkmax `tablet/_inputs.css`).
 (`../zkcml/zkmax/.../inp/css/timepicker.css`)
 
 ## toast, notification
