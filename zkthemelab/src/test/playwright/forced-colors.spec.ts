@@ -669,17 +669,35 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
   });
 
   // The standard variant draws its underline with the root's ::before; the double-border overlay of an invalid
-  // combobox must not take that pseudo-element over and turn the underline into a box.
-  test('an invalid standard combobox keeps its underline in forced colors', async ({ page }) => {
+  // combobox must not take that pseudo-element over and turn the underline into a box. Its error cue is the
+  // underline itself, doubled, and the focus line (::after) must not cover it with one solid bar.
+  test('an invalid standard combobox shows a double underline in forced colors, focused or not', async ({ page }) => {
     await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
     const combo = page.locator('.z-combobox').first();
     await combo.waitFor({ state: 'visible', timeout: 10000 });
-    const line = await combo.evaluate(el => {
-      el.classList.add('z-combobox-standard', 'z-combobox-invalid');
+    const line = () => combo.evaluate(el => {
       const cs = getComputedStyle(el, '::before');
-      return { top: cs.borderTopStyle, bottom: `${cs.borderBottomStyle} ${cs.borderBottomWidth}`, offset: cs.bottom };
+      return {
+        top: cs.borderTopStyle, bottom: `${cs.borderBottomStyle} ${cs.borderBottomWidth}`, offset: cs.bottom,
+        focusLine: getComputedStyle(el, '::after').display,
+      };
     });
-    expect(line).toEqual({ top: 'none', bottom: 'solid 1px', offset: '0px' });
+    await combo.evaluate(el => el.classList.add('z-combobox-standard', 'z-combobox-invalid'));
+    expect(await line()).toEqual({ top: 'none', bottom: 'double 3px', offset: '0px', focusLine: 'none' });
+    await combo.locator('input').focus();
+    expect(await line()).toEqual({ top: 'none', bottom: 'double 3px', offset: '0px', focusLine: 'none' });
+  });
+
+  test('a valid standard combobox keeps its single underline and focus line in forced colors', async ({ page }) => {
+    await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
+    const combo = page.locator('.z-combobox').first();
+    await combo.waitFor({ state: 'visible', timeout: 10000 });
+    await combo.evaluate(el => el.classList.add('z-combobox-standard'));
+    const line = await combo.evaluate(el => {
+      const cs = getComputedStyle(el, '::before');
+      return { bottom: `${cs.borderBottomStyle} ${cs.borderBottomWidth}`, focusLine: getComputedStyle(el, '::after').display };
+    });
+    expect(line).toEqual({ bottom: 'solid 1px', focusLine: 'block' });
   });
 
   // A real constraint failure puts z-combobox-invalid / z-bandbox-invalid on the <input>,

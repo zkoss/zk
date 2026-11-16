@@ -301,3 +301,21 @@ test('textbox — a z-textbox-error textbox in an inputgroup draws the error bor
   await input.focus();
   await expectBorder('focus');
 });
+
+// Outside a group the hover and focus rules of input.css (`.z-textbox:hover`, `.z-textbox:focus`) out-rank the sclass.
+for (const widget of ['textbox', 'intbox']) {
+  test(`${widget} — a z-textbox-error ${widget} outside an inputgroup draws the error border at rest, hover and focus`, { tag: '@ZK-6112' }, async ({ page }) => {
+    const input = page.locator(`.iig-textbox-error input.z-${widget}`);
+    const error = await errorColor(page);
+    const expectBorder = (state: string) =>
+      expect.poll(() => input.evaluate(el => getComputedStyle(el).borderTopColor), `${widget} at ${state}`).toBe(error);
+
+    await page.mouse.move(0, 0);
+    await expectBorder('rest');
+    await input.hover();
+    expect(await input.evaluate(el => el.matches(':hover')), 'the pointer is over the input').toBe(true);
+    await expectBorder('hover');
+    await input.focus();
+    await expectBorder('focus');
+  });
+}

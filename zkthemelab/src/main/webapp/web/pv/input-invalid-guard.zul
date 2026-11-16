@@ -3,7 +3,7 @@
      real constraint, the same inputs inside an inputgroup and as inplace inputs, a plain textbox,
      a read-only timebox, spinner, doublespinner, textbox and intbox, and a disabled and an inplace
      timebox, a standard combobox with a real constraint, and a textbox with the z-textbox-error sclass in an
-     inputgroup. The spec types, deletes and blurs, so ZK itself puts z-*-invalid on the <input>, which the
+     inputgroup and outside one. The spec types, deletes and blurs, so ZK itself puts z-*-invalid on the <input>, which the
      sclass-based preview pages cannot reproduce. Lives under pv/ so gallery-scan and
      forced-colors-gallery do not pick it up as a page. -->
 <zk>
@@ -19,6 +19,10 @@
     <inputgroup sclass="iig-group-decimalbox"><label value="A"/><decimalbox constraint="no empty"/></inputgroup>
     <inputgroup sclass="iig-group-combobox"><label value="A"/><combobox constraint="no empty"><comboitem label="Item 1"/></combobox></inputgroup>
     <inputgroup sclass="iig-group-textbox-error"><label value="A"/><textbox sclass="z-textbox-error"/></inputgroup>
+    <div sclass="iig-textbox-error">
+        <textbox sclass="z-textbox-error"/>
+        <intbox sclass="z-textbox-error"/>
+    </div>
     <inputgroup sclass="iig-group-combobox-error"><label value="A"/><combobox sclass="z-combobox-error"><comboitem label="Item 1"/></combobox></inputgroup>
     <div sclass="iig-inplace">
         <textbox sclass="iig-inplace-textbox" inplace="true" constraint="no empty"/>

@@ -175,6 +175,16 @@
         pointer-events: none;
     }
 
+    /* (1c-standard) The standard combobox has no box, so its error cue is a double underline on the same ::before. The
+       focus line (::after) would cover it with one solid bar; the (1b) outline is the focus signal here. */
+    .z-combobox.z-combobox-standard:is(.z-combobox-invalid, :has(> .z-combobox-invalid))::before {
+        border-bottom-style: double;
+        border-bottom-width: 3px;
+    }
+    .z-combobox.z-combobox-standard:is(.z-combobox-invalid, :has(> .z-combobox-invalid))::after {
+        display: none;
+    }
+
     /* (2a) Selected rows lose their primary-container tint → map to the system
        selection colors so the selection stays obvious. */
     .z-listitem.z-listitem-selected,

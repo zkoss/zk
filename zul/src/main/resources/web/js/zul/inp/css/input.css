@@ -126,6 +126,12 @@
     border-color: var(--zk-input-border-color-error);
 }
 
+/* `.z-textbox:hover` and `.z-textbox:focus` above out-rank `.z-textbox-error`, so repeat it at their specificity. */
+:is(.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox).z-textbox-error,
+:is(.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox).z-textbox-error:is(:hover, :focus, :focus-visible) {
+    border-color: var(--zk-input-border-color-error);
+}
+
 /* Textarea */
 textarea.z-textbox {
     vertical-align: middle;
