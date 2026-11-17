@@ -139,7 +139,8 @@ test.describe('native select', () => {
       const control = page.locator(select).first();
       await page.mouse.move(0, 0);
       const atRest = await style(control, 'box-shadow');
-      await control.focus();
+      await tabTo(page, control);
+      expect(await control.evaluate(el => el.matches(':focus-visible')), 'the keyboard focus is a focus-visible one').toBe(true);
       const primary = await resolve(page, 'color', 'var(--zk-color-primary)');
       expect(await style(control, 'border-top-color')).toBe(primary);
       expect(await style(control, 'border-top-width'), 'the border stays 1px, the ring grows inward').toBe('1px');
@@ -249,11 +250,12 @@ test.describe('combobox popup', () => {
   });
 });
 
-// Chosenbox: the remove button of a chip and the option that creates a new chip draw a hover shade. Both shades are
-// literal translucent blacks in the CSS, so the assertion is that the hover paints a visible shade over the transparent rest.
+// Chosenbox: the remove button of a chip and the option that creates a new chip draw the hover state layer, a translucent
+// --zk-color-on-surface at --zk-state-hover-opacity, over the transparent rest.
 // Fixture: web/pv/popup-item-states-guard.zul
 test.describe('chosenbox', () => {
-  const isVisibleShade = (color: string) => color !== 'rgba(0, 0, 0, 0)' && !/ 0\)$/.test(color);
+  const HOVER_LAYER = 'color-mix(in srgb, var(--zk-color-on-surface) calc(var(--zk-state-hover-opacity) * 100%), transparent)';
+  const TRANSPARENT = 'rgba(0, 0, 0, 0)';
 
   test.beforeEach(async ({ page }) => {
     await open(page, '/pv/popup-item-states-guard.zul');
@@ -264,10 +266,25 @@ test.describe('chosenbox', () => {
     const button = page.locator('.z-chosenbox-item .z-chosenbox-button').first();
     // za11y moves the shade from the button to a ::before circle (a 24px hit box with a 20px circle).
     const shade = () => button.evaluate(el => [getComputedStyle(el).backgroundColor, getComputedStyle(el, '::before').backgroundColor]);
-    expect((await shade()).some(isVisibleShade), 'no shade at rest').toBe(false);
+    const layer = await resolve(page, 'background-color', HOVER_LAYER);
+    expect(await shade(), 'no shade at rest').toEqual([TRANSPARENT, TRANSPARENT]);
     await button.hover();
     expect(await button.evaluate(el => el.matches(':hover'))).toBe(true);
-    expect((await shade()).some(isVisibleShade), 'a shade on hover').toBe(true);
+    expect(await shade(), 'the hover state layer').toContain(layer);
+  });
+
+  // The za11y sheet moves the shade to a ::before circle and clears the button's own, which hides chosenbox.css from the
+  // test above, so this one switches that sheet off.
+  test('chosenbox — without the za11y sheet the remove button itself carries the hover state layer', async ({ page }) => {
+    await page.evaluate(() => {
+      for (const sheet of Array.from(document.styleSheets))
+        if (sheet.href?.includes('/za11y/css/marble')) sheet.disabled = true;
+    });
+    const button = page.locator('.z-chosenbox-item .z-chosenbox-button').first();
+    expect(await style(button, 'background-color'), 'no shade at rest').toBe(TRANSPARENT);
+    await button.hover();
+    expect(await button.evaluate(el => el.matches(':hover'))).toBe(true);
+    expect(await style(button, 'background-color'), 'the hover state layer').toBe(await resolve(page, 'background-color', HOVER_LAYER));
   });
 
   test('chosenbox — hovering the option that creates a new item shades it', async ({ page }) => {
@@ -278,14 +295,14 @@ test.describe('chosenbox', () => {
     // ZK highlights the only option when the popup opens; without that class only the pointer can shade it.
     await creatable.evaluate(el => el.classList.remove('z-chosenbox-option-hover'));
     await page.mouse.move(0, 0);
-    expect(isVisibleShade(await style(creatable, 'background-color')), 'no shade before the pointer arrives').toBe(false);
+    expect(await style(creatable, 'background-color'), 'no shade before the pointer arrives').toBe(TRANSPARENT);
     await creatable.hover();
     expect(await creatable.evaluate(el => el.matches(':hover'))).toBe(true);
-    expect(isVisibleShade(await style(creatable, 'background-color')), 'a shade on hover').toBe(true);
+    expect(await style(creatable, 'background-color'), 'the hover state layer').toBe(await resolve(page, 'background-color', HOVER_LAYER));
   });
 });
 
-// A placeholder is drawn in the secondary text colour at full opacity, not the browser's faded grey.
+// A placeholder is drawn in the secondary text colour, not the browser's grey.
 // Fixture: web/pv/placeholder-guard.zul (the chosenbox is left out: ZK never renders a placeholder on its input)
 test.describe('placeholder', () => {
   const FIELDS = [
@@ -301,15 +318,14 @@ test.describe('placeholder', () => {
       const field = page.locator(input);
       expect(await field.evaluate(el => (el as HTMLInputElement).placeholder), 'the field has a placeholder').not.toBe('');
       expect(await style(field, 'color', '::placeholder')).toBe(await resolve(page, 'color', 'var(--zk-color-on-surface-variant)'));
-      expect(await style(field, 'opacity', '::placeholder')).toBe('1');
     });
   }
 });
 
 // A collapsed groupbox, in both molds and with a caption or a plain title. The default mold wears z-groupbox-collapsed, which
 // ignores an explicit height and rounds the header on all corners because the header is the whole frame; a 3d mold groupbox
-// has no collapsed class, ZK only hides its content. The content of a groupbox that starts closed is never rendered, so
-// the rule that hides it is reached by closing an open one.
+// has no collapsed class. In both molds ZK hides the content with an inline display:none, so the CSS controls the root
+// and the header only.
 // Fixture: web/pv/groupbox-collapsed-guard.zul
 test.describe('groupbox', () => {
   test.beforeEach(async ({ page }) => {
@@ -336,33 +352,40 @@ test.describe('groupbox', () => {
       await expect(box).not.toHaveClass(/z-groupbox-collapsed/);
       await expect(box.locator('.z-groupbox-content')).toHaveCount(0);
       expect(await height(box), 'the box is as tall as its header').toBe(await height(box.locator('.z-groupbox-header')));
-      expect(await style(box.locator('.z-groupbox-header'), 'border-bottom-left-radius'), '3d keeps a square header bottom').toBe('0px');
+      // Only the 3d rules give the header the container surface and the narrower inner padding.
+      const header = box.locator('.z-groupbox-header');
+      expect(await style(header, 'background-color'), '3d header surface').toBe(await resolve(page, 'background-color', 'var(--zk-color-surface-container-low)'));
+      expect(await style(header, 'padding-left'), '3d header padding').toBe(await resolve(page, 'padding-left', 'var(--zk-spacing-3)'));
+      expect(await style(header, 'border-bottom-left-radius'), '3d keeps a square header bottom').toBe('0px');
     });
   }
 
   for (const [mold, collapsedClass] of [['default', true], ['3d', false]] as const) {
-    test(`groupbox — closing an open ${mold} mold groupbox hides its content${collapsedClass ? ' and rounds the header' : ''}`, async ({ page }) => {
+    test(`groupbox — closing an open ${mold} mold groupbox hides its content${collapsedClass ? ', shrinks the box to its rounded header' : ''}`, async ({ page }) => {
       const box = page.locator(`.gc-toggle-${mold}`);
       const header = box.locator('.z-groupbox-header');
       const content = box.locator('.z-groupbox-content');
       const radius = await resolve(page, 'border-bottom-left-radius', 'var(--zk-groupbox-radius)');
-      expect(await style(content, 'display')).toBe('block');
       expect(await style(header, 'border-bottom-left-radius'), 'an open header has a square bottom').toBe('0px');
+      expect(await height(box), 'an open box is taller than its header').toBeGreaterThan(await height(header));
 
       await header.click();
       await expect(content).toBeHidden();
-      expect(await style(content, 'display')).toBe('none');
       if (collapsedClass) {
         await expect(box).toHaveClass(/z-groupbox-collapsed/);
+        expect(await height(box), 'the box is as tall as its header, despite the inline height').toBe(await height(header));
         expect(await style(header, 'border-bottom-left-radius')).toBe(radius);
+        expect(await style(header, 'border-bottom-width'), 'the header draws the line the root border would').toBe('2px');
       } else {
         await expect(box).not.toHaveClass(/z-groupbox-collapsed/);
+        expect(await style(header, 'border-bottom-left-radius'), '3d keeps a square header bottom').toBe('0px');
       }
 
       await header.click();
       await expect(content).toBeVisible();
       await expect(box).not.toHaveClass(/z-groupbox-collapsed/);
       expect(await style(header, 'border-bottom-left-radius')).toBe('0px');
+      expect(await style(header, 'border-bottom-width')).toBe('1px');
     });
   }
 
@@ -438,17 +461,32 @@ test.describe('daterangebox popup', () => {
     expect(await popup.evaluate(el => [el.getBoundingClientRect().width, el.getBoundingClientRect().height])).toEqual([500, 800]);
     expect(await style(page.locator('.z-daterangebox-popup-panels'), 'grid-template-columns').then(columns => columns.split(' ').length), 'one column').toBe(1);
     const footerBottom = await page.locator('.z-daterangebox-popup-footer').evaluate(el => el.getBoundingClientRect().bottom);
-    expect(808 - footerBottom, 'the footer sits at the bottom edge of the popup, inside its padding').toBeLessThan(40);
+    expect(800 - footerBottom, 'the footer sits at the bottom edge of the popup, inside its padding').toBeLessThan(40);
   });
 
   // The media rule says position: fixed; inset: 0, but the widget writes `position: absolute; top: 8px; left: 8px` into the
-  // popup's style attribute, which wins: the full-viewport popup sits 8px off the origin and overflows by 8px.
-  test.fixme('daterangebox — on a narrow viewport the popup sits at the viewport origin', async ({ page }) => {
+  // popup's style attribute; only `!important` on the two properties beats it.
+  test('daterangebox — on a narrow viewport the popup sits at the viewport origin', async ({ page }) => {
     await page.setViewportSize({ width: 500, height: 800 });
     await openPopup(page);
     const popup = page.locator('.z-daterangebox-popup');
     expect(await style(popup, 'position')).toBe('fixed');
     expect(await popup.evaluate(el => [el.getBoundingClientRect().left, el.getBoundingClientRect().top])).toEqual([0, 0]);
+    expect(await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.scrollHeight]), 'the page does not overflow').toEqual([500, 800]);
+  });
+
+  // calendar.css caps a calendar at 268px; in the single-column popup that left the calendar hugging the left edge.
+  test('daterangebox — on a narrow viewport the calendar fills the popup between the panel paddings', async ({ page }) => {
+    await page.setViewportSize({ width: 500, height: 800 });
+    await openPopup(page);
+    const { left, right, padding } = await page.evaluate(() => {
+      const popup = document.querySelector('.z-daterangebox-popup')!.getBoundingClientRect();
+      const calendar = document.querySelector('.z-daterangebox-popup .z-calendar')!.getBoundingClientRect();
+      const panelsPadding = parseFloat(getComputedStyle(document.querySelector('.z-daterangebox-popup-panels')!).paddingLeft);
+      return { left: calendar.left - popup.left, right: popup.right - calendar.right, padding: panelsPadding };
+    });
+    expect(left, 'the left gap is the panel padding').toBe(padding);
+    expect(right, 'the right gap is the panel padding').toBe(padding);
   });
 });
 
@@ -663,6 +701,7 @@ test.describe('goldenlayout', () => {
     const maximise = stack.locator('.lm_controls .lm_maximise');
     const iconAtRest = await style(maximise, '-webkit-mask-image', '::after');
     expect(await style(stack, 'position')).toBe('relative');
+    const rectAtRest = await stack.evaluate(el => el.getBoundingClientRect().toJSON());
 
     await maximise.click();
     await expect(stack).toHaveClass(/lm_maximised/);
@@ -670,6 +709,13 @@ test.describe('goldenlayout', () => {
     expect(await style(stack, 'z-index')).toBe('40');
     expect(await stack.evaluate(el => el.getBoundingClientRect().width)).toBeGreaterThan(await layout.evaluate(el => el.getBoundingClientRect().width) * 0.95);
     expect(await style(maximise, '-webkit-mask-image', '::after'), 'the restore glyph').not.toBe(iconAtRest);
+    // The library keeps the stack's slot with an empty placeholder; it must take no space beside the siblings.
+    expect(await style(layout.locator('.lm_maximise_place'), 'display'), 'the placeholder').toBe('none');
+
+    await maximise.click();
+    await expect(stack).not.toHaveClass(/lm_maximised/);
+    await expect(layout.locator('.lm_maximise_place')).toHaveCount(0);
+    expect(await stack.evaluate(el => el.getBoundingClientRect().toJSON()), 'restored to its rect').toEqual(rectAtRest);
   });
 });
 
