@@ -502,10 +502,7 @@ task prepareBin() {
 			includeEmptyDirs false
 			into "$buildDir/tmp/eebin/dist/lib/zkforge"
 			from("$rootDir/dist/lib") {
-				include "**/flashchart.jar"
 				include "**/gmapsz.jar"
-				include "**/timelinez.jar"
-				include "**/timeplotz.jar"
 				include "**/zuljsp.jar"
 			}
 		}
@@ -563,6 +560,7 @@ task prepareBin() {
 
 		// prepare ce
 		copy {
+			includeEmptyDirs false
 			into "$buildDir/tmp/cebin"
 			from("$buildDir/tmp/eebin") {
 				// lib/ext
@@ -576,8 +574,6 @@ task prepareBin() {
 				exclude "**/jcommon.jar"
 				// lib/zkforge
 				exclude "**/gmapsz.jar"
-				exclude "**/timelinez.jar"
-				exclude "**/timeplotz.jar"
 				exclude "**/zuljsp.jar"
 				// cml
 				exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/zkex*.jar", "**/zml*.jar", "**/stateless*.jar", "**/client-bind*.jar"
@@ -787,20 +783,22 @@ task zkpeBinTar(type: Tar) {
 	archiveFileName = "zkpe-bin-${project.version}.tar.gz"
 	destinationDirectory = file("$buildDir/bin/proprietary")
 	compression = Compression.GZIP
+	includeEmptyDirs false
 	from "$buildDir/tmp/eebin"
 	into "zkpe-bin-${project.version}"
 	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-	exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
+	exclude "**/gson.jar", "**/gmapsz.jar", "**/zuljsp.jar"
 }
 
 task zkpeBinZip(type: Zip) {
 	dependsOn(prepareCmlBin)
 	archiveFileName = "zkpe-bin-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin/proprietary")
+	includeEmptyDirs false
 	from "$buildDir/tmp/eebin"
 	into "zkpe-bin-${project.version}"
 	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-	exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
+	exclude "**/gson.jar", "**/gmapsz.jar", "**/zuljsp.jar"
 }
 
 
@@ -847,9 +845,10 @@ task zkpeBinEvalZip(type: Zip) {
 	dependsOn(prepareCmlBin)
 	archiveFileName = "zkpe-bin-eval-${project.version}.zip"
 	destinationDirectory = file("$buildDir/bin")
+	includeEmptyDirs false
 	from("$buildDir/tmp/eebin-eval") {
 		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-		exclude "**/gson.jar", "**/gmapsz.jar", "**/timeplotz.jar", "**/zuljsp.jar"
+		exclude "**/gson.jar", "**/gmapsz.jar", "**/zuljsp.jar"
 	}
 	into "zkpe-bin-eval-${project.version}"
 }
