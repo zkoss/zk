@@ -57,6 +57,10 @@ function zulPages(dir: string, prefix = ''): string[] {
 
 const pages = zulPages(WEB_DIR).sort();
 
+// The icon catalogues of ~2000 tiles: settling the DOM and the histogram outran the default 30 s test timeout under the
+// load of a full suite. brand-override.spec.ts treats icons-lucide the same way.
+const HEAVY_PAGES = new Set(['icons-lucide.zul', 'utility/icons.zul']);
+
 type Histogram = Record<string, number>;
 const captured: Record<string, Histogram> = {};
 
@@ -73,6 +77,7 @@ test.describe('font-size equivalence', () => {
 
   for (const p of pages) {
     test(p, async ({ page }) => {
+      if (HEAVY_PAGES.has(p)) test.slow();
       const resp = await page.goto(`/${p}`, { waitUntil: 'networkidle' });
       // The suite runs serial (the capture aggregates into one module-level object), so a
       // throw here would abort every page after it. While capturing, record the bad status
