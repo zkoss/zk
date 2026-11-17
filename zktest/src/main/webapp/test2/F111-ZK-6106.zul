@@ -108,7 +108,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 	</label>
 	<separator />
 	<label value="Visual parity reference — the Inputmask below must look identical to this Intbox / Textbox." />
-	<hbox spacing="8px" align="center">
+	<hlayout spacing="8px" valign="middle">
 		<label value="Textbox:" />
 		<textbox id="referenceTextbox" value="ref" />
 		<label value="Intbox:" />
@@ -117,9 +117,9 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 		<inputmask id="referenceInputmask" format="9999" />
 		<label value="Inputmask (rounded):" />
 		<inputmask id="roundedInputmask" format="9999" mold="rounded" />
-	</hbox>
+	</hlayout>
 	<label value="Inputgroup reference — the grouped Inputmask must look identical to the grouped Textbox." />
-	<hbox spacing="8px" align="center">
+	<hlayout spacing="8px" valign="middle">
 		<inputgroup>
 			<label value="+886" />
 			<textbox id="groupedTextbox" />
@@ -128,7 +128,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<label value="+886" />
 			<inputmask id="groupedInputmask" format="999-999-999" />
 		</inputgroup>
-	</hbox>
+	</hlayout>
 
 	<separator />
 	<grid hflex="min">
@@ -340,21 +340,21 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 				<label value="runtime setInstant(true) — commits without blur" />
 				<inputmask id="runtimeInstantMask" format="9999" instant="false"
 						onChange='runtimeInstantLog.setValue(runtimeInstantLog.getValue() + ":change:" + self.getValue())' />
-				<hbox>
+				<hlayout>
 					<button id="runtimeInstantBtn" label="setInstant(true)"
 							onClick='runtimeInstantMask.setInstant(true)' />
 					<label id="runtimeInstantLog" value="" />
-				</hbox>
+				</hlayout>
 			</row>
 			<row>
 				<label value="runtime setStrictFill(true) — revalidates the next blur" />
 				<inputmask id="runtimeStrictFillMask" format="9999" strictFill="false"
 						onChange='runtimeStrictFillLog.setValue("change:" + self.getValue())' />
-				<hbox>
+				<hlayout>
 					<button id="runtimeStrictFillBtn" label="setStrictFill(true)"
 							onClick='runtimeStrictFillMask.setStrictFill(true)' />
 					<label id="runtimeStrictFillLog" value="" />
-				</hbox>
+				</hlayout>
 			</row>
 			<row>
 				<label value="runtime setFormat(null) — reverts to plain textbox" />
@@ -366,12 +366,12 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 				<label value="runtime setFormat(null) keeps the value on both sides" />
 				<inputmask id="unmaskNullMask" format="99-99" value="1234"
 						onChange='unmaskNullLog.setValue("change:" + self.getValue())' />
-				<hbox>
+				<hlayout>
 					<button id="unmaskNullBtn" label="setFormat(null)"
 							onClick='unmaskNullMask.setFormat(null); unmaskNullValueLog.setValue("value:" + unmaskNullMask.getValue())' />
 					<label id="unmaskNullValueLog" value="" />
 					<label id="unmaskNullLog" value="" />
-				</hbox>
+				</hlayout>
 			</row>
 			<row>
 				<label value='constraint="no empty" + strictFill=false — partial fill behavior' />
@@ -403,7 +403,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<row>
 				<label value="optional section before a required slot" />
 				<inputmask id="optionalMidMask" format="9999" />
-				<hbox>
+				<hlayout>
 					<button id="optionalMidBtn" label='setFormat("+9[9][9] 999-9999")'>
 						<attribute name="onClick">
 							try {
@@ -415,7 +415,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 						</attribute>
 					</button>
 					<label id="optionalMidLog" value="" />
-				</hbox>
+				</hlayout>
 			</row>
 			<row>
 				<label value="readonly partial value" />
@@ -463,12 +463,12 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 				<label value="runtime setFormat drops a value the new grid rejects" />
 				<inputmask id="refitMask" format="aaa" value="abc"
 						onChange='refitLog.setValue("change:" + self.getValue())' />
-				<hbox>
+				<hlayout>
 					<button id="refitBtn" label='setFormat("999")'
 							onClick='refitMask.setFormat("999"); refitValueLog.setValue("value:" + refitMask.getValue())' />
 					<label id="refitValueLog" value="" />
 					<label id="refitLog" value="" />
-				</hbox>
+				</hlayout>
 			</row>
 			<row>
 				<label value="empty masks inside an onOK ancestor" />
@@ -489,18 +489,18 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			</row>
 			<row>
 				<label value='value="12" before strictFill="false" / readonly="true"' />
-				<hbox>
+				<hlayout>
 					<inputmask id="orderStrictMask" format="9999" value="12" strictFill="false" />
 					<inputmask id="orderReadonlyMask" format="9999" value="12" readonly="true" />
-				</hbox>
+				</hlayout>
 				<label />
 			</row>
 			<row>
 				<label value="server fill checks: isValid / readonly / constraint once / full-width filler" />
-				<hbox>
+				<hlayout>
 					<inputmask id="srvMask" format="9999" />
 					<inputmask id="srvFwMask" format="9999" placeholderChar="Ｘ" strictFill="false" />
-				</hbox>
+				</hlayout>
 				<vlayout>
 					<div>
 						<button id="srvIsValidBtn" label="isValid">
@@ -556,21 +556,21 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			</row>
 			<row>
 				<label value='client: setValue of bare slots / Alt+Backspace after typing' />
-				<hbox>
+				<hlayout>
 					<inputmask id="digitLiteralMask" format="+1 (999) 999-9999" />
 					<inputmask id="modBackspaceMask" format="9999" />
-				</hbox>
+				</hlayout>
 				<label />
 			</row>
 			<row>
 				<label value="client: blur over a letter literal / native Backspace / glyph swap / format removal" />
-				<hbox>
+				<hlayout>
 					<inputmask id="altLiteralMask" format="**[X**]" />
 					<inputmask id="androidBackspaceMask" format="9999" />
 					<inputmask id="phcUntouchedMask" format="9999" />
 					<inputmask id="fmtClearMask" format="99-99" />
 					<inputmask id="srvPushMask" format="9999-9999" />
-				</hbox>
+				</hlayout>
 				<label />
 			</row>
 			<row>
@@ -604,7 +604,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 			<row>
 				<label value='strictFill setValue("12")' />
 				<inputmask id="strictSetValueMask" format="9999" />
-				<hbox>
+				<hlayout>
 					<button id="strictSetValueBtn" label='setValue("12"); getValue()'>
 						<attribute name="onClick">
 							try {
@@ -617,7 +617,7 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 						</attribute>
 					</button>
 					<label id="strictSetValueLog" value="" />
-				</hbox>
+				</hlayout>
 			</row>
 			<row>
 				<label value="required literal after an optional section" />
@@ -655,12 +655,12 @@ Copyright (C) 2026 Potix Corporation. All Rights Reserved.
 				<label value="instant + strictFill — debounced commit refuses a partial fill" />
 				<inputmask id="instantStrictMask" format="9999" instant="true"
 						onChange='instantStrictLog.setValue(instantStrictLog.getValue() + "|" + self.getValue())' />
-				<hbox>
+				<hlayout>
 					<button id="instantStrictValueBtn" label="getRawValue()"
 							onClick='instantStrictValueLog.setValue("value:" + instantStrictMask.getRawValue())' />
 					<label id="instantStrictLog" value="" />
 					<label id="instantStrictValueLog" value="" />
-				</hbox>
+				</hlayout>
 			</row>
 			<row>
 				<label value="textbox with an authored aria-describedby" />
