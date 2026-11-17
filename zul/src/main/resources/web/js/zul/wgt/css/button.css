@@ -119,22 +119,22 @@
    warning SEED was darkened to #bd3f00 (5.42:1 on white) rather than given a
    separate tone, so --zk-color-warning-fill resolves to the same color and the
    solid variant is unchanged. */
-.z-button-secondary.z-button { background-color: var(--zk-color-secondary-fill); color: #fff; }
-.z-button-success.z-button   { background-color: var(--zk-color-success, #2e7d32); color: #fff; }
-.z-button-warning.z-button   { background-color: var(--zk-color-warning-fill); color: #fff; }
-.z-button-error.z-button     { background-color: var(--zk-color-error, #d32f2f); color: #fff; }
-.z-button-info.z-button      { background-color: var(--zk-color-status-info-fill); color: #fff; }
+.z-button-secondary.z-button { background-color: var(--zk-color-secondary-fill); color: var(--zk-color-on-secondary); }
+.z-button-success.z-button   { background-color: var(--zk-color-success, #2e7d32); color: var(--zk-color-on-success); }
+.z-button-warning.z-button   { background-color: var(--zk-color-warning-fill); color: var(--zk-color-on-warning); }
+.z-button-error.z-button     { background-color: var(--zk-color-error, #d32f2f); color: var(--zk-color-on-error); }
+.z-button-info.z-button      { background-color: var(--zk-color-status-info-fill); color: var(--zk-color-on-status); }
 .z-button-light.z-button     { background-color: var(--zk-color-light); color: var(--zk-color-on-light); border: 1px solid var(--zk-color-light-outline); }
 .z-button-dark.z-button      { background-color: var(--zk-color-dark); color: var(--zk-color-on-dark); }
 
 /* State layers for color variants — white overlay on colored backgrounds */
-.z-button-secondary.z-button::before,
-.z-button-success.z-button::before,
-.z-button-warning.z-button::before,
-.z-button-error.z-button::before,
-.z-button-info.z-button::before { background-color: #fff; }
+.z-button-secondary.z-button::before { background-color: var(--zk-color-on-secondary); }
+.z-button-success.z-button::before   { background-color: var(--zk-color-on-success); }
+.z-button-warning.z-button::before   { background-color: var(--zk-color-on-warning); }
+.z-button-error.z-button::before     { background-color: var(--zk-color-on-error); }
+.z-button-info.z-button::before { background-color: var(--zk-color-on-status); }
 .z-button-dark.z-button::before { background-color: var(--zk-color-on-dark); }
-.z-button-light.z-button::before { background-color: #000; }
+.z-button-light.z-button::before { background-color: var(--zk-color-on-light); }
 
 /* Disabled overrides for contained color variants (spec 0,3,0 > 0,2,0 variant rules) */
 .z-button-secondary.z-button[disabled],

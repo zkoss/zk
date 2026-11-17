@@ -6,10 +6,9 @@
  *                       --zk-color-<x>, chosen for legible contrast.
  * They pair up:  background: var(--zk-color-light);  color: var(--zk-color-on-light);
  *
- * Not every base needs an `on-` partner. Add one only when content sits on the
- * base AND its color isn't the universal white — e.g. light/dark need both
- * (dark text on light, white text on dark), whereas success/warning/error use
- * plain white text and share that implicit foreground.
+ * Every role color that content sits on has its own `on-` partner: primary,
+ * secondary, error, warning, success, light and dark. The status fills (e.g.
+ * info) share one partner, --zk-color-on-status.
  */
 :root {
     /* -----------------------------------------------------------------------

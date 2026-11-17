@@ -871,9 +871,6 @@ const labelledWidget = (page: Page, caption: string, widgetClass: string): Locat
     .locator(`xpath=ancestor::div[.//*[contains(concat(' ', normalize-space(@class), ' '), ' ${widgetClass} ')]][1]`)
     .locator(`.${widgetClass}`).first();
 
-/** Enabled, editable instance that is not in a state variant: the "Default" cell of a matrix row. */
-const PLAIN_WIDGET = ':not([class*="-disabled"]):not([class*="-readonly"]):not([class*="-invalid"]):not([class*="-inplace"])';
-
 /** The bottom sheet of ZK's touch molds: pinned to the viewport bottom, 10px in from both sides. */
 async function expectBottomSheet(page: Page, popup: Locator): Promise<void> {
   const viewport = page.viewportSize()!;
