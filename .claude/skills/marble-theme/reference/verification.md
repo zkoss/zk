@@ -38,6 +38,9 @@ Stop by pressing a key in the `appRun` terminal (closing stdin has the same effe
 `java.net.ConnectException: Connection refused`. Under `appRun` only the `statusPort` in
 `build/gretty_ports.properties` listens; the `servicePort` that `appStop` dials never opens. If you
 lose the terminal, kill the `org.akhikhl.gretty.Runner` process instead.
+When you stop it by pid, take the pid from `lsof -nP -iTCP:<port> -sTCP:LISTEN -t`. A plain
+`lsof -t -i:<port>` also lists every client connected to the port (a browser, a test runner), and
+killing those pids kills them too.
 
 **How to tell which theme is actually being served:** read the theme stylesheet href in the served
 HTML. Marble is zk's core theme, so the reset link carries **no theme segment** —
@@ -47,6 +50,8 @@ the theme prefix from that `reset.css` link.
 
 **After a CSS change,** rebuild (`./gradlew :zul:compileMarbleCss`, or the matching `zkcml` task for
 EE) and restart `appRun`. The two live-reload `<script>` tags some preview pages still carry are inert.
+`appRun` does not rebuild the `za11y` jar: after a change to a `za11y` stylesheet run `./gradlew :za11y:jar`
+in `zkcml` first, or the server keeps serving the old sheet.
 
 Do not rebuild jars on a running preview server. The zul and zkmax jars are shared; rebuilding them under a running server causes HTTP 500 or `NoClassDefFoundError`.
 
@@ -87,6 +92,8 @@ script adds `--config`). Edit and rebuild, then run `npm run baseline:compare --
 ## Running Playwright — flags that bite
 
 - Compare against the baselines with the repo config: `npx playwright test -c src/test/playwright/playwright.config.ts ...`. A temporary config must copy `snapshotDir` and `snapshotPathTemplate`; otherwise the run writes new PNGs and passes falsely. Playwright reports a missing snapshot as "writing actual"; that line means nothing was compared.
+- A missing snapshot is also written into `doc/screenshots` (the default `--update-snapshots=missing`), so a page that gained a section leaves new PNGs behind after a compare run. Pass `--update-snapshots=none` to compare without writing, or delete the files the run created.
+- The config falls back to port 8085 when `PREVIEW_URL` is unset. Set `PREVIEW_URL` on every command when your server listens elsewhere, or the run goes to whatever answers on 8085.
 - In Playwright 1.59 a bare `--update-snapshots` defaults to `changed`. Name the mode (`--update-snapshots=changed`).
 - `-g` matches the title path joined by spaces and starting with the Playwright project name (`project file describe title`, e.g. `chromium screenshot.spec.ts tabbox gallery`). Anchor the end with `describe title$`; anchoring the start with `^` requires the project name. Do not paste the `›` form that `--list` prints.
 - Rebuild the class index only with `node scripts/build-class-index.mjs`. The script starts and stops the server it needs by itself (client ROD off). On a default server the pop-up elements are not in the static DOM, so the whole index would miss the pop-up classes. Do not build it against a server you already have running.
@@ -313,7 +320,7 @@ rules as dead.
 - A never-applied rule is one of three things, and the list cannot tell which:
   a state or variant no test reaches, a class ZK no longer emits, or a selector that does not agree with the class ZK
   emits. Settle it from the widget source and the live DOM before acting — a rule on a class only an application's
-  `sclass` sets (the wrapper-level `-invalid` rules of the input components, for example) is live.
+  `sclass` sets (the colour variants of the button, for example) is live.
 - "Applied" means only that the rule matched an element during some test. It does not mean a test asserts its result;
   check that by removing the rule in the page and watching the test fail (see "Writing checks that can fail").
 - Chromium only. Expect a difference of one or two rules between runs, from states that depend on timing.
