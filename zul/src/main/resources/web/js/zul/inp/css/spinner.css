@@ -82,11 +82,6 @@
     border-color: var(--zk-color-error);
 }
 
-.z-spinner:has(.z-spinner-invalid):hover,
-.z-doublespinner:has(.z-doublespinner-invalid):hover {
-    border-color: var(--zk-color-error);
-}
-
 .z-spinner:has(.z-spinner-invalid):focus-within,
 .z-doublespinner:has(.z-doublespinner-invalid):focus-within {
     border-color: var(--zk-color-error);
@@ -96,11 +91,6 @@
 /* When sclass="z-spinner-invalid" is on the wrapper (server-side approach) */
 .z-spinner.z-spinner-invalid,
 .z-doublespinner.z-doublespinner-invalid {
-    border-color: var(--zk-color-error);
-}
-
-.z-spinner.z-spinner-invalid:hover,
-.z-doublespinner.z-doublespinner-invalid:hover {
     border-color: var(--zk-color-error);
 }
 

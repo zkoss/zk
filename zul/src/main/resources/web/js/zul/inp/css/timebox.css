@@ -89,10 +89,6 @@
     border-color: var(--zk-color-error);
 }
 
-.z-timebox:has(.z-timebox-invalid):hover {
-    border-color: var(--zk-color-error);
-}
-
 .z-timebox:has(.z-timebox-invalid):focus-within {
     border-color: var(--zk-color-error);
     box-shadow: inset 0 0 0 1px var(--zk-color-error);
@@ -100,10 +96,6 @@
 
 /* When sclass="z-timebox-invalid" is on the wrapper (server-side approach) */
 .z-timebox.z-timebox-invalid {
-    border-color: var(--zk-color-error);
-}
-
-.z-timebox.z-timebox-invalid:hover {
     border-color: var(--zk-color-error);
 }
 

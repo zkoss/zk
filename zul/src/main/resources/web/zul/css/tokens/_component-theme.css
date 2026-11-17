@@ -252,12 +252,11 @@
     --zk-tab-fg-hover:     var(--zk-color-on-surface);
     --zk-tab-accent:       var(--zk-color-primary);
 
-    /* ── Menu — menubar surface + dropdown popup + selected item ─────────── */
+    /* ── Menu — menubar surface + dropdown popup ─────────────────────────── */
     --zk-menubar-bg:             var(--zk-color-surface-container);
     --zk-menupopup-bg:           var(--zk-color-surface);
     --zk-menupopup-radius:       var(--zk-shape-menu);
     --zk-menupopup-border-color: var(--zk-color-outline-variant);
-    --zk-menuitem-selected-bg:   var(--zk-color-secondary-container);
 
     /* ── Badge (native, ZK-6097) — the indicator resolves these. ZK always stamps
        a severity class (default `info`), and the indicator is a CHILD of it, so a
@@ -571,7 +570,6 @@
        color variants). */
     --zk-messagebox-bg:           var(--zk-color-surface);
     --zk-messagebox-fg:           var(--zk-color-on-surface-variant);
-    --zk-messagebox-header-fg:    var(--zk-color-on-surface);
     --zk-messagebox-border-color: var(--zk-color-outline-variant);
     --zk-messagebox-radius:       var(--zk-shape-dialog);
     --zk-messagebox-elevation:    var(--zk-elevation-dialog);
@@ -1129,9 +1127,8 @@
        same "one knob, several roles" precedent as tab/calendar/coachmark's shared
        fill. --zk-confirmpopup-header-fg covers BOTH the root's own text color AND
        the optional header's title text (both read on-surface today); the message
-       body reads the muted on-surface-variant tone via its own --zk-confirmpopup-fg,
-       the same "header vs body" fg pairing precedent as messagebox's
-       -header-fg/-fg. --zk-confirmpopup-border-color covers the arrow's outer
+       body reads the muted on-surface-variant tone via its own --zk-confirmpopup-fg.
+       --zk-confirmpopup-border-color covers the arrow's outer
        ::before edge (all four placements) AND both dividers (header's
        border-bottom, footer's border-top) — the same "one knob, several dividers"
        precedent as toolbar/messagebox's shared border-color. Severity recolors

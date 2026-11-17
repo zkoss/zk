@@ -502,10 +502,6 @@
     opacity: var(--zk-state-hover-opacity);
 }
 
-.z-menupopup .z-menu-selected > .z-menu-content::before {
-    opacity: var(--zk-state-pressed-opacity);
-}
-
 .z-menupopup .z-menu-content[disabled] {
     opacity: var(--zk-state-disabled-opacity);
     cursor: not-allowed;

@@ -146,10 +146,6 @@
     border-color: var(--zk-color-error);
 }
 
-.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):not(.z-bandbox-inplace):hover {
-    border-color: var(--zk-color-error);
-}
-
 .z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):focus-within {
     border-color: var(--zk-color-error);
     box-shadow: inset 0 0 0 1px var(--zk-color-error);
