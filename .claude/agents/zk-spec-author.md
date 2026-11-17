@@ -49,7 +49,7 @@ Allowed content: tokens, colors, spacing values, MUI refs, baseline screenshots,
 
 **Refuse to emit into a contract:**
 - Any DOM tree (ASCII tree, class hierarchy)
-- Any state-class enumeration (e.g. "ZK adds `.z-button-disabled` when…")
+- Any state-class enumeration (e.g. "ZK adds `.z-checkbox-disabled` when…")
 - Any framework-quirk explanation
 
 If you catch yourself describing what ZK *does* in a contract — stop. It belongs in the skill.

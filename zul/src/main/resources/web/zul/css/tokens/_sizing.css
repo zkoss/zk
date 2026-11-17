@@ -35,7 +35,7 @@
     --zk-control-height-sm: 32px;   /* paging controls, window-close */
     --zk-control-height-md: 40px;   /* DEFAULT control: inputs, icon-button, menu items, list rows */
     --zk-control-height-lg: 48px;   /* chrome bars: toolbar, menubar, tabs, panel/groupbox header, notification */
-    --zk-control-height-xl: 56px;   /* prominent: window header, FAB */
+    --zk-control-height-xl: 56px;   /* prominent: window header */
 
     /* Window/panel header VERTICAL padding. These headers are tall enough that
        padding — not min-height — sets their height, so density must shrink the
@@ -81,8 +81,6 @@
     --zk-button-height-sm:       var(--zk-control-height-xs);
     --zk-button-height-lg:       calc(var(--zk-control-height-lg) - 4px);  /* off-ladder */
     --zk-icon-button-size:       var(--zk-control-height-md);
-    --zk-fab-size:               var(--zk-control-height-xl);
-    --zk-fab-size-sm:            var(--zk-control-height-md);
     --zk-toolbar-height:         var(--zk-control-height-lg);
     --zk-menubar-height:         var(--zk-control-height-lg);  /* bar + top-level item */
     --zk-menuitem-height:        calc(var(--zk-control-height-md) - 4px);  /* off-ladder: popup menu rows, denser than the bar */

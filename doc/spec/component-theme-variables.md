@@ -231,7 +231,7 @@ notification and toast state that their warning and error variants are unaffecte
 (CTV-7).
 
 **Affected.**
-- button: color, outlined, text, icon and FAB variants. The disabled treatment is also not
+- button: color, outlined, text and icon variants. The disabled treatment is also not
   knob-driven.
 - progressmeter: secondary, success, warning and error variants. Only the default bar responds to
   an override.

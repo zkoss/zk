@@ -33,3 +33,5 @@ Delta and status colors MUST be driven by *meaning* (good vs. bad), never by arr
 ## 6. Button emphasis footgun
 
 A bare `.z-button` defaults to **filled primary**. Secondary and tertiary actions MUST explicitly add `z-button-outlined` (or `z-button-text`) — otherwise every button reads as a primary CTA and the emphasis hierarchy collapses. A screen should carry one high-emphasis (filled) action; companions such as Cancel/Back sit lower.
+
+`z-button-light` and `z-button-dark` are neutral filled variants at the same emphasis level as the other filled variants: `z-button-light` takes `--zk-color-light`, `--zk-color-on-light` and a `--zk-color-light-outline` border, `z-button-dark` takes `--zk-color-dark` and `--zk-color-on-dark`.

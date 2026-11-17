@@ -98,38 +98,12 @@
     pointer-events: none;
 }
 
-/* Suppress hover border change when disabled or readonly */
-.z-textbox[disabled]:hover,
-.z-intbox[disabled]:hover,
-.z-decimalbox[disabled]:hover,
-.z-doublebox[disabled]:hover,
-.z-longbox[disabled]:hover,
-.z-textbox.z-textbox-disabled:hover,
-.z-intbox.z-intbox-disabled:hover,
-.z-decimalbox.z-decimalbox-disabled:hover,
-.z-doublebox.z-doublebox-disabled:hover,
-.z-longbox.z-longbox-disabled:hover {
-    border-color: var(--zk-color-outline-variant);
-}
-
 .z-textbox[readonly]:hover,
 .z-intbox[readonly]:hover,
 .z-decimalbox[readonly]:hover,
 .z-doublebox[readonly]:hover,
 .z-longbox[readonly]:hover {
     cursor: default;
-}
-
-/* Error state (sclass="z-textbox-error" applied by developer). ZK's own `.z-error` is the error message box
-   (zk.ts creates <div class="z-error">), never a field sclass, so no field rule uses it. */
-.z-textbox-error {
-    border-color: var(--zk-input-border-color-error);
-}
-
-/* `.z-textbox:hover` and `.z-textbox:focus` above out-rank `.z-textbox-error`, so repeat it at their specificity. */
-:is(.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox).z-textbox-error,
-:is(.z-textbox, .z-intbox, .z-decimalbox, .z-doublebox, .z-longbox).z-textbox-error:is(:hover, :focus, :focus-visible) {
-    border-color: var(--zk-input-border-color-error);
 }
 
 /* Textarea */

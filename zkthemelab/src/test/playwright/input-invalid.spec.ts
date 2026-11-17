@@ -1,8 +1,8 @@
 import { test, expect, Locator, Page } from '@playwright/test';
 
 // Guard for the invalid state of a real combobox and bandbox (combobox.css, bandbox.css). ZK puts
-// z-combobox-invalid / z-bandbox-invalid on the <input>, not on the wrapper that a preview page's
-// sclass reaches, so the constraint failure is driven the way a user does it: type, delete, blur.
+// z-combobox-invalid / z-bandbox-invalid on the <input>, so the constraint failure is driven the way a user does it:
+// type, delete, blur.
 // The same inputs inside an inputgroup, whose `border` shorthand repainted the error border, and as inplace
 // inputs, which are transparent at rest and on hover and show the error on focus.
 // Fixture: web/pv/input-invalid-guard.zul
@@ -54,6 +54,23 @@ test('an invalid combobox draws the error border on its root at rest, hover and 
   await expectBorders('hover');
   await page.locator('.iig-single .z-combobox-input').focus();
   await expectBorders('focus');
+});
+
+// An open combobox that has no focus (opened by the API, not by a click) is matched by `.z-combobox-open`, which would
+// paint the primary border over the error border on hover if the invalid hover rule did not outrank it: the invalid
+// hover rule wins on specificity (it names the invalid class and the :hover), not on source order.
+test('an invalid combobox that is open without focus keeps the error border on hover', async ({ page }) => {
+  await failConstraint(page, 'combobox');
+  const error = await errorColor(page);
+  const combobox = page.locator('.iig-single .z-combobox');
+
+  await page.mouse.move(0, 0);
+  await combobox.evaluate(el => zk.Widget.$(el).open());
+  await expect(combobox).toHaveClass(/z-combobox-open/);
+  expect(await combobox.evaluate(el => el.matches(':focus-within')), 'the open combobox has no focus').toBe(false);
+  await combobox.hover({ position: { x: 4, y: 4 }, force: true });
+  expect(await combobox.evaluate(el => el.matches(':hover')), 'the pointer is over the combobox').toBe(true);
+  await expect.poll(() => topBorderColor(page, '.iig-single .z-combobox'), 'root').toBe(error);
 });
 
 test('an invalid bandbox draws the error border on its wrapper at rest, hover and focus', async ({ page }) => {
@@ -171,18 +188,6 @@ for (const state of ['valid', 'invalid']) {
   });
 }
 
-// A combobox given the error variant by sclass (z-combobox-error) rather than by a failed constraint: the group's
-// focus rule must not paint its root grey.
-test('a focused z-combobox-error combobox in an inputgroup draws the error border on its root', async ({ page }) => {
-  const input = page.locator('.iig-group-combobox-error .z-combobox-input');
-  const root = page.locator('.iig-group-combobox-error .z-combobox');
-  const error = await errorColor(page);
-
-  await page.mouse.move(0, 0);
-  await input.focus();
-  await expect.poll(() => borderOf(root), 'root border').toEqual({ width: '1px', color: error });
-});
-
 // The border sits on the wrapper of a bandbox and a combobox and on the input of a textbox.
 const INPLACE_BORDERS: Record<string, string> = {
   textbox: '.iig-inplace-textbox',
@@ -258,40 +263,15 @@ for (const { widget, id, composite } of READONLY_FIELDS) {
   });
 }
 
-// The standard (underline-only) combobox draws no root outline, so its error colour belongs on the ::before rest and
-// hover line and on the ::after focus line; a failed constraint must not leave them neutral.
-test('combobox — an invalid standard combobox draws its underline in the error colour at rest, hover and focus', { tag: '@ZK-6112' }, async ({ page }) => {
-  const root = page.locator('.iig-standard .z-combobox');
-  const input = page.locator('.iig-standard .z-combobox-input');
-  const underline = (pseudo: '::before' | '::after') =>
-    root.evaluate((el, p) => getComputedStyle(el, p).borderBottomColor, pseudo);
-
-  // Never filled: the constraint fails only after a value was typed, cleared and left.
-  await input.click();
-  await page.keyboard.type('x');
-  await page.locator('body').click({ position: { x: 600, y: 700 } });
-  await input.click();
-  await page.keyboard.press('Backspace');
-  await page.locator('body').click({ position: { x: 600, y: 700 } });
-  await expect(input).toHaveClass(/z-combobox-invalid/);
-  const error = await errorColor(page);
-
-  await page.mouse.move(0, 0);
-  await expect.poll(() => underline('::before'), 'rest line').toBe(error);
-  await root.hover();
-  await expect.poll(() => underline('::before'), 'hover line').toBe(error);
-  await page.mouse.move(0, 0);
-  await input.focus();
-  await expect.poll(() => underline('::after'), 'focus line').toBe(error);
-});
-
-// ZK's `.z-error` is the error message box, never a field sclass; the developer's field sclass is z-textbox-error.
-// Inside an inputgroup the group's border rule must not repaint it in the group colour.
-test('textbox — a z-textbox-error textbox in an inputgroup draws the error border at rest, hover and focus', { tag: '@ZK-6112' }, async ({ page }) => {
-  const input = page.locator('.iig-group-textbox-error input.z-textbox');
+// An intbox outside an inputgroup: input.css's `.z-intbox:hover` and `.z-intbox:focus` rules must not repaint the error
+// border of a failed constraint, and the focused field keeps the 2px border of the focus rule. (The textbox and the grouped
+// widgets are covered by tests earlier in this file.)
+test('intbox — an invalid intbox draws the error border at rest, hover and focus', { tag: '@ZK-6112' }, async ({ page }) => {
+  const input = page.locator('.iig-plain input.z-intbox');
+  await failConstraintOf(page, input);
   const error = await errorColor(page);
   const expectBorder = (state: string) =>
-    expect.poll(() => input.evaluate(el => getComputedStyle(el).borderTopColor), `textbox at ${state}`).toBe(error);
+    expect.poll(() => topBorderColor(page, '.iig-plain input.z-intbox'), `intbox at ${state}`).toBe(error);
 
   await page.mouse.move(0, 0);
   await expectBorder('rest');
@@ -300,25 +280,8 @@ test('textbox — a z-textbox-error textbox in an inputgroup draws the error bor
   await expectBorder('hover');
   await input.focus();
   await expectBorder('focus');
+  expect(await input.evaluate(el => getComputedStyle(el).borderTopWidth), 'focus border width').toBe('2px');
 });
-
-// Outside a group the hover and focus rules of input.css (`.z-textbox:hover`, `.z-textbox:focus`) out-rank the sclass.
-for (const widget of ['textbox', 'intbox']) {
-  test(`${widget} — a z-textbox-error ${widget} outside an inputgroup draws the error border at rest, hover and focus`, { tag: '@ZK-6112' }, async ({ page }) => {
-    const input = page.locator(`.iig-textbox-error input.z-${widget}`);
-    const error = await errorColor(page);
-    const expectBorder = (state: string) =>
-      expect.poll(() => input.evaluate(el => getComputedStyle(el).borderTopColor), `${widget} at ${state}`).toBe(error);
-
-    await page.mouse.move(0, 0);
-    await expectBorder('rest');
-    await input.hover();
-    expect(await input.evaluate(el => el.matches(':hover')), 'the pointer is over the input').toBe(true);
-    await expectBorder('hover');
-    await input.focus();
-    await expectBorder('focus');
-  });
-}
 
 // A field that failed its constraint keeps the error border when the pointer is over it and when it has focus; the
 // focused field also draws the second ring pixel as an inset shadow in the error colour. The composite widgets carry
@@ -370,6 +333,60 @@ test.describe('invalid together with focus or hover', () => {
       await expect.poll(() => root.evaluate(inset, ringPseudo), `${widget} focus ring`).toContain(error);
     });
   }
+
+  // Opened by the API, the datebox has no focus, so `.z-datebox-open` (primary border) competes with the invalid hover
+  // rule; the error border must win, by specificity (the invalid hover rule names one more class or pseudo-class).
+  test('datebox — a field that failed its constraint and is open without focus keeps the error border on hover', async ({ page }) => {
+    await failField(page, 'datebox');
+    const root = page.locator('.z-datebox.iif-datebox');
+    const error = await errorColor(page);
+
+    await page.mouse.move(0, 0);
+    await root.evaluate(el => zk.Widget.$(el).setOpen(true));
+    await expect(root).toHaveClass(/z-datebox-open/);
+    expect(await root.evaluate(el => el.matches(':focus-within')), 'the open datebox has no focus').toBe(false);
+    await root.hover({ position: { x: 4, y: 4 }, force: true });
+    expect(await root.evaluate(el => el.matches(':hover')), 'the pointer is over the field').toBe(true);
+    await expect.poll(() => topBorderColor(page, '.z-datebox.iif-datebox'), 'datebox on hover').toBe(error);
+  });
+
+  // Only the border carries the invalid state; the typed value keeps the text colour of a valid field. The field holds a
+  // valid value when the error is set (setErrorMessage), so there is text to colour. The error box is hidden so that it
+  // cannot cover the input.
+  for (const widget of ['datebox', 'spinner', 'doublespinner']) {
+    test(`${widget} — a field that failed its constraint keeps the default text colour`, async ({ page }) => {
+      await page.addStyleTag({ content: '.z-errorbox{visibility:hidden}' });
+      const root = page.locator(`.z-${widget}.iif-${widget}`);
+      const input = root.locator('input');
+      const textColor = () => input.evaluate(el => getComputedStyle(el).color);
+
+      await input.fill(widget === 'datebox' ? '2026-01-15' : '3');
+      await page.locator('body').click({ position: { x: 900, y: 700 } });
+      const validColor = await textColor();
+      await root.evaluate(el => zk.Widget.$(el).setErrorMessage('Wrong'));
+      await expect(input).toHaveClass(new RegExp(`z-${widget}-invalid`));
+
+      expect(await textColor(), `${widget} text colour when invalid`).toBe(validColor);
+      expect(validColor, 'the valid text colour is not the error colour').not.toBe(await errorColor(page));
+    });
+  }
+
+  // `.z-timepicker-inplace:hover` would turn the border transparent on hover if the invalid hover rule did not outrank
+  // it: that rule wins on specificity (it also names the invalid class), and it comes earlier in the file. The error box
+  // is hidden so that it cannot sit under the pointer.
+  test('timepicker — an inplace field that failed its constraint keeps the error border on hover', async ({ page }) => {
+    await page.addStyleTag({ content: '.z-errorbox{visibility:hidden}' });
+    const root = page.locator('.z-timepicker.iif-timepicker-inplace');
+    const error = await errorColor(page);
+
+    await root.evaluate(el => zk.Widget.$(el).setErrorMessage('Wrong'));
+    await expect(root.locator('input')).toHaveClass(/z-timepicker-invalid/);
+    await page.mouse.move(0, 0);
+    await expect.poll(() => topBorderColor(page, '.z-timepicker.iif-timepicker-inplace'), 'timepicker at rest').toBe(error);
+    await root.hover({ position: { x: 4, y: 4 }, force: true });
+    expect(await root.evaluate(el => el.matches(':hover')), 'the pointer is over the field').toBe(true);
+    await expect.poll(() => topBorderColor(page, '.z-timepicker.iif-timepicker-inplace'), 'timepicker on hover').toBe(error);
+  });
 
   test('textbox — a textarea that failed its constraint draws the error border on focus and keeps its vertical padding', async ({ page }) => {
     const textarea = page.locator('textarea.iif-textarea');

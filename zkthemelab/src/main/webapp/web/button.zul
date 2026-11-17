@@ -80,6 +80,16 @@
             <div><button label="Button" sclass="z-button-info"/></div>
             <div><button label="Button" sclass="z-button-info" disabled="true"/></div>
         </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Light"/></div>
+            <div><button label="Button" sclass="z-button-light"/></div>
+            <div><button label="Button" sclass="z-button-light" disabled="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Dark"/></div>
+            <div><button label="Button" sclass="z-button-dark"/></div>
+            <div><button label="Button" sclass="z-button-dark" disabled="true"/></div>
+        </div>
         <div style="grid-column:1/-1" sclass="z-mt-3 z-mb-1"><label sclass="z-text-xs z-text-secondary" value="Outlined"/></div>
         <div sclass="z-d-contents">
             <div><label sclass="z-text-sm z-text-secondary" value="Secondary"/></div>

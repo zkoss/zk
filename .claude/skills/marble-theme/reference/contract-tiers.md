@@ -337,7 +337,7 @@ iceblue writes `.z-orgnode { position: relative; }` together with `.z-orgnode::a
 ### Content written into `doc/contracts/<comp>.md` must never contain:
 
 - Any DOM tree (ASCII tree, class hierarchy)
-- Any description of state-class behavior (such as "ZK adds `.z-button-disabled` when…")
+- Any description of state-class behavior (such as "ZK adds `.z-checkbox-disabled` when…")
 - Any framework-quirk description (DOM mutation, JS-injected attributes, etc.)
 - Any `source` field written as "mirrors iceblue", "matches legacy", "same as ZK iceblue", or similar **smuggling with no design reason**
 

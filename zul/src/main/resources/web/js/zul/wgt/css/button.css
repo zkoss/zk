@@ -59,12 +59,12 @@
 .z-button:active::before { opacity: var(--zk-button-active-opacity); }
 
 /* Contained/filled hover — MD3: state layer + elevation lift.
-   Scoped to filled variants only; flat (outlined/text/icon) & FAB variants excluded
-   so they stay flat or keep their own shadow. */
-.z-button:hover:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not([class*="z-button-fab"]):not([disabled]) {
+   Scoped to filled variants only; flat (outlined/text/icon) variants excluded
+   so they stay flat. */
+.z-button:hover:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not([disabled]) {
     box-shadow: var(--zk-elevation-2);
 }
-.z-button:hover:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not([class*="z-button-fab"]):not([disabled])::before {
+.z-button:hover:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not([disabled])::before {
     opacity: 0.12; /* small bump over the 0.08 global token; stays within the MD3 state-layer range */
 }
 
@@ -75,8 +75,7 @@
 
 
 /* ─── Disabled state ─────────────────────────────────────────────────── */
-.z-button[disabled],
-.z-button.z-button-disabled {
+.z-button[disabled] {
     background-color: var(--zk-color-disabled-container);
     color: var(--zk-color-disabled);
     border-color: transparent;
@@ -85,8 +84,7 @@
     pointer-events: none;
 }
 
-.z-button[disabled]::before,
-.z-button.z-button-disabled::before {
+.z-button[disabled]::before {
     display: none;
 }
 
@@ -109,14 +107,6 @@
    Single source of truth — do not add button variants in page CSS.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ─── Layout helper ──────────────────────────────────────────────────── */
-.z-button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-}
-
 /* ─── Contained — color variants ─────────────────────────────────────── */
 /* (default .z-button = primary filled; these add semantic color variants)
    secondary / warning / info fill from the L-capped `-fill` token, not the raw
@@ -134,16 +124,16 @@
 .z-button-warning.z-button   { background-color: var(--zk-color-warning-fill); color: #fff; }
 .z-button-error.z-button     { background-color: var(--zk-color-error, #d32f2f); color: #fff; }
 .z-button-info.z-button      { background-color: var(--zk-color-status-info-fill); color: #fff; }
-.z-button-light.z-button     { background-color: var(--zk-color-light, #f5f5f5); color: var(--zk-color-on-light, #333); border: 1px solid var(--zk-color-light-outline, #e0e0e0); }
-.z-button-dark.z-button      { background-color: var(--zk-color-dark, #212121); color: var(--zk-color-on-dark, #fff); }
+.z-button-light.z-button     { background-color: var(--zk-color-light); color: var(--zk-color-on-light); border: 1px solid var(--zk-color-light-outline); }
+.z-button-dark.z-button      { background-color: var(--zk-color-dark); color: var(--zk-color-on-dark); }
 
 /* State layers for color variants — white overlay on colored backgrounds */
 .z-button-secondary.z-button::before,
 .z-button-success.z-button::before,
 .z-button-warning.z-button::before,
 .z-button-error.z-button::before,
-.z-button-info.z-button::before,
-.z-button-dark.z-button::before { background-color: #fff; }
+.z-button-info.z-button::before { background-color: #fff; }
+.z-button-dark.z-button::before { background-color: var(--zk-color-on-dark); }
 .z-button-light.z-button::before { background-color: #000; }
 
 /* Disabled overrides for contained color variants (spec 0,3,0 > 0,2,0 variant rules) */
@@ -247,9 +237,6 @@
 .z-button-icon.z-button-sm.z-button { width: var(--zk-control-height-xs); height: var(--zk-control-height-xs); min-height: var(--zk-control-height-xs); padding: 0; font-size: 14px; }
 .z-button-icon.z-button-lg.z-button { width: var(--zk-control-height-lg); height: var(--zk-control-height-lg); min-height: var(--zk-control-height-lg); padding: 0; font-size: 24px; }
 
-/* FAB xs — smaller than sm (for size demonstration row) */
-.z-button-fab.z-button-xs.z-button { width: var(--zk-control-height-xs); height: var(--zk-control-height-xs); min-height: var(--zk-control-height-xs); font-size: 14px; }
-
 /* ─── Icon button ─────────────────────────────────────────────────────── */
 .z-button-icon.z-button {
     background-color: transparent;
@@ -273,34 +260,6 @@
 .z-button-icon.z-button-primary.z-button::before   { background-color: var(--zk-color-primary); }
 .z-button-icon.z-button-secondary.z-button::before { background-color: var(--zk-color-secondary); }
 .z-button-icon.z-button-error.z-button::before     { background-color: var(--zk-color-error, #d32f2f); }
-
-/* ─── FAB (Floating Action Button) ───────────────────────────────────── */
-.z-button-fab.z-button {
-    border-radius: 50%;
-    width: var(--zk-fab-size);
-    height: var(--zk-fab-size);
-    min-height: var(--zk-fab-size);
-    padding: 0;
-    font-size: 24px;
-    box-shadow:
-        0px 3px 5px -1px rgba(0,0,0,0.20),
-        0px 6px 10px 0px rgba(0,0,0,0.14),
-        0px 1px 18px 0px rgba(0,0,0,0.12);
-}
-.z-button-fab.z-button-sm.z-button { width: var(--zk-fab-size-sm); height: var(--zk-fab-size-sm); min-height: var(--zk-fab-size-sm); font-size: 20px; }
-
-/* FAB extended (wide, with label) */
-.z-button-fab-extended.z-button {
-    border-radius: 16px;
-    height: var(--zk-fab-size);
-    min-height: var(--zk-fab-size);
-    padding: 0 20px;
-    /* gap inherited from base .z-button (var(--zk-spacing-2) = 8px) */
-    box-shadow:
-        0px 3px 5px -1px rgba(0,0,0,0.20),
-        0px 6px 10px 0px rgba(0,0,0,0.14),
-        0px 1px 18px 0px rgba(0,0,0,0.12);
-}
 
 /* ─── Vertical orient — icon stacked above label ────────────────────────── */
 .z-button:has(br) {

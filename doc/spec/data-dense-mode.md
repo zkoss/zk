@@ -180,7 +180,7 @@ So components read the frozen `--zk-input-height` and the input never shrinks.
 
 This is exactly why an earlier `/usecase` demo that toggled density on `body` left the
 inputs full-size: everything reached *through* the alias layer (inputs, toolbars, tabs,
-headers, FAB) stayed frozen.
+headers) stayed frozen.
 
 ### Two correct fixes
 

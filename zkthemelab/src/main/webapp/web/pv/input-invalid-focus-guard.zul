@@ -3,7 +3,8 @@
      widget (datebox, timebox, spinner, doublespinner, timepicker, daterangebox) and a textarea, each with a
      constraint the spec fails the way a user does (type, delete, blur), so ZK itself marks the field invalid. A
      timebox cannot be typed empty or wrong, so its button fails it through Clients.wrongValue, the server call that
-     marks any field invalid.
+     marks any field invalid. An inplace timepicker has no typing path to the invalid state (it is dropdown-only), so the
+     spec marks it through setErrorMessage.
      Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it up as a page. -->
 <zk>
 <vlayout spacing="16px">
@@ -13,6 +14,7 @@
     <spinner sclass="iif-spinner" constraint="no empty"/>
     <doublespinner sclass="iif-doublespinner" constraint="no empty"/>
     <timepicker sclass="iif-timepicker" format="HH:mm" readonly="false" constraint="no empty"/>
+    <timepicker sclass="iif-timepicker-inplace" inplace="true" format="HH:mm"/>
     <daterangebox sclass="iif-daterangebox" format="yyyy-MM-dd"/>
     <textbox sclass="iif-textarea" rows="3" constraint="no empty"/>
 </vlayout>

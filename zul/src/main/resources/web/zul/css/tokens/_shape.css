@@ -7,7 +7,7 @@
     --zk-shape-corner-medium: 12px;        /* date/search popups (Marble cards use --zk-shape-card) */
     --zk-shape-corner-large: 16px;         /* drawers */
     --zk-shape-corner-extra-large: 28px;   /* bottom sheets */
-    --zk-shape-corner-full: 9999px;        /* pills, FAB */
+    --zk-shape-corner-full: 9999px;        /* pills */
 
     /* Semantic aliases used in ZK components */
     --zk-shape-button: var(--zk-shape-corner-extra-small);

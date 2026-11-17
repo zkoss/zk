@@ -1,4 +1,5 @@
 <zk xmlns:h="native">
+<apply templateURI="~./pv/errorbox-hidden.zul"/>
 <apply templateURI="~./pv/matrix.zul" title="States" colMin="max-content"
        cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
        rowsTemplate="combobox-rows">
@@ -8,7 +9,7 @@
             <div><combobox><comboitem label="Item 1"/><comboitem label="Item 2"/></combobox></div>
             <div><combobox disabled="true"><comboitem label="Item 1"/><comboitem label="Item 2"/></combobox></div>
             <div><combobox readonly="true"><comboitem label="Item 1"/><comboitem label="Item 2"/></combobox></div>
-            <div><combobox sclass="z-combobox-invalid"><comboitem label="Item 1"/><comboitem label="Item 2"/></combobox></div>
+            <div><combobox errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"><comboitem label="Item 1"/><comboitem label="Item 2"/></combobox></div>
             <div><combobox inplace="true" value="Item 1"><comboitem label="Item 1"/><comboitem label="Item 2"/></combobox></div>
         </div>
         <div sclass="z-d-contents">
@@ -16,7 +17,7 @@
             <div><combobox buttonVisible="false"><comboitem label="Item 1"/></combobox></div>
             <div><combobox buttonVisible="false" disabled="true"><comboitem label="Item 1"/></combobox></div>
             <div><combobox buttonVisible="false" readonly="true"><comboitem label="Item 1"/></combobox></div>
-            <div><combobox buttonVisible="false" sclass="z-combobox-invalid"><comboitem label="Item 1"/></combobox></div>
+            <div><combobox buttonVisible="false" errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"><comboitem label="Item 1"/></combobox></div>
             <div><combobox buttonVisible="false" inplace="true" value="Item 1"><comboitem label="Item 1"/></combobox></div>
         </div>
     </template>

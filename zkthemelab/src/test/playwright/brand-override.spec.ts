@@ -426,7 +426,7 @@ test.describe('brand-slate', () => {
       document.body.appendChild(probe);
       const seed = getComputedStyle(probe).backgroundColor;
       probe.remove();
-      const button = document.querySelector('.z-button:not(.z-button-disabled)') as HTMLElement;
+      const button = document.querySelector('.z-button:not([disabled])') as HTMLElement;
       return { seed, button: getComputedStyle(button).backgroundColor };
     });
     await settle(page);

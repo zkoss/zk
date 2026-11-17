@@ -23,8 +23,8 @@
  */
 :root {
     /* ── Button — filled base ────────────────────────────────────────────
-       The color VARIANTS (.z-button-secondary/-success/…, outlined, text, icon,
-       fab) keep their own colors via higher-specificity rules; these knobs drive
+       The color VARIANTS (.z-button-secondary/-success/…, outlined, text, icon)
+       keep their own colors via higher-specificity rules; these knobs drive
        the default filled button. State is an MD3 ::before overlay (a tint whose
        opacity animates), NOT a per-state background — so the knobs are an overlay
        color + per-state opacities, matching the real implementation. */
@@ -393,8 +393,8 @@
        number/title text; --zk-calendar-header-fg is the muted weekday-label
        + nav-icon (resting) text. --zk-calendar-accent / -accent-fg is a
        single defining-state pair — it colors the selected-day fill, that
-       day's own hover blend, the today ring, and the Today-link label (all
-       four read var(--zk-color-primary)/-on-primary today), the same "one
+       day's own hover blend, and the Today-link label (all
+       three read var(--zk-color-primary)/-on-primary today), the same "one
        knob, several roles" precedent as tab's --zk-tab-accent. Hover state
        layers (title/icon/day-cell hover tints, the Today-link hover tint)
        stay on base tokens, not knob-driven (same convention as menu's

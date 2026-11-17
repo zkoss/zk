@@ -212,16 +212,14 @@
     background-color: var(--zk-combobox-item-hover-bg);
 }
 
-.z-comboitem.z-comboitem-selected,
-.z-comboitem.z-selected {
+.z-comboitem.z-comboitem-selected {
     background-color: var(--zk-combobox-selected-bg);
     color: var(--zk-combobox-selected-fg);
 }
 
 /* The selected row recolors the li; keep the description a step lighter than the
    label while staying dark enough on the selected background. */
-.z-comboitem.z-comboitem-selected .z-comboitem-inner,
-.z-comboitem.z-selected .z-comboitem-inner {
+.z-comboitem.z-comboitem-selected .z-comboitem-inner {
     color: color-mix(in oklch, var(--zk-combobox-selected-fg) 85%, transparent);
 }
 
@@ -235,108 +233,19 @@
     border-color: var(--zk-color-outline-variant);
 }
 
-.z-combobox[disabled]:hover,
-.z-combobox.z-combobox-disabled:hover {
-    border-color: var(--zk-color-outline-variant);
-}
-
-.z-combobox[disabled] .z-combobox-input,
-.z-combobox.z-combobox-disabled .z-combobox-input {
-    cursor: not-allowed;
-}
-
-/* ─── Error variant ───────────────────────────────────────────────────────── */
-.z-combobox.z-combobox-error {
-    border-color: var(--zk-color-error);
-}
-
-.z-combobox.z-combobox-error:hover {
-    border-color: var(--zk-color-error);
-}
-
-.z-combobox.z-combobox-error:focus-within {
-    border-color: var(--zk-color-error);
-    box-shadow: inset 0 0 0 1px var(--zk-color-error);
-}
-
-.z-combobox.z-combobox-error .z-combobox-input {
-    color: var(--zk-color-error);
-}
-
-/* ─── Standard (underline-only) variant ──────────────────────────────────── */
-/* Standard variant: bottom border only, no box. Its root outline is removed after the state rules (see
-   "Standard: no outline" below). */
-.z-combobox.z-combobox-standard {
-    background-color: transparent;
-    min-height: 32px;
-    position: relative;
-}
-
-/* Static bottom line */
-.z-combobox.z-combobox-standard::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-bottom: 1px solid var(--zk-color-outline);
-    pointer-events: none;
-    transition: border-bottom-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
-}
-
-/* Animated focus indicator */
-.z-combobox.z-combobox-standard::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-bottom: 2px solid var(--zk-color-primary);
-    transform: scaleX(0);
-    transition: transform var(--zk-motion-duration-medium2) var(--zk-motion-easing-standard);
-    pointer-events: none;
-}
-
-.z-combobox.z-combobox-standard:focus-within::after {
-    transform: scaleX(1);
-}
-
-.z-combobox.z-combobox-standard:hover::before {
-    border-bottom-width: 2px;
-    border-bottom-color: var(--zk-color-on-surface);
-}
-
-.z-combobox.z-combobox-standard .z-combobox-input {
-    padding: 4px var(--zk-combobox-button-width) 5px 0;
-    min-height: 30px;
-}
-
-.z-combobox.z-combobox-standard .z-combobox-button {
-    border-radius: 0;
-    min-height: 30px;
-}
-
 /* ─── Invalid variant ─────────────────────────────────────────────────────── */
-/* ZK adds z-combobox-invalid to the <input> after a failed constraint; an sclass puts it on the wrapper. */
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)) {
+/* ZK adds z-combobox-invalid to the <input> after a failed constraint. */
+.z-combobox:has(> .z-combobox-invalid) {
     border-color: var(--zk-color-error);
 }
 
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):hover {
+.z-combobox:has(> .z-combobox-invalid):hover {
     border-color: var(--zk-color-error);
 }
 
-.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid)):focus-within {
+.z-combobox:has(> .z-combobox-invalid):focus-within {
     border-color: var(--zk-color-error);
     box-shadow: inset 0 0 0 1px var(--zk-color-error);
-}
-
-/* The standard variant draws no root outline (see "Standard: no outline"), so the error colour goes on its
-   ::before rest and hover line and on the ::after focus line instead. */
-.z-combobox.z-combobox-standard:is(.z-combobox-error, .z-combobox-invalid, :has(> .z-combobox-invalid))::before,
-.z-combobox.z-combobox-standard:is(.z-combobox-error, .z-combobox-invalid, :has(> .z-combobox-invalid)):hover::before,
-.z-combobox.z-combobox-standard:is(.z-combobox-error, .z-combobox-invalid, :has(> .z-combobox-invalid))::after {
-    border-bottom-color: var(--zk-color-error);
 }
 
 /* ─── Readonly variant ────────────────────────────────────────────────────── */
@@ -392,16 +301,6 @@
 
 .z-combobox-empty-search-message-hidden {
     display: none;
-}
-
-/* ─── Standard: no outline ────────────────────────────────────────────────── */
-/* Placed after every state rule that colours the root outline (hover, focus, open, error, invalid) so
-   none of them brings the box back: the standard variant draws only its ::before/::after lines. */
-.z-combobox.z-combobox-standard,
-.z-combobox.z-combobox-standard:is(:hover, :focus-within) {
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
 }
 
 /* ─── Button hidden (buttonVisible="false") ──────────────────────────── */

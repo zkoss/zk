@@ -61,15 +61,13 @@ const BOX_TIERS: Tier[] = [
       + '.z-combobox, .z-bandbox, .z-datebox, .z-timebox, .z-spinner, .z-doublespinner, .z-selectbox, '
       + '.z-searchbox, .z-chosenbox, .z-daterangebox, .z-cascader, .z-colorbox' },
   { name: 'button', alias: '--zk-button-height',
-    selector: '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon):not(.z-button-fab):not(.z-button-xs)' },
+    selector: '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon)' },
   { name: 'button-sm', alias: '--zk-button-height-sm',
-    selector: '.z-button-sm.z-button:not(.z-button-icon):not(.z-button-fab)' },
+    selector: '.z-button-sm.z-button:not(.z-button-icon)' },
   { name: 'button-lg', alias: '--zk-button-height-lg',
-    selector: '.z-button-lg.z-button:not(.z-button-icon):not(.z-button-fab)' },
+    selector: '.z-button-lg.z-button:not(.z-button-icon)' },
   { name: 'icon-button', alias: '--zk-icon-button-size',
     selector: '.z-button-icon.z-button:not(.z-button-sm):not(.z-button-lg)' },
-  { name: 'fab', alias: '--zk-fab-size',
-    selector: '.z-button-fab.z-button:not(.z-button-sm):not(.z-button-xs)' },
   { name: 'toolbar', alias: '--zk-toolbar-height', selector: '.z-toolbar:not(.z-toolbar-vertical):not(.z-toolbar-tabs)' },
   // A toolbar inside a tabbox gets the height of the tab strip as an inline style (Tabs.ts:430-437, tb.style.height =
   // tabs.offsetHeight): the tab alias plus the strip's 1px bottom border (tabbox.css .z-tabs).
@@ -352,24 +350,16 @@ test.describe('compact-height', () => {
   }
 });
 
-// button.zul renders one icon button (`sclass="z-button-icon"`, Sizes section). No preview page renders a FAB (`z-button-fab` appears in no .zul), so that tier
-// gets its control from the test: a plain button with the theme's class, in the button page.
-test.describe('compact-height-synthetic', () => {
-  test('button: the page icon button and an injected FAB are on their aliases', async ({ page }) => {
+// button.zul renders one icon button (`sclass="z-button-icon"`, Sizes section). The per-page test above would pass
+// without measuring it, so this one asserts that exactly that button is measured and sits on its alias.
+test.describe('compact-height-icon-button', () => {
+  test('button — the page icon button is measured and on its alias', async ({ page }) => {
     await page.goto('/button.zul', { waitUntil: 'networkidle' });
-    await page.evaluate(() => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'z-button z-button-fab';
-      button.innerHTML = '<i class="z-icon-settings" aria-hidden="true"></i>';
-      document.querySelector('.z-p-8')!.appendChild(button);
-    });
     const results = await measureBothDensities(page);
     for (const density of DENSITIES) {
       const { deviations, measured } = results[density];
       expect(measured['icon-button'], `${density}: the icon button of the page was measured`).toBe(1);
-      expect(measured['fab'], `${density}: the injected FAB was measured`).toBe(1);
-      const own = deviations.filter(d => d.tier === 'icon-button' || d.tier === 'fab');
+      const own = deviations.filter(d => d.tier === 'icon-button');
       expect(own.map(d => `${density} ${d.tier} ${d.element}: ${d.height}px, alias ${d.expected}px`)).toEqual([]);
     }
   });
@@ -485,7 +475,7 @@ test.describe('density-rung-override', () => {
       if (open) await open(page);
       return renderedHeight(page.locator(selector).first());
     };
-    const button = await measure('/button.zul', '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon):not(.z-button-fab)');
+    const button = await measure('/button.zul', '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon)');
     const menuitem = await measure('/menubar.zul', '.z-menupopup-open .z-menuitem', async p => {
       await p.locator('.z-menubar .z-menu-content').first().click();
       await p.locator('.z-menupopup-open .z-menuitem').first().waitFor();

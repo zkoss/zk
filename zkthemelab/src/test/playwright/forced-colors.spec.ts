@@ -97,9 +97,9 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     await page.waitForSelector('.z-listitem', { timeout: 10000 });
     await page.locator('.z-listitem').first().click();
     await page.waitForTimeout(200);
-    const sel = await page.locator('.z-listitem.z-selected, .z-listitem.z-listitem-selected').first()
+    const sel = await page.locator('.z-listitem.z-listitem-selected').first()
       .evaluate(el => ({ bg: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color }));
-    const unsel = await page.locator('.z-listitem:not(.z-selected):not(.z-listitem-selected)').first()
+    const unsel = await page.locator('.z-listitem:not(.z-listitem-selected)').first()
       .evaluate(el => getComputedStyle(el).backgroundColor).catch(() => null);
     // Selected fill must be a real (opaque-ish) color and must differ from an unselected row.
     expect(sel.bg).not.toBe('rgba(0, 0, 0, 0)');
@@ -209,7 +209,7 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     await page.waitForSelector('.z-listitem', { timeout: 10000 });
     await page.locator('.z-listitem').first().click();
     await page.waitForTimeout(200);
-    const check = await page.locator('.z-listitem.z-selected .z-icon-check, .z-listitem.z-listitem-selected .z-icon-check')
+    const check = await page.locator('.z-listitem.z-listitem-selected .z-icon-check')
       .first().evaluate(el => {
         const cs = getComputedStyle(el, '::before');
         return { fca: cs.forcedColorAdjust, bgImg: cs.backgroundImage };
@@ -650,61 +650,15 @@ test.describe('forced-colors (Windows High-Contrast) a11y guards', () => {
     expect([...new Set(opacities)], 'every toolbar glyph must be fully opaque').toEqual(['1']);
   });
 
+  // A real constraint failure puts z-combobox-invalid / z-bandbox-invalid on the <input>. Driven the way a user does it.
   // The combobox draws one outline on its root; the double border is that root's overlay, and neither the
   // input nor the button may draw a second box of their own.
-  test('invalid combobox is one double-bordered box (the root draws it, input and button have none)', async ({ page }) => {
-    await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
-    const combo = page.locator('.z-combobox.z-combobox-invalid:has(.z-combobox-input:not(.z-combobox-input-full)) ').first();
-    await combo.waitFor({ state: 'visible', timeout: 10000 });
-    const boxes = await combo.evaluate(el => {
-      const input = getComputedStyle(el.querySelector('.z-combobox-input')!);
-      const button = getComputedStyle(el.querySelector('.z-combobox-button')!);
-      const overlay = getComputedStyle(el, '::before');
-      return {
-        overlayTop: `${overlay.borderTopStyle} ${overlay.borderTopWidth}`,
-        inputTop: input.borderTopStyle, buttonTop: button.borderTopStyle,
-      };
-    });
-    expect(boxes).toEqual({ overlayTop: 'double 3px', inputTop: 'none', buttonTop: 'none' });
-  });
-
-  // The standard variant draws its underline with the root's ::before; the double-border overlay of an invalid
-  // combobox must not take that pseudo-element over and turn the underline into a box. Its error cue is the
-  // underline itself, doubled, and the focus line (::after) must not cover it with one solid bar.
-  test('an invalid standard combobox shows a double underline in forced colors, focused or not', async ({ page }) => {
-    await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
-    const combo = page.locator('.z-combobox').first();
-    await combo.waitFor({ state: 'visible', timeout: 10000 });
-    const line = () => combo.evaluate(el => {
-      const cs = getComputedStyle(el, '::before');
-      return {
-        top: cs.borderTopStyle, bottom: `${cs.borderBottomStyle} ${cs.borderBottomWidth}`, offset: cs.bottom,
-        focusLine: getComputedStyle(el, '::after').display,
-      };
-    });
-    await combo.evaluate(el => el.classList.add('z-combobox-standard', 'z-combobox-invalid'));
-    expect(await line()).toEqual({ top: 'none', bottom: 'double 3px', offset: '0px', focusLine: 'none' });
-    await combo.locator('input').focus();
-    expect(await line()).toEqual({ top: 'none', bottom: 'double 3px', offset: '0px', focusLine: 'none' });
-  });
-
-  test('a valid standard combobox keeps its single underline and focus line in forced colors', async ({ page }) => {
-    await page.goto('/pv/combobox-content.zul', { waitUntil: 'domcontentloaded' });
-    const combo = page.locator('.z-combobox').first();
-    await combo.waitFor({ state: 'visible', timeout: 10000 });
-    await combo.evaluate(el => el.classList.add('z-combobox-standard'));
-    const line = await combo.evaluate(el => {
-      const cs = getComputedStyle(el, '::before');
-      return { bottom: `${cs.borderBottomStyle} ${cs.borderBottomWidth}`, focusLine: getComputedStyle(el, '::after').display };
-    });
-    expect(line).toEqual({ bottom: 'solid 1px', focusLine: 'block' });
-  });
-
-  // A real constraint failure puts z-combobox-invalid / z-bandbox-invalid on the <input>,
-  // not on the wrapper that the sclass-based preview pages style. Driven the way a user does it.
   test('a real invalid combobox and bandbox show the double border (one box, seam open)', async ({ page }) => {
     await page.goto('/pv/input-invalid-guard.zul', { waitUntil: 'networkidle' });
-    for (const widget of ['combobox', 'bandbox']) {
+    // A field's errorbox opens at its right edge, over the field that follows it in the row. The combobox's errorbox
+    // covers the bandbox input once the server has answered, so the click on the bandbox raced that answer; the bandbox
+    // goes first, and its errorbox opens to the right of both fields.
+    for (const widget of ['bandbox', 'combobox']) {
       const input = page.locator(`.iig-single .z-${widget}-input`);
       await input.click();
       await page.keyboard.type('a');
