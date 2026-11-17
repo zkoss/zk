@@ -205,7 +205,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // A header-less window or title-less groupbox does not hide the header of a container nested in it (window.css, groupbox.css). See nested-header.spec.ts.
+      // The state of a window, groupbox or panel (header-less, no border, overlapped, modal, highlighted, 3d) does not restyle the header or content of a container nested in it (window.css, groupbox.css, panel.css). See nested-header.spec.ts.
       name: 'nested-header',
       testMatch: /nested-header\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },

@@ -83,7 +83,6 @@
 }
 
 /* Icons inside header (collapse/expand icon rendered by ZK in .z-icon-*) */
-.z-groupbox-header .z-groupbox-icon,
 .z-groupbox-header [class*="z-icon-"] {
     font-size: 16px;
     color: var(--zk-color-on-surface-variant);
@@ -93,7 +92,6 @@
     border-radius: var(--zk-shape-corner-full);
 }
 
-.z-groupbox-header .z-groupbox-icon:hover,
 .z-groupbox-header [class*="z-icon-"]:hover {
     background-color: var(--zk-groupbox-icon-hover-bg);
 }
@@ -119,10 +117,6 @@
     height: auto !important;
 }
 
-.z-groupbox-collapsed .z-groupbox-content {
-    display: none;
-}
-
 .z-groupbox-collapsed .z-groupbox-header {
     border-radius: var(--zk-groupbox-radius);
     /* The header is the whole frame here: its own bottom line plus the line that the
@@ -142,7 +136,7 @@
     padding: 0;
 }
 
-.z-groupbox-3d .z-groupbox-header {
+.z-groupbox-3d > .z-groupbox-header {
     min-height: calc(var(--zk-control-height-md) + 1px);
     padding: 0 var(--zk-spacing-3);
     background-color: var(--zk-color-surface-container-low);

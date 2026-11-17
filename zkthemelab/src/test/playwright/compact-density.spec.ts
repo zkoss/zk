@@ -79,9 +79,9 @@ const BOX_TIERS: Tier[] = [
     selector: '.z-tabbox-top > .z-tabs .z-tab, .z-tabbox-bottom > .z-tabs .z-tab' },
   // The groupbox header carries the frame's top line (groupbox.css draws the frame on the header and the content,
   // not on the root, B95-ZK-4505), so its box is the alias plus that 1px; the same holds for the 3D mold.
-  { name: 'groupbox-header', alias: '--zk-groupbox-header-height', extraHeight: 1, selector: '.z-groupbox:not(.z-groupbox-3d) .z-groupbox-header' },
-  // The 3D mold header is panel-like but denser: it binds the md rung (groupbox.css .z-groupbox-3d .z-groupbox-header), 40 / 32.
-  { name: 'groupbox-3d-header', alias: '--zk-control-height-md', extraHeight: 1, selector: '.z-groupbox-3d .z-groupbox-header' },
+  { name: 'groupbox-header', alias: '--zk-groupbox-header-height', extraHeight: 1, selector: '.z-groupbox:not(.z-groupbox-3d) > .z-groupbox-header' },
+  // The 3D mold header is panel-like but denser: it binds the md rung (groupbox.css .z-groupbox-3d > .z-groupbox-header), 40 / 32.
+  { name: 'groupbox-3d-header', alias: '--zk-control-height-md', extraHeight: 1, selector: '.z-groupbox-3d > .z-groupbox-header' },
   { name: 'paging-button', alias: '--zk-paging-control-size', selector: '.z-paging-button' },
 ];
 

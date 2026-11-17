@@ -1,12 +1,41 @@
 <?page title="Nested header guard" contentType="text/html;charset=UTF-8"?>
-<!-- Fixture for nested-header.spec.ts: a header-less window holding a titled window, and a
-     title-less groupbox holding a captioned groupbox. Lives under pv/ so gallery-scan,
-     forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<!-- Fixture for nested-header.spec.ts: for every rule that a state class on a window, groupbox or panel root applies
+     to one of its parts, an outer container in that state holding an inner container in the default state. The
+     header-less window and title-less groupbox hold a titled one; the others are titled themselves, the second
+     highlighted window by a caption holding a label. Lives under pv/ so gallery-scan, forced-colors-gallery and
+     font-size-equivalence do not pick it up as a page. -->
 <zk>
-<window id="outerWin" width="400px" border="normal">
-    <window id="innerWin" title="Inner title" width="300px" border="normal">inner</window>
+<window sclass="nh-noheader" width="400px" border="normal">
+    <window sclass="nh-inner" title="Inner title" width="300px" border="normal">inner</window>
 </window>
-<groupbox id="outerGb" width="400px">
-    <groupbox id="innerGb" width="300px"><caption label="Inner caption"/>inner</groupbox>
+<window sclass="nh-noborder-noheader" width="400px" border="none">
+    <window sclass="nh-inner" title="Inner title" width="300px" border="normal">inner</window>
+</window>
+<window sclass="nh-noborder" title="Outer, no border" width="400px" border="none">
+    <window sclass="nh-inner" title="Inner title" width="300px" border="normal">inner</window>
+</window>
+<window sclass="nh-overlapped" title="Outer, overlapped" mode="overlapped" position="left,top" width="400px">
+    <window sclass="nh-inner" title="Inner title" width="300px" border="normal">inner</window>
+</window>
+<window sclass="nh-modal" title="Outer, modal" mode="modal" position="right,bottom" width="400px">
+    <window sclass="nh-inner" title="Inner title" width="300px" border="normal">inner</window>
+</window>
+<window sclass="nh-highlighted" title="Outer, highlighted" mode="highlighted" position="right,top" width="400px">
+    <window sclass="nh-inner" title="Inner title" width="300px" border="normal">inner</window>
+</window>
+<window sclass="nh-highlighted-caption" mode="highlighted" position="left,bottom" width="400px">
+    <caption><label value="Outer caption label"/></caption>
+    <window sclass="nh-inner" width="300px" border="normal"><caption><label value="Inner caption label"/></caption>inner</window>
+</window>
+<groupbox sclass="nh-notitle" width="400px">
+    <groupbox sclass="nh-inner" width="300px"><caption label="Inner caption"/>inner</groupbox>
 </groupbox>
+<groupbox sclass="nh-3d" mold="3d" width="400px"><caption label="Outer, 3d"/>
+    <groupbox sclass="nh-inner" width="300px"><caption label="Inner caption"/>inner</groupbox>
+</groupbox>
+<panel sclass="nh-panel-noborder" title="Outer, no border" border="none" width="400px">
+    <panelchildren>
+        <panel sclass="nh-inner" title="Inner title" border="normal" width="300px"><panelchildren>inner</panelchildren></panel>
+    </panelchildren>
+</panel>
 </zk>

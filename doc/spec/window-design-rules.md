@@ -58,7 +58,7 @@ The base `.z-window` rule carries no `box-shadow`; the mode classes (`.z-window-
 > **A chrome-less window — `.z-window-noborder.z-window-noheader` — MUST render its content flush: `padding: 0` on `.z-window-content`.**
 
 ```css
-.z-window-noborder.z-window-noheader .z-window-content {
+.z-window-noborder.z-window-noheader > .z-window-content {
     padding: 0;
 }
 ```

@@ -161,7 +161,7 @@
     box-shadow: none;
 }
 
-.z-panel-noborder .z-panel-head {
+.z-panel-noborder > .z-panel-head {
     border-bottom: none;
 }
 
