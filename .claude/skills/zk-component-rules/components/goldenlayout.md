@@ -73,7 +73,7 @@ During drag, a `.z-goldenlayout-dragProxy` div is appended to the document root 
 - Splitter width (horizontal) and height (vertical) are controlled by `config.dimensions.borderWidth` (set to `8` in `bind_`). The CSS width/height of `.lm_splitter` does not need to be set — GoldenLayout sets it inline.
 - **GoldenLayout's bundled stylesheets (goldenlayout-base.css + a light/dark theme) are never loaded in ZK's integration.** The stock IceBlue goldenlayout stylesheet reproduces the ENTIRE goldenlayout-base.css verbatim at the top of the file — every theme must carry the structural subset or library features visibly break (same pattern as cropper/Jcrop). The must-have rules:
   - `.lm_maximised { position: absolute; top: 0; left: 0; z-index: 40 }` — without it, the maximised stack stays a flex/float item at partial width with siblings beside it. **Specificity trap:** if the theme also sets `position: relative` on `.lm_item.lm_stack` (0,3,0 with wrapper scope), the maximised rule needs ≥ that specificity (e.g. `.z-goldenlayout .lm_item.lm_stack.lm_maximised`).
-  - `.lm_maximise_placeholder { display: none }`
+  - `.lm_maximise_place { display: none }`
   - `.lm_dropTargetIndicator { display: none; position: absolute; z-index: 20 }` — otherwise it renders as a permanently visible in-flow element at rest (GL toggles display inline only during drag). In ZK the node carries both `lm_dropTargetIndicator` and `z-goldenlayout-dropTargetIndicator` classes.
   - `.lm_transition_indicator { display: none; ... }` — the node is appended to `<body>`, OUTSIDE `.z-goldenlayout`; the selector must be unscoped.
   - `.lm_dragProxy { position: absolute; top: 0; left: 0; z-index: 30 }` (ZK class: `z-goldenlayout-dragProxy`, also at `<body>`).
