@@ -170,7 +170,6 @@
 .z-combobutton[disabled] .z-combobutton-content {
     background-color: var(--zk-color-disabled-container);
     color: var(--zk-color-disabled);
-    cursor: not-allowed;
 }
 
 .z-combobutton[disabled] .z-combobutton-content::before {

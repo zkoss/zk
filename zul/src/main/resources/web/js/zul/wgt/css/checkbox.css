@@ -367,7 +367,6 @@
 .z-radio-disabled > input[type="radio"],
 .z-radio-disabled > .z-radio-content {
     opacity: var(--zk-state-disabled-opacity);
-    cursor: not-allowed;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
