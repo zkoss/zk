@@ -468,22 +468,21 @@ task prepareBin() {
 			into "$buildDir/tmp/eebin/dist/lib/ext"
 			from("$rootDir/dist/lib/ext") {
 				include "**/bsh.jar"
-				include "**/commons-collections4.jar"
 				include "**/commons-fileupload2-javax.jar"
 				include "**/commons-fileupload2-core.jar"
 				include "**/commons-io.jar"
-				include "**/commons-logging.jar"
 				include "**/encoder.jar"
+				include "**/failureaccess.jar"
 				include "**/Filters.jar"
 				include "**/gson.jar"
 				include "**/guava.jar"
 				include "**/httpcore5.jar"
+				include "**/jackson-annotations.jar"
+				include "**/jackson-core.jar"
 				include "**/jackson-databind.jar"
-				include "**/jasperreports.jar"
 				include "**/javassist.jar"
 				include "**/jcommon.jar"
 				include "**/jfreechart.jar"
-				include "**/openpdf.jar"
 				include "**/reflections.jar"
 				include "**/slf4j-api.jar"
 				include "**/zsoup.jar"
@@ -565,12 +564,9 @@ task prepareBin() {
 			into "$buildDir/tmp/cebin"
 			from("$buildDir/tmp/eebin") {
 				// lib/ext
-				exclude "**/commons-collections4.jar"
-				exclude "**/commons-logging.jar"
 				exclude "**/Filters.jar"
 				exclude "**/gson.jar"
-				exclude "**/openpdf.jar"
-				exclude "**/jasperreports.jar"
+				exclude "**/jackson-*.jar"
 				exclude "**/jfreechart.jar"
 				exclude "**/jcommon.jar"
 				// lib/zkforge
@@ -788,7 +784,7 @@ task zkpeBinTar(type: Tar) {
 	from "$buildDir/tmp/eebin"
 	into "zkpe-bin-${project.version}"
 	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-	exclude "**/gson.jar", "**/gmapsz.jar", "**/zuljsp.jar"
+	exclude "**/gson.jar", "**/jackson-*.jar", "**/gmapsz.jar", "**/zuljsp.jar"
 }
 
 task zkpeBinZip(type: Zip) {
@@ -799,7 +795,7 @@ task zkpeBinZip(type: Zip) {
 	from "$buildDir/tmp/eebin"
 	into "zkpe-bin-${project.version}"
 	exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-	exclude "**/gson.jar", "**/gmapsz.jar", "**/zuljsp.jar"
+	exclude "**/gson.jar", "**/jackson-*.jar", "**/gmapsz.jar", "**/zuljsp.jar"
 }
 
 
@@ -849,7 +845,7 @@ task zkpeBinEvalZip(type: Zip) {
 	includeEmptyDirs false
 	from("$buildDir/tmp/eebin-eval") {
 		exclude "**/za11y*.jar", "**/zkmax*.jar", "**/zuti*.jar", "**/stateless*.jar", "**/client-bind*.jar"
-		exclude "**/gson.jar", "**/gmapsz.jar", "**/zuljsp.jar"
+		exclude "**/gson.jar", "**/jackson-*.jar", "**/gmapsz.jar", "**/zuljsp.jar"
 	}
 	into "zkpe-bin-eval-${project.version}"
 }
