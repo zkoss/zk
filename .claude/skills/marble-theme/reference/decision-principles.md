@@ -114,6 +114,9 @@ rulings — `doc/spec/`. This file holds conclusions only.
 | Icons | Lucide masks; never text glyphs; header control buttons share one family (size, icon set, states) |
 | Forced colours | handled centrally in `_forced-colors.css`; restore only information-carrying affordances; every mask icon needs `CanvasText` |
 | Layout primitives (vlayout, hlayout, div, cell) | zero padding and margin; semantic containers (panel, groupbox, window) pad |
+| Field label | a separate component beside or above the field (input fields have no `label` attribute); no floating, in-border label |
+| Press and hover feedback | a `::before` state layer (`doc/spec/DESIGN.md` §8); no ink ripple |
+| Calendar header | ZK's arrow, title, arrow layout (`.claude/skills/zk-component-rules/components/calendar.md`) |
 | Layout the spec does not support (e.g. colspan under frozen columns) | document it, guard against layout shift, do not engineer support |
 | Public `--zk-*` token | keep the knob and change only its default; never change a knob's meaning (add a new token); no token that cannot work (e.g. breakpoints, since `@media` cannot read `var()`) |
 | Utility class names | follow `doc/spec/utility-naming.md` (Bootstrap vocabulary first; an accurate name beats a short one; one rule, one name) |

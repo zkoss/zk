@@ -1,7 +1,8 @@
 # image
 
-`Image` (`<image>`/`<img>`, `zul.wgt.Image`) — renders an image inside
-`<span class="z-image"><img…></span>`.
+`Image` (`<image>`/`<img>`, `zul.wgt.Image`) — renders a bare
+`<img class="z-image">` (`mold/image.js`); the widget's root node is the `<img>` itself
+(`Image.getImageNode()` returns `$n()`), so there is no wrapper element.
 
 ## No css-uri → must be globally bundled
 

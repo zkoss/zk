@@ -9,7 +9,7 @@ zk-version: 10.2.1-jakarta
 - Rule: `.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md`
 - MUI / Mira: MUI images use `extra-small` rounding for inline media.
 
-`Image` renders `<span class="z-image"><img…></span>`. It has **no `lang.xml` css-uri**, so
+`Image` renders a bare `<img class="z-image">` (`mold/image.js`), with no wrapper element, so the `.z-image` rules style the `<img>` itself. It has **no `lang.xml` css-uri**, so
 its CSS loads only via the global `norm.css.dsp` bundle (see `.claude/skills/zk-component-rules/reference/component-css-must-be-bundled-or-css-uri.md`).
 
 ## Expected values
