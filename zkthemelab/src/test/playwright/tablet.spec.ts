@@ -1431,3 +1431,22 @@ test.describe('tablet-trailing-button-width', () => {
     });
   }
 });
+
+// Guard for zkmax tablet/_calendar.css: its unlayered `.z-calendar { max-width: 360px }` beats the layered narrow-viewport
+// `max-width: none` of daterangebox.css, so on a tablet 500-575px wide the calendar left a gap on the right of its column.
+// Fixture: web/pv/daterangebox-popup-guard.zul
+test('daterangebox — on a narrow tablet viewport the calendar fills its column of the popup', { tag: '@ZK-6112' }, async ({ page }) => {
+  await page.setViewportSize({ width: 500, height: 800 });
+  await page.goto('/pv/daterangebox-popup-guard.zul', { waitUntil: 'networkidle' });
+  expect(await tabletCssLoaded(page)).toBe(true);
+  expect(await page.evaluate(() => window.matchMedia('(max-width: 575px)').matches), 'the narrow rules apply').toBe(true);
+  await page.locator('.z-daterangebox-button').click();
+  await expect(page.locator('.z-daterangebox-popup')).toBeVisible();
+
+  const panels = page.locator('.z-daterangebox-popup-panels');
+  const calendar = page.locator('.z-daterangebox-popup .z-calendar').first();
+  const columnRight = () => panels.evaluate(el => el.getBoundingClientRect().right - parseFloat(getComputedStyle(el).paddingRight));
+  const calendarRight = () => calendar.evaluate(el => el.getBoundingClientRect().right);
+  await expect.poll(async () => Math.abs((await columnRight()) - (await calendarRight())), 'gap between the calendar and its column')
+    .toBeLessThanOrEqual(1);
+});
