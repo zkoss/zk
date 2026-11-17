@@ -96,6 +96,7 @@ ZK 11.0.0
   ZK-6273: commons-io pinned to 2.17.0, below the 2.19.0 that commons-fileupload2 2.0.0-M4 depends on
   ZK-6241: cropper: Jcrop's touch detection sets inline on* attributes, causing CSP violations under strict-dynamic CSP
   ZK-6280: The Timeline, Timeplot and Flashchart add-ons in the binary distributions no longer work
+  ZK-6249: Upgrade 3rd party dependencies and list the CVEs
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
@@ -132,29 +133,55 @@ ZK 11.0.0
     must send the session cookie back; otherwise each action request reloads the page. Give the
     session cookie SameSite=None; Secure for a page in a cross-site iframe, and use sticky sessions
     or session replication in a cluster.
-  + Upgrade httpcore5 to 5.4.3 to fix vulnerabilities
-  + Upgrade jackson-databind to 2.22.1 to fix vulnerabilities
-  + Upgrade tomcat-jasper-el to 9.0.120 to fix vulnerabilities
-  + Upgrade guava to 33.7.2-jre to fix vulnerabilities
-  + Upgrade DOMPurify to 3.4.17 to fix vulnerabilities
-  + Upgrade moment.js to 2.31.0 to fix vulnerabilities
+  + Upgrade httpcore5 to 5.4.3 to fix CVE-2026-54399
+  + Upgrade jackson-databind to 2.22.4 to fix CVE-2026-19032, CVE-2026-54512, CVE-2026-54513, CVE-2026-54514,
+    CVE-2026-54515, CVE-2026-59888, CVE-2026-59889, CVE-2026-68497, CVE-2026-77310, CVE-2026-83557, CVE-2026-91776 and
+    CVE-2026-91777; the jackson-core 2.22.4 it depends on fixes CVE-2026-18401, CVE-2026-68494, CVE-2026-89407 and
+    CVE-2026-89425
+  + Upgrade tomcat-jasper-el (optional, in zkmax) to 9.0.120. The Tomcat CVEs that dependency checkers report against it
+    are in Tomcat's server components, which tomcat-jasper-el does not contain; none of the Apache Tomcat 9 advisories
+    fixed in 9.0.51 to 9.0.120 is in its EL code.
+  + Upgrade guava to 33.7.2-jre to fix CVE-2026-102554
+  + Upgrade DOMPurify to 3.4.17 to fix CVE-2025-15599, CVE-2026-0540, CVE-2026-41238, CVE-2026-41239, CVE-2026-41240,
+    CVE-2026-49458, CVE-2026-49459, CVE-2026-49978, CVE-2026-65898, CVE-2026-65899, CVE-2026-65900, CVE-2026-65901,
+    CVE-2026-65902, CVE-2026-65903, CVE-2026-65912, CVE-2026-65913, CVE-2026-65914, CVE-2026-66010, CVE-2026-75838,
+    CVE-2026-109345, CVE-2026-116802, CVE-2026-116803 and CVE-2026-116804
+  + Upgrade moment.js to 2.31.0 to fix CVE-2026-17495
+  + Upgrade spring-beans, spring-context and spring-web (optional, in zkplus) to 5.3.39 to fix CVE-2024-22262,
+    CVE-2024-38808 and CVE-2024-38809
   + Remove closure-compiler-unshaded (an optional dependency in zk, unused since ZK 10.0.0) from the POM and the binary distribution's lib/ext; declare it yourself if your application uses it.
   + Remove flashchart.jar (the ZK Forge Flashchart add-on) from lib/zkforge of the binary distributions: it needs Adobe
     Flash Player, which has been unsupported since 2021.
   + Remove timelinez.jar and timeplotz.jar (the ZK Forge Timeline and Timeplot add-ons) from lib/zkforge of the PE and EE
     binary distributions: they fail with NoClassDefFoundError since ZK 10.0.0.
+  + Remove jasperreports.jar (an optional dependency in zkex) and the openpdf.jar, commons-collections4.jar and
+    commons-logging.jar it depends on from lib/ext of the PE and EE binary distributions; add JasperReports and its
+    dependencies yourself if your application uses the Jasperreport component.
+  + Remove jackson-databind.jar from lib/ext of the CE and PE binary distributions, where no ZK module uses it; add it
+    yourself if your application uses it. The EE binary distribution keeps it for stateless and client-bind and now
+    also ships the jackson-core.jar and jackson-annotations.jar it needs.
+  + Add failureaccess.jar, which guava needs at runtime, to lib/ext of the binary distributions; without it, looking up
+    an application- or session-scoped event queue fails with NoClassDefFoundError.
   + Upgrade groovy (optional, for Groovy zscript) to 5.0.8. With 5.0.0-alpha-1, a Groovy zscript that uses JDK classes fails on JDK 22 or later with "Unsupported class file major version".
   + The following optional dependencies have known vulnerabilities that ZK 11.0.0 does not fix; review them if your
     application uses them:
-    - jasperreports 6.20.5 (in zkex, also in lib/ext of the EE binary distribution): CVE-2025-10492 is fixed only in
-      JasperReports 7.x, which needs ZK public API changes. If you do not use the Jasperreport component, remove
-      jasperreports.jar; otherwise see https://community.jaspersoft.com/knowledgebase/faq/update-details-about-the-java-vulnerability-r4897/.
-    - jackson-databind 2.14.1 and commons-beanutils 1.9.4, dependencies of jasperreports 6.20.5: upgrade them in your
-      application if you use jasperreports.
-    - spring-beans, spring-context and spring-web 5.3.33 (in zkplus): no open-source Spring 5.3.x release fixes them, and
-      Spring 6 needs jakarta.servlet; use a commercially supported Spring 5.3.x release if you have one.
-    - tomcat-jasper-el 9.0.120 (in zkmax): upgrade it to the latest 9.0.x in your application.
+    - jasperreports 6.20.5 (in zkex): CVE-2025-10492 and CVE-2026-6009 are fixed only in JasperReports 7.x, which needs
+      ZK public API changes. If you use the Jasperreport component, see
+      https://community.jaspersoft.com/knowledgebase/faq/update-details-about-the-java-vulnerability-r4897/.
+    - jackson-databind 2.14.1, jackson-core 2.14.1 and commons-beanutils 1.9.4, dependencies of jasperreports 6.20.5:
+      upgrade them in your application if you use jasperreports.
+    - zksandbox.war in the zk-sandbox zip bundles jasperreports 6.20.5 and the three dependencies above for its
+      Jasperreport demo.
+    - spring-beans, spring-context and spring-web 5.3.39 (in zkplus): no open-source Spring 5.3.x release fixes the rest,
+      and Spring 6 needs jakarta.servlet; use a commercially supported Spring 5.3.x release if you have one.
+    - tomcat-jasper-el 9.0.120 (in zkmax): the reported CVEs are in Apache Tomcat's server components, which
+      tomcat-jasper-el does not contain.
+    - ognl 3.1.28 (in zkmax): CVE-2026-113730 is fixed only in OGNL 3.4.x, whose accessor API ZK's OGNL evaluator does
+      not support yet.
     - jline 2.14.6, shaded in jython 2.7.4 (in zk): the reported CVEs are in JLine 3 modules that jline 2 does not contain.
+  + zsoup 1.8.2.5 (in zhtml), Potix's fork of jsoup 1.8.2, is in the affected range of jsoup's CVE-2021-37714 and
+    CVE-2022-36033. ZK uses it only to parse zhtml pages and never calls its Cleaner, so they matter only if your
+    application parses untrusted HTML with zsoup or as a zhtml page.
   + Some CSS variable names are changed for semantic correctness. The values are unchanged; override
     the new name. The LESS aliases in the ZK theme template's _zkvariables.less follow (@inputTextSize -> @inputFontSize):
         --zk-text-color-default3 -> --zk-text-color-inverse

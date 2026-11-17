@@ -27,11 +27,6 @@ Its 2.0b6 source release carries this NOTICE:
   Licensed under the Apache License, Version 2.0.
   Granted to the Apache Software Foundation 2012
 
->>> commons-collections4.jar  org.apache.commons:commons-collections4 4.4  (Apache-2.0)  in PE, EE
-
-Unmodified: identical to the published artifact.
-Its own licence files are inside the jar.
-
 >>> commons-fileupload2-core.jar  org.apache.commons:commons-fileupload2-core 2.0.0-M4  (Apache-2.0)  in CE, PE, EE
 
 Unmodified: identical to the published artifact.
@@ -47,12 +42,12 @@ Its own licence files are inside the jar.
 Unmodified: identical to the published artifact.
 Its own licence files are inside the jar.
 
->>> commons-logging.jar  commons-logging:commons-logging 1.1.1  (Apache-2.0)  in PE, EE
+>>> encoder.jar  org.owasp.encoder:encoder 1.3.1  (BSD-3-Clause)  in CE, PE, EE
 
-Unmodified classes; its MANIFEST and Maven metadata come from a different build than the published artifact.
+Unmodified: identical to the published artifact.
 Its own licence files are inside the jar.
 
->>> encoder.jar  org.owasp.encoder:encoder 1.3.1  (BSD-3-Clause)  in CE, PE, EE
+>>> failureaccess.jar  com.google.guava:failureaccess 1.0.3  (Apache-2.0)  in CE, PE, EE
 
 Unmodified: identical to the published artifact.
 Its own licence files are inside the jar.
@@ -77,16 +72,20 @@ Its own licence files are inside the jar.
 Unmodified: identical to the published artifact.
 Its own licence files are inside the jar.
 
->>> jackson-databind.jar  com.fasterxml.jackson.core:jackson-databind 2.22.1  (Apache-2.0)  in CE, PE, EE
+>>> jackson-annotations.jar  com.fasterxml.jackson.core:jackson-annotations 2.22  (Apache-2.0)  in EE
 
 Unmodified: identical to the published artifact.
 Its own licence files are inside the jar.
 
->>> jasperreports.jar  net.sf.jasperreports:jasperreports 6.20.5  (LGPL-3.0-or-later)  in PE, EE
+>>> jackson-core.jar  com.fasterxml.jackson.core:jackson-core 2.22.4  (Apache-2.0)  in EE
 
 Unmodified: identical to the published artifact.
 Its own licence files are inside the jar.
-Source code: https://github.com/TIBCOSoftware/jasperreports
+
+>>> jackson-databind.jar  com.fasterxml.jackson.core:jackson-databind 2.22.4  (Apache-2.0)  in EE
+
+Unmodified: identical to the published artifact.
+Its own licence files are inside the jar.
 
 >>> javassist.jar  org.javassist:javassist 3.29.2-GA  (Apache-2.0)  in CE, PE, EE
 
@@ -104,12 +103,6 @@ Source code: https://repo1.maven.org/maven2/org/jfree/jcommon/1.0.17/jcommon-1.0
 Unmodified: identical to the published artifact.
 The jar carries no licence file; the GNU Lesser General Public License 2.1 text is in its own section further down.
 Source code: https://github.com/jfree/jfreechart
-
->>> openpdf.jar  com.github.librepdf:openpdf 1.3.30.jaspersoft.2  (LGPL-2.1-or-later OR MPL-2.0)  in PE, EE
-
-Unmodified: identical to Jaspersoft's published build.
-Its own licence files are inside the jar.
-Source code: https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/com/github/librepdf/openpdf/1.3.30.jaspersoft.2/openpdf-1.3.30.jaspersoft.2-sources.jar
 
 >>> reflections.jar  org.reflections:reflections 0.10.2  (Apache-2.0)  in CE, PE, EE
 
