@@ -192,7 +192,7 @@ rejecting `.z-grid.z-sticky-header .z-grid-header`, where the class is a compone
 Finally, `_print.css` is not purely authorable — it also resets component chrome under
 `@media print`. Component class names reach the utility files that way, for example: `z-window`,
 `z-panel`, `z-panel-move-block`, `z-panel-resize-faker`, `z-window-resize-faker`, `z-groupbox`,
-`z-mask`, `z-modal-mask`, `z-error`, `z-grid-body`, `z-listbox-body`, `z-tree-body`,
+`z-modal-mask`, `z-error`, `z-grid-body`, `z-listbox-body`, `z-tree-body`,
 `z-loadingbar-position`, `z-toast-position-wrapper`. Those rules apply on their own and are not
 something an author writes in `sclass`. The generator resolves this by asking the component
 stylesheets which names they own and subtracting them, which needs no hand-maintained list and

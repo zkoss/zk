@@ -447,10 +447,10 @@ The same trap applies to any `<td>` that uses `colspan` (e.g. `.z-foot` footer c
 Group header (`.z-listgroup`) and group subtotal (`.z-listgroupfoot`) rows are TR elements with TDs inside. ZK renders cell content as:
 
 ```
-TR.z-listgroup > TD.z-listcell > DIV.z-listcell-cnt > DIV.z-listcell-content
+TR.z-listgroup > TD.z-listcell > DIV.z-listcell-content
 ```
 
-If you write `.z-listgroup .z-listcell-content { border-top; border-bottom }`, the border lands on the innermost DIV — every cell shows its own top+bottom lines, giving you 3 stacked lines across the row (since td/cnt/content all rendered separately). The intent is **one** divider per row, so put the border on the TR itself:
+If you write `.z-listgroup .z-listcell-content { border-top; border-bottom }`, the border lands on the innermost DIV — every cell shows its own top+bottom lines instead of one line across the row (since td and content are rendered separately). The intent is **one** divider per row, so put the border on the TR itself:
 
 ```css
 .z-listgroup    { border-bottom: 1px <divider color> }   /* divider after group header */

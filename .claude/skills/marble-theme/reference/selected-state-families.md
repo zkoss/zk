@@ -40,7 +40,7 @@ colour role changed.
 ### List-row family — `secondary-container`
 | Component | Selector | CSS file |
 |-----------|----------|----------|
-| Listbox row | `.z-listitem-selected`, `.z-selected` | `js/zul/sel/css/listbox.css` |
+| Listbox row | `.z-listitem-selected` | `js/zul/sel/css/listbox.css` |
 | Combobox dropdown option | `.z-comboitem-selected` | `js/zul/inp/css/combobox.css` |
 | Tree row | `.z-treerow-selected` | `js/zul/sel/css/tree.css` |
 | Menu item (active) | `.z-menuitem-content:active`, `.z-menuitem-over` | `js/zul/menu/css/menu.css` |

@@ -182,8 +182,7 @@
 
 /* Listbox selected state uses a semi-transparent rgba; replace with opaque
    color-mix inside frozen listboxes so inherited cell backgrounds are solid. */
-.z-listbox:has(.z-listbox-frozen) .z-listitem.z-listitem-selected,
-.z-listbox:has(.z-listbox-frozen) .z-listitem.z-selected {
+.z-listbox:has(.z-listbox-frozen) .z-listitem.z-listitem-selected {
     background-color: color-mix(in srgb, var(--zk-color-primary) 12%, var(--zk-color-surface));
 }
 

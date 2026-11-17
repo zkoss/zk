@@ -8,7 +8,6 @@ ZK's class naming is mostly predictable (`.z-{component}-{part}`) but several co
 |-----------|-----------------|--------------|
 | panel content area | `.z-panel-content` | `.z-panelchildren` |
 | grid cell content | `.z-cell-content` / `.z-cell-cnt` | `.z-row-content` (on the row, not the cell) |
-| listbox cell content | `.z-listcell-cnt` | `.z-listcell-content` |
 | tree cell content | `.z-treecell-cnt` | `.z-treecell-content` |
 | groupbox body | `.z-groupbox-body` | `.z-groupbox-content` |
 | rating star | `.z-rating-star` | `.z-rating-icon` |

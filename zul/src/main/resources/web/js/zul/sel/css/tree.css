@@ -195,20 +195,17 @@
 }
 
 /* Selected row — z-treerow-selected set by Treerow.domClass_ */
-.z-treerow.z-treerow-selected,
-.z-treerow.z-selected {
+.z-treerow.z-treerow-selected {
     background-color: var(--zk-tree-selected-bg);
 }
 
 /* Selected row text color via cell content */
-.z-treerow.z-treerow-selected .z-treecell-content,
-.z-treerow.z-selected .z-treecell-content {
+.z-treerow.z-treerow-selected .z-treecell-content {
     color: var(--zk-tree-selected-fg);
 }
 
 /* Selected + hover: slightly darker tint */
-.z-treerow.z-treerow-selected:hover,
-.z-treerow.z-selected:hover {
+.z-treerow.z-treerow-selected:hover {
     background-color: color-mix(in srgb, var(--zk-tree-selected-fg) 8%, var(--zk-tree-selected-bg));
 }
 
@@ -434,7 +431,6 @@
 
 /* Selected row: filled blue box with white checkmark */
 .z-treerow.z-treerow-selected .z-treerow-icon.z-icon-check::before,
-.z-treerow.z-selected .z-treerow-icon.z-icon-check::before,
 .z-treecol-checkable.z-treecol-checked .z-treecol-icon.z-icon-check::before {
     background-color: var(--zk-color-primary, #376fd0);
     border-color: var(--zk-color-primary, #376fd0);
@@ -462,8 +458,7 @@
 }
 
 /* Selected row: primary ring + filled centre dot */
-.z-treerow.z-treerow-selected .z-treerow-icon.z-icon-radio::before,
-.z-treerow.z-selected .z-treerow-icon.z-icon-radio::before {
+.z-treerow.z-treerow-selected .z-treerow-icon.z-icon-radio::before {
     border-color: var(--zk-color-primary, #376fd0);
     background-image: radial-gradient(circle at center, var(--zk-color-primary, #376fd0) 0 4px, transparent 4px);
     background-repeat: no-repeat;

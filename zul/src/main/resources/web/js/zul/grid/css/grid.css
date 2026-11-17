@@ -162,7 +162,6 @@
     }
 }
 
-.z-column .z-column-sort-icon,
 .z-column [class*="z-icon-"] {
     font-size: 14px;
     margin-left: var(--zk-spacing-1);
@@ -258,8 +257,7 @@
     pointer-events: none;
 }
 
-.z-grid-body table,
-.z-grid-inner {
+.z-grid-body table {
     border-collapse: collapse;
 }
 

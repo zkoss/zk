@@ -59,7 +59,7 @@
 
 | 行為 | 選擇器（摘要） | 為什麼 |
 |------|---------------|--------|
-| 隱藏浮層 chrome | `.z-modal-mask, .z-mask, .z-toast-position-wrapper, .z-loadingbar-position, .z-drawer, .z-window-resize-faker, .z-panel-move-block, .z-panel-resize-faker, .z-error` → `display:none` | modal 遮罩、拖拉 / 縮放 faker、toast、loading bar、drawer、浮動 error panel 都不該印在紙上 |
+| 隱藏浮層 chrome | `.z-modal-mask, .z-toast-position-wrapper, .z-loadingbar-position, .z-drawer, .z-window-resize-faker, .z-panel-move-block, .z-panel-resize-faker, .z-error` → `display:none` | modal 遮罩、拖拉 / 縮放 faker、toast、loading bar、drawer、浮動 error panel 都不該印在紙上 |
 | 解除 sticky header | `.z-{grid,listbox,tree}.z-sticky-header .z-*-header` → `position:static` | 讓長表格跨頁分頁，而非每頁都釘住表頭 |
 | 展開卷軸區 | `.z-grid-body, .z-listbox-body, .z-tree-body` → `overflow:visible; height:auto; max-height:none` | 讓完整資料集印出，而非只印螢幕上的卷軸視窗 |
 | 陰影 → 邊框 | `[class*="z-elevation-"], .z-window, .z-panel, .z-paper, .z-groupbox` → `box-shadow:none; border:1px solid var(--zk-color-outline-variant)` | 陰影在紙上不會呈現，改用 hairline 邊框保留表面邊界 |
@@ -68,7 +68,7 @@
 
 ```css
 @media print {
-    .z-modal-mask, .z-mask, .z-toast-position-wrapper,
+    .z-modal-mask, .z-toast-position-wrapper,
     .z-loadingbar-position, .z-drawer, .z-error { display: none; }
 
     .z-grid.z-sticky-header .z-grid-header,

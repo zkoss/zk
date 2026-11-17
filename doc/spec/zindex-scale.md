@@ -76,7 +76,7 @@
 | 元件（selector） | cosmetic 現值 | runtime 實際 |
 |------------------|--------------|-------------|
 | Drawer `.z-drawer` | 1200 | inline ≥ 1800 |
-| Window mask `.z-modal-mask` / `.z-mask` | 1400 | JS `new zk.eff.FullMask({zIndex})` 設定 |
+| Window mask `.z-modal-mask` | 1400 | JS `new zk.eff.FullMask({zIndex})` 設定 |
 | Popup / ConfirmPopup / Panel faker / Window faker | 1500 | inline ≥ 1800 |
 | Combobox / Menupopup / Bandbox / Errorbox / Toolbar / Colorbox / Chosenbox / Timepicker / Bandpopup | 1600 | inline ≥ 1800 |
 | Datebox / DaterangeBox 下拉 | 1700 | inline ≥ 1800 |

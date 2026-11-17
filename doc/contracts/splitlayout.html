@@ -160,11 +160,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
     cursor: col-resize;
 }
 
-/* No-drag state */
-.z-splitlayout-splitter-nosplitter {
-    cursor: default;
-}
-
 /* Collapse button — doc/spec/DESIGN.md "Splitter Family" actuator pill */
 .z-splitlayout-splitter-button {
     display: inline-flex;
@@ -360,7 +355,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0 0 var(--zk-spacing-2); }
                 <div class="z-splitlayout-cave-top split-demo-cave" style="height:50px">
                     <div class="pane-label">Pane top</div>
                 </div>
-                <div class="z-splitlayout-splitter z-splitlayout-splitter-vertical z-splitlayout-splitter-nosplitter">
+                <div class="z-splitlayout-splitter z-splitlayout-splitter-vertical">
                     <span class="z-splitlayout-splitter-button z-splitlayout-splitter-button-disabled">
                         <!-- no icons, no collapse -->
                     </span>

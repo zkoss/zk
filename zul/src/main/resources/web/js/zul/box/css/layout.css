@@ -13,7 +13,6 @@
     box-sizing: border-box;
 }
 
-.z-hlayout-cell,
 .z-hlayout-inner {
     display: inline-block;
     vertical-align: top;

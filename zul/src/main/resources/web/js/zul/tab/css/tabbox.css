@@ -48,8 +48,7 @@
 .z-tabbox-top,
 .z-tabbox-bottom,
 .z-tabbox-left,
-.z-tabbox-right,
-.z-tabbox-vertical {
+.z-tabbox-right {
     overflow: hidden;
 }
 
@@ -170,7 +169,6 @@
 }
 
 .z-tabbox-left > .z-tabs .z-tab-selected::after,
-.z-tabbox-vertical > .z-tabs .z-tab-selected::after,
 .z-tabbox-right > .z-tabs .z-tab-selected::after {
     content: '';
     position: absolute;
@@ -182,8 +180,7 @@
     pointer-events: none;
 }
 
-.z-tabbox-left > .z-tabs .z-tab-selected::after,
-.z-tabbox-vertical > .z-tabs .z-tab-selected::after {
+.z-tabbox-left > .z-tabs .z-tab-selected::after {
     right: 1px;
     border-radius: 3px 0 0 3px;
 }
@@ -354,10 +351,9 @@
 
 /* Directional edge anchors — buttons overlay the strip ends (c22b).
  * Up/down scroll buttons MUST follow the tabs' side: left for orient=left,
- * right for orient=right. Default `left: 0` covers .z-tabbox-left and
- * .z-tabbox-vertical (legacy alias for left); .z-tabbox-right overrides
- * to anchor right. Regression-prone — keep .z-tabbox-right override pair
- * in sync with .z-tabbox-left/.z-tabbox-vertical defaults. (c22j) */
+ * right for orient=right. Default `left: 0` covers .z-tabbox-left;
+ * .z-tabbox-right overrides to anchor right. Regression-prone — keep
+ * .z-tabbox-right override pair in sync with .z-tabbox-left defaults. (c22j) */
 .z-tabbox-left-scroll  { left: 0;   top: 0;    }
 .z-tabbox-right-scroll { right: 0;  top: 0;    }
 .z-tabbox-up-scroll    { left: 0;   top: 0;    width: 100%; }
@@ -484,9 +480,8 @@
     margin-bottom: 0;
 }
 
-/* orient="vertical" → z-tabbox-vertical; orient="left" → z-tabbox-left */
-.z-tabbox-left,
-.z-tabbox-vertical {
+/* orient="left" → z-tabbox-left */
+.z-tabbox-left {
     flex-direction: row;
 }
 
@@ -495,13 +490,11 @@
    would keep the stale height and never report a smaller one (B50-ZK-298); IceBlue floats
    the tabs so the panels always keep their content height. */
 .z-tabbox-left > .z-tabpanels,
-.z-tabbox-vertical > .z-tabpanels,
 .z-tabbox-right > .z-tabpanels {
     align-self: flex-start;
 }
 
-.z-tabbox-left .z-tabs,
-.z-tabbox-vertical .z-tabs {
+.z-tabbox-left .z-tabs {
     flex-direction: column;
     border-bottom: none;
     border-right: 1px solid var(--zk-tab-border-color);
@@ -510,13 +503,11 @@
     overflow: hidden;
 }
 
-.z-tabbox-left .z-tabs-content,
-.z-tabbox-vertical .z-tabs-content {
+.z-tabbox-left .z-tabs-content {
     flex-direction: column;
 }
 
-.z-tabbox-left .z-tab,
-.z-tabbox-vertical .z-tab {
+.z-tabbox-left .z-tab {
     padding-bottom: 0;
     padding-right: 2px;
     margin-bottom: 0;
@@ -524,8 +515,7 @@
     justify-content: flex-start;
 }
 
-.z-tabbox-left .z-tab.z-tab-selected,
-.z-tabbox-vertical .z-tab.z-tab-selected {
+.z-tabbox-left .z-tab.z-tab-selected {
     color: var(--zk-color-primary);
 }
 
@@ -534,13 +524,11 @@
    the auto margin pushes the × to the bar's trailing edge (c34a); the 8px
    inset comes from the closable padding-right rule above (c33). */
 .z-tabbox-left .z-tab-content,
-.z-tabbox-vertical .z-tab-content,
 .z-tabbox-right .z-tab-content {
     flex: 1 1 auto;
 }
 
 .z-tabbox-left .z-tab-button,
-.z-tabbox-vertical .z-tab-button,
 .z-tabbox-right .z-tab-button {
     margin-left: auto;
 }

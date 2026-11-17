@@ -112,8 +112,6 @@ A vertical-by-default timeline layout presenting items as a column of points con
 | pt13a | `.z-lineitem-point-inner` | align-items | `center` | structural — vertical centring of the icon glyph / content |
 | pt13c | `.z-lineitem-point-inner` | justify-content | `center` | structural — horizontal centring of the icon glyph / content |
 | pt13b | `.z-lineitem-point-inner` | font-size | `12px` | icon glyph fits within the 20px interior height without overflow |
-| pt14 | `.z-lineitem-point-image` | display | `inline-flex` | structural |
-| pt15 | `.z-lineitem-point-image` | vertical-align | `baseline` | structural |
 
 ## State matrix
 
