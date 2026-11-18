@@ -869,30 +869,6 @@ test.describe('button state layer', () => {
     await page.mouse.up();
   });
 
-  // .m-editor-toolbar-btn has its own hover rule and is not on the preview page: clone a filled button and add the class.
-  test('editor toolbar button — keeps 0.12 on hover, press and focus, unaffected by the filled 0.16 / 0.24', { tag: '@ZK-6112' }, async ({ page }) => {
-    await page.evaluate(() => {
-      const clone = document.querySelector('.z-button:not([disabled])')!.cloneNode(true) as HTMLElement;
-      clone.removeAttribute('id');
-      clone.classList.add('m-editor-toolbar-btn');
-      clone.style.cssText = 'position:fixed;top:80px;left:80px';
-      document.body.appendChild(clone);
-    });
-    const target = page.locator('.m-editor-toolbar-btn');
-    await target.hover();
-    expect(await target.evaluate(el => el.matches(':hover'))).toBe(true);
-    expect(await style(target, 'opacity', '::before'), 'hover').toBe('0.12');
-    await page.mouse.down();
-    expect(await style(target, 'opacity', '::before'), 'pressed').toBe('0.12');
-    await page.mouse.up();
-    await page.mouse.move(0, 0);
-    await target.evaluate(el => el.blur()); // the press gave it a pointer focus, which does not match :focus-visible
-    await tabTo(page, target);
-    expect(await style(target, 'opacity', '::before'), 'focus').toBe('0.12');
-    await target.hover();
-    expect(await style(target, 'opacity', '::before'), 'focus and hover').toBe('0.12');
-  });
-
   test('disabled filled button — has no state layer and ignores the pointer', { tag: '@ZK-6112' }, async ({ page }) => {
     const target = button(page, '', '[disabled]');
     expect(await style(target, 'pointer-events')).toBe('none');
@@ -992,5 +968,17 @@ test.describe('combobutton state layer', () => {
     await page.mouse.down();
     expect(await style(content, 'opacity', '::before'), 'pressed').toBe(await resolve(page, 'opacity', 'var(--zk-combobutton-active-opacity)'));
     await page.mouse.up();
+  });
+
+  test('combobutton toolbar mold — open: neither half gets the filled open 0.24', { tag: '@ZK-6112' }, async ({ page }) => {
+    await stopTransitions(page);
+    const root = page.locator('.z-combobutton-toolbar:not([disabled])').first();
+    await root.locator('.z-combobutton-button').click();
+    await expect(root).toHaveClass(/z-combobutton-open/);
+    await page.mouse.move(0, 0);
+    // The label half keeps the toolbar open layer (--zk-combobutton-active-opacity); the arrow half has none.
+    // Neither is the filled open 0.24.
+    expect(await style(root.locator('.z-combobutton-content'), 'opacity', '::before'), 'label layer').toBe(await resolve(page, 'opacity', 'var(--zk-combobutton-active-opacity)'));
+    expect(await style(root.locator('.z-combobutton-button'), 'opacity', '::before'), 'arrow layer').toBe('0');
   });
 });

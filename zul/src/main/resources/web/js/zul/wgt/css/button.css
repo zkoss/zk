@@ -70,11 +70,11 @@
 }
 /* Filled state layer is stronger than the global tokens: 16% on hover, 24% when pressed. The `:active`
    rule is the hover selector with `:hover` swapped for `:active`, and comes after it, so pressing wins
-   while the pointer is still over the button. .m-editor-toolbar-btn is excluded and sets its own 0.12 below. */
-.z-button:hover:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not(.m-editor-toolbar-btn):not([disabled])::before {
+   while the pointer is still over the button. */
+.z-button:hover:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not([disabled])::before {
     opacity: 0.16;
 }
-.z-button:active:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not(.m-editor-toolbar-btn):not([disabled])::before {
+.z-button:active:not([class*="z-button-outlined"]):not([class*="z-button-text"]):not(.z-button-icon):not([disabled])::before {
     opacity: 0.24;
 }
 
@@ -277,19 +277,4 @@
     line-height: 1;
 }
 .z-button:has(br) br { display: none; }
-
-/* ─── Editor toolbar button — minimal, borderless, for WYSIWYG toolbars ── */
-.m-editor-toolbar-btn.z-button {
-    background-color: transparent;
-    color: var(--zk-color-on-surface-variant, #49454f);
-    border: none;
-    border-radius: 4px;
-    padding: 4px 6px;
-    min-width: var(--zk-button-height-sm);
-    min-height: var(--zk-button-height-sm);
-    height: var(--zk-button-height-sm);
-    font-size: 14px;
-}
-.m-editor-toolbar-btn.z-button::before { background-color: var(--zk-color-on-surface); }
-.m-editor-toolbar-btn.z-button:hover::before { opacity: 0.12; } /* also the pressed strength: it keeps the 0.12 it always rendered */
 }
