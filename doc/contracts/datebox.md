@@ -55,6 +55,14 @@ composite input and reads as a thicker ring / layout shift. See
 
 Guarded by `screenshot.spec.ts › input focus (no layout shift) › datebox open state (icon click)`.
 
+An invalid field keeps the error colours while it is open:
+
+| id | selector | property | expected |
+|----|----------|----------|----------|
+| op3 | `.z-datebox.z-datebox-open:where(:not(.z-datebox-inplace)):has(.z-datebox-invalid)` | border-color / box-shadow | `--zk-color-error` and `inset 0 0 0 1px var(--zk-color-error)`, also when the field has no focus; an inplace field is excluded while it still carries the inplace class and stays transparent |
+
+Guarded by `input-invalid.spec.ts › datebox — a field that failed its constraint and is open without focus draws the error border and ring at rest and on hover`.
+
 ## States to evaluate
 - [ ] default, hover, focus, disabled, readonly, invalid, open
 - [ ] inplace (see `zk-component-rules reference/inplace-state.md`)

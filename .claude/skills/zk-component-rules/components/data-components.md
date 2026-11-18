@@ -17,7 +17,7 @@ Grid and listbox emit explicit `-odd` classes (`Grid.ts` and `Listbox.ts`, `getO
 - `.z-grid-odd` (applied to alternating `.z-row`)
 - `.z-listbox-odd` (applied to alternating `.z-listitem`)
 
-**Prefer the explicit class** over `:nth-child(odd)` for grid and listbox. With virtual scrolling and dynamic row insertion/removal, `:nth-child` selectors break (the DOM position changes but the row's logical position doesn't). The framework-emitted class survives re-renders.
+**Prefer the explicit class** over `:nth-child(odd)` for grid and listbox. With virtual scrolling and dynamic row insertion/removal, `:nth-child` selectors break (the DOM position changes but the row's logical position doesn't). The framework-emitted class survives re-renders. The class sits on the row itself, so a rule written as `.z-listbox-odd .z-listitem` (or the grid twin) can only reach rows of a listbox nested in an odd row, never the odd rows themselves (with the classes ZK emits).
 
 Tree rows are styled for alternation with `:nth-child` (Tree has no `getOddRowSclass`); check the result under virtual scrolling.
 

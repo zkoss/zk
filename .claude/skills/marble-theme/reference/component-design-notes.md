@@ -168,7 +168,7 @@ the 2px gap. The padding and the button width are `--zk-colorbox-padding` and `-
   which drew a lighter, thinner edge. Guarded by `zkthemelab/src/test/playwright/field-border-subpixel.spec.ts`.
   Focus, open and invalid focus keep the border at 1px and add an inset `box-shadow` of 1px in the state
   colour (`--zk-combobox-border-color-focus` for focus, `--zk-color-primary` for open, `--zk-color-error`
-  for invalid focus), so the second pixel does not shift the content.
+  for invalid focus and an invalid open field), so the second pixel does not shift the content.
   Which combo components hug their content (`field-sizing: content`) is a Marble decision, see
   `doc/spec/DESIGN.md`.
 - **`buttonVisible="false"`.** Marble draws the border of combobox, bandbox, datebox, timebox, spinner and
