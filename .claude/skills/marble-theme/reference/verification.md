@@ -95,7 +95,7 @@ before you edit CSS. First run the selector with the CSS paths you are about to 
 `zkthemelab/scripts/README-select-tests.md`; it accepts explicit paths). Then, on the unedited CSS,
 run `npm run baseline:capture -- <Playwright args>` with the args of the command it prints (the
 `npx playwright test -c src/test/playwright/playwright.config.ts` prefix is left out, because the
-script adds `--config`). Edit and rebuild, then run `npm run baseline:compare -- <same args>`. See
+script adds `--config`; the script drops `--update-snapshots=...` and sets its own). Edit and rebuild, then run `npm run baseline:compare -- <same args>`. See
 "Screenshot baselines" below.
 
 ## Running Playwright — flags that bite

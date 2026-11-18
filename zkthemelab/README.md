@@ -140,9 +140,8 @@ report, and a run that ran 0 tests fails too.
 
 **With no arguments this is the full suite.** Per "Which tests to run after a change" in
 `.claude/skills/marble-theme/reference/verification.md`, starting a full run is the Marble maintainer's call. When
-`select-tests.mjs` answers `partial`, run the command it prints (`--project ... -g ...`) directly, with `--update-snapshots=none`
-appended (the printed command does not carry it, and Playwright's default writes a missing PNG into `doc/screenshots`);
-do not go through this script. Spec file paths narrow both runs to those files; the script then prints that it is a PARTIAL run, first
+`select-tests.mjs` answers `partial`, run the command it prints (`--project ... -g ...`) directly; it carries
+`--update-snapshots=none`, so a missing screenshot baseline is not written. Do not go through this script. Spec file paths narrow both runs to those files; the script then prints that it is a PARTIAL run, first
 and last, because a partial run is not the full verification.
 
 It prints the totals per run and then four lists: new failures (the first 10 are rerun once, so a flaky test shows as

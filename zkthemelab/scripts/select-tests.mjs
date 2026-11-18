@@ -16,7 +16,8 @@ const SPEC_DIR = path.join(ZKTHEMELAB_DIR, 'src/test/playwright');
 const CLASS_INDEX_FILE = path.join(ZKTHEMELAB_DIR, 'doc/class-index.json');
 const AGGREGATE_PAGES_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'aggregate-pages.json');
 const PLAYWRIGHT_CONFIG = 'src/test/playwright/playwright.config.ts';
-const RUN_PREFIX = `npx playwright test -c ${PLAYWRIGHT_CONFIG}`;
+// --update-snapshots=none: running a printed command as-is must not write a missing PNG into doc/screenshots.
+const RUN_PREFIX = `npx playwright test -c ${PLAYWRIGHT_CONFIG} --update-snapshots=none`;
 
 // README-select-tests.md ("How a path is resolved"): selecting more than this share of all tests means a partial run no longer saves enough time.
 const FULL_RUN_TEST_FRACTION = 2 / 3;

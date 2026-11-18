@@ -36,11 +36,11 @@ Output: `mode`, `reasons`, `pages`, `uncovered`, `commands`, and the selected/to
 the object carries `selectedTests`, `totalTests` and `tests` (selected test count per Playwright project). Commands are meant to be run from `zkthemelab/`;
 set `PREVIEW_URL` when the preview server is not on 8085.
 
-A partial run is ONE command, `npx playwright test -c src/test/playwright/playwright.config.ts [--fully-parallel]
---project=<p> ... -g '<regex>'`: every needed project is repeated as `--project`, and a single `-g` regex is the
+A partial run is ONE command, `npx playwright test -c src/test/playwright/playwright.config.ts --update-snapshots=none
+[--fully-parallel] --project=<p> ... -g '<regex>'`: every needed project is repeated as `--project`, and a single `-g` regex is the
 alternation of anchored title paths (`^(?:<project> <file> <describe...> <title>|...)$`; a whole project or file is
 `<project> .*` / `<project> <file> .*`). The selector checks, against the `--list` inventory, that the regex selects
-exactly the intended tests. A full run is the bare `npx playwright test -c ...`.
+exactly the intended tests. A full run is the bare `npx playwright test -c ... --update-snapshots=none`. The flag keeps a run as printed from writing a missing PNG into `doc/screenshots`; `visual-baseline.sh` drops it and sets its own.
 
 `--fully-parallel` is added when no selected spec file is in `UNSAFE_PARALLEL_SPECS` (top of `select-tests.mjs`);
 `reasons` says which case applied. The constant is empty: an audit found no spec that depends on test order or shared state in the way the printed command runs it. Two specs are
