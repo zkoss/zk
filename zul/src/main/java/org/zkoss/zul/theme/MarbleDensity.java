@@ -97,12 +97,15 @@ public final class MarbleDensity {
 	 * Applies the density to a single component subtree by setting
 	 * {@code data-density} on that component's DOM element. Use this to make one
 	 * region (e.g. a data-dense grid panel) compact while the rest of the app stays
-	 * comfortable; it nests and can be overridden by a closer descendant.
+	 * comfortable; it nests and can be overridden by a closer descendant. The
+	 * component is re-rendered even when this is its first {@code data-density} value.
 	 *
 	 * @param scope   the component whose subtree should adopt the density.
 	 * @param density the density to apply; never {@code null}.
 	 */
 	public static void apply(Component scope, Density density) {
-		scope.setClientDataAttribute("density", density.token());
+		// ZK core invalidates only when replacing an old value, so the first value needs an explicit invalidate
+		if (scope.setClientDataAttribute("density", density.token()) == null)
+			scope.invalidate();
 	}
 }

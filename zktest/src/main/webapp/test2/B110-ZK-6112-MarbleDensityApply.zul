@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6112-MarbleDensityApply.zul
+
+	Purpose:
+
+	Description:
+
+	History:
+		Tue Nov 17 2026, Created for ZK-6112.
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		MarbleDensity.apply(Component, Density) reaches the DOM on the first call for an already rendered
+		component, not only from the second call on.
+	</label>
+	<div id="region">
+		<textbox/>
+	</div>
+	<button id="compact" label="compact"
+			onClick="org.zkoss.zul.theme.MarbleDensity.apply(region, org.zkoss.zul.theme.MarbleDensity.Density.COMPACT)"/>
+	<button id="comfortable" label="comfortable"
+			onClick="org.zkoss.zul.theme.MarbleDensity.apply(region, org.zkoss.zul.theme.MarbleDensity.Density.COMFORTABLE)"/>
+</zk>
