@@ -492,9 +492,6 @@ task prepareBin() {
 			from("$rootDir/dist/lib") {
 				include "**/iceblue_c.jar"
 				include "**/iceblue.jar"
-				include "**/breeze.jar"
-				include "**/sapphire.jar"
-				include "**/silvertail.jar"
 			}
 		}
 		// zkforge jars
