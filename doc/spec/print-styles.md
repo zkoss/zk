@@ -114,5 +114,6 @@ npx playwright test -c zkthemelab/src/test/playwright/playwright.config.ts --pro
 ## 5. 注意事項 / 限制
 
 - **凍結欄（`<frozen>`）以 JavaScript 定位**（`translateX` 隨 `scrollLeft`），非 CSS `position:sticky`，故無法單靠列印樣式完整展開 —— 橫向卷動的 grid 在紙上可能裁掉右側凍結區。寬報表建議用分頁 / 伺服器端匯出。
+- **ROD（`rod=true`）不支援，屬設計範圍外，不是 bug**：未載入的列只以 `-tpad` / `-bpad` 佔位元素撐出高度，CSS 無法把它們變成真實資料列；展開後只會印出整頁空白。需要完整列印請關閉 ROD 或改用伺服器端匯出。
 - **保留背景色**：本 reset 不做 ink-saving（不強制黑白 / 移除品牌底色）。若需省墨版本，屬另一個獨立決策，未實作。
 - `@page` 邊界、列印頁首 / 頁尾未納入本次範圍。
