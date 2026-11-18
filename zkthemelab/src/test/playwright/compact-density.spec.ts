@@ -350,15 +350,17 @@ test.describe('compact-height', () => {
   }
 });
 
-// button.zul renders one icon button (`sclass="z-button-icon"`, Sizes section). The per-page test above would pass
-// without measuring it, so this one asserts that exactly that button is measured and sits on its alias.
+// button.zul renders eight icon buttons of the default size (`sclass="z-button-icon"` plain, primary, secondary and error,
+// each enabled and disabled; Sizes and Icon button colors sections). The tier selector does not exclude disabled buttons.
+// The per-page test above would pass without measuring them, so this one asserts that exactly those buttons are measured
+// and sit on their alias.
 test.describe('compact-height-icon-button', () => {
-  test('button — the page icon button is measured and on its alias', async ({ page }) => {
+  test('button — the page icon buttons are measured and on their alias', async ({ page }) => {
     await page.goto('/button.zul', { waitUntil: 'networkidle' });
     const results = await measureBothDensities(page);
     for (const density of DENSITIES) {
       const { deviations, measured } = results[density];
-      expect(measured['icon-button'], `${density}: the icon button of the page was measured`).toBe(1);
+      expect(measured['icon-button'], `${density}: the icon buttons of the page were measured`).toBe(8);
       const own = deviations.filter(d => d.tier === 'icon-button');
       expect(own.map(d => `${density} ${d.tier} ${d.element}: ${d.height}px, alias ${d.expected}px`)).toEqual([]);
     }

@@ -219,8 +219,11 @@ Traced empirically (an earlier note wrongly said the server checks the UA):
 
 Consequences: a desktop UA leaves the link disabled — it is not even in `document.styleSheets`,
 so **tablet CSS can never leak to desktop by construction**. `zk.wcs` (~1.6 MB, the whole theme)
-sits at position 0 and `tablet.css.dsp` at position 1, so tablet rules win by source order with
-no `!important`; size variants such as `.z-button-sm.z-button` keep their size by specificity.
+sits at position 0 and `tablet.css.dsp` at position 1. The theme rules sit in `@layer zk-components`
+and the tablet rules are unlayered, so tablet rules win without `!important` whatever the specificity.
+Size variants therefore do not keep their size on a tablet: `.z-button`, `.z-button-sm` and `.z-button-lg`
+are all `--zk-touch-target-min` high, and every `.z-button-icon`, small and large included, is a
+`--zk-touch-target-min` square.
 Detect in-page with
 `[...document.styleSheets].some(s => s.href?.includes('zkmax/css/tablet.css'))`.
 

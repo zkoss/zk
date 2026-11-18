@@ -874,6 +874,51 @@ test.describe('button state layer', () => {
     expect(await style(target, 'pointer-events')).toBe('none');
     expect(await style(target, 'display', '::before'), 'the layer is not rendered').toBe('none');
   });
+
+  // Fixture: the "Icon button colors" and "Sizes" sections of the preview page button.
+  for (const { colour, token } of [
+    { colour: 'primary', token: 'var(--zk-color-primary)' },
+    { colour: 'secondary', token: 'var(--zk-color-secondary)' },
+    { colour: 'error', token: 'var(--zk-color-error)' },
+  ]) {
+    test(`icon button ${colour} — the label and the state layer take the ${colour} colour token`, { tag: '@ZK-6112' }, async ({ page }) => {
+      await stopTransitions(page);
+      const target = page.locator(`.z-button.z-button-icon.z-button-${colour}:not([disabled])`);
+      const expected = await resolve(page, 'color', token);
+      expect(await style(target, 'color'), 'label colour').toBe(expected);
+      expect(await style(target, 'background-color', '::before'), 'state layer colour').toBe(expected);
+    });
+  }
+
+  for (const { colour, sclass } of [
+    { colour: 'plain', sclass: '' },
+    { colour: 'primary', sclass: '.z-button-primary' },
+    { colour: 'secondary', sclass: '.z-button-secondary' },
+    { colour: 'error', sclass: '.z-button-error' },
+  ]) {
+    test(`icon button ${colour} — disabled takes the disabled colour and shows no state layer under the pointer`, { tag: '@ZK-6112' }, async ({ page }) => {
+      await stopTransitions(page);
+      const target = button(page, `.z-button-icon${sclass}`, '[disabled]');
+      const box = (await target.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      expect(await style(target, 'color'), 'glyph colour').toBe(await resolve(page, 'color', 'var(--zk-color-disabled)'));
+      expect(await style(target, 'background-color'), 'background').toBe('rgba(0, 0, 0, 0)');
+      expect(await style(target, 'opacity', '::before'), 'state layer under the pointer').toBe('0');
+      expect(await style(target, 'display', '::before'), 'the layer is not rendered').toBe('none');
+    });
+  }
+
+  for (const { size, token } of [
+    { size: 'sm', token: 'var(--zk-control-height-xs)' },
+    { size: 'lg', token: 'var(--zk-control-height-lg)' },
+  ]) {
+    test(`icon button ${size} — is a square of the ${size} control height`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const target = page.locator(`.z-button.z-button-icon.z-button-${size}:not([disabled])`);
+      const expected = await resolve(page, 'width', token);
+      expect(await style(target, 'width'), 'width').toBe(expected);
+      expect(await style(target, 'height'), 'height').toBe(expected);
+    });
+  }
 });
 
 // The filled Combobutton follows the filled Button: a darkening layer at 0.16 on hover and 0.24 pressed, under the label
