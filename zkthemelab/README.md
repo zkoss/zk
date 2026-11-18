@@ -120,3 +120,41 @@ This file is the page inventory only. For everything else, read the `marble-them
 
 Playwright specs live in `src/test/playwright/` and drive this app over the **direct**
 URL form; `doc/focus-ring-known-clips.json` is their tracked allow-list and `doc/focus-ring-outline-selectors.json` the focus-ring scan's selector list.
+
+## Verify Marble with one command
+
+```bash
+PREVIEW_URL=http://127.0.0.1:8085 node scripts/verify-playwright.mjs [--out <dir>] [spec file ...]
+```
+
+`scripts/verify-playwright.mjs` runs the fixed verification and reports only what is new. Run 1 is `chromium` and
+`compact` with the screenshots compared; run 2 is every other project in `playwright.config.ts` except
+`forced-colors-gallery`, with `--ignore-snapshots`. Both use `--update-snapshots=none`, so nothing is written to
+`doc/screenshots`. The script has no `-g`, no `--update-snapshots` and no project option, and refuses to run while
+`UPDATE_FONT_BASELINE`, `FOCUS_SCAN_UPDATE`, `POPUP_MAX_DIFF`, `POPUP_THRESHOLD` or `CSS_COVERAGE` is set (they rewrite
+baselines, loosen the comparison or write files). The JSON reports and the Playwright output go to `--out` (default
+`test-results/verify/`; not inside `doc` or `src`). `--report-only <dir>` compares the `run1.json` and `run2.json` of an
+earlier run without running anything; it takes no `--out`. The script fails (exit 1) instead of reporting OK when
+Playwright dies, a run is interrupted (Ctrl-C), a run leaves no report or the report holds errors; it never reads an old
+report, and a run that ran 0 tests fails too.
+
+**With no arguments this is the full suite.** Per "Which tests to run after a change" in
+`.claude/skills/marble-theme/reference/verification.md`, starting a full run is the Marble maintainer's call. When
+`select-tests.mjs` answers `partial`, run the command it prints (`--project ... -g ...`) directly, with `--update-snapshots=none`
+appended (the printed command does not carry it, and Playwright's default writes a missing PNG into `doc/screenshots`);
+do not go through this script. Spec file paths narrow both runs to those files; the script then prints that it is a PARTIAL run, first
+and last, because a partial run is not the full verification.
+
+It prints the totals per run and then four lists: new failures (the first 10 are rerun once, so a flaky test shows as
+`PASSED on rerun`), known failures that failed as expected, `expected` entries that passed, and `intermittent` entries
+that failed. The exit code is 0 only when there is no new failure.
+
+`src/test/playwright/known-failures.json` holds the failures that are accepted. An entry is matched on `project`, `file`
+and the full `title` (describe titles and test title joined with ` › `, as `npx playwright test --list` prints them),
+and has a `kind` and a `reason`:
+
+- `expected`: always fails for the stated reason. When it passes, the script says so; delete the entry.
+- `intermittent`: fails now and then. A failure is listed but does not fail the run.
+
+To add an entry, copy the project, file and title from the `NEW failures` line. Do it only for a failure the maintainer
+has accepted, and give the reason.

@@ -80,6 +80,15 @@ prints against your local preview server. When it answers `full`, do not start a
 own: report the selector's reasons and let the Marble maintainer decide when the full suite runs. The suite
 runs locally only; it is not wired to CI or Jenkins.
 
+When the maintainer asks for the full suite, run `PREVIEW_URL=<url> node scripts/verify-playwright.mjs`
+from `zkthemelab/` instead of assembling the Playwright commands by hand. It runs the two fixed runs
+(`chromium` and `compact` with screenshots compared; every other project except
+`forced-colors-gallery` with `--ignore-snapshots`), never writes a baseline, and prints only the
+failures that are not in `src/test/playwright/known-failures.json`. Exit code 0 means no new
+failure; a new failure is rerun once, up to the script's rerun limit, to show whether it is flaky. Add an entry to
+`known-failures.json` only when the Marble maintainer has accepted that failure (see "Verify Marble
+with one command" in `zkthemelab/README.md`).
+
 When the command you run includes screenshot specs (`toHaveScreenshot`), capture the baselines
 before you edit CSS. First run the selector with the CSS paths you are about to edit:
 `node scripts/select-tests.mjs <css paths>` from `zkthemelab/` (path forms are in

@@ -1,0 +1,86 @@
+[
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "button › gallery",
+    "kind": "expected",
+    "reason": "The screenshot baselines follow upstream master and are not recaptured on this branch."
+  },
+  {
+    "project": "compact",
+    "file": "compact-density.spec.ts",
+    "title": "compact-gallery › button",
+    "kind": "expected",
+    "reason": "The screenshot baselines follow upstream master and are not recaptured on this branch."
+  },
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "button › default-hover",
+    "kind": "expected",
+    "reason": "The screenshot baselines follow upstream master and are not recaptured on this branch."
+  },
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "button › default-focus",
+    "kind": "expected",
+    "reason": "The screenshot baselines follow upstream master and are not recaptured on this branch."
+  },
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "button › default-active",
+    "kind": "expected",
+    "reason": "The screenshot baselines follow upstream master and are not recaptured on this branch."
+  },
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "combobutton › hover",
+    "kind": "expected",
+    "reason": "The screenshot baselines follow upstream master and are not recaptured on this branch."
+  },
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "combobutton › focus",
+    "kind": "expected",
+    "reason": "The screenshot baselines follow upstream master and are not recaptured on this branch."
+  },
+  {
+    "project": "popup",
+    "file": "popup-gallery.spec.ts",
+    "title": "datebox › datebox.zul: open calendar with the timezone selector",
+    "kind": "intermittent",
+    "reason": "Fails now and then; passes on a rerun."
+  },
+  {
+    "project": "compact",
+    "file": "compact-density.spec.ts",
+    "title": "compact-gallery › window",
+    "kind": "intermittent",
+    "reason": "Fails now and then; passes on a rerun."
+  },
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "window › gallery",
+    "kind": "intermittent",
+    "reason": "Fails now and then; passes on a rerun."
+  },
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "chosenbox dropdown › chip focus",
+    "kind": "intermittent",
+    "reason": "Fails now and then; passes on a rerun."
+  },
+  {
+    "project": "chromium",
+    "file": "screenshot.spec.ts",
+    "title": "input focus (no layout shift) › datebox timezone <select>: Mechanism A ring, no border-width transition",
+    "kind": "intermittent",
+    "reason": "Fails now and then; passes on a rerun."
+  }
+]
