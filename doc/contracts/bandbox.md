@@ -10,7 +10,7 @@ zk-version: 10.2.1-jakarta
 - doc/spec/DESIGN.md sections: "Surface Palette", "Text Colors", "Corner Radii", "Typography", "Motion", "Density", "Border Rules"
 - Closest-sibling CSS to read first: `zul/src/main/resources/web/js/zul/inp/css/combobox.css`
 - Popup container CSS: `zul/src/main/resources/web/js/zul/inp/css/bandbox.css`
-- No direct MUI mapping — the Evaluator compares input metrics against combobox.
+- No direct MD3 component mapping — the Evaluator compares input metrics against combobox.
 
 ## Expected values (T2 — DESIGN.md tokens only)
 - Input metrics match combobox (since visually a styled combobox).
@@ -22,9 +22,16 @@ match the input-click `:focus-within` ring — an **inset** box-shadow, not an o
 ring reads as a different halo and is clipped by ancestor `overflow: hidden`). See
 `marble-theme reference/focus-affordance-no-layout-shift.md`.
 
+Guarded by the open-state rule check in `screenshot.spec.ts`.
+
+An invalid bandbox keeps its error border and ring while it is open, with or without focus inside it: the open state never replaces the error colours with the focus colours.
+
+The exception is an inplace bandbox that is open while it still carries the inplace class. It follows the open rule above, not the invalid rule.
+
+Guarded by `input-invalid.spec.ts`, the tests titled `bandbox — …` that open an invalid bandbox.
+
 | id | selector | property | expected |
 |----|----------|----------|----------|
-| op1 | `.z-bandbox.z-bandbox-open` | box-shadow | `inset 0 0 0 1px var(--zk-bandbox-border-color-focus)` (inset — same ring as `:focus-within`, NOT outset) |
 | va1 | `.z-bandbox` (root) | vertical-align | `middle` — Safari 18 gives an inline-flex box whose first item is an empty input the input's bottom edge as its baseline, so an empty field sat about 14px off the text line and jumped when typed into; centring the box avoids it (WebKit bug 294558, fixed in Safari 26; B50-3032885, B50-ZK-577). Side effect: text beside the field sits about 1px above the field centre |
 
 ## States to evaluate
