@@ -159,3 +159,6 @@ and has a `kind` and a `reason`:
 
 To add an entry, copy the project, file and title from the `NEW failures` line. Do it only for a failure the maintainer
 has accepted, and give the reason.
+
+The scripts themselves are tested with `npm run test:scripts` (Node's built-in test runner, about 15 seconds, no preview
+server and no browser; the `select-tests.mjs` tests only list tests with `playwright test --list`).

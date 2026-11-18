@@ -138,3 +138,8 @@ Changes that touch only blank lines or comments select nothing. Changed rules wi
   Gallery baselines are recognised by `galleryPageOfBaseline` and `isGalleryTest`; if the gallery test titles change, adjust those.
 * Each generated `-g` pattern is checked against the inventory before it is printed; the script throws if it would
   select any test other than the intended ones.
+
+## Tests
+
+`npm run test:scripts` (from `zkthemelab/`) tests this script, `grep-titles-reporter.mjs`, `verify-playwright.mjs` and
+`visual-baseline.sh` (`scripts/tests/`). The tests of this script compare its answer with what `playwright test --list` lists.
