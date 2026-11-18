@@ -142,12 +142,13 @@
     padding: 0 var(--zk-spacing-3);
 }
 
-/* The combobox draws its outline on its root, so inside the group the root takes the group colour at rest, hover and
- * focus; the group outline owns the focus, so the inset ring of combobox.css is off. A failed constraint keeps the
+/* The combobox draws its outline on its root, so inside the group the root takes the group colour at rest, hover, focus
+ * and open; the group outline owns the focus, so the inset ring of combobox.css is off. A failed constraint keeps the
  * error colour in every state, as outside the group. */
 .z-inputgroup .z-combobox,
 .z-inputgroup .z-combobox:hover,
-.z-inputgroup .z-combobox:focus-within {
+.z-inputgroup .z-combobox:focus-within,
+.z-inputgroup .z-combobox.z-combobox-open {
     border-color: var(--zk-inputgroup-border-color);
     box-shadow: none;
 }

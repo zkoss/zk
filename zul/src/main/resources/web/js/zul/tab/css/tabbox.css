@@ -23,7 +23,9 @@
  * Every accordion rule below is a child-combinator chain from .z-tabbox-accordion, never a
  * descendant selector: a tabbox nested in an accordion panel (strip molds) must look like the
  * same tabbox outside it, so the accordion's rules may not reach its .z-tabpanels, .z-tab,
- * .z-tab-content or .z-tab-button.
+ * .z-tab-content or .z-tab-button. The orient rules of the strip molds are chains from their own
+ * .z-tabbox-{top,bottom,left,right} root for the same reason: a tabbox nested in a tabpanel of a tabbox
+ * of another orient keeps its own tab bar, tabpanels and tabs.
  */
 
 /* ─── Outer container ───────────────────────────────────────────────────── */
@@ -455,25 +457,25 @@
 }
 
 /* ─── Placement molds ────────────────────────────────────────────────────── */
-.z-tabbox-top .z-tabs {
+.z-tabbox-top > .z-tabs {
     border-bottom: 1px solid var(--zk-tab-border-color);
 }
 
 /* Bottom orientation: ZK mold renders tabpanels FIRST then tabs in DOM,
    so default flex column order already places panels on top, tabs on bottom. */
-.z-tabbox-bottom .z-tabs {
+.z-tabbox-bottom > .z-tabs {
     border-top: 1px solid var(--zk-tab-border-color);
     border-bottom: none;
 }
 
 /* Tabpanels border adjustment for bottom: border is on top/sides/none at bottom */
-.z-tabbox-bottom .z-tabpanels {
+.z-tabbox-bottom > .z-tabpanels {
     border-top: 1px solid var(--zk-tab-border-color);
     border-bottom: none;
     border-radius: var(--zk-shape-card) var(--zk-shape-card) 0 0;
 }
 
-.z-tabbox-bottom .z-tab {
+.z-tabbox-bottom > .z-tabs .z-tab {
     padding-bottom: 0;
     padding-top: 2px;
     margin-top: -1px;
@@ -494,7 +496,7 @@
     align-self: flex-start;
 }
 
-.z-tabbox-left .z-tabs {
+.z-tabbox-left > .z-tabs {
     flex-direction: column;
     border-bottom: none;
     border-right: 1px solid var(--zk-tab-border-color);
@@ -503,11 +505,11 @@
     overflow: hidden;
 }
 
-.z-tabbox-left .z-tabs-content {
+.z-tabbox-left > .z-tabs > .z-tabs-content {
     flex-direction: column;
 }
 
-.z-tabbox-left .z-tab {
+.z-tabbox-left > .z-tabs .z-tab {
     padding-bottom: 0;
     padding-right: 2px;
     margin-bottom: 0;
@@ -515,7 +517,7 @@
     justify-content: flex-start;
 }
 
-.z-tabbox-left .z-tab.z-tab-selected {
+.z-tabbox-left > .z-tabs .z-tab.z-tab-selected {
     color: var(--zk-color-primary);
 }
 
@@ -523,13 +525,13 @@
    the × adjacent to a short label mid-bar. Content spans the bar (c34) and
    the auto margin pushes the × to the bar's trailing edge (c34a); the 8px
    inset comes from the closable padding-right rule above (c33). */
-.z-tabbox-left .z-tab-content,
-.z-tabbox-right .z-tab-content {
+.z-tabbox-left > .z-tabs .z-tab-content,
+.z-tabbox-right > .z-tabs .z-tab-content {
     flex: 1 1 auto;
 }
 
-.z-tabbox-left .z-tab-button,
-.z-tabbox-right .z-tab-button {
+.z-tabbox-left > .z-tabs .z-tab-button,
+.z-tabbox-right > .z-tabs .z-tab-button {
     margin-left: auto;
 }
 
@@ -537,7 +539,7 @@
     flex-direction: row-reverse;
 }
 
-.z-tabbox-right .z-tabs {
+.z-tabbox-right > .z-tabs {
     flex-direction: column;
     border-bottom: none;
     border-left: 1px solid var(--zk-tab-border-color);
@@ -546,11 +548,11 @@
     overflow: hidden;
 }
 
-.z-tabbox-right .z-tabs-content {
+.z-tabbox-right > .z-tabs > .z-tabs-content {
     flex-direction: column;
 }
 
-.z-tabbox-right .z-tab {
+.z-tabbox-right > .z-tabs .z-tab {
     padding-bottom: 0;
     padding-left: 2px;
     margin-bottom: 0;
@@ -558,7 +560,7 @@
     justify-content: flex-start;
 }
 
-.z-tabbox-right .z-tab.z-tab-selected {
+.z-tabbox-right > .z-tabs .z-tab.z-tab-selected {
     color: var(--zk-color-primary);
 }
 

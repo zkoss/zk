@@ -56,21 +56,41 @@ test('an invalid combobox draws the error border on its root at rest, hover and 
   await expectBorders('focus');
 });
 
-// An open combobox that has no focus (opened by the API, not by a click) is matched by `.z-combobox-open`, which would
-// paint the primary border over the error border on hover if the invalid hover rule did not outrank it: the invalid
-// hover rule wins on specificity (it names the invalid class and the :hover), not on source order.
-test('an invalid combobox that is open without focus keeps the error border on hover', async ({ page }) => {
+// An open combobox that has no focus (opened by the API, not by a click) is matched by `.z-combobox-open`, which paints
+// the primary border and inset ring unless the invalid rule outranks it. The error border and ring hold at rest and on hover.
+test('combobox — an invalid combobox that is open without focus draws the error border and ring at rest and on hover', async ({ page }) => {
   await failConstraint(page, 'combobox');
   const error = await errorColor(page);
   const combobox = page.locator('.iig-single .z-combobox');
+  const border = () => combobox.evaluate(el => {
+    const style = getComputedStyle(el);
+    return { color: style.borderTopColor, shadow: style.boxShadow };
+  });
 
   await page.mouse.move(0, 0);
   await combobox.evaluate(el => zk.Widget.$(el).open());
   await expect(combobox).toHaveClass(/z-combobox-open/);
   expect(await combobox.evaluate(el => el.matches(':focus-within')), 'the open combobox has no focus').toBe(false);
+  await expect.poll(border, 'at rest').toEqual({ color: error, shadow: `${error} 0px 0px 0px 1px inset` });
   await combobox.hover({ position: { x: 4, y: 4 }, force: true });
   expect(await combobox.evaluate(el => el.matches(':hover')), 'the pointer is over the combobox').toBe(true);
-  await expect.poll(() => topBorderColor(page, '.iig-single .z-combobox'), 'root').toBe(error);
+  await expect.poll(border, 'on hover').toEqual({ color: error, shadow: `${error} 0px 0px 0px 1px inset` });
+});
+
+// The group outline owns the focus, so an open combobox in an inputgroup keeps the error border and draws no inset ring.
+test('combobox — an invalid combobox in an inputgroup that is open without focus draws the error border and no ring', async ({ page }) => {
+  await failConstraintOf(page, page.locator('.iig-group-combobox .z-combobox-input'));
+  const error = await errorColor(page);
+  const combobox = page.locator('.iig-group-combobox .z-combobox');
+
+  await page.mouse.move(0, 0);
+  await combobox.evaluate(el => zk.Widget.$(el).open());
+  await expect(combobox).toHaveClass(/z-combobox-open/);
+  expect(await combobox.evaluate(el => el.matches(':focus-within')), 'the open combobox has no focus').toBe(false);
+  await expect.poll(() => combobox.evaluate(el => {
+    const style = getComputedStyle(el);
+    return { color: style.borderTopColor, shadow: style.boxShadow };
+  })).toEqual({ color: error, shadow: 'none' });
 });
 
 test('an invalid bandbox draws the error border on its wrapper at rest, hover and focus', async ({ page }) => {
@@ -219,6 +239,26 @@ for (const widget of Object.keys(INPLACE_BORDERS)) {
   });
 }
 
+// ZK removes the inplace class once the field has had focus and adds it back about 150 ms after the blur. While the class is
+// on the root, opening the field through the API must not draw the error border and ring: it stays as at rest.
+test('combobox — an invalid inplace combobox that is open without focus stays transparent', async ({ page }) => {
+  const combobox = page.locator('.iig-inplace-combobox.z-combobox');
+  await failConstraintOf(page, page.locator('.iig-inplace-combobox .z-combobox-input'));
+  await expect(combobox).toHaveClass(/z-combobox-inplace/);
+  const border = () => combobox.evaluate(el => {
+    const style = getComputedStyle(el);
+    return { color: style.borderTopColor, shadow: style.boxShadow };
+  });
+
+  await page.mouse.move(0, 0);
+  await expect.poll(border, 'at rest').toEqual({ color: TRANSPARENT, shadow: 'none' });
+  await combobox.evaluate(el => zk.Widget.$(el).open());
+  await expect(combobox).toHaveClass(/z-combobox-open/);
+  await expect(combobox, 'the inplace class is still on the root').toHaveClass(/z-combobox-inplace/);
+  expect(await combobox.evaluate(el => el.matches(':focus-within')), 'the open combobox has no focus').toBe(false);
+  await expect.poll(border, 'open').toEqual({ color: TRANSPARENT, shadow: 'none' });
+});
+
 // A read-only field keeps the 3:1 outline at rest and on hover, but its read-only rules must not hide the focus or
 // error border: they win over those rules on order or specificity, so a border-color in them kept the field grey.
 // Read-only blocks typing, so the error is set the way Clients.wrongValue does it, through setErrorMessage.
@@ -334,20 +374,25 @@ test.describe('invalid together with focus or hover', () => {
     });
   }
 
-  // Opened by the API, the datebox has no focus, so `.z-datebox-open` (primary border) competes with the invalid hover
-  // rule; the error border must win, by specificity (the invalid hover rule names one more class or pseudo-class).
-  test('datebox — a field that failed its constraint and is open without focus keeps the error border on hover', async ({ page }) => {
+  // Opened by the API, the datebox has no focus, so `.z-datebox-open` (primary border and ring) competes with the invalid
+  // rule; the error border and ring must win at rest and on hover.
+  test('datebox — a field that failed its constraint and is open without focus draws the error border and ring at rest and on hover', async ({ page }) => {
     await failField(page, 'datebox');
     const root = page.locator('.z-datebox.iif-datebox');
     const error = await errorColor(page);
+    const border = () => root.evaluate(el => {
+      const style = getComputedStyle(el);
+      return { color: style.borderTopColor, shadow: style.boxShadow };
+    });
 
     await page.mouse.move(0, 0);
     await root.evaluate(el => zk.Widget.$(el).setOpen(true));
     await expect(root).toHaveClass(/z-datebox-open/);
     expect(await root.evaluate(el => el.matches(':focus-within')), 'the open datebox has no focus').toBe(false);
+    await expect.poll(border, 'at rest').toEqual({ color: error, shadow: `${error} 0px 0px 0px 1px inset` });
     await root.hover({ position: { x: 4, y: 4 }, force: true });
     expect(await root.evaluate(el => el.matches(':hover')), 'the pointer is over the field').toBe(true);
-    await expect.poll(() => topBorderColor(page, '.z-datebox.iif-datebox'), 'datebox on hover').toBe(error);
+    await expect.poll(border, 'on hover').toEqual({ color: error, shadow: `${error} 0px 0px 0px 1px inset` });
   });
 
   // Only the border carries the invalid state; the typed value keeps the text colour of a valid field. The field holds a

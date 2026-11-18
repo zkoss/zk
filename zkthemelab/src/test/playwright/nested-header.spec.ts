@@ -7,6 +7,10 @@ import { test, expect, Locator, Page } from '@playwright/test';
 // ZK adds z-window-noheader / z-groupbox-notitle only when the container renders no header, so a descendant rule on
 // that class can only ever hit a nested container.
 // Fixture: web/pv/nested-header-guard.zul
+//
+// The tabbox, listbox and grid tests at the end of the file hold the same rule for the orient classes of a tabbox
+// (web/pv/tabbox-nested-guard.zul) and the odd-row stripe of a listbox and a grid (web/pv/listbox-nested-guard.zul,
+// web/pv/grid-nested-guard.zul): a widget nested in a part of another one looks like the same widget on its own.
 
 const FIXTURE = '/pv/nested-header-guard.zul';
 
@@ -113,4 +117,159 @@ test('panel — a titled panel nested in a borderless panel keeps the line under
   await expect(inner).toHaveCount(1);
   expect(await style(inner, 'border-bottom-width'), 'nested').toBe('1px');
   expect(await style(outer, 'border-bottom-width'), 'the borderless panel itself').toBe('0px');
+});
+
+const NESTED_TABBOX_FIXTURE = '/pv/tabbox-nested-guard.zul';
+
+/** Each outer orient with the orient of the tabbox in its first tabpanel; `reference` is that tabbox on its own. */
+const NESTED_TABBOXES = [
+  { outer: 'left', inner: 'top', reference: 'top' },
+  { outer: 'right', inner: 'top', reference: 'top' },
+  { outer: 'bottom', inner: 'top', reference: 'top' },
+  { outer: 'top', inner: 'top', reference: 'top' },
+  { outer: 'bottom-left', inner: 'left', reference: 'left' },
+  { outer: 'left-bottom', inner: 'bottom', reference: 'bottom' },
+];
+
+const SIDES = ['top', 'right', 'bottom', 'left'];
+const TABBOX_PROPERTIES = [
+  'display', 'flex-direction', 'flex-grow', 'flex-shrink', 'flex-basis', 'align-self', 'justify-content', 'min-width', 'width',
+  'color', 'overflow-x',
+  'border-top-left-radius', 'border-top-right-radius', 'border-bottom-right-radius', 'border-bottom-left-radius',
+  ...SIDES.flatMap(side => [`padding-${side}`, `margin-${side}`, `border-${side}-width`, `border-${side}-style`, `border-${side}-color`]),
+];
+
+/** Part name → [selector below the tabbox root, index among its matches]. */
+type TabboxParts = Record<string, [string, number]>;
+
+const STRIP_PARTS: TabboxParts = {
+  tabs: [':scope > .z-tabs', 0],
+  'tabs-content': [':scope > .z-tabs > .z-tabs-content', 0],
+  'tab 1 (selected)': [':scope > .z-tabs .z-tab', 0],
+  'tab 2 (closable)': [':scope > .z-tabs .z-tab', 1],
+  'tab 3 (disabled)': [':scope > .z-tabs .z-tab', 2],
+  'tab-content 1': [':scope > .z-tabs .z-tab-content', 0],
+  'tab-content 2': [':scope > .z-tabs .z-tab-content', 1],
+  'tab-button': [':scope > .z-tabs .z-tab-button', 0],
+  tabpanels: [':scope > .z-tabpanels', 0],
+};
+
+const ACCORDION_PARTS: TabboxParts = {
+  tabpanels: [':scope > .z-tabpanels', 0],
+  'tabpanel 1': [':scope > .z-tabpanels > .z-tabpanel', 0],
+  'tab 1 (selected)': [':scope > .z-tabpanels > .z-tabpanel > .z-tab', 0],
+  'tab 2 (closable)': [':scope > .z-tabpanels > .z-tabpanel > .z-tab', 1],
+  'tab 3 (disabled)': [':scope > .z-tabpanels > .z-tabpanel > .z-tab', 2],
+  'tab-content 1': [':scope > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content', 0],
+  'tab-content 2': [':scope > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content', 1],
+  'tab-button': [':scope > .z-tabpanels > .z-tabpanel > .z-tab .z-tab-button', 0],
+};
+
+/** The computed values of the tabbox root and of the given parts of it. */
+function measureTabbox(tabbox: Locator, parts: TabboxParts): Promise<Record<string, string>> {
+  return tabbox.evaluate((root, { parts, properties }) => {
+    const values: Record<string, string> = {};
+    const elements: Record<string, Element | undefined> = { tabbox: root };
+    for (const [name, [selector, index]] of Object.entries(parts) as [string, [string, number]][])
+      elements[name] = root.querySelectorAll(selector)[index];
+    for (const [name, el] of Object.entries(elements)) {
+      if (!el) throw new Error(`missing part: ${name}`);
+      const style = getComputedStyle(el);
+      for (const property of properties) values[`${name} ${property}`] = style.getPropertyValue(property);
+    }
+    return values;
+  }, { parts, properties: TABBOX_PROPERTIES });
+}
+
+async function expectSameTabbox(nested: Locator, alone: Locator, parts: TabboxParts): Promise<void> {
+  await expect(nested).toHaveCount(1);
+  await expect(alone).toHaveCount(1);
+  const nestedValues = await measureTabbox(nested, parts);
+  const aloneValues = await measureTabbox(alone, parts);
+  const differing = Object.keys(aloneValues)
+    .filter(key => nestedValues[key] !== aloneValues[key])
+    .map(key => `${key}: nested ${nestedValues[key]}, alone ${aloneValues[key]}`);
+  expect(differing).toEqual([]);
+}
+
+for (const { outer, inner, reference } of NESTED_TABBOXES) {
+  test(`tabbox — a ${inner} tabbox nested in a ${outer} tabbox looks like the same tabbox on its own`, async ({ page }) => {
+    await page.goto(NESTED_TABBOX_FIXTURE, { waitUntil: 'networkidle' });
+    await expectSameTabbox(page.locator(`.nt-outer-${outer} .nt-inner`), page.locator(`.nt-ref-${reference}`), STRIP_PARTS);
+  });
+}
+
+for (const outer of ['left', 'right', 'bottom']) {
+  test(`tabbox — an accordion tabbox nested in a ${outer} tabbox looks like the same accordion on its own`, async ({ page }) => {
+    await page.goto(NESTED_TABBOX_FIXTURE, { waitUntil: 'networkidle' });
+    await expectSameTabbox(page.locator(`.nt-outer-${outer}-accordion .nt-inner`), page.locator('.nt-ref-accordion'), ACCORDION_PARTS);
+  });
+}
+
+test('tabbox — the orient of a tabbox still shapes its own tab bar and tabpanels', async ({ page }) => {
+  await page.goto(NESTED_TABBOX_FIXTURE, { waitUntil: 'networkidle' });
+  const tabs = (orient: string) => page.locator(`.nt-outer-${orient} > .z-tabs`);
+  const tabpanels = (orient: string) => page.locator(`.nt-outer-${orient} > .z-tabpanels`);
+  expect(await style(tabs('left'), 'flex-direction'), 'left').toBe('column');
+  expect(await style(tabs('left'), 'border-right-width'), 'left').toBe('1px');
+  expect(await style(tabs('left'), 'min-width'), 'left').toBe('120px');
+  expect(await style(tabs('right'), 'flex-direction'), 'right').toBe('column');
+  expect(await style(tabs('right'), 'border-left-width'), 'right').toBe('1px');
+  expect(await style(tabs('bottom'), 'border-top-width'), 'bottom').toBe('1px');
+  expect(await style(tabs('bottom'), 'border-bottom-width'), 'bottom').toBe('0px');
+  expect(await style(tabpanels('bottom'), 'border-top-left-radius'), 'bottom panels, top corner').not.toBe('0px');
+  expect(await style(tabpanels('bottom'), 'border-bottom-left-radius'), 'bottom panels, bottom corner').toBe('0px');
+  expect(await style(tabs('top'), 'flex-direction'), 'top').toBe('row');
+});
+
+const NESTED_LISTBOX_FIXTURE = '/pv/listbox-nested-guard.zul';
+
+test('listbox — selected rows of a listbox nested in an odd-striped row keep the selected fill', async ({ page }) => {
+  await page.goto(NESTED_LISTBOX_FIXTURE, { waitUntil: 'networkidle' });
+  // A row fill transitions on hover; read it settled.
+  await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important}' });
+  const rows = (scope: string) => page.locator(`.${scope} > .z-listbox-body tr.z-listitem`);
+  const nested = rows('nl-inner');
+  const alone = rows('nl-ref');
+  await expect(nested).toHaveCount(4);
+  await expect(alone).toHaveCount(4);
+  await expect(page.locator('.nl-outer > .z-listbox-body tr.z-listbox-odd:has(.nl-inner)'), 'the nested listbox sits in an odd-striped row').toHaveCount(1);
+
+  const selectedFill = await style(alone.nth(0), 'background-color');
+  const restFill = await style(alone.nth(2), 'background-color');
+  expect(selectedFill, 'the selected fill differs from a resting row').not.toBe(restFill);
+  // Rows 1 and 3 are at odd positions among their siblings, rows 2 and 4 at even ones; rows 1 and 2 are selected.
+  for (const index of [0, 1])
+    expect(await style(nested.nth(index), 'background-color'), `selected row ${index + 1}`).toBe(selectedFill);
+  expect(await style(nested.nth(2), 'background-color'), 'unselected row 3').toBe(restFill);
+
+  // A hovered row, selected or not, takes the hover fill of the same row of the listbox on its own.
+  for (const index of [0, 2]) {
+    await alone.nth(index).hover();
+    const hoverFill = await style(alone.nth(index), 'background-color');
+    await nested.nth(index).hover();
+    expect(await style(nested.nth(index), 'background-color'), `hovered row ${index + 1}`).toBe(hoverFill);
+  }
+});
+
+const NESTED_GRID_FIXTURE = '/pv/grid-nested-guard.zul';
+
+test('grid — rows of a grid nested in an odd-striped row take the hover fill', async ({ page }) => {
+  await page.goto(NESTED_GRID_FIXTURE, { waitUntil: 'networkidle' });
+  // A row fill transitions on hover; read it settled.
+  await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important}' });
+  const rows = (scope: string) => page.locator(`.${scope} > .z-grid-body tr.z-row`);
+  const nested = rows('ng-inner');
+  const alone = rows('ng-ref');
+  await expect(nested).toHaveCount(4);
+  await expect(alone).toHaveCount(4);
+  await expect(page.locator('.ng-outer > .z-grid-body tr.z-grid-odd:has(.ng-inner)'), 'the nested grid sits in an odd-striped row').toHaveCount(1);
+
+  // Rows 1 and 3 are at odd positions among their siblings, the position a descendant rule on .z-grid-odd would hit.
+  for (const index of [0, 1, 2, 3]) {
+    await alone.nth(index).hover();
+    const hoverFill = await style(alone.nth(index), 'background-color');
+    await nested.nth(index).hover();
+    expect(await style(nested.nth(index), 'background-color'), `hovered row ${index + 1}`).toBe(hoverFill);
+  }
 });

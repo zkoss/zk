@@ -239,11 +239,11 @@
     border-color: var(--zk-color-error);
 }
 
-.z-combobox:has(> .z-combobox-invalid):hover {
-    border-color: var(--zk-color-error);
-}
-
-.z-combobox:has(> .z-combobox-invalid):focus-within {
+/* Open is listed with focus: the open rule below would otherwise paint the primary border and ring over the error.
+   While the inplace class is still on the root (ZK removes it once the field has had focus), an inplace field stays
+   transparent when it is open without focus, as before. */
+.z-combobox:has(> .z-combobox-invalid):focus-within,
+.z-combobox.z-combobox-open:where(:not(.z-combobox-inplace)):has(> .z-combobox-invalid) {
     border-color: var(--zk-color-error);
     box-shadow: inset 0 0 0 1px var(--zk-color-error);
 }

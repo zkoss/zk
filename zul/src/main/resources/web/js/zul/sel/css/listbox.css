@@ -749,12 +749,6 @@
     border-top: 1px solid var(--zk-color-outline-variant);
 }
 
-/* ─── Odd row stripe via parent sclass (legacy fallback) ─────────────────── */
-/* ZK normally applies z-listbox-odd directly on the TR; this covers the legacy parent-sclass approach */
-.z-listbox-odd .z-listitem:nth-child(odd) {
-    background-color: var(--zk-color-surface-container-lowest);
-}
-
 /* ─── Empty body ─────────────────────────────────────────────────────────── */
 /* ZK-3914: stays a table row group, so the message cell's colspan spans the widget even when the first
    column is hidden (a block tbody is wrapped in an anonymous cell of that column). */
