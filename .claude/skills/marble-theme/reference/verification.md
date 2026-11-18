@@ -195,6 +195,13 @@ are trying to catch.
 Also: disable transitions before measuring focus rings, and never open `/preview` in the
 Chrome automation session.
 
+**Computed colours read right after a state or `data-brand` switch are mid-transition.** `.z-button`
+transitions `background-color` over `--zk-motion-duration-standard`, and its `::before` state layer
+transitions `opacity` (`--zk-state-layer-transition`), the one that matters for state layers. Wait until
+`getAnimations({ subtree: true })` is empty, or disable transitions with `stopTransitions()` in
+`interaction-states.spec.ts`, which also covers `::before` and `::after` (the `*` rule in `settle()` of
+`brand-override.spec.ts` does not match pseudo-elements).
+
 **Geometry claims are read off the captured PNG, never the live DOM.**
 `getBoundingClientRect` at `networkidle` runs before the gallery spec's font-settle wait and read
 1 px wide on the splitter page while every shot showed the settled width.

@@ -154,6 +154,9 @@
     --zk-state-disabled-opacity: 0.38;
     --zk-state-disabled-container-opacity: 0.12;
 
+    /* State-layer colour for filled buttons that darken on hover and press. */
+    --zk-state-darken-color: #000000;
+
     /* Keyboard focus affordance — the standard 2px primary outline ring.
        `outline-offset` stays per-component (2px default; ±1/2px inset on dense
        rows like grid/tree/listbox). The border-/box-shadow-based focus styles

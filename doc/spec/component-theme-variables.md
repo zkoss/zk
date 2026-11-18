@@ -509,7 +509,8 @@ notification and toast, which are not knob-driven (the toast entry cites the not
 ### State model sets the knob vocabulary
 
 **Rule.** A component's knobs follow its state model. Overlay models (button, combobutton) expose an
-overlay color and per-state opacities. Border-color models (the input family) expose a border color
+overlay color and per-state opacities; the opacities drive the flat variants and the focus state, while the
+filled hover and pressed strengths are fixed in the component CSS. Border-color models (the input family) expose a border color
 per state. Background-swap models (window, grid) expose a background color per state. Toolbarbutton's
 overlay reads `currentColor`, so its text knob also drives the tint and no separate overlay knob
 exists.

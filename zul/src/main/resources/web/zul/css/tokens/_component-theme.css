@@ -23,18 +23,21 @@
  */
 :root {
     /* ── Button — filled base ────────────────────────────────────────────
-       The color VARIANTS (.z-button-secondary/-success/…, outlined, text, icon)
-       keep their own colors via higher-specificity rules; these knobs drive
-       the default filled button. State is an MD3 ::before overlay (a tint whose
-       opacity animates), NOT a per-state background — so the knobs are an overlay
-       color + per-state opacities, matching the real implementation. */
+       --zk-button-overlay-color drives the default and the coloured filled
+       variants (.z-button-secondary/-success/…); .z-button-dark and -light keep
+       their own overlay colours, and so do outlined, text and icon. The filled
+       hover and pressed strengths are fixed in button.css, so
+       --zk-button-hover-opacity and --zk-button-active-opacity drive only the
+       flat variants; --zk-button-focus-opacity drives focus on every variant.
+       State is an MD3 ::before overlay (a tint whose opacity animates), NOT a
+       per-state background. */
     --zk-button-bg:             var(--zk-color-primary);
     --zk-button-fg:             var(--zk-color-on-primary);
     --zk-button-radius:         var(--zk-shape-button);
     --zk-button-elevation:      var(--zk-elevation-resting);
     --zk-button-padding-y:      6px;                    /* off-token literal (kept as default) */
     --zk-button-padding-x:      var(--zk-spacing-4);    /* 16px */
-    --zk-button-overlay-color:  var(--zk-color-on-primary);
+    --zk-button-overlay-color:  var(--zk-state-darken-color);
     --zk-button-hover-opacity:  var(--zk-state-hover-opacity);    /* .08 */
     --zk-button-focus-opacity:  var(--zk-state-focus-opacity);    /* .12 */
     --zk-button-active-opacity: var(--zk-state-pressed-opacity);  /* .12 */
@@ -343,18 +346,21 @@
     /* ── Combobutton — split button (filled base + dropdown arrow) ───────
        Shares the button family's overlay state model: state is an MD3
        ::before overlay on the content area (a tint whose opacity animates),
-       not a per-state background, so the knobs are bg/fg + radius + an
-       overlay color/opacities pair, matching the real implementation. The
+       not a per-state background. --zk-combobutton-overlay-color drives the
+       filled combobutton. Its filled hover and pressed strengths (and the open
+       state, which shows the pressed strength on both halves) are fixed in
+       combobutton.css, so --zk-combobutton-hover-opacity and
+       --zk-combobutton-active-opacity drive only the toolbar mold;
+       --zk-combobutton-focus-opacity drives focus on the label half. The
        divider between the content and arrow areas is its own accent knob.
        The toolbar mold is a color VARIANT (like button's outlined/text
        variants) and keeps its own colors via higher-specificity rules;
-       disabled likewise stays off the knobs — both intentionally not
-       knob-driven, same convention as button. */
+       disabled likewise stays off the knobs. */
     --zk-combobutton-bg:             var(--zk-color-primary);
     --zk-combobutton-fg:             var(--zk-color-on-primary);
     --zk-combobutton-radius:         var(--zk-shape-button);
     --zk-combobutton-divider-color:  rgba(255, 255, 255, 0.3);
-    --zk-combobutton-overlay-color:  var(--zk-color-on-primary);
+    --zk-combobutton-overlay-color:  var(--zk-state-darken-color);
     --zk-combobutton-hover-opacity:  var(--zk-state-hover-opacity);
     --zk-combobutton-focus-opacity:  var(--zk-state-focus-opacity);
     --zk-combobutton-active-opacity: var(--zk-state-pressed-opacity);

@@ -49,6 +49,22 @@ const ringToken = (page: Page) =>
     return ring;
   });
 
+/** The pixels of the element's screenshot: the brightest one (by channel sum), leaving out a 4px frame where the rounded
+ *  corners show the page, and the one 6px in from the left edge. */
+async function pixelsOf(element: Locator) {
+  const { PNG } = require('playwright-core/lib/utilsBundle');
+  const { data, width, height } = PNG.sync.read(await element.screenshot());
+  let brightest = [0, 0, 0];
+  for (let y = 4; y < height - 4; y++)
+    for (let x = 4; x < width - 4; x++) {
+      const i = 4 * (y * width + x);
+      if (data[i] + data[i + 1] + data[i + 2] > brightest[0] + brightest[1] + brightest[2]) brightest = [data[i], data[i + 1], data[i + 2]];
+    }
+  const at = 4 * (Math.floor(height / 2) * width + 6);
+  return { brightest, background: [data[at], data[at + 1], data[at + 2]] as number[] };
+}
+const channelSum = (rgb: number[]) => rgb[0] + rgb[1] + rgb[2];
+
 /** Presses Tab until the element has the focus: the only way to focus it so that :focus-visible matches. */
 async function tabTo(page: Page, target: Locator): Promise<void> {
   for (let presses = 0; presses < 40 && !(await target.evaluate(el => el === document.activeElement)); presses++)
@@ -763,5 +779,218 @@ test.describe('menupopup', () => {
     expect(await style(content, 'opacity')).toBe(await resolve(page, 'opacity', 'var(--zk-state-disabled-opacity)'));
     expect(await style(content, 'cursor')).toBe('not-allowed');
     expect(await style(content, 'pointer-events')).toBe('none');
+  });
+});
+
+// A filled button's state layer is stronger than the global tokens (hover 0.16, pressed 0.24) and darkens a coloured
+// fill, while the dark and light fills move away from their own colour. The outlined and text variants keep the token
+// strength and their own overlay colour; a disabled button has no layer.
+// Fixture: the preview page button
+test.describe('button state layer', () => {
+  const BLACK = 'rgb(0, 0, 0)';
+  const FILLED = [
+    { variant: 'primary', sclass: '', overlay: BLACK },
+    { variant: 'secondary', sclass: '.z-button-secondary', overlay: BLACK },
+    { variant: 'success', sclass: '.z-button-success', overlay: BLACK },
+    { variant: 'warning', sclass: '.z-button-warning', overlay: BLACK },
+    { variant: 'error', sclass: '.z-button-error', overlay: BLACK },
+    { variant: 'info', sclass: '.z-button-info', overlay: BLACK },
+    { variant: 'dark', sclass: '.z-button-dark', overlay: 'rgb(255, 255, 255)' },
+    { variant: 'light', sclass: '.z-button-light', overlay: 'rgb(51, 51, 51)' },
+  ];
+  const button = (page: Page, sclass: string, state = ':not([disabled])') => page.locator(`.z-button${sclass}${state}`).first();
+
+  test.beforeEach(async ({ page }) => {
+    await open(page, '/button.zul');
+    await page.mouse.move(0, 0);
+  });
+
+  for (const { variant, sclass, overlay } of FILLED) {
+    test(`${variant} fill — hover layer is 0.16, pressed layer is 0.24, in the variant's overlay colour`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const target = button(page, sclass);
+      await target.hover();
+      expect(await target.evaluate(el => el.matches(':hover'))).toBe(true);
+      expect(await style(target, 'opacity', '::before'), 'hover').toBe('0.16');
+      expect(await style(target, 'background-color', '::before'), 'overlay colour').toBe(overlay);
+
+      await page.mouse.down();
+      expect(await style(target, 'opacity', '::before'), 'pressed while hovering').toBe('0.24');
+      expect(await style(target, 'background-color', '::before'), 'overlay colour').toBe(overlay);
+      await page.mouse.up();
+    });
+  }
+
+  for (const { variant, sclass, token } of [
+    { variant: 'outlined', sclass: '.z-button-outlined', token: 'var(--zk-color-primary)' },
+    { variant: 'text', sclass: '.z-button-text', token: 'var(--zk-color-primary)' },
+  ]) {
+    test(`${variant} button — keeps the token hover and pressed layer in its own colour`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const target = button(page, sclass);
+      await target.hover();
+      expect(await target.evaluate(el => el.matches(':hover'))).toBe(true);
+      expect(await style(target, 'opacity', '::before'), 'hover').toBe(await resolve(page, 'opacity', 'var(--zk-button-hover-opacity)'));
+      expect(await style(target, 'background-color', '::before'), 'overlay colour').toBe(await resolve(page, 'background-color', token));
+
+      await page.mouse.down();
+      expect(await style(target, 'opacity', '::before'), 'pressed').toBe(await resolve(page, 'opacity', 'var(--zk-button-active-opacity)'));
+      expect(await style(target, 'background-color', '::before'), 'overlay colour').toBe(await resolve(page, 'background-color', token));
+      await page.mouse.up();
+    });
+  }
+
+  for (const { variant, sclass } of FILLED.filter(({ variant }) => ['primary', 'dark', 'light'].includes(variant))) {
+    test(`${variant} fill — keyboard focus layer is 0.12 and hovering the focused button raises it to 0.16`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const target = button(page, sclass);
+      await tabTo(page, target);
+      expect(await target.evaluate(el => el.matches(':focus-visible'))).toBe(true);
+      expect(await style(target, 'opacity', '::before'), 'focus').toBe('0.12');
+      await target.hover();
+      expect(await style(target, 'opacity', '::before'), 'focus and hover').toBe('0.16');
+    });
+  }
+
+  for (const { variant, sclass } of [...FILLED, { variant: 'outlined', sclass: '.z-button-outlined' }, { variant: 'text', sclass: '.z-button-text' }, { variant: 'icon', sclass: '.z-button-icon' }]) {
+    test(`${variant} button — the state layer sits under the content`, { tag: '@ZK-6112' }, async ({ page }) => {
+      const target = button(page, sclass);
+      expect(await style(target, 'isolation'), 'the button is a stacking context').toBe('isolate');
+      expect(await style(target, 'z-index', '::before'), 'the layer is behind the label').toBe('-1');
+    });
+  }
+
+  test('filled primary button — a pressed button keeps its label pure white', { tag: '@ZK-6112' }, async ({ page }) => {
+    const target = button(page, '');
+    const resting = await pixelsOf(target);
+    await target.hover();
+    await page.mouse.down();
+    expect(await style(target, 'opacity', '::before'), 'pressed').toBe('0.24');
+    const pressed = await pixelsOf(target);
+    expect(pressed.brightest, 'the label stays white').toEqual([255, 255, 255]);
+    expect(channelSum(pressed.background), 'the layer darkens the fill').toBeLessThan(channelSum(resting.background));
+    await page.mouse.up();
+  });
+
+  // .m-editor-toolbar-btn has its own hover rule and is not on the preview page: clone a filled button and add the class.
+  test('editor toolbar button — keeps 0.12 on hover, press and focus, unaffected by the filled 0.16 / 0.24', { tag: '@ZK-6112' }, async ({ page }) => {
+    await page.evaluate(() => {
+      const clone = document.querySelector('.z-button:not([disabled])')!.cloneNode(true) as HTMLElement;
+      clone.removeAttribute('id');
+      clone.classList.add('m-editor-toolbar-btn');
+      clone.style.cssText = 'position:fixed;top:80px;left:80px';
+      document.body.appendChild(clone);
+    });
+    const target = page.locator('.m-editor-toolbar-btn');
+    await target.hover();
+    expect(await target.evaluate(el => el.matches(':hover'))).toBe(true);
+    expect(await style(target, 'opacity', '::before'), 'hover').toBe('0.12');
+    await page.mouse.down();
+    expect(await style(target, 'opacity', '::before'), 'pressed').toBe('0.12');
+    await page.mouse.up();
+    await page.mouse.move(0, 0);
+    await target.evaluate(el => el.blur()); // the press gave it a pointer focus, which does not match :focus-visible
+    await tabTo(page, target);
+    expect(await style(target, 'opacity', '::before'), 'focus').toBe('0.12');
+    await target.hover();
+    expect(await style(target, 'opacity', '::before'), 'focus and hover').toBe('0.12');
+  });
+
+  test('disabled filled button — has no state layer and ignores the pointer', { tag: '@ZK-6112' }, async ({ page }) => {
+    const target = button(page, '', '[disabled]');
+    expect(await style(target, 'pointer-events')).toBe('none');
+    expect(await style(target, 'display', '::before'), 'the layer is not rendered').toBe('none');
+  });
+});
+
+// The filled Combobutton follows the filled Button: a darkening layer at 0.16 on hover and 0.24 pressed, under the label
+// and the caret on both halves. The flat toolbar mold keeps its own overlay colour and the token strengths.
+// Fixture: the preview page combobutton
+test.describe('combobutton state layer', () => {
+  const darken = (page: Page) => resolve(page, 'background-color', 'var(--zk-state-darken-color)');
+
+  test.beforeEach(async ({ page }) => {
+    await open(page, '/combobutton.zul');
+    await page.mouse.move(0, 0);
+  });
+
+  test('combobutton — the label half darkens at 0.16 on hover and 0.24 pressed, in --zk-state-darken-color', { tag: '@ZK-6112' }, async ({ page }) => {
+    const content = page.locator('.z-combobutton:not(.z-combobutton-toolbar):not([disabled]) .z-combobutton-content').first();
+    const resting = await pixelsOf(content);
+    await content.hover({ position: { x: 10, y: 10 } });
+    expect(await style(content, 'opacity', '::before'), 'hover').toBe('0.16');
+    expect(await style(content, 'background-color', '::before')).toBe(await darken(page));
+    await page.mouse.down();
+    expect(await style(content, 'opacity', '::before'), 'pressed').toBe('0.24');
+    const pressed = await pixelsOf(content);
+    expect(pressed.brightest, 'the label stays white').toEqual([255, 255, 255]);
+    expect(channelSum(pressed.background), 'the layer darkens the fill').toBeLessThan(channelSum(resting.background));
+    await page.mouse.up();
+  });
+
+  test('combobutton — the arrow half darkens at 0.16 on hover and 0.24 pressed, in --zk-state-darken-color', { tag: '@ZK-6112' }, async ({ page }) => {
+    const arrow = page.locator('.z-combobutton:not(.z-combobutton-toolbar):not([disabled]) .z-combobutton-button').first();
+    await arrow.hover();
+    expect(await style(arrow, 'opacity', '::before'), 'hover').toBe('0.16');
+    expect(await style(arrow, 'background-color', '::before')).toBe(await darken(page));
+    await page.mouse.down();
+    expect(await style(arrow, 'opacity', '::before'), 'pressed').toBe('0.24');
+    // The 14px caret is thin and antialiased, so its brightest pixel is near white, not pure white; a layer over it would cap it at 194.
+    expect(Math.min(...(await pixelsOf(arrow)).brightest), 'the caret stays white').toBeGreaterThanOrEqual(240);
+    await page.mouse.up();
+  });
+
+  test('combobutton — both state layers sit under their content', { tag: '@ZK-6112' }, async ({ page }) => {
+    const root = page.locator('.z-combobutton:not([disabled])');
+    for (const part of ['.z-combobutton-content', '.z-combobutton-button']) {
+      const target = root.first().locator(part);
+      expect(await style(target, 'z-index', '::before'), `${part} layer`).toBe('-1');
+    }
+    expect(await style(root.first().locator('.z-combobutton-content'), 'isolation'), 'the label half is a stacking context').toBe('isolate');
+    expect(await style(root.first().locator('.z-combobutton-button'), 'z-index'), 'the arrow half is a stacking context').toBe('1');
+  });
+
+  const filledRoot = (page: Page) => page.locator('.z-combobutton:not(.z-combobutton-toolbar):not([disabled])').first();
+
+  test('combobutton — keyboard-focused: the label layer is 0.12, hovering it raises it to 0.16 and pressing to 0.24', { tag: '@ZK-6112' }, async ({ page }) => {
+    const root = filledRoot(page);
+    const content = root.locator('.z-combobutton-content');
+    await tabTo(page, root);
+    expect(await root.evaluate(el => el.matches(':focus-within')), 'the combobutton has the focus').toBe(true);
+    expect(await style(content, 'opacity', '::before'), 'focus').toBe('0.12');
+    await content.hover({ position: { x: 10, y: 10 } });
+    expect(await style(content, 'opacity', '::before'), 'focus and hover').toBe('0.16');
+    await page.mouse.down();
+    expect(await style(content, 'opacity', '::before'), 'focus and pressed').toBe('0.24');
+    await page.mouse.up();
+  });
+
+  test('combobutton — open: both halves carry 0.24 in --zk-state-darken-color, show one colour, and hovering either half changes nothing', { tag: '@ZK-6112' }, async ({ page }) => {
+    const root = filledRoot(page);
+    const halves = { label: root.locator('.z-combobutton-content'), arrow: root.locator('.z-combobutton-button') };
+    await halves.arrow.click();
+    await expect(root).toHaveClass(/z-combobutton-open/);
+    await page.mouse.move(0, 0);
+    const expectOneColour = async (when: string) => {
+      for (const [name, half] of Object.entries(halves)) {
+        expect(await style(half, 'opacity', '::before'), `${when}: ${name} layer`).toBe('0.24');
+        expect(await style(half, 'background-color', '::before'), `${when}: ${name} overlay colour`).toBe(await darken(page));
+      }
+      const label = (await pixelsOf(halves.label)).background;
+      const arrow = (await pixelsOf(halves.arrow)).background;
+      expect(Math.abs(channelSum(label) - channelSum(arrow)), `${when}: the halves show the same colour (${label} / ${arrow})`).toBeLessThanOrEqual(3);
+    };
+    await expectOneColour('open');
+    await halves.label.hover({ position: { x: 10, y: 10 } });
+    await expectOneColour('open, label hovered');
+    await halves.arrow.hover();
+    await expectOneColour('open, arrow hovered');
+  });
+
+  test('combobutton toolbar mold — stays flat: its own overlay colour and the token strengths', { tag: '@ZK-6112' }, async ({ page }) => {
+    const content = page.locator('.z-combobutton-toolbar:not([disabled]) .z-combobutton-content').first();
+    await content.hover({ position: { x: 10, y: 10 } });
+    expect(await style(content, 'opacity', '::before'), 'hover').toBe(await resolve(page, 'opacity', 'var(--zk-combobutton-hover-opacity)'));
+    expect(await style(content, 'background-color', '::before')).toBe(await resolve(page, 'background-color', 'var(--zk-color-on-surface-variant)'));
+    await page.mouse.down();
+    expect(await style(content, 'opacity', '::before'), 'pressed').toBe(await resolve(page, 'opacity', 'var(--zk-combobutton-active-opacity)'));
+    await page.mouse.up();
   });
 });
