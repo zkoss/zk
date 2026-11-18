@@ -21,6 +21,7 @@ ZK 11.0.0
   ZK-6120: Create SBOM for each new version
   ZK-6277: Commercial jars should include the updated ZK License Statement
   ZK-6283: Breeze / Sapphire / Silvertail 10.0.1 in the ZK 11 binary distribution
+  ZK-6149: Replace the deprecated window 'unload' listener in mount.ts, which triggers a Chrome Permissions Policy violation
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
