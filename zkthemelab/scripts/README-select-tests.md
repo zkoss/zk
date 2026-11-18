@@ -33,14 +33,21 @@ Accepted path forms:
 (a fraction, `0 < F <= 1`; default `2/3`, e.g. `--threshold 0.5`).
 
 Output: `mode`, `reasons`, `pages`, `uncovered`, `commands`, and the selected/total test counts. With `--json`
-the object carries `selectedTests`, `totalTests` and `tests` (selected test count per Playwright project). Commands are meant to be run from `zkthemelab/`;
+the object carries `selectedTests`, `totalTests`, `reviewCaptureTests` and `tests` (selected test count per Playwright project). Commands are meant to be run from `zkthemelab/`;
 set `PREVIEW_URL` when the preview server is not on 8085.
 
 A partial run is ONE command, `npx playwright test -c src/test/playwright/playwright.config.ts --update-snapshots=none
 [--fully-parallel] --project=<p> ... -g '<regex>'`: every needed project is repeated as `--project`, and a single `-g` regex is the
 alternation of anchored title paths (`^(?:<project> <file> <describe...> <title>|...)$`; a whole project or file is
 `<project> .*` / `<project> <file> .*`). The selector checks, against the `--list` inventory, that the regex selects
-exactly the intended tests. A full run is the bare `npx playwright test -c ... --update-snapshots=none`. The flag keeps a run as printed from writing a missing PNG into `doc/screenshots`; `visual-baseline.sh` drops it and sets its own.
+exactly the intended tests. A full run is the bare `npx playwright test -c ... --update-snapshots=none`; the output says not to run
+it bare, because it includes `forced-colors-gallery`, which writes its review screenshots into `doc/screenshots` whatever
+`--update-snapshots` says. Run the full suite with `scripts/verify-playwright.mjs`. The flag keeps a run as printed from writing a missing PNG into `doc/screenshots`; `visual-baseline.sh` drops it and sets its own.
+
+The `forced-colors-gallery` project is never in the command, and neither are its tests in `selectedTests` or `tests`.
+`reviewCaptureTests` counts the forced-colors review captures of the selected pages that were left out, and the text output
+then adds one line saying so; run that project on purpose when the pictures should be refreshed. A selection made only of
+those tests answers `none`.
 
 `--fully-parallel` is added when no selected spec file is in `UNSAFE_PARALLEL_SPECS` (top of `select-tests.mjs`);
 `reasons` says which case applied. The constant is empty: an audit found no spec that depends on test order or shared state in the way the printed command runs it. Two specs are

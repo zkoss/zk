@@ -76,7 +76,7 @@ reaches the server. Nothing in the harness uses a query string.
 
 Run `node zkthemelab/scripts/select-tests.mjs --base <base>` from the repository root (usage:
 `zkthemelab/scripts/README-select-tests.md`). When it answers `partial`, run the single command it
-prints against your local preview server. When it answers `full`, do not start a full run on your
+prints against your local preview server; it leaves out `forced-colors-gallery` (see "Playwright projects"). When it answers `full`, do not start a full run on your
 own: report the selector's reasons and let the Marble maintainer decide when the full suite runs. The suite
 runs locally only; it is not wired to CI or Jenkins.
 
@@ -140,7 +140,7 @@ The project list is in the config: `grep "name:" zkthemelab/src/test/playwright/
 - `smoke` renders every preview ZUL (xmllint passing is **not** proof a page renders).
 - `iceblue` runs IceBlue on ZK 11 through the `zktheme=iceblue` cookie.
 - `tablet` needs a mobile UA, because the client enables `tablet.css.dsp` only when `zk.mobile`.
-- `forced-colors-gallery` writes review artifacts, not compared baselines.
+- `forced-colors-gallery` writes review artifacts, not compared baselines, even with `--update-snapshots=none`; run it only on purpose, never through the command `select-tests.mjs` prints.
 
 ```bash
 cd zkthemelab && npx playwright test --config src/test/playwright/playwright.config.ts --project=<project>

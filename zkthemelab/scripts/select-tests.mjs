@@ -18,6 +18,9 @@ const AGGREGATE_PAGES_FILE = path.join(path.dirname(fileURLToPath(import.meta.ur
 const PLAYWRIGHT_CONFIG = 'src/test/playwright/playwright.config.ts';
 // --update-snapshots=none: running a printed command as-is must not write a missing PNG into doc/screenshots.
 const RUN_PREFIX = `npx playwright test -c ${PLAYWRIGHT_CONFIG} --update-snapshots=none`;
+// Writes its screenshots with page.screenshot({path}), which --update-snapshots=none does not stop (verification.md, "Playwright projects"):
+// its tests never go into a printed command, the maintainer runs the project on purpose.
+const REVIEW_CAPTURE_PROJECT = 'forced-colors-gallery';
 
 // README-select-tests.md ("How a path is resolved"): selecting more than this share of all tests means a partial run no longer saves enough time.
 const FULL_RUN_TEST_FRACTION = 2 / 3;
@@ -815,9 +818,11 @@ function assertPatternIsExact(pattern, projects, intended, tests) {
 const maxPartialTests = (total, fraction) => Math.ceil(total * fraction);
 
 function decide(sel, tests, threshold) {
+  const runnableIds = new Set([...sel.testIds].filter(id => tests[id].project !== REVIEW_CAPTURE_PROJECT));
   const base = {
     reasons: sel.reasons, pages: [...sel.pages].sort(), uncovered: [...sel.uncovered, ...sel.namedWithoutTest],
-    selectedTests: sel.testIds.size, totalTests: tests.length,
+    selectedTests: runnableIds.size, totalTests: tests.length,
+    reviewCaptureTests: sel.testIds.size - runnableIds.size,
   };
   if (sel.untestedPages.size) base.reasons = [...base.reasons, `pages no test opens, left out: ${[...sel.untestedPages].sort().join(', ')}`];
   if (sel.skippedAggregates.size) {
@@ -829,11 +834,11 @@ function decide(sel, tests, threshold) {
     fullReasons.push(`${sel.testIds.size} of ${tests.length} tests selected, more than ${maxPartialTests(tests.length, threshold)} (threshold ${threshold})`);
   }
   if (fullReasons.length) {
-    return { mode: 'full', ...base, selectedTests: tests.length, reasons: [...fullReasons, ...sel.reasons], commands: [RUN_PREFIX], testCounts: countByProject(tests.map(t => t.id), tests) };
+    return { mode: 'full', ...base, selectedTests: tests.length, reviewCaptureTests: 0, reasons: [...fullReasons, ...sel.reasons], commands: [RUN_PREFIX], testCounts: countByProject(tests.map(t => t.id), tests) };
   }
-  if (sel.testIds.size === 0) return { mode: 'none', ...base, commands: [], testCounts: {} };
-  const { command, parallelReason } = buildCommand(sel.testIds, tests);
-  return { mode: 'partial', ...base, reasons: [...base.reasons, parallelReason], commands: [command], testCounts: countByProject(sel.testIds, tests) };
+  if (runnableIds.size === 0) return { mode: 'none', ...base, commands: [], testCounts: {} };
+  const { command, parallelReason } = buildCommand(runnableIds, tests);
+  return { mode: 'partial', ...base, reasons: [...base.reasons, parallelReason], commands: [command], testCounts: countByProject(runnableIds, tests) };
 }
 
 function countByProject(ids, tests) {
@@ -854,6 +859,12 @@ function printSummary(result) {
   if (result.mode !== 'none') {
     console.log('run from zkthemelab/ (set PREVIEW_URL for a port other than 8085):');
     result.commands.forEach(c => console.log(`  ${c}`));
+  }
+  if (result.mode === 'full') {
+    console.log(`not for a bare run: it includes ${REVIEW_CAPTURE_PROJECT}, which rewrites the forced-colors review screenshots; run the full suite with scripts/verify-playwright.mjs`);
+  }
+  if (result.reviewCaptureTests) {
+    console.log(`forced-colors review captures not included (${result.reviewCaptureTests} test(s) of the selected pages): run --project=${REVIEW_CAPTURE_PROJECT} on purpose when the pictures should be refreshed`);
   }
 }
 
