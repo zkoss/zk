@@ -231,8 +231,10 @@ notification and toast state that their warning and error variants are unaffecte
 (CTV-7).
 
 **Affected.**
-- button: color, outlined, text and icon variants. The disabled treatment is also not
-  knob-driven.
+- button: color, outlined, text and icon variants keep their own fill and label colors. The filled
+  variants other than dark and light still take `--zk-button-overlay-color`; the flat variants take
+  `--zk-button-hover-opacity` and `--zk-button-active-opacity`; every variant takes
+  `--zk-button-focus-opacity`. The disabled treatment is not knob-driven.
 - progressmeter: secondary, success, warning and error variants. Only the default bar responds to
   an override.
 - combobutton: toolbar mold.

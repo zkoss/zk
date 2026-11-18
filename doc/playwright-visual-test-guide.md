@@ -40,9 +40,9 @@ cd zkthemelab && ./start.sh                 # http://127.0.0.1:8085
 npm run baseline:capture -- --project=gallery -g "button"   # BEFORE editing; refuses if CSS is dirty
 npm run baseline:compare -- --project=gallery -g "button"   # after editing and rebuilding
 
-npm run screenshot:test                    # the whole suite
-npx playwright test -c src/test/playwright/playwright.config.ts --project=<project>
-npx playwright test -c src/test/playwright/playwright.config.ts -g "button"
+PREVIEW_URL=http://127.0.0.1:8085 node scripts/verify-playwright.mjs   # the full suite (the maintainer's call)
+npx playwright test -c src/test/playwright/playwright.config.ts --update-snapshots=none --project=<project>
+npx playwright test -c src/test/playwright/playwright.config.ts --update-snapshots=none --project=chromium -g "button"
 node scripts/select-tests.mjs --base HEAD  # which tests a change needs (scripts/README-select-tests.md)
 ```
 
@@ -100,7 +100,7 @@ ZK bakes the server's "now" into a `<calendar>`'s default `value` (month and sel
 evaluates `constraint="no past/future"` greying against the real clock, so freezing only the browser clock
 does not help. `calendar.zul` pins every `<calendar value="${fixedDate}">` and the datebox to a fixed
 **past** date (2020-03-15): a past month is unambiguously past against any real today, so the
-today-highlight never shows and the greying is stable. `portallayout.zul` uses the same idiom. Apply the
+greying is stable. `portallayout.zul` uses the same idiom. Apply the
 same idea elsewhere (stub media for `video` and `audio`, etc.). Canvas, embedded-document and virtualised
 pages (`signature`, `cropper`, `pdfviewer`, `biglistbox`, `barcode`) carry higher cross-machine flake risk:
 if a run flags one, add it to `SKIP` or raise its tolerance.

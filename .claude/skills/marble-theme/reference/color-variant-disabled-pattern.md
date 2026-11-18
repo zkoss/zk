@@ -32,6 +32,8 @@ disabled override block, even if a "base" override already exists for the parent
 
 The button variants (contained, outlined, text) and their disabled overrides are in `zul/src/main/resources/web/js/zul/wgt/css/button.css`.
 
+A variant that is itself three classes (`.z-button-icon.z-button-primary.z-button`, 0,3,0) also beats a 0,3,0 disabled rule written before it. Put the disabled override after the colour rules (as `.z-button-icon.z-button[disabled]` is in `button.css`) or raise it to 0,4,0.
+
 ## Specificity Breakdown
 
 | Selector | Spec | Wins over |

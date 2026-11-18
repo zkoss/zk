@@ -110,8 +110,9 @@ script adds `--config`; the script drops `--update-snapshots=...` and sets its o
 ## Spec files and test titles
 
 The suite is organised with **files = features and component = data**. `zkthemelab/doc/test-matrix.html`
-shows this architecture with diagrams (how a feature picks its components, the four layers, and how
-`select-tests.mjs` maps a change to tests); update it when that structure changes.
+shows this architecture with diagrams (how a feature picks its components, the layers its features fall
+into, how to check that the tests really test something, and how `select-tests.mjs` maps a change to
+tests); update it when that structure changes.
 
 - A spec file covers one feature (screenshot, density, forced-colors, focus ring, …), never one
   component. A component-specific regression test goes into the feature file it exercises.
@@ -143,7 +144,7 @@ The project list is in the config: `grep "name:" zkthemelab/src/test/playwright/
 - `forced-colors-gallery` writes review artifacts, not compared baselines, even with `--update-snapshots=none`; run it only on purpose, never through the command `select-tests.mjs` prints.
 
 ```bash
-cd zkthemelab && npx playwright test --config src/test/playwright/playwright.config.ts --project=<project>
+cd zkthemelab && npx playwright test --config src/test/playwright/playwright.config.ts --update-snapshots=none --project=<project>
 ```
 
 **Run it from `zkthemelab/`, not the repository root.** From the root, npx resolves a second copy of
@@ -257,6 +258,10 @@ failures as regressions.** Confirm rendering-neutrality with a HEAD-versus-chang
 deterministic computed-style probes instead. A stale-baseline failure looks identical at HEAD with
 no change applied — check that before trusting the gate. Run ad-hoc probes with
 `NODE_PATH="$(pwd)/node_modules" node script.cjs` using `require('playwright')`.
+
+A flaky test the Marble maintainer has accepted is recorded as `intermittent` in
+`zkthemelab/src/test/playwright/known-failures.json`, so `verify-playwright.mjs` lists it without
+failing the run.
 
 ## Cross-theme A/B: the determinism floor
 

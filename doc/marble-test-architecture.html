@@ -117,7 +117,7 @@ footer code { font-size: 11.5px; }
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">ZK 11 · Marble 主題 · 2026-10-20 現況</div>
+  <div class="eyebrow">ZK 11 · Marble 主題 · 2026-11-18 現況</div>
   <h1>一行 CSS 改壞了，誰會發現？</h1>
   <p class="lede">Marble 的外觀由<strong>五層</strong>檢查把關。主力是 Playwright：每個預覽頁<strong>分區截圖</strong>、彈出層<strong>打開後截圖</strong>，並有<strong>選擇器</strong>依改動挑出該跑的測試。部分測試在本機跑；選擇器判定要全測時，由負責人決定何時跑。目前不接 CI 或 Jenkins。</p>
   <div class="legend">
@@ -220,6 +220,7 @@ footer code { font-size: 11.5px; }
         <li>讀 <code>getComputedStyle</code> 與元素位置，不看圖</li>
         <li>每條守衛鎖住一個<b>過去出過的問題</b></li>
         <li><b>component-theme-variables</b>：確認 <code>--zk-&lt;元件&gt;-*</code> 覆寫在各元件頁生效</li>
+        <li><b>interaction-states</b>、<b>input-invalid</b>：用真實操作進入狀態後讀 computed style</li>
       </ul>
     </div>
     <div class="card">
@@ -348,7 +349,7 @@ footer code { font-size: 11.5px; }
           <td class="dot h1c"><i class="full"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h3c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td></tr>
         <tr><td>靜態外觀變了：顏色、間距、邊框、圓角<small>分區截圖，每區超過 20 px 就失敗；整頁 0.2% 抓不到的小改動，分區後抓得到</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
-        <tr><td>hover、focus、active 狀態變了<small>表單元件有狀態截圖；其他元件只有靜止畫面</small></td>
+        <tr><td>hover、focus、active 狀態變了<small>表單元件有狀態截圖；interaction-states 以真實操作進入其他 spec 沒走到的 hover／focus／pressed／open 狀態，讀 computed style 檢查</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
         <tr><td>只有彈出層打開時才看得到的樣式<small>popup project；tablet 上的彈出層尚未量測</small></td>
           <td class="dot h1c"><i class="full"></i></td><td class="dot h2c"><i class="part"></i></td><td class="dot"><span class="none">—</span></td><td class="dot h4c"><i class="part"></i></td></tr>
@@ -385,7 +386,7 @@ footer code { font-size: 11.5px; }
     </div>
     <div class="ob done">
       <h3>規則：部分測本機跑，全測人工決定</h3>
-      <p>改動後先跑選擇器。回答「部分測」就在本機跑它給的指令；回答「全測」時不自動跑，回報原因，由負責人決定何時全測。Jenkins 接線計畫暫緩。</p>
+      <p>改動後先跑選擇器。回答「部分測」就在本機跑它給的指令；回答「全測」時不自動跑，回報原因，由負責人決定何時全測。全測時執行 <code>zkthemelab/scripts/verify-playwright.mjs</code>；只有 <code>known-failures.json</code> 沒記錄的失敗才讓結果失敗。Jenkins 接線計畫暫緩。</p>
     </div>
     <div class="ob">
       <h3>ZATS 由核心團隊觸發</h3>

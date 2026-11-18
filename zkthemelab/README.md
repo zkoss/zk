@@ -124,8 +124,10 @@ URL form; `doc/focus-ring-known-clips.json` is their tracked allow-list and `doc
 ## Verify Marble with one command
 
 ```bash
-PREVIEW_URL=http://127.0.0.1:8085 node scripts/verify-playwright.mjs [--out <dir>] [spec file ...]
+PREVIEW_URL=http://127.0.0.1:8085 node scripts/verify-playwright.mjs [--url <preview url>] [--out <dir>] [spec file ...]
 ```
+
+`--url` overrides `PREVIEW_URL`.
 
 `scripts/verify-playwright.mjs` runs the fixed verification and reports only what is new. Run 1 is `chromium` and
 `compact` with the screenshots compared; run 2 is every other project in `playwright.config.ts` except
@@ -144,7 +146,7 @@ report, and a run that ran 0 tests fails too.
 `--update-snapshots=none`, so a missing screenshot baseline is not written. Do not go through this script. Spec file paths narrow both runs to those files; the script then prints that it is a PARTIAL run, first
 and last, because a partial run is not the full verification.
 
-It prints the totals per run and then four lists: new failures (the first 10 are rerun once, so a flaky test shows as
+It prints the totals per run and then four lists: new failures (up to `MAX_RERUNS` (set at the top of the script) are rerun once, so a flaky test shows as
 `PASSED on rerun`), known failures that failed as expected, `expected` entries that passed, and `intermittent` entries
 that failed. The exit code is 0 only when there is no new failure.
 

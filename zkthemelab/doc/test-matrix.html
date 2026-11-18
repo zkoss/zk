@@ -282,7 +282,7 @@ flowchart TD
 
 <section id="measure">
   <h2>Checking that the tests really test something</h2>
-  <p class="prose">When every test passes, that says nothing about the cells no test runs. Three report-only tools ask, each more strictly than the last, whether a cell really tests something. All three need the preview server up and are run from <code>zkthemelab/</code>.</p>
+  <p class="prose">When every test passes, that says nothing about the cells no test runs. Three report-only tools ask, each more strictly than the last, whether a cell really tests something. They are run from <code>zkthemelab/</code>. The coverage and mutation runs need the preview server up; the component × feature matrix needs no preview server: it reads the test list (<code>playwright test --list</code>), the spec files, and the index and config files named in the header of <code>scripts/component-feature-matrix.mjs</code>.</p>
   <div class="layers">
     <div class="layer">
       <div><div class="name">Component × feature</div><div class="q">Does any test reach this component?</div></div>
@@ -304,13 +304,13 @@ flowchart TD
 
 <section>
   <h2>Which cells does my change need?</h2>
-  <p class="prose"><code>scripts/select-tests.mjs</code> walks the matrix backwards: from changed files to classes, from classes to the pages that render them, from pages to the tests that open those pages. It answers <em>none</em>, <em>partial</em> (one exact command) or <em>full</em>.</p>
+  <p class="prose"><code>scripts/select-tests.mjs</code> walks the matrix backwards: from changed files to classes, from classes to the pages that render them, from pages to the tests that open those pages. It answers <em>none</em>, <em>partial</em> (one exact command, which carries <code>--update-snapshots=none</code> so it never writes a missing baseline) or <em>full</em>. A full run is the maintainer's call and goes through <code>scripts/verify-playwright.mjs</code>, which runs the fixed verification and reports only the failures not listed in <code>src/test/playwright/known-failures.json</code> (see "Verify Marble with one command" in <code>zkthemelab/README.md</code>).</p>
   <div class="diagram">
 <pre class="mermaid">
 flowchart TD
   C["Changed files<br/>(--base diff, zk and zkcml)"] --> K{"What kind of file?"}
   K -->|"docs, comments-only CSS"| N["none"]
-  K -->|"tokens, base, utility CSS,<br/>lang.xml, .wcs, build, config"| F["full run<br/>(maintainer decides when)"]
+  K -->|"tokens, base, utility CSS,<br/>lang.xml, .wcs, build, config"| F["full run: scripts/verify-playwright.mjs<br/>(maintainer decides when)"]
   K -->|"component CSS / widget .ts"| R["Changed rules → .z-* classes"]
   K -->|"component CSS / widget .ts"| OWN["Own pages: &lt;comp&gt;.zul<br/>and every pv/&lt;comp&gt;-*.zul"]
   OWN --> PG
@@ -341,7 +341,7 @@ flowchart TD
   </ol>
 </section>
 
-<footer>Sources: <code>zkthemelab/src/test/playwright/</code>, <code>zkthemelab/scripts/README-select-tests.md</code>, the headers of <code>scripts/component-feature-matrix.mjs</code>, <code>scripts/css-coverage.mjs</code> and <code>scripts/css-mutation.mjs</code>, and the marble-theme skill's <code>reference/verification.md</code>. Counts are left out on purpose; get them from <code>playwright test --list</code>.</footer>
+<footer>Sources: <code>zkthemelab/src/test/playwright/</code>, <code>zkthemelab/scripts/README-select-tests.md</code>, <code>scripts/verify-playwright.mjs</code>, the "Verify Marble with one command" section of <code>zkthemelab/README.md</code>, the headers of <code>scripts/component-feature-matrix.mjs</code>, <code>scripts/css-coverage.mjs</code> and <code>scripts/css-mutation.mjs</code>, and the marble-theme skill's <code>reference/verification.md</code>. Counts are left out on purpose; get them from <code>playwright test --list</code>.</footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
 <script>

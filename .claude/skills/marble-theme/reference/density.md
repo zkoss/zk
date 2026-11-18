@@ -61,11 +61,11 @@ using a height token and most hardcoding 28/32/36/40/44/48/56.
 - **Cascade shadowing.** The three cell-padding tokens were declared on the component and
   shadowed the `:root` override. Hoisted. Any new overridable token needs the same check.
 - **Button padding in compact.** A label line (`--zk-typescale-label-large-line-height`) plus the
-  default `--zk-button-padding-y` is 32px, taller than the compact `--zk-button-height`, and an
-  outlined button adds its 1px borders on top (34px). Compact sets `--zk-button-padding-y: 4px` (in `_component-theme.css`,
+  default `--zk-button-padding-y` is taller than the compact `--zk-button-height`, and an outlined
+  button adds its 1px borders on top. Compact lowers `--zk-button-padding-y` (in `_component-theme.css`,
   after `:root`, because `html[data-density=compact]` is `:root` itself), so filled, text,
-  icon+label, outlined, confirmpopup and messagebox buttons are all exactly 30px; icon-only stays
-  at `--zk-icon-button-size`. Default is unchanged.
+  icon+label, outlined, confirmpopup and messagebox buttons are all exactly `--zk-button-height`; icon-only
+  stays at `--zk-icon-button-size`. Default is unchanged.
 - **Colorbox swatch in compact.** The colorbox is square, so at the compact 32px its padding,
   gap and 14px chevron button left an 8px swatch. Compact sets `--zk-colorbox-padding: 2px` and
   `--zk-colorbox-button-width: 12px` (same block as the button padding), which gives a 12px swatch;
