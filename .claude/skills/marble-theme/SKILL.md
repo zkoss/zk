@@ -56,7 +56,9 @@ has a Playwright test for it: a fixture under `zkthemelab/src/main/webapp/web/pv
 `zkthemelab/src/test/playwright/`, and a project in `playwright.config.ts` only when a new spec file
 is added (a test added to an existing spec runs in that spec's project). The test must pass with the
 fix and be shown to fail under a mutation. The minimal repro page used while debugging is temporary
-and does not count as this test.
+and does not count as this test. Before writing a test or choosing which tests to run, read
+`zkthemelab/doc/test-matrix.html`: how the suite is built (files = features, components = data) and which
+spec a new test belongs in.
 
 0. **Show a visual bug as an Artifact.** When the bug is something seen on screen, publish an
    Artifact before editing anything: the problem (a screenshot of the current Marble rendering, plus

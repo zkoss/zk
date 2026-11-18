@@ -113,6 +113,7 @@ This file is the page inventory only. For everything else, read the `marble-them
 
 | Question | Read |
 |---|---|
+| How the Playwright suite is built, which spec a new test belongs in, which tests a change needs | `doc/test-matrix.html` |
 | Launch details, ports, Playwright projects, screenshot baselines | `.claude/skills/marble-theme/reference/verification.md` |
 | Rules for writing or fixing a preview page (utilities not page-local CSS, parse traps that look like 404s, `hflex` vs `flex-direction`) | `.claude/skills/marble-theme/reference/zul-authoring.md` |
 | Tokens, `@layer`, `.css.dsp` wiring, brand overrides | the other files under `.claude/skills/marble-theme/reference/` |
