@@ -106,6 +106,46 @@ test('an invalid bandbox draws the error border on its wrapper at rest, hover an
   await expectBorder('focus');
 });
 
+// An open bandbox that has no focus inside its root is matched by `.z-bandbox-open`, which paints the primary border and
+// inset ring unless the invalid rule outranks it. Focus is outside the root when the server opens it, or when the user
+// clicks inside the popup: ZK moves the popup to <body>, so focus in the popup is not inside the root.
+const invalidBandboxBorder = (bandbox: Locator) => bandbox.evaluate(el => {
+  const style = getComputedStyle(el);
+  return { color: style.borderTopColor, shadow: style.boxShadow };
+});
+
+test('bandbox — an invalid bandbox that is open without focus draws the error border and ring', async ({ page }) => {
+  await failConstraint(page, 'bandbox');
+  const error = await errorColor(page);
+  const bandbox = page.locator('.iig-single .z-bandbox');
+
+  await page.mouse.move(0, 0);
+  await bandbox.evaluate(el => zk.Widget.$(el).open());
+  await expect(bandbox).toHaveClass(/z-bandbox-open/);
+  expect(await bandbox.evaluate(el => el.matches(':focus-within')), 'the open bandbox has no focus').toBe(false);
+  await expect.poll(() => invalidBandboxBorder(bandbox)).toEqual({ color: error, shadow: `${error} 0px 0px 0px 1px inset` });
+});
+
+test('bandbox — an invalid bandbox opened by its button keeps the error border and ring when focus is in the popup', async ({ page }) => {
+  await failConstraint(page, 'bandbox');
+  const error = await errorColor(page);
+  const bandbox = page.locator('.iig-single .z-bandbox');
+
+  await page.locator('.iig-single .z-bandbox-button').click();
+  await expect(bandbox).toHaveClass(/z-bandbox-open/);
+  await page.locator('.z-bandpopup', { hasText: 'Content' }).click();
+  await expect(bandbox, 'the popup stays open').toHaveClass(/z-bandbox-open/);
+  // After a click on plain popup content, as in this fixture, ZK gives the input its focus back after about half a
+  // second (with a focusable child such as a listbox, focus stays in the popup), so the state without focus is read in
+  // the same task that takes the focus away.
+  const withoutFocus = await bandbox.evaluate(el => {
+    (document.activeElement as HTMLElement).blur();
+    const style = getComputedStyle(el);
+    return { focusWithin: el.matches(':focus-within'), color: style.borderTopColor, shadow: style.boxShadow };
+  });
+  expect(withoutFocus).toEqual({ focusWithin: false, color: error, shadow: `${error} 0px 0px 0px 1px inset` });
+});
+
 test('an invalid textbox draws the error border at rest, hover and focus', async ({ page }) => {
   const input = page.locator('.iig-plain .z-textbox');
   await input.click();
@@ -257,6 +297,22 @@ test('combobox — an invalid inplace combobox that is open without focus stays 
   await expect(combobox, 'the inplace class is still on the root').toHaveClass(/z-combobox-inplace/);
   expect(await combobox.evaluate(el => el.matches(':focus-within')), 'the open combobox has no focus').toBe(false);
   await expect.poll(border, 'open').toEqual({ color: TRANSPARENT, shadow: 'none' });
+});
+
+// An inplace bandbox that is open without focus, with the inplace class still on the root, is left to the open rule:
+// it draws the primary border and ring, not the error ones.
+test('bandbox — an invalid inplace bandbox that is open without focus draws the primary border and ring, not the error ones', async ({ page }) => {
+  const bandbox = page.locator('.iig-inplace-bandbox.z-bandbox');
+  await failConstraintOf(page, page.locator('.iig-inplace-bandbox .z-bandbox-input'));
+  await expect(bandbox).toHaveClass(/z-bandbox-inplace/);
+  const primary = await resolvedColor(page, 'var(--zk-bandbox-border-color-focus)');
+
+  await page.mouse.move(0, 0);
+  await bandbox.evaluate(el => zk.Widget.$(el).open());
+  await expect(bandbox).toHaveClass(/z-bandbox-open/);
+  await expect(bandbox, 'the inplace class is still on the root').toHaveClass(/z-bandbox-inplace/);
+  expect(await bandbox.evaluate(el => el.matches(':focus-within')), 'the open bandbox has no focus').toBe(false);
+  await expect.poll(() => invalidBandboxBorder(bandbox), 'open').toEqual({ color: primary, shadow: `${primary} 0px 0px 0px 1px inset` });
 });
 
 // A read-only field keeps the 3:1 outline at rest and on hover, but its read-only rules must not hide the focus or
