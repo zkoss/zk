@@ -20,6 +20,7 @@ ZK 11.0.0
   ZK-6112: a theme of Material Design 3
   ZK-6120: Create SBOM for each new version
   ZK-6277: Commercial jars should include the updated ZK License Statement
+  ZK-6283: Breeze / Sapphire / Silvertail 10.0.1 in the ZK 11 binary distribution
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -269,6 +270,10 @@ ZK 11.0.0
     <style>@import url("bootstrap.min.css") layer(zk-base);</style>
   + zul no longer ships LESS sources (~./zul/less/*). A custom theme that imports them must be built
     from the ZK theme template (https://github.com/zkoss/zkThemeTemplate) instead.
+  + The binary distribution no longer ships the Breeze, Sapphire and Silvertail themes (deprecated
+    since ZK 10.0.0) in dist/lib/theme. They render broken on ZK 11: no icons, as zul.jar no longer
+    ships Font Awesome, and no styles for the components added in ZK 11. Use IceBlue or a Theme Pack
+    theme instead.
 
    --------
 ZK 10.3.0

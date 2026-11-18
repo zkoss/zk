@@ -170,24 +170,6 @@ SIMILE Timeplot (BSD-3-Clause), released by the SIMILE Project under its BSD lic
 
 No third-party code.
 
->>> breeze.jar  ZK theme breeze 10.0.1, as a Maven bundle holding breeze-10.0.1.jar  in CE, PE, EE
-
-GoldenLayout (MIT): web/<theme>/js/zkmax/layout/css/goldenlayout.css.dsp is adapted from its stylesheet.
-HTML5 Boilerplate and normalize.css (MIT): web/<theme>/zul/css/norm.css.dsp is adapted from them.
-Trumbowyg (MIT): web/<theme>/js/zkmax/inp/css/tbeditor.css.dsp is adapted from its stylesheet, and web/<theme>/js/zkmax/inp/ext/icons.svg holds its icons.
-
->>> sapphire.jar  ZK theme sapphire 10.0.1, as a Maven bundle holding sapphire-10.0.1.jar  in CE, PE, EE
-
-GoldenLayout (MIT): web/<theme>/js/zkmax/layout/css/goldenlayout.css.dsp is adapted from its stylesheet.
-HTML5 Boilerplate and normalize.css (MIT): web/<theme>/zul/css/norm.css.dsp is adapted from them.
-Trumbowyg (MIT): web/<theme>/js/zkmax/inp/css/tbeditor.css.dsp is adapted from its stylesheet, and web/<theme>/js/zkmax/inp/ext/icons.svg holds its icons.
-
->>> silvertail.jar  ZK theme silvertail 10.0.1, as a Maven bundle holding silvertail-10.0.1.jar  in CE, PE, EE
-
-GoldenLayout (MIT): web/<theme>/js/zkmax/layout/css/goldenlayout.css.dsp is adapted from its stylesheet.
-HTML5 Boilerplate and normalize.css (MIT): web/<theme>/zul/css/norm.css.dsp is adapted from them.
-Trumbowyg (MIT): web/<theme>/js/zkmax/inp/css/tbeditor.css.dsp is adapted from its stylesheet, and web/<theme>/js/zkmax/inp/ext/icons.svg holds its icons.
-
 >>> iceblue.jar  ZK theme iceblue  in CE, PE, EE
 
 GoldenLayout (MIT): web/<theme>/js/zkmax/goldenlayout/css/goldenlayout.css.dsp is adapted from its stylesheet.
