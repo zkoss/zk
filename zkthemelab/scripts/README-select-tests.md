@@ -39,8 +39,9 @@ set `PREVIEW_URL` when the preview server is not on 8085.
 A partial run is ONE command, `npx playwright test -c src/test/playwright/playwright.config.ts --update-snapshots=none
 [--fully-parallel] --project=<p> ... -g '<regex>'`: every needed project is repeated as `--project`, and a single `-g` regex is the
 alternation of anchored title paths (`^(?:<project> <file> <describe...> <title>|...)$`; a whole project or file is
-`<project> .*` / `<project> <file> .*`). The selector checks, against the `--list` inventory, that the regex selects
-exactly the intended tests. A full run is the bare `npx playwright test -c ... --update-snapshots=none`; the output says not to run
+`<project> .*` / `<project> <file> .*`). Before printing it the selector runs `playwright test --list` with exactly those
+arguments and fails (non-zero exit, the stderr says which tests differ) unless Playwright lists exactly the intended tests; this takes one extra `--list` per partial answer.
+The inventory comes from `--list` through `grep-titles-reporter.mjs`, because the JSON reporter drops the `@` of tags that `-g` is matched against. A full run is the bare `npx playwright test -c ... --update-snapshots=none`; the output says not to run
 it bare, because it includes `forced-colors-gallery`, which writes its review screenshots into `doc/screenshots` whatever
 `--update-snapshots` says. Run the full suite with `scripts/verify-playwright.mjs`. The flag keeps a run as printed from writing a missing PNG into `doc/screenshots`; `visual-baseline.sh` drops it and sets its own.
 

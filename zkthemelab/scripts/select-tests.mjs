@@ -21,6 +21,7 @@ const RUN_PREFIX = `npx playwright test -c ${PLAYWRIGHT_CONFIG} --update-snapsho
 // Writes its screenshots with page.screenshot({path}), which --update-snapshots=none does not stop (verification.md, "Playwright projects"):
 // its tests never go into a printed command, the maintainer runs the project on purpose.
 const REVIEW_CAPTURE_PROJECT = 'forced-colors-gallery';
+const GREP_TITLES_REPORTER = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grep-titles-reporter.mjs');
 
 // README-select-tests.md ("How a path is resolved"): selecting more than this share of all tests means a partial run no longer saves enough time.
 const FULL_RUN_TEST_FRACTION = 2 / 3;
@@ -341,8 +342,9 @@ function classResolver({ pageKeys, pagesByClass }) {
 // Test inventory: Playwright's own --list is the source of truth for projects, files and titles
 // ---------------------------------------------------------------------------------------------
 
-function listAllTests() {
-  const json = execFileSync('npx', ['playwright', 'test', '-c', PLAYWRIGHT_CONFIG, '--list', '--reporter=json'],
+/** `npx playwright test <args> --list` through the grep-titles reporter: the tests Playwright would run, as the reporter prints them. */
+function listWithPlaywright(args) {
+  const json = execFileSync('npx', ['playwright', 'test', '-c', PLAYWRIGHT_CONFIG, ...args, '--list', `--reporter=${GREP_TITLES_REPORTER}`],
     { cwd: ZKTHEMELAB_DIR, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
   const tests = [];
   // `ancestors` are the enclosing describes, outermost first; their `firstChildLine` is filled in during the walk.
@@ -353,8 +355,8 @@ function listAllTests() {
         const describes = ancestors.map(a => a.title);
         tests.push({
           project: t.projectName, file: spec.file, line: spec.line, describes, ancestors, title: spec.title,
-          // The exact string Playwright's -g matches against: project, file, describes, title, tags.
-          grepTitle: [t.projectName, spec.file, ...describes.filter(Boolean), spec.title, ...(spec.tags ?? [])].join(' '),
+          // The exact string Playwright's -g matches against: project, file, describes, title, explicit tags (with their '@').
+          grepTitle: t.grepTitle,
         });
       }
     }
@@ -364,6 +366,11 @@ function listAllTests() {
     }
   };
   JSON.parse(json).suites.forEach(fileSuite => visit(fileSuite, [])); // a file suite is the root, not a describe
+  return tests;
+}
+
+function listAllTests() {
+  const tests = listWithPlaywright([]);
   tests.forEach((t, id) => { t.id = id; });
   return tests;
 }
@@ -791,23 +798,31 @@ function buildCommand(selectedIds, tests) {
   const selected = tests.filter(t => selectedIds.has(t.id));
   const projects = [...new Set(selected.map(t => t.project))];
   const pattern = grepPatternFor(selected, tests);
-  assertPatternIsExact(pattern, projects, selected, tests);
 
   const unsafeSpecs = [...new Set(selected.map(t => t.file))].filter(file => UNSAFE_PARALLEL_SPECS.has(file));
   const parallelReason = unsafeSpecs.length
     ? `--fully-parallel not added: ${unsafeSpecs.map(file => `${file} (${UNSAFE_PARALLEL_SPECS.get(file)})`).join('; ')}`
     : `--fully-parallel added: none of the ${new Set(selected.map(t => t.file)).size} selected spec file(s) is in UNSAFE_PARALLEL_SPECS`;
+  const selectionArgs = [...projects.map(p => `--project=${p}`), '-g', pattern];
+  assertCommandSelectsIntended(['--update-snapshots=none', ...selectionArgs], selected);
   const command = [RUN_PREFIX, ...(unsafeSpecs.length ? [] : ['--fully-parallel']), ...projects.map(p => `--project=${p}`), `-g ${shellQuote(pattern)}`].join(' ');
   return { command, parallelReason };
 }
 
-/** Guards against a -g pattern that Playwright would resolve to more (or fewer) tests than intended within the given projects. */
-function assertPatternIsExact(pattern, projects, intended, tests) {
-  const regex = new RegExp(pattern, 'i');
-  const intendedIds = new Set(intended.map(t => t.id));
-  const matchedIds = new Set(tests.filter(t => projects.includes(t.project) && regex.test(t.grepTitle)).map(t => t.id));
-  const wrong = [...matchedIds].filter(id => !intendedIds.has(id)).length + [...intendedIds].filter(id => !matchedIds.has(id)).length;
-  if (wrong) throw new Error(`-g pattern is not exact (${wrong} mismatches; intended ${intendedIds.size}, matched ${matchedIds.size})`);
+/**
+ * Asks Playwright itself which tests the printed arguments select and fails unless they are exactly the intended ones.
+ * Checking the pattern against the script's own list of titles is not enough: a wrong model of the matched string
+ * (the tags once lacked their '@') passes that check and selects nothing in the real run.
+ */
+function assertCommandSelectsIntended(args, intended) {
+  const listed = listWithPlaywright(args).map(t => `${t.file}:${t.line} ${t.grepTitle}`).sort();
+  const expected = intended.map(t => `${t.file}:${t.line} ${t.grepTitle}`).sort();
+  const missing = expected.filter(key => !listed.includes(key));
+  const unexpected = listed.filter(key => !expected.includes(key));
+  if (listed.length === expected.length && !missing.length && !unexpected.length) return;
+  const sample = keys => keys.slice(0, 3).map(key => `\n    ${key}`).join('');
+  throw new Error(`the printed command does not select what was intended (intended ${expected.length}, \`playwright test --list\` selects ${listed.length}); `
+    + `intended but not selected: ${missing.length}${sample(missing)}\n  selected but not intended: ${unexpected.length}${sample(unexpected)}`);
 }
 
 // ---------------------------------------------------------------------------------------------
