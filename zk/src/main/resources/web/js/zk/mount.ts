@@ -925,17 +925,6 @@ jq(function () {
 
 	if (zk.mobile) {
 		jq(window).on('orientationchange', _sizeHandler);
-
-		// Bug ZK-2697
-		if (zk.ios) {
-			jq(window).on('pagehide', function () {
-				zk.unloading = true; //to disable error message
-
-				if (!zk.rmDesktoping) {
-					rmDesktop();
-				}
-			});
-		}
 	} else {
 		jq(window).resize(_sizeHandler);
 	}
@@ -958,11 +947,23 @@ jq(function () {
 
 	jq(window).scroll(function () {
 		zWatch.fire('onScroll', zk.Desktop._dt!); //notify all
-	}).on('unload', function () {
+	});
+	// beforeunload misses a removed iframe (ZK-6149) and, on iOS, a navigation (ZK-2697)
+	window.addEventListener('pagehide', function () {
 		zk.unloading = true; //to disable error message
 
 		if (!zk.rmDesktoping) {
 			rmDesktop();
+		}
+	});
+	window.addEventListener('pageshow', function (evt) {
+		if (evt.persisted) {
+			// ZK-6149: restored from the back/forward cache, where the desktop may have been removed on the way in
+			if (zk.rmDesktoping && !zk.keepDesktop) {
+				window.onbeforeunload = undefined as never; // the user has already confirmed leaving; don't ask zk.confirmClose again
+				location.reload();
+			} else
+				zk.unloading = zk.rmDesktoping = zAu.disabledRequest = false;
 		}
 	});
 

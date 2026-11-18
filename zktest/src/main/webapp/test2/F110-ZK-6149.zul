@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+F110-ZK-6149.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Wed Nov 18 14:37:23 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<zscript><![CDATA[
+		execution.setResponseHeader("Permissions-Policy", "unload=()");
+		if (param.get("cacheable") != null)
+			((org.zkoss.zk.ui.sys.PageCtrl) page).setCacheable(Boolean.TRUE);
+		desktop.addListener(new org.zkoss.zk.ui.util.DesktopCleanup() {
+			public void cleanup(Desktop dt) {
+				Session sess = dt.getSession();
+				sess.setAttribute("zk6149", "" + sess.getAttribute("zk6149") + dt.getId() + ";");
+			}
+		});
+	]]></zscript>
+	<label id="dtid" value="${desktop.id}"/>
+	<button id="btn" label="show removed desktops" onClick='removed.setValue("" + session.getAttribute("zk6149"))'/>
+	<label id="removed"/>
+	<button id="redirect" label="redirect" onClick='Executions.sendRedirect(desktop.getRequestPath() + "?zk6149=next")'/>
+</zk>
