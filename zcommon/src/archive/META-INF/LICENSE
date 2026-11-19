@@ -515,7 +515,7 @@ zel, and the StandardBeanNameResolver in org.zkoss.xel.zel.XelELResolver, are de
 
 Licensed under the Apache License, Version 2.0, whose text is at the end of this file.
 
->>> jdom2 2014-06-11T09:45:05+01:00 (LicenseRef-JDOM):
+>>> jdom2 2014-06-11T09:45:05+01:00 (LicenseRef-scancode-jdom):
 
 The character tables and comments of org.zkoss.idom.Verifier are derived from JDOM2 (https://github.com/hunterhacker/jdom).
 
