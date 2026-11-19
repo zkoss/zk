@@ -956,11 +956,13 @@ def binSbom = { String name, List<File> boms, List deps, List<AbstractArchiveTas
 			def ga = { String ref -> "${comps[ref].group}:${comps[ref].name}".toString() }
 			def held = located.findAll { comps[it].group }.collectEntries { [(ga(it)): it] }
 			def edges = bom.dependencies.collectEntries { [(it.ref): it] }
+			// a container API the archive lacks stays as sbom.gradle identified it
+			def identified = bom.compositions.findAll { it.aggregate == 'unknown' }.collectMany { it.dependencies } as Set
 			def kept = located as LinkedHashSet, cut = [] as LinkedHashSet, todo = kept as List
 			while (todo) {
 				def d = edges[todo.pop()]
 				if (!d) continue
-				def to = (d.dependsOn ?: []).collect { r -> r in kept || !comps[r]?.purl?.contains('type=jar') ? r : held[ga(r)] }
+				def to = (d.dependsOn ?: []).collect { r -> r in kept || !comps[r]?.purl?.contains('type=jar') ? r : held[ga(r)] ?: (r in identified ? r : null) }
 				if (to.contains(null)) cut << d.ref
 				d.dependsOn = (to.findAll() - d.ref).unique()
 				d.dependsOn.each { if (kept.add(it)) todo << it }
@@ -980,8 +982,14 @@ def binSbom = { String name, List<File> boms, List deps, List<AbstractArchiveTas
 				bom.compositions << [aggregate: 'incomplete', dependencies: cut as List]
 			if (added) // the ZK build graph holds no dependencies for them
 				bom.compositions << [aggregate: 'unknown', dependencies: added]
+			// the Eval Maven repository publishes every ZK module, CE's unchanged ones too, as <version>-Eval
+			def version = project.version.toString()
+			def evalPurls = name.endsWith('-eval') ? bom.components.findAll { it.group in ['org.zkoss.zk', 'org.zkoss.common'] && it.version == version }
+				.collect { c -> c.version = "${version}-Eval".toString(); c.purl } : []
+			def json = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(bom))
+			evalPurls.each { p -> json = json.replace(p, p.replace("@${version}?", "@${version}-Eval?")) } // with the refs and URLs built on it
 			new File(out, 'doc').mkdirs()
-			new File(out, 'doc/sbom.cdx.json').text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(bom))
+			new File(out, 'doc/sbom.cdx.json').text = json
 		}
 	}
 	archives.each {
