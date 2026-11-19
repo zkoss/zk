@@ -1,0 +1,25 @@
+<?page title="Collapsed groupbox" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for interaction-states.spec.ts: closed groupboxes in both molds, with a caption and with a plain title,
+     two open closable ones the spec collapses by clicking the caption, and an open one whose caption carries an
+     icon. Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it up as a page. -->
+<zk>
+<vlayout spacing="16px">
+    <groupbox id="defaultCaption" sclass="gc-default-caption" width="360px" height="200px" closable="true" open="false">
+        <caption label="Caption, default mold"/>Hidden content
+    </groupbox>
+    <groupbox id="defaultTitle" sclass="gc-default-title" width="360px" height="200px" closable="true" open="false" title="Title, default mold">Hidden content</groupbox>
+    <groupbox id="mold3dCaption" sclass="gc-3d-caption" width="360px" mold="3d" closable="true" open="false">
+        <caption label="Caption, 3d mold"/>Hidden content
+    </groupbox>
+    <groupbox id="mold3dTitle" sclass="gc-3d-title" width="360px" mold="3d" closable="true" open="false" title="Title, 3d mold">Hidden content</groupbox>
+    <groupbox id="toggleDefault" sclass="gc-toggle-default" width="360px" height="200px" closable="true">
+        <caption label="Closable, default mold"/>Content
+    </groupbox>
+    <groupbox id="toggle3d" sclass="gc-toggle-3d" width="360px" mold="3d" closable="true">
+        <caption label="Closable, 3d mold"/>Content
+    </groupbox>
+    <groupbox id="openIcon" sclass="gc-open-icon" width="360px" closable="true">
+        <caption label="Caption with icon" iconSclass="z-icon-home"/>Visible content
+    </groupbox>
+</vlayout>
+</zk>

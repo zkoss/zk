@@ -137,35 +137,13 @@
    under `position: fixed` — yet it overrides our `inset: 0` for the top edge,
    producing a Ypx gap at the top of the scrim. We pin top/left with
    !important to neutralize the inline values. */
-.z-modal-mask,
-.z-mask {
+.z-modal-mask {
     background-color: var(--zk-color-scrim);
     position: fixed;
     inset: 0;
     top: 0 !important;
     left: 0 !important;
     z-index: 1400;
-}
-
-/* Focus ring utility */
-.z-focus-ring:focus-visible {
-    outline: 3px solid var(--zk-color-primary);
-    outline-offset: 2px;
-}
-
-/* ZK shadow host */
-.z-shadow {
-    box-shadow: var(--zk-elevation-2);
-}
-
-/* Error message style */
-.z-error-box {
-    background-color: var(--zk-color-error-container);
-    color: var(--zk-color-on-error-container);
-    border-radius: var(--zk-shape-corner-extra-small);
-    padding: var(--zk-spacing-2) var(--zk-spacing-3);
-    font-family: var(--zk-typescale-font-family);
-    font-size: var(--zk-typescale-body-small-size);
 }
 
 /* Floating error panel (emitted by zk/zk.ts `_Erbx` class for zk.error()).

@@ -1,4 +1,5 @@
 <zk>
+<apply templateURI="~./pv/errorbox-hidden.zul"/>
 <apply templateURI="~./pv/matrix.zul" title="States — Spinner"
        cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
        rowsTemplate="spinner-rows">
@@ -8,7 +9,7 @@
             <div><spinner/></div>
             <div><spinner disabled="true"/></div>
             <div><spinner readonly="true"/></div>
-            <div><spinner sclass="z-spinner-invalid"/></div>
+            <div><spinner errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"/></div>
             <div><spinner inplace="true" value="5"/></div>
         </div>
         <div sclass="z-d-contents">
@@ -16,7 +17,7 @@
             <div><spinner buttonVisible="false"/></div>
             <div><spinner buttonVisible="false" disabled="true"/></div>
             <div><spinner buttonVisible="false" readonly="true"/></div>
-            <div><spinner buttonVisible="false" sclass="z-spinner-invalid"/></div>
+            <div><spinner buttonVisible="false" errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"/></div>
             <div><spinner buttonVisible="false" inplace="true" value="5"/></div>
         </div>
     </template>
@@ -31,7 +32,7 @@
             <div><doublespinner/></div>
             <div><doublespinner disabled="true"/></div>
             <div><doublespinner readonly="true"/></div>
-            <div><doublespinner sclass="z-doublespinner-invalid"/></div>
+            <div><doublespinner errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"/></div>
             <div><doublespinner inplace="true" value="3.5"/></div>
         </div>
         <div sclass="z-d-contents">
@@ -39,7 +40,7 @@
             <div><doublespinner buttonVisible="false"/></div>
             <div><doublespinner buttonVisible="false" disabled="true"/></div>
             <div><doublespinner buttonVisible="false" readonly="true"/></div>
-            <div><doublespinner buttonVisible="false" sclass="z-doublespinner-invalid"/></div>
+            <div><doublespinner buttonVisible="false" errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"/></div>
             <div><doublespinner buttonVisible="false" inplace="true" value="3.5"/></div>
         </div>
     </template>

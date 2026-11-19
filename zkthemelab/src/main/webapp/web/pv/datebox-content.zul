@@ -1,4 +1,5 @@
 <zk xmlns:h="native">
+<apply templateURI="~./pv/errorbox-hidden.zul"/>
 <zscript><![CDATA[
     import org.zkoss.util.Locales;
     import java.util.Locale;
@@ -51,7 +52,7 @@
             <div><datebox/></div>
             <div><datebox disabled="true"/></div>
             <div><datebox readonly="true"/></div>
-            <div><datebox sclass="z-datebox-invalid"/></div>
+            <div><datebox errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"/></div>
             <div><datebox inplace="true" value="${sampleDate}"/></div>
         </div>
         <div sclass="z-d-contents">
@@ -59,7 +60,7 @@
             <div><datebox buttonVisible="false"/></div>
             <div><datebox buttonVisible="false" disabled="true"/></div>
             <div><datebox buttonVisible="false" readonly="true"/></div>
-            <div><datebox buttonVisible="false" sclass="z-datebox-invalid"/></div>
+            <div><datebox buttonVisible="false" errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"/></div>
             <div><datebox buttonVisible="false" inplace="true" value="${sampleDate}"/></div>
         </div>
     </template>

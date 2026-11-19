@@ -34,6 +34,20 @@ test.describe('Component Theme Variables (borrowed preview pages)', () => {
     expect(await bgOf(disabled)).toBe(disabledBg); // CTV-7: disabled does not read the fill knob
   });
 
+  // zkmax restyles a stacking listbox row as a card and keeps its own stripe rule, which targets the same
+  // `z-listbox-odd` class as the table rows.
+  test('listbox — --zk-listbox-stripe-bg paints the odd cards of a stacking listbox', async ({ page }) => {
+    await page.goto('/listbox-responsive.zul', { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+    const stacking = page.locator('.z-listbox--stacking').first();
+    const oddCard = stacking.locator('tr.z-listitem.z-listbox-odd:not(.z-listitem-selected)').first();
+    const evenCard = stacking.locator('tr.z-listitem:not(.z-listbox-odd):not(.z-listitem-selected)').first();
+
+    await page.addStyleTag({ content: ':root{--zk-listbox-stripe-bg:#efe6ff}' });
+    expect(await bgOf(oddCard)).toBe('rgb(239, 230, 255)');
+    expect(await bgOf(evenCard)).not.toBe('rgb(239, 230, 255)');
+  });
+
   test('messagebox — stock values, then :root override reaches the page-root dialog', async ({ page }) => {
     await page.goto('/messagebox.zul', { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: 'Information', exact: true }).click();
@@ -115,6 +129,30 @@ test.describe('Component Theme Variables (borrowed preview pages, batch 1)', () 
     expect(await radiusOf(c0)).toBe('0px');
     expect(await borderColorOf(c1)).toBe(SCOPED_PURPLE);
     expect(await bgOf(c2)).toBe(SCOPED_PURPLE);
+  });
+
+  // ZK puts `z-listbox-odd` on the odd <tr> itself (Listitem.domClass_ -> Listbox.getOddRowSclass), so the
+  // stripe knob has to target that class. In light mode the stock stripe equals the row colour and hides a miss.
+  test('listbox — --zk-listbox-stripe-bg paints the odd rows, resting and hovered, and nothing else', async ({ page }) => {
+    const listbox = page.locator('.z-listbox').first();
+    const oddRow = listbox.locator('tr.z-listitem.z-listbox-odd:not(.z-listitem-selected):not(.z-listitem-disabled)').first();
+    const evenRow = listbox.locator('tr.z-listitem:not(.z-listbox-odd):not(.z-listitem-selected):not(.z-listitem-disabled)').first();
+    const stripeHoverReference = () => page.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = 'color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-listbox-stripe-bg))';
+      document.body.appendChild(probe);
+      const color = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return color;
+    });
+
+    await page.addStyleTag({ content: ':root{--zk-listbox-stripe-bg:#efe6ff}' });
+    const evenBg = await bgOf(evenRow);
+    expect(await bgOf(oddRow), 'resting odd row follows the stripe knob').toBe('rgb(239, 230, 255)');
+    expect(evenBg, 'even row keeps the listbox background').not.toBe('rgb(239, 230, 255)');
+
+    await oddRow.hover();
+    expect(await bgOf(oddRow), 'hovered odd row mixes the hover layer into the stripe').toBe(await stripeHoverReference());
   });
 
   test('tree — stock values, then :root override reaches it', async ({ page }) => {

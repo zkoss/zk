@@ -166,10 +166,10 @@ covers widgets whose mold declares no tag (e.g. `div.js`).
   shape.
 - **§G3 replaced/form elements are skipped, not findings.** `<img>`, `<input>`,
   `<button>`, `<select>`… have UA-specific defaults and are always styled
-  deliberately — e.g. `.z-image img { display: block }` is an intentional
+  deliberately — e.g. a `display: block` on an `<img>` is an intentional
   baseline-gap fix (an `<img>` is inline), NOT redundant. The check never flags these.
 - **§G4 unknown root tag → manual.** Sub-element wrappers (`.z-*-content`,
-  `.z-*-icon`, `.z-listcell-cnt`) aren't widget roots, so no mold resolves them. Only
+  `.z-*-icon`) aren't widget roots, so no mold resolves them. Only
   values that *could* be a default (`block`/`inline-block`/table-family) are listed;
   check them against the rendered DOM if you pursue them.
 

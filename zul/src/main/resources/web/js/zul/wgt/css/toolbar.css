@@ -104,22 +104,6 @@
     font-weight: var(--zk-typescale-title-large-weight);
 }
 
-/* Toolbarseparator in app bar */
-.z-north .z-toolbar .z-toolbarseparator {
-    background-color: color-mix(in srgb, var(--zk-color-on-primary) 30%, transparent);
-}
-
-/* ─── Toolbarseparator (visual divider between toolbar items) ────────────── */
-.z-toolbarseparator {
-    display: inline-block;
-    width: 1px;
-    height: 24px;
-    background-color: var(--zk-toolbar-border-color);
-    margin: 0 var(--zk-spacing-1);
-    flex-shrink: 0;
-    align-self: center;
-}
-
 /* ─── Separator inside toolbar (flex spacer) ─────────────────────────────── */
 /* <separator/> component — acts as a flex spacer pushing items apart */
 .z-toolbar .z-separator,
@@ -132,7 +116,7 @@
 }
 
 /* A separator with bar="true" between the items of a toolbar is a divider, in the
-   toolbar's own axis, whichever orient the separator has. It reads like .z-toolbarseparator: 1px x 24px.
+   toolbar's own axis, whichever orient the separator has. It is 1px x 24px.
    The box holds `&nbsp;`, so `font-size: 0` and `overflow: hidden` keep the 1px flex item from stretching to
    the width of that glyph. `flex-basis` and `min-width` set the size because the spacer rule above makes
    `width: auto` important. `max-height` keeps the inline `height` that ZK writes for `spacing` from stretching
@@ -173,14 +157,6 @@
     min-width: 24px;
     height: 1px;
     margin: var(--zk-spacing-1) 0;
-}
-
-/* Toolbarseparator in vertical toolbar: horizontal rule */
-.z-toolbar-vertical .z-toolbarseparator {
-    width: 24px;
-    height: 1px;
-    margin: var(--zk-spacing-1) 0;
-    align-self: center;
 }
 
 /* ─── Panel mold toolbar ─────────────────────────────────────────────────── */

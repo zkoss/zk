@@ -290,12 +290,12 @@
     background-color: var(--zk-listbox-row-hover-bg);
 }
 
-/* Odd striping: ZK applies z-listitem-odd class directly on TR */
-.z-listitem-odd {
+/* Odd striping: ZK applies z-listbox-odd class directly on TR */
+.z-listitem.z-listbox-odd {
     background-color: var(--zk-listbox-stripe-bg);
 }
 
-.z-listitem-odd:hover {
+.z-listitem.z-listbox-odd:hover {
     background-color: color-mix(in srgb, var(--zk-color-on-surface) 8%, var(--zk-listbox-stripe-bg));
 }
 
@@ -305,15 +305,13 @@
  * menu item / searchbox dropdown; deliberately different from the resting chip (surface-container-high)
  * and single-point picker (filled primary disc, e.g. calendar day).
  * See reference/selected-state-families.md. */
-.z-listitem.z-listitem-selected,
-.z-listitem.z-selected {
+.z-listitem.z-listitem-selected {
     background-color: var(--zk-listbox-selected-bg);
     color: var(--zk-listbox-selected-fg);
 }
 
 /* Selected + hover: state layer on top of the selected fill */
-.z-listitem.z-listitem-selected:hover,
-.z-listitem.z-selected:hover {
+.z-listitem.z-listitem-selected:hover {
     background-color: color-mix(in srgb, var(--zk-listbox-selected-fg) 8%, var(--zk-listbox-selected-bg));
 }
 
@@ -342,7 +340,6 @@
 }
 
 /* ZK renders cell content as DIV.z-listcell-content inside TD.z-listcell */
-.z-listcell-cnt,
 .z-listcell-content {
     display: block;
     padding: var(--zk-listbox-cell-padding);
@@ -359,17 +356,13 @@
    Covers the button family only: those are the controls with no text to truncate. Input fields are sized
    by their own width and are not wrapped (a wrapped textbox changes the tree row's height).
    Text cells keep nowrap + ellipsis. */
-.z-listcell-cnt:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)),
 .z-listcell-content:has(> :is(.z-button, .z-toolbarbutton, .z-combobutton)) {
     white-space: normal;
 }
 
 /* Cell text in selected row uses on-secondary-container (the paired text token
  * for secondary-container background). MD3 colour-role pairing rule. */
-.z-listitem.z-listitem-selected .z-listcell-cnt,
-.z-listitem.z-listitem-selected .z-listcell-content,
-.z-listitem.z-selected .z-listcell-cnt,
-.z-listitem.z-selected .z-listcell-content {
+.z-listitem.z-listitem-selected .z-listcell-content {
     color: var(--zk-listbox-selected-fg);
 }
 
@@ -440,7 +433,6 @@
 }
 
 .z-listgroupfoot td,
-.z-listgroupfoot .z-listcell-cnt,
 .z-listgroupfoot .z-listcell-content {
     background-color: transparent;
     color: var(--zk-color-on-surface);
@@ -455,7 +447,6 @@
     padding: 0;
 }
 
-.z-listgroupfoot .z-listcell-cnt,
 .z-listgroupfoot .z-listcell-content {
     padding: var(--zk-listbox-cell-padding);
 }
@@ -488,34 +479,9 @@
     padding: var(--zk-spacing-3) var(--zk-spacing-4);
 }
 
-/* Empty */
-.z-listbox-emph {
-    padding: var(--zk-spacing-8) var(--zk-spacing-4);
-    text-align: center;
-    color: var(--zk-color-on-surface-variant);
-    font-style: italic;
-    font-size: var(--zk-typescale-body-medium-size);
-}
-
 /* Checkbox cell in listbox */
 .z-listcell .z-checkbox {
     margin: 0;
-}
-
-/* ─── Plain / simple-list variant (.z-listbox-plain) ──────────────────── */
-/* Compact list appearance: no header, lighter separators, smaller cell padding */
-.z-listbox-plain .z-listcell-cnt,
-.z-listbox-plain .z-listcell-content {
-    font-size: var(--zk-typescale-body-medium-size);
-    padding: var(--zk-spacing-2) var(--zk-spacing-2);
-}
-
-.z-listbox-plain .z-listitem {
-    border-bottom: 1px solid var(--zk-color-surface-container-high);
-}
-
-.z-listbox-plain .z-listitem:hover {
-    background-color: var(--zk-color-surface-container-low);
 }
 
 /* ─── Checkmark column (listbox checkmark="true") ──────────────────────── */
@@ -544,7 +510,6 @@
 
 /* Selected row: filled blue box with white checkmark */
 .z-listitem.z-listitem-selected .z-listitem-icon.z-icon-check::before,
-.z-listitem.z-selected .z-listitem-icon.z-icon-check::before,
 .z-listgroup.z-listgroup-selected .z-listgroup-checkable > .z-listgroup-icon.z-icon-check::before {
     background-color: var(--zk-color-primary, #376fd0);
     border-color: var(--zk-color-primary, #376fd0);
@@ -585,8 +550,7 @@
 }
 
 /* Selected row: primary ring + filled centre dot */
-.z-listitem.z-listitem-selected .z-listitem-icon.z-icon-radio::before,
-.z-listitem.z-selected .z-listitem-icon.z-icon-radio::before {
+.z-listitem.z-listitem-selected .z-listitem-icon.z-icon-radio::before {
     border-color: var(--zk-color-primary, #376fd0);
     background-image: radial-gradient(circle at center, var(--zk-color-primary, #376fd0) 0 4px, transparent 4px);
     background-repeat: no-repeat;
@@ -785,12 +749,6 @@
     border-top: 1px solid var(--zk-color-outline-variant);
 }
 
-/* ─── Odd row stripe via parent sclass (legacy fallback) ─────────────────── */
-/* ZK normally applies z-listitem-odd directly on the TR; this covers the legacy parent-sclass approach */
-.z-listbox-odd .z-listitem:nth-child(odd) {
-    background-color: var(--zk-color-surface-container-lowest);
-}
-
 /* ─── Empty body ─────────────────────────────────────────────────────────── */
 /* ZK-3914: stays a table row group, so the message cell's colspan spans the widget even when the first
    column is hidden (a block tbody is wrapped in an anonymous cell of that column). */
@@ -844,12 +802,6 @@
     color: var(--zk-color-on-secondary-container);
 }
 
-.z-listgroup-content {
-    display: flex;
-    align-items: center;
-    gap: var(--zk-spacing-2);
-}
-
 /* The group row's <td> carries colspan="N" — must stay `display: table-cell`,
    otherwise the cell collapses to a single column width (display:flex/grid
    on a <td> disables its table-cell rendering and breaks colspan). Put the
@@ -880,10 +832,6 @@ td.z-listgroup-inner {
        .z-listheader (transparent over the listbox surface), not a tinted bar. */
     background-color: transparent;
     border-bottom: 1px solid var(--zk-color-outline-variant);
-}
-
-.z-listhead-border {
-    border-right: 1px solid var(--zk-color-outline-variant);
 }
 
 /* ─── Select mold ──────────────────────────────────────────────────────────
@@ -1076,13 +1024,6 @@ td.z-listgroup-inner {
 
     .z-select option:checked::checkmark {
         opacity: 1;
-    }
-
-    .z-select selectedcontent {
-        font-family: var(--zk-typescale-font-family);
-        font-size: var(--zk-typescale-body-medium-size);
-        color: var(--zk-color-on-surface);
-        flex: 1;
     }
 }
 }

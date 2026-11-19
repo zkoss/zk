@@ -1,0 +1,18 @@
+<?page title="Menupopup submenu" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for interaction-states.spec.ts: a button that opens a menupopup holding a menuitem, a submenu with an
+     icon and a disabled submenu. Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it up as a
+     page. -->
+<zk>
+<div style="padding:16px">
+    <button id="opener" label="Open the menu" popup="mp, position=after_start"/>
+    <menupopup id="mp">
+        <menuitem label="Plain item"/>
+        <menu label="Submenu" iconSclass="z-icon-cog">
+            <menupopup><menuitem label="Child item"/></menupopup>
+        </menu>
+        <menu label="Disabled submenu" disabled="true">
+            <menupopup><menuitem label="Hidden child"/></menupopup>
+        </menu>
+    </menupopup>
+</div>
+</zk>

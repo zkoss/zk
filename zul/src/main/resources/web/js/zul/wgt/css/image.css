@@ -7,10 +7,4 @@
     vertical-align: middle;
     border-radius: var(--zk-shape-corner-extra-small);
 }
-
-.z-image img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-}
 }

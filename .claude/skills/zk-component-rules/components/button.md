@@ -18,7 +18,7 @@ To style vertical buttons, select the button with `:has(br)` (the only reliable 
 
 ## State classes
 
-- `disabled="true"` sets the native `[disabled]` attribute on the `<button>` (`Button.ts`, `mold/button.js`); ZK adds no `.z-button-disabled` class.
+- `disabled="true"` sets the native `[disabled]` attribute on the `<button>` (`Button.ts`, `mold/button.js`).
 - Hover / focus / active rely on pseudo-classes (`:hover`, `:focus-visible`, `:active`) on the rendered `<button>` element. The root IS the button, so `:focus` (not `:focus-within`) works.
 
 ## Icon support

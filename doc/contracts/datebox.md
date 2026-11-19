@@ -55,6 +55,12 @@ composite input and reads as a thicker ring / layout shift. See
 
 Guarded by `screenshot.spec.ts › input focus (no layout shift) › datebox open state (icon click)`.
 
+An invalid datebox keeps its error border and ring while it is open, with or without focus.
+
+The exception is an inplace datebox that still carries the inplace class. It is excluded from this rule and stays transparent.
+
+Guarded by `input-invalid.spec.ts › datebox — a field that failed its constraint and is open without focus draws the error border and ring at rest and on hover`.
+
 ## States to evaluate
 - [ ] default, hover, focus, disabled, readonly, invalid, open
 - [ ] inplace (see `zk-component-rules reference/inplace-state.md`)

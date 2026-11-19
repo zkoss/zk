@@ -27,6 +27,19 @@ CONFIG="src/test/playwright/playwright.config.ts"
 mode="${1:-}"
 [ $# -gt 0 ] && shift
 
+# The command select-tests.mjs prints carries --update-snapshots=none; the last occurrence wins in
+# Playwright, so it would turn capture into a no-op. Each mode sets its own value below.
+n=$#
+while [ $n -gt 0 ]; do
+    arg="$1"
+    shift
+    case "$arg" in
+        --update-snapshots|--update-snapshots=*) ;;
+        *) set -- "$@" "$arg" ;;
+    esac
+    n=$((n - 1))
+done
+
 case "$mode" in
     capture)
         dirty=""

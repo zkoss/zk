@@ -8,7 +8,7 @@ The HTML attribute is the selector target. Use `[disabled]` or `[readonly]` dire
 
 - **selectbox**: only the native `disabled` attribute on the `<select>` (`Selectbox.ts`).
 - **searchbox**, **cascader**: ZK sets a `disabled` attribute and also adds a `-disabled` class on the root.
-- **button**: the native `disabled` attribute only (`mold/button.js:17`); there is no `.z-button-disabled` class.
+- **button**: the native `disabled` attribute only (`mold/button.js:17`).
 - **slider** has no `disabled` property, so ZK emits no disabled state for it. **rangeslider** / **multislider** add a root class `.z-rangeslider-disabled` / `.z-multislider-disabled` (`Rangeslider.ts` `setDisabled`, `domClass_`) and set no `[disabled]` attribute.
 - Native `<input>` elements also expose the attribute, but ZK usually emits a class too — see #2.
 
@@ -28,8 +28,6 @@ A constraint failure is automatic: `InputWidget._markError` adds `z-{component}-
 - **Single-input widgets** (textbox, intbox, longbox, decimalbox, doublebox): the `<input>` is the root, so the class sits next to the base class: `.z-intbox.z-intbox-invalid`.
 - **Composite widgets** (combobox, bandbox, datebox, timebox, timepicker, spinner, doublespinner): the class lands on the inner `<input>`, `span.z-combobox > input.z-combobox-input.z-combobox-invalid`. A border drawn on the wrapper needs `:has()`: `.z-datebox:has(.z-datebox-invalid)`.
 - **daterangebox**: its `domClass_` puts the class on the root `<div>`.
-
-A developer can also write `sclass="z-{component}-invalid"`, which puts the class on the **wrapper** of a composite widget. Preview pages use this to show the state without a constraint. A theme that wants both to work lists both forms: `.z-combobox:is(.z-combobox-invalid, :has(> .z-combobox-invalid))`.
 
 ## Checkbox mold-prefixed state classes
 

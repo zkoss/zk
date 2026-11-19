@@ -205,6 +205,12 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      // The state of a window, groupbox or panel (header-less, no border, overlapped, modal, highlighted, 3d) does not restyle the header or content of a container nested in it (window.css, groupbox.css, panel.css). See nested-header.spec.ts.
+      name: 'nested-header',
+      testMatch: /nested-header\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       // Every Panel border value uses --zk-panel-radius (panel.css). See panel-radius.spec.ts.
       name: 'panel-radius',
       testMatch: /panel-radius\.spec\.ts/,
@@ -258,6 +264,13 @@ export default defineConfig({
       // A real constraint failure styles the combobox and bandbox (combobox.css, bandbox.css). See input-invalid.spec.ts.
       name: 'input-invalid',
       testMatch: /input-invalid\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      // Hover, keyboard focus, open pickers, highlighted items and collapsed containers that no other spec drives
+      // through real input. See interaction-states.spec.ts.
+      name: 'interaction-states',
+      testMatch: /interaction-states\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
     {

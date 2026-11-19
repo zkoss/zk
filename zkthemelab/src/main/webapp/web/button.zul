@@ -80,6 +80,16 @@
             <div><button label="Button" sclass="z-button-info"/></div>
             <div><button label="Button" sclass="z-button-info" disabled="true"/></div>
         </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Light"/></div>
+            <div><button label="Button" sclass="z-button-light"/></div>
+            <div><button label="Button" sclass="z-button-light" disabled="true"/></div>
+        </div>
+        <div sclass="z-d-contents">
+            <div><label sclass="z-text-sm z-text-secondary" value="Dark"/></div>
+            <div><button label="Button" sclass="z-button-dark"/></div>
+            <div><button label="Button" sclass="z-button-dark" disabled="true"/></div>
+        </div>
         <div style="grid-column:1/-1" sclass="z-mt-3 z-mb-1"><label sclass="z-text-xs z-text-secondary" value="Outlined"/></div>
         <div sclass="z-d-contents">
             <div><label sclass="z-text-sm z-text-secondary" value="Secondary"/></div>
@@ -166,6 +176,48 @@
             <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
                 <h:div><h:span class="z-text-xs z-text-secondary">Icon button</h:span></h:div>
                 <button iconSclass="z-icon-cog" sclass="z-button-icon"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Icon button disabled</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon" disabled="true"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Icon button small</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon z-button-sm"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Icon button large</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon z-button-lg"/>
+            </h:div>
+        </h:div>
+    </h:div>
+
+    <h:div class="z-mb-6">
+        <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Icon button colors</h:span></h:div>
+        <h:div class="z-d-flex z-items-start z-flex-wrap z-gap-6 z-py-3">
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Primary</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon z-button-primary"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Primary disabled</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon z-button-primary" disabled="true"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Secondary</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon z-button-secondary"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Secondary disabled</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon z-button-secondary" disabled="true"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Error</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon z-button-error"/>
+            </h:div>
+            <h:div class="z-d-flex z-flex-col z-items-start z-gap-2">
+                <h:div><h:span class="z-text-xs z-text-secondary">Error disabled</h:span></h:div>
+                <button iconSclass="z-icon-cog" sclass="z-button-icon z-button-error" disabled="true"/>
             </h:div>
         </h:div>
     </h:div>

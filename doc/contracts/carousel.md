@@ -344,7 +344,7 @@ density: bound (arrows only) — indicators are an accessibility-floor exception
 density-tokens: --zk-carousel-arrow-size (alias in `tokens/_sizing.css`,
   `--zk-carousel-arrow-size: var(--zk-control-height-sm);` — the default value is that alias, with
   explicit values in the compact and comfortable density blocks; same "component-type → ladder
-  rung" pattern as `--zk-fab-size` → `--zk-control-height-xl`)
+  rung" pattern as `--zk-icon-button-size` → `--zk-control-height-md`)
 
 The arrow button has a genuine intrinsic control height (a fixed circular hit target, not
 sized by its text content, the same distinguishing test the Density spec uses elsewhere) —

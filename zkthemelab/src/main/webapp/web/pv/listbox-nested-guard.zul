@@ -1,0 +1,28 @@
+<?page title="Nested listbox guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for nested-header.spec.ts: a multiple-selection listbox in a cell of the second (odd-striped) row of
+     another listbox, with its first and second rows selected, and the same listbox on its own (nl-ref) to measure it
+     against. Lives under pv/ so gallery-scan, forced-colors-gallery and font-size-equivalence do not pick it up as
+     a page. -->
+<zk>
+<listbox sclass="nl-outer" width="500px">
+    <listhead><listheader label="Outer"/></listhead>
+    <listitem><listcell label="Outer row 1"/></listitem>
+    <listitem><listcell>
+        <listbox sclass="nl-inner" multiple="true" width="400px">
+            <listhead><listheader label="Inner"/></listhead>
+            <listitem selected="true"><listcell label="Inner row 1"/></listitem>
+            <listitem selected="true"><listcell label="Inner row 2"/></listitem>
+            <listitem><listcell label="Inner row 3"/></listitem>
+            <listitem><listcell label="Inner row 4"/></listitem>
+        </listbox>
+    </listcell></listitem>
+    <listitem><listcell label="Outer row 3"/></listitem>
+</listbox>
+<listbox sclass="nl-ref" multiple="true" width="400px">
+    <listhead><listheader label="Inner"/></listhead>
+    <listitem selected="true"><listcell label="Inner row 1"/></listitem>
+    <listitem selected="true"><listcell label="Inner row 2"/></listitem>
+    <listitem><listcell label="Inner row 3"/></listitem>
+    <listitem><listcell label="Inner row 4"/></listitem>
+</listbox>
+</zk>

@@ -1,0 +1,10 @@
+<zk>
+<!-- The invalid rows of the gallery pages set errorMessage, so ZK itself marks the field invalid and opens an
+     errorbox. The rows show the field, not the box, so those fields set errorboxSclass="demo-errorbox-hidden" and
+     this rule hides their errorboxes. The errorbox is a popup appended to the body, outside the field, so only the
+     class ZK copies onto it reaches the right boxes; pages that demonstrate the errorbox (errorbox.zul) do not set
+     it. Closing the boxes from script instead was tried: ZK creates the errorbox after mount at a time that
+     varies with the first page load, so the box showed on a cold start. !important: the popup shows itself with an
+     inline display. -->
+<style>.demo-errorbox-hidden { display: none !important; }</style>
+</zk>

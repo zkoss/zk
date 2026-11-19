@@ -1,4 +1,5 @@
 <zk xmlns:h="native">
+<apply templateURI="~./pv/errorbox-hidden.zul"/>
 <apply templateURI="~./pv/matrix.zul" title="States"
        cols="${['Default','Disabled','Readonly','Invalid','Inplace']}"
        rowsTemplate="bandbox-rows">
@@ -8,7 +9,7 @@
             <div><bandbox><bandpopup>Content</bandpopup></bandbox></div>
             <div><bandbox disabled="true"><bandpopup>Content</bandpopup></bandbox></div>
             <div><bandbox readonly="true"><bandpopup>Content</bandpopup></bandbox></div>
-            <div><bandbox sclass="z-bandbox-invalid"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"><bandpopup>Content</bandpopup></bandbox></div>
             <div><bandbox inplace="true" value="Selected"><bandpopup>Content</bandpopup></bandbox></div>
         </div>
         <div sclass="z-d-contents">
@@ -16,7 +17,7 @@
             <div><bandbox buttonVisible="false"><bandpopup>Content</bandpopup></bandbox></div>
             <div><bandbox buttonVisible="false" disabled="true"><bandpopup>Content</bandpopup></bandbox></div>
             <div><bandbox buttonVisible="false" readonly="true"><bandpopup>Content</bandpopup></bandbox></div>
-            <div><bandbox buttonVisible="false" sclass="z-bandbox-invalid"><bandpopup>Content</bandpopup></bandbox></div>
+            <div><bandbox buttonVisible="false" errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"><bandpopup>Content</bandpopup></bandbox></div>
             <div><bandbox buttonVisible="false" inplace="true" value="Selected"><bandpopup>Content</bandpopup></bandbox></div>
         </div>
     </template>

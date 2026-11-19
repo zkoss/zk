@@ -120,7 +120,7 @@ Files with no summary row below: `components/biglistbox.md`, `columnlayout.md`, 
 | `components/a.md` | a / link (`.z-a`, `[disabled]` via CSS pointer-events) — stub |
 | `components/absolutelayout.md` | absolutelayout (JS positions children with `position: absolute`) — stub |
 | `components/anchorlayout.md` | anchorlayout + anchorchildren — flat DOM (no body wrapper), `anchor=` JS inline-width sizing (% and delta); stock ZK uses `float: left` |
-| `components/caption.md` | caption (no `.z-caption-text` element — plain text) — stub |
+| `components/caption.md` | caption (plain text) — stub |
 | `components/hlayout-vlayout.md` | hlayout / vlayout + hbox / vbox (`.z-hlayout-inner` wrapper) — stub |
 | `components/inputgroup.md` | inputgroup (`display: inline-flex` root, `.z-inputgroup-text`) — stub |
 | `components/paging.md` | paging (`.z-paging-previous` NOT `-prev` — naming trap) — stub |

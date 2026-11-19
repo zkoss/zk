@@ -61,15 +61,13 @@ const BOX_TIERS: Tier[] = [
       + '.z-combobox, .z-bandbox, .z-datebox, .z-timebox, .z-spinner, .z-doublespinner, .z-selectbox, '
       + '.z-searchbox, .z-chosenbox, .z-daterangebox, .z-cascader, .z-colorbox' },
   { name: 'button', alias: '--zk-button-height',
-    selector: '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon):not(.z-button-fab):not(.z-button-xs)' },
+    selector: '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon)' },
   { name: 'button-sm', alias: '--zk-button-height-sm',
-    selector: '.z-button-sm.z-button:not(.z-button-icon):not(.z-button-fab)' },
+    selector: '.z-button-sm.z-button:not(.z-button-icon)' },
   { name: 'button-lg', alias: '--zk-button-height-lg',
-    selector: '.z-button-lg.z-button:not(.z-button-icon):not(.z-button-fab)' },
+    selector: '.z-button-lg.z-button:not(.z-button-icon)' },
   { name: 'icon-button', alias: '--zk-icon-button-size',
     selector: '.z-button-icon.z-button:not(.z-button-sm):not(.z-button-lg)' },
-  { name: 'fab', alias: '--zk-fab-size',
-    selector: '.z-button-fab.z-button:not(.z-button-sm):not(.z-button-xs)' },
   { name: 'toolbar', alias: '--zk-toolbar-height', selector: '.z-toolbar:not(.z-toolbar-vertical):not(.z-toolbar-tabs)' },
   // A toolbar inside a tabbox gets the height of the tab strip as an inline style (Tabs.ts:430-437, tb.style.height =
   // tabs.offsetHeight): the tab alias plus the strip's 1px bottom border (tabbox.css .z-tabs).
@@ -79,9 +77,9 @@ const BOX_TIERS: Tier[] = [
     selector: '.z-tabbox-top > .z-tabs .z-tab, .z-tabbox-bottom > .z-tabs .z-tab' },
   // The groupbox header carries the frame's top line (groupbox.css draws the frame on the header and the content,
   // not on the root, B95-ZK-4505), so its box is the alias plus that 1px; the same holds for the 3D mold.
-  { name: 'groupbox-header', alias: '--zk-groupbox-header-height', extraHeight: 1, selector: '.z-groupbox:not(.z-groupbox-3d) .z-groupbox-header' },
-  // The 3D mold header is panel-like but denser: it binds the md rung (groupbox.css .z-groupbox-3d .z-groupbox-header), 40 / 32.
-  { name: 'groupbox-3d-header', alias: '--zk-control-height-md', extraHeight: 1, selector: '.z-groupbox-3d .z-groupbox-header' },
+  { name: 'groupbox-header', alias: '--zk-groupbox-header-height', extraHeight: 1, selector: '.z-groupbox:not(.z-groupbox-3d) > .z-groupbox-header' },
+  // The 3D mold header is panel-like but denser: it binds the md rung (groupbox.css .z-groupbox-3d > .z-groupbox-header), 40 / 32.
+  { name: 'groupbox-3d-header', alias: '--zk-control-height-md', extraHeight: 1, selector: '.z-groupbox-3d > .z-groupbox-header' },
   { name: 'paging-button', alias: '--zk-paging-control-size', selector: '.z-paging-button' },
 ];
 
@@ -352,24 +350,18 @@ test.describe('compact-height', () => {
   }
 });
 
-// button.zul renders one icon button (`sclass="z-button-icon"`, Sizes section). No preview page renders a FAB (`z-button-fab` appears in no .zul), so that tier
-// gets its control from the test: a plain button with the theme's class, in the button page.
-test.describe('compact-height-synthetic', () => {
-  test('button: the page icon button and an injected FAB are on their aliases', async ({ page }) => {
+// button.zul renders eight icon buttons of the default size (`sclass="z-button-icon"` plain, primary, secondary and error,
+// each enabled and disabled; Sizes and Icon button colors sections). The tier selector does not exclude disabled buttons.
+// The per-page test above would pass without measuring them, so this one asserts that exactly those buttons are measured
+// and sit on their alias.
+test.describe('compact-height-icon-button', () => {
+  test('button — the page icon buttons are measured and on their alias', async ({ page }) => {
     await page.goto('/button.zul', { waitUntil: 'networkidle' });
-    await page.evaluate(() => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'z-button z-button-fab';
-      button.innerHTML = '<i class="z-icon-settings" aria-hidden="true"></i>';
-      document.querySelector('.z-p-8')!.appendChild(button);
-    });
     const results = await measureBothDensities(page);
     for (const density of DENSITIES) {
       const { deviations, measured } = results[density];
-      expect(measured['icon-button'], `${density}: the icon button of the page was measured`).toBe(1);
-      expect(measured['fab'], `${density}: the injected FAB was measured`).toBe(1);
-      const own = deviations.filter(d => d.tier === 'icon-button' || d.tier === 'fab');
+      expect(measured['icon-button'], `${density}: the icon buttons of the page were measured`).toBe(8);
+      const own = deviations.filter(d => d.tier === 'icon-button');
       expect(own.map(d => `${density} ${d.tier} ${d.element}: ${d.height}px, alias ${d.expected}px`)).toEqual([]);
     }
   });
@@ -464,5 +456,41 @@ test.describe('compact-comfortable-region', () => {
     expect(compactInside.tokenHeight, '--zk-button-height inside the region').toBe(comfortable.tokenHeight);
     expect(compactInside.paddingY, '--zk-button-padding-y inside the region').toBe(comfortable.paddingY);
     expect(compactInside.height, 'button height inside the region').toBe(comfortable.height);
+  });
+});
+
+// The off-ladder aliases are written relative to the rungs (tokens/_sizing.css), so a customer who changes only
+// --zk-control-height-md at :root moves the button and the popup menu rows with it. The aliases are calc()
+// expressions, so the heights are read from the rendered boxes, not from the custom property string.
+test.describe('density-rung-override', () => {
+  const OVERRIDDEN_MD = 48;
+  const OFF_LADDER_STEP = 4;
+  const OVERRIDE_STYLE = `:root { --zk-control-height-md: ${OVERRIDDEN_MD}px; }`;
+
+  const renderedHeight = (locator: Locator) => locator.evaluate(el => el.getBoundingClientRect().height);
+
+  async function measureButtonAndMenuitem(page: Page, overrideMd: boolean) {
+    const measure = async (url: string, selector: string, open?: (page: Page) => Promise<void>) => {
+      await page.goto(url, { waitUntil: 'networkidle' });
+      await page.evaluate(() => document.fonts.ready.then(() => true));
+      if (overrideMd) await page.addStyleTag({ content: OVERRIDE_STYLE });
+      if (open) await open(page);
+      return renderedHeight(page.locator(selector).first());
+    };
+    const button = await measure('/button.zul', '.z-button:not(.z-button-sm):not(.z-button-lg):not(.z-button-icon)');
+    const menuitem = await measure('/menubar.zul', '.z-menupopup-open .z-menuitem', async p => {
+      await p.locator('.z-menubar .z-menu-content').first().click();
+      await p.locator('.z-menupopup-open .z-menuitem').first().waitFor();
+    });
+    return { button, menuitem };
+  }
+
+  test('button — overriding only --zk-control-height-md at :root moves the button and menuitem heights', async ({ page }) => {
+    const byDefault = await measureButtonAndMenuitem(page, false);
+    const overridden = await measureButtonAndMenuitem(page, true);
+    const expected = OVERRIDDEN_MD - OFF_LADDER_STEP;
+    expect(overridden.button, 'button height follows --zk-control-height-md').toBe(expected);
+    expect(overridden.menuitem, 'menuitem height follows --zk-control-height-md').toBe(expected);
+    expect(overridden.button - byDefault.button, 'button moved by the rung delta').toBe(overridden.menuitem - byDefault.menuitem);
   });
 });

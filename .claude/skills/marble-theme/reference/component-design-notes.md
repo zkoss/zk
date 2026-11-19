@@ -45,9 +45,20 @@ Three parts must keep a real box, because WScroll reads their size or `offsetTop
   The base `.z-button` has `gap: var(--zk-spacing-2)` for the MD3 icon/image-to-label gap (the graphic
   and the label are separated only by a whitespace text node, which collapses in the flex box); the
   `:has(br)` rule sets its own smaller stacked gap that wins on specificity.
-- A filled `.z-button` hover raises the state layer to opacity 0.12 (hard-coded in `button.css`, above the global
-  `--zk-state-hover-opacity`) and lifts to `--zk-elevation-2`. Flat variants (outlined, text,
-  icon) and FAB are excluded and do not change elevation. (`zul/.../wgt/css/button.css`)
+- A filled `.z-button` darkens on hover and press: the state layer is `--zk-state-darken-color` (through
+  `--zk-button-overlay-color`) at opacity 0.16 on hover and 0.24 when pressed (hard-coded in `button.css`, above the global
+  `--zk-state-hover-opacity`), and hover lifts to `--zk-elevation-2`. `.z-button-dark` keeps `--zk-color-on-dark` (lightens)
+  and `.z-button-light` keeps `--zk-color-on-light`. Flat variants (outlined, text,
+  icon) are excluded and do not change elevation. The layer sits under the content (`isolation: isolate` on the button, `z-index: -1` on `::before`),
+  so a dark layer never tints the label or icon. (`zul/.../wgt/css/button.css`)
+- A filled `.z-combobutton` follows Button: overlay `--zk-state-darken-color`, 0.16 hover, 0.24 pressed, layer
+  under the label and the caret on both halves. When open, both halves carry the pressed-strength layer, so the
+  control is one colour whichever half is hovered. The toolbar mold is flat and keeps `--zk-color-on-surface-variant`
+  and the token opacities. (`zul/.../wgt/css/combobutton.css`)
+- Under a tablet user agent every widget keeps the default mold: zkmax's `touch/widget-touch.ts` turns
+  `zk.Widget.prototype.setMold` into a no-op, and only the widgets whose own touch script overrides `setMold` differ.
+  A `mold="toolbar"` Combobutton therefore renders without `z-combobutton-toolbar` and takes the filled look there;
+  measure the toolbar mold on a desktop project only.
 
 ## calendar
 
@@ -157,7 +168,7 @@ the 2px gap. The padding and the button width are `--zk-colorbox-padding` and `-
   which drew a lighter, thinner edge. Guarded by `zkthemelab/src/test/playwright/field-border-subpixel.spec.ts`.
   Focus, open and invalid focus keep the border at 1px and add an inset `box-shadow` of 1px in the state
   colour (`--zk-combobox-border-color-focus` for focus, `--zk-color-primary` for open, `--zk-color-error`
-  for invalid focus), so the second pixel does not shift the content.
+  for invalid focus and an invalid open field), so the second pixel does not shift the content.
   Which combo components hug their content (`field-sizing: content`) is a Marble decision, see
   `doc/spec/DESIGN.md`.
 - **`buttonVisible="false"`.** Marble draws the border of combobox, bandbox, datebox, timebox, spinner and
@@ -242,10 +253,9 @@ Adjacent bordered children double the seam, and the axis decides which border to
 horizontal-only collapse rule must be scoped with `.z-inputgroup:not(.z-inputgroup-vertical)`,
 otherwise the vertical textbox loses its left border. The group's `:focus-within` outline owns the
 focus affordance, so grouped children keep a constant 1px border and rest padding in every state.
-A grouped field that carries the error colour (failed constraint, `z-textbox-error`, `z-combobox-error`) keeps
+A grouped field that carries the error colour (failed constraint) keeps
 it at rest, hover and focus: the group's border shorthand has the specificity of the field's own error rule
-and loads after it, so each error selector is repeated inside the group. `.z-error` is ZK's error message
-box, never a field sclass, so no field rule uses it.
+and loads after it, so each error selector is repeated inside the group.
 (`zul/.../wgt/css/inputgroup.css`)
 
 ## linelayout

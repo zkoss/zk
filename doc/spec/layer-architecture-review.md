@@ -68,7 +68,7 @@ inject layers; it concatenates the source and **verifies** the wrapper is presen
    checkbox/radio mask-icon overrides in `listbox.css`/`tree.css` win over `_icons.css` purely because
    `zk-components` outranks `zk-base`, so their `!important` was redundant and was removed (verified
    rendering-neutral by computed-style probe + HEAD A/B). The remaining ones are predominantly **irreducible**: they neutralize ZK-JS-set **inline**
-   styles (splitlayout buttons, tablet popups, modal `.z-mask`, rotated borderlayout titles, collapsed
+   styles (splitlayout buttons, tablet popups, modal `.z-modal-mask`, rotated borderlayout titles, collapsed
    panel/groupbox heights) — no cascade layer can beat an inline style — plus `prefers-reduced-motion` resets and
    add-on internals. The small tail (menu separator, messagebox) is **also irreducible** — those are same-layer
    (`zk-components`) author-vs-author conflicts where the layer order gives no help; they correctly keep `!important`.

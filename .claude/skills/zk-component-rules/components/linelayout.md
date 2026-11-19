@@ -43,7 +43,7 @@ The `.z-lineitem-point-inner` element may carry additional classes for point con
 
 - No extra class — default; no image, no icon; the inner div is an empty square rendered by CSS alone.
 - The author-supplied `pointIconSclass` value is added to the inner div as its own class (`_updatePointIconSclass` in `Lineitem.ts`); ZK adds no `-point-icon` class. The inner div acts as an icon holder.
-- `.z-lineitem-point-image` — implicit via `background-image` inline style when `pointImageSrc` is set (no dedicated class, the image is applied via `background-image` by `_updatePointImageSrc()`).
+- `pointImageSrc` — applied as an inline `background-image` on the inner div by `_updatePointImageSrc()`; ZK adds no class for it.
 
 There are NO lineitem-level state classes for selected, disabled, active, or error. Linelayout and lineitem have no interactive state model — they are purely layout and display components.
 

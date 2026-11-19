@@ -4,7 +4,7 @@ The date-grid widget — used standalone (`<calendar/>`) or as the popup inside 
 
 ## `.z-calendar-today` is the today-link row, not a day cell
 
-`.z-calendar-today` appears only when `showTodayLink=true`. It sits on the today-link row, the same `div` that carries `.z-calendar-header` (`mold/calendar.js`). It is never on a day cell, so a rule such as `.z-calendar-cell.z-calendar-today` matches nothing.
+`.z-calendar-today` appears only when `showTodayLink=true`. It sits on the today-link row, the same `div` that carries `.z-calendar-header` (`mold/calendar.js`). It is never on a day cell.
 
 To highlight "today" among day cells, use a different mechanism (typically a custom `sclass` injected by the developer, or no highlight at all).
 

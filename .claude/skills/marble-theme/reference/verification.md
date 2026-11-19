@@ -38,6 +38,9 @@ Stop by pressing a key in the `appRun` terminal (closing stdin has the same effe
 `java.net.ConnectException: Connection refused`. Under `appRun` only the `statusPort` in
 `build/gretty_ports.properties` listens; the `servicePort` that `appStop` dials never opens. If you
 lose the terminal, kill the `org.akhikhl.gretty.Runner` process instead.
+When you stop it by pid, take the pid from `lsof -nP -iTCP:<port> -sTCP:LISTEN -t`. A plain
+`lsof -t -i:<port>` also lists every client connected to the port (a browser, a test runner), and
+killing those pids kills them too.
 
 **How to tell which theme is actually being served:** read the theme stylesheet href in the served
 HTML. Marble is zk's core theme, so the reset link carries **no theme segment** —
@@ -47,6 +50,8 @@ the theme prefix from that `reset.css` link.
 
 **After a CSS change,** rebuild (`./gradlew :zul:compileMarbleCss`, or the matching `zkcml` task for
 EE) and restart `appRun`. The two live-reload `<script>` tags some preview pages still carry are inert.
+`appRun` does not rebuild the `za11y` jar: after a change to a `za11y` stylesheet run `./gradlew :za11y:jar`
+in `zkcml` first, or the server keeps serving the old sheet.
 
 Do not rebuild jars on a running preview server. The zul and zkmax jars are shared; rebuilding them under a running server causes HTTP 500 or `NoClassDefFoundError`.
 
@@ -71,9 +76,18 @@ reaches the server. Nothing in the harness uses a query string.
 
 Run `node zkthemelab/scripts/select-tests.mjs --base <base>` from the repository root (usage:
 `zkthemelab/scripts/README-select-tests.md`). When it answers `partial`, run the single command it
-prints against your local preview server. When it answers `full`, do not start a full run on your
+prints against your local preview server; it leaves out `forced-colors-gallery` (see "Playwright projects"). When it answers `full`, do not start a full run on your
 own: report the selector's reasons and let the Marble maintainer decide when the full suite runs. The suite
 runs locally only; it is not wired to CI or Jenkins.
+
+When the maintainer asks for the full suite, run `PREVIEW_URL=<url> node scripts/verify-playwright.mjs`
+from `zkthemelab/` instead of assembling the Playwright commands by hand. It runs the two fixed runs
+(`chromium` and `compact` with screenshots compared; every other project except
+`forced-colors-gallery` with `--ignore-snapshots`), never writes a baseline, and prints only the
+failures that are not in `src/test/playwright/known-failures.json`. Exit code 0 means no new
+failure; a new failure is rerun once, up to the script's rerun limit, to show whether it is flaky. Add an entry to
+`known-failures.json` only when the Marble maintainer has accepted that failure (see "Verify Marble
+with one command" in `zkthemelab/README.md`).
 
 When the command you run includes screenshot specs (`toHaveScreenshot`), capture the baselines
 before you edit CSS. First run the selector with the CSS paths you are about to edit:
@@ -81,12 +95,14 @@ before you edit CSS. First run the selector with the CSS paths you are about to 
 `zkthemelab/scripts/README-select-tests.md`; it accepts explicit paths). Then, on the unedited CSS,
 run `npm run baseline:capture -- <Playwright args>` with the args of the command it prints (the
 `npx playwright test -c src/test/playwright/playwright.config.ts` prefix is left out, because the
-script adds `--config`). Edit and rebuild, then run `npm run baseline:compare -- <same args>`. See
+script adds `--config`; the script drops `--update-snapshots=...` and sets its own). Edit and rebuild, then run `npm run baseline:compare -- <same args>`. See
 "Screenshot baselines" below.
 
 ## Running Playwright — flags that bite
 
 - Compare against the baselines with the repo config: `npx playwright test -c src/test/playwright/playwright.config.ts ...`. A temporary config must copy `snapshotDir` and `snapshotPathTemplate`; otherwise the run writes new PNGs and passes falsely. Playwright reports a missing snapshot as "writing actual"; that line means nothing was compared.
+- A missing snapshot is also written into `doc/screenshots` (the default `--update-snapshots=missing`), so a page that gained a section leaves new PNGs behind after a compare run. Pass `--update-snapshots=none` to compare without writing, or delete the files the run created.
+- The config falls back to port 8085 when `PREVIEW_URL` is unset. Set `PREVIEW_URL` on every command when your server listens elsewhere, or the run goes to whatever answers on 8085.
 - In Playwright 1.59 a bare `--update-snapshots` defaults to `changed`. Name the mode (`--update-snapshots=changed`).
 - `-g` matches the title path joined by spaces and starting with the Playwright project name (`project file describe title`, e.g. `chromium screenshot.spec.ts tabbox gallery`). Anchor the end with `describe title$`; anchoring the start with `^` requires the project name. Do not paste the `›` form that `--list` prints.
 - Rebuild the class index only with `node scripts/build-class-index.mjs`. The script starts and stops the server it needs by itself (client ROD off). On a default server the pop-up elements are not in the static DOM, so the whole index would miss the pop-up classes. Do not build it against a server you already have running.
@@ -94,8 +110,9 @@ script adds `--config`). Edit and rebuild, then run `npm run baseline:compare --
 ## Spec files and test titles
 
 The suite is organised with **files = features and component = data**. `zkthemelab/doc/test-matrix.html`
-shows this architecture with diagrams (how a feature picks its components, the four layers, and how
-`select-tests.mjs` maps a change to tests); update it when that structure changes.
+shows this architecture with diagrams (how a feature picks its components, the layers its features fall
+into, how to check that the tests really test something, and how `select-tests.mjs` maps a change to
+tests); update it when that structure changes.
 
 - A spec file covers one feature (screenshot, density, forced-colors, focus ring, …), never one
   component. A component-specific regression test goes into the feature file it exercises.
@@ -124,10 +141,10 @@ The project list is in the config: `grep "name:" zkthemelab/src/test/playwright/
 - `smoke` renders every preview ZUL (xmllint passing is **not** proof a page renders).
 - `iceblue` runs IceBlue on ZK 11 through the `zktheme=iceblue` cookie.
 - `tablet` needs a mobile UA, because the client enables `tablet.css.dsp` only when `zk.mobile`.
-- `forced-colors-gallery` writes review artifacts, not compared baselines.
+- `forced-colors-gallery` writes review artifacts, not compared baselines, even with `--update-snapshots=none`; run it only on purpose, never through the command `select-tests.mjs` prints.
 
 ```bash
-cd zkthemelab && npx playwright test --config src/test/playwright/playwright.config.ts --project=<project>
+cd zkthemelab && npx playwright test --config src/test/playwright/playwright.config.ts --update-snapshots=none --project=<project>
 ```
 
 **Run it from `zkthemelab/`, not the repository root.** From the root, npx resolves a second copy of
@@ -188,6 +205,13 @@ are trying to catch.
 Also: disable transitions before measuring focus rings, and never open `/preview` in the
 Chrome automation session.
 
+**Computed colours read right after a state or `data-brand` switch are mid-transition.** `.z-button`
+transitions `background-color` over `--zk-motion-duration-standard`, and its `::before` state layer
+transitions `opacity` (`--zk-state-layer-transition`), the one that matters for state layers. Wait until
+`getAnimations({ subtree: true })` is empty, or disable transitions with `stopTransitions()` in
+`interaction-states.spec.ts`, which also covers `::before` and `::after` (the `*` rule in `settle()` of
+`brand-override.spec.ts` does not match pseudo-elements).
+
 **Geometry claims are read off the captured PNG, never the live DOM.**
 `getBoundingClientRect` at `networkidle` runs before the gallery spec's font-settle wait and read
 1 px wide on the splitter page while every shot showed the settled width.
@@ -205,8 +229,11 @@ Traced empirically (an earlier note wrongly said the server checks the UA):
 
 Consequences: a desktop UA leaves the link disabled — it is not even in `document.styleSheets`,
 so **tablet CSS can never leak to desktop by construction**. `zk.wcs` (~1.6 MB, the whole theme)
-sits at position 0 and `tablet.css.dsp` at position 1, so tablet rules win by source order with
-no `!important`; size variants such as `.z-button-sm.z-button` keep their size by specificity.
+sits at position 0 and `tablet.css.dsp` at position 1. The theme rules sit in `@layer zk-components`
+and the tablet rules are unlayered, so tablet rules win without `!important` whatever the specificity.
+Size variants therefore do not keep their size on a tablet: `.z-button`, `.z-button-sm` and `.z-button-lg`
+are all `--zk-touch-target-min` high, and every `.z-button-icon`, small and large included, is a
+`--zk-touch-target-min` square.
 Detect in-page with
 `[...document.styleSheets].some(s => s.href?.includes('zkmax/css/tablet.css'))`.
 
@@ -231,6 +258,10 @@ failures as regressions.** Confirm rendering-neutrality with a HEAD-versus-chang
 deterministic computed-style probes instead. A stale-baseline failure looks identical at HEAD with
 no change applied — check that before trusting the gate. Run ad-hoc probes with
 `NODE_PATH="$(pwd)/node_modules" node script.cjs` using `require('playwright')`.
+
+A flaky test the Marble maintainer has accepted is recorded as `intermittent` in
+`zkthemelab/src/test/playwright/known-failures.json`, so `verify-playwright.mjs` lists it without
+failing the run.
 
 ## Cross-theme A/B: the determinism floor
 
@@ -298,6 +329,25 @@ or put probes in a throwaway file from the start.
 - A verification command asserts only its own claim. Do not add extra output such as versions or counts. Write only to temporary directories and build output.
 - A verification clause must be able to detect the failure it claims to catch: it must be true on the real state today and false when the failure is present. Where possible, dry-run it once against the closest existing state.
 - A dry-run that stops at its designed marker says nothing about the later stages. Run all stages on a copy.
+
+## CSS rule coverage — which rules no test ever applies
+
+CSS has no line coverage, so the suite is measured by rule: `zkthemelab/scripts/css-coverage.mjs` lists every served
+Marble style rule that never matched an element in any Playwright test. Its header documents how to collect and merge,
+how the numbers are made and their limits. Run it after adding a component's CSS or its tests, and before deleting
+rules as dead.
+
+- It is off by default and changes no spec: a coverage run swaps `@playwright/test` for the wrapper in
+  `src/test/playwright/css-coverage/` through a separate tsconfig.
+- Always collect with `--ignore-snapshots` and a separate `--output`, as the header shows; see
+  "Screenshot baselines" above for why.
+- A never-applied rule is one of three things, and the list cannot tell which:
+  a state or variant no test reaches, a class ZK no longer emits, or a selector that does not agree with the class ZK
+  emits. Settle it from the widget source and the live DOM before acting — a rule on a class only an application's
+  `sclass` sets (the colour variants of the button, for example) is live.
+- "Applied" means only that the rule matched an element during some test. It does not mean a test asserts its result;
+  check that by removing the rule in the page and watching the test fail (see "Writing checks that can fail").
+- Chromium only. Expect a difference of one or two rules between runs, from states that depend on timing.
 
 ## Theme-done criterion
 

@@ -62,7 +62,7 @@ Icon-only tabs (`iconSclass` set, no `label`) render the icon centred in the tab
 | c16 | `.z-tabbox-accordion .z-tabpanel-content` | padding | `var(--zk-spacing-4)` | DESIGN.md "Spacing Scale" |
 | c17 | `.z-tabbox-accordion .z-tabpanel + .z-tabpanel` | border-top | `1px solid var(--zk-tab-border-color)` | tabbox.css; DESIGN.md "Surface Palette" |
 
-**Nested isolation: the same role looks and measures the same wherever it is nested.** The accordion selectors in c11–c17, c22h, c22i, c35 and c11a are shorthand: in `tabbox.css` each is a child-combinator chain from the accordion root (`.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content …`). A strip tabbox nested in an accordion panel therefore looks and measures exactly like the same tabbox outside it, and an accordion nested in anything equals an un-nested accordion. Do not write accordion rules as descendant selectors.
+**Nested isolation: the same role looks and measures the same wherever it is nested.** The accordion selectors in c11–c17, c22h, c22i, c35 and c11a are shorthand: in `tabbox.css` each is a child-combinator chain from the accordion root (`.z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab > .z-tab-content …`). A strip tabbox nested in an accordion panel therefore looks and measures exactly like the same tabbox outside it, and an accordion nested in anything equals an un-nested accordion. Do not write accordion rules as descendant selectors. The same holds for the orient rules of the strip molds (c18–c21, c34, c34a and the placement rules for `-top`, `-bottom`, `-left`, `-right`): each is a chain from its own `.z-tabbox-{orient}` root (`.z-tabbox-left > .z-tabs .z-tab`), so a tabbox, strip or accordion, nested in a tabpanel of a tabbox of another orient looks and measures like the same tabbox outside it. `nested-header.spec.ts` holds this.
 
 ### Orientation indicators — c18–c21
 
@@ -89,7 +89,7 @@ The scroll buttons are visible whenever ZK adds `.z-tabbox-scroll` to the root. 
 | c22g | `.z-tabbox-scroll > .z-tabbox-up-scroll, .z-tabbox-scroll > .z-tabbox-down-scroll` | min-width | `120px` (matches `.z-tabs` min-width in vertical mode — ZK propagates `tabs.style.width` to scroll buttons, which can be narrower than the rendered strip if min-width isn't matched) | skill — Layout invariants |
 | c22h | `.z-tabbox-accordion .z-tabpanel` | min-height | `0` (overrides base `.z-tabpanel { min-height: 80px }` so `Tabpanel._fixPanelHgh` doesn't clamp selected cave height to 0) | skill — Layout invariants |
 | c22i | `.z-tabbox-accordion .z-tab-content` | padding | `0` (overrides the base `.z-tab-content` padding; outer `.z-tab` already supplies vertical padding so doubling it inflates header) | skill — Layout invariants |
-| c22j | `.z-tabbox-right > .z-tabbox-up-scroll, .z-tabbox-right > .z-tabbox-down-scroll` | left, right | `left: auto; right: 0;` (overrides shared default `left: 0`; the scroll buttons MUST anchor on the tabs' side — `.z-tabbox-left`/`.z-tabbox-vertical` keep the default; `.z-tabbox-right` flips them) | skill — Layout invariants |
+| c22j | `.z-tabbox-right > .z-tabbox-up-scroll, .z-tabbox-right > .z-tabbox-down-scroll` | left, right | `left: auto; right: 0;` (overrides shared default `left: 0`; the scroll buttons MUST anchor on the tabs' side — `.z-tabbox-left` keeps the default; `.z-tabbox-right` flips them) | skill — Layout invariants |
 | c22k | `.z-tabbox-accordion` | border-radius | none (must NOT be set — children are square-cornered and parent rounding leaves visible sharp corners; MD3 expansion-panel groups are flat at the edges; `overflow: hidden` workaround is forbidden because it breaks `jq.slideDown`) | skill — Layout invariants |
 | c23 | `.z-tabbox-scroll > .z-tabbox-up-scroll`, `.z-tabbox-scroll > .z-tabbox-down-scroll` | display | `flex` (centred glyph) | this contract |
 | c24 | `.z-tabbox-left-scroll`, `.z-tabbox-right-scroll` | width | 40px | MUI TabScrollButton.css |
@@ -113,8 +113,8 @@ Executes the deferred tabbox side-flip pass.
 | c31 | `.z-tab-button` | order | `1` | ZK emits the button BEFORE `.z-tab-text` in the DOM (skill — DOM structure); flex `order` flips it to trailing. Dismiss affordances trail the content (`doc/spec/md3-close-affordance-placement.md`) |
 | c32 | `.z-tab-button` | margin-left | `0` (label–icon gap supplied solely by `.z-tab-content { gap: var(--zk-spacing-1) }`) | closable geometry 16/4/8 — the previous `margin-left: spacing-1` was the gap *in leading position*; once trailing, it would double the gap to 8px |
 | c33 | `.z-tab-content:has(> .z-tab-button)` | padding-right | `var(--zk-spacing-2)` | trailing inset = half the 16px text inset (16/4/8), mirrors GL close-7. Cascade note: accordion's c22i (`padding: 0`) has equal specificity (0,2,0) and MUST come later in the file so accordion headers stay at padding 0 |
-| c34 | `.z-tabbox-left .z-tab-content`, `.z-tabbox-vertical .z-tab-content`, `.z-tabbox-right .z-tab-content` | flex | `1 1 auto` (content row spans the full bar width) | prerequisite for c34a — without it the content box shrink-wraps and `margin-left: auto` has no room to act |
-| c34a | `.z-tabbox-left .z-tab-button`, `.z-tabbox-vertical .z-tab-button`, `.z-tabbox-right .z-tab-button` | margin-left | `auto` | vertical-orient bars are ≥ 120px wide — order alone leaves the × adjacent to a short label mid-bar; `auto` margin pushes it to the bar's trailing edge |
+| c34 | `.z-tabbox-left > .z-tabs .z-tab-content`, `.z-tabbox-right > .z-tabs .z-tab-content` | flex | `1 1 auto` (content row spans the full bar width) | prerequisite for c34a — without it the content box shrink-wraps and `margin-left: auto` has no room to act |
+| c34a | `.z-tabbox-left > .z-tabs .z-tab-button`, `.z-tabbox-right > .z-tabs .z-tab-button` | margin-left | `auto` | vertical-orient bars are ≥ 120px wide — order alone leaves the × adjacent to a short label mid-bar; `auto` margin pushes it to the bar's trailing edge |
 | c35 | `.z-tabbox-accordion .z-tab-content::after` | order / display | `2`; `display: none` on `.z-tab-content:has(> .z-tab-button)::after` | non-closable header: label (`flex: 1`) … chevron (`order: 2`). Closable header: label … × (c11a) — the × replaces the chevron |
 | c36 | `.z-tab-button > .z-tab-icon` | position / width / height | `absolute` centred (`top/left: 50%`, `translate(-50%,-50%)`) / `24px` / `24px` | WCAG 2.5.8 hit area for strip molds (top/bottom/left/right/vertical). The `<i>` is the click target (Tab.ts `_doCloseClick`); out of flow so c31–c34a geometry and the 18px glyph are unchanged; 24px ends 4px inside the tab edge (8px trailing inset − 4px). In accordion the `<i>` fills the 32px (compact 24px) wrapper | `doc/spec/md3-close-affordance-placement.md`; the strip 24×24 rule is in za11y (WCAG), see the paragraph above |
 
@@ -135,7 +135,7 @@ Outcome-level predicates gating VERIFIED (first backfilled M-row for this pre-ou
 | strip — tab bar | `.z-tabbox-top > .z-tabs` | c7 |
 | strip — hover | `.z-tab:hover` | c8 |
 | strip — closable | `.z-tab-content:has(> .z-tab-button)` | c31, c32, c33, M1 |
-| vertical — closable | `.z-tabbox-left/.z-tabbox-vertical/.z-tabbox-right` closable tab | c34, c34a, M1 |
+| vertical — closable | `.z-tabbox-left/.z-tabbox-right` closable tab | c34, c34a, M1 |
 | accordion — container | `.z-tabbox-accordion` | c9, c10 |
 | accordion — header default | `.z-tabbox-accordion .z-tab` | c11, c12, c13 |
 | accordion — header selected | `.z-tabbox-accordion .z-tab.z-tab-selected` | c14, c15 |

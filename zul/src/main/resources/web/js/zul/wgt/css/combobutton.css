@@ -36,6 +36,8 @@
     /* ZK-3579: the content fills the combobutton's width, so the arrow sits at the root's right edge. */
     flex: 1 1 auto;
     overflow: hidden;
+    /* The stacking context lets the state layer sit under the label and image (see ::before). */
+    isolation: isolate;
     min-height: var(--zk-button-height);
     padding: 0 var(--zk-spacing-4);
     /* Leave room on the right for the arrow button */
@@ -53,10 +55,12 @@
     transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
-/* State layer for main content */
+/* State layer for main content. z-index -1 puts it between the background and the label, so the dark
+   overlay does not tint the text. */
 .z-combobutton-content::before {
     content: '';
     position: absolute;
+    z-index: -1;
     inset: 0;
     background-color: var(--zk-combobutton-overlay-color);
     opacity: 0;
@@ -78,6 +82,16 @@
     opacity: var(--zk-combobutton-focus-opacity);
     clip-path: none;
 }
+/* Filled combobutton, like a filled Button: 16% on hover, 24% when pressed. :where() keeps the
+   specificity of the rules above. They come after the focus rule so that hovering or pressing a focused
+   combobutton (a click focuses it) still reads 0.16 / 0.24. The toolbar mold is flat and keeps the token
+   strengths. */
+.z-combobutton:where(:not(.z-combobutton-toolbar)):hover .z-combobutton-content:where(:not(:has(.z-combobutton-button:hover)))::before {
+    opacity: 0.16;
+}
+.z-combobutton:where(:not(.z-combobutton-toolbar)):active .z-combobutton-content:where(:not(:has(.z-combobutton-button:hover)))::before {
+    opacity: 0.24;
+}
 
 /* Dropdown arrow portion — positioned absolutely on the right */
 .z-combobutton-button {
@@ -96,10 +110,12 @@
     transition: background-color var(--zk-motion-duration-standard) var(--zk-motion-easing-standard);
 }
 
-/* State layer for the arrow half — hover / press only the arrow rectangle */
+/* State layer for the arrow half — hover / press only the arrow rectangle. z-index -1 puts it under the
+   caret icon (the arrow is already a stacking context through its own z-index). */
 .z-combobutton-button::before {
     content: '';
     position: absolute;
+    z-index: -1;
     inset: 0;
     background-color: var(--zk-combobutton-overlay-color);
     opacity: 0;
@@ -109,6 +125,8 @@
 
 .z-combobutton-button:hover::before { opacity: var(--zk-combobutton-hover-opacity); }
 .z-combobutton-button:active::before { opacity: var(--zk-combobutton-active-opacity); }
+.z-combobutton:where(:not(.z-combobutton-toolbar)) .z-combobutton-button:hover::before { opacity: 0.16; }
+.z-combobutton:where(:not(.z-combobutton-toolbar)) .z-combobutton-button:active::before { opacity: 0.24; }
 
 /* Icon inside arrow area */
 .z-combobutton-icon {
@@ -129,6 +147,12 @@
 /* Open keeps the whole-wrapper layer even while the label is hovered (beats the hover clip). */
 .z-combobutton.z-combobutton-open .z-combobutton-content::before {
     clip-path: none;
+}
+/* Filled and open: both halves carry the pressed-strength layer, so the whole control is one colour. Placed after
+   the arrow's hover rule, which it ties on specificity, so hovering either half while open changes nothing. */
+.z-combobutton.z-combobutton-open:where(:not(.z-combobutton-toolbar)) .z-combobutton-content::before,
+.z-combobutton.z-combobutton-open:where(:not(.z-combobutton-toolbar)) .z-combobutton-button::before {
+    opacity: 0.24;
 }
 
 /* ─── Toolbar mold ─────────────────────────────────────────────────────── */
@@ -170,7 +194,6 @@
 .z-combobutton[disabled] .z-combobutton-content {
     background-color: var(--zk-color-disabled-container);
     color: var(--zk-color-disabled);
-    cursor: not-allowed;
 }
 
 .z-combobutton[disabled] .z-combobutton-content::before {

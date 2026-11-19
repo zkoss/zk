@@ -23,18 +23,21 @@
  */
 :root {
     /* ── Button — filled base ────────────────────────────────────────────
-       The color VARIANTS (.z-button-secondary/-success/…, outlined, text, icon,
-       fab) keep their own colors via higher-specificity rules; these knobs drive
-       the default filled button. State is an MD3 ::before overlay (a tint whose
-       opacity animates), NOT a per-state background — so the knobs are an overlay
-       color + per-state opacities, matching the real implementation. */
+       --zk-button-overlay-color drives the default and the coloured filled
+       variants (.z-button-secondary/-success/…); .z-button-dark and -light keep
+       their own overlay colours, and so do outlined, text and icon. The filled
+       hover and pressed strengths are fixed in button.css, so
+       --zk-button-hover-opacity and --zk-button-active-opacity drive only the
+       flat variants; --zk-button-focus-opacity drives focus on every variant.
+       State is an MD3 ::before overlay (a tint whose opacity animates), NOT a
+       per-state background. */
     --zk-button-bg:             var(--zk-color-primary);
     --zk-button-fg:             var(--zk-color-on-primary);
     --zk-button-radius:         var(--zk-shape-button);
     --zk-button-elevation:      var(--zk-elevation-resting);
     --zk-button-padding-y:      6px;                    /* off-token literal (kept as default) */
     --zk-button-padding-x:      var(--zk-spacing-4);    /* 16px */
-    --zk-button-overlay-color:  var(--zk-color-on-primary);
+    --zk-button-overlay-color:  var(--zk-state-darken-color);
     --zk-button-hover-opacity:  var(--zk-state-hover-opacity);    /* .08 */
     --zk-button-focus-opacity:  var(--zk-state-focus-opacity);    /* .12 */
     --zk-button-active-opacity: var(--zk-state-pressed-opacity);  /* .12 */
@@ -252,12 +255,11 @@
     --zk-tab-fg-hover:     var(--zk-color-on-surface);
     --zk-tab-accent:       var(--zk-color-primary);
 
-    /* ── Menu — menubar surface + dropdown popup + selected item ─────────── */
+    /* ── Menu — menubar surface + dropdown popup ─────────────────────────── */
     --zk-menubar-bg:             var(--zk-color-surface-container);
     --zk-menupopup-bg:           var(--zk-color-surface);
     --zk-menupopup-radius:       var(--zk-shape-menu);
     --zk-menupopup-border-color: var(--zk-color-outline-variant);
-    --zk-menuitem-selected-bg:   var(--zk-color-secondary-container);
 
     /* ── Badge (native, ZK-6097) — the indicator resolves these. ZK always stamps
        a severity class (default `info`), and the indicator is a CHILD of it, so a
@@ -344,18 +346,21 @@
     /* ── Combobutton — split button (filled base + dropdown arrow) ───────
        Shares the button family's overlay state model: state is an MD3
        ::before overlay on the content area (a tint whose opacity animates),
-       not a per-state background, so the knobs are bg/fg + radius + an
-       overlay color/opacities pair, matching the real implementation. The
+       not a per-state background. --zk-combobutton-overlay-color drives the
+       filled combobutton. Its filled hover and pressed strengths (and the open
+       state, which shows the pressed strength on both halves) are fixed in
+       combobutton.css, so --zk-combobutton-hover-opacity and
+       --zk-combobutton-active-opacity drive only the toolbar mold;
+       --zk-combobutton-focus-opacity drives focus on the label half. The
        divider between the content and arrow areas is its own accent knob.
        The toolbar mold is a color VARIANT (like button's outlined/text
        variants) and keeps its own colors via higher-specificity rules;
-       disabled likewise stays off the knobs — both intentionally not
-       knob-driven, same convention as button. */
+       disabled likewise stays off the knobs. */
     --zk-combobutton-bg:             var(--zk-color-primary);
     --zk-combobutton-fg:             var(--zk-color-on-primary);
     --zk-combobutton-radius:         var(--zk-shape-button);
     --zk-combobutton-divider-color:  rgba(255, 255, 255, 0.3);
-    --zk-combobutton-overlay-color:  var(--zk-color-on-primary);
+    --zk-combobutton-overlay-color:  var(--zk-state-darken-color);
     --zk-combobutton-hover-opacity:  var(--zk-state-hover-opacity);
     --zk-combobutton-focus-opacity:  var(--zk-state-focus-opacity);
     --zk-combobutton-active-opacity: var(--zk-state-pressed-opacity);
@@ -394,8 +399,8 @@
        number/title text; --zk-calendar-header-fg is the muted weekday-label
        + nav-icon (resting) text. --zk-calendar-accent / -accent-fg is a
        single defining-state pair — it colors the selected-day fill, that
-       day's own hover blend, the today ring, and the Today-link label (all
-       four read var(--zk-color-primary)/-on-primary today), the same "one
+       day's own hover blend, and the Today-link label (all
+       three read var(--zk-color-primary)/-on-primary today), the same "one
        knob, several roles" precedent as tab's --zk-tab-accent. Hover state
        layers (title/icon/day-cell hover tints, the Today-link hover tint)
        stay on base tokens, not knob-driven (same convention as menu's
@@ -413,13 +418,11 @@
 
     /* ── Toolbar — chrome bar (bg + divider line) ─────────────────────────
        A plain surface bar, no radius (full-width chrome, like menubar). One
-       shared border-color knob drives every divider in the family: the bar's
-       own edge (border-bottom horizontal / border-right vertical) AND the
-       .z-toolbarseparator item divider (both orientations) — same precedent
-       as tab's --zk-tab-border-color driving every tab-family border. The
-       app-bar context variant (.z-north .z-toolbar, incl. its toolbarseparator
-       color-mix tint) is a distinct color VARIANT (like combobutton's toolbar
-       mold) and keeps its own colors, not knob-driven; likewise the tabs-host
+       shared border-color knob drives the bar's own edge (border-bottom
+       horizontal / border-right vertical) — same precedent as tab's
+       --zk-tab-border-color driving every tab-family border. The
+       app-bar context variant (.z-north .z-toolbar) is a distinct color
+       VARIANT (like combobutton's toolbar mold) and keeps its own colors, not knob-driven; likewise the tabs-host
        variant (.z-toolbar-tabs, transparent/no-border) and the overflow popup
        (.z-toolbar-popup, a minor sub-feature) stay on base tokens. */
     --zk-toolbar-bg:           var(--zk-color-surface);
@@ -573,7 +576,6 @@
        color variants). */
     --zk-messagebox-bg:           var(--zk-color-surface);
     --zk-messagebox-fg:           var(--zk-color-on-surface-variant);
-    --zk-messagebox-header-fg:    var(--zk-color-on-surface);
     --zk-messagebox-border-color: var(--zk-color-outline-variant);
     --zk-messagebox-radius:       var(--zk-shape-dialog);
     --zk-messagebox-elevation:    var(--zk-elevation-dialog);
@@ -749,8 +751,7 @@
        listbox/tree's selected-bg/-fg. The group header's own open/selected
        color swap (.z-nav-open/.z-nav-selected > .z-nav-content), the hover
        state layer (::before overlay + navitem's rgba hover fill), the
-       group-label text (.z-nav-header), the horizontal mode's submenu/
-       overflow popup surface (.z-nav-popup, .z-navbar-horizontal .z-nav >
+       horizontal mode's submenu/overflow popup surface (.z-nav-popup, .z-navbar-horizontal .z-nav >
        ul), and the badge (.z-nav-info/-navitem-info) stay on base tokens —
        secondary sub-features kept out of the curated surface (same
        convention as calendar/toolbar's minor sub-features). Disabled dims
@@ -1132,9 +1133,8 @@
        same "one knob, several roles" precedent as tab/calendar/coachmark's shared
        fill. --zk-confirmpopup-header-fg covers BOTH the root's own text color AND
        the optional header's title text (both read on-surface today); the message
-       body reads the muted on-surface-variant tone via its own --zk-confirmpopup-fg,
-       the same "header vs body" fg pairing precedent as messagebox's
-       -header-fg/-fg. --zk-confirmpopup-border-color covers the arrow's outer
+       body reads the muted on-surface-variant tone via its own --zk-confirmpopup-fg.
+       --zk-confirmpopup-border-color covers the arrow's outer
        ::before edge (all four placements) AND both dividers (header's
        border-bottom, footer's border-top) — the same "one knob, several dividers"
        precedent as toolbar/messagebox's shared border-color. Severity recolors
@@ -1286,9 +1286,9 @@
     --zk-codeeditor-dark-border-color-focus: oklch(from var(--zk-color-primary) 0.8 c h); /* ≈ #80bdff */
 }
 
-/* Compact density: a 20px label line plus the default 6px padding is 32px, taller than the
-   30px --zk-button-height, and an outlined button adds its 1px borders on top of that. 4px
-   leaves room for those borders, so every button variant, the confirmpopup and messagebox
+/* Compact density: --zk-typescale-label-large-line-height plus the default --zk-button-padding-y
+   is taller than the compact --zk-button-height, and an outlined button adds its 1px borders on
+   top of that. The value below leaves room for those borders, so every button variant, the confirmpopup and messagebox
    buttons included, ends up exactly --zk-button-height. Declared here, after :root, because
    html[data-density="compact"] is :root itself and an earlier rule would lose to the default. */
 [data-density="compact"] {

@@ -23,14 +23,15 @@ current px. Only the customer's compact override changes anything.
 **Layer 2 — the semantic alias layer.** Every component binds to a rung **by meaning**, never to
 a raw px (`--zk-input-height`, `--zk-toolbar-height`, `--zk-window-header-height`, …; the full list
 is in `tokens/_sizing.css`). This is the discipline that prevents drift: the intentional
-input-40 / button-36 / toolbar-48 *relationships* survive a tier change because the relationship is
-defined once, here. A few aliases are deliberately off-ladder: their default is a literal px
-(an MD figure such as the button base, or a popup menu row denser than its bar), not a rung.
-Each one is marked `off-ladder` in its comment in `tokens/_sizing.css`; that marker, not a
-list here, is the record of which aliases they are.
+relationships (`--zk-input-height` above `--zk-button-height`, `--zk-toolbar-height` above
+`--zk-input-height`) survive a tier change because the relationship is defined once, here. The aliases
+marked `off-ladder` in `tokens/_sizing.css` are relative to a rung: the rung minus a step (4px in the
+default tier, 2px in compact), so they follow that rung. Each one is marked `off-ladder` in its comment
+in `tokens/_sizing.css`; that marker, not a list here, is the record of which aliases they are. The
+values no rung drives (for example `--zk-header-padding-y`) are stated in each density block instead.
 
-A normal customer flips only the 5 rungs plus the off-ladder seeds; every alias follows
-automatically.
+A normal customer flips only the 5 rungs plus the values that no rung drives (`--zk-header-padding-y`
+and the Layer 3 cell padding); every alias follows automatically.
 
 **Layer 3 — data-cell padding:** `--zk-grid-cell-padding`, `--zk-grid-detail-padding`, `--zk-listbox-cell-padding`,
 `--zk-tree-cell-padding`, `--zk-tree-header-padding`, and the group-row pair `--zk-group-padding-y`/`--zk-group-padding-x`.
@@ -60,11 +61,11 @@ using a height token and most hardcoding 28/32/36/40/44/48/56.
 - **Cascade shadowing.** The three cell-padding tokens were declared on the component and
   shadowed the `:root` override. Hoisted. Any new overridable token needs the same check.
 - **Button padding in compact.** A label line (`--zk-typescale-label-large-line-height`) plus the
-  default `--zk-button-padding-y` is 32px, taller than the compact `--zk-button-height`, and an
-  outlined button adds its 1px borders on top (34px). Compact sets `--zk-button-padding-y: 4px` (in `_component-theme.css`,
+  default `--zk-button-padding-y` is taller than the compact `--zk-button-height`, and an outlined
+  button adds its 1px borders on top. Compact lowers `--zk-button-padding-y` (in `_component-theme.css`,
   after `:root`, because `html[data-density=compact]` is `:root` itself), so filled, text,
-  icon+label, outlined, confirmpopup and messagebox buttons are all exactly 30px; icon-only stays
-  at `--zk-icon-button-size`. Default is unchanged.
+  icon+label, outlined, confirmpopup and messagebox buttons are all exactly `--zk-button-height`; icon-only
+  stays at `--zk-icon-button-size`. Default is unchanged.
 - **Colorbox swatch in compact.** The colorbox is square, so at the compact 32px its padding,
   gap and 14px chevron button left an 8px swatch. Compact sets `--zk-colorbox-padding: 2px` and
   `--zk-colorbox-button-width: 12px` (same block as the button padding), which gives a 12px swatch;

@@ -1,4 +1,5 @@
 <zk xmlns:h="native">
+<apply templateURI="~./pv/errorbox-hidden.zul"/>
 <h:div class="z-mb-6">
     <h:div class="z-text-uppercase z-border-bottom z-pb-2 z-mb-4"><h:span class="z-text-xs z-fw-semibold z-text-secondary">Seeded value</h:span></h:div>
     <h:div class="z-d-flex z-flex-wrap z-gap-6 z-py-3">
@@ -18,7 +19,7 @@
             <div><timebox/></div>
             <div><timebox disabled="true"/></div>
             <div><timebox readonly="true"/></div>
-            <div><timebox sclass="z-timebox-invalid"/></div>
+            <div><timebox errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"/></div>
             <div><timebox inplace="true" value="${sampleTime}"/></div>
         </div>
         <div sclass="z-d-contents">
@@ -26,7 +27,7 @@
             <div><timebox buttonVisible="false"/></div>
             <div><timebox buttonVisible="false" disabled="true"/></div>
             <div><timebox buttonVisible="false" readonly="true"/></div>
-            <div><timebox buttonVisible="false" sclass="z-timebox-invalid"/></div>
+            <div><timebox buttonVisible="false" errorMessage="Wrong value" errorboxSclass="demo-errorbox-hidden"/></div>
             <div><timebox buttonVisible="false" inplace="true" value="${sampleTime}"/></div>
         </div>
     </template>

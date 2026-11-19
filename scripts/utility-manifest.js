@@ -116,7 +116,7 @@ function astClassNames(filename, code) {
 
 // Every class name the component stylesheets define. The utility files are not purely
 // authorable: _print.css also resets component chrome under @media print (`.z-panel`,
-// `.z-mask`, `.z-listbox-body`, …). Those rules apply on their own and are not something an
+// `.z-modal-mask`, `.z-listbox-body`, …). Those rules apply on their own and are not something an
 // author writes in `sclass`, so they must not reach the catalogue. Asking the component CSS
 // which names it owns settles it without a hand-maintained exclusion list.
 function collectComponentClasses(componentDir) {

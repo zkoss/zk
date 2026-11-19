@@ -114,7 +114,7 @@ async function expectComputedLike(target: Locator, property: string, tokenValue:
 }
 
 // Enabled, editable instance that is not in a state variant: the "Default" cell of a matrix row.
-const PLAIN = ':not([class*="-disabled"]):not([class*="-readonly"]):not([class*="-invalid"]):not([class*="-inplace"])';
+const PLAIN = ':not([class*="-disabled"]):not([class*="-readonly"]):not(:has([class*="-invalid"])):not([class*="-inplace"])';
 
 /**
  * The widget next to a small caption label, e.g. labelled(page, 'Timezone selector', 'z-datebox'):

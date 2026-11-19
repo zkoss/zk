@@ -143,11 +143,12 @@ test.describe('anchorlayout', () => {
 
 // Guard for grid.css and listbox.css (ZK-6112, B36-2805177): a Grid or Listbox without rows shows no height of its own,
 // as under IceBlue (at most the 1px its empty cell gets there), and with an emptyMessage the body is as tall as the
-// message box. The empty cell must not keep the browser's default td padding, which added 2px both times.
+// message box plus that same 1px (a8d0d9c1de keeps it so an empty table can still scroll sideways, B70-ZK-2290). The
+// empty cell must not keep the browser's default td padding, which added 2px both times.
 // A Tree has no empty cell (Tree.ts renders none), so it is not covered.
 // Fixture: web/pv/empty-mesh-body-guard.zul
 test.describe('empty mesh body', () => {
-  const MAX_EMPTY_BODY_HEIGHT_PX = 1;
+  const EMPTY_CELL_BOTTOM_PADDING_PX = 1;
 
   test.beforeEach(async ({ page }) => {
     const resp = await page.goto('/pv/empty-mesh-body-guard.zul', { waitUntil: 'networkidle' });
@@ -162,13 +163,13 @@ test.describe('empty mesh body', () => {
 
   for (const name of ['listbox', 'grid']) {
     test(`${name} — an empty body shows no height of its own`, { tag: '@ZK-6112' }, async ({ page }) => {
-      expect(await bodyHeight(page, name)).toBeLessThanOrEqual(MAX_EMPTY_BODY_HEIGHT_PX);
+      expect(await bodyHeight(page, name)).toBeLessThanOrEqual(EMPTY_CELL_BOTTOM_PADDING_PX);
     });
 
-    test(`${name} — with an emptyMessage the body is as tall as the message box`, { tag: '@ZK-6112' }, async ({ page }) => {
+    test(`${name} — with an emptyMessage the body is as tall as the message box plus the empty cell's bottom padding`, { tag: '@ZK-6112' }, async ({ page }) => {
       const id = name + 'Message';
       expect(await messageBoxHeight(page, id, name)).toBeGreaterThan(0);
-      expect(await bodyHeight(page, id)).toBeCloseTo(await messageBoxHeight(page, id, name), 0);
+      expect(await bodyHeight(page, id)).toBeCloseTo(await messageBoxHeight(page, id, name) + EMPTY_CELL_BOTTOM_PADDING_PX, 0);
     });
   }
 });

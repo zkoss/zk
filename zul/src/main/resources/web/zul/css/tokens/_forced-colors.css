@@ -51,7 +51,6 @@
     .z-errorbox-content,
     .z-loading,
     .z-apply-loading,
-    .z-shadow,
     .z-error,
     .z-notification-content,
     .z-toast-content {
@@ -155,17 +154,12 @@
        `position: relative`; the overlay is pointer-transparent, and `::before` is free (the timepicker's
        focus ring is its `::after`). */
     .z-datebox:has(.z-datebox-invalid)::before,
-    .z-datebox.z-datebox-invalid::before,
     .z-timebox:has(.z-timebox-invalid)::before,
-    .z-timebox.z-timebox-invalid::before,
     .z-timepicker:has(.z-timepicker-invalid)::before,
     .z-spinner:has(.z-spinner-invalid)::before,
-    .z-spinner.z-spinner-invalid::before,
     .z-doublespinner:has(.z-doublespinner-invalid)::before,
-    .z-doublespinner.z-doublespinner-invalid::before,
-    .z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid))::before,
-    /* The standard combobox has no box: its root ::before is the underline, which the overlay would replace. */
-    .z-combobox:not(.z-combobox-standard):is(.z-combobox-invalid, :has(> .z-combobox-invalid))::before,
+    .z-bandbox:has(> .z-bandbox-invalid)::before,
+    .z-combobox:has(> .z-combobox-invalid)::before,
     .z-daterangebox.z-daterangebox-invalid::before {
         content: '';
         position: absolute;
@@ -175,31 +169,15 @@
         pointer-events: none;
     }
 
-    /* (1c-standard) The standard combobox has no box, so its error cue is a double underline on the same ::before. The
-       focus line (::after) would cover it with one solid bar; the (1b) outline is the focus signal here. */
-    .z-combobox.z-combobox-standard:is(.z-combobox-invalid, :has(> .z-combobox-invalid))::before {
-        border-bottom-style: double;
-        border-bottom-width: 3px;
-    }
-    .z-combobox.z-combobox-standard:is(.z-combobox-invalid, :has(> .z-combobox-invalid))::after {
-        display: none;
-    }
-
     /* (2a) Selected rows lose their primary-container tint → map to the system
        selection colors so the selection stays obvious. */
     .z-listitem.z-listitem-selected,
-    .z-listitem.z-selected,
-    .z-treerow.z-treerow-selected,
-    .z-treerow.z-selected {
+    .z-treerow.z-treerow-selected {
         background-color: Highlight;
         color: HighlightText;
     }
-    .z-listitem.z-listitem-selected .z-listcell-cnt,
     .z-listitem.z-listitem-selected .z-listcell-content,
-    .z-listitem.z-selected .z-listcell-cnt,
-    .z-listitem.z-selected .z-listcell-content,
-    .z-treerow.z-treerow-selected .z-treecell-content,
-    .z-treerow.z-selected .z-treecell-content {
+    .z-treerow.z-treerow-selected .z-treecell-content {
         color: HighlightText;
     }
 
@@ -231,9 +209,7 @@
     .z-navitem-selected > .z-navitem-content:focus-visible,
     .z-navitem.z-navitem-selected > .z-navitem-content:focus-visible,
     .z-tree:has(.z-focus-a:focus-visible) .z-treerow.z-treerow-focus.z-treerow-selected,
-    .z-tree:has(.z-focus-a:focus-visible) .z-treerow.z-treerow-focus.z-selected,
     .z-listbox:has(.z-focus-a:focus-visible) .z-listitem.z-listitem-focus.z-listitem-selected,
-    .z-listbox:has(.z-focus-a:focus-visible) .z-listitem.z-listitem-focus.z-selected,
     .z-orgitem-selected > .z-orgnode:focus-visible {
         outline-color: HighlightText;
     }
@@ -241,12 +217,8 @@
     /* (2a backplate) forced-colors paints a Canvas backplate behind inline text; on a
        Highlight fill the near-white label reads white-on-white. Opt the label text out
        so HighlightText paints straight onto the fill. */
-    .z-listitem.z-listitem-selected .z-listcell-cnt,
     .z-listitem.z-listitem-selected .z-listcell-content,
-    .z-listitem.z-selected .z-listcell-cnt,
-    .z-listitem.z-selected .z-listcell-content,
     .z-treerow.z-treerow-selected .z-treecell-content,
-    .z-treerow.z-selected .z-treecell-content,
     .z-tabbox-accordion > .z-tabpanels > .z-tabpanel > .z-tab.z-tab-selected > .z-tab-content > .z-tab-text,
     .z-paging-selected,
     .z-navitem-selected > .z-navitem-content,
@@ -288,7 +260,6 @@
     .z-tabbox-top > .z-tabs .z-tab-selected .z-tab-content::after,
     .z-tabbox-bottom > .z-tabs .z-tab-selected .z-tab-content::after,
     .z-tabbox-left > .z-tabs .z-tab-selected::after,
-    .z-tabbox-vertical > .z-tabs .z-tab-selected::after,
     .z-tabbox-right > .z-tabs .z-tab-selected::after {
         forced-color-adjust: none;
         background-color: Highlight;
@@ -309,11 +280,9 @@
     .z-checkbox-indeterminate > .z-checkbox-mold,
     .z-checkbox-indeterminate > .z-checkbox-mold::after,
     .z-listitem.z-listitem-selected .z-listitem-icon.z-icon-check::before,
-    .z-listitem.z-selected .z-listitem-icon.z-icon-check::before,
     .z-listgroup.z-listgroup-selected .z-listgroup-checkable > .z-listgroup-icon.z-icon-check::before,
     .z-listheader-checkable.z-listheader-checked .z-listheader-icon.z-icon-check::before,
-    .z-treerow.z-treerow-selected .z-treerow-icon.z-icon-check::before,
-    .z-treerow.z-selected .z-treerow-icon.z-icon-check::before {
+    .z-treerow.z-treerow-selected .z-treerow-icon.z-icon-check::before {
         forced-color-adjust: none;
     }
 
@@ -341,9 +310,7 @@
        HighlightText, so a leading glyph stays legible against the selection
        color rather than reading as CanvasText-on-Highlight. */
     .z-listitem.z-listitem-selected [class*="z-icon-"]:not(.z-icon-check):not(.z-icon-radio)::before,
-    .z-listitem.z-selected [class*="z-icon-"]:not(.z-icon-check):not(.z-icon-radio)::before,
     .z-treerow.z-treerow-selected [class*="z-icon-"]:not(.z-icon-check):not(.z-icon-radio)::before,
-    .z-treerow.z-selected [class*="z-icon-"]:not(.z-icon-check):not(.z-icon-radio)::before,
     .z-paging-selected [class*="z-icon-"]::before {
         background-color: HighlightText;
     }
@@ -409,9 +376,7 @@
        the ::after dot). */
     .z-radio-on > input[type="radio"],
     .z-listitem.z-listitem-selected .z-listitem-icon.z-icon-radio::before,
-    .z-listitem.z-selected .z-listitem-icon.z-icon-radio::before,
-    .z-treerow.z-treerow-selected .z-treerow-icon.z-icon-radio::before,
-    .z-treerow.z-selected .z-treerow-icon.z-icon-radio::before {
+    .z-treerow.z-treerow-selected .z-treerow-icon.z-icon-radio::before {
         forced-color-adjust: none;
     }
 
@@ -431,13 +396,11 @@
         border-radius: inherit;
         pointer-events: none;
     }
-    .z-button[disabled],
-    .z-button.z-button-disabled {
+    .z-button[disabled] {
         color: GrayText;
         border-color: GrayText;
     }
-    .z-button[disabled]::after,
-    .z-button.z-button-disabled::after {
+    .z-button[disabled]::after {
         border-color: GrayText;
     }
 

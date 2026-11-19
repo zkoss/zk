@@ -36,6 +36,29 @@ const slug = (s: string) => s
   .slice(0, 48)
   .replace(/^-+|-+$/g, '');
 
+/**
+ * Replaces every GIF on the page with its first frame. Chromium keeps animated GIFs running under
+ * `animations: 'disabled'`, so a shot taken at a random frame of network.gif (7 frames) differed from the
+ * baseline by about 30 px, over the 20 px budget (compact-gallery toolbar failed even against a baseline
+ * captured seconds before). `image-animation: paused` would do it in CSS, but Chromium 147 lacks it.
+ */
+async function freezeAnimatedGifs(page: Page): Promise<void> {
+  await page.evaluate(async () => {
+    const gifs = Array.from(document.images).filter((img) => /\.gif(;|\?|$)/.test(img.src));
+    for (const img of gifs) {
+      const data = await (await fetch(img.src)).arrayBuffer();
+      const { image } = await new ImageDecoder({ data, type: 'image/gif' }).decode({ frameIndex: 0 });
+      const canvas = document.createElement('canvas');
+      canvas.width = image.displayWidth;
+      canvas.height = image.displayHeight;
+      canvas.getContext('2d')!.drawImage(image, 0, 0);
+      image.close();
+      img.src = canvas.toDataURL();
+      await img.decode();
+    }
+  });
+}
+
 /** Lists the shot units of the page and fails when a direct child of `.z-p-8` is not covered. */
 export async function listSections(page: Page, comp: string): Promise<Section[]> {
   const units = await page.evaluate((heading) => {
@@ -72,6 +95,7 @@ export async function expectSectionShots(
 ): Promise<void> {
   // `skipTitle` leaves out sections that cannot be shot statically (an autoplaying carousel); they
   // still count as covered by the guard.
+  await freezeAnimatedGifs(page);
   const listed = await listSections(page, comp);
   const sections = listed.map((s, n) => ({ ...s, n })).filter(s => !skipTitle?.test(s.title));
   // Each section is a clipped full-page capture (about 1s on a tall page); the default 30s test

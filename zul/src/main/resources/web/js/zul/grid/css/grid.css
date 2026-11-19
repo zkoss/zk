@@ -162,7 +162,6 @@
     }
 }
 
-.z-column .z-column-sort-icon,
 .z-column [class*="z-icon-"] {
     font-size: 14px;
     margin-left: var(--zk-spacing-1);
@@ -258,8 +257,7 @@
     pointer-events: none;
 }
 
-.z-grid-body table,
-.z-grid-inner {
+.z-grid-body table {
     border-collapse: collapse;
 }
 
@@ -286,30 +284,8 @@
     background-color: var(--zk-grid-row-hover-bg);
 }
 
-/* Odd striping: ZK applies z-row-odd class directly on TR */
-.z-row-odd {
-    background-color: var(--zk-grid-stripe-bg);
-}
-
-.z-row-odd:hover {
-    background-color: var(--zk-grid-row-hover-bg);
-}
-
 /* Grid does NOT support row selection — listbox/tree do, but Grid widget
    never emits .z-row-selected. Do not add selection rules here. */
-
-/* Disabled row */
-.z-row.z-row-disabled,
-.z-row[disabled] {
-    opacity: var(--zk-state-disabled-opacity, 0.38);
-    pointer-events: none;
-}
-
-/* Focus: ZK uses z-row-focus class added by ItemWidget */
-.z-row.z-row-focus {
-    outline: var(--zk-focus-ring);
-    outline-offset: -2px;
-}
 
 /* Cell — TD.z-row-inner contains DIV.z-row-content */
 .z-row-inner {
@@ -357,17 +333,7 @@
     white-space: normal;
 }
 
-/* Legacy: even/odd striping via grid sclass (fallback, prefer z-row-odd) */
-.z-grid-striped .z-row:nth-child(even) {
-    background-color: var(--zk-color-surface-container-lowest);
-}
-
 /* ─── Foot area ─────────────────────────────────────────────────────────── */
-.z-grid-foot {
-    background-color: var(--zk-grid-foot-bg);
-    border-top: 2px solid var(--zk-color-outline-variant);
-}
-
 .z-foot td,
 .z-foot .z-row-inner {
     font-weight: var(--zk-typescale-label-large-weight);
@@ -453,36 +419,17 @@
     font-weight: inherit;
 }
 
-/* Empty message */
-.z-grid-emph {
-    padding: var(--zk-spacing-8) var(--zk-spacing-4);
-    text-align: center;
-    color: var(--zk-color-on-surface-variant);
-    font-style: italic;
-    font-size: var(--zk-typescale-body-medium-size);
-}
-
 /* ─── Row striping: ZK applies .z-grid-odd directly on even TR elements ──── */
-/* ZK's Row widget adds .z-grid-odd to every other <row> in the body.
-   Specificity 0,2,0 overrides the bare .z-grid-odd rule (0,1,0) below,
-   giving even TRs an explicit OPAQUE background so frozen-cell inherit works. */
+/* ZK's Row widget adds .z-grid-odd to every other <row> in the body, never to the grid itself,
+   giving those TRs an explicit OPAQUE background so frozen-cell inherit works.
+   The rules name .z-row on the same element: a descendant rule on .z-grid-odd would also reach
+   the rows of a grid nested in an odd row and outrank their :hover. */
 .z-row.z-grid-odd {
     background-color: var(--zk-grid-stripe-bg);
 }
 
 .z-row.z-grid-odd:hover {
     background-color: var(--zk-grid-row-hover-bg);
-}
-
-/* ─── Legacy: sclass="z-grid-odd" on the <grid> container ───────────────── */
-/* When the grid DIV itself carries .z-grid-odd the container is transparent;
-   child rows get the stripe via nth-child. */
-.z-grid-odd {
-    background-color: transparent;
-}
-
-.z-grid-odd .z-row:nth-child(odd) {
-    background-color: var(--zk-color-surface-container-lowest);
 }
 
 /* ─── Empty body ─────────────────────────────────────────────────────────── */
@@ -527,16 +474,6 @@
 /* The UA default `border-spacing: 2px` would push every footer column right of its body column. */
 .z-grid-footer table {
     border-spacing: 0;
-}
-
-.z-grid-footer .z-cell,
-.z-footer .z-cell,
-.z-grid-footer .z-row-content,
-.z-footer .z-row-content {
-    padding: var(--zk-grid-cell-padding);
-    font-size: var(--zk-typescale-body-small-size);
-    font-weight: var(--zk-typescale-label-large-weight);
-    color: var(--zk-color-on-surface-variant);
 }
 
 .z-group.z-group-open {
@@ -597,10 +534,6 @@
     padding: 0;
     background-color: var(--zk-color-surface-container);
     border-bottom: 1px solid var(--zk-color-outline-variant);
-}
-
-.z-columns-border {
-    border-right: 1px solid var(--zk-color-outline-variant);
 }
 
 .z-groupfoot-inner {

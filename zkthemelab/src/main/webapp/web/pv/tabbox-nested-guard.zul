@@ -1,0 +1,131 @@
+<?page title="Nested tabbox guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for nested-header.spec.ts: a tabbox in the first tabpanel of a tabbox of another orient, and the same
+     tabbox on its own (nt-ref-*) to measure it against. The inner tabbox has a closable and a disabled tab so the
+     rules on the close button and the tab states are measured too. Lives under pv/ so gallery-scan,
+     forced-colors-gallery and font-size-equivalence do not pick it up as a page. -->
+<zk>
+<tabbox sclass="nt-outer-left" orient="left" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-outer-right" orient="right" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-outer-bottom" orient="bottom" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-outer-top" orient="top" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-ref-top" width="400px">
+    <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+    <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+</tabbox>
+<tabbox sclass="nt-outer-bottom-left" orient="bottom" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" orient="left" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-ref-left" orient="left" width="400px">
+    <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+    <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+</tabbox>
+<tabbox sclass="nt-outer-left-bottom" orient="left" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" orient="bottom" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-ref-bottom" orient="bottom" width="400px">
+    <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+    <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+</tabbox>
+<tabbox sclass="nt-outer-left-accordion" orient="left" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" mold="accordion" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-outer-right-accordion" orient="right" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" mold="accordion" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-outer-bottom-accordion" orient="bottom" width="600px">
+    <tabs><tab label="Outer A"/><tab label="Outer B"/></tabs>
+    <tabpanels>
+        <tabpanel>
+            <tabbox sclass="nt-inner" mold="accordion" width="400px">
+                <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+                <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+            </tabbox>
+        </tabpanel>
+        <tabpanel>B</tabpanel>
+    </tabpanels>
+</tabbox>
+<tabbox sclass="nt-ref-accordion" mold="accordion" width="400px">
+    <tabs><tab label="Inner 1"/><tab label="Inner 2" closable="true"/><tab label="Inner 3" disabled="true"/></tabs>
+    <tabpanels><tabpanel>one</tabpanel><tabpanel>two</tabpanel><tabpanel>three</tabpanel></tabpanels>
+</tabbox>
+</zk>

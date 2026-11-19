@@ -50,6 +50,9 @@ const RESIDUAL_MAX_PIXELS = 0;
 const VIEWPORT_SLACK = 1000;
 // Chromium cannot capture a texture taller than this.
 const MAX_CLIP_HEIGHT = 16000;
+// Pages whose two full-height shots and pixel scan outrun the default 30 s test timeout: icons-lucide (about 2000 tiles)
+// took 26 s in a full run and timed out intermittently.
+const HEAVY_PAGES = new Set(['icons-lucide']);
 // Hidden (visibility, so layout does not move) before BOTH shots: content pixels are not theme colour, and the
 // carousel and cropper photos matched a family colour within +-2. visibility:hidden removes only the image itself,
 // so components drawn over an image (carousel indicators, the cropper toolbar) stay scanned; a Playwright mask would
@@ -259,6 +262,7 @@ async function attachResidualDebug(testInfo: TestInfo, comp: string, stock: any,
 test.describe('brand-residual', () => {
   for (const comp of pages) {
     test(comp, async ({ page }, testInfo) => {
+      if (HEAVY_PAGES.has(comp)) test.slow();
       await page.goto(`/${comp}.zul`, { waitUntil: 'networkidle' });
       await settle(page);
       const size = await page.evaluate(() => ({
@@ -422,7 +426,7 @@ test.describe('brand-slate', () => {
       document.body.appendChild(probe);
       const seed = getComputedStyle(probe).backgroundColor;
       probe.remove();
-      const button = document.querySelector('.z-button:not(.z-button-disabled)') as HTMLElement;
+      const button = document.querySelector('.z-button:not([disabled])') as HTMLElement;
       return { seed, button: getComputedStyle(button).backgroundColor };
     });
     await settle(page);

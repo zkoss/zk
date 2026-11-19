@@ -102,7 +102,7 @@
     <div sclass="z-text-sm z-text-secondary z-mb-3">The reset itself (excerpt from <h:code>utility/_print.css</h:code>):</div>
     <div sclass="z-bg-surface-variant z-rounded z-p-3 z-text-sm z-overflow-x-auto z-mb-8"><label multiline="true" pre="true"><![CDATA[@media print {
     /* hide fixed overlay chrome */
-    .z-modal-mask, .z-mask, .z-toast-position-wrapper,
+    .z-modal-mask, .z-toast-position-wrapper,
     .z-loadingbar-position, .z-drawer, .z-error { display: none; }
 
     /* un-stick headers so long tables paginate */

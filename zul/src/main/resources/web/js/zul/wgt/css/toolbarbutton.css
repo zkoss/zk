@@ -104,15 +104,13 @@
 }
 
 /* Disabled state — apply opacity to the entire element */
-.z-toolbarbutton[disabled],
-.z-toolbarbutton.z-toolbarbutton-disabled {
+.z-toolbarbutton[disabled] {
     opacity: var(--zk-state-disabled-opacity);
     cursor: not-allowed;
     pointer-events: none;
 }
 
-.z-toolbarbutton[disabled]::before,
-.z-toolbarbutton.z-toolbarbutton-disabled::before {
+.z-toolbarbutton[disabled]::before {
     display: none;
 }
 }

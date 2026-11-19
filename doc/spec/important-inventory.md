@@ -29,6 +29,7 @@ The current count is computed, not recorded here: run `.claude/skills/marble-the
 
 **Overrides a ZK-JS-set inline `style` (no cascade can beat inline):**
 - `zkex/inp/css/colorbox.css` `display:none` — **empirically confirmed load-bearing on 10.3.0.1**: after outside-tap dismiss the reattached popup keeps inline `display:block`; removing `!important` makes it compute `display:block`/visible. Guarded by `tablet.spec.ts › tablet-colorbox-dismiss`. (ZK 10.4 source resets display on close → re-check on upgrade.) Comment was stale ("10.2.1") — corrected.
+- `zkmax/db/css/daterangebox.css` ×2 (`position`, `inset`, narrow-viewport media rule) — the widget (`DaterangePopup.ts`) writes inline `position:absolute; top; left` when it opens the popup; without `!important` the full-screen popup sits 8px off the viewport origin and the page scrolls (reproduced live). Guarded by `interaction-states.spec.ts › daterangebox — on a narrow viewport the popup sits at the viewport origin`.
 - `zkmax/tbeditor/css/tbeditor.css` ×4 — the hidden raw textarea carries inline `height:0px`; `height:1px !important` overrides it, and `opacity:0` hides the overlay. Coupled force-hide over an inline style.
 - `zkmax/layout/css/splitlayout.css` ×2 (`margin`) — JS `setBtnPos_` writes inline margin.
 - `zul/layout/css/borderlayout.css` (`width:auto`) — JS sets inline width on the rotated E/W title.

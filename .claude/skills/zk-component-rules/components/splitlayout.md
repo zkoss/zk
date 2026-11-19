@@ -29,7 +29,7 @@ The splitter bar always contains exactly three `<i>` elements: the first and thi
 ## State classes
 
 - `.z-splitlayout-splitter-draggable` — added to splitter when `resizable="true"` (default); enables `cursor: col-resize` (horizontal orient) or `cursor: row-resize` (vertical orient)
-- `resizable="false"` — `_fixResizeIcon` (`Splitlayout.ts`) removes `.z-splitlayout-splitter-draggable` and hides the grip icons. The splitter then has no drag cursor; `.z-splitlayout-splitter-nosplitter` appears only in `splitlayout.css`, no code adds it.
+- `resizable="false"` — `_fixResizeIcon` (`Splitlayout.ts`) removes `.z-splitlayout-splitter-draggable` and hides the grip icons. The splitter then has no drag cursor.
 - `.z-splitlayout-splitter-button-disabled` — added to the collapse button when `collapse="none"` (default); collapse icon is hidden; button has no active click behavior
 - Open/collapsed state: no class on the root. JS calls `.show()` / `.hide()` on the affected cave element directly. The collapsed cave becomes `display: none` via inline style; the other cave expands to fill.
 

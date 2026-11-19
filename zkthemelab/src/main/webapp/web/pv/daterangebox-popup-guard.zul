@@ -1,0 +1,13 @@
+<?page title="Daterangebox popup" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for interaction-states.spec.ts: a daterangebox with a committed range whose popup footer has all three
+     buttons (Clear, Today, Cancel). Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it up
+     as a page. -->
+<zk>
+<zscript><![CDATA[
+	java.util.Date b = new java.util.Date(125, 0, 25); // 2025-01-25
+	java.util.Date e = new java.util.Date(125, 1, 5);  // 2025-02-05
+]]></zscript>
+<div style="padding:16px">
+	<daterangebox id="range" format="yyyy-MM-dd" beginValue="${b}" endValue="${e}" allowEmpty="both" showTodayLink="true"/>
+</div>
+</zk>

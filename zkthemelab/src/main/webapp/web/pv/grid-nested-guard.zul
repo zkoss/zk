@@ -1,0 +1,33 @@
+<?page title="Nested grid guard" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for nested-header.spec.ts: a grid in a cell of the second (odd-striped) row of another grid, and the same
+     grid on its own (ng-ref) to measure it against. Lives under pv/ so gallery-scan, forced-colors-gallery and
+     font-size-equivalence do not pick it up as a page. -->
+<zk>
+<grid sclass="ng-outer" width="500px">
+    <columns><column label="Outer"/></columns>
+    <rows>
+        <row><label value="Outer row 1"/></row>
+        <row>
+            <grid sclass="ng-inner" width="400px">
+                <columns><column label="Inner"/></columns>
+                <rows>
+                    <row><label value="Inner row 1"/></row>
+                    <row><label value="Inner row 2"/></row>
+                    <row><label value="Inner row 3"/></row>
+                    <row><label value="Inner row 4"/></row>
+                </rows>
+            </grid>
+        </row>
+        <row><label value="Outer row 3"/></row>
+    </rows>
+</grid>
+<grid sclass="ng-ref" width="400px">
+    <columns><column label="Inner"/></columns>
+    <rows>
+        <row><label value="Inner row 1"/></row>
+        <row><label value="Inner row 2"/></row>
+        <row><label value="Inner row 3"/></row>
+        <row><label value="Inner row 4"/></row>
+    </rows>
+</grid>
+</zk>

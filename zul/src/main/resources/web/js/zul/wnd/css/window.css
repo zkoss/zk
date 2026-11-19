@@ -70,8 +70,8 @@
 }
 
 /* Draggable header on floating windows */
-.z-window-modal .z-window-header,
-.z-window-overlapped .z-window-header,
+.z-window-modal > .z-window-header,
+.z-window-overlapped > .z-window-header,
 .z-window-header-move {
     cursor: move;
 }
@@ -84,7 +84,6 @@
 
 /* Caption text — works for both .z-caption-content (text node container) and .z-label children */
 .z-window-header .z-caption-content,
-.z-window-header .z-caption-text,
 .z-window-header .z-label {
     font-size: var(--zk-typescale-title-medium-size);
     font-weight: var(--zk-typescale-title-medium-weight);
@@ -151,17 +150,6 @@
     font-size: var(--zk-typescale-body-medium-size);
 }
 
-/* ─── Resize handle ──────────────────────────────────────────────────────── */
-.z-window-se {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 16px;
-    height: 16px;
-    cursor: se-resize;
-    opacity: 0.3;
-}
-
 /* ─── Modal overlay mask (created by ZK as z-modal-mask or via FullMask) ─── */
 .z-modal-mask {
     position: fixed;
@@ -171,14 +159,13 @@
 }
 
 /* ─── Highlighted mode ───────────────────────────────────────────────────── */
-.z-window-highlighted .z-window-header {
+.z-window-highlighted > .z-window-header {
     background-color: var(--zk-color-primary-container);
     color: var(--zk-color-on-primary-container);
 }
 
-.z-window-highlighted .z-window-header .z-caption-content,
-.z-window-highlighted .z-window-header .z-caption-text,
-.z-window-highlighted .z-window-header .z-label {
+.z-window-highlighted > .z-window-header .z-caption-content,
+.z-window-highlighted > .z-window-header .z-label {
     color: var(--zk-color-on-primary-container);
 }
 
@@ -189,17 +176,13 @@
     border: none;
 }
 
-.z-window-noborder .z-window-header {
+.z-window-noborder > .z-window-header {
     border-bottom: none;
-}
-
-.z-window-noheader .z-window-header {
-    display: none;
 }
 
 /* ZK 10.3.0.1 parity: a chrome-less window (no border + no header) renders its
    content flush — the developer owns any inner spacing. */
-.z-window-noborder.z-window-noheader .z-window-content {
+.z-window-noborder.z-window-noheader > .z-window-content {
     padding: 0;
 }
 

@@ -1,0 +1,24 @@
+<?page title="Native select states" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for interaction-states.spec.ts: the three native <select> controls Marble styles, each at rest and
+     disabled: a listbox in select mold (.z-select), a selectbox (.z-selectbox) and the time zone select inside
+     a datebox popup (.z-datebox-timezone>select). Lives under pv/ so gallery-scan and forced-colors-gallery do
+     not pick it up as a page. -->
+<zk>
+<zscript>
+String[] names = {"Alice", "Bob", "Charlie"};
+ListModelList names1 = new ListModelList(names);
+names1.addToSelection("Bob");
+ListModelList names2 = new ListModelList(names);
+</zscript>
+<vlayout spacing="16px">
+    <listbox id="selectMold" mold="select" rows="1">
+        <listitem label="Alice"/><listitem label="Bob" selected="true"/><listitem label="Charlie"/>
+    </listbox>
+    <listbox id="selectMoldDisabled" mold="select" rows="1" disabled="true">
+        <listitem label="Alice" selected="true"/><listitem label="Bob"/>
+    </listbox>
+    <selectbox id="selectbox" model="${names1}"><template name="model">${each}</template></selectbox>
+    <selectbox id="selectboxDisabled" model="${names2}" disabled="true"><template name="model">${each}</template></selectbox>
+    <datebox id="zoned" format="yyyy-MM-dd HH:mm" displayedTimeZones="GMT,America/New_York,Asia/Taipei" timeZonesReadonly="false"/>
+</vlayout>
+</zk>

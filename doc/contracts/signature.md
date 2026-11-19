@@ -19,7 +19,7 @@ closest-sibling: toolbar (for the tool-button strip chrome pattern; canvas wrapp
 
 ## Design Contract
 
-The `.z-signature` root is a bordered container (1px solid `outline`, medium corner radius) with `position: relative` and a white (`surface`) background — it reads as a writing area akin to an outlined input field. The canvas layers inside are fully opaque to CSS. The toolbar strip is positioned absolute in the bottom-right corner of the root, with a comfortable inset (`spacing-2`). Each tool button is styled as a secondary tonal button: outlined border (`outline-variant`), `surface` fill at rest, with standard hover (`surface-container-high`), focus (`--zk-focus-ring` outline), and active state layers. Tool buttons carry a subtle elevation (`elevation-1`) to lift them above the canvas and aid legibility. The toolbar disappears (`display: none` via `.z-signature-toolbar-hide`) transiently during pen drawing — no transition on this hide (instant is correct). When the signature widget is disabled, the root wrapper dims to opacity 0.38 (hard-coded in `signature.css`; no token). Tool button labels render in label-medium typography next to a font-icon glyph.
+The `.z-signature` root is a bordered container (1px solid `outline`, medium corner radius) with `position: relative` and a white (`surface`) background — it reads as a writing area akin to an outlined input field. The canvas layers inside are fully opaque to CSS. The toolbar strip is positioned absolute in the bottom-right corner of the root, with a comfortable inset (`spacing-2`). Each tool button is styled as a secondary tonal button: outlined border (`outline-variant`), `surface` fill at rest, with standard hover (`surface-container-high`), focus (`--zk-focus-ring` outline), and active state layers. Tool buttons carry a subtle elevation (`elevation-1`) to lift them above the canvas and aid legibility. The toolbar disappears (`display: none` via `.z-signature-toolbar-hide`) transiently during pen drawing — no transition on this hide (instant is correct). Tool button labels render in label-medium typography next to a font-icon glyph.
 
 ## Expected values
 
@@ -63,8 +63,6 @@ The `.z-signature` root is a bordered container (1px solid `outline`, medium cor
 | icon1 | `.z-signature-tool-button-icon` | font-size | `18px` | DESIGN.md "Typography" (icon inside compact button) |
 | icon2 | `.z-signature-tool-button-icon` | line-height | `1` | layout |
 | lbl1 | `.z-signature-tool-button-label:not(:empty)` | margin-left | `var(--zk-spacing-1)` | DESIGN.md "Spacing Scale" (conditional: label present) |
-| dis1 | `.z-signature[disabled]` | opacity | `0.38` | signature.css (hard-coded; no token) |
-| dis2 | `.z-signature[disabled]` | pointer-events | `none` | DESIGN.md "State-Layer Overlays" |
 
 ## State matrix
 
@@ -90,7 +88,7 @@ The `.z-signature` root is a bordered container (1px solid `outline`, medium cor
 - [ ] tool-button focus-visible
 - [ ] tool-button active
 
-> Not evaluatable: the **disabled** state is **unreachable from ZUL** — `Signature` (zkmax) extends `XulElement` and defines no `setDisabled`, so `disabled="true"` throws an HTTP 500 at compose time. The `dis1`/`dis2` CSS rows below are retained for reference only (would apply if the `[disabled]` DOM state were ever produced by a client API).
+> The component has no disabled state: `Signature` (zkmax) extends `XulElement` and defines no `setDisabled`.
 - [ ] label-present vs label-empty (check `:not(:empty)` margin behavior)
 
 ## T3 wrapper boundary

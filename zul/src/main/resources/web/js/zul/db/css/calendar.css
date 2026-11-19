@@ -17,8 +17,8 @@
      .z-calendar-header.z-calendar-today  (showTodayLink footer — only when showTodayLink=true)
        A.z-calendar-title                 (the Today link anchor)
 
-   NOTE: ZK does NOT add a "today" class to the current-day cell.
-         .z-calendar-selected is added to the selected cell only.
+   NOTE: .z-calendar-today belongs to the footer row above, never to a day cell.
+         .z-calendar-selected is the only class ZK adds to a day cell for the selected date.
 */
 
 @layer zk-components {
@@ -243,28 +243,6 @@
     background-color: color-mix(in srgb, var(--zk-calendar-accent) 85%, var(--zk-calendar-accent-fg));
 }
 
-/* ─── Today's date cell (z-calendar-today class added by ZK when present) ── */
-/* Circular outline ring via `::after` (the disc slot `::before` is reserved
- * for hover/selected fill). Hidden when also selected — the filled disc IS
- * the indicator. */
-.z-calendar-cell.z-calendar-today::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 28px;
-    height: 28px;
-    transform: translate(-50%, -50%);
-    border: 1px solid var(--zk-calendar-accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.z-calendar-cell.z-calendar-today.z-calendar-selected::after {
-    display: none;
-}
-
 /* ─── Disabled day cells ─────────────────────────────────────────────────── *
  * Distinguished from `.z-calendar-outside` by a MD3 strike-through and a
  * `not-allowed` cursor. Outside-month days are merely de-emphasised (still
@@ -281,14 +259,6 @@
 }
 .z-calendar-cell.z-calendar-disabled::before {
     background-color: transparent;
-}
-
-/* ─── Out-of-range cells (yearView/decadeView disabled cells) ─────────────── */
-.z-calendar-cell.z-calendar-outrange {
-    color: var(--zk-color-outline);
-    opacity: 0.5;
-    cursor: default;
-    pointer-events: none;
 }
 
 /* ─── Week-of-year column ────────────────────────────────────────────────── */

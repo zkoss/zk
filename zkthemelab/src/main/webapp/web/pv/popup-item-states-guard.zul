@@ -1,0 +1,21 @@
+<?page title="Popup item states" contentType="text/html;charset=UTF-8"?>
+<!-- Fixture for interaction-states.spec.ts: a combobox whose items carry a description, and a creatable chosenbox with
+     two chips, so the spec can open the popup, highlight items with the pointer and the keyboard and hover the chip
+     remove button and the "create" option. Lives under pv/ so gallery-scan and forced-colors-gallery do not pick it
+     up as a page. -->
+<zk>
+<zscript>
+ListModelList fruits = new ListModelList(new String[]{"Apple", "Banana", "Cherry"});
+fruits.setMultiple(true);
+fruits.addToSelection("Apple");
+fruits.addToSelection("Banana");
+</zscript>
+<vlayout spacing="16px">
+    <combobox id="combo" width="220px">
+        <comboitem label="Item 1" description="First item"/>
+        <comboitem label="Item 2" description="Second item"/>
+        <comboitem label="Item 3" description="Third item"/>
+    </combobox>
+    <chosenbox id="chosen" model="${fruits}" creatable="true" createMessage="Add new {0}" width="260px"/>
+</vlayout>
+</zk>

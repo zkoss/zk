@@ -24,7 +24,7 @@ Primary text is `--zk-color-on-surface`; secondary text and placeholder use `--z
 Reasons (not in the token file):
 
 - **Warning** is one tone for text *and* fill, because the former `#ed6c02` failed 4.5:1 contrast as text.
-- **On-status** (`--zk-color-on-status`) is the text color on a capped status fill, used by `.z-bg-info`. Badges carry a dark label instead (`--zk-badge-fg`), because their fills are bright tones.
+- **On-status** (`--zk-color-on-status`) is the text color on a capped status fill, used by `.z-bg-info` and `.z-button-info`. Badges carry a dark label instead (`--zk-badge-fg`), because their fills are bright tones.
 - **Secondary** and every `*-container` are derived from the primary seed (`oklch(from …)`), not set by hand.
 
 The five semantic **roles** (primary / secondary / success / warning / error) each carry
@@ -113,6 +113,8 @@ Rationale:
 Apply via a `::before` pseudo-element with `background: currentColor` and `opacity`:
 
 Opacities are the `--zk-state-*-opacity` tokens (hover, focus, pressed, dragged, disabled, disabled-container); values: `tokens/_colors.css`.
+
+Filled Button and Combobutton are the exception: every filled variant uses fixed hover and pressed strengths, and the layer sits under the content. The layer is `--zk-state-darken-color` by default (through `--zk-button-overlay-color` / `--zk-combobutton-overlay-color`), except on `.z-button-dark` and `.z-button-light`, which keep their own on-color. See `.claude/skills/marble-theme/reference/component-design-notes.md` (button, combobutton).
 
 For surfaces (rows, list items) prefer a solid color on hover instead of the overlay.
 

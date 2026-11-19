@@ -139,18 +139,21 @@
 }
 
 /* ─── Invalid variant ─────────────────────────────────────────────────── */
-/* ZK adds z-bandbox-invalid to the <input> after a failed constraint; an sclass puts it on the wrapper.
+/* ZK adds z-bandbox-invalid to the <input> after a failed constraint.
    An inplace bandbox stays transparent at rest and on hover like the inplace combobox and textbox, and shows the error
    border on focus, when ZK has removed z-bandbox-inplace (follow-up 56). */
-.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):not(.z-bandbox-inplace) {
+.z-bandbox:has(> .z-bandbox-invalid):not(.z-bandbox-inplace) {
     border-color: var(--zk-color-error);
 }
 
-.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):not(.z-bandbox-inplace):hover {
-    border-color: var(--zk-color-error);
-}
-
-.z-bandbox:is(.z-bandbox-invalid, :has(> .z-bandbox-invalid)):focus-within {
+/* Open is listed with focus: the open rule below would otherwise paint the primary border and ring over the error,
+   when focus is not inside the root. ZK moves the popup to <body>, so focus in the popup (a click on an item) is outside
+   the root; so is an open() from the server.
+   ZK removes the inplace class on focus and adds it back after blur unless the popup is open. While the class is on the
+   root, an inplace bandbox that is open without focus is left to the open rule, so it keeps the primary border and ring
+   it had before. */
+.z-bandbox:has(> .z-bandbox-invalid):focus-within,
+.z-bandbox.z-bandbox-open:where(:not(.z-bandbox-inplace)):has(> .z-bandbox-invalid) {
     border-color: var(--zk-color-error);
     box-shadow: inset 0 0 0 1px var(--zk-color-error);
 }

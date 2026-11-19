@@ -26,7 +26,7 @@
     /* Hide fixed-position overlay chrome that must never appear on paper:
        modal scrims, drag/resize fakers, toasts, the loading bar, drawers,
        and the floating error panel. */
-    .z-modal-mask, .z-mask,
+    .z-modal-mask,
     .z-toast-position-wrapper,
     .z-loadingbar-position,
     .z-drawer,

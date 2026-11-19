@@ -221,13 +221,5 @@
     .z-selectbox option:checked::checkmark {
         opacity: 1;
     }
-
-    /* `selectedcontent` displays the currently selected option's content */
-    .z-selectbox selectedcontent {
-        font-family: var(--zk-typescale-font-family);
-        font-size: var(--zk-typescale-body-medium-size);
-        color: var(--zk-color-on-surface);
-        flex: 1;
-    }
 }
 }

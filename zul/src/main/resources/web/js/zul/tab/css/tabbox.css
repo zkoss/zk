@@ -23,7 +23,9 @@
  * Every accordion rule below is a child-combinator chain from .z-tabbox-accordion, never a
  * descendant selector: a tabbox nested in an accordion panel (strip molds) must look like the
  * same tabbox outside it, so the accordion's rules may not reach its .z-tabpanels, .z-tab,
- * .z-tab-content or .z-tab-button.
+ * .z-tab-content or .z-tab-button. The orient rules of the strip molds are chains from their own
+ * .z-tabbox-{top,bottom,left,right} root for the same reason: a tabbox nested in a tabpanel of a tabbox
+ * of another orient keeps its own tab bar, tabpanels and tabs.
  */
 
 /* ─── Outer container ───────────────────────────────────────────────────── */
@@ -48,8 +50,7 @@
 .z-tabbox-top,
 .z-tabbox-bottom,
 .z-tabbox-left,
-.z-tabbox-right,
-.z-tabbox-vertical {
+.z-tabbox-right {
     overflow: hidden;
 }
 
@@ -73,11 +74,6 @@
     margin: 0;
     padding: 0;
     min-height: var(--zk-tab-height);
-}
-
-/* Spacer element ZK inserts */
-.z-tabs-space {
-    flex: 1;
 }
 
 /* ─── Individual tab ────────────────────────────────────────────────────── */
@@ -175,7 +171,6 @@
 }
 
 .z-tabbox-left > .z-tabs .z-tab-selected::after,
-.z-tabbox-vertical > .z-tabs .z-tab-selected::after,
 .z-tabbox-right > .z-tabs .z-tab-selected::after {
     content: '';
     position: absolute;
@@ -187,8 +182,7 @@
     pointer-events: none;
 }
 
-.z-tabbox-left > .z-tabs .z-tab-selected::after,
-.z-tabbox-vertical > .z-tabs .z-tab-selected::after {
+.z-tabbox-left > .z-tabs .z-tab-selected::after {
     right: 1px;
     border-radius: 3px 0 0 3px;
 }
@@ -359,10 +353,9 @@
 
 /* Directional edge anchors — buttons overlay the strip ends (c22b).
  * Up/down scroll buttons MUST follow the tabs' side: left for orient=left,
- * right for orient=right. Default `left: 0` covers .z-tabbox-left and
- * .z-tabbox-vertical (legacy alias for left); .z-tabbox-right overrides
- * to anchor right. Regression-prone — keep .z-tabbox-right override pair
- * in sync with .z-tabbox-left/.z-tabbox-vertical defaults. (c22j) */
+ * right for orient=right. Default `left: 0` covers .z-tabbox-left;
+ * .z-tabbox-right overrides to anchor right. Regression-prone — keep
+ * .z-tabbox-right override pair in sync with .z-tabbox-left defaults. (c22j) */
 .z-tabbox-left-scroll  { left: 0;   top: 0;    }
 .z-tabbox-right-scroll { right: 0;  top: 0;    }
 .z-tabbox-up-scroll    { left: 0;   top: 0;    width: 100%; }
@@ -464,34 +457,33 @@
 }
 
 /* ─── Placement molds ────────────────────────────────────────────────────── */
-.z-tabbox-top .z-tabs {
+.z-tabbox-top > .z-tabs {
     border-bottom: 1px solid var(--zk-tab-border-color);
 }
 
 /* Bottom orientation: ZK mold renders tabpanels FIRST then tabs in DOM,
    so default flex column order already places panels on top, tabs on bottom. */
-.z-tabbox-bottom .z-tabs {
+.z-tabbox-bottom > .z-tabs {
     border-top: 1px solid var(--zk-tab-border-color);
     border-bottom: none;
 }
 
 /* Tabpanels border adjustment for bottom: border is on top/sides/none at bottom */
-.z-tabbox-bottom .z-tabpanels {
+.z-tabbox-bottom > .z-tabpanels {
     border-top: 1px solid var(--zk-tab-border-color);
     border-bottom: none;
     border-radius: var(--zk-shape-card) var(--zk-shape-card) 0 0;
 }
 
-.z-tabbox-bottom .z-tab {
+.z-tabbox-bottom > .z-tabs .z-tab {
     padding-bottom: 0;
     padding-top: 2px;
     margin-top: -1px;
     margin-bottom: 0;
 }
 
-/* orient="vertical" → z-tabbox-vertical; orient="left" → z-tabbox-left */
-.z-tabbox-left,
-.z-tabbox-vertical {
+/* orient="left" → z-tabbox-left */
+.z-tabbox-left {
     flex-direction: row;
 }
 
@@ -500,13 +492,11 @@
    would keep the stale height and never report a smaller one (B50-ZK-298); IceBlue floats
    the tabs so the panels always keep their content height. */
 .z-tabbox-left > .z-tabpanels,
-.z-tabbox-vertical > .z-tabpanels,
 .z-tabbox-right > .z-tabpanels {
     align-self: flex-start;
 }
 
-.z-tabbox-left .z-tabs,
-.z-tabbox-vertical .z-tabs {
+.z-tabbox-left > .z-tabs {
     flex-direction: column;
     border-bottom: none;
     border-right: 1px solid var(--zk-tab-border-color);
@@ -515,13 +505,11 @@
     overflow: hidden;
 }
 
-.z-tabbox-left .z-tabs-content,
-.z-tabbox-vertical .z-tabs-content {
+.z-tabbox-left > .z-tabs > .z-tabs-content {
     flex-direction: column;
 }
 
-.z-tabbox-left .z-tab,
-.z-tabbox-vertical .z-tab {
+.z-tabbox-left > .z-tabs .z-tab {
     padding-bottom: 0;
     padding-right: 2px;
     margin-bottom: 0;
@@ -529,8 +517,7 @@
     justify-content: flex-start;
 }
 
-.z-tabbox-left .z-tab.z-tab-selected,
-.z-tabbox-vertical .z-tab.z-tab-selected {
+.z-tabbox-left > .z-tabs .z-tab.z-tab-selected {
     color: var(--zk-color-primary);
 }
 
@@ -538,15 +525,13 @@
    the × adjacent to a short label mid-bar. Content spans the bar (c34) and
    the auto margin pushes the × to the bar's trailing edge (c34a); the 8px
    inset comes from the closable padding-right rule above (c33). */
-.z-tabbox-left .z-tab-content,
-.z-tabbox-vertical .z-tab-content,
-.z-tabbox-right .z-tab-content {
+.z-tabbox-left > .z-tabs .z-tab-content,
+.z-tabbox-right > .z-tabs .z-tab-content {
     flex: 1 1 auto;
 }
 
-.z-tabbox-left .z-tab-button,
-.z-tabbox-vertical .z-tab-button,
-.z-tabbox-right .z-tab-button {
+.z-tabbox-left > .z-tabs .z-tab-button,
+.z-tabbox-right > .z-tabs .z-tab-button {
     margin-left: auto;
 }
 
@@ -554,7 +539,7 @@
     flex-direction: row-reverse;
 }
 
-.z-tabbox-right .z-tabs {
+.z-tabbox-right > .z-tabs {
     flex-direction: column;
     border-bottom: none;
     border-left: 1px solid var(--zk-tab-border-color);
@@ -563,11 +548,11 @@
     overflow: hidden;
 }
 
-.z-tabbox-right .z-tabs-content {
+.z-tabbox-right > .z-tabs > .z-tabs-content {
     flex-direction: column;
 }
 
-.z-tabbox-right .z-tab {
+.z-tabbox-right > .z-tabs .z-tab {
     padding-bottom: 0;
     padding-left: 2px;
     margin-bottom: 0;
@@ -575,7 +560,7 @@
     justify-content: flex-start;
 }
 
-.z-tabbox-right .z-tab.z-tab-selected {
+.z-tabbox-right > .z-tabs .z-tab.z-tab-selected {
     color: var(--zk-color-primary);
 }
 

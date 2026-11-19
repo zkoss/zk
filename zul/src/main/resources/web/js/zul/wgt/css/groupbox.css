@@ -52,9 +52,8 @@
     min-width: 0;
 }
 
-/* Caption text — ZK renders it in .z-caption-content (text node), also .z-caption-text if present */
-.z-groupbox-header .z-caption-content,
-.z-groupbox-header .z-caption-text {
+/* Caption text — ZK renders it in .z-caption-content (text node) */
+.z-groupbox-header .z-caption-content {
     font-size: var(--zk-typescale-title-medium-size);
     font-weight: var(--zk-typescale-title-medium-weight);
     line-height: var(--zk-typescale-title-medium-line-height);
@@ -83,13 +82,7 @@
     white-space: nowrap;
 }
 
-.z-groupbox-title-readonly {
-    pointer-events: none;
-    color: var(--zk-color-on-surface-variant);
-}
-
 /* Icons inside header (collapse/expand icon rendered by ZK in .z-icon-*) */
-.z-groupbox-header .z-groupbox-icon,
 .z-groupbox-header [class*="z-icon-"] {
     font-size: 16px;
     color: var(--zk-color-on-surface-variant);
@@ -99,7 +92,6 @@
     border-radius: var(--zk-shape-corner-full);
 }
 
-.z-groupbox-header .z-groupbox-icon:hover,
 .z-groupbox-header [class*="z-icon-"]:hover {
     background-color: var(--zk-groupbox-icon-hover-bg);
 }
@@ -125,10 +117,6 @@
     height: auto !important;
 }
 
-.z-groupbox-collapsed .z-groupbox-content {
-    display: none;
-}
-
 .z-groupbox-collapsed .z-groupbox-header {
     border-radius: var(--zk-groupbox-radius);
     /* The header is the whole frame here: its own bottom line plus the line that the
@@ -137,11 +125,7 @@
 }
 
 /* ─── No-title variant ───────────────────────────────────────────────────── */
-.z-groupbox-notitle .z-groupbox-header {
-    display: none;
-}
-
-.z-groupbox-notitle .z-groupbox-content {
+.z-groupbox-notitle > .z-groupbox-content {
     border-top: 1px solid var(--zk-groupbox-border-color);
     border-radius: var(--zk-groupbox-radius);
 }
@@ -152,7 +136,7 @@
     padding: 0;
 }
 
-.z-groupbox-3d .z-groupbox-header {
+.z-groupbox-3d > .z-groupbox-header {
     min-height: calc(var(--zk-control-height-md) + 1px);
     padding: 0 var(--zk-spacing-3);
     background-color: var(--zk-color-surface-container-low);

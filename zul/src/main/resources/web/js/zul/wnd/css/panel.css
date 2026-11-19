@@ -58,7 +58,6 @@
 
 /* Caption text inside .z-caption-content or direct .z-label children */
 .z-panel-header .z-caption-content,
-.z-panel-header .z-caption-text,
 .z-panel-header .z-label {
     font-size: var(--zk-typescale-title-medium-size);
     font-weight: var(--zk-typescale-title-medium-weight);
@@ -162,7 +161,7 @@
     box-shadow: none;
 }
 
-.z-panel-noborder .z-panel-head {
+.z-panel-noborder > .z-panel-head {
     border-bottom: none;
 }
 

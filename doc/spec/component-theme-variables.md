@@ -231,8 +231,10 @@ notification and toast state that their warning and error variants are unaffecte
 (CTV-7).
 
 **Affected.**
-- button: color, outlined, text, icon and FAB variants. The disabled treatment is also not
-  knob-driven.
+- button: color, outlined, text and icon variants keep their own fill and label colors. The filled
+  variants other than dark and light still take `--zk-button-overlay-color`; the flat variants take
+  `--zk-button-hover-opacity` and `--zk-button-active-opacity`; every variant takes
+  `--zk-button-focus-opacity`. The disabled treatment is not knob-driven.
 - progressmeter: secondary, success, warning and error variants. Only the default bar responds to
   an override.
 - combobutton: toolbar mold.
@@ -509,7 +511,8 @@ notification and toast, which are not knob-driven (the toast entry cites the not
 ### State model sets the knob vocabulary
 
 **Rule.** A component's knobs follow its state model. Overlay models (button, combobutton) expose an
-overlay color and per-state opacities. Border-color models (the input family) expose a border color
+overlay color and per-state opacities; the opacities drive the flat variants and the focus state, while the
+filled hover and pressed strengths are fixed in the component CSS. Border-color models (the input family) expose a border color
 per state. Background-swap models (window, grid) expose a background color per state. Toolbarbutton's
 overlay reads `currentColor`, so its text knob also drives the tint and no separate overlay knob
 exists.
@@ -530,10 +533,6 @@ differ", and that the overlay color is separate from the fill only for button an
 
 ### Dormant and dead selectors (caveats, not knob rules)
 
-- **`.z-toolbarseparator`:** no matching class exists in current ZK 10 core. `<separator bar="true">`
-  renders `z-separator-horizontal-bar` / `-vertical-bar` instead. The toolbar border knob's reach to
-  separators is therefore CSS-only. This is pre-existing dead code, unrelated to the knob, with zero
-  regression either way.
 - **`js/zul/sel/css/select.css`:** was a second `.z-select` block, reading the same knobs as listbox's,
   that no `css-uri` requested. It has been deleted; `listbox.css` is the only `.z-select` source.
 

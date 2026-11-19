@@ -75,33 +75,15 @@
 }
 
 /* Invalid — class is added to the <input> element by ZK JS */
-.z-datebox-input.z-datebox-invalid {
-    color: var(--zk-color-error);
-}
-
 .z-datebox:has(.z-datebox-invalid) {
     border-color: var(--zk-color-error);
 }
 
-.z-datebox:has(.z-datebox-invalid):hover {
-    border-color: var(--zk-color-error);
-}
-
-.z-datebox:has(.z-datebox-invalid):focus-within {
-    border-color: var(--zk-color-error);
-    box-shadow: inset 0 0 0 1px var(--zk-color-error);
-}
-
-/* Keep legacy class on wrapper in case server sets it */
-.z-datebox.z-datebox-invalid {
-    border-color: var(--zk-color-error);
-}
-
-.z-datebox.z-datebox-invalid:hover {
-    border-color: var(--zk-color-error);
-}
-
-.z-datebox.z-datebox-invalid:focus-within {
+/* Open is listed with focus: the open rule below would otherwise paint the primary border and ring over the error.
+   While the inplace class is still on the root (ZK removes it once the field has had focus), an inplace field stays
+   transparent when it is open without focus, as before. */
+.z-datebox:has(.z-datebox-invalid):focus-within,
+.z-datebox.z-datebox-open:where(:not(.z-datebox-inplace)):has(.z-datebox-invalid) {
     border-color: var(--zk-color-error);
     box-shadow: inset 0 0 0 1px var(--zk-color-error);
 }
@@ -453,13 +435,6 @@
 
     .z-datebox-timezone > select option:checked::checkmark {
         opacity: 1;
-    }
-
-    .z-datebox-timezone > select selectedcontent {
-        font-family: var(--zk-typescale-font-family);
-        font-size: var(--zk-typescale-body-medium-size);
-        color: var(--zk-color-on-surface);
-        flex: 1;
     }
 }
 }

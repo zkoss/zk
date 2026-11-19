@@ -41,7 +41,7 @@ test('the 1st inside a hover preview band paints like the band', async ({ page }
   const anchor = `${POPUP} .z-calendar-cell.z-calendar-selected.z-cell-range-preview-mid`;
   await expect(page.locator(anchor), 'precondition: the preview band covers the next panel\'s 1st')
     .toHaveCount(1);
-  const band = `${POPUP} .z-cell-range-preview-mid:not(.z-calendar-selected):not(.z-calendar-today)`;
+  const band = `${POPUP} .z-cell-range-preview-mid:not(.z-calendar-selected)`;
   expect(await paintOf(page, anchor)).toEqual(await paintOf(page, band));
 });
 
@@ -76,6 +76,6 @@ test('the 1st inside a committed range paints like the band', async ({ page }) =
   const anchor = `${POPUP} .z-calendar-cell.z-calendar-selected.z-cell-range-mid`;
   await expect(page.locator(anchor), 'precondition: the 25 Jan to 5 Feb range covers 1 Feb')
     .toHaveCount(1);
-  const band = `${POPUP} .z-cell-range-mid:not(.z-calendar-selected):not(.z-calendar-today)`;
+  const band = `${POPUP} .z-cell-range-mid:not(.z-calendar-selected)`;
   expect(await paintOf(page, anchor)).toEqual(await paintOf(page, band));
 });

@@ -38,7 +38,7 @@ div.z-cropper                          (root; inline-block; position: relative)
          └─ a[href="javascript:;"]     ("cancel" text)
 ```
 
-Note: Jcrop never emits `.z-cropper-area`; no ZK or Jcrop source adds that class, so a rule for it matches nothing. `.z-cropper-vline` and `.z-cropper-hline` are emitted by Jcrop's `createBorders` when `drawBorders` is true (default true; the default `createBorders` is `n`, `s`, `e`, `w`, which also yields the `bottom` and `right` modifier classes). The selection overlay is governed by Jcrop's internal rendering and should not be relied upon as a stable CSS target.
+Note: `.z-cropper-vline` and `.z-cropper-hline` are emitted by Jcrop's `createBorders` when `drawBorders` is true (default true; the default `createBorders` is `n`, `s`, `e`, `w`, which also yields the `bottom` and `right` modifier classes). The selection overlay is governed by Jcrop's internal rendering and should not be relied upon as a stable CSS target.
 
 The toolbar is conditionally rendered: it appears in the initial HTML only when `enableToolbar="true"` (the default). If `enableToolbar="false"`, the toolbar `<div>` is not emitted at all.
 

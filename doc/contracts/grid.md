@@ -24,7 +24,7 @@ zk-version: 10.2.1-jakarta
 | c7 | `.z-column` | border-bottom | 1px solid `var(--zk-grid-border-color)` |
 | c8 | `.z-row` | border-bottom | 1px solid `var(--zk-grid-border-color)` |
 | c9 | `.z-row:hover` | background-color | `var(--zk-grid-row-hover-bg)` |
-| c10 | `.z-grid-odd` | background-color | tinted alternate (or not used) |
+| c10 | `.z-row.z-grid-odd` | background-color | tinted alternate (or not used) |
 | c12 | `.z-grid` | border-radius | `var(--zk-grid-radius)` (card-like) |
 | c13 | `.z-grid-emptybody td` (the empty cell) | padding | `0 0 1px` — a grid without rows keeps a 1px body (as IceBlue), and with an `emptyMessage` the body is the message box plus 1px; the browser's default `td` padding would add 2px (B36-2805177). The 1px keeps the empty table in the body's scroll width, so columns wider than the grid can be scrolled to (B70-ZK-2290; with 0px nothing scrolls, and Safari 18 does not count a 0px-tall table even when the grid has a height) |
 
