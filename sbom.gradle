@@ -17,6 +17,8 @@ def sbomCreators = [
 	'javax'                      : [name: 'Oracle Corporation', url: ['https://javaee.github.io']],
 	'javax.enterprise'           : [name: 'Red Hat, Inc.', url: ['https://www.cdi-spec.org']],
 	'javax.inject'               : [name: 'JSR-330 Expert Group', url: ['https://github.com/javax-inject/javax-inject']],
+	'javax.portlet'              : [name: 'The Apache Software Foundation', url: ['https://portals.apache.org/pluto/']],
+	'javax.validation'           : [name: 'Red Hat, Inc.', url: ['https://beanvalidation.org']],
 	'org.apache'                 : [name: 'The Apache Software Foundation', url: ['https://www.apache.org']],
 	'org.apache-extras.beanshell': [name: 'BeanShell', url: ['https://github.com/beanshell/beanshell']],
 	'org.javassist'              : [name: 'Shigeru Chiba', url: ['https://www.javassist.org']],
@@ -33,12 +35,28 @@ def sbomCreators = [
 
 def sbomLicences = [
 	'com.google.re2j:re2j'                   : 'BSD-3-Clause',
-	'javax.el:javax.el-api'                  : 'CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0',
+	'javax.el:javax.el-api'                  : 'CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0',
 	'javax.interceptor:javax.interceptor-api': 'CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0',
+	'javax.portlet:portlet-api'              : 'Apache-2.0',
+	'javax.servlet:javax.servlet-api'        : 'CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0',
 	'javax.transaction:jta'                  : 'CDDL-1.0',
+	'javax.validation:validation-api'        : 'Apache-2.0',
+	'javax.websocket:javax.websocket-api'    : 'CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0',
 	'org.python:jython'                      : 'LicenseRef-scancode-jython',
 	'org.seasar.container:s2-framework'      : 'Apache-2.0',
 	'org.zkoss.zkforge.el:zcommons-el'       : 'Apache-1.1',
+]
+
+// the servlet container's APIs a module compiles against lie outside the delivery, yet TR-03183-2 §5.1 wants each identified;
+// listed because zkcml's build cannot read zk's compileOnly, and checked against it wherever the module is a project of the build
+def sbomProvided = [
+	zcommon   : ['javax.servlet:javax.servlet-api:3.1.0'],
+	zk        : ['javax.servlet:javax.servlet-api:3.1.0', 'javax.portlet:portlet-api:3.0.1', 'javax.websocket:javax.websocket-api:1.1'],
+	zkbind    : ['javax.servlet:javax.servlet-api:3.1.0', 'javax.validation:validation-api:2.0.1.Final'],
+	zkplus    : ['javax.servlet:javax.servlet-api:3.1.0', 'javax.el:javax.el-api:3.0.1-b06', 'javax.portlet:portlet-api:3.0.1'],
+	zul       : ['javax.servlet:javax.servlet-api:3.1.0'],
+	zweb      : ['javax.servlet:javax.servlet-api:3.1.0', 'javax.portlet:portlet-api:3.0.1'],
+	'zweb-dsp': ['javax.servlet:javax.servlet-api:3.1.0'],
 ]
 
 def sbomVendored = [
@@ -137,6 +155,7 @@ def extra = rootProject.findProperty('sbomExtra') ?: [:]
 sbomCreators += extra.creators ?: [:]
 sbomLicences += extra.licences ?: [:]
 sbomVendored += extra.vendored ?: [:]
+sbomProvided += extra.provided ?: [:]
 npmCreators += extra.npmCreators ?: [:]
 npmLicences += extra.npmLicences ?: [:]
 def creatorOf = { String group -> sbomCreators.findAll { k, v -> group == k || group.startsWith("${k}.") }.max { it.key.length() }?.value }
@@ -457,6 +476,32 @@ tasks.matching { it.name in ['cyclonedxBom', 'cyclonedxBomPe'] }.configureEach {
 				if (direct) bom.dependencies.find { it.ref == owner.'bom-ref' }.dependsOn += direct
 			}
 
+			// only identified (TR-03183-2 §3.2.4): the container's own jars, under their own names, are what run
+			def providedRefs = [] as Set
+			owners.each { owner ->
+				def listed = sbomProvided[owner.name] ?: []
+				def declared = rootProject.findProject(":${owner.name}")?.configurations?.findByName('compileOnly')?.dependencies
+					?.findAll { it.group ==~ /(javax|jakarta)\..+/ }?.collect { "${it.group}:${it.name}:${it.version}".toString() }
+				if (declared != null && declared as Set != listed as Set)
+					problems << "${owner.name} compiles against ${(declared as Set).sort()}; list them in sbomProvided"
+				def deps = bom.dependencies.find { it.ref == owner.'bom-ref' }.dependsOn
+				listed.each { coord ->
+					def (group, name, ver) = coord.split(':')
+					def purl = "pkg:maven/${group}/${name}@${ver}?type=jar".toString()
+					if (!bom.components.find { it.'bom-ref' == purl }) {
+						def creator = creatorOf(group)
+						if (!creator) problems << "no creator for ${group}:${name}; add its group to sbomCreators"
+						def c = [type: 'library', 'bom-ref': purl, supplier: creator, manufacturer: creator, group: group, name: name, version: ver, purl: purl]
+						def licence = licenceOf(c)
+						if (licence) c.licenses = [[expression: licence, acknowledgement: 'concluded']]
+						bom.components << c
+						bom.dependencies << [ref: purl, dependsOn: []]
+						providedRefs << purl
+					}
+					if (!(purl in deps)) deps << purl
+				}
+			}
+
 			// a module's extra published jars, e.g. zkbind-api and zkbind-impl, only in the build that makes them
 			owners.each { owner ->
 				def p = rootProject.findProject(":${owner.name}")
@@ -480,8 +525,14 @@ tasks.matching { it.name in ['cyclonedxBom', 'cyclonedxBomPe'] }.configureEach {
 			bom.metadata.lifecycles = [[phase: 'build']]
 			bom.metadata.manufacturer = potix
 			bom.metadata.supplier = potix
-			bom.compositions = [[aggregate: bundlesRead ? 'complete' : 'incomplete', dependencies: bom.dependencies*.ref]]
-			bomFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(bom))
+			// the plugin still writes the tool array and component `modified` that CycloneDX 1.6 deprecates
+			if (bom.metadata.tools instanceof List)
+				bom.metadata.tools = [components: bom.metadata.tools.collect { t -> [type: 'library', manufacturer: [name: t.vendor], name: t.name, version: t.version] }]
+			([bom.metadata.component] + bom.components)*.remove('modified')
+			// an identified component's own dependencies are left unresolved (TR-03183-2 §8.3.4)
+			bom.compositions = [[aggregate: bundlesRead ? 'complete' : 'incomplete', dependencies: bom.dependencies*.ref - providedRefs]] +
+				(providedRefs ? [[aggregate: 'unknown', dependencies: providedRefs as List]] : [])
+			bomFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(['$schema': "http://cyclonedx.org/schema/bom-${bom.specVersion}.schema.json".toString()] + bom))
 
 			// deploy-script makes the Eval SBOM by renaming versions, but EE Eval jars differ from the official ones
 			def evalHashes = bom.components.findAll { isOwn(it) && rootProject.findProject(":${it.name}") && it.purl?.contains('type=jar') }.collectEntries { c ->
