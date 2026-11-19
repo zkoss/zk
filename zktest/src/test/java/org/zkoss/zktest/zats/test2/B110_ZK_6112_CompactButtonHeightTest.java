@@ -77,7 +77,15 @@ public class B110_ZK_6112_CompactButtonHeightTest extends WebDriverTestCase {
 		return jq(selector).outerHeight();
 	}
 
+	// the used length: getPropertyValue() returns a calc() token unevaluated, e.g. "calc(32px - 2px)"
 	private static String rootToken(String name) {
-		return getEval("getComputedStyle(document.documentElement).getPropertyValue('" + name + "').trim()");
+		return getEval("(function () {"
+				+ "var probe = document.createElement('div');"
+				+ "probe.style.height = 'var(" + name + ")';"
+				+ "document.body.appendChild(probe);"
+				+ "var height = getComputedStyle(probe).height;"
+				+ "probe.remove();"
+				+ "return height;"
+				+ "})()");
 	}
 }
