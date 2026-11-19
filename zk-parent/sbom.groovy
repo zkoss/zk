@@ -23,6 +23,8 @@ def sbomCreators = [
 	'javax'                      : [name: 'Oracle Corporation', url: ['https://javaee.github.io']],
 	'javax.enterprise'           : [name: 'Red Hat, Inc.', url: ['https://www.cdi-spec.org']],
 	'javax.inject'               : [name: 'JSR-330 Expert Group', url: ['https://github.com/javax-inject/javax-inject']],
+	'javax.portlet'              : [name: 'The Apache Software Foundation', url: ['https://portals.apache.org/pluto/']],
+	'javax.validation'           : [name: 'Red Hat, Inc.', url: ['https://beanvalidation.org']],
 	'org.apache'                 : [name: 'The Apache Software Foundation', url: ['https://www.apache.org']],
 	'org.acegisecurity'          : [name: 'Acegi Security', url: ['https://github.com/spring-projects/spring-security']],
 	'org.apache-extras.beanshell': [name: 'BeanShell', url: ['https://github.com/beanshell/beanshell']],
@@ -44,7 +46,11 @@ def sbomLicences = [
 	'javax.el:javax.el-api'                  : 'CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0',
 	'javax.interceptor:javax.interceptor-api': 'CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0',
 	'javax.persistence:persistence-api'      : 'CDDL-1.0',
+	'javax.portlet:portlet-api'              : 'Apache-2.0',
+	'javax.servlet:javax.servlet-api'        : 'CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0',
 	'javax.transaction:jta'                  : 'CDDL-1.0',
+	'javax.validation:validation-api'        : 'Apache-2.0',
+	'javax.websocket:javax.websocket-api'    : 'CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0',
 	'org.jruby:jruby-core'                   : 'EPL-1.0 OR GPL-2.0-or-later OR LGPL-2.1-or-later',
 	'org.python:jython'                      : 'LicenseRef-scancode-jython',
 	'org.seasar.container:s2-framework'      : 'Apache-2.0',
@@ -65,7 +71,7 @@ def sbomVendored = [
 		 version: '2015-09-03T16:40:33+08:00', upstream: null, stamp: /The UNBESCAPE team/, licence: 'Apache-2.0',
 		 creator: [name: 'The UNBESCAPE team', url: ['https://www.unbescape.org']], patched: true, multi: true],
 		[file: '../org/zkoss/idom/Verifier.java', name: 'jdom2', purl: 'pkg:maven/org.jdom/jdom2',
-		 version: '2014-06-11T09:45:05+01:00', upstream: null, stamp: /jdom2/, licence: 'LicenseRef-JDOM',
+		 version: '2014-06-11T09:45:05+01:00', upstream: null, stamp: /jdom2/, licence: 'LicenseRef-scancode-jdom',
 		 creator: [name: 'Jason Hunter & Brett McLaughlin', url: ['http://www.jdom.org']], patched: true, multi: true],
 		[file: '../org/zkoss/json/JSONObject.java', name: 'json-simple', purl: 'pkg:maven/com.googlecode.json-simple/json-simple',
 		 version: '2022-05-24T14:32:59+08:00', upstream: null, stamp: /FangYidong/, licence: 'Apache-2.0',
@@ -100,8 +106,8 @@ def sbomVendored = [
 		[file: 'web/js/zk/js.ts', name: 'string.prototype.endswith', npm: 'string.prototype.endswith', stamp: /mths\.be\/endswith v([\d.]+)/, licence: 'MIT',
 		 creator: [name: 'Mathias Bynens', url: ['https://mths.be']], multi: true],
 		[file: 'web/js/zk/js.ts', name: 'weakmap-polyfill', npm: 'weakmap-polyfill', stamp: /weakmap-polyfill v([\d.]+)/, licence: 'MIT', multi: true],
-		[file: 'web/js/zk/js.ts', name: 'string.polyfill.js', purl: 'pkg:github/behnammodi/polyfill', stamp: /github\.com\/behnammodi\/polyfill/, licence: 'MIT',
-		 creator: [name: 'Behnam Mohammadi', url: ['https://github.com/behnammodi/polyfill']], multi: true],
+		[file: 'web/js/zk/js.ts', name: 'string.polyfill.js', purl: 'pkg:github/behnammodi/polyfill', version: '2021-02-02T15:47:27+08:00', upstream: null, stamp: /github\.com\/behnammodi\/polyfill/, licence: 'MIT',
+		 creator: [name: 'Behnam Mohammadi', url: ['https://github.com/behnammodi/polyfill']], patched: true, multi: true],
 		[file: '../org/zkoss/zk/au/http/ServletRequestContext.java', name: 'commons-fileupload', purl: 'pkg:maven/commons-fileupload/commons-fileupload',
 		 version: '2021-06-17T12:00:36+08:00', upstream: null, stamp: /Licensed to the Apache Software Foundation/, licence: 'Apache-2.0',
 		 creator: [name: 'The Apache Software Foundation', url: ['https://commons.apache.org/proper/commons-fileupload/']], patched: true, multi: true],
@@ -289,16 +295,48 @@ try {
 		vendoredOf[owner.'bom-ref'] = resolved
 	}
 
+	// TR-03183-2 §5.1: the APIs the servlet container provides lie outside the delivery, but each module's must be identified;
+	// Maven passes no provided scope on, so each module's own pom names them
+	def builder = session.container.lookup(org.apache.maven.project.ProjectBuilder)
+	def request = new org.apache.maven.project.DefaultProjectBuildingRequest(session.projectBuildingRequest).setProcessPlugins(false)
+	def providedRefs = [] as Set
+	bom.components.findAll(isZk).each { owner ->
+		def deps = bom.dependencies.find { it.ref == owner.'bom-ref' }.dependsOn
+		def pom = new File(moduleDir(owner.name) ?: new File(zkDir, owner.name), 'pom.xml')
+		builder.build(pom, request).project.dependencies.findAll { it.scope == 'provided' }.each { d ->
+			def purl = "pkg:maven/${d.groupId}/${d.artifactId}@${d.version}?type=jar".toString()
+			if (!bom.components.find { it.'bom-ref' == purl }) {
+				def c = [type: 'library', 'bom-ref': purl, group: d.groupId, name: d.artifactId, version: d.version, purl: purl]
+				enrich(c)
+				c.remove('properties') // the container's own jar runs, under its own filename, so only identify this one
+				bom.components << c
+				bom.dependencies << [ref: purl, dependsOn: []]
+				providedRefs << purl
+			}
+			if (!(purl in deps)) deps << purl
+		}
+	}
+
 	// cmldoc/release leaves zk-parent and zkcml-parent at the release version, so isZk matches no module until the poms are restored
 	if (bundles && !released)
 		throw new IllegalStateException("SBOM: no ZK module in ${bomFile} has version ${project.version}; restore the poms cmldoc/release rewrote, then run makeAggregateBom again")
 	if (problems)
 		throw new IllegalStateException("SBOM: update sbom.groovy:\n  ${problems.join('\n  ')}")
+	// makeAggregateBom gives an aggregator that is not its modules' parent, e.g. zksbom-pe, no edges, which `complete` below would deny
+	def root = bom.dependencies.find { it.ref == bom.metadata.component.'bom-ref' }
+	if (!root.dependsOn) {
+		def modules = project.modules.collect { new File(it).name } as Set
+		root.dependsOn = bom.components.findAll { isZk(it) && it.name in modules }*.'bom-ref'
+	}
 	bom.metadata.lifecycles = [[phase: 'build']]
 	bom.metadata.manufacturer = potix
 	bom.metadata.supplier = potix
-	bom.compositions = [[aggregate: 'complete', dependencies: bom.dependencies*.ref]]
-	def text = JsonOutput.prettyPrint(JsonOutput.toJson(bom))
+	// the plugin names its own maker in `author`, which CycloneDX 1.6 deprecates
+	bom.metadata.tools?.components?.each { t -> if (t.author) t.manufacturer = [name: t.remove('author')] }
+	// an identified component's own dependencies are left unresolved (TR-03183-2 §8.3.4)
+	bom.compositions = [[aggregate: 'complete', dependencies: bom.dependencies*.ref - providedRefs]] +
+		(providedRefs ? [[aggregate: 'unknown', dependencies: providedRefs as List]] : [])
+	def text = JsonOutput.prettyPrint(JsonOutput.toJson(['$schema': "http://cyclonedx.org/schema/bom-${bom.specVersion}.schema.json".toString()] + bom))
 	// the restored 9.x poms are at -SNAPSHOT; the jars ship as `released`
 	def publish = { File f, String json -> f.text = released ? json.replace(project.version, released) : json }
 	publish(bomFile, text)
