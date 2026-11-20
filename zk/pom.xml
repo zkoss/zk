@@ -72,8 +72,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.google.javascript</groupId>
-			<artifactId>closure-compiler-unshaded</artifactId>
+			<artifactId>closure-compiler</artifactId>
 			<version>v20220601</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>33.7.2-jre</version>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>

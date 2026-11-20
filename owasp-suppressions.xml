@@ -28,9 +28,9 @@
 	</suppress>
 	<suppress>
 		<notes><![CDATA[
-			gson and guava bundled inside closure-compiler-unshaded, a dependency of zk: see ZK 9.6.7 Upgrade Notes.
+			gson and guava bundled inside closure-compiler (relocated), a dependency of zk: see ZK 9.6.7 Upgrade Notes.
 		]]></notes>
-		<filePath regex="true">.*closure-compiler-unshaded-v20220601\.jar.*</filePath>
+		<filePath regex="true">.*closure-compiler-v20220601\.jar.*</filePath>
 		<vulnerabilityName regex="true">.*</vulnerabilityName>
 	</suppress>
 </suppressions>
