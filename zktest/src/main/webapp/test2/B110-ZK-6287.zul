@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+B110-ZK-6287.zul
+
+		Purpose:
+
+		Description:
+
+		History:
+				Fri Nov 20 16:56:17 CST 2026, Created by peakerlee
+
+Copyright (C) 2026 Potix Corporation. All Rights Reserved.
+-->
+<zk>
+	<label multiline="true">
+		1. Open this page in Chrome 155 or later with the DevTools console open.
+		Expected: no "Permissions policy violation: unload is not allowed in this document" error.
+		Bug (ZK-6287): golden-layout binds a window unload listener, which Chrome reports as that error.
+		2. Click "detach". Expected: no error, and the goldenlayout is gone.
+	</label>
+	<goldenlayout id="gl" height="300px">
+		<goldenpanel title="Panel A">A</goldenpanel>
+		<goldenpanel title="Panel B">B</goldenpanel>
+	</goldenlayout>
+	<button id="detach" label="detach" onClick="gl.detach()"/>
+</zk>
