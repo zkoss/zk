@@ -11,9 +11,12 @@ ZK 9.6.7
   + upgrade dompurify to 3.4.17 to fix vulnerabilities
   + upgrade moment to 2.31.0 to fix vulnerabilities
   + upgrade jython to 2.7.4 and rhino to 1.7.14.1 (both in zk) to fix vulnerabilities
-  + upgrade tomcat-jasper-el to 9.0.121 and jackson-databind to 2.22.1 (both in zkmax) to fix vulnerabilities
+  + upgrade tomcat-jasper-el to 9.0.121 and jackson-databind to 2.22.3 (both in zkmax) to fix vulnerabilities
+  + update outdated libraries
+  + zk now depends on guava 33.7.2-jre: the binary distribution adds guava.jar and failureaccess.jar to dist/lib/ext, deploy both when upgrading.
+  + closure-compiler replaces closure-compiler-unshaded and no longer exposes the libraries it bundles (such as gson, args4j, protobuf and javax.annotation); declare them yourself if your application uses them.
   + the following dependencies have known vulnerabilities, users are recommended to review them if used:
-    - closure-compiler-unshaded (in zk) cannot be upgraded within ZK 9.6 due to the Java 8 support requirement.
+    - closure-compiler (in zk) cannot be upgraded within ZK 9.6 due to the Java 8 support requirement.
     - optional acegi-security (in zkplus) with no fixed release exists
     and org.zkoss.zkplus.acegi package deprecated in ZK 7.0.0.
     - optional spring-beans, spring-context and spring-web (in zkplus) cannot be upgraded beyond 5.3.x
@@ -22,6 +25,10 @@ ZK 9.6.7
     applications if used.
     - optional jasperreports (in zkex) cannot be upgraded within ZK 9.6 because upgrading to 7.x
     requires ZK public API changes so is deferred to ZK 11.
+    - vue (in zkmax, used by Fragment) has no fixed 2.x release and upgrading to Vue 3
+    requires rewriting Fragment; ZK 10.2.0 moved Fragment out of zkmax (ZK-5824).
+    - optional ognl (in zkmax) cannot be upgraded within ZK 9.6 because 3.2+ changes the API
+    the OGNL evaluator uses.
 
    --------
 ZK 9.6.6

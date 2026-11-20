@@ -46,4 +46,6 @@ slf4j-jdk14.jar
 zsoup.jar
 javassist.jar
 gson.jar
-closure-compiler-unshaded.jar
+closure-compiler.jar
+guava.jar
+failureaccess.jar

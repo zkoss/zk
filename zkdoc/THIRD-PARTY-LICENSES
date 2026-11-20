@@ -13,9 +13,9 @@ META-INF/LICENSE and META-INF/NOTICE.
 Unmodified: identical to the published artifact.
 The jar carries no licence file; the Apache License 2.0 text is at the end of this file.
 
->>> closure-compiler-unshaded.jar  com.google.javascript:closure-compiler-unshaded v20220601  (Apache-2.0)  in CE, PE, EE
+>>> closure-compiler.jar  com.google.javascript:closure-compiler v20220601  (Apache-2.0)  in CE, PE, EE
 
-Unmodified: identical to the published artifact. It bundles args4j (MIT), protobuf, re2j and jsr305 (BSD-3-Clause), Ant, Guava and Gson (Apache-2.0).
+Unmodified: identical to the published artifact. It bundles args4j (MIT), protobuf, re2j and jsr305 (BSD-3-Clause), Ant, Guava and Gson (Apache-2.0), relocated under com.google.javascript.jscomp.jarjar.
 Its own licence files are inside the jar.
 
 >>> commons-collections4.jar  org.apache.commons:commons-collections4 4.4  (Apache-2.0)  in PE, EE
@@ -38,15 +38,25 @@ Its own licence files are inside the jar.
 Unmodified classes; its MANIFEST and Maven metadata come from a different build than the published artifact.
 Its own licence files are inside the jar.
 
+>>> failureaccess.jar  com.google.guava:failureaccess 1.0.3  (Apache-2.0)  in CE, PE, EE
+
+Unmodified: identical to the published artifact.
+Its own licence file is inside the jar.
+
 >>> Filters.jar  com.jhlabs:filters 2.0.235-1  (Apache-2.0)  in PE, EE
 
 Unmodified: identical to the published artifact.
 The jar carries no licence file; the Apache License 2.0 text is at the end of this file.
 
->>> gson.jar  com.google.code.gson:gson 2.7  (Apache-2.0)  in EE
+>>> gson.jar  com.google.code.gson:gson 2.8.9  (Apache-2.0)  in EE
 
 Unmodified: identical to the published artifact.
 The jar carries no licence file; the Apache License 2.0 text is at the end of this file.
+
+>>> guava.jar  com.google.guava:guava 33.7.2-jre  (Apache-2.0)  in CE, PE, EE
+
+Unmodified: identical to the published artifact.
+Its own licence file is inside the jar.
 
 >>> jasperreports.jar  net.sf.jasperreports:jasperreports 6.20.5  (LGPL-3.0-or-later)  in PE, EE
 

@@ -28,3 +28,5 @@ openpdf.jar
 bsh.jar
 mvel.jar
 ognl.jar
+guava.jar
+failureaccess.jar

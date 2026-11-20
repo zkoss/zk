@@ -38,3 +38,5 @@ slf4j-jdk14.jar
 zsoup.jar
 gson.jar
 javassist.jar
+guava.jar
+failureaccess.jar

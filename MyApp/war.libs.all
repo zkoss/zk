@@ -22,3 +22,5 @@ commons-collections4.jar
 commons-digester.jar
 commons-logging.jar
 openpdf.jar
+guava.jar
+failureaccess.jar
