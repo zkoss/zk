@@ -99,6 +99,7 @@ ZK 11.0.0
   ZK-6241: cropper: Jcrop's touch detection sets inline on* attributes, causing CSP violations under strict-dynamic CSP
   ZK-6280: The Timeline, Timeplot and Flashchart add-ons in the binary distributions no longer work
   ZK-6249: Upgrade 3rd party dependencies and list the CVEs
+  ZK-6287: goldenlayout: Chrome 158 logs "Permissions policy violation: unload is not allowed in this document" because the bundled golden-layout library binds window unload
 
 * Upgrade Notes
   + ZK 11 jars are compiled for Java 17 (class file version 61), so ZK 11 needs JVM 17 or later; on
