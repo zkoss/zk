@@ -135,22 +135,17 @@ ZK 11.0.0
     must send the session cookie back; otherwise each action request reloads the page. Give the
     session cookie SameSite=None; Secure for a page in a cross-site iframe, and use sticky sessions
     or session replication in a cluster.
-  + Upgrade httpcore5 to 5.4.3 to fix CVE-2026-54399
-  + Upgrade jackson-databind to 2.22.4 to fix CVE-2026-19032, CVE-2026-54512, CVE-2026-54513, CVE-2026-54514,
-    CVE-2026-54515, CVE-2026-59888, CVE-2026-59889, CVE-2026-68497, CVE-2026-77310, CVE-2026-83557, CVE-2026-91776 and
-    CVE-2026-91777; the jackson-core 2.22.4 it depends on fixes CVE-2026-18401, CVE-2026-68494, CVE-2026-89407 and
-    CVE-2026-89425
+  + Upgrade httpcore5 to 5.4.3 to fix vulnerabilities
+  + Upgrade jackson-databind to 2.22.4 to fix CVE-2026-19032, CVE-2026-68497, CVE-2026-77310, CVE-2026-83557,
+    CVE-2026-91776 and CVE-2026-91777; the jackson-core 2.22.4 it depends on fixes CVE-2026-89407 and CVE-2026-89425
   + Upgrade tomcat-jasper-el (optional, in zkmax) to 9.0.120. The Tomcat CVEs that dependency checkers report against it
     are in Tomcat's server components, which tomcat-jasper-el does not contain; none of the Apache Tomcat 9 advisories
     fixed in 9.0.51 to 9.0.120 is in its EL code.
   + Upgrade guava to 33.7.2-jre to fix CVE-2026-102554
-  + Upgrade DOMPurify to 3.4.17 to fix CVE-2025-15599, CVE-2026-0540, CVE-2026-41238, CVE-2026-41239, CVE-2026-41240,
-    CVE-2026-49458, CVE-2026-49459, CVE-2026-49978, CVE-2026-65898, CVE-2026-65899, CVE-2026-65900, CVE-2026-65901,
-    CVE-2026-65902, CVE-2026-65903, CVE-2026-65912, CVE-2026-65913, CVE-2026-65914, CVE-2026-66010, CVE-2026-75838,
-    CVE-2026-109345, CVE-2026-116802, CVE-2026-116803 and CVE-2026-116804
+  + Upgrade DOMPurify to 3.4.17 to fix CVE-2026-75838, CVE-2026-109345, CVE-2026-116802, CVE-2026-116803 and
+    CVE-2026-116804
   + Upgrade moment.js to 2.31.0 to fix CVE-2026-17495
-  + Upgrade spring-beans, spring-context and spring-web (optional, in zkplus) to 5.3.39 to fix CVE-2024-22262,
-    CVE-2024-38808 and CVE-2024-38809
+  + Update outdated libraries: spring-beans, spring-context and spring-web (optional, in zkplus) to 5.3.39
   + Remove closure-compiler-unshaded (an optional dependency in zk, unused since ZK 10.0.0) from the POM and the binary distribution's lib/ext; declare it yourself if your application uses it.
   + Remove flashchart.jar (the ZK Forge Flashchart add-on) from lib/zkforge of the binary distributions: it needs Adobe
     Flash Player, which has been unsupported since 2021.
