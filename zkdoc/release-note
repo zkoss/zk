@@ -22,6 +22,7 @@ ZK 11.0.0
   ZK-6277: Commercial jars should include the updated ZK License Statement
   ZK-6283: Breeze / Sapphire / Silvertail 10.0.1 in the ZK 11 binary distribution
   ZK-6149: Replace the deprecated window 'unload' listener in mount.ts, which triggers a Chrome Permissions Policy violation
+  ZK-6288: Stop bundling optional third-party jars in lib/ext of the binary distributions
 
 * Bugs
   ZK-5670: org.zkoss.zul.progressbox.position doesn't take effect in an embedded zul
@@ -155,10 +156,10 @@ ZK 11.0.0
     Flash Player, which has been unsupported since 2021.
   + Remove timelinez.jar and timeplotz.jar (the ZK Forge Timeline and Timeplot add-ons) from lib/zkforge of the PE and EE
     binary distributions: they fail with NoClassDefFoundError since ZK 10.0.0.
-  + Remove jasperreports.jar (an optional dependency in zkex) and the openpdf.jar, commons-collections4.jar and
-    commons-logging.jar it depends on from lib/ext of the PE and EE binary distributions; add JasperReports and its
-    dependencies yourself if your application uses the Jasperreport component.
-  + Remove jackson-databind.jar from lib/ext of the CE and PE binary distributions, where no ZK module uses it; add it
+  + jasperreports.jar (an optional dependency in zkex) and the openpdf.jar, commons-collections4.jar and
+    commons-logging.jar it depends on are no longer shipped in lib/ext of the PE and EE binary distributions from this
+    release; add them yourself if your application uses the Jasperreport component.
+  + jackson-databind.jar is no longer shipped in lib/ext of the CE and PE binary distributions from this release; add it
     yourself if your application uses it. The EE binary distribution keeps it for stateless and client-bind and now
     also ships the jackson-core.jar and jackson-annotations.jar it needs.
   + Add failureaccess.jar, which guava needs at runtime, to lib/ext of the binary distributions; without it, looking up
