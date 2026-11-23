@@ -1,4 +1,5 @@
 ZK 9.6.7
+Nov 23, 2026
 * Features
   ZK-6120: Create SBOM for each new version
   ZK-6277: Commercial jars should include the updated ZK License Statement
@@ -6,6 +7,8 @@ ZK 9.6.7
 * Bugs
   ZK-5161: page directive's attributes are not encoded before rendering into HTML
   ZK-5707: avoid invoking a event listener after a session expired
+  ZK-6083: Fix path traversal vulnerabilities on WebSphere Liberty deployments
+  ZK-6092: DOMPurify: Fix XSS vulnerabilities CVE-2026-0540 and CVE-2025-15599
 
 * Upgrade Notes
   + upgrade dompurify to 3.4.17 to fix vulnerabilities
