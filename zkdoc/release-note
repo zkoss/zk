@@ -303,7 +303,8 @@ ZK 11.0.0
   + The binary distribution no longer ships the Breeze, Sapphire and Silvertail themes (deprecated
     since ZK 10.0.0) in dist/lib/theme. They render broken on ZK 11: no icons, as zul.jar no longer
     ships Font Awesome, and no styles for the components added in ZK 11. Use IceBlue or a Theme Pack
-    theme instead.
+    theme instead. zk-bom no longer manages their versions either, so a Maven dependency on
+    org.zkoss.theme:breeze, sapphire or silvertail must now declare its version.
 
    --------
 ZK 10.3.0
