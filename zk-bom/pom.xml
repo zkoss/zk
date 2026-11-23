@@ -19,15 +19,11 @@
         <zkckeditor.version>4.21.0.0</zkckeditor.version>
         <zkgmaps.version>4.0.3</zkgmaps.version>
         <zkcharts.version>12.5.0.0</zkcharts.version>
-        <!-- not upgraded to 3.1.0 due to keikai-poi version conflict
-             pivottable 3.1.0 depends on keikai-poi 5.13.0
-             keikai-ex 6.2.0.1 depends on keikai-poi 6.2.0.1
-         -->
-        <zkpivotable.version>3.0.0</zkpivotable.version>
+        <zkpivotable.version>4.0.0</zkpivotable.version>
         <zkpoi.version>3.9.17</zkpoi.version>
         <zss.version>3.9.6</zss.version>
         <keikai.oss.version>5.0.0.1</keikai.oss.version>
-        <keikai.ex.version>6.3.0</keikai.ex.version>
+        <keikai.ex.version>7.0.0</keikai.ex.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -116,11 +112,6 @@
             </dependency>
             <dependency>
                 <groupId>org.zkoss.theme</groupId>
-                <artifactId>breeze</artifactId>
-                <version>10.0.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.zkoss.theme</groupId>
                 <artifactId>iceblue</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -128,16 +119,6 @@
                 <groupId>org.zkoss.theme</groupId>
                 <artifactId>iceblue_c</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.zkoss.theme</groupId>
-                <artifactId>sapphire</artifactId>
-                <version>10.0.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.zkoss.theme</groupId>
-                <artifactId>silvertail</artifactId>
-                <version>10.0.1.1</version>
             </dependency>
             <!-- Theme Pack -->
             <dependency>
