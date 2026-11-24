@@ -1,4 +1,5 @@
-ZK 11.0.0
+ZK 11.0.0-Beta
+Nov 24, 2026
 * Features
   ZK-6167: Change Java compiler source/target to 17
   ZK-6068: zk.xsd declares elements for CSP-related settings
