@@ -1,4 +1,12 @@
-Third-party software in the ZK 9.6 binary distributions
+Third-Party Software Notices
+
+ZK includes third-party software components. This file identifies these components and
+provides the copyright notices, license texts, and other acknowledgments required by their
+respective licenses.
+
+For customers with a valid Potix commercial license covering ZK, use of ZK is governed by the
+applicable license agreement with Potix Corporation. The third-party notices below are included
+to fulfill attribution and redistribution requirements.
 
 The first part lists the third-party libraries in dist/lib/ext, with their licences and whether
 Potix modified them; the second lists the third-party code bundled in ZK's own jars in
@@ -18,11 +26,6 @@ The jar carries no licence file; the Apache License 2.0 text is at the end of th
 Unmodified: identical to the published artifact. It bundles args4j (MIT), protobuf, re2j and jsr305 (BSD-3-Clause), Ant, Guava and Gson (Apache-2.0), relocated under com.google.javascript.jscomp.jarjar.
 Its own licence files are inside the jar.
 
->>> commons-collections4.jar  org.apache.commons:commons-collections4 4.4  (Apache-2.0)  in PE, EE
-
-Unmodified: identical to the published artifact.
-Its own licence files are inside the jar.
-
 >>> commons-fileupload.jar  commons-fileupload:commons-fileupload 1.6.0  (Apache-2.0)  in CE, PE, EE
 
 Unmodified: identical to the published artifact.
@@ -31,11 +34,6 @@ Its own licence files are inside the jar.
 >>> commons-io.jar  commons-io:commons-io 2.17.0  (Apache-2.0)  in CE, PE, EE
 
 Unmodified: identical to the published artifact.
-Its own licence files are inside the jar.
-
->>> commons-logging.jar  commons-logging:commons-logging 1.1.1  (Apache-2.0)  in PE, EE
-
-Unmodified classes; its MANIFEST and Maven metadata come from a different build than the published artifact.
 Its own licence files are inside the jar.
 
 >>> failureaccess.jar  com.google.guava:failureaccess 1.0.3  (Apache-2.0)  in CE, PE, EE
@@ -58,12 +56,6 @@ The jar carries no licence file; the Apache License 2.0 text is at the end of th
 Unmodified: identical to the published artifact.
 Its own licence file is inside the jar.
 
->>> jasperreports.jar  net.sf.jasperreports:jasperreports 6.20.5  (LGPL-3.0-or-later)  in PE, EE
-
-Unmodified: identical to the published artifact.
-Its own licence files are inside the jar.
-Source code: https://github.com/TIBCOSoftware/jasperreports
-
 >>> javassist.jar  org.javassist:javassist 3.28.0-GA  (Apache-2.0)  in CE, PE, EE
 
 Unmodified: identical to the published artifact. Javassist is offered under MPL-1.1, LGPL-2.1-or-later or Apache-2.0; ZK takes it under Apache-2.0.
@@ -80,12 +72,6 @@ Source code: https://github.com/jfree/jcommon
 Unmodified: identical to the published artifact.
 The jar carries no licence file; the GNU Lesser General Public License 2.1 text is at the end of this file.
 Source code: https://github.com/jfree/jfreechart
-
->>> openpdf.jar  com.github.librepdf:openpdf 1.3.30.jaspersoft.2  (LGPL-2.1-only OR MPL-2.0)  in PE, EE
-
-Unmodified: identical to Jaspersoft's published build.
-Its own licence files are inside the jar.
-Source code: https://github.com/LibrePDF/OpenPDF
 
 >>> slf4j-api.jar  org.slf4j:slf4j-api 1.7.30  (MIT)  in CE, PE, EE
 
