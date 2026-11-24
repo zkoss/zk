@@ -9,8 +9,6 @@ ZK 9.6.8
 ZK 9.6.7
 Nov 23, 2026
 * Features
-  ZK-6120: Create SBOM for each new version
-  ZK-6277: Commercial jars should include the updated ZK License Statement
 
 * Bugs
   ZK-5161: page directive's attributes are not encoded before rendering into HTML
@@ -25,8 +23,14 @@ Nov 23, 2026
   + upgrade tomcat-jasper-el to 9.0.121 and jackson-databind to 2.22.3 (both in zkmax) to fix vulnerabilities
   + update outdated libraries
   + zk now depends on guava 33.7.2-jre: the binary distribution adds guava.jar and failureaccess.jar to dist/lib/ext, deploy both when upgrading.
+  + jasperreports.jar (an optional dependency in zkex) and the openpdf.jar, commons-collections4.jar and
+    commons-logging.jar it depends on are no longer shipped in lib/ext of the PE and EE binary distributions from this
+    release; add them yourself if your application uses the Jasperreport component.
   + closure-compiler replaces closure-compiler-unshaded and no longer exposes the libraries it bundles (such as gson, args4j, protobuf and javax.annotation); declare them yourself if your application uses them.
-  + the following dependencies have known vulnerabilities, users are recommended to review them if used:
+  + Existing dependency limitations
+    The following notes summarize existing dependency update constraints and related security considerations in
+    ZK 9.6.x. These limitations were not introduced by ZK 9.6.7. We recommend upgrading to the latest actively
+    maintained ZK release for broader security and dependency updates.
     - closure-compiler (in zk) cannot be upgraded within ZK 9.6 due to the Java 8 support requirement.
     - optional acegi-security (in zkplus) with no fixed release exists
     and org.zkoss.zkplus.acegi package deprecated in ZK 7.0.0.
@@ -40,6 +44,10 @@ Nov 23, 2026
     requires rewriting Fragment; ZK 10.2.0 moved Fragment out of zkmax (ZK-5824).
     - optional ognl (in zkmax) cannot be upgraded within ZK 9.6 because 3.2+ changes the API
     the OGNL evaluator uses.
+  * Other Changes
+    + ZK-6120: Create SBOM for each new version
+    + ZK-6277: Commercial jars should include the updated ZK License Statement
+    + ZK-6288: Stop bundling optional third-party jars in lib/ext of the binary distributions
 
    --------
 ZK 9.6.6
