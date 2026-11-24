@@ -162,15 +162,18 @@ Nov 24, 2026
   + Add failureaccess.jar, which guava needs at runtime, to lib/ext of the binary distributions; without it, looking up
     an application- or session-scoped event queue fails with NoClassDefFoundError.
   + Upgrade groovy (optional, for Groovy zscript) to 5.0.8. With 5.0.0-alpha-1, a Groovy zscript that uses JDK classes fails on JDK 22 or later with "Unsupported class file major version".
-  + The following optional dependencies have known vulnerabilities that ZK 11.0.0 does not fix; review them if your
-    application uses them:
-    - jasperreports 6.20.5 (in zkex): CVE-2025-10492 and CVE-2026-6009 are fixed only in JasperReports 7.x, which needs
-      ZK public API changes. If you use the Jasperreport component, see
-      https://community.jaspersoft.com/knowledgebase/faq/update-details-about-the-java-vulnerability-r4897/.
+  + Optional dependency considerations
+    The optional dependencies listed below are not included in ZK by default. These notes apply only if your
+    application explicitly adds and uses them. They summarize existing dependency update constraints and related
+    security considerations carried over from ZK 10.x. These limitations were not introduced by ZK 11.0.0-Beta.
+    - JasperReports 6.20.5 (optional; used by the Jasperreport component in zkex): CVE-2025-10492 and CVE-2026-6009
+      are addressed in JasperReports 7.x. Upgrading this integration to 7.x requires changes to ZK's public API. If
+      your application uses the Jasperreport component, review Jaspersoft's advisory for details:
+      https://community.jaspersoft.com/knowledgebase/faq/update-details-about-the-java-vulnerability-r4897/
     - jackson-databind 2.14.1, jackson-core 2.14.1 and commons-beanutils 1.9.4, dependencies of jasperreports 6.20.5:
       upgrade them in your application if you use jasperreports.
-    - zksandbox.war in the zk-sandbox zip bundles jasperreports 6.20.5 and the three dependencies above for its
-      Jasperreport demo.
+    - zksandbox.war, the demo application in the zk-sandbox zip, bundles jasperreports 6.20.5 and the three
+      dependencies above for its Jasperreport demo.
     - spring-beans, spring-context and spring-web 5.3.39 (in zkplus): no open-source Spring 5.3.x release fixes the rest,
       and Spring 6 needs jakarta.servlet; use a commercially supported Spring 5.3.x release if you have one.
     - tomcat-jasper-el 9.0.120 (in zkmax): the reported CVEs are in Apache Tomcat's server components, which
