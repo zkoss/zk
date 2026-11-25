@@ -303,6 +303,7 @@ subprojects { p ->
 				outputs.dir(out)
 				outputs.upToDateWhen { false } // reads the frontend bundles and package-lock.json
 				dependsOn tasks.matching { it.name == 'compileTypeScript' }
+				mustRunAfter rootProject.allprojects.collect { it.tasks.matching { it.name == 'npm_install' } }
 				doLast { writeLicence(p, out.get().asFile) }
 			}
 			tasks.named('processResources') {
