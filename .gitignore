@@ -40,17 +40,17 @@ zk.code-workspace
 !.claude/skills/
 !.claude/agents/
 # third-party skills are installed per machine (skills CLI -> .agents/); their symlinks stay untracked
-.claude/skills/show-me
-.claude/skills/zul-writer
 .mcp.json
 .vscode/mcp.json
 docs/
 skills-lock.json
 graphify-out
+.playwright-mcp/
 
 # macOS Finder metadata — ignored by the repository, not only via a machine-local core.excludesFile
 .DS_Store
 tasks/
 
-# personal Claude Code instructions (each checkout imports its own)
+# personal agent instructions (each checkout imports its own)
 CLAUDE.local.md
+AGENTS.md
